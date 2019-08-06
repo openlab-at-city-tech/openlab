@@ -77,7 +77,11 @@ add_filter( 'bp_activity_hide_sitewide_before_save', __NAMESPACE__ . '\\groups_a
  * @return void
  */
 function record_site_creation_activity( $blog, $is_private, $is_recoreed, $no_activity ) {
-	if ( $no_activity && ! bp_blogs_is_blog_trackable( $blog->blog_id, $blog->user_id ) ) {
+	if ( $no_activity ) {
+		return null;
+	}
+
+	if ( ! bp_blogs_is_blog_trackable( $blog->blog_id, $blog->user_id ) ) {
 		return;
 	}
 

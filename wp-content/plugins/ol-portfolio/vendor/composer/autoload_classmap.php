@@ -19,5 +19,6 @@ return array(
     'OpenLab\\Portfolio\\Logger\\Logger' => $baseDir . '/src/Logger/Logger.php',
     'OpenLab\\Portfolio\\Logger\\ServerSentEventsLogger' => $baseDir . '/src/Logger/ServerSentEventsLogger.php',
     'OpenLab\\Portfolio\\Portfolio' => $baseDir . '/src/Portfolio.php',
+    'OpenLab\\Portfolio\\Share\\RestController' => $baseDir . '/src/Share/RestController.php',
     'OpenLab\\Portfolio\\Share\\Service' => $baseDir . '/src/Share/Service.php',
 );

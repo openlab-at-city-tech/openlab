@@ -1361,7 +1361,7 @@ function ra_copy_blog_page( $group_id ) {
 					for ( $i = 0; $i < count( $tables ); $i++ ) {
 						$table = current( $tables[ $i ] );
 						if ( substr( $table, 0, $len ) == $blogtables ) {
-							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table == $blogtables . 'commentmeta' ) ) {
 								// phpcs:disable
 								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
 								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );

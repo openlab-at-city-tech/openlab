@@ -38,6 +38,7 @@ class ComposerStaticInit90f43fa9dd54e820f67ac7497e2e9576
         'OpenLab\\Portfolio\\Logger\\Logger' => __DIR__ . '/../..' . '/src/Logger/Logger.php',
         'OpenLab\\Portfolio\\Logger\\ServerSentEventsLogger' => __DIR__ . '/../..' . '/src/Logger/ServerSentEventsLogger.php',
         'OpenLab\\Portfolio\\Portfolio' => __DIR__ . '/../..' . '/src/Portfolio.php',
+        'OpenLab\\Portfolio\\Share\\RestController' => __DIR__ . '/../..' . '/src/Share/RestController.php',
         'OpenLab\\Portfolio\\Share\\Service' => __DIR__ . '/../..' . '/src/Share/Service.php',
     );
 

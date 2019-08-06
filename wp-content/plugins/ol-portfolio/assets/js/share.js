@@ -106,7 +106,11 @@
 
 	app.fetchEntry = function( id, type ) {
 		// Create endpoint based on content type.
-		var endpoint = app.settings.root + 'wp/v2/' + type + '/' + id + '?context=edit';
+		var endpoint = app.settings.root + 'wp/v2/' + type + '/' + id;
+
+		if ( 'comments' !== type ) {
+			var endpoint = endpoint + '?context=edit';
+		}
 
 		return $.ajax( {
 			url: endpoint,
@@ -132,6 +136,10 @@
 
 	app.saveMeta = function( id, restBase, portfolioId ) {
 		var endpoint = app.settings.root + 'wp/v2/' + restBase + '/' + id;
+
+		if ( 'comments' === restBase ) {
+			var endpoint = app.settings.root + 'wp/v2/' + restBase + '/shared/' + id;
+		}
 
 		return $.ajax( {
 			url: endpoint,
