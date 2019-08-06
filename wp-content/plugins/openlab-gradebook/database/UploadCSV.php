@@ -299,29 +299,31 @@ class gradebook_upload_csv_API
 
             $assignment = trim($assignment);
 
+            $assigndex = $this->getAssignmentIndexStart() + 1;
+            $stored_type = '';
+
+            if (!empty($process_result['types']) && !empty($process_result['types'][$assigndex + $thisdex])) {
+                $stored_type = $process_result['types'][$assigndex + $thisdex];
+            }
+
             //check for existing assignments first
             $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE TRIM(assign_name) LIKE '%s'", $assignment);
             $existing_assignment = $wpdb->get_results($query);
 
             if (!empty($existing_assignment)) {
+
+                $this_type = !empty($stored_type) ? $stored_type : $existing_assignment[0]->assign_grade_type;
+
                 $process_result['assignments'][$thisdex] = array(
                     'status' => 'existing',
                     'name' => trim($assignment),
-                    'type' => $existing_assignment[0]->assign_grade_type,
+                    'type' => $this_type,
                     'id' => $existing_assignment[0]->id,
                     'assign_order' => $existing_assignment[0]->assign_order,
                     'assign_weight' => $existing_assignment[0]->id,
                     'assign_visibility' => $existing_assignment[0]->assign_visibility,
                 );
             } else {
-
-                $assigndex = $this->getAssignmentIndexStart() + 1;
-
-                $stored_type = '';
-
-                if (!empty($process_result['types']) && !empty($process_result['types'][$assigndex + $thisdex])) {
-                    $stored_type = $process_result['types'][$assigndex + $thisdex];
-                }
 
                 $this_type = !empty($stored_type) ? $stored_type : $this->checkAssignmentType($assignment, $process_result['data']);
 
