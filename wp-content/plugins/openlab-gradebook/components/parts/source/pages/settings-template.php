@@ -28,10 +28,10 @@
                         <div class="grades-table-wrapper">
                             <table id="gradesTable" class="table table-bordered table-striped">
                                 <tr>
-                                    <th><?php esc_html_e('Assignment Grade Type Checkmark', 'openlab-gradebook')?></th>
-                                    <th><?php esc_html_e('Assignment Grade Type Letter Grades', 'openlab-gradebook')?>
+                                    <th><?php esc_html_e('Assignment Grade Type Checkmark:', 'openlab-gradebook')?></th>
+                                    <th><?php esc_html_e('Assignment Grade Type Letter Grades:', 'openlab-gradebook')?>
                                     </th>
-                                    <th><?php esc_html_e('Assignment Grade Type Numeric', 'openlab-gradebook')?></th>
+                                    <th><?php esc_html_e('Assignment Grade Type Numeric:', 'openlab-gradebook')?></th>
                                 </tr>
                                 <tr>
                                     <td rowspan="12"><i
