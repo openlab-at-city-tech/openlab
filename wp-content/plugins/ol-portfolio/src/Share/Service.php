@@ -166,7 +166,7 @@ class Service implements Registerable {
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'20190806',
+			'20190807',
 			true
 		);
 
