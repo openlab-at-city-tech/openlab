@@ -218,7 +218,7 @@ class gradebook_upload_csv_API
             return $process_result;
         }
 
-        $process_result = $this->checkHeaderFormatting($process_result);
+        $process_result = $this->checkHeaderFormatting($process_result, $gbid);
 
         //if errors, immediately report back
         if ($process_result['errors'] > 0) {
@@ -230,7 +230,7 @@ class gradebook_upload_csv_API
         return $process_result;
     }
 
-    public function checkHeaderFormatting($process_result)
+    public function checkHeaderFormatting($process_result, $gbid)
     {
         global $wpdb;
         $errors = 0;
@@ -309,7 +309,7 @@ class gradebook_upload_csv_API
             }
 
             //check for existing assignments first
-            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE TRIM(assign_name) LIKE '%s'", $assignment);
+            $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_assignments WHERE TRIM(assign_name) LIKE '%s' AND gbid = %d", $assignment, $gbid);
             $existing_assignment = $wpdb->get_results($query);
 
             if (!empty($existing_assignment)) {
