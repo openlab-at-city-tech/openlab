@@ -83,7 +83,7 @@
 		var data = {
 			author: app.entry.author,
 			title: title,
-			content: app.entry.content.raw,
+			content: ( app.entry.type === 'comment' ) ? app.entry.content.rendered : app.entry.content.raw,
 			status: 'draft',
 			type: type,
 			meta: {
