@@ -87,9 +87,15 @@ define(['jquery', 'backbone', 'underscore', "views/CommentView"],
                 edit: function () {
 
                     var current = this.$el.find('.grade-numeric').html();
+
+                    console.log('cell input current raw incoming: ', current);
+
                     current = current.replace(/(<([^>]+)>)/ig,"");
                     current = current.replace(/\s+/g, ' ');
                     current = current.trim();
+
+                    console.log('cell input current processed: ', current);
+
                     var id = this.$el.find('.grade-numeric').data('id');
                     var thisLegacy = legacy[id];
 
