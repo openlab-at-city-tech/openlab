@@ -134,9 +134,9 @@ function openlab_library_search_form() {
 function openlab_library_information() {
 	?>
 	<div class="openlab-library-information">
-		<a class="bold" href="https://library.citytech.cuny.edu">Ursula C. Schwerin Library</a><br />
-		New York City College of Technology, C.U.N.Y<br />
-		300 Jay Street, Library&nbsp;Building - 4th Floor<br />
+		<p><a class="bold" href="https://library.citytech.cuny.edu">Ursula C. Schwerin Library</a></p>
+		<p>New York City College of Technology, C.U.N.Y</p>
+		<p>300 Jay Street, Library&nbsp;Building - 4th Floor</p>
 
 		<ul>
 			<li><a href="https://library.citytech.cuny.edu/help/ask/index.php">Ask Us</a></li>
@@ -220,6 +220,10 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 			.library-search-advanced-link {
 				font-size: .9rem;
 				white-space: nowrap;
+			}
+
+			.openlab-library-information p {
+				margin-bottom: 0;
 			}
 		</style>
 
