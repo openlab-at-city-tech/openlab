@@ -121,6 +121,7 @@ class gradebook_upload_csv_API
                 //also add a trim to prevent accidental spacing errors
                 $row = array_map("trim", $row);
                 $row = $oplb_gradebook_api->special_char_handling_incoming($row);
+                $row = array_map("sanitize_text_field", $row);
 
                 // If the header has been stored
                 if ($header_rows_filled) {
