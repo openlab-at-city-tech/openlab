@@ -68,22 +68,14 @@ class Service implements Registerable {
 	}
 
 	/**
-	 * Displaye import process errors.
+	 * Display import process errors.
 	 *
-	 * @param WP_Error $err
-	 * @param int $step
+	 * @param WP_Error $error
 	 * @return void
 	 */
-	protected function display_error( WP_Error $error, $step = 0 ) {
-		echo '<div class="wrap">';
-		echo '<p><strong>Sorry, there has been an error.</strong><br />';
-		echo $error->get_error_message();
-		echo '</p>';
-		printf(
-			'<p><a class="button" href="%s">Try Again</a></p>',
-			esc_url( $this->get_url( $step ) )
-		);
-		echo '</div>';
+	protected function display_error( WP_Error $error ) {
+		extract( [ 'error' => $error ], EXTR_SKIP );
+		require ROOT_DIR . '/views/import/error.php';
 	}
 
 	/**
@@ -96,7 +88,7 @@ class Service implements Registerable {
 			'ol-portfolio-import-styles',
 			plugins_url( 'assets/css/import.css', ROOT_FILE ),
 			[],
-			'20190727'
+			'20190808'
 		);
 
 		if ( $step !== static::STEP_IMPORT ) {
