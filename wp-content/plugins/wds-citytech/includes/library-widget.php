@@ -140,7 +140,6 @@ function openlab_library_information() {
 
 		<ul>
 			<li><a href="https://library.citytech.cuny.edu/help/ask/index.php">Ask Us</a></li>
-			<li><a href="https://library.citytech.cuny.edu/">library.citytech.cuny.edu</a></li>
 		</ul>
 	</div>
 	<?php
