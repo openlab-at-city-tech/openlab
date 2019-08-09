@@ -10,7 +10,7 @@
                         <p><?php esc_html_e('OpenLab GradeBook provides faculty with a simple, secure way to keep track of assignments and share grades with their students. When logged into the OpenLab, faculty may enter and view all student grades via their course site dashboard, and each student may log in and view their own grades.', 'openlab-gradebook');?>
                         </p>
 
-                        <h2 class="h5 bold"><?php esc_html_e('Help:', 'openlab-gradebook')?></h2>
+                        <h2 class="h5 bold"><?php esc_html_e('Help', 'openlab-gradebook')?></h2>
 
                         <p><?php esc_html_e("For more information and help using OpenLab GradeBook, please visit OpenLab Help&nbsp;>&nbsp;", 'openlab-gradebook');?><a
                                 class="bold"
@@ -21,17 +21,17 @@
                         <p><?php esc_html_e('If you experience any problems while using OpenLab GradeBook, please contact the OpenLab team for assistance.');?>
                         </p>
 
-                        <h2 class="h5 bold"><?php esc_html_e('Assignment Grade Types:', 'openlab-gradebook')?></h2>
+                        <h2 class="h5 bold"><?php esc_html_e('Assignment Grade Types', 'openlab-gradebook')?></h2>
                         <p><?php esc_html_e('Grade type can be set per assignment by selecting "Edit" from the dropdown menu.', 'openlab-gradebook');?>
                         </p>
 
                         <div class="grades-table-wrapper">
                             <table id="gradesTable" class="table table-bordered table-striped">
                                 <tr>
-                                    <th><?php esc_html_e('Assignment Grade Type Checkmark:', 'openlab-gradebook')?></th>
-                                    <th><?php esc_html_e('Assignment Grade Type Letter Grades:', 'openlab-gradebook')?>
+                                    <th><?php esc_html_e('Checkmark:', 'openlab-gradebook')?></th>
+                                    <th><?php esc_html_e('Letter:', 'openlab-gradebook')?>
                                     </th>
-                                    <th><?php esc_html_e('Assignment Grade Type Numeric:', 'openlab-gradebook')?></th>
+                                    <th><?php esc_html_e('Numeric:', 'openlab-gradebook')?></th>
                                 </tr>
                                 <tr>
                                     <td rowspan="12"><i
