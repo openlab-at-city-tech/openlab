@@ -337,6 +337,11 @@ a.breadcrumb-link:hover {
 	body div.title-area {
 		width: 90% !important;
 	}
+
+	.header-widget-area .genesis-nav-menu.responsive-menu {
+		padding-left: 5%;
+		padding-right: 5%;
+	}
 }
 
 @media screen and (min-width: 1023px) {
