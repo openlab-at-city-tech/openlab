@@ -25,6 +25,10 @@ div.title-area {
     background-color: #fff;
 }
 
+.header-image .site-header {
+	background-color: #000;
+}
+
 .site-title {
 	margin-bottom: 12px;
 }
