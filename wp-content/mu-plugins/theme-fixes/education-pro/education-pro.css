@@ -322,6 +322,23 @@ a.breadcrumb-link:hover {
 	position: relative;
 }
 
+@media screen and (max-width: 768px) {
+	.site-header .wrap {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.title-area-link {
+		padding-left: 5%;
+		padding-right: 5%;
+		width: auto;
+	}
+
+	body div.title-area {
+		width: 90% !important;
+	}
+}
+
 @media screen and (min-width: 1023px) {
 	.menu-item-has-children > a:after {
 		font-family: "fontawesome";
