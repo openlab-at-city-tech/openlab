@@ -278,6 +278,10 @@ a.breadcrumb-link:hover {
 	border-bottom: none;
 }
 
+#ez-toc-container a:hover {
+	text-decoration: none;
+}
+
 .site-footer .wrap a:hover {
 	color: inherit;
 	text-decoration: underline;
