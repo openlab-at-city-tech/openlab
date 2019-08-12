@@ -286,9 +286,9 @@ function openlab_bpeo_list_author() {
 	$event     = get_post( get_the_ID() );
 	$author_id = $event->post_author;
 
-	$base = __( '<strong>Author:</strong> %s', 'bp-event-organiser' );
+	$base = sprintf( '<strong>Author:</strong> %s', esc_html( bp_core_get_user_displayname( $author_id ) ) );
 
-	echo sprintf( '<li>' . esc_html( wp_filter_kses( $base ) ) . '</li>', esc_html( bp_core_get_user_displayname( $author_id ) ) );
+	echo '<li>' . $base . '</li>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'eventorganiser_additional_event_meta', 'openlab_bpeo_list_author', 5 );
 
