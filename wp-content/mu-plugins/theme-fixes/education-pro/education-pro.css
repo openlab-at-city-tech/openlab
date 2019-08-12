@@ -248,11 +248,19 @@ body.header-image .title-area {
 	padding: 10px 0;
 }
 
+a,
+div.entry-content a,
+.breadcrumb a,
+.comment-reply-link,
+#ol-print-this-page a,
+a.breadcrumb-link {
+    color: #aa2418;
+}
+
 div.entry-content a,
 .breadcrumb a,
 #ol-print-this-page a,
 a.breadcrumb-link {
-    color: #aa2418;
 	border-bottom: 1px solid #aa2418;
 	padding-bottom: 1px;
 }
