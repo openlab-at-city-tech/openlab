@@ -277,7 +277,7 @@ div.entry-content .wp-block-image a {
 .breadcrumb a:hover,
 #ol-print-this-page a:hover,
 a.breadcrumb-link:hover {
-    color: #000;
+    color: #444;
 	border-bottom: none;
 }
 
@@ -306,7 +306,7 @@ a.breadcrumb-link:hover {
 }
 
 .entry-footer .entry-meta a:hover {
-    color: #000;
+    color: #444;
 	border-bottom: none;
 }
 
