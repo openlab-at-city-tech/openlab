@@ -131,6 +131,7 @@ div.wp-block-file__button a {
     color: #444;
 }
 
+.entry-title a:hover,
 a:hover {
 	color: #444;
 }
