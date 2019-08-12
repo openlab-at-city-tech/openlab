@@ -185,8 +185,9 @@ div#toc_container.no_bullets.contracted {
     text-align: left;
 }
 
-
-
+#toc_container a:hover {
+	text-decoration: none;
+}
 
 /* Color adjustments for Default color scheme */
 
