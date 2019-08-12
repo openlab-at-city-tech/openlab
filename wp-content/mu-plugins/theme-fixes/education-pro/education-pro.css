@@ -131,6 +131,10 @@ div.wp-block-file__button a {
     color: #444;
 }
 
+a:hover {
+	color: #444;
+}
+
 button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .button:hover, div.wp-block-file__button a:hover {
     background-color: #444;
     color: #e3f2fa;
