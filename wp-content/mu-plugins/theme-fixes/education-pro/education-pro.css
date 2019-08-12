@@ -278,6 +278,11 @@ a.breadcrumb-link:hover {
 	border-bottom: none;
 }
 
+.site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
+}
+
 #ol-print-this-page a:hover {
 	box-shadow: none !important;
 }
