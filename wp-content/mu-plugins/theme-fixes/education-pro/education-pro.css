@@ -271,7 +271,6 @@ a.breadcrumb-link {
 
 div.entry-content .wp-block-image a {
 	border-bottom: 0;
-	padding-bottom;
 }
 
 .entry-content a:hover,
@@ -764,9 +763,10 @@ body .site-title a {
 		color: inherit;
 	}
 
+	.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }
@@ -913,15 +913,17 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
+	.education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
 	.education-pro-green .header-widget-area .genesis-nav-menu li a:hover,
 	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
 		background-color: inherit;
 		color: inherit;
 	}
 
+	.education-pro-green .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }
@@ -1068,15 +1070,17 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
+	.education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
 	.education-pro-red .header-widget-area .genesis-nav-menu li a:hover,
 	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
-		background-color: inherit;
+		background-color: inherit !important;
 		color: inherit;
 	}
 
+	.education-pro-red .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-red .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }
