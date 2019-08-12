@@ -146,6 +146,13 @@ cite {
     font-size: .8em;
 }
 
+/* Specificity required to override scheme-specific colors */
+body .site-inner .entry-pings h3,
+body .site-inner .comment-respond h3,
+body .site-inner .entry-comments h3 {
+	color: #444;
+}
+
 /* 3. TOC Plugin style. Can we replace the text/link with a fontawesome list icon?
 See mockup: https://www.dropbox.com/s/5jl5er5lf4jyn3y/TOCstyle.png?dl=0 OR see below and compare with mockups */
 
@@ -582,12 +589,15 @@ body .site-title a {
 .education-pro-blue .entry-content a,
 .education-pro-blue .entry-footer .entry-meta a,
 .education-pro-blue #ol-print-this-page a,
+.education-pro-blue .comment-reply-link,
+.education-pro-blue .entry-title a,
 .education-pro-blue a.breadcrumb-link,
 .education-pro-blue a {
 	border-color: #185a7d;
 	color: #185a7d;
 }
 
+.education-pro-blue .entry-title a:hover,
 .education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
 	color: #444;
@@ -728,12 +738,15 @@ body .site-title a {
 .education-pro-green .entry-footer .entry-meta a,
 .education-pro-green #ol-print-this-page a,
 .education-pro-green .archive-pagination a,
+.education-pro-green .comment-reply-link,
+.education-pro-green .entry-title a,
 .education-pro-green a.breadcrumb-link,
 .education-pro-green a {
 	border-color: #3e6120;
 	color: #3e6120;
 }
 
+.education-pro-green .entry-title a:hover,
 .education-pro-green .entry-footer .entry-meta a:hover,
 .education-pro-green a:hover {
 	color: #444;
@@ -880,12 +893,15 @@ body .site-title a {
 .education-pro-red .entry-footer .entry-meta a,
 .education-pro-red #ol-print-this-page a,
 .education-pro-red .archive-pagination a,
+.education-pro-red .comment-reply-link,
+.education-pro-red .entry-title a,
 .education-pro-red a.breadcrumb-link,
 .education-pro-red a {
 	border-color: #aa2418;
 	color: #aa2418;
 }
 
+.education-pro-red .entry-title a:hover,
 .education-pro-red .entry-footer .entry-meta a:hover,
 .education-pro-red a:hover {
 	color: #444;
