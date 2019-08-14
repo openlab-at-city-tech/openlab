@@ -4,8 +4,8 @@ Author URI: http://philbuchanan.com/
 Donate Link: http://philbuchanan.com/
 Tags: accordion, accordions, shortcodes, responsive accordions, accordions plugin, jquery accordions, accordions short-code, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 3.3
-Tested up to: 4.8
-Stable tag: 2.3.3
+Tested up to: 5.1
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,27 @@ There are a few advanced settings you can add to the opening accordion shortcode
 
 **tag**: You can also set the HTML tag for the titles of each accordion item individually by adding `tag="tagname"` to each `[accordion-item]` shortcode. Make sure to **not** include the angle brackets around the tag name. Example: to use `<h2>` instead of the default `<h3>` tag: `[accordion-item title="Item title" tag="h2"]Item content[/accordion-item]`. Using a tag attribute on an individual accordion item will override the global setting. The list of valid tags is: h1, h2, h3, h4, h5, h6, p, div.
 
+**usebutons**: You can now optionally wrap each accordion item title in a `<button>` tag by adding `usebuttons="true"` to the main `[accordion]` shortcode. Please note that your theme may apply undesirable styles to `<button>` tags by default. You may need to add more custom styles to override your themes default styles. Using this setting will produce this HTML output:
+
+    <div class="accordion">
+        <h3 class="accordion-title">
+            <button>
+                Title of accordion item
+            </button>
+        </h3>
+        <div class="accordion-content">
+            Drop-down content goes here.
+        </div>
+        <h3 class="accordion-title">
+            <button>
+                Second accordion item
+            </button>
+        </h3>
+        <div class="accordion-content">
+            Drop-down content goes here.
+        </div>
+    </div>
+
 = Filtering Shortcodes =
 
 You can filter the settings and content of the shortcodes by adding some simply code to the functions.php file of your theme.
@@ -244,6 +265,17 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 3. The Accordion Item shortcode insertion dialog box
 
 == Changelog ==
+= 2.4.2 =
+* FIXED: Each accordion group now respects its own settings when using multiple accordions on a single page
+
+= 2.4.1 =
+* FIXED: Accordions now open onkeyup instead of onkeydown to better comply with WCAG 2.1 accessibility guidelines
+
+= 2.4.0 =
+* NEW: Added option to add a button tag wrapper around the accordion title
+* FIXED: better accessibility support
+* Now compatible up to WordPress 5.1
+
 = 2.3.3 =
 * Now compatible up to WordPress 4.8
 * FIXED: aria-mutliselectable is now on the accordion group instead of each accordion item title
@@ -305,6 +337,15 @@ FIXED: A bug where setting both scroll and openfirst would scroll the window wit
 * FIXED: A few incredibly small bugs/annoyances
 
 == Upgrade Notice ==
+= 2.4.2 =
+Fixed an issue where only the last accordion group's settings were used for all accordion groups when using multiple accordions to a single page.
+
+= 2.4.1 =
+Accordions now open onkeyup instead of onkeydown to better comply with WCAG 2.1 accessibility guidelines.
+
+= 2.4.0 =
+Updated accessibility. Added an option to a button wrapper around each accordion item title.
+
 = 2.3.2 =
 You may notice a focus state around your accordion items when clicking them. This is necessary to support accessibility within the plugin. If you really must remove the focus state (though not recommended) you can do so by adding this CSS to your theme's stylesheet: `.accordion-title {outline: none;}`.
 

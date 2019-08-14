@@ -1,7 +1,7 @@
 <div class="entry-source-note">
-	<?php include WDS_CITYTECH_DIR . '/views/portfolio/citation.php'; ?>
+	<div class="entry__citation"><?php echo wp_kses_post( $data['citation'] ); ?></div>
 
 	<?php if ( ! empty( $data['annotation'] ) ) : ?>
-		<div class="entry__annotation"><?php echo esc_html( $data['annotation'] ); ?></div>
+		<div class="entry__annotation show-more"><?php echo esc_html( $data['annotation'] ); ?></div>
 	<?php endif; ?>
 </div>

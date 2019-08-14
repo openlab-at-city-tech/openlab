@@ -10,6 +10,10 @@
 	font-style: normal;
 }
 
+#debugLog {
+	display: none;
+}
+
 [data-icon]:before {
 	font-family: "openlab-gradebook" !important;
 	content: attr(data-icon);
@@ -36,6 +40,65 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/**bootstrap-style callouts**/
+.bs-callout {
+	padding: 20px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-left-width: 5px;
+	border-radius: 3px;
+	background: #f4e2e3;
+}
+.bs-callout h4 {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+	margin-bottom: 0;
+}
+.bs-callout code {
+	border-radius: 3px;
+}
+.bs-callout + .bs-callout {
+	margin-top: -5px;
+}
+.bs-callout-default {
+	border-left-color: #777;
+}
+.bs-callout-default h4 {
+	color: #777;
+}
+.bs-callout-primary {
+	border-left-color: #428bca;
+}
+.bs-callout-primary h4 {
+	color: #428bca;
+}
+.bs-callout-success {
+	border-left-color: #5cb85c;
+}
+.bs-callout-success h4 {
+	color: #5cb85c;
+}
+.bs-callout-danger {
+	border-left-color: #d9534f;
+}
+.bs-callout-danger h4 {
+	color: #d9534f;
+}
+.bs-callout-warning {
+	border-left-color: #f0ad4e;
+}
+.bs-callout-warning h4 {
+	color: #f0ad4e;
+}
+.bs-callout-info {
+	border-left-color: #5bc0de;
+}
+.bs-callout-info h4 {
+	color: #5bc0de;
+}
+
 body {
 	&.toplevel_page_oplb_gradebook {
 		#adminmenu {
@@ -48,14 +111,37 @@ body {
 				}
 			}
 		}
-		.btn{
-			&.btn-opaque{
+		.btn {
+			&.btn-opaque {
 				background: #d0d0d0;
 				color: #000;
 				border-color: #b9b9b9;
-				&:hover{
+				&:hover {
 					background: #e6e6e6;
 				}
+			}
+		}
+	}
+	#modal-download-csv-success {
+		display: none;
+		cursor: default;
+		justify-content: center;
+		align-items: center;
+		border: 1px solid transparent;
+		white-space: nowrap;
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.42857143;
+		background: #5cb85c;
+		margin-bottom: 0;
+		color: #fff;
+		vertical-align: middle;
+		.fa-stack {
+			font-size: 10px;
+			width: 20px;
+			margin-right: 6px;
+			.fa-check {
+				color: #5cb85c;
 			}
 		}
 	}
@@ -79,6 +165,14 @@ body {
 	}
 }
 
+.openlab-gradebook_page_oplb_gradebook_settings {
+	h2{
+		margin-top: 28px;
+	}
+	p {
+		margin: 0 0 15px;
+	}
+}
 .oplb-grdbk-check-mark-2:before {
 	content: "\61";
 }
@@ -150,13 +244,6 @@ body {
 	}
 	#edit-comment-form {
 		padding: 20px 30px;
-	}
-}
-
-.upload-modal {
-	.modal-dialong {
-		width: 96%;
-		max-width: 880px;
 	}
 }
 
@@ -244,6 +331,21 @@ h5 {
 
 body {
 	background-color: #f1f1f1;
+	&.admin_page_oplb-gradebook-upload-csv {
+		.oplb-bs.navbar-location-oplb-bs,
+		#wpadminbar,
+		#adminmenumain,
+		#wpfooter,
+		#local-env-flag {
+			display: none !important;
+		}
+		#wpcontent {
+			padding-top: 21px !important;
+		}
+	}
+	.bold {
+		font-weight: bold;
+	}
 	.overline {
 		text-decoration: overline;
 	}
@@ -566,7 +668,7 @@ span.twitter-typeahead {
 					flex: 1 0 40%;
 					&.inactive {
 						button {
-							color: #8F8F8F;
+							color: #8f8f8f;
 						}
 					}
 				}
@@ -723,7 +825,7 @@ span.twitter-typeahead {
 				.sort-up {
 					.arrow-wrapper {
 						span {
-							color: #0073aa	;
+							color: #0073aa;
 						}
 						.glyphicon-triangle-bottom {
 							visibility: hidden;
@@ -876,9 +978,11 @@ span.twitter-typeahead {
 			td {
 				min-width: 180px;
 				max-width: 200px;
+				text-overflow: ellipsis;
 			}
 			td {
 				padding-bottom: 17px;
+				overflow: hidden;
 				.grade-numeric {
 					display: block;
 					margin: 0 0 8px;
@@ -889,6 +993,7 @@ span.twitter-typeahead {
 			#students td.student-tools {
 				max-width: 50px;
 				min-width: 50px;
+				overflow: visible;
 				button#download-csv-mobile {
 					background: #0073aa;
 					font-size: 22px;
@@ -936,6 +1041,95 @@ span.twitter-typeahead {
 						padding: 19px 8px 3px;
 					}
 				}
+			}
+		}
+	}
+}
+
+#upload-modal {
+	&.secondary-modal {
+		z-index: 1039;
+	}
+	.modal-body {
+		p {
+			margin: 10px 10px 20px;
+			font-size: 14px;
+		}
+		ol {
+			margin: 0 10px 10px 25px;
+		}
+		li {
+			margin-bottom: 10px;
+		}
+		.download-buttons {
+			display: block;
+			margin-top: 10px;
+		}
+	}
+	#modal-download-csv {
+		&:hover {
+			background: #286090;
+			border-color: #2e6da4;
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+	#modal-upload-csv {
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	.download-buttons.success {
+		#modal-download-csv-success {
+			display: inline-flex;
+		}
+	}
+}
+
+#upload-csv {
+	.file-drop-zone-title {
+		padding: 42px 10px;
+	}
+	.progress {
+		height: 19px;
+		.progress-bar {
+			height: 19px;
+		}
+	}
+	#upload-csv-success-message {
+		background: #efefef;
+		p {
+			color: #000;
+		}
+		#modal-download-csv-success {
+			display: block;
+			max-width: 120px;
+		}
+	}
+	#uploadExternal {
+		display: none;
+	}
+	.modal-content {
+		&.upload-active {
+			#uploadExternal {
+				display: inline-block;
+			}
+			.input-group-btn {
+				.btn-primary {
+					background: #6b6b6b;
+					border-color: #636363;
+				}
+			}
+		}
+		&.upload-successful {
+			.file-preview {
+				display: none;
+			}
+			.input-group.file-caption-main {
+				display: none;
+			}
+			#uploadExternal {
+				display: none;
 			}
 		}
 	}

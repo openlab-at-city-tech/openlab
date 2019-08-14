@@ -12,7 +12,7 @@
  * the parent theme's file, so the child theme functions would be used.
  *
  * @link https://codex.wordpress.org/Theme_Development
- * @link https://codex.wordpress.org/Child_Themes
+ * @link https://developer.wordpress.org/themes/advanced-topics/child-themes/
  *
  * Functions that are not pluggable (not wrapped in function_exists()) are
  * instead attached to a filter or action hook.
@@ -455,8 +455,8 @@ if ( ! function_exists( 'twentyfourteen_the_attached_image' ) ) :
 			// get the URL of the next image attachment...
 			if ( $next_id ) {
 				$next_attachment_url = get_attachment_link( $next_id );
-			} // or get the URL of the first image attachment.
-			else {
+			} else {
+				// or get the URL of the first image attachment.
 				$next_attachment_url = get_attachment_link( reset( $attachment_ids ) );
 			}
 		}

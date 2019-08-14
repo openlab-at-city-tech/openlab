@@ -398,7 +398,6 @@ function gformCalculateProductPrice(form_id, productFieldId){
             var label = gformGetOptionLabel(choice_element, choice_element.val(), selected_price, form_id, field_id);
             choice_element.html(label);
         });
-		dropdown_field.trigger('chosen:updated');
     });
 
 
@@ -949,6 +948,8 @@ function gformDeleteRepeaterItem(deleteButton, max) {
 
 function gformResetRepeaterAttributes($container, depth, row) {
 
+	var cachedRadioSelection = null;
+
 	if (typeof depth === 'undefined') {
 		depth = 0;
 	}
@@ -957,7 +958,7 @@ function gformResetRepeaterAttributes($container, depth, row) {
 		row = 0;
 	}
 
-	$container.children('.gfield_repeater_items').children('.gfield_repeater_item').each(function (i) {
+	$container.children('.gfield_repeater_items').children('.gfield_repeater_item').each(function () {
 		var $children = jQuery(this).children('.gfield_repeater_cell');
 		$children.each(function () {
 			var $cell = jQuery(this);
@@ -1017,15 +1018,30 @@ function gformResetRepeaterAttributes($container, depth, row) {
 						$this.attr('id', newId);
 					}
 				}
-				var newName = name.replace(parts[0], newNameIndex);
+				var newName = name.replace(parts[0], newNameIndex),
+					newNameIsChecked = jQuery('input[name="'+ newName +'"]').is(':checked');
+
+				if ( $this.is(':radio') && $this.is(':checked') && name !== newName && newNameIsChecked ) {
+					if ( cachedRadioSelection !== null ) {
+						cachedRadioSelection.prop('checked', true);
+					}
+
+					$this.prop('checked', false);
+					cachedRadioSelection = $this;
+				}
+
 				$this.attr('name', newName);
 			});
-
 		});
 		if (depth === 0) {
 			row++;
 		}
 	});
+
+	if ( cachedRadioSelection !== null ) {
+		cachedRadioSelection.prop('checked', true);
+		cachedRadioSelection = null;
+	}
 
 }
 
@@ -1763,26 +1779,38 @@ function renderRecaptcha() {
             parameters.stoken = $elem.data( 'stoken' );
         }
 
-	    /**
-	     * Allows a custom callback function to be executed when the user successfully submits the captcha.
-	     *
-	     * @since 2.2.5.20
-	     *
-	     * @param string|false callback The name of the callback function to be executed when the user successfully submits the captcha.
-	     * @param object       $elem    The jQuery object containing the div element with the ginput_recaptcha class for the current reCaptcha field.
-	     */
-	    var callback = gform.applyFilters( 'gform_recaptcha_callback', false, $elem );
+        var callback = false;
+
+        if ( $elem.data( 'size' ) == 'invisible' ) {
+            callback = function( token ) {
+                if ( token ) {
+                    $elem.closest('form').submit();
+                }
+            }
+        }
+
+        /**
+         * Allows a custom callback function to be executed when the user successfully submits the captcha.
+         *
+         * @since 2.4.x     The callback will be a function if reCAPTCHA v2 Invisible is used.
+         * @since 2.2.5.20
+         *
+         * @param string|false|object   The name of the callback function or the function object itself to be executed when the user successfully submits the captcha.
+         * @param object       $elem    The jQuery object containing the div element with the ginput_recaptcha class for the current reCaptcha field.
+         */
+	    callback = gform.applyFilters( 'gform_recaptcha_callback', callback, $elem );
 	    if ( callback ) {
 		    parameters.callback = callback;
 	    }
 
-        grecaptcha.render( this.id, parameters );
+        $elem.data( 'widget-id', grecaptcha.render( this.id, parameters ) );
 
 	    if ( parameters.tabindex ) {
 		    $elem.find( 'iframe' ).attr( 'tabindex', parameters.tabindex );
 	    }
 
         gform.doAction( 'gform_post_recaptcha_render', $elem );
+
 
     } );
 
@@ -1815,13 +1843,9 @@ function gformValidateFileSize( field, max_file_size ) {
 	if ( file && file.size > max_file_size ) {
 
 		// Set validation message.
-		validation_element.text( file.name + " - " + gform_gravityforms.strings.file_exceeds_limit );
+		validation_element.text(file.name + " - " + gform_gravityforms.strings.file_exceeds_limit);
 
-		// Unset file selection.
-		var input = jQuery( field );
-		input.replaceWith( input.val( '' ).clone( true ) );
-
-	} else {
+    } else {
 
 		// Reset validation message.
 		validation_element.text( '' );
@@ -1954,19 +1978,26 @@ function gformValidateFileSize( field, max_file_size ) {
                     return;
                 }
 
-                var size = typeof file.size !== 'undefined' ? plupload.formatSize(file.size) : strings.in_progress;
-                var status = '<div id="'
-                    + file.id
-                    + '" class="ginput_preview">'
-                    + htmlEncode(file.name)
-                    + ' (' + size + ') <b></b> '
-                    + '<a href="javascript:void(0)" title="' + strings.cancel_upload + '" onclick=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container.id + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\' onkeypress=\'$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container.id + ';uploader.stop();uploader.removeFile(uploader.getFile("' + file.id +'"));$this.after("' + strings.cancelled + '"); uploader.start();$this.remove();\'>' + strings.cancel + '</a>'
-                    + '</div>';
+                var size         = typeof file.size !== 'undefined' ? plupload.formatSize(file.size) : strings.in_progress,
+                    removeFileJs = '$this=jQuery(this); var uploader = gfMultiFileUploader.uploaders.' + up.settings.container.id + ';uploader.stop();uploader.removeFile(uploader.getFile(\'' + file.id +'\'));$this.after(\'' + strings.cancelled + '\'); uploader.start();$this.remove();',
+                    statusMarkup = '<div id="{0}" class="ginput_preview">{1} ({2}) <b></b> <a href="javascript:void(0)" title="{3}" onclick="{4}" onkeypress="{4}">{5}</a></div>';
 
-                $('#' + up.settings.filelist).prepend(status);
+                /**
+                 *  Filer the file upload markup as it is being uploaded.
+                 *
+                 *  @param {string}            statusMarkup Markup template used to render the status of the file being uploaded.
+                 *  @param {plupload.File}     file         Instance of File being uploaded. See: https://www.plupload.com/docs/v2/File.
+                 *  @param {int|string}        size         File size.
+                 *  @param {object}            strings      Array of localized strings relating to the file upload UI.
+                 *  @param {string}            removeFileJs JS used to remove the file when the "Cancel" link is click/pressed.
+                 *  @param {plupload.Uploader} up           Instance of Uploader responsible for uploading current file. See: https://www.plupload.com/docs/v2/Uploader.
+                 */
+                statusMarkup = gform.applyFilters( 'gform_file_upload_status_markup', statusMarkup, file, size, strings, removeFileJs, up )
+                    .format( file.id, htmlEncode( file.name ), size, strings.cancel_upload, removeFileJs, strings.cancel );
+
+                $( '#' + up.settings.filelist ).prepend( statusMarkup );
+
                 totalCount++;
-
-
 
             });
 
@@ -2298,7 +2329,23 @@ jQuery( document ).on( 'submit.gravityforms', '.gform_wrapper form', function( e
 		window[ 'gf_submitting_' + formID ] = false;
 		formWrapper.find( '.gform_ajax_spinner' ).remove();
 		event.preventDefault();
-	}
+	} else if ( isSubmit || isSubmit ) {
+        var $reCaptcha = formWrapper.find( '.ginput_recaptcha' );
+
+        if ( $reCaptcha.length !== 0 && $reCaptcha.data( 'size' ) === 'invisible' ) {
+            // Check for the verified invisible captcha token first.
+            var $reCaptchaResponse = formWrapper.find( 'input[name="g-recaptcha-response"]' );
+            if ( $reCaptchaResponse.length === 0 ) {
+                $reCaptchaResponse = $reCaptcha.find( '.g-recaptcha-response' );
+            }
+            var token = $reCaptchaResponse.val();
+            if ( ! token ) {
+                // Execute the invisible captcha.
+                grecaptcha.execute($reCaptcha.data('widget-id'));
+                event.preventDefault();
+            }
+        }
+    }
 
 } );
 

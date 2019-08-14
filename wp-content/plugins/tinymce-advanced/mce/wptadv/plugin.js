@@ -2,9 +2,9 @@
  * This file is part of the TinyMCE Advanced WordPress plugin and is released under the same license.
  * For more information please see tinymce-advanced.php.
  *
- * Copyright (c) 2007-2018 Andrew Ozz. All rights reserved.
+ * Copyright (c) 2007-2019 Andrew Ozz. All rights reserved.
  */
- 
+
 ( function( tinymce ) {
 	tinymce.PluginManager.add( 'wptadv', function( editor ) {
 		var noAutop = ( ! editor.settings.wpautop && editor.settings.tadv_noautop );
@@ -64,11 +64,111 @@
 			});
 		});
 
+		editor.on( 'ObjectResizeStart', function( event ) {
+			var element = event.target;
+			var table = editor.$( element );
+			var parentWidth;
+			var tableWidth;
+			var width;
+
+			if ( table.is( 'table' ) ) {
+				if ( element.style.width && element.style.width.indexOf( '%' ) !== -1 ) {
+					return;
+				}
+
+				parentWidth = parseInt( table.parent().css( 'width' ), 10 );
+				tableWidth = parseInt( event.width, 10 );
+
+				if ( parentWidth && tableWidth ) {
+					if ( Math.abs( parentWidth - tableWidth ) < 3 ) {
+						table.css({ width: '100%' });
+					} else {
+						width = Math.round( ( tableWidth / parentWidth ) * 100 );
+
+						if ( width > 10 && width < 200 ) {
+							table.css({ width: width + '%' });
+						}
+					}
+				}
+			}
+		}, true );
+
+		editor.addMenuItem( 'tmaresettablesize', {
+			text: 'Reset table size',
+			cmd: 'tmaResetTableSize',
+			icon: 'dashicon dashicons-image-flip-horizontal',
+			context: 'format',
+		});
+
+		editor.addMenuItem( 'tmaremovetablestyles', {
+			text: 'Remove table styling',
+			cmd: 'tmaRemoveTableStyles',
+			icon: 'dashicon dashicons-editor-table',
+			context: 'format',
+		});
+
+		editor.addButton( 'tmaresettablesize', {
+			title: 'Reset table size',
+			cmd: 'tmaResetTableSize',
+			icon: 'dashicon dashicons-image-flip-horizontal',
+		} );
+
+		editor.addButton( 'tmaremovetablestyles', {
+			title: 'Remove table styling',
+			cmd: 'tmaRemoveTableStyles',
+			icon: 'dashicon dashicons-editor-table',
+		} );
+
+		editor.addCommand( 'tmaRemoveTableStyles', function() {
+			var node = editor.selection.getStart();
+			var table = editor.dom.getParents( node, 'table' );
+
+			if ( table ) {
+				editor.$( table ).attr({
+					style: null,
+					width: null,
+					height: null,
+					border: null,
+					cellspacing: null,
+					cellpadding: null
+				}).find( 'tr, td' ).each( function( i, element ) {
+					editor.$( element ).attr({
+						style: null,
+						width: null,
+						height: null
+					});
+				} );
+			}
+		} );
+
+		editor.addCommand( 'tmaResetTableSize', function() {
+			var node = editor.selection.getStart();
+			var table = editor.dom.getParents( node, 'table' );
+
+			if ( table ) {
+				removeInlineSizes( table );
+
+				editor.$( table ).find( 'tr, td' ).each( function( i, element ) {
+					removeInlineSizes( element );
+				} );
+			}
+		} );
+
+		function removeInlineSizes( node ) {
+			var element = editor.$( node );
+
+			element.css({ width: null, height: null });
+
+			if ( ! element.attr( 'style' ) ) {
+				element.attr({ style: null });
+			}
+		}
+
 		if ( noAutop ) {
 			editor.on( 'beforeSetContent', function( event ) {
 				var autop;
 				var wp = window.wp;
-				
+
 				if ( ! wp ) {
 					return;
 				}
@@ -86,13 +186,22 @@
 
 			if ( editor.settings.classic_block_editor ) {
 				editor.on( 'beforeGetContent', function( event ) {
-					// Mark all paragraph tags so they are not stripped by the Block Editor...
-					if ( event.format !== 'raw' ) {
+					if ( event.format === 'raw' ) {
+						return;
+					}
+
+					var blocks = tinymce.$( '.block-editor-block-list__block' );
+
+					if ( blocks.length === 1 && blocks.attr( 'data-type' ) === 'core/freeform' ) {
+						// Mark all paragraph tags inside a single freeform block so they are not stripped by the block editor...
 						editor.$( 'p' ).each( function ( i, node ) {
 							if ( ! node.hasAttributes() ) {
 								editor.$( node ).attr( 'data-tadv-p', 'keep' );
 							}
-						} )
+						} );
+					} else {
+						// Remove the above ugliness...
+						editor.$( 'p[data-tadv-p]' ).removeAttr( 'data-tadv-p' );
 					}
 				}, true );
 			}

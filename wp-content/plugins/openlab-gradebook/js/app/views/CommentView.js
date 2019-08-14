@@ -44,6 +44,13 @@ define([
 		},
 		addComment: function(ev) {
 
+			var checkElem = $("body").find("#modalDialogComments");
+
+			//prevent double modals
+			if(checkElem.length){
+				return false;
+			}
+
 			var view = new CommentModalView({
 				model: this.model,
 				gradebook: this.gradebook,

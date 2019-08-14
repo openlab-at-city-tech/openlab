@@ -317,14 +317,19 @@
 			}
 
 	.tribe-ea .tribe-banner {
+		display: -webkit-box;
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 1 1 auto;
+		-webkit-box-align: center;
+		        align-items: center;
+		-webkit-box-pack: center;
+		        justify-content: center;
+		-webkit-box-flex: 1;
+		        flex: 1 1 auto;
 
 	}
 
 	.tribe-ea .tribe-banner.tribe-active.tribe-dependent {
+			display: -webkit-box;
 			display: flex;
 		}
 
@@ -537,6 +542,7 @@
 
 .tribe-default-settings {
 	display: none;
+	overflow: hidden;
 	padding-bottom: 1rem;
 	padding-top: 1rem;
 }
@@ -688,6 +694,14 @@
 			.tribe-aggregator-inactive .tribe-ea-tab-scheduled .widefat ul {
 				color: #ccc;
 			}
+
+.tribe-ea-field-wrapper-post_status {
+	min-width: 275px;
+}
+
+.tribe-ea-field-wrapper-post_status.tribe-active {
+		float: left;
+	}
 
 @media screen and (max-width: 782px) {
 		/**

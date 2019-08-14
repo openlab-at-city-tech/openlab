@@ -67,7 +67,19 @@
 
 							<?php if ( get_the_title() ) : ?>
 							
-								<h1 class="post-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h1>
+								<h1 class="post-title">
+
+									<?php if ( is_single() ) : ?>
+								
+										<a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+
+									<?php else : ?>
+
+										<?php the_title(); ?>
+
+									<?php endif; ?>
+									
+								</h1>
 
 							<?php endif; ?>
 

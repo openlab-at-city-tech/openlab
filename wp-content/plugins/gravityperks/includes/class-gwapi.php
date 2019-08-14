@@ -123,7 +123,7 @@ class GWAPI {
 
 		if ( ! $response ) {
 			if ( $cache ) {
-				set_transient( $transient, null, $cache );
+				set_transient( $transient, null, $cache_expiration );
 			}
 
 			return false;
@@ -190,9 +190,9 @@ class GWAPI {
 				'%LICENSE_ID%',
 				'%LICENSE_HASH%',
 			), array(
-				rawurlencode(GWAPI::get_site_url()),
-				rawurlencode($license['ID']),
-				rawurlencode(md5(GWPerks::get_license_key())),
+				rawurlencode( GWAPI::get_site_url() ),
+				rawurlencode( isset( $license['ID'] ) ? $license['ID'] : '' ),
+				rawurlencode( md5( GWPerks::get_license_key() ) ),
 			), $perk->package);
 
 			$perk->download_link = $perk->package;
@@ -231,6 +231,10 @@ class GWAPI {
 		$force_check = rgget( 'force-check' ) == 1;
 
 		GravityPerks::log_debug( 'pre_set_site_transient_update_plugins_filter() start. Retrieves download package for individual prodyct auto-updates.' );
+
+		if ( ! is_object( $_transient_data ) ) {
+			$_transient_data = new stdClass;
+		}
 
 		if ( empty( $_transient_data->response ) ) {
 			$_transient_data->response = array();

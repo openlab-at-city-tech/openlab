@@ -1,0 +1,64 @@
+// *-------------------------------------------------------------------------------------
+// * Underline, overline, rightline and leftline reveal
+// *-------------------------------------------------------------------------------------
+
+@mixin underlineReveal {
+	.ftwp-text::before {
+		top: auto;
+		right: 0;
+		bottom: -$linemedium;
+		left: 0;
+		height: $linemedium;
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				bottom: 0;
+			}		
+		}
+	}	
+}
+
+
+@mixin leftlineReveal {
+	.ftwp-text::before {
+		top: 0;
+		right: auto;
+		bottom: 0;
+		left: -$linebold;
+		width: $linebold;
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+//		&:hover,
+		&:focus {
+			.ftwp-text::before {
+				left: 0;
+			}		
+		}
+	}	
+}
+
+
+@mixin rightlineReveal {
+	.ftwp-text::before {
+		top: 0;
+		right: -$linebold;
+		bottom: 0;
+		left: auto;
+		width: $linebold;
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+//		&:hover,
+		&:focus {
+			.ftwp-text::before {
+				right: 0;
+			}		
+		}
+	}	
+}

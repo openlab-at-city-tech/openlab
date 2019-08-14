@@ -173,7 +173,7 @@ define([
 			var template = _.template(
 				$("#edit-cell-dropdown-mid-final-template").html()
             );
-            
+
 			var compiled = template({
 				student: this.model,
 				grades: this.grades,

@@ -1,12 +1,14 @@
 <?php
 class S2_Frontend extends S2_Core {
 	/**
-	Load all our strings
-	*/
-	function load_strings() {
+	 * Load all our strings
+	 */
+	public function load_strings() {
+		// Translators: Link to login page
 		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
 
 		$profile = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
+		// Translators: Link to Profile page
 		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>', 'subscribe2' ), $profile ) . '</p>';
 		if ( true === $this->s2_mu ) {
 			global $blog_id;
@@ -14,6 +16,7 @@ class S2_Frontend extends S2_Core {
 			if ( ! is_user_member_of_blog( $user_ID, $blog_id ) ) {
 				// if we are on multisite and the user is not a member of this blog change the link
 				$mu_profile = apply_filters( 's2_mu_profile_link', get_option( 'siteurl' ) . '/wp-admin/?s2mu_subscribe=' . $blog_id );
+				// Translators: Link to Profile page
 				$this->profile = '<p class="s2_message">' . sprintf( __( '<a href="%1$s">Subscribe</a> to email notifications when this blog posts new content.', 'subscribe2' ), $mu_profile ) . '</p>';
 			}
 		}
@@ -40,22 +43,26 @@ class S2_Frontend extends S2_Core {
 		$this->subscribe = __( 'subscribe', 'subscribe2' ); //ACTION replacement in subscribing confirmation email
 
 		$this->unsubscribe = __( 'unsubscribe', 'subscribe2' ); //ACTION replacement in unsubscribing in confirmation email
-	} // end load_strings()
+	}
 
 	/* ===== template and filter functions ===== */
 	/**
-	Display our form; also handles (un)subscribe requests
-	*/
-	function shortcode( $atts ) {
-		$args = shortcode_atts( array(
-			'hide'  => '',
-			'id'    => '',
-			'nojs' => 'false',
-			'noantispam' => 'false',
-			'link' => '',
-			'size' => 20,
-			'wrap' => 'true',
-		), $atts );
+	 * Display our form; also handles (un)subscribe requests
+	 */
+	public function shortcode( $atts ) {
+		$args = shortcode_atts(
+			array(
+				'hide'       => '',
+				'id'         => '',
+				'nojs'       => 'false',
+				'noantispam' => 'false',
+				'link'       => '',
+				'size'       => 20,
+				'wrap'       => 'true',
+				'widget'     => 'false',
+			),
+			$atts
+		);
 
 		// if link is true return a link to the page with the ajax class
 		if ( '1' === $this->subscribe2_options['ajax'] && '' !== $args['link'] && ! is_user_logged_in() ) {
@@ -74,7 +81,7 @@ class S2_Frontend extends S2_Core {
 
 		// Apply filters to button text
 		$unsubscribe_button_value = apply_filters( 's2_unsubscribe_button', __( 'Unsubscribe', 'subscribe2' ) );
-		$subscribe_button_value = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2' ) );
+		$subscribe_button_value   = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2' ) );
 
 		// if a button is hidden, show only other
 		$hide = strtolower( $args['hide'] );
@@ -96,7 +103,7 @@ class S2_Frontend extends S2_Core {
 		} elseif ( 'self' === $args['id'] ) {
 			// Correct for Static front page redirect behaviour
 			if ( 'page' === get_option( 'show_on_front' ) && is_front_page() ) {
-				$post = get_post( get_option( 'page_on_front' ) );
+				$post   = get_post( get_option( 'page_on_front' ) );
 				$action = ' action="' . get_option( 'home' ) . '/' . $post->post_name . '/"';
 			} else {
 				$action = '';
@@ -106,8 +113,11 @@ class S2_Frontend extends S2_Core {
 		}
 
 		// allow remote setting of email in form
-		if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
-			$value = $this->sanitize_email( $_REQUEST['email'] );
+		if ( isset( $_REQUEST['email'] ) ) {
+			$email = $this->sanitize_email( $_REQUEST['email'] );
+		}
+		if ( isset( $_REQUEST['email'] ) && false !== $this->validate_email( $email ) ) {
+			$value = $email;
 		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
 			$value = '';
 		} else {
@@ -123,7 +133,7 @@ class S2_Frontend extends S2_Core {
 		// deploy some anti-spam measures
 		$antispam_text = '';
 		if ( 'true' !== strtolower( $args['noantispam'] ) ) {
-			$antispam_text = '<span style="display:none !important">';
+			$antispam_text  = '<span style="display:none !important">';
 			$antispam_text .= '<label for="firstname">Leave This Blank:</label><input type="text" id="firstname" name="firstname" />';
 			$antispam_text .= '<label for="lastname">Leave This Blank Too:</label><input type="text" id="lastname" name="lastname" />';
 			$antispam_text .= '<label for="uri">Do Not Change This:</label><input type="text" id="uri" name="uri" value="http://" />';
@@ -133,17 +143,24 @@ class S2_Frontend extends S2_Core {
 		// get remote IP address
 		$remote_ip = $this->get_remote_ip();
 
+		// form name
+		if ( 'true' === $args['widget'] ) {
+			$form_name = 's2formwidget';
+		} else {
+			$form_name = 's2form';
+		}
+
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="s2form" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="text" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="s2form" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="text" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
-		$this->s2form = apply_filters( 's2_form', $this->form );
+		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
 		global $user_ID;
-		if ( $user_ID ) {
-			$this->s2form = $this->profile;
+		if ( 0 !== $user_ID ) {
+			return $this->profile;
 		}
 
 		if ( isset( $_POST['subscribe'] ) || isset( $_POST['unsubscribe'] ) ) {
@@ -152,9 +169,13 @@ class S2_Frontend extends S2_Core {
 				// looks like some invisible-to-user fields were changed; falsely report success
 				return $this->confirmation_sent;
 			}
+			$validation = apply_filters( 's2_form_submission', true );
+			if ( true !== $validation ) {
+				return apply_filters( 's2_form_failed_validation', $this->s2form );
+			}
 			global $wpdb;
 			$this->email = $this->sanitize_email( $_POST['email'] );
-			if ( ! is_email( $this->email ) ) {
+			if ( false === $this->validate_email( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->not_an_email;
 			} elseif ( $this->is_barred( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->barred_domain;
@@ -162,8 +183,8 @@ class S2_Frontend extends S2_Core {
 				$this->ip = $_POST['ip'];
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
 					$date = date( 'H:i:s.u', $this->lockout );
-					$ips = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $this->public WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
-					if ( in_array( $this->ip, $ips ) ) {
+					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
+					if ( in_array( $this->ip, $ips, true ) ) {
 						return __( 'Slow down, you move too fast.', 'subscribe2' );
 					}
 				}
@@ -214,25 +235,29 @@ class S2_Frontend extends S2_Core {
 			}
 		}
 		return $this->s2form;
-	} // end shortcode()
+	}
 
 	/**
-	Display form when deprecated <!--subscribe2--> is used
-	*/
-	function filter( $content = '' ) {
-		if ( '' === $content || ! strstr( $content, '<!--subscribe2-->' ) ) { return $content; }
+	 * Display form when deprecated <!--subscribe2--> is used
+	 */
+	public function filter( $content = '' ) {
+		if ( '' === $content || ! strstr( $content, '<!--subscribe2-->' ) ) {
+			return $content;
+		}
 
-		return preg_replace( '/(<p>)?(\n)*<!--subscribe2-->(\n)*(</p>)?/', do_shortcode( '[subscribe2]' ), $content );
-	} // end filter()
+		return preg_replace( '/(<p>)?(\n)*<!--subscribe2-->(\n)*(<\/p>)?/', do_shortcode( '[subscribe2]' ), $content );
+	}
 
 	/**
-	Overrides the default query when handling a (un)subscription confirmation
-	This is basically a trick: if the s2 variable is in the query string, just grab the first
-	static page and override it's contents later with title_filter()
-	*/
-	function query_filter() {
+	 * Overrides the default query when handling a (un)subscription confirmation
+	 * This is basically a trick: if the s2 variable is in the query string, just grab the first
+	 * static page and override it's contents later with title_filter()
+	 */
+	public function query_filter() {
 		// don't interfere if we've already done our thing
-		if ( 1 === $this->filtered ) { return; }
+		if ( 1 === $this->filtered ) {
+			return;
+		}
 
 		global $wpdb;
 
@@ -258,14 +283,14 @@ class S2_Frontend extends S2_Core {
 				);
 			}
 		}
-	} // end query_filter()
+	}
 
 	/**
-	Overrides the page title
-	*/
-	function title_filter( $title ) {
+	 * Overrides the page title
+	 */
+	public function title_filter( $title ) {
 		if ( in_the_loop() ) {
-			$code = $_GET['s2'];
+			$code   = $_GET['s2'];
 			$action = intval( substr( $code, 0, 1 ) );
 			if ( 1 === $action ) {
 				return __( 'Subscription Confirmation', 'subscribe2' );
@@ -275,12 +300,12 @@ class S2_Frontend extends S2_Core {
 		} else {
 			return $title;
 		}
-	} // end title_filter()
+	}
 
 	/**
-	Confirm request from the link emailed to the user and email the admin
-	*/
-	function confirm( $content = '' ) {
+	 * Confirm request from the link emailed to the user and email the admin
+	 */
+	public function confirm( $content = '' ) {
 		global $wpdb;
 
 		if ( 1 === $this->filtered && '' !== $this->message ) {
@@ -289,10 +314,10 @@ class S2_Frontend extends S2_Core {
 			return $content;
 		}
 
-		$code = $_GET['s2'];
+		$code   = $_GET['s2'];
 		$action = substr( $code, 0, 1 );
-		$hash = substr( $code, 1, 32 );
-		$id = intval( substr( $code, 33 ) );
+		$hash   = substr( $code, 1, 32 );
+		$id     = intval( substr( $code, 33 ) );
 		if ( $id ) {
 			$this->email = $this->sanitize_email( $this->get_email( $id ) );
 			if ( ! $this->email || wp_hash( $this->email ) !== $hash ) {
@@ -331,64 +356,70 @@ class S2_Frontend extends S2_Core {
 		if ( '' !== $this->message ) {
 			return $this->message;
 		}
-	} // end confirm()
+	}
 
 	/**
-	Prepare and send emails to admins on new subscriptions and unsubsriptions
-	*/
-	function admin_email( $action ) {
-		if ( ! in_array( $action, array( 'subscribe', 'unsubscribe' ) ) ) {
+	 * Prepare and send emails to admins on new subscriptions and unsubsriptions
+	 */
+	public function admin_email( $action ) {
+		if ( ! in_array( $action, array( 'subscribe', 'unsubscribe' ), true ) ) {
 			return false;
 		}
 
 		( '' === get_option( 'blogname' ) ) ? $subject = '' : $subject = '[' . stripslashes( html_entity_decode( get_option( 'blogname' ), ENT_QUOTES ) ) . '] ';
 		if ( 'subscribe' === $action ) {
 			$subject .= __( 'New Subscription', 'subscribe2' );
-			$message = $this->email . ' ' . __( 'subscribed to email notifications!', 'subscribe2' );
+			$message  = $this->email . ' ' . __( 'subscribed to email notifications!', 'subscribe2' );
 		} elseif ( 'unsubscribe' === $action ) {
 			$subject .= __( 'New Unsubscription', 'subscribe2' );
-			$message = $this->email . ' ' . __( 'unsubscribed from email notifications!', 'subscribe2' );
+			$message  = $this->email . ' ' . __( 'unsubscribed from email notifications!', 'subscribe2' );
 		}
+
 		$subject = html_entity_decode( $subject, ENT_QUOTES );
-		$role = array(
+		$role    = array(
 			'fields' => array(
 				'user_email',
 			),
-			'role' => 'administrator',
+			'role'   => 'administrator',
 		);
+
 		$wp_user_query = get_users( $role );
 		foreach ( $wp_user_query as $user ) {
 			$recipients[] = $user->user_email;
 		}
+
 		$recipients = apply_filters( 's2_admin_email', $recipients, $action );
-		$headers = $this->headers();
+		$headers    = $this->headers();
 		// send individual emails so we don't reveal admin emails to each other
 		foreach ( $recipients as $recipient ) {
-			@wp_mail( $recipient, $subject, $message, $headers );
+			$status = wp_mail( $recipient, $subject, $message, $headers );
 		}
-	} // end admin_email()
+	}
 
 	/**
-	Add hook for Minimeta Widget plugin
-	*/
-	function add_minimeta() {
+	 * Add hook for Minimeta Widget plugin
+	 */
+	public function add_minimeta() {
 		if ( 0 !== $this->subscribe2_options['s2page'] ) {
 			echo '<li><a href="' . get_permalink( $this->subscribe2_options['s2page'] ) . '">' . __( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
 		}
-	} // end add_minimeta()
+	}
 
 	/**
-	Check email is not from a barred domain
-	*/
-	function is_barred( $email = '' ) {
-		if ( '' === $email ) { return false; }
+	 * Check email is not from a barred domain
+	 */
+	public function is_barred( $email = '' ) {
+		if ( '' === $email ) {
+			return false;
+		}
 
 		list( $user, $domain ) = explode( '@', $email, 2 );
+
 		$domain = '@' . $domain;
+
 		foreach ( preg_split( '/[\s,]+/', $this->subscribe2_options['barred'] ) as $barred_domain ) {
-			if ( false !== strpos( $barred_domain, '*' ) ) {
-				// wildcard domain checking
-				$url = explode( '.', $barred_domain );
+			if ( false !== strpos( $barred_domain, '!' ) ) {
+				$url   = explode( '.', str_replace( '!', '', $barred_domain ) );
 				$count = count( $url );
 				// make sure our exploded domain has at least 2 components e.g. yahoo.*
 				if ( $count < 2 ) {
@@ -399,7 +430,36 @@ class S2_Frontend extends S2_Core {
 						unset( $url[ $i ] );
 					}
 				}
+
 				$new_barred_domain = '@' . strtolower( trim( implode( '.', $url ) ) );
+
+				if ( false !== strpos( $barred_domain, '*' ) ) {
+					$new_barred_subdomain = '.' . strtolower( trim( implode( '.', $url ) ) );
+					if ( false !== stripos( $domain, $new_barred_domain ) || false !== stripos( $domain, $new_barred_subdomain ) ) {
+						return false;
+					}
+				} else {
+					if ( false !== stripos( $domain, $new_barred_domain ) ) {
+						return false;
+					}
+				}
+			}
+
+			if ( false === strpos( $barred_domain, '!' ) && false !== strpos( $barred_domain, '*' ) ) {
+				// wildcard and explictly allowed checking
+				$url   = explode( '.', str_replace( '!', '', $barred_domain ) );
+				$count = count( $url );
+				// make sure our exploded domain has at least 2 components e.g. yahoo.*
+				if ( $count < 2 ) {
+					continue;
+				}
+				for ( $i = 0; $i < $count; $i++ ) {
+					if ( '*' === $url[ $i ] ) {
+						unset( $url[ $i ] );
+					}
+				}
+
+				$new_barred_domain    = '@' . strtolower( trim( implode( '.', $url ) ) );
 				$new_barred_subdomain = '.' . strtolower( trim( implode( '.', $url ) ) );
 
 				if ( false !== stripos( $domain, $new_barred_domain ) || false !== stripos( $domain, $new_barred_subdomain ) ) {
@@ -413,13 +473,14 @@ class S2_Frontend extends S2_Core {
 				}
 			}
 		}
+
 		return false;
-	} // end is_barred()
+	}
 
 	/**
-	Collect and return the IP address of the remote client machine
-	*/
-	function get_remote_ip() {
+	 * Collect and return the IP address of the remote client machine
+	 */
+	public function get_remote_ip() {
 		$remote_ip = false;
 
 		// In order of preference, with the best ones for this purpose first
@@ -439,27 +500,29 @@ class S2_Frontend extends S2_Core {
 				// addresses. The first one is the original client. It can't be
 				// trusted for authenticity, but we don't need to for this purpose.
 				$address_chain = explode( ',', $_SERVER[ $header ] );
-				$remote_ip = trim( $address_chain[0] );
+				$remote_ip     = trim( $address_chain[0] );
 				break;
 			}
 		}
 
 		return $remote_ip;
-	} // end get_remote_ip()
+	}
 
-	/*
-	Enqueue javascript ip updater code
-	*/
-	function js_ip_script() {
-		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.0', true );
+	/**
+	 * Enqueue javascript ip updater code
+	 */
+	public function js_ip_script() {
+		wp_register_script( 's2_ip_updater', S2URL . 'include/s2-ip-updater' . $this->script_debug . '.js', array(), '1.1', true );
 		wp_enqueue_script( 's2_ip_updater' );
-	} // end js_ip_script()
+	}
 
-	/*
-	Add ip updater library to footer
-	*/
-	function js_ip_library_script() {
-		echo '<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n";
-	} // end js_ip_library_script()
+	/**
+	 * Add ip updater library to footer
+	 */
+	public function js_ip_library_script() {
+		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n"; // phpcs:ignore WordPress.WP.EnqueuedResources
+	}
+
+	/* ===== define some variables ===== */
+	public $profile = '';
 }
-?>

@@ -328,7 +328,7 @@ echo do_shortcode('[cminds_free_activation id="cmtt"]');
                                 <input type="hidden" name="cmtt_glossaryLimitTooltip" value="0" />
                                 <input type="text" name="cmtt_glossaryLimitTooltip" value="<?php echo get_option('cmtt_glossaryLimitTooltip'); ?>"  />
                             </td>
-                            <td colspan="2" class="cmtt_field_help_container">Select this option if you want to show only a limited number of chars and add "(...)<?php echo get_option('cmtt_glossaryTermDetailsLink'); ?>" at the end of the tooltip text. Minimum is 30 chars.</td>
+                            <td colspan="2" class="cmtt_field_help_container">Select this option if you want to show only a limited number of chars and add "(...)" at the end of the tooltip text. Minimum is 30 chars.</td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">Clean tooltip text?</th>

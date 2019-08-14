@@ -2,8 +2,8 @@
 Contributors: wordpressdotorg, azaozz, melchoyce, chanthaboune, alexislloyd, pento, youknowriad, desrosj, luciano-croce
 Tags: gutenberg, disable, disable gutenberg, editor, classic editor, block editor
 Requires at least: 4.9
-Tested up to: 5.0
-Stable tag: 1.3
+Tested up to: 5.2
+Stable tag: 1.4
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,8 @@ Enables the previous "classic" editor and the old-style Edit Post screen with Ti
 == Description ==
 
 Classic Editor is an official plugin maintained by the WordPress team that restores the previous ("classic") WordPress editor and the "Edit Post" screen. It makes it possible to use plugins that extend that screen, add old-style meta boxes, or otherwise depend on the previous editor.
-By default, this plugin hides all functionality available in the new Block Editor ("Gutenberg").
+
+Classic Editor is an official WordPress plugin, and will be fully supported and maintained until at least 2022, or as long as is necessary.
 
 At a glance, this plugin adds the following:
 
@@ -24,9 +25,20 @@ At a glance, this plugin adds the following:
 
 In addition, the Classic Editor plugin includes several filters that let other plugins control the settings, and the editor choice per post and per post type.
 
-Classic Editor is an official WordPress plugin, and will be maintained until at least 2022.
+By default, this plugin hides all functionality available in the new Block Editor ("Gutenberg").
 
 == Changelog ==
+
+= 1.5 =
+* Updated for WordPress 5.2 and Gutenberg 5.3+.
+* Enhanced and fixed the "open posts in the last editor used to edit them" logic.
+* Fixed adding post state so it can easily be accessed from other plugins.
+
+= 1.4 =
+* On network installations removed the restriction for only network activation.
+* Added support for network administrators to choose the default network-wide editor.
+* Fixed the settings link in the warning on network About screen.
+* Properly added the "Switch to Classic Editor" menu item to the Block Editor menu. 
 
 = 1.3 =
 * Fixed removal of the "Try Gutenberg" dashboard widget.
@@ -78,10 +90,30 @@ Fixed a bug where it may attempt to load the Block Editor for post types that do
 = 0.1 =
 Initial release.
 
+== Frequently Asked Questions ==
+
+= Default settings =
+
+When activated this plugin will restore the previous ("classic") WordPress editor and hide the new Block Editor ("Gutenberg").
+These settings can be changed at the Settings => Writing screen.
+
+= Default settings for network installation =
+
+There are two options:
+
+* When network-activated this plugin will set the Classic Editor as default and prevent site administrators and users from changing editors.
+The settings can be changed and default network-wide editor can be selected on the Network Settings screen.
+* When not network-activated each site administrator will be able to activate the plugin and choose options for their users.
+
+= Cannot find the "Switch to Classic Editor" link =
+
+It is in the main Block Editor menu, see this [screenshot](https://ps.w.org/classic-editor/assets/screenshot-7.png?rev=2023480).
+
 == Screenshots ==
 1. Admin settings on the Settings -> Writing screen.
 2. User settings on the Profile screen. Visible when the users are allowed to switch editors.
 3. "Action links" to choose alternative editor. Visible when the users are allowed to switch editors.
 4. Link to switch to the Block Editor while editing a post in the Classic Editor. Visible when the users are allowed to switch editors.
 5. Link to switch to the Classic Editor while editing a post in the Block Editor. Visible when the users are allowed to switch editors.
-6. Network setting to allow site admins to change the default options.
+6. Network settings to select the default editor for the network and allow site admins to change it.
+7. The "Switch to Classic Editor" link.

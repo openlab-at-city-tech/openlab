@@ -1,6 +1,6 @@
 <div class='mapp-directions'>
 	<span class='mapp-close' data-mapp-action='dir-cancel'></span>
-	<?php if (Mappress::ssl()) : ?>
+	<?php if (Mappress::is_ssl()) : ?>
 		<a href='#' class='mapp-myloc' data-mapp-action='dir-myloc'><?php _e('My location', 'mappress-google-maps-for-wordpress'); ?></a>
 	<?php endif; ?>
 	<div>

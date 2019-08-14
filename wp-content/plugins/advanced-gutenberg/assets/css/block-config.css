@@ -1,0 +1,118 @@
+.sticky-menu {
+    background-color: #f3f6fa;
+}
+
+#advgb-loading-screen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center 200px;
+    opacity: 0.5;
+}
+
+#advgb-config-saved-text {
+    position: fixed;
+    top: 250px;
+    left: 50%;
+    z-index: 1000;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    transform: translateX(-50%);
+    width: fit-content;
+    text-align: center;
+}
+
+.block-config-modal-wrapper {
+    padding: 15px;
+}
+
+.block-config-modal-wrapper * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+.block-config-modal-header {
+    margin-bottom: 20px;
+}
+
+.block-config-modal-title {
+    margin: 0;
+    float: left;
+    line-height: 38px;
+}
+
+.block-config-modal-header .block-config-save {
+    float: right;
+}
+
+.block-config-settings-wrapper {
+    padding: 10px;
+}
+
+ul.block-config-settings {
+    list-style: none;
+    padding: 0;
+    margin: 10px auto;
+}
+
+.block-config-category-title {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.block-config-option {
+    padding: 5px 10px;
+}
+
+.block-config-option .block-config-input-wrapper {
+    float: right;
+}
+
+.block-config-settings .ju-settings-option {
+    font-size: 14px;
+}
+
+input.block-config-input[type="number"] {
+    width: 130px;
+}
+
+select.block-config-input {
+    padding: 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 130px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.block-config-option .ju-switch-button {
+    margin-right: 0;
+}
+
+.minicolors-input {
+    height: auto !important;
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    min-width: 100px;
+    font-size: 15px;
+}
+
+input.ju-input.minicolors+.minicolors-swatch {
+    top: 1px;
+    left: 1px;
+}
+
+input.ju-input.minicolors+.minicolors-swatch .minicolors-swatch-color {
+    border: 1px dashed #ccc;
+}
+
+#wpfooter {
+    display: none;
+}

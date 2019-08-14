@@ -1,0 +1,14 @@
+// *-------------------------------------------------------------------------------------
+// * Border Fade.
+// *-------------------------------------------------------------------------------------
+
+@mixin borderFade {
+	.ftwp-anchor {
+		@include transition((color $durationMedium, box-shadow $durationMedium));
+		
+		&.ftwp-active,
+		&:focus {
+			box-shadow: inset 0 0 0 $linemedium rgba($list_active_bgcolor, $opacity);
+		}
+	}
+}

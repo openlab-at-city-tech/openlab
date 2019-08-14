@@ -57,7 +57,18 @@
 									{text: 'p',   value: 'p'},
 									{text: 'div', value: 'div'}
 								]
-							}
+							},
+							{
+								type: 'checkbox',
+								name: 'usebuttons',
+								label: 'Wrap title in <button> tag'
+							},
+							{
+								type: 'container',
+								name: 'container',
+								label: '',
+								html: '<div style="font-size: 0.75em;">Button tags are better for accessibility, but may require<br/>additional CSS styling to match your site design.</div>'
+							},
 						],
 						onsubmit: function(e) {
 							var shortcode = '[' + accordionShortcodesPrefix + 'accordion';
@@ -79,6 +90,9 @@
 							}
 							if (e.data.tag) {
 								shortcode += ' tag=' + e.data.tag;
+							}
+							if (e.data.usebuttons) {
+								shortcode += ' usebuttons=' + e.data.usebuttons;
 							}
 
 							shortcode += ']' + editor.selection.getContent() + '[/' + accordionShortcodesPrefix + 'accordion]';

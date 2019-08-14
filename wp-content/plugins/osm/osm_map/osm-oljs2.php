@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 */
 
 class Osm_OpenLayers
@@ -748,7 +749,7 @@ class Osm_OpenLayers
 
   public static function addMarkerListLayer($a_MapName, $Icon ,$a_MarkerArray, $a_DoPopUp)
   {
-    Osm::traceText(DEBUG_INFO, "addMarkerListLayer(".$a_MapName.",".$Icon[name].",".$Icon[width].",".$Icon[height].",".$a_MarkerArray.",".$Icon[offset_width].",".$Icon[offset_height].",".$a_DoPopUp.")");
+    Osm::traceText(DEBUG_INFO, "addMarkerListLayer(".$a_MapName.",".$Icon['name'].",".$Icon['width'].",".$Icon['height'].",".$a_MarkerArray.",".$Icon['offset_width'].",".$Icon['offset_height'].",".$a_DoPopUp.")");
 
     $Layer = '';
     $Layer .= 'var MarkerLayer = new OpenLayers.Layer.Markers("Marker");';
@@ -773,13 +774,16 @@ class Osm_OpenLayers
 
     $Layer .= 'var '.$a_MapName.'IconArray = [];';
 
-    $NumOfMarker = count($a_MarkerArray);
+	$NumOfMarker = 0;
+	if (is_array($a_MarkerArray)) {
+		$NumOfMarker = count($a_MarkerArray);
+	}
     for ($row = 0; $row < $NumOfMarker; $row++){
 
       $Layer .= 'var Mdata = {};';
       $Icon_tmp = $Icon; 
       
-      if ($a_MarkerArray[$row][Marker] != ""){
+      if ($a_MarkerArray[$row]['Marker'] != ""){
         $IconURL = OSM_PLUGIN_ICONS_URL.$a_MarkerArray[$row][Marker];
         if (Osm_icon::isOsmIcon($a_MarkerArray[$row][Marker]) == 1){
           $Icon_tmp = Osm_icon::getIconsize($a_MarkerArray[$row][Marker]);
@@ -791,12 +795,12 @@ class Osm_OpenLayers
         }
       }
       else {
-        $IconURL = OSM_PLUGIN_ICONS_URL.$Icon[name];
+        $IconURL = OSM_PLUGIN_ICONS_URL.$Icon['name'];
       } 
       $Layer .= '
         Mdata.icon = new OpenLayers.Icon("'.$IconURL.'",
-          new OpenLayers.Size('.$Icon_tmp[width].','.$Icon_tmp[height].'),
-          new OpenLayers.Pixel('.$Icon_tmp[offset_width].', '.$Icon_tmp[offset_height].'));';   
+          new OpenLayers.Size('.$Icon_tmp['width'].','.$Icon_tmp['height'].'),
+          new OpenLayers.Pixel('.$Icon_tmp['offset_width'].', '.$Icon_tmp['offset_height'].'));';   
  
       $Layer .= ''.$a_MapName.'IconArray.push(Mdata);'; 
     }
@@ -804,13 +808,13 @@ class Osm_OpenLayers
     for ($row = 0; $row < $NumOfMarker; $row++){
 
       // add the the backslashes
-      $OSM_HTML_TEXT = addslashes($a_MarkerArray[$row][text]);
+      $OSM_HTML_TEXT = addslashes($a_MarkerArray[$row]['text']);
 
-      $Layer .= 'var ll = new OpenLayers.LonLat('.$a_MarkerArray[$row][lon].','.$a_MarkerArray[$row][lat].').transform('.$a_MapName.'.displayProjection, '.$a_MapName.'.projection);';
+      $Layer .= 'var ll = new OpenLayers.LonLat('.$a_MarkerArray[$row]['lon'].','.$a_MarkerArray[$row]['lat'].').transform('.$a_MapName.'.displayProjection, '.$a_MapName.'.projection);';
 
       $Layer .= 'var feature = new OpenLayers.Feature(MarkerLayer, ll, '.$a_MapName.'IconArray['.$row.']);';         
       $Layer .= 'feature.closeBox = true;';
-      $Layer .= 'feature.popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {"autoSize": true, minSize: new OpenLayers.Size('.$a_MarkerArray[$row][popup_width].','.$a_MarkerArray[$row][popup_height].'),"keepInMap": true } );';      
+      $Layer .= 'feature.popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {"autoSize": true, minSize: new OpenLayers.Size('.$a_MarkerArray[$row]['popup_width'].','.$a_MarkerArray[$row]['popup_height'].'),"keepInMap": true } );';      
       $Layer .= 'feature.data.popupContentHTML = "'.$OSM_HTML_TEXT.'";';
       $Layer .= 'feature.data.overflow = "hidden";';
 

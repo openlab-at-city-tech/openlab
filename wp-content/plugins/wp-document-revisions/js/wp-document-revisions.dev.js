@@ -16,6 +16,9 @@
       this.enableSubmit = bind(this.enableSubmit, this);
       this.autosaveEnableButtons = bind(this.autosaveEnableButtons, this);
       this.hijackAutosave = bind(this.hijackAutosave, this);
+      this.cookieFalse = bind(this.cookieFalse, this);
+      this.cookieTrue = bind(this.cookieTrue, this);
+      this.cookieDelete = bind(this.cookieDelete, this);
       this.$ = $;
       this.$('.revision').click(this.restoreRevision);
       this.$('#override_link').click(this.overrideLock);
@@ -26,6 +29,14 @@
       this.$('#misc-publishing-actions a').click(this.enableSubmit);
       this.$('input, select').on('change', this.enableSubmit);
       this.$('input[type=text], textarea').on('keyup', this.enableSubmit);
+      this.$('#content-add_media').click(this.cookieFalse);
+      this.$('#postimagediv .inside').click(this.cookieTrue);
+      this.$('#submitdiv .inside').click(this.cookieDelete);
+      this.$('#adminmenumain').click(this.cookieDelete);
+      this.$('#wpadminbar').click(this.cookieDelete);
+      this.$('#document').show();
+      this.$('#revision-log').show();
+      this.$('#revision-summary').hide();
       this.bindPostDocumentUploadCB();
       this.hijackAutosave();
       setInterval(this.updateTimestamps, 60000);
@@ -44,6 +55,7 @@
     };
 
     WPDocumentRevisions.prototype.enableSubmit = function() {
+      this.$('#revision-summary').show();
       this.$(':button, :submit', '#submitpost').removeAttr('disabled');
       return this.window.jQuery('#lock_override').prev().fadeIn();
     };
@@ -153,6 +165,23 @@
           return _this.postDocumentUpload(file.name, response.response);
         };
       })(this));
+    };
+
+    WPDocumentRevisions.prototype.cookieFalse = function() {
+      var secure = ( 'https:' === window.location.protocol );
+      wpCookies.set( 'doc_image', 'false', 24 * 60 * 60, false, false, secure );
+    };
+
+    WPDocumentRevisions.prototype.cookieTrue = function() {
+      var secure = ( 'https:' === window.location.protocol );
+      wpCookies.set( 'doc_image', 'true', 24 * 60 * 60, false, false, secure );
+      this.$(':button, :submit', '#submitpost').removeAttr('disabled');
+      // Propagation will be stopped in postimagediv to stop document event setting cookie false.
+    };
+
+    WPDocumentRevisions.prototype.cookieDelete = function() {
+      var secure = ( 'https:' === window.location.protocol );
+      wpCookies.set( 'doc_image', 'true', -1, false, false, secure );
     };
 
     WPDocumentRevisions.prototype.updateTimestamps = function() {

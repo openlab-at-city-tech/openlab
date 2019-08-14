@@ -12,7 +12,8 @@ define([
 		events: {
 			"hidden.bs.modal": "editCancel",
 			"click #edit-comment": "editSave",
-			"click #clear-comment": "clearComment"
+			"click #clear-comment": "clearComment",
+			"shown.bs.modal": "focusInput"
 		},
 		initialize: function(options) {
 			this.model = options.model;
@@ -161,6 +162,9 @@ define([
 			} else {
 				this.model.set({ comments: comments, commentsUpdate: false });
 			}
+		},
+		focusInput: function() {
+			this.$el.find("#comment").focus();
 		}
 	});
 

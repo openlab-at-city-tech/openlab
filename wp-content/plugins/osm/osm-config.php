@@ -46,8 +46,8 @@ define ("Osm_OL_LibraryPath", OSM_PLUGIN_URL.'js/OL/2.13.1/');
 define ("Osm_OL_LibraryLocation", OSM_PLUGIN_URL."js/OL/2.13.1/OpenLayers.js");
 
 
-define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/4.5.0/ol.js");
-define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/4.5.0/css/ol.css");
+define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/5.3/ol.js");
+define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/5.3/css/ol.css");
 define ("Osm_map_CSS", OSM_PLUGIN_URL."css/osm_map.css");
 define ("Osm_OL_3_Ext_LibraryLocation", OSM_PLUGIN_URL."js/osm-v3-plugin-lib.js");
 define ("Osm_OL_3_MetaboxEvents_LibraryLocation", OSM_PLUGIN_URL."js/osm-metabox-events.js");

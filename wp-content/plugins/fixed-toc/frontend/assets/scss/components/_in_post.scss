@@ -1,0 +1,78 @@
+// *-------------------------------------------------------------------------------------
+// * Style only apply in the post
+// *-------------------------------------------------------------------------------------
+
+@at-root .ftwp-in-post#ftwp-container-outer {
+	margin-bottom: 20px;
+	
+	&,
+	#ftwp-contents {
+		height: $height_in_post;
+		overflow-y: hidden;
+		position: relative;
+		z-index: 1; 
+	}
+	
+	#ftwp-trigger {
+		visibility: hidden;
+		position: absolute;
+		top: -9999px;
+		z-index: -10;
+	}
+	
+//	#ftwp-header {
+//		&-minimize {
+//			display: none;
+//		}
+//	}
+	
+	&.ftwp-float {
+		@mixin ftocFullWidth {
+			@media screen and (max-width: 420px) {
+				&,
+				#ftwp-contents {
+					margin-left: 0;
+					margin-right: 0;
+					float: none;
+					width: 100% !important;
+				}
+			}			
+		}
+		
+		&-right,
+		&-left {
+			&,
+			#ftwp-contents {
+				width: $width_in_post;
+			}			
+		}
+		
+		&-right {
+			float: right;
+			margin-left: 20px;
+			
+			@include ftocFullWidth;
+		}	
+
+		&-left {
+			float: left;
+			margin-right: 20px;
+			
+			@include ftocFullWidth;
+		}
+		
+		&-none {
+			&,
+			#ftwp-contents {
+				width: 100%;
+			}			
+		}
+	}
+}
+
+//@at-root #ftwp-postcontent {
+//	.ftwp-in-post.ftwp-float-left ~ .ftwp-heading,
+//	.ftwp-in-post.ftwp-float-right ~ .ftwp-heading{
+//		clear: none;
+//	}
+//}

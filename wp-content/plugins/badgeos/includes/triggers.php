@@ -22,6 +22,7 @@ function badgeos_get_activity_triggers() {
 		array(
 			// WordPress-specific
 			'badgeos_wp_login'             => __( 'Log in to Website', 'badgeos' ),
+            'badgeos_wp_not_login'         => __( 'Not Login for X days', 'badgeos' ),
 			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
@@ -89,36 +90,49 @@ function badgeos_trigger_event() {
 
 	// Grab the user ID
 	$user_id = badgeos_trigger_get_user_id( $this_trigger, $args );
-	$user_data = get_user_by( 'id', $user_id );
+
+    if( 'all-achievements' == $this_trigger || 'any-achievement' == $this_trigger) {
+        $user_id = $args[ 0 ];
+    }
+
+    $user_data = get_user_by( 'id', $user_id );
 
 	// Sanity check, if we don't have a user object, bail here
-	if ( ! is_object( $user_data ) )
-		return $args[ 0 ];
+    if ( ! is_object( $user_data ) ) {
+        return $args[ 0 ];
+    }
 
-	// If the user doesn't satisfy the trigger requirements, bail here
-	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
-		return $args[ 0 ];
+    // If the user doesn't satisfy the trigger requirements, bail here
+    if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+        return $args[ 0 ];
+    }
 
-	// Update hook count for this user
-	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
+    // If the user doesn't satisfy the trigger requirements, bail here
+    $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
-	// Mark the count in the log entry
-	badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+    $is_any_or_all_trigger = false;
+    if ( 'badgeos_unlock_all_' == substr( $this_trigger, 0, 19 ) ) {
+        $is_any_or_all_trigger = true;
+    } else if ( 'badgeos_unlock_' == substr( $this_trigger, 0, 15 ) ) {
+        $is_any_or_all_trigger = true;
+    }
+    
+    if( count( $triggered_achievements ) > 0 || $is_any_or_all_trigger == true ) {
+        // Update hook count for this user
+        $new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
 
-	// Now determine if any badges are earned based on this trigger event
-	$triggered_achievements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT post_id
-		FROM   $wpdb->postmeta
-		WHERE  meta_key = '_badgeos_trigger_type'
-		       AND meta_value = %s
-		",
-		$this_trigger
-	) );
+        // Mark the count in the log entry
+        badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+    }
 
-	foreach ( $triggered_achievements as $achievement ) {
-		badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
-	}
+    foreach ( $triggered_achievements as $achievement ) {
+        $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
+        if( count( $parents ) > 0 ) {
+            if( $parents[0]->post_status == 'publish' ) {
+                badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
+            }
+        }
+    }
 
 	return $args[ 0 ];
 
@@ -137,6 +151,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 
 	switch ( $trigger ) {
 		case 'badgeos_wp_login' :
+        case 'badgeos_wp_not_login':
 			$user_data = get_user_by( 'login', $args[ 0 ] );
 			$user_id = $user_data->ID;
 			break;
@@ -239,10 +254,56 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $a
 	// Update the triggers arary with the new count
 	$user_triggers = badgeos_get_user_triggers( $user_id, false );
 	$user_triggers[$site_id][$trigger] = $trigger_count;
-	update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+
+    if( ! isset( $user_triggers[$site_id]['all-achievements'] ) )
+        $user_triggers[$site_id]['all-achievements'] = 0;
+    if( ! isset( $user_triggers[$site_id]['any-achievement'] ) )
+        $user_triggers[$site_id]['any-achievement'] = 0;
+
+    update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
 	// Send back our trigger count for other purposes
 	return $trigger_count;
+
+}
+
+/**
+ * decrement the user's trigger count
+ *
+ * @since  1.0.0
+ * @param  integer $user_id The given user's ID
+ * @param  string  $trigger The trigger we're updating
+ * @param  integer $site_id The desired Site ID to update
+ * @param  array $args        The triggered args
+ * @return integer          The updated trigger count
+ */
+function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id ) {
+
+    // Set to current site id
+    $site_id = get_current_blog_id();
+
+
+    $args = array();
+
+    $times 			= absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+    $trigger 		= get_post_meta( $step_id, '_badgeos_trigger_type', true );
+
+    // Grab the current count and increase it by 1
+    $trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
+    $trigger_count -= (int) apply_filters( 'badgeos_decrement_user_trigger_count', $times, $user_id, $step_id, $trigger, $site_id, $args );
+
+    if( $trigger_count < 0 )
+        $trigger_count = 0;
+
+    // Update the triggers arary with the new count
+    $user_triggers = badgeos_get_user_triggers( $user_id, false );
+    $user_triggers[$site_id][$trigger] = $trigger_count;
+    update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+
+    do_action( 'badgeos_decrement_user_trigger_count', $user_id, $step_id, $trigger, $del_ach_id, $site_id );
+
+    // Send back our trigger count for other purposes
+    return $trigger_count;
 
 }
 
@@ -326,6 +387,8 @@ add_action( 'publish_page', 'badgeos_publish_listener', 0 );
  */
 function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
+    global $wpdb;
+
 	// Enforce array for both hooks (wp_insert_comment uses object, comment_{status}_comment uses array)
 	if ( is_object( $comment ) ) {
 		$comment = get_object_vars( $comment );
@@ -336,9 +399,20 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 		return;
 	}
 
-	// Trigger a comment actions
-	do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
-	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+
+    $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_badgeos_trigger_type' AND meta_value = 'badgeos_specific_new_comment'" );
+
+    if( $trigger_data ) {
+        foreach( $trigger_data as $data ) {
+            $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+            if( absint( $post_specific_id ) == absint($comment[ 'comment_post_ID' ]) ) {
+                do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+                break;
+            }
+        }
+    }
+    // Trigger a comment actions
+	  do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
@@ -359,7 +433,11 @@ function badgeos_login_trigger( $user_login, $user ) {
     if( !is_object( $user ) || is_null( $user ) || empty( $user ) ) {
         return;
     }
-
+    $user_id = intval( $user->ID );
+    do_action( 'badgeos_wp_not_login', $user_login, $user );
     do_action( 'badgeos_wp_login', $user_login, $user );
+
+    update_user_meta( $user_id, '_badgeos_last_login', time() );
+
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );

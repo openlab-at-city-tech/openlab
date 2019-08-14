@@ -88,6 +88,8 @@ function openlab_bp_group_documents_display_content() {
 		$classes[] = 'is-folder';
 	}
 
+	$user_can_upload = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
+
 	?>
 
 	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -130,11 +132,13 @@ function openlab_bp_group_documents_display_content() {
 						</form>
 					</div>
 
-					<div class="pull-right upload-new-file">
-						<?php if ( 'add' === $template->operation ) { ?>
-							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
-						<?php } ?>
-					</div>
+					<?php if ( $user_can_upload ) : ?>
+						<div class="pull-right upload-new-file">
+							<?php if ( 'add' === $template->operation ) { ?>
+								<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+							<?php } ?>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 
@@ -215,11 +219,13 @@ function openlab_bp_group_documents_display_content() {
 						There have been no files uploaded to this group.
 					<?php endif; ?>
 
-					<div class="upload-new-file">
-						<?php if ( 'add' === $template->operation ) { ?>
-							<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
-						<?php } ?>
-					</div>
+					<?php if ( $user_can_upload ) : ?>
+						<div class="upload-new-file">
+							<?php if ( 'add' === $template->operation ) { ?>
+								<a class="btn btn-primary link-btn" id="bp-group-documents-upload-button" href="" style="display:none;"><?php esc_html_e( 'Upload a New Document', 'bp-group-documents' ); ?></a>
+							<?php } ?>
+						</div>
+					<?php endif; ?>
 				</p>
 			</div>
 

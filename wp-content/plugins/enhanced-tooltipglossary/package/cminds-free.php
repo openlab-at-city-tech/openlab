@@ -1,9 +1,9 @@
 <?php
 
-namespace com\cminds\package\free\v1_0_12;
+namespace com\cminds\package\free\v1_0_13;
 
 if (!defined(__NAMESPACE__ . '\PLATFORM_VERSION')) {
-    define(__NAMESPACE__ . '\PLATFORM_VERSION', '1_0_12');
+    define(__NAMESPACE__ . '\PLATFORM_VERSION', '1_0_13');
 }
 if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
 
@@ -63,8 +63,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $this->licensingApi = new CmindsLicensingAPI($this);
 
             $globalVariableName = $this->getOption('plugin-abbrev') . '_isLicenseOk';
-            global ${$globalVariableName};
-            ${$globalVariableName} = true; //$licensingApi->isLicenseOk();
+            $GLOBALS[$globalVariableName] = TRUE;
 
             $licensePageKey = $this->getLicensingSlug();
             add_action('cminds-' . $licensePageKey . '-content-10', array($this->licensingApi, 'license_page'));
@@ -2929,6 +2928,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $permalinksurl = self_admin_url('options-permalink.php');
 
             $content = '';
+            $namespace = explode('\\', __NAMESPACE__);
             ob_start();
             if (!$plaintext):
                 ?>
@@ -2936,6 +2936,11 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                     The information in this table is useful to check if the plugin might have some incompabilities with you server.
                 </span>
                 <table class="form-table server-info-table">
+                    <tr>
+                        <td>Package Version</td>
+                        <td><?php echo str_replace(array('v', '_'), array('', '.'), end($namespace)); ?></td>
+                        <td><span>OK</span></td>
+                    </tr>
                     <tr>
                         <td>WordPress Version</td>
                         <td><?php echo $wp_version; ?></td>
@@ -3018,7 +3023,8 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php
             else:
                 ?>
-
+                Package Version		<?php echo str_replace(array('v', '_'), array('', '.'), end($namespace)); ?> OK
+                
                 WordPress Version		<?php echo $wp_version; ?>
                 <?php if (version_compare($wp_version, '3.3.0', '<')): ?>The minimum supported version of WordPress is 3.3<?php else: ?>OK<?php endif; ?>
 

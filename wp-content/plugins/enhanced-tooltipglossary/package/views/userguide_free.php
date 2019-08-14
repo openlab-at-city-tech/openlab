@@ -473,7 +473,7 @@
                         </div>
 
                         <div class="plugins-price item">
-                            <span>$199</span>
+                            <span>$249</span>
                         </div>
 
                         <div class="plugins-body item">

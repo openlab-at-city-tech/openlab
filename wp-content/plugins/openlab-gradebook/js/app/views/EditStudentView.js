@@ -71,6 +71,8 @@ define(['jquery', 'backbone', 'underscore', 'models/User', 'models/UserList', 'b
                 populateStudentDropdown: function () {
                     var self = this;
 
+                    this.$el.find('#studentRangeAll').focus();
+
                     this.userList.fetch({success: function (model, response, options) {
 
                             if (typeof response.error !== 'undefined') {

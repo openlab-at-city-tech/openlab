@@ -202,8 +202,8 @@
             function createLettersHtml() {
                 var html = [ ];
                 for ( var i = 0; i < letters.length; i++ ) {
-                    if ( html.length == 0 ) {
-                        html.push( '<a class="ln-all" role="tab" aria-controls="panel-all" aria-selected="false" href="#">ALL</a>' );
+                    if ( html.length === 0 ) {
+                        html.push( '<a class="ln-all" role="tab" aria-controls="panel-all" aria-selected="false" href="#">'+window.cmtt_listnav_data.listnav.allLabel+'</a>' );
                         if ( opts.includeNums ) {
                             html.push( '<a class="ln-_" tabindex="-1" role="tab" aria-controls="panel-_" aria-selected="false" href="#">0-9</a>' );
                         }

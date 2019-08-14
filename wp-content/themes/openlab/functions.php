@@ -140,6 +140,14 @@ function openlab_load_scripts_high_priority() {
         wp_register_style('print-styles', $stylesheet_dir_uri . '/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }
+
+	wp_enqueue_style(
+		'openlab-print',
+		get_stylesheet_directory_uri() . '/print.css',
+		array(),
+		OL_VERSION,
+		'print'
+	);
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);

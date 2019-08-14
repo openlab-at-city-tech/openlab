@@ -1,0 +1,972 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-21 22:26+0100\n"
+"PO-Revision-Date: 2018-07-19 15:44+0300\n"
+"Language-Team: Italian <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.9\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2);\n"
+"Language: ro_RO\n"
+
+#: osm-error-msg.php:11
+msgid "gcStats plugin is not activated!"
+msgstr "plugin-ul gcStats nu este activ!"
+
+#: osm-error-msg.php:12
+msgid "gcStats plugin has to be updated (If-Version)!"
+msgstr "plugin-ul gcStats  necesită actualizare (If-Version)!"
+
+#: osm-error-msg.php:13
+msgid "gcStats plugin do not have any entries for this user!"
+msgstr "plugin-ul gcStats nu are înregistrări pentru utilizatorul curent!"
+
+#: osm-error-msg.php:15
+msgid "Extra Comment Field plugin is not activated!"
+msgstr "Câmpul Comentarii Extra nu este activat!"
+
+#: osm-error-msg.php:17
+msgid "Not all options updated!"
+msgstr "Nu toate opțiunile au fost actualizate!"
+
+#: osm-error-msg.php:18
+msgid "Options updated!"
+msgstr "Opțiunile au fost actualizate!"
+
+# check defaultvalue
+#: osm-error-msg.php:19
+msgid "Map Zoomlevel out of range or invalid! (using defaultvalue)"
+msgstr ""
+"Nivelul de zoom al hărții este în afara limitelor sau este invalid! "
+"(utilizăm valoarea implicită)"
+
+#: osm-error-msg.php:20
+msgid "Lat or Lon is out of range or invalid (using defaultvalue)!"
+msgstr ""
+"Latitudinea sau Longitudinea este în afara limitelor sau este invalidă! "
+"(utilizăm valoarea implicită)!"
+
+#: osm-error-msg.php:21
+msgid "Map width or height is out of range or invalid (using defaultsize)!"
+msgstr ""
+"Lățimea hărții este în afara limitelor sau este invalidă! (utilizăm "
+"dimensiunea implicită)!"
+
+#: osm-error-msg.php:22
+msgid "Did not get latitude [missing argument @ OSM_getCoordinateLat]"
+msgstr ""
+"Nu a fost introdusă latitudinea [argument lipsă @ OSM_getCoordinateLat]"
+
+#: osm-error-msg.php:23
+msgid "Did not get longitude [missing argument @ OSM_getCoordinateLong]"
+msgstr ""
+"Nu a fost introdusă longitudinea [argument lipsă @ OSM_getCoordinateLong]"
+
+#: osm-error-msg.php:24
+msgid "If you define a marker, the width and height has to be defined as well!"
+msgstr ""
+"Dacă definiți un marker, lățimea și înălțimea trebuie, de asemenea, definite!"
+
+#: osm-error-msg.php:25
+msgid "Use the argument import instead of marker_all_posts!"
+msgstr "Utilizați importul de argumente în locul marker_all_posts!"
+
+#: osm-error-msg.php:26
+msgid "Import type is unknown!"
+msgstr "Tipul de import este necunoscut!"
+
+#: osm-error-msg.php:27
+msgid "Invalid marker_name!"
+msgstr "Denumirea markerului este invalidă!"
+
+#: osm-error-msg.php:29
+msgid ""
+"Could not load OSM library, check LoadLibraryMode @ wp-content/plugins/osm/"
+"osm-config.php!"
+msgstr ""
+"Nu am putut încărca librăria OSM, verificați LoadLibraryMode @ wp-content/"
+"plugins/osm/osm-config.php!"
+
+#: osm-error-msg.php:30
+msgid "Invalid usage of control tag!"
+msgstr "Utilizare invalidă a etichetei de control!"
+
+#: osm-error-msg.php:31
+msgid "Num of Gpx files does not match to num of Gpx colours!"
+msgstr "Numărul de fișiere Gpx nu corespunde cu numărul de culori Gpx!"
+
+#: osm-error-msg.php:32
+msgid "Missing the routingservice at marker_routing argument!"
+msgstr "Serviciul de rutare lipsă în cadrul argumentului marker_routing!"
+
+#: osm-error-msg.php:33
+msgid "Not valid WP OSM Plugin icon!"
+msgstr "Icoană invalidă pentru plugin-ul WP OSM!"
+
+#: osm-file-select.php:1 osm-marker-select.php:1 osm-metabox.php:138
+#: osm-options.php:33 osm-options.php:108 osm-theme-select.php:1
+#: osm-widget.php:112
+msgid "none"
+msgstr "nimic"
+
+#: osm-file-select.php:2 osm-options.php:109
+msgid "KML file"
+msgstr "Fișier KML"
+
+#: osm-file-select.php:3 osm-file-select.php:4 osm-file-select.php:5
+#: osm-file-select.php:6 osm-options.php:110 osm-options.php:111
+#: osm-options.php:112 osm-options.php:113
+msgid "GPX file"
+msgstr "Fișier GPX"
+
+#: osm-file-select.php:3 osm-marker-select.php:3 osm-marker-select.php:9
+#: osm-marker-select.php:20 osm-metabox.php:140 osm-options.php:35
+#: osm-options.php:41 osm-options.php:52 osm-options.php:110 osm-widget.php:102
+#: osm-widget.php:114
+msgid "red"
+msgstr "roșu"
+
+#: osm-file-select.php:4 osm-marker-select.php:2 osm-marker-select.php:10
+#: osm-marker-select.php:16 osm-marker-select.php:22 osm-marker-select.php:42
+#: osm-marker-select.php:46 osm-metabox.php:139 osm-options.php:34
+#: osm-options.php:42 osm-options.php:48 osm-options.php:54 osm-options.php:111
+#: osm-widget.php:101 osm-widget.php:113
+msgid "green"
+msgstr "verde"
+
+#: osm-file-select.php:5 osm-marker-select.php:5 osm-marker-select.php:11
+#: osm-marker-select.php:18 osm-marker-select.php:19 osm-marker-select.php:25
+#: osm-marker-select.php:26 osm-marker-select.php:27 osm-marker-select.php:33
+#: osm-marker-select.php:34 osm-marker-select.php:38 osm-marker-select.php:40
+#: osm-marker-select.php:47 osm-metabox.php:141 osm-options.php:37
+#: osm-options.php:43 osm-options.php:50 osm-options.php:51 osm-options.php:57
+#: osm-options.php:58 osm-options.php:59 osm-options.php:65 osm-options.php:66
+#: osm-options.php:70 osm-options.php:72 osm-options.php:112
+#: osm-theme-select.php:2 osm-widget.php:91 osm-widget.php:105
+#: osm-widget.php:115
+msgid "blue"
+msgstr "albastru"
+
+#: osm-file-select.php:6 osm-marker-select.php:6 osm-marker-select.php:7
+#: osm-marker-select.php:8 osm-marker-select.php:12 osm-marker-select.php:28
+#: osm-marker-select.php:29 osm-marker-select.php:30 osm-marker-select.php:31
+#: osm-marker-select.php:32 osm-marker-select.php:41 osm-marker-select.php:43
+#: osm-marker-select.php:44 osm-marker-select.php:45 osm-marker-select.php:49
+#: osm-metabox.php:142 osm-options.php:38 osm-options.php:39 osm-options.php:40
+#: osm-options.php:44 osm-options.php:60 osm-options.php:61 osm-options.php:62
+#: osm-options.php:63 osm-options.php:64 osm-options.php:73 osm-options.php:113
+#: osm-widget.php:104 osm-widget.php:117
+msgid "black"
+msgstr "negru"
+
+#: osm-file-select.php:7 osm-options.php:114
+msgid "text file"
+msgstr "fișier text"
+
+#: osm-marker-select.php:2 osm-marker-select.php:3 osm-marker-select.php:4
+#: osm-options.php:34 osm-options.php:35 osm-options.php:36 osm-widget.php:101
+#: osm-widget.php:102 osm-widget.php:103
+msgid "Waypoint"
+msgstr "Punct"
+
+#: osm-marker-select.php:4 osm-marker-select.php:13 osm-marker-select.php:14
+#: osm-marker-select.php:15 osm-options.php:36 osm-options.php:45
+#: osm-options.php:46 osm-options.php:47 osm-widget.php:103
+msgid "yellow"
+msgstr "galben"
+
+#: osm-marker-select.php:5 osm-metabox.php:73 osm-options.php:37
+msgid "Marker"
+msgstr "Marker"
+
+#: osm-marker-select.php:6 osm-options.php:38
+msgid "Pin #1"
+msgstr "Pin #1"
+
+#: osm-marker-select.php:7 osm-options.php:39
+msgid "Pin #2"
+msgstr "Pin #2"
+
+#: osm-marker-select.php:8 osm-marker-select.php:9 osm-marker-select.php:10
+#: osm-marker-select.php:11 osm-options.php:40 osm-options.php:41
+#: osm-options.php:42 osm-options.php:43
+msgid "Pin #3"
+msgstr "Pin #3"
+
+#: osm-marker-select.php:12 osm-options.php:44 osm-widget.php:104
+msgid "Camera"
+msgstr "Camera"
+
+#: osm-marker-select.php:13 osm-options.php:45
+msgid "Chin. restaurant"
+msgstr "Restaurant chinezesc"
+
+#: osm-marker-select.php:14 osm-options.php:46
+msgid "Icecream"
+msgstr "Înghețată"
+
+#: osm-marker-select.php:15 osm-options.php:47
+msgid "Campingtents"
+msgstr "Corturi de camping"
+
+#: osm-marker-select.php:16 osm-options.php:48
+msgid "Campingcar"
+msgstr "Mașină de camping"
+
+#: osm-marker-select.php:17 osm-options.php:49
+msgid "Pickup camper"
+msgstr "Rulotă Pickup"
+
+#: osm-marker-select.php:17 osm-options.php:49
+msgid "brown"
+msgstr "maro"
+
+#: osm-marker-select.php:18 osm-options.php:50
+msgid "Toilets disability"
+msgstr "Toaletă pentru persoane cu dizabilități"
+
+#: osm-marker-select.php:19 osm-options.php:51
+msgid "Shark"
+msgstr "Rechin"
+
+#: osm-marker-select.php:20 osm-options.php:52
+msgid "Pizzaria"
+msgstr "Pizzerie"
+
+#: osm-marker-select.php:21 osm-options.php:53
+msgid "Parasailing"
+msgstr "Parapantă"
+
+#: osm-marker-select.php:21 osm-marker-select.php:23 osm-marker-select.php:24
+#: osm-marker-select.php:35 osm-marker-select.php:36 osm-marker-select.php:37
+#: osm-marker-select.php:39 osm-marker-select.php:48 osm-options.php:53
+#: osm-options.php:55 osm-options.php:56 osm-options.php:67 osm-options.php:68
+#: osm-options.php:69 osm-options.php:71 osm-theme-select.php:4
+#: osm-widget.php:90 osm-widget.php:106 osm-widget.php:116
+msgid "orange"
+msgstr "portocaliu"
+
+#: osm-marker-select.php:22 osm-options.php:54
+msgid "Horseriding"
+msgstr "Călărie"
+
+#: osm-marker-select.php:23 osm-options.php:55
+msgid "Cycling"
+msgstr "Ciclism"
+
+#: osm-marker-select.php:24 osm-options.php:56
+msgid "Coldfookcheckpoint"
+msgstr ""
+
+#: osm-marker-select.php:25 osm-options.php:57
+msgid "Tweet"
+msgstr "Tweet"
+
+#: osm-marker-select.php:26 osm-options.php:58
+msgid "Information"
+msgstr "Informații"
+
+#: osm-marker-select.php:27 osm-options.php:59
+msgid "Horserinding"
+msgstr "Călărie"
+
+#: osm-marker-select.php:28 osm-options.php:60
+msgid "Train"
+msgstr "Tren"
+
+#: osm-marker-select.php:29 osm-options.php:61
+msgid "Steamtrain"
+msgstr "Tren cu aburi"
+
+#: osm-marker-select.php:30 osm-options.php:62
+msgid "Powerplant"
+msgstr "Centrală energie"
+
+#: osm-marker-select.php:31 osm-options.php:63
+msgid "Bicycle Parking"
+msgstr "Parcare pentru Biciclete"
+
+#: osm-marker-select.php:32 osm-options.php:64
+msgid "cctv"
+msgstr "cctv"
+
+#: osm-marker-select.php:33 osm-options.php:65
+msgid "Toilets"
+msgstr "Toaletă"
+
+#: osm-marker-select.php:34 osm-options.php:66
+msgid "Scubadiving"
+msgstr "Scufundări"
+
+#: osm-marker-select.php:35 osm-marker-select.php:54 osm-options.php:67
+#: osm-options.php:78
+msgid "Motorbike"
+msgstr "Motocicletă"
+
+#: osm-marker-select.php:36 osm-options.php:68
+msgid "Sailing"
+msgstr "Navigație"
+
+#: osm-marker-select.php:37 osm-options.php:69
+msgid "Fishing"
+msgstr "Pescuit"
+
+#: osm-marker-select.php:38 osm-options.php:70
+msgid "Mobilephonetower"
+msgstr "Antenă GSM"
+
+#: osm-marker-select.php:39 osm-options.php:71 osm-widget.php:106
+msgid "Hiking"
+msgstr "Plimbare"
+
+#: osm-marker-select.php:40 osm-options.php:72 osm-widget.php:105
+msgid "Bridge"
+msgstr "Pod"
+
+#: osm-marker-select.php:41 osm-options.php:73
+msgid "Memorial"
+msgstr "Monument"
+
+#: osm-marker-select.php:42
+msgid "Tree"
+msgstr "Arbore"
+
+#: osm-marker-select.php:43
+msgid "Finish 01"
+msgstr "Finish 01"
+
+#: osm-marker-select.php:44
+msgid "Finish 02"
+msgstr "Finish 02"
+
+#: osm-marker-select.php:45
+msgid "Start 01"
+msgstr "Start 01"
+
+#: osm-marker-select.php:46
+msgid "Garden"
+msgstr "Grădină"
+
+#: osm-marker-select.php:47
+msgid "Drinkingwater"
+msgstr "Apă Potabilă"
+
+#: osm-marker-select.php:48 osm-marker-select.php:49
+msgid "Archery"
+msgstr "Tir cu arcul"
+
+#: osm-marker-select.php:50 osm-options.php:74
+msgid "Car"
+msgstr "Autoturism"
+
+#: osm-marker-select.php:51 osm-options.php:75
+msgid "Bus"
+msgstr "Autobus"
+
+#: osm-marker-select.php:52 osm-options.php:76
+msgid "Bicycling"
+msgstr "Bicicletă"
+
+#: osm-marker-select.php:53 osm-options.php:77
+msgid "Airport"
+msgstr "Aeroport"
+
+#: osm-marker-select.php:55 osm-options.php:79
+msgid "Hostel"
+msgstr "Hostel"
+
+#: osm-marker-select.php:56 osm-options.php:80
+msgid "Guesthouse"
+msgstr "Casă de oaspeți"
+
+#: osm-marker-select.php:57 osm-options.php:81
+msgid "Camping"
+msgstr "Camping"
+
+#: osm-marker-select.php:58 osm-options.php:82
+msgid "Geocache"
+msgstr "Geocache"
+
+#: osm-marker-select.php:59 osm-options.php:83
+msgid "Styria Tux"
+msgstr ""
+
+#: osm-message-backlog.php:4
+msgid "Geometry"
+msgstr "Geometrie"
+
+#: osm-message-backlog.php:5 osm-metabox.php:136
+msgid "Draw a line"
+msgstr "Trasați o linie"
+
+#: osm-message-backlog.php:6
+msgid "Draw a circle"
+msgstr "Trasați un cerc"
+
+#: osm-message-backlog.php:7 osm-message-backlog.php:11
+msgid "boxing"
+msgstr "box"
+
+#: osm-message-backlog.php:8
+msgid "WordPress"
+msgstr "WordPress"
+
+#: osm-message-backlog.php:9 osm-widget.php:124
+msgid "OpenStreetMap"
+msgstr "OpenStreetMap"
+
+#: osm-message-backlog.php:10
+msgid "Plugin"
+msgstr "Plugin"
+
+#: osm-message-backlog.php:12
+msgid "WordPress OpenStreetMap Plugin Vx.y released."
+msgstr "WordPress OpenStreetMap Plugin Vx.y publicat."
+
+#: osm-message-backlog.php:13
+msgid "Map design"
+msgstr "Designul hărții"
+
+#: osm-message-backlog.php:14 osm-widget.php:110
+msgid "border"
+msgstr "margine"
+
+#: osm-message-backlog.php:15
+msgid "Find the WP OSM Plugin shortcode generator at [Add post / page]."
+msgstr "Generatorul de cod WP OSM Plugin este disponibil la [Add post / page]."
+
+#: osm-message-backlog.php:16
+msgid "Geotag your post / page at [Add post / page]."
+msgstr "Geoetichetați postarea/pagina dumneavoastră la [Add post / page]."
+
+#: osm-message-backlog.php:17
+msgid "This map adds an icon for all posts with geotag."
+msgstr "Această hartă adaugă o icoană pentru toate postările cu geoetichetă."
+
+#: osm-message-backlog.php:18
+msgid "You can filter the posts by category."
+msgstr "Puteți filtra postările după categorie."
+
+#: osm-message-backlog.php:19
+msgid "Category filter"
+msgstr "Filtru de categorii"
+
+#: osm-metabox.php:34
+msgid "post icon"
+msgstr "icoană pentru postare"
+
+#: osm-metabox.php:38
+msgid "Click into the map for geotag!"
+msgstr "Click pe hartă pentru geoetichetă!"
+
+#: osm-metabox.php:41
+msgid "Save"
+msgstr "Salvare"
+
+#: osm-metabox.php:75
+msgid "Geotagged"
+msgstr "Geoetichetat"
+
+#: osm-metabox.php:76
+msgid "About"
+msgstr "Despre"
+
+#: osm-metabox.php:81
+msgid "map type"
+msgstr "tip de hartă"
+
+#: osm-metabox.php:85 osm-metabox.php:106 osm-metabox.php:128
+msgid "OSM control theme"
+msgstr "Temă de control OSM"
+
+#: osm-metabox.php:90
+msgid "marker icon"
+msgstr "pictogramă pentru marker"
+
+#: osm-metabox.php:96 osm-metabox.php:118 osm-metabox.php:152
+#, php-format
+msgid ""
+"Adjust the map and click into the map to generate the shortcode. Find more "
+"features  <a href=\"%s\" target=\"_blank\">here</a> !"
+msgstr ""
+"Ajustați harta și click în hartă pentru generarea codului.  Găsiți mai multe "
+"funcționalități<a href=\"%s\" target=\"_blank\">aici</a> !"
+
+#: osm-metabox.php:102 osm-metabox.php:124 osm-widget.php:122
+msgid "Map type"
+msgstr "Tip de hartă"
+
+#: osm-metabox.php:110 osm-options.php:105
+msgid "If you want to add a file (KML, GPX, TXT):"
+msgstr "Dacă doriți să adăugați un fișier (KML, GPX, TXT):"
+
+#: osm-metabox.php:114
+msgid "Paste the local URL of file here: "
+msgstr "Introduceți URL-ul local al fișierului aici: "
+
+#: osm-metabox.php:115
+msgid ""
+"Do not save any of your personal data in the plugins/osm folder but in the "
+"upload folder!"
+msgstr ""
+"Nu salvați datele dumneavoastră în folderol plugins/osm.  Utilizați folderol "
+"upload!"
+
+#: osm-metabox.php:132
+msgid "Marker icon"
+msgstr "Pictogramă pentru marker"
+
+#: osm-metabox.php:144
+msgid "post type"
+msgstr "tip de postare"
+
+#: osm-metabox.php:146
+msgid "any"
+msgstr "oricare"
+
+#: osm-metabox.php:147
+msgid "post"
+msgstr "postare"
+
+#: osm-metabox.php:148
+msgid "page"
+msgstr "pagină"
+
+#: osm-metabox.php:161
+msgid "Coordination"
+msgstr "Coordonare"
+
+#: osm-metabox.php:161
+msgid "Development"
+msgstr "Dezvoltare"
+
+#: osm-metabox.php:162
+msgid "Thanks for Translation to"
+msgstr "Mulțumim pentru traducere"
+
+#: osm-metabox.php:165
+#, php-format
+msgid "If you like the OSM plugin rate it <a href=\"%s\">here</a>. "
+msgstr "Dacă vă place acest plug-in, evaluați-l <a href=\"%s\">aici</a>. "
+
+#: osm-metabox.php:167
+msgid "Thanks!"
+msgstr "Mulțumim!"
+
+#: osm-metabox.php:171 osm-options.php:169
+msgid "Some usefull sites for this plugin:"
+msgstr "Site-uri utile pentru acest plugin:"
+
+#: osm-metabox.php:173 osm-options.php:171
+msgid "for advanced samples visit the "
+msgstr "pentru exemple detaliate, accesați "
+
+#: osm-metabox.php:174 osm-options.php:172
+msgid "for questions, bugs and other feedback visit the"
+msgstr "pentru întrebări, erori sau feedback, accesați"
+
+#: osm-metabox.php:175 osm-options.php:173
+msgid "Follow us on twitter: "
+msgstr "Urmăriți-ne pe twitter: "
+
+#: osm-metabox.php:176 osm-options.php:174
+msgid "download the last version at WordPress.org "
+msgstr "descărcați ultima versiune de la WordPress.org "
+
+#: osm-metabox.php:181
+msgid "Copy the generated shortcode/customfield/argument: "
+msgstr "Copiați codul/câmpul/argumentul generat: "
+
+#: osm-metabox.php:182
+msgid "If you click into the map this text is replaced"
+msgstr "La click pe hartă, acest text este înlocuit"
+
+#: osm-options.php:16
+msgid "How to add a map to your post/page"
+msgstr "Cum să adăugați o hartă la pagina/postarea dumneavoastră"
+
+#: osm-options.php:18
+msgid "choose a marker if you want to"
+msgstr "alegeți un marker dacă doriți să"
+
+#: osm-options.php:19
+msgid "add a gpx file and/or marker file if you want to"
+msgstr "adăugați un fișier gpx și/sau fișier cu markere dacă doriți să"
+
+#: osm-options.php:20
+msgid "add a border around the map and or some controls if you want to"
+msgstr "adăugați o margine în jurul hărții"
+
+#: osm-options.php:21
+msgid ""
+"click on the map to generate the shortcode (if you chose a marker it is "
+"placed where you clicked)"
+msgstr ""
+"click pe hartă pentru a genera codul (dacă alegeți un marker, acesta e "
+"poziționat la click)"
+
+#: osm-options.php:22
+msgid "copy the shortcode from below the map and paste it in your post/page"
+msgstr "copiați codul de sub hartă în postarea/pagina dumneavoastră"
+
+#: osm-options.php:23
+msgid "delete the argument - type - if you want all osm maps to be available"
+msgstr ""
+"ștergeți parametrul - tip - dacă doriți ca toate hărțile OSM să fie "
+"disponibile"
+
+#: osm-options.php:24
+msgid ""
+"add other arguments to insert tracks, points ... or modify mapsize ... if "
+"needed"
+msgstr ""
+"adăugați alți parametri pentru inserarea traseelor, punctelor ... sau "
+"modificați dimensiunea hărții... dacă este necesar"
+
+#: osm-options.php:25
+msgid ""
+"do not save any of your personal data in the plugins/osm folder but in the "
+"upload folder!"
+msgstr ""
+"nu salvați datele dumneavoastră în folderol plugins/osm, ci în folderul "
+"upload!"
+
+#: osm-options.php:29
+msgid "If you want to add a marker choose one of the supported:"
+msgstr "Dacă doriți să adăugați un marker, alegeți unul dintre:"
+
+#: osm-options.php:30
+msgid "the marker is placed where you click into the map"
+msgstr "markerul este poziționat unde dați click în hartă"
+
+#: osm-options.php:86
+msgid ""
+"alternativly you can also add privat marker from the upload folder (see "
+msgstr ""
+"alternativ, puteți adăuga un marker personal din folderul upload (vezi "
+
+#: osm-options.php:88
+msgid "If you want to add a text to your marker change the text here"
+msgstr ""
+"Dacă doriți să adăugați un text la markerul dumneavoastră, schimbați textul "
+"următor"
+
+#: osm-options.php:90
+msgid "1st row of markertext: "
+msgstr "primul rând al textului markerului "
+
+#: osm-options.php:91
+msgid "2nd row of markertext: "
+msgstr "al doilea rând al textului markerului "
+
+#: osm-options.php:92
+msgid "3rd row of markertext: "
+msgstr "al treilea rând al textului markerului "
+
+#: osm-options.php:93
+msgid "4th row of markertext: "
+msgstr "al patrulea rând al textului markerului "
+
+#: osm-options.php:98
+msgid "Add a link in the marker to route to your marker: "
+msgstr "Adăugați un link in marker pentru a fi direcționat spre marker: "
+
+#: osm-options.php:99
+msgid "OpenRouteService   "
+msgstr "OpenRouteService "
+
+#: osm-options.php:100
+msgid "YourNavigation   "
+msgstr "Navigația Dumneavoastră "
+
+#: osm-options.php:101
+msgid "Open Source Routing Machine "
+msgstr "Mașina Open Source de rutare "
+
+#: osm-options.php:117
+msgid "paste the local URL of file here: "
+msgstr "introduceți URL-ul fișierului local aici: "
+
+#: osm-options.php:120
+msgid "If you want to add a border around the map choose the colour:"
+msgstr "Dacă doriți să adăugați o margine în jurul hărții, alegeți culoarea:"
+
+#: osm-options.php:122
+msgid "colour of a thin solid border:"
+msgstr "culoarea unei margini continue subțiri:"
+
+#: osm-options.php:123
+msgid "red "
+msgstr "roșu "
+
+#: osm-options.php:124
+msgid "green "
+msgstr "verde "
+
+#: osm-options.php:125
+msgid "blue "
+msgstr "albastru "
+
+#: osm-options.php:126
+msgid "black "
+msgstr "negru "
+
+#: osm-options.php:129
+msgid "If you want to add some controls to your map add it here:"
+msgstr "Dacă doriți să adăugați controale pe hartă, faceți-o aici:"
+
+#: osm-options.php:133
+msgid "scaleline  "
+msgstr "rigla "
+
+#: osm-options.php:134
+msgid "mouse position"
+msgstr "poziția cursorului"
+
+#: osm-options.php:139
+msgid "Choose the style of the controls: "
+msgstr "Alegeți stilul pentru controale: "
+
+#: osm-options.php:141
+msgid "default theme   "
+msgstr "tema implicită "
+
+#: osm-options.php:143
+msgid "orange   "
+msgstr "portocaliu "
+
+#: osm-options.php:146
+msgid "dark theme   "
+msgstr "temă închisă "
+
+#: osm-options.php:148
+msgid "/uploads/osm/theme/"
+msgstr "/uploads/osm/theme/"
+
+#: osm-options.php:152
+msgid "Misc. settings:"
+msgstr "Configurări diverse:"
+
+#: osm-options.php:154
+msgid "z-index: 0"
+msgstr "z-index: 0"
+
+#: osm-options.php:158
+msgid ""
+"Adjust the map and click into the map to get your shortcode below the map"
+msgstr "Ajustați harta și faceți click pentru a obține codul sub hartă"
+
+#: osm-options.php:159
+msgid ""
+"select the area and zoomlevel on the map (get a zoomwindow with shift and "
+"mousebutton)"
+msgstr ""
+"selectați zona și nivelul de zoom pe hartă (obțineți o fereastră de zoom cu "
+"shift și butonul mouse-ului)"
+
+#: osm-options.php:160
+msgid "choose your maptype with this icon "
+msgstr "alegeți tipul de hartă asociat acestei pictograme "
+
+#: osm-options.php:160
+msgid "in the map (google maps will have a license pop up in yor post/page)"
+msgstr ""
+"în hartă (google maps va afișa un pop-up pentru licență în postarea/pagina "
+"dumneavoastră)"
+
+#: osm-options.php:161
+msgid ""
+"your inputs (gpx-file, marker,...) are not displayed in this map but in your "
+"post/page "
+msgstr ""
+"input-urile dumneavoastră (fișiere gpx, markere, ...) nu sunt afișate în "
+"această hartă ci în postarea/pagina dumneavoastră "
+
+#: osm-options.php:162
+msgid ""
+"you can modify your inputs and click again into the map to generate another "
+"shortcode "
+msgstr ""
+"puteți modifica inputurile și face click din nou pe hartă pentru a genera un "
+"alt cod "
+
+#: osm-options.php:166
+msgid "Copy the shortcode and paste it into the content of your post/article: "
+msgstr "Copiați codul în conținutul postării/articolului dumneavoastră: "
+
+#: osm-options.php:167
+msgid ""
+"If you click into the map the shortcode is displayed instead of this text"
+msgstr ""
+"Dacă faceți click în interiorul hărții, codul este afișat în locul acestui "
+"text"
+
+#: osm-options.php:168
+msgid ""
+"NOTE: For OpenSeaMap just modify the type to type=\"OpenSeaMap\" manually in "
+"the generated shortcode!"
+msgstr ""
+"NOTĂ: Pentru OpenSeaMap modificați manual tipul la tip=\"OpenSeaMap\" în "
+"codul generat!"
+
+#: osm-options.php:176
+msgid "If you want to express thanks for this plugin ..."
+msgstr "Dacă doriți să mulțumiți pentru acest plugin ..."
+
+#: osm-options.php:178
+msgid "give this plugin a good ranking at "
+msgstr "acordați acestui plugin un scor bun la "
+
+#: osm-options.php:179
+msgid "post an article about "
+msgstr "publicați un articol despre "
+
+#: osm-options.php:179
+msgid " on your blog."
+msgstr " pe blogul dumneavoastră."
+
+#: osm-options.php:197
+msgid "Map Zoomlevel for the PHP Link (1-17)"
+msgstr "Nivelul de zoom al hărții pentru link-ul PHP (1-17)"
+
+#: osm-options.php:201
+msgid "Update Options"
+msgstr "Opțiuni de actualizare"
+
+#: osm.php:152
+msgid "OSM plugin added: GPX / KML"
+msgstr "Plugin-ul os adăugat: GPZ / KML"
+
+#: osm.php:616
+msgid "OpenStreetMap Manager"
+msgstr "Manager OpenStreetMap"
+
+#: osm.php:616
+msgid "OSM"
+msgstr "OSM"
+
+#: osm-sc-osm_map.php:475
+msgid "Missing routing service!"
+msgstr "Serviciul de rutare lipsește!"
+
+#: osm-sc-osm_map.php:478
+msgid "Route from your location to this place"
+msgstr "Rutare de la locația dumneavoastră spre acest loc"
+
+#: osm-theme-select.php:3 osm-widget.php:89
+msgid "dark"
+msgstr "închis"
+
+#: osm-widget.php:10
+msgid "OSM Widget"
+msgstr "Widget OSM"
+
+#: osm-widget.php:11
+msgid "WP OSM Geotag Widget"
+msgstr "WIDGET WP OSM Geotag"
+
+#: osm-widget.php:39
+msgid "New title"
+msgstr "Titlu nou"
+
+#: osm-widget.php:55
+msgid "Title:"
+msgstr "Titlu:"
+
+#: osm-widget.php:60
+msgid "Height of map:"
+msgstr "Înălțimea hărții:"
+
+#: osm-widget.php:64
+msgid "Zoom"
+msgstr "Zoom"
+
+#: osm-widget.php:87
+msgid "Control Theme"
+msgstr "Tema controlului"
+
+#: osm-widget.php:99
+msgid "marker"
+msgstr "marker"
+
+#: osm-widget.php:118
+msgid "grey"
+msgstr "gri"
+
+#: osm-widget.php:125
+msgid "CycleMap"
+msgstr "CycleMap"
+
+#: osm-widget.php:126
+msgid "OpenSeaMap"
+msgstr "OpenSeaMap"
+
+#: osm-widget.php:127
+msgid "BaseMap"
+msgstr "Harta de bază"
+
+#: osm-widget.php:128
+msgid "Stamen Watercolor"
+msgstr "Stamen Watercolor"
+
+#: osm-widget.php:129
+msgid "Stamen Toner"
+msgstr "Stamen Toner"
+
+msgid "Add markers"
+msgstr "Adaugă markere"
+
+msgid "single marker"
+msgstr "marker unic"
+
+msgid "all geotagged posts"
+msgstr "toate postările cu geoetichetă"
+
+msgid "photos (EXIF) in post/page"
+msgstr "fotografii (EXIF) în postare/pagină"
+
+msgid "Blue Marker"
+msgstr "Marker albastru"
+
+msgid "Green Waypoint"
+msgstr "Waypoint verde"
+
+msgid "Red Waypoint"
+msgstr "Waypoint roșu"
+
+msgid "Yellow Marker"
+msgstr "Marker galben"
+
+msgid "Bicycling Waypoint"
+msgstr "Waypoint biclist"
+
+msgid "Hotel"
+msgstr "Hotel"
+
+msgid "If you want to add a gpx-track add it:"
+msgstr "Adăugați un track gpx aici:"
+
+msgid "copy the gpx file via FTP to your upload-folder"
+msgstr "copiați fișierul gpx prin FTP în folderul upload"
+
+msgid "colour of your gpx-track: "
+msgstr "culoarea track-ului GPS "
+
+msgid "copy the marker file via FTP to your upload-folder"
+msgstr "copiați fișierul cu marker prin FTP în folderul upload"
+
+msgid "paste the local URL of marker file here: "
+msgstr "introduceti URL-ul local al markerului aici: "
+
+msgid "Generate"
+msgstr "Generează"

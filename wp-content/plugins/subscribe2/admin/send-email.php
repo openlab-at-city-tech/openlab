@@ -3,18 +3,18 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-global $wpdb, $current_user;
+global $current_user;
 
 // was anything POSTed?
-if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( $_GET['delete-draft'] ) ) {
+if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-write_subscribers' . S2VERSION ) ) {
 		die( '<p>' . __( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
 	$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
-	$body = wpautop( $this->substitute( stripslashes( $_POST['content'] ) ), true );
+	$body    = wpautop( $this->substitute( stripslashes( $_POST['content'] ) ), true );
 	if ( '' !== $current_user->display_name || '' !== $current_user->user_email ) {
-		$this->myname = html_entity_decode( $current_user->display_name, ENT_QUOTES );
+		$this->myname  = html_entity_decode( $current_user->display_name, ENT_QUOTES );
 		$this->myemail = $current_user->user_email;
 	}
 	if ( isset( $_POST['send'] ) ) {
@@ -23,19 +23,19 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 		} elseif ( 'unconfirmed' === $_POST['what'] ) {
 			$recipients = $this->get_public( 0 );
 		} elseif ( 'public' === $_POST['what'] ) {
-			$confirmed = $this->get_public();
+			$confirmed   = $this->get_public();
 			$unconfirmed = $this->get_public( 0 );
-			$recipients = array_merge( (array) $confirmed, (array) $unconfirmed );
+			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed );
 		} elseif ( is_numeric( $_POST['what'] ) ) {
-			$cat = intval( $_POST['what'] );
-			$recipients = $this->get_registered( "cats=$cat" );
+			$category   = intval( $_POST['what'] );
+			$recipients = $this->get_registered( "cats=$category" );
 		} elseif ( 'all_users' === $_POST['what'] ) {
 			$recipients = $this->get_all_registered();
 		} elseif ( 'all' === $_POST['what'] ) {
-			$confirmed = $this->get_public();
+			$confirmed   = $this->get_public();
 			$unconfirmed = $this->get_public( 0 );
-			$registered = $this->get_all_registered();
-			$recipients = array_merge( (array) $confirmed, (array) $unconfirmed, (array) $registered );
+			$registered  = $this->get_all_registered();
+			$recipients  = array_merge( (array) $confirmed, (array) $unconfirmed, (array) $registered );
 		} else {
 			$recipients = $this->get_registered();
 		}
@@ -55,9 +55,13 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 					'error'    => $_FILES['file']['error'][ $key ],
 					'size'     => $_FILES['file']['size'][ $key ],
 				);
-				$uploads[] = wp_handle_upload( $file, array(
-					'test_form' => false,
-				) );
+
+				$uploads[] = wp_handle_upload(
+					$file,
+					array(
+						'test_form' => false,
+					)
+				);
 			}
 		}
 	}
@@ -74,16 +78,16 @@ if ( ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) || isset( 
 
 	if ( empty( $body ) ) {
 		$error_message = __( 'Your email was empty', 'subscribe2' );
-		$status = false;
+		$success       = false;
 	} elseif ( isset( $upload_error ) ) {
 		$error_message = $upload_error;
-		$status = false;
+		$success       = false;
 	} else {
-		$status = $this->mail( $recipients, $subject, $body, 'text', $attachments );
+		$success       = $this->mail( $recipients, $subject, $body, 'html', $attachments );
 		$error_message = __( 'Check your settings and check with your hosting provider', 'subscribe2' );
 	}
 
-	if ( $status ) {
+	if ( $success ) {
 		if ( isset( $_POST['preview'] ) ) {
 			$message = '<p class="s2_message">' . __( 'Preview message sent!', 'subscribe2' ) . '</p>';
 		} elseif ( isset( $_POST['send'] ) ) {
@@ -126,15 +130,14 @@ echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 <script type="text/javascript">
 //<![CDATA[
 function add_file_upload() {
-	var div = document.getElementById('upload_files');
-	var field = div.getElementsByTagName('input')[0];
-	div.appendChild(document.createElement("br"));
-	div.appendChild(field.cloneNode(false));
+	var div = document.getElementById( 'upload_files' );
+	var field = div.getElementsByTagName( 'input' )[0];
+	div.appendChild( document.createElement( 'br' ) );
+	div.appendChild( field.cloneNode( false ) );
 }
 //]]>
 </script>
 <?php
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 // just to be sure
 die;
-?>

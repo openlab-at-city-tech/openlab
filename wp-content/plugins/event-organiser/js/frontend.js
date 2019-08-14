@@ -20,7 +20,7 @@ jQuery(document).ready(function () {
 	function eventorganiser_filter_markup( options ){
 
 		//Are we whitelisting categories
-		var whitelist = ( typeof options.whitelist !== "undefined" && options.whitelist ? options.whitelist.split(',') : false );
+		var whitelist = ( typeof options.whitelist !== "undefined" && options.whitelist ? options.whitelist.trim().split(/\s*,\s*/) : false );
 
 		var html="<select class='eo-fc-filter eo-fc-filter-"+options.type+"' data-filter-type='"+options.type+"'>";
 		html+="<option value=''>"+options.select_none+"</option>";
@@ -294,7 +294,7 @@ jQuery(document).ready(function () {
                 				start: start.format( "YYYY-MM-DD" ),
                 				end: end.format( "YYYY-MM-DD" ),
                 				timeformat: options.timeFormatphp,
-                				users_events: 0,
+                				users_events: options.users_events,
                 		};
 
                 		if (typeof options.category !== "undefined" && options.category !== "") {

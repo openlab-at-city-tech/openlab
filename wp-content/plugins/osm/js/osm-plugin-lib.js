@@ -233,6 +233,10 @@ function osm_savePostMarker(){
       MarkerIcon: osm_ajax_object.MarkerIcon,
       MarkerText: osm_ajax_object.MarkerText,
       MarkerName: osm_ajax_object.MarkerName,
+      map_zoom: osm_ajax_object.map_zoom,
+      map_type: osm_ajax_object.map_type,
+      map_border: osm_ajax_object.map_border,
+      map_controls: osm_ajax_object.map_controls,
       post_id: osm_ajax_object.post_id,
       marker_nonce: osm_ajax_object.marker_nonce
     };

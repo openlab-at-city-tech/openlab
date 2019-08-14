@@ -2540,6 +2540,7 @@ abstract class GFAddOn {
 		$key_field['name']    .= '_key';
 		$key_field['choices']  = isset( $field['field_map'] ) ? $field['field_map'] : null;
 		$key_field['class']    = 'key key_{i}';
+		$key_field['title']    = rgar( $field, 'key_field_title' );
 
 		// Define custom key field properties.
 		$custom_key_field['name']  .= '_custom_key_{i}';
@@ -2552,6 +2553,7 @@ abstract class GFAddOn {
 		// Define value field properties.
 		$value_field['name']  .= '_custom_value';
 		$value_field['class']  = 'value value_{i}';
+		$value_field['title']  = rgar( $field, 'value_field_title' );
 
 		// Remove unneeded field properties.
 		unset( $field['field_map'], $value_field['field_map'], $key_field['field_map'], $custom_key_field['field_map'] );
@@ -2561,9 +2563,17 @@ abstract class GFAddOn {
 			$html .= $this->get_error_icon( $field );
 		}
 
+		$header = '';
+		if ( ! empty( $key_field['title'] ) || ! empty ( $value_field['title'] ) ) {
+			$header = '<th>' . $key_field['title'] . '</th>' .'
+					   <th>' . $value_field['title'] . '</th>';
+
+		}
+
 		// Display dynamic field map table.
 		$html .= '
             <table class="settings-field-map-table" cellspacing="0" cellpadding="0">
+            	' . $header . '
                 <tbody class="repeater">
 	                <tr>
 	                    '. $this->get_mapping_field( 'key', $key_field, $custom_key_field ) .'
@@ -4269,9 +4279,7 @@ abstract class GFAddOn {
 	public function form_settings_init() {
 		$view    = rgget( 'view' );
 		$subview = rgget( 'subview' );
-		if ( $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			add_action( 'gform_form_settings_menu', array( $this, 'add_form_settings_menu' ), 10, 2 );
-		}
+		add_filter( 'gform_form_settings_menu', array( $this, 'add_form_settings_menu' ), 10, 2 );
 
 		if ( rgget( 'page' ) == 'gf_edit_forms' && $view == 'settings' && $subview == $this->_slug && $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
@@ -4682,8 +4690,8 @@ abstract class GFAddOn {
 	 * Not intended to be overridden or called directly by add-ons.
 	 */
 	public function app_tab_page() {
-		$page        = rgget( 'page' );
-		$current_tab = rgget( 'view' );
+		$page        = sanitize_text_field( rgget( 'page' ) );
+		$current_tab = sanitize_text_field( rgget( 'view' ) );
 
 		if ( $page == $this->_slug . '_settings' ) {
 
@@ -4781,7 +4789,7 @@ abstract class GFAddOn {
 	 */
 	public function add_form_settings_menu( $tabs, $form_id ) {
 
-		$tabs[] = array( 'name' => $this->_slug, 'label' => $this->get_short_title(), 'query' => array( 'fid' => null ) );
+		$tabs[] = array( 'name' => $this->_slug, 'label' => $this->get_short_title(), 'query' => array( 'fid' => null ), 'capabilities' => $this->_capabilities_form_settings );
 
 		return $tabs;
 	}
@@ -5092,7 +5100,7 @@ abstract class GFAddOn {
 		</ul>
 
 		<div id="gform_tab_container" class="gform_tab_container">
-		<div class="gform_tab_content" id="tab_<?php echo $current_tab ?>">
+		<div class="gform_tab_content" id="tab_<?php echo esc_attr( $current_tab ) ?>">
 
 	<?php
 	}

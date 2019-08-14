@@ -18,7 +18,7 @@ add_action( 'admin_head', 'wpa_admin_styles' );
  * Enqueue admin stylesheets.
  */
 function wpa_admin_styles() {
-	if ( isset( $_GET['page'] ) && ( 'wp-accessibility/wp-accessibility.php' == $_GET['page'] ) ) {
+	if ( isset( $_GET['page'] ) && ( 'wp-accessibility/wp-accessibility.php' === $_GET['page'] ) ) {
 		wp_enqueue_style( 'farbtastic' );
 		echo '<link type="text/css" rel="stylesheet" href="' . plugins_url( 'css/wpa-styles.css', __FILE__ ) . '" />';
 	}
@@ -29,7 +29,7 @@ function wpa_admin_styles() {
  */
 function wpa_write_js() {
 	global $current_screen;
-	if ( 'settings_page_wp-accessibility/wp-accessibility' == $current_screen->base ) {
+	if ( 'settings_page_wp-accessibility/wp-accessibility' === $current_screen->base ) {
 		?>
 <script>
 	//<![CDATA[
@@ -50,7 +50,7 @@ add_action( 'admin_enqueue_scripts', 'wpa_admin_js' );
  **/
 function wpa_admin_js() {
 	global $current_screen;
-	if ( 'settings_page_wp-accessibility/wp-accessibility' == $current_screen->base ) {
+	if ( 'settings_page_wp-accessibility/wp-accessibility' === $current_screen->base ) {
 		wp_enqueue_script( 'farbtastic' );
 	}
 }
@@ -67,7 +67,7 @@ function wpa_update_settings() {
 		if ( ! wp_verify_nonce( $nonce, 'wpa-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		if ( isset( $_POST['action'] ) && 'rta' == $_POST['action'] ) {
+		if ( isset( $_POST['action'] ) && 'rta' === $_POST['action'] ) {
 			$rta_from_tag_clouds = ( isset( $_POST['rta_from_tag_clouds'] ) ) ? 'on' : '';
 			update_option( 'rta_from_tag_clouds', $rta_from_tag_clouds );
 
@@ -75,7 +75,7 @@ function wpa_update_settings() {
 
 			return "<div class='updated'><p>" . $message . '</p></div>';
 		}
-		if ( isset( $_POST['action'] ) && 'asl' == $_POST['action'] ) {
+		if ( isset( $_POST['action'] ) && 'asl' === $_POST['action'] ) {
 			$asl_enable         = ( isset( $_POST['asl_enable'] ) ) ? 'on' : '';
 			$asl_content        = ( isset( $_POST['asl_content'] ) ) ? $_POST['asl_content'] : '';
 			$asl_navigation     = ( isset( $_POST['asl_navigation'] ) ) ? $_POST['asl_navigation'] : '';
@@ -92,7 +92,7 @@ function wpa_update_settings() {
 			update_option( 'asl_extra_target', $asl_extra_target );
 			update_option( 'asl_extra_text', $asl_extra_text );
 			update_option( 'asl_visible', $asl_visible );
-			$notice = ( 'asl' == $asl_visible ) ? '<p>' . __( 'WP Accessibility does not provide any styles for visible skiplinks. You can still set the look of the links using the textareas provided, but all other layout must be assigned in your theme.', 'wp-accessibility' ) . '</p>' : '';
+			$notice = ( 'asl' === $asl_visible ) ? '<p>' . __( 'WP Accessibility does not provide any styles for visible skiplinks. You can still set the look of the links using the textareas provided, but all other layout must be assigned in your theme.', 'wp-accessibility' ) . '</p>' : '';
 
 			update_option( 'asl_styles_focus', $asl_styles_focus );
 			update_option( 'asl_styles_passive', $asl_styles_passive );
@@ -100,7 +100,7 @@ function wpa_update_settings() {
 
 			return "<div class='updated'><p>" . $message . "</p>$notice</div>";
 		}
-		if ( isset( $_POST['action'] ) && 'misc' == $_POST['action'] ) {
+		if ( isset( $_POST['action'] ) && 'misc' === $_POST['action'] ) {
 			$wpa_lang                    = ( isset( $_POST['wpa_lang'] ) ) ? 'on' : '';
 			$wpa_target                  = ( isset( $_POST['wpa_target'] ) ) ? 'on' : '';
 			$wpa_labels                  = ( isset( $_POST['wpa_labels'] ) ) ? 'on' : '';
@@ -108,7 +108,6 @@ function wpa_update_settings() {
 			$wpa_tabindex                = ( isset( $_POST['wpa_tabindex'] ) ) ? 'on' : '';
 			$wpa_underline               = ( isset( $_POST['wpa_underline'] ) ) ? 'on' : '';
 			$wpa_longdesc                = ( isset( $_POST['wpa_longdesc'] ) ) ? esc_attr( $_POST['wpa_longdesc'] ) : 'false';
-			$wpa_current_menu            = ( isset( $_POST['wpa_current_menu'] ) ) ? 'on' : '';
 			$wpa_longdesc_featured       = ( isset( $_POST['wpa_longdesc_featured'] ) ) ? esc_attr( $_POST['wpa_longdesc_featured'] ) : 'false';
 			$wpa_image_titles            = ( isset( $_POST['wpa_image_titles'] ) ) ? 'on' : '';
 			$wpa_more                    = ( isset( $_POST['wpa_more'] ) ) ? 'on' : '';
@@ -126,7 +125,6 @@ function wpa_update_settings() {
 			update_option( 'wpa_tabindex', $wpa_tabindex );
 			update_option( 'wpa_underline', $wpa_underline );
 			update_option( 'wpa_longdesc', $wpa_longdesc );
-			update_option( 'wpa_current_menu', $wpa_current_menu );
 			update_option( 'wpa_longdesc_featured', $wpa_longdesc_featured );
 			update_option( 'wpa_image_titles', $wpa_image_titles );
 			update_option( 'wpa_more', $wpa_more );
@@ -142,7 +140,7 @@ function wpa_update_settings() {
 			return "<div class='updated'><p>" . $message . '</p></div>';
 		}
 
-		if ( isset( $_POST['action'] ) && 'toolbar' == $_POST['action'] ) {
+		if ( isset( $_POST['action'] ) && 'toolbar' === $_POST['action'] ) {
 			$wpa_toolbar            = ( isset( $_POST['wpa_toolbar'] ) ) ? 'on' : '';
 			$wpa_toolbar_size       = ( isset( $_POST['wpa_toolbar_size'] ) ) ? $_POST['wpa_toolbar_size'] : '';
 			$wpa_alternate_fontsize = ( isset( $_POST['wpa_alternate_fontsize'] ) ) ? 'on' : '';
@@ -189,7 +187,7 @@ function wpa_admin_settings() {
 
 				<div class="inside">
 					<?php
-					if ( wpa_accessible_theme() && 'on' != get_option( 'asl_enable' ) ) {
+					if ( wpa_accessible_theme() && 'on' !== get_option( 'asl_enable' ) ) {
 						?>
 					<p>
 						<?php _e( 'Your <code>accessibility-ready</code> theme has skip links built in.', 'wp-accessibility' ); ?>
@@ -234,7 +232,7 @@ function wpa_admin_settings() {
 									<textarea name='asl_styles_focus' id='asl_styles_focus' cols='60' rows='4'><?php echo esc_attr( stripslashes( get_option( 'asl_styles_focus' ) ) ); ?></textarea>
 								</li>
 								<?php
-								if ( 'on' != get_option( 'asl_visible' ) ) {
+								if ( 'on' !== get_option( 'asl_visible' ) ) {
 									$disabled = " disabled='disabled' style='background: #eee;'";
 									$note     = ' ' . __( '(Not currently visible)', 'wp-accessibility' );
 								} else {
@@ -293,17 +291,17 @@ function wpa_admin_settings() {
 								<input type="text" id="wpa_toolbar_default" name="wpa_toolbar_default" value="<?php echo esc_attr( get_option( 'wpa_toolbar_default' ) ); ?>" />
 							</li>
 							<?php
-							$size = get_option( 'wpa_toolbar_size' );
+							$size = absint( get_option( 'wpa_toolbar_size' ) );
 							?>
 							<li>
 								<label for="wpa_toolbar_size"><?php _e( 'Toolbar font size', 'wp-accessibility' ); ?></label>
 								<select name='wpa_toolbar_size' id='wpa_toolbar_size'>
 									<option value=''><?php _e( 'Default size', 'wp-accessibility' ); ?></option>
 									<?php
-									for ( $i = 1; $i <= 2.5; ) {
+									for ( $i = 1.2; $i <= 3.8; ) {
 										$val           = ( $i * 10 ) + 2;
 										$current       = $val;
-										$selected_size = ( $current == $size ) ? ' selected="selected"' : '';
+										$selected_size = ( $current === $size ) ? ' selected="selected"' : '';
 										echo "<option value='$val'$selected_size>$val px</option>";
 										$i = $i + .1;
 									}
@@ -402,7 +400,7 @@ function wpa_admin_settings() {
 							</li>
 							<li>
 								<input type="checkbox" id="wpa_row_actions" name="wpa_row_actions" <?php checked( get_option( 'wpa_row_actions' ), 'on' ); ?>/>
-								<label for="wpa_row_actions"><?php _e( 'Make row actions always visible', 'wp-accessibility' ); ?></label>
+								<label for="wpa_row_actions"><?php _e( 'Make admin row actions always visible', 'wp-accessibility' ); ?></label>
 							</li>
 							<li>
 								<input type="checkbox" id="wpa_image_titles" name="wpa_image_titles" <?php checked( get_option( 'wpa_image_titles' ), 'on' ); ?>/>
@@ -417,10 +415,6 @@ function wpa_admin_settings() {
 								<label for="wpa_focus"><?php _e( 'Add outline to elements on keyboard focus', 'wp-accessibility' ); ?></label>
 								<label for="wpa_focus_color"><?php _e( 'Outline color (hexadecimal, optional)', 'wp-accessibility' ); ?></label>
 								<input type="text" id="wpa_focus_color" name="wpa_focus_color" value="#<?php echo esc_attr( get_option( 'wpa_focus_color' ) ); ?>"/></li>
-							<li>
-								<input type="checkbox" id="wpa_current_menu" name="wpa_current_menu" <?php checked( get_option( 'wpa_current_menu' ), 'on' ); ?>/>
-								<label for="wpa_current_menu"><?php _e( 'Non-visually identify currently active menu item', 'wp-accessibility' ); ?></label>
-							</li>
 						</ul>
 						<p>
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>

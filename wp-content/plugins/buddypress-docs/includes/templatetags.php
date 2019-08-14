@@ -942,3 +942,46 @@ function bp_docs_get_group_settings( $group_id ) {
 }
 
 
+/**
+ * Get the Doc settings array
+ *
+ * This will prepopulate many of the required settings, for cases where the settings have not
+ * yet been saved for this Doc.
+ *
+ * @param int $doc_id
+ * @param string $type 'default' parses with default options to ensure that all
+ *        keys have values. 'raw' returns results as stored in the database.
+ * @return array
+ */
+function bp_docs_get_doc_settings( $doc_id = 0, $type = 'default', $group_id = 0 ) {
+	$doc_settings = array();
+
+	$q = get_queried_object();
+	if ( !$doc_id && isset( $q->ID ) ) {
+		$doc_id = $q->ID;
+	}
+
+	$saved_settings = get_post_meta( $doc_id, 'bp_docs_settings', true );
+	if ( !is_array( $saved_settings ) ) {
+		$saved_settings = array();
+	}
+
+	$default_settings = [
+		'read'          => 'group-members',
+		'view_history'  => 'group-members',
+		'delete'        => 'creator',
+		'edit'          => 'group-members',
+		'read_comments' => 'group-members',
+	];
+
+	if ( 'raw' !== $type ) {
+		// Empty string settings can slip through sometimes
+		$saved_settings = array_filter( $saved_settings );
+
+		$doc_settings = wp_parse_args( $saved_settings, $default_settings );
+	} else {
+		$doc_settings = $saved_settings;
+	}
+
+	return apply_filters( 'bp_docs_get_doc_settings', $doc_settings, $doc_id, $default_settings, $saved_settings, $group_id );
+}

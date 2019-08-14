@@ -6,6 +6,7 @@ define([
 	"views/AssignmentView",
 	"views/EditStudentView",
 	"views/EditAssignmentView",
+	"views/uploadModal",
 	"models/Course"
 ], function(
 	$,
@@ -15,6 +16,7 @@ define([
 	AssignmentView,
 	EditStudentView,
 	EditAssignmentView,
+	uploadModal,
 	Course
 ) {
 	Backbone.pubSub = _.extend({}, Backbone.Events);
@@ -87,6 +89,9 @@ define([
 			);
 
 			Backbone.pubSub.on("updateAverageGrade", this.updateAverageGrade, this);
+			Backbone.pubSub.on("newGradebookCSV", this.initRender, this);
+
+			this.render();
 
 			this.initRender();
 
@@ -108,6 +113,7 @@ define([
 		},
 		events: {
 			"click button#add-student": "addStudent",
+			"click button#upload-modal": "uploadModal",
 			"click button#download-csv": "downloadCSV",
 			"click button#download-csv-mobile": "downloadCSV",
 			"click button#add-assignment": "addAssignment",
@@ -115,11 +121,29 @@ define([
 			"click [class^=gradebook-student-column-]": "sortGradebookBy",
 			"click [class^=gradebook-student-column-] span": "sortGradebookBy"
 		},
-		initRender: function() {
+		initRender: function(ev) {
 			this.scrollSize = 0;
 			var self = this;
 			this.clearSubViews();
 			this.renderControl = 0;
+
+			console.log('ev on initRender', ev);
+			if (typeof ev !== "undefined") {
+				console.log("ev, self.gradebook", ev, self.gradebook);
+
+				if (typeof ev.cells !== "undefined") {
+					this.gradebook.cells.set(ev.cells);
+				}
+
+				if (typeof ev.students !== "undefined") {
+					this.gradebook.students.set(ev.students);
+				}
+
+				if (typeof ev.assignments !== "undefined") {
+					this.gradebook.assignments.set(ev.assignments);
+				}
+			}
+
 			var _x = _.map(self.gradebook.assignments.models, function(model) {
 				return model.get("assign_category").trim();
 			});
@@ -193,12 +217,8 @@ define([
 				}
 			}
 		},
-		render: function(ev) {
+		render: function() {
 			var self = this;
-
-			if (typeof ev !== "undefined") {
-				console.log("ev, self.gradebook", ev, self.gradebook);
-			}
 
 			switch (this.gradebook.sort_key) {
 				case "cell":
@@ -430,12 +450,26 @@ define([
 			});
 		},
 		addAssignment: function(ev) {
+			var checkElem = $("body").find("#modalDialogEditAssignment");
+
+			//prevent double modals
+			if (checkElem.length) {
+				return false;
+			}
+
 			var view = new EditAssignmentView({
 				course: this.course,
 				gradebook: this.gradebook
 			});
 		},
 		addStudent: function(ev) {
+			var checkElem = $("body").find("#modalDialogEditStudent");
+
+			//prevent double modals
+			if (checkElem.length) {
+				return false;
+			}
+
 			var view = new EditStudentView({
 				course: this.course,
 				gradebook: this.gradebook
@@ -446,6 +480,22 @@ define([
 			e.preventDefault();
 
 			this.course.export2csv();
+		},
+		uploadModal: function(e) {
+			var checkElem = $("body").find("#modalDialogUpload");
+
+			//prevent double modals
+			if (checkElem.length) {
+				return false;
+			}
+
+			var view = new uploadModal({
+				course: this.course,
+				gradebook: this.gradebook,
+				model: this.model
+			});
+
+			$("body").append(view.render());
 		},
 		checkStudentSortDirection: function() {
 			if (this.gradebook.students.sort_direction === "asc") {

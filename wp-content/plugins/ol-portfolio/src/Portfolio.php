@@ -4,6 +4,8 @@ namespace OpenLab\Portfolio;
 
 use OpenLab\Portfolio\Contracts\Registerable;
 use OpenLab\Portfolio\Share\Service as ShareService;
+use OpenLab\Portfolio\Export\Service as ExportService;
+use OpenLab\Portfolio\Import\Service as ImportService;
 
 /**
  * Main plugin class.
@@ -12,6 +14,8 @@ final class Portfolio {
 
 	const SERVICE_PROVIDERS = [
 		ShareService::class,
+		ExportService::class,
+		ImportService::class,
 	];
 
 	/**

@@ -105,10 +105,10 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			return;
 		}
 
-		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_assets' ), -999 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ), -999 );
-		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ), -999 );
-		add_action( 'enqueue_embed_scripts', array( $this, 'enqueue_assets' ), -999 );
+		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_assets' ), -9999 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ), -9999 );
+		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ), -9999 );
+		add_action( 'enqueue_embed_scripts', array( $this, 'enqueue_assets' ), -9999 );
 
 		add_action( 'gp_head',                array( $this, 'manually_print_assets' ), 11 );
 
@@ -239,6 +239,17 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		 */
 		$this->panel_menu = apply_filters( 'qm/output/panel_menus', $this->admin_bar_menu );
 
+		foreach ( $this->outputters as $output_id => $output ) {
+			$collector = $output->get_collector();
+
+			if ( ( ! empty( $collector->concerned_filters ) || ! empty( $collector->concerned_actions ) ) && isset( $this->panel_menu[ 'qm-' . $output_id ] ) ) {
+				$this->panel_menu[ 'qm-' . $output_id ]['children'][ 'qm-' . $output_id . '-concerned_hooks' ] = array(
+					'href'  => esc_attr( '#' . $collector->id() . '-concerned_hooks' ),
+					'title' => '└ ' . __( 'Hooks in Use', 'query-monitor' ),
+				);
+			}
+		}
+
 		$class = array(
 			'qm-no-js',
 		);
@@ -252,21 +263,19 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			$class[] = 'qm-peek';
 		}
 
-		if ( wp_is_mobile() ) {
-			$class[] = 'qm-touch';
-		}
-
 		$json = array(
 			'menu'        => $this->js_admin_bar_menu(),
 			'ajax_errors' => array(), # @TODO move this into the php_errors collector
 		);
 
+		echo '<!-- Begin Query Monitor output -->' . "\n\n";
 		echo '<script type="text/javascript">' . "\n\n";
 		echo 'var qm = ' . json_encode( $json ) . ';' . "\n\n";
 		echo '</script>' . "\n\n";
 
-		echo '<div id="query-monitor" class="' . implode( ' ', array_map( 'esc_attr', $class ) ) . '" dir="ltr">';
-		echo '<div id="qm-title">';
+		echo '<div id="query-monitor-main" class="' . implode( ' ', array_map( 'esc_attr', $class ) ) . '" dir="ltr">';
+		echo '<div id="qm-side-resizer" class="qm-resizer"></div>';
+		echo '<div id="qm-title" class="qm-resizer">';
 		echo '<h1 class="qm-title-heading">' . esc_html__( 'Query Monitor', 'query-monitor' ) . '</h1>';
 		echo '<div class="qm-title-heading">';
 		echo '<select>';
@@ -283,31 +292,44 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 				esc_attr( $menu['href'] ),
 				esc_html( $menu['title'] )
 			);
+			if ( ! empty( $menu['children'] ) ) {
+				foreach ( $menu['children'] as $child ) {
+					printf(
+						'<option value="%1$s">%2$s</option>',
+						esc_attr( $child['href'] ),
+						esc_html( $child['title'] )
+					);
+				}
+			}
 		}
+
+		printf(
+			'<option value="%1$s">%2$s</option>',
+			'#qm-settings',
+			esc_html__( 'Settings', 'query-monitor' )
+		);
+
 		echo '</select>';
 
 		echo '</div>';
-		echo '<div class="qm-title-button"><button class="qm-button-container-settings"><span class="screen-reader-text">' . esc_html__( 'Settings', 'query-monitor' ) . '</span><span class="dashicons dashicons-admin-generic" aria-hidden="true"></span></button></div>';
-		echo '<div class="qm-title-button"><button class="qm-button-container-close"><span class="screen-reader-text">' . esc_html__( 'Close Panel', 'query-monitor' ) . '</span><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button></div>';
+		echo '<button class="qm-title-button qm-button-container-settings" aria-label="' . esc_attr__( 'Settings', 'query-monitor' ) . '"><span class="dashicons dashicons-admin-generic" aria-hidden="true"></span></button>';
+		echo '<button class="qm-title-button qm-button-container-position" aria-label="' . esc_html__( 'Toggle panel position', 'query-monitor' ) . '"><span class="dashicons dashicons-image-rotate-left" aria-hidden="true"></span></button>';
+		echo '<button class="qm-title-button qm-button-container-close" aria-label="' . esc_attr__( 'Close Panel', 'query-monitor' ) . '"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>';
 		echo '</div>'; // #qm-title
 
 		echo '<div id="qm-wrapper">';
 		echo '<nav id="qm-panel-menu" aria-labelledby="qm-panel-menu-caption">';
 		echo '<h2 class="qm-screen-reader-text" id="qm-panel-menu-caption">' . esc_html__( 'Query Monitor Menu', 'query-monitor' ) . '</h2>';
-		echo '<ul>';
+		echo '<ul role="tablist">';
 
 		printf(
-			'<li><button data-qm-href="%1$s">%2$s</button></li>',
+			'<li role="presentation"><button role="tab" data-qm-href="%1$s">%2$s</button></li>',
 			'#qm-overview',
 			esc_html__( 'Overview', 'query-monitor' )
 		);
 
-		foreach ( $this->panel_menu as $menu ) {
-			printf(
-				'<li><button data-qm-href="%1$s">%2$s</button></li>',
-				esc_attr( $menu['href'] ),
-				esc_html( $menu['title'] )
-			);
+		foreach ( $this->panel_menu as $id => $menu ) {
+			$this->do_panel_menu_item( $id, $menu );
 		}
 
 		echo '</ul>';
@@ -315,6 +337,24 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		echo '<div id="qm-panels">';
 
+	}
+
+	protected function do_panel_menu_item( $id, array $menu ) {
+		printf(
+			'<li role="presentation"><button role="tab" data-qm-href="%1$s">%2$s</button>',
+			esc_attr( $menu['href'] ),
+			esc_html( $menu['title'] )
+		);
+
+		if ( ! empty( $menu['children'] ) ) {
+			echo '<ul role="presentation">';
+			foreach ( $menu['children'] as $child_id => $child ) {
+				$this->do_panel_menu_item( $child_id, $child );
+			}
+			echo '</ul>';
+		}
+
+		echo '</li>';
 	}
 
 	protected function after_output() {
@@ -338,7 +378,9 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		echo '<p><button class="qm-auth qm-button" data-qm-text-on="' . esc_attr( $text['on'] ) . '" data-qm-text-off="' . esc_attr( $text['off'] ) . '">' . esc_html( $text[ $state ] ) . '</button></p>';
 		echo '</section>';
+		echo '</div>';
 
+		echo '<div class="qm-boxed">';
 		$constants = array(
 			'QM_DB_EXPENSIVE'          => array(
 				/* translators: %s: The default value for a PHP constant */
@@ -433,14 +475,14 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 		echo '</div>'; // #qm-panels
 		echo '</div>'; // #qm-wrapper
-		echo '</div>'; // #qm
+		echo '</div>'; // #query-monitor-main
 
 		echo '<script type="text/javascript">' . "\n\n";
 		?>
 		window.addEventListener('load', function() {
 			if ( ( 'undefined' === typeof QM_i18n ) || ( 'undefined' === typeof jQuery ) || ! window.jQuery ) {
 				/* Fallback for worst case scenario */
-				document.getElementById( 'query-monitor' ).className += ' qm-broken';
+				document.getElementById( 'query-monitor-main' ).className += ' qm-broken';
 				console.error( document.getElementById( 'qm-broken' ).textContent );
 
 				if ( 'undefined' === typeof QM_i18n ) {
@@ -458,16 +500,16 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 				var menu_item = document.getElementById( 'wp-admin-bar-query-monitor' );
 				if ( menu_item ) {
 					menu_item.addEventListener( 'click', function() {
-						document.getElementById( 'query-monitor' ).className += ' qm-show';
+						document.getElementById( 'query-monitor-main' ).className += ' qm-show';
 					} );
 				}
 			} else if ( ! document.getElementById( 'wpadminbar' ) ) {
-				document.getElementById( 'query-monitor' ).className += ' qm-peek';
+				document.getElementById( 'query-monitor-main' ).className += ' qm-peek';
 			}
 		} );
 		<?php
 		echo '</script>' . "\n\n";
-		echo '<!-- End of Query Monitor output -->' . "\n\n";
+		echo '<!-- End Query Monitor output -->' . "\n\n";
 
 	}
 

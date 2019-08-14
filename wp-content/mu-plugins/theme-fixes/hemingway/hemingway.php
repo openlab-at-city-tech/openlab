@@ -75,3 +75,12 @@ function openlab_add_missing_label_element_to_comment_form_for_hemingway( $field
 }
 add_filter( 'comment_form_fields', 'openlab_add_missing_label_element_to_comment_form_for_hemingway' );
 
+add_action(
+	'wp_head',
+	function() {
+		$print_css_url = content_url( 'mu-plugins/theme-fixes/hemingway/print.css' );
+		?>
+<link rel="stylesheet" href="<?php echo esc_attr( $print_css_url ); ?>" type="text/css" media="print" />
+		<?php
+	}
+);

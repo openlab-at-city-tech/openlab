@@ -61,6 +61,8 @@ abstract class SAL_Site {
 
 	abstract public function get_frame_nonce();
 
+	abstract public function get_jetpack_frame_nonce();
+
 	abstract public function allowed_file_types();
 
 	abstract public function get_post_formats();
@@ -76,6 +78,8 @@ abstract class SAL_Site {
 	abstract public function is_jetpack();
 
 	abstract public function get_jetpack_modules();
+
+	abstract public function is_module_active( $module );
 
 	abstract public function is_vip();
 
@@ -123,6 +127,10 @@ abstract class SAL_Site {
 			false,
 			$this->blog_id
 		);
+	}
+
+	public function is_wpcom_atomic() {
+		return false;
 	}
 
 	public function is_wpcom_store() {
@@ -627,5 +635,13 @@ abstract class SAL_Site {
 	function get_site_goals() {
 		$options = get_option( 'options' );
 		return empty( $options[ 'siteGoals'] ) ? null : $options[ 'siteGoals' ];
+	}
+
+	function get_launch_status() {
+		return false;
+	}
+
+	function get_site_segment() {
+		return false;
 	}
 }

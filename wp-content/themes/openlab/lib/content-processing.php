@@ -41,6 +41,10 @@ function openlab_conditional_body_classes($classes) {
         $classes[] = 'sidebar-mobile-dropdown';
     }
 
+	if ( is_page() && ( get_queried_object_id() === $about_page_obj->ID || get_queried_object()->post_parent === $about_page_obj->ID ) ) {
+		$classes[] = 'openlab-about-page';
+	}
+
     return $classes;
 }
 

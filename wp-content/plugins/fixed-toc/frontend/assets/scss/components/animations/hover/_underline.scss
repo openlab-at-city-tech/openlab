@@ -1,0 +1,58 @@
+// *-------------------------------------------------------------------------------------
+// * Underline from right, left and center
+// *-------------------------------------------------------------------------------------
+
+@mixin underlineFromLeft {
+	.ftwp-text::before {
+		top: auto;
+		right: 100%;
+		height: $linethin;
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				right: 0;
+			}		
+		}
+	}	
+}
+
+
+@mixin underlineFromRight {
+	.ftwp-text::before {
+		top: auto;
+		left: 100%;
+		height: $linethin;
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				left: 0;
+			}		
+		}
+	}	
+}
+
+
+@mixin underlineFromCenter {
+	.ftwp-text::before {
+		top: auto;
+		left: 50%;
+		right: 50%;
+		height: $linethin; 
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				left: 0;
+				right: 0;
+			}		
+		}
+	}	
+}

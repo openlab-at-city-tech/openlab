@@ -1,0 +1,57 @@
+.header {
+	background-image: none !important;
+	padding: 0;
+}
+
+.section.bg-dark,
+.section.bg-dark-light {
+	background: #fff !important;
+}
+
+.header-inner {
+	text-align: left;
+}
+
+.section-inner {
+	width: 100%;
+	max-width: 100%;
+}
+
+.blog-info {
+	background-color: inherit;
+	display: block;
+	padding: 0;
+}
+
+.blog-title {
+	text-align: left;
+}
+
+.blog-title a {
+	color: inherit;
+}
+
+.blog-description {
+	color: inherit;
+	text-align: left;
+}
+
+.navigation {
+	display: none;
+}
+
+.content {
+	width: 100%;
+}
+
+.sidebar {
+	display: none;
+}
+
+.credits, .credits a {
+	color: inherit;
+}
+
+.credits-right {
+	display: none;
+}

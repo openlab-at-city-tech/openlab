@@ -21,7 +21,7 @@ class WP_Document_Revisions {
 	/**
 	 * Length of feed key
 	 *
-	 * @var Int $key_legth
+	 * @var Int $key_length
 	 */
 	public static $key_length = 32;
 
@@ -37,7 +37,45 @@ class WP_Document_Revisions {
 	 *
 	 * @var String $version
 	 */
-	public $version = '3.0.0';
+	public $version = '3.2.2';
+
+	/**
+	 * The WP default directory cache
+	 *
+	 * @var Array $wp_default_dir
+	 *
+	 * @since 3.2
+	 */
+	public static $wp_default_dir = array();
+
+	/**
+	 * The document directory cache
+	 *
+	 * @var String $wpdr_document_dir
+	 *
+	 * @since 3.2
+	 */
+	public static $wpdr_document_dir = null;
+
+	/**
+	 * Whether processing document or image directory
+	 *
+	 * @var Boolean $doc_image
+	 *
+	 * @since 3.2
+	 */
+	public static $doc_image = true;
+
+	/**
+	 * Identify if processing document or image directory
+	 *
+	 * @return Boolean $doc_image
+	 *
+	 * @since 3.2
+	 */
+	public function is_doc_image() {
+		return self::$doc_image;
+	}
 
 	/**
 	 * Initiates an instance of the class and adds hooks
@@ -50,7 +88,7 @@ class WP_Document_Revisions {
 
 		// admin
 		add_action( 'plugins_loaded', array( &$this, 'admin_init' ) );
-		add_action( 'plugins_loaded', array( &$this, 'i18n' ) );
+		add_action( 'plugins_loaded', array( &$this, 'i18n' ), 5 );
 
 		// CPT/CT
 		add_action( 'init', array( &$this, 'register_cpt' ) );
@@ -61,6 +99,7 @@ class WP_Document_Revisions {
 
 		// rewrites and permalinks
 		add_filter( 'rewrite_rules_array', array( &$this, 'revision_rewrite' ) );
+		add_filter( 'transient_rewrite_rules', array( &$this, 'revision_rewrite' ) );
 		add_filter( 'init', array( &$this, 'inject_rules' ) );
 		add_action( 'post_type_link', array( &$this, 'permalink' ), 10, 4 );
 		add_action( 'post_link', array( &$this, 'permalink' ), 10, 4 );
@@ -68,7 +107,7 @@ class WP_Document_Revisions {
 		add_filter( 'serve_document_auth', array( &$this, 'serve_document_auth' ), 10, 3 );
 		add_action( 'parse_request', array( &$this, 'ie_cache_fix' ) );
 		add_filter( 'query_vars', array( &$this, 'add_query_var' ), 10, 4 );
-		add_filter( 'default_feed', array( &$this, 'hijack_feed' ), 10, 2 );
+		add_filter( 'default_feed', array( &$this, 'hijack_feed' ) );
 		add_action( 'do_feed_revision_log', array( &$this, 'do_feed_revision_log' ) );
 		add_action( 'template_redirect', array( $this, 'revision_feed_auth' ) );
 		add_filter( 'get_sample_permalink_html', array( &$this, 'sample_permalink_html_filter' ), 10, 4 );
@@ -78,8 +117,8 @@ class WP_Document_Revisions {
 		add_filter( 'redirect_canonical', array( &$this, 'redirect_canonical_filter' ), 10, 2 );
 
 		// RSS
-		add_filter( 'private_title_format', array( &$this, 'no_title_prepend' ), 20, 2 );
-		add_filter( 'protected_title_format', array( &$this, 'no_title_prepend' ), 20, 2 );
+		add_filter( 'private_title_format', array( &$this, 'no_title_prepend' ), 20 );
+		add_filter( 'protected_title_format', array( &$this, 'no_title_prepend' ), 20 );
 		add_filter( 'the_title', array( &$this, 'add_revision_num_to_title' ), 20, 2 );
 
 		// uploads
@@ -100,6 +139,7 @@ class WP_Document_Revisions {
 
 		// load front-end features (shortcode, widgets, etc.)
 		include dirname( __FILE__ ) . '/class-wp-document-revisions-front-end.php';
+		include dirname( __FILE__ ) . '/class-wp-document-revisions-recently-revised-widget.php';
 		new WP_Document_Revisions_Front_End( $this );
 
 	}
@@ -126,6 +166,34 @@ class WP_Document_Revisions {
 
 
 	/**
+	 * Clear document directory name cache
+	 *
+	 * Used by Admin function when changing options
+	 *
+	 * @return void
+	 *
+	 * @since 3.2
+	 */
+	public function clear_document_dir_cache() {
+		self::$wpdr_document_dir = null;
+	}
+
+
+	/**
+	 * Set the default content directory name into cacle
+	 *
+	 * @return void
+	 *
+	 * @since 3.2
+	 */
+	private function set_default_dir_cache() {
+		remove_filter( 'upload_dir', array( &$this, 'document_upload_dir_filter' ), 10 );
+		self::$wp_default_dir = wp_upload_dir();
+		add_filter( 'upload_dir', array( &$this, 'document_upload_dir_filter' ), 10 );
+	}
+
+
+	/**
 	 * Extends class with admin functions when in admin backend
 	 *
 	 * @since 0.5
@@ -133,7 +201,7 @@ class WP_Document_Revisions {
 	public function admin_init() {
 
 		// only fire on admin + escape hatch to prevent fatal errors
-		if ( ! is_admin() || class_exists( 'Document_Revisions_Admin' ) ) {
+		if ( ! is_admin() || class_exists( 'WP_Document_Revisions_Admin' ) ) {
 			return;
 		}
 
@@ -157,12 +225,17 @@ class WP_Document_Revisions {
 			'edit_item'          => __( 'Edit Document', 'wp-document-revisions' ),
 			'new_item'           => __( 'New Document', 'wp-document-revisions' ),
 			'view_item'          => __( 'View Document', 'wp-document-revisions' ),
+			'view_items'         => __( 'View Documents', 'wp-document-revisions' ),
 			'search_items'       => __( 'Search Documents', 'wp-document-revisions' ),
 			'not_found'          => __( 'No documents found', 'wp-document-revisions' ),
 			'not_found_in_trash' => __( 'No documents found in Trash', 'wp-document-revisions' ),
 			'parent_item_colon'  => '',
 			'menu_name'          => __( 'Documents', 'wp-document-revisions' ),
 			'all_items'          => __( 'All Documents', 'wp-document-revisions' ),
+			'featured_image'        => __( 'Document Image', 'wp-document-revisions' ),
+			'set_featured_image'    => __( 'Set Document Image', 'wp-document-revisions' ),
+			'remove_featured_image' => __( 'Remove Document Image', 'wp-document-revisions' ),
+			'use_featured_image'    => __( 'Use as Document Image', 'wp-document-revisions' ),
 		);
 
 		$args = array(
@@ -179,11 +252,24 @@ class WP_Document_Revisions {
 			'hierarchical'         => false,
 			'menu_position'        => null,
 			'register_meta_box_cb' => array( &$this->admin, 'meta_cb' ),
-			'supports'             => array( 'title', 'author', 'revisions', 'excerpt', 'custom-fields' ),
+			'supports'             => array( 'title', 'author', 'revisions', 'excerpt', 'custom-fields', 'thumbnail' ),
 			'menu_icon'            => plugins_url( '../img/menu-icon.png', __FILE__ ),
 		);
 
 		register_post_type( 'document', apply_filters( 'document_revisions_cpt', $args ) );
+
+		// Ensure that there is a post-thumbnail size set - could/should be set by theme - copy from thumbnail
+		if ( ! array_key_exists( 'post-thumbnail', wp_get_additional_image_sizes() ) ) {
+			add_image_size( 'post-thumbnail', get_option( 'thumbnail_size_w' ), get_option( 'thumbnail_size_h' ), false );
+		}
+
+		if ( empty( self::$wp_default_dir ) ) {
+			// Set the default upload directory cache
+			$this->set_default_dir_cache();
+		}
+
+		// Set Global for Document Image from Cookie doc_image (may be updated later)
+		self::$doc_image = ( isset( $_COOKIE['doc_image'] ) ? 'true' === $_COOKIE['doc_image'] : true );
 
 	}
 
@@ -209,9 +295,19 @@ class WP_Document_Revisions {
 			'menu_name'         => __( 'Workflow States', 'wp-document-revisions' ),
 		);
 
+		/**
+		 * Filters the default structure and label values of the workflow_state taxonomy on declaration.
+		 *
+		 * @since 0.5
+		 *
+		 * @param array of default structure and label workflow_state values.
+		 */
 		register_taxonomy(
-			'workflow_state', array( 'document' ), apply_filters(
-				'document_revisions_ct', array(
+			'workflow_state',
+			array( 'document' ),
+			apply_filters(
+				'document_revisions_ct',
+				array(
 					'hierarchical'          => false,
 					'labels'                => $labels,
 					'show_ui'               => true,
@@ -233,7 +329,8 @@ class WP_Document_Revisions {
 	public function initialize_workflow_states() {
 
 		$terms = get_terms(
-			'workflow_state', array(
+			'workflow_state',
+			array(
 				'hide_empty' => false,
 			)
 		);
@@ -253,7 +350,9 @@ class WP_Document_Revisions {
 
 		foreach ( $states as $state => $desc ) {
 			wp_insert_term(
-				$state, 'workflow_state', array(
+				$state,
+				'workflow_state',
+				array(
 					'description' => $desc,
 				)
 			);
@@ -592,7 +691,8 @@ class WP_Document_Revisions {
 
 		// get revisions, and prepend the post
 		$revs = wp_get_post_revisions(
-			$post_id, array(
+			$post_id,
+			array(
 				'order' => 'DESC',
 			)
 		);
@@ -659,7 +759,8 @@ class WP_Document_Revisions {
 		}
 
 		$revs = wp_get_post_revisions(
-			$post_id, array(
+			$post_id,
+			array(
 				'order' => 'ASC',
 			)
 		);
@@ -759,11 +860,16 @@ class WP_Document_Revisions {
 		$revision = get_post( $rev_post->post_content ); // @todo can this be simplified?
 
 		$file = get_attached_file( $revision->ID );
-		// Used cached version of std directory, so cannot change within call, so replace it in the output
-		$std_dir = wp_get_upload_dir();
+		// Above used a cached version of std directory, so cannot change within call and may be wrong,
+		// so possibly replace it in the output
+		if ( empty( self::$wp_default_dir ) ) {
+			// Set the default upload directory cache
+			$this->set_default_dir_cache();
+		}
+		$std_dir = self::$wp_default_dir['basedir'];
 		$doc_dir = $this->document_upload_dir();
-		if ( $std_dir['basedir'] !== $doc_dir ) {
-			$file = str_replace( $std_dir['basedir'], $doc_dir, $file );
+		if ( $std_dir !== $doc_dir ) {
+			$file = str_replace( $std_dir, $doc_dir, $file );
 		}
 
 		// flip slashes for WAMP settups to prevent 404ing on the next line
@@ -784,12 +890,12 @@ class WP_Document_Revisions {
 
 		}
 
-		// note: authentication is happeneing via a hook here to allow shortcircuiting
+		// note: authentication is happening via a hook here to allow shortcircuiting
 		if ( ! apply_filters( 'serve_document_auth', true, $post, $version ) ) {
 			wp_die(
-				esc_html__( 'You are not authorized to access that file.', 'wp-document-revisions' ), null, array(
-					'response' => 403,
-				)
+				esc_html__( 'You are not authorized to access that file.', 'wp-document-revisions' ),
+				null,
+				array( 'response' => 403 )
 			);
 			return false; // for unit testing
 		}
@@ -808,11 +914,14 @@ class WP_Document_Revisions {
 		$filename .= $this->get_extension( wp_get_attachment_url( $revision->ID ) );
 		add_filter( 'wp_get_attachment_url', array( &$this, 'attachment_url_filter' ), 10, 2 );
 
+		$headers = array();
+
 		// Set content-disposition header. Two options here:
 		// "attachment" -- force save-as dialog to pop up when file is downloaded (pre 1.3.1 default)
 		// "inline" -- attempt to open in browser (e.g., PDFs), if not possible, prompt with save as (1.3.1+ default)
 		$disposition = ( apply_filters( 'document_content_disposition_inline', true ) ) ? 'inline' : 'attachment';
-		@header( 'Content-Disposition: ' . $disposition . '; filename="' . $filename . '"' );
+
+		$headers['Content-Disposition'] = $disposition . '; filename="' . $filename . '"';
 
 		/**
 		 * Filters the MIME type for a file before it is processed by WP Document Revisions.
@@ -842,17 +951,30 @@ class WP_Document_Revisions {
 
 		// Set the Content-Type header if a mimetype has been detected or provided.
 		if ( is_string( $mimetype ) ) {
-			@header( 'Content-Type: ' . $mimetype );
+			$headers['Content-Type'] = $mimetype;
 		}
 
-		@header( 'Content-Length: ' . filesize( $file ) );
+		$headers['Content-Length'] = filesize( $file );
 
 		// modified
 		$last_modified = gmdate( 'D, d M Y H:i:s', filemtime( $file ) );
 		$etag = '"' . md5( $last_modified ) . '"';
-		@header( "Last-Modified: $last_modified GMT" );
-		@header( 'ETag: ' . $etag );
-		@header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + 100000000 ) . ' GMT' );
+		$headers['Last-Modified'] = $last_modified . ' GMT';
+		$headers['ETag'] = $etag;
+		$headers['Expires'] = gmdate( 'D, d M Y H:i:s', time() + 100000000 ) . ' GMT';
+
+		/**
+		 * Filters the HTTP headers sent when a file is served through WP Document Revisions.
+		 *
+		 * @param array  $headers The HTTP headers to be sent.
+		 * @param string $file    The file being served.
+		 */
+		$headers = apply_filters( 'document_revisions_serve_file_headers', $headers, $file );
+
+		foreach ( $headers as $header => $value ) {
+			//@codingStandardsIgnoreLine WordPress.PHP.NoSilencedErrors.Discouraged
+			@header( $header . ': ' . $value );
+		}
 
 		// Support for Conditional GET
 		$client_etag = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
@@ -878,6 +1000,7 @@ class WP_Document_Revisions {
 		}
 
 		// in case this is a large file, remove PHP time limits
+		//@codingStandardsIgnoreLine WordPress.PHP.NoSilencedErrors.Discouraged
 		@set_time_limit( 0 );
 
 		// clear output buffer to prevent other plugins from corrupting the file
@@ -1021,28 +1144,34 @@ class WP_Document_Revisions {
 
 		global $wpdb;
 
-		// grab unfiltered defaults
-		remove_filter( 'upload_dir', array( &$this, 'document_upload_dir_filter' ), 10, 2 );
-		$defaults = wp_upload_dir();
-		add_filter( 'upload_dir', array( &$this, 'document_upload_dir_filter' ), 10, 2 );
+		if ( ! is_null( self::$wpdr_document_dir ) ) {
+			return self::$wpdr_document_dir;
+		}
 
 		// If no options set, default to normal upload dir
 		$dir = get_site_option( 'document_upload_directory' );
 		if ( ! ( $dir ) ) {
-			return $defaults['basedir'];
+			if ( empty( self::$wp_default_dir ) ) {
+				// Set the default upload directory cache
+				$this->set_default_dir_cache();
+			}
+			self::$wpdr_document_dir = self::$wp_default_dir['basedir'];
+			return self::$wpdr_document_dir;
 		}
 
+		self::$wpdr_document_dir = $dir;
 		if ( ! is_multisite() ) {
 			return $dir;
 		}
 
 		// make site specific on multisite
 		if ( is_multisite() && ! is_network_admin() ) {
-			if ( is_main_site() ) {
+			if ( is_main_site() && get_current_network_id() === get_main_network_id() ) {
 				$dir = str_replace( '/sites/%site_id%', '', $dir );
 			}
 
 			$dir = str_replace( '%site_id%', $wpdb->blogid, $dir );
+			self::$wpdr_document_dir = $dir;
 		}
 
 		return $dir;
@@ -1079,9 +1208,45 @@ class WP_Document_Revisions {
 	public function document_upload_dir_filter( $dir ) {
 
 		if ( ! $this->verify_post_type() ) {
+			// Ensure cookie variable is set correctly - if needed elsewhere
+			self::$doc_image = true;
 			return $dir;
 		}
 
+		// Ignore if dealing with thumbnail on document page
+		if ( self::$doc_image ) {
+			return $dir;
+		}
+
+		global $pagenow;
+
+		// got past cookie check (could be initial display), but may be in thumbnail code
+		// Set image directory if dealing with thumbnail on document page
+		$pages = array(
+			'admin-ajax.php',
+			'async-upload.php',
+			'edit.php',
+			'media-upload.php',
+			'post.php',
+			'post-new.php',
+		);
+		if ( in_array( $pagenow, $pages, true ) ) {
+			// @codingStandardsIgnoreLine WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+			$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+			$functions = array(
+				'wp_ajax_get_post_thumbnail_html',
+				'_wp_post_thumbnail_html',
+				'post_thumbnail_meta_box',
+			);
+			foreach ( $trace as $traceline ) :
+				if ( in_array( $traceline['function'], $functions, true ) ) {
+					self::$doc_image = true;
+					return $dir;
+				}
+			endforeach;
+		}
+
+		self::$doc_image = false;
 		$dir['path'] = $this->document_upload_dir() . $dir['subdir'];
 		$dir['url'] = home_url( '/' . $this->document_slug() ) . $dir['subdir'];
 		$dir['basedir'] = $this->document_upload_dir();
@@ -1120,10 +1285,37 @@ class WP_Document_Revisions {
 	public function filename_rewrite( $file ) {
 
 		// verify this is a document
+		// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 		if ( ! isset( $_POST['post_id'] ) || ! $this->verify_post_type( $_POST['post_id'] ) ) {
+			self::$doc_image = true;
 			return $file;
 		}
 
+		// Ignore if dealing with thumbnail on document page
+		if ( self::$doc_image ) {
+			return $file;
+		}
+
+		global $pagenow;
+
+		if ( 'async-upload.php' === $pagenow ) {
+			// got past cookie, but may be in thumbnail code
+			// @codingStandardsIgnoreLine WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+			$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+			$functions = array(
+				'wp_ajax_get_post_thumbnail_html',
+				'_wp_post_thumbnail_html',
+				'post_thumbnail_meta_box',
+			);
+			foreach ( $trace as $traceline ) :
+				if ( in_array( $traceline['function'], $functions, true ) ) {
+					self::$doc_image = true;
+					return $file;
+				}
+			endforeach;
+		}
+
+		self::$doc_image = false;
 		// hash and replace filename, appending extension
 		$file['name'] = md5( $file['name'] . time() ) . $this->get_extension( $file['name'] );
 
@@ -1144,10 +1336,39 @@ class WP_Document_Revisions {
 	public function rewrite_file_url( $file ) {
 
 		// verify that this is a document
+		// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 		if ( ! isset( $_POST['post_id'] ) || ! $this->verify_post_type( $_POST['post_id'] ) ) {
+			self::$doc_image = true;
 			return $file;
 		}
 
+		// Ignore if dealing with thumbnail on document page
+		if ( self::$doc_image ) {
+			return $file;
+		}
+
+		global $pagenow;
+
+		if ( 'async-upload.php' === $pagenow ) {
+			// got past cookie, but may be in thumbnail code
+			// @codingStandardsIgnoreLine WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+			$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+			$functions = array(
+				'wp_ajax_get_post_thumbnail_html',
+				'_wp_post_thumbnail_html',
+				'post_thumbnail_meta_box',
+			);
+			foreach ( $trace as $traceline ) :
+				if ( in_array( $traceline['function'], $functions, true ) ) {
+					self::$doc_image = true;
+					return $file;
+				}
+			endforeach;
+
+		}
+
+		self::$doc_image = false;
+		// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 		$file['url'] = get_permalink( $_POST['post_id'] );
 
 		return $file;
@@ -1173,24 +1394,30 @@ class WP_Document_Revisions {
 		if ( false === $documentish ) {
 
 			// check for post_type query arg (post new)
+			// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 			if ( isset( $_GET['post_type'] ) && 'document' === $_GET['post_type'] ) {
 				return true;
 			}
 
 			// Assume that a document feed is a document feed, even without a post object.
-			if ( is_feed() && 'document' === $wp_query->query_vars['post_type'] ) {
+			if ( is_array( $wp_query->query_vars ) && ( array_key_exists( 'post_type', $wp_query->query_vars ) ) &&
+			'document' === $wp_query->query_vars['post_type'] && is_feed() ) {
 				return true;
 			}
 
 			// if post isn't set, try get vars (edit post)
+			// @codingStandardsIgnoreStart WordPress.Security.NonceVerification.NoNonceVerification
 			if ( isset( $_GET['post'] ) ) {
 				$documentish = intval( $_GET['post'] );
+			// @codingStandardsIgnoreEnd WordPress.Security.NonceVerification.NoNonceVerification
 			}
 
 			// look for post_id via post or get (media upload)
+			// @codingStandardsIgnoreStart WordPress.Security.NonceVerification.NoNonceVerification
 			if ( isset( $_REQUEST['post_id'] ) ) {
 				$documentish = intval( $_REQUEST['post_id'] );
 			}
+			// @codingStandardsIgnoreEnd WordPress.Security.NonceVerification.NoNonceVerification
 		}
 
 		if ( false === $documentish ) {
@@ -1241,8 +1468,8 @@ class WP_Document_Revisions {
 		remove_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
 		remove_filter( 'get_the_excerpt', 'twentyeleven_custom_excerpt_more' );
 
-		// include feed and die
-		load_template( dirname( __FILE__ ) . '/includes/revision-feed.php' );
+		// include the feed and then die
+		load_template( dirname( __FILE__ ) . '/revision-feed.php' );
 
 	}
 
@@ -1258,7 +1485,9 @@ class WP_Document_Revisions {
 	 */
 	public function hijack_feed( $default ) {
 
-		if ( ! $this->verify_post_type() || ! apply_filters( 'document_custom_feed', true ) ) {
+		global $post;
+
+		if ( ! $this->verify_post_type( ( isset( $post->id ) ? $post->id : false ) ) || ! apply_filters( 'document_custom_feed', true ) ) {
 			return $default;
 		}
 
@@ -1298,11 +1527,13 @@ class WP_Document_Revisions {
 		global $wpdb;
 
 		// verify key exists
+		// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 		if ( empty( $_GET['key'] ) ) {
 			return false;
 		}
 
 		// make alphanumeric
+		// @codingStandardsIgnoreLine WordPress.Security.NonceVerification.NoNonceVerification
 		$key = preg_replace( '/[^a-z0-9]/i', '', $_GET['key'] );
 
 		// verify length
@@ -1372,7 +1603,7 @@ class WP_Document_Revisions {
 		// get lock owner's details
 		$lock_owner = get_userdata( $owner_id );
 
-		// get the current user's detaisl
+		// get the current user's details
 		$current_user = wp_get_current_user( $current_user_id );
 
 		// get the post
@@ -1409,7 +1640,7 @@ class WP_Document_Revisions {
 	 */
 	public function add_caps() {
 		global $wp_roles;
-		if ( ! isset( $wp_roles ) ) {
+		if ( ! is_object( $wp_roles ) ) {
 			// @codingStandardsIgnoreLine
 			$wp_roles = new WP_Roles;
 		}
@@ -1503,11 +1734,22 @@ class WP_Document_Revisions {
 
 			// if the role is a standard role, map the default caps, otherwise, map as a subscriber
 			$caps = ( array_key_exists( $role, $defaults ) ) ? $defaults[ $role ] : $defaults['subscriber'];
+
+			/**
+			 * Filter the default capabilities.
+			 *
+			 * @param array  $caps the default set of capabilities for the role
+			 * @param String $role the role being reviewed (all will be reviewed in turn)
+			 */
 			$caps = apply_filters( 'document_caps', $caps, $role );
 
-			// loop and assign
+			$role_caps = $wp_roles->roles[ $role ]['capabilities'];
+			// loop through capacities for role
 			foreach ( $caps as $cap => $grant ) {
-				$wp_roles->add_cap( $role, $cap, $grant );
+				// add only missing capabilities
+				if ( ! array_key_exists( $cap, $role_caps ) ) {
+					$wp_roles->add_cap( $role, $cap, $grant );
+				}
 			}
 		}
 
@@ -1518,13 +1760,14 @@ class WP_Document_Revisions {
 	 * Removes Private or Protected from document titles in RSS feeds
 	 *
 	 * @since 1.0
-	 * @param string  $prepend the sprintf formatted string to prepend to the title
-	 * @param WP_Post $post    The post object for which the title is being generated.
+	 * @param string $prepend the sprintf formatted string to prepend to the title
 	 * @return string just the string
 	 */
-	public function no_title_prepend( $prepend, $post ) {
+	public function no_title_prepend( $prepend ) {
 
-		if ( ! $this->verify_post_type( $post ) ) {
+		global $post;
+
+		if ( ! $this->verify_post_type( $post->ID ) ) {
 			return $prepend;
 		}
 
@@ -1812,7 +2055,8 @@ class WP_Document_Revisions {
 			array(
 				'object_type' => 'document',
 				'update_count_callback' => '',
-			), 'objects'
+			),
+			'objects'
 		);
 
 		foreach ( $taxs as $tax ) {
