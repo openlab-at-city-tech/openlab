@@ -666,7 +666,23 @@ class Openlab_Clone_Course_Site {
 	 * 3) Copy admin-authored posts from old blog
 	 */
 	public function go() {
+//		wp_suspend_cache_invalidation();
+
 		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
+
+		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10, 3);
+		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);
+
+		remove_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+
+		remove_action( 'eventorganiser_save_event', '_eventorganiser_delete_calendar_cache' );
+		remove_action( 'eventorganiser_delete_event', '_eventorganiser_delete_calendar_cache' );
+		remove_action( 'wp_trash_post', '_eventorganiser_delete_calendar_cache' );
+
+		remove_action( 'delete_post', '_update_posts_count_on_delete' );
+		remove_action( 'delete_post', '_wp_delete_post_menu_item' );
+		remove_action( 'delete_attachment', '_delete_attachment_theme_mod' );
+		remove_action( 'publish_post', '_publish_post_hook', 5, 1 );
 
 		$this->create_site();
 
@@ -676,6 +692,23 @@ class Openlab_Clone_Course_Site {
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
+		add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10, 3);
+		add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);
+		add_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+
+		if ( function_exists( '_eventorganiser_delete_calendar_cache' ) ) {
+			_eventorganiser_delete_calendar_cache();
+			add_action( 'wp_trash_post', '_eventorganiser_delete_calendar_cache' );
+		}
+
+		add_action( 'delete_post', '_update_posts_count_on_delete' );
+		add_action( 'delete_post', '_wp_delete_post_menu_item' );
+		add_action( 'delete_attachment', '_delete_attachment_theme_mod' );
+		add_action( 'publish_post', '_publish_post_hook', 5, 1 );
+
+		update_posts_count();
+
+		wp_cache_flush();
 	}
 
 	protected function create_site() {
@@ -830,6 +863,9 @@ class Openlab_Clone_Course_Site {
 
 		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
+
+		$posts_to_delete_ids = [];
+		$atts_to_delete_ids  = [];
 		foreach ( $site_posts as $sp ) {
 			if ( in_array( $sp->post_author, $source_group_admins ) ) {
 				if ( 'publish' === $sp->post_status || 'private' === $sp->post_status ) {
@@ -844,10 +880,9 @@ class Openlab_Clone_Course_Site {
 			} else {
 				// Non-teachers have their stuff deleted.
 				if ( 'attachment' === $sp->post_type ) {
-					// Will delete the file as well.
-					wp_delete_attachment( $sp->ID, true );
+					$atts_to_delete_ids[] = $sp->ID;
 				} else {
-					wp_delete_post( $sp->ID, true );
+					$posts_to_delete_ids[] = $sp->ID;
 				}
 			}
 
@@ -866,15 +901,29 @@ class Openlab_Clone_Course_Site {
 				if ( $url ) {
 					update_post_meta( $sp->ID, '_menu_item_url', str_replace( $source_site_url, $dest_site_url, $url ) );
 				}
-
-				// Delete all edit locks.
-				$wpdb->delete(
-					$wpdb->postmeta,
-					array(
-						'meta_key' => '_edit_lock',
-					)
-				);
 			}
+		}
+
+		// Delete all edit locks.
+		$wpdb->delete(
+			$wpdb->postmeta,
+			array(
+				'meta_key' => '_edit_lock',
+			)
+		);
+
+		// Bulk delete metadata and revisions.
+		$sql_ids = implode( ',', array_map( 'intval', array_merge( $atts_to_delete_ids, $posts_to_delete_ids ) ) );
+		$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type = 'revision' AND post_parent IN ({$sql_ids})" );
+		$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN ({$sql_ids})" );
+
+		foreach ( $atts_to_delete_ids as $att_id ) {
+			// Will delete file as well.
+			wp_delete_attachment( $att_id, true );
+		}
+
+		foreach ( $posts_to_delete_ids as $posts_id ) {
+			wp_delete_post( $att_id, true );
 		}
 
 		// Replace the site URL in all post content.
