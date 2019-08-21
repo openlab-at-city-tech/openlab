@@ -126,7 +126,7 @@ class gradebook_upload_csv_API
                 // If the header has been stored
                 if ($header_rows_filled) {
                     // Create an associative array with the data
-                    $arrData['data'][] = array_combine($header, $row);
+                    $arrData['data'][] = array_map(function ($key, $val) {return array('key' => $key, 'val' => $val);}, $header, $row);
                 }
                 // Else the header has not been stored
                 else {
@@ -157,7 +157,7 @@ class gradebook_upload_csv_API
                         if (strpos($possibly_types[0], 'Assignment Types') !== false) {
                             $arrData['types'] = $row;
                         } else {
-                            $arrData['data'][] = array_combine($header, $row);
+                            $arrData['data'][] = array_map(function ($key, $val) {return array('key' => $key, 'val' => $val);}, $header, $row);
                         }
 
                         $header_rows_filled = true;
@@ -167,6 +167,30 @@ class gradebook_upload_csv_API
 
             // Close the file pointer
             fclose($handle);
+        }
+
+        //this is here to handle duplicate keys
+        //duplicate keys will be handled later on (and throw an error), but we need to preserve the key
+        //somehow in order to send the column of grades back with the error CSV
+        if (!empty($arrData['data'])) {
+
+            $final_data = array();
+            foreach ($arrData['data'] as $key => $data) {
+
+                foreach ($data as $item) {
+
+                    if (isset($final_data[$key][$item['key']])) {
+                        $final_data[$key][$item['key'] . rand(1000, 9999)] = $item['val'];
+                    } else {
+                        $final_data[$key][$item['key']] = $item['val'];
+                    }
+
+                }
+
+            }
+
+            $arrData['data'] = $final_data;
+
         }
 
         return $arrData;
@@ -236,7 +260,7 @@ class gradebook_upload_csv_API
         global $wpdb;
         $errors = 0;
 
-        $headers = $process_result['headers'];
+        $headers = &$process_result['headers'];
         $check_array = array(
             0 => 'firstname',
             1 => 'lastname',
@@ -249,11 +273,19 @@ class gradebook_upload_csv_API
         $assignments = array();
         $assignmentdex = 0;
 
-        foreach ($headers as $index => $header) {
+        foreach ($headers as $index => &$header) {
 
             //start setting up assignments, so we have them if this CSV is formatted correctly
             if ($index > $this->getAssignmentIndexStart()) {
-                $assignments[$assignmentdex] = $header;
+
+                if (in_array($header, $assignments)) {
+                    $header = "**This assignment already exists in the CSV file**$header";
+                    $assignments[$assignmentdex] = $header;
+                    $errors++;
+                } else {
+                    $assignments[$assignmentdex] = $header;
+                }
+
                 $assignmentdex++;
                 continue;
             }
