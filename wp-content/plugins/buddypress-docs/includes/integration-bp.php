@@ -477,7 +477,7 @@ class BP_Docs_BP_Integration {
 		// Until better individual activity item privacy controls are available in BP,
 		// comments will only be shown in the activity stream if "Who can read comments on
 		// this doc?" is set to "Anyone" or "Group members"
-		$doc_settings	= get_post_meta( $doc_id, 'bp_docs_settings', true );
+		$doc_settings = bp_docs_get_doc_settings( $doc_id );
 
 		if ( !empty( $doc_settings['read_comments'] ) && ( 'admins-mods' == $doc_settings['read_comments'] || 'no-one' == $doc_settings['read_comments'] ) )
 			return false;

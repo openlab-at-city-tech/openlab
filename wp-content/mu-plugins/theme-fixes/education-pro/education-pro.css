@@ -25,6 +25,10 @@ div.title-area {
     background-color: #fff;
 }
 
+.header-image .site-header {
+	background-color: #000;
+}
+
 .site-title {
 	margin-bottom: 12px;
 }
@@ -127,6 +131,11 @@ div.wp-block-file__button a {
     color: #444;
 }
 
+.entry-title a:hover,
+a:hover {
+	color: #444;
+}
+
 button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .button:hover, div.wp-block-file__button a:hover {
     background-color: #444;
     color: #e3f2fa;
@@ -144,6 +153,13 @@ h4.widget-title.widgettitle {
 
 cite {
     font-size: .8em;
+}
+
+/* Specificity required to override scheme-specific colors */
+body .site-inner .entry-pings h3,
+body .site-inner .comment-respond h3,
+body .site-inner .entry-comments h3 {
+	color: #444;
 }
 
 /* 3. TOC Plugin style. Can we replace the text/link with a fontawesome list icon?
@@ -174,8 +190,9 @@ div#toc_container.no_bullets.contracted {
     text-align: left;
 }
 
-
-
+#toc_container a:hover {
+	text-decoration: none;
+}
 
 /* Color adjustments for Default color scheme */
 
@@ -241,26 +258,42 @@ body.header-image .title-area {
 	padding: 10px 0;
 }
 
+a,
+div.entry-content a,
+.breadcrumb a,
+.comment-reply-link,
+#ol-print-this-page a,
+a.breadcrumb-link {
+    color: #aa2418;
+}
+
 div.entry-content a,
 .breadcrumb a,
 #ol-print-this-page a,
 a.breadcrumb-link {
-    color: #aa2418;
 	border-bottom: 1px solid #aa2418;
 	padding-bottom: 1px;
 }
 
 div.entry-content .wp-block-image a {
 	border-bottom: 0;
-	padding-bottom;
 }
 
 .entry-content a:hover,
 .breadcrumb a:hover,
 #ol-print-this-page a:hover,
 a.breadcrumb-link:hover {
-    color: #000;
+    color: #444;
 	border-bottom: none;
+}
+
+#ez-toc-container a:hover {
+	text-decoration: none;
+}
+
+.site-footer .wrap a:hover {
+	color: inherit;
+	text-decoration: underline;
 }
 
 #ol-print-this-page a:hover {
@@ -279,7 +312,7 @@ a.breadcrumb-link:hover {
 }
 
 .entry-footer .entry-meta a:hover {
-    color: #000;
+    color: #444;
 	border-bottom: none;
 }
 
@@ -292,6 +325,28 @@ a.breadcrumb-link:hover {
 
 .menu-item-has-children {
 	position: relative;
+}
+
+@media screen and (max-width: 768px) {
+	.site-header .wrap {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.title-area-link {
+		padding-left: 5%;
+		padding-right: 5%;
+		width: auto;
+	}
+
+	body div.title-area {
+		width: 90% !important;
+	}
+
+	.header-widget-area .genesis-nav-menu.responsive-menu {
+		padding-left: 5%;
+		padding-right: 5%;
+	}
 }
 
 @media screen and (min-width: 1023px) {
@@ -558,7 +613,7 @@ body .site-title a {
 		padding: 40px;
 	}
 
-	body .site-header .header-widget-area {
+	body .site-header .nav-title-menu {
 		max-width: 740px;
 		margin: 0 auto;
 		float: none;
@@ -582,12 +637,15 @@ body .site-title a {
 .education-pro-blue .entry-content a,
 .education-pro-blue .entry-footer .entry-meta a,
 .education-pro-blue #ol-print-this-page a,
+.education-pro-blue .comment-reply-link,
+.education-pro-blue .entry-title a,
 .education-pro-blue a.breadcrumb-link,
 .education-pro-blue a {
 	border-color: #185a7d;
 	color: #185a7d;
 }
 
+.education-pro-blue .entry-title a:hover,
 .education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
 	color: #444;
@@ -711,9 +769,10 @@ body .site-title a {
 		color: inherit;
 	}
 
+	.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }
@@ -728,12 +787,15 @@ body .site-title a {
 .education-pro-green .entry-footer .entry-meta a,
 .education-pro-green #ol-print-this-page a,
 .education-pro-green .archive-pagination a,
+.education-pro-green .comment-reply-link,
+.education-pro-green .entry-title a,
 .education-pro-green a.breadcrumb-link,
 .education-pro-green a {
 	border-color: #3e6120;
 	color: #3e6120;
 }
 
+.education-pro-green .entry-title a:hover,
 .education-pro-green .entry-footer .entry-meta a:hover,
 .education-pro-green a:hover {
 	color: #444;
@@ -857,15 +919,17 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
+	.education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
 	.education-pro-green .header-widget-area .genesis-nav-menu li a:hover,
 	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
 		background-color: inherit;
 		color: inherit;
 	}
 
+	.education-pro-green .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }
@@ -880,12 +944,15 @@ body .site-title a {
 .education-pro-red .entry-footer .entry-meta a,
 .education-pro-red #ol-print-this-page a,
 .education-pro-red .archive-pagination a,
+.education-pro-red .comment-reply-link,
+.education-pro-red .entry-title a,
 .education-pro-red a.breadcrumb-link,
 .education-pro-red a {
 	border-color: #aa2418;
 	color: #aa2418;
 }
 
+.education-pro-red .entry-title a:hover,
 .education-pro-red .entry-footer .entry-meta a:hover,
 .education-pro-red a:hover {
 	color: #444;
@@ -1009,15 +1076,17 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
+	.education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
 	.education-pro-red .header-widget-area .genesis-nav-menu li a:hover,
 	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
-		background-color: inherit;
+		background-color: inherit !important;
 		color: inherit;
 	}
 
+	.education-pro-red .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-red .header-widget-area .genesis-nav-menu li.current-menu-item > a,
 	.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: inherit;
 	}
 }

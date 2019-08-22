@@ -298,7 +298,7 @@ class BP_Docs_Groups_Integration {
 			$doc = get_post( $doc_id );
 
 		if ( !empty( $doc ) ) {
-			$doc_settings = get_post_meta( $doc->ID, 'bp_docs_settings', true );
+			$doc_settings = bp_docs_get_doc_settings( $doc->ID );
 
 			// Manage settings don't always get set on doc creation, so we need a default
 			if ( empty( $doc_settings['manage'] ) )
