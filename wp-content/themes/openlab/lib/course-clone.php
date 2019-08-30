@@ -931,8 +931,8 @@ class Openlab_Clone_Course_Site {
 			wp_delete_attachment( $att_id, true );
 		}
 
-		foreach ( $posts_to_delete_ids as $posts_id ) {
-			wp_delete_post( $att_id, true );
+		foreach ( $posts_to_delete_ids as $post_id ) {
+			wp_delete_post( $post_id, true );
 		}
 
 		// Replace the site URL in all post content.
