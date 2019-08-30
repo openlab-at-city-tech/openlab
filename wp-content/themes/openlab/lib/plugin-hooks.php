@@ -583,7 +583,11 @@ function openlab_prevent_bbp_recounts() {
 add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
 
 function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
-	$group_root        = (int) bbp_get_group_forums_root_id();
+	$group_root = (int) bbp_get_group_forums_root_id();
+	if ( ! $group_root ) {
+		return $id;
+	}
+
 	$group_root_parent = (int) get_post( $group_root )->post_parent;
 	if ( $group_root !== $id && $group_root_parent !== $id ) {
 		return $id;
