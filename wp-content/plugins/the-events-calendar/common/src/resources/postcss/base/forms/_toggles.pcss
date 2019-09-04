@@ -29,7 +29,9 @@
 	 *
 	 * ----------------------------------------------------------------------------- */
 
-	/* .tribe-common-form-control-toggle {} */
+	.tribe-common-form-control-toggle {
+		line-height: 0;
+	}
 
 	.tribe-common-form-control-toggle__input {
 		@mixin form-control-slider-toggle-track;
@@ -78,15 +80,26 @@
 		}
 	}
 
-	body#top & { /* Enfold Compatibility */
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Toggles Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+	#top.tribe-theme-enfold & {
 
 		.tribe-common-form-control-toggle__input {
 			display: inline-block;
+			margin: 5px 0;
 		}
 
 		.tribe-common-form-control-toggle__label {
-			color: var(--color-text-secondary);
 			font-weight: var(--font-weight-regular);
+			font-size: var(--font-size-1);
 		}
 	}
 }

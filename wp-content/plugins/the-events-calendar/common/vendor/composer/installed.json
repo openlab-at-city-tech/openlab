@@ -35,13 +35,13 @@
         "authors": [
             {
                 "name": "Neuman Vong",
-                "email": "neuman+pear@twilio.com",
-                "role": "Developer"
+                "role": "Developer",
+                "email": "neuman+pear@twilio.com"
             },
             {
                 "name": "Anant Narayanan",
-                "email": "anant@php.net",
-                "role": "Developer"
+                "role": "Developer",
+                "email": "anant@php.net"
             }
         ],
         "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",

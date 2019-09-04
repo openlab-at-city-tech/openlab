@@ -33,6 +33,15 @@ class Tribe__Events__Integrations__Freemius {
 	private $slug = 'the-events-calendar';
 
 	/**
+	 * Store the value from the 'page' in the request.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @var string
+	 */
+	private $page = '';
+
+	/**
 	 * Performs setup for the Freemius integration singleton.
 	 *
 	 * @since  4.9
@@ -46,7 +55,7 @@ class Tribe__Events__Integrations__Freemius {
 
 		global $pagenow;
 
-		$page = tribe_get_request_var( 'page' );
+		$this->page = tribe_get_request_var( 'page' );
 
 		$valid_page = [
 			Tribe__Settings::$parent_slug,
@@ -55,7 +64,7 @@ class Tribe__Events__Integrations__Freemius {
 			'tribe-help',
 		];
 
-		if ( ! in_array( $page, $valid_page ) && 'plugins.php' !== $pagenow ) {
+		if ( ! in_array( $this->page, $valid_page ) && 'plugins.php' !== $pagenow ) {
 			return;
 		}
 
@@ -77,13 +86,14 @@ class Tribe__Events__Integrations__Freemius {
 			return;
 		}
 
+
 		$this->instance = tribe( 'freemius' )->initialize(
 			$this->slug,
 			$this->freemius_id,
 			'pk_e32061abc28cfedf231f3e5c4e626',
 			[
 				'menu' => [
-					'slug'    => $page,
+					'slug'    => $this->page,
 					'account' => true,
 					'support' => false,
 				],
@@ -91,6 +101,14 @@ class Tribe__Events__Integrations__Freemius {
 				'has_addons'     => false,
 				'has_paid_plans' => false,
 			]
+		);
+
+		$this->instance->add_filter( 'connect_url', [ $this, 'redirect_settings_url' ] );
+		$this->instance->add_filter( 'after_skip_url', [ $this, 'redirect_settings_url' ] );
+		$this->instance->add_filter( 'after_connect_url', [ $this, 'redirect_settings_url' ] );
+		$this->instance->add_filter(
+			'after_pending_connect_url',
+			[ $this, 'redirect_settings_url' ]
 		);
 
 		tribe_asset( Tribe__Events__Main::instance(), 'tribe-events-freemius', 'freemius.css', [], 'admin_enqueue_scripts' );
@@ -103,6 +121,23 @@ class Tribe__Events__Integrations__Freemius {
 		$this->instance->add_filter( 'connect_message_on_update', [ $this, 'filter_connect_message_on_update' ], 10, 6 );
 
 		add_action( 'admin_init', [ $this, 'maybe_remove_activation_complete_notice' ] );
+	}
+
+	/**
+	 * Redirect URL after the Freemius actions.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @return mixed
+	 */
+	public function redirect_settings_url() {
+		$url = sprintf(
+			'edit.php?post_type=%s&page=%s',
+			Tribe__Events__Main::POSTTYPE,
+			$this->page
+		);
+
+		return admin_url( $url );
 	}
 
 	/**
@@ -214,7 +249,7 @@ class Tribe__Events__Integrations__Freemius {
 
 		$html .= '<p>';
 		$html .= sprintf(
-			esc_html__( 'Hi, %1$s! This is an invitation to help %2$s community. If you opt-in, some data about your usage of %2$s will be shared with our teams (so they can work their butts off to improve). We will also share some helpful info on events management. WordPress, and our products from time to time.', 'the-events-calendar' ),
+			esc_html__( 'Hi, %1$s! This is an invitation to help %2$s community. If you opt-in, some data about your usage of %2$s will be shared with our teams (so they can work their butts off to improve). We will also share some helpful info on events management, WordPress, and our products from time to time.', 'the-events-calendar' ),
 			$user_first_name,
 			$plugin_name
 		);
