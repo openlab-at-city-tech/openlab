@@ -38,6 +38,11 @@ function openlab_load_custom_bp_functions() {
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
 
+/**
+ * Login customizations.
+ */
+add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
+
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
 
