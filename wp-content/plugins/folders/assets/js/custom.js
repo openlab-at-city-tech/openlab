@@ -38,6 +38,58 @@ function addFolder() {
 	}
 	folderOrder = jQuery("#space_"+fileFolderID+" > li").length+1;
 	ajaxURL = wcp_settings.ajax_url+"?parent_id=" + fileFolderID + "&type=" + wcp_settings.post_type + "&action=wcp_add_new_folder&nonce=" + wcp_settings.nonce + "&term_id=" + fileFolderID + "&order=" + folderOrder+"&name=";
+	// Swal.fire({
+	// 	url: wcp_settings.ajax_url,
+	// 	input: 'text',
+	// 	inputAttributes: {
+	// 		autocapitalize: 'off',
+	// 		placeholder: "Folder name"
+	// 	},
+	// 	showCancelButton: true,
+	// 	confirmButtonText: 'Submit',
+	// 	showLoaderOnConfirm: true,
+	// 	reverseButtons: true,
+	// 	}).then((result) => {
+	// 		if (result.value) {
+	// 		Swal({
+	// 			title: 'Please wait..',
+	// 			imageUrl: wcp_settings.ajax_image,
+	// 			imageAlt: 'The uploaded picture',
+	// 			showConfirmButton: false
+	// 		});
+	// 		// jQuery.ajax({
+	// 		// 	url: wcp_settings.ajax_url,
+	// 		// 	data: "type=" + wcp_settings.post_type + "&action=wcp_remove_folder&term_id=" + fileFolderID+"&nonce="+nonce,
+	// 		// 	method: 'post',
+	// 		// 	success: function (res) {
+	// 		// 		res = jQuery.parseJSON(res);
+	// 		// 		if (res.status == '1') {
+	// 		// 			Swal.fire(
+	// 		// 				'Deleted!',
+	// 		// 				'Your folder has been deleted.',
+	// 		// 				'success'
+	// 		// 			);
+	// 		// 			jQuery("#wcp_folder_"+fileFolderID).remove();
+	// 		// 			jQuery("#folder_"+fileFolderID).remove();
+	// 		// 			isKeyActive = parseInt(res.is_key_active);
+	// 		// 			totalFolders = parseInt(res.folders);
+	// 		// 			jQuery("#current-folder").text(totalFolders);
+	// 		// 			if(totalFolders > folderLimitation) {
+	// 		// 				folderLimitation = totalFolders;
+	// 		// 			}
+	// 		// 			jQuery("#total-folder").text(folderLimitation);
+	// 		// 			add_menu_to_list();
+	// 		// 		} else {
+	// 		// 			Swal.fire(
+	// 		// 				'',
+	// 		// 				res.message,
+	// 		// 				'error'
+	// 		// 			);
+	// 		// 		}
+	// 		// 	}
+	// 		// });
+	// 	}
+	// });
 	Swal({
 		title: 'Add Folder',
 		input: 'text',
@@ -50,44 +102,53 @@ function addFolder() {
 		showLoaderOnConfirm: true,
 		reverseButtons: true,
 		preConfirm: (folderName) => {
-		if(folderName == "") {
-			swal.showValidationError(
-				'Please enter folder name'
-			)
-			return false;
-		}
-		return fetch(ajaxURL+folderName)
-		.then(response => {
-				if (!response.ok) {
-				throw new Error(response.statusText);
-			}
-			return response.json();
-		}).catch(error => {
-			Swal.showValidationMessage(
-				"Request failed: "+error
+			if(folderName == "")
+			{
+				swal.showValidationError(
+					'Please enter folder name'
 				)
-			});
-		},
-		allowOutsideClick: () => !Swal.isLoading()
-	}).then((result) => {
-		if(result.value.error == 1) {
-			Swal({
-				type: 'error',
-				title: 'Oops...',
-				text: result.value.message
-			});
-		} else if(result.value.status == 1) {
-			jQuery("#space_"+result.value.parent_id).append(result.value.term_data);
-			jQuery("#wcp_folder_"+result.value.parent_id).addClass("active has-sub-tree");
-			isKeyActive = parseInt(result.value.is_key_active);
-			totalFolders = parseInt(result.value.folders);
-			jQuery("#current-folder").text(totalFolders);
-			if(totalFolders > folderLimitation) {
-				folderLimitation = totalFolders;
+				return false;
+			} else {
+				folderNameDynamic = folderName;
 			}
-			jQuery("#total-folder").text(folderLimitation);
-			checkForExpandCollapse();
-			add_menu_to_list();
+		}
+	}).then((result) => {
+		if(typeof(result.value) != "undefined")
+		{
+			Swal({
+				title: 'Please wait..',
+				imageUrl: wcp_settings.ajax_image,
+				imageAlt: 'The uploaded picture',
+				showConfirmButton: false
+			});
+			jQuery.ajax({
+				url: wcp_settings.ajax_url,
+				data: "parent_id=" + fileFolderID + "&type=" + wcp_settings.post_type + "&action=wcp_add_new_folder&nonce=" + wcp_settings.nonce + "&term_id=" + fileFolderID + "&order=" + folderOrder + "&name=" + folderNameDynamic,
+				method: 'post',
+				success: function (res) {
+					result = jQuery.parseJSON(res);
+					if (result.status == '1') {
+						jQuery("#space_" + result.parent_id).append(result.term_data);
+						jQuery("#wcp_folder_" + result.parent_id).addClass("active has-sub-tree");
+						isKeyActive = parseInt(result.is_key_active);
+						totalFolders = parseInt(result.folders);
+						jQuery("#current-folder").text(totalFolders);
+						if (totalFolders > folderLimitation) {
+							folderLimitation = totalFolders;
+						}
+						jQuery("#total-folder").text(folderLimitation);
+						checkForExpandCollapse();
+						add_menu_to_list();
+						Swal.close();
+					} else {
+						Swal.fire(
+							'',
+							result.message,
+							'error'
+						);
+					}
+				}
+			});
 		}
 	});
 }
@@ -99,8 +160,8 @@ function updateFolder() {
 	if(parentID == undefined) {
 		parentID = 0;
 	}
-	nonce = jQuery.trim(jQuery("#wcp_folder_"+fileFolderID).data("rename"));
-	ajaxURL = wcp_settings.ajax_url+"?parent_id=" + parentID + "&nonce=" + nonce + "&type=" + wcp_settings.post_type + "&action=wcp_update_folder&term_id=" + fileFolderID + "&name=";
+	console.log("folderName");
+
 	Swal({
 		title: 'Update Folder',
 		input: 'text',
@@ -115,38 +176,99 @@ function updateFolder() {
 		showLoaderOnConfirm: true,
 		reverseButtons: true,
 		preConfirm: (folderName) => {
-		if(folderName == "") {
-		swal.showValidationError(
-			'Please enter folder name'
-		)
-		return false;
-	}
-	return fetch(ajaxURL+folderName)
-			.then(response => {
-			if (!response.ok) {
-		throw new Error(response.statusText);
-	}
-	return response.json();
-	}).catch(error => {
-			Swal.showValidationMessage(
-			"Request failed: "+error
-			)
-		});
-	},
-	allowOutsideClick: () => !Swal.isLoading()
-	}).then((result) => {
-		if(result.value.error == 1) {
+			if(folderName == "")
+				{
+					swal.showValidationError(
+						'Please enter folder name'
+					)
+					return false;
+				} else {
+					folderNameDynamic = folderName;
+				}
+			}
+		}).then((result) => {
+		if(typeof(result.value) != "undefined" )
+	{
 		Swal({
-			type: 'error',
-			title: 'Oops...',
-			text: result.value.message
+			title: 'Please wait..',
+			imageUrl: wcp_settings.ajax_image,
+			imageAlt: 'The uploaded picture',
+			showConfirmButton: false
 		});
-	} else if(result.value.status == 1) {
-		jQuery("#wcp_folder_"+result.value.id+" > h3 > .title-text").text(result.value.term_title);
-		jQuery("#wcp_folder_"+result.value.id+" > h3").attr("title",result.value.term_title);
-		add_menu_to_list();
+		nonce = jQuery.trim(jQuery("#wcp_folder_" + fileFolderID).data("rename"));
+		parentID = jQuery("#wcp_folder_" + fileFolderID).closest("li.route").data("folder-id");
+		if (parentID == undefined) {
+			parentID = 0;
+		}
+		jQuery.ajax({
+			url: wcp_settings.ajax_url,
+			data: "parent_id=" + parentID + "&nonce=" + nonce + "&type=" + wcp_settings.post_type + "&action=wcp_update_folder&term_id=" + fileFolderID + "&name=" + folderNameDynamic,
+			method: 'post',
+			success: function (res) {
+				result = jQuery.parseJSON(res);
+				if (result.status == '1') {
+					jQuery("#wcp_folder_" + result.id + " > h3 > .title-text").text(result.term_title);
+					jQuery("#wcp_folder_" + result.id + " > h3").attr("title", result.term_title);
+					add_menu_to_list();
+					Swal.close();
+				} else {
+					Swal.fire(
+						'',
+						result.message,
+						'error'
+					);
+				}
+			}
+		});
 	}
-	});
+		});
+
+	// Swal({
+	// 	title: 'Update Folder',
+	// 	input: 'text',
+	// 	inputValue: folderName,
+	// 	inputAttributes: {
+	// 		autocapitalize: 'off',
+	// 		placeholder: "Folder name",
+	// 		value: folderName
+	// 	},
+	// 	showCancelButton: true,
+	// 	confirmButtonText: 'Submit',
+	// 	showLoaderOnConfirm: true,
+	// 	reverseButtons: true,
+	// 	preConfirm: (folderName) => {
+	// 	if(folderName == "") {
+	// 	swal.showValidationError(
+	// 		'Please enter folder name'
+	// 	)
+	// 	return false;
+	// }
+	// return fetch(ajaxURL+folderName)
+	// 		.then(response => {
+	// 		if (!response.ok) {
+	// 	throw new Error(response.statusText);
+	// }
+	// return response.json();
+	// }).catch(error => {
+	// 		Swal.showValidationMessage(
+	// 		"Request failed: "+error
+	// 		)
+	// 	});
+	// },
+	// allowOutsideClick: () => !Swal.isLoading()
+	// }).then((result) => {
+	// 	if(result.value.error == 1) {
+	// 	Swal({
+	// 		type: 'error',
+	// 		title: 'Oops...',
+	// 		text: result.value.message
+	// 	});
+	// } else if(result.value.status == 1) {
+	// 	jQuery("#wcp_folder_"+result.value.id+" > h3 > .title-text").text(result.value.term_title);
+	// 	jQuery("#wcp_folder_"+result.value.id+" > h3").attr("title",result.value.term_title);
+	// 	add_menu_to_list();
+	// }
+	// });
 }
 
 function add_menu_to_list() {
@@ -304,15 +426,15 @@ jQuery(document).ready(function(){
 				jQuery("body").removeClass("no-hover-css");
 			}
 		});
-		jQuery(this).draggable("disable");
+		// jQuery(this).draggable("disable");
 	});
 
 	jQuery(".media-button").livequery(function () {
 		jQuery(this).click(function () {
 			if (jQuery(".delete-selected-button").hasClass("hidden")) {
-				jQuery(".attachments-browser li.attachment").draggable("disable");
+				//jQuery(".attachments-browser li.attachment").draggable("disable");
 			} else {
-				jQuery(".attachments-browser li.attachment").draggable("enable");
+				// jQuery(".attachments-browser li.attachment").draggable("enable");
 			}
 		});
 	});
@@ -561,7 +683,6 @@ jQuery(document).ready(function(){
 
 	jQuery(".wcp-move-file").livequery(function(){
 		jQuery(this).draggable({
-			/*cancel: "a.ui-icon",*/
 			revert: "invalid",
 			containment: "document",
 			helper: "clone",
@@ -1060,7 +1181,7 @@ function calcWidth(obj){
 
 if(wcp_settings.post_type == "attachment") {
 	jQuery(window).load(function() {
-		jQuery("button.button.media-button.select-mode-toggle-button").after("<button class='button organize-button'>Organize</button>");
+		jQuery("button.button.media-button.select-mode-toggle-button").after("<button class='button organize-button'>Bulk Organize</button>");
 		jQuery(".media-toolbar-secondary").append("<span class='media-info-message'>Drag and drop your media files to the relevant folders</span>");
 		if(jQuery(".wcp-custom-form").length) {
 			if (wp.Uploader !== undefined) {
