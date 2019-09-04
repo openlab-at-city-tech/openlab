@@ -483,6 +483,8 @@ function openlab_registration_page() {
 									data-parsley-remote-message="That username is already taken."
 									data-parsley-errors-container="#signup_username_error"
 									/>
+
+								<p class="register-field-note">IMPORTANT: Your username will be visible in the URL of your member profile and connot be changed. You don't need to use your real name. You can choose how you identify yourself by changing your display name at any time.</p>
 							</div>
 
 							<div class="form-group">
