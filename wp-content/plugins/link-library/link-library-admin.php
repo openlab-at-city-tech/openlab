@@ -2500,6 +2500,12 @@ class link_library_plugin_admin {
 		extract( $genoptions );
 
 		?>
+		<script type="text/javascript">
+			jQuery( document ).ready(function() {
+
+			});
+		</script>
+
 		<div style='padding-top:15px' id="ll-general" class="content-section">
 		<table>
 			<tr>
@@ -2511,7 +2517,7 @@ class link_library_plugin_admin {
 						</tr>
 						<tr>
 							<td><?php _e( 'Re-import', 'link-library' ); ?></td>
-							<td><input type="submit" id="ll60reupdate" name="ll60reupdate" value="<?php _e( 'Re-import links', 'link-library' ); ?>" /></td>
+							<td><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1' \""; ?>><?php _e( 'Reset current Library', 'link-library' ); ?></button></td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Category mapping table', 'link-library' ); ?></td>
@@ -3305,6 +3311,18 @@ class link_library_plugin_admin {
 							<tr>
 								<td>[link-library settings="<?php echo $settings; ?>" tableoverride=0]</td>
 								<td>Set to 0 or 1 to display links in an unordered list or a table</td>
+							</tr>
+							<tr>
+								<td>[link-library settings="<?php echo $settings; ?>" maxlinksoverride=5]</td>
+								<td>Overrides the max number of links to be displayed</td>
+							</tr>
+							<tr>
+								<td>[link-library settings="<?php echo $settings; ?>" linkorderoverride="date"]</td>
+								<td>Changes the link display order. Valid values are 'name', 'id', 'random', 'date', 'hits', 'scpo'</td>
+							</tr>
+							<tr>
+								<td>[link-library settings="<?php echo $settings; ?>" linkdirectionoverride="date"]</td>
+								<td>Changes the order in which links are displayed. Valid values are 'ASC', 'DESC'</td>
 							</tr>
 						</table></td>
 				</tr>
