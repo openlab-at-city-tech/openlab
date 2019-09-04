@@ -491,6 +491,10 @@ table.advgb-table-frontend td, table.advgb-table-frontend tr {
     text-align: center;
 }
 
+#editor .advgb-counter > div.editor-rich-text {
+    display: inline-block;
+}
+
 .advgb-count-up {
     margin: 10px auto;
 }

@@ -5159,7 +5159,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return ['advgb/column'];
                                 }),
                                 templateLock: 'all',
-                                allowdBlockType: ['advgb/column'],
+                                allowedBlocks: ['advgb/column'],
                                 random: this.state.random
                             })
                         )
@@ -6607,6 +6607,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     var _wpBlockEditor = wpBlockEditor,
         InnerBlocks = _wpBlockEditor.InnerBlocks,
         InspectorControls = _wpBlockEditor.InspectorControls;
+    var _wp$components = wp.components,
+        PanelBody = _wp$components.PanelBody,
+        SelectControl = _wp$components.SelectControl;
 
 
     var containerBlockIcon = React.createElement(
@@ -6625,23 +6628,37 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         category: 'advgb-category',
         keywords: [__('container'), __('row'), __('box')],
-        attributes: {},
+        attributes: {
+            wrapperTag: {
+                type: 'string',
+                default: 'div'
+            }
+        },
         supports: {
             align: true,
-            inserter: false
+            className: true
         },
         transforms: {
             to: [{
                 type: 'block',
                 blocks: ['advgb/columns'],
                 transform: function transform(attributes, innerBlocks) {
+                    var className = attributes.className,
+                        wrapperTag = attributes.wrapperTag;
+
                     var columnBlock = createBlock('advgb/column', {}, innerBlocks);
 
-                    return createBlock('advgb/columns', { columns: 1, className: attributes.className }, [columnBlock]);
+                    return createBlock('advgb/columns', { columns: 1, className: className, wrapperTag: wrapperTag }, [columnBlock]);
                 }
             }]
         },
-        edit: function edit() {
+        edit: function edit(props) {
+            var attributes = props.attributes,
+                setAttributes = props.setAttributes,
+                className = props.className;
+            var wrapperTag = attributes.wrapperTag;
+
+
             return React.createElement(
                 Fragment,
                 null,
@@ -6649,28 +6666,32 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     InspectorControls,
                     null,
                     React.createElement(
-                        "div",
-                        { style: {
-                                color: '#ff0000',
-                                fontStyle: 'italic',
-                                marginTop: 20,
-                                padding: 10,
-                                borderTop: '1px solid #ccc'
+                        PanelBody,
+                        { title: __('Container Settings') },
+                        React.createElement(SelectControl, {
+                            label: __('Wrapper Tag'),
+                            value: wrapperTag,
+                            options: [{ label: 'Div', value: 'div' }, { label: 'Header', value: 'header' }, { label: 'Section', value: 'section' }, { label: 'Main', value: 'main' }, { label: 'Article', value: 'article' }, { label: 'Aside', value: 'aside' }, { label: 'Footer', value: 'footer' }],
+                            onChange: function onChange(value) {
+                                return setAttributes({ wrapperTag: value });
                             }
-                        },
-                        __('We will remove this block in the future release. ' + 'Please convert it to Columns Manager block to avoid unwanted error. ' + 'Columns Manager block has a lot of styles and improvements.')
+                        })
                     )
                 ),
                 React.createElement(
                     "div",
-                    { className: "advgb-blocks-container" },
+                    { className: "advgb-blocks-container " + className },
                     React.createElement(InnerBlocks, null)
                 )
             );
         },
-        save: function save() {
+        save: function save(_ref) {
+            var attributes = _ref.attributes;
+            var Tag = attributes.wrapperTag;
+
+
             return React.createElement(
-                "div",
+                Tag,
                 { className: "advgb-blocks-container" },
                 React.createElement(InnerBlocks.Content, null)
             );
@@ -6916,20 +6937,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'header' });
                                 },
                                 style: { color: headerTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-header'
                             }),
-                            React.createElement(RichText, {
-                                tagName: 'div',
-                                value: countUpNumber,
-                                onChange: function onChange(value) {
-                                    return setAttributes({ countUpNumber: value });
-                                },
-                                isSelected: isSelected && currentEdit === 'countUp',
-                                unstableOnFocus: function unstableOnFocus() {
-                                    return _this2.setState({ currentEdit: 'countUp' });
-                                },
-                                style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor }
-                            }),
+                            React.createElement(
+                                'div',
+                                { className: 'advgb-counter' },
+                                countUpSymbol && !countUpSymbolAfter && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol
+                                ),
+                                React.createElement(RichText, {
+                                    tagName: 'div',
+                                    value: countUpNumber,
+                                    onChange: function onChange(value) {
+                                        return setAttributes({ countUpNumber: value });
+                                    },
+                                    isSelected: isSelected && currentEdit === 'countUp',
+                                    unstableOnFocus: function unstableOnFocus() {
+                                        return _this2.setState({ currentEdit: 'countUp' });
+                                    },
+                                    style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor },
+                                    className: 'advgb-counter-number'
+                                }),
+                                countUpSymbol && countUpSymbolAfter && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol
+                                )
+                            ),
                             React.createElement(RichText, {
                                 tagName: 'p',
                                 value: descText,
@@ -6941,7 +6988,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'desc' });
                                 },
                                 style: { color: descTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-desc'
                             })
                         ),
                         React.createElement(
@@ -6958,20 +7006,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'header2' });
                                 },
                                 style: { color: headerTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-header'
                             }),
-                            React.createElement(RichText, {
-                                tagName: 'div',
-                                value: countUpNumber2,
-                                onChange: function onChange(value) {
-                                    return setAttributes({ countUpNumber2: value });
-                                },
-                                isSelected: isSelected && currentEdit === 'countUp2',
-                                unstableOnFocus: function unstableOnFocus() {
-                                    return _this2.setState({ currentEdit: 'countUp2' });
-                                },
-                                style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor }
-                            }),
+                            React.createElement(
+                                'div',
+                                { className: 'advgb-counter' },
+                                countUpSymbol2 && !countUpSymbolAfter2 && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol2
+                                ),
+                                React.createElement(RichText, {
+                                    tagName: 'div',
+                                    value: countUpNumber2,
+                                    onChange: function onChange(value) {
+                                        return setAttributes({ countUpNumber2: value });
+                                    },
+                                    isSelected: isSelected && currentEdit === 'countUp2',
+                                    unstableOnFocus: function unstableOnFocus() {
+                                        return _this2.setState({ currentEdit: 'countUp2' });
+                                    },
+                                    style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor },
+                                    className: 'advgb-counter-number'
+                                }),
+                                countUpSymbol2 && countUpSymbolAfter2 && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol2
+                                )
+                            ),
                             React.createElement(RichText, {
                                 tagName: 'p',
                                 value: descText2,
@@ -6983,7 +7057,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'desc2' });
                                 },
                                 style: { color: descTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-desc'
                             })
                         ),
                         React.createElement(
@@ -7000,20 +7075,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'header3' });
                                 },
                                 style: { color: headerTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-header'
                             }),
-                            React.createElement(RichText, {
-                                tagName: 'div',
-                                value: countUpNumber3,
-                                onChange: function onChange(value) {
-                                    return setAttributes({ countUpNumber3: value });
-                                },
-                                isSelected: isSelected && currentEdit === 'countUp3',
-                                unstableOnFocus: function unstableOnFocus() {
-                                    return _this2.setState({ currentEdit: 'countUp3' });
-                                },
-                                style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor }
-                            }),
+                            React.createElement(
+                                'div',
+                                { className: 'advgb-counter' },
+                                countUpSymbol3 && !countUpSymbolAfter3 && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol3
+                                ),
+                                React.createElement(RichText, {
+                                    tagName: 'div',
+                                    value: countUpNumber3,
+                                    onChange: function onChange(value) {
+                                        return setAttributes({ countUpNumber3: value });
+                                    },
+                                    isSelected: isSelected && currentEdit === 'countUp3',
+                                    unstableOnFocus: function unstableOnFocus() {
+                                        return _this2.setState({ currentEdit: 'countUp3' });
+                                    },
+                                    style: { fontSize: countUpNumberSize + 'px', color: countUpNumberColor },
+                                    className: 'advgb-counter-number'
+                                }),
+                                countUpSymbol3 && countUpSymbolAfter3 && React.createElement(
+                                    'span',
+                                    { className: 'advgb-counter-symbol',
+                                        style: {
+                                            fontSize: countUpNumberSize,
+                                            color: countUpNumberColor
+                                        }
+                                    },
+                                    countUpSymbol3
+                                )
+                            ),
                             React.createElement(RichText, {
                                 tagName: 'p',
                                 value: descText3,
@@ -7025,7 +7126,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return _this2.setState({ currentEdit: 'desc3' });
                                 },
                                 style: { color: descTextColor },
-                                placeholder: __('Enter text…')
+                                placeholder: __('Enter text…'),
+                                className: 'advgb-count-up-desc'
                             })
                         )
                     )
@@ -11676,7 +11778,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
                     summaryContent = React.createElement(
                         "ul",
-                        { className: 'advgb-toc' },
+                        { className: "advgb-toc" },
                         headings.map(function (heading) {
                             return React.createElement(
                                 "li",
@@ -11689,7 +11791,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     { href: '#' + heading.anchor,
                                         onClick: function onClick() {
                                             return selectBlock(heading.clientId);
-                                        }
+                                        },
+                                        style: { color: anchorColor }
                                     },
                                     heading.content
                                 )
@@ -11751,12 +11854,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             })
                         )
                     ),
-                    summaryContent,
-                    anchorColor && React.createElement(
-                        "style",
-                        null,
-                        ".advgb-toc li a {\n                        color: " + anchorColor + ";\n                    }"
-                    )
+                    summaryContent
                 );
             }
         }], [{
@@ -11788,6 +11886,34 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         return SummaryBlock;
     }(Component);
 
+    var blockAttrs = {
+        headings: {
+            type: 'array',
+            default: []
+        },
+        loadMinimized: {
+            type: 'boolean',
+            default: false
+        },
+        anchorColor: {
+            type: 'string'
+        },
+        align: {
+            type: 'string',
+            default: 'none'
+        },
+        postTitle: {
+            type: 'string'
+        },
+        headerTitle: {
+            type: 'string'
+        },
+        changed: {
+            type: 'boolean',
+            default: false
+        }
+    };
+
     registerBlockType('advgb/summary', {
         title: summaryBlockTitle,
         description: __('Show the table of content of current post/page.'),
@@ -11797,33 +11923,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         category: 'advgb-category',
         keywords: [__('summary'), __('table of content'), __('list')],
-        attributes: {
-            headings: {
-                type: 'array',
-                default: []
-            },
-            loadMinimized: {
-                type: 'boolean',
-                default: false
-            },
-            anchorColor: {
-                type: 'string'
-            },
-            align: {
-                type: 'string',
-                default: 'none'
-            },
-            postTitle: {
-                type: 'string'
-            },
-            headerTitle: {
-                type: 'string'
-            },
-            changed: {
-                type: 'boolean',
-                default: false
-            }
-        },
+        attributes: blockAttrs,
         supports: {
             multiple: false
         },
@@ -11858,16 +11958,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         },
                         React.createElement(
                             "a",
-                            { href: '#' + heading.anchor },
+                            { href: '#' + heading.anchor,
+                                style: { color: anchorColor }
+                            },
                             heading.content
                         )
                     );
-                }),
-                anchorColor && React.createElement(
-                    "style",
-                    null,
-                    ".advgb-toc li a {\n                            color: " + anchorColor + ";\n                        }"
-                )
+                })
             );
 
             if (loadMinimized) {
@@ -11895,7 +11992,68 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }
 
             return props;
-        }
+        },
+
+        deprecated: [{
+            attributes: blockAttrs,
+            save: function save(_ref2) {
+                var attributes = _ref2.attributes;
+                var headings = attributes.headings,
+                    loadMinimized = attributes.loadMinimized,
+                    anchorColor = attributes.anchorColor,
+                    _attributes$align2 = attributes.align,
+                    align = _attributes$align2 === undefined ? 'none' : _attributes$align2,
+                    postTitle = attributes.postTitle,
+                    headerTitle = attributes.headerTitle;
+                // No heading blocks
+
+                if (headings.length < 1) {
+                    return null;
+                }
+
+                var blockStyle = undefined;
+                if (loadMinimized) blockStyle = { display: 'none' };
+
+                var summary = React.createElement(
+                    "ul",
+                    { className: "advgb-toc align" + align, style: blockStyle },
+                    headings.map(function (heading, index) {
+                        return React.createElement(
+                            "li",
+                            { className: 'toc-level-' + heading.level,
+                                key: "summary-save-" + index,
+                                style: { marginLeft: heading.level * 20 }
+                            },
+                            React.createElement(
+                                "a",
+                                { href: '#' + heading.anchor },
+                                heading.content
+                            )
+                        );
+                    }),
+                    anchorColor && React.createElement(
+                        "style",
+                        null,
+                        ".advgb-toc li a {\n                                    color: " + anchorColor + ";\n                                }"
+                    )
+                );
+
+                if (loadMinimized) {
+                    return React.createElement(
+                        "div",
+                        { className: "align" + align },
+                        React.createElement(
+                            "div",
+                            { className: 'advgb-toc-header collapsed' },
+                            headerTitle || postTitle
+                        ),
+                        summary
+                    );
+                }
+
+                return summary;
+            }
+        }]
     });
 })(wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components, wp.data, wp.hooks);
 
