@@ -14,13 +14,13 @@ OpenLayers.Layer.OSM.Mapnik = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
-            "http://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
-            "http://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
+            "https://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+            "https://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
+            "https://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 20,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors; <a href='http://www.HanBlog.Net'>OSM Plugin</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors; <a href='https://www.HanBlog.Net'>OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -48,13 +48,13 @@ OpenLayers.Layer.OSM.CycleMap = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-            "http://b.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-            "http://c.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png"
+            "https://a.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
+            "https://b.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
+            "https://c.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>  contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>; <a href='http://www.HanBlog.Net'>OSM Plugin</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>  contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>; <a href='https://www.HanBlog.Net'>OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -83,13 +83,13 @@ OpenLayers.Layer.OSM.StamenWC = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg",
-            "http://b.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg",
-            "http://c.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg"
+            "https://a.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg",
+            "https://b.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg",
+            "https://c.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg"
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a>  and <a href=\"http://www.HanBlog.net\">OSM Plugin</a>",
+            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a>  and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -116,13 +116,13 @@ OpenLayers.Layer.OSM.StamenToner = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.stamen.com/toner/${z}/${x}/${y}.jpg",
-            "http://b.tile.stamen.com/toner/${z}/${x}/${y}.jpg",
-            "http://c.tile.stamen.com/toner/${z}/${x}/${y}.jpg"
+            "https://a.tile.stamen.com/toner/${z}/${x}/${y}.jpg",
+            "https://b.tile.stamen.com/toner/${z}/${x}/${y}.jpg",
+            "https://c.tile.stamen.com/toner/${z}/${x}/${y}.jpg"
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a> and <a href=\"http://www.HanBlog.net\">OSM Plugin</a>",
+            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a> and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -149,13 +149,13 @@ OpenLayers.Layer.OSM.TransportMap = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
-            "http://b.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
-            "http://c.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png"
+            "https://a.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
+            "https://b.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
+            "https://c.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>,  and <a href='http://mapicons.nicolasmollet.com/'>Icon</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>,  and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
             buffer: 0,
             transitionEffect: "resize"
         }, options);
