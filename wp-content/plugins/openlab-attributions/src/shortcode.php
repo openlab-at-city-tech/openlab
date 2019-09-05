@@ -2,6 +2,7 @@
 
 namespace OpenLab\Attributions\Shortcode;
 
+use const OpenLab\Attributions\ROOT_DIR;
 use function OpenLab\Attributions\Settings\get_settings;
 use function OpenLab\Attributions\Helpers\get_supported_post_types;
 
@@ -68,17 +69,14 @@ class References {
 				return $content;
 		}
 
-		$settings = get_settings();
+		extract( [
+			'settings' => get_settings(),
+			'refs'     => array_filter( $this->refs[ $post->ID ] ),
+		], EXTR_SKIP );
 
-		$content .= sprintf( '<footer><p id="attributions">%s:</p><ol>', $settings['title'] );
-		foreach ( array_filter( $this->refs[ $post->ID ] ) as $num => $note ) {
-				$content .= sprintf(
-					'<li id="attr-%1$d">%2$s<a href="#%1$d-anchor">&#8617;</a></li>',
-					$num,
-					$note
-				);
-		}
-		$content .= '</ol></footer>';
+		ob_start();
+		require_once ROOT_DIR . '/views/attributions.php';
+		$content .= ob_get_clean();
 
 		return $content;
 	}
