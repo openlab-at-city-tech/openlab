@@ -32,7 +32,6 @@ ignores=(
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
   'wp-content/plugins/wp-document-revisions/tests'
   'wp-content/plugins/wp-post-to-pdf'
-  'wp-content/plugins/wp-post-to-pdf/tcpdf'
   'wp-content/plugins/wp-simile-timeline'
 #  'wp-content/plugins/wp-live-preview-links'
 #  'wp-content/plugins/wp-security-scan'
