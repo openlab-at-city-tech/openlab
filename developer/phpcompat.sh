@@ -17,7 +17,7 @@ ignores=(
   'wp-content/plugins/download-monitor/src/DownloadHandler.php'
   'wp-content/plugins/download-monitor/src/Polyfill/DateTimeImmutable'
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
-#  'wp-content/plugins/easy-visualization-tools'
+  'wp-content/plugins/edge-suite/includes/edge-suite-general.php'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
 #  'wp-content/plugins/extended-categories-widget/2.8'
   'wp-content/plugins/gravityforms'
