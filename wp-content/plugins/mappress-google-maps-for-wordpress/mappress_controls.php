@@ -214,7 +214,7 @@ class Mappress_Controls {
 	static function get_meta_values($meta_key) {
 		global $wpdb;
 		$sql = "SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value != '' ORDER BY meta_value";
-		$meta_values = $wpdb->get_col($wpdb->prepare($sql, $this->key));
+		$meta_values = $wpdb->get_col($wpdb->prepare($sql, $meta_key));
 		$results = ($meta_values) ? array_combine($meta_values, $meta_values) : array();
 		return $results;
 	}
