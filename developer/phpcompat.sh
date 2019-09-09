@@ -26,6 +26,7 @@ ignores=(
   'wp-content/plugins/query-monitor/collectors/environment.php'
   'wp-content/plugins/query-monitor/wp-content/db.php'
   'wp-content/plugins/shardb'
+  'wp-content/plugins/social/lib/social/log.php'
   'wp-content/plugins/static-html-output-plugin'
   'wp-content/plugins/tablepress/views/view-about.php'
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
