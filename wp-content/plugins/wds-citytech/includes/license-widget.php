@@ -64,7 +64,7 @@ class OpenLab_License_Widget extends WP_Widget {
 		$license_data = $this->licenses[ $license_slug ];
 
 		printf(
-			'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Except where otherwise noted, content on this site is made available under the terms of the <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
+			'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
 			esc_attr( $license_data['url'] ),
 			esc_attr( content_url( 'plugins/wds-citytech/assets/img/cc/' . $license_slug . '.png' ) ),
 			esc_attr( $license_data['label'] ),
