@@ -56,6 +56,10 @@ class OpenLab_License_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		echo $args['before_widget'];
 
+		echo $args['before_title'];
+		echo esc_html( $instance['title'] );
+		echo $args['after_title'];
+
 		$license_slug = $instance['license'];
 		$license_data = $this->licenses[ $license_slug ];
 
@@ -75,11 +79,18 @@ class OpenLab_License_Widget extends WP_Widget {
 		$r = array_merge(
 			[
 				'license' => 'by',
+				'title'   => 'License',
 			],
 			$instance
 		);
 
 		?>
+
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">Title:</label>
+			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" value="<?php echo esc_attr( $r['title'] ); ?>" />
+		</p>
+
 		<p>
 			<label class="screen-reader-text" for="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">Select your Creative Commons license.</p>
 			<select class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'license' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">
@@ -97,6 +108,7 @@ class OpenLab_License_Widget extends WP_Widget {
 
 		$instance = [
 			'license' => isset( $this->licenses[ $new_license ] ) ? $new_license : 'by-nc',
+			'title'   => isset( $new_instance['title'] ) ? $new_instance['title'] : '',
 		];
 
 		return $instance;
