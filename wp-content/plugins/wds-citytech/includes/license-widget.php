@@ -46,7 +46,7 @@ class OpenLab_License_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_license',
-			'Creative Commons',
+			'Creative Commons License',
 			array(
 				'description' => '',
 			)
