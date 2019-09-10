@@ -96,7 +96,7 @@ class OpenLab_License_Widget extends WP_Widget {
 		$new_license = isset( $new_instance['license'] ) ? wp_unslash( $new_instance['license'] ) : 'by';
 
 		$instance = [
-			'license' => isset( $this->licenses[ $new_license ] ) ? $new_license : 'by',
+			'license' => isset( $this->licenses[ $new_license ] ) ? $new_license : 'by-nc',
 		];
 
 		return $instance;
