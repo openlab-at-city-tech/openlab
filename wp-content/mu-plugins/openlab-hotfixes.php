@@ -44,3 +44,30 @@ add_action(
 		wp_enqueue_script( 'openlab-fixed-toc', home_url( 'wp-content/mu-plugins/js/fixed-toc.js' ), array('jquery'), OL_VERSION, true );
 	}
 );
+
+/**
+ * Init TablePress caps.
+ *
+ * See #2498.
+ */
+add_action(
+	'admin_init',
+	function() {
+		// Plugin not active.
+		if ( ! class_exists( 'TablePress' ) ) {
+			return;
+		}
+
+		// User doesn't have the caps, so don't bother checking.
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return;
+		}
+
+		// User already has the TP caps, so nothing to do.
+		if ( current_user_can( 'tablepress_edit_tables' ) ) {
+			return;
+		}
+
+		TablePress::$model_options->add_access_capabilities();
+	}
+);
