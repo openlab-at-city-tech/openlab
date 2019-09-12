@@ -78,7 +78,7 @@ class OpenLab_License_Widget extends WP_Widget {
 	public function form( $instance ) {
 		$r = array_merge(
 			[
-				'license' => 'by',
+				'license' => 'by-nc',
 				'title'   => 'License',
 			],
 			$instance
