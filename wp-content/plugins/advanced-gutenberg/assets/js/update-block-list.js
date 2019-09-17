@@ -77,10 +77,6 @@ window.onload = function () {
         listBlocks.forEach(function (block) {
             list_blocks_names.push(block.name);
 
-            if (block.name === 'advgb/container') {
-                return null;
-            }
-
             var blockHTML = '';
             blockHTML += '<li class="block-item ju-settings-option" data-type="'+ block.name +'">';
             blockHTML +=    '<label for="'+ block.name +'" class="ju-setting-label">';

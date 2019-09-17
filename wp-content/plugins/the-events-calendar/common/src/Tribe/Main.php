@@ -17,7 +17,7 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.9.12';
+	const VERSION             = '4.9.14';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
@@ -167,6 +167,7 @@ class Tribe__Main {
 		require_once $this->plugin_path . 'src/functions/multibyte.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/general.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/html.php';
 
 		Tribe__Debug::instance();
 		tribe( 'assets' );

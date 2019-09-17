@@ -120,6 +120,16 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                 this.uploader.bind('UploadComplete', function (up, files) {
                     selectedFolderMediaId = -1;
                 });
+                this.uploader.bind('UploadComplete', function (up, files) {
+                    var wp_media = window.wp;
+
+                    if( wp_media.media.frame.content.get() !== null) {
+                        wp_media.media.frame.content.get().collection.props.set({ignore: (+ new Date())});
+                        wp_media.media.frame.content.get().options.selection.reset();
+                    } else {
+                        wp_media.media.frame.library.props.set ({ignore: (+ new Date())});
+                    }
+                });
             }
         }
     });

@@ -15,7 +15,7 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 
 	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
 	if ( false === $group_id ) {
-		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) ); // WPCS: unprepared SQL ok.
 		if ( null === $group_id ) {
 			$group_id = 0;
 		}
@@ -249,7 +249,7 @@ function openlab_force_blog_role_sync() {
 	if ( $group_id ) {
 
 		// Get the user's group status, if any
-		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) );
+		$member = $wpdb->get_row( $wpdb->prepare( "SELECT is_admin, is_mod FROM {$bp->groups->table_name_members} WHERE is_confirmed = 1 AND is_banned = 0 AND group_id = %d AND user_id = %d", $group_id, get_current_user_id() ) ); // WPCS: unprepared SQL ok.
 
 		$userdata = get_userdata( get_current_user_id() );
 
@@ -293,7 +293,7 @@ function openlab_force_blog_role_sync() {
 
 		if ( ! $role_is_correct ) {
 			// Redirect, just for good measure
-			echo '<script type="text/javascript">window.location="' . get_option( 'siteurl' ) . '";</script>';
+			echo '<script type="text/javascript">window.location="' . esc_url_raw( get_option( 'siteurl' ) ) . '";</script>';
 		}
 	}
 }
@@ -403,9 +403,12 @@ function openlab_group_blog_activity( $activity ) {
 	// prevent infinite loops, but let this function run on later activities ( for unit tests )
 	// @see https://buddypress.trac.wordpress.org/ticket/3980
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	add_action( 'bp_activity_after_save', function() {
-		add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	});
+	add_action(
+		'bp_activity_after_save',
+		function() {
+			add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+		}
+	);
 
 	return $activity;
 }
@@ -562,9 +565,9 @@ function wds_bp_group_meta() {
 
 		<?php
 		if ( ! empty( $group_type ) && 'group' !== $group_type ) {
-			echo wds_load_group_type( $group_type );
+			echo wds_load_group_type( $group_type ); // WPCS: XSS ok.
 			?>
-			<input type="hidden" name="group_type" value="<?php echo $group_type; ?>" />
+			<input type="hidden" name="group_type" value="<?php echo esc_attr( $group_type ); ?>" />
 			<?php
 		}
 		?>
@@ -592,8 +595,8 @@ function wds_bp_group_meta() {
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
 						}
 						?>
-						<p>This <?php echo openlab_get_group_type_label(); ?> is currently associated with the site <?php echo $group_site_text; ?></p>
-						<ul id="change-group-site"><li><?php echo $group_site_url_out; ?> <a class="button underline confirm" href="<?php echo wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
+						<p>This <?php echo esc_html( openlab_get_group_type_label() ); ?> is currently associated with the site <?php echo $group_site_text; // WPCS: XSS ok ?></p>
+						<ul id="change-group-site"><li><?php echo esc_html( $group_site_url_out ); ?> <a class="button underline confirm" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
 					</div>
 
@@ -624,7 +627,7 @@ function wds_bp_group_meta() {
 					</style>
 
 					<input type="hidden" name="action" value="copy_blog" />
-					<input type="hidden" name="source_blog" value="<?php echo $blog_details->blog_id; ?>" />
+					<input type="hidden" name="source_blog" value="<?php echo esc_attr( $blog_details->blog_id ); ?>" />
 
 					<div class="form-table groupblog-setup"
 					<?php
@@ -642,40 +645,42 @@ function wds_bp_group_meta() {
 							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
-						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo $show_website; ?>"><div>
-				<?php
-				switch ( $group_type ) :
-					case 'course':
-						?>
-						<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
+						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
+							<div>
 
-						<ul class="ol-tooltip">
-							<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-							<li class="hyphenate">smithadv1100sp2012</li>
-						</ul>
+							<?php
+							switch ( $group_type ) {
+								case 'course':
+									?>
+									<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
-						<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+									<ul class="ol-tooltip">
+										<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+										<li class="hyphenate">smithadv1100sp2012</li>
+									</ul>
 
-						<?php
-						break;
+									<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+									<?php
+									break;
 
-					case 'project':
-						?>
-						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
+								case 'project':
+									?>
+									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
+									<?php
+									break;
 
-						<?php
-						break;
-					case 'club':
-						?>
-						<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
-
-						<?php break ?>
-
-				<?php endswitch ?>
-							</div></div>
+								case 'club':
+									?>
+									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+									<?php
+									break;
+							}
+							?>
+							</div>
+						</div>
 
 						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ) ) : ?>
-							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo $show_website; ?>">
+							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
 								<div id="noo_clone_options">
 									<div class="row">
 										<div class="radio disabled-opt col-sm-6">
@@ -685,10 +690,10 @@ function wds_bp_group_meta() {
 										</div>
 										<div class="col-sm-5 site-label">
 											<?php global $current_site; ?>
-											<?php echo $current_site->domain . $current_site->path; ?>
+											<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 										</div>
 										<div class="col-sm-13">
-											<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="<?php _e( 'Path' ); ?>" value="" />
+											<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
 										</div>
 										<input name="blog-id-to-clone" value="" type="hidden" />
 									</div>
@@ -698,7 +703,7 @@ function wds_bp_group_meta() {
 							</div>
 						<?php endif ?>
 
-						<div id="wds-website" class="form-field form-required" style="display:<?php echo $show_website; ?>">
+						<div id="wds-website" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
 
 							<div id="noo_new_options">
 								<div id="noo_new_options-div" class="row">
@@ -707,15 +712,17 @@ function wds_bp_group_meta() {
 											<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
 											Create a new site:</label>
 									</div>
-					<div class="col-sm-5 site-label">
-						<?php
-						$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
-						echo $current_site->domain . $current_site->path
-						?>
-					</div>
-										<div class="col-sm-13">
-						<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="<?php _e( 'Domain' ); ?>" value="<?php echo $suggested_path; ?>" />
-					</div>
+
+									<div class="col-sm-5 site-label">
+										<?php
+										$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+										echo esc_html( $current_site->domain . $current_site->path );
+										?>
+									</div>
+
+									<div class="col-sm-13">
+										<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
+									</div>
 								</div>
 
 							</div>
@@ -725,7 +732,7 @@ function wds_bp_group_meta() {
 						<?php
 						// Exclude blogs already used as groupblogs
 						global $wpdb, $bp;
-						$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
+						$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
 
 						foreach ( $user_blogs as $ubid => $ub ) {
 							if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
@@ -736,7 +743,7 @@ function wds_bp_group_meta() {
 						?>
 
 						<?php if ( ! empty( $user_blogs ) ) : ?>
-							<div id="wds-website-existing" class="form-field form-required" style="display:<?php echo $show_website; ?>">
+							<div id="wds-website-existing" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
 
 								<div id="noo_old_options">
 									<div class="row">
@@ -750,7 +757,7 @@ function wds_bp_group_meta() {
 											<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
 												<option value="0">- Choose a site -</option>
 												<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
-													<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+													<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
 												<?php endforeach ?>
 											</select>
 										</div>
@@ -759,7 +766,7 @@ function wds_bp_group_meta() {
 							</div>
 						<?php endif ?>
 
-						<div id="wds-website-external" class="form-field form-required" style="display:<?php echo $show_website; ?>">
+						<div id="wds-website-external" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
 
 							<div id="noo_external_options">
 								<div class="form-group row">
@@ -777,7 +784,7 @@ function wds_bp_group_meta() {
 								</div>
 							</div>
 						</div>
-						<div id="check-note-wrapper" style="display:<?php echo $show_website; ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo ucfirst( $group_type ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
+						<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
 					</div>
 
 				<?php endif; ?>
@@ -848,13 +855,13 @@ function openlab_group_member_role_settings( $group_type ) {
 		<div class="panel-heading semibold">Member Role Settings</div>
 
 		<div class="group-profile panel-body">
-			<p>These settings control the default member roles on your associated <?php echo $group_type_name_uc; ?> site when members join the <?php echo $group_type_name_uc; ?>. You may also adjust individual member roles in Membership settings and on the <?php echo $group_type_name_uc; ?> site Dashboard.</p>
+			<p>These settings control the default member roles on your associated <?php echo esc_html( $group_type_name_uc ); ?> site when members join the <?php echo esc_html( $group_type_name_uc ); ?>. You may also adjust individual member roles in Membership settings and on the <?php echo esc_html( $group_type_name_uc ); ?> site Dashboard.</p>
 
 			<div class="row">
 				<div class="col-sm-24">
 					<ul class="member-role-selectors">
 						<li>
-							<label for="member_role_member"><?php echo $group_type_name_uc; ?> members have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<label for="member_role_member"><?php echo esc_html( $group_type_name_uc ); ?> members have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
 							<select class="form-control" name="member_role_member">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['member'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
@@ -863,7 +870,7 @@ function openlab_group_member_role_settings( $group_type ) {
 						</li>
 
 						<li>
-							<label for="member_role_admin"><?php echo $group_type_name_uc; ?> moderators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<label for="member_role_admin"><?php echo esc_html( $group_type_name_uc ); ?> moderators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
 							<select class="form-control" name="member_role_mod">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['mod'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
@@ -872,7 +879,7 @@ function openlab_group_member_role_settings( $group_type ) {
 						</li>
 
 						<li>
-							<label for="member_role_admin"><?php echo $group_type_name_uc; ?> administrators have the following role on the <?php echo $group_type_name_uc; ?> site:</label>
+							<label for="member_role_admin"><?php echo esc_html( $group_type_name_uc ); ?> administrators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
 							<select class="form-control" name="member_role_admin">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['admin'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
@@ -885,7 +892,7 @@ function openlab_group_member_role_settings( $group_type ) {
 
 			<div class="row">
 				<div class="member-role-definition col-sm-24">
-					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo $group_type_name_uc; ?> Member Role Definitions</div>
+					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo esc_html( $group_type_name_uc ); ?> Member Role Definitions</div>
 					<div class="member-role-definition-text">
 						<ul>
 							<li><strong>Administrator</strong>: Someone who can change course, project, or club settings (such as changing privacy settings); edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs. They can also change the avatar, manage membership, and delete the course, project, or club.</li>
@@ -898,7 +905,7 @@ function openlab_group_member_role_settings( $group_type ) {
 
 			<div class="row">
 				<div class="member-role-definition col-sm-24">
-					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo $group_type_name_uc; ?> Site Member Role Definitions</div>
+					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo esc_html( $group_type_name_uc ); ?> Site Member Role Definitions</div>
 					<div class="member-role-definition-text">
 						<ul>
 							<li><strong>Administrator</strong>: Someone who can control every aspect of a site, from managing content and comments, to choosing site themes to activating widgets and plugins.  In most cases, you should not make another site user an Administrator unless you want them to have equal control over your site content and functions.</li>
@@ -959,7 +966,7 @@ function openlab_validate_groupblog_url() {
 	if (
 			isset( $_POST['new_or_old'] ) &&
 			( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
-			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ) ) )
+			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ), true ) )
 	) {
 		// Which field we check depends on whether this is a clone
 		$path = '';
@@ -1053,7 +1060,7 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
-	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
+	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
 
 	if ( ! empty( $exclude_blogs ) ) {
 		$exclude_sql = ' AND b.blog_id NOT IN ( ' . implode( ',', $exclude_blogs ) . ' ) ';
@@ -1089,11 +1096,11 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 
 	if ( ! empty( $search_terms ) ) {
 		$filter      = like_escape( $wpdb->escape( $search_terms ) );
-		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
-		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
+		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" ); // WPCS: unprepared SQL ok.
+		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" ); // WPCS: unprepared SQL ok.
 	} else {
-		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
-		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" );
+		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" ); // WPCS: unprepared SQL ok.
+		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" ); // WPCS: unprepared SQL ok.
 	}
 
 	$blog_ids = array();
@@ -1379,7 +1386,7 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 function openlab_external_activity_item_exists( $permalink, $group_id, $type ) {
 	global $wpdb, $bp;
 
-	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id );
+	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id ); // WPCS: unprepared SQL ok.
 
 	return (bool) $wpdb->get_var( $sql );
 }
@@ -1468,10 +1475,10 @@ function openlab_find_feed_urls( $url ) {
  * AJAX handler for feed detection
  */
 function openlab_detect_feeds_handler() {
-	$url   = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
+	$url   = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : ''; // WPCS: CSRF ok.
 	$feeds = openlab_find_feed_urls( $url );
 
-	die( json_encode( $feeds ) );
+	die( wp_json_encode( $feeds ) );
 }
 
 add_action( 'wp_ajax_openlab_detect_feeds', 'openlab_detect_feeds_handler' );
@@ -1520,6 +1527,12 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
 					break;
 				case 'student':
 					$template = 'template-eportfolio';
+					/*
+					$user_units = openlab_get_user_academic_units( $user_id );
+					if ( in_array( 'communication-design', $user_units['departments'], true ) ) {
+						$template = 'template-eportfolio-communication-design';
+					}
+					*/
 					break;
 				case 'alumni':
 					$template = 'template-eportfolio-alumni';
@@ -1532,8 +1545,6 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
 			break;
 	}
 	return $template;
-	//  $tp = new OpenLab_GroupBlog_Template_Picker( $user_id );
-	//  return $tp->get_portfolio_template_for_user();
 }
 
 /**
@@ -1588,7 +1599,7 @@ class OpenLab_GroupBlog_Template_Picker {
 
 	public function get_student_department() {
 		if ( ! isset( $this->student_department ) ) {
-			$dept_field               = 'student' == $this->get_user_type() ? 'Major Program of Study' : 'Department';
+			$dept_field               = 'student' === $this->get_user_type() ? 'Major Program of Study' : 'Department';
 			$this->student_department = xprofile_get_field_data( $dept_field, $this->user_id );
 		}
 
@@ -1639,7 +1650,7 @@ class OpenLab_GroupBlog_Template_Picker {
 /**
  * Map "instructor" status to group administrator for wp-grade-comments.
  */
-function openlab_olgc_is_instructor( $is ) {
+function openlab_olgc_is_instructor() {
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 	return groups_is_user_admin( get_current_user_id(), $group_id );
 }
@@ -1763,7 +1774,7 @@ Comment URL: %s',
 
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
-		if ( $admin->user_id == $comment_author_user->ID ) {
+		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
 			continue;
 		}
 
@@ -1825,8 +1836,8 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span>Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="<?php echo admin_url( 'edit.php' ); ?>">Posts</a> and <a href="<?php echo admin_url( 'edit.php?post_type=page' ); ?>">Pages</a>. Custom menus will need to be reactivated via <a href="<?php echo admin_url( 'nav-menus.php' ); ?>">Appearance > Menus</a>.</span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
+		<p><span>Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="<?php echo esc_attr( admin_url( 'edit.php' ) ); ?>">Posts</a> and <a href="<?php echo esc_attr( admin_url( 'edit.php?post_type=page' ) ); ?>">Pages</a>. Custom menus will need to be reactivated via <a href="<?php echo esc_attr( admin_url( 'nav-menus.php' ) ); ?>">Appearance > Menus</a>.</span>
+		<a class="ol-clone-message-dismiss" href="<?php echo esc_attr( esc_url( $dismiss_url ) ); ?>">Dismiss</a>
 		</p>
 	</div>
 	<?php

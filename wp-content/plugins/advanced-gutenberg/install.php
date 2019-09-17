@@ -48,7 +48,7 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
             'post_type'   => 'advgb_profiles',
             'post_status' => 'publish',
             'meta_input'  => array(
-                'blocks' => array('active_blocks'=>array(), 'inactive_blocks'=>array()),
+                'blocks' => array('active_blocks'=>array(), 'inactive_blocks'=>array('advgb/container')),
                 'roles_access'  => AdvancedGutenbergMain::$default_roles_access,
                 'users_access'  => array(),
             )
@@ -113,54 +113,33 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
 $advgb_current_version = get_option('advgb_version', '0.0.0');
 global $wpdb;
 
-if (version_compare($advgb_current_version, '1.6.7', 'lt')) {
-    $all_blocks_list = get_option('advgb_blocks_list');
-    if (!is_array($all_blocks_list)) {
-        $all_blocks_list     = array();
-    }
-
+if (version_compare($advgb_current_version, '2.0.6', 'lt')) {
     // Get all GB-ADV active profiles
     $profiles = $wpdb->get_results('SELECT * FROM '. $wpdb->prefix. 'posts
          WHERE post_type="advgb_profiles"');
 
     if (!empty($profiles)) {
         foreach ($profiles as $profile) {
-            $active_blocks_saved = get_post_meta($profile->ID, 'active_blocks', true);
-            $isNewProfile = get_post_meta($profile->ID, 'blocks', true);
+            $blocks_saved = get_post_meta($profile->ID, 'blocks', true);
 
-            // Active all blocks from default profiles
-            if (!is_array($active_blocks_saved)) {
-                if ($active_blocks_saved === 'all' ||
-                    $isNewProfile && isset($isNewProfile['active_blocks']) && count($isNewProfile['active_blocks']) < 1) {
-                    update_post_meta($profile->ID, 'blocks', array('active_blocks'   => array(), 'inactive_blocks' => array()));
-                    delete_post_meta($profile->ID, 'active_blocks');
-                    continue;
-                }
-            }
-
-            // Check if it already is a new profile, no need to update it
-            if ($isNewProfile && isset($isNewProfile['active_blocks'])) {
+            if (!is_array($blocks_saved)) {
                 continue;
             }
 
-            if (!is_array($active_blocks_saved)) {
-                $active_blocks_saved     = array();
+            // Remove Container block from profile
+            $key = array_search('advgb/container', $blocks_saved['active_blocks']);
+            if ($key !== false) {
+                unset($blocks_saved['active_blocks'][$key]);
             }
-            // Rewrite the $all_block_list array to a simple index array with only block name
-            $all_blocks = array();
-            foreach ($all_blocks_list as $all_block_list) {
-                $all_blocks[] = $all_block_list['name'];
-            }
-            $inactive_blocks = array_diff($all_blocks, $active_blocks_saved);
-            $inactive_blocks = array_values($inactive_blocks);
 
-            update_post_meta($profile->ID, 'blocks', array('active_blocks'=>$active_blocks_saved, 'inactive_blocks'=>$inactive_blocks));
-            delete_post_meta($profile->ID, 'active_blocks');
+            $keyIA = array_search('advgb/container', $blocks_saved['inactive_blocks']);
+            if ($keyIA === false) {
+                array_push($blocks_saved['inactive_blocks'], 'advgb/container');
+            }
+
+            update_post_meta($profile->ID, 'blocks', $blocks_saved);
         }
     }
-
-    // We don't use it anymore
-    delete_option('advgb_categories_list');
 }
 
 // Set version if needed

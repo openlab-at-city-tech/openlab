@@ -13,6 +13,8 @@ class WCP_Folders
 
     public $total_folders = 0;
 
+    private static $postIds;
+
     public function __construct()
     {
         spl_autoload_register(array($this, 'autoload'));
@@ -96,6 +98,32 @@ class WCP_Folders
         add_filter('pre-upload-ui', array($this, 'show_dropdown_on_media_screen'));
 
         add_action('add_attachment', array($this, 'add_attachment_category'));
+
+        $options = get_option("folders_settings");
+
+        $options = is_array($options)?$options:array();
+
+        if (in_array("post", $options)) {
+            add_filter('manage_posts_columns', array($this, 'wcp_manage_columns_head'));
+            add_action('manage_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
+        }
+
+        if (in_array("page", $options)) {
+            add_filter('manage_page_posts_columns', array($this, 'wcp_manage_columns_head'));
+            add_action('manage_page_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
+        }
+
+        if (in_array("attachment", $options)) {
+            add_filter('manage_media_columns', array($this, 'wcp_manage_columns_head'));
+            add_action('manage_media_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
+        }
+
+        foreach ($options as $option) {
+            if ($option != "post" && $option != "page" && $option != "attachment") {
+                add_filter('manage_edit-'.$option.'_columns', array($this, 'wcp_manage_columns_head'), 99999);
+                add_action('manage_'.$option.'_posts_custom_column', array($this, 'wcp_manage_columns_content'), 2, 2);
+            }
+        }
     }
 
     public function add_attachment_category($post_ID)
@@ -1380,7 +1408,7 @@ class WCP_Folders
                 }
             } else {
                 $response['error'] = 1;
-                $response['message'] = __("Folder name already exists", WCP_FOLDER);
+                $response['message'] = __("Folder name is already exists", WCP_FOLDER);
             }
         } else {
             $response['error'] = 1;
@@ -1956,31 +1984,7 @@ class WCP_Folders
 
         self::check_and_set_post_type();
 
-        $options = get_option("folders_settings");
 
-        $options = is_array($options)?$options:array();
-
-        if (in_array("post", $options)) {
-            add_filter('manage_posts_columns', array($this, 'wcp_manage_columns_head'));
-            add_action('manage_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-        }
-
-        if (in_array("page", $options)) {
-            add_filter('manage_page_posts_columns', array($this, 'wcp_manage_columns_head'));
-            add_action('manage_page_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-        }
-
-        if (in_array("attachment", $options)) {
-            add_filter('manage_media_columns', array($this, 'wcp_manage_columns_head'));
-            add_action('manage_media_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-        }
-
-        foreach ($options as $option) {
-            if ($option != "post" && $option != "page" && $option != "attachment") {
-                add_filter('manage_media_columns', array($this, 'wcp_manage_columns_head'));
-                add_action('manage_media_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-            }
-        }
 
         $option = get_option("folder_redirect_status", true);
         if ($option == 1) {
@@ -1999,6 +2003,8 @@ class WCP_Folders
         }
 
         $options = get_option("folders_settings");
+
+//        echo "<pre>"; print_r($defaults);
         if (is_array($options) && in_array($type, $options)) {
             $columns = array(
                     'wcp_move' => '<div class="wcp-move-multiple wcp-col" title="' . __('Move selected items', WCP_FOLDER) . '"><span class="dashicons dashicons-move"></span><div class="wcp-items"></div></div>',
@@ -2010,20 +2016,28 @@ class WCP_Folders
 
     function wcp_manage_columns_content($column_name, $post_ID)
     {
-        global $typenow;
-        $type = $typenow;
-        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
-            $type = self::sanitize_options($_REQUEST['post_type']);
+        $postIDs = self::$postIds;
+        if(!is_array($postIDs)) {
+            $postIDs = array();
         }
+        if(!in_array($post_ID, $postIDs)) {
+            $postIDs[] = $post_ID;
+            self::$postIds = $postIDs;
+            global $typenow;
+            $type = $typenow;
+            if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
+                $type = self::sanitize_options($_REQUEST['post_type']);
+            }
 
-        $options = get_option("folders_settings");
-        if (is_array($options) && in_array($type, $options)) {
-            if ($column_name == 'wcp_move') {
-                $title = get_the_title();
-                if (strlen($title) > 20) {
-                    $title = substr($title, 0, 20) . "...";
+            $options = get_option("folders_settings");
+            if (is_array($options) && in_array($type, $options)) {
+                if ($column_name == 'wcp_move') {
+                    $title = get_the_title();
+                    if (strlen($title) > 20) {
+                        $title = substr($title, 0, 20) . "...";
+                    }
+                    echo "<div class='wcp-move-file' data-id='{$post_ID}'><span class='wcp-move dashicons dashicons-move' data-id='{$post_ID}'></span><span class='wcp-item' data-object-id='{$post_ID}'>" . $title . "</span></div>";
                 }
-                echo "<div class='wcp-move-file' data-id='{$post_ID}'><span class='wcp-move dashicons dashicons-move' data-id='{$post_ID}'></span><span class='wcp-item' data-object-id='{$post_ID}'>" . $title . "</span></div>";
             }
         }
     }

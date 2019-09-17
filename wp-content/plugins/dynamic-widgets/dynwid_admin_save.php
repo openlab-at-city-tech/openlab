@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_save.php - Saving options to the database
  *
- * @version $Id: dynwid_admin_save.php 1698398 2017-07-18 19:34:08Z qurl $
+ * @version $Id: dynwid_admin_save.php 2032225 2019-02-16 17:53:18Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -321,8 +321,8 @@
 			$_POST['page_act'] = array();
 		}
 
-		$DW->addMultiOption($widget_id, 'page', $_POST['page'], $_POST['page_act']);
-	} else if ( $_POST['page'] == 'no' ) {
+		$DW->addMultiOption($widget_id, 'page', $_POST['pg'], $_POST['page_act']);
+	} else if ( $_POST['pg'] == 'no' ) {
 		$DW->addSingleOption($widget_id, 'page');
 	}
 

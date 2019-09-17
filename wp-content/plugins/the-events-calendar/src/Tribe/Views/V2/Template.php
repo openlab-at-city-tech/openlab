@@ -59,7 +59,7 @@ class Template extends Base_Template {
 		$context = wp_parse_args( $context_overrides, $this->context );
 		$context['_context'] = $context;
 
-		return parent::template( $this->view->get_slug(), $context, false );
+		return parent::template( $this->view->get_template_slug(), $context, false );
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Template extends Base_Template {
 		$this->set( 'view_class', get_class( $view ), false );
 		$this->set( 'view_slug', $view->get_slug(), false );
 
-		// Set which view globaly
+		// Set which view globally.
 		$this->set( 'view', $view, false );
 	}
 
@@ -138,13 +138,19 @@ class Template extends Base_Template {
 		$this->set(
 			'lookup_folders',
 			array_map(
-				function ( array $folder ) {
+				static function ( array $folder ) {
 					$folder['path'] = str_replace( WP_CONTENT_DIR, '', $folder['path'] );
 					return $folder;
 				},
 				$this->get_template_path_list()
-			)
+			),
+			false
 		);
+
+		if ( $this->view instanceof View_Interface ) {
+			$this->set( 'view_slug', $this->view->get_slug(), false );
+			$this->set( 'view_class', get_class( $this->view ), false );
+		}
 
 		return parent::get_template_file( 'base' );
 	}

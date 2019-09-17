@@ -359,9 +359,6 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
         <ul class="blocks-config-list clearfix">
             <?php foreach ($advgb_blocks as $block) : ?>
                 <?php $iconColor = '';
-                if ($block['name'] === 'advgb/container') :
-                    continue;
-                endif;
                 if (isset($block['iconColor'])) :
                     $iconColor = 'style=color:' . $block['iconColor'];
                 endif; ?>

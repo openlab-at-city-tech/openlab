@@ -440,10 +440,6 @@
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
- * Selects
- * ----------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
  * Sliders & Toggles
  * ----------------------------------------------------------------------------- */
 
@@ -478,25 +474,22 @@
 
 /* Forms */
 
-/* .tribe-common-form-control-checkbox,
-	.tribe-common-form-control-radio {
+.tribe-common {
 
-	} */
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Checkboxes & Radios Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
 
-.tribe-common .tribe-common-form-control-checkbox__label,
-	.tribe-common .tribe-common-form-control-radio__label {
-		color: #141827;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 14px;
-		line-height: 1.62;
-		font-weight: 400;
+	/* -----------------------------------------------------------------------------
+	 * Form Control: Checkboxes Theme Overrides
+	 * ----------------------------------------------------------------------------- */
 
-		color: #727272;
-		cursor: pointer;
-		display: inline-block;
-		margin-left: 11px;
-		vertical-align: middle;
-	}
+	/* -----------------------------------------------------------------------------
+	 * Form Control: Radios Theme Overrides
+	 * ----------------------------------------------------------------------------- */
+}
 
 /* -----------------------------------------------------------------------------
 	 *
@@ -562,6 +555,26 @@
 	 *
 	 * ----------------------------------------------------------------------------- */
 
+.tribe-common .tribe-common-form-control-checkbox,
+	.tribe-common .tribe-common-form-control-radio {
+		line-height: 0;
+	}
+
+.tribe-common .tribe-common-form-control-checkbox__label,
+	.tribe-common .tribe-common-form-control-radio__label {
+		color: #141827;
+		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+		font-size: 14px;
+		line-height: 1.62;
+		font-weight: 400;
+
+		color: #727272;
+		cursor: pointer;
+		display: inline-block;
+		margin-left: 11px;
+		vertical-align: middle;
+	}
+
 .tribe-common .tribe-common-form-control-checkbox__input,
 	.tribe-common .tribe-common-form-control-radio__input {
 		-webkit-appearance: none;
@@ -615,7 +628,6 @@
 	 * ----------------------------------------------------------------------------- */
 
 .tribe-common .tribe-common-form-control-radio__input {
-
 		border-radius: 50%;
 	}
 
@@ -631,6 +643,28 @@
 			-webkit-transform: translate(-50%, -50%);
 			        transform: translate(-50%, -50%);
 			width: 8px;
+		}
+
+/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-checkbox__input {
+			display: inline-block;
+		}
+
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-checkbox__label {
+			font-weight: 400;
+			font-size: 14px;
+		}
+
+/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-radio__label {
+			font-weight: 400;
+			font-size: 14px;
 		}
 
 /* -----------------------------------------------------------------------------
@@ -659,155 +693,57 @@
 				margin-bottom: 0;
 			}
 
+.tribe-common {
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Sliders Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+}
+
 /* -----------------------------------------------------------------------------
 	 *
-	 * Form Control: Groups (Input)
+	 * Form Control: Sliders
 	 *
-	 * Example:
-	 * <div class="tribe-common-form-control-input-group">
-	 *   <div class="tribe-common-form-control-text">
-	 *     <label for="inputOne">Input One</label>
-	 *     <input id="inputOne" name="inputOne" type="text" placeholder="Input One" />
-	 *   </div>
-	 *   <div class="tribe-common-form-control-text">
-	 *     <label for="inputTwo">Input Two</label>
-	 *     <input id="inputTwo" name="inputTwo" type="text" placeholder="Input Two" />
-	 *   </div>
+	 * Example (Horizontal):
+	 * <div class="tribe-common-form-control-slider">
+	 *   <input
+	 *     class="tribe-common-form-control-slider__input"
+	 *     id="sliderOne"
+	 *     type="range"
+	 *     min="0"
+	 *     max="100"
+	 *     value="50"
+	 *   />
+	 *   <label class="tribe-common-form-control-slider__label" for="sliderOne">Slider One</label>
+	 * </div>
+	 *
+	 * Example (Vertical):
+	 * <div class="tribe-common-form-control-slider tribe-common-form-control-slider--vertical">
+	 *   <label class="tribe-common-form-control-slider__label" for="sliderOne">Slider One</label>
+	 *   <input
+	 *     class="tribe-common-form-control-slider__input"
+	 *     id="sliderOne"
+	 *     type="range"
+	 *     min="0"
+	 *     max="100"
+	 *     value="50"
+	 *   />
 	 * </div>
 	 *
 	 * ----------------------------------------------------------------------------- */
 
-.tribe-common .tribe-common-form-control-input-group > * {
-			margin-bottom: 8px;
-		}
-
-.tribe-common .tribe-common-form-control-input-group > *:last-child {
-				margin-bottom: 0px;
-			}
-
-/**
-	 * @todo: implement listbox JS
-	 * https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-collapsible.html
-	 */
-
-.tribe-common .tribe-common-form-control-select {
-		position: relative;
+.tribe-common .tribe-common-form-control-slider {
+		line-height: 0;
 	}
-
-/* -----------------------------------------------------------------------------
-	 *
-	 * Form Control: Selects
-	 *
-	 * Example:
-	 * <div class="tribe-common-form-control-select">
-	 *   <button
-	 *     class="tribe-common-form-control-select__button"
-	 *     aria-haspopup="listbox"
-	 *     aria-labelledby="selectButton"
-	 *     id="selectButton"
-	 *   >
-	 *     Option One
-	 *   </button>
-	 *   <ul class="tribe-common-form-control-select__list" tabindex="-1" role="listbox">
-	 *     <li
-	 *       class="tribe-common-form-control-select__list-item"
-	 *       id="optionOne"
-	 *       role="option"
-	 *     >
-	 *       Option One
-	 *     </li>
-	 *     <li
-	 *       class="tribe-common-form-control-select__list-item"
-	 *       id="optionTwo"
-	 *       role="option"
-	 *     >
-	 *       Option Two
-	 *     </li>
-	 *   </ul>
-	 * </div>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
-.tribe-common .tribe-common-form-control-select__button {
-		color: #141827;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 14px;
-		line-height: 1.62;
-		font-weight: 400;
-		font-weight: 700;
-		border: 1px solid #D5D5D5;
-		padding: 12px 40px 12px 18px;
-		position: relative;
-		text-align: left;
-		width: 205px;
-	}
-
-.tribe-common .tribe-common-form-control-select__button:after {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6l6-6H0z' fill='%23727272'/%3E%3C/svg%3E");
-			content: '';
-			height: 6px;
-			position: absolute;
-			right: 16px;
-			top: 50%;
-			-webkit-transform: translateY(-50%);
-			        transform: translateY(-50%);
-			width: 12px;
-		}
-
-.tribe-common .tribe-common-form-control-select__list {
-		/**
-		 * @todo: remove once listbox JS is implemented
-		 */
-		/* @mixin hidden; */
-
-		background-color: #FFFFFF;
-
-		border: 1px solid #D5D5D5;
-
-		box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.14);
-
-		left: 0;
-
-		position: absolute;
-
-		top: 55px;
-
-		width: 205px;
-	}
-
-.tribe-common .tribe-common-form-control-select__list-item {
-		color: #141827;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 14px;
-		line-height: 1.62;
-		font-weight: 400;
-		color: #727272;
-		cursor: pointer;
-		padding: 6px 18px;
-		text-align: left;
-	}
-
-.tribe-common .tribe-common-form-control-select__list-item:first-child {
-			padding-top: 16px;
-		}
-
-.tribe-common .tribe-common-form-control-select__list-item:last-child {
-			padding-bottom: 16px;
-		}
-
-.tribe-common .tribe-common-form-control-select__list-item[aria-selected="true"] {
-			color: #141827;
-			font-weight: 700;
-		}
-
-/* .tribe-common-form-control-slider {} */
 
 .tribe-common .tribe-common-form-control-slider__input {
 		-webkit-appearance: none;
 		   -moz-appearance: none;
 		        appearance: none;
 		background-color: transparent;
-		border: none;
+		border: 0;
 		cursor: pointer;
 		display: inline-block;
 		margin: 0;
@@ -897,38 +833,6 @@
 			margin-top: -1px;
 		}
 
-/* -----------------------------------------------------------------------------
-	 *
-	 * Form Control: Sliders
-	 *
-	 * Example (Horizontal):
-	 * <div class="tribe-common-form-control-slider">
-	 *   <input
-	 *     class="tribe-common-form-control-slider__input"
-	 *     id="sliderOne"
-	 *     type="range"
-	 *     min="0"
-	 *     max="100"
-	 *     value="50"
-	 *   />
-	 *   <label class="tribe-common-form-control-slider__label" for="sliderOne">Slider One</label>
-	 * </div>
-	 *
-	 * Example (Vertical):
-	 * <div class="tribe-common-form-control-slider tribe-common-form-control-slider--vertical">
-	 *   <label class="tribe-common-form-control-slider__label" for="sliderOne">Slider One</label>
-	 *   <input
-	 *     class="tribe-common-form-control-slider__input"
-	 *     id="sliderOne"
-	 *     type="range"
-	 *     min="0"
-	 *     max="100"
-	 *     value="50"
-	 *   />
-	 * </div>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
 .tribe-common .tribe-common-form-control-slider__label {
 		color: #141827;
 		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
@@ -948,175 +852,23 @@
 			margin: 0 0 6px;
 		}
 
-/**
-	 * @todo: implement listbox JS
-	 * https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-collapsible.html
-	 */
-
-.tribe-common .tribe-common-form-control-tabs {
-		position: relative;
-	}
-
 /* -----------------------------------------------------------------------------
-	 *
-	 * Form Control: Tabs
-	 *
-	 * Example:
-	 * <div class="tribe-common-form-control-tabs">
-	 *   <button
-	 *     class="tribe-common-form-control-tabs__button"
-	 *     aria-haspopup="listbox"
-	 *     aria-labelledby="tabButton"
-	 *     id="tabButton"
-	 *   >
-	 *     Tab One
-	 *   </button>
-	 *   <ul class="tribe-common-form-control-tabs__list" tabindex="-1" role="listbox">
-	 *     <li class="tribe-common-form-control-tabs__list-item" role="presentation">
-	 *       <input
-	 *         class="tribe-common-form-control-tabs__input"
-	 *         id="tabOne"
-	 *         name="tabGroup"
-	 *         type="radio"
-	 *         value="tabOne"
-	 *         checked="checked"
-	 *       />
-	 *       <label
-	 *         class="tribe-common-form-control-tabs__label"
-	 *         id="tabOneLabel"
-	 *         for="tabOne"
-	 *         role="option"
-	 *       >
-	 *         Tab One
-	 *       </label>
-	 *     </li>
-	 *     <li class="tribe-common-form-control-tabs__list-item" role="presentation">
-	 *       <input
-	 *         class="tribe-common-form-control-tabs__input"
-	 *         id="tabTwo"
-	 *         name="tabGroup"
-	 *         type="radio"
-	 *         value="tabTwo"
-	 *       />
-	 *       <label
-	 *         class="tribe-common-form-control-tabs__label"
-	 *         id="tabTwoLabel"
-	 *         for="tabTwo"
-	 *         role="option"
-	 *       >
-	 *         Tab Two
-	 *       </label>
-	 *     </li>
-	 *   </ul>
-	 * </div>
-	 *
+	 * Theme Overrides - Enfold
 	 * ----------------------------------------------------------------------------- */
 
-.tribe-common .tribe-common-form-control-tabs__button {
-		color: #141827;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 14px;
-		line-height: 1.62;
-		font-weight: 400;
-		font-weight: 700;
-		border: 1px solid #D5D5D5;
-		padding: 12px 40px 12px 18px;
-		position: relative;
-		text-align: left;
-		width: 205px;
-	}
-
-.tribe-common .tribe-common-form-control-tabs__button:after {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 6l6-6H0z' fill='%23727272'/%3E%3C/svg%3E");
-			content: '';
-			height: 6px;
-			position: absolute;
-			right: 16px;
-			top: 50%;
-			-webkit-transform: translateY(-50%);
-			        transform: translateY(-50%);
-			width: 12px;
-		}
-
-.tribe-common .tribe-common-form-control-tabs__list {
-		/**
-		 * @todo: remove once listbox JS is implemented
-		 */
-		/* @mixin hidden; */
-
-		background-color: #FFFFFF;
-
-		border: 1px solid #D5D5D5;
-
-		box-shadow: 0 2px 5px 0 rgba(0,0,0, 0.14);
-
-		left: 0;
-
-		position: absolute;
-
-		top: 55px;
-
-		width: 205px;
-	}
-
-.tribe-common .tribe-common-form-control-tabs__list-item:first-child .tribe-common-form-control-tabs__label {
-			padding-top: 16px;
-		}
-
-.tribe-common .tribe-common-form-control-tabs__list-item:last-child .tribe-common-form-control-tabs__label {
-			padding-bottom: 16px;
-		}
-
-.tribe-common .tribe-common-form-control-tabs__input {
-		border: 0;
-		clip: rect(0 0 0 0);
-		height: 1px;
-		margin: -1px;
-		overflow: hidden;
-		padding: 0;
-		position: absolute;
-		width: 1px;
-	}
-
-.tribe-common .tribe-common-form-control-tabs__input:checked + .tribe-common-form-control-tabs__label {
-			color: #141827;
-			font-weight: 700;
-		}
-
-.tribe-common .tribe-common-form-control-tabs__label {
-		color: #141827;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 14px;
-		line-height: 1.62;
-		font-weight: 400;
-		color: #727272;
-		cursor: pointer;
-		padding: 6px 18px;
-		text-align: left;
-	}
-
-/* Enfold Compatibility */
-
-body#top .tribe-common .tribe-common-form-control-tabs__list-item:first-child .tribe-common-form-control-tabs__label {
-				padding-top: 16px;
-			}
-
-body#top .tribe-common .tribe-common-form-control-tabs__list-item:last-child .tribe-common-form-control-tabs__label {
-				padding-bottom: 16px;
-			}
-
-body#top .tribe-common .tribe-common-form-control-tabs__input:checked + .tribe-common-form-control-tabs__label {
-				color: #141827;
-				font-weight: 700;
-			}
-
-body#top .tribe-common .tribe-common-form-control-tabs__label {
-			color: #141827;
-			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-			font-size: 14px;
-			line-height: 1.62;
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-slider__label {
 			font-weight: 400;
+			font-size: 12px;
 		}
+
+.tribe-common {
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Text Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+}
 
 /* .tribe-common-form-control-text {} */
 
@@ -1156,8 +908,9 @@ body#top .tribe-common .tribe-common-form-control-tabs__label {
 		line-height: 1.62;
 		font-weight: 400;
 
-		border: none;
+		border: 0;
 		border-bottom: 1px solid #D5D5D5;
+		height: auto;
 		padding: 12px 28px 12px 0;
 		width: 100%;
 	}
@@ -1184,40 +937,81 @@ body#top .tribe-common .tribe-common-form-control-tabs__label {
 
 .tribe-common .tribe-common-form-control-text__input:focus {
 			border-bottom-color: #141827;
-			outline: none;
+			outline: 0;
 		}
 
-/* Enfold Compatibility */
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
 
-body#top .tribe-common .tribe-common-form-control-text__input {
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-form-control-text__input {
+			color: #141827;
+		}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ------------------------------------------------------------------------- */
+
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-text__input {
 			color: #141827;
 			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 			font-size: 16px;
 			line-height: 1.62;
 			font-weight: 400;
 
+			border: 0;
 			border-bottom: 1px solid #D5D5D5;
-			padding: 12px 20px 12px 0;
+			padding: 12px 28px 12px 0;
 			width: 100%;
 		}
 
-body#top .tribe-common .tribe-common-form-control-text__input::-webkit-input-placeholder {
-				color: #727272;
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-text__input:focus {
+				border-bottom-color: #141827;
+				box-shadow: none;
 			}
 
-body#top .tribe-common .tribe-common-form-control-text__input:-ms-input-placeholder {
-				color: #727272;
-			}
+.tribe-common {
 
-body#top .tribe-common .tribe-common-form-control-text__input::-ms-input-placeholder {
-				color: #727272;
-			}
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Toggles Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+}
 
-body#top .tribe-common .tribe-common-form-control-text__input::placeholder {
-				color: #727272;
-			}
+/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Toggles
+	 *
+	 * Example (Horizontal):
+	 * <div class="tribe-common-form-control-toggle">
+	 *   <input
+	 *     class="tribe-common-form-control-toggle__input"
+	 *     id="toggleOne"
+	 *     name="toggleGroup"
+	 *     type="checkbox"
+	 *     value="toggleOne"
+	 *   />
+	 *   <label class="tribe-common-form-control-toggle__label" for="toggleOne">Toggle One</label>
+	 * </div>
+	 *
+	 * Example (Vertical):
+	 * <div class="tribe-common-form-control-toggle tribe-common-form-control-toggle--vertical">
+	 *   <label class="tribe-common-form-control-toggle__label" for="toggleOne">Toggle One</label>
+	 *   <input
+	 *     class="tribe-common-form-control-toggle__input"
+	 *     id="toggleOne"
+	 *     name="toggleGroup"
+	 *     type="checkbox"
+	 *     value="toggleOne"
+	 *   />
+	 * </div>
+	 *
+	 * ----------------------------------------------------------------------------- */
 
-/* .tribe-common-form-control-toggle {} */
+.tribe-common .tribe-common-form-control-toggle {
+		line-height: 0;
+	}
 
 .tribe-common .tribe-common-form-control-toggle__input {
 		border: none;
@@ -1266,36 +1060,6 @@ body#top .tribe-common .tribe-common-form-control-text__input::placeholder {
 				        transform: translateX(20px);
 			}
 
-/* -----------------------------------------------------------------------------
-	 *
-	 * Form Control: Toggles
-	 *
-	 * Example (Horizontal):
-	 * <div class="tribe-common-form-control-toggle">
-	 *   <input
-	 *     class="tribe-common-form-control-toggle__input"
-	 *     id="toggleOne"
-	 *     name="toggleGroup"
-	 *     type="checkbox"
-	 *     value="toggleOne"
-	 *   />
-	 *   <label class="tribe-common-form-control-toggle__label" for="toggleOne">Toggle One</label>
-	 * </div>
-	 *
-	 * Example (Vertical):
-	 * <div class="tribe-common-form-control-toggle tribe-common-form-control-toggle--vertical">
-	 *   <label class="tribe-common-form-control-toggle__label" for="toggleOne">Toggle One</label>
-	 *   <input
-	 *     class="tribe-common-form-control-toggle__input"
-	 *     id="toggleOne"
-	 *     name="toggleGroup"
-	 *     type="checkbox"
-	 *     value="toggleOne"
-	 *   />
-	 * </div>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
 .tribe-common .tribe-common-form-control-toggle__label {
 		color: #141827;
 		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
@@ -1315,15 +1079,18 @@ body#top .tribe-common .tribe-common-form-control-text__input::placeholder {
 			margin: 0 0 6px;
 		}
 
-/* Enfold Compatibility */
+/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
 
-body#top .tribe-common .tribe-common-form-control-toggle__input {
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-toggle__input {
 			display: inline-block;
+			margin: 5px 0;
 		}
 
-body#top .tribe-common .tribe-common-form-control-toggle__label {
-			color: #727272;
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-toggle__label {
 			font-weight: 400;
+			font-size: 12px;
 		}
 
 /* Grid */
@@ -1367,9 +1134,20 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 
 /* Typography */
 
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Anchor: Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
 .tribe-common a {
 		color: #141827;
 		cursor: pointer;
+		outline: 0;
+		text-decoration: none;
 	}
 
 .tribe-common a:hover,
@@ -1377,6 +1155,32 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		.tribe-common a:active,
 		.tribe-common a:visited {
 			color: #141827;
+			outline: 0;
+			text-decoration: none;
+		}
+
+/* -------------------------------------------------------------------------
+	 *
+	 * Anchor: Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Theme Overrides - Twenty Seventeen
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common a:hover,
+			.tribe-theme-twentyseventeen .tribe-common a:focus {
+				box-shadow: none;
+				color: #141827;
+			}
+
+/* -------------------------------------------------------------------------
+		 * Theme Overrides - Twenty Nineteen
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentynineteen .entry .tribe-common a {
+			text-decoration: none;
 		}
 
 /* -------------------------------------------------------------------------
@@ -1424,6 +1228,15 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	.tribe-common .tribe-common-anchor-thin:hover {
 		border-bottom: 1px solid #141827;
 	}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-anchor-alt:hover,
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-anchor-alt:focus {
+				color: #334AFF;
+			}
 
 /* -------------------------------------------------------------------------
 	 * Body 1
@@ -1483,6 +1296,19 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	}
 
 /* -------------------------------------------------------------------------
+	 * Body 1 for --viewport-medium
+	 * ------------------------------------------------------------------------- */
+
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * CTA: Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
+/* -------------------------------------------------------------------------
 	 *
 	 * CTA
 	 *
@@ -1523,6 +1349,32 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	}
 
 /* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--alt:hover,
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--alt:focus {
+				color: #334AFF;
+			}
+
+.tribe-common {
+	/* -------------------------------------------------------------------------
+	 *
+	 * Heading
+	 *
+	 * Example:
+	 * <h1 class="tribe-common-h1">Heading Text</h1>
+	 *
+	 * ------------------------------------------------------------------------- */
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Heading: Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
+/* -------------------------------------------------------------------------
 	 * Heading: h1
 	 * ------------------------------------------------------------------------- */
 
@@ -1559,19 +1411,6 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	}
 
 /* -------------------------------------------------------------------------
-	 *
-	 * Heading
-	 *
-	 * Example:
-	 * <h1 class="tribe-common-h1">Heading Text</h1>
-	 *
-	 * ------------------------------------------------------------------------- */
-
-.tribe-common .tribe-common-h3--alt {
-		font-weight: 400;
-	}
-
-/* -------------------------------------------------------------------------
 	 * Heading: h4
 	 * ------------------------------------------------------------------------- */
 
@@ -1581,10 +1420,6 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		font-weight: 700;
 		font-size: 20px;
 		line-height: 1.42;
-	}
-
-.tribe-common .tribe-common-h4--alt {
-		font-weight: 400;
 	}
 
 /* -------------------------------------------------------------------------
@@ -1608,11 +1443,7 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 		font-weight: 700;
 		font-size: 16px;
-		line-height: 1.62;
-	}
-
-.tribe-common .tribe-common-h6--alt {
-		font-weight: 400;
+		line-height: 1.5;
 	}
 
 /* -------------------------------------------------------------------------
@@ -1627,10 +1458,6 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		line-height: 1.62;
 	}
 
-.tribe-common .tribe-common-h7--alt {
-		font-weight: 400;
-	}
-
 /* -------------------------------------------------------------------------
 	 * Heading: h8
 	 * ------------------------------------------------------------------------- */
@@ -1643,9 +1470,9 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		line-height: 1.38;
 	}
 
-.tribe-common .tribe-common-h8--alt {
-		font-weight: 400;
-	}
+/* -------------------------------------------------------------------------
+	 * Heading: h3 for --viewport-medium
+	 * ------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------
 	 * Heading: h4 for --viewport-medium
@@ -1660,13 +1487,182 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 * ------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------
+	 * Heading: h7 for --viewport-medium
+	 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+	 * Heading: alt style
+	 * ------------------------------------------------------------------------- */
+
+.tribe-common .tribe-common-h--alt {
+		font-weight: 400;
+	}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Avada
+	 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: h1
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h1 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 28px;
+			line-height: 1.42;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h2
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h2 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 24px;
+			line-height: 1.42;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h3
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h3 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 22px;
+			line-height: 1.5;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h4
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h4 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 20px;
+			line-height: 1.42;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h5
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h5 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 18px;
+			line-height: 1.5;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h6
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h6 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 16px;
+			line-height: 1.5;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h7
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h7 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 14px;
+			line-height: 1.62;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h8
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h8 {
+			color: #141827;
+			font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+			font-weight: 700;
+			font-size: 12px;
+			line-height: 1.38;
+		}
+
+/* -------------------------------------------------------------------------
+		 * Heading: h3 for --viewport-medium
+		 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: h4 for --viewport-medium
+		 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: h5 for --viewport-medium
+		 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: h6 for --viewport-medium
+		 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: h7 for --viewport-medium
+		 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+		 * Heading: alt style
+		 * ------------------------------------------------------------------------- */
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h--alt {
+			font-weight: 400;
+		}
+
+.tribe-common {
+	/* -------------------------------------------------------------------------
+	 * Lists
+	 * ------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Lists: Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Divi
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-divi #left-area .tribe-common ul,
+	.tribe-theme-divi .entry-content .tribe-common ul,
+	body.et-pb-preview.tribe-theme-divi #main-content .container .tribe-common ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+/* -------------------------------------------------------------------------
 	 * Button
 	 * ------------------------------------------------------------------------- */
 
 .tribe-common button {
-		background-color: #FFFFFF;
+		background-color: transparent;
+		border: none;
 		padding: 0;
 	}
+
+.tribe-common button:hover,
+		.tribe-common button:focus {
+			background-color: transparent;
+		}
 
 /* -----------------------------------------------------------------------------
 	 *
@@ -1735,6 +1731,27 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 .tribe-common .tribe-common-svgicon--filters {
 		background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17'%3E%3Cg fill='none' fill-rule='evenodd' stroke='%23727272' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' transform='translate(1 1)'%3E%3Cpath d='M3 3V0M3 15v-2' stroke='%23727272'/%3E%3Ccircle cx='3' cy='9' r='3' stroke='%23727272'/%3E%3Cpath d='M12 9v6' stroke='%23727272'/%3E%3Ccircle cx='12' cy='3' r='3' transform='matrix(1 0 0 -1 0 6)' stroke='%23727272'/%3E%3C/g%3E%3C/svg%3E");
 	}
+
+.tribe-common {
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Tables
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 * Tables: Theme Overrides
+	 * ----------------------------------------------------------------------------- */
+}
+
+/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+.tribe-theme-enfold .tribe-common th {
+			letter-spacing: 0;
+			text-transform: none;
+		}
 
 /* A11y */
 
@@ -1809,7 +1826,8 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 *
 	 * ----------------------------------------------------------------------------- */
 
-.tribe-common .tribe-common-c-btn-border {
+.tribe-common .tribe-common-c-btn-border,
+	.tribe-common a.tribe-common-c-btn-border {
 		color: #141827;
 		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 		font-size: 12px;
@@ -1822,25 +1840,38 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		padding: 0;
 		text-decoration: none;
 		width: auto;
+		background-color: #FFFFFF;
 		border: 1px solid #D5D5D5;
 		border-radius: 4px;
+		text-align: center;
 		transition: color 0.2s ease, border-color 0.2s ease;
 
 		color: #727272;
-		padding: 6px 16px 7px;
+		padding: 14px 20px 14px;
+		width: 100%;
 	}
 
-.tribe-common .tribe-common-c-btn-border:active {
+.tribe-common .tribe-common-c-btn-border:hover,
+	.tribe-common .tribe-common-c-btn-border:focus,
+	.tribe-common a.tribe-common-c-btn-border:hover,
+	.tribe-common a.tribe-common-c-btn-border:focus {
+		background-color: #FFFFFF;
+	}
+
+.tribe-common .tribe-common-c-btn-border:active, .tribe-common a.tribe-common-c-btn-border:active {
 		border-color: #141827;
 	}
 
 .tribe-common .tribe-common-c-btn-border:active,
 		.tribe-common .tribe-common-c-btn-border:focus,
-		.tribe-common .tribe-common-c-btn-border:hover {
+		.tribe-common .tribe-common-c-btn-border:hover,
+		.tribe-common a.tribe-common-c-btn-border:active,
+		.tribe-common a.tribe-common-c-btn-border:focus,
+		.tribe-common a.tribe-common-c-btn-border:hover {
 			color: #141827;
 		}
 
-.tribe-common .tribe-common-c-btn-border:disabled {
+.tribe-common .tribe-common-c-btn-border:disabled, .tribe-common a.tribe-common-c-btn-border:disabled {
 			color: #D5D5D5
 		}
 
@@ -1862,8 +1893,6 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		padding: 0;
 		text-decoration: none;
 		width: auto;
-
-		background-color: transparent;
 	}
 
 .tribe-common .tribe-common-c-btn-icon:before {
@@ -1884,6 +1913,7 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 * ----------------------------------------------------------------------------- */
 
 .tribe-common .tribe-common-c-btn-icon--border {
+		background-color: #FFFFFF;
 		border: 1px solid #D5D5D5;
 		align-items: center;
 		display: inline-flex;
@@ -1891,6 +1921,11 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		justify-content: center;
 		transition: none;
 		width: 56px;
+	}
+
+.tribe-common .tribe-common-c-btn-icon--border:hover,
+	.tribe-common .tribe-common-c-btn-icon--border:focus {
+		background-color: #FFFFFF;
 	}
 
 .tribe-common .tribe-common-c-btn-icon--border:active {
@@ -1902,13 +1937,13 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 * ----------------------------------------------------------------------------- */
 
 .tribe-common .tribe-common-c-btn-icon--caret-left:before {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23727272'/%3E%3C/svg%3E");
+			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23BABABA'/%3E%3C/svg%3E");
 			height: 20px;
 			width: 12px;
 		}
 
 .tribe-common .tribe-common-c-btn-icon--caret-left:active:before, .tribe-common .tribe-common-c-btn-icon--caret-left:hover:before, .tribe-common .tribe-common-c-btn-icon--caret-left:focus:before {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23141827'/%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23727272'/%3E%3C/svg%3E");
 			}
 
 .tribe-common .tribe-common-c-btn-icon--caret-left:disabled:before {
@@ -1920,13 +1955,13 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 * ----------------------------------------------------------------------------- */
 
 .tribe-common .tribe-common-c-btn-icon--caret-right:before {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23727272'/%3E%3C/svg%3E");
+			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23BABABA'/%3E%3C/svg%3E");
 			height: 20px;
 			width: 12px;
 		}
 
 .tribe-common .tribe-common-c-btn-icon--caret-right:active:before, .tribe-common .tribe-common-c-btn-icon--caret-right:hover:before, .tribe-common .tribe-common-c-btn-icon--caret-right:focus:before {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23141827'/%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23727272'/%3E%3C/svg%3E");
 			}
 
 .tribe-common .tribe-common-c-btn-icon--caret-right:disabled:before {
@@ -1979,7 +2014,8 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 	 *
 	 * ----------------------------------------------------------------------------- */
 
-.tribe-common .tribe-common-c-btn {
+.tribe-common .tribe-common-c-btn,
+	.tribe-common a.tribe-common-c-btn {
 		color: #141827;
 		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 		font-size: 14px;
@@ -1999,40 +2035,23 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		transition: background-color 0.2s ease;
 
 		background-color: #334AFF;
-		padding: 11px 22px 11px;
+		padding: 11px 20px 11px;
 		width: 100%;
 	}
 
 .tribe-common .tribe-common-c-btn:focus,
-		.tribe-common .tribe-common-c-btn:hover {
+		.tribe-common .tribe-common-c-btn:hover,
+		.tribe-common a.tribe-common-c-btn:focus,
+		.tribe-common a.tribe-common-c-btn:hover {
 			background-color: rgba(51,74,255, 0.8);
 		}
 
-.tribe-common .tribe-common-c-btn:active {
+.tribe-common .tribe-common-c-btn:active, .tribe-common a.tribe-common-c-btn:active {
 			background-color: rgba(51,74,255, 0.9);
 		}
 
-.tribe-common .tribe-common-c-btn:disabled {
+.tribe-common .tribe-common-c-btn:disabled, .tribe-common a.tribe-common-c-btn:disabled {
 			background-color: rgba(51,74,255, 0.07);
-		}
-
-/* -----------------------------------------------------------------------------
-	 *
-	 * Button: Solid Secondary
-	 *
-	 * Example:
-	 * <button class="tribe-common-c-btn tribe-common-c-btn--secondary">...</button>
-	 * <a href="#" class="tribe-common-c-btn tribe-common-c-btn--secondary">...</a>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
-.tribe-common .tribe-common-c-btn--secondary {
-		padding: 12px 19px 13px;
-		width: auto;
-	}
-
-.tribe-common .tribe-common-c-btn--secondary:after {
-			content: none;
 		}
 
 /* -----------------------------------------------------------------------------
@@ -2073,268 +2092,7 @@ body#top .tribe-common .tribe-common-form-control-toggle__label {
 		width: 100%;
 	}
 
-/**
-	 * @todo: consider moving to TEC styles
-	 */
-
-.tribe-common .tribe-common-c-nav {
-		border-top: 1px solid #D5D5D5;
-		padding-top: 24px;
-	}
-
-/* -----------------------------------------------------------------------------
-	 *
-	 * Navigation
-	 *
-	 * Example:
-	 * <nav class="tribe-common-c-nav">
-	 *   <ul class="tribe-common-c-nav__list">
-	 *     <li class="tribe-common-c-nav__list-item">
-	 *       <a href="#" class="tribe-common-c-nav__prev">
-	 *         Previous
-	 *       </a>
-	 *       <a href="#" class="tribe-common-c-nav__next">
-	 *         Next
-	 *       </a>
-	 *     </li>
-	 *   </ul>
-	 * </nav>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
-.tribe-common .tribe-common-c-nav__list {
-		display: flex;
-		list-style: none;
-		width: 100%;
-		flex-wrap: wrap;
-		justify-content: space-between;
-
-	}
-
-/* .tribe-common-c-nav__list-item {} */
-
-.tribe-common .tribe-common-c-nav__prev,
-	.tribe-common .tribe-common-c-nav__next {
-		display: flex;
-		justify-content: center;
-		flex-wrap: wrap;
-		align-items: center;
-		color: #727272;
-		font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-		font-size: 12px;
-		line-height: 1.42;
-		font-weight: 700;
-	}
-
-.tribe-common .tribe-common-c-nav__prev:hover, .tribe-common .tribe-common-c-nav__next:hover {
-			color: var(--color-navigation-hover);
-		}
-
-.tribe-common .tribe-common-c-nav__prev:disabled, .tribe-common .tribe-common-c-nav__next:disabled {
-			background-color: transparent;
-			color: #D5D5D5;
-		}
-
-.tribe-common .tribe-common-c-nav__prev:before {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23727272'/%3E%3C/svg%3E");
-			background-repeat: no-repeat;
-			background-size: contain;
-			content: '';
-			height: 14px;
-			margin-right: 10px;
-			width: 12px;
-		}
-
-.tribe-common .tribe-common-c-nav__prev:active:before, .tribe-common .tribe-common-c-nav__prev:hover:before, .tribe-common .tribe-common-c-nav__prev:focus:before {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23141827'/%3E%3C/svg%3E");
-			}
-
-.tribe-common .tribe-common-c-nav__prev:disabled:before {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.916 17.841L10 19.757l-9.9-9.9L10-.041l1.916 1.916-7.983 7.984z' fill='%23D5D5D5'/%3E%3C/svg%3E");
-			}
-
-.tribe-common .tribe-common-c-nav__next:after {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23727272'/%3E%3C/svg%3E");
-			background-repeat: no-repeat;
-			background-size: contain;
-			content: '';
-			height: 14px;
-			margin-left: 10px;
-			width: 12px;
-		}
-
-.tribe-common .tribe-common-c-nav__next:active:after, .tribe-common .tribe-common-c-nav__next:hover:after, .tribe-common .tribe-common-c-nav__next:focus:after {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23141827'/%3E%3C/svg%3E");
-			}
-
-.tribe-common .tribe-common-c-nav__next:disabled:after {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M.084 2.159L2 .243l9.9 9.9L2 20.041.084 18.126l7.983-7.984z' fill='%23D5D5D5'/%3E%3C/svg%3E");
-			}
-
-/**
-	 * @todo: consider moving to TEC styles
-	 */
-
-/* -----------------------------------------------------------------------------
-	 *
-	 * Search
-	 *
-	 * Example:
-	 * <form action="" method="post" class="tribe-common-c-search">
-	 *   <div class="tribe-common-form-control-input-group tribe-common-c-search__input-group">
-	 *     <div class="tribe-common-form-control-text tribe-common-c-search__input-control">
-	 *       <label class="tribe-common-form-control-text__label" for="keyword">Keyword</label>
-	 *       <input
-	 *         class="tribe-common-form-control-text__input tribe-common-c-search__input"
-	 *         type="text"
-	 *         id="keyword"
-	 *         name="keyword"
-	 *         placeholder="Keyword"
-	 *       />
-	 *     </div>
-	 *     <div class="tribe-common-form-control-text tribe-common-c-search__input-control">
-	 *       <label class="tribe-common-form-control-text__label" for="location">Location</label>
-	 *       <input
-	 *         class="tribe-common-form-control-text__input tribe-common-c-search__input"
-	 *         type="text"
-	 *         id="location"
-	 *         name="location"
-	 *         placeholder="Location"
-	 *       />
-	 *     </div>
-	 *     <div class="tribe-common-form-control-text">
-	 *       <label class="tribe-common-form-control-text__label" for="date">Date</label>
-	 *       <input
-	 *         class="tribe-common-form-control-text__input tribe-common-c-search__input"
-	 *         type="text"
-	 *         id="date"
-	 *         name="date"
-	 *         placeholder="Enter Date"
-	 *       />
-	 *     </div>
-	 *   </div>
-	 *   <button type="submit" class="tribe-common-c-btn tribe-common-c-search__button">Find Events</button>
-	 * </form>
-	 *
-	 * ----------------------------------------------------------------------------- */
-
-.tribe-common .tribe-common-c-search__input--icon {
-		background-repeat: no-repeat;
-		background-position: right center;
-	}
-
-.tribe-common .tribe-common-c-search__input-control--keyword .tribe-common-c-search__input {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 18.711l-6.044-6.044a7.782 7.782 0 0 0 1.688-4.845c0-2.089-.822-4.044-2.288-5.533C11.866.822 9.91 0 7.822 0S3.778.822 2.29 2.289A7.801 7.801 0 0 0 0 7.822c0 2.09.822 4.045 2.289 5.534a7.801 7.801 0 0 0 5.533 2.288c1.778 0 3.467-.6 4.845-1.688L18.71 20 20 18.711zM3.578 12.067c-2.334-2.334-2.334-6.156 0-8.49a5.968 5.968 0 0 1 4.244-1.755c1.6 0 3.111.622 4.245 1.756 2.333 2.333 2.333 6.155 0 8.489a5.968 5.968 0 0 1-4.245 1.755c-1.6 0-3.11-.622-4.244-1.755z' fill='%23727272'/%3E%3C/svg%3E");
-			background-size: 16px;
-		}
-
-.tribe-common .tribe-common-c-search__input-control--keyword .tribe-common-c-search__input:focus {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 18.711l-6.044-6.044a7.782 7.782 0 0 0 1.688-4.845c0-2.089-.822-4.044-2.288-5.533C11.866.822 9.91 0 7.822 0S3.778.822 2.29 2.289A7.801 7.801 0 0 0 0 7.822c0 2.09.822 4.045 2.289 5.534a7.801 7.801 0 0 0 5.533 2.288c1.778 0 3.467-.6 4.845-1.688L18.71 20 20 18.711zM3.578 12.067c-2.334-2.334-2.334-6.156 0-8.49a5.968 5.968 0 0 1 4.244-1.755c1.6 0 3.111.622 4.245 1.756 2.333 2.333 2.333 6.155 0 8.489a5.968 5.968 0 0 1-4.245 1.755c-1.6 0-3.11-.622-4.244-1.755z' fill='%23334AFF'/%3E%3C/svg%3E");
-			}
-
-.tribe-common .tribe-common-c-search__input-control--keyword-focus .tribe-common-c-search__input {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 18.711l-6.044-6.044a7.782 7.782 0 0 0 1.688-4.845c0-2.089-.822-4.044-2.288-5.533C11.866.822 9.91 0 7.822 0S3.778.822 2.29 2.289A7.801 7.801 0 0 0 0 7.822c0 2.09.822 4.045 2.289 5.534a7.801 7.801 0 0 0 5.533 2.288c1.778 0 3.467-.6 4.845-1.688L18.71 20 20 18.711zM3.578 12.067c-2.334-2.334-2.334-6.156 0-8.49a5.968 5.968 0 0 1 4.244-1.755c1.6 0 3.111.622 4.245 1.756 2.333 2.333 2.333 6.155 0 8.489a5.968 5.968 0 0 1-4.245 1.755c-1.6 0-3.11-.622-4.244-1.755z' fill='%23334AFF'/%3E%3C/svg%3E");
-		}
-
-.tribe-common .tribe-common-c-search__input-control--location .tribe-common-c-search__input {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='10' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.682 1.548a5.166 5.166 0 0 0-7.375 0C-3.073 5.984 4.959 15.36 4.994 15.36c.051-.001 8.092-9.35 3.688-13.812zM4.994 2.833c1.27 0 2.301 1.043 2.301 2.331 0 1.287-1.03 2.33-2.301 2.33-1.272 0-2.3-1.043-2.3-2.33 0-1.288 1.028-2.331 2.3-2.331z' fill='%23727272' fill-rule='evenodd'/%3E%3C/svg%3E");
-			background-size: 10px 15px;
-		}
-
-.tribe-common .tribe-common-c-search__input-control--location .tribe-common-c-search__input:focus {
-				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='10' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.682 1.548a5.166 5.166 0 0 0-7.375 0C-3.073 5.984 4.959 15.36 4.994 15.36c.051-.001 8.092-9.35 3.688-13.812zM4.994 2.833c1.27 0 2.301 1.043 2.301 2.331 0 1.287-1.03 2.33-2.301 2.33-1.272 0-2.3-1.043-2.3-2.33 0-1.288 1.028-2.331 2.3-2.331z' fill='%23334AFF' fill-rule='evenodd'/%3E%3C/svg%3E");
-			}
-
-.tribe-common .tribe-common-c-search__input-control--location-focus .tribe-common-c-search__input {
-			background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='10' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.682 1.548a5.166 5.166 0 0 0-7.375 0C-3.073 5.984 4.959 15.36 4.994 15.36c.051-.001 8.092-9.35 3.688-13.812zM4.994 2.833c1.27 0 2.301 1.043 2.301 2.331 0 1.287-1.03 2.33-2.301 2.33-1.272 0-2.3-1.043-2.3-2.33 0-1.288 1.028-2.331 2.3-2.331z' fill='%23334AFF' fill-rule='evenodd'/%3E%3C/svg%3E");
-		}
-
-.tribe-common .tribe-common-c-search__button {
-		margin-top: 24px;
-	}
-
-/* Enfold Compatibility */
-
 @media (min-width: 768px) {
-
-.tribe-common .tribe-common-form-control-select__button {
-			padding: 16px 44px 16px 18px;
-			width: 220px
-	}
-
-.tribe-common .tribe-common-form-control-select__button:after {
-				right: 18px
-		}
-
-.tribe-common .tribe-common-form-control-select__list {
-			width: 220px
-	}
-
-.tribe-common .tribe-common-form-control-tabs {
-			display: flex
-	}
-
-.tribe-common .tribe-common-form-control-tabs__button {
-			display: none !important;
-			visibility: hidden
-	}
-
-.tribe-common .tribe-common-form-control-tabs__list {
-			border: 1px solid #D5D5D5;
-			box-shadow: none;
-			display: flex !important;
-			flex: none;
-			position: static;
-			visibility: visible;
-			width: auto;
-			outline: none
-	}
-
-.tribe-common .tribe-common-form-control-tabs__list-item:first-child .tribe-common-form-control-tabs__label {
-				margin-top: -6px;
-				padding-top: 17px
-		}
-
-.tribe-common .tribe-common-form-control-tabs__list-item:last-child .tribe-common-form-control-tabs__label {
-				margin-bottom: -6px;
-				padding-bottom: 17px
-		}
-
-.tribe-common .tribe-common-form-control-tabs__list-item {
-			border-right: 1px solid #D5D5D5;
-			flex: none;
-			margin: 6px 0;
-			width: 88px
-	}
-
-			.tribe-common .tribe-common-form-control-tabs__list-item:last-child {
-				border: none;
-				width: 87px;
-			}
-
-.tribe-common .tribe-common-form-control-tabs__label {
-			margin: -6px 0;
-			padding: 17px 5px;
-			text-align: center;
-			display: block
-	}
-
-body#top .tribe-common .tribe-common-form-control-tabs__list-item:first-child .tribe-common-form-control-tabs__label {
-					margin-top: -6px;
-					padding-top: 17px
-			}
-
-body#top .tribe-common .tribe-common-form-control-tabs__list-item:last-child .tribe-common-form-control-tabs__label {
-					margin-bottom: -6px;
-					padding-bottom: 17px
-			}
-
-body#top .tribe-common .tribe-common-form-control-tabs__label {
-				margin: -6px 0;
-				padding: 17px 5px;
-				text-align: center;
-				display: block
-		}
 
 .tribe-common .tribe-common-form-control-text__input {
 			color: #141827;
@@ -2343,18 +2101,19 @@ body#top .tribe-common .tribe-common-form-control-tabs__label {
 			line-height: 1.62;
 			font-weight: 400;
 
-			border: none;
+			border: 0;
 			padding: 20px 20px 20px 40px
 	}
 
-body#top .tribe-common .tribe-common-form-control-text__input {
+#top.tribe-theme-enfold .tribe-common .tribe-common-form-control-text__input {
 				color: #141827;
 				font-family: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 				font-size: 14px;
 				line-height: 1.62;
 				font-weight: 400;
 
-				padding: 12px 18px
+				border: 0;
+				padding: 20px 20px 20px 40px
 		}
 
 .tribe-common .tribe-common-g-row--gutters {
@@ -2382,6 +2141,11 @@ body#top .tribe-common .tribe-common-form-control-text__input {
 			line-height: 1.38
 	}
 
+.tribe-common .tribe-common-b1--min-medium {
+			font-size: 16px;
+			line-height: 1.62
+	}
+
 .tribe-common .tribe-common-h1 {
 			font-size: 42px;
 			line-height: 1.38
@@ -2402,6 +2166,16 @@ body#top .tribe-common .tribe-common-form-control-text__input {
 			line-height: 1.42
 	}
 
+.tribe-common .tribe-common-h6 {
+			font-size: 16px;
+			line-height: 1.62
+	}
+
+.tribe-common .tribe-common-h3--min-medium {
+			font-size: 28px;
+			line-height: 1.42
+	}
+
 .tribe-common .tribe-common-h4--min-medium {
 			font-size: 24px;
 			line-height: 1.42
@@ -2417,64 +2191,74 @@ body#top .tribe-common .tribe-common-form-control-text__input {
 			line-height: 1.62
 	}
 
+.tribe-common .tribe-common-h7--min-medium {
+			font-size: 14px;
+			line-height: 1.62
+	}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h1 {
+				font-size: 42px;
+				line-height: 1.38
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h2 {
+				font-size: 32px;
+				line-height: 1.38
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h3 {
+				font-size: 28px;
+				line-height: 1.42
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h4 {
+				font-size: 24px;
+				line-height: 1.42
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h6 {
+				font-size: 16px;
+				line-height: 1.62
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h3--min-medium {
+				font-size: 28px;
+				line-height: 1.42
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h4--min-medium {
+				font-size: 24px;
+				line-height: 1.42
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h5--min-medium {
+				font-size: 18px;
+				line-height: 1.5
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h6--min-medium {
+				font-size: 16px;
+				line-height: 1.62
+		}
+
+.tribe-theme-avada #main .tribe-common .tribe-common-h7--min-medium {
+				font-size: 14px;
+				line-height: 1.62
+		}
+
 .tribe-common .tribe-common-l-container {
 			padding-left: 42px;
 			padding-right: 42px
 	}
 
-.tribe-common .tribe-common-c-btn {
+.tribe-common .tribe-common-c-btn-border,
+	.tribe-common a.tribe-common-c-btn-border {
+			padding: 6px 15px;
 			width: auto
 	}
 
-.tribe-common .tribe-common-c-nav {
-			padding-top: 32px
+.tribe-common .tribe-common-c-btn,
+	.tribe-common a.tribe-common-c-btn {
+			width: auto
 	}
-
-.tribe-common .tribe-common-c-nav__prev,
-	.tribe-common .tribe-common-c-nav__next {
-			font-size: 14px
-	}
-
-.tribe-common .tribe-common-c-search {
-			display: flex;
-			align-items: center
-	}
-
-.tribe-common .tribe-common-c-search__input-group {
-			align-items: center;
-			display: flex;
-			flex: auto
-	}
-
-.tribe-common .tribe-common-c-search__input-control {
-			border-right: 1px solid #D5D5D5;
-			flex: auto;
-			margin: 12px 0
-	}
-
-.tribe-common .tribe-common-c-search__input-control:last-child {
-				border-right: none
-		}
-
-.tribe-common .tribe-common-c-search__input {
-			margin: -12px 0
-	}
-
-.tribe-common .tribe-common-c-search__input--icon {
-			background-position: 16px center
-	}
-
-.tribe-common .tribe-common-c-search__button {
-			flex: none;
-			margin-top: 0
-	}
-
-body#top .tribe-common .tribe-common-form-control-text-group {
-				padding: 8px 0
-		}
-
-body#top .tribe-common .tribe-common-c-search__input {
-				border: none;
-				border-right: 1px solid #D5D5D5
-		}
 		}

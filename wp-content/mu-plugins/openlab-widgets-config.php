@@ -6,7 +6,7 @@
  * Hooked at 99 because this is as late as we can go before WP loads them up.
  */
 function openlab_disable_widgets_on_non_root_blogs() {
-    if (bp_is_root_blog()) {
+    if ( ! function_exists( 'bp_is_root_blog' ) || bp_is_root_blog() ) {
         return;
     }
     unregister_widget('InviteAnyoneWidget');

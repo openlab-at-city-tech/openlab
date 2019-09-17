@@ -17,11 +17,13 @@ function lint( $dir = 'C:\dev\\' )
 		'/wp-content/plugins/buddypress/bp-forums/bbpress',
 		'/wp-content/plugins/wp-document-revisions/tests',
 		'/wp-content/plugins/anthologize/vendor/pear/pear/', // Not loaded because we have zlib.
+		'/wp-content/plugins/wp-post-to-pdf', // Plugin is deprecated and throws lots of false positives
 	];
 
 	$excluded_files = [
 		'/wp-content/plugins/btcnew/parser_php4.php', // Not loaded on later PHP.
 		'/wp-content/plugins/backtype-connect/parser_php4.php', // Not loaded on later PHP.
+		'/wp-content/plugins/bbpress/includes/admin/parser.php', // Don't feel like hotfixing.
 	];
 
 	foreach ( new RecursiveDirectoryIterator($dir) as $path => $objSplFileInfo )

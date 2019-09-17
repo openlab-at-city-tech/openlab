@@ -3,7 +3,7 @@ Contributors: JoomUnited
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
 Tested up to: 5.2.2
-Stable tag: 2.0.5
+Stable tag: 2.0.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -137,6 +137,18 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 
 == Changelog ==
 
+= 2.0.7 =
+ * Fix : Some blocks missing styles when using as Reusable blocks
+ * Fix : Remove notice on Container block
+
+= 2.0.6 =
+ * Add : Show Count Up symbol on editor
+ * Add : Allow nested Accordion blocks
+ * Add : Allow to change the html tag of the Container block
+ * Fix : Bring back the Container block (can be enabled in profile)
+ * Fix : Add missing classname for Count Up block on editor
+ * Fix : Remove inline styles from Summary block
+
 = 2.0.5 =
  * Fix : Compatible with Gutenberg v6.1.0
 
@@ -157,13 +169,13 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
  * Fix : Remove unneeded styles to avoid conflict with theme styles
 
 = 2.0.0 =
- * Add : New block: Columns Manager with predifined sizes
+ * Add : New block: Columns Manager with predefined sizes
  * Add : Multiple responsive options on the column manager
  * Add : New editor menu to choose editor width
  * Add : New editor menu to display/hide column visual guides
  * Add : Compatible with Gutenberg v5.9
  * Add : Drop support for PHP version < 5.6.20
- * Add : Remove Container block (replced by column manager)
+ * Add : Remove Container block (replaced by column manager)
  * Add : Remove custom columns and custom separator block settings
  * Fix : Map block not showing on IE
  * Fix : Recent Posts block: Compatible with WPML

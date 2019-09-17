@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 1698398 2017-07-18 19:34:08Z qurl $
+ * @version $Id: dynwid_admin_edit.php 2032225 2019-02-16 17:53:18Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -22,8 +22,8 @@
 	$GLOBALS['widget_id'] = $widget_id;
 
 	if (! array_key_exists($widget_id, $DW->registered_widgets) ) {
-  	wp_die('WidgetID is not valid');
-  }
+		wp_die('WidgetID is not valid');
+	}
 ?>
 
 <style type="text/css">

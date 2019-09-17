@@ -3,10 +3,10 @@ Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, organize, pages folders, media library, posts folders, media folders, subfolders, file manager, directories
 Requires at least: 3.0.0
 Tested up to: 5.2
-Stable tag: 2.1.5
+Stable tag: 2.1.9
 Plugin URI: https://premio.io/downloads/folders/
 
-Folders is a FREE WordPress plugin that will help you quickly organize and manage all of your Pages, Posts and Media library files in folders.
+Folders is a WordPress plugin that will help you quickly organize and manage all of your Pages, Posts and Media library files in folders.
 
 == Description ==
 
@@ -56,7 +56,7 @@ Digital Agencies: You're creating all sorts of content for your clients daily - 
 * Drag and drop pages, posts, and media library
 * Select specific folders when you add media to your pages, posts or any other post type.
 * Drag and drop folders, change order, and hierarchy
-* Bulk select images and media files and drag them to any folder
+* Bulk select images and media files and drag them to any folder. No worries, you can also drag and drop media library files one-by-one if you want :)
 * Rename folders
 * Monitor all the unassigned media library files, posts, pages, and custom posts so you can organize them easily to your folders
 * Sticky toolbar for the media library so you can navigate and organize your folders with ease
@@ -126,6 +126,18 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.1.9 =
+* Screen resolution bug fixed
+
+= 2.1.8 =
+* Upgrade fix
+
+= 2.1.7 =
+* Better drag and drop, SportPress support
+
+= 2.1.6 =
+* Now you can drag and drop single media library files without clicking on the "Organize" button. We've also fixed a WooCommerce products page bug, Safari issue and some other media library issues
 
 = 2.1.5 =
 * You don't need to hit the "Organize" button each time you drag media files now, once you click on it you get into "Organize mode" until you click on the "Cancel" button + when you upload new media files you can select the folder in advance + fixed the hidden div thanks @nubess

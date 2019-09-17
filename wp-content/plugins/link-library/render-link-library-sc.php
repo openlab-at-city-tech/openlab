@@ -729,19 +729,36 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					}
 				}
 
-				if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-					$tag_array = explode( '.', $_GET['link_tags'] );
+				if ( !empty( $taglistoverride ) || ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
+
+					$tag_array = array();
+
+					if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
+						$tag_array = explode( '.', $_GET['link_tags'] );
+					} elseif( !empty( $taglistoverride ) ) {
+						$tag_array = explode( ',', $taglistoverride );
+					}
 
 					// YL: Make this an option
 					if ( !empty( $tag_array ) ) {
 						$showlinksonclick = false;
 					}
-					$link_query_args['tax_query'][] = array(
-						'taxonomy' => 'link_library_tags',
-						'field' => 'slug',
-						'terms' => $tag_array,
-					);
-					if ( sizeof( $link_query_args['tax_query'] > 1 ) ) {
+
+					if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
+						$link_query_args['tax_query'][] = array(
+							'taxonomy' => 'link_library_tags',
+							'field' => 'slug',
+							'terms' => $tag_array,
+						);
+					} elseif ( !empty( $taglistoverride ) ) {
+						$link_query_args['tax_query'][] = array(
+							'taxonomy' => 'link_library_tags',
+							'field' => 'id',
+							'terms' => $tag_array,
+						);
+					}
+
+					if ( sizeof( $link_query_args['tax_query'] ) > 1 ) {
 						$link_query_args['tax_query']['relation'] = 'AND';
 					}
 				}

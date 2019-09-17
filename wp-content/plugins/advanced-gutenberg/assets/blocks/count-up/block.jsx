@@ -155,15 +155,39 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header' } ) }
                                 style={ { color: headerTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-header"
                             />
-                            <RichText
-                                tagName="div"
-                                value={ countUpNumber }
-                                onChange={ (value) => setAttributes( { countUpNumber: value } ) }
-                                isSelected={ isSelected && currentEdit === 'countUp' }
-                                unstableOnFocus={ () => this.setState( { currentEdit: 'countUp' } ) }
-                                style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
-                            />
+                            <div className="advgb-counter">
+                                {countUpSymbol && !countUpSymbolAfter && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol }
+                                    </span>
+                                ) }
+                                <RichText
+                                    tagName="div"
+                                    value={ countUpNumber }
+                                    onChange={ (value) => setAttributes( { countUpNumber: value } ) }
+                                    isSelected={ isSelected && currentEdit === 'countUp' }
+                                    unstableOnFocus={ () => this.setState( { currentEdit: 'countUp' } ) }
+                                    style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
+                                    className="advgb-counter-number"
+                                />
+                                {countUpSymbol && countUpSymbolAfter && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol }
+                                    </span>
+                                ) }
+                            </div>
                             <RichText
                                 tagName="p"
                                 value={ descText }
@@ -172,6 +196,7 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc' } ) }
                                 style={ { color: descTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-desc"
                             />
                         </div>
                         <div className="advgb-count-up-columns-two" style={ { textAlign: 'center' } }>
@@ -183,15 +208,39 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header2' } ) }
                                 style={ { color: headerTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-header"
                             />
-                            <RichText
-                                tagName="div"
-                                value={ countUpNumber2 }
-                                onChange={ (value) => setAttributes( { countUpNumber2: value } ) }
-                                isSelected={ isSelected && currentEdit === 'countUp2' }
-                                unstableOnFocus={ () => this.setState( { currentEdit: 'countUp2' } ) }
-                                style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
-                            />
+                            <div className="advgb-counter">
+                                {countUpSymbol2 && !countUpSymbolAfter2 && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol2 }
+                                    </span>
+                                ) }
+                                <RichText
+                                    tagName="div"
+                                    value={ countUpNumber2 }
+                                    onChange={ (value) => setAttributes( { countUpNumber2: value } ) }
+                                    isSelected={ isSelected && currentEdit === 'countUp2' }
+                                    unstableOnFocus={ () => this.setState( { currentEdit: 'countUp2' } ) }
+                                    style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
+                                    className="advgb-counter-number"
+                                />
+                                {countUpSymbol2 && countUpSymbolAfter2 && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol2 }
+                                    </span>
+                                ) }
+                            </div>
                             <RichText
                                 tagName="p"
                                 value={ descText2 }
@@ -200,6 +249,7 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc2' } ) }
                                 style={ { color: descTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-desc"
                             />
                         </div>
                         <div className="advgb-count-up-columns-three" style={ { textAlign: 'center' } }>
@@ -211,15 +261,39 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header3' } ) }
                                 style={ { color: headerTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-header"
                             />
-                            <RichText
-                                tagName="div"
-                                value={ countUpNumber3 }
-                                onChange={ (value) => setAttributes( { countUpNumber3: value } ) }
-                                isSelected={ isSelected && currentEdit === 'countUp3' }
-                                unstableOnFocus={ () => this.setState( { currentEdit: 'countUp3' } ) }
-                                style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
-                            />
+                            <div className="advgb-counter">
+                                {countUpSymbol3 && !countUpSymbolAfter3 && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol3 }
+                                    </span>
+                                ) }
+                                <RichText
+                                    tagName="div"
+                                    value={ countUpNumber3 }
+                                    onChange={ (value) => setAttributes( { countUpNumber3: value } ) }
+                                    isSelected={ isSelected && currentEdit === 'countUp3' }
+                                    unstableOnFocus={ () => this.setState( { currentEdit: 'countUp3' } ) }
+                                    style={ { fontSize: countUpNumberSize + 'px', color: countUpNumberColor } }
+                                    className="advgb-counter-number"
+                                />
+                                {countUpSymbol3 && countUpSymbolAfter3 && (
+                                    <span className="advgb-counter-symbol"
+                                          style={ {
+                                              fontSize: countUpNumberSize,
+                                              color: countUpNumberColor,
+                                          } }
+                                    >
+                                        { countUpSymbol3 }
+                                    </span>
+                                ) }
+                            </div>
                             <RichText
                                 tagName="p"
                                 value={ descText3 }
@@ -228,6 +302,7 @@
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc3' } ) }
                                 style={ { color: descTextColor } }
                                 placeholder={ __( 'Enter text…' ) }
+                                className="advgb-count-up-desc"
                             />
                         </div>
                     </div>

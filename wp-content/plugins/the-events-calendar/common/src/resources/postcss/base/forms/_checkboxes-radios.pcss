@@ -63,10 +63,10 @@
 	 *
 	 * ----------------------------------------------------------------------------- */
 
-	/* .tribe-common-form-control-checkbox,
+	.tribe-common-form-control-checkbox,
 	.tribe-common-form-control-radio {
-
-	} */
+		line-height: 0;
+	}
 
 	.tribe-common-form-control-checkbox__label,
 	.tribe-common-form-control-radio__label {
@@ -130,7 +130,6 @@
 	 * ----------------------------------------------------------------------------- */
 
 	.tribe-common-form-control-radio__input {
-
 		border-radius: 50%;
 
 		&:checked:before {
@@ -144,6 +143,48 @@
 			top: 50%;
 			transform: translate(-50%, -50%);
 			width: 8px;
+		}
+	}
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Form Control: Checkboxes & Radios Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 * Form Control: Checkboxes Theme Overrides
+	 * ----------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+	#top.tribe-theme-enfold & {
+
+		.tribe-common-form-control-checkbox__input {
+			display: inline-block;
+		}
+
+		.tribe-common-form-control-checkbox__label {
+			font-weight: var(--font-weight-regular);
+			font-size: var(--font-size-2);
+		}
+	}
+
+	/* -----------------------------------------------------------------------------
+	 * Form Control: Radios Theme Overrides
+	 * ----------------------------------------------------------------------------- */
+
+	/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Enfold
+	 * ----------------------------------------------------------------------------- */
+
+	#top.tribe-theme-enfold & {
+
+		.tribe-common-form-control-radio__label {
+			font-weight: var(--font-weight-regular);
+			font-size: var(--font-size-2);
 		}
 	}
 }
