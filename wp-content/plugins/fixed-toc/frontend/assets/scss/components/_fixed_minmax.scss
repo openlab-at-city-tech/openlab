@@ -1,0 +1,26 @@
+// *-------------------------------------------------------------------------------------
+// * Minimize and Maximize
+// *-------------------------------------------------------------------------------------
+&.ftwp-fixed-to-post {
+	&.ftwp-minimize {
+		#ftwp-trigger {
+			visibility: visible; 
+		}
+
+		#ftwp-contents {
+			visibility: hidden;
+			z-index: -100;
+		}
+	}
+
+	&.ftwp-maximize {
+		#ftwp-trigger {
+			visibility: hidden;
+			z-index: -100;
+		}
+
+		#ftwp-contents {
+			visibility: visible; 
+		}
+	}	
+}

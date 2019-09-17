@@ -35,7 +35,7 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 			$current_user = $bp->loggedin_user->id;
 
 			// Account for bp-groupblog
-			if ( $activity->component == 'groups' ) {
+			if ( $activity->component == 'groups' && bp_is_active( 'groups' ) && 0 === strpos( $activity->type, 'new_groupblog_' ) ) {
 				$group_id = $activity->item_id;
 				$blog_id = groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
 			} else {
@@ -48,40 +48,25 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 			switch ( $privacy ) {
 				case '1':
-					break;
+				break;
 
 				case '0':
-					if ( $current_user != 0 ) {
-						break;
-						}
-					else {
-						$remove_from_stream = true;
-					}
-					break;
-
-
-				case '-1':
-					if ( $current_user != 0 )
-						break;
-					else {
-						$remove_from_stream = true;
-					}
-					break;
+				case '1':
+					$remove_from_stream = ! is_user_logged_in();
+				break;
 
 				case '-2':
 					if ( is_user_logged_in() ) {
 						$meta_key = 'wp_' . $blog_id . '_capabilities';
 						$caps = get_user_meta( $current_user, $meta_key, true );
 
-						if ( !empty( $caps ) ) {
-							break;
-						} else {
+						if ( empty( $caps ) ) {
 							$remove_from_stream = true;
 						}
 					} else {
 						$remove_from_stream = true;
 					}
-					break;
+				break;
 
 				case '-3':
 					if ( is_user_logged_in() ) {
@@ -89,16 +74,14 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 						$user = new WP_User( $current_user );
 
-						if ( in_array( 'administrator', $user->roles ) )
-							break;
-						else {
+						if ( ! in_array( 'administrator', $user->roles ) ) {
 							$remove_from_stream = true;
 						}
 						restore_current_blog();
 					} else {
 						$remove_from_stream = true;
 					}
-					break;
+				break;
 
 			}
 

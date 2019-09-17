@@ -3,8 +3,8 @@
 Contributors: benbalter
 Tags: documents, uploads, attachments, document management, enterprise, version control, revisions, collaboration, journalism, government, files, revision log, document management, intranet, digital asset management
 Requires at least: 3.9
-Tested up to: 4.9.2
-Stable tag: 3.1.2
+Tested up to: 4.9.8
+Stable tag: 3.2.2
 
 == Description ==
 
@@ -31,7 +31,7 @@ See [the full documentation](http://ben.balter.com/wp-document-revisions)
 * [Links](http://ben.balter.com/wp-document-revisions/links/)
 * [Where to get Support or Report an Issue](http://ben.balter.com/wp-document-revisions/SUPPORT/)
 * [Translations](http://ben.balter.com/wp-document-revisions/translations/)
-* [Useful Plugins and Tools](http://ben.balter.com/wp-document-revisions/plugins-and-tools/)
+* [Useful Plugins and Tools](http://ben.balter.com/wp-document-revisions/useful-plugins-and-tools/)
 
 = Get Involved =
 
@@ -101,6 +101,26 @@ See [the full documentation](http://ben.balter.com/wp-document-revisions)
 
 
 == Changelog ==
+
+= 3.2.1 =
+
+* Fix for $wp_query->query_vars being null (#136) @benbalter
+* Media Library URL’s change after plugin update (#139) @NeilWJames
+* New Crowdin translations (#137) @benbalter
+* New Crowdin translations (#138) @benbalter
+
+= 3.2.0 =
+
+* Enable filter by workflow_state on Admin screen (#121) @NeilWJames
+* missing translate on metabox titles (#122) @geminorum
+* Addresses #124 (is_feed has doing_it_wrong error) (#125) @NeilWJames
+* New Crowdin translations (#120) @benbalter
+* Allow HTTP headers to be filtered in serve_file() (#123) @jeremyfelt
+* Small fixes in Admin function (#126) @NeilWJames
+* Support Featured Images (#131) @NeilWJames
+* Error if directory option not present (#132) @NeilWJames
+* Create Edit link on document shortcode (#133) @NeilWJames
+* Bump version to V3.2 and Tested WP 4.9.8 (#134) @NeilWJames
 
 = 3.1.2 =
 

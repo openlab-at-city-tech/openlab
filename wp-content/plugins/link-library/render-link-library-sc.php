@@ -385,7 +385,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 		$categorysluglist = $_GET['cat'];
 	} elseif ($showonecatonly && 'HTMLGETCATNAME' == $showonecatmode && isset( $_GET['catname'] ) && ( !isset( $_GET['searchll'] ) || ( isset( $_GET['searchll'] ) && empty( $_GET['searchll'] ) ) ) ) {
 		$categorynamelist = $_GET['catname'];
-	}elseif ( $showonecatonly && 'HTMLGETPERM' == $showonecatmode && empty( $_GET['searchll'] ) ) {
+	} elseif ( $showonecatonly && 'HTMLGETPERM' == $showonecatmode && empty( $_GET['searchll'] ) ) {
 		global $wp_query;
 
 		$categoryname = $wp_query->query_vars['cat_name'];
@@ -580,7 +580,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 		if ( isset( $AJAXcatid ) && !empty( $AJAXcatid ) ) {
 			$link_categories_query_args['include'] = $AJAXcatid;
-		} else {
+		} elseif ( empty( $link_categories_query_args['slug'] ) ) {
 			$no_sub_cat = true;
 			if ( !empty( $link_categories_query_args['include'] ) ) {
 				foreach ( $link_categories_query_args['include'] as $include_cat ) {
@@ -598,6 +598,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 		}
 
 		$link_categories = get_terms( 'link_library_category', $link_categories_query_args );
+
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_only_publish' );
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_publish_pending' );
 		remove_filter( 'get_terms', 'link_library_get_terms_filter_publish_draft' );
@@ -692,6 +693,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 		if ( !empty( $link_categories ) ) {
 			foreach ( $link_categories as $link_category ) {
+				if ( !empty( $maxlinks ) && is_numeric( $maxlinks ) && 0 < $maxlinks && $linkcount > $maxlinks ) {
+					break;
+				}
+
 				if ( $enablerewrite && $showbreadcrumbspermalinks && $parent_cat_id != 0 && $level == 0) {
 					$breadcrumb = '<div class="breadcrumb">' . link_library_get_breadcrumb_path( $link_category->slug, $rewritepage ) . '</div>';
 					$output .= $breadcrumb;
@@ -724,19 +729,36 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					}
 				}
 
-				if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
-					$tag_array = explode( '.', $_GET['link_tags'] );
+				if ( !empty( $taglistoverride ) || ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
+
+					$tag_array = array();
+
+					if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
+						$tag_array = explode( '.', $_GET['link_tags'] );
+					} elseif( !empty( $taglistoverride ) ) {
+						$tag_array = explode( ',', $taglistoverride );
+					}
 
 					// YL: Make this an option
 					if ( !empty( $tag_array ) ) {
 						$showlinksonclick = false;
 					}
-					$link_query_args['tax_query'][] = array(
-						'taxonomy' => 'link_library_tags',
-						'field' => 'slug',
-						'terms' => $tag_array,
-					);
-					if ( sizeof( $link_query_args['tax_query'] > 1 ) ) {
+
+					if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
+						$link_query_args['tax_query'][] = array(
+							'taxonomy' => 'link_library_tags',
+							'field' => 'slug',
+							'terms' => $tag_array,
+						);
+					} elseif ( !empty( $taglistoverride ) ) {
+						$link_query_args['tax_query'][] = array(
+							'taxonomy' => 'link_library_tags',
+							'field' => 'id',
+							'terms' => $tag_array,
+						);
+					}
+
+					if ( sizeof( $link_query_args['tax_query'] ) > 1 ) {
 						$link_query_args['tax_query']['relation'] = 'AND';
 					}
 				}
@@ -794,6 +816,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				} elseif ( 'hits' == $linkorder ) {
 					$link_query_args['meta_query']['link_visits_clause'] = array( 'key' => 'link_visits', 'type' => 'numeric' );
 					$link_query_args['orderby']['link_visits_clause'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
+				} elseif ( 'scpo' == $linkorder ) {
+					$link_query_args['orderby']['menu_order'] = in_array( $linkdirection, $validdirections ) ? $linkdirection : 'ASC';
 				}
 
 				if ( $current_user_links ) {
@@ -821,6 +845,12 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$linkquerystarttime = microtime ( true );
 				}
 
+				if ( $combineresults && !empty( $maxlinks ) && 0 < intval( $maxlinks ) ) {
+					$link_query_args['posts_per_page'] = intval ( $maxlinks );
+				} elseif ( !empty( $maxlinkspercat ) && 0 < intval( $maxlinkspercat ) ) {
+					$link_query_args['posts_per_page'] = intval ( $maxlinkspercat );
+				}
+
 				$the_link_query = new WP_Query( $link_query_args );
 
 				if ( $debugmode ) {
@@ -830,7 +860,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				}
 
 				if ( $debugmode ) {
-					echo '<!-- showonecatmode: ' . $showonecatonly . ', AJAXnocatset: ' . $AJAXnocatset . ', nocatonstartup: ' . $nocatonstartup . '-->';
+					$output .= '<!-- showonecatmode: ' . $showonecatonly . ', AJAXnocatset: ' . $AJAXnocatset . ', nocatonstartup: ' . $nocatonstartup . '-->';
 				}
 
 				$child_cat_params = array( 'taxonomy' => 'link_library_category', 'child_of' => $link_category->term_id );
@@ -1123,7 +1153,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 									$activation_variables = array( 1 => 'show_images', 2 => 'showname', 3 => 'showdate', 4 => 'showdescription',
 									                               5 => 'shownotes', 6 => 'show_rss', 7 => 'displayweblink', 8 => 'showtelephone',
 									                               9 => 'showemail', 10 => 'showlinkhits', 11 => 'showrating', 12 => 'showlargedescription',
-									                               13 => 'showsubmittername', 14 => 'showcatdesc', 15 => 'showlinktags', 16 => 'showlinkprice' );
+									                               13 => 'showsubmittername', 14 => 'showcatdesc', 15 => 'showlinktags', 16 => 'showlinkprice',
+																   17 => 'showcatname' );
 
 									$default_labels = array( 1 => __( 'Image', 'link-library' ), 2 => __( 'Name', 'link-library' ),
 									                         3 => __( 'Date', 'link-library' ), 4 => __( 'Description', 'link-library'),
@@ -1132,15 +1163,16 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 									                         9 => __( 'E-mail', 'link-library' ), 10 => __( 'Hits', 'link-library' ),
 									                         11 => __( 'Rating', 'link-library' ), 12 => __( 'Large Description', 'link-library' ),
 									                         13 => __( 'Submitter Name', 'link-library' ), 14 => __( 'Category Description', 'link-library' ),
-									                         15 => __( 'Tags', 'link-library' ), 16 => __( 'Price', 'link-library') );
+									                         15 => __( 'Tags', 'link-library' ), 16 => __( 'Price', 'link-library'),
+															 17 => __( 'Category Name', 'link-library' ) );
 
 									if ( empty( $dragndroporder ) ) {
-										$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16';
+										$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17';
 									}
 
 									$dragndroparray = explode( ',', $dragndroporder );
 
-									$new_entries = array( '13', '14', '15', '16' );
+									$new_entries = array( '13', '14', '15', '16', '17' );
 
 									foreach ( $new_entries as $new_entry ) {
 										if ( !in_array( $new_entry, $dragndroparray ) ) {
@@ -1230,6 +1262,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 							while ( $the_link_query->have_posts() ) {
 								$the_link_query->the_post();
 
+								if ( !empty( $maxlinks ) && is_numeric( $maxlinks ) && 0 < $maxlinks && $linkcount > $maxlinks ) {
+									break;
+								}
+
 								if ( $pagination && 'search' != $mode ) {
 									if ( $linkcount > $pagenumber * $linksperpage || $linkcount < $startingitem ) {
 										$linkcount++;
@@ -1241,6 +1277,27 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 								$linkitem['link_name'] = get_the_title();
 								$linkitem['link_permalink'] = get_the_permalink( get_the_ID() );
 								$link_meta = get_metadata( 'post', get_the_ID() );
+
+								$linkitem['category_description'] = $link_category->description;
+
+								$linkitem['category_name'] = '';
+								if ( $combineresults ) {
+									$link_terms = wp_get_post_terms( get_the_ID(), 'link_library_category' );
+									if ( !empty( $link_terms ) ) {
+										$link_term_array = array();
+										foreach( $link_terms as $link_term ) {
+											$link_term_array[] = $link_term->name;
+										}
+
+										if ( !empty( $link_term_array ) ) {
+											$link_term_string = implode( ', ', $link_term_array );
+											$linkitem['category_name'] = $link_term_string;
+										}
+									}
+								} else {
+									$linkitem['category_name'] = $link_category->name;
+								}
+
 
 								if ( isset( $link_meta['link_url'] ) ) {
 									$linkitem['link_url'] = esc_html ( $link_meta['link_url'][0] );
@@ -1510,7 +1567,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 									$title = $cleandesc;
 								}
 
-								if ( $showupdated ) {
+								if ( $showupdatedtooltip ) {
 									$date_format_string = get_option( 'date_format' );
 									$cleandate = date_i18n( $date_format_string, intval( $linkitem['link_updated'] ) );
 									if ( substr( $cleandate, 0, 2 ) != '00' ) {
@@ -1535,12 +1592,12 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 								}
 
 								if ( empty( $dragndroporder ) ) {
-									$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16';
+									$dragndroporder = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17';
 								}
 
 								$dragndroparray = explode( ',', $dragndroporder );
 
-								$new_entries = array( '13', '14', '15', '16' );
+								$new_entries = array( '13', '14', '15', '16', '17' );
 
 								foreach ( $new_entries as $new_entry ) {
 									if ( !in_array( $new_entry, $dragndroparray ) ) {
@@ -1853,6 +1910,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 															$current_cat_output .= $the_link;
 														} elseif ( 'secondary' == $sourcetelephone && !empty( $the_second_link ) ) {
 															$current_cat_output .= $the_second_link;
+														} elseif ( 'phone' == $sourcetelephone && !empty( $the_second_link ) ) {
+															$current_cat_output .= 'tel:' . $linkitem['link_telephone'];
 														}
 
 														$current_cat_output .= '" id="link-' . $linkitem['proper_link_id'] . '" class="track_this_link" >';
@@ -2071,6 +2130,22 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 												}
 
 												break;
+
+											case 17: 	//------------------ Category Name Output --------------------
+
+												if ( $showcatname && ( !$nooutputempty || ( $nooutputempty && !empty( $linkitem['category_name'] ) ) ) ) {
+													if ( true == $debugmode ) {
+														$starttimedesc = microtime ( true );
+													}
+
+													$current_cat_output .= $between . stripslashes( $beforecatname ) . $linkitem['category_name'] . stripslashes( $aftercatname );
+
+													if ( true == $debugmode ) {
+														$current_cat_output .= "\n<!-- Time to render category name section of link id " . $linkitem['proper_link_id'] . ': ' . ( microtime( true ) - $starttimedesc ) . " --> \n";
+													}
+												}
+
+												break;
 										}
 									}
 								}
@@ -2089,10 +2164,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 								$linkcount++;
 
-								if ( ( !empty( $maxlinks ) && is_numeric( $maxlinks ) && 0 < $maxlinks && $linkcount > $maxlinks ) ||
-										!empty( $maxlinkspercat ) && is_numeric( $maxlinkspercat ) && 0 < $maxlinkspercat && $the_link_query->current_post + 1 == $maxlinkspercat ) {
-									break;
-								}
+
 
 							}
 
@@ -2140,7 +2212,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 				}
 			}
 		} else {
-			$output .= __( 'All of your links must be assigned at least to one category to be displayed', 'link-library');
+			$output .= '<span class="nolinkstodisplay">' . __( 'All of your links must be assigned at least to one category to be displayed', 'link-library') . '</span>';
 		}
 	} else {
 		$output .= __( 'No links found', 'link-library' );

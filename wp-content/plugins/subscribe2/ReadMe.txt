@@ -1,10 +1,9 @@
 === Subscribe2 ===
-
-Contributors: Dabelon, wenzhixue, tanaylakhani
-Tags: posts, subscription, email, subscribe, notify, notification
-Requires at least: 3.3
-Tested up to: 4.8.1
-Stable tag: 10.22.1
+Contributors: collizo4sky
+Donate link: https://mailoptin.io
+Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing
+Requires at least: 4.0
+Tested up to: 5.1
 License: GPLv3
 
 Sends a list of subscribers an email notification when you publish new posts.
@@ -32,7 +31,7 @@ The format of the email can also be customised for per-post notifications, Subsc
 * HTML excerpt (Registered Users only).
 * HTML full post (Registered Users only).
 
-If you want to send full content HTML emails to Public Subscribers too then upgrade to [Subscribe2 HTML](http://semperplugins.com/plugins/subscribe2-html/).
+If you want to send new post notification or daily, weekly or monthly email digest of published posts to your email list in MailChimp, AWeber, Constant Contact etc, upgrade to [MailOptin](https://mailoptin.io).
 
 == Installation ==
 

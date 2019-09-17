@@ -9,7 +9,10 @@
   "autoload": {
     "psr-4": {
       "OpenLab\\Portfolio\\": "src"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "config": {
     "sort-packages": true

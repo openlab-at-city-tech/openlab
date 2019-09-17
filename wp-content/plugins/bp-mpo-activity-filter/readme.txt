@@ -2,10 +2,10 @@
 Contributors: boonebgorges, cuny-academic-commons
 Tags: buddypress, activity, privacy, more privacy options, filter
 Requires at least: 3.5
+Tested up to: 5.0
 Requires PHP: 5.3
-Tested up to: 4.9
 Donate link: http://teleogistic.net/donate/
-Stable tag: 1.2.2
+Stable tag: 1.3.1
 
 When using More Privacy Options, this plugin removes items from BP activity streams according to user roles.
 
@@ -25,9 +25,12 @@ I borrowed the idea, and a little bit of the code, from this plugin: http://blog
 
 == Changelog ==
 
-= 1.2.2 =
-* Removed PHP 5.3+ syntax.
-* Clarified future PHP version support in plugin header.
+= 1.3.1 =
+* Fixes PHP 5.3 incompatibility
+
+= 1.3.0 =
+* Fixed bugs when checking for component activation
+* Fixed bugs related to groupblog activity items
 
 = 1.2.1 =
 * Fixed bug in activity filter callback.

@@ -1,5 +1,7 @@
 <?php
 
+use Automattic\Jetpack\Assets;
+
 /*
 Plugin Name: Grunion Contact Form
 Description: Add a contact form to any post, page or text widget.  Emails will be sent to the post's author by default, or any email address you choose.  As seen on WordPress.com.
@@ -9,6 +11,8 @@ Author URI: http://automattic.com/
 Version: 2.4
 License: GPLv2 or later
 */
+
+use Automattic\Jetpack\Sync\Settings;
 
 define( 'GRUNION_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GRUNION_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -50,7 +54,7 @@ class Grunion_Contact_Form_Plugin {
 		static $instance = false;
 
 		if ( ! $instance ) {
-			$instance = new Grunion_Contact_Form_Plugin;
+			$instance = new Grunion_Contact_Form_Plugin();
 
 			// Schedule our daily cleanup
 			add_action( 'wp_scheduled_delete', array( $instance, 'daily_akismet_meta_cleanup' ) );
@@ -120,7 +124,10 @@ class Grunion_Contact_Form_Plugin {
 		return $data_without_tags;
 	}
 
-	function __construct() {
+	/**
+	 * Class uses singleton pattern; use Grunion_Contact_Form_Plugin::init() to initialize.
+	 */
+	protected function __construct() {
 		$this->add_shortcode();
 
 		// While generating the output of a text widget with a contact-form shortcode, we need to know its widget ID.
@@ -136,6 +143,8 @@ class Grunion_Contact_Form_Plugin {
 		) {
 			add_filter( 'widget_text', array( $this, 'widget_shortcode_hack' ), 5 );
 		}
+
+		add_filter( 'jetpack_contact_form_is_spam', array( $this, 'is_spam_blacklist' ), 10, 2 );
 
 		// Akismet to the rescue
 		if ( defined( 'AKISMET_VERSION' ) || function_exists( 'akismet_http_post' ) ) {
@@ -234,48 +243,57 @@ class Grunion_Contact_Form_Plugin {
 		wp_register_style( 'grunion.css', GRUNION_PLUGIN_URL . 'css/grunion.css', array(), JETPACK__VERSION );
 		wp_style_add_data( 'grunion.css', 'rtl', 'replace' );
 
-		if ( Jetpack_Gutenberg::is_gutenberg_available() ) {
-			self::register_contact_form_blocks();
-		}
+		self::register_contact_form_blocks();
 	}
 
 	private static function register_contact_form_blocks() {
-		jetpack_register_block( 'contact-form', array(
+		jetpack_register_block( 'jetpack/contact-form', array(
 			'render_callback' => array( __CLASS__, 'gutenblock_render_form' ),
 		) );
 
 		// Field render methods.
-		jetpack_register_block( 'field-text', array(
+		jetpack_register_block( 'jetpack/field-text', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_text' ),
 		) );
-		jetpack_register_block( 'field-name', array(
+		jetpack_register_block( 'jetpack/field-name', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_name' ),
 		) );
-		jetpack_register_block( 'field-email', array(
+		jetpack_register_block( 'jetpack/field-email', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_email' ),
 		) );
-		jetpack_register_block( 'field-url', array(
+		jetpack_register_block( 'jetpack/field-url', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_url' ),
 		) );
-		jetpack_register_block( 'field-date', array(
+		jetpack_register_block( 'jetpack/field-date', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_date' ),
 		) );
-		jetpack_register_block( 'field-telephone', array(
+		jetpack_register_block( 'jetpack/field-telephone', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_telephone' ),
 		) );
-		jetpack_register_block( 'field-textarea', array(
+		jetpack_register_block( 'jetpack/field-textarea', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_textarea' ),
 		) );
-		jetpack_register_block( 'field-checkbox', array(
+		jetpack_register_block( 'jetpack/field-checkbox', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_checkbox' ),
 		) );
-		jetpack_register_block( 'field-checkbox-multiple', array(
+		jetpack_register_block( 'jetpack/field-checkbox-multiple', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_checkbox_multiple' ),
 		) );
-		jetpack_register_block( 'field-radio', array(
+		jetpack_register_block( 'jetpack/field-radio', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_radio' ),
 		) );
-		jetpack_register_block( 'field-select', array(
+		jetpack_register_block( 'jetpack/field-select', array(
+			'parent'          => array( 'jetpack/contact-form' ),
 			'render_callback' => array( __CLASS__, 'gutenblock_render_field_select' ),
 		) );
 	}
@@ -617,6 +635,29 @@ class Grunion_Contact_Form_Plugin {
 		$GLOBALS['shortcode_tags']                             = $old;
 
 		return $text;
+	}
+
+	/**
+	 * Check if a submission matches the Comment Blacklist.
+	 * The Comment Blacklist is a means to moderate discussion, and contact
+	 * forms are 1:1 discussion forums, ripe for abuse by users who are being
+	 * removed from the public discussion.
+	 * Attached to `jetpack_contact_form_is_spam`
+	 *
+	 * @param bool  $is_spam
+	 * @param array $form
+	 * @return bool TRUE => spam, FALSE => not spam
+	 */
+	function is_spam_blacklist( $is_spam, $form = array() ) {
+		if ( $is_spam ) {
+			return $is_spam;
+		}
+
+		if ( wp_blacklist_check( $form['comment_author'], $form['comment_author_email'], $form['comment_author_url'], $form['comment_content'], $form['user_ip'], $form['user_agent'] ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1763,6 +1804,11 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 	 */
 	static $style = false;
 
+	/**
+	 * @var array When printing the submit button, what tags are allowed
+	 */
+	static $allowed_html_tags_for_submit_button = array( 'br' => array() );
+
 	function __construct( $attributes, $content = null ) {
 		global $post;
 
@@ -1893,8 +1939,7 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 	 * @return string HTML for the concat form.
 	 */
 	static function parse( $attributes, $content ) {
-		require_once JETPACK__PLUGIN_DIR . '/sync/class.jetpack-sync-settings.php';
-		if ( Jetpack_Sync_Settings::is_syncing() ) {
+		if ( Settings::is_syncing() ) {
 			return '';
 		}
 		// Create a new Grunion_Contact_Form object (this class)
@@ -1992,6 +2037,11 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 			$r .= $form->body;
 			$r .= "\t<p class='contact-submit'>\n";
 
+			$gutenberg_submit_button_classes = '';
+			if ( ! empty( $attributes['submitButtonClasses'] ) ) {
+				$gutenberg_submit_button_classes = ' ' . $attributes['submitButtonClasses'];
+			}
+
 			/**
 			 * Filter the contact form submit button class attribute.
 			 *
@@ -2001,9 +2051,31 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 			 *
 			 * @param string $class Additional CSS classes for button attribute.
 			 */
-			$submit_button_class = apply_filters( 'jetpack_contact_form_submit_button_class', 'pushbutton-wide' );
+			$submit_button_class = apply_filters( 'jetpack_contact_form_submit_button_class', 'pushbutton-wide' . $gutenberg_submit_button_classes );
 
-			$r .= "\t\t<input type='submit' value='" . esc_attr( $form->get_attribute( 'submit_button_text' ) ) . "' class='" . $submit_button_class . "'/>\n";
+			$submit_button_styles = '';
+			if ( ! empty( $attributes['customBackgroundButtonColor'] ) ) {
+				$submit_button_styles .= 'background-color: ' . $attributes['customBackgroundButtonColor'] . '; ';
+			}
+			if ( ! empty( $attributes['customTextButtonColor'] ) ) {
+				$submit_button_styles .= 'color: ' . $attributes['customTextButtonColor'] . ';';
+			}
+			if ( ! empty( $attributes['submitButtonText'] ) ) {
+				$submit_button_text = $attributes['submitButtonText'];
+			} else {
+				$submit_button_text = $form->get_attribute( 'submit_button_text' );
+			}
+
+			$r .= "\t\t<button type='submit' class='" . esc_attr( $submit_button_class ) . "'";
+			if ( ! empty( $submit_button_styles ) ) {
+				$r .= " style='" . esc_attr( $submit_button_styles ) . "'";
+			}
+			$r .= ">";
+			$r .= wp_kses(
+				      $submit_button_text,
+				      self::$allowed_html_tags_for_submit_button
+			      ) . "</button>";
+
 			if ( is_user_logged_in() ) {
 				$r .= "\t\t" . wp_nonce_field( 'contact-form_' . $id, '_wpnonce', true, false ) . "\n"; // nonce and referer
 			}
@@ -2723,6 +2795,23 @@ class Grunion_Contact_Form extends Crunion_Contact_Form_Shortcode {
 			self::wp_mail( $to, "{$spam}{$subject}", $message, $headers );
 		}
 
+		/**
+		 * Fires an action hook right after the email(s) have been sent.
+		 *
+		 * @module contact-form
+		 *
+		 * @since 7.3.0
+		 *
+		 * @param int $post_id Post contact form lives on.
+		 * @param string|array $to Array of valid email addresses, or single email address.
+		 * @param string $subject Feedback email subject.
+		 * @param string $message Feedback email message.
+		 * @param string|array $headers Optional. Additional headers.
+		 * @param array $all_values Contact form fields.
+		 * @param array $extra_values Contact form fields not included in $all_values
+		 */
+		do_action( 'grunion_after_message_sent', $post_id, $to, $subject, $message, $headers, $all_values, $extra_values );
+
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return self::success_message( $post_id, $this );
 		}
@@ -3161,8 +3250,8 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 
 		$type_class = $type ? ' ' .$type : '';
 		return
-			"<label 
-				for='" . esc_attr( $id ) . "' 
+			"<label
+				for='" . esc_attr( $id ) . "'
 				class='grunion-field-label{$type_class}" . ( $this->is_error() ? ' form-error' : '' ) . "'
 				>"
 				. esc_html( $label )
@@ -3172,13 +3261,13 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 	}
 
 	function render_input_field( $type, $id, $value, $class, $placeholder, $required ) {
-		return "<input 
-					type='". esc_attr( $type ) ."' 
-					name='" . esc_attr( $id ) . "' 
-					id='" . esc_attr( $id ) . "' 
-					value='" . esc_attr( $value ) . "' 
-					" . $class . $placeholder . ' 
-					' . ( $required ? "required aria-required='true'" : '' ) . " 
+		return "<input
+					type='". esc_attr( $type ) ."'
+					name='" . esc_attr( $id ) . "'
+					id='" . esc_attr( $id ) . "'
+					value='" . esc_attr( $value ) . "'
+					" . $class . $placeholder . '
+					' . ( $required ? "required aria-required='true'" : '' ) . "
 				/>\n";
 	}
 
@@ -3203,8 +3292,8 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 	function render_textarea_field( $id, $label, $value, $class, $required, $required_field_text, $placeholder ) {
 		$field = $this->render_label( 'textarea', 'contact-form-comment-' . $id, $label, $required, $required_field_text );
 		$field .= "<textarea
-		                name='" . esc_attr( $id ) . "' 
-		                id='contact-form-comment-" . esc_attr( $id ) . "' 
+		                name='" . esc_attr( $id ) . "'
+		                id='contact-form-comment-" . esc_attr( $id ) . "'
 		                rows='20' "
 		                . $class
 		                . $placeholder
@@ -3220,9 +3309,9 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 			$option = Grunion_Contact_Form_Plugin::strip_tags( $option );
 			if ( $option ) {
 				$field .= "\t\t<label class='grunion-radio-label radio" . ( $this->is_error() ? ' form-error' : '' ) . "'>";
-				$field .= "<input 
-									type='radio' 
-									name='" . esc_attr( $id ) . "' 
+				$field .= "<input
+									type='radio'
+									name='" . esc_attr( $id ) . "'
 									value='" . esc_attr( $this->get_option_value( $this->get_attribute( 'values' ), $optionIndex, $option ) ) . "' "
 				                    . $class
 				                    . checked( $option, $value, false ) . ' '
@@ -3282,7 +3371,7 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 
 		wp_enqueue_script(
 			'grunion-frontend',
-			Jetpack::get_file_url_for_environment(
+			Assets::get_file_url_for_environment(
 				'_inc/build/contact-form/js/grunion-frontend.min.js',
 				'modules/contact-form/js/grunion-frontend.js'
 			),
@@ -3302,6 +3391,7 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 	}
 
 	function render_field( $type, $id, $label, $value, $class, $placeholder, $required ) {
+
 		$field_placeholder = ( ! empty( $placeholder ) ) ? "placeholder='" . esc_attr( $placeholder ) . "'" : '';
 		$field_class       = "class='" . trim( esc_attr( $type ) . ' ' . esc_attr( $class ) ) . "' ";
 		$wrap_classes = empty( $class ) ? '' : implode( '-wrap ', array_filter( explode( ' ', $class ) ) ) . '-wrap'; // this adds
@@ -3320,6 +3410,10 @@ class Grunion_Contact_Form_Field extends Crunion_Contact_Form_Shortcode {
 		$required_field_text = esc_html( apply_filters( 'jetpack_required_field_text', __( '(required)', 'jetpack' ) ) );
 
 		$field = "\n<div {$shell_field_class} >\n"; // new in Jetpack 6.8.0
+		// If they are logged in, and this is their site, don't pre-populate fields
+		if ( current_user_can( 'manage_options' ) ) {
+			$value = '';
+		}
 		switch ( $type ) {
 			case 'email':
 				$field .= $this->render_email_field( $id, $label, $value, $field_class, $required, $required_field_text, $field_placeholder );

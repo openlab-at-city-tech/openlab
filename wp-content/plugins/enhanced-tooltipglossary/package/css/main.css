@@ -471,6 +471,7 @@ input.input{
     display: table-cell;
     vertical-align: middle;
     text-align: left;
+    padding-right: 10px;
 }
 
 .cm .right.box .plugins-img {
@@ -519,7 +520,7 @@ input.input{
 .cm .right.box .plugins .button-success:focus {
     text-align: center;
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.42857143;
     border: 5px solid #FFF;
     -webkit-transition: all ease .15s;

@@ -389,8 +389,8 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
 				$actions = '';
 
 			$rows .= "<tr$class>\n";
-			$rows .= "\t<th style='white-space: nowrap' scope='row'><input type='radio' name='left' value='$revision->ID'$left_checked /></th>\n";
-			$rows .= "\t<th style='white-space: nowrap' scope='row'><input type='radio' name='right' value='$revision->ID'$right_checked /></th>\n";
+			$rows .= "\t<th style='white-space: nowrap' scope='row'><label for='revision-left-$revision->ID' class='sr-only'>Use this revision as the 'old' item in a comparison</label><input id='revision-left-$revision->ID' type='radio' name='left' value='$revision->ID'$left_checked /></th>\n";
+			$rows .= "\t<th style='white-space: nowrap' scope='row'><label for='revision-right-$revision->ID' class='sr-only'>Use this revision as the 'old' item in a comparison</label><input id='revision-right-$revision->ID' type='radio' name='right' value='$revision->ID'$right_checked /></th>\n";
 			$rows .= "\t<td>$date</td>\n";
 			$rows .= "\t<td>$name</td>\n";
 			$rows .= "\t<td class='action-links'>$actions</td>\n";

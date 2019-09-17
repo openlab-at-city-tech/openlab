@@ -2,7 +2,7 @@
     data-targetwidth="50"></th>
 <th class="gradebook-student-column-first_name visible-xs visible-sm pointer">
     <span class="header-wrapper">
-        <span class="tooltip-wrapper mobile"><?php esc_html_e('First Name', 'openlab-gradebook')?></span>
+        <span class="tooltip-wrapper mobile" data-target="first_name"><?php esc_html_e('First Name', 'openlab-gradebook')?></span>
         <% if(role === 'instructor') { %>
         <span class="arrow-placement">
             <span class="arrow-wrapper">
@@ -15,7 +15,7 @@
 </th>
 <th class="gradebook-student-column-last_name visible-xs visible-sm pointer">
     <span class="header-wrapper sort-up">
-        <span class="tooltip-wrapper mobile"><?php esc_html_e('Last Name', 'openlab-gradebook')?></span>
+        <span class="tooltip-wrapper mobile" data-target="last_name"><?php esc_html_e('Last Name', 'openlab-gradebook')?></span>
         <% if(role === 'instructor') { %>
         <span class="arrow-placement">
             <span class="arrow-wrapper">
@@ -28,7 +28,7 @@
 </th>
 <th class="gradebook-student-column-user_login visible-xs visible-sm pointer">
     <span class="header-wrapper">
-        <span class="tooltip-wrapper mobile"><?php esc_html_e('Username', 'openlab-gradebook')?></span>
+        <span class="tooltip-wrapper mobile" data-target="user_login"><?php esc_html_e('Username', 'openlab-gradebook')?></span>
         <% if(role === 'instructor') { %>
         <span class="arrow-placement">
             <span class="arrow-wrapper">

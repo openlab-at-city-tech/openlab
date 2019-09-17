@@ -38,7 +38,7 @@ function duplicate_post_register_settings() { // whitelist options
 	register_setting( 'duplicate_post_group', 'duplicate_post_show_adminbar');
 	register_setting( 'duplicate_post_group', 'duplicate_post_show_submitbox');
 	register_setting( 'duplicate_post_group', 'duplicate_post_show_bulkactions');
-	register_setting( 'duplicate_post_group', 'duplicate_post_show_notice');	
+	register_setting( 'duplicate_post_group', 'duplicate_post_show_notice');
 }
 
 
@@ -57,9 +57,6 @@ function duplicate_post_options() {
 
 		foreach ($roles as $name => $display_name){
 			$role = get_role($name);
-
-			// role should have at least edit_posts capability
-			if ( !$role->has_cap('edit_posts') ) continue;
 
 			/* If the role doesn't have the capability and it was selected, add it. */
 			if ( !$role->has_cap( 'copy_posts' )  && in_array($name, $dp_roles) )
@@ -198,49 +195,49 @@ img#donate-button{
 					<th scope="row"><?php esc_html_e('Post/page elements to copy', 'duplicate-post'); ?>
 					</th>
 					<td colspan="2"><label> <input type="checkbox"
-							name="duplicate_post_copytitle" value="1" <?php  if(get_option('duplicate_post_copytitle') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copytitle" value="1" <?php  if(get_option('duplicate_post_copytitle') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Title", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copydate" value="1" <?php  if(get_option('duplicate_post_copydate') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copydate" value="1" <?php  if(get_option('duplicate_post_copydate') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Date", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copystatus" value="1" <?php  if(get_option('duplicate_post_copystatus') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copystatus" value="1" <?php  if(get_option('duplicate_post_copystatus') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Status", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copyslug" value="1" <?php  if(get_option('duplicate_post_copyslug') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copyslug" value="1" <?php  if(get_option('duplicate_post_copyslug') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Slug", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copyexcerpt" value="1" <?php  if(get_option('duplicate_post_copyexcerpt') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copyexcerpt" value="1" <?php  if(get_option('duplicate_post_copyexcerpt') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Excerpt", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copycontent" value="1" <?php  if(get_option('duplicate_post_copycontent') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copycontent" value="1" <?php  if(get_option('duplicate_post_copycontent') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Content", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copythumbnail" value="1" <?php  if(get_option('duplicate_post_copythumbnail') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copythumbnail" value="1" <?php  if(get_option('duplicate_post_copythumbnail') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Featured Image", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copytemplate" value="1" <?php  if(get_option('duplicate_post_copytemplate') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copytemplate" value="1" <?php  if(get_option('duplicate_post_copytemplate') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Template", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copyformat" value="1" <?php  if(get_option('duplicate_post_copyformat') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copyformat" value="1" <?php  if(get_option('duplicate_post_copyformat') == 1) echo 'checked="checked"'; ?>/>
 							<?php echo esc_html_x("Format", 'post format', 'default'); ?>																					
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copyauthor" value="1" <?php  if(get_option('duplicate_post_copyauthor') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copyauthor" value="1" <?php  if(get_option('duplicate_post_copyauthor') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Author", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copypassword" value="1" <?php  if(get_option('duplicate_post_copypassword') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copypassword" value="1" <?php  if(get_option('duplicate_post_copypassword') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Password", 'default'); ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copyattachments" value="1" <?php  if(get_option('duplicate_post_copyattachments') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copyattachments" value="1" <?php  if(get_option('duplicate_post_copyattachments') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Attachments", 'duplicate-post');  ?> <small>(<?php esc_html_e("you probably want this unchecked, unless you have very special requirements", 'duplicate-post');  ?>)</small>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copychildren" value="1" <?php  if(get_option('duplicate_post_copychildren') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copychildren" value="1" <?php  if(get_option('duplicate_post_copychildren') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Children", 'duplicate-post');  ?>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copycomments" value="1" <?php  if(get_option('duplicate_post_copycomments') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copycomments" value="1" <?php  if(get_option('duplicate_post_copycomments') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Comments", 'default');  ?> <small>(<?php esc_html_e("except pingbacks and trackbacks", 'duplicate-post');  ?>)</small>
 					</label> <label> <input type="checkbox"
-							name="duplicate_post_copymenuorder" value="1" <?php  if(get_option('duplicate_post_copymenuorder') == 1) echo 'checked="checked"'; ?>"/>
+							name="duplicate_post_copymenuorder" value="1" <?php  if(get_option('duplicate_post_copymenuorder') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Menu order", 'default');  ?>
 					</label>
 					</td>
@@ -320,13 +317,20 @@ img#donate-button{
 					</th>
 					<td><?php	global $wp_roles;
 					$roles = $wp_roles->get_names();
-					foreach ($roles as $name => $display_name): $role = get_role($name);
-					if ( !$role->has_cap('edit_posts') ) continue; ?> <label> <input
+					$post_types = get_post_types( array( 'show_ui' => true ), 'objects' );
+					$edit_capabilities = array('edit_posts' => true);
+					foreach( $post_types as $post_type ) {
+						$edit_capabilities[$post_type->cap->edit_posts] = true;
+					}
+					foreach ( $roles as $name => $display_name ):
+						$role = get_role( $name );
+						if( count ( array_intersect_key( $role->capabilities, $edit_capabilities ) ) > 0 ): ?>
+					<label> <input
 							type="checkbox" name="duplicate_post_roles[]"
 							value="<?php echo $name ?>"
 							<?php if($role->has_cap('copy_posts')) echo 'checked="checked"'?> />
 							<?php echo translate_user_role($display_name); ?>
-					</label> <?php endforeach; ?> <span class="description"><?php esc_html_e("Warning: users will be able to copy all posts, even those of other users", 'duplicate-post'); ?><br />
+					</label> <?php endif; endforeach; ?> <span class="description"><?php esc_html_e("Warning: users will be able to copy all posts, even those of other users", 'duplicate-post'); ?><br />
 							<?php esc_html_e("Passwords and contents of password-protected posts may become visible to undesired users and visitors", 'duplicate-post'); ?>
 					</span>
 					</td>
@@ -355,15 +359,15 @@ img#donate-button{
 					<th scope="row"><?php esc_html_e("Show links in", 'duplicate-post'); ?>
 					</th>
 					<td><label><input type="checkbox" name="duplicate_post_show_row"
-							value="1" <?php  if(get_option('duplicate_post_show_row') == 1) echo 'checked="checked"'; ?>"/>
+							value="1" <?php  if(get_option('duplicate_post_show_row') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Post list", 'duplicate-post'); ?> </label>
-							<label><input type="checkbox" name="duplicate_post_show_submitbox" value="1" <?php  if(get_option('duplicate_post_show_submitbox') == 1) echo 'checked="checked"'; ?>"/>
+							<label><input type="checkbox" name="duplicate_post_show_submitbox" value="1" <?php  if(get_option('duplicate_post_show_submitbox') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Edit screen", 'duplicate-post'); ?> </label>
-							<label><input type="checkbox" name="duplicate_post_show_adminbar" value="1" <?php  if(get_option('duplicate_post_show_adminbar') == 1) echo 'checked="checked"'; ?>"/>
-							<?php esc_html_e("Admin bar", 'duplicate-post'); ?> <small>(<?php esc_html_e("now works on Edit screen too — check this option to use with Gutenberg enabled", 'duplicate-post');  ?>)</small></label> 
+							<label><input type="checkbox" name="duplicate_post_show_adminbar" value="1" <?php  if(get_option('duplicate_post_show_adminbar') == 1) echo 'checked="checked"'; ?>/>
+							<?php esc_html_e("Admin bar", 'duplicate-post'); ?> <small>(<?php esc_html_e("now works on Edit screen too - check this option to use with Gutenberg enabled", 'duplicate-post');  ?>)</small></label> 
 							<?php global $wp_version;
 							if( version_compare($wp_version, '4.7') >= 0 ){ ?>
-							<label><input type="checkbox" name="duplicate_post_show_bulkactions" value="1" <?php  if(get_option('duplicate_post_show_bulkactions') == 1) echo 'checked="checked"'; ?>"/>
+							<label><input type="checkbox" name="duplicate_post_show_bulkactions" value="1" <?php  if(get_option('duplicate_post_show_bulkactions') == 1) echo 'checked="checked"'; ?>/>
 							<?php esc_html_e("Bulk Actions", 'default'); ?> </label>
 							<?php } ?>												
 					</td>
@@ -378,7 +382,7 @@ img#donate-button{
 					<th scope="row"><?php esc_html_e("Show update notice", 'duplicate-post'); ?>
 					</th>
 					<td><input type="checkbox" name="duplicate_post_show_notice"
-							value="1" <?php  if(get_option('duplicate_post_show_notice') == 1) echo 'checked="checked"'; ?>"/>
+							value="1" <?php  if(get_option('duplicate_post_show_notice') == 1) echo 'checked="checked"'; ?>/>
 					</td>
 				</tr>				
 			</table>

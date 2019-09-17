@@ -23,7 +23,7 @@ class cOsm_arguments
     private  $map_Lat = '58.213';
     private  $map_Lon = '6.378';
     private  $zoom = '4';
-	private  $map_api_key = 'NoKey';
+    private  $map_api_key = 'NoKey';
     private  $file_list = 'NoFile';
     private  $file_color_list = 'NoColor';
     private  $map_type = 'Osm';
@@ -38,6 +38,7 @@ class cOsm_arguments
     private  $wms_attr_name = 'wms_attr_name';
     private  $wms_attr_url = 'wms_attr_url';
     private  $tagged_type = 'no';
+    private  $tagged_filter_type = 'category';
     private  $tagged_filter = 'osm_all';
     private  $mwz = 'false';
     private  $marker_height = '32';
@@ -51,7 +52,7 @@ class cOsm_arguments
     private $tagged_cluster = "false";
     private $tagged_border_color = "[0, 0, 255, 0.5]";
     private $tagged_inner_color = "[0, 0, 255, 0.5]";
-	private $map_event = 'no';
+    private $map_event = 'no';
     
    private function setMarkersize($a_marker_size){
       if ($a_marker_size == "no"){
@@ -207,9 +208,13 @@ public function setMap_event($a_map_event){
   $this->map_event = $a_map_event;  
 }
 
+public function setTaxonomy($a_tagged_filter_type){
+  $this->tagged_filter_type = $a_tagged_filter_type;  
+}
+
   function __construct($a_width, $a_height, $a_map_center, $zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, $a_map_event, 
     $marker_name, $a_marker_size, $control, $wms_address, $wms_param, $wms_attr_name,  $wms_type, $wms_attr_url, 
-    $tagged_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color){
+    $tagged_type, $a_tagged_filter_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color){
         
     $this->setLatLon($a_map_center) ;
     $this->setMapSize($a_width,  $a_height);
@@ -222,6 +227,7 @@ public function setMap_event($a_map_event){
 	$this->setMapAPIkey($a_map_api_key);
 	$this->setMapType($a_type); // needs to be done after setMapAPIkey
 	$this->setMap_event($a_map_event);
+        $this->setTaxonomy($a_tagged_filter_type);
 }
 
 public function getPostMarkers(){
@@ -288,5 +294,10 @@ public function getTaggedInnerColor(){
 public function getMap_event(){
     return $this->map_event;  
 }
+
+public function getTaxonomy(){
+  return $this->tagged_filter_type;  
+}
+
 }
 ?>

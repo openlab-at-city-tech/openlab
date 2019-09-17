@@ -91,7 +91,8 @@ module.exports = function(grunt) {
 				},
 				src: [
 					"node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
-					"node_modules/jscrollpane/style/jquery.jscrollpane.css"
+					"node_modules/jscrollpane/style/jquery.jscrollpane.css",
+					"node_modules/bootstrap-fileinput/css/fileinput.min.css"
 				],
 				dest: "css/vendor.css"
 			}

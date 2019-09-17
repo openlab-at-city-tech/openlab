@@ -41,7 +41,7 @@ if ( $missing_eventbrite_credentials ) :
 					);
 					?>
 				</p>
-				<a class="tribe-ea-eventbrite-button" href="<?php echo esc_url( Tribe__Events__Aggregator__Record__Eventbrite::get_auth_url() ); ?>"><?php esc_html_e( 'Log into Eventbrite', 'the-events-calendar' ); ?></a>
+				<a class="tribe-ea-eventbrite-button tribe-ea-login-button" href="<?php echo esc_url( Tribe__Events__Aggregator__Record__Eventbrite::get_auth_url() ); ?>"><?php esc_html_e( 'Log into Eventbrite', 'the-events-calendar' ); ?></a>
 			</div>
 		</td>
 	</tr>
@@ -113,7 +113,13 @@ if ( 'edit' === $tab->get_slug() ) {
 $field              = (object) array();
 $field->label       = __( 'Import Source', 'the-events-calendar' );
 $field->placeholder = __( 'Select Source', 'the-events-calendar' );
-$field->help        = __( 'Import events directly from your connected Eventbrite.com account or from a public Eventbrite.com url.', 'the-events-calendar' );
+
+if ( ! class_exists( 'Tribe__Events__Tickets__Eventbrite__Main' ) ) {
+	$field->help = esc_html__( 'Import events directly from a public Eventbrite.com URL. Please note that only Live events (i.e. published events) can be imported via URL.', 'the-events-calendar' );
+} else {
+	$field->help = esc_html__( 'Import events directly from your connected Eventbrite.com account or from a public Eventbrite.com URL.', 'the-events-calendar' );
+}
+
 $default_eb_source  = 'source_type_url';
 if ( ! empty( $service->api()->licenses['tribe-eventbrite'] ) ) {
 	$field->options[]  = array(

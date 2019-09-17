@@ -45,6 +45,11 @@ class GES_Updater {
 	 * Update routine.
 	 */
 	protected function init() {
+		// Bail if BuddyPress isn't available.
+		if ( ! function_exists( 'bp_get_option' ) ) {
+			return;
+		}
+
 		$installed_date = (int) self::get_installed_revision_date();
 
 		// Sept 28, 2016 - Install email post types.
@@ -54,6 +59,7 @@ class GES_Updater {
 
 		// 3.9.0 - Install subscription table and migrate data.
 		if ( $installed_date < 1523891599 ) {
+			bp_update_option( '_ges_installed_before_39', 1 );
 			bpges_install_subscription_table();
 			bpges_install_queued_items_table();
 			bpges_39_launch_legacy_subscription_migration();

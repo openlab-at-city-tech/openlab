@@ -1,0 +1,20 @@
+.entry-source-note {
+	background-color: #f0f0f0;
+	color: #444;
+	font-size: small;
+	margin-bottom: 1rem;
+	padding: 1rem;
+}
+.entry-source-note a,
+.entry-source-note a:visited {
+	color: #444;
+}
+.entry-source-note .entry__citation {
+	font-style: italic;
+}
+.entry-source-note .entry__annotation {
+	margin-top: 1rem;
+}
+.full-content span {
+	display: none;
+}

@@ -1,0 +1,7 @@
+.import-page strong {
+	color: #23282d;
+	font-weight: 900;
+}
+.import-page .error {
+	color: red;
+}

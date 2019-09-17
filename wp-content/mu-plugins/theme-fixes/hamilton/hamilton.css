@@ -1,0 +1,95 @@
+#openlab-footer {
+	display: none !important;
+}
+
+.site-header {
+	margin-bottom: 100px;
+	margin-top: 100px;
+	padding: 0;
+}
+
+.site-header .site-title {
+	max-width: calc(100% - 65px);
+}
+
+.page-header {
+	margin: 0 auto 0 auto;
+}
+
+.site-nav .menus {
+	padding-bottom: 10px; /* Prevents scroll bar */
+}
+
+.site-nav ul + ul a {
+	color: #5C5C5C;
+}
+
+.site-nav li {
+	display: block;
+	font-size: 1rem;
+	position: relative;
+}
+
+.site-nav.active {
+	margin-top: 100px;
+}
+
+.oplb-bs button,
+.site-nav button,
+#wpadminbar button {
+	min-width: initial;
+}
+
+.alt-nav button.menu-toggle {
+	display: none !important;
+}
+
+ul:not(.alt-nav) button.menu-toggle:hover {
+	background: #000;
+}
+
+ul:not(.alt-nav) button.menu-toggle:hover:before {
+	color: #F6F7F8;
+}
+
+ul:not(.alt-nav) button.menu-toggle {
+	background: none;
+	display: inline;
+	margin-left: 14px;
+	padding: 3px 12px;
+}
+
+ul:not(.alt-nav) button.menu-toggle:before {
+	color: #000;
+	content: '\f106';
+	text-decoration: none;
+	font-family: fontawesome;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.site-nav ul + ul button.menu-toggle:before {
+	color: #5c5c5c;
+}
+
+ul:not(.alt-nav) .menu-collapsed button.menu-toggle:before {
+	content: '\f107';
+}
+
+ul:not(.alt-nav) .menu-item-has-children.menu-collapsed > .sub-menu {
+	display: none;
+}
+
+@media (max-width: 620px) {
+	.site-header {
+		margin-top: 50px;
+	}
+
+	.site-nav {
+		padding-top: 220px;
+	}
+
+	.site-nav ul:first-child li {
+		font-size: inherit;
+	}
+}

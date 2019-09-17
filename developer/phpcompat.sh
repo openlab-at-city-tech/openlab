@@ -8,24 +8,26 @@ ignores=(
   'wp-content/plugins/anthologize'
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
-#  'wp-content/plugins/bdprss'
   'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
 #  'wp-content/plugins/btcnew/parser_php4.php'
   'wp-content/plugins/buddypress/cli/features'
   'wp-content/plugins/digressit'
   'wp-content/plugins/dk-pdf/vendor/paragonie/random_compat'
   'wp-content/plugins/download-monitor/src/DownloadHandler.php'
+  'wp-content/plugins/download-monitor/src/Polyfill/DateTimeImmutable'
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
-#  'wp-content/plugins/easy-visualization-tools'
+  'wp-content/plugins/edge-suite/includes/edge-suite-general.php'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
 #  'wp-content/plugins/extended-categories-widget/2.8'
   'wp-content/plugins/gravityforms'
   'wp-content/plugins/kb-gradebook'
 #  'wp-content/plugins/newsletters-lite/vendor/phpseclib'
-#  'wp-content/plugins/oauth2-provider/library/WPOAuth2/Request.php'
+  'wp-content/plugins/osm'
+  'wp-content/plugins/papercite/lib/PEAR.php'
   'wp-content/plugins/query-monitor/collectors/environment.php'
   'wp-content/plugins/query-monitor/wp-content/db.php'
   'wp-content/plugins/shardb'
+  'wp-content/plugins/social/lib/social/log.php'
   'wp-content/plugins/static-html-output-plugin'
   'wp-content/plugins/tablepress/views/view-about.php'
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
@@ -52,7 +54,7 @@ do
   for subdir in ${subdirs[*]}
   do
     echo "Testing $subdir..."
-    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2- $ignore $subdir)
+    results=$(./vendor/bin/phpcs -p --extensions=php,inc --standard=PHPCompatibilityWP --warning-severity=0 --runtime-set testVersion 7.2 $ignore $subdir)
     if [ $? -eq 1 ]
     then
       echo "$results"

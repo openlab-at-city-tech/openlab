@@ -4,7 +4,7 @@
  */
 
 /**
- * Loads theme fixes for OpenLab site themes
+ * Loads CSS theme fixes for OpenLab site themes.
  */
 function openlab_load_theme_fixes() {
 	$t = get_stylesheet();
@@ -14,8 +14,11 @@ function openlab_load_theme_fixes() {
 		case 'coraline':
 		case 'education-pro':
 		case 'filtered':
+		case 'hamilton':
 		case 'hemingway':
 		case 'herothemetrust':
+		case 'koji':
+		case 'lingonberry' :
 		case 'motion':
 		case 'openlab-twentysixteen':
 		case 'p2':
@@ -48,11 +51,33 @@ add_action(
 
 		switch ( $t ) {
 			case 'education-pro' :
+			case 'hamilton':
 			case 'hemingway':
+			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'twentynineteen':
 				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
+			break;
+		}
+	}
+);
+
+/**
+ * Loads JS-based theme mods for OpenLab site themes.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		$t = get_stylesheet();
+
+		switch ( $t ) {
+			// All of the below require only jQuery.
+			case 'education-pro' :
+			case 'hamilton':
+			case 'koji' :
+			case 'lingonberry' :
+				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $t . '/' . $t . '.js', array( 'jquery' ) ) );
 			break;
 		}
 	}

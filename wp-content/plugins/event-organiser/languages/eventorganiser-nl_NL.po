@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-26 22:24+0000\n"
+"POT-Creation-Date: 2019-07-15 22:39+0100\n"
 "PO-Revision-Date: 2017-11-03T23:42:56+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -124,8 +124,8 @@ msgstr "Toont een lijst met evenementen"
 
 #: classes/class-eo-event-list-widget.php:14
 #: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
-#: event-organiser.php:149 includes/event-organiser-cpt.php:224
-#: includes/event-organiser-cpt.php:236
+#: event-organiser.php:149 includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
 msgid "Events"
 msgstr "Evenementen"
@@ -251,7 +251,7 @@ msgid "Event Categories"
 msgstr "Evenementencategorieën"
 
 #: classes/class-eo-widget-categories.php:25
-#: includes/event-organiser-cpt.php:94 includes/event-organiser-cpt.php:105
+#: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
 #: includes/event-organiser-event-functions.php:1563
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
@@ -457,6 +457,21 @@ msgstr "Sluit modaal"
 msgid "Open shortcut help"
 msgstr "Open help"
 
+#. //codex.wp-event-organiser.com
+#. *
+#. ***************** NOTICE: *****************
+#. *  Do not make changes to this file. Any changes made to this file
+#. * will be overwritten if the plug-in is updated.
+#. *
+#. * To overwrite this template with your own, make a copy of it (with the same name)
+#. * in your theme directory. See http://docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.7
+#.
 #: event-organiser-calendar.php:387 event-organiser-edit.php:14
 #: templates/event-meta-event-single.php:32
 msgid "Event Details"
@@ -516,18 +531,18 @@ msgstr ""
 "hebben wellicht een eenvoudige oplossing. Neem contact op met support."
 
 #. / TRANSLATORS: [this plugin] has only been tested up to [required plugin] [required plugin version]
-#: event-organiser-debug.php:424
+#: event-organiser-debug.php:426
 #, php-format
 msgid "%1$s has only been tested up to %1$s %1$s"
 msgstr "%1$s is alleen getest tot %1$s %1$s"
 
 #. / TRANSLATORS: [this plugin] requires [required plugin] version [required plugin version] or higher
-#: event-organiser-debug.php:437
+#: event-organiser-debug.php:439
 #, php-format
 msgid "%1$s requires %1$s version %1$s or higher"
 msgstr "%1$s vereist %1$s versie %1$s of hoger"
 
-#: event-organiser-debug.php:462
+#: event-organiser-debug.php:464
 msgid "unknown"
 msgstr "onbekend"
 
@@ -653,7 +668,7 @@ msgid "Show dates"
 msgstr "Toon data"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1026
+#: includes/event-organiser-venue-functions.php:1030
 msgid "Select a venue"
 msgstr "Selecteer een locatie"
 
@@ -743,7 +758,7 @@ msgstr ""
 msgid "Go to Event Organiser settings"
 msgstr "Ga naar de Evenementen-beheerinstellingen"
 
-#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:225
+#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:227
 msgid "Event"
 msgstr "Evenement"
 
@@ -906,7 +921,7 @@ msgid "Revisions"
 msgstr "Revisies"
 
 #: event-organiser-settings.php:154 event-organiser-settings.php:355
-#: includes/event-organiser-cpt.php:151
+#: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Evenement-zoekwoorden"
 
@@ -1270,13 +1285,13 @@ msgstr "Link tonen"
 msgid "Slug"
 msgstr "URL-naam"
 
-#: features/bootstrap/FeatureContext.php:413
-#: features/bootstrap/FeatureContext.php:608
+#: features/bootstrap/FeatureContext.php:459
+#: features/bootstrap/FeatureContext.php:627
 msgid "Main Sidebar"
 msgstr "Hoofdmenu"
 
-#: features/bootstrap/FeatureContext.php:415
-#: features/bootstrap/FeatureContext.php:610
+#: features/bootstrap/FeatureContext.php:461
+#: features/bootstrap/FeatureContext.php:629
 msgid "Widgets in this area will be shown on all posts and pages."
 msgstr ""
 "Widgets in deze omgeving zullen in alle berichten en pagina's worden laten "
@@ -1469,7 +1484,7 @@ msgstr "Organisator"
 msgid "This event recurs"
 msgstr "Herhaalt zich"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:228
+#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Evenement bewerken"
 
@@ -1571,236 +1586,254 @@ msgstr "Locatie"
 msgid "View all venues"
 msgstr "Alle locaties"
 
-#: includes/event-organiser-cpt.php:95
+#: includes/event-organiser-cpt.php:96
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr "Categorie"
 
-#: includes/event-organiser-cpt.php:96
+#: includes/event-organiser-cpt.php:97
 msgid "Search Categories"
 msgstr "Categorie&#235;n doorzoeken"
 
-#: includes/event-organiser-cpt.php:97
+#: includes/event-organiser-cpt.php:98
 msgid "All Categories"
 msgstr "Alle categorie&#235;n"
 
-#: includes/event-organiser-cpt.php:98
+#: includes/event-organiser-cpt.php:99
 msgid "Parent Category"
 msgstr "Bovenliggende categorie"
 
-#: includes/event-organiser-cpt.php:99
+#: includes/event-organiser-cpt.php:100
 msgid "Parent Category:"
 msgstr "Bovenliggende categorie:"
 
-#: includes/event-organiser-cpt.php:100
+#: includes/event-organiser-cpt.php:101
 msgid "Edit Category"
 msgstr "Categorie aanpassen"
 
-#: includes/event-organiser-cpt.php:101
+#: includes/event-organiser-cpt.php:102
 msgid "Update Category"
 msgstr "Categorie bijwerken"
 
-#: includes/event-organiser-cpt.php:102
+#: includes/event-organiser-cpt.php:103
 msgid "Add New Category"
 msgstr "Categorie toevoegen"
 
-#: includes/event-organiser-cpt.php:103
+#: includes/event-organiser-cpt.php:104
 msgid "New Category Name"
 msgstr "Nieuwe categorienaam"
 
-#: includes/event-organiser-cpt.php:104
+#: includes/event-organiser-cpt.php:105
 msgid "No categories found"
 msgstr "Geen categorie&#235;n gevonden"
 
-#: includes/event-organiser-cpt.php:106
+#: includes/event-organiser-cpt.php:107
 msgid "Event categories list navigation"
 msgstr "Evenementcategorieën-navigatie"
 
-#: includes/event-organiser-cpt.php:107
+#: includes/event-organiser-cpt.php:108
 msgid "Event categories list"
 msgstr "Evenementcategorieënlijst"
 
-#: includes/event-organiser-cpt.php:109
+#: includes/event-organiser-cpt.php:110
 msgid "View all categories"
 msgstr "Alle categorie&#235;n"
 
-#: includes/event-organiser-cpt.php:152
+#: includes/event-organiser-cpt.php:153
 msgctxt "taxonomy singular name"
 msgid "Tag"
 msgstr "Zoekwoord"
 
-#: includes/event-organiser-cpt.php:153
+#: includes/event-organiser-cpt.php:154
 msgid "Search Tags"
 msgstr "Zoekwoorden zoeken"
 
-#: includes/event-organiser-cpt.php:154
+#: includes/event-organiser-cpt.php:155
 msgid "All Tags"
 msgstr "Alle zoekwoorden"
 
-#: includes/event-organiser-cpt.php:155
+#: includes/event-organiser-cpt.php:156
 msgid "Popular Tags"
 msgstr "Populaire zoekwoorden"
 
-#: includes/event-organiser-cpt.php:156
+#: includes/event-organiser-cpt.php:157
 msgid "Edit Tag"
 msgstr "Zoekwoord aanpassen"
 
-#: includes/event-organiser-cpt.php:157
+#: includes/event-organiser-cpt.php:158
 msgid "Update Tag"
 msgstr "Zoekwoord bijwerken"
 
-#: includes/event-organiser-cpt.php:158
+#: includes/event-organiser-cpt.php:159
 msgid "Add New Tag"
 msgstr "Zoekwoord toevoegen"
 
-#: includes/event-organiser-cpt.php:159
+#: includes/event-organiser-cpt.php:160
 msgid "New Tag Name"
 msgstr "Nieuwe zoekwoordnaam"
 
-#: includes/event-organiser-cpt.php:160
+#: includes/event-organiser-cpt.php:161
 msgid "No tags found"
 msgstr "Geen zoekwoorden gevonden"
 
-#: includes/event-organiser-cpt.php:161
+#: includes/event-organiser-cpt.php:162
 msgid "Choose from the most used tags"
 msgstr "Kies uit de meest gebruikte zoekwoorden"
 
-#: includes/event-organiser-cpt.php:162
+#: includes/event-organiser-cpt.php:163
 #: includes/event-organiser-event-functions.php:1571
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "Zoekwoorden"
 
-#: includes/event-organiser-cpt.php:163
+#: includes/event-organiser-cpt.php:164
 msgid "Add or remove tags"
 msgstr "Zoekwoorden toevoegen of verwijderen"
 
-#: includes/event-organiser-cpt.php:164
+#: includes/event-organiser-cpt.php:165
 msgid "Separate tags with commas"
 msgstr "Zoekwoorden scheiden door komma's"
 
-#: includes/event-organiser-cpt.php:165
+#: includes/event-organiser-cpt.php:166
 msgid "Event tags list navigation"
 msgstr "Evenementzoekwoordennavigatie"
 
-#: includes/event-organiser-cpt.php:166
+#: includes/event-organiser-cpt.php:167
 msgid "Event tags list"
 msgstr "Evenementzoekwoordenlijst"
 
-#: includes/event-organiser-cpt.php:168
+#: includes/event-organiser-cpt.php:169
 msgid "View all tags"
 msgstr "Toon alle zoekwoorden"
 
-#: includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:228
 msgctxt "post"
 msgid "Add New"
 msgstr "Nieuw evenement"
 
-#: includes/event-organiser-cpt.php:227
+#: includes/event-organiser-cpt.php:229
 msgid "Add New Event"
 msgstr "Evenement toevoegen"
 
-#: includes/event-organiser-cpt.php:229
+#: includes/event-organiser-cpt.php:231
 msgid "New Event"
 msgstr "Nieuw evenement"
 
-#: includes/event-organiser-cpt.php:230
+#: includes/event-organiser-cpt.php:232
 #, fuzzy
 msgid "All Events"
 msgstr "Alle evenementen"
 
-#: includes/event-organiser-cpt.php:231
+#: includes/event-organiser-cpt.php:233
 msgid "View Event"
 msgstr "Bekijk evenement"
 
-#: includes/event-organiser-cpt.php:232
+#: includes/event-organiser-cpt.php:234
 msgid "Search events"
 msgstr "Zoek evenementen"
 
-#: includes/event-organiser-cpt.php:233
+#: includes/event-organiser-cpt.php:235
 msgid "No events found"
 msgstr "Geen evenementen gevonden"
 
-#: includes/event-organiser-cpt.php:234
+#: includes/event-organiser-cpt.php:236
 msgid "No events found in Trash"
 msgstr "Geen evenementen gevonden in de prullenbak "
 
-#: includes/event-organiser-cpt.php:237
+#: includes/event-organiser-cpt.php:239
 msgid "Filter events list"
 msgstr "Filter evenementenlijst"
 
-#: includes/event-organiser-cpt.php:238
+#: includes/event-organiser-cpt.php:240
 msgid "Events list navigation"
 msgstr "Evenementenlijstnavigatie"
 
-#: includes/event-organiser-cpt.php:239
+#: includes/event-organiser-cpt.php:241
 msgid "Events list"
 msgstr "Evenementenlijst"
 
-#: includes/event-organiser-cpt.php:240
+#: includes/event-organiser-cpt.php:242
 msgid "Event Archives"
 msgstr "Evenementarchieven"
 
-#: includes/event-organiser-cpt.php:241
+#: includes/event-organiser-cpt.php:243
 msgid "Insert into event"
 msgstr "Invoegen in evenement"
 
-#: includes/event-organiser-cpt.php:242
+#: includes/event-organiser-cpt.php:244
 msgid "Uploaded to this event"
 msgstr "Uploaden naar dit evenement"
 
-#: includes/event-organiser-cpt.php:244
+#: includes/event-organiser-cpt.php:246
 #, php-format
 msgid "Events at %s"
 msgstr "Evenementen op %s"
 
-#: includes/event-organiser-cpt.php:245
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:247
 #: templates/taxonomy-event-category.php:27
 #, php-format
 msgid "Event Category: %s"
 msgstr "Evenementcategorie: %s"
 
-#: includes/event-organiser-cpt.php:246 templates/taxonomy-event-tag.php:27
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.2.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:248 templates/taxonomy-event-tag.php:27
 #, php-format
 msgid "Event Tag: %s"
 msgstr "Evenement-tag: %s"
 
-#: includes/event-organiser-cpt.php:247 includes/event-organiser-cpt.php:248
-#: includes/event-organiser-cpt.php:249
+#: includes/event-organiser-cpt.php:249 includes/event-organiser-cpt.php:250
+#: includes/event-organiser-cpt.php:251
 #, fuzzy, php-format
 msgid "Events: %s"
 msgstr "Evenementen:"
 
-#: includes/event-organiser-cpt.php:330
+#: includes/event-organiser-cpt.php:332
 #, php-format
 msgid "Event updated. <a href=\"%s\">View event</a>"
 msgstr "Evenement bijgewerkt. <a href=\"%s\">Bekijk evenement</a>"
 
-#: includes/event-organiser-cpt.php:331
+#: includes/event-organiser-cpt.php:333
 msgid "Event updated."
 msgstr "Evenement bijgewerkt."
 
-#: includes/event-organiser-cpt.php:333
+#: includes/event-organiser-cpt.php:335
 #, php-format
 msgid "Event restored to revision from %s"
 msgstr "Evenement teruggezet naar versie van %s"
 
-#: includes/event-organiser-cpt.php:334
+#: includes/event-organiser-cpt.php:336
 #, php-format
 msgid "Event published. <a href=\"%s\">View event</a>"
 msgstr "Evenement gepupliceerd <a href=\"%s\">Bekijk gebeurtenis</a>"
 
-#: includes/event-organiser-cpt.php:335
+#: includes/event-organiser-cpt.php:337
 msgid "Event saved."
 msgstr "Evenement opgeslagen."
 
-#: includes/event-organiser-cpt.php:337
+#: includes/event-organiser-cpt.php:339
 #, php-format
 msgid "Event submitted. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Evenement verstuurd <a target=\"_blank\" href=\"%s\">Bekijk evenement</a>"
 
-#: includes/event-organiser-cpt.php:341
+#: includes/event-organiser-cpt.php:343
 #, php-format
 msgid ""
 "Event scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
@@ -1809,30 +1842,31 @@ msgstr ""
 "Evenement gepland voor: <strong>%1$s</strong>. <a target=\"_blank\" href="
 "\"%2$s\">Bekijk evenement</a>"
 
-#: includes/event-organiser-cpt.php:343
+#. //php.net/date
+#: includes/event-organiser-cpt.php:345
 msgid "M j, Y @ G:i"
 msgstr "j M, Y - G:i"
 
-#: includes/event-organiser-cpt.php:346
+#: includes/event-organiser-cpt.php:348
 #, php-format
 msgid "Event draft updated. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Evenement-concept bijgewerkt. <a target=\"_blank\" href=\"%s\">Bekijk "
 "evenement</a>"
 
-#: includes/event-organiser-cpt.php:349
+#: includes/event-organiser-cpt.php:351
 msgid "This event has been broken from a recurring event."
 msgstr "Dit evenement is losgekoppeld van een terugkerende gebeurtenis."
 
-#: includes/event-organiser-cpt.php:525
+#: includes/event-organiser-cpt.php:527
 msgid "Creating events"
 msgstr "Evenementen aanmaken"
 
-#: includes/event-organiser-cpt.php:526
+#: includes/event-organiser-cpt.php:528
 msgid "Creating events:"
 msgstr "Aanmaken evenementen:"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:530
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1840,7 +1874,7 @@ msgstr ""
 "De startdatum is de datum waarop het evenement begint. Bij evenementen die "
 "terugkeren is deze datum de startdag van de eerste gebeurtenis."
 
-#: includes/event-organiser-cpt.php:529
+#: includes/event-organiser-cpt.php:531
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1848,7 +1882,7 @@ msgstr ""
 "De einddatum is de datum waarop het evenement stopt. Bij evenementen die "
 "terugkeren is het de einddatum van de eerste gebeurtenis."
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:532
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1856,11 +1890,11 @@ msgstr ""
 "Alle data en tijden moeten worden opgegeven in de juiste format. Dit kan "
 "worden aangepast op de instellingen-pagina."
 
-#: includes/event-organiser-cpt.php:535
+#: includes/event-organiser-cpt.php:537
 msgid "Repeating events"
 msgstr "Terugkerende evenementen"
 
-#: includes/event-organiser-cpt.php:536
+#: includes/event-organiser-cpt.php:538
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1869,11 +1903,11 @@ msgstr ""
 "Maak een keuze uit de keuzelijst om een evenement te herhalen volgens een "
 "terugkeerpatroon. Aanvullende instelmogelijkheden worden dan zichtbaar."
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:540
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Hoe vaak moet het evenement herhalen (standaard 1)"
 
-#: includes/event-organiser-cpt.php:539
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1882,7 +1916,7 @@ msgstr ""
 "evenementen worden toegevoegd na deze datum, maar evenementen die al gestart "
 "zijn kunnen wel eindigen na deze datum."
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:542
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1892,7 +1926,7 @@ msgstr ""
 "vaste datum (b.v. iedere 24e van de maand) of een vaste dag (b.v. iedere 3e "
 "dinsdag)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:543
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1902,15 +1936,15 @@ msgstr ""
 "waarop het evenement zich herhaald. Indien geen dag wordt gekozen, dan wordt "
 "standaard de dag van de startdatum gebruikt."
 
-#: includes/event-organiser-cpt.php:546 includes/event-organiser-cpt.php:547
+#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
 msgid "Selecting a venue"
 msgstr "Locatie selecteren"
 
-#: includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551
 msgid "Use the venues input field to search for existing venues"
 msgstr "Gebruik het inputveld om te kiezen uit reeds aangemaakte locaties"
 
-#: includes/event-organiser-cpt.php:550
+#: includes/event-organiser-cpt.php:552
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -1918,11 +1952,11 @@ msgstr ""
 "Staat de locatie er nog niet tussen. Maak dan een nieuwe locatie aan vai de "
 "Locatie pagina."
 
-#: includes/event-organiser-cpt.php:560 includes/event-organiser-cpt.php:579
+#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
 msgid "Overview"
 msgstr "Overzicht"
 
-#: includes/event-organiser-cpt.php:561
+#: includes/event-organiser-cpt.php:563
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1933,7 +1967,7 @@ msgstr ""
 "einddatum van de eerste gebeurtenis. Klik op het evenement om het "
 "terugkeerpatroon te bekijken."
 
-#: includes/event-organiser-cpt.php:567
+#: includes/event-organiser-cpt.php:569
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1941,22 +1975,22 @@ msgstr ""
 "Bij bewegen van de muis over de lijst met locaties verschijnen er actie-"
 "links om de locatie te bewerken. De volgende acties zijn mogelijk:"
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:571
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
 msgstr ""
 "Door te klikken op de titel of op bewerken komt u in het bewerkingsscherm."
 
-#: includes/event-organiser-cpt.php:570
+#: includes/event-organiser-cpt.php:572
 msgid "Delete will permanently remove the venue"
 msgstr "Door te klikken op verwijderen wordt de locatie permanent verwijderd."
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:573
 msgid "View will take you to the venue's page"
 msgstr "Door te klikken op bekijken komt u op de locatie-pagina."
 
-#: includes/event-organiser-cpt.php:580
+#: includes/event-organiser-cpt.php:582
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1965,7 +1999,7 @@ msgstr ""
 "Deze pagina toont alle evenementen met hun terugkeerpatronen. Bekijk de "
 "samenvatting van een evenement door er op te klikken. "
 
-#: includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:583
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1976,11 +2010,11 @@ msgstr ""
 "categorie en op locatie. Met de 'ga naar datum'-knop kunt u snel naar een "
 "bepaalde datum gaan."
 
-#: includes/event-organiser-cpt.php:585
+#: includes/event-organiser-cpt.php:587
 msgid "Add Event"
 msgstr "Evenement toevoegen"
 
-#: includes/event-organiser-cpt.php:586
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1994,28 +2028,28 @@ msgstr ""
 "toevoegen. Het evenement kan direct worden gepubliceerd of worden bewaard "
 "als concept. "
 
-#: includes/event-organiser-cpt.php:592
+#: includes/event-organiser-cpt.php:594
 msgid "For more information"
 msgstr "Voor meer informatie"
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:595
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Bekijk de <a %s> documentatie</a>"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:596
 msgid "Debugging Event Organiser"
 msgstr "Event Organiser debuggen"
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:597
 msgid "Go Pro!"
 msgstr "Ga voor Pro!"
 
-#: includes/event-organiser-cpt.php:706 includes/event-organiser-cpt.php:729
+#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
 msgid "Color"
 msgstr "Kleur"
 
-#: includes/event-organiser-cpt.php:712
+#: includes/event-organiser-cpt.php:714
 msgid "Assign the category a colour."
 msgstr "Kies een kleur voor de categorie."
 
@@ -2207,23 +2241,23 @@ msgstr ""
 msgid "Help"
 msgstr "Help"
 
-#: includes/event-organiser-venue-functions.php:991
+#: includes/event-organiser-venue-functions.php:995
 msgid "Address"
 msgstr "Adres"
 
-#: includes/event-organiser-venue-functions.php:992
+#: includes/event-organiser-venue-functions.php:996
 msgid "City"
 msgstr "Woonplaats"
 
-#: includes/event-organiser-venue-functions.php:993
+#: includes/event-organiser-venue-functions.php:997
 msgid "State / Province"
 msgstr "Provincie"
 
-#: includes/event-organiser-venue-functions.php:994
+#: includes/event-organiser-venue-functions.php:998
 msgid "Post Code"
 msgstr "Postcode"
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Country"
 msgstr "Land"
 
@@ -2321,6 +2355,15 @@ msgstr ""
 msgid "This event was posted by <a href=\"%3$s\">%2$s</a>."
 msgstr "Dit evenement is gemaakt door <a href=\"%3$s\">%2$s</a>."
 
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
 #: templates/taxonomy-event-venue.php:30
 #, php-format
 msgid "Events at: %s"

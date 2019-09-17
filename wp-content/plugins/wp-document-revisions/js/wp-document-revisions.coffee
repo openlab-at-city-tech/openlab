@@ -16,10 +16,17 @@ class WPDocumentRevisions
     @$('#misc-publishing-actions a').click @enableSubmit #if post status is changed, enable the submit button so the change can be saved
     @$('input, select').on 'change', @enableSubmit #if any metabox is changed, allow submission
     @$('input[type=text], textarea').on 'keyup', @enableSubmit #if any metabox is changed, allow submission
+    @$('#content-add_media').click @cookieFalse #click on upload document
+    @$('#postimagediv .inside').click @cookieTrue #click within Featured Image metabox, set library to image library
+    @$('#submitdiv .inside').click @cookieDelete #click within Submit metabox, remove cookie for non-WPDR functions
+    @$('#adminmenumain').click @cookieDelete #click menu, remove cookie for non-WPDR functions as going elsewhere
+    @$('#wpadminbar').click @cookieDelete #click bar, remove cookie for non-WPDR functions as going elsewhere
 
+    @$('#document').show() #present the user with the docment upload box
+    @$('#revision-log').show() #present the user with the revision log box
+    @$('#revision-summary').hide() #initially hide the revision summary box
     @bindPostDocumentUploadCB()
     @hijackAutosave()
-
     setInterval @updateTimestamps, 60000 #automatically refresh all timestamps every minute with actual human time diff
 
   #monkey patch global autosave to our autosave
@@ -36,6 +43,7 @@ class WPDocumentRevisions
 
   #enable submit buttons
   enableSubmit: =>
+    @$('#revision-summary').show() #change made so show the summary for comment
     @$(':button, :submit', '#submitpost').removeAttr 'disabled'
 
     #notify user of success by adding the post upload notice before the #post div
@@ -154,6 +162,24 @@ class WPDocumentRevisions
       @postDocumentUpload file.name, response.response
 
 
+  #sets cookie as being outside image area, so is a document
+  cookieFalse = =>
+      secure = 'https:' == window.location.protocol
+      wpCookies.set 'doc_image', 'false', 24 * 60 * 60, false, false, secure
+
+  #sets cookie as being inside image area, so use the image library
+  cookieTrue = =>
+      secure = 'https:' == window.location.protocol
+      wpCookies.set 'doc_image', 'true', 24 * 60 * 60, false, false, secure
+      @$(':button, :submit', '#submitpost').removeAttr 'disabled'
+      # Propagation will be stopped in postimagediv to stop document event setting cookie false.
+
+  cookieDelete = =>
+      secure = 'https:' == window.location.protocol
+      wpCookies.set 'doc_image', 'true', -1, false, false, secure
+      @$(':button, :submit', '#submitpost').removeAttr 'disabled'
+      # Propagation will be stopped in postimagediv to stop document event setting cookie false.
+
   #loop through all timestamps and update
   updateTimestamps: =>
     @$( '.timestamp').each => #loop through all timestamps and update the timestamp
@@ -197,5 +223,5 @@ class WPDocumentRevisions
 
 jQuery(document).ready ($) ->
 
-  #note: selective enqueuing happens in includes/admin.php
+  #note: selective enqueuing happens in includes/class-wp-document-revisions-admin.php
   window.WPDocumentRevisions = new WPDocumentRevisions($)

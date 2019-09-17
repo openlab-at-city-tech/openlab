@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2017  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2019  MiKa (http://wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,14 +31,18 @@ function osm_map_create() {
                    'MarkerIcon' => '',
                    'MarkerName' => '',
                    'MarkerText' => '',
+                   'map_zoom' => '',
+                   'map_type' => '',
+                   'map_border' => '',
+                   'map_controls' => '',
                    'geotag_nonce' => wp_create_nonce( 'osm_geotag_nonce'),
                    'marker_nonce' => wp_create_nonce( 'osm_marker_nonce'),
                    'plugin_url' => OSM_PLUGIN_URL
             ));
 
-  $screens = array( 'post', 'page' );
-  foreach ($screens as $screen) {
-    add_meta_box( 'osm-sc-meta', 'WP OSM Plugin shortcode generator', 'osm_map_create_shortcode_function', $screen, 'normal', 'high' );
+  $post_types = get_post_types();
+  foreach ($post_types as $post_type) {
+    add_meta_box( 'osm-sc-meta', 'WP OSM Plugin shortcode generator', 'osm_map_create_shortcode_function', $post_type, 'normal', 'high' );
   }
 }
 
@@ -59,14 +63,51 @@ function osm_map_create_shortcode_function( $post ) {
 		jQuery(this).addClass('current');
 		jQuery("#"+tab_id).addClass('current');
 
-		map_ol3js_1.updateSize();
+                if(typeof map_ol3js_1 === "undefined"){
+                 map_ol3js_6.updateSize();
+                }
+                else {
+                  map_ol3js_1.updateSize();
+                 }
 		map_ol3js_2.updateSize();
 		map_ol3js_3.updateSize();
 		map_ol3js_4.updateSize();
 		map_ol3js_5.updateSize();
+                
+	})
+
+	jQuery('ul.osm-marker-tabs li').click(function(){
+		var tab_id = jQuery(this).attr('marker-tab');
+
+		jQuery('ul.osm-marker-tabs li').removeClass('current');
+		jQuery('.marker-tab-content').removeClass('current');
+
+		jQuery(this).addClass('current');
+		jQuery("#"+tab_id).addClass('current');
+                
+	})
+	jQuery('ul.osm-geo-marker-tabs li').click(function(){
+		var tab_id = jQuery(this).attr('geo-marker-tab');
+
+		jQuery('ul.osm-geo-marker-tabs li').removeClass('current');
+		jQuery('.geo-marker-tab-content').removeClass('current');
+
+		jQuery(this).addClass('current');
+		jQuery("#"+tab_id).addClass('current');
+                
 	})
 
 })
+
+  // sometimes mapNr starts with 2 ... needs to by analysed
+  jQuery(window).load(function(){	
+  if(typeof map_ol3js_1 === "undefined"){
+    map_ol3js_2.updateSize();
+  }
+  else {
+   map_ol3js_1.updateSize();
+  }
+  });
 
 
 
@@ -75,61 +116,64 @@ function osm_map_create_shortcode_function( $post ) {
 
 <div class="osm-tab-container">
   	<ul class="osm-tabs">
-		<li class="tab-link current" data-tab="tab_marker"><?php _e('Map & Marker','OSM') ?></li>
+		<li class="tab-link current" data-tab="tab_add_marker"><?php _e('Map & Marker','OSM') ?></li>
 		<li class="tab-link" data-tab="tab_file_list"><?php _e('Map & GPX | KML','OSM') ?></li>
 		<li class="tab-link" data-tab="tab_geotag"><?php _e('Map & geotags','OSM') ?></li>
-		<li class="tab-link" data-tab="tab_add_marker"><?php _e('Create Marker','OSM') ?></li>
 		<li class="tab-link" data-tab="tab_set_geotag"><?php _e('Set Geotag','OSM') ?></li>
 		<li class="tab-link" data-tab="tab_about"><?php _e('About','OSM') ?></li>
 	</ul>
 
-    <div id="tab_marker" class="tab-content current">
-        <?php _e('Add a map with or without a marker. <br/>Markers have to be created at [Create Marker] tab.','OSM') ?><br/><br/>
+    <div id="tab_add_marker" class="tab-content current"><br/>
       <b>1. <?php _e('map type','OSM') ?></b>:
-      <select name="osm_marker_map_type">
+      <select name="osm_add_marker_map_type" id="osm_add_marker_map_type">
       <?php include('osm-maptype-select.php'); ?>
       </select>
       <b>2. <?php _e('map border','OSM') ?></b>:
-      <select name="osm_marker_border">
+      <select name="osm_add_marker_border" id="osm_add_marker_border">
       <?php include('osm-color-select.php'); ?>
-      </select>
-      <b>3. <?php _e('marker id','OSM') ?></b>:
-      <select name="osm_marker_id">
-      <option value="no"><?php _e('none','OSM') ?></option>
-      <option value="all"><?php _e('all','OSM') ?></option>
-      <option value="1">01</option> <option value="2">02</option> <option value="3">03</option>
-      <option value="4">04</option> <option value="5">05</option> <option value="6">06</option>
-      <option value="7">07</option> <option value="8">08</option> <option value="9">09</option>
-      </select><br/>
+      </select><br/><br/>
+       <b>3. <?php _e('map controls','OSM') ?></b>:
+        <input type="checkbox" name="osm_add_marker_fullscreen" id="osm_add_marker_fullscreen" value="fullscreen"> <?php _e('fullscreen','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_scaleline" id="osm_add_marker_scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?> <br/>
+       <br/>
+       <b>4. <?php _e('marker icon','OSM') ?></b>:
+       <br/>
+      <?php include('osm-marker-select.php'); ?>
       <br/>
-      <b>3. <?php _e('map controls','OSM') ?></b>:
-        <input type="checkbox" name="fullscreen" value="fullscreen"> <?php _e('fullscreen','OSM') ?>
-        <input type="checkbox" name="scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
-        <input type="checkbox" name="mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?> <br/><br/>
-      <b>4. <?php $url = 'http://wp-osm-plugin.hanblog.net/';
-      $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode!', 'OSM' ), esc_url( $url ) );
-      echo $link; ?></b><br/><br/>
-	    <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-	    echo Osm::sc_OL3JS(array('map_center'=> $latlon,'zoom'=> $zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'MarkerSC')); ?>
-      <br/>
-    </div> <!-- id="tab_marker" -->
+      <b>5. <?php _e('marker text','OSM') ?>  (<?php _e('optional','OSM') ?>)</b>: <br/>
+        <?php _e('Use &lt;b&gt;&lt;/b&gt; for bold, &lt;i&gt;&lt;/i&gt; for kursiv and&lt;br&gt; for new line.','OSM') ?><br/>
+         <textarea id="osm_add_marker_text" name="marker_text" cols="35" rows="4"></textarea>
+      <br/><br/>
+      <b>5. <?php $url = 'http://wp-osm-plugin.hanblog.net/';
+      $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
+      echo $link; ?></b>
+
+	  <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
+	echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'AddMarker')); ?>
+
+      <div id="Marker_Div"><br/></div><br/>
+        <a class="button" onClick="osm_savePostMarker();"> <?php _e('Save marker and generate shortcode','OSM')?> </a><br/><br/>      <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>
+
+
+ </div> <!-- id="tab_geotag" -->
 
   <!-- id="add map with gpx or kml file" -->
 	<div id="tab_file_list" class="tab-content">
 	  <?php _e('Add a map with an GPX or KML file. <br/>Copy file address at Meditathek.','OSM') ?><br/><br/>
       <b>1. <?php _e('Map type','OSM') ?></b>:
-      <select name="osm_file_list_map_type">
+      <select name="osm_file_list_map_type" id="osm_file_list_map_type">
       <?php include('osm-maptype-select.php'); ?>
       </select>
       <b>2. <?php _e('map border','OSM') ?></b>:
-      <select name="osm_file_border">
+      <select name="osm_file_border" id="osm_file_border">
       <?php include('osm-color-select.php'); ?>
       </select>
       <br/><br/>
       <b>3. <?php _e('map controls','OSM') ?></b>:
-        <input type="checkbox" name="file_fullscreen" value="file_fullscreen"> <?php _e('fullscreen','OSM') ?>
-        <input type="checkbox" name="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
-        <input type="checkbox" name="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?> <br/><br/>
+        <input type="checkbox" name="file_fullscreen" id="file_fullscreen" value="file_fullscreen"> <?php _e('fullscreen','OSM') ?>
+        <input type="checkbox" name="file_scaleline" id="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
+        <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?> <br/><br/>
 
     <b>4. <?php _e('Paste the local URL of file here: ','OSM') ?></b>
 	<p><?php _e('Do not save any of your personal data in the plugins/osm folder but in the upload folder!','OSM') ?></p>
@@ -172,7 +216,7 @@ function osm_map_create_shortcode_function( $post ) {
   <ol>
         <li>
           <?php _e('map type','OSM') ?>
-          <select name="osm_geotag_map_type">
+          <select name="osm_geotag_map_type" id="osm_geotag_map_type">
           <?php include('osm-maptype-select.php'); ?>
           </select>
         </li>
@@ -183,18 +227,18 @@ function osm_map_create_shortcode_function( $post ) {
     <li>
       <?php _e('marker style','OSM');echo " "; _e('cluster','OSM') ?><br/>
       <label class="metabox-label">
-        <input type="radio" name="tagged_marker_style" value="standard" checked="checked" />
+        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" value="standard" checked="checked" />
         <?php  echo '<img src="'.OSM_PLUGIN_URL.'/images/marker_standard_01.png" align="left" hspace="5" alt="mic_black_pinother_02.png">'; ?>
       </label>
       <label class="metabox-label">
-        <input type="radio" name="tagged_marker_style" value="cluster"/>
+        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" value="cluster"/>
         <?php  echo '<img src="'.OSM_PLUGIN_URL.'/images/marker_cluster_01.png" align="left" hspace="5" alt="mic_red_pinother_02.png">'; ?>
       </label>
     </li>
     <br/><br/><br/><br/><br/><br/><br/>
     <li>
       <?php _e('post type','OSM') ?>
-      <select name="osm_geotag_posttype">
+      <select name="osm_geotag_posttype" id="osm_geotag_posttype">
         <option value="post"><?php _e('post','OSM') ?></option>
         <option value="page"><?php _e('page','OSM') ?></option>
       </select>
@@ -204,7 +248,9 @@ function osm_map_create_shortcode_function( $post ) {
         _e('Category Filter','OSM') ;
         wp_dropdown_categories(
         array('hide_empty' => 0, 'value_field'=>'name', 'name' => 'category_parent', 'orderby' => 'name', 'selected' => '0', 'hierarchical' => true, 'show_option_none' => __('None')));
-      ?>
+        _e(' OR ','OSM') ;?>
+	<label for="TagFilter">Tag Tilter: </label>
+	<input type="text" id="tag_filter" name="tag_filter">
     </li>
     <li>
         <?php
@@ -218,41 +264,6 @@ function osm_map_create_shortcode_function( $post ) {
 
      </div> <!-- id="tab_geotag" -->
 
-    <div id="tab_add_marker" class="tab-content">
-
-       <?php _e('You can store up to nine markers here for this post / page','OSM') ?><br/>
-       <?php _e('Use the ','OSM'); _e('marker id','OSM'); _e(' at [Map & Marker] tab.','OSM') ?><br/>
-      <b>1. <?php _e('marker id','OSM') ?></b>:
-      <select name="osm_add_marker_id">
-      <option value="1">01</option><option value="2">02</option><option value="3">03</option>
-      <option value="4">04</option><option value="5">05</option><option value="6">06</option>
-      <option value="7">07</option><option value="8">08</option><option value="9">09</option>
-      </select><br/>
-      <b>2. <?php _e('marker name','OSM') ?></b>:
-        <input name="osm_add_marker_name" type="text" size="20" maxlength="30" value="NoName"><br/>
-       <b>3. <?php _e('marker icon','OSM') ?></b>:
-
-       <br/>
-      <?php include('osm-marker-select.php'); ?>
-      <br/><br/><br/><br/><br/><br/><br/><br/>
-      <b>4. <?php _e('marker text','OSM') ?>  (<?php _e('optional','OSM') ?>)</b>: <br/>
-        <?php _e('Use &lt;b&gt;&lt;/b&gt; for bold, &lt;i&gt;&lt;/i&gt; for kursiv and&lt;br&gt; for new line.','OSM') ?><br/>
-         <textarea id="osm_add_marker_text" name="marker_text" cols="35" rows="4"></textarea>
-      <br/><br/>
-      <b>5. <?php $url = 'http://wp-osm-plugin.hanblog.net/';
-      $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
-      echo $link; ?></b>
-
-	  <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-		echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'AddMarker')); ?>
-
-
-
-      <div id="Marker_Div"><br/></div><br/>
-        <a class="button" onClick="osm_savePostMarker();"> <?php _e('Save','OSM')?> </a><br/><br/>      <?php _e('You can store up to nine markers here for this post / page','OSM') ?><br/>
-
-
- </div> <!-- id="tab_geotag" -->
     <div id="tab_set_geotag" class="tab-content">
         <?php _e('You can set a geotag (lat/lon) and an icon for this post / page.') ?><br/>
         <b>1. <?php _e('post icon','OSM') ?></b>:
@@ -274,15 +285,15 @@ function osm_map_create_shortcode_function( $post ) {
      <table border="0" >
        <tr><td><?php  echo '<p><img src="'.OSM_PLUGIN_URL.'/WP_OSM_Plugin_Logo.png" align="left" vspace="10" hspace="20" alt="Osm Logo"></p>'; ?> </td>
        <td><b><?php _e('Coordination','OSM'); echo " & "; _e('Development','OSM') ?>:</b><a target="_new" href="http://mika.HanBlog.net"> MiKa</a><br/><br/>
-       <b><?php _e('Thanks for Translation to','OSM') ?>:</b><br/> Вячеслав Стренадко, <a target="_new" href="http://tounoki.org/">Tounoki</a>, Sykane, <a target="_new" href="http://www.pibinko.org">Andrea Giacomelli</a><br/><br/><b>
+       <b><?php _e('Thanks for Translation to','OSM') ?>:</b><br/> Вячеслав Стренадко, <a target="_new" href="http://tounoki.org/">Tounoki</a>, Sykane, <a target="_new" href="http://www.pibinko.org">Andrea Giacomelli</a>, <a target="_new" href="http://www.cspace.ro">Sorin Pop</a><br/><br/><b>
+
+
+<b><?php _e('Thanks for Icons to','OSM') ?>:</b><br/>
+<a target="_new" href="http://rgb-labs.com">Dash</a>, <a target="_new" href="https://github.com/mapbox/maki">Maki</a>, <a target="_new" href="http://www.sjjb.co.uk/mapicons/">SJJB</a>, <a target="_new" href="http://publicdomainvectors.org/en/free-clipart/">Publicdomainvectors</a>, <a target="_new" href="https://pixabay.com/de/">Pixaba</a>, <a target="_new" href="https://thenounproject.com/">TheNounProject</a><br/><br/>
        <?php
        $wp_url = "https://wordpress.org/support/view/plugin-reviews/osm";
        $rate_txt = sprintf( __( 'If you like the OSM plugin rate it on WP <a href="%s">here</a> ', 'OSM' ), esc_url($wp_url));
        echo $rate_txt; ?>
-	   <?php
-       $fb_url = "https://www.facebook.com/WpOsmPlugin";
-	   $fb_txt = sprintf( __( ' or ike us on facebook <a href="%s">here</a>. ', 'OSM' ), esc_url($fb_url));
-       echo $fb_txt; ?>
        <?php _e('Thanks!','OSM') ?></b>
        </td></tr>
      </table>

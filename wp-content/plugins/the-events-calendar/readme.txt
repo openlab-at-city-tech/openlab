@@ -1,12 +1,12 @@
 === The Events Calendar ===
 
-Contributors: ModernTribe, borkweb, barry.hughes, bordoni, brianjessee, aguseo, cliffpaulick, courane01, faction23, GeoffBel, geoffgraham, ggwicz, jbrinley, jentheo, leahkoerper, lucatume, mastromktg, MZAWeb, neillmcshea, nicosantos, patriciahillebrandt, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, tribecari, vicskf, zbtirrell
+Contributors: ModernTribe, borkweb, barry.hughes, bordoni, brianjessee, aguseo, cliffpaulick, courane01, faction23, GeoffBel, geoffgraham, ggwicz, jbrinley, jentheo, leahkoerper, lucatume, mastromktg, MZAWeb, neillmcshea, nicosantos, patriciahillebrandt, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, tribecari, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, modern tribe, tribe, widget
 Donate link: http://m.tri.be/29
 Requires at least: 4.7
-Stable tag: 4.7.4
-Tested up to: 5.0.3
-Requires PHP: 5.2.4
+Stable tag: 4.9.7
+Tested up to: 5.2.2
+Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -215,6 +215,168 @@ Still not happy? Shoot us an email to support@theeventscalendar.com or tweet to 
 
 == Changelog ==
 
+= [4.9.7] 2019-08-19 =
+
+* Tweak - Update Lodash version on Block editor to prevent any possibility of a security issue with the package. From v4.17.11 to v4.17.15 [131421]
+* Tweak - Add filter 'tribe_events_js_config' to allow filtering the contents of the Javascript configuration [132567]
+* Tweak - Updates to the shortcode Javascript code to allow disabling the URL manipulation behavior [132567]
+* Fix - Prevent mascot image to get blown up out of proportions to a larger size on buggy CSS loading. [131910]
+* Language - 3 new strings added, 191 updated, 1 fuzzied, and 0 obsoleted
+
+= [4.9.6] 2019-08-07 =
+
+* Tweak - Update Event Aggregator to include compatibility with new Meetup API requirements - [See more](http://m.tri.be/1afb) [125635]
+* Language - 5 new strings added, 120 updated, 5 fuzzied, and 10 obsoleted
+
+= [4.9.5] 2019-07-25 =
+
+* Tweak - Update redirection URLs for Freemius actions [130281]
+* Fix - Location filtering for Context class moved out of construct, resolving lots of navigation problems across The Events Calendar [130754]
+* Fix - Featured event AJAX and browser navigation working as expected for all use cases. [127272]
+* Fix - Shortcode properly handling featured param on AJAX requests. [114002]
+* Fix - Remove removing wpautop for gutenberg blocks to fix spacing when content comes from classic editor. [122801]
+* Language - 4 new strings added, 16 updated, 0 fuzzied, and 0 obsoleted
+
+= [4.9.4] 2019-07-03 =
+
+* Tweak - Add filter `tribe_events_event_insert_args` the arguments in prior to inserting the event and meta fields. [129517]
+* Tweak - Add filter `tribe_events_event_update_args` the arguments prior the update of an event and meta fields. [129517]
+* Tweak - Add filter `tribe_events_event_prevent_update` to disable the update for an event via the Tribe API [129517]
+* Tweak - Add filter `tribe_events_archive_get_args` to filter the arguments used to get the events on the archive page via REST API. [129517]
+* Tweak - Add filter `tribe_events_validator_is_event_id` to define if is a valid event_id [129517]
+* Tweak - Add action `tribe_rest_before_event_data` executed before the Event data is pulled before deliver the Event via REST API. [129517]
+* Tweak - Add `Tribe__Events__Query::last_found_events()` to access the last results via the `Query` object [129517]
+* Tweak - Wrap `register_rest_route` calls with `tribe_register_rest_route` to enable filtering on REST registration
+* Tweak - Add filter `tribe_ical_feed_vtimezone` to filter the `VTIMEZONE` group [89999]
+* Tweak - Include proper documentation of why the plugin has been deactivated and a knowledgebase article about how to downgrade [129726]
+* Tweak - When trying to update The Events Calendar with an incompatible version of an Addon that is expired, it will stop the upgrade [129727]
+* Tweak - Add filter `tribe_is_classic_editor_plugin_active` to change the output if the classic editor is active or not [121267]
+* Tweak - Create a new key if `AUTH_KEY` is not defined or is empty and add a new filter `tribe_promoter_secret_key` to filter the result [127183]
+* Tweak - Divide the `tribe-common.js` file to prevent that file from being bloated with external dependencies. [129526]
+* Tweak - Make sure `UTC-0` is converted back to `UTC` instead of `UTC-01` [129240]
+* Tweak - Add new function `tribe_register_rest_route` Wrapper around `register_rest_route` to filter the arguments when a new REST endpoint is created [129517]
+* Tweak - Add new method `Tribe__Cost_Utils::parse_separators` to infer decimal and thousands separators from a value that might have been formatted in a local different from the current one [98061]
+* Fix - Save of event meta data when Classic editor plugin and gutenberg blocks for events are enabled [121267]
+* Fix - Moved The Events Calendar specific code from common Context class into The Events Calendar [129241]
+* Fix - Fixed issue where multiday events were not returning correct end date in block editor [128033]
+* Fix - Resolved issue where deactivation feedback was not hooked properly [128341]
+* Fix - Added escaping to the event website URL target attribute [129565]
+* Fix - Fix Timezone definitions for `*.ics` file on events [89999]
+* Fix - Resolved an issue where non-English decimal and thousands event cost separators could lead to wrong cost values in REST API responses [98061]
+* Fix - Prevent Clipboard Javascript from loading all over the place on `/wp-admin/` [129526]
+* Fix - PHP 5.6 compatibility for `trait Cache_User` by using WP action `shutdown` instead of `__destruct` on our `WP_Rewrite` [129860]
+* Language - 14 new strings added, 222 updated, 1 fuzzied, and 6 obsoleted
+
+= [4.9.3.2] 2019-06-20 =
+
+* Fix - Prevent issue where older versions of the tribe-common libraries could be bootstrapped [129478]
+* Fix - Add Promoter PCSS file so that the proper CSS will be generated on package build [129584]
+
+= [4.9.3.1] 2019-06-07 =
+
+* Fix - Remove caching of rewrite base slugs which make third-party, Photo and Week work as expected [129035]
+* Tweak - Adjust newsletter signup submission destination [129034]
+
+= [4.9.3] 2019-06-06 =
+
+* Fix - Fixed issue where the previous events link was not present on initial page load of the List View [127477]
+* Language - 10 new strings added, 18 updated, 0 fuzzied, and 0 obsoleted
+
+= [4.9.2] 2019-05-16 =
+
+* Tweak - In the Event Repository class: filter the event cretion meta before checking it for coherency
+* Tweak - Reduced file size by removing .po files and directing anyone creating or editing local translations to translate.wordpress.org
+* Fix - Fix event bar issue where it was required to pick the date in order to search events via keyword or location [126158]
+* Fix - Make back-compatibility handling more robust when dealing with classes non-existing in the older plugin versions [127173]
+
+= [4.9.1.1] 2019-05-06 =
+
+* Fix - Prevent Composer autoloader from throwing Fatal due to unexistent `setClassMapAuthoritative()` method [126590]
+
+= [4.9.1] 2019-05-02 =
+
+* Fix - Prevent recurring events all page to throw 404 when events are in the past [126790]
+* Fix - Backwards compatibility for `eventDiplay` usage around `list` and `day` only showing upcoming events [126686]
+* Fix - List events Widget will display events until their end date has passed [126837]
+* Tweak - Add values for the JSON-LD object to avoid Google console errors. Fields added: `offers.availability`, `offers.category`, `offers.priceCurrency`, `offers.validFrom` and `performer` [120193]
+* Tweak - Add `tribe_events_cost_unformatted` filter to allow WPML support for WooCommerce Multilingual
+* Language - 0 new strings added, 168 updated, 0 fuzzied, and 5 obsoleted
+
+= [4.9.0.3] 2019-04-26 =
+
+* Fix - Prevent Composer autoloader from throwing Fatal due to unexistent `setClassMapAuthoritative()` method [126590]
+
+= [4.9.0.2] 2019-04-25 =
+
+* Fix - Avoid fatals due to Query method not been present by bumping version of Event Tickets required to 4.10.4.2
+
+= [4.9.0.1] 2019-04-25 =
+
+* Fix - Modifications to `tribe_get_events()` to resolve problems introduced by latest release `4.9.0`
+* Fix - Backwards compatibility for `'eventDisplay' => 'upcoming'` on `tribe_get_events()`. Thanks @softwebteam, @mrwweb and @karks88 [126124]
+* Fix - Single navigation to next and previous events using the Object Relational Mapping classes [126144]
+* Fix - Events displayed correctly on all views, using End date instead of Start Date. Making sure events that are not over still show on upcoming [126259]
+
+= [4.9.0] 2019-04-17 =
+
+* Feature - Refactor the Database Connection to start using an Object Relational Mapping tool for a better tested codebase
+* Feature - Add the `tribe_events()` function as entry-point to the Events ORM and the supporting filter code [116356, 115579]
+* Feature - Add the `tribe_venues()` function as entry-point to the Venues ORM and the supporting filter code [116356, 115579]
+* Feature - Add the `tribe_organizers()` function as entry-point to the Organizers ORM and the supporting filter code [116356, 115579]
+* Feature - Add additional caching to The Events Calendar REST API archives and the Post Repository event/venue/organizer responses [117159]
+* Feature - Include Freemius integration on to allow opt-in information collection for 10% of new users
+* Tweak - Setting the site of Timezones will trigger queries using UTC to equalize event dates on Views
+* Tweak - Add filter to allow deactivating Freemius `tribe_events_integrations_should_load_freemius`
+* Tweak - Include a way for third-party to handle Known Range rebuilding of events `tribe_events_rebuild_known_range`
+* Tweak - All new granular handling for UTC and Timezone saving on the Classic editor
+* Tweak - Add support for the `tribe_suppress_query_filters` query variable to prevent the plugin's own query filters from applying [116356, 115579]
+* Tweak - Add the `tribe_events_has_next_args` and `tribe_events_has_previous_args` filters to allow filtering the arguments that check if next/previous archive pages or events are available [123950]
+* Fix - Include second param for the `the_title` for Events, Venue and Organizer Rest API endpoints amd prevent warnings. Props to Alex [123317]
+* Language - 5 new strings added, 167 updated, 0 fuzzied, and 1 obsoleted
+
+= [4.8.2] 2019-03-04 =
+
+* Fix - Resolve console warnings around React key usage for Blocks Editor [121198]
+* Fix - Improve our `tribe_paged` URL parameter sanitization, preventing themes from printing the variable and causing XSS security issues [123616]
+* Fix - Change ordering for Eventbrite Tickets on Event Aggregator, Ascending order by date is now the default [121979]
+* Tweak - Day light savings notice will now reset 4 times per year when using any UTC Timezone [123221]
+* Tweak - Start date for Event Aggregator is now required on Eventbrite Tickets [121979]
+* Language - 3 new strings added, 172 updated, 0 fuzzied, and 1 obsoleted
+
+= [4.8.1] 2019-02-14 =
+
+* Feature - Introduced new "(do not override)" default post status for Eventbrite imports in Event Aggregator. This preserves events' original statuses from Eventbrite.com upon import (e.g., "draft" events will not be automatically set to "publish" upon import) [112346]
+* Fix - Make sure the setting for "Default mobile view" is respected. Thanks to Kathleen, Tim and others for reporting this! [119271]
+* Fix - Apply block closer to price block [120108]
+* Tweak - Added new filter `tribe_aggregator_new_event_post_status_before_import` to allow for custom handling of an event's post status before EA an import is completed [112648]
+* Tweak - Added filters: `tribe_events_admin_js_ajax_url_data`
+* Tweak - Unload Image Widget Plus version 1.0.2 or older to Prevent it from creating fatals on The Events Calendar
+* Language - 2 new strings added, 150 updated, 1 fuzzied, and 0 obsoleted
+
+= [4.8] 2019-02-04 =
+
+* Feature - Introduced new "(do not override)" default post status for Eventbrite imports in Event Aggregator. This preserves events' original statuses from Eventbrite.com upon import (e.g., "draft" events will not be automatically set to "publish" upon import) [112346]
+* Fix - Make sure the setting for "Default mobile view" is respected. Thanks to Kathleen, Tim and others for reporting this! [119271]
+* Fix - Apply block closer to price block [120108]
+* Tweak - Added new filter `tribe_aggregator_new_event_post_status_before_import` to allow for custom handling of an event's post status before EA an import is completed [112648]
+* Tweak - Added filters: `tribe_events_admin_js_ajax_url_data`
+* Tweak - Unload Image Widget Plus version 1.0.2 or older to Prevent it from creating fatals on The Events Calendar
+* Language - 2 new strings added, 150 updated, 1 fuzzied, and 0 obsoleted
+
+= [4.8.0.1] 2019-02-07 =
+
+* Fix - Modify extension dependency checking with new system to determine if it can load [122368]
+* Tweak - Prevent most extensions from loading if Event Tickets is on an older version to prevent conflicts [122368]
+
+= [4.8] 2019-02-05 =
+
+* Feature - Add check and enforce PHP 5.6 as the minimum version [116282]
+* Feature - Add system to check plugin versions to inform you to update and prevent site breaking errors [116841]
+* Tweak - Added filters: `tribe_not_php_version_names`
+* Deprecated - Constants MIN_ET_VERSION and MIN_COMMON_VERSION in Tribe__Events__Main, use $min_et_version property and no replacement for MIN_COMMON_VERSION
+* Deprecated - The `is_delayed_activation()`, `maybe_delay_activation_if_outdated_common()`, and `checkAddOnCompatibility()` method has been deprecated in `Tribe__Events__Main` in favor of new Dependency Checking System
+* Language - 7 new strings added, 139 updated, 0 fuzzied, and 1 obsoleted
+
 = [4.7.4] 2019-01-21 =
 
 * Fix - Display the tags block delimiter in the editor [119393]
@@ -229,6 +391,7 @@ Still not happy? Shoot us an email to support@theeventscalendar.com or tweet to 
 * Fix - Layout bugs with the new Twenty Nineteen core theme [119689]
 * Fix - Include UTC dates meta on the event creation from the block editor [120399]
 * Tweak - Ensure we don't re-apply `wpautop()` to content that has had it removed [120562]
+* Tweak - Added `tribe_events_admin_js_ajax_url_data` filter to make filtering the JS vars of TEC's admin JS easier [116973]
 * Tweak - Adjusted content in the admin welcome page that users are brought to upon newly activating The Events Calendar [117795]
 * Tweak - Changed views: `blocks/event-tags`
 * Language - 3 new strings added, 21 updated, 1 fuzzied, and 5 obsoleted

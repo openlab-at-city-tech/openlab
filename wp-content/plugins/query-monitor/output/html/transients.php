@@ -124,7 +124,7 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 			/* translators: %s: Number of transient values that were updated */
 			: __( 'Transient Updates (%s)', 'query-monitor' );
 
-		$menu[] = $this->menu( array(
+		$menu[ $this->collector->id() ] = $this->menu( array(
 			'title' => esc_html( sprintf(
 				$title,
 				number_format_i18n( $count )
@@ -137,7 +137,7 @@ class QM_Output_Html_Transients extends QM_Output_Html {
 }
 
 function register_qm_output_html_transients( array $output, QM_Collectors $collectors ) {
-	$collector = $collectors::get( 'transients' );
+	$collector = QM_Collectors::get( 'transients' );
 	if ( $collector ) {
 		$output['transients'] = new QM_Output_Html_Transients( $collector );
 	}

@@ -63,7 +63,7 @@ class Tribe__Settings_Manager {
 	 * @return array of options
 	 */
 	public static function get_options() {
-		$options = get_option( Tribe__Main::OPTIONNAME, array() );
+		$options = (array) get_option( Tribe__Main::OPTIONNAME, array() );
 		if ( has_filter( 'tribe_get_options' ) ) {
 			_deprecated_function( 'tribe_get_options', '3.10', 'option_' . Tribe__Main::OPTIONNAME );
 			$options = apply_filters( 'tribe_get_options', $options );
@@ -261,6 +261,10 @@ class Tribe__Settings_Manager {
 	 * Create the help tab
 	 */
 	public function do_help_tab() {
+		/**
+		 * Include Help tab Assets here
+		 */
+
 		include_once Tribe__Main::instance()->plugin_path . 'src/admin-views/tribe-options-help.php';
 	}
 

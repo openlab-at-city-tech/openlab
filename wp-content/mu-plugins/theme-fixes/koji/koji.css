@@ -1,0 +1,132 @@
+html.html-locked.showing-admin-bar.js {
+	padding-top: 0 !important;
+}
+
+@media (min-width: 600px) {
+	.site-title {
+		width: calc(100% - 12rem);
+	}
+}
+
+@media (min-width: 1000px ) {
+	#site-header {
+		position: absolute;
+	}
+
+	.site-title {
+		width: auto;
+	}
+
+	body.adminbar-special {
+		padding-top: 0;
+	}
+
+	body.adminbar-special #site-wrapper {
+		padding-top: 70px;
+	}
+
+	.site-description {
+		margin-bottom: 10rem;
+	}
+}
+
+@media (max-width: 999px) {
+	.admin-bar .mobile-menu-wrapper {
+		top: 50px;
+	}
+}
+
+@media (max-width: 782px) {
+	.admin-bar .mobile-menu-wrapper {
+		top: 90px;
+	}
+}
+
+#site-header:after {
+	content: '';
+	clear: both;
+	display: table;
+}
+
+#mobile-menu.site-nav {
+	margin-top: 6rem;
+}
+
+.entry-content h1 { font-size: 2.8rem; }
+.entry-content h2 { font-size: 2.6rem; }
+.entry-content h3 { font-size: 2.3rem; }
+.entry-content h4 { font-size: 2.1rem; }
+.entry-content h5 { font-size: 1.9rem; }
+.entry-content h6 { font-size: 1.8rem; }
+.post-inner {
+    margin-bottom: 4.5rem;
+	padding-top: 6rem;
+}
+#site-content {
+	display: block; padding: 3rem 3rem 0 3rem; width: 100%;
+}
+.site-description {
+    margin: 1.7rem 0 1.7rem 0;
+	font-size: 1.5rem;
+}
+h3.comment-reply­title {
+    margin: 0 0 3rem 0;
+	font-size: 2rem;
+}
+.entry-content li, .entry-content ul ul, .entry-content ul ol, .entry-content ol ol, .entry-content ol ul {
+    margin-top: 1rem;
+	line-height: 2.5rem;
+}
+.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 {
+    margin-top: 2rem;
+    margin-right: 0px;
+    margin-bottom: 2.5rem;
+    margin-left: 0px;
+}
+
+.menu-item-has-children.menu-collapsed > .sub-menu {
+	display: none;
+}
+
+.menu-item-has-children {
+	position: relative;
+}
+
+button.menu-toggle:hover {
+	background: #000;
+}
+
+button.menu-toggle:hover:before {
+	color: #F6F7F8;
+}
+
+button.menu-toggle {
+	background: none;
+	position: absolute;
+	padding: 3px 12px;
+	right: 0;
+	top: -3px;
+}
+
+button.menu-toggle:before {
+	color: #000;
+	content: '\f107';
+	font-family: fontawesome;
+	text-decoration: none;
+}
+
+.menu-collapsed button.menu-toggle:before {
+	content: '\f105';
+}
+
+#ol-print-this-page a {
+	font-size: .9em !important;
+}
+
+.wpcf7-form-control-wrap textarea {
+	margin-top: .5rem;
+}
+
+#openlab-footer {
+	display: none !important;
+}

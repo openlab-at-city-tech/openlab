@@ -1,0 +1,53 @@
+// *-------------------------------------------------------------------------------------
+// * List Style Type
+// *-------------------------------------------------------------------------------------
+#ftwp-list {
+	.ftwp-anchor::before {
+		@extend .ftwp-icon;
+		float: left;
+		font-size: 0.4 * $font_size;
+		line-height: 2.5 * $list_line_height;
+		margin-right: $list_type_offset;
+	}
+	
+	.ftwp-text {
+		display: block;
+		overflow: hidden;
+	}
+	
+	&.ftwp-liststyle {
+		&-circle .ftwp-anchor::before {
+			content: '\F111';
+		}
+		
+		&-circle-o .ftwp-anchor::before {
+			content: '\F10C';
+//			font-weight: bold;
+		}
+		
+		&-square .ftwp-anchor::before {
+			content: '\F0C8';
+		}
+		
+		&-square-o .ftwp-anchor::before {
+			content: '\F096';
+//			font-weight: bold;
+		}
+		
+		&-decimal {
+			counter-reset: List;
+			
+			.ftwp-item {
+				counter-increment: List;
+			}
+			
+			.ftwp-anchor::before {
+				font-size: $font_size;
+				line-height: $list_line_height;
+				font-family: inherit;
+				content: counters(List, '.');
+			}
+		}
+	}
+	
+}

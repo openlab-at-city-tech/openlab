@@ -39,9 +39,18 @@ function metabox( $post ) {
 	$show = show_for_post( $post->ID );
 
 	?>
+	<style type="text/css">
+		p.print-this-page-description {
+			margin-top: 5px;
+		}
+	</style>
+
 	<label for="print-this-page-toggle">
 		<input type="checkbox" id="print-this-page-toggle" value="1" name="print-this-page-toggle" <?php checked( $show ); ?>> <?php printf( "Add a 'Print this Page' link to this %s allowing site users to easily print its contents.", esc_html( $post->post_type ) ); ?>
 	</label>
+
+
+	<p class="description print-this-page-description">To change settings for the entire site, go to <a href="<?php echo esc_attr( admin_url( 'options-reading.php' ) ); ?>">Reading Settings.</a></p>
 	<?php wp_nonce_field( 'print_this_page_toggle', 'print-this-page-toggle-nonce', false ); ?>
 	<?php
 }
@@ -64,7 +73,7 @@ add_action(
 		if ( $disable ) {
 			update_post_meta( $post_id, 'print_this_page_disable', '1' );
 		} else {
-			delete_post_meta( $post_id, 'print_this_page_disable' );
+			update_post_meta( $post_id, 'print_this_page_disable', '0' );
 		}
 	}
 );
@@ -77,6 +86,12 @@ add_action(
  */
 function show_for_post( $post_id ) {
 	$disable = get_post_meta( $post_id, 'print_this_page_disable', true );
+
+	if ( '' === $disable ) {
+		$option  = get_option( 'openlab-print-this-page', 'off' );
+		$disable = 'on' === $option ? '0' : '1';
+	}
+
 	return '1' !== $disable;
 }
 
@@ -86,6 +101,11 @@ function show_for_post( $post_id ) {
 add_filter(
 	'the_content',
 	function( $content ) {
+		// Handled in a different way on the main site.
+		if ( bp_is_root_blog() ) {
+			return $content;
+		}
+
 		if ( ! is_single() && ! is_singular() ) {
 			return $content;
 		}
@@ -125,4 +145,40 @@ add_filter(
 		return $content;
 	},
 	300
+);
+
+/**
+ * Adds settings field to Settings > Reading.
+ */
+add_action(
+	'admin_init',
+	function() {
+		register_setting(
+			'reading',
+			'openlab-print-this-page',
+			[
+				'sanitize_callback' => function( $setting ) {
+					return 'on' === $setting ? 'on' : 'off';
+				}
+			]
+		);
+
+		add_settings_field(
+			'openlab-print-this-page',
+			'Print This Page',
+			function() {
+				$option = get_option( 'openlab-print-this-page', 'off' );
+				?>
+				<fieldset>
+					<legend class="screen-reader-text">"Print This Page" default setting</legend>
+					<input type="radio" value="on" id="print-this-page-on" name="openlab-print-this-page" <?php checked( 'on', $option ); ?> /> <label for="print-this-page-on">Enable 'Print This Page' button on all posts and pages.<br /></label><br />
+					<input type="radio" value="off" id="print-this-page-off" name="openlab-print-this-page" <?php checked( 'off', $option ); ?> /> <label for="print-this-page-off">Disable 'Print This Page' button on all posts and pages.</label>
+				</label>
+
+				<p class="description">You may override the default setting on individual posts and pages.</p>
+				<?php
+			},
+			'reading'
+		);
+	}
 );

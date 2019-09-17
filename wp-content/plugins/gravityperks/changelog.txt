@@ -1,6 +1,31 @@
 
 # Changelog
 
+## 2.1.8
+
+	- Fixed potential warning if the Gravity Perks updater isn’t provided the optimal data format.
+
+## 2.1.7
+
+	- Updated perk settings view to require "manage_options" capability instead of "update_plugins".
+
+## 2.1.6
+
+	- Fixed an issue where certain API calls going to Gravity Wiz (such as checking for announcements) weren’t being cached.
+
+## 2.1.5
+
+	- Added security enhancements to perk settings API.
+
+## 2.1.4
+
+	- Fixed fatal error introduced in 2.1.3.
+
+## 2.1.3
+
+	- Fixed security issue.
+	- Fixed notice generated when fetching available perks and no license key is specified.
+
 ## 2.1.2
 
 	- Fixed several fatal errors that occurred when running older versions of Gravity Forms.

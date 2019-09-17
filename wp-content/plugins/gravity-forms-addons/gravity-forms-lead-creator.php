@@ -12,6 +12,10 @@ class KWS_GF_Change_Lead_Creator {
 			return;
 		}
 
+		if ( ! function_exists( 'wp_get_current_user' ) ) {
+			return;
+		}
+
 		if ( ! GFCommon::current_user_can_any( "gravityforms_edit_entries" ) ) {
 			return;
 		}

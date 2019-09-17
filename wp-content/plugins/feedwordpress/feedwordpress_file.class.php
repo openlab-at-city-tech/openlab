@@ -9,6 +9,10 @@ class FeedWordPress_File extends WP_SimplePie_File {
 		global $wp_version;
 
 		$source = NULL;
+		if ( empty( $feedwordpress ) ) {
+			return;
+		}
+
 		if ($feedwordpress->subscribed($url)) :
 			$source = $feedwordpress->subscription($url);
 		endif;

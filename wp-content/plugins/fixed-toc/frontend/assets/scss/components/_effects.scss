@@ -1,0 +1,352 @@
+// *-------------------------------------------------------------------------------------
+// * Define the transition and animate effects.
+// *-------------------------------------------------------------------------------------
+
+// Effects on/off
+// *------------------------------------------
+$fade: true;
+$backPulse: true;
+$sweepToRight: true;
+$sweepToLeft: true;
+$bounceToRight: true;
+$bounceToLeft: true;
+$radialOut: true;
+$radialIn: true;
+$rectangleOut: true;
+$rectangleIn: true;
+$shutterOut: true;
+$shutterIn: true;
+$underlineFromLeft: true;
+$underlineFromRight: true;
+$underlineFromCenter: true;
+$revealUnderline: true;
+$revealLeftline: true;
+$revealRightline: true;
+$roundCorners: true;
+$borderFade: true;
+
+$fadeIO: true;
+$zoomIO: true;
+$slideIO: true;
+$dropIO: true;
+$flipIO: true;
+
+
+// * The hover effects of the list anchor.
+// *------------------------------------------
+
+#ftwp-list.ftwp-effect {
+	// Basic effect
+	&-basic {
+		@import 'animations/hover/basic';
+		@include hoverEffectBasic;
+	}
+	
+	// Fade
+	@import 'animations/hover/fade';
+	@if $fade {
+		&-fade {
+			@include fade;
+		}
+	}
+	
+	// Back Pulse	
+//	@import 'animations/hover/back_pulse';
+//	@if $backPulse {
+//		&-back-pulse {
+//			@include backPulse;	
+//		}		
+//	}
+	
+	// Sweep
+	&-sweep {
+		@import 'animations/hover/sweep';
+		
+		// Sweep to right
+		@if $sweepToRight {
+			&-to-right {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include sweepToRight;		
+			}		
+		}
+			
+		// Sweep to left
+		@if $sweepToLeft {
+			&-to-left {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include sweepToLeft;		
+			}			
+		}
+	}	
+	
+	// Bounce
+	&-bounce {
+		@import 'animations/hover/bounce';
+		
+		// Bounce to right
+		@if $bounceToRight {
+			&-to-right {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include bounceToRight;		
+			}			
+		}	
+		
+		// Bounce to left
+		@if $bounceToLeft {
+			&-to-left {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include bounceToLeft;	
+			}			
+		}	
+	}
+	
+	// Radial
+	&-radial {
+		@import 'animations/hover/radial';
+		
+		// Radial Out
+		@if $radialOut {
+			&-out {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include radialOut;
+			}		
+		}	
+		
+		// Radial In
+		@if $radialIn {
+			&-in {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include radialIn;
+			}			
+		}
+	}
+	
+	// Rectangle
+	&-rectangle {
+		@import 'animations/hover/rectangle';
+		
+		// Rectangle Out
+		@if $rectangleOut {
+			&-out {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include rectangleOut;
+			}			
+		}
+		
+		// Rectangle In
+		@if $rectangleIn {
+			&-in {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include rectangleIn;
+			}			
+		}
+	}
+	
+	// Shutter
+	&-shutter {
+		@import 'animations/hover/shutter';
+		
+		// Shutter In
+		@if $shutterIn {
+			&-in {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include shutterInHorizontal;
+			}			
+		}
+
+		// Shutter Out
+		@if $shutterOut {
+			&-out {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include shutterOutHorizontal;
+			}			
+		}
+	}
+	
+	// Underline
+	&-underline {
+		@import 'animations/hover/underline';
+		
+		// Underline from left
+		@if $underlineFromLeft {
+			&-from-left {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include underlineFromLeft;
+			}			
+		}
+		
+		// Underline from right
+		@if $underlineFromRight {
+			&-from-right {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include underlineFromRight;
+			}			
+		}
+		
+		// Underline from center
+		@if $underlineFromCenter {
+			&-from-center {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include underlineFromCenter;
+			}			
+		}
+	}	
+	
+	// Reveal
+	&-reveal {
+		@import 'animations/hover/reveal';
+		
+		// Reveal Underline
+		@if $revealUnderline {
+			&-underline {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include underlineReveal;
+			}			
+		}
+		
+		// Reveal leftline
+		@if $revealLeftline {
+			&-leftline {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include leftlineReveal;
+			}			
+		}
+		
+		// Reveal rightline
+		@if $revealRightline {
+			&-rightline {
+				@extend #ftwp-list.ftwp-effect-basic;
+				@include rightlineReveal;
+			}			
+		}
+	}
+	
+	// Round Corners
+	@import 'animations/hover/round_conrners';
+	@if $roundCorners {
+		&-round-corners {
+			@extend #ftwp-list.ftwp-effect-basic;
+			@include roundCorners;
+		}		
+	}
+	
+	// Border Fade
+	@import 'animations/hover/border_fade';
+	@if $borderFade {
+		&-border-fade {
+			@include borderFade;
+		}		
+	}
+	
+} // End hover effects
+
+
+// * The In/Out animate effects of the Contents.
+// *------------------------------------------
+&.ftwp-fixed-to-post.ftwp-animate {
+	
+	@import 'animations/in_out/fadeIO';
+	@if $fadeIO {
+		&-fade {
+			@include fadeIO;
+		}
+	}
+	
+	@import 'animations/in_out/zoomIO';
+	@if $zoomIO {
+		&-zoom {
+			@include zoomIO;
+		}
+	}
+	
+//	@import 'animations/in_out/slideIO';
+//	@if $slideIO {
+//		&-slide {
+//			@include slideIO;
+//		}
+//	}
+//	
+//	@import 'animations/in_out/dropIO';
+//	@if $dropIO {
+//		&-drop {
+//			@include dropIO;
+//		}
+//	}
+//	
+//	@import 'animations/in_out/flipIO';
+//	@if $flipIO {
+//		&-flip {
+//			@include flipIO;
+//		}
+//	}
+	
+} // End container animates effect
+
+
+// Others.
+// * ------------------------------------------
+
+// Heading target hin
+@include keyframes(ftwpTargetHint) {
+	0%, 100% {
+		opacity: 0;
+	}
+
+	50% {
+		opacity: 1;
+	}
+}
+
+@at-root .ftwp-heading-target { 
+	position: relative;
+	outline: none;
+}
+
+@at-root .ftwp-heading-target::before {
+	content: '';
+	display: block;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: -10px;
+	width: 4px;
+	height: 100%;
+	background: $targetHintColor;
+	@include animation( ftwpTargetHint $targetHintDuration $targetHintDelay forwards );
+}
+
+// Auto fade trigger button.
+@at-root .ftwp-fade-trigger {
+	opacity: 0.1 !important;
+	filter: blur( 1px );
+	@include transition( 3s ease-in );
+	@include transitionProperty( (opacity, filter) );
+}
+
+@at-root .ftwp-unfade-trigger {
+	opacity: 1;
+	filter: blur( 0px );
+	@include transform( translateX( 0 ) );
+	@include transition( $durationSlow ease-out ); 
+	@include transitionProperty( (opacity, filter) );
+}
+
+
+// Blur background
+@at-root .ftwp-blur {
+	filter: blur( 3px ) !important;
+	opacity: .8 !important;
+	@include transition( filter 1s ease-out !important );
+}
+
+@at-root .ftwp-unblur {
+	filter: blur( 0px ) !important;
+	opacity: 1 !important;
+	@include transition( filter $durationMedium ease-out !important );
+}
+
+
+// No scroll
+@at-root .ftwp-no-scroll {
+	overflow: hidden !important;
+}

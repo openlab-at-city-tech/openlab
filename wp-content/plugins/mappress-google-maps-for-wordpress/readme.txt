@@ -3,8 +3,8 @@ Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
 Tags: leaflet, openstreetmap, osm, mapbox, map box, google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 4.5
-Tested up to: 4.9
-Stable tag: 2.50.10
+Tested up to: 5.2
+Stable tag: 2.53.1
 
 == Description ==
 MapPress adds beautiful, interactive Google or Leaflet maps to WordPress.
@@ -85,6 +85,47 @@ Please see the plugin documentation pages:
 4. Get directions from any map marker
 
 == Changelog ==
+
+= 2.53.1 =
+* Changed: minor internal updates to geocoders
+* Fixed: centering not working on maps from old versions of plugin
+
+= 2.53 =
+* Added: Algolia, Nominatim and MapBox geocoders can be selected on MapPress settings screen
+* Changed: updated Algolia Places to latest version
+* Changed: updated Leaflet to 1.4.0
+* Fixed: added missing left float for mashup thumbnails (to modify it, see '.mapp-body .wp-post-image' in mappress.css)
+* Fixed: dead directions link if setting 'none' was imported from prior versions
+
+= 2.52.5 =
+* Added: setting to display KML POIs in mashup maps
+* Fixed: conflict with 2017 theme and Leaflet zoom buttons
+* Fixed: maps output in Gutenberg REST requests when option to load scripts in header is selected
+
+= 2.52.4 =
+* Added: a 'check now' button has been added to the settings screen to force license check
+* Fixed: priority was too high for default 'mappress_poi_props' filter
+
+= 2.52.3 =
+* Added: geocoding errors are now shown on the settings screen
+
+= 2.52.2 =
+* Fixed: map controls language code not saving/displaying correctly
+
+= 2.52.1 =
+* Fixed: ajax error when opening map for edit
+
+= 2.52 =
+* Fixed: prevent enter press in map list search from publishing post
+* Changed: updated map editor search/filter function
+* Changed: internal function Mappress::ssl() renamed Mappress::is_ssl() - please update any custom directions.php or search.php to use the new name
+
+= 2.51 =
+* Added: mashups with a center but no zoom will perform a radius search
+* Fixed: KML markers showing POI text instead of text from KML file
+* Fixed: mashup initial center and zoom have been improved
+* Fixed: mashups not displaying on some servers; updated gzip detection
+* Changed: internal mashup query and layers control changes
 
 = 2.50.10 =
 * Fixed: PHP 7.2 notice on widgets_init

@@ -455,34 +455,43 @@ new Jetpack_JSON_API_Sync_Endpoint( array(
 ) );
 
 // GET /sites/%s/sync/status
-new Jetpack_JSON_API_Sync_Status_Endpoint( array(
-	'description'     => 'Status of the current full sync or the previous full sync',
-	'method'          => 'GET',
-	'path'            => '/sites/%s/sync/status',
-	'stat'            => 'sync-status',
-	'path_labels' => array(
-		'$site' => '(int|string) The site ID, The site domain'
-	),
-	'response_format' => array(
-		'started' => '(int|null) The unix timestamp when the last sync started',
-		'queue_finished' => '(int|null) The unix timestamp when the enqueuing was done for the last sync',
-		'send_started' => '(int|null) The unix timestamp when the last sent process started',
-		'finished' => '(int|null) The unix timestamp when the last sync finished',
-		'total'  => '(array) Count of actions that could be sent',
-		'queue'  => '(array) Count of actions that have been added to the queue',
-		'sent'  => '(array) Count of actions that have been sent',
-		'config' => '(array) Configuration of the last full sync',
-		'queue_size' => '(int) Number of items in the  sync queue',
-		'queue_lag' => '(float) Time delay of the oldest item in the sync queue',
-		'queue_next_sync' => '(float) Time in seconds before trying to sync again',
-		'full_queue_size' => '(int) Number of items in the full sync queue',
-		'full_queue_lag' => '(float) Time delay of the oldest item in the full sync queue',
-		'full_queue_next_sync' => '(float) Time in seconds before trying to sync the full sync queue again',
-		'cron_size' => '(int) Size of the current cron array',
-		'next_cron' => '(int) The number of seconds till the next item in cron.',
-	),
-	'example_request' => 'https://public-api.wordpress.com/rest/v1.1/sites/example.wordpress.org/sync/status'
-) );
+new Jetpack_JSON_API_Sync_Status_Endpoint(
+	array(
+		'description'      => 'Status of the current full sync or the previous full sync',
+		'method'           => 'GET',
+		'path'             => '/sites/%s/sync/status',
+		'stat'             => 'sync-status',
+		'path_labels'      => array(
+			'$site' => '(int|string) The site ID, The site domain',
+		),
+		'query_parameters' => array(
+			'fields' => '(string|null) List of comma-separated fields to return (see `response_format`).',
+		),
+		'response_format'  => array(
+			'posts_checksum'        => '(string|null) Posts checksum. Needs to be requested using the filter parameter.',
+			'comments_checksum'     => '(string|null) Comments checksum. Needs to be requested using the filter parameter.',
+			'post_meta_checksum'    => '(string|null) Post Meta checksum. Needs to be requested using the filter parameter.',
+			'comment_meta_checksum' => '(string|null) Comment Meta checksum. Needs to be requested using the filter parameter.',
+			'started'               => '(int|null) The unix timestamp when the last sync started',
+			'queue_finished'        => '(int|null) The unix timestamp when the enqueuing was done for the last sync',
+			'send_started'          => '(int|null) The unix timestamp when the last send process started',
+			'finished'              => '(int|null) The unix timestamp when the last sync finished',
+			'total'                 => '(array) Count of actions that could be sent',
+			'queue'                 => '(array) Count of actions that have been added to the queue',
+			'sent'                  => '(array) Count of actions that have been sent',
+			'config'                => '(array) Configuration of the last full sync',
+			'queue_size'            => '(int) Number of items in the sync queue',
+			'queue_lag'             => '(float) Time delay of the oldest item in the sync queue',
+			'queue_next_sync'       => '(float) Time in seconds before trying to sync again',
+			'full_queue_size'       => '(int) Number of items in the full sync queue',
+			'full_queue_lag'        => '(float) Time delay of the oldest item in the full sync queue',
+			'full_queue_next_sync'  => '(float) Time in seconds before trying to sync the full sync queue again',
+			'cron_size'             => '(int) Size of the current cron array',
+			'next_cron'             => '(int) The number of seconds till the next item in cron.',
+		),
+		'example_request'  => 'https://public-api.wordpress.com/rest/v1.1/sites/example.wordpress.org/sync/status',
+	)
+);
 
 
 // GET /sites/%s/data-checksums
@@ -518,10 +527,12 @@ new Jetpack_JSON_API_Sync_Histogram_Endpoint( array(
 		'start_id' => '(int=0) Starting ID for the range',
 		'end_id' => '(int=null) Ending ID for the range',
 		'columns' => '(string) Columns to checksum',
-		'strip_non_ascii', '(bool=true) Strip non-ascii characters from all columns',
+		'strip_non_ascii' => '(bool=true) Strip non-ascii characters from all columns',
+		'shared_salt' => '(string) Salt to reduce the collision and improve validation',
 	),
 	'response_format' => array(
-		'histogram' => '(array) Associative array of histograms by ID range, e.g. "500-999" => "abcd1234"'
+		'histogram' => '(array) Associative array of histograms by ID range, e.g. "500-999" => "abcd1234"',
+		'type'      => '(string) Type of checksum algorithm',
 	),
 	'example_request' => 'https://public-api.wordpress.com/rest/v1.1/sites/example.wordpress.org/data-histogram'
 ) );
@@ -1050,8 +1061,9 @@ new Jetpack_JSON_API_Get_Post_Backup_Endpoint( array(
 		'$post' => '(int) The post ID',
 	),
 	'response_format' => array(
-		'post' => '(array) Post table row',
-		'meta' => '(array) Associative array of key/value postmeta data',
+		'post'  => '(array) Post table row',
+		'meta'  => '(array) Associative array of key/value postmeta data',
+		'terms' => '(array) List of terms attached to the post object',
 	),
 	'example_request_data' => array(
 		'headers' => array(
@@ -1192,4 +1204,41 @@ new Jetpack_JSON_API_User_Create_Endpoint( array(
     }',
 	'example_request' => 'https://public-api.wordpress.com/rest/v1/sites/example.wordpress.org/users/create'
 
+) );
+
+require_once( $json_jetpack_endpoints_dir . 'class.jetpack-json-api-jps-woocommerce-connect-endpoint.php' );
+
+// POST /sites/%s/jps/woo-connect
+new Jetpack_JSON_API_JPS_WooCommerce_Connect_Endpoint( array(
+	'description'    => 'Attempts to connect the WooCommerce plugin for this site to WooCommerce.com.',
+	'group'          => '__do_not_document',
+	'method'         => 'POST',
+	'path'           => '/sites/%s/jps/woo-connect',
+	'stat'           => 'jps:woo-connect',
+	'allow_jetpack_site_auth' => true,
+	'path_labels'    => array(
+		'$site' => '(int|string) The site ID, The site domain',
+	),
+	'request_format'  => array(
+		'access_token'        => '(string) The access token for WooCommerce to connect to WooCommerce.com',
+		'access_token_secret' => '(string) The access token secret for WooCommerce to connect to WooCommerce.com',
+		'user_id'             => '(int) The user\'s ID after registering for a host plan',
+		'site_id'             => '(int) The site\'s ID after registering for a host plan',
+	),
+	'response_format' => array(
+		'success' => '(bool) Setting access token and access token secret successful?',
+	),
+	'example_request_data' => array(
+		'headers' => array(
+			'authorization' => 'Bearer YOUR_API_TOKEN',
+		),
+		'body' => array(
+			'access_token'        => '123456789',
+			'access_token_secret' => 'abcdefghiklmnop',
+			'user_id'             => 1,
+			'site_id'             => 2,
+		),
+	),
+	'example_response' => '{ "success": true }',
+	'example_request'  => 'https://public-api.wordpress.com/rest/v1/sites/example.wordpress.org/jps/woo-connect'
 ) );

@@ -635,15 +635,24 @@
 			return $results;
 		}
 
+		/**
+		 * dynWid::getHostname() Get Hostname
+		 *
+		 * @return string|null
+		 */
 		private function getHostname() {
-			$server_name = $_SERVER['SERVER_NAME'];
-			$hostname = $_SERVER['HTTP_HOST'];
+			if ( php_sapi_name() !== 'cli' ) {
+				$server_name = $_SERVER['SERVER_NAME'];
+				$hostname = $_SERVER['HTTP_HOST'];
 
-			if (! empty($hostname) && $hostname != $server_name ) {
-				return $hostname;
+				if (! empty($hostname) && $hostname != $server_name ) {
+					return $hostname;
+				}
+
+				return $server_name;
 			}
 
-			return $server_name;
+			return NULL;
 		}
 
 		private function getIP() {
