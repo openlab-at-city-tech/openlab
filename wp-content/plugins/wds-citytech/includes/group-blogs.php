@@ -603,10 +603,6 @@ function wds_bp_group_meta() {
 				<?php else : ?>
 
 					<?php
-					$template = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_type );
-
-					$blog_details = get_blog_details( $template );
-
 					// Set up user blogs for fields below
 					$user_blogs = get_blogs_of_user( get_current_user_id() );
 
@@ -627,7 +623,6 @@ function wds_bp_group_meta() {
 					</style>
 
 					<input type="hidden" name="action" value="copy_blog" />
-					<input type="hidden" name="source_blog" value="<?php echo esc_attr( $blog_details->blog_id ); ?>" />
 
 					<div class="form-table groupblog-setup"
 					<?php
@@ -1513,7 +1508,9 @@ add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
  * Until we get the dynamic portfolio picker working properly, we manually fall
  * back on old logic
  */
-function openlab_get_groupblog_template( $user_id, $group_type ) {
+function openlab_get_groupblog_template( $user_id, $group_id ) {
+	$group_type = openlab_get_group_type( $group_id );
+
 	switch ( $group_type ) {
 		case 'portfolio':
 			$account_type = strtolower( xprofile_get_field_data( 'Account Type', $user_id ) );
@@ -1527,12 +1524,11 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
 					break;
 				case 'student':
 					$template = 'template-eportfolio';
-					/*
-					$user_units = openlab_get_user_academic_units( $user_id );
-					if ( in_array( 'communication-design', $user_units['departments'], true ) ) {
+
+					$group_units = openlab_get_group_academic_units( $group_id );
+					if ( in_array( 'communication-design', $group_units['departments'], true ) ) {
 						$template = 'template-eportfolio-communication-design';
 					}
-					*/
 					break;
 				case 'alumni':
 					$template = 'template-eportfolio-alumni';
@@ -1544,7 +1540,17 @@ function openlab_get_groupblog_template( $user_id, $group_type ) {
 			$template = 'template-' . strtolower( $group_type );
 			break;
 	}
-	return $template;
+
+	// Get the ID.
+	$network = get_network();
+
+	$site = get_site_by_path( $network->domain, $template );
+
+	if ( $site ) {
+		return $site->blog_id;
+	} else {
+		return 0;
+	}
 }
 
 /**
