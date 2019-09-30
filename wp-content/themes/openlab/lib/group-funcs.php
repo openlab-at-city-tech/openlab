@@ -1123,6 +1123,8 @@ function openlab_default_subscription_settings_form() {
         return;
     }
 
+	$stored_setting = ass_get_default_subscription();
+
 	$group_type_label = openlab_get_group_type_label( [ 'case' => 'upper' ] );
 
     ?>
@@ -1132,10 +1134,10 @@ function openlab_default_subscription_settings_form() {
         <div class="panel-body">
             <p>When new users join this <?php echo esc_html( $group_type_label ); ?>, their default email notification settings will be:</p>
             <div class="radio email-sub">
-                <label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> /> All Email <span class="bpges-settings-gloss">(Receive email about this <?php echo esc_html( $group_type_label ); ?>'s activity as it happens.)</span></label>
-                <label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> /> Daily Digest <span class="bpges-settings-gloss">(This <?php echo esc_html( $group_type_label ); ?>'s activity will be bundled in a daily email with other groups set to daily digest.)</span></label>
-                <label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ); ?> /> Weekly Digest <span class="bpges-settings-gloss">(This <?php echo esc_html( $group_type_label ); ?>'s activity will be bundled in a weekly email with other groups set to weekly digest.)</span></label>
-                <label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> /> No Email <span class="bpges-settings-gloss">(Opt out of all email related to this <?php esc_html( $group_type_label ); ?>'s activity.)</span></label>
+                <label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> <?php checked( 'supersub', $stored_setting ); ?> /> All Email <span class="bpges-settings-gloss">(Receive email about this <?php echo esc_html( $group_type_label ); ?>'s activity as it happens.)</span></label>
+                <label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> <?php checked( 'dig', $stored_setting ); ?> /> Daily Digest <span class="bpges-settings-gloss">(This <?php echo esc_html( $group_type_label ); ?>'s activity will be bundled in a daily email with other groups set to daily digest.)</span></label>
+                <label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ); ?> <?php checked( 'sum', $stored_setting ); ?> /> Weekly Digest <span class="bpges-settings-gloss">(This <?php echo esc_html( $group_type_label ); ?>'s activity will be bundled in a weekly email with other groups set to weekly digest.)</span></label>
+                <label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> <?php checked( 'no', $stored_setting ); ?> /> No Email <span class="bpges-settings-gloss">(Opt out of all email related to this <?php esc_html( $group_type_label ); ?>'s activity.)</span></label>
 			</div>
         </div>
     </div>
