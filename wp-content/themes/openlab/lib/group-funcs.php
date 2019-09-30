@@ -1781,7 +1781,7 @@ function openlab_group_academic_unit_save( $group ) {
 
     $to_save = [];
     foreach ( [ 'schools', 'offices', 'departments' ] as $unit_type ) {
-        $to_save[ $unit_type ] = $_POST[ $unit_type ] ?: array();
+        $to_save[ $unit_type ] = isset( $_POST[ $unit_type ] ) ? $_POST[ $unit_type ] : array();
     }
 
     openlab_set_group_academic_units( $group->id, $to_save );
