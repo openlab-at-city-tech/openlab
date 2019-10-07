@@ -280,3 +280,20 @@
 		border-bottom: 1px solid var(--color-text-primary);
 	}
 }
+
+/* -----------------------------------------------------------------------------
+ * Anchor - Thin
+ * ----------------------------------------------------------------------------- */
+
+@define-mixin anchor-thin-alt {
+	border-bottom: 1px solid var(--color-accent-primary);
+	color: var(--color-text-primary);
+	transition: var(--transition-color);
+
+	&:active,
+	&:focus,
+	&:hover {
+		border-bottom: 1px solid var(--color-accent-primary);
+		color: var(--color-accent-primary);
+	}
+}

@@ -424,6 +424,10 @@
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
+ * Anchor - Thin
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
  * Button - Global
  * ----------------------------------------------------------------------------- */
 
@@ -1299,6 +1303,14 @@
 	 * Body 1 for --viewport-medium
 	 * ------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------
+	 * Body 2 for --viewport-medium
+	 * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+	 * Body 3 for --viewport-medium
+	 * ------------------------------------------------------------------------- */
+
 .tribe-common {
 
 	/* -------------------------------------------------------------------------
@@ -1348,12 +1360,27 @@
 		color: #334AFF;
 	}
 
+.tribe-common .tribe-common-cta--thin-alt {
+		border-bottom: 1px solid #334AFF;
+		color: #141827;
+		transition: color 0.2s ease;
+	}
+
+.tribe-common .tribe-common-cta--thin-alt:active,
+	.tribe-common .tribe-common-cta--thin-alt:focus,
+	.tribe-common .tribe-common-cta--thin-alt:hover {
+		border-bottom: 1px solid #334AFF;
+		color: #334AFF;
+	}
+
 /* -------------------------------------------------------------------------
 	 * Theme Overrides - Twenty Seventeen
 	 * ------------------------------------------------------------------------- */
 
 .tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--alt:hover,
-			.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--alt:focus {
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--alt:focus,
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--thin-alt:hover,
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-cta--thin-alt:focus {
 				color: #334AFF;
 			}
 
@@ -1649,6 +1676,15 @@
 		padding: 0;
 	}
 
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Button: Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
 /* -------------------------------------------------------------------------
 	 * Button
 	 * ------------------------------------------------------------------------- */
@@ -1663,6 +1699,15 @@
 		.tribe-common button:focus {
 			background-color: transparent;
 		}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common button:hover,
+			.tribe-theme-twentyseventeen .tribe-common button:focus {
+				background-color: transparent;
+			}
 
 /* -----------------------------------------------------------------------------
 	 *
@@ -1816,6 +1861,15 @@
 
 /* Buttons */
 
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Button: Border - Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
 /* -----------------------------------------------------------------------------
 	 *
 	 * Button: Border
@@ -1874,6 +1928,23 @@
 .tribe-common .tribe-common-c-btn-border:disabled, .tribe-common a.tribe-common-c-btn-border:disabled {
 			color: #D5D5D5
 		}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-c-btn-border:hover {
+				background-color: #FFFFFF;
+			}
+
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Button: Icon Border - Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
 
 /* -----------------------------------------------------------------------------
 	 *
@@ -2004,6 +2075,23 @@
 				background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 18.711l-6.044-6.044a7.782 7.782 0 0 0 1.688-4.845c0-2.089-.822-4.044-2.288-5.533C11.866.822 9.91 0 7.822 0S3.778.822 2.29 2.289A7.801 7.801 0 0 0 0 7.822c0 2.09.822 4.045 2.289 5.534a7.801 7.801 0 0 0 5.533 2.288c1.778 0 3.467-.6 4.845-1.688L18.71 20 20 18.711zM3.578 12.067c-2.334-2.334-2.334-6.156 0-8.49a5.968 5.968 0 0 1 4.244-1.755c1.6 0 3.111.622 4.245 1.756 2.333 2.333 2.333 6.155 0 8.489a5.968 5.968 0 0 1-4.245 1.755c-1.6 0-3.11-.622-4.244-1.755z' fill='%23D5D5D5'/%3E%3C/svg%3E");
 			}
 
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-c-btn-icon--border:hover {
+				background-color: #FFFFFF;
+			}
+
+.tribe-common {
+
+	/* -------------------------------------------------------------------------
+	 *
+	 * Button: Solid - Theme Overrides
+	 *
+	 * ------------------------------------------------------------------------- */
+}
+
 /* -----------------------------------------------------------------------------
 	 *
 	 * Button: Solid
@@ -2053,6 +2141,16 @@
 .tribe-common .tribe-common-c-btn:disabled, .tribe-common a.tribe-common-c-btn:disabled {
 			background-color: rgba(51,74,255, 0.07);
 		}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common .tribe-common-c-btn:hover,
+			.tribe-theme-twentyseventeen .tribe-common .tribe-common-c-btn:focus {
+				background-color: rgba(51,74,255, 0.8);
+				color: #FFFFFF;
+			}
 
 /* -----------------------------------------------------------------------------
 	 *
@@ -2144,6 +2242,16 @@
 .tribe-common .tribe-common-b1--min-medium {
 			font-size: 16px;
 			line-height: 1.62
+	}
+
+.tribe-common .tribe-common-b2--min-medium {
+			font-size: 14px;
+			line-height: 1.62
+	}
+
+.tribe-common .tribe-common-b3--min-medium {
+			font-size: 12px;
+			line-height: 1.38
 	}
 
 .tribe-common .tribe-common-h1 {

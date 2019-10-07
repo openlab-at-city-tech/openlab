@@ -42,9 +42,9 @@ class Assets extends \tad_DI52_ServiceProvider {
 
 		tribe_asset(
 			$plugin,
-			'tribe-events-calendar-views-v2',
-			'views/tribe-events-v2.css',
-			[ 'tribe-common-style', 'tribe-tooltipster-css' ], // @todo: check if we're including tooltips only in month view.
+			'tribe-events-views-v2-full',
+			'views-full.css',
+			[ 'tribe-common-style', 'tribe-tooltipster-css' ],
 			'wp_enqueue_scripts',
 			[
 				'priority'     => 10,
@@ -78,6 +78,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 				'tribe-events-views-v2-viewport',
 				'tribe-events-views-v2-accordion',
 				'tribe-events-views-v2-view-selector',
+				'tribe-events-views-v2-navigation-scroll',
 				'tribe-events-views-v2-multiday-events',
 				'tribe-events-views-v2-month-mobile-events',
 				'tribe-events-views-v2-month-grid',
@@ -124,6 +125,17 @@ class Assets extends \tad_DI52_ServiceProvider {
 			null,
 			[
 				'priority' => 10,
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-views-v2-navigation-scroll',
+			'views/navigation-scroll.js',
+			[ 'jquery', 'tribe-common' ],
+			null,
+			[
+				'priority' => 15,
 			]
 		);
 
