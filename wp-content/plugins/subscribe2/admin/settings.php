@@ -3,7 +3,7 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit();
 }
 
-global $wpdb, $wp_version, $current_tab;
+global $wpdb, $current_tab;
 
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) ) {
