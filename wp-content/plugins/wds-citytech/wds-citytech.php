@@ -1099,7 +1099,7 @@ function openlab_require_school_and_department_for_groups() {
 add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
 // Save Group Meta
-add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
+add_action( 'groups_group_after_save', 'wds_bp_group_meta_save', 15 );
 
 function wds_bp_group_meta_save( $group ) {
 	global $wpdb, $user_ID, $bp;
