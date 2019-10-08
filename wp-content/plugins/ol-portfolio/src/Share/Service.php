@@ -210,6 +210,13 @@ class Service implements Registerable {
 			'added'     => get_post_meta( $post->ID, 'portfolio_post_id', true ),
 		];
 
+		if ( ! empty( $entry['added'] ) ) {
+			$entry['edit_link'] = get_admin_url(
+				$this->portfolio_id,
+				sprintf( 'post.php?post=%d&action=edit', $entry['added'] )
+			);
+		}
+
 		ob_start();
 		extract( [ 'data' => $entry ], EXTR_SKIP );
 		include ROOT_DIR . '/views/share/button/post.php';
@@ -242,6 +249,13 @@ class Service implements Registerable {
 			'site_name' => get_option( 'blogname' ),
 			'added'     => get_comment_meta( $comment->comment_ID, 'portfolio_post_id', true ),
 		];
+
+		if ( ! empty( $entry['added'] ) ) {
+			$entry['edit_link'] = get_admin_url(
+				$this->portfolio_id,
+				sprintf( 'comment.php?action=editcomment&c=%d', $entry['added'] )
+			);
+		}
 
 		ob_start();
 		extract( [ 'data' => $entry ], EXTR_SKIP );
