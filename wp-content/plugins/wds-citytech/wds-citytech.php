@@ -18,6 +18,7 @@ require 'includes/library-widget.php';
 require 'includes/clone.php';
 require 'includes/print-this-page.php';
 require 'includes/license-widget.php';
+require 'includes/user-moderation.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
