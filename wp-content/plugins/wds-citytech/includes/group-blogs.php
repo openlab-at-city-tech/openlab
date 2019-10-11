@@ -596,7 +596,7 @@ function wds_bp_group_meta() {
 						}
 						?>
 						<p>This <?php echo esc_html( openlab_get_group_type_label() ); ?> is currently associated with the site <?php echo $group_site_text; // WPCS: XSS ok ?></p>
-						<ul id="change-group-site"><li><?php echo esc_html( $group_site_url_out ); ?> <a class="button underline confirm" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
+						<ul id="change-group-site"><li><?php echo $group_site_url_out; ?> <a class="button underline confirm" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
 					</div>
 
