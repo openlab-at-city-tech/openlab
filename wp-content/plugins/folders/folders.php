@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Folders
  * Description: Arrange media, pages, custom post types and posts into folders
- * Version: 2.1.5
+ * Version: 2.1.9
  * Author: Premio
  * Author URI: https://premio.io/downloads/folders/
  */
@@ -15,7 +15,7 @@ define('WCP_FOLDER', 'folders');
 define('WCP_FOLDER_VAR', 'folders_settings');
 define("WCP_DS", DIRECTORY_SEPARATOR);
 define('WCP_FOLDER_URL',plugin_dir_url(__FILE__));
-define('WCP_FOLDER_VERSION',"2.1.5");
+define('WCP_FOLDER_VERSION',"2.1.9");
 
 include_once plugin_dir_path(__FILE__)."includes/folders.class.php";
 register_activation_hook( __FILE__, array( 'WCP_Folders', 'activate' ) );

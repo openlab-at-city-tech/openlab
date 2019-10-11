@@ -1467,6 +1467,8 @@ class BP_Activity_Activity {
 	public static function get_activity_comments( $activity_id, $left, $right, $spam = 'ham_only', $top_level_parent_id = 0 ) {
 		global $wpdb;
 
+		$func_args = func_get_args();
+
 		if ( empty( $top_level_parent_id ) ) {
 			$top_level_parent_id = $activity_id;
 		}
@@ -1514,7 +1516,7 @@ class BP_Activity_Activity {
 			 * @param BP_Activity_Activity $value     Magic method referring to currently called method.
 			 * @param array                $func_args Array of the method's argument list.
 			 */
-			if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, func_get_args() ) ) {
+			if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $func_args ) ) {
 
 				/**
 				 * Filters the MySQL prepared statement for the legacy activity query.

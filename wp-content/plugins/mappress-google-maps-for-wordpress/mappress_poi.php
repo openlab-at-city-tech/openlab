@@ -35,7 +35,6 @@ class Mappress_Poi extends Mappress_Obj {
 
 		// If point has a lat/lng then no geocoding
 		if (!empty($this->point['lat']) && !empty($this->point['lng'])) {
-			$this->correctedAddress = ($this->address) ? $this->address : null;
 			$this->viewport = null;
 		} else {
 			$location = Mappress_Geocoder::geocode($this->address);
@@ -44,14 +43,14 @@ class Mappress_Poi extends Mappress_Obj {
 				return $location;
 
 			$this->point = array('lat' => $location->lat, 'lng' => $location->lng);
-			$this->correctedAddress = $location->formatted_address;
+			$this->address = $location->formatted_address;
 			$this->viewport = $location->viewport;
 		}
 
 		// Guess a default title / body - use address if available or lat, lng if not
 		if (empty($this->title) && empty($this->body)) {
-			if ($this->correctedAddress) {
-				$parsed = Mappress_Geocoder::parse_address($this->correctedAddress);
+			if ($this->address) {
+				$parsed = Mappress_Geocoder::parse_address($this->address);
 				$this->title = $parsed[0];
 				$this->body = (isset($parsed[1])) ? $parsed[1] : "";
 			} else {

@@ -191,7 +191,7 @@
             if (headings.length > 0) {
                 const { selectBlock } = dispatch( 'core/editor' );
                 summaryContent = (
-                    <ul className={'advgb-toc'}>
+                    <ul className="advgb-toc">
                         {headings.map( ( heading ) => {
                             return (
                                 <li className={'toc-level-' + heading.level}
@@ -200,6 +200,7 @@
                                 >
                                     <a href={'#' + heading.anchor}
                                        onClick={() => selectBlock( heading.clientId )}
+                                       style={ { color: anchorColor } }
                                     >
                                         {heading.content}
                                     </a>
@@ -253,17 +254,38 @@
                         </PanelBody>
                     </InspectorControls>
                     {summaryContent}
-                    {anchorColor &&
-                    <style>
-                        {`.advgb-toc li a {
-                        color: ${anchorColor};
-                    }`}
-                    </style>
-                    }
                 </Fragment>
             )
         }
     }
+
+    const blockAttrs = {
+        headings: {
+            type: 'array',
+            default: [],
+        },
+        loadMinimized: {
+            type: 'boolean',
+            default: false,
+        },
+        anchorColor: {
+            type: 'string',
+        },
+        align: {
+            type: 'string',
+            default: 'none',
+        },
+        postTitle: {
+            type: 'string',
+        },
+        headerTitle: {
+            type: 'string',
+        },
+        changed: {
+            type: 'boolean',
+            default: false,
+        },
+    };
 
     registerBlockType( 'advgb/summary', {
         title: summaryBlockTitle,
@@ -274,33 +296,7 @@
         },
         category: 'advgb-category',
         keywords: [ __( 'summary' ), __( 'table of content' ), __( 'list' ) ],
-        attributes: {
-            headings: {
-                type: 'array',
-                default: [],
-            },
-            loadMinimized: {
-                type: 'boolean',
-                default: false,
-            },
-            anchorColor: {
-                type: 'string',
-            },
-            align: {
-                type: 'string',
-                default: 'none',
-            },
-            postTitle: {
-                type: 'string',
-            },
-            headerTitle: {
-                type: 'string',
-            },
-            changed: {
-                type: 'boolean',
-                default: false,
-            },
-        },
+        attributes: blockAttrs,
         supports: {
             multiple: false,
         },
@@ -323,17 +319,14 @@
                                 key={`summary-save-${index}`}
                                 style={{ marginLeft: heading.level * 20 }}
                             >
-                                <a href={'#' + heading.anchor}>{heading.content}</a>
+                                <a href={'#' + heading.anchor}
+                                   style={ { color: anchorColor } }
+                                >
+                                    {heading.content}
+                                </a>
                             </li>
                         )
-                    } )}
-                    { anchorColor &&
-                    <style>
-                        {`.advgb-toc li a {
-                            color: ${anchorColor};
-                        }`}
-                    </style>
-                    }
+                    } ) }
                 </ul>
             );
 
@@ -358,5 +351,53 @@
 
             return props;
         },
+        deprecated: [
+            {
+                attributes: blockAttrs,
+                save: function ( { attributes } ) {
+                    const { headings, loadMinimized, anchorColor, align = 'none', postTitle, headerTitle } = attributes;
+                    // No heading blocks
+                    if (headings.length < 1) {
+                        return null;
+                    }
+
+                    let blockStyle = undefined;
+                    if (loadMinimized) blockStyle = { display: 'none' };
+
+                    const summary = (
+                        <ul className={`advgb-toc align${align}`} style={ blockStyle }>
+                            {headings.map( ( heading, index ) => {
+                                return (
+                                    <li className={'toc-level-' + heading.level}
+                                        key={`summary-save-${index}`}
+                                        style={{ marginLeft: heading.level * 20 }}
+                                    >
+                                        <a href={'#' + heading.anchor}>{heading.content}</a>
+                                    </li>
+                                )
+                            } ) }
+                            { anchorColor &&
+                            <style>
+                                {`.advgb-toc li a {
+                                    color: ${anchorColor};
+                                }`}
+                            </style>
+                            }
+                        </ul>
+                    );
+
+                    if ( loadMinimized ) {
+                        return (
+                            <div className={`align${align}`}>
+                                <div className={'advgb-toc-header collapsed'}>{ headerTitle || postTitle }</div>
+                                {summary}
+                            </div>
+                        );
+                    }
+
+                    return summary;
+                },
+            },
+        ]
     } );
 })( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components, wp.data, wp.hooks );

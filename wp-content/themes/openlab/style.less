@@ -291,7 +291,7 @@ input[type="submit"]{
         font-weight: @bold;
     }
     &.group-site label,
-    &.email-sub label {
+    &.email-sub label .bpges-settings-gloss {
         font-weight: normal;
     }
     input[type="radio"]{
@@ -952,6 +952,11 @@ body{
         }
     }
     #register-page{
+		.register-field-note {
+			color: @70gray;
+			font-size: small;
+			margin-bottom: 2em;
+		}
         .password-field {
             position: relative;
         }
@@ -1150,6 +1155,9 @@ body form{
 .privacy-settings-note{
     padding-left: 20px;
     margin-top: -15px;
+}
+.bpges-settings-gloss {
+	font-style: italic;
 }
 .ct-group-meta{
     tr{

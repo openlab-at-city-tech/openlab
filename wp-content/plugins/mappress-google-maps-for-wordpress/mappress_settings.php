@@ -276,7 +276,7 @@ class Mappress_Settings {
 
 	function set_preview() {
 		$poi = new Mappress_Poi(array(
-			'correctedAddress' => 'San Francisco, CA',
+			'address' => 'San Francisco, CA',
 			"title" => "MapPress",
 			"body" => __("Easy Google Maps", 'mappress-google-maps-for-wordpress'),
 			"point" => array('lat' => 37.774095, 'lng' => -122.418731)

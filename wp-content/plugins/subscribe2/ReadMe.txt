@@ -1,9 +1,9 @@
-=== Subscribe2 ===
+=== Subscribe2 - Form, Email Subscribers & Newsletters ===
 Contributors: collizo4sky
 Donate link: https://mailoptin.io
-Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing
+Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
-Tested up to: 5.1
+Tested up to: 5.2
 License: GPLv3
 
 Sends a list of subscribers an email notification when you publish new posts.

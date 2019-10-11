@@ -666,6 +666,7 @@ class Openlab_Clone_Course_Site {
 	 * 3) Copy admin-authored posts from old blog
 	 */
 	public function go() {
+		global $wpdb;
 //		wp_suspend_cache_invalidation();
 
 		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -675,9 +676,17 @@ class Openlab_Clone_Course_Site {
 
 		remove_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
 
+		switch_to_blog( $this->site_id );
+		$eo_is_active = is_plugin_active( 'event-organiser/event-organiser.php' );
+		restore_current_blog();
+
 		remove_action( 'eventorganiser_save_event', '_eventorganiser_delete_calendar_cache' );
 		remove_action( 'eventorganiser_delete_event', '_eventorganiser_delete_calendar_cache' );
 		remove_action( 'wp_trash_post', '_eventorganiser_delete_calendar_cache' );
+
+		if ( ! $eo_is_active ) {
+			remove_action( 'delete_post', 'eo_delete_event_occurences', 10 );
+		}
 
 		remove_action( 'delete_post', '_update_posts_count_on_delete' );
 		remove_action( 'delete_post', '_wp_delete_post_menu_item' );
@@ -913,7 +922,7 @@ class Openlab_Clone_Course_Site {
 		);
 
 		// Bulk delete metadata and revisions.
-		$sql_ids = implode( ',', array_map( 'intval', array_merge( $atts_to_delete_ids, $posts_to_delete_ids ) ) );
+		$sql_ids = implode( ',', array_map( 'intval', $posts_to_delete_ids ) );
 		$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type = 'revision' AND post_parent IN ({$sql_ids})" );
 		$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN ({$sql_ids})" );
 
@@ -922,17 +931,12 @@ class Openlab_Clone_Course_Site {
 			wp_delete_attachment( $att_id, true );
 		}
 
-		foreach ( $posts_to_delete_ids as $posts_id ) {
-			wp_delete_post( $att_id, true );
+		foreach ( $posts_to_delete_ids as $post_id ) {
+			wp_delete_post( $post_id, true );
 		}
 
 		// Replace the site URL in all post content.
-				// For some reason a regular MySQL query is not working.
-		foreach ( $wpdb->get_col( "SELECT ID FROM $wpdb->posts" ) as $post_id ) {
-				$post               = get_post( $post_id );
-				$post->post_content = str_replace( $source_site_url, $dest_site_url, $post->post_content );
-				wp_update_post( $post );
-		}
+		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
 
 		restore_current_blog();
 	}

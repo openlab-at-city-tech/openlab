@@ -4,7 +4,7 @@
 }
 .media-modal-content .media-frame select.attachment-filters {
     width: auto;
-    max-width: 150px;
+    width: 28% !important;
 }
 #media-attachment-taxonomy-filter {
     border: solid 1px #FF5983;

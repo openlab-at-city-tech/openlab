@@ -42,9 +42,22 @@ class Assets extends \tad_DI52_ServiceProvider {
 
 		tribe_asset(
 			$plugin,
-			'tribe-events-calendar-views-v2',
-			'views/tribe-events-v2.css',
-			[ 'tribe-common-style', 'tribe-tooltipster-css' ], // @todo: check if we're including tooltips only in month view.
+			'tribe-events-views-v2-full',
+			'views-full.css',
+			[ 'tribe-common-style', 'tribe-tooltipster-css' ],
+			'wp_enqueue_scripts',
+			[
+				'priority'     => 10,
+				'conditionals' => [ $this, 'should_enqueue_frontend' ],
+				'groups'       => [ static::$group_key ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-views-v2-bootstrap-datepicker',
+			'vendor/bootstrap-datepicker/js/bootstrap-datepicker.js',
+			[ 'jquery' ],
 			'wp_enqueue_scripts',
 			[
 				'priority'     => 10,
@@ -62,20 +75,34 @@ class Assets extends \tad_DI52_ServiceProvider {
 				'tribe-common',
 				'tribe-query-string',
 				'underscore',
+				'tribe-events-views-v2-viewport',
 				'tribe-events-views-v2-accordion',
 				'tribe-events-views-v2-view-selector',
-				'tribe-events-views-v2-month-multiday-events',
+				'tribe-events-views-v2-navigation-scroll',
+				'tribe-events-views-v2-multiday-events',
 				'tribe-events-views-v2-month-mobile-events',
 				'tribe-events-views-v2-month-grid',
 				'tribe-events-views-v2-tooltip',
 				'tribe-events-views-v2-events-bar',
 				'tribe-events-views-v2-events-bar-inputs',
+				'tribe-events-views-v2-datepicker',
 			],
 			'wp_enqueue_scripts',
 			[
-				'priority'     => 10,
+				'priority'     => 20,
 				'conditionals' => [ $this, 'should_enqueue_frontend' ],
 				'groups'       => [ static::$group_key ],
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-views-v2-viewport',
+			'views/viewport.js',
+			[ 'jquery', 'tribe-common' ],
+			null,
+			[
+				'priority' => 10,
 			]
 		);
 
@@ -94,7 +121,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			$plugin,
 			'tribe-events-views-v2-view-selector',
 			'views/view-selector.js',
-			[ 'jquery', 'tribe-common' ],
+			[ 'jquery', 'tribe-common', 'tribe-events-views-v2-viewport', 'tribe-events-views-v2-accordion', ],
 			null,
 			[
 				'priority' => 10,
@@ -103,8 +130,19 @@ class Assets extends \tad_DI52_ServiceProvider {
 
 		tribe_asset(
 			$plugin,
-			'tribe-events-views-v2-month-multiday-events',
-			'views/month-multiday-events.js',
+			'tribe-events-views-v2-navigation-scroll',
+			'views/navigation-scroll.js',
+			[ 'jquery', 'tribe-common' ],
+			null,
+			[
+				'priority' => 15,
+			]
+		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-views-v2-multiday-events',
+			'views/multiday-events.js',
 			[ 'jquery', 'tribe-common' ],
 			null,
 			[
@@ -116,7 +154,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			$plugin,
 			'tribe-events-views-v2-month-mobile-events',
 			'views/month-mobile-events.js',
-			[ 'jquery', 'tribe-common', 'tribe-events-views-v2-accordion' ],
+			[ 'jquery', 'tribe-common', 'tribe-events-views-v2-viewport', 'tribe-events-views-v2-accordion' ],
 			null,
 			[
 				'priority' => 10,
@@ -166,9 +204,36 @@ class Assets extends \tad_DI52_ServiceProvider {
 				'priority' => 10,
 			]
 		);
+
+		tribe_asset(
+			$plugin,
+			'tribe-events-views-v2-datepicker',
+			'views/datepicker.js',
+			[ 'jquery', 'tribe-common', 'tribe-events-views-v2-bootstrap-datepicker' ],
+			null,
+			[
+				'priority' => 10,
+			]
+		);
+
+		/**
+		 * @todo: remove once we can not load v1 scripts in v2
+		 */
+		add_action( 'wp_enqueue_scripts', [ $this, 'disable_v1' ], 200 );
 	}
 
-/**
+	/**
+	 * Removes assets from View V1 when V2 is loaded.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @return void
+	 */
+	public function disable_v1() {
+		wp_deregister_script( 'tribe-events-calendar-script' );
+	}
+
+	/**
 	 * Checks if we should enqueue frontend assets for the V2 views
 	 *
 	 * @since 4.9.4

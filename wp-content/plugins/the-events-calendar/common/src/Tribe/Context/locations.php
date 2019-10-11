@@ -14,8 +14,8 @@ return [
 	'posts_per_page' => [
 		'read'  => [
 			Tribe__Context::REQUEST_VAR  => 'posts_per_page',
-			Tribe__Context::TRIBE_OPTION => [ 'posts_per_page', 'postsPerPage' ],
 			Tribe__Context::OPTION       => 'posts_per_page',
+			Tribe__Context::TRIBE_OPTION => [ 'posts_per_page', 'postsPerPage' ],
 		],
 		'write' => [
 			Tribe__Context::REQUEST_VAR => 'posts_per_page',
@@ -65,6 +65,13 @@ return [
 		'write' => [
 			Tribe__Context::REQUEST_VAR => [ 'name', 'post_name' ],
 			Tribe__Context::QUERY_VAR   => [ 'name', 'post_name' ],
+		],
+	],
+	'post_type' => [
+		'read' => [
+			Tribe__Context::QUERY_PROP  => 'post_type',
+			Tribe__Context::QUERY_VAR   => 'post_type',
+			Tribe__Context::REQUEST_VAR => 'post_type',
 		],
 	],
 ];

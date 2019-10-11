@@ -9,20 +9,26 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version 4.9.4
+ * @version 4.9.9
  *
+ * @var WP_Post $event The event post object with properties added by the `tribe_get_event` function.
+ *
+ * @see tribe_get_event() For the format of the event object.
  */
-$event    = $this->get( 'event' );
-$event_id = $event->ID;
+
+/**
+ * @todo @be @bordoni
+ *       only show tooltip if at least one of featured image, description, or cost exists
+ */
 ?>
 <div
 	class="tribe-events-calendar-month__calendar-event-tooltip"
 	data-js="tribe-events-tooltip-content"
 	role="tooltip"
 >
-	<div id="tooltip_content-<?php echo esc_attr( $event_id ); ?>">
+	<div id="tribe-events-tooltip-content-<?php echo esc_attr( $event->ID ); ?>">
 		<?php $this->template( 'month/calendar-body/day/calendar-events/calendar-event/tooltip/featured-image', [ 'event' => $event ] ); ?>
 		<?php $this->template( 'month/calendar-body/day/calendar-events/calendar-event/tooltip/description', [ 'event' => $event ] ); ?>
-		<?php $this->template( 'month/calendar-body/day/calendar-events/calendar-event/tooltip/cta', [ 'event' => $event ] ); ?>
+		<?php $this->template( 'month/calendar-body/day/calendar-events/calendar-event/tooltip/cost', [ 'event' => $event ] ); ?>
 	</div>
 </div>

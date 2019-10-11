@@ -3,8 +3,8 @@ Contributors: Qurl
 Donate link: http://www.qurl.nl/dynamic-widgets/donate/
 Tags: widget, dynamic, sidebar, custom, rules, logic, display, condition, hide, show
 Requires at least: 3.0.0
-Tested up to: 4.8
-Stable tag: 1.5.13
+Tested up to: 5.2
+Stable tag: 1.5.15
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -128,10 +128,6 @@ For the latest FAQ, please visit the [online FAQ](http://www.qurl.nl/dynamic-wid
 3. Your theme must call `wp_head()`.
 4. Minimum of PHP version 5.2.7, PHP 5.3 is highly recommended.
 
-= My hoster is (still) using PHP4 =
-
-Sorry, Dynamic Widgets is not compatible with PHP4. Look for another hosting company. The one you're having now don't deserve your money.
-
 = I'm not sure my theme is calling `wp_head()`. Can I check? =
 
 Yes, you can. In the Dynamic Widgets Overview page, click the 'Advanced >' link at the bottom. You should see if `wp_head()` is called in your theme. It is possible Dynamic Widgets can't detect if the theme is calling `wp_head()`. Please contact the author of the theme to ask for it. You can also of course just try Dynamic Widgets to see if it works.
@@ -178,10 +174,6 @@ Since version 3.8, WPEC uses the by WordPress provided Custom Post Types and Cus
 * Save the text file.
 * Remember where you saved it.
 
-= I have found a bug! Now what? =
-
-Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracker/) first. The bug might have been reported and even maybe already fixed.  When not, you can file a [bugreport](http://www.qurl.nl/dynamic-widgets/bugreport/). Please note the procedure how to create a dump in the previous answer. After you've filed the report, I'll get back to you asap.
-
 = How do I completely remove Dynamic Widgets? =
 
 * Click at the bottom of the Widgets Overview page on the 'Advanced >' link.
@@ -191,6 +183,14 @@ Please check the [Issue Tracker](http://www.qurl.nl/dynamic-widgets/issue-tracke
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.5.15 =
+
+* Bugfix for Pages childs not being saved anymore and als going into opposite direction. Thanks to @sovabarmak for debugging and fixing!
+
+= Version 1.5.14 =
+
+* Bugfix for a problem introduced in WordPress 5 when using the Pages module. Kudo's to @fjaeker for doing debugging for this!
 
 = Version 1.5.13 =
 
@@ -476,13 +476,16 @@ This version has 1 new feature and 1 bug fixed. See the changelog for details.
 
 == Upgrade Notice ==
 
-= 1.5.13 =
-When you upgrade manually, remove the dynamic-widgets directory first.
+When you upgrade manually, do a deactivate - activate cycle of the plugin.
 
-This version has 1 feature added, 1 language added and 3 bugs fixed.
+This version has 1 bug fixed.
 
 == Screenshots ==
 
 1. Widgets overview page
 2. Widget Options page
 3. Widget with Dynamic Widgets info and link
+
+== Privacy Policy ==
+
+Dynamic Widgets does not collect any private data, nor does it send any private data to remote servers. Please be aware that widgets might do. Dynamic Widgets does not read, write or alter contents or functionality of a widget it self, so this is beyond the scope and control of Dynamic Widgets.

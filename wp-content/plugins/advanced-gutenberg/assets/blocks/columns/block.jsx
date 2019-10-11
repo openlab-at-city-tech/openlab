@@ -615,7 +615,7 @@
                             <InnerBlocks
                                 template={ times( parseInt(columns), () => [ 'advgb/column' ] ) }
                                 templateLock="all"
-                                allowdBlockType={ [ 'advgb/column' ] }
+                                allowedBlocks={ [ 'advgb/column' ] }
                                 random={ this.state.random }
                             />
                         </div>

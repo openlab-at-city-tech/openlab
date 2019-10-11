@@ -31,7 +31,7 @@ class CWS_PageLinksTo {
 	const DISMISSED_NOTICES = 'page_links_dismissed_options';
 	const MESSAGE_ID = 4;
 	const NEWSLETTER_URL = 'https://pages.convertkit.com/8eb23c1339/1ce4614706';
-	const CSS_JS_VERSION = '3.1.1';
+	const CSS_JS_VERSION = '3.1.2';
 
 	/**
 	 * Whether to replace WP links with their specified URLs.
@@ -171,6 +171,7 @@ class CWS_PageLinksTo {
 		$this->hook( 'display_post_states' );
 		$this->hook( 'admin_footer' );
 		$this->hook( 'admin_enqueue_scripts' );
+		$this->hook( 'enqueue_block_editor_assets' );
 		$this->hook( 'admin_menu' );
 
 		// Gutenberg.
@@ -304,13 +305,19 @@ class CWS_PageLinksTo {
 	 * @return void
 	 */
 	public function admin_enqueue_scripts() {
-		wp_register_script( 'plt-clipboard', $this->get_url() . 'js/clipboard.min.js', array(), self::CSS_JS_VERSION, true );
-
-		if ( current_user_can( 'edit_posts' ) ) {
+		if ( !is_customize_preview() && current_user_can( 'edit_posts' ) ) {
+			wp_register_script( 'plt-clipboard', $this->get_url() . 'js/clipboard.min.js', array(), self::CSS_JS_VERSION, true );
 			wp_enqueue_script( 'plt-quick-add', $this->get_url() . 'js/quick-add.min.js', array( 'plt-clipboard', 'jquery-ui-dialog' ), self::CSS_JS_VERSION, true );
 			wp_enqueue_style( 'plt-quick-add', $this->get_url() . 'css/quick-add.css', array( 'wp-jquery-ui-dialog' ), self::CSS_JS_VERSION );
 		}
+	}
 
+	/**
+	 * Enqueues block editor scripts.
+	 *
+	 * @return void
+	 */
+	public function enqueue_block_editor_assets() {
 		// Gutenberg.
 		if ( self::is_block_editor() && self::is_supported_post_type() ) {
 			wp_enqueue_script( 'plt-gutenberg', $this->get_url() . 'js/gutenberg.min.js', array( 'wp-edit-post', 'wp-element', 'wp-plugins' ), self::CSS_JS_VERSION, true );

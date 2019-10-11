@@ -7,7 +7,6 @@
  */
 tribe.events = tribe.events || {};
 tribe.events.views = tribe.events.views || {};
-tribe.events.views.manager = tribe.events.views.manager || {};
 
 /**
  * Configures Views Tooltip Object in the Global Tribe variable
@@ -42,6 +41,9 @@ tribe.events.views.tooltip = {};
 	obj.selectors = {
 		tooltip: '[data-js="tribe-events-tooltip"]',
 		tooltipContent: '[data-js="tribe-events-tooltip-content"]',
+		tribeEventsTooltipThemeClass: '.tribe-events-tooltip-theme',
+		tribeCommonClass: '.tribe-common',
+		tribeEventsClass: '.tribe-events',
 	};
 
 	/**
@@ -121,29 +123,103 @@ tribe.events.views.tooltip = {};
 	};
 
 	/**
+	 * Deinitialize accessible tooltips via tooltipster
+	 *
+	 * @since 4.9.5
+	 *
+	 * @param {jQuery} $container jQuery object of view container.
+	 *
+	 * @return {void}
+	 */
+	obj.deinitTooltips = function( $container ) {
+		$container
+			.find( obj.selectors.tooltip )
+			.each( function( index, tooltip ) {
+				$( tooltip )
+					.off( 'focus', obj.handleOriginFocus )
+					.off( 'blur', obj.handleOriginBlur );
+			} );
+	};
+
+	/**
 	 * Initialize accessible tooltips via tooltipster
 	 *
 	 * @since 4.9.4
 	 *
-	 * @param {Event}   event      JS event triggered.
+	 * @param {jQuery} $container jQuery object of view container.
+	 *
+	 * @return {void}
+	 */
+	obj.initTooltips = function( $container ) {
+		var theme = $container.data( 'tribeEventsTooltipTheme' );
+
+		$container
+			.find( obj.selectors.tooltip )
+			.each( function( index, tooltip ) {
+				$( tooltip ).tooltipster( {
+					interactive: true,
+					theme: theme,
+					functionInit: obj.onFunctionInit,
+					functionReady: obj.onFunctionReady,
+					functionAfter: obj.onFunctionAfter,
+				} );
+			} );
+	};
+
+	/**
+	 * Initialize tooltip theme
+	 *
+	 * @since 4.9.9
+	 *
+	 * @param {jQuery} $container jQuery object of view container.
+	 *
+	 * @return {void}
+	 */
+	obj.initTheme = function( $container ) {
+		$container.trigger( 'beforeTooltipInitTheme.tribeEvents', [ $container ] );
+
+		var theme = [
+			obj.selectors.tribeEventsTooltipThemeClass.className(),
+			obj.selectors.tribeCommonClass.className(),
+			obj.selectors.tribeEventsClass.className(),
+		];
+		$container.data( 'tribeEventsTooltipTheme', theme );
+
+		$container.trigger( 'afterTooltipInitTheme.tribeEvents', [ $container ] );
+	};
+
+	/**
+	 * Deinitialize tooltip JS.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @param  {Event}       event    event object for 'beforeAjaxSuccess.tribeEvents' event
+	 * @param  {jqXHR}       jqXHR    Request object
+	 * @param  {PlainObject} settings Settings that this request was made with
+	 *
+	 * @return {void}
+	 */
+	obj.deinit = function( event, jqXHR, settings ) {
+		var $container = event.data.container;
+		obj.deinitTooltips( $container );
+	};
+
+	/**
+	 * Initialize tooltips JS.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @param {Event}   event      event object for 'afterSetup.tribeEvents' event
 	 * @param {integer} index      jQuery.each index param from 'afterSetup.tribeEvents' event.
 	 * @param {jQuery}  $container jQuery object of view container.
 	 * @param {object}  data       data object passed from 'afterSetup.tribeEvents' event.
 	 *
 	 * @return {void}
 	 */
-	obj.initTooltips = function( event, index, $container, data ) {
-		$container
-			.find( obj.selectors.tooltip )
-			.each( function( index, tooltip ) {
-				$( tooltip ).tooltipster( {
-					interactive: true,
-					theme: [ 'tribe-common', 'tribe-events', 'tribe-events-tooltip-theme' ],
-					functionInit: obj.onFunctionInit,
-					functionReady: obj.onFunctionReady,
-					functionAfter: obj.onFunctionAfter,
-				} );
-			} );
+	obj.init = function( event, index, $container, data ) {
+		obj.initTheme( $container );
+		obj.initTooltips( $container );
+		$container.on( 'beforeAjaxSuccess.tribeEvents', { container: $container }, obj.deinit );
 	};
 
 	/**
@@ -154,13 +230,7 @@ tribe.events.views.tooltip = {};
 	 * @return {void}
 	 */
 	obj.ready = function() {
-		$document.on( 'afterSetup.tribeEvents', tribe.events.views.manager.selectors.container, obj.initTooltips );
-
-		/**
-		 * @todo: do below for ajax events
-		 */
-		// on 'beforeAjaxBeforeSend.tribeEvents' event, remove all tooltips
-		// on 'afterAjaxError.tribeEvents', add all tooltips
+		$document.on( 'afterSetup.tribeEvents', tribe.events.views.manager.selectors.container, obj.init );
 	};
 
 	// Configure on document ready

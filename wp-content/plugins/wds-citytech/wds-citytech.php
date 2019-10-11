@@ -17,6 +17,8 @@ require 'includes/oembed.php';
 require 'includes/library-widget.php';
 require 'includes/clone.php';
 require 'includes/print-this-page.php';
+require 'includes/license-widget.php';
+require 'includes/user-moderation.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -36,6 +38,11 @@ function openlab_load_custom_bp_functions() {
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
+
+/**
+ * Login customizations.
+ */
+add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
 
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
@@ -1093,7 +1100,7 @@ function openlab_require_school_and_department_for_groups() {
 add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
 // Save Group Meta
-add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
+add_action( 'groups_group_after_save', 'wds_bp_group_meta_save', 15 );
 
 function wds_bp_group_meta_save( $group ) {
 	global $wpdb, $user_ID, $bp;
@@ -1285,7 +1292,7 @@ function ra_copy_blog_page( $group_id ) {
 			$where = 'AND d.domain IS NULL ';
 		}
 
-		$src_id = intval( $_POST['source_blog'] );
+		$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
 
 		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 		//$domain = str_replace( ".","", $domain );

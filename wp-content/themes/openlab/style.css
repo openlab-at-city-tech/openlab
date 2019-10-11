@@ -7522,8 +7522,8 @@ input[type="submit"] {
 }
 .radio.group-site label,
 .radio-inline.group-site label,
-.radio.email-sub label,
-.radio-inline.email-sub label {
+.radio.email-sub label .bpges-settings-gloss,
+.radio-inline.email-sub label .bpges-settings-gloss {
   font-weight: normal;
 }
 .radio input[type="radio"],
@@ -8125,6 +8125,11 @@ body .bbp-template-notice.info {
   padding-left: 0;
   padding-right: 0;
 }
+body #register-page .register-field-note {
+  color: #444444;
+  font-size: small;
+  margin-bottom: 2em;
+}
 body #register-page .password-field {
   position: relative;
 }
@@ -8313,6 +8318,9 @@ body form .checkbox-list-container {
 .privacy-settings-note {
   padding-left: 20px;
   margin-top: -15px;
+}
+.bpges-settings-gloss {
+  font-style: italic;
 }
 .ct-group-meta tr label input[type="checkbox"] {
   margin-top: -2px;

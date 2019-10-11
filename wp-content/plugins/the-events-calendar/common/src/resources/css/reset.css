@@ -255,28 +255,78 @@
 
 /* Theme Overrides */
 
-.tribe-theme-avada {
+/* -------------------------------------------------------------------------
+	 * Reset Theme Overrides - Avada
+	 * ------------------------------------------------------------------------- */
 
-}
+.tribe-theme-avada input[type="text"] {
+		margin: 0;
+	}
 
-.tribe-theme-divi {
+/* -------------------------------------------------------------------------
+	 * Reset Theme Overrides - Divi
+	 * ------------------------------------------------------------------------- */
 
-}
+.tribe-theme-divi .entry-content .tribe-common table, .tribe-theme-divibody.et-pb-preview #main-content .container .tribe-common table {
+			border: 0;
+			margin: 0;
+		}
 
-/* Enfold is using the #top id in the <body> */
+.tribe-theme-divi .entry-content .tribe-common td, .tribe-theme-divibody.et-pb-preview #main-content .container .tribe-common td {
+			border: 0;
+		}
+
+.tribe-theme-divi #content-area .tribe-common td,
+		.tribe-theme-divi #content-area .tribe-common th,
+		.tribe-theme-divi #content-area .tribe-common tr {
+			padding: 0;
+		}
+
+/* -------------------------------------------------------------------------
+	 * Reset Theme Overrides - Enfold
+	 * ------------------------------------------------------------------------- */
+
+#top.tribe-theme-enfold .tribe-common form {
+		margin: 0;
+	}
 
 #top.tribe-theme-enfold .tribe-common input {
-				margin: 0;
-			}
+		margin: 0;
+	}
 
 .tribe-theme-genesis {
 
 }
 
-.tribe-theme-twentynineteen {
+/* -------------------------------------------------------------------------
+	 * Reset Theme Overrides - Twenty Nineteen
+	 * ------------------------------------------------------------------------- */
 
-}
+.tribe-theme-twentynineteen .tribe-common h1:before, .tribe-theme-twentynineteen .tribe-common h2:before {
+			content: none;
+		}
 
-.tribe-theme-twentyseventeen {
+.tribe-theme-twentynineteen .tribe-common button,
+	.tribe-theme-twentynineteen .tribe-common input[type="button"],
+	.tribe-theme-twentynineteen .tribe-common input[type="reset"],
+	.tribe-theme-twentynineteen .tribe-common input[type="submit"] {
+		outline: none;
+	}
 
-}
+.tribe-theme-twentynineteen .tribe-common th,
+	.tribe-theme-twentynineteen .tribe-common td {
+		word-break: normal;
+	}
+
+/* -------------------------------------------------------------------------
+	 * Reset Theme Overrides - Twenty Seventeen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-common h5 {
+		letter-spacing: normal;
+		text-transform: none;
+	}
+
+.tribe-theme-twentyseventeen .tribe-common input[type="text"] {
+		border-radius: 0;
+	}
