@@ -1,3 +1,4 @@
 /node_modules
 /build/js/*.deps.json
 /build/mix-manifest.json
+yarn.lock

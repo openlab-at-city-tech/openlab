@@ -1,9 +1,15 @@
+<?php
+use function OpenLab\Attributions\Helpers\get_the_attribution;
+?>
 <footer>
-	<p id="attributions"><?php echo esc_html( $settings['title'] ); ?></p>
-	<p><?php echo esc_html( $settings['description'] ); ?></p>
+	<p id="attributions">Attribtuions</p>
 	<ol>
-		<?php foreach ( $refs as $id => $note ) : ?>
-		<?php printf( '<li id="attr-%1$d">%2$s<a href="#%1$d-anchor">&#8617;</a></li>', $id, $note ); ?>
+		<?php foreach ( $attributions as $attribution ) : ?>
+		<?php printf(
+			'<li id="ref-%1$s">%2$s.<a href="#anchor-%1$s">&#8617;</a></li>',
+			$attribution['id'],
+			get_the_attribution( $attribution )
+		); ?>
 		<?php endforeach; ?>
 	</ol>
 </footer>

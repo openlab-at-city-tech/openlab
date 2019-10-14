@@ -1,52 +1,47 @@
-/* global tinymce */
-const licenses = Object.values( window.attrLicenses );
+/**
+ * External dependencies
+ */
+const nanoid = require( 'nanoid' );
+
+/**
+ * WordPress dependencies
+ */
+import domReady from '@wordpress/dom-ready';
+import { dispatch } from '@wordpress/data';
+import { render } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import formatAttribution from './utils/format-attribution';
-import formTmpl from './utils/form-template';
+import './data';
+import Metabox from './components/metabox';
 import tinyIcon from './utils/tiny-icon';
 
-const getFormData = ( form ) => {
-	const data = Array
-		.from( form.elements )
-		.map( ( input ) => {
-			return { [ input.name ]: input.value };
-		} );
+const tinymce = window.tinymce;
 
-	return data;
-};
+const addMarker = ( editor, value, data ) => {
+	const id = nanoid( 8 );
+	const item = { ...data, id };
 
-const addShortcode = ( editor, value ) => {
-	const form = document.getElementById( 'attribution-builder' );
+	// Create marker element.
+	const marker = document.createElement( 'a' );
+	marker.setAttribute( 'href', `#ref-${ id }` );
+	marker.setAttribute( 'id', `anchor-${ id }` );
+	marker.setAttribute( 'class', 'attribution-anchor' );
 
-	// Get format data.
-	const data = getFormData( form );
+	// Add attribution.
+	dispatch( 'openlab/attributions' ).add( item );
 
-	// Convert form data array into object and pass for formatting.
-	const attribution = formatAttribution( Object.assign( ...data ), licenses );
-	const shortcode = `[ref]${ attribution }[/ref]`;
-	const newValue = value.concat( ' ', shortcode );
+	const newValue = value.concat( '', marker.outerHTML );
 
 	editor.execCommand( 'mceInsertContent', false, newValue );
 };
 
-const renderPreview = () => {
-	const form = document.getElementById( 'attribution-builder' );
-	const preview = document.getElementById( 'attribution-preview' );
-	const data = getFormData( form );
-
-	const attribution = formatAttribution( Object.assign( ...data ), licenses );
-
-	preview.innerHTML = attribution;
-};
-
 tinymce.create( 'tinymce.plugins.Attributions', {
 	init( editor ) {
-		editor.addButton( 'olAttrButton', {
+		editor.addButton( 'attribution-button', {
 			title: 'Add Attribution',
-			cmd: 'olAttrButtonCmd',
+			cmd: 'add-attribution',
 			icon: 'attribution',
 			onPostRender: () => {
 				const icon = document.getElementsByClassName( 'mce-i-attribution' );
@@ -54,40 +49,20 @@ tinymce.create( 'tinymce.plugins.Attributions', {
 			},
 		} );
 
-		editor.addCommand( 'olAttrButtonCmd', function() {
+		editor.addCommand( 'add-attribution', function() {
 			const value = editor.selection.getContent( { format: 'html' } );
-			const selected = editor.selection.getContent( { format: 'text' } );
 
-			const modal = editor.windowManager.open( {
-				title: 'Add Attribution',
-				body: {
-					type: 'container',
-					classes: 'ol-attributions-modal',
-					minWidth: 750,
-					minHeight: 500,
-					html: formTmpl( selected, licenses ),
-					onPostRender: () => {
-						const form = document.getElementById( 'attribution-builder' );
-						form.addEventListener( 'blur', renderPreview, true );
-					},
-				},
-				buttons: [
-					{
-						text: 'Cancel',
-						onclick: () => modal.close(),
-					},
-					{
-						text: 'Insert',
-						subtype: 'primary',
-						onclick: () => modal.submit(),
-					},
-				],
-				onsubmit: () => {
-					addShortcode( editor, value );
-				},
+			dispatch( 'openlab/modal' ).open( {
+				item: {},
+				modalType: 'add',
+				addItem: ( data ) => addMarker( editor, value, data ),
 			} );
 		} );
 	},
 } );
 
-tinymce.PluginManager.add( 'olAttrButton', tinymce.plugins.Attributions );
+tinymce.PluginManager.add( 'attribution-button', tinymce.plugins.Attributions );
+
+domReady( () => {
+	render( <Metabox />, document.getElementById( 'attribution-box' ) );
+} );

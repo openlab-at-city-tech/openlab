@@ -8,7 +8,7 @@
  */
 const validateLicense = ( options, value ) => {
 	const license = options
-		.filter( ( option ) => option.label === value )
+		.filter( ( option ) => option.value === value )
 		.pop();
 
 	return license;
