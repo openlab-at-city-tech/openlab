@@ -1159,7 +1159,7 @@ class oplb_gradebook_api
 
             //on the way out, we add some header info to the first column,
             //but this needs to removed on the way in
-            if(strpos($item, 'firstname') !== false){
+            if (strpos($item, 'firstname') !== false) {
                 $item = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $item);
             }
             return htmlspecialchars($item);
@@ -1440,6 +1440,72 @@ class oplb_gradebook_api
 
         return $grade;
 
+    }
+
+    public function version_tracker($version, $course)
+    {
+        global $wpdb;
+
+        switch ($version) {
+            case "0.0.4":
+
+                $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_cells WHERE gbid = %d", $course['id']);
+                $cells = $wpdb->get_results($query, ARRAY_A);
+
+                foreach ($cells as &$cell) {
+
+                    if (!empty($cell['is_null'])) {
+
+                        if (is_numeric($cell['assign_points_earned']) && floatval($cell['assign_points_earned']) > 0) {
+
+                            $wpdb->update(
+                                "{$wpdb->prefix}oplb_gradebook_cells",
+                                array(
+                                    'is_null' => false,
+                                ),
+                                array(
+                                    'uid' => $cell['uid'],
+                                    'amid' => $cell['amid'],
+                                    'gbid' => $course['id'],
+                                ),
+                                array(
+                                    '%d',
+                                ),
+                                array(
+                                    '%d',
+                                    '%d',
+                                    '%d',
+                                )
+                            );
+
+                        }
+
+                    }
+
+                }
+
+                $wpdb->update(
+                    "{$wpdb->prefix}oplb_gradebook_courses",
+                    array(
+                        'gradebook_version' => $version,
+                    ),
+                    array(
+                        'id' => $course['id'],
+                    ),
+                    array(
+                        '%s',
+                    ),
+                    array(
+                        '%d',
+                    )
+                );
+
+                return $wpdb->last_error;
+
+                break;
+        }
+
+        return true;
     }
 
 }

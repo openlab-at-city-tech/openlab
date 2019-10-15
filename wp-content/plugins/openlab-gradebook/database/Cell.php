@@ -39,20 +39,23 @@ class gradebook_cell_API
             case 'POST':
                 $is_null = 1;
 
-                if (is_numeric($params['assign_points_earned']) && empty($params['comment_edit'])) {
+                if (is_numeric($params['assign_points_earned'])) {
                     $is_null = 0;
                 }
 
                 $values = array(
                     'assign_order' => $params['assign_order'],
                     'assign_points_earned' => $params['assign_points_earned'],
-                    'is_null' => $is_null,
                 );
                 $formats = array(
                     '%d',
                     '%f',
-                    '%d',
                 );
+
+                if (empty($params['comment_edit'])) {
+                    $values['is_null'] = $is_null;
+                    array_push($formats, '%d');
+                }
 
                 if (!empty($params['comment_edit'])) {
                     if (!empty($params['comments'])) {

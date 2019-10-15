@@ -11,7 +11,7 @@
 
 
 //establishing some constants
-define("OPENLAB_GRADEBOOK_VERSION", "0.0.3");
+define("OPENLAB_GRADEBOOK_VERSION", "0.0.4");
 define("OPENLAB_GRADEBOOK_FEATURES_TRACKER", 0.3);
 define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 

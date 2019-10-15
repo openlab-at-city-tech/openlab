@@ -6,7 +6,7 @@
 class OPLB_DATABASE
 {
 
-    const oplb_gradebook_db_version = 1.88;
+    const oplb_gradebook_db_version = 1.89;
 
     public function __construct()
     {
@@ -124,6 +124,14 @@ class OPLB_DATABASE
             }
 
             update_option("oplb_gradebook_db_version", 1.88);
+        }
+
+        if (get_option('oplb_gradebook_db_version') < 1.89) {
+
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_courses ADD gradebook_version VARCHAR(255)";
+            $wpdb->query($sql);
+
+            update_option("oplb_gradebook_db_version", 1.89);
         }
 
     }

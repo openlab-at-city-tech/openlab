@@ -4,7 +4,7 @@ Plugin Name: MapPress Maps for WordPress
 Plugin URI: https://www.mappresspro.com/mappress
 Author URI: https://www.mappresspro.com/chris-contact
 Description: MapPress makes it easy to add Google and Leaflet Maps to WordPress
-Version: 2.53.1
+Version: 2.53.3
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Matthias Stasiak for his wonderful icons (http://code.google.com/p/google-maps-icons/)
@@ -35,7 +35,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.53.1';
+	const VERSION = '2.53.3';
 
 	static
 		$baseurl,
@@ -56,7 +56,7 @@ class Mappress {
 		self::$baseurl = plugins_url('', __FILE__);
 		self::$options = Mappress_Options::get();
 		self::$pro = is_dir(dirname( __FILE__ ) . '/pro');
-		self::$version = (self::$pro) ? self::VERSION . " PRO" : self::VERSION;
+		self::$version = (self::$pro) ? self::VERSION . "PRO" : self::VERSION;
 		self::$version = (defined('MAPPRESS_DEV') && MAPPRESS_DEV) ? self::$version . '-' . rand(0,99999) : self::$version;
 
 		self::debugging();
@@ -460,10 +460,11 @@ class Mappress {
 					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'satellite-streets-v10', 'name' => 'satellite-streets', 'label' => __('Satellite Streets', 'mappress-google-maps-for-wordpress'))
 				);
 
-				// Mapbox studio styles (remove base url and everything after '.html', remainder is user/id)
+				// Mapbox studio styles - extract user/id from url
 				foreach(self::$options->mapboxStyles as $name => $url) {
-					$url = strstr($url, '.html', true);
-					$url = str_ireplace('https://api.mapbox.com/styles/v1/', '', $url);
+					$url = str_ireplace('.html', '', $url);
+					$url = str_ireplace('https://api.mapbox.com/styles/v1/', '', $url);		// Old studio format
+					$url = str_ireplace('mapbox://styles/', '', $url);						// New studio format
 					$parts = explode('/', $url);
 					if (count($parts) == 2)
 						$baselayers[] = array('provider' => 'mapbox', 'user' => $parts[0], 'id' => $parts[1], 'name' => $name, 'label' => $name);

@@ -1915,6 +1915,11 @@ class S2_Core {
 			$this->block_editor = true;
 		}
 
+        // Compatibility with Fusion Builder
+        if ( is_plugin_active( 'fusion-builder/fusion-builder.php' ) && ! isset( $_GET['gutenberg-editor'] ) ) {
+            $this->block_editor = false;
+        }
+
 		if ( true === $this->block_editor ) {
 			require_once S2PATH . 'classes/class-s2-block-editor.php';
 			global $mysubscribe2_block_editor;
