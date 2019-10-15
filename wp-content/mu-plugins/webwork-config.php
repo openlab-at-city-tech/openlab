@@ -39,6 +39,7 @@ add_filter(
 	'webwork_section_instructor_map',
 	function( $map ) {
 		return array(
+			'WW-Dev' => 'work@bree.bz',
 			'MAT1275-F17-Antoine'                    => 'wantoine@citytech.cuny.edu',
 			'MAT1275-F17-Ferguson'                   => 'rferguson@citytech.cuny.edu',
 			'MAT1275-F17-Mujica'                     => 'pmujica@citytech.cuny.edu',
