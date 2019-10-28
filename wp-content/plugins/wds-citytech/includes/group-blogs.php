@@ -1525,10 +1525,12 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 				case 'student':
 					$template = 'template-eportfolio';
 
+					/*
 					$group_units = openlab_get_group_academic_units( $group_id );
 					if ( in_array( 'communication-design', $group_units['departments'], true ) ) {
 						$template = 'template-eportfolio-communication-design';
 					}
+					*/
 					break;
 				case 'alumni':
 					$template = 'template-eportfolio-alumni';
