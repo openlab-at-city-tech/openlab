@@ -2,7 +2,7 @@
 /**
  * dynwid_worker.php - The worker does the actual work.
  *
- * @version $Id: dynwid_worker.php 1698398 2017-07-18 19:34:08Z qurl $
+ * @version $Id: dynwid_worker.php 2164836 2019-09-28 10:54:30Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -523,7 +523,7 @@
 							}
 						}
 					/* Only Author */
-					} else if ( count($act_author) > 0 && count($act_category == 0) ) {
+					} else if ( count($act_author) > 0 && count($act_category) == 0 ) {
 						if ( in_array($post->post_author, $act_author) ) {
 							$display = $other;
 							$DW->message('Exception triggered for ' . $widget_id . ' sets display to ' . $e . ' (rule ES2)');

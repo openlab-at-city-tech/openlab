@@ -971,7 +971,7 @@ class GWPerksPage {
 
         <head>
         <title><?php echo $page_title; ?></title>
-        <link rel='stylesheet' id='google-fonts-css'  href='http://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%7CUbuntu%3A300%2C400%2C400italic%2C500italic%2C500%7CAnonymous+Pro%3A400%2C700italic%2C700%2C400italic&#038;ver=3.5' type='text/css' media='all' />
+        <link rel='stylesheet' id='google-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%7CUbuntu%3A300%2C400%2C400italic%2C500italic%2C500%7CAnonymous+Pro%3A400%2C700italic%2C700%2C400italic&#038;ver=3.5' type='text/css' media='all' />
         <?php
             wp_print_styles(array('gwp-admin', 'colors-fresh'));
             wp_print_scripts(array('jquery'));

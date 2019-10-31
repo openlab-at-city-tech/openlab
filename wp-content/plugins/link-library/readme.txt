@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.home.blog/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 5.2
+Tested up to: 5.2.3
 Stable tag: trunk
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -47,6 +47,9 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 6.3.3 =
+* Added import and export fields for link tags
 
 = 6.3.2 =
 * Added new shortcode parameters to be able to override the number of links to be displayed, the order in which links are displayed and the direction of that order. All new parameters are documented in the first tab of the library configurations page.
