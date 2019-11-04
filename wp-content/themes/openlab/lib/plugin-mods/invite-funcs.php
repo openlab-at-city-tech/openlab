@@ -403,3 +403,80 @@ function openlab_limit_invite_anyone_group_query( $args ) {
 	return $args;
 }
 add_filter( 'bp_after_has_groups_parse_args', 'openlab_limit_invite_anyone_group_query' );
+
+/**
+ * Catches group member import requests.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( ! bp_is_group() || ! bp_is_current_action( 'invite-anyone' ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['group-import-members-nonce'] ) ) {
+			return;
+		}
+
+		check_admin_referer( 'group_import_members', 'group-import-members-nonce' );
+
+		// @todo Better permission check?
+		if ( ! bp_is_item_admin() ) {
+			return;
+		}
+
+		$emails_raw = wp_unslash( $_POST['email-addresses-to-import'] );
+
+		$lines  = preg_split( '/\R/', $emails_raw );
+		$emails = [];
+		foreach ( $lines as $line ) {
+			$line_emails = preg_split( '/[,\s]+/', $line );
+
+			$emails = array_merge( $emails, $line_emails );
+		}
+
+		$status = [
+			'success'         => [],
+			'invalid_address' => [],
+			'illegal_address' => [],
+			'not_found'       => [],
+		];
+
+		foreach ( $emails as $email ) {
+			if ( ! is_email( $email ) ) {
+				$status['invalid_address'][] = $email;
+				continue;
+			}
+
+			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu' ];
+			if ( is_array( $email_domains ) && ! empty( $email_domains ) ) {
+				$emaildomain = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
+				if ( ! in_array( $emaildomain, $email_domains, true ) ) {
+					$status['illegal_address'][] = $email;
+					continue;
+				}
+			}
+
+			if ( is_email_address_unsafe( $email ) ) {
+				$status['illegal_address'][] = $email;
+				continue;
+			}
+
+			$user = get_user_by( 'email', $email );
+			if ( ! $user ) {
+				$status['not_found'][] = $email;
+				continue;
+			}
+
+			groups_join_group( bp_get_current_group_id(), $user->ID );
+
+			$status['success'][] = $email;
+		}
+
+		$timestamp = time();
+		groups_update_groupmeta( bp_get_current_group_id(), 'import_' . $timestamp, $status );
+
+		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'invite-anyone?import_id=' . $timestamp );
+	},
+	5
+);
