@@ -116,3 +116,98 @@
 <?php endif; ?>
 
 <?php do_action('bp_after_group_send_invites_content') ?>
+
+<?php /* @todo Should this be restricted differently? */ ?>
+<?php if ( bp_is_item_admin() && 'course' === $group_type ) : ?>
+
+	<?php
+	$import_results = null;
+	if ( ! empty( $_GET['import_id'] ) ) {
+		$import_id      = intval( wp_unslash( $_GET['import_id'] ) );
+		$import_results = groups_get_groupmeta( bp_get_current_group_id(), 'import_' . $import_id );
+	}
+	?>
+	<form method="post" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
+		<div class="panel panel-default">
+			<div class="panel-heading semibold">Import Members to Your Course</div>
+			<div class="panel-body">
+
+				<?php if ( $import_results ) : ?>
+					<?php if ( ! empty( $import_results['success'] ) ) : ?>
+						<?php
+						$user_links = [];
+						foreach ( $import_results['success'] as $success_email ) {
+							$success_user = get_user_by( 'email', $success_email );
+							if ( ! $success_user ) {
+								continue;
+							}
+
+							$user_links[] = sprintf(
+								'<a href="%s">%s</a> (%s)',
+								esc_attr( bp_core_get_user_domain( $success_user->ID ) ),
+								esc_html( bp_core_get_user_displayname( $success_user->ID ) ),
+								esc_html( $success_email )
+							);
+						}
+						?>
+
+						<?php if ( $user_links ) : ?>
+							<p class="invite-copy">The following users were successfully added to your <?php echo esc_html( ucfirst( $group_type ) ); ?>: <?php echo implode( ', ', $user_links ); ?>
+						<?php endif; ?>
+					<?php endif; ?>
+
+					<?php if ( ! empty( $import_results['illegal_address'] ) ) : ?>
+						<?php
+						$illegal = [];
+						foreach ( $import_results['illegal_address'] as $illegal_address ) {
+							$illegal[] = sprintf(
+								'<code>%s</code>',
+								esc_html( $illegal_address )
+							);
+						}
+						?>
+
+						<?php if ( $illegal ) : ?>
+							<p class="invite-copy">The following email addresses are not valid for the OpenLab: <?php echo implode( ', ', $illegal ); ?>. Please note that OpenLab user accounts must have a <code>mail.citytech.cuny.edu</code> or a <code>citytech.cuny.edu</code> email address.</p>
+						<?php endif; ?>
+					<?php endif; ?>
+
+					<?php if ( ! empty( $import_results['invalid_address'] ) ) : ?>
+						<?php
+						$invalid = [];
+						foreach ( $import_results['invalid_address'] as $invalid_address ) {
+							$invalid[] = sprintf(
+								'<code>%s</code>',
+								esc_html( $invalid_address )
+							);
+						}
+						?>
+
+						<?php if ( $invalid ) : ?>
+							<p class="invite-copy">The following don't appear to be valid email addresses. Please verify and resubmit. <?php echo implode( ', ', $illegal ); ?></p>
+						<?php endif; ?>
+					<?php endif; ?>
+
+					<?php if ( ! empty( $import_results['not_found'] ) ) : ?>
+						<p class="invite-copy">The following email addresses could not be found in the system. To invite them to the OpenLab, do xyz.</p>
+
+						<label for="not-found-addresses" class="sr-only">Addresses not found in the system</label>
+						<textarea name="not-found-addresses" class="form-control" id="not-found-addresses"><?php echo esc_textarea( implode( ', ', $import_results['not_found'] ) ); ?></textarea>
+					<?php endif; ?>
+
+					<p><a class="btn btn-primary no-deco" href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) . BP_INVITE_ANYONE_SLUG ); ?>/">Perform a new import</a></p>
+
+				<?php else : ?>
+					<p class="invite-copy">Add members to your <?php echo esc_html( ucfirst( $group_type )); ?> in bulk by entering a list of email addresses below. OpenLab users corresponding to this list will be added automatically to your Course.</p>
+
+					<label class="sr-only" id="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( ucfirst( $group_type ) ); ?></label>
+					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control"></textarea>
+
+					<p><input type="submit" class="btn btn-primary no-deco" value="Import" /></p>
+				<?php endif; ?>
+			</div>
+		</div>
+
+		<?php wp_nonce_field( 'group_import_members', 'group-import-members-nonce' ) ?>
+	</form>
+<?php endif; ?>
