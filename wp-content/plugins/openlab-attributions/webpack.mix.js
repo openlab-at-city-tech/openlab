@@ -40,8 +40,15 @@ mix.version();
  *
  * @link https://laravel.com/docs/5.6/mix#working-with-scripts
  */
-mix.js( `${devPath}/js/classic-editor.js`, 'js' );
-mix.react( `${devPath}/js/block-editor.js`, 'js' );
+mix.react( `${devPath}/js/classic-editor.js`, 'js' )
+	.react( `${devPath}/js/block-editor.js`, 'js' );
+
+/**
+ * Copy files.
+ *
+ * @link https://laravel.com/docs/5.8/mix#copying-files-and-directories
+ */
+mix.copy( `${devPath}/js/plugin.js`, 'build/js' );
 
 /*
  * Compile CSS. Mix supports Sass, Less, Stylus, and plain CSS, and has functions
@@ -60,7 +67,8 @@ var sassConfig = {
 };
 
 // Compile SASS/CSS.
-mix.sass( `${devPath}/scss/editor.scss`, 'css', sassConfig );
+mix.sass( `${devPath}/scss/editor.scss`, 'css', sassConfig )
+	.sass( `${devPath}/scss/style.scss`, 'css' );
 
 /*
  * Add custom Webpack configuration.

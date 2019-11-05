@@ -18,7 +18,9 @@
     "lint:scripts:fix": "cross-env eslint './dist/js/**/*.js' --fix"
   },
   "dependencies": {
-    "uuid": "^3.3.2"
+    "classnames": "^2.2.6",
+    "nanoid": "^2.1.1",
+    "react-tippy": "^1.2.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",

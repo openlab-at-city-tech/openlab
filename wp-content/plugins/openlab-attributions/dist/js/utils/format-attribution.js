@@ -5,7 +5,7 @@ import format from './format';
 import validateLicense from './validate-license';
 
 /**
- * Format attribution for shortcode.
+ * Format the attribution for render.
  *
  * @param {Object} data    Form input data.
  * @param {Array} licenses List of licenses.
@@ -13,39 +13,40 @@ import validateLicense from './validate-license';
  * @return {string} Formatted attribution.
  */
 const formatAttribution = ( data, licenses ) => {
-	if ( data.title ) {
-		data.title = format( data.title, data.titleUrl );
+	const parts = [];
+
+	if ( data.authorName ) {
+		parts.push( format( data.authorName, data.authorUrl ) );
 	}
 
-	if ( data.author ) {
-		data.author = format( data.author, data.authorUrl );
+	if ( data.datePublished ) {
+		parts.push( `(${ data.datePublished })` );
+	}
+
+	if ( data.title ) {
+		parts.push( format( data.title, data.titleUrl ) );
+	}
+
+	if ( data.derivative ) {
+		const url = format( data.derivative, data.derivative );
+		parts.push( `Retrieved from ${ url }` );
 	}
 
 	if ( data.publisher ) {
-		data.publisher = format( data.publisher, data.publisherUrl );
+		parts.push( format( data.publisher, data.publisherUrl ) );
 	}
 
 	if ( data.project ) {
-		data.project = format( data.project, data.projectUrl );
+		parts.push( format( data.project, data.publisherUrl ) );
 	}
 
-	// Get our license object from the list.
-	const license = validateLicense( licenses, data.license );
-
-	if ( license ) {
-		data.license = format( license.label, license.url );
+	if ( data.license ) {
+		const license = validateLicense( licenses, data.license );
+		const url = format( license.label, license.url );
+		parts.push( `Licensed under ${ url }` );
 	}
 
-	const attribution = `
-			${ data.title }
-			${ data.author ? `by ${ data.author }.` : '' }
-			${ data.year ? `${ data.year }.` : '' }
-			${ data.publisher ? `${ data.publisher }.` : '' }
-			${ data.license ? `is licensed under ${ data.license }.` : '' }
-			${ data.derivative ? `Receive from ${ data.derivative }` : '' }
-	`;
-
-	return attribution.trim();
+	return parts.join( '. ' );
 };
 
 export default formatAttribution;
