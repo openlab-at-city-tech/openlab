@@ -4,7 +4,7 @@
  * Functionality related to the Library widgets on sites and course profiles.
  */
 
-add_action( 'widgets_init', 'openlab_register_library_tools_widget' );
+add_action( 'widgets_init', 'openlab_register_library_widgets' );
 
 /**
  * Checks whether a group has the Library Tools feature enabled on the group profile.
@@ -88,8 +88,9 @@ add_action( 'bp_group_options_nav', 'openlab_group_library_tools_display', 80 );
 /**
  * Registers the Library Tools widget for WP sites.
  */
-function openlab_register_library_tools_widget() {
+function openlab_register_library_widgets() {
 	register_widget( 'OpenLab_Library_Tools_Widget' );
+	register_widget( 'OpenLab_Library_Subject_Guides_Widget' );
 }
 
 /**
@@ -265,5 +266,492 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 		);
 
 		return $this->parse_settings( $passed );
+	}
+}
+
+/**
+ * Gets a list of Library Subject Guides.
+ *
+ * See http://libguides.citytech.cuny.edu/?b=t for the canonical list.
+ */
+function openlab_get_library_subject_guides() {
+	return [
+		// Course Guide
+		'com-1330'                       => [
+			'name' => 'COM 1330',
+			'url'  => 'http://libguides.citytech.cuny.edu/Speech',
+			'type' => 'course',
+		],
+
+		'construction-management'        => [
+			'name' => 'Construction Management and Civil Engineering Technology',
+			'url'  => 'http://libguides.citytech.cuny.edu/c.php?g=881500',
+			'type' => 'course',
+		],
+
+		'cst-1101'                       => [
+			'name' => 'CST 1101',
+			'url'  => 'http://libguides.citytech.cuny.edu/cst1101',
+			'type' => 'course',
+		],
+
+		'english-1101'                   => [
+			'name' => 'English1101',
+			'url'  => 'http://libguides.citytech.cuny.edu/eng1101',
+			'type' => 'course',
+		],
+
+		'hmgt-1101'                      => [
+			'name' => 'HMGT1101 Industry Research',
+			'url'  => 'http://libguides.citytech.cuny.edu/hmgt1101',
+			'type' => 'course',
+		],
+
+		// General Purpose.
+		'arturss'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/advancedResearch',
+			'name' => 'Advanced Research Techniques for Undergraduate Research Student Scholars',
+			'type' => 'general',
+		],
+
+		'boost'                          => [
+			'url'  => 'https://libguides.citytech.cuny.edu/boost',
+			'name' => 'Boost Your Scholarly Profile!',
+			'type' => 'general',
+		],
+
+		'citations'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/citations',
+			'name' => 'Citation and Formatting Guides',
+			'type' => 'general',
+		],
+
+		'cunyaw'                         => [
+			'url'  => 'https://libguides.citytech.cuny.edu/cunyaw',
+			'name' => 'CUNY Academic Works',
+			'type' => 'general',
+		],
+
+		'esol'                           => [
+			'url'  => 'https://libguides.citytech.cuny.edu/c.php?g=396279',
+			'name' => 'ESOL & Applied Linguistics',
+			'type' => 'general',
+		],
+
+		'fair-use'                       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/c.php?g=642462',
+			'name' => 'Fair Use and Copyright',
+			'type' => 'general',
+		],
+
+		'grad-school'                    => [
+			'url'  => 'https://libguides.citytech.cuny.edu/Gradschool',
+			'name' => 'Grad School Resources',
+			'type' => 'general',
+		],
+
+		'guide-to-research'              => [
+			'url'  => 'https://libguides.citytech.cuny.edu/intro',
+			'name' => 'Guide to Research',
+			'type' => 'general',
+		],
+
+		'open-access'                    => [
+			'url'  => 'https://libguides.citytech.cuny.edu/openaccess',
+			'name' => 'Open Access',
+			'type' => 'general',
+		],
+
+		'oer'                            => [
+			'url'  => 'https://libguides.citytech.cuny.edu/OER',
+			'name' => 'Open Educational Resources (OER)',
+			'type' => 'general',
+		],
+
+		'pacifica'                       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/pacifica',
+			'name' => 'Pacifica Radio Archives',
+			'type' => 'general',
+		],
+
+		'places'                         => [
+			'url'  => 'https://libguides.citytech.cuny.edu/places',
+			'name' => 'Place Based Research',
+			'type' => 'general',
+		],
+
+		'prom'                           => [
+			'url'  => 'https://libguides.citytech.cuny.edu/PROM',
+			'name' => 'PROM Outreach Toolkit',
+			'type' => 'general',
+		],
+
+		'pubqual'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/pubqual',
+			'name' => 'Publication Quality, Evaluating Publishers, and Bibliometrics',
+			'type' => 'general',
+		],
+
+		'sounds'                         => [
+			'url'  => 'https://libguides.citytech.cuny.edu/sounds',
+			'name' => 'Recorded Sounds for the Classroom',
+			'type' => 'general',
+		],
+
+		'mcfp'                           => [
+			'url'  => 'https://libguides.citytech.cuny.edu/mcfp',
+			'name' => 'Resources for Academic Publishing',
+			'type' => 'general',
+		],
+
+		'undocumented'                   => [
+			'url'  => 'https://libguides.citytech.cuny.edu/undocumented',
+			'name' => 'Resources for Undocumented Students',
+			'type' => 'general',
+		],
+
+		'scholarly-communications'       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/scholarlycommunications',
+			'name' => 'Scholarly Communications',
+			'type' => 'general',
+		],
+
+		'stem'                           => [
+			'url'  => 'https://libguides.citytech.cuny.edu/stem',
+			'name' => 'STEM Study of Teaching and Learning Journals',
+			'type' => 'general',
+		],
+
+		'student-scholarship'            => [
+			'url'  => 'https://libguides.citytech.cuny.edu/student-scholarship',
+			'name' => 'Undergraduate Research Student Posters: How to Submit to Academic Works',
+			'type' => 'general',
+		],
+
+		'finding-info'                   => [
+			'url'  => 'https://libguides.citytech.cuny.edu/findingInfo',
+			'name' => 'Using Different Kinds of Information',
+			'type' => 'general',
+		],
+
+		// Subject Guide.
+		'african-american-studies'       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/african_american_studies',
+			'name' => 'African American Studies',
+			'type' => 'subject',
+		],
+
+		'archtech'                       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/archtech',
+			'name' => 'Architectural Technology',
+			'type' => 'subject',
+		],
+
+		'arthist'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/arthist',
+			'name' => 'Art History',
+			'type' => 'subject',
+		],
+
+		'biology'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/biology',
+			'name' => 'Biology',
+			'type' => 'subject',
+		],
+
+		'fashion'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/c.php?g=847871',
+			'name' => 'Business & Technology of Fashion',
+			'type' => 'subject',
+		],
+
+		'chemistry'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/chemistry',
+			'name' => 'Chemistry',
+			'type' => 'subject',
+		],
+
+		'comd'                           => [
+			'url'  => 'https://libguides.citytech.cuny.edu/communication_design',
+			'name' => 'Communication Design',
+			'type' => 'subject',
+		],
+
+		'communications'                 => [
+			'url'  => 'https://libguides.citytech.cuny.edu/c.php?g=846670',
+			'name' => 'Communications',
+			'type' => 'subject',
+		],
+
+		'computer-tech'                  => [
+			'url'  => 'https://libguides.citytech.cuny.edu/computer_tech',
+			'name' => 'Computer Engineering & Systems Technology',
+			'type' => 'subject',
+		],
+
+		'dental-hygiene'                 => [
+			'url'  => 'https://libguides.citytech.cuny.edu/dental_hygiene',
+			'name' => 'Dental Hygiene',
+			'type' => 'subject',
+		],
+
+		'economics'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/economics',
+			'name' => 'Economics',
+			'type' => 'subject',
+		],
+
+		'engineer'                       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/Engineer',
+			'name' => 'Engineering',
+			'type' => 'subject',
+		],
+
+		'english'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/eng',
+			'name' => 'English',
+			'type' => 'subject',
+		],
+
+		'entertainment-tech'             => [
+			'url'  => 'https://libguides.citytech.cuny.edu/entertainment_tech',
+			'name' => 'Entertainment Technology',
+			'type' => 'subject',
+		],
+
+		'health-services-administration' => [
+			'url'  => 'https://libguides.citytech.cuny.edu/healthservicesadmin',
+			'name' => 'Health Services Administration',
+			'type' => 'subject',
+		],
+
+		'hospitality'                    => [
+			'url'  => 'https://libguides.citytech.cuny.edu/hospitality',
+			'name' => 'Hospitality Management',
+			'type' => 'subject',
+		],
+
+		'humanservices'                  => [
+			'url'  => 'https://libguides.citytech.cuny.edu/humanservices',
+			'name' => 'Human Services',
+			'type' => 'subject',
+		],
+
+		'legal-studies'                  => [
+			'url'  => 'https://libguides.citytech.cuny.edu/legalstudies',
+			'name' => 'Law and Paralegal Studies',
+			'type' => 'subject',
+		],
+
+		'mathematics'                    => [
+			'url'  => 'https://libguides.citytech.cuny.edu/math',
+			'name' => 'Mathematics',
+			'type' => 'subject',
+		],
+
+		'nursing'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/nursing',
+			'name' => 'Nursing',
+			'type' => 'subject',
+		],
+
+		'philosophy'                     => [
+			'url'  => 'https://libguides.citytech.cuny.edu/philosophy',
+			'name' => 'Philosophy',
+			'type' => 'subject',
+		],
+
+		'physics'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/physics',
+			'name' => 'Physics',
+			'type' => 'subject',
+		],
+
+		'polisci'                        => [
+			'url'  => 'https://libguides.citytech.cuny.edu/polisci',
+			'name' => 'Political Science',
+			'type' => 'subject',
+		],
+
+		'radiotech'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/radiotech',
+			'name' => 'Radiological Technology',
+			'type' => 'subject',
+		],
+
+		'religion'                       => [
+			'url'  => 'https://libguides.citytech.cuny.edu/religion',
+			'name' => 'Religion',
+			'type' => 'subject',
+		],
+
+		'dentistry'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/dentistry',
+			'name' => 'Restorative Dentistry',
+			'type' => 'subject',
+		],
+
+		'sociology'                      => [
+			'url'  => 'https://libguides.citytech.cuny.edu/sociology',
+			'name' => 'Sociology',
+			'type' => 'subject',
+		],
+
+		'vision'                         => [
+			'url'  => 'https://libguides.citytech.cuny.edu/vision',
+			'name' => 'Vision Care Technology',
+			'type' => 'subject',
+		],
+
+		'authors-rights'                 => [
+			'url'  => 'https://libguides.citytech.cuny.edu/authorsRights',
+			'name' => 'Author Rights',
+			'type' => 'topic',
+		],
+
+		'market'                         => [
+			'url'  => 'https://libguides.citytech.cuny.edu/market',
+			'name' => 'Finding Consumer/Market and Company/Industry Information',
+			'type' => 'topic',
+		],
+	];
+}
+
+/**
+ * Library Subject Guides widget class.
+ */
+class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'openlab-library-subject-guides-widget',
+			'Library Subject Guides',
+			array(
+				'class'     => 'openlab-library-subject-guides-widget',
+				'classname' => 'openlab-library-subject-guides-widget',
+			)
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		$checked = isset( $instance['selected_guides'] ) ? $instance['selected_guides'] : [];
+		$guides  = openlab_get_library_subject_guides();
+
+		$selected_guides = array_map(
+			function( $guide ) use ( $guides ) {
+				if ( ! isset( $guides[ $guide ] ) ) {
+					return;
+				}
+
+				return sprintf(
+					'<a href="%s">%s</a>',
+					esc_attr( $guides[ $guide ]['url'] ),
+					esc_html( $guides[ $guide ]['name'] )
+				);
+			},
+			$checked
+		);
+
+		?>
+
+		<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
+		<div class="openlab-library-tools-widget" id="<?php echo esc_attr( $this->get_field_id( '' ) ); ?>">
+			<?php echo $args['before_widget']; ?>
+			<?php echo $args['before_title']; ?><?php echo count( $selected_guides ) > 1 ? 'Library Guides' : 'Library Guide'; ?><?php echo $args['after_title']; ?>
+
+			<ul>
+				<?php foreach ( $selected_guides as $selected_guide ) : ?>
+					<li><?php echo $selected_guide; ?></li>
+				<?php endforeach; ?>
+			</ul>
+			<?php echo $args['after_widget']; ?>
+		</div>
+
+		<style type="text/css">
+			.widget_openlab-library-tools-widget input[type="text"],
+			.widget_openlab-library-tools-widget select {
+				margin-bottom: .5rem;
+			}
+
+			#openlab-library-information-widget-content ul {
+				list-style-type: disc;
+				margin-top: .5rem;
+				padding-left: 20px;
+			}
+
+			.library-search-advanced-link {
+				font-size: .9rem;
+				white-space: nowrap;
+			}
+
+			.openlab-library-information p {
+				margin-bottom: 0;
+			}
+		</style>
+
+		<?php
+
+	}
+
+	public function form( $instance ) {
+		wp_enqueue_script( 'openlab-library-subject-guides-widget', plugins_url() . '/wds-citytech/assets/js/library-subject-guides-widget.js', [ 'jquery-ui-accordion' ] );
+		wp_enqueue_style( 'openlab-library-subject-guides-widget', plugins_url() . '/wds-citytech/assets/css/library-subject-guides-widget.css' );
+
+		$checked = isset( $instance['selected_guides'] ) ? $instance['selected_guides'] : [];
+
+		$guides_by_type = [
+			'course'  => [],
+			'general' => [],
+			'subject' => [],
+			'topic'   => [],
+		];
+
+		foreach ( openlab_get_library_subject_guides() as $slug => $guide ) {
+			$guide_type = $guide['type'];
+
+			$guides_by_type[ $guide_type ][ $slug ] = $guide;
+		}
+
+		$types = [
+			'course'  => 'Course Guide',
+			'general' => 'General Purpose',
+			'subject' => 'Subject Guide',
+			'topic'   => 'Topic Guide',
+		];
+
+		?>
+
+		<p>Select one or more Library Subject Guides.</p>
+
+		<div class="library-subject-guide-selectors">
+			<?php foreach ( $types as $type => $type_name ) : ?>
+				<h4><?php echo esc_html( $type_name ); ?></h4>
+				<div>
+					<?php foreach ( $guides_by_type[ $type ] as $guide_slug => $guide ) : ?>
+						<?php $guide_id = $this->get_field_id( $guide_slug ); ?>
+						<input class="checkbox" type="checkbox" name="library-subject-guides[]" value="<?php echo esc_attr( $guide_slug ); ?>" id="<?php echo esc_attr( $guide_id ); ?>" <?php checked( in_array( $guide_slug, $checked, true ) ); ?>> <label for="<?php echo esc_attr( $guide_id ); ?>"><?php echo esc_html( $guide['name'] ); ?></label>
+					<?php endforeach; ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
+
+		<?php wp_nonce_field( 'openlab_library_subject_guides', 'openlab-library-subject-guides-nonce', false ); ?>
+
+		<?php
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		if ( empty( $_POST['openlab-library-subject-guides-nonce'] ) ) {
+			return $old_instance;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['openlab-library-subject-guides-nonce'], 'openlab_library_subject_guides' ) ) {
+			return $old_instance;
+		}
+
+		if ( isset( $_POST['library-subject-guides'] ) ) {
+			$new_instance['selected_guides'] = wp_unslash( $_POST['library-subject-guides'] );
+		}
+
+		return $new_instance;
 	}
 }
