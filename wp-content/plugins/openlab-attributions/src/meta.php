@@ -66,7 +66,7 @@ function register_metabox() {
 		'ol-attributions-box',
 		'Attributions',
 		__NAMESPACE__ . '\\render_metabox',
-		'post',
+		get_supported_post_types(),
 		'normal',
 		'high'
 	);

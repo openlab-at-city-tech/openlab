@@ -16,28 +16,28 @@ function register_assets() {
 		'attribution-block-script',
 		plugins_url( '/build/js/block-editor.js', ROOT_FILE ),
 		[ 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element', 'wp-rich-text' ],
-		'20191014'
+		'20191107'
 	);
 
 	wp_register_script(
 		'attribution-classic-script',
 		plugins_url( '/build/js/classic-editor.js', ROOT_FILE ),
 		[ 'wp-tinymce', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element' ],
-		'20191014'
+		'20191107'
 	);
 
 	wp_register_style(
 		'attribution-frontend-styles',
 		plugins_url( '/build/css/style.css', ROOT_FILE ),
 		[],
-		'20191014'
+		'20191107'
 	);
 
 	wp_register_style(
 		'attribution-editor-styles',
 		plugins_url( '/build/css/editor.css', ROOT_FILE ),
 		[ 'wp-components' ],
-		'20191014'
+		'20191107'
 	);
 }
 add_action( 'init', __NAMESPACE__ . '\\register_assets' );

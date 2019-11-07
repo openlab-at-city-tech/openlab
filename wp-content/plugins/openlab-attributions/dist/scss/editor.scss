@@ -1,5 +1,28 @@
 @import "~react-tippy/dist/tippy.css";
 
+.tippy-tooltip {
+	color: #333;
+	background: #e2e4e7;
+	border: 2px solid #0073aa;
+	font-size: 0.9rem;
+	padding: 0.5rem;
+	text-align: initial;
+}
+
+.tippy-popper[x-placement^="right"] [x-arrow] {
+	border-right: 9px solid #0073aa;
+	border-top: 9px solid transparent;
+	border-bottom: 9px solid transparent;
+	left: -9px;
+}
+
+.tippy-popper[x-placement^="left"] [x-arrow] {
+	border-left: 9px solid #0073aa;
+	border-top: 9px solid transparent;
+	border-bottom: 9px solid transparent;
+	right: -9px;
+}
+
 .component-attributions-modal {
 	min-width: 700px;
 
@@ -98,6 +121,7 @@
 	.attribution-plugin {
 		background-color: #e2e4e7;
 		padding: 6px 8px;
+		margin-top: 3em;
 		margin-bottom: 1em;
 	}
 }
