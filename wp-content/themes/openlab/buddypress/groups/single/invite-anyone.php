@@ -184,7 +184,7 @@
 						?>
 
 						<?php if ( $invalid ) : ?>
-							<p class="invite-copy">The following don't appear to be valid email addresses. Please verify and resubmit. <?php echo implode( ', ', $illegal ); ?></p>
+							<p class="invite-copy">The following don't appear to be valid email addresses. Please verify and resubmit. <?php echo implode( ', ', $invalid ); ?></p>
 						<?php endif; ?>
 					<?php endif; ?>
 
