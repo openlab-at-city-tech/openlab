@@ -100,6 +100,10 @@ function openlab_load_scripts() {
         );
     }
 
+	if ( bp_is_group() && bp_is_current_action( 'invite-anyone' ) ) {
+		wp_enqueue_script( 'openlab-invite-anyone', $stylesheet_dir_uri . '/js/invite-anyone.js', [ 'jquery' ] );
+	}
+
     if (bp_is_register_page()) {
         wp_enqueue_script('password-strength-meter');
     }

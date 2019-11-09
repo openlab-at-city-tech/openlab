@@ -19,9 +19,9 @@
     <div id="topgroupinvite" class="panel panel-default">
         <div class="panel-heading semibold">Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></div>
         <div class="panel-body">
-            
+
             <?php do_action('template_notices') ?>
-            
+
             <label><?php _e("Search for members to invite:", 'bp-invite-anyone') ?></label>
 
             <ul class="first acfb-holder invite-search inline-element-list">
@@ -82,7 +82,7 @@
             <?php do_action('bp_after_group_send_invites_list') ?>
         </div>
     </div>
-        
+
     <?php wp_nonce_field('groups_invite_uninvite_user', '_wpnonce_invite_uninvite_user') ?>
 
     <?php if (invite_anyone_access_test() && !bp_is_group_create()) : ?>
@@ -127,7 +127,7 @@
 		$import_results = groups_get_groupmeta( bp_get_current_group_id(), 'import_' . $import_id );
 	}
 	?>
-	<form method="post" class="form-panel" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
+	<form method="post" id="import-members-form" class="form-panel" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
 		<div class="panel panel-default">
 			<div class="panel-heading semibold">Import Members to Your Course</div>
 			<div class="panel-body">
@@ -198,10 +198,12 @@
 					<p><a class="btn btn-primary no-deco" href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) . BP_INVITE_ANYONE_SLUG ); ?>/">Perform a new import</a></p>
 
 				<?php else : ?>
-					<p class="invite-copy">Add members to your <?php echo esc_html( ucfirst( $group_type )); ?> in bulk by entering a list of email addresses below. OpenLab users corresponding to this list will be added automatically to your Course.</p>
+					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( ucfirst( $group_type )); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your Course and will receive notification via email.</p>
 
-					<label class="sr-only" id="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( ucfirst( $group_type ) ); ?></label>
-					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control"></textarea>
+					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially enrolled in my course or have approved this action.</label></p>
+
+					<label class="sr-only" for="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( ucfirst( $group_type ) ); ?></label>
+					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control" placeholder="Add mail.citytech.cuny.edu or citytech.cuny.edu email addresses using a comma-separated list and/or one address per line."></textarea>
 
 					<p><input type="submit" class="btn btn-primary no-deco" value="Import" /></p>
 				<?php endif; ?>
