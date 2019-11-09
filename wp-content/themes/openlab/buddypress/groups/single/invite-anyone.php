@@ -127,7 +127,7 @@
 		$import_results = groups_get_groupmeta( bp_get_current_group_id(), 'import_' . $import_id );
 	}
 	?>
-	<form method="post" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
+	<form method="post" class="form-panel" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
 		<div class="panel panel-default">
 			<div class="panel-heading semibold">Import Members to Your Course</div>
 			<div class="panel-body">
