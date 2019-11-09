@@ -468,7 +468,48 @@ add_action(
 				continue;
 			}
 
+			// Already sent.
+			if ( in_array( $email, $status['success'], true ) ) {
+				continue;
+			}
+
+			// User is already a member of the group.
+			if ( groups_is_user_member( $user->ID, bp_get_current_group_id() ) ) {
+				$status['success'][] = $email;
+				continue;
+			}
+
 			groups_join_group( bp_get_current_group_id(), $user->ID );
+
+			$group = groups_get_current_group();
+
+			$email_subject = sprintf(
+				'You are now a member of %s',
+				stripslashes( $group->name )
+			);
+
+			$email_message = sprintf(
+				'<p>You are now a member of %s.</p><p>Visit <a href="%s">%s</a> to make changes to your membership settings or to leave this course.</p>',
+				stripslashes( $group->name ),
+				bp_get_group_permalink( $group ),
+				stripslashes( $group->name )
+			);
+
+			$email_args = array(
+				'tokens' => array(
+					'usermessage'   => $email_message,
+					'usersubject'   => $email_subject,
+					'ol.group-name' => stripslashes( $group->name ),
+					'ol.group-url'  => bp_get_group_permalink( $group ),
+					'ol.group-type' => openlab_get_group_type( $group->id )
+				),
+			);
+
+			bp_send_email(
+				'openlab-added-to-group',
+				$email,
+				$email_args
+			);
 
 			$status['success'][] = $email;
 		}
