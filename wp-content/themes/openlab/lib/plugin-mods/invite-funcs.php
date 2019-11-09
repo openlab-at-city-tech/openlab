@@ -473,6 +473,10 @@ add_action(
 			$status['success'][] = $email;
 		}
 
+		foreach ( $status as &$emails ) {
+			$emails = array_unique( $emails );
+		}
+
 		$timestamp = time();
 		groups_update_groupmeta( bp_get_current_group_id(), 'import_' . $timestamp, $status );
 
