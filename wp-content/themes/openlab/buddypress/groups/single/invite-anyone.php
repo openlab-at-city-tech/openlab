@@ -143,7 +143,7 @@
 							}
 
 							$user_links[] = sprintf(
-								'<a href="%s">%s</a> (%s)',
+								'<li><a href="%s">%s</a> (%s)</li>',
 								esc_attr( bp_core_get_user_domain( $success_user->ID ) ),
 								esc_html( bp_core_get_user_displayname( $success_user->ID ) ),
 								esc_html( $success_email )
@@ -152,24 +152,17 @@
 						?>
 
 						<?php if ( $user_links ) : ?>
-							<p class="invite-copy">The following users were successfully added to your <?php echo esc_html( ucfirst( $group_type ) ); ?>: <?php echo implode( ', ', $user_links ); ?>
+							<div class="import-results-section import-results-section-success">
+								<p class="invite-copy">The following users were successfully added to your <?php echo esc_html( ucfirst( $group_type ) ); ?>: <ul><?php echo implode( ', ', $user_links ); ?></ul>
+							</div>
 						<?php endif; ?>
 					<?php endif; ?>
 
 					<?php if ( ! empty( $import_results['illegal_address'] ) ) : ?>
-						<?php
-						$illegal = [];
-						foreach ( $import_results['illegal_address'] as $illegal_address ) {
-							$illegal[] = sprintf(
-								'<code>%s</code>',
-								esc_html( $illegal_address )
-							);
-						}
-						?>
+						<p class="invite-copy">The following email addresses are not valid for the OpenLab. Please note that OpenLab members must have a <code>mail.citytech.cuny.edu</code> or a <code>citytech.cuny.edu</code> email address in order to join.</p>
 
-						<?php if ( $illegal ) : ?>
-							<p class="invite-copy">The following email addresses are not valid for the OpenLab: <?php echo implode( ', ', $illegal ); ?>. Please note that OpenLab user accounts must have a <code>mail.citytech.cuny.edu</code> or a <code>citytech.cuny.edu</code> email address.</p>
-						<?php endif; ?>
+						<label for="illegal-addresses" class="sr-only">Illegal addresses</label>
+						<textarea name="illegal-addresses" class="form-control" id="illegal-addresses"><?php echo esc_textarea( implode( ', ', $import_results['illegal_addresses'] ) ); ?></textarea>
 					<?php endif; ?>
 
 					<?php if ( ! empty( $import_results['invalid_address'] ) ) : ?>
@@ -177,7 +170,7 @@
 						$invalid = [];
 						foreach ( $import_results['invalid_address'] as $invalid_address ) {
 							$invalid[] = sprintf(
-								'<code>%s</code>',
+								'<strong>%s</strong>',
 								esc_html( $invalid_address )
 							);
 						}
@@ -189,7 +182,20 @@
 					<?php endif; ?>
 
 					<?php if ( ! empty( $import_results['not_found'] ) ) : ?>
-						<p class="invite-copy">The following email addresses could not be found in the system. To invite them to the OpenLab, do xyz.</p>
+						<p class="invite-copy">The following email addresses are valid, but were not found in the OpenLab member directory. The link below wil take you to My Invitations > Invite New Members, where you may invite the following to join the OpenLab and your <?php echo esc_html( ucfirst( $group_type ) ); ?>.</p>
+
+						<?php
+						$invite_link = bp_loggedin_user_domain() . '/invite-anyone/';
+						$invite_link = add_query_arg(
+							[
+								'emails'   => $import_results['not_found'],
+								'group_id' => bp_get_current_group_id(),
+							],
+							$invite_link
+						);
+						?>
+
+						<p class="invite-new-members-link"><span class="fa fa-chevron-circle-right" aria-hidden="true"></span> <a href="<?php echo esc_attr( $invite_link ); ?>">Invite the following to join the OpenLab and your <?php echo esc_html( ucfirst( $group_type ) ); ?></a></p>
 
 						<label for="not-found-addresses" class="sr-only">Addresses not found in the system</label>
 						<textarea name="not-found-addresses" class="form-control" id="not-found-addresses"><?php echo esc_textarea( implode( ', ', $import_results['not_found'] ) ); ?></textarea>

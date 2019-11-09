@@ -484,3 +484,38 @@ add_action(
 	},
 	5
 );
+
+/**
+ * Catch requests from group Import page and set IA cookies.
+ */
+add_action(
+	'bp_template_redirect',
+	function() {
+		if ( ! bp_is_user() || ! bp_is_current_action( 'invite-new-members' ) ) {
+			return;
+		}
+
+		$emails = [];
+		if ( isset( $_GET['emails'] ) ) {
+			$emails = wp_unslash( $_GET['emails'] );
+		}
+
+		$group_id = null;
+		if ( isset( $_GET['group_id'] ) ) {
+			$group_id = intval( $_GET['group_id'] );
+		}
+
+		if ( ! $emails && ! $group_id ) {
+			return;
+		}
+
+		if ( $emails ) {
+			buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
+		}
+
+		if ( $group_id ) {
+			buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+		}
+	},
+	8 // after IA
+);
