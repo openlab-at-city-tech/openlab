@@ -656,7 +656,7 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 		<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
 		<div class="openlab-library-tools-widget" id="<?php echo esc_attr( $this->get_field_id( '' ) ); ?>">
 			<?php echo $args['before_widget']; ?>
-			<?php echo $args['before_title']; ?><?php echo count( $selected_guides ) > 1 ? 'Library Guides' : 'Library Guide'; ?><?php echo $args['after_title']; ?>
+			<?php echo $args['before_title']; ?><?php echo count( $selected_guides ) > 1 ? 'Library Subject Guides' : 'Library Subject Guide'; ?><?php echo $args['after_title']; ?>
 
 			<ul>
 				<?php foreach ( $selected_guides as $selected_guide ) : ?>

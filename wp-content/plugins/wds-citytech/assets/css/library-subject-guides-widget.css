@@ -13,12 +13,30 @@
 
 .library-subject-guide-selectors .ui-accordion-header {
 	background: #fafafa;
-	color: rgb(35, 40, 45);
+	border: 1px solid #e5e5e5;
+	color: rgb(0, 142, 194);
 	margin-top: 7px;
-	padding-left: 15px;
+	padding-left: 1em;
 	font-family: inherit;
 	font-size: 1em;
 	font-weight: 600;
+	position: relative;
+}
+
+.library-subject-guide-selectors .ui-accordion-header:after {
+	content: '\f067';
+	font-family: 'FontAwesome';
+	font-weight: normal;
+	position: absolute;
+	right: 1em;
+}
+
+.library-subject-guide-selectors .ui-accordion-header.ui-accordion-header-active:after {
+	content: '\f068';
+}
+
+.library-subject-guide-selectors .ui-accordion-header:hover {
+	border-color: #999;
 }
 
 .library-subject-guide-selectors .ui-accordion-header-icon {
@@ -26,10 +44,11 @@
 }
 
 .library-subject-guide-selectors .ui-accordion-content {
-	background-color: transparent;
+	background-color: #8e777700;
 	background-image: none;
-	padding-left: 15px;
-	padding-right: 15px;
+	padding-left: 1em;
+	padding-right: 1em;
+	margin-bottom: 1.5em;
 }
 
 .library-subject-guide-selectors input[type="checkbox"] {
