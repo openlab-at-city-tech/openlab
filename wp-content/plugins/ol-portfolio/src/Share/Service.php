@@ -166,14 +166,15 @@ class Service implements Registerable {
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'20190807',
+			'20191112',
 			true
 		);
 
 		$settings = [
-			'root'          => esc_url_raw( get_rest_url() ),
-			'portfolioRoot' => esc_url_raw( get_rest_url( $this->portfolio_id ) ),
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'root'           => esc_url_raw( get_rest_url() ),
+			'portfolioRoot'  => esc_url_raw( get_rest_url( $this->portfolio_id ) ),
+			'portfolioAdmin' => esc_url_raw( get_admin_url( $this->portfolio_id ) ),
+			'nonce'          => wp_create_nonce( 'wp_rest' ),
 		];
 
 		wp_localize_script( 'add-to-portfolio', 'portfolioSettings', $settings );
@@ -253,7 +254,7 @@ class Service implements Registerable {
 		if ( ! empty( $entry['added'] ) ) {
 			$entry['edit_link'] = get_admin_url(
 				$this->portfolio_id,
-				sprintf( 'comment.php?action=editcomment&c=%d', $entry['added'] )
+				sprintf( 'post.php?post=%d&action=edit', $entry['added'] )
 			);
 		}
 
