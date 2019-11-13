@@ -560,3 +560,14 @@ add_action(
 	},
 	8 // after IA
 );
+
+/**
+ * Customizes Invite Anyone options.
+ */
+add_filter(
+	'invite_anyone_options',
+	function( $options ) {
+		$options['max_invites'] = 100;
+		return $options;
+	}
+);
