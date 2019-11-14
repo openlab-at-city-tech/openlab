@@ -103,6 +103,10 @@ function save_attributions( $post_id, $post ) {
 	// Sanitize data.
 	$attributions = array_map( __NAMESPACE__ . '\\sanitize_attributions', $attributions );
 
+	// Reset array keys.
+	// JS uses enumeration order vs insertion order.
+	$attributions = array_values( $attributions );
+
 	update_post_meta( $post_id, 'attributions', $attributions );
 }
 add_action( 'save_post', __NAMESPACE__ . '\\save_attributions', 10, 2 );
