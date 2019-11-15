@@ -1,3 +1,138 @@
 #respond .olgc-grade-entry input#olgc-grade {
 	width: 120px;
 }
+
+body a {
+	color: #000;
+	border-bottom: none;
+	text-decoration: none;
+}
+
+body a:hover {
+	color: #000;
+	border-bottom: none;
+	text-decoration: none;
+}
+
+.post-content a {
+    border-bottom: 1px solid #000;
+	text-decoration: none;
+}
+
+.post-content a:hover {
+    text-decoration: none;
+	border-bottom: none;
+}
+
+.header { background: #000; }
+
+.post-title a:hover {
+	border-bottom: 1px solid #000;
+	text-decoration: none;
+}
+
+.post-bubbles a:hover { background-color: #000; }
+
+.format-quote .post-content blockquote cite a:hover {
+	color: #000;
+}
+
+.single-format-quote .post-content blockquote cite a { color: #000; }
+
+.post-nav a:hover {
+	background: #000;
+	text-decoration: none;
+	border-bottom: none;
+}
+
+.post-content fieldset legend {
+	background: #000;
+}
+
+.post-content input[type="submit"]:hover,
+.post-content input[type="reset"]:hover,
+.post-content input[type="button"]:hover {
+	background: #000;
+}
+
+.post-content .has-accent-color { color: #000; }
+.post-content .has-accent-background-color { background-color: #000; }
+
+.comment-form input[type="submit"]:hover {
+	cursor: pointer;
+	background-color: #000;
+}
+
+.tagcloud a:hover {
+	background: #000;
+}
+
+#wp-calendar a { color: #000; }
+
+.credits {
+    color: #f0f0f0;
+    background-color: #2d3641;
+}
+
+.credits a {
+	color: #f0f0f0;
+}
+
+.credits a:hover {color: #f0f0f0;
+	border-bottom: 1px solid #f0f0f0;
+	text-decoration: none;
+}
+
+.post-meta a {
+    color: #000;
+}
+
+.post-meta a:hover {
+    color: #000;
+	border-bottom: 1px solid #000;
+	text-decoration: none;
+}
+
+.comment-actions a,
+a#cancel-comment-reply-link {
+	background: #2D3642;
+}
+
+.post-meta .date-sep {
+    color: #2D3642;
+}
+
+.wp-block-image a {
+	text-decoration: none;
+	border-bottom: none;
+}
+
+.wp-block-image a:hover {
+	border-bottom: none;
+}
+
+.post-categories {
+    font-weight: bold;
+}
+
+.post-categories a {
+    font-weight: normal;
+	border-bottom: 1px solid #000;
+}
+
+.post-tags {
+    font-weight: bold;
+}
+
+.post-tags a {
+    font-weight: normal;
+	border-bottom: 1px solid #000;
+}
+
+.post-cat-tags {
+    color: #000;
+}
+
+.post-cat-tags a:hover {
+	border-bottom: none;
+}
