@@ -111,42 +111,45 @@ function get_the_license( $id ) {
 function get_the_attribution( $item ) {
 	$parts = [];
 
-	if ( ! empty( $item['authorName'] ) ) {
-		$parts[] = format( $item['authorName'], $item['authorUrl'] );
-	}
-
-	if ( ! empty( $item['datePublished'] ) ) {
-		$parts[] = sprintf( '(%s)', $item['datePublished'] );
-	}
-
 	if ( ! empty( $item['title'] ) ) {
 		$parts[] = format( $item['title'], $item['titleUrl'] );
 	}
 
-	if ( ! empty( $item['derivative'] ) ) {
-		$parts[] = sprintf(
-			'Retrieved from %s',
-			format( $item['derivative'], $item['derivative'] )
-		);
+	if ( ! empty( $item['authorName'] ) ) {
+		$parts[] = format( $item['authorName'], $item['authorUrl'] );
 	}
 
 	if ( ! empty( $item['publisher'] ) ) {
-		$parts[] = format( $item['publisherUrl'], $item['publisherUrl'] );
+		$parts[] = format( $item['publisher'], $item['publisherUrl'] );
 	}
 
 	if ( ! empty( $item['project'] ) ) {
 		$parts[] = format( $item['project'], $item['projectUrl'] );
 	}
 
+	if ( ! empty( $item['datePublished'] ) ) {
+		$parts[] = $item['datePublished'];
+	}
+
 	if ( ! empty( $item['license'] ) ) {
 		$license = get_the_license( $item['license'] );
-		$parts[] = sprintf(
-			'Licensed under %s',
-			format( $license['label'], $license['url'] )
+
+		$parts[] = ( 'pd' === $item['license'] )
+			? sprintf( '%s.', $license['label'] )
+			: sprintf( 'Licensed under %s.', format( $license['label'], $license['url'] )
 		);
 	}
 
-	return implode( '. ', $parts );
+	$attribution = implode( '. ', $parts );
+
+	if ( ! empty( $item['derivative'] ) ) {
+		$attribution .= sprintf(
+			' / A derivative from the <a href="%s">original work</a>',
+			$item['derivative']
+		);
+	}
+
+	return $attribution;
 }
 
 /**

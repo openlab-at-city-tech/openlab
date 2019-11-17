@@ -15,21 +15,12 @@ import validateLicense from './validate-license';
 const formatAttribution = ( data, licenses ) => {
 	const parts = [];
 
-	if ( data.authorName ) {
-		parts.push( format( data.authorName, data.authorUrl ) );
-	}
-
-	if ( data.datePublished ) {
-		parts.push( `(${ data.datePublished })` );
-	}
-
 	if ( data.title ) {
 		parts.push( format( data.title, data.titleUrl ) );
 	}
 
-	if ( data.derivative ) {
-		const url = format( data.derivative, data.derivative );
-		parts.push( `Retrieved from ${ url }` );
+	if ( data.authorName ) {
+		parts.push( format( data.authorName, data.authorUrl ) );
 	}
 
 	if ( data.publisher ) {
@@ -40,13 +31,23 @@ const formatAttribution = ( data, licenses ) => {
 		parts.push( format( data.project, data.publisherUrl ) );
 	}
 
+	if ( data.datePublished ) {
+		parts.push( data.datePublished );
+	}
+
 	if ( data.license ) {
 		const license = validateLicense( licenses, data.license );
 		const url = format( license.label, license.url );
-		parts.push( `Licensed under ${ url }` );
+		parts.push( ( 'pd' === data.license ) ? `${ url }.` : `Licensed under ${ url }.` );
 	}
 
-	return parts.join( '. ' );
+	let attribution = parts.join( '. ' );
+
+	if ( data.derivative ) {
+		attribution += ` / A derivative from the <a href="${ data.derivative }">original work</a>`;
+	}
+
+	return attribution;
 };
 
 export default formatAttribution;
