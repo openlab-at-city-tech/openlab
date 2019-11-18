@@ -136,3 +136,15 @@ a#cancel-comment-reply-link {
 .post-cat-tags a:hover {
 	border-bottom: none;
 }
+
+.portfolio-actions button {
+	border-bottom: 1px solid #000;
+	text-decoration: none;
+	cursor:pointer;
+}
+
+.portfolio-actions button:hover {
+	border-bottom: none;
+	text-decoration: none;
+	cursor: pointer;
+}
