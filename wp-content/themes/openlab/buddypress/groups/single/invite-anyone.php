@@ -163,7 +163,7 @@
 					<?php if ( ! empty( $import_results['illegal_address'] ) ) : ?>
 						<?php $show_submit_border = true; ?>
 						<div class="import-results-section import-results-section-illegal">
-							<p class="invite-copy">The following email addresses are not valid for the OpenLab. Please note that OpenLab members must have a <strong>mail.citytech.cuny.edu</strong> or a <strong>citytech.cuny.edu</strong> email address in order to join.</p>
+							<p class="invite-copy">The following email addresses are not valid for the OpenLab. Please note that OpenLab members must have an <strong>@mail.citytech.cuny.edu</strong> or <strong>@citytech.cuny.edu</strong> email address in order to join.</p>
 
 							<label for="illegal-addresses" class="sr-only">Illegal addresses</label>
 							<textarea name="illegal-addresses" class="form-control" id="illegal-addresses"><?php echo esc_textarea( implode( ', ', $import_results['illegal_address'] ) ); ?></textarea>
@@ -222,7 +222,7 @@
 					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially enrolled in my course or have approved this action.</label></p>
 
 					<label class="sr-only" for="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( ucfirst( $group_type ) ); ?></label>
-					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control" placeholder="Add mail.citytech.cuny.edu or citytech.cuny.edu email addresses using a comma-separated list and/or one address per line."></textarea>
+					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control" placeholder="Add an @mail.citytech.cuny.edu or @citytech.cuny.edu email addresses using a comma-separated list and/or one address per line."></textarea>
 
 					<p><input type="submit" class="btn btn-primary no-deco" value="Import" /></p>
 				<?php endif; ?>
