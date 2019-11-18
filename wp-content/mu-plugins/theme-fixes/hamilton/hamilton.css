@@ -80,23 +80,6 @@ ul:not(.alt-nav) .menu-item-has-children.menu-collapsed > .sub-menu {
 	display: none;
 }
 
-.meta a {
-	color: #515151;
-}
-
-div.meta {
-	color: #515151;
-}
-
-.comment-metadata {
-	color: #515151;
-	line-height: 1.25;
-}
-
-.meta {
-	color: #515151;
-}
-
 @media (max-width: 620px) {
 	.site-header {
 		margin-top: 50px;
