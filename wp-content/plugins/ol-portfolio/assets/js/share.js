@@ -159,8 +159,7 @@
 		// Create new edit link element.
 		var editLink = $( '<a />' )
 			.attr( 'href', editUrl )
-			.text( 'Added to my Portfolio' )
-			.addClass( 'button faux-button' );
+			.text( 'Added to my Portfolio' );
 
 		$( '.portfolio-actions-' + entry.id )
 			.find( 'button' )

@@ -4,6 +4,6 @@
 	</span>
 <?php else: ?>
 	<span class="portfolio-actions">
-		<a class="button faux-button" href="<?php echo esc_url( $data['edit_link'] ); ?>">Added to my Portfolio</a>
+		<a href="<?php echo esc_url( $data['edit_link'] ); ?>">Added to my Portfolio</a>
 	</span>
 <?php endif; ?>
