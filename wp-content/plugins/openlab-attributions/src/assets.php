@@ -16,14 +16,14 @@ function register_assets() {
 		'attribution-block-script',
 		plugins_url( '/build/js/block-editor.js', ROOT_FILE ),
 		[ 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element', 'wp-rich-text' ],
-		'20191107'
+		'20191118'
 	);
 
 	wp_register_script(
 		'attribution-classic-script',
 		plugins_url( '/build/js/classic-editor.js', ROOT_FILE ),
 		[ 'wp-tinymce', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element' ],
-		'20191107'
+		'20191118'
 	);
 
 	wp_register_style(

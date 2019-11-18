@@ -5,6 +5,34 @@ import format from './format';
 import validateLicense from './validate-license';
 
 /**
+ * Format attribution license.
+ * @param {Object} license License object.
+ * @param {string} value  Current license.
+ *
+ * @return {string} Formatted license string.
+ */
+const formatLicense = ( license, value ) => {
+	let text = '';
+
+	switch ( value ) {
+		case 'pd':
+		case 'fu':
+			text = `${ license.label }.`;
+			break;
+
+		case 'u':
+			text = 'License unknown.';
+			break;
+
+		default:
+			text = `Licensed under ${ format( license.label, license.url ) }.`;
+			break;
+	}
+
+	return text;
+};
+
+/**
  * Format the attribution for render.
  *
  * @param {Object} data    Form input data.
@@ -37,8 +65,7 @@ const formatAttribution = ( data, licenses ) => {
 
 	if ( data.license ) {
 		const license = validateLicense( licenses, data.license );
-		const url = format( license.label, license.url );
-		parts.push( ( 'pd' === data.license ) ? `${ url }.` : `Licensed under ${ url }.` );
+		parts.push( formatLicense( license, data.license ) );
 	}
 
 	let attribution = parts.join( '. ' );

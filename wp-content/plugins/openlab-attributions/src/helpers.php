@@ -68,6 +68,21 @@ function get_licenses() {
 }
 
 /**
+ * Get the license object by ID/value.
+ *
+ * @param string $value License value.
+ * @return array
+ */
+function get_the_license( $value ) {
+	$licenses = get_licenses();
+	$license  = array_filter( $licenses, function( $item ) use ( $value ) {
+		return $item['value'] === $value;
+	} );
+
+	return end( $license );
+}
+
+/**
  * Returns attribution name or link.
  *
  * @param string $title
@@ -83,18 +98,31 @@ function format( $title, $url ) {
 }
 
 /**
- * Get the license object by ID/value.
+ * Format attribution license.
  *
- * @param string $id
- * @return array
+ * @param string $value License value.
+ * @return string $text
  */
-function get_the_license( $id ) {
-	$licenses = get_licenses();
-	$license  = array_filter( $licenses, function( $item ) use ( $id ) {
-		return $item['value'] === $id;
-	} );
+function format_license( $value ) {
+	$license = get_the_license( $value );
+	$text    = '';
 
-	return end( $license );
+	switch ( $value ) {
+		case 'pd':
+		case 'fu':
+			$text = sprintf( '%s.', $license['label'] );
+			break;
+
+		case 'u':
+			$text = 'License unknown.';
+			break;
+
+		default:
+			$text = sprintf( 'Licensed under %s.', format( $license['label'], $license['url'] ) );
+			break;
+	}
+
+	return $text;
 }
 
 /**
@@ -132,19 +160,14 @@ function get_the_attribution( $item ) {
 	}
 
 	if ( ! empty( $item['license'] ) ) {
-		$license = get_the_license( $item['license'] );
-
-		$parts[] = ( 'pd' === $item['license'] )
-			? sprintf( '%s.', $license['label'] )
-			: sprintf( 'Licensed under %s.', format( $license['label'], $license['url'] )
-		);
+		$parts[] = format_license( $item['license'] );
 	}
 
 	$attribution = implode( '. ', $parts );
 
 	if ( ! empty( $item['derivative'] ) ) {
 		$attribution .= sprintf(
-			' / A derivative from the <a href="%s">original work</a>',
+			' / A derivative from the <a href="%s">original work</a>.',
 			$item['derivative']
 		);
 	}
