@@ -139,3 +139,12 @@ body .blog-menu li:hover > a {
 }
 @media print {
 }
+
+.comment-metadata {
+	color: #515151;
+	line-height: 1.25;
+}
+
+.meta {
+	color: #515151;
+}

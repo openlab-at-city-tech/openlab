@@ -136,12 +136,3 @@ a#cancel-comment-reply-link {
 .post-cat-tags a:hover {
 	border-bottom: none;
 }
-
-.comment-metadata {
-	color: #515151;
-	line-height: 1.25;
-}
-
-.meta {
-	color: #515151;
-}
