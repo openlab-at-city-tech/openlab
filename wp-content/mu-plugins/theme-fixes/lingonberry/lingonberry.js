@@ -10,7 +10,7 @@
 
 		$('input#s').before('<label for="s" class="sr-only">Search terms</label>');
 
-		$('.header-inner > a.logo').html('<span class="sr-only">Home</span>');
+		$('.header-inner > a.logo').append('<span class="sr-only">Home</span>');
 
 		$('.posts .post-bubbles a.format-bubble').each(function(k,v){
 			var $bubble = $(this);
