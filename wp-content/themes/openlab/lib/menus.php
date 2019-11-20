@@ -743,7 +743,7 @@ function openlab_filter_subnav_members($subnav_item) {
     }
 
     //filtering for current status on membership menu item when in membership submenu
-    if ((bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) || $notification_status) {
+    if ((bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) || $notification_status || ( bp_is_group() && bp_is_current_action( 'invite-anyone' ) ) ) {
         $new_item = str_replace('id="members-groups-li"', 'id="members-groups-li" class="current-menu-item"', $new_item);
     } else {
         //update "current" class to "current-menu-item" to unify site identification of current menu page

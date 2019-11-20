@@ -485,7 +485,7 @@ class GP_Perk {
 				        $url = false;
 		        }
 	        }
-	        // Supports returning a plain string URL (e.g. http://gravitywiz.com/documentation/gp-net-perk/).
+	        // Supports returning a plain string URL (e.g. https://gravitywiz.com/documentation/gp-net-perk/).
 	        else if( strpos( (string) $documentation, 'http' ) === 0 ) {
 		        $url = $documentation;
 	        }
@@ -503,7 +503,7 @@ class GP_Perk {
         // @TODO REVIEW BELOW //
 
         case 'purchase':
-            return 'http://gravitywiz.com/gravity-perks/';
+            return 'https://gravitywiz.com/gravity-perks/';
             break;
 
         case 'deregister':

@@ -1,0 +1,33 @@
+// Ideally, this should be the post wrapper element. So `.post` or similar.
+body,
+.entry {
+	counter-reset: attributions;
+}
+
+.attribution-anchor::after {
+	counter-increment: attributions;
+	content: "[" counter(attributions) "]";
+	margin-left: 2px;
+	vertical-align: super;
+	font-size: smaller;
+}
+
+#attributions-list {
+	margin-top: 3em;
+	margin-bottom: 3em;
+
+	hr {
+		margin-top: 1em;
+		margin-bottom: 1em;
+		width: 100%;
+	}
+
+	ol li {
+		font-size: 0.8em;
+	}
+}
+
+#attributions {
+	font-weight: 600;
+	margin-bottom: 1em;
+}

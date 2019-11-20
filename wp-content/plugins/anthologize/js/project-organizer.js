@@ -47,7 +47,7 @@
 		j.cookie( 'anth-orderby', currentOrderBy, { expires: cookieExpires } );
 
 		var data = {
-			action: 'get_posts_by',
+			action: 'anthologize_get_posts_by',
 			filterby: currentFilterBy,
 			orderby: currentOrderBy
 		};
@@ -72,6 +72,7 @@
 			success: function(response){
 				j('#sidebar-posts').empty();
 				j.each( response, function(post_index, post_data) {
+					console.log(post_data);
 					var post_id = post_data.ID;
 					var h = '';
 					h += '<li class="part-item item has-accordion accordion-closed">';
@@ -138,7 +139,7 @@
 		}
 
 		if ( currentFilterBy == 'date' ) {
-			$datefilter.show();
+			$dateFilterSection.show();
 			var cstartdate = j.cookie('anth-startdate');
 			var cenddate = j.cookie('anth-enddate');
 			j("#startdate").val(cstartdate);

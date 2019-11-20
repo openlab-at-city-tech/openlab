@@ -2,49 +2,29 @@
 
 namespace OpenLab\Attributions\Content;
 
-use function OpenLab\Attributions\Helpers\get_the_image_attribution;
+use const OpenLab\Attributions\ROOT_DIR;
+use function OpenLab\Attributions\Helpers\get_supported_post_types;
 
-/**
- * Search for images in the content.
- * Fires before `do_shortcodes()`.
- *
- * @param string $content
- * @return string $content
- */
-function do_images( $content ) {
-	if ( false === strpos( $content, '<img' ) ) {
+function render_attributions( $content ) {
+	if ( ! is_singular( get_supported_post_types() ) ) {
 		return $content;
 	}
 
-	$content = preg_replace_callback(
-		'/<img [^>]+>/',
-		__NAMESPACE__ . '\\replace_with_ref',
-		$content
-	);
+	$post         = get_post();
+	$attributions = get_post_meta( $post->ID, 'attributions', true );
+
+	if ( empty( $attributions ) ) {
+		return $content;
+	}
+
+	extract( [
+		'attributions' => $attributions,
+	], EXTR_SKIP );
+
+	ob_start();
+	require_once ROOT_DIR . '/views/attributions.php';
+	$content .= ob_get_clean();
 
 	return $content;
 }
-add_filter( 'the_content', __NAMESPACE__ . '\\do_images' );
-
-/**
- * Adds image attribution [ref] shortcode.
- * This will be reformatted later by shortcode helper.
- *
- * @param array $matches Regular expression match array
- * @return string $image Updated image tag.
- */
-function replace_with_ref( $matches ) {
-	$image = $matches[0];
-
-	if ( preg_match( '/wp-image-([0-9]+)/i', $image, $class ) ) {
-		$image_id = $class[1];
-
-		return sprintf(
-			'%1$s[ref]%2$s[/ref]',
-			$image,
-			get_the_image_attribution( $image_id )
-		);
-	}
-
-	return $image;
-}
+add_filter( 'the_content', __NAMESPACE__ . '\\render_attributions', 12 );

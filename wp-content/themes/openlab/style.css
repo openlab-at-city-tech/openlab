@@ -7676,6 +7676,23 @@ input[type="submit"] {
 .panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label:hover {
   text-decoration: underline;
 }
+.import-acknowledge label {
+  font-weight: normal;
+}
+.import-acknowledge input {
+  margin-right: 8px;
+}
+.invite-new-members-link {
+  font-weight: 700;
+}
+.import-results-section-success {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 15px;
+}
+.import-results-section-submit-show-border {
+  border-top: 1px solid #dddddd;
+  padding-top: 15px;
+}
 .related-link-actions {
   display: inline-block;
   margin-top: -15px;

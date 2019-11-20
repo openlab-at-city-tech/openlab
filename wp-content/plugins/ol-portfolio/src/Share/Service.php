@@ -159,21 +159,22 @@ class Service implements Registerable {
 			'add-to-portfolio-styles',
 			plugins_url( 'assets/css/share.css', ROOT_FILE ),
 			[],
-			'20190812'
+			'20191105'
 		);
 
 		wp_enqueue_script(
 			'add-to-portfolio',
 			plugins_url( 'assets/js/share.js', ROOT_FILE ),
 			[ 'a11y-dialog', 'wp-util' ],
-			'20190807',
+			'20191118',
 			true
 		);
 
 		$settings = [
-			'root'          => esc_url_raw( get_rest_url() ),
-			'portfolioRoot' => esc_url_raw( get_rest_url( $this->portfolio_id ) ),
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'root'           => esc_url_raw( get_rest_url() ),
+			'portfolioRoot'  => esc_url_raw( get_rest_url( $this->portfolio_id ) ),
+			'portfolioAdmin' => esc_url_raw( get_admin_url( $this->portfolio_id ) ),
+			'nonce'          => wp_create_nonce( 'wp_rest' ),
 		];
 
 		wp_localize_script( 'add-to-portfolio', 'portfolioSettings', $settings );
@@ -210,6 +211,13 @@ class Service implements Registerable {
 			'added'     => get_post_meta( $post->ID, 'portfolio_post_id', true ),
 		];
 
+		if ( ! empty( $entry['added'] ) ) {
+			$entry['edit_link'] = get_admin_url(
+				$this->portfolio_id,
+				sprintf( 'post.php?post=%d&action=edit', $entry['added'] )
+			);
+		}
+
 		ob_start();
 		extract( [ 'data' => $entry ], EXTR_SKIP );
 		include ROOT_DIR . '/views/share/button/post.php';
@@ -242,6 +250,13 @@ class Service implements Registerable {
 			'site_name' => get_option( 'blogname' ),
 			'added'     => get_comment_meta( $comment->comment_ID, 'portfolio_post_id', true ),
 		];
+
+		if ( ! empty( $entry['added'] ) ) {
+			$entry['edit_link'] = get_admin_url(
+				$this->portfolio_id,
+				sprintf( 'post.php?post=%d&action=edit', $entry['added'] )
+			);
+		}
 
 		ob_start();
 		extract( [ 'data' => $entry ], EXTR_SKIP );

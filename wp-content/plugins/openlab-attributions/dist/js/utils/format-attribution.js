@@ -5,7 +5,35 @@ import format from './format';
 import validateLicense from './validate-license';
 
 /**
- * Format attribution for shortcode.
+ * Format attribution license.
+ * @param {Object} license License object.
+ * @param {string} value  Current license.
+ *
+ * @return {string} Formatted license string.
+ */
+const formatLicense = ( license, value ) => {
+	let text = '';
+
+	switch ( value ) {
+		case 'pd':
+		case 'fu':
+			text = `${ license.label }.`;
+			break;
+
+		case 'u':
+			text = 'License unknown.';
+			break;
+
+		default:
+			text = `Licensed under ${ format( license.label, license.url ) }.`;
+			break;
+	}
+
+	return text;
+};
+
+/**
+ * Format the attribution for render.
  *
  * @param {Object} data    Form input data.
  * @param {Array} licenses List of licenses.
@@ -13,39 +41,40 @@ import validateLicense from './validate-license';
  * @return {string} Formatted attribution.
  */
 const formatAttribution = ( data, licenses ) => {
+	const parts = [];
+
 	if ( data.title ) {
-		data.title = format( data.title, data.titleUrl );
+		parts.push( format( data.title, data.titleUrl ) );
 	}
 
-	if ( data.author ) {
-		data.author = format( data.author, data.authorUrl );
+	if ( data.authorName ) {
+		parts.push( format( data.authorName, data.authorUrl ) );
 	}
 
 	if ( data.publisher ) {
-		data.publisher = format( data.publisher, data.publisherUrl );
+		parts.push( format( data.publisher, data.publisherUrl ) );
 	}
 
 	if ( data.project ) {
-		data.project = format( data.project, data.projectUrl );
+		parts.push( format( data.project, data.publisherUrl ) );
 	}
 
-	// Get our license object from the list.
-	const license = validateLicense( licenses, data.license );
-
-	if ( license ) {
-		data.license = format( license.label, license.url );
+	if ( data.datePublished ) {
+		parts.push( data.datePublished );
 	}
 
-	const attribution = `
-			${ data.title }
-			${ data.author ? `by ${ data.author }.` : '' }
-			${ data.year ? `${ data.year }.` : '' }
-			${ data.publisher ? `${ data.publisher }.` : '' }
-			${ data.license ? `is licensed under ${ data.license }.` : '' }
-			${ data.derivative ? `Receive from ${ data.derivative }` : '' }
-	`;
+	if ( data.license ) {
+		const license = validateLicense( licenses, data.license );
+		parts.push( formatLicense( license, data.license ) );
+	}
 
-	return attribution.trim();
+	let attribution = parts.join( '. ' );
+
+	if ( data.derivative ) {
+		attribution += ` / A derivative from the <a href="${ data.derivative }">original work</a>`;
+	}
+
+	return attribution;
 };
 
 export default formatAttribution;

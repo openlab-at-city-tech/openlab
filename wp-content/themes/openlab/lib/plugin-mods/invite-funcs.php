@@ -403,3 +403,171 @@ function openlab_limit_invite_anyone_group_query( $args ) {
 	return $args;
 }
 add_filter( 'bp_after_has_groups_parse_args', 'openlab_limit_invite_anyone_group_query' );
+
+/**
+ * Catches group member import requests.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( ! bp_is_group() || ! bp_is_current_action( 'invite-anyone' ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['group-import-members-nonce'] ) ) {
+			return;
+		}
+
+		check_admin_referer( 'group_import_members', 'group-import-members-nonce' );
+
+		// @todo Better permission check?
+		if ( ! bp_is_item_admin() ) {
+			return;
+		}
+
+		$emails_raw = wp_unslash( $_POST['email-addresses-to-import'] );
+
+		$lines  = preg_split( '/\R/', $emails_raw );
+		$emails = [];
+		foreach ( $lines as $line ) {
+			$line_emails = preg_split( '/[,\s]+/', $line );
+
+			$emails = array_merge( $emails, $line_emails );
+		}
+
+		$status = [
+			'success'         => [],
+			'invalid_address' => [],
+			'illegal_address' => [],
+			'not_found'       => [],
+		];
+
+		foreach ( $emails as $email ) {
+			if ( ! is_email( $email ) ) {
+				$status['invalid_address'][] = $email;
+				continue;
+			}
+
+			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu' ];
+			if ( is_array( $email_domains ) && ! empty( $email_domains ) ) {
+				$emaildomain = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
+				if ( ! in_array( $emaildomain, $email_domains, true ) ) {
+					$status['illegal_address'][] = $email;
+					continue;
+				}
+			}
+
+			if ( is_email_address_unsafe( $email ) ) {
+				$status['illegal_address'][] = $email;
+				continue;
+			}
+
+			$user = get_user_by( 'email', $email );
+			if ( ! $user ) {
+				$status['not_found'][] = $email;
+				continue;
+			}
+
+			// Already sent.
+			if ( in_array( $email, $status['success'], true ) ) {
+				continue;
+			}
+
+			// User is already a member of the group.
+			if ( groups_is_user_member( $user->ID, bp_get_current_group_id() ) ) {
+				$status['success'][] = $email;
+				continue;
+			}
+
+			groups_join_group( bp_get_current_group_id(), $user->ID );
+
+			$group = groups_get_current_group();
+
+			$email_subject = sprintf(
+				'You are now a member of %s',
+				stripslashes( $group->name )
+			);
+
+			$email_message = sprintf(
+				'<p>You are now a member of %s.</p><p>Visit <a href="%s">%s</a> to make changes to your membership settings or to leave this course.</p>',
+				stripslashes( $group->name ),
+				bp_get_group_permalink( $group ),
+				stripslashes( $group->name )
+			);
+
+			$email_args = array(
+				'tokens' => array(
+					'usermessage'   => $email_message,
+					'usersubject'   => $email_subject,
+					'ol.group-name' => stripslashes( $group->name ),
+					'ol.group-url'  => bp_get_group_permalink( $group ),
+					'ol.group-type' => openlab_get_group_type( $group->id )
+				),
+			);
+
+			bp_send_email(
+				'openlab-added-to-group',
+				$email,
+				$email_args
+			);
+
+			$status['success'][] = $email;
+		}
+
+		foreach ( $status as &$emails ) {
+			$emails = array_unique( $emails );
+		}
+
+		$timestamp = time();
+		groups_update_groupmeta( bp_get_current_group_id(), 'import_' . $timestamp, $status );
+
+		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'invite-anyone?import_id=' . $timestamp );
+	},
+	5
+);
+
+/**
+ * Catch requests from group Import page and set IA cookies.
+ */
+add_action(
+	'bp_template_redirect',
+	function() {
+		if ( ! bp_is_user() || ! bp_is_current_action( 'invite-new-members' ) ) {
+			return;
+		}
+
+		$emails = [];
+		if ( isset( $_GET['emails'] ) ) {
+			$emails = wp_unslash( $_GET['emails'] );
+		}
+
+		$group_id = null;
+		if ( isset( $_GET['group_id'] ) ) {
+			$group_id = intval( $_GET['group_id'] );
+		}
+
+		if ( ! $emails && ! $group_id ) {
+			return;
+		}
+
+		if ( $emails ) {
+			buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
+		}
+
+		if ( $group_id ) {
+			buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+		}
+	},
+	8 // after IA
+);
+
+/**
+ * Customizes Invite Anyone options.
+ */
+add_filter(
+	'invite_anyone_options',
+	function( $options ) {
+		$options['max_invites'] = 100;
+		return $options;
+	}
+);

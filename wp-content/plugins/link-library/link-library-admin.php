@@ -1350,6 +1350,7 @@ class link_library_plugin_admin {
 					} else {
 						$existing_link_post_id = '';
 						$matched_link_cats = array();
+						$matched_link_tags = array();
 
 						if ( ( isset( $import_columns['Category Slugs'] ) && !empty( $data[$import_columns['Category Slugs']] ) ) ) {
 							$new_link_cats_slugs_array = array();
@@ -1383,6 +1384,41 @@ class link_library_plugin_admin {
 										print_r( 'Failed creating category ' . $new_link_cat );
 									} else {
 										$matched_link_cats[] = $new_cat_term_data['term_id'];
+									}
+								}
+							}
+						}
+						
+						if ( ( isset( $import_columns['Tag Slugs'] ) && !empty( $data[$import_columns['Tag Slugs']] ) ) ) {
+							$new_link_tags_slugs_array = array();
+							if ( isset( $import_columns['Tag Slugs'] ) ) {
+								$new_link_tags_slugs_array = explode( ',', $data[$import_columns['Tag Slugs']] );
+							}
+
+							if ( ( isset( $import_columns['Tag Names'] ) && !empty( $data[$import_columns['Tag Names']] ) ) ) {
+								if ( isset( $import_columns['Tag Names'] ) ) {
+									$new_link_tags_array = explode( ',', $data[$import_columns['Tag Names']] );
+								}
+							}
+
+							foreach ( $new_link_tags_slugs_array as $index => $new_link_tag_slug ) {
+								$tag_matched_term = get_term_by( 'slug', $new_link_tag_slug, 'link_library_tags' );
+
+								if ( false !== $tag_matched_term ) {
+									$matched_link_tags[] = $tag_matched_term->term_id;
+								} else {
+									$new_link_tag = '';
+									if ( !empty( $new_link_tags_array ) && isset( $new_link_tags_array[$index] ) ) {
+										$new_link_tag = $new_link_tags_array[$index];
+									} else {
+										$new_link_tag = $new_link_tag_slug;
+									}
+
+									$new_tag_term_data   = wp_insert_term( $new_link_tag, 'link_library_tags', array( 'slug' => $new_link_tag_slug ) );
+									if ( is_wp_error( $new_tag_term_data ) ) {
+										print_r( 'Failed creating tag ' . $new_link_tag );
+									} else {
+										$matched_link_tags[] = $new_tag_term_data['term_id'];
 									}
 								}
 							}
@@ -1441,7 +1477,7 @@ class link_library_plugin_admin {
 							'post_type' => 'link_library_links',
 							'post_content' => '',
 							'post_title' => $post_title,
-							'tax_input' => array( 'link_library_category' => $matched_link_cats ),
+							'tax_input' => array( 'link_library_category' => $matched_link_cats, 'link_library_tags' => $matched_link_tags ),
 							'post_status' => $post_status
 						);
 
@@ -1826,6 +1862,22 @@ class link_library_plugin_admin {
 								$link_cats_slugs = implode( ', ', $link_cats_slugs_array );
 							}
 						}
+						
+						$link_tags_array = array();
+						$link_tags_slugs_array = array();
+						$link_tags = wp_get_post_terms( get_the_ID(), 'link_library_tags' );
+						if ( $link_tags ) {
+							foreach ( $link_tags as $link_tag ) {
+								$link_tags_array[] = $link_tag->name;
+								$link_tags_slugs_array[] = $link_tag->slug;
+							}
+							if ( !empty( $link_tags_array ) ) {
+								$link_tags_string = implode( ', ', $link_tags_array );
+							}
+							if ( !empty( $link_cats_slugs_array ) ) {
+								$link_tags_slugs = implode( ', ', $link_tags_slugs_array );
+							}
+						}
 
 						$link_object['Name'] = get_the_title();
 						$link_object['Address'] = get_post_meta( get_the_ID(), 'link_url', true );
@@ -1834,6 +1886,8 @@ class link_library_plugin_admin {
 						$link_object['Notes'] = get_post_meta( get_the_ID(), 'link_notes', true );
 						$link_object['Category Slugs'] = $link_cats_slugs;
 						$link_object['Category Names'] = $link_cats;
+						$link_object['Tag Slugs'] = $link_tags_slugs;
+						$link_object['Tag Names'] = $link_tags_string;
 						$link_object['Status'] = get_post_status();
 						$link_object['Secondary URL'] = get_post_meta( get_the_ID(), 'link_second_url', true );
 						$link_object['Telephone'] = get_post_meta( get_the_ID(), 'link_telephone', true );
