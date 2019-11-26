@@ -17,3 +17,33 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Translate OL group type into BP group type for the query.
+ */
+add_filter(
+	'epbp_group_query_args',
+	function( $args, $group_query_args ) {
+		if ( empty( $group_query_args['meta_query'] ) ) {
+			return $args;
+		}
+
+		foreach ( $group_query_args['meta_query'] as $mq ) {
+			if ( 'wds_group_type' !== $mq['key'] ) {
+				continue;
+			}
+
+			$args['query']['bool']['filter'][] = [
+				'term' => [
+					'group_type' => $mq['value'],
+				],
+			];
+
+			break;
+		}
+
+		return $args;
+	},
+	10,
+	2
+);
