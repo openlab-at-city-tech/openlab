@@ -8,6 +8,8 @@
   "author": "OpenLab Development Team",
   "license": "ISC",
   "devDependencies": {
+    "cypress": "^3.7.0",
+    "faker": "^4.1.0",
     "grunt": "^1.0.4",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^3.0.0",

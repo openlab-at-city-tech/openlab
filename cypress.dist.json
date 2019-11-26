@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://openlabdev.test",
+  "env": {
+    "wp_user": "admin",
+    "wp_pass": "secret"
+  }
+}
