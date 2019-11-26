@@ -19,7 +19,7 @@ add_filter(
 );
 
 /**
- * Translate OL group type into BP group type for the query.
+ * Translate OL group query args into BPES standard query args.
  */
 add_filter(
 	'epbp_group_query_args',
@@ -29,17 +29,23 @@ add_filter(
 		}
 
 		foreach ( $group_query_args['meta_query'] as $mq ) {
-			if ( 'wds_group_type' !== $mq['key'] ) {
-				continue;
+			switch ( $mq['key'] ) {
+				case 'wds_group_type' :
+					$args['query']['bool']['filter'][] = [
+						'term' => [
+							'group_type' => $mq['value'],
+						],
+					];
+				break;
+
+				case 'openlab_school' :
+					$args['query']['bool']['filter'][] = [
+						'term' => [
+							'meta.' . $mq['key'] . '.value' => $mq['value'],
+						],
+					];
+				break;
 			}
-
-			$args['query']['bool']['filter'][] = [
-				'term' => [
-					'group_type' => $mq['value'],
-				],
-			];
-
-			break;
 		}
 
 		return $args;
