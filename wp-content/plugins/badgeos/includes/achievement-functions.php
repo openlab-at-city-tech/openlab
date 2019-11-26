@@ -290,7 +290,7 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
  * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned' ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned', $trigger='' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -298,12 +298,20 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
 		return false;
 
 	// Setup a new object for the achievement
-	$achievement_object            = new stdClass;
-	$achievement_object->ID        = $achievement_id;
-	$achievement_object->post_type = $achievement->post_type;
-	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
+    $achievement_object            		= new stdClass;
+    $achievement_object->ID        		= $achievement_id;
+    $achievement_object->title        	= $achievement->post_title;
+    $achievement_object->the_trigger  	= $trigger;
+    $achievement_object->post_type 		= $achievement->post_type;
+    $achievement_object->points    		= get_post_meta( $achievement_id, '_badgeos_points', true );
 
-	// Store the current timestamp differently based on context
+    if( !empty( $trigger ) ) {
+        $achievement_object->trigger   = $trigger;
+    } else {
+        $achievement_object->trigger   = '';
+    }
+
+    // Store the current timestamp differently based on context
 	if ( 'earned' == $context ) {
 		$achievement_object->date_earned = time();
 	} elseif ( 'started' == $context ) {
@@ -428,7 +436,7 @@ function badgeos_get_user_earned_achievement_types( $user_id = 0 ){
  * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
-function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
+function badgeos_get_dependent_achievements( $achievement_id = 0, $user_id = 0 ) {
 	global $wpdb;
 
 	// Grab the current achievement ID if none specified
@@ -462,11 +470,72 @@ function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 		get_post_type( $achievement_id )
 	) );
 
-	// Merge our dependent achievements together
-	$achievements = array_merge( $specific_achievements, $type_achievements );
+    $new_type_achivements = array();
+    foreach( $type_achievements as $ach ) {
+        $post_id = $ach->ID;
+        $trigger = get_post_meta( $post_id, '_badgeos_trigger_type', true );
+        if( $trigger != 'specific-achievement' ) {
+            $new_type_achivements[] = $ach;
+        } else {
 
-	// Available filter to modify an achievement's dependents
-	return apply_filters( 'badgeos_dependent_achievements', $achievements, $achievement_id );
+            $achievement_post 	= get_post_meta( $post_id, '_badgeos_achievement_post', true );
+            $badgeos_count 		= get_post_meta( $post_id, '_badgeos_count', true );
+
+            $dest_achievements = badgeos_get_user_achievements(
+                array(
+                    'user_id' => absint( $user_id ),
+                    'achievement_id' => $achievement_post
+                )
+            );
+            $dest_total = count($dest_achievements);
+
+            $parent_post = $post_id;
+            $parents = badgeos_get_achievements( array( 'parent_of' => $post_id ) );
+            if( count( $parents ) > 0 ) {
+                if( $parents[0]->post_status == 'publish' ) {
+                    $parent_post = $parents[0]->ID;
+                }
+            }
+
+
+            $source_achievements = badgeos_get_user_achievements(
+                array(
+                    'user_id' => absint( $user_id ),
+                    'achievement_id' => $parent_post
+                )
+            );
+            $source_total = count( $source_achievements );
+
+            $dest_remaind_value = $dest_total * $badgeos_count;
+            $source_remaind_value = $source_total * $badgeos_count;
+
+            $allowed_limit = $dest_remaind_value - $source_remaind_value;
+
+            $dest_remaind_value.' - '.$source_remaind_value.'<br>';
+
+            $allowed_limit.' >= '.$badgeos_count;
+            if( $allowed_limit > 0 && $allowed_limit >= $badgeos_count ) {
+                $new_type_achivements[] = $ach;
+            }
+        }
+    }
+
+    // Merge our dependent achievements together
+	$achievements = array_merge( $specific_achievements, $new_type_achivements );
+
+    if( !is_array( $GLOBALS['badgeos']->award_ids ) || count( $GLOBALS['badgeos']->award_ids ) == 0 ) {
+        $GLOBALS['badgeos']->award_ids = [];
+    }
+
+    $new_list = array();
+    foreach($achievements as $achievement ) {
+        if( ! in_array( $achievement->ID, $GLOBALS['badgeos']->award_ids ) ) {
+            $new_list[] = $achievement;
+        }
+    }
+
+    // Available filter to modify an achievement's dependents
+	return apply_filters( 'badgeos_dependent_achievements', $new_list, $achievement_id );
 }
 
 /**
@@ -491,8 +560,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 
 	// Grab our requirements for this achievement
 	$requirements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT   *
+		"SELECT   *
 		FROM     $wpdb->posts as posts
 		         LEFT JOIN $wpdb->p2p as p2p
 		                   ON p2p.p2p_from = posts.ID
@@ -500,8 +568,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		                   ON p2p.p2p_id = p2pmeta.p2p_id
 		WHERE    p2p.p2p_to = %d
 		         AND p2pmeta.meta_key = %s
-		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
-		",
+		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC",
 		$achievement_id,
 		'order'
 	) );
@@ -635,9 +702,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 function credly_issue_badge( $user_id, $achievement_id ) {
 
 	if ( 'true' === $GLOBALS['badgeos_credly']->user_enabled ) {
-
 		$GLOBALS['badgeos_credly']->post_credly_user_badge( $user_id, $achievement_id );
-
 	}
 
 }

@@ -7,12 +7,18 @@ if ( 'edit' === $aggregator_action ) {
 	$default_category = get_post_meta( $record->post->ID, Tribe__Events__Aggregator__Record__Abstract::$meta_key_prefix . 'category', true );
 }
 
+// Set up the generic default post statuses and category.
 $default_post_status = empty( $default_post_status ) ? tribe_get_option( 'tribe_aggregator_default_post_status', 'draft' ) : $default_post_status;
-$default_category = empty( $default_category ) ? tribe_get_option( 'tribe_aggregator_default_category', '' ) : $default_category;
+$default_category    = empty( $default_category ) ? tribe_get_option( 'tribe_aggregator_default_category', '' ) : $default_category;
+$post_statuses       = get_post_statuses( array() );
 
-$post_statuses = get_post_statuses( array() );
+// Ensure the "(do not override)" status is set up for Eventbrite imports, and "Published" is removed.
+$do_not_override_status   = [ 'do_not_override' => esc_html__( '(do not override)', 'the-events-calendar' ) ];
+$eventbrite_post_statuses = $do_not_override_status + $post_statuses;
+unset( $eventbrite_post_statuses['publish'] );
+
 $category_dropdown = array();
-$category_dropdown = wp_dropdown_categories( array(
+$category_dropdown = wp_dropdown_categories( [
 	'echo'       => false,
 	'name'       => 'aggregator[category]',
 	'id'         => 'tribe-ea-field-category',
@@ -20,7 +26,7 @@ $category_dropdown = wp_dropdown_categories( array(
 	'class'      => 'tribe-ea-field tribe-ea-dropdown tribe-ea-size-large',
 	'orderby'    => 'post_title',
 	'taxonomy'   => Tribe__Events__Main::TAXONOMY,
-) );
+] );
 $category_dropdown = preg_replace( '!\<select!', '<select data-hide-search', $category_dropdown );
 $category_dropdown = preg_replace( '!(\<select[^\>]*\>)!', '$1<option value="">' . __( 'No Additional Categories', 'the-events-calendar' ) . '</option>', $category_dropdown );
 $category_dropdown = preg_replace( '!(value="' . $default_category . '")!', '$1 selected', $category_dropdown );
@@ -42,6 +48,7 @@ wp_nonce_field( 'tribe-aggregator-save-import', 'tribe_aggregator_nonce' );
 		$field->upsell_options = array();
 
 		foreach ( $field->options as $key => $option ) {
+
 			$option->disabled = isset( $option->disabled ) ? $option->disabled : null;
 			$option->upsell   = isset( $option->upsell ) ? $option->upsell : false;
 
@@ -121,10 +128,10 @@ wp_nonce_field( 'tribe-aggregator-save-import', 'tribe_aggregator_nonce' );
 		</tr>
 
 		<?php
-		$form_args = array(
+		$form_args = [
 			'record'            => $record,
 			'aggregator_action' => $aggregator_action,
-		);
+		];
 
 		if ( 'edit' === $aggregator_action ) {
 			$this->template( 'origins/' . $record->meta['origin'], $form_args );
@@ -215,19 +222,41 @@ $scheduled_save_help = esc_html__( 'When you save this scheduled import, the eve
 			</tfoot>
 		</table>
 	</div>
+
 	<div class="tribe-default-settings">
-		<label for="tribe-ea-field-post_status"><?php esc_html_e( 'Status:', 'the-events-calendar' ); ?></label>
-		<select
-			name="aggregator[post_status]"
-			id="tribe-ea-field-post_status"
-			class="tribe-ea-field tribe-ea-dropdown tribe-ea-size-large"
-			data-hide-search
-		>
-			<option value=""></option>
-			<?php foreach ( $post_statuses as $slug => $post_status ) : ?>
-				<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_post_status, $slug ); ?>><?php echo esc_html( $post_status ); ?></option>
-			<?php endforeach; ?>
-		</select>
+
+		<div class="tribe-dependent tribe-ea-field-wrapper-post_status" data-depends="#tribe-ea-field-origin" data-condition="eventbrite">
+
+			<label for="tribe-ea-field-post_status"><?php esc_html_e( 'Status:', 'the-events-calendar' ); ?></label>
+			<select
+				name="aggregator[post_status]"
+				id="tribe-ea-field-post_status"
+				class="tribe-ea-field tribe-ea-dropdown tribe-ea-size-large tribe-ea-field-post_status"
+				data-hide-search
+			>
+				<option value=""></option>
+				<?php foreach ( $eventbrite_post_statuses as $slug => $post_status ) : ?>
+					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_post_status, $slug ); ?>><?php echo esc_html( $post_status ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+
+		<div class="tribe-dependent tribe-ea-field-wrapper-post_status" data-depends="#tribe-ea-field-origin" data-condition-not="eventbrite">
+
+			<label for="tribe-ea-field-post_status"><?php esc_html_e( 'Status:', 'the-events-calendar' ); ?></label>
+			<select
+				name="aggregator[post_status]"
+				id="tribe-ea-field-post_status"
+				class="tribe-ea-field tribe-ea-dropdown tribe-ea-size-large tribe-ea-field-post_status"
+				data-hide-search
+			>
+				<option value=""></option>
+				<?php foreach ( $post_statuses as $slug => $post_status ) : ?>
+					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_post_status, $slug ); ?>><?php echo esc_html( $post_status ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+
 		<label for="tribe-ea-field-category"><?php esc_html_e( 'Category:', 'the-events-calendar' ); ?></label>
 		<?php echo $category_dropdown; ?>
 		<span

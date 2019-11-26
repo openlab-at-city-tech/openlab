@@ -1,0 +1,95 @@
+// Container
+$font_family: inherit;
+$font_size: 12px;
+$opacity: 0.95;
+$border_color: #333;
+$border_thin: 1px;
+$border_medium: 2px;
+$border_bold: 5px;
+$width_in_post: 250px;
+$height_in_post: auto;
+$offsetY: 0;
+
+// Trigger
+$trigger_color: #333;
+//$trigger_hover_color: red;
+$trigger_bgcolor: #eee;
+//$trigger_hover_bgcolor: black;
+$trigger_size: 50px;
+$trigger_font_size: .6 * $trigger_size;
+$trigger_round_radius: 7px;
+
+// Contents
+$contents_width: 250px;
+$contents_height: auto;
+
+
+// Header
+$header_color: #333;
+$header_bgcolor: #eee;
+$header_font_size: 1.6 * $font_size;
+$header_vpadding: 10px;
+$header_hpadding: 10px;
+$header_line_height: 1.5;
+
+// List
+$list_color: #333;
+$list_bgcolor: #eee;
+$list_font_size: $font_size;
+$list_line_height: 1.2;
+$list_type_offset: 10px;
+$list_nested_offset: 20px;
+$list_anchor_vpadding: 5px;
+$list_anchor_hpadding: $header_hpadding;
+$list_hover_color: #00A368;
+$list_active_color: white;
+$list_active_bgcolor: #dd3333;
+
+
+// Effects
+$durationFast: .1s;
+$durationMedium: .3s;
+$durationSlow: .5s;
+//$durationSlowX: 1s;
+//$durationSlow2X: 2s;
+$linethin: 1px;
+$linemedium: 2px;
+$linebold: 3px;
+//$durationOut: .3s;
+//$durationIn: .5s;
+
+// Target hint
+$targetHintColor: #dd3333;
+$targetHintDuration: 1s;
+$targetHintDelay: .6s;
+
+// Effects on/off
+$fade: false !default;
+$backPulse: false !default;
+$sweepToRight: false !default;
+$sweepToLeft: false !default;
+$bounceToRight: false !default;
+$bounceToLeft: false !default;
+$bounceToRight: false !default;
+$bounceToLeft: false !default;
+$radialOut: false !default;
+$radialIn: false !default;
+$rectangleIn: false !default;
+$rectangleOut: false !default;
+$shutterOut: false !default;
+$shutterIn: false !default;
+$underlineFromLeft: false !default;
+$underlineFromRight: false !default;
+$underlineFromCenter: false !default;
+$revealUnderline: false !default;
+$revealLeftline: false !default;
+$revealRightline: false !default;
+$roundCorners: false !default;
+$borderFade: false !default;
+
+$fadeIO: false !default;
+$zoomIO: false !default;
+$slideIO: false !default;
+$dropIO: false !default;
+$rotateIO: false !default;
+$flipIO: false !default;

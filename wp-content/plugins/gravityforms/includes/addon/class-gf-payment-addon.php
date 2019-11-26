@@ -214,6 +214,8 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			add_filter( 'gform_form_args', array( $this, 'force_ajax_for_creditcard_tokens' ), 10, 1 );
 		}
 
+		add_filter( 'gform_is_delayed_pre_process_feed', array( $this, 'maybe_delay_feed_processing' ), 20, 4 );
+
 	}
 
 	/**
@@ -242,7 +244,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		add_filter( 'gform_currencies', array( $this, 'supported_currencies' ) );
 
 		add_filter( 'gform_delete_lead', array( $this, 'entry_deleted' ) );
-
+		add_action( 'gform_before_delete_field', array( $this, 'before_delete_field' ), 10, 2 );
 
 		if ( rgget( 'page' ) == 'gf_entries' ) {
 			add_action( 'gform_payment_details', array( $this, 'entry_info' ), 10, 2 );
@@ -265,7 +267,6 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		parent::init_ajax();
 
 		add_action( 'wp_ajax_gaddon_cancel_subscription', array( $this, 'ajax_cancel_subscription' ) );
-		add_action( 'gform_before_delete_field', array( $this, 'before_delete_field' ), 10, 2 );
 	}
 
 	/**
@@ -394,6 +395,82 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		parent::post_gravityforms_upgrade( $db_version, $previous_db_version, $force_upgrade );
 	}
 
+	//--------- Delayed Feeds ------
+
+	/**
+	 * Determines if feed processing is delayed by the payment feed configuration.
+	 *
+	 * @since 2.4.13
+	 *
+	 * @param bool   $is_delayed Is feed processing delayed?
+	 * @param array  $form       The form currently being processed.
+	 * @param array  $entry      The entry currently being processed.
+	 * @param string $slug       The Add-On slug e.g. gravityformsmailchimp
+	 *
+	 * @return bool
+	 */
+	public function maybe_delay_feed_processing( $is_delayed, $form, $entry, $slug ) {
+		if ( $is_delayed || ! $this->is_payment_gateway( $entry['id'] ) ) {
+			return $is_delayed;
+		}
+
+		$payment_feed = $this->current_feed;
+
+		return (bool) rgars( $payment_feed, 'meta/delay_' . $slug );
+	}
+
+	/**
+	 * Triggers processing of delayed feeds for other add-ons.
+	 *
+	 * @since 2.4.13
+	 *
+	 * @param string $transaction_id The transaction or subscription ID.
+	 * @param array  $payment_feed   The payment feed which originated the transaction.
+	 * @param array  $entry          The entry currently being processed.
+	 * @param array  $form           The form currently being processed.
+	 */
+	public function trigger_payment_delayed_feeds( $transaction_id, $payment_feed, $entry, $form ) {
+		if ( has_filter( 'gform_trigger_payment_delayed_feeds' ) ) {
+			$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_trigger_payment_delayed_feeds.' );
+
+			/**
+			 * Used in GFFeedAddOn to trigger processing of feeds delayed until payment is completed.
+			 *
+			 * @since 2.4.13
+			 *
+			 * @param string $transaction_id The transaction or subscription ID.
+			 * @param array  $payment_feed   The payment feed which originated the transaction.
+			 * @param array  $entry          The entry currently being processed.
+			 * @param array  $form           The form currently being processed.
+			 */
+			do_action( 'gform_trigger_payment_delayed_feeds', $transaction_id, $payment_feed, $entry, $form );
+		}
+	}
+
+	/**
+	 * Override to specify where the "Post Payment Action" setting should appear on the payment add-on feed.
+	 *
+	 * @since 2.4.13
+	 *
+	 * @param string $feed_slug The feed add-on slug.
+	 *
+	 * @return array
+	 */
+	public function get_post_payment_actions_config( $feed_slug ) {
+		// We specify PayPal here for backwards capability, in case the PayPal add-on < 3.3
+		// hasn't implemented get_post_payment_actions_config().
+		if ( $this->get_slug() === 'gravityformspaypal' ) {
+			$config = array(
+				'position' => 'after',
+				'setting'  => 'options',
+			);
+		} else {
+			$config = array();
+		}
+
+		return $config;
+	}
+
 	//--------- Submission Process ------
 
 	/**
@@ -518,6 +595,14 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			return $validation_result;
 		}
 
+		global $gf_payment_gateway;
+
+		if ( $gf_payment_gateway && $gf_payment_gateway !== $this->get_slug() ) {
+			$this->log_debug( __METHOD__ . '() Aborting. Submission already processed by ' . $gf_payment_gateway );
+
+			return $validation_result;
+		}
+
 		$submission_data = $this->get_submission_data( $feed, $form, $entry );
 
 		//Do not process payment if payment amount is 0
@@ -528,6 +613,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			return $validation_result;
 		}
 
+		$gf_payment_gateway = $this->get_slug();
 
 		$this->is_payment_gateway      = true;
 		$this->current_feed            = $this->_single_submission_feed = $feed;
@@ -741,6 +827,26 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 
 		return $validation_result;
 
+	}
+
+	/**
+	 * Sets the processed feed meta.
+	 *
+	 * @since 2.4.13 Overrode to prevent processed feed meta being set when a different add-on processed the submission.
+	 *
+	 * @param array $entry The Entry Object currently being processed.
+	 * @param array $form  The Form Object currently being processed.
+	 *
+	 * @return array
+	 */
+	public function maybe_process_feed( $entry, $form ) {
+		global $gf_payment_gateway;
+
+		if ( $gf_payment_gateway && $gf_payment_gateway !== $this->get_slug() ) {
+			return $entry;
+		}
+
+		return parent::maybe_process_feed( $entry, $form );
 	}
 
 	/**
@@ -2079,6 +2185,10 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 	 * @return bool|string
 	 */
 	public function get_entry_by_transaction_id( $transaction_id ) {
+		if ( empty( $transaction_id ) ) {
+			return false;
+		}
+
 		global $wpdb;
 
 		$entry_table_name = self::get_entry_table_name();
@@ -2843,7 +2953,8 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		}
 
 		if ( isset( $search['end_date'] ) ) {
-			$lead_date_filter .= $wpdb->prepare( " AND timestampdiff(SECOND, %s, CONVERT_TZ(l.payment_date, '+00:00', '" . $tz_offset . "')) <= 0", $search['end_date'] );
+			$search['end_date']      .= ' 23:59:59';
+			$lead_date_filter        .= $wpdb->prepare( " AND timestampdiff(SECOND, %s, CONVERT_TZ(l.payment_date, '+00:00', '" . $tz_offset . "')) <= 0", $search['end_date'] );
 			$transaction_date_filter .= $wpdb->prepare( " AND timestampdiff(SECOND, %s, CONVERT_TZ(t.date_created, '+00:00', '" . $tz_offset . "')) <= 0", $search['end_date'] );
 		}
 
@@ -3547,28 +3658,33 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		$form  = GFAPI::get_form( $entry['form_id'] );
 		$feed  = $this->get_payment_feed( $entry, $form );
 
+		// If user is not authorized, exit.
+		if ( $feed && $this->_slug === $feed['addon_slug'] && ! GFCommon::current_user_can_any( $this->_capabilities_settings_page ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Access denied.', 'gravityforms' ) ) );
+		}
+
 		//This addon does not have a payment feed. Abort.
 		if ( empty ( $feed ) ) {
 			$this->log_debug( __METHOD__ . '(): Aborting. Entry does not have a feed.' );
-
 			return;
 		}
 
 		if ( $this->cancel( $entry, $feed ) ) {
 			$this->cancel_subscription( $entry, $feed );
-			die( '1' );
+			wp_send_json_success();
 		} else {
 			$this->log_debug( __METHOD__ . '(): Aborting. Unable to cancel subscription.' );
-			die( '0' );
+			wp_send_json_error();
 		}
 
 	}
 
 	/**
-	 * Target of gform_before_delete_field hook. Sets relevant payment feeds to inactive when the credit card field is deleted.
+	 * Target of gform_before_delete_field hook. Sets relevant payment feeds to inactive when the credit card field is
+	 * deleted.
 	 *
-	 * @param $form_id . ID of the form being edited.
-	 * @param $field_id . ID of the field being deleted.
+	 * @param int $form_id   ID of the form being edited.
+	 * @param int $field_id  ID of the field being deleted.
 	 */
 	public function before_delete_field( $form_id, $field_id ) {
 		if ( $this->_requires_credit_card ) {

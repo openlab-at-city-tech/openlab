@@ -1,0 +1,528 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Lingonberry v1.32\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2015-08-11 08:00:39+0000\n"
+"Last-Translator: anders <anders@andersnoren.se>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: 404.php:13
+#@ lingonberry
+msgid "Error 404"
+msgstr "Error 404"
+
+#: 404.php:19
+#@ lingonberry
+msgid "It seems like you have tried to open a page that doesn't exist. It could have been deleted, moved, or it never existed at all. You are welcome to search for what you are looking for with the form below."
+msgstr "Det verkar som att du har försökt öppna en sida som inte existerar. Den kan ha raderats, flyttats eller har aldrig existerat överhuvudtaget. Du är välkommen att söka efter det du letar efter i sökformuläret nedan."
+
+#: archive.php:10
+#, php-format
+#@ lingonberry
+msgid "Date: %s"
+msgstr "Datum: %s"
+
+#: archive.php:12
+#, php-format
+#@ lingonberry
+msgid "Month: %s"
+msgstr "Månad: %s"
+
+#: archive.php:12
+#@ lingonberry
+msgctxt "F = Month, Y = Year"
+msgid "F Y"
+msgstr "F Y"
+
+#: archive.php:14
+#, php-format
+#@ lingonberry
+msgid "Year: %s"
+msgstr "År: %s"
+
+#: archive.php:14
+#@ lingonberry
+msgctxt "Y = Year"
+msgid "Y"
+msgstr "Y"
+
+#: archive.php:16
+#, php-format
+#@ lingonberry
+msgid "Category: %s"
+msgstr "Kategori: %s"
+
+#: archive.php:18
+#, php-format
+#@ lingonberry
+msgid "Tag: %s"
+msgstr "Etikett: %s"
+
+#: archive.php:21
+#, php-format
+#@ lingonberry
+msgid "Author: %s"
+msgstr "Författare: %s"
+
+#: archive.php:23
+#@ lingonberry
+msgid "Archive"
+msgstr "Arkiv"
+
+#: archive.php:31
+#: search.php:20
+#: search.php:73
+#, php-format
+#@ lingonberry
+msgid "(page %s of %s)"
+msgstr "(sida %s av %s)"
+
+#: comments.php:14
+#@ lingonberry
+msgid "Comment"
+msgid_plural "Comments"
+msgstr[0] "Kommentar"
+msgstr[1] "Kommentarer"
+
+#: comments.php:31
+#@ lingonberry
+msgid "Pingback"
+msgid_plural "Pingbacks"
+msgstr[0] "Pingback"
+msgstr[1] "Pingbacks"
+
+#: comments.php:67
+#@ lingonberry
+msgid "Comments are closed."
+msgstr "Kommentarsfunktionen är avstängd."
+
+#: comments.php:74
+#@ lingonberry
+msgid "Your email address will not be published."
+msgstr "Din e-postadress kommer inte att publiceras."
+
+#: comments.php:83
+#@ lingonberry
+msgid "Name"
+msgstr "Namn"
+
+#: comments.php:86
+#@ lingonberry
+msgid "Email"
+msgstr "E-post"
+
+#: comments.php:89
+#@ lingonberry
+msgid "Website"
+msgstr "Hemsida"
+
+#: content-aside.php:6
+#: content-audio.php:8
+#: content-chat.php:6
+#: content-gallery.php:6
+#: content-image.php:6
+#: content-link.php:6
+#: content-quote.php:6
+#: content-status.php:6
+#: content-video.php:6
+#: content.php:6
+#@ lingonberry
+msgid "Sticky post"
+msgstr "Klistrat inlägg"
+
+#: functions.php:243
+#@ lingonberry
+msgid "Sticky"
+msgstr "Klistrat"
+
+#: functions.php:247
+#: functions.php:309
+#: functions.php:331
+#: page.php:45
+#: template-archives.php:101
+#: template-contact.php:31
+#@ lingonberry
+msgid "Edit"
+msgstr "Redigera"
+
+#: content-aside.php:67
+#: content-audio.php:45
+#: content-chat.php:71
+#: content-gallery.php:49
+#: content-image.php:71
+#: content-quote.php:63
+#: content-status.php:63
+#: content-video.php:43
+#: content.php:59
+#@ lingonberry
+msgid "Categories:"
+msgstr "Kategorier:"
+
+#: footer.php:57
+#@ lingonberry
+msgid "Copyright"
+msgstr "Copyright"
+
+#: footer.php:63
+#, php-format
+#@ lingonberry
+msgid "Theme by <a href=\"%s\">Anders Noren</a>"
+msgstr "Tema av <a href=\"%s\">Anders Norén</a>"
+
+#: footer.php:63
+#@ lingonberry
+msgid "To the top"
+msgstr "Till toppen"
+
+#: footer.php:63
+#@ lingonberry
+msgid "Up"
+msgstr "Upp"
+
+#: functions.php:88
+#@ lingonberry
+msgid "Footer A"
+msgstr "Sidfot A"
+
+#: functions.php:90
+#@ lingonberry
+msgid "Widgets in this area will be shown in the first column in the footer."
+msgstr "Widgets i det här sektionen kommer att visas i sidfotens första kolumn."
+
+#: functions.php:97
+#@ lingonberry
+msgid "Footer B"
+msgstr "Sidfot B"
+
+#: functions.php:99
+#@ lingonberry
+msgid "Widgets in this area will be shown in the second column in the footer."
+msgstr "Widgets i det här sektionen kommer att visas i sidfotens andra kolumn."
+
+#: functions.php:106
+#@ lingonberry
+msgid "Footer C"
+msgstr "Sidfot C"
+
+#: functions.php:108
+#@ lingonberry
+msgid "Widgets in this area will be shown in the third column in the footer."
+msgstr "Widgets i det här sektionen kommer att visas i sidfotens tredje kolumn."
+
+#: functions.php:172
+#@ lingonberry
+msgid "Continue reading"
+msgstr "Fortsätt läsa"
+
+#: functions.php:280
+#@ lingonberry
+msgid "Pingback:"
+msgstr "Pingback:"
+
+#: functions.php:280
+#@ lingonberry
+msgid "(Edit)"
+msgstr "(Redigera)"
+
+#: functions.php:300
+#@ lingonberry
+msgid "(Post author)"
+msgstr "(Inläggsförfattare)"
+
+#: functions.php:311
+#: functions.php:333
+#@ lingonberry
+msgid "Reply"
+msgstr "Svara"
+
+#: functions.php:323
+#@ lingonberry
+msgid "Your comment is awaiting moderation."
+msgstr "Din kommentar inväntar moderering."
+
+#: searchform.php:2
+#@ lingonberry
+msgid "Type and press enter"
+msgstr "Skriv och tryck retur"
+
+#: searchform.php:3
+#@ lingonberry
+msgid "Search"
+msgstr "Sök"
+
+#: image.php:79
+#@ lingonberry
+msgid "&laquo; Previous<span> attachment</span>"
+msgstr "&laquo; Föregående<span> bilaga</span>"
+
+#: image.php:80
+#@ lingonberry
+msgid "Next<span> attachment</span> &raquo;"
+msgstr "Nästa<span> bilaga</span> &raquo; "
+
+#: image.php:90
+#: page.php:57
+#: single.php:39
+#: template-archives.php:117
+#: template-contact.php:43
+#@ lingonberry
+msgid "We couldn't find any posts that matched your query. Please try again."
+msgstr "Vi kunde inte hitta några inlägg som matchar din sökning. Vänligen försök igen."
+
+#: index.php:19
+#, php-format
+#@ lingonberry
+msgid "Page %s of %s"
+msgstr "Sida %s av %s"
+
+#: index.php:43
+#@ lingonberry
+msgid "&laquo; Older<span> posts</span>"
+msgstr "&laquo; Äldre<span> inlägg</span>"
+
+#: index.php:45
+#@ lingonberry
+msgid "Newer<span> posts</span> &raquo;"
+msgstr "Nyare<span> inlägg</span> &raquo;"
+
+#: search.php:13
+#: search.php:66
+#@ lingonberry
+msgid "Search results:"
+msgstr "Sökresultat:"
+
+#: search.php:95
+#@ lingonberry
+msgid "No results. Try again, would you kindly?"
+msgstr "Inga träffar. Försök igen, är du snäll?"
+
+#: single.php:19
+#@ lingonberry
+msgid "Next post:"
+msgstr "Nästa inlägg:"
+
+#: single.php:27
+#@ lingonberry
+msgid "Previous post:"
+msgstr "Föregående inlägg:"
+
+#: template-archives.php:33
+#@ lingonberry
+msgid "Last 30 Posts"
+msgstr "Senaste 30 inläggen"
+
+#: template-archives.php:47
+#@ lingonberry
+msgid "Archives by Categories"
+msgstr "Arkiv för kategorier"
+
+#: template-archives.php:53
+#@ lingonberry
+msgid "Archives by Tags"
+msgstr "Arkiv för etiketter"
+
+#: template-archives.php:60
+#, php-format
+#@ lingonberry
+msgid "View all posts in %s"
+msgstr "Visa alla inlägg i %s"
+
+#: template-archives.php:69
+#@ lingonberry
+msgid "Contributors"
+msgstr "Skribenter"
+
+#: template-archives.php:75
+#@ lingonberry
+msgid "Archives by Year"
+msgstr "Arkiv för år"
+
+#: template-archives.php:81
+#@ lingonberry
+msgid "Archives by Month"
+msgstr "Arkiv för månader"
+
+#: template-archives.php:87
+#@ lingonberry
+msgid "Archives by Day"
+msgstr "Arkiv för dagar"
+
+#: widgets/dribbble-widget.php:10
+#@ lingonberry
+msgid "Displays your latest Dribbble photos."
+msgstr "Visa dina senaste Dribbble-bilder."
+
+#: widgets/dribbble-widget.php:53
+#, php-format
+#@ lingonberry
+msgid "Follow %s on Dribbble &raquo;"
+msgstr "Följ %s på Dribbble &raquo;"
+
+#: widgets/dribbble-widget.php:80
+#: widgets/flickr-widget.php:55
+#: widgets/video-widget.php:64
+#@ lingonberry
+msgid "Title"
+msgstr "Titel"
+
+#: widgets/dribbble-widget.php:86
+#@ lingonberry
+msgid "Dribbble username"
+msgstr "Dribbble-användarnamn"
+
+#: widgets/dribbble-widget.php:92
+#: widgets/flickr-widget.php:67
+#@ lingonberry
+msgid "Number of images to display:"
+msgstr "Antal bilder att visa:"
+
+#: widgets/flickr-widget.php:8
+#@ lingonberry
+msgid "Displays your latest Flickr photos."
+msgstr "Visa dina senaste Flickr-fotografier."
+
+#: widgets/flickr-widget.php:33
+#@ lingonberry
+msgid "More on Flickr &raquo;"
+msgstr "Mer på Flickr &raquo;"
+
+#: widgets/flickr-widget.php:61
+#@ lingonberry
+msgid "Flickr ID (use <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr "Flickr ID (använd <a target=\"_blank\" href=\"http://www.idgettr.com\">idGettr</a>):"
+
+#: image.php:28
+#@ lingonberry
+msgid "Uploaded"
+msgstr "Laddades upp"
+
+#: image.php:32
+#@ lingonberry
+msgid "Width:"
+msgstr "Bredd:"
+
+#: image.php:36
+#@ lingonberry
+msgid "Height:"
+msgstr "Höjd:"
+
+#: functions.php:235
+#@ lingonberry
+msgid "0 Comments"
+msgstr "0 kommentarer"
+
+#: functions.php:235
+#@ lingonberry
+msgid "1 Comment"
+msgstr "1 kommentar"
+
+#: functions.php:235
+#@ lingonberry
+msgid "% Comments"
+msgstr "% kommentarer"
+
+#: functions.php:357
+#@ lingonberry
+msgid "Options for Lingonberry"
+msgstr "Lingonberry-inställningar"
+
+#: functions.php:387
+#@ lingonberry
+msgid "Accent Color"
+msgstr "Accentfärg"
+
+#: functions.php:360
+#@ lingonberry
+msgid "Allows you to customize theme settings for Lingonberry."
+msgstr "Låter dig ställa in temainställningarna för Lingonberry."
+
+#: archive.php:67
+#: comments.php:51
+#: search.php:48
+#@ lingonberry
+msgid "Older"
+msgstr "Äldre"
+
+#: archive.php:67
+#: archive.php:69
+#: search.php:48
+#: search.php:50
+#@ lingonberry
+msgid "posts"
+msgstr "inlägg"
+
+#: archive.php:69
+#: comments.php:53
+#: search.php:50
+#@ lingonberry
+msgid "Newer"
+msgstr "Nyare"
+
+#: comments.php:83
+#@ lingonberry
+msgid "Author"
+msgstr "Författare"
+
+#: content-aside.php:69
+#: content-audio.php:47
+#: content-chat.php:73
+#: content-gallery.php:51
+#: content-image.php:73
+#: content-quote.php:65
+#: content-status.php:65
+#: content-video.php:45
+#: content.php:61
+#@ lingonberry
+msgid "Tags:"
+msgstr "Etiketter:"
+
+#: comments.php:49
+#@ lingonberry
+msgid "Comment Navigation"
+msgstr "Kommentarsnavigation"
+
+#: comments.php:51
+#: comments.php:53
+#@ lingonberry
+msgid "Comments"
+msgstr "Kommentarer"
+
+#: widgets/dribbble-widget.php:11
+#@ lingonberry
+msgid "Dribbble Widget"
+msgstr "Dribbble-widget"
+
+#: widgets/flickr-widget.php:9
+#@ lingonberry
+msgid "Flickr Widget"
+msgstr "Flickr-widget"
+
+#: widgets/video-widget.php:8
+#@ lingonberry
+msgid "Displays a video of your choosing."
+msgstr "Låter dig visa en video i ett widgetutrymme."
+
+#: widgets/video-widget.php:9
+#@ lingonberry
+msgid "Video Widget"
+msgstr "Video-widget"
+
+#: widgets/video-widget.php:70
+#@ lingonberry
+msgid "Video URL"
+msgstr "Videoklippets adress"
+

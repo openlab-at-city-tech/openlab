@@ -97,7 +97,7 @@ input.mapp-media-title {
 }
 
 .mapp-edit .mapp-wrapper {
-	height: 325px !important;
+	height: 350px !important;
 }
 
 .mapp-searchbox {
@@ -210,6 +210,12 @@ input.mapp-media-title {
 
 .mapp-settings-toolbar {
 	margin-top: 10px;
+}
+
+/* Hidden submit buttons to use as form default */
+.mapp-settings-hidden-toolbar {
+	height: 0;
+	overflow: hidden;
 }
 
 /* Simulate postboxes */

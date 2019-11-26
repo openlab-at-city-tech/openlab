@@ -7,6 +7,7 @@ before_script:
   - composer install
 
 script:
+  - php ./developer/lint-php.php
   - ./developer/phpcompat.sh
 
 notifications:
@@ -14,4 +15,4 @@ notifications:
     recipients:
       - boonebgorges+openlab@gmail.com
     on_success: change
-    on_failure: always
+    on_failure: change

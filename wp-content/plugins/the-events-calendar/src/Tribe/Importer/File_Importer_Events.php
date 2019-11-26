@@ -66,6 +66,7 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 
 		$query_args['meta_query'] = $meta_query;
 		$query_args['tribe_remove_date_filters'] = true;
+		$query_args['tribe_suppress_query_filters'] = true;
 
 		add_filter( 'posts_search', array( $this, 'filter_query_for_title_search' ), 10, 2 );
 
@@ -269,7 +270,12 @@ class Tribe__Events__Importer__File_Importer_Events extends Tribe__Events__Impor
 
 		if ( ! empty ( $additional_fields ) ) {
 			foreach ( $additional_fields as $key => $csv_column ) {
-				$event[ $key ] = $this->get_value_by_key( $record, $key );
+				$value = $this->get_value_by_key( $record, $key );
+				if ( strpos( $value, '|' ) > -1 ) {
+					$event[ $key ] = explode( '|', $value );
+				} else {
+					$event[ $key ] = $value;
+				}
 			}
 		}
 

@@ -738,21 +738,21 @@ function bp_groupblog_validate_blog_form() {
 							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed", 'groupblog'));
 
 						}
-						continue;
+						break;
 					case 'Site name must be at least 4 characters.':
 						if( strlen( $result['blogname'] ) < $checks[minlength] && !is_super_admin() )
 						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters", 'groupblog'));
-						continue;
+						break;
 					case "Sorry, site names may not contain the character &#8220;_&#8221;!":
 						if($checks['allowunderscores']!= 1) {
 							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!", 'groupblog'));
 						}
-						continue;
+						break;
 					case 'Sorry, site names must have letters too!':
 						if($checks['allownumeric'] != 1){
 							$newerrors->add('blogname', __("Sorry, blog names must have letters too!", 'groupblog'));
 						}
-						continue;
+						break;
 					default:
 						$newerrors->add('blogname', $subvalue);
 

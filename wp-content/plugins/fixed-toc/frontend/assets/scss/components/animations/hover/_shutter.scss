@@ -1,0 +1,39 @@
+// *-------------------------------------------------------------------------------------
+// * Shutter In, Out, Horizontal And Vertical
+// *-------------------------------------------------------------------------------------
+
+@mixin shutterInHorizontal {
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			background: rgba($list_active_bgcolor, $opacity);
+			
+			.ftwp-text::before {
+				@include transform(scaleX(0));
+			}
+		}
+	}
+	
+	.ftwp-text::before {
+		background: rgba($list_bgcolor, $opacity);
+		@include transformOrigin(center);
+	}
+}
+
+
+@mixin shutterOutHorizontal {
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				@include transform(scaleX(1));
+			}
+		}
+	}
+	
+	.ftwp-text::before {
+		background: rgba($list_active_bgcolor, $opacity);
+		@include transform(scaleX(0));
+		@include transformOrigin(center);
+	}
+}

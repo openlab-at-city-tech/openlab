@@ -1,4 +1,4 @@
-/*  Copyright (C) 2017  Matthias Greiling (https://westrad.de)
+/*  Copyright (C) 2019  Matthias Greiling (https://westrad.de)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,15 +15,6 @@
 
 */
 
-
-/**  all layers have to be in this global array - in further process each map will have something like vectorM['map_ol3js_n']['layer_n'] */
-vectorM = [];
-
-/** put translations from PHP/mo to JavaScript */
-translations = [];
-
-/** global GET-Parameters */
-HTTP_GET_VARS = [];
 	
 /** 
  * get method for stored GET-Parameters
@@ -88,7 +79,7 @@ function activateLayers(_map, _layers, _startUp) {
 		jQuery('#layerBox' + e + _map).data('active', true);
 		
 		/** real action */
-		window[_map].addLayer(vectorM[_map][e]);
+		window[_map].addLayer(window.vectorM[_map][e]);
 
 		/** tracking stuff */
 		if (typeof _paq !== "undefined") {
@@ -138,7 +129,7 @@ function switchLayerOff(_e) {
 	_e.children('span.layerColor').addClass('layerColorHidden'); 
 	
 	/** window and vectorM are both global */
-	window[_e.data('map')].removeLayer(vectorM[_e.data('map')][_e.data('layer')]);
+	window[_e.data('map')].removeLayer(window.vectorM[_e.data('map')][_e.data('layer')]);
 	
 	/** tracking stuff */
 	if (typeof _paq !== "undefined") {
@@ -157,7 +148,7 @@ function switchLayerOn(_e) {
 	_e.children('span.layerColor').removeClass('layerColorHidden'); 
 	
 	/** window and vectorM are both global */
-	window[_e.data('map')].addLayer(vectorM[_e.data('map')][_e.data('layer')]);
+	window[_e.data('map')].addLayer(window.vectorM[_e.data('map')][_e.data('layer')]);
 	
 	/** tracking stuff */
 	if (typeof _paq !== "undefined") {

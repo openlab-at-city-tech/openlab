@@ -6,6 +6,51 @@
  */
 
 /**
+ * Checks whether Calendar is enabled for a group.
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_is_calendar_enabled_for_group( $group_id = null ) {
+	if ( null === $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	// Default to true in case no value is found.
+	if ( ! $group_id ) {
+		return true;
+	}
+
+	// Default to true in case no setting is found, except for portfolios.
+	$is_disabled = groups_get_groupmeta( $group_id, 'calendar_is_disabled', true );
+	if ( '' === $is_disabled && openlab_is_portfolio( $group_id ) ) {
+		$is_disabled = 1;
+	}
+
+	return ! $is_disabled;
+}
+
+/**
+ * Disable Calendar subnav if not enabled for group.
+ */
+add_action(
+	'bp_screens',
+	function() {
+		if ( ! bp_is_group() ) {
+			return;
+		}
+
+		if ( openlab_is_calendar_enabled_for_group() ) {
+			return;
+		}
+
+		bp_core_remove_subnav_item( groups_get_current_group()->slug, 'events', 'groups' );
+		bp_core_remove_subnav_item( groups_get_current_group()->slug, 'events-mobile', 'groups' );
+	},
+	9
+);
+
+/**
  * Google maps API now requires a key
  */
 function openlab_custom_calendar_assets() {
@@ -241,9 +286,9 @@ function openlab_bpeo_list_author() {
 	$event     = get_post( get_the_ID() );
 	$author_id = $event->post_author;
 
-	$base = __( '<strong>Author:</strong> %s', 'bp-event-organiser' );
+	$base = sprintf( '<strong>Author:</strong> %s', esc_html( bp_core_get_user_displayname( $author_id ) ) );
 
-	echo sprintf( '<li>' . esc_html( wp_filter_kses( $base ) ) . '</li>', esc_html( bp_core_get_user_displayname( $author_id ) ) );
+	echo '<li>' . $base . '</li>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'eventorganiser_additional_event_meta', 'openlab_bpeo_list_author', 5 );
 

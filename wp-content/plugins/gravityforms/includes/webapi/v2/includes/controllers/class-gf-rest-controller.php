@@ -35,6 +35,17 @@ abstract class GF_REST_Controller extends WP_REST_Controller {
 	protected $rest_base = '';
 
 	/**
+	 * Indicates if the capability validation request has been logged.
+	 *
+	 * Without this the other registered methods for the route will also be logged when rest_send_allow_header() in WP rest-api.php runs.
+	 *
+	 * @since 2.4.11
+	 *
+	 * @var bool
+	 */
+	protected $_validate_caps_logged = false;
+
+	/**
 	 * Parses the entry search, sort and paging parameters from the request
 	 *
 	 * @since 2.4-beta-1
@@ -184,19 +195,25 @@ abstract class GF_REST_Controller extends WP_REST_Controller {
 
 		$form = GFAPI::get_form( $entry['form_id'] );
 		foreach ( $form['fields'] as $field ) {
-			if ( $this->is_field_value_json( $field ) ) {
 
-				$value = $entry[ $field->id ];
+			if ( empty( $entry[ $field->id ] ) ) {
+				continue;
+			}
 
-				if ( $field->get_input_type() == 'list' ) {
-					$new_value = maybe_unserialize( $value );
-				} else {
-					$new_value = json_decode( $value );
-				}
+			if ( $field instanceof GF_Field_MultiSelect ) {
 
-				$entry[ $field->id ] = $new_value;
+				$entry[ $field->id ] = $field->to_array( $entry[ $field->id ] );
+
+			} elseif ( $field instanceof GF_Field_FileUpload && $field->multipleFiles ) {
+
+				$entry[ $field->id ] = json_decode( $entry[ $field->id ] );
+
+			} elseif ( $field instanceof GF_Field_List ) {
+
+				$entry[ $field->id ] = maybe_unserialize( $entry[ $field->id ] );
 
 			}
+
 		}
 
 		return $entry;
@@ -270,10 +287,23 @@ abstract class GF_REST_Controller extends WP_REST_Controller {
 
 		$form = GFAPI::get_form( $entry['form_id'] );
 
+		/** @var GF_Field $field */
 		foreach ( $form['fields'] as $field ) {
-			if ( $this->is_field_value_json( $field ) && $field->get_input_type() != 'list' && isset( $entry[ $field->id ] ) ) {
-				$entry[ $field->id ] = json_encode( $entry[ $field->id ] );
+
+			if ( empty( $entry[ $field->id ] ) ) {
+				continue;
 			}
+
+			if ( $field->get_input_type() === 'fileupload' && $field->multipleFiles ) {
+
+				$entry[ $field->id ] = json_encode( $entry[ $field->id ] );
+
+			} elseif ( $field instanceof GF_Field_MultiSelect ) {
+
+				$entry[ $field->id ] = $field->to_string( $entry[ $field->id ] );
+
+			}
+
 		}
 
 		return $entry;
@@ -325,6 +355,28 @@ abstract class GF_REST_Controller extends WP_REST_Controller {
 	 * @param string $message
 	 */
 	public function log_debug( $message ) {
-		GFCommon::log_debug( $message );
+		GFAPI::log_debug( $message );
 	}
+
+	/**
+	 * Validates that the current user has the specified capability.
+	 *
+	 * @since 2.4.11
+	 *
+	 * @param string|array    $capability The required capability.
+	 * @param WP_REST_Request $request    Full data about the request.
+	 *
+	 * @return bool
+	 */
+	public function current_user_can_any( $capability, $request ) {
+		$result = GFAPI::current_user_can_any( $capability );
+
+		if ( ! $this->_validate_caps_logged ) {
+			$this->log_debug( sprintf( '%s(): method: %s; route: %s; capability: %s; result: %s.', __METHOD__, $request->get_method(), $request->get_route(), json_encode( $capability ), json_encode( $result ) ) );
+			$this->_validate_caps_logged = true;
+		}
+
+		return $result;
+	}
+
 }

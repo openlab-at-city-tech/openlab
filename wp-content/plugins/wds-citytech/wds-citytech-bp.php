@@ -782,3 +782,7 @@ function openlab_ass_clean_content( $content ) {
 }
 add_filter( 'ass_clean_content', 'openlab_ass_clean_content', 4 );
 remove_filter( 'ass_clean_content', 'strip_tags', 4 );
+
+add_action( 'admin_head', function() {
+	remove_action( 'admin_head', 'bpges_39_migration_admin_notice' );
+}, 5 );

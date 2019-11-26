@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-26 22:24+0000\n"
+"POT-Creation-Date: 2019-07-15 22:39+0100\n"
 "PO-Revision-Date: 2017-08-31T14:17:32+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -125,8 +125,8 @@ msgstr "Näyttää tapahtumalistan"
 
 #: classes/class-eo-event-list-widget.php:14
 #: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
-#: event-organiser.php:149 includes/event-organiser-cpt.php:224
-#: includes/event-organiser-cpt.php:236
+#: event-organiser.php:149 includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
 msgid "Events"
 msgstr "Tapahtumat"
@@ -252,7 +252,7 @@ msgid "Event Categories"
 msgstr "Tapahtumakategoriat"
 
 #: classes/class-eo-widget-categories.php:25
-#: includes/event-organiser-cpt.php:94 includes/event-organiser-cpt.php:105
+#: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
 #: includes/event-organiser-event-functions.php:1563
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
@@ -456,6 +456,21 @@ msgstr ""
 msgid "Open shortcut help"
 msgstr ""
 
+#. //codex.wp-event-organiser.com
+#. *
+#. ***************** NOTICE: *****************
+#. *  Do not make changes to this file. Any changes made to this file
+#. * will be overwritten if the plug-in is updated.
+#. *
+#. * To overwrite this template with your own, make a copy of it (with the same name)
+#. * in your theme directory. See http://docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.7
+#.
 #: event-organiser-calendar.php:387 event-organiser-edit.php:14
 #: templates/event-meta-event-single.php:32
 msgid "Event Details"
@@ -509,18 +524,18 @@ msgid ""
 msgstr ""
 
 #. / TRANSLATORS: [this plugin] has only been tested up to [required plugin] [required plugin version]
-#: event-organiser-debug.php:424
+#: event-organiser-debug.php:426
 #, php-format
 msgid "%1$s has only been tested up to %1$s %1$s"
 msgstr ""
 
 #. / TRANSLATORS: [this plugin] requires [required plugin] version [required plugin version] or higher
-#: event-organiser-debug.php:437
+#: event-organiser-debug.php:439
 #, php-format
 msgid "%1$s requires %1$s version %1$s or higher"
 msgstr ""
 
-#: event-organiser-debug.php:462
+#: event-organiser-debug.php:464
 msgid "unknown"
 msgstr "tuntematon"
 
@@ -646,7 +661,7 @@ msgid "Show dates"
 msgstr "Näytä päivämäärät"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1026
+#: includes/event-organiser-venue-functions.php:1030
 msgid "Select a venue"
 msgstr "Valitse tapahtumapaikka"
 
@@ -723,7 +738,7 @@ msgstr ""
 msgid "Go to Event Organiser settings"
 msgstr "Mene Event Organiserin asetuksiin"
 
-#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:225
+#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:227
 msgid "Event"
 msgstr "Tapahtuma"
 
@@ -886,7 +901,7 @@ msgid "Revisions"
 msgstr "Versiot"
 
 #: event-organiser-settings.php:154 event-organiser-settings.php:355
-#: includes/event-organiser-cpt.php:151
+#: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Tapahtumatagit"
 
@@ -1233,13 +1248,13 @@ msgstr "Ota linkki"
 msgid "Slug"
 msgstr "Polkutunnus"
 
-#: features/bootstrap/FeatureContext.php:413
-#: features/bootstrap/FeatureContext.php:608
+#: features/bootstrap/FeatureContext.php:459
+#: features/bootstrap/FeatureContext.php:627
 msgid "Main Sidebar"
 msgstr ""
 
-#: features/bootstrap/FeatureContext.php:415
-#: features/bootstrap/FeatureContext.php:610
+#: features/bootstrap/FeatureContext.php:461
+#: features/bootstrap/FeatureContext.php:629
 msgid "Widgets in this area will be shown on all posts and pages."
 msgstr ""
 
@@ -1426,7 +1441,7 @@ msgstr ""
 msgid "This event recurs"
 msgstr "Tämä tapahtuma toistuu"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:228
+#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Muokkaa tapahtumaa"
 
@@ -1528,237 +1543,255 @@ msgstr "Tapahtumapaikan sijainti"
 msgid "View all venues"
 msgstr "Näytä kaikki paikat"
 
-#: includes/event-organiser-cpt.php:95
+#: includes/event-organiser-cpt.php:96
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:96
+#: includes/event-organiser-cpt.php:97
 msgid "Search Categories"
 msgstr "Etsi kategorioita"
 
-#: includes/event-organiser-cpt.php:97
+#: includes/event-organiser-cpt.php:98
 msgid "All Categories"
 msgstr "Kaikki kategoriat"
 
-#: includes/event-organiser-cpt.php:98
+#: includes/event-organiser-cpt.php:99
 msgid "Parent Category"
 msgstr "Yläkategoria"
 
-#: includes/event-organiser-cpt.php:99
+#: includes/event-organiser-cpt.php:100
 msgid "Parent Category:"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:100
+#: includes/event-organiser-cpt.php:101
 msgid "Edit Category"
 msgstr "Muokkaa kategoriaa"
 
-#: includes/event-organiser-cpt.php:101
+#: includes/event-organiser-cpt.php:102
 msgid "Update Category"
 msgstr "Päivitä kategoria"
 
-#: includes/event-organiser-cpt.php:102
+#: includes/event-organiser-cpt.php:103
 msgid "Add New Category"
 msgstr "Lisää uusi kategoria"
 
-#: includes/event-organiser-cpt.php:103
+#: includes/event-organiser-cpt.php:104
 msgid "New Category Name"
 msgstr "Uusi kategorian nimi"
 
-#: includes/event-organiser-cpt.php:104
+#: includes/event-organiser-cpt.php:105
 msgid "No categories found"
 msgstr "Kategorioita ei löytynyt"
 
-#: includes/event-organiser-cpt.php:106
+#: includes/event-organiser-cpt.php:107
 msgid "Event categories list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:107
+#: includes/event-organiser-cpt.php:108
 msgid "Event categories list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:109
+#: includes/event-organiser-cpt.php:110
 msgid "View all categories"
 msgstr "Näytä kaikki kategoriat"
 
-#: includes/event-organiser-cpt.php:152
+#: includes/event-organiser-cpt.php:153
 msgctxt "taxonomy singular name"
 msgid "Tag"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:153
+#: includes/event-organiser-cpt.php:154
 msgid "Search Tags"
 msgstr "Etsi avainsanoista"
 
-#: includes/event-organiser-cpt.php:154
+#: includes/event-organiser-cpt.php:155
 msgid "All Tags"
 msgstr "Kaikki avainsanat"
 
-#: includes/event-organiser-cpt.php:155
+#: includes/event-organiser-cpt.php:156
 msgid "Popular Tags"
 msgstr "Suositut avainsanat"
 
-#: includes/event-organiser-cpt.php:156
+#: includes/event-organiser-cpt.php:157
 msgid "Edit Tag"
 msgstr "Muokkaa avainsanaa"
 
-#: includes/event-organiser-cpt.php:157
+#: includes/event-organiser-cpt.php:158
 msgid "Update Tag"
 msgstr "Päivitä avainsana"
 
-#: includes/event-organiser-cpt.php:158
+#: includes/event-organiser-cpt.php:159
 msgid "Add New Tag"
 msgstr "Lisää uusi avainsana"
 
-#: includes/event-organiser-cpt.php:159
+#: includes/event-organiser-cpt.php:160
 msgid "New Tag Name"
 msgstr "Uusi avainsanan nimi"
 
-#: includes/event-organiser-cpt.php:160
+#: includes/event-organiser-cpt.php:161
 msgid "No tags found"
 msgstr "Avainsanoja ei löytynyt"
 
-#: includes/event-organiser-cpt.php:161
+#: includes/event-organiser-cpt.php:162
 msgid "Choose from the most used tags"
 msgstr "Valitse eniten käytetyistä avainsanoista"
 
-#: includes/event-organiser-cpt.php:162
+#: includes/event-organiser-cpt.php:163
 #: includes/event-organiser-event-functions.php:1571
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "Avainsanat"
 
-#: includes/event-organiser-cpt.php:163
+#: includes/event-organiser-cpt.php:164
 msgid "Add or remove tags"
 msgstr "Lisää tai poista avainsanoja"
 
-#: includes/event-organiser-cpt.php:164
+#: includes/event-organiser-cpt.php:165
 msgid "Separate tags with commas"
 msgstr "Erottele avainsanat pilkulla"
 
-#: includes/event-organiser-cpt.php:165
+#: includes/event-organiser-cpt.php:166
 msgid "Event tags list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:166
+#: includes/event-organiser-cpt.php:167
 msgid "Event tags list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:168
+#: includes/event-organiser-cpt.php:169
 msgid "View all tags"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:228
 msgctxt "post"
 msgid "Add New"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:227
+#: includes/event-organiser-cpt.php:229
 msgid "Add New Event"
 msgstr "Lisää uusi tapahtuma"
 
-#: includes/event-organiser-cpt.php:229
+#: includes/event-organiser-cpt.php:231
 msgid "New Event"
 msgstr "Uusi tapahtuma"
 
-#: includes/event-organiser-cpt.php:230
+#: includes/event-organiser-cpt.php:232
 #, fuzzy
 msgid "All Events"
 msgstr "Kaikki tapahtumat"
 
-#: includes/event-organiser-cpt.php:231
+#: includes/event-organiser-cpt.php:233
 msgid "View Event"
 msgstr "Näytä tapahtuma"
 
-#: includes/event-organiser-cpt.php:232
+#: includes/event-organiser-cpt.php:234
 msgid "Search events"
 msgstr "Hae tapahtumia"
 
-#: includes/event-organiser-cpt.php:233
+#: includes/event-organiser-cpt.php:235
 msgid "No events found"
 msgstr "Tapahtumia ei löytynyt"
 
-#: includes/event-organiser-cpt.php:234
+#: includes/event-organiser-cpt.php:236
 msgid "No events found in Trash"
 msgstr "Tapahtumia ei löytynyt roskakorista"
 
-#: includes/event-organiser-cpt.php:237
+#: includes/event-organiser-cpt.php:239
 msgid "Filter events list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:238
+#: includes/event-organiser-cpt.php:240
 msgid "Events list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:239
+#: includes/event-organiser-cpt.php:241
 msgid "Events list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:240
+#: includes/event-organiser-cpt.php:242
 msgid "Event Archives"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:241
+#: includes/event-organiser-cpt.php:243
 msgid "Insert into event"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:242
+#: includes/event-organiser-cpt.php:244
 msgid "Uploaded to this event"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:244
+#: includes/event-organiser-cpt.php:246
 #, php-format
 msgid "Events at %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:245
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:247
 #: templates/taxonomy-event-category.php:27
 #, php-format
 msgid "Event Category: %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:246 templates/taxonomy-event-tag.php:27
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.2.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:248 templates/taxonomy-event-tag.php:27
 #, php-format
 msgid "Event Tag: %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:247 includes/event-organiser-cpt.php:248
-#: includes/event-organiser-cpt.php:249
+#: includes/event-organiser-cpt.php:249 includes/event-organiser-cpt.php:250
+#: includes/event-organiser-cpt.php:251
 #, fuzzy, php-format
 msgid "Events: %s"
 msgstr "Tapahtumat:"
 
-#: includes/event-organiser-cpt.php:330
+#: includes/event-organiser-cpt.php:332
 #, php-format
 msgid "Event updated. <a href=\"%s\">View event</a>"
 msgstr "Tapahtuma päivitetty. <a href=\"%s\">Näytä tapahtuma</a>"
 
-#: includes/event-organiser-cpt.php:331
+#: includes/event-organiser-cpt.php:333
 msgid "Event updated."
 msgstr "Tapahtuma päivitetty."
 
-#: includes/event-organiser-cpt.php:333
+#: includes/event-organiser-cpt.php:335
 #, php-format
 msgid "Event restored to revision from %s"
 msgstr "Tapahtuma palautettu versioon %s"
 
-#: includes/event-organiser-cpt.php:334
+#: includes/event-organiser-cpt.php:336
 #, php-format
 msgid "Event published. <a href=\"%s\">View event</a>"
 msgstr "Tapahtuma julkaistu. <a href=\"%s\">Näytä tapahtuma</a>"
 
-#: includes/event-organiser-cpt.php:335
+#: includes/event-organiser-cpt.php:337
 msgid "Event saved."
 msgstr "Tapahtuma tallennettu."
 
-#: includes/event-organiser-cpt.php:337
+#: includes/event-organiser-cpt.php:339
 #, php-format
 msgid "Event submitted. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Tapahtuma lähetetty. <a target=\"_blank\" href=\"%s\">Esikatsele tapahtuma </"
 "a>"
 
-#: includes/event-organiser-cpt.php:341
+#: includes/event-organiser-cpt.php:343
 #, php-format
 msgid ""
 "Event scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
@@ -1767,30 +1800,31 @@ msgstr ""
 "Tapahtuma aikataulutettu: <strong>%1$s</strong>. <a target=\"_blank\" href="
 "\"%2$s\">Esikatsele tapahtuma</a>"
 
-#: includes/event-organiser-cpt.php:343
+#. //php.net/date
+#: includes/event-organiser-cpt.php:345
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
-#: includes/event-organiser-cpt.php:346
+#: includes/event-organiser-cpt.php:348
 #, php-format
 msgid "Event draft updated. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Tapahtuman luonnos päivitetty. <a target=\"_blank\" href=\"%s\">Esikatsele "
 "tapahtuma</a>"
 
-#: includes/event-organiser-cpt.php:349
+#: includes/event-organiser-cpt.php:351
 msgid "This event has been broken from a recurring event."
 msgstr ""
 
-#: includes/event-organiser-cpt.php:525
+#: includes/event-organiser-cpt.php:527
 msgid "Creating events"
 msgstr "Luomassa tapahtumia"
 
-#: includes/event-organiser-cpt.php:526
+#: includes/event-organiser-cpt.php:528
 msgid "Creating events:"
 msgstr "Luomassa tapahtumia:"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:530
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1798,7 +1832,7 @@ msgstr ""
 "Aloituspäivä on se päivä jolloin tapahtuma alkaa. Jos tapahtuma on toistuvia "
 "tapahtuma, tämä on ensimmäisen esiintymän alkamispäivämäärä."
 
-#: includes/event-organiser-cpt.php:529
+#: includes/event-organiser-cpt.php:531
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1806,7 +1840,7 @@ msgstr ""
 "Päättymispäivä on päivämäärä jolloin tapahtuma päättyy. Jos tapahtuma on "
 "toistuvia tapahtuma, tämä on viimeisen esiintymän päättymispäivä."
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:532
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1814,11 +1848,11 @@ msgstr ""
 "Kaikki päivämäärät ja ajat on syötettävä määrätyssä muodossa. Tätä muotoa "
 "voi muuttaa asetukset sivulta."
 
-#: includes/event-organiser-cpt.php:535
+#: includes/event-organiser-cpt.php:537
 msgid "Repeating events"
 msgstr "Toistuvat tapahtumat"
 
-#: includes/event-organiser-cpt.php:536
+#: includes/event-organiser-cpt.php:538
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1828,11 +1862,11 @@ msgstr ""
 "pudotusvalikkoa valitaksesi miten tapahtuma toistuu. Lisävaihtoehtoja tulee "
 "näkyviin,"
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:540
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Määritä, miten säännöllisesti tapahtumaa toistetaan (oletus 1)"
 
-#: includes/event-organiser-cpt.php:539
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1841,7 +1875,7 @@ msgstr ""
 "jälkeen, mutta esiintymä, joka alkaa ennen voi loppua tämän päivämäärän "
 "jälkeen."
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:542
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1851,7 +1885,7 @@ msgstr ""
 "kyseisenä päivämääränä kuukaudessa (esim. 24.) tai päivänä (esim. kolmantena "
 "tiistaina)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:543
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1861,17 +1895,17 @@ msgstr ""
 "tapahtuma tulee toistaa. Jos yhtään päivää ei valita, niin käytetään "
 "aloituspäivää"
 
-#: includes/event-organiser-cpt.php:546 includes/event-organiser-cpt.php:547
+#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
 msgid "Selecting a venue"
 msgstr "Valitsee tapahtumapaikkaa"
 
-#: includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551
 msgid "Use the venues input field to search for existing venues"
 msgstr ""
 "Käytä tapahtumapaikat syöttökenttää etsiäksesi olemassa olevia "
 "tapahtumapaikkoja"
 
-#: includes/event-organiser-cpt.php:550
+#: includes/event-organiser-cpt.php:552
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -1879,11 +1913,11 @@ msgstr ""
 "Vain olemassa olevia tapahtumapaikkoja voidaan valita. Lisätäksesi paikan, "
 "mene tapahtumapaikat sivulle."
 
-#: includes/event-organiser-cpt.php:560 includes/event-organiser-cpt.php:579
+#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
 msgid "Overview"
 msgstr "Yleiskatsaus"
 
-#: includes/event-organiser-cpt.php:561
+#: includes/event-organiser-cpt.php:563
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1893,7 +1927,7 @@ msgstr ""
 "toistuvat tapahtumat näkyvät yhdellä rivillä </strong> taulukossa ja sekä "
 "alkamis- että päättymispäivä viittaa tapahtuman ensimmäiseen esiintymään."
 
-#: includes/event-organiser-cpt.php:567
+#: includes/event-organiser-cpt.php:569
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1902,7 +1936,7 @@ msgstr ""
 "toimintalinkkejä, joiden avulla voit hallita paikkaa. Voit tehdä seuraavat "
 "toimet:"
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:571
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1910,15 +1944,15 @@ msgstr ""
 "Muokkaa vie tapahtumapaikan muokkausnäyttöön. Pääset samaan näkymään myös "
 "klikkaamalla paikan otsikkoa."
 
-#: includes/event-organiser-cpt.php:570
+#: includes/event-organiser-cpt.php:572
 msgid "Delete will permanently remove the venue"
 msgstr "Poistaminen poistaa tapahtumapaikan pysyvästi"
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:573
 msgid "View will take you to the venue's page"
 msgstr "Näkymä vie sinut tapahtumapaikan sivulle"
 
-#: includes/event-organiser-cpt.php:580
+#: includes/event-organiser-cpt.php:582
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1928,7 +1962,7 @@ msgstr ""
 "yhteenvetoa tapahtumasta klikkaamalla sitä. Jos sinulla on tarvittavat "
 "oikeudet, linkki tapahtuman muokkaussivulle on myös näkyvissä."
 
-#: includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:583
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1939,11 +1973,11 @@ msgstr ""
 "perusteella.'Valitse päivämäärä' painikkeen avulla voit nopeasti siirtyä "
 "tiettyyn päivämäärään."
 
-#: includes/event-organiser-cpt.php:585
+#: includes/event-organiser-cpt.php:587
 msgid "Add Event"
 msgstr "Lisää tapahtuma"
 
-#: includes/event-organiser-cpt.php:586
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1958,28 +1992,28 @@ msgstr ""
 "luonnoksena. Joka tapauksessa, tapahtuma on luotu ja siirryt automaattisesti "
 "tapahtuman muokkaussivulle."
 
-#: includes/event-organiser-cpt.php:592
+#: includes/event-organiser-cpt.php:594
 msgid "For more information"
 msgstr "Lisätietoa"
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:595
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Katso <a %s> ohjeistus</a>"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:596
 msgid "Debugging Event Organiser"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:597
 msgid "Go Pro!"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:706 includes/event-organiser-cpt.php:729
+#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
 msgid "Color"
 msgstr "Väri"
 
-#: includes/event-organiser-cpt.php:712
+#: includes/event-organiser-cpt.php:714
 msgid "Assign the category a colour."
 msgstr "Liitää värin kategoriaan."
 
@@ -2165,23 +2199,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/event-organiser-venue-functions.php:991
+#: includes/event-organiser-venue-functions.php:995
 msgid "Address"
 msgstr "Osoite"
 
-#: includes/event-organiser-venue-functions.php:992
+#: includes/event-organiser-venue-functions.php:996
 msgid "City"
 msgstr "Kaupunki"
 
-#: includes/event-organiser-venue-functions.php:993
+#: includes/event-organiser-venue-functions.php:997
 msgid "State / Province"
 msgstr "Osavaltio / lääni"
 
-#: includes/event-organiser-venue-functions.php:994
+#: includes/event-organiser-venue-functions.php:998
 msgid "Post Code"
 msgstr "Postinumero"
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Country"
 msgstr "Maa"
 
@@ -2276,6 +2310,15 @@ msgstr ""
 msgid "This event was posted by <a href=\"%3$s\">%2$s</a>."
 msgstr ""
 
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
 #: templates/taxonomy-event-venue.php:30
 #, php-format
 msgid "Events at: %s"

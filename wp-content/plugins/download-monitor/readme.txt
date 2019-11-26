@@ -1,22 +1,25 @@
 === Download Monitor ===
 Contributors: never5, barrykooij, hchouhan, mikejolley
 Donate link: http://www.barrykooij.com/donate/
-Tags: download, downloads, monitor, hits, download monitor, tracking, admin, count, counter, files, versions, download count, logging, AJAX, digital, documents, download category, download manager, download template, downloadmanager, file manager, file tree, grid, hits, ip-address, manager, media, monitor, password, protect downloads, tracker
+Tags: download, downloads, monitor, hits, download monitor, tracking, admin, count, counter, files, versions, download count, logging, AJAX, digital, documents, download category, download manager, download template, downloadmanager, file manager, file tree, grid, hits, ip-address, manager, media, monitor, password, protect downloads, tracker, sell, shop, ecommerce, paypal
 Requires at least: 3.8
-Tested up to: 4.9.8
-Stable tag: 4.1.1
+Tested up to: 5.1.1
+Stable tag: 4.4.2
 License: GPLv3
 Text Domain: -
+Requires PHP: 5.3
 
-Download Monitor is a plugin for uploading and managing downloads, tracking downloads, and displaying links.
+Download Monitor is a plugin for uploading and managing downloads, tracking downloads, displaying links and selling downloads!
 
 == Description ==
 
-Download Monitor provides an interface for uploading and managing downloadable files (including support for multiple versions), inserting download links into posts, and logging downloads.
+Download Monitor provides an interface for uploading and managing downloadable files (including support for multiple versions), inserting download links into posts, logging downloads and selling downloads!
 
 = Features =
 
 * Add, edit and remove downloads from a familiar WP interface; Your downloads are just like posts.
+* Sell your downloads from within your WordPress website!
+* 100% Gutenberg compatible, including a new Download Monitor Download Block. Type /download to use it!
 * Quick-add panel for adding downloads / files whilst editing posts.
 * Add multiple file versions to your downloads each with their own data like download count and file links.
 * Define alternative links (mirrors) per download version.
@@ -108,15 +111,48 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 
 == Screenshots ==
 
-1. The main admin screen lists your downloads using familiar WordPress UI.
-2. Easily add file information and multiple versions.
-3. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
+1. Easily add downloads to your website with our Gutenberg block!
+2. The main admin screen lists your downloads using familiar WordPress UI.
+3. Easily add file information and multiple versions.
+4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
 
+= 4.4.2: April 3, 2019 =
+* Tweak: Fixed an relative inclusion bug that sometimes caused bootstrap not to properly load. (Undefined function dlm_is_shop_enabled()).
+
+= 4.4.1: March 27, 2019 =
+* Tweak: Added proper html escaping to order overview page, props Nam.Dinh.
+
+= 4.4.0: March 8, 2019 =
+* Feature: Added a new product post type to create a clear separation between downloads and the products you can sell. Read more about this here: https://www.download-monitor.com/kb/products/
+* Feature: Shop products now have a basic detail (single) page. This will be improved in future updates.
+* Feature: Added "Paid Only" option to downloads. This allows you to require users to have a purchase linked to the download before file can be downloaded.
+* Feature: Versions are now passed through the no-access page.
+* Tweak: dlm_buy shortcode now takes a product id, instead of a download ID. These need to be updated manually.
+* Tweak: Shop feature has been more isolated from non-shop. To enable shop, go to general Download Monitor settings and check "Enable Shop".
+* Tweak: PayPal gateway is now enabled by default.
+
+= 4.3.0: February 27, 2019 =
+* Feature: Added Shop (Beta) feature. You can now sell your downloads via Download Monitor! More addition to shop (like taxes and discounts) coming soon.
+* Feature: Added PayPal integration for shop feature.
+* Feature: Added an onboarding screen, helping the user set up the plugin.
+* Tweak: Fixed an error when changing dates in reports on Safari.
+* Tweak: Added download ID to Reports overview table.
+* Tweak: Increased spacing of download title on reports summary block.
+* Tweak: We're no longer automatically creating the No Access page. This is now done via the onboarding screen.
+* Tweak: We're no longer supporting PHP 5.2. If you upgrade and are still running PHP 5.2, the plugin will not load but display an upgrade notice instead. More info: https://www.download-monitor.com/kb/minimum-required-php-version/
+* Tweak: Updated translations.
+
+= 4.2.1: January 31, 2019 =
+* Tweak: Correctly set default template of Gutenberg block on frontend of website when no specific template is set.
+
+= 4.2.0: January 24, 2019 =
+* Feature: Added Gutenberg download block. Type /download in your post screen to see it in action!
+
 = 4.1.1: September 12, 2018 =
 * Tweak: Fixed a bug that incorrectly included featured downloads by default in [downloads].
-* Tweak: Added 'dlm_get_template_part_args' filter that allows arugment filtering on Download Monitor templates.
+* Tweak: Added 'dlm_get_template_part_args' filter that allows argument filtering on Download Monitor templates.
 
 = 4.1.0: May 21, 2018 =
 * Feature: Added a new option that allows site-owners if and how they wish to track IP addresses of users.

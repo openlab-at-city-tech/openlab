@@ -26,8 +26,8 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	} else {
 		$searchstring = '';
 	}
-	
-	if ( $show_tag_filters ) {
+
+	if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
 
 		$output .= '<div class="tag-filters">';
 		$output .= '<div class="tag-filters-title">' . $tag_label . '</div>';
@@ -69,7 +69,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
 		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?' + 'link_tags=' + link_tags_string";
 				
-		if ( $show_price_filters ) {
+		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
 			$output .= " + '&'";
 			
 			if ( 'free' == $prev_link_price ) {
@@ -90,7 +90,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= '</div>';
 	}
 
-	if ( $show_price_filters ) {
+	if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
 		$output .= '<div class="tag-filters">';
 		$output .= '<div class="tag-filters-title">' . $price_label . '</div>';
 
@@ -102,14 +102,14 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= "jQuery('.link_price').click( function() {\n";
 		
-		if ( $show_tag_filters ) {
+		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
 			$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
 			$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
 		}
 		
 		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
 		
-		if ( $show_tag_filters ) {
+		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
 			$output .= " + 'link_tags=' + current_link_tags";
 			$output .= " + '&'";
 		}
@@ -129,8 +129,6 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= "});\n";
 
 		$output .= '</script>';
-
-		$output .= '</div>';
 
 		$output .= '</div>';
 	}

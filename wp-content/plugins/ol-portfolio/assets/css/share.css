@@ -1,0 +1,210 @@
+.dialog[aria-hidden="true"] {
+	display: none;
+}
+.dialog__overlay {
+	z-index: 2;
+	background-color: rgba(0, 0, 0, 0.66);
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+[data-a11y-dialog-native] .dialog__overlay {
+	display: none;
+}
+dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.66);
+}
+.dialog .dialog__content[open] {
+	display: flex;
+}
+.dialog .dialog__content {
+	flex-direction: column;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	max-height: 90%;
+	width: 600px;
+	z-index: 3;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	margin: 0;
+	padding: 0;
+}
+.dialog .dialog__content label,
+.dialog .dialog__content legend {
+	color: #1a202c;
+	display: inline-block;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 1;
+	margin-bottom: 8px;
+}
+.dialog .dialog__content input[type="text"],
+.dialog .dialog__content textarea,
+.dialog .dialog__content #citation {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px 12px;
+	font-size: 14px;
+	font-family: inherit;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #495057;
+	background: #fff;
+	background-clip: padding-box;
+	border: 1px solid #ddd;
+	border-radius: 0;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+	transition: 50ms border-color ease-in-out;
+}
+.dialog .dialog__content input[type="text"]:focus,
+.dialog .dialog__content textarea:focus {
+	border-color: #5b9dd9;
+	box-shadow: 0 0 2px rgba(30, 140, 190, 0.8);
+	outline: 2px solid transparent;
+}
+.dialog .dialog__content input[readonly],
+.dialog .dialog__content textarea[readonly],
+.dialog .dialog__content #citation {
+	background-color: #eee;
+	opacity: 1;
+}
+.dialog .dialog__content .dialog__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 16px;
+	border-bottom: 1px solid #dee2e6;
+}
+.dialog .dialog__content .dialog__header h1 {
+	color: #1a202c;
+	font-size: 22px;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	font-weight: 600;
+	line-height: 1;
+	margin: 0;
+	padding: 0;
+}
+.dialog .dialog__content .dialog__header h1:before {
+	display: none;
+}
+.dialog .dialog__content .dialog__header button {
+	background: transparent;
+	border: 0;
+	color: #666;
+	border-radius: 0;
+	padding: 0;
+}
+.dialog .dialog__content .dialog__close {
+	font-size: 22px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+}
+.dialog .dialog__content .dialog__body {
+	padding: 16px;
+	overflow-y: auto;
+}
+.dialog .dialog__body a {
+	outline: none;
+	color: #21759b;
+}
+.dialog .dialog__body a:hover {
+	color: #0f3647;
+}
+.dialog .dialog__content .dialog__footer {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 16px 16px;
+	border-top: 1px solid #dee2e6;
+}
+.dialog .dialog__content .form-group {
+	margin-bottom: 16px;
+}
+.dialog .dialog__content .control-radio {
+	display: inline-flex;
+	margin-right: 10px;
+}
+.dialog .dialog__content .control-radio:first-child {
+	margin-left: 20px;
+}
+.dialog .dialog__content .control-radio label {
+	font-weight: 400;
+	font-size: 14px;
+	margin-bottom: 0;
+}
+.dialog .dialog__content .control-radio input {
+	margin-right: 4px;
+}
+.dialog .dialog__content .btn {
+	display: inline-block;
+	font-weight: 400;
+	color: #212529;
+	cursor: pointer;
+	text-align: center;
+	text-transform: none;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: 0;
+	padding: 6px 12px;
+	font-size: 16px;
+	line-height: 1.5;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.dialog .dialog__content .btn:hover {
+	background-image: none;
+}
+.dialog .dialog__content .btn-primary {
+	color: #fff;
+	background-color: #007bff;
+	border-color: #007bff;
+}
+.dialog .dialog__content .btn-primary:hover {
+	color: #fff;
+	background: #0069d9;
+	border-color: #0062cc;
+}
+.dialog .dialog__content .btn-link {
+	font-weight: 400;
+	font-size: 14px;
+	color: #007bff;
+	text-decoration: none;
+}
+.dialog .dialog__content .btn-link:hover {
+	color: #0056b3;
+	text-decoration: underline;
+}
+.dialog .dialog__content .text-muted {
+	color: #6c757d;
+	display: block;
+	font-size: 80%;
+	margin-top: 4px;
+}
+.portfolio-actions {
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.portfolio-actions button:disabled {
+	pointer-events: none;
+}
+@media print {
+	.portfolio-actions {
+		display: none;
+	}
+}

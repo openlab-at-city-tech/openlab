@@ -1,0 +1,65 @@
+.library-subject-guide-selectors {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	margin-bottom: 1em;
+}
+
+.library-subject-guide-selectors .ui-accordion .ui-accordion-content {
+	padding: 0;
+}
+
+.library-subject-guide-selectors .ui-state-default {
+	background-image: none;
+}
+
+.library-subject-guide-selectors .ui-accordion-header {
+	background: #fafafa;
+	border: 1px solid #e5e5e5;
+	color: rgb(0, 142, 194);
+	margin-top: 7px;
+	padding: 1em;
+	font-family: inherit;
+	font-size: 1em;
+	font-weight: 600;
+	position: relative;
+}
+
+.library-subject-guide-selectors .ui-accordion-header:after {
+	content: '\f067';
+	font-family: 'FontAwesome';
+	font-weight: normal;
+	position: absolute;
+	right: 1em;
+}
+
+.library-subject-guide-selectors .ui-accordion-header.ui-accordion-header-active:after {
+	content: '\f068';
+}
+
+.library-subject-guide-selectors .ui-accordion-header:hover {
+	border-color: #999;
+}
+
+.library-subject-guide-selectors .ui-accordion-header-icon {
+	display: none;
+}
+
+.library-subject-guide-selectors .ui-accordion-content {
+	background-color: #8e777700;
+	background-image: none;
+	padding-left: 1em;
+	padding-right: 1em;
+	margin-bottom: 1.5em;
+}
+
+.library-subject-guide-selectors input[type="checkbox"] {
+	float: left;
+	margin-top: 0;
+}
+
+.library-subject-guide-selectors label {
+	display: block;
+	font-size: 13px;
+	line-height: 18px;
+	padding-left: 1.5em;
+	margin-bottom: 7px;
+}

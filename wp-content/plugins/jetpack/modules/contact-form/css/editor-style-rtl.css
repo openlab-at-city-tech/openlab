@@ -91,6 +91,13 @@ input[type="url"]:-ms-input-placeholder {
 	color: #87a6bc;
 }
 
+input[type="text"]::-ms-input-placeholder,
+input[type="tel"]::-ms-input-placeholder,
+input[type="email"]::-ms-input-placeholder,
+input[type="url"]::-ms-input-placeholder {
+	color: #87a6bc;
+}
+
 input[type="text"]::placeholder,
 input[type="tel"]::placeholder,
 input[type="email"]::placeholder,
@@ -145,6 +152,13 @@ input[type="url"]:disabled:-ms-input-placeholder {
 	color: #a8bece;
 }
 
+input[type="text"]:disabled::-ms-input-placeholder,
+input[type="tel"]:disabled::-ms-input-placeholder,
+input[type="email"]:disabled::-ms-input-placeholder,
+input[type="url"]:disabled::-ms-input-placeholder {
+	color: #a8bece;
+}
+
 input[type="text"]:disabled::placeholder,
 input[type="tel"]:disabled::placeholder,
 input[type="email"]:disabled::placeholder,
@@ -180,6 +194,10 @@ textarea:-ms-input-placeholder {
 	color: #87a6bc;
 }
 
+textarea::-ms-input-placeholder {
+	color: #87a6bc;
+}
+
 textarea::placeholder {
 	color: #87a6bc;
 }
@@ -210,6 +228,10 @@ textarea:disabled:hover {
 }
 
 textarea:disabled:-ms-input-placeholder {
+	color: #a8bece;
+}
+
+textarea:disabled::-ms-input-placeholder {
 	color: #a8bece;
 }
 
@@ -371,6 +393,10 @@ input[type="radio"]:disabled:-ms-input-placeholder {
 	color: #a8bece;
 }
 
+input[type="radio"]:disabled::-ms-input-placeholder {
+	color: #a8bece;
+}
+
 input[type="radio"]:disabled::placeholder {
 	color: #a8bece;
 }
@@ -438,11 +464,11 @@ select {
 	vertical-align: top;
 	white-space: nowrap;
 	box-sizing: border-box;
-	padding: 7px 14px 9px 32px; // Aligns the text to the 8px baseline grid and adds padding on right to allow for the arrow.
+	/* Aligns the text to the 8px baseline grid and adds padding on right to allow for the arrow. */
+	padding: 7px 14px 9px 32px;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	-webkit-appearance: none;
-	        appearance: none;
+	appearance: none;
 }
 
 select:hover {

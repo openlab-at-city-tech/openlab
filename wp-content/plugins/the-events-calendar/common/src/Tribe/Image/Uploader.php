@@ -43,6 +43,8 @@ class Tribe__Image__Uploader {
 			return false;
 		}
 
+		$existing = false;
+
 		if ( is_string( $this->featured_image ) && ! is_numeric( $this->featured_image ) ) {
 			$existing = $this->get_attachment_ID_from_url( $this->featured_image );
 			$id = $existing ? $existing : $this->upload_file( $this->featured_image );
@@ -51,6 +53,17 @@ class Tribe__Image__Uploader {
 		} else {
 			$id = false;
 		}
+
+		do_action(
+			'tribe_log',
+			'debug',
+			__CLASS__,
+			[
+				'featured_image' => $this->featured_image,
+				'exists'         => (bool) $existing,
+				'id'             => $id,
+			]
+		);
 
 		return $id;
 	}
@@ -61,7 +74,17 @@ class Tribe__Image__Uploader {
 	 * @return int
 	 */
 	protected function upload_file( $file_url ) {
-		if ( ! filter_var( $file_url, FILTER_VALIDATE_URL ) ) {
+		/**
+		 * Allow plugins to enable local URL uploads, mainly used for testing.
+		 *
+		 * @param bool   $allow_local_urls Whether to allow local URLs.
+		 * @param string $file_url         File URL.
+		 *
+		 * @since 4.9.5
+		 */
+		$allow_local_urls = apply_filters( 'tribe_image_uploader_local_urls', false, $file_url );
+
+		if ( ! filter_var( $file_url, FILTER_VALIDATE_URL ) && ! $allow_local_urls ) {
 			return false;
 		}
 

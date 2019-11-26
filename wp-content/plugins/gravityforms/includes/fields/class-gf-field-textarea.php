@@ -44,6 +44,8 @@ class GF_Field_Textarea extends GF_Field {
 
 	public function get_field_input( $form, $value = '', $entry = null ) {
 
+		global $current_screen;
+
 		$form_id         = absint( $form['id'] );
 		$is_entry_detail = $this->is_entry_detail();
 		$is_form_editor  = $this->is_form_editor();
@@ -58,18 +60,22 @@ class GF_Field_Textarea extends GF_Field {
 		$class         = esc_attr( $class );
 		$disabled_text = $is_form_editor ? 'disabled="disabled"' : '';
 
+		$maxlength_attribute   = is_numeric( $this->maxLength ) ? "maxlength='{$this->maxLength}'" : '';
 		$placeholder_attribute = $this->get_field_placeholder_attribute();
 		$required_attribute    = $this->isRequired ? 'aria-required="true"' : '';
 		$invalid_attribute     = $this->failed_validation ? 'aria-invalid="true"' : 'aria-invalid="false"';
+		$aria_describedby      = $this->get_aria_describedby();
 
 		$tabindex = $this->get_tabindex();
 
 		if ( $this->get_allowable_tags() === false ) {
 			$value = esc_textarea( $value );
+		} else {
+			$value = wp_kses_post( $value );
 		}
 
 		//see if the field is set to use the rich text editor
-		if ( ! $is_admin && $this->is_rich_edit_enabled() ) {
+		if ( ! $is_admin && $this->is_rich_edit_enabled() && ( ! $current_screen || ( $current_screen && ! rgobj( $current_screen, 'is_block_editor' ) ) ) ) {
 			//placeholders cannot be used with the rte; message displayed in admin when this occurs
 			//field cannot be used in conditional logic by another field; message displayed in admin and field removed from conditional logic drop down
 			$tabindex = GFCommon::$tab_index > 0 ? GFCommon::$tab_index ++ : '';
@@ -131,7 +137,7 @@ class GF_Field_Textarea extends GF_Field {
 				$input       = sprintf( '<div id="%s_rte_preview" class="gform-rte-preview %s" style="display:%s"></div>', $field_id, $size, $display );
 			}
 
-			$input .= "<textarea name='input_{$id}' id='{$field_id}' class='textarea {$class}' {$tabindex} {$placeholder_attribute} {$required_attribute} {$invalid_attribute} {$disabled_text} {$input_style} rows='10' cols='50'>{$value}</textarea>";
+			$input .= "<textarea name='input_{$id}' id='{$field_id}' class='textarea {$class}' {$tabindex} {$aria_describedby} {$maxlength_attribute} {$placeholder_attribute} {$required_attribute} {$invalid_attribute} {$disabled_text} {$input_style} rows='10' cols='50'>{$value}</textarea>";
 
 		}
 
@@ -170,12 +176,16 @@ class GF_Field_Textarea extends GF_Field {
 
 		preg_match_all( $pattern, $script, $matches, PREG_SET_ORDER );
 
+		// Fix editor height issue: https://core.trac.wordpress.org/ticket/45461.
+		$wp_version       = get_bloginfo( 'version' );
+		$height_issue_fix = version_compare( $wp_version, '5.0', '>=' ) && version_compare( $wp_version, '5.2', '<' ) ? ' gform_post_conditional_logic' : '';
+
 		foreach ( $matches as $match ) {
 
 			list( $search, $open_tag, $guts, $close_tag ) = $match;
 
 			$custom  = "if ( typeof current_page === 'undefined' ) { return; }\nfor( var id in tinymce.editors ) { tinymce.EditorManager.remove( tinymce.editors[id] ); }";
-			$replace = sprintf( "%s\njQuery( document ).bind( 'gform_post_render', function( event, form_id, current_page ) { \n%s\n%s } );\n%s", $open_tag, $custom, $guts, $close_tag );
+			$replace = sprintf( "%s\njQuery( document ).on( 'gform_post_render%s', function( event, form_id, current_page ) { \n%s\n%s } );\n%s", $open_tag, $height_issue_fix, $custom, $guts, $close_tag );
 			$script  = str_replace( $search, $replace, $script );
 
 		}

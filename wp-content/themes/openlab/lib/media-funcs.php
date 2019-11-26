@@ -74,7 +74,11 @@ function openlab_activity_group_avatar( $current_activity_item = null ) {
 		$current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
 	}
 
-	$item_id = $current_activity_item->item_id;
+	if ( 'new_blog' === $current_activity_item->type ) {
+		$item_id = openlab_get_group_id_by_blog_id( $current_activity_item->item_id );
+	} else {
+		$item_id = $current_activity_item->item_id;
+	}
 
 	$group = groups_get_group(array('group_id' => $item_id));
 
@@ -101,7 +105,7 @@ function openlab_activity_group_link( $current_activity_item = null ) {
  * @return array
  */
 function openlab_whats_happening_activity_types() {
-	return array( 'created_group', 'added_group_document', 'bbp_reply_create', 'bbp_topic_create', 'bpeo_create_event', 'bpeo_edit_event', 'bp_doc_comment', 'bp_doc_created', 'bp_doc_edited', 'deleted_group_document', 'joined_group', 'new_blog', 'new_blog_comment', 'new_blog_post', 'new_forum_post', 'new_forum_topic', 'group_details_updated' );
+	return array( 'created_group', 'added_group_document', 'bbp_reply_create', 'bbp_topic_create', 'bpeo_create_event', 'bpeo_edit_event', 'bp_doc_comment', 'bp_doc_created', 'bp_doc_edited', 'deleted_group_document', 'joined_group', 'new_blog_comment', 'new_blog_post', 'new_forum_post', 'new_forum_topic', 'group_details_updated' );
 }
 /**
  * Get activity items for the What's Happening feed.
@@ -121,6 +125,7 @@ function openlab_whats_happening_activity_items() {
 			'date_query' => array(
 				'before' => $now->format( 'Y-m-d H:i:s' ),
 			),
+			'show_hidden' => false,
 		);
 
 		$a = bp_activity_get( $activity_args );

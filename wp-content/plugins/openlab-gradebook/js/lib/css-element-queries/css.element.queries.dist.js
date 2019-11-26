@@ -19,14 +19,21 @@
     if (typeof window === "undefined") {
         return null;
     }
+    // https://github.com/Semantic-Org/Semantic-UI/issues/3855
+    // https://github.com/marcj/css-element-queries/issues/257
+    var globalWindow = typeof window != 'undefined' && window.Math == Math
+        ? window
+        : typeof self != 'undefined' && self.Math == Math
+            ? self
+            : Function('return this')();
     // Only used for the dirty checking, so the event callback count is limited to max 1 call per fps per sensor.
     // In combination with the event based resize sensor this saves cpu time, because the sensor is too fast and
     // would generate too many unnecessary events.
-    var requestAnimationFrame = window.requestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
+    var requestAnimationFrame = globalWindow.requestAnimationFrame ||
+        globalWindow.mozRequestAnimationFrame ||
+        globalWindow.webkitRequestAnimationFrame ||
         function (fn) {
-            return window.setTimeout(fn, 20);
+            return globalWindow.setTimeout(fn, 20);
         };
 
     /**
@@ -75,6 +82,18 @@
     }
 
     /**
+     * Apply CSS styles to element.
+     *
+     * @param {HTMLElement} element
+     * @param {Object} style
+     */
+    function setStyle(element, style) {
+        Object.keys(style).forEach(function(key) {
+            element.style[key] = style[key];
+        });
+    }
+
+    /**
      * Class for dimension change detection.
      *
      * @param {Element|Element[]|Elements|jQuery} element
@@ -94,9 +113,9 @@
             };
 
             var i, j;
-            this.call = function() {
+            this.call = function(sizeInfo) {
                 for (i = 0, j = q.length; i < j; i++) {
-                    q[i].call();
+                    q[i].call(this, sizeInfo);
                 }
             };
 
@@ -131,53 +150,98 @@
             element.resizeSensor = document.createElement('div');
             element.resizeSensor.dir = 'ltr';
             element.resizeSensor.className = 'resize-sensor';
-            var style = 'position: absolute; left: -10px; top: -10px; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;';
-            var styleChild = 'position: absolute; left: 0; top: 0; transition: 0s;';
 
-            element.resizeSensor.style.cssText = style;
-            element.resizeSensor.innerHTML =
-                '<div class="resize-sensor-expand" style="' + style + '">' +
-                    '<div style="' + styleChild + '"></div>' +
-                '</div>' +
-                '<div class="resize-sensor-shrink" style="' + style + '">' +
-                    '<div style="' + styleChild + ' width: 200%; height: 200%"></div>' +
-                '</div>';
+            var style = {
+                pointerEvents: 'none',
+                position: 'absolute',
+                left: '0px',
+                top: '0px',
+                right: '0px',
+                bottom: '0px',
+                overflow: 'hidden',
+                zIndex: '-1',
+                visibility: 'hidden',
+                maxWidth: '100%'
+            };
+            var styleChild = {
+                position: 'absolute',
+                left: '0px',
+                top: '0px',
+                transition: '0s',
+            };
+
+            setStyle(element.resizeSensor, style);
+
+            var expand = document.createElement('div');
+            expand.className = 'resize-sensor-expand';
+            setStyle(expand, style);
+
+            var expandChild = document.createElement('div');
+            setStyle(expandChild, styleChild);
+            expand.appendChild(expandChild);
+
+            var shrink = document.createElement('div');
+            shrink.className = 'resize-sensor-shrink';
+            setStyle(shrink, style);
+
+            var shrinkChild = document.createElement('div');
+            setStyle(shrinkChild, styleChild);
+            setStyle(shrinkChild, { width: '200%', height: '200%' });
+            shrink.appendChild(shrinkChild);
+
+            element.resizeSensor.appendChild(expand);
+            element.resizeSensor.appendChild(shrink);
             element.appendChild(element.resizeSensor);
 
-            var position = window.getComputedStyle(element).getPropertyValue('position');
+            var computedStyle = window.getComputedStyle(element);
+            var position = computedStyle ? computedStyle.getPropertyValue('position') : null;
             if ('absolute' !== position && 'relative' !== position && 'fixed' !== position) {
                 element.style.position = 'relative';
             }
 
-            var expand = element.resizeSensor.childNodes[0];
-            var expandChild = expand.childNodes[0];
-            var shrink = element.resizeSensor.childNodes[1];
-            var dirty, rafId, newWidth, newHeight;
+            var dirty, rafId;
             var size = getElementSize(element);
-            var lastWidth = size.width;
-            var lastHeight = size.height;
+            var lastWidth = 0;
+            var lastHeight = 0;
+            var initialHiddenCheck = true;
+            var lastAnimationFrame = 0;
+
+            var resetExpandShrink = function () {
+                var width = element.offsetWidth;
+                var height = element.offsetHeight;
+
+                expandChild.style.width = (width + 10) + 'px';
+                expandChild.style.height = (height + 10) + 'px';
+
+                expand.scrollLeft = width + 10;
+                expand.scrollTop = height + 10;
+
+                shrink.scrollLeft = width + 10;
+                shrink.scrollTop = height + 10;
+            };
 
             var reset = function() {
-                //set display to block, necessary otherwise hidden elements won't ever work
-                var invisible = element.offsetWidth === 0 && element.offsetHeight === 0;
+                // Check if element is hidden
+                if (initialHiddenCheck) {
+                    var invisible = element.offsetWidth === 0 && element.offsetHeight === 0;
+                    if (invisible) {
+                        // Check in next frame
+                        if (!lastAnimationFrame){
+                            lastAnimationFrame = requestAnimationFrame(function(){
+                                lastAnimationFrame = 0;
 
-                if (invisible) {
-                    var saveDisplay = element.style.display;
-                    element.style.display = 'block';
+                                reset();
+                            });
+                        }
+
+                        return;
+                    } else {
+                        // Stop checking
+                        initialHiddenCheck = false;
+                    }
                 }
 
-                expandChild.style.width = '100000px';
-                expandChild.style.height = '100000px';
-
-                expand.scrollLeft = 100000;
-                expand.scrollTop = 100000;
-
-                shrink.scrollLeft = 100000;
-                shrink.scrollTop = 100000;
-
-                if (invisible) {
-                    element.style.display = saveDisplay;
-                }
+                resetExpandShrink();
             };
             element.resizeSensor.resetSensor = reset;
 
@@ -186,19 +250,17 @@
 
                 if (!dirty) return;
 
-                lastWidth = newWidth;
-                lastHeight = newHeight;
+                lastWidth = size.width;
+                lastHeight = size.height;
 
                 if (element.resizedAttached) {
-                    element.resizedAttached.call();
+                    element.resizedAttached.call(size);
                 }
             };
 
             var onScroll = function() {
-                var size = getElementSize(element);
-                var newWidth = size.width;
-                var newHeight = size.height;
-                dirty = newWidth != lastWidth || newHeight != lastHeight;
+                size = getElementSize(element);
+                dirty = size.width !== lastWidth || size.height !== lastHeight;
 
                 if (dirty && !rafId) {
                     rafId = requestAnimationFrame(onResized);
@@ -217,9 +279,9 @@
 
             addEvent(expand, 'scroll', onScroll);
             addEvent(shrink, 'scroll', onScroll);
-            
-			// Fix for custom Elements
-			requestAnimationFrame(reset);
+
+            // Fix for custom Elements
+            requestAnimationFrame(reset);
         }
 
         forEachElement(element, function(elem){
@@ -235,7 +297,7 @@
         };
     };
 
-    ResizeSensor.reset = function(element, ev) {
+    ResizeSensor.reset = function(element) {
         forEachElement(element, function(elem){
             elem.resizeSensor.resetSensor();
         });
@@ -257,6 +319,28 @@
             }
         });
     };
+
+    if (typeof MutationObserver !== "undefined") {
+        var observer = new MutationObserver(function (mutations) {
+            for (var i in mutations) {
+                if (mutations.hasOwnProperty(i)) {
+                    var items = mutations[i].addedNodes;
+                    for (var j = 0; j < items.length; j++) {
+                        if (items[j].resizeSensor) {
+                            ResizeSensor.reset(items[j]);
+                        }
+                    }
+                }
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        });
+    }
 
     return ResizeSensor;
 
@@ -433,13 +517,12 @@
             if (!element.elementQueriesSetupInformation) {
                 element.elementQueriesSetupInformation = new SetupInformation(element, id);
             }
+
             if (!element.elementQueriesSensor) {
                 element.elementQueriesSensor = new ResizeSensor(element, function () {
                     element.elementQueriesSetupInformation.call();
                 });
             }
-
-            element.elementQueriesSetupInformation.call();
         }
 
         /**
@@ -587,7 +670,7 @@
                 }
             }
 
-            element.resizeSensor = new ResizeSensor(element, check);
+            element.resizeSensorInstance = new ResizeSensor(element, check);
             check();
         }
 
@@ -672,9 +755,11 @@
 
             document.body.addEventListener(animationStart, function (e) {
                 var element = e.target;
-                var styles = window.getComputedStyle(element, null);
+                var styles = element && window.getComputedStyle(element, null);
+                var animationName = styles && styles.getPropertyValue('animation-name');
+                var requiresSetup = animationName && (-1 !== animationName.indexOf('element-queries'));
 
-                if (-1 !== styles.getPropertyValue('animation-name').indexOf('element-queries')) {
+                if (requiresSetup) {
                     element.elementQueriesSensor = new ResizeSensor(element, function () {
                         if (element.elementQueriesSetupInformation) {
                             element.elementQueriesSetupInformation.call();
@@ -702,7 +787,7 @@
             for (var i = 0, j = document.styleSheets.length; i < j; i++) {
                 try {
                     if (document.styleSheets[i].href && 0 === document.styleSheets[i].href.indexOf('file://')) {
-                        console.log("CssElementQueries: unable to parse local css files, " + document.styleSheets[i].href);
+                        console.warn("CssElementQueries: unable to parse local css files, " + document.styleSheets[i].href);
                     }
 
                     readRules(document.styleSheets[i].cssRules || document.styleSheets[i].rules || document.styleSheets[i].cssText);
@@ -745,11 +830,11 @@
             delete element.elementQueriesSetupInformation;
             delete element.elementQueriesSensor;
 
-        } else if (element.resizeSensor) {
+        } else if (element.resizeSensorInstance) {
             //responsive image
 
-            element.resizeSensor.detach();
-            delete element.resizeSensor;
+            element.resizeSensorInstance.detach();
+            delete element.resizeSensorInstance;
         }
     };
 

@@ -35,10 +35,11 @@ class DLM_Admin {
 		// setup settings
 		$settings = new DLM_Admin_Settings();
 		add_action( 'admin_init', array( $settings, 'register_settings' ) );
+		add_filter( 'dlm_settings', array( $settings, 'backwards_compatibility_settings' ), 99, 1 );
 		$settings->register_lazy_load_callbacks();
 
 		// setup settings page
-        $settings_page = new DLM_Settings_Page();
+		$settings_page = new DLM_Settings_Page();
 		$settings_page->setup();
 
 		// setup logs
@@ -193,7 +194,17 @@ class DLM_Admin {
 		$enqueue = false;
 
 		if ( $hook == 'post-new.php' || $hook == 'post.php' || $hook == 'edit.php' ) {
-			if ( ( ! empty( $_GET['post_type'] ) && $_GET['post_type'] == 'dlm_download' ) || ( ! empty( $post->post_type ) && 'dlm_download' === $post->post_type ) ) {
+			if (
+				( ! empty( $_GET['post_type'] ) && in_array( $_GET['post_type'], array(
+						'dlm_download',
+						\Never5\DownloadMonitor\Shop\Util\PostType::KEY
+					) ) )
+				||
+				( ! empty( $post->post_type ) && in_array( $post->post_type, array(
+						'dlm_download',
+						\Never5\DownloadMonitor\Shop\Util\PostType::KEY
+					) ) )
+			) {
 				$enqueue = true;
 			}
 		}
@@ -203,6 +214,10 @@ class DLM_Admin {
 		}
 
 		if ( $hook == 'edit-tags.php' && strstr( $_GET['taxonomy'], 'dlm_download' ) ) {
+			$enqueue = true;
+		}
+
+		if ( isset( $_GET['page'] ) && 'download-monitor-orders' === $_GET['page'] ) {
 			$enqueue = true;
 		}
 

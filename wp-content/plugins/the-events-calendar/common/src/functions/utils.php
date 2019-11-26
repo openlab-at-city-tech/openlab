@@ -26,40 +26,38 @@ if ( ! function_exists( 'tribe_array_merge_recursive' ) ) {
 	}
 }
 
+
 if ( ! function_exists( 'tribe_register_plugin' ) ) {
 	/**
 	 * Checks if this plugin has permission to run, if not it notifies the admin
 	 *
-	 * @param string $file_path   Full file path to the base plugin file
-	 * @param string $main_class  The Main/base class for this plugin
-	 * @param string $version     The version
-	 * @param array  $classes_req Any Main class files/tribe plugins required for this to run
+	 * @param string $file_path    Full file path to the base plugin file
+	 * @param string $main_class   The Main/base class for this plugin
+	 * @param string $version      The version
+	 * @param array  $classes_req  Any Main class files/tribe plugins required for this to run
+	 * @param array  $dependencies an array of dependencies to check
+	 */
+	function tribe_register_plugin( $file_path, $main_class, $version, $classes_req = [], $dependencies = [] ) {
+		$tribe_dependency = tribe( Tribe__Dependency::class );
+		$tribe_dependency->register_plugin( $file_path, $main_class, $version, $classes_req, $dependencies );
+	}
+}
+
+if ( ! function_exists( 'tribe_check_plugin' ) ) {
+	/**
+	 * Checks if this plugin has permission to run, if not it notifies the admin
+	 *
+	 * @since 4.9
+	 *
+	 * @param string $main_class   The Main/base class for this plugin
 	 *
 	 * @return bool Indicates if plugin should continue initialization
 	 */
-	function tribe_register_plugin( $file_path, $main_class, $version, $classes_req = array() ) {
-		$tribe_dependency = Tribe__Dependency::instance();
-		$should_plugin_run = true;
+	function tribe_check_plugin( $main_class ) {
 
-		// Checks to see if the plugins are active
-		if ( ! empty( $classes_req ) && ! $tribe_dependency->has_requisite_plugins( $classes_req ) ) {
-			$should_plugin_run = false;
+		$tribe_dependency    = Tribe__Dependency::instance();
+		return $tribe_dependency->check_plugin( $main_class );
 
-			$tribe_plugins = new Tribe__Plugins();
-			$admin_notice  = new Tribe__Admin__Notice__Plugin_Download( $file_path );
-
-			foreach ( $classes_req as $class => $version ) {
-				$plugin    = $tribe_plugins->get_plugin_by_class( $class );
-				$is_active = $tribe_dependency->is_plugin_version( $class, $version );
-				$admin_notice->add_required_plugin( $plugin['short_name'], $plugin['thickbox_url'], $is_active );
-			}
-		}
-
-		if ( $should_plugin_run ) {
-			$tribe_dependency->add_active_plugin( $main_class, $version, $file_path );
-		}
-
-		return $should_plugin_run;
 	}
 }
 
@@ -134,7 +132,9 @@ if ( ! function_exists( 'tribe_get_request_var' ) ) {
 	 *
 	 * The variable being tested for can be an array if you wish to find a nested value.
 	 *
-	 * @see Tribe__Utils__Array::get()
+	 * @since 4.9.17 Included explicit check against $_REQUEST.
+	 *
+	 * @see   Tribe__Utils__Array::get()
 	 *
 	 * @param string|array $var
 	 * @param mixed        $default
@@ -142,19 +142,8 @@ if ( ! function_exists( 'tribe_get_request_var' ) ) {
 	 * @return mixed
 	 */
 	function tribe_get_request_var( $var, $default = null ) {
-		$post_var = Tribe__Utils__Array::get( $_POST, $var );
-
-		if ( null !== $post_var ) {
-			return $post_var;
-		}
-
-		$query_var = Tribe__Utils__Array::get( $_GET, $var );
-
-		if ( null !== $query_var ) {
-			return $query_var;
-		}
-
-		return $default;
+		$unsafe = Tribe__Utils__Array::get_in_any( [ $_GET, $_POST, $_REQUEST ], $var, $default );
+		return tribe_sanitize_deep( $unsafe );
 	}
 }
 
@@ -231,30 +220,32 @@ if ( ! function_exists( 'tribe_is_truthy' ) ) {
 	}
 }
 
-/**
- * Sorting function based on Priority
- *
- * @since  4.7.20
- *
- * @param  object|array  $a  First Subject to compare
- * @param  object|array  $b  Second subject to compare
- *
- * @return int
- */
-function tribe_sort_by_priority( $a, $b ) {
-	if ( is_array( $a ) ) {
-		$a_priority = $a['priority'];
-	} else {
-		$a_priority = $a->priority;
-	}
+if ( ! function_exists( 'tribe_sort_by_priority' ) ) {
+	/**
+	 * Sorting function based on Priority
+	 *
+	 * @param object|array $a First Subject to compare
+	 * @param object|array $b Second subject to compare
+	 *
+	 * @return int
+	 * @since  4.7.20
+	 *
+	 */
+	function tribe_sort_by_priority( $a, $b ) {
+		if ( is_array( $a ) ) {
+			$a_priority = $a['priority'];
+		} else {
+			$a_priority = $a->priority;
+		}
 
-	if ( is_array( $b ) ) {
-		$b_priority = $b['priority'];
-	} else {
-		$b_priority = $b->priority;
-	}
+		if ( is_array( $b ) ) {
+			$b_priority = $b['priority'];
+		} else {
+			$b_priority = $b->priority;
+		}
 
-	return (int) $a_priority === (int) $b_priority ? 0 : (int) $a_priority > (int) $b_priority;
+		return (int) $a_priority === (int) $b_priority ? 0 : (int) $a_priority > (int) $b_priority;
+	}
 }
 
 if ( ! function_exists( 'tribe_normalize_terms_list' ) ) {
@@ -487,6 +478,90 @@ if ( ! function_exists( 'tribe_post_excerpt' ) ) {
 	}
 }
 
+if ( ! function_exists( 'tribe_catch_and_throw' ) ) {
+	/**
+	 * A convenience function used to cast errors to exceptions.
+	 *
+	 * Use in `set_error_handler` calls:
+	 *
+	 *      try{
+	 *          set_error_handler( 'tribe_catch_and_throw' );
+	 *          // ...do something that could generate an error...
+	 *          restore_error_handler();
+	 *      } catch ( RuntimeException $e ) {
+	 *          // Handle the exception.
+	 *      }
+	 *
+	 * @since 4.9.5
+	 *
+	 * @throws RuntimeException The message will be the error message, the code will be the error code.
+	 *
+	 * @see   set_error_handler()
+	 * @see   restore_error_handler()
+	 */
+	function tribe_catch_and_throw( $errno, $errstr ) {
+		throw new RuntimeException( $errstr, $errno );
+	}
+}
+
+if ( ! function_exists( 'tribe_is_regex' ) ) {
+
+	/**
+	 * Checks whether a candidate string is a valid regular expression or not.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @param string $candidate The candidate string to check, it must include the
+	 *                          regular expression opening and closing tags to validate.
+	 *
+	 * @return bool Whether a candidate string is a valid regular expression or not.
+	 */
+	function tribe_is_regex( $candidate ) {
+		if ( ! is_string( $candidate ) ) {
+			return false;
+		}
+
+		// We need to have the Try/Catch for Warnings too
+		try {
+			return ! ( @preg_match( $candidate, null ) === false );
+		} catch ( Exception $e ) {
+			return false;
+		}
+	}
+}
+
+if ( ! function_exists( 'tribe_unfenced_regex' ) ) {
+
+	/**
+	 * Removes fence characters and modifiers from a regular expression string.
+	 *
+	 * Use this to go from a PCRE-format regex (PHP) to one SQL can understand.
+	 *
+	 * @since 4.9.5
+	 *
+	 * @param string $regex The input regular expression string.
+	 *
+	 * @return string The un-fenced regular expression string.
+	 */
+	function tribe_unfenced_regex( $regex ) {
+		if ( ! is_string( $regex ) ) {
+			return $regex;
+		}
+
+		$str_fence   = $regex[0];
+		// Let's pick a fence char the string itself is not using.
+		$fence_char = '~' === $str_fence ? '#' : '~';
+		$pattern = $fence_char
+		           . preg_quote( $str_fence, $fence_char ) // the opening fence
+		           . '(.*)' // keep anything after the opening fence, group 1
+		           . preg_quote( $str_fence, $fence_char ) // the closing fence
+		           . '.*' // any modifier after the closing fence
+		           . $fence_char;
+
+		return preg_replace( $pattern, '$1', $regex );
+	}
+}
+
 /**
  * Create a function to mock the real function if the extension or Beta is not present.
  *
@@ -514,5 +589,131 @@ if ( ! function_exists( 'has_blocks' ) ) {
 			}
 		}
 		return false !== strpos( (string) $post, '<!-- wp:' );
+	}
+}
+
+if ( ! function_exists( 'tribe_register_rest_route' ) ) {
+	/**
+	 * Wrapper function for `register_rest_route` to allow for filtering any Tribe REST API endpoint.
+	 *
+	 * @param string $namespace The first URL segment after core prefix. Should be unique to your package/plugin.
+	 * @param string $route     The base URL for route you are adding.
+	 * @param array  $args      Optional. Either an array of options for the endpoint, or an array of arrays for
+	 *                          multiple methods. Default empty array.
+	 * @param bool   $override  Optional. If the route already exists, should we override it? True overrides,
+	 *                          false merges (with newer overriding if duplicate keys exist). Default false.
+	 *
+	 * @return bool True on success, false on error.
+	 *
+	 * @since 4.9.12
+	 */
+	function tribe_register_rest_route( $namespace, $route, $args = array(), $override = false ) {
+		/**
+		 * Allow plugins to customize REST API arguments and callbacks.
+		 *
+		 * @param array  $args      Either an array of options for the endpoint, or an array of arrays for
+		 *                          multiple methods. Default empty array.
+		 * @param string $namespace The first URL segment after core prefix. Should be unique to your package/plugin.
+		 * @param string $route     The base URL for route you are adding.
+		 * @param bool   $override  Optional. If the route already exists, should we override it? True overrides,
+		 *                          false merges (with newer overriding if duplicate keys exist). Default false.
+		 *
+		 * @since 4.9.12
+		 */
+		$args = apply_filters( 'tribe_register_rest_route_args_' . $namespace . $route, $args, $namespace, $route, $override );
+
+		/**
+		 * Allow plugins to customize REST API arguments and callbacks.
+		 *
+		 * @param array  $args      Either an array of options for the endpoint, or an array of arrays for
+		 *                          multiple methods. Default empty array.
+		 * @param string $namespace The first URL segment after core prefix. Should be unique to your package/plugin.
+		 * @param string $route     The base URL for route you are adding.
+		 * @param bool   $override  Optional. If the route already exists, should we override it? True overrides,
+		 *                          false merges (with newer overriding if duplicate keys exist). Default false.
+		 *
+		 * @since 4.9.12
+		 */
+		$args = apply_filters( 'tribe_register_rest_route_args', $args, $namespace, $route, $override );
+		return register_rest_route( $namespace, $route, $args, $override );
+	}
+}
+
+if ( ! function_exists( 'tribe_get_request_vars' ) ) {
+	/**
+	 * Returns the sanitized version of the `$_REQUEST` super-global array.
+	 *
+	 * Note: the return value is cached. It will be resolve the first time the function is called, per HTTP request,
+	 * then the same return value will be returned. After the function has been called the first time, changes to the
+	 * `$_REQUEST` super-global will NOT be reflected in the function return value.
+	 * Call the function with `$refresh` set to `true` to refresh the function value.
+	 *
+	 * @since 4.9.18
+	 *
+	 * @param bool $refresh Whether to parse the `$_REQUEST` cache again and refresh the cache or not; defaults to
+	 *                      `false`.
+	 *
+	 * @return array The sanitized version of the `$_REQUEST` super-global.
+	 */
+	function tribe_get_request_vars( $refresh = false ) {
+		static $cache;
+
+		if ( ! isset( $_REQUEST ) ) {
+			return [];
+		}
+
+		if ( null !== $cache && ! $refresh ) {
+			return $cache;
+		}
+
+		$cache = array_combine(
+			array_keys( $_REQUEST ),
+			array_map( static function ( $v )
+			{
+				return filter_var( $v, FILTER_SANITIZE_STRING );
+			},
+				$_REQUEST )
+		);
+
+		return $cache;
+	}
+}
+
+if ( ! function_exists( 'tribe_sanitize_deep' ) ) {
+
+	/**
+	 * Sanitizes a value according to its type.
+	 *
+	 * The function will recursively sanitize array values.
+	 *
+	 * @since TBD
+	 *
+	 * @param mixed $value The value, or values, to sanitize.
+	 *
+	 * @return mixed|null Either the sanitized version of the value, or `null` if the value is not a string, number or
+	 *                    array.
+	 */
+	function tribe_sanitize_deep( &$value ) {
+		if ( is_bool( $value ) ) {
+			return $value;
+		}
+		if ( is_string( $value ) ) {
+			$value = filter_var( $value, FILTER_SANITIZE_STRING );
+			return $value;
+		}
+		if ( is_int( $value ) ) {
+			$value = filter_var( $value, FILTER_VALIDATE_INT );
+			return $value;
+		}
+		if ( is_float( $value ) ) {
+			$value = filter_var( $value, FILTER_VALIDATE_FLOAT );
+			return $value;
+		}
+		if ( is_array( $value ) ) {
+			array_walk( $value, 'tribe_sanitize_deep' );
+			return $value;
+		}
+
+		return null;
 	}
 }

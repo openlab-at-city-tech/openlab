@@ -743,7 +743,7 @@ function openlab_filter_subnav_members($subnav_item) {
     }
 
     //filtering for current status on membership menu item when in membership submenu
-    if ((bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) || $notification_status) {
+    if ((bp_action_variable(0) && ( $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' || $bp->current_action == 'notifications' || $bp->action_variables[0] == 'membership-requests' || $wp_query->query_vars['pagename'] == 'invite-anyone' )) || $notification_status || ( bp_is_group() && bp_is_current_action( 'invite-anyone' ) ) ) {
         $new_item = str_replace('id="members-groups-li"', 'id="members-groups-li" class="current-menu-item"', $new_item);
     } else {
         //update "current" class to "current-menu-item" to unify site identification of current menu page
@@ -1159,11 +1159,13 @@ function openlab_get_group_profile_mobile_anchor_links() {
         return $links;
     }
 
-    $related_links = openlab_get_group_related_links($group_id);
-    if (!empty($related_links)) {
+	if ( groups_get_groupmeta( $group_id, 'openlab_related_links_list_enable' ) ) {
+		$related_links = openlab_get_group_related_links($group_id);
+		if (!empty($related_links)) {
 
-        $links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
-    }
+			$links .= '<li id="related-links-groups-li" class="visible-xs mobile-anchor-link"><a href="#group-related-links-sidebar-widget" id="related-links">Related Sites</a></li>';
+		}
+	}
 
     if (openlab_portfolio_list_enabled_for_group()) {
         $portfolio_data = openlab_get_group_member_portfolios($group_id);

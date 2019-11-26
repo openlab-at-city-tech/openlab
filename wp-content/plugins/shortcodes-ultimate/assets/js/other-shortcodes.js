@@ -79,8 +79,6 @@ jQuery(document).ready(function($) {
 			}).magnificPopup('open');
 		}
 	});
-	// Tables
-	$('.su-table tr:even').addClass('su-even');
 	// Frame
 	$('.su-frame-align-center, .su-frame-align-none').each(function() {
 		var frame_width = $(this).find('img').width();

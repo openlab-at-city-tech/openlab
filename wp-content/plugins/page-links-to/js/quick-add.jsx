@@ -1,5 +1,9 @@
 // Copy to clipboard.
 jQuery($ => {
+	if (undefined === window.pltVars) {
+		return;
+	}
+
 	const $clipboardLinks = $('.plt-copy-short-url');
 	if (ClipboardJS.isSupported()) {
 		$clipboardLinks.click(e => e.preventDefault());
@@ -12,8 +16,7 @@ jQuery($ => {
 	});
 
 	const clipboard = new ClipboardJS('.plt-copy-short-url');
-	const copied = pltVars.copied;
-	const browserNoSupportCopying = pltVars.browserNoSupportCopying;
+	const { copied, browserNoSupportCopying } = window.pltVars;
 
 	clipboard.on('success', e => {
 		const $trigger = $(e.trigger);
@@ -160,7 +163,7 @@ jQuery($ => {
 
 	$modal.dialog({
 		title: 'Add Page Link',
-		dialogClass: 'wp-dialog',
+		dialogClass: 'wp-dialog plt-ui-dialog',
 		autoOpen: no,
 		draggable: no,
 		width: 'auto',
@@ -173,8 +176,27 @@ jQuery($ => {
 			of: window,
 		},
 		open: () => $('.ui-widget-overlay').bind('click', close),
-		create: () => $('.ui-dialog-titlebar-close').addClass('ui-button'),
+		create: () => {
+			$('.plt-ui-dialog .ui-dialog-titlebar-close').addClass('ui-button');
+			$('.plt-ui-dialog').css({ position: 'fixed' });
+		},
 	});
+
+	const repositionModal = () => {
+		if (!isOpen()) {
+			return;
+		}
+
+		$modal.dialog('option', 'position', {
+			my: 'center',
+			at: 'center',
+			of: window,
+		});
+	};
+
+	$(window)
+		.scroll(repositionModal)
+		.resize(repositionModal);
 
 	// Events.
 	if (fancyUrls) {

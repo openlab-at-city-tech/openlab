@@ -1,0 +1,640 @@
+
+<!--<![endif]--><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Venues ‹ BDD WordPress — WordPress</title>
+<script type="text/javascript">
+addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
+var ajaxurl = '/wp-admin/admin-ajax.php',
+	pagenow = 'event_page_venues',
+	typenow = 'event',
+	adminpage = 'event_page_venues',
+	thousandsSeparator = ',',
+	decimalPoint = '.',
+	isRtl = 0;
+</script><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+<link rel="dns-prefetch" href="//s.w.org">
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<script type="text/javascript">
+		var eventorganiser = eventorganiser || {};
+		eventorganiser.wp_version = '5.0.3';
+	</script><link rel="stylesheet" href="http://wordpress/wp-admin/load-styles.php?c=0&amp;dir=ltr&amp;load%5B%5D=farbtastic,dashicons,admin-bar,common,forms,admin-menu,dashboard,list-tables,edit,revisions,media,themes,about,nav-menus,wp-poin&amp;load%5B%5D=ter,widgets,site-icon,l10n,buttons,wp-auth-check&amp;ver=5.0.3" type="text/css" media="all">
+<link rel="stylesheet" id="eo-leaflet.js-css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css?ver=5.0.3" type="text/css" media="all">
+<style id="eo-leaflet.js-inline-css" type="text/css">
+.leaflet-popup-close-button{box-shadow:none!important;}
+</style>
+<!--[if lte IE 7]>
+<link rel='stylesheet' id='ie-css'  href='http://wordpress/wp-admin/css/ie.min.css?ver=5.0.3' type='text/css' media='all' />
+<![endif]--><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/wordpress\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.0.3"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script type="text/javascript">
+/* <![CDATA[ */
+var userSettings = {"url":"\/","uid":"1","time":"1551392033","secure":""};/* ]]> */
+</script><script type="text/javascript" src="http://wordpress/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate,utils,farbtastic&amp;ver=5.0.3"></script><style>#wpadminbar {z-index:0!important;}</style>
+<link id="wp-admin-canonical" rel="canonical" href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues">
+<script>
+		if ( window.history.replaceState ) {
+			window.history.replaceState( null, null, document.getElementById( 'wp-admin-canonical' ).href + window.location.hash );
+		}
+	</script><script type="text/javascript">var _wpColorScheme = {"icons":{"base":"#82878c","focus":"#00a0d2","current":"#fff"}};</script><style type="text/css" media="print">#wpadminbar { display:none; }</style>
+</head>
+<body class="wp-admin wp-core-ui no-js  event_page_venues auto-fold admin-bar post-type-event branch-5 version-5-0-3 admin-color-fresh locale-en-us no-customize-support no-svg">
+<script type="text/javascript">
+	document.body.className = document.body.className.replace('no-js','js');
+</script><!--[if lte IE 8]>
+		<script type="text/javascript">
+			document.body.className = document.body.className.replace( /(^|\s)(no-)?customize-support(?=\s|$)/, '' ) + ' no-customize-support';
+		</script>
+	<![endif]--><!--[if gte IE 9]><!--><script type="text/javascript">
+			(function() {
+				var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+						request = true;
+		
+				b[c] = b[c].replace( rcs, ' ' );
+				// The customizer requires postMessage and CORS (if the site is cross domain)
+				b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+			}());
+		</script><!--<![endif]--><div id="wpwrap">
+
+<div id="adminmenumain" role="navigation" aria-label="Main menu">
+<a href="#wpbody-content" class="screen-reader-shortcut">Skip to main content</a>
+<a href="#wp-toolbar" class="screen-reader-shortcut">Skip to toolbar</a>
+<div id="adminmenuback"></div>
+<div id="adminmenuwrap">
+<ul id="adminmenu">
+<li class="wp-first-item wp-has-submenu wp-not-current-submenu menu-top menu-top-first menu-icon-dashboard menu-top-last" id="menu-dashboard">
+	<a href="index.php" class="wp-first-item wp-has-submenu wp-not-current-submenu menu-top menu-top-first menu-icon-dashboard menu-top-last" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-dashboard"><br></div>
+<div class="wp-menu-name">Dashboard</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Dashboard</li>
+<li class="wp-first-item"><a href="index.php" class="wp-first-item">Home</a></li>
+<li><a href="update-core.php">Updates <span class="update-plugins count-6"><span class="update-count">6</span></span></a></li>
+</ul>
+</li>
+	<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-post open-if-no-js menu-top-first" id="menu-posts">
+	<a href="edit.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-post open-if-no-js menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div>
+<div class="wp-menu-name">Posts</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Posts</li>
+<li class="wp-first-item"><a href="edit.php" class="wp-first-item">All Posts</a></li>
+<li><a href="post-new.php">Add New</a></li>
+<li><a href="edit-tags.php?taxonomy=category">Categories</a></li>
+<li><a href="edit-tags.php?taxonomy=post_tag">Tags</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-icon-event" id="menu-posts-event">
+	<a href="edit.php?post_type=event" class="wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-icon-event"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-calendar"><br></div>
+<div class="wp-menu-name">Events</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Events</li>
+<li class="wp-first-item"><a href="edit.php?post_type=event" class="wp-first-item">All Events</a></li>
+<li><a href="post-new.php?post_type=event">Add New</a></li>
+<li><a href="edit-tags.php?taxonomy=event-category&amp;post_type=event">Categories</a></li>
+<li><a href="edit-tags.php?taxonomy=event-tag&amp;post_type=event">Tags</a></li>
+<li class="current"><a href="edit.php?post_type=event&amp;page=venues" class="current" aria-current="page">Venues</a></li>
+<li><a href="edit.php?post_type=event&amp;page=calendar">Calendar View</a></li>
+<li><a href="edit.php?post_type=event&amp;page=eo-addons">Extensions</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
+	<a href="upload.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div>
+<div class="wp-menu-name">Media</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Media</li>
+<li class="wp-first-item"><a href="upload.php" class="wp-first-item">Library</a></li>
+<li><a href="media-new.php">Add New</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
+	<a href="edit.php?post_type=page" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div>
+<div class="wp-menu-name">Pages</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Pages</li>
+<li class="wp-first-item"><a href="edit.php?post_type=page" class="wp-first-item">All Pages</a></li>
+<li><a href="post-new.php?post_type=page">Add New</a></li>
+</ul>
+</li>
+	<li class="wp-not-current-submenu menu-top menu-icon-comments menu-top-last" id="menu-comments">
+	<a href="edit-comments.php" class="wp-not-current-submenu menu-top menu-icon-comments menu-top-last"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-comments"><br></div>
+<div class="wp-menu-name">Comments <span class="awaiting-mod count-0"><span class="pending-count">0</span></span>
+</div></a>
+</li>
+	<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-appearance menu-top-first" id="menu-appearance">
+	<a href="themes.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-appearance menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-appearance"><br></div>
+<div class="wp-menu-name">Appearance</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Appearance</li>
+<li class="wp-first-item"><a href="themes.php" class="wp-first-item">Themes</a></li>
+<li class="hide-if-no-customize"><a href="customize.php?return=%2Fwp-admin%2Fedit.php%3Fpost_type%3Devent%26page%3Dvenues" class="hide-if-no-customize">Customize</a></li>
+<li><a href="widgets.php">Widgets</a></li>
+<li><a href="nav-menus.php">Menus</a></li>
+<li><a href="theme-editor.php">Editor</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-plugins" id="menu-plugins">
+	<a href="plugins.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-plugins" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-plugins"><br></div>
+<div class="wp-menu-name">Plugins <span class="update-plugins count-2"><span class="plugin-count">2</span></span>
+</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Plugins <span class="update-plugins count-2"><span class="plugin-count">2</span></span>
+</li>
+<li class="wp-first-item"><a href="plugins.php" class="wp-first-item">Installed Plugins</a></li>
+<li><a href="plugin-install.php">Add New</a></li>
+<li><a href="plugin-editor.php">Editor</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-users" id="menu-users">
+	<a href="users.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-users" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-users"><br></div>
+<div class="wp-menu-name">Users</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Users</li>
+<li class="wp-first-item"><a href="users.php" class="wp-first-item">All Users</a></li>
+<li><a href="user-new.php">Add New</a></li>
+<li><a href="profile.php">Your Profile</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-tools" id="menu-tools">
+	<a href="tools.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-tools" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-tools"><br></div>
+<div class="wp-menu-name">Tools</div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Tools</li>
+<li class="wp-first-item"><a href="tools.php" class="wp-first-item">Available Tools</a></li>
+<li><a href="import.php">Import</a></li>
+<li><a href="export.php">Export</a></li>
+<li><a href="tools.php?page=export_personal_data">Export Personal Data</a></li>
+<li><a href="tools.php?page=remove_personal_data">Erase Personal Data</a></li>
+</ul>
+</li>
+	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-settings menu-top-last" id="menu-settings">
+	<a href="options-general.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-settings menu-top-last" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
+<div class="wp-menu-image dashicons-before dashicons-admin-settings"><br></div>
+<div class="wp-menu-name">Settings </div></a>
+	<ul class="wp-submenu wp-submenu-wrap">
+<li class="wp-submenu-head" aria-hidden="true">Settings </li>
+<li class="wp-first-item"><a href="options-general.php" class="wp-first-item">General</a></li>
+<li><a href="options-writing.php">Writing</a></li>
+<li><a href="options-reading.php">Reading</a></li>
+<li><a href="options-discussion.php">Discussion</a></li>
+<li><a href="options-media.php">Media</a></li>
+<li><a href="options-permalink.php">Permalinks</a></li>
+<li><a href="privacy.php">Privacy </a></li>
+<li><a href="options-general.php?page=event-settings">Event Organiser</a></li>
+</ul>
+</li>
+<li id="collapse-menu" class="hide-if-no-js"><button type="button" id="collapse-button" aria-label="Collapse Main menu" aria-expanded="true"><span class="collapse-button-icon" aria-hidden="true"></span><span class="collapse-button-label">Collapse menu</span></button></li>
+</ul>
+</div>
+</div>
+<div id="wpcontent">
+
+		<div id="wpadminbar" class="nojq nojs">
+						<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Toolbar" tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+<li id="wp-admin-bar-menu-toggle">
+<a class="ab-item" href="#"><span class="ab-icon"></span><span class="screen-reader-text">Menu</span></a>		</li>
+		<li id="wp-admin-bar-wp-logo" class="menupop">
+<a class="ab-item" aria-haspopup="true" href="http://wordpress/wp-admin/about.php"><span class="ab-icon"></span><span class="screen-reader-text">About WordPress</span></a><div class="ab-sub-wrapper">
+<ul id="wp-admin-bar-wp-logo-default" class="ab-submenu"><li id="wp-admin-bar-about">
+<a class="ab-item" href="http://wordpress/wp-admin/about.php">About WordPress</a>		</li></ul>
+<ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+<li id="wp-admin-bar-wporg">
+<a class="ab-item" href="https://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation">
+<a class="ab-item" href="https://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums">
+<a class="ab-item" href="https://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback">
+<a class="ab-item" href="https://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li>
+</ul>
+</div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop">
+<a class="ab-item" aria-haspopup="true" href="http://wordpress/">BDD WordPress</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu"><li id="wp-admin-bar-view-site">
+<a class="ab-item" href="http://wordpress/">Visit Site</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-updates">
+<a class="ab-item" href="http://wordpress/wp-admin/update-core.php" title="1 WordPress Update, 2 Plugin Updates, 3 Theme Updates"><span class="ab-icon"></span><span class="ab-label">6</span><span class="screen-reader-text">1 WordPress Update, 2 Plugin Updates, 3 Theme Updates</span></a>		</li>
+		<li id="wp-admin-bar-comments">
+<a class="ab-item" href="http://wordpress/wp-admin/edit-comments.php"><span class="ab-icon"></span><span class="ab-label awaiting-mod pending-count count-0" aria-hidden="true">0</span><span class="screen-reader-text">0 comments awaiting moderation</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop">
+<a class="ab-item" aria-haspopup="true" href="http://wordpress/wp-admin/post-new.php"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+<li id="wp-admin-bar-new-post">
+<a class="ab-item" href="http://wordpress/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media">
+<a class="ab-item" href="http://wordpress/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-page">
+<a class="ab-item" href="http://wordpress/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-event">
+<a class="ab-item" href="http://wordpress/wp-admin/post-new.php?post_type=event">Event</a>		</li>
+		<li id="wp-admin-bar-new-user">
+<a class="ab-item" href="http://wordpress/wp-admin/user-new.php">User</a>		</li>
+</ul></div>		</li>
+</ul>
+<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu"><li id="wp-admin-bar-my-account" class="menupop with-avatar">
+<a class="ab-item" aria-haspopup="true" href="http://wordpress/wp-admin/profile.php">Howdy, <span class="display-name">admin</span><img alt="" src="http://0.gravatar.com/avatar/fec8fc482f0b7680030aa28962900033?s=26&amp;d=mm&amp;r=g" srcset="http://0.gravatar.com/avatar/fec8fc482f0b7680030aa28962900033?s=52&amp;d=mm&amp;r=g 2x" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+<li id="wp-admin-bar-user-info">
+<a class="ab-item" tabindex="-1" href="http://wordpress/wp-admin/profile.php"><img alt="" src="http://0.gravatar.com/avatar/fec8fc482f0b7680030aa28962900033?s=64&amp;d=mm&amp;r=g" srcset="http://0.gravatar.com/avatar/fec8fc482f0b7680030aa28962900033?s=128&amp;d=mm&amp;r=g 2x" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">admin</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile">
+<a class="ab-item" href="http://wordpress/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout">
+<a class="ab-item" href="http://wordpress/wp-login.php?action=logout&amp;_wpnonce=c43467f120">Log Out</a>		</li>
+</ul></div>		</li></ul>
+</div>
+						<a class="screen-reader-shortcut" href="http://wordpress/wp-login.php?action=logout&amp;_wpnonce=c43467f120">Log Out</a>
+					</div>
+
+		
+<div id="wpbody" role="main">
+
+<div id="wpbody-content" aria-label="Main content" tabindex="0">
+		<div id="screen-meta" class="metabox-prefs">
+
+			<div id="contextual-help-wrap" class="hidden" tabindex="-1" aria-label="Contextual Help Tab">
+				<div id="contextual-help-back"></div>
+				<div id="contextual-help-columns">
+					<div class="contextual-help-tabs">
+						<ul>
+<li id="tab-link-old-contextual-help" class="active">
+								<a href="#tab-panel-old-contextual-help" aria-controls="tab-panel-old-contextual-help">
+									Overview								</a>
+							</li>
+												</ul>
+</div>
+
+										<div class="contextual-help-sidebar">
+						<p> <strong>For more information</strong>See the <a target="_blank" href="http://docs.wp-event-organiser.com/"> documentation</a></p>
+<p><strong><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=debug">Debugging Event Organiser</a></strong></p>
+<p><strong><a href="http://wordpress/wp-admin/index.php?page=eo-pro">Go Pro!</a></strong></p>					</div>
+					
+					<div class="contextual-help-tabs-wrap">
+						
+							<div id="tab-panel-old-contextual-help" class="help-tab-content active">
+								<p>Hovering over a row in the venues list will display action links that allow you to manage that venue. You can perform the following actions:</p>
+<ul>
+<li>Edit takes you to the editing screen for that venue. You can also reach that screen by clicking on the venue title.</li>
+<li>Delete will permanently remove the venue</li>
+<li>View will take you to the venue's page</li>
+</ul>
+</div>
+											</div>
+				</div>
+			</div>
+		<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="Screen Options Tab">
+<form id="adv-settings" method="post">
+		<fieldset class="metabox-prefs">
+<legend>Columns</legend>
+		<label><input class="hide-column-tog" name="venue_address-hide" type="checkbox" id="venue_address-hide" value="venue_address" checked>Address</label>
+<label><input class="hide-column-tog" name="venue_city-hide" type="checkbox" id="venue_city-hide" value="venue_city" checked>City</label>
+<label><input class="hide-column-tog" name="venue_state-hide" type="checkbox" id="venue_state-hide" value="venue_state" checked>State / Province</label>
+<label><input class="hide-column-tog" name="venue_postcode-hide" type="checkbox" id="venue_postcode-hide" value="venue_postcode" checked>Post Code</label>
+<label><input class="hide-column-tog" name="venue_country-hide" type="checkbox" id="venue_country-hide" value="venue_country" checked>Country</label>
+<label><input class="hide-column-tog" name="venue_slug-hide" type="checkbox" id="venue_slug-hide" value="venue_slug" checked>Slug</label>
+<label><input class="hide-column-tog" name="posts-hide" type="checkbox" id="posts-hide" value="posts" checked>Events</label>
+		</fieldset>
+<fieldset class="screen-options">
+<legend>Pagination</legend>
+							<label for="edit_event-venue_per_page">Venues</label>
+				<input type="number" step="1" min="1" max="999" class="screen-per-page" name="wp_screen_options[value]" id="edit_event-venue_per_page" maxlength="3" value="20"><input type="hidden" name="wp_screen_options[option]" value="edit_event-venue_per_page">
+</fieldset>
+<p class="submit"><input type="submit" name="screen-options-apply" id="screen-options-apply" class="button button-primary" value="Apply"></p>
+<input type="hidden" id="screenoptionnonce" name="screenoptionnonce" value="b81a7cf133">
+</form>
+</div>		</div>
+				<div id="screen-meta-links">
+					<div id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle">
+			<button type="button" id="contextual-help-link" class="button show-settings" aria-controls="contextual-help-wrap" aria-expanded="false">Help</button>
+			</div>
+					<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
+			<button type="button" id="show-settings-link" class="button show-settings" aria-controls="screen-options-wrap" aria-expanded="false">Screen Options</button>
+			</div>
+				</div>
+		<div class="update-nag">
+<a href="https://codex.wordpress.org/Version_5.1">WordPress 5.1</a> is available! <a href="http://wordpress/wp-admin/update-core.php" aria-label="Please update WordPress now">Please update now</a>.</div>
+<div class="notice eventorganiser-notice notice-warning" id="eventorganiser-notice-google_maps_api">
+					<form action="" method="post">
+						<h4>Enter a Google Maps API key</h4>
+<p>Google Maps now requires you register for an API key. If you wish to use maps on your site, <a href="http://wordpress/wp-admin/options-general.php?page=event-settings#google_api_key">please enter your key</a>.</p>
+						<button type="submit" class="notice-dismiss eventorganiser-dismiss">
+							<span class="screen-reader-text">Dismiss this notice</span>
+						</button>
+						<input type="hidden" name="action" value="eventorganiser-dismiss-notice"><input type="hidden" name="_wpnonce" value="beecb88de3"><input type="hidden" name="notice" value="google_maps_api">
+</form>
+				</div>	<div class="wrap">
+
+		
+				<h2>
+										Venues					 <a href="edit.php?post_type=event&amp;page=venues&amp;action=create" class="add-new-h2">Add New Venue</a>
+									</h2>
+
+		       	 <form id="eo-venue-table" method="get">
+					<!-- Ensure that the form posts back to our current page -->
+					<input type="hidden" name="page" value="venues"><input type="hidden" name="post_type" value="event"><!-- Now we can render the completed list table --><p class="search-box">
+	<label class="screen-reader-text" for="s-search-input">Search Venues:</label>
+	<input type="search" id="s-search-input" name="s" value=""><input type="submit" id="search-submit" class="button" value="Search Venues"></p>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="d7294f7fe9"><input type="hidden" name="_wp_http_referer" value="/wp-admin/edit.php?post_type=event&amp;page=venues"><div class="tablenav top">
+
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label><select name="action" id="bulk-action-selector-top"><option value="-1">Bulk Actions</option>
+<option value="delete">Delete</option></select><input type="submit" id="doaction" class="button action" value="Apply">
+</div>
+		<div class="tablenav-pages one-page">
+<span class="displaying-num">3 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+<span class="paging-input"><label for="current-page-selector" class="screen-reader-text">Current Page</label><input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="1" aria-describedby="table-paging"><span class="tablenav-paging-text"> of <span class="total-pages">1</span></span></span>
+<span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">»</span></span>
+</div>
+		<br class="clear">
+</div>
+<table class="wp-list-table widefat fixed striped venues">
+<thead><tr>
+<td id="cb" class="manage-column column-cb check-column">
+<label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" type="checkbox">
+</td>
+<th scope="col" id="name" class="manage-column column-name column-primary sortable asc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=name&amp;order=desc"><span>Venue</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_address" class="manage-column column-venue_address sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=address&amp;order=asc"><span>Address</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_city" class="manage-column column-venue_city sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=city&amp;order=asc"><span>City</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_state" class="manage-column column-venue_state sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=state&amp;order=asc"><span>State / Province</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_postcode" class="manage-column column-venue_postcode sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=postcode&amp;order=asc"><span>Post Code</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_country" class="manage-column column-venue_country sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=country&amp;order=asc"><span>Country</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="venue_slug" class="manage-column column-venue_slug sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=slug&amp;order=asc"><span>Slug</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" id="posts" class="manage-column column-posts num sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=count&amp;order=asc"><span>Events</span><span class="sorting-indicator"></span></a></th>	</tr></thead>
+<tbody id="the-list" data-wp-lists="list:venue">
+<tr class="alternate" id="venue-4">
+<th scope="row" class="check-column"><input type="checkbox" name="event-venue[]" value="dragonfly"></th>
+<td class="name column-name has-row-actions column-primary" data-colname="Venue">
+<a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=dragonfly" class="row-title">Dragonfly</a><div class="row-actions">
+<span class="edit"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=dragonfly" aria-label="Edit “Dragonfly”">Edit</a> | </span><span class="delete"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=delete&amp;event-venue=dragonfly&amp;_wpnonce=1e4745cf3c" aria-label="Delete “Dragonfly”">Delete</a> | </span><span class="view"><a href="http://wordpress/events/venues/dragonfly/" aria-label="View “Dragonfly”">View</a></span>
+</div>
+<button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+</td>
+<td class="venue_address column-venue_address" data-colname="Address">52 West Port</td>
+<td class="venue_city column-venue_city" data-colname="City">Edinburgh</td>
+<td class="venue_state column-venue_state" data-colname="State / Province"></td>
+<td class="venue_postcode column-venue_postcode" data-colname="Post Code">EH1 2LD</td>
+<td class="venue_country column-venue_country" data-colname="Country">United Kingdom</td>
+<td class="venue_slug column-venue_slug" data-colname="Slug">dragonfly</td>
+<td class="posts column-posts" data-colname="Events">0</td>
+</tr>
+<tr class="" id="venue-3">
+<th scope="row" class="check-column"><input type="checkbox" name="event-venue[]" value="living-room"></th>
+<td class="name column-name has-row-actions column-primary" data-colname="Venue">
+<a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=living-room" class="row-title">Living Room</a><div class="row-actions">
+<span class="edit"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=living-room" aria-label="Edit “Living Room”">Edit</a> | </span><span class="delete"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=delete&amp;event-venue=living-room&amp;_wpnonce=659bf1e85f" aria-label="Delete “Living Room”">Delete</a> | </span><span class="view"><a href="http://wordpress/events/venues/living-room/" aria-label="View “Living Room”">View</a></span>
+</div>
+<button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+</td>
+<td class="venue_address column-venue_address" data-colname="Address">113-115 George St</td>
+<td class="venue_city column-venue_city" data-colname="City">Edinburgh</td>
+<td class="venue_state column-venue_state" data-colname="State / Province"></td>
+<td class="venue_postcode column-venue_postcode" data-colname="Post Code">EH2 4JN</td>
+<td class="venue_country column-venue_country" data-colname="Country">United Kingdom</td>
+<td class="venue_slug column-venue_slug" data-colname="Slug">living-room</td>
+<td class="posts column-posts" data-colname="Events">1</td>
+</tr>
+<tr class="alternate" id="venue-2">
+<th scope="row" class="check-column"><input type="checkbox" name="event-venue[]" value="akva"></th>
+<td class="name column-name has-row-actions column-primary" data-colname="Venue">
+<a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=akva" class="row-title">Akva</a><div class="row-actions">
+<span class="edit"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=edit&amp;event-venue=akva" aria-label="Edit “Akva”">Edit</a> | </span><span class="delete"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;action=delete&amp;event-venue=akva&amp;_wpnonce=6965001ae2" aria-label="Delete “Akva”">Delete</a> | </span><span class="view"><a href="http://wordpress/events/venues/akva/" aria-label="View “Akva”">View</a></span>
+</div>
+<button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button><button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+</td>
+<td class="venue_address column-venue_address" data-colname="Address">129 Fountainbridge</td>
+<td class="venue_city column-venue_city" data-colname="City">Edinburgh</td>
+<td class="venue_state column-venue_state" data-colname="State / Province"></td>
+<td class="venue_postcode column-venue_postcode" data-colname="Post Code">EH3 9QG</td>
+<td class="venue_country column-venue_country" data-colname="Country">United Kingdom</td>
+<td class="venue_slug column-venue_slug" data-colname="Slug">akva</td>
+<td class="posts column-posts" data-colname="Events">2</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td class="manage-column column-cb check-column">
+<label class="screen-reader-text" for="cb-select-all-2">Select All</label><input id="cb-select-all-2" type="checkbox">
+</td>
+<th scope="col" class="manage-column column-name column-primary sortable asc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=name&amp;order=desc"><span>Venue</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_address sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=address&amp;order=asc"><span>Address</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_city sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=city&amp;order=asc"><span>City</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_state sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=state&amp;order=asc"><span>State / Province</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_postcode sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=postcode&amp;order=asc"><span>Post Code</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_country sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=country&amp;order=asc"><span>Country</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-venue_slug sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=slug&amp;order=asc"><span>Slug</span><span class="sorting-indicator"></span></a></th>
+<th scope="col" class="manage-column column-posts num sortable desc"><a href="http://wordpress/wp-admin/edit.php?post_type=event&amp;page=venues&amp;orderby=count&amp;order=asc"><span>Events</span><span class="sorting-indicator"></span></a></th>	</tr></tfoot>
+</table>
+<div class="tablenav bottom">
+
+				<div class="alignleft actions bulkactions">
+			<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label><select name="action2" id="bulk-action-selector-bottom"><option value="-1">Bulk Actions</option>
+<option value="delete">Delete</option></select><input type="submit" id="doaction2" class="button action" value="Apply">
+</div>
+		<div class="tablenav-pages one-page">
+<span class="displaying-num">3 items</span>
+<span class="pagination-links"><span class="tablenav-pages-navspan" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+<span class="screen-reader-text">Current Page</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">1 of <span class="total-pages">1</span></span></span>
+<span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">»</span></span>
+</div>
+		<br class="clear">
+</div>
+				 </form>
+			
+	</div>
+<!--End .wrap -->
+    
+<div class="clear"></div>
+</div>
+<!-- wpbody-content -->
+<div class="clear"></div>
+</div>
+<!-- wpbody -->
+<div class="clear"></div>
+</div>
+<!-- wpcontent -->
+
+<div id="wpfooter" role="contentinfo">
+		<p id="footer-left" class="alignleft">
+		<span id="footer-thankyou">Thank you for creating with <a href="https://wordpress.org/">WordPress</a>.</span>	</p>
+	<p id="footer-upgrade" class="alignright">
+		<strong><a href="http://wordpress/wp-admin/update-core.php">Get Version 5.1</a></strong>	</p>
+	<div class="clear"></div>
+</div>
+	<div id="wp-auth-check-wrap" class="hidden">
+	<div id="wp-auth-check-bg"></div>
+	<div id="wp-auth-check">
+	<button type="button" class="wp-auth-check-close button-link"><span class="screen-reader-text">Close dialog</span></button>
+			<div id="wp-auth-check-form" class="loading" data-src="http://wordpress/wp-login.php?interim-login=1&amp;wp_lang=en_US"></div>
+			<div class="wp-auth-fallback">
+		<p><b class="wp-auth-fallback-expired" tabindex="0">Session expired</b></p>
+		<p><a href="http://wordpress/wp-login.php" target="_blank">Please log in again.</a>
+		The login page will open in a new window. After logging in you can close it and return to this page.</p>
+	</div>
+	</div>
+	</div>
+	
+<script type="text/javascript">
+/* <![CDATA[ */
+var commonL10n = {"warnDelete":"You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete.","dismiss":"Dismiss this notice.","collapseMenu":"Collapse Main menu","expandMenu":"Expand Main menu"};/* ]]> */
+</script><script type="text/javascript" src="http://wordpress/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=hoverIntent,common,admin-bar,svg-painter&amp;ver=5.0.3"></script><script type="text/javascript" src="http://wordpress/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=7.0.0"></script><script type="text/javascript">
+( 'fetch' in window ) || document.write( '<script src="http://wordpress/wp-includes/js/dist/vendor/wp-polyfill-fetch.min.js?ver=3.0.0">' + 'ipt>' );( document.contains ) || document.write( '<script src="http://wordpress/wp-includes/js/dist/vendor/wp-polyfill-node-contains.min.js?ver=3.26.0-0">' + 'ipt>' );( window.FormData && window.FormData.prototype.keys ) || document.write( '<script src="http://wordpress/wp-includes/js/dist/vendor/wp-polyfill-formdata.min.js?ver=3.0.12">' + 'ipt>' );( Element.prototype.matches && Element.prototype.closest ) || document.write( '<script src="http://wordpress/wp-includes/js/dist/vendor/wp-polyfill-element-closest.min.js?ver=2.0.2">' + 'ipt>' );
+</script><script type="text/javascript" src="http://wordpress/wp-includes/js/dist/hooks.min.js?ver=2.0.4"></script><script type="text/javascript">
+/* <![CDATA[ */
+var heartbeatSettings = {"nonce":"e9c1697f02"};
+/* ]]> */
+</script><script type="text/javascript" src="http://wordpress/wp-includes/js/heartbeat.min.js?ver=5.0.3"></script><script type="text/javascript">
+/* <![CDATA[ */
+var authcheckL10n = {"beforeunload":"Your session has expired. You can log in again from this page or go to the login page.","interval":"180"};
+/* ]]> */
+</script><script type="text/javascript" src="http://wordpress/wp-includes/js/wp-auth-check.min.js?ver=5.0.3"></script><style>
+			.eventorganiser-notice {position: relative;}
+			/* Backwards compatability with 4.1 and earlier */ 
+			/* @see https://core.trac.wordpress.org/ticket/31233 */
+			.eventorganiser-dismiss:before {
+				background: none;
+				color: #b4b9be;
+				content: "\f153";
+				display: block;
+				font: normal 16px/20px dashicons;
+				speak: none;
+				height: 20px;
+				text-align: center;
+				width: 20px;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+
+			.eventorganiser-dismiss {
+				position: absolute;
+				top: 0;
+				right: 1px;
+				border: none;
+				margin: 0;
+				padding: 9px;
+				background: none;
+				color: #b4b9be;
+				cursor: pointer;
+			}
+
+			.eventorganiser-dismiss:hover:before,
+			.eventorganiser-dismiss:active:before,
+			.eventorganiser-dismiss:focus:before {
+				color: #c00;
+			}
+
+			.eventorganiser-dismiss:focus {
+				outline: none;
+				-webkit-box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+				box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+			}
+
+			.ie8 .eventorganiser-dismiss:focus {outline: 1px solid #5b9dd9;}
+
+			@media screen and ( max-width: 782px ) {
+				.eventorganiser-dismiss {padding: 13px;}
+			}
+		</style>
+<script type="text/javascript">
+		jQuery(document).ready(function ($){
+			var dismissClass = 'eventorganiser-dismiss';
+			var ajaxaction   = 'eventorganiser-dismiss-notice';
+			var _wpnonce     = '917081a6e5';
+			var noticeClass  = 'eventorganiser-notice';
+
+			jQuery('.'+dismissClass).click(function(e){
+				e.preventDefault();
+				var noticeID= $(this).parents('.'+noticeClass).attr('id').substring(noticeClass.length+1);
+				$('#'+noticeClass+'-'+noticeID).fadeOut('slow');
+				$.post(ajaxurl, 
+					{
+						action: ajaxaction,
+						notice: noticeID,
+						_wpnonce: _wpnonce
+					}, 
+					function (response) {
+						if ('1' !== response) {
+							$('#'+noticeClass+'-'+noticeID).removeClass('updated notice-success').addClass('notice-error error').show();
+						}
+					}
+				);
+			});
+		});
+		</script><script type="text/javascript">
+	var compressionNonce = "57f4218206";
+	var testCompression = {
+		get : function(test) {
+			var x;
+			if ( window.XMLHttpRequest ) {
+				x = new XMLHttpRequest();
+			} else {
+				try{x=new ActiveXObject('Msxml2.XMLHTTP');}catch(e){try{x=new ActiveXObject('Microsoft.XMLHTTP');}catch(e){};}
+			}
+
+			if (x) {
+				x.onreadystatechange = function() {
+					var r, h;
+					if ( x.readyState == 4 ) {
+						r = x.responseText.substr(0, 18);
+						h = x.getResponseHeader('Content-Encoding');
+						testCompression.check(r, h, test);
+					}
+				};
+
+				x.open('GET', ajaxurl + '?action=wp-compression-test&test='+test+'&_ajax_nonce='+compressionNonce+'&'+(new Date()).getTime(), true);
+				x.send('');
+			}
+		},
+
+		check : function(r, h, test) {
+			if ( ! r && ! test )
+				this.get(1);
+
+			if ( 1 == test ) {
+				if ( h && ( h.match(/deflate/i) || h.match(/gzip/i) ) )
+					this.get('no');
+				else
+					this.get(2);
+
+				return;
+			}
+
+			if ( 2 == test ) {
+				if ( '"wpCompressionTest' == r )
+					this.get('yes');
+				else
+					this.get('no');
+			}
+		}
+	};
+	testCompression.check();
+	</script><div class="clear"></div>
+</div>
+<!-- wpwrap -->
+<script type="text/javascript">if(typeof wpOnload=='function')wpOnload();</script>
+</body>

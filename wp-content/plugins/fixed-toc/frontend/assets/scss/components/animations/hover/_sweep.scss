@@ -1,0 +1,37 @@
+// *-------------------------------------------------------------------------------------
+// * Sweep To Right, Left, Top and Bottom
+// *-------------------------------------------------------------------------------------
+
+@mixin sweepToRight {
+	.ftwp-text::before {
+		@include transform(scaleX(0));
+		@include transformOrigin(left center);
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				@include transform(scaleX(1));
+			}		
+		}
+	}	
+}
+
+
+@mixin sweepToLeft {
+	.ftwp-text::before {
+		@include transform(scaleX(0));
+		@include transformOrigin(right center);
+		@include transitionProperty( transform );
+	}
+	
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				@include transform(scaleX(1));
+			}		
+		}
+	}	
+}

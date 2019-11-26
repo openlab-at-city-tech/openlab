@@ -291,7 +291,7 @@ input[type="submit"]{
         font-weight: @bold;
     }
     &.group-site label,
-    &.email-sub label {
+    &.email-sub label .bpges-settings-gloss {
         font-weight: normal;
     }
     input[type="radio"]{
@@ -323,6 +323,11 @@ input[type="submit"]{
             display: inline-block;
         }
     }
+	&.related-links-url {
+        @media(max-width: @screen-xs-max){
+			display: inline-block;
+		}
+	}
 }
 .parsley-errors-list.filled {
     margin: 0;
@@ -466,6 +471,47 @@ input[type="submit"]{
             }
         }
     }
+}
+.import-acknowledge {
+	label {
+		font-weight: normal;
+	}
+	input {
+		margin-right: 8px;
+	}
+}
+.invite-new-members-link {
+	font-weight: @bold;
+}
+.import-results-section {
+}
+.import-results-section-success {
+	border-bottom: 1px solid #dddddd;
+	margin-bottom: 15px;
+}
+.import-results-section-submit-show-border {
+	border-top: 1px solid #dddddd;
+	padding-top: 15px;
+}
+.related-link-actions {
+	display: inline-block;
+	margin-top: -15px;
+	vertical-align: middle;
+	@media(max-width: @screen-xs-max){
+		margin-top: 0;
+	}
+}
+button.related-link-action {
+	background: none;
+	border: none;
+	font-size: 20px;
+	height: 32px;
+}
+button.related-link-action.related-link-add {
+	padding: 0;
+	.fa {
+		margin-left: 0;
+	}
 }
 .submenu{
     .submenu-text{
@@ -778,6 +824,9 @@ body{
             width: 100%;
         }
     }
+	.calendar-settings-toggle {
+		margin-bottom: 20px;
+	}
     .pointer{
         cursor: pointer;
     }
@@ -924,6 +973,11 @@ body{
         }
     }
     #register-page{
+		.register-field-note {
+			color: @70gray;
+			font-size: small;
+			margin-bottom: 2em;
+		}
         .password-field {
             position: relative;
         }
@@ -1122,6 +1176,9 @@ body form{
 .privacy-settings-note{
     padding-left: 20px;
     margin-top: -15px;
+}
+.bpges-settings-gloss {
+	font-style: italic;
 }
 .ct-group-meta{
     tr{
@@ -2473,8 +2530,12 @@ body.membership-requests {
 }
 #bp-group-documents{
 	&.has-folders {
-		#bp-group-documents-list {
+		.bp-group-documents-list-container {
 			float: left;
+			width: calc(~"100% - 200px");
+		}
+
+		#bp-group-documents-sorting {
 			width: calc(~"100% - 200px");
 		}
 
@@ -2485,11 +2546,97 @@ body.membership-requests {
 		}
 	}
 
+	.upload-new-file {
+		padding-top: 18px;
+		padding-right: 8px;
+	}
+
+    @media (max-width: @screen-xs-max){
+		& #bp-group-documents-sorting {
+			.sorting-column {
+				display: inline-block;
+				width: auto;
+			}
+		}
+		& .bp-group-documents-list-container {
+			float: none !important;
+			width: 100% !important;
+		}
+
+		& #bp-group-documents-sorting {
+			width: 100% !important;
+		}
+
+
+		& .bp-group-documents-folder-links {
+			display: block;
+			margin-top: 2em;
+			width: 100% !important;
+			float: none !important;
+		}
+	}
+
+	&.is-edit-mode {
+		#bp-group-documents-sorting,
+		.bp-group-documents-list-container,
+		.bp-group-documents-folder-links,
+		#bp-group-documents-upload-button,
+		.submenu-row .group-count {
+			display: none;
+		}
+
+		#bp-group-documents-upload-new {
+			display: block;
+		}
+	}
+
+	.bp-group-documents-list-folder-header {
+        background-color: @panel-default-heading-bg;
+        border: 1px solid @panel-default-border;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		border-bottom: none;
+        color: @panel-default-text;
+		display: block;
+		padding: 15px;
+		font-weight: bold;
+	}
+
+	&.is-folder .bp-group-documents-list.item-list {
+		.list-group-item:first-child {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+	}
+
 	.bp-group-documents-folder-links {
 		display: none;
 	}
+	.group-documents-orderby {
+		width: auto;
+	}
+	.admin-links {
+		padding-left: 1em;
+		padding-bottom: 1em;
+	}
+	.group-documents-title {
+		font-weight: 600;
+	}
+	.show-all-files {
+		margin-top: .5em;
+	}
+    #bp-group-documents-upload-new {
+		display: none;
 
-
+		.form-panel .panel {
+			margin-top: 0;
+		}
+	}
+    #bp-group-documents-edit {
+		.form-panel .panel {
+			margin-top: 0;
+		}
+	}
     .bp-template-notice{
         &.error,
         &.updated{
@@ -2529,16 +2676,26 @@ body.membership-requests {
     }
 
     .group-file-folder-nav {
-        height: 120px;
+        height: 300px;
         border: 1px solid @30gray;
         border-radius: @border-radius-base;
         overflow: auto;
         padding: 6px 12px;
 
+		hr {
+			margin-top: 12px;
+			margin-bottom: 12px;
+		}
+
 		ul {
 			list-style-type: none;
 			margin-top: 0;
 			padding-left: 0;
+		}
+
+		.current-category a {
+			font-weight: bold;
+			text-decoration: none;
 		}
     }
 }
@@ -2572,6 +2729,9 @@ body.membership-requests {
         display: none;
     }
 }
+body div#bp-docs-pagination-count {
+	color: @70gray;
+}
 .doc-tabs{
     ul{
         padding: 0;
@@ -2594,6 +2754,14 @@ body.membership-requests {
                 width: auto;
             }
         }
+		.row-actions {
+			a {
+				color: @80gray;
+				&.delete {
+					color: #a20000;
+				}
+			}
+		}
     }
     @media (max-width: @screen-xs-max){
         table,
@@ -2619,6 +2787,17 @@ body.docs{
 		margin-bottom: 10px;
 	}
 }
+#doc-settings {
+	legend {
+		border-bottom: none;
+		font-size: inherit;
+		font-weight: bold;
+	}
+	label {
+		display: block;
+		font-weight: normal;
+	}
+}
 .doc-content{
     &.edit-doc{
         border: none;
@@ -2631,12 +2810,14 @@ body.docs{
     }
     .tmce-active{
         .switch-tmce{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .html-active{
         .switch-html{
-            color: @aqua;
+            color: @80gray;
+			font-weight: @semibold;
         }
     }
     .wp-editor-container{
@@ -2653,12 +2834,26 @@ body.docs{
 }
 #doc-meta{
     .toggle-switch{
+        background-color: @panel-default-heading-bg;
+        border-color: @panel-default-border;
         padding: 6px 16px;
+		&:hover {
+			background-color: @panel-default-text;
+
+			a {
+				color: @panel-default-heading-bg;
+			}
+		}
         .plus-or-minus{
             font-size: 1.1em;
         }
+		a {
+			color: @panel-default-text;
+			font-weight: @semibold;
+		}
     }
     .toggle-content{
+        border-color: @panel-default-border;
         padding-top: 12px;
         width: 100%;
     }
@@ -2677,6 +2872,9 @@ body.docs{
             }
         }
     }
+}
+a.delete-doc-button {
+	color: #a20000 !important;
 }
 /**forum (bbpress) styles**/
 .forum{

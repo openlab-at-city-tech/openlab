@@ -845,20 +845,22 @@
         h2,
 		h3 {
 			letter-spacing: inherit;
+			line-height: 1.42852 !important;
             text-shadow: none !important;
 			text-transform: none;
+			border: none !important;
         }
         .footer-wrapper {
-            color: #333333;
-            font-family: "Open Sans", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.42857;
-            background: #f0f0f0;
-            margin: 0 auto;
-            padding-top: 30px;
-            width: 100%;
+            color: #333333 !important;
+            font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+            font-size: 14px !important;
+            line-height: 1.42857 !important;
+            background: #f0f0f0 !important;
+            margin: 0 auto !important;
+            padding-top: 30px !important;
+            width: 100% !important;
             @media (max-width: @screen-xs-max) {
-                width: 95%;
+                width: 95% !important;
             }
         }
         .row, .ol-toolbar-row, .ol-footer-row {
@@ -963,6 +965,11 @@
                 list-style-type: none;
                 font-size: 13px;
             }
+			li {
+				font-style: italic !important;
+				line-height: 1.42852 !important;
+				margin-bottom: 5px !important;
+			}
             img {
                 margin-left: 8px;
             }
@@ -1010,9 +1017,10 @@
         }
     }
     /**go to the top button (mobile only)**/
-    #go-to-top {
-        background: fade(@aqua, 42%);
+    a#go-to-top {
+        background: rgba(128, 128, 128, 0.5);
         bottom: 5%;
+		color: #000;
         display: none;
         font-size: 13px;
         font-style: italic;
@@ -1196,6 +1204,20 @@ body {
     }
 }
 
+@media(min-width: 782px) {
+	.edit-post-sidebar {
+		top: 128px;
+	}
+	.block-editor__container {
+		min-height: calc(100vh - 79px);
+	}
+}
+@media screen and (min-width: 600px) and (max-width: 781px) {
+	.edit-post-header {
+		top: 110px;
+	}
+}
+
 @media(max-width: 782px) {
     body #wp-link-wrap {
         margin-top: 0;
@@ -1211,4 +1233,23 @@ body {
 			visibility: hidden;
 		}
 	}
+
+	body.adminbar-special {
+		padding-top: 0 !important;
+	}
+
+	.header-mobile-wrapper {
+		display: none !important;
+		visibility: hidden !important;
+	}
+}
+
+/* Creative Commons CC widget */
+a.cc-widget-icon-link {
+	display: block;
+	max-width: 150px !important;
+}
+
+.cc-widget-text {
+	margin-top: 1em;
 }

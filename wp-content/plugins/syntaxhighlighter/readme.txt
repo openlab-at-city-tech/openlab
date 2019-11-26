@@ -1,10 +1,10 @@
 === SyntaxHighlighter Evolved ===
-Contributors: Viper007Bond, automattic
-Donate link: http://www.viper007bond.com/wordpress-plugins/syntaxhighlighter/donate/
+Contributors: Viper007Bond, automattic, donncha
+Donate link: https://alex.blog/2019/03/13/in-memory-of-alex-donation-link-update/
 Tags: code, sourcecode, block, php, xhtml, html, css, WordPress.com
 Requires at least: 4.2.3
-Tested up to: 5.0
-Stable tag: trunk
+Tested up to: 5.2.3
+Stable tag: 3.5.1
 
 Easily post syntax-highlighted code to your site without having to modify the code at all. As seen on WordPress.com.
 
@@ -14,9 +14,12 @@ Easily post syntax-highlighted code to your site without having to modify the co
 
 SyntaxHighlighter Evolved allows you to easily post syntax-highlighted code to your site without losing its formatting or making any manual changes. It uses the [SyntaxHighlighter JavaScript package by Alex Gorbatchev](http://alexgorbatchev.com/wiki/SyntaxHighlighter).
 
-For a live demo, see [this plugin's homepage](http://www.viper007bond.com/wordpress-plugins/syntaxhighlighter/).
+For a live demo, see [this plugin's homepage](https://alex.blog/wordpress-plugins/syntaxhighlighter/).
 
 For a list of supported languages (most widely used languages are supported), see the [WordPress.com support document](http://en.support.wordpress.com/code/posting-source-code/).
+
+Development of this plugin is [on GitHub](https://github.com/Automattic/syntaxhighlighter).
+Translation of the plugin into different languages is on the [translation page](https://translate.wordpress.org/projects/wp-plugins/syntaxhighlighter).
 
 *[As seen on WordPress.com.](http://en.blog.wordpress.com/2009/12/02/better-source-code-posting/)*
 
@@ -32,10 +35,21 @@ Try excluding this plugin's Javascript from any performance optimizations your s
 
 == Screenshots ==
 
-1. Example code display of some PHP inside some HTML.
-2. A part of the Settings page which controls the defaults.
+1. Example display of some PHP code.
+2. An example use of the editor block.
 
 == ChangeLog ==
+
+= Version 3.5.1 =
+
+* Fix stored XSS by tightening up the autolinking code so it only does http/https text. #1
+* Add more CSS keywords and values. #6
+* Fork GH repository: https://github.com/Automattic/syntaxhighlighter/
+
+= Version 3.5.0 =
+
+* Block: Add a bunch of display settings.
+* Block: Switch to server-side rendering so that the same code that renders the shortcode will render the block.
 
 = Version 3.4.2 =
 
@@ -268,3 +282,6 @@ Localizations:
 = Version 1.0.0 =
 
 * Initial release!
+
+= Upgrade Notice =
+Security fix for stored XSS in comments.

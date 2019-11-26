@@ -71,7 +71,7 @@ function openlab_load_scripts() {
 
         wp_register_script( 'openlab-academic-units', $stylesheet_dir_uri . '/js/academic-units.js', array( 'jquery' ) );
 
-        $utility_deps = array('jquery');
+        $utility_deps = array( 'jquery' );
         if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) {
             $utility_deps[] = 'hyphenator-js';
         } else {
@@ -99,6 +99,10 @@ function openlab_load_scripts() {
             )
         );
     }
+
+	if ( bp_is_group() && bp_is_current_action( 'invite-anyone' ) ) {
+		wp_enqueue_script( 'openlab-invite-anyone', $stylesheet_dir_uri . '/js/invite-anyone.js', [ 'jquery' ] );
+	}
 
     if (bp_is_register_page()) {
         wp_enqueue_script('password-strength-meter');
@@ -140,6 +144,14 @@ function openlab_load_scripts_high_priority() {
         wp_register_style('print-styles', $stylesheet_dir_uri . '/css/print.css', array(), '2015', 'print');
         wp_enqueue_style('print-styles');
     }
+
+	wp_enqueue_style(
+		'openlab-print',
+		get_stylesheet_directory_uri() . '/print.css',
+		array(),
+		OL_VERSION,
+		'print'
+	);
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts_high_priority', 999);

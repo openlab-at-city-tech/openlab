@@ -1,17 +1,17 @@
 <?php
 /**
  * Plugin Name: Gravity Perks
- * Plugin URI: http://gravitywiz.com/
+ * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.1.2
+ * Version: 2.1.9
  * Author: Gravity Wiz
- * Author URI: http://gravitywiz.com/
+ * Author URI: https://gravitywiz.com/
  * License: GPL2
  * Text Domain: gravityperks
  * Domain Path: /languages
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.1.2' );
+define( 'GRAVITY_PERKS_VERSION', '2.1.9' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -118,31 +118,14 @@ class GravityPerks {
             // show various plugin messages after the plugin row
             add_action('after_plugin_row_' . self::$basename, array('GWPerks', 'after_plugin_row'), 10, 2);
 
-            if(self::is_gravity_perks_page()) {
+            if( self::is_gravity_perks_page() ) {
 
-                // all pages that should be loaded "before" admin
-                switch( gwget('view') ) {
+            	if( rgget( 'view' ) ) {
+					require_once( self::get_base_path() . '/admin/manage_perks.php' );
+					GWPerksPage::load_perk_settings();
+				}
 
-                case 'documentation':
-                    require_once(self::get_base_path() . '/admin/manage_perks.php');
-                    GWPerksPage::load_documentation();
-                    break;
-
-                case 'perk_info':
-                    require_once(self::get_base_path() . '/admin/manage_perks.php');
-                    GWPerksPage::load_perk_info();
-                    break;
-
-                case 'perk_settings':
-                    require_once(self::get_base_path() . '/admin/manage_perks.php');
-                    GWPerksPage::load_perk_settings();
-                    break;
-
-                default:
-                    require_once(self::get_base_path() . '/admin/manage_perks.php');
-                    add_thickbox();
-                    //GWPerksPage::process_actions();
-                }
+				add_thickbox();
 
             }
 
@@ -226,7 +209,7 @@ class GravityPerks {
 	    define( 'GW_SUPPORT_URL', GW_URL . '/support/' );
 	    define( 'GW_BUY_URL',     GW_URL );
 
-	    define( 'GW_GFORM_AFFILIATE_URL', 'http://bit.ly/gwizgravityforms' );
+	    define( 'GW_GFORM_AFFILIATE_URL', 'https://bit.ly/gwizgravityforms' );
 	    define( 'GW_MANAGE_PERKS_URL',    admin_url( 'admin.php?page=gwp_perks' ) );
 
 	    define( 'GW_PRICE_ID_LEGACY_SINGLE',    0 );

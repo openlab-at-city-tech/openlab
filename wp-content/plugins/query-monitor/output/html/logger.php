@@ -61,7 +61,7 @@ class QM_Output_Html_Logger extends QM_Output_Html {
 				$class = '';
 			}
 
-			echo '<tr ' . $attr . 'class="' . esc_attr( $class ) . '">'; // WPCS: XSS ok.
+			echo '<tr' . $attr . ' class="' . esc_attr( $class ) . '">'; // WPCS: XSS ok.
 
 			echo '<td scope="row" class="qm-nowrap">';
 
@@ -75,7 +75,7 @@ class QM_Output_Html_Logger extends QM_Output_Html {
 			echo '</td>';
 
 			printf(
-				'<td>%s</td>',
+				'<td><pre>%s</pre></td>',
 				esc_html( $row['message'] )
 			);
 
@@ -145,7 +145,7 @@ class QM_Output_Html_Logger extends QM_Output_Html {
 			}
 		}
 
-		$menu[] = $this->menu( array(
+		$menu[ $this->collector->id() ] = $this->menu( array(
 			'id'    => "query-monitor-logger-{$key}",
 			'title' => esc_html__( 'Logs', 'query-monitor' ),
 		) );
@@ -156,7 +156,7 @@ class QM_Output_Html_Logger extends QM_Output_Html {
 }
 
 function register_qm_output_html_logger( array $output, QM_Collectors $collectors ) {
-	$collector = $collectors::get( 'logger' );
+	$collector = QM_Collectors::get( 'logger' );
 	if ( $collector ) {
 		$output['logger'] = new QM_Output_Html_Logger( $collector );
 	}

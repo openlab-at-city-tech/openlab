@@ -509,7 +509,7 @@ HTML;
 		}
 
 		// Now add our menus
-		// profile, courses, projects, clubs, portfolio, friends, messages, invitations, dashboard
+		// profile, portfolio, courses, projects, clubs, portfolio, friends, messages, invitations, dashboard
 		$wp_admin_bar->add_node(
 			array(
 				'parent' => 'my-openlab',
@@ -521,6 +521,29 @@ HTML;
 				),
 			)
 		);
+
+		$portfolio_id = openlab_get_user_portfolio_id( bp_loggedin_user_id() );
+		if ( $portfolio_id ) {
+			$portfolio_url = openlab_get_user_portfolio_profile_url( bp_loggedin_user_id() );
+
+			$portfolio_label = openlab_get_portfolio_label( [
+				'user_id'  => bp_loggedin_user_id(),
+				'group_id' => $portfolio_id,
+				'case'     => 'upper',
+			] );
+
+			$wp_admin_bar->add_node(
+				array(
+					'parent' => 'my-openlab',
+					'id'     => 'my-portfolio',
+					'title'  => 'My ' . $portfolio_label,
+					'href'   => openlab_get_user_portfolio_profile_url( bp_loggedin_user_id() ),
+					'meta'   => array(
+						'class' => 'admin-bar-menu-item mobile-no-hover',
+					),
+				)
+			);
+		}
 
 		$wp_admin_bar->add_node(
 			array(

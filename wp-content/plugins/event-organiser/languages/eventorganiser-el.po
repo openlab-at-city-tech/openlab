@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-26 22:24+0000\n"
+"POT-Creation-Date: 2019-07-15 22:39+0100\n"
 "PO-Revision-Date: 2017-04-14T23:02:23+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -123,8 +123,8 @@ msgstr "Εμφάνιση λίστας με events"
 
 #: classes/class-eo-event-list-widget.php:14
 #: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
-#: event-organiser.php:149 includes/event-organiser-cpt.php:224
-#: includes/event-organiser-cpt.php:236
+#: event-organiser.php:149 includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
 msgid "Events"
 msgstr "Γεγονότα"
@@ -250,7 +250,7 @@ msgid "Event Categories"
 msgstr "Κατηγορίες Event"
 
 #: classes/class-eo-widget-categories.php:25
-#: includes/event-organiser-cpt.php:94 includes/event-organiser-cpt.php:105
+#: includes/event-organiser-cpt.php:95 includes/event-organiser-cpt.php:106
 #: includes/event-organiser-event-functions.php:1563
 #: templates/event-meta-event-single.php:62
 msgid "Categories"
@@ -456,6 +456,21 @@ msgstr ""
 msgid "Open shortcut help"
 msgstr ""
 
+#. //codex.wp-event-organiser.com
+#. *
+#. ***************** NOTICE: *****************
+#. *  Do not make changes to this file. Any changes made to this file
+#. * will be overwritten if the plug-in is updated.
+#. *
+#. * To overwrite this template with your own, make a copy of it (with the same name)
+#. * in your theme directory. See http://docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.7
+#.
 #: event-organiser-calendar.php:387 event-organiser-edit.php:14
 #: templates/event-meta-event-single.php:32
 msgid "Event Details"
@@ -512,18 +527,18 @@ msgstr ""
 "υποστήριξη."
 
 #. / TRANSLATORS: [this plugin] has only been tested up to [required plugin] [required plugin version]
-#: event-organiser-debug.php:424
+#: event-organiser-debug.php:426
 #, php-format
 msgid "%1$s has only been tested up to %1$s %1$s"
 msgstr ""
 
 #. / TRANSLATORS: [this plugin] requires [required plugin] version [required plugin version] or higher
-#: event-organiser-debug.php:437
+#: event-organiser-debug.php:439
 #, php-format
 msgid "%1$s requires %1$s version %1$s or higher"
 msgstr ""
 
-#: event-organiser-debug.php:462
+#: event-organiser-debug.php:464
 msgid "unknown"
 msgstr "Άγνωστο"
 
@@ -649,7 +664,7 @@ msgid "Show dates"
 msgstr "Εμφάνιση Ημέρων"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1026
+#: includes/event-organiser-venue-functions.php:1030
 msgid "Select a venue"
 msgstr "Διάλεξε Τοποθεσία"
 
@@ -737,7 +752,7 @@ msgstr ""
 msgid "Go to Event Organiser settings"
 msgstr "Μετάβαση στις ρυθμίσεις του Event Organizer"
 
-#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:225
+#: event-organiser-manage.php:19 includes/event-organiser-cpt.php:227
 msgid "Event"
 msgstr "Γεγονός"
 
@@ -900,7 +915,7 @@ msgid "Revisions"
 msgstr "Αναθεωρήσεις"
 
 #: event-organiser-settings.php:154 event-organiser-settings.php:355
-#: includes/event-organiser-cpt.php:151
+#: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Eτικέτα"
 
@@ -1255,13 +1270,13 @@ msgstr "Λήψη συνδέσμου"
 msgid "Slug"
 msgstr "Slug"
 
-#: features/bootstrap/FeatureContext.php:413
-#: features/bootstrap/FeatureContext.php:608
+#: features/bootstrap/FeatureContext.php:459
+#: features/bootstrap/FeatureContext.php:627
 msgid "Main Sidebar"
 msgstr ""
 
-#: features/bootstrap/FeatureContext.php:415
-#: features/bootstrap/FeatureContext.php:610
+#: features/bootstrap/FeatureContext.php:461
+#: features/bootstrap/FeatureContext.php:629
 msgid "Widgets in this area will be shown on all posts and pages."
 msgstr ""
 
@@ -1449,7 +1464,7 @@ msgstr ""
 msgid "This event recurs"
 msgstr "Αυτο το event επαναλαμβάνεται"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:228
+#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Επεξεργασία Event"
 
@@ -1551,237 +1566,255 @@ msgstr "Τοποθεσία χώρου"
 msgid "View all venues"
 msgstr "Δείτε όλους τους χώρους"
 
-#: includes/event-organiser-cpt.php:95
+#: includes/event-organiser-cpt.php:96
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:96
+#: includes/event-organiser-cpt.php:97
 msgid "Search Categories"
 msgstr "Αναζήτηση κατηγοριών"
 
-#: includes/event-organiser-cpt.php:97
+#: includes/event-organiser-cpt.php:98
 msgid "All Categories"
 msgstr "Όλες οι κατηγορίες"
 
-#: includes/event-organiser-cpt.php:98
+#: includes/event-organiser-cpt.php:99
 msgid "Parent Category"
 msgstr "Μητρική κατηγορία"
 
-#: includes/event-organiser-cpt.php:99
+#: includes/event-organiser-cpt.php:100
 msgid "Parent Category:"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:100
+#: includes/event-organiser-cpt.php:101
 msgid "Edit Category"
 msgstr "Επεξεργασία κατηγορίας"
 
-#: includes/event-organiser-cpt.php:101
+#: includes/event-organiser-cpt.php:102
 msgid "Update Category"
 msgstr "Ενημέρωση κατηγορίας"
 
-#: includes/event-organiser-cpt.php:102
+#: includes/event-organiser-cpt.php:103
 msgid "Add New Category"
 msgstr "Προσθήκη νέας κατηγορίας"
 
-#: includes/event-organiser-cpt.php:103
+#: includes/event-organiser-cpt.php:104
 msgid "New Category Name"
 msgstr "Προσθήκη "
 
-#: includes/event-organiser-cpt.php:104
+#: includes/event-organiser-cpt.php:105
 msgid "No categories found"
 msgstr "Δεν βρέθηκαν κατηγορίες"
 
-#: includes/event-organiser-cpt.php:106
+#: includes/event-organiser-cpt.php:107
 msgid "Event categories list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:107
+#: includes/event-organiser-cpt.php:108
 msgid "Event categories list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:109
+#: includes/event-organiser-cpt.php:110
 msgid "View all categories"
 msgstr "Εμφάνιση όλοων των κατηγοριών"
 
-#: includes/event-organiser-cpt.php:152
+#: includes/event-organiser-cpt.php:153
 msgctxt "taxonomy singular name"
 msgid "Tag"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:153
+#: includes/event-organiser-cpt.php:154
 msgid "Search Tags"
 msgstr "Αναζήτηση ετικέτας"
 
-#: includes/event-organiser-cpt.php:154
+#: includes/event-organiser-cpt.php:155
 msgid "All Tags"
 msgstr "Όλες οι ετικέτες"
 
-#: includes/event-organiser-cpt.php:155
+#: includes/event-organiser-cpt.php:156
 msgid "Popular Tags"
 msgstr "Δημοφιλείς ετικέτες"
 
-#: includes/event-organiser-cpt.php:156
+#: includes/event-organiser-cpt.php:157
 msgid "Edit Tag"
 msgstr "Επεξεργασία ετικέτας"
 
-#: includes/event-organiser-cpt.php:157
+#: includes/event-organiser-cpt.php:158
 msgid "Update Tag"
 msgstr "Ενημέρωση ετικέτας"
 
-#: includes/event-organiser-cpt.php:158
+#: includes/event-organiser-cpt.php:159
 msgid "Add New Tag"
 msgstr "Νέα ετικέτα"
 
-#: includes/event-organiser-cpt.php:159
+#: includes/event-organiser-cpt.php:160
 msgid "New Tag Name"
 msgstr "Νέο όνομα ετικέτας"
 
-#: includes/event-organiser-cpt.php:160
+#: includes/event-organiser-cpt.php:161
 msgid "No tags found"
 msgstr "Δεν βρέθηκαν ετικέτες"
 
-#: includes/event-organiser-cpt.php:161
+#: includes/event-organiser-cpt.php:162
 msgid "Choose from the most used tags"
 msgstr "Επιλέξτε απο τις πιο δημοφιλής ετικέτες"
 
-#: includes/event-organiser-cpt.php:162
+#: includes/event-organiser-cpt.php:163
 #: includes/event-organiser-event-functions.php:1571
 #: templates/event-meta-event-single.php:66
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: includes/event-organiser-cpt.php:163
+#: includes/event-organiser-cpt.php:164
 msgid "Add or remove tags"
 msgstr "Προσθήκη ή αφαίρεση ετικέτας"
 
-#: includes/event-organiser-cpt.php:164
+#: includes/event-organiser-cpt.php:165
 msgid "Separate tags with commas"
 msgstr "Διαχωρίστε τις ετικέτες με κόμα."
 
-#: includes/event-organiser-cpt.php:165
+#: includes/event-organiser-cpt.php:166
 msgid "Event tags list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:166
+#: includes/event-organiser-cpt.php:167
 msgid "Event tags list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:168
+#: includes/event-organiser-cpt.php:169
 msgid "View all tags"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:226
+#: includes/event-organiser-cpt.php:228
 msgctxt "post"
 msgid "Add New"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:227
+#: includes/event-organiser-cpt.php:229
 msgid "Add New Event"
 msgstr "Προσθήκη Νέου Event"
 
-#: includes/event-organiser-cpt.php:229
+#: includes/event-organiser-cpt.php:231
 msgid "New Event"
 msgstr "Νέο Event"
 
-#: includes/event-organiser-cpt.php:230
+#: includes/event-organiser-cpt.php:232
 #, fuzzy
 msgid "All Events"
 msgstr "Όλα τα event"
 
-#: includes/event-organiser-cpt.php:231
+#: includes/event-organiser-cpt.php:233
 msgid "View Event"
 msgstr "Εμφάνιση Event"
 
-#: includes/event-organiser-cpt.php:232
+#: includes/event-organiser-cpt.php:234
 msgid "Search events"
 msgstr "Αναζήτηση Event"
 
-#: includes/event-organiser-cpt.php:233
+#: includes/event-organiser-cpt.php:235
 msgid "No events found"
 msgstr "Δεν βρέθηκαν Event"
 
-#: includes/event-organiser-cpt.php:234
+#: includes/event-organiser-cpt.php:236
 msgid "No events found in Trash"
 msgstr "Δεν βρέθηκαν Event στον κάδο"
 
-#: includes/event-organiser-cpt.php:237
+#: includes/event-organiser-cpt.php:239
 msgid "Filter events list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:238
+#: includes/event-organiser-cpt.php:240
 msgid "Events list navigation"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:239
+#: includes/event-organiser-cpt.php:241
 msgid "Events list"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:240
+#: includes/event-organiser-cpt.php:242
 msgid "Event Archives"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:241
+#: includes/event-organiser-cpt.php:243
 msgid "Insert into event"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:242
+#: includes/event-organiser-cpt.php:244
 msgid "Uploaded to this event"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:244
+#: includes/event-organiser-cpt.php:246
 #, php-format
 msgid "Events at %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:245
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:247
 #: templates/taxonomy-event-category.php:27
 #, php-format
 msgid "Event Category: %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:246 templates/taxonomy-event-tag.php:27
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.2.0
+#.
+#. Call the template header
+#: includes/event-organiser-cpt.php:248 templates/taxonomy-event-tag.php:27
 #, php-format
 msgid "Event Tag: %s"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:247 includes/event-organiser-cpt.php:248
-#: includes/event-organiser-cpt.php:249
+#: includes/event-organiser-cpt.php:249 includes/event-organiser-cpt.php:250
+#: includes/event-organiser-cpt.php:251
 #, fuzzy, php-format
 msgid "Events: %s"
 msgstr "Γεγονότα: "
 
-#: includes/event-organiser-cpt.php:330
+#: includes/event-organiser-cpt.php:332
 #, php-format
 msgid "Event updated. <a href=\"%s\">View event</a>"
 msgstr "Το event ενημερώθηκε. <a href=\"%s\">Εμφάνιση event</a>"
 
-#: includes/event-organiser-cpt.php:331
+#: includes/event-organiser-cpt.php:333
 msgid "Event updated."
 msgstr "Το event ενημερώθηκε."
 
-#: includes/event-organiser-cpt.php:333
+#: includes/event-organiser-cpt.php:335
 #, php-format
 msgid "Event restored to revision from %s"
 msgstr "Το event επαναφέρθηκε απο  %s"
 
-#: includes/event-organiser-cpt.php:334
+#: includes/event-organiser-cpt.php:336
 #, php-format
 msgid "Event published. <a href=\"%s\">View event</a>"
 msgstr "To event δημοσιέυθηκε <a href=\"%s\">Εμφάνιση</a>"
 
-#: includes/event-organiser-cpt.php:335
+#: includes/event-organiser-cpt.php:337
 msgid "Event saved."
 msgstr "Το Event αποθηκέυτηκε"
 
-#: includes/event-organiser-cpt.php:337
+#: includes/event-organiser-cpt.php:339
 #, php-format
 msgid "Event submitted. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Το event υποβλήθηκε.  <a target=\"_blank\" href=\"%s\">Προεπισκόπηση event</"
 "a>"
 
-#: includes/event-organiser-cpt.php:341
+#: includes/event-organiser-cpt.php:343
 #, php-format
 msgid ""
 "Event scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
@@ -1790,30 +1823,31 @@ msgstr ""
 "Το event προγραμματίστηκε για  <strong>%1$s</strong>. <a target=\"_blank\" "
 "href=\"%2$s\">Προεπισκόπηση event</a>"
 
-#: includes/event-organiser-cpt.php:343
+#. //php.net/date
+#: includes/event-organiser-cpt.php:345
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
-#: includes/event-organiser-cpt.php:346
+#: includes/event-organiser-cpt.php:348
 #, php-format
 msgid "Event draft updated. <a target=\"_blank\" href=\"%s\">Preview event</a>"
 msgstr ""
 "Το Event Πρόχειρο ενημερώθηκε. <a target=\"_blank\" href=\"%s"
 "\">Προεπισκόπηση</a>"
 
-#: includes/event-organiser-cpt.php:349
+#: includes/event-organiser-cpt.php:351
 msgid "This event has been broken from a recurring event."
 msgstr "Το event έχει διακοπεί από ένα επαναλαμβανόμενο event."
 
-#: includes/event-organiser-cpt.php:525
+#: includes/event-organiser-cpt.php:527
 msgid "Creating events"
 msgstr "Δημιουργία events"
 
-#: includes/event-organiser-cpt.php:526
+#: includes/event-organiser-cpt.php:528
 msgid "Creating events:"
 msgstr "Δημιουργία events:"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:530
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1822,7 +1856,7 @@ msgstr ""
 "εκδήλωση είναι μια reoccuring περιπτώσει, αυτή είναι η ημερομηνία έναρξης "
 "της πρώτης εμφάνισης."
 
-#: includes/event-organiser-cpt.php:529
+#: includes/event-organiser-cpt.php:531
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1831,7 +1865,7 @@ msgstr ""
 "εκδήλωση είναι μια reoccuring περιπτώσει, αυτή είναι η ημερομηνία λήξης της "
 "πρώτης εμφάνισης."
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:532
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1839,11 +1873,11 @@ msgstr ""
 "Όλες οι ημερομηνίες και οι ώρες πρέπει να αναγράφονται με συγκεκριμένο "
 "τρόπο. Αυτή η μορφή μπορεί να αλλάξει στην σελίδα ρυθμίσεων."
 
-#: includes/event-organiser-cpt.php:535
+#: includes/event-organiser-cpt.php:537
 msgid "Repeating events"
 msgstr "Events που επαναλαμβάνονται"
 
-#: includes/event-organiser-cpt.php:536
+#: includes/event-organiser-cpt.php:538
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1853,11 +1887,11 @@ msgstr ""
 "χρησιμοποιείστε το ανάλογο dropdown μενού για να επιλέξετε πως το event θα "
 "επαναλαμβάνεται."
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:540
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Καθορίστε πόσο συχνά το γεγονός θα πρέπει να επαναλάβει (προεπιλογή 1)"
 
-#: includes/event-organiser-cpt.php:539
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1866,7 +1900,7 @@ msgstr ""
 "περιστατικά προστίθενται μετά την ημερομηνία αυτή, αλλά ένα περιστατικό που "
 "ξεκινά πριν να ολοκληρωθεί μετά την ημερομηνία αυτή."
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:542
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1876,7 +1910,7 @@ msgstr ""
 "επαναλάβει την εν λόγω ημερομηνία του μήνα (π.χ. για την 24η), είτε την "
 "ημέρα του μήνα (π.χ. για την τρίτη Τρίτη)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:543
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1886,16 +1920,16 @@ msgstr ""
 "η εκδήλωση θα πρέπει να επαναληφθεί. Εάν δεν έχουν επιλεγεί ημέρες, από την "
 "ημέρα από την ημερομηνία έναρξης χρησιμοποιείται"
 
-#: includes/event-organiser-cpt.php:546 includes/event-organiser-cpt.php:547
+#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
 msgid "Selecting a venue"
 msgstr "Επιλέγοντας ένα χώρο"
 
-#: includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551
 msgid "Use the venues input field to search for existing venues"
 msgstr ""
 "Χρησιμοποιήστε το πεδίο εισαγωγής χώρους για την αναζήτηση υπάρχον χώρους"
 
-#: includes/event-organiser-cpt.php:550
+#: includes/event-organiser-cpt.php:552
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -1903,11 +1937,11 @@ msgstr ""
 "Μόνο προϋπάρχουσα χώρους μπορεί να επιλεγεί. Για να προσθέσετε ένα χώρο, "
 "μεταβείτε στη σελίδα χώρους."
 
-#: includes/event-organiser-cpt.php:560 includes/event-organiser-cpt.php:579
+#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
 msgid "Overview"
 msgstr "Περίληψη"
 
-#: includes/event-organiser-cpt.php:561
+#: includes/event-organiser-cpt.php:563
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1918,7 +1952,7 @@ msgstr ""
 "πίνακα και την ημερομηνία έναρξης και λήξης αναφέρεται στην πρώτη εμφάνιση "
 "αυτού του γεγονότος."
 
-#: includes/event-organiser-cpt.php:567
+#: includes/event-organiser-cpt.php:569
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1927,7 +1961,7 @@ msgstr ""
 "που σας επιτρέπουν να διαχειριστεί το εν λόγω χώρο. Μπορείτε να εκτελέσετε "
 "τις ακόλουθες ενέργειες:"
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:571
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1935,15 +1969,15 @@ msgstr ""
 "Επεξεργασία σας μεταφέρει στην οθόνη επεξεργασίας για το συγκεκριμένο χώρο. "
 "Μπορείτε να φτάσετε επίσης ότι η οθόνη κάνοντας κλικ στον τίτλο τόπο."
 
-#: includes/event-organiser-cpt.php:570
+#: includes/event-organiser-cpt.php:572
 msgid "Delete will permanently remove the venue"
 msgstr "Διαγραφή θα αφαιρέσει οριστικά το χώρο"
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:573
 msgid "View will take you to the venue's page"
 msgstr "Η Εμφάνιση θα οδηγήσει σην σελίδα με τις τοποθεσίες."
 
-#: includes/event-organiser-cpt.php:580
+#: includes/event-organiser-cpt.php:582
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1953,7 +1987,7 @@ msgstr ""
 "event by clicking on it. If you have the necessary permissions, a link to "
 "the event's edit page will appear also."
 
-#: includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:583
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1963,11 +1997,11 @@ msgstr ""
 "mode. You can also filter the events by events by category and venue. The "
 "'go to date' button allows you to quickly jump to a specific date."
 
-#: includes/event-organiser-cpt.php:585
+#: includes/event-organiser-cpt.php:587
 msgid "Add Event"
 msgstr "Προσθήκη Event"
 
-#: includes/event-organiser-cpt.php:586
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1981,28 +2015,28 @@ msgstr ""
 "The event can be immediately published or saved as a draft. In any case, the "
 "event is created and you are forwarded to that event's edit page."
 
-#: includes/event-organiser-cpt.php:592
+#: includes/event-organiser-cpt.php:594
 msgid "For more information"
 msgstr "Για περισσότερες πληροφορίες"
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:595
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Δες την <a %s> αρθογραφία</a>"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:596
 msgid "Debugging Event Organiser"
 msgstr "Αποσφαλμάτωση Event Organizer"
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:597
 msgid "Go Pro!"
 msgstr "Αναβάθμιση σε Pro!"
 
-#: includes/event-organiser-cpt.php:706 includes/event-organiser-cpt.php:729
+#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
 msgid "Color"
 msgstr "Χρώμα"
 
-#: includes/event-organiser-cpt.php:712
+#: includes/event-organiser-cpt.php:714
 msgid "Assign the category a colour."
 msgstr "Ορισε στην κατηγορία ένα χρώμα"
 
@@ -2188,23 +2222,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/event-organiser-venue-functions.php:991
+#: includes/event-organiser-venue-functions.php:995
 msgid "Address"
 msgstr "Διέυθυνση"
 
-#: includes/event-organiser-venue-functions.php:992
+#: includes/event-organiser-venue-functions.php:996
 msgid "City"
 msgstr "Πόλη"
 
-#: includes/event-organiser-venue-functions.php:993
+#: includes/event-organiser-venue-functions.php:997
 msgid "State / Province"
 msgstr "Περιοχή"
 
-#: includes/event-organiser-venue-functions.php:994
+#: includes/event-organiser-venue-functions.php:998
 msgid "Post Code"
 msgstr "Ταχυδρομικός Κώδικας"
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Country"
 msgstr "Χώρα"
 
@@ -2299,6 +2333,15 @@ msgstr ""
 msgid "This event was posted by <a href=\"%3$s\">%2$s</a>."
 msgstr ""
 
+#. //docs.wp-event-organiser.com/theme-integration for more information
+#. *
+#. * WordPress will automatically prioritise the template in your theme directory.
+#. ***************** NOTICE: *****************
+#. *
+#. * @package Event Organiser (plug-in)
+#. * @since 1.0.0
+#.
+#. Call the template header
 #: templates/taxonomy-event-venue.php:30
 #, php-format
 msgid "Events at: %s"

@@ -14,7 +14,7 @@ class DLM_WordPress_Download_Repository implements DLM_Download_Repository {
 	private function filter_query_args( $args = array(), $limit = 0, $offset = 0 ) {
 
 		// limit must be int, not abs
-		$limit  = intval( $limit );
+		$limit = intval( $limit );
 
 		// most be absint
 		$offset = absint( $offset );
@@ -89,13 +89,18 @@ class DLM_WordPress_Download_Repository implements DLM_Download_Repository {
 		$items = array();
 
 		$q     = new WP_Query();
+
 		$posts = $q->query( $this->filter_query_args( $filters, $limit, $offset ) );
 
 		if ( count( $posts ) > 0 ) {
 			foreach ( $posts as $post ) {
 
 				// create download object
-				$download = new DLM_Download();
+
+				/**
+				 * @var $download \DLM_Download
+				 */
+				$download = download_monitor()->service( 'download_factory' )->make( ( ( 1 == get_post_meta( $post->ID, '_is_purchasable', true ) ) ? 'product' : 'regular' ) );
 				$download->set_id( $post->ID );
 				$download->set_status( $post->post_status );
 				$download->set_title( $post->post_title );

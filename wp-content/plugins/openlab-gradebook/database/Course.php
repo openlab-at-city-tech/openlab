@@ -63,10 +63,26 @@ class gradebook_course_API{
 	  		case 'PATCH' :
 				echo json_encode(array("patch" => "patching"));				
 				break;
-	  		case 'GET' :	 
+              case 'GET' :
                                 $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);                            
-                                $courseDetails = $wpdb->get_row($query, ARRAY_A);	
-   				echo json_encode($courseDetails);		
+                                $courseDetails = $wpdb->get_row($query, ARRAY_A);
+
+                                if(empty($courseDetails['gradebook_version'])){
+                                    $tracker = $oplb_gradebook_api->version_tracker(OPENLAB_GRADEBOOK_VERSION, $courseDetails);
+
+                                    if($tracker){
+                                        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}oplb_gradebook_courses WHERE id = %d", $gbid);                            
+                                        $courseDetails = $wpdb->get_row($query, ARRAY_A);
+                                        echo json_encode($courseDetails);
+                                    } else {
+                                        echo json_encode($courseDetails);
+                                    }
+
+                                } else {
+                                    echo json_encode($courseDetails);
+                                }
+
+   						
 				break;
 	  		case 'POST' :		
                                 $user = wp_get_current_user();

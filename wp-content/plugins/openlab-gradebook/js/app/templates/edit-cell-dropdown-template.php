@@ -1,5 +1,19 @@
-<select class="grade-selector" <%= role === 'instructor' ? '' : 'disabled="disabled"' %>>
+<div class="cell-wrapper">
+    <% if (role === 'instructor') { %>
+    <select class="grade-selector">
         <% grades.each(function(grade) { %>
-            <option value="<%= grade.get('value') %>" <% if(cell.get('assign_points_earned') >= grade.get('range_low') && cell.get('assign_points_earned') < grade.get('range_high')) { %>selected<% } %> ><%= grade.get('label') %></option>
+        <option value="<%= grade.get('value') %>"
+            <% if(cell.get('assign_points_earned') >= grade.get('range_low') && cell.get('assign_points_earned') < grade.get('range_high')) { %>selected<% } %>>
+            <%= grade.get('label') %></option>
         <% }); %>
-</select>
+    </select>
+    <% } else { %>
+    <span class="grade-numeric" style="cursor: default;">
+        <% if(cell.get('assign_points_earned') === 0) { %>--<% } %>
+        <% grades.each(function(grade) { %>
+        <% if(cell.get('assign_points_earned') >= grade.get('range_low') && cell.get('assign_points_earned') < grade.get('range_high')) { %>
+        <%= grade.get('label') %> <% } %>
+        <% }); %>
+    </span>
+    <% } %>
+</div>

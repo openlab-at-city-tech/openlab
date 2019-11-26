@@ -3,25 +3,20 @@
 **************************************************************************
 
 Plugin Name:  SyntaxHighlighter Evolved
-Plugin URI:   http://www.viper007bond.com/wordpress-plugins/syntaxhighlighter/
-Version:      3.4.2
-Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/wiki/SyntaxHighlighter">SyntaxHighlighter</a>. <strong>TIP:</strong> Don't use the Visual editor if you don't want your code mangled. TinyMCE will "clean up" your HTML.
+Plugin URI:   https://alex.blog/wordpress-plugins/syntaxhighlighter/
+Version:      3.5.1
+Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>. Includes a new editor block.
 Author:       Alex Mills (Viper007Bond)
-Author URI:   http://www.viper007bond.com/
-
-**************************************************************************
-
-Thanks to:
-
-* Alex Gorbatchev for writing the Javascript-powered syntax highlighter script
-
-* Andrew Ozz for writing the TinyMCE plugin
+Author URI:   https://alex.blog/
+Text Domain:  syntaxhighlighter
+License:      GPL2
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 
 **************************************************************************/
 
 class SyntaxHighlighter {
 	// All of these variables are private. Filters are provided for things that can be modified.
-	var $pluginver            = '3.4.2';  // Plugin version
+	var $pluginver            = '3.5.0';  // Plugin version
 	var $agshver              = false;    // Alex Gorbatchev's SyntaxHighlighter version (dynamically set below due to v2 vs v3)
 	var $shfolder             = false;    // Controls what subfolder to load SyntaxHighlighter from (v2 or v3)
 	var $settings             = array();  // Contains the user's settings
@@ -60,8 +55,6 @@ class SyntaxHighlighter {
 		add_filter( 'bp_get_the_topic_post_edit_text', array( $this, 'decode_shortcode_contents' ), 1 ); // BuddyPress
 
 		// Outputting SyntaxHighlighter's JS and CSS
-		add_action( 'wp_head', array( $this, 'output_header_placeholder' ), 15 );
-		add_action( 'admin_head', array( $this, 'output_header_placeholder' ), 15 ); // For comments
 		add_action( 'wp_footer', array( $this, 'maybe_output_scripts' ), 15 );
 		add_action( 'admin_footer', array( $this, 'maybe_output_scripts' ), 15 ); // For comments
 
@@ -79,6 +72,12 @@ class SyntaxHighlighter {
 		) {
 			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 			add_action( 'the_content', array( $this, 'enable_brushes_used_in_blocks' ), 0 );
+			register_block_type(
+				'syntaxhighlighter/code',
+				array(
+					'render_callback' => array( $this, 'render_block' ),
+				)
+			);
 		}
 
 		// Register widget hooks
@@ -259,6 +258,13 @@ class SyntaxHighlighter {
 			'xml'        => __( 'HTML / XHTML / XML / XSLT', 'syntaxhighlighter' ),
 		) );
 
+		// Add any custom brushes that aren't making use of the newer "syntaxhighlighter_brush_names" filter.
+		foreach ( $this->brushes as $slug => $language ) {
+			if ( ! isset( $this->brush_names[ $language ] ) ) {
+				$this->brush_names[ $language ] = $slug;
+			}
+		}
+
 		// Create a list of shortcodes to use. You can use the filter to add/remove ones.
 		// If the language/lang parameter is left out, it's assumed the shortcode name is the language.
 		// If that's invalid, then "plain" is used.
@@ -315,7 +321,7 @@ class SyntaxHighlighter {
 			'syntaxhighlighter-blocks',
 			plugins_url( 'dist/blocks.build.js', __FILE__ ),
 			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
-			( defined( 'WP_DEBUG' ) && WP_DEBUG )
+			( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) )
 				? filemtime( plugin_dir_path( __FILE__ ) . 'dist/blocks.build.js' )
 				: $this->pluginver
 		);
@@ -325,15 +331,44 @@ class SyntaxHighlighter {
 			wp_set_script_translations( 'syntaxhighlighter-blocks', 'syntaxhighlighter' );
 		}
 
-		natsort( $this->brush_names );
+		natcasesort( $this->brush_names );
+
+		$settings = (object) array(
+			'language' => (object) array(
+				'supported' => true,
+				'default' => 'plain'
+			),
+			'lineNumbers' => (object) array(
+				'supported' => true,
+				'default' => (bool) $this->settings['gutter'],
+			),
+			'firstLineNumber' => (object) array(
+				'supported' => true,
+				'default' => $this->settings['firstline'],
+			),
+			'highlightLines' => (object) array(
+				'supported' => true,
+				'default' => '',
+			),
+			'wrapLines' => (object) array(
+				'supported' => ( '2' == $this->settings['shversion'] ),
+				'default' => (bool) $this->settings['wraplines'],
+			),
+			'makeURLsClickable' => (object) array(
+				'supported' => true,
+				'default' => (bool) $this->settings['autolinks'],
+			),
+		);
 
 		wp_add_inline_script(
 			'syntaxhighlighter-blocks',
 			sprintf( '
 				var syntaxHighlighterData = {
 					brushes: %s,
+					settings: %s,
 				};',
-				json_encode( $this->brush_names )
+				json_encode( $this->brush_names ),
+				json_encode( $settings )
 			),
 			'before'
 		);
@@ -365,7 +400,7 @@ class SyntaxHighlighter {
 			! has_block( 'syntaxhighlighter/code', $content )
 			&& ! has_block( 'core/block', $content ) // Reusable
 		) {
-			//return $content;
+			return $content;
 		}
 
 		if ( function_exists( 'parse_blocks' ) ) { // WP 5.0+
@@ -443,6 +478,44 @@ class SyntaxHighlighter {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Renders the content of the Gutenberg block on the front end
+	 * using the shortcode callback. This ensures one source of truth
+	 * and allows for forward compatibility.
+	 *
+	* @param string $content The block's content.
+	 *
+	 * @return string The rendered content.
+	 */
+	public function render_block( $attributes, $content ) {
+		$remaps = array(
+			'lineNumbers'       => 'gutter',
+			'firstLineNumber'   => 'firstline',
+			'highlightLines'    => 'highlight',
+			'wrapLines'         => 'wraplines',
+			'makeURLsClickable' => 'autolinks',
+		);
+
+		foreach ( $remaps as $from => $to ) {
+			if ( isset( $attributes[ $from ] ) ) {
+				if ( is_bool( $attributes[ $from ] ) ) {
+					$attributes[ $to ] = ( $attributes[ $from ] ) ? '1' : '0';
+				} else {
+					$attributes[ $to ] = $attributes[ $from ];
+				}
+
+				unset( $attributes[ $from ] );
+			}
+		}
+
+		$code = preg_replace( '#<pre [^>]+>([^<]+)?</pre>#', '$1', $content );
+
+		// Undo escaping done by WordPress
+		$code = str_replace( '&lt;', '<', $code );
+
+		return $this->shortcode_callback( $attributes, $code, 'code' );
 	}
 
 	// Add the custom TinyMCE plugin which wraps plugin shortcodes in <pre> in TinyMCE
@@ -814,13 +887,6 @@ class SyntaxHighlighter {
 	}
 
 
-	// Output an anchor in the header for the Javascript to use.
-	// In the <head>, we don't know if we'll need this plugin's CSS and JavaScript yet but we will in the footer.
-	function output_header_placeholder() {
-		echo '<style type="text/css" id="syntaxhighlighteranchor"></style>' . "\n";
-	}
-
-
 	// Output any needed scripts. This is meant for the footer.
 	function maybe_output_scripts() {
 		global $wp_styles;
@@ -881,7 +947,7 @@ class SyntaxHighlighter {
 				corecss.rel = "stylesheet";
 				corecss.href = corecssurl;
 		}
-		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		document.head.appendChild( corecss );
 <?php
 		endif; // Endif $needcore
 
@@ -895,8 +961,7 @@ class SyntaxHighlighter {
 				themecss.rel = "stylesheet";
 				themecss.href = themecssurl;
 		}
-		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
-		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+		document.head.appendChild( themecss );
 <?php
 		endif; // Endif none != theme
 
@@ -1439,7 +1504,7 @@ class SyntaxHighlighter {
 	<p><?php printf( __( 'These are the parameters you can pass to the shortcode and what they do. For the booleans (i.e. on/off), pass %1$s/%2$s or %3$s/%4$s.', 'syntaxhighlighter' ), '<code>true</code>', '<code>1</code>', '<code>false</code>', '<code>0</code>' ); ?></p>
 
 	<ul class="ul-disc">
-		<li><?php printf( _x( '%1$s or %2$s &#8212; The language syntax to highlight with. You can alternately just use that as the tag, such as <code>[php]code[/php]</code>. <a href="%3$s">Click here</a> for a list of valid tags (under &quot;aliases&quot;).', 'language parameter', 'syntaxhighlighter' ), '<code>lang</code>', '<code>language</code>', 'http://alexgorbatchev.com/wiki/SyntaxHighlighter:Brushes' ); ?></li>
+		<li><?php printf( _x( '%1$s or %2$s &#8212; The language syntax to highlight with. You can alternately just use that as the tag, such as <code>[php]code[/php]</code>. <a href="%3$s">Click here</a> for a list of valid tags (under &quot;aliases&quot;).', 'language parameter', 'syntaxhighlighter' ), '<code>lang</code>', '<code>language</code>', 'http://alexgorbatchev.com/SyntaxHighlighter/manual/brushes/' ); ?></li>
 		<li><?php printf( _x( '%s &#8212; Toggle automatic URL linking.', 'autolinks parameter', 'syntaxhighlighter' ), '<code>autolinks</code>' ); ?></li>
 		<li><?php printf( _x( '%s &#8212; Add an additional CSS class to the code box.', 'classname parameter', 'syntaxhighlighter' ), '<code>classname</code>' ); ?></li>
 		<li><?php printf( _x( '%s &#8212; Toggle collapsing the code box by default, requiring a click to expand it. Good for large code posts.', 'collapse parameter', 'syntaxhighlighter' ), '<code>collapse</code>' ); ?></li>

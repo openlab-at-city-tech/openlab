@@ -2,7 +2,7 @@
 /**
  * Pages Module
  *
- * @version $Id: pages_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: pages_module.php 2032225 2019-02-16 17:53:18Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -61,7 +61,7 @@
 			}
 			self::$info = $childs_infotext;
 			self::GUIHeader(self::$option[self::$name], self::$question, self::$info);
-			self::GUIOption();
+			self::GUIOption('pg');
 
 			if ( $num_pages > 0 ) {
 				$DW->dumpOpt(self::$opt_page_childs);

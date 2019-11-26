@@ -1635,6 +1635,11 @@ class GFFormSettings {
 				<?php
 				foreach ( $setting_tabs as $tab ) {
 					$query = array( 'subview' => $tab['name'] );
+
+					if ( rgar( $tab, 'capabilities' ) && ! GFCommon::current_user_can_any( $tab['capabilities'] ) ) {
+						continue;
+					}
+
 					if ( isset( $tab['query'] ) )
 						$query = array_merge( $query, $tab['query'] );
 
@@ -1702,10 +1707,29 @@ class GFFormSettings {
 	public static function get_tabs( $form_id ) {
 
 		$setting_tabs = array(
-			'10' => array( 'name' => 'settings', 'label' => __( 'Form Settings', 'gravityforms' ) ),
-			'20' => array( 'name' => 'confirmation', 'label' => __( 'Confirmations', 'gravityforms' ), 'query' => array( 'cid' => null, 'duplicatedcid' => null ) ),
-			'30' => array( 'name' => 'notification', 'label' => __( 'Notifications', 'gravityforms' ), 'query' => array( 'nid' => null ) ),
-			'40' => array( 'name' => 'personal-data', 'label' => __( 'Personal Data', 'gravityforms' ), 'query' => array( 'nid' => null ) ),
+			'10' => array(
+				'name'         => 'settings',
+				'label'        => __( 'Form Settings', 'gravityforms' ),
+				'capabilities' => array( 'gravityforms_edit_forms' ),
+			),
+			'20' => array(
+				'name'         => 'confirmation',
+				'label'        => __( 'Confirmations', 'gravityforms' ),
+				'query'        => array( 'cid' => null, 'duplicatedcid' => null ),
+				'capabilities' => array( 'gravityforms_edit_forms' ),
+			),
+			'30' => array(
+				'name'         => 'notification',
+				'label'        => __( 'Notifications', 'gravityforms' ),
+				'query'        => array( 'nid' => null ),
+				'capabilities' => array( 'gravityforms_edit_forms' ),
+			),
+			'40' => array(
+				'name'         => 'personal-data',
+				'label'        => __( 'Personal Data', 'gravityforms' ),
+				'query'        => array( 'nid' => null ),
+				'capabilities' => array( 'gravityforms_edit_forms' ),
+			),
 		);
 
 		/**
@@ -2034,30 +2058,11 @@ class GFFormSettings {
 		}
 
 		if ( ! $has_save_confirmation ) {
-			$confirmation_id = uniqid( 'sc1' );
-			$form['confirmations'][ $confirmation_id ] = array(
-				'id'          => $confirmation_id,
-				'event'       => 'form_saved',
-				'name'        => __( 'Save and Continue Confirmation', 'gravityforms' ),
-				'isDefault'   => true,
-				'type'        => 'message',
-				'message'     => __( '<p>Please use the following link to return and complete this form from any computer.</p><p class="resume_form_link_wrapper"> {save_link} </p><p> Note: This link will expire after 30 days.<br />Enter your email address if you would like to receive the link via email.</p></p> {save_email_input}</p>', 'gravityforms' ),
-				'url'         => '',
-				'pageId'      => '',
-				'queryString' => '',
-			);
-			$confirmation_id = uniqid( 'sc2' );
-			$form['confirmations'][ $confirmation_id ] = array(
-				'id'          => $confirmation_id,
-				'event'       => 'form_save_email_sent',
-				'name'        => __( 'Save and Continue Email Sent Confirmation', 'gravityforms' ),
-				'isDefault'   => true,
-				'type'        => 'message',
-				'message'     => __( '<span class="saved_message_success">Success!</span>The link was sent to the following email address: <span class="saved_message_email">{save_email}</span>', 'gravityforms' ),
-				'url'         => '',
-				'pageId'      => '',
-				'queryString' => '',
-			);
+			$confirmation_1 = GFFormsModel::get_default_confirmation( 'form_saved' );
+			$confirmation_2 = GFFormsModel::get_default_confirmation( 'form_save_email_sent' );
+
+			$form['confirmations'][ $confirmation_1['id'] ] = $confirmation_1;
+			$form['confirmations'][ $confirmation_2['id'] ] = $confirmation_2;
 			GFFormsModel::save_form_confirmations( $form_id, $form['confirmations'] );
 		}
 		return $form;
@@ -2491,9 +2496,9 @@ class GFConfirmationTable extends WP_List_Table {
 		$duplicate_url = add_query_arg( array( 'cid' => 0, 'duplicatedcid' => $item['id'] ) );
 		$actions       = apply_filters(
 			'gform_confirmation_actions', array(
-				'edit'      => '<a title="' . __( 'Edit this item', 'gravityforms' ) . '" href="' . esc_url( $edit_url ) . '">' . __( 'Edit', 'gravityforms' ) . '</a>',
-				'duplicate' => '<a title="' . __( 'Duplicate this confirmation', 'gravityforms' ) . '" href="' . esc_url( $duplicate_url ) . '">' . __( 'Duplicate', 'gravityforms' ) . '</a>',
-				'delete'    => '<a title="' . __( 'Delete this item', 'gravityforms' ) . '" class="submitdelete" onclick="javascript: if(confirm(\'' . __( 'WARNING: You are about to delete this confirmation.', 'gravityforms' ) . __( "\'Cancel\' to stop, \'OK\' to delete.", 'gravityforms' ) . '\')){ DeleteConfirmation(\'' . esc_js( $item['id'] ) . '\'); }" onkeypress="javascript: if(confirm(\'' . __( 'WARNING: You are about to delete this confirmation.', 'gravityforms' ) . __( "\'Cancel\' to stop, \'OK\' to delete.", 'gravityforms' ) . '\')){ DeleteConfirmation(\'' . esc_js( $item['id'] ) . '\'); }" style="cursor:pointer;">' . __( 'Delete', 'gravityforms' ) . '</a>'
+				'edit'      => '<a href="' . esc_url( $edit_url ) . '">' . __( 'Edit', 'gravityforms' ) . '</a>',
+				'duplicate' => '<a href="' . esc_url( $duplicate_url ) . '">' . __( 'Duplicate', 'gravityforms' ) . '</a>',
+				'delete'    => '<a class="submitdelete" onclick="javascript: if(confirm(\'' . __( 'WARNING: You are about to delete this confirmation.', 'gravityforms' ) . __( "\'Cancel\' to stop, \'OK\' to delete.", 'gravityforms' ) . '\')){ DeleteConfirmation(\'' . esc_js( $item['id'] ) . '\'); }" onkeypress="javascript: if(confirm(\'' . __( 'WARNING: You are about to delete this confirmation.', 'gravityforms' ) . __( "\'Cancel\' to stop, \'OK\' to delete.", 'gravityforms' ) . '\')){ DeleteConfirmation(\'' . esc_js( $item['id'] ) . '\'); }" style="cursor:pointer;">' . __( 'Delete', 'gravityforms' ) . '</a>'
 			)
 		);
 

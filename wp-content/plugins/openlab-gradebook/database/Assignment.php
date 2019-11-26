@@ -31,7 +31,7 @@ class gradebook_assignment_API
         }
 
         $wpdb->show_errors();
-        
+
         //trim assignment_category to prevent downstream spacing issues
         if (!empty($params['assign_category'])) {
             $params['assign_category'] = trim($params['assign_category']);
@@ -46,14 +46,14 @@ class gradebook_assignment_API
                     "{$wpdb->prefix}oplb_gradebook_cells",
                     array(
                         'amid' => $id,
-                        'gbid' => $gbid
+                        'gbid' => $gbid,
                     )
                 );
                 $wpdb->delete(
                     "{$wpdb->prefix}oplb_gradebook_assignments",
                     array(
                         'id' => $id,
-                        'gbid' => $gbid
+                        'gbid' => $gbid,
                     )
                 );
 
@@ -64,7 +64,7 @@ class gradebook_assignment_API
                 if (!empty($student_data)) {
                     $return_data['student_grade_update'] = $student_data;
                 }
-                
+
                 //get the total weight
                 $weight_return = $oplb_gradebook_api->oplb_gradebook_get_total_weight($gbid, array());
                 $return_data['distributed_weight'] = $weight_return['distributed_weight'];
@@ -78,7 +78,7 @@ class gradebook_assignment_API
                 $incoming_weight = $params['assign_weight'];
 
                 $wpdb->update("{$wpdb->prefix}oplb_gradebook_assignments", array(
-                    'assign_name' => $params['assign_name'],
+                    'assign_name' => htmlspecialchars_decode(trim($params['assign_name']), ENT_QUOTES),
                     'assign_date' => $params['assign_date'],
                     'assign_due' => $params['assign_due'],
                     'assign_order' => $params['assign_order'],
@@ -151,7 +151,7 @@ class gradebook_assignment_API
                     $assignOrders = array(0);
                 }
                 $assignOrder = max($assignOrders) + 1;
-                
+
                 //handle values that cannot be NULL
                 if (!$params['assign_weight']) {
                     $params['assign_weight'] = 0;
@@ -170,7 +170,7 @@ class gradebook_assignment_API
                 }
 
                 $wpdb->insert("{$wpdb->prefix}oplb_gradebook_assignments", array(
-                    'assign_name' => $params['assign_name'],
+                    'assign_name' => htmlspecialchars_decode(trim($params['assign_name']), ENT_QUOTES),
                     'assign_date' => $params['assign_date'],
                     'assign_due' => $params['assign_due'],
                     'assign_category' => $params['assign_category'],
@@ -178,7 +178,7 @@ class gradebook_assignment_API
                     'assign_grade_type' => $params['assign_grade_type'],
                     'assign_weight' => $params['assign_weight'],
                     'gbid' => $params['gbid'],
-                    'assign_order' => $assignOrder
+                    'assign_order' => $assignOrder,
                 ), array('%s', '%s', '%s', '%s', '%s', '%s', '%f', '%d', '%d'));
 
                 $assignID = $wpdb->insert_id;
@@ -192,7 +192,13 @@ class gradebook_assignment_API
                     $is_null = 0;
                 }
 
+                $usernames = array();
+
                 foreach ($studentIDs as $value) {
+
+                    $student = get_userdata($value[0]);
+                    $usernames[intval($student->ID)] = $student->user_login;
+
                     $wpdb->insert("{$wpdb->prefix}oplb_gradebook_cells", array(
                         'amid' => $assignID,
                         'uid' => $value[0],
@@ -224,11 +230,13 @@ class gradebook_assignment_API
                 foreach ($cells as &$cell) {
                     $cell['amid'] = intval($cell['amid']);
                     $cell['uid'] = intval($cell['uid']);
+                    $cell['username'] = !empty($usernames[intval($cell['uid'])]) ? $usernames[intval($cell['uid'])] : '';
                     $cell['assign_order'] = intval($cell['assign_order']);
                     $cell['assign_points_earned'] = floatval($cell['assign_points_earned']);
                     $cell['gbid'] = intval($cell['gbid']);
                     $cell['id'] = intval($cell['id']);
                     $cell['is_null'] = boolval(intval($cell['is_null']));
+                    $cell['comments'] = !empty($cell['comments']) ? sanitize_text_field($cell['comments']) : false;
                 }
                 $data = array('assignment' => $assignment, 'cells' => $cells);
                 echo json_encode($data);
@@ -238,5 +246,3 @@ class gradebook_assignment_API
     }
 
 }
-
-?>

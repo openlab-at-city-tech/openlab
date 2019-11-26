@@ -6,7 +6,7 @@
 class OPLB_DATABASE
 {
 
-    const oplb_gradebook_db_version = 1.84;
+    const oplb_gradebook_db_version = 1.89;
 
     public function __construct()
     {
@@ -15,10 +15,10 @@ class OPLB_DATABASE
 
     public function oplb_gradebook_upgrade_db()
     {
-        global $wpdb;
 
         if (!get_option('oplb_gradebook_db_version')) {
             $this->database_init();
+            $this->database_alter();
         }
 
         if (self::oplb_gradebook_db_version > get_option('oplb_gradebook_db_version')) {
@@ -87,6 +87,53 @@ class OPLB_DATABASE
             update_option("oplb_gradebook_db_version", 1.84);
         }
 
+        if (get_option('oplb_gradebook_db_version') < 1.87) {
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_cells LIKE %s", 'comments');
+            $check_comments = $wpdb->get_results($query);
+
+            //comments for cells
+            if (empty($check_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_cells ADD comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
+
+            update_option("oplb_gradebook_db_version", 1.87);
+        }
+
+        if (get_option('oplb_gradebook_db_version') < 1.88) {
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_users LIKE %s", 'mid_semester_comments');
+            $check_mid_semester_comments = $wpdb->get_results($query);
+
+            //comments for cells
+            if (empty($check_mid_semester_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD mid_semester_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
+
+            //some installs may already have this column, so this will check first
+            $query = $wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oplb_gradebook_users LIKE %s", 'final_comments');
+            $check_final_comments = $wpdb->get_results($query);
+
+            if (empty($check_final_comments)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_users ADD final_comments longtext CHARACTER SET utf8 COLLATE utf8_general_ci";
+                $wpdb->query($sql);
+            }
+
+            update_option("oplb_gradebook_db_version", 1.88);
+        }
+
+        if (get_option('oplb_gradebook_db_version') < 1.89) {
+
+            $sql = "ALTER TABLE {$wpdb->prefix}oplb_gradebook_courses ADD gradebook_version VARCHAR(255)";
+            $wpdb->query($sql);
+
+            update_option("oplb_gradebook_db_version", 1.89);
+        }
+
     }
 
     public function database_init()
@@ -104,7 +151,7 @@ class OPLB_DATABASE
 			semester TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 			year int(11) NOT NULL,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
 
@@ -121,7 +168,7 @@ class OPLB_DATABASE
             mid_semester_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "--",
             final_grade VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "--",
 			PRIMARY KEY  (id)  )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
         //The column headings that should be in the oplb_assignments table are stored in $table_columns
@@ -146,19 +193,19 @@ class OPLB_DATABASE
             $sql = 'CREATE TABLE ' . $db_name2 . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			gbid int(11) NOT NULL,
-			assign_order int(11) NOT NULL,		
+			assign_order int(11) NOT NULL,
 			assign_name mediumtext NOT NULL,
-			assign_category mediumtext NOT NULL,			
+			assign_category mediumtext NOT NULL,
 			assign_visibility VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "Students",
 			assign_date DATE NOT NULL DEFAULT "0000-00-00",
 			assign_due DATE NOT NULL DEFAULT "0000-00-00",
                         assign_grade_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT "numeric",
                         assign_weight decimal(7,2) NOT NULL DEFAULT 1.00,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         } else {
-            //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table		
+            //Otherwise, check if there is something to upgrade in oplb_gradebook_assignments table
             //anfixme: this needs to move to the database_alter
             $query = $wpdb->prepare("SELECT column_name FROM information_schema.columns
 				WHERE table_name = %s ORDER BY ordinal_position", $db_name2);
@@ -188,7 +235,7 @@ class OPLB_DATABASE
             assign_points_earned decimal(7,2) NOT NULL,
             is_null tinyint unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id) )';
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta($sql);
         }
         update_option("oplb_gradebook_settings", array(
@@ -196,9 +243,9 @@ class OPLB_DATABASE
             'editor' => false,
             'contributor' => false,
             'author' => false,
-            'subscriber' => false
+            'subscriber' => false,
         ));
-        update_option("oplb_gradebook_db_version", self::oplb_gradebook_db_version);
+        update_option("oplb_gradebook_db_version", 1.84);
     }
 
 }

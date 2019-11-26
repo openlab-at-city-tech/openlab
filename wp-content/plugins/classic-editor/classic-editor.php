@@ -5,14 +5,13 @@
  * Plugin Name: Classic Editor
  * Plugin URI:  https://wordpress.org/plugins/classic-editor/
  * Description: Enables the WordPress classic editor and the old-style Edit Post screen with TinyMCE, Meta Boxes, etc. Supports the older plugins that extend this screen.
- * Version:     1.3
+ * Version:     1.5
  * Author:      WordPress Contributors
  * Author URI:  https://github.com/WordPress/classic-editor/
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Text Domain: classic-editor
  * Domain Path: /languages
- * Network:     true
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
  * General Public License version 2, as published by the Free Software Foundation. You may NOT assume
@@ -28,7 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Classic_Editor' ) ) :
 class Classic_Editor {
-	const plugin_version = 1.2;
 	private static $settings;
 	private static $supported_post_types = array();
 
@@ -36,7 +34,7 @@ class Classic_Editor {
 
 	public static function init_actions() {
 		$block_editor = has_action( 'enqueue_block_assets' );
-		$gutenberg = function_exists( 'gutenberg_can_edit_post_type' );
+		$gutenberg = function_exists( 'gutenberg_register_scripts_and_styles' );
 
 		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
@@ -49,8 +47,10 @@ class Classic_Editor {
 		}
 
 		if ( ! $settings['hide-settings-ui'] ) {
-			// Show the plugin's admin settings, and a link to them in the plugins list table.
+			// Add a link to the plugin's settings and/or network admin settings in the plugins list table.
 			add_filter( 'plugin_action_links', array( __CLASS__, 'add_settings_link' ), 10, 2 );
+			add_filter( 'network_admin_plugin_action_links', array( __CLASS__, 'add_settings_link' ), 10, 2 );
+
 			add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 
 			if ( $settings['allow-users'] ) {
@@ -68,10 +68,11 @@ class Classic_Editor {
 		}
 
 		if ( $settings['allow-users'] ) {
-			if ( $block_editor ) {
-				add_filter( 'use_block_editor_for_post', array( __CLASS__, 'choose_editor' ), 100, 2 );
-			}
+			// Also used in Gutenberg.
+			add_filter( 'use_block_editor_for_post', array( __CLASS__, 'choose_editor' ), 100, 2 );
+
 			if ( $gutenberg ) {
+				// Support older Gutenberg versions.
 				add_filter( 'gutenberg_can_edit_post', array( __CLASS__, 'choose_editor' ), 100, 2 );
 
 				if ( $settings['editor'] === 'classic' ) {
@@ -95,15 +96,15 @@ class Classic_Editor {
 
 			// Switch editors while editing a post
 			add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_box' ), 10, 2 );
-			// TODO: needs https://github.com/WordPress/gutenberg/pull/12309
-			// add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'enqueue_block_editor_scripts' ) );
+			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'enqueue_block_editor_scripts' ) );
 		} else {
 			if ( $settings['editor'] === 'classic' ) {
-				if ( $block_editor ) {
-					// Consider disabling other Block Editor functionality.
-					add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
-				}
+				// Also used in Gutenberg.
+				// Consider disabling other Block Editor functionality.
+				add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
+
 				if ( $gutenberg ) {
+					// Support older Gutenberg versions.
 					add_filter( 'gutenberg_can_edit_post_type', '__return_false', 100 );
 					self::remove_gutenberg_hooks();
 				}
@@ -114,13 +115,11 @@ class Classic_Editor {
 		}
 
 		if ( $block_editor ) {
-			// Show warning on the "What's New" screen (about.php).
-			add_action( 'all_admin_notices', array( __CLASS__, 'notice_after_upgrade' ) );
 			// Move the Privacy Page notice back under the title.
 			add_action( 'admin_init', array( __CLASS__, 'on_admin_init' ) );
 		}
 		if ( $gutenberg ) {
-			// These are handled by this plugin.
+			// These are handled by this plugin. All are older, not used in 5.3+.
 			remove_action( 'admin_init', 'gutenberg_add_edit_link_filters' );
 			remove_action( 'admin_print_scripts-edit.php', 'gutenberg_replace_default_add_new_button' );
 			remove_filter( 'redirect_post_location', 'gutenberg_redirect_to_classic_editor_when_saving_posts' );
@@ -137,16 +136,35 @@ class Classic_Editor {
 			return;
 		}
 
+		// Gutenberg 5.3+
+		remove_action( 'wp_enqueue_scripts', 'gutenberg_register_scripts_and_styles' );
+		remove_action( 'admin_enqueue_scripts', 'gutenberg_register_scripts_and_styles' );
+		remove_action( 'admin_notices', 'gutenberg_wordpress_version_notice' );
+		remove_action( 'rest_api_init', 'gutenberg_register_rest_widget_updater_routes' );
+		remove_action( 'admin_print_styles', 'gutenberg_block_editor_admin_print_styles' );
+		remove_action( 'admin_print_scripts', 'gutenberg_block_editor_admin_print_scripts' );
+		remove_action( 'admin_print_footer_scripts', 'gutenberg_block_editor_admin_print_footer_scripts' );
+		remove_action( 'admin_footer', 'gutenberg_block_editor_admin_footer' );
+		remove_action( 'admin_enqueue_scripts', 'gutenberg_widgets_init' );
+		remove_action( 'admin_notices', 'gutenberg_build_files_notice' );
+
+		remove_filter( 'load_script_translation_file', 'gutenberg_override_translation_file' );
+		remove_filter( 'block_editor_settings', 'gutenberg_extend_block_editor_styles' );
+		remove_filter( 'default_content', 'gutenberg_default_demo_content' );
+		remove_filter( 'default_title', 'gutenberg_default_demo_title' );
+		remove_filter( 'block_editor_settings', 'gutenberg_legacy_widget_settings' );
+		remove_filter( 'rest_request_after_callbacks', 'gutenberg_filter_oembed_result' );
+
+		// Previously used, compat for older Gutenberg versions.
 		remove_filter( 'wp_refresh_nonces', 'gutenberg_add_rest_nonce_to_heartbeat_response_headers' );
 		remove_filter( 'get_edit_post_link', 'gutenberg_revisions_link_to_editor' );
 		remove_filter( 'wp_prepare_revision_for_js', 'gutenberg_revisions_restore' );
 
 		remove_action( 'rest_api_init', 'gutenberg_register_rest_routes' );
 		remove_action( 'rest_api_init', 'gutenberg_add_taxonomy_visibility_field' );
-		remove_filter( 'rest_request_after_callbacks', 'gutenberg_filter_oembed_result' );
 		remove_filter( 'registered_post_type', 'gutenberg_register_post_prepare_functions' );
 
-		remove_action( 'do_meta_boxes', 'gutenberg_meta_box_save', 1000 );
+		remove_action( 'do_meta_boxes', 'gutenberg_meta_box_save' );
 		remove_action( 'submitpost_box', 'gutenberg_intercept_meta_box_render' );
 		remove_action( 'submitpage_box', 'gutenberg_intercept_meta_box_render' );
 		remove_action( 'edit_page_form', 'gutenberg_intercept_meta_box_render' );
@@ -154,7 +172,6 @@ class Classic_Editor {
 		remove_filter( 'redirect_post_location', 'gutenberg_meta_box_save_redirect' );
 		remove_filter( 'filter_gutenberg_meta_boxes', 'gutenberg_filter_meta_boxes' );
 
-		remove_action( 'admin_notices', 'gutenberg_build_files_notice' );
 		remove_filter( 'body_class', 'gutenberg_add_responsive_body_class' );
 		remove_filter( 'admin_url', 'gutenberg_modify_add_new_button_url' ); // old
 		remove_action( 'admin_enqueue_scripts', 'gutenberg_check_if_classic_needs_warning_about_blocks' );
@@ -200,7 +217,7 @@ class Classic_Editor {
 
 		if ( is_multisite() ) {
 			$defaults = array(
-				'editor' => 'classic',
+				'editor' => get_network_option( null, 'classic-editor-replace' ) === 'block' ? 'block' : 'classic',
 				'allow-users' => false,
 			);
 
@@ -272,12 +289,16 @@ class Classic_Editor {
 			if ( $settings['allow-users'] && ! isset( $_GET['classic-editor__forget'] ) ) {
 				$which = get_post_meta( $post_id, 'classic-editor-remember', true );
 
-				// The editor choice will be "remembered" when the post is opened in either Classic or Block editor.
-				if ( 'classic-editor' === $which ) {
-					return true;
-				} elseif ( 'block-editor' === $which ) {
-					return false;
+				if ( $which ) {
+					// The editor choice will be "remembered" when the post is opened in either Classic or Block editor.
+					if ( 'classic-editor' === $which ) {
+						return true;
+					} elseif ( 'block-editor' === $which ) {
+						return false;
+					}
 				}
+
+				return ( ! self::has_blocks( $post_id ) );
 			}
 		}
 
@@ -422,7 +443,7 @@ class Classic_Editor {
 		?>
 		<table class="form-table">
 			<tr class="classic-editor-user-options">
-				<th scope="row"><?php _e( 'Editor', 'classic-editor' ); ?></th>
+				<th scope="row"><?php _e( 'Default Editor', 'classic-editor' ); ?></th>
 				<td>
 				<?php wp_nonce_field( 'allow-user-settings', 'classic-editor-user-settings' ); ?>
 				<?php self::settings_1(); ?>
@@ -434,17 +455,32 @@ class Classic_Editor {
 	}
 
 	public static function network_settings() {
-		$is_checked =  ( get_network_option( null, 'classic-editor-allow-sites' ) === 'allow' );
+		$editor = get_network_option( null, 'classic-editor-replace' );
+		$is_checked = ( get_network_option( null, 'classic-editor-allow-sites' ) === 'allow' );
 
 		?>
+		<h2 id="classic-editor-options"><?php _e( 'Editor Settings', 'classic-editor' ); ?></h2>
 		<table class="form-table">
+			<?php wp_nonce_field( 'allow-site-admin-settings', 'classic-editor-network-settings' ); ?>
 			<tr>
-				<th scope="row"><?php _ex( 'Classic Editor', 'Editor Name', 'classic-editor' ); ?></th>
+				<th scope="row"><?php _e( 'Default editor for all sites', 'classic-editor' ); ?></th>
 				<td>
-				<?php wp_nonce_field( 'allow-site-admin-settings', 'classic-editor-network-settings' ); ?>
-				<input type="checkbox" name="classic-editor-allow-sites" id="classic-editor-allow-sites" value="allow"<?php if ( $is_checked ) echo ' checked'; ?>>
-				<label for="classic-editor-allow-sites"><?php _e( 'Allow site admins to change settings', 'classic-editor' ); ?></label>
-				<p class="description"><?php _e( 'By default the Block Editor is replaced with the Classic Editor and users cannot switch editors.', 'classic-editor' ); ?></p>
+					<p>
+						<input type="radio" name="classic-editor-replace" id="classic-editor-classic" value="classic"<?php if ( $editor !== 'block' ) echo ' checked'; ?> />
+						<label for="classic-editor-classic"><?php _ex( 'Classic Editor', 'Editor Name', 'classic-editor' ); ?></label>
+					</p>
+					<p>
+						<input type="radio" name="classic-editor-replace" id="classic-editor-block" value="block"<?php if ( $editor === 'block' ) echo ' checked'; ?> />
+						<label for="classic-editor-block"><?php _ex( 'Block Editor', 'Editor Name', 'classic-editor' ); ?></label>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php _e( 'Change settings', 'classic-editor' ); ?></th>
+				<td>
+					<input type="checkbox" name="classic-editor-allow-sites" id="classic-editor-allow-sites" value="allow"<?php if ( $is_checked ) echo ' checked'; ?>>
+					<label for="classic-editor-allow-sites"><?php _e( 'Allow site admins to change settings', 'classic-editor' ); ?></label>
+					<p class="description"><?php _e( 'By default the Block Editor is replaced with the Classic Editor and users cannot switch editors.', 'classic-editor' ); ?></p>
 				</td>
 			</tr>
 		</table>
@@ -457,44 +493,17 @@ class Classic_Editor {
 			current_user_can( 'manage_network_options' ) &&
 			wp_verify_nonce( $_POST['classic-editor-network-settings'], 'allow-site-admin-settings' )
 		) {
+			if ( isset( $_POST['classic-editor-replace'] ) && $_POST['classic-editor-replace'] === 'block' ) {
+				update_network_option( null, 'classic-editor-replace', 'block' );
+			} else {
+				update_network_option( null, 'classic-editor-replace', 'classic' );
+			}
 			if ( isset( $_POST['classic-editor-allow-sites'] ) && $_POST['classic-editor-allow-sites'] === 'allow' ) {
 				update_network_option( null, 'classic-editor-allow-sites', 'allow' );
 			} else {
 				update_network_option( null, 'classic-editor-allow-sites', 'disallow' );
 			}
 		}
-	}
-
-	public static function notice_after_upgrade() {
-		global $pagenow;
-		$settings = self::get_settings();
-
-		if (
-			$pagenow !== 'about.php' ||
-			$settings['hide-settings-ui'] ||
-			$settings['editor'] === 'block' || 
-			$settings['allow-users'] ||
-			! current_user_can( 'edit_posts' )
-		) {
-			// No need to show when the user cannot edit posts,
-			// the settings are preset from another plugin,
-			// or when not replacing the Block Editor.
-			return;
-		}
-
-		$message = __( 'The Classic Editor plugin prevents use of the new Block Editor.', 'classic-editor' );
-
-		if ( current_user_can( 'manage_options' ) ) {
-			$message .= ' ' . sprintf( __( 'Change the %1$sClassic Editor settings%2$s.', 'classic-editor' ), '<a href="options-writing.php#classic-editor-options">', '</a>' );
-		}
-
-		$margin = is_rtl() ? 'margin: 1em 0 0 160px;' : 'margin: 1em 160px 0 0;';
-
-		?>
-		<div id="message" class="notice-warning notice" style="display: inline-block !important; <?php echo $margin; ?>">
-			<p><?php echo $message; ?></p>
-		</div>
-		<?php
 	}
 
 	/**
@@ -618,33 +627,25 @@ class Classic_Editor {
 		$id = 'classic-editor-switch-editor';
 		$title = __( 'Editor', 'classic-editor' );
 		$callback = array( __CLASS__, 'do_meta_box' );
-		/* Add when the Block Editor plugin is enabled.
 		$args = array(
 			'__back_compat_meta_box' => true,
 	    );
-	    */
 
-		add_meta_box( $id, $title, $callback, null, 'side', 'default' );
+		add_meta_box( $id, $title, $callback, null, 'side', 'default', $args );
 	}
 
 	public static function do_meta_box( $post ) {
 		$edit_url = get_edit_post_link( $post->ID, 'raw' );
 
-		if ( did_action( 'enqueue_block_editor_assets' ) ) {
-			// Block Editor is loading, switch to Classic Editor.
-			$edit_url = add_query_arg( 'classic-editor', '', $edit_url );
-			$link_text = __( 'Switch to Classic Editor', 'classic-editor' );
-		} else {
-			// Switch to Block Editor.
-			$edit_url = remove_query_arg( 'classic-editor', $edit_url );
-			$link_text = __( 'Switch to Block Editor', 'classic-editor' );
-		}
-
+		// Switching to Block Editor.
+		$edit_url = remove_query_arg( 'classic-editor', $edit_url );
 		// Forget the previous value when going to a specific editor.
 		$edit_url = add_query_arg( 'classic-editor__forget', '', $edit_url );
 
 		?>
-		<p style="margin: 1em 0;"><a href="<?php echo esc_url( $edit_url ); ?>"><?php echo $link_text; ?></a></p>
+		<p style="margin: 1em 0;">
+			<a href="<?php echo esc_url( $edit_url ); ?>"><?php _e( 'Switch to Block Editor', 'classic-editor' ); ?></a>
+		</p>
 		<?php
 	}
 
@@ -657,15 +658,15 @@ class Classic_Editor {
 		}
 
 		wp_enqueue_script(
-			'classic-editor-add-submenu',
+			'classic-editor-plugin',
 			plugins_url( 'js/block-editor-plugin.js', __FILE__ ),
 			array( 'wp-element', 'wp-components', 'lodash' ),
-			self::plugin_version,
+			'1.4',
 			true
 		);
 
 		wp_localize_script(
-			'classic-editor-add-submenu',
+			'classic-editor-plugin',
 			'classicEditorPluginL10n',
 			array( 'linkText' => __( 'Switch to Classic Editor', 'classic-editor' ) )
 		);
@@ -678,7 +679,15 @@ class Classic_Editor {
 		$settings = self::get_settings();
 
 		if ( $file === 'classic-editor/classic-editor.php' && ! $settings['hide-settings-ui'] && current_user_can( 'manage_options' ) ) {
-			(array) $links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-writing.php#classic-editor-options' ), __( 'Settings', 'classic-editor' ) );
+			if ( current_filter() === 'plugin_action_links' ) {
+				$url = admin_url( 'options-writing.php#classic-editor-options' );
+			} else {
+				$url = admin_url( '/network/settings.php#classic-editor-options' );
+			}
+
+			// Prevent warnings in PHP 7.0+ when a plugin uses this filter incorrectly.
+			$links = (array) $links;
+			$links[] = sprintf( '<a href="%s">%s</a>', $url, __( 'Settings', 'classic-editor' ) );
 		}
 
 		return $links;
@@ -793,14 +802,14 @@ class Classic_Editor {
 
 		// Link to the Block Editor.
 		$url = remove_query_arg( 'classic-editor', $edit_url );
-		$text = _x( 'Block Editor', 'Editor Name', 'classic-editor' );
+		$text = _x( 'Edit (Block Editor)', 'Editor Name', 'classic-editor' );
 		/* translators: %s: post title */
 		$label = sprintf( __( 'Edit &#8220;%s&#8221; in the Block Editor', 'classic-editor' ), $title );
 		$edit_block = sprintf( '<a href="%s" aria-label="%s">%s</a>', esc_url( $url ), esc_attr( $label ), $text );
 
 		// Link to the Classic Editor.
 		$url = add_query_arg( 'classic-editor', '', $edit_url );
-		$text = _x( 'Classic Editor', 'Editor Name', 'classic-editor' );
+		$text = _x( 'Edit (Classic Editor)', 'Editor Name', 'classic-editor' );
 		/* translators: %s: post title */
 		$label = sprintf( __( 'Edit &#8220;%s&#8221; in the Classic Editor', 'classic-editor' ), $title );
 		$edit_classic = sprintf( '<a href="%s" aria-label="%s">%s</a>', esc_url( $url ), esc_attr( $label ), $text );
@@ -821,6 +830,10 @@ class Classic_Editor {
 	 * Show the editor that will be used in a "post state" in the Posts list table.
 	 */
 	public static function add_post_state( $post_states, $post ) {
+		if ( get_post_status( $post ) === 'trash' ) {
+			return $post_states;
+		}
+
 		$editors = self::get_enabled_editors_for_post( $post );
 
 		if ( ! $editors['classic_editor'] && ! $editors['block_editor'] ) {
@@ -836,6 +849,8 @@ class Classic_Editor {
 
 			if ( $last_editor ) {
 				$is_classic = ( $last_editor === 'classic-editor' );
+			} elseif ( ! empty( $post->post_content ) ) {
+				$is_classic = ! self::has_blocks( $post->post_content );
 			} else {
 				$settings = self::get_settings();
 				$is_classic = ( $settings['editor'] === 'classic' );
@@ -844,7 +859,9 @@ class Classic_Editor {
 			$state = $is_classic ? _x( 'Classic Editor', 'Editor Name', 'classic-editor' ) : _x( 'Block Editor', 'Editor Name', 'classic-editor' );
 		}
 
-		(array) $post_states[] = $state;
+		// Fix PHP 7+ warnings if another plugin returns unexpected type.
+		$post_states = (array) $post_states;
+		$post_states['classic-editor-plugin'] = $state;
 
 		return $post_states;
 	}
@@ -879,11 +896,25 @@ class Classic_Editor {
 		}
 	}
 
+	// Need to support WP < 5.0
+	private static function has_blocks( $post = null ) {
+		if ( ! is_string( $post ) ) {
+			$wp_post = get_post( $post );
+
+			if ( $wp_post instanceof WP_Post ) {
+				$post = $wp_post->post_content;
+			}
+		}
+
+		return false !== strpos( (string) $post, '<!-- wp:' );
+	}
+
 	/**
 	 * Set defaults on activation.
 	 */
 	public static function activate() {
 		if ( is_multisite() ) {
+			add_network_option( null, 'classic-editor-replace', 'classic' );
 			add_network_option( null, 'classic-editor-allow-sites', 'disallow' );
 		}
 
@@ -896,6 +927,7 @@ class Classic_Editor {
 	 */
 	public static function uninstall() {
 		if ( is_multisite() ) {
+			delete_network_option( null, 'classic-editor-replace' );
 			delete_network_option( null, 'classic-editor-allow-sites' );
 		}
 

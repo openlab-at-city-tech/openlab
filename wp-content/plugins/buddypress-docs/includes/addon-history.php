@@ -3,7 +3,7 @@
 /**
  * The History tab add-on for BuddyPress Docs
  *
- * @package BuddyPressDocs
+ * @package BuddyPress Docs
  * @subpackage History
  * @since 1.1
  */
@@ -24,13 +24,19 @@ class BP_Docs_History {
 	/**
 	 * PHP 5 constructor
 	 *
+	 * @package BuddyPress Docs
 	 * @since 1.1
 	 */
 	function __construct() {
 		global $bp;
 
-		add_action( 'bp_actions', array( &$this, 'setup_params' ), 1 );
-		add_action( 'bp_actions', array( &$this, 'setup_action' ), 2 );
+		if ( 'history' != bp_docs_current_view() )
+			return false;
+
+		$this->setup_params();
+
+		// Hooked to a page load action to make sure the post type is registered
+		add_action( 'bp_docs_registered_post_type', array( $this, 'setup_action' ), 2 );
 
 		$bp->bp_docs->history =& $this;
 	}
@@ -40,14 +46,11 @@ class BP_Docs_History {
 	 *
 	 * Does some sanity checks along the way
 	 *
+	 * @package BuddyPress Docs
 	 * @since 1.1
 	 */
 	function setup_params() {
 		global $bp;
-
-		if ( ! bp_docs_is_existing_doc() ) {
-			return;
-		}
 
 		$actions = array(
 			'restore',
@@ -64,7 +67,10 @@ class BP_Docs_History {
 		// current post
 		$this->revision_id = !empty( $_GET['revision'] ) ? (int)$_GET['revision'] : false;
 		if ( !$this->revision_id ) {
-			$this->revision_id = get_the_ID();
+			if ( empty( $bp->bp_docs->current_post ) )
+				$bp->bp_docs->current_post = bp_docs_get_current_doc();
+
+			$this->revision_id = !empty( $bp->bp_docs->current_post->ID ) ? $bp->bp_docs->current_post->ID : false;
 		}
 	}
 
@@ -78,14 +84,11 @@ class BP_Docs_History {
 	 * This is cribbed nearly wholesale from wp-admin/revision.php. In the future I would like
 	 * to clean it up to be less WordPressy and more pluginish.
 	 *
+	 * @package BuddyPress Docs
 	 * @since 1.1
 	 */
 	function setup_action() {
-		global $bp;
-
-		if ( ! bp_docs_is_existing_doc() ) {
-			return;
-		}
+		global $bp, $post;
 
 		wp_enqueue_script( 'list-revisions' );
 
@@ -95,13 +98,13 @@ class BP_Docs_History {
 		case 'restore' :
 			if ( !$this->revision = wp_get_post_revision( $this->revision_id ) )
 				break;
-			if ( ! current_user_can( 'bp_docs_edit' ) )
+			if ( !bp_docs_current_user_can( 'edit' ) )
 				break;
 			if ( !$post = get_post( $this->revision->post_parent ) )
 				break;
 
 			// Revisions disabled and we're not looking at an autosave
-			if ( ! wp_revisions_enabled( $post ) && !wp_is_post_autosave( $this->revision ) ) {
+			if ( ( ! WP_POST_REVISIONS || !post_type_supports( $post->post_type, 'revisions') ) && !wp_is_post_autosave( $this->revision ) ) {
 				$redirect = 'edit.php?post_type=' . $post->post_type;
 				break;
 			}
@@ -111,8 +114,8 @@ class BP_Docs_History {
 
 			wp_restore_post_revision( $this->revision->ID );
 
-			bp_core_add_message( sprintf( __( 'You have successfully restored the Doc to the revision from %s.', 'buddypress-docs' ), $this->revision->post_date ) );
-			$redirect = get_permalink( $post->ID ) . '/' . BP_DOCS_HISTORY_SLUG . '/';
+			bp_core_add_message( sprintf( __( 'You have successfully restored the Doc to the revision from %s.', 'bp-docs' ), $this->revision->post_date ) );
+			$redirect = bp_docs_get_doc_link( $post->ID ) . '/' . BP_DOCS_HISTORY_SLUG . '/';
 			break;
 		case 'diff' :
 			if ( !$this->left_revision  = get_post( $this->left ) )
@@ -135,7 +138,7 @@ class BP_Docs_History {
 			else
 				break; // Don't diff two unrelated revisions
 
-			if ( ! wp_revisions_enabled( $post ) ) { // Revisions disabled
+			if ( ! WP_POST_REVISIONS || !post_type_supports( $post->post_type, 'revisions' ) ) { // Revisions disabled
 
 				if (
 					// we're not looking at an autosave
@@ -159,8 +162,8 @@ class BP_Docs_History {
 				break;
 
 			$post_title = '<a href="' . get_edit_post_link() . '">' . get_the_title() . '</a>';
-			$h2 = sprintf( __( 'Compare Revisions of &#8220;%1$s&#8221;', 'buddypress-docs' ), $post_title );
-			$title = __( 'Revisions', 'buddypress-docs' );
+			$h2 = sprintf( __( 'Compare Revisions of &#8220;%1$s&#8221;', 'bp-docs' ), $post_title );
+			$title = __( 'Revisions', 'bp-docs' );
 
 			$this->left  = $this->left_revision->ID;
 			$this->right = $this->right_revision->ID;
@@ -181,15 +184,15 @@ class BP_Docs_History {
 				break;
 
 			// Revisions disabled and we're not looking at an autosave
-			if ( ! wp_revisions_enabled( $post ) && !wp_is_post_autosave( $this->revision ) ) {
+			if ( ( ! WP_POST_REVISIONS || !post_type_supports($post->post_type, 'revisions') ) && !wp_is_post_autosave( $this->revision ) ) {
 				$redirect = 'edit.php?post_type=' . $post->post_type;
 				break;
 			}
 
 			$post_title = '<a href="' . get_edit_post_link() . '">' . get_the_title() . '</a>';
 			$revision_title = wp_post_revision_title( $this->revision, false );
-			$h2 = sprintf( __( 'Revision for &#8220;%1$s&#8221; created on %2$s', 'buddypress-docs' ), $post_title, $revision_title );
-			$title = __( 'Revisions', 'buddypress-docs' );
+			$h2 = sprintf( __( 'Revision for &#8220;%1$s&#8221; created on %2$s', 'bp-docs' ), $post_title, $revision_title );
+			$title = __( 'Revisions', 'bp-docs' );
 
 			// Sets up the diff radio buttons
 			$this->left  = $this->revision->ID;
@@ -211,6 +214,7 @@ class BP_Docs_History {
 	 * This is cribbed nearly wholesale from wp-admin/revision.php. In the future I would like
 	 * to clean it up to be less WordPressy and more pluginish.
 	 *
+	 * @package BuddyPress Docs
 	 * @since 1.1
 	 */
 	function setup_is_identical() {
@@ -223,7 +227,7 @@ class BP_Docs_History {
 				if ( !$content = wp_text_diff( $left_content, $right_content ) )
 					continue; // There is no difference between left and right
 				$this->revisions_are_identical = false;
-			} else if ( isset( $this->revision ) && is_object( $this->revision ) && isset( $this->revision->$field ) ) {
+			} else {
 				add_filter( "_wp_post_revision_field_$field", 'htmlspecialchars' );
 				$content = apply_filters( "_wp_post_revision_field_$field", $this->revision->$field, $field );
 			}
@@ -234,6 +238,7 @@ class BP_Docs_History {
 /**
  * Returns the current revision action.
  *
+ * @package BuddyPress Docs
  * @since 1.1
  *
  * @return str $action The current revision action ('view', 'diff', 'restore')
@@ -254,6 +259,7 @@ function bp_docs_history_action() {
  * overkill to me. I also added a default null $side, so that you can also use this function to
  * get the field of a single revision ($history->revision) instead of $history->left_revision, etc.
  *
+ * @package BuddyPress Docs
  * @since 1.1
  *
  * @param str $side 'left', 'right', or false to show the main revision
@@ -265,9 +271,9 @@ function bp_docs_history_post_revision_field( $side = false, $field = 'post_titl
 
 	if ( $side ) {
 		$side = 'right' == $side ? 'right_revision' : 'left_revision';
-		$data = isset( $bp->bp_docs->history->{$side}->{$field} ) ? $bp->bp_docs->history->{$side}->{$field} : '';
+		$data = $bp->bp_docs->history->{$side}->{$field};
 	} else {
-		$data = isset( $bp->bp_docs->history->revision->{$field} ) ? $bp->bp_docs->history->revision->{$field} : '';
+		$data = $bp->bp_docs->history->revision->{$field};
 	}
 
 	return apply_filters( 'bp_docs_history_post_revision_field', $data, $side );
@@ -276,6 +282,7 @@ function bp_docs_history_post_revision_field( $side = false, $field = 'post_titl
 /**
  * Returns whether the revisions are identical.
  *
+ * @package BuddyPress Docs
  * @since 1.1
  *
  * @return bool True when left and right are the same
@@ -293,6 +300,7 @@ function bp_docs_history_revisions_are_identical() {
  * history selector. That's because I don't like WP's default behavior, which is to show the most
  * recent revision.
  *
+ * @package BuddyPress Docs
  * @since 1.1
  *
  * @return bool True when the current revision is the latest revision
@@ -306,6 +314,7 @@ function bp_docs_history_is_latest() {
 /**
  * Display list of a Docs's revisions. Borrowed heavily from WP's wp_list_post_revisions()
  *
+ * @package BuddyPress Docs
  * @since 1.1
  *
  * @uses wp_get_post_revisions()
@@ -348,19 +357,19 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
 	}
 
 	/* translators: post revision: 1: when, 2: author name */
-	$titlef = _x( '%1$s by %2$s', 'post revision', 'buddypress-docs' );
+	$titlef = _x( '%1$s by %2$s', 'post revision' );
 
 	if ( $parent )
 		array_unshift( $revisions, $post );
 
 	$rows = $right_checked = '';
 	$class = false;
-	$can_edit_post = current_user_can( 'bp_docs_edit' );
+	$can_edit_post = bp_docs_current_user_can( 'edit' );
 	foreach ( $revisions as $revision ) {
 		if ( 'revision' === $type && wp_is_post_autosave( $revision ) )
 			continue;
 
-		$base_url = trailingslashit( get_permalink() . BP_DOCS_HISTORY_SLUG );
+		$base_url = bp_docs_get_doc_link( get_the_ID() ) . '/' . BP_DOCS_HISTORY_SLUG . '/';
 
 		$date = '<a href="' . add_query_arg( 'revision', $revision->ID ) . '">' . bp_format_time( strtotime( $revision->post_date ), false, false /* don't double localize time */ ) . '</a>';
 		$name = bp_core_get_userlink( $revision->post_author );
@@ -375,13 +384,13 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
 			$class = $class ? '' : " class='alternate'";
 
 			if ( $post->ID != $revision->ID && $can_edit_post )
-				$actions = '<a class="confirm" href="' . wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'action' => 'restore' ), $base_url ), "restore-post_$post->ID|$revision->ID" ) . '">' . __( 'Restore', 'buddypress-docs' ) . '</a>';
+				$actions = '<a class="confirm" href="' . wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'action' => 'restore' ), $base_url ), "restore-post_$post->ID|$revision->ID" ) . '">' . __( 'Restore', 'bp-docs' ) . '</a>';
 			else
 				$actions = '';
 
 			$rows .= "<tr$class>\n";
-			$rows .= "\t<th style='white-space:nowrap;text-align:center' scope='row'><input type='radio' name='left' value='$revision->ID'$left_checked id='left-$revision->ID' /><label class='screen-reader-text' for='left-$revision->ID'>" . __( 'Old', 'buddypress-docs' ) . "</label></th>\n";
-			$rows .= "\t<th style='white-space:nowrap;text-align:center' scope='row'><input type='radio' name='right' value='$revision->ID'$right_checked id='right-$revision->ID' /><label class='screen-reader-text' for='right-$revision->ID'>" . __( 'New', 'buddypress-docs' ) . "</label></th>\n";
+			$rows .= "\t<th style='white-space: nowrap' scope='row'><label for='revision-left-$revision->ID' class='sr-only'>Use this revision as the 'old' item in a comparison</label><input id='revision-left-$revision->ID' type='radio' name='left' value='$revision->ID'$left_checked /></th>\n";
+			$rows .= "\t<th style='white-space: nowrap' scope='row'><label for='revision-right-$revision->ID' class='sr-only'>Use this revision as the 'old' item in a comparison</label><input id='revision-right-$revision->ID' type='radio' name='right' value='$revision->ID'$right_checked /></th>\n";
 			$rows .= "\t<td>$date</td>\n";
 			$rows .= "\t<td>$name</td>\n";
 			$rows .= "\t<td class='action-links'>$actions</td>\n";
@@ -398,7 +407,7 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
 
 <div class="tablenav">
 	<div class="alignleft">
-		<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Compare Revisions', 'buddypress-docs' ); ?>" />
+		<input type="submit" class="button-secondary" value="<?php esc_attr_e( 'Compare Revisions', 'bp-docs' ); ?>" />
 		<input type="hidden" name="action" value="diff" />
 		<input type="hidden" name="post_type" value="<?php echo esc_attr($post->post_type); ?>" />
 	</div>
@@ -414,11 +423,11 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
 	<col style="width: 33%" />
 <thead>
 <tr>
-	<th scope="col"><?php /* translators: column name in revisons */ _e( 'Old', 'buddypress-docs' ); ?></th>
-	<th scope="col"><?php /* translators: column name in revisons */ _e( 'New', 'buddypress-docs' ); ?></th>
-	<th scope="col"><?php /* translators: column name in revisons */ _e( 'Date Created', 'buddypress-docs' ); ?></th>
-	<th scope="col"><?php _e( 'Author', 'buddypress-docs' ); ?></th>
-	<th scope="col" class="action-links"><?php _e( 'Actions', 'buddypress-docs' ); ?></th>
+	<th scope="col"><?php /* translators: column name in revisons */ _e( 'Old', 'bp-docs' ); ?></th>
+	<th scope="col"><?php /* translators: column name in revisons */ _e( 'New', 'bp-docs' ); ?></th>
+	<th scope="col"><?php /* translators: column name in revisons */ _e( 'Date Created', 'bp-docs' ); ?></th>
+	<th scope="col"><?php _e( 'Author', 'bp-docs' ); ?></th>
+	<th scope="col" class="action-links"><?php _e( 'Actions', 'bp-docs' ); ?></th>
 </tr>
 </thead>
 <tbody>
@@ -440,15 +449,17 @@ function bp_docs_list_post_revisions( $post_id = 0, $args = null ) {
  * This is hooked to bp_docs_header_tabs, so that it only loads if the History addon is
  * enabled.
  *
+ * @package BuddyPress Docs
  * @since 1.1.4
  */
 function bp_docs_history_tab() {
-	if ( current_user_can( 'bp_docs_view_history' ) ) : ?>
-		<li<?php if ( bp_docs_is_doc_history() ) : ?> class="current"<?php endif ?>>
-			<a href="<?php echo bp_docs_get_doc_link() . BP_DOCS_HISTORY_SLUG ?>"><?php _e( 'History', 'buddypress-docs' ) ?></a>
+	if ( bp_docs_current_user_can( 'view_history' ) ) : ?>
+		<li<?php if ( 'history' == bp_docs_current_view() ) : ?> class="current"<?php endif ?>>
+			<a href="<?php echo bp_docs_get_group_doc_permalink() . '/' . BP_DOCS_HISTORY_SLUG ?>"><?php _e( 'History', 'bp-docs' ) ?></a>
 		</li>
 	<?php endif;
 }
 add_action( 'bp_docs_header_tabs', 'bp_docs_history_tab' );
+
 
 ?>

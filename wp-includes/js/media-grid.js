@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -95,24 +95,36 @@
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var media = wp.media;
-
-media.controller.EditAttachmentMetadata = __webpack_require__( 11 );
-media.view.MediaFrame.Manage = __webpack_require__( 12 );
-media.view.Attachment.Details.TwoColumn = __webpack_require__( 13 );
-media.view.MediaFrame.Manage.Router = __webpack_require__( 14 );
-media.view.EditImage.Details = __webpack_require__( 15 );
-media.view.MediaFrame.EditAttachments = __webpack_require__( 16 );
-media.view.SelectModeToggleButton = __webpack_require__( 17 );
-media.view.DeleteSelectedButton = __webpack_require__( 18 );
-media.view.DeleteSelectedPermanentlyButton = __webpack_require__( 19 );
+module.exports = __webpack_require__(12);
 
 
 /***/ }),
-/* 11 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * @output wp-includes/js/media-grid.js
+ */
+
+var media = wp.media;
+
+media.controller.EditAttachmentMetadata = __webpack_require__( 13 );
+media.view.MediaFrame.Manage = __webpack_require__( 14 );
+media.view.Attachment.Details.TwoColumn = __webpack_require__( 15 );
+media.view.MediaFrame.Manage.Router = __webpack_require__( 16 );
+media.view.EditImage.Details = __webpack_require__( 17 );
+media.view.MediaFrame.EditAttachments = __webpack_require__( 18 );
+media.view.SelectModeToggleButton = __webpack_require__( 19 );
+media.view.DeleteSelectedButton = __webpack_require__( 20 );
+media.view.DeleteSelectedPermanentlyButton = __webpack_require__( 21 );
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports) {
 
 var l10n = wp.media.view.l10n,
@@ -146,7 +158,7 @@ module.exports = EditAttachmentMetadata;
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 var MediaFrame = wp.media.view.MediaFrame,
@@ -439,7 +451,7 @@ module.exports = Manage;
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 var Details = wp.media.view.Attachment.Details,
@@ -496,7 +508,7 @@ module.exports = TwoColumn;
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -569,7 +581,7 @@ module.exports = Router;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports) {
 
 var View = wp.media.View,
@@ -610,7 +622,7 @@ module.exports = Details;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var Frame = wp.media.view.Frame,
@@ -695,8 +707,9 @@ EditAttachments = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.EditAtta
 		// Initialize modal container view.
 		if ( this.options.modal ) {
 			this.modal = new wp.media.view.Modal({
-				controller: this,
-				title:      this.options.title
+				controller:     this,
+				title:          this.options.title,
+				hasCloseButton: false
 			});
 
 			this.modal.on( 'open', _.bind( function () {
@@ -874,7 +887,7 @@ module.exports = EditAttachments;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports) {
 
 
@@ -932,7 +945,7 @@ SelectModeToggle = Button.extend(/** @lends wp.media.view.SelectModeToggle.proto
 		if ( this.controller.isModeActive( 'select' ) ) {
 			this.model.set( {
 				size: 'large',
-				text: l10n.cancelSelection
+				text: l10n.cancel
 			} );
 			children.not( '.spinner, .media-button' ).hide();
 			this.$el.show();
@@ -955,7 +968,7 @@ module.exports = SelectModeToggle;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 var Button = wp.media.view.Button,
@@ -982,15 +995,16 @@ DeleteSelected = Button.extend(/** @lends wp.media.view.DeleteSelectedButton.pro
 			this.options.filters.model.on( 'change', this.filterChange, this );
 		}
 		this.controller.on( 'selection:toggle', this.toggleDisabled, this );
+		this.controller.on( 'select:activate', this.toggleDisabled, this );
 	},
 
 	filterChange: function( model ) {
 		if ( 'trash' === model.get( 'status' ) ) {
-			this.model.set( 'text', l10n.untrashSelected );
+			this.model.set( 'text', l10n.restoreSelected );
 		} else if ( wp.media.view.settings.mediaTrash ) {
 			this.model.set( 'text', l10n.trashSelected );
 		} else {
-			this.model.set( 'text', l10n.deleteSelected );
+			this.model.set( 'text', l10n.deletePermanently );
 		}
 	},
 
@@ -1014,7 +1028,7 @@ module.exports = DeleteSelected;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports) {
 
 var Button = wp.media.view.Button,

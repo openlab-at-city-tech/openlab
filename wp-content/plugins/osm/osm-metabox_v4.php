@@ -35,7 +35,13 @@ function osm_map_create() {
             ));
   $screens = array( 'post', 'page' );
   foreach ($screens as $screen) {
-    add_meta_box( 'osm-sc-meta', 'WP OSM Plugin shortcode generator', 'osm_map_create_shortcode_function', $screen, 'normal', 'high' );
+    add_meta_box( 'osm-sc-meta', 'WP OSM Plugin shortcode generator 1', 'osm_map_create_shortcode_function', $screen, 'normal', 'high',    array(
+        '__block_editor_compatible_meta_box' => false,
+    )
+);
+
+
+
   }
 }
 

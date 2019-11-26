@@ -626,12 +626,25 @@ class Tribe__Events__Assets {
 	 * @return array
 	 */
 	public function get_ajax_url_data() {
-		$bits = array(
-			'ajaxurl' => esc_url_raw( admin_url( 'admin-ajax.php', ( is_ssl() || FORCE_SSL_ADMIN ? 'https' : 'http' ) ) ),
+
+		$data = array(
+			'ajaxurl'   => esc_url_raw( admin_url( 'admin-ajax.php', ( is_ssl() || FORCE_SSL_ADMIN ? 'https' : 'http' ) ) ),
 			'post_type' => Tribe__Events__Main::POSTTYPE,
 		);
 
-		return $bits;
+		/**
+		 * Makes the localize variable for TEC admin JS filterable.
+		 *
+		 * @since 4.8.1
+		 *
+		 * @param array $data {
+	     *     These items exist on the TEC object in admin JS.
+	     *
+	     *     @type string ajaxurl The default URL to wp-admin's AJAX endpoint.
+	     *     @type string post_type The Event post type.
+		 * }
+		 */
+		return apply_filters( 'tribe_events_admin_js_ajax_url_data', $data );
 	}
 
 
@@ -643,11 +656,18 @@ class Tribe__Events__Assets {
 	 * @return array
 	 */
 	public function get_js_calendar_script_data() {
-		$js_config_array = array(
+		$js_config_array = [
 			'permalink_settings' => get_option( 'permalink_structure' ),
 			'events_post_type'   => Tribe__Events__Main::POSTTYPE,
 			'events_base'        => tribe_get_events_link(),
-		);
+			'update_urls'        => [
+				'shortcode' => [
+					'list'  => true,
+					'month' => true,
+					'day'   => true,
+				],
+			],
+		];
 
 		/**
 		 * Allow filtering if we should display JS debug messages
@@ -669,6 +689,15 @@ class Tribe__Events__Assets {
 		if ( apply_filters( 'tribe_events_force_filtered_ical_link', false ) ) {
 			$js_config_array['force_filtered_ical_link'] = true;
 		}
+
+		/**
+		 * Allows filtering the contents of the Javascript configuration object that will be printed on the page.
+		 *
+		 * @since 4.9.8
+		 *
+		 * @param array $js_config_array The Javascript configuration object that will be printed on the page.
+		 */
+		$js_config_array = apply_filters( 'tribe_events_js_config', $js_config_array );
 
 		return $js_config_array;
 	}

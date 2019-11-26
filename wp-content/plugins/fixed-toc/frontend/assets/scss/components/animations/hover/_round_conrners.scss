@@ -1,0 +1,19 @@
+// *-------------------------------------------------------------------------------------
+// * Round Corners.
+// *-------------------------------------------------------------------------------------
+
+@mixin roundCorners {
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			.ftwp-text::before {
+				background: rgba($list_active_bgcolor, $opacity);
+				border-radius: 1em;
+			}		
+		}
+	}
+	
+	.ftwp-text::before {
+		background: rgba($list_bgcolor, $opacity);
+	}
+}

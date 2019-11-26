@@ -38,9 +38,18 @@
 			esc_html_e( 'Menu', 'gillian' );
 			echo '</span></button>';
 			gillian_top_menu();
-			echo '</div><div class="social-menu">';
-			gillian_social_menu();
-			echo '</div></nav> <!-- .top-navigation -->';
+			echo '</div>';
+			
+			if (has_nav_menu( 'social' )) {
+				echo '<div class="social-menu">';
+				gillian_social_menu();
+				echo '</div>';
+			}
+			else {
+				echo '<div class="social-menu"><div id="menu-social" class="menu-social"><ul id="menu-social-items" class="menu-items social-menu"></ul></div></div>';
+			};
+			
+			echo '</nav> <!-- .top-navigation -->';
 		} ?>
 	
 		<div class="header-bar">

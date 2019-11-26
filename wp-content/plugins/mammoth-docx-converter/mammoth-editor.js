@@ -11,12 +11,12 @@ function setUpMammoth() {
     var latestDocumentArrayBuffer = null;
     var uploadElement = document.getElementById("mammoth-docx-upload");
     var visualPreviewElement = document.getElementById("mammoth-docx-visual-preview");
-    
+
     uploadElement.addEventListener('change', function(event) {
         parentElement.className = "status-loading";
         handleFileSelect(event);
     }, false);
-    
+
     function convertToHtml(input, options) {
         var fullOptions = {prettyPrint: true};
         for (var key in options) {
@@ -31,7 +31,7 @@ function setUpMammoth() {
         }
         return mammoth.convertToHtml(input, fullOptions);
     }
-    
+
     function handleFileSelect(event) {
         readFileInputEventAsArrayBuffer(event, function(arrayBuffer) {
             latestDocumentArrayBuffer = arrayBuffer;
@@ -42,23 +42,23 @@ function setUpMammoth() {
                 .then(null, showError);
         });
     }
-    
+
     function readFileInputEventAsArrayBuffer(event, callback) {
         var file = event.target.files[0];
 
         var reader = new FileReader();
-        
+
         reader.onload = function(loadEvent) {
             var arrayBuffer = loadEvent.target.result;
             callback(arrayBuffer);
         };
-        
+
         reader.readAsArrayBuffer(file);
     }
-    
+
     document.getElementById("mammoth-docx-insert")
         .addEventListener("click", insertIntoEditor, false);
-    
+
     function insertIntoEditor() {
         var postId = document.getElementById("post_ID").value;
         var options = {
@@ -95,19 +95,19 @@ function setUpMammoth() {
             })
             .then(null, showError);
     }
-    
+
     var slugCharmap = jQuery.extend({}, slug.charmap, {".": "-", "\\": "-", "/": "-"});
     var slugOptions = {
         mode: "rfc3986",
         charmap: slugCharmap
     };
-    
+
     function generateFilename(options) {
         var name = options.altText ? slug(options.altText.slice(0, 50), slugOptions) : "word-image";
         var extension = options.contentType.split("/")[1];
         return name + "." + extension;
     }
-    
+
     function uploadImage(options) {
         var filename = options.filename;
         var contentType = options.contentType;
@@ -140,11 +140,11 @@ function setUpMammoth() {
             return rejectImage(value.statusText);
         });
     }
-    
+
     function rejectImage(message) {
         return reject(new Error("Image upload HTTP request failed: " + message));
     }
-    
+
     function reject(error) {
         var deferred = jQuery.Deferred();
         deferred.reject(error);
@@ -189,7 +189,7 @@ function setUpMammoth() {
             insertText(document.getElementById(elementId), text);
         }
     }
-    
+
     function showError(error) {
         console.error(error);
         if (error.message) {
@@ -198,14 +198,14 @@ function setUpMammoth() {
         parentElement.className = "status-error";
         document.getElementById("mammoth-docx-error-message").innerHTML = escapeHtml(error);
     }
-    
+
     function showResult(result) {
         parentElement.className = "status-loaded";
-        
+
         showPreview(result.value);
         showMessages(result.messages);
     }
-    
+
     function showPreview(value) {
         var visualPreviewDocument = visualPreviewElement.contentDocument;
         setUpVisualPreviewStylesheets();
@@ -216,7 +216,7 @@ function setUpMammoth() {
         var htmlWithoutImageData = value.replace(/(<img\s[^>]*)src="data:[^"]*"([^>]* \/>)/g, '$1src="path/to/image"$2');
         document.getElementById("mammoth-docx-raw-preview").innerHTML = escapeHtml(htmlWithoutImageData);
     }
-    
+
     function showMessages(messages) {
         if (messages.length) {
             var messageElements = messages
@@ -227,7 +227,7 @@ function setUpMammoth() {
                     return "<li>" + capitalise(message.type) + ": " + escapeHtml(message.message) + "</li>";
                 })
                 .join("");
-            
+
             document.getElementById("mammoth-docx-messages").innerHTML =
                 "<ul>" + messageElements + "</ul>";
         } else {
@@ -238,11 +238,11 @@ function setUpMammoth() {
 
     function insertText(element, text) {
         var startPosition = element.selectionStart;
-        element.value = 
+        element.value =
             element.value.substring(0, startPosition) +
             text +
             element.value.substring(element.selectionEnd);
-        
+
         var newStartPosition = startPosition + text.length;
         element.selectionStart = newStartPosition;
         element.selectionEnd = newStartPosition;
@@ -255,11 +255,11 @@ function setUpMammoth() {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
     }
-    
+
     function capitalise(string) {
         return string.charAt(0).toUpperCase() + string.substring(1);
     }
-    
+
     var visualStylesheetsAlreadySetUp = false;
     function setUpVisualPreviewStylesheets() {
         if (visualStylesheetsAlreadySetUp) {
@@ -267,6 +267,7 @@ function setUpMammoth() {
         }
         visualStylesheetsAlreadySetUp = true;
         var visualPreviewDocument = visualPreviewElement.contentDocument;
+        visualPreviewDocument.body.style.backgroundColor = "white";
         var stylesheets = visualPreviewElement.getAttribute("data-stylesheets").split(",");
         stylesheets.forEach(function(stylesheet) {
             var element = document.createElement("link");
@@ -276,7 +277,7 @@ function setUpMammoth() {
             visualPreviewDocument.head.appendChild(element);
         });
     }
-    
+
     function toArrayBuffer(buffer) {
         var arrayBuffer = new ArrayBuffer(buffer.length);
         var view = new Uint8Array(arrayBuffer);
@@ -285,21 +286,21 @@ function setUpMammoth() {
         }
         return arrayBuffer;
     }
-    
+
     function PolyfillFormData() {
         this.boundary = "-----------------------------" + Math.floor(Math.random() * 0x100000000);
         this._fields = [];
         this._files = [];
     }
-    
+
     PolyfillFormData.prototype.append = function(key, value) {
         this._fields.push({key: key, value: value});
     };
-    
+
     PolyfillFormData.prototype.appendFile = function(key, file) {
         this._files.push({key: key, file: file});
     };
-    
+
     PolyfillFormData.prototype.body = function() {
         var boundary = this.boundary;
         var body = "";
@@ -317,7 +318,7 @@ function setUpMammoth() {
             body += field.file.binary + "\r\n";
         });
         body += "--" + boundary +"--\r\n";
-        
+
         var nBytes = body.length
         var ui8Data = new Uint8Array(nBytes);
         for (var nIdx = 0; nIdx < nBytes; nIdx++) {
@@ -325,7 +326,7 @@ function setUpMammoth() {
         }
         return ui8Data;
     };
-    
+
 };
 
 
@@ -12450,24 +12451,24 @@ function DocumentConverter(options) {
 
 function DocumentConversion(options, comments) {
     var noteNumber = 1;
-    
+
     var noteReferences = [];
-    
+
     var referencedComments = [];
-    
+
     options = _.extend({ignoreEmptyParagraphs: true}, options);
     var idPrefix = options.idPrefix === undefined ? "" : options.idPrefix;
     var ignoreEmptyParagraphs = options.ignoreEmptyParagraphs;
-    
+
     var defaultParagraphStyle = htmlPaths.topLevelElement("p");
-    
+
     var styleMap = options.styleMap || [];
-    
+
     function convertToHtml(document) {
         var messages = [];
-        
+
         var html = elementToHtml(document, messages, {});
-        
+
         var deferredNodes = [];
         walkHtml(html, function(node) {
             if (node.type === "deferred") {
@@ -12503,7 +12504,7 @@ function DocumentConversion(options, comments) {
             return new results.Result(writer.asString(), messages);
         });
     }
-    
+
     function convertElements(elements, messages, options) {
         return flatMap(elements, function(element) {
             return elementToHtml(element, messages, options);
@@ -12521,7 +12522,7 @@ function DocumentConversion(options, comments) {
             return [];
         }
     }
-    
+
     function convertParagraph(element, messages, options) {
         return htmlPathForParagraph(element, messages).wrap(function() {
             var content = convertElements(element.children, messages, options);
@@ -12532,10 +12533,10 @@ function DocumentConversion(options, comments) {
             }
         });
     }
-    
+
     function htmlPathForParagraph(element, messages) {
         var style = findStyle(element);
-        
+
         if (style) {
             return style.to;
         } else {
@@ -12545,7 +12546,7 @@ function DocumentConversion(options, comments) {
             return defaultParagraphStyle;
         }
     }
-    
+
     function convertRun(run, messages, options) {
         var nodes = function() {
             return convertElements(run.children, messages, options);
@@ -12580,14 +12581,14 @@ function DocumentConversion(options, comments) {
             messages.push(unrecognisedStyleWarning("run", run));
         }
         paths.push(stylePath);
-            
+
         paths.forEach(function(path) {
             nodes = path.wrap.bind(path, nodes);
         });
-        
+
         return nodes();
     }
-    
+
     function findHtmlPathForRunProperty(elementType, defaultTagName) {
         var path = findHtmlPath({type: elementType});
         if (path) {
@@ -12598,12 +12599,12 @@ function DocumentConversion(options, comments) {
             return htmlPaths.empty;
         }
     }
-    
+
     function findHtmlPath(element, defaultPath) {
         var style = findStyle(element);
         return style ? style.to : defaultPath;
     }
-    
+
     function findStyle(element) {
         for (var i = 0; i < styleMap.length; i++) {
             if (styleMap[i].from.matches(element)) {
@@ -12611,7 +12612,7 @@ function DocumentConversion(options, comments) {
             }
         }
     }
-    
+
     function recoveringConvertImage(convertImage) {
         return function(image, messages) {
             return promises.attempt(function() {
@@ -12626,23 +12627,23 @@ function DocumentConversion(options, comments) {
     function noteHtmlId(note) {
         return referentHtmlId(note.noteType, note.noteId);
     }
-    
+
     function noteRefHtmlId(note) {
         return referenceHtmlId(note.noteType, note.noteId);
     }
-    
+
     function referentHtmlId(referenceType, referenceId) {
         return htmlId(referenceType + "-" + referenceId);
     }
-    
+
     function referenceHtmlId(referenceType, referenceId) {
         return htmlId(referenceType + "-ref-" + referenceId);
     }
-    
+
     function htmlId(suffix) {
         return idPrefix + suffix;
     }
-    
+
     var defaultTablePath = htmlPaths.elements([
         htmlPaths.element("table", {}, {fresh: true})
     ]);
@@ -12685,11 +12686,14 @@ function DocumentConversion(options, comments) {
         }
         return [Html.forceWrite].concat(children);
     }
-    
+
     function convertTableRow(element, messages, options) {
-        return wrapChildrenInFreshElement(element, "tr", messages, options);
+        var children = convertElements(element.children, messages, options);
+        return [
+            Html.freshElement("tr", {}, [Html.forceWrite].concat(children))
+        ];
     }
-    
+
     function convertTableCell(element, messages, options) {
         var tagName = options.isTableHeader ? "th" : "td";
         var children = convertElements(element.children, messages, options);
@@ -12700,12 +12704,12 @@ function DocumentConversion(options, comments) {
         if (element.rowSpan !== 1) {
             attributes.rowspan = element.rowSpan.toString();
         }
-            
+
         return [
             Html.freshElement(tagName, attributes, [Html.forceWrite].concat(children))
         ];
     }
-    
+
     function convertCommentReference(reference, messages, options) {
         return findHtmlPath(reference, htmlPaths.ignore).wrap(function() {
             var comment = comments[reference.commentId];
@@ -12721,10 +12725,10 @@ function DocumentConversion(options, comments) {
             ];
         });
     }
-    
+
     function convertComment(referencedComment, messages, options) {
         // TODO: remove duplication with note references
-        
+
         var label = referencedComment.label;
         var comment = referencedComment.comment;
         var body = convertElements(comment.body, messages, options).concat([
@@ -12735,7 +12739,7 @@ function DocumentConversion(options, comments) {
                 ])
             ])
         ]);
-        
+
         return [
             Html.freshElement(
                 "dt",
@@ -12745,13 +12749,13 @@ function DocumentConversion(options, comments) {
             Html.freshElement("dd", {}, body)
         ];
     }
-    
+
     function convertBreak(element, messages, options) {
         return htmlPathForBreak(element).wrap(function() {
             return [];
         });
     }
-    
+
     function htmlPathForBreak(element) {
         var style = findStyle(element);
         if (style) {
@@ -12761,13 +12765,6 @@ function DocumentConversion(options, comments) {
         } else {
             return htmlPaths.empty;
         }
-    }
-    
-    function wrapChildrenInFreshElement(element, wrapElementName, messages, options) {
-        var children = convertElements(element.children, messages, options);
-        return [
-            Html.freshElement(wrapElementName, {}, [Html.forceWrite].concat(children))
-        ];
     }
 
     var elementConverters = {
@@ -12814,7 +12811,7 @@ function DocumentConversion(options, comments) {
                 href: "#" + noteHtmlId(element),
                 id: noteRefHtmlId(element)
             }, [Html.text("[" + (noteNumber++) + "]")]);
-            
+
             return [Html.freshElement("sup", {}, [anchor])];
         },
         "note": function(element, messages, options) {
@@ -12824,7 +12821,7 @@ function DocumentConversion(options, comments) {
                 Html.freshElement("a", {href: "#" + noteRefHtmlId(element)}, [Html.text("↑")])
             ]);
             var body = children.concat([backLink]);
-            
+
             return Html.freshElement("li", {id: noteHtmlId(element)}, body);
         },
         "commentReference": convertCommentReference,
@@ -13855,7 +13852,7 @@ var Files = require("./files").Files;
 
 function read(docxFile, input) {
     input = input || {};
-    
+
     return promises.props({
         contentTypes: readContentTypesFromZipFile(docxFile),
         partPaths: findPartPaths(docxFile),
@@ -13863,8 +13860,11 @@ function read(docxFile, input) {
         files: new Files(input.path ? path.dirname(input.path) : null)
     }).also(function(result) {
         return {
-            numbering: readNumberingFromZipFile(docxFile, result.partPaths.numbering),
             styles: readStylesFromZipFile(docxFile, result.partPaths.styles)
+        };
+    }).also(function(result) {
+        return {
+            numbering: readNumberingFromZipFile(docxFile, result.partPaths.numbering, result.styles)
         };
     }).also(function(result) {
         return {
@@ -13923,11 +13923,11 @@ function findPartPaths(docxFile) {
             basePath: "",
             fallbackPath: "word/document.xml"
         });
-        
+
         if (!docxFile.exists(mainDocumentPath)) {
             throw new Error("Could not find main document part. Are you sure this is a valid .docx file?");
         }
-        
+
         return xmlFileReader({
             filename: relationshipsFilename(mainDocumentPath),
             readElement: relationshipsReader.readRelationships,
@@ -13942,7 +13942,7 @@ function findPartPaths(docxFile) {
                     fallbackPath: "word/" + name + ".xml"
                 });
             }
-        
+
             return {
                 mainDocument: mainDocumentPath,
                 comments: findPartRelatedToMainDocument("comments"),
@@ -13961,7 +13961,7 @@ function findPartPath(options) {
     var relationshipType = options.relationshipType;
     var basePath = options.basePath;
     var fallbackPath = options.fallbackPath;
-    
+
     var targets = relationships.findTargetsByType(relationshipType);
     var normalisedTargets = targets.map(function(target) {
         return stripPrefix(zipfile.joinPath(basePath, target), "/");
@@ -13999,7 +13999,7 @@ function readXmlFileWithBody(filename, options, func) {
         readElement: relationshipsReader.readRelationships,
         defaultValue: relationshipsReader.defaultValue
     });
-    
+
     return readRelationshipsFromZipFile(options.docxFile).then(function(relationships) {
         var bodyReader = new createBodyReader({
             relationships: relationships,
@@ -14027,10 +14027,12 @@ var readContentTypesFromZipFile = xmlFileReader({
     defaultValue: contentTypesReader.defaultContentTypes
 });
 
-function readNumberingFromZipFile(zipFile, path) {
+function readNumberingFromZipFile(zipFile, path, styles) {
     return xmlFileReader({
         filename: path,
-        readElement: numberingXml.readNumberingXml,
+        readElement: function(element) {
+            return numberingXml.readNumberingXml(element, {styles: styles});
+        },
         defaultValue: numberingXml.defaultNumbering
     })(zipFile);
 }
@@ -14084,23 +14086,35 @@ exports.readNumberingXml = readNumberingXml;
 exports.Numbering = Numbering;
 exports.defaultNumbering = new Numbering({});
 
-function Numbering(nums) {
-    return {
-        findLevel: function(numId, level) {
-            var num = nums[numId];
-            if (num) {
-                return num[level];
+function Numbering(nums, abstractNums, styles) {
+    function findLevel(numId, level) {
+        var num = nums[numId];
+        if (num) {
+            var abstractNum = abstractNums[num.abstractNumId];
+            if (abstractNum.numStyleLink == null) {
+                return abstractNums[num.abstractNumId].levels[level];
             } else {
-                return null;
+                var style = styles.findNumberingStyleById(abstractNum.numStyleLink);
+                return findLevel(style.numId, level);
             }
+        } else {
+            return null;
         }
+    }
+
+    return {
+        findLevel: findLevel
     };
 }
 
-function readNumberingXml(root) {
+function readNumberingXml(root, options) {
+    if (!options || !options.styles) {
+        throw new Error("styles is missing");
+    }
+
     var abstractNums = readAbstractNums(root);
     var nums = readNums(root, abstractNums);
-    return new Numbering(nums);
+    return new Numbering(nums, abstractNums, options.styles);
 }
 
 function readAbstractNums(root) {
@@ -14122,15 +14136,18 @@ function readAbstractNum(element) {
             level: levelIndex
         };
     });
-    return levels;
+
+    var numStyleLink = element.firstOrEmpty("w:numStyleLink").attributes["w:val"];
+
+    return {levels: levels, numStyleLink: numStyleLink};
 }
 
-function readNums(root, abstractNums) {
+function readNums(root) {
     var nums = {};
     root.getElementsByTagName("w:num").forEach(function(element) {
-        var id = element.attributes["w:numId"];
+        var numId = element.attributes["w:numId"];
         var abstractNumId = element.first("w:abstractNumId").attributes["w:val"];
-        nums[id] = abstractNums[abstractNumId];
+        nums[numId] = {abstractNumId: abstractNumId};
     });
     return nums;
 }
@@ -14322,7 +14339,7 @@ exports.readStylesXml = readStylesXml;
 exports.Styles = Styles;
 exports.defaultStyles = new Styles({}, {});
 
-function Styles(paragraphStyles, characterStyles, tableStyles) {
+function Styles(paragraphStyles, characterStyles, tableStyles, numberingStyles) {
     return {
         findParagraphStyleById: function(styleId) {
             return paragraphStyles[styleId];
@@ -14332,32 +14349,40 @@ function Styles(paragraphStyles, characterStyles, tableStyles) {
         },
         findTableStyleById: function(styleId) {
             return tableStyles[styleId];
+        },
+        findNumberingStyleById: function(styleId) {
+            return numberingStyles[styleId];
         }
     };
 }
 
-Styles.EMPTY = new Styles({}, {}, {});
+Styles.EMPTY = new Styles({}, {}, {}, {});
 
 function readStylesXml(root) {
     var paragraphStyles = {};
     var characterStyles = {};
     var tableStyles = {};
-    
+    var numberingStyles = {};
+
     var styles = {
         "paragraph": paragraphStyles,
         "character": characterStyles,
         "table": tableStyles
     };
-    
+
     root.getElementsByTagName("w:style").forEach(function(styleElement) {
         var style = readStyleElement(styleElement);
-        var styleSet = styles[style.type];
-        if (styleSet) {
-            styleSet[style.styleId] = style;
+        if (style.type === "numbering") {
+            numberingStyles[style.styleId] = readNumberingStyleElement(styleElement);
+        } else {
+            var styleSet = styles[style.type];
+            if (styleSet) {
+                styleSet[style.styleId] = style;
+            }
         }
     });
-    
-    return new Styles(paragraphStyles, characterStyles, tableStyles);
+
+    return new Styles(paragraphStyles, characterStyles, tableStyles, numberingStyles);
 }
 
 function readStyleElement(styleElement) {
@@ -14370,6 +14395,15 @@ function readStyleElement(styleElement) {
 function styleName(styleElement) {
     var nameElement = styleElement.first("w:name");
     return nameElement ? nameElement.attributes["w:val"] : null;
+}
+
+function readNumberingStyleElement(styleElement) {
+    var numId = styleElement
+        .firstOrEmpty("w:pPr")
+        .firstOrEmpty("w:numPr")
+        .firstOrEmpty("w:numId")
+        .attributes["w:val"];
+    return {numId: numId};
 }
 
 },{}],92:[function(require,module,exports){

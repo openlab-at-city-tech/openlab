@@ -400,7 +400,7 @@ class BP_Group_Documents {
 	 */
 	public function icon() {
 		if( $icon_url =  $this->get_icon() ) {
-		echo '<a class="group-documents-icon" id="group-document-icon-' . $this->id . '" href="' . $this->get_url() . '" target="_blank"><img class="bp-group-documents-icon" src="' . $icon_url . '" alt="" /></a>';
+		echo '<a role="presentation" class="group-documents-icon" id="group-document-icon-' . $this->id . '" href="' . $this->get_url() . '" target="_blank"><img class="bp-group-documents-icon" src="' . $icon_url . '" alt="" /><span class="sr-only">View document</span></a>';
 		}
 	}
 		public function get_icon() {
@@ -512,27 +512,23 @@ class BP_Group_Documents {
 	public static function get_list_by_group( $group_id, $category=null, $sort=0, $order=0, $start=0, $items=0 ){
 		global $wpdb, $bp;
 
-		// if these parameters aren't passed, grab the entire list
-		if( null === $category ) {
+		$sql = "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ";
 
-			$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ORDER BY name ASC", $group_id), ARRAY_A );
+		if ( $category ) {
+			// grab all object id's in the passed category
+			$category_ids = get_objects_in_term( $category, 'group-documents-category' );
 
-			return $result;
+			if ( $category_ids ) {
+				$cat_in_clause = '(' . implode( ',', $category_ids ) . ') ';
+			} else {
+				$cat_in_clause = '(0)';
+			}
+
+			$sql .= "AND id IN " . $cat_in_clause;
 		}
 
 		//convert from 1-based paging to 0-based SQL limit
 		--$start;
-
-		//grab all object id's in the passed category
-		$category_ids = get_objects_in_term($category,'group-documents-category');
-
-		$sql = "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ";
-		if( !empty( $category_ids ) ) {
-			$in_clause = '(' . implode(',',$category_ids) . ') ';
-			$sql .= "AND id IN " . $in_clause;
-		} else {
-			return array();
-		}
 		$sql .= "ORDER BY $sort $order LIMIT %d, %d";
 
  		$result = $wpdb->get_results( $wpdb->prepare( $sql, $group_id, $start, $items ), ARRAY_A );

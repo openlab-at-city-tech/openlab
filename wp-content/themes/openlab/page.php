@@ -30,6 +30,9 @@
                                     <span class="icon-bar"></span>
                                 </button>
                             <?php endif; ?>
+							<?php if ( \OpenLab\PrintThisPage\show_for_post( get_the_ID() ) ) : ?>
+								<span class="print-link pull-right hidden-xs"><a class="print-page" href="#"><span class="fa fa-print"></span> Print this page</a></span></h1>
+							<?php endif; ?>
                         </h1>
                         <div class="entry-content"><?php the_content(); ?></div>
                     </div>

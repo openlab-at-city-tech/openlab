@@ -1,0 +1,55 @@
+// *-------------------------------------------------------------------------------------
+// * Position
+// *-------------------------------------------------------------------------------------
+
+&.ftwp-fixed-to-post {
+	position: relative;
+	z-index: 999;
+	
+	#ftwp-trigger,
+	#ftwp-contents {
+		position: fixed;
+		top: auto;
+		bottom: auto;
+		left: auto;
+		right: auto;
+	}
+	
+	&.ftwp-top {
+		&-right,
+		&-left {
+			#ftwp-trigger,
+			#ftwp-contents {
+				top: $offsetY;
+			}
+		}
+	}
+
+	&.ftwp-middle {
+		&-right,
+		&-left {
+			#ftwp-trigger,
+			#ftwp-contents {
+				top: 0;
+				bottom: 0;
+				margin: auto 0;
+			}
+//			
+			#ftwp-contents {
+				@media screen and (max-height: 420px) {
+					margin: 0;
+				}				
+			}
+		}
+	}
+
+	&.ftwp-bottom {
+		&-right,
+		&-left {
+			#ftwp-trigger,
+			#ftwp-contents {
+				bottom: $offsetY;
+			}
+		}
+	}	
+}

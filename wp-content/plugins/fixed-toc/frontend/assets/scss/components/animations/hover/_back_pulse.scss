@@ -1,0 +1,19 @@
+// *-------------------------------------------------------------------------------------
+// * Back Pulse
+// *-------------------------------------------------------------------------------------
+
+@include keyframes(ftwp_back_pulse) {
+	50% {
+		background: rgba($list_active_bgcolor, 0.65);
+	}
+}
+
+@mixin backPulse {
+	.ftwp-anchor {
+		&.ftwp-active,
+		&:focus {
+			@include animation(ftwp_back_pulse 1s $durationMedium linear infinite);
+			background: rgba($list_active_bgcolor, $opacity);
+		}
+	}
+}

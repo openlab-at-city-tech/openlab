@@ -204,6 +204,9 @@ function su_shortcode_button( $atts = null, $content = null ) {
 		'bottom-left'  => '-1px 1px'
 	);
 
+	// Sanitize the size value
+	$atts['size'] = intval( $atts['size'] );
+
 	// Common styles for button
 	$styles = array(
 		'size'     => round( ( $atts['size'] + 7 ) * 1.3 ),

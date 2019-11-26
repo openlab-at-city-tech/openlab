@@ -1,0 +1,40 @@
+// *-------------------------------------------------------------------------------------
+// * Drop in/out.
+// *-------------------------------------------------------------------------------------
+
+@mixin dropIO {
+	#ftwp-trigger,
+	#ftwp-contents {
+		visibility: hidden;
+		opacity: 0;
+		@include transform( translateY( -1000px ) );
+		
+	}
+	
+	&.ftwp-bottom-right,
+	&.ftwp-bottom-left {
+		#ftwp-trigger,
+		#ftwp-contents {
+			@include transform( translateY( -2000px ) );
+		}
+	}
+	
+	&.ftwp-top-right,
+	&.ftwp-top-left {
+		#ftwp-trigger,
+		#ftwp-contents {
+			@include transform( translateY( -500px ) );
+		}
+	}
+	
+	&-in {
+		&.ftwp-minimize #ftwp-trigger,
+		&.ftwp-maximize #ftwp-contents {
+			opacity: 1;
+			visibility: visible;
+			@include transform( translateY( 0px ) );
+			@include transition( $durationMedium ease-out );
+			@include transitionProperty( (transform, opacity, visibility) );
+		}
+	}
+}

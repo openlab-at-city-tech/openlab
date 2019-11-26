@@ -1,0 +1,55 @@
+// *-------------------------------------------------------------------------------------
+// * Strong the first level list item
+// *-------------------------------------------------------------------------------------
+
+$strong_font_size: 1.1 * $font_size;
+
+#ftwp-list.ftwp-strong-first {
+	&>.ftwp-item>.ftwp-anchor .ftwp-text {
+		font: {
+			weight: bold;
+			size: $strong_font_size;
+		}
+	}
+	
+	&.ftwp-liststyle {
+		&-circle,
+		&-circle-o,
+		&-square,
+		&-square-o {
+			&>.ftwp-item>.ftwp-anchor::before {
+				font-size: 0.5 * $font_size;
+				line-height: 2 * $list_line_height;
+				font-weight: bold;
+			}
+		}
+		
+		&-decimal {
+			&>.ftwp-item>.ftwp-anchor::before {
+				font-size: $strong_font_size;
+				font-weight: bold;
+			}
+		}
+		
+//		&-decimal {
+//			&>.ftwp-item>.ftwp-anchor::before {
+//				font-weight: bold;
+//			}
+//			
+//			&-circle>.ftwp-item>.ftwp-anchor {
+//				&::before {
+//					background: rgba($list_color, 0.1);
+//					font-size: .7 * $font_size;
+//					font-weight: bold;
+//					width: $strong_font_size;
+//					height: $strong_font_size;
+//					line-height: $strong_font_size;
+//					border-radius: 50%;
+//					text-align: center;
+//					@include transform(scale(1.4));
+//				}			
+//			}
+//		}
+	}
+	
+}

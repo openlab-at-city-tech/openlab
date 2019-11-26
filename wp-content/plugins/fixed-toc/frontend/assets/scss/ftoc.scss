@@ -1,0 +1,124 @@
+// *-------------------------------------------------------------------------------------
+// * Class Definitions
+// * ------------------------------------------------------------------------------------
+// .ftwp-icon-menu : The menu icon. 
+// .ftwp-icon-number : The number list icon. 
+// .ftwp-icon-bullet : The bullet list icon.
+// .ftwp-icon-ellipsis : The horizontal ellipsis icon.  
+// .ftwp-icon-vellipsis : The vertical ellipsis icon.
+// .ftwp-icon-minus : The circle minus icon.
+// .ftwp-icon-expand : The arrow right icon. 
+// .ftwp-icon-collapse : The arrow down icon.  
+// .ftwp-icon-up : The arrow up icon.   
+// .ftwp-icon-eye : The eye icon. 
+// .ftwp-icon-circle : The circle icon.     
+// .ftwp-icon-circle-o : The empty circle icon.  
+// .ftwp-icon-square : The square icon.   
+// .ftwp-icon-square-o : The empty square icon. 
+// .ftwp-minimize : The state of the minimize.
+// .ftwp-maximize : The state of the maximize. 
+// .ftwp-middle-right : Display in the middle right window.
+// .ftwp-middle-left : Display in the middle left window.
+// .ftwp-border-thin: With the thin border.
+// .ftwp-border-medium: With the medium border.
+// .ftwp-border-bold: With the bold border.
+// .ftwp-shape-square: Square shape.
+// .ftwp-shape-round: Round shape.
+// .ftwp-shape-circle: Circle shape.
+// .ftwp-liststyle-none: No list style type. 
+// .ftwp-liststyle-cirle: List style type is circle. 
+// .ftwp-liststyle-cirle-o: List style type is empty circle. 
+// .ftwp-liststyle-square: List style type is square. 
+// .ftwp-liststyle-square-o: List style type is empty square. 
+// .ftwp-liststyle-decimal: List style type is decimal.
+// .ftwp-liststyle-decimal-circle: List style type is decimal in a circle for the Strong First.
+// .ftwp-list-nest: Display the nested list.
+// .ftwp-colexp: enable collapse/expand list. 
+// .ftwp-expand: Expand the sub list of the current item. 
+// .ftwp-collapse: Collapse the sub list of the current item.  
+// .ftwp-strong-first: Strong the 1st level list item.
+// .ftwp-effect-fade: Fade.   
+// .ftwp-effect-back-pulse: Back Pulse.
+// .ftwp-effect-sweep-to-right: Sweep To Right.
+// .ftwp-effect-sweep-to-left: Sweep To Left.
+// .ftwp-effect-bounce-to-right: Bounce To Right.
+// .ftwp-effect-bounce-to-left: Bounce To Left.
+// .ftwp-effect-radial-in: Radial In.  
+// .ftwp-effect-radial-out: Radial Out. 
+// .ftwp-effect-rectangle-in: Rectangle In. 
+// .ftwp-effect-rectangle-out: Rectangle Out.   
+// .ftwp-effect-shutter-in: Shutter In Horizontal. 
+// .ftwp-effect-shutter-out: Shutter Out Horizontal. 
+// .ftwp-effect-underline-from-right: Underline From Right. 
+// .ftwp-effect-underline-from-left: Underline From Left.     
+// .ftwp-effect-underline-from-center: Underline From Center.   
+// .ftwp-effect-reveal-underline: Underline Reveal.    
+// .ftwp-effect-reveal-rightline: Rightline Reveal.    
+// .ftwp-effect-reveal-leftline: Leftline Reveal.    
+// .ftwp-effect-round-corners: Round Corners.    
+// .ftwp-effect-border-fade: Border Fade. 
+// .ftwp-animate-fade: Fade In/Out.  
+// .ftwp-animate-zoom-in: Zoom In. 
+// .ftwp-animate-slide-in: Slide In.  
+// .ftwp-effanimateect-drop-in: Drop In.   
+// .ftwp-animate-flip-in: Flip In.  
+ 
+
+// *-------------------------------------------------------------------------------------
+// * Define The Web Font
+// *-------------------------------------------------------------------------------------
+@font-face {
+  src: url('../fonts/icons.eot?45335921');
+  src: url('../fonts/icons.eot?45335921#iefix') format('embedded-opentype'),
+       url('../fonts/icons.woff2?45335921') format('woff2'), 
+       url('../fonts/icons.woff?45335921') format('woff'),
+       url('../fonts/icons.ttf?45335921') format('truetype'),
+       url('../fonts/icons.svg?45335921#fontello') format('svg');
+	font-family: 'ftwp-icon'; 
+}
+
+ 
+// *-------------------------------------------------------------------------------------
+// * Import Files
+// *-------------------------------------------------------------------------------------
+@import 'options';  
+@import 'functions';   
+@import 'mixins'; 
+    
+
+// *-------------------------------------------------------------------------------------
+// * Main style
+// *-------------------------------------------------------------------------------------
+#ftwp-container { 
+	    
+	&.ftwp-wrap {  
+		@import 'reset'; 
+		@import 'default';  
+	}  
+	   
+	// Components for special style        
+	@import 'components/_fixed_minmax'; 
+	@import 'components/fixed_position';     
+	@import 'components/border';     
+	@import 'components/shape';   
+	@import 'components/list_style'; 
+	@import 'components/nested';      
+	@import 'components/strong_first'; 
+	@import 'components/effects'; 
+	@import 'components/in_post';
+	@import 'components/in_widget'; 
+	@import 'components/hidden_state';
+	  
+	// Media queries
+	@import 'components/media';  
+	
+	// Hacks
+	@import 'hacks'; 
+} 
+
+
+// *-------------------------------------------------------------------------------------
+// * Just a test, remember to delete the below code if finish
+// *-------------------------------------------------------------------------------------
+
+  

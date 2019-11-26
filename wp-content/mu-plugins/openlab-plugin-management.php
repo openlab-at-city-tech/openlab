@@ -8,6 +8,10 @@
 function openlab_hide_plugins( $plugins ) {
 	$network_admin_only = array();
 
+	if ( defined( 'WP_CLI' ) ) {
+		return $plugins;
+	}
+
 	$super_admin_only = array(
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
@@ -28,6 +32,7 @@ function openlab_hide_plugins( $plugins ) {
 		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
 		'pdf-embedder/pdf_embedder.php',
+		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
 		'slideshare/slideshare.php',
@@ -41,12 +46,6 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
 		'wp-simile-timeline/timeline.php',
-
-		// See #2541.
-		'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
-		'fv-wordpress-flowplayer/flowplayer.php',
-		'yotuwp-easy-youtube-embed/yotuwp.php',
-		'kirki/kirki.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -78,6 +77,8 @@ function openlab_hide_plugins( $plugins ) {
 			'genesis-connect-for-buddypress/genesis-connect.php',
 			'invite-anyone/invite-anyone.php',
 			'more-privacy-options/ds_wp3_private_blog.php',
+			'ol-portfolio/ol-portfolio.php',
+			'openlab-badges/openlab-badges.php',
 			'openlab-grade-comments/openlab-grade-comments.php',
 			'u-buddypress-forum-attachment/u-bp-forum-attachment.php',
 			'wds-buddypress-docs/loader.php',
@@ -92,6 +93,9 @@ function openlab_hide_plugins( $plugins ) {
 	}
 
 	$blog_specific_whitelist = array(
+		'fixed-toc/fixed-toc.php' => array(
+			12249, // openlabguide - https://redmine.citytech.cuny.edu/issues/2562
+		),
 		'h5p/h5p.php' => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088

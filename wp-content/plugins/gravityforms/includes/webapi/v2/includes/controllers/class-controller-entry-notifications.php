@@ -73,7 +73,14 @@ class GF_REST_Entry_Notifications_Controller extends GF_REST_Controller {
 		if ( empty( $notification_ids ) ) {
 			$notification_ids = GFAPI::send_notifications( $form, $entry, $event );
 		} else {
-			GFCommon::send_notifications( $notification_ids, $form, $entry, true );
+			foreach ( $notification_ids as $notification_id ) {
+				if ( empty( $form['notifications'][ $notification_id ] ) ) {
+					/* translators: %s: The notification id */
+					return new WP_Error( __( sprintf( 'Notification %s not found.', $notification_id ), 'gravityforms' ) );
+				}
+
+				GFCommon::send_notification( $form['notifications'][ $notification_id ], $form, $entry );
+			}
 		}
 
 		return new WP_REST_Response( $notification_ids, 200 );
@@ -94,11 +101,11 @@ class GF_REST_Entry_Notifications_Controller extends GF_REST_Controller {
 		 *
 		 * @since 2.4-beta-1
 		 *
-		 * @param string          $capability The capability required for this endpoint.
+		 * @param string|array    $capability The capability required for this endpoint.
 		 * @param WP_REST_Request $request    Full data about the request.
 		 */
 		$capability = apply_filters( 'gform_rest_api_capability_post_entries_notifications', 'gravityforms_edit_entries', $request );
-		return GFAPI::current_user_can_any( $capability );
+		return $this->current_user_can_any( $capability, $request );
 	}
 
 	/**

@@ -321,6 +321,10 @@
 				}
 
 				if ( count($t) > 0 && count($t_childs) > 0 ) {
+					if ( $_POST['pg'] == 'no' ) {
+						$_POST['page'] = 'no';
+					}
+
 					$DW->addChilds($widget_id, $dwtype, $_POST[$name], $t, $t_childs);
 				}
 			}

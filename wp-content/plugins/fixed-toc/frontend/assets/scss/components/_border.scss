@@ -1,0 +1,21 @@
+// *-------------------------------------------------------------------------------------
+// * Border
+// *-------------------------------------------------------------------------------------
+
+
+@each $name, $width in (thin, $border_thin),
+											 (medium, $border_medium),
+											 (bold, $border_bold) {
+	#ftwp-trigger.ftwp-border-#{$name},
+	#ftwp-contents.ftwp-border-#{$name} {
+		border: {
+			color: rgba($border_color, $opacity);
+			style: solid;
+			width: $width;
+		}
+	}
+												 
+	#ftwp-trigger.ftwp-border-#{$name} {
+		font-size: $trigger_font_size - $width/2;
+	}
+}

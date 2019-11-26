@@ -5,14 +5,14 @@
  * @package   query-monitor
  * @link      https://github.com/johnbillion/query-monitor
  * @author    John Blackbourn <john@johnblackbourn.com>
- * @copyright 2009-2018 John Blackbourn
+ * @copyright 2009-2019 John Blackbourn
  * @license   GPL v2 or later
  *
  * Plugin Name:  Query Monitor
  * Description:  The Developer Tools Panel for WordPress.
- * Version:      3.2.2
+ * Version:      3.3.7
  * Plugin URI:   https://querymonitor.com/
- * Author:       John Blackbourn & contributors
+ * Author:       John Blackbourn
  * Author URI:   https://querymonitor.com/
  * Text Domain:  query-monitor
  * Domain Path:  /languages/
@@ -36,6 +36,7 @@ $qm_dir = dirname( __FILE__ );
 require_once "{$qm_dir}/classes/Plugin.php";
 
 if ( ! QM_Plugin::php_version_met() ) {
+	add_action( 'admin_notices', 'QM_Plugin::php_version_nope' );
 	return;
 }
 
@@ -61,7 +62,7 @@ if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
 	return;
 }
 
-foreach ( array( 'QueryMonitor', 'Backtrace', 'Collectors', 'Collector', 'Dispatchers', 'Dispatcher', 'Output', 'Timer' ) as $qm_class ) {
+foreach ( array( 'QueryMonitor', 'Backtrace', 'Collectors', 'Collector', 'Dispatchers', 'Dispatcher', 'Hook', 'Output', 'Timer' ) as $qm_class ) {
 	require_once "{$qm_dir}/classes/{$qm_class}.php";
 }
 

@@ -118,7 +118,6 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 		<?php do_action( 'badgeos_steps_ui_html_after_trigger_type', $step_id, $post_id ); ?>
 
 		<select class="select-achievement-type select-achievement-type-<?php echo $step_id; ?>">
-			<option value=""></option>
 			<?php
 				foreach ( $achievement_types as $achievement_type ) {
 					if ( 'step' == $achievement_type ){
@@ -131,15 +130,16 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_type', $step_id, $post_id ); ?>
 
-		<select class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
-			<option value=""></option>
-		</select>
+		<select class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>"></select>
 
 		<input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
-		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
+        <input type="number" size="5" min="0" placeholder="<?php _e( 'days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) > 0 ? intval( $requirements['num_of_days'] ): "0" ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
+        <?php do_action( 'badgeos_steps_ui_html_after_num_of_days', $step_id, $post_id ); ?>
+
+        <input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
 
 		<?php do_action( 'badgeos_steps_ui_html_after_count_text', $step_id, $post_id ); ?>
@@ -164,7 +164,8 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		'count'            => absint( get_post_meta( $step_id, '_badgeos_count', true ) ),
 		'trigger_type'     => get_post_meta( $step_id, '_badgeos_trigger_type', true ),
 		'achievement_type' => get_post_meta( $step_id, '_badgeos_achievement_type', true ),
-		'achievement_post' => ''
+        'num_of_days'      => get_post_meta( $step_id, '_badgeos_num_of_days', true ),
+		'achievement_post' => get_post_meta( $step_id, '_badgeos_achievement_post', true ),
 	);
 
 	// If the step requires a specific achievement
@@ -271,6 +272,7 @@ function badgeos_update_steps_ajax_handler() {
 			// Clear all relation data
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
 			delete_post_meta( $step_id, '_badgeos_achievement_post' );
+            delete_post_meta( $step_id, '_badgeos_num_of_days' );
 
 			// Flip between our requirement types and make an appropriate connection
 			switch ( $trigger_type ) {
@@ -293,13 +295,19 @@ function badgeos_update_steps_ajax_handler() {
 							)
 						)
 					);
+
+                    update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
 					$title = '"' . get_the_title( $step['achievement_post'] ) . '"';
 					break;
 				case 'badgeos_specific_new_comment' :
 					update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
 					$title = sprintf( __( 'comment on post %d', 'badgeos' ),  $step['achievement_post'] );
 					break;
-				default :
+                case 'badgeos_wp_not_login':
+                    update_post_meta( $step_id, '_badgeos_num_of_days', absint( $step['num_of_days'] ) );
+                    $title = sprintf( __( 'Not login for %d days', 'badgeos' ),  $step['num_of_days'] );
+                    break;
+                default :
 					$triggers = badgeos_get_activity_triggers();
 					$title = $triggers[$trigger_type];
 				break;
@@ -366,7 +374,7 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 	));
 
 	// Setup our output
-	$output = '<option></option>';
+	$output = '';
 	foreach ( $achievements as $achievement ) {
 		$output .= '<option value="' . $achievement->ID . '" ' . selected( $requirements['achievement_post'], $achievement->ID, false ) . '>' . $achievement->post_title . '</option>';
 	}

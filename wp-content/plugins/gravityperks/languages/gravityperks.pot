@@ -1,4 +1,4 @@
-# Copyright (C) 2018 Gravity Perks
+# Copyright (C) 2019 Gravity Perks
 # This file is distributed under the same license as the Gravity Perks package.
 msgid ""
 msgstr ""
@@ -13,287 +13,279 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../admin/manage_perks.php:163
+#: ../admin/manage_perks.php:161
 msgid "Active Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:176
+#: ../admin/manage_perks.php:174
 msgid "Inactive Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:193
+#: ../admin/manage_perks.php:191
 msgid "You don't have any perks installed."
 msgstr ""
 
-#: ../admin/manage_perks.php:194
+#: ../admin/manage_perks.php:192
 msgid "Let's go install some perks!"
 msgstr ""
 
-#: ../admin/manage_perks.php:229, ../admin/manage_perks.php:400, ../admin/manage_perks.php:415, ../admin/manage_perks.php:967
+#: ../admin/manage_perks.php:227, ../admin/manage_perks.php:398, ../admin/manage_perks.php:413, ../admin/manage_perks.php:965
 msgid "%s Documentation"
 msgstr ""
 
-#: ../admin/manage_perks.php:230
+#: ../admin/manage_perks.php:228
 msgid "View Documentation"
 msgstr ""
 
-#: ../admin/manage_perks.php:242
+#: ../admin/manage_perks.php:240
 msgid "Install Perk"
 msgstr ""
 
-#: ../admin/manage_perks.php:245
+#: ../admin/manage_perks.php:243
 msgid "Deregister"
 msgstr ""
 
-#: ../admin/manage_perks.php:250
+#: ../admin/manage_perks.php:248
 msgid "Upgrade License"
 msgstr ""
 
-#: ../admin/manage_perks.php:256, ../admin/manage_perks.php:693
+#: ../admin/manage_perks.php:254, ../admin/manage_perks.php:691
 msgid "Buy License"
 msgstr ""
 
-#: ../admin/manage_perks.php:306
+#: ../admin/manage_perks.php:304
 msgid "Registered Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:321
+#: ../admin/manage_perks.php:319
 msgid "Unregistered Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:335
+#: ../admin/manage_perks.php:333
 msgid "Holy cow. You must really love perks.<br /><strong>You've installed them all</strong>!"
 msgstr ""
 
-#: ../admin/manage_perks.php:402, ../admin/manage_perks.php:416
+#: ../admin/manage_perks.php:400, ../admin/manage_perks.php:414
 msgid "Docs"
 msgstr ""
 
-#: ../admin/manage_perks.php:405
+#: ../admin/manage_perks.php:403
 msgid "Deactivate"
 msgstr ""
 
-#: ../admin/manage_perks.php:408
+#: ../admin/manage_perks.php:406
 msgid "Settings"
 msgstr ""
 
-#: ../admin/manage_perks.php:426
+#: ../admin/manage_perks.php:424
 msgid "<h6>Uninstall Perk</h6> <em>Uninstalling</em> a perk you will <strong>completely remove its data and all files</strong>. This option is available for some perks which create custom tables or store a significant amount of data in the form meta."
 msgstr ""
 
-#: ../admin/manage_perks.php:427
+#: ../admin/manage_perks.php:425
 msgid "Are you sure you want to delete this perk and all of its data?"
 msgstr ""
 
-#: ../admin/manage_perks.php:428
+#: ../admin/manage_perks.php:426
 msgid "Uninstall"
 msgstr ""
 
-#: ../admin/manage_perks.php:457
+#: ../admin/manage_perks.php:455
 msgid "<b>This perk is unregistered.</b> You will not receive updates for it."
 msgstr ""
 
-#: ../admin/manage_perks.php:519
+#: ../admin/manage_perks.php:517
 msgid "You must purchase or register your license to take advantage of automatic upgrades."
 msgstr ""
 
-#: ../admin/manage_perks.php:526
+#: ../admin/manage_perks.php:524
 msgid "<h6>Network Activated Perk</h6>This perk is network activated. You can deactivate this perk from the Network Admin Plugins page."
 msgstr ""
 
-#: ../admin/manage_perks.php:526
+#: ../admin/manage_perks.php:524
 msgid "Network Activated"
 msgstr ""
 
-#: ../admin/manage_perks.php:544, ../admin/manage_perks.php:642
+#: ../admin/manage_perks.php:542, ../admin/manage_perks.php:640
 msgid "There was an error managing this perk."
 msgstr ""
 
-#: ../admin/manage_perks.php:560
+#: ../admin/manage_perks.php:558
 msgid "You do not have sufficient permissions to activate plugins for this site."
 msgstr ""
 
-#: ../admin/manage_perks.php:575
+#: ../admin/manage_perks.php:573
 msgid "There was an error activating this perk."
 msgstr ""
 
-#: ../admin/manage_perks.php:596
+#: ../admin/manage_perks.php:594
 msgid "You do not have sufficient permissions to deactivate plugins for this site."
 msgstr ""
 
-#: ../admin/manage_perks.php:601
+#: ../admin/manage_perks.php:599
 msgid "This perk can only be managed from the network admin's Plugins page."
 msgstr ""
 
-#: ../admin/manage_perks.php:616
+#: ../admin/manage_perks.php:614
 msgid "You do not have sufficient permissions to delete plugins for this site."
 msgstr ""
 
-#: ../admin/manage_perks.php:688
+#: ../admin/manage_perks.php:686
 msgid "Get Support"
 msgstr ""
 
-#: ../admin/manage_perks.php:728
+#: ../admin/manage_perks.php:726
 msgid "Oops! That doesn't appear to be a valid license."
 msgstr ""
 
-#: ../admin/manage_perks.php:732
+#: ../admin/manage_perks.php:730
 msgid "Oops! You have reached your license's site limit of %d site(s)."
 msgstr ""
 
-#: ../admin/manage_perks.php:734
+#: ../admin/manage_perks.php:732
 msgid "Oops! You have reached your license's site limit."
 msgstr ""
 
-#: ../admin/manage_perks.php:737
+#: ../admin/manage_perks.php:735
 msgid "Upgrade Now"
 msgstr ""
 
-#: ../admin/manage_perks.php:751
+#: ../admin/manage_perks.php:749
 msgid "Perk successfully deregistered."
 msgstr ""
 
-#: ../admin/manage_perks.php:762
+#: ../admin/manage_perks.php:760
 msgid "Perk successfully registered."
 msgstr ""
 
-#: ../admin/manage_perks.php:781
+#: ../admin/manage_perks.php:779
 msgid "License successfully deactivated."
 msgstr ""
 
-#: ../admin/manage_perks.php:789
+#: ../admin/manage_perks.php:787
 msgid "License successfully refreshed."
 msgstr ""
 
-#: ../admin/manage_perks.php:835, ../gravityperks.php:203, ../gravityperks.php:715
+#: ../admin/manage_perks.php:833, ../gravityperks.php:186, ../gravityperks.php:698
 msgid "Manage Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:836
+#: ../admin/manage_perks.php:834
 msgid "Welcome to the <strong>Manage Perks</strong> page. Here you can activate/deactivate installed perks, view documentation, modify a perk\'s global settings and also delete unwanted perks."
 msgstr ""
 
-#: ../admin/manage_perks.php:841
+#: ../admin/manage_perks.php:839
 msgid "Install Perks"
 msgstr ""
 
-#: ../admin/manage_perks.php:842
+#: ../admin/manage_perks.php:840
 msgid "The <strong>Install Perks</strong> page provides you a complete list of perks available for installation. Just click the <em>Install</em> button on any listed perk to automatically download and install."
 msgstr ""
 
-#: ../admin/manage_perks.php:849
+#: ../admin/manage_perks.php:847
 msgid "Buy a License"
 msgstr ""
 
-#: ../admin/manage_perks.php:850
+#: ../admin/manage_perks.php:848
 msgid "Buy a license to receive unlimited access to <strong>all perks</strong> along with automatic upgrades and support."
 msgstr ""
 
-#: ../admin/manage_perks.php:857
+#: ../admin/manage_perks.php:855
 msgid "Need Help? Get Support!"
 msgstr ""
 
-#: ../admin/manage_perks.php:858
+#: ../admin/manage_perks.php:856
 msgid "One of the best perks of your Gravity Perks license is premium support! If you\'ve got a question or problem, get in touch. We are eager to help!"
 msgstr ""
 
-#: ../admin/manage_perks.php:1026
+#: ../admin/manage_perks.php:1030
 msgid "Settings saved successfully."
 msgstr ""
 
-#: ../admin/manage_perks.php:1028
+#: ../admin/manage_perks.php:1032
 msgid "Settings were not saved."
 msgstr ""
 
-#: ../admin/manage_perks.php:1034
+#: ../admin/manage_perks.php:1038
 msgid "%s Settings"
 msgstr ""
 
-#: ../admin/manage_perks.php:1066
+#: ../admin/manage_perks.php:1071
 msgid "Save Settings"
 msgstr ""
 
-#: ../admin/manage_perks.php:1108
-msgid "Oops! Doesn't look like you have permission to do this."
-msgstr ""
-
-#: ../admin/manage_perks.php:1112
-msgid "What exactly are you trying to do?"
-msgstr ""
-
-#: ../gravityperks.php:478
+#: ../gravityperks.php:461
 msgid "Current Gravity Forms version (%1$s) does not meet minimum Gravity Forms version requirement (%2$s)."
 msgstr ""
 
-#: ../gravityperks.php:481
+#: ../gravityperks.php:464
 msgid "Gravity Forms %1$s or greater is required. Activate it now or %2$spurchase it today!%3$s"
 msgstr ""
 
-#: ../gravityperks.php:488
+#: ../gravityperks.php:471
 msgid "%1$s requires WordPress %2$s or greater. You must upgrade WordPress in order to use this perk."
 msgstr ""
 
-#: ../gravityperks.php:491
+#: ../gravityperks.php:474
 msgid "Gravity Perks requires WordPress %1$s or greater. You must upgrade WordPress in order to use Gravity Perks."
 msgstr ""
 
-#: ../gravityperks.php:496
+#: ../gravityperks.php:479
 msgid "%1$s requires Gravity Perks %2$s or greater. Activate it now or %3$spurchase it today!%4$s"
 msgstr ""
 
-#: ../gravityperks.php:501
+#: ../gravityperks.php:484
 msgid "%1$sRegister%2$s your copy of Gravity Perks to receive access to automatic upgrades and support for this perk. Need a license key? %3$sPurchase one now.%2$s"
 msgstr ""
 
-#: ../gravityperks.php:504
+#: ../gravityperks.php:487
 msgid "%1$sRegister%2$s your copy of Gravity Perks to receive access to automatic upgrades and support. Need a license key? %3$sPurchase one now.%2$s"
 msgstr ""
 
-#: ../gravityperks.php:712
+#: ../gravityperks.php:695
 msgid "Back to Manage Perks"
 msgstr ""
 
-#: ../gravityperks.php:719
+#: ../gravityperks.php:702
 msgid "Activate Perk"
 msgstr ""
 
-#: ../gravityperks.php:878
+#: ../gravityperks.php:861
 msgid "<strong>Gravity Perks</strong> must be network activated before a <strong>perk</strong> can be network activated."
 msgstr ""
 
-#: ../gravityperks.php:917
+#: ../gravityperks.php:900
 msgid "No, Return to Manage Perks page"
 msgstr ""
 
-#: ../gravityperks.php:1009
+#: ../gravityperks.php:992
 msgid "Oops! Your site is having some trouble communicating with the our API."
 msgstr ""
 
-#: ../gravityperks.php:1010
+#: ../gravityperks.php:993
 msgid "Let's get this fixed."
 msgstr ""
 
-#: ../gravityperks.php:1182, ../gravityperks.php:1204, ../gravityperks.php:1638, ../gravityperks.php:1642
+#: ../gravityperks.php:1165, ../gravityperks.php:1187, ../gravityperks.php:1621, ../gravityperks.php:1625
 msgid "Perks"
 msgstr ""
 
-#: ../gravityperks.php:1228, ../gravityperks.php:1228
+#: ../gravityperks.php:1211, ../gravityperks.php:1211
 msgid "Return to Perks Page"
 msgstr ""
 
-#: ../gravityperks.php:1423
+#: ../gravityperks.php:1406
 msgid "Welcome to Gravity Perks"
 msgstr ""
 
-#: ../gravityperks.php:1424
+#: ../gravityperks.php:1407
 msgid "Ready to get started? Click the <strong>Perks</strong> link (to the left) to take a quick tour."
 msgstr ""
 
-#: ../gravityperks.php:1509
+#: ../gravityperks.php:1492
 msgid "Does this page look strange? Your PHP version is out-of-date. <strong>Please upgrade.</strong>"
 msgstr ""
 
-#: ../gravityperks.php:1576
+#: ../gravityperks.php:1559
 msgid "Gravity Perks"
 msgstr ""
 

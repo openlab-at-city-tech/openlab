@@ -240,10 +240,10 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 	echo '<h5>Email Status</h5>';
 
 	echo '<ul class="group-manage-members-bpges-status">';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
 	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
 
 	echo '</ul>';
 
@@ -483,6 +483,14 @@ function openlab_group_feature_toggle( $group_id ) {
 	} else {
 		groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
 	}
+
+	// Calendar.
+	$enable_calendar = ! empty( $_POST['openlab-edit-group-calendar'] );
+	if ( $enable_calendar ) {
+		groups_update_groupmeta( $group_id, 'calendar_is_disabled', '0' );
+	} else {
+		groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
+	}
 }
 add_action( 'groups_settings_updated', 'openlab_group_feature_toggle' );
 
@@ -575,7 +583,11 @@ function openlab_prevent_bbp_recounts() {
 add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
 
 function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
-	$group_root        = (int) bbp_get_group_forums_root_id();
+	$group_root = (int) bbp_get_group_forums_root_id();
+	if ( ! $group_root ) {
+		return $id;
+	}
+
 	$group_root_parent = (int) get_post( $group_root )->post_parent;
 	if ( $group_root !== $id && $group_root_parent !== $id ) {
 		return $id;

@@ -1,0 +1,290 @@
+// *-------------------------------------------------------------------------------------
+// * Set the default style
+// *-------------------------------------------------------------------------------------
+
+// Global font property
+& {
+	font: {
+		family: $font_family;
+		size: $font_size;
+	}
+}
+
+
+// Font icons
+.ftwp-icon {
+	& {
+		display: inline-block;
+		font: {
+			family: "ftwp-icon";
+			style: normal;
+			weight: normal;
+		}
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	
+	&-menu {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F0C9';
+		}
+	}	
+	
+	&-bullet {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F0CA';
+		}
+	}	
+	
+	&-number {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F0CB';
+		}
+	}
+	
+	&-ellipsis {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F141';
+		}
+	}
+	
+	&-vellipsis {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F142';
+		}
+	}
+	
+	&-circle {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F111';
+		}
+	}
+	
+	&-circle-o {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F10C';
+		}
+	}
+	
+	&-square {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F0C8';
+		}
+	}
+	
+	&-square-o {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\F096';
+		}
+	}	
+	
+	&-expand {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\E801';
+		}
+	}	
+	
+	&-collapse {
+		@extend .ftwp-icon;
+		&::before {
+			content: '\E800';
+		}
+	}
+	
+	&-minimize {
+		@extend .ftwp-icon; 
+		&::before {
+			content: '\E803'; 
+		}
+	}
+
+}
+
+@each $x, $y in 
+	( left, top ),
+	( left, center ),
+	( left, bottom ),
+	( right, top ),
+	( right, center ),
+	( right, bottom ) {
+		.ftwp-transform-#{$x}-#{$y} {
+			@include transformOrigin( $x $y );
+		}
+}
+
+
+// Trigger
+#ftwp-trigger {
+	display: inline-block;
+	width: $trigger_size;
+	height: $trigger_size;
+	background: rgba( $trigger_bgcolor, $opacity );
+	color: $trigger_color;
+	font-size: $trigger_font_size;
+//	line-height: $trigger_font_size;
+	position: relative;
+//	@include transition((background $durationMedium, transform $durationFast));
+
+	&:hover {
+//		color: $trigger_hover_color;
+//		background: $trigger_hover_bgcolor;
+//		background: $trigger_bgcolor;
+		cursor: pointer;
+	}
+	
+	&:focus {
+//		opacity: .5;
+		outline: 5px cyan solid;
+		box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+	}
+	
+	.ftwp-trigger-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		@include transform(translate(-50%, -50%));
+	}
+}
+
+
+// Contents
+#ftwp-contents {
+	width: $contents_width;
+	max-width: 100%;
+	overflow: hidden;
+	height: $contents_height;  
+	max-height: 100%;
+}
+
+#ftwp-contents:hover {
+	#ftwp-header {
+		background: $header_bgcolor;
+	}
+	
+	#ftwp-list {
+		background: $list_bgcolor;
+	}
+}
+
+
+// Header of the Contents
+#ftwp-header {
+	color: $header_color;
+	background: rgba( $header_bgcolor, $opacity );
+	padding: $header_vpadding $header_hpadding;
+	font-size: $header_font_size;
+	line-height: $header_line_height;
+	@include transition( background $durationMedium );
+	
+	&-control {
+		float: left;
+		margin-right: 5px;
+		
+//		&:hover,
+//		&:active,
+//		&:focus {
+//			font-family: "ftwp-icon";	// Override the reset style.
+//		}
+		
+//		&:focus {
+//			outline: 3px solid rgba($header_color, .5);
+//			box-shadow: 0 6px 6px rgba(0, 0, 0, .5);
+//		}
+		
+//		&:hover {
+//			cursor: default; 
+//		}
+	}
+	
+	&-title {
+		font-weight: bold;
+		display: block;
+		overflow: hidden; 
+	}
+	
+	&-minimize {
+		float: right;
+		margin-left: 5px;
+		width: 25px;
+		text-align: center;
+		opacity: .5;
+		
+		&:hover,
+		&:active,
+		&:focus {
+			font-family: "ftwp-icon";	// Override the reset style.
+		}
+		
+		&:hover,
+		&:focus {
+			opacity: 1;
+		}
+		
+		&:hover {
+			cursor: pointer;
+		}
+		
+		&:focus {
+			outline: 2px solid rgba( $header_color, .5 );
+		}
+	}
+	
+	&::after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+// List of the contents
+#ftwp-list {
+	color: $list_color;
+	font-size: $list_font_size;
+	background: rgba($list_bgcolor, $opacity);
+	line-height: $list_line_height;
+	overflow-y: auto;
+  width: 100%;
+	@include transition( background $durationMedium );
+	.ftwp-item {
+		text-indent: 0;
+	}
+	
+	.ftwp-anchor {
+		display: block;
+		padding: $list_anchor_vpadding $list_anchor_hpadding;
+		z-index: 10;
+		overflow: hidden;
+		position: relative; 
+		@include transition( color $durationMedium );
+		
+		&:hover {
+			color: $list_hover_color;
+		}
+		
+		&:focus {
+			color: $list_active_color;
+		}
+		
+//		&:active .ftwp-text {
+//			text-shadow: 1px 1px 1px $list_active_color;
+//		}
+	}
+	
+	.ftwp-active {
+		color: $list_active_color;
+		&:hover {
+			color: $list_active_color;
+		}
+	}
+}

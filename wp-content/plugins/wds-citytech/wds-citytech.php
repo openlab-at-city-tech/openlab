@@ -16,6 +16,9 @@ require 'wds-docs.php';
 require 'includes/oembed.php';
 require 'includes/library-widget.php';
 require 'includes/clone.php';
+require 'includes/print-this-page.php';
+require 'includes/license-widget.php';
+require 'includes/user-moderation.php';
 
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
@@ -35,6 +38,11 @@ function openlab_load_custom_bp_functions() {
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
+
+/**
+ * Login customizations.
+ */
+add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
 
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
@@ -137,16 +145,18 @@ function my_page_menu_filter( $menu ) {
 	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
-		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
-		$menu_a     = explode( '<ul>', $menu );
-		$menu_a     = array(
-			$menu_a[0],
-			'<ul>',
-			'<li id="group-profile-link"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
-			$menu_a[1],
-		);
-		$menu       = implode( '', $menu_a );
+		$group = groups_get_group( $wds_bp_group_id );
+		if ( $group->is_visible ) {
+			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
+			$menu_a     = explode( '<ul>', $menu );
+			$menu_a     = array(
+				$menu_a[0],
+				'<ul>',
+				'<li id="group-profile-link" class="menu-item"><a title="Site" href="' . bp_get_root_domain() . '/groups/' . $group->slug . '/">' . $group_type . ' Profile</a></li>',
+				$menu_a[1],
+			);
+			$menu       = implode( '', $menu_a );
+		}
 	}
 	return $menu;
 }
@@ -154,9 +164,11 @@ add_filter( 'wp_page_menu', 'my_page_menu_filter' );
 
 //child theme menu filter to link to website
 function cuny_add_group_menu_items( $items, $args ) {
-	// The Sliding Door theme shouldn't get any added items
-	// See http://openlab.citytech.cuny.edu/redmine/issues/772
-	if ( 'custom-sliding-menu' == $args->theme_location ) {
+	/**
+	 * Allows individual themes to opt out.
+	 */
+	$allow = apply_filters( 'openlab_add_dynamic_nav_items', true, $args );
+	if ( ! $allow ) {
 		return $items;
 	}
 
@@ -181,7 +193,7 @@ function cuny_add_group_menu_items( $items, $args ) {
 		$home_link->url     = trailingslashit( site_url() );
 		$home_link->slug    = 'home';
 		$home_link->ID      = 'home';
-		$home_link->classes = [];
+		$home_link->classes = [ 'menu-item', 'menu-item-home' ];
 		$items              = array_merge( array( $home_link ), $items );
 	}
 
@@ -217,18 +229,20 @@ function cuny_group_menu_items() {
 	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $wds_bp_group_id ) {
-		$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-		$group      = new BP_Groups_Group( $wds_bp_group_id, true );
+		$group = groups_get_group( $wds_bp_group_id );
+		if ( $group->is_visible ) {
+			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
 
-		$post_args             = new stdClass();
-		$profile_item          = new WP_Post( $post_args );
-		$profile_item->ID      = 'group-profile-link';
-		$profile_item->title   = sprintf( '%s Profile', $group_type );
-		$profile_item->slug    = 'group-profile-link';
-		$profile_item->url     = bp_get_group_permalink( $group );
-		$profile_item->classes = [];
+			$post_args             = new stdClass();
+			$profile_item          = new WP_Post( $post_args );
+			$profile_item->ID      = 'group-profile-link';
+			$profile_item->title   = sprintf( '%s Profile', $group_type );
+			$profile_item->slug    = 'group-profile-link';
+			$profile_item->url     = bp_get_group_permalink( $group );
+			$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
 
-		$items[] = $profile_item;
+			$items[] = $profile_item;
+		}
 	}
 
 	return $items;
@@ -1086,7 +1100,7 @@ function openlab_require_school_and_department_for_groups() {
 add_action( 'bp_actions', 'openlab_require_school_and_department_for_groups', 5 );
 
 // Save Group Meta
-add_action( 'groups_group_after_save', 'wds_bp_group_meta_save' );
+add_action( 'groups_group_after_save', 'wds_bp_group_meta_save', 15 );
 
 function wds_bp_group_meta_save( $group ) {
 	global $wpdb, $user_ID, $bp;
@@ -1278,7 +1292,7 @@ function ra_copy_blog_page( $group_id ) {
 			$where = 'AND d.domain IS NULL ';
 		}
 
-		$src_id = intval( $_POST['source_blog'] );
+		$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
 
 		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 		//$domain = str_replace( ".","", $domain );
@@ -1354,7 +1368,7 @@ function ra_copy_blog_page( $group_id ) {
 					for ( $i = 0; $i < count( $tables ); $i++ ) {
 						$table = current( $tables[ $i ] );
 						if ( substr( $table, 0, $len ) == $blogtables ) {
-							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table == $blogtables . 'commentmeta' ) ) {
 								// phpcs:disable
 								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
 								$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
@@ -2472,26 +2486,6 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 	return $check;
 }
 add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
-
-/**
- * Set "From" name in outgoing email to the site name.
- *
- * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
- * for now, we must reinstate.
- *
- * @return string The blog name for the root blog.
- */
-function openlab_email_from_name_filter() {
-	/**
-	 * Filters the "From" name in outgoing email to the site name.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 *
-	 * @param string $value Value to set the "From" name to.
-	 */
-	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
-}
-add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
 
 function openlab_email_appearance_settings( $settings ) {
 	$settings['email_bg']        = '#fff';
