@@ -6,6 +6,23 @@
  * - Add the above to the sync mechanism
 
 /**
+ * Blacklist meta keys being indexed.
+ */
+add_filter(
+	'epbp_prepare_group_meta_excluded_public_keys',
+	function( $keys ) {
+		return array_merge(
+			[
+				'wds_group_type',
+				'wds_group_school',
+				'wds_group_department',
+			],
+			$keys,
+		);
+	}
+);
+
+/**
  * Group type should reflect what's stored in meta.
  */
 add_filter(
