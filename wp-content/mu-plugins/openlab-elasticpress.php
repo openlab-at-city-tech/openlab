@@ -13,7 +13,13 @@ add_filter(
 	function( $keys ) {
 		return array_merge(
 			[
+				// Handled separately.
+				'openlab_department',
+				'openlab_office',
+				'openlab_school',
 				'wds_group_type',
+
+				// No longer used.
 				'wds_group_school',
 				'wds_group_department',
 			],
@@ -23,17 +29,31 @@ add_filter(
 );
 
 /**
- * Group type should reflect what's stored in meta.
+ * OL-specific group data.
  */
 add_filter(
 	'epbp_group_sync_args',
 	function( $args, $group_id ) {
+		// Group type should come from our custom meta.
 		$args['group_type'] = openlab_get_group_type( $group_id );
 
+		// Categories.
 		$categories = BPCGC_Groups_Terms::get_object_terms( $group_id, 'bp_group_categories', [] );
 		$cat_slugs  = wp_list_pluck( $categories, 'slug' );
 
 		$args['meta']['categories'] = $cat_slugs;
+
+		// Academic units.
+		$academic_units = openlab_get_group_academic_units( $group_id );
+
+		foreach ( $academic_units as $unit_type => $units ) {
+			$args[ $unit_type ] = array_map(
+				function( $unit ) {
+					return str_replace( '-', '_', $unit );
+				},
+				$units
+			);
+		}
 
 		return $args;
 	},
@@ -61,12 +81,13 @@ add_filter(
 					];
 				break;
 
-//				case 'openlab_department' : WHY DOES THIS NOT WORK
+				case 'openlab_department' :
 				case 'openlab_office' :
 				case 'openlab_school' :
+					$academic_unit = substr( $mq['key'], 8 ) . 's';
 					$args['query']['bool']['filter'][] = [
 						'terms' => [
-							'meta.' . $mq['key'] . '.value' => [ $mq['value'] ],
+							$academic_unit => str_replace( '-', '_', [ $mq['value'] ] ),
 						],
 					];
 				break;
