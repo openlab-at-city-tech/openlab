@@ -29,6 +29,12 @@ add_filter(
 	'epbp_group_sync_args',
 	function( $args, $group_id ) {
 		$args['group_type'] = openlab_get_group_type( $group_id );
+
+		$categories = BPCGC_Groups_Terms::get_object_terms( $group_id, 'bp_group_categories', [] );
+		$cat_slugs  = wp_list_pluck( $categories, 'slug' );
+
+		$args['meta']['categories'] = $cat_slugs;
+
 		return $args;
 	},
 	10,
@@ -55,14 +61,26 @@ add_filter(
 					];
 				break;
 
+//				case 'openlab_department' : WHY DOES THIS NOT WORK
+				case 'openlab_office' :
 				case 'openlab_school' :
 					$args['query']['bool']['filter'][] = [
-						'term' => [
-							'meta.' . $mq['key'] . '.value' => $mq['value'],
+						'terms' => [
+							'meta.' . $mq['key'] . '.value' => [ $mq['value'] ],
 						],
 					];
 				break;
 			}
+		}
+
+		if ( isset( $_GET['cat'] ) && ! empty( $_GET['cat'] ) ) {
+			$cat = wp_unslash( $_GET['cat'] );
+			$cat = sanitize_text_field( $cat );
+			$args['query']['bool']['filter'][] = [
+				'terms' => [
+					'meta.categories' => [ $cat ],
+				],
+			];
 		}
 
 		return $args;
