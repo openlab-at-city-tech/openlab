@@ -425,6 +425,7 @@
                     white-space: normal;
                     display: flex;
                     align-items: center;
+                    flex: 1 1 0;
                     &:after{
                         content: "\f0d7";
                         display: flex;
@@ -433,7 +434,7 @@
                         -webkit-font-smoothing: antialiased;
                         -moz-osx-font-smoothing: grayscale;
                         position: absolute;
-                        right: 4%;
+                        right: 18px;
                         top: 0;
                         bottom: 0;
                         justify-content: center;
@@ -443,10 +444,10 @@
                         }
                     }
                     @media (min-width: @screen-md-min){
-                        padding-right: 8%;
+                        padding-right: 42px;
                     }
                     @media (max-width: @screen-xs-max){
-                        padding-right: 8%;
+                        padding-right: 42px;
                     }
                     .site-name{
                         white-space: nowrap;
