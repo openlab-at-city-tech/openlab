@@ -1,17 +1,17 @@
 <?php
 /**
  * Plugin Name: Gravity Perks
- * Plugin URI: http://gravitywiz.com/
+ * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.1.8
+ * Version: 2.1.9
  * Author: Gravity Wiz
- * Author URI: http://gravitywiz.com/
+ * Author URI: https://gravitywiz.com/
  * License: GPL2
  * Text Domain: gravityperks
  * Domain Path: /languages
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.1.8' );
+define( 'GRAVITY_PERKS_VERSION', '2.1.9' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -209,7 +209,7 @@ class GravityPerks {
 	    define( 'GW_SUPPORT_URL', GW_URL . '/support/' );
 	    define( 'GW_BUY_URL',     GW_URL );
 
-	    define( 'GW_GFORM_AFFILIATE_URL', 'http://bit.ly/gwizgravityforms' );
+	    define( 'GW_GFORM_AFFILIATE_URL', 'https://bit.ly/gwizgravityforms' );
 	    define( 'GW_MANAGE_PERKS_URL',    admin_url( 'admin.php?page=gwp_perks' ) );
 
 	    define( 'GW_PRICE_ID_LEGACY_SINGLE',    0 );

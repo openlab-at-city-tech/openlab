@@ -120,7 +120,7 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 		}
 		// if the 'other' choice is selected, get the value from the 'other' text input
 		else if ( fieldValue == 'gf_other_choice' ) {
-			fieldValue = $( '#input_{0}_{1}_other'.format( formId, fieldId ) ).val();
+			fieldValue = jQuery( '#input_{0}_{1}_other'.format( formId, fieldId ) ).val();
 		}
 
 		if( gf_matches_operation( fieldValue, rule.value, rule.operator ) ) {

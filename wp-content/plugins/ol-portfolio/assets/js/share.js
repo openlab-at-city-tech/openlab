@@ -96,9 +96,7 @@
 			// Update current entry meta.
 			app.saveMeta( app.entry.id, app.entry.rest_base, res.id );
 
-			$( '#add-to-portfolio-' + app.entry.id )
-				.text( 'Added to my Portfolio' )
-				.prop( 'disabled', true );
+			app.updateButton( app.entry, res.id );
 
 			app.modal.hide();
 		} );
@@ -153,7 +151,20 @@
 				xhr.setRequestHeader( 'X-WP-Nonce', app.settings.nonce );
 			},
 		} );
-	}
+	};
+
+	app.updateButton = function( entry, id ) {
+		var editUrl = app.settings.portfolioAdmin + 'post.php?action=edit&post=' + id;
+
+		// Create new edit link element.
+		var editLink = $( '<a />' )
+			.attr( 'href', editUrl )
+			.text( 'Added to my Portfolio' );
+
+		$( '.portfolio-actions-' + entry.id )
+			.find( 'button' )
+			.replaceWith( editLink );
+	};
 
 	$( document ).ready( app.init );
 }( window, jQuery, {} ) );

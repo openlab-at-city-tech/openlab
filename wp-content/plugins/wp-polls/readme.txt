@@ -3,8 +3,8 @@ Contributors: GamerZ
 Donate link: https://lesterchan.net/site/donation/  
 Tags: poll, polls, polling, vote, booth, democracy, ajax, survey, post, widget  
 Requires at least: 4.9.6  
-Tested up to: 5.0  
-Stable tag: 2.75.2  
+Tested up to: 5.3  
+Stable tag: 2.75.3  
 
 Adds an AJAX poll system to your WordPress blog. You can also easily add a poll into your WordPress's blog post/page.
 
@@ -24,6 +24,11 @@ WP-Polls is extremely customizable via templates and css styles and there are to
 I spent most of my free time creating, updating, maintaining and supporting these plugins, if you really love my plugins and could spare me a couple of bucks, I will really appreciate it. If not feel free to use it without any obligations.
 
 ## Changelog
+### VErsion 2.75.3
+* FIXED: Broken filter for templates
+* FIXED: Divison by 0 by totalvoters
+* FIXED: Add whitelist to sortby poll answers
+
 ### Versiob 2.75.2
 * FIXED: Missing str_replace for wp_polls_template filter
 
@@ -206,10 +211,26 @@ I spent most of my free time creating, updating, maintaining and supporting thes
 <?php endif; ?> 
 ~~~
  
+### To Display Poll Votes by ID
+
+~~~
+<?php if ( function_exists( 'get_pollvotes_by_id' ) ): ?>
+	<?php get_pollvotes_by_id($poll_id); ?>
+<?php endif; ?>
+~~~
+
 ### To Display Total Poll Voters
 
 ~~~
 <?php if ( function_exists( 'get_pollvoters' ) ): ?>
 	<?php get_pollvoters(); ?>
 <?php endif; ?> 
+~~~
+
+### To Display Poll Time by ID and date format
+
+~~~
+<?php if ( function_exists( 'get_polltime' ) ): ?>
+	<?php get_polltime( $poll_id, $date_format ); ?>
+<?php endif; ?>
 ~~~

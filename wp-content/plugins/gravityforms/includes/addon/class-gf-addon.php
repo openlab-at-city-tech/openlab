@@ -280,11 +280,9 @@ abstract class GFAddOn {
 
 
 		// Members plugin integration.
-		if ( GFForms::has_members_plugin( '2.0' ) ) {
+		if ( $this->has_members_plugin( ) ) {
 			add_action( 'members_register_cap_groups', array( $this, 'members_register_cap_group' ), 11 );
 			add_action( 'members_register_caps', array( $this, 'members_register_caps' ), 11 );
-		} else if ( GFForms::has_members_plugin() ) {
-			add_filter( 'members_get_capabilities', array( $this, 'members_get_capabilities' ) );
 		}
 
 		// User Role Editor integration.
@@ -1188,20 +1186,7 @@ abstract class GFAddOn {
 	 * @return bool
 	 */
 	public function has_members_plugin() {
-		return function_exists( 'members_get_capabilities' );
-	}
-
-	/**
-	 * Not intended to be overridden or called directly by Add-Ons.
-	 *
-	 * @ignore
-	 *
-	 * @param $caps
-	 *
-	 * @return array
-	 */
-	public function members_get_capabilities( $caps ) {
-		return array_merge( $caps, $this->_capabilities );
+		return GFForms::has_members_plugin();
 	}
 
 	/**
@@ -4106,7 +4091,7 @@ abstract class GFAddOn {
 	public function get_field( $name, $settings ) {
 		foreach ( $settings as $section ) {
 			for ( $i = 0; $i < count( $section['fields'] ); $i ++ ) {
-				if ( $section['fields'][ $i ]['name'] == $name ) {
+				if ( rgar( $section['fields'][ $i ], 'name' ) == $name ) {
 					return $section['fields'][ $i ];
 				}
 			}

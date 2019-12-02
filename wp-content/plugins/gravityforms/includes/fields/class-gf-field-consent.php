@@ -114,7 +114,6 @@ class GF_Field_Consent extends GF_Field {
 			'checkbox_label_setting',
 			'rules_setting',
 			'visibility_setting',
-			'placeholder_setting',
 			'description_setting',
 			'css_class_setting',
 		);

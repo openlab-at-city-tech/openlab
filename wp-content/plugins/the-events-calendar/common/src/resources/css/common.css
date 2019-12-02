@@ -168,6 +168,9 @@
 	 * Borders - Radius
 	 * ----------------------------------------------------------------------------- */
 
+	/* -----------------------------------------------------------------------------
+	 * Borders - Width
+	 * ----------------------------------------------------------------------------- */
 }
 
 :root {
@@ -2190,6 +2193,77 @@
 		width: 100%;
 	}
 
+/*.tribe-common-c-loader {}*/
+
+.tribe-common .tribe-common-c-loader {
+		display: flex;
+		padding-top: 192px;
+	}
+
+/* -----------------------------------------------------------------------------
+	 *
+	 * Component: Loader
+	 *
+	 *
+	 * Example:
+	 * <div class="tribe-events-view-loader__dots tribe-common-c-loader">
+	 *    <div class="tribe-common-c-loader__dot tribe-common-c-loader__dot--first"></div>
+	 *    <div class="tribe-common-c-loader__dot tribe-common-c-loader__dot--second"></div>
+	 *    <div class="tribe-common-c-loader__dot tribe-common-c-loader__dot--third"></div>
+	 * </div>
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+.tribe-common .tribe-common-c-loader__dot {
+		background-color: rgba(51,74,255, 0.07);
+		height: 15px;
+		width: 15px;
+		-webkit-animation-name: tribe-common-c-loader-bounce;
+		        animation-name: tribe-common-c-loader-bounce;
+		-webkit-animation-duration: 2.24s;
+		        animation-duration: 2.24s;
+		-webkit-animation-iteration-count: infinite;
+		        animation-iteration-count: infinite;
+		-webkit-animation-direction: normal;
+		        animation-direction: normal;
+		border-radius: 50%;
+	}
+
+.tribe-common .tribe-common-c-loader__dot:not(:first-of-type) {
+			margin-left: 8px;
+		}
+
+.tribe-common .tribe-common-c-loader__dot--first {
+		-webkit-animation-delay: 0.45s;
+		        animation-delay: 0.45s;
+	}
+
+.tribe-common .tribe-common-c-loader__dot--second {
+		-webkit-animation-delay: 1.05s;
+		        animation-delay: 1.05s;
+	}
+
+.tribe-common .tribe-common-c-loader__dot--third {
+		-webkit-animation-delay: 1.35s;
+		        animation-delay: 1.35s;
+	}
+
+@-webkit-keyframes tribe-common-c-loader-bounce {
+		0% {}
+
+		50% { background-color: #334AFF; }
+
+		100% {}
+	}
+
+@keyframes tribe-common-c-loader-bounce {
+		0% {}
+
+		50% { background-color: #334AFF; }
+
+		100% {}
+	}
+
 @media (min-width: 768px) {
 
 .tribe-common .tribe-common-form-control-text__input {
@@ -2368,5 +2442,9 @@
 .tribe-common .tribe-common-c-btn,
 	.tribe-common a.tribe-common-c-btn {
 			width: auto
+	}
+
+.tribe-common .tribe-common-c-loader {
+			padding-top: 288px
 	}
 		}

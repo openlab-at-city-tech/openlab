@@ -1119,10 +1119,6 @@ add_filter('bp_get_group_join_button', 'openlab_custom_group_buttons');
  * does *save* the correct level )
  */
 function openlab_default_subscription_settings_form() {
-    if (openlab_is_portfolio() || ( isset($_GET['type']) && 'portfolio' == $_GET['type'] )) {
-        return;
-    }
-
 	$stored_setting = ass_get_default_subscription();
 
 	$group_type_label = openlab_get_group_type_label( [ 'case' => 'upper' ] );

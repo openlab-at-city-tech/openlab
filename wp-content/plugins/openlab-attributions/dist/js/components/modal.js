@@ -1,40 +1,28 @@
 /**
  * WordPress dependencies
  */
-import { Component } from '@wordpress/element';
-import {
-	Button,
-	Modal,
-} from '@wordpress/components';
+import { Component, RawHTML } from '@wordpress/element';
+import { Button, Modal } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
+import TextControl from './text-control';
+import SelectControl from './select-control';
+import PluginAttribution from './plugin-attribution';
 import formatAttribution from '../utils/format-attribution';
+import help from '../utils/help';
 
-const licenses = Object.values( window.attrLicenses );
+const licenses = window.attrLicenses || [];
 
-export default class AttributionModal extends Component {
+class AttributionModal extends Component {
 	constructor( props ) {
 		super( props );
 
 		this.handleChange = this.handleChange.bind( this );
+		this.handleSubmit = this.handleSubmit.bind( this );
 
-		this.initalState = {
-			title: '',
-			titleUrl: '',
-			author: '',
-			authorUrl: '',
-			publisher: '',
-			publisherUrl: '',
-			annotation: '',
-			project: '',
-			projectUrl: '',
-			license: '',
-			year: '',
-			derivative: '',
-		};
-		this.state = this.initalState;
+		this.state = props.item;
 	}
 
 	handleChange( event ) {
@@ -47,17 +35,30 @@ export default class AttributionModal extends Component {
 		} );
 	}
 
+	handleSubmit( event ) {
+		event.preventDefault();
+
+		// Handle updating or adding item.
+		if ( this.props.modalType === 'add' ) {
+			this.props.addItem( { ...this.state } );
+		} else {
+			this.props.updateItem( { ...this.state } );
+		}
+
+		this.props.onClose();
+
+		// Reset state.
+		this.setState( this.props.item );
+	}
+
 	render() {
 		if ( ! this.props.isOpen ) {
 			return null;
 		}
 
-		const { title, onClose, onSubmit } = this.props;
+		const { onClose, modalType } = this.props;
 
-		const selected = window.getSelection().toString();
-		const preview = {
-			__html: formatAttribution( { ...this.state }, licenses ),
-		};
+		const title = ( modalType === 'add' ) ? 'Add Attribution' : 'Update Attribution';
 
 		return (
 			<Modal
@@ -65,165 +66,146 @@ export default class AttributionModal extends Component {
 				shouldCloseOnClickOutside={ false }
 				title={ title }
 				onRequestClose={ onClose }
-				className="ol-attributions-modal"
+				className="component-attributions-modal"
 			>
-				<form
-					onSubmit={ ( e ) => {
-						e.preventDefault();
-						onSubmit( { ...this.state } );
-						this.setState( this.initalState );
-					} }
-				>
+				<form onSubmit={ this.handleSubmit } >
 					<div className="form-row">
-						<div className="form-group col">
-							<div className="form-group">
-								<label htmlFor="title">Title</label>
-								<input
-									type="text"
-									className="form-control"
-									id="title"
-									name="title"
-									value={ this.state.title }
-									onChange={ this.handleChange } />
-								<label htmlFor="titleUrl">URL</label>
-								<input
-									type="text"
-									className="form-control"
-									id="titleUrl"
-									name="titleUrl"
-									value={ this.state.titleUrl }
-									onChange={ this.handleChange } />
-							</div>
-							<div className="form-group">
-								<label htmlFor="author">Author Name</label>
-								<input
-									type="text"
-									className="form-control"
-									id="author"
-									name="author"
-									value={ this.state.authorName }
-									onChange={ this.handleChange } />
-								<label htmlFor="authorUrl">URL</label>
-								<input
-									type="text"
-									className="form-control"
-									id="authorUrl"
-									name="authorUrl"
-									value={ this.state.authorUrl }
-									onChange={ this.handleChange } />
-							</div>
+						<div className="col">
+							<TextControl
+								label="Title"
+								id="title"
+								name="title"
+								value={ this.state.title }
+								help={ help.title }
+								onChange={ this.handleChange }
+								placeholder="Item Title"
+							/>
+							<TextControl
+								label="URL"
+								id="titleUrl"
+								name="titleUrl"
+								className="inline"
+								value={ this.state.titleUrl }
+								onChange={ this.handleChange }
+								placeholder="URL of the item title"
+							/>
 						</div>
-						<div className="form-group col">
-							<label htmlFor="selectedText">Selected</label>
-							<textarea
-								className="form-control"
-								id="selectedText"
-								rows="9"
-								value={ selected }
-								disabled />
+						<div className="col">
+							<SelectControl
+								label="License"
+								id="license"
+								name="license"
+								value={ this.state.license }
+								help={ help.license }
+								options={ licenses }
+								onChange={ this.handleChange }
+							/>
 						</div>
 					</div>
 					<div className="form-row">
-						<div className="form-group col">
-							<label htmlFor="publisher">Organization / Publisher</label>
-							<input
-								type="text"
-								className="form-control"
+						<div className="col">
+							<TextControl
+								label="Author Name"
+								id="authorName"
+								name="authorName"
+								value={ this.state.authorName }
+								help={ help.authorName }
+								onChange={ this.handleChange }
+								placeholder="Author Name"
+							/>
+							<TextControl
+								label="URL"
+								id="authorUrl"
+								name="authorUrl"
+								className="inline"
+								value={ this.state.authorUrl }
+								onChange={ this.handleChange }
+								placeholder="URL of the author page"
+							/>
+						</div>
+						<div className="col">
+							<TextControl
+								label="Derivative Work"
+								id="derivative"
+								name="derivative"
+								value={ this.state.derivative }
+								help={ help.derivative }
+								onChange={ this.handleChange }
+								placeholder="URL of original work"
+							/>
+						</div>
+					</div>
+					<div className="form-row">
+						<div className="col">
+							<TextControl
+								label="Organization / Publisher"
 								id="publisher"
 								name="publisher"
 								value={ this.state.publisher }
-								onChange={ this.handleChange } />
-							<label htmlFor="publisherUrl">URL</label>
-							<input
-								type="text"
-								className="form-control"
+								help={ help.publisher }
+								onChange={ this.handleChange }
+								placeholder="Name of organization or publisher"
+							/>
+							<TextControl
+								label="URL"
 								id="publisherUrl"
 								name="publisherUrl"
+								className="inline"
 								value={ this.state.publisherUrl }
-								onChange={ this.handleChange } />
-						</div>
-						<div className="form-group col">
-							<label htmlFor="annotation">Annotation <em>(Added to bibliography)</em></label>
-							<textarea
-								className="form-control"
-								id="annotation"
-								name="annotation"
-								rows="4"
-								value={ this.state.annotation }
-								onChange={ this.handleChange } />
+								onChange={ this.handleChange }
+								placeholder="URL of the organization or publisher"
+							/>
 						</div>
 					</div>
 					<div className="form-row">
-						<div className="form-group col">
-							<label htmlFor="project">Project</label>
-							<input
-								type="text"
-								className="form-control"
+						<div className="col">
+							<TextControl
+								label="Project"
 								id="project"
 								name="project"
 								value={ this.state.project }
-								onChange={ this.handleChange } />
-							<label htmlFor="projectUrl">URL</label>
-							<input
-								type="text"
-								className="form-control"
+								help={ help.project }
+								onChange={ this.handleChange }
+								placeholder="Name of project"
+							/>
+							<TextControl
+								label="URL"
 								id="projectUrl"
 								name="projectUrl"
+								className="inline"
 								value={ this.state.projectUrl }
-								onChange={ this.handleChange } />
-						</div>
-						<div className="form-group col">
-							<label htmlFor="license">License</label>
-							<select
-								id="license"
-								className="form-control"
-								name="license"
-								onBlur={ this.handleChange }
-							>
-								<option key="0" value="">Choose...</option>
-								{ licenses.map( ( option, index ) =>
-									<option
-										key={ `${ option.label }-${ index }` }
-										value={ option.label }
-									>
-										{ option.label }
-									</option>
-								) }
-							</select>
+								onChange={ this.handleChange }
+								placeholder="URL of the project"
+							/>
 						</div>
 					</div>
 					<div className="form-row">
-						<div className="form-group col">
-							<label htmlFor="year">Date Published</label>
-							<input
-								type="text"
-								className="form-control"
-								id="year"
-								name="year"
-								value={ this.state.year }
-								onChange={ this.handleChange } />
-						</div>
-						<div className="form-group col">
-							<label htmlFor="derivative">Derivative Work</label>
-							<input
-								type="text"
-								className="form-control"
-								id="derivative"
-								name="derivative"
-								placeholder="URL of original work"
-								value={ this.state.derivative }
-								onChange={ this.handleChange } />
+						<div className="col">
+							<TextControl
+								label="Date Published"
+								id="datePublished"
+								name="datePublished"
+								value={ this.state.datePublished }
+								help={ help.datePublished }
+								onChange={ this.handleChange }
+								placeholder="Date item was published"
+							/>
 						</div>
 					</div>
 
 					<span className="attribution-preview__title">Attribution Preview</span>
-					<div className="attribution-preview__body" dangerouslySetInnerHTML={ preview } />
+					<div className="attribution-preview__body">
+						<RawHTML>{ formatAttribution( { ...this.state }, licenses ) }</RawHTML>
+					</div>
+					<PluginAttribution />
 					<div className="component-modal__footer">
 						<Button isDestructive isLink onClick={ onClose }>Cancel</Button>
-						<Button isLarge isPrimary type="submit">Add Attribution</Button>
+						<Button isLarge isPrimary type="submit">{ title }</Button>
 					</div>
 				</form>
 			</Modal>
 		);
 	}
 }
+
+export default AttributionModal;

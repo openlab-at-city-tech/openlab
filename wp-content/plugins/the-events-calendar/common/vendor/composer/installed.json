@@ -49,17 +49,17 @@
     },
     {
         "name": "lucatume/di52",
-        "version": "2.0.10",
-        "version_normalized": "2.0.10.0",
+        "version": "2.0.12",
+        "version_normalized": "2.0.12.0",
         "source": {
             "type": "git",
             "url": "https://github.com/lucatume/di52.git",
-            "reference": "1db42c08914ecc6c7d9ba86eeeb465f4eee7858c"
+            "reference": "b5ae39274b03c697f20d8d620e534539d6d8d27e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/lucatume/di52/zipball/1db42c08914ecc6c7d9ba86eeeb465f4eee7858c",
-            "reference": "1db42c08914ecc6c7d9ba86eeeb465f4eee7858c",
+            "url": "https://api.github.com/repos/lucatume/di52/zipball/b5ae39274b03c697f20d8d620e534539d6d8d27e",
+            "reference": "b5ae39274b03c697f20d8d620e534539d6d8d27e",
             "shasum": ""
         },
         "require": {
@@ -70,7 +70,7 @@
             "phpunit/phpunit-mock-objects-php52": "dev-1.1.0-php52",
             "phpunit/phpunit-php52": "dev-3.6.12-php52"
         },
-        "time": "2018-10-29T06:23:41+00:00",
+        "time": "2019-10-14T08:27:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

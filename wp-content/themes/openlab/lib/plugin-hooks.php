@@ -240,10 +240,10 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 	echo '<h5>Email Status</h5>';
 
 	echo '<ul class="group-manage-members-bpges-status">';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
 	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
+	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
 
 	echo '</ul>';
 

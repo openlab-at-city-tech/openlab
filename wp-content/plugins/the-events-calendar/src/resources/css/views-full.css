@@ -33,6 +33,9 @@
 	 * Borders - Radius
 	 * ----------------------------------------------------------------------------- */
 
+	/* -----------------------------------------------------------------------------
+	 * Borders - Width
+	 * ----------------------------------------------------------------------------- */
 }
 
 :root {
@@ -900,6 +903,16 @@
  *
  * ----------------------------------------------------------------------------- */
 
+.tribe-events {
+
+	/* -----------------------------------------------------------------------------
+	 *
+	 * Events Bar: Theme Overrides
+	 *
+	 * ----------------------------------------------------------------------------- */
+
+}
+
 .tribe-events .tribe-events-c-events-bar {
 		background-color: #FFFFFF;
 		display: -webkit-box;
@@ -1060,6 +1073,43 @@
 		height: 16px;
 		margin-bottom: 4px;
 		width: 16px;
+	}
+
+/* -----------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Seventeen
+	 * ----------------------------------------------------------------------------- */
+
+.tribe-theme-twentyseventeen .tribe-events .tribe-events-c-events-bar__tab--active {
+			background-color: #F7F6F6;
+		}
+
+.tribe-theme-twentyseventeen .tribe-events .tribe-events-c-events-bar__tab--active:hover,
+			.tribe-theme-twentyseventeen .tribe-events .tribe-events-c-events-bar__tab--active:focus {
+				background-color: #F7F6F6;
+			}
+
+/* Loader */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Loader
+ *
+ * ----------------------------------------------------------------------------- */
+
+.tribe-events .tribe-events-view-loader {
+		-webkit-box-align: start;
+		        align-items: flex-start;
+		-webkit-box-pack: center;
+		        justify-content: center;
+		display: -webkit-box;
+		display: flex;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 100;
+		background: rgba(255,255,255, 0.6);
 	}
 
 /* Navigation */
@@ -1228,6 +1278,10 @@
 				margin-left: 0;
 			}
 
+.tribe-events .tribe-events-c-small-cta--readmore {
+		margin-top: 12px;
+	}
+
 .tribe-events .tribe-events-c-small-cta__link {
 		cursor: pointer;
 	}
@@ -1373,11 +1427,6 @@
  * Tooltip
  *
  * ----------------------------------------------------------------------------- */
-
-.tribe-events .tribe-events-calendar-month__calendar-event-tooltip {
-		position: absolute;
-		visibility: hidden; /* A11y purposes */
-	}
 
 /* Defining our tooltipster theme. */
 
@@ -1717,28 +1766,6 @@
  * Make partials (start with an underscore) for any actual css code.
  *
  * ----------------------------------------------------------------------------- */
-
-/* Loader for the Views Container */
-
-.tribe-events .tribe-events-view-loader {
-		-webkit-box-align: center;
-		        align-items: center;
-		-webkit-box-pack: center;
-		        justify-content: center;
-		display: -webkit-box;
-		display: flex;
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 100;
-		background: rgba(255,255,255, 0.6);
-	}
-
-.tribe-events .tribe-events-view-loader .tribe-events-view-loader__spinner {
-			/* placeholder for when spinner is added */
-		}
 
 /* Header */
 
@@ -2489,11 +2516,7 @@
 	 * Nav
 	 * ----------------------------------------------------------------------------- */
 
-.tribe-events .tribe-events-calendar-month-nav--calendar {
-		padding-top: 16px;
-	}
-
-.tribe-events .tribe-events-calendar-month-nav--mobile {
+.tribe-events .tribe-events-calendar-month-nav {
 		padding-top: 20px;
 	}
 
@@ -2771,6 +2794,10 @@
 				width: 9px
 		}
 
+.tribe-events .tribe-events-c-small-cta--readmore {
+			margin-top: 16px
+	}
+
 .tribe-events .tribe-events-c-search {
 			display: -webkit-box;
 			display: flex;
@@ -2833,7 +2860,7 @@
 			-webkit-box-direction: normal;
 			        flex-direction: row;
 			flex-wrap: wrap;
-			margin-bottom: 16px;
+			margin-bottom: 32px;
 			width: 100%
 	}
 
@@ -2860,6 +2887,16 @@
 .tribe-events .tribe-events-c-top-bar__datepicker {
 			margin: 0;
 			padding: 0
+	}
+
+.tribe-events .tribe-events-c-top-bar__datepicker-mobile {
+			display: none !important;
+			visibility: hidden
+	}
+
+.tribe-events .tribe-events-c-top-bar__datepicker-desktop {
+			display: block !important;
+			visibility: visible
 	}
 
 .tribe-events .tribe-events-c-top-bar__datepicker-button:after {
@@ -3119,6 +3156,16 @@
 
 .tribe-events .tribe-events-calendar-month__header-column-title {
 			text-align: left
+	}
+
+.tribe-events .tribe-events-calendar-month__header-column-title-mobile {
+			display: none !important;
+			visibility: hidden
+	}
+
+.tribe-events .tribe-events-calendar-month__header-column-title-desktop {
+			display: block !important;
+			visibility: visible
 	}
 
 .tribe-events .tribe-events-calendar-month__day {

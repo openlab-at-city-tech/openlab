@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.11.6
+Version: 2.4.14.11
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.11.6';
+	public static $version = '2.4.14.11';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -249,27 +249,25 @@ class GFForms {
 		if ( class_exists( 'GFAddOn' ) ) {
 			GFAddOn::init_addons();
 		}
+
+		if ( defined( 'OSDXP_DASHBOARD_VER' ) ) {
+			// Integration with osDXP.
+			require_once  plugin_dir_path( __FILE__ ) . 'includes/class-gf-osdxp.php';
+		}
 	}
 
 	/**
 	 * Determines if the 3rd party Members plugin is active.
 	 *
+	 * @since  2.4.13 Removed Members v1 support.
 	 * @since  Unknown
 	 *
-	 * @param string $version Minimum version number of Members plugin to check for.
+	 * @param null $deprecated No longer used. Previously the minimum version number of Members plugin to check for.
 	 *
 	 * @return boolean True if the Members plugin is active. False otherwise.
 	 */
-	public static function has_members_plugin( $min_version = '1.0' ) {
-
-		if ( version_compare( $min_version, '2.0', '>=' ) ) {
-			return function_exists( 'members_register_cap_group' );
-		} else if ( version_compare( $min_version, '1.0', '>=' ) ) {
-			return ! function_exists( 'members_register_cap_group' ) && function_exists( 'members_get_capabilities' );
-		}
-
-		return false;
-
+	public static function has_members_plugin( $deprecated = null ) {
+		return function_exists( 'members_register_cap_group' ) && function_exists( 'members_register_cap' );
 	}
 
 	/**
@@ -323,9 +321,7 @@ class GFForms {
 			}
 
 			// Load included Blocks.
-			foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/blocks/class-gf-block-*.php' ) as $filename ) {
-				require_once $filename;
-			}
+			GFCommon::glob_require_once( '/includes/blocks/class-gf-block-*.php' );
 
 		}
 
@@ -339,11 +335,9 @@ class GFForms {
 			global $current_user;
 
 			//Members plugin integration. Adding Gravity Forms roles to the checkbox list
-			if ( self::has_members_plugin( '2.0' ) ) {
+			if ( self::has_members_plugin() ) {
 				add_action( 'members_register_cap_groups', array( 'GFForms', 'members_register_cap_group' ) );
 				add_action( 'members_register_caps', array( 'GFForms', 'members_register_caps' ) );
-			} else if ( self::has_members_plugin( '1.0' ) ) {
-				add_filter( 'members_get_capabilities', array( 'GFForms', 'members_get_capabilities' ) );
 			}
 
             // User Role Editor integration.
@@ -1209,20 +1203,6 @@ class GFForms {
 	}
 
 	/**
-	 * Provides the Members plugin with Gravity Forms lists of capabilities.
-	 *
-	 * @since  Unknown
-	 * @access public
-	 *
-	 * @param array $caps All capabilities.
-	 *
-	 * @return array $caps The capabilities list.
-	 */
-	public static function members_get_capabilities( $caps ) {
-		return array_merge( $caps, GFCommon::all_caps() );
-	}
-
-	/**
 	 * Register the Gravity Forms capabilities group with the Members plugin.
 	 *
 	 * @since  2.4
@@ -1471,7 +1451,7 @@ class GFForms {
 			'settings_page'
 		) );
 
-		add_submenu_page( $parent_menu['name'], __( 'Import/Export', 'gravityforms' ), __( 'Import/Export', 'gravityforms' ), $has_full_access ? 'gform_full_access' : 'gravityforms_export_entries', 'gf_export', array(
+		add_submenu_page( $parent_menu['name'], __( 'Import/Export', 'gravityforms' ), __( 'Import/Export', 'gravityforms' ), $has_full_access ? 'gform_full_access' : ( current_user_can( 'gravityforms_export_entries' ) ? 'gravityforms_export_entries' : 'gravityforms_edit_forms' ), 'gf_export', array(
 			'GFForms',
 			'export_page'
 		) );
@@ -1663,7 +1643,7 @@ class GFForms {
 				$title        = strtolower( $title ) == 'false' ? false : true;
 				$description  = strtolower( $description ) == 'false' ? false : true;
 				$field_values = htmlspecialchars_decode( $field_values );
-				$field_values = str_replace( '&#038;', '&', $field_values );
+				$field_values = str_replace( array( '&#038;', '&#091;', '&#093;' ), array( '&', '[', ']' ), $field_values );
 
 				$ajax = strtolower( $ajax ) == 'true' ? true : false;
 
@@ -2432,7 +2412,7 @@ class GFForms {
 			) );
 		}
 
-		if ( self::has_members_plugin( '2.0' ) && rgget( 'page' ) === 'roles' ) {
+		if ( self::has_members_plugin() && rgget( 'page' ) === 'roles' ) {
 		    wp_enqueue_style( 'gform_dashicons' );
         }
 
@@ -3361,7 +3341,11 @@ class GFForms {
 	 */
 	public static function update_form_active() {
 		check_ajax_referer( 'rg_update_form_active', 'rg_update_form_active' );
-		RGFormsModel::update_form_active( $_POST['form_id'], $_POST['is_active'] );
+		if ( GFCommon::current_user_can_any( 'gravityforms_edit_forms' ) ) {
+			GFFormsModel::update_form_active( $_POST['form_id'], $_POST['is_active'] );
+		} else {
+			wp_die( -1, 403 );
+		}
 	}
 
 	/**
@@ -3376,7 +3360,11 @@ class GFForms {
 	 */
 	public static function update_notification_active() {
 		check_ajax_referer( 'rg_update_notification_active', 'rg_update_notification_active' );
-		RGFormsModel::update_notification_active( $_POST['form_id'], $_POST['notification_id'], $_POST['is_active'] );
+		if ( GFCommon::current_user_can_any( 'gravityforms_edit_forms' ) ) {
+			GFFormsModel::update_notification_active( $_POST['form_id'], $_POST['notification_id'], $_POST['is_active'] );
+		} else {
+			wp_die( -1, 403 );
+		}
 	}
 
 	/**
@@ -3391,7 +3379,11 @@ class GFForms {
 	 */
 	public static function update_confirmation_active() {
 		check_ajax_referer( 'rg_update_confirmation_active', 'rg_update_confirmation_active' );
-		RGFormsModel::update_confirmation_active( $_POST['form_id'], $_POST['confirmation_id'], $_POST['is_active'] );
+		if ( GFCommon::current_user_can_any( 'gravityforms_edit_forms' ) ) {
+			GFFormsModel::update_confirmation_active( $_POST['form_id'], $_POST['confirmation_id'], $_POST['is_active'] );
+		} else {
+			wp_die( -1, 403 );
+		}
 	}
 
 	/**
@@ -5199,7 +5191,7 @@ class GFForms {
 			return;
 		}
 		GFCommon::log_debug( __METHOD__ . '(): Start deleting old export files' );
-		foreach ( glob( $export_folder . DIRECTORY_SEPARATOR . '*.csv' ) as $filename ) {
+		foreach ( GFCommon::glob( '*.csv', $export_folder . DIRECTORY_SEPARATOR ) as $filename ) {
 			$timestamp = filemtime( $filename );
 			if ( $timestamp < time() - DAY_IN_SECONDS ) {
 				// Delete files over a day old
@@ -5231,7 +5223,7 @@ class GFForms {
 			return;
 		}
 		GFCommon::log_debug( __METHOD__ . '(): Start deleting old log files' );
-		foreach ( glob( $logs_folder . DIRECTORY_SEPARATOR . '*.txt' ) as $filename ) {
+		foreach ( GFCommon::glob( '*.txt', $logs_folder . DIRECTORY_SEPARATOR ) as $filename ) {
 			$timestamp = filemtime( $filename );
 			if ( $timestamp < time() - MONTH_IN_SECONDS ) {
 				// Delete files over one month old

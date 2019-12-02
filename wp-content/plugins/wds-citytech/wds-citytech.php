@@ -2487,26 +2487,6 @@ function openlab_allow_unlimited_space_on_blog_1( $check ) {
 }
 add_filter( 'pre_get_space_used', 'openlab_allow_unlimited_space_on_blog_1' );
 
-/**
- * Set "From" name in outgoing email to the site name.
- *
- * BP did this until 2.5, when the filters were moved to the new email system. Since we're using the legacy emails
- * for now, we must reinstate.
- *
- * @return string The blog name for the root blog.
- */
-function openlab_email_from_name_filter() {
-	/**
-	 * Filters the "From" name in outgoing email to the site name.
-	 *
-	 * @since BuddyPress (1.2.0)
-	 *
-	 * @param string $value Value to set the "From" name to.
-	 */
-	return apply_filters( 'bp_core_email_from_name_filter', bp_get_option( 'blogname', 'WordPress' ) );
-}
-add_filter( 'wp_mail_from_name', 'openlab_email_from_name_filter' );
-
 function openlab_email_appearance_settings( $settings ) {
 	$settings['email_bg']        = '#fff';
 	$settings['header_bg']       = '#fff';

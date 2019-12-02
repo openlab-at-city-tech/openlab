@@ -39,6 +39,7 @@ add_filter(
 	'webwork_section_instructor_map',
 	function( $map ) {
 		return array(
+			'WW-Dev' => 'work@bree.bz',
 			'MAT1275-F17-Antoine'                    => 'wantoine@citytech.cuny.edu',
 			'MAT1275-F17-Ferguson'                   => 'rferguson@citytech.cuny.edu',
 			'MAT1275-F17-Mujica'                     => 'pmujica@citytech.cuny.edu',
@@ -348,5 +349,36 @@ add_filter(
 	'webwork_incomplete_question_text',
 	function() {
 		return sprintf( 'This question does not contain enough detail for a useful response to be provided. Please review the <a href="%s">Ask Questions</a> page for guidance on how to phrase your question so that we may help you.', home_url( 'help/ask-questions' ) );
+	}
+);
+
+/**
+ * Author type label.
+ */
+add_filter(
+	'webwork_author_type_label',
+	function ( $label, $user_id ) {
+		$account_type = xprofile_get_field_data( 'Account Type', $user_id );
+		if ( $account_type ) {
+			$label = $account_type;
+		}
+		return $label;
+	},
+	10,
+	2
+);
+
+/**
+ * Set admin to Faculty.
+ */
+add_filter(
+	'webwork_user_is_admin',
+	function( $is_admin ) {
+		$account_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+		if ( $account_type && 'Faculty' === $account_type ) {
+			$is_admin = true;
+		}
+
+		return $is_admin;
 	}
 );

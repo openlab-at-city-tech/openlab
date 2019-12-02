@@ -19,6 +19,8 @@ namespace Tribe\Events\Views\V2;
 
 use Tribe\Events\Views\V2\Query\Abstract_Query_Controller;
 use Tribe\Events\Views\V2\Query\Event_Query_Controller;
+use Tribe\Events\Views\V2\Template\Title;
+use Tribe\Events\Views\V2\Template\Excerpt;
 use Tribe__Events__Main as TEC;
 use Tribe__Rewrite as Rewrite;
 
@@ -37,9 +39,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @since 4.9.2
 	 */
 	public function register() {
-		$this->container->tag( [
-			Event_Query_Controller::class,
-		], 'query_controllers' );
+		$this->container->tag( [ Event_Query_Controller::class, ], 'query_controllers' );
 		$this->add_actions();
 		$this->add_filters();
 	}
@@ -52,8 +52,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	protected function add_actions() {
 		add_action( 'rest_api_init', [ $this, 'register_rest_endpoints' ] );
 		add_action( 'tribe_common_loaded', [ $this, 'on_tribe_common_loaded' ], 1 );
-		add_action( 'loop_start', [ $this, 'on_loop_start' ], PHP_INT_MAX );
-		add_action( 'wp_head', [ $this, 'on_wp_head' ], PHP_INT_MAX );
+		add_action( 'wp_head', [ $this, 'on_wp_head' ], 1000 );
 		add_action( 'tribe_events_pre_rewrite', [ $this, 'on_tribe_events_pre_rewrite' ] );
 	}
 
@@ -70,6 +69,13 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		add_filter( 'body_class', [ $this, 'filter_body_class' ] );
 		add_filter( 'query_vars', [ $this, 'filter_query_vars' ], 15 );
 		add_filter( 'tribe_rewrite_canonical_query_args', [ $this, 'filter_map_canonical_query_args' ], 15, 3 );
+		add_filter( 'excerpt_length', [ $this, 'filter_excerpt_length' ] );
+		add_filter( 'excerpt_more', [ $this, 'filter_excerpt_more' ], 999 );
+
+		if ( tribe_context()->doing_php_initial_state() ) {
+			add_filter( 'wp_title', [ $this, 'filter_wp_title' ], 10, 2 );
+			add_filter( 'document_title_parts', [ $this, 'filter_document_title_parts' ] );
+		}
 	}
 
 	/**
@@ -82,16 +88,6 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		$this->container->make( Rest_Endpoint::class )->maybe_enable_ajax_fallback();
 	}
 
-	/**
-	 * Fires when the loop starts.
-	 *
-	 * @since 4.9.2
-	 *
-	 * @param  \WP_Query  $query
-	 */
-	public function on_loop_start( \WP_Query $query ) {
-		$this->container->make( Template\Page::class )->maybe_hijack_page_template( $query );
-	}
 
 	/**
 	 * Fires when WordPress head is printed.
@@ -205,5 +201,60 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	public function filter_body_class( $classes ) {
 		return $this->container->make( Theme_Compatibility::class )->filter_add_body_classes( $classes );
+	}
+
+	/**
+	 * Filters the `wp_title` template tag.
+	 *
+	 * @since TBD
+	 *
+	 * @param      string $title The current title value.
+	 * @param string|null $sep The separator char, or sequence, to use to separate the page title from the blog one.
+	 *
+	 * @return string The modified page title, if required.
+	 */
+	public function filter_wp_title( $title, $sep = null ) {
+		return $this->container->make( Title::class )->filter_wp_title( $title, $sep );
+	}
+
+	/**
+	 * Filters the `wp_get_document_title` template tag.
+	 *
+	 * This is the template tag introduced in WP 4.4 to get the page title.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $title The page title.
+	 *
+	 * @return string The modified page title, if required.
+	 */
+	public function filter_document_title_parts( $title ) {
+		return $this->container->make( Title::class )->filter_document_title_parts( $title );
+	}
+
+	/**
+	 * Filters the `excerpt_length`.
+	 *
+	 * @since TBD
+	 *
+	 * @param int $length The excerpt length.
+	 *
+	 * @return int The modified excerpt length, if required.
+	 */
+	public function filter_excerpt_length( $length ) {
+		return $this->container->make( Template\Excerpt::class )->maybe_filter_excerpt_length( $length );
+	}
+
+	/**
+	 * Filters the `excerpt_more`.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $link The excerpt read more link.
+	 *
+	 * @return int The modified excerpt read more link, if required.
+	 */
+	public function filter_excerpt_more( $link ) {
+		return $this->container->make( Template\Excerpt::class )->maybe_filter_excerpt_more( $link );
 	}
 }
