@@ -421,6 +421,40 @@
             #wp-admin-bar-site-name {
                 border-left: none;
                 max-width: 320px;
+                > .ab-item{
+                    white-space: normal;
+                    display: flex;
+                    align-items: center;
+                    &:after{
+                        content: "\f0d7";
+                        display: flex;
+                        font: normal normal normal 14px/1 FontAwesome;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        position: absolute;
+                        right: 4%;
+                        top: 0;
+                        bottom: 0;
+                        justify-content: center;
+                        align-items: center;
+                        @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
+                            display: none;
+                        }
+                    }
+                    @media (min-width: @screen-md-min){
+                        padding-right: 8%;
+                    }
+                    @media (max-width: @screen-xs-max){
+                        padding-right: 8%;
+                    }
+                    .site-name{
+                        white-space: nowrap;
+                        position: relative;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
             }
             #wp-admin-bar-my-openlab,
             #wp-admin-bar-network-menu-mobile {

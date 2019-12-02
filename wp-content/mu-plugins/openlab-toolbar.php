@@ -1060,7 +1060,7 @@ HTML;
 			$blogname = sprintf( __( 'Global Dashboard: %s' ), esc_html( get_current_site()->site_name ) );
 		}
 
-		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate hidden-sm' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span></span>";
+		$display_string = "<span class='hidden-sm site-name'>$blogname</span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='sr-only visible-sm'>$blogname</span>";
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -1068,7 +1068,7 @@ HTML;
 				'title' => $display_string,
 				'href'  => is_admin() ? home_url( '/' ) : admin_url(),
 				'meta'  => array(
-					'class'    => 'admin-bar-menu hidden-xs truncate-obfuscate menu-loading',
+					'class'    => 'admin-bar-menu hidden-xs',
 					'tabindex' => 0,
 				),
 			)
@@ -1622,7 +1622,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.0.4' );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.0.5' );
 	}
 
 	function adminbar_special_body_class( $classes ) {
