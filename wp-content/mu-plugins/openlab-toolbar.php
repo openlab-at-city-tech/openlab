@@ -1709,14 +1709,20 @@ function openlab_get_loginform() {
  * This is to avoid styling conflicts on the admin pages and group sites
  * FYI: due to an undiagnosed issue in the LESS compilation, the class has to be wrapped twice to work; definitely will try to fix this in the future
  */
-function openlab_wrap_adminbar_top() {
-	if ( get_current_blog_id() !== 1 || is_admin() ) :
+function openlab_wrap_adminbar_top()
+{
+    if (get_current_blog_id() !== 1 || is_admin()):
 
-		$admin_class = ( is_admin() ? ' admin-area' : '' );
-		$logged_in = (is_user_logged_in() ? ' logged-in' : ' logged-out' );
-		?>
-		<div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?><?php echo $logged_in; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
-	<?php else : ?>
+        $classes = array();
+
+        $classes[] = 'oplb-bs adminbar-manual-bootstrap';
+        $classes[] = $admin_class = (is_admin() ? 'admin-area' : 'frontend-area');
+        $classes[] = (is_user_logged_in() ? 'logged-in' : 'logged-out');
+        $current_theme = wp_get_theme();
+        $classes[] = esc_html($current_theme->get('TextDomain'));
+        ?>
+				<div id="oplbBSAdminar" class="<?php echo implode(' ', $classes); ?>"><div class="oplb-bs adminbar-manual-bootstrap <?php echo $admin_class; ?>">
+			<?php else: ?>
 		<div class="oplb-bs"><div class="oplb-bs">
 	<?php
 	endif;
