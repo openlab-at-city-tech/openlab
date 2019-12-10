@@ -1,0 +1,22 @@
+tr.sl-locked{}
+tr.sl-locked > td > fieldset{position:relative;}
+.sl-locked-shield {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:rgba(252,252,252,.7);
+	text-align:right;
+	border-right:5px solid rgba(0,133,186,.2);
+}
+.sl-locked-shield span {
+	position:absolute;
+	top:50%;
+	right:20px;
+	margin-top:-10px;
+	font-size:12px;
+	line-height:16px;
+	font-style:italic;
+	color:#666;
+}

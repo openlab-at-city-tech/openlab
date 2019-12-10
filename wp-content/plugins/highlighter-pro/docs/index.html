@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="stylesheet" href="documentation.css" type="text/css" media="screen, projection">	
+</head>
+
+<body data-spy="scroll" data-target=".nav-sidebar">
+
+    <div class="container-fluid">    
+    
+        <div class="row">
+        
+            <div class="col-sm-3 nav-sidebar">
+            
+                <ul class="nav nav-stacked fixed" id="sidebar" data-spy="affix" data-offset-top="0">
+                    <li class="active"><a href="#overview">Overview</a></li>
+                    <li><a href="#gettingstarted">Getting Started</a></li>
+                    <li><a href="#code">Code Structure</a>
+                        <ul class="nav nav-stacked">
+                            <li><a href="#html">HTML</a></li>
+                            <li><a href="#css">CSS</a></li>
+                            <li><a href="#javascript">JavaScript</a></li>
+                            <li><a href="#php">PHP</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#shortcodes">Shortcodes</a></li>
+                    <li><a href="#cron">Cron Jobs</a></li>
+                    <li><a href="#using">Using the Plugin</a></li>
+                    <li><a href="#credits">Sources and Credits</a></li>
+                    
+                </ul>
+            
+            </div>
+            
+            <div class="col-sm-9">    
+            
+<section id="overview">                
+    
+    <h1>Overview</h1>
+    
+    <div class="jumbotron">
+      <h2>Thanks for choosing Industrial Themes!</h2>
+      <p class="tagline">We want you to be completely satisfied with this plugin. If you have any questions that go beyond the scope of this documentation, please refer to our support portal for the most up-to-date resources.</p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="https://industrialthemes.ticksy.com" target="_blank">Support Center</a>
+      </p>
+    </div> 
+
+</section>
+
+<section id="gettingstarted">                
+    
+    <h1>Getting Started</h1>
+    
+    <h3 id="requirements">Requirements</h3>
+    
+    <ul>
+    	<li>PHP 5.0+</li>
+        <li>Requires at least WordPress version 3.8</li>
+        <li>Tested up to WordPress version 5.2.1</li>
+        <li>Requires Chrome, Firefox, Safari, Edge, or IE11</li>
+    </ul>
+
+    <h3 id="compatibility">Compatibility</h3>
+
+    <p>Works well with the following browsers:</p>
+
+    <ul>
+        <li>Chrome</li>
+        <li>Firefox</li>
+        <li>Opera</li>
+        <li>Safari</li>
+        <li>Microsoft Edge</li>
+        <li>Microsoft IE11</li>
+        <li>Chrome Mobile</li>
+        <li>Safari Mobile</li>
+    </ul>
+
+    <p>Tested with the following devices:</p>
+
+    <ul>
+        <li>Macbook Pro running macOS</li>
+        <li>HP touchscreen laptop running Windows 10</li>
+        <li>iPad 3 running ios11</li>
+        <li>iPhone 6 Plus running ios11</li>
+        <li>iPhone 5 running ios10</li>
+    </ul>
+
+    <p>Tested with the following WordPress themes:</p>
+
+    <ul>
+        <li>TwentySeventeen</li>
+        <li>Implicit (IndustrialThemes premium)</li>
+        <li>Explicit (IndustrialThemes premium)</li>
+        <li>Engine (IndustrialThemes premium)</li>
+        <li>Techwise (IndustrialThemes premium)</li>
+        <li>DeVoe (MVP Themes premium)</li>
+        <li>Zox (MVP Themes premium)</li>
+        <li>Mediumm (WP theme directory)</li>
+        <li>Morfeu (WP theme directory)</li>
+        <li>Vmag (WP theme directory)</li>
+        <li>Boston (WP theme directory)</li>
+        <li>Styled Mag (WP theme directory)</li>
+        <li>Convac (WP theme directory)</li>
+        <li>Kouki (WP theme directory)</li>
+    </ul>
+    
+    <h3 id="installing">Installation</h3>
+    
+    <p>
+    Download the plugin zip file form CodeCanyon. Once you've downloaded the installable plugin zip file, go to your WordPress plugins page and click Add New at the top. Select the zip file from your computer and then install it.
+    </p>   
+    
+    <p>
+    Or, you can use FTP directly. To do so, unzip the plugin zip file, then connect to your WordPress installation via FTP and upload the unzipped <b>highlighter-pro</b> folder to your wp-content/plugins/ folder.</p>
+    </p>
+     
+    <p>Once the plugin is installed, go to your Plugins page and activate the Highlighter Pro plugin. You will then see the Highlighter Pro menu item in the left WordPress admin menu, which will get you to the plugin settings page.</p> 
+
+    <h3 id="howitworks">How It Works</h3>
+
+    <p>When a user highlights a selection, the Rangy library takes over and wraps the selected text in a <code>&lt;span&gt;</code> tag which stores various information about the highlight via data attributes. All highlights have the <code>.highlighted-text</code> class. Here is an example of a highlight within a post:</p>
+
+    <pre>
+&lt;span class="highlighted-text" data-userid="u11id,u3id" data-commentid="238" data-userid-comment="u3id"&gt;...highlighted text selection here...&lt;/span&gt;</pre>
+
+    <p>User IDs are prepended with <em>u</em> and appended by <em>id</em> in order to create a truly unique id that is comma-separated and stored in the <code>data-userid</code> attribute. If a user adds a note (comment) with their highlight, their userid is also added to the <code>data-userid-comment</code> attribute, which is also capable of holding a comma-separated list. The comment ID itself is stored in the <code>data-commentid</code> attribute for reference.</p>
+
+    <p>The Rangy library has all kinds of great features that allow for highlights to overlap, multiple highlights back to back, and block-level element detection so you can't highlight an image or iframe. It will always make sure your html syntax is valid after the highlighter spans are added to your post content so that your sit elayout is never broken by unclosed or incorrectly nested html tags.</p>
+    
+</section>
+
+<section id="code">                
+    
+    <h1>Code Structure</h1>
+    
+    <h3 id="html">HTML</h3>
+    
+    <p>
+    Highlighter Pro leverages the the_content WordPress filter to wrap your main post or page content in a div tag with class <code>.highlighter-content</code>. It also adds data attributes to store settings from the plugin options page to pass them to the javascript file. An example of how the html code is rendered is:
+    </p>
+
+    <pre>
+&lt;div class="highlighter-content all-only post-1108" 
+    data-postid="1108" 
+    data-timestamp="2017-09-22 18:08:56" 
+    data-userid="u3id" 
+    data-logintype="ajax" 
+    data-loginurl="https://framework2017.dev/wp-login.php"
+    data-posttitle="Post 10" 
+    data-removehighlight="Remove your highlight?"
+    data-facebookconfirm="Post this to Facebook?" 
+    data-twitterconfirm="Tweet this?" 
+    data-permalink="https://framework2017.dev/2017/05/post-10/"
+    data-msghighlighted="You highlighted" 
+    data-msgcommented="You highlighted and commented" 
+    data-addhighlight="Highlight this selection?" 
+    data-addcomment="Comment on this highlight?" 
+    data-redirecttopost="Go to this post?" 
+    data-addnewcomment="Comment on this selection?" 
+    data-labelplacement="right" 
+    data-labeloffset="10" 
+    data-labeldisplay="[&quot;yours&quot;,&quot;notes&quot;,&quot;top&quot;]"
+    data-highlightdisplay="all" 
+    data-twitterhighlights="1" 
+    data-facebookhighlights="1" 
+    data-viewingenabled="1" 
+    data-commentsview="dock" 
+    data-selectors="{&quot;comment-list&quot;:&quot;.commentlist&quot;,&quot;respond&quot;:&quot;#respond&quot;}"&gt;
+
+    ... content here ...
+
+&lt;/div&gt;</pre>
+
+    <p>
+    The popup buttons that appear when you highlight text within a post and when you hover over existing highlights are contained within a div that is added in the footer of the theme. They are shown and hidden by receiving via javascript a class of <code>.shown</code>. The format of the popup buttons is as so:
+    </p>
+
+    <pre>
+&lt;div class="highlighter-shield"&gt;
+    &lt;div class="highlighter-popup"&gt;
+        &lt;span class="highlighter-triangle"&gt;&lt;/span&gt;
+        &lt;div class="btn-popup btn-remove-highlight"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-view-highlight"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-highlight-text"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-comment"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-comment btn-comment-link"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-twitter"&gt;&lt;/div&gt;
+        &lt;div class="btn-popup btn-facebook"&gt;&lt;/div&gt;
+        &lt;div class="lbl-popup btn-view-highlight lbl-count"&gt;&lt;/div&gt;
+        &lt;div class="lbl-popup btn-view-highlight lbl-you"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+    <p>
+    The shield div masks the entire page so the user has to close out of the current operation in order to continue using the page. The popup displays within the shield for z-index purposes.
+    </p>
+
+    <p>
+    There is another div container added to the footer for the docked panel that shows when you view an existing highlight or comment. The class of the container is <code>.highlighter-docked-panel</code>. Similary, there is an ajax login, register, and forgot password form added to the footer with the class <code>.ajax-auth</code>. Both of those can be found in the highlighter.php file. All of these div panels are added via the <code>wp_footer</code> action hook.
+    </p>
+
+    <p>
+    The highlighter notes that display to the right or left of the post content indicating where users have creatd highlights and notes are added dynanically at run-time via javascript. They are positioned absolutely with a calculated top and left/right offset and then appended to the <code>&lt;body&gt;</code> tag. Here is a typical highlighter note showing a comment count (note the calculated top and left positioning):
+    </p>
+
+    <pre>
+&lt;div class="btn-view-highlight highlighter-note shown" style="top: 3505.2px; left: 991.5px;"&gt;
+    &lt;span class="highlighter-note-comment"&gt;1&lt;/span&gt;
+    &lt;span class="highlighter-icon"&gt;&lt;/span&gt;
+&lt;/div&gt;</pre>
+    
+    <h3 id="css">CSS</h3>
+
+    <p>
+    All of the plugin's styles are in the <code>css/highlighter.css</code> file, which is commented and organized by module. Every class the plugin uses is prefixed with <code>.highlighter-</code> to offer maximum compatibility with other themes and plugins and minimum potential for conflicts. The main styles for the highlights, notes, and popup buttons are at the top, followed by the docked panel settings, then the custom confirmation dialog box styles, and finally the ajax authentication styles at the bottom.
+    </p>
+
+    <p>
+    The plugin adds a class to the <code>&lt;body&gt;</code> and <code>&lt;html&gt;</code> tags called <code>.no-scroll</code> depending on what state the highlighter UI is in. At the same time it also activates the highlighter-shield div tag noted above so that the user cannot utilize the page until they confirm or close the highlighter popup buttons. The highlighter-shield is activated with the <code>.shown</code> class and then made available to use via the <code>.available</code> class (this is to help with Microsoft Edge compatibility). The CSS for these two classes is as follows:
+    </p>
+
+    <pre>
+.no-scroll {
+    overflow:hidden;
+}
+.highlighter-shield {
+    display:none;
+    width:100%;
+    height:100%;
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:999997;
+    background:rgba(255,255,255,0);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    pointer-events:none;
+}
+.highlighter-shield.shown {
+    display:block;
+}
+.highlighter-shield.available {
+    pointer-events:auto;
+}</pre>
+
+    <p>There are also styles applied inline from the plugin options and injected directly into the footer of the page via the <code>wp_footer</code> action hook. This necessary to apply custom colors to the elements, as well as hiding certain buttons. Here is an example of that CSS, which is within PHP syntax since it's programmatically injected into the page via the action hook:</p>
+
+    <pre>
+$css = '';
+if($highlight_color) $css .= '
+    .highlighted-text,
+    .highlighted-text-comment,
+    .highlighted-text[data-userid*="'.$userid.'"] {
+        background-color:rgba('.$highlight_color.',.3);
+    }
+    .highlighted-text.active,
+    .highlighter-stat-text a:hover .highlighted-text-comment,
+    .highlighted-text.active[data-userid*="'.$userid.'"] {
+        background-color:rgba('.$highlight_color.',.5);
+    }
+    .highlighter-shortcode .highlighter-stat-text a:hover {
+        background:rgba('.$highlight_color.',.25);
+    }
+    .highlighter-stat:first-child,
+    .highlighter-shortcode .highlighter-stat-text:first-child {
+        border-top:1px dashed rgba('.$highlight_color.',.7);
+    }';
+
+# see if we're showing only user's highlights
+if($options['highlight_display']=='yours') $css .= '
+    .highlighted-text {
+        background:none;
+        cursor:text;
+    }';
+# see if we need to hide facebook/twitter buttons
+if(!$options['twitter_enabled']) $css .= '
+    .btn-twitter {
+        display:none;
+    }';
+if(!$options['facebook_enabled']) $css .= '
+    .btn-facebook {
+        display:none;
+    }';
+# see if we need a custom z-index for labels
+if($options['label_zindex']) $css .= '
+    .highlighter-note {
+        z-index:'.$options['label_zindex'].'
+    }';
+if(!empty($css)) echo '&lt;style type="text/css"&gt;' . $css . '&lt;/style&gt;';</pre>
+
+    <p>The Elusive icon set is also enqueued which provides all of the icons available with the plugin. These are by default part of the Redux framework which the plugin leverages.</p>
+
+    <pre>wp_enqueue_style( 'sl-icons', plugin_dir_url( __FILE__ ) . 'options/assets/css/vendor/elusive-icons/elusive-icons.css', false, false, 'all');</pre>
+
+    
+    <h3 id="javascript">JavaScript</h3>
+    
+    <p>Highlighter uses WordPress's built-in jQuery library as well as the Rangy library for text highlighting purposes, and the jquery validate library for login and register form validation. It also calls the plugin's custom JavaScript file to handle all of the highlighter UI called highlighter.js within the plugin's js folder. Here is the full list of javascript files loaded in the WordPress scripe enqueue system:</p>
+    
+    <pre>
+// Rangy libraries
+wp_enqueue_script( 'rangy-core', plugin_dir_url( __FILE__ ) . 'js/rangy-core.js', array( 'jquery' ), false, true );
+wp_enqueue_script( 'rangy-classapplier', plugin_dir_url( __FILE__ ) . 'js/rangy-classapplier.js', array( 'jquery' ), false, true );
+wp_enqueue_script( 'rangy-highlighter', plugin_dir_url( __FILE__ ) . 'js/rangy-highlighter.js', array( 'jquery' ), false, true );
+
+// Validate library
+wp_enqueue_script('validate-script', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.js', array('jquery'), false, false); 
+
+// Custom plugin scripts
+wp_enqueue_script('ajax-request', plugin_dir_url( __FILE__ ) . 'js/highlighter.js', array( 'jquery' ), '', true);</pre>
+    
+    <p>Due to the plugin being so front-end UI heavy in nature, most of the functionality takes place in the <code>highlighter.js</code> file. The file is well organized and commented, and is separated into the following three sections:</p>
+
+    <ol>
+        <li>Utility functions</li>
+        <li>jQuery events</li>
+        <li>Custom functions</li>
+    </ol>
+
+    <p>The utility functions section contains functions such as determining if this is a touch device, determining if the top or bottom edge of an element is within the viewport, and other such common utilities. Here's an example of the <code>isTouchDevice()</code> function:</p>
+
+    <pre>
+//utility for determining touch devices
+function isTouchDevice() {
+  return 'ontouchstart' in window // works on most browsers 
+      || window.navigator.msMaxTouchPoints > 0; // works on ie10
+}</pre>
+
+    <p>The jQuery events section is broken into subsections of main jQuery events, most notable the window.scroll, window.resize, window.load, and document.ready (which contains a majority of the event handlers). The document.ready section contains mostly .on function calls to detect if an event has run and is compatible with AJAX dynamically loaded content. Since Highlighter is optimized for mobile/touch devices, you'll notice most of the event handlers allow for both mouse and touch events. For example, here's one such event handler:</p>
+
+    <pre>
+// remove highlighter popup if user clicks close
+jQuery('body').on('click touch', '.login_close', function(e) {
+
+    removePopups();
+    return false;
+
+});</pre>
+
+    <p>And finally, the custom functions section contains all the functions called by the event handlers. Some are simple and others are quite extensive, and again they are all well commented and documented within the code. Here's an example of a relatively simple one:</p>
+
+    <pre>
+// position the highlight notes after they are all added to the DOM
+function highlightNotePosition() {
+    var offset = jQuery('.highlighter-content').data('labeloffset');
+    var placement = jQuery('.highlighter-content').data('labelplacement');
+
+    if(jQuery('.highlighter-content').length) {
+        if(placement==='right') {
+            if(jQuery(window).width() > 991) {
+                var left = jQuery('.highlighter-content').offset().left + jQuery('.highlighter-content').outerWidth() + offset;
+                jQuery('.highlighter-note').removeClass('fixed-right').css('left', left + 'px');
+            } else {
+                jQuery('.highlighter-note').addClass('fixed-right');
+                jQuery('body').addClass('label-compact');
+            }
+        } else {
+            jQuery('.highlighter-note').addClass('placement-left');
+            if(jQuery(window).width() > 991) {
+                var right = jQuery(window).width() - jQuery('.highlighter-content').offset().left + offset;
+                jQuery('.highlighter-note').removeClass('fixed-left').css('right', right + 'px');
+            } else {
+                jQuery('.highlighter-note').addClass('fixed-left');
+                jQuery('body').addClass('label-compact');
+            }
+        }
+    }
+}</pre> 
+    
+    <h3 id="php">PHP</h3>
+
+    <p>All of the PHP functions used in the theme are contained in the main <code>highlighter.php</code> file and are well commented, spaced, indented, and semantically written according to WordPress and CodeCanyon standards and best practices guidelines. To find out what a PHP function does, you can usually just read the in-line comments. We will discuss the more sophisticated AJAX functionality in this section since it will demonstrate the main PHP format of the plugin.</p>
+
+    <p>Highlighter uses a lot of AJAX in order to process UI without reloading the page, which includes the ability to directly update post content from the front-end. Most notably it has a sophisticated content checking system that checks to see whether the content has been updated since last page load, and if so, re-load only the content. This is necessary since several users may be highlighting the same post and we don't want any user's highlights to get overwritten because of another user using the page at the same time.</p>
+
+    <p>The AJAX component uses the WordPress built-in library and is enqueued in the following manor:</p>
+
+    <pre>
+wp_localize_script( 'ajax-request', 'highlighterAjax', array( 
+    'ajaxurl' => admin_url( 'admin-ajax.php' ),
+    'redirecturl' => $_SERVER['REQUEST_URI'],
+    'loadingmessage' => __('Sending user info, please wait...')
+));</pre>
+
+    <p>The functions are called according to WordPress standards and best practices for both logged in and logged out users with an action hook like so:</p>
+
+    <pre>
+# ajax actions
+add_action( 'wp_ajax_nopriv_ajax-check-content', 'ajax_check_content' );
+add_action( 'wp_ajax_ajax-check-content', 'ajax_check_content' );
+add_action( 'wp_ajax_nopriv_ajax-update-content', 'ajax_update_content' );
+add_action( 'wp_ajax_ajax-update-content', 'ajax_update_content' );
+add_action( 'wp_ajax_nopriv_ajax-get-comment', 'ajax_get_comment' );
+add_action( 'wp_ajax_ajax-get-comment', 'ajax_get_comment' );
+add_action( 'wp_ajax_ajaxcomments', 'ajax_submit_comment' );
+add_action( 'wp_ajax_nopriv_ajaxcomments', 'ajax_submit_comment' );</pre>
+  
+    <p>The plugin uses a timestamp stored on the content wrapper to keep track of when the post was last updated on the front-end, and compares that to when the post was most recently updated in the database. Then if the timestamps match, the content can be updated from the front-end and a new timestamp stored on the content wrapper. The main function that takes care of this is the <code>ajax_update_content()</code> function, and it is laid out as follows:</p>
+
+    <pre>
+function ajax_update_content() {
+
+    #setup vars
+    $postid = empty($_POST['postid']) ? '' : $_POST['postid'];
+    $new_timestamp = empty($_POST['timestamp']) ? '' : $_POST['timestamp'];
+    $new_content = empty($_POST['new_content']) ? '' : $_POST['new_content'];
+
+    #get latest edited timestamp
+    $content_post = get_post($postid);
+    $old_timestamp = $content_post->post_modified;
+    $old_content = $content_post->post_content;
+    remove_filter( 'the_content', 'highlighter_wrap_content' );
+    $old_content = apply_filters('the_content', $old_content);
+    add_filter( 'the_content', 'highlighter_wrap_content', 10, 2 ); 
+    $old_content = str_replace(']]>', ']]&gt;', $old_content);
+
+    $modified = $new_timestamp == $old_timestamp ? false : true;
+
+    $new_content = $modified ? $old_content : $new_content;
+    $new_timestamp = $modified ? $old_timestamp : $new_timestamp;
+
+    $new_content = stripslashes($new_content);
+
+    // Update post
+    $update_post = array(
+      'ID'           => $postid,
+      'post_content' => $new_content
+    );
+
+    // Update the post into the database
+    wp_update_post( $update_post );
+    #get modified timestamp after update
+    $updated_post = get_post($postid);
+    $updated_timestamp = $updated_post->post_modified;
+
+    #generate the response
+    $response = json_encode( array( 'new_content' => $new_content, 'new_timestamp' => $updated_timestamp) );
+
+    #response output
+    header( "Content-Type: application/json" );
+    echo $response;
+
+    exit;
+}</pre>
+
+    <p>As you can see the function is thoroughly commented and easy to follow. The default WordPress function <code>get_post</code> runs to get the latest post object so it can compare a timestamp and get new content if needed. An important step is to remove Highlighter's own content filter with <code>remove_filter( 'the_content', 'highlighter_wrap_content' );</code> and then immediately re-add it after getting the content with <code>add_filter( 'the_content', 'highlighter_wrap_content', 10, 2 ); </code> so that the outer wrapper doesn't get stored within the inner post content. The function then returns the new content and updated timestamp to the AJAX call.</p>
+
+    <p>At the bottom of the functions file are the ajax authentication functions which allow for dynamic logging in or registering of users. The first of these is the <code>ajax_login()</code> function and it checks for a nonce and then calls the main user login function, and it appears as follows:</p>
+
+    <pre>
+function ajax_login(){
+
+    // First check the nonce, if it fails the function will break
+    check_ajax_referer( 'ajax-login-nonce', 'security' );
+
+    // Nonce is checked, get the POST data and sign user on
+    // Call auth_user_login
+    auth_user_login($_POST['username'], $_POST['password'], 'Login'); 
+    
+    die();
+}</pre>
+
+    <p>The resulting function is called <code>auth_user_login()</code> which accepts user credentials as parameters and then performs the login using WordPress's built-in login system:</p>
+
+    <pre>
+function auth_user_login($user_login, $password, $login)
+{
+    $info = array();
+    $info['user_login'] = $user_login;
+    $info['user_password'] = $password;
+    $info['remember'] = true;
+    
+    $user_signon = wp_signon( $info, false );
+    if ( is_wp_error($user_signon) ){
+        echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.', 'highlighter')));
+    } else {
+        wp_set_current_user($user_signon->ID); 
+        echo json_encode(array('loggedin'=>true, 'message'=>__($login.' successful, redirecting...', 'highlighter')));
+    }
+    
+    die();
+}</pre>
+
+    <p>Any time a function needs to get ahold of the plugin options, it does so using the collowing command: <code>$options = get_option( 'highlighter_settings' );</code> which stores all of the options from the Redux option panel into a variable. Then the specifically requested setting can be optained by accessing the array key matching the setting like so: <code>$options['enable_widget_shortcodes']</code>. As you can see, this is demonstrating in the following utility function which checks for the presences of the widgets in shortcodes option to be enabled, and if so, it adds the filter to WordPress:</p>
+
+    <pre>
+#enables shortcodes in text widgets
+if($options['enable_widget_shortcodes']) add_filter('widget_text','do_shortcode');</pre>
+
+    <p>There are more detailed elements as part of the PHP code such as shortcodes and cron jobs, but they deserve their own sections below in order to go into greater detail.</p>
+    
+</section>
+
+<section id="shortcodes">
+
+    <h1>Shortcodes</h1>
+
+    <p>Highlighter ships with lots of shortcodes which are used for displaying highlighter statics all throughout your site, including in post content, page content, widgets, and even custom placement in your theme template code if desired. Here we will list all of the available shortcodes as well as some examples of how the code syntax looks and a description of what each one does.</p>
+
+    <p>Below we will list an example shortcode function that lists top most highlighted posts in order of number of highlights, using defaults set in the plugin options:</p>
+
+    <pre>
+function highlighter_inked($atts) {
+
+    $options = get_option( 'highlighter_settings' );
+    $types = isset($options['inked_enable']) ? $options['inked_enable'] : array();
+    $types_cpts = isset($options['inked_cpts']) ? $options['inked_cpts'] : array();
+    $types = array_merge($types, $types_cpts);
+
+    # set defaults based on plugin options
+    $atts = shortcode_atts( array(
+        'num' => $options['inked_num'],
+        'title' => $options['inked_title'],
+        'types' => $types,
+        'counts' => $options['inked_counts']
+    ), $atts, 'highlighter-inked' );
+
+    return highlighter_shortcode($atts, 'total_highlights');
+
+}
+add_shortcode( 'highlighter-inked', 'highlighter_inked' );</pre>
+
+    <p>As you can see, the defaults are held in the plugin options, and can be overwritten by parameters passed in through the shortcode syntax itself. A corresponding shortcode that calls this function could look something like this: <code>[highlighter-inked types="post,page,etc..." title="write title here" num="10"]</code>. Since most of the shortcodes are meant for calling certain posts based on custom fields, it made sense to consolidate all of the heavy lifting into one abstracted function called <code>highlighter_shortcode</code> and then pass in the specific shortcode name and parameters so the <code>WP_Query</code> can be called accordingly. That function does the heavy lifting of displaying the shortcode and looks as follows:</p>
+
+    <pre>
+# function to return top x posts sorted by passed in custom meta field
+function highlighter_shortcode($atts, $meta_key) {
+
+    $out = '';
+    $found = '';
+
+    if(!isset($atts['types'])) $atts['types'] = explode(',', $atts['types']);
+    
+    // setup the query
+    $args = array( 
+        'post_type'       => $atts['types'],
+        'post_status'     => 'publish',
+        'posts_per_page'  => $atts['num'],
+        'orderby'         => 'meta_value_num',
+        //'meta_key'      => $meta_key,
+        'meta_query' => array(
+            array(
+                'key' => $meta_key,
+                'value'   => 0,
+                'compare' => '>'
+            )
+        )
+    );
+
+    global $post;
+
+    $posts = get_posts( $args );
+    foreach($posts as $post) : setup_postdata($post);
+        $count = get_post_meta( $post->ID, $meta_key, true );
+
+        $found .= '
+        &lt;div class="highlighter-stat-text"&gt;';
+            $found .= '&lt;a href="' . get_the_permalink($post) . '"&gt;';
+            if($atts['counts']) $found .= '&lt;span class="count"&gt;' . $count . '&lt;/span&gt;';
+            $found .= $post->post_title . '&lt;/a&gt;
+        &lt;/div&gt;';
+
+    endforeach;
+
+    if(!empty($found)) {
+        $out .= '
+        &lt;div class="highlighter-stats-wrapper site highlighter-shortcode"&gt;
+            &lt;div class="highlighter-stats-title"&gt;
+                &lt;img src="' . plugin_dir_url( __FILE__ ) . 'img/stats-toggle.png" /&gt;
+                ' . $atts['title'] . '
+            &lt;/div&gt;
+            &lt;div class="highlighter-stats"&gt;
+                ' . $found . '
+            &lt;/div&gt;
+        &lt;/div&gt;
+        ';
+    }
+
+    return $out;
+}</pre>
+
+    <p>As you can see the <code>get_posts</code> standard function is called with the passed in arguments, and then the actual rendering of the shortcode HTML takes place afterwards.</p>
+
+    <p>There are a total of eight shortcodes that come with the plugin, each one capable of taking multiple parameters. Each of the parameter defaults are set in the plugin options >> shortcodes tab, so that you can set what happens if no parameter is specified in a shortcode. Here is the list of shortcodes with a description:</p>
+
+    <ul>
+        <li><strong>[highlighter-stats]</strong> - displays highlighter statistics for a single post or for your entire site. Example usage [highlighter-stats context="site"]</li>
+        <li><strong>[highlighter-most-noted]</strong> - displays the single most noted highlight across your site. Example usage [highlighter-most-noted title="write title here" linked="true"]</li>
+        <li><strong>[highlighter-most-highlighted]</strong> - displays the single most highlighted selection across your site. Example usage [highlighter-most-highlighted title="write title here" linked="true"]</li>
+        <li><strong>[highlighter-inked]</strong> - displays a list of the most highlighted posts (posts containing the greatest number of highlights). Example usage [highlighter-inked types="post,page,etc..." title="write title here" num="10"]</li>
+        <li><strong>[highlighter-noteworthy]</strong> - displays a list of the most noted posts (posts with the greatest number of notes). Example usage [highlighter-noteworthy types="post,page,etc..." title="write title here" num="10"]</li>
+        <li><strong>[highlighter-trending]</strong> - displays a list of posts with the most individual users highlighting (not necessarily the most highlights since multiple users can highlight the same selection). Example usage [highlighter-trending types="post,page,etc..." title="write title here" num="10"]</li>
+        <li><strong>[highlighter-bold]</strong> - displays a list of posts with the single most noted highlight. Example usage [highlighter-bold types="post,page,etc..." title="write title here" num="10"]</li>
+        <li><strong>[highlighter-memorable]</strong> - displays a list of posts with the single most highlighted selection. Example usage [highlighter-memorable types="post,page,etc..." title="write title here" num="10"]</li>
+        <li><strong>[highlighter-view]</strong> - displays a list of all highlights for the current user, a specified user by ID, or all users (a list of all site highlights). Example usage [highlighter-view userid="all"]</li>
+    </ul>
+
+</section>
+
+<section id="cron">
+
+    <h1>Cron Jobs</h1>
+
+    <p>In order for the Highlighter statistics engine to run, the plugin relies on scheduled cron jobs which scan posts and store values in the database. There are lots options to control when the jobs run and how they process the results, so you can control the load on your system. Highlighter uses standard WordPress filters and action hooks to create the cron jobs, and even adds extra schedule increments to the options:</p>
+
+    <pre>
+#cron jobs
+add_filter( 'cron_schedules', 'cron_add_schedules' );
+add_action( 'wp', 'highlighter_setup_schedule' );
+add_action( 'highlighter_scheduled_event', 'highlighter_scan' );</pre>
+
+    <p>You can also see below how Highlighter actually does the scheduling of the cron event:</p>
+
+    <pre>
+if(!function_exists('highlighter_setup_schedule')) {
+    #setup cron schedule for the highlight scan
+    function highlighter_setup_schedule() {
+        $hook = 'highlighter_scheduled_event';
+        $options = get_option( 'highlighter_settings' );
+        $old = wp_get_schedule($hook);
+        $new = $options['stats_schedule'];
+        $timestamp = wp_next_scheduled($hook);
+        //die('old=' . $old . '<br />new=' . $new);
+        if (!$timestamp || $old != $new) {
+            if($options['stats_enabled']) {
+                wp_unschedule_event($timestamp, $hook);
+                wp_schedule_event(time(), $new, $hook);
+            }
+        }
+    }
+}</pre>
+
+    <p>Due to the sophisticated nature of the stats functions we will not list all of the functions here in the documentation. To see them, look in the functions file beginning at line 780, which is where the <code>highlighter_scan()</code> function is stored. This function loops through every post on your site and performs various counts, such as total number of highlights, total number of people that have highlighted, etc. for use in the shortcodes. It uses the <code>update_post_meta()</code> WordPress function to store the values in the post meta of each post.</p>
+
+    <p>You'll also notice within this same function the <code>update_option()</code> WordPress function is utilized to store full site stats in the options table for later use. This system is good because it doesn't create any additional tables in your WordPress database, keeping your table and database structure untouched.</p>
+
+    <p>Also, as mentioned above, Highlighter adds extra convenience time periods to give you more fine-tuned control over when the cron jobs run, and the function that adds those extra time increments is as follows:</p>
+
+    <pre>
+if(!function_exists('cron_add_schedules')) {
+    function cron_add_schedules( $schedules ) {
+        #Add more time periods to the available cron schedule options
+        $schedules['everyfiveminutes'] = array(
+            'interval' => 300,
+            'display' => __( 'Every 5 Minutes', 'highlighter' )
+        );
+        $schedules['everyfifteenminutes'] = array(
+            'interval' => 900,
+            'display' => __( 'Every 15 Minutes', 'highlighter' )
+        );
+        $schedules['everythirtyminutes'] = array(
+            'interval' => 1800,
+            'display' => __( 'Every 30 Minutes', 'highlighter' )
+        );
+        $schedules['everyfortyfiveminutes'] = array(
+            'interval' => 2700,
+            'display' => __( 'Every 45 Minutes', 'highlighter' )
+        );
+        $schedules['everytwodays'] = array(
+            'interval' => 172800,
+            'display' => __( 'Every 2 Days', 'highlighter' )
+        );
+        $schedules['everythreedays'] = array(
+            'interval' => 259200,
+            'display' => __( 'Every 3 Days', 'highlighter' )
+        );
+        $schedules['everyfourdays'] = array(
+            'interval' => 345600,
+            'display' => __( 'Every 4 Days', 'highlighter' )
+        );
+        $schedules['weekly'] = array(
+            'interval' => 604800,
+            'display' => __( 'Weekly', 'highlighter' )
+        );
+        return $schedules;
+    }
+}</pre>
+
+</section>
+
+
+
+<section id="using">             
+    
+    <h1>Using the Plugin</h1>
+    
+    <p>Highlighter comes fully loaded with the Redux framework for the plugin settings screen. This makes administering the plugin settings very quick and easy. There are tabs on the left that group the options together. The first tab is for the <strong>functionality</strong>, letting you control how the highlighter works and what components are active. From this tab you can control which major components of the theme are enabled, such as:</p>
+
+    <ul>
+        <li>Where the highlighter is enabled</li>
+        <li>Whether or not you can view existing highlights</li>
+        <li>If users can add in-line comments (notes) to posts</li>
+        <li>Which highlights are visible to users</li>
+        <li>Which labels (if any) should be visible to users</li>
+        <li>AJAX login vs. standard WP login</li>
+        <li>Social sharing options</li>
+    </ul>
+
+    <p>Next is the <strong>style</strong> tab which lets you control things like highlighter colors, placement and style of highlighter labels, and custom CSS input area.</p>
+
+    <p>Next is the <strong>stats</strong> tab which controls how the highlighter statistics engine works. You can control the frequency of the cron job that collects and calculates stats, and even how the stats display per post.</p>
+
+    <p>Next is <strong>shortcodes</strong>, which lists all eight of the built in shortcodes along with options to control each of the default settings. When you use a shortcode without specifying any parameters, this is the panel where you tell Highlighter what the defaults should be. There are also examples of the syntax you need to use each of the shortcodes.</p>
+
+    <p>The <strong>messages</strong> tab is after that, which allows you to manually control the various messages shown to the user on the front-end. These messages are passed via data attributes to a javascript file, and this panel is where you specify which messages should be passed to the javascript file for display to the front-end user.</p>
+
+    <p>Finally the <strong>advanced</strong> panel is home to some settings that most users probably won't need to touch, notably the custom selectors for AJAX adding of comments to the comment list, as well as the ability to specify hooks to ignore for comment form purposes.</p>
+
+    <p>All of the aforementioned panels have detailed descriptions of panel summary as well as instructions on how to use each setting and what all the possible options are. You shouldn't need to manually edit any of the plugin code since we have made as many things customizable via the plugin options as possible.</p>
+
+    <h3>Helpful Tips</h3>
+
+    <p>If a highlighter shortcode is placed within post content and then a user highlights text from that post, the rendered shortcode will be injected into the original post content in place of the shortcode. This is actually a good thing because shortcodes can contain text that potentially users will want to highlight, and because of the way the highlighter system physically wraps highlighted text in spans, the highlight wouldn't be able to be retained if the shortcode was compacted back down from full rendered result to shortcode syntax on post update.</p>
+
+    <p>If you have a plugin active such as AddThis that adds filters before or after your post titles, don't put the highlighter stats into the before title or after title position because it will conflict with the other plugins using that area. Instead, use the before or after content positions, or place the shortcode into your post or theme template code manually.</p>
+
+    <p>All themes are different and have different levels of z-indexes applied to post content, sidebars, widgets, headers, footers, etc. Highlighter places the highlighter labels using absolute positioning either to the right or to the left of your post content. It has a built-in z-index positioning system which attempts to make it compatible with the greatest number of plugins and themes, but sometimes you might have to adjust this. For instance, if you can't see the highlighter labels at all, they might be displaying underneath your sidebar(s) and in this case you need to go into the plugin options and increase the z-index manually. Or if they are displaying on top of a fixed header/menu and you don't want them to, you might need to decrease the z-index manually. That is why we give you this option in the plugin options so you can easily modify this value.</p>
+   
+    
+</section>
+
+
+<section id="credits">             
+    
+    <h1>Credits</h1>
+    
+    <p>This plugin uses the <a href="https://reduxframework.com/">Redux Framework</a> for the plugin settings panel, which is free for commercial use. It is licensed under the GNU General Public License v2. This plugin also uses <a href="http://jqueryvalidation.org/">jQuery Validation Plugin v1.12.0</a> for the login/register AJAX authentication, and is licensed under the MIT license. To handle all the highlighting and range selection, <a href="https://github.com/timdown/rangy">Rangy</a> is used and is licensed under the MIT license. This plugin also makes use of jQuery which is built into WordPress. This documentation page that you're reading makes use of Bootstrap 3.</p>
+
+    <p>The following icons were used from <a href="https://www.thenounproject.com">www.thenounproject.com</a> and are available for free usage via attribution:</p>
+
+    <ul>
+        <li>Highlighter by bezier master: <a href="https://thenounproject.com/term/highlighter/1036599/">https://thenounproject.com/term/highlighter/1036599/</a></li>
+        <li>View by Jivan: <a href="https://thenounproject.com/term/view/1051451/">https://thenounproject.com/term/view/1051451/</a></li>
+        <li>Twitter by Lubos Volkov: <a href="https://thenounproject.com/term/twitter/20940/">https://thenounproject.com/term/twitter/20940/</a></li>
+        <li>Trash by Aya Sofya: <a href="https://thenounproject.com/term/trash/862233/">https://thenounproject.com/term/trash/862233/</a></li>
+        <li>Comment by i cons: <a href="https://thenounproject.com/term/comment/847911/">https://thenounproject.com/term/comment/847911/</a></li>
+        <li>Thumbs Up by mikicon: <a href="https://thenounproject.com/term/thumbs-up/648780/">https://thenounproject.com/term/thumbs-up/648780/</a></li>
+        <li>Star by il Capitano: <a href="https://thenounproject.com/term/star/889312/">https://thenounproject.com/term/star/889312/</a></li>
+    </ul>
+      
+    <br />
+    
+</section>
+            
+            </div>
+          
+        </div>
+    
+    </div>
+    
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="documentation.js"></script>	
+    
+    <script type="text/javascript">
+		!function ($) {
+
+		  $(function(){
+		
+			var $window = $(window)
+		
+			// Disable certain links in docs
+			$('section [href^=#]').click(function (e) {
+			  e.preventDefault()
+			})
+		
+			// side bar
+			setTimeout(function () {
+			  $('.nav-sidenav').affix({
+				offset: {
+				  top: function () { return $window.width() <= 980 ? 290 : 210 }
+				, bottom: 270
+				}
+			  })
+			}, 100)
+		  })
+		
+		}(window.jQuery)
+	</script>
+    
+</body>
+</html>
