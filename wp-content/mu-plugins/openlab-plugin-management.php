@@ -30,6 +30,7 @@ function openlab_hide_plugins( $plugins ) {
 		'featured-content-gallery/content-gallery.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
+		'highlighter-pro/highlighter.php',
 		'kb-gradebook/kb-gradebook.php',
 		'p3-profiler/p3-profiler.php',
 		'pdf-embedder/pdf_embedder.php',
