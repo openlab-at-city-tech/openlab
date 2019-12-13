@@ -22,6 +22,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
 		'cac-non-cuny-signup/loader.php',
+		'dk-pdf-generator/dk-pdf-generator.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
 		'embed-google-map/embed_google_map.php',
