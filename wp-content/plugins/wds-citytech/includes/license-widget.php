@@ -63,14 +63,27 @@ class OpenLab_License_Widget extends WP_Widget {
 		$license_slug = $instance['license'];
 		$license_data = $this->licenses[ $license_slug ];
 
-		printf(
-			'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
-			esc_attr( $license_data['url'] ),
-			esc_attr( content_url( 'plugins/wds-citytech/assets/img/cc/' . $license_slug . '.png' ) ),
-			esc_attr( $license_data['label'] ),
-			esc_html( $license_data['label'] ),
-			esc_attr( $license_data['url'] )
-		);
+		if ( ! empty( $instance['author_name'] ) && ! empty( $instance['author_url'] ) ) {
+			printf(
+				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site by <a href="%s">%s</a> has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
+				esc_attr( $license_data['url'] ),
+				esc_attr( content_url( 'plugins/wds-citytech/assets/img/cc/' . $license_slug . '.png' ) ),
+				esc_attr( $license_data['label'] ),
+				esc_attr( $instance['author_url'] ),
+				esc_html( $instance['author_name'] ),
+				esc_html( $license_data['label'] ),
+				esc_attr( $license_data['url'] )
+			);
+		} else {
+			printf(
+				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
+				esc_attr( $license_data['url'] ),
+				esc_attr( content_url( 'plugins/wds-citytech/assets/img/cc/' . $license_slug . '.png' ) ),
+				esc_attr( $license_data['label'] ),
+				esc_html( $license_data['label'] ),
+				esc_attr( $license_data['url'] )
+			);
+		}
 
 		echo $args['after_widget'];
 	}
@@ -78,8 +91,10 @@ class OpenLab_License_Widget extends WP_Widget {
 	public function form( $instance ) {
 		$r = array_merge(
 			[
-				'license' => 'by-nc',
-				'title'   => 'License',
+				'author_name' => bp_core_get_user_displayname( get_current_user_id() ),
+				'author_url'  => bp_core_get_user_domain( get_current_user_id() ),
+				'license'     => 'by-nc',
+				'title'       => 'License',
 			],
 			$instance
 		);
@@ -92,7 +107,17 @@ class OpenLab_License_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label class="screen-reader-text" for="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">Select your Creative Commons license.</p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'author_name' ) ); ?>">Site Author:</label>
+			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'author_name' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author_name' ) ); ?>" value="<?php echo esc_attr( $r['author_name'] ); ?>" />
+		</p>
+
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'author_url' ) ); ?>">Site Author URL:</label>
+			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'author_url' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author_url' ) ); ?>" value="<?php echo esc_attr( $r['author_url'] ); ?>" />
+		</p>
+
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">Choose a License:</label>
 			<select class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'license' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">
 				<?php foreach ( $this->licenses as $slug => $data ) : ?>
 					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $slug, $r['license'] ); ?>><?php echo esc_html( $data['label'] ); ?></option>
@@ -107,8 +132,10 @@ class OpenLab_License_Widget extends WP_Widget {
 		$new_license = isset( $new_instance['license'] ) ? wp_unslash( $new_instance['license'] ) : 'by';
 
 		$instance = [
-			'license' => isset( $this->licenses[ $new_license ] ) ? $new_license : 'by-nc',
-			'title'   => isset( $new_instance['title'] ) ? $new_instance['title'] : '',
+			'author_name' => isset( $new_instance['author_name'] ) ? $new_instance['author_name'] : '',
+			'author_url'  => isset( $new_instance['author_url'] ) ? $new_instance['author_url'] : '',
+			'license'     => isset( $this->licenses[ $new_license ] ) ? $new_license : 'by-nc',
+			'title'       => isset( $new_instance['title'] ) ? $new_instance['title'] : '',
 		];
 
 		return $instance;
