@@ -167,11 +167,10 @@ span.tma-down-addow::after {
 .tma-block-dropdown-toolbar-inner-wrap {
 	height: 100%;
 	width: 100%;
-	padding: 9px;
 }
 
 ul.toolbar-block-dropdown {
-	padding: 0;
+	padding: 7px 0;
 	margin: 0;
 	height: 100%;
 	width: 100%;
@@ -180,10 +179,18 @@ ul.toolbar-block-dropdown {
 
 ul.toolbar-block-dropdown > li {
 	display: block;
-	margin: 0;
+	margin: 0 0 4px;
 	width: auto;
 	height: 40px;
 	cursor: move;
+	outline: none;
+}
+
+ul.toolbar-block-dropdown > li:hover {
+	color: #191e23;
+	border: none;
+	box-shadow: none;
+	background: #f3f4f5;
 }
 
 ul.toolbar-block-dropdown .tma-components-icon-button {
@@ -265,10 +272,6 @@ ul.toolbar-block-dropdown span {
 
 .toolbar-block-dropdown .tma-components-icon-button:hover > span {
 	box-shadow: none;
-}
-
-.toolbar-block-dropdown .tma-components-icon-button:hover {
-	box-shadow: inset 0 0 0 1px #e2e4e7, inset 0 0 0 2px #fff, 0 1px 1px rgba(25, 30, 35, 0.2);
 }
 
 .toolbar-side-wrap,
@@ -512,11 +515,26 @@ ul.container,
 
 .tadv-mce-menu.mce-menubar .mce-menubtn:hover {
 	background: transparent;
+	border-color: transparent;
+}
+
+/* Menubar fix... */
+.mce-menubar .mce-menubtn button span {
+	font-size: 13px;
+}
+
+.tadv-mce-menu.mce-menubar .mce-menubtn:hover button span {
+	color: #000;
 }
 
 .tadv-mce-menu .mce-btn .mce-caret {
-	margin-top: 9px;
 	margin-left: 1px;
+	margin-top: 6px;
+	border-top-color: #555;
+}
+
+#tadvadmin .mce-menubar .mce-menubtn:hover .mce-caret {
+	border-top-color: #000;
 }
 
 .tadv-mce-menu * {
@@ -582,7 +600,7 @@ ul.container,
 }
 
 .tadvdropzone.mce-toolbar .mce-btn .the-button {
-	padding: 0 3px;
+	padding: 2px 3px 0;
 }
 
 .tadvdropzone .tadvmodule .tadvitem:hover {
@@ -708,7 +726,7 @@ div.tadv-error {
 }
 
 .tadv-block-editor .mce-menubtn {
-	margin: 6px 0;
+	margin: 7px 0 6px;
 }
 
 .tadv-block-editor.tadvdropzone {
@@ -768,7 +786,6 @@ div.tadv-error {
 	background: #fff;
 	vertical-align: middle;
 }
-
 
 /* Block toolbar */
 .tma-block-toolbar-wrap.editor-block-toolbar {
@@ -975,3 +992,12 @@ div.tadv-error {
 .tadvmodule .the-button {
 	margin: 0;
 }
+
+/* Fixes for inadequate css changes in 5.3 :( */
+#tadvadmin .button,
+#tadvadmin .button-primary {
+	font-size: 14px;
+	line-height: 1.7;
+	padding: 2px 10px 3px;
+}
+
