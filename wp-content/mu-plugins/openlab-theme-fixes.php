@@ -53,6 +53,7 @@ add_action(
 			case 'education-pro' :
 			case 'hamilton':
 			case 'hemingway':
+			case 'lingonberry':
 			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
