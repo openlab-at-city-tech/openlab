@@ -1,10 +1,9 @@
 <?php
 
 su_add_shortcode( array(
+		'deprecated' => true,
 		'id' => 'frame',
 		'callback' => 'su_shortcode_frame',
-		'image' => su_get_plugin_url() . 'admin/images/shortcodes/frame.svg',
-		'deprecated' => true,
 		'name' => __( 'Frame', 'shortcodes-ultimate' ),
 		'type' => 'wrap',
 		'group' => 'content',
@@ -40,7 +39,7 @@ function su_shortcode_frame( $atts = null, $content = null ) {
 		), $atts, 'frame' );
 
 	su_query_asset( 'css', 'su-shortcodes' );
-	su_query_asset( 'js', 'su-other-shortcodes' );
+	su_query_asset( 'js', 'su-shortcodes' );
 
 	return '<span class="su-frame su-frame-align-' . $atts['align'] . ' su-frame-style-' . $atts['style'] . su_get_css_class( $atts ) . '"><span class="su-frame-inner">' . do_shortcode( $content ) . '</span></span>';
 

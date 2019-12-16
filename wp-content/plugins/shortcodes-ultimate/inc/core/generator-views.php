@@ -140,13 +140,17 @@ class Su_Generator_Views {
 		$field = wp_parse_args( $field, array(
 				'default' => 'none'
 			) );
+
+		if ( ! isset( $field['media_sources'] ) ) {
+			$field['media_sources'] = array(
+				'media'         => __( 'Media library', 'shortcodes-ultimate' ),
+				'posts: recent' => __( 'Recent posts', 'shortcodes-ultimate' ),
+				'taxonomy'      => __( 'Taxonomy', 'shortcodes-ultimate' ),
+			);
+		}
+
 		$sources = su_html_dropdown( array(
-				'options'  => array(
-					'media'         => __( 'Media library', 'shortcodes-ultimate' ),
-					'posts: recent' => __( 'Recent posts', 'shortcodes-ultimate' ),
-					'category'      => __( 'Category', 'shortcodes-ultimate' ),
-					'taxonomy'      => __( 'Taxonomy', 'shortcodes-ultimate' )
-				),
+				'options'  => $field['media_sources'],
 				'selected' => '0',
 				'none'     => __( 'Select images source', 'shortcodes-ultimate' ) . '&hellip;',
 				'class'    => 'su-generator-isp-sources'

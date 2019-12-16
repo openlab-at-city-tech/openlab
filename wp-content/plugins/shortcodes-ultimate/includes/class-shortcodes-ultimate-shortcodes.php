@@ -24,7 +24,12 @@ class Shortcodes_Ultimate_Shortcodes {
 	 * @return array The collection of available shortcodes.
 	 */
 	public static function get_all() {
-		return apply_filters( 'su/data/shortcodes', self::$shortcodes );
+
+		$shortcodes = apply_filters( 'su/data/shortcodes', self::$shortcodes );
+		$shortcodes = self::add_ids( $shortcodes );
+
+		return $shortcodes;
+
 	}
 
 	/**
@@ -110,6 +115,16 @@ class Shortcodes_Ultimate_Shortcodes {
 			add_shortcode( $prefix . $id, $callback );
 
 		}
+
+	}
+
+	public static function add_ids( $shortcodes ) {
+
+		foreach ( $shortcodes as $id => $shortcode ) {
+			$shortcodes[ $id ] = array_merge( array( 'id' => $id ), (array) $shortcode );
+		}
+
+		return $shortcodes;
 
 	}
 

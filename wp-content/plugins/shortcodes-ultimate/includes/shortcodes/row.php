@@ -8,7 +8,7 @@ su_add_shortcode( array(
 		'type' => 'wrap',
 		'group' => 'box',
 		'required_child' => 'column',
-		'article' => 'http://docs.getshortcodes.com/article/44-row-column',
+		'article' => 'https://getshortcodes.com/docs/columns/',
 		'atts' => array(
 			'class' => array(
 				'type' => 'extra_css_class',

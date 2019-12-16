@@ -63,6 +63,6 @@ function su_shortcode_quote( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-quote su-quote-style-' . $atts['style'] . $cite_class . su_get_css_class( $atts ) . '"><div class="su-quote-inner su-clearfix">' . do_shortcode( $content ) . su_do_attribute( $cite ) . '</div></div>';
+	return '<div class="su-quote su-quote-style-' . $atts['style'] . $cite_class . su_get_css_class( $atts ) . '"><div class="su-quote-inner su-u-clearfix su-u-trim">' . do_shortcode( $content ) . su_do_attribute( $cite ) . '</div></div>';
 
 }

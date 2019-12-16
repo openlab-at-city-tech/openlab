@@ -43,9 +43,9 @@ function su_get_plugin_version() {
  *
  * @since  5.0.5
  * @param string  $key
- * @return mixed      Config data if found, Flase otherwise.
+ * @return mixed      Config data if found, False otherwise.
  */
-function su_get_config( $key = null ) {
+function su_get_config( $key = null, $default = false ) {
 
 	static $config = array();
 
@@ -53,7 +53,7 @@ function su_get_config( $key = null ) {
 		empty( $key ) ||
 		preg_match( '/^(?!-)[a-z0-9-_]+(?<!-)(\/(?!-)[a-z0-9-_]+(?<!-))*$/', $key ) !== 1
 	) {
-		return false;
+		return $default;
 	}
 
 	if ( isset( $config[ $key ] ) ) {
@@ -63,7 +63,7 @@ function su_get_config( $key = null ) {
 	$config_file = su_get_plugin_path() . 'includes/config/' . $key . '.php';
 
 	if ( ! file_exists( $config_file ) ) {
-		return false;
+		return $default;
 	}
 
 	$config[ $key ] = include $config_file;
@@ -82,6 +82,10 @@ function su_get_config( $key = null ) {
  */
 function su_error_message( $title = '', $message = '' ) {
 
+	if ( ! su_current_user_can_insert() ) {
+		return;
+	}
+
 	if ( $title ) {
 		$title = "<strong>${title}:</strong> ";
 	}
@@ -95,6 +99,23 @@ function su_error_message( $title = '', $message = '' ) {
 }
 
 /**
+ * Conditional check if current user can use the plugin.
+ *
+ * @since 5.4.0
+ * @return bool True if user is allowed to use the plugin, False otherwise.
+ */
+function su_current_user_can_insert() {
+
+	$required_capability = (string) get_option(
+		'su_option_generator_access',
+		'manage_options'
+	);
+
+	return current_user_can( $required_capability );
+
+}
+
+/**
  * Validate filter callback name.
  *
  * @since  5.0.5
@@ -102,13 +123,13 @@ function su_error_message( $title = '', $message = '' ) {
  * @return boolean         True if filter name contains word 'filter', False otherwise.
  */
 function su_is_filter_safe( $filter ) {
-	return is_string( $filter ) && strpos( $filter, 'filter' ) !== false;
+	return is_string( $filter ) && false !== strpos( $filter, 'filter' );
 }
 
 /**
  * Range converter.
  *
- * Converts string range like '1, 3-5, 10' into an array like [1, 3, 4, 5, 10].
+ * Converts string ranges like '1, 3-5' into arrays like [1, 3, 4, 5].
  *
  * @since  5.0.5
  * @param string  $string Range string.
@@ -164,151 +185,8 @@ if ( ! function_exists( 'su_get_css_class' ) ) {
 }
 
 /**
- * Get shortcode prefix.
- *
- * @since  5.0.5
- * @return string Shortcode prefix.
- */
-function su_get_shortcode_prefix() {
-	return get_option( 'su_option_prefix' );
-}
-
-/**
- * Do shortcodes in attributes.
- *
- * Replace braces with square brackets: {shortcode} => [shortcode], applies do_shortcode() filter.
- *
- * @since  5.0.5
- * @param string  $value Attribute value with shortcodes.
- * @return string        Parsed string.
- */
-function su_do_attribute( $value ) {
-
-	$value = str_replace( array( '{', '}' ), array( '[', ']' ), $value );
-	$value = do_shortcode( $value );
-
-	return $value;
-
-}
-
-/**
- * Custom do_shortcode function for nested shortcodes
- *
- * @since  5.0.4
- * @param string  $content Shortcode content.
- * @param string  $pre     First shortcode letter.
- * @return string          Formatted content.
- */
-function su_do_nested_shortcodes_alt( $content, $pre ) {
-
-	if ( strpos( $content, '[_' ) !== false ) {
-		$content = preg_replace( '@(\[_*)_(' . $pre . '|/)@', '$1$2', $content );
-	}
-
-	return do_shortcode( $content );
-
-}
-
-/**
- * Remove underscores from nested shortcodes.
- *
- * @since  5.0.4
- * @param string  $content   String with nested shortcodes.
- * @param string  $shortcode Shortcode tag name (without prefix).
- * @return string            Parsed string.
- */
-function su_do_nested_shortcodes( $content, $shortcode ) {
-
-	if ( get_option( 'su_option_do_nested_shortcodes_alt' ) ) {
-		return su_do_nested_shortcodes_alt( $content, substr( $shortcode, 0, 1 ) );
-	}
-
-	$prefix = su_get_shortcode_prefix();
-
-	if ( strpos( $content, '[_' . $prefix . $shortcode ) !== false ) {
-
-		$content = str_replace(
-			array( '[_' . $prefix . $shortcode, '[_/' . $prefix . $shortcode ),
-			array( '[' . $prefix . $shortcode, '[/' . $prefix . $shortcode ),
-			$content
-		);
-
-		return do_shortcode( $content );
-
-	}
-
-	return do_shortcode( wptexturize( $content ) );
-
-}
-
-/**
- * Helper function to check validity of a given HEX color.
- *
- * Valid formats are:
- * - #aabbcc
- * - aabbcc
- * - #abc
- * - abc
- *
- * @since  5.2.0
- * @param  string $color HEX color to check validity of.
- * @return bool          True if a given color mathes accepted pattern, False otherwise.
- */
-function su_is_valid_hex( $color ) {
-	return preg_match( '/^#?([a-f0-9]{3}|[a-f0-9]{6})$/i', $color ) === 1;
-}
-
-/**
- * Helper function that adjusts brightness of a given HEX color value.
- *
- * Examples of use:
- * `su_adjust_brightness( '#fc0', 50 )` - increase color brightness by 50%
- * `su_adjust_brightness( 'ffcc00', -50 )` - decrease color brightness by 50%
- *
- * @since  5.2.0
- * @param  string $color A valid HEX color
- * @param  int $percent  The percent to adjust brightness to.
- * @return string        Adjusted HEX color value.
- */
-function su_adjust_brightness( $color, $percent ) {
-
-	if (
-		! su_is_valid_hex( $color ) ||
-		! is_numeric( $percent )
-	) {
-		return $color;
-	}
-
-	$percent = max( -100, min( 100, $percent ) );
-	$steps   = round( $percent * 2.55 );
-	$color   = str_replace( '#', '', $color );
-
-	if ( 3 === strlen( $color ) ) {
-		$color =
-			str_repeat( substr( $color, 0, 1 ), 2 ) .
-			str_repeat( substr( $color, 1, 1 ), 2 ) .
-			str_repeat( substr( $color, 2, 1 ), 2 );
-	}
-
-	$color_parts = str_split( $color, 2 );
-	$new_color   = '#';
-
-	foreach ( $color_parts as $color_part ) {
-
-		$color_part = hexdec( $color_part );
-		$color_part = max( 0, min( 255, $color_part + $steps ) );
-
-		$new_color .= str_pad( dechex( $color_part ), 2, '0', STR_PAD_LEFT );
-
-	}
-
-	return $new_color;
-
-}
-
-/**
- * Helper function to force enqueuing of the shortcode generator
- * assets and templates.
+ * Helper function to force enqueuing of the shortcode generator assets and
+ * templates.
  *
  * Usage example:
  * `add_action( 'admin_init', 'su_enqueue_generator' );`
@@ -317,4 +195,85 @@ function su_adjust_brightness( $color, $percent ) {
  */
 function su_enqueue_generator() {
 	Su_Generator::enqueue_generator();
+}
+
+/**
+ * Helper function to check that the given path is related to the current theme
+ * or to the plugin directory.
+ *
+ * @since  5.4.0
+ * @param  string $path Relative path to check.
+ * @return bool         True if the given path relates to theme/plugin directory, False otherwise.
+ */
+function su_is_valid_template_name( $path ) {
+
+	$path = su_set_file_extension( $path, 'php' );
+
+	$allowed = apply_filters(
+		'su/allowed_template_paths',
+		array(
+			get_stylesheet_directory(),
+			get_template_directory(),
+			plugin_dir_path( dirname( __FILE__ ) ),
+		)
+	);
+
+	foreach ( $allowed as $dir ) {
+
+		$dir  = untrailingslashit( $dir );
+		$real = realpath( $dir . DIRECTORY_SEPARATOR . $path );
+
+		$dir  = str_replace( '\\', '/', $dir );
+		$real = str_replace( '\\', '/', $real );
+
+		if ( strpos( $real, $dir ) === 0 ) {
+			return true;
+		}
+
+	}
+
+	return false;
+
+}
+
+/**
+ * Helper function to add/remove file extension to/from a given path.
+ *
+ * @since  5.4.0
+ * @param  string      $path      Path to add/remove file extension to/from.
+ * @param  string|bool $extension Extension to add/remove.
+ * @return string                 Modified file path.
+ */
+function su_set_file_extension( $path, $extension ) {
+
+	$path_info = pathinfo( $path );
+
+	if ( ! $extension ) {
+		return path_join( $path_info['dirname'], $path_info['filename'] );
+	}
+
+	if ( $path_info['extension'] !== $extension ) {
+		$path .= ".{$extension}";
+	}
+
+	return $path;
+
+}
+
+/**
+ * Helper function to add utm-args to an URL.
+ *
+ * @since 5.6.1
+ */
+function su_get_utm_link( $url, $utm ) {
+
+	return add_query_arg(
+		array(
+			'utm_source'   => $utm[0],
+			'utm_medium'   => $utm[1],
+			'utm_campaign' => $utm[2],
+		),
+		$url
+	);
+
 }

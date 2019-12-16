@@ -8,7 +8,7 @@ su_add_shortcode( array(
 		'type' => 'wrap',
 		'group' => 'gallery',
 		'required_sibling' => 'lightbox',
-		'article' => 'http://docs.getshortcodes.com/article/76-how-to-use-lightbox-shortcode',
+		'article' => 'https://getshortcodes.com/docs/lightbox/',
 		'atts' => array(
 			'id' => array(
 				'default' => '',
@@ -105,7 +105,7 @@ function su_shortcode_lightbox_content( $atts = null, $content = null ) {
 		return su_error_message( 'Lightbox content', __( 'please specify correct ID for this block. You should use same ID as in the Content source field (when inserting lightbox shortcode)', 'shortcodes-ultimate' ) );
 	}
 
-	$return = '<div class="su-lightbox-content ' . su_get_css_class( $atts ) . '" id="' . trim( $atts['id'], '#' ) . '" style="display:none;width:' . $atts['width'] . ';margin-top:' . $atts['margin'] . 'px;margin-bottom:' . $atts['margin'] . 'px;padding:' . $atts['padding'] . 'px;background-color:' . $atts['background'] . ';color:' . $atts['color'] . ';box-shadow:' . $atts['shadow'] . ';text-align:' . $atts['text_align'] . '">' . do_shortcode( $content ) . '</div>';
+	$return = '<div class="su-lightbox-content su-u-trim ' . su_get_css_class( $atts ) . '" id="' . trim( $atts['id'], '#' ) . '" style="display:none;width:' . $atts['width'] . ';margin-top:' . $atts['margin'] . 'px;margin-bottom:' . $atts['margin'] . 'px;padding:' . $atts['padding'] . 'px;background-color:' . $atts['background'] . ';color:' . $atts['color'] . ';box-shadow:' . $atts['shadow'] . ';text-align:' . $atts['text_align'] . '">' . do_shortcode( $content ) . '</div>';
 
 	return did_action( 'su/generator/preview/before' )
 		? '<div class="su-lightbox-content-preview">' . $return . '</div>'
