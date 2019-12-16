@@ -9,42 +9,42 @@
     const { dispatch, select } = wp.data;
 
     const COLUMNS_LAYOUTS = [
-        { columns: 1, layout: '100', icon: '100', title: __( 'One' ) },
-        { columns: 2, layout: '12-12', icon: '12-12', title: __( 'Two: 1/2 - 1/2' ) },
-        { columns: 2, layout: '23-13', icon: '23-13', title: __( 'Two: 2/3 - 1/3' ) },
-        { columns: 2, layout: '13-23', icon: '13-23', title: __( 'Two: 1/3 - 2/3' ) },
-        { columns: 2, layout: '14-34', icon: '14-34', title: __( 'Two: 1/4 - 3/4' ) },
-        { columns: 2, layout: '34-14', icon: '34-14', title: __( 'Two: 3/4 - 1/4' ) },
-        { columns: 2, layout: '15-45', icon: '15-45', title: __( 'Two: 1/5 - 4/5' ) },
-        { columns: 2, layout: '45-15', icon: '45-15', title: __( 'Two: 4/5 - 1/5' ) },
-        { columns: 3, layout: '13-13-13', icon: '13-13-13', title: __( 'Three: 1/3 - 1/3 - 1/3' ) },
-        { columns: 3, layout: '12-14-14', icon: '12-14-14', title: __( 'Three: 1/2 - 1/4 - 1/4' ) },
-        { columns: 3, layout: '14-14-12', icon: '14-14-12', title: __( 'Three: 1/4 - 1/4 - 1/2' ) },
-        { columns: 3, layout: '14-12-14', icon: '14-12-14', title: __( 'Three: 1/4 - 1/2 - 1/4' ) },
-        { columns: 3, layout: '15-35-15', icon: '15-35-15', title: __( 'Three: 1/5 - 3/5 - 1/5' ) },
-        { columns: 3, layout: '35-15-15', icon: '35-15-15', title: __( 'Three: 3/5 - 1/5 - 1/5' ) },
-        { columns: 3, layout: '15-15-35', icon: '15-15-35', title: __( 'Three: 1/5 - 1/5 - 3/5' ) },
-        { columns: 3, layout: '16-46-16', icon: '16-46-16', title: __( 'Three: 1/6 - 4/6 - 1/6' ) },
-        { columns: 4, layout: '14-14-14-14', icon: '14-14-14-14', title: __( 'Four: 1/4 - 1/4 - 1/4 - 1/4' ) },
-        { columns: 4, layout: '36-16-16-16', icon: '36-16-16-16', title: __( 'Four: 3/6 - 1/6 - 1/6 - 1/6' ) },
-        { columns: 4, layout: '16-16-16-36', icon: '16-16-16-36', title: __( 'Four: 1/6 - 1/6 - 1/6 - 3/6' ) },
-        { columns: 4, layout: '15-15-15-25', icon: '15-15-15-25', title: __( 'Four: 1/5 - 1/5 - 1/5 - 2/5' ) },
-        { columns: 4, layout: '25-15-15-15', icon: '25-15-15-15', title: __( 'Four: 2/5 - 1/5 - 1/5 - 1/5' ) },
-        { columns: 5, layout: 'five', icon: '15-15-15-15-15', title: __( 'Five' ) },
-        { columns: 6, layout: 'six', icon: '16-16-16-16-16-16', title: __( 'Six' ) },
+        { columns: 1, layout: '100', icon: '100', title: __( 'One', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '12-12', icon: '12-12', title: __( 'Two: 1/2 - 1/2', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '23-13', icon: '23-13', title: __( 'Two: 2/3 - 1/3', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '13-23', icon: '13-23', title: __( 'Two: 1/3 - 2/3', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '14-34', icon: '14-34', title: __( 'Two: 1/4 - 3/4', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '34-14', icon: '34-14', title: __( 'Two: 3/4 - 1/4', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '15-45', icon: '15-45', title: __( 'Two: 1/5 - 4/5', 'advanced-gutenberg' ) },
+        { columns: 2, layout: '45-15', icon: '45-15', title: __( 'Two: 4/5 - 1/5', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '13-13-13', icon: '13-13-13', title: __( 'Three: 1/3 - 1/3 - 1/3', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '12-14-14', icon: '12-14-14', title: __( 'Three: 1/2 - 1/4 - 1/4', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '14-14-12', icon: '14-14-12', title: __( 'Three: 1/4 - 1/4 - 1/2', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '14-12-14', icon: '14-12-14', title: __( 'Three: 1/4 - 1/2 - 1/4', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '15-35-15', icon: '15-35-15', title: __( 'Three: 1/5 - 3/5 - 1/5', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '35-15-15', icon: '35-15-15', title: __( 'Three: 3/5 - 1/5 - 1/5', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '15-15-35', icon: '15-15-35', title: __( 'Three: 1/5 - 1/5 - 3/5', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '16-46-16', icon: '16-46-16', title: __( 'Three: 1/6 - 4/6 - 1/6', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '14-14-14-14', icon: '14-14-14-14', title: __( 'Four: 1/4 - 1/4 - 1/4 - 1/4', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '36-16-16-16', icon: '36-16-16-16', title: __( 'Four: 3/6 - 1/6 - 1/6 - 1/6', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '16-16-16-36', icon: '16-16-16-36', title: __( 'Four: 1/6 - 1/6 - 1/6 - 3/6', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '15-15-15-25', icon: '15-15-15-25', title: __( 'Four: 1/5 - 1/5 - 1/5 - 2/5', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '25-15-15-15', icon: '25-15-15-15', title: __( 'Four: 2/5 - 1/5 - 1/5 - 1/5', 'advanced-gutenberg' ) },
+        { columns: 5, layout: 'five', icon: '15-15-15-15-15', title: __( 'Five', 'advanced-gutenberg' ) },
+        { columns: 6, layout: 'six', icon: '16-16-16-16-16-16', title: __( 'Six', 'advanced-gutenberg' ) },
     ];
     const COLUMNS_LAYOUTS_RESPONSIVE = [
-        { columns: 3, layout: '1-12-12', icon: '100-12-12', title: __( 'Three: 100 - 1/2 - 1/2' ) },
-        { columns: 3, layout: '12-12-1', icon: '12-12-100', title: __( 'Three: 1/2 - 1/2 - 100' ) },
-        { columns: 4, layout: '12x4', icon: '12-12-12-12', title: __( 'Four: Two Columns' ) },
-        { columns: 6, layout: '12x6', icon: '12-12-12-12', title: __( 'Six: Two Columns' ) },
-        { columns: 6, layout: '13x6', icon: '13-13-13-13-13-13', title: __( 'Six: Three Columns' ) },
+        { columns: 3, layout: '1-12-12', icon: '100-12-12', title: __( 'Three: 100 - 1/2 - 1/2', 'advanced-gutenberg' ) },
+        { columns: 3, layout: '12-12-1', icon: '12-12-100', title: __( 'Three: 1/2 - 1/2 - 100', 'advanced-gutenberg' ) },
+        { columns: 4, layout: '12x4', icon: '12-12-12-12', title: __( 'Four: Two Columns', 'advanced-gutenberg' ) },
+        { columns: 6, layout: '12x6', icon: '12-12-12-12', title: __( 'Six: Two Columns', 'advanced-gutenberg' ) },
+        { columns: 6, layout: '13x6', icon: '13-13-13-13-13-13', title: __( 'Six: Three Columns', 'advanced-gutenberg' ) },
     ];
     const COLUMNS_LAYOUTS_STACKED = {
-        columns: 1, layout: 'stacked', icon: 'stacked', title: __( 'Stacked' )
+        columns: 1, layout: 'stacked', icon: 'stacked', title: __( 'Stacked', 'advanced-gutenberg' )
     };
     const GUTTER_OPTIONS = [
-        {label: __( 'None' ), value: 0},
+        {label: __( 'None', 'advanced-gutenberg' ), value: 0},
         {label: '10px', value: 10},
         {label: '20px', value: 20},
         {label: '30px', value: 30},
@@ -288,6 +288,7 @@
                 marginUnit,
                 marginTop, marginRight, marginBottom, marginLeft,
                 marginTopM, marginRightM, marginBottomM, marginLeftM,
+                paddingUnit,
                 paddingTop, paddingRight, paddingBottom, paddingLeft,
                 paddingTopM, paddingRightM, paddingBottomM, paddingLeftM,
                 vAlign,
@@ -299,6 +300,8 @@
                 contentMaxWidthUnit,
                 contentMinHeight,
                 contentMinHeightUnit,
+                contentMaxHeight,
+                contentMaxHeightUnit,
                 wrapperTag,
             } = attributes;
 
@@ -320,7 +323,7 @@
                 return (
                     <div className="advgb-columns-select-wrapper">
                         <div className="advgb-columns-select-title">
-                            { __( 'Pickup a columns layout' ) }
+                            { __( 'Pickup a columns layout', 'advanced-gutenberg' ) }
                         </div>
                         <div className="advgb-columns-select-layout">
                             {COLUMNS_LAYOUTS.map( (layout, index) => {
@@ -355,7 +358,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Vertical Align Top' ),
+                    title: __( 'Vertical Align Top', 'advanced-gutenberg' ),
                     isActive: vAlign === 'top',
                     onClick: () => setAttributes( { vAlign: 'top' } )
                 },
@@ -366,7 +369,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Vertical Align Middle' ),
+                    title: __( 'Vertical Align Middle', 'advanced-gutenberg' ),
                     isActive: vAlign === 'middle',
                     onClick: () => setAttributes( { vAlign: 'middle' } )
                 },
@@ -377,7 +380,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Vertical Align Bottom' ),
+                    title: __( 'Vertical Align Bottom', 'advanced-gutenberg' ),
                     isActive: vAlign === 'bottom',
                     onClick: () => setAttributes( { vAlign: 'bottom' } )
                 },
@@ -388,7 +391,7 @@
                             <polygon points="4,12 4,6 0,6 6,0 12,6 8,6 8,12"/>
                         </svg>
                     ),
-                    title: __( 'Inner Columns Full Height' ),
+                    title: __( 'Inner Columns Full Height', 'advanced-gutenberg' ),
                     isActive: vAlign === 'full',
                     onClick: () => setAttributes( { vAlign: 'full' } )
                 },
@@ -410,8 +413,8 @@
                         <Toolbar controls={ VERT_ALIGNMENT_CONTROLS } />
                     </BlockControls>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Columns Settings' ) }>
-                            <PanelBody title={ __( 'Responsive Settings' ) }>
+                        <PanelBody title={ __( 'Columns Settings', 'advanced-gutenberg' ) }>
+                            <PanelBody title={ __( 'Responsive Settings', 'advanced-gutenberg' ) }>
                                 <div className="advgb-columns-responsive-items">
                                     {['desktop', 'tablet', 'mobile'].map( (device, index) => {
                                         const itemClasses = [
@@ -482,7 +485,7 @@
                                 </div>
                                 {tabSelected === 'desktop' && (
                                     <SelectControl
-                                        label={ __( 'Space between columns' ) }
+                                        label={ __( 'Space between columns', 'advanced-gutenberg' ) }
                                         value={ gutter }
                                         options={ GUTTER_OPTIONS }
                                         onChange={ (value) => setAttributes( { gutter: parseInt(value) } ) }
@@ -491,22 +494,33 @@
                                 {tabSelected === 'mobile' && columnsLayoutM === 'stacked' && (
                                     <Fragment>
                                         <SelectControl
-                                            label={ __( 'Vertical space when collapsed' ) }
+                                            label={ __( 'Vertical space when collapsed', 'advanced-gutenberg' ) }
                                             value={ collapsedGutter }
                                             options={ GUTTER_OPTIONS }
                                             onChange={ (value) => setAttributes( { collapsedGutter: parseInt(value) } ) }
                                         />
                                         <ToggleControl
-                                            label={ __( 'Collapsed Order RTL' ) }
+                                            label={ __( 'Collapsed Order RTL', 'advanced-gutenberg' ) }
                                             checked={ collapsedRtl }
                                             onChange={ () => setAttributes( { collapsedRtl: !collapsedRtl } ) }
                                         />
                                     </Fragment>
                                 ) }
-                                <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnsEdit.jsUcfirst(tabSelected) + __(' Padding') : __('Padding') }
+                                <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnsEdit.jsUcfirst(tabSelected) + __(' Padding', 'advanced-gutenberg') : __('Padding', 'advanced-gutenberg') }
                                            initialOpen={false}
                                 >
-                                    <div className="advgb-controls-title">{ __( 'Unit (px)' ) }</div>
+                                    <div className="advgb-controls-title">
+                                        <span>{ __( 'Unit', 'advanced-gutenberg' ) }</span>
+                                        <div className="advgb-unit-wrapper" key="unit">
+                                            { ['px', 'em', 'vh', '%'].map( (unit, idx) => (
+                                                <span className={`advgb-unit ${paddingUnit === unit ? 'selected' : ''}`} key={idx}
+                                                      onClick={ () => setAttributes( { paddingUnit: unit } ) }
+                                                >
+                                                    {unit}
+                                                </span>
+                                            ) ) }
+                                        </div>
+                                    </div>
                                     {MARGIN_PADDING_CONTROLS.map((pos, idx) => (
                                         <RangeControl
                                             key={ idx }
@@ -518,11 +532,11 @@
                                         />
                                     ) ) }
                                 </PanelBody>
-                                <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnsEdit.jsUcfirst(tabSelected) + __(' Margin') : __('Margin') }
+                                <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnsEdit.jsUcfirst(tabSelected) + __(' Margin', 'advanced-gutenberg') : __('Margin', 'advanced-gutenberg') }
                                            initialOpen={false}
                                 >
                                     <div className="advgb-controls-title">
-                                        <span>{ __( 'Unit' ) }</span>
+                                        <span>{ __( 'Unit', 'advanced-gutenberg' ) }</span>
                                         <div className="advgb-unit-wrapper" key="unit">
                                             { ['px', 'em', 'vh', '%'].map( (unit, idx) => (
                                                 <span className={`advgb-unit ${marginUnit === unit ? 'selected' : ''}`} key={idx}
@@ -545,15 +559,15 @@
                                     ) ) }
                                 </PanelBody>
                             </PanelBody>
-                            <PanelBody title={ __( 'Row Settings' ) } initialOpen={ false }>
+                            <PanelBody title={ __( 'Row Settings', 'advanced-gutenberg' ) } initialOpen={ false }>
                                 <ToggleControl
-                                    label={ __( 'Columns Wrapped' ) }
-                                    help={ __( 'If your columns is overflown, it will be separated to a new line (eg: Use this with Columns Spacing).' ) }
+                                    label={ __( 'Columns Wrapped', 'advanced-gutenberg' ) }
+                                    help={ __( 'If your columns is overflown, it will be separated to a new line (eg: Use this with Columns Spacing).', 'advanced-gutenberg' ) }
                                     checked={ columnsWrapped }
                                     onChange={ () => setAttributes( { columnsWrapped: !columnsWrapped } ) }
                                 />
                                 <SelectControl
-                                    label={ __( 'Wrapper Tag' ) }
+                                    label={ __( 'Wrapper Tag', 'advanced-gutenberg' ) }
                                     value={ wrapperTag }
                                     options={ [
                                         { label: 'Div', value: 'div' },
@@ -568,7 +582,7 @@
                                 />
                                 <RangeControl
                                     label={ [
-                                        __( 'Content Max Width' ),
+                                        __( 'Content Max Width', 'advanced-gutenberg' ),
                                         <div className="advgb-unit-wrapper" key="unit">
                                             { ['px', 'vw', '%'].map( (unit, idx) => (
                                                 <span className={`advgb-unit ${contentMaxWidthUnit === unit ? 'selected' : ''}`} key={idx}
@@ -586,7 +600,7 @@
                                 />
                                 <RangeControl
                                     label={ [
-                                        __( 'Content Min Height' ),
+                                        __( 'Content Min Height', 'advanced-gutenberg' ),
                                         <div className="advgb-unit-wrapper" key="unit">
                                             { ['px', 'vw', 'vh'].map( (unit, idx) => (
                                                 <span className={`advgb-unit ${contentMinHeightUnit === unit ? 'selected' : ''}`} key={idx}
@@ -602,6 +616,24 @@
                                     max={ contentMinHeightUnit === 'px' ? 2000 : 200 }
                                     onChange={ (value) => setAttributes( { contentMinHeight: value } ) }
                                 />
+                                <RangeControl
+                                    label={ [
+                                        __( 'Content Max Height', 'advanced-gutenberg' ),
+                                        <div className="advgb-unit-wrapper" key="unit">
+                                            { ['px', 'vw', 'vh'].map( (unit, idx) => (
+                                                <span className={`advgb-unit ${contentMaxHeightUnit === unit ? 'selected' : ''}`} key={idx}
+                                                      onClick={ () => setAttributes( { contentMaxHeightUnit: unit } ) }
+                                                >
+                                                    {unit}
+                                                </span>
+                                            ) ) }
+                                        </div>
+                                    ] }
+                                    value={ contentMaxHeight }
+                                    min={ 0 }
+                                    max={ contentMaxHeightUnit === 'px' ? 2000 : 200 }
+                                    onChange={ (value) => setAttributes( { contentMaxHeight: value } ) }
+                                />
                             </PanelBody>
                         </PanelBody>
                     </InspectorControls>
@@ -610,6 +642,7 @@
                              style={ {
                                  maxWidth: !!contentMaxWidth ? `${contentMaxWidth}${contentMaxWidthUnit}` : undefined,
                                  minHeight: !!contentMinHeight ? `${contentMinHeight}${contentMinHeightUnit}` : undefined,
+                                 maxHeight: !!contentMaxHeight ? `${contentMaxHeight}${contentMaxHeightUnit}` : undefined,
                              } }
                         >
                             <InnerBlocks
@@ -626,10 +659,10 @@
                             margin-right: ${marginRight + marginUnit};
                             margin-bottom: ${marginBottom + marginUnit};
                             margin-left: ${marginLeft + marginUnit};
-                            padding-top: ${paddingTop}px;
-                            padding-right: ${paddingRight}px;
-                            padding-bottom: ${paddingBottom}px;
-                            padding-left: ${paddingLeft}px;
+                            padding-top: ${paddingTop + paddingUnit};
+                            padding-right: ${paddingRight + paddingUnit};
+                            padding-bottom: ${paddingBottom + paddingUnit};
+                            padding-left: ${paddingLeft + paddingUnit};
                         }
                         @media screen and (max-width: 767px) {
                             #block-${clientId} .advgb-columns-wrapper .advgb-columns {
@@ -637,10 +670,10 @@
                                 margin-right: ${marginRightM + marginUnit};
                                 margin-bottom: ${marginBottomM + marginUnit};
                                 margin-left: ${marginLeftM + marginUnit};
-                                padding-top: ${paddingTopM}px;
-                                padding-right: ${paddingRightM}px;
-                                padding-bottom: ${paddingBottomM}px;
-                                padding-left: ${paddingLeftM}px;
+                                padding-top: ${paddingTopM + paddingUnit};
+                                padding-right: ${paddingRightM + paddingUnit};
+                                padding-bottom: ${paddingBottomM + paddingUnit};
+                                padding-left: ${paddingLeftM + paddingUnit};
                             }
                         }`}
                     </style>
@@ -739,6 +772,10 @@
         paddingLeftM: {
             type: 'number',
         },
+        paddingUnit: {
+            type: 'string',
+            default: 'px',
+        },
         gutter: {
             type: 'number',
             default: 0,
@@ -772,6 +809,13 @@
             type: 'string',
             default: 'px',
         },
+        contentMaxHeight: {
+            type: 'number',
+        },
+        contentMaxHeightUnit: {
+            type: 'string',
+            default: 'px',
+        },
         wrapperTag: {
             type: 'string',
             default: 'div',
@@ -786,14 +830,14 @@
     };
 
     registerBlockType( 'advgb/columns', {
-        title: __( 'Columns Manager' ),
-        description: __( 'Row layout with columns you decided.' ),
+        title: __( 'Columns Manager', 'advanced-gutenberg' ),
+        description: __( 'Row layout with columns you decided.', 'advanced-gutenberg' ),
         icon: {
             src: 'layout',
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'columns' ), __( 'row' ), __( 'layout' ) ],
+        keywords: [ __( 'columns', 'advanced-gutenberg' ), __( 'row', 'advanced-gutenberg' ), __( 'layout', 'advanced-gutenberg' ) ],
         supports: {
             align: [ 'wide', 'full' ],
             html: false,
@@ -813,6 +857,8 @@
                 contentMaxWidthUnit,
                 contentMinHeight,
                 contentMinHeightUnit,
+                contentMaxHeight,
+                contentMaxHeightUnit,
                 wrapperTag,
                 colId,
             } = attributes;
@@ -820,6 +866,7 @@
 
             const blockClasses = [
                 'advgb-columns',
+                'advgb-columns-row',
                 'advgb-is-mobile',
                 vAlign && `columns-valign-${vAlign}`,
                 columns && `advgb-columns-${columns}`,
@@ -833,19 +880,73 @@
             ].filter( Boolean ).join( ' ' );
 
             return (
-                <Tag className="advgb-columns-wrapper">
-                    <div className={ blockClasses } id={ colId }
-                         style={ {
-                             maxWidth: !!contentMaxWidth ? `${contentMaxWidth}${contentMaxWidthUnit}` : undefined,
-                             minHeight: !!contentMinHeight ? `${contentMinHeight}${contentMinHeightUnit}` : undefined,
-                         } }
-                    >
-                        <InnerBlocks.Content />
+                <Tag className="advgb-columns-wrapper" id={ colId }>
+                    <div className="advgb-columns-container">
+                        <div className={ blockClasses }
+                             style={ {
+                                 maxWidth: !!contentMaxWidth ? `${contentMaxWidth}${contentMaxWidthUnit}` : undefined,
+                                 minHeight: !!contentMinHeight ? `${contentMinHeight}${contentMinHeightUnit}` : undefined,
+                                 maxHeight: !!contentMaxHeight ? `${contentMaxHeight}${contentMaxHeightUnit}` : undefined,
+                             } }
+                        >
+                            <InnerBlocks.Content />
+                        </div>
                     </div>
                 </Tag>
             );
         },
         deprecated: [
+            {
+                attributes: blockAttrs,
+                save: function ( { attributes } ) {
+                    const {
+                        columns,
+                        columnsLayout, columnsLayoutT, columnsLayoutM,
+                        vAlign,
+                        gutter,
+                        collapsedGutter,
+                        collapsedRtl,
+                        columnsWrapped,
+                        contentMaxWidth,
+                        contentMaxWidthUnit,
+                        contentMinHeight,
+                        contentMinHeightUnit,
+                        contentMaxHeight,
+                        contentMaxHeightUnit,
+                        wrapperTag,
+                        colId,
+                    } = attributes;
+                    const Tag = wrapperTag;
+
+                    const blockClasses = [
+                        'advgb-columns',
+                        'advgb-is-mobile',
+                        vAlign && `columns-valign-${vAlign}`,
+                        columns && `advgb-columns-${columns}`,
+                        columnsLayout && `layout-${columnsLayout}`,
+                        columnsLayoutT && `tbl-layout-${columnsLayoutT}`,
+                        columnsLayoutM && `mbl-layout-${columnsLayoutM}`,
+                        !!gutter && `gutter-${gutter}`,
+                        !!collapsedGutter && `vgutter-${collapsedGutter}`,
+                        collapsedRtl && 'order-rtl',
+                        columnsWrapped && 'columns-wrapped',
+                    ].filter( Boolean ).join( ' ' );
+
+                    return (
+                        <Tag className="advgb-columns-wrapper">
+                            <div className={ blockClasses } id={ colId }
+                                 style={ {
+                                     maxWidth: !!contentMaxWidth ? `${contentMaxWidth}${contentMaxWidthUnit}` : undefined,
+                                     minHeight: !!contentMinHeight ? `${contentMinHeight}${contentMinHeightUnit}` : undefined,
+                                     maxHeight: !!contentMaxHeight ? `${contentMaxHeight}${contentMaxHeightUnit}` : undefined,
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </Tag>
+                    );
+                }
+            },
             {
                 attributes: blockAttrs,
                 save: function ( { attributes } ) {

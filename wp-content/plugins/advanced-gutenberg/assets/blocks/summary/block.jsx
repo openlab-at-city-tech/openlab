@@ -14,7 +14,7 @@
             <path d="M0 0h24v24H0z" fill="none"/>
         </svg>
     );
-    const summaryBlockTitle = __( 'Summary' );
+    const summaryBlockTitle = __( 'Summary', 'advanced-gutenberg' );
 
     // Add button to insert summary inside table of contents component
     ( function () {
@@ -33,7 +33,7 @@
                 setTimeout( function () {
                     const summaryButton = $(
                         '<button class="button" style="position: absolute; bottom: 10px; right: 15px">'
-                        + __( 'Insert Summary' ) +
+                        + __( 'Insert Summary', 'advanced-gutenberg' ) +
                         '</button>'
                     );
 
@@ -62,7 +62,7 @@
                 isSelected && blockType === 'core/heading' && attributes.nodeName !== 'H1' &&
                 <InspectorAdvancedControls key="advgb-summary-controls-hint">
                     <p style={{ color: 'red', fontStyle: 'italic' }}>
-                        {__( 'After manually changing the anchor, remember to refresh summary block to make the links work!' )}
+                        {__( 'After manually changing the anchor, remember to refresh summary block to make the links work!', 'advanced-gutenberg' )}
                     </p>
                 </InspectorAdvancedControls>,
             ] )
@@ -177,12 +177,12 @@
                 <Placeholder
                     icon={summaryBlockIcon}
                     label={summaryBlockTitle}
-                    instructions={__( 'Your current post/page has no headings. Try add some headings and update this block later' )}
+                    instructions={__( 'Your current post/page has no headings. Try add some headings and update this block later', 'advanced-gutenberg' )}
                 >
                     <Button onClick={this.updateSummary}
                             className={'button'}
                     >
-                        {__( 'Update' )}
+                        {__( 'Update', 'advanced-gutenberg' )}
                     </Button>
                 </Placeholder>
             );
@@ -219,33 +219,33 @@
                             <Toolbar>
                                 <IconButton className={'components-icon-button components-toolbar__control'}
                                             icon={'update'}
-                                            label={__( 'Update Summary' )}
+                                            label={__( 'Update Summary', 'advanced-gutenberg' )}
                                             onClick={this.updateSummary}
                                 />
                             </Toolbar>
                         </BlockControls>
                     ) }
                     <InspectorControls>
-                        <PanelBody title={ __( 'Summary settings' ) } >
+                        <PanelBody title={ __( 'Summary settings', 'advanced-gutenberg' ) } >
                             <ToggleControl
-                                label={ __( 'Load minimized' ) }
+                                label={ __( 'Load minimized', 'advanced-gutenberg' ) }
                                 checked={ !!loadMinimized }
                                 onChange={ () => setAttributes( { loadMinimized: !loadMinimized, postTitle: select('core/editor').getEditedPostAttribute('title') } ) }
                             />
                             {loadMinimized &&
                             <TextControl
-                                label={ __( 'Summary header title' ) }
+                                label={ __( 'Summary header title', 'advanced-gutenberg' ) }
                                 value={ headerTitle || '' }
-                                placeholder={ __( 'Enter header…' ) }
+                                placeholder={ __( 'Enter header…', 'advanced-gutenberg' ) }
                                 onChange={ (value) => setAttributes( { headerTitle: value } ) }
                             />
                             }
                             <PanelColorSettings
-                                title={ __( 'Anchor Color' ) }
+                                title={ __( 'Anchor Color', 'advanced-gutenberg' ) }
                                 initialOpen={ false }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Anchor Color' ),
+                                        label: __( 'Anchor Color', 'advanced-gutenberg' ),
                                         value: anchorColor,
                                         onChange: ( value ) => setAttributes( { anchorColor: value } ),
                                     },
@@ -289,13 +289,13 @@
 
     registerBlockType( 'advgb/summary', {
         title: summaryBlockTitle,
-        description: __( 'Show the table of content of current post/page.' ),
+        description: __( 'Show the table of content of current post/page.', 'advanced-gutenberg' ),
         icon: {
             src: summaryBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'summary' ), __( 'table of content' ), __( 'list' ) ],
+        keywords: [ __( 'summary', 'advanced-gutenberg' ), __( 'table of content', 'advanced-gutenberg' ), __( 'list', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
         supports: {
             multiple: false,

@@ -14,6 +14,7 @@ jQuery(document).ready(function ($) {
         var contactMsg = $(this).find('.advgb-form-input-msg').val();
         var date = new Date();
         var submitDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' - ' + date.getHours() + ':' + date.getMinutes();
+        var g_id = parseInt($thisForm.find('.advgb-grecaptcha').data('gid'));
 
         if (contactName === '' || contactEmail === '' || contactMsg === '') {
             var alertText = $thisForm.find('.advgb-form-submit').data('alert');
@@ -31,7 +32,7 @@ jQuery(document).ready(function ($) {
                 contact_email: contactEmail,
                 contact_msg: contactMsg,
                 submit_date: submitDate,
-                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse() : undefined
+                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined
             },
             beforeSend: function () {
                 $thisForm.find('.advgb-form-submit-wrapper').append('<div class="advgb-form-sending" />');

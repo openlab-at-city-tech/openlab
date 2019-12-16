@@ -227,7 +227,7 @@
             } );
 
             if (newSection.length < 2) {
-                alert( __( 'At least 1 row of current section must present.' ) );
+                alert( __( 'At least 1 row of current section must present.', 'advanced-gutenberg' ));
                 return false;
             }
 
@@ -771,18 +771,20 @@
 
                         if (this.isRangeSelected()) {
                             const { fromCell, toCell } = rangeSelected;
-                            const fCell = attributes[ sectionSelected ][fromCell.rowIdx].cells[fromCell.colIdx];
-                            const tCell = attributes[ sectionSelected ][toCell.rowIdx].cells[toCell.colIdx];
-                            const fcSpan = typeof fCell.colSpan === 'undefined' ? 0 : parseInt(fCell.colSpan) - 1;
-                            const frSpan = typeof fCell.rowSpan === 'undefined' ? 0 : parseInt(fCell.rowSpan) - 1;
-                            const tcSpan = typeof tCell.colSpan === 'undefined' ? 0 : parseInt(tCell.colSpan) - 1;
-                            const trSpan = typeof tCell.rowSpan === 'undefined' ? 0 : parseInt(tCell.rowSpan) - 1;
+                            if (attributes[ sectionSelected ][fromCell.rowIdx] && attributes[ sectionSelected ][toCell.rowIdx]) {
+                                const fCell = attributes[ sectionSelected ][fromCell.rowIdx].cells[fromCell.colIdx];
+                                const tCell = attributes[ sectionSelected ][toCell.rowIdx].cells[toCell.colIdx];
+                                const fcSpan = typeof fCell.colSpan === 'undefined' ? 0 : parseInt(fCell.colSpan) - 1;
+                                const frSpan = typeof fCell.rowSpan === 'undefined' ? 0 : parseInt(fCell.rowSpan) - 1;
+                                const tcSpan = typeof tCell.colSpan === 'undefined' ? 0 : parseInt(tCell.colSpan) - 1;
+                                const trSpan = typeof tCell.rowSpan === 'undefined' ? 0 : parseInt(tCell.rowSpan) - 1;
 
-                            isSelected = rowIndex >= Math.min(fromCell.rowIdx, toCell.rowIdx)
-                                && rowIndex <= Math.max(fromCell.rowIdx + frSpan, toCell.rowIdx + trSpan)
-                                && cI >= Math.min(fromCell.RCI, toCell.RCI)
-                                && cI <= Math.max(fromCell.RCI + fcSpan, toCell.RCI + tcSpan)
-                                && section === sectionSelected
+                                isSelected = rowIndex >= Math.min(fromCell.rowIdx, toCell.rowIdx)
+                                    && rowIndex <= Math.max(fromCell.rowIdx + frSpan, toCell.rowIdx + trSpan)
+                                    && cI >= Math.min(fromCell.RCI, toCell.RCI)
+                                    && cI <= Math.max(fromCell.RCI + fcSpan, toCell.RCI + tcSpan)
+                                    && section === sectionSelected;
+                            }
                         }
 
                         if (this.isMultiSelected()) {
@@ -810,7 +812,7 @@
 
                                         const { fromCell } = rangeSelected;
                                         if (section !== fromCell.section) {
-                                            alert( __( 'Cannot select multi cells from difference section!' ) );
+                                            alert( __( 'Cannot select multi cells from difference section!', 'advanced-gutenberg' ));
                                             return;
                                         }
                                         const toCell = {
@@ -829,7 +831,7 @@
                                         const existCell = multiCells.findIndex( (cel) => cel.rowIndex === rowIndex && cel.colIndex === colIndex );
 
                                         if (multiCells.length && section !== multiCells[0].section) {
-                                            alert( __( 'Cannot select multi cells from difference section!' ) );
+                                            alert( __( 'Cannot select multi cells from difference section!', 'advanced-gutenberg' ));
                                             return;
                                         }
 
@@ -899,21 +901,21 @@
                         <div className="advgb-init-table">
                             <TextControl
                                 type="number"
-                                label={ __( 'Column Count' ) }
+                                label={ __( 'Column Count', 'advanced-gutenberg' ) }
                                 value={ initCol }
                                 onChange={ ( value ) => this.setState( { initCol: value } ) }
                                 min="1"
                             />
                             <TextControl
                                 type="number"
-                                label={ __( 'Row Count' ) }
+                                label={ __( 'Row Count', 'advanced-gutenberg' ) }
                                 value={ initRow }
                                 onChange={ ( value ) => this.setState( { initRow: value } ) }
                                 min="1"
                             />
-                            <Button isPrimary onClick={ () => this.createTable() }>{ __( 'Create' ) }</Button>
+                            <Button isPrimary onClick={ () => this.createTable() }>{ __( 'Create', 'advanced-gutenberg' ) }</Button>
                             <div style={ { marginTop: 10 } }>
-                                <small>{ __( 'Hint: Hold CTRL key for multi cells selection. Hold SHIFT key for range cells selection.' ) }</small>
+                                <small>{ __( 'Hint: Hold CTRL key for multi cells selection. Hold SHIFT key for range cells selection.', 'advanced-gutenberg' ) }</small>
                             </div>
                         </div>
                     </Fragment>
@@ -923,37 +925,37 @@
             const TABLE_CONTROLS = [
                 {
                     icon: 'table-row-before',
-                    title: __( 'Add Row Before' ),
+                    title: __( 'Add Row Before', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.insertRow( 0 ),
                 },
                 {
                     icon: 'table-row-after',
-                    title: __( 'Add Row After' ),
+                    title: __( 'Add Row After', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.insertRow( 1 ),
                 },
                 {
                     icon: 'table-row-delete',
-                    title: __( 'Delete Row' ),
+                    title: __( 'Delete Row', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.deleteRow(),
                 },
                 {
                     icon: 'table-col-before',
-                    title: __( 'Add Column Before' ),
+                    title: __( 'Add Column Before', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.insertColumn( 0 ),
                 },
                 {
                     icon: 'table-col-after',
-                    title: __( 'Add Column After' ),
+                    title: __( 'Add Column After', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.insertColumn( 1 ),
                 },
                 {
                     icon: 'table-col-delete',
-                    title: __( 'Delete Column' ),
+                    title: __( 'Delete Column', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell || this.isRangeSelected() || this.isMultiSelected(),
                     onClick: () => this.deleteColumn(),
                 },
@@ -964,7 +966,7 @@
                             <path d="M4,5v13h17V5H4z M14,7v9h-3V7H14z M6,7h3v9H6V7z M19,16h-3V7h3V16z"/>
                         </svg>
                     ),
-                    title: __( 'Split Merged Cells' ),
+                    title: __( 'Split Merged Cells', 'advanced-gutenberg' ),
                     isDisabled: ! selectedCell
                         || (currentCell && !currentCell.rowSpan && !currentCell.colSpan)
                         || this.isRangeSelected()
@@ -980,7 +982,7 @@
                             <polygon points="21,4 2,4 2,6 21,6 21,4"/>
                         </svg>
                     ),
-                    title: __( 'Merge Cells' ),
+                    title: __( 'Merge Cells', 'advanced-gutenberg' ),
                     isDisabled: !this.isRangeSelected(),
                     onClick: () => this.mergeCells(),
                 },
@@ -988,7 +990,7 @@
 
             let BORDER_SELECT = [
                 {
-                    title: __( 'Border Top' ),
+                    title: __( 'Border Top', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M7 21h2v-2H7v2zm0-8h2v-2H7v2zm4 0h2v-2h-2v2zm0 8h2v-2h-2v2zm-8-4h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2v-2H3v2zm0-4h2V7H3v2zm8 8h2v-2h-2v2zm8-8h2V7h-2v2zm0 4h2v-2h-2v2zM3 3v2h18V3H3zm16 14h2v-2h-2v2zm-4 4h2v-2h-2v2zM11 9h2V7h-2v2zm8 12h2v-2h-2v2zm-4-8h2v-2h-2v2z"/>
@@ -998,7 +1000,7 @@
                     onClick: () => this.updateCellsStyles( { setBorder: 'top' } ),
                 },
                 {
-                    title: __( 'Border Right' ),
+                    title: __( 'Border Right', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M7 21h2v-2H7v2zM3 5h2V3H3v2zm4 0h2V3H7v2zm0 8h2v-2H7v2zm-4 8h2v-2H3v2zm8 0h2v-2h-2v2zm-8-8h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm8 8h2v-2h-2v2zm4-4h2v-2h-2v2zm4-10v18h2V3h-2zm-4 18h2v-2h-2v2zm0-16h2V3h-2v2zm-4 8h2v-2h-2v2zm0-8h2V3h-2v2zm0 4h2V7h-2v2z"/>
@@ -1008,7 +1010,7 @@
                     onClick: () => this.updateCellsStyles( { setBorder: 'right' } ),
                 },
                 {
-                    title: __( 'Border Bottom' ),
+                    title: __( 'Border Bottom', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M9 11H7v2h2v-2zm4 4h-2v2h2v-2zM9 3H7v2h2V3zm4 8h-2v2h2v-2zM5 3H3v2h2V3zm8 4h-2v2h2V7zm4 4h-2v2h2v-2zm-4-8h-2v2h2V3zm4 0h-2v2h2V3zm2 10h2v-2h-2v2zm0 4h2v-2h-2v2zM5 7H3v2h2V7zm14-4v2h2V3h-2zm0 6h2V7h-2v2zM5 11H3v2h2v-2zM3 21h18v-2H3v2zm2-6H3v2h2v-2z"/>
@@ -1018,7 +1020,7 @@
                     onClick: () => this.updateCellsStyles( { setBorder: 'bottom' } ),
                 },
                 {
-                    title: __( 'Border Left' ),
+                    title: __( 'Border Left', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M11 21h2v-2h-2v2zm0-4h2v-2h-2v2zm0-12h2V3h-2v2zm0 4h2V7h-2v2zm0 4h2v-2h-2v2zm-4 8h2v-2H7v2zM7 5h2V3H7v2zm0 8h2v-2H7v2zm-4 8h2V3H3v18zM19 9h2V7h-2v2zm-4 12h2v-2h-2v2zm4-4h2v-2h-2v2zm0-14v2h2V3h-2zm0 10h2v-2h-2v2zm0 8h2v-2h-2v2zm-4-8h2v-2h-2v2zm0-8h2V3h-2v2z"/>
@@ -1028,7 +1030,7 @@
                     onClick: () => this.updateCellsStyles( { setBorder: 'left' } ),
                 },
                 {
-                    title: __( 'Border All' ),
+                    title: __( 'Border All', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M3 3v18h18V3H3zm8 16H5v-6h6v6zm0-8H5V5h6v6zm8 8h-6v-6h6v6zm0-8h-6V5h6v6z"/>
@@ -1038,7 +1040,7 @@
                     onClick: () => this.updateCellsStyles( { setBorder: 'all' } ),
                 },
                 {
-                    title: __( 'Border None' ),
+                    title: __( 'Border None', 'advanced-gutenberg' ),
                     icon: (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M7 5h2V3H7v2zm0 8h2v-2H7v2zm0 8h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm-8 0h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm0-4h2V3H3v2zm8 8h2v-2h-2v2zm8 4h2v-2h-2v2zm0-4h2v-2h-2v2zm0 8h2v-2h-2v2zm0-12h2V7h-2v2zm-8 0h2V7h-2v2zm8-6v2h2V3h-2zm-8 2h2V3h-2v2zm4 16h2v-2h-2v2zm0-8h2v-2h-2v2zm0-8h2V3h-2v2z"/>
@@ -1052,7 +1054,7 @@
             if (this.isRangeSelected()) {
                 const EXTRA_BORDER_SELECT = [
                     {
-                        title: __( 'Border Vertical' ),
+                        title: __( 'Border Vertical', 'advanced-gutenberg' ),
                         icon: (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M3 9h2V7H3v2zm0-4h2V3H3v2zm4 16h2v-2H7v2zm0-8h2v-2H7v2zm-4 0h2v-2H3v2zm0 8h2v-2H3v2zm0-4h2v-2H3v2zM7 5h2V3H7v2zm12 12h2v-2h-2v2zm-8 4h2V3h-2v18zm8 0h2v-2h-2v2zm0-8h2v-2h-2v2zm0-10v2h2V3h-2zm0 6h2V7h-2v2zm-4-4h2V3h-2v2zm0 16h2v-2h-2v2zm0-8h2v-2h-2v2z"/>
@@ -1062,7 +1064,7 @@
                         onClick: () => this.updateCellsStyles( { setBorder: 'vert' } ),
                     },
                     {
-                        title: __( 'Border Horizontal' ),
+                        title: __( 'Border Horizontal', 'advanced-gutenberg' ),
                         icon: (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M3 21h2v-2H3v2zM5 7H3v2h2V7zM3 17h2v-2H3v2zm4 4h2v-2H7v2zM5 3H3v2h2V3zm4 0H7v2h2V3zm8 0h-2v2h2V3zm-4 4h-2v2h2V7zm0-4h-2v2h2V3zm6 14h2v-2h-2v2zm-8 4h2v-2h-2v2zm-8-8h18v-2H3v2zM19 3v2h2V3h-2zm0 6h2V7h-2v2zm-8 8h2v-2h-2v2zm4 4h2v-2h-2v2zm4 0h2v-2h-2v2z"/>
@@ -1072,7 +1074,7 @@
                         onClick: () => this.updateCellsStyles( { setBorder: 'horz' } ),
                     },
                     {
-                        title: __( 'Border Inner' ),
+                        title: __( 'Border Inner', 'advanced-gutenberg' ),
                         icon: (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M3 21h2v-2H3v2zm4 0h2v-2H7v2zM5 7H3v2h2V7zM3 17h2v-2H3v2zM9 3H7v2h2V3zM5 3H3v2h2V3zm12 0h-2v2h2V3zm2 6h2V7h-2v2zm0-6v2h2V3h-2zm-4 18h2v-2h-2v2zM13 3h-2v8H3v2h8v8h2v-8h8v-2h-8V3zm6 18h2v-2h-2v2zm0-4h2v-2h-2v2z"/>
@@ -1082,7 +1084,7 @@
                         onClick: () => this.updateCellsStyles( { setBorder: 'inner' } ),
                     },
                     {
-                        title: __( 'Border Outer' ),
+                        title: __( 'Border Outer', 'advanced-gutenberg' ),
                         icon: (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M13 7h-2v2h2V7zm0 4h-2v2h2v-2zm4 0h-2v2h2v-2zM3 3v18h18V3H3zm16 16H5V5h14v14zm-6-4h-2v2h2v-2zm-4-4H7v2h2v-2z"/>
@@ -1099,22 +1101,22 @@
             const HORZ_ALIGNMENT_CONTROLS = [
                 {
                     icon: 'editor-alignleft',
-                    title: __( 'Align left' ),
+                    title: __( 'Align left', 'advanced-gutenberg' ),
                     align: 'left',
                 },
                 {
                     icon: 'editor-aligncenter',
-                    title: __( 'Align center' ),
+                    title: __( 'Align center', 'advanced-gutenberg' ),
                     align: 'center',
                 },
                 {
                     icon: 'editor-alignright',
-                    title: __( 'Align right' ),
+                    title: __( 'Align right', 'advanced-gutenberg' ),
                     align: 'right',
                 },
                 {
                     icon: 'editor-justify',
-                    title: __( 'Align justify' ),
+                    title: __( 'Align justify', 'advanced-gutenberg' ),
                     align: 'justify',
                 },
             ];
@@ -1127,7 +1129,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Align top' ),
+                    title: __( 'Align top', 'advanced-gutenberg' ),
                     align: 'top',
                 },
                 {
@@ -1137,7 +1139,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Align middle' ),
+                    title: __( 'Align middle', 'advanced-gutenberg' ),
                     align: 'middle',
                 },
                 {
@@ -1147,7 +1149,7 @@
                             <path d="M0 0h24v24H0z" fill="none"/>
                         </svg>
                     ),
-                    title: __( 'Align bottom' ),
+                    title: __( 'Align bottom', 'advanced-gutenberg' ),
                     align: 'bottom',
                 },
             ];
@@ -1157,65 +1159,66 @@
                     <BlockControls>
                         <Toolbar>
                             <DropdownMenu
+                                hasArrowIndicator
                                 icon="editor-table"
-                                label={ __( 'Edit Table' ) }
+                                label={ __( 'Edit Table', 'advanced-gutenberg' ) }
                                 controls={ TABLE_CONTROLS }
                             />
                             <IconButton
                                 icon="update"
-                                label={ __( 'Refresh table (Use this after using undo or redo)' ) }
+                                label={ __( 'Refresh table (Use this after using undo or redo)', 'advanced-gutenberg' ) }
                                 onClick={ () => this.calculateRealColIndex() }
                             />
                         </Toolbar>
                     </BlockControls>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Table Settings' ) }>
+                        <PanelBody title={ __( 'Table Settings', 'advanced-gutenberg' ) }>
                             <RangeControl
-                                label={ __( 'Max width (px)' ) }
-                                help={ __( 'Set this to 0 to make max-width is 100%' ) }
+                                label={ __( 'Max width (px)', 'advanced-gutenberg' ) }
+                                help={ __( 'Set this to 0 to make max-width is 100%', 'advanced-gutenberg' ) }
                                 min={ 0 }
                                 max={ 1999 }
                                 value={ maxWidth }
                                 onChange={ ( value ) => setAttributes( { maxWidth: value } ) }
                             />
                             <ToggleControl
-                                label={ __( 'Fixed width table cells' ) }
+                                label={ __( 'Fixed width table cells', 'advanced-gutenberg' ) }
                                 checked={ hasFixedLayout }
                                 onChange={ () => setAttributes( { hasFixedLayout: !hasFixedLayout } ) }
                             />
                             <ToggleControl
-                                label={ __( 'Table header' ) }
+                                label={ __( 'Table header', 'advanced-gutenberg' ) }
                                 checked={ head && head.length }
                                 onChange={ () => this.toggleSection( 'head' ) }
                             />
                             <ToggleControl
-                                label={ __( 'Table footer' ) }
+                                label={ __( 'Table footer', 'advanced-gutenberg' ) }
                                 checked={ foot && foot.length }
                                 onChange={ () => this.toggleSection( 'foot' ) }
                             />
                             <ToggleControl
-                                label={ __( 'Border collapsed' ) }
+                                label={ __( 'Border collapsed', 'advanced-gutenberg' ) }
                                 checked={ tableCollapsed }
                                 onChange={ () => setAttributes( { tableCollapsed: !tableCollapsed } ) }
                             />
                         </PanelBody>
-                        <PanelBody title={ __( 'Cell Settings' ) }>
+                        <PanelBody title={ __( 'Cell Settings', 'advanced-gutenberg' ) }>
                             <PanelColorSettings
-                                title={ __( 'Color Settings' ) }
+                                title={ __( 'Color Settings', 'advanced-gutenberg' ) }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Background Color' ),
+                                        label: __( 'Background Color', 'advanced-gutenberg' ),
                                         value: this.getCellStyles( 'backgroundColor' ),
                                         onChange: ( value ) => this.updateCellsStyles( { backgroundColor: value } ),
                                     },
                                     {
-                                        label: __( 'Text Color' ),
+                                        label: __( 'Text Color', 'advanced-gutenberg' ),
                                         value: this.getCellStyles( 'color' ),
                                         onChange: ( value ) => this.updateCellsStyles( { color: value } ),
                                     },
                                 ] }
                             />
-                            <PanelBody title={ __( 'Border' ) } initialOpen={ false }>
+                            <PanelBody title={ __( 'Border', 'advanced-gutenberg' ) } initialOpen={ false }>
                                 <div className="advgb-border-item-wrapper">
                                     {BORDER_SELECT.map( ( item, index ) => (
                                         <div className="advgb-border-item" key={ index }>
@@ -1226,66 +1229,66 @@
                                     ) ) }
                                 </div>
                                 <SelectControl
-                                    label={ __( 'Border Style' ) }
+                                    label={ __( 'Border Style', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles( 'borderStyle' ) }
                                     options={ [
-                                        { label: __( 'Solid' ), value: 'solid' },
-                                        { label: __( 'Dashed' ), value: 'dashed' },
-                                        { label: __( 'Dotted' ), value: 'dotted' },
-                                        { label: __( 'None' ), value: 'none' },
+                                        { label: __( 'Solid', 'advanced-gutenberg' ), value: 'solid' },
+                                        { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
+                                        { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
+                                        { label: __( 'None', 'advanced-gutenberg' ), value: 'none' },
                                     ] }
                                     onChange={ ( value ) => this.updateCellsStyles( { borderStyle: value } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Border width' ) }
+                                    label={ __( 'Border width', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles( 'borderWidth' ) || 0 }
                                     min={ 0 }
                                     max={ 10 }
                                     onChange={ ( value ) => this.updateCellsStyles( { borderWidth: value } ) }
                                 />
                                 <PanelColorSettings
-                                    title={ __( 'Border Color' ) }
+                                    title={ __( 'Border Color', 'advanced-gutenberg' ) }
                                     colorSettings={ [
                                         {
-                                            label: __( 'Border Color' ),
+                                            label: __( 'Border Color', 'advanced-gutenberg' ),
                                             value: this.getCellStyles( 'borderColor' ),
                                             onChange: ( value ) => this.updateCellsStyles( { borderColor: value } ),
                                         },
                                     ] }
                                 />
                             </PanelBody>
-                            <PanelBody title={ __( 'Padding' ) } initialOpen={ false }>
+                            <PanelBody title={ __( 'Padding', 'advanced-gutenberg' ) } initialOpen={ false }>
                                 <RangeControl
-                                    label={ __( 'Padding Top' ) }
+                                    label={ __( 'Padding Top', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles('paddingTop') || 0 }
                                     min={ 0 }
                                     max={ 100 }
                                     onChange={ (value) => this.updateCellsStyles( { paddingTop: value } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Padding Right' ) }
+                                    label={ __( 'Padding Right', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles('paddingRight') || 0 }
                                     min={ 0 }
                                     max={ 100 }
                                     onChange={ (value) => this.updateCellsStyles( { paddingRight: value } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Padding Bottom' ) }
+                                    label={ __( 'Padding Bottom', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles('paddingBottom') || 0 }
                                     min={ 0 }
                                     max={ 100 }
                                     onChange={ (value) => this.updateCellsStyles( { paddingBottom: value } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Padding Left' ) }
+                                    label={ __( 'Padding Left', 'advanced-gutenberg' ) }
                                     value={ this.getCellStyles('paddingLeft') || 0 }
                                     min={ 0 }
                                     max={ 100 }
                                     onChange={ (value) => this.updateCellsStyles( { paddingLeft: value } ) }
                                 />
                             </PanelBody>
-                            <PanelBody title={ __( 'Text Alignment' ) } initialOpen={ false }>
-                                <BaseControl label={ __( 'Horizontal Align' ) }>
+                            <PanelBody title={ __( 'Text Alignment', 'advanced-gutenberg' ) } initialOpen={ false }>
+                                <BaseControl label={ __( 'Horizontal Align', 'advanced-gutenberg' ) }>
                                     <Toolbar
                                         controls={ HORZ_ALIGNMENT_CONTROLS.map( ( control ) => {
                                             const isActive = ( this.getCellStyles( 'textAlign' ) === control.align );
@@ -1298,7 +1301,7 @@
                                         } ) }
                                     />
                                 </BaseControl>
-                                <BaseControl label={ __( 'Vertical Align' ) }>
+                                <BaseControl label={ __( 'Vertical Align', 'advanced-gutenberg' ) }>
                                     <Toolbar
                                         controls={ VERT_ALIGNMENT_CONTROLS.map( ( control ) => {
                                             const isActive = ( this.getCellStyles( 'verticalAlign' ) === control.align );
@@ -1335,14 +1338,14 @@
     }
 
     registerBlockType( 'advgb/table', {
-        title: __( 'Advanced Table' ),
-        description: __( 'Advanced table block with more styles and functions.' ),
+        title: __( 'Advanced Table', 'advanced-gutenberg' ),
+        description: __( 'Advanced table block with more styles and functions.', 'advanced-gutenberg' ),
         icon: {
             src: tableBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'table' ), __( 'cell' ), __( 'data' ) ],
+        keywords: [ __( 'table', 'advanced-gutenberg' ), __( 'cell', 'advanced-gutenberg' ), __( 'data', 'advanced-gutenberg' ) ],
         attributes: {
             head: {
                 type: 'array',
@@ -1472,8 +1475,8 @@
             align: true,
         },
         styles: [
-            { name: 'default', label: __( 'Default' ), isDefault: true },
-            { name: 'stripes', label: __( 'Stripes' ) },
+            { name: 'default', label: __( 'Default', 'advanced-gutenberg' ), isDefault: true },
+            { name: 'stripes', label: __( 'Stripes', 'advanced-gutenberg' ) },
         ],
         edit: AdvTable,
         save: function ( { attributes } ) {

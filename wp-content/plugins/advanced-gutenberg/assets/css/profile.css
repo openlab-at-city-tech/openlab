@@ -12,6 +12,10 @@
     -webkit-animation: rotation 2s infinite linear;
 }
 
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab[href="#profiles"]:after {
+    display: none;
+}
+
 button[disabled] {
     opacity: 0.7;
 }

@@ -22,6 +22,11 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined'){
                 let missing_block = false;
                 // Retrieve all registered blocks
                 let blocks = wp.blocks.getBlockTypes();
+                const savedBlocks = {
+                    active_blocks: Object.values(advgb_blocks_vars.blocks.active_blocks),
+                    inactive_blocks: Object.values(advgb_blocks_vars.blocks.inactive_blocks),
+                };
+
                 for (let block in blocks) {
                     var blockItemIcon = '';
                     var blockItem = {
@@ -57,10 +62,10 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined'){
 
 
                     // Compare current block with the list of blocks we have
-                    if (advgb_blocks_vars.blocks.active_blocks.indexOf(blocks[block].name) >= 0) {
+                    if (savedBlocks.active_blocks.indexOf(blocks[block].name) >= 0) {
                         // Block is active
                         granted_blocks.push(blocks[block].name);
-                    } else if (advgb_blocks_vars.blocks.inactive_blocks.indexOf(blocks[block].name) >= 0) {
+                    } else if (savedBlocks.inactive_blocks.indexOf(blocks[block].name) >= 0) {
                         // Block is inactive
                     } else {
                         // This block is not in our database yet, but by default we allow the usage

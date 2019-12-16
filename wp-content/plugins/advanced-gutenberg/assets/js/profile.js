@@ -41,10 +41,8 @@ jQuery(document).ready(function ($) {
     if (typeof advgb !== undefined) {
         if (advgb.onProfileView) {
             $('.ju-menu-tabs a.link-tab[href="#profiles"]').click(function () {
-                if ($(this).hasClass('active') && $(this).hasClass('expanded')) {
-                    window.location = advgb.toProfilesList;
-                    return false;
-                }
+                window.location = advgb.toProfilesList;
+                return false;
             });
         }
     }

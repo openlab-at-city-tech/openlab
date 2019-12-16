@@ -28,10 +28,20 @@
 .advgb_qtip:after {
     content: "\e0cb";
     font-family: 'Material Icons';
-    font-size: 14px;
-    vertical-align: sub;
+    font-size: 15px;
+    vertical-align: middle;
     margin-left: 5px;
     color: inherit;
+}
+
+.ju-main-wrapper .ju-right-panel .ju-content-wrapper {
+    font-family: "Roboto", "Nunito Sans", sans-serif;
+}
+
+.ju-settings-option .ju-setting-label {
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    font-weight: bold;
 }
 
 /*Search input styles*/
