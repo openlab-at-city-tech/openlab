@@ -3,9 +3,9 @@
 /**
  * Plugin Name: PDF Embedder
  * Plugin URI: http://wp-pdf.com/
- * Description: Embed PDFs straight into your posts and pages, with flexible width and height. No third-party services required.
- * Version: 3.1.8
- * Author: Dan Lester
+ * Description: Embed PDFs straight into your posts and pages, with flexible width and height. No third-party services required. Compatible with Gutenberg Editor WordPress
+ * Version: 4.5
+ * Author: Lever Technology LLC
  * Author URI: http://wp-pdf.com/
  * License: GPL3
  * Text Domain: pdf-embedder
@@ -15,7 +15,7 @@ require_once( plugin_dir_path(__FILE__).'/core/core_pdf_embedder.php' );
 
 class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 
-	protected $PLUGIN_VERSION = '3.1.8';
+	protected $PLUGIN_VERSION = '4.5';
 	
 	// Singleton
 	private static $instance = null;
@@ -29,7 +29,7 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 	
 	// Basic specific
 
-    protected static $poweredby_optionname='pdfemb_poweredby';
+    protected static $poweredby_optionname='poweredby';
 
     public function pdfemb_activation_hook($network_wide) {
         parent::pdfemb_activation_hook($network_wide);
@@ -38,28 +38,30 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
         $old_options = get_site_option($this->get_options_name());
 
         if (!$old_options) {
-            update_site_option(self::$poweredby_optionname, true);
+            update_site_option(self::$poweredby_optionname, 'off');
         }
     }
 
     public function pdfemb_wp_enqueue_scripts() {
-		if (!$this->useminified()) {
-			wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'js/grabtopan-basic.js', array('jquery'), $this->PLUGIN_VERSION);
-			wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'js/pdfemb-pv-core.js',
-                array('pdfemb_grabtopan_js', 'jquery'), $this->PLUGIN_VERSION );
-			wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'js/pdfemb-basic.js',
-                array('jquery', 'pdfemb_pv_core_js'), $this->PLUGIN_VERSION);
-			wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/pdfemb-embed-pdf.js',
-				array('pdfemb_pv_core_js', 'pdfemb_versionspecific_pdf_js'), $this->PLUGIN_VERSION );
-		}
-		else {
-			wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/all-pdfemb-basic.min.js', array('jquery'), $this->PLUGIN_VERSION );
-		}
-		
-		wp_localize_script( 'pdfemb_embed_pdf_js', 'pdfemb_trans', $this->get_translation_array() );
-	
-		wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'js/pdfjs/pdf'.($this->useminified() ? '.min' : '').'.js', array(), $this->PLUGIN_VERSION);
-	}
+    	
+    			if (!$this->useminified()) {
+    				wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'js/grabtopan-basic.js', array('jquery'), $this->PLUGIN_VERSION);
+    				wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'js/pdfemb-pv-core.js',
+    	                array('pdfemb_grabtopan_js', 'jquery'), $this->PLUGIN_VERSION );
+    				wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'js/pdfemb-basic.js',
+    	                array('jquery', 'pdfemb_pv_core_js'), $this->PLUGIN_VERSION);
+    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/pdfemb-embed-pdf.js',
+    					array('pdfemb_pv_core_js', 'pdfemb_versionspecific_pdf_js'), $this->PLUGIN_VERSION );
+    			}
+    			else {
+    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/all-pdfemb-basic.min.js', array('jquery'), $this->PLUGIN_VERSION );
+    			}
+    			
+    			wp_localize_script( 'pdfemb_embed_pdf_js', 'pdfemb_trans', $this->get_translation_array() );
+    		
+    			wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'js/pdfjs/pdf'.($this->useminified() ? '.min' : '').'.js', array(), $this->PLUGIN_VERSION);
+    		
+    }
 	
 	protected function get_extra_js_name() {
 		return 'basic';
@@ -181,8 +183,9 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 	}
 
 	protected function get_translation_array() {
-		return array_merge(parent::get_translation_array(),
-				Array('poweredby' => get_site_option(self::$poweredby_optionname, false)));
+		return array_merge(parent::get_translation_array()
+			// ,Array('poweredby' => get_site_option(self::$poweredby_optionname, false))
+		);
 	}
 
 	public function pdfemb_attachment_fields_to_edit($form_fields, $post) {
