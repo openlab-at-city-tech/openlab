@@ -4,11 +4,11 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-add_action( 'gform_after_submission', array( 'GF_Field_Password', 'delete_passwords' ), 100, 2 );
-
 class GF_Field_Password extends GF_Field {
 
 	public $type = 'password';
+
+	private static $passwords = array();
 
 	public function get_form_editor_field_title() {
 		return esc_attr__( 'Password', 'gravityforms' );
@@ -283,7 +283,12 @@ class GF_Field_Password extends GF_Field {
 		return $value;
 	}
 
-
+	/**
+	 * @deprecated 2.4.16
+	 *
+	 * @param $entry
+	 * @param $form
+	 */
 	public static function delete_passwords( $entry, $form ) {
 		$password_fields = GFAPI::get_fields_by_type( $form, array( 'password' ) );
 
@@ -338,6 +343,42 @@ class GF_Field_Password extends GF_Field {
 
 		return isset( $confirm_input['isHidden'] ) ? ! $confirm_input['isHidden'] : true;
 
+	}
+
+	/**
+	 * Passwords are not saved to the database and won't be available in the runtime $entry object unless we stash and
+	 * rehydrate them into the $entry object after it has been retrieved from the database.
+	 *
+	 * @since 2.4.16
+	 *
+	 * @param $form
+	 */
+	public static function stash_passwords( $form ) {
+		foreach( $form['fields'] as $field ) {
+			/* @var GF_Field $field */
+			if ( $field->get_input_type() == 'password' ) {
+				self::$passwords[ $field->id ] = $field->get_value_submission( rgpost( 'gform_field_values' ) );
+			}
+		}
+	}
+
+	/**
+	 * Hydrate the stashed passwords back into the runtime $entry object that has just been saved and retrieved from the
+	 * database.
+	 *
+	 * @since 2.4.16
+	 *
+	 * @param $entry
+	 *
+	 * @return array $entry
+	 */
+	public static function hydrate_passwords( $entry ) {
+		foreach( self::$passwords as $field_id => $password ) {
+			$entry[ $field_id ] = $password;
+		}
+		// Reset passwords so they are not available for the next submission in multi-submission requests (only possible via API).
+		self::$passwords = array();
+		return $entry;
 	}
 
 }

@@ -701,8 +701,8 @@ function gformShowPasswordStrength(fieldId){
     var password = document.getElementById( fieldId ).value,
         confirm = document.getElementById( fieldId + '_2' ) ? document.getElementById( fieldId + '_2' ).value : '';
 
-    var result = gformPasswordStrength(password, confirm),
-        text = window['gf_text']["password_" + result],
+    var result = gformPasswordStrength( password, confirm ),
+        text = window[ 'gf_text' ][ "password_" + result ],
         resultClass = result === 'unknown' ? 'blank' : result;
 
     jQuery("#" + fieldId + "_strength").val(result);
@@ -710,7 +710,7 @@ function gformShowPasswordStrength(fieldId){
 }
 
 // Password strength meter
-function gformPasswordStrength(password1, password2) {
+function gformPasswordStrength( password1, password2 ) {
 
     if ( password1.length <= 0 ) {
         return 'blank';
@@ -1494,7 +1494,7 @@ var GFCalc = function(formId, formulaFields){
             formulaInput.val(result).trigger('change');
         }
 
-    }
+    };
 
     this.runCalcs = function( formId, formulaFields ) {
 	    for(var i=0; i<formulaFields.length; i++) {
@@ -2269,34 +2269,62 @@ function gf_raw_input_change( event, elem ) {
 
     if( event.type == 'keyup' ) {
         __gf_keyup_timeout = setTimeout( function() {
-            gf_input_change( this, formId, fieldId );
+            gf_input_change( elem, formId, fieldId );
         }, 300 );
     } else {
-        gf_input_change( this, formId, fieldId );
+        gf_input_change( elem, formId, fieldId );
     }
 
 }
 
+/**
+ * Get the input id from a form element's HTML id.
+ *
+ * @param {string} htmlId The HTML id of a form element.
+ *
+ * @returns {string} inputId The input id.
+ */
 function gf_get_input_id_by_html_id( htmlId ) {
 
     var ids = gf_get_ids_by_html_id( htmlId ),
-        id  = ids[2];
+        id  = ids[ ids.length - 1 ];
 
-    if( ids[3] ) {
-        id += '.' + ids[3];
+    if ( ids.length == 3 ) {
+        ids.shift();
+        id = ids.join( '.' );
     }
 
     return id;
 }
 
+/**
+ * Get the form id from a form element's HTML id.
+ *
+ * @param {string} htmlId The HTML id of a form element.
+ *
+ * @returns {string} formId The form id.
+ */
 function gf_get_form_id_by_html_id( htmlId ) {
-    var ids = gf_get_ids_by_html_id( htmlId ),
-        id  = ids[1];
-    return id;
+    var ids = gf_get_ids_by_html_id( htmlId );
+    return ids[0];
 }
 
+/**
+ * Get the form, field, and input id by a form elements HTML id.
+ *
+ * Note: Only multi-input fields will be return an input ID.
+ *
+ * @param {string} htmlId The HTML id of a form element.
+ *
+ * @returns {array} ids An array contain the form, field and input id.
+ */
 function gf_get_ids_by_html_id( htmlId ) {
-    var ids = htmlId ? htmlId.split( '_' ) : false;
+    var ids = htmlId ? htmlId.split( '_' ) : [];
+    for( var i = ids.length - 1; i >= 0; i-- ) {
+        if ( ! gformIsNumber( ids[ i ] ) ) {
+            ids.splice( i, 1 );
+        }
+    }
     return ids;
 }
 
