@@ -1,358 +1,174 @@
 <?php
 /**
- * @package WP Static HTML Output
+ * @package WP2Static
  *
  * Copyright (c) 2011 Leon Stafford
  */
 
-$settings = esc_html($this->staticExportSettings);
-if ($settings == '') {
-    $settings = 'no existing settings found';
-}
+$ajax_nonce = wp_create_nonce( 'wpstatichtmloutput' );
+
+require_once(__DIR__ . '/../plugin/WP2Static/TemplateHelper.php');
+
+$tpl = new TemplateHelper();
+
 ?>
 
-<script>
-var settings = '<?php echo $settings; ?>';
+<div class="wrap wp2static">
+  <?php if ( PHP_VERSION < 5.4 ) : ?>
 
-jQuery(document).ready(function($){
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-    }
+   <div class="notice notice-error inline">
+      <h2 class="title">Outdated PHP version detected</h2>
+      <p>The current officially supported PHP versions can be found on <a href="http://php.net/supported-versions.php" target="_blank">PHP.net</a></p>
 
-    function notifyMe() {
-      if (!Notification) {
-        alert('All exports are complete!.'); 
-        return;
-      }
+      <p>Whilst the plugin tries to work on the most common PHP environments, it currently requires PHP 5.4 or higher.</p>
 
-      if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-      } else {
-        var notification = new Notification('WP Static HTML Export', {
-          icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Wordpress_Shiny_Icon.svg/768px-Wordpress_Shiny_Icon.svg.png',
-          body: "Exports have finished!",
-        });
+      <p>As official security support drops for PHP 5.6 at the end of 2018, it is strongly recommended to upgraded your WordPress hosting environment to PHP 7, ideally, PHP 7.1 or 7.2, as 7.0 will also stop being supported in December, 2018.<br><br>For help on upgrading your environment, please join our support community at <a href="https://wp2static.com/community/" target="_blank">https://wp2static.com/community/</a></p>
 
-        notification.onclick = function () {
-          parent.focus();
-          window.focus();
-          this.close();
-        };
-      }
-    }
-
-    var currentArchive = 1;
-
-    function processArchives() {
-        $('.hiddenActionField').val('generate_archive');
-        archives = $('.options-form');
-        numberOfArchives = archives.length;
-
-        if (currentArchive <= numberOfArchives) {
-            data = $(archives[currentArchive - 1]).serialize();
-            $.ajax({
-                url: ajaxurl,
-                data: data,
-                dataType: 'html',
-                method: 'POST',
-                success: function(serverResponse) {
-                    $('#results').append(serverResponse);
-                    currentArchive += 1;
-                    processArchives();
-                    }
-            });
-        } else {
-             currentArchive = 0;
-            // all archives processed
-            $('#progress').hide();
-            notifyMe();
-        }
-    }
-
-    function saveOptions() {
-        // toggles between saving and generating archives
-        // TODO: 'save' would be better name here....
-        $('.hiddenActionField').val('generate');
-        archives = $('.options-form');
-        numberOfArchives = archives.length;
-        var newSettings = $(".options-form").serialize();
-        // stick json encoded settings into hidden field within form(s)
-        $(".hiddenSettingsField").val(newSettings);
-        // submit first form which encapsulates all others 
-        $(archives[0]).submit();
-    }
-
-    $('#generateArchiveButton').click(function() {
-        $('#progress').show();
-        processArchives();
-        $('#results').html('');
-    });
-
-    $('.wrap').on('click', '.removeTargetButton', function(event) {
-        event.preventDefault();
-
-        if ($('.options-form').length === 1) {
-            alert("Sorry, got to keep at least one settings block around. But, you can delete the values if you like");
-        } else {
-            $(event.target).closest('.options-form').remove();
-        }
-    });
-
-    $('.wrap').on('click', '.saveSettingsButton', function(event) {
-        // TODO: needed prevention?
-        event.preventDefault();
-        $('#progress').show();
-        saveOptions();
-        $('#results').html('');
-    });
-
-    $('.wrap').on('click', '.addAnotherTargetButton', function(event) {
-        event.preventDefault();
-       $('.options-form:last').clone().insertAfter('.options-form:last');
-    });
-
-    //  load existing settings
-    if (settings != 'no existing settings found') {
-        archives = settings.split('baseUrl=');
-        // remove crufty first element
-        archives.shift();
-
-        // first run, will populate only form on page
-        var targetExportSettingsBlock = $('.options-form')[0];
-
-        // iterate each saved settings chunk and create forms for them
-        $.each(archives, function(index, value) {
-            renderedExportSettingsBlocks = $('.options-form').length;
-            targetExportSettingsBlock = $('.options-form:last');
-            archive = 'baseUrl=' + value;
-            archive = archive.substring(0, archive.indexOf('&amp;staticExportSettings='));
-
-            settingsBlock = JSON.parse('{"' + decodeURI(archive).replace(/\n/g, ",").replace(/\r/g, ",").replace(/"/g, '\\"').replace(/&amp;/g, '","').replace(/=/g,'":"') + '"}');
-        
-            $(targetExportSettingsBlock).find('#baseUrl').first().val(decodeURIComponent(settingsBlock.baseUrl));
-
-            additionalUrls = settingsBlock.additionalUrls.split(',');
-            newAdditionalUrls = '';
-
-            $.each(additionalUrls, function(index, value) {
-               if (value != '') {
-                   newAdditionalUrls += decodeURIComponent(value) + "\n"; 
-               }
-            });
-
-            $(targetExportSettingsBlock).find('#additionalUrls').val(newAdditionalUrls);
-            $(targetExportSettingsBlock).find('#cleanMeta')[0].checked = settingsBlock.cleanMeta;
-            $(targetExportSettingsBlock).find('#retainStaticFiles')[0].checked = settingsBlock.retainStaticFiles;
-            $(targetExportSettingsBlock).find('#sendViaFTP')[0].checked = settingsBlock.sendViaFTP;
-            $(targetExportSettingsBlock).find('#ftpServer').first().val(decodeURIComponent(settingsBlock.ftpServer));
-            $(targetExportSettingsBlock).find('#ftpUsername').first().val(decodeURIComponent(settingsBlock.ftpUsername));
-            $(targetExportSettingsBlock).find('#ftpPassword').first().val(decodeURIComponent(settingsBlock.ftpPassword));
-            $(targetExportSettingsBlock).find('#ftpRemotePath').first().val(decodeURIComponent(settingsBlock.ftpRemotePath));
-            $(targetExportSettingsBlock).find('#sendViaS3')[0].checked = settingsBlock.sendViaS3;
-            $(targetExportSettingsBlock).find('#s3Key').first().val(decodeURIComponent(settingsBlock.s3Key));
-            $(targetExportSettingsBlock).find('#s3Secret').first().val(decodeURIComponent(settingsBlock.s3Secret));
-            $(targetExportSettingsBlock).find('#s3Region').first().val(decodeURIComponent(settingsBlock.s3Region));
-            $(targetExportSettingsBlock).find('#s3Bucket').first().val(decodeURIComponent(settingsBlock.s3Bucket));
-            $(targetExportSettingsBlock).find('#sendViaDropbox')[0].checked = settingsBlock.sendViaDropbox;
-            $(targetExportSettingsBlock).find('#dropboxAccessToken').first().val(decodeURIComponent(settingsBlock.dropboxAccessToken));
-            $(targetExportSettingsBlock).find('#dropboxFolder').first().val(decodeURIComponent(settingsBlock.dropboxFolder));
-
-
-            // if there are more to come, clone and set target
-            if (index < (archives.length -1)) {
-                $('.options-form:last').clone().insertAfter('.options-form:last');
-                targetExportSettingsBlock =  $('.options-form:last');
-                $(targetExportSettingsBlock).find('#baseUrl').first().val('');
-                $(targetExportSettingsBlock).find('#additionalUrls').val('');
-                $(targetExportSettingsBlock).find('#cleanMeta').first().prop('checked', false);
-                $(targetExportSettingsBlock).find('#retainStaticFiles').first().prop('checked', false);
-                $(targetExportSettingsBlock).find('#sendViaFTP').first().prop('checked', false);
-                $(targetExportSettingsBlock).find('#ftpServer').val('');
-                $(targetExportSettingsBlock).find('#ftpUsername').val('');
-                $(targetExportSettingsBlock).find('#ftpPassword').val('');
-                $(targetExportSettingsBlock).find('#ftpRemotePath').val('');
-                $(targetExportSettingsBlock).find('#sendViaS3').first().prop('checked', false);
-                $(targetExportSettingsBlock).find('#s3Key').val('');
-                $(targetExportSettingsBlock).find('#s3Secret').val('');
-                $(targetExportSettingsBlock).find('#s3Region').val('');
-                $(targetExportSettingsBlock).find('#s3Bucket').val('');
-                $(targetExportSettingsBlock).find('#sendViaDropbox').first().prop('checked', false);
-                $(targetExportSettingsBlock).find('#dropboxAccessToken').val('');
-                $(targetExportSettingsBlock).find('#dropboxFolder').val('');
-            }
-        });
-    }
-});
-</script>
-
-<div class="wrap">
-	
-	<h2><?php echo __('WP Static HTML Output - Configure & Run', 'static-html-output-plugin');?></h2>
-
-	<div class="postbox-container">
-		<div class="metabox-holder">
-			<div class="meta-box-sortables ui-sortable">
-
-				<form id="general-options" class="options-form" method="post" action="">
-
-					<div class="postbox">
-
-              <h3>
-                <span><?php echo __('Configurable options', 'static-html-output-plugin');?></span>
-              </h3>
-
-              <div class="inside">
-                <p>
-                  <strong><label for="baseUrl"><?php echo __('Base Url', 'static-html-output-plugin');?></label></strong>
-                  <p>
-                    <i>This defaults to your WordPress Site URL. If you know the URL of where you'll be hosting the static version of your site, it will be good to change this to that, ie http://mystaticsite.github.io</i>
-                  </p> 
-                  <input type="text" id="baseUrl" name="baseUrl" value="<?php echo esc_attr($this->baseUrl) ?>" size="50" />
-                </p>
-                
-                <p>
-                  <strong><label for="additionalUrls"><?php echo __('Additional Urls', 'static-html-output-plugin');?></label></strong>
-                  <p>
-                    <i>For a few themes, certain files may not be detected as part of the export process. Enter any such files here, one per line.
-
-                    Enter them as the full URL, including your WordPress site url, ie:</i>
-<pre>http://localhost/wp-content/themes/twentyseventeen/banana.jpg
-http://172.17.0.3/my_pricelist.pdf</pre>
-                  </p>
-                  <textarea class="widefat" name="additionalUrls" id="additionalUrls" rows="5" cols="10"><?php echo esc_html($this->additionalUrls) ?></textarea>
-                </p>
-
-                <fieldset>
-                    <label for="cleanMeta">
-                        <input name="cleanMeta" id="cleanMeta" value="1" type="checkbox" <?php if ($this->cleanMeta == 1) echo "checked"; ?> />
-                        <span><?php echo __('Strip out unneeded WordPress meta tags, ie &lt;meta name="generator" content="WordPress...', 'static-html-output-plugin');?></span>
-                    </label>
-                </fieldset>
-                
-                <fieldset>
-                    <label for="retainStaticFiles">
-                        <input name="retainStaticFiles" id="retainStaticFiles" value="1" type="checkbox" <?php if ($this->retainStaticFiles == 1) echo "checked"; ?> />
-                        <span><?php echo __('Retain generated static files on server', 'static-html-output-plugin');?></span>
-                    </label>
-                </fieldset>
-
-                <fieldset>
-                    <label for="sendViaFTP">
-                    <input name="sendViaFTP" id="sendViaFTP" value="1" type="checkbox" <?php if ($this->sendViaFTP == 1) echo "checked"; ?> />
-                        <span><?php echo __('Transfer files via FTP', 'static-html-output-plugin');?></span>
-                    </label>
-                </fieldset>
-
-                <input name="ftpServer" class="regular-text" id="ftpServer" value="<?php echo esc_attr($this->ftpServer) ?>" placeholder="<?php echo __('FTP Server', 'static-html-output-plugin');?>" />
-                <span class="description">ie, localhost, 192.168.1.7, ftp.mydomain.com, etc</span>
-                <br>
-
-                <input name="ftpUsername" class="regular-text" id="ftpUsername" value="<?php echo esc_attr($this->ftpUsername) ?>" placeholder="<?php echo __('FTP Username', 'static-html-output-plugin');?>" />
-                <br>
-
-                <input class="regular-text" name="ftpPassword" id="ftpPassword" type="password" value="" placeholder="<?php echo __('FTP Password', 'static-html-output-plugin');?>" />
-                <br>
-
-                <input class="regular-text" name="ftpRemotePath" id="ftpRemotePath" value="<?php echo esc_attr($this->ftpRemotePath) ?>" placeholder="<?php echo __('FTP Remote Path', 'static-html-output-plugin');?>" />
-                <span class="description">will attempt to create folder recursively if non-existent</span>
-                <br>
-            
-
-                <br>
-                <fieldset>
-                    <label for="sendViaS3">
-                    <input name="sendViaS3" id="sendViaS3" value="1" type="checkbox" <?php if ($this->sendViaS3 == 1) echo "checked"; ?> />
-                        <span><?php echo __('Transfer files via S3', 'static-html-output-plugin');?></span>
-                    </label>
-                </fieldset>
-
-                <input name="s3Key" class="regular-text" id="s3Key" value="<?php echo esc_attr($this->s3Key) ?>" placeholder="<?php echo __('S3 Key', 'static-html-output-plugin');?>" />
-                <span class="description">ie, AKIAIOSFODNN7EXAMPLE</span>
-                <br>
-
-
-                <input name="s3Secret" class="regular-text" id="s3Secret" value="<?php echo esc_attr($this->s3Secret) ?>" placeholder="<?php echo __('S3 Secret', 'static-html-output-plugin');?>" />
-                <span class="description">ie, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY</span>
-                <br>
-
-                <select name="s3Region" id="s3Region">
-                    <option value="us-east-1">US East (N. Virginia)</option>
-                    <option value="us-east-2">US East (Ohio)</option>
-                    <option value="us-west-1">US West (N. California)</option>
-                    <option value="us-west-2">US West (Oregon)</option>
-                    <option value="ca-central-1">Canada (Central)</option>
-                    <option value="ap-south-1">Asia Pacific (Mumbai)</option>
-                    <option value="ap-northeast-2">Asia Pacific (Seoul)</option>
-                    <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
-                    <option value="ap-southeast-2">Asia Pacific (Sydney)</option>
-                    <option value="ap-northeast-1">Asia Pacific (Tokyo)</option>
-                    <option value="eu-central-1">EU (Frankfurt)</option>
-                    <option value="eu-west-1">EU (Ireland)</option>
-                    <option value="eu-west-2">EU (London)</option>
-                    <option value="sa-east-1">South America (São Paulo)</option>
-                </select>
-                <span class="description">choose the region your bucket is in</span>
-                <br>
-
-                <input name="s3Bucket" class="regular-text" id="s3Bucket" value="<?php echo esc_attr($this->s3Bucket) ?>" placeholder="<?php echo __('S3 Bucket name', 'static-html-output-plugin');?>" />
-                <span class="description">ie, my-static-site</span>
-                <br>
-
-                <br>
-                <fieldset>
-                    <label for="sendViaDropbox">
-                    <input name="sendViaDropbox" id="sendViaDropbox" value="1" type="checkbox" <?php if ($this->sendViaDropbox == 1) echo "checked"; ?> />
-                        <span><?php echo __('Transfer files via Dropbox', 'static-html-output-plugin');?></span>
-                    </label>
-                </fieldset>
-
-                <input name="dropboxAccessToken" class="regular-text" id="dropboxAccessToken" value="<?php echo esc_attr($this->dropboxAccessToken) ?>" placeholder="<?php echo __('Dropbox access token', 'static-html-output-plugin');?>" />
-                <span class="description"><a href="https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/" target="_blank">How do I get this?</a></span>
-                <br>
-
-                <input name="dropboxFolder" class="regular-text" id="dropboxFolder" value="<?php echo esc_attr($this->dropboxFolder) ?>" placeholder="<?php echo __('Dropbox folder', 'static-html-output-plugin');?>" />
-                <span class="description">ie, where you want this to appear in your Dropbox account</span>
-                <br>
-
-					<p class="submit">
-            <?php wp_nonce_field($this->onceAction) ?>
-						<input id="formActionHiddenField" class="hiddenActionField" type="hidden" name="action" value="generate" />
-						<input name="staticExportSettings" class="hiddenSettingsField" type="hidden" name="action" value="" />
-						<input class="saveSettingsButton button-primary" value="Save current options" />
-                        <button class="button addAnotherTargetButton">Add another export target</button>
-                        <button class="button removeTargetButton">Remove this export target</button>
-					</p>
-						</div>
-					</div>
-
-				</form>
-					<div class="postbox">
-						<div class="handlediv" title="Click to toggle"><br /></div>
-
-              <h3 class="hndle"><span><?php echo __('Export your site', 'static-html-output-plugin');?></span></h3>
-
-              <div class="inside">
-                <p>
-
-    <div id="progress" style="display:none;">
-        <img src="<?php echo plugins_url('../images/dashinfinity.gif', __FILE__); ?>" />
+      <p>Your current PHP version is: <?php echo PHP_VERSION; ?></p>
     </div>
 
-    <div id="results">
+  <?php endif; ?>
+
+
+  <?php if ( ! $this->wp_site->uploads_writable ) : ?>
+
+   <div class="notice notice-error inline is-dismissible">
+      <h2 class="title">Your uploads directory is not writable</h2>
+      <p>Please ensure that <code><?php echo $this->wp_site->wp_uploads_path; ?></code>
+            is writable by your webserver. 
+    </p>
     </div>
 
-                  <p>
-                    <i>Clicking the button below will start the process of generating a static site from your WordPress installation. Depending on the size of your website, this process may take some time.</i>
-                  </p>
+  <?php endif; ?>
 
-					<p class="submit">
-            <?php wp_nonce_field($this->onceAction) ?>
-						<input id="generateArchiveButton" class="button-primary" value="Start static site export" />
-					</p>
-                </p>
-						</div>
-					</div>
-			</div>
-		</div>
-	</div>
+  <?php if ( ! $this->wp_site->curl_enabled ) : ?>
+
+   <div class="notice notice-error inline is-dismissible">
+      <h2 class="title">You need the cURL extension enabled on your web server</h2>
+        <p> This is a library that allows the plugin to better export your static site out to services like GitHub, S3, Dropbox, BunnyCDN, etc. It's usually an easy fix to get this working. You can try Googling "How to enable cURL extension for PHP", along with the name of the environment you are using to run your WordPress site. This may be something like DigitalOcean, GoDaddy or LAMP, MAMP, WAMP for your webserver on your local computer. If you're still having trouble, the developer of this plugin is easger to help you get up and running. Please ask for help on our <a href="https://forum.wp2static.com">forum</a>.</p>
+    </div>
+
+  <?php endif; ?>
+
+  <?php if ( ! $this->wp_site->permalinks_set ) : ?>
+
+   <div class="notice notice-error inline is-dismissible">
+      <h2 class="title">You need to set your WordPress Pemalinks</h2>
+
+        <p>Due to the nature of how static sites work, you'll need to have some kind of permalinks structure defined in your <a href="<?php echo admin_url( 'options-permalink.php' ); ?>">Permalink Settings</a> within WordPress. To learn more on how to do this, please see WordPress's official guide to the <a href="https://codex.wordpress.org/Settings_Permalinks_Screen">Settings Permalinks Screen</a>.</p>
+    </div>
+
+  <?php endif; ?>
+
+  <h2 class="nav-tab-wrapper">
+    <a href="#" class="nav-tab nav-tab-active">Deploy static website</a>
+    <a href="#" class="nav-tab">Crawling</a>
+    <a href="#" class="nav-tab">Processing</a>
+    <a href="#" class="nav-tab">Advanced options</a>
+    <a href="#" class="nav-tab">Help</a>
+    <a href="#" class="nav-tab">Logs</a>
+    <a href="#" class="nav-tab"><span class="dashicons dashicons-heart" style="color:red;margin-top:3px;"></span></a>
+  </h2>
+
+
+  <!-- main form containing options that get sent -->
+  <form id="general-options" class="options-form" method="post" action="">
+
+    <!-- placeholder input fields to allow select menu deployment options to use existing behaviour -->
+    <span class="hiddenExportOptions" style="display:none;">
+      <?php $tpl->displayCheckbox($this, 'createZip', 'Create a ZIP file of your statically exported site, ready for you to manually deploy. Download link will appear in the Export Log below'); ?>
+    </span>
+
+    <?php
+
+    function generateDeploymentMethodOptions() {
+      $options = array(
+        "folder" => array('Subdirectory on current server', 'free'),
+        "blank1" => array("--- Manual Deployment ---", 'free'),
+        "zip" => array('ZIP archive (.zip)'),
+        "blank2" => array("--- Automated Deployment ---"),
+        "s3" => array("Amazon S3"),
+        "bitbucket" => array("Bitbucket"),
+        "bunnycdn" => array("BunnyCDN"),
+        "github" => array("GitHub Pages"),
+        "gitlab" => array("GitLab"),
+        "netlify" => array("Netlify"),
+        "blank3" => array("--- Other Automated Deployments ---"),
+        "ftp" => array("FTP"),
+      );
+
+      foreach ($options as $key => $value) {
+            echo "<option value='$key'>$value[0]</option>";
+      }
+    }
+
+    ?>
+
+    <?php require_once(__DIR__ . '/tab_export.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_crawling.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_processing.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_advanced.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_help.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_logs.phtml'); ?>
+    <?php require_once(__DIR__ . '/tab_love.phtml'); ?>
+
+    <br>
+
+    <span class="submit" style="display:none;">
+      <?php wp_nonce_field($this->onceAction) ?>
+      <input id="formActionHiddenField" class="hiddenActionField" type="hidden" name="action" value="wp_static_html_output_ajax" />
+      <input id="basedir" type="hidden" name="basedir" value="" />
+      <input id="wp_site_url" type="hidden" name="wp_site_url" value="" />
+      <input id="wp_uploads_path" type="hidden" name="wp_uploads_path" value="" />
+      <input id="wp_uploads_url" type="hidden" name="wp_uploads_url" value="" />
+      <input id="subdirectory" type="hidden" name="subdirectory" value="<?php echo $this->wp_site->subdirectory; ?>" />
+      <input id="wp_site_path" type="hidden" name="wp_site_path" value="" />
+      <input id="wp_inc" type="hidden" name="wp_inc" value="" />
+      <input id="wp_active_theme" type="hidden" name="wp_active_theme" value="" />
+      <input id="wp_uploads" type="hidden" name="wp_uploads" value="" />
+      <input id="hiddenNonceField" type="hidden" name="nonce" value="<?php echo $ajax_nonce; ?>" />
+      <input id="hiddenAJAXAction" type="hidden" name="ajax_action" value="" />
+      <input name="staticExportSettings" class="hiddenSettingsField" type="hidden" name="action" value="" />
+    </span>
+  </form>
+
+    </div>
+  </div>
+
+    <div id="wp2static-footer">
+
+          <div class="inside">
+
+            <div class="submit">
+              <?php wp_nonce_field($this->onceAction) ?>
+              <button id="startExportButton" class="button-primary button-hero" disabled>Start static site export</button>
+              <button class="saveSettingsButton button-secondary" disabled>Save current options</button>
+              <button class="button resetDefaultSettingsButton" disabled>Reset to default settings</button>
+              <button style="display:none;" class="button cancelExportButton">Cancel export</button>
+
+              <a href="" id="downloadZIP"><button class="button button-secondary button-call-to-action" target="_blank">Download ZIP</button></a>
+
+              <a href="#" class="button button-secondary button-call-to-action" target="_blank" id="goToMyStaticSite" style="display:none;">Go to my deployed site</a>
+
+            </div>
+
+        </div><!-- end inside -->
+
+            <div id="pbar-container">
+                <div id="pbar-fill">
+
+                </div>
+
+                <div id="progress-container">
+                  <div id="progress">
+                    <div class="pulsate-css"></div>
+                    <div id="current_action">Starting export</div>
+                  </div>
+
+                  <p id="exportDuration" style="display:block;"></p>
+                </div>
+            </div>
+
+    </div><!-- end wp2static-footer -->
+
 </div>

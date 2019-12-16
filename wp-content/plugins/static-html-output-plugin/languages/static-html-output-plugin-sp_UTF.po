@@ -12,63 +12,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-Language: Japanese\n"
-"X-Poedit-Country: JAPAN\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: LATIN AMERICA\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../wp-static-html-output.php:30
 msgid "Settings"
-msgstr "設定"
+msgstr "Ajustes"
 
 #: ../WP2Static.php:135
 msgid "WP Static HTML Output"
-msgstr "WordPress静的HTML出力"
+msgstr "Salida WordPress en HTML"
 
 #: ../views/options-page.phtml:11
 msgid "WP Static HTML Output Plugin"
-msgstr "WordPress静的HTML出力プラグイン"
+msgstr "Enchunfle de Salida Wordpress en HTML"
 
 #: ../views/options-page.phtml:26
 msgid "Export Options"
-msgstr "静的HTML化設定"
+msgstr "Opciones de exportaciòn"
 
 #: ../views/options-page.phtml:29
 msgid "Base Url"
-msgstr "ベースURL"
+msgstr "Base URL"
 
 #: ../views/options-page.phtml:34
 msgid "Additional Urls"
-msgstr "その他のファイル"
+msgstr "URLs Adicionales"
 
 #: ../views/options-page.phtml:40
 msgid "Generate Zip archive of whole site"
-msgstr "サイト全体をZIPファイルに圧縮する"
+msgstr "Comprime todo el sitio en un archivo ZIP"
 
 #: ../views/options-page.phtml:45
 msgid "Retain generated static files on server"
-msgstr "現場サーバーに書き出されたHTMLファイルを保存する"
+msgstr "Guarde el archivo HTML exportado al servidor del sitio"
 
 #: ../views/options-page.phtml:50
 msgid "Transfer files via FTP"
-msgstr "FTPサーバーに送信する"
+msgstr "Transfiere archivos a travès de FTP"
 
 #: ../views/options-page.phtml:51
 msgid "FTP functionality is in Beta testing: For large sites, page may seem unresponsive until complete. If in doubt, check your remote FTP directory for activity."
-msgstr "FTPサーバーに送信する機能がまだテスト中なので不安定の場合もございます"
+msgstr "La funcionalidad de FTP est· en la prueba Beta: para sitios grandes, la p·gina puede parecer insensible hasta que se complete. En caso de duda, verifique su actividad en el directorio FTP remoto."
 
 #: ../views/options-page.phtml:55
 msgid "FTP Server"
-msgstr "FTPサーバーアドレス"
+msgstr "Servidor de FTP"
 
 #: ../views/options-page.phtml:60
 msgid "FTP Username"
-msgstr "FTPユーザ名"
+msgstr "Nombre de uso de el FTP"
 
 #: ../views/options-page.phtml:65
 msgid "FTP Password"
-msgstr "FTPパスワード"
+msgstr "Contraseña de FTP"
 
 #: ../views/options-page.phtml:70
 msgid "FTP Remote Path"
-msgstr "FTPのリモートパス"
+msgstr "Ruta remota de FTP"
 
