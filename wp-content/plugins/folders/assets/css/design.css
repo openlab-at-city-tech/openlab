@@ -76,6 +76,7 @@
 
 .wcp-container .first-space {
     margin-left: 10px;
+    top: 10px;
 }
 
 i.fa-caret-right {
@@ -128,6 +129,13 @@ html[dir="rtl"] .wcp-content {
     left: auto;
     right: 160px;
 }
+body.folded .wcp-content {
+    left: 36px;
+}
+html[dir="rtl"] body.folded .wcp-content {
+    left: auto;
+    right: 36px;
+}
 body.wp-admin #wpcontent {
     padding-left: 310px;
     transition: all 0.15s linear;
@@ -147,6 +155,7 @@ html[dir="rtl"] body.wp-admin #wpcontent {
     margin: 0;
     padding: 0 0 10px 0;
     line-height: 29px;
+    min-height: 36px;
 }
 .form-operations {
     border: solid 1px #e5e5e5;
@@ -232,6 +241,7 @@ button#wcp-save-folder {
     cursor: move;
     left: 5px;
     top: 2px;
+    height: 26px;
 }
 .route.active-item > span.ui-icon {
     background: #008ec2;
@@ -252,6 +262,22 @@ button#wcp-save-folder {
     background: #dfdfdf;
     cursor: pointer;
 }
+.wcp-container .route .title img {
+    display: none;
+    width: 14px;
+    height: 14px;
+    margin: 5px auto 0;
+}
+.wcp-container .route .title:hover {
+    background: #dfdfdf;
+    cursor: pointer;
+}
+.wcp-container .route .title:hover img {
+    display: block;
+}
+.wcp-container .route .title:hover .ui-icon i {
+    display: none;
+}
 body.no-hover-css .wcp-container .route .title:hover {
     background: transparent;
 }
@@ -269,11 +295,21 @@ body.no-hover-css .wcp-container .route .title:hover {
     -webkit-box-shadow: 0 3px 5px -3px #333333;
     -moz-box-shadow: 0 3px 5px -3px #333333;
     box-shadow: 0 3px 5px -3px #333333;
+    position: relative;
 }
 .add-new-folder:hover, .add-new-folder:focus {
-    background: #bc0f50;
+    /*background: #bc0f50;*/
     color: #ffffff;
-    border: solid 1px #bc0f50
+    /*border: solid 1px #bc0f50;*/
+}
+.add-new-folder:hover:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.10);
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .add-new-folder span {
     display: block;
@@ -287,8 +323,8 @@ body.no-hover-css .wcp-container .route .title:hover {
 }
 .form-options {
     background: #fff;
-    padding: 10px 10px 0 10px;
-    margin: 10px 0 0px;
+    padding: 10px 0px 0 10px;
+    margin: 0 0px;
 }
 .form-options ul {
     margin: 0;
@@ -305,14 +341,14 @@ body.no-hover-css .wcp-container .route .title:hover {
 .form-options li a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 12px;
+    padding: 5px 10px;
     color: #000;
     background: #ccc;
     box-shadow: 0 1px 0 #ccc;
     vertical-align: middle;
     border: solid 1px #ccc;
     border-radius: 3px;
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
 }
 .form-options li.last a {
     padding: 3px;
@@ -334,6 +370,9 @@ a#expand-collapse-list.all-open span:before {
     display: inline-block;
     vertical-align: top;
 }
+.un-categorised-items {
+    border-radius: 3px;
+}
 .header-posts a, .un-categorised-items a {
     color: #444444;
     padding: 7px;
@@ -343,8 +382,19 @@ a#expand-collapse-list.all-open span:before {
     font-size: 14px;
     line-height: 18px;
 }
-.header-posts a:hover, .un-categorised-items:hover {
+.header-posts a:hover, .un-categorised-items:hover, .un-categorised-items.active-item {
     background: #dfdfdf;
+    border-radius: 3px;
+}
+.header-posts a.active-item, .un-categorised-items.active-item {
+    background: #008ec2 !important;
+    color: #fff !important;
+}
+.un-categorised-items.active-item a {
+    color: #fff !important;
+}
+.un-categorised-items.active-item a span, .header-posts a.active-item span.total-count {
+    color: #444444 !important;
 }
 span.total-count {
     float: right;
@@ -461,7 +511,7 @@ display: inline;
 .form-loader {
     width: 100%;
     height: 5px;
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 }
 .form-loader-count {
     width: 0;
@@ -499,9 +549,12 @@ th#wcp_move {
 }
 td.wcp_move.column-wcp_move {
     vertical-align: middle;
+}
+.wp-list-table tr td .wcp-move-file {
+    vertical-align: middle;
     opacity: 0;
 }
-.wp-list-table tr:hover .column-wcp_move:hover, .wp-list-table td.wcp_move.column-wcp_move.wcp-draggable {
+.wp-list-table tr:hover td .wcp-move-file, .wp-list-table td.wcp_move.column-wcp_move.wcp-draggable {
     opacity: 1;
 }
 .wcp-drop-hover {
@@ -633,6 +686,7 @@ span.wcp-item {
 
 div#custom-menu {
     padding-bottom: 120px;
+    padding-left: 4px;
 }
 .wcp-container .route span.star-icon {
     position: relative;
@@ -767,6 +821,7 @@ div#custom-menu {
     -webkit-border-radius: 5px;
     margin-top: 0px;
     cursor: none;
+    font-size: 12px;
 }
 .media-frame, .media-frame-content, .media-frame .attachments-browser {
     overflow: inherit;
@@ -832,9 +887,22 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    position: relative;
 }
-.wcp-hide-show-buttons .toggle-buttons:hover {
-    background: #bc0f50;
+.wcp-hide-show-buttons:hover .toggle-buttons:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.10);
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-border-top-right-radius: 50%;
+    -webkit-border-bottom-right-radius: 50%;
+    -moz-border-radius-topright: 50%;
+    -moz-border-radius-bottomright: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
 }
 .hide-folders-area .wcp-content {
     width: 0px !important;
@@ -863,11 +931,22 @@ button.button.organize-button {
     -webkit-box-shadow: 0 3px 5px -3px #333333;
     -moz-box-shadow: 0 3px 5px -3px #333333;
     box-shadow: 0 3px 5px -3px #333333;
+    position: relative;
 }
 button.button.organize-button:hover, button.button.organize-button:focus {
-    background: #bc0f50;
+    /*background: #bc0f50;*/
     color: #ffffff;
-    border: solid 1px #bc0f50;
+    /*border: solid 1px #bc0f50;*/
+}
+
+button.button.organize-button:hover:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.10);
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .tree-structure-content ul {
     margin: 0;
@@ -922,14 +1001,376 @@ button.button.organize-button:hover, button.button.organize-button:focus {
 }
 span.media-info-message {
     vertical-align: middle;
-    line-height: 50px;
+    line-height: 20px;
     font-weight: bold;
     color: #f51366;
     padding: 0 0 0 20px;
     display: none !important;;
 }
 span.media-info-message.active {
+    display: block !important;
+}
+
+
+/* custom popup css */
+.folder-popup-form {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    display: none;
+}
+.folder-popup-form.disabled {
+    pointer-events: none;
+}
+.popup-form-content {
+    background: #ffffff;
+    min-height: 100px;
+    width: 400px;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    -webkit-transform: translate(0, -50%);
+    -moz-transform: translate(0, -50%);
+    -o-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    padding: 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.folder-form-buttons a, .folder-form-buttons button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 10px 3px;
+    font-size: 18px;
+    line-height: 22px;
+    border-radius: .25em;
+    color: #ffffff;
+    border: none;
+}
+.folder-form-buttons a span, .folder-form-buttons button span {
+    -webkit-animation: fa-spin 0.75s infinite linear;
+    animation: fa-spin 0.75s infinite linear;
+}
+
+[data-tooltip] {
+    position: relative; /* opinion 1 */
+}
+
+/* Applies to all tooltips */
+[data-tooltip]::before,
+[data-tooltip]::after {
+    text-transform: none; /* opinion 2 */
+    font-size: .9em; /* opinion 3 */
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    position: absolute;
+    display: none;
+    opacity: 0;
+}
+[data-tooltip]::before {
+    content: '';
+    border: 5px solid transparent; /* opinion 4 */
+    z-index: 1001; /* absurdity 1 */
+}
+[data-tooltip]::after {
+    content: attr(data-tooltip); /* magic! */
+
+    /* most of the rest of this is opinion */
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+
+    /*
+      Let the content set the size of the tooltips
+      but this will also keep them from being obnoxious
+      */
+    min-width: 3em;
+    max-width: 21em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1ch 1.5ch;
+    border-radius: .3ch;
+    box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
+    background: #333;
+    color: #fff;
+    z-index: 1000; /* absurdity 2 */
+}
+
+/* Make the tooltips respond to hover */
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+    display: block;
+    opacity: 1;
+}
+/* FLOW: UP */
+[data-tooltip]:not([flow])::before,
+[data-tooltip][flow^="up"]::before {
+    bottom: 100%;
+    border-bottom-width: 0;
+    border-top-color: #333;
+}
+[data-tooltip]:not([flow])::after,
+[data-tooltip][flow^="up"]::after {
+    bottom: calc(100% + 5px);
+}
+[data-tooltip]:not([flow])::before,
+[data-tooltip]:not([flow])::after,
+[data-tooltip][flow^="up"]::before,
+[data-tooltip][flow^="up"]::after {
+    left: 50%;
+    transform: translate(-50%, -.5em);
+}
+
+#remove-folder-item {
+    width: 126px !important;
+}
+.wp-core-ui .button-primary.select-all-item-btn {
+    margin: 11px 11px 11px 0;
+    display: none !important;
+}
+.wp-core-ui .button-primary.select-all-item-btn.active {
     display: inline-block !important;
+}
+.form-options li.last.folder-checkbox {
+    padding: 8px 0 0 6px;
+}
+#custom-menu input.checkbox {
+    display: none;
+}
+#custom-menu.show-folder-checkbox input.checkbox {
+    display: block;
+    margin: 5px 0 0 0;
+}
+#custom-menu.show-folder-checkbox h3.title > .ui-icon > i, #custom-menu.show-folder-checkbox h3.title > .ui-icon > img{
+    display: none !important;
+}
+@-webkit-keyframes fa-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+.folder-form-buttons a:hover, .folder-form-buttons a:focus, .folder-form-buttons button:hover, .folder-form-buttons button:focus {
+    color: #ffffff;
+    background-image: linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1));
+}
+.folder-form-buttons a:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50,100,150,.4);
+}
+.form-cancel-btn {
+    background-color: #aaaaaa;
+}
+.form-submit-btn {
+    background-color: #3085d6;
+}
+.add-update-folder-title {
+    display: block;
+    position: relative;
+    max-width: 100%;
+    margin: 0 0 .4em;
+    padding: 0;
+    color: #595959;
+    font-size: 1.875em;
+    font-weight: 600;
+    text-align: center;
+    text-transform: none;
+    word-wrap: break-word;
+    line-height: 30px;
+}
+.folder-form-input input {
+    width: 100%;
+    transition: border-color .3s,box-shadow .3s;
+    border: 1px solid #d9d9d9;
+    border-radius: .1875em;
+    font-size: 1.125em;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.06);
+    box-sizing: border-box;
+    height: 2.625em;
+    padding: 0 .75em;
+    margin: 1em auto;
+}
+.folder-form-message {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 25px 0;
+}
+.folder-form-errors {
+    margin: 0 0 10px 0;
+    padding: 8px 0;
+    background: #ffe4e4;
+    color: #a20000;
+    display: none;
+}
+.folder-form-errors.active {
+    display: block;
+}
+
+.sticky-menu #adminmenuwrap {
+    position: relative !important;
+}
+span.folder-loader-ajax {
+    float: right;
+    margin: 0px 8px 0 0;
+    line-height: 30px;
+    display:none;
+}
+.folder-loader-ajax.active {
+    display: inline-block;
+}
+@-webkit-keyframes scaleAnimation {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes scaleAnimation {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+@-webkit-keyframes drawCircle {
+    0% {
+        stroke-dashoffset: 151px;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes drawCircle {
+    0% {
+        stroke-dashoffset: 151px;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@-webkit-keyframes drawCheck {
+    0% {
+        stroke-dashoffset: 36px;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes drawCheck {
+    0% {
+        stroke-dashoffset: 36px;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+#successAnimationCircle {
+    stroke-dasharray: 151px 151px;
+    stroke: #2CE0A7;
+}
+
+#successAnimationCheck {
+    stroke-dasharray: 36px 36px;
+    stroke: #2CE0A7;
+}
+
+#successAnimationResult {
+    fill: #2CE0A7;
+    opacity: 0;
+}
+svg#successAnimation {
+    width: 34px;
+    height: 34px;
+    padding: 0 0 0px 0;
+    display: none;
+    float: left;
+}
+#successAnimation.active {
+    display: inline-block;
+}
+.folder-loader-ajax img {
+    display: none;
+}
+.folder-loader-ajax img.active {
+    display: inline-block;
+}
+
+#successAnimation.animated {
+    -webkit-animation: 1s ease-out 0s 1 both scaleAnimation;
+    animation: 1s ease-out 0s 1 both scaleAnimation;
+}
+#successAnimation.animated #successAnimationCircle {
+    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
+    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
+}
+#successAnimation.animated #successAnimationCheck {
+    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
+    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
+}
+#successAnimation.animated #successAnimationResult {
+    -webkit-animation: 0.3s linear 0.9s both fadeIn;
+    animation: 0.3s linear 0.9s both fadeIn;
+}
+.mCSB_scrollTools a+.mCSB_draggerContainer {
+    margin: 10px 0 !important;
 }
 @media screen and (max-width: 1300px) {
     .tree-structure li {

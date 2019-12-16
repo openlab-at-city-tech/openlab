@@ -831,6 +831,7 @@ div#wpwrap {
 .payments {
     margin: 20px 0 0 0;
 }
+
 @media only screen and (max-width: 640px) {
     .rpt_plans .rpt_plan {
         width: 96%;

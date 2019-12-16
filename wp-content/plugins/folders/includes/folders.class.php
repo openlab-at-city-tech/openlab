@@ -1,6 +1,5 @@
 <?php
-
-defined('ABSPATH') or die('Nope, not accessing this');
+defined('ABSPATH') or wp_die('Nope, not accessing this');
 
 class WCP_Folders
 {
@@ -25,65 +24,59 @@ class WCP_Folders
         add_action('admin_enqueue_scripts', array($this, 'folders_admin_scripts'));
         add_filter('plugin_action_links_' . WCP_FOLDERS_PLUGIN_BASE, [$this, 'plugin_action_links']);
         add_action('admin_footer', array($this, 'admin_footer'));
+
+        /* check for polygon media */
+        $polylang_options = get_option("polylang");
+        if(is_array($polylang_options) && isset($polylang_options['media_support']) && $polylang_options['media_support'] == 1) {
+            $polylang_options['media_support'] = 0;
+            update_option("polylang", $polylang_options);
+        }
+
         add_action('parse_tax_query', array($this, 'taxonomy_archive_exclude_children'));
+        add_action('admin_footer', array($this, 'admin_footer_for_media'));
 
         /* Save Data */
         add_action('wp_ajax_wcp_add_new_folder', array($this, 'wcp_add_new_folder'));
-
         /* Update Data */
         add_action('wp_ajax_wcp_update_folder', array($this, 'wcp_update_folder'));
-
         /* Remove Data */
         add_action('wp_ajax_wcp_remove_folder', array($this, 'wcp_remove_folder'));
-
+        /* Remove Multple Folder */
+        add_action('wp_ajax_wcp_remove_muliple_folder', array($this, 'remove_muliple_folder'));
         /* Save State Data */
         add_action('wp_ajax_save_wcp_folder_state', array($this, 'save_wcp_folder_state'));
-
         /* Save State Data */
         add_action('wp_ajax_wcp_save_parent_data', array($this, 'wcp_save_parent_data'));
-
         /* Update Parent Data */
         add_action('wp_ajax_wcp_update_parent_information', array($this, 'wcp_update_parent_information'));
-
         /* Update Parent Data */
         add_action('wp_ajax_wcp_save_folder_order', array($this, 'wcp_save_folder_order'));
-
         /* Update Parent Data */
         add_action('wp_ajax_wcp_mark_un_mark_folder', array($this, 'wcp_mark_un_mark_folder'));
-
         /* Update Parent Data */
         add_action('wp_ajax_wcp_change_post_folder', array($this, 'wcp_change_post_folder'));
-
         /* Update Parent Data */
         add_action('wp_ajax_wcp_change_multiple_post_folder', array($this, 'wcp_change_multiple_post_folder'));
-
-        /* Update Parent Data */
-        add_action('wp_ajax_wcp_remove_post_folder', array($this, 'wcp_remove_post_folder'));
-
         /* Update width Data */
         add_action('wp_ajax_wcp_change_post_width', array($this, 'wcp_change_post_width'));
-
         /* Update width Data */
         add_action('wp_ajax_wcp_change_folder_display_status', array($this, 'wcp_change_folder_display_status'));
-
-
         /* Update width Data */
         add_action('wp_ajax_wcp_change_all_status', array($this, 'wcp_change_all_status'));
-
         self::$folders = 10;
 
         /* Send message on plugin deactivate */
         add_action( 'wp_ajax_folder_plugin_deactivate', array( $this, 'folder_plugin_deactivate' ) );
-
+        /* Update Parent Data */
+        add_action('wp_ajax_wcp_remove_post_folder', array($this, 'wcp_remove_post_folder'));
         /* Send message on owner */
         add_action( 'wp_ajax_wcp_folder_send_message_to_owner', array( $this, 'wcp_folder_send_message_to_owner' ) );
-
         /* Get default list */
         add_action( 'wp_ajax_wcp_get_default_list', array( $this, 'wcp_get_default_list' ) );
-
+        /* Get default list */
+        add_action( 'wp_ajax_get_folders_default_list', array( $this, 'get_folders_default_list' ) );
         /* Auto select folder for new page, post */
         add_action('new_to_auto-draft', array($this, 'new_to_auto_draft'), 10);
-
         /* for media */
         add_action('restrict_manage_posts', array($this, 'output_list_table_filters'), 10, 2);
         add_filter('pre_get_posts', array($this, 'filter_attachments_list'));
@@ -93,11 +86,11 @@ class WCP_Folders
 
         /* to filter un assigned items*/
         add_filter('pre_get_posts', array($this, 'filter_record_list'));
-
-        /**/
         add_filter('pre-upload-ui', array($this, 'show_dropdown_on_media_screen'));
-
         add_action('add_attachment', array($this, 'add_attachment_category'));
+
+        /* check for default folders */
+        add_filter('pre_get_posts', array($this, 'check_for_default_folders'));
 
         $options = get_option("folders_settings");
 
@@ -124,13 +117,108 @@ class WCP_Folders
                 add_action('manage_'.$option.'_posts_custom_column', array($this, 'wcp_manage_columns_content'), 2, 2);
             }
         }
+
+        add_action("wp_ajax_folder_update_status", array($this, 'folder_update_status'));
+
+
+    }
+
+    public function admin_footer_for_media(){
+        echo "<style>";
+        $customize_folders = get_option('customize_folders');
+        if(isset($customize_folders['dropdown_color']) && !empty($customize_folders['dropdown_color'])) {
+            ?>
+            #media-attachment-taxonomy-filter, .post-upload-ui .folder_for_media { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
+            .folder_for_media option {color:#000000;}
+            .folder_for_media option:first-child {
+                font-weight: bold;
+            }
+            <?php
+        }
+        echo "</style>";
+    }
+
+    public function check_for_default_folders() {
+        global $typenow, $current_screen;
+        $isAjax = (defined('DOING_AJAX') && DOING_AJAX)?1:0;
+        $options = get_option('folders_settings');
+        $options = (empty($options) || !is_array($options))?array():$options;
+        if(!$isAjax && in_array($typenow, $options) && (isset($current_screen->base) && ($current_screen->base == "edit" || ($current_screen->base == "upload")))) {
+            $default_folders = get_option('default_folders');
+            $default_folders = (empty($default_folders) || !is_array($default_folders))?array():$default_folders;
+
+            $status = 1;
+            if(isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
+                $type = self::get_custom_post_type($typenow);
+                $term = get_term_by('slug', $default_folders[$typenow], $type);
+                if(empty($term) || !is_object($term)) {
+                    $status = 0;
+                }
+            } else {
+                $status = 0;
+            }
+
+            if($status) {
+                if ($typenow == "attachment") {
+                    $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
+                    if (!isset($_REQUEST['media_folder'])) {
+                        if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
+                            $admin_url .= $default_folders[$typenow];
+//                        wp_redirect($admin_url);
+                            ?>
+                            <script>
+                                window.location = '<?php echo $admin_url ?>';
+                            </script>
+                            <?php
+                            exit;
+                        }
+                    }
+                } else {
+                    $admin_url = admin_url("edit.php?post_type=" . $typenow);
+                    if (isset($_GET['s']) && !empty($_GET['s'])) {
+                        $admin_url .= "&s=" . $_GET['s'];
+                    }
+                    $post_type = self::get_custom_post_type($typenow);
+                    $admin_url .= "&{$post_type}=";
+                    if (!isset($_REQUEST[$post_type])) {
+                        if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
+                            $admin_url .= $default_folders[$typenow];
+                            ?>
+                            <script>
+                                window.location = '<?php echo $admin_url ?>';
+                            </script>
+                            <?php
+                            exit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function folder_update_status() {
+        if(!empty($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], 'folder_update_status')) {
+            $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+            update_option("folder_update_message", 2);
+            if($status == 1) {
+                $url = 'https://go.premio.io/api/update.php?email='.$email.'&plugin=folders';
+                $handle = curl_init();
+                curl_setopt($handle, CURLOPT_URL, $url);
+                curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($handle);
+                curl_close($handle);
+            }
+        }
+        echo "1";
+        die;
     }
 
     public function add_attachment_category($post_ID)
     {
         if(self::is_for_this_post_type('attachment') || self::is_for_this_post_type('media')) {
             $folder_id = isset($_REQUEST["folder_for_media"]) ? $_REQUEST["folder_for_media"] : null;
-            if (!is_null($folder_id)) {
+            if ($folder_id !== null) {
                 $folder_id = (int)$folder_id;
                 $folder_id = self::sanitize_options($folder_id, "int");
                 if ($folder_id > 0) {
@@ -147,6 +235,9 @@ class WCP_Folders
     public function show_dropdown_on_media_screen() {
         if(self::is_for_this_post_type('attachment')) {
             $post_type = self::get_custom_post_type('attachment');
+            global $typenow, $current_screen;
+//            echo $typenow;
+//            echo "<pre>"; print_r($current_screen); die;
             if(!class_exists('WCP_Tree')) {
                 $files = array(
                     'WCP_Tree' => WCP_DS . "includes" . WCP_DS . "tree.class.php"
@@ -158,11 +249,19 @@ class WCP_Folders
                     }
                 }
             }
-            $options = WCP_Tree::get_folder_option_data($post_type);;
-            echo '<p class="attachments-category">'.esc_html__("Select a folder (Optional)", WCP_FOLDER).'<br/></p>
+            $options = WCP_Tree::get_folder_option_data($post_type);?>
+            <p class="attachments-category"><?php esc_html_e("Select a folder (Optional)", WCP_FOLDER) ?></p>
+            <p class="attachments-category"><?php esc_html_e("First select the folder, and the upload the files", WCP_FOLDER) ?><br/></p>
 	        <p>
-	            <select name="folder_for_media" class="folder_for_media"><option value="-1">- '.esc_html__('Uncategorized', WCP_FOLDER).'</option>'.$options.'</select>
-	        </p>';
+	            <select name="folder_for_media" class="folder_for_media">
+                    <option value="-1">- <?php esc_html_e('Uncategorized', WCP_FOLDER) ?></option>
+                    <?php echo $options ?>
+                    <?php if($typenow == "attachment" && isset($current_screen->base) && $current_screen->base == "upload") {?>
+                        <option value="add-folder"><?php esc_html_e('+ Create a New Folder', WCP_FOLDER) ?></option>
+                    <?php } ?>
+                </select>
+	        </p>
+            <?php
         }
     }
 
@@ -173,28 +272,28 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['status']) || empty($postData['status'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -206,7 +305,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_change_folder_display_status()
@@ -216,28 +315,28 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['status']) || empty($postData['status'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -249,7 +348,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_remove_post_folder() {
@@ -258,19 +357,19 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_id']) || empty($postData['post_id'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         }
         if ($errorCounter == 0) {
@@ -290,68 +389,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
-//        wp_delete_object_term_relationships
-    }
-
-    public function wcp_get_default_list() {
-        $post_type = 'attachment';
-
-        $total_posts = wp_count_posts($post_type)->inherit;;
-
-        $empty_items = self::get_total_empty_posts('attachment');
-
-        $post_type = self::get_custom_post_type($post_type);
-        $terms_data = WCP_Tree::get_full_tree_data($post_type);
-        $taxonomies = self::get_terms_hierarchical('media_folder');
-
-        $response = array(
-            'status' => 1,
-            'data' => $terms_data,
-            'total_items' => $total_posts,
-            'taxonomies' => $taxonomies,
-            'empty_items' => $empty_items
-        );
-        echo json_encode($response);
-        die;
-    }
-
-    function save_media_terms( $post_id ) {
-        if ( wp_is_post_revision( $post_id ) ) {
-            return;
-        }
-        $post = get_post($post_id);
-        if($post->post_type !== 'attachment') {
-            return;
-        }
-        $post_type = self::get_custom_post_type('attachment');
-        $selected_folder = get_option("selected_{$post_type}_folder");
-        if($selected_folder != null && !empty($selected_folder)) {
-            $terms = get_term($selected_folder);
-            if(!empty($terms) && isset($terms->term_id)) {
-                wp_set_post_terms($post_id, $terms->term_id, $post_type, false);
-            }
-        }
-    }
-
-    public function filter_attachments_grid( $args ) {
-        $taxonomy = 'media_folder';
-        if ( ! isset( $args[ $taxonomy ] ) ) {
-            return $args;
-        }
-        $term = sanitize_text_field( $args[ $taxonomy ] );
-        if ( $term != "-1" ) {
-            return $args;
-        }
-        unset( $args[ $taxonomy ] );
-        $args['tax_query'] = array(
-            array(
-                'taxonomy'  => $taxonomy,
-                'operator'  => 'NOT EXISTS',
-            ),
-        );
-        $args = apply_filters( 'media_library_organizer_media_filter_attachments_grid', $args );
-        return $args;
+        wp_die();
     }
 
     public function filter_record_list($query) {
@@ -393,32 +431,188 @@ class WCP_Folders
         return $query;
     }
 
+    public function wcp_get_default_list() {
+
+        $postData = filter_input_array(INPUT_POST);
+
+        $post_type = $postData['type'];
+
+        $total_posts = wp_count_posts($post_type)->inherit;
+
+        $empty_items = self::get_total_empty_posts($post_type);
+
+        $post_type = self::get_custom_post_type($post_type);
+//        $terms_data = WCP_Tree::get_full_tree_data($post_type);
+        $taxonomies = self::get_terms_hierarchical($post_type);
+
+        $response = array(
+            'status' => 1,
+//            'data' => $terms_data,
+            'total_items' => $total_posts,
+            'taxonomies' => $taxonomies,
+            'empty_items' => $empty_items
+        );
+        echo json_encode($response);
+        wp_die();
+    }
+
+    function get_folders_default_list() {
+        $postData = filter_input_array(INPUT_POST);
+
+        $post_type = $postData['type'];
+
+        if($post_type != 'attachment') {
+            $total_posts = self::get_total_posts($post_type);
+        } else {
+            $total_posts = wp_count_posts($post_type)->inherit;
+        }
+
+        $empty_items = self::get_total_empty_posts($post_type);
+
+        $post_type = self::get_custom_post_type($post_type);
+
+//        $terms_data = WCP_Tree::get_full_tree_data($post_type);
+
+        $taxonomies = self::get_terms_hierarchical($post_type);
+
+        $response = array(
+            'status' => 1,
+//            'data' => $terms_data,
+            'total_items' => $total_posts,
+            'empty_items' => $empty_items,
+            'taxonomies' => $taxonomies
+        );
+        echo json_encode($response);
+        die;
+
+    }
+
+    function save_media_terms( $post_id ) {
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
+        $post = get_post($post_id);
+        if($post->post_type !== 'attachment') {
+            return;
+        }
+        $post_type = self::get_custom_post_type('attachment');
+        $selected_folder = get_option("selected_{$post_type}_folder");
+        if($selected_folder != null && !empty($selected_folder)) {
+            $terms = get_term($selected_folder);
+            if(!empty($terms) && isset($terms->term_id)) {
+                wp_set_post_terms($post_id, $terms->term_id, $post_type, false);
+            }
+        }
+    }
+
+    public function filter_attachments_grid( $args ) {
+        $taxonomy = 'media_folder';
+        if ( ! isset( $args[ $taxonomy ] ) ) {
+            return $args;
+        }
+        $term = sanitize_text_field( $args[ $taxonomy ] );
+        if ( $term != "-1" ) {
+            return $args;
+        }
+        unset( $args[ $taxonomy ] );
+        $args['tax_query'] = array(
+            array(
+                'taxonomy'  => $taxonomy,
+                'operator'  => 'NOT EXISTS',
+            ),
+        );
+        $args = apply_filters( 'media_library_organizer_media_filter_attachments_grid', $args );
+        return $args;
+    }
+
     public function output_backbone_view_filters() {
         wp_enqueue_script( 'folders-media', WCP_FOLDER_URL.'assets/js/media.js', array( 'media-editor', 'media-views' ), WCP_FOLDER_VERSION, true );
         wp_localize_script( 'folders-media', 'folders_media_options', array(
             'terms'     => self::get_terms_hierarchical('media_folder'),
-            'taxonomy'  => get_taxonomy('media_folder')
+            'taxonomy'  => get_taxonomy('media_folder'),
+            'ajax_url'  => admin_url("admin-ajax.php")
         ));
         wp_enqueue_style( 'folders-media', WCP_FOLDER_URL . 'assets/css/media.css' , array(), WCP_FOLDER_VERSION);
     }
 
     public function get_terms_hierarchical( $taxonomy ) {
+//        $terms = get_terms( array(
+//            'taxonomy'      => $taxonomy,
+//            'hide_empty'    => false,
+//            'parent'        => 0,
+//            'orderby' => 'meta_value_num',
+//            'order' => 'ASC',
+//            'update_count_callback' => '_update_generic_term_count',
+//            'meta_query' => [[
+//                'key' => 'wcp_custom_order',
+//                'type' => 'NUMERIC',
+//            ]]
+//        ) );
+//
+//        if ( empty( $terms ) ) {
+//            return false;
+//        }
+//
+//        $hierarchy = _get_term_hierarchy( $taxonomy );
+//
+//        $hierarchical_terms = array();
+//        if(!empty($terms)) {
+//            foreach ($terms as $term) {
+//                if(isset($term->term_id)) {
+//                    $hierarchical_terms[] = $term;
+//                    $hierarchical_terms = self::add_child_terms_recursive($taxonomy, $hierarchical_terms, $hierarchy, $term->term_id, 1);
+//                }
+//            }
+//        }
+//
+//        return $hierarchical_terms;
+        $terms = get_terms( array(
+            'taxonomy'      => $taxonomy,
+            'hide_empty' => false,
+            'parent'   => 0,
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'hierarchical' => false,
+            'update_count_callback' => '_update_generic_term_count',
+            'meta_query' => [[
+                'key' => 'wcp_custom_order',
+                'type' => 'NUMERIC',
+            ]]
+        ));
+        $hierarchical_terms = array();
+        if(!empty($terms)) {
+            foreach ($terms as $term) {
+                if(!empty($term) && isset($term->term_id)) {
+                    $hierarchical_terms[] = $term;
+                    $hierarchical_terms = self::get_child_terms($taxonomy, $hierarchical_terms, $term->term_id, "-");
+                }
+            }
+        }
+        return $hierarchical_terms;
+    }
+
+    public static function get_child_terms($taxonomy, $hierarchical_terms, $term_id, $separator = "-") {
         $terms = get_terms( array(
             'taxonomy'      => $taxonomy,
             'hide_empty'    => false,
-            'parent'        => 0,
-        ) );
-
-        if ( empty( $terms ) ) {
-            return false;
-        }
-
-        $hierarchy = _get_term_hierarchy( $taxonomy );
-
-        $hierarchical_terms = array();
-        foreach ( $terms as $term ) {
-            $hierarchical_terms[] = $term;
-            $hierarchical_terms = self::add_child_terms_recursive( $taxonomy, $hierarchical_terms, $hierarchy, $term->term_id, 1 );
+            'parent'        => $term_id,
+            'orderby' => 'meta_value_num',
+            'order' => 'ASC',
+            'hierarchical' => false,
+            'update_count_callback' => '_update_generic_term_count',
+            'meta_query' => [[
+                'key' => 'wcp_custom_order',
+                'type' => 'NUMERIC',
+            ]]
+        ));
+        if(!empty($terms)) {
+            foreach ($terms as $term) {
+                if(isset($term->name)) {
+                    $term->name = $separator . " " . $term->name;
+                    $hierarchical_terms[] = $term;
+                    $hierarchical_terms = self::get_child_terms($taxonomy, $hierarchical_terms, $term->term_id, $separator . "-");
+                }
+            }
         }
 
         return $hierarchical_terms;
@@ -461,7 +655,7 @@ class WCP_Folders
             return $query;
         }
 
-        $term = sanitize_text_field( $_REQUEST['media_folder'] );
+        $term = sanitize_text_field(wp_unslash($_REQUEST['media_folder']));
         if ( $term != "-1" ) {
             return $query;
         }
@@ -498,10 +692,10 @@ class WCP_Folders
         }
 
         wp_dropdown_categories( array(
-            'show_option_all'   => __( 'All Folders', WCP_FOLDER ),
-            'show_option_none'   => __( '(Unassigned)', WCP_FOLDER ),
+            'show_option_all'   =>  esc_html__('All Folders', WCP_FOLDER ),
+            'show_option_none'   =>  esc_html__('(Unassigned)', WCP_FOLDER ),
             'option_none_value' => -1,
-            'orderby'           => 'name',
+            'orderby'           => 'meta_value_num',
             'order'             => 'ASC',
             'show_count'        => true,
             'hide_empty'        => false,
@@ -513,6 +707,10 @@ class WCP_Folders
             'class'             => '',
             'taxonomy'          => 'media_folder',
             'value_field'       => 'slug',
+            'meta_query' => [[
+                'key' => 'wcp_custom_order',
+                'type' => 'NUMERIC',
+            ]]
         ) );
 
     }
@@ -522,7 +720,7 @@ class WCP_Folders
 
         $post_type = $post->post_type;
 
-        if(self::is_for_this_post_type($post_type)) {
+        if(self::is_for_this_post_type($post_type) && !isset($_REQUEST["folder_for_media"])) {
 
             $post_type = self::get_custom_post_type($post_type);
             $selected_folder = get_option("selected_{$post_type}_folder");
@@ -544,12 +742,12 @@ class WCP_Folders
         $response['errors'] = array();
         $response['message'] = "";
         $errorArray = [];
-        $errorMessage = __("%s is required", WCP_FOLDER);
-        $postData = $_POST;
+        $errorMessage =  esc_html__("%s is required", WCP_FOLDER);
+        $postData = filter_input_array(INPUT_POST);
         if(!isset($postData['textarea_text']) || trim($postData['textarea_text']) == "") {
             $error = array(
                 "key"   => "textarea_text",
-                "message" => __("Please enter your message",WCP_FOLDER)
+                "message" =>  esc_html__("Please enter your message",WCP_FOLDER)
             );
             $errorArray[] = $error;
         }
@@ -570,14 +768,14 @@ class WCP_Folders
             if(!isset($postData['folder_help_nonce']) || trim($postData['folder_help_nonce']) == "") {
                 $error = array(
                     "key"   => "nonce",
-                    "message" => __("Your request is not valid", WCP_FOLDER)
+                    "message" =>  esc_html__("Your request is not valid", WCP_FOLDER)
                 );
                 $errorArray[] = $error;
             } else {
                 if(!wp_verify_nonce($postData['folder_help_nonce'], 'wcp_folder_help_nonce')) {
                     $error = array(
                         "key"   => "nonce",
-                        "message" => __("Your request is not valid", WCP_FOLDER)
+                        "message" =>  esc_html__("Your request is not valid", WCP_FOLDER)
                     );
                     $errorArray[] = $error;
                 }
@@ -600,21 +798,21 @@ class WCP_Folders
             <table border="0" cellspacing="0" cellpadding="5">
                 <tr>
                     <th>Domain</th>
-                    <td><?php echo $domain ?></td>
+                    <td><?php echo esc_attr($domain) ?></td>
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td><?php echo $email ?></td>
+                    <td><?php echo esc_attr($email) ?></td>
                 </tr>
                 <tr>
                     <th>Message</th>
-                    <td><?php echo nl2br($text_message) ?></td>
+                    <td><?php echo esc_attr(nl2br($text_message)) ?></td>
                 </tr>
             </table>
             <?php
             $message = ob_get_clean();
-            $to = "contact+fromwp@premio.io";
-            $status = wp_mail($to, $subject, $message, $headers);
+            $email_id = "gal@premio.io";
+            $status = wp_mail($email_id, $subject, $message, $headers);
             if($status) {
                 $response['status'] = 1;
             } else {
@@ -630,7 +828,7 @@ class WCP_Folders
 
     public function folder_plugin_deactivate() {
         global $current_user;
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         $response = array();
         $response['status'] = 0;
@@ -640,20 +838,23 @@ class WCP_Folders
             $errorCounter++;
             $response['message'] = "Please provide reason";
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
             $response['valid'] = 0;
         } else {
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_deactivate_nonce')) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
                 $response['valid'] = 0;
             }
         }
         if($errorCounter == 0) {
             $reason = $postData['reason'];
-            $email = get_option( 'admin_email' );
+            $email = "none@none.none";
+            if (isset($postData['email_id']) && !empty($postData['email_id']) && filter_var($postData['email_id'], FILTER_VALIDATE_EMAIL)) {
+                $email = $postData['email_id'];
+            }
             $domain = site_url();
             $user_name = $current_user->first_name." ".$current_user->last_name;
             $subject = "Folders was removed from {$domain}";
@@ -671,33 +872,33 @@ class WCP_Folders
                 </tr>
                 <tr>
                     <th>Plugin Version</th>
-                    <td><?php echo WCP_FOLDER_VERSION ?></td>
+                    <td><?php echo esc_attr(WCP_FOLDER_VERSION) ?></td>
                 </tr>
                 <tr>
                     <th>Domain</th>
-                    <td><?php echo $domain ?></td>
+                    <td><?php echo esc_attr($domain) ?></td>
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td><?php echo $email ?></td>
+                    <td><?php echo esc_attr($email) ?></td>
                 </tr>
                 <tr>
                     <th>Comment</th>
-                    <td><?php echo nl2br($reason) ?></td>
+                    <td><?php echo esc_attr(nl2br($reason)) ?></td>
                 </tr>
                 <tr>
                     <th>WordPress Version</th>
-                    <td><?php echo get_bloginfo('version') ?></td>
+                    <td><?php echo esc_attr(get_bloginfo('version')) ?></td>
                 </tr>
                 <tr>
                     <th>PHP Version</th>
-                    <td><?php echo PHP_VERSION ?></td>
+                    <td><?php echo esc_attr(PHP_VERSION) ?></td>
                 </tr>
             </table>
             <?php
             $content = ob_get_clean();
-            $to = "contact+removed@premio.io";
-            wp_mail($to, $subject, $content, $headers);
+            $email_id = "gal@premio.io";
+            wp_mail($email_id, $subject, $content, $headers);
             $response['status'] = 1;
         }
         echo json_encode($response);
@@ -743,13 +944,13 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         if (isset($postData['post_id']) && !empty($postData['post_id'])) {
             wp_delete_post($postData['post_id']);
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_change_all_status()
@@ -759,25 +960,25 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else  if (!current_user_can("manage_categories") || ($postData['type'] == "page" && !current_user_can("edit_pages"))) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if (!current_user_can("manage_categories") || ($postData['type'] != "page" && !current_user_can("edit_posts"))) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -795,7 +996,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_change_post_width()
@@ -805,28 +1006,28 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['width']) || empty($postData['width'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = __("You have not permission to update width", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -838,7 +1039,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_change_multiple_post_folder()
@@ -848,30 +1049,30 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_ids']) || empty($postData['post_ids'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else {
             $folder_id = self::sanitize_options($postData['folder_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$folder_id)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -892,10 +1093,15 @@ class WCP_Folders
                 $taxonomy = self::sanitize_options($postData['taxonomy']);
             }
             if (is_array($postArray)) {
+                $post_type = self::get_custom_post_type($type);
                 foreach ($postArray as $post) {
-                    $post_type = self::get_custom_post_type($type);
-                    if(!empty($taxonomy)) {
-                        wp_remove_object_terms($post, $taxonomy, $post_type);
+                    $terms = get_the_terms($post, $post_type);
+                    if (!empty($terms)) {
+                        foreach ($terms as $term) {
+                            if(!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
+                                wp_remove_object_terms($post, $term->term_id, $post_type);
+                            }
+                        }
                     }
                     wp_set_post_terms($post, $folderID, $post_type, $status);
                 }
@@ -903,7 +1109,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_change_post_folder()
@@ -913,30 +1119,30 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_id']) || empty($postData['post_id'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['type']) || empty($postData['type'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['folder_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -957,7 +1163,7 @@ class WCP_Folders
             $terms = get_the_terms($postID, $folder_post_type);
             if (!empty($terms)) {
                 foreach ($terms as $term) {
-                       if(!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
+                    if(!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
                         wp_remove_object_terms($postID, $term->term_id, $folder_post_type);
                     }
                 }
@@ -966,7 +1172,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_mark_un_mark_folder()
@@ -976,21 +1182,21 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_highlight_term_'.$term_id)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1009,7 +1215,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_save_folder_order()
@@ -1019,24 +1225,24 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] = __("You have not permission to update folder order", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder order", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_ids']) || empty($postData['term_ids'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['type']) || empty($postData['type'])) {
             $errorCounter++;
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1055,10 +1261,9 @@ class WCP_Folders
             $response['status'] = 1;
             $folder_type = self::get_custom_post_type($type);
             $response['options'] = WCP_Tree::get_option_data_for_select($folder_type);
-
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function save_wcp_folder_state()
@@ -1068,13 +1273,13 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $response['message'] = "Unable to create folder, Your request is not valid";
@@ -1082,7 +1287,7 @@ class WCP_Folders
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1098,7 +1303,7 @@ class WCP_Folders
             }
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_update_parent_information()
@@ -1108,27 +1313,27 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] = __("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['parent_id'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1144,7 +1349,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function wcp_save_parent_data()
@@ -1154,18 +1359,18 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = __("Your request is not valid", WCP_FOLDER);
+            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
-                $response['message'] = __("Your request is not valid", WCP_FOLDER);
+                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1182,7 +1387,54 @@ class WCP_Folders
             }
         }
         echo json_encode($response);
-        die;
+        wp_die();
+    }
+
+    public function remove_muliple_folder(){
+        $response = array();
+        $response['status'] = 0;
+        $response['error'] = 0;
+        $response['data'] = array();
+        $response['message'] = "";
+        $postData = filter_input_array(INPUT_POST);
+        $errorCounter = 0;
+        if (!current_user_can("manage_categories")) {
+            $error = esc_attr__("You have not permission to remove folder", WCP_FOLDER);
+            $errorCounter++;
+        } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
+            $errorCounter++;
+        } else if (!isset($postData['type']) || empty($postData['type'])) {
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
+            $errorCounter++;
+        }
+        if ($errorCounter == 0) {
+            $term_id = self::sanitize_options($postData['term_id']);
+            $type = self::sanitize_options($postData['type']);
+            if(!empty($term_id)) {
+                $term_id = trim($term_id,",");
+                $term_ids = explode(",", $term_id);
+                if(is_array($term_ids) && count($term_ids) > 0) {
+                    foreach ($term_ids as $term) {
+                        self::remove_folder_child_items($term, $type);
+                    }
+                }
+            }
+            $is_active = 1;
+            $folders = -1;
+            $response['status'] = 1;
+            if (!self::check_has_valid_key()) {
+                $is_active = 0;
+                $folders = self::total_term_folders();
+            }
+            $response['folders'] = $folders;
+            $response['is_key_active'] = $is_active;
+        } else {
+            $response['error'] = 1;
+            $response['message'] = $error;
+        }
+        echo json_encode($response);
+        wp_die();
     }
 
     public function wcp_remove_folder()
@@ -1192,16 +1444,16 @@ class WCP_Folders
         $response['error'] = 0;
         $response['data'] = array();
         $response['message'] = "";
-        $postData = $_POST;
+        $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error = __("You have not permission to remove folder", WCP_FOLDER);
+            $error =  esc_html__("You have not permission to remove folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $error = __("Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error = __("Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $error = "Unable to delete folder, Your request is not valid";
@@ -1231,7 +1483,7 @@ class WCP_Folders
             $response['message'] = $error;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function remove_folder_child_items($term_id, $post_type)
@@ -1262,19 +1514,19 @@ class WCP_Folders
         $postData = $_REQUEST;
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error = __("You have not permission to update folder", WCP_FOLDER);
+            $error =  esc_html__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $error = __("Unable to rename folder, Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['name']) || empty($postData['name'])) {
-            $error = __("Folder name can no be empty", WCP_FOLDER);
+            $error =  esc_html__("Folder name can no be empty", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error = __("Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $error = __("Unable to rename folder, Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
@@ -1300,14 +1552,14 @@ class WCP_Folders
                 $response['status'] = 1;
                 $response['term_title'] = $postData['name'];
             } else {
-                $response['message'] = __("Unable to rename folder", WCP_FOLDER);
+                $response['message'] =  esc_html__("Unable to rename folder", WCP_FOLDER);
             }
         } else {
             $response['error'] = 1;
             $response['message'] = $error;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function create_slug_from_string($str)
@@ -1322,9 +1574,9 @@ class WCP_Folders
         if($type == "int") {
             $value = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
         } else if($type == "email") {
-            $value = sanitize_email($value);
+            $value = filter_var($value, FILTER_SANITIZE_EMAIL);
         } else {
-            $value = sanitize_text_field($value);
+            $value = filter_var($value, FILTER_SANITIZE_STRING);
         }
         return $value;
     }
@@ -1340,23 +1592,23 @@ class WCP_Folders
         $postData = $_REQUEST;
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error = __("You have not permission to add folder", WCP_FOLDER);
+            $error =  esc_html__("You have not permission to add folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['name']) || empty($postData['name'])) {
-            $error = __("Folder name can no be empty", WCP_FOLDER);
+            $error =  esc_html__("Folder name can no be empty", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error = __("Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $response['login'] = 0;
-            $error = __("Unable to create folder, Your request is not valid", WCP_FOLDER);
+            $error =  esc_html__("Unable to create folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
                 $response['login'] = 0;
-                $error = __("Unable to create folder, Your request is not valid", WCP_FOLDER);
+                $error =  esc_html__("Unable to create folder, Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1390,10 +1642,11 @@ class WCP_Folders
                     $rename_nonce = wp_create_nonce('wcp_folder_rename_term_'.$result['term_id']);
                     $highlight_nonce = wp_create_nonce('wcp_folder_highlight_term_'.$result['term_id']);
                     $term_nonce = wp_create_nonce('wcp_folder_term_'.$result['term_id']);
-                    $string = "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$result['term_id']}' class='ui-state-default route' id='wcp_folder_{$result['term_id']}' data-folder-id='{$result['term_id']}'><h3 class='title' id='title_{$result['term_id']}'><span class='title-text'>{$postData['name']}</span> <span class='update-inline-record'></span><span class='star-icon'></span> </h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i></span>	<ul class='space' id='space_{$result['term_id']}'>";
+                    $string = "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$result['term_id']}' class='ui-state-default route' id='wcp_folder_{$result['term_id']}' data-folder-id='{$result['term_id']}'><h3 class='title' title='{$postData['name']}' id='title_{$result['term_id']}'><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i><img src='".esc_url(WCP_FOLDER_URL."assets/images/move-option.png")."' class='move-folder-icon' ><input type='checkbox' class='checkbox' value='{$result['term_id']}' /></span><span class='title-text'>{$postData['name']}</span> <span class='update-inline-record'></span><span class='star-icon'></span> </h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span>	<ul class='space' id='space_{$result['term_id']}'>";
                     $string .= "</ul></li>";
                     $response['term_data'] = $string;
                     $response['parent_id'] = $parent;
+                    $response['term_id'] = $result['term_id'];
 
                     $is_active = 1;
                     $folders = -1;
@@ -1404,18 +1657,18 @@ class WCP_Folders
                     $response['is_key_active'] = $is_active;
                     $response['folders'] = $folders;
                 } else {
-                    $response['message'] = __("Error during server request", WCP_FOLDER);
+                    $response['message'] =  esc_html__("Error during server request", WCP_FOLDER);
                 }
             } else {
                 $response['error'] = 1;
-                $response['message'] = __("Folder name is already exists", WCP_FOLDER);
+                $response['message'] =  esc_html__("Folder name is already exists", WCP_FOLDER);
             }
         } else {
             $response['error'] = 1;
             $response['message'] = $error;
         }
         echo json_encode($response);
-        die;
+        wp_die();
     }
 
     public function is_for_this_post_type($post_type)
@@ -1430,7 +1683,9 @@ class WCP_Folders
 
         global $typenow, $current_screen;
 
-        if ((isset($_POST['action']) && $_POST['action'] == 'inline-save') && (isset($_POST['post_type']) && self::is_for_this_post_type($_POST['post_type']))) {
+        $postData = filter_input_array(INPUT_POST);
+
+        if ((isset($postData['action']) && $postData['action'] == 'inline-save') && (isset($postData['post_type']) && self::is_for_this_post_type($postData['post_type']))) {
             return true;
         }
         global $current_screen;
@@ -1487,9 +1742,10 @@ class WCP_Folders
 
     public function admin_footer()
     {
-
         if (self::is_active_for_screen()) {
             global $typenow;
+
+            self::set_default_values_if_not_exists();
 
             $total_posts = self::get_total_posts($typenow);
 
@@ -1540,9 +1796,14 @@ class WCP_Folders
                 'operator'  => 'NOT EXISTS',
             ),
         );
+
         $result = get_posts($args);
 
-        return (count($result));
+        if(!empty($result)) {
+            return (count($result));
+        } else {
+            return 0;
+        }
     }
 
     public function autoload()
@@ -1591,20 +1852,20 @@ class WCP_Folders
         if (!empty($posts)) {
             foreach ($posts as $post_type) {
                 $labels = array(
-                    'name' => __('Folders', WCP_FOLDER),
-                    'singular_name' => __('Folder', WCP_FOLDER),
-                    'all_items' => __('All Folders', WCP_FOLDER),
-                    'edit_item' => __('Edit Folder', WCP_FOLDER),
-                    'update_item' => __('Update Folder', WCP_FOLDER),
-                    'add_new_item' => __('Add New Folder', WCP_FOLDER),
-                    'new_item_name' => __('Add Folder Name', WCP_FOLDER),
-                    'menu_name' => __('Folders', WCP_FOLDER),
-                    'search_items' => __('Search Folders', WCP_FOLDER),
-                    'parent_item' => __('Parent Folder', WCP_FOLDER),
+                    'name' =>  esc_html__('Folders', WCP_FOLDER),
+                    'singular_name' =>  esc_html__('Folder', WCP_FOLDER),
+                    'all_items' =>  esc_html__('All Folders', WCP_FOLDER),
+                    'edit_item' =>  esc_html__('Edit Folder', WCP_FOLDER),
+                    'update_item' =>  esc_html__('Update Folder', WCP_FOLDER),
+                    'add_new_item' =>  esc_html__('Add New Folder', WCP_FOLDER),
+                    'new_item_name' =>  esc_html__('Add Folder Name', WCP_FOLDER),
+                    'menu_name' =>  esc_html__('Folders', WCP_FOLDER),
+                    'search_items' =>  esc_html__('Search Folders', WCP_FOLDER),
+                    'parent_item' =>  esc_html__('Parent Folder', WCP_FOLDER),
                 );
 
                 $args = array(
-                    'label' => __('Folder'),
+                    'label' =>  esc_html__('Folder', WCP_FOLDER),
                     'labels' => $labels,
                     'show_tagcloud' => false,
                     'hierarchical' => true,
@@ -1628,23 +1889,45 @@ class WCP_Folders
             }
         }
 
+        $postData = filter_input_array(INPUT_POST);
+
         if(current_user_can("manage_categories")) {
-            if (isset($_POST['folders_show_in_menu']) && !empty($_POST['folders_show_in_menu'])) {
+            if (isset($postData['folders_show_in_menu']) && !empty($postData['folders_show_in_menu'])) {
                 $show_menu = "off";
-                if ($_POST['folders_show_in_menu'] == "on") {
+                if ($postData['folders_show_in_menu'] == "on") {
                     $show_menu = "on";
                 }
                 update_option("folders_show_in_menu", $show_menu);
             }
 
-            if (isset($_POST['folders_settings1'])) {
+            if (isset($postData['folders_settings1'])) {
                 $posts = array();
-                if (isset($_POST['folders_settings']) && is_array($_POST['folders_settings'])) {
-                    foreach ($_POST['folders_settings'] as $key => $val) {
+                if (isset($postData['folders_settings']) && is_array($postData['folders_settings'])) {
+                    foreach ($postData['folders_settings'] as $key => $val) {
                         $posts[] = $val;
                     }
                 }
                 update_option("folders_settings", $posts);
+            }
+
+            if (isset($_POST['folders_settings1'])) {
+                $posts = array();
+                if (isset($_POST['default_folders']) && is_array($_POST['default_folders'])) {
+                    foreach ($_POST['default_folders'] as $key => $val) {
+                        $posts[$key] = $val;
+                    }
+                }
+                update_option("default_folders", $posts);
+            }
+
+            if (isset($_POST['folders_settings1'])) {
+                $posts = array();
+                if (isset($_POST['customize_folders']) && is_array($_POST['customize_folders'])) {
+                    foreach ($_POST['customize_folders'] as $key => $val) {
+                        $posts[$key] = $val;
+                    }
+                }
+                update_option("customize_folders", $posts);
             }
         }
 
@@ -1824,7 +2107,10 @@ class WCP_Folders
                 'type' => 'NUMERIC',
             ]]
         ));
-        echo '<div class="tree-structure" id="list-folder-' . $termId . '" data-id="' . $termId . '">';
+        $optionName = "wcp_folder_display_status_" . $typenow;
+        $optionValue = get_option($optionName);
+        $class = (!empty($optionValue) && $optionValue == "hide")?"":"active";
+        echo '<div class="tree-structure-content '.$class.'"><div class="tree-structure" id="list-folder-' . $termId . '" data-id="' . $termId . '">';
         echo '<ul>';
         foreach ($terms as $term) {
             $status = get_term_meta($term->term_id, "is_highlighted", true);
@@ -1840,10 +2126,12 @@ class WCP_Folders
                     </a>
                 </div>
             </li>
-        <?php
+            <?php
         }
         echo '</ul>';
         echo '<div class="clear clearfix"></div>';
+        echo '</div>';
+        echo '<div class="folders-toggle-button"><span></span></div>';
         echo '</div>';
         if(!empty($content) && is_array($content)) {
             echo '<ul class="subsubsub">';
@@ -1858,7 +2146,7 @@ class WCP_Folders
     {
         if (self::is_active_for_screen()) {
             global $typenow;
-            wp_register_script('wcp-folders-alert', plugin_dir_url(dirname(__FILE__)) . 'assets/js/sweetalert.all.min.js', array(), WCP_FOLDER_VERSION);
+            wp_register_script('wcp-folders-alert', plugin_dir_url(dirname(__FILE__)) . 'assets/js/livequery.min.js', array(), WCP_FOLDER_VERSION);
             wp_register_script('wcp-folders-custom', plugin_dir_url(dirname(__FILE__)) . 'assets/js/custom.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION);
 
             if ($typenow == "attachment") {
@@ -1922,7 +2210,8 @@ class WCP_Folders
 
     public function plugin_action_links($links)
     {
-        array_unshift($links, '<a href="' . admin_url("admin.php?page=wcp_folders_settings") . '" >' . __('Settings', WCP_FOLDER) . '</a>');
+        array_unshift($links, '<a href="' . admin_url("admin.php?page=wcp_folders_settings") . '" >' .  esc_html__('Settings', WCP_FOLDER) . '</a>');
+        $links['need_help'] = '<a target="_blank" href="https://premio.io/help/folders/?utm_source=pluginspage" >'.__( 'Need help?', WCP_FOLDER ).'</a>';
         $links['pro'] = '<a class="wcp-folder-upgrade-button" href="'.admin_url("admin.php?page=wcp_folders_upgrade").'" >'.__( 'Upgrade', WCP_FOLDER ).'</a>';
         return $links;
     }
@@ -1981,6 +2270,8 @@ class WCP_Folders
     function folders_register_settings()
     {
         register_setting('folders_settings', 'folders_settings1', 'folders_settings_validate');
+        register_setting('default_folders', 'default_folders');
+        register_setting('customize_folders', 'customize_folders');
 
         self::check_and_set_post_type();
 
@@ -1992,6 +2283,930 @@ class WCP_Folders
             wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
             exit;
         }
+    }
+
+    public static function get_font_list(){
+        return array(
+            // System fonts.
+            '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;' => 'Default',
+            'Arial' => 'Default',
+            'Tahoma' => 'Default',
+            'Verdana' => 'Default',
+            'Helvetica' => 'Default',
+            'Times New Roman' => 'Default',
+            'Trebuchet MS' => 'Default',
+            'Georgia' => 'Default',
+
+            // Google Fonts (last update: 23/10/2018).
+            'ABeeZee' => 'Google Fonts',
+            'Abel' => 'Google Fonts',
+            'Abhaya Libre' => 'Google Fonts',
+            'Abril Fatface' => 'Google Fonts',
+            'Aclonica' => 'Google Fonts',
+            'Acme' => 'Google Fonts',
+            'Actor' => 'Google Fonts',
+            'Adamina' => 'Google Fonts',
+            'Advent Pro' => 'Google Fonts',
+            'Aguafina Script' => 'Google Fonts',
+            'Akronim' => 'Google Fonts',
+            'Aladin' => 'Google Fonts',
+            'Aldrich' => 'Google Fonts',
+            'Alef' => 'Google Fonts',
+            'Alef Hebrew' => 'Google Fonts', // Hack for Google Early Access.
+            'Alegreya' => 'Google Fonts',
+            'Alegreya SC' => 'Google Fonts',
+            'Alegreya Sans' => 'Google Fonts',
+            'Alegreya Sans SC' => 'Google Fonts',
+            'Alex Brush' => 'Google Fonts',
+            'Alfa Slab One' => 'Google Fonts',
+            'Alice' => 'Google Fonts',
+            'Alike' => 'Google Fonts',
+            'Alike Angular' => 'Google Fonts',
+            'Allan' => 'Google Fonts',
+            'Allerta' => 'Google Fonts',
+            'Allerta Stencil' => 'Google Fonts',
+            'Allura' => 'Google Fonts',
+            'Almendra' => 'Google Fonts',
+            'Almendra Display' => 'Google Fonts',
+            'Almendra SC' => 'Google Fonts',
+            'Amarante' => 'Google Fonts',
+            'Amaranth' => 'Google Fonts',
+            'Amatic SC' => 'Google Fonts',
+            'Amethysta' => 'Google Fonts',
+            'Amiko' => 'Google Fonts',
+            'Amiri' => 'Google Fonts',
+            'Amita' => 'Google Fonts',
+            'Anaheim' => 'Google Fonts',
+            'Andada' => 'Google Fonts',
+            'Andika' => 'Google Fonts',
+            'Angkor' => 'Google Fonts',
+            'Annie Use Your Telescope' => 'Google Fonts',
+            'Anonymous Pro' => 'Google Fonts',
+            'Antic' => 'Google Fonts',
+            'Antic Didone' => 'Google Fonts',
+            'Antic Slab' => 'Google Fonts',
+            'Anton' => 'Google Fonts',
+            'Arapey' => 'Google Fonts',
+            'Arbutus' => 'Google Fonts',
+            'Arbutus Slab' => 'Google Fonts',
+            'Architects Daughter' => 'Google Fonts',
+            'Archivo' => 'Google Fonts',
+            'Archivo Black' => 'Google Fonts',
+            'Archivo Narrow' => 'Google Fonts',
+            'Aref Ruqaa' => 'Google Fonts',
+            'Arima Madurai' => 'Google Fonts',
+            'Arimo' => 'Google Fonts',
+            'Arizonia' => 'Google Fonts',
+            'Armata' => 'Google Fonts',
+            'Arsenal' => 'Google Fonts',
+            'Artifika' => 'Google Fonts',
+            'Arvo' => 'Google Fonts',
+            'Arya' => 'Google Fonts',
+            'Asap' => 'Google Fonts',
+            'Asap Condensed' => 'Google Fonts',
+            'Asar' => 'Google Fonts',
+            'Asset' => 'Google Fonts',
+            'Assistant' => 'Google Fonts',
+            'Astloch' => 'Google Fonts',
+            'Asul' => 'Google Fonts',
+            'Athiti' => 'Google Fonts',
+            'Atma' => 'Google Fonts',
+            'Atomic Age' => 'Google Fonts',
+            'Aubrey' => 'Google Fonts',
+            'Audiowide' => 'Google Fonts',
+            'Autour One' => 'Google Fonts',
+            'Average' => 'Google Fonts',
+            'Average Sans' => 'Google Fonts',
+            'Averia Gruesa Libre' => 'Google Fonts',
+            'Averia Libre' => 'Google Fonts',
+            'Averia Sans Libre' => 'Google Fonts',
+            'Averia Serif Libre' => 'Google Fonts',
+            'Bad Script' => 'Google Fonts',
+            'Bahiana' => 'Google Fonts',
+            'Bai Jamjuree' => 'Google Fonts',
+            'Baloo' => 'Google Fonts',
+            'Baloo Bhai' => 'Google Fonts',
+            'Baloo Bhaijaan' => 'Google Fonts',
+            'Baloo Bhaina' => 'Google Fonts',
+            'Baloo Chettan' => 'Google Fonts',
+            'Baloo Da' => 'Google Fonts',
+            'Baloo Paaji' => 'Google Fonts',
+            'Baloo Tamma' => 'Google Fonts',
+            'Baloo Tammudu' => 'Google Fonts',
+            'Baloo Thambi' => 'Google Fonts',
+            'Balthazar' => 'Google Fonts',
+            'Bangers' => 'Google Fonts',
+            'Barlow' => 'Google Fonts',
+            'Barlow Condensed' => 'Google Fonts',
+            'Barlow Semi Condensed' => 'Google Fonts',
+            'Barrio' => 'Google Fonts',
+            'Basic' => 'Google Fonts',
+            'Battambang' => 'Google Fonts',
+            'Baumans' => 'Google Fonts',
+            'Bayon' => 'Google Fonts',
+            'Belgrano' => 'Google Fonts',
+            'Bellefair' => 'Google Fonts',
+            'Belleza' => 'Google Fonts',
+            'BenchNine' => 'Google Fonts',
+            'Bentham' => 'Google Fonts',
+            'Berkshire Swash' => 'Google Fonts',
+            'Bevan' => 'Google Fonts',
+            'Bigelow Rules' => 'Google Fonts',
+            'Bigshot One' => 'Google Fonts',
+            'Bilbo' => 'Google Fonts',
+            'Bilbo Swash Caps' => 'Google Fonts',
+            'BioRhyme' => 'Google Fonts',
+            'BioRhyme Expanded' => 'Google Fonts',
+            'Biryani' => 'Google Fonts',
+            'Bitter' => 'Google Fonts',
+            'Black And White Picture' => 'Google Fonts',
+            'Black Han Sans' => 'Google Fonts',
+            'Black Ops One' => 'Google Fonts',
+            'Bokor' => 'Google Fonts',
+            'Bonbon' => 'Google Fonts',
+            'Boogaloo' => 'Google Fonts',
+            'Bowlby One' => 'Google Fonts',
+            'Bowlby One SC' => 'Google Fonts',
+            'Brawler' => 'Google Fonts',
+            'Bree Serif' => 'Google Fonts',
+            'Bubblegum Sans' => 'Google Fonts',
+            'Bubbler One' => 'Google Fonts',
+            'Buda' => 'Google Fonts',
+            'Buenard' => 'Google Fonts',
+            'Bungee' => 'Google Fonts',
+            'Bungee Hairline' => 'Google Fonts',
+            'Bungee Inline' => 'Google Fonts',
+            'Bungee Outline' => 'Google Fonts',
+            'Bungee Shade' => 'Google Fonts',
+            'Butcherman' => 'Google Fonts',
+            'Butterfly Kids' => 'Google Fonts',
+            'Cabin' => 'Google Fonts',
+            'Cabin Condensed' => 'Google Fonts',
+            'Cabin Sketch' => 'Google Fonts',
+            'Caesar Dressing' => 'Google Fonts',
+            'Cagliostro' => 'Google Fonts',
+            'Cairo' => 'Google Fonts',
+            'Calligraffitti' => 'Google Fonts',
+            'Cambay' => 'Google Fonts',
+            'Cambo' => 'Google Fonts',
+            'Candal' => 'Google Fonts',
+            'Cantarell' => 'Google Fonts',
+            'Cantata One' => 'Google Fonts',
+            'Cantora One' => 'Google Fonts',
+            'Capriola' => 'Google Fonts',
+            'Cardo' => 'Google Fonts',
+            'Carme' => 'Google Fonts',
+            'Carrois Gothic' => 'Google Fonts',
+            'Carrois Gothic SC' => 'Google Fonts',
+            'Carter One' => 'Google Fonts',
+            'Catamaran' => 'Google Fonts',
+            'Caudex' => 'Google Fonts',
+            'Caveat' => 'Google Fonts',
+            'Caveat Brush' => 'Google Fonts',
+            'Cedarville Cursive' => 'Google Fonts',
+            'Ceviche One' => 'Google Fonts',
+            'Chakra Petch' => 'Google Fonts',
+            'Changa' => 'Google Fonts',
+            'Changa One' => 'Google Fonts',
+            'Chango' => 'Google Fonts',
+            'Charmonman' => 'Google Fonts',
+            'Chathura' => 'Google Fonts',
+            'Chau Philomene One' => 'Google Fonts',
+            'Chela One' => 'Google Fonts',
+            'Chelsea Market' => 'Google Fonts',
+            'Chenla' => 'Google Fonts',
+            'Cherry Cream Soda' => 'Google Fonts',
+            'Cherry Swash' => 'Google Fonts',
+            'Chewy' => 'Google Fonts',
+            'Chicle' => 'Google Fonts',
+            'Chivo' => 'Google Fonts',
+            'Chonburi' => 'Google Fonts',
+            'Cinzel' => 'Google Fonts',
+            'Cinzel Decorative' => 'Google Fonts',
+            'Clicker Script' => 'Google Fonts',
+            'Coda' => 'Google Fonts',
+            'Coda Caption' => 'Google Fonts',
+            'Codystar' => 'Google Fonts',
+            'Coiny' => 'Google Fonts',
+            'Combo' => 'Google Fonts',
+            'Comfortaa' => 'Google Fonts',
+            'Coming Soon' => 'Google Fonts',
+            'Concert One' => 'Google Fonts',
+            'Condiment' => 'Google Fonts',
+            'Content' => 'Google Fonts',
+            'Contrail One' => 'Google Fonts',
+            'Convergence' => 'Google Fonts',
+            'Cookie' => 'Google Fonts',
+            'Copse' => 'Google Fonts',
+            'Corben' => 'Google Fonts',
+            'Cormorant' => 'Google Fonts',
+            'Cormorant Garamond' => 'Google Fonts',
+            'Cormorant Infant' => 'Google Fonts',
+            'Cormorant SC' => 'Google Fonts',
+            'Cormorant Unicase' => 'Google Fonts',
+            'Cormorant Upright' => 'Google Fonts',
+            'Courgette' => 'Google Fonts',
+            'Cousine' => 'Google Fonts',
+            'Coustard' => 'Google Fonts',
+            'Covered By Your Grace' => 'Google Fonts',
+            'Crafty Girls' => 'Google Fonts',
+            'Creepster' => 'Google Fonts',
+            'Crete Round' => 'Google Fonts',
+            'Crimson Text' => 'Google Fonts',
+            'Croissant One' => 'Google Fonts',
+            'Crushed' => 'Google Fonts',
+            'Cuprum' => 'Google Fonts',
+            'Cute Font' => 'Google Fonts',
+            'Cutive' => 'Google Fonts',
+            'Cutive Mono' => 'Google Fonts',
+            'Damion' => 'Google Fonts',
+            'Dancing Script' => 'Google Fonts',
+            'Dangrek' => 'Google Fonts',
+            'David Libre' => 'Google Fonts',
+            'Dawning of a New Day' => 'Google Fonts',
+            'Days One' => 'Google Fonts',
+            'Dekko' => 'Google Fonts',
+            'Delius' => 'Google Fonts',
+            'Delius Swash Caps' => 'Google Fonts',
+            'Delius Unicase' => 'Google Fonts',
+            'Della Respira' => 'Google Fonts',
+            'Denk One' => 'Google Fonts',
+            'Devonshire' => 'Google Fonts',
+            'Dhurjati' => 'Google Fonts',
+            'Didact Gothic' => 'Google Fonts',
+            'Diplomata' => 'Google Fonts',
+            'Diplomata SC' => 'Google Fonts',
+            'Do Hyeon' => 'Google Fonts',
+            'Dokdo' => 'Google Fonts',
+            'Domine' => 'Google Fonts',
+            'Donegal One' => 'Google Fonts',
+            'Doppio One' => 'Google Fonts',
+            'Dorsa' => 'Google Fonts',
+            'Dosis' => 'Google Fonts',
+            'Dr Sugiyama' => 'Google Fonts',
+            'Droid Arabic Kufi' => 'Google Fonts', // Hack for Google Early Access.
+            'Droid Arabic Naskh' => 'Google Fonts', // Hack for Google Early Access.
+            'Duru Sans' => 'Google Fonts',
+            'Dynalight' => 'Google Fonts',
+            'EB Garamond' => 'Google Fonts',
+            'Eagle Lake' => 'Google Fonts',
+            'East Sea Dokdo' => 'Google Fonts',
+            'Eater' => 'Google Fonts',
+            'Economica' => 'Google Fonts',
+            'Eczar' => 'Google Fonts',
+            'El Messiri' => 'Google Fonts',
+            'Electrolize' => 'Google Fonts',
+            'Elsie' => 'Google Fonts',
+            'Elsie Swash Caps' => 'Google Fonts',
+            'Emblema One' => 'Google Fonts',
+            'Emilys Candy' => 'Google Fonts',
+            'Encode Sans' => 'Google Fonts',
+            'Encode Sans Condensed' => 'Google Fonts',
+            'Encode Sans Expanded' => 'Google Fonts',
+            'Encode Sans Semi Condensed' => 'Google Fonts',
+            'Encode Sans Semi Expanded' => 'Google Fonts',
+            'Engagement' => 'Google Fonts',
+            'Englebert' => 'Google Fonts',
+            'Enriqueta' => 'Google Fonts',
+            'Erica One' => 'Google Fonts',
+            'Esteban' => 'Google Fonts',
+            'Euphoria Script' => 'Google Fonts',
+            'Ewert' => 'Google Fonts',
+            'Exo' => 'Google Fonts',
+            'Exo 2' => 'Google Fonts',
+            'Expletus Sans' => 'Google Fonts',
+            'Fahkwang' => 'Google Fonts',
+            'Fanwood Text' => 'Google Fonts',
+            'Farsan' => 'Google Fonts',
+            'Fascinate' => 'Google Fonts',
+            'Fascinate Inline' => 'Google Fonts',
+            'Faster One' => 'Google Fonts',
+            'Fasthand' => 'Google Fonts',
+            'Fauna One' => 'Google Fonts',
+            'Faustina' => 'Google Fonts',
+            'Federant' => 'Google Fonts',
+            'Federo' => 'Google Fonts',
+            'Felipa' => 'Google Fonts',
+            'Fenix' => 'Google Fonts',
+            'Finger Paint' => 'Google Fonts',
+            'Fira Mono' => 'Google Fonts',
+            'Fira Sans' => 'Google Fonts',
+            'Fira Sans Condensed' => 'Google Fonts',
+            'Fira Sans Extra Condensed' => 'Google Fonts',
+            'Fjalla One' => 'Google Fonts',
+            'Fjord One' => 'Google Fonts',
+            'Flamenco' => 'Google Fonts',
+            'Flavors' => 'Google Fonts',
+            'Fondamento' => 'Google Fonts',
+            'Fontdiner Swanky' => 'Google Fonts',
+            'Forum' => 'Google Fonts',
+            'Francois One' => 'Google Fonts',
+            'Frank Ruhl Libre' => 'Google Fonts',
+            'Freckle Face' => 'Google Fonts',
+            'Fredericka the Great' => 'Google Fonts',
+            'Fredoka One' => 'Google Fonts',
+            'Freehand' => 'Google Fonts',
+            'Fresca' => 'Google Fonts',
+            'Frijole' => 'Google Fonts',
+            'Fruktur' => 'Google Fonts',
+            'Fugaz One' => 'Google Fonts',
+            'GFS Didot' => 'Google Fonts',
+            'GFS Neohellenic' => 'Google Fonts',
+            'Gabriela' => 'Google Fonts',
+            'Gaegu' => 'Google Fonts',
+            'Gafata' => 'Google Fonts',
+            'Galada' => 'Google Fonts',
+            'Galdeano' => 'Google Fonts',
+            'Galindo' => 'Google Fonts',
+            'Gamja Flower' => 'Google Fonts',
+            'Gentium Basic' => 'Google Fonts',
+            'Gentium Book Basic' => 'Google Fonts',
+            'Geo' => 'Google Fonts',
+            'Geostar' => 'Google Fonts',
+            'Geostar Fill' => 'Google Fonts',
+            'Germania One' => 'Google Fonts',
+            'Gidugu' => 'Google Fonts',
+            'Gilda Display' => 'Google Fonts',
+            'Give You Glory' => 'Google Fonts',
+            'Glass Antiqua' => 'Google Fonts',
+            'Glegoo' => 'Google Fonts',
+            'Gloria Hallelujah' => 'Google Fonts',
+            'Goblin One' => 'Google Fonts',
+            'Gochi Hand' => 'Google Fonts',
+            'Gorditas' => 'Google Fonts',
+            'Gothic A1' => 'Google Fonts',
+            'Goudy Bookletter 1911' => 'Google Fonts',
+            'Graduate' => 'Google Fonts',
+            'Grand Hotel' => 'Google Fonts',
+            'Gravitas One' => 'Google Fonts',
+            'Great Vibes' => 'Google Fonts',
+            'Griffy' => 'Google Fonts',
+            'Gruppo' => 'Google Fonts',
+            'Gudea' => 'Google Fonts',
+            'Gugi' => 'Google Fonts',
+            'Gurajada' => 'Google Fonts',
+            'Habibi' => 'Google Fonts',
+            'Halant' => 'Google Fonts',
+            'Hammersmith One' => 'Google Fonts',
+            'Hanalei' => 'Google Fonts',
+            'Hanalei Fill' => 'Google Fonts',
+            'Handlee' => 'Google Fonts',
+            'Hanuman' => 'Google Fonts',
+            'Happy Monkey' => 'Google Fonts',
+            'Harmattan' => 'Google Fonts',
+            'Headland One' => 'Google Fonts',
+            'Heebo' => 'Google Fonts',
+            'Henny Penny' => 'Google Fonts',
+            'Herr Von Muellerhoff' => 'Google Fonts',
+            'Hi Melody' => 'Google Fonts',
+            'Hind' => 'Google Fonts',
+            'Hind Guntur' => 'Google Fonts',
+            'Hind Madurai' => 'Google Fonts',
+            'Hind Siliguri' => 'Google Fonts',
+            'Hind Vadodara' => 'Google Fonts',
+            'Holtwood One SC' => 'Google Fonts',
+            'Homemade Apple' => 'Google Fonts',
+            'Homenaje' => 'Google Fonts',
+            'IBM Plex Mono' => 'Google Fonts',
+            'IBM Plex Sans' => 'Google Fonts',
+            'IBM Plex Sans Condensed' => 'Google Fonts',
+            'IBM Plex Serif' => 'Google Fonts',
+            'IM Fell DW Pica' => 'Google Fonts',
+            'IM Fell DW Pica SC' => 'Google Fonts',
+            'IM Fell Double Pica' => 'Google Fonts',
+            'IM Fell Double Pica SC' => 'Google Fonts',
+            'IM Fell English' => 'Google Fonts',
+            'IM Fell English SC' => 'Google Fonts',
+            'IM Fell French Canon' => 'Google Fonts',
+            'IM Fell French Canon SC' => 'Google Fonts',
+            'IM Fell Great Primer' => 'Google Fonts',
+            'IM Fell Great Primer SC' => 'Google Fonts',
+            'Iceberg' => 'Google Fonts',
+            'Iceland' => 'Google Fonts',
+            'Imprima' => 'Google Fonts',
+            'Inconsolata' => 'Google Fonts',
+            'Inder' => 'Google Fonts',
+            'Indie Flower' => 'Google Fonts',
+            'Inika' => 'Google Fonts',
+            'Inknut Antiqua' => 'Google Fonts',
+            'Irish Grover' => 'Google Fonts',
+            'Istok Web' => 'Google Fonts',
+            'Italiana' => 'Google Fonts',
+            'Italianno' => 'Google Fonts',
+            'Itim' => 'Google Fonts',
+            'Jacques Francois' => 'Google Fonts',
+            'Jacques Francois Shadow' => 'Google Fonts',
+            'Jaldi' => 'Google Fonts',
+            'Jim Nightshade' => 'Google Fonts',
+            'Jockey One' => 'Google Fonts',
+            'Jolly Lodger' => 'Google Fonts',
+            'Jomhuria' => 'Google Fonts',
+            'Josefin Sans' => 'Google Fonts',
+            'Josefin Slab' => 'Google Fonts',
+            'Joti One' => 'Google Fonts',
+            'Jua' => 'Google Fonts',
+            'Judson' => 'Google Fonts',
+            'Julee' => 'Google Fonts',
+            'Julius Sans One' => 'Google Fonts',
+            'Junge' => 'Google Fonts',
+            'Jura' => 'Google Fonts',
+            'Just Another Hand' => 'Google Fonts',
+            'Just Me Again Down Here' => 'Google Fonts',
+            'K2D' => 'Google Fonts',
+            'Kadwa' => 'Google Fonts',
+            'Kalam' => 'Google Fonts',
+            'Kameron' => 'Google Fonts',
+            'Kanit' => 'Google Fonts',
+            'Kantumruy' => 'Google Fonts',
+            'Karla' => 'Google Fonts',
+            'Karma' => 'Google Fonts',
+            'Katibeh' => 'Google Fonts',
+            'Kaushan Script' => 'Google Fonts',
+            'Kavivanar' => 'Google Fonts',
+            'Kavoon' => 'Google Fonts',
+            'Kdam Thmor' => 'Google Fonts',
+            'Keania One' => 'Google Fonts',
+            'Kelly Slab' => 'Google Fonts',
+            'Kenia' => 'Google Fonts',
+            'Khand' => 'Google Fonts',
+            'Khmer' => 'Google Fonts',
+            'Khula' => 'Google Fonts',
+            'Kirang Haerang' => 'Google Fonts',
+            'Kite One' => 'Google Fonts',
+            'Knewave' => 'Google Fonts',
+            'KoHo' => 'Google Fonts',
+            'Kodchasan' => 'Google Fonts',
+            'Kosugi' => 'Google Fonts',
+            'Kosugi Maru' => 'Google Fonts',
+            'Kotta One' => 'Google Fonts',
+            'Koulen' => 'Google Fonts',
+            'Kranky' => 'Google Fonts',
+            'Kreon' => 'Google Fonts',
+            'Kristi' => 'Google Fonts',
+            'Krona One' => 'Google Fonts',
+            'Krub' => 'Google Fonts',
+            'Kumar One' => 'Google Fonts',
+            'Kumar One Outline' => 'Google Fonts',
+            'Kurale' => 'Google Fonts',
+            'La Belle Aurore' => 'Google Fonts',
+            'Laila' => 'Google Fonts',
+            'Lakki Reddy' => 'Google Fonts',
+            'Lalezar' => 'Google Fonts',
+            'Lancelot' => 'Google Fonts',
+            'Lateef' => 'Google Fonts',
+            'Lato' => 'Google Fonts',
+            'League Script' => 'Google Fonts',
+            'Leckerli One' => 'Google Fonts',
+            'Ledger' => 'Google Fonts',
+            'Lekton' => 'Google Fonts',
+            'Lemon' => 'Google Fonts',
+            'Lemonada' => 'Google Fonts',
+            'Libre Barcode 128' => 'Google Fonts',
+            'Libre Barcode 128 Text' => 'Google Fonts',
+            'Libre Barcode 39' => 'Google Fonts',
+            'Libre Barcode 39 Extended' => 'Google Fonts',
+            'Libre Barcode 39 Extended Text' => 'Google Fonts',
+            'Libre Barcode 39 Text' => 'Google Fonts',
+            'Libre Baskerville' => 'Google Fonts',
+            'Libre Franklin' => 'Google Fonts',
+            'Life Savers' => 'Google Fonts',
+            'Lilita One' => 'Google Fonts',
+            'Lily Script One' => 'Google Fonts',
+            'Limelight' => 'Google Fonts',
+            'Linden Hill' => 'Google Fonts',
+            'Lobster' => 'Google Fonts',
+            'Lobster Two' => 'Google Fonts',
+            'Londrina Outline' => 'Google Fonts',
+            'Londrina Shadow' => 'Google Fonts',
+            'Londrina Sketch' => 'Google Fonts',
+            'Londrina Solid' => 'Google Fonts',
+            'Lora' => 'Google Fonts',
+            'Love Ya Like A Sister' => 'Google Fonts',
+            'Loved by the King' => 'Google Fonts',
+            'Lovers Quarrel' => 'Google Fonts',
+            'Luckiest Guy' => 'Google Fonts',
+            'Lusitana' => 'Google Fonts',
+            'Lustria' => 'Google Fonts',
+            'M PLUS 1p' => 'Google Fonts',
+            'M PLUS Rounded 1c' => 'Google Fonts',
+            'Macondo' => 'Google Fonts',
+            'Macondo Swash Caps' => 'Google Fonts',
+            'Mada' => 'Google Fonts',
+            'Magra' => 'Google Fonts',
+            'Maiden Orange' => 'Google Fonts',
+            'Maitree' => 'Google Fonts',
+            'Mako' => 'Google Fonts',
+            'Mali' => 'Google Fonts',
+            'Mallanna' => 'Google Fonts',
+            'Mandali' => 'Google Fonts',
+            'Manuale' => 'Google Fonts',
+            'Marcellus' => 'Google Fonts',
+            'Marcellus SC' => 'Google Fonts',
+            'Marck Script' => 'Google Fonts',
+            'Margarine' => 'Google Fonts',
+            'Markazi Text' => 'Google Fonts',
+            'Marko One' => 'Google Fonts',
+            'Marmelad' => 'Google Fonts',
+            'Martel' => 'Google Fonts',
+            'Martel Sans' => 'Google Fonts',
+            'Marvel' => 'Google Fonts',
+            'Mate' => 'Google Fonts',
+            'Mate SC' => 'Google Fonts',
+            'Maven Pro' => 'Google Fonts',
+            'McLaren' => 'Google Fonts',
+            'Meddon' => 'Google Fonts',
+            'MedievalSharp' => 'Google Fonts',
+            'Medula One' => 'Google Fonts',
+            'Meera Inimai' => 'Google Fonts',
+            'Megrim' => 'Google Fonts',
+            'Meie Script' => 'Google Fonts',
+            'Merienda' => 'Google Fonts',
+            'Merienda One' => 'Google Fonts',
+            'Merriweather' => 'Google Fonts',
+            'Merriweather Sans' => 'Google Fonts',
+            'Metal' => 'Google Fonts',
+            'Metal Mania' => 'Google Fonts',
+            'Metamorphous' => 'Google Fonts',
+            'Metrophobic' => 'Google Fonts',
+            'Michroma' => 'Google Fonts',
+            'Milonga' => 'Google Fonts',
+            'Miltonian' => 'Google Fonts',
+            'Miltonian Tattoo' => 'Google Fonts',
+            'Mina' => 'Google Fonts',
+            'Miniver' => 'Google Fonts',
+            'Miriam Libre' => 'Google Fonts',
+            'Mirza' => 'Google Fonts',
+            'Miss Fajardose' => 'Google Fonts',
+            'Mitr' => 'Google Fonts',
+            'Modak' => 'Google Fonts',
+            'Modern Antiqua' => 'Google Fonts',
+            'Mogra' => 'Google Fonts',
+            'Molengo' => 'Google Fonts',
+            'Molle' => 'Google Fonts',
+            'Monda' => 'Google Fonts',
+            'Monofett' => 'Google Fonts',
+            'Monoton' => 'Google Fonts',
+            'Monsieur La Doulaise' => 'Google Fonts',
+            'Montaga' => 'Google Fonts',
+            'Montez' => 'Google Fonts',
+            'Montserrat' => 'Google Fonts',
+            'Montserrat Alternates' => 'Google Fonts',
+            'Montserrat Subrayada' => 'Google Fonts',
+            'Moul' => 'Google Fonts',
+            'Moulpali' => 'Google Fonts',
+            'Mountains of Christmas' => 'Google Fonts',
+            'Mouse Memoirs' => 'Google Fonts',
+            'Mr Bedfort' => 'Google Fonts',
+            'Mr Dafoe' => 'Google Fonts',
+            'Mr De Haviland' => 'Google Fonts',
+            'Mrs Saint Delafield' => 'Google Fonts',
+            'Mrs Sheppards' => 'Google Fonts',
+            'Mukta' => 'Google Fonts',
+            'Mukta Mahee' => 'Google Fonts',
+            'Mukta Malar' => 'Google Fonts',
+            'Mukta Vaani' => 'Google Fonts',
+            'Muli' => 'Google Fonts',
+            'Mystery Quest' => 'Google Fonts',
+            'NTR' => 'Google Fonts',
+            'Nanum Brush Script' => 'Google Fonts',
+            'Nanum Gothic' => 'Google Fonts',
+            'Nanum Gothic Coding' => 'Google Fonts',
+            'Nanum Myeongjo' => 'Google Fonts',
+            'Nanum Pen Script' => 'Google Fonts',
+            'Neucha' => 'Google Fonts',
+            'Neuton' => 'Google Fonts',
+            'New Rocker' => 'Google Fonts',
+            'News Cycle' => 'Google Fonts',
+            'Niconne' => 'Google Fonts',
+            'Niramit' => 'Google Fonts',
+            'Nixie One' => 'Google Fonts',
+            'Nobile' => 'Google Fonts',
+            'Nokora' => 'Google Fonts',
+            'Norican' => 'Google Fonts',
+            'Nosifer' => 'Google Fonts',
+            'Notable' => 'Google Fonts',
+            'Nothing You Could Do' => 'Google Fonts',
+            'Noticia Text' => 'Google Fonts',
+            'Noto Kufi Arabic' => 'Google Fonts', // Hack for Google Early Access.
+            'Noto Naskh Arabic' => 'Google Fonts', // Hack for Google Early Access.
+            'Noto Sans' => 'Google Fonts',
+            'Noto Sans Hebrew' => 'Google Fonts', // Hack for Google Early Access.
+            'Noto Sans JP' => 'Google Fonts',
+            'Noto Sans KR' => 'Google Fonts',
+            'Noto Serif' => 'Google Fonts',
+            'Noto Serif JP' => 'Google Fonts',
+            'Noto Serif KR' => 'Google Fonts',
+            'Nova Cut' => 'Google Fonts',
+            'Nova Flat' => 'Google Fonts',
+            'Nova Mono' => 'Google Fonts',
+            'Nova Oval' => 'Google Fonts',
+            'Nova Round' => 'Google Fonts',
+            'Nova Script' => 'Google Fonts',
+            'Nova Slim' => 'Google Fonts',
+            'Nova Square' => 'Google Fonts',
+            'Numans' => 'Google Fonts',
+            'Nunito' => 'Google Fonts',
+            'Nunito Sans' => 'Google Fonts',
+            'Odor Mean Chey' => 'Google Fonts',
+            'Offside' => 'Google Fonts',
+            'Old Standard TT' => 'Google Fonts',
+            'Oldenburg' => 'Google Fonts',
+            'Oleo Script' => 'Google Fonts',
+            'Oleo Script Swash Caps' => 'Google Fonts',
+            'Open Sans' => 'Google Fonts',
+            'Open Sans Condensed' => 'Google Fonts',
+            'Open Sans Hebrew' => 'Google Fonts', // Hack for Google Early Access.
+            'Open Sans Hebrew Condensed' => 'Google Fonts', // Hack for Google Early Access.
+            'Oranienbaum' => 'Google Fonts',
+            'Orbitron' => 'Google Fonts',
+            'Oregano' => 'Google Fonts',
+            'Orienta' => 'Google Fonts',
+            'Original Surfer' => 'Google Fonts',
+            'Oswald' => 'Google Fonts',
+            'Over the Rainbow' => 'Google Fonts',
+            'Overlock' => 'Google Fonts',
+            'Overlock SC' => 'Google Fonts',
+            'Overpass' => 'Google Fonts',
+            'Overpass Mono' => 'Google Fonts',
+            'Ovo' => 'Google Fonts',
+            'Oxygen' => 'Google Fonts',
+            'Oxygen Mono' => 'Google Fonts',
+            'PT Mono' => 'Google Fonts',
+            'PT Sans' => 'Google Fonts',
+            'PT Sans Caption' => 'Google Fonts',
+            'PT Sans Narrow' => 'Google Fonts',
+            'PT Serif' => 'Google Fonts',
+            'PT Serif Caption' => 'Google Fonts',
+            'Pacifico' => 'Google Fonts',
+            'Padauk' => 'Google Fonts',
+            'Palanquin' => 'Google Fonts',
+            'Palanquin Dark' => 'Google Fonts',
+            'Pangolin' => 'Google Fonts',
+            'Paprika' => 'Google Fonts',
+            'Parisienne' => 'Google Fonts',
+            'Passero One' => 'Google Fonts',
+            'Passion One' => 'Google Fonts',
+            'Pathway Gothic One' => 'Google Fonts',
+            'Patrick Hand' => 'Google Fonts',
+            'Patrick Hand SC' => 'Google Fonts',
+            'Pattaya' => 'Google Fonts',
+            'Patua One' => 'Google Fonts',
+            'Pavanam' => 'Google Fonts',
+            'Paytone One' => 'Google Fonts',
+            'Peddana' => 'Google Fonts',
+            'Peralta' => 'Google Fonts',
+            'Permanent Marker' => 'Google Fonts',
+            'Petit Formal Script' => 'Google Fonts',
+            'Petrona' => 'Google Fonts',
+            'Philosopher' => 'Google Fonts',
+            'Piedra' => 'Google Fonts',
+            'Pinyon Script' => 'Google Fonts',
+            'Pirata One' => 'Google Fonts',
+            'Plaster' => 'Google Fonts',
+            'Play' => 'Google Fonts',
+            'Playball' => 'Google Fonts',
+            'Playfair Display' => 'Google Fonts',
+            'Playfair Display SC' => 'Google Fonts',
+            'Podkova' => 'Google Fonts',
+            'Poiret One' => 'Google Fonts',
+            'Poller One' => 'Google Fonts',
+            'Poly' => 'Google Fonts',
+            'Pompiere' => 'Google Fonts',
+            'Pontano Sans' => 'Google Fonts',
+            'Poor Story' => 'Google Fonts',
+            'Poppins' => 'Google Fonts',
+            'Port Lligat Sans' => 'Google Fonts',
+            'Port Lligat Slab' => 'Google Fonts',
+            'Pragati Narrow' => 'Google Fonts',
+            'Prata' => 'Google Fonts',
+            'Preahvihear' => 'Google Fonts',
+            'Press Start 2P' => 'Google Fonts',
+            'Pridi' => 'Google Fonts',
+            'Princess Sofia' => 'Google Fonts',
+            'Prociono' => 'Google Fonts',
+            'Prompt' => 'Google Fonts',
+            'Prosto One' => 'Google Fonts',
+            'Proza Libre' => 'Google Fonts',
+            'Puritan' => 'Google Fonts',
+            'Purple Purse' => 'Google Fonts',
+            'Quando' => 'Google Fonts',
+            'Quantico' => 'Google Fonts',
+            'Quattrocento' => 'Google Fonts',
+            'Quattrocento Sans' => 'Google Fonts',
+            'Questrial' => 'Google Fonts',
+            'Quicksand' => 'Google Fonts',
+            'Quintessential' => 'Google Fonts',
+            'Qwigley' => 'Google Fonts',
+            'Racing Sans One' => 'Google Fonts',
+            'Radley' => 'Google Fonts',
+            'Rajdhani' => 'Google Fonts',
+            'Rakkas' => 'Google Fonts',
+            'Raleway' => 'Google Fonts',
+            'Raleway Dots' => 'Google Fonts',
+            'Ramabhadra' => 'Google Fonts',
+            'Ramaraja' => 'Google Fonts',
+            'Rambla' => 'Google Fonts',
+            'Rammetto One' => 'Google Fonts',
+            'Ranchers' => 'Google Fonts',
+            'Rancho' => 'Google Fonts',
+            'Ranga' => 'Google Fonts',
+            'Rasa' => 'Google Fonts',
+            'Rationale' => 'Google Fonts',
+            'Ravi Prakash' => 'Google Fonts',
+            'Redressed' => 'Google Fonts',
+            'Reem Kufi' => 'Google Fonts',
+            'Reenie Beanie' => 'Google Fonts',
+            'Revalia' => 'Google Fonts',
+            'Rhodium Libre' => 'Google Fonts',
+            'Ribeye' => 'Google Fonts',
+            'Ribeye Marrow' => 'Google Fonts',
+            'Righteous' => 'Google Fonts',
+            'Risque' => 'Google Fonts',
+            'Roboto' => 'Google Fonts',
+            'Roboto Condensed' => 'Google Fonts',
+            'Roboto Mono' => 'Google Fonts',
+            'Roboto Slab' => 'Google Fonts',
+            'Rochester' => 'Google Fonts',
+            'Rock Salt' => 'Google Fonts',
+            'Rokkitt' => 'Google Fonts',
+            'Romanesco' => 'Google Fonts',
+            'Ropa Sans' => 'Google Fonts',
+            'Rosario' => 'Google Fonts',
+            'Rosarivo' => 'Google Fonts',
+            'Rouge Script' => 'Google Fonts',
+            'Rozha One' => 'Google Fonts',
+            'Rubik' => 'Google Fonts',
+            'Rubik Mono One' => 'Google Fonts',
+            'Ruda' => 'Google Fonts',
+            'Rufina' => 'Google Fonts',
+            'Ruge Boogie' => 'Google Fonts',
+            'Ruluko' => 'Google Fonts',
+            'Rum Raisin' => 'Google Fonts',
+            'Ruslan Display' => 'Google Fonts',
+            'Russo One' => 'Google Fonts',
+            'Ruthie' => 'Google Fonts',
+            'Rye' => 'Google Fonts',
+            'Sacramento' => 'Google Fonts',
+            'Sahitya' => 'Google Fonts',
+            'Sail' => 'Google Fonts',
+            'Saira' => 'Google Fonts',
+            'Saira Condensed' => 'Google Fonts',
+            'Saira Extra Condensed' => 'Google Fonts',
+            'Saira Semi Condensed' => 'Google Fonts',
+            'Salsa' => 'Google Fonts',
+            'Sanchez' => 'Google Fonts',
+            'Sancreek' => 'Google Fonts',
+            'Sansita' => 'Google Fonts',
+            'Sarala' => 'Google Fonts',
+            'Sarina' => 'Google Fonts',
+            'Sarpanch' => 'Google Fonts',
+            'Satisfy' => 'Google Fonts',
+            'Sawarabi Gothic' => 'Google Fonts',
+            'Sawarabi Mincho' => 'Google Fonts',
+            'Scada' => 'Google Fonts',
+            'Scheherazade' => 'Google Fonts',
+            'Schoolbell' => 'Google Fonts',
+            'Scope One' => 'Google Fonts',
+            'Seaweed Script' => 'Google Fonts',
+            'Secular One' => 'Google Fonts',
+            'Sedgwick Ave' => 'Google Fonts',
+            'Sedgwick Ave Display' => 'Google Fonts',
+            'Sevillana' => 'Google Fonts',
+            'Seymour One' => 'Google Fonts',
+            'Shadows Into Light' => 'Google Fonts',
+            'Shadows Into Light Two' => 'Google Fonts',
+            'Shanti' => 'Google Fonts',
+            'Share' => 'Google Fonts',
+            'Share Tech' => 'Google Fonts',
+            'Share Tech Mono' => 'Google Fonts',
+            'Shojumaru' => 'Google Fonts',
+            'Short Stack' => 'Google Fonts',
+            'Shrikhand' => 'Google Fonts',
+            'Siemreap' => 'Google Fonts',
+            'Sigmar One' => 'Google Fonts',
+            'Signika' => 'Google Fonts',
+            'Signika Negative' => 'Google Fonts',
+            'Simonetta' => 'Google Fonts',
+            'Sintony' => 'Google Fonts',
+            'Sirin Stencil' => 'Google Fonts',
+            'Six Caps' => 'Google Fonts',
+            'Skranji' => 'Google Fonts',
+            'Slabo 13px' => 'Google Fonts',
+            'Slabo 27px' => 'Google Fonts',
+            'Slackey' => 'Google Fonts',
+            'Smokum' => 'Google Fonts',
+            'Smythe' => 'Google Fonts',
+            'Sniglet' => 'Google Fonts',
+            'Snippet' => 'Google Fonts',
+            'Snowburst One' => 'Google Fonts',
+            'Sofadi One' => 'Google Fonts',
+            'Sofia' => 'Google Fonts',
+            'Song Myung' => 'Google Fonts',
+            'Sonsie One' => 'Google Fonts',
+            'Sorts Mill Goudy' => 'Google Fonts',
+            'Source Code Pro' => 'Google Fonts',
+            'Source Sans Pro' => 'Google Fonts',
+            'Source Serif Pro' => 'Google Fonts',
+            'Space Mono' => 'Google Fonts',
+            'Special Elite' => 'Google Fonts',
+            'Spectral' => 'Google Fonts',
+            'Spectral SC' => 'Google Fonts',
+            'Spicy Rice' => 'Google Fonts',
+            'Spinnaker' => 'Google Fonts',
+            'Spirax' => 'Google Fonts',
+            'Squada One' => 'Google Fonts',
+            'Sree Krushnadevaraya' => 'Google Fonts',
+            'Sriracha' => 'Google Fonts',
+            'Srisakdi' => 'Google Fonts',
+            'Stalemate' => 'Google Fonts',
+            'Stalinist One' => 'Google Fonts',
+            'Stardos Stencil' => 'Google Fonts',
+            'Stint Ultra Condensed' => 'Google Fonts',
+            'Stint Ultra Expanded' => 'Google Fonts',
+            'Stoke' => 'Google Fonts',
+            'Strait' => 'Google Fonts',
+            'Stylish' => 'Google Fonts',
+            'Sue Ellen Francisco' => 'Google Fonts',
+            'Suez One' => 'Google Fonts',
+            'Sumana' => 'Google Fonts',
+            'Sunflower' => 'Google Fonts',
+            'Sunshiney' => 'Google Fonts',
+            'Supermercado One' => 'Google Fonts',
+            'Sura' => 'Google Fonts',
+            'Suranna' => 'Google Fonts',
+            'Suravaram' => 'Google Fonts',
+            'Suwannaphum' => 'Google Fonts',
+            'Swanky and Moo Moo' => 'Google Fonts',
+            'Syncopate' => 'Google Fonts',
+            'Tajawal' => 'Google Fonts',
+            'Tangerine' => 'Google Fonts',
+            'Taprom' => 'Google Fonts',
+            'Tauri' => 'Google Fonts',
+            'Taviraj' => 'Google Fonts',
+            'Teko' => 'Google Fonts',
+            'Telex' => 'Google Fonts',
+            'Tenali Ramakrishna' => 'Google Fonts',
+            'Tenor Sans' => 'Google Fonts',
+            'Text Me One' => 'Google Fonts',
+            'The Girl Next Door' => 'Google Fonts',
+            'Tienne' => 'Google Fonts',
+            'Tillana' => 'Google Fonts',
+            'Timmana' => 'Google Fonts',
+            'Tinos' => 'Google Fonts',
+            'Titan One' => 'Google Fonts',
+            'Titillium Web' => 'Google Fonts',
+            'Trade Winds' => 'Google Fonts',
+            'Trirong' => 'Google Fonts',
+            'Trocchi' => 'Google Fonts',
+            'Trochut' => 'Google Fonts',
+            'Trykker' => 'Google Fonts',
+            'Tulpen One' => 'Google Fonts',
+            'Ubuntu' => 'Google Fonts',
+            'Ubuntu Condensed' => 'Google Fonts',
+            'Ubuntu Mono' => 'Google Fonts',
+            'Ultra' => 'Google Fonts',
+            'Uncial Antiqua' => 'Google Fonts',
+            'Underdog' => 'Google Fonts',
+            'Unica One' => 'Google Fonts',
+            'UnifrakturCook' => 'Google Fonts',
+            'UnifrakturMaguntia' => 'Google Fonts',
+            'Unkempt' => 'Google Fonts',
+            'Unlock' => 'Google Fonts',
+            'Unna' => 'Google Fonts',
+            'VT323' => 'Google Fonts',
+            'Vampiro One' => 'Google Fonts',
+            'Varela' => 'Google Fonts',
+            'Varela Round' => 'Google Fonts',
+            'Vast Shadow' => 'Google Fonts',
+            'Vesper Libre' => 'Google Fonts',
+            'Vibur' => 'Google Fonts',
+            'Vidaloka' => 'Google Fonts',
+            'Viga' => 'Google Fonts',
+            'Voces' => 'Google Fonts',
+            'Volkhov' => 'Google Fonts',
+            'Vollkorn' => 'Google Fonts',
+            'Vollkorn SC' => 'Google Fonts',
+            'Voltaire' => 'Google Fonts',
+            'Waiting for the Sunrise' => 'Google Fonts',
+            'Wallpoet' => 'Google Fonts',
+            'Walter Turncoat' => 'Google Fonts',
+            'Warnes' => 'Google Fonts',
+            'Wellfleet' => 'Google Fonts',
+            'Wendy One' => 'Google Fonts',
+            'Wire One' => 'Google Fonts',
+            'Work Sans' => 'Google Fonts',
+            'Yanone Kaffeesatz' => 'Google Fonts',
+            'Yantramanav' => 'Google Fonts',
+            'Yatra One' => 'Google Fonts',
+            'Yellowtail' => 'Google Fonts',
+            'Yeon Sung' => 'Google Fonts',
+            'Yeseva One' => 'Google Fonts',
+            'Yesteryear' => 'Google Fonts',
+            'Yrsa' => 'Google Fonts',
+            'Zeyada' => 'Google Fonts',
+            'Zilla Slab' => 'Google Fonts',
+            'Zilla Slab Highlight' => 'Google Fonts',
+        );
     }
 
     function wcp_manage_columns_head($defaults, $d = "")
@@ -2007,7 +3222,7 @@ class WCP_Folders
 //        echo "<pre>"; print_r($defaults);
         if (is_array($options) && in_array($type, $options)) {
             $columns = array(
-                    'wcp_move' => '<div class="wcp-move-multiple wcp-col" title="' . __('Move selected items', WCP_FOLDER) . '"><span class="dashicons dashicons-move"></span><div class="wcp-items"></div></div>',
+                    'wcp_move' => '<div class="wcp-move-multiple wcp-col" title="' .  esc_html__('Move selected items', WCP_FOLDER) . '"><span class="dashicons dashicons-move"></span><div class="wcp-items"></div></div>',
                 ) + $defaults;
             return $columns;
         }
@@ -2064,8 +3279,8 @@ class WCP_Folders
     public function admin_menu()
     {
         // Add menu item for settings page
-        $page_title = __('Folders', WCP_FOLDER);
-        $menu_title = __('Folders Settings', WCP_FOLDER);
+        $page_title =  esc_html__('Folders', WCP_FOLDER);
+        $menu_title =  esc_html__('Folders Settings', WCP_FOLDER);
         $capability = 'manage_options';
         $menu_slug = 'wcp_folders_settings';
         $callback = array($this, "wcp_folders_settings");
@@ -2076,8 +3291,8 @@ class WCP_Folders
 
         add_submenu_page(
             $menu_slug,
-            __('Upgrade to Pro', WCP_FOLDER),
-            __('Upgrade to Pro', WCP_FOLDER),
+             esc_html__('Upgrade to Pro', WCP_FOLDER),
+             esc_html__('Upgrade to Pro', WCP_FOLDER),
             'manage_options',
             'wcp_folders_upgrade',
             array($this, 'wcp_folders_upgrade')
@@ -2100,7 +3315,28 @@ class WCP_Folders
     public function wcp_folders_settings()
     {
         self::set_default_values_if_not_exists();
-        include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
+        $is_shown = get_option("folder_update_message");
+        if($is_shown === false) {
+            include_once dirname(dirname(__FILE__)) . "/templates/admin/update.php";
+        } else {
+            $options = get_option('folders_settings');
+            $options = (empty($options) || !is_array($options)) ?array():$options;
+            $post_types = get_post_types( array( 'public' => true ), 'objects' );
+            $terms_data = array();
+            foreach ($post_types as $post_type) {
+                if(in_array($post_type->name, $options)) {
+                    $term = $post_type->name;
+                    $term = self::get_custom_post_type($term);
+                    $categories = self::get_terms_hierarchical($term);
+                    $terms_data[$post_type->name] = $categories;
+                } else {
+                    $terms_data[$post_type->name] = array();
+                }
+            }
+            $fonts = self::get_font_list();
+            include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
+        }
+
     }
 
     public function set_default_values_if_not_exists()

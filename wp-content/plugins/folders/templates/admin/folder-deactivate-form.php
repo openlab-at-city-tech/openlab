@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') or die('Nope, not accessing this');
+defined('ABSPATH') or wp_die('Nope, not accessing this');
 ?>
 <style>
     .folder-hidden {
@@ -109,6 +109,8 @@ defined('ABSPATH') or die('Nope, not accessing this');
     .folder-hidden-input textarea {
         padding: 10px;
         width: 100%;
+        height: 100px;
+        margin: 0 0 10px 0;
     }
 
     span.folder-error-message {
@@ -212,7 +214,9 @@ defined('ABSPATH') or die('Nope, not accessing this');
     }
 
     .folder-form-field textarea {
-        height: 70px
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
     }
 
     .folder-help-button {
@@ -289,36 +293,41 @@ defined('ABSPATH') or die('Nope, not accessing this');
     .folder-popup-body h3 {
         line-height: 24px;
     }
+    .folder-popup-overlay .form-control input {
+        width: 100%;
+        margin: 0 0 15px 0;
+    }
 </style>
 
 <div class="folder-popup-overlay">
     <div class="folder-serveypanel">
         <form action="#" method="post" id="folder-deactivate-form">
             <div class="folder-popup-header">
-                <h2><?php _e('Quick feedback about Folders', WCP_FOLDER); ?> 🙏</h2>
+                <h2><?php esc_html_e('Quick feedback about Folders', WCP_FOLDER); ?> 🙏</h2>
             </div>
             <div class="folder-popup-body">
-                <h3><?php _e('Your feedback will help us improve the product, please tell us why did you decide to deactivate Folders :)', WCP_FOLDER); ?></h3>
+                <h3><?php esc_html_e('Your feedback will help us improve the product, please tell us why did you decide to deactivate Folders :)', WCP_FOLDER); ?></h3>
+                <div class="form-control">
+                    <input type="email" value="<?php echo get_option( 'admin_email' ) ?>" placeholder="<?php echo _e("Email address", WCP_FOLDER) ?>" id="folder-deactivate-email_id">
+                </div>
                 <div class="form-control">
                     <label></label>
-                    <textarea placeholder="<?php echo _e("Your comment", WCP_FOLDER) ?>" id="folder-comment"></textarea>
+                    <textarea placeholder="<?php esc_html_e("Your comment", WCP_FOLDER) ?>" id="folder-comment"></textarea>
                 </div>
-                <?php _e("Having any problem with the Folders plugins? <a class='folder-deactivate-button' href='javascript:;'>Click here</a> to contact our support now", WCP_FOLDER) ?>
+                <?php esc_html_e("Having any problem with the Folders plugins?", WCP_FOLDER) ?><a class='folder-deactivate-button' href='javascript:;'><?php esc_html_e("Click here", WCP_FOLDER) ?></a><?php esc_html_e(" to contact our support now", WCP_FOLDER) ?>
             </div>
             <div class="folder-popup-footer">
-                <label class="folder-anonymous"><input type="checkbox"/><?php _e('Anonymous feedback', WCP_FOLDER); ?>
+                <label class="folder-anonymous"><input type="checkbox"/><?php esc_html_e('Anonymous feedback', WCP_FOLDER); ?>
                 </label>
                 <input type="button" class="button button-secondary button-skip folder-popup-skip-feedback"
                        value="Skip &amp; Deactivate">
 
                 <div class="action-btns">
-                    <span class="folder-spinner"><img src="<?php echo admin_url('/images/spinner.gif'); ?>"
-                                                      alt=""></span>
-                    <input type="submit" class="button button-secondary button-deactivate folder-popup-allow-deactivate"
-                           value="Submit &amp; Deactivate" disabled="disabled">
-                    <a href="#"
-                       class="button button-primary folder-popup-button-close"><?php _e('Cancel', WCP_FOLDER); ?></a>
-
+                    <span class="folder-spinner">
+                        <img src="<?php echo esc_url(admin_url('/images/spinner.gif')); ?>" alt="">
+                    </span>
+                    <input type="submit" class="button button-secondary button-deactivate folder-popup-allow-deactivate" value="Submit &amp; Deactivate" disabled="disabled">
+                    <a href="#" class="button button-primary folder-popup-button-close"><?php esc_html_e('Cancel', WCP_FOLDER); ?></a>
                 </div>
             </div>
         </form>
@@ -369,6 +378,7 @@ defined('ABSPATH') or die('Nope, not accessing this');
                 event.preventDefault();
 
                 var _reason = jQuery('#folder-comment').val();
+                var _email_id = jQuery('#folder-deactivate-email_id').val();
 
                 $.ajax({
                     url: ajaxurl,
@@ -376,7 +386,8 @@ defined('ABSPATH') or die('Nope, not accessing this');
                     data: {
                         action: 'folder_plugin_deactivate',
                         reason: _reason,
-                        nonce: '<?php echo wp_create_nonce('wcp_folder_deactivate_nonce') ?>'
+                        email_id: _email_id,
+                        nonce: '<?php echo esc_attr(wp_create_nonce('wcp_folder_deactivate_nonce')) ?>'
                     },
                     beforeSend: function () {
                         $(".folder-spinner").show();
