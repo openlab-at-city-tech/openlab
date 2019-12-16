@@ -2,6 +2,10 @@
 /* wp-osm-plugin.HanBlog.Net                                  */
 /* note: there is also some style information in the php-file */
 
+.ol-openseamap{
+background: transparent;
+}
+
 .ol-popup {
   position: absolute;
   background-color: white;

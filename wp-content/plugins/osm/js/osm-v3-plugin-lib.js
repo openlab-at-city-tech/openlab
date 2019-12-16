@@ -193,7 +193,8 @@ function osm_addMarkerLayer(a_mapname, a_lon, a_lat, a_MarkerIcon, a_MarkerXAnch
         });
 
         var vectorMarkerLayer = new ol.layer.Vector({
-          source: vectorMarkerSource
+          source: vectorMarkerSource,
+          zIndex: 92
         });
 
        a_mapname.addLayer(vectorMarkerLayer);
