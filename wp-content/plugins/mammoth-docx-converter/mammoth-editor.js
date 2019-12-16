@@ -12797,7 +12797,7 @@ function DocumentConversion(options, comments) {
             }
 
             var children = convertElements(element.children, messages, options);
-            return [Html.freshElement("a", attributes, children)];
+            return [Html.nonFreshElement("a", attributes, children)];
         },
         "bookmarkStart": function(element, messages, options) {
             var anchor = Html.freshElement("a", {
@@ -16146,31 +16146,39 @@ function openArrayBuffer(arrayBuffer) {
     function exists(name) {
         return zipFile.file(name) !== null;
     }
-    
+
     function read(name, encoding) {
         var array = zipFile.file(name).asUint8Array();
-        var buffer = new Buffer(array);
+        var buffer = uint8ArrayToBuffer(array);
         if (encoding) {
             return promises.when(buffer.toString(encoding));
         } else {
             return promises.when(buffer);
         }
     }
-    
+
     function write(name, contents) {
         zipFile.file(name, contents);
     }
-    
+
     function toBuffer() {
         return zipFile.generate({type: "nodebuffer"});
     }
-    
+
     return {
         exists: exists,
         read: read,
         write: write,
         toBuffer: toBuffer
     };
+}
+
+function uint8ArrayToBuffer(array) {
+    if (Buffer.from && Buffer.from !== Uint8Array.from) {
+        return Buffer.from(array);
+    } else {
+        return new Buffer(array);
+    }
 }
 
 function splitPath(path) {
@@ -16189,9 +16197,9 @@ function joinPath() {
     var nonEmptyPaths = Array.prototype.filter.call(arguments, function(path) {
         return path;
     });
-    
+
     var relevantPaths = [];
-    
+
     nonEmptyPaths.forEach(function(path) {
         if (/^\//.test(path)) {
             relevantPaths = [path];
@@ -16199,7 +16207,7 @@ function joinPath() {
             relevantPaths.push(path);
         }
     });
-    
+
     return relevantPaths.join("/");
 }
 
