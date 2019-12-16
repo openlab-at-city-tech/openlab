@@ -285,7 +285,7 @@ window.bp = window.bp || {};
 			$( this.objectNavParent + ' [data-bp-scope="' + data.scope + '"], #object-nav li.current' ).addClass( 'selected loading' );
 			$( '#buddypress [data-bp-filter="' + data.object + '"] option[value="' + data.filter + '"]' ).prop( 'selected', true );
 
-			if ( 'friends' === data.object || 'group_members' === data.object ) {
+			if ( 'friends' === data.object || 'friend_requests' === data.object || 'group_members' === data.object ) {
 				data.template = data.object;
 				data.object   = 'members';
 			} else if ( 'group_requests' === data.object ) {
@@ -318,20 +318,20 @@ window.bp = window.bp || {};
 						$( 'html,body' ).animate( { scrollTop: top.offset().top }, 'slow', function() {
 							$( data.target ).fadeOut( 100, function() {
 								self.inject( this, response.data.contents, data.method );
-								$( this ).fadeIn( 100 );
-
-								// Inform other scripts the list of objects has been refreshed.
-								$( data.target ).trigger( 'bp_ajax_request', $.extend( data, { response: response.data } ) );
+								$( this ).fadeIn( 100, 'swing', function(){
+									// Inform other scripts the list of objects has been refreshed.
+									$( data.target ).trigger( 'bp_ajax_request', $.extend( data, { response: response.data } ) );
+								} );
 							} );
 						} );
 
 					} else {
 						$( data.target ).fadeOut( 100, function() {
 							self.inject( this, response.data.contents, data.method );
-							$( this ).fadeIn( 100 );
-
-							// Inform other scripts the list of objects has been refreshed.
-							$( data.target ).trigger( 'bp_ajax_request', $.extend( data, { response: response.data } ) );
+							$( this ).fadeIn( 100, 'swing', function(){
+								// Inform other scripts the list of objects has been refreshed.
+								$( data.target ).trigger( 'bp_ajax_request', $.extend( data, { response: response.data } ) );
+							} );
 						} );
 					}
 				}
@@ -572,10 +572,6 @@ window.bp = window.bp || {};
 
 			if ( $( '#buddypress [data-bp-search="' + object + '"] input[type=search]' ).length ) {
 				search_terms = $( '#buddypress [data-bp-search="' + object + '"] input[type=search]' ).val();
-			}
-
-			if ( 'friends' === object ) {
-				object = 'members';
 			}
 
 			self.objectRequest( {

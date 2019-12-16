@@ -360,8 +360,10 @@ class BP_Activity_Activity {
 	public static function get( $args = array() ) {
 		global $wpdb;
 
+		$function_args = func_get_args();
+
 		// Backward compatibility with old method of passing arguments.
-		if ( !is_array( $args ) || func_num_args() > 1 ) {
+		if ( !is_array( $args ) || count( $function_args ) > 1 ) {
 			_deprecated_argument( __METHOD__, '1.6', sprintf( __( 'Arguments passed to %1$s should be in an associative array. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
 
 			$old_args_keys = array(
@@ -378,7 +380,7 @@ class BP_Activity_Activity {
 				10 => 'spam'
 			);
 
-			$args = bp_core_parse_args_array( $old_args_keys, func_get_args() );
+			$args = bp_core_parse_args_array( $old_args_keys, $function_args );
 		}
 
 		$bp = buddypress();
@@ -1467,7 +1469,7 @@ class BP_Activity_Activity {
 	public static function get_activity_comments( $activity_id, $left, $right, $spam = 'ham_only', $top_level_parent_id = 0 ) {
 		global $wpdb;
 
-		$func_args = func_get_args();
+		$function_args = func_get_args();
 
 		if ( empty( $top_level_parent_id ) ) {
 			$top_level_parent_id = $activity_id;
@@ -1516,7 +1518,7 @@ class BP_Activity_Activity {
 			 * @param BP_Activity_Activity $value     Magic method referring to currently called method.
 			 * @param array                $func_args Array of the method's argument list.
 			 */
-			if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $func_args ) ) {
+			if ( apply_filters( 'bp_use_legacy_activity_query', false, __METHOD__, $function_args ) ) {
 
 				/**
 				 * Filters the MySQL prepared statement for the legacy activity query.
@@ -1541,6 +1543,7 @@ class BP_Activity_Activity {
 				$descendant_ids = $wpdb->get_col( $sql );
 				$descendants    = self::get_activity_data( $descendant_ids );
 				$descendants    = self::append_user_fullnames( $descendants );
+				$descendants    = self::generate_action_strings( $descendants );
 			}
 
 			$ref = array();
