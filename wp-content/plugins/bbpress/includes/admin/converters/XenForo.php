@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * bbPress XenForo Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  *  Implementation of XenForo converter.
  *
- * @since bbPress (r5145)
- * @link Codex Docs http://codex.bbpress.org/import-forums/xenforo
+ * @since 2.5.0 bbPress (r5145)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/xenforo
  */
 class XenForo extends BBP_Converter_Base {
 
 	/**
 	 * Main constructor
 	 *
-	 * @uses XenForo::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -23,14 +29,20 @@ class XenForo extends BBP_Converter_Base {
 	 */
 	public function setup_globals() {
 
+		// Setup smiley URL & path
+		$this->bbcode_parser_properties = array(
+			'smiley_url' => false,
+			'smiley_dir' => false
+		);
+
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'node',
 			'from_fieldname'  => 'node_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_id'
+			'to_fieldname'    => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0. Stored in postmeta)
@@ -38,7 +50,7 @@ class XenForo extends BBP_Converter_Base {
 			'from_tablename'  => 'node',
 			'from_fieldname'  => 'parent_node_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -168,14 +180,33 @@ class XenForo extends BBP_Converter_Base {
 			'default'      => date('Y-m-d H:i:s')
 		);
 
+		/** Forum Subscriptions Section ***************************************/
+
+		// Subscribed forum ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forum_watch',
+			'from_fieldname'  => 'node_id',
+			'to_type'         => 'forum_subscriptions',
+			'to_fieldname'    => '_bbp_forum_subscriptions'
+		);
+
+		// Subscribed user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forum_watch',
+			'from_fieldname'  => 'user_id',
+			'to_type'         => 'forum_subscriptions',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'thread',
 			'from_fieldname' => 'thread_id',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -214,6 +245,23 @@ class XenForo extends BBP_Converter_Base {
 			'callback_method' => 'callback_userid'
 		);
 
+		// Topic author name (Stored in postmeta as _bbp_anonymous_name)
+		$this->field_map[] = array(
+			'from_tablename' => 'thread',
+			'from_fieldname' => 'username',
+			'to_type'        => 'topic',
+			'to_fieldname'   => '_bbp_old_topic_author_name_id'
+		);
+
+		// Is the topic anonymous (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'thread',
+			'from_fieldname'  => 'user_id',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_is_topic_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
+		);
+
 		// Topic title.
 		$this->field_map[] = array(
 			'from_tablename' => 'thread',
@@ -244,12 +292,21 @@ class XenForo extends BBP_Converter_Base {
 			'callback_method' => 'callback_html'
 		);
 
+		// Topic status (Visible or Deleted)
+		$this->field_map[] = array(
+			'from_tablename'  => 'thread',
+			'from_fieldname'  => 'discussion_state',
+			'to_type'         => 'topic',
+			'to_fieldname'    => 'post_status',
+			'callback_method' => 'callback_status'
+		);
+
 		// Topic status (Open = 1 or Closed = 0)
 		$this->field_map[] = array(
 			'from_tablename'  => 'thread',
 			'from_fieldname'  => 'discussion_open',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
@@ -262,12 +319,12 @@ class XenForo extends BBP_Converter_Base {
 			'callback_method' => 'callback_forumid'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'thread',
 			'from_fieldname'  => 'sticky',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -314,14 +371,43 @@ class XenForo extends BBP_Converter_Base {
 		 * XenForo Forums do not support topic tags out of the box
 		 */
 
+		/** Topic Subscriptions Section ***************************************/
+
+		// Subscribed topic ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'thread_watch',
+			'from_fieldname'  => 'thread_id',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => '_bbp_subscriptions'
+		);
+
+		// Subscribed user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'thread_watch',
+			'from_fieldname'  => 'user_id',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'post',
 			'from_fieldname' => 'post_id',
 			'to_type'        => 'reply',
-			'to_fieldname'   => '_bbp_post_id'
+			'to_fieldname'   => '_bbp_old_reply_id'
+		);
+
+		// Join the 'thread' table to exclude topics from being imported as replies
+		$this->field_map[] = array(
+			'from_tablename'  => 'thread',
+			'from_fieldname'  => 'thread_id',
+			'join_tablename'  => 'post',
+			'join_type'       => 'LEFT',
+			'join_expression' => 'USING (thread_id) WHERE thread.first_post_id != post.post_id',
+			'to_type'         => 'reply'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
@@ -351,29 +437,30 @@ class XenForo extends BBP_Converter_Base {
 			'callback_method' => 'callback_userid'
 		);
 
-		// Reply title.
-		// Note: We join the 'thread' table because 'post' do not have titles.
+		// Reply status (Visible or Deleted)
 		$this->field_map[] = array(
-			'from_tablename'  => 'thread',
-			'from_fieldname'  => 'title',
-			'join_tablename'  => 'post',
-			'join_type'       => 'LEFT',
-			'join_expression' => 'USING (thread_id) WHERE thread.first_post_id != post.post_id',
+			'from_tablename'  => 'post',
+			'from_fieldname'  => 'message_state',
 			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title',
-			'callback_method' => 'callback_reply_title'
+			'to_fieldname'    => 'post_status',
+			'callback_method' => 'callback_status'
 		);
 
-		// Reply slug (Clean name to avoid conflicts)
-		// Note: We join the 'thread' table because 'post' do not have titles.
+		// Reply author name (Stored in postmeta as _bbp_anonymous_name)
 		$this->field_map[] = array(
-			'from_tablename'  => 'thread',
-			'from_fieldname'  => 'title',
-			'join_tablename'  => 'post',
-			'join_type'       => 'LEFT',
-			'join_expression' => 'USING (thread_id) WHERE thread.first_post_id != post.post_id',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
+			'from_tablename'  => 'post',
+			'from_fieldname'  => 'username',
+			'to_type'         => 'reply',
+			'to_fieldname'   => '_bbp_old_reply_author_name_id'
+		);
+
+		// Is the reply anonymous  (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'post',
+			'from_fieldname'  => 'user_id',
+			'to_type'         => 'reply',
+			'to_fieldname'    => '_bbp_old_is_reply_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
 		);
 
 		// Reply content.
@@ -426,12 +513,12 @@ class XenForo extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'user',
 			'from_fieldname' => 'user_id',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
 /*		// User password.
@@ -597,10 +684,9 @@ class XenForo extends BBP_Converter_Base {
 	/**
 	 * This method is to save the salt and password together.  That
 	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by wordpress.
+	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function translate_savepass( $field, $row )
-	{
+	public function translate_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -609,11 +695,9 @@ class XenForo extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
-		switch( $pass_array['hashFunc'] )
-		{
+		switch( $pass_array['hashFunc'] ) {
 			case 'sha256':
 				return ( $pass_array['hash'] == hash( 'sha256', hash( 'sha256', $password ) . $pass_array['salt'] ) );
 			case 'sha1':
@@ -642,7 +726,7 @@ class XenForo extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the forum status from XenForo numeric's to WordPress's strings.
+	 * Translate the forum status from XenForo numerics to WordPress's strings.
 	 *
 	 * @param int $status XenForo numeric forum status
 	 * @return string WordPress safe
@@ -662,7 +746,27 @@ class XenForo extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic status from XenForo numeric's to WordPress's strings.
+	 * Translate the post status from XenForo to WordPress' strings.
+	 *
+	 * @param int $status XenForo post status
+	 * @return string WordPress safe
+	 */
+	public function callback_status( $status = 1 ) {
+		switch ( $status ) {
+			case 'deleted' :
+				$status = 'pending'; // bbp_get_pending_status_id()
+				break;
+
+			case 'visible'  :
+			default :
+				$status = 'publish'; // bbp_get_public_status_id()
+				break;
+		}
+		return $status;
+	}
+
+	/**
+	 * Translate the topic status from XenForo numerics to WordPress's strings.
 	 *
 	 * @param int $status XenForo numeric topic status
 	 * @return string WordPress safe
@@ -682,7 +786,7 @@ class XenForo extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic sticky status type from XenForo numeric's to WordPress's strings.
+	 * Translate the topic sticky status type from XenForo numerics to WordPress's strings.
 	 *
 	 * @param int $status XenForo numeric forum type
 	 * @return string WordPress safe
@@ -713,13 +817,34 @@ class XenForo extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Set the reply title
-	 *
-	 * @param string $title XenForo topic title of this reply
-	 * @return string Prefixed topic title, or empty string
+	 * This callback processes any custom parser.php attributes and custom code with preg_replace
 	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
+	protected function callback_html( $field ) {
+
+		// Strips Xenforo custom HTML first from $field before parsing $field to parser.php
+		$xenforo_markup = $field;
+		$xenforo_markup = html_entity_decode( $xenforo_markup );
+
+		// Replace '[QUOTE]' with '<blockquote>'
+		$xenforo_markup = preg_replace( '/\[QUOTE\]/', '<blockquote>', $xenforo_markup );
+		// Replace '[/QUOTE]' with '</blockquote>'
+		$xenforo_markup = preg_replace( '/\[\/QUOTE\]/', '</blockquote>', $xenforo_markup );
+		// Replace '[QUOTE=User Name($1)]' with '<em>@$1 wrote:</em><blockquote>"
+		$xenforo_markup = preg_replace( '/\[quote=\"(.*?)\,\spost\:\s(.*?)\,\s\member\:\s(.*?)\"\](.*?)\[\/quote\]/', '<em>@$1 wrote:</em><blockquote>', $xenforo_markup );
+		// Replace '[/quote]' with '</blockquote>'
+		$xenforo_markup = preg_replace( '/\[\/quote\]/', '</blockquote>', $xenforo_markup );
+
+		// Replace '[media=youtube]$1[/media]' with '$1"
+		$xenforo_markup = preg_replace( '/\[media\=youtube\](.*?)\[\/media\]/', 'https://youtu.be/$1', $xenforo_markup );
+		// Replace '[media=dailymotion]$1[/media]' with '$1"
+		$xenforo_markup = preg_replace( '/\[media\=dailymotion\](.*?)\[\/media\]/', 'https://www.dailymotion.com/video/$1', $xenforo_markup );
+		// Replace '[media=vimeo]$1[/media]' with '$1"
+		$xenforo_markup = preg_replace( '/\[media\=vimeo\](.*?)\[\/media\]/', 'https://vimeo.com/$1', $xenforo_markup );
+
+		// Now that Xenforo custom HTML has been stripped put the cleaned HTML back in $field
+		$field = $xenforo_markup;
+
+		// Parse out any bbCodes in $field with the BBCode 'parser.php'
+		return parent::callback_html( $field );
 	}
 }

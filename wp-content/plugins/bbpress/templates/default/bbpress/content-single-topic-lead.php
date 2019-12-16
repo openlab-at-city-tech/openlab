@@ -7,23 +7,20 @@
  * @subpackage Theme
  */
 
-?>
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
 
-<?php do_action( 'bbp_template_before_lead_topic' ); ?>
+do_action( 'bbp_template_before_lead_topic' ); ?>
 
 <ul id="bbp-topic-<?php bbp_topic_id(); ?>-lead" class="bbp-lead-topic">
 
 	<li class="bbp-header">
 
-		<div class="bbp-topic-author"><?php  _e( 'Creator',  'bbpress' ); ?></div><!-- .bbp-topic-author -->
+		<div class="bbp-topic-author"><?php esc_html_e( 'Creator',  'bbpress' ); ?></div><!-- .bbp-topic-author -->
 
 		<div class="bbp-topic-content">
 
-			<?php _e( 'Topic', 'bbpress' ); ?>
-
-			<?php bbp_topic_subscription_link(); ?>
-
-			<?php bbp_topic_favorite_link(); ?>
+			<?php esc_html_e( 'Topic', 'bbpress' ); ?>
 
 		</div><!-- .bbp-topic-content -->
 
@@ -55,9 +52,9 @@
 
 				<?php do_action( 'bbp_theme_before_topic_author_details' ); ?>
 
-				<?php bbp_topic_author_link( array( 'sep' => '<br />', 'show_role' => true ) ); ?>
+				<?php bbp_topic_author_link( array( 'show_role' => true ) ); ?>
 
-				<?php if ( bbp_is_user_keymaster() ) : ?>
+				<?php if ( current_user_can( 'moderate', bbp_get_reply_id() ) ) : ?>
 
 					<?php do_action( 'bbp_theme_before_topic_author_admin_details' ); ?>
 
@@ -87,11 +84,11 @@
 
 	<li class="bbp-footer">
 
-		<div class="bbp-topic-author"><?php  _e( 'Creator',  'bbpress' ); ?></div>
+		<div class="bbp-topic-author"><?php esc_html_e( 'Creator',  'bbpress' ); ?></div>
 
 		<div class="bbp-topic-content">
 
-			<?php _e( 'Topic', 'bbpress' ); ?>
+			<?php esc_html_e( 'Topic', 'bbpress' ); ?>
 
 		</div><!-- .bbp-topic-content -->
 
@@ -99,4 +96,4 @@
 
 </ul><!-- #bbp-topic-<?php bbp_topic_id(); ?>-lead -->
 
-<?php do_action( 'bbp_template_after_lead_topic' ); ?>
+<?php do_action( 'bbp_template_after_lead_topic' );

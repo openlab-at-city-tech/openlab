@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * bbPress PHPWind Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of PHPWind Forum converter.
  *
- * @since bbPress (r5142)
- * @link Codex Docs http://codex.bbpress.org/import-forums/phpwind
+ * @since 2.5.0 bbPress (r5142)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/phpwind
  */
 class PHPWind extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
 	 *
-	 * @uses PHPWind::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -25,12 +31,12 @@ class PHPWind extends BBP_Converter_Base {
 
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'bbs_forum',
 			'from_fieldname' => 'fid',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0, Stored in postmeta)
@@ -38,7 +44,7 @@ class PHPWind extends BBP_Converter_Base {
 			'from_tablename'  => 'bbs_forum',
 			'from_fieldname'  => 'parentid',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -132,6 +138,12 @@ class PHPWind extends BBP_Converter_Base {
 			'callback_method' => 'callback_forum_type'
 		);
 
+		// Forum status (Set a default value 'open', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_status',
+			'default'      => 'open'
+		);
 		// Forum dates.
 		$this->field_map[] = array(
 			'to_type'      => 'bbs_forum',
@@ -156,12 +168,12 @@ class PHPWind extends BBP_Converter_Base {
 
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'bbs_threads',
 			'from_fieldname' => 'tid',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -289,7 +301,7 @@ class PHPWind extends BBP_Converter_Base {
 			'from_tablename'  => 'bbs_threads',
 			'from_fieldname'  => 'tpcstatus',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
@@ -301,12 +313,12 @@ class PHPWind extends BBP_Converter_Base {
 
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'bbs_posts',
 			'from_fieldname' => 'pid',
 			'to_type'        => 'reply',
-			'to_fieldname'   => '_bbp_post_id'
+			'to_fieldname'   => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
@@ -342,31 +354,6 @@ class PHPWind extends BBP_Converter_Base {
 			'to_type'         => 'reply',
 			'to_fieldname'    => 'post_author',
 			'callback_method' => 'callback_userid'
-		);
-
-		// Reply title.
-		// Note: We join the 'bbs_threads' table because 'bbs_posts' table does not include reply title.
-		$this->field_map[] = array(
-			'from_tablename'  => 'bbs_threads',
-			'from_fieldname'  => 'subject',
-			'join_tablename'  => 'bbs_posts',
-			'join_type'       => 'LEFT',
-			'join_expression' => 'USING (tid)',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
-		// Note: We join the 'bbs_threads' table because 'bbs_posts' table does not include reply slug.
-		$this->field_map[] = array(
-			'from_tablename'  => 'bbs_threads',
-			'from_fieldname'  => 'subject',
-			'join_tablename'  => 'bbs_posts',
-			'join_type'       => 'LEFT',
-			'join_expression' => 'USING (tid)',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
 		);
 
 		// Reply content.
@@ -419,15 +406,15 @@ class PHPWind extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'user',
 			'from_fieldname' => 'uid',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
 			'from_tablename'  => 'user',
 			'from_fieldname'  => 'password',
@@ -436,7 +423,7 @@ class PHPWind extends BBP_Converter_Base {
 //			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
 /*		$this->field_map[] = array(
 			'from_tablename' => 'user',
 			'from_fieldname' => 'pass',
@@ -497,8 +484,7 @@ class PHPWind extends BBP_Converter_Base {
 	 * This method allows us to indicates what is or is not converted for each
 	 * converter.
 	 */
-	public function info()
-	{
+	public function info() {
 		return '';
 	}
 
@@ -507,8 +493,7 @@ class PHPWind extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass( $field, $row )
-	{
+	public function callback_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -517,8 +502,7 @@ class PHPWind extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
 		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
 	}
@@ -552,7 +536,7 @@ class PHPWind extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from PHPWind v9.x numeric's to WordPress's strings.
+	 * Translate the post status from PHPWind v9.x numerics to WordPress's strings.
 	 *
 	 * @param int $status PHPWind v9.x numeric topic status
 	 * @return string WordPress safe

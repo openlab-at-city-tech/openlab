@@ -7,10 +7,12 @@
  * @subpackage Theme
  */
 
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
 ?>
 
 <ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?>>
-
 	<li class="bbp-forum-info">
 
 		<?php if ( bbp_is_user_home() && bbp_is_subscriptions() ) : ?>
@@ -71,5 +73,4 @@
 
 		</p>
 	</li>
-
 </ul><!-- #bbp-forum-<?php bbp_forum_id(); ?> -->

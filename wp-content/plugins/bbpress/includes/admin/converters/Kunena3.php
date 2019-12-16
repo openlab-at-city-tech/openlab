@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * bbPress Kunena 3.x Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of Kunena v3.x Forums for Joomla Forum converter.
  *
- * @since bbPress (r5144)
- * @link Codex Docs http://codex.bbpress.org/import-forums/kunena/
+ * @since 2.5.0 bbPress (r5144)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/kunena/
  */
 class Kunena3 extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
 	 *
-	 * @uses Kunena3::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -25,12 +31,12 @@ class Kunena3 extends BBP_Converter_Base {
 
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'kunena_categories',
 			'from_fieldname' => 'id',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0, Stored in postmeta)
@@ -38,7 +44,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'from_tablename'  => 'kunena_categories',
 			'from_fieldname'  => 'parent_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -149,12 +155,12 @@ class Kunena3 extends BBP_Converter_Base {
 
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'kunena_topics',
 			'from_fieldname' => 'id',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -282,7 +288,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'from_tablename'  => 'kunena_topics',
 			'from_fieldname'  => 'locked',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
@@ -294,12 +300,12 @@ class Kunena3 extends BBP_Converter_Base {
 
 		/** Reply Section ******************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'kunena_messages',
 			'from_fieldname'  => 'id',
 			'to_type'         => 'reply',
-			'to_fieldname'    => '_bbp_post_id'
+			'to_fieldname'    => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
@@ -335,24 +341,6 @@ class Kunena3 extends BBP_Converter_Base {
 			'to_type'         => 'reply',
 			'to_fieldname'    => 'post_author',
 			'callback_method' => 'callback_userid'
-		);
-
-		// Reply title.
-		$this->field_map[] = array(
-			'from_tablename' => 'kunena_messages',
-			'from_fieldname' => 'subject',
-			'to_type'        => 'reply',
-			'to_fieldname'   => 'post_title',
-			'callback_method' => 'callback_reply_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
-		$this->field_map[] = array(
-			'from_tablename'  => 'kunena_messages',
-			'from_fieldname'  => 'subject',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
 		);
 
 		// Reply content.
@@ -411,15 +399,15 @@ class Kunena3 extends BBP_Converter_Base {
 
 		//Note: We are importing the Joomla User details and the Kunena v3.x user profile details.
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'id',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users',
 			'from_fieldname'  => 'password',
@@ -428,7 +416,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
 //		$this->field_map[] = array(
 //			'from_tablename' => 'users',
 //			'from_fieldname' => 'salt',
@@ -503,7 +491,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'join_type'       => 'LEFT',
 			'join_expression' => 'ON kunena_users.userid = users.id',
 			'to_type'         => 'user',
-			'to_fieldname'    => 'aim'
+			'to_fieldname'    => '_bbp_kunena3_user_aim'
 		);
 
 		// User Yahoo (Stored in usermeta)
@@ -514,7 +502,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'join_type'       => 'LEFT',
 			'join_expression' => 'ON kunena_users.userid = users.id',
 			'to_type'         => 'user',
-			'to_fieldname'    => 'yim'
+			'to_fieldname'    => '_bbp_kunena3_user_yim'
 		);
 
 		// Store Google Tak (Stored in usermeta)
@@ -525,7 +513,7 @@ class Kunena3 extends BBP_Converter_Base {
 			'join_type'       => 'LEFT',
 			'join_expression' => 'ON kunena_users.userid = users.id',
 			'to_type'         => 'user',
-			'to_fieldname'    => 'jabber'
+			'to_fieldname'    => '_bbp_kunena3_user_jabber'
 		);
 
 		// Store ICQ (Stored in usermeta)
@@ -710,8 +698,7 @@ class Kunena3 extends BBP_Converter_Base {
 	 * This method allows us to indicates what is or is not converted for each
 	 * converter.
 	 */
-	public function info()
-	{
+	public function info() {
 		return '';
 	}
 
@@ -720,8 +707,7 @@ class Kunena3 extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass( $field, $row )
-	{
+	public function callback_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -730,14 +716,13 @@ class Kunena3 extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
 		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
 	}
 
 	/**
-	 * Translate the forum type from Kunena v3.x numeric's to WordPress's strings.
+	 * Translate the forum type from Kunena v3.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v3.x numeric forum type
 	 * @return string WordPress safe
@@ -752,7 +737,7 @@ class Kunena3 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the forum status from Kunena v3.x numeric's to WordPress's strings.
+	 * Translate the forum status from Kunena v3.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v3.x numeric forum status
 	 * @return string WordPress safe
@@ -772,7 +757,7 @@ class Kunena3 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from Kunena v3.x numeric's to WordPress's strings.
+	 * Translate the post status from Kunena v3.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v3.x numeric topic status
 	 * @return string WordPress safe
@@ -800,16 +785,5 @@ class Kunena3 extends BBP_Converter_Base {
 	public function callback_topic_reply_count( $count = 1 ) {
 		$count = absint( (int) $count - 1 );
 		return $count;
-	}
-
-	/**
-	 * Set the reply title
-	 *
-	 * @param string $title Kunena v3.x topic title of this reply
-	 * @return string Prefixed topic title, or empty string
-	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
 	}
 }

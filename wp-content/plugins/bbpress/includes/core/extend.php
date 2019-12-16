@@ -11,25 +11,29 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Loads Akismet inside the bbPress global class
  *
- * @since bbPress (r3277)
+ * @since 2.0.0 bbPress (r3277)
  *
  * @return If bbPress is not active
  */
 function bbp_setup_akismet() {
 
 	// Bail if no akismet
-	if ( !defined( 'AKISMET_VERSION' ) ) return;
+	if ( ! defined( 'AKISMET_VERSION' ) ) {
+		return;
+	}
 
 	// Bail if Akismet is turned off
-	if ( !bbp_is_akismet_active() ) return;
+	if ( ! bbp_is_akismet_active() ) {
+		return;
+	}
 
 	// Include the Akismet Component
-	require( bbpress()->includes_dir . 'extend/akismet.php' );
+	require_once bbpress()->includes_dir . 'extend/akismet.php';
 
 	// Instantiate Akismet for bbPress
 	bbpress()->extend->akismet = new BBP_Akismet();
@@ -39,7 +43,8 @@ function bbp_setup_akismet() {
  * Requires and creates the BuddyPress extension, and adds component creation
  * action to bp_init hook. @see bbp_setup_buddypress_component()
  *
- * @since bbPress (r3395)
+ * @since 2.0.0 bbPress (r3395)
+ *
  * @return If BuddyPress is not active
  */
 function bbp_setup_buddypress() {
@@ -49,7 +54,8 @@ function bbp_setup_buddypress() {
 		/**
 		 * Helper for BuddyPress 1.6 and earlier
 		 *
-		 * @since bbPress (r4395)
+		 * @since 2.2.0 bbPress (r4395)
+		 *
 		 * @return BuddyPress
 		 */
 		function buddypress() {
@@ -58,11 +64,12 @@ function bbp_setup_buddypress() {
 	}
 
 	// Bail if in maintenance mode
-	if ( ! buddypress() || buddypress()->maintenance_mode )
+	if ( ! buddypress() || buddypress()->maintenance_mode ) {
 		return;
+	}
 
 	// Include the BuddyPress Component
-	require( bbpress()->includes_dir . 'extend/buddypress/loader.php' );
+	require_once bbpress()->includes_dir . 'extend/buddypress/loader.php';
 
 	// Instantiate BuddyPress for bbPress
 	bbpress()->extend->buddypress = new BBP_Forums_Component();

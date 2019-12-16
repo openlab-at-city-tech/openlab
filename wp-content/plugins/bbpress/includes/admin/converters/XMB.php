@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * bbPress XMB Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of XMB Forum converter.
  *
- * @since bbPress (r5143)
- * @link Codex Docs http://codex.bbpress.org/import-forums/xmb
+ * @since 2.5.0 bbPress (r5143)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/xmb
  */
 class XMB extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
 	 *
-	 * @uses XMB::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -25,12 +31,12 @@ class XMB extends BBP_Converter_Base {
 
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'forums',
 			'from_fieldname' => 'fid',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0, Stored in postmeta)
@@ -38,7 +44,7 @@ class XMB extends BBP_Converter_Base {
 			'from_tablename'  => 'forums',
 			'from_fieldname'  => 'fup',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -116,6 +122,13 @@ class XMB extends BBP_Converter_Base {
 			'callback_method' => 'callback_forum_type'
 		);
 
+		// Forum status (Set a default value 'open', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_status',
+			'default'      => 'open'
+		);
+
 		// Forum dates.
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
@@ -140,12 +153,12 @@ class XMB extends BBP_Converter_Base {
 
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'threads',
 			'from_fieldname' => 'tid',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -186,6 +199,26 @@ class XMB extends BBP_Converter_Base {
 			'to_type'         => 'topic',
 			'to_fieldname'    => 'post_author',
 			'callback_method' => 'callback_userid'
+		);
+
+		// Topic author name (Stored in postmeta as _bbp_anonymous_name)
+		$this->field_map[] = array(
+			'from_tablename'  => 'threads',
+			'from_fieldname'  => 'author',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_topic_author_name_id'
+		);
+
+		// Is the topic anonymous (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'members',
+			'from_fieldname'  => 'uid',
+			'join_tablename'  => 'threads',
+			'join_type'       => 'LEFT',
+			'join_expression' => 'ON threads.author = members.username  WHERE posts.subject = ""',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_is_topic_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
 		);
 
 		// Topic Author ip (Stored in postmeta)
@@ -244,16 +277,16 @@ class XMB extends BBP_Converter_Base {
 			'from_tablename'  => 'threads',
 			'from_fieldname'  => 'closed',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'threads',
 			'from_fieldname'  => 'topped',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -318,12 +351,12 @@ class XMB extends BBP_Converter_Base {
 
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'posts',
 			'from_fieldname' => 'pid',
 			'to_type'        => 'reply',
-			'to_fieldname'   => '_bbp_post_id'
+			'to_fieldname'   => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
@@ -359,36 +392,30 @@ class XMB extends BBP_Converter_Base {
 			'from_fieldname'  => 'uid',
 			'join_tablename'  => 'posts',
 			'join_type'       => 'LEFT',
-			'join_expression' => 'ON posts.author = members.username',
+			'join_expression' => 'ON posts.author = members.username WHERE posts.subject = ""',
 			'to_type'         => 'reply',
 			'to_fieldname'    => 'post_author',
 			'callback_method' => 'callback_userid'
 		);
 
-		// Reply title.
-		// Note: We join the 'threads' table because 'posts' table does not have topic title.
+		// Reply author name (Stored in postmeta as _bbp_anonymous_name)
 		$this->field_map[] = array(
-			'from_tablename'  => 'threads',
-			'from_fieldname'  => 'subject',
-			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'USING (tid) WHERE posts.subject = ""',
+			'from_tablename'  => 'posts',
+			'from_fieldname'  => 'author',
 			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title',
-			'callback_method' => 'callback_reply_title'
+			'to_fieldname'    => '_bbp_old_reply_author_name_id'
 		);
 
-		// Reply slug (Clean name to avoid conflicts)
-		// Note: We join the 'threads' table because 'posts' table does not have topic title.
+		// Is the reply anonymous (Stored in postmeta)
 		$this->field_map[] = array(
-			'from_tablename'  => 'threads',
-			'from_fieldname'  => 'subject',
+			'from_tablename'  => 'members',
+			'from_fieldname'  => 'uid',
 			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'USING (tid) WHERE posts.subject = ""',
+			'join_type'       => 'LEFT',
+			'join_expression' => 'ON posts.author = members.username WHERE posts.subject = ""',
 			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
+			'to_fieldname'    => '_bbp_old_is_reply_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
 		);
 
 		// Reply content.
@@ -441,12 +468,12 @@ class XMB extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'members',
 			'from_fieldname' => 'uid',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
 		// Store old User password (Stored in usermeta serialized with salt)
@@ -519,7 +546,7 @@ class XMB extends BBP_Converter_Base {
 			'from_tablename' => 'members',
 			'from_fieldname' => 'aim',
 			'to_type'        => 'user',
-			'to_fieldname'   => 'aim'
+			'to_fieldname'   => '_bbp_xmb_user_aim'
 		);
 
 		// User Yahoo (Stored in usermeta)
@@ -527,7 +554,7 @@ class XMB extends BBP_Converter_Base {
 			'from_tablename' => 'members',
 			'from_fieldname' => 'yahoo',
 			'to_type'        => 'user',
-			'to_fieldname'   => 'yim'
+			'to_fieldname'   => '_bbp_xmb_user_yim'
 		);
 
 		// Store ICQ (Stored in usermeta)
@@ -594,8 +621,7 @@ class XMB extends BBP_Converter_Base {
 	 * This method allows us to indicates what is or is not converted for each
 	 * converter.
 	 */
-	public function info()
-	{
+	public function info() {
 		return '';
 	}
 
@@ -604,8 +630,7 @@ class XMB extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass( $field, $row )
-	{
+	public function callback_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -614,8 +639,7 @@ class XMB extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
 		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
 	}
@@ -645,7 +669,7 @@ class XMB extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from XMB v1.9.11.13 numeric's to WordPress's strings.
+	 * Translate the post status from XMB v1.9.11.13 numerics to WordPress's strings.
 	 *
 	 * @param int $status XMB v1.9.11.13 numeric topic status
 	 * @return string WordPress safe
@@ -665,7 +689,7 @@ class XMB extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic sticky status type from XMB v1.9.11.13 numeric's to WordPress's strings.
+	 * Translate the topic sticky status type from XMB v1.9.11.13 numerics to WordPress's strings.
 	 *
 	 * @param int $status XMB v1.9.11.13 numeric forum type
 	 * @return string WordPress safe
@@ -694,16 +718,4 @@ class XMB extends BBP_Converter_Base {
 		$count = absint( (int) $count - 1 );
 		return $count;
 	}
-
-	/**
-	 * Set the reply title
-	 *
-	 * @param string $title XMB v1.9.11.13 topic title of this reply
-	 * @return string Prefixed topic title, or empty string
-	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
-	}
-
 }
