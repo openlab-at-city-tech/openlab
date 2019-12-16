@@ -91,7 +91,15 @@ function badgeos_achievment_metaboxes( ) {
     $prefix = '_badgeos_';
 
     // Grab our achievement types as an array
-    $achievement_types = badgeos_get_achievement_types_slugs();
+    $achievement_types_temp = badgeos_get_achievement_types_slugs();
+    $achievement_types = array();
+    if( $achievement_types_temp ) {
+        foreach( $achievement_types_temp as $key=>$ach ) {
+            if( ! empty( $ach ) && $ach != 'step' ) {
+                $achievement_types[] = $ach;
+            }
+        }
+    }
 
     // Setup our $post_id, if available
     $post_id = isset( $_GET['post'] ) ? $_GET['post'] : 0;
@@ -120,7 +128,7 @@ function badgeos_achievment_metaboxes( ) {
         'name' => __( 'Points Awarded', 'badgeos' ),
         'desc' => ' '.__( 'Points awarded for earning this achievement (optional). Leave empty if no points are awarded.', 'badgeos' ),
         'id'   => $prefix . 'points',
-        'type' => 'text_small',
+        'type' => 'credit_field',
     ));
 
     $cmb_obj->add_field(array(
@@ -142,7 +150,7 @@ function badgeos_achievment_metaboxes( ) {
         'name' => __( 'Minimum Points Requried', 'badgeos' ),
         'desc' => ' '.__( 'Fewest number of points required for earning this achievement.', 'badgeos' ),
         'id'   => $prefix . 'points_required',
-        'type' => 'text_small',
+        'type' => 'credit_field',
     ));
 
     $cmb_obj->add_field(array(
