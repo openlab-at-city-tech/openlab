@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-15 22:39+0100\n"
+"POT-Creation-Date: 2019-11-18 21:30+0000\n"
 "PO-Revision-Date: 2017-05-02T14:20:11+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1316,7 +1316,7 @@ msgstr "フィードを取得中にエラーが発生しました。レスポン
 msgid "There was an error opening the ICAL file."
 msgstr "iCalファイルの展開でエラー発生しました。"
 
-#: includes/class-eo-ical-parser.php:428
+#: includes/class-eo-ical-parser.php:431
 #, php-format
 msgid ""
 "Feed contains an indefinitely recurring event. This event will recurr until "
@@ -1325,22 +1325,22 @@ msgstr ""
 "フィードには無限に繰り返されるイベントが含まれています。このイベントは%sまで"
 "繰り返されます。"
 
-#: includes/class-eo-ical-parser.php:551 includes/class-eo-ical-parser.php:576
+#: includes/class-eo-ical-parser.php:554 includes/class-eo-ical-parser.php:579
 #, php-format
 msgid "[Lines %1$d-%2$d]"
 msgstr "[%1$d-%2$d行]"
 
-#: includes/class-eo-ical-parser.php:558 includes/class-eo-ical-parser.php:583
+#: includes/class-eo-ical-parser.php:561 includes/class-eo-ical-parser.php:586
 #, php-format
 msgid "[Line %1$d]"
 msgstr "[%1$d行]"
 
-#: includes/class-eo-ical-parser.php:1041
+#: includes/class-eo-ical-parser.php:1044
 #, php-format
 msgid "Invalid date \"%s\". Date expected in YYYYMMDD format."
 msgstr "正しくない日付: \"%s\"。日付形式は YYYYMMDD です。"
 
-#: includes/class-eo-ical-parser.php:1079
+#: includes/class-eo-ical-parser.php:1082
 #, php-format
 msgid ""
 "Invalid datetime \"%s\". Date expected in YYYYMMDDTHHiissZ or "

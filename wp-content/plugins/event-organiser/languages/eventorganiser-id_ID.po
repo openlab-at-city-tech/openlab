@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-15 22:39+0100\n"
+"POT-Creation-Date: 2019-11-18 21:30+0000\n"
 "PO-Revision-Date: 2017-08-19T03:46:46+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1260,29 +1260,29 @@ msgstr ""
 msgid "There was an error opening the ICAL file."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:428
+#: includes/class-eo-ical-parser.php:431
 #, php-format
 msgid ""
 "Feed contains an indefinitely recurring event. This event will recurr until "
 "%s."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:551 includes/class-eo-ical-parser.php:576
+#: includes/class-eo-ical-parser.php:554 includes/class-eo-ical-parser.php:579
 #, php-format
 msgid "[Lines %1$d-%2$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:558 includes/class-eo-ical-parser.php:583
+#: includes/class-eo-ical-parser.php:561 includes/class-eo-ical-parser.php:586
 #, php-format
 msgid "[Line %1$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1041
+#: includes/class-eo-ical-parser.php:1044
 #, php-format
 msgid "Invalid date \"%s\". Date expected in YYYYMMDD format."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1079
+#: includes/class-eo-ical-parser.php:1082
 #, php-format
 msgid ""
 "Invalid datetime \"%s\". Date expected in YYYYMMDDTHHiissZ or "
