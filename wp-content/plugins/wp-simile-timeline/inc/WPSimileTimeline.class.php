@@ -3,7 +3,7 @@
  * WPSimileTimeline.class.php
  * Description: Main class for the plugin. Does most of the frontend work.
  * Plugin URI: http://wordpress.org/extend/plugins/wp-simile-timeline/
- * Author: Tim Isenheim
+ * Author: freshlabs
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
@@ -140,7 +140,7 @@ class WPSimileTimeline{
 	
 		if( WPSimileTimeline::isTimelinePage($post->ID)):
 			// directly include SIMILE Ajax API (prototype/jQuery issues)
-			echo '<script src="http://simile.mit.edu/ajax/api/simile-ajax-api.js" type="text/javascript"></script>';
+			echo '<script src="'.STL_TIMELINE_FOLDER.'/src/timeline_ajax/simile-ajax-api.js" type="text/javascript"></script>';
 			// load API from SIMILE server
 			echo '<script src="' . STL_TIMELINE_API_URL . '" type="text/javascript"></script>'.
 			// include local CSS template for timeline rules

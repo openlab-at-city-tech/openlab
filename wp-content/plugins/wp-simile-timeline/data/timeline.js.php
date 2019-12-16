@@ -2,12 +2,12 @@
 /*
  * timeline.js.php
  * Description: JavaScript for the SIMILE Timline Plugin
- * Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/
- * Author: Tim Isenheim
+ * Plugin URI: freshlabs.de
+ * Author: freshlabs
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006 Tim Isenheim
+	Copyright (C) 2006 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -140,10 +140,9 @@ function loadSimileTimeline() {
 ''); ?>
 
 var eventSource = new Timeline.DefaultEventSource();
-
 <?php
 $datafile = STL_TIMELINE_DATA_FOLDER.'/timeline.xml.php';
-#stl_api_createEventSourceArray($datafile, $categories);
+// stl_api_createEventSourceArray($datafile, $categories);
 // load data / event source
 stl_api_createEventSource($datafile, $categories, 'eventSource');
 ?>
@@ -192,7 +191,7 @@ foreach($stl_bands as $band){
 	
 	foreach($band->hotzones as $hotzone){
 		$hotzones .= stl_api_createZone($stl_timeline_resolutions[$hotzone->unit], adodb_date2('r',$hotzone->start_date), adodb_date2('r',$hotzone->end_date), $hotzone->magnify, $hotzone->multiple);
-		if($i<sizeof($hotzones)-1) $hotzones .= ',';
+		if(is_array($hotzones) && $i<sizeof($hotzones)-1) $hotzones .= ',';
 	}
 	
 	stl_api_createBandInfo(

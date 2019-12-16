@@ -1,12 +1,12 @@
 <?php
 /**
  * Description: Helper functions for the WP SIMILE Timeline plugin
- * @author Tim Isenheim
+ * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
  * 
 	===========================================================================
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
