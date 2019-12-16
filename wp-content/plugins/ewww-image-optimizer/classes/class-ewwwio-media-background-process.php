@@ -2,7 +2,7 @@
 /**
  * Classes for Background and Async processing.
  *
- * This file contains classes and methods that extend WP_Background_Process and
+ * This file contains classes and methods that extend EWWWIO_Background_Process and
  * WP_Async_Request to allow parallel and background processing of images.
  *
  * @link https://ewww.io
@@ -14,23 +14,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The parent WP_Async_Request class file.
+ * The (grand)parent WP_Async_Request class file.
  */
 require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'vendor/wp-async-request.php' );
 
 /**
- * The parent WP_Background_Process class file.
+ * The parent EWWWIO_Background_Process class file.
  */
-require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'vendor/wp-background-process.php' );
+require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewwwio-background-process.php' );
 
 /**
  * Processes media uploads in background/async mode.
  *
  * Uses a dual-queue system to track uploads to be optimized, handling them one at a time.
  *
- * @see WP_Background_Process
+ * @see EWWWIO_Background_Process
  */
-class EWWWIO_Media_Background_Process extends WP_Background_Process {
+class EWWWIO_Media_Background_Process extends EWWWIO_Background_Process {
 
 	/**
 	 * The action name used to trigger this class extension.
@@ -50,34 +50,40 @@ class EWWWIO_Media_Background_Process extends WP_Background_Process {
 	 * @global bool $ewww_defer True to defer optimization, false otherwise.
 	 *
 	 * @param array $item The id of the attachment, how many attempts have been made to process
-	 *		 the item, the type of attachment, and whether it is a new upload.
+	 *                    the item, the type of attachment, and whether it is a new upload.
 	 * @return bool|array If the item is not complete, return it. False indicates completion.
 	 */
 	protected function task( $item ) {
 		session_write_close();
 		global $ewww_defer;
-		$ewww_defer = false;
+		$ewww_defer   = false;
 		$max_attempts = 15;
-		$id = $item['id'];
+		$id           = $item['id'];
 		if ( empty( $item['attempts'] ) ) {
 			$item['attempts'] = 0;
 			sleep( 4 ); // On the first attempt, hold off and wait for the db to catch up.
 		}
 		ewwwio_debug_message( "background processing $id, type: " . $item['type'] );
-		$type = $item['type'];
+		$type        = $item['type'];
 		$image_types = array(
 			'image/jpeg',
 			'image/png',
 			'image/gif',
 		);
-		$meta = wp_get_attachment_metadata( $id, true );
-		if ( in_array( $type, $image_types ) && empty( $meta ) && $item['attempts'] < $max_attempts ) {
+
+		if ( in_array( $type, $image_types, true ) && $item['new'] && class_exists( 'wpCloud\StatelessMedia\EWWW' ) ) {
+			$meta = wp_get_attachment_metadata( $id );
+		} else {
+			// This is unfiltered for performance, because we don't often need filtered meta.
+			$meta = wp_get_attachment_metadata( $id, true );
+		}
+		if ( in_array( $type, $image_types, true ) && empty( $meta ) && $item['attempts'] < $max_attempts ) {
 			$item['attempts']++;
 			sleep( 4 );
 			ewwwio_debug_message( "metadata is missing, requeueing {$item['attempts']}" );
 			ewww_image_optimizer_debug_log();
 			return $item;
-		} elseif ( in_array( $type, $image_types ) && empty( $meta ) ) {
+		} elseif ( in_array( $type, $image_types, true ) && empty( $meta ) ) {
 			ewwwio_debug_message( 'metadata is missing for image, out of attempts' );
 			ewww_image_optimizer_debug_log();
 			delete_transient( 'ewwwio-background-in-progress-' . $id );
@@ -90,7 +96,11 @@ class EWWWIO_Media_Background_Process extends WP_Background_Process {
 			ewww_image_optimizer_debug_log();
 			return $item;
 		}
-		wp_update_attachment_metadata( $id, $meta );
+		if ( class_exists( 'wpCloud\StatelessMedia\EWWW' ) ) {
+			$meta = apply_filters( 'wp_update_attachment_metadata', wp_get_attachment_metadata( $image->attachment_id ), $image->attachment_id );
+		} else {
+			wp_update_attachment_metadata( $id, $meta );
+		}
 		ewww_image_optimizer_debug_log();
 		delete_transient( 'ewwwio-background-in-progress-' . $id );
 		return false;
@@ -119,9 +129,9 @@ $ewwwio_media_background = new EWWWIO_Media_Background_Process();
  * time. This is only used for Nextcellent thumbs currently.
  *
  * @deprecated 3.1.3
- * @see WP_Background_Process
+ * @see EWWWIO_Background_Process
  */
-class EWWWIO_Image_Background_Process extends WP_Background_Process {
+class EWWWIO_Image_Background_Process extends EWWWIO_Background_Process {
 
 	/**
 	 * The action name used to trigger this class extension.
@@ -169,9 +179,9 @@ $ewwwio_image_background = new EWWWIO_Image_Background_Process();
  *
  * Uses a dual-queue system to track uploads to be optimized, handling them one at a time.
  *
- * @see WP_Background_Process
+ * @see EWWWIO_Background_Process
  */
-class EWWWIO_Flag_Background_Process extends WP_Background_Process {
+class EWWWIO_Flag_Background_Process extends EWWWIO_Background_Process {
 
 	/**
 	 * The action name used to trigger this class extension.
@@ -247,9 +257,9 @@ $ewwwio_flag_background = new EWWWIO_Flag_Background_Process();
  *
  * Uses a dual-queue system to track uploads to be optimized, handling them one at a time.
  *
- * @see WP_Background_Process
+ * @see EWWWIO_Background_Process
  */
-class EWWWIO_Ngg_Background_Process extends WP_Background_Process {
+class EWWWIO_Ngg_Background_Process extends EWWWIO_Background_Process {
 
 	/**
 	 * The action name used to trigger this class extension.
@@ -325,9 +335,9 @@ $ewwwio_ngg_background = new EWWWIO_Ngg_Background_Process();
  *
  * Uses a dual-queue system to track uploads to be optimized, handling them one at a time.
  *
- * @see WP_Background_Process
+ * @see EWWWIO_Background_Process
  */
-class EWWWIO_Ngg2_Background_Process extends WP_Background_Process {
+class EWWWIO_Ngg2_Background_Process extends EWWWIO_Background_Process {
 
 	/**
 	 * The action name used to trigger this class extension.
@@ -360,7 +370,7 @@ class EWWWIO_Ngg2_Background_Process extends WP_Background_Process {
 		// Creating the 'registry' object for working with nextgen.
 		$registry = C_Component_Registry::get_instance();
 		// Creating a database storage object from the 'registry' object.
-		$storage  = $registry->get_utility( 'I_Gallery_Storage' );
+		$storage = $registry->get_utility( 'I_Gallery_Storage' );
 		// Get a NextGEN image object.
 		$image = $storage->object->_image_mapper->find( $id );
 		if ( ! is_object( $image ) && $item['attempts'] < $max_attempts ) {
@@ -437,12 +447,13 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 			$id = (int) $_POST['ewwwio_id'];
 		}
 		global $ewww_image;
-		if ( ! empty( $_POST['ewwwio_path'] ) && 'full' == $size ) {
+		if ( ! empty( $_POST['ewwwio_path'] ) && 'full' === $size ) {
 			$file_path = $this->find_file( $_POST['ewwwio_path'] );
 			if ( ! empty( $file_path ) ) {
 				ewwwio_debug_message( "processing async optimization request for {$_POST['ewwwio_path']}" );
-				$ewww_image = new EWWW_Image( $id, 'media', $file_path );
+				$ewww_image         = new EWWW_Image( $id, 'media', $file_path );
 				$ewww_image->resize = 'full';
+
 				list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path, 1, false, false, true );
 			} else {
 				ewwwio_debug_message( "could not process async optimization request for {$_POST['ewwwio_path']}" );
@@ -451,8 +462,9 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 			$file_path = $this->find_file( $_POST['ewwwio_path'] );
 			if ( ! empty( $file_path ) ) {
 				ewwwio_debug_message( "processing async optimization request for {$_POST['ewwwio_path']}" );
-				$ewww_image = new EWWW_Image( $id, 'media', $file_path );
+				$ewww_image         = new EWWW_Image( $id, 'media', $file_path );
 				$ewww_image->resize = ( empty( $size ) ? null : $size );
+
 				list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path );
 			} else {
 				ewwwio_debug_message( "could not process async optimization request for {$_POST['ewwwio_path']}" );
@@ -463,7 +475,7 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 		}
 		ewww_image_optimizer_hidpi_optimize( $file_path );
 		ewwwio_debug_message( 'checking for: ' . $file_path . '.processing' );
-		if ( is_file( $file_path . '.processing' ) ) {
+		if ( ewwwio_is_file( $file_path . '.processing' ) ) {
 			ewwwio_debug_message( 'removing ' . $file_path . '.processing' );
 			unlink( $file_path . '.processing' );
 		}
@@ -479,24 +491,28 @@ class EWWWIO_Async_Request extends WP_Async_Request {
 	 * @return string The full file path, reconstructed using the upload folder for WP_CONTENT_DIR
 	 */
 	public function find_file( $file_path ) {
-		if ( is_file( $file_path ) ) {
+		if ( false !== strpos( $file_path, '../' ) ) {
+			return false;
+		}
+		if ( ewwwio_is_file( $file_path ) ) {
 			return $file_path;
 		}
-		// Retrieve the location of the wordpress upload folder.
-		$upload_dir = wp_upload_dir();
+		// Retrieve the location of the WordPress upload folder.
+		$upload_dir  = wp_upload_dir();
 		$upload_path = trailingslashit( $upload_dir['basedir'] );
-		$file = $upload_path . $file_path;
-		if ( is_file( $file ) ) {
+		$file        = $upload_path . $file_path;
+		if ( ewwwio_is_file( $file ) ) {
 			return $file;
 		}
 		$upload_path = trailingslashit( WP_CONTENT_DIR );
-		$file = $upload_path . $file_path;
-		if ( is_file( $file ) ) {
+		$file        = $upload_path . $file_path;
+		if ( ewwwio_is_file( $file ) ) {
 			return $file;
 		}
 		$upload_path .= 'uploads/';
+
 		$file = $upload_path . $file_path;
-		if ( is_file( $file ) ) {
+		if ( ewwwio_is_file( $file ) ) {
 			return $file;
 		}
 		return '';
@@ -576,7 +592,7 @@ class EWWWIO_Test_Async_Handler extends WP_Async_Request {
 			ewww_image_optimizer_debug_log();
 			return;
 		}
-		if ( '949c34123cf2a4e4ce2f985135830df4a1b2adc24905f53d2fd3f5df5b162932' != $item ) {
+		if ( '949c34123cf2a4e4ce2f985135830df4a1b2adc24905f53d2fd3f5df5b162932' !== $item ) {
 			ewwwio_debug_message( 'wrong item received, not enabling background opt' );
 			ewww_image_optimizer_debug_log();
 			return;

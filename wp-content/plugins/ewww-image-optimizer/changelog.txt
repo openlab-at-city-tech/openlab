@@ -1,3 +1,499 @@
+= 5.1.3 =
+* added: better compatibility with Divi filterable grid images and parallax backgrounds
+* added: cleanup .webp and database records when using Enable Media Replace
+* fixed: Divi builder will not load with Easy IO and Include All Resources active
+* fixed: image cover block with fixed width scaled too much
+* fixed: PNG placeholders could use more memory than available
+* removed: Lazy Load CSS gradient for blank placeholders
+
+= 5.1.2 =
+* added: disable native lazy-load attributes with EWWWIO_DISABLE_NATIVE_LAZY
+* added: ability to choose LQIP or blank placeholders for lazy load
+* changed: renaming ExactDN as Easy IO
+* changed: default to blank placeholders with Easy IO
+* changed: regenerated images are automatically re-optimized after running Image Regenerate & Select Crop plugin
+* fixed: low-quality placeholders sometimes had larger dimensions than necessary
+* fixed: database records and .webp images are not removed when Image Regenerate & Select Crop plugin deletes a thumbnail
+* fixed: path traversal protection preventing normal files from optimizing
+* fixed: Slider Revolution dummy.png not properly handled by Easy IO
+
+= 5.1.1 =
+* fixed: no optimization when escapeshellarg() is disabled
+* fixed: warning thrown by implode() when JS WebP is enabled with no WebP URLs
+
+= 5.1.0 =
+* added: WebP-only mode for Bulk Optimizer
+* added: JS WebP Rewriting for pull-mode CDNs via WebP URLS without Force WebP
+* added: JS WebP Rewriting zero-conf for WP Offload Media
+* added: force lossy PNG to WebP conversion with EWWW_IMAGE_OPTIMIZER_LOSSY_PNG2WEBP override (set to true)
+* changed: bulk optimizer runs wp_update_attachment_metadata() in separate request to avoid timeouts
+* fixed: WebP warning regarding missing modules displayed even if green WebP test image is working
+* fixed: Nextgen bulk actions not working
+* fixed: unable to regenerate existing thumbnails with Image Regenerate & Select Crop plugin
+* updated: WebP (cwebp) binary to version 1.0.3
+* updated: Pngquant binary to version 2.12.5
+* updated: cwebp requires Mac OS X 10.14
+* updated: FreeBSD 10 is EOL, version 11 is the supported/tested version
+
+= 5.0.0 =
+* added: use native lazy load attributes to supplement lazy loader and make placeholders more efficient
+* added: GCS sub-folder rewriting with ExactDN for cleaner URLs
+* added: option to optimize original versions of scaled images for WP 5.3
+* added: ability to erase optimization history from Tools page
+* changed: define EWWWIO_WPLR_AUTO (any value) to enable auto-optimize on images from WP/LR Sync
+* changed: thumbnails could be converted even if original was not
+* changed: Show Optimized Images table moved to Tools menu
+* fixed: full-size image optimization not deferred if scaled by WP 5.3
+* fixed: data-width and data-height attributes missing when JS WebP active
+* security: rewrote escapeshellarg() wrapper to be more secure
+
+= 4.9.3 =
+* fixed: ExactDN incorrectly scales Elementor background images rather than cropping
+* fixed: ExactDN cannot work with Divi/Elementor background images due to use of external CSS files
+* fixed: JS WebP rewriting picture tags that already have WebP markup in Force WebP mode
+* fixed: JS WebP incorrectly parses GIF/SVG images in Force WebP mode
+* fixed: JS WebP does not support lazy load + infinite scroll
+* fixed: Lazy Load auto-scaling breaks if background image is enclosed in encoded quotes
+* fixed: GRAND FlaGallery integration broken by hook suffix change
+
+= 4.9.2 =
+* fixed: generating lazy load PNG placeholders with large heights causes 500 errors
+* fixed: error when importing media via WordPress Importer plugin
+* fixed: error with WP/LR Sync
+
+= 4.9.1 =
+* fixed: error on settings screen when JS WebP is enabled
+
+= 4.9.0 =
+* added: Lazy Load background image support for section elements
+* added: ExactDN background image support for li,span, and section elements
+* added: lazysizes print plugin, enable via EWWW_IMAGE_OPTIMIZER_LAZY_PRINT constant
+* added: compatibility with upcoming Easy Image Optimizer
+* changed: automatic compression disabled during WP/LR Sync with admin notice
+* changed: Lazy Load PNG placeholders capped at 1920px wide to prevent errors
+* changed: use ExactDN, when active, for Lazy Load PNG placeholders
+* changed: EWWW_MEMORY_LIMIT renamed to EIO_MEMORY_LIMIT for setting plugin memory limit
+* fixed: WebP test image not refreshing after inserting .htaccess rules
+* fixed: errors when manually adding lazysizes script
+
+= 4.8.1 =
+* added: Lazy Load background image support added for span elements
+* changed: constrain by height for background images that are taller than they are wide
+* changed: debug.log moved to more suitable location
+* fix: Lazy Load breaks when an image has an empty class attribute
+* fix: regression that caused jpegtran and pngout tests to fail on Windows
+* fix: writing to debug.log causes errors
+
+= 4.8.0 =
+* added: ability to resize images outside media library via scheduled or bulk optimization
+* added: compatibility with WP Stateless for GSC
+* added: use ewww_image_optimizer_autoconvert_threshold filter to modify conversion threshold (default of 300kb)
+* changed: Lazy Load without ExactDN uses blank PNG placeholders for better srcset auto-sizing
+* changed: API backups taken prior to resizing/scaling rather than just before compression
+* changed: ExactDN + Lazy Load uses scaling rather than cropping by default
+* changed: prevent NextGEN backup images from being optimized
+* fixed: bulk optimizer not resuming when non-media library images remain in queue
+* fixed: notices when a user-selected admin theme is unavailable
+* fixed: privacy policy function triggers notices in WP-CLI
+* fixed: background-image attributes with single-quotes now supported by ExactDN, Lazy Load, and JS WebP
+* fixed: background-image attributes getting extra arguments with lazy load
+* fixed: On multi-site installs, site admins could add folders to optimize outside of the uploads folder
+* fixed: LQIP with SVG files results in duplicate requests
+* fixed: image optimization results in media library report file missing when using WP Stateless
+* fixed: plugin checking for 'nice' on Windows servers
+
+= 4.7.4 =
+* fixed: ExactDN modifies Autoptimize CDN setting even when Include All Resources is disabled
+* fixed: noscript elements with newlines being parsed incorrectly by Lazy Load and JS WebP
+* fixed: Lazy Load parsing breaking img elements in script blocks
+* fixed: Lazy Load and JS WebP bail when SVGs are wrapped in XML tags
+* fixed: ExactDN mixes x and w srcset descriptors
+* fixed: page parsers (ExactDN, Lazy, JS WebP) still fail to process some img elements that have unquoted src attributes
+
+= 4.7.3 =
+* added: disable WebP script block on certain pages by defining EWWW_IMAGE_OPTIMIZER_NO_JS as true
+* changed: use SVG inline image placeholder if width and height are known when LQIP is disabled or ExactDN is not available
+* changed: Lazy Load ignores images using browser-native loading attribute
+* fixed: page parsers (ExactDN, Lazy, JS WebP) do not properly handle attributes that start on a new line
+* fixed: page parsers do not recognize img elements with unquoted attributes
+* fixed: uninstaller cannot clear queue table due to undefined table name
+* fixed: implode throws notice when image sizes array is multi-dimensional
+* fixed: srcset url replaced incorrectly when using pixel density descriptors
+* fixed: srcset url added with 0 width when width attribute is empty
+
+= 4.7.2 =
+* changed: JS WebP no longer necessary with ExactDN
+* fixed: fatal error from NextGEN get_image_sizes() method
+* fixed: debugging mode gets stuck
+* fixed: ExactDN has unexpected results when content_width global equals zero
+* fixed: img elements with unquoted src attributes ignored by ExactDN, Lazy Load, and JS WebP
+
+= 4.7.1 =
+* added: CSS background image support for <li> elements
+* added: ExactDN + Lazy Load will auto-calculate dimensions for img elements without srcset/responsive markup
+* added: ExactDN parses thumbnail url for personalization.com + WooCommerce integration
+* added: ExactDN can use data-actual-width attribute for srcset generation
+* added: ExactDN + Lazy Load uses devicePixelRatio to provide clearer background images
+* fixed: Lazy Load for CSS background images misfires when display height is greater than width
+* fixed: visitors without JS see Lazy Load placeholder + fallback image
+
+= 4.7.0 =
+* added: lazy load (on ExactDN tab for now)
+* added: JS WebP supports background images via lazy load (div elements only for now)
+* added: ExactDN supports compression of background images (div elements only for now)
+* added: compat with Google Cloud Storage via WP Offload Media
+* added: automatic PNG to JPG conversion for ExactDN
+* added: ExactDN parsing for legacy WooCommerce API (current API works as-is)
+* changed: responsive image 'sizes' attribute can be auto-calculated by lazy load
+* changed: JS WebP no longer requires jQuery
+* changed: ExactDN srcset multipliers include fullscreen value of 1920px
+* changed: force resize function to ignore filesize with ewww_image_optimizer_resize_filesize_ignore filter
+* changed: prevent .php script/style generators from going through ExactDN
+* changed: ExactDN sites can dismiss exec notice to disable local compression
+* changed: automatic compression disabled during WooCommerce regen with admin notice
+* changed: use wp_resource_hints filter to include ExactDN dns-prefetch earlier in the page header
+* changed: gather debugging information on settings page even when debugging is not enabled yet
+* fixed: Bulk Optimize scanner does not update queue in some cases
+* fixed: ExactDN does not handle themes that support wide and full-screen images in block editor
+* fixed: ExactDN constrains images to 640px in Twenty Nineteen theme
+* fixed: ExactDN mangles Flatsome lazy load placeholder image URL
+* fixed: empty attributes not recognized properly by HTML parser, resulting in broken markup
+* fixed: table nav button styling broken in WP 5.1
+* fixed: ExactDN applies resizing args during image_downsize() even when full/original image is too small
+* fixed: animated GIF resizing breaks the use of image_resize_dimensions filter in WP_Image_Editor_GD
+* fixed: NextGen bulk optimizer unable to decode meta_data
+
+= 4.6.3 =
+* changed: folders to ignore setting applies to resizing also
+* fixed: lazy load placeholders have inconsistent URLs with ExactDN
+* fixed: bulk resume indicator gets stuck
+* fixed: bulk scanning queue gets out of sync and skips images
+* fixed: async processing does not handle memory limit specified in G (gigabytes)
+
+= 4.6.2 =
+* changed: API key may be defined as EWWW_IMAGE_OPTIMIZER_CLOUD_KEY
+* fixed: if img tag is missing dimensions, ExactDN sometimes loads original rather than existing thumbnail
+* fixed: TinyPNG/TinyJPG images skipped when Force Re-optimize is checked
+
+= 4.6.1 =
+* added: automatic configuration for ExactDN + WP Offload Media
+* fixed: bulk action from media library skipping last attachment in selection
+* fixed: uninstall function throws fatal error preventing deletion
+
+= 4.6.0 =
+* added: preserve animations in GIF images during resize operations for sites using Imagick extension
+* changed: EXACTDN_EXCLUDE applies to all resources, including images, CSS, JS, fonts, etc.
+* changed: API/ExactDN preserves color profiles, even when removing image metadata
+* changed: new queue table for bulk optimizer to avoid exceeding max packet size for MySQL
+* changed: unit tests run on PHP 7.3 also
+* fixed: too many settings updates when trying to prevent slow queries
+* fixed: ExactDN rewrites urls to static HTML files
+* fixed: ExactDN skips 1x url in some cases, causing browser upscaling
+* fixed: PHP notice when EXACTDN_EXCLUDE is defined
+* fixed: race condition in Alt WebP prevents Webp derivatives from replacing the originals
+
+= 4.5.3 =
+* fixed: ExactDN duplicates srcset instead of replacing it
+* security: remote code execution, low exposure
+
+= 4.5.2 =
+* added: automatic migration to move image paths from absolute to relative
+* changed: default quality for PNG to JPG did not match WordPress default
+* fixed: legacy absolute paths not matched during bulk scanner when relative matching is enabled
+* fixed: PNG to JPG auto-convert produces larger JPG images in some cases
+
+= 4.5.1 =
+* changed: optimization results are tracked by relative urls instead of absolute ones for better portability, migration tool coming soon
+* changed: ExactDN defaults to crop when explicit dimensions are given to image_downsize(), revert to scaling with EXACTDN_IMAGE_DOWNSIZE_SCALE
+* fixed: WooCommerce thumbnail regeneration triggers excessive admin-ajax requests within EWWW IO
+* fixed: ExactDN filtering REST API media endpoint for Gutenberg editor requests
+* fixed: ExactDN adding unneeded resize parameters to full-size image urls
+* fixed: Alt WebP skipping images with query strings
+* fixed: Alt WebP not working with Jetpack Lazy Load for images missing srcset
+* fixed: Show Optimized Images table does not display images saved to ewwwio_images table with relative path matching
+* fixed: Show Optimized Images table has broken thumbs when WP_CONTENT_DIR is outside of ABSPATH
+
+= 4.5.0 =
+* added: Alt WebP supports BJ Lazy Load, a3 Lazy Load, WP Rocket Lazy Load, Jetpack Lazy Load, and WP Retina Lazy Load
+* added: ExactDN rewrites relative image urls that start with a single slash
+* changed: ExactDN srcset markup for smaller images improved
+* fixed: errors during upload/download with WP Offload Media
+* fixed: Alt WebP refuses to process page when FB tracking pixel is present
+* fixed: SVG files within <use> tags throw errors with ExactDN
+* fixed: thumbnail generation fails with S3 Uploads plugin
+* fixed: unable to modify WebP conversion option when ExactDN is enabled
+* fixed: ExactDN inserts full-size image without arguments
+* removed: PHP 5.5 no longer supported
+
+= 4.4.2 =
+* added: notice for Pantheon users that an API key is required
+* added: ExactDN fully supports protocol-relative urls for non-image resources
+* changed: better lazy load support in ExactDN
+* fixed: optimization failure produces rename() errors
+* fixed: folder scanner ignores files with no extension
+* fixed: Alt WebP blocks on Facebook tracking pixel
+* fixed: ExactDN srcset functions cause duplicate image requests with zoom=1
+* fixed: ExactDN srcset fill adds double arguments to urls
+* fixed: srcset fill generates notices with non-numeric widths
+* fixed: bulk scanner stuck in resume mode with nothing to do
+
+= 4.4.1 =
+* fixed: ExactDN srcset fill replaces images with first image on page
+
+= 4.4.0 =
+* added: preserve animations in GIF images during resize operations
+* added: ExactDN will fill in srcset/sizes attributes for all images based on detected width for better mobile support
+* added: configuration options in the settings page for several "hidden" ExactDN options
+* changed: Alt WebP still depends on jQuery, but jQuery can be loaded in async or defer mode
+* changed: Remove Metadata option has been renamed, if you previously had it configured as an override (JPEGTRAN_COPY), please use the new name: EWWW_IMAGE_OPTIMIZER_METADATA_REMOVE
+* changed: ExactDN uses premium compression by default
+* fixed: regression with ExactDN and max-width style attributes
+* fixed: WP esc_url mangles ExactDN urls
+* fixed: WebP images missing from S3 when using WP Offload S3
+* fixed: PDF uploads with S3 Uploads plugin
+* deprecated: PHP 5.5 support will be removed in the next major release (version 4.5)
+* removed: PHP 5.4 no longer supported
+
+= 4.3.2 =
+* changed: prevent dynamic JS/CSS urls within wp-admin/ from being rewritten by ExactDN
+* fixed: auto-convert PNG to JPG was running on images with transparency
+* fixed: Alt WebP broken on sites that have jquery-migrate disabled
+
+= 4.3.1 =
+* fixed: fatal error on older WP versions due to missing privacy policy function
+
+= 4.3.0 =
+* added: Alt WebP enables instant conversion with ExactDN, no need for bulk optimize
+* added: links within settings and other notices for contextual help
+* added: auto-convert large PNG images to JPG during upload, define EWWW_IMAGE_OPTIMIZER_DISABLE_AUTOCONVERT to skip
+* added: use file modification time to add query strings on JS/CSS files for cache invalidation on ExactDN
+* added: use EXACTDN_EXCLUDE in wp-config.php to bypass ExactDN for JS, CSS, etc.
+* added: NextGEN image urls properly rewritten for ExactDN
+* added: NextGEN dynamic thumbs included during manual/bulk optimization
+* added: auto-installer for Cloud plugin when running EWWW IO on a "banned" webhost
+* added: suggested privacy policy text for users of the API and ExactDN
+* added: detect wordpress.com sites and disable exec function and binaries
+* changed: resizing uses the primary media dimensions unless the "other" dimensions are configured
+* changed: Resize Other Images removed from GUI, configure via Overrides tab
+* changed: filter NextGEN quality to prevent oversized thumbs
+* changed: allow crop via filter even when one dimension is the same as the original
+* changed: auto-rotate function disabled with EWWW_IMAGE_OPTIMIZER_DISABLE_AUTOROTATE
+* changed: one-click copy for debug info, and debug collapsed by default in media library and bulk results
+* changed: bulk operations for batches of NextGEN images now use the bulk optimizer page instead of loading inline
+* fixed: thumbs not generated during WP/LR Sync
+* fixed: uploading images in the Gutenberg editor uses the wrong resize dimensions
+* fixed: unique filename function producing names with a hyphen and no digits
+* fixed: encoded ampersands within the path portion of a url prevent ExactDN parsing
+* fixed: entering a decimal for bulk delay does nothing
+* fixed: if urls on a localized WPML domain are using the default domain, ExactDN ignores them
+* fixed: toggle for plugin status and bulk status generate admin-ajax.php 403 errors
+* fixed: PNGOUT installer confirmation notice was missing
+* deprecated: PHP 5.4 support will be removed in the next major release (version 4.4)
+
+= 4.2.3 =
+* added: skip resizing for images with noresize in the filename
+* added: notice about plugins that remove query strings when ExactDN is active
+* changed: cache busting for ExactDN uses theme directory modified time with fallback to EWWW IO version
+* fixed: exactdn test verification attempts to access WP_Error as an array
+
+= 4.2.2 =
+* added: view pages with ExactDN or the entire plugin disabled via GET paramaters: ewwwio_disable and exactdn_disable
+* changed: moved to v2 quota endpoint for API
+* changed: S3 uploads no longer deferred until after optimization by default, define EWWW_IMAGE_OPTIMIZER_DEFER_S3 as true to override
+* changed: image editor extensions can be disabled separately from media library optimization via EWWW_IMAGE_OPTIMIZER_DISABLE_EDITOR
+* changed: use exactdn url instead of standard API url for verification simulation and fallback
+* fixed: async test outputs unescaped html on settings page when debugging enabled
+* fixed: debugging uses extra memory when dumping output to file
+* fixed: json_encode dies silently when passing non-utf8 data, results in AJAX/bulk errors
+* fixed: disabled auto-optimization bypassed for resizes when max dimensions are set
+* fixed: NextGEN support disabled for version 3
+* fixed: progressbar color does not match admin theme for NextGEN/Nextcellent
+* fixed: optimization details overlay styling missing for NextGEN with some locales
+* fixed: FlAGallery batch optimization from Manage Galleries/Images broken
+* fixed: undefined variable notices for resize detection and forced re-optimization
+* updated: PEL library for maintaining metadata during JPG auto-rotation
+
+= 4.2.1 =
+* fixed: EXACTDN_LOCAL_DOMAIN does not work with auto-verification
+* fixed: uncaught error during upgrade when 'SHOW FULL COLUMNS' fails
+* fixed: async simulation gets 403 error
+
+= 4.2.0 =
+* added: disable ExactDN attachment ID queries if they take too long
+* added: ExactDN compatibility with a3 Lazy Load
+* added: ability to re-test async/background mode if it gets disabled
+* changed: better compatibility between Autoptimize and ExactDN
+* changed: .webp files removed when restoring original from API
+* changed: Force re-optimize checkbox persists up to an hour if bulk optimizer is interrupted
+* fixed: CSS, JS, and other resources could be skipped by ExactDN in certain circumstances
+* fixed: Jupiter theme captcha incompatible with ExactDN
+* fixed: prevent calls to php_uname when it is disabled
+* fixed: MacOS X installer for PNGOUT
+* fixed: prevent notices due to empty output from exec()
+* fixed: ExactDN fails to crop when image_downsize() is called with explicit dimensions
+* fixed: ExactDN breaks image resizing with Themify themes
+* fixed: multi-site settings throws error during submission when ExactDN is active
+* fixed: single-site override option displayed when plugin activated per-site
+* removed: PHP 5.3 no longer supported
+
+= 4.1.3 =
+* fixed: infinite loop when removing invalid API key
+* fixed: img elements with incorrect attachment ID being replaced with wrong image src
+* fixed: ExactDN CSS and JS parsing incompatible with Autoptimize
+
+= 4.1.2 =
+* added: detect WP Fastest Cache WebP rewrite rules
+* added: notice if WebP conversion enabled but mod_rewrite or mod_headers is missing
+* added: better debugging when background/async mode is blocked
+* changed: CSS/JS files are filtered pre-emptively by ExactDN to avoid quirks with emoji scripts
+* fixed: warning during wp_cron for undefined constant
+* fixed: invalid or expired keys would still attempt optimization
+* fixed: WebP files are orphaned when using Media File Renamer
+* deprecated: PHP 5.3 will no longer be supported in 4.2
+* deprecated: PHP 5.4 support will be removed by July 2018
+* deprecated: PHP 5.5 support will be removed by October 2018
+
+= 4.1.1 =
+* added: reduce ExactDN load time by suppressing db queries with EXACTDN_PREVENT_DB_QUERIES
+* added: $fullsize indicator added to pre/post optimization hooks, props Schweinepriester
+* fixed: missing www preventing rewrites for ExactDN
+* fixed: Alt WebP compatibility with Tatsu page builder
+* fixed: relative path support not working properly for Pantheon users
+* fixed: missing directories prevent optimization of S3 files
+
+= 4.1.0 =
+* SECURITY: gifsicle and optipng have been updated to address security flaws
+* added: full compatibility with Image Watermark plugin
+* added: dummy images for Essential Grid and Layer Slider whitelisted with ExactDN
+* added: compatibility with Visual Composer and Essential Grid async/AJAX loaders
+* added: compatibility with Media File Renamer
+* changed: ExactDN rewrites all wp-content and wp-includes urls by default
+* changed: mime-type detection function does not rely on fileinfo extension anymore
+* changed: Solaris/SunOS binary builds use OpenIndiana 2017.10, let me know if they break
+* fixed: wp-emoji script not rewritten by EXACTDN_ALL_THE_THINGS
+* fixed: resize detection script throws error when admin bar is hidden
+* fixed: warnings when WP Offload S3 set to delete local files, props ianmjones
+* updated: pngquant version 2.11.7
+
+= 4.0.6 =
+* changed: dummy images have no args appended with exactdn except for ssl flag
+* fixed: resize_detection.js being combined with other scripts by Autoptimize
+* fixed: retina optimization not deferred in async mode
+* fixed: PDF files could trigger license exceeded message
+* fixed: binary detection not fully functional with MacOS and PHP 7.2
+* fixed: compatibility with Regenerate Thumbnails version 3
+
+= 4.0.5 =
+* added: enable lossy compression with ExactDN: https://docs.ewww.io/article/47-getting-more-from-exactdn
+* added: CSS/JS minification with ExactDN, see https://docs.ewww.io/article/47-getting-more-from-exactdn
+* added: disable WebP for specific files with ewww_image_optimizer_bypass_webp filter
+* added: ExactDN obeys focus point from Theia Smart Thumbnails plugin
+* added: admin-ajax requests for eddvbugm loader work with ExactDN
+* fixed: multisite settings would not save in certain circumstances
+* fixed: compression levels reset for API users on multisite after toggling single-site override on and off
+* fixed: media library items with non-local images rewritten incorrectly by ExactDN
+* fixed: restoring images throws errors on PHP 7.1
+* fixed: has_cap with invalid argument not recognizing utf8-mb4 v5.2
+
+= 4.0.4 =
+* fixed: ExactDN domain validation failing on length check for some domains
+* updated: PEL for better EXIF preservation
+
+= 4.0.3 =
+* added: support for additional ExactDN root domains
+* added: button to remove WebP rewrite rules
+* added: informational notice on thumbnail rebuild pages of how the plugins interact
+* changed: WebP rewrite rules removed automatically when ExactDN is enabled, use Alt WebP instead
+* changed: ExactDN now removes metadata if option is enabled
+* fixed: multisite settings set to defaults when single-site resize settings are submitted
+
+= 4.0.2 =
+* fixed: WooCommerce images still not working with Alt WebP in all cases
+* fixed: ob_clean() breaks AJAX actions when there is no buffer to clean
+* fixed: notice on NextCellent gallery management pages
+* fixed: missing JS for AJAX actions in NextCellent
+
+= 4.0.1 =
+* fixed: ExactDN option not disabled when verification fails too many times
+* fixed: theme scanner sometimes skipped images on PHP 5.3
+* fixed: invalid (float) width parameters for srcset attributes
+* fixed: Jetpack lightbox and carousel were not fully working with Alt WebP
+* fixed: WooCommerce lightbox and gallery not working with Alt WebP
+* fixed: incorrect message about scanning scope when selecting images from media library for bulk optimization
+* security: fixed wildcard LIKE queries to allow proper escaping
+
+= 4.0.0 =
+* added: ExactDN with CDN and automatic image resizing
+* added: image resize detection for admin users
+* changed: WP core, theme, and plugin images are excluded from lossy optimization
+* fixed: files fetched from S3 not detected by PHP in some cases
+* fixed: option override conflict preventing webp conversion
+* fixed: Alt WebP breaks Draw Attention image maps
+* fixed: customized WP_Background_Process class conflicts with other plugins using the same class
+* fixed: image deletion could cause deletion of images on source site after cloning database
+* fixed: WebP .htaccess rules using REQUEST_FILENAME instead of REQUEST_URI does not work on some servers
+* fixed: per-site resize settings hidden when API is active network-wide
+* fixed: network-wide settings not saving properly
+* fixed: notice of undefined index with some configurations of the Shield security plugin
+* deprecated: PHP 5.3 support will be removed by March 2018
+
+= 3.6.1 =
+* fixed: bulk optimizer fails to initialize if the bulk_attachments array is set to an empty string
+* fixed: misplaced parenthesis breaks option overrides
+
+= 3.6.0 =
+In an effort to simplify the settings page and make room for new features, many settings have been "hidden" and/or rearranged. It is my hope that this will make it easier for new users to get going with EWWW IO.
+You can find more information about overriding options in the [Documentation](https://docs.ewww.io)
+* added: ability to override any boolean/integer options by defining constant of the same name
+* added: debug information included automatically with help beacon requests when debugging is enabled
+* added: use wp_raise_memory_limit (WP 4.6+) to avoid memory issues
+* added: use wp_is_ini_value_changeable (WP 4.6+) to avoid errors when raising max_execution_time
+* added: notice to use cloud version on Kinsta sites
+* changed: Better Lossless and Maximum Lossless have been combined for PNG images with more intelligent usage of advpng on the API
+* changed: resize settings moved to new tab
+* changed: various options have been removed from the settings page, but are still available via constants, see removals
+* changed: bulk optimizer will auto-adjust settings if an image fails to optimize
+* changed: bulk scanner will go into fall-back mode if the normal mode is too slow or if the image table takes longer than 5 seconds to load
+* changed: images previously compressed by TinyPNG/JPG will be skipped during bulk optimization
+* fixed: Optipng not working properly on Windows servers.
+* fixed: notice on settings and bulk pages when debug mode is disabled
+* removed: ewww_image_optimizer_delay (Bulk Delay), can be selected on the bulk page instead
+* removed: ewww_image_optimizer_optipng_level (OptiPNG level) option
+* removed: ewww_image_optimizer_pngout_level (PNGOUT level) option
+* removed: ewww_image_optimizer_disable_pngout (Disable PNGOUT) option
+* removed: ewww_image_optimizer_skip_size (Skip Small Images) option
+* removed: ewww_image_optimizer_skip_png_size (Skip Large PNG Images) option
+* removed: ewww_image_optimizer_lossy_skip_full (Exclude full-size images from lossy optimization) option
+* removed: ewww_image_optimizer_metadata_skip_full (Exclude full-size images from metadata removal) option
+* removed: ewww_image_optimizer_skip_bundle (Use System Paths) option
+
+= 3.5.1 =
+* added: optional help beacons on bulk and settings pages
+* added: disable deferring of WP Offload S3 uploads with EWWW_IMAGE_OPTIMIZER_NO_DEFER_S3
+* added: override use of wp_add_inline_script with non-standard jQuery by defining EWWW_IMAGE_OPTIMIZER_WEBP_INLINE_FALLBACK
+* fixed: javascript for bulk optimizers in NextGEN, NextCellent and FlaGallery
+
+= 3.5.0 =
+* added: compatibility with S3 Uploads by Human Made
+* added: MediaPress uploads fully optimized on upload
+* changed: WebP .htaccess rewrite rule verifier more flexible
+* changed: WebP .htaccess rewrite rules allow appending type=original to access non-WebP image
+* changed: if an image is too small for resizing, but the dimensions in the metadata are incorrect, it will attempt to update them
+* fixed: fatal error if image metadata cannot be read by PEL
+* fixed: WebP .htaccess rewrite rules work better on LiteSpeed
+* fixed: WP Symposium integration using old options, scanner now includes avatars folder by default
+
+= 3.4.1 =
+* added: move the Alt WebP script to an external resource by defining EWWW_IMAGE_OPTIMIZER_WEBP_EXTERNAL_SCRIPT
+* changed: API keys are partially revealed, for easier verification
+* changed: API key no longer uses password field to avoid problems with auto-fill
+* changed: API key activation raises JPG and PNG to lossy and enables backups
+* fixed: bulk delay setting not carried over to bulk optimizer
+* fixed: WP Offload S3 uploads images prior to background optimization, resulting in a second upload afterwards
+* fixed: single-site settings override not saving in certain cases on multisite
+* fixed: AMP pages are broken when Alt WebP is enabled with old versions of libxml (less than 2.8.0)
+* removed: unnecessary call to WP Offload S3 update function after optimization
+
 = 3.4.0 =
 * added: optional usage tracking
 * added: close sessions even earlier in background/async handling to prevent lock-ups
@@ -830,9 +1326,9 @@
 * prevent tool checks and cloud verification from firing on every page load, yikes...
 
 = 1.6.1 =
-*fixed: temporary jpgs were not being deleted (leftovers from testing for last release)
-*fixed: jpgs would not be converted to pngs if jpgs had already been optimized
-*fixed: cloud service not converting gif to png
+* fixed: temporary jpgs were not being deleted (leftovers from testing for last release)
+* fixed: jpgs would not be converted to pngs if jpgs had already been optimized
+* fixed: cloud service not converting gif to png
 
 = 1.6.0 =
 * Cloud Optimization option (BETA: get your free API key at http://www.exactlywww.com/cloud/)

@@ -27,7 +27,7 @@ class EWWWIO_Utility_Tests extends WP_UnitTestCase {
 		$binaries = scandir( EWWW_IMAGE_OPTIMIZER_BINARY_PATH );
 		foreach ( $binaries as $binary ) {
 			$binary = trailingslashit( EWWW_IMAGE_OPTIMIZER_BINARY_PATH ) . $binary;
-			if ( ! is_file( $binary ) ) {
+			if ( ! ewwwio_is_file( $binary ) ) {
 				continue;
 			}
 			$this->assertTrue( ewww_image_optimizer_md5check( $binary ) );
@@ -39,15 +39,15 @@ class EWWWIO_Utility_Tests extends WP_UnitTestCase {
 	 */
 	function test_mimetype() {
 		$binaries = scandir( EWWW_IMAGE_OPTIMIZER_BINARY_PATH );
-		global $ewww_debug;
-		$ewww_debug .= '';
+		global $eio_debug;
+		$eio_debug .= '';
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_debug', true );
 		foreach ( $binaries as $binary ) {
 			$binary = trailingslashit( EWWW_IMAGE_OPTIMIZER_BINARY_PATH ) . $binary;
-			if ( ! is_file( $binary ) ) {
+			if ( ! ewwwio_is_file( $binary ) ) {
 				continue;
 			}
-			$this->assertTrue( (bool) ewww_image_optimizer_mimetype( $binary, 'b' ), $binary . ":\n" . str_replace( '<br>', "\n", $ewww_debug ) );
+			$this->assertTrue( (bool) ewww_image_optimizer_mimetype( $binary, 'b' ), $binary . ":\n" . str_replace( '<br>', "\n", $eio_debug ) );
 		}
 	}
 
@@ -62,7 +62,7 @@ class EWWWIO_Utility_Tests extends WP_UnitTestCase {
 	 * Tests that shell args get escaped properly (quotes and such).
 	 */
 	function test_shellargesc() {
-		$this->assertEquals( ewww_image_optimizer_escapeshellarg( "file'name" ), "'file'\"'\"'name'" );
+		$this->assertEquals( ewww_image_optimizer_escapeshellarg( "file'name" ), "'file'\\''name'" );
 	}
 
 	/**
@@ -95,11 +95,13 @@ class EWWWIO_Utility_Tests extends WP_UnitTestCase {
 	 * Test relative path functions.
 	 */
 	function test_relative_paths() {
-		define( 'EWWW_IMAGE_OPTIMIZER_RELATIVE', true );
+		if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_RELATIVE' ) ) {
+			define( 'EWWW_IMAGE_OPTIMIZER_RELATIVE', true );
+		}
 		$test_image = trailingslashit( ABSPATH ) . 'images/test.png';
-		$relative_test_image_path = ewww_image_optimizer_relative_path_remove( $test_image );
+		$relative_test_image_path = ewww_image_optimizer_relativize_path( $test_image );
 		$this->assertEquals( 'ABSPATHimages/test.png', $relative_test_image_path );
-		$replaced_test_image = ewww_image_optimizer_relative_path_replace( $relative_test_image_path );
+		$replaced_test_image = ewww_image_optimizer_absolutize_path( $relative_test_image_path );
 		$this->assertEquals( $test_image, $replaced_test_image );
 	}
 }
