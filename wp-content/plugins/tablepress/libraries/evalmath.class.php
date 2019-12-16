@@ -107,6 +107,7 @@ class EvalMath {
 		'number_format' => array( 1, 2 ),
 		'number_format_eu' => array( 1, 2 ),
 		'sum' => array( -1 ),
+		'counta' => array ( -1 ),
 		'product' => array( -1 ),
 		'rand_int' => array( 2 ),
 		'rand_float' => array( 0 ),
@@ -527,7 +528,7 @@ class EvalMath {
 					} elseif ( 'arctan2' === $function_name ) {
 						$function_name = 'atan2';
 					}
-					$result = call_user_func_array( array( 'EvalMath_Functions', $function_name ), array_reverse( $args ) );
+					$result = EvalMath_Functions::$function_name( ...array_reverse( $args ) );
 					if ( false === $result ) {
 						return $this->raise_error( 'internal_error' );
 					}
@@ -820,8 +821,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the conjunction shall be calculated.
 	 * @return int Conjunction of the passed arguments.
 	 */
-	public static function func_and( $args ) {
-		$args = func_get_args();
+	public static function func_and( ...$args ) {
 		foreach ( $args as $value ) {
 			if ( ! $value ) {
 				return 0;
@@ -840,8 +840,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the disjunction shall be calculated.
 	 * @return int Disjunction of the passed arguments.
 	 */
-	public static function func_or( $args ) {
-		$args = func_get_args();
+	public static function func_or( ...$args ) {
 		foreach ( $args as $value ) {
 			if ( $value ) {
 				return 1;
@@ -869,9 +868,20 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the sum shall be calculated.
 	 * @return double|int Sum of the passed arguments.
 	 */
-	public static function sum( $args ) {
-		$args = func_get_args();
+	public static function sum( ...$args ) {
 		return array_sum( $args );
+	}
+
+	/**
+	 * Count the number of non-empty arguments.
+	 *
+	 * @since 1.10.0
+	 *
+	 * @param double|int $args Values for which the number of non-empty elements shall be counted.
+	 * @return double|int Counted number of non-empty elements in the passed values.
+	 */
+	public static function counta( ...$args ) {
+		return count( array_filter( $args ) );
 	}
 
 	/**
@@ -882,8 +892,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the product shall be calculated.
 	 * @return double|int Product of the passed arguments.
 	 */
-	public static function product( $args ) {
-		$args = func_get_args();
+	public static function product( ...$args ) {
 		return array_product( $args );
 	}
 
@@ -895,9 +904,12 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the average shall be calculated.
 	 * @return double|int Average value of the passed arguments.
 	 */
-	public static function average( $args ) {
-		$args = func_get_args();
-		return ( call_user_func_array( array( 'self', 'sum' ), $args ) / count( $args ) );
+	public static function average( ...$args ) {
+		// Catch division by zero.
+		if ( 0 === count( $args ) ) {
+			return 0;
+		}
+		return array_sum( $args ) / count( $args );
 	}
 
 	/**
@@ -910,8 +922,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the median shall be calculated.
 	 * @return double|int Median of the passed arguments.
 	 */
-	public static function median( $args ) {
-		$args = func_get_args();
+	public static function median( ...$args ) {
 		sort( $args );
 		$middle = floor( count( $args ) / 2 ); // Upper median for even counts.
 		return $args[ $middle ];
@@ -925,8 +936,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the mode shall be calculated.
 	 * @return double|int Mode of the passed arguments.
 	 */
-	public static function mode( $args ) {
-		$args = func_get_args();
+	public static function mode( ...$args ) {
 		$values = array_count_values( $args );
 		asort( $values );
 		end( $values );
@@ -941,8 +951,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the range shall be calculated.
 	 * @return double|int Range of the passed arguments.
 	 */
-	public static function range( $args ) {
-		$args = func_get_args();
+	public static function range( ...$args ) {
 		sort( $args );
 		return end( $args ) - reset( $args );
 	}
@@ -955,8 +964,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the maximum value shall be found.
 	 * @return double|int Maximum value of the passed arguments.
 	 */
-	public static function max( $args ) {
-		$args = func_get_args();
+	public static function max( ...$args ) {
 		return max( $args );
 	}
 
@@ -968,8 +976,7 @@ class EvalMath_Functions {
 	 * @param double|int $args Values for which the minimum value shall be found.
 	 * @return double|int Minimum value of the passed arguments.
 	 */
-	public static function min( $args ) {
-		$args = func_get_args();
+	public static function min( ...$args ) {
 		return min( $args );
 	}
 

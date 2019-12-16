@@ -51,11 +51,6 @@
 	margin-right: 20px;
 }
 
-/* Placeholder fields in gray text color, but only if JS is enabled */
-.js #tablepress-page .placeholder-active {
-	color: #bbbbbb;
-}
-
 /* Width of the columns on the "All Tables" list */
 .tablepress-all-tables thead .column-table_id {
 	width: 50px;
@@ -92,24 +87,17 @@
 	background: transparent;
 	border: none;
 	color: #333333;
-	width: 110px;
+	width: 120px;
 	margin: 0;
 	padding: 0;
 	font-weight: bold;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 	text-align: center;
-	vertical-align: top;
-}
-#tablepress-page .table-shortcode {
-	cursor: text;
 }
 
 /* Table ID/name dropdown on "Export" screen */
 #tablepress-page #tables-export {
 	width: 100%;
-	height: auto;
-	line-height: normal;
 }
 
 /* Red border for form fields that have invalid values */
@@ -154,8 +142,7 @@
 	padding-top: 6px;
 }
 /* Adjust positioning of labels in relation to checkboxes/radio buttons */
-#tablepress_import-import-form .column-2 label,
-#tablepress_import-import-wp-table-reloaded .column-2 label {
+#tablepress_import-import-form .column-2 label {
 	margin-right: 20px; /* some margin on radio buttons */
 }
 /* Red color for the "Uninstall TablePress" button on the "Plugin Options" screen */
@@ -165,4 +152,13 @@
 /* Select dropdown alignment on the "Plugin Options" screen */
 #tablepress-page select {
 	vertical-align: baseline;
+}
+/* Equal heights for UI elements */
+#tablepress-page textarea,
+.tablepress-postbox-table .button {
+	margin: 1px;
+}
+#tablepress-page .button,
+#tablepress-page select {
+	min-height: 30px;
 }
