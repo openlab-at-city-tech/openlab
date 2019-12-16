@@ -8,7 +8,7 @@
 // http://alexking.org/projects/wordpress
 //
 // Released under the GPL license
-// http://www.opensource.org/licenses/gpl-license.php
+// https://www.opensource.org/licenses/gpl-license.php
 //
 // **********************************************************************
 // This program is distributed in the hope that it will be useful, but
@@ -136,7 +136,7 @@ function jetpack_mobile_available() {
 function jetpack_mobile_request_handler() {
 	global $wpdb;
 	if (isset($_GET['ak_action'])) {
-		$url = parse_url( get_bloginfo( 'url' ) );
+		$url = wp_parse_url( get_bloginfo( 'url' ) );
 		$domain = $url['host'];
 		if (!empty($url['path'])) {
 			$path = $url['path'];
@@ -220,7 +220,7 @@ function jetpack_mobile_theme_setup() {
 					exit;
 				break;
 				case 'ios':
-					header( 'Location: http://itunes.apple.com/us/app/wordpress/id335703880?mt=8' );
+					header( 'Location: https://itunes.apple.com/us/app/wordpress/id335703880?mt=8' );
 					exit;
 				break;
 				case 'blackberry':
