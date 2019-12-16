@@ -8,14 +8,17 @@ class H5PWordPress implements H5PFrameworkInterface {
    * @since 1.0.0
    * @var array
    */
-  protected $messages = array('error' => array(), 'updated' => array());
+  private $messages = array('error' => array(), 'info' => array());
 
   /**
    * Implements setErrorMessage
    */
-  public function setErrorMessage($message) {
+  public function setErrorMessage($message, $code = NULL) {
     if (current_user_can('edit_h5p_contents')) {
-      $this->messages['error'][] = $message;
+      $this->messages['error'][] = (object)array(
+        'code' => $code,
+        'message' => $message
+      );
     }
   }
 
@@ -24,7 +27,7 @@ class H5PWordPress implements H5PFrameworkInterface {
    */
   public function setInfoMessage($message) {
     if (current_user_can('edit_h5p_contents')) {
-      $this->messages['updated'][] = $message;
+      $this->messages['info'][] = $message;
     }
   }
 
@@ -57,7 +60,7 @@ class H5PWordPress implements H5PFrameworkInterface {
         $replacements[$key] = '<em>' . esc_html($replacement) . '</em>';
       }
     }
-    $message = preg_replace('/(!|@|%)[a-z0-9]+/i', '%s', $message);
+    $message = preg_replace('/(!|@|%)[a-z0-9-]+/i', '%s', $message);
 
     $plugin = H5P_Plugin::get_instance();
     $this->plugin_slug = $plugin->get_plugin_slug();
@@ -243,6 +246,7 @@ class H5PWordPress implements H5PFrameworkInterface {
     if (!isset($library['hasIcon'])) {
       $library['hasIcon'] = 0;
     }
+
     if ($new) {
       $wpdb->insert(
           $wpdb->prefix . 'h5p_libraries',
@@ -258,8 +262,12 @@ class H5PWordPress implements H5PFrameworkInterface {
             'preloaded_js' => $preloadedJs,
             'preloaded_css' => $preloadedCss,
             'drop_library_css' => $dropLibraryCss,
+            'tutorial_url' => '', // NOT NULL, has to be there
             'semantics' => $library['semantics'],
-            'has_icon' => $library['hasIcon'] ? 1 : 0
+            'has_icon' => $library['hasIcon'] ? 1 : 0,
+            'metadata_settings'=> $library['metadataSettings'],
+            'add_to' => isset($library['addTo']) ? json_encode($library['addTo']) : NULL
+            // Missing? created_at, updated_at
           ),
           array(
             '%s',
@@ -272,9 +280,12 @@ class H5PWordPress implements H5PFrameworkInterface {
             '%s',
             '%s',
             '%s',
+            '%s',
+            '%s',
+            '%s',
             '%d',
             '%s',
-            '%d'
+            '%s',
           )
         );
       $library['libraryId'] = $wpdb->insert_id;
@@ -292,7 +303,9 @@ class H5PWordPress implements H5PFrameworkInterface {
             'preloaded_css' => $preloadedCss,
             'drop_library_css' => $dropLibraryCss,
             'semantics' => $library['semantics'],
-            'has_icon' => $library['hasIcon'] ? 1 : 0
+            'has_icon' => $library['hasIcon'] ? 1 : 0,
+            'metadata_settings'=> $library['metadataSettings'],
+            'add_to' => isset($library['addTo']) ? json_encode($library['addTo']) : NULL
           ),
           array('id' => $library['libraryId']),
           array(
@@ -303,9 +316,11 @@ class H5PWordPress implements H5PFrameworkInterface {
             '%s',
             '%s',
             '%s',
+            '%s',
+            '%s',
             '%d',
             '%s',
-            '%d'
+            '%s'
           ),
           array('%d')
         );
@@ -418,25 +433,25 @@ class H5PWordPress implements H5PFrameworkInterface {
   public function updateContent($content, $contentMainId = NULL) {
     global $wpdb;
 
+    $metadata = (array)$content['metadata'];
     $table = $wpdb->prefix . 'h5p_contents';
-    $data = array(
+
+    $format = array();
+    $data = array_merge(\H5PMetadata::toDBArray($metadata, true, true, $format), array(
       'updated_at' => current_time('mysql', 1),
-      'title' => $content['title'],
       'parameters' => $content['params'],
       'embed_type' => 'div', // TODO: Determine from library?
       'library_id' => $content['library']['libraryId'],
       'filtered' => '',
-      'disable' => $content['disable'],
-    );
-    $format = array(
-      '%s',
-      '%s',
-      '%s',
-      '%s',
-      '%d',
-      '%s',
-      '%d'
-    );
+      'disable' => $content['disable']
+    ));
+
+    $format[] = '%s'; // updated_at
+    $format[] = '%s'; // parameters
+    $format[] = '%s'; // embed_type
+    $format[] = '%d'; // library_id
+    $format[] = '%s'; // filtered
+    $format[] = '%d'; // disable
 
     if (!isset($content['id'])) {
       // Insert new content
@@ -460,7 +475,7 @@ class H5PWordPress implements H5PFrameworkInterface {
     }
     new H5P_Event('content', $event_type,
         $content['id'],
-        $content['title'],
+        $metadata['title'],
         $content['library']['machineName'],
         $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']);
 
@@ -678,12 +693,40 @@ class H5PWordPress implements H5PFrameworkInterface {
               , hl.minor_version AS libraryMinorVersion
               , hl.embed_types AS libraryEmbedTypes
               , hl.fullscreen AS libraryFullscreen
+              , hc.authors AS authors
+              , hc.source AS source
+              , hc.year_from AS yearFrom
+              , hc.year_to AS yearTo
+              , hc.license AS license
+              , hc.license_version AS licenseVersion
+              , hc.license_extras AS licenseExtras
+              , hc.author_comments AS authorComments
+              , hc.changes AS changes
+              , hc.default_language AS defaultLanguage
         FROM {$wpdb->prefix}h5p_contents hc
         JOIN {$wpdb->prefix}h5p_libraries hl ON hl.id = hc.library_id
         WHERE hc.id = %d",
         $id),
         ARRAY_A
       );
+
+    if ($content !== NULL) {
+      $content['metadata'] = array();
+      $metadata_structure = array('title', 'authors', 'source', 'yearFrom', 'yearTo', 'license', 'licenseVersion', 'licenseExtras', 'authorComments', 'changes', 'defaultLanguage');
+      foreach ($metadata_structure as $property) {
+        if (!empty($content[$property])) {
+          if ($property === 'authors' || $property === 'changes') {
+            $content['metadata'][$property] = json_decode($content[$property]);
+          }
+          else {
+            $content['metadata'][$property] = $content[$property];
+          }
+          if ($property !== 'title') {
+            unset($content[$property]); // Unset all except title
+          }
+        }
+      }
+    }
 
     return $content;
   }
@@ -787,10 +830,15 @@ class H5PWordPress implements H5PFrameworkInterface {
   /**
    * Implements clearFilteredParameters().
    */
-  public function clearFilteredParameters($library_id) {
+  public function clearFilteredParameters($library_ids) {
     global $wpdb;
 
-    $wpdb->update($wpdb->prefix . 'h5p_contents', array('filtered' => NULL), array('library_id' => $library_id), array('%s'), array('%d'));
+    $wpdb->query($wpdb->prepare(
+      "UPDATE {$wpdb->prefix}h5p_contents
+          SET filtered = NULL
+        WHERE library_id IN (%s)",
+      implode(',', $library_ids))
+    );
   }
 
   /**
@@ -809,13 +857,15 @@ class H5PWordPress implements H5PFrameworkInterface {
   /**
    * Implements getNumContent().
    */
-  public function getNumContent($library_id) {
+  public function getNumContent($library_id, $skip = NULL) {
     global $wpdb;
+    $skip_query = empty($skip) ? '' : " AND id NOT IN ($skip)";
 
     return (int) $wpdb->get_var($wpdb->prepare(
       "SELECT COUNT(id)
-        FROM {$wpdb->prefix}h5p_contents
-        WHERE library_id = %d",
+         FROM {$wpdb->prefix}h5p_contents
+        WHERE library_id = %d
+              {$skip_query}",
       $library_id
     ));
   }
@@ -891,7 +941,7 @@ class H5PWordPress implements H5PFrameworkInterface {
     }
 
     if (is_wp_error($response)) {
-      //$error_message = $response->get_error_message();
+      $this->setErrorMessage($response->get_error_message(), 'failed-fetching-external-data');
       return FALSE;
     }
     elseif ($response['response']['code'] === 200) {
@@ -1088,6 +1138,7 @@ class H5PWordPress implements H5PFrameworkInterface {
     switch ($permission) {
       case H5PPermission::DOWNLOAD_H5P:
       case H5PPermission::EMBED_H5P:
+      case H5PPermission::COPY_H5P:
         return self::currentUserCanEdit($contentUserId);
 
       case H5PPermission::CREATE_RESTRICTED:
@@ -1171,5 +1222,62 @@ class H5PWordPress implements H5PFrameworkInterface {
   public static function dateTimeToTime($datetime) {
     $dt = new DateTime($datetime);
     return $dt->getTimestamp();
+  }
+
+  /**
+   * Load addon libraries
+   *
+   * @return array
+   */
+  public function loadAddons() {
+    global $wpdb;
+    // Load addons
+    // If there are several versions of the same addon, pick the newest one
+    return $wpdb->get_results(
+       "SELECT l1.id as libraryId, l1.name as machineName,
+              l1.major_version as majorVersion, l1.minor_version as minorVersion,
+              l1.patch_version as patchVersion, l1.add_to as addTo,
+              l1.preloaded_js as preloadedJs, l1.preloaded_css as preloadedCss
+        FROM {$wpdb->prefix}h5p_libraries AS l1
+        LEFT JOIN {$wpdb->prefix}h5p_libraries AS l2
+          ON l1.name = l2.name AND
+            (l1.major_version < l2.major_version OR
+              (l1.major_version = l2.major_version AND
+               l1.minor_version < l2.minor_version))
+        WHERE l1.add_to IS NOT NULL AND l2.name IS NULL", ARRAY_A
+    );
+
+    // NOTE: These are treated as library objects but are missing the following properties:
+    // title, embed_types, drop_library_css, fullscreen, runnable, semantics, has_icon
+  }
+
+  /**
+   * Implements getLibraryConfig
+   *
+   * @param array $libraries
+   * @return array
+   */
+  public function getLibraryConfig($libraries = NULL) {
+     return defined('H5P_LIBRARY_CONFIG') ? H5P_LIBRARY_CONFIG : NULL;
+  }
+
+  /**
+   * Implements libraryHasUpgrade
+   */
+  public function libraryHasUpgrade($library) {
+    global $wpdb;
+
+    return $wpdb->get_var($wpdb->prepare(
+        "SELECT id
+          FROM {$wpdb->prefix}h5p_libraries
+          WHERE name = '%s'
+          AND (major_version > %d
+           OR (major_version = %d AND minor_version > %d))
+        LIMIT 1",
+        $library['machineName'],
+        $library['majorVersion'],
+        $library['majorVersion'],
+        $library['minorVersion']
+    )) !== NULL;
   }
 }

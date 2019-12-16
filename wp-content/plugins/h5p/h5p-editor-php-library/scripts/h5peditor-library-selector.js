@@ -1,6 +1,4 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
+/* global ns */
 /**
  * Construct a library selector.
  *
@@ -11,6 +9,8 @@ var ns = H5PEditor;
  */
 ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var that = this;
+
+  this.libraries = libraries;
 
   H5P.EventDispatcher.call(this);
 
@@ -23,7 +23,6 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   catch (event) {
     // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
     this.defaultParams = {};
-    // TODO: Inform the user?
   }
 
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
@@ -40,7 +39,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   }).appendTo(document.body);
 
   if (H5PIntegration.hubIsEnabled) {
-    this.selector = new ns.SelectorHub(defaultLibrary, changeLibraryDialog);
+    this.selector = new ns.SelectorHub(libraries, defaultLibrary, changeLibraryDialog);
   }
   else {
     this.selector = new ns.SelectorLegacy(libraries, defaultLibrary, changeLibraryDialog);
@@ -54,11 +53,11 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    */
   var librarySelectHandler = function (library) {
     that.currentLibrary = library.uberName;
-    that.loadSemantics(library.uberName, that.selector.getParams());
+    that.loadSemantics(library.uberName, that.selector.getParams(), that.selector.getMetadata());
 
     that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
     that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
-  }
+  };
 
   /**
    * Event handler for loading a new library editor
@@ -69,22 +68,42 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     that.selector.getSelectedLibrary(librarySelectHandler);
   };
 
+  /**
+   * Confirm replace if there is content selected
+   *
+   * @param {number} top Offset
+   * @param {function} next Next callback
+   */
+  this.confirmPasteError = function (message, top, next) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'pasteError'),
+      dialogText: message,
+      cancelText: ' ',
+      confirmText: H5PEditor.t('core', 'ok')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(top);
+  };
+
   // Change library on confirmation
   changeLibraryDialog.on('confirmed', loadLibrary);
 
   // Revert selector on cancel
   changeLibraryDialog.on('canceled', function () {
-    that.selector.resetSelection(that.currentLibrary, that.defaultParams);
+    that.selector.resetSelection(that.currentLibrary, that.defaultParams, that.form.metadata, true);
   });
 
   // First time a library is selected in the editor
   this.selector.on('selected', loadLibrary);
 
-  this.selector.on('resized', function () {
-    that.trigger('resized');
+  this.selector.on('resize', function () {
+    that.trigger('resize');
   });
 
   this.on('select', loadLibrary);
+  H5P.externalDispatcher.on('datainclipboard', this.updateCopyPasteButtons.bind(this));
+  this.selector.on('paste', this.pasteContent.bind(this));
 };
 
 // Extends the event dispatcher
@@ -98,7 +117,7 @@ ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
  */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
   this.trigger('select');
-}
+};
 
 /**
  * Append the selector html to the given container.
@@ -107,11 +126,85 @@ ns.LibrarySelector.prototype.setLibrary = function (library) {
  * @returns {undefined}
  */
 ns.LibrarySelector.prototype.appendTo = function ($element) {
+  var self = this;
   this.$parent = $element;
 
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
   this.$exampleUrl.appendTo($element);
+
+  if (window.localStorage) {
+    var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
+
+    // Hide copy paste until library is selected:
+    $buttons.addClass('hidden');
+    self.on('editorloaded', function () {
+      $buttons.removeClass('hidden');
+    });
+
+    this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
+      H5P.clipboardify({
+        library: self.getCurrentLibrary(),
+        params: self.getParams(),
+        metadata: self.getMetadata()
+      });
+      ns.attachToastTo(
+        self.$copyButton.get(0),
+        H5PEditor.t('core', 'copiedToClipboard'), {
+          position: {
+            horizontal: 'center',
+            vertical: 'above',
+            noOverflowX: true
+          }
+        }
+      );
+    });
+    this.$pasteButton = $buttons.find('.h5peditor-paste-button')
+      .click(self.pasteContent.bind(this));
+
+    self.updateCopyPasteButtons();
+  }
+};
+
+/**
+ * Update state of copy and paste buttons dependent on what is currently in
+ * the clipboard
+ */
+ns.LibrarySelector.prototype.updateCopyPasteButtons = function () {
+  if (!window.localStorage) {
+    return;
+  }
+
+  // Check if content type is supported here
+  const pasteCheck = ns.canPastePlus(H5P.getClipboard(), this.libraries);
+  const canPaste = pasteCheck.canPaste;
+
+  this.$copyButton
+    .prop('disabled', false)
+    .toggleClass('disabled', false);
+
+  this.$pasteButton
+    .text(ns.t('core', 'pasteAndReplaceButton'))
+    .attr('title', canPaste ? ns.t('core', 'pasteAndReplaceFromClipboard') : pasteCheck.description)
+    .toggleClass('disabled', !canPaste)
+    .prop('disabled', !canPaste);
+
+  this.selector.setCanPaste && this.selector.setCanPaste(canPaste, !canPaste ? pasteCheck.description : undefined);
+};
+
+/**
+ * Sets the current library
+ *
+ * @param {string} library
+ */
+ns.LibrarySelector.prototype.pasteContent = function () {
+  var self = this;
+  var clipboard = H5P.getClipboard();
+
+  ns.confirmReplace(self.getCurrentLibrary(), self.$parent.offset().top, function () {
+    self.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
+    self.setLibrary();
+  });
 };
 
 /**
@@ -121,7 +214,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
  * @param {Object} params Pass in params to semantics
  * @returns {unresolved}
  */
-ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
+ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata) {
   var that = this;
 
   if (this.form !== undefined) {
@@ -160,10 +253,21 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
         overrideParams = that.defaultParams;
       }
 
-      that.form = new ns.Form();
+      if (!metadata) {
+        metadata = overrideParams.metadata;
+      }
+      const defaultLanguage = metadata && metadata.defaultLanguage
+        ? metadata.defaultLanguage
+        : null;
+      that.form = new ns.Form(
+        library,
+        ns.libraryCache[library].languages,
+        defaultLanguage
+      );
       that.form.replace($loading);
       that.form.currentLibrary = library;
-      that.form.processSemantics(semantics, overrideParams);
+      that.form.processSemantics(semantics, overrideParams, metadata);
+      that.updateCopyPasteButtons();
     }
 
     that.$selector.attr('disabled', false);
@@ -190,16 +294,47 @@ ns.LibrarySelector.prototype.getParams = function () {
   }
 
   // Only return if all fields has validated.
-  var valid = true;
+  //var valid = true;
+
+  if (this.form.metadataForm.children !== undefined) {
+    for (var i = 0; i < this.form.metadataForm.children.length; i++) {
+      if (this.form.metadataForm.children[i].validate() === false) {
+        //valid = false;
+      }
+    }
+  }
 
   if (this.form.children !== undefined) {
     for (var i = 0; i < this.form.children.length; i++) {
       if (this.form.children[i].validate() === false) {
-        valid = false;
+        //valid = false;
       }
     }
   }
 
   //return valid ? this.form.params : false;
   return this.form.params; // TODO: Switch to the line above when we are able to tell the user where the validation fails
+};
+
+/**
+ * Get the metadata of the main form.
+ *
+ * @return {object} Metadata object.
+ */
+ns.LibrarySelector.prototype.getMetadata = function () {
+  if (this.form === undefined) {
+    return;
+  }
+
+  return this.form.metadata;
+};
+
+/**
+ *
+ * @param content
+ * @param library
+ * @returns {H5PEditor.Presave} Result after processing library and content
+ */
+ns.LibrarySelector.prototype.presave = function (content, library) {
+  return (new ns.Presave).process(library, content);
 };

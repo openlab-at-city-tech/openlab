@@ -60,6 +60,10 @@ class H5P_Plugin_Admin {
     // Prepare admin pages / sections
     $this->content = new H5PContentAdmin($this->plugin_slug);
     $this->library = new H5PLibraryAdmin($this->plugin_slug);
+    $this->privacy = new H5PPrivacyPolicy($this->plugin_slug);
+
+    // Initialize admin area.
+    $this->add_privacy_features();
 
     // Load admin style sheet and JavaScript.
     add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles_and_scripts'));
@@ -85,6 +89,8 @@ class H5P_Plugin_Admin {
     add_action('wp_ajax_h5p_libraries', array($this->content, 'ajax_libraries'));
     add_action('wp_ajax_h5p_files', array($this->content, 'ajax_files'));
     add_action('wp_ajax_h5p_content-type-cache', array($this->content, 'ajax_content_type_cache'));
+    add_action('wp_ajax_h5p_translations', array($this->content, 'ajax_translations'));
+    add_action('wp_ajax_h5p_filter', array($this->content, 'ajax_filter'));
 
     // AJAX for rebuilding all content caches
     add_action('wp_ajax_h5p_rebuild_cache', array($this->library, 'ajax_rebuild_cache'));
@@ -120,6 +126,24 @@ class H5P_Plugin_Admin {
 
     // Remove user data and results
     add_action('deleted_user', array($this, 'deleted_user'));
+  }
+
+  /**
+   * Display a form for adding and editing h5p content.
+   *
+   * @since 1.14.0
+   */
+  public function display_new_content_page($custom_view = NULL) {
+    $this->content->display_new_content_page($custom_view);
+  }
+
+  /**
+   * Display a form for adding and editing h5p content.
+   *
+   * @since 1.14.0
+   */
+  public function process_new_content($echo_on_success = NULL) {
+    $this->content->process_new_content($echo_on_success);
   }
 
   /**
@@ -200,6 +224,18 @@ class H5P_Plugin_Admin {
           $scripts = array_merge($scripts, $core->getAssetsUrls($files['scripts']));
           $styles = array_merge($styles, $core->getAssetsUrls($files['styles']));
 
+          $additional_embed_head_tags = array();
+
+          /**
+           * Add support for additional head tags for embedded content.
+           * Very useful when adding xAPI events tracking code.
+           *
+           * @since 1.9.5
+           *
+           * @param array &$additional_embed_head_tags
+           */
+          do_action_ref_array('h5p_additional_embed_head_tags', array(&$additional_embed_head_tags));
+
           include_once(plugin_dir_path(__FILE__) . '../h5p-php-library/embed.php');
 
           // Log embed view
@@ -266,8 +302,7 @@ class H5P_Plugin_Admin {
         // A new installation of the plugin
         $messages[] = __('Thank you for choosing H5P.', $this->plugin_slug);
 
-        $messages[] = sprintf(wp_kses(__('Check out our <a href="%s" target="_blank">Examples and Downloads</a> page for inspiration.', $this->plugin_slug), array('a' => array('href' => array(), 'target' => array()))), esc_url('https://h5p.org/content-types-and-applications'));
-        $messages[] = sprintf(wp_kses(__('H5P fetches content types directly from the H5P Hub. In order to do this, the H5P plugin will communicate with the Hub once a day to fetch information about new and updated content types. It will send in anonymous data to the Hub about H5P usage. Read more at <a href="%s">the plugin communication page at H5P.org</a>.', $this->plugin_slug), array('a' => array('href' => array()))), esc_url('https://h5p.org/tracking-the-usage-of-h5p'));
+        $messages[] = sprintf(wp_kses(__('You are ready to <a href="%s">start creating</a> interactive content. Check out our <a href="%s" target="_blank">Examples and Downloads</a> page for inspiration.', $this->plugin_slug), array('a' => array('href' => array(), 'target' => array()))), admin_url('admin.php?page=h5p_new'), esc_url('https://h5p.org/content-types-and-applications'));
       }
       else {
         // Looks like we've just updated, always thank the user for updating.
@@ -304,7 +339,7 @@ class H5P_Plugin_Admin {
 
     $plugin = H5P_Plugin::get_instance();
     $core = $plugin->get_h5p_instance('core');
-    if ($core->h5pF->getOption('check_h5p_requirements')) {
+    if ($core->h5pF->getOption('hub_is_enabled') && $core->h5pF->getOption('check_h5p_requirements')) {
       $core->checkSetupForRequirements();
       $core->h5pF->setOption('check_h5p_requirements', FALSE);
     }
@@ -320,6 +355,22 @@ class H5P_Plugin_Admin {
 
     // Print any other messages
     self::print_messages();
+  }
+
+  /**
+   * Initialize admin area.
+   *
+   * @since 1.10.2
+   */
+  function add_privacy_features() {
+    // Privacy Policy
+    add_action('admin_init', array($this->privacy, 'add_privacy_policy_content'), 20);
+
+    // Exporter
+    add_filter('wp_privacy_personal_data_exporters', array($this->privacy, 'register_h5p_exporter'), 10);
+
+    // Eraser
+    add_filter('wp_privacy_personal_data_erasers', array($this->privacy, 'register_h5p_eraser'), 10);
   }
 
   /**
@@ -341,10 +392,10 @@ class H5P_Plugin_Admin {
   public function add_plugin_admin_menu() {
     // H5P Content pages
     $h5p_content = __('H5P Content', $this->plugin_slug);
-    add_menu_page($h5p_content, $h5p_content, 'edit_h5p_contents', $this->plugin_slug, array($this->content, 'display_contents_page'), 'none');
+    add_menu_page($h5p_content, $h5p_content, 'view_h5p_contents', $this->plugin_slug, array($this->content, 'display_contents_page'), 'none');
 
-    $all_h5p_content = __('All H5P Content', $this->plugin_slug);
-    add_submenu_page($this->plugin_slug, $all_h5p_content, $all_h5p_content, 'edit_h5p_contents', $this->plugin_slug, array($this->content, 'display_contents_page'));
+    $all_h5p_content = (current_user_can('view_others_h5p_contents') == true) ? __('All H5P Content', $this->plugin_slug) : __('My H5P Content', $this->plugin_slug);
+    add_submenu_page($this->plugin_slug, $all_h5p_content, $all_h5p_content, 'view_h5p_contents', $this->plugin_slug, array($this->content, 'display_contents_page'));
 
     $add_new = __('Add New', $this->plugin_slug);
     $contents_page = add_submenu_page($this->plugin_slug, $add_new, $add_new, 'edit_h5p_contents', $this->plugin_slug . '_new', array($this->content, 'display_new_content_page'));
@@ -403,6 +454,9 @@ class H5P_Plugin_Admin {
       $save_content_frequency = filter_input(INPUT_POST, 'save_content_frequency', FILTER_VALIDATE_INT);
       update_option('h5p_save_content_frequency', $save_content_frequency);
 
+      $show_toggle_view_others_h5p_contents = filter_input(INPUT_POST, 'show_toggle_view_others_h5p_contents', FILTER_VALIDATE_INT);
+      update_option('h5p_show_toggle_view_others_h5p_contents', $show_toggle_view_others_h5p_contents);
+
       $insert_method = filter_input(INPUT_POST, 'insert_method', FILTER_SANITIZE_SPECIAL_CHARS);
       update_option('h5p_insert_method', $insert_method);
 
@@ -442,6 +496,7 @@ class H5P_Plugin_Admin {
       $track_user = get_option('h5p_track_user', TRUE);
       $save_content_state = get_option('h5p_save_content_state', FALSE);
       $save_content_frequency = get_option('h5p_save_content_frequency', 30);
+      $show_toggle_view_others_h5p_contents = get_option('h5p_show_toggle_view_others_h5p_contents', 0);
       $insert_method = get_option('h5p_insert_method', 'id');
       $enable_lrs_content_types = get_option('h5p_enable_lrs_content_types', FALSE);
       $enable_hub = get_option('h5p_hub_is_enabled', TRUE);
@@ -524,11 +579,30 @@ class H5P_Plugin_Admin {
     rename($_FILES['h5p_file']['tmp_name'], $interface->getUploadedH5pPath());
 
     $skipContent = ($content === NULL);
-    if ($validator->isValidPackage($skipContent, $only_upgrade) && ($skipContent || $content['title'] !== NULL)) {
+    if ($validator->isValidPackage($skipContent, $only_upgrade)) {
+      $tmpDir = $interface->getUploadedH5pFolderPath();
+
+      if (!$skipContent) {
+        foreach ($validator->h5pC->mainJsonData['preloadedDependencies'] as $dep) {
+          if ($dep['machineName'] === $validator->h5pC->mainJsonData['mainLibrary']) {
+            if ($validator->h5pF->libraryHasUpgrade($dep)) {
+              // We do not allow storing old content due to security concerns
+              $interface->setErrorMessage(__("You're trying to upload content of an older version of H5P. Please upgrade the content on the server it originated from and try to upload again or turn on the H5P Hub to have this server upgrade it for your automaticall.", $this->plugin_slug));
+              H5PCore::deleteFileTree($tmpDir);
+              return FALSE;
+            }
+          }
+        }
+
+        if (empty($content['metadata']) || empty($content['metadata']['title'])) {
+          // Fix for legacy content upload to work.
+          // Fetch title from h5p.json or use a default string if not available
+          $content['metadata']['title'] = empty($validator->h5pC->mainJsonData['title']) ? 'Uploaded Content' : $validator->h5pC->mainJsonData['title'];
+        }
+      }
 
       if (function_exists('check_upload_size')) {
         // Check file sizes before continuing!
-        $tmpDir = $interface->getUploadedH5pFolderPath();
         $error = self::check_upload_sizes($tmpDir);
         if ($error !== NULL) {
           // Didn't meet space requirements, cleanup tmp dir.
@@ -614,12 +688,12 @@ class H5P_Plugin_Admin {
     $plugin = H5P_Plugin::get_instance();
     $interface = $plugin->get_h5p_instance('interface');
 
-    foreach (array('updated', 'error') as $type) {
+    foreach (array('info', 'error') as $type) {
       $messages = $interface->getMessages($type);
       if (!empty($messages)) {
-        print '<div class="' . $type . '"><ul>';
+        print '<div class="' . ($type === 'info' ? 'updated' : $type) . '"><ul>';
         foreach ($messages as $message) {
-          print '<li>' . $message . '</li>';
+          print '<li>' . ($type === 'error' ? $message->message : $message) . '</li>';
         }
         print '</ul></div>';
       }
@@ -912,10 +986,30 @@ class H5P_Plugin_Admin {
         'search' => __('Search', $this->plugin_slug),
         'remove' => __('Remove', $this->plugin_slug),
         'empty' => $empty,
+        'showOwnContentOnly' => __('Show my content only', $this->plugin_slug)
       )
     );
     $plugin = H5P_Plugin::get_instance();
     $settings = array('dataViews' => $data_views);
+
+    // Add toggler for hiding others' content only if user can view others content types
+    $canToggleViewOthersH5PContents = current_user_can('view_others_h5p_contents') ?
+      get_option('h5p_show_toggle_view_others_h5p_contents') :
+    0;
+
+    // Add user object to H5PIntegration
+    $user = wp_get_current_user();
+    if ($user->ID !== 0) {
+      $user = array(
+        'user' => array(
+          'id' => $user->ID,
+          'name' => $user->display_name,
+          'canToggleViewOthersH5PContents' => $canToggleViewOthersH5PContents
+        )
+      );
+      $settings = array_merge( $settings, $user );
+    }
+
     $plugin->print_settings($settings);
 
     // Add JS

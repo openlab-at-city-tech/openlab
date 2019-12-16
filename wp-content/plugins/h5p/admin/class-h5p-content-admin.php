@@ -121,9 +121,36 @@ class H5PContentAdmin {
    * @return boolean
    */
   private function current_user_can_edit($content) {
+    // If you can't edit content, you neither can edit others contents
+    if (!current_user_can('edit_h5p_contents')) {
+      return FALSE;
+    }
     if (current_user_can('edit_others_h5p_contents')) {
       return TRUE;
     }
+    $author_id = (int)(is_array($content) ? $content['user_id'] : $content->user_id);
+    return get_current_user_id() === $author_id;
+  }
+
+  /**
+   * Permission check. Can the current user view the given content?
+   *
+   * @since 1.15.0
+   * @param array $content
+   * @return boolean
+   */
+  private function current_user_can_view($content) {
+    // If you can't view content, you neither can view others contents
+    if (! current_user_can('view_h5p_contents')) {
+      return FALSE;
+    }
+
+    // If user is allowed to view others' contents, can also see content in general
+    if (current_user_can('view_others_h5p_contents')) {
+      return TRUE;
+    }
+
+    // Does content belong to current user?
     $author_id = (int)(is_array($content) ? $content['user_id'] : $content->user_id);
     return get_current_user_id() === $author_id;
   }
@@ -206,6 +233,13 @@ class H5PContentAdmin {
         return;
 
       case 'show':
+        // Access restriction
+        if ($this->current_user_can_view($this->content) == FALSE) {
+          H5P_Plugin_Admin::set_error(__('You are not allowed to view this content.', $this->plugin_slug));
+          H5P_Plugin_Admin::print_messages();
+          return;
+        }
+
         // Admin preview of H5P content.
         if (is_string($this->content)) {
           H5P_Plugin_Admin::set_error($this->content);
@@ -289,8 +323,16 @@ class H5PContentAdmin {
    *
    * @since 1.1.0
    */
-  public function process_new_content() {
+  public function process_new_content($echo_on_success) {
     $plugin = H5P_Plugin::get_instance();
+
+    $consent = filter_input(INPUT_POST, 'consent', FILTER_VALIDATE_BOOLEAN);
+    if ($consent !== NULL && !get_option('h5p_has_request_user_consent', FALSE) && current_user_can('manage_options')) {
+      check_admin_referer('h5p_consent', 'can_has'); // Verify form
+      update_option('h5p_hub_is_enabled', $consent);
+      update_option('h5p_send_usage_statistics', $consent);
+      update_option('h5p_has_request_user_consent', TRUE);
+    }
 
     // Check if we have any content or errors loading content
     $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -347,7 +389,6 @@ class H5PContentAdmin {
       elseif (isset($_FILES['h5p_file']) && $_FILES['h5p_file']['error'] === 0) {
         // Create new content if none exists
         $content = ($this->content === NULL ? array('disable' => H5PCore::DISABLE_NONE) : $this->content);
-        $content['title'] = $this->get_input_title();
         $content['uploaded'] = true;
         $this->get_disabled_content_features($core, $content);
 
@@ -359,7 +400,12 @@ class H5PContentAdmin {
       if ($result) {
         $content['id'] = $result;
         $this->set_content_tags($content['id'], filter_input(INPUT_POST, 'tags'));
-        wp_safe_redirect(admin_url('admin.php?page=h5p&task=show&id=' . $result));
+	      if (empty($echo_on_success)) {
+          wp_safe_redirect(admin_url('admin.php?page=h5p&task=show&id=' . $result));
+        }
+        else {
+          echo $echo_on_success;
+        }
         exit;
       }
     }
@@ -421,17 +467,21 @@ class H5PContentAdmin {
    *
    * @since 1.1.0
    */
-  public function display_new_content_page() {
-    $contentExists = ($this->content !== NULL);
+  public function display_new_content_page($custom_view) {
+    if (!get_option('h5p_has_request_user_consent', FALSE) && current_user_can('manage_options')) {
+      // Get the user to enable the Hub before creating content
+      return include_once('views/user-consent.php');
+    }
+
+    $contentExists = ($this->content !== NULL && !is_string($this->content));
     $hubIsEnabled = get_option('h5p_hub_is_enabled', TRUE);
 
     $plugin = H5P_Plugin::get_instance();
     $core = $plugin->get_h5p_instance('core');
 
     // Prepare form
-    $title = $this->get_input('title', $contentExists ? $this->content['title'] : '');
     $library = $this->get_input('library', $contentExists ? H5PCore::libraryToString($this->content['library']) : 0);
-    $parameters = $this->get_input('parameters', $contentExists ? $core->filterParameters($this->content) : '{}');
+    $parameters = $this->get_input('parameters', '{"params":' . ($contentExists ? $core->filterParameters($this->content) : '{}') . ',"metadata":' . ($contentExists ? json_encode((object)$this->content['metadata']) : '{}') . '}');
 
     // Determine upload or create
     if (!$hubIsEnabled && !$contentExists && !$this->has_libraries()) {
@@ -448,9 +498,11 @@ class H5PContentAdmin {
     $safe_text = _wp_specialchars($safe_text, ENT_QUOTES, false, true);
     $parameters = apply_filters('attribute_escape', $safe_text, $parameters);
 
-    $display_options = $core->getDisplayOptionsForEdit($this->content['disable']);
+    $display_options = $core->getDisplayOptionsForEdit($contentExists ? $this->content['disable'] : NULL);
 
-    include_once('views/new-content.php');
+    // allows for customization of the editor's view
+    include_once(empty($custom_view) ? 'views/new-content.php' : $custom_view);
+
     $this->add_editor_assets($contentExists ? $this->content['id'] : NULL);
     H5P_Plugin_Admin::add_script('jquery', 'h5p-php-library/js/jquery.js');
     H5P_Plugin_Admin::add_script('disable', 'h5p-php-library/js/h5p-display-options.js');
@@ -512,17 +564,16 @@ class H5PContentAdmin {
       $core->h5pF->setErrorMessage(__('Invalid library.', $this->plugin_slug));
       return FALSE;
     }
+    if ($core->h5pF->libraryHasUpgrade($content['library'])) {
+      // We do not allow storing old content due to security concerns
+      $core->h5pF->setErrorMessage(__('Something unexpected happened. We were unable to save this content.', $this->plugin_slug));
+      return FALSE;
+    }
 
     // Check if library exists.
     $content['library']['libraryId'] = $core->h5pF->getLibraryId($content['library']['machineName'], $content['library']['majorVersion'], $content['library']['minorVersion']);
     if (!$content['library']['libraryId']) {
       $core->h5pF->setErrorMessage(__('No such library.', $this->plugin_slug));
-      return FALSE;
-    }
-
-    // Get title
-    $content['title'] = $this->get_input_title();
-    if ($content['title'] === NULL) {
       return FALSE;
     }
 
@@ -537,16 +588,36 @@ class H5PContentAdmin {
       return FALSE;
     }
 
+    $content['params'] = json_encode($params->params);
+    $content['metadata'] = $params->metadata;
+
+    // Trim title and check length
+    $trimmed_title = empty($content['metadata']->title) ? '' : trim($content['metadata']->title);
+    if ($trimmed_title === '') {
+      H5P_Plugin_Admin::set_error(sprintf(__('Missing %s.', $this->plugin_slug), 'title'));
+      return FALSE;
+    }
+
+    if (strlen($trimmed_title) > 255) {
+      H5P_Plugin_Admin::set_error(__('Title is too long. Must be 256 letters or shorter.', $this->plugin_slug));
+      return FALSE;
+    }
+
     // Set disabled features
     $this->get_disabled_content_features($core, $content);
 
-    // Save new content
-    $content['id'] = $core->saveContent($content);
+    try {
+      // Save new content
+      $content['id'] = $core->saveContent($content);
+    }
+    catch (Exception $e) {
+      H5P_Plugin_Admin::set_error($e->getMessage());
+      return;
+    }
 
     // Move images and find all content dependencies
     $editor = $this->get_h5peditor_instance();
-    $editor->processParameters($content['id'], $content['library'], $params, $oldLibrary, $oldParams);
-    //$content['params'] = json_encode($params);
+    $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
     return $content['id'];
   }
 
@@ -591,33 +662,6 @@ class H5PContentAdmin {
   }
 
   /**
-   * Get input post data field title. Validates.
-   *
-   * @since 1.1.0
-   * @return string
-   */
-  public function get_input_title() {
-    $title = $this->get_input('title');
-    if ($title === NULL) {
-      return NULL;
-    }
-
-    // Trim title and check length
-    $trimmed_title = trim($title);
-    if ($trimmed_title === '') {
-      H5P_Plugin_Admin::set_error(sprintf(__('Missing %s.', $this->plugin_slug), 'title'));
-      return NULL;
-    }
-
-    if (strlen($trimmed_title) > 255) {
-      H5P_Plugin_Admin::set_error(__('Title is too long. Must be 256 letters or shorter.', $this->plugin_slug));
-      return NULL;
-    }
-
-    return $trimmed_title;
-  }
-
-  /**
    * Add custom media button for selecting H5P content.
    *
    * @since 1.1.0
@@ -659,6 +703,11 @@ class H5PContentAdmin {
           'facet' => TRUE
         ),
         (object) array(
+          'text' => __('Author', $this->plugin_slug),
+          'sortable' => TRUE,
+          'facet' => TRUE
+        ),
+        (object) array(
           'text' => __('Tags', $this->plugin_slug),
           'sortable' => FALSE,
           'facet' => TRUE
@@ -674,7 +723,7 @@ class H5PContentAdmin {
       array(true),
       __("No H5P content available. You must upload or create new content.", $this->plugin_slug),
       (object) array(
-        'by' => 3,
+        'by' => 4,
         'dir' => 0
       )
     );
@@ -732,7 +781,7 @@ class H5PContentAdmin {
 
     // Different fields for insert
     if ($insert) {
-      $fields = array('title', 'content_type', 'tags', 'updated_at', 'id', 'content_type_id', 'slug');
+      $fields = array('title', 'content_type', 'user_name', 'tags', 'updated_at', 'id', 'user_id', 'content_type_id', 'slug');
     }
     else {
       $fields = array('title', 'content_type', 'user_name', 'tags', 'updated_at', 'id', 'user_id', 'content_type_id');
@@ -742,6 +791,11 @@ class H5PContentAdmin {
     $conditions = array();
     if (isset($filters[0])) {
       $conditions[] = array('title', $filters[0], 'LIKE');
+    }
+
+    // Limit query to content types that user is allowed to view
+    if (current_user_can('view_others_h5p_contents') == FALSE) {
+      array_push($conditions, array('user_id', get_current_user_id(), '='));
     }
 
     if ($facets !== NULL) {
@@ -843,6 +897,10 @@ class H5PContentAdmin {
       array(
         'id' => $result->content_type_id,
         'title' => esc_html($result->content_type)
+      ),
+      array(
+        'id' => $result->user_id,
+        'title' => esc_html($result->user_name)
       ),
       $this->format_tags($result->tags),
       $this->format_time($result->updated_at),
@@ -981,9 +1039,11 @@ class H5PContentAdmin {
       'ajaxPath' => admin_url('admin-ajax.php?token=' . wp_create_nonce('h5p_editor_ajax') . '&action=h5p_'),
       'libraryUrl' => plugin_dir_url('h5p/h5p-editor-php-library/h5peditor.class.php'),
       'copyrightSemantics' => $content_validator->getCopyrightSemantics(),
+      'metadataSemantics' => $content_validator->getMetadataSemantics(),
       'assets' => $assets,
       'deleteMessage' => __('Are you sure you wish to delete this content?', $this->plugin_slug),
-      'apiVersion' => H5PCore::$coreApi
+      'apiVersion' => H5PCore::$coreApi,
+      'language' => $language
     );
 
     if ($id !== NULL) {
@@ -1037,7 +1097,7 @@ class H5PContentAdmin {
 
       $editor->ajax->action(H5PEditorEndpoints::SINGLE_LIBRARY, $name,
         $major_version, $minor_version, $plugin->get_language(), '',
-        $plugin->get_h5p_path()
+        $plugin->get_h5p_path(), filter_input(INPUT_GET, 'default-language')
       );
 
       // Log library load
@@ -1060,6 +1120,17 @@ class H5PContentAdmin {
 
     $editor = $this->get_h5peditor_instance();
     $editor->ajax->action(H5PEditorEndpoints::CONTENT_TYPE_CACHE, $token);
+    exit;
+  }
+
+  /**
+   * Get translations
+   */
+  public function ajax_translations() {
+    $language = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
+
+    $editor = $this->get_h5peditor_instance();
+    $editor->ajax->action(H5PEditorEndpoints::TRANSLATIONS, $language);
     exit;
   }
 
@@ -1096,5 +1167,19 @@ class H5PContentAdmin {
 
     $plugin_admin = H5P_Plugin_Admin::get_instance();
     $plugin_admin->print_results($id);
+  }
+
+  /**
+   * Handle filtering of parameters through AJAX.
+   *
+   * @since 1.14.0
+   */
+  public function ajax_filter() {
+    $token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
+    $libraryParameters = filter_input(INPUT_POST, 'libraryParameters');
+
+    $editor = $this->get_h5peditor_instance();
+    $editor->ajax->action(H5PEditorEndpoints::FILTER, $token, $libraryParameters);
+    exit;
   }
 }

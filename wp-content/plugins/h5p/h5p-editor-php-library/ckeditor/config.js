@@ -1,12 +1,12 @@
 /**
- * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
 	// For complete reference see:
-	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
 	// The toolbar groups arrangement, optimized for a single toolbar row.
 	config.toolbarGroups = [
@@ -27,10 +27,9 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-//      config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript';
+	//	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript';
 
 	// Dialog windows are also simplified.
-//      config.removeDialogTabs = 'link:advanced';
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
 	// Se the most common block elements.
@@ -41,5 +40,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoGrow_onStartup = true;
 	config.autoGrow_maxHeight = 500;
 	config.colorButton_enableMore = true;
-	config.plugins += ',removeRedundantNBSP';
+	config.plugins += ',removeRedundantNBSP,customCodeHighlighter';
 };

@@ -1,6 +1,4 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
+/* global ns */
 /**
  * Adds a dimensions field to the form.
  *
@@ -25,7 +23,7 @@ ns.Dimensions = function (parent, field, params, setValue) {
   });
 
   // Find image field to get default size from.
-  H5PEditor.followField(parent, field['default'], function (file, index) {
+  H5PEditor.followField(parent, field['default'], function (file) {
     // Make sure we don't set size if we have one in the default params.
     if (params.width === undefined) {
       that.setSize(file);
@@ -118,8 +116,15 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Dimensions.prototype.createHtml = function () {
-  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width')) + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'));
-  return ns.createFieldMarkup(this.field, input);
+  const id = ns.getNextFieldId(this.field);
+  const descriptionId = (this.field.description !== undefined ? ns.getDescriptionId(id) : undefined)
+
+  var input =
+    ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width'), id, descriptionId) +
+    ' x ' +
+    ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'), undefined, descriptionId);
+
+  return ns.createFieldMarkup(this.field, input, id);
 };
 
 /**

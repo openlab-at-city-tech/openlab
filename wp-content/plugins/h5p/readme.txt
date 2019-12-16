@@ -1,10 +1,10 @@
 ﻿=== Interactive Content – H5P ===
 Contributors: icc0rz, fnoks, falcon28
 Donate link: http://h5p.org
-Tags: interactive content, content, interactive video, quiz, drag and drop, multiple choice, hot spots, collage, memory game, cloze test, game, free, export, elearning, e-learning, learning, education, xAPI, html5, responsive
+Tags: editor, video, quiz, slider, education
 Requires at least: 3.8.1
-Tested up to: 4.8
-Stable tag: 1.9.4
+Tested up to: 5.3
+Stable tag: 1.15.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -12,7 +12,7 @@ Create and add rich content to your website for free. Some examples of what you 
 
 == Description ==
 
-One of the great benefits with using H5P is that it gives you access to lots of different [interactive content types](https://h5p.org/content-types-and-applications "Examples and Downloads").
+One of the great benefits with using H5P is that it gives you access to lots of different [interactive content types](https://h5p.org/content-types-and-applications "Examples and Downloads"), such as presentation, interactive video, memory game, quiz, multiple choice, timeline, collage, hotspots, drag and drop, cloze test (fill in the blanks), personality quiz, accordion, flash cards, audio recorder.
 
 Another great benefit with H5P is that it allows you to easily share and reuse content. To use content created with H5P, you simply insert a shortcode `[h5p Id="1"]` where you wish for the content to appear. To reuse content, you just download the H5P you would like to edit and make your changes – e.g. translate to a new language or adjust it to a new situation.
 
@@ -26,6 +26,9 @@ H5P is:
 The H5P community is actively contributing to improve H5P. Updates and new features are continuously made available on the community portal [H5P.org](https://h5p.org "H5P").
 
 View our [setup for WordPress](https://h5p.org/documentation/setup/wordpress "Setup H5P for WordPress") to get information on how to get started with H5P.
+
+= GDPR Compliance =
+Information useful to help you achieve GDPR compliance while using this plugin can be found at [H5P.org's GDPR Compliance](https://h5p.org/plugin-gdpr-compliance "GDPR Compliance") page.
 
 == Installation ==
 
@@ -354,3 +357,99 @@ Improved the fix introduced in 1.9.2 as it was not tested well enough.
 
 = 1.9.4 =
 Something went wrong with the release of 1.9.3.
+
+= 1.10.0 =
+Adds more detailed error messages with links for troubleshooting them.
+Prevent deleting sub content of linked directories.
+New action for adding head tags to embed page.
+Fixed PHP warnings when trying to view deleted content.
+Updated CKEditor to version 4.7.3.
+Added Greek translations (thanks to xarhsdev).
+Added Finnish translations (thanks to Janne Särkelä).
+Added support for editor iframe reloading.
+Allow multiple content to be loaded at the same time.
+Refactor of the Content Type Selector(Hub); big UX and performance improvements .
+Updated translations.
+
+= 1.10.1 =
+Fix issue with editor not saving correctly in Safari 11.
+Fix missing translation and some PHP notices.
+
+= 1.10.2 =
+Add support for the new Privacy APIs added in the latest WordPress. (retrieving and deleting user data upon request)
+Add an opt-in option for statistics for first time users of the plugin.
+Update the French translation, big thanks to knowledgeplaces on GitHub!
+Restricted some new content type in case an LRS isn't used.
+Add support for the latest H5P Core version.
+Various minor bug fixes
+
+= 1.10.3 =
+Fix compatibility with PHP <5.4
+
+= 1.11.0 =
+Added the new metadata system to H5P
+Added support for Copy and Paste inside H5PEditor (No cross-site support)
+Added support for addons (e.g. Mathdisplay)
+Added Russian translation. Big thanks to Александр Шульгин
+Added Arabic translation. Big thanks to omniasaid
+Updated Turkish translation. Big thanks to hakangur
+Upgraded CKEditor inside H5PEditor
+Added Bosnian translation to H5PEditor. Big thanks to Sabahuddin
+Updated German translation in H5PEditor. Big thanks to Sebastian Rettig
+Updated French translations in H5PEditor. Big thanks to knowledgeplaces
+Updated Arabic translations in H5PEditor. Big thanks to smartwayme
+Updated Polish translations in H5PEditor. Big thanks to Andrzej Pieńkowski
+Added brazilian portuguese translation in H5PEditor. Big thanks to Juliano Navroski Junior
+Updated Turkish translations in H5PEditor. Big thanks to Adem Özgür
+Fix appropriate separator for AJAX URLs in H5PEditor. Big thanks to Miika Langille
+Minor bug fixes and improvements to H5PEditor and Core
+
+= 1.11.1 =
+Fixed serious bug when loading editor translations for some languages.
+
+= 1.11.2 =
+Fix compatibility with PHP <5.4
+
+= 1.11.3 =
+Fix "common fields" issue when switching between content types.
+Fix resizing bug for iframe embeds.
+Fix issue with temporary files.
+
+= 1.12.0 =
+Improved API for better support with PressBooks.
+Added Copy/Paste support for single libraries in Editor.
+Added support for semi-fullscreen in Editor. (used in Branching Scenario)
+Added support for Audio Recorder in default audio widget. (used in Memory Game)
+Improved group summaries in Editor.
+Fix reset of all subContentIds when using Copy/Paste.
+Removed caching of pasted content to ensure objects are cloned.
+Removed support for base64 "uploads" in Core. (All uploads should be blobs or files)
+Other minor Editor & Core improvements.
+Updated translations, a big thanks to all contributors.
+
+= 1.13.0 =
+Added automated upgrade of content on save.
+Improved error handling for content upgrade.
+Added support for language switching in editor.
+Added a new reuse dialog for download or copy of content in view.
+
+= 1.13.1 =
+Fix correct default language not always loading.
+
+= 1.14.0 =
+Added fullscreen editing mode
+Added offline support for storing and resubmitting answers
+Allow setting bitrate for video files
+Improved cross origin handling for media files
+
+= 1.14.1 =
+Fix invalid finnish language issue in core
+
+= 1.15.0 =
+Removed GitHub URL to prevent Update plugins using it and download the plugin without dependencies.
+Added capabilities for viewing h5p content. Thanks Otacke.
+Fixed missing NOT NULL causing errors on some configurations.
+Improved list layout for narrow screens. Thanks Otacke.
+Change how focus effect is applied when only using mouse cursor.
+Minor accessibility improvements to editor.
+Updated language files. Big thanks to all the contributors.
