@@ -4,8 +4,8 @@ Donate link: http://giving.ufhealth.org/ways-to-give/give-now/
 Tags: a11y, alt tag, accessibility
 Requires at least: 4.2
 Requires PHP: 5.6
-Tested up to: 4.9
-Stable tag: 1.1.5
+Tested up to: 4.9.8
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,9 @@ Forces users to add an ALT tag when adding images to WordPress posts and more.
 5. All images will now require alt text. There are no settings to worry about. To disable the feature simply disable the plugin.
 
 == Changelog ==
+
+= 1.2 =
+* Updated plugin for newer coding standards, easier docker development and more.
 
 = 1.1.5 =
 * Minor fixes for WordPress 4.9 compatibility
