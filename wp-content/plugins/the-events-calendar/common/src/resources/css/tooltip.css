@@ -44,6 +44,7 @@
 		position: absolute;
 		-webkit-transform: translate(-50%, 0);
 		        transform: translate(-50%, 0);
+		-webkit-transition: opacity 0.8s;
 		transition: opacity 0.8s;
 		visibility: hidden;
 		width: 250px;

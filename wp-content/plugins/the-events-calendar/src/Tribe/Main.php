@@ -32,7 +32,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '4.9.10';
+		const VERSION             = '4.9.13';
 
 		/**
 		 * Min Pro Addon
@@ -652,6 +652,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			require_once $this->plugin_path . 'src/functions/advanced-functions/linked-posts.php';
 			require_once $this->plugin_path . 'src/functions/utils/array.php';
 			require_once $this->plugin_path . 'src/functions/utils/labels.php';
+			require_once $this->plugin_path . 'src/functions/utils/install.php';
 
 			// Load Deprecated Template Tags
 			if ( ! defined( 'TRIBE_DISABLE_DEPRECATED_TAGS' ) ) {
@@ -700,6 +701,9 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			// Load Rewrite
 			add_action( 'plugins_loaded', array( Tribe__Events__Rewrite::instance(), 'hooks' ) );
+
+			// Trigger smart activation of V2 after we triggered the Update version on Init@P10.
+			add_action( 'init', 'tribe_events_views_v2_smart_activation', 25 );
 
 			add_action( 'init', array( $this, 'init' ), 10 );
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -828,6 +832,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			add_filter( 'tribe_general_settings_tab_fields', array( $this, 'general_settings_tab_fields' ) );
 			add_filter( 'tribe_display_settings_tab_fields', array( $this, 'display_settings_tab_fields' ) );
 			add_filter( 'tribe_settings_url', array( $this, 'tribe_settings_url' ) );
+			add_action( 'tribe_settings_do_tabs', [ $this, 'do_upgrade_tab' ] );
 
 			// Setup Help Tab texting
 			add_action( 'tribe_help_pre_get_sections', array( $this, 'add_help_section_feature_box_content' ) );
@@ -1173,6 +1178,107 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 */
 		public function do_addons_api_settings_tab() {
 			include_once $this->plugin_path . 'src/admin-views/tribe-options-addons-api.php';
+		}
+
+		/**
+		 * should we show the upgrade nags?
+		 *
+		 * @since 4.9.12
+		 *
+		 * @return boolean
+		 */
+		public function show_upgrade() {
+			$show_tab = current_user_can( 'activate_plugins' );
+
+			/**
+			 * Provides an oppotunity to override the decision to show or hide the upgrade tab
+			 *
+			 * Normally it will only show if the current user has the "activate_plugins" capability
+			 * and there are some currently-activated premium plugins.
+			 *
+			 * @since 4.9.12
+			 *
+			 * @param bool $show_tab True or False for showing the Upgrade Tab.
+			 */
+			if ( ! apply_filters( 'tribe_events_show_upgrade_tab', $show_tab ) ) {
+				return false;
+			}
+
+			/**
+			 * This constant was introduced in the View Alpha
+			 * for agencies or others who'd like to hide the V2 Views upgrade prompt.
+			 * Let them set a constant in wp-config that will be respected.
+			 */
+			if ( defined( 'TRIBE_HIDE_V2_VIEWS_UPGRADE' ) ) {
+				return false;
+			}
+
+			return true;
+		}
+
+		/**
+		 * Create the upgrade tab
+		 *
+		 * @since 4.9.12
+		 */
+		public function do_upgrade_tab() {
+			if ( ! $this->show_upgrade() ) {
+				return;
+			}
+
+			tribe_asset(
+				self::instance(),
+				'tribe-admin-upgrade-page',
+				'admin-upgrade-page.js',
+				[ 'tribe-common' ],
+				'admin_enqueue_scripts',
+				[
+					'localize' => [
+						'name' => 'tribe_upgrade',
+						'data' => [
+							'v2_is_enabled' => tribe_events_views_v2_is_enabled(),
+							'button_text' => __( 'Upgrade your calendar views', 'the-events-calendar' ),
+						],
+					],
+				]
+			);
+
+			/**
+			 * Get Upgrade tab template.
+			 */
+			ob_start();
+			include_once $this->plugin_path . 'src/admin-views/tribe-options-upgrade.php';
+			$upgrade_tab_html = ob_get_clean();
+
+			$upgrade_tab = [
+				'info-box-description' => [
+					'type' => 'html',
+					'html' => $upgrade_tab_html,
+				],
+				'views_v2_enabled' => [
+					'type'            => 'checkbox_bool',
+					'default'         => true,
+					'value'           => true,
+					'validation_type' => 'boolean',
+					'conditional'     => true,
+				],
+			];
+
+			/**
+			 * Allows the fields displayed in the upgrade tab to be modified.
+			 *
+			 * @since 4.9.12
+			 *
+			 * @param array $upgrade_tab Array of fields used to setup the Upgrade Tab.
+			 */
+			$upgrade_fields = apply_filters( 'tribe_upgrade_fields', $upgrade_tab );
+
+			new Tribe__Settings_Tab( 'upgrade', esc_html__( 'Upgrade', 'tribe-common' ), array(
+				'priority'      => 100,
+				'fields'        => $upgrade_fields,
+				'network_admin' => is_network_admin(),
+				'show_save'     => true,
+			) );
 		}
 
 		/**
@@ -2690,7 +2796,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			// Fetch the
 			$location = trim( $this->fullAddressString( $post->ID ) );
 
-			$event_details = apply_filters( 'the_content', get_the_content( $post->ID ) );
+			$event_details = tribe_get_the_content( null, false, $post->ID );
 
 			// Hack: Add space after paragraph
 			// Normally Google Cal understands the newline character %0a
@@ -2864,6 +2970,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 * @param bool $network_deactivating
 		 */
 		public static function activate() {
+			$plugin_path = dirname( TRIBE_EVENTS_FILE );
 
 			self::instance()->plugins_loaded();
 
@@ -2875,7 +2982,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			self::flushRewriteRules();
 
 			if ( ! class_exists( 'Tribe__Events__Editor__Compatibility' ) ) {
-				require_once dirname( __FILE__ ) . '/Editor/Compatibility.php';
+				require_once $plugin_path . '/src/Tribe/Editor/Compatibility.php';
 			}
 
 			$editor_compatibility = new Tribe__Events__Editor__Compatibility();
@@ -4245,15 +4352,27 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			$format  = Tribe__Utils__Array::get( $formats_full, $datepicker_format, $formats_full[0] );
 			$label   = sprintf( esc_html__( 'Search for %s by Date. Please use the format %s.', 'the-events-calendar' ), $this->plural_event_label, $format );
 
+			// If there is a value set via the query string or a filter, use that.
+			// Otherwise use wp_query if possible. Failover to today's date.
+			if ( $value ) {
+				$date = $value;
+			} elseif ( ! empty( $wp_query->query_vars['eventDate'] ) ) {
+				$date = $wp_query->query_vars['eventDate'];
+			} else {
+				$date = date( 'Y-m-d' );
+			}
+
 			if ( tribe_is_month() ) {
 				$caption = sprintf( esc_html__( '%s In', 'the-events-calendar' ), $this->plural_event_label );
 				$format  = Tribe__Utils__Array::get( $formats_month, $datepicker_format, $formats_month[0] );
 				$label   = sprintf( esc_html__( 'Search for %s by month. Please use the format %s.', 'the-events-calendar' ), $this->plural_event_label, $format );
+				$value   = date( Tribe__Date_Utils::datepicker_formats( "m{$datepicker_format}" ), strtotime( $date ) );
 			} elseif ( tribe_is_list_view() ) {
 				$caption = sprintf( esc_html__( '%s From', 'the-events-calendar' ), $this->plural_event_label );
+				$value   = date( Tribe__Date_Utils::datepicker_formats( $datepicker_format ), strtotime( $date ) );
 			} elseif ( tribe_is_day() ) {
 				$caption = esc_html__( 'Day Of', 'the-events-calendar' );
-				$value   = date( Tribe__Date_Utils::DBDATEFORMAT, strtotime( $wp_query->query_vars['eventDate'] ) );
+				$value   = date( Tribe__Date_Utils::datepicker_formats( $datepicker_format ), strtotime( $wp_query->query_vars['eventDate'] ) );
 			}
 
 			/**

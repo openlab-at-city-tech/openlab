@@ -39,7 +39,7 @@ class Page {
 	/**
 	 * Fires when the loop starts, and tries to hijack the loop for post.
 	 *
-	 * @since  TBD
+	 * @since  4.9.10
 	 *
 	 * @param  \WP_Query  $query
 	 */
@@ -270,7 +270,7 @@ class Page {
 		}
 
 		// We wont hijack in case we are not dealing with a Post Type query
-		if ( ! in_array( TEC::POSTTYPE, (array) $query->get( 'post_type' ) ) ) {
+		if ( empty( $query->tribe_is_event_query ) ) {
 			$should_hijack = false;
 		}
 

@@ -24,6 +24,10 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 		require_once tribe( 'tec.main' )->plugin_path . 'src/functions/views/provider.php';
 
 		if ( ! tribe_events_views_v2_is_enabled() ) {
+
+			add_filter( 'tribe_events_show_upgrade_tab', '__return_false' );
+ 			add_filter( 'tribe_events_views_v2_should_smart_activate', '__return_false' );
+
 			return;
 		}
 
@@ -36,6 +40,7 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 		$this->container->singleton( Kitchen_Sink::class, Kitchen_Sink::class );
 		$this->container->singleton( Theme_Compatibility::class, Theme_Compatibility::class );
 		$this->container->singleton( Rest_Endpoint::class, Rest_Endpoint::class );
+		$this->container->singleton( Template\Settings\Advanced_Display::class, Template\Settings\Advanced_Display::class );
 
 		$this->register_hooks();
 		$this->register_assets();
