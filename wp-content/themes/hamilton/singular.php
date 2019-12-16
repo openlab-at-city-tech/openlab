@@ -44,7 +44,7 @@ if ( have_posts() )  :
 			
 			</header><!-- .page-header -->
 
-			<?php if ( has_post_thumbnail() ) : ?>
+			<?php if ( has_post_thumbnail() && ! post_password_required() ) : ?>
 
 				<div class="featured-image">
 					<?php the_post_thumbnail( 'hamilton_fullscreen-image' ); ?>
@@ -82,8 +82,8 @@ if ( have_posts() )  :
 			
 			<?php 
 			
-			// If comments are open, or there are at least one comment
-			if ( get_comments_number() || comments_open() ) : ?>
+			// Output comments wrapper if it's a post, or if comments are open, or if there's a comment number – and check for password
+			if ( ( $post_type == 'post' || comments_open() || get_comments_number() ) && ! post_password_required() ) : ?>
 			
 				<div class="section-inner thin">
 					<?php comments_template(); ?>
