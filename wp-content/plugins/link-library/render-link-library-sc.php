@@ -841,6 +841,10 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 						);
 				}
 
+				if ( isset( $_GET['link_letter'] ) && !empty( $_GET['link_letter'] ) ) {
+					$link_query_args['link_starts_with'] = $_GET['link_letter'];
+				}
+
 				if ( true == $debugmode ) {
 					$linkquerystarttime = microtime ( true );
 				}
@@ -879,7 +883,6 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 					$children_have_links = false;
 				}
-
 
 				// Display links
 				if ( ( $the_link_query->found_posts && $showonecatonly && ( ( 'AJAX' == $showonecatmode && $AJAXnocatset ) || ( 'AJAX' != $showonecatmode && $GETnocatset ) ) && $nocatonstartup && !isset( $_GET['searchll'] ) ) || ( 0 == $the_link_query->found_posts && $nocatonstartup && empty( $_GET['searchll'] ) ) ) {
@@ -2209,6 +2212,8 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					if ( $start_link_count != $linkcount ) {
 						$output .= $current_cat_output;
 					}
+				} else {
+					$output .= __( 'No links found', 'link-library' );
 				}
 			}
 		} else {
