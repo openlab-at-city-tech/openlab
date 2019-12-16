@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.9.1
+ * Version:     1.9.2
  * Plugin URI:  http://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -10,7 +10,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 5.1+.
+ * Compatible with WordPress 4.6 through 5.3+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.9.1
+ * @version 1.9.2
  */
 
 /*
@@ -35,7 +35,7 @@
  */
 
 /*
-	Copyright (c) 2009-2019 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2009-2020 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.9.1';
+		return '1.9.2';
 	}
 
 	/**

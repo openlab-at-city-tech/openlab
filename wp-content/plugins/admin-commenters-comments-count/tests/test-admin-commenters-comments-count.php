@@ -116,7 +116,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 	//
 
 	public function test_plugin_version() {
-		$this->assertEquals( '1.9.1', c2c_AdminCommentersCommentsCount::version() );
+		$this->assertEquals( '1.9.2', c2c_AdminCommentersCommentsCount::version() );
 	}
 
 	public function test_class_is_available() {
@@ -139,7 +139,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 		$comments = $this->create_comments( null, 3 );
 		$GLOBALS['comment'] = get_comment( $comments[0] );
 
-		$this->assertEquals( "<a href='http://example.org/alpha/' rel='external nofollow' class='url'>Alpha User</a>", get_comment_author_link( $comments[0] ) );
+		$this->assertEquals( "<a href='http://example.org/alpha/' rel='external nofollow ugc' class='url'>Alpha User</a>", get_comment_author_link( $comments[0] ) );
 		$this->assertEquals( 'originallink', apply_filters( 'get_comment_author_link', 'originallink' ) );
 	}
 
