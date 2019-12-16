@@ -40,7 +40,13 @@ class BPTK_Suspend
         $this->bp_toolkit = $bp_toolkit;
         $this->version = $version;
         add_action( 'bp_init', array( $this, 'toggle_suspension' ) );
-        add_action( 'bp_member_header_actions', array( $this, 'add_profile_suspend_button' ) );
+        
+        if ( class_exists( 'Youzer' ) ) {
+            add_action( 'yz_after_header_cover_head_content', array( $this, 'add_profile_suspend_button' ) );
+        } else {
+            add_action( 'bp_member_header_actions', array( $this, 'add_profile_suspend_button' ) );
+        }
+        
         add_action( 'bp_directory_members_actions', array( $this, 'add_list_suspend_button' ) );
         add_filter( 'authenticate', array( $this, 'prevent_login' ), 40 );
     }
@@ -66,7 +72,13 @@ class BPTK_Suspend
             if ( bp_get_theme_package_id() == 'nouveau' ) {
                 echo  '<li class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_suspend_link( $member_id ) . '" class="activity-button">' . __( 'Suspend', 'bp-toolkit' ) . '</a></li>' ;
             } else {
-                echo  '<div class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_suspend_link( $member_id ) . '" class="activity-button">' . __( 'Suspend', 'bp-toolkit' ) . '</a></div>' ;
+                
+                if ( class_exists( 'Youzer' ) ) {
+                    echo  '<li style="cursor: pointer;" class="bptk-suspend-profile yz-name"><a href="' . $this->bptk_suspend_link( $member_id ) . '" class="activity-button"><i class="fa fa-lock" aria-hidden="true"></i><span>' . __( 'Suspend User', 'bp-toolkit' ) . '</span></a></li>' ;
+                } else {
+                    echo  '<div class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_suspend_link( $member_id ) . '" class="activity-button">' . __( 'Suspend', 'bp-toolkit' ) . '</a></div>' ;
+                }
+            
             }
         
         } else {
@@ -74,7 +86,13 @@ class BPTK_Suspend
             if ( bp_get_theme_package_id() == 'nouveau' ) {
                 echo  '<li class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_unsuspend_link( $member_id ) . '" class="activity-button">' . __( 'Unsuspend', 'bp-toolkit' ) . '</a></li>' ;
             } else {
-                echo  '<div class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_unsuspend_link( $member_id ) . '" class="activity-button">' . __( 'Unsuspend', 'bp-toolkit' ) . '</a></div>' ;
+                
+                if ( class_exists( 'Youzer' ) ) {
+                    echo  '<li style="cursor: pointer;" class="bptk-suspend-profile yz-name"><a href="' . $this->bptk_unsuspend_link( $member_id ) . '" class="activity-button"><i class="fa fa-unlock" aria-hidden="true"></i><span>' . __( 'Unsuspend User', 'bp-toolkit' ) . '</span></a></li>' ;
+                } else {
+                    echo  '<div class="generic-button bptk-suspend-profile"><a href="' . $this->bptk_unsuspend_link( $member_id ) . '" class="activity-button">' . __( 'Unsuspend', 'bp-toolkit' ) . '</a></div>' ;
+                }
+            
             }
         
         }
@@ -234,8 +252,9 @@ class BPTK_Suspend
         // If the user is blocked, set the wp-login.php error message.
         
         if ( $this->is_suspended( $member_id ) ) {
-            // Set the default message.
-            $message = __( '<strong>ERROR</strong>: This account has been suspended. Please contact the site administrator.', 'bp-toolkit' );
+            $options = get_option( 'suspend_section' );
+            // Set the message, or a dfeault message if none specified.
+            $message = ( isset( $options['bptk_suspend_login_message'] ) ? $options['bptk_suspend_login_message'] : '' );
             // Set an error object to short-circuit the authentication process.
             $member = new WP_Error( 'bptk_suspended_user', $message );
         }

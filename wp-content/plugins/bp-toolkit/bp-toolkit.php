@@ -8,15 +8,15 @@
 *
 * @wordpress-plugin
 * Plugin Name:       Block, Suspend, Report for BuddyPress
-* Plugin URI:        https://www.therealbenroberts.com/plugins
+* Plugin URI:        https://www.therealbenroberts.com/plugins/toolkit-for-buddypress/
 * Description:       Block, Suspend, Report for BuddyPress provides enhanced moderation for your BuddyPress site.
-* Version:           1.0.5
+* Version:           2.0.2
 * Author:            Ben Roberts
 * Author URI:        https://www.therealbenroberts.com
 * License:           GPL-2.0+
 * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
 * Text Domain:       bp-toolkit
-* Domain Path:       /languages
+* Domain Path:       /languages/
 *
 *
 */
@@ -56,11 +56,7 @@ if ( !function_exists( 'bptk_fs' ) ) {
             ),
                 'menu'           => array(
                 'slug'    => 'bp-toolkit',
-                'contact' => true,
                 'support' => false,
-                'parent'  => array(
-                'slug' => 'options-general.php',
-            ),
             ),
                 'is_live'        => true,
             ) );
@@ -80,7 +76,15 @@ if ( !function_exists( 'bptk_fs' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'BP_TOOLKIT_VERSION', '1.0.5' );
+define( 'BP_TOOLKIT_VERSION', '2.0.2' );
+/**
+ * Define a constant to hold our plugin page
+ */
+define( "BP_TOOLKIT_HOMEPAGE", "https://www.therealbenroberts.com/plugins/toolkit-for-buddypress/" );
+/**
+ * Define a constant to hold our support page
+ */
+define( "BP_TOOLKIT_SUPPORT", "https://www.therealbenroberts.com/support/" );
 /**
  * Define the capability for administrators.
  */
@@ -141,4 +145,4 @@ function run_bp_toolkit()
     $plugin->bptk_init();
 }
 
-add_action( 'bp_include', 'run_bp_toolkit' );
+add_action( 'init', 'run_bp_toolkit' );
