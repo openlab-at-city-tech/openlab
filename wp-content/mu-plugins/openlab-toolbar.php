@@ -37,6 +37,7 @@ add_action( 'wp_default_styles', 'openlab_remove_admin_bar_default_css', 99999 )
 add_action( 'add_admin_bar_menus', array( 'OpenLab_Admin_Bar', 'init' ) );
 
 class OpenLab_Admin_Bar {
+
 	public static function init() {
 		static $instance;
 
@@ -45,7 +46,7 @@ class OpenLab_Admin_Bar {
 		}
 	}
 
-	function __construct() {
+	public function __construct() {
 		// Bail if BP is not present
 		if ( ! class_exists( 'BP_Core' ) ) {
 			return;
@@ -168,14 +169,14 @@ class OpenLab_Admin_Bar {
 		}
 	}
 
-	function remove_bp_admin_bar_styles( $styles ) {
+	public function remove_bp_admin_bar_styles( $styles ) {
 		return array();
 	}
 
-		/**
-		 * Custom dashboard toggle on mobile
-		 */
-	function custom_admin_bar_sidebar_toggle( $wp_admin_bar ) {
+	/**
+	 * Custom dashboard toggle on mobile
+	 */
+	public function custom_admin_bar_sidebar_toggle( $wp_admin_bar ) {
 		if ( is_admin() ) {
 
 			$sr_text = __( 'Menu' );
@@ -202,7 +203,7 @@ HTML;
 	/**
 	 * Add the main OpenLab menu
 	 */
-	function add_network_menu( $wp_admin_bar ) {
+	public function add_network_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_node(
 			array(
 				/*'parent' => 'top-secondary',*/
@@ -215,10 +216,10 @@ HTML;
 				),
 			)
 		);
-				$this->openlab_menu_items( 'openlab' );
+		$this->openlab_menu_items( 'openlab' );
 	}
 
-	function openlab_menu_items( $parent ) {
+	public function openlab_menu_items( $parent ) {
 		global $wp_admin_bar;
 
 		$wp_admin_bar->add_node(
@@ -323,7 +324,7 @@ HTML;
 	 *
 	 * @param type $wp_admin_bar
 	 */
-	function add_middle_group_for_blogs_and_admin( $wp_admin_bar ) {
+	public function add_middle_group_for_blogs_and_admin( $wp_admin_bar ) {
 
 		$wp_admin_bar->add_group(
 			array(
@@ -335,11 +336,11 @@ HTML;
 		);
 	}
 
-	 /**
-	  * The MOL link on mobile needs to sit between the hamburger menus and the logout link
-	  * So we'll need a third group for this ( makes styling easier )
-	  */
-	function add_middle_group_for_mobile( $wp_admin_bar ) {
+	/**
+	 * The MOL link on mobile needs to sit between the hamburger menus and the logout link
+	 * So we'll need a third group for this ( makes styling easier )
+	 */
+	public function add_middle_group_for_mobile( $wp_admin_bar ) {
 		$wp_admin_bar->add_group(
 			array(
 				'id'   => 'mobile-centered',
@@ -353,7 +354,7 @@ HTML;
 	/**
 	 * Mol link on mobile
 	 */
-	function add_mobile_mol_link( $wp_admin_bar ) {
+	public function add_mobile_mol_link( $wp_admin_bar ) {
 		$current_user = wp_get_current_user();
 
 		// truncating to be on the safe side
@@ -367,8 +368,8 @@ HTML;
 			$username_small = $username;
 		}
 
-		$howdy       = '<span class="small-size">' . sprintf( __( 'Hi, %1$s' ), $username ) . '</span>';
-		//$howdy 		 = "<span class='truncate-sizer small-size'><span class='truncate-on-the-fly' data-basevalue='30' data-minvalue='10' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
+		$howdy = '<span class="small-size">' . sprintf( __( 'Hi, %1$s' ), $username ) . '</span>';
+		//$howdy          = "<span class='truncate-sizer small-size'><span class='truncate-on-the-fly' data-basevalue='30' data-minvalue='10' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
 		$howdy_small = '<span class="very-small-size">' . sprintf( __( 'Hi, %1$s' ), $username_small ) . '</span>';
 
 		$wp_admin_bar->add_menu(
@@ -387,7 +388,7 @@ HTML;
 	/**
 	 * Adds 'My OpenLab' menu
 	 */
-	function add_my_openlab_menu( $wp_admin_bar ) {
+	public function add_my_openlab_menu( $wp_admin_bar ) {
 
 		$current_user = wp_get_current_user();
 
@@ -409,7 +410,7 @@ HTML;
 	/**
 	 * Hamburger menu (mobile only).
 	 */
-	function openlab_hamburger_menu( $wp_admin_bar ) {
+	public function openlab_hamburger_menu( $wp_admin_bar ) {
 
 		$hamburger = <<<HTML
 					<button type="button" class="navbar-toggle mobile-toggle direct-toggle network-menu" data-target="#wp-admin-bar-network-menu-mobile .ab-sub-wrapper" data-plusheight="19">
@@ -446,7 +447,7 @@ HTML;
 	/**
 	 * Hamburger menu (mobile only).
 	 */
-	function openlab_hamburger_mol_menu( $wp_admin_bar ) {
+	public function openlab_hamburger_mol_menu( $wp_admin_bar ) {
 
 		$hamburger = <<<HTML
 					<button type="button" class="navbar-toggle mobile-toggle direct-toggle mol-menu" data-target="#wp-admin-bar-my-openlab .ab-sub-wrapper" data-plusheight="19">
@@ -470,7 +471,7 @@ HTML;
 	/**
 	 * Change 'Howdy' message to 'Hi'
 	 */
-	function change_howdy_to_hi( $wp_admin_bar ) {
+	public function change_howdy_to_hi( $wp_admin_bar ) {
 		global $bp;
 		$wp_admin_bar->add_node(
 			array(
@@ -487,7 +488,7 @@ HTML;
 	/**
 	 * Removes BP default "My" items, and builds our own.
 	 */
-	function prepend_my_to_my_openlab_items( $wp_admin_bar ) {
+	public function prepend_my_to_my_openlab_items( $wp_admin_bar ) {
 		$nodes            = $wp_admin_bar->get_nodes();
 		$my_openlab_nodes = array();
 
@@ -526,11 +527,13 @@ HTML;
 		if ( $portfolio_id ) {
 			$portfolio_url = openlab_get_user_portfolio_profile_url( bp_loggedin_user_id() );
 
-			$portfolio_label = openlab_get_portfolio_label( [
-				'user_id'  => bp_loggedin_user_id(),
-				'group_id' => $portfolio_id,
-				'case'     => 'upper',
-			] );
+			$portfolio_label = openlab_get_portfolio_label(
+				[
+					'user_id'  => bp_loggedin_user_id(),
+					'group_id' => $portfolio_id,
+					'case'     => 'upper',
+				]
+			);
 
 			$wp_admin_bar->add_node(
 				array(
@@ -669,14 +672,14 @@ HTML;
 	 * We have to do it in a function like this because of the way BP adds the menu in the first
 	 * place.
 	 */
-	function remove_notifications_hook( $wp_admin_bar ) {
+	public function remove_notifications_hook( $wp_admin_bar ) {
 		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 	}
 
 	/**
 	 * Maybe remove the current blog menu.
 	 */
-	function maybe_remove_thisblog( $wp_admin_bar ) {
+	public function maybe_remove_thisblog( $wp_admin_bar ) {
 		if ( ! current_user_can( 'publish_posts' ) ) {
 			$wp_admin_bar->remove_node( 'site-name' );
 		}
@@ -685,7 +688,7 @@ HTML;
 	/**
 	 * Add the Invites menu ( Friend Requests + Group Invitations )
 	 */
-	function add_invites_menu( $wp_admin_bar ) {
+	public function add_invites_menu( $wp_admin_bar ) {
 		if ( ! bp_is_active( 'friends' ) || ! bp_is_active( 'groups' ) ) {
 			return;
 		}
@@ -853,7 +856,7 @@ HTML;
 	/**
 	 * Add the Messages menu.
 	 */
-	function add_messages_menu( $wp_admin_bar ) {
+	public function add_messages_menu( $wp_admin_bar ) {
 		if ( ! bp_is_active( 'messages' ) ) {
 			return;
 		}
@@ -952,7 +955,7 @@ HTML;
 	/**
 	 * Add the Activity menu ( My Group activity )
 	 */
-	function add_activity_menu( $wp_admin_bar ) {
+	public function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'activity',
@@ -1037,7 +1040,7 @@ HTML;
 		);
 	}
 
-	function openlab_custom_admin_bar_site_menu( $wp_admin_bar ) {
+	public function openlab_custom_admin_bar_site_menu( $wp_admin_bar ) {
 		// Don't show for logged out users.
 		if ( ! is_user_logged_in() ) {
 			return;
@@ -1061,6 +1064,8 @@ HTML;
 		}
 
 		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate hidden-sm' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span></span>";
+		//temporary rollback
+		//$display_string = "<span class='hidden-sm site-name'>$blogname</span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='sr-only visible-sm'>$blogname</span>";
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -1069,6 +1074,8 @@ HTML;
 				'href'  => is_admin() ? home_url( '/' ) : admin_url(),
 				'meta'  => array(
 					'class'    => 'admin-bar-menu hidden-xs truncate-obfuscate menu-loading',
+					//temporary rollback
+					//'class'    => 'admin-bar-menu hidden-xs',
 					'tabindex' => 0,
 				),
 			)
@@ -1112,7 +1119,7 @@ HTML;
 		}
 	}
 
-	function add_custom_edit_menu( $wp_admin_bar ) {
+	public function add_custom_edit_menu( $wp_admin_bar ) {
 		global $tag, $wp_the_query;
 		$post = get_post();
 		if ( $post instanceof WP_Post ) {
@@ -1123,11 +1130,11 @@ HTML;
 			$current_screen = get_current_screen();
 
 			if ( 'post' == $current_screen->base
-						&& 'add' != $current_screen->action
-						&& ( $post_type_object = get_post_type_object( $post->post_type ) )
-						&& current_user_can( 'read_post', $post->ID )
-						&& ( $post_type_object->public )
-						&& ( $post_type_object->show_in_admin_bar ) ) {
+				&& 'add' != $current_screen->action
+				&& ( $post_type_object = get_post_type_object( $post->post_type ) )
+				&& current_user_can( 'read_post', $post->ID )
+				&& ( $post_type_object->public )
+				&& ( $post_type_object->show_in_admin_bar ) ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id'    => 'view',
@@ -1139,9 +1146,9 @@ HTML;
 					)
 				);
 			} elseif ( 'edit-tags' == $current_screen->base
-						&& isset( $tag ) && is_object( $tag )
-						&& ( $tax = get_taxonomy( $tag->taxonomy ) )
-						&& $tax->public ) {
+				&& isset( $tag ) && is_object( $tag )
+				&& ( $tax = get_taxonomy( $tag->taxonomy ) )
+				&& $tax->public ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id'    => 'view',
@@ -1161,9 +1168,9 @@ HTML;
 			}
 
 			if ( ! empty( $current_object->post_type )
-						&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
-						&& current_user_can( 'edit_post', $current_object->ID )
-						&& $post_type_object->show_ui && $post_type_object->show_in_admin_bar ) {
+				&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+				&& current_user_can( 'edit_post', $current_object->ID )
+				&& $post_type_object->show_ui && $post_type_object->show_in_admin_bar ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id'    => 'edit',
@@ -1176,9 +1183,9 @@ HTML;
 					)
 				);
 			} elseif ( ! empty( $current_object->taxonomy )
-						&& ( $tax = get_taxonomy( $current_object->taxonomy ) )
-						&& current_user_can( $tax->cap->edit_terms )
-						&& $tax->show_ui ) {
+				&& ( $tax = get_taxonomy( $current_object->taxonomy ) )
+				&& current_user_can( $tax->cap->edit_terms )
+				&& $tax->show_ui ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id'    => 'edit',
@@ -1199,7 +1206,7 @@ HTML;
 	 *
 	 * @param type $wp_admin_bar
 	 */
-	function adminbar_plugin_cleanup( $wp_admin_bar ) {
+	public function adminbar_plugin_cleanup( $wp_admin_bar ) {
 		global $wp_admin_bar;
 
 		$wp_admin_bar->remove_menu( 'tribe-events' );
@@ -1212,7 +1219,7 @@ HTML;
 	 * @param type $wp_admin_bar
 	 * @return type
 	 */
-	function add_custom_content_menu( $wp_admin_bar ) {
+	public function add_custom_content_menu( $wp_admin_bar ) {
 		$actions = array();
 
 		$cpts = (array) get_post_types( array( 'show_in_admin_bar' => true ), 'objects' );
@@ -1278,7 +1285,7 @@ HTML;
 		);
 
 		foreach ( $actions as $link => $action ) {
-			list( $title, $id ) = $action;
+			list($title, $id) = $action;
 
 			$wp_admin_bar->add_menu(
 				array(
@@ -1294,7 +1301,7 @@ HTML;
 		}
 	}
 
-	function add_dashboard_link( $wp_admin_bar ) {
+	public function add_dashboard_link( $wp_admin_bar ) {
 		global $bp;
 
 		$current_screen       = new stdClass();
@@ -1331,7 +1338,7 @@ HTML;
 		}
 	}
 
-	function add_custom_updates_menu( $wp_admin_bar ) {
+	public function add_custom_updates_menu( $wp_admin_bar ) {
 		$update_data = wp_get_update_data();
 
 		if ( ! $update_data['counts']['total'] ) {
@@ -1363,7 +1370,7 @@ HTML;
 	 * @param type $wp_admin_bar
 	 * @return type
 	 */
-	function add_custom_comments_menu( $wp_admin_bar ) {
+	public function add_custom_comments_menu( $wp_admin_bar ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;
 		}
@@ -1403,7 +1410,7 @@ HTML;
 	/**
 	 * Add a 'Log Out' link to the far right
 	 */
-	function add_logout_item( $wp_admin_bar ) {
+	public function add_logout_item( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'parent' => 'top-secondary',
@@ -1417,7 +1424,7 @@ HTML;
 		);
 	}
 
-	function openlab_custom_my_account_item( $wp_admin_bar ) {
+	public function openlab_custom_my_account_item( $wp_admin_bar ) {
 		$user_id      = get_current_user_id();
 		$current_user = wp_get_current_user();
 		$profile_url  = get_edit_profile_url( $user_id );
@@ -1460,7 +1467,7 @@ HTML;
 	 * @param type $wp_admin_bar
 	 * @return type
 	 */
-	function openlab_custom_my_account_menu( $wp_admin_bar ) {
+	public function openlab_custom_my_account_menu( $wp_admin_bar ) {
 		$user_login   = '';
 		$user_id      = get_current_user_id();
 		$current_user = wp_get_current_user();
@@ -1507,7 +1514,7 @@ HTML;
 	/**
 	 * Fix the logout redirect
 	 */
-	function fix_logout_redirect( $wp_admin_bar ) {
+	public function fix_logout_redirect( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'   => 'logout',
@@ -1519,7 +1526,7 @@ HTML;
 	/**
 	 * Adds the Sign Up item
 	 */
-	function add_signup_item( $wp_admin_bar ) {
+	public function add_signup_item( $wp_admin_bar ) {
 		// Remove so we can replace in the right order
 		$signup = $wp_admin_bar->get_node( 'bp-register' );
 		$login  = $wp_admin_bar->get_node( 'bp-login' );
@@ -1550,7 +1557,7 @@ HTML;
 		$wp_admin_bar->add_node( (array) $login );
 	}
 
-	function fix_tabindex( $wp_admin_bar ) {
+	public function fix_tabindex( $wp_admin_bar ) {
 		// var_Dump( $wp_admin_bar );
 		$wp_admin_bar->add_menu(
 			array(
@@ -1571,7 +1578,7 @@ HTML;
 		);
 	}
 
-	function body_class( $body_class ) {
+	public function body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class[] = 'openlab-main';
 		} else {
@@ -1581,7 +1588,7 @@ HTML;
 		return $body_class;
 	}
 
-	function admin_body_class( $body_class ) {
+	public function admin_body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class .= ' openlab-main ';
 		} else {
@@ -1591,7 +1598,7 @@ HTML;
 		return $body_class;
 	}
 
-	function enqueue_styles() {
+	public function enqueue_styles() {
 		global $wpdb;
 
 		// Getting the theme folder for the main site.
@@ -1622,15 +1629,15 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.0.4' );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.1.0' );
 	}
 
-	function adminbar_special_body_class( $classes ) {
+	public function adminbar_special_body_class( $classes ) {
 		$classes[] = 'adminbar-special';
 		return $classes;
 	}
 
-	function admin_bar_html_update() {
+	public function admin_bar_html_update() {
 		?>
 
 			<style type="text/css" media="screen">
@@ -1645,7 +1652,7 @@ HTML;
 		<?php
 	}
 
-	function admin_bar_group_sites_html_update() {
+	public function admin_bar_group_sites_html_update() {
 		?>
 
 			<style type="text/css" media="screen">
@@ -1660,7 +1667,7 @@ HTML;
 			<?php
 	}
 
-	function groups_sites_fix_for_mobile() {
+	public function groups_sites_fix_for_mobile() {
 		?>
 
 			<meta name="viewport" content="width=device-width">
@@ -1714,12 +1721,24 @@ function openlab_wrap_adminbar_top() {
 
 		$admin_class = ( is_admin() ? ' admin-area' : '' );
 		$logged_in = (is_user_logged_in() ? ' logged-in' : ' logged-out' );
-		?>
+	?>
 		<div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?><?php echo $logged_in; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
-	<?php else : ?>
+		
+		<?php
+		$classes = array();
+		//temporary rollback
+
+		// $classes[]     = 'oplb-bs adminbar-manual-bootstrap';
+		// $classes[]     = $admin_class = ( is_admin() ? 'admin-area' : 'frontend-area' );
+		// $classes[]     = ( is_user_logged_in() ? 'logged-in' : 'logged-out' );
+		// $current_theme = wp_get_theme();
+		// $classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
+		?>
+				<!-- <div id="oplbBSAdminar" class="<?php echo implode( ' ', $classes ); ?>"><div class="oplb-bs adminbar-manual-bootstrap <?php echo $admin_class; ?>"> -->
+			<?php else : ?>
 		<div class="oplb-bs"><div class="oplb-bs">
-	<?php
-	endif;
+				<?php
+endif;
 }
 
 add_action( 'wp_before_admin_bar_render', 'openlab_wrap_adminbar_top' );
