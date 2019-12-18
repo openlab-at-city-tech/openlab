@@ -1101,6 +1101,8 @@
 				}
 			}
 			#wp-toolbar {
+				width: 100%;
+				max-width: none;
 				> ul {
 					> li {
 						> .ab-item {
@@ -1299,90 +1301,4 @@ a.cc-widget-icon-link {
 
 .cc-widget-text {
 	margin-top: 1em;
-}
-/**theme specific adminbar styles (group sites only)**/
-.oplb-bs.adminbar-manual-bootstrap {
-	#wpadminbar {
-		#wp-toolbar {
-			#wp-admin-bar-site-name{
-				max-width: 280px;
-			}
-		}
-	}
-	&.twentyeleven {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 1000px;
-				@media (max-width: 1060px) and (min-width: 992px) {
-					padding: 0 2em;
-				}
-			}
-		}
-	}
-	&.twentytwelve {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 68.571428571rem + 2 * 2.857142857rem;
-			}
-		}
-	}
-	&.twentythirteen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 1600px;
-			}
-		}
-	}
-	&.twentyfourteen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 1260px;
-				margin: 0;
-			}
-		}
-	}
-	&.twentyfifteen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 1240px;
-				width: 88%;
-				@media (max-width: 954px) {
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.twentysixteen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 1200px;
-				width: 88%;
-				@media (max-width: 909px) {
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.twentyseventeen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 906px;
-				width: 88%;
-				@media (max-width: 900px) {
-					width: 100%;
-				}
-			}
-		}
-	}
-	&.twentynineteen {
-		#wpadminbar {
-			#wp-toolbar {
-				max-width: 100%;
-                padding: 0 ~"calc(10% + 60px)";
-                @media (max-width: 1220px){
-                    padding: 0;
-                }
-			}
-		}
-	}
 }
