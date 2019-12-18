@@ -1063,9 +1063,7 @@ HTML;
 			$blogname = sprintf( __( 'Global Dashboard: %s' ), esc_html( get_current_site()->site_name ) );
 		}
 
-		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate hidden-sm' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$blogname</span> <span class='fa fa-caret-down hidden-sm' aria-hidden='true'></span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='original-copy hidden' aria-hidden='true'>$blogname</span><span class='sr-only'>$blogname</span></span>";
-		//temporary rollback
-		//$display_string = "<span class='hidden-sm site-name'>$blogname</span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='sr-only visible-sm'>$blogname</span>";
+		$display_string = "<span class='hidden-sm site-name'>$blogname</span><span class='fa fa-desktop visible-sm' aria-hidden='true'></span><span class='sr-only visible-sm'>$blogname</span>";
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -1073,9 +1071,7 @@ HTML;
 				'title' => $display_string,
 				'href'  => is_admin() ? home_url( '/' ) : admin_url(),
 				'meta'  => array(
-					'class'    => 'admin-bar-menu hidden-xs truncate-obfuscate menu-loading',
-					//temporary rollback
-					//'class'    => 'admin-bar-menu hidden-xs',
+					'class'    => 'admin-bar-menu hidden-xs',
 					'tabindex' => 0,
 				),
 			)
@@ -1726,13 +1722,11 @@ function openlab_wrap_adminbar_top() {
 		
 		<?php
 		$classes = array();
-		//temporary rollback
-
-		// $classes[]     = 'oplb-bs adminbar-manual-bootstrap';
-		// $classes[]     = $admin_class = ( is_admin() ? 'admin-area' : 'frontend-area' );
-		// $classes[]     = ( is_user_logged_in() ? 'logged-in' : 'logged-out' );
-		// $current_theme = wp_get_theme();
-		// $classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
+		$classes[]     = 'oplb-bs adminbar-manual-bootstrap';
+		$classes[]     = $admin_class = ( is_admin() ? 'admin-area' : 'frontend-area' );
+		$classes[]     = ( is_user_logged_in() ? 'logged-in' : 'logged-out' );
+		$current_theme = wp_get_theme();
+		$classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
 		?>
 				<!-- <div id="oplbBSAdminar" class="<?php echo implode( ' ', $classes ); ?>"><div class="oplb-bs adminbar-manual-bootstrap <?php echo $admin_class; ?>"> -->
 			<?php else : ?>
