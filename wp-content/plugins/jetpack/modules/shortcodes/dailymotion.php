@@ -51,7 +51,7 @@ function dailymotion_embed_to_shortcode( $content ) {
 			}
 
 			$id = basename( substr( $src, strlen( 'www.dailymotion.com/swf' ) ) );
-			$id = preg_replace( '/[^a-z0-9].*$/i', '', $id );
+			$id = preg_replace( '/[^a-z0-9].*$/is', '', $id );
 
 			$content = str_replace( $match[0], "[dailymotion id=$id]", $content );
 			/** This action is documented in modules/shortcodes/youtube.php */
@@ -151,6 +151,15 @@ function dailymotion_shortcode( $atts ) {
 		$width = $height / 334 * 425;
 	}
 
+	if ( class_exists( 'Jetpack_AMP_Support' ) && Jetpack_AMP_Support::is_amp_request() ) {
+		return sprintf(
+			'<amp-dailymotion data-videoid="%1$s" layout="responsive" width="%2$d" height="%3$d"></amp-dailymotion>',
+			esc_attr( $id ),
+			absint( $width ),
+			absint( $height )
+		);
+	}
+
 	/**
 	 * Let's add parameters if needed.
 	 *
@@ -208,7 +217,7 @@ function dailymotion_shortcode( $atts ) {
 			&& array_key_exists( 'title', $atts )
 			&& $title
 		) {
-			$output .= '<br /><strong><a href="' . esc_url( 'http://www.dailymotion.com/video/' . $video ) . '" target="_blank">' . esc_html( $title ) . '</a></strong>';
+			$output .= '<br /><strong><a href="' . esc_url( 'https://www.dailymotion.com/video/' . $video ) . '" target="_blank">' . esc_html( $title ) . '</a></strong>';
 		}
 
 		$user = preg_replace( '/[^-a-z0-9_]/i', '', $atts['user'] );
@@ -218,7 +227,7 @@ function dailymotion_shortcode( $atts ) {
 				sprintf(
 					/* Translators: placeholder is a Dailymotion username, linking to a Dailymotion profile page. */
 					__( 'Uploaded by %s', 'jetpack' ),
-					'<a href="' . esc_url( 'http://www.dailymotion.com/' . $user ) . '" target="_blank">' . esc_html( $user ) . '</a>'
+					'<a href="' . esc_url( 'https://www.dailymotion.com/' . $user ) . '" target="_blank">' . esc_html( $user ) . '</a>'
 				),
 				array(
 					'a' => array(

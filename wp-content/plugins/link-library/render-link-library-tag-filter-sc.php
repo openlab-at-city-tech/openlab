@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
-function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $include_tags, $exclude_tags, $show_tag_filters, $tag_label, $show_price_filters, $price_label ) {
+function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $include_tags, $exclude_tags, $show_tag_filters, $tag_label, $show_price_filters, $price_label, $show_alphabetic_filters, $alphabetic_label ) {
 
 	$generaloptions = wp_parse_args( $generaloptions, ll_reset_gen_settings( 'return' ) );
 	extract( $generaloptions );
@@ -19,6 +19,12 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$prev_link_price = $_GET['link_price'];
 	} else {
 		$prev_link_price = '';
+	}
+
+	if ( isset( $_GET['link_letter'] ) && !empty( $_GET['link_letter'] ) ) {
+		$prev_link_letter = $_GET['link_letter'];
+	} else {
+		$prev_link_letter = '';
 	}
 	
 	if ( isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
@@ -53,6 +59,11 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= '<script type="text/javascript">';
 
+		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
+			$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+			$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+		}
+
 		$output .= "function isInArray(days, day) {\n";
 		$output .= "\treturn days.indexOf(day.toLowerCase()) > -1;\n";
 		$output .= "}\n";
@@ -68,7 +79,12 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= "\t}\n";
 		$output .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
 		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?' + 'link_tags=' + link_tags_string";
-				
+
+		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
+			$output .= " + '&'";
+			$output .= " + 'link_letter=' + current_link_letter";
+		}
+
 		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
 			$output .= " + '&'";
 			
@@ -78,7 +94,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 				$output .= " + 'link_price='";
 			}
 		}
-		
+
 		if ( !empty( $searchstring ) ) {
 			$output .= " + '&searchll=" . $searchstring . "'";
 		}
@@ -106,12 +122,22 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 			$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
 			$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
 		}
-		
+
+		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
+			$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+			$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+		}
+
 		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
 		
 		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-			$output .= " + 'link_tags=' + current_link_tags";
 			$output .= " + '&'";
+			$output .= " + 'link_tags=' + current_link_tags";
+		}
+
+		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
+			$output .= " + '&'";
+			$output .= " + 'link_letter=' + current_link_letter";
 		}
 		
 		if ( 'free' == $prev_link_price ) {
@@ -133,7 +159,76 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= '</div>';
 	}
 
-	//$output .= '<input type="submit" value="' . __( 'Apply filter', 'link-library' ) . '" />';
+	if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
+		$output .= '<div class="tag-filters">';
+		$output .= '<div class="tag-filters-title">' . $alphabetic_label . '</div>';
+
+		$output .= '<div class="alphabetic-filters-choices">';
+		$output .= '<select name="link_letter" class="link_letter">';
+		$output .= '<option value="">' . __( 'All', 'link-library' ) . '<br/>';
+		$output .= '<option disabled>_________<br/>';
+
+		foreach( range( 'A', 'Z' ) as $v ){
+			$output .= '<option value="' . $v . '" ';
+			$output .= selected( $v, $prev_link_letter, false );
+			$output .= '>' . $v . '</option>';
+		}
+
+		$output .= '<option disabled>_________<br/>';
+
+		foreach( range( '0', '9' ) as $v ){
+			$output .= '<option value="' . $v . '"';
+			$output .= selected( $v, $prev_link_letter, false );
+			$output .= '>' . $v . '</option>';
+		}
+
+		$output .= '</select>';
+
+		$output .= '</div>';
+
+		$output .= '<script type="text/javascript">';
+
+		$output .= "jQuery('.link_letter').change( function() {\n";
+
+		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
+			$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
+			$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
+		}
+
+		$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+		$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+
+		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
+
+		$output .= " + 'link_letter=' + current_link_letter";
+
+		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
+			$output .= " + '&'";
+			$output .= " + 'link_tags=' + current_link_tags";
+		}
+
+		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
+			$output .= " + '&'";
+
+			if ( 'free' == $prev_link_price ) {
+				$output .= " + 'link_price='";
+			} else {
+				$output .= " + 'link_price=free'";
+			}
+		}
+
+		if ( !empty( $searchstring ) ) {
+			$output .= " + '&searchll='" . $searchstring . "'";
+		}
+
+		$output .= ";\n";
+
+		$output .= "});\n";
+
+		$output .= '</script>';
+
+		$output .= '</div>';
+	}
 
 	$output .= '</fieldset>';
 

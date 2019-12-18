@@ -1,6 +1,4 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
+/* global ns */
 /**
  * Create a text field for the form.
  *
@@ -70,8 +68,10 @@ ns.Text.prototype.change = function (callback) {
  * Create HTML for the text field.
  */
 ns.Text.prototype.createHtml = function () {
-  var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder);
-  return ns.createFieldMarkup(this.field, input);
+  const id = ns.getNextFieldId(this.field);
+  const descriptionId = (this.field.description !== undefined ? ns.getDescriptionId(id) : undefined)
+  var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder, id, descriptionId);
+  return ns.createFieldMarkup(this.field, input, id);
 };
 
 /**
@@ -81,23 +81,25 @@ ns.Text.prototype.validate = function () {
   var that = this;
 
   var value = H5P.trim(this.$input.val());
-
-  if (this.$errors.html().length > 0) {
-    this.$input.addClass('error');
-  }
+  var valid = true;
 
   // Clear errors before showing new ones
   this.$errors.html('');
 
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
+    valid = false;
   }
   else if (value.length > this.field.maxLength) {
     this.$errors.append(ns.createError(ns.t('core', 'tooLong', {':max': this.field.maxLength})));
+    valid = false;
   }
   else if (this.field.regexp !== undefined && value.length && !value.match(new RegExp(this.field.regexp.pattern, this.field.regexp.modifiers))) {
     this.$errors.append(ns.createError(ns.t('core', 'invalidFormat')));
+    valid = false;
   }
+
+  this.$input.toggleClass('error', !valid);
 
   return ns.checkErrors(this.$errors, this.$input, value);
 };
@@ -107,6 +109,15 @@ ns.Text.prototype.validate = function () {
  */
 ns.Text.prototype.remove = function () {
   this.$item.remove();
+};
+
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {string} value
+ */
+ns.Text.prototype.forceValue = function (value) {
+  this.$input.val(value).change();
 };
 
 // Tell the editor what widget we are.

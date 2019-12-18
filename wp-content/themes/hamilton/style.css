@@ -2,13 +2,14 @@
 
 	Theme Name: Hamilton
     Text Domain: hamilton
-	Version: 1.24
-	Description: Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor/Gutenberg support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: http://andersnoren.se/themes/hamilton/
-	Tags: blog, two-columns, three-columns, custom-menu, featured-images, threaded-comments, translation-ready, grid-layout, custom-background, custom-logo, editor-style, sticky-post, theme-options, portfolio, photography
+	Version: 1.26
+	Description: Hamilton is a clean WordPress portfolio theme for creatives. It displays posts in a beautiful image grid that can be set to either two or three columns, which makes it a perfect fit for photographers, illustrators or graphic designers looking for a theme for their portfolio. It also features Block Editor/Gutenberg support, a dark mode, custom background color support, a resume page template, responsive design, Jetpack infinite scroll support, editor styling, and much more. Demo: https://andersnoren.se/themes/hamilton/
+	Tags: blog, two-columns, three-columns, custom-menu, featured-images, threaded-comments, translation-ready, grid-layout, custom-background, custom-logo, editor-style, sticky-post, theme-options, portfolio, photography, block-styles, wide-blocks
 	Author: Anders Norén
 	Author URI: https://www.andersnoren.se
 	License: GNU General Public License version 2.0
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
+	Theme URI: https://www.andersnoren.se/teman/hamilton-wordpress-theme/
 	
 	All files, unless otherwise stated, are released under the GNU General Public License
 	version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -64,8 +65,6 @@ ol, ul { list-style:none; }
 blockquote:before, 
 blockquote:after { content:""; }
 
-a { outline:none; }
-
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
@@ -102,6 +101,20 @@ input[type="search"]::-webkit-search-results-decoration {
 	z-index: 100000; /* Above WP toolbar. */
 }
 
+/* Skip Link */
+
+.skip-link {
+	position: absolute;
+		left: -9999rem;
+		top: 2.5rem;
+	z-index: 999999999;
+}
+
+.skip-link:focus {
+	left: 2.5rem;
+	text-decoration: none;
+}
+
 
 /* -------------------------------------------------------------------------------- */
 /*	1. Document Setup
@@ -112,7 +125,7 @@ body {
     background: #fff;
 	border: none;
     color: #000; 
-	font-family: 'Libre Franklin', 'Helvetica Neue', sans-serif;
+	font-family: 'Libre Franklin', -apple-system, 'Helvetica Neue', sans-serif;
     font-size: 20px;
 }
 
@@ -179,6 +192,10 @@ input::-moz-placeholder { color: #999; }
 /*	2.	Structure
 /* -------------------------------------------------------------------------------- */
 
+
+main {
+	display: block;
+}
 
 .section-inner {
 	margin: 0 auto;
@@ -465,21 +482,9 @@ a {
 
 
 .show-alt-nav .site-header {
-		display: -webkit-box;
 	display: flex;
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-	align-items: center;
-		-webkit-box-pack: justify;
-		-ms-flex-pack: justify;
+	align-items: baseline;
 	justify-content: space-between;
-}
-
-.alt-nav {
-	display: none;
-	margin-top: 5px;
-	position: relative;
-	z-index: 1;
 }
 
 .show-alt-nav .nav-toggle,
@@ -487,21 +492,23 @@ a {
 	display: none;
 }
 
-.show-alt-nav .site-title,
-.show-alt-nav .site-logo, 
-.no-js .site-title,
-.no-js .site-logo {
-	float: left;
-	width: 100%;
+.show-alt-nav .alt-nav-wrapper,
+.no-js .alt-nav-wrapper {
+	display: block;
 }
 
-.show-alt-nav .alt-nav,
-.no-js .alt-nav {
-	display: block;
-		-ms-flex-negative: 0;
-	flex-shrink: 0;
-	float: right;
-	margin: 0 0 0 20px;
+.alt-nav-wrapper {
+	display: none;
+	margin-left: 80px;
+}
+
+.alt-nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	margin: -10px 0 0 -40px;
+	position: relative;
+	z-index: 1;
 }
 
 .alt-nav li {
@@ -511,8 +518,9 @@ a {
 	position: relative;
 }
 
-.alt-nav > li + li {
-	margin-left: 40px;
+.alt-nav > li {
+	margin: 10px 0 0 40px;
+	position: relative;
 }
 
 .alt-nav > li.menu-item-has-children {
@@ -557,6 +565,7 @@ a {
 	transform: translateY( 10px );
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, left 0s .3s, top 0s .3s;
 	width: 200px;
+	z-index: 1;
 }
 
 .alt-nav ul:before,
@@ -806,6 +815,26 @@ a {
 		font-size: 28px;
 	}
 
+}
+
+
+/* Search Results ---------------------------- */
+
+.search-no-results .search-form {
+	display: flex;
+	margin: 50px auto 0 auto;
+	max-width: 400px;
+	width: 100%;
+}
+
+.search-no-results label {
+	display: flex;
+	margin: 0 10px 0 0;
+	width: 100%;
+}
+
+.search-no-results .search-field {
+	margin: 0;
 }
 
 
@@ -1429,10 +1458,11 @@ textarea,
 input[type="email"],
 input[type="password"],
 input[type="tel"],
+input[type="search"],
 input[type="text"],
 input[type="url"] {
 	background: transparent;
-	border-radius: none;
+	border-radius: 0;
     border: 1px solid rgba( 0, 0, 0, 0.2 );
 	box-shadow: none;
     color: #000;
@@ -1441,6 +1471,7 @@ input[type="url"] {
     margin: 0 0 15px 0;
     padding: 15px;
 	transition: border-color .2s ease-in-out;
+	-webkit-appearance: none;
     width: 100%;
 }
 
@@ -1480,7 +1511,7 @@ input[type="submit"] {
 	font-family: inherit;
 	font-size: 16px;
 	font-weight: 700;
-	min-width: 120px;
+	margin: 0;
     padding: 16px 24px 18px;
 	text-align: center;
 	-moz-appearance: none;
@@ -2285,7 +2316,7 @@ tbody > tr:nth-child(odd) { background: rgba( 0, 0, 0, 0.05 ); }
 
 	/* Site Nav ----------------------------- */
 	
-	.show-alt-nav .alt-nav {
+	.show-alt-nav .alt-nav-wrapper {
 		display: none;
 	}
 	
@@ -2559,6 +2590,21 @@ tbody > tr:nth-child(odd) { background: rgba( 0, 0, 0, 0.05 ); }
 		font-size: 20px;
 	}
 	
+	/* SEARCH RESULTS */
+
+	.search-no-results .search-form {
+		display: block;
+		margin: 30px auto 0 auto;
+	}
+
+	.search-no-results .search-form label {
+		margin: 0 0 10px 0;
+	}
+
+	.search-no-results .search-form input[type="submit"] {
+		width: 100%;
+	}
+
 	/* PAGINATION */
 	
 	.post-pagination {

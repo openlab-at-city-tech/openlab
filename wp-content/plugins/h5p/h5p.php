@@ -15,14 +15,13 @@
  * Plugin Name:       H5P
  * Plugin URI:        http://h5p.org/wordpress
  * Description:       Allows you to upload, create, share and use rich interactive content on your WordPress site.
- * Version:           1.9.4
+ * Version:           1.15.0
  * Author:            Joubel
  * Author URI:        http://joubel.com
  * Text Domain:       h5p
  * License:           MIT
  * License URI:       http://opensource.org/licenses/MIT
  * Domain Path:       /languages
- * GitHub Plugin URI: https://github.com/h5p/h5p-wordpress
  */
 
 // If this file is called directly, abort.

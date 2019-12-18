@@ -8,43 +8,21 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Possibly intercept the template being loaded
  *
  * Listens to the 'template_include' filter and waits for any bbPress specific
  * template condition to be met. If one is met and the template file exists,
- * it will be used; otherwise 
+ * it will be used; otherwise
  *
  * Note that the _edit() checks are ahead of their counterparts, to prevent them
  * from being stomped on accident.
  *
- * @since bbPress (r3032)
+ * @since 2.0.0 bbPress (r3032)
  *
  * @param string $template
- *
- * @uses bbp_is_single_user() To check if page is single user
- * @uses bbp_get_single_user_template() To get user template
- * @uses bbp_is_single_user_edit() To check if page is single user edit
- * @uses bbp_get_single_user_edit_template() To get user edit template
- * @uses bbp_is_single_view() To check if page is single view
- * @uses bbp_get_single_view_template() To get view template
- * @uses bbp_is_search() To check if page is search
- * @uses bbp_get_search_template() To get search template
- * @uses bbp_is_forum_edit() To check if page is forum edit
- * @uses bbp_get_forum_edit_template() To get forum edit template
- * @uses bbp_is_topic_merge() To check if page is topic merge
- * @uses bbp_get_topic_merge_template() To get topic merge template
- * @uses bbp_is_topic_split() To check if page is topic split
- * @uses bbp_get_topic_split_template() To get topic split template
- * @uses bbp_is_topic_edit() To check if page is topic edit
- * @uses bbp_get_topic_edit_template() To get topic edit template
- * @uses bbp_is_reply_move() To check if page is reply move
- * @uses bbp_get_reply_move_template() To get reply move template
- * @uses bbp_is_reply_edit() To check if page is reply edit
- * @uses bbp_get_reply_edit_template() To get reply edit template
- * @uses bbp_set_theme_compat_template() To set the global theme compat template
  *
  * @return string The path to the template file that is being used
  */
@@ -109,18 +87,20 @@ function bbp_template_include_theme_supports( $template = '' ) {
 	endif;
 
 	// A bbPress template file was located, so override the WordPress template
-	// and use it to switch off bbPress's theme compatibility.
-	if ( !empty( $new_template ) ) {
+	// and use it to switch off theme compatibility.
+	if ( ! empty( $new_template ) ) {
 		$template = bbp_set_template_included( $new_template );
 	}
 
+	// Filter & return
 	return apply_filters( 'bbp_template_include_theme_supports', $template );
 }
 
 /**
  * Set the included template
  *
- * @since bbPress (r4975)
+ * @since 2.4.0 bbPress (r4975)
+ *
  * @param mixed $template Default false
  * @return mixed False if empty. Template name if template included
  */
@@ -133,7 +113,8 @@ function bbp_set_template_included( $template = false ) {
 /**
  * Is a bbPress template being included?
  *
- * @since bbPress (r4975)
+ * @since 2.4.0 bbPress (r4975)
+ *
  * @return bool True if yes, false if no
  */
 function bbp_is_template_included() {
@@ -146,19 +127,19 @@ function bbp_is_template_included() {
  * Attempt to load a custom bbPress functions file, similar to each themes
  * functions.php file.
  *
- * @since bbPress (r3732)
+ * @since 2.1.0 bbPress (r3732)
  *
  * @global string $pagenow
- * @uses bbp_locate_template()
  */
 function bbp_load_theme_functions() {
 	global $pagenow;
 
 	// If bbPress is being deactivated, do not load any more files
-	if ( bbp_is_deactivation() )
+	if ( bbp_is_deactivation() ) {
 		return;
+	}
 
-	if ( ! defined( 'WP_INSTALLING' ) || ( !empty( $pagenow ) && ( 'wp-activate.php' !== $pagenow ) ) ) {
+	if ( ! defined( 'WP_INSTALLING' ) || ( ! empty( $pagenow ) && ( 'wp-activate.php' !== $pagenow ) ) ) {
 		bbp_locate_template( 'bbpress-functions.php', true );
 	}
 }
@@ -168,10 +149,8 @@ function bbp_load_theme_functions() {
 /**
  * Get the user profile template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_displayed_user_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_user_template() {
@@ -189,10 +168,8 @@ function bbp_get_single_user_template() {
 /**
  * Get the user profile edit template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_displayed_user_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_user_edit_template() {
@@ -211,10 +188,8 @@ function bbp_get_single_user_edit_template() {
 /**
  * Get the user favorites template
  *
- * @since bbPress (r4225)
+ * @since 2.2.0 bbPress (r4225)
  *
- * @uses bbp_get_displayed_user_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_favorites_template() {
@@ -234,10 +209,8 @@ function bbp_get_favorites_template() {
 /**
  * Get the user subscriptions template
  *
- * @since bbPress (r4225)
+ * @since 2.2.0 bbPress (r4225)
  *
- * @uses bbp_get_displayed_user_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_subscriptions_template() {
@@ -257,10 +230,8 @@ function bbp_get_subscriptions_template() {
 /**
  * Get the view template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_view_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_view_template() {
@@ -277,9 +248,8 @@ function bbp_get_single_view_template() {
 /**
  * Get the search template
  *
- * @since bbPress (r4579)
+ * @since 2.3.0 bbPress (r4579)
  *
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_search_template() {
@@ -293,10 +263,8 @@ function bbp_get_search_template() {
 /**
  * Get the single forum template
  *
- * @since bbPress (r3922)
+ * @since 2.1.0 bbPress (r3922)
  *
- * @uses bbp_get_forum_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_forum_template() {
@@ -309,10 +277,8 @@ function bbp_get_single_forum_template() {
 /**
  * Get the forum archive template
  *
- * @since bbPress (r3922)
+ * @since 2.1.0 bbPress (r3922)
  *
- * @uses bbp_get_forum_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_forum_archive_template() {
@@ -325,10 +291,8 @@ function bbp_get_forum_archive_template() {
 /**
  * Get the forum edit template
  *
- * @since bbPress (r3566)
+ * @since 2.1.0 bbPress (r3566)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_forum_edit_template() {
@@ -341,10 +305,8 @@ function bbp_get_forum_edit_template() {
 /**
  * Get the single topic template
  *
- * @since bbPress (r3922)
+ * @since 2.1.0 bbPress (r3922)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_topic_template() {
@@ -357,10 +319,8 @@ function bbp_get_single_topic_template() {
 /**
  * Get the topic archive template
  *
- * @since bbPress (r3922)
+ * @since 2.1.0 bbPress (r3922)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_archive_template() {
@@ -373,10 +333,8 @@ function bbp_get_topic_archive_template() {
 /**
  * Get the topic edit template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_edit_template() {
@@ -389,10 +347,8 @@ function bbp_get_topic_edit_template() {
 /**
  * Get the topic split template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_split_template() {
@@ -405,10 +361,8 @@ function bbp_get_topic_split_template() {
 /**
  * Get the topic merge template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_topic_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_merge_template() {
@@ -421,10 +375,8 @@ function bbp_get_topic_merge_template() {
 /**
  * Get the single reply template
  *
- * @since bbPress (r3922)
+ * @since 2.1.0 bbPress (r3922)
  *
- * @uses bbp_get_reply_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_single_reply_template() {
@@ -437,10 +389,8 @@ function bbp_get_single_reply_template() {
 /**
  * Get the reply edit template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_reply_post_type()
- * @uses bbp_get_query_template()
 * @return string Path to template file
  */
 function bbp_get_reply_edit_template() {
@@ -453,10 +403,8 @@ function bbp_get_reply_edit_template() {
 /**
  * Get the reply move template
  *
- * @since bbPress (r4521)
+ * @since 2.3.0 bbPress (r4521)
  *
- * @uses bbp_get_reply_post_type()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_reply_move_template() {
@@ -469,10 +417,8 @@ function bbp_get_reply_move_template() {
 /**
  * Get the topic template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_topic_tag_tax_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_tag_template() {
@@ -488,10 +434,8 @@ function bbp_get_topic_tag_template() {
 /**
  * Get the topic edit template
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
  *
- * @uses bbp_get_topic_tag_tax_id()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_topic_tag_edit_template() {
@@ -507,11 +451,9 @@ function bbp_get_topic_tag_edit_template() {
 /**
  * Get the templates to use as the endpoint for bbPress template parts
  *
- * @since bbPress (r3311)
+ * @since 2.0.0 bbPress (r3311)
+ * @since 2.6.0 bbPress (r5950) Added `singular.php` to template stack
  *
- * @uses apply_filters()
- * @uses bbp_set_theme_compat_templates()
- * @uses bbp_get_query_template()
  * @return string Path to template file
  */
 function bbp_get_theme_compat_templates() {
@@ -523,6 +465,7 @@ function bbp_get_theme_compat_templates() {
 		'generic.php',
 		'page.php',
 		'single.php',
+		'singular.php',
 		'index.php'
 	);
 	return bbp_get_query_template( 'bbpress', $templates );

@@ -1,111 +1,119 @@
 <?php
 
-su_add_shortcode( array(
-		'id' => 'dailymotion',
+su_add_shortcode(
+	array(
+		'id'       => 'dailymotion',
 		'callback' => 'su_shortcode_dailymotion',
-		'image' => su_get_plugin_url() . 'admin/images/shortcodes/dailymotion.svg',
-		'name' => __( 'Dailymotion', 'shortcodes-ultimate' ),
-		'type' => 'single',
-		'group' => 'media',
-		'atts' => array(
-			'url' => array(
+		'image'    => su_get_plugin_url() . 'admin/images/shortcodes/dailymotion.svg',
+		'name'     => __( 'Dailymotion', 'shortcodes-ultimate' ),
+		'type'     => 'single',
+		'group'    => 'media',
+		'atts'     => array(
+			'url'        => array(
 				'default' => '',
-				'name' => __( 'Url', 'shortcodes-ultimate' ),
-				'desc' => __( 'Url of Dailymotion page with video', 'shortcodes-ultimate' )
+				'name'    => __( 'Url', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Url of Dailymotion page with video', 'shortcodes-ultimate' ),
 			),
-			'width' => array(
-				'type' => 'slider',
-				'min' => 200,
-				'max' => 1600,
-				'step' => 20,
+			'width'      => array(
+				'type'    => 'slider',
+				'min'     => 200,
+				'max'     => 1600,
+				'step'    => 20,
 				'default' => 600,
-				'name' => __( 'Width', 'shortcodes-ultimate' ),
-				'desc' => __( 'Player width', 'shortcodes-ultimate' )
+				'name'    => __( 'Width', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Player width', 'shortcodes-ultimate' ),
 			),
-			'height' => array(
-				'type' => 'slider',
-				'min' => 200,
-				'max' => 1600,
-				'step' => 20,
+			'height'     => array(
+				'type'    => 'slider',
+				'min'     => 200,
+				'max'     => 1600,
+				'step'    => 20,
 				'default' => 400,
-				'name' => __( 'Height', 'shortcodes-ultimate' ),
-				'desc' => __( 'Player height', 'shortcodes-ultimate' )
+				'name'    => __( 'Height', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Player height', 'shortcodes-ultimate' ),
 			),
 			'responsive' => array(
-				'type' => 'bool',
+				'type'    => 'bool',
 				'default' => 'yes',
-				'name' => __( 'Responsive', 'shortcodes-ultimate' ),
-				'desc' => __( 'Ignore width and height parameters and make player responsive', 'shortcodes-ultimate' )
+				'name'    => __( 'Responsive', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Ignore width and height parameters and make player responsive', 'shortcodes-ultimate' ),
 			),
-			'autoplay' => array(
-				'type' => 'bool',
+			'autoplay'   => array(
+				'type'    => 'bool',
 				'default' => 'no',
-				'name' => __( 'Autoplay', 'shortcodes-ultimate' ),
-				'desc' => __( 'Start the playback of the video automatically after the player load. May not work on some mobile OS versions', 'shortcodes-ultimate' )
+				'name'    => __( 'Autoplay', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Start the playback of the video automatically after the player load. May not work on some mobile OS versions', 'shortcodes-ultimate' ),
 			),
 			'background' => array(
-				'type' => 'color',
+				'type'    => 'color',
 				'default' => '#FFC300',
-				'name' => __( 'Background color', 'shortcodes-ultimate' ),
-				'desc' => __( 'HTML color of the background of controls elements', 'shortcodes-ultimate' )
+				'name'    => __( 'Background color', 'shortcodes-ultimate' ),
+				'desc'    => __( 'HTML color of the background of controls elements', 'shortcodes-ultimate' ),
 			),
 			'foreground' => array(
-				'type' => 'color',
+				'type'    => 'color',
 				'default' => '#F7FFFD',
-				'name' => __( 'Foreground color', 'shortcodes-ultimate' ),
-				'desc' => __( 'HTML color of the foreground of controls elements', 'shortcodes-ultimate' )
+				'name'    => __( 'Foreground color', 'shortcodes-ultimate' ),
+				'desc'    => __( 'HTML color of the foreground of controls elements', 'shortcodes-ultimate' ),
 			),
-			'highlight' => array(
-				'type' => 'color',
+			'highlight'  => array(
+				'type'    => 'color',
 				'default' => '#171D1B',
-				'name' => __( 'Highlight color', 'shortcodes-ultimate' ),
-				'desc' => __( 'HTML color of the controls elements\' highlights', 'shortcodes-ultimate' )
+				'name'    => __( 'Highlight color', 'shortcodes-ultimate' ),
+				'desc'    => __( 'HTML color of the controls elements\' highlights', 'shortcodes-ultimate' ),
 			),
-			'logo' => array(
-				'type' => 'bool',
+			'logo'       => array(
+				'type'    => 'bool',
 				'default' => 'yes',
-				'name' => __( 'Show logo', 'shortcodes-ultimate' ),
-				'desc' => __( 'Allows to hide or show the Dailymotion logo', 'shortcodes-ultimate' )
+				'name'    => __( 'Show logo', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Allows to hide or show the Dailymotion logo', 'shortcodes-ultimate' ),
 			),
-			'quality' => array(
-				'type' => 'select',
-				'values' => array(
+			'quality'    => array(
+				'type'    => 'select',
+				'values'  => array(
 					'240'  => '240',
 					'380'  => '380',
 					'480'  => '480',
 					'720'  => '720',
-					'1080' => '1080'
+					'1080' => '1080',
 				),
 				'default' => '380',
-				'name' => __( 'Quality', 'shortcodes-ultimate' ),
-				'desc' => __( 'Determines the quality that must be played by default if available', 'shortcodes-ultimate' )
+				'name'    => __( 'Quality', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Determines the quality that must be played by default if available', 'shortcodes-ultimate' ),
 			),
-			'related' => array(
-				'type' => 'bool',
+			'related'    => array(
+				'type'    => 'bool',
 				'default' => 'yes',
-				'name' => __( 'Show related videos', 'shortcodes-ultimate' ),
-				'desc' => __( 'Show related videos at the end of the video', 'shortcodes-ultimate' )
+				'name'    => __( 'Show related videos', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Show related videos at the end of the video', 'shortcodes-ultimate' ),
 			),
-			'info' => array(
-				'type' => 'bool',
+			'info'       => array(
+				'type'    => 'bool',
 				'default' => 'yes',
-				'name' => __( 'Show video info', 'shortcodes-ultimate' ),
-				'desc' => __( 'Show videos info (title/author) on the start screen', 'shortcodes-ultimate' )
+				'name'    => __( 'Show video info', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Show videos info (title/author) on the start screen', 'shortcodes-ultimate' ),
 			),
-			'class' => array(
-				'type' => 'extra_css_class',
-				'name' => __( 'Extra CSS class', 'shortcodes-ultimate' ),
-				'desc' => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
+			'title'      => array(
+				'name'    => __( 'Title', 'shortcodes-ultimate' ),
+				'desc'    => __( 'A brief description of the embedded content (used by screenreaders)', 'shortcodes-ultimate' ),
+				'default' => '',
+			),
+			'class'      => array(
+				'type'    => 'extra_css_class',
+				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
 				'default' => '',
 			),
 		),
-		'desc' => __( 'Dailymotion video', 'shortcodes-ultimate' ),
-		'icon' => 'youtube-play',
-	) );
+		'desc'     => __( 'Dailymotion video', 'shortcodes-ultimate' ),
+		'icon'     => 'youtube-play',
+	)
+);
 
 function su_shortcode_dailymotion( $atts = null, $content = null ) {
 
-	$atts = shortcode_atts( array(
+	$atts = shortcode_atts(
+		array(
 			'url'        => false,
 			'width'      => 600,
 			'height'     => 400,
@@ -118,21 +126,25 @@ function su_shortcode_dailymotion( $atts = null, $content = null ) {
 			'quality'    => '380',
 			'related'    => 'yes',
 			'info'       => 'yes',
-			'class'      => ''
-		), $atts, 'dailymotion' );
+			'title'      => '',
+			'class'      => '',
+		),
+		$atts,
+		'dailymotion'
+	);
 
 	if ( ! $atts['url'] ) {
 		return su_error_message( 'Dailymotion', __( 'please specify correct url', 'shortcodes-ultimate' ) );
 	}
 
 	$atts['url'] = su_do_attribute( $atts['url'] );
-	$id = strtok( basename( $atts['url'] ), '_' );
+	$id          = strtok( basename( $atts['url'] ), '_' );
 
 	if ( ! $id ) {
 		return su_error_message( 'Screenr', __( 'please specify correct url', 'shortcodes-ultimate' ) );
 	}
 
-	$params = array();
+	$params     = array();
 	$dm_options = array( 'autoplay', 'background', 'foreground', 'highlight', 'logo', 'quality', 'related', 'info' );
 
 	foreach ( $dm_options as $dm_option ) {
@@ -141,6 +153,6 @@ function su_shortcode_dailymotion( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-dailymotion su-responsive-media-' . $atts['responsive'] . su_get_css_class( $atts ) . '"><iframe width="' . $atts['width'] . '" height="' . $atts['height'] . '" src="//www.dailymotion.com/embed/video/' . $id . '?' . implode( '&', $params ) . '" frameborder="0" allowfullscreen="true"></iframe></div>';
+	return '<div class="su-dailymotion su-u-responsive-media-' . $atts['responsive'] . su_get_css_class( $atts ) . '"><iframe width="' . $atts['width'] . '" height="' . $atts['height'] . '" src="//www.dailymotion.com/embed/video/' . $id . '?' . implode( '&', $params ) . '" frameborder="0" allowfullscreen="true" title="' . esc_attr( $atts['title'] ) . '"></iframe></div>';
 
 }

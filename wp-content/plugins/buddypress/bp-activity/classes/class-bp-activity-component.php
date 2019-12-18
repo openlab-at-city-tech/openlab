@@ -124,9 +124,30 @@ class BP_Activity_Component extends BP_Component {
 				require $this->path . 'bp-activity/screens/just-me.php';
 			}
 
-			// Screens - User secondary nav.
-			if ( bp_is_user() && in_array( bp_current_action(), array( 'friends', 'groups', 'favorites', 'mentions' ), true ) ) {
-				require $this->path . 'bp-activity/screens/' . bp_current_action() . '.php';
+			/**
+			 * Screens - User secondary nav.
+			 *
+			 * For these specific actions, slugs can be customized using `BP_{COMPONENT}_SLUGS`.
+			 * As a result, we need to map filenames with slugs.
+			 */
+			$filenames = array(
+				'favorites' => 'favorites',
+				'mentions'  => 'mentions',
+			);
+
+			if ( bp_is_active( 'friends' ) ) {
+				$filenames[bp_get_friends_slug()] = 'friends';
+			}
+
+			if ( bp_is_active( 'groups' ) ) {
+				$filenames[bp_get_groups_slug()] = 'groups';
+			}
+
+			// The slug is the current action requested.
+			$slug = bp_current_action();
+
+			if ( bp_is_user() && isset( $filenames[ $slug ] ) ) {
+				require $this->path . 'bp-activity/screens/' . $filenames[ $slug ] . '.php';
 			}
 
 			// Screens - Single permalink.
@@ -434,5 +455,17 @@ class BP_Activity_Component extends BP_Component {
 		) );
 
 		parent::setup_cache_groups();
+	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		parent::rest_api_init( array( 'BP_REST_Activity_Endpoint' ) );
 	}
 }

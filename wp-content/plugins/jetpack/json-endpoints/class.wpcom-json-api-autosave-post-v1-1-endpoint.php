@@ -44,6 +44,9 @@ class WPCOM_JSON_API_Autosave_Post_v1_1_Endpoint extends WPCOM_JSON_API_Post_v1_
 
 	// /sites/%s/posts/%d/autosave -> $blog_id, $post_id
 	function callback( $path = '', $blog_id = 0, $post_id = 0 ) {
+		if ( ! defined( 'DOING_AUTOSAVE' ) ) {
+			define( 'DOING_AUTOSAVE', true );
+		}
 
 		$blog_id = $this->api->switch_to_blog_and_validate_user( $this->api->get_blog_id( $blog_id ) );
 		if ( is_wp_error( $blog_id ) ) {
@@ -102,7 +105,7 @@ class WPCOM_JSON_API_Autosave_Post_v1_1_Endpoint extends WPCOM_JSON_API_Post_v1_
 			return array(
 				'ID'          => $auto_ID,
 				'post_ID'     => $post->ID,
-				'modified'    => $this->format_date( $updated_post->post_modified ),
+				'modified'    => $this->format_date( $updated_post->post_modified_gmt, $updated_post->post_modified ),
 				'preview_URL' => $preview_url
 			);
 		} else {

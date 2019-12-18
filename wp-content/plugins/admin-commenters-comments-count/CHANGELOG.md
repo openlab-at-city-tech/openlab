@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.2 _(2019-12-07)_
+* Fix: Correct typo in GitHub URL
+* Unit test:
+    * Change: Update unit test install script and bootstrap to use latest WP unit test repo
+    * Change: Update expected frontend output to include additional "ugc" (user generated content) value now included for `rel="nofollow"` attribute of commenter links
+* Change: Note compatibility through WP 5.3+
+* Change: Update copyright date (2020)
+
 ## 1.9.1 _(2019-04-05)_
 * Change: Initialize plugin on `plugins_loaded` action instead of on load
 * Change: Merge `do_init()` into `init()`

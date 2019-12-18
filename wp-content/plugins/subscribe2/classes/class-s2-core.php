@@ -105,7 +105,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) || empty( $recipient ) ) {
+				if ( false === is_email( $recipient ) || empty( $recipient ) ) {
 					continue;
 				}
 				// Use the mail queue provided we are not sending a preview
@@ -121,7 +121,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) ) {
+				if ( false === is_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
@@ -138,7 +138,7 @@ class S2_Core {
 			foreach ( $recipients as $recipient ) {
 				$recipient = trim( $recipient );
 				// sanity check -- make sure we have a valid email
-				if ( false === $this->validate_email( $recipient ) ) {
+				if ( false === is_email( $recipient ) ) {
 					continue;
 				}
 				// and NOT the sender's email, since they'll get a copy anyway
@@ -1009,7 +1009,7 @@ class S2_Core {
 
 		// ensure that domain is in lowercase as per internet email standards http://www.ietf.org/rfc/rfc5321.txt
 		list( $name, $domain ) = explode( '@', $email, 2 );
-		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ) );
+		return apply_filters( 's2_sanitize_email', $name . '@' . strtolower( $domain ), $email );
 	}
 
 	/**
@@ -1021,8 +1021,16 @@ class S2_Core {
 			if ( false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 				return false;
 			}
+		}
+
+		if ( true === apply_filters( 's2_validate_email_with_dns', true ) ) {
 			$domain = explode( '@', $email, 2 );
-			if ( true === checkdnsrr( $domain[1] ) ) {
+			if ( function_exists( 'idn_to_ascii' ) ) {
+				$check_domain = idn_to_ascii( $domain[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 );
+			} else {
+				$check_domain = $domain[1];
+			}
+			if ( true === checkdnsrr( $check_domain, 'MX' ) ) {
 				return $email;
 			} else {
 				return false;
@@ -1915,10 +1923,10 @@ class S2_Core {
 			$this->block_editor = true;
 		}
 
-        // Compatibility with Fusion Builder
-        if ( is_plugin_active( 'fusion-builder/fusion-builder.php' ) && ! isset( $_GET['gutenberg-editor'] ) ) {
-            $this->block_editor = false;
-        }
+		// Compatibility with Fusion Builder
+		if ( is_plugin_active( 'fusion-builder/fusion-builder.php' ) && ! isset( $_GET['gutenberg-editor'] ) ) {
+			$this->block_editor = false;
+		}
 
 		if ( true === $this->block_editor ) {
 			require_once S2PATH . 'classes/class-s2-block-editor.php';
@@ -1974,11 +1982,11 @@ class S2_Core {
 			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
 
 			// MailOptin admin notices
-			require_once S2PATH . 'classes/mo-notice.php';
+			require_once S2PATH . 'classes/class-mo-admin-notice.php';
 
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
-				$date = date( 'Y-m-d' );
+				$date = gmdate( 'Y-m-d' );
 				header( 'Content-Description: File Transfer' );
 				header( 'Content-type: application/octet-stream' );
 				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );

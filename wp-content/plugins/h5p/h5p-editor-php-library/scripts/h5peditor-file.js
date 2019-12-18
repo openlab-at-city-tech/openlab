@@ -1,6 +1,4 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
+/* global ns */
 /**
  * Adds a file upload field to the form.
  *
@@ -21,6 +19,7 @@ ns.File = function (parent, field, params, setValue) {
   this.params = params;
   this.setValue = setValue;
   this.library = parent.library + '/' + field.name;
+  this.id = ns.getNextFieldId(field);
 
   if (params !== undefined) {
     this.copyright = params.copyright;
@@ -56,6 +55,11 @@ ns.File = function (parent, field, params, setValue) {
 
     // Clear old error messages
     self.$errors.html('');
+  });
+
+  // Monitor upload progress
+  self.on('uploadProgress', function (e) {
+    self.$file.children().html(ns.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
   });
 
   // Handle upload complete
@@ -108,7 +112,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
     '</div>';
 
-  var html = ns.createFieldMarkup(this.field, fileHtml);
+  var html = ns.createFieldMarkup(this.field, fileHtml, this.id);
 
   var $container = ns.$(html).appendTo($wrapper);
   this.$copyrightButton = $container.find('.h5p-copyright-button');
@@ -160,9 +164,9 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
         return list[i];
       }
     }
-  }
+  };
 
-  // Re-map old licenses that has been moved
+  // Re-map old licenses that have been moved
   if (field.copyright) {
     if (field.copyright.license === 'ODC PDDL') {
       field.copyright.license = 'PD';
@@ -175,6 +179,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   }
 
   var group = new H5PEditor.widgets.group(field, H5PEditor.copyrightSemantics, field.copyright, setCopyright);
+  // TODO: We'll have to do something here with metadataSemantics if we change the widgtets
   group.appendTo($dialog);
   group.expand();
   group.$group.find('.title').remove();
@@ -187,7 +192,6 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
 
   // Listen for changes to license
   licenseField.changes.push(function (value) {
-
     // Find versions for selected value
     var option = find(licenseField.field.options, 'value', value);
     var versions = option.versions;
@@ -222,11 +226,16 @@ ns.File.prototype.addFile = function () {
   var that = this;
 
   if (this.params === undefined) {
-    this.$file.html(
-      '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '">' +
-        '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
-      '</a>'
-    ).children('.add').click(function () {
+
+    let html = '<a href="#" id="' + this.id + '" class="add"';
+    if (this.field.description !== undefined) {
+      html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+    }
+    html += ' title="' + ns.t('core', 'addFile') + '">' +
+      '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
+    '</a>'
+
+    this.$file.html(html).children('.add').click(function () {
       that.openFileSelector();
       return false;
     });
@@ -247,10 +256,20 @@ ns.File.prototype.addFile = function () {
     thumbnail = ns.fileIcon;
   }
 
-  this.$file.html('<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"><img ' + (thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"') + 'height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></a>').children(':eq(0)').click(function () {
+  var fileHtmlString = '<a href="#" id="' + this.id + '" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"';
+  if (this.field.description !== undefined) {
+    fileHtmlString += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+  }
+  fileHtmlString += '><img ' +
+      (thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"') +
+      'height="' + thumbnail.height + '"  '+
+      'alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/></a>' +
+    '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';
+
+  this.$file.html(fileHtmlString).children(':eq(0)').click(function () {
     that.openFileSelector();
     return false;
-  }).children('img').attr('src', thumbnail.path).end().next().click(function (e) {
+  }).children('img').attr('src', thumbnail.path).end().next().click(function () {
     that.confirmRemovalDialog.show(H5P.jQuery(this).offset().top);
     return false;
   });

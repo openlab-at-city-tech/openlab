@@ -128,7 +128,8 @@ class BP_Groups_Component extends BP_Component {
 			'template',
 			'adminbar',
 			'functions',
-			'notifications'
+			'notifications',
+			'cssjs',
 		);
 
 		// Conditional includes.
@@ -793,7 +794,7 @@ class BP_Groups_Component extends BP_Component {
 			$title   = _x( 'Groups', 'My Account Groups', 'buddypress' );
 			$pending = _x( 'No Pending Invites', 'My Account Groups sub nav', 'buddypress' );
 
-			if ( ! empty( $count['total'] ) ) {
+			if ( $count ) {
 				$title = sprintf(
 					/* translators: %s: Group invitation count for the current user */
 					_x( 'Groups %s', 'My Account Groups nav', 'buddypress' ),
@@ -919,6 +920,24 @@ class BP_Groups_Component extends BP_Component {
 		// Group Type.
 		register_taxonomy( 'bp_group_type', 'bp_group', array(
 			'public' => false,
+		) );
+	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		parent::rest_api_init( array(
+			'BP_REST_Groups_Endpoint',
+			'BP_REST_Group_Membership_Endpoint',
+			'BP_REST_Group_Invites_Endpoint',
+			'BP_REST_Group_Membership_Request_Endpoint',
+			'BP_REST_Attachments_Group_Avatar_Endpoint',
 		) );
 	}
 }

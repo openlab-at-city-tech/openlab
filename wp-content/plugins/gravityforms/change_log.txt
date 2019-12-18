@@ -1,53 +1,91 @@
-### 2.4.14.11
-- Updated handling of sending notes and logging messages when no entry id is provided. 
-
-### 2.4.14.10
-- Fixed blocked submissions with invisible reCaptcha.
+### 2.4.15.15
+- Fixed a compatibility issue with the Form block and WPGraphQL Gutenberg.
 
 
-### 2.4.14.9
-- Fixed an issue with the osDXP integration which prevents the dashboard from loading.
+### 2.4.15.14
+- Fixed a JavaScript error which can occur in the form editor when trying to edit a field which has been populated with integer based choices via a form object filter.
+- Fixed PHP 7.4 compatibility issues.
+- Fixed some untranslatable strings for the form and entry locking features. Credit: The GravityView team.
+- API: Fixed an issue with GFAPI::get_feeds() and the GET gf/v2/feeds and GET/PUT/DELETE gf/v2/feeds/[feed_id] endpoints where feeds cannot be updated or deleted correctly.
+- API: Fixed GFAPI::update_forms_property().
 
 
-### 2.4.14.8
-- Added the *[gform_logging_message]()* filter. Credit: Jamie Oastler.
+### 2.4.15.13
+- Updated the minimum version of WordPress required for support to 5.2.
+- Fixed an issue with the styles for the active/inactive toggle in the admin.
 
 
-### 2.4.14.7
+### 2.4.15.12
+- Fixed an issue where the conditional shortcode can output content when using an ends_with 0 rule and the value does not match. Credit: The Gravity PDF team.
+
+
+### 2.4.15.11
+- Fixed a typo in the address field's country subfield for the Brunei Darussalam choice.
+
+
+### 2.4.15.10
+- Fixed form block and widget not centering when using Twenty Twenty theme.
+
+
+### 2.4.15.9
+- Fixed an issue with the US/Canada phone field type not validating correctly when the no duplicates feature is enabled.
+
+
+### 2.4.15.8
+- Fixed the form widget and gravity_form function not suppressing the tabindex by default.
+
+
+### 2.4.15.7
+- Added security enhancements.
+
+
+### 2.4.15.6
+- Fixed a PHP notice for $phpmailer->ErrorInfo in certain sites where a third-party plugin or custom function could be altering the $phpmailer object.
+- Fixed front-end merge tag replacement returning values for fields in sections hidden by conditional logic.
+
+
+### 2.4.15.5
+- Fixed issue where [gform_input_change](https://docs.gravityforms.com/gform_input_change/) filter did not pass correct values for its parameters.
+
+
+### 2.4.15.4
+- Fixed styling conflict between Ready Classes and the Signature Add-on field.
+- Fixed password fields using the password strength feature throwing a false validation error in some multi-page form configurations.
+
+
+### 2.4.15.3
+- Fixed an issue where spaces at the beginning of a consent field's label can trigger false validation errors on a multi-page form if the field is marked as required.
+
+
+### 2.4.15.2
+- Updated the gform_version_info option so autoload is disabled.
+
+
+### 2.4.15.1
+- Fixed password visibility toggle being clickable when editing form.
+
+
+### 2.4.15 | 2019-11-06
+- Added entry notes with the sending result as part of the notification sending process. These notes can be customized or disabled using the *[gform_notification_note](https://docs.gravityforms.com/gform_notification_note/)* filter.
+- Added the *[gform_logging_message](https://docs.gravityforms.com/gform_logging_message/)* filter. Credit: Jamie Oastler.
 - Added support for disabling Confirm Password input in Password field.
 - Added password visibility toggle to Password field, enabled via new field setting.
 - Added support for osDXP.
+- Updated handling of sending notes and logging messages when no entry id is provided.
 - Updated Password field strength meter to match the WordPress password strength algorithm.
-- Fixed an issue where the honeypot can be assigned the wrong ID when the form contains Repeater fields.
-
-
-### 2.4.14.6
 - Updated the *[gform_{$SHORT_SLUG}_error](https://docs.gravityforms.com/gform_slug_error/)* hook to include *$error_message* as the fourth parameter.
-- API: Fixed an issue with field visibility evaluation for third-party integrations processing multiple entries in the same request. Credit: The GravityView team.
-
-
-### 2.4.14.5
+- Fixed update notifications on the Plugins page of a subsite when Gravity Forms or add-ons are activated on it, but aren't activated on the main site or the network.
+- Fixed an issue with invisible reCaptcha which can prevent the form from being submitted.
+- Fixed an issue where the honeypot can be assigned the wrong ID when the form contains Repeater fields.
+- Fixed a JavaScript error when conditional logic based on the radio button field other input is evaluated.
+- Fixed the form ID not being passed to the *[gform_phone_formats](https://docs.gravityforms.com/gform_phone_formats/)* filter when the field settings are sanitized on form save.
+- Fixed a PHP warning that would output if a notification is set to use conditional routing for the Send To address but no routing rules are defined.
 - Fixed active and inactive form counts not updating when changing a form's active status.
 - Fixed a corrupt confirmation being created for a form when all the confirmations have been deleted and there isn't a legacy confirmation (pre 1.7) to upgrade.
-
-
-### 2.4.14.4
-- Fixed a JavaScript error when conditional logic based on the radio button field other input is evaluated.
-- Fixed the form ID not being passed to the gform_phone_formats filter when the field settings are sanitized on form save.
-- Fixed a PHP warning that would output if a notification is set to use conditional routing for the Send To address but no routing rules are defined.
-- Removed the ability to set a placeholder in the settings UI for a consent field as the field does not use placeholders or the entered value anywhere.
-
-
-### 2.4.14.3
-- Fixed an issue with the address field where countries with apostrophes would throw incorrect validation errors in certain situations.
-
-
-### 2.4.14.2
+- Fixed an issue with the address field where countries with apostrophes throw incorrect validation errors in certain situations.
 - Fixed PHP fatal errors caused by some required files not being loaded when the site path includes square brackets.
-
-
-### 2.4.14.1
-- Added entry notes with the sending result as part of the notification sending process. These notes can be customized or disabled using the *[gform_notification_note]()* filter.
+- Removed the ability to set a placeholder in the settings UI for a consent field as the field does not use placeholders or the entered value anywhere.
+- API: Fixed an issue with field visibility evaluation for third-party integrations processing multiple entries in the same request. Credit: The GravityView team.
 - API: Fixed inactive notifications not being sent when using the v2 POST /entries/[ENTRY_ID]/notifications endpoint with the _notifications arg.
 
 

@@ -4,7 +4,7 @@
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, BlockControls, RichText, PanelColorSettings, MediaUpload } = wpBlockEditor;
-    const { RangeControl, PanelBody, ToggleControl, SelectControl, TextControl, IconButton, Button, Toolbar } = wpComponents;
+    const { RangeControl, PanelBody, ToggleControl, SelectControl, TextControl, IconButton, Button, Toolbar, FocalPointPicker } = wpComponents;
 
     class AdvImage extends Component {
         constructor() {
@@ -35,29 +35,27 @@
             }
         }
 
+        componentDidMount() {
+            const { attributes, setAttributes, clientId } = this.props;
+            const { blockIDX } = attributes;
+
+            if (!blockIDX) {
+                setAttributes({blockIDX: `advgb-img-${clientId}`});
+            }
+        }
+
         render() {
             const { currentEdit } = this.state;
             const { attributes, setAttributes, isSelected } = this.props;
             const {
-                openOnClick,
-                openUrl,
-                linkInNewTab,
-                imageUrl,
-                imageID,
-                title,
-                titleColor,
-                subtitle,
-                subtitleColor,
-                overlayColor,
-                fullWidth,
-                width,
-                height,
-                vAlign,
-                hAlign,
+                blockIDX, openOnClick, openUrl, linkInNewTab, imageUrl, imageID,
+                title, titleColor, subtitle, subtitleColor, overlayColor, defaultOpacity,
+                fullWidth, width, height, vAlign, hAlign, overlayOpacity, focalPoint,
             } = attributes;
             const blockClassName = [
                 'advgb-image-block',
                 fullWidth && 'full-width',
+                blockIDX,
             ].filter( Boolean ).join( ' ' );
 
             return (
@@ -72,7 +70,7 @@
                                     render={ ( { open } ) => (
                                         <IconButton
                                             className="components-toolbar__control"
-                                            label={ __( 'Change image' ) }
+                                            label={ __( 'Change image', 'advanced-gutenberg' ) }
                                             icon="edit"
                                             onClick={ open }
                                         />
@@ -80,7 +78,7 @@
                                 />
                                 <IconButton
                                     className="components-toolbar__control"
-                                    label={ __( 'Remove image' ) }
+                                    label={ __( 'Remove image', 'advanced-gutenberg' ) }
                                     icon="no"
                                     onClick={ () => setAttributes( { imageUrl: undefined, imageID: undefined } ) }
                                 />
@@ -88,14 +86,14 @@
                         </BlockControls>
                     ) }
                     <InspectorControls>
-                        <PanelBody title={ __( 'Advanced Image' ) }>
+                        <PanelBody title={ __( 'Advanced Image', 'advanced-gutenberg' ) }>
                             <SelectControl
-                                label={ __( 'Action on click' ) }
+                                label={ __( 'Action on click', 'advanced-gutenberg' ) }
                                 value={ openOnClick }
                                 options={ [
-                                    { label: __( 'None' ), value: 'none' },
-                                    { label: __( 'Open image in lightbox' ), value: 'lightbox' },
-                                    { label: __( 'Open custom URL' ), value: 'url' },
+                                    { label: __( 'None', 'advanced-gutenberg' ), value: 'none' },
+                                    { label: __( 'Open image in lightbox', 'advanced-gutenberg' ), value: 'lightbox' },
+                                    { label: __( 'Open custom URL', 'advanced-gutenberg' ), value: 'url' },
                                 ] }
                                 onChange={ (value) => setAttributes( { openOnClick: value } ) }
                             />
@@ -103,30 +101,30 @@
                             <Fragment>
                                 <TextControl
                                     label={ [
-                                        __( 'Link URL' ),
+                                        __( 'Link URL', 'advanced-gutenberg' ),
                                         (openUrl && <a href={ openUrl || '#' } key="advgb_image_link_url" target="_blank" style={ { float: 'right' } }>
-                                            { __( 'Preview' ) }
+                                            { __( 'Preview', 'advanced-gutenberg' ) }
                                         </a>)
                                     ] }
                                     value={ openUrl }
-                                    placeholder={ __( 'Enter URL…' ) }
+                                    placeholder={ __( 'Enter URL…', 'advanced-gutenberg' ) }
                                     onChange={ ( text ) => setAttributes( { openUrl: text } ) }
                                 />
                                 <ToggleControl
-                                    label={ __( 'Open link in new tab' ) }
+                                    label={ __( 'Open link in new tab', 'advanced-gutenberg' ) }
                                     checked={ linkInNewTab }
                                     onChange={ () => setAttributes( { linkInNewTab: !linkInNewTab } ) }
                                 />
                             </Fragment>
                             }
-                            <PanelBody title={ __( 'Image Size' ) }>
+                            <PanelBody title={ __( 'Image Size', 'advanced-gutenberg' ) }>
                                 <ToggleControl
-                                    label={ __( 'Full width' ) }
+                                    label={ __( 'Full width', 'advanced-gutenberg' ) }
                                     checked={ fullWidth }
                                     onChange={ () => setAttributes( { fullWidth: !fullWidth } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Height' ) }
+                                    label={ __( 'Height', 'advanced-gutenberg' ) }
                                     value={ height }
                                     min={ 100 }
                                     max={ 1000 }
@@ -134,53 +132,74 @@
                                 />
                                 {!fullWidth &&
                                 <RangeControl
-                                    label={ __( 'Width' ) }
+                                    label={ __( 'Width', 'advanced-gutenberg' ) }
                                     value={ width }
                                     min={ 200 }
                                     max={ 1300 }
                                     onChange={ (value) => setAttributes( { width: value } ) }
+                                />}
+                                {imageUrl && (
+                                    <FocalPointPicker
+                                        label={ __( 'Focal Point Picker', 'advanced-gutenberg' ) }
+                                        url={ imageUrl }
+                                        value={ focalPoint }
+                                        onChange={ ( value ) => setAttributes( { focalPoint: value } ) }
+                                    />
+                                ) }
+                                <RangeControl
+                                    label={ __( 'Overlay opacity default', 'advanced-gutenberg' ) }
+                                    value={ defaultOpacity }
+                                    min={ 0 }
+                                    max={ 100 }
+                                    onChange={ (value) => setAttributes( { defaultOpacity: value } ) }
                                 />
-                                }
+                                <RangeControl
+                                    label={ __( 'Overlay opacity hover', 'advanced-gutenberg' ) }
+                                    value={ overlayOpacity }
+                                    min={ 0 }
+                                    max={ 100 }
+                                    onChange={ (value) => setAttributes( { overlayOpacity: value } ) }
+                                />
                             </PanelBody>
                             <PanelColorSettings
-                                title={ __( 'Color Settings' ) }
+                                title={ __( 'Color Settings', 'advanced-gutenberg' ) }
                                 initialOpen={ false }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Title Color' ),
+                                        label: __( 'Title Color', 'advanced-gutenberg' ),
                                         value: titleColor,
                                         onChange: ( value ) => setAttributes( { titleColor: value === undefined ? '#fff' : value } ),
                                     },
                                     {
-                                        label: __( 'Subtitle Color' ),
+                                        label: __( 'Subtitle Color', 'advanced-gutenberg' ),
                                         value: subtitleColor,
                                         onChange: ( value ) => setAttributes( { subtitleColor: value === undefined ? '#fff' : value } ),
                                     },
                                     {
-                                        label: __( 'Overlay Color' ),
+                                        label: __( 'Overlay Color', 'advanced-gutenberg' ),
                                         value: overlayColor,
-                                        onChange: ( value ) => setAttributes( { overlayColor: value === undefined ? '#2196f3' : value } ),
+                                        onChange: ( value ) => setAttributes( { overlayColor: value === undefined ? '#000' : value } ),
                                     },
                                 ] }
                             />
-                            <PanelBody title={ __( 'Text Alignment' ) } initialOpen={false}>
+                            <PanelBody title={ __( 'Text Alignment', 'advanced-gutenberg' ) } initialOpen={false}>
                                 <SelectControl
-                                    label={ __( 'Vertical Alignment' ) }
+                                    label={ __( 'Vertical Alignment', 'advanced-gutenberg' ) }
                                     value={vAlign}
                                     options={ [
-                                        { label: __( 'Top' ), value: 'flex-start' },
-                                        { label: __( 'Center' ), value: 'center' },
-                                        { label: __( 'Bottom' ), value: 'flex-end' },
+                                        { label: __( 'Top', 'advanced-gutenberg' ), value: 'flex-start' },
+                                        { label: __( 'Center', 'advanced-gutenberg' ), value: 'center' },
+                                        { label: __( 'Bottom', 'advanced-gutenberg' ), value: 'flex-end' },
                                     ] }
                                     onChange={ (value) => setAttributes( { vAlign: value } ) }
                                 />
                                 <SelectControl
-                                    label={ __( 'Horizontal Alignment' ) }
+                                    label={ __( 'Horizontal Alignment', 'advanced-gutenberg' ) }
                                     value={hAlign}
                                     options={ [
-                                        { label: __( 'Left' ), value: 'flex-start' },
-                                        { label: __( 'Center' ), value: 'center' },
-                                        { label: __( 'Right' ), value: 'flex-end' },
+                                        { label: __( 'Left', 'advanced-gutenberg' ), value: 'flex-start' },
+                                        { label: __( 'Center', 'advanced-gutenberg' ), value: 'center' },
+                                        { label: __( 'Right', 'advanced-gutenberg' ), value: 'flex-end' },
                                     ] }
                                     onChange={ (value) => setAttributes( { hAlign: value } ) }
                                 />
@@ -189,27 +208,28 @@
                     </InspectorControls>
                     <div className={ blockClassName }
                          style={ {
-                             backgroundImage: `url( ${imageUrl})`,
+                             backgroundImage: `url(${imageUrl || advgbBlocks.image_holder})`,
+                             backgroundPosition: focalPoint ? `${ focalPoint.x * 100 }% ${ focalPoint.y * 100 }%` : undefined,
                              height: height,
                              width: width,
                              justifyContent: vAlign,
                              alignItems: hAlign,
                          } }
                     >
-                    <span className="advgb-image-overlay"
-                          style={ { backgroundColor: overlayColor } }
-                    />
+                        <span className="advgb-image-overlay"
+                              style={ { backgroundColor: overlayColor, opacity: defaultOpacity/100 } }
+                        />
                         {!imageID &&
                         <MediaUpload
                             allowedTypes={ ['image'] }
                             value={ imageID }
-                            onSelect={ (image) => setAttributes( { imageUrl: image.url, imageID: image.id } ) }
+                            onSelect={ (image) => setAttributes( { imageUrl: image.url, imageID: image.id, focalPoint: {} } ) }
                             render={ ( { open } ) => (
                                 <Button
-                                    className="button button-large"
+                                    className="button button-large advgb-browse-image-btn"
                                     onClick={ open }
                                 >
-                                    { __( 'Choose image' ) }
+                                    { __( 'Open media library', 'advanced-gutenberg' ) }
                                 </Button>
                             ) }
                         />
@@ -223,7 +243,7 @@
                             isSelected={ isSelected && currentEdit === 'title' }
                             unstableOnFocus={ () => this.setState( { currentEdit: 'title' } ) }
                             unstableOnSplit={ () => null }
-                            placeholder={ __( 'Enter title…' ) }
+                            placeholder={ __( 'Enter title…', 'advanced-gutenberg' ) }
                         />
                         <RichText
                             tagName="p"
@@ -234,8 +254,11 @@
                             isSelected={ isSelected && currentEdit === 'subtitle' }
                             unstableOnFocus={ () => this.setState( { currentEdit: 'subtitle' } ) }
                             unstableOnSplit={ () => null }
-                            placeholder={ __( 'Enter subtitle…' ) }
+                            placeholder={ __( 'Enter subtitle…', 'advanced-gutenberg' ) }
                         />
+                        <style>
+                            {`.${blockIDX}.advgb-image-block:hover .advgb-image-overlay {opacity: ${overlayOpacity/100} !important;}`}
+                        </style>
                     </div>
                 </Fragment>
             );
@@ -250,6 +273,9 @@
     );
 
     const blockAttrs = {
+        blockIDX: {
+            type: 'string',
+        },
         openOnClick: {
             type: 'string',
             default: 'none',
@@ -269,7 +295,7 @@
         },
         title: {
             type: 'string',
-            default: __( 'Image title' ),
+            default: __( 'Image title', 'advanced-gutenberg' ),
         },
         titleColor: {
             type: 'string',
@@ -277,7 +303,7 @@
         },
         subtitle: {
             type: 'string',
-            default: __( 'Your subtitle here' ),
+            default: __( 'Your subtitle here', 'advanced-gutenberg' ),
         },
         subtitleColor: {
             type: 'string',
@@ -285,11 +311,11 @@
         },
         overlayColor: {
             type: 'string',
-            default: '#2196f3'
+            default: '#000'
         },
         fullWidth: {
             type: 'boolean',
-            default: false,
+            default: true,
         },
         width: {
             type: 'number',
@@ -307,6 +333,17 @@
             type: 'string',
             default: 'center',
         },
+        overlayOpacity: {
+            type: 'number',
+            default: 20,
+        },
+        defaultOpacity: {
+            type: 'number',
+            default: 40,
+        },
+        focalPoint: {
+            type: 'object',
+        },
         changed: {
             type: 'boolean',
             default: false,
@@ -314,18 +351,22 @@
     };
 
     registerBlockType( 'advgb/image', {
-        title: __( 'Advanced Image' ),
-        description: __( 'Advanced image/photo block with more options and styles.' ),
+        title: __( 'Advanced Image', 'advanced-gutenberg' ),
+        description: __( 'Advanced image/photo block with more options and styles.', 'advanced-gutenberg' ),
         icon: {
             src: advImageBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'image' ), __( 'photo' ), __( 'box' ) ],
+        keywords: [ __( 'image', 'advanced-gutenberg' ), __( 'photo', 'advanced-gutenberg' ), __( 'box', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        supports: {
+            align: true,
+        },
         edit: AdvImage,
         save: ( { attributes } ) => {
             const {
+                blockIDX,
                 openOnClick,
                 openUrl,
                 linkInNewTab,
@@ -340,18 +381,21 @@
                 height,
                 vAlign,
                 hAlign,
+                focalPoint,
             } = attributes;
             const linkURL = ( openOnClick === 'url' && !!openUrl ) ? openUrl : undefined;
             const blockClassName = [
                 'advgb-image-block',
                 fullWidth && 'full-width',
                 openOnClick === 'lightbox' && !!imageUrl && 'advgb-lightbox',
+                blockIDX,
             ].filter( Boolean ).join( ' ' );
 
             return (
                 <div className={ blockClassName }
                      style={ {
                          backgroundImage: `url(${imageUrl})`,
+                         backgroundPosition: focalPoint ? `${ focalPoint.x * 100 }% ${ focalPoint.y * 100 }%` : undefined,
                          height: height,
                          width: width,
                          justifyContent: vAlign,
@@ -379,6 +423,77 @@
             );
         },
         deprecated: [
+            {
+                attributes: {
+                    ...blockAttrs,
+                    overlayColor: {
+                        type: 'string',
+                        default: '#2196f3',
+                    },
+                    fullWidth: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                },
+                save: ( { attributes } ) => {
+                    const {
+                        blockIDX,
+                        openOnClick,
+                        openUrl,
+                        linkInNewTab,
+                        imageUrl,
+                        title,
+                        titleColor,
+                        subtitle,
+                        subtitleColor,
+                        overlayColor,
+                        fullWidth,
+                        width,
+                        height,
+                        vAlign,
+                        hAlign,
+                        focalPoint,
+                    } = attributes;
+                    const linkURL = ( openOnClick === 'url' && !!openUrl ) ? openUrl : undefined;
+                    const blockClassName = [
+                        'advgb-image-block',
+                        fullWidth && 'full-width',
+                        openOnClick === 'lightbox' && !!imageUrl && 'advgb-lightbox',
+                        blockIDX,
+                    ].filter( Boolean ).join( ' ' );
+
+                    return (
+                        <div className={ blockClassName }
+                             style={ {
+                                 backgroundImage: `url(${imageUrl})`,
+                                 backgroundPosition: focalPoint ? `${ focalPoint.x * 100 }% ${ focalPoint.y * 100 }%` : undefined,
+                                 height: height,
+                                 width: width,
+                                 justifyContent: vAlign,
+                                 alignItems: hAlign,
+                             } }
+                             data-image={ imageUrl }
+                        >
+                            <a className="advgb-image-overlay"
+                               style={ { backgroundColor: overlayColor } }
+                               target={ linkInNewTab ? '_blank' : '_self' }
+                               rel="noopener noreferrer"
+                               href={ linkURL }
+                            />
+                            {title && (
+                                <h4 className="advgb-image-title" style={ { color: titleColor } }>
+                                    {title}
+                                </h4>
+                            ) }
+                            {subtitle && (
+                                <p className="advgb-image-subtitle" style={ { color: subtitleColor } }>
+                                    {subtitle}
+                                </p>
+                            ) }
+                        </div>
+                    );
+                }
+            },
             {
                 attributes: blockAttrs,
                 save: ( { attributes } ) => {
@@ -408,7 +523,7 @@
                     return (
                         <div className={ blockClassName }
                              style={ {
-                                 backgroundImage: `url( ${imageUrl})`,
+                                 backgroundImage: `url(${imageUrl})`,
                                  height: height,
                                  width: width,
                                  justifyContent: vAlign,
@@ -422,12 +537,16 @@
                                rel="noopener noreferrer"
                                href={ linkURL }
                             />
-                            <h4 className="advgb-image-title" style={ { color: titleColor } }>
-                                {title}
-                            </h4>
-                            <p className="advgb-image-subtitle" style={ { color: subtitleColor } }>
-                                {subtitle}
-                            </p>
+                            {title && (
+                                <h4 className="advgb-image-title" style={ { color: titleColor } }>
+                                    {title}
+                                </h4>
+                            ) }
+                            {subtitle && (
+                                <p className="advgb-image-subtitle" style={ { color: subtitleColor } }>
+                                    {subtitle}
+                                </p>
+                            ) }
                         </div>
                     );
                 },

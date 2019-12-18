@@ -36,6 +36,7 @@
 					<div>
 						<h2 class="title"><?php _e( 'No results found', 'hamilton' ); ?></h2>
 						<p><?php global $found_posts; printf( __( 'We could not find any results for the search query "%s".', 'hamilton' ), get_search_query() ); ?></p>
+						<?php get_search_form(); ?>
 					</div>
 				</header>
 

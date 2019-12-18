@@ -74,6 +74,16 @@ class OpenLab_License_Widget extends WP_Widget {
 				esc_html( $license_data['label'] ),
 				esc_attr( $license_data['url'] )
 			);
+		} elseif ( ! empty( $instance['author_name'] ) && empty( $instance['author_url'] ) ) {
+			printf(
+				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site by %s has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',
+				esc_attr( $license_data['url'] ),
+				esc_attr( content_url( 'plugins/wds-citytech/assets/img/cc/' . $license_slug . '.png' ) ),
+				esc_attr( $license_data['label'] ),
+				esc_html( $instance['author_name'] ),
+				esc_html( $license_data['label'] ),
+				esc_attr( $license_data['url'] )
+			);
 		} else {
 			printf(
 				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /></a><p class="cc-widget-text">Unless otherwise noted, this site has a Creative Commons <strong>%s</strong> license. <a href="%s">Learn more.</a></p>',

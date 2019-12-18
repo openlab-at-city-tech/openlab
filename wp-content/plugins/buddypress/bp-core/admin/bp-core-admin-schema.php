@@ -382,6 +382,11 @@ function bp_core_install_extended_profiles() {
 
 	if ( ! $wpdb->get_var( "SELECT id FROM {$bp_prefix}bp_xprofile_fields WHERE id = 1" ) ) {
 		$insert_sql[] = "INSERT INTO {$bp_prefix}bp_xprofile_fields ( group_id, parent_id, type, name, description, is_required, can_delete ) VALUES ( 1, 0, 'textbox', " . $wpdb->prepare( '%s', stripslashes( bp_get_option( 'bp-xprofile-fullname-field-name' ) ) ) . ", '', 1, 0 );";
+
+		// Make sure the custom visibility is disabled for the default field.
+		if ( ! $wpdb->get_var( "SELECT id FROM {$bp_prefix}bp_xprofile_meta WHERE id = 1" ) ) {
+			$insert_sql[] = "INSERT INTO {$bp_prefix}bp_xprofile_meta ( object_id, object_type, meta_key, meta_value ) VALUES ( 1, 'field', 'allow_custom_visibility', 'disabled' );";
+		}
 	}
 
 	dbDelta( $insert_sql );
@@ -534,4 +539,50 @@ function bp_core_install_emails() {
 	 * @since 2.5.0
 	 */
 	do_action( 'bp_core_install_emails' );
+}
+
+/**
+ * Install database tables for the Invitations API
+ *
+ * @since 5.0.0
+ *
+ * @uses bp_core_set_charset()
+ * @uses bp_core_get_table_prefix()
+ * @uses dbDelta()
+ */
+function bp_core_install_invitations() {
+	$sql             = array();
+	$charset_collate = $GLOBALS['wpdb']->get_charset_collate();
+	$bp_prefix       = bp_core_get_table_prefix();
+	$sql[] = "CREATE TABLE {$bp_prefix}bp_invitations (
+		id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		user_id bigint(20) NOT NULL,
+		inviter_id bigint(20) NOT NULL,
+		invitee_email varchar(100) DEFAULT NULL,
+		class varchar(120) NOT NULL,
+		item_id bigint(20) NOT NULL,
+		secondary_item_id bigint(20) DEFAULT NULL,
+		type varchar(12) NOT NULL DEFAULT 'invite',
+		content longtext DEFAULT '',
+		date_modified datetime NOT NULL,
+		invite_sent tinyint(1) NOT NULL DEFAULT '0',
+		accepted tinyint(1) NOT NULL DEFAULT '0',
+		KEY user_id (user_id),
+		KEY inviter_id (inviter_id),
+		KEY invitee_email (invitee_email),
+		KEY class (class),
+		KEY item_id (item_id),
+		KEY secondary_item_id (secondary_item_id),
+		KEY type (type),
+		KEY invite_sent (invite_sent),
+		KEY accepted (accepted)
+		) {$charset_collate};";
+	dbDelta( $sql );
+
+	/**
+	 * Fires after BuddyPress adds the invitations table.
+	 *
+	 * @since 5.0.0
+	 */
+	do_action( 'bp_core_install_invitations' );
 }

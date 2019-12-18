@@ -32,6 +32,36 @@ class H5PEditorWordPressStorage implements H5peditorStorage {
   }
 
   /**
+   * Load a list of available language codes from the database.
+   *
+   * @param string $machineName The machine readable name of the library(content type)
+   * @param int $majorVersion Major part of version number
+   * @param int $minorVersion Minor part of version number
+   * @return array List of possible language codes
+   */
+  public function getAvailableLanguages($machineName, $majorVersion, $minorVersion) {
+    global $wpdb;
+
+    $results = $wpdb->get_results($wpdb->prepare(
+      "SELECT hll.language_code
+         FROM {$wpdb->prefix}h5p_libraries_languages hll
+         JOIN {$wpdb->prefix}h5p_libraries hl
+           ON hll.library_id = hl.id
+        WHERE hl.name = %s
+          AND hl.major_version = %d
+          AND hl.minor_version = %d",
+      $machineName, $majorVersion, $minorVersion
+    ));
+
+    $codes = array('en'); // Semantics is 'en' by default.
+    foreach ($results as $result) {
+      $codes[] = $result->language_code;
+    }
+
+    return $codes;
+  }
+
+  /**
    * "Callback" for mark the given file as a permanent file.
    * Used when saving content that has new uploaded files.
    *
@@ -66,7 +96,7 @@ class H5PEditorWordPressStorage implements H5peditorStorage {
       foreach ($libraries as $library) {
         // Look for library
         $details = $wpdb->get_row($wpdb->prepare(
-            "SELECT title, runnable, restricted, tutorial_url
+            "SELECT title, runnable, restricted, tutorial_url, metadata_settings
               FROM {$wpdb->prefix}h5p_libraries
               WHERE name = %s
               AND major_version = %d
@@ -80,6 +110,7 @@ class H5PEditorWordPressStorage implements H5peditorStorage {
           $library->title = $details->title;
           $library->runnable = $details->runnable;
           $library->restricted = $super_user ? FALSE : ($details->restricted === '1' ? TRUE : FALSE);
+          $library->metadataSettings = json_decode($details->metadata_settings);
           $librariesWithDetails[] = $library;
         }
       }
@@ -96,7 +127,8 @@ class H5PEditorWordPressStorage implements H5peditorStorage {
                 major_version AS majorVersion,
                 minor_version AS minorVersion,
                 tutorial_url AS tutorialUrl,
-                restricted
+                restricted,
+                metadata_settings AS metadataSettings
           FROM {$wpdb->prefix}h5p_libraries
           WHERE runnable = 1
           AND semantics IS NOT NULL
@@ -120,6 +152,9 @@ class H5PEditorWordPressStorage implements H5peditorStorage {
           }
         }
       }
+
+      // Convert from string to object
+      $library->metadataSettings = json_decode($library->metadataSettings);
 
       // Check to see if content type should be restricted
       $library->restricted = $super_user ? FALSE : ($library->restricted === '1' ? TRUE : FALSE);

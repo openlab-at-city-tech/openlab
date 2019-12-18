@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, organize, pages folders, media library, posts folders, media folders, subfolders, file manager, directories
 Requires at least: 3.0.0
-Tested up to: 5.2
-Stable tag: 2.1.9
+Tested up to: 5.3
+Stable tag: 2.3.3
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly organize and manage all of your Pages, Posts and Media library files in folders.
@@ -28,6 +28,9 @@ There are several ways professionals are using the Folders file manager plugin t
 
 = Live Demo =
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
+
+= Join the Premio community =
+Have any questions or feature suggestions? We'd love to hear from you. <strong><a href="https://www.facebook.com/groups/premioplugins/" target="_blank" title="Premio Facebook group">Join our Facebook group</a></strong> to share ideas and get updates about new features.
 
 = So How Does it Work? =
 
@@ -54,13 +57,18 @@ Digital Agencies: You're creating all sorts of content for your clients daily - 
 * Create new folders
 * Create and organize subfolders
 * Drag and drop pages, posts, and media library
-* Select specific folders when you add media to your pages, posts or any other post type.
+* Select specific folders when you add media to your pages, posts or any other post type
 * Drag and drop folders, change order, and hierarchy
+* Upload directly to a media library folder - you can easily upload images or any other kind of files to a specific folder
+* Select a default folder for your media library, posts, pages, and custom posts - you can select the folder that will load by default when you open your media library, pages, posts, and custom posts. For example, you can show all the unassigned files whenever you open the media library.
 * Bulk select images and media files and drag them to any folder. No worries, you can also drag and drop media library files one-by-one if you want :)
+* Bulk select and delete folders. You can select one folder or more and delete it in the click of a button.
+* While adding images or any kind of file from your media library to your pages and posts, use Folders to view all your media library files based on the folder the files are assigned to. You can also upload new files directly to a folder from that section
 * Rename folders
 * Monitor all the unassigned media library files, posts, pages, and custom posts so you can organize them easily to your folders
 * Sticky toolbar for the media library so you can navigate and organize your folders with ease
 * Add stars to important directories
+* New! Customize the look and feel of your folders. Change the colors, font, and size of your media folder, pages, posts, and custom posts folders
 * Simultaneously assign and organize media, pages, posts, templates and custom posts while adding them to directories
 * Place content in multiple folders at once
 * Easily see subfolders within each file
@@ -103,6 +111,9 @@ Step 3: Add new folders for your post type.
 = Is there a time limit for the free plan? =
 No. you can use the free plan as long as you want.
 
+= Does Folders change the URL of my images/posts/pages? =
+No. adding a page/post/image into a folder will not change its URL
+
 = Do I need any coding skills to use Folders plugin? =
 No! just activate the plugin and you're good to go.
 
@@ -126,6 +137,48 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.3.3 =
+You can bulk delete folders now. You can also create a new folder from the upload screen in the media library. We've also fixed some bugs like Polylang compatibility bug, folders order bug, default folder bug, and other minor bugs.
+
+= 2.3.2 =
+You can customize the folders look and feel now: change colors, font, and size of folders. We've also added some features to improve the easy-of-use like Enter key to create a new folder and more.
+
+= 2.3.1 =
+We've added an indication for succesful actions (like moving elements into a folder, changing folders names etc)
+
+= 2.3 =
+Select a default folder for your media library, pages, posts, and custom posts. We've also added a knowledge base with all FAQs.
+
+= 2.2.9 =
+Better media library to folders bulk drag and drop in list mode
+
+= 2.2.8 =
+Folder organization dropdown bug
+
+= 2.2.7 =
+Better folder drag and drop
+
+= 2.2.6 =
+Bug fixes
+
+= 2.2.5 =
+Folders is much faster and smoother now. We've also fixed a media library resolution bug for Mac+Safari
+
+= 2.2.4 =
+Class variable folder fixes
+
+= 2.2.3 =
+Javascript functionality conflict
+
+= 2.2.2 =
+* Replaced sweetalert to avoid conflicts with other plugins
+
+= 2.2.1 =
+* Folders settings type bug fixed
+
+= 2.2 =
+* Fixed collapsed menu state bug
 
 = 2.1.9 =
 * Screen resolution bug fixed

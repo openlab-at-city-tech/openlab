@@ -1,4 +1,7 @@
 <?php
+
+use Automattic\Jetpack\Status;
+
 /**
  * This is the base class for every Core API endpoint Jetpack uses.
  *
@@ -196,7 +199,7 @@ class Jetpack_Core_API_Module_List_Endpoint {
 			if (
 				isset( $modules[ $slug ]['requires_connection'] )
 				&& $modules[ $slug ]['requires_connection']
-				&& Jetpack::is_development_mode()
+				&& ( new Status() )->is_development_mode()
 			) {
 				$modules[ $slug ]['activated'] = false;
 			}
@@ -363,7 +366,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 			if (
 				isset( $module['requires_connection'] )
 				&& $module['requires_connection']
-				&& Jetpack::is_development_mode()
+				&& ( new Status() )->is_development_mode()
 			) {
 				$module['activated'] = false;
 			}
@@ -420,19 +423,16 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 		foreach ( $settings as $setting => $properties ) {
 			switch ( $setting ) {
 				case 'lang_id':
-					if ( defined( 'WPLANG' ) ) {
-						// We can't affect this setting, so warn the client
-						$response[ $setting ] = 'error_const';
-						break;
-					}
-
 					if ( ! current_user_can( 'install_languages' ) ) {
 						// The user doesn't have caps to install language packs, so warn the client
 						$response[ $setting ] = 'error_cap';
 						break;
 					}
 
-					$value = get_option( 'WPLANG' );
+					$value = get_option( 'WPLANG', '' );
+					if ( empty( $value ) && defined( 'WPLANG' ) ) {
+						$value = WPLANG;
+					}
 					$response[ $setting ] = empty( $value ) ? 'en_US' : $value;
 					break;
 
@@ -645,7 +645,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 
 			switch ( $option ) {
 				case 'lang_id':
-					if ( defined( 'WPLANG' ) || ! current_user_can( 'install_languages' ) ) {
+					if ( ! current_user_can( 'install_languages' ) ) {
 						// We can't affect this setting
 						$updated = false;
 						break;
@@ -1646,7 +1646,8 @@ class Jetpack_Core_API_Module_Data_Endpoint {
 				'code'    => 'success',
 				'message' => esc_html(
 					sprintf(
-						__( 'Your site was successfully backed-up %s ago.', 'jetpack' ),
+						/* translators: placeholder is a unit of time (1 hour, 5 days, ...) */
+						esc_html__( 'Your site was successfully backed up %s ago.', 'jetpack' ),
 						human_time_diff(
 							$data->backups->last_backup,
 							current_time( 'timestamp' )

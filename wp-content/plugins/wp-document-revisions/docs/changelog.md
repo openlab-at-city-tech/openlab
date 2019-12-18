@@ -1,5 +1,30 @@
 ## Changelog
 
+### 3.2.4
+
+* Address technical debt for WP Document Standards  (#192) @NeilWJames
+* On plugin activation, check that the user has edit_documents capability. If not, a warning message will be output that the menu may be incorrect. (#180) @NeilWJames
+* PHPCS review (#179) @NeilWJames
+* Bump phpunit/phpunit from 8.2.5 to 8.3.4 (#177) @dependabot-preview
+* Addresses phpunit and toolset versions and prepare for future release (#174) @NeilWJames
+* Version 3.2.2 gives an "property of non-object" at line 1403 on load (#161) @NeilWJames
+
+### 3.2.3
+
+* On plugin activation, admin warning if user doesn't have edit_documents capability (#180) @NeilWJames
+* PHPCS Review (no functional changes) (#179) @NeilWJames
+* Review for WP Coding standard 2.1.1 and newer phpunit (#174) @NeilWJames
+* Bump version to V3.2.3 and Tested WP 5.2.2 (#174) @NeilWJames
+
+### 3.2.2
+
+* Version 3.2.2 gives an "property of non-object" at line 1403 on load (#161) @NeilWJames
+* Add default capabilities only when they are absent. (#146) @NeilWJames
+* Fix multi-network (needs WP 4.6) (#143) @geminorum 
+* Allow Sites to use WP_POST_REVISIONS for other post types (#140)
+* Media Library URL’s change after plugin update (#139) @NeilWJames
+* New crowdin translations (#137/#138) @benbalter
+
 ### 3.2.1
 
 * Fix for $wp_query->query_vars being null (#136) @benbalter

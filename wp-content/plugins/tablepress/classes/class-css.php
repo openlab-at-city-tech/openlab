@@ -60,7 +60,7 @@ class TablePress_CSS {
 		$csstidy->set_cfg( 'css_level', 'CSS3.0' );
 		$csstidy->set_cfg( 'preserve_css', true );
 		$csstidy->set_cfg( 'timestamp', false );
-		$csstidy->set_cfg( 'template', dirname( TABLEPRESS__FILE__ ) . '/libraries/csstidy/tablepress-standard.tpl' );
+		$csstidy->set_cfg( 'template', TABLEPRESS__DIR__ . '/libraries/csstidy/tablepress-standard.tpl' );
 
 		$csstidy->parse( $css );
 		return $csstidy->print->plain();
@@ -249,7 +249,7 @@ class TablePress_CSS {
 	/**
 	 * Save "Custom CSS" to files, delete "Custom CSS" files, or return HTML for the credentials form.
 	 *
-	 * Only used from "Plugin Options" screen, save_custom_css_to_file() is used in cases where no form output/redirection is possible (plugin updates, WP-Table Reloaded Import).
+	 * Only used from "Plugin Options" screen, save_custom_css_to_file() is used in cases where no form output/redirection is possible (e.g. during plugin updates).
 	 *
 	 * @since 1.0.0
 	 *
@@ -436,6 +436,10 @@ class TablePress_CSS {
 		// W3 Total Cache
 		if ( function_exists( 'w3tc_minify_flush' ) ) {
 			w3tc_minify_flush();
+		}
+		// WP Fastest Cache
+		if ( isset( $GLOBALS['wp_fastest_cache'] ) && method_exists( $GLOBALS['wp_fastest_cache'], 'deleteCache' ) ) {
+			$GLOBALS['wp_fastest_cache']->deleteCache( true );
 		}
 	}
 

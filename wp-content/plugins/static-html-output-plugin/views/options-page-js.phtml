@@ -1,0 +1,1256 @@
+<script>
+//TODO: in help screen and error dialog, give button to display all client settings (excluding pwds) for easier troubleshooting
+
+
+var wp_site = <?php echo json_encode($this->wp_site, JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES); ?>
+
+// TODO: update this from prapre_for_export() response;
+var current_archive = {}; 
+
+var current_deployment_method = '<?php echo $this->options->selected_deployment_option ? $this->options->selected_deployment_option : 'folder'; ?>';
+
+// TODO: get the log out of the archive, along with it's meta infos
+var log_file_url = wp_site.uploads_url + '/WP-STATIC-EXPORT-LOG.txt';
+var discovered_urls_file_url = wp_site.uploads_url + '/WP-STATIC-DISCOVERED-URLS-LOG.txt';
+var modified_crawl_list_file_url = wp_site.uploads_url + '/WP-STATIC-MODIFIED-CRAWL-LIST.txt';
+var detected_wordpress_urls_file_url = wp_site.uploads_url + '/WP-STATIC-INITIAL-CRAWL-LIST.txt';
+var encountered_404s_list_file_url = wp_site.uploads_url + '/WP-STATIC-404-LOG.txt';
+var crawled_links_list_file_url = wp_site.uploads_url + '/WP-STATIC-CRAWLED-LINKS.txt';
+var progress_file = wp_site.uploads_url + '/WP-STATIC-PROGRESS.txt';
+
+var export_action = '';
+var export_targets = [];
+var export_commence_time = '';
+var export_duration = '';
+var batch_increment = 0;
+var status_text = '';
+var protocolAndDomainRE = /^(?:\w+:)?\/\/(\S+)$/;
+var localhostDomainRE = /^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/
+var nonLocalhostDomainRE = /^[^\s\.]+\.\S{2,}$/;
+var pollingIntervalID = '';
+var status_descriptions = {
+    'crawl_site' : 'Crawling initial file list',
+    'crawl_again' : 'Crawling discovered URLs',
+    'post_process_archive_dir' : 'Processing the crawled files',
+    'post_export_teardown' : 'Cleaning up after processing',
+    'netlify_do_export' : 'Deploying to Netlify',
+    's3_prepare_export' : 'Preparing files for S3 deployment',
+    's3_transfer_files' : 'Deploying files to S3',
+    'cloudfront_invalidate_all_items' : 'Invalidating CloudFront cache',
+    'bunnycdn_prepare_export' : 'Preparing files for BunnyCDN deployment',
+    'bunnycdn_transfer_files' : 'Deploying files to BunnyCDN',
+    'bunnycdn_purge_cache' : 'Purging BunnyCDN cache',
+    'ftp_prepare_export' : 'Preparing files for FTP deployment',
+    'ftp_transfer_files' : 'Deploying files via FTP',
+    'github_prepare_export' : 'Preparing files for GitHub deployment',
+    'github_upload_files' : 'Deploying files via GitHub',
+    'bitbucket_prepare_export' : 'Preparing files for Bitbucket deployment',
+    'bitbucket_upload_files' : 'Deploying files to Bitbucket (progress will look slow at end if using large batch sizes)',
+    'gitlab_prepare_export' : 'Preparing files for GitLab deployment',
+    'gitlab_upload_files' : 'Deploying files to GitLab',
+    'finalize_deployment' : 'Performing post-deployment actions'
+};
+
+
+jQuery(document).ready(function($){
+  function prepareInitialFileList() {
+    $('.hiddenActionField').val('wp_static_html_output_ajax');
+    $('#hiddenAJAXAction').val('generate_filelist_preview');
+
+    status_text = 'Analyzing site... this may take a few minutes (but it\'s worth it!)';
+    $('#current_action').html( status_text );    
+    $('#progress').show();    
+
+    data = $(".options-form :input")
+        .filter(function(index, element) {
+            return $(element).val() != '';
+        })
+        .serialize();
+
+    $.ajax({
+        url: ajaxurl,
+        data: data,
+        dataType: 'html',
+        method: 'POST',
+        success: function(serverResponse) {
+            $('#initial_crawl_list_loader').hide();
+            $('#initial_crawl_list_count').text(serverResponse + ' URLs were detected on your site that will be used to initiate the crawl. Other URLs will be discovered while crawling.');
+            $('#preview_initial_crawl_list_button').show();
+
+            $('#startExportButton').prop('disabled', false);
+            $('.saveSettingsButton').prop('disabled', false);
+            $('.resetDefaultSettingsButton').prop('disabled', false);
+            $('#progress').hide();    
+        },
+        error: function(serverResponse) {
+          $('#initial_crawl_list_loader').hide();
+          // TODO: surface via ajaxerrorhandler
+          console.log('error in generating the initial crawl list');
+        }
+    });
+
+    // on result, hide progress and show error or update with number of files found
+    
+  }
+
+  function saveOptions( reload ) {
+    $('.hiddenActionField').val('wp_static_html_output_ajax');
+    $('#hiddenAJAXAction').val('save_options');
+
+    $('#current_action').html('Saving options');
+    $('#progress').show();
+
+    data = $(".options-form :input")
+        .filter(function(index, element) {
+            return $(element).val() != '';
+        })
+        .serialize();
+
+    $.ajax({
+        url: ajaxurl,
+        data: data,
+        dataType: 'html',
+        method: 'POST',
+        success: function(serverResponse) {
+            $('#progress').hide();
+            if ( reload ) {
+                location.reload();
+            } else {
+                alert('Options have been saved');
+            }
+        },
+        error: function(serverResponse) {
+            $('#progress').hide();
+        }
+    });
+  }
+
+  function millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+  }
+
+  function processExportTargets () {
+  // TODO: optimisation: just call doAJAXExport with shifted arr element (req's consistent naming of exports)
+
+    if( export_targets.length > 0) {
+      switch(target = export_targets.shift()) {
+        case 'GITLAB':
+          doAJAXExport(
+            'gitlab_prepare_export',
+            'gitlab_upload_files',
+            'finalize_deployment'
+            );
+          break;
+        case 'BITBUCKET':
+          doAJAXExport(
+            'bitbucket_prepare_export',
+            'bitbucket_upload_files',
+            'finalize_deployment'
+          );
+          break;
+        case 'GITHUB':
+          doAJAXExport(
+            'github_prepare_export',
+            'github_upload_files',
+            'finalize_deployment'
+          );
+          break;
+        case 'ZIP':
+          doAJAXExport(
+            'finalize_deployment'
+          );
+          break;
+        case 'FOLDER':
+          doAJAXExport(
+            'finalize_deployment'
+          );
+          break;
+        case 'FTP':
+          doAJAXExport(
+            'ftp_prepare_export',
+            'ftp_transfer_files',
+            'finalize_deployment'
+          );
+          break;
+
+        case 'BUNNYCDN':
+          doAJAXExport(
+            'bunnycdn_prepare_export',
+            'bunnycdn_transfer_files',
+            'bunnycdn_purge_cache',
+            'finalize_deployment'
+          );
+          break;
+
+        case 'S3':
+          doAJAXExport(
+            's3_prepare_export',
+            's3_transfer_files',
+            'cloudfront_invalidate_all_items',
+            'finalize_deployment'
+          );
+          break;
+
+        case 'NETLIFY':
+          doAJAXExport(
+            'netlify_do_export',
+            'finalize_deployment'
+          );
+          break;
+
+        default:
+          console.log('unexpected return value from export target processing');
+          break; 
+      }
+    } else {
+      // if zip was selected, call to get zip name and enable the button with the link to download
+      if (current_deployment_method === 'zip') {
+        $('#downloadZIP').show();
+
+        $.get( wp_site.uploads_url + '/WP2STATIC-CURRENT-ARCHIVE.txt?cacheBuster=' + Date.now(),
+            function( archive_path ) {
+                path_segments = archive_path.split('/');
+                current_archive.name = path_segments[path_segments.length - 2];
+                zipURL = wp_site.uploads_url + '/' + current_archive.name + '.zip';
+                $('#downloadZIP').attr('href', zipURL);
+            },
+            'text'
+        );
+      } else {
+        // for other methods, show the Go to my static site link
+        $('#goToMyStaticSite').attr('href', $('#baseUrl').val());
+        $('#goToMyStaticSite').show();
+      }
+
+      // all complete
+      exportCompleteTime = + new Date();
+      export_duration = exportCompleteTime - export_commence_time;
+
+      stopPolling();
+      setProgressBarPercent( 0 );
+      $('#current_action').text('Process completed in ' +  millisToMinutesAndSeconds(export_duration) + ' (mins:ss)');
+      $("#goToMyStaticSite").focus();
+      $(".pulsate-css").hide();
+      $('#startExportButton').prop('disabled', false);
+      $('.saveSettingsButton').prop('disabled', false);
+      $('.resetDefaultSettingsButton').prop('disabled', false);
+      $('.cancelExportButton').hide();
+      notifyMe();
+    }
+  }
+
+  function ajaxErrorHandler () {
+      stopPolling();
+      $('#current_action').html(
+        // if not debug mode
+        'Failed during "' + status_text  + '", please consult the Help tab for where to get assistance.')
+        // if debug mode 
+      $(".pulsate-css").hide();
+      $('#startExportButton').prop('disabled', false);
+      $('.saveSettingsButton').prop('disabled', false);
+      $('.resetDefaultSettingsButton').prop('disabled', false);
+      $('.cancelExportButton').hide();
+  }
+
+  function startExport() {
+    // start timer
+    export_commence_time = + new Date();
+
+    startPolling();
+
+    validation_errors = getValidationErrors();
+
+    if (validation_errors !== '') {
+      alert(validation_errors);
+
+      // TODO: place in function that resets any in progress counters, etc
+      $('#progress').hide();
+      $('#startExportButton').prop('disabled', false);
+      $('.saveSettingsButton').prop('disabled', false);
+      $('.resetDefaultSettingsButton').prop('disabled', false);
+      $('.cancelExportButton').hide();
+
+      return false;
+    }
+
+    $('#current_action').html('Starting export...');
+
+    showProgress();
+
+    // reset export targets to avoid having left-overs from a failed run
+    export_targets = [];
+
+    $('.hiddenActionField').val('wp_static_html_output_ajax');
+    $('#hiddenAJAXAction').val('prepare_for_export');
+
+    // set the correct one
+    switch (current_deployment_method) {
+      case 'zip':
+        $('#createZip').attr('checked', 'checked');
+        export_targets.push('ZIP');
+      break;	
+      case 'folder':
+        export_targets.push('FOLDER');
+      break;	
+
+      case 'github':
+        export_targets.push('GITHUB');
+      break;	
+
+      case 'bitbucket':
+        export_targets.push('BITBUCKET');
+      break;	
+
+      case 'gitlab':
+        export_targets.push('GITLAB');
+      break;	
+
+      case 'bunnycdn':
+        export_targets.push('BUNNYCDN');
+      break;	
+
+      case 's3':
+        export_targets.push('S3');
+      break;	
+
+      case 'netlify':
+        export_targets.push('NETLIFY');
+      break;	
+
+      case 'ftp':
+        export_targets.push('FTP');
+      break;	
+
+      default:
+
+      break;
+    }
+
+    data = $(".options-form :input")
+        .filter(function(index, element) {
+            return $(element).val() != '';
+        })
+        .serialize();
+
+    $.ajax({
+        url: ajaxurl,
+        data: data,
+        dataType: 'html',
+        method: 'POST',
+        success: function(serverResponse) {
+          doAJAXExport('crawl_site', 'crawl_again', 'post_process_archive_dir');
+        },
+        error: ajaxErrorHandler
+    });
+  }
+
+  function clearProgressAndResults() {
+    $('#downloadZIP').hide();
+    $('#goToMyStaticSite').hide();
+    $('#exportDuration').hide();
+  }
+
+  function showProgress() {
+    clearProgressAndResults();
+    $('#progress').show();
+    $(".pulsate-css").show();
+  }
+
+  function getValidationErrors() {
+    validation_errors = '';
+    // check for when targetFolder is showing (plugin reset state)
+    if ($('#targetFolder').is(':visible') &&
+      ( $('#targetFolder').val() == '' ) ) {
+      validation_errors += 'Target folder may not be empty. Please adjust your settings.';
+    }
+
+    if (( $('#baseUrl').val() === undefined ||
+        $('#baseUrl').val() == '' ) &&
+        !$('#allowOfflineUsage').is(":checked")) {
+      validation_errors += "Please set the Base URL field to the address you will host your static site.\n";
+    }
+
+    // TODO: on new Debian package-managed environment, this was falsely erroring
+    if (!isUrl($('#baseUrl').val()) && !$('#allowOfflineUsage').is(":checked")) {
+        // TODO: testing / URL as base
+        if ($('#baseUrl').val() !== '/') {
+          validation_errors += "Please set the Base URL field to a valid URL, ie http://mystaticsite.com.\n";
+        }
+    }
+
+    switch(current_deployment_method) {
+      case 'zip':
+      break;
+
+      case 'ftp':
+        required_fields = {
+          ftpServer: 'Please specify the FTP server address needed to transfer your files via FTP',
+          ftpUsername: 'Please input an FTP username in order to authenticate when using the FTP deployment method.',
+          ftpPassword: 'Please input an FTP password in order to authenticate when using the FTP deployment method.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+      break; 
+
+      case 'folder':
+      break;
+
+      case 's3':
+        required_fields = {
+          s3Key: 'Please input an S3 Key in order to authenticate when using the S3 deployment method.',
+          s3Secret: 'Please input an S3 Secret in order to authenticate when using the S3 deployment method.',
+          s3Bucket: 'Please input the name of the S3 bucket you are trying to deploy to.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+      break;
+
+      case 'bunnycdn':
+        required_fields = {
+          bunnycdnPullZoneName: 'Please specify your BunnyCDN pull zone name in order to deploy to BunnyCDN.',
+          bunnycdnAPIKey: 'Please specify your BunnyCDN API/FTP password in order to deploy to BunnyCDN.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+      break; 
+
+      case 'netlify':
+        required_fields = {
+          netlifyPersonalAccessToken: 'Please specify your Netlify personal access token in order to deploy to Netlify.',
+          netlifySiteID: 'Please specify the id of your Netlify site you want to deploy to.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+      break; 
+
+      case 'github':
+        required_fields = {
+          ghToken: 'Please specify your GitHub personal access token in order to deploy to GitHub.',
+          ghRepo: 'Please specify your GitHub repository name in order to deploy to GitHub.',
+          ghBranch: 'Please specify which branch in your GitHub repository you want to deploy to.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+
+        repo = $('#ghRepo').val();
+
+        if (repo != '') {
+          if (repo.split('/').length !== 2) {
+            validation_errors += "Please ensure your GitHub repo is specified as USER_OR_ORG_NAME/REPO_NAME\n";
+          }
+        }
+      break; 
+
+      case 'bitbucket':
+        required_fields = {
+          bbToken: 'Please specify your Bitbucket personal access token in order to deploy to Bitbucket.',
+          bbRepo: 'Please specify your Bitbucket repository name in order to deploy to Bitbucket.',
+          bbBranch: 'Please specify which branch in your Bitbucket repository you want to deploy to.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+
+        repo = $('#bbRepo').val();
+
+        if (repo != '') {
+          if (repo.split('/').length !== 2) {
+            validation_errors += "Please ensure your Bitbucket repo is specified as USER_OR_ORG_NAME/REPO_NAME\n";
+          }
+        }
+      break; 
+
+      case 'gitlab':
+        required_fields = {
+          glToken: 'Please specify your GitLab personal access token in order to deploy to GitLab.',
+          glProject: 'Please specify your GitLab project ID in order to deploy to GitLab.',
+          glBranch: 'Please specify which branch in your GitLab repository you want to deploy to.',
+        };	
+
+        Object.keys(required_fields).forEach(function(key,index) {
+          if ($('#' + key).val() == '') {
+            validation_errors += required_fields[key] + "\n";
+          }
+        });
+      break; 
+    }
+
+    return validation_errors;
+  }
+
+  function isUrl(string) {
+    if (typeof string !== 'string') {
+      return false;
+    }
+
+    var match = string.match(protocolAndDomainRE);
+
+    if (!match) {
+      return false;
+    }
+
+    var everythingAfterProtocol = match[1];
+
+    if (!everythingAfterProtocol) {
+      return false;
+    }
+
+    if (localhostDomainRE.test(everythingAfterProtocol) ||
+      nonLocalhostDomainRE.test(everythingAfterProtocol)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /*
+    doAJAXExport() can handle from 1 to n actions
+    each action runs, with 3 possible results:
+      SUCCESS - action is complete
+      > 0 - action is in progress inremental task
+      ERROR
+        
+      if an action is successful, and there are other actions queued up,
+      it will call the function again with the remaining arguments/actions
+
+      if an action is succesful, and there are no other actions queued,
+      it will call processExportTargets() to continue any other exports
+
+      if an action is in progress incremental, it will call itself again,
+      with all the same arguments
+
+      if an action fails, ajaxErrorHandler() is called
+  */
+  function doAJAXExport() {
+    // arguments is not a real array, avoid nastiness by capturing as such
+    var args = [];
+    for (var i = 0; i < arguments.length; ++i) args[i] = arguments[i];
+
+    export_action = args[0];
+    status_text = export_action;
+
+    if ( status_descriptions[export_action] != undefined ) {
+        status_text = status_descriptions[export_action];
+    } else {
+        status_text = export_option;
+    }
+
+    $('#current_action').html(status_text);
+    $('.hiddenActionField').val('wp_static_html_output_ajax');
+    $('#hiddenAJAXAction').val(export_action);
+
+    data = $(".options-form :input")
+      .filter(function(index, element) {
+          return $(element).val() != '';
+      })
+      .serialize();
+
+    $.ajax({
+        url: ajaxurl,
+        data: data,
+        dataType: 'html',
+        method: 'POST',
+        success: function(serverResponse) {
+          // if an action is successful, and there are other actions queued up
+          if (serverResponse === 'SUCCESS' && args.length > 1) {
+            batch_increment = 0;
+            // rm first action now that it's succeeded
+            args.shift();
+            // call function with all other actions
+            doAJAXExport.apply(this, args);
+          // if an action is in progress incremental, it will call itself again
+          } else if (serverResponse > 0) {
+            doAJAXExport.apply(this, args);
+
+            batch_increment += 1;
+          } else if (serverResponse === 'SUCCESS') {
+            // not an incremental action, continue on with export targets
+            processExportTargets();
+            batch_increment = 0;
+          } else {
+            ajaxErrorHandler();
+          }
+        },
+        error: ajaxErrorHandler
+      });
+  }
+
+  function startPolling() {
+    pollingIntervalID = window.setInterval(checkProgress, 500);
+  }
+
+  function stopPolling() {
+    window.clearInterval( pollingIntervalID );
+
+    setProgressBarPercent( 0 );
+  }
+
+  function checkProgress() {
+    console.log('checking progress');
+
+    // get WP2STATIC-PROGRESS.txt
+    $.get( progress_file + '?cacheBuster=' + Date.now(), function( data ) {
+      progress_amount = parseInt( data );
+
+      setProgressBarPercent( progress_amount );
+    });
+
+    // TODO: append progress to current task if we're in certain task
+  }
+
+  function setProgressBarPercent( percent ) {
+    $('#pbar-fill').css('width', percent.toString() + '%');
+  }
+
+  function updateBaseURLReferences() {
+    var base_url_previews = $('.base_url_preview' );
+
+    if ($('#baseUrl-' + current_deployment_method)) {
+      base_url = $('#baseUrl-' + current_deployment_method).val(); 
+
+      $('#baseUrl').val($('#baseUrl-' + current_deployment_method).val()); 
+
+      base_url_previews.text(base_url.replace(/\/$/, "") + '/');
+
+      // update the clickable preview url in folder options
+      $('#folderPreviewURL').text(wp_site.site_url + '/');
+      $('#folderPreviewURL').attr('href', (wp_site.site_url + '/'));
+    }
+  }
+
+  /* 
+    TODO: quick win to get the select menu options to behave like the sendViaFTP, etc checkboxes
+  */
+    // TODO: remove this completely?
+  function setDeploymentMethod(selected_deployment_method) {
+    // hide zip dl link for all
+    $('#downloadZIP').hide();
+    current_deployment_method = selected_deployment_method;
+
+    // set the selected option in case calling this from outside the event handler
+    $('.selected_deployment_method').val(selected_deployment_method);
+  }
+
+  function offlineUsageChangeHandler(checkbox) {
+    if ($(checkbox).is(':checked')) {
+        $('#baseUrl-zip').prop('disabled', true);
+    } else {
+        $('#baseUrl-zip').prop('disabled', false);
+    }
+  }
+
+  function setExportSettingDetailsVisibility(changed_checkbox) {
+    checkbox_name = $(changed_checkbox).attr('name');
+    export_option_name = checkbox_name.replace('sendVia', '').toLowerCase();
+
+    var export_option_elements = $('.' + export_option_name );
+
+    if($(changed_checkbox).is(":checked")) {
+      export_option_elements.show();
+      // unhide all the inputs, the following span and the following br
+      } else {
+      // hide all the inputs, the following span and the following br
+      export_option_elements.hide();
+      }
+  }
+
+  /* 
+    render the information and settings blocks based on the deployment method selected
+  */
+  function renderSettingsBlock(selected_deployment_method) {
+    deployment_options = [
+      'zip',
+      'ftp',
+      'folder',
+      's3',
+      'bunnycdn',
+      'netlify',
+      'github',
+      'gitlab',
+      'bitbucket'
+    ];
+
+    // hide those not selected
+    $.each(deployment_options, function(index, deployment_option) {
+      $('.' + deployment_option  + '_settings_block').hide();
+    });
+
+    $('.' + selected_deployment_method  + '_settings_block').show();
+  }
+
+  function notifyMe() {
+    if (!Notification) {
+      alert('All exports are complete!.'); 
+      return;
+    }
+
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    } else {
+      var notification = new Notification('WP Static HTML Export', {
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Wordpress_Shiny_Icon.svg/768px-Wordpress_Shiny_Icon.svg.png',
+        body: "Exports have finished!",
+      });
+
+      notification.onclick = function () {
+        parent.focus();
+        window.focus();
+        this.close();
+      };
+    }
+  }
+
+  function reloadLogFile() {
+    // get current log selection
+    current_log_target = $("#log_switcher").val();
+
+    // if not empty, call loadLogFile again
+    if ( current_log_target ) {
+        loadLogFile( current_log_target );
+    }
+  }
+
+
+  function loadLogFile( log_name ) {
+    // display loading icon
+    $('#log_load_progress').show();
+        
+    // set textarea to disabled
+    $("#export_log_textarea" ).attr('disabled', true);
+
+    // set textarea content to 'Loading log file...'
+    $("#export_log_textarea" ).html('Loading log file...');
+
+    var log_url = '';
+
+    switch ( log_name ) {
+        case 'export_log':
+            // TODO: rename ambiguous export log name
+            log_url = log_file_url;
+        break;
+
+        case 'discovered_urls':
+            log_url = discovered_urls_file_url;
+        break;
+
+        case 'detected_wordpress_urls':
+            log_url = detected_wordpress_urls_file_url;
+        break;
+
+        case 'modified_crawl_list':
+            log_url = modified_crawl_list_file_url;
+        break;
+
+        case 'crawled_links':
+            log_url = crawled_links_list_file_url;
+        break;
+
+        case 'encountered_404s':
+            log_url = encountered_404s_list_file_url;
+        break;
+    }
+
+    // load the log file
+    $.get( log_url, function( data ) {
+      // hide loading icon
+      $('#log_load_progress').hide();
+
+      // set textarea to enabled
+      $("#export_log_textarea" ).attr('disabled', false);
+
+      // set textarea content
+      $("#export_log_textarea" ).html( data );
+    }).fail(function() {
+      $('#log_load_progress').hide();
+
+      // set textarea to enabled
+      $("#export_log_textarea" ).attr('disabled', false);
+
+      // set textarea content
+      $("#export_log_textarea" ).html( 'Requested log file not found' );
+    });
+  }
+
+  /*****************************/
+  /* END FUNCTION DECLARATIONS */
+  /*****************************/
+
+
+  if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+  }
+
+	$('input[type="checkbox"]').change(function() {
+		setExportSettingDetailsVisibility(this);
+    });
+
+	// disable zip base url field when offline usage is checked
+	$('#allowOfflineUsage').change(function() {
+    offlineUsageChangeHandler($(this));
+  });
+
+	// handler when deployment method is changed
+	$('.selected_deployment_method').change(function() {
+		renderSettingsBlock(this.value);
+		setDeploymentMethod(this.value);
+		updateBaseURLReferences();
+    clearProgressAndResults();
+    });
+
+	// handler when log selector is changed
+	$('#reload_log_button').click(function() {
+        reloadLogFile();
+    });
+
+	// handler when log selector is changed
+	$('#log_switcher').change(function() {
+      target_log = this.value;
+
+      if (target_log) {
+        loadLogFile( target_log );
+      }
+    });
+
+	// update base url previews in realtime
+	$(document).on('input', 
+		'#baseUrl-s3, #baseUrl-ftp, #baseUrl-folder, #baseUrl-github, #baseUrl-bitbucket, #baseUrl-gitlab, #baseUrl-netlify, #baseUrl-bunnycdn, #baseUrl-zip', 
+		function() {
+			updateBaseURLReferences();
+		}
+	);
+
+  $(document).on('click', '.nav-tab' , function(evt) {
+    evt.preventDefault();
+    current_tab = $(this);
+    $('.nav-tab').removeClass('nav-tab-active');
+    current_tab.addClass('nav-tab-active');
+    current_tab_text = current_tab.text();
+
+    switch(current_tab_text) {
+      case 'Advanced options':
+		    $('.export_your_site').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.crawl_settings').hide();
+		    $('.processing_settings').hide();
+		    $('.advanced_settings').show();
+		    $('.export_logs').hide();
+		    $('.give_love').hide();
+      break;
+
+      case 'Deploy static website':
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.export_your_site').show();
+		    $('.processing_settings').hide();
+		    $('.crawl_settings').hide();
+		    $('.export_logs').hide();
+		    $('.give_love').hide();
+      break;
+
+      case 'Help':
+		    $('.export_your_site').hide();
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').show();
+		    $('.processing_settings').hide();
+		    $('.crawl_settings').hide();
+		    $('.export_logs').hide();
+		    $('.give_love').hide();
+      break;
+
+      case 'Logs':
+		    $('.export_your_site').hide();
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.export_logs').show();
+		    $('.processing_settings').hide();
+		    $('.crawl_settings').hide();
+		    $('.give_love').hide();
+      break;
+
+      case 'Crawling':
+		    $('.export_your_site').hide();
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.processing_settings').hide();
+		    $('.crawl_settings').show();
+		    $('.export_logs').hide();
+		    $('.give_love').hide();
+      break;
+
+      case 'Processing':
+		    $('.export_your_site').hide();
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.processing_settings').show();
+		    $('.crawl_settings').hide();
+		    $('.export_logs').hide();
+		    $('.give_love').hide();
+      break;
+
+      case '':
+		    $('.export_your_site').hide();
+		    $('.advanced_settings').hide();
+		    $('.help_troubleshooting').hide();
+		    $('.processing_settings').hide();
+		    $('.crawl_settings').hide();
+		    $('.export_logs').hide();
+		    $('.give_love').show();
+      break;
+    }
+
+    current_tab.blur();
+  });
+
+	$(document).on('submit', '#general-options' , function(evt) {
+    evt.preventDefault();
+	});
+
+  $('#startExportButton').click(function() {
+      $(this).prop('disabled', true);
+      $('.saveSettingsButton').prop('disabled', true);
+      $('.resetDefaultSettingsButton').prop('disabled', true);
+      $('.cancelExportButton').show();
+      startExport();
+  });
+
+  $('.cancelExportButton').click(function() {
+    var reallyCancel = confirm("Stop current export and reload page?");
+    if (reallyCancel) {
+      window.location = window.location.href;
+    }
+  });
+
+  $('#wp2static-footer').on('click', '.resetDefaultSettingsButton', function(event) {
+      event.preventDefault();
+
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('reset_default_settings');
+
+      data = $(".options-form :input")
+        .filter(function(index, element) {
+            return $(element).val() != '';
+        })
+        .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+      alert("Settings have been reset to default, the page will now be reloaded.");
+      window.location.reload(true); 
+          },
+          error: function(serverResponse) {
+      alert("Error encountered in trying to reset settings. Please try refreshing the page.");
+          }
+      });
+  });
+
+  $('#wp2static-footer').on('click', '.saveSettingsButton', function(event) {
+      event.preventDefault();
+      saveOptions();
+  });
+
+  $('.wrap').on('click', '#delete_deploy_cache_button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('delete_deploy_cache');
+
+      button = event.currentTarget;
+      spinner = $('button').siblings('div.spinner')
+      spinner.show();
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('Deploy cache cleared');
+            } else {
+                alert('FAIL: Unable to delete deploy cache');
+            }
+
+            spinner.hide();
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to delete deploy cache');
+
+            spinner.hide();
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#ftp-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_ftp');
+
+      button = event.currentTarget;
+      spinner = $('button').siblings('div.spinner')
+      spinner.show();
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('FTP Connection Test Successful');
+            } else {
+                alert('FAIL: Unable to login to FTP server');
+            }
+
+            spinner.hide();
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to login to FTP server');
+
+            spinner.hide();
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#bitbucket-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_bitbucket');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('Bitbucket Connection/Upload Test Successful');
+            } else {
+                alert('FAIL: Unable to complete test upload to Bitbucket');
+            }
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to Bitbucket');
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#netlify-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_netlify');
+      $('#netlify_test_results').html('');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            alert('Netlify Connection/Upload Test Successful');
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to Netlify');
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#s3-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_s3');
+      $('#s3_test_results').html('');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            alert('S3 Connection/Upload Test Successful');
+
+            $('#s3_test_results').html(serverResponse);
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to S3');
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#bunny-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_bunny');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('BunnyCDN Connection/Upload Test Successful');
+            } else {
+                alert('FAIL: Unable to complete test upload to BunnyCDN');
+            }
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to BunnyCDN');
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#gitlab-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_gitlab');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('GitLab Connection/Upload Test Successful');
+            } else {
+                alert('FAIL: Unable to complete test upload to GitLab');
+            }
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to GitLab');
+          }
+      });
+  });
+
+  $('.wrap').on('click', '#save-and-reload', function(event) {
+      event.preventDefault();
+      saveOptions( 'reload' );
+  });
+
+  $('.wrap').on('click', '#github-test-button', function(event) {
+      event.preventDefault();
+      $('.hiddenActionField').val('wp_static_html_output_ajax');
+      $('#hiddenAJAXAction').val('test_github');
+
+      data = $(".options-form :input")
+          .filter(function(index, element) {
+              return $(element).val() != '';
+          })
+          .serialize();
+
+      $.ajax({
+          url: ajaxurl,
+          data: data,
+          dataType: 'html',
+          method: 'POST',
+          success: function(serverResponse) {
+            if (serverResponse === 'SUCCESS') {
+                alert('GitHub Connection/Upload Test Successful');
+            } else {
+                alert('FAIL: Unable to complete test upload to GitHub');
+            }
+          },
+          error: function(serverResponse) {
+            alert('FAIL: Unable to complete test upload to GitHub');
+          }
+      });
+  });
+
+  // populate some hidden fields
+  $('#wp_site_url').val(wp_site.site_url);
+  $('#wp_uploads_path').val(wp_site.wp_uploads_path);
+  $('#wp_uploads_url').val(wp_site.uploads_url);
+  $('#wp_site_path').val(wp_site.site_path);
+  $('#wp_inc').val(wp_site.wp_inc);
+  $('#wp_active_theme').val(wp_site.wp_active_theme);
+  $('#wp_uploads').val(wp_site.wp_uploads);
+  $('.spinner').hide();
+
+  // call change handler on page load, to set correct state
+  offlineUsageChangeHandler($('#allowOfflineUsage'));
+
+  updateBaseURLReferences($('#baseUrl').val());
+
+// TODO: These may still be needed?
+
+//    set and show the previous selected deployment method
+  renderSettingsBlock(current_deployment_method);
+//
+//		// set the select to the current deployment type
+  setDeploymentMethod(current_deployment_method);
+
+  prepareInitialFileList();
+
+});
+</script>
+

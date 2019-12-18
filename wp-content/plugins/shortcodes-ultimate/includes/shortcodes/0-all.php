@@ -42,6 +42,7 @@ require_once $this->plugin_path . 'includes/shortcodes/subpages.php';
 require_once $this->plugin_path . 'includes/shortcodes/siblings.php';
 require_once $this->plugin_path . 'includes/shortcodes/document.php';
 require_once $this->plugin_path . 'includes/shortcodes/gmap.php';
+require_once $this->plugin_path . 'includes/shortcodes/image-carousel.php';
 require_once $this->plugin_path . 'includes/shortcodes/slider.php';
 require_once $this->plugin_path . 'includes/shortcodes/carousel.php';
 require_once $this->plugin_path . 'includes/shortcodes/custom-gallery.php';

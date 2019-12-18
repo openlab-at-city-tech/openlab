@@ -15,6 +15,13 @@
     color: #000000;
 }
 #media-attachment-taxonomy-filter option:first-child {
-    color: #FF5983;
     font-weight: bold;
+}
+.media-frame .uploader-inline {
+    z-index: 1;
+}
+#wp-media-grid .media-toolbar-secondary {
+    float: left;
+    height: 100%;
+    padding: 0 0 10px 0;
 }

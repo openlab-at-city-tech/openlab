@@ -1,21 +1,26 @@
 <?php
 
 /**
+ * bbPress Example Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Example converter base impoprter template for bbPress
  *
- * @since bbPress (r4689)
- * @link Codex Docs http://codex.bbpress.org/import-forums/custom-import
+ * @since 2.3.0 bbPress (r4689)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/custom-import
  */
 class Example extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
-	 *
-	 * @uses Example_Converter::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -27,12 +32,12 @@ class Example extends BBP_Converter_Base {
 
 		// Setup table joins for the forum section at the base of this section
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'forums_table',
 			'from_fieldname'  => 'the_forum_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_id'
+			'to_fieldname'    => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0. Stored in postmeta)
@@ -40,7 +45,7 @@ class Example extends BBP_Converter_Base {
 			'from_tablename'  => 'forums_table',
 			'from_fieldname'  => 'the_parent_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -109,6 +114,24 @@ class Example extends BBP_Converter_Base {
 			'to_fieldname'    => 'menu_order'
 		);
 
+		// Forum type (Category = 0 or Forum = 1, Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forums_table',
+			'from_fieldname'  => 'the_forum_type',
+			'to_type'         => 'forum',
+			'to_fieldname'    => '_bbp_forum_type',
+			'callback_method' => 'callback_forum_type'
+		);
+
+		// Forum status (Unlocked = 0 or Locked = 1, Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forums_table',
+			'from_fieldname'  => 'the_forum_status',
+			'to_type'         => 'forum',
+			'to_fieldname'    => '_bbp_status',
+			'callback_method' => 'callback_forum_status'
+		);
+
 		// Forum dates.
 		$this->field_map[] = array(
 			'to_type'         => 'forum',
@@ -142,16 +165,35 @@ class Example extends BBP_Converter_Base {
 			'to_type'         => 'forum'
 		);
 
+		/** Forum Subscriptions Section ***************************************/
+
+		// Subscribed forum ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forum_subscriptions_table',
+			'from_fieldname'  => 'the_forum_id',
+			'to_type'         => 'forum_subscriptions',
+			'to_fieldname'    => '_bbp_forum_subscriptions'
+		);
+
+		// Subscribed user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'forum_subscriptions_table',
+			'from_fieldname'  => 'the_user_id',
+			'to_type'         => 'forum_subscriptions',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
 		/** Topic Section *****************************************************/
 
 		// Setup table joins for the topic section at the base of this section
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'topics_table',
 			'from_fieldname'  => 'the_topic_id',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_topic_id'
+			'to_fieldname'    => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -224,6 +266,15 @@ class Example extends BBP_Converter_Base {
 			'callback_method' => 'callback_slug'
 		);
 
+		// Topic status (Open or Closed)
+		$this->field_map[] = array(
+			'from_tablename'  => 'topics_table',
+			'from_fieldname'  => 'the_topic_status',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
+			'callback_method' => 'callback_topic_status'
+		);
+
 		// Topic parent forum id (If no parent, then 0)
 		$this->field_map[] = array(
 			'from_tablename'  => 'topics_table',
@@ -233,12 +284,12 @@ class Example extends BBP_Converter_Base {
 			'callback_method' => 'callback_forumid'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'topics_table',
 			'from_fieldname'  => 'the_topic_sticky_status',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -346,16 +397,54 @@ class Example extends BBP_Converter_Base {
 			'to_fieldname'    => 'description'
 		);
 
+		/** Topic Subscriptions Section ***************************************/
+
+		// Subscribed topic ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'topic_subscriptions_table',
+			'from_fieldname'  => 'the_topic_id',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => '_bbp_subscriptions'
+		);
+
+		// Subscribed user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'topic_subscriptions_table',
+			'from_fieldname'  => 'the_user_id',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
+		/** Favorites Section *************************************************/
+
+		// Favorited topic ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'favorites_table',
+			'from_fieldname'  => 'the_favorite_topic_id',
+			'to_type'         => 'favorites',
+			'to_fieldname'    => '_bbp_favorites'
+		);
+
+		// Favorited user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'favorites_table',
+			'from_fieldname'  => 'the_user_id',
+			'to_type'         => 'favorites',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
 		/** Reply Section *****************************************************/
 
 		// Setup table joins for the reply section at the base of this section
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'replies_table',
 			'from_fieldname'  => 'the_reply_id',
 			'to_type'         => 'reply',
-			'to_fieldname'    => '_bbp_post_id'
+			'to_fieldname'    => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
@@ -364,7 +453,7 @@ class Example extends BBP_Converter_Base {
 			'from_fieldname'  => 'the_reply_parent_forum_id',
 			'to_type'         => 'reply',
 			'to_fieldname'    => '_bbp_forum_id',
-			'callback_method' => 'callback_topicid_to_forumid'
+			'callback_method' => 'callback_forumid'
 		);
 
 		// Reply parent topic id (If no parent, then 0. Stored in postmeta)
@@ -393,22 +482,9 @@ class Example extends BBP_Converter_Base {
 			'callback_method' => 'callback_userid'
 		);
 
-		// Reply title.
-		$this->field_map[] = array(
-			'from_tablename'  => 'replies_table',
-			'from_fieldname'  => 'the_reply_title',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
-		$this->field_map[] = array(
-			'from_tablename'  => 'replies_table',
-			'from_fieldname'  => 'the_reply_slug',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
-		);
+		// Reply title and reply slugs
+		// Note: We don't actually want either a reply title or a reply slug as
+		//       we want single replies to use their ID as the permalink.
 
 		// Reply content.
 		$this->field_map[] = array(
@@ -481,15 +557,15 @@ class Example extends BBP_Converter_Base {
 
 		// Setup table joins for the user section at the base of this section
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users_table',
 			'from_fieldname'  => 'the_users_id',
 			'to_type'         => 'user',
-			'to_fieldname'    => '_bbp_user_id'
+			'to_fieldname'    => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users_table',
 			'from_fieldname'  => 'the_users_password',
@@ -498,7 +574,7 @@ class Example extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users_table',
 			'from_fieldname'  => 'the_users_password_salt',
@@ -570,28 +646,28 @@ class Example extends BBP_Converter_Base {
 			'to_fieldname'   => 'display_name'
 		);
 
-		// User AIM (Stored in usermeta)
+		// User Profile Field 1 (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users_table',
-			'from_fieldname'  => 'the_users_aim',
+			'from_fieldname'  => 'the_users_custom_profile_field_1',
 			'to_type'         => 'user',
-			'to_fieldname'    => 'aim'
+			'to_fieldname'    => '_bbp_example_profile_field_1'
 		);
 
-		// User Yahoo (Stored in usermeta)
+		// User Profile Field 2 (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users_table',
-			'from_fieldname'  => 'the_users_yahoo',
+			'from_fieldname'  => 'the_users_custom_profile_field_2',
 			'to_type'         => 'user',
-			'to_fieldname'    => 'yim'
+			'to_fieldname'    => '_bbp_example_profile_field_2'
 		);
 
-		// User Jabber (Stored in usermeta)
+		// User Profile Field 3 (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'users_table',
-			'from_fieldname' => 'the_users_jabber',
+			'from_fieldname' => 'the_users_custom_profile_field_3',
 			'to_type'        => 'user',
-			'to_fieldname'   => 'jabber'
+			'to_fieldname'   => '_bbp_example_profile_field_3'
 		);
 
 		// Setup any table joins needed for the user section

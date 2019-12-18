@@ -161,8 +161,8 @@
                 return (
                     <Placeholder
                         icon={ imageSliderBlockIcon }
-                        label={ __( 'Image Slider Block' ) }
-                        instructions={ __( 'No images selected. Adding images to start using this block.' ) }
+                        label={ __( 'Image Slider Block', 'advanced-gutenberg' ) }
+                        instructions={ __( 'No images selected. Adding images to start using this block.', 'advanced-gutenberg' ) }
                     >
                         <MediaUpload
                             allowedTypes={ ['image'] }
@@ -183,7 +183,7 @@
                             } }
                             render={ ( { open } ) => (
                                 <Button className="button button-large button-primary" onClick={ open }>
-                                    { __( 'Add images' ) }
+                                    { __( 'Add images', 'advanced-gutenberg' ) }
                                 </Button>
                             ) }
                         />
@@ -199,30 +199,30 @@
             return (
                 <Fragment>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Image Settings' ) }>
+                        <PanelBody title={ __( 'Image Settings', 'advanced-gutenberg' ) }>
                             <SelectControl
-                                label={ __( 'Action on click' ) }
+                                label={ __( 'Action on click', 'advanced-gutenberg' ) }
                                 value={ actionOnClick }
                                 options={ [
-                                    { label: __( 'None' ), value: '' },
-                                    { label: __( 'Open image in lightbox' ), value: 'lightbox' },
-                                    { label: __( 'Open custom link' ), value: 'link' },
+                                    { label: __( 'None', 'advanced-gutenberg' ), value: '' },
+                                    { label: __( 'Open image in lightbox', 'advanced-gutenberg' ), value: 'lightbox' },
+                                    { label: __( 'Open custom link', 'advanced-gutenberg' ), value: 'link' },
                                 ] }
                                 onChange={ (value) => setAttributes( { actionOnClick: value } ) }
                             />
                             <ToggleControl
-                                label={ __( 'Full width' ) }
+                                label={ __( 'Full width', 'advanced-gutenberg' ) }
                                 checked={ fullWidth }
                                 onChange={ () => setAttributes( { fullWidth: !fullWidth } ) }
                             />
                             <ToggleControl
-                                label={ __( 'Auto height' ) }
+                                label={ __( 'Auto height', 'advanced-gutenberg' ) }
                                 checked={ autoHeight }
                                 onChange={ () => setAttributes( { autoHeight: !autoHeight } ) }
                             />
                             {!fullWidth && (
                                 <RangeControl
-                                    label={ __( 'Width' ) }
+                                    label={ __( 'Width', 'advanced-gutenberg' ) }
                                     value={ width }
                                     onChange={ (value) => setAttributes( { width: value } ) }
                                     min={ 200 }
@@ -231,7 +231,7 @@
                             ) }
                             {!autoHeight && (
                                 <RangeControl
-                                    label={ __( 'Height' ) }
+                                    label={ __( 'Height', 'advanced-gutenberg' ) }
                                     value={ height }
                                     onChange={ (value) => setAttributes( { height: value } ) }
                                     min={ 100 }
@@ -239,49 +239,49 @@
                                 />
                             ) }
                             <ToggleControl
-                                label={ __( 'Always show overlay' ) }
+                                label={ __( 'Always show overlay', 'advanced-gutenberg' ) }
                                 checked=    { alwaysShowOverlay }
                                 onChange={ () => setAttributes( { alwaysShowOverlay: !alwaysShowOverlay } ) }
                             />
                         </PanelBody>
                         <PanelColorSettings
-                            title={ __( 'Color Settings' ) }
+                            title={ __( 'Color Settings', 'advanced-gutenberg' ) }
                             colorSettings={ [
                                 {
-                                    label: __( 'Hover Color' ),
+                                    label: __( 'Hover Color', 'advanced-gutenberg' ),
                                     value: hoverColor,
                                     onChange: ( value ) => setAttributes( { hoverColor: value } ),
                                 },
                                 {
-                                    label: __( 'Title Color' ),
+                                    label: __( 'Title Color', 'advanced-gutenberg' ),
                                     value: titleColor,
                                     onChange: ( value ) => setAttributes( { titleColor: value } ),
                                 },
                                 {
-                                    label: __( 'Text Color' ),
+                                    label: __( 'Text Color', 'advanced-gutenberg' ),
                                     value: textColor,
                                     onChange: ( value ) => setAttributes( { textColor: value } ),
                                 },
                             ] }
                         />
-                        <PanelBody title={ __( 'Text Alignment' ) } initialOpen={false}>
+                        <PanelBody title={ __( 'Text Alignment', 'advanced-gutenberg' ) } initialOpen={false}>
                             <SelectControl
-                                label={ __( 'Vertical Alignment' ) }
+                                label={ __( 'Vertical Alignment', 'advanced-gutenberg' ) }
                                 value={vAlign}
                                 options={ [
-                                    { label: __( 'Top' ), value: 'flex-start' },
-                                    { label: __( 'Center' ), value: 'center' },
-                                    { label: __( 'Bottom' ), value: 'flex-end' },
+                                    { label: __( 'Top', 'advanced-gutenberg' ), value: 'flex-start' },
+                                    { label: __( 'Center', 'advanced-gutenberg' ), value: 'center' },
+                                    { label: __( 'Bottom', 'advanced-gutenberg' ), value: 'flex-end' },
                                 ] }
                                 onChange={ (value) => setAttributes( { vAlign: value } ) }
                             />
                             <SelectControl
-                                label={ __( 'Horizontal Alignment' ) }
+                                label={ __( 'Horizontal Alignment', 'advanced-gutenberg' ) }
                                 value={hAlign}
                                 options={ [
-                                    { label: __( 'Left' ), value: 'flex-start' },
-                                    { label: __( 'Center' ), value: 'center' },
-                                    { label: __( 'Right' ), value: 'flex-end' },
+                                    { label: __( 'Left', 'advanced-gutenberg' ), value: 'flex-start' },
+                                    { label: __( 'Center', 'advanced-gutenberg' ), value: 'center' },
+                                    { label: __( 'Right', 'advanced-gutenberg' ), value: 'flex-end' },
                                 ] }
                                 onChange={ (value) => setAttributes( { hAlign: value } ) }
                             />
@@ -293,7 +293,7 @@
                                 <div className="advgb-image-slider-item" key={index}>
                                     <img src={ image.url }
                                          className="advgb-image-slider-img"
-                                         alt={ __( 'Slider image' ) }
+                                         alt={ __( 'Slider image', 'advanced-gutenberg' ) }
                                          style={ {
                                              width: fullWidth ? '100%' : width,
                                              height: autoHeight ? 'auto' : height,
@@ -347,14 +347,14 @@
                         <div className="advgb-image-slider-controls">
                             <div className="advgb-image-slider-control">
                                 <TextControl
-                                    label={ __( 'Title' ) }
+                                    label={ __( 'Title', 'advanced-gutenberg' ) }
                                     value={ images[currentSelected] ? images[currentSelected].title || '' : '' }
                                     onChange={ (value) => this.updateImagesData( { title: value || '' } ) }
                                 />
                             </div>
                             <div className="advgb-image-slider-control">
                                 <TextareaControl
-                                    label={ __( 'Text' ) }
+                                    label={ __( 'Text', 'advanced-gutenberg' ) }
                                     value={ images[currentSelected] ? images[currentSelected].text || '' : '' }
                                     onChange={ (value) => this.updateImagesData( { text: value || '' } ) }
                                 />
@@ -362,7 +362,7 @@
                             {actionOnClick === 'link' && (
                                 <div className="advgb-image-slider-control">
                                     <TextControl
-                                        label={ __( 'Link' ) }
+                                        label={ __( 'Link', 'advanced-gutenberg' ) }
                                         value={ images[currentSelected] ? images[currentSelected].link || '' : '' }
                                         onChange={ (value) => this.updateImagesData( { link: value || '' } ) }
                                     />
@@ -372,7 +372,7 @@
                                 {images.map( (image, index) => (
                                     <div className="advgb-image-slider-image-list-item" key={index}>
                                         {index > 0 && (
-                                            <Tooltip text={ __( 'Move Left' ) }>
+                                            <Tooltip text={ __( 'Move Left', 'advanced-gutenberg' ) }>
                                                 <span className="advgb-move-arrow advgb-move-left"
                                                       onClick={ () => this.moveImage( index, index - 1 ) }
                                                 >
@@ -385,14 +385,14 @@
                                         ) }
                                         <img src={ image.url }
                                              className="advgb-image-slider-image-list-img"
-                                             alt={ __( 'Image' ) }
+                                             alt={ __( 'Image', 'advanced-gutenberg' ) }
                                              onClick={ () => {
                                                  $(`#block-${clientId} .advgb-images-slider`).slick('slickGoTo', index, false);
                                                  this.setState( { currentSelected: index } )
                                              } }
                                         />
                                         {index + 1 < images.length && (
-                                            <Tooltip text={ __( 'Move Right' ) }>
+                                            <Tooltip text={ __( 'Move Right', 'advanced-gutenberg' ) }>
                                                 <span className="advgb-move-arrow advgb-move-right"
                                                       onClick={ () => this.moveImage( index, index + 1 ) }
                                                 >
@@ -403,7 +403,7 @@
                                                 </span>
                                             </Tooltip>
                                         ) }
-                                        <Tooltip text={ __( 'Remove image' ) }>
+                                        <Tooltip text={ __( 'Remove image', 'advanced-gutenberg' ) }>
                                             <IconButton
                                                 className="advgb-image-slider-image-list-item-remove"
                                                 icon="no"
@@ -425,7 +425,7 @@
                                         } ) }
                                         render={ ( { open } ) => (
                                             <IconButton
-                                                label={ __( 'Add image' ) }
+                                                label={ __( 'Add image', 'advanced-gutenberg' ) }
                                                 icon="plus"
                                                 onClick={ open }
                                             />
@@ -493,14 +493,14 @@
     };
 
     registerBlockType( 'advgb/images-slider', {
-        title: __( 'Images Slider' ),
-        description: __( 'Display your images in a slider.' ),
+        title: __( 'Images Slider', 'advanced-gutenberg' ),
+        description: __( 'Display your images in a slider.', 'advanced-gutenberg' ),
         icon: {
             src: imageSliderBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'slide' ), __( 'gallery' ), __( 'photos' ) ],
+        keywords: [ __( 'slide', 'advanced-gutenberg' ), __( 'gallery', 'advanced-gutenberg' ), __( 'photos', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
         edit: AdvImageSlider,
         save: function ( { attributes } ) {
@@ -530,7 +530,7 @@
                             <div className="advgb-image-slider-item" key={index}>
                                 <img src={ image.url }
                                      className="advgb-image-slider-img"
-                                     alt={ __( 'Slider image' ) }
+                                     alt={ __( 'Slider image', 'advanced-gutenberg' ) }
                                      style={ {
                                          width: fullWidth ? '100%' : width,
                                          height: autoHeight ? 'auto' : height,
@@ -602,7 +602,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={ image.url }
                                              className="advgb-image-slider-img"
-                                             alt={ __( 'Slider image' ) }
+                                             alt={ __( 'Slider image', 'advanced-gutenberg' ) }
                                              style={ {
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,

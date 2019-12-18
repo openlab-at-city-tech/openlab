@@ -803,7 +803,7 @@ class GFFormDisplay {
 			}
 		}
 
-		if ( ! $review_page_done ) {
+		if ( ! $review_page_done && $form !== false ) {
 			$form = self::maybe_add_review_page( $form );
 		}
 
@@ -1460,6 +1460,9 @@ class GFFormDisplay {
 			$lead['id'] = $lead_id;
 		}
 
+		// Passwords are not saved to the database but should be available during the submission process.
+		GF_Field_Password::stash_passwords( $form );
+
 		//creating entry in DB
 		RGFormsModel::save_lead( $form, $lead );
 
@@ -1491,6 +1494,9 @@ class GFFormDisplay {
 			$lead['status'] = 'spam';
 
 		}
+
+		// Passwords are not saved to the database but should be available during the submission process.
+		$lead = GF_Field_Password::hydrate_passwords( $lead );
 
         /**
          * Fired after an entry is created
@@ -2007,6 +2013,7 @@ class GFFormDisplay {
 		}
 
 		if ( self::has_password_strength( $form ) ) {
+			wp_enqueue_script( 'gforms_zxcvbn', includes_url( '/js/zxcvbn.min.js' ) );
 			wp_enqueue_script( 'password-strength-meter' );
 		}
 
@@ -2112,6 +2119,7 @@ class GFFormDisplay {
 		$scripts = array();
 
 		if ( self::has_password_strength( $form ) ) {
+			wp_enqueue_script( 'gforms_zxcvbn', includes_url( '/js/zxcvbn.min.js' ) );
 			$scripts[] = 'password-strength-meter';
 		}
 

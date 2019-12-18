@@ -1,6 +1,8 @@
 <?php
 
-return apply_filters( 'su/data/animations', array(
+return apply_filters(
+	'su/data/animations',
+	array(
 		'flash',
 		'bounce',
 		'shake',
@@ -61,5 +63,6 @@ return apply_filters( 'su/data/animations', array(
 		'lightSpeedOut',
 		'hinge',
 		'rollIn',
-		'rollOut'
-	) );
+		'rollOut',
+	)
+);

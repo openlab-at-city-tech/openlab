@@ -327,7 +327,7 @@ class GFAPI {
 			$value = sprintf( "'%s'", $value );
 		}
 		$in_str_arr = array_fill( 0, count( $form_ids ), '%d' );
-		$in_str     = join( $in_str_arr, ',' );
+		$in_str     = join( ',', $in_str_arr );
 		$result     = $wpdb->query(
 			$wpdb->prepare(
 				"
@@ -986,8 +986,7 @@ class GFAPI {
 
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
-			$type = GFFormsModel::get_input_type( $field );
-			if ( in_array( $type, array( 'html', 'page', 'section' ) ) ) {
+			if ( $field->displayOnly ) {
 				continue;
 			}
 
@@ -1249,7 +1248,7 @@ class GFAPI {
 
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
-			if ( in_array( $field->type, array( 'html', 'page', 'section' ) ) ) {
+			if ( $field->displayOnly ) {
 				continue;
 			}
 			self::queue_batch_field_operation( $form, $entry, $field );
@@ -1620,7 +1619,7 @@ class GFAPI {
 				$feed_ids = array( $feed_ids );
 			}
 			$in_str_arr  = array_fill( 0, count( $feed_ids ), '%d' );
-			$in_str      = join( $in_str_arr, ',' );
+			$in_str      = join( ',', $in_str_arr );
 			$where_arr[] = $wpdb->prepare( "id IN ($in_str)", $feed_ids );
 		}
 

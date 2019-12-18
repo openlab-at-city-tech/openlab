@@ -22,7 +22,7 @@ class S2_Upgrade {
 			$charset_collate .= " COLLATE {$wpdb->collate}";
 		}
 
-		$date = date( 'Y-m-d' );
+		$date = gmdate( 'Y-m-d' );
 		$sql  = "CREATE TABLE $wpdb->subscribe2 (
 			id int(11) NOT NULL auto_increment,
 			email varchar(64) NOT NULL default '',
@@ -194,7 +194,7 @@ class S2_Upgrade {
 		if ( ! function_exists( 'maybe_add_column' ) ) {
 			require_once ABSPATH . 'wp-admin/install-helper.php';
 		}
-		$date = date( 'Y-m-d' );
+		$date = gmdate( 'Y-m-d' );
 		maybe_add_column( $wpdb->subscribe2, 'date', "ALTER TABLE $wpdb->subscribe2 ADD date DATE DEFAULT '$date' NOT NULL AFTER active" );
 
 		// update the options table to serialized format

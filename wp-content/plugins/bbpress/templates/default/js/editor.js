@@ -1,3 +1,4 @@
+/* global edButtons, QTags, tinymce */
 jQuery(document).ready( function() {
 
 	/* Use backticks instead of <code> for the Code button in the editor */
@@ -8,8 +9,9 @@ jQuery(document).ready( function() {
 
 	/* Tab from topic title */
 	jQuery( '#bbp_topic_title' ).bind( 'keydown.editor-focus', function(e) {
-		if ( e.which !== 9 )
+		if ( e.which !== 9 ) {
 			return;
+		}
 
 		if ( !e.ctrlKey && !e.altKey && !e.shiftKey ) {
 			if ( typeof( tinymce ) !== 'undefined' ) {
@@ -29,8 +31,9 @@ jQuery(document).ready( function() {
 
 	/* Shift + tab from topic tags */
 	jQuery( '#bbp_topic_tags' ).bind( 'keydown.editor-focus', function(e) {
-		if ( e.which !== 9 )
+		if ( e.which !== 9 ) {
 			return;
+		}
 
 		if ( e.shiftKey && !e.ctrlKey && !e.altKey ) {
 			if ( typeof( tinymce ) !== 'undefined' ) {

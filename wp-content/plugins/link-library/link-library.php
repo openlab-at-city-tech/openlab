@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 6.3.3
+Version: 6.3.4
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.home.blog/
 Text Domain: link-library
@@ -270,6 +270,8 @@ class link_library_plugin {
 
         add_action( 'wp_enqueue_scripts', array( $this, 'll_register_script' ) );
 
+		add_filter( 'posts_where', array( $this, 'll_posts_where' ), 10, 2 );
+
 		// Load text domain for translation of admin pages and text strings
 		load_plugin_textdomain( 'link-library', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
@@ -282,6 +284,19 @@ class link_library_plugin {
 		add_action('auth_redirect', array( $this, 'add_pending_count_filter') ); // modify esc_attr on auth_redirect
 		add_action('admin_menu', array( $this, 'esc_attr_restore' ) ); // restore on admin_menu (very soon)
 	}
+
+	function ll_posts_where( $where, $query ) {
+		global $wpdb;
+
+		$starts_with = $query->get( 'link_starts_with' );
+
+		if ( $starts_with ) {
+			$where .= " AND $wpdb->posts.post_title LIKE '$starts_with%'";
+		}
+
+		return $where;
+	}
+
 
 	function add_pending_count_filter() {
 		add_filter('attribute_escape', array( $this, 'remove_esc_attr_and_count' ), 20, 2);
@@ -772,13 +787,25 @@ class link_library_plugin {
 			'excludecategoryoverride' => '',
 			'settings' => ''
 		), $atts ) );
-		
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
 		if ( empty( $settings ) ) {
 			$settings = 1;
 		}
 
-        $settingsname = 'LinkLibraryPP' . $settings;
-        $options = get_option( $settingsname );
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
+
+		$settingsname = 'LinkLibraryPP' . $settings;
+		$options = get_option( $settingsname );
+
+		if ( empty( $options ) ) {
+			$settingsname = 'LinkLibraryPP1';
+			$options = get_option( $settingsname );
+		}
 
         if ( !empty( $categorylistoverride ) ) {
             $options['categorylist_cpt'] = $categorylistoverride;
@@ -824,8 +851,6 @@ class link_library_plugin {
 			}
         }
 
-		$genoptions = get_option( 'LinkLibraryGeneral' );
-
         if ( $genoptions['debugmode'] ) {
             $mainoutputstarttime = microtime( true );
             $timeoutputstart = "\n<!-- Start Link Library Cats Time: " . $mainoutputstarttime . "-->\n";
@@ -848,12 +873,21 @@ class link_library_plugin {
 		extract(shortcode_atts(array(
 			'settings' => ''
 		), $atts));
-		
+
 		if ( empty( $settings ) ) {
-            $options = get_option('LinkLibraryPP1');
-        } else {
-			$settingsname = 'LinkLibraryPP' . $settings;
-			$options = get_option($settingsname);
+			$settings = 1;
+		}
+
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
+
+		$settingsname = 'LinkLibraryPP' . $settings;
+		$options = get_option( $settingsname );
+
+		if ( empty( $options ) ) {
+			$settingsname = 'LinkLibraryPP1';
+			$options = get_option( $settingsname );
 		}
 
         require_once plugin_dir_path( __FILE__ ) . 'render-link-library-search-sc.php';
@@ -872,15 +906,27 @@ class link_library_plugin {
 			'categorylistoverride' => '',
 			'excludecategoryoverride' => ''
 		), $atts));
-                
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
 		if ( empty( $settings ) ) {
-            $settings = 1;
-        }
+			$settings = 1;
+		} else if ( isset( $_POST['settings'] ) ) {
+			$settings = intval( $_POST['settings'] );
+		}
+
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
 
 		$settingsname = 'LinkLibraryPP' . $settings;
-        $options = get_option($settingsname);
-                
-        $genoptions = get_option('LinkLibraryGeneral');
+		$options = get_option( $settingsname );
+
+		if ( empty( $options ) ) {
+			$settingsname = 'LinkLibraryPP1';
+			$options = get_option( $settingsname );
+		}
 				
 		if ( !empty( $categorylistoverride ) ) {
             $options['categorylist_cpt'] = $categorylistoverride;
@@ -907,11 +953,21 @@ class link_library_plugin {
 
 		if ( empty( $settings ) ) {
 			$settings = 1;
+		} else if ( isset( $_POST['settings'] ) ) {
+			$settings = intval( $_POST['settings'] );
+		}
+
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
 		}
 
 		$settingsname = 'LinkLibraryPP' . $settings;
 		$options = get_option( $settingsname );
-		$options = wp_parse_args( $options, ll_reset_options( $settings, 'list', 'return' ) );
+
+		if ( empty( $options ) ) {
+			$settingsname = 'LinkLibraryPP1';
+			$options = get_option( $settingsname );
+		}
 
 		$linkeditoruser = current_user_can( 'manage_options' );
 
@@ -971,19 +1027,34 @@ class link_library_plugin {
 			'taglabel' => __( 'Tag', 'link-library' ),
 			'showpricefilters' => true,
 			'pricelabel' => __( 'Price', 'link-library' ),
+			'alphabeticlabel' => __( 'Link Name', 'link-library' ),
+			'showalphabeticfilters' => true,
 			'settings' => ''
 		), $atts ) );
 
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
 		if ( empty( $settings ) ) {
+			$settings = 1;
+		} else if ( isset( $_POST['settings'] ) ) {
+			$settings = intval( $_POST['settings'] );
+		}
+
+		if ( $settings > $genoptions['numberstylesets'] ) {
 			$settings = 1;
 		}
 
 		$settingsname = 'LinkLibraryPP' . $settings;
 		$options = get_option( $settingsname );
-		$genoptions = get_option( 'LinkLibraryGeneral' );
+
+		if ( empty( $options ) ) {
+			$settingsname = 'LinkLibraryPP1';
+			$options = get_option( $settingsname );
+		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-tag-filter-sc.php';
-		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel );
+		return RenderLinkLibraryFilterBox( $this, $genoptions, $options, $settings, $includetagsids, $excludetagsids, $showtagfilters, $taglabel, $showpricefilters, $pricelabel, $showalphabeticfilters, $alphabeticlabel );
 	}
 	
 	/********************************************** Function to Process [link-library] shortcode *********************************************/
@@ -1023,14 +1094,31 @@ class link_library_plugin {
 			'linkdirectionoverride' => ''
 		), $atts ) );
 
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		if ( floatval( $genoptions['schemaversion'] ) < '5.0' ) {
+			$this->ll_install();
+		}
+
 		if ( empty( $settings ) && !isset( $_POST['settings'] ) ) {
 			$settings = 1;
 		} else if ( isset( $_POST['settings'] ) ) {
             $settings = intval( $_POST['settings'] );
         }
 
-        $settingsname = 'LinkLibraryPP' . $settings;
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
+
+		$settingsname = 'LinkLibraryPP' . $settings;
         $options = get_option( $settingsname );
+
+        if ( empty( $options ) ) {
+	        $settingsname = 'LinkLibraryPP1';
+	        $options = get_option( $settingsname );
+		}
+
         $options['AJAXcatid'] = '';
         $options['AJAXpageid'] = '';
 
@@ -1139,20 +1227,6 @@ class link_library_plugin {
                 $options['AJAXpageid'] = $pageID;
             }
         }
-
-        $genoptions = get_option( 'LinkLibraryGeneral' );
-		
-		if ( floatval( $genoptions['schemaversion'] ) < '5.0' ) {
-			$this->ll_install();
-			$genoptions = get_option( 'LinkLibraryGeneral' );
-			
-			if ( empty( $settings ) ) {
-                $options = get_option( 'LinkLibraryPP1' );
-            } else {
-				$settingsname = 'LinkLibraryPP' . $settings;
-				$options = get_option( $settingsname );
-			}
-		}
 
         $linklibraryoutput = '';
 

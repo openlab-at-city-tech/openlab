@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.2.1
-Stable tag: 2.4
+Tested up to: 5.2.4
+Stable tag: 3.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -12,14 +12,35 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 
 == Description ==
 
-**Major Release:**
-This is a major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+**Major Release (3.0):**
+This is a major release of BadgeOS in which we have added separate point type options so that you can create multiple point types to award/deduct points. We have also added ranks in this version so you can awards ranks to your users on completing the events. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+Note: You may have to update all the existing badges too in order to sync the point types data.
 * [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
-* [BadgeOS Referring Link](https://badgeos.org/downloads/referring-link/ "BadgeOS Referring Link")
 * [BadgeOS Leaderboards](https://badgeos.org/downloads/leaderboards/ "BadgeOS Leaderboards")
-* [BadgeOS Activity Code](https://badgeos.org/downloads/activity-codes/ "BadgeOS Activity Code")
-* [BadgeOS Auto Messages](https://badgeos.org/downloads/auto-messages/ "BadgeOS Auto Message")
-* [BadgeOS Invite Codes](https://wordpress.org/plugins/badgeos-invite-codes-add-on/ "BadgeOS Invite Codes")
+* [BadgeOS Congratulation](https://badgeos.org/downloads/congratulations/ "BadgeOS Congratulation")
+* [BadgeOS Reports add-on](https://badgeos.org/downloads/reports/ "BadgeOS Reports add-on")
+* [BadgeOS Community add-on](https://wordpress.org/plugins/badgeos-community-add-on/ "BadgeOS Community add-on")
+* [BadgeOS LearnDash](https://wordpress.org/plugins/badgeos-learndash-add-on/ "BadgeOS Auto LearnDash")
+
+After updating the plugin to 3.0, You will need to update the users' earning and achievements. Follow the steps below to update them.
+
+**Note: please clear the cache of the site before updating the user's earning and existing achievements.**
+
+**Update users' earned achievements and points:**
+- Update the BadgeOS to 3.1 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade 3.0 DB" button
+
+**Update existing achievements:**
+- Update the BadgeOS to 3.2 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade Achievements" button
 
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
@@ -49,6 +70,19 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Easily define how they relate to one another using the 'Required Steps' tool
 *   Set default images for each achievement type or select unique images for every achievement item
 
+**Define an Unlimited Number of Rank Types**
+
+*   Create as many types of rank as you like
+*   Name rank types whatever you wish
+*   Easily define how they relate to one another using the 'Required Steps' tool
+*   Set default images for each rank type or select unique images for every achievement item
+
+**Define an Unlimited Number of Point Types**
+
+*   Create as many types of points as you like
+*   Name point types whatever you wish
+*   Easily define how they relate to one another using the 'Required Steps' tool
+*   Set default images for each rank type or select unique images for every achievement item
 
 **Design Beautiful Badge and Achievement Images from within WordPress**
 
@@ -179,6 +213,21 @@ There is NO WARRANTY for this software, express or implied, including the implie
 
 == Frequently Asked Questions ==
 
+= How many point types can be created? =
+
+Unlimited point types can be created
+
+= How many rank types can be created? =
+
+Unlimited rank types can be created
+
+= What is the default rank? =
+
+Default rank is the one with the "0" priority. It will automatically be rewarded to all the users. If you don't want to create a default rank then set its priority more than "0" like 1,2 etc.
+
+= What is the difference between rank and achievement? =
+
+An achievement can be earned multiple times but the rank will only be earned once. Achievement is like a step while rank is like a level.
 
 = Any ideas for making badge images? =
 
@@ -227,7 +276,69 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
+10. Daily visit Trigger
+
+11. Register to the website trigger
+
+12. Point types on achievements
+
+13. Earned point types on Profile
+
+14. Rank requirement
+
+15. Ranks data
+
 == Changelog ==
+
+= 3.3 =
+* New: Set default point type as point type id parameter in badgeos_get_points_by_type()
+* New: Added post attributes for BadgeOS Rank Type posts
+* New: Added option to award/revoke achievements in bulk
+* New: Added option to award/delete points in bulk
+* New: Added option to award/revoke ranks in bulk
+* New: Added option to display the system information on tools page
+* New: Deleted user data on uninstall
+* Fix: Revamp rank award process
+* Fix: Updated rank count for users on revoking their earned rank
+* Fix: Updated labels for BadgeOS point types
+* Fix: Removed select2 js dependency from badgeos-shortcode-embed-js
+* Fix: Renamed BadgeOS get_parent_id function to avoid conflicts
+* Fix: Removed steps post type from metabox achievement array
+* Fix: Revamp function badgeos_user_deserves_rank_step_count_callback()
+* Fix: Removed slug fields from Points and Rank types
+* Fix: Fixed add-ons licensing issues
+* Fix: Hide earned achievements on front-end if show to users is not allowed
+* Fix: Revamp BadgeOS shortcode embeder code to avoid select2 version conflicts
+* Fix: Fixed widget notification issues for deleted ranks and achievements
+* Fix: Fixed deduct point trigger issue
+* Fix: Altered ranks and achievements table structure
+
+
+= 3.2 =
+* New: Added option to update the existing achievements with regards the point types
+* New: Added default thumbnail for the rank post
+* Fix: Fixed conflict with scormcloud plugin
+* Fix: Fixed the point and rank type pages 404 issue
+
+= 3.1 =
+* New: Added option to upgrade db from plugin setting page
+* New: An email will be sent to admin on completing the db upgrade
+* Fix: Changed db upgrade query to work as background process
+* Fix: Fixed the BadgeOS shortcodes popup layout issues
+
+= 3.0 =
+* New: Added option to create multiple point types
+* New: Added option to award/deduct points on completing steps
+* New: Display users' earned points with types on user profile page
+* New: Added option to create multiple rank types
+* New: Displayed users' earned ranks on user profile page
+* New: Added option to select point type when awarding points with achievements/ranks
+* New: Saved users' earned achievement to custom db table rather than saving in meta data
+* New: Added option to transfer users' earned badges meta data to custom db table by clicking on a button
+* New: Added new actions hooks to extend the user achievement section
+* New: Added two new triggers. "Daily Visit" and "Register to the website"
+* Fix: Fixed conflict of BadgeOS with WooCommerce Membership add-on
+* Fix: Improved log entry message texts
 
 = 2.4 =
 * New: Added action hook to run when revoking badges

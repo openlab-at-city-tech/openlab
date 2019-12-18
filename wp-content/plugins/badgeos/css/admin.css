@@ -131,9 +131,6 @@ Shortcode Embed styles
 .clear {
 	clear: both;
 }
-.select2-container {
-	width: 100%;
-}
 #select2-drop {
 	z-index: 100051;
 }
@@ -150,4 +147,420 @@ Shortcode Embed styles
 }
 .form-table td.bulk-delete-detail {
 	padding-left: 20px;
+}
+.profile-php .earned-user-credits-wrapper,
+.user-edit-php .earned-user-credits-wrapper {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits {
+	border: 1px solid #e8e8e8;
+	position: relative;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	cursor: pointer;
+	color: #0073aa;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper {
+	padding: 9px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit {
+	padding: 15px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits h3,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits h3 {
+	margin: 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: left;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: right;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
+}
+
+
+.profile-php .badgeos-achievement-table,
+.profile-php .badgeos-rank-table,
+.user-edit-php .badgeos-achievement-table,
+.user-edit-php .badgeos-rank-table {
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	box-shadow: 0 0 1px 2px #e8e8e8;
+	margin-bottom: 30px;
+}
+.profile-php .badgeos-achievement-table thead,
+.profile-php .badgeos-rank-table thead,
+.user-edit-php .badgeos-achievement-table thead,
+.user-edit-php .badgeos-rank-table thead {
+	border-bottom: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tfoot,
+.profile-php .badgeos-rank-table tfoot,
+.user-edit-php .badgeos-achievement-table tfoot,
+.user-edit-php .badgeos-rank-table tfoot {
+	border-top: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table th,
+.profile-php .badgeos-rank-table th,
+.user-edit-php .badgeos-achievement-table th,
+.user-edit-php .badgeos-rank-table th {
+	padding: 10px;
+	background-color: #f6f6f6;
+}
+.profile-php .badgeos-achievement-table td,
+.profile-php .badgeos-rank-table td,
+.user-edit-php .badgeos-achievement-table td,
+.user-edit-php .badgeos-rank-table td {
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.profile-php .badgeos-rank-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-rank-table tbody tr:nth-child( odd ) {
+	background-color: #fff;
+}
+.profile-php .badgeos-achievement-table .revoke-achievement,
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-achievement-table .revoke-achievement,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+.profile-php .badgeos-achievement-table .award-achievement,
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-achievement-table .award-achievement,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
+}
+.profile_ranks_last_award_field{
+	font-size: 20px !important;
+	font-weight: bolder;
+}
+.badgeos-migration-form-table td {
+	margin-left: 3px;
+	padding:7px;
+}
+.badgeos-migration-form-table h3 {
+	margin: 0px;
+	padding:0px;
+}
+
+.ui-tabs-vertical {
+	width: 100%;
+}
+.ui-tabs-vertical .ui-tabs-nav {
+	float: left;
+	width: 25%;
+}
+
+.ui-tabs-vertical .ui-tabs-nav li {
+	clear: left;
+	width: 100%;
+	border-bottom-width: 1px !important;
+	border-right-width: 0 !important;
+	margin: 0 -1px .2em 0;
+	display: block;
+}
+.ui-tabs-vertical .ui-tabs-nav li a {
+	display:block;
+	width: 100%;
+	padding: 8px 0 !important;
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	padding-bottom: 0;
+	padding-right: .1em;
+	border-right-width: 1px;
+}
+.ui-tabs-vertical .ui-tabs-panel {
+	padding: 1em;
+	float: right;
+	width: calc(75% - 1px);
+}
+#system-tabs,
+#achievement-tabs,
+#rank-tabs,
+#credit-tabs {
+	margin-top: 20px;
+	background-color: #f6f6f6;
+	border-color: #ccc;
+	box-shadow: 0 0 1px 2px #e8e8e8;
+	padding: 0;
+}
+#system-tabs .tab-title,
+#achievement-tabs .tab-title,
+#rank-tabs .tab-title,
+#credit-tabs .tab-title {
+	padding: 10px;
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 1px solid #ccc;
+	background-color: #f6f6f6;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav {
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li a {
+	padding: 8px 2% !important;
+	width: 96% !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li {
+	background-color: #f6f6f6;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 0;
+	margin-bottom: 0;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	background-color: #fff;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 0;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a {
+	color: #000;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li:focus {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+#badgeos_info,
+#wordpress_info,
+#php_config,
+#server_info,
+#rank_bulk_award,
+#rank_bulk_revoke,
+#credit_bulk_award,
+#credit_bulk_revoke,
+#achievement_bulk_award,
+#achievement_bulk_revoke {
+	background-color: #fff;
+	padding: 0 !important;
+	border-left: 1px solid #ccc;
+}
+#rank_bulk_award form,
+#rank_bulk_revoke form,
+#credit_bulk_award form,
+#credit_bulk_revoke form,
+#achievement_bulk_award form,
+#achievement_bulk_revoke form {
+	padding: 20px;
+}
+#badgeos_info table,
+#wordpress_info table,
+#php_config table,
+#server_info table {
+	padding: 20px;
+	width: 100%;
+	text-align: left;
+}
+#badgeos_info table tr:nth-child( even ),
+#wordpress_info table tr:nth-child( even ),
+#php_config table tr:nth-child( even ),
+#server_info table tr:nth-child( even ) {
+	text-align: left;
+	background: #fff;
+}
+#badgeos_info table tr:nth-child( odd ),
+#wordpress_info table tr:nth-child( odd ),
+#php_config table tr:nth-child( odd ),
+#server_info table tr:nth-child( odd ) {
+	text-align: left;
+	background: #f6f6f6;
+}
+#server_info table tr th,
+#php_config table tr th,
+#wordpress_info table tr th,
+#badgeos_info table tr th {
+	width: 35%;
+}
+
+#server_info table tr th,
+#server_info table tr td,
+#php_config table tr th,
+#php_config table tr td,
+#wordpress_info table tr th,
+#wordpress_info table tr td,
+#badgeos_info table tr th,
+#badgeos_info table tr td {
+	padding: 10px;
+}
+#rank_bulk_award form table,
+#rank_bulk_revoke form table,
+#credit_bulk_award form table,
+#credit_bulk_revoke form table,
+#achievement_bulk_award form table,
+#achievement_bulk_revoke form table {
+	width: 100%;
+}
+.badgeos-wp_page_badgeos_tools form table tr th {
+	width: 35% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td {
+	width: 65% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td span input,
+.badgeos-wp_page_badgeos_tools form table tr td span > span.selection {
+	width: 100% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td > select,
+.badgeos-wp_page_badgeos_tools form table tr td > input {
+	width: 80%;
+	padding: 20px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	height: 45px !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr th,
+.badgeos-wp_page_badgeos_tools form table tr td {
+	border-bottom: 1pt solid #e5e5e5;
+	padding: 20px 0;
+}
+#rank-tabs .button,
+#achievement-tabs .button,
+#credit-tabs .button {
+	margin: 20px 0;
+	float: right;
+}
+#rank-tabs .tool-hint,
+#achievement-tabs .tool-hint,
+#credit-tabs .tool-hint {
+	display: block;
+	color: #aaa;
+	margin: 5px 0;
+}
+.badgeos-wp_page_badgeos_tools .select2-container .select2-search--inline .select2-search__field {
+	margin-top: 12px;
+}
+
+#credit_types_to_award,
+#credit_types_to_revoke {
+	padding: 12px;
+	line-height: normal;
+	height: auto;
+}
+
+#credit_bulk_award form table tr th,
+#credit_bulk_award form table tr td,
+#rank_bulk_award form table tr th,
+#rank_bulk_revoke form table tr td,
+#credit_bulk_revoke form table tr th,
+#achievement_bulk_award form table tr td,
+#achievement_bulk_revoke form table tr th,
+#credit_bulk_revoke form table tr td {
+	padding-bottom: 20px;
+}
+#credit_bulk_award form table tr th,
+#credit_bulk_revoke form table tr th,
+#rank_bulk_award form table tr th,
+#rank_bulk_revoke form table tr th,
+#achievement_bulk_award form table tr th,
+#achievement_bulk_revoke form table tr th {
+	vertical-align: top;
+	text-align: left;
+	width: 40%;
+}
+#credit_bulk_award form table tr td .select2-selection,
+#credit_bulk_revoke form table tr td .select2-selection,
+#rank_bulk_award form table tr td .select2-selection,
+#rank_bulk_revoke form table tr td .select2-selection,
+#achievement_bulk_award form table tr td .select2-selection,
+#achievement_bulk_revoke form table tr td .select2-selection {
+	border: 1px solid #ddd;
+	max-width: 70%;
+	padding: 6px 8px;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent {
+	overflow-y: auto !important;
+	overflow-x: hidden;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap {
+	padding: 10px;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap .select2-selection__rendered {
+	border: 1px solid #ddd;
+	box-shadow: 0 0 5px 0 #ddd;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap .badgeos_input:nth-child(even) {
+	clear: left;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent #shortcode_options > div,
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent #shortcode_options {
+	clear: left;
+	width: 100%;
 }

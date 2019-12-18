@@ -109,17 +109,16 @@ body #wp-link-backdrop {
 	display: none;
 }
 
-#tablepress-page .small-text {
-	width: 65px;
-	padding: 3px 5px;
-}
 #tablepress-page #table-new-id {
 	width: 120px;
 }
 
-#table-information-shortcode,
-#tablepress-page .button {
+#table-information-shortcode {
 	vertical-align: middle;
+}
+
+#tablepress-page .button {
+	vertical-align: baseline;
 }
 
 /* Table cells */
@@ -142,10 +141,13 @@ body #wp-link-backdrop {
 #edit-form-body textarea {
 	display: block;
 	min-width: 150px;
+	border-color: #dddddd;
+	border-radius: 0;
 	width: 100%;
 	width: auto\0/IE; /* IE hack, as cells will otherwise shrink and overlap instead of horizontal scrolling kicking in */
 	height: 100%;
 	resize: both;
+	margin: 0;
 }
 #edit-form-body textarea:focus {
 	border-color: #333333;
@@ -155,9 +157,7 @@ body #wp-link-backdrop {
 #tablepress-page input[type="text"],
 #tablepress-page textarea,
 #tablepress-page select {
-	-webkit-box-shadow: none;
 	box-shadow: none;
-	-webkit-transition: none;
 	transition: none;
 }
 

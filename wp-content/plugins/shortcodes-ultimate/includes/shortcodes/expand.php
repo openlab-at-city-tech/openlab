@@ -125,8 +125,8 @@ function su_shortcode_expand( $atts = null, $content = null ) {
 		: '';
 
 	su_query_asset( 'css', 'su-shortcodes' );
-	su_query_asset( 'js', 'su-other-shortcodes' );
+	su_query_asset( 'js', 'su-shortcodes' );
 
-	return '<div class="su-expand su-expand-collapsed su-expand-link-style-' . $atts['link_style'] . su_get_css_class( $atts ) . '" data-height="' . $atts['height'] . '"><div class="su-expand-content" style="color:' . $atts['text_color'] . ';max-height:' . intval( $atts['height'] ) . 'px;overflow:hidden">' . do_shortcode( $content ) . '</div><div class="su-expand-link su-expand-link-more" style="text-align:' . $atts['link_align'] . '"><a href="javascript:;" style="color:' . $atts['link_color'] . ';border-color:' . $atts['link_color'] . '">' . $more_icon . '<span style="border-color:' . $atts['link_color'] . '">' . $atts['more_text'] . '</span></a></div>' . $less . '</div>';
+	return '<div class="su-expand su-expand-collapsed su-expand-link-style-' . $atts['link_style'] . su_get_css_class( $atts ) . '" data-height="' . $atts['height'] . '"><div class="su-expand-content su-u-trim" style="color:' . $atts['text_color'] . ';max-height:' . intval( $atts['height'] ) . 'px;overflow:hidden">' . do_shortcode( $content ) . '</div><div class="su-expand-link su-expand-link-more" style="text-align:' . $atts['link_align'] . '"><a href="javascript:;" style="color:' . $atts['link_color'] . ';border-color:' . $atts['link_color'] . '">' . $more_icon . '<span style="border-color:' . $atts['link_color'] . '">' . $atts['more_text'] . '</span></a></div>' . $less . '</div>';
 
 }

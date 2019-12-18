@@ -1,15 +1,14 @@
 <?php
 /*
 Plugin Name:  WP SIMILE Timeline
-Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/
+Plugin URI: freshlabs.de
 Description: Integrates the <a href="http://simile.mit.edu/timeline/">SIMILE Timeline</a> with WordPress and provides an option interface for the various timeline settings. With this plugin you can display posts from a specific category in the Timeline Widget. Simply include the <strong>[similetimeline]</strong> shortcode in your page or post and specify the category on the <a href="options-general.php?page=timeline.php">admin page</a>.
-Author: Tim Isenheim
-Author URI: http://www.freshlabs.de/journal
-Version: 0.4.9
-*/
+Author: freshlabs
+Author URI: freshlabs.de
+Version: 0.5.1
 /*
 	SIMILE Timeline for WordPress
-    Copyright 2006-2013 Tim Isenheim
+    Copyright 2006-2019 freshlabs
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +23,7 @@ Version: 0.4.9
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- * TODO: support post types from WP 3.0 in xml.php
- * TODO: implement support for dates BC
- * TODO: Update screenshots
- * TODO: Make dynamic timelines. Extend the api function to stl_simile_timeline($id, $terms, $scriptfile, $theme, $bands, $hotzones, $decorators)
- * TODO: Implement abstract class for Band,Hotzone,Decorator class to extend from
- */
+
 include('inc/adodb-time.inc.php');  // AdoDB Time+Date Library
 include('inc/WPSimileTimeline.class.php');	// class for timeline database functions
 include('inc/WPSimileTimelineDatabase.class.php');	// class for timeline database functions
@@ -43,10 +36,11 @@ include('inc/WPSimileTimelineHotzone.class.php'); // class for timeline hotzone
 include('inc/WPSimileTimelineDecorator.class.php'); // class for timeline decorator
 
 @define('STL_TIMELINE_PLUGIN_DATESTRING', '20140920');
-@define('STL_TIMELINE_PLUGIN_VERSION', '0.4.9');
+@define('STL_TIMELINE_PLUGIN_VERSION', '0.5.1');
 @define('STL_TIMELINE_FOLDER', WP_PLUGIN_URL.'/wp-simile-timeline');
 @define('STL_TIMELINE_DATA_FOLDER', STL_TIMELINE_FOLDER.'/data');
-@define('STL_TIMELINE_API_URL', 'http://api.simile-widgets.org/timeline/2.3.1/timeline-api.js?bundle=true'); // use &defaultLocale to override detected locale
+@define('STL_TIMELINE_IMAGE_FOLDER', STL_TIMELINE_FOLDER.'/src/img');
+@define('STL_TIMELINE_API_URL', STL_TIMELINE_FOLDER.'/src/timeline_js/timeline-api.js?bundle=true'); // use &defaultLocale to override detected locale
 @define('STL_TIMELINE_NONCE_NAME', 'stl_timeline_update_options');
 
 /**
@@ -152,7 +146,7 @@ class WPSimileTimelineLoader{
 	 */
 	function registerOptionsPage(){
 		if (function_exists('add_options_page')) {
-			$plugin_page = add_menu_page( 'SIMILE Timeline', 'SIMILE Timeline', 'activate_plugins', 'wp-simile-timeline', array('WPSimileTimelineLoader', 'showHtmlOptionsPage'), '' );
+			$plugin_page = add_menu_page( 'SIMILE Timeline', 'SIMILE Timeline', 'activate_plugins', 'wp-simile-timeline', array('WPSimileTimelineLoader', 'showHtmlOptionsPage'), STL_TIMELINE_IMAGE_FOLDER.'/icon.png', 76.4 );
 			// register plugin's own scripts
 			add_action('admin_init', array('WPSimileTimelineAdmin', 'registerAdminScripts'));
 			// plugin admin styles

@@ -6,8 +6,9 @@ class WCP_Tree {
     }
 
     public static function get_full_tree_data($post_type) {
-        $isAjax = (!empty( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ]) == 'xmlhttprequest')?1:0;
-        if(isset($_GET[$post_type]) || ! $isAjax) {
+        $isAjax = (defined('DOING_AJAX') && DOING_AJAX)?1:0;
+        $type = filter_input(INPUT_GET, $post_type, FILTER_SANITIZE_STRING);
+        if((isset($type) && !empty($type)) || ! $isAjax) {
             update_option("selected_" . $post_type . "_folder", "");
         }
         $string = self::get_folder_category_data($post_type, 0, 0);
@@ -30,7 +31,7 @@ class WCP_Tree {
         ));
         $string = "";
         $child = 0;
-        $isAjax = (!empty( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ] ) && strtolower( $_SERVER[ 'HTTP_X_REQUESTED_WITH' ]) == 'xmlhttprequest')?1:0;
+        $isAjax = (defined('DOING_AJAX') && DOING_AJAX)?1:0;
         if(!empty($terms)) {
             $child = count($terms);
             foreach($terms as $term) {
@@ -38,21 +39,23 @@ class WCP_Tree {
                 $return = self::get_folder_category_data($post_type, $term->term_id, $status);
                 $class = ($status == 1 && $return['child']>0)?"active":"";
                 $class .= ($return['child'])>0?" has-sub-tree":"";
+                $term_var = filter_input(INPUT_GET, "term", FILTER_SANITIZE_STRING);
+                $type = filter_input(INPUT_GET, $post_type, FILTER_SANITIZE_STRING);
                 if($post_type == "attachment") {
-                    $class .= (isset($_GET['term']) && $_GET['term'] == $term->slug)?" active-item active-term":"";
-                    if(isset($_GET[$post_type]) && $_GET[$post_type] == $term->slug) {
+                    $class .= (isset($term_var) && $term_var == $term->slug)?" active-item active-term":"";
+                    if(isset($type) && $type == $term->slug) {
                         update_option("selected_".$post_type."_folder", $term->term_id);
                     }
-                    if(!isset($_GET[$post_type]) && $isAjax) {
+                    if(!isset($type) && $isAjax) {
                         $termId = get_option("selected_".$post_type."_folder");
                         $class .= ($termId == $term->term_id)?" active-item active-term":"";
                     }
                 } else {
-                    $class .= (isset($_GET[$post_type]) && $_GET[$post_type] == $term->slug)?" active-item active-term":"";
-                    if(isset($_GET[$post_type]) && $_GET[$post_type] == $term->slug) {
+                    $class .= (isset($type) && $type == $term->slug)?" active-item active-term":"";
+                    if(isset($type) && $type == $term->slug) {
                         update_option("selected_" . $post_type . "_folder", $term->term_id);
                     }
-                    if(!isset($_GET[$post_type]) && $isAjax) {
+                    if(!isset($type) && $isAjax) {
                         $termId = get_option("selected_".$post_type."_folder");
                         $class .= ($termId == $term->term_id)?" active-item active-term":"";
                     }
@@ -64,7 +67,7 @@ class WCP_Tree {
                 $rename_nonce = wp_create_nonce('wcp_folder_rename_term_'.$term->term_id);
                 $highlight_nonce = wp_create_nonce('wcp_folder_highlight_term_'.$term->term_id);
                 $term_nonce = wp_create_nonce('wcp_folder_term_'.$term->term_id);
-                $string .= "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$term->slug}' class='ui-state-default route {$class}' id='wcp_folder_{$term->term_id}' data-folder-id='{$term->term_id}'><h3 class='title' title='{$term->name}' id='title_{$term->term_id}'><span class='title-text'>{$term->name}</span> <span class='update-inline-record'></span> {$count} <span class='star-icon'></span></h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i></span>	<ul class='space' id='space_{$term->term_id}'>";
+                $string .= "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$term->slug}' class='ui-state-default route {$class}' id='wcp_folder_{$term->term_id}' data-folder-id='{$term->term_id}'><h3 class='title' title='{$term->name}' id='title_{$term->term_id}'><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i><img src='".esc_url(WCP_FOLDER_URL."assets/images/move-option.png")."' class='move-folder-icon' ><input type='checkbox' class='checkbox' value='{$term->term_id}' /> </span><span class='title-text'>{$term->name}</span> <span class='update-inline-record'></span> {$count} <span class='star-icon'></span></h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span>	<ul class='space' id='space_{$term->term_id}'>";
                 $string .= $return['string'];
                 $string .= "</ul></li>";
             }
@@ -95,7 +98,6 @@ class WCP_Tree {
         ) );
 
         $selected_term = get_option("selected_" . $post_type . "_folder");
-
 
         $string = "";
         if(!empty($terms)) {

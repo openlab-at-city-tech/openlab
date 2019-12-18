@@ -163,7 +163,7 @@
 .slick-dots li button:before
 {
     font-family: 'dashicons';
-    font-size: 6px;
+    font-size: 10px;
     line-height: 20px;
 
     position: absolute;

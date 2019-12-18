@@ -26,7 +26,7 @@
     if (typeof advgbBlocks.customStyles !== 'undefined' && advgbBlocks.customStyles) {
         advgbBlocks.customStyles.unshift( {
             id: 0,
-            label: __( 'Paragraph' ),
+            label: __( 'Paragraph', 'advanced-gutenberg' ),
             value: '',
             identifyColor: ''
         } );
@@ -41,7 +41,7 @@
                 <InspectorControls key="advgb-custom-controls">
                     <SelectControl
                         label={ [
-                            __( 'Custom styles' ),
+                            __( 'Custom styles', 'advanced-gutenberg' ),
                             <span className={'components-panel__color-area'}
                                   key="customstyle-identify"
                                   style={ {
@@ -55,7 +55,7 @@
                                       marginLeft: '10px',
                                   } } />
                         ] }
-                        help={__( 'This option let you add custom style for current paragraph. (Front-end only!)' )}
+                        help={__( 'This option let you add custom style for current paragraph. (Front-end only!)', 'advanced-gutenberg' )}
                         value={props.attributes.customStyle}
                         options={advgbBlocks.customStyles.map( ( cstyle, index ) => {
                             if (cstyle.title) advgbBlocks.customStyles[ index ].label = cstyle.title;

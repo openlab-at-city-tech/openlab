@@ -54,13 +54,20 @@ $tabs_data = array(
             >
         </div>
         <ul class="tabs ju-menu-tabs">
-            <?php foreach ($tabs_data as $thisTab) : ?>
+            <?php foreach ($tabs_data as $thisTab) :
+                $tab_title = $thisTab['title'];
+                $icon = $thisTab['icon'];
+                if (isset($_GET['view']) && $_GET['view'] === 'profile' && $tab_title === 'Profiles') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No action, nonce is not required
+                    $tab_title = __('Back to profiles list', 'advanced-gutenberg');
+                    $icon = 'arrow-back';
+                }
+                ?>
                 <li class="tab" data-tab-title="<?php echo esc_attr($thisTab['title']) ?>">
                     <a href="#<?php echo esc_attr($thisTab['id']) ?>"
                        class="link-tab white-text waves-effect waves-light"
                     >
-                        <i class="mi mi-<?php echo esc_attr($thisTab['icon']) ?> menu-tab-icon"></i>
-                        <span class="tab-title"><?php echo esc_html($thisTab['title']) ?></span>
+                        <i class="mi mi-<?php echo esc_attr($icon) ?> menu-tab-icon"></i>
+                        <span class="tab-title"><?php echo esc_html($tab_title) ?></span>
                     </a>
                 </li>
             <?php endforeach; ?>

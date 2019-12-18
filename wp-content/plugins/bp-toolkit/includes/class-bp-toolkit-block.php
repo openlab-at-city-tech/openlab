@@ -39,20 +39,64 @@ class BPTK_Block
     {
         $this->bp_toolkit = $bp_toolkit;
         $this->version = $version;
-        add_action( 'bp_init', array( $this, 'bptk_toggle_blocking' ) );
-        add_action( 'bp_member_header_actions', array( $this, 'add_profile_block_button' ) );
-        add_action( 'bp_directory_members_actions', array( $this, 'add_list_block_button' ) );
-        add_action( 'bp_setup_nav', array( $this, 'setup_nav' ), 100 );
-        add_action( 'bp_after_has_members_parse_args', array( $this, 'adjust_query' ) );
-        add_filter( 'bp_get_total_member_count', array( $this, 'adjust_count' ) );
-        add_filter( 'bp_get_member_latest_update', array( $this, 'redo_update' ) );
-        add_action( 'bp_members_screen_display_profile', array( $this, 'display_block_screen' ) );
         
-        if ( bp_is_active( 'messages' ) ) {
-            add_filter( 'bp_messages_recipients', array( $this, 'check_recipients' ) );
-            add_action( 'messages_message_before_save', array( $this, 'check_conversations' ) );
+        if ( class_exists( 'BuddyPress' ) ) {
+            add_action( 'bp_init', array( $this, 'bptk_toggle_blocking' ) );
+            
+            if ( class_exists( 'Youzer' ) ) {
+                add_action( 'yz_after_header_cover_head_content', array( $this, 'add_profile_block_button' ) );
+            } else {
+                add_action( 'bp_member_header_actions', array( $this, 'add_profile_block_button' ) );
+            }
+            
+            add_action( 'bp_directory_members_actions', array( $this, 'add_list_block_button' ) );
+            add_action( 'bp_setup_nav', array( $this, 'setup_nav' ), 100 );
+            add_action( 'bp_after_has_members_parse_args', array( $this, 'adjust_query' ) );
+            add_filter( 'bp_get_total_member_count', array( $this, 'adjust_count' ) );
+            add_filter( 'bp_get_member_latest_update', array( $this, 'redo_update' ) );
+            add_action( 'bp_members_screen_display_profile', array( $this, 'display_block_screen' ) );
+            
+            if ( bp_is_active( 'messages' ) ) {
+                add_filter( 'bp_messages_recipients', array( $this, 'check_recipients' ) );
+                add_action( 'messages_message_before_save', array( $this, 'check_conversations' ) );
+            }
+            
+            add_filter(
+                'bp_activity_get',
+                array( $this, 'filter_activities' ),
+                10,
+                2
+            );
+            add_filter(
+                'bp_activity_can_comment_reply',
+                array( $this, 'block_comment_replies' ),
+                10,
+                2
+            );
+            if ( bp_is_active( 'friends' ) ) {
+                add_filter(
+                    'bp_is_friend',
+                    array( $this, 'friend_check' ),
+                    10,
+                    2
+                );
+            }
         }
     
+    }
+    
+    /**
+     * Check user has the required level to block others.
+     *
+     * @since 2.0
+     *
+     * @param      string    $user_id       The id of the user.
+     * @return     boolean   The result of the check.
+     */
+    public function has_required_level( $user_id )
+    {
+        $result = true;
+        return $result;
     }
     
     /**
@@ -120,19 +164,25 @@ class BPTK_Block
      */
     public function add_profile_block_button()
     {
-        if ( !is_user_logged_in() ) {
-            return;
-        }
         $user_id = get_current_user_id();
         $member_id = bp_displayed_user_id();
-        if ( bp_is_my_profile() || user_can( $member_id, BPTK_ADMIN_CAP ) ) {
+        if ( !is_user_logged_in() || bp_is_my_profile() || user_can( $member_id, BPTK_ADMIN_CAP ) || user_can( $user_id, BPTK_ADMIN_CAP ) ) {
+            return;
+        }
+        if ( !$this->has_required_level( $user_id ) ) {
             return;
         }
         
-        if ( bp_get_theme_package_id() == 'nouveau' ) {
-            echo  '<li class="generic-button bptk-block-profile"><a href="' . $this->bptk_block_link( $user_id, $member_id ) . '" class="activity-button">' . __( 'Block', 'bp-toolkit' ) . '</a></li>' ;
+        if ( class_exists( 'Youzer' ) ) {
+            echo  '<li style="cursor: pointer;" class="bptk-block-profile yz-name"><a href="' . $this->bptk_block_link( $user_id, $member_id ) . '" class="activity-button"><i class="fa fa-ban" aria-hidden="true"></i>' . __( 'Block User', 'bp-toolkit' ) . '</a></li>' ;
         } else {
-            echo  '<div class="generic-button bptk-block-profile"><a href="' . $this->bptk_block_link( $user_id, $member_id ) . '" class="activity-button">' . __( 'Block', 'bp-toolkit' ) . '</a></div>' ;
+            
+            if ( bp_get_theme_package_id() == 'nouveau' ) {
+                echo  '<li class="generic-button bptk-block-profile"><a href="' . $this->bptk_block_link( $user_id, $member_id ) . '" class="activity-button">' . __( 'Block', 'bp-toolkit' ) . '</a></li>' ;
+            } else {
+                echo  '<div class="generic-button bptk-block-profile"><a href="' . $this->bptk_block_link( $user_id, $member_id ) . '" class="activity-button">' . __( 'Block', 'bp-toolkit' ) . '</a></div>' ;
+            }
+        
         }
     
     }
@@ -143,12 +193,12 @@ class BPTK_Block
      */
     public function add_list_block_button()
     {
-        if ( !is_user_logged_in() ) {
-            return;
-        }
         $user_id = get_current_user_id();
         $member_id = bp_get_member_user_id();
-        if ( user_can( $member_id, BPTK_ADMIN_CAP ) || bp_loggedin_user_id() == bp_get_member_user_id() ) {
+        if ( !is_user_logged_in() || user_can( $member_id, BPTK_ADMIN_CAP ) || user_can( $user_id, BPTK_ADMIN_CAP ) || bp_loggedin_user_id() == bp_get_member_user_id() ) {
+            return;
+        }
+        if ( !$this->has_required_level( $user_id ) ) {
             return;
         }
         
@@ -343,6 +393,26 @@ class BPTK_Block
     }
     
     /**
+     * Returns whether member is blocked.
+     *
+     * @param int $blocker The current user
+     * @param int $blocked The user to test to see if blocked
+     * @since 2.0.2
+     *
+     */
+    public function is_blocked( $blocker, $blocked )
+    {
+        $list = $this->get_blocked_users( $blocker );
+        
+        if ( in_array( $blocked, $list ) ) {
+            return true;
+        } else {
+            return false;
+        }
+    
+    }
+    
+    /**
      * Adjusts the member query so blocked users aren't shown.
      * @since 1.0
      */
@@ -524,6 +594,103 @@ class BPTK_Block
             }
         }
         $message->recipients = $filtered;
+    }
+    
+    /**
+     * Get rid of my/their activites for those that they/I block.
+     * @since 1.0.1
+     */
+    public function filter_activities( &$activities, &$args )
+    {
+        if ( !is_user_logged_in() ) {
+            return $activities;
+        }
+        $user_id = get_current_user_id();
+        $my_list = $this->get_blocked_users( $user_id );
+        $args['exclude'] = implode( ',', $my_list );
+        $removed = 0;
+        // Ditch member activity I have blocked
+        foreach ( $activities['activities'] as $num => $activity ) {
+            
+            if ( in_array( $activity->user_id, $my_list ) && !user_can( $activity->user_id, BPTK_ADMIN_CAP ) ) {
+                unset( $activities['activities'][$num] );
+                $removed = $removed + 1;
+            }
+            
+            $children = $activity->children;
+            if ( !empty($activity->children) ) {
+                foreach ( $children as $child => $value ) {
+                    if ( in_array( $value->user_id, $my_list ) ) {
+                        $value->content = '*** You have blocked this member\'s content. ***';
+                    }
+                }
+            }
+        }
+        // Re-organize the array
+        $activities['activities'] = array_values( $activities['activities'] );
+        // Ditch my activity if I have been blocked
+        foreach ( $activities['activities'] as $num => $activity ) {
+            $their_list = $this->get_blocked_users( $activity->user_id );
+            
+            if ( in_array( $user_id, $their_list ) && !user_can( $activity->user_id, BPTK_ADMIN_CAP ) ) {
+                unset( $activities['activities'][$num] );
+                $removed = $removed + 1;
+            }
+            
+            $children = $activity->children;
+            if ( !empty($activity->children) ) {
+                foreach ( $children as $child => $value ) {
+                    $their_list = $this->get_blocked_users( $value->user_id );
+                    if ( in_array( $user_id, $their_list ) && !user_can( $value->user_id, BPTK_ADMIN_CAP ) ) {
+                        $value->content = '*** You are blocked from viewing this member\'s content. ***';
+                    }
+                }
+            }
+        }
+        // Re-organize the array
+        $activities['activities'] = array_values( $activities['activities'] );
+        // Update counter
+        if ( $removed > 0 ) {
+            $activities['total'] = $activities['total'] - $removed;
+        }
+        // Return the good news
+        return $activities;
+    }
+    
+    /**
+     * Prevent reply button from displaying on activity comments if blocked or blocking.
+     * @since 2.0.0
+     */
+    public function block_comment_replies( $can_comment, $comment )
+    {
+        $my_list = $this->get_blocked_users( get_current_user_id() );
+        $their_list = $this->get_blocked_users( $comment->user_id );
+        
+        if ( in_array( $comment->user_id, $my_list ) ) {
+            return false;
+        } else {
+            
+            if ( in_array( get_current_user_id(), $their_list ) ) {
+                return false;
+            } else {
+                return $can_comment;
+            }
+        
+        }
+    
+    }
+    
+    /**
+     * Removed the Add Friend button if the user is blocking.
+     * @since 1.0.4
+     */
+    public function friend_check( $status, $user_id )
+    {
+        $list = $this->get_blocked_users( $user_id );
+        if ( in_array( bp_loggedin_user_id(), (array) $list ) ) {
+            return false;
+        }
+        return $status;
     }
 
 }

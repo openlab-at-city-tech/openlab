@@ -2,8 +2,8 @@
 Contributors: JoomUnited
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
-Tested up to: 5.2.2
-Stable tag: 2.0.7
+Tested up to: 5.2.4
+Stable tag: 2.2.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ Advanced Gutenberg adds the missing blocks and configuration you need to build p
 - Define Gutenberg editor size and column materialization
 
 
-## ADVANCED GUTENBERG SPECIAL BLOCKS
+## ADVANCED GUTENBERG BLOCKS
 
 - Column manager with pre-defined layouts
 - Latest post slider and latest post slider
@@ -36,10 +36,12 @@ Advanced Gutenberg adds the missing blocks and configuration you need to build p
 - Map block: load a Google map position with zoom, icon, tooltip, color...
 - Advanced Table block: create tables with style like color, border
 - Accordion block: display content in a fully configurable accordion
-- Tabs block: display content in a fully tabbed UX
-- Testimonial block: define avatar, title, text, colors, slider
+- Tabs block: display content in a tabbed UX with nested blocks inside
+- Testimonial block: define avatar, title, text, slider or static
 - Contact Form block: get email and export contact form data
 - Email Opt-In block: get email and export data
+- WordPress login block
+- WordPress register block
 - Counter block: display numbers in a dynamic, fun and engaging way
 - Advanced Image block: hover text, overlay, colors, link and more
 - Advanced Image block: load and display local and remote video
@@ -136,6 +138,55 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 1. Latest posts and WooCommerce products blocks
 
 == Changelog ==
+
+= 2.2.2 =
+ * Fix : Columns manager frontend grid
+ * Fix : Recent Posts block return PHP error if don't have post
+ * Fix : Cover block toolbar is hidden
+ * Fix : Missing Add Block area of nested block inside Tabs block
+ * Fix : Add spacing in backend block columns
+
+= 2.2.1 =
+ * Fix : Frontend testimonial block not working inside Columns block with 1 column layout
+ * Fix : Missing padding units in columns block
+
+= 2.2.0 =
+ * Add : Tabs block: Rework Tabs block, allow nested block in tabs
+ * Add : Tabs block: news design and new option for design
+ * Add : Testimonial block: Improve slider view, new option for slider effects
+ * Add : Testimonial block: add design options, add avatar position setting
+ * Add : Columns block: Add max height for each line
+ * Add : Adv Button block: Add margin settings
+ * Add : Accordions block: Show settings on all accordion levels
+ * Add : Maps block: Add settings to show marker tooltip by default
+ * Add : Adv Image block: Add focal point picker, block alignment, default opacity settings
+ * Add : Add a defulat svg image for test purpose when none is selected
+ * Add : Add back profile list
+
+= 2.1.5 =
+ * Fix : Material fonts missing
+
+= 2.1.4 =
+ * Add : Add Opt In feedback on plugin first disabling & review message
+
+= 2.1.3 =
+ * Fix : Default editor width now apply the Gutenberg default width (750px)
+ * Fix : HTML tag is rendered on accordions header
+
+= 2.1.2 =
+ * Fix : Count Up block: br tag is shown as text on front-end
+ * Fix : Count Up block: check counter type to avoid render NaN
+
+= 2.1.1 =
+ * Fix : Error on login block with Gutenberg core
+
+= 2.1.0 =
+ * Add : Login/Register Form block: Easy to create login and register form
+ * Add : New Search bar block: Create a search bar block
+ * Add : New Accordions Wrapper block: group accordions elements
+ * Add : Adv Button block: add predefined styles and hover opacity
+ * Fix : Adv Table block: block error on headers in some cases
+ * Fix : Cannot verify newsletter form captcha
 
 = 2.0.7 =
  * Fix : Some blocks missing styles when using as Reusable blocks

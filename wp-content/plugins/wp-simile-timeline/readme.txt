@@ -1,10 +1,9 @@
 === WP SIMILE Timeline ===
 Contributors: freshlabs
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F9HV8RZH76SHU
 Tags: api, widget, visualization, javascript, simile, timeline, time, posts, post, ajax, integration, rss, feed, links, lifestream, twitter, xml
-Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 0.4.9
+Requires at least: 5.0.1
+Tested up to: 5.2
+Stable tag: 0.5.0
 
 Integrates the SIMILE Timeline into WordPress and provides an option interface for the various timeline settings.
 
@@ -26,7 +25,6 @@ Thanks to:
 
 *	[SIMILE Project](http://simile.mit.edu) for providing the Timeline script API and releasing useful, semantic applications.
 *	[John Lim of PHP Everywhere](http://phplens.com/phpeverywhere/adodb_date_library) for creating the ADOdb Date Library, making date formatting with dates before 1970 a charm.
-*	[The users of this plugin](http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/#comments) for giving me helpful bug feedback and inspiration for new features.
 *	Gianni Diurno for the Italian translations.
 *	[Marcis G.](http://pc.de) for the Belorussian translation
 
@@ -48,8 +46,6 @@ To include the Timeline in a page or post, you can use a PHP template tag or Wor
 
 *	`[similetimeline]`
 *	`<?php stl_simile_timeline(); ?>`
-
-The full documentation can be found on the [Google Group wp-simile-timeline](http://groups.google.com/group/wp-simile-timeline/web/documentation).
 
 == Frequently Asked Questions ==
 
@@ -88,6 +84,14 @@ call that file directly to see if posts show up there.
 5. Plugin Extras: Uninstaller and contextual help
 
 == Upgrade Notice ==
+
+= 0.5.1 =
+Typo fixed
+
+= 0.5 =
+WordPress 5.2 + compatibility
+PHP 7.2.1 + compatibility
+Date format fixes
 
 = 0.4.9 =
 WordPress 4.0 compatibility

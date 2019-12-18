@@ -875,6 +875,32 @@ function bp_group_avatar_mini( $group = false ) {
 		) );
 	}
 
+/**
+ * Returns the group avatar URL.
+ *
+ * @since 5.0.0
+ *
+ * @param object|bool $group Optional. Group object. Default current group in loop.
+ * @param string      $type  Optional. The type of the avatar ('full' or 'thumb'). Default 'full'.
+ * @return string The avatar URL.
+ */
+function bp_get_group_avatar_url( $group = false, $type = 'full' ) {
+	$group_id = bp_get_group_id( $group );
+
+	if ( ! $group_id ) {
+		return '';
+	}
+
+	return bp_core_fetch_avatar(
+		array(
+			'type'    => $type,
+			'object'  => 'group',
+			'item_id' => $group_id,
+			'html'    => false,
+		)
+	);
+}
+
 /** Group cover image *********************************************************/
 
 /**
@@ -887,6 +913,36 @@ function bp_group_avatar_mini( $group = false ) {
  */
 function bp_group_use_cover_image_header() {
 	return (bool) bp_is_active( 'groups', 'cover_image' ) && ! bp_disable_group_cover_image_uploads() && bp_attachments_is_wp_version_supported();
+}
+
+/**
+ * Returns the group cover image URL.
+ *
+ * @since 5.0.0
+ *
+ * @param object|bool $group Optional. Group object. Default current group in loop.
+ * @return string The cover image URL or empty string if not found.
+ */
+function bp_get_group_cover_url( $group = false ) {
+	$group_id = bp_get_group_id( $group );
+
+	if ( ! $group_id ) {
+		return '';
+	}
+
+	$cover_url = bp_attachments_get_attachment(
+		'url',
+		array(
+			'object_dir' => 'groups',
+			'item_id'    => $group_id,
+		)
+	);
+
+	if ( ! $cover_url ) {
+		return '';
+	}
+
+	return $cover_url;
 }
 
 /**
@@ -5430,6 +5486,12 @@ function bp_group_request_reject_link() {
 	function bp_get_group_request_reject_link() {
 		global $requests_template;
 
+		$link = add_query_arg( array(
+			'_wpnonce' => wp_create_nonce( 'groups_reject_membership_request' ),
+			'user_id'  => $requests_template->request->user_id,
+			'action'   => 'reject'
+		), trailingslashit( bp_get_group_permalink( groups_get_current_group() ) ) . 'admin/membership-requests/' );
+
 		/**
 		 * Filters the URL to use to reject a membership request.
 		 *
@@ -5437,7 +5499,7 @@ function bp_group_request_reject_link() {
 		 *
 		 * @param string $value URL to use to reject a membership request.
 		 */
-		return apply_filters( 'bp_get_group_request_reject_link', wp_nonce_url( trailingslashit( bp_get_group_permalink( groups_get_current_group() ) . 'admin/membership-requests/reject/' . $requests_template->request->membership_id ), 'groups_reject_membership_request' ) );
+		return apply_filters( 'bp_get_group_request_reject_link', $link );
 	}
 
 /**
@@ -5454,6 +5516,12 @@ function bp_group_request_accept_link() {
 	function bp_get_group_request_accept_link() {
 		global $requests_template;
 
+		$link = add_query_arg( array(
+			'_wpnonce' => wp_create_nonce( 'groups_accept_membership_request' ),
+			'user_id'  => $requests_template->request->user_id,
+			'action'   => 'accept'
+		), trailingslashit( bp_get_group_permalink( groups_get_current_group() ) ) . 'admin/membership-requests/' );
+
 		/**
 		 * Filters the URL to use to accept a membership request.
 		 *
@@ -5461,7 +5529,7 @@ function bp_group_request_accept_link() {
 		 *
 		 * @param string $value URL to use to accept a membership request.
 		 */
-		return apply_filters( 'bp_get_group_request_accept_link', wp_nonce_url( trailingslashit( bp_get_group_permalink( groups_get_current_group() ) . 'admin/membership-requests/accept/' . $requests_template->request->membership_id ), 'groups_accept_membership_request' ) );
+		return apply_filters( 'bp_get_group_request_accept_link', $link );
 	}
 
 /**
@@ -5865,7 +5933,7 @@ function bp_groups_activity_feed() {
 		return;
 	} ?>
 
-	<link rel="alternate" type="application/rss+xml" title="<?php bloginfo( 'name' ) ?> | <?php bp_current_group_name() ?> | <?php _e( 'Group Activity RSS Feed', 'buddypress' ) ?>" href="<?php bp_group_activity_feed_link() ?>" />
+	<link rel="alternate" type="application/rss+xml" title="<?php bloginfo( 'name' ) ?> | <?php echo esc_attr( bp_get_current_group_name() ); ?> | <?php _e( 'Group Activity RSS Feed', 'buddypress' ) ?>" href="<?php bp_group_activity_feed_link() ?>" />
 
 <?php
 }
@@ -6160,4 +6228,16 @@ function bp_groups_get_profile_stats( $args = '' ) {
 	 * @param array  $r     Array of parsed arguments for query.
 	 */
 	return apply_filters( 'bp_groups_get_profile_stats', $r['output'], $r );
+}
+
+/**
+ * Check if the active template pack includes the Group Membership management UI templates.
+ *
+ * @since 5.0.0
+ *
+ * @return boolean True if the active template pack includes the Group Membership management UI templates.
+ *                 False otherwise.
+ */
+function bp_groups_has_manage_group_members_templates() {
+	return file_exists( bp_locate_template( 'common/js-templates/group-members/index.php' ) );
 }

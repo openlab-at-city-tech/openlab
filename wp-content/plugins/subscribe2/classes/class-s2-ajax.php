@@ -86,7 +86,7 @@ class S2_Ajax {
 			echo '<p>' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
 		} else {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
-				$date = date( 'H:i:s.u', $s2_frontend->lockout );
+				$date = gmdate( 'H:i:s.u', $s2_frontend->lockout );
 				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 				if ( in_array( $s2_frontend->ip, $ips, true ) ) {
 					echo '<p>' . __( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';

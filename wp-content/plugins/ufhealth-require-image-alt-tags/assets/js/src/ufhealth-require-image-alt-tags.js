@@ -5,141 +5,156 @@
  * Copyright (c) 2017 UF Health
  * Licensed under the GPLv2+ license.
  */
-jQuery(document).ready(function ($) {
-	'use strict';
+jQuery(document).ready(function($) {
+  'use strict';
 
-	/**
-	 * Checks the media form for proper ALT text
-	 *
-	 * @since 1.0
-	 *
-	 * @param showNotice
-	 *
-	 * @returns {boolean}
-	 */
-	var checkForAlt = function (showNotice) {
+  /**
+   * Checks the media form for proper ALT text
+   *
+   * @since 1.0
+   *
+   * @param showNotice
+   *
+   * @returns {boolean}
+   */
+  var checkForAlt = function(showNotice) {
 
-		var notice         = ('undefined' !== typeof showNotice) ? showNotice : false,
-		    $parent        = $('.media-frame-toolbar .media-toolbar-primary'),
-		    selectedImages = $('.media-frame-content ul.attachments li[aria-checked="true"]'),
-		    canProceed     = true,
-		    badImages      = [];
+    var notice = ('undefined' !== typeof showNotice) ? showNotice : false,
+        $parent = $('.media-frame-toolbar .media-toolbar-primary'),
+        selectedImages = $('.media-frame-content ul.attachments li[aria-checked="true"]'),
+        canProceed = true,
+        badImages = [];
 
-		// Clear all the marked ones first.
-		$('.ufh-needs-alt-text').each(function (idx, li) {
-			$(li).removeClass('ufh-needs-alt-text');
-		});
+    // Clear all the marked ones first.
+    $('.ufh-needs-alt-text').each(function(idx, li) {
+      $(li).removeClass('ufh-needs-alt-text');
+    });
 
-		if (0 === selectedImages.length) { // This is seen in some modals.
+    if (0 === selectedImages.length) { // This is seen in some modals.
 
-			var $image = $('.attachment-details').attr('data-id'),
-			    altText;
+      var $image = $('.attachment-details').attr('data-id'),
+          altText;
 
-			// Handle image uploads if there is a multi-select box (normal image insertion).
-			if ('undefined' !== typeof $image) {
+      // Handle image uploads if there is a multi-select box (normal image
+      // insertion).
+      if ('undefined' !== typeof $image) {
 
-				var image = wp.media.model.Attachment.get($image);
+        var image = wp.media.model.Attachment.get($image);
 
-				altText = image.get('alt');
+        altText = image.get('alt');
 
-			} else { // Handle featured image, replace image, etc.
+      }
+      else { // Handle featured image, replace image, etc.
 
-				// Different forms have different markup so attempt to address accordingly.
-				var hasLabel = $('.media-modal-content label[data-setting="alt"] input'),
-				    noLabel  = $('.media-frame-content input[data-setting="alt"]');
+        // Different forms have different markup so attempt to address
+        // accordingly.
+        var hasLabel = $(
+            '.media-modal-content label[data-setting="alt"] input'),
+            noLabel = $('.media-frame-content input[data-setting="alt"]');
 
-				if (hasLabel.length && 0 < hasLabel.length) {
+        if (hasLabel.length && 0 < hasLabel.length) {
 
-					altText = hasLabel.val();
+          altText = hasLabel.val();
 
-				} else {
+        }
+        else {
 
-					altText = noLabel.val();
+          altText = noLabel.val();
 
-				}
-			}
+        }
+      }
 
-			// If we don't have an alt text field or don't even have a media form we're OK.
-			if (0 === $('.media-sidebar.visible').length || ( altText.length && 0 < altText.length )) {
+      // If we don't have an alt text field or don't even have a media form
+      // we're OK.
+      if (0 === $('.media-sidebar.visible').length ||
+          (altText.length && 0 < altText.length)) {
 
-				$parent.addClass('ufh-has-alt-text');
+        $parent.addClass('ufh-has-alt-text');
 
-				return true;
+        return true;
 
-			}
+      }
 
-			// Remove the mask that allows the button to be pushed.
-			$parent.removeClass('ufh-has-alt-text');
+      // Remove the mask that allows the button to be pushed.
+      $parent.removeClass('ufh-has-alt-text');
 
-			if (notice) {
-				alert(ufhTagsCopy.editTxt);
-			}
+      if (notice) {
+        /* jshint ignore:start */
+        alert(ufhTagsCopy.editTxt);
+        /* jshint ignore:end */
+      }
 
-			return false;
+      return false;
 
-		} else { // We've selected one or more in a normal box.
+    }
+    else { // We've selected one or more in a normal box.
 
-			selectedImages.each(function (idx, li) {
+      selectedImages.each(function(idx, li) {
 
-				var $image  = $(li),
-				    imageId = $image.attr('data-id'),
-				    image   = wp.media.model.Attachment.get(imageId),
-				    altText = image.get('alt');
+        var $image = $(li),
+            imageId = $image.attr('data-id'),
+            image = wp.media.model.Attachment.get(imageId),
+            altText = image.get('alt');
 
-				if ('undefined' !== typeof imageId) { // It's not actually an image or even an uploaded item.
+        if ('undefined' !== typeof imageId) { // It's not actually an image or even an uploaded item.
 
-					if (altText.length || 'image' !== image.get('type')) { //looks like we're OK on this one.
+          if (altText.length || 'image' !== image.get('type')) { //looks like we're OK on this one.
 
-						$parent.addClass('ufh-has-alt-text');
-						$image.removeClass('ufh-needs-alt-text');
+            $parent.addClass('ufh-has-alt-text');
+            $image.removeClass('ufh-needs-alt-text');
 
-					} else { // Mark it 0 dude.
+          }
+          else { // Mark it 0 dude.
 
-						$image.addClass('ufh-needs-alt-text');
+            $image.addClass('ufh-needs-alt-text');
 
-						badImages.push(image.get('title'));
+            badImages.push(image.get('title'));
 
-						canProceed = false;
+            canProceed = false;
 
-					}
-				}
-			});
+          }
+        }
+      });
 
-			if (false === canProceed) {
+      if (false === canProceed) {
 
-				$parent.removeClass('ufh-has-alt-text');
+        $parent.removeClass('ufh-has-alt-text');
 
-				if (notice) {
+        if (notice) {
 
-					var imageList = '\n\n';
+          var imageList = '\n\n';
 
-					for (var i = 0, l = badImages.length; i < l; i++) {
-						imageList = imageList + badImages[i] + '\n\n';
-					}
+          for (var i = 0, l = badImages.length; i < l; i++) {
+            imageList = imageList + badImages[i] + '\n\n';
+          }
+          /* jshint ignore:start */
+          alert(ufhTagsCopy.disclaimer + '\n\n' + ufhTagsCopy.txt + ':' + imageList);
+          /* jshint ignore:end */
 
-					alert(ufhTagsCopy.disclaimer + '\n\n' + ufhTagsCopy.txt + ':' + imageList);
+        }
 
-				}
+        return false;
 
-				return false;
+      }
 
-			}
+      return true;
 
-			return true;
+    }
+  };
 
-		}
-	};
+  var body = $('body');
 
-	var body = $('body');
+  // Bind to keyup.
+  body.on('keyup',
+      '.media-modal-content label[data-setting="alt"] input, .media-frame-content input[data-setting="alt"]',
+      function() {
+        checkForAlt();
+      });
 
-	// Bind to keyup.
-	body.on('keyup', '.media-modal-content label[data-setting="alt"] input, .media-frame-content input[data-setting="alt"]', function () {
-		checkForAlt();
-	});
-
-	// Bind to the 'Insert into post' button.
-	body.on('mouseenter mouseleave click', '.media-frame-toolbar .media-toolbar-primary', function (e) {
-		checkForAlt(e.type === 'click');
-	});
+  // Bind to the 'Insert into post' button.
+  body.on('mouseenter mouseleave click',
+      '.media-frame-toolbar .media-toolbar-primary', function(e) {
+        checkForAlt(e.type === 'click');
+      });
 
 });

@@ -182,7 +182,7 @@ class S2_Frontend extends S2_Core {
 			} else {
 				$this->ip = $_POST['ip'];
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
-					$date = date( 'H:i:s.u', $this->lockout );
+					$date = gmdate( 'H:i:s.u', $this->lockout );
 					$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 					if ( in_array( $this->ip, $ips, true ) ) {
 						return __( 'Slow down, you move too fast.', 'subscribe2' );

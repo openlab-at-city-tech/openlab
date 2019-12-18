@@ -2,13 +2,15 @@
 Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
-Requires at least: WP 3.0 / BP 1.5
-Tested up to: WP 4.6 / BP 2.6
-Stable tag: 1.8.13
+Requires at least: 3.6
+Tested up to: 5.0
+Stable tag: 1.9.1
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
 == Description ==
+
+Requires BuddyPress 1.7+ and PHP 5.3+.
 
 The BuddyPress Groupblog plugin extends the group functionality by enabling each group to have a single blog associated with it. Group members are automatically added to the blog and will have blog roles as set by the groupblog admin settings.
 
@@ -100,6 +102,17 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.1 =
+* Fixed activity stream behavior for comments from non-logged-in comments.
+* Fixed redirectblog behavior for hidden groups.
+* Improved values passed to filters.
+* PHP compatibility fixes.
+
+= 1.9.0 =
+* Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.
+* Added support for comment activity recording.
+* Fixed activity pagination on BP groupblog templates.
 
 = 1.8.13 =
 * Bumped BuddyPress version requirement to 1.5

@@ -3,7 +3,7 @@
  * View: Month View Nav Next Button
  *
  * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/events/views/v2/month/mobile-events/nav/next.php
+ * [your-theme]/tribe/events/v2/month/mobile-events/nav/next.php
  *
  * See more documentation about our views templating system.
  *
@@ -12,7 +12,7 @@
  * @var string $link The URL to the next page, if any, or an empty string.
  * @var string $label The label for the next link.
  *
- * @version TBD
+ * @version 4.9.10
  *
  */
 ?>

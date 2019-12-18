@@ -3,13 +3,13 @@
  * View: Month View Mobile Day
  *
  * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/events/views/v2/month/mobile-events/mobile-day.php
+ * [your-theme]/tribe/events/v2/month/mobile-events/mobile-day.php
  *
  * See more documentation about our views templating system.
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version TBD
+ * @version 4.9.10
  *
  * @var string $today_date Today's date in the `Y-m-d` format.
  * @var string $day_date The current day date, in the `Y-m-d` format.
@@ -52,9 +52,11 @@ if ( $today_date === $day_date ) {
 	<?php $this->template( 'month/mobile-events/mobile-day/day-marker', [ 'day_date' => $day_date ] ); ?>
 
 	<?php foreach( $events as $event ) : ?>
+		<?php $this->setup_postdata( $event ); ?>
 
 		<?php $this->template( 'month/mobile-events/mobile-day/mobile-event', [ 'event' => $event ] ); ?>
 
 	<?php endforeach; ?>
 
+	<?php $this->template( 'month/mobile-events/mobile-day/more-events', [ 'more_events' => $day['more_events'], 'more_url' => $day['day_url'] ] ); ?>
 </div>

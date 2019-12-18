@@ -2,8 +2,8 @@
 /*
 Plugin Name: TinyMCE Advanced
 Plugin URI: http://www.laptoptips.ca/projects/tinymce-advanced/
-Description: Enables advanced features and plugins in TinyMCE, the visual editor in WordPress.
-Version: 5.2.1
+Description: Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMCE).
+Version: 5.3.0
 Author: Andrew Ozz
 Author URI: http://www.laptoptips.ca/
 License: GPL2

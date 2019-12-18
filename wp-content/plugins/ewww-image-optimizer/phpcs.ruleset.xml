@@ -2,6 +2,9 @@
 <ruleset name="WordPress Coding Standards for Plugins">
 	<description>Generally-applicable sniffs for WordPress plugins</description>
 
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+
 	<rule ref="WordPress-Core" />
 	<rule ref="WordPress-Docs" />
 
@@ -12,16 +15,18 @@
 	<rule ref="Generic.PHP.NoSilencedErrors">
 		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged" />
 	</rule>
-	
+
+	<rule ref="WordPress.PHP.NoSilencedErrors">
+		<properties>
+			<property name="custom_whitelist" type="array" value="ini_get,exif_read_data,ob_end_flush"/>
+		</properties>
+	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-			<property name="customPropertiesWhitelist" type="array" value="formatOutput,parentNode,nextSibling,documentElement,imagePath,webimagePath,thumbPath,fileName,Version,Name" />
+			<property name="customPropertiesWhitelist" type="array" value="formatOutput,imgQuality,parentNode,nextSibling,documentElement,imagePath,webimagePath,thumbPath,fileName,Version,Name" />
 		</properties>
 		<properties>
 			<property name="customVariablesWhitelist" type="array" value="formatOutput,parentNode,nextSibling,documentElement" />
 		</properties>
 	</rule>
-
-	<exclude-pattern>*/vendor/*</exclude-pattern>
-	<exclude-pattern>*/tests/*</exclude-pattern>
 </ruleset>

@@ -1,21 +1,26 @@
 <?php
 
 /**
+ * bbPress AEF Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of AEF Forum converter.
  *
- * @since bbPress (r5139)
- * @link Codex Docs http://codex.bbpress.org/import-forums/aef
+ * @since 2.5.0 bbPress (r5139)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/aef
  */
 class AEF extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
-	 *
-	 * @uses AEF::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -25,12 +30,12 @@ class AEF extends BBP_Converter_Base {
 
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'forums',
 			'from_fieldname' => 'fid',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0, Stored in postmeta)
@@ -38,7 +43,7 @@ class AEF extends BBP_Converter_Base {
 			'from_tablename'  => 'forums',
 			'from_fieldname'  => 'par_board_id',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -107,6 +112,13 @@ class AEF extends BBP_Converter_Base {
 			'to_fieldname'   => 'menu_order'
 		);
 
+		// Forum type (Set a default value 'forum', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_forum_type',
+			'default'      => 'forum'
+		);
+
 		// Forum status (Unlocked = 1 or Locked = 0, Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'forums',
@@ -140,12 +152,12 @@ class AEF extends BBP_Converter_Base {
 
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'topics',
 			'from_fieldname' => 'tid',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -239,12 +251,12 @@ class AEF extends BBP_Converter_Base {
 			'callback_method' => 'callback_forumid'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'topics',
 			'from_fieldname'  => 't_sticky',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -306,7 +318,7 @@ class AEF extends BBP_Converter_Base {
 			'from_tablename'  => 'topics',
 			'from_fieldname'  => 't_status',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
@@ -318,12 +330,12 @@ class AEF extends BBP_Converter_Base {
 
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'posts',
 			'from_fieldname'  => 'pid',
 			'to_type'         => 'reply',
-			'to_fieldname'    => '_bbp_post_id'
+			'to_fieldname'    => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0, Stored in postmeta)
@@ -359,32 +371,6 @@ class AEF extends BBP_Converter_Base {
 			'to_type'         => 'reply',
 			'to_fieldname'    => 'post_author',
 			'callback_method' => 'callback_userid'
-		);
-
-		// Reply title.
-		// Note: We join the 'topics' table because 'posts' table does not include reply title.
-		$this->field_map[] = array(
-			'from_tablename'  => 'topics',
-			'from_fieldname'  => 'topic',
-			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'ON topics.tid = posts.post_tid WHERE topics.first_post_id != posts.pid',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title',
-			'callback_method' => 'callback_reply_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
-		// Note: We join the 'topics' table because 'posts' table does not include reply slug.
-		$this->field_map[] = array(
-			'from_tablename'  => 'topics',
-			'from_fieldname'  => 'topic',
-			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'ON topics.tid = posts.post_tid WHERE topics.first_post_id != posts.pid',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
 		);
 
 		// Reply content.
@@ -437,15 +423,15 @@ class AEF extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'id',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users',
 			'from_fieldname'  => 'password',
@@ -454,7 +440,7 @@ class AEF extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'salt',
@@ -515,7 +501,7 @@ class AEF extends BBP_Converter_Base {
 			'from_tablename' => 'users',
 			'from_fieldname' => 'aim',
 			'to_type'        => 'user',
-			'to_fieldname'   => 'aim'
+			'to_fieldname'   => '_bbp_aef_user_aim'
 		);
 
 		// User Yahoo (Stored in usermeta)
@@ -523,7 +509,7 @@ class AEF extends BBP_Converter_Base {
 			'from_tablename' => 'users',
 			'from_fieldname' => 'yim',
 			'to_type'        => 'user',
-			'to_fieldname'   => 'yim'
+			'to_fieldname'   => '_bbp_aef_user_yim'
 		);
 
 		// Store ICQ (Stored in usermeta)
@@ -581,8 +567,7 @@ class AEF extends BBP_Converter_Base {
 	 * This method allows us to indicates what is or is not converted for each
 	 * converter.
 	 */
-	public function info()
-	{
+	public function info() {
 		return '';
 	}
 
@@ -591,8 +576,7 @@ class AEF extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass( $field, $row )
-	{
+	public function callback_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -601,14 +585,13 @@ class AEF extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
 		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
 	}
 
 	/**
-	 * Translate the forum status from AEF v1.0.9 numeric's to WordPress's strings.
+	 * Translate the forum status from AEF v1.0.9 numerics to WordPress's strings.
 	 *
 	 * @param int $status AEF v1.0.9 numeric forum status
 	 * @return string WordPress safe
@@ -628,7 +611,7 @@ class AEF extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from AEF v1.0.9 numeric's to WordPress's strings.
+	 * Translate the post status from AEF v1.0.9 numerics to WordPress's strings.
 	 *
 	 * @param int $status AEF v1.0.9 numeric topic status
 	 * @return string WordPress safe
@@ -648,7 +631,7 @@ class AEF extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic sticky status type from AEF 1.x numeric's to WordPress's strings.
+	 * Translate the topic sticky status type from AEF 1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status AEF 1.x numeric forum type
 	 * @return string WordPress safe
@@ -676,16 +659,5 @@ class AEF extends BBP_Converter_Base {
 	public function callback_topic_reply_count( $count = 1 ) {
 		$count = absint( (int) $count - 1 );
 		return $count;
-	}
-
-	/**
-	 * Set the reply title
-	 *
-	 * @param string $title AEF v1.0.9 topic title of this reply
-	 * @return string Prefixed topic title, or empty string
-	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
 	}
 }

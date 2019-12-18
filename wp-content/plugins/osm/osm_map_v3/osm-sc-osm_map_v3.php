@@ -412,11 +412,13 @@ if( $OL3_LIBS_LOADED == 0) {
 
 			  var clusterSource = new ol.source.Cluster({
 				  distance: 30,
-				  source: vectorMarkerSource
+				  source: vectorMarkerSource,
+				  zIndex: 92
 			   });
 			   var styleCache = {};
 			  var vectorMarkerLayer = new ol.layer.Vector({
 				source: clusterSource,
+				zIndex: 92,
 				style: function(feature, resolution) {
 			var size = feature.get("features").length;
 			var features = feature.get("features");

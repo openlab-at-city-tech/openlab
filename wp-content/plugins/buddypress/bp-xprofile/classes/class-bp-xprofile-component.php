@@ -489,4 +489,21 @@ class BP_XProfile_Component extends BP_Component {
 
 		return $wp_admin_nav;
 	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		parent::rest_api_init( array(
+			'BP_REST_XProfile_Fields_Endpoint',
+			'BP_REST_XProfile_Field_Groups_Endpoint',
+			'BP_REST_XProfile_Data_Endpoint',
+			'BP_REST_Attachments_Member_Avatar_Endpoint',
+		) );
+	}
 }

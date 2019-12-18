@@ -48,6 +48,13 @@ function sortBy($key)
 }
 
 usort($advgb_blocks, sortBy('title'));
+$excluded_blocks_config = array(
+    'advgb/container',
+    'advgb/accordion-item',
+    'advgb/accordion',
+    'advgb/tabs',
+    'advgb/tab',
+);
 
 $gallery_lightbox_checked         = $saved_settings['gallery_lightbox'] ? 'checked' : '';
 $gallery_lightbox_caption_checked = $saved_settings['gallery_lightbox_caption'] ? 'checked' : '';
@@ -56,7 +63,7 @@ $google_api_key_saved             = isset($saved_settings['google_api_key']) ? $
 $enable_blocks_spacing            = isset($saved_settings['enable_blocks_spacing']) && $saved_settings['enable_blocks_spacing'] ? 'checked' : '';
 $blocks_spacing                   = isset($saved_settings['blocks_spacing']) ? $saved_settings['blocks_spacing'] : 0;
 $blocks_icon_color                = isset($saved_settings['blocks_icon_color']) ? $saved_settings['blocks_icon_color'] : '#5952de';
-$editor_width                     = isset($saved_settings['editor_width']) ? $saved_settings['editor_width'] : '75';
+$editor_width                     = isset($saved_settings['editor_width']) ? $saved_settings['editor_width'] : '0';
 $default_thumb                    = plugins_url('assets/blocks/recent-posts/recent-post-default.png', ADVANCED_GUTENBERG_PLUGIN);
 $rp_default_thumb                 = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
 $enable_columns_visual_guide      = isset($saved_settings['enable_columns_visual_guide']) && $saved_settings['enable_columns_visual_guide'] ? 'checked' : '';
@@ -359,6 +366,9 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
         <ul class="blocks-config-list clearfix">
             <?php foreach ($advgb_blocks as $block) : ?>
                 <?php $iconColor = '';
+                if (in_array($block['name'], $excluded_blocks_config)) {
+                    continue;
+                }
                 if (isset($block['iconColor'])) :
                     $iconColor = 'style=color:' . $block['iconColor'];
                 endif; ?>

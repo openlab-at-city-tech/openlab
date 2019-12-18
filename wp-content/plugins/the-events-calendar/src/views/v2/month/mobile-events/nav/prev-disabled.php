@@ -3,7 +3,7 @@
  * View: Month View Nav Disabled Previous Button
  *
  * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/events/views/v2/month/mobile-events/nav/prev-disabled.php
+ * [your-theme]/tribe/events/v2/month/mobile-events/nav/prev-disabled.php
  *
  * See more documentation about our views templating system.
  *
@@ -11,7 +11,7 @@
  *
  * @var string $label The label for the previous link.
  *
- * @version TBD
+ * @version 4.9.10
  *
  */
 ?>

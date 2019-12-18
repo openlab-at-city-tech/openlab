@@ -7,52 +7,56 @@
  * @subpackage Theme
  */
 
-?>
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
 
-	<?php do_action( 'bbp_template_before_user_subscriptions' ); ?>
+do_action( 'bbp_template_before_user_subscriptions' ); ?>
 
-	<?php if ( bbp_is_subscriptions_active() ) : ?>
+<?php if ( bbp_is_subscriptions_active() ) : ?>
 
-		<?php if ( bbp_is_user_home() || current_user_can( 'edit_users' ) ) : ?>
+	<?php if ( bbp_is_user_home() || current_user_can( 'edit_user', bbp_get_displayed_user_id() ) ) : ?>
 
-			<div id="bbp-user-subscriptions" class="bbp-user-subscriptions">
-				<h2 class="entry-title"><?php _e( 'Subscribed Forums', 'bbpress' ); ?></h2>
-				<div class="bbp-user-section">
+		<div id="bbp-user-subscriptions" class="bbp-user-subscriptions">
 
-					<?php if ( bbp_get_user_forum_subscriptions() ) : ?>
+			<?php bbp_get_template_part( 'form', 'topic-search' ); ?>
 
-						<?php bbp_get_template_part( 'loop', 'forums' ); ?>
+			<h2 class="entry-title"><?php esc_html_e( 'Subscribed Forums', 'bbpress' ); ?></h2>
+			<div class="bbp-user-section">
 
-					<?php else : ?>
+				<?php if ( bbp_get_user_forum_subscriptions() ) : ?>
 
-						<p><?php bbp_is_user_home() ? _e( 'You are not currently subscribed to any forums.', 'bbpress' ) : _e( 'This user is not currently subscribed to any forums.', 'bbpress' ); ?></p>
+					<?php bbp_get_template_part( 'loop', 'forums' ); ?>
 
-					<?php endif; ?>
+				<?php else : ?>
 
-				</div>
+					<?php bbp_get_template_part( 'feedback', 'no-forums' ); ?>
 
-				<h2 class="entry-title"><?php _e( 'Subscribed Topics', 'bbpress' ); ?></h2>
-				<div class="bbp-user-section">
+				<?php endif; ?>
 
-					<?php if ( bbp_get_user_topic_subscriptions() ) : ?>
+			</div>
 
-						<?php bbp_get_template_part( 'pagination', 'topics' ); ?>
+			<h2 class="entry-title"><?php esc_html_e( 'Subscribed Topics', 'bbpress' ); ?></h2>
+			<div class="bbp-user-section">
 
-						<?php bbp_get_template_part( 'loop',       'topics' ); ?>
+				<?php if ( bbp_get_user_topic_subscriptions() ) : ?>
 
-						<?php bbp_get_template_part( 'pagination', 'topics' ); ?>
+					<?php bbp_get_template_part( 'pagination', 'topics' ); ?>
 
-					<?php else : ?>
+					<?php bbp_get_template_part( 'loop',       'topics' ); ?>
 
-						<p><?php bbp_is_user_home() ? _e( 'You are not currently subscribed to any topics.', 'bbpress' ) : _e( 'This user is not currently subscribed to any topics.', 'bbpress' ); ?></p>
+					<?php bbp_get_template_part( 'pagination', 'topics' ); ?>
 
-					<?php endif; ?>
+				<?php else : ?>
 
-				</div>
-			</div><!-- #bbp-user-subscriptions -->
+					<?php bbp_get_template_part( 'feedback', 'no-topics' ); ?>
 
-		<?php endif; ?>
+				<?php endif; ?>
+
+			</div>
+		</div><!-- #bbp-user-subscriptions -->
 
 	<?php endif; ?>
 
-	<?php do_action( 'bbp_template_after_user_subscriptions' ); ?>
+<?php endif; ?>
+
+<?php do_action( 'bbp_template_after_user_subscriptions' );

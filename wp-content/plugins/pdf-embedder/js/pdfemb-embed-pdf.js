@@ -56,19 +56,23 @@ jQuery(document).ready(function ($) {
                       return;
                   }
 
-	  	    	  PDFJS.getDocument(pdf).then(
-                      function(pdfDoc_) {
-                          initPdfDoc(pdfDoc_, showIsSecure)
-                      },
-                      function(e) {
-						  var msgnode = document.createTextNode(e.message);
-						  if (e.name == 'UnexpectedResponseException' && e.status == 0) {
-							  msgnode = $('<span></span>').append(
-								  document.createTextNode(pdfemb_trans.objectL10n.domainerror+' '))
-								  .append($('<a href="https://wp-pdf.com/troubleshooting/#unexpected" target="_blank">'+pdfemb_trans.objectL10n.clickhereinfo+'</a>'));
-						  }
-                          divContainer.empty().append($('<div></div>', {'class': 'pdfemb-errormsg'}).append(msgnode));
-                      }
+	  	    	  var loadingTask = pdfjsLib.getDocument(pdf);
+                  loadingTask.promise.then(function(pdfDoc_) {
+                    // you can now use *pdf* here
+                    initPdfDoc(pdfDoc_, showIsSecure)
+                  },
+                  function(e) {
+                      var msgnode = document.createTextNode(e.message);
+                          if (e.name == 'UnknownErrorException' && e.message == 'Failed to fetch') {
+                                  // "Failed to fetch" - probably cross-domain issue
+                              msgnode = $('<span></span>').append(
+                                  document.createTextNode(e.message+' '+pdfemb_trans.objectL10n.domainerror+' '))
+                                  .append($('<a href="https://wp-pdf.com/kb/error-url-to-the-pdf-file-must-be-on-exactly-the-same-domain-as-the-current-web-page/" target="_blank">'
+                                  +pdfemb_trans.objectL10n.clickhereinfo+'</a>'));
+                          }
+                              divContainer.empty().append($('<div></div>', {'class': 'pdfemb-errormsg'}).append(msgnode));
+                          }
+
                   );
 
 	    	};
@@ -87,10 +91,6 @@ jQuery(document).ready(function ($) {
     };
 
     // Apply plugin to relevant divs
-	
-	PDFJS.workerSrc = pdfemb_trans.worker_src;
-	PDFJS.cMapUrl = pdfemb_trans.cmap_url;
-	PDFJS.cMapPacked = true;
 	$('.pdfemb-viewer').pdfEmbedder();
 	
 });

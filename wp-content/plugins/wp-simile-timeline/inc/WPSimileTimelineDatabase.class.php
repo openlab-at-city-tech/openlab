@@ -3,11 +3,11 @@
  * WPSimileTimelineDatabase.class.php
  * Description: Database functions for the SIMILE Timline Plugin
  * Plugin URI: http://wordpress.org/extend/plugins/wp-simile-timeline/
- * Author: Tim Isenheim
+ * Author: freshlabs
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

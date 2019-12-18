@@ -3,8 +3,8 @@ Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
 Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, OpenStreetMap, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 5.1
-Stable tag: 3.8.0
+Tested up to: 5.3.0
+Stable tag: 3.8.6
 License: GPLv3
 
 Create and maintain events, including complex reoccurring patterns, venue management (with Google Maps or OpenStreetMap), calendars and customisable event lists
@@ -221,6 +221,31 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 8. Events list (using TwentySixteen)
 
 == Changelog ==
+= 3.8.6 - 18th November 2019 =
+* bugfix: Removed call to is_feed(), uses $query->is_feed() instead. Fixes potential warning logged
+
+= 3.8.5 - 7th November 2019 =
+* bugfix: Fixed missing Leaflet files for openstreetmap
+
+= 3.8.4 - 5th November 2019 =
+* bugfix: Fixed inline editing event looses venue selection
+
+= 3.8.3 - 31st August 2019 =
+* bugfix: Fixed 'Feed not found' when importing a feed with a Byte Order Mark.
+
+= 3.8.2 - 6th August 2019 =
+* bugfix: Restored PHP 5.2 compatability
+
+= 3.8.1 - 26th July 2019 =
+* Bumped tested up-to version
+* bugfix: Fixed bug where leaflet map appeared above datepicker in the event edit screen
+
+= 3.8.0 - 15th July 2019 =
+* feature: Added `eventorganiser_ical_location` filter
+* feature: Added `eventorganiser_ical_summary` filter
+* bugfix: Fixed max zoom for leaflet
+* bugfix: Fixed recurrence notice being removed by 'hide admin notices' plugin
+* bugfix: Fixed bug where `[eo_fullcalendar]` shortcode would not display terms in the dropdown filter if they were surrounded by space, e.g. `[eo_fullcalendar event_category="foo, bar"]`
 
 = 3.7.6 - 6th March 2019 =
 * bugfix: Fixed missing translations

@@ -44,21 +44,21 @@
 
         render() {
             const listIcons = [
-                { label: __( 'None' ), value: '' },
-                { label: __( 'Pushpin' ), value: 'admin-post' },
-                { label: __( 'Configuration' ), value: 'admin-generic' },
-                { label: __( 'Flag' ), value: 'flag' },
-                { label: __( 'Star' ), value: 'star-filled' },
-                { label: __( 'Checkmark' ), value: 'yes' },
-                { label: __( 'Minus' ), value: 'minus' },
-                { label: __( 'Plus' ), value: 'plus' },
-                { label: __( 'Play' ), value: 'controls-play' },
-                { label: __( 'Arrow right' ), value: 'arrow-right-alt' },
-                { label: __( 'X Cross' ), value: 'dismiss' },
-                { label: __( 'Warning' ), value: 'warning' },
-                { label: __( 'Help' ), value: 'editor-help' },
-                { label: __( 'Info' ), value: 'info' },
-                { label: __( 'Circle' ), value: 'marker' },
+                { label: __( 'None', 'advanced-gutenberg' ), value: '' },
+                { label: __( 'Pushpin', 'advanced-gutenberg' ), value: 'admin-post' },
+                { label: __( 'Configuration', 'advanced-gutenberg' ), value: 'admin-generic' },
+                { label: __( 'Flag', 'advanced-gutenberg' ), value: 'flag' },
+                { label: __( 'Star', 'advanced-gutenberg' ), value: 'star-filled' },
+                { label: __( 'Checkmark', 'advanced-gutenberg' ), value: 'yes' },
+                { label: __( 'Minus', 'advanced-gutenberg' ), value: 'minus' },
+                { label: __( 'Plus', 'advanced-gutenberg' ), value: 'plus' },
+                { label: __( 'Play', 'advanced-gutenberg' ), value: 'controls-play' },
+                { label: __( 'Arrow right', 'advanced-gutenberg' ), value: 'arrow-right-alt' },
+                { label: __( 'X Cross', 'advanced-gutenberg' ), value: 'dismiss' },
+                { label: __( 'Warning', 'advanced-gutenberg' ), value: 'warning' },
+                { label: __( 'Help', 'advanced-gutenberg' ), value: 'editor-help' },
+                { label: __( 'Info', 'advanced-gutenberg' ), value: 'info' },
+                { label: __( 'Circle', 'advanced-gutenberg' ), value: 'marker' },
             ];
             const {
                 attributes,
@@ -96,7 +96,7 @@
                     <BlockControls>
                         <Toolbar>
                             <IconButton
-                                label={ __( 'Refresh this list when it conflict with other lists styles' ) }
+                                label={ __( 'Refresh this list when it conflict with other lists styles', 'advanced-gutenberg' ) }
                                 icon="update"
                                 className="components-toolbar__control"
                                 onClick={ () => setAttributes( { id: 'advgblist-' + blockID } ) }
@@ -104,9 +104,9 @@
                         </Toolbar>
                     </BlockControls>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Text Settings' ) } initialOpen={false}>
+                        <PanelBody title={ __( 'Text Settings', 'advanced-gutenberg' ) } initialOpen={false}>
                             <RangeControl
-                                label={ __( 'Text size' ) }
+                                label={ __( 'Text size', 'advanced-gutenberg' ) }
                                 value={ fontSize || '' }
                                 onChange={ ( size ) => setAttributes( { fontSize: size } ) }
                                 min={ 10 }
@@ -115,8 +115,8 @@
                                 allowReset
                             />
                         </PanelBody>
-                        <PanelBody title={ __( 'Icon Settings' ) }>
-                            <BaseControl label={ __( 'List icon' ) }>
+                        <PanelBody title={ __( 'Icon Settings', 'advanced-gutenberg' ) }>
+                            <BaseControl label={ __( 'List icon', 'advanced-gutenberg' ) }>
                                 <div className="advgb-icon-items-wrapper">
                                     { listIcons.map( (item, index) => (
                                         <div className="advgb-icon-item h20" key={ index }>
@@ -136,7 +136,7 @@
                                 <Fragment>
                                     <PanelBody
                                         title={ [
-                                            __( 'Icon color' ),
+                                            __( 'Icon color', 'advanced-gutenberg' ),
                                             <span key="advgb-list-icon-color" className={ `dashicons dashicons-${icon}` } style={ { color: iconColor, marginLeft: '10px' } } />
                                         ] }
                                         initialOpen={ false }
@@ -147,7 +147,7 @@
                                         />
                                     </PanelBody>
                                     <RangeControl
-                                        label={ __( 'Icon size' ) }
+                                        label={ __( 'Icon size', 'advanced-gutenberg' ) }
                                         value={ iconSize || '' }
                                         onChange={ ( size ) => setAttributes( { iconSize: size } ) }
                                         min={ 10 }
@@ -155,7 +155,7 @@
                                         allowReset
                                     />
                                     <RangeControl
-                                        label={ __( 'Line height' ) }
+                                        label={ __( 'Line height', 'advanced-gutenberg' ) }
                                         value={ lineHeight || '' }
                                         onChange={ ( size ) => setAttributes( { lineHeight: size } ) }
                                         min={ 0 }
@@ -163,7 +163,7 @@
                                         allowReset
                                     />
                                     <RangeControl
-                                        label={ __( 'Margin' ) }
+                                        label={ __( 'Margin', 'advanced-gutenberg' ) }
                                         value={ margin || '' }
                                         onChange={ ( size ) => setAttributes( { margin: size } ) }
                                         min={ 0 }
@@ -171,7 +171,7 @@
                                         allowReset
                                     />
                                     <RangeControl
-                                        label={ __( 'Padding' ) }
+                                        label={ __( 'Padding', 'advanced-gutenberg' ) }
                                         value={ padding || '' }
                                         onChange={ ( size ) => setAttributes( { padding: size } ) }
                                         min={ 0 }
@@ -189,7 +189,7 @@
                         value={ values }
                         wrapperClassName="advgb-list-item"
                         className={ listClassName }
-                        placeholder={__('Write advanced list…')}
+                        placeholder={__('Write advanced list…', 'advanced-gutenberg')}
                         onMerge={ mergeBlocks }
                         unstableOnSplit={
                             insertBlocksAfter ?
@@ -287,14 +287,14 @@
     };
 
     registerBlockType( 'advgb/list', {
-        title: __( 'Advanced List' ),
-        description: __( 'List block with custom icons and styles.' ),
+        title: __( 'Advanced List', 'advanced-gutenberg' ),
+        description: __( 'List block with custom icons and styles.', 'advanced-gutenberg' ),
         icon: {
             src: listBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'list' ), __( 'icon' ) ],
+        keywords: [ __( 'list', 'advanced-gutenberg' ), __( 'icon', 'advanced-gutenberg' ) ],
         attributes: listBlockAttrs,
         transforms: {
             from: [
