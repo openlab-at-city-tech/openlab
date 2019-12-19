@@ -6,6 +6,34 @@
  * - Add the above to the sync mechanism
 
 /**
+ * Add custom fields to group mapping.
+ */
+add_filter(
+	'epbp_group_mapping',
+	function( $mapping ) {
+		$mapping['mappings']['properties']['departments'] = [
+			'type' => 'keyword',
+		];
+		$mapping['mappings']['properties']['schools'] = [
+			'type' => 'keyword',
+		];
+		$mapping['mappings']['properties']['offices'] = [
+			'type' => 'keyword',
+		];
+		$mapping['mappings']['properties']['categories'] = [
+			'type' => 'keyword',
+		];
+		$mapping['mappings']['properties']['semester'] = [
+			'type' => 'keyword',
+		];
+		$mapping['mappings']['properties']['year'] = [
+			'type' => 'long',
+		];
+		return $mapping;
+	}
+);
+
+/**
  * Blacklist meta keys being indexed.
  */
 add_filter(
@@ -22,6 +50,7 @@ add_filter(
 				// No longer used.
 				'wds_group_school',
 				'wds_group_department',
+				'wds_departments',
 			],
 			$keys,
 		);
@@ -55,6 +84,17 @@ add_filter(
 			);
 		}
 
+		// Semester/year.
+		$semester = groups_get_groupmeta( $group_id, 'wds_semester', true );
+		if ( $semester ) {
+			$args['semester'] = $semester;
+		}
+
+		$year = groups_get_groupmeta( $group_id, 'wds_year', true );
+		if ( $year ) {
+			$args['year'] = $year;
+		}
+
 		return $args;
 	},
 	10,
@@ -77,6 +117,16 @@ add_filter(
 					$args['query']['bool']['filter'][] = [
 						'term' => [
 							'group_type' => $mq['value'],
+						],
+					];
+				break;
+
+				case 'wds_semester' :
+				case 'wds_year' :
+					$clean_key = substr( $mq['key'], 4 );
+					$args['query']['bool']['filter'][] = [
+						'term' => [
+							$clean_key => $mq['value'],
 						],
 					];
 				break;
