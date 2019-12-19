@@ -87,7 +87,7 @@ class Elasticsearch {
 		if ( version_compare( $this->get_elasticsearch_version(), '7.0', '<' ) ) {
 			$path = apply_filters( 'ep_index_' . $type . '_request_path', $index . '/' . $type . '/' . $document['ID'], $document, $type );
 		} else {
-			$path = apply_filters( 'ep_index_' . $type . '_request_path', $index . '/' . $document['ID'], $document, $type );
+			$path = apply_filters( 'ep_index_' . $type . '_request_path', $index . '/_doc/' . $document['ID'], $document, $type );
 		}
 
 		if ( function_exists( 'wp_json_encode' ) ) {
@@ -100,7 +100,7 @@ class Elasticsearch {
 
 		$request_args = array(
 			'body'     => $encoded_document,
-			'method'   => 'PUT',
+			'method'   => 'POST',
 			'timeout'  => 15,
 			'blocking' => $blocking,
 		);
@@ -247,10 +247,11 @@ class Elasticsearch {
 	 * @param  string $type Index type. Previously this was used for index type. Now it's just passed to hooks for legacy reasons.
 	 * @param  array  $query Prepared ES query.
 	 * @param  array  $query_args WP query args.
+	 * @param  mixed  $query_object Could be WP_Query, WP_User_Query, etc.
 	 * @since  3.0
 	 * @return bool|array
 	 */
-	public function query( $index, $type, $query, $query_args ) {
+	public function query( $index, $type, $query, $query_args, $query_object = null ) {
 		if ( version_compare( $this->get_elasticsearch_version(), '7.0', '<' ) ) {
 			$path = $index . '/' . $type . '/_search';
 		} else {
@@ -267,9 +268,10 @@ class Elasticsearch {
 		 * @param  {string} $type Index type
 		 * @param  {array} $query Prepared Elasticsearch query
 		 * @param  {array} $query_args Query arguments
+		 * @param  {mixed} $query_object Could be WP_Query, WP_User_Query, etc.
 		 * @return  {string} New path
 		 */
-		$path = apply_filters( 'ep_search_request_path', $path, $index, $type, $query, $query_args );
+		$path = apply_filters( 'ep_search_request_path', $path, $index, $type, $query, $query_args, $query_object );
 
 		/**
 		 * Filter Elasticsearch query request path
@@ -280,9 +282,10 @@ class Elasticsearch {
 		 * @param  {string} $type Index type
 		 * @param  {array} $query Prepared Elasticsearch query
 		 * @param  {array} $query_args Query arguments
+		 * @param  {mixed} $query_object Could be WP_Query, WP_User_Query, etc.
 		 * @return  {string} New path
 		 */
-		$path = apply_filters( 'ep_query_request_path', $path, $index, $type, $query, $query_args );
+		$path = apply_filters( 'ep_query_request_path', $path, $index, $type, $query, $query_args, $query_object );
 
 		$request_args = array(
 			'body'    => wp_json_encode( $query ),
@@ -297,11 +300,7 @@ class Elasticsearch {
 			$request_args['headers']['EP-Search-Term'] = $query_args['s'];
 		}
 
-		var_DumP( $path );
-		var_dump( $query );
-		var_DumP( $request_args );
 		$request = $this->remote_request( $path, $request_args, $query_args, 'query' );
-		var_dump( json_decode( wp_remote_retrieve_body( $request ) ) );
 
 		$remote_req_res_code = absint( wp_remote_retrieve_response_code( $request ) );
 
@@ -330,10 +329,11 @@ class Elasticsearch {
 			 *
 			 * @hook ep_valid_response
 			 * @param {array} $response Elasticsearch decoded response
-			 * @param  {WP_Query} $query Current WP Query
+			 * @param  {array} $query Prepared Elasticsearch query
 			 * @param  {array} $query_args Current WP Query arguments
+			 * @param  {mixed} $query_object Could be WP_Query, WP_User_Query, etc.
 			 */
-			do_action( 'ep_valid_response', $response, $query, $query_args );
+			do_action( 'ep_valid_response', $response, $query, $query_args, $query_object );
 
 			// Backwards compat
 			/**
@@ -341,10 +341,11 @@ class Elasticsearch {
 			 *
 			 * @hook ep_retrieve_raw_response
 			 * @param {array} $response Elasticsearch request
-			 * @param  {WP_Query} $query Current WP Query
+			 * @param  {array} $query Prepared Elasticsearch query
 			 * @param  {array} $query_args Current WP Query arguments
+			 * @param  {mixed} $query_object Could be WP_Query, WP_User_Query, etc.
 			 */
-			do_action( 'ep_retrieve_raw_response', $request, $query, $query_args );
+			do_action( 'ep_retrieve_raw_response', $request, $query, $query_args, $query_object );
 
 			$documents = [];
 
@@ -372,6 +373,7 @@ class Elasticsearch {
 			 * @param  {response} $response Raw response from Elasticsearch
 			 * @param  {array} $query Raw Elasticsearch query
 			 * @param  {array} $query_args Query arguments
+			 * @param  {mixed} $query_object Could be WP_Query, WP_User_Query, etc.
 			 * @return  {array} New results
 			 */
 			return apply_filters(
@@ -382,7 +384,8 @@ class Elasticsearch {
 				],
 				$response,
 				$query,
-				$query_args
+				$query_args,
+				$query_object
 			);
 		}
 
@@ -418,7 +421,17 @@ class Elasticsearch {
 			return [];
 		}
 
-		return $response['hits']['hits'];
+		/**
+		 * Filter Elasticsearch allows to flatten hits, if searched hits are come within aggregations.
+		 *
+		 * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics-top-hits-aggregation.html
+		 *
+		 * @hook ep_get_hits_from_query
+		 * @param {array} $hits from Elasticsearch
+		 * @param {response} $response Raw response from Elasticsearch
+		 * @return {array} hits
+		 */
+		return apply_filters( 'ep_get_hits_from_query', $response['hits']['hits'], $response );
 	}
 
 	/**
@@ -463,7 +476,7 @@ class Elasticsearch {
 		if ( version_compare( $this->get_elasticsearch_version(), '7.0', '<' ) ) {
 			$path = $index . '/' . $type . '/' . $document_id;
 		} else {
-			$path = $index . '/' . $document_id;
+			$path = $index . '/_doc/' . $document_id;
 		}
 
 		$request_args = [
@@ -541,7 +554,7 @@ class Elasticsearch {
 		if ( version_compare( $this->get_elasticsearch_version(), '7.0', '<' ) ) {
 			$path = $index . '/' . $type . '/' . $document_id;
 		} else {
-			$path = $index . '/' . $document_id;
+			$path = $index . '/_doc/' . $document_id;
 		}
 
 		$request_args = [ 'method' => 'GET' ];
@@ -872,7 +885,7 @@ class Elasticsearch {
 			 * @param  {array} $args Request arguments
 			 * @return {string} New url
 			 */
-			$query['url']  = apply_filters( 'ep_pre_request_url', esc_url( trailingslashit( $query['host'] ) . $path ), $failures, $query['host'], $path, $args );
+			$query['url'] = apply_filters( 'ep_pre_request_url', esc_url( trailingslashit( $query['host'] ) . $path ), $failures, $query['host'], $path, $args );
 
 			/**
 			 * Filter whether remote request should be intercepted
