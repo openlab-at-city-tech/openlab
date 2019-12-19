@@ -69,6 +69,9 @@
 				}
 			}
 			#wp-admin-bar-root-default {
+				min-width: 0;
+				display: flex;
+				flex-wrap: nowrap;
 				.ab-icon {
 					&.dashicon-icon {
 						font: 400 28px/1 dashicons;
@@ -202,7 +205,7 @@
 				border: 1px solid @70gray;
 				border-top: none;
 				border-radius: 0 0 4px 4px;
-				margin-top: 1px;
+				margin-top: 2px;
 				width: 600%;
 				.ab-submenu {
 					padding: 0;
@@ -428,6 +431,9 @@
 					align-items: center;
 					flex: 1 1 0;
 					min-width: 100px;
+					@media (max-width: @screen-sm-max){
+						min-width: 50px;
+					}
 					&:after {
 						content: "\f0d7";
 						display: flex;
@@ -455,6 +461,7 @@
 						white-space: nowrap;
 						position: relative;
 						text-overflow: ellipsis;
+						display: block;
 						overflow: hidden;
 					}
 				}
@@ -498,12 +505,16 @@
 					display: inline-block;
 					width: 100%;
 					text-align: right;
-					span.truncate-sizer {
-						display: inline-block;
+					span.user-name {
+						overflow: hidden;
+						text-overflow: ellipsis;
 						width: 100%;
+						white-space: nowrap;
+						display: block;
 					}
 				}
 				.ab-sub-wrapper {
+					right: -2px;
 					width: auto;
 					min-width: 250px;
 					p {
@@ -578,7 +589,9 @@
 				}
 			}
 			#wp-admin-bar-blogs-and-admin-centered {
-				flex-grow: 1;
+				margin-left: auto;
+				min-width: 0;
+				flex-shrink: 60;
 				@media (max-width: @screen-xs-max) {
 					.ab-sub-wrapper {
 						display: none;
@@ -1091,7 +1104,6 @@
 			}
 			.ab-blogs-and-admin-centered {
 				float: none;
-				overflow: hidden;
 				text-align: right;
 				#wp-admin-bar-my-account {
 					width: 100%;
@@ -1136,6 +1148,9 @@
 				}
 				#wp-admin-bar-network-menu-mobile,
 				#wp-admin-bar-my-openlab {
+					> .ab-item{
+						min-width: 132px;
+					}
 					@media (max-width: @screen-xs-max) {
 						> .ab-item {
 							display: none;
@@ -1170,10 +1185,10 @@
 				}
 			}
 		}
-		&.logged-in{
-			#wpadminbar{
-				#wp-admin-bar-blogs-and-admin-centered{
-					border-left: 1px solid #000;
+		&.logged-in {
+			#wpadminbar {
+				#wp-admin-bar-root-default {
+					border-right: 1px solid #000;
 				}
 			}
 		}

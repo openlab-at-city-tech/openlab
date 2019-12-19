@@ -478,8 +478,7 @@ HTML;
 				'id'    => 'my-account',
 				'title' => sprintf( 'Hi, %s', $bp->loggedin_user->userdata->display_name ),
 				'meta'  => array(
-					// add in truncation obfuscation (hides truncation processing on page load).
-					'class' => 'user-display-name truncation-obfuscation',
+					'class' => 'user-display-name',
 				),
 			)
 		);
@@ -1430,7 +1429,7 @@ HTML;
 		}
 
 		$howdy          = sprintf( __( 'Hi, %1$s' ), $current_user->display_name );
-		$display_string = "<span class='truncate-sizer'><span class='truncate-on-the-fly hyphenate' data-basevalue='30' data-minvalue='5' data-basewidth='calculate' aria-hidden='true'>$howdy</span><span class='original-copy hidden' aria-hidden='true'>$howdy</span><span class='sr-only'>$howdy</span></span>";
+		$display_string = "<span class='user-name'>$howdy</span><span class='sr-only'>$howdy</span>";
 
 		$parent = 'top-secondary';
 		$class  = 'hidden-xs';
@@ -1439,9 +1438,6 @@ HTML;
 			$parent = 'blogs-and-admin-centered';
 			$class  = 'user-display-name';
 		}
-
-		// add in truncation obfuscation (hides truncation processing on page load).
-		$class = "$class truncate-obfuscate menu-loading";
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -1625,7 +1621,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.1.0' );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.1.1' );
 	}
 
 	public function adminbar_special_body_class( $classes ) {
