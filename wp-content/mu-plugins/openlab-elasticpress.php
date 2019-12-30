@@ -43,6 +43,7 @@ add_filter(
 			[
 				// Handled separately.
 				'openlab_department',
+				'openlab_departments',
 				'openlab_office',
 				'openlab_school',
 				'wds_group_type',
@@ -51,9 +52,48 @@ add_filter(
 				'wds_group_school',
 				'wds_group_department',
 				'wds_departments',
+
+				// Serialized and not parseable, or otherwise not relevant for index.
+				'clone_history',
+				'last_import_results',
+				'library_tools_enabled',
+				'member_portfolios',
+				'member_portfolios_display_name',
+				'member_portfolios_title',
+				'member_site_roles',
+				'openlab_related_links_list',
+				'openlab_related_links_list_enable',
+				'openlab_related_links_list_heading',
+				'portfolio_list_enabled',
+				'portfolio_list_heading',
 			],
 			$keys,
 		);
+	}
+);
+
+/**
+ * Blacklist dynamic meta keys.
+ */
+add_filter(
+	'epbp_allow_index_group_meta_key',
+	function( $allow_index, $key ) {
+		// User import records.
+		if ( 0 === strpos( $key, 'import_' ) ) {
+			$allow_index = false;
+		}
+
+		return $allow_index;
+	},
+	10,
+	2
+);
+
+add_filter(
+	'epbp_group_query_excluded_meta_keys',
+	function( $keys ) {
+		$keys[] = 'wds_group_type';
+		return $keys;
 	}
 );
 
