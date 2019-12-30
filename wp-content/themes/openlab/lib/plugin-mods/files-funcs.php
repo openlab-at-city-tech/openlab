@@ -90,6 +90,8 @@ function openlab_bp_group_documents_display_content() {
 
 	$user_can_upload = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
 
+	$sort_form_action = $template->action_link;
+
 	?>
 
 	<div id="bp-group-documents" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
@@ -103,7 +105,7 @@ function openlab_bp_group_documents_display_content() {
 			<div id="bp-group-documents-sorting">
 				<div class="row">
 					<div class="col-sm-8 sorting-column">
-						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $template->action_link ); ?>">
+						<form id="bp-group-documents-sort-form" method="get" action="<?php echo esc_attr( $sort_form_action ); ?>">
 							<label for="group-documents-orderby">
 								<?php esc_html_e( 'Order by:', 'bp-group-documents' ); ?>
 							</label>
@@ -128,6 +130,11 @@ function openlab_bp_group_documents_display_content() {
 								?>
 								><?php esc_html_e( 'Most Popular', 'bp-group-documents' ); ?></option>
 							</select>
+
+							<?php if ( $template->category ) : ?>
+								<input type="hidden" name="category" value="<?php echo esc_attr( $template->category ); ?>" />
+							<?php endif; ?>
+
 							<input type="submit" class="bp-group-documents-go button" value="<?php esc_html_e( 'Go', 'bp-group-documents' ); ?>" />
 						</form>
 					</div>
