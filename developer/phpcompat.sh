@@ -8,6 +8,7 @@ ignores=(
   'wp-content/plugins/anthologize'
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
+  'wp-content/plugins/bbpress/includes/users/template.php' # punt
   'wp-content/plugins/bp-reply-by-email/includes/phpseclib'
 #  'wp-content/plugins/btcnew/parser_php4.php'
   'wp-content/plugins/buddypress/cli/features'
@@ -30,6 +31,8 @@ ignores=(
   'wp-content/plugins/social/lib/social/log.php'
   'wp-content/plugins/static-html-output-plugin'
   'wp-content/plugins/tablepress/views/view-about.php'
+  'wp-content/plugins/the-events-calendar/src/Tribe/Views/V2/Repository/Event_Period.php'
+  'wp-content/plugins/the-events-calendar/src/Tribe/Templates.php'
 #  'wp-content/plugins/threewp-broadcast/src/sdk/wordpress/updater/edd.php'
   'wp-content/plugins/wp-document-revisions/tests'
   'wp-content/plugins/wp-post-to-pdf'
