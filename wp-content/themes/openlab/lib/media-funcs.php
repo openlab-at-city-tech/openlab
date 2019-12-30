@@ -67,6 +67,31 @@ function openlab_activity_user_avatar() {
 	return '<img class="img-responsive" src ="' . bp_core_fetch_avatar(array('item_id' => $item_id, 'object' => 'user', 'type' => 'full', 'html' => false)) . '" alt="' . esc_attr( $alt ) . '"/>';
 }
 
+/**
+ * Gets the group ID corresponding to an activity item.
+ *
+ * @param BP_Activity_Activity $activity
+ * @return int
+ */
+function openlab_get_group_id_for_activity_item( $activity ) {
+	switch ( $activity->type ) {
+		case 'new_blog' :
+			$item_id = openlab_get_group_id_by_blog_id( $activity->item_id );
+		break;
+
+		case 'bpeo_create_event' :
+			$groups  = bpeo_get_event_groups( $activity->secondary_item_id );
+			$item_id = empty( $groups ) ? 0 : reset( $groups );
+		break;
+
+		default :
+			$item_id = $activity->item_id;
+		break;
+	}
+
+	return $item_id;
+}
+
 function openlab_activity_group_avatar( $current_activity_item = null ) {
 	global $activities_template;
 
@@ -74,11 +99,7 @@ function openlab_activity_group_avatar( $current_activity_item = null ) {
 		$current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
 	}
 
-	if ( 'new_blog' === $current_activity_item->type ) {
-		$item_id = openlab_get_group_id_by_blog_id( $current_activity_item->item_id );
-	} else {
-		$item_id = $current_activity_item->item_id;
-	}
+	$item_id = openlab_get_group_id_for_activity_item( $current_activity_item );
 
 	$group = groups_get_group(array('group_id' => $item_id));
 
@@ -92,7 +113,7 @@ function openlab_activity_group_link( $current_activity_item = null ) {
 		$current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
 	}
 
-	$item_id = $current_activity_item->item_id;
+	$item_id = openlab_get_group_id_for_activity_item( $current_activity_item );
 
 	$group = groups_get_group(array('group_id' => $item_id));
 
