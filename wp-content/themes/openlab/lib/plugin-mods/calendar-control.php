@@ -202,7 +202,7 @@ function openlab_event_page_controller( $wp ) {
 	 */
 	if ( strpos( $wp->request, '/events/' ) !== false && strpos( $wp->request, '/new-event' ) !== false ) {
 
-		$event_create_access = groups_get_groupmeta( bp_get_current_group_id(), 'openlab_bpeo_event_create_access' );
+		$event_create_access = openlab_get_group_event_create_access_setting( bp_get_current_group_id() );
 
 		if ( 'admin' === $event_create_access && ! bp_is_item_admin() && ! bp_is_item_mod() ) {
 
@@ -420,6 +420,15 @@ function _eventorganiser_details_metabox_openlab_custom( $post ) {
 	$custom_meta_box = ob_get_clean();
 
 	echo $custom_meta_box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Gets the 'create access' setting for a group.
+ */
+function openlab_get_group_event_create_access_setting( $group_id ) {
+	$access = groups_get_groupmeta( $group_id, 'openlab_bpeo_event_create_access' );
+
+	return 'members' === $access ? 'members' : 'admin';
 }
 
 /**

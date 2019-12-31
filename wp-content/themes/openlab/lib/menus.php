@@ -932,7 +932,7 @@ function openlab_filter_subnav_nav_new_event($subnav_item) {
     $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
 
     //check the group calendar access setting to see if the current user has the right privileges
-    $event_create_access = groups_get_groupmeta(bp_get_current_group_id(), 'openlab_bpeo_event_create_access');
+	$event_create_access = openlab_get_group_event_create_access_setting( bp_get_current_group_id() );
 
     if ($event_create_access === 'admin' && !bp_is_item_admin() && !bp_is_item_mod()) {
         return "";
