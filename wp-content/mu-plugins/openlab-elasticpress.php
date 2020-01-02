@@ -114,7 +114,7 @@ add_filter(
 		$categories = BPCGC_Groups_Terms::get_object_terms( $group_id, 'bp_group_categories', [] );
 		$cat_slugs  = wp_list_pluck( $categories, 'slug' );
 
-		$args['meta']['categories'] = $cat_slugs;
+		$args['categories'] = $cat_slugs;
 
 		// Academic units.
 		$academic_units = openlab_get_group_academic_units( $group_id );
@@ -193,7 +193,7 @@ add_filter(
 			$cat = sanitize_text_field( $cat );
 			$args['query']['bool']['filter'][] = [
 				'terms' => [
-					'meta.categories' => [ $cat ],
+					'categories' => [ $cat ],
 				],
 			];
 		}
