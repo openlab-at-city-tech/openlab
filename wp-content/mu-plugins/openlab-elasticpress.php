@@ -92,7 +92,11 @@ add_filter(
 add_filter(
 	'epbp_group_query_excluded_meta_keys',
 	function( $keys ) {
+		$keys[] = 'openlab_school';
+		$keys[] = 'openlab_department';
 		$keys[] = 'wds_group_type';
+		$keys[] = 'wds_semester';
+		$keys[] = 'wds_year';
 		return $keys;
 	}
 );
