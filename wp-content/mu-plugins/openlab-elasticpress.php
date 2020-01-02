@@ -101,6 +101,14 @@ add_filter(
 	}
 );
 
+add_filter(
+	'epbp_group_query_search_fields',
+	function( $fields ) {
+		//$fields[] = 'meta.wds_faculty';
+		return $fields;
+	}
+);
+
 /**
  * OL-specific group data.
  */
@@ -149,16 +157,16 @@ add_filter(
  * Translate OL group query args into BPES standard query args.
  */
 add_filter(
-	'epbp_group_query_args',
-	function( $args, $group_query_args ) {
+	'epbp_group_query_filter_args',
+	function( $filter, $group_query_args ) {
 		if ( empty( $group_query_args['meta_query'] ) ) {
-			return $args;
+			return $filter;
 		}
 
 		foreach ( $group_query_args['meta_query'] as $mq ) {
 			switch ( $mq['key'] ) {
 				case 'wds_group_type' :
-					$args['query']['bool']['filter'][] = [
+					$filter[] = [
 						'term' => [
 							'group_type' => $mq['value'],
 						],
@@ -168,7 +176,7 @@ add_filter(
 				case 'wds_semester' :
 				case 'wds_year' :
 					$clean_key = substr( $mq['key'], 4 );
-					$args['query']['bool']['filter'][] = [
+					$filter[] = [
 						'term' => [
 							$clean_key => $mq['value'],
 						],
@@ -179,7 +187,7 @@ add_filter(
 				case 'openlab_office' :
 				case 'openlab_school' :
 					$academic_unit = substr( $mq['key'], 8 ) . 's';
-					$args['query']['bool']['filter'][] = [
+					$filter[] = [
 						'terms' => [
 							$academic_unit => str_replace( '-', '_', [ $mq['value'] ] ),
 						],
@@ -191,14 +199,14 @@ add_filter(
 		if ( isset( $_GET['cat'] ) && ! empty( $_GET['cat'] ) ) {
 			$cat = wp_unslash( $_GET['cat'] );
 			$cat = sanitize_text_field( $cat );
-			$args['query']['bool']['filter'][] = [
+			$filter[] = [
 				'terms' => [
 					'categories' => [ $cat ],
 				],
 			];
 		}
 
-		return $args;
+		return $filter;
 	},
 	10,
 	2
