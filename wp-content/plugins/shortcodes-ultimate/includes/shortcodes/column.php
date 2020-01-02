@@ -68,6 +68,6 @@ function su_shortcode_column( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-column su-column-size-' . str_replace( '/', '-', $atts['size'] ) . su_get_css_class( $atts ) . '"><div class="su-column-inner su-clearfix">' . su_do_nested_shortcodes( $content, 'column' ) . '</div></div>';
+	return '<div class="su-column su-column-size-' . str_replace( '/', '-', $atts['size'] ) . su_get_css_class( $atts ) . '"><div class="su-column-inner su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'column' ) . '</div></div>';
 
 }

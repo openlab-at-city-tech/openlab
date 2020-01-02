@@ -2,7 +2,7 @@
 /**
  * Plugin Name: The Events Calendar
  * Description: The Events Calendar is a carefully crafted, extensible plugin that lets you easily share your events. Beautiful. Solid. Awesome.
- * Version: 4.9.10
+ * Version: 4.9.13
  * Author: Modern Tribe, Inc.
  * Author URI: http://m.tri.be/1x
  * Text Domain: the-events-calendar
@@ -74,3 +74,4 @@ Tribe__Events__Main::instance();
 register_activation_hook( TRIBE_EVENTS_FILE, array( 'Tribe__Events__Main', 'activate' ) );
 register_deactivation_hook( TRIBE_EVENTS_FILE, array( 'Tribe__Events__Main', 'deactivate' ) );
 
+// GlotPress Manual Change

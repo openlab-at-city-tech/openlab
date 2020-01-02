@@ -8,18 +8,18 @@
     const { compose } = wp.compose;
 
     const sidebarName  = "advgb-editor-sidebar";
-    const sidebarTitle = __( 'Adv. Gutenberg Settings' );
+    const sidebarTitle = __( 'Adv. Gutenberg Settings', 'advanced-gutenberg' );
     const sidebarIcon  = "layout";
     const VISUAL_GUIDE_SETTINGS = [
-        { label: __( 'Inherit from global settings' ), value: '' },
-        { label: __( 'Enable' ), value: 'enable' },
-        { label: __( 'Disable' ), value: 'disable' },
+        { label: __( 'Inherit from global settings', 'advanced-gutenberg' ), value: '' },
+        { label: __( 'Enable', 'advanced-gutenberg' ), value: 'enable' },
+        { label: __( 'Disable', 'advanced-gutenberg' ), value: 'disable' },
     ];
     const EDITOR_WIDTH_SETTINGS = [
-        { label: __( 'Inherit from global settings' ), value: '' },
-        { label: __( 'Original' ), value: 'default' },
-        { label: __( 'Large' ), value: 'large' },
-        { label: __( 'Full width' ), value: 'full' },
+        { label: __( 'Inherit from global settings', 'advanced-gutenberg' ), value: '' },
+        { label: __( 'Original', 'advanced-gutenberg' ), value: 'default' },
+        { label: __( 'Large', 'advanced-gutenberg' ), value: 'large' },
+        { label: __( 'Full width', 'advanced-gutenberg' ), value: 'full' },
     ];
 
     const updateBodyClass = function () {
@@ -66,11 +66,11 @@
             return (
                 <Fragment>
                     <div className="advgb-editor-sidebar-note">
-                        { __( 'These settings will override the Adv. Gutenberg global settings.' ) }
+                        { __( 'These settings will override the Adv. Gutenberg global settings.', 'advanced-gutenberg' ) }
                     </div>
-                    <PanelBody title={ __( 'Editor width' ) }>
+                    <PanelBody title={ __( 'Editor width', 'advanced-gutenberg' ) }>
                         <div className="advgb-editor-sidebar-note">
-                            { __( 'Change your editor width' ) }
+                            { __( 'Change your editor width', 'advanced-gutenberg' ) }
                         </div>
                         <ButtonGroup className="advgb-button-group">
                             {EDITOR_WIDTH_SETTINGS.map((setting, index) => (
@@ -85,9 +85,9 @@
                             ) ) }
                         </ButtonGroup>
                     </PanelBody>
-                    <PanelBody title={ __( 'Columns Visual Guide' ) } initialOpen={ false }>
+                    <PanelBody title={ __( 'Columns Visual Guide', 'advanced-gutenberg' ) } initialOpen={ false }>
                         <div className="advgb-editor-sidebar-note">
-                            { __( 'Border to materialize Adv. Gutenberg Column block' ) }
+                            { __( 'Border to materialize Adv. Gutenberg Column block', 'advanced-gutenberg' ) }
                         </div>
                         <ButtonGroup className="advgb-button-group">
                             {VISUAL_GUIDE_SETTINGS.map((setting, index) => (

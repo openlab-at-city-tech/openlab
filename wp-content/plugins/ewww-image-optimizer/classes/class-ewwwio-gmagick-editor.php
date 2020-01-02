@@ -26,20 +26,24 @@ if ( class_exists( 'WP_Image_Editor_Gmagick' ) ) {
 		 */
 		protected function _save( $image, $filename = null, $mime_type = null ) {
 			global $ewww_defer;
+			global $ewww_preempt_editor;
+			if ( ! empty( $ewww_preempt_editor ) ) {
+				return parent::_save( $image, $filename, $mime_type );
+			}
 			list( $filename, $extension, $mime_type ) = $this->get_output_format( $filename, $mime_type );
 			if ( ! $filename ) {
 				$filename = $this->generate_filename( null, null, $extension );
 			}
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
-						'path' => $filename,
-						'file' => wp_basename( apply_filters( 'image_make_intermediate_size', $filename ) ),
-						'width' => $this->size['width'],
-						'height' => $this->size['height'],
+						'path'      => $filename,
+						'file'      => wp_basename( apply_filters( 'image_make_intermediate_size', $filename ) ),
+						'width'     => $this->size['width'],
+						'height'    => $this->size['height'],
 						'mime-type' => $mime_type,
 					);
 				}

@@ -1,13 +1,13 @@
 <?php
 /**
  * Description: For managing relations and database operations of a timeline decorator
- * @author Tim Isenheim
+ * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ class WPSimileTimelineDecorator{
                     $this->{$key} = $value;
             }
             if(is_array($data)){
-                if(sizeof($data['start_date']) > 1){
+                if(is_array($data['start_date']) && sizeof($data['start_date']) > 1){
                     $ds1 = $data['start_date']['year'].'-'.$data['start_date']['month'].'-'.$data['start_date']['day'].' '.$data['start_date']['hour'].':'.$data['start_date']['minute'].':'.$data['start_date']['second'];
                     $ds2 = $data['end_date']['year']  .'-'.$data['end_date']['month']  .'-'.$data['end_date']['day']  .' '.$data['end_date']['hour']  .':'.$data['end_date']['minute']  .':'.$data['end_date']['second'];
                 }

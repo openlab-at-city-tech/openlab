@@ -26,7 +26,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const string
 	 */
-	const version = '1.9.2';
+	const version = '1.10';
 
 	/**
 	 * TablePress internal plugin version ("options scheme" version).
@@ -36,7 +36,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const int
 	 */
-	const db_version = 38;
+	const db_version = 39;
 
 	/**
 	 * TablePress "table scheme" (data format structure) version.
@@ -113,9 +113,9 @@ abstract class TablePress {
 			return;
 		}
 
-		// Check if minimum requirements are fulfilled, currently WordPress 4.9.1.
+		// Check if minimum requirements are fulfilled, currently WordPress 5.3.
 		include( ABSPATH . WPINC . '/version.php' ); // Include an unmodified $wp_version.
-		if ( version_compare( str_replace( '-src', '', $wp_version ), '4.9.1', '<' ) ) {
+		if ( version_compare( str_replace( '-src', '', $wp_version ), '5.3', '<' ) ) {
 			// Show error notice to admins, if WP is not installed in the minimum required version, in which case TablePress will not work.
 			if ( current_user_can( 'update_plugins' ) ) {
 				add_action( 'admin_notices', array( 'TablePress', 'show_minimum_requirements_error_notice' ) );

@@ -132,10 +132,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 			<?php if ( function_exists( 'eo_get_event_fullcalendar' ) && ! openlab_is_portfolio() ) : ?>
 				<?php
 				$calendar_enabled    = openlab_is_calendar_enabled_for_group();
-				$event_create_access = groups_get_groupmeta( bp_get_current_group_id(), 'openlab_bpeo_event_create_access' );
-				if ( ! $event_create_access ) {
-					$event_create_access = 'admin';
-				}
+				$event_create_access = openlab_get_group_event_create_access_setting( bp_get_current_group_id() );
 				?>
 				<div class="panel panel-default">
 					<div class="panel-heading">Calendar Settings</div>

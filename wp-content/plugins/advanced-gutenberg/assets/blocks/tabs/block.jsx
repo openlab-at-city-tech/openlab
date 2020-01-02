@@ -2,7 +2,7 @@
     wpBlockEditor = wp.blockEditor || wp.editor;
     const { __ } = wpI18n;
     const { Component, Fragment } = wpElement;
-    const { registerBlockType } = wpBlocks;
+    const { registerBlockType, createBlock } = wpBlocks;
     const { InspectorControls, RichText, PanelColorSettings } = wpBlockEditor;
     const { Dashicon, Tooltip, PanelBody, RangeControl, SelectControl } = wpComponents;
 
@@ -109,78 +109,78 @@
                 <Fragment>
                     <InspectorControls>
                         <PanelColorSettings
-                            title={ __( 'Tab Colors' ) }
+                            title={ __( 'Tab Colors', 'advanced-gutenberg' ) }
                             initialOpen={ false }
                             colorSettings={ [
                                 {
-                                    label: __( 'Background Color' ),
+                                    label: __( 'Background Color', 'advanced-gutenberg' ),
                                     value: headerBgColor,
                                     onChange: ( value ) => setAttributes( { headerBgColor: value === undefined ? '#000' : value } ),
                                 },
                                 {
-                                    label: __( 'Text Color' ),
+                                    label: __( 'Text Color', 'advanced-gutenberg' ),
                                     value: headerTextColor,
                                     onChange: ( value ) => setAttributes( { headerTextColor: value === undefined ? '#fff' : value } ),
                                 },
                                 {
-                                    label: __( 'Active Tab Background Color' ),
+                                    label: __( 'Active Tab Background Color', 'advanced-gutenberg' ),
                                     value: activeTabBgColor,
                                     onChange: ( value ) => setAttributes( { activeTabBgColor: value } ),
                                 },
                                 {
-                                    label: __( 'Active Tab Text Color' ),
+                                    label: __( 'Active Tab Text Color', 'advanced-gutenberg' ),
                                     value: activeTabTextColor,
                                     onChange: ( value ) => setAttributes( { activeTabTextColor: value } ),
                                 },
                             ] }
                         />
                         <PanelColorSettings
-                            title={ __( 'Body Colors' ) }
+                            title={ __( 'Body Colors', 'advanced-gutenberg' ) }
                             initialOpen={ false }
                             colorSettings={ [
                                 {
-                                    label: __( 'Background Color' ),
+                                    label: __( 'Background Color', 'advanced-gutenberg' ),
                                     value: bodyBgColor,
                                     onChange: ( value ) => setAttributes( { bodyBgColor: value } ),
                                 },
                                 {
-                                    label: __( 'Text Color' ),
+                                    label: __( 'Text Color', 'advanced-gutenberg' ),
                                     value: bodyTextColor,
                                     onChange: ( value ) => setAttributes( { bodyTextColor: value } ),
                                 },
                             ] }
                         />
-                        <PanelBody title={ __( 'Border Settings' ) } initialOpen={ false }>
+                        <PanelBody title={ __( 'Border Settings', 'advanced-gutenberg' ) } initialOpen={ false }>
                             <SelectControl
-                                label={ __( 'Border Style' ) }
+                                label={ __( 'Border Style', 'advanced-gutenberg' ) }
                                 value={ borderStyle }
                                 options={ [
-                                    { label: __( 'Solid' ), value: 'solid' },
-                                    { label: __( 'Dashed' ), value: 'dashed' },
-                                    { label: __( 'Dotted' ), value: 'dotted' },
+                                    { label: __( 'Solid', 'advanced-gutenberg' ), value: 'solid' },
+                                    { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
+                                    { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
                                 ] }
                                 onChange={ ( value ) => setAttributes( { borderStyle: value } ) }
                             />
                             <PanelColorSettings
-                                title={ __( 'Border Color' ) }
+                                title={ __( 'Border Color', 'advanced-gutenberg' ) }
                                 initialOpen={ false }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Border Color' ),
+                                        label: __( 'Border Color', 'advanced-gutenberg' ),
                                         value: borderColor,
                                         onChange: ( value ) => setAttributes( { borderColor: value } ),
                                     },
                                 ] }
                             />
                             <RangeControl
-                                label={ __( 'Border width' ) }
+                                label={ __( 'Border width', 'advanced-gutenberg' ) }
                                 value={ borderWidth }
                                 min={ 1 }
                                 max={ 10 }
                                 onChange={ ( value ) => setAttributes( { borderWidth: value } ) }
                             />
                             <RangeControl
-                                label={ __( 'Border radius' ) }
+                                label={ __( 'Border radius', 'advanced-gutenberg' ) }
                                 value={ borderRadius }
                                 min={ 0 }
                                 max={ 100 }
@@ -210,10 +210,10 @@
                                             value={ item.header }
                                             onChange={ ( value ) => this.updateTabs( { header: value || '' }, index ) }
                                             unstableOnSplit={ () => null }
-                                            placeholder={ __( 'Title…' ) }
+                                            placeholder={ __( 'Title…', 'advanced-gutenberg' ) }
                                         />
                                     </a>
-                                    <Tooltip text={ __( 'Remove tab' ) }>
+                                    <Tooltip text={ __( 'Remove tab', 'advanced-gutenberg' ) }>
                                         <span className="advgb-tab-remove"
                                               onClick={ () => setAttributes( {
                                                   tabItems: tabItems.filter( (vl, idx) => idx !== index )
@@ -231,11 +231,11 @@
                                     margin: `-${borderWidth}px 0 -${borderWidth}px -${borderWidth}px`,
                                 } }
                             >
-                                <Tooltip text={ __( 'Add tab' ) }>
+                                <Tooltip text={ __( 'Add tab', 'advanced-gutenberg' ) }>
                                     <span onClick={ () => setAttributes( {
                                         tabItems: [
                                             ...tabItems,
-                                            { header: __( 'New Tab' ), body: __( 'Enter your content.' ) }
+                                            { header: __( 'New Tab', 'advanced-gutenberg' ), body: __( 'Enter your content.', 'advanced-gutenberg' ) }
                                         ]
                                     } ) }>
                                         <Dashicon icon="plus-alt"/>
@@ -260,7 +260,7 @@
                                     tagName="p"
                                     value={ item.body }
                                     onChange={ ( value ) => this.updateTabs( { body: value }, index ) }
-                                    placeholder={ __( 'Enter text…' ) }
+                                    placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 />
                             </div>
                         ) ) }
@@ -293,16 +293,16 @@
             type: "array",
             default: [
                 {
-                    header: __( 'Tab 1' ),
-                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.' )
+                    header: __( 'Tab 1', 'advanced-gutenberg' ),
+                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.', 'advanced-gutenberg' )
                 },
                 {
-                    header: __( 'Tab 2' ),
-                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.' )
+                    header: __( 'Tab 2', 'advanced-gutenberg' ),
+                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.', 'advanced-gutenberg' )
                 },
                 {
-                    header: __( 'Tab 3' ),
-                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.' )
+                    header: __( 'Tab 3', 'advanced-gutenberg' ),
+                    body: __( 'Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated.', 'advanced-gutenberg' )
                 },
             ]
         },
@@ -351,15 +351,18 @@
     };
 
     registerBlockType( 'advgb/tabs', {
-        title: __( 'Tabs' ),
-        description: __( 'Create your own tabs never easy like this.' ),
+        title: __( 'Tabs', 'advanced-gutenberg' ),
+        description: __( 'Create your own tabs never easy like this.', 'advanced-gutenberg' ),
         icon: {
             src: tabsBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: "advgb-category",
-        keywords: [ __( 'tabs' ), __( 'cards' ) ],
+        keywords: [ __( 'tabs', 'advanced-gutenberg' ), __( 'cards', 'advanced-gutenberg' ) ],
         attributes: tabBlockAttrs,
+        supports: {
+            inserter: false,
+        },
         edit: AdvTabsBlock,
         save: function ( { attributes } ) {
             const {
@@ -428,6 +431,41 @@
                     }
                 </div>
             );
+        },
+        transforms: {
+            to: [
+                {
+                    type: 'block',
+                    blocks: [ 'advgb/adv-tabs' ],
+                    transform: ( attributes ) => {
+                        const innerTabs = [];
+                        const tabHeaders = [];
+
+                        attributes.tabItems.map(item => {
+                            const tabContent = createBlock(
+                                'core/paragraph',
+                                {content: item.body}
+                            );
+
+                            const tab = createBlock(
+                                'advgb/tab',
+                                { tabActive: 0 },
+                                [ tabContent ]
+                            );
+
+                            tabHeaders.push(item.header);
+                            innerTabs.push(tab);
+                        });
+
+                        attributes.tabItems =  undefined;
+                        return createBlock(
+                            'advgb/adv-tabs',
+                            { ...attributes, tabHeaders: tabHeaders, changed: false },
+                            innerTabs,
+                        )
+                    }
+                }
+            ]
         },
     } );
 })( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components );

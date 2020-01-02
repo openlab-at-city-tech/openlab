@@ -1,22 +1,5 @@
 <?php
 
-function su_hex2rgb( $colour, $delimiter = '-' ) {
-	if ( $colour[0] == '#' ) {
-		$colour = substr( $colour, 1 );
-	}
-	if ( strlen( $colour ) == 6 ) {
-		list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
-	} elseif ( strlen( $colour ) == 3 ) {
-		list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
-	} else {
-		return false;
-	}
-	$r = hexdec( $r );
-	$g = hexdec( $g );
-	$b = hexdec( $b );
-	return implode( $delimiter, array( $r, $g, $b ) ); //array( 'red' => $r, 'green' => $g, 'blue' => $b );
-}
-
 /**
  *  Resizes an image and returns an array containing the resized URL, width, height and file type. Uses native WordPress functionality.
  *
@@ -49,8 +32,8 @@ function su_image_resize( $url, $width = null, $height = null, $crop = true, $re
 			$file_path    = str_replace( $blog_details->path . 'files/', '/wp-content/blogs.dir/' . $blog_id . '/files/', $file_path );
 		}
 		// Destination width and height variables
-		$dest_width  = $width * $retina;
-		$dest_height = $height * $retina;
+		$dest_width  = intval( $width ) * intval( $retina );
+		$dest_height = intval( $height ) * intval( $retina );
 		// File name suffix (appended to original file name)
 		$suffix = "{$dest_width}x{$dest_height}";
 		// Some additional info about the image

@@ -311,13 +311,7 @@ class H5PDefaultStorage implements \H5PFileStorage {
     // Add filename to path
     $path .= '/' . $file->getName();
 
-    $fileData = $file->getData();
-    if ($fileData) {
-      file_put_contents($path, $fileData);
-    }
-    else {
-      copy($_FILES['file']['tmp_name'], $path);
-    }
+    copy($_FILES['file']['tmp_name'], $path);
 
     return $file;
   }
@@ -363,15 +357,14 @@ class H5PDefaultStorage implements \H5PFileStorage {
    * content from the current temporary upload folder to the editor path.
    *
    * @param string $source path to source directory
-   * @param string $contentId Id of content
-   *
-   * @return object Object containing h5p json and content json data
+   * @param string $contentId Id of contentarray
    */
   public function moveContentDirectory($source, $contentId = NULL) {
     if ($source === NULL) {
       return NULL;
     }
 
+    // TODO: Remove $contentId and never copy temporary files into content folder. JI-366
     if ($contentId === NULL || $contentId == 0) {
       $target = $this->getEditorPath();
     }
@@ -380,7 +373,7 @@ class H5PDefaultStorage implements \H5PFileStorage {
       $target = "{$this->path}/content/{$contentId}";
     }
 
-    $contentSource = $source . DIRECTORY_SEPARATOR . 'content';
+    $contentSource = $source . '/' . 'content';
     $contentFiles = array_diff(scandir($contentSource), array('.','..', 'content.json'));
     foreach ($contentFiles as $file) {
       if (is_dir("{$contentSource}/{$file}")) {
@@ -391,14 +384,7 @@ class H5PDefaultStorage implements \H5PFileStorage {
       }
     }
 
-    // Successfully loaded content json of file into editor
-    $h5pJson = $this->getContent($source . DIRECTORY_SEPARATOR . 'h5p.json');
-    $contentJson = $this->getContent($contentSource . DIRECTORY_SEPARATOR . 'content.json');
-
-    return (object) array(
-      'h5pJson' => $h5pJson,
-      'contentJson' => $contentJson
-    );
+    // TODO: Return list of all files so that they can be marked as temporary. JI-366
   }
 
   /**
@@ -449,6 +435,57 @@ class H5PDefaultStorage implements \H5PFileStorage {
    */
   public function hasWriteAccess() {
     return self::dirReady($this->path);
+  }
+
+  /**
+   * Check if the file presave.js exists in the root of the library
+   *
+   * @param string $libraryFolder
+   * @param string $developmentPath
+   * @return bool
+   */
+  public function hasPresave($libraryFolder, $developmentPath = null) {
+      $path = is_null($developmentPath) ? 'libraries' . '/' . $libraryFolder : $developmentPath;
+      $filePath = realpath($this->path . '/' . $path . '/' . 'presave.js');
+    return file_exists($filePath);
+  }
+
+  /**
+   * Check if upgrades script exist for library.
+   *
+   * @param string $machineName
+   * @param int $majorVersion
+   * @param int $minorVersion
+   * @return string Relative path
+   */
+  public function getUpgradeScript($machineName, $majorVersion, $minorVersion) {
+    $upgrades = "/libraries/{$machineName}-{$majorVersion}.{$minorVersion}/upgrades.js";
+    if (file_exists($this->path . $upgrades)) {
+      return $upgrades;
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
+   * Store the given stream into the given file.
+   *
+   * @param string $path
+   * @param string $file
+   * @param resource $stream
+   * @return bool
+   */
+  public function saveFileFromZip($path, $file, $stream) {
+    $filePath = $path . '/' . $file;
+
+    // Make sure the directory exists first
+    $matches = array();
+    preg_match('/(.+)\/[^\/]*$/', $filePath, $matches);
+    self::dirReady($matches[1]);
+
+    // Store in local storage folder
+    return file_put_contents($filePath, $stream);
   }
 
   /**

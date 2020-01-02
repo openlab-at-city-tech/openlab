@@ -1,0 +1,103 @@
+.bptk-hidden {
+  display: none !important; }
+
+.bptk-report-modal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: fixed;
+  z-index: 104312;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 300px;
+  max-width: 90%;
+  height: 400px;
+  max-height: 90%;
+  background-color: #fff;
+  border-radius: 2%; }
+  .bptk-report-modal .bptk-report-modal-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 20px;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+    .bptk-report-modal .bptk-report-modal-inner textarea {
+      height: auto; }
+    .bptk-report-modal .bptk-report-modal-inner p {
+      margin: 0px;
+      font-weight: bold; }
+    .bptk-report-modal .bptk-report-modal-inner #bptk-report-type {
+      padding: 3px; }
+    .bptk-report-modal .bptk-report-modal-inner .bptk-report-modal-inner-header {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between; }
+      .bptk-report-modal .bptk-report-modal-inner .bptk-report-modal-inner-header .bptk-report-close-button {
+        cursor: pointer;
+        font-size: 80%; }
+
+.bptk-report-closed {
+  display: none; }
+
+.bptk-report-modal-overlay {
+  z-index: 104311;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); }
+
+#buddypress .bptk-report-message-button {
+  font-size: 80%; }
+
+#bbpress-forums .bptk-report-forum-topic-button {
+  cursor: pointer; }
+  #bbpress-forums .bptk-report-forum-topic-button:not(.bptk-youzer) {
+    float: left;
+    margin-bottom: 10px; }
+
+.youzer .bptk-block-profile.yz-name, .youzer .bptk-report-button.yz-name, .youzer .bptk-suspend-profile.yz-name {
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  line-height: 24px;
+  font-weight: 400;
+  margin: 0;
+  color: #fff;
+  display: inline;
+  margin: 0px 4px; }
+  .youzer .bptk-block-profile.yz-name i, .youzer .bptk-report-button.yz-name i, .youzer .bptk-suspend-profile.yz-name i {
+    margin-right: 3px;
+    font-size: 10px; }
+  .youzer .bptk-block-profile.yz-name a, .youzer .bptk-report-button.yz-name a, .youzer .bptk-suspend-profile.yz-name a {
+    color: #fff;
+    font-size: 10px; }
+  .youzer .bptk-block-profile.yz-name span, .youzer .bptk-report-button.yz-name span, .youzer .bptk-suspend-profile.yz-name span {
+    font-size: 10px; }
+
+.youzer .activity-meta .bptk-report-activity-button:before, .youzer .acomment-options .bptk-report-activity-comment-button:before {
+  content: "\f024"; }

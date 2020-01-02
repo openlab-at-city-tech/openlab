@@ -1,21 +1,27 @@
 <?php
 
 /**
+ * bbPress 1.x Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * bbPress 1.1 Converter
  *
- * @since bbPress (r3816)
- * @link Codex Docs http://codex.bbpress.org/import-forums/bbpress-1-x-buddypress-group-forums
+ * @since 2.1.0 bbPress (r3816)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/bbpress-1-x-buddypress-group-forums
  */
 class bbPress1 extends BBP_Converter_Base {
 
 	/**
 	 * Main constructor
 	 *
-	 * @uses bbPress1::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -23,14 +29,20 @@ class bbPress1 extends BBP_Converter_Base {
 	 */
 	public function setup_globals() {
 
+		// Setup smiley URL & path
+		$this->bbcode_parser_properties = array(
+			'smiley_url' => false,
+			'smiley_dir' => false
+		);
+
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'forums',
 			'from_fieldname' => 'forum_id',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0. Stored in postmeta)
@@ -38,7 +50,7 @@ class bbPress1 extends BBP_Converter_Base {
 			'from_tablename' => 'forums',
 			'from_fieldname' => 'forum_parent',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_parent_id'
+			'to_fieldname'   => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -119,6 +131,13 @@ class bbPress1 extends BBP_Converter_Base {
 			'callback_method' => 'callback_forum_type'
 		);
 
+		// Forum status (Set a default value 'open', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_status',
+			'default'      => 'open'
+		);
+
 		// Forum dates.
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
@@ -141,14 +160,20 @@ class bbPress1 extends BBP_Converter_Base {
 			'default'      => date('Y-m-d H:i:s')
 		);
 
+		/** Forum Subscriptions Section ***************************************/
+
+		/**
+		 * bbPress 1.x Forums do not support forum subscriptions
+		 */
+
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'topics',
 			'from_fieldname' => 'topic_id',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -229,6 +254,15 @@ class bbPress1 extends BBP_Converter_Base {
 			'callback_method' => 'callback_status'
 		);
 
+		// Topic status (Publish or Closed to new replies)
+		$this->field_map[] = array(
+			'from_tablename'  => 'topics',
+			'from_fieldname'  => 'topic_open',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
+			'callback_method' => 'callback_topic_status'
+		);
+
 		// Topic author ip (Stored in postmeta)
 		// Note: We join the 'posts' table because 'topics' table does not include author ip.
 		$this->field_map[] = array(
@@ -250,12 +284,12 @@ class bbPress1 extends BBP_Converter_Base {
 			'callback_method' => 'callback_forumid'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'topics',
 			'from_fieldname'  => 'topic_sticky',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -313,13 +347,25 @@ class bbPress1 extends BBP_Converter_Base {
 			'to_fieldname'    => 'taxonomy'
 		);
 
+		// Term description.
+		$this->field_map[] = array(
+			'from_tablename'  => 'term_taxonomy',
+			'from_fieldname'  => 'description',
+			'join_tablename'  => 'term_relationships',
+			'join_type'       => 'INNER',
+			'join_expression' => 'USING (term_taxonomy_id)',
+			'to_type'         => 'tags',
+			'to_fieldname'    => 'description',
+			'callback_method' => 'callback_html'
+		);
+
 		// Term text.
 		$this->field_map[] = array(
 			'from_tablename'  => 'terms',
 			'from_fieldname'  => 'name',
 			'join_tablename'  => 'term_taxonomy',
 			'join_type'       => 'INNER',
-			'join_expression' => 'USING (term_id)',
+			'join_expression' => 'USING (term_id) WHERE term_taxonomy.taxonomy = "bb_topic_tag"',
 			'to_type'         => 'tags',
 			'to_fieldname'    => 'name'
 		);
@@ -330,26 +376,84 @@ class bbPress1 extends BBP_Converter_Base {
 			'from_fieldname'  => 'slug',
 			'join_tablename'  => 'term_taxonomy',
 			'join_type'       => 'INNER',
-			'join_expression' => 'USING (term_id)',
+			'join_expression' => 'USING (term_id) WHERE term_taxonomy.taxonomy = "bb_topic_tag"',
 			'to_type'         => 'tags',
 			'to_fieldname'    => 'slug',
 			'callback_method' => 'callback_slug'
 		);
 
+		/** Topic Subscriptions Section ***************************************/
+
+		// Subscribed user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'term_relationships',
+			'from_fieldname'  => 'user_id',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
+		// Join the 'term_taxonomy' table to link 'terms' 'term_relationships' tables
+		$this->field_map[] = array(
+			'from_tablename'  => 'term_taxonomy',
+			'from_fieldname'  => 'term_taxonomy_id',
+			'join_tablename'  => 'term_relationships',
+			'join_type'       => 'INNER',
+			'join_expression' => 'USING (term_taxonomy_id)',
+			'to_type'         => 'topic_subscriptions'
+		);
+
+		// Subscribed topic ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'terms',
+			'from_fieldname'  => 'name',
+			'join_tablename'  => 'term_taxonomy',
+			'join_type'       => 'INNER',
+			'join_expression' => 'USING (term_id) WHERE term_taxonomy.taxonomy = "bb_subscribe"',
+			'to_type'         => 'topic_subscriptions',
+			'to_fieldname'    => '_bbp_subscriptions',
+			'callback_method' => 'callback_topic_subscriptions'
+		);
+
+		/** Favorites Section *************************************************/
+
+		// Favorited topic ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'usermeta',
+			'from_fieldname'  => 'meta_value',
+			'from_expression' => 'WHERE usermeta.meta_key = "bb_favorites"',
+			'to_type'         => 'favorites',
+			'to_fieldname'    => '_bbp_favorites'
+		);
+
+		// Favorited user ID (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'usermeta',
+			'from_fieldname'  => 'user_id',
+			'from_expression' => 'WHERE usermeta.meta_key = "bb_favorites"',
+			'to_type'         => 'favorites',
+			'to_fieldname'    => 'user_id',
+			'callback_method' => 'callback_userid'
+		);
+
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'posts',
 			'from_fieldname'  => 'post_id',
 			'to_type'         => 'reply',
-			'to_fieldname'    => '_bbp_post_id'
+			'to_fieldname'    => '_bbp_old_reply_id'
 		);
 
 		// Reply parent topic id (If no parent, then 0. Stored in postmeta)
+		// Note: We join the 'topics' table to limit the replies section to only import replies
 		$this->field_map[] = array(
-			'from_tablename'  => 'posts',
+			'from_tablename'  => 'topics',
 			'from_fieldname'  => 'topic_id',
+			'join_tablename'  => 'posts',
+			'join_type'       => 'INNER',
+			'join_expression' => 'USING (topic_id) WHERE posts.post_position NOT IN (0,1)',
 			'to_type'         => 'reply',
 			'to_fieldname'    => '_bbp_topic_id',
 			'callback_method' => 'callback_topicid'
@@ -362,32 +466,6 @@ class bbPress1 extends BBP_Converter_Base {
 			'to_type'         => 'reply',
 			'to_fieldname'    => '_bbp_forum_id',
 			'callback_method' => 'callback_forumid'
-		);
-
-		// Reply title.
-		// Note: We join the 'topics' table because 'posts' table does not include topic title.
-		$this->field_map[] = array(
-			'from_tablename'  => 'topics',
-			'from_fieldname'  => 'topic_title',
-			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'USING (topic_id) WHERE posts.post_position NOT IN (0,1)',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_title',
-			'callback_method' => 'callback_reply_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
-		// Note: We join the 'topics' table because 'posts' table does not include topic slug.
-		$this->field_map[] = array(
-			'from_tablename'  => 'topics',
-			'from_fieldname'  => 'topic_slug',
-			'join_tablename'  => 'posts',
-			'join_type'       => 'INNER',
-			'join_expression' => 'USING (topic_id) WHERE posts.post_position NOT IN (0,1)',
-			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
 		);
 
 		// Reply author ip (Stored in postmeta)
@@ -470,15 +548,15 @@ class bbPress1 extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'ID',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta)
+		// Store old user password (Stored in usermeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'user_pass',
@@ -552,7 +630,7 @@ class bbPress1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from bbPress 1's numeric's to WordPress's
+	 * Translate the post status from bbPress 1's numerics to WordPress's
 	 * strings.
 	 *
 	 * @param int $status bbPress 1.x numeric post status
@@ -577,7 +655,7 @@ class bbPress1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the forum type from bbPress 1.x numeric's to WordPress's strings.
+	 * Translate the forum type from bbPress 1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status bbPress 1.x numeric forum type
 	 * @return string WordPress safe
@@ -592,7 +670,28 @@ class bbPress1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic sticky status type from bbPress 1.x numeric's to WordPress's strings.
+	 * Translate the topic status from bbPress 1's numerics to WordPress's
+	 * strings.
+	 *
+	 * @param int $topic_status bbPress 1.x numeric status
+	 * @return string WordPress safe
+	 */
+	public function callback_topic_status( $topic_status = 1 ) {
+		switch ( $topic_status ) {
+			case 0 :
+				$topic_status = 'closed';  // bbp_get_closed_status_id()
+				break;
+
+			case 1 :
+				default :
+				$topic_status = 'publish'; // bbp_get_public_status_id()
+				break;
+		}
+		return $topic_status;
+	}
+
+	/**
+	 * Translate the topic sticky status type from bbPress 1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status bbPress 1.x numeric forum type
 	 * @return string WordPress safe
@@ -627,17 +726,6 @@ class bbPress1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Set the reply title
-	 *
-	 * @param string $title bbPress 1.x topic title of this reply
-	 * @return string Prefixed topic title, or empty string
-	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
-	}
-
-	/**
 	 * This method is to save the salt and password together. That
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
@@ -655,17 +743,17 @@ class bbPress1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This callback:
+	 * This callback strips `topic-` from topic subscriptions taxonomy
 	 *
-	 * - turns off smiley parsing
-	 * - processes any custom parser.php attributes
-	 * - decodes necessary HTML entities
+	 * @since 2.6.0 bbPress (r5572)
+	 *
+	 * @param string $field Topic ID
+	 * @return integer WordPress safe
 	 */
-	protected function callback_html( $field ) {
-		require_once( bbpress()->admin->admin_dir . 'parser.php' );
-		$bbcode = BBCode::getInstance();
-		$bbcode->enable_smileys = false;
-		$bbcode->smiley_regex   = false;
-		return html_entity_decode( $bbcode->Parse( $field ) );
+	protected function callback_topic_subscriptions( $field ) {
+
+		// Replace 'topic-' with '' so that only the original topic ID remains
+		$field = absint( (int) preg_replace( '/(topic-)(\d+)/', '$2', $field ) );
+		return $field;
 	}
 }

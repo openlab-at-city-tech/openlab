@@ -3,8 +3,8 @@ Contributors: takayukister
 Donate link: https://contactform7.com/donate/
 Tags: contact, form, contact form, feedback, email, ajax, captcha, akismet, multilingual
 Requires at least: 4.9
-Tested up to: 5.2
-Stable tag: 5.1.4
+Tested up to: 5.3
+Stable tag: 5.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,16 @@ Do you have questions or issues with Contact Form 7? Use these support channels 
 == Changelog ==
 
 For more information, see [Releases](https://contactform7.com/category/releases/).
+
+= 5.1.6 =
+
+* CSS: removes a style rule from the stylesheet that was unnecessary and conflicting with Twenty Twenty’s rules.
+* REST API: retrieves the contact form ID explicitly from the route parameters.
+
+= 5.1.5 =
+
+* Config Validator: New test item for the unavailable_html_elements error.
+* Config Validator: New test item for the attachments_overweight error.
 
 = 5.1.4 =
 

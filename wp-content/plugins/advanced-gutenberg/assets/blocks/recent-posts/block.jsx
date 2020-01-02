@@ -165,7 +165,7 @@
 
             const inspectorControls = (
                 <InspectorControls>
-                    <PanelBody title={ __( 'Block Settings' ) }>
+                    <PanelBody title={ __( 'Block Settings', 'advanced-gutenberg' ) }>
                         <QueryControls
                             { ...{ order, orderBy } }
                             categoriesList={ categoriesList }
@@ -178,7 +178,7 @@
                         />
                         {postView === 'grid' &&
                         <RangeControl
-                            label={ __( 'Columns' ) }
+                            label={ __( 'Columns', 'advanced-gutenberg' ) }
                             value={ columns }
                             min={ 1 }
                             max={ 4 }
@@ -186,48 +186,48 @@
                         />
                         }
                         <ToggleControl
-                            label={ __( 'Display Featured Image' ) }
+                            label={ __( 'Display Featured Image', 'advanced-gutenberg' ) }
                             checked={ displayFeaturedImage }
                             onChange={ () => setAttributes( { displayFeaturedImage: !displayFeaturedImage } ) }
                         />
                         <ToggleControl
-                            label={ __( 'Display Post Author' ) }
+                            label={ __( 'Display Post Author', 'advanced-gutenberg' ) }
                             checked={ displayAuthor }
                             onChange={ () => setAttributes( { displayAuthor: !displayAuthor } ) }
                         />
                         <ToggleControl
-                            label={ __( 'Display Post Date' ) }
+                            label={ __( 'Display Post Date', 'advanced-gutenberg' ) }
                             checked={ displayDate }
                             onChange={ () => setAttributes( { displayDate: !displayDate } ) }
                         />
                         <ToggleControl
-                            label={ __( 'Display Read More Link' ) }
+                            label={ __( 'Display Read More Link', 'advanced-gutenberg' ) }
                             checked={ displayReadMore }
                             onChange={ () => setAttributes( { displayReadMore: !displayReadMore } ) }
                         />
                         {displayReadMore &&
                             <TextControl
-                                label={ __('Read more text') }
+                                label={ __('Read more text', 'advanced-gutenberg') }
                                 value={ readMoreLbl }
                                 onChange={ (value) => setAttributes( { readMoreLbl: value } ) }
                             />
                         }
                         <ToggleControl
-                            label={ __( 'Display Post Excerpt' ) }
+                            label={ __( 'Display Post Excerpt', 'advanced-gutenberg' ) }
                             checked={ displayExcerpt }
                             onChange={ () => setAttributes( { displayExcerpt: !displayExcerpt } ) }
                         />
                         {displayExcerpt &&
                             <ToggleControl
-                                label={ __( 'First Post text as Excerpt' ) }
-                                help={ __( 'Display some part of first text found in post as excerpt.' ) }
+                                label={ __( 'First Post text as Excerpt', 'advanced-gutenberg' ) }
+                                help={ __( 'Display some part of first text found in post as excerpt.', 'advanced-gutenberg' ) }
                                 checked={ postTextAsExcerpt }
                                 onChange={ () => setAttributes( { postTextAsExcerpt: !postTextAsExcerpt } ) }
                             />
                         }
                         {displayExcerpt && postTextAsExcerpt &&
                             <RangeControl
-                                label={ __( 'Post Text Excerpt length' ) }
+                                label={ __( 'Post Text Excerpt length', 'advanced-gutenberg' ) }
                                 min={ 50 }
                                 max={ 300 }
                                 value={ postTextExcerptLength }
@@ -247,11 +247,11 @@
                         { inspectorControls }
                         <Placeholder
                             icon={ advRecentPostsBlockIcon }
-                            label={ __( 'ADVGB Recent Posts Block' ) }
+                            label={ __( 'ADVGB Recent Posts Block', 'advanced-gutenberg' ) }
                         >
                             { ! Array.isArray( recentPosts ) ?
                                 <Spinner /> :
-                                __( 'No posts found! Try to change category or publish posts.' )
+                                __( 'No posts found! Try to change category or publish posts.', 'advanced-gutenberg' )
                             }
                         </Placeholder>
                     </Fragment>
@@ -261,19 +261,19 @@
             const postViewControls = [
                 {
                     icon: 'grid-view',
-                    title: __( 'Grid View' ),
+                    title: __( 'Grid View', 'advanced-gutenberg' ),
                     onClick: () => setAttributes( { postView: 'grid' } ),
                     isActive: postView === 'grid',
                 },
                 {
                     icon: 'list-view',
-                    title: __( 'List View' ),
+                    title: __( 'List View', 'advanced-gutenberg' ),
                     onClick: () => setAttributes( { postView: 'list' } ),
                     isActive: postView === 'list',
                 },
                 {
                     icon: 'slides',
-                    title: __( 'Slider View' ),
+                    title: __( 'Slider View', 'advanced-gutenberg' ),
                     onClick: () => setAttributes( { postView: 'slider' } ),
                     isActive: postView === 'slider',
                 },
@@ -297,7 +297,7 @@
                         <Toolbar controls={ postViewControls } />
                         <Toolbar>
                             <IconButton
-                                label={ __( 'Refresh' ) }
+                                label={ __( 'Refresh', 'advanced-gutenberg' ) }
                                 icon="update"
                                 onClick={ () => setAttributes( { myToken: Math.floor(Math.random() * Math.floor(999)) } ) }
                             />
@@ -311,7 +311,7 @@
                                     {displayFeaturedImage && (
                                         <div className="advgb-post-thumbnail">
                                             <a href={ post.link } target="_blank">
-                                                <img src={ post.featured_img ? post.featured_img : advgbBlocks.post_thumb } alt={ __( 'Post Image' ) } />
+                                                <img src={ post.featured_img ? post.featured_img : advgbBlocks.post_thumb } alt={ __( 'Post Image', 'advanced-gutenberg' ) } />
                                             </a>
                                         </div>
                                     ) }
@@ -343,7 +343,7 @@
                                             ) }
                                             {displayReadMore && (
                                                 <div className="advgb-post-readmore">
-                                                    <a href={ post.link } target="_blank">{ readMoreLbl ? readMoreLbl : __( 'Read More' ) }</a>
+                                                    <a href={ post.link } target="_blank">{ readMoreLbl ? readMoreLbl : __( 'Read More', 'advanced-gutenberg' ) }</a>
                                                 </div>
                                             ) }
                                         </div>
@@ -358,14 +358,14 @@
     }
 
     registerBlockType( 'advgb/recent-posts', {
-        title: __( 'Recent Posts' ),
-        description: __( 'Display your recent posts in slider or grid view with beautiful styles.' ),
+        title: __( 'Recent Posts', 'advanced-gutenberg' ),
+        description: __( 'Display your recent posts in slider or grid view with beautiful styles.', 'advanced-gutenberg' ),
         icon: {
             src: advRecentPostsBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'latest posts' ), __( 'posts slide' ), __( 'posts grid' ) ],
+        keywords: [ __( 'latest posts', 'advanced-gutenberg' ), __( 'posts slide', 'advanced-gutenberg' ), __( 'posts grid', 'advanced-gutenberg' ) ],
         supports: {
             html: false,
         },

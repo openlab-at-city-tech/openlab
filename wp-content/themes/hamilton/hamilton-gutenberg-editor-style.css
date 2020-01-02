@@ -12,8 +12,12 @@
 
 .editor-rich-text__tinymce {
 	color: #000;
-	font-family: 'Libre Franklin', 'Helvetica Neue', sans-serif;
+	font-family: 'Libre Franklin', -apple-system, 'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
+}
+
+.editor-styles-wrapper > * {
+	font-family: 'Libre Franklin', -apple-system, 'Helvetica Neue', sans-serif;
 }
 
 .editor-rich-text__tinymce * {

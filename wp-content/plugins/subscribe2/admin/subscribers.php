@@ -39,43 +39,43 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		$email_error   = '';
 		$message       = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
-			$email = $this->sanitize_email( $email );
-			if ( false === $this->validate_email( $email ) ) {
+			$clean_email = $this->sanitize_email( $email );
+			if ( false === $this->validate_email( $clean_email ) ) {
 				( '' === $email_error ) ? $email_error = "$email" : $email_error .= ", $email";
 					continue;
 			} else {
 				if ( isset( $_POST['subscribe'] ) ) {
-					if ( false !== $this->is_public( $email ) ) {
-						( '' === $pub_sub_error ) ? $pub_sub_error = "$email" : $pub_sub_error .= ", $email";
+					if ( false !== $this->is_public( $clean_email ) ) {
+						( '' === $pub_sub_error ) ? $pub_sub_error = "$clean_email" : $pub_sub_error .= ", $clean_email";
 						continue;
 					}
-					if ( $this->is_registered( $email ) ) {
-						( '' === $reg_sub_error ) ? $reg_sub_error = "$email" : $reg_sub_error .= ", $email";
+					if ( $this->is_registered( $clean_email ) ) {
+						( '' === $reg_sub_error ) ? $reg_sub_error = "$clean_email" : $reg_sub_error .= ", $clean_email";
 						continue;
 					}
-					$this->add( $email, true );
+					$this->add( $clean_email, true );
 					$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) subscribed!', 'subscribe2' ) . '</strong></p></div>';
 				} elseif ( isset( $_POST['unsubscribe'] ) ) {
-					if ( false === $this->is_public( $email ) || $this->is_registered( $email ) ) {
-						( '' === $unsub_error ) ? $unsub_error = "$email" : $unsub_error .= ", $email";
+					if ( false === $this->is_public( $clean_email ) || $this->is_registered( $clean_email ) ) {
+						( '' === $unsub_error ) ? $unsub_error = "$clean_email" : $unsub_error .= ", $clean_email";
 						continue;
 					}
-					$this->delete( $email );
+					$this->delete( $clean_email );
 					$message = '<div id="message" class="updated fade"><p><strong>' . __( 'Address(es) unsubscribed!', 'subscribe2' ) . '</strong></p></div>';
 				}
 			}
 		}
 		if ( '' !== $reg_sub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Registered Subscribers', 'subscribe2' ) . ':<br />' . $reg_sub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Registered Subscribers', 'subscribe2' ) . ':<br />' . esc_html( $reg_sub_error ) . '</strong></p></div>';
 		}
 		if ( '' !== $pub_sub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Public Subscribers', 'subscribe2' ) . ':<br />' . $pub_sub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following are already Public Subscribers', 'subscribe2' ) . ':<br />' . esc_html( $pub_sub_error ) . '</strong></p></div>';
 		}
 		if ( '' !== $unsub_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were not in the database', 'subscribe2' ) . ':<br /> ' . $unsub_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were not in the database', 'subscribe2' ) . ':<br /> ' . esc_html( $unsub_error ) . '</strong></p></div>';
 		}
 		if ( '' !== $email_error ) {
-			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were invalid email addresses', 'subscribe2' ) . ':<br /> ' . $email_error . '</strong></p></div>';
+			echo '<div id="message" class="error"><p><strong>' . __( 'Some emails were not processed, the following were invalid email addresses', 'subscribe2' ) . ':<br /> ' . esc_html( $email_error ) . '</strong></p></div>';
 		}
 		if ( '' !== $message ) {
 			echo $message;

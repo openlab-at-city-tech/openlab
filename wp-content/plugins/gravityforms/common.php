@@ -1315,6 +1315,7 @@ class GFCommon {
 
 			switch ( $field->type ) {
 				case 'captcha' :
+				case 'password' :
 					break;
 
 				case 'section' :
@@ -1345,9 +1346,6 @@ class GFCommon {
 
 					$field_data .= $field_value;
 
-					break;
-				case 'password' :
-					//ignore password fields
 					break;
 
 				default :
@@ -2175,8 +2173,11 @@ class GFCommon {
 
 			$result = is_wp_error( $is_success ) ? $is_success->get_error_message() : $is_success;
 
+			// Get $phpmailer->ErrorInfo value if available.
+			$error_info = is_object( $phpmailer ) ? $phpmailer->ErrorInfo : '';
+
 			// Add note with sending result ?
-			GFFormsModel::add_notification_note( $entry_id, $result, $notification, $phpmailer->ErrorInfo, $email );
+			GFFormsModel::add_notification_note( $entry_id, $result, $notification, $error_info, $email );
 
 			GFCommon::log_debug( __METHOD__ . "(): Result from wp_mail(): {$result}" );
 
@@ -2190,8 +2191,8 @@ class GFCommon {
 				GFCommon::log_debug( __METHOD__ . '(): The WordPress phpmailer_init hook has been detected, usually used by SMTP plugins. It can alter the email setup/content or sending server, and impact the notification deliverability.' );
 			}
 
-			if ( ! empty( $phpmailer->ErrorInfo ) ) {
-				GFCommon::log_debug( __METHOD__ . '(): PHPMailer class returned an error message: ' . $phpmailer->ErrorInfo );
+			if ( ! empty( $error_info ) ) {
+				GFCommon::log_debug( __METHOD__ . '(): PHPMailer class returned an error message: ' . $error_info );
 			}
 		} else {
 			GFCommon::log_debug( sprintf( '%s(): Aborting notification (#%s - %s)%s. The gform_pre_send_email hook was used to set the abort_email parameter to true.', __METHOD__, $notification['id'], $notification['name'], $entry_info ) );
@@ -2700,7 +2701,7 @@ Content-Type: text/html;
 			$version_info['timestamp'] = time();
 
 			// Caching response.
-			update_option( 'gform_version_info', $version_info ); //caching version info
+			update_option( 'gform_version_info', $version_info, false ); //caching version info
 		}
 
 		return $version_info;
@@ -3456,6 +3457,10 @@ Content-Type: text/html;
 
 				if ( ! empty( $post_link ) ) {
 					return $post_link;
+				}
+
+				if ( $form === null ) {
+					$form = array( 'id' => 0 );
 				}
 
 				if ( ! isset( $lead ) ) {
@@ -4241,7 +4246,7 @@ Content-Type: text/html;
 		for ( $i = strlen( $number ) - 1; $i >= 0; $i -- ) {
 
 			//Multiply current digit by multiplier (1 or 2)
-			$num = $number{$i} * $multiplier;
+			$num = $number[ $i ] * $multiplier;
 
 			// If the result is in greater than 9, add 1 to the checksum total
 			if ( $num >= 10 ) {

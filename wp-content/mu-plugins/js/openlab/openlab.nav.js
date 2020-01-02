@@ -425,48 +425,6 @@ OpenLab.nav = (function ($) {
 		fixHoverOnMobile: function (thisElem) {
 			thisElem.trigger( 'click' );
 		},
-		userNameAdjustments: function (reset) {
-			//this function exists purely to deal with weirdness surrounding overflow-x and overflow-y
-
-			if (typeof reset === 'undefined') {
-				reset = false;
-			}
-
-			var targetElem = $( '#wp-admin-bar-blogs-and-admin-centered' );
-
-			if (reset) {
-				targetElem.css(
-					{
-						'max-width': 'none',
-						'overflow': 'hidden',
-						'float': 'none'
-					}
-				);
-
-				return true;
-
-			}
-
-			var targetElem_w = targetElem.outerWidth();
-
-			targetElem.css(
-				{
-					'max-width': targetElem_w + 'px',
-					'overflow': 'visible',
-					'float': 'none'
-				}
-			);
-
-			//on mobile remove the dropdown
-			if (OpenLab.nav.isBreakpoint( 'xs' ) || OpenLab.nav.isBreakpoint( 'xxs' )) {
-				targetElem.find( '#wp-admin-bar-my-account' ).removeClass( 'menupop' );
-				targetElem.find( '.ab-sub-wrapper' ).addClass( 'hidden' );
-			} else {
-				targetElem.find( '#wp-admin-bar-my-account' ).addClass( 'menupop' );
-				targetElem.find( '.ab-sub-wrapper' ).removeClass( 'hidden' );
-			}
-
-		},
 		isBreakpoint: function (alias) {
 			return $( '.device-' + alias ).is( ':visible' );
 		},
@@ -511,8 +469,6 @@ OpenLab.nav = (function ($) {
 		'resize',
 		function (e) {
 
-			OpenLab.nav.userNameAdjustments( true );
-
 			clearTimeout( navResizeTimer );
 			navResizeTimer = setTimeout(
 				function () {
@@ -530,22 +486,6 @@ OpenLab.nav = (function ($) {
 				},
 				250
 			);
-
-		}
-	);
-
-	$( document ).on(
-		'truncate-obfuscate-removed',
-		function (e, thisElem) {
-
-			if ($( thisElem ).closest( '.ab-top-menu' ).attr( 'id' ) === 'wp-admin-bar-blogs-and-admin-centered') {
-				setTimeout(
-					function () {
-						OpenLab.nav.userNameAdjustments();
-					},
-					50
-				);
-			}
 
 		}
 	);

@@ -69,6 +69,9 @@
 				}
 			}
 			#wp-admin-bar-root-default {
+				min-width: 0;
+				display: flex;
+				flex-wrap: nowrap;
 				.ab-icon {
 					&.dashicon-icon {
 						font: 400 28px/1 dashicons;
@@ -202,7 +205,7 @@
 				border: 1px solid @70gray;
 				border-top: none;
 				border-radius: 0 0 4px 4px;
-				margin-top: 1px;
+				margin-top: 2px;
 				width: 600%;
 				.ab-submenu {
 					padding: 0;
@@ -422,43 +425,46 @@
 			#wp-admin-bar-site-name {
 				border-left: none;
 				max-width: 320px;
-				//temporary rollback
-				// > .ab-item {
-				// 	white-space: normal;
-				// 	display: flex;
-				// 	align-items: center;
-				// 	flex: 1 1 0;
-				// 	min-width: 100px;
-				// 	&:after {
-				// 		content: "\f0d7";
-				// 		display: flex;
-				// 		font: normal normal normal 14px/1 FontAwesome;
-				// 		text-rendering: auto;
-				// 		-webkit-font-smoothing: antialiased;
-				// 		-moz-osx-font-smoothing: grayscale;
-				// 		position: absolute;
-				// 		right: 18px;
-				// 		top: 0;
-				// 		bottom: 0;
-				// 		justify-content: center;
-				// 		align-items: center;
-				// 		@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-				// 			display: none;
-				// 		}
-				// 	}
-				// 	@media (min-width: @screen-md-min) {
-				// 		padding-right: 42px;
-				// 	}
-				// 	@media (max-width: @screen-xs-max) {
-				// 		padding-right: 42px;
-				// 	}
-				// 	.site-name {
-				// 		white-space: nowrap;
-				// 		position: relative;
-				// 		text-overflow: ellipsis;
-				// 		overflow: hidden;
-				// 	}
-				// }
+				> .ab-item {
+					white-space: normal;
+					display: flex;
+					align-items: center;
+					flex: 1 1 0;
+					min-width: 100px;
+					@media (max-width: @screen-sm-max){
+						min-width: 50px;
+					}
+					&:after {
+						content: "\f0d7";
+						display: flex;
+						font: normal normal normal 14px/1 FontAwesome;
+						text-rendering: auto;
+						-webkit-font-smoothing: antialiased;
+						-moz-osx-font-smoothing: grayscale;
+						position: absolute;
+						right: 18px;
+						top: 0;
+						bottom: 0;
+						justify-content: center;
+						align-items: center;
+						@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+							display: none;
+						}
+					}
+					@media (min-width: @screen-md-min) {
+						padding-right: 42px;
+					}
+					@media (max-width: @screen-xs-max) {
+						padding-right: 42px;
+					}
+					.site-name {
+						white-space: nowrap;
+						position: relative;
+						text-overflow: ellipsis;
+						display: block;
+						overflow: hidden;
+					}
+				}
 			}
 			#wp-admin-bar-my-openlab,
 			#wp-admin-bar-network-menu-mobile {
@@ -499,12 +505,16 @@
 					display: inline-block;
 					width: 100%;
 					text-align: right;
-					span.truncate-sizer {
-						display: inline-block;
+					span.user-name {
+						overflow: hidden;
+						text-overflow: ellipsis;
 						width: 100%;
+						white-space: nowrap;
+						display: block;
 					}
 				}
 				.ab-sub-wrapper {
+					right: -2px;
 					width: auto;
 					min-width: 250px;
 					p {
@@ -579,7 +589,9 @@
 				}
 			}
 			#wp-admin-bar-blogs-and-admin-centered {
-				flex-grow: 1;
+				margin-left: auto;
+				min-width: 0;
+				flex-shrink: 60;
 				@media (max-width: @screen-xs-max) {
 					.ab-sub-wrapper {
 						display: none;
@@ -1076,12 +1088,9 @@
 		#wpadminbar {
 			top: 0;
 			height: auto;
-			border-bottom: 19px solid @white; //temporary rollback
 			&:before {
 				border-bottom: 1px solid @black;
-				//temporary rollback
-				bottom: -20px;
-				//bottom: -1px;
+				bottom: -1px;
 				content: "";
 				left: 0;
 				position: absolute;
@@ -1095,7 +1104,6 @@
 			}
 			.ab-blogs-and-admin-centered {
 				float: none;
-				overflow: hidden;
 				text-align: right;
 				#wp-admin-bar-my-account {
 					width: 100%;
@@ -1105,12 +1113,13 @@
 				}
 			}
 			#wp-toolbar {
+				width: 100%;
+				max-width: none;
 				> ul {
 					> li {
 						> .ab-item {
 							min-height: 50px;
-							//temporary rollback
-							//min-width: 50px;
+							min-width: 50px;
 							&.ab-empty-item {
 								padding-bottom: 16px;
 							}
@@ -1139,6 +1148,9 @@
 				}
 				#wp-admin-bar-network-menu-mobile,
 				#wp-admin-bar-my-openlab {
+					> .ab-item{
+						min-width: 140px;
+					}
 					@media (max-width: @screen-xs-max) {
 						> .ab-item {
 							display: none;
@@ -1173,14 +1185,13 @@
 				}
 			}
 		}
-		//temporary rollback
-		// &.logged-in{
-		// 	#wpadminbar{
-		// 		#wp-admin-bar-blogs-and-admin-centered{
-		// 			border-left: 1px solid #000;
-		// 		}
-		// 	}
-		// }
+		&.logged-in {
+			#wpadminbar {
+				#wp-admin-bar-root-default {
+					border-right: 1px solid #000;
+				}
+			}
+		}
 	}
 }
 
@@ -1194,9 +1205,9 @@ html {
 
 body {
 	&.adminbar-special {
-		padding-top: 70px;
+		padding-top: 52px;
 		@media (max-width: 767px) {
-			padding-top: 110px;
+			padding-top: 114px;
 		}
 	}
 	.page-table {
@@ -1306,90 +1317,3 @@ a.cc-widget-icon-link {
 .cc-widget-text {
 	margin-top: 1em;
 }
-/**theme specific adminbar styles (group sites only)**/
-//temporary rollback
-// .oplb-bs.adminbar-manual-bootstrap {
-// 	#wpadminbar {
-// 		#wp-toolbar {
-// 			#wp-admin-bar-site-name{
-// 				max-width: 280px;
-// 			}
-// 		}
-// 	}
-// 	&.twentyeleven {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 1000px;
-// 				@media (max-width: 1060px) and (min-width: 992px) {
-// 					padding: 0 2em;
-// 				}
-// 			}
-// 		}
-// 	}
-// 	&.twentytwelve {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 68.571428571rem + 2 * 2.857142857rem;
-// 			}
-// 		}
-// 	}
-// 	&.twentythirteen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 1600px;
-// 			}
-// 		}
-// 	}
-// 	&.twentyfourteen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 1260px;
-// 				margin: 0;
-// 			}
-// 		}
-// 	}
-// 	&.twentyfifteen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 1240px;
-// 				width: 88%;
-// 				@media (max-width: 954px) {
-// 					width: 100%;
-// 				}
-// 			}
-// 		}
-// 	}
-// 	&.twentysixteen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 1200px;
-// 				width: 88%;
-// 				@media (max-width: 909px) {
-// 					width: 100%;
-// 				}
-// 			}
-// 		}
-// 	}
-// 	&.twentyseventeen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 906px;
-// 				width: 88%;
-// 				@media (max-width: 900px) {
-// 					width: 100%;
-// 				}
-// 			}
-// 		}
-// 	}
-// 	&.twentynineteen {
-// 		#wpadminbar {
-// 			#wp-toolbar {
-// 				max-width: 100%;
-//                 padding: 0 ~"calc(10% + 60px)";
-//                 @media (max-width: 1220px){
-//                     padding: 0;
-//                 }
-// 			}
-// 		}
-// 	}
-// }

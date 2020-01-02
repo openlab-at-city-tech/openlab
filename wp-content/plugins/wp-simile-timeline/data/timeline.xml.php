@@ -3,12 +3,12 @@
  * timeline.xml.php
  * Description: XML data for the SIMILE Timline Plugin. 
  * This file fetches the posts from the database and outputs them in the loop
- * Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/
- * Author: Tim Isenheim
+ * Plugin URI: freshlabs.de
+ * Author: freshlabs
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006 Tim Isenheim
+	Copyright (C) 2006 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	===========================================================================
 */
+//xml declaration
+echo '<?xml version="1.0" encoding="UTF-8"?'.'>' . "\n\r";
 // load WordPress environment
 include_once('../../../../wp-load.php');
 define('WP_USE_THEMES', false);
@@ -95,7 +97,6 @@ $wpst_term = new WPSimileTimelineTerm();
 header('Content-type: text/xml; charset=UTF-8');
 header("Pragma: no-cache");
 @ob_end_flush(); // flush and end output buffer to prevent SimplePie from sending new headers
-echo '<?xml version="1.0" encoding="UTF-8"?'.'>' . "\n\r";
 echo '<data>' . "\n\r";
 
 /* =========================================================================
@@ -132,7 +133,6 @@ while ($query->have_posts()) : $query->the_post();
 			}	
 		}
 	}
-
 	echo '<event ';
 	/* =========================================================================
 	 * time information
@@ -143,7 +143,7 @@ while ($query->have_posts()) : $query->the_post();
 		echo 'start="' . adodb_date2('r', $post->stl_timeline_event_start)  .'"';
 	// ...otherwise use the post publish date
 	else:
-		echo 'start="' . get_the_time('r') . '"';  // or get_the_time('D M Y H:i:s') . " GMT".date('O')
+		echo 'start="' . get_the_time('c') . '"';  // or get_the_time('D M Y H:i:s') . " GMT".date('O') , ,,,, get_the_time('r')
 	endif;
 	
 	if($post->stl_timeline_event_latest_start != '0000-00-00 00:00:00' && $post->stl_timeline_event_latest_start != null)

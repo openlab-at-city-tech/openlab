@@ -7,19 +7,20 @@
  * @subpackage Theme
 */
 
-?>
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
 
-<?php do_action( 'bbp_template_before_search_results_loop' ); ?>
+do_action( 'bbp_template_before_search_results_loop' ); ?>
 
 <ul id="bbp-search-results" class="forums bbp-search-results">
 
 	<li class="bbp-header">
 
-		<div class="bbp-search-author"><?php  _e( 'Author',  'bbpress' ); ?></div><!-- .bbp-reply-author -->
+		<div class="bbp-search-author"><?php esc_html_e( 'Author',  'bbpress' ); ?></div><!-- .bbp-reply-author -->
 
 		<div class="bbp-search-content">
 
-			<?php _e( 'Search Results', 'bbpress' ); ?>
+			<?php esc_html_e( 'Search Results', 'bbpress' ); ?>
 
 		</div><!-- .bbp-search-content -->
 
@@ -37,11 +38,11 @@
 
 	<li class="bbp-footer">
 
-		<div class="bbp-search-author"><?php  _e( 'Author',  'bbpress' ); ?></div>
+		<div class="bbp-search-author"><?php esc_html_e( 'Author',  'bbpress' ); ?></div>
 
 		<div class="bbp-search-content">
 
-			<?php _e( 'Search Results', 'bbpress' ); ?>
+			<?php esc_html_e( 'Search Results', 'bbpress' ); ?>
 
 		</div><!-- .bbp-search-content -->
 
@@ -49,4 +50,4 @@
 
 </ul><!-- #bbp-search-results -->
 
-<?php do_action( 'bbp_template_after_search_results_loop' ); ?>
+<?php do_action( 'bbp_template_after_search_results_loop' );

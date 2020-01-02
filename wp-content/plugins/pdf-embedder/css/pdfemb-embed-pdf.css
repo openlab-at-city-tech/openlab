@@ -70,22 +70,22 @@ div.pdfemb-wantmobile-fsarea {
 }
 
 .grab-to-pan-grab {
-  cursor: move !important;
-  cursor: -webkit-grab !important;
-  cursor: -moz-grab !important;
-  cursor: grab !important;
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
   -webkit-overflow-scrolling: touch;
 }
 
 .grab-to-pan-grab *:not(input):not(textarea):not(button):not(select):not(:link) {
-  cursor: inherit !important;
+  cursor: inherit;
 }
 .grab-to-pan-grab:active,
 .grab-to-pan-grabbing {
-  cursor: move !important;
-  cursor: -webkit-grabbing !important;
-  cursor: -moz-grabbing !important;
-  cursor: grabbing !important;
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
 
   z-index: 50000; /* should be higher than anything else in PDF.js! */
 }
@@ -318,6 +318,7 @@ input.pdfemb-page-num {
 	padding: 0;
 	margin: 0;
 	background: none;
+    z-index: 5;
 }
 
 .pdfembAnnotationLayer .linkAnnotation > a {
@@ -382,13 +383,43 @@ input.pdfemb-page-num {
 	cursor: pointer;
 }
 
+.pdfembTextLayer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 0.2;
+    line-height: 1.0;
+    background: none;
+}
+
+.pdfembTextLayer > div {
+    cursor: text !important;
+    color: transparent;
+	position: absolute;
+    padding: 0;
+    margin: 0;
+    background: none;
+    top: 0;
+    left: 0;
+    -webkit-transform-origin: 0% 0%;
+    -moz-transform-origin: 0% 0%;
+    -o-transform-origin: 0% 0%;
+    -ms-transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
+}
+
 .pdfemb-pagescontainer {
-	overflow: hidden;
+	overflow: hidden ;
 	display: block;
 	position: relative;
 	background-color: lightGrey;
 }
-
+.poweredby{
+	float: right !important;
+}
 
 /* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
 
@@ -399,3 +430,13 @@ and(-webkit-min-device-pixel-ratio:0) { @media
         margin-left: 1px;
     }
 }}
+
+.scrollbar-none{
+    overflow: scroll;
+    scrollbar-width: none
+}
+
+.scrollbar-none::-webkit-scrollbar { 
+    display: none; 
+} 
+.scrollbar-none { -ms-overflow-style: none; }

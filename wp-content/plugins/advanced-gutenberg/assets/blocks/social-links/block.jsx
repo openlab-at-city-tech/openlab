@@ -173,13 +173,13 @@
                             <IconButton
                                 className="components-toolbar__control"
                                 icon="plus"
-                                label={ __( 'Add item' ) }
+                                label={ __( 'Add item', 'advanced-gutenberg' ) }
                                 onClick={ () => setAttributes( { items: [ ...items, { icon: '', iconID: '', link: '#' } ] } ) }
                             />
                             <IconButton
                                 className="components-toolbar__control"
                                 icon="no"
-                                label={ __( 'Remove selected item' ) }
+                                label={ __( 'Remove selected item', 'advanced-gutenberg' ) }
                                 onClick={ () => {
                                     this.setState( { currentSelected: Math.max(currentSelected - 1, 0) } );
                                     if (items.length > 1) {
@@ -197,9 +197,9 @@
                         <AlignmentToolbar value={ align } onChange={ ( value ) => setAttributes( { align: value === undefined ? 'center' : value } ) } />
                     </BlockControls>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Preset Icons' ) }>
+                        <PanelBody title={ __( 'Preset Icons', 'advanced-gutenberg' ) }>
                             <TextControl
-                                placeholder={ __( 'Type here to search…' ) }
+                                placeholder={ __( 'Type here to search…', 'advanced-gutenberg' ) }
                                 value={ searchedText }
                                 onChange={ (value) => this.setState( { searchedText: value } ) }
                             />
@@ -230,7 +230,7 @@
                                     </div>
                                 ) ) }
                             </div>
-                            <BaseControl label={ __( 'Custom icon' ) }>
+                            <BaseControl label={ __( 'Custom icon', 'advanced-gutenberg' ) }>
                                 <MediaUpload
                                     allowedTypes={ ["image"] }
                                     value={ items[currentSelected].iconID }
@@ -253,17 +253,17 @@
                                             className="button button-large"
                                             onClick={ open }
                                         >
-                                            { __( 'Upload/Choose' ) }
+                                            { __( 'Upload/Choose', 'advanced-gutenberg' ) }
                                         </Button>
                                     ) }
                                 />
                             </BaseControl>
                             <PanelColorSettings
-                                title={ __( 'Preset Icon Color' ) }
+                                title={ __( 'Preset Icon Color', 'advanced-gutenberg' ) }
                                 initialOpen={ false }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Preset Icon Color' ),
+                                        label: __( 'Preset Icon Color', 'advanced-gutenberg' ),
                                         value: items[currentSelected].iconColor,
                                         onChange: (value) => {
                                             let newItems = items.map( (item, index) => {
@@ -282,16 +282,16 @@
                                 ] }
                             />
                         </PanelBody>
-                        <PanelBody title={ __( 'Icons settings' ) }>
+                        <PanelBody title={ __( 'Icons settings', 'advanced-gutenberg' ) }>
                             <RangeControl
-                                label={ __( 'Icon size' ) }
+                                label={ __( 'Icon size', 'advanced-gutenberg' ) }
                                 value={ iconSize }
                                 min={ 20 }
                                 max={ 60 }
                                 onChange={ (value) => setAttributes( { iconSize: value } ) }
                             />
                             <RangeControl
-                                label={ __( 'Icon space' ) }
+                                label={ __( 'Icon space', 'advanced-gutenberg' ) }
                                 value={ iconSpace }
                                 min={ 0 }
                                 max={ 30 }
@@ -316,7 +316,7 @@
                                     {!!item.icon
                                         ? (item.icon in ICONS_SET_NEW)
                                             ? <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 50 50">{ICONS_SET_NEW[item.icon]}</svg>
-                                            : <img src={ item.icon } alt={ __( 'Social link icon' ) } />
+                                            : <img src={ item.icon } alt={ __( 'Social link icon', 'advanced-gutenberg' ) } />
                                         : <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 24 24">
                                             {socialBlockIconContent}
                                         </svg>
@@ -327,9 +327,9 @@
                         {isSelected && (
                             <Fragment>
                                 <div className="advgb-social-link">
-                                    <strong>{ __( 'Social link:' ) }</strong>
+                                    <strong>{ __( 'Social link:', 'advanced-gutenberg' ) }</strong>
                                     <TextControl
-                                        placeholder={ __( 'Enter social link…' ) }
+                                        placeholder={ __( 'Enter social link…', 'advanced-gutenberg' ) }
                                         value={ items[currentSelected].link }
                                         onChange={ ( value ) => {
                                             let newItems = items.map( (vl, idx) => {
@@ -375,14 +375,14 @@
         };
 
     registerBlockType( 'advgb/social-links', {
-        title: __( 'Social Links' ),
-        description: __( 'Insert your social link with icon.' ),
+        title: __( 'Social Links', 'advanced-gutenberg' ),
+        description: __( 'Insert your social link with icon.', 'advanced-gutenberg' ),
         icon: {
             src: socialBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'social icons' ), __( 'shares' ), __( 'icon link' ) ],
+        keywords: [ __( 'social icons', 'advanced-gutenberg' ), __( 'shares', 'advanced-gutenberg' ), __( 'icon link', 'advanced-gutenberg' ) ],
         attributes: socialBlockAttrs,
         edit: AdvSocialBlock,
         save: function ( { attributes } ) {
@@ -408,7 +408,7 @@
                                 {!!item.icon
                                     ? (item.icon in ICONS_SET_NEW)
                                         ? <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 50 50">{ICONS_SET_NEW[item.icon]}</svg>
-                                        : <img src={ item.icon } alt={ __( 'Social link icon' ) } />
+                                        : <img src={ item.icon } alt={ __( 'Social link icon', 'advanced-gutenberg' ) } />
                                     : <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 24 24">
                                         {socialBlockIconContent}
                                     </svg>
@@ -451,7 +451,7 @@
                                         {!!item.icon
                                             ? (item.icon in ICONS_SET_NEW)
                                                 ? <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 50 50">{ICONS_SET_NEW[item.icon]}</svg>
-                                                : <img src={ item.icon } alt={ __( 'Social link icon' ) } />
+                                                : <img src={ item.icon } alt={ __( 'Social link icon', 'advanced-gutenberg' ) } />
                                             : <svg width={iconSize-6} height={iconSize-6} viewBox="0 0 24 24">
                                                 {React.createElement(
                                                     Fragment,

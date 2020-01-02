@@ -1,21 +1,25 @@
+
 # papercite 
-**Contributors:** bpiwowar  
-**Tags:** formatting, bibtex, bibliography  
+
+**Contributors:** bpiwowar, digfish  
+**Tags:** formatting, bibtex, bibliography, footnotes  
 **Requires at least:** 3.8  
-**Tested up to:** 4.9.1  
-**Stable tag:** 0.5.18  
+**Tested up to:** 5.1.0  
+**Stable tag:** 0.5.22 
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 Papercite helps to format bibtex entries to display a bibliography or
 cite papers.
 
+***This fork adds support for textual footnotes, besides references from bibliograhic databases.***
+
 
 ## Description 
 
 [![Build Status](https://travis-ci.org/bpiwowar/papercite.svg?branch=master)](https://travis-ci.org/bpiwowar/papercite)
 
-**To report bugs or request features, please go to https://github.com/bpiwowar/papercite**.
+**To report bugs or request features, please go to https://github.com/digfish/papercite**.
 **Documentation can be found on http://papercite.readthedocs.org/en/latest/**.
 
 papercite format bibtex entries as HTML so they can be inserted in
@@ -65,7 +69,7 @@ as installed on my site <a href="http://www.bpiwowar.net/wp-content/plugins/pape
 * Max Harper: patch for having good URLs
 * Martin Henze: option for highlighting name(s) of specific author(s)/editor(s)
 * Some parts of the code come from bib2html (version 0.9.3) written by Sergio Andreozzi.
-
+* Samuel Viana aka digfish (digitalfisherman on Wordpress) : current mantainer
 
 ## Installation 
 
@@ -114,6 +118,14 @@ Entries are sorted by year by default.
 The HTML rendering is isolated in two template files, located in the
 subfolders tpl (citation list rendering) and format (entry rendering).
 
+### How do I use the new textual footnotes ?
+
+Using the new shortcode `[ppcnote]`. For example:
+```
+In molecular biology, the term double helix [ppcnote]usually applies to DNA[\ppcnote] 
+```
+will result in a footnote being generated after the post text. The numbering of the footnotes is separated from the one used in the citations.
+
 
 ## Screenshots 
 
@@ -126,9 +138,19 @@ subfolders tpl (citation list rendering) and format (entry rendering).
 ### 3. The bibfilter command
 ![The bibfilter command](https://ps.w.org/papercite/assets/screenshot-3.png)
 
-
+## TODO list
+  * All authors appear in the bibfilter dropdown by default
+  * Support the new citation styles (CSL) in XML format
 
 ## Changelog 
+
+### 0.5.22
+ * Fixed problem with uploading .bib files to the media library was being denied for security reasons (issue #144)
+
+### 0.5.20
+
+ * Support for textual footnotes
+ * Minor bug corrections
 
 
 ### 0.5.18 
@@ -445,6 +467,8 @@ subfolders tpl (citation list rendering) and format (entry rendering).
 
 ## Upgrade Notice 
 
+### 0.6.0
+The upgrade is not required. Just some minor corrections from minor glitches that were causing PHP warnings were cleaned.
 
 ### 0.5.9 
 Update to this version for those having troubles after updating to 0.5.7 or 0.5.8 (or clear the cache)

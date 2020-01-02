@@ -30,6 +30,6 @@ function su_shortcode_accordion( $atts = null, $content = null ) {
 
 	$atts = shortcode_atts( array( 'class' => '' ), $atts, 'accordion' );
 
-	return '<div class="su-accordion' . su_get_css_class( $atts ) . '">' . do_shortcode( $content ) . '</div>';
+	return '<div class="su-accordion su-u-trim' . su_get_css_class( $atts ) . '">' . do_shortcode( $content ) . '</div>';
 
 }

@@ -53,6 +53,10 @@ img.thumb-selected {
     margin-right: 10px;
 }
 
+#recaptcha_theme {
+    width: 100%;
+}
+
 /*Save setting button*/
 .save-settings-block {
     margin-top: 20px;

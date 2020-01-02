@@ -232,8 +232,25 @@
 .no-content-types-hint > p {
   font-size: 1.125em
 }
+.content-upgrade-log {
+  color: red;
+}
 
 @media screen and (max-width: 782px) {
+  #wpwrap {
+    overflow-x: auto;
+  }
+  .h5p-data-view {
+    margin-top: 1em;
+    min-width: 600px; /* width of next media query in hierarchy */
+  }
+  .h5p-data-view thead th {
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+  .h5p-data-view tbody td, .h5p-data-view tfoot td {
+    display: table-cell !important; /* WP media query has priority */
+  }
   .wrap h2 {
     margin-bottom: 0.25em;
   }
@@ -241,6 +258,11 @@
   .h5p-content {
     margin-right: -12px;
     margin-left: -10px;
+  }
+  .h5p-semi-fullscreen.h5p-iframe-wrapper,
+  .h5p-semi-fullscreen.h5p-content {
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 @media screen and (max-width: 960px) {

@@ -1,13 +1,13 @@
 <?php
 /**
  * Description: SIMILE Timeline admin functions for the WordPress backend
- * @author Tim Isenheim
+ * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -533,13 +533,6 @@ class WPSimileTimelineAdmin{
 					</fieldset>
 					
 					<fieldset class="options">
-					<h3><?php _e('Link Categories', 'stl_timeline'); ?></h3>
-						<p><small><?php printf(__('Select the link-categories that hold your desired RSS links. The Timeline will display the feed content.','stl_timeline') ); ?></small></p>
-						<?php WPSimileTimelineAdmin::outputTermsTable('link_category'); ?>
-						<p class="submit"><input type="submit" class="button-primary" name="Submit" value="<?php _e('Update Options', 'stl_timeline') ?>" /></p>
-					</fieldset>
-					
-					<fieldset class="options">
 					<h3><?php _e('Tags', 'stl_timeline'); ?></h3>
 						<p><small><?php printf(__('Select the tags the Timeline should display posts from.','stl_timeline') ); ?></small></p>
 						<?php WPSimileTimelineAdmin::outputTermsTable('post_tag'); ?>
@@ -556,7 +549,7 @@ class WPSimileTimelineAdmin{
 						<p class="submit"><input type="submit" class="button-primary" name="Submit" value="<?php _e('Update Options', 'stl_timeline') ?>" /></p>
 					</fieldset>
 					<?php endforeach; ?>
-				</div>	
+				</div>
 	<!--
 	******************************************************
 	Timeline Appearance

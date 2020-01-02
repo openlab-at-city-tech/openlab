@@ -150,7 +150,7 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 	su_query_asset( 'css', 'su-shortcodes' );
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'qtip' );
-	su_query_asset( 'js', 'su-other-shortcodes' );
+	su_query_asset( 'js', 'su-shortcodes' );
 
 	return '<span class="su-tooltip' . su_get_css_class( $atts ) . '" data-close="' . $atts['close'] . '" data-behavior="' . $atts['behavior'] . '" data-my="' . $position['my'] . '" data-at="' . $position['at'] . '" data-classes="' . implode( ' ', $classes ) . '" data-title="' . $atts['title'] . '" title="' . esc_attr( $atts['content'] ) . '">' . do_shortcode( $content ) . '</span>';
 

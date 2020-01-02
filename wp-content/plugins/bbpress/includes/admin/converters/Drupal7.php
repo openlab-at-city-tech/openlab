@@ -1,21 +1,26 @@
 <?php
 
 /**
+ * bbPress Drupal7 Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of Drupal v7.x Forum converter.
  *
- * @since bbPress (r5138)
- * @link Codex Docs http://codex.bbpress.org/import-forums/drupal
+ * @since 2.5.0 bbPress (r5138)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/drupal
  */
 class Drupal7 extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
-	 *
-	 * @uses Drupal7::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
@@ -25,12 +30,12 @@ class Drupal7 extends BBP_Converter_Base {
 
 		/** Forum Section *****************************************************/
 
-		// Forum id (Stored in postmeta)
+		// Old forum id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'taxonomy_term_data',
 			'from_fieldname' => 'tid',
 			'to_type'        => 'forum',
-			'to_fieldname'   => '_bbp_forum_id'
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
 		// Forum parent id (If no parent, then 0, Stored in postmeta)
@@ -42,7 +47,7 @@ class Drupal7 extends BBP_Converter_Base {
 			'join_expression' => 'USING (tid)',
 			'from_expression' => 'LEFT JOIN taxonomy_vocabulary AS taxonomy_vocabulary USING (vid) WHERE module = "forum"',
 			'to_type'         => 'forum',
-			'to_fieldname'    => '_bbp_forum_parent_id'
+			'to_fieldname'    => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum title.
@@ -79,6 +84,20 @@ class Drupal7 extends BBP_Converter_Base {
 			'to_fieldname'   => 'menu_order'
 		);
 
+		// Forum type (Set a default value 'forum', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_forum_type',
+			'default'      => 'forum'
+		);
+
+		// Forum status (Set a default value 'open', Stored in postmeta)
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => '_bbp_status',
+			'default'      => 'open'
+		);
+
 		// Forum dates.
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
@@ -103,12 +122,12 @@ class Drupal7 extends BBP_Converter_Base {
 
 		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'forum_index',
 			'from_fieldname' => 'nid',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic reply count (Stored in postmeta)
@@ -151,6 +170,25 @@ class Drupal7 extends BBP_Converter_Base {
 			'callback_method' => 'callback_userid'
 		);
 
+		// Topic author name (Stored in postmeta as _bbp_anonymous_name)
+		$this->field_map[] = array(
+			'to_type'      => 'topic',
+			'to_fieldname' => '_bbp_old_topic_author_name_id',
+			'default'      => 'Anonymous'
+		);
+
+		// Is the topic anonymous (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'node',
+			'from_fieldname'  => 'uid',
+			'join_tablename'  => 'forum_index',
+			'join_type'       => 'INNER',
+			'join_expression' => 'ON node.nid = forum_index.nid',
+			'to_type'         => 'topic',
+			'to_fieldname'    => '_bbp_old_is_topic_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
+		);
+
 		// Topic content.
 		// Note: We join the 'field_data_body' table because 'node' or 'forum_index' table does not include topic content.
 		$this->field_map[] = array(
@@ -190,12 +228,24 @@ class Drupal7 extends BBP_Converter_Base {
 			'callback_method' => 'callback_forumid'
 		);
 
-		// Sticky status (Stored in postmeta))
+		// Topic status (Publish or Unpublished, Drupal v7.x publish = 1, pending = 0)
+		$this->field_map[] = array(
+			'from_tablename'  => 'node',
+			'from_fieldname'  => 'status',
+			'join_tablename'  => 'forum_index',
+			'join_type'       => 'INNER',
+			'join_expression' => 'ON node.nid = forum_index.nid',
+			'to_type'         => 'topic',
+			'to_fieldname'    => 'post_status',
+			'callback_method' => 'callback_status'
+		);
+
+		// Sticky status (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename'  => 'forum_index',
 			'from_fieldname'  => 'sticky',
 			'to_type'         => 'topic',
-			'to_fieldname'    => '_bbp_old_sticky_status',
+			'to_fieldname'    => '_bbp_old_sticky_status_id',
 			'callback_method' => 'callback_sticky_status'
 		);
 
@@ -244,7 +294,7 @@ class Drupal7 extends BBP_Converter_Base {
 			'join_type'       => 'INNER',
 			'join_expression' => 'ON node.nid = forum_index.nid',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
@@ -303,22 +353,18 @@ class Drupal7 extends BBP_Converter_Base {
 
 		/** Reply Section *****************************************************/
 
-		// Reply id (Stored in postmeta)
+		// Old reply id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'comment',
 			'from_fieldname' => 'cid',
 			'to_type'        => 'reply',
-			'to_fieldname'   => '_bbp_post_id'
+			'to_fieldname'   => '_bbp_old_reply_id'
 		);
 
 		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
-		// Note: We join the 'forum' table because 'comment' table does not include parent forum id.
 		$this->field_map[] = array(
-			'from_tablename'  => 'forum',
-			'from_fieldname'  => 'tid',
-			'join_tablename'  => 'comment',
-			'join_type'       => 'INNER',
-			'join_expression' => 'ON forum.nid = comment.nid',
+			'from_tablename'  => 'comment',
+			'from_fieldname'  => 'nid',
 			'to_type'         => 'reply',
 			'to_fieldname'    => '_bbp_forum_id',
 			'callback_method' => 'callback_topicid_to_forumid'
@@ -338,7 +384,7 @@ class Drupal7 extends BBP_Converter_Base {
 			'from_tablename'  => 'comment',
 			'from_fieldname'  => 'pid',
 			'to_type'         => 'reply',
-			'to_fieldname'    => '_bbp_reply_to'
+			'to_fieldname'    => '_bbp_old_reply_to_id'
 		);
 
 		// Reply author ip (Stored in postmeta)
@@ -358,21 +404,30 @@ class Drupal7 extends BBP_Converter_Base {
 			'callback_method' => 'callback_userid'
 		);
 
-		// Reply title.
-		$this->field_map[] = array(
-			'from_tablename' => 'comment',
-			'from_fieldname' => 'subject',
-			'to_type'        => 'reply',
-			'to_fieldname'   => 'post_title'
-		);
-
-		// Reply slug (Clean name to avoid conflicts)
+		// Reply status (Publish or Unpublished, Drupal v7.x publish = 1, pending = 0)
 		$this->field_map[] = array(
 			'from_tablename'  => 'comment',
-			'from_fieldname'  => 'subject',
+			'from_fieldname'  => 'status',
 			'to_type'         => 'reply',
-			'to_fieldname'    => 'post_name',
-			'callback_method' => 'callback_slug'
+			'to_fieldname'    => 'post_status',
+			'callback_method' => 'callback_status'
+		);
+
+		// Reply author name (Stored in postmeta as _bbp_anonymous_name)
+		$this->field_map[] = array(
+			'from_tablename' => 'comment',
+			'from_fieldname' => 'name',
+			'to_type'        => 'reply',
+			'to_fieldname'   => '_bbp_old_reply_author_name_id'
+		);
+
+		// Is the reply anonymous  (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'comment',
+			'from_fieldname'  => 'uid',
+			'to_type'         => 'reply',
+			'to_fieldname'    => '_bbp_old_is_reply_anonymous_id',
+			'callback_method' => 'callback_check_anonymous'
 		);
 
 		// Reply content.
@@ -429,15 +484,17 @@ class Drupal7 extends BBP_Converter_Base {
 
 		/** User Section ******************************************************/
 
-		// Store old User id (Stored in usermeta)
+		// Store old user id (Stored in usermeta)
+		// Don't import user uid = 0, this is Drupal 7's guest user
 		$this->field_map[] = array(
-			'from_tablename' => 'users',
-			'from_fieldname' => 'uid',
-			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_user_id'
+			'from_tablename'  => 'users',
+			'from_fieldname'  => 'uid',
+			'from_expression' => 'WHERE uid != 0',
+			'to_type'         => 'user',
+			'to_fieldname'    => '_bbp_old_user_id'
 		);
 
-		// Store old User password (Stored in usermeta serialized with salt)
+		// Store old user password (Stored in usermeta serialized with salt)
 		$this->field_map[] = array(
 			'from_tablename'  => 'users',
 			'from_fieldname'  => 'pass',
@@ -446,7 +503,7 @@ class Drupal7 extends BBP_Converter_Base {
 //			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old User Salt (This is only used for the SELECT row info for the above password save)
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
 		$this->field_map[] = array(
 			'from_tablename' => 'users',
 			'from_fieldname' => 'pass',
@@ -508,8 +565,7 @@ class Drupal7 extends BBP_Converter_Base {
 	 * This method allows us to indicates what is or is not converted for each
 	 * converter.
 	 */
-	public function info()
-	{
+	public function info() {
 		return '';
 	}
 
@@ -518,8 +574,7 @@ class Drupal7 extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass( $field, $row )
-	{
+	public function callback_savepass( $field, $row ) {
 		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
 		return $pass_array;
 	}
@@ -528,14 +583,34 @@ class Drupal7 extends BBP_Converter_Base {
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass( $password, $serialized_pass )
-	{
+	public function authenticate_pass( $password, $serialized_pass ) {
 		$pass_array = unserialize( $serialized_pass );
 		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
 	}
 
 	/**
-	 * Translate the post status from Drupal v7.x numeric's to WordPress's strings.
+	 * Translate the post status from Drupal v7.x numerics to WordPress's
+	 * strings.
+	 *
+	 * @param int $status Drupal v7.x numeric post status
+	 * @return string WordPress safe
+	 */
+	public function callback_status( $status = 1 ) {
+		switch ( $status ) {
+			case 0 :
+				$status = 'pending'; // bbp_get_pending_status_id()
+				break;
+
+			case 1  :
+			default :
+				$status = 'publish'; // bbp_get_public_status_id()
+				break;
+		}
+		return $status;
+	}
+
+	/**
+	 * Translate the post status from Drupal v7.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Drupal v7.x numeric topic status
 	 * @return string WordPress safe
@@ -555,7 +630,7 @@ class Drupal7 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the topic sticky status type from Drupal v7.x numeric's to WordPress's strings.
+	 * Translate the topic sticky status type from Drupal v7.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Drupal v7.x numeric forum type
 	 * @return string WordPress safe

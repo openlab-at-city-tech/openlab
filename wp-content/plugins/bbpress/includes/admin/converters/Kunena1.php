@@ -1,44 +1,50 @@
 <?php
 
 /**
+ * bbPress Kunena 1.x Converter
+ *
+ * @package bbPress
+ * @subpackage Converters
+ */
+
+/**
  * Implementation of Kunena v1.x Forums for Joomla Forum converter.
  *
- * @since bbPress (r5144)
- * @link Codex Docs http://codex.bbpress.org/import-forums/kunena/
+ * @since 2.5.0 bbPress (r5144)
+ *
+ * @link Codex Docs https://codex.bbpress.org/import-forums/kunena/
  */
 class Kunena1 extends BBP_Converter_Base {
 
 	/**
 	 * Main Constructor
 	 *
-	 * @uses Kunena1::setup_globals()
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
-		$this->setup_globals();
 	}
 
 	/**
 	 * Sets up the field mappings
 	 */
-    public function setup_globals() {
+	public function setup_globals() {
 
-        /** Forum Section *****************************************************/
+		/** Forum Section *****************************************************/
 
-        // Forum id (Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_categories',
-        	'from_fieldname' => 'id',
-        	'to_type'        => 'forum',
-        	'to_fieldname'   => '_bbp_forum_id'
+		// Old forum id (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_categories',
+			'from_fieldname' => 'id',
+			'to_type'        => 'forum',
+			'to_fieldname'   => '_bbp_old_forum_id'
 		);
 
-        // Forum parent id (If no parent, then 0, Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_categories',
-        	'from_fieldname' => 'parent',
-        	'to_type'        => 'forum',
-        	'to_fieldname'   => '_bbp_forum_parent_id'
+		// Forum parent id (If no parent, then 0, Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_categories',
+			'from_fieldname' => 'parent',
+			'to_type'        => 'forum',
+			'to_fieldname'   => '_bbp_old_forum_parent_id'
 		);
 
 		// Forum topic count (Stored in postmeta)
@@ -73,38 +79,38 @@ class Kunena1 extends BBP_Converter_Base {
 			'to_fieldname'    => '_bbp_total_reply_count'
 		);
 
-        // Forum title.
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_categories',
-        	'from_fieldname' => 'name',
-        	'to_type'        => 'forum',
-        	'to_fieldname'   => 'post_title'
+		// Forum title.
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_categories',
+			'from_fieldname' => 'name',
+			'to_type'        => 'forum',
+			'to_fieldname'   => 'post_title'
 		);
 
-        // Forum slug (Clean name to avoid conflicts)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_categories',
-        	'from_fieldname'  => 'name',
-        	'to_type'         => 'forum',
-        	'to_fieldname'    => 'post_name',
-        	'callback_method' => 'callback_slug'
+		// Forum slug (Clean name to avoid conflicts)
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_categories',
+			'from_fieldname'  => 'name',
+			'to_type'         => 'forum',
+			'to_fieldname'    => 'post_name',
+			'callback_method' => 'callback_slug'
 		);
 
-        // Forum description.
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_categories',
-        	'from_fieldname'  => 'description',
-        	'to_type'         => 'forum',
-        	'to_fieldname'    => 'post_content',
-        	'callback_method' => 'callback_null'
+		// Forum description.
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_categories',
+			'from_fieldname'  => 'description',
+			'to_type'         => 'forum',
+			'to_fieldname'    => 'post_content',
+			'callback_method' => 'callback_null'
 		);
 
-        // Forum display order (Starts from 1)
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_categories',
-        	'from_fieldname' => 'ordering',
-        	'to_type'        => 'forum',
-        	'to_fieldname'   => 'menu_order'
+		// Forum display order (Starts from 1)
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_categories',
+			'from_fieldname' => 'ordering',
+			'to_type'        => 'forum',
+			'to_fieldname'   => 'menu_order'
 		);
 
 		// Forum type (Category = 0 or Forum > 0, Stored in postmeta)
@@ -125,36 +131,36 @@ class Kunena1 extends BBP_Converter_Base {
 			'callback_method' => 'callback_forum_status'
 		);
 
-        // Forum dates.
-        $this->field_map[] = array(
-        	'to_type'      => 'forum',
-        	'to_fieldname' => 'post_date',
-        	'default'      => date('Y-m-d H:i:s')
+		// Forum dates.
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date',
+			'default'      => date('Y-m-d H:i:s')
 		);
-        $this->field_map[] = array(
-        	'to_type'      => 'forum',
-        	'to_fieldname' => 'post_date_gmt',
-        	'default'      => date('Y-m-d H:i:s')
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date_gmt',
+			'default'      => date('Y-m-d H:i:s')
 		);
-        $this->field_map[] = array(
-        	'to_type'      => 'forum',
-        	'to_fieldname' => 'post_modified',
-        	'default'      => date('Y-m-d H:i:s')
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified',
+			'default'      => date('Y-m-d H:i:s')
 		);
-        $this->field_map[] = array(
-        	'to_type'      => 'forum',
-        	'to_fieldname' => 'post_modified_gmt',
-        	'default'      => date('Y-m-d H:i:s')
+		$this->field_map[] = array(
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified_gmt',
+			'default'      => date('Y-m-d H:i:s')
 		);
 
-        /** Topic Section *****************************************************/
+		/** Topic Section *****************************************************/
 
-		// Topic id (Stored in postmeta)
+		// Old topic id (Stored in postmeta)
 		$this->field_map[] = array(
 			'from_tablename' => 'kunena_messages',
 			'from_fieldname' => 'thread',
 			'to_type'        => 'topic',
-			'to_fieldname'   => '_bbp_topic_id'
+			'to_fieldname'   => '_bbp_old_topic_id'
 		);
 
 		// Topic parent forum id (If no parent, then 0. Stored in postmeta)
@@ -264,222 +270,204 @@ class Kunena1 extends BBP_Converter_Base {
 			'from_tablename'  => 'kunena_messages',
 			'from_fieldname'  => 'locked',
 			'to_type'         => 'topic',
-			'to_fieldname'    => 'post_status',
+			'to_fieldname'    => '_bbp_old_closed_status_id',
 			'callback_method' => 'callback_topic_status'
 		);
 
-        /** Tags Section ******************************************************/
+		/** Tags Section ******************************************************/
 
 		/**
 		 * Kunena v1.x Forums do not support topic tags out of the box
 		 */
 
-        /** Reply Section *****************************************************/
+		/** Reply Section *****************************************************/
 
-        // Reply id (Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_messages',
-        	'from_fieldname' => 'id',
-        	'to_type'        => 'reply',
-        	'to_fieldname'   => '_bbp_post_id'
+		// Old reply id (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_messages',
+			'from_fieldname' => 'id',
+			'to_type'        => 'reply',
+			'to_fieldname'   => '_bbp_old_reply_id'
 		);
 
-        // Reply parent forum id (If no parent, then 0. Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'catid',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => '_bbp_forum_id',
-        	'callback_method' => 'callback_topicid_to_forumid'
+		// Reply parent forum id (If no parent, then 0. Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'catid',
+			'to_type'         => 'reply',
+			'to_fieldname'    => '_bbp_forum_id',
+			'callback_method' => 'callback_topicid_to_forumid'
 		);
 
-        // Reply parent topic id (If no parent, then 0. Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'thread',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => '_bbp_topic_id',
-        	'callback_method' => 'callback_topicid'
+		// Reply parent topic id (If no parent, then 0. Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'thread',
+			'to_type'         => 'reply',
+			'to_fieldname'    => '_bbp_topic_id',
+			'callback_method' => 'callback_topicid'
 		);
 
-        // Reply author ip (Stored in postmeta)
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_messages',
-        	'from_fieldname' => 'ip',
-        	'to_type'        => 'reply',
-        	'to_fieldname'   => '_bbp_author_ip'
+		// Reply author ip (Stored in postmeta)
+		$this->field_map[] = array(
+			'from_tablename' => 'kunena_messages',
+			'from_fieldname' => 'ip',
+			'to_type'        => 'reply',
+			'to_fieldname'   => '_bbp_author_ip'
 		);
 
-        // Reply author.
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'userid',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_author',
-        	'callback_method' => 'callback_userid'
+		// Reply author.
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'userid',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_author',
+			'callback_method' => 'callback_userid'
 		);
 
-        // Reply title.
-        $this->field_map[] = array(
-        	'from_tablename' => 'kunena_messages',
-        	'from_fieldname' => 'subject',
-        	'to_type'        => 'reply',
-        	'to_fieldname'   => 'post_title',
-        	'callback_method' => 'callback_reply_title'
+		// Reply content.
+		// Note: We join the 'kunena_messages_text' table because 'kunena_messages' table does not include reply content.
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages_text',
+			'from_fieldname'  => 'message',
+			'join_tablename'  => 'kunena_messages',
+			'join_type'       => 'INNER',
+			'join_expression' => 'ON kunena_messages.id = kunena_messages_text.mesid WHERE kunena_messages.parent != 0',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_content',
+			'callback_method' => 'callback_html'
 		);
 
-        // Reply slug (Clean name to avoid conflicts)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'subject',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_name',
-        	'callback_method' => 'callback_slug'
+		// Reply parent topic id (If no parent, then 0)
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'thread',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_parent',
+			'callback_method' => 'callback_topicid'
 		);
 
-        // Reply content.
-        // Note: We join the 'kunena_messages_text' table because 'kunena_messages' table does not include reply content.
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages_text',
-        	'from_fieldname'  => 'message',
-        	'join_tablename'  => 'kunena_messages',
-        	'join_type'       => 'INNER',
-        	'join_expression' => 'ON kunena_messages.id = kunena_messages_text.mesid WHERE kunena_messages.parent != 0',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_content',
-        	'callback_method' => 'callback_html'
+		// Reply dates.
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'time',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_date',
+			'callback_method' => 'callback_datetime'
+		);
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'time',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_date_gmt',
+			'callback_method' => 'callback_datetime'
+		);
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'time',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_modified',
+			'callback_method' => 'callback_datetime'
+		);
+		$this->field_map[] = array(
+			'from_tablename'  => 'kunena_messages',
+			'from_fieldname'  => 'time',
+			'to_type'         => 'reply',
+			'to_fieldname'    => 'post_modified_gmt',
+			'callback_method' => 'callback_datetime'
 		);
 
-        // Reply parent topic id (If no parent, then 0)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'thread',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_parent',
-        	'callback_method' => 'callback_topicid'
+		/** User Section ******************************************************/
+
+		//Note: We are importing the Joomla User details and the Kunena v1.x user profile details.
+
+		// Store old user id (Stored in usermeta)
+		$this->field_map[] = array(
+			'from_tablename' => 'users',
+			'from_fieldname' => 'id',
+			'to_type'        => 'user',
+			'to_fieldname'   => '_bbp_old_user_id'
 		);
 
-        // Reply dates.
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'time',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_date',
-        	'callback_method' => 'callback_datetime'
-		);
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'time',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_date_gmt',
-        	'callback_method' => 'callback_datetime'
-		);
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'time',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_modified',
-        	'callback_method' => 'callback_datetime'
-		);
-        $this->field_map[] = array(
-        	'from_tablename'  => 'kunena_messages',
-        	'from_fieldname'  => 'time',
-        	'to_type'         => 'reply',
-        	'to_fieldname'    => 'post_modified_gmt',
-        	'callback_method' => 'callback_datetime'
+		// Store old user password (Stored in usermeta serialized with salt)
+		$this->field_map[] = array(
+			'from_tablename'  => 'users',
+			'from_fieldname'  => 'password',
+			'to_type'         => 'user',
+			'to_fieldname'    => '_bbp_password',
+			'callback_method' => 'callback_savepass'
 		);
 
-        /** User Section ******************************************************/
-
-        //Note: We are importing the Joomla User details and the Kunena v1.x user profile details.
-
-        // Store old User id (Stored in usermeta)
-        $this->field_map[] = array(
-        	'from_tablename' => 'users',
-        	'from_fieldname' => 'id',
-        	'to_type'        => 'user',
-        	'to_fieldname'   => '_bbp_user_id'
-		);
-
-        // Store old User password (Stored in usermeta serialized with salt)
-        $this->field_map[] = array(
-        	'from_tablename'  => 'users',
-        	'from_fieldname'  => 'password',
-        	'to_type'         => 'user',
-        	'to_fieldname'    => '_bbp_password',
-        	'callback_method' => 'callback_savepass'
-		);
-
-        // Store old User Salt (This is only used for the SELECT row info for the above password save)
-//        $this->field_map[] = array(
-//        	'from_tablename' => 'user',
-//        	'from_fieldname' => 'salt',
-//        	'to_type'        => 'user',
-//        	'to_fieldname'   => ''
+		// Store old user salt (This is only used for the SELECT row info for the above password save)
+//		$this->field_map[] = array(
+//			'from_tablename' => 'user',
+//			'from_fieldname' => 'salt',
+//			'to_type'        => 'user',
+//			'to_fieldname'   => ''
 //		);
 
-        // User password verify class (Stored in usermeta for verifying password)
-//        $this->field_map[] = array(
-//        	'to_type'      => 'user',
-//        	'to_fieldname' => '_bbp_class',
-//        	'default'      => 'Kunena1'
+		// User password verify class (Stored in usermeta for verifying password)
+//		$this->field_map[] = array(
+//			'to_type'      => 'user',
+//			'to_fieldname' => '_bbp_class',
+//			'default'      => 'Kunena1'
 //		);
 
-        // User name.
-        $this->field_map[] = array(
-        	'from_tablename' => 'users',
-        	'from_fieldname' => 'username',
-        	'to_type'        => 'user',
-        	'to_fieldname'   => 'user_login'
+		// User name.
+		$this->field_map[] = array(
+			'from_tablename' => 'users',
+			'from_fieldname' => 'username',
+			'to_type'        => 'user',
+			'to_fieldname'   => 'user_login'
 		);
 
-        // User email.
-        $this->field_map[] = array(
-        	'from_tablename' => 'users',
-        	'from_fieldname' => 'email',
-        	'to_type'        => 'user',
-        	'to_fieldname'   => 'user_email'
+		// User email.
+		$this->field_map[] = array(
+			'from_tablename' => 'users',
+			'from_fieldname' => 'email',
+			'to_type'        => 'user',
+			'to_fieldname'   => 'user_email'
 		);
 
-        // User registered.
-        $this->field_map[] = array(
-        	'from_tablename'  => 'users',
-        	'from_fieldname'  => 'registerDate',
-        	'to_type'         => 'user',
-        	'to_fieldname'    => 'user_registered',
-        	'callback_method' => 'callback_datetime'
+		// User registered.
+		$this->field_map[] = array(
+			'from_tablename'  => 'users',
+			'from_fieldname'  => 'registerDate',
+			'to_type'         => 'user',
+			'to_fieldname'    => 'user_registered',
+			'callback_method' => 'callback_datetime'
 		);
-    }
-
-    /**
-     * This method allows us to indicates what is or is not converted for each
-     * converter.
-     */
-    public function info() {
-        return '';
-    }
-
-    /**
-     * This method is to save the salt and password together.  That
-     * way when we authenticate it we can get it out of the database
-     * as one value. Array values are auto sanitized by WordPress.
-     */
-    public function callback_savepass($field, $row) {
-        $pass_array = array('hash' => $field, 'salt' => $row['salt']);
-        return $pass_array;
-    }
-
-    /**
-     * This method is to take the pass out of the database and compare
-     * to a pass the user has typed in.
-     */
-    public function authenticate_pass($password, $serialized_pass) {
-        $pass_array = unserialize($serialized_pass);
-        return ( $pass_array['hash'] == md5(md5($password) . $pass_array['salt']) );
-    }
+	}
 
 	/**
-	 * Translate the forum type from Kunena v1.x numeric's to WordPress's strings.
+	 * This method allows us to indicates what is or is not converted for each
+	 * converter.
+	 */
+	public function info() {
+		return '';
+	}
+
+	/**
+	 * This method is to save the salt and password together.  That
+	 * way when we authenticate it we can get it out of the database
+	 * as one value. Array values are auto sanitized by WordPress.
+	 */
+	public function callback_savepass($field, $row) {
+		$pass_array = array('hash' => $field, 'salt' => $row['salt']);
+		return $pass_array;
+	}
+
+	/**
+	 * This method is to take the pass out of the database and compare
+	 * to a pass the user has typed in.
+	 */
+	public function authenticate_pass($password, $serialized_pass) {
+		$pass_array = unserialize($serialized_pass);
+		return ( $pass_array['hash'] == md5(md5($password) . $pass_array['salt']) );
+	}
+
+	/**
+	 * Translate the forum type from Kunena v1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v1.x numeric forum type
 	 * @return string WordPress safe
@@ -494,7 +482,7 @@ class Kunena1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the forum status from Kunena v1.x numeric's to WordPress's strings.
+	 * Translate the forum status from Kunena v1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v1.x numeric forum status
 	 * @return string WordPress safe
@@ -514,7 +502,7 @@ class Kunena1 extends BBP_Converter_Base {
 	}
 
 	/**
-	 * Translate the post status from Kunena v1.x numeric's to WordPress's strings.
+	 * Translate the post status from Kunena v1.x numerics to WordPress's strings.
 	 *
 	 * @param int $status Kunena v1.x numeric topic status
 	 * @return string WordPress safe
@@ -531,16 +519,5 @@ class Kunena1 extends BBP_Converter_Base {
 				break;
 		}
 		return $status;
-	}
-
-	/**
-	 * Set the reply title
-	 *
-	 * @param string $title Kunena v1.x topic title of this reply
-	 * @return string Prefixed topic title, or empty string
-	 */
-	public function callback_reply_title( $title = '' ) {
-		$title = !empty( $title ) ? __( 'Re: ', 'bbpress' ) . html_entity_decode( $title ) : '';
-		return $title;
 	}
 }

@@ -1,0 +1,138 @@
+<div class="crawl_settings" style="display:none;">
+
+  <table class="form-table">
+    <tbody>
+      <tr>
+        <th scope="row">
+          <label for="useBasicAuth"><?php echo __('Use basic authentication', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+          <?php $tpl->displayCheckbox($this, 'useBasicAuth', 'My WP site requires Basic Auth to access'); ?>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="basicAuthUser"><?php echo __('Basic auth user', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+          <?php $tpl->displayTextfield($this, 'basicAuthUser', 'Basic Auth user', '', ''); ?>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="basicAuthPassword"><?php echo __('Basic auth password', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+          <?php $tpl->displayTextfield($this, 'basicAuthPassword', 'Basic Auth password', '', 'password'); ?>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="crawlPort"><?php echo __('Custom crawling port', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+          <?php $tpl->displayTextfield($this, 'crawlPort', 'Custom crawling port', ''); ?>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label><?php echo __('Initial crawl list', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+          <p>Before it starts to export your site, the plugin first generates a list of all WordPress URLs it thinks it should include. It takes these from what it knows about your posts, pages, tags, archives and media.</p>
+
+          <div id="initial_crawl_list_loader" class="spinner is-active" style="float:none;width:auto;height:auto;padding:10px 0 10px 50px;background-position:20px 0;">
+            Generating initial file list
+          </div>
+
+          <i><p id="initial_crawl_list_count"></p></i>
+        <br>
+        <a id="preview_initial_crawl_list_button" style="display:none;" href="<?php echo $this->wp_site->uploads_url; ?>/WP-STATIC-INITIAL-CRAWL-LIST.txt" class="button button-secondary" target="_blank">Preview initial crawl list</a>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="detection_level"><?php echo __('Detection level', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+            <select name="detection_level" id="detection_level">
+    <?php 
+      // TODO: shift this into helper function for select
+      $detection_levels = array(
+            'everything' => 'As much as possible',
+            'posts_and_pages' => 'Posts and pages only',
+            'homepage' => 'Homepage only'      
+      );
+
+      foreach($detection_levels as $key => $level) : ?>
+              <option value="<?php echo $key; ?>"<?php echo $this->options->detection_level == $key ? ' selected' : ''; ?>><?php echo $level; ?></option>
+
+           <?php endforeach; ?>
+            </select>
+
+        <button class="button button-secondary" id="save-and-reload">Save and reload</button>
+
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label><?php echo __('Exclude certain URLs', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+        <p>Where the plugin has detected too many files and you want to exclude certain URLs from being crawled, please specify these URLs here.</p> <br>
+
+        <i><p>You can enter this as a partial string or full path</p> <br>
+
+        <?php echo $this->wp_site_url; ?>/wp-content/themes/twentyseventeen/banana.jpg<br>
+        /my_pricelist.pdf<br>
+        .js<br>
+        </i>
+        <br>
+
+          <textarea class="widefat" name="excludeURLs" id="excludeURLs" rows="5" cols="10"><?php echo $this->options->excludeURLs ? $this->options->excludeURLs : ''  ?></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label><?php echo __('Include additional URLs', 'static-html-output-plugin');?></label>
+        </th>
+        <td>
+  <p>Where the plugin fails to detect certain URLs that you know you want to include, please add these here. This will be applied after any exclusions, in case you want to exclude a whole directory, then include just one file from it.</p> <br>
+
+          <i><p>Supported formats are relative URLs</p> <br>
+
+          <?php echo $this->wp_site_url; ?><br>
+          <?php echo $this->wp_site_url; ?>/wp-content/themes/twentyseventeen/banana.jpg<br>
+          /my_pricelist.pdf<br>
+          </i>
+          <br>
+
+            <textarea class="widefat" name="additionalUrls" id="additionalUrls" rows="5" cols="10"><?php echo $this->options->additionalUrls ? $this->options->additionalUrls : ''  ?></textarea>
+        </td>
+      </tr>
+    <tr>
+      <th scope="row">
+        <label for="crawl_delay"><?php echo __('Crawl Delay', 'static-html-output-plugin');?></label>
+      </th>
+      <td>
+        <select name="crawl_delay" id="crawl_delay">
+<?php 
+  // TODO: shift this into helper function for select
+  $delays = array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 4, 10);
+
+  foreach($delays as $delay) : ?>
+          <option value="<?php echo $delay; ?>"<?php echo $this->options->crawl_delay == $delay ? ' selected' : ''; ?>><?php echo $delay; ?></option>
+
+       <?php endforeach; ?>
+        </select><br>
+
+        <p>This is set to 0, by default, for better performance, but if exports are failing and no error appears with Debug Log enabled or you see "Too many files open" or such errors in the server logs, try increasing this value until you get a successful export.</p>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div><!-- end crawl_setings -->

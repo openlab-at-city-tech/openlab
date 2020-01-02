@@ -1,3 +1,11 @@
+= 10.31 =
+
+* Enhance DNS check when validating email addresses
+* Pass full email as second parameter to 's2_sanitize_email' filter
+* Validate emails fully when making database changes, but simpler and faster checks when sending notifications
+* Better escaping of subscriber email data when reporting errors to Subscribers page
+* Fix some Coding Standards Issues
+
 = 10.30.1 =
 
 * Clean unused global variables

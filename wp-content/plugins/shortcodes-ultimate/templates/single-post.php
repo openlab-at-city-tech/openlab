@@ -14,7 +14,11 @@
 					?>
 					<div id="su-post-<?php the_ID(); ?>" class="su-post">
 						<h1 class="su-post-title"><?php the_title(); ?></h1>
-						<div class="su-post-meta"><?php _e( 'Posted', 'shortcodes-ultimate' ); ?>: <?php the_time( get_option( 'date_format' ) ); ?> | <a href="<?php comments_link(); ?>" class="su-post-comments-link"><?php comments_number( __( '0 comments', 'shortcodes-ultimate' ), __( '1 comment', 'shortcodes-ultimate' ), __( '%n comments', 'shortcodes-ultimate' ) ); ?></a></div>
+						<div class="su-post-meta"><?php _e( 'Posted', 'shortcodes-ultimate' ); ?>: <?php the_time( get_option( 'date_format' ) ); ?>
+						<?php if ( have_comments() || comments_open() ) : ?>
+							 | <a href="<?php comments_link(); ?>" class="su-post-comments-link"><?php comments_number( __( '0 comments', 'shortcodes-ultimate' ), __( '1 comment', 'shortcodes-ultimate' ), __( '%n comments', 'shortcodes-ultimate' ) ); ?></a>
+						<?php endif; ?>
+						</div>
 						<div class="su-post-content">
 							<?php the_content(); ?>
 						</div>

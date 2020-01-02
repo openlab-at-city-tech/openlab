@@ -36,6 +36,17 @@ su_add_shortcode(
 				'name'    => __( 'Vertical', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Align tabs vertically', 'shortcodes-ultimate' ),
 			),
+			'mobile'   => array(
+				'type'    => 'select',
+				'values'  => array(
+					'stack'   => __( 'Stack – tab handles will stack vertically', 'shortcodes-ultimate' ),
+					'desktop' => __( 'Desktop – tabs will be displayed as on the desktop', 'shortcodes-ultimate' ),
+					'scroll'  => __( 'Scroll – tab bar will be scrollable horizontally', 'shortcodes-ultimate' ),
+				),
+				'default' => 'stack',
+				'name'    => __( 'Appearance on mobile devices', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option controls how shortcode will look and function on mobile devices.', 'shortcodes-ultimate' ),
+			),
 			'class'    => array(
 				'type'    => 'extra_css_class',
 				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
@@ -117,6 +128,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 			'active'   => 1,
 			'vertical' => 'no',
 			'style'    => 'default', // 3.x
+			'mobile'   => 'stack',
 			'class'    => '',
 		),
 		$atts,
@@ -148,11 +160,13 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 		$tabs[] = '<span class="' . su_get_css_class( $tab ) . $tab['disabled'] . '"' . $tab['anchor'] . $tab['url'] . $tab['target'] . ' tabindex="0" role="button">' . su_do_attribute( $tab['title'] ) . '</span>';
 
-		$panes[] = '<div class="su-tabs-pane su-clearfix' . su_get_css_class( $tab ) . '">' . $tab['content'] . '</div>';
+		$panes[] = '<div class="su-tabs-pane su-u-clearfix su-u-trim' . su_get_css_class( $tab ) . '" data-title="' . esc_attr( $tab['title'] ) . '">' . $tab['content'] . '</div>';
 
 	}
 
-	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
+	$atts['mobile'] = sanitize_key( $atts['mobile'] );
+
+	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
 
 	// Reset tabs
 	$shortcodes_ultimate_global_tabs       = array();
@@ -160,7 +174,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 	su_query_asset( 'js', 'jquery' );
-	su_query_asset( 'js', 'su-other-shortcodes' );
+	su_query_asset( 'js', 'su-shortcodes' );
 
 	return $output;
 

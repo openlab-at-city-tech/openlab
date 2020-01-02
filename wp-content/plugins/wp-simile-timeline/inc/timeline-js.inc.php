@@ -2,12 +2,12 @@
 /*
  * timeline-js.inc.php
  * Description: Timeline functions used to generate JavaScript
- * Plugin URI: http://www.freshlabs.de/journal/archives/2006/10/wordpress-plugin-simile-timeline/
- * Author: Pete Myers, Tim Isenheim
+ * Plugin URI: freshlabs.de
+ * Author: Pete Myers, freshlabs
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

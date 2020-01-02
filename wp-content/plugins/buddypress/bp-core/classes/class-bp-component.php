@@ -461,6 +461,11 @@ class BP_Component {
 		// Generate rewrite rules.
 		add_action( 'bp_generate_rewrite_rules', array( $this, 'generate_rewrite_rules' ), 10 );
 
+		// Register BP REST Endpoints
+		if ( bp_rest_in_buddypress() && bp_rest_api_is_available() ) {
+			add_action( 'bp_rest_api_init', array( $this, 'rest_api_init' ), 10 );
+		}
+
 		/**
 		 * Fires at the end of the setup_actions method inside BP_Component.
 		 *
@@ -856,6 +861,50 @@ class BP_Component {
 		 * @since 1.5.0
 		 */
 		do_action( 'bp_' . $this->id . '_generate_rewrite_rules' );
+	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $controllers The list of BP REST controllers to load.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		if ( is_array( $controllers ) && $controllers ) {
+			// Built-in controllers.
+			$_controllers = $controllers;
+
+			/**
+			 * Use this filter to disable all or some REST API controllers
+			 * for the component.
+			 *
+			 * This is a dynamic hook that is based on the component string ID.
+			 *
+			 * @since 5.0.0
+			 *
+			 * @param array $controllers The list of BP REST API controllers to load.
+			 */
+			$controllers = (array) apply_filters( 'bp_' . $this->id . '_rest_api_controllers', $controllers );
+
+			foreach( $controllers as $controller ) {
+				if ( ! in_array( $controller, $_controllers, true ) ) {
+					continue;
+				}
+
+				$component_controller = new $controller;
+				$component_controller->register_routes();
+			}
+		}
+
+		/**
+		 * Fires in the rest_api_init method inside BP_Component.
+		 *
+		 * This is a dynamic hook that is based on the component string ID.
+		 *
+		 * @since 5.0.0
+		 */
+		do_action( 'bp_' . $this->id . '_rest_api_init' );
 	}
 }
 endif; // BP_Component.

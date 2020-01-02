@@ -3,7 +3,7 @@
  * View: Month View Nav Template
  *
  * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/events/views/v2/month/mobile-events/nav.php
+ * [your-theme]/tribe/events/v2/month/mobile-events/nav.php
  *
  * See more documentation about our views templating system.
  *
@@ -15,7 +15,7 @@
  * @var string $next_label The label for the next link.
  * @var string $today_url The URL to the today page, if any, or an empty string.
  *
- * @version TBD
+ * @version 4.9.10
  *
  */
 ?>

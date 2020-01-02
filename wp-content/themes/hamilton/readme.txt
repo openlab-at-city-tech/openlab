@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.4
-Tested up to: 4.8
+Tested up to: 5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,23 @@ Source: https://www.pexels.com/u/fancycrave-60738/
 
 
 == Changelog ==
+
+Version 1.26 (2019-07-20)
+-------------------------
+- Fixed issue with images on archive pages
+
+Version 1.25 (2019-07-20)
+-------------------------
+- Added theme URI to style.css
+- Updated "Tested up to"
+- Added theme tags
+- Added skip link
+- Don't show comments if the post is password protected
+- Don't show the post thumbnail if the post is password protected
+- Fixed font issues in the block editor styles
+- Improvments to the alt nav/JS fallback
+- Added search form to no search results page
+- Input styling improvements
 
 Version 1.24 (2019-04-07)
 -------------------------

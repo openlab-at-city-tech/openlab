@@ -1,13 +1,13 @@
 <?php
 /**
  * SIMILE Timeline functions for terms (categories)
- * @author Tim Isenheim
+ * @author freshlabs
  * @link http://wordpress.org/extend/plugins/wp-simile-timeline/
  * @package wp-simile-timeline
  * 
 	===========================================================================
 	SIMILE Timeline for WordPress
-	Copyright (C) 2006-2013 Tim Isenheim
+	Copyright (C) 2006-2019 freshlabs
 	
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -205,10 +205,11 @@ class WPSimileTimelineTerm{
 		else{
 			$terms = $termdata;
 		}
-		
+
 		$class = get_class($terms[0]);
 
 		if ($terms && $class != 'WP_Error') {
+		// if (false) {
 			$index = 1;
 			$i=0;
 			foreach ($terms as $category) {

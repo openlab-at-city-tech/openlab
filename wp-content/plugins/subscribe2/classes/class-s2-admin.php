@@ -6,8 +6,9 @@ class S2_Admin extends S2_Core {
 	 */
 	public function admin_menu() {
 		add_menu_page( __( 'Subscribe2', 'subscribe2' ), __( 'Subscribe2', 'subscribe2' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', null, S2URL . 'include/email-edit.png' );
-        $s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2' ), __( 'Your Subscriptions', 'subscribe2' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
-        add_action( "admin_print_scripts-$s2user", array( &$this, 'checkbox_form_js' ) );
+
+		$s2user = add_submenu_page( 's2', __( 'Your Subscriptions', 'subscribe2' ), __( 'Your Subscriptions', 'subscribe2' ), apply_filters( 's2_capability', 'read', 'user' ), 's2', array( &$this, 'user_menu' ) );
+		add_action( "admin_print_scripts-$s2user", array( &$this, 'checkbox_form_js' ) );
 		add_action( "admin_print_styles-$s2user", array( &$this, 'user_admin_css' ) );
 		add_action( 'load-' . $s2user, array( &$this, 'user_help' ) );
 
@@ -400,7 +401,7 @@ class S2_Admin extends S2_Core {
 				'default',
 				array(
 					'__block_editor_compatible_meta_box' => false,
-					'__back_compat_meta_box' => true,
+					'__back_compat_meta_box'             => true,
 				)
 			);
 		}

@@ -456,4 +456,23 @@ class BP_Members_Component extends BP_Component {
 
 		parent::setup_cache_groups();
 	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		parent::rest_api_init( array(
+			/**
+			 * As the Members component is always loaded,
+			 * let's register the Components endpoint here.
+			 */
+			'BP_REST_Components_Endpoint',
+			'BP_REST_Members_Endpoint',
+		) );
+	}
 }

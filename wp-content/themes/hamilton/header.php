@@ -20,8 +20,10 @@
 			wp_body_open(); 
 		}
 		?>
+
+		<a class="skip-link button" href="#site-content"><?php _e( 'Skip to the content', 'hamilton' ); ?></a>
     
-        <header class="section-inner site-header group">
+        <header class="section-inner site-header">
 		
 			<?php if ( function_exists( 'the_custom_logo' ) && get_theme_mod( 'custom_logo' ) ) :
 				$logo = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' );
@@ -64,23 +66,27 @@
 				<div class="bar"></div>
 				<div class="bar"></div>
 			</div>
+
+			<div class="alt-nav-wrapper">
 			
-			<ul class="alt-nav">
-				<?php 
-				if ( has_nav_menu( 'primary-menu' ) ) : 
-					wp_nav_menu( array( 
-						'container' 		=> '',
-						'items_wrap' 		=> '%3$s',
-						'theme_location' 	=> 'primary-menu',
-					) ); 
-				else :
-					wp_list_pages( array(
-						'container' => '',
-						'title_li' 	=> ''
-					) );
-				endif;
-				?>
-			</ul>
+				<ul class="alt-nav">
+					<?php 
+					if ( has_nav_menu( 'primary-menu' ) ) : 
+						wp_nav_menu( array( 
+							'container' 		=> '',
+							'items_wrap' 		=> '%3$s',
+							'theme_location' 	=> 'primary-menu',
+						) ); 
+					else :
+						wp_list_pages( array(
+							'container' => '',
+							'title_li' 	=> ''
+						) );
+					endif;
+					?>
+				</ul><!-- .alt-nav -->
+
+			</div><!-- .alt-nav-wrapper -->
 
         </header> <!-- header -->
 		
@@ -128,10 +134,12 @@
 				<div class="section-inner">
 
 					<p>&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php bloginfo( 'name' ); ?></a></p>
-					<p><?php _e( 'Theme by', 'hamilton' ); ?> <a href="https://www.andersnoren.se">Anders Nor&eacute;n</a></p>
+					<p class="theme-by"><?php _e( 'Theme by', 'hamilton' ); ?> <a href="https://www.andersnoren.se">Anders Nor&eacute;n</a></p>
 				
 				</div>
 
 			</footer>
 			
 		</nav>
+
+		<main id="site-content">

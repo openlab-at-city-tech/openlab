@@ -21,39 +21,40 @@ var MetaboxEventhandler = {
 
   MarkerSC: function osm_addMarkerMapEvent(a_mapname) {
     a_mapname.on('click', function(evt) {
+	
       var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
       var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
       var zoom = a_mapname.getView().getZoom();
       var Controls = "";
 
-	  MarkerId = "";
+	   MarkerId = "";
       BorderField  = "";
       MapTypeField = "";
 
       
-      if ($('#osm_marker_map_type').val() != "Mapnik"){
+      if (jQuery('#osm_marker_map_type').val() != "Mapnik"){
         MapTypeField = " type=\"" + $('#osm_marker_map_type').val() + "\"";
       }
 
-      if ($('#osm_marker_id').val() != "no"){
+      if (jQuery('#osm_marker_id').val() != "no"){
         MarkerId = " post_markers=\"" + $('#osm_marker_id').val() + "\"";
       }
 
-      if ($('#osm_marker_border').val() != "none"){
+      if (jQuery('#osm_marker_border').val() != "none"){
         BorderField = " map_border=\"thin solid "  + $('#osm_marker_border').val()+ "\"";
       }
 
 
-      if($('#fullscreen').prop('checked') == true) {
+      if(jQuery('#fullscreen').prop('checked') == true) {
         Controls = "fullscreen,";
       }
 
-      if($('#scaleline').prop('checked') == true) {
+      if(jQuery('#scaleline').prop('checked') == true) {
         Controls = Controls + "scaleline,";
       }
 
-      if($('#mouseposition').prop('checked') == true) {
+      if(jQuery('#mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
 
@@ -70,12 +71,16 @@ var MetaboxEventhandler = {
 
       //div = document.getElementById("ShortCode_Div");
       //div.innerHTML = GenTxt;
-      $('#ShortCode_Div').html(GenTxt);
+      jQuery('#ShortCode_Div').html(GenTxt);      
+      
     });
   },
 
 	FileSC: function osm_addFilesMapEvent(a_mapname) {
 	  a_mapname.on('click', function(evt) {
+
+jQuery( document ).ready( function( $ ) { 
+
       var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
       var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
@@ -85,8 +90,8 @@ var MetaboxEventhandler = {
       var FileList_TypeField   = "";
       var FileList_MapTypeField = "";
       var FileList_FileField = "";
-	    var FileList_TitleField = "";
-		  var FileList_SelectBoxField = "";
+	   var FileList_TitleField = "";
+		var FileList_SelectBoxField = "";
       var DisplayName = "";
       var Controls = "";
       var ControlField ="";
@@ -130,13 +135,13 @@ var MetaboxEventhandler = {
 
 
 			  /** handle multiple form fields in metabox with same input (layers and their files/colors/titles - links still missing (tbc) */
-  	  jQuery(".osmFileName").each(function(i,e) {
+  	  $(".osmFileName").each(function(i,e) {
   	    if (jQuery(e).val() != "") {
 	  	  fileUrls.push( jQuery(e).val());
 	  	}
   	  });
 
-  	  jQuery(".osmFileTitle").each(function(i,e) {
+  	  $(".osmFileTitle").each(function(i,e) {
   	    if (jQuery(e).val() != "" && fileUrls[i] != "") {
   		  fileTitles.push( jQuery(e).val());
   		  }
@@ -147,7 +152,7 @@ var MetaboxEventhandler = {
 				}
   	  });
 
-  	  jQuery(".osmFileColor").each(function(i,e) {
+  	  $(".osmFileColor").each(function(i,e) {
   	    if (jQuery(e).val() != "" && typeof(fileUrls[i]) == "string") {
   		  fileColors.push( jQuery(e).val());
   		}
@@ -159,17 +164,22 @@ var MetaboxEventhandler = {
 
 	  GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + FileList_TitleField + FileList_SelectBoxField +"]";
 
-          $('#ShortCode_Div').html(GenTxt);
+     $('#ShortCode_Div').html(GenTxt);
+     
+} ); /** JQuery **/
 
 	});
     },
 
     TaggedPostsSC: function osm_addTaggedPostsMapEvent(a_mapname) {
       a_mapname.on('click', function(evt) {
-        var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-	var lon = lonlat[0].toFixed(4);
+   
+jQuery( document ).ready( function( $ ) { 
+  
+      var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
+   	var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
-       var zoom = a_mapname.getView().getZoom();
+      var zoom = a_mapname.getView().getZoom();
 
       var MarkerField = "";
       var ThemeField  = "";
@@ -245,11 +255,15 @@ var MetaboxEventhandler = {
       }
 
       $('#ShortCode_Div').html(GenTxt);
+      } ); /** JQuery **/
 	});
   },
 
   AddMarker: function osm_AddMarker(a_mapname, a_post_id) {
       a_mapname.on('click', function(evt) {
+
+jQuery( document ).ready( function( $ ) {
+
       var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
       var lon = lonlat[0].toFixed(4);
       var lat = lonlat[1].toFixed(4);
@@ -258,13 +272,12 @@ var MetaboxEventhandler = {
 
       MarkerId = "";
       BorderField  = "";
-      MapTypeField = "";
+      MapTypeField = "";  
 
-           
       if ($('#osm_add_marker_map_type').val() != "Mapnik"){
         MapTypeField = $('#osm_add_marker_map_type').val();
       }
-
+      
 
       if ($('#osm_add_marker_border').val() != "none"){
         BorderField = $('#osm_add_marker_border').val();
@@ -281,7 +294,7 @@ var MetaboxEventhandler = {
       if($('#osm_add_marker_mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
-
+      
       if (Controls != ""){
         Controls = Controls.substr(0, Controls.length-1);
         ControlField = Controls;
@@ -295,9 +308,11 @@ var MetaboxEventhandler = {
       MarkerTextField = "";
 
       MarkerId = 1;
+
       MarkerName = $('#osm_add_marker_name').val();
       MarkerIcon = $('#marker_icon:checked').val();
       MarkerTextField = $('#osm_add_marker_text').val();
+
       MarkerTextField = MarkerTextField.replace(/(\r\n|\n|\r)/gm, "");
       MarkerTextField = MarkerTextField.replace(/(\')/gm, "&apos;");
 
@@ -317,9 +332,9 @@ var MetaboxEventhandler = {
 
       GenTxt = "<br> Marker_Id: "+ MarkerId + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+lat+","+lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save] to store marker!</b>";
 
-
       $('#Marker_Div').html(GenTxt);
       $('#ShortCode_Div').html("");
+           
 
       /** if there is already a marker, delete the layer with it **/
       var layers = a_mapname.getLayers().getArray();
@@ -328,14 +343,23 @@ var MetaboxEventhandler = {
       }
       MarkerIconUrl = osm_ajax_object.plugin_url + "/icons/"+MarkerIcon;
       osm_addMarkerLayer(a_mapname,   Number(lon), Number(lat), MarkerIconUrl, -16, -41, "");
+} ); /** JQuery **/
+      
 	  });
+
+	  
+	  
   },
 
   SetGeotag: function osm_setGeotagEvent(a_mapname, a_post_id) {
     a_mapname.on('click', function(evt) {
+
+jQuery( document ).ready( function( $ ) {
+
 	var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
 	var lon = lonlat[0].toFixed(4);
-        var lat = lonlat[1].toFixed(4);
+   var lat = lonlat[1].toFixed(4); 
+   
 	var zoom = a_mapname.getView().getZoom();
 
     MarkerField = "";
@@ -370,6 +394,9 @@ var MetaboxEventhandler = {
 
     MarkerIconUrl = osm_ajax_object.plugin_url + "/icons/"+MarkerName;
     osm_addMarkerLayer(a_mapname,   Number(lon), Number(lat), MarkerIconUrl, -16, -41, "");
+
+    } ); /** JQuery **/
+
 	});
   }
 }

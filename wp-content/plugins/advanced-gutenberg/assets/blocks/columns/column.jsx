@@ -14,15 +14,15 @@
         </svg>
     );
     const listBorderStyles = [
-        { label: __( 'None' ), value: 'none' },
-        { label: __( 'Solid' ), value: 'solid' },
-        { label: __( 'Dotted' ), value: 'dotted' },
-        { label: __( 'Dashed' ), value: 'dashed' },
-        { label: __( 'Double' ), value: 'double' },
-        { label: __( 'Groove' ), value: 'groove' },
-        { label: __( 'Ridge' ), value: 'ridge' },
-        { label: __( 'Inset' ), value: 'inset' },
-        { label: __( 'Outset' ), value: 'outset' },
+        { label: __( 'None', 'advanced-gutenberg' ), value: 'none' },
+        { label: __( 'Solid', 'advanced-gutenberg' ), value: 'solid' },
+        { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
+        { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
+        { label: __( 'Double', 'advanced-gutenberg' ), value: 'double' },
+        { label: __( 'Groove', 'advanced-gutenberg' ), value: 'groove' },
+        { label: __( 'Ridge', 'advanced-gutenberg' ), value: 'ridge' },
+        { label: __( 'Inset', 'advanced-gutenberg' ), value: 'inset' },
+        { label: __( 'Outset', 'advanced-gutenberg' ), value: 'outset' },
     ];
     const MARGIN_PADDING_CONTROLS = [
         {label:'Top', icon: 'arrow-up-alt2'},
@@ -84,7 +84,7 @@
                 paddingTop, paddingRight, paddingBottom, paddingLeft,
                 paddingTopM, paddingRightM, paddingBottomM, paddingLeftM,
             } = attributes;
-            const { getBlockOrder, getBlockRootClientId, getBlockAttributes  } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );;
+            const { getBlockOrder, getBlockRootClientId, getBlockAttributes } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
             const hasChildBlocks = getBlockOrder( clientId ).length > 0;
             const rootBlockId = getBlockRootClientId( clientId );
             const rootChildBlocks = getBlockOrder(rootBlockId).filter( blockId => blockId !== clientId );
@@ -105,21 +105,21 @@
             return (
                 <Fragment>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Column Settings' ) }>
+                        <PanelBody title={ __( 'Column Settings', 'advanced-gutenberg' ) }>
                             <RangeControl
                                 label={ [
-                                    __( 'Width (%)' ),
-                                    <span key="width" style={ { color: '#555d66', marginLeft: 10 } }>{ __( 'Available: ' ) + avaiWidth + '%' }</span>
+                                    __( 'Width (%)', 'advanced-gutenberg' ),
+                                    <span key="width" style={ { color: '#555d66', marginLeft: 10 } }>{ __( 'Available: ', 'advanced-gutenberg' ) + avaiWidth + '%' }</span>
                                 ] }
-                                help={ __( 'Set to 0 = auto. This will override predefine layout styles. Recommend for experience users!' ) }
+                                help={ __( 'Set to 0 = auto. This will override predefine layout styles. Recommend for experience users!', 'advanced-gutenberg' ) }
                                 value={ width }
                                 min={ 0 }
                                 max={ avaiWidth }
                                 onChange={ (value) => setAttributes( { width: value } ) }
                             />
-                            <PanelBody title={ __( 'Border Settings' ) }>
+                            <PanelBody title={ __( 'Border Settings', 'advanced-gutenberg' ) }>
                                 <SelectControl
-                                    label={ __( 'Border style' ) }
+                                    label={ __( 'Border style', 'advanced-gutenberg' ) }
                                     value={ borderStyle }
                                     options={ listBorderStyles }
                                     onChange={ ( value ) => setAttributes( { borderStyle: value } ) }
@@ -127,25 +127,25 @@
                                 {borderStyle !== 'none' && (
                                     <Fragment>
                                         <PanelColorSettings
-                                            title={ __( 'Border Color' ) }
+                                            title={ __( 'Border Color', 'advanced-gutenberg' ) }
                                             initialOpen={ false }
                                             colorSettings={ [
                                                 {
-                                                    label: __( 'Border Color' ),
+                                                    label: __( 'Border Color', 'advanced-gutenberg' ),
                                                     value: borderColor,
                                                     onChange: ( value ) => setAttributes( { borderColor: value } ),
                                                 },
                                             ] }
                                         />
                                         <RangeControl
-                                            label={ __( 'Border width' ) }
+                                            label={ __( 'Border width', 'advanced-gutenberg' ) }
                                             value={ borderWidth || '' }
                                             onChange={ ( value ) => setAttributes( { borderWidth: value } ) }
                                             min={ 0 }
                                             max={ 20 }
                                         />
                                         <RangeControl
-                                            label={ __( 'Border radius (px)' ) }
+                                            label={ __( 'Border radius (px)', 'advanced-gutenberg' ) }
                                             value={ borderRadius || '' }
                                             onChange={ ( value ) => setAttributes( { borderRadius: value } ) }
                                             min={ 0 }
@@ -175,17 +175,18 @@
                                 } ) }
                             </div>
                             <BaseControl
-                                label={ AdvColumnEdit.jsUcfirst(tabSelected) + __( ' text alignment' ) }
+                                label={ AdvColumnEdit.jsUcfirst(tabSelected) + __( ' text alignment', 'advanced-gutenberg' ) }
                             >
                                 <AlignmentToolbar
+                                    isCollapsed={ false }
                                     value={ attributes[ 'textAlign' + deviceLetter ] }
                                     onChange={ (align) => setAttributes( { ['textAlign' + deviceLetter]: align } ) }
                                 />
                             </BaseControl>
-                            <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnEdit.jsUcfirst(tabSelected) + __(' Padding') : __('Padding') }
+                            <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnEdit.jsUcfirst(tabSelected) + __(' Padding', 'advanced-gutenberg') : __('Padding', 'advanced-gutenberg') }
                                        initialOpen={false}
                             >
-                                <div className="advgb-controls-title">{ __( 'Unit (px)' ) }</div>
+                                <div className="advgb-controls-title">{ __( 'Unit (px)', 'advanced-gutenberg' ) }</div>
                                 {MARGIN_PADDING_CONTROLS.map((pos, idx) => (
                                     <RangeControl
                                         key={ idx }
@@ -197,10 +198,10 @@
                                     />
                                 ) ) }
                             </PanelBody>
-                            <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnEdit.jsUcfirst(tabSelected) + __(' Margin') : __('Margin') }
+                            <PanelBody title={ tabSelected !== 'desktop' ? AdvColumnEdit.jsUcfirst(tabSelected) + __(' Margin', 'advanced-gutenberg') : __('Margin', 'advanced-gutenberg') }
                                        initialOpen={false}
                             >
-                                <div className="advgb-controls-title">{ __( 'Unit (px)' ) }</div>
+                                <div className="advgb-controls-title">{ __( 'Unit (px)', 'advanced-gutenberg' ) }</div>
                                 {MARGIN_PADDING_CONTROLS.map((pos, idx) => (
                                     <RangeControl
                                         key={ idx }
@@ -350,15 +351,15 @@
     };
 
     registerBlockType( 'advgb/column', {
-        title: __( 'Adv. Column' ),
+        title: __( 'Adv. Column', 'advanced-gutenberg' ),
         parent: [ 'advgb/columns' ],
-        description: __( 'Column in row.' ),
+        description: __( 'Column in row.', 'advanced-gutenberg' ),
         icon: {
             src: columnsBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'columns' ), __( 'row' ), __( 'layout' ) ],
+        keywords: [ __( 'columns', 'advanced-gutenberg' ), __( 'row', 'advanced-gutenberg' ), __( 'layout', 'advanced-gutenberg' ) ],
         supports: {
             inserter: false,
             reusable: false,

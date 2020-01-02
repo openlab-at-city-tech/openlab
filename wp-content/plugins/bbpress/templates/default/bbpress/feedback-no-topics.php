@@ -7,8 +7,13 @@
  * @subpackage Theme
  */
 
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
 ?>
 
 <div class="bbp-template-notice">
-	<p><?php _e( 'Oh bother! No topics were found here!', 'bbpress' ); ?></p>
+	<ul>
+		<li><?php esc_html_e( 'Oh, bother! No topics were found here.', 'bbpress' ); ?></li>
+	</ul>
 </div>

@@ -7,8 +7,13 @@
  * @subpackage Theme
  */
 
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
 ?>
 
 <div class="bbp-template-notice info">
-	<p><?php _e( 'You are already logged in.', 'bbpress' ); ?></p>
+	<ul>
+		<li><?php esc_html_e( 'You are already logged in.', 'bbpress' ); ?></li>
+	</ul>
 </div>

@@ -12,10 +12,10 @@
 
 <div class="wrap">
   <h2>
-    <?php if ($this->content === NULL): ?>
+    <?php if ($this->content === NULL || is_string($this->content)): ?>
       <?php print esc_html(get_admin_page_title()); ?>
     <?php else: ?>
-      <?php esc_html_e('Edit', $this->plugin_slug); ?> <em><?php print esc_html($title); ?></em>
+      <?php esc_html_e('Edit', $this->plugin_slug); ?> <em><?php print esc_html($this->content['title']); ?></em>
       <a href="<?php print admin_url('admin.php?page=h5p&task=show&id=' . $this->content['id']); ?>" class="add-new-h2"><?php _e('View', $this->plugin_slug); ?></a>
       <?php if ($this->current_user_can_view_content_results($this->content)): ?>
         <a href="<?php print admin_url('admin.php?page=h5p&task=results&id=' . $this->content['id']); ?>" class="add-new-h2"><?php _e('Results', $this->plugin_slug); ?></a>
@@ -26,10 +26,6 @@
   <?php if (!$contentExists || $this->current_user_can_edit($this->content)): ?>
     <form method="post" enctype="multipart/form-data" id="h5p-content-form">
       <div id="post-body-content">
-        <div id="titlediv">
-          <label class="" id="title-prompt-text" for="title"><?php esc_html_e('Enter title here', $this->plugin_slug); ?></label>
-          <input id="title" type="text" name="title" id="title" value="<?php print esc_attr($title); ?>"/>
-        </div>
         <div class="h5p-upload">
           <input type="file" name="h5p_file" id="h5p-file"/>
           <?php if (current_user_can('disable_h5p_security')): ?>
@@ -57,10 +53,10 @@
           <?php wp_nonce_field('h5p_content', 'yes_sir_will_do'); ?>
         </div>
         <div id="major-publishing-actions" class="submitbox">
-          <?php if ($this->content !== NULL): ?>
+          <?php if ($this->content !== NULL && !is_string($this->content)): ?>
             <a class="submitdelete deletion" href="<?php print wp_nonce_url(admin_url('admin.php?page=h5p_new&id=' . $this->content['id']), 'deleting_h5p_content', 'delete'); ?>"><?php esc_html_e('Delete') ?></a>
           <?php endif; ?>
-          <input type="submit" name="submit" value="<?php $this->content === NULL ? esc_html_e('Create', $this->plugin_slug) : esc_html_e('Update')?>"class="button button-primary button-large"/>
+          <input type="submit" name="submit-button" value="<?php $this->content === NULL ? esc_html_e('Create', $this->plugin_slug) : esc_html_e('Update')?>" class="button button-primary button-large"/>
         </div>
       </div>
       <?php if (isset($display_options['frame'])): ?>
@@ -75,9 +71,9 @@
             <?php if (isset($display_options[H5PCore::DISPLAY_OPTION_DOWNLOAD]) || isset($display_options[H5PCore::DISPLAY_OPTION_EMBED]) || isset($display_options[H5PCore::DISPLAY_OPTION_COPYRIGHT])) : ?>
               <div class="h5p-action-bar-buttons-settings">
                 <?php if (isset($display_options[H5PCore::DISPLAY_OPTION_DOWNLOAD])): ?>
-                  <label>
+                  <label title="<?php _e("If checked a reuse button will always be displayed for this content and allow users to download the content as an .h5p file", $this->plugin_slug); ?>">
                     <input name="download" type="checkbox" value="true"<?php if ($display_options[H5PCore::DISPLAY_OPTION_DOWNLOAD]): ?> checked="checked"<?php endif; ?>/>
-                    <?php _e("Display Download button", $this->plugin_slug); ?>
+                    <?php _e("Allow users to download the content", $this->plugin_slug); ?>
                   </label>
                 <?php endif; ?>
                 <?php if (isset($display_options[H5PCore::DISPLAY_OPTION_EMBED])): ?>
@@ -101,7 +97,7 @@
         <div role="button" class="h5p-toggle" tabindex="0" aria-expanded="true" aria-label="<?php esc_html_e('Toggle panel', $this->plugin_slug); ?>"></div>
         <h2><?php esc_html_e('Tags', $this->plugin_slug); ?></h2>
         <div class="h5p-panel">
-          <textarea rows="2" name="tags" class="h5p-tags"><?php print esc_html($this->content['tags']); ?></textarea>
+          <textarea rows="2" name="tags" class="h5p-tags"><?php if ($contentExists): print esc_html($this->content['tags']); endif; ?></textarea>
           <p class="howto"><?php esc_html_e('Separate tags with commas', $this->plugin_slug); ?></p>
         </div>
       </div>

@@ -64,43 +64,43 @@
             return (
                 <Fragment>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Count Up Settings' ) }>
+                        <PanelBody title={ __( 'Count Up Settings', 'advanced-gutenberg' ) }>
                             <PanelColorSettings
-                                title={ __( 'Color Settings' ) }
+                                title={ __( 'Color Settings', 'advanced-gutenberg' ) }
                                 initialOpen={ false }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Header Color' ),
+                                        label: __( 'Header Color', 'advanced-gutenberg' ),
                                         value: headerTextColor,
                                         onChange: ( value ) => setAttributes( { headerTextColor: value } ),
                                     },
                                     {
-                                        label: __( 'Count Up Color' ),
+                                        label: __( 'Count Up Color', 'advanced-gutenberg' ),
                                         value: countUpNumberColor,
                                         onChange: ( value ) => setAttributes( { countUpNumberColor: value } ),
                                     },
                                     {
-                                        label: __( 'Description Color' ),
+                                        label: __( 'Description Color', 'advanced-gutenberg' ),
                                         value: descTextColor,
                                         onChange: ( value ) => setAttributes( { descTextColor: value } ),
                                     },
                                 ] }
                             />
                             <RangeControl
-                                label={ __( 'Columns' ) }
+                                label={ __( 'Columns', 'advanced-gutenberg' ) }
                                 min={ 1 }
                                 max={ 3 }
                                 value={ columns }
                                 onChange={ (value) => setAttributes( { columns: value } ) }
                             />
                             <RangeControl
-                                label={ __( 'Counter Number Size' ) }
+                                label={ __( 'Counter Number Size', 'advanced-gutenberg' ) }
                                 min={ 10 }
                                 max={ 100 }
                                 value={ countUpNumberSize }
                                 onChange={ (value) => setAttributes( { countUpNumberSize: value } ) }
                             />
-                            <div>{ __( 'Counter Up Symbol' ) }</div>
+                            <div>{ __( 'Counter Up Symbol', 'advanced-gutenberg' ) }</div>
                             {
                                 <div className="advgb-col-3">
                                     <TextControl
@@ -110,7 +110,7 @@
                                     <FormToggle
                                         checked={ countUpSymbolAfter }
                                         onChange={ () => setAttributes( { countUpSymbolAfter: !countUpSymbolAfter } ) }
-                                        title={ !!countUpSymbolAfter ? __( 'After' ) : __( 'Before' ) }
+                                        title={ !!countUpSymbolAfter ? __( 'After', 'advanced-gutenberg' ) : __( 'Before', 'advanced-gutenberg' ) }
                                     />
                                 </div>
                             }
@@ -123,7 +123,7 @@
                                 <FormToggle
                                     checked={ countUpSymbolAfter2 }
                                     onChange={ () => setAttributes( { countUpSymbolAfter2: !countUpSymbolAfter2 } ) }
-                                    title={ !!countUpSymbolAfter2 ? __( 'After' ) : __( 'Before' ) }
+                                    title={ !!countUpSymbolAfter2 ? __( 'After', 'advanced-gutenberg' ) : __( 'Before', 'advanced-gutenberg' ) }
                                 />
                             </div>
                             }
@@ -136,12 +136,12 @@
                                 <FormToggle
                                     checked={ countUpSymbolAfter3 }
                                     onChange={ () => setAttributes( { countUpSymbolAfter3: !countUpSymbolAfter3 } ) }
-                                    title={ !!countUpSymbolAfter3 ? __( 'After' ) : __( 'Before' ) }
+                                    title={ !!countUpSymbolAfter3 ? __( 'After', 'advanced-gutenberg' ) : __( 'Before', 'advanced-gutenberg' ) }
                                 />
                             </div>
                             }
                             <p className={'components-base-control__help'} style={ { clear: 'both' } }>
-                                { __( 'Use toggle buttons above to define symbol placement before/after the number (toggle on is after).' ) }
+                                { __( 'Use toggle buttons above to define symbol placement before/after the number (toggle on is after).', 'advanced-gutenberg' ) }
                             </p>
                         </PanelBody>
                     </InspectorControls>
@@ -154,7 +154,7 @@
                                 isSelected={ isSelected && currentEdit === 'header' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header' } ) }
                                 style={ { color: headerTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-header"
                             />
                             <div className="advgb-counter">
@@ -195,7 +195,7 @@
                                 isSelected={ isSelected && currentEdit === 'desc' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc' } ) }
                                 style={ { color: descTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-desc"
                             />
                         </div>
@@ -207,7 +207,7 @@
                                 isSelected={ isSelected && currentEdit === 'header2' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header2' } ) }
                                 style={ { color: headerTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-header"
                             />
                             <div className="advgb-counter">
@@ -248,7 +248,7 @@
                                 isSelected={ isSelected && currentEdit === 'desc2' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc2' } ) }
                                 style={ { color: descTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-desc"
                             />
                         </div>
@@ -260,7 +260,7 @@
                                 isSelected={ isSelected && currentEdit === 'header3' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'header3' } ) }
                                 style={ { color: headerTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-header"
                             />
                             <div className="advgb-counter">
@@ -301,7 +301,7 @@
                                 isSelected={ isSelected && currentEdit === 'desc3' }
                                 unstableOnFocus={ () => this.setState( { currentEdit: 'desc3' } ) }
                                 style={ { color: descTextColor } }
-                                placeholder={ __( 'Enter text…' ) }
+                                placeholder={ __( 'Enter text…', 'advanced-gutenberg' ) }
                                 className="advgb-count-up-desc"
                             />
                         </div>
@@ -402,26 +402,26 @@
     );
 
     registerBlockType( 'advgb/count-up', {
-        title: __( 'Count Up' ),
-        description: __( 'Make a block with animate counting numbers.' ),
+        title: __( 'Count Up', 'advanced-gutenberg' ),
+        description: __( 'Make a block with animate counting numbers.', 'advanced-gutenberg' ),
         icon: {
             src: countUpBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'numbers' ), __( 'count' ), __( 'increase' ) ],
+        keywords: [ __( 'numbers', 'advanced-gutenberg' ), __( 'count', 'advanced-gutenberg' ), __( 'increase', 'advanced-gutenberg' ) ],
         attributes: {
             headerText: {
                 type: 'string',
-                default: __( 'Header text' ),
+                default: __( 'Header text', 'advanced-gutenberg' ),
             },
             headerText2: {
                 type: 'string',
-                default: __( 'Header text' ),
+                default: __( 'Header text', 'advanced-gutenberg' ),
             },
             headerText3: {
                 type: 'string',
-                default: __( 'Header text' ),
+                default: __( 'Header text', 'advanced-gutenberg' ),
             },
             headerTextColor: {
                 type: 'string',
@@ -468,15 +468,15 @@
             },
             descText: {
                 type: 'string',
-                default: __( 'and description' ),
+                default: __( 'and description', 'advanced-gutenberg' ),
             },
             descText2: {
                 type: 'string',
-                default: __( 'and description' ),
+                default: __( 'and description', 'advanced-gutenberg' ),
             },
             descText3: {
                 type: 'string',
-                default: __( 'and description' ),
+                default: __( 'and description', 'advanced-gutenberg' ),
             },
             descTextColor: {
                 type: 'string',

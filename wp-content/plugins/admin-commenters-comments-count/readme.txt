@@ -5,8 +5,8 @@ Tags: commenters, comment count, comment author, comments, comment, admin, coffe
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
-Tested up to: 5.1
-Stable tag: 1.9.1
+Tested up to: 5.3
+Stable tag: 1.9.2
 
 Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
 
@@ -34,7 +34,7 @@ Specifically, the linked comment count appears next to commenters in:
 
 Commenters are identified by the email address they provided when commenting. If your site does not require that commenters submit their email address when commenting, this plugin will use the commenter's name as the identifier, though since this is a publicly viewable piece of data it's possible that multiple people could be posting under the same "name", so this method has the potential to be not as accurate.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [GitHub](https://github.com/coffe2code/admin-commenters-comments-count/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [GitHub](https://github.com/coffee2code/admin-commenters-comments-count/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -82,6 +82,14 @@ Yes.
 
 == Changelog ==
 
+= 1.9.2 (2019-12-07) =
+* Fix: Correct typo in GitHub URL
+* Unit test:
+    * Change: Update unit test install script and bootstrap to use latest WP unit test repo
+    * Change: Update expected frontend output to include additional "ugc" (user generated content) value now included for `rel="nofollow"` attribute of commenter links
+* Change: Note compatibility through WP 5.3+
+* Change: Update copyright date (2020)
+
 = 1.9.1 (2019-04-05) =
 * Change: Initialize plugin on `plugins_loaded` action instead of on load
 * Change: Merge `do_init()` into `init()`
@@ -105,28 +113,13 @@ Yes.
 * Change: Update copyright date (2018)
 * Change: Minor whitespace tweaks in unit test bootstrap
 
-= 1.8 (2017-03-04) =
-* Change: Adopt WP core style of showing pending comments in a red circle superscript to comments bubble icon
-* Change: Show comments bubble in "Comments" column of user listings instead of plain integer
-* Change: Don't link comments bubble when there are zero comments since approved and pending comments are available as separate links
-* Change: Extract comments bubble markup generation from `comment_author()` into new `get_comments_bubble()`
-* Change: Remove support for pre-WP 4.3 markup
-* Change: Prevent object instantiation of the class
-* Change: Use `sprintf()` to produce markup rather than concatenating various strings, function calls, and variables
-* Change: Update unit test bootstrap
-    * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
-    * Enable more error output for unit tests
-* Change: Note compatibility through WP 4.7+
-* Change: Remove support for WordPress older than 4.6 (should still work for earlier versions back to WP 4.3)
-* Change: Update readme.txt content and formatting
-* Change: Update copyright date (2017)
-* Change: Update screenshots
-* New: Add LICENSE file
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/admin-commenters-comments-count/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.9.2 =
+Trivial update: modernized unit tests, noted compatibility through WP 5.3+, and updated copyright date (2020)
 
 = 1.9.1 =
 Trivial update: tweaked plugin initialization, noted compatibility through WP 5.1+, created CHANGELOG.md to store historical changelog outside of readme.txt, and updated copyright date (2019).

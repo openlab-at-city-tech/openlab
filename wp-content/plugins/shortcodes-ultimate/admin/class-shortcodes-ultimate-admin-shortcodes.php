@@ -11,17 +11,6 @@
 final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Admin {
 
 	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since  5.0.0
-	 * @param string  $plugin_file    The path of the main plugin file
-	 * @param string  $plugin_version The current version of the plugin
-	 */
-	public function __construct( $plugin_file, $plugin_version, $plugin_prefix ) {
-		parent::__construct( $plugin_file, $plugin_version, $plugin_prefix );
-	}
-
-	/**
 	 * Add menu page.
 	 *
 	 * @since   5.0.0
@@ -50,7 +39,35 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @return   string   Menu page markup.
 	 */
 	public function the_menu_page() {
-		$this->the_template( 'admin/partials/pages/shortcodes' );
+
+		$shortcode = $this->get_current_shortcode();
+
+		if ( ! $shortcode ) {
+			return $this->the_template( 'admin/partials/pages/shortcodes-list' );
+		}
+
+		if ( isset( $shortcode['id'] ) ) {
+			return $this->the_template( 'admin/partials/pages/shortcodes-single' );
+		}
+
+	}
+
+	public function single_shortcode_page_content() {
+
+		$shortcode = $this->get_current_shortcode();
+
+		if (
+			isset( $shortcode['as_callback'] ) &&
+			is_callable( $shortcode['as_callback'] )
+		) {
+			return call_user_func( $shortcode['as_callback'], $shortcode );
+		}
+
+		$this->the_template(
+			'admin/partials/pages/shortcodes-single-content',
+			$shortcode
+		);
+
 	}
 
 	/**
@@ -65,11 +82,13 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 			return;
 		}
 
-		$screen->add_help_tab( array(
+		$screen->add_help_tab(
+			array(
 				'id'      => 'shortcodes-ultimate-shortcodes',
 				'title'   => __( 'Shortcodes Ultimate', 'shortcodes-ultimate' ),
 				'content' => $this->get_template( 'admin/partials/help/shortcodes' ),
-			) );
+			)
+		);
 
 		$screen->set_help_sidebar( $this->get_template( 'admin/partials/help/sidebar' ) );
 
@@ -86,7 +105,12 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 			return;
 		}
 
-		wp_enqueue_style( 'shortcodes-ultimate-admin', $this->plugin_url . 'admin/css/admin.css', array( 'su-icons' ), $this->plugin_version );
+		wp_enqueue_style(
+			'shortcodes-ultimate-admin-available-shortcodes',
+			plugins_url( 'css/available-shortcodes.css', __FILE__ ),
+			array( 'su-icons' ),
+			filemtime( plugin_dir_path( __FILE__ ) . 'css/available-shortcodes.css' )
+		);
 
 	}
 
@@ -99,7 +123,7 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @since  5.0.0
 	 * @return string      Shortcode code
 	 */
-	protected function get_shortcode_code( $args ) {
+	public function get_shortcode_code( $args ) {
 
 		$defaults = array(
 			'id'     => '',
@@ -120,7 +144,7 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 		}
 
 		// Get shortcode data
-		$shortcode = $this->get_shortcode( $args['id'] );
+		$shortcode = su_get_shortcode( $args['id'] );
 
 		// Prepare shortcode prefix
 		$prefix = get_option( 'su_option_prefix' );
@@ -157,12 +181,12 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 			}
 
 			// Create complex content
-			else if ( is_array( $shortcode['content'] ) && $args['id'] !== $shortcode['content']['id'] ) {
+			elseif ( is_array( $shortcode['content'] ) && $args['id'] !== $shortcode['content']['id'] ) {
 
 					$shortcode['content']['nested'] = true;
-					$output .= $this->get_shortcode_code( $shortcode['content'] );
+					$output                        .= $this->get_shortcode_code( $shortcode['content'] );
 
-				}
+			}
 
 		}
 
@@ -186,134 +210,50 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	}
 
 	/**
-	 * Retrieve shortcodes data.
-	 *
-	 * @since  5.0.0
-	 * @return array  Shortcodes data.
-	 */
-	protected function get_shortcodes() {
-
-		$shortcodes = su_get_all_shortcodes();
-
-		foreach ( $shortcodes as $id => $shortcode ) {
-
-			// Skip deprecated shortcodes
-			if ( isset( $shortcode['deprecated'] ) ) {
-				$shortcode['skip_in_available'] = true;
-			}
-
-			// Skip nested shortcodes
-			if ( isset( $shortcode['required_parent'] ) ) {
-				$shortcode['skip_in_available'] = true;
-			}
-
-			// Skip supplementary shortcodes
-			if ( isset( $shortcode['required_sibling'] ) ) {
-				$shortcode['skip_in_available'] = true;
-			}
-
-			$shortcodes[ $id ] = array( 'id' => $id ) + $shortcode;
-
-		}
-
-		return $shortcodes;
-
-	}
-
-	/**
 	 * Retrieve shortcodes data for shortcodes-list page.
 	 *
 	 * @since  5.0.0
 	 * @return array  Shortcodes data.
 	 */
-	protected function get_shortcodes_list() {
+	public function get_available_shortcodes() {
 
-		$shortcodes = $this->get_shortcodes();
-		$group = isset( $_GET['group'] ) ? sanitize_title( $_GET['group'] ) : false;
+		$shortcodes = su_get_all_shortcodes();
+		$available  = array();
 
-		// Filter unwanted shortcodes
-		foreach ( $shortcodes as $shortcode ) {
+		foreach ( $shortcodes as $id => $shortcode ) {
 
-			// Filter skipped shortcodes
-			if ( isset( $shortcode['skip_in_available'] ) ) {
-
-				unset( $shortcodes[ $shortcode['id'] ] );
-				continue;
-
-			}
-
-			// Filter shortcodes with specified group
 			if (
-				$group &&
-				isset( $shortcode['group'] ) &&
-				! in_array( $group, explode( ' ', $shortcode['group'] ) )
+				get_option( 'su_option_hide_deprecated' ) &&
+				isset( $shortcode['deprecated'] )
 			) {
-
-				unset( $shortcodes[ $shortcode['id'] ] );
 				continue;
-
 			}
+
+			if (
+				isset( $shortcode['hidden'] ) ||
+				isset( $shortcode['required_parent'] ) ||
+				isset( $shortcode['required_sibling'] )
+			) {
+				continue;
+			}
+
+			if (
+				'all' !== $this->get_current_group() &&
+				isset( $shortcode['group'] ) &&
+				! in_array(
+					$this->get_current_group(),
+					explode( ' ', $shortcode['group'] ),
+					true
+				)
+			) {
+				continue;
+			}
+
+			$available[ $id ] = $shortcode;
 
 		}
 
-		return $shortcodes;
-
-	}
-
-	/**
-	 * Retrieve the groups data.
-	 *
-	 * @since  5.0.0
-	 * @return array  Array with groups data.
-	 */
-	protected function get_groups() {
-
-		$groups  = su_get_config( 'groups' );
-		$current = ( isset( $_GET['group'] ) ) ? sanitize_title( $_GET['group'] ) : 'all';
-		$groups['all'] = __( 'All shortcodes', 'shortcodes-ultimate' );
-
-		foreach ( $groups as $id => $title ) {
-
-			$groups[$id] = array(
-				'id'     => $id,
-				'url'    => add_query_arg( 'group', $id, $this->get_component_url() ),
-				'title'  => $title,
-				'active' => false,
-			);
-
-			if ( $id === 'all' ) {
-				$groups[$id]['url'] = $this->get_component_url();
-			}
-
-			if ( $id === $current ) {
-				$groups[$id]['active'] = true;
-			}
-
-		}
-
-		return $groups;
-
-	}
-
-	/**
-	 * Retrieve the shortcode data.
-	 *
-	 * @since  5.0.0
-	 * @param string  $shortcode_id The shortcode ID.
-	 * @return mixed  Array with shortcode data, or FALSE if shortcode was not found.
-	 */
-	protected function get_shortcode( $shortcode_id ) {
-
-		$shortcodes = $this->get_shortcodes();
-
-		if ( isset( $shortcodes[ $shortcode_id ] ) ) {
-
-			$data = $shortcodes[ $shortcode_id ];
-			$data = $data + array( 'id' => $shortcode_id );
-
-		}
-
-		return isset( $data ) ? $data : false;
+		return $available;
 
 	}
 
@@ -323,11 +263,67 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @since  5.0.0
 	 * @return mixed  Array with shortcode data, or FALSE if shortcode was not found.
 	 */
-	protected function get_single_shortcode() {
+	public function get_current_shortcode() {
 
-		$shortcode = $this->get_shortcode( sanitize_title( $_GET['shortcode'] ) );
+		return isset( $_GET['shortcode'] )
+			? su_get_shortcode( sanitize_key( $_GET['shortcode'] ) )
+			: false;
 
-		return isset( $shortcode['skip_in_available'] ) ? false : $shortcode;
+	}
+
+	/**
+	 * Template tag to retrieve the current group.
+	 *
+	 * @since 5.4.0
+	 * @return string Selected group ID.
+	 */
+	protected function get_current_group() {
+
+		$default = 'all';
+
+		if ( ! isset( $_GET['group'] ) ) {
+			return $default;
+		}
+
+		$group = sanitize_key( $_GET['group'] );
+
+		return in_array( $group, array_keys( su_get_config( 'groups' ) ), true )
+			? $group
+			: $default;
+
+	}
+
+	/**
+	 * Retrieve the groups data.
+	 *
+	 * @since  5.0.0
+	 * @return array  Array with groups data.
+	 */
+	public function get_groups() {
+
+		$groups        = su_get_config( 'groups' );
+		$groups['all'] = __( 'All shortcodes', 'shortcodes-ultimate' );
+
+		foreach ( $groups as $id => $title ) {
+
+			$groups[ $id ] = array(
+				'id'     => $id,
+				'url'    => add_query_arg( 'group', $id, $this->get_component_url() ),
+				'title'  => $title,
+				'active' => false,
+			);
+
+			if ( 'all' === $id ) {
+				$groups[ $id ]['url'] = $this->get_component_url();
+			}
+
+			if ( $id === $this->get_current_group() ) {
+				$groups[ $id ]['active'] = true;
+			}
+
+		}
+
+		return $groups;
 
 	}
 
@@ -337,10 +333,10 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @since  5.0.0
 	 * @return mixed  Array with shortcode data, or FALSE if shortcode was not found.
 	 */
-	protected function get_single_shortcode_options() {
+	public function get_single_shortcode_options() {
 
-		$options = array();
-		$shortcode = $this->get_single_shortcode();
+		$options   = array();
+		$shortcode = $this->get_current_shortcode();
 
 		if ( ! $shortcode || ! isset( $shortcode['atts'] ) ) {
 			return $options;
@@ -349,12 +345,12 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 		$options[] = $shortcode;
 
 		if ( isset( $shortcode['required_child'] ) ) {
-			$child = $this->get_shortcode( $shortcode['required_child'] );
+			$child     = su_get_shortcode( $shortcode['required_child'] );
 			$options[] = $child;
 		}
 
 		if ( isset( $shortcode['possible_sibling'] ) ) {
-			$child = $this->get_shortcode( $shortcode['possible_sibling'] );
+			$child     = su_get_shortcode( $shortcode['possible_sibling'] );
 			$options[] = $child;
 		}
 
@@ -368,18 +364,8 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @since  5.0.0
 	 * @return boolean True on success, false on failure.
 	 */
-	protected function is_single_shortcode_page() {
+	public function is_single_shortcode_page() {
 		return isset( $_GET['shortcode'] );
-	}
-
-	/**
-	 * Returns shortcodes prefix.
-	 *
-	 * @since  5.0.0
-	 * @return string Shortcodes prefix.
-	 */
-	protected function get_shortcodes_prefix() {
-		return get_option( 'su_option_prefix' );
 	}
 
 	/**
@@ -389,21 +375,23 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @param array   $args Attribute details.
 	 * @return string       Possible values.
 	 */
-	protected function get_possible_values( $args ) {
+	public function get_possible_values( $args ) {
 
-		$args = wp_parse_args( $args, array(
+		$args = wp_parse_args(
+			$args,
+			array(
 				'type'   => 'text',
 				'values' => array(),
 				'min'    => 0,
 				'max'    => 1,
 				'step'   => 1,
-			) );
+			)
+		);
 
 		$image_sources = array(
 			'media: 1,2,3'       => __( 'Media file IDs', 'shortcodes-ultimate' ),
 			'posts: 1,2,3'       => __( 'Post IDs', 'shortcodes-ultimate' ),
 			'posts: recent'      => __( 'Recent posts', 'shortcodes-ultimate' ),
-			'category: 1,2,3'    => __( 'Category IDs', 'shortcodes-ultimate' ),
 			'taxonomy: book/3,5' => __( 'Taxonomy term slug / term IDs', 'shortcodes-ultimate' ),
 		);
 
@@ -418,14 +406,14 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 			'taxonomy'        => __( 'Taxonomy slug(s) separated by comma(s)', 'shortcodes-ultimate' ),
 			'term'            => __( 'Term slug(s) separated by comma(s)', 'shortcodes-ultimate' ),
 			'upload'          => __( 'The URL of uploaded file', 'shortcodes-ultimate' ),
-			'bool'            => sprintf( __( '%s or %s', 'shortcodes-ultimate' ), 'yes', 'no' ),
-			'number'          => sprintf( __( 'Number from %s to %s', 'shortcodes-ultimate' ), $args['min'], $args['max'] ),
-			'slider'          => sprintf( __( 'Number from %s to %s', 'shortcodes-ultimate' ), $args['min'], $args['max'] ),
-			'icon'            => sprintf( '%s. %s: <em>icon: star</em>, <em>http://example.com/icon.png</em>', __( 'FontAwesome icon name (with "icon:" prefix) or icon image URL', 'shortcodes-ultimate' ), __( 'Examples', 'shortcodes-ultimate' ) ),
+			'bool'            => sprintf( __( '%1$s or %2$s', 'shortcodes-ultimate' ), 'yes', 'no' ),
+			'number'          => sprintf( __( 'Number from %1$s to %2$s', 'shortcodes-ultimate' ), $args['min'], $args['max'] ),
+			'slider'          => sprintf( __( 'Number from %1$s to %2$s', 'shortcodes-ultimate' ), $args['min'], $args['max'] ),
+			'icon'            => sprintf( '%s. %s: <em>icon: star</em>, <em>http://example.com/icon.png</em>. <a href="https://forkaweso.me/Fork-Awesome/icons/" target="_blank">%s</a>.', __( 'Fork Awesome icon name (with "icon:" prefix) or image URL', 'shortcodes-ultimate' ), __( 'Examples', 'shortcodes-ultimate' ), __( 'See available Fork Awesome icons', 'shortcodes-ultimate' ) ),
 			'image_source'    => $this->implodef( '<br>', $image_sources, '%1$s (%2$s)' ),
 		);
 
-		return isset( $possible[$args['type']] ) ? $possible[$args['type']] : '&mdash;';
+		return isset( $possible[ $args['type'] ] ) ? $possible[ $args['type'] ] : '&mdash;';
 
 	}
 
@@ -436,7 +424,7 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 * @param array   $args Attribute details.
 	 * @return string       Default value.
 	 */
-	protected function get_default_value( $args ) {
+	public function get_default_value( $args ) {
 
 		if ( isset( $args['default'] ) && $args['default'] !== '' ) {
 			return $args['default'];
@@ -457,43 +445,38 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	 */
 	public function shortcode_image( $shortcode, $size, $echo = true ) {
 
-		if ( isset( $shortcode['image'] ) ) {
-			$image = $shortcode['image'];
-		}
-		elseif ( isset( $shortcode['icon'] ) ) {
+		$image = $this->plugin_url . 'admin/images/shortcodes/_default.svg';
+
+		if ( isset( $shortcode['icon'] ) ) {
 			$image = $shortcode['icon'];
 		}
-		else {
-			$image = $this->plugin_url . 'admin/images/shortcodes/_default.svg';
+
+		if ( isset( $shortcode['image'] ) ) {
+			$image = $shortcode['image'];
 		}
 
 		$font_size = $size - 20;
 
-		// <img> tag
+		$template = '
+			<i class="sui sui-%1$s" style="
+				display: block;
+				width: %2$spx;
+				height: %2$spx;
+				line-height: %2$spx;
+				font-size: %3$spx;
+				text-align: center;
+				color: #e0e5e6;
+			"></i>';
+
 		if ( strpos( $image, '/' ) !== false ) {
 			$template = '<img src="%1$s" alt="" width="%2$s" height="%2$s">';
-		}
-
-		// <i> FontAwesome tag
-		else {
-			$template = '
-				<i class="sui sui-%1$s" style="
-					display: block;
-					width: %2$spx;
-					height: %2$spx;
-					line-height: %2$spx;
-					font-size: %3$spx;
-					text-align: center;
-					color: #888;
-				"></i>';
 		}
 
 		if ( $echo ) {
 			printf( $template, $image, $size, $font_size );
 		}
-		else {
-			return sprintf( $template, $image, $size, $font_size );
-		}
+
+		return sprintf( $template, $image, $size, $font_size );
 
 	}
 
@@ -544,7 +527,7 @@ final class Shortcodes_Ultimate_Admin_Shortcodes extends Shortcodes_Ultimate_Adm
 	public function implodef( $glue, $pieces, $pattern ) {
 
 		foreach ( $pieces as $key => $value ) {
-			$pieces[$key] = sprintf( $pattern, $key, $value );
+			$pieces[ $key ] = sprintf( $pattern, $key, $value );
 		}
 
 		return implode( $glue, $pieces );

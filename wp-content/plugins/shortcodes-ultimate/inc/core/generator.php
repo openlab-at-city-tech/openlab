@@ -172,7 +172,6 @@ class Su_Generator {
 			return;
 		}
 
-		ob_start();
 		$tools = apply_filters( 'su/generator/tools', array(
 				'<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate' ) . '#tab-1" target="_blank" title="' . __( 'Settings', 'shortcodes-ultimate' ) . '">' . __( 'Plugin settings', 'shortcodes-ultimate' ) . '</a>',
 				'<a href="https://getshortcodes.com/" target="_blank" title="' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '">' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '</a>',
@@ -180,7 +179,7 @@ class Su_Generator {
 
 		// Add add-ons links
 		if ( ! self::is_addons_active() ) {
-			$tools[] = '<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate-addons' ) . '" target="_blank" title="' . __( 'Add-ons', 'shortcodes-ultimate' ) . '" class="su-add-ons">' . __( 'Add-ons', 'shortcodes-ultimate' ) . '</a>';
+			$tools[] = '<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate-addons&from-generator' ) . '" target="_blank" title="' . __( 'Add-ons', 'shortcodes-ultimate' ) . '" class="su-add-ons">&#9733; ' . __( 'Premium Add-ons', 'shortcodes-ultimate' ) . '</a>';
 		}
 ?>
 	<div id="su-generator-wrap" style="display:none">
@@ -197,9 +196,14 @@ class Su_Generator {
 					<?php
 		// Choices loop
 		foreach ( self::get_shortcodes() as $name => $shortcode ) {
-			$icon = ( isset( $shortcode['icon'] ) ) ? $shortcode['icon'] : 'puzzle-piece';
+			if ( ! isset( $shortcode['icon'] ) ) {
+				$shortcode['icon'] = 'puzzle-piece';
+			}
+			if ( strpos( $shortcode['icon'], '/' ) === false ) {
+				$shortcode['icon'] = 'icon:' . $shortcode['icon'];
+			}
 			$shortcode['name'] = ( isset( $shortcode['name'] ) ) ? $shortcode['name'] : $name;
-			echo '<span data-name="' . $shortcode['name'] . '" data-shortcode="' . $name . '" title="' . esc_attr( $shortcode['desc'] ) . '" data-desc="' . esc_attr( $shortcode['desc'] ) . '" data-group="' . $shortcode['group'] . '">' . su_html_icon( 'icon:' . $icon ) . $shortcode['name'] . '</span>' . "\n";
+			echo '<span data-name="' . $shortcode['name'] . '" data-shortcode="' . $name . '" title="' . esc_attr( $shortcode['desc'] ) . '" data-desc="' . esc_attr( $shortcode['desc'] ) . '" data-group="' . $shortcode['group'] . '">' . su_html_icon( $shortcode['icon'] ) . $shortcode['name'] . '</span>' . "\n";
 		}
 ?>
 				</div>
@@ -212,10 +216,6 @@ class Su_Generator {
 		</div>
 	</div>
 <?php
-		$output = ob_get_contents();
-		set_transient( 'su/generator/popup', $output, 2 * DAY_IN_SECONDS );
-		ob_end_clean();
-		echo $output;
 	}
 
 	/**
@@ -227,6 +227,14 @@ class Su_Generator {
 		if ( empty( $_REQUEST['shortcode'] ) ) wp_die( __( 'Shortcode not specified', 'shortcodes-ultimate' ) );
 		// Request queried shortcode
 		$shortcode = su_get_shortcode( sanitize_key( $_REQUEST['shortcode'] ) );
+		// Call custom callback
+		if (
+			isset( $shortcode['generator_callback'] ) &&
+			is_callable( $shortcode['generator_callback'] )
+		) {
+			call_user_func( $shortcode['generator_callback'], $shortcode );
+			exit;
+		}
 		// Prepare skip-if-default option
 		$skip = ( get_option( 'su_option_skip' ) === 'on' ) ? ' su-generator-skip' : '';
 		// Prepare actions
@@ -557,9 +565,15 @@ class Su_Generator {
 	 */
 	public static function is_addons_active() {
 
-		foreach ( su_get_config( 'addon-ids' ) as $addon ) {
+		foreach ( su_get_config( 'addons' ) as $addon ) {
 
-			if ( ! did_action( "su/{$addon}/ready" ) ) {
+			if ( isset( $addon['is_bundle'] ) && $addon['is_bundle'] ) {
+				continue;
+			}
+
+			$addon_id = sanitize_key( $addon['id'] );
+
+			if ( ! did_action( "su/{$addon_id}/ready" ) ) {
 				return false;
 			}
 
@@ -605,10 +619,18 @@ class Su_Generator {
 	 */
 	public static function get_shortcodes() {
 
-		return array_filter(
-			su_get_all_shortcodes(),
-			array( __CLASS__, 'filter_deprecated_shortcodes' )
-		);
+		$shortcodes = su_get_all_shortcodes();
+
+		if ( get_option( 'su_option_hide_deprecated' ) ) {
+
+			$shortcodes = array_filter(
+				$shortcodes,
+				array( __CLASS__, 'filter_deprecated_shortcodes' )
+			);
+
+		}
+
+		return $shortcodes;
 
 	}
 

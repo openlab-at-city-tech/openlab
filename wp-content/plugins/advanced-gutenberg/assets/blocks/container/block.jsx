@@ -14,14 +14,14 @@
     );
 
     registerBlockType( 'advgb/container', {
-        title: __( 'Container' ),
-        description: __( 'Block for containing other blocks.' ),
+        title: __( 'Container', 'advanced-gutenberg' ),
+        description: __( 'Block for containing other blocks.', 'advanced-gutenberg' ),
         icon: {
             src: containerBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'container' ), __( 'row' ), __( 'box' ) ],
+        keywords: [ __( 'container', 'advanced-gutenberg' ), __( 'row', 'advanced-gutenberg' ), __( 'box', 'advanced-gutenberg' ) ],
         attributes: {
             wrapperTag: {
                 type: 'string',
@@ -61,9 +61,9 @@
             return (
                 <Fragment>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Container Settings' ) }>
+                        <PanelBody title={ __( 'Container Settings', 'advanced-gutenberg' ) }>
                             <SelectControl
-                                label={ __( 'Wrapper Tag' ) }
+                                label={ __( 'Wrapper Tag', 'advanced-gutenberg' ) }
                                 value={ wrapperTag }
                                 options={ [
                                     { label: 'Div', value: 'div' },

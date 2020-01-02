@@ -183,7 +183,7 @@ abstract class Shortcodes_Ultimate_Notice {
 	 * @param string  $redirect Custom redirect URL.
 	 * @return string           The admin url.
 	 */
-	protected function get_dismiss_link( $defer = false, $redirect = '' ) {
+	public function get_dismiss_link( $defer = false, $redirect = '' ) {
 
 		$link = admin_url( sprintf(
 				'admin-post.php?action=%s&nonce=%s&id=%s',

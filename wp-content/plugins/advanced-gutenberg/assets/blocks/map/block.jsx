@@ -4,7 +4,7 @@
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, MediaUpload } = wpBlockEditor;
-    const { PanelBody, TextControl, TextareaControl, RangeControl, SelectControl, BaseControl, Button, Placeholder, Spinner } = wpComponents;
+    const { PanelBody, TextControl, TextareaControl, RangeControl, SelectControl, ToggleControl, BaseControl, Button, Placeholder, Spinner } = wpComponents;
 
     let mapWillUpdate = null;
     const mapBlockIcon = (
@@ -1037,7 +1037,7 @@
 
             const DEFAULT_MARKER = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
             const { currentMap, currentMarker, currentInfo, invalidStyle } = this.state;
-            const { mapID, lat, lng, zoom, markerTitle, markerIcon, markerDesc, mapStyle, mapStyleCustom } = this.props.attributes;
+            const { mapID, lat, lng, zoom, markerTitle, markerIcon, markerDesc, mapStyle, mapStyleCustom, infoWindowDefaultShown } = this.props.attributes;
             const location = { lat: parseFloat(lat), lng: parseFloat(lng) };
             const that = this;
             const formattedDesc = markerDesc.replace(/\n/g, '<br/>');
@@ -1108,10 +1108,16 @@
                 scaledSize: new google.maps.Size( 27, 43 ),
             } );
 
-            if (!!markerTitle) {
+            if (!!markerTitle || !!markerDesc) {
                 marker.addListener('click', function() {
                     infoWindow.open(map, marker);
                 });
+
+                if (infoWindowDefaultShown) {
+                    infoWindow.open(map, marker);
+                }
+            } else {
+                infoWindow.close();
             }
 
             marker.addListener( 'dragend', function() {
@@ -1145,7 +1151,7 @@
                             currentAddress: res[0].formatted_address,
                         } );
                     } else if (stt === ZERO_RESULTS) {
-                        setAttributes( { currentAddress: __( 'No matching address found!' ) } );
+                        setAttributes( { currentAddress: __( 'No matching address found!', 'advanced-gutenberg' ) } );
                     } else {
                         setAttributes( { currentAddress: stt } );
                     }
@@ -1173,6 +1179,7 @@
                 markerDesc,
                 mapStyle,
                 mapStyleCustom,
+                infoWindowDefaultShown,
             } = attributes;
 
             const listStyles = Object.keys(MAP_STYLES).map( (style) => {
@@ -1183,30 +1190,30 @@
                 <Fragment>
                     {typeof google !== 'undefined' &&
                     <InspectorControls>
-                        <PanelBody title={ __( 'Map settings' ) }>
+                        <PanelBody title={ __( 'Map settings', 'advanced-gutenberg' ) }>
                             {!useLatLng &&
                             <Fragment>
                                 <TextControl
                                     label={ [
-                                        __( 'Address' ),
+                                        __( 'Address', 'advanced-gutenberg' ),
                                         <a key="switch-type"
                                            style={ { marginLeft: '10px' } }
                                            onClick={ () => setAttributes( { useLatLng: !useLatLng } ) }
                                         >
-                                            { __( 'Use Lat/Lng' ) }
+                                            { __( 'Use Lat/Lng', 'advanced-gutenberg' ) }
                                         </a>
                                     ] }
                                     value={ address }
-                                    placeholder={ __( 'Enter address…' ) }
+                                    placeholder={ __( 'Enter address…', 'advanced-gutenberg' ) }
                                     onChange={ (value) => setAttributes( { address: value } ) }
                                 />
                                 <div>
                                     <Button className="button button-large" onClick={ this.fetchLocation }>
-                                        { __( 'Fetch Location' ) }
+                                        { __( 'Fetch Location', 'advanced-gutenberg' ) }
                                     </Button>
                                     {fetching && <Spinner /> }
                                     <div style={ { margin: '10px auto' } }>
-                                        <strong style={ { marginRight: '5px' } }>{ __( 'Current' ) }:</strong>
+                                        <strong style={ { marginRight: '5px' } }>{ __( 'Current', 'advanced-gutenberg' ) }:</strong>
                                         <span>{ currentAddress }</span>
                                     </div>
                                 </div>
@@ -1216,36 +1223,36 @@
                             <Fragment>
                                 <TextControl
                                     label={ [
-                                        __( 'Location' ),
+                                        __( 'Location', 'advanced-gutenberg' ),
                                         <a key="switch-type"
                                            style={ { marginLeft: '10px' } }
                                            onClick={ () => setAttributes( { useLatLng: !useLatLng } ) }
                                         >
-                                            { __( 'Use Address' ) }
+                                            { __( 'Use Address', 'advanced-gutenberg' ) }
                                         </a>
                                     ] }
                                     value={ lat }
-                                    placeholder={ __( 'Enter latitude…' ) }
-                                    title={ __( 'Latitude' ) }
+                                    placeholder={ __( 'Enter latitude…', 'advanced-gutenberg' ) }
+                                    title={ __( 'Latitude', 'advanced-gutenberg' ) }
                                     onChange={ (value) => setAttributes( { lat: value } ) }
                                 />
                                 <TextControl
                                     value={ lng }
-                                    placeholder={ __( 'Enter longitude…' ) }
-                                    title={ __( 'Longitude' ) }
+                                    placeholder={ __( 'Enter longitude…', 'advanced-gutenberg' ) }
+                                    title={ __( 'Longitude', 'advanced-gutenberg' ) }
                                     onChange={ (value) => setAttributes( { lng: value } ) }
                                 />
                             </Fragment>
                             }
                             <RangeControl
-                                label={ __( 'Zoom level' ) }
+                                label={ __( 'Zoom level', 'advanced-gutenberg' ) }
                                 value={ zoom }
                                 min={ 0 }
                                 max={ 25 }
                                 onChange={ (value) => setAttributes( { zoom: value } ) }
                             />
                             <RangeControl
-                                label={ __( 'Height' ) }
+                                label={ __( 'Height', 'advanced-gutenberg' ) }
                                 value={ height }
                                 min={ 300 }
                                 max={ 1000 }
@@ -1261,7 +1268,7 @@
                                 render={ ( { open } ) => {
                                     return (
                                         <BaseControl label={ [
-                                            __( 'Marker Icon (27x43 px)' ),
+                                            __( 'Marker Icon (27x43 px)', 'advanced-gutenberg' ),
                                             markerIcon && (
                                                 <a key="marker-icon-remove"
                                                    style={ { marginLeft: '10px', cursor: 'pointer' } }
@@ -1270,7 +1277,7 @@
                                                        markerIconID: undefined,
                                                    } ) }
                                                 >
-                                                    { __( 'Remove' ) }
+                                                    { __( 'Remove', 'advanced-gutenberg' ) }
                                                 </a>
                                             )
                                         ] }
@@ -1278,60 +1285,65 @@
                                             <Button className="button button-large"
                                                     onClick={ open }
                                             >
-                                                { __( 'Choose icon' ) }
+                                                { __( 'Choose icon', 'advanced-gutenberg' ) }
                                             </Button>
                                             {!!markerIcon &&
                                             <img style={ { maxHeight: '30px', marginLeft: '10px' } }
                                                  src={ markerIcon }
-                                                 alt={ __( 'Marker icon' ) }/>
+                                                 alt={ __( 'Marker icon', 'advanced-gutenberg' ) }/>
                                             }
                                         </BaseControl>
                                     )
                                 } }
                             />
                             <TextControl
-                                label={ __( 'Marker Title' ) }
+                                label={ __( 'Marker Title', 'advanced-gutenberg' ) }
                                 value={ markerTitle }
-                                placeholder={ __( 'Enter custom title…' ) }
+                                placeholder={ __( 'Enter custom title…', 'advanced-gutenberg' ) }
                                 onChange={ (value) => setAttributes( { markerTitle: value } ) }
                             />
                             <TextareaControl
-                                label={ __( 'Marker description' ) }
+                                label={ __( 'Marker description', 'advanced-gutenberg' ) }
                                 value={ markerDesc }
-                                placeholder={ __( 'Enter custom description…' ) }
+                                placeholder={ __( 'Enter custom description…', 'advanced-gutenberg' ) }
                                 onChange={ (value) => setAttributes( { markerDesc: value } ) }
                             />
+                            <ToggleControl
+                                label={ __( 'Open marker tooltip', 'advanced-gutenberg' ) }
+                                checked={ infoWindowDefaultShown }
+                                onChange={ () => setAttributes({infoWindowDefaultShown: !infoWindowDefaultShown}) }
+                            />
                             <SelectControl
-                                label={ __( 'Map styles' ) }
-                                help={ __( 'Custom map style is recommended for experienced users only.' ) }
+                                label={ __( 'Map styles', 'advanced-gutenberg' ) }
+                                help={ __( 'Custom map style is recommended for experienced users only.', 'advanced-gutenberg' ) }
                                 value={ mapStyle }
                                 onChange={ (value) => setAttributes( { mapStyle: value } ) }
                                 options={ [
-                                    { label: __( 'Standard' ), value: '' },
+                                    { label: __( 'Standard', 'advanced-gutenberg' ), value: '' },
                                     ...listStyles,
-                                    { label: __( 'Custom' ), value: 'custom' },
+                                    { label: __( 'Custom', 'advanced-gutenberg' ), value: 'custom' },
                                 ] }
                             />
                             {mapStyle === 'custom' && (
                                 <TextareaControl
                                     label={ [
-                                        __( 'Custom code' ),
+                                        __( 'Custom code', 'advanced-gutenberg' ),
                                         invalidStyle && (
                                             <span key="invalid-json"
                                                   style={ { fontWeight: 'bold', color: '#ff0000', marginLeft: 5 } }
                                             >
-                                                { __( 'Invalid JSON' ) }
+                                                { __( 'Invalid JSON', 'advanced-gutenberg' ) }
                                             </span>
                                         )
                                     ] }
                                     help={ [
-                                        __( 'Paste your custom map styles in json format into the text field. You can create your own map styles by follow one of these links: ' ),
+                                        __( 'Paste your custom map styles in json format into the text field. You can create your own map styles by follow one of these links: ', 'advanced-gutenberg' ),
                                         <a href="https://mapstyle.withgoogle.com/" target="_blank" key="gg-map">Google Map</a>,
                                         ' - ',
                                         <a href="https://snazzymaps.com/" target="_blank" key="snazzy-map">Snazzy Map</a>
                                     ] }
                                     value={ mapStyleCustom }
-                                    placeholder={ __( 'Enter your json code here…' ) }
+                                    placeholder={ __( 'Enter your json code here…', 'advanced-gutenberg' ) }
                                     onChange={ (value) => setAttributes( { mapStyleCustom: value } ) }
                                 />
                             ) }
@@ -1345,7 +1357,7 @@
                         :
                         <Placeholder
                             icon={ mapBlockIcon }
-                            label={ __( 'No API Key Provided!' ) }
+                            label={ __( 'No API Key Provided!', 'advanced-gutenberg' ) }
                             instructions={ __( 'Opps! Look like you have not configured your Google API Key yet. ' +
                                 'Add an API Key and refresh the page to start using Map Block. ' +
                                 'This is a requirement enforced by Google.' ) }
@@ -1354,7 +1366,7 @@
                                className="button button-large"
                                href={advgbBlocks.config_url + '#settings'}
                             >
-                                { __( 'Add Google API Key' ) }
+                                { __( 'Add Google API Key', 'advanced-gutenberg' ) }
                             </a>
                         </Placeholder>
                     }
@@ -1402,7 +1414,7 @@
         },
         markerTitle: {
             type: 'string',
-            default: __( 'Eiffel Tower' ),
+            default: __( 'Eiffel Tower', 'advanced-gutenberg' ),
         },
         markerDesc: {
             type: 'string',
@@ -1415,14 +1427,14 @@
     };
 
     registerBlockType( 'advgb/map', {
-        title: __( 'Map' ),
-        description: __( 'Block for inserting location map.' ),
+        title: __( 'Map', 'advanced-gutenberg' ),
+        description: __( 'Block for inserting location map.', 'advanced-gutenberg' ),
         icon: {
             src: mapBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'google map' ), __( 'location' ), __( 'address' ) ],
+        keywords: [ __( 'google map', 'advanced-gutenberg' ), __( 'location', 'advanced-gutenberg' ), __( 'address', 'advanced-gutenberg' ) ],
         attributes: {
             ...mapBlockAttrs,
             mapStyle: {
@@ -1430,7 +1442,11 @@
             },
             mapStyleCustom: {
                 type: 'string',
-            }
+            },
+            infoWindowDefaultShown: {
+                type: 'boolean',
+                default: true,
+            },
         },
         edit: AdvMap,
         save: function ( { attributes } ) {
@@ -1445,6 +1461,7 @@
                 markerDesc,
                 mapStyle,
                 mapStyleCustom,
+                infoWindowDefaultShown,
             } = attributes;
 
             const formattedDesc = markerDesc.replace( /\n/g, '<br/>' ).replace( /'/, '\\\'' );
@@ -1476,6 +1493,7 @@
                          data-title={ formattedTitle }
                          data-desc={ formattedDesc }
                          data-icon={ markerIcon }
+                         data-shown={ infoWindowDefaultShown }
                          data-style={ encodeURIComponent(mapStyleApply) }
                     />
                 </div>
@@ -1509,11 +1527,6 @@
                     const formattedDesc = markerDesc.replace( /\n/g, '<br/>' ).replace( /'/, '\\\'' );
                     const formattedTitle = markerTitle.replace( /'/, '\\\'' );
                     const DEFAULT_MARKER = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
-                    const infoWindowHtml = ''+
-                        '<div class="advgbmap-wrapper">' +
-                        '<h2 class="advgbmap-title">' + formattedTitle + '</h2>' +
-                        '<p class="advgbmap-desc">'+ formattedDesc +'</p>' +
-                        '</div>';
                     let mapStyleApply = MAP_STYLES[mapStyle];
                     if (mapStyle === 'custom') {
                         try {
@@ -1538,8 +1551,8 @@
                                  data-lng={ lng }
                                  data-zoom={ zoom }
                                  data-title={ formattedTitle }
+                                 data-desc={ formattedDesc }
                                  data-icon={ markerIcon }
-                                 data-info={ encodeURIComponent(infoWindowHtml) }
                                  data-style={ encodeURIComponent(mapStyleApply) }
                             />
                         </div>

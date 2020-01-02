@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2017  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2019  MiKa (wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@ class Osm_OLJS3
         collapsible: false
       });
       ';
-    if ($a_Type == "osm"){
+    if(($a_Type == "osm") || ($a_Type == "brezhoneg")) {
       $TileLayer .= '
       var raster = new ol.layer.Tile({
-        source: new ol.source.OSM({ })
+        source: new ol.source.OSM({ }),
+        zIndex: 90
       });';
     }
     if ($a_Type == "hot"){
@@ -39,7 +40,8 @@ class Osm_OLJS3
                attributions: "Maps &copy; " +
                "<a href=\"http://hot.openstreetmap.org/\">Humanitarian OpenStreetMap Team.</a>" + ol.source.OSM.ATTRIBUTION,
                url: "https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
@@ -49,7 +51,8 @@ class Osm_OLJS3
       var raster = new ol.layer.Tile({
         source: new ol.source.Stamen({
             layer: "toner"
-          })
+          }),
+          zIndex: 90
         });
       ';
   }
@@ -58,7 +61,8 @@ class Osm_OLJS3
       var raster = new ol.layer.Tile({
         source: new ol.source.Stamen({
             layer: "watercolor"
-          })
+          }),
+          zIndex: 90
         });
       ';
       }
@@ -67,14 +71,17 @@ class Osm_OLJS3
       var raster = new ol.layer.Tile({
         source: new ol.source.Stamen({
             layer: "terrain"
-          })
+          }),
+          zIndex: 90
         });
       ';
   }
       else if ($a_Type == "stamen_terrain-labels"){
         $TileLayer .= '
         var raster = new ol.layer.Tile({
-          source: new ol.source.Stamen({layer: "terrain-labels"})
+          source: new ol.source.Stamen({
+          	layer: "terrain-labels"}),
+          zIndex: 90
         });';
       }
       else if ($a_Type == "tilewms"){
@@ -88,13 +95,15 @@ class Osm_OLJS3
             url: "'.$a_WMSAddress.'",
             params: {'.$a_WMSParam.'},
             serverType: "'.$a_WMSType.'"
-          })
+          }),
+          zIndex: 90
         });';
       }
       else if ($a_Type == "openseamap"){
         $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM(),
+            zIndex: 90
           });
           var Layer2 = new ol.layer.Tile({
             source: new ol.source.OSM({
@@ -102,7 +111,9 @@ class Osm_OLJS3
               "<a href=\"http://www.openseamap.org/\">OpenSeaMap</a>",
               crossOrigin: null,
               url: "'.Osm_OpenSeaMap_Tiles.'"
-            })
+            }),
+            className: "ol-openseamap",
+            zIndex: 91
           });';
     }
 	      else if ($a_Type == "cyclemap"){
@@ -112,7 +123,8 @@ class Osm_OLJS3
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
               url: "'.Osm_thunderforest_Cycle_Tiles.'?apikey='.$a_api_key.'"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
@@ -123,7 +135,8 @@ class Osm_OLJS3
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
               url: "'.Osm_thunderforest_Outdoor_Tiles.'?apikey='.$a_api_key.'"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
@@ -135,7 +148,8 @@ class Osm_OLJS3
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
               url: "'.Osm_thunderforest_Landscape_Tiles.'?apikey='.$a_api_key.'"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
@@ -147,7 +161,8 @@ class Osm_OLJS3
               attributions: "Maps &copy; " +
               "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
               url: "'.Osm_thunderforest_Spinal_Tiles.'?apikey='.$a_api_key.'"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
@@ -158,11 +173,13 @@ class Osm_OLJS3
                attributions: "Maps &copy; " +
                "<a href=\"http://www.thunderforest.com/\">Thunderforest, Data.</a>" + ol.source.OSM.ATTRIBUTION,
                url: "'.Osm_thunderforest_Pioneer_Tiles.'?apikey='.$a_api_key.'"
-             })
+             }),
+             zIndex: 90
            });
           ';
     }
-
+/*
+Server seams to be down
     else if ($a_Type == "brezhoneg"){
          $TileLayer .= '
            var raster = new ol.layer.Tile({
@@ -174,10 +191,12 @@ class Osm_OLJS3
                 ol.source.OSM.ATTRIBUTION
                 ],
               url: "http://tile-b.openstreetmap.fr/bzh/{z}/{x}/{y}.png"
-              })
+              }),
+              zIndex: 90
             });
     ';
     }
+*/
     else if ($a_Type == "basemap_at"){
 
         $TileLayer .= '

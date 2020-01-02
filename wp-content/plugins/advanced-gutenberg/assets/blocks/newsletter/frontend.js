@@ -19,6 +19,7 @@ jQuery(document).ready(function ($) {
         var email = $(this).find('.advgb-form-input-email').val();
         var date = new Date();
         var submitDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' - ' + date.getHours() + ':' + date.getMinutes();
+        var g_id = parseInt($thisForm.find('.advgb-grecaptcha').data('gid'));
 
         if (typeof firstName !== "undefined") firstName = firstName.trim();
         if (typeof lastName !== "undefined") lastName = lastName.trim();
@@ -40,7 +41,7 @@ jQuery(document).ready(function ($) {
                 l_name: lastName,
                 email: email,
                 submit_date: submitDate,
-                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse() : undefined
+                captcha: typeof grecaptcha !== "undefined" ? grecaptcha.getResponse(g_id) : undefined
             },
             beforeSend: function () {
                 $thisForm.find('.advgb-form-submit-wrapper').append('<div class="advgb-form-sending" />');

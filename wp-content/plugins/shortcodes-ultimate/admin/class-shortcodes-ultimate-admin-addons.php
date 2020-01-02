@@ -10,30 +10,6 @@
  */
 final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 
-	private $api_url;
-	private $plugin_addons;
-	private $transient_name;
-	private $transient_timeout;
-
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since  5.0.0
-	 * @param string  $plugin_file    The path of the main plugin file
-	 * @param string  $plugin_version The current version of the plugin
-	 */
-	public function __construct( $plugin_file, $plugin_version, $plugin_prefix ) {
-
-		parent::__construct( $plugin_file, $plugin_version, $plugin_prefix );
-
-		$this->api_url           = 'https://getshortcodes.com/api/v1/add-ons/';
-		$this->addons            = array();
-		$this->transient_name    = 'su_addons';
-		$this->transient_timeout = 3 * DAY_IN_SECONDS;
-
-	}
-
-
 	/**
 	 * Add menu page.
 	 *
@@ -48,7 +24,10 @@ final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 		$this->add_submenu_page(
 			rtrim( $this->plugin_prefix, '-_' ),
 			__( 'Add-ons', 'shortcodes-ultimate' ),
-			__( 'Add-ons', 'shortcodes-ultimate' ),
+			sprintf(
+				'<span style="color:#2afd39">&#9733; %s</span>',
+				__( 'Add-ons', 'shortcodes-ultimate' )
+			),
 			$this->get_capability(),
 			$this->plugin_prefix . 'addons',
 			array( $this, 'the_menu_page' )
@@ -69,11 +48,13 @@ final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 			return;
 		}
 
-		$screen->add_help_tab( array(
+		$screen->add_help_tab(
+			array(
 				'id'      => 'shortcodes-ultimate-addons',
 				'title'   => __( 'Add-ons', 'shortcodes-ultimate' ),
 				'content' => $this->get_template( 'admin/partials/help/addons' ),
-			) );
+			)
+		);
 
 		$screen->set_help_sidebar( $this->get_template( 'admin/partials/help/sidebar' ) );
 
@@ -91,7 +72,12 @@ final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 			return;
 		}
 
-		wp_enqueue_style( 'shortcodes-ultimate-admin', $this->plugin_url . 'admin/css/admin.css', array(), $this->plugin_version );
+		wp_enqueue_style(
+			'shortcodes-ultimate-admin-addons',
+			plugins_url( 'css/addons.css', __FILE__ ),
+			array(),
+			filemtime( plugin_dir_path( __FILE__ ) . 'css/addons.css' )
+		);
 
 	}
 
@@ -102,50 +88,32 @@ final class Shortcodes_Ultimate_Admin_Addons extends Shortcodes_Ultimate_Admin {
 	 * @access   private
 	 * @return  array The plugin add-ons collection.
 	 */
-	protected function get_addons() {
+	public function get_addons() {
 
-		if ( empty( $this->addons ) ) {
-			$this->addons = $this->load_addons();
+		$addons = (array) su_get_config( 'addons', array() );
+
+		foreach ( $addons as $index => $addon ) {
+
+			$addon_id                  = sanitize_key( $addons[ $index ]['id'] );
+			$addons[ $index ]['image'] = plugins_url( "images/addons/{$addon_id}.png", __FILE__ );
+
 		}
 
-		return apply_filters( 'su/admin/addons', $this->addons );
+		return $addons;
 
 	}
 
-	/**
-	 * Load the collection of plugin add-ons from remote API.
-	 *
-	 * @since    5.0.0
-	 * @access   private
-	 * @return  array The plugin add-ons collection.
-	 */
-	private function load_addons() {
+	public function get_addon_permalink( $addon ) {
 
-		$transient = get_transient( $this->transient_name );
+		$utm = array( 'admin-menu', 'add-ons', 'wp-dashboard' );
 
-		if ( ! empty( $transient ) ) {
-			return $transient;
+		// phpcs:disable
+		if ( isset( $_GET['from-generator'] ) ) {
+			$utm[0] = 'generator';
 		}
+		// phpcs:enable
 
-		$response = wp_remote_get(
-			$this->api_url,
-			array( 'timeout' => 10, 'sslverify' => false, )
-		);
-		$response = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( empty( $response[0]['id'] ) ) {
-			return array();
-		}
-
-		$this->addons = array();
-
-		foreach ( $response as $item ) {
-			$this->addons[ $item['id'] ] = $item;
-		}
-
-		set_transient( $this->transient_name, $this->addons, $this->transient_timeout );
-
-		return $this->addons;
+		return su_get_utm_link( $addon['permalink'], $utm );
 
 	}
 

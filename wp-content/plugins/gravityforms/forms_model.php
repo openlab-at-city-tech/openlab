@@ -901,7 +901,7 @@ class GFFormsModel {
 
 
 		// Loading main form object (supports serialized strings as well as JSON strings)
-		$form = self::unserialize( $form_row['display_meta'] );
+		$form = self::unserialize( rgar( $form_row, 'display_meta' ) );
 
 		if ( ! $form ) {
 			return null;
@@ -2837,7 +2837,7 @@ class GFFormsModel {
 			}
 
 			//Ignore fields that are marked as display only
-			if ( $field->displayOnly && $field->type != 'password' ) {
+			if ( $field->displayOnly ) {
 				continue;
 			}
 
@@ -3058,7 +3058,7 @@ class GFFormsModel {
 			/* @var $field GF_Field */
 
 			// ignore fields that are marked as display only
-			if ( $field->displayOnly && $field->type != 'password' ) {
+			if ( $field->displayOnly ) {
 				continue;
 			}
 
@@ -3427,7 +3427,7 @@ class GFFormsModel {
 			case 'ends_with' :
 				// If target value is a 0 set $val2 to 0 rather than the empty string it currently is to prevent false positives.
 				if ( empty( $val2 ) ) {
-					$val2 = 0;
+					$val2 = '0';
 				}
 
 				$start = strlen( $val1 ) - strlen( $val2 );
@@ -5375,7 +5375,7 @@ class GFFormsModel {
 
 	public static function get_file_upload_path( $form_id, $file_name ) {
 
-		if ( get_magic_quotes_gpc() ) {
+		if ( version_compare( phpversion(), '7.4', '<' ) && get_magic_quotes_gpc() ) {
 			$file_name = stripslashes( $file_name );
 		}
 
@@ -5529,8 +5529,9 @@ class GFFormsModel {
 			return GF_Forms_Model_Legacy::is_duplicate( $form_id, $field, $value );
 		}
 
-		$entry_meta_table_name = self::get_entry_meta_table_name();
+		$entry_meta_table_name   = self::get_entry_meta_table_name();
 		$entry_table_name        = self::get_entry_table_name();
+		$sql_comparison          = 'ld.meta_value = %s';
 
 		switch ( GFFormsModel::get_input_type( $field ) ) {
 			case 'time':
@@ -5544,7 +5545,7 @@ class GFFormsModel {
 				break;
 			case 'phone':
 				$value          = str_replace( array( ')', '(', '-', ' ' ), '', $value );
-				$sql_comparison = 'replace( replace( replace( replace( ld.value, ")", "" ), "(", "" ), "-", "" ), " ", "" ) = %s';
+				$sql_comparison = 'replace( replace( replace( replace( ld.meta_value, ")", "" ), "(", "" ), "-", "" ), " ", "" ) = %s';
 				break;
 			case 'email':
 				$value = is_array( $value ) ? rgar( $value, 0 ) : $value;
@@ -5558,7 +5559,7 @@ class GFFormsModel {
 
 		$inner_sql_template .= "WHERE l.form_id=%d AND ld.form_id=%d
                                 AND ld.meta_key = %s
-                                AND status='active' AND ld.meta_value = %s";
+                                AND status='active' AND {$sql_comparison}";
 
 		$sql = "SELECT count(distinct input) as match_count FROM ( ";
 
@@ -7026,6 +7027,14 @@ class GFFormsModel {
 	}
 
 
+	/**
+	 * @deprecated 2.4.16
+	 *
+	 * @param $entry
+	 * @param $form
+	 *
+	 * @return mixed
+	 */
 	public static function delete_password( $entry, $form ) {
 		$password_fields = self::get_fields_by_type( $form, array( 'password' ) );
 		if ( is_array( $password_fields ) ) {

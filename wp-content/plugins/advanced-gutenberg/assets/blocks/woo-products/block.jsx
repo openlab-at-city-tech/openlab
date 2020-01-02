@@ -195,13 +195,13 @@
             const viewControls = [
                 {
                     icon: 'grid-view',
-                    title: __( 'Normal View' ),
+                    title: __( 'Normal View', 'advanced-gutenberg' ),
                     onClick: () => setAttributes( { viewType: 'normal' } ),
                     isActive: viewType === 'normal',
                 },
                 {
                     icon: 'slides',
-                    title: __( 'Slider View' ),
+                    title: __( 'Slider View', 'advanced-gutenberg' ),
                     onClick: () => setAttributes( { viewType: 'slider' } ),
                     isActive: viewType === 'slider',
                 },
@@ -223,23 +223,23 @@
                         <Toolbar controls={ viewControls } />
                     </BlockControls>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Products Settings' ) }>
+                        <PanelBody title={ __( 'Products Settings', 'advanced-gutenberg' ) }>
                             <SelectControl
-                                label={ __( 'Product Status' ) }
+                                label={ __( 'Product Status', 'advanced-gutenberg' ) }
                                 value={ status }
                                 options={ [
-                                    { label: __( 'All' ), value: '' },
-                                    { label: __( 'Featured' ), value: 'featured' },
-                                    { label: __( 'On Sale' ), value: 'on_sale' },
+                                    { label: __( 'All', 'advanced-gutenberg' ), value: '' },
+                                    { label: __( 'Featured', 'advanced-gutenberg' ), value: 'featured' },
+                                    { label: __( 'On Sale', 'advanced-gutenberg' ), value: 'on_sale' },
                                 ] }
                                 onChange={ ( value ) => setAttributes( { status: value } ) }
                             />
                             <SelectControl
-                                label={ __( 'Category' ) }
+                                label={ __( 'Category', 'advanced-gutenberg' ) }
                                 value={ category }
                                 options={ [
-                                    { label: __( 'All' ), value: '' },
-                                    { label: __( 'Selected' ), value: 'selected' },
+                                    { label: __( 'All', 'advanced-gutenberg' ), value: '' },
+                                    { label: __( 'Selected', 'advanced-gutenberg' ), value: 'selected' },
                                 ] }
                                 onChange={ ( value ) => setAttributes( { category: value } ) }
                             />
@@ -261,10 +261,10 @@
                                 </div>
                             }
                         </PanelBody>
-                        <PanelBody title={ __( 'Layout Settings' ) }>
+                        <PanelBody title={ __( 'Layout Settings', 'advanced-gutenberg' ) }>
                             {viewType !== 'slider' &&
                                 <RangeControl
-                                    label={ __( 'Columns' ) }
+                                    label={ __( 'Columns', 'advanced-gutenberg' ) }
                                     value={ columns }
                                     min={ 1 }
                                     max={ 4 }
@@ -272,23 +272,23 @@
                                 />
                             }
                             <RangeControl
-                                label={ __( 'Number of Products' ) }
+                                label={ __( 'Number of Products', 'advanced-gutenberg' ) }
                                 value={ numberOfProducts }
                                 min={ 1 }
                                 max={ 48 }
                                 onChange={ (value) => setAttributes( { numberOfProducts: value } ) }
                             />
                             <SelectControl
-                                label={ __( 'Order' ) }
+                                label={ __( 'Order', 'advanced-gutenberg' ) }
                                 value={ `${orderBy}-${order}` }
                                 options={ [
-                                    { label: __( 'Newest to oldest' ), value: 'date-desc' },
-                                    { label: __( 'Price: high to low' ), value: 'price-desc' },
-                                    { label: __( 'Price: low to high' ), value: 'price-asc' },
-                                    { label: __( 'Highest Rating first' ), value: 'rating-desc' },
-                                    { label: __( 'Most sale first' ), value: 'popularity-desc' },
-                                    { label: __( 'Title: Alphabetical' ), value: 'title-asc' },
-                                    { label: __( 'Title: Alphabetical reversed' ), value: 'title-desc' },
+                                    { label: __( 'Newest to oldest', 'advanced-gutenberg' ), value: 'date-desc' },
+                                    { label: __( 'Price: high to low', 'advanced-gutenberg' ), value: 'price-desc' },
+                                    { label: __( 'Price: low to high', 'advanced-gutenberg' ), value: 'price-asc' },
+                                    { label: __( 'Highest Rating first', 'advanced-gutenberg' ), value: 'rating-desc' },
+                                    { label: __( 'Most sale first', 'advanced-gutenberg' ), value: 'popularity-desc' },
+                                    { label: __( 'Title: Alphabetical', 'advanced-gutenberg' ), value: 'title-asc' },
+                                    { label: __( 'Title: Alphabetical reversed', 'advanced-gutenberg' ), value: 'title-desc' },
                                 ] }
                                 onChange={ (value) => {
                                     const splitedVal = value.split('-');
@@ -311,33 +311,33 @@
                                         <div className="advgb-product-title">{ product.name }</div>
                                         <div className="advgb-product-price" dangerouslySetInnerHTML={ { __html: product.price_html } } />
                                         <div className="advgb-product-add-to-cart">
-                                            <span>{ __( 'Add to cart' ) }</span>
+                                            <span>{ __( 'Add to cart', 'advanced-gutenberg' ) }</span>
                                         </div>
                                     </div>
                                 ) ) }
                             </div>
                             : ( // When no products found
-                                <div>{ __( 'No products found.' ) }</div>
+                                <div>{ __( 'No products found.', 'advanced-gutenberg' ) }</div>
                             )
                             : ( // When products is fetching
                                 <div>
-                                    <span>{ __( 'Loading' ) }</span>
+                                    <span>{ __( 'Loading', 'advanced-gutenberg' ) }</span>
                                     <Spinner/>
                                 </div>
                             )
                             : ( // When error
                                 <Placeholder
                                     icon={ advProductsBlockIcon }
-                                    label={ __( 'ADVGB Woo Products Block' ) }
+                                    label={ __( 'ADVGB Woo Products Block', 'advanced-gutenberg' ) }
                                 >
                                     <div style={ { marginBottom: 10 } }>
-                                        { __( 'WooCommerce has not been detected, make sure WooCommerce is installed and activated.' ) }
+                                        { __( 'WooCommerce has not been detected, make sure WooCommerce is installed and activated.', 'advanced-gutenberg' ) }
                                     </div>
                                     <Button
                                         className="button button-large"
                                         onClick={ () => this.fetchProducts() }
                                     >
-                                        { __( 'Try again' ) }
+                                        { __( 'Try again', 'advanced-gutenberg' ) }
                                     </Button>
                                 </Placeholder>
                             )
@@ -349,14 +349,14 @@
     }
 
     registerBlockType( 'advgb/woo-products', {
-        title: __( 'Woo Products' ),
-        description: __( 'Listing your products in a easy way.' ),
+        title: __( 'Woo Products', 'advanced-gutenberg' ),
+        description: __( 'Listing your products in a easy way.', 'advanced-gutenberg' ),
         icon: {
             src: advProductsBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'woo commerce' ), __( 'products list' ), __( 'price list' ) ],
+        keywords: [ __( 'woo commerce', 'advanced-gutenberg' ), __( 'products list', 'advanced-gutenberg' ), __( 'price list', 'advanced-gutenberg' ) ],
         attributes: {
             viewType: {
                 type: 'string',

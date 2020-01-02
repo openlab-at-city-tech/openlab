@@ -13,7 +13,7 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /** Helpers *******************************************************************/
 
@@ -25,7 +25,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * child posts whenever a parent post is modified. This can cause thousands of
  * cache invalidations to occur on a single edit, which is no good for anyone.
  *
- * @since bbPress (r4011)
+ * @since 2.1.0 bbPress (r4011)
  *
  * @package bbPress
  * @subpackage Cache
@@ -47,7 +47,7 @@ class BBP_Skip_Children {
 	/**
 	 * Hook into the 'pre_post_update' action.
 	 *
-	 * @since bbPress (r4011)
+	 * @since 2.1.0 bbPress (r4011)
 	 */
 	public function __construct() {
 		add_action( 'pre_post_update', array( $this, 'pre_post_update' ) );
@@ -60,7 +60,7 @@ class BBP_Skip_Children {
 	 * post ID to be used later, and adds an action to 'clean_post_cache' that
 	 * prevents child post caches from being cleared.
 	 *
-	 * @since bbPress (r4011)
+	 * @since 2.1.0 bbPress (r4011)
 	 *
 	 * @param int $post_id The post ID being updated
 	 * @return If invalid post data
@@ -68,8 +68,9 @@ class BBP_Skip_Children {
 	public function pre_post_update( $post_id = 0 ) {
 
 		// Bail if post ID is not a bbPress post type
-		if ( empty( $post_id ) || ! bbp_is_custom_post_type( $post_id ) )
+		if ( empty( $post_id ) || ! bbp_is_custom_post_type( $post_id ) ) {
 			return;
+		}
 
 		// Store the $post_id
 		$this->updating_post = $post_id;
@@ -83,7 +84,7 @@ class BBP_Skip_Children {
 	 * Skip cache invalidation of related posts if the post ID being invalidated
 	 * is not the one that was just updated.
 	 *
-	 * @since bbPress (r4011)
+	 * @since 2.1.0 bbPress (r4011)
 	 *
 	 * @param int $post_id The post ID of the cache being invalidated
 	 * @return If invalid post data
@@ -91,8 +92,9 @@ class BBP_Skip_Children {
 	public function skip_related_posts( $post_id = 0 ) {
 
 		// Bail if this post is not the current bbPress post
-		if ( empty( $post_id ) || ( $this->updating_post !== $post_id ) )
+		if ( empty( $post_id ) || ( $this->updating_post !== $post_id ) ) {
 			return;
+		}
 
 		// Stash the current cache invalidation value in a variable, so we can
 		// restore back to it nicely in the future.
@@ -110,8 +112,7 @@ class BBP_Skip_Children {
 	/**
 	 * Restore the cache invalidation to its previous value.
 	 *
-	 * @since bbPress (r4011)
-	 * @uses wp_suspend_cache_invalidation()
+	 * @since 2.1.0 bbPress (r4011)
 	 */
 	public function restore_cache_invalidation() {
 		wp_suspend_cache_invalidation( $this->original_cache_invalidation );
@@ -126,43 +127,42 @@ new BBP_Skip_Children();
  *
  * Will call to clean the term object cache associated with the post ID.
  *
- * @since bbPress (r4040)
+ * @since 2.1.0 bbPress (r4040)
+ * @since 2.6.0 bbPress (r6053) Introduced the `$post_id` parameter.
  *
- * @uses do_action() Calls 'bbp_clean_post_cache' on $id
- * @param object|int $_post The post object or ID to remove from the cache
+ * @param int     $post_id The post id.
+ * @param WP_Post $post    The WP_Post object.
  */
-function bbp_clean_post_cache( $_post = '' ) {
-
-	// Bail if no post
-	$_post = get_post( $_post );
-	if ( empty( $_post ) )
-		return;
-
-	wp_cache_delete( $_post->ID, 'posts'     );
-	wp_cache_delete( $_post->ID, 'post_meta' );
-
-	clean_object_term_cache( $_post->ID, $_post->post_type );
-
-	do_action( 'bbp_clean_post_cache', $_post->ID, $_post );
+function bbp_clean_post_cache( $post_id = null, $post = null ) {
 
 	// Child query types to clean
 	$post_types = array(
-		bbp_get_topic_post_type(),
 		bbp_get_forum_post_type(),
+		bbp_get_topic_post_type(),
 		bbp_get_reply_post_type()
 	);
 
-	// Loop through query types and clean caches
-	foreach ( $post_types as $post_type ) {
-		wp_cache_delete( 'bbp_get_forum_'     . $_post->ID . '_reply_id',                              'bbpress_posts' );
-		wp_cache_delete( 'bbp_parent_'        . $_post->ID . '_type_' . $post_type . '_child_last_id', 'bbpress_posts' );
-		wp_cache_delete( 'bbp_parent_'        . $_post->ID . '_type_' . $post_type . '_child_count',   'bbpress_posts' );
-		wp_cache_delete( 'bbp_parent_public_' . $_post->ID . '_type_' . $post_type . '_child_ids',     'bbpress_posts' );
-		wp_cache_delete( 'bbp_parent_all_'    . $_post->ID . '_type_' . $post_type . '_child_ids',     'bbpress_posts' );
+	// Bail if not a bbPress post type
+	if ( ! in_array( $post->post_type, $post_types, true ) ) {
+		return;
 	}
 
+	/**
+	 * Fires immediately after the given post cache is cleaned.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	do_action( 'bbp_clean_post_cache', $post->ID, $post );
+
 	// Invalidate parent caches
-	if ( ! empty( $_post->post_parent ) ) {
-		bbp_clean_post_cache( $_post->post_parent );
+	if ( ! empty( $post->post_parent ) ) {
+		clean_post_cache( $post->post_parent );
+
+	// Only bump `last_changed` when forum-root is reached
+	} else {
+		wp_cache_set( 'last_changed', microtime(), 'bbpress_posts' );
 	}
 }

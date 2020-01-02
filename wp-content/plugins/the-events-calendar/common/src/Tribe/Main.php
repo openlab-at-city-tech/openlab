@@ -17,7 +17,7 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.9.20';
+	const VERSION             = '4.10.2';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
@@ -170,6 +170,7 @@ class Tribe__Main {
 		require_once $this->plugin_path . 'src/functions/template-tags/general.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/html.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/post.php';
 
 		Tribe__Debug::instance();
 		tribe( 'assets' );
@@ -216,8 +217,8 @@ class Tribe__Main {
 		tribe_assets(
 			$this,
 			[
-				[ 'tribe-reset-style', 'reset.css' ],
-				[ 'tribe-common-style', 'common.css', [ 'tribe-reset-style' ] ],
+				[ 'tribe-common-skeleton-style', 'common-skeleton.css' ],
+				[ 'tribe-common-full-style', 'common-full.css', [ 'tribe-common-skeleton-style' ] ],
 			],
 			null
 		);
@@ -583,8 +584,8 @@ class Tribe__Main {
 		tribe_register_provider( Tribe__Editor__Provider::class );
 		tribe_register_provider( Tribe__Service_Providers__Debug_Bar::class );
 		tribe_register_provider( Tribe__Service_Providers__Promoter::class );
-		tribe_register_provider( Tribe__Service_Providers__Tooltip::class );
-
+		tribe_register_provider( Tribe\Service_Providers\Tooltip::class );
+		tribe_register_provider( Tribe\Service_Providers\Dialog::class );
 		tribe_register_provider( Tribe\Service_Providers\PUE::class );
 		tribe_register_provider( Tribe\Log\Service_Provider::class );
 	}
@@ -594,7 +595,7 @@ class Tribe__Main {
 	 *
 	 * Add a filter to determine_current_user during the setup of common library.
 	 *
-	 * @since TBD
+	 * @since 4.9.20
 	 */
 	public function promoter_connector() {
 		tribe_singleton( 'promoter.connector', 'Tribe__Promoter__Connector' );

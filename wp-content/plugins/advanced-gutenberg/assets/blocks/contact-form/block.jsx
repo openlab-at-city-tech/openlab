@@ -62,129 +62,129 @@
             return (
                 <Fragment>
                     <InspectorControls>
-                        <PanelBody title={ __( 'Form Settings' ) }>
+                        <PanelBody title={ __( 'Form Settings', 'advanced-gutenberg' ) }>
                             {(typeof advgbBlocks !== 'undefined' && !parseInt(advgbBlocks.captchaEnabled)) && (
-                                <PanelBody title={ __( 'Notice' ) }>
+                                <PanelBody title={ __( 'Notice', 'advanced-gutenberg' ) }>
                                     <p style={ { fontStyle: 'italic' } }>
-                                        { __( 'We strongly recommend to enable Google reCaptcha to avoid spam bot. You can enable it in Form Recaptcha in' ) }
-                                        <a href={advgbBlocks.config_url + '#email-form'} target="_blank"> { __( 'settings' ) }.</a>
+                                        { __( 'We strongly recommend to enable Google reCaptcha to avoid spam bot. You can enable it in Form Recaptcha in', 'advanced-gutenberg' ) }
+                                        <a href={advgbBlocks.config_url + '#email-form'} target="_blank"> { __( 'settings', 'advanced-gutenberg' ) }.</a>
                                     </p>
                                 </PanelBody>
                             ) }
-                            <PanelBody title={ __( 'Email sender' ) } initialOpen={ false }>
+                            <PanelBody title={ __( 'Email sender', 'advanced-gutenberg' ) } initialOpen={ false }>
                                 <p style={ { fontStyle: 'italic' } }>
-                                    { __('An email will be sent to the admin email (by default) whenever a contact form is submitted. You can change it in ') }
-                                    <a href={advgbBlocks.config_url + '#settings'} target="_blank"> { __( 'settings' ) }.</a>
+                                    { __('An email will be sent to the admin email (by default) whenever a contact form is submitted. You can change it in ', 'advanced-gutenberg') }
+                                    <a href={advgbBlocks.config_url + '#settings'} target="_blank"> { __( 'settings', 'advanced-gutenberg' ) }.</a>
                                 </p>
                             </PanelBody>
-                            <PanelBody title={ __( 'Text Label' ) }>
+                            <PanelBody title={ __( 'Text Label', 'advanced-gutenberg' ) }>
                                 <TextControl
-                                    label={ __( 'Name input placeholder' ) }
+                                    label={ __( 'Name input placeholder', 'advanced-gutenberg' ) }
                                     value={ nameLabel }
                                     onChange={ (value) => setAttributes( { nameLabel: value } ) }
                                 />
                                 <TextControl
-                                    label={ __( 'Email input placeholder' ) }
+                                    label={ __( 'Email input placeholder', 'advanced-gutenberg' ) }
                                     value={ emailLabel }
                                     onChange={ (value) => setAttributes( { emailLabel: value } ) }
                                 />
                                 <TextControl
-                                    label={ __( 'Message input placeholder' ) }
+                                    label={ __( 'Message input placeholder', 'advanced-gutenberg' ) }
                                     value={ msgLabel }
                                     onChange={ (value) => setAttributes( { msgLabel: value } ) }
                                 />
                                 <TextControl
-                                    label={ __( 'Submit text' ) }
+                                    label={ __( 'Submit text', 'advanced-gutenberg' ) }
                                     value={ submitLabel }
                                     onChange={ (value) => setAttributes( { submitLabel: value } ) }
                                 />
                                 <TextControl
-                                    label={ __( 'Empty field warning text' ) }
+                                    label={ __( 'Empty field warning text', 'advanced-gutenberg' ) }
                                     value={ alertLabel }
                                     onChange={ (value) => setAttributes( { alertLabel: value } ) }
                                 />
                                 <TextControl
-                                    label={ __( 'Submit success text' ) }
+                                    label={ __( 'Submit success text', 'advanced-gutenberg' ) }
                                     value={ successLabel }
                                     onChange={ (value) => setAttributes( { successLabel: value } ) }
                                 />
                             </PanelBody>
                             <PanelColorSettings
-                                title={ __( 'Input Color' ) }
+                                title={ __( 'Input Color', 'advanced-gutenberg' ) }
                                 colorSettings={ [
                                     {
-                                        label: __( 'Background color' ),
+                                        label: __( 'Background color', 'advanced-gutenberg' ),
                                         value: bgColor,
                                         onChange: (value) => setAttributes( { bgColor: value } ),
                                     },
                                     {
-                                        label: __( 'Text color' ),
+                                        label: __( 'Text color', 'advanced-gutenberg' ),
                                         value: textColor,
                                         onChange: (value) => setAttributes( { textColor: value } ),
                                     },
                                 ] }
                             />
-                            <PanelBody title={ __( 'Border Settings' ) } initialOpen={ false }>
+                            <PanelBody title={ __( 'Border Settings', 'advanced-gutenberg' ) } initialOpen={ false }>
                                 <PanelColorSettings
-                                    title={ __( 'Border Color' ) }
+                                    title={ __( 'Border Color', 'advanced-gutenberg' ) }
                                     initialOpen={ false }
                                     colorSettings={ [
                                         {
-                                            label: __( 'Border color' ),
+                                            label: __( 'Border color', 'advanced-gutenberg' ),
                                             value: borderColor,
                                             onChange: (value) => setAttributes( { borderColor: value } ),
                                         },
                                     ] }
                                 />
                                 <SelectControl
-                                    label={ __( 'Border Style' ) }
+                                    label={ __( 'Border Style', 'advanced-gutenberg' ) }
                                     value={ borderStyle }
                                     options={ [
-                                        { label: __( 'Solid' ), value: 'solid' },
-                                        { label: __( 'Dashed' ), value: 'dashed' },
-                                        { label: __( 'Dotted' ), value: 'dotted' },
+                                        { label: __( 'Solid', 'advanced-gutenberg' ), value: 'solid' },
+                                        { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
+                                        { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
                                     ] }
                                     onChange={ (value) => setAttributes( { borderStyle: value } ) }
                                 />
                                 <RangeControl
-                                    label={ __( 'Border radius (px)' ) }
+                                    label={ __( 'Border radius (px)', 'advanced-gutenberg' ) }
                                     value={ borderRadius }
                                     onChange={ (value) => setAttributes( { borderRadius: value } ) }
                                     min={ 0 }
                                     max={ 50 }
                                 />
                             </PanelBody>
-                            <PanelBody title={ __( 'Submit Button Settings' ) }>
+                            <PanelBody title={ __( 'Submit Button Settings', 'advanced-gutenberg' ) }>
                                 <PanelColorSettings
-                                    title={ __( 'Color Settings' ) }
+                                    title={ __( 'Color Settings', 'advanced-gutenberg' ) }
                                     initialOpen={ false }
                                     colorSettings={ [
                                         {
-                                            label: __( 'Border and Text' ),
+                                            label: __( 'Border and Text', 'advanced-gutenberg' ),
                                             value: submitColor,
                                             onChange: (value) => setAttributes( { submitColor: value } ),
                                         },
                                         {
-                                            label: __( 'Background' ),
+                                            label: __( 'Background', 'advanced-gutenberg' ),
                                             value: submitBgColor,
                                             onChange: (value) => setAttributes( { submitBgColor: value } ),
                                         },
                                     ] }
                                 />
                                 <RangeControl
-                                    label={ __( 'Button border radius' ) }
+                                    label={ __( 'Button border radius', 'advanced-gutenberg' ) }
                                     value={ submitRadius }
                                     onChange={ (value) => setAttributes( { submitRadius: value } ) }
                                     min={ 0 }
                                     max={ 50 }
                                 />
                                 <SelectControl
-                                    label={ __( 'Button position' ) }
+                                    label={ __( 'Button position', 'advanced-gutenberg' ) }
                                     value={ submitPosition }
                                     options={ [
-                                        { label: __( 'Center' ), value: 'center' },
-                                        { label: __( 'Left' ), value: 'left' },
-                                        { label: __( 'Right' ), value: 'right' },
+                                        { label: __( 'Center', 'advanced-gutenberg' ), value: 'center' },
+                                        { label: __( 'Left', 'advanced-gutenberg' ), value: 'left' },
+                                        { label: __( 'Right', 'advanced-gutenberg' ), value: 'right' },
                                     ] }
                                     onChange={ (value) => setAttributes( { submitPosition: value } ) }
                                 />
@@ -195,7 +195,7 @@
                         <div className="advgb-form-field advgb-form-field-half">
                             <input type="text" disabled={ true }
                                    className="advgb-form-input"
-                                   value={ nameLabel ? nameLabel : __( 'Name' ) }
+                                   value={ nameLabel ? nameLabel : __( 'Name', 'advanced-gutenberg' ) }
                                    style={ {
                                        backgroundColor: bgColor,
                                        color: textColor,
@@ -208,7 +208,7 @@
                         <div className="advgb-form-field advgb-form-field-half">
                             <input type="text" disabled={ true }
                                    className="advgb-form-input"
-                                   value={ emailLabel ? emailLabel : __( 'Email address' ) }
+                                   value={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
                                    style={ {
                                        backgroundColor: bgColor,
                                        color: textColor,
@@ -221,7 +221,7 @@
                         <div className="advgb-form-field advgb-form-field-full">
                             <textarea className="advgb-form-input"
                                       disabled={ true }
-                                      value={ msgLabel ? msgLabel : __( 'Message' ) }
+                                      value={ msgLabel ? msgLabel : __( 'Message', 'advanced-gutenberg' ) }
                                       style={ {
                                           backgroundColor: bgColor,
                                           color: textColor,
@@ -242,7 +242,7 @@
                                         borderRadius: submitRadius,
                                     } }
                             >
-                                { submitLabel ? submitLabel : __( 'Submit' ) }
+                                { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
                             </button>
                         </div>
                     </div>
@@ -305,14 +305,14 @@
     };
 
     registerBlockType( 'advgb/contact-form', {
-        title: __( 'Contact Form' ),
-        description: __( 'Fastest way to create a contact form for your page.' ),
+        title: __( 'Contact Form', 'advanced-gutenberg' ),
+        description: __( 'Fastest way to create a contact form for your page.', 'advanced-gutenberg' ),
         icon: {
             src: contactBlockIcon,
             foreground: typeof advgbBlocks !== 'undefined' ? advgbBlocks.color : undefined,
         },
         category: 'advgb-category',
-        keywords: [ __( 'contact' ), __( 'form' ) ],
+        keywords: [ __( 'contact', 'advanced-gutenberg' ), __( 'form', 'advanced-gutenberg' ) ],
         attributes: contactBlockAttrs,
         edit: AdvContactForm,
         save: function ( { attributes } ) {
@@ -340,7 +340,7 @@
                         <div className="advgb-form-field advgb-form-field-half">
                             <input type="text"
                                    className="advgb-form-input advgb-form-input-name"
-                                   placeholder={ nameLabel ? nameLabel : __( 'Name' ) }
+                                   placeholder={ nameLabel ? nameLabel : __( 'Name', 'advanced-gutenberg' ) }
                                    name="contact_name"
                                    style={ {
                                        backgroundColor: bgColor,
@@ -354,7 +354,7 @@
                         <div className="advgb-form-field advgb-form-field-half">
                             <input type="email"
                                    className="advgb-form-input advgb-form-input-email"
-                                   placeholder={ emailLabel ? emailLabel : __( 'Email address' ) }
+                                   placeholder={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
                                    name="contact_email"
                                    style={ {
                                        backgroundColor: bgColor,
@@ -367,7 +367,7 @@
                         </div>
                         <div className="advgb-form-field advgb-form-field-full">
                             <textarea className="advgb-form-input advgb-form-input-msg"
-                                      placeholder={ msgLabel ? msgLabel : __( 'Message' ) }
+                                      placeholder={ msgLabel ? msgLabel : __( 'Message', 'advanced-gutenberg' ) }
                                       name="contact_message"
                                       style={ {
                                           backgroundColor: bgColor,
@@ -393,7 +393,7 @@
                                         borderRadius: submitRadius,
                                     } }
                             >
-                                { submitLabel ? submitLabel : __( 'Submit' ) }
+                                { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
                             </button>
                         </div>
                     </form>
