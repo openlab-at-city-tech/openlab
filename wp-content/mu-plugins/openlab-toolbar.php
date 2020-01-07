@@ -1243,6 +1243,10 @@ HTML;
 				continue;
 			}
 
+			if ( bp_is_root_blog() && 'topic' === $cpt->name ) {
+				continue;
+			}
+
 			$key             = 'post-new.php?post_type=' . $cpt->name;
 			$actions[ $key ] = array( $cpt->labels->name_admin_bar, 'new-' . $cpt->name );
 		}
