@@ -1301,25 +1301,28 @@ class BP_Groups_Group {
 			$where = "WHERE {$sql['where']}";
 		}
 
-		$paged_groups_sql = "{$sql['select']} FROM {$sql['from']} {$where} {$sql['orderby']} {$sql['pagination']}";
+		$paged_group_ids = apply_filters( 'bp_groups_pre_group_ids_query', null, $r, $sql );
+		if ( null === $paged_group_ids ) {
+			$paged_groups_sql = "{$sql['select']} FROM {$sql['from']} {$where} {$sql['orderby']} {$sql['pagination']}";
 
-		/**
-		 * Filters the pagination SQL statement.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Concatenated SQL statement.
-		 * @param array  $sql   Array of SQL parts before concatenation.
-		 * @param array  $r     Array of parsed arguments for the get method.
-		 */
-		$paged_groups_sql = apply_filters( 'bp_groups_get_paged_groups_sql', $paged_groups_sql, $sql, $r );
+			/**
+			 * Filters the pagination SQL statement.
+			 *
+			 * @since 1.5.0
+			 *
+			 * @param string $value Concatenated SQL statement.
+			 * @param array  $sql   Array of SQL parts before concatenation.
+			 * @param array  $r     Array of parsed arguments for the get method.
+			 */
+			$paged_groups_sql = apply_filters( 'bp_groups_get_paged_groups_sql', $paged_groups_sql, $sql, $r );
 
-		$cached = bp_core_get_incremented_cache( $paged_groups_sql, 'bp_groups' );
-		if ( false === $cached ) {
-			$paged_group_ids = $wpdb->get_col( $paged_groups_sql );
-			bp_core_set_incremented_cache( $paged_groups_sql, 'bp_groups', $paged_group_ids );
-		} else {
-			$paged_group_ids = $cached;
+			$cached = bp_core_get_incremented_cache( $paged_groups_sql, 'bp_groups' );
+			if ( false === $cached ) {
+				$paged_group_ids = $wpdb->get_col( $paged_groups_sql );
+				bp_core_set_incremented_cache( $paged_groups_sql, 'bp_groups', $paged_group_ids );
+			} else {
+				$paged_group_ids = $cached;
+			}
 		}
 
 		if ( 'ids' === $r['fields'] ) {

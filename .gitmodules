@@ -1,3 +1,6 @@
 [submodule "wp-content/plugins/webwork"]
 	path = wp-content/plugins/webwork
 	url = git://github.com/livinglab/webwork-for-wordpress
+[submodule "wp-content/plugins/elasticpress-buddypress"]
+	path = wp-content/plugins/elasticpress-buddypress
+	url = git@github.com:Hard-G/elasticpress-buddypress
