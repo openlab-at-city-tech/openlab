@@ -512,7 +512,7 @@ class BP_Group_Documents {
 	public static function get_list_by_group( $group_id, $category=null, $sort=0, $order=0, $start=0, $items=0 ){
 		global $wpdb, $bp;
 
-		$sql = "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ";
+		$sql = $wpdb->prepare( "SELECT * FROM {$bp->group_documents->table_name} WHERE group_id = %d ", $group_id );
 
 		if ( $category ) {
 			// grab all object id's in the passed category
@@ -527,11 +527,22 @@ class BP_Group_Documents {
 			$sql .= "AND id IN " . $cat_in_clause;
 		}
 
-		//convert from 1-based paging to 0-based SQL limit
-		--$start;
-		$sql .= "ORDER BY $sort $order LIMIT %d, %d";
+		if ( $sort && $order ) {
+			$sort_fields = [ 'id', 'user_id', 'group_id', 'created_ts', 'modified_ts', 'name' ];
+			if ( ! in_array( $sort, $sort_fields, true ) ) {
+				$sort = 'created_ts';
+			}
 
- 		$result = $wpdb->get_results( $wpdb->prepare( $sql, $group_id, $start, $items ), ARRAY_A );
+			$order = 'ASC' === strtoupper( $order ) ? 'ASC' : 'DESC';
+
+			$sql .= "ORDER BY $sort $order";
+		}
+
+		if ( ( $start > 0 ) || $items ) {
+			$sql .= $wpdb->prepare( ' LIMIT %d, %d', $start - 1, $items );
+		}
+
+ 		$result = $wpdb->get_results( $sql, ARRAY_A );
 
 		return $result;
 	}
