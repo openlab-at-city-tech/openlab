@@ -247,7 +247,9 @@ jQuery(document).ready(function($){
                     });
                 }
 
-                window.openlab.academicUnits.validateAcademicTypeSelector();
+								if ( window.hasOwnProperty( 'openlab' ) ) {
+									window.openlab.academicUnits.validateAcademicTypeSelector();
+								}
 
 				// Categories
 				$('.bp-group-categories-list-container input').each(function(k,v){
