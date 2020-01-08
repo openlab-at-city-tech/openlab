@@ -1715,17 +1715,15 @@ function openlab_get_loginform() {
 function openlab_wrap_adminbar_top() {
 	if ( get_current_blog_id() !== 1 || is_admin() ) :
 
-		$admin_class = ( is_admin() ? ' admin-area' : '' );
-		$logged_in = (is_user_logged_in() ? ' logged-in' : ' logged-out' );
-	?>
-		<div id="oplbBSAdminar" class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?><?php echo $logged_in; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
-		
-		<?php
 		$classes = array();
 		$classes[]     = 'oplb-bs adminbar-manual-bootstrap';
 		$classes[]     = $admin_class = ( is_admin() ? 'admin-area' : 'frontend-area' );
 		$classes[]     = ( is_user_logged_in() ? 'logged-in' : 'logged-out' );
 		$classes[]     = ( is_user_member_of_blog() ? 'is-member' : 'not-member' );
+	?>
+		<div id="oplbBSAdminar" class="<?php echo implode( ' ', $classes ); ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
+		
+		<?php
 		$current_theme = wp_get_theme();
 		$classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
 		?>
