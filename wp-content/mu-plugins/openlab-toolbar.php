@@ -1725,6 +1725,7 @@ function openlab_wrap_adminbar_top() {
 		$classes[]     = 'oplb-bs adminbar-manual-bootstrap';
 		$classes[]     = $admin_class = ( is_admin() ? 'admin-area' : 'frontend-area' );
 		$classes[]     = ( is_user_logged_in() ? 'logged-in' : 'logged-out' );
+		$classes[]     = ( is_user_member_of_blog() ? 'is-member' : 'not-member' );
 		$current_theme = wp_get_theme();
 		$classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
 		?>
