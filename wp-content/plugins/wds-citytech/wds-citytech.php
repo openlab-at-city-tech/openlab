@@ -878,7 +878,7 @@ function wds_load_group_type( $group_type ) {
 	$return = '<div class="panel panel-default">';
 
 	$return .= '<div class="panel-heading">School(s)';
-	if ( openlab_is_school_required_for_group_type( $group_type ) && ( 'staff' != strtolower( $account_type ) || is_super_admin( get_current_user_id() ) ) ) {
+	if ( openlab_is_school_required_for_group_type( $group_type ) ) {
 		$return .= ' <span class="required">(required)</span>';
 	}
 	$return .= '</div><div class="panel-body">';
