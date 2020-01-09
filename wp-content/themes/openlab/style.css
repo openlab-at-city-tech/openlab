@@ -8101,6 +8101,9 @@ body #ubpfattach-message p {
 body .bp-template-notice a,
 body .bbp-template-notice a,
 body #ubpfattach-message a,
+body .bp-template-notice li,
+body .bbp-template-notice li,
+body #ubpfattach-message li,
 body .bp-template-notice p,
 body .bbp-template-notice p,
 body #ubpfattach-message p {
