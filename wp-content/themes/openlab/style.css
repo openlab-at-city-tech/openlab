@@ -10019,6 +10019,10 @@ a.delete-doc-button {
   position: relative;
   top: 0;
 }
+#content #bbpress-forums .pagination a,
+#content #bbpress-forums .pagination a:hover {
+  border: 1px solid #ddd;
+}
 #content #bbpress-forums .reply a,
 #content #bbpress-forums .reply a:visited {
   color: inherit;
