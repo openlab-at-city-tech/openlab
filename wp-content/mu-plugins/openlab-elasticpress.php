@@ -67,7 +67,7 @@ add_filter(
 				'portfolio_list_enabled',
 				'portfolio_list_heading',
 			],
-			$keys,
+			$keys
 		);
 	}
 );
