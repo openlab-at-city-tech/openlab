@@ -88,6 +88,9 @@ class OpenLab_Admin_Bar {
 		// for hamburger menu on mobile
 		add_action( 'admin_bar_menu', array( $this, 'openlab_hamburger_menu' ), 1 );
 
+		// For cleaning up any plugin add-ons.
+		add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
+
 		// Logged-in only
 		if ( is_user_logged_in() ) {
 
