@@ -432,7 +432,7 @@
 					align-items: center;
 					flex: 1 1 0;
 					min-width: 100px;
-					@media (max-width: @screen-sm-max){
+					@media (max-width: @screen-sm-max) {
 						min-width: 50px;
 					}
 					&:after {
@@ -1149,7 +1149,7 @@
 				}
 				#wp-admin-bar-network-menu-mobile,
 				#wp-admin-bar-my-openlab {
-					> .ab-item{
+					> .ab-item {
 						min-width: 140px;
 					}
 					@media (max-width: @screen-xs-max) {
@@ -1266,6 +1266,16 @@ body {
 	}
 	.empty-header-placeholder {
 		display: block;
+	}
+	/**legacy gutenberg plugin conflicts with adminbar styling**/
+	#editor {
+		.components-navigate-regions {
+			.edit-post-editor-regions {
+				position: relative;
+				left: auto;
+				top: auto;
+			}
+		}
 	}
 }
 
