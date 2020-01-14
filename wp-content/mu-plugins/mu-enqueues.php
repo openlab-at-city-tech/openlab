@@ -277,12 +277,12 @@ function admin_bar_padding_in_admin() {
         }
         html.wp-toolbar #wpcontent,
         html.wp-toolbar #adminmenuwrap{
-            padding-top: 80px;
+            padding-top: 50px;
         }
         @media (max-width: 767px){
             html.wp-toolbar #wpcontent,
             html.wp-toolbar #adminmenuwrap{
-                padding-top: 120px;
+                padding-top: 115px;
             }
             html.wp-toolbar #wpbody{
                 padding-top: 0;
