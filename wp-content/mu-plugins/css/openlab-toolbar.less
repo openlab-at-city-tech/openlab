@@ -1119,8 +1119,10 @@
 				> ul {
 					> li {
 						> .ab-item {
-							min-height: 50px;
-							min-width: 50px;
+							@media (min-width: @screen-sm-min) {
+								min-height: 50px;
+								min-width: 50px;
+							}
 							&.ab-empty-item {
 								padding-bottom: 16px;
 							}
@@ -1190,6 +1192,9 @@
 			#wpadminbar {
 				#wp-admin-bar-root-default {
 					border-right: 1px solid #000;
+					@media (max-width: @screen-xxs-max) {
+						border-right: none;
+					}
 				}
 			}
 		}
