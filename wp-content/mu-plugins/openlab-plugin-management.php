@@ -45,6 +45,7 @@ function openlab_hide_plugins( $plugins ) {
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'webwork/webwork.php',
 		'wp-accessibility/wp-accessibility',
+		'wp-dpla/wp-dpla.php',
 		'wp-latex/wp-latex.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
 		'wp-simile-timeline/timeline.php',
