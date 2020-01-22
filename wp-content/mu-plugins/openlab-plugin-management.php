@@ -40,6 +40,7 @@ function openlab_hide_plugins( $plugins ) {
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'webwork/webwork.php',
