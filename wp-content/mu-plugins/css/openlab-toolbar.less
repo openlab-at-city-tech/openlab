@@ -426,6 +426,9 @@
 			#wp-admin-bar-site-name {
 				border-left: none;
 				max-width: 320px;
+				@media (max-width: @screen-md-max) and (min-width: @screen-md-min){
+					max-width: 260px;
+				}
 				> .ab-item {
 					white-space: normal;
 					display: flex;
