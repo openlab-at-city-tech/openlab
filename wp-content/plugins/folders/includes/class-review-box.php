@@ -1,4 +1,5 @@
 <?php
+/* Free/Pro Class name change */
 class folders_review_box {
 
     public $plugin_name = "Folders";

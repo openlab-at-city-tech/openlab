@@ -222,7 +222,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
 }
 
 jQuery( document ).ajaxComplete(function( event, request, settings ) {
-    if(settings.data.indexOf("action=delete-post")>-1) {
+    if(settings.data != undefined && settings.data.indexOf("action=delete-post")>-1) {
         resetDDCounter();
     }
 });

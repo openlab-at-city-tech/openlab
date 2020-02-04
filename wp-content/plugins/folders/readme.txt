@@ -3,7 +3,7 @@ Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, organize, pages folders, media library, posts folders, media folders, subfolders, file manager, directories
 Requires at least: 3.0.0
 Tested up to: 5.3
-Stable tag: 2.3.3
+Stable tag: 2.3.9
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly organize and manage all of your Pages, Posts and Media library files in folders.
@@ -76,7 +76,10 @@ Digital Agencies: You're creating all sorts of content for your clients daily - 
 * Compatible with RTL admin panel (such as Hebrew,Arabic etc.)
 * Add and remove folders menu from pages, posts, and media
 * Minimize the folders area if you need extra space
-* <a href="https://premio.io/downloads/folders" target="_blank" title="Folders pro plans"><strong>Upgrade to pro</strong></a> to get unlimited folders :)
+
+= FOLDERS PLUGIN PRO FEATURES: =
+* <a href="https://premio.io/downloads/folders?utm_source=wporg" target="_blank" title="Folders pro plans"><strong>Upgrade to pro</strong></a> to get unlimited folders :)
+* Download any media library folder as Zip: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally.
 
 = GDPR AND PRIVACY =
 Folders plugin is GDPR compliant:
@@ -100,11 +103,11 @@ Download this plugin today for free and get 10 folders to organize your WP conte
 
 == Installation ==
 
-Step 1: Download and install the Folders plugin.
+Step 1: Download, install and activate the Folders plugin
 
-Step 2: In the “Folder Settings” menu, select which post type you want folders to be used with.
+Step 2: In the “Folder Settings” menu, select if you want Folders to appear in your media library, pages, posts or any custom post
 
-Step 3: Add new folders for your post type.
+Step 3: Create new folders and drag & drop elements into your new folders
 
 == Frequently Asked Questions ==
 
@@ -137,6 +140,24 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.3.9 =
+Fixed long folders names bug
+
+= 2.3.8 =
+Polylang media library fix
+
+= 2.3.7 =
+Translation support change
+
+= 2.3.6 =
+Added translation support
+
+= 2.3.5 =
+Folder order when adding a media library file to posts/pages fix, and infrastructure improvments
+
+= 2.3.4 =
+Thrive Themes Architect bug fixed
 
 = 2.3.3 =
 You can bulk delete folders now. You can also create a new folder from the upload screen in the media library. We've also fixed some bugs like Polylang compatibility bug, folders order bug, default folder bug, and other minor bugs.

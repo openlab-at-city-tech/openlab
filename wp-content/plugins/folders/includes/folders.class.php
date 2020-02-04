@@ -1,12 +1,12 @@
 <?php
 defined('ABSPATH') or wp_die('Nope, not accessing this');
-
+/* Free/Pro Class name change */
 class WCP_Folders
 {
 
     private static $instance;
 
-    public $license_key_data = null;
+    private static $license_key_data = null;
 
     private static $folders;
 
@@ -26,11 +26,11 @@ class WCP_Folders
         add_action('admin_footer', array($this, 'admin_footer'));
 
         /* check for polygon media */
-        $polylang_options = get_option("polylang");
-        if(is_array($polylang_options) && isset($polylang_options['media_support']) && $polylang_options['media_support'] == 1) {
-            $polylang_options['media_support'] = 0;
-            update_option("polylang", $polylang_options);
-        }
+//        $polylang_options = get_option("polylang");
+//        if(is_array($polylang_options) && isset($polylang_options['media_support']) && $polylang_options['media_support'] == 1) {
+//            $polylang_options['media_support'] = 0;
+//            update_option("polylang", $polylang_options);
+//        }
 
         add_action('parse_tax_query', array($this, 'taxonomy_archive_exclude_children'));
         add_action('admin_footer', array($this, 'admin_footer_for_media'));
@@ -120,7 +120,12 @@ class WCP_Folders
 
         add_action("wp_ajax_folder_update_status", array($this, 'folder_update_status'));
 
+        /* load language files */
+        add_action( 'plugins_loaded', array( $this, 'folders_text' ) );
+    }
 
+    public function folders_text() {
+        load_plugin_textdomain("folders", FALSE, dirname(plugin_basename(__FILE__)).'/languages/');
     }
 
     public function admin_footer_for_media(){
@@ -131,7 +136,7 @@ class WCP_Folders
             #media-attachment-taxonomy-filter, .post-upload-ui .folder_for_media { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
             .folder_for_media option {color:#000000;}
             .folder_for_media option:first-child {
-                font-weight: bold;
+            font-weight: bold;
             }
             <?php
         }
@@ -164,7 +169,6 @@ class WCP_Folders
                     if (!isset($_REQUEST['media_folder'])) {
                         if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
                             $admin_url .= $default_folders[$typenow];
-//                        wp_redirect($admin_url);
                             ?>
                             <script>
                                 window.location = '<?php echo $admin_url ?>';
@@ -236,8 +240,7 @@ class WCP_Folders
         if(self::is_for_this_post_type('attachment')) {
             $post_type = self::get_custom_post_type('attachment');
             global $typenow, $current_screen;
-//            echo $typenow;
-//            echo "<pre>"; print_r($current_screen); die;
+            /* Free/Pro Class name change */
             if(!class_exists('WCP_Tree')) {
                 $files = array(
                     'WCP_Tree' => WCP_DS . "includes" . WCP_DS . "tree.class.php"
@@ -249,18 +252,19 @@ class WCP_Folders
                     }
                 }
             }
+            /* Free/Pro Class name change */
             $options = WCP_Tree::get_folder_option_data($post_type);?>
             <p class="attachments-category"><?php esc_html_e("Select a folder (Optional)", WCP_FOLDER) ?></p>
             <p class="attachments-category"><?php esc_html_e("First select the folder, and the upload the files", WCP_FOLDER) ?><br/></p>
-	        <p>
-	            <select name="folder_for_media" class="folder_for_media">
+            <p>
+                <select name="folder_for_media" class="folder_for_media">
                     <option value="-1">- <?php esc_html_e('Uncategorized', WCP_FOLDER) ?></option>
                     <?php echo $options ?>
                     <?php if($typenow == "attachment" && isset($current_screen->base) && $current_screen->base == "upload") {?>
                         <option value="add-folder"><?php esc_html_e('+ Create a New Folder', WCP_FOLDER) ?></option>
                     <?php } ?>
                 </select>
-	        </p>
+            </p>
             <?php
         }
     }
@@ -275,25 +279,25 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['status']) || empty($postData['status'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -318,25 +322,25 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['status']) || empty($postData['status'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -360,16 +364,16 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_id']) || empty($postData['post_id'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         }
         if ($errorCounter == 0) {
@@ -442,12 +446,11 @@ class WCP_Folders
         $empty_items = self::get_total_empty_posts($post_type);
 
         $post_type = self::get_custom_post_type($post_type);
-//        $terms_data = WCP_Tree::get_full_tree_data($post_type);
+
         $taxonomies = self::get_terms_hierarchical($post_type);
 
         $response = array(
             'status' => 1,
-//            'data' => $terms_data,
             'total_items' => $total_posts,
             'taxonomies' => $taxonomies,
             'empty_items' => $empty_items
@@ -471,13 +474,10 @@ class WCP_Folders
 
         $post_type = self::get_custom_post_type($post_type);
 
-//        $terms_data = WCP_Tree::get_full_tree_data($post_type);
-
         $taxonomies = self::get_terms_hierarchical($post_type);
 
         $response = array(
             'status' => 1,
-//            'data' => $terms_data,
             'total_items' => $total_posts,
             'empty_items' => $empty_items,
             'taxonomies' => $taxonomies
@@ -525,13 +525,41 @@ class WCP_Folders
         return $args;
     }
 
+    public function get_total_empty_posts($post_type = "")
+    {
+        $taxonomy = self::get_custom_post_type($post_type);
+        $args = array(
+            'posts_per_page' => -1,
+            'post_type' => $post_type,
+            'post_status' => 'inherit'
+        );
+        if ($post_type != "attachment") {
+            $args['post_status'] = array('publish', 'draft', 'future', 'private');
+        }
+        $args['tax_query'] = array(
+            array(
+                'taxonomy'  => $taxonomy,
+                'operator'  => 'NOT EXISTS',
+            ),
+        );
+        $result = get_posts($args);
+
+        if(!empty($result)) {
+            return (count($result));
+        } else {
+            return 0;
+        }
+    }
+
     public function output_backbone_view_filters() {
+        /* Free/Pro URL Change */
         wp_enqueue_script( 'folders-media', WCP_FOLDER_URL.'assets/js/media.js', array( 'media-editor', 'media-views' ), WCP_FOLDER_VERSION, true );
         wp_localize_script( 'folders-media', 'folders_media_options', array(
             'terms'     => self::get_terms_hierarchical('media_folder'),
             'taxonomy'  => get_taxonomy('media_folder'),
             'ajax_url'  => admin_url("admin-ajax.php")
         ));
+        /* Free/Pro URL Change */
         wp_enqueue_style( 'folders-media', WCP_FOLDER_URL . 'assets/css/media.css' , array(), WCP_FOLDER_VERSION);
     }
 
@@ -692,13 +720,14 @@ class WCP_Folders
         }
 
         wp_dropdown_categories( array(
-            'show_option_all'   =>  esc_html__('All Folders', WCP_FOLDER ),
-            'show_option_none'   =>  esc_html__('(Unassigned)', WCP_FOLDER ),
+            'show_option_all'   => esc_attr__( 'All Folders', WCP_FOLDER),
+            'show_option_none'   => esc_attr__( '(Unassigned)', WCP_FOLDER),
             'option_none_value' => -1,
             'orderby'           => 'meta_value_num',
             'order'             => 'ASC',
             'show_count'        => true,
             'hide_empty'        => false,
+            'update_count_callback' => '_update_generic_term_count',
             'echo'              => true,
             'selected'          => $current_term,
             'hierarchical'      => true,
@@ -742,12 +771,12 @@ class WCP_Folders
         $response['errors'] = array();
         $response['message'] = "";
         $errorArray = [];
-        $errorMessage =  esc_html__("%s is required", WCP_FOLDER);
+        $errorMessage = esc_attr__("%s is required", WCP_FOLDER);
         $postData = filter_input_array(INPUT_POST);
         if(!isset($postData['textarea_text']) || trim($postData['textarea_text']) == "") {
             $error = array(
                 "key"   => "textarea_text",
-                "message" =>  esc_html__("Please enter your message",WCP_FOLDER)
+                "message" => esc_attr__("Please enter your message",WCP_FOLDER)
             );
             $errorArray[] = $error;
         }
@@ -768,14 +797,14 @@ class WCP_Folders
             if(!isset($postData['folder_help_nonce']) || trim($postData['folder_help_nonce']) == "") {
                 $error = array(
                     "key"   => "nonce",
-                    "message" =>  esc_html__("Your request is not valid", WCP_FOLDER)
+                    "message" => esc_attr__("Your request is not valid", WCP_FOLDER)
                 );
                 $errorArray[] = $error;
             } else {
                 if(!wp_verify_nonce($postData['folder_help_nonce'], 'wcp_folder_help_nonce')) {
                     $error = array(
                         "key"   => "nonce",
-                        "message" =>  esc_html__("Your request is not valid", WCP_FOLDER)
+                        "message" => esc_attr__("Your request is not valid", WCP_FOLDER)
                     );
                     $errorArray[] = $error;
                 }
@@ -838,13 +867,13 @@ class WCP_Folders
             $errorCounter++;
             $response['message'] = "Please provide reason";
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
             $response['valid'] = 0;
         } else {
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_deactivate_nonce')) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
                 $response['valid'] = 0;
             }
@@ -872,6 +901,7 @@ class WCP_Folders
                 </tr>
                 <tr>
                     <th>Plugin Version</th>
+                    <!-- Free Pro Version Change -->
                     <td><?php echo esc_attr(WCP_FOLDER_VERSION) ?></td>
                 </tr>
                 <tr>
@@ -902,12 +932,7 @@ class WCP_Folders
             $response['status'] = 1;
         }
         echo json_encode($response);
-        die;
-    }
-
-    public function check_has_valid_key()
-    {
-        return 0;
+        wp_die();
     }
 
     public static function total_term_folders()
@@ -920,21 +945,6 @@ class WCP_Folders
             $total += wp_count_terms($post_type);
         }
         return $total;
-    }
-
-    public function get_license_key_information($licenseKey)
-    {
-        return array();
-    }
-
-    public function get_license_key_data($licenseKey = '')
-    {
-        return array();
-    }
-
-    public function check_for_license_key()
-    {
-        return false;
     }
 
     public function wcp_remove_post_item()
@@ -963,22 +973,22 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else  if (!current_user_can("manage_categories") || ($postData['type'] == "page" && !current_user_can("edit_pages"))) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if (!current_user_can("manage_categories") || ($postData['type'] != "page" && !current_user_can("edit_posts"))) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1009,25 +1019,25 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['width']) || empty($postData['width'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] =  esc_html__("You have not permission to update width", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update width", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
             if(!wp_verify_nonce($nonce, 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1052,27 +1062,27 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['post_ids']) || empty($postData['post_ids'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else {
             $folder_id = self::sanitize_options($postData['folder_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$folder_id)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1123,26 +1133,26 @@ class WCP_Folders
         $errorCounter = 0;
         if (!isset($postData['post_id']) || empty($postData['post_id'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['type']) || empty($postData['type'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['folder_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1185,18 +1195,18 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_highlight_term_'.$term_id)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1228,21 +1238,21 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] =  esc_html__("You have not permission to update folder order", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder order", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_ids']) || empty($postData['term_ids'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['type']) || empty($postData['type'])) {
             $errorCounter++;
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1260,6 +1270,7 @@ class WCP_Folders
             }
             $response['status'] = 1;
             $folder_type = self::get_custom_post_type($type);
+            /* Free/Pro Class name change */
             $response['options'] = WCP_Tree::get_option_data_for_select($folder_type);
         }
         echo json_encode($response);
@@ -1276,18 +1287,18 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = "Unable to create folder, Your request is not valid";
+            $response['message'] = esc_attr__("Unable to create folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1316,24 +1327,24 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $response['message'] =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $response['message'] = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['parent_id'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1362,15 +1373,15 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!isset($postData['type']) || empty($postData['type'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
-                $response['message'] =  esc_html__("Your request is not valid", WCP_FOLDER);
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1447,21 +1458,21 @@ class WCP_Folders
         $postData = filter_input_array(INPUT_POST);
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error =  esc_html__("You have not permission to remove folder", WCP_FOLDER);
+            $error = esc_attr__("You have not permission to remove folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $error = "Unable to delete folder, Your request is not valid";
+            $error = esc_attr__("Unable to delete folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_delete_term_'.$term_id)) {
-                $error = "Unable to delete folder, Your request is not valid";
+                $error = esc_attr__("Unable to delete folder, Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1514,24 +1525,24 @@ class WCP_Folders
         $postData = $_REQUEST;
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error =  esc_html__("You have not permission to update folder", WCP_FOLDER);
+            $error = esc_attr__("You have not permission to update folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
-            $error =  esc_html__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['name']) || empty($postData['name'])) {
-            $error =  esc_html__("Folder name can no be empty", WCP_FOLDER);
+            $error = esc_attr__("Folder name can no be empty", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $error =  esc_html__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $term_id = self::sanitize_options($postData['term_id']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_rename_term_'.$term_id)) {
-                $error = _("Unable to rename folder, Your request is not valid", WCP_FOLDER);
+                $error = esc_attr__("Unable to rename folder, Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1552,7 +1563,7 @@ class WCP_Folders
                 $response['status'] = 1;
                 $response['term_title'] = $postData['name'];
             } else {
-                $response['message'] =  esc_html__("Unable to rename folder", WCP_FOLDER);
+                $response['message'] = esc_attr__("Unable to rename folder", WCP_FOLDER);
             }
         } else {
             $response['error'] = 1;
@@ -1592,23 +1603,23 @@ class WCP_Folders
         $postData = $_REQUEST;
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
-            $error =  esc_html__("You have not permission to add folder", WCP_FOLDER);
+            $error = esc_attr__("You have not permission to add folder", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['name']) || empty($postData['name'])) {
-            $error =  esc_html__("Folder name can no be empty", WCP_FOLDER);
+            $error = esc_attr__("Folder name can no be empty", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $error =  esc_html__("Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $response['login'] = 0;
-            $error =  esc_html__("Unable to create folder, Your request is not valid", WCP_FOLDER);
+            $error = esc_attr__("Unable to create folder, Your request is not valid", WCP_FOLDER);
             $errorCounter++;
         } else {
             $type = self::sanitize_options($postData['type']);
             if(!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$type)) {
                 $response['login'] = 0;
-                $error =  esc_html__("Unable to create folder, Your request is not valid", WCP_FOLDER);
+                $error = esc_attr__("Unable to create folder, Your request is not valid", WCP_FOLDER);
                 $errorCounter++;
             }
         }
@@ -1642,7 +1653,8 @@ class WCP_Folders
                     $rename_nonce = wp_create_nonce('wcp_folder_rename_term_'.$result['term_id']);
                     $highlight_nonce = wp_create_nonce('wcp_folder_highlight_term_'.$result['term_id']);
                     $term_nonce = wp_create_nonce('wcp_folder_term_'.$result['term_id']);
-                    $string = "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$result['term_id']}' class='ui-state-default route' id='wcp_folder_{$result['term_id']}' data-folder-id='{$result['term_id']}'><h3 class='title' title='{$postData['name']}' id='title_{$result['term_id']}'><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i><img src='".esc_url(WCP_FOLDER_URL."assets/images/move-option.png")."' class='move-folder-icon' ><input type='checkbox' class='checkbox' value='{$result['term_id']}' /></span><span class='title-text'>{$postData['name']}</span> <span class='update-inline-record'></span><span class='star-icon'></span> </h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span>	<ul class='space' id='space_{$result['term_id']}'>";
+                    /* Free/Pro URL Change */
+                    $string = "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$slug}' class='ui-state-default route' id='wcp_folder_{$result['term_id']}' data-folder-id='{$result['term_id']}'><h3 class='title' title='{$postData['name']}' id='title_{$result['term_id']}'><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i><img src='".esc_url(WCP_FOLDER_URL."assets/images/move-option.png")."' class='move-folder-icon' ><input type='checkbox' class='checkbox' value='{$result['term_id']}' /></span><span class='title-text'>{$postData['name']}</span> <span class='update-inline-record'></span><span class='star-icon'></span> </h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span>	<ul class='space' id='space_{$result['term_id']}'>";
                     $string .= "</ul></li>";
                     $response['term_data'] = $string;
                     $response['parent_id'] = $parent;
@@ -1657,11 +1669,11 @@ class WCP_Folders
                     $response['is_key_active'] = $is_active;
                     $response['folders'] = $folders;
                 } else {
-                    $response['message'] =  esc_html__("Error during server request", WCP_FOLDER);
+                    $response['message'] = esc_attr__("Error during server request", WCP_FOLDER);
                 }
             } else {
                 $response['error'] = 1;
-                $response['message'] =  esc_html__("Folder name is already exists", WCP_FOLDER);
+                $response['message'] = esc_attr__("Folder name already exists", WCP_FOLDER);
             }
         } else {
             $response['error'] = 1;
@@ -1752,6 +1764,7 @@ class WCP_Folders
             $total_empty = self::get_total_empty_posts($typenow);
 
             $folder_type = self::get_custom_post_type($typenow);
+            /* Do not change: Free/Pro Class name change */
             $terms_data = WCP_Tree::get_full_tree_data($folder_type);
             $terms_html = WCP_Tree::get_option_data_for_select($folder_type);
             $form_html = WCP_Forms::get_form_html($terms_html);
@@ -1776,33 +1789,6 @@ class WCP_Folders
             return wp_count_posts($post_type)->inherit;
         } else {
             return wp_count_posts($post_type)->publish + wp_count_posts($post_type)->draft + wp_count_posts($post_type)->future + wp_count_posts($post_type)->private;
-        }
-    }
-
-    public function get_total_empty_posts($post_type = "")
-    {
-        $taxonomy = self::get_custom_post_type($post_type);
-        $args = array(
-            'posts_per_page' => -1,
-            'post_type' => $post_type,
-            'post_status' => 'inherit'
-        );
-        if ($post_type != "attachment") {
-            $args['post_status'] = array('publish', 'draft', 'future', 'private');
-        }
-        $args['tax_query'] = array(
-            array(
-                'taxonomy'  => $taxonomy,
-                'operator'  => 'NOT EXISTS',
-            ),
-        );
-
-        $result = get_posts($args);
-
-        if(!empty($result)) {
-            return (count($result));
-        } else {
-            return 0;
         }
     }
 
@@ -1852,20 +1838,20 @@ class WCP_Folders
         if (!empty($posts)) {
             foreach ($posts as $post_type) {
                 $labels = array(
-                    'name' =>  esc_html__('Folders', WCP_FOLDER),
-                    'singular_name' =>  esc_html__('Folder', WCP_FOLDER),
-                    'all_items' =>  esc_html__('All Folders', WCP_FOLDER),
-                    'edit_item' =>  esc_html__('Edit Folder', WCP_FOLDER),
-                    'update_item' =>  esc_html__('Update Folder', WCP_FOLDER),
-                    'add_new_item' =>  esc_html__('Add New Folder', WCP_FOLDER),
-                    'new_item_name' =>  esc_html__('Add Folder Name', WCP_FOLDER),
-                    'menu_name' =>  esc_html__('Folders', WCP_FOLDER),
-                    'search_items' =>  esc_html__('Search Folders', WCP_FOLDER),
-                    'parent_item' =>  esc_html__('Parent Folder', WCP_FOLDER),
+                    'name' => esc_html__('Folders', WCP_FOLDER),
+                    'singular_name' => esc_html__('Folder', WCP_FOLDER),
+                    'all_items' => esc_html__('All Folders', WCP_FOLDER),
+                    'edit_item' => esc_html__('Edit Folder', WCP_FOLDER),
+                    'update_item' => esc_html__('Update Folder', WCP_FOLDER),
+                    'add_new_item' => esc_html__('Add New Folder', WCP_FOLDER),
+                    'new_item_name' => esc_html__('Add Folder Name', WCP_FOLDER),
+                    'menu_name' => esc_html__('Folders', WCP_FOLDER),
+                    'search_items' => esc_html__('Search Folders', WCP_FOLDER),
+                    'parent_item' => esc_html__('Parent Folder', WCP_FOLDER),
                 );
 
                 $args = array(
-                    'label' =>  esc_html__('Folder', WCP_FOLDER),
+                    'label' => esc_html__('Folder', WCP_FOLDER),
                     'labels' => $labels,
                     'show_tagcloud' => false,
                     'hierarchical' => true,
@@ -1876,7 +1862,7 @@ class WCP_Folders
                     'show_admin_column' => true,
                     'update_count_callback' => '_update_generic_term_count',
                     'query_var' => true,
-                    'rewrite' => false,
+                    'rewrite' => false
                 );
 
                 $folder_post_type = self::get_custom_post_type($post_type);
@@ -2080,7 +2066,6 @@ class WCP_Folders
             global $typenow;
             add_filter('views_edit-' . $typenow, array($this, 'wcp_check_for_child_folders'));
         }
-
     }
 
     function wcp_check_for_child_folders($content)
@@ -2146,6 +2131,7 @@ class WCP_Folders
     {
         if (self::is_active_for_screen()) {
             global $typenow;
+            /* Free/Pro Version change */
             wp_register_script('wcp-folders-alert', plugin_dir_url(dirname(__FILE__)) . 'assets/js/livequery.min.js', array(), WCP_FOLDER_VERSION);
             wp_register_script('wcp-folders-custom', plugin_dir_url(dirname(__FILE__)) . 'assets/js/custom.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION);
 
@@ -2166,6 +2152,7 @@ class WCP_Folders
                 $is_active = 0;
                 $folders = self::total_term_folders();
             }
+            /* For free: upgrade URL, for Pro: Register Key URL */
             $register_url = admin_url("admin.php?page=wcp_folders_upgrade");
 
             $is_rtl = 0;
@@ -2186,6 +2173,7 @@ class WCP_Folders
             }
             wp_localize_script('wcp-folders-custom', 'wcp_settings', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
+                'upgrade_url' => admin_url('admin.php?page=wcp_folders_upgrade'),
                 'post_type' => $typenow,
                 'page_url' => $admin_url,
                 'ajax_image' => plugin_dir_url(dirname(__FILE__)) . "assets/images/ajax-loader.gif",
@@ -2199,7 +2187,6 @@ class WCP_Folders
                 'taxonomy_status' => $taxonomy_status,
                 'selected_taxonomy' => $selected_taxonomy
             ));
-
             wp_enqueue_script('wcp-folders-alert');
             wp_enqueue_script('wcp-folders-custom');
 
@@ -2210,15 +2197,18 @@ class WCP_Folders
 
     public function plugin_action_links($links)
     {
-        array_unshift($links, '<a href="' . admin_url("admin.php?page=wcp_folders_settings") . '" >' .  esc_html__('Settings', WCP_FOLDER) . '</a>');
-        $links['need_help'] = '<a target="_blank" href="https://premio.io/help/folders/?utm_source=pluginspage" >'.__( 'Need help?', WCP_FOLDER ).'</a>';
-        $links['pro'] = '<a class="wcp-folder-upgrade-button" href="'.admin_url("admin.php?page=wcp_folders_upgrade").'" >'.__( 'Upgrade', WCP_FOLDER ).'</a>';
+        array_unshift($links, '<a href="' . admin_url("admin.php?page=wcp_folders_settings") . '" >' . esc_html__('Settings', WCP_FOLDER) . '</a>');
+        $links['need_help'] = '<a target="_blank" href="https://premio.io/help/folders/?utm_source=pluginspage" >'.__( 'Need help?', WCP_FOLDER).'</a>';
+
+        /* PRO link for only for FREE*/
+        $links['pro'] = '<a class="wcp-folder-upgrade-button" href="'.admin_url("admin.php?page=wcp_folders_upgrade").'" >'.__( 'Upgrade', WCP_FOLDER).'</a>';
         return $links;
     }
 
     public static function get_instance()
     {
         if (empty(self::$instance)) {
+            /* Do not change Class name here */
             self::$instance = new WCP_Folders();
         }
         return self::$instance;
@@ -2226,10 +2216,9 @@ class WCP_Folders
 
     public function check_and_set_post_type() {
         $options = get_option(WCP_FOLDER_VAR);
-        $options = is_array($options)?$options:array();
         $old_plugin_status = 0;
         $post_array = array();
-        if (!empty($options)) {
+        if (!empty($options) && is_array($options)) {
             foreach ($options as $key=>$val) {
                 if (!(strpos($key, 'folders4') === false) && $old_plugin_status == 0) {
                     $old_plugin_status = 1;
@@ -2275,13 +2264,140 @@ class WCP_Folders
 
         self::check_and_set_post_type();
 
-
-
-        $option = get_option("folder_redirect_status", true);
+        $option = get_option("folder_redirect_status");
         if ($option == 1) {
-            update_option("folder_redirect_status", 0);
+            update_option("folder_redirect_status", 2);
             wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
             exit;
+        }
+    }
+
+    function wcp_manage_columns_head($defaults, $d = "")
+    {
+        global $typenow;
+        $type = $typenow;
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
+            $type = self::sanitize_options($_REQUEST['post_type']);
+        }
+
+        $options = get_option("folders_settings");
+        if (is_array($options) && in_array($type, $options)) {
+            $columns = array(
+                    'wcp_move' => '<div class="wcp-move-multiple wcp-col" title="' . esc_attr__('Move selected items', WCP_FOLDER) . '"><span class="dashicons dashicons-move"></span><div class="wcp-items"></div></div>',
+                ) + $defaults;
+            return $columns;
+        }
+        return $defaults;
+    }
+
+    function wcp_manage_columns_content($column_name, $post_ID)
+    {
+        $postIDs = self::$postIds;
+        if(!is_array($postIDs)) {
+            $postIDs = array();
+        }
+        if(!in_array($post_ID, $postIDs)) {
+            $postIDs[] = $post_ID;
+            self::$postIds = $postIDs;
+            global $typenow;
+            $type = $typenow;
+            if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
+                $type = self::sanitize_options($_REQUEST['post_type']);
+            }
+
+            $options = get_option("folders_settings");
+            if (is_array($options) && in_array($type, $options)) {
+                if ($column_name == 'wcp_move') {
+                    $title = get_the_title();
+                    if (strlen($title) > 20) {
+                        $title = substr($title, 0, 20) . "...";
+                    }
+                    echo "<div class='wcp-move-file' data-id='{$post_ID}'><span class='wcp-move dashicons dashicons-move' data-id='{$post_ID}'></span><span class='wcp-item' data-object-id='{$post_ID}'>" . $title . "</span></div>";
+                }
+            }
+        }
+    }
+
+    function taxonomy_archive_exclude_children($query)
+    {
+        $options = get_option("folders_settings");
+        if (!empty($options)) {
+            $taxonomy_slugs = array();
+            foreach ($options as $option) {
+                $taxonomy_slugs[] = self::get_custom_post_type($option);
+            }
+            if (!empty($taxonomy_slugs)) {
+                $i = 0;
+                foreach ($query->tax_query->queries as $tax_query_item) {
+                    if (empty($taxonomy_slugs) || (isset($tax_query_item['taxonomy']) && in_array($tax_query_item['taxonomy'], $taxonomy_slugs))) {
+                        $query->tax_query->queries[$i]['include_children'] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    public function admin_menu()
+    {
+        // Add menu item for settings page
+        $page_title = esc_attr__('Folders', WCP_FOLDER);
+        $menu_title = esc_attr__('Folders Settings', WCP_FOLDER);
+        $capability = 'manage_options';
+        $menu_slug = 'wcp_folders_settings';
+        $callback = array($this, "wcp_folders_settings");
+        $icon_url = 'dashicons-category';
+        $position = 99;
+
+        add_menu_page($page_title, $menu_title, $capability, $menu_slug, $callback, $icon_url, $position);
+
+        /* Do not Change Free/Pro Change for menu */
+        add_submenu_page(
+            $menu_slug,
+            esc_html__('Upgrade to Pro', WCP_FOLDER),
+            esc_html__('Upgrade to Pro', WCP_FOLDER),
+            'manage_options',
+            'wcp_folders_upgrade',
+            array($this, 'wcp_folders_upgrade_or_register')
+        );
+
+        self::check_and_set_post_type();
+
+        $show_menu = get_option("folders_show_in_menu", true);
+        if ($show_menu == "on") {
+            self::create_menu_for_folders();
+        }
+    }
+
+    public function wcp_folders_upgrade_or_register()
+    {
+        self::set_default_values_if_not_exists();
+        include_once dirname(dirname(__FILE__)) . "/templates/admin/upgrade-to-pro.php";
+    }
+
+    public function wcp_folders_settings()
+    {
+        self::set_default_values_if_not_exists();
+        /* Only in Free, Get Folders update confirmation popup */
+        $is_shown = get_option("folder_update_message");
+        if($is_shown === false) {
+            include_once dirname(dirname(__FILE__)) . "/templates/admin/update.php";
+        } else {
+            $options = get_option('folders_settings');
+            $options = (empty($options) || !is_array($options)) ?array():$options;
+            $post_types = get_post_types( array( 'public' => true ), 'objects' );
+            $terms_data = array();
+            foreach ($post_types as $post_type) {
+                if(in_array($post_type->name, $options)) {
+                    $term = $post_type->name;
+                    $term = self::get_custom_post_type($term);
+                    $categories = self::get_terms_hierarchical($term);
+                    $terms_data[$post_type->name] = $categories;
+                } else {
+                    $terms_data[$post_type->name] = array();
+                }
+            }
+            $fonts = self::get_font_list();
+            include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
         }
     }
 
@@ -3209,153 +3325,46 @@ class WCP_Folders
         );
     }
 
-    function wcp_manage_columns_head($defaults, $d = "")
-    {
-        global $typenow;
-        $type = $typenow;
-        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
-            $type = self::sanitize_options($_REQUEST['post_type']);
-        }
-
-        $options = get_option("folders_settings");
-
-//        echo "<pre>"; print_r($defaults);
-        if (is_array($options) && in_array($type, $options)) {
-            $columns = array(
-                    'wcp_move' => '<div class="wcp-move-multiple wcp-col" title="' .  esc_html__('Move selected items', WCP_FOLDER) . '"><span class="dashicons dashicons-move"></span><div class="wcp-items"></div></div>',
-                ) + $defaults;
-            return $columns;
-        }
-        return $defaults;
-    }
-
-    function wcp_manage_columns_content($column_name, $post_ID)
-    {
-        $postIDs = self::$postIds;
-        if(!is_array($postIDs)) {
-            $postIDs = array();
-        }
-        if(!in_array($post_ID, $postIDs)) {
-            $postIDs[] = $post_ID;
-            self::$postIds = $postIDs;
-            global $typenow;
-            $type = $typenow;
-            if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save') {
-                $type = self::sanitize_options($_REQUEST['post_type']);
-            }
-
-            $options = get_option("folders_settings");
-            if (is_array($options) && in_array($type, $options)) {
-                if ($column_name == 'wcp_move') {
-                    $title = get_the_title();
-                    if (strlen($title) > 20) {
-                        $title = substr($title, 0, 20) . "...";
-                    }
-                    echo "<div class='wcp-move-file' data-id='{$post_ID}'><span class='wcp-move dashicons dashicons-move' data-id='{$post_ID}'></span><span class='wcp-item' data-object-id='{$post_ID}'>" . $title . "</span></div>";
-                }
-            }
-        }
-    }
-
-    function taxonomy_archive_exclude_children($query)
-    {
-        $options = get_option("folders_settings");
-        if (!empty($options)) {
-            $taxonomy_slugs = array();
-            foreach ($options as $option) {
-                $taxonomy_slugs[] = self::get_custom_post_type($option);
-            }
-            if (!empty($taxonomy_slugs)) {
-                $i = 0;
-                foreach ($query->tax_query->queries as $tax_query_item) {
-                    if (empty($taxonomy_slugs) || (isset($tax_query_item['taxonomy']) && in_array($tax_query_item['taxonomy'], $taxonomy_slugs))) {
-                        $query->tax_query->queries[$i]['include_children'] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-    public function admin_menu()
-    {
-        // Add menu item for settings page
-        $page_title =  esc_html__('Folders', WCP_FOLDER);
-        $menu_title =  esc_html__('Folders Settings', WCP_FOLDER);
-        $capability = 'manage_options';
-        $menu_slug = 'wcp_folders_settings';
-        $callback = array($this, "wcp_folders_settings");
-        $icon_url = 'dashicons-category';
-        $position = 99;
-
-        add_menu_page($page_title, $menu_title, $capability, $menu_slug, $callback, $icon_url, $position);
-
-        add_submenu_page(
-            $menu_slug,
-             esc_html__('Upgrade to Pro', WCP_FOLDER),
-             esc_html__('Upgrade to Pro', WCP_FOLDER),
-            'manage_options',
-            'wcp_folders_upgrade',
-            array($this, 'wcp_folders_upgrade')
-        );
-
-        self::check_and_set_post_type();
-
-        $show_menu = get_option("folders_show_in_menu", true);
-        if ($show_menu == "on") {
-            self::create_menu_for_folders();
-        }
-    }
-
-    public function wcp_folders_upgrade()
-    {
-        self::set_default_values_if_not_exists();
-        include_once dirname(dirname(__FILE__)) . "/templates/admin/upgrade-to-pro.php";
-    }
-
-    public function wcp_folders_settings()
-    {
-        self::set_default_values_if_not_exists();
-        $is_shown = get_option("folder_update_message");
-        if($is_shown === false) {
-            include_once dirname(dirname(__FILE__)) . "/templates/admin/update.php";
-        } else {
-            $options = get_option('folders_settings');
-            $options = (empty($options) || !is_array($options)) ?array():$options;
-            $post_types = get_post_types( array( 'public' => true ), 'objects' );
-            $terms_data = array();
-            foreach ($post_types as $post_type) {
-                if(in_array($post_type->name, $options)) {
-                    $term = $post_type->name;
-                    $term = self::get_custom_post_type($term);
-                    $categories = self::get_terms_hierarchical($term);
-                    $terms_data[$post_type->name] = $categories;
-                } else {
-                    $terms_data[$post_type->name] = array();
-                }
-            }
-            $fonts = self::get_font_list();
-            include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
-        }
-
-    }
-
     public function set_default_values_if_not_exists()
     {
         $options = get_option(WCP_FOLDER_VAR);
-        $options = is_array($options)?$options:array();
+        $options = empty($options) || !is_array($options) ? array() : $options;
         foreach ($options as $option) {
             $post_type = self::get_custom_post_type($option);
             $terms = get_terms($post_type, array(
                     'hide_empty' => false,
                 )
             );
-            foreach ($terms as $term) {
-                $order = get_term_meta($term->term_id, "wcp_custom_order", true);
-                if (empty($order) || $order == null) {
-                    update_term_meta($term->term_id, "wcp_custom_order", "1");
+            if (!empty($terms)) {
+                foreach ($terms as $term) {
+                    $order = get_term_meta($term->term_id, "wcp_custom_order", true);
+                    if (empty($order) || $order == null) {
+                        update_term_meta($term->term_id, "wcp_custom_order", "1");
+                    }
                 }
-
             }
         }
+    }
+
+    /* Free and Pro major changes */
+    public function check_has_valid_key()
+    {
+        /* Free/Pro: checking for key, for Free return 0, for Pro check for Key */
+        return 0;
+    }
+
+    public function get_license_key_information($licenseKey)
+    {
+        return array();
+    }
+
+    public function get_license_key_data($licenseKey = '')
+    {
+        return array();
+    }
+
+    public function check_for_license_key()
+    {
+        return false;
     }
 }

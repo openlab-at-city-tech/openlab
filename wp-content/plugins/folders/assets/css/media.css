@@ -3,7 +3,6 @@
     width: 66%;
 }
 .media-modal-content .media-frame select.attachment-filters {
-    width: auto;
     width: 28% !important;
 }
 #media-attachment-taxonomy-filter {
