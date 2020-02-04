@@ -1275,19 +1275,20 @@ body {
 	.empty-header-placeholder {
 		display: block;
 	}
-	/**legacy gutenberg plugin conflicts with adminbar styling**/
-	#editor {
-		.components-navigate-regions {
-			.edit-post-editor-regions {
-				position: relative;
-				left: auto;
-				top: auto;
-			}
-		}
+}
+
+#editor {
+	.edit-post-editor-regions {
+		top: 110px;
 	}
 }
 
 @media (min-width: 782px) {
+	#editor {
+		.edit-post-editor-regions {
+			top: 54px;
+		}
+	}
 	.edit-post-sidebar {
 		top: 128px;
 	}
