@@ -362,3 +362,17 @@ add_filter(
 	5
 
 );
+
+/**
+ * Prevent wpautop from running on group description excerpts.
+ *
+ * This breaks the markup necessary for auto-truncation.
+ */
+add_filter(
+	'bp_get_group_description_excerpt',
+	function( $excerpt ) {
+		remove_filter( 'bp_get_group_description_excerpt', 'wpautop' );
+		return $excerpt;
+	},
+	0
+);
