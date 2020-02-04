@@ -3,7 +3,7 @@ Contributors: MiKa
 Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, travelogue, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, WMS, OpenSeaMap, stamen, basemap, meta, thunderforest
 Requires at least: 3.0
 Tested up to: 5.3
-Stable tag: 5.3.4
+Stable tag: 5.3.6
 License: GPLv2
 Requires PHP: 5.3
 

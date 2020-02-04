@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2017  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2019  MiKa (http://wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@
 				$file_select_box
 				);
 
- 	$dontShow = array('&#8243;','&#8220;');
+ 	 $dontShow = array('&#8243;','&#8220;');
 
     $lat = str_replace($dontShow, '', $sc_args->getMapCenterLat());
     $lon = str_replace($dontShow, '', $sc_args->getMapCenterLon());
@@ -125,7 +125,7 @@
 	global $post;
 
     /** if not all 5 parameters are correctly set, a map instead of the text link will be shown */
-    if (($setup_zoom != 'undefined') &&
+   if (($setup_zoom != 'undefined') &&
     	($setup_layer != 'undefined') &&
     	($setup_center != 'undefined') &&
     	($setup_trigger != 'undefined') &&
@@ -133,26 +133,26 @@
 
     	$output = '<a class="setupChange" data-zoom="' . $setup_zoom .'"  data-center="' . $setup_center .'"  data-layer="' . $setup_layer .'"  data-map_name="' . $setup_map_name .'" title="' .  __('Klick auf diesen Text um die Karte zu beeinflussen', 'OSM_Plugin') .'">' . $setup_trigger . '</a>';
 
-	} else {
+	 } else {
 
 		if (($mwz != "true") && ($mwz != "false")){
 				$mwz = "false";
 				Osm::traceText(DEBUG_ERROR, "Error at argument mwz (true|false)!");
-			}
+		}
 
 			// if the markersize is set, we expect a private marker
-			if ($marker_size == "no"){
-			  $default_icon = new cOsm_icon($marker_name);
-			}
-			else{
-			  $default_icon = new cOsm_icon($marker_name, $sc_args->getMarkerHeight(), $sc_args->getMarkerWidth(), $sc_args->getMarkerFocus());
-			}
+		if ($marker_size == "no"){
+		  $default_icon = new cOsm_icon($marker_name);
+		}
+		else{
+		  $default_icon = new cOsm_icon($marker_name, $sc_args->getMarkerHeight(), $sc_args->getMarkerWidth(), $sc_args->getMarkerFocus());
+		}
 
-			$MapCounter += 1;
-                        $MapName = 'map_ol3js_' . $MapCounter;
+		$MapCounter += 1;
+      $MapName = 'map_ol3js_' . $MapCounter;
 
-			// $setup_map_name is a class name - to control several maps at once map_name need not to be unique on one page
-			$output = '
+		// $setup_map_name is a class name - to control several maps at once map_name need not to be unique on one page
+		$output = '
 				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; overflow:hidden;border:' . $map_border . ';" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
@@ -162,7 +162,7 @@
 			';
 
 
-if( $OL3_LIBS_LOADED == 0) {
+      if( $OL3_LIBS_LOADED == 0) {
 			  $OL3_LIBS_LOADED = 1;
 			  $output .= '
 				<link rel="stylesheet" href="' . Osm_OL_3_CSS . '" type="text/css">
@@ -238,10 +238,9 @@ if( $OL3_LIBS_LOADED == 0) {
 				/** if setup_map_name is set, set setup_map_name otherwise map */
 				if ($setup_map_name != 'undefined') {
 					 $map_link_name  = $setup_map_name;
-                                         echo "ERROR";
+                echo "ERROR";
 				} else {
 					$map_link_name  = $MapName;
-
 				}
 
 				$output .= '
@@ -378,6 +377,7 @@ if( $OL3_LIBS_LOADED == 0) {
 				//$output .= 'osm_addPopupClickhandler('. $MapName .',  "'. $MapName .'"); ';
 			  }
 			} // $file_list != "NoFile"
+			
 		  if ((($tagged_type == "post") || ($tagged_type == "page") || ($tagged_type == "any")) && ($tagged_param == "cluster")){
 			$tagged_icon = new cOsm_icon($default_icon->getIconName());
 
@@ -391,11 +391,9 @@ if( $OL3_LIBS_LOADED == 0) {
 			  ';
 
 
-				  foreach( $MarkerArray as $Marker ) {
-
-			   $MarkerText = addslashes($MarkerArray[$Counter]['text']);
-
-			 $output .= '
+			foreach( $MarkerArray as $Marker ) {
+			  $MarkerText = addslashes($MarkerArray[$Counter]['text']);
+           $output .= '
 				var iconFeature'.$Counter.' = new ol.Feature({
 				  geometry: new ol.geom.Point(
 				  ol.proj.transform(['.$MarkerArray[$Counter]['lon'].','.$MarkerArray[$Counter]['lat'].'], "EPSG:4326", "EPSG:3857")),
@@ -480,7 +478,8 @@ if( $OL3_LIBS_LOADED == 0) {
 			$output .= '
 			  var vectorMarkerSource = new ol.source.Vector({});
 			  var vectorMarkerLayer = new ol.layer.Vector({
-				source: vectorMarkerSource
+				source: vectorMarkerSource,
+				zIndex: 92
 			   });
 			';
 			foreach( $MarkerArray as $Marker ) {
@@ -571,9 +570,9 @@ if( $OL3_LIBS_LOADED == 0) {
 
 			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
 
-                  if (is_array($MarkerArray) || is_object($MarkerArray)) {
-			$NumOfMarker = count($MarkerArray);
-			$Counter = 0;
+         if (is_array($MarkerArray) || is_object($MarkerArray)) {
+			  $NumOfMarker = count($MarkerArray);
+			  $Counter = 0;
 
 			foreach( $MarkerArray as $Marker ) {
 			  $metapostmarker_text = addslashes($MarkerArray[$Counter]['text']);
