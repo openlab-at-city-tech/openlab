@@ -319,6 +319,7 @@ class GF_Query {
 						$operator = GF_Query_Condition::LIKE;
 						break;
 					case 'NOT IN':
+					case 'NOTIN':
 						$operator = GF_Query_Condition::NIN;
 						break;
 					case 'IN':
@@ -443,6 +444,7 @@ class GF_Query {
 				$operator = GF_Query_Condition::LIKE;
 				break;
 			case 'NOT IN':
+			case 'NOTIN':
 				$operator = GF_Query_Condition::NIN;
 				break;
 			case 'IN':
