@@ -9029,18 +9029,6 @@ module.exports = isEmpty;
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = tribe.common.hoc;
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = wp.element;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
 /**
  * This method returns `undefined`.
  *
@@ -9059,6 +9047,18 @@ function noop() {
 
 module.exports = noop;
 
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = tribe.common.hoc;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = wp.element;
 
 /***/ }),
 /* 28 */
@@ -10799,7 +10799,7 @@ var inherits = __webpack_require__(19);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ./node_modules/lodash/noop.js
-var noop = __webpack_require__(27);
+var noop = __webpack_require__(25);
 var noop_default = /*#__PURE__*/__webpack_require__.n(noop);
 
 // EXTERNAL MODULE: ./node_modules/lodash/isFunction.js
@@ -10815,7 +10815,7 @@ var validator = __webpack_require__(127);
 var validator_default = /*#__PURE__*/__webpack_require__.n(validator);
 
 // EXTERNAL MODULE: external {"var":"wp.element","root":["wp","element"]}
-var external_var_wp_element_root_wp_element_ = __webpack_require__(26);
+var external_var_wp_element_root_wp_element_ = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./src/modules/elements/input/style.pcss
 var style = __webpack_require__(584);
@@ -12016,7 +12016,7 @@ var es = __webpack_require__(32);
 var search = __webpack_require__(30);
 
 // EXTERNAL MODULE: external "tribe.common.hoc"
-var external_tribe_common_hoc_ = __webpack_require__(25);
+var external_tribe_common_hoc_ = __webpack_require__(26);
 
 // EXTERNAL MODULE: ./node_modules/lodash/uniqueId.js
 var uniqueId = __webpack_require__(498);
@@ -40016,7 +40016,7 @@ module.exports = baseUniq;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Set = __webpack_require__(149),
-    noop = __webpack_require__(27),
+    noop = __webpack_require__(25),
     setToArray = __webpack_require__(134);
 
 /** Used as references for various `Number` constants. */
@@ -44850,7 +44850,7 @@ var blocks_organizers = __webpack_require__(77);
 var ui = __webpack_require__(57);
 
 // EXTERNAL MODULE: external "tribe.common.hoc"
-var external_tribe_common_hoc_ = __webpack_require__(25);
+var external_tribe_common_hoc_ = __webpack_require__(26);
 
 // EXTERNAL MODULE: external "React"
 var external_React_ = __webpack_require__(3);
@@ -45880,6 +45880,10 @@ var event_datetime_container_mapDispatchToProps = function mapDispatchToProps(di
 };
 
 /* harmony default export */ var event_datetime_container = (Object(redux["c" /* compose */])(Object(external_tribe_common_hoc_["withStore"])(), Object(es["a" /* connect */])(event_datetime_container_mapStateToProps, event_datetime_container_mapDispatchToProps), Object(external_tribe_common_hoc_["withSaveData"])(), external_tribe_common_hoc_["withBlockCloser"])(event_datetime_template));
+// EXTERNAL MODULE: ./node_modules/lodash/noop.js
+var noop = __webpack_require__(25);
+var noop_default = /*#__PURE__*/__webpack_require__.n(noop);
+
 // EXTERNAL MODULE: external "tribe.common.utils.globals"
 var external_tribe_common_utils_globals_ = __webpack_require__(12);
 
@@ -46292,9 +46296,11 @@ template_EventDateTimeContent.propTypes = {
 /* harmony default export */ var content_template = (template_EventDateTimeContent);
 // CONCATENATED MODULE: ./src/modules/blocks/event-datetime/subblocks/content/container.js
 
+
 /**
  * External dependencies
  */
+
 
 
 
@@ -46339,7 +46345,8 @@ var content_container_mapStateToProps = function mapStateToProps(state) {
 
 var content_container_mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	return extends_default()({}, Object(redux["a" /* bindActionCreators */])(datetime["actions"], dispatch), Object(redux["a" /* bindActionCreators */])(price["a" /* actions */], dispatch), {
-		onDateTimeLabelClick: container_onDateTimeLabelClick(dispatch)
+		onDateTimeLabelClick: container_onDateTimeLabelClick(dispatch),
+		setInitialState: noop_default.a
 	});
 };
 
@@ -47035,15 +47042,11 @@ var event_datetime_timeZone = get_default()(external_tribe_common_utils_["global
 // EXTERNAL MODULE: ./src/modules/editor/utils/geo-data.js
 var geo_data = __webpack_require__(39);
 
-// EXTERNAL MODULE: ./node_modules/lodash/noop.js
-var noop = __webpack_require__(27);
-var noop_default = /*#__PURE__*/__webpack_require__.n(noop);
-
 // EXTERNAL MODULE: ./node_modules/he/he.js
 var he = __webpack_require__(139);
 
 // EXTERNAL MODULE: external {"var":"wp.element","root":["wp","element"]}
-var external_var_wp_element_root_wp_element_ = __webpack_require__(26);
+var external_var_wp_element_root_wp_element_ = __webpack_require__(27);
 
 // CONCATENATED MODULE: ./src/modules/blocks/event-venue/venue-details.js
 
