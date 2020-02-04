@@ -707,6 +707,9 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
         }
 
         public function add_plugin_action_links($links) {
+            if(!is_array($links)){
+                return $links;
+            }
             $settingsUrl = $this->getOption('plugin-redirect-after-install');
             if (!empty($settingsUrl)) {
                 $links[] = '<a href="' . esc_url($settingsUrl) . '">Settings</a>';
