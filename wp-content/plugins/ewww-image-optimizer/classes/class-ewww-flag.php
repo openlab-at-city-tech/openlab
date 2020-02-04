@@ -110,7 +110,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			if ( empty( $resume ) ) {
 				$button_text = esc_attr__( 'Start optimizing', 'ewww-image-optimizer' );
 			} else {
-				$button_text = esc_attr__( 'Resume previous bulk operation', 'ewww-image-optimizer' );
+				$button_text = esc_attr__( 'Resume previous optimization', 'ewww-image-optimizer' );
 			}
 			$delay = ewww_image_optimizer_get_option( 'ewww_image_optimizer_delay' ) ? ewww_image_optimizer_get_option( 'ewww_image_optimizer_delay' ) : 0;
 			/* translators: 1-4: number(s) of images */
@@ -153,7 +153,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			<p class="ewww-bulk-info"><?php echo $selected_images_text; ?><br />
 			<?php esc_html_e( 'Previously optimized images will be skipped by default.', 'ewww-image-optimizer' ); ?></p>
 			<form id="ewww-bulk-start" class="ewww-bulk-form" method="post" action="">
-				<input type="submit" class="button-secondary action" value="<?php echo $button_text; ?>" />
+				<input type="submit" class="button-primary action" value="<?php echo $button_text; ?>" />
 			</form>
 			<?php
 			// If there was a previous operation, offer the option to reset the option in the db.
@@ -737,6 +737,10 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			// Get the mimetype.
 			$type  = ewww_image_optimizer_mimetype( $file_path, 'i' );
 			$valid = true;
+			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_JPEGTRAN' ) ) {
+				ewww_image_optimizer_tool_init();
+				ewww_image_optimizer_notice_utils( 'quiet' );
+			}
 			// If we don't have a valid tool for the image type, output the appropriate message.
 			$skip = ewww_image_optimizer_skip_tools();
 			switch ( $type ) {

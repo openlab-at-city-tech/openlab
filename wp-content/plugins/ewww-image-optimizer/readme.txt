@@ -5,7 +5,7 @@ Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization,
 Requires at least: 5.0
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: 5.1.3
+Stable tag: 5.2.0
 License: GPLv3
 
 Speed up your website to better connect with your visitors. Properly compress and size/scale images. Includes lazy load and WebP convert.
@@ -173,6 +173,32 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 * Feature requests can be viewed and submitted at https://github.com/nosilver4u/ewww-image-optimizer/labels/enhancement
 * If you would like to help translate this plugin in your language, get started here: https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/
 
+= 5.2.0 =
+* added: Lazy Load, JS WebP, and Easy IO support background images on link elements
+* added: JS WebP supports background images on section, span, and li elements
+* added: exclude images from Easy IO in settings
+* added: exclude images from Lazy Load by string or class name
+* added: prevent auto-scaling with skip-autoscale
+* added: Folders to Optimize, Folders to Ignore, Lazy Load Exclusions, Easy IO Exclusions, and WebP URLs can be defined as overrides (single value as string, multiple values as an array)
+* added: API key, JPG Background (for conversion only), and Disabled Resizes can be defined as overrides, see https://docs.ewww.io/article/40-override-options
+* added: PNG placeholders for Lazy Load retrieved direct from API for drastically reduced memory usage (API users only)
+* added: Smart Re-optimize option available on Bulk Optimizer if you want to re-optimize images that were compressed on a different setting
+* added: auto-restore for Smart Re-optimize when going from lossy to lossless mode
+* added: Restore & Re-optimize from Media Library to change individual images from lossy to lossless
+* added: search function for Optimized Images table (Tools menu)
+* added: table cleanup for database table (Tools menu)
+* fixed: errors due to duplicate ssl= arguments in URLs
+* fixed: JS WebP has incorrect selector for video elements (props @CharlieHawker)
+* updated: embedded help code for better debug prefill
+
+= 5.1.4 =
+* fixed: warnings on FlaGallery's manage gallery page
+* fixed: cwebp version test results in false-positives
+* fixed: EWWW IO resize limits are ignored when higher than WP default
+* fixed: PNGOUT warning during one-click conversion
+* fixed: WebP images not removed from remote storage when an attachment is deleted (WP Offload Media)
+* fixed: after running regen for single thumbs with Image Regenerate & Select Crop plugin, regenerated images were not automatically optimized
+
 = 5.1.3 =
 * added: better compatibility with Divi filterable grid images and parallax backgrounds
 * added: cleanup .webp and database records when using Enable Media Replace
@@ -210,21 +236,9 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 * updated: cwebp requires Mac OS X 10.14
 * updated: FreeBSD 10 is EOL, version 11 is the supported/tested version
 
-= 5.0.0 =
-* added: use native lazy load attributes to supplement lazy loader and make placeholders more efficient
-* added: GCS sub-folder rewriting with ExactDN for cleaner URLs
-* added: option to optimize original versions of scaled images for WP 5.3
-* added: ability to erase optimization history from Tools page
-* changed: define EWWWIO_WPLR_AUTO (any value) to enable auto-optimize on images from WP/LR Sync
-* changed: thumbnails could be converted even if original was not
-* changed: Show Optimized Images table moved to Tools menu
-* fixed: full-size image optimization not deferred if scaled by WP 5.3
-* fixed: data-width and data-height attributes missing when JS WebP active
-* security: rewrote escapeshellarg() wrapper to be more secure
-
 = Earlier versions =
 Please refer to the separate changelog.txt file.
 
-== Contact and Credits ==
+== Credits ==
 
 Written by [Shane Bishop](https://ewww.io) with special thanks to my [Lord and Savior](https://www.iamsecond.com/). Based upon CW Image Optimizer, which was written by [Jacob Allred](http://www.jacoballred.com/) at [Corban Works, LLC](http://www.corbanworks.com/). CW Image Optimizer was based on WP Smush.it. Jpegtran is the work of the Independent JPEG Group. PEL is the work of Martin Geisler, Lars Olesen, and Erik Oskam. Easy IO and HTML parsing classes based upon the Photon module from Jetpack.
