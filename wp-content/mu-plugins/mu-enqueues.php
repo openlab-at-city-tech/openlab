@@ -85,11 +85,6 @@ function openlab_mu_enqueue() {
                 )
         );
     }
-
-	if ( is_admin() ) {
-		wp_enqueue_script( 'openlab-alt-text', content_url( 'mu-plugins/js/openlab/openlab.alt-text.js' ), [ 'jquery' ] );
-		wp_enqueue_style( 'openlab-alt-text', content_url( 'mu-plugins/css/openlab.alt-text.css' ) );
-	}
 }
 
 add_action('wp_enqueue_scripts', 'openlab_mu_enqueue', 9);
