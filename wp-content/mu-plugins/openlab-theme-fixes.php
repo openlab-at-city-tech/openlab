@@ -3,6 +3,30 @@
  * Theme-specific fixes.
  */
 
+function openlab_use_education_pro_new() {
+	// Never true on production.
+	if ( 'openlab.citytech.cuny.edu' === $_SERVER['HTTP_HOST'] ) {
+		return false;
+	}
+
+	$t = get_stylesheet();
+	if ( 'education-pro' !== $t ) {
+		return false;
+	}
+
+	global $current_blog;
+	$paths = [
+		'/boonetestcourse/' => 1,
+		'/jennasoerthemetesting' => 1,
+	];
+
+	if ( ! isset( $paths[ $current_blog->path ] ) ) {
+		return false;
+	}
+
+	return true;
+}
+
 /**
  * Loads CSS theme fixes for OpenLab site themes.
  */
@@ -34,7 +58,9 @@ function openlab_load_theme_fixes() {
 		case 'twentyeleven':
 		case 'twentynineteen':
 		case 'twentyten':
-			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $t ) . '/' . esc_attr( $t ) . '.css" />
+			$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+
+			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $subdir ) . '/' . esc_attr( $t ) . '.css" />
 ';
 		break;
 	}
@@ -58,7 +84,8 @@ add_action(
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'twentynineteen':
-				include __DIR__ . '/theme-fixes/' . $t . '/' . $t . '.php';
+				$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+				include __DIR__ . '/theme-fixes/' . $subdir . '/' . $t . '.php';
 			break;
 		}
 	}
@@ -78,7 +105,8 @@ add_action(
 			case 'hamilton':
 			case 'koji' :
 			case 'lingonberry' :
-				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $t . '/' . $t . '.js', array( 'jquery' ) ) );
+				$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '.js', array( 'jquery' ) ) );
 			break;
 		}
 	}
