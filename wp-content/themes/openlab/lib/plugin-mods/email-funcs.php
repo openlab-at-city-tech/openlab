@@ -95,6 +95,9 @@ function openlab_ass_group_subscribe_settings() {
         return false;
 
     $group_status = ass_get_group_subscription_status( bp_loggedin_user_id(), $group->id );
+	if ( ! $group_status ) {
+		$group_status = ass_get_default_subscription( $group );
+	}
 
 	$group_type_label = openlab_get_group_type_label( [ 'case' => 'upper' ] );
 
