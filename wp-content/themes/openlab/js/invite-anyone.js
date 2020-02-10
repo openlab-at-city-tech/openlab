@@ -19,6 +19,10 @@
 		$importMembersAddresses = $('#email-addresses-to-import');
 		$importMembersSubmit = $('#import-members-form input[type="submit"]');
 
+		if ( $importMembersAddresses.length === 0 ) {
+			return;
+		}
+
 		updateForm();
 
 		$acknowledgeCheckbox.on('change', updateForm);
