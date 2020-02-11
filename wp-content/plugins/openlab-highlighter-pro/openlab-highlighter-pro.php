@@ -20,6 +20,8 @@ function bootstrap() {
 	remove_action( 'wp_footer', 'highlighter_comment_form' );
 
 	add_filter( 'body_class', __NAMESPACE__ . '\\body_class' );
+	add_filter( 'redux/args/highlighter_settings', __NAMESPACE__ . '\\filter_settings' );
+
 	add_action( 'wp_footer', __NAMESPACE__ . '\\render_comment_form' );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
@@ -38,6 +40,19 @@ function body_class( $classes ) {
 	}
 
 	return $classes;
+}
+
+/**
+ * Removes unnecessary plugin settings.
+ *
+ * @param array $args
+ * @return array
+ */
+function filter_settings( $args ) {
+	// Disable Customizer panels
+	$args['customizer'] = false;
+
+	return $args;
 }
 
 /**
