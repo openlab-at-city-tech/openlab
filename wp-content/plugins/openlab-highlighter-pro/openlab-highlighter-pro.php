@@ -49,60 +49,61 @@ function body_class( $classes ) {
  */
 function render_comment_form() {
 	$options = \get_option( 'highlighter_settings' );
+	$types = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
 	$comments_enabled = $options['comments_enabled'] ? $options['comments_enabled'] : false;
 
-	// @todo check is_signular against CPT options.
-	if ( $comments_enabled && \is_singular() ) {
+	if ( ! $comments_enabled && ! \is_singular( $types ) ) {
+		return;
+	}
 
-		// get some user info
-		$current_user = \wp_get_current_user();
-		$avatar = '';
-		$name = '';
+	// get some user info
+	$current_user = \wp_get_current_user();
+	$avatar = '';
+	$name = '';
 
-		if ( $current_user instanceof \WP_User ) {
-			$avatar = \get_avatar( $current_user->user_email, 32 );
-			$name = $current_user->display_name;
-		}
+	if ( $current_user instanceof \WP_User ) {
+		$avatar = \get_avatar( $current_user->user_email, 32 );
+		$name = $current_user->display_name;
+	}
 
-		// setup comment form
-		$comment_args = array(
-			'id_form' => 'highlighter-comment-form',
-			'title_reply' => '',
-			'id_submit'   => 'highlighter-comment-submit',
-			'label_submit' => __( 'Respond', 'highlighter' ),
-			'submit_button' => '<div class="btn-confirm confirm-yes">
-				<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s" />
-			</div>',
-			'fields' => apply_filters( 'comment_form_default_fields', array(
-					'author' => '',
-					'email'  => '',
-					'url'    => '' ) ),
-			'must_log_in' => '',
-			'logged_in_as' => '',
-			'comment_field' => '<textarea id="highlighter-comment-textarea" name="comment" aria-required="true"></textarea>',
-			'comment_notes_before' => '',
-			'comment_notes_after' => '',
-		);
+	// setup comment form
+	$comment_args = array(
+		'id_form' => 'highlighter-comment-form',
+		'title_reply' => '',
+		'id_submit'   => 'highlighter-comment-submit',
+		'label_submit' => __( 'Respond', 'highlighter' ),
+		'submit_button' => '<div class="btn-confirm confirm-yes">
+			<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s" />
+		</div>',
+		'fields' => apply_filters( 'comment_form_default_fields', array(
+				'author' => '',
+				'email'  => '',
+				'url'    => '' ) ),
+		'must_log_in' => '',
+		'logged_in_as' => '',
+		'comment_field' => '<textarea id="highlighter-comment-textarea" name="comment" aria-required="true"></textarea>',
+		'comment_notes_before' => '',
+		'comment_notes_after' => '',
+	);
 
-		?>
+	?>
 
-		<div class="highlighter-docked-panel highlighter-comments-wrapper">
-			<div class="highlighter-docked-header"><?php _e( 'Add Comment', 'highlighter' ); ?></div>
+	<div class="highlighter-docked-panel highlighter-comments-wrapper">
+		<div class="highlighter-docked-header"><?php _e( 'Add Comment', 'highlighter' ); ?></div>
 
-			<div class="highlighter-comments-user">
-				<?php echo $avatar; ?>
-				<span class="highlighter-comments-name"><?php echo $name; ?></span>
-			</div>
-
-			<div class="highlighter-comment">
-				<div class="highlighter-view-loading"><?php _e( 'Loading...', 'highlighter' ); ?></div>
-
-				<?php \comment_form( $comment_args ); ?>
-
-				<div class="btn-confirm confirm-no"><?php _e('Cancel', 'highlighter'); ?></div>
-			</div>
+		<div class="highlighter-comments-user">
+			<?php echo $avatar; ?>
+			<span class="highlighter-comments-name"><?php echo $name; ?></span>
 		</div>
 
+		<div class="highlighter-comment">
+			<div class="highlighter-view-loading"><?php _e( 'Loading...', 'highlighter' ); ?></div>
+
+			<?php \comment_form( $comment_args ); ?>
+
+			<div class="btn-confirm confirm-no"><?php _e('Cancel', 'highlighter'); ?></div>
+		</div>
+	</div>
+
 	<?php
-	}
 }
