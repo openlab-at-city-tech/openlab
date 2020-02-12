@@ -469,29 +469,8 @@ function openlab_group_documents_email_notification( $document ) {
 		),
 	);
 
-	//these will be all the emails getting the update
-	//'user_id' => 'user_email
+	// These will be all the emails getting the notification.
 	$emails = array();
-
-	//first get the admin & moderator emails
-	if ( count( $bp->groups->current_group->admins ) ) {
-		foreach ( $bp->groups->current_group->admins as $user ) {
-			if ( 'no' === get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) {
-				continue;
-			}
-			$emails[ $user->user_id ] = $user->user_email;
-		}
-	}
-	if ( count( $bp->groups->current_group->mods ) ) {
-		foreach ( $bp->groups->current_group->mods as $user ) {
-			if ( 'no' === get_user_meta( $user->user_id, 'notification_group_documents_upload_mod' ) ) {
-				continue;
-			}
-			if ( ! in_array( $user->user_email, $emails, true ) ) {
-				$emails[ $user->user_id ] = $user->user_email;
-			}
-		}
-	}
 
 	$group_user_subscriptions = ass_get_subscriptions_for_group( bp_get_current_group_id() );
 
