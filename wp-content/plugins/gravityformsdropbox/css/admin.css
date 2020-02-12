@@ -1,0 +1,16 @@
+#tab_gravityformsdropbox table.gforms_form_settings > tbody > tr > th {
+	padding: 0;
+	width: 36px;
+}
+
+#gform_dropbox_auth_button {
+	margin-bottom: 1em;
+}
+
+ #gform_dropbox_deauth_button {
+	 margin-top: 1em;
+ }
+
+.form-table td .gform_dropbox_disclaimer {
+	font-size: 12px;
+}
