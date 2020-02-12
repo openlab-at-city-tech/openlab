@@ -18,6 +18,16 @@ function bootstrap() {
 
 	// Remove core hooks
 	remove_action( 'wp_footer', 'highlighter_comment_form' );
+	remove_action( 'wp_footer', 'highlighter_login' );
+
+	// Disable AJAX callbacks
+	remove_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
+	remove_action( 'wp_ajax_nopriv_ajaxregister', 'ajax_register' );
+	remove_action( 'wp_ajax_nopriv_ajaxforgotpassword', 'ajax_forgotPassword' );
+
+	// Don't allow content sumbission unauthorized users.
+	remove_action( 'wp_ajax_nopriv_ajax-update-content', 'ajax_update_content' );
+	remove_action( 'wp_ajax_nopriv_ajaxcomments', 'ajax_submit_comment' );
 
 	add_filter( 'body_class', __NAMESPACE__ . '\\body_class' );
 	add_filter( 'redux/args/highlighter_settings', __NAMESPACE__ . '\\filter_settings' );
