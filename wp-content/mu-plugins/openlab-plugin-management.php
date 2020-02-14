@@ -178,3 +178,15 @@ function openlab_tablepress_stylesheet( $atts ) {
 	return $atts;
 }
 add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );
+
+
+function openlab_jetpack_module_management($modules)
+{
+    if (isset($modules['notes'])) {
+        unset($modules['notes']);
+    }
+
+    return $modules;
+}
+
+add_filter('jetpack_get_available_modules', 'openlab_jetpack_module_management');
