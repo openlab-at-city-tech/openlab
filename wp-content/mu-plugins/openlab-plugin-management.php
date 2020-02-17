@@ -188,9 +188,17 @@ function openlab_tablepress_stylesheet( $atts ) {
 }
 add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );
 
+/**Jetpack**/
 
+/**
+ * Remove entire modules from Jetpack
+ *
+ * @param  mixed $modules
+ * @return void
+ */
 function openlab_jetpack_module_management($modules)
 {
+	//remove Jetpack notes
     if (isset($modules['notes'])) {
         unset($modules['notes']);
     }
@@ -199,3 +207,61 @@ function openlab_jetpack_module_management($modules)
 }
 
 add_filter('jetpack_get_available_modules', 'openlab_jetpack_module_management');
+
+/**
+ * Remove Jetpack adminbar hooks that cause styling and functionality conflicts
+ * Hooks into wp_head to maximize hook coverage
+ *
+ * @return void
+ */
+function openlab_jetpack_adminbar_management()
+{
+
+    //remove JetPack stats in adminbar
+    if (class_exists('Jetpack')) {
+        remove_action('admin_bar_menu', 'stats_admin_bar_menu', 100);
+
+        //remove JetPack likes in adminbar
+        if (class_exists('Jetpack_Likes')) {
+            openlab_remove_filters_for_anonymous_class('admin_bar_menu', 'Jetpack_Likes', 'admin_bar_likes', 60);
+        }
+
+    }
+
+}
+
+add_action('wp_head', 'openlab_jetpack_adminbar_management', 9999);
+
+/**Utilities**/
+/**
+ * Allow to remove method for an hook when, it's a class method used and class don't have variable, but you know the class name
+ * Courtesy of: https://github.com/herewithme/wp-filters-extras
+ */
+function openlab_remove_filters_for_anonymous_class($hook_name = '', $class_name = '', $method_name = '', $priority = 0)
+{
+    global $wp_filter;
+
+    // Take only filters on right hook name and priority
+    if (!isset($wp_filter[$hook_name][$priority]) || !is_array($wp_filter[$hook_name][$priority])) {
+        return false;
+    }
+
+    // Loop on filters registered
+    foreach ((array) $wp_filter[$hook_name][$priority] as $unique_id => $filter_array) {
+        // Test if filter is an array ! (always for class/method)
+        if (isset($filter_array['function']) && is_array($filter_array['function'])) {
+            // Test if object is a class, class and method is equal to param !
+            if (is_object($filter_array['function'][0]) && get_class($filter_array['function'][0]) && get_class($filter_array['function'][0]) == $class_name && $filter_array['function'][1] == $method_name) {
+                // Test for WordPress >= 4.7 WP_Hook class (https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/)
+                if (is_a($wp_filter[$hook_name], 'WP_Hook')) {
+                    unset($wp_filter[$hook_name]->callbacks[$priority][$unique_id]);
+                } else {
+                    unset($wp_filter[$hook_name][$priority][$unique_id]);
+                }
+            }
+        }
+
+    }
+
+    return false;
+}
