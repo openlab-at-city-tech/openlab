@@ -755,6 +755,15 @@ class GFFormsModel {
 			}
 		}
 
+		/**
+		 * Modifies the summary of all forms, includes unread and total entry counts.
+		 *
+		 * @since 2.4.16
+		 *
+		 * @param array $forms Form summary.
+		 */
+		$forms = apply_filters( 'gform_form_summary', $forms );
+
 		return $forms;
 	}
 
@@ -4835,7 +4844,7 @@ class GFFormsModel {
 			}
 		}
 
-		$name     = basename( $url );
+		$name     = wp_basename( $url );
 		$filename = wp_unique_filename( $upload_dir['path'], $name );
 
 		// the destination path
@@ -4879,7 +4888,7 @@ class GFFormsModel {
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
-		$name = basename( $url );
+		$name = wp_basename( $url );
 
 		$file = self::copy_post_image( $url, $post_id );
 
@@ -5219,6 +5228,17 @@ class GFFormsModel {
 		return true;
 	}
 
+	/**
+	 * Checks if any field updates, inserts, or deletions have been registered for batch processing.
+	 *
+	 * @since 2.4.17
+	 *
+	 * @return bool
+	 */
+	public static function has_batch_field_operations() {
+		return ! empty( self::$_batch_field_updates ) || ! empty( self::$_batch_field_inserts ) || ! empty( self::$_batch_field_deletes );
+	}
+
 	public static function flush_batch_field_operations() {
 		self::$_batch_field_updates = array();
 		self::$_batch_field_inserts = array();
@@ -5419,13 +5439,12 @@ class GFFormsModel {
 
 		//Add the original filename to our target path.
 		//Result is "uploads/filename.extension"
-		$file_info = pathinfo( $file_name );
-		$extension = rgar( $file_info, 'extension' );
+		$extension = pathinfo( $file_name, PATHINFO_EXTENSION );
 		if ( ! empty( $extension ) ) {
 			$extension = '.' . $extension;
 		}
-		$file_name = basename( $file_info['basename'], $extension );
 
+		$file_name = wp_basename( $file_name, $extension );
 		$file_name = sanitize_file_name( $file_name );
 
 		$counter     = 1;
@@ -7390,15 +7409,15 @@ class GFFormsModel {
 				if ( isset( $upload_field[0] ) && is_array( $upload_field[0] ) ) {
 					foreach ( $upload_field as &$upload ) {
 						if ( isset( $upload['temp_filename'] ) ) {
-							$upload['temp_filename'] = sanitize_file_name( basename( $upload['temp_filename'] ) );
+							$upload['temp_filename'] = sanitize_file_name( wp_basename( $upload['temp_filename'] ) );
 						}
 						if ( isset( $upload['uploaded_filename'] ) ) {
-							$upload['uploaded_filename'] = sanitize_file_name( basename( $upload['uploaded_filename'] ) );
+							$upload['uploaded_filename'] = sanitize_file_name( wp_basename( $upload['uploaded_filename'] ) );
 						}
 					}
 				}
 			} else {
-				$upload_field = basename( $upload_field );
+				$upload_field = wp_basename( $upload_field );
 			}
 		}
 

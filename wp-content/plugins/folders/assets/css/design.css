@@ -1,16 +1,12 @@
 .wcp-custom-menu {
     padding-left: 0px;
-
 }
-
 .wcp-custom-menu {
     position: relative;
 }
-
 .wcp-container ul {
     list-style: none;
 }
-
 .wcp-container .route {
     position: relative;
     list-style-type: none;
@@ -25,7 +21,6 @@
     z-index: -1;
     background: transparent;
 }
-
 .wcp-container .route span {
     position: absolute;
     top: 2px;
@@ -37,7 +32,6 @@
     font-size: 20px;
     background: no-repeat;
 }
-
 .wcp-container .route .title {
     position: absolute;
     border: 0;
@@ -57,11 +51,9 @@
     -moz-border-radius: 4px;
     overflow: hidden;
 }
-
 .wcp-container .first-title {
     margin-left: 10px;
 }
-
 .wcp-container .space {
     position: relative;
     list-style-type: none;
@@ -73,45 +65,36 @@
     height: 100%;
     z-index: 1;
 }
-
 .wcp-container .first-space {
     margin-left: 10px;
     top: 10px;
 }
-
 i.fa-caret-right {
     transition: 0.1s;
     -webkit-transition: 0.1s;
     -moz-transition: 0.1s;
 }
-
 li.active > span > i.fa-caret-right {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
 }
-
 li.active > span > i.fa-folder:before {
     content: "\f07c";
 }
-
 .has-sub-tree > ul.ui-sortable  li {
     display: none;
 }
-
 .has-sub-tree.active > ul.ui-sortable > li {
     display: block;
 }
-
 .nav-icon {
     display: none;
     left: -20px !important;
 }
-
 .has-sub-tree > .nav-icon {
     display: block;
 }
-
 .wcp-content {
     position: fixed !important;
     top: 32px;
@@ -214,7 +197,6 @@ html[dir="rtl"] body.wp-admin #wpcontent {
 .wcp-form-data .form-field {
     padding: 0 0 10px 0;
 }
-
 .wcp-form-data .form-field input, .wcp-form-data .form-field select {
     width: 100%;
 }
@@ -420,11 +402,9 @@ span.total-count {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
 }
-
 .route.active > .ui-icon > .folder-icon-folder:before {
     content: "\e90c";
 }
-
 .wcp-container .route span.total-count {
     position: relative;
     font-size: 8px;
@@ -433,7 +413,7 @@ span.total-count {
     width: auto;
     background: #fff;
     display: block;
-    margin: 6px 3px 3px 3px;
+    margin: 4px 3px 3px 3px;
     color: #23282d !important;
     line-height: 16px;
     height: 16px;
@@ -442,7 +422,7 @@ span.total-count {
     position: absolute;
     left: 50px;
     background: #fff;
-    width: 140px;
+    width: 170px;
     padding: 0;
     z-index: 101;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
@@ -461,6 +441,8 @@ span.total-count {
     position: relative;
     display: block;
     padding: 5px 10px;
+    line-height: 18px;
+    white-space: nowrap;
 }
 .wcp-container .route .dynamic-menu ul > li > a > span, .wcp-container .route .dynamic-menu ul > li > a > span span {
     position: relative;
@@ -470,13 +452,13 @@ span.total-count {
     margin-right: 5px;
 }
 .wcp-container .route .dynamic-menu ul > li > a > span span {
-top: auto;
-height: auto;
-width: auto;
-margin: 0;
-left: auto;
-vertical-align: baseline;
-display: inline;
+    top: auto;
+    height: auto;
+    width: auto;
+    margin: 0;
+    left: auto;
+    vertical-align: baseline;
+    display: inline;
 }
 .dynamic-menu li.new-folder {
     border-bottom: solid 1px #d8d8d8;
@@ -568,7 +550,6 @@ td.wcp_move.column-wcp_move {
 .ui-draggable-dragging {
     z-index: 1051 !important;
 }
-
 .wcp-hover-list {
     background: #008ec2 !important;
     color: #fff;
@@ -606,7 +587,6 @@ span.wcp-item {
 .tree-structure .folder-view:hover {
     background: #008ec2;
     color: #ffffff;
-
 }
 .wcp-drop-hover-list a.folder-view:before {
     width: 100%;
@@ -647,11 +627,13 @@ span.wcp-item {
     position: relative;
     top: auto;
     left: auto;
-    width: auto;
     display: inline-block;
     font-size: 16px;
     line-height: 30px;
     height: 30px;
+    width: calc(100% - 80px);
+    overflow: hidden;
+    white-space: nowrap;
 }
 .ui-resizable-handle.ui-resizable-e {
     position: absolute;
@@ -683,7 +665,6 @@ span.wcp-item {
     border-right: 1px solid #ccc;
     cursor: col-resize;
 }
-
 div#custom-menu {
     padding-bottom: 120px;
     padding-left: 4px;
@@ -724,7 +705,6 @@ div#custom-menu {
  .wcp-container .route span.star-icon:after {
     content: "\e907";
 }
-
 .tree-structure li {
     display: block;
     width: 16.667%;
@@ -834,6 +814,9 @@ body.upload-php.eml-grid #wpbody {
     right: auto !important;;
     height: auto;
 }
+#footer-thankyou {
+    display: none;
+}
 span.upgrade-message {
     padding: 0px 0 10px;
     background: #fff;
@@ -846,14 +829,12 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
     text-decoration: none;
     font-weight: bold;
 }
-
 .media-toolbar.sticky-media {
     position: fixed;
     top: 32px;
     right: 18px !important;
     left: auto;
 }
-
 .media-position {
     width: 1px;
     height: 1px;
@@ -910,7 +891,6 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
 .hide-folders-area .wcp-container {
     display: none;
 }
-
 .wcp-hide-show-buttons .toggle-buttons.active {
     display: block;
 }
@@ -938,7 +918,6 @@ button.button.organize-button:hover, button.button.organize-button:focus {
     color: #ffffff;
     /*border: solid 1px #bc0f50;*/
 }
-
 button.button.organize-button:hover:after {
     content: "";
     width: 100%;
@@ -1004,14 +983,12 @@ span.media-info-message {
     line-height: 20px;
     font-weight: bold;
     color: #f51366;
-    padding: 0 0 0 20px;
+    padding: 0 0 10px 0;
     display: none !important;;
 }
 span.media-info-message.active {
     display: block !important;
 }
-
-
 /* custom popup css */
 .folder-popup-form {
     position: fixed;
@@ -1061,11 +1038,9 @@ span.media-info-message.active {
     -webkit-animation: fa-spin 0.75s infinite linear;
     animation: fa-spin 0.75s infinite linear;
 }
-
 [data-tooltip] {
     position: relative; /* opinion 1 */
 }
-
 /* Applies to all tooltips */
 [data-tooltip]::before,
 [data-tooltip]::after {
@@ -1085,11 +1060,9 @@ span.media-info-message.active {
 }
 [data-tooltip]::after {
     content: attr(data-tooltip); /* magic! */
-
     /* most of the rest of this is opinion */
     font-family: Helvetica, sans-serif;
     text-align: center;
-
     /*
       Let the content set the size of the tooltips
       but this will also keep them from being obnoxious
@@ -1106,7 +1079,6 @@ span.media-info-message.active {
     color: #fff;
     z-index: 1000; /* absurdity 2 */
 }
-
 /* Make the tooltips respond to hover */
 [data-tooltip]:hover::before,
 [data-tooltip]:hover::after {
@@ -1131,7 +1103,6 @@ span.media-info-message.active {
     left: 50%;
     transform: translate(-50%, -.5em);
 }
-
 #remove-folder-item {
     width: 126px !important;
 }
@@ -1220,7 +1191,6 @@ span.media-info-message.active {
 .folder-form-errors.active {
     display: block;
 }
-
 .sticky-menu #adminmenuwrap {
     position: relative !important;
 }
@@ -1245,7 +1215,6 @@ span.folder-loader-ajax {
         transform: scale(1);
     }
 }
-
 @keyframes scaleAnimation {
     0% {
         opacity: 0;
@@ -1326,12 +1295,10 @@ span.folder-loader-ajax {
     stroke-dasharray: 151px 151px;
     stroke: #2CE0A7;
 }
-
 #successAnimationCheck {
     stroke-dasharray: 36px 36px;
     stroke: #2CE0A7;
 }
-
 #successAnimationResult {
     fill: #2CE0A7;
     opacity: 0;
@@ -1352,7 +1319,6 @@ svg#successAnimation {
 .folder-loader-ajax img.active {
     display: inline-block;
 }
-
 #successAnimation.animated {
     -webkit-animation: 1s ease-out 0s 1 both scaleAnimation;
     animation: 1s ease-out 0s 1 both scaleAnimation;
@@ -1389,7 +1355,6 @@ svg#successAnimation {
         width: 25%;
     }
 }
-
 @media screen and (max-width: 780px) {
     .wcp-content {
         left: 0px;
@@ -1401,8 +1366,6 @@ svg#successAnimation {
         width: 33.33%;
     }
 }
-
-
 @media screen and (max-width: 640px) {
     .wcp-content {
         left: 0px;

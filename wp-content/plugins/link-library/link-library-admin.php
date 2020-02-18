@@ -1065,7 +1065,7 @@ class link_library_plugin_admin {
 								} ?>><?php _e( 'Reciprocal Check', 'link-library' ); ?></a>
 							</li>
 							<li class="link-library-page">
-								<a href="https://ylefebvre.home.blog/wordpress-plugins/link-library/link-library-faq/"><?php _e( 'FAQ', 'link-library' ); ?></a>
+								<a target="LinkLibraryFAQ" href="https://ylefebvre.home.blog/wordpress-plugins/link-library/link-library-faq/"><?php _e( 'FAQ', 'link-library' ); ?></a>
 							</li>
 							<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
 								<li class="link-library-page">
@@ -6436,7 +6436,10 @@ class link_library_plugin_admin {
 
 		if ( $links ) {
 			foreach ( $links as $link ) {
-				echo $link->ID . ' - ' . $link->post_title . '<br /><br />';
+				echo $link->ID . ' - ' . $link->post_title;
+				echo ' - <a href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => $link->ID ), admin_url( 'post.php' ) ) );
+				echo '">(' . __('Edit', 'link-library') . ')</a>';
+				echo '<br /><br />';
 			}
 		} else {
 			echo 'No duplicate name links found';
@@ -6487,22 +6490,26 @@ function link_library_reciprocal_link_checker() {
 					$reciprocal_result = $my_link_library_plugin->CheckReciprocalLink( $RecipCheckAddress, $link_url );
 				}
 
+				if ( ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) || 'broken' == $check_type && strpos( $reciprocal_result, 'exists' ) !== false ) {
+					echo '<div class="nextcheckitem"></div>';
+					continue;
+				}
+
 				echo '<a href="' . $link_url . '">' . get_the_title() . '</a>: ';
 
 				if ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_notfound' ) {
-					echo '<span style="color: #FF0000">' . __( 'Not Found', 'link-library' ) . '</span><br />';
-				} elseif ( 'reciprocal' == $check_type && $reciprocal_result == 'exists_found' ) {
-					echo '<span style="color: #00FF00">' . __( 'OK', 'link-library' ) . '</span><br />';
-				} elseif ( 'broken' == $check_type && strpos( $reciprocal_result, 'exists' ) !== false ) {
-					echo '<span style="color: #00FF00">' . __( 'Link valid', 'link-library' ) . '</span><br />';
+					echo '<span style="color: #FF0000">' . __( 'Not Found', 'link-library' ) . '</span>';
 				} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == true ) {
 					wp_delete_post( get_the_ID() );
-					echo '<span style="color: #FF0000">' . __( 'Error 403: Link Deleted', 'link-library' ) . '</span><br />';
+					echo '<span style="color: #FF0000">' . __( 'Error 403: Link Deleted', 'link-library' ) . '</span>';
 				} elseif ( $reciprocal_result == 'error_403' && $recipcheckdelete403 == false ) {
-					echo '<span style="color: #FF0000">' . __( 'Error 403', 'link-library' ) . '</span><br />';
+					echo '<span style="color: #FF0000">' . __( 'Error 403', 'link-library' ) . '</span>';
 				} elseif ( $reciprocal_result == 'unreachable' ) {
-					echo '<span style="color: #FF0000">' . __( 'Website Unreachable', 'link-library' ) . '</span><br />';
+					echo '<span style="color: #FF0000">' . __( 'Website Unreachable', 'link-library' ) . '</span>';
 				}
+
+				echo ' - <a target="linkedit' . get_the_ID() . '" href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => get_the_ID() ), admin_url( 'post.php' ) ) );
+				echo '">(' . __('Edit', 'link-library') . ')</a><br />';
 			}
 
 			echo '<div class="nextcheckitem"></div>';

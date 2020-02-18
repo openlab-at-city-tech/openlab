@@ -101,11 +101,6 @@ if ( !empty( $_GET['group_sequence'] ) ) {
             <?php $count++ ?>
 		<?php endwhile; ?>
         </div>
-        <script type="text/javascript">
-            (function($){
-              $('.item-content-wrapper p').css('opacity','0');
-            })(jQuery);
-        </script>
 
 		<div class="pagination-links" id="group-dir-pag-top">
 			<?php echo openlab_groups_pagination_links() ?>

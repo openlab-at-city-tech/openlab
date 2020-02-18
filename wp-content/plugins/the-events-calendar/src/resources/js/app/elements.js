@@ -5875,18 +5875,6 @@ module.exports = isEmpty;
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = tribe.common.hoc;
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = wp.element;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
 /**
  * This method returns `undefined`.
  *
@@ -5905,6 +5893,18 @@ function noop() {
 
 module.exports = noop;
 
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = tribe.common.hoc;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = wp.element;
 
 /***/ }),
 /* 28 */
@@ -7369,7 +7369,7 @@ var inherits = __webpack_require__(19);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ./node_modules/lodash/noop.js
-var noop = __webpack_require__(27);
+var noop = __webpack_require__(25);
 var noop_default = /*#__PURE__*/__webpack_require__.n(noop);
 
 // EXTERNAL MODULE: ./node_modules/lodash/isFunction.js
@@ -7385,7 +7385,7 @@ var validator = __webpack_require__(127);
 var validator_default = /*#__PURE__*/__webpack_require__.n(validator);
 
 // EXTERNAL MODULE: external {"var":"wp.element","root":["wp","element"]}
-var external_var_wp_element_root_wp_element_ = __webpack_require__(26);
+var external_var_wp_element_root_wp_element_ = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./src/modules/elements/input/style.pcss
 var style = __webpack_require__(584);
@@ -8586,7 +8586,7 @@ var es = __webpack_require__(32);
 var search = __webpack_require__(30);
 
 // EXTERNAL MODULE: external "tribe.common.hoc"
-var external_tribe_common_hoc_ = __webpack_require__(25);
+var external_tribe_common_hoc_ = __webpack_require__(26);
 
 // EXTERNAL MODULE: ./node_modules/lodash/uniqueId.js
 var uniqueId = __webpack_require__(498);

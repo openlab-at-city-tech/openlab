@@ -4,7 +4,7 @@ Plugin Name: MapPress Maps for WordPress
 Plugin URI: https://www.mappresspro.com/mappress
 Author URI: https://www.mappresspro.com/chris-contact
 Description: MapPress makes it easy to add Google and Leaflet Maps to WordPress
-Version: 2.53.3
+Version: 2.53.4
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Matthias Stasiak for his wonderful icons (http://code.google.com/p/google-maps-icons/)
@@ -35,7 +35,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.53.3';
+	const VERSION = '2.53.4';
 
 	static
 		$baseurl,
@@ -584,7 +584,7 @@ class Mappress {
 		$atts = array_change_key_case($atts);
 
 		// Map options - includes both leaflet and Google
-		foreach(array('disableDefaultUI', 'disableDoubleClickZoom', 'draggable', 'fullscreenControl', 'keyboardShortcuts', 'mapTypeControl', 'maxZoom', 'minZoom', 'panControl', 'rotateControl', 'scaleControl', 'scrollwheel', 'scrollWheelZoom', 'streetViewControl', 'zoomControl') as $opt) {
+		foreach(array('disableDefaultUI', 'disableDoubleClickZoom', 'draggable', 'dragging', 'fullscreenControl', 'keyboard', 'keyboardShortcuts', 'mapTypeControl', 'maxZoom', 'minZoom', 'panControl', 'rotateControl', 'scaleControl', 'scrollwheel', 'scrollWheelZoom', 'streetViewControl', 'zoomControl') as $opt) {
 			$lcopt = strtolower($opt);
 			if (isset($atts[$lcopt])) {
 				$atts['mapopts'][$opt] = $atts[$lcopt];
@@ -645,6 +645,10 @@ class Mappress {
 
 		// Determine what to show
 		$mapid = (isset($atts['mapid'])) ? $atts['mapid'] : null;
+
+		// On archive pages, $post isn't set
+		if (!$mapid && !$post)
+			return;
 
 		if ($mapid) {
 			// Show map by mapid

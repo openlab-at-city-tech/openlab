@@ -27,6 +27,7 @@
 		top: 63px;
 		min-width: 0;
 		z-index: 99997;
+		-webkit-font-smoothing: auto;
 		a {
 			&:focus {
 				outline: solid;
@@ -426,6 +427,9 @@
 			#wp-admin-bar-site-name {
 				border-left: none;
 				max-width: 320px;
+				@media (max-width: @screen-md-max) and (min-width: @screen-md-min){
+					max-width: 260px;
+				}
 				> .ab-item {
 					white-space: normal;
 					display: flex;
@@ -1272,19 +1276,22 @@ body {
 	.empty-header-placeholder {
 		display: block;
 	}
-	/**legacy gutenberg plugin conflicts with adminbar styling**/
-	#editor {
-		.components-navigate-regions {
-			.edit-post-editor-regions {
-				position: relative;
-				left: auto;
-				top: auto;
-			}
-		}
+}
+
+#editor {
+	.editor-post-publish-panel,
+	.edit-post-editor-regions {
+		top: 110px;
 	}
 }
 
 @media (min-width: 782px) {
+	#editor {
+		.editor-post-publish-panel,
+		.edit-post-editor-regions {
+			top: 54px;
+		}
+	}
 	.edit-post-sidebar {
 		top: 128px;
 	}

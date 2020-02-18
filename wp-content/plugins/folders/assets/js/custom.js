@@ -74,7 +74,7 @@ jQuery(document).ready(function(){
 						add_menu_to_list();
 						jQuery(".folder-popup-form").hide();
 						jQuery(".folder-popup-form").removeClass("disabled");
-                        ajaxAnimation();
+						ajaxAnimation();
 						if(jQuery("#media-attachment-taxonomy-filter").length) {
 							fileFolderID = result.term_id;
 							resetMediaData(0);
@@ -120,7 +120,7 @@ jQuery(document).ready(function(){
 						add_menu_to_list();
 						jQuery(".folder-popup-form").hide();
 						jQuery(".folder-popup-form").removeClass("disabled");
-                        ajaxAnimation();
+						ajaxAnimation();
 						if(jQuery("#media-attachment-taxonomy-filter").length) {
 							resetMediaData(0)
 						}
@@ -259,14 +259,14 @@ function triggerInlineUpdate() {
 }
 
 function ajaxAnimation() {
-    jQuery(".folder-loader-ajax").addClass("active");
-    jQuery(".folder-loader-ajax img").removeClass("active");
-    jQuery(".folder-loader-ajax svg#successAnimation").addClass("active").addClass("animated");
-    setTimeout(function(){
-        jQuery(".folder-loader-ajax").removeClass("active");
-        jQuery(".folder-loader-ajax img").addClass("active");
-        jQuery(".folder-loader-ajax svg#successAnimation").removeClass("active").removeClass("animated");
-    }, 2000);
+	jQuery(".folder-loader-ajax").addClass("active");
+	jQuery(".folder-loader-ajax img").removeClass("active");
+	jQuery(".folder-loader-ajax svg#successAnimation").addClass("active").addClass("animated");
+	setTimeout(function(){
+		jQuery(".folder-loader-ajax").removeClass("active");
+		jQuery(".folder-loader-ajax img").addClass("active");
+		jQuery(".folder-loader-ajax svg#successAnimation").removeClass("active").removeClass("animated");
+	}, 2000);
 }
 
 function addFolder() {
@@ -381,7 +381,7 @@ function resetMediaAndPosts() {
 		jQuery(".folder-loader-ajax").addClass("active");
 		jQuery("#wpbody").load(folderCurrentURL + " #wpbody-content", false, function (res) {
 			if (!jQuery(".tree-structure").length) {
-				//jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
+				jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
 			}
 			add_active_item_to_list();
 			add_menu_to_list();
@@ -398,7 +398,6 @@ function add_active_item_to_list() {
 			folderId = 0;
 		}
 	}
-	console.log("folderId: "+folderId);
 	jQuery(".tree-structure ul").html("");
 	jQuery("#space_"+folderId).children().each(function(){
 		fID = jQuery(this).data("folder-id");
@@ -527,11 +526,9 @@ jQuery(document).ready(function(){
 			folderCurrentURL = wcp_settings.page_url + jQuery(this).closest("li.route").data("slug");
 			jQuery(".form-loader-count").css("width", "100%");
 			jQuery("#wpbody").load(folderCurrentURL + " #wpbody-content", function () {
-
 				if (!jQuery(".tree-structure").length) {
-					//jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
+					jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
 				}
-
 				//add_menu_to_list();
 				triggerInlineUpdate();
 			});
@@ -560,11 +557,11 @@ jQuery(document).ready(function(){
 		jQuery(".wcp-container .route").removeClass("active-item");
 		if(!jQuery("#media-attachment-taxonomy-filter").length) {
 			folderCurrentURL = wcp_settings.page_url;
-            jQuery(".form-loader-count").css("width", "100%");
+			jQuery(".form-loader-count").css("width", "100%");
 			jQuery("#wpbody").load(folderCurrentURL + " #wpbody-content", function () {
 
 				if (!jQuery(".tree-structure").length) {
-					//jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
+					jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
 				}
 
 				triggerInlineUpdate();
@@ -599,7 +596,7 @@ jQuery(document).ready(function(){
 								res = jQuery.parseJSON(res);
 								if(res.status == "1") {
 									resetMediaAndPosts();
-                                    ajaxAnimation();
+									ajaxAnimation();
 								} else {
 									jQuery(".folder-popup-form").hide();
 									jQuery(".folder-popup-form").removeClass("disabled");
@@ -621,7 +618,7 @@ jQuery(document).ready(function(){
 							if(res.status == "1") {
 								// window.location.reload();
 								resetMediaAndPosts();
-                                ajaxAnimation();
+								ajaxAnimation();
 							} else {
 								jQuery(".folder-popup-form").hide();
 								jQuery(".folder-popup-form").removeClass("disabled");
@@ -647,7 +644,7 @@ jQuery(document).ready(function(){
 						success: function (res) {
 							// window.location.reload();
 							resetMediaAndPosts();
-                            ajaxAnimation();
+							ajaxAnimation();
 						}
 					});
 				}
@@ -697,11 +694,11 @@ jQuery(document).ready(function(){
 		jQuery(".header-posts a").addClass("active-item");
 		if(!jQuery("#media-attachment-taxonomy-filter").length) {
 			folderCurrentURL = wcp_settings.page_url;
-			 jQuery(".form-loader-count").css("width", "100%");
+			jQuery(".form-loader-count").css("width", "100%");
 			jQuery("#wpbody").load(folderCurrentURL + " #wpbody-content", function () {
 
 				if (!jQuery(".tree-structure").length) {
-					//jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
+					jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
 				}
 				add_active_item_to_list();
 				triggerInlineUpdate();
@@ -721,11 +718,11 @@ jQuery(document).ready(function(){
 		jQuery(".un-categorised-items").addClass("active-item");
 		if(!jQuery("#media-attachment-taxonomy-filter").length) {
 			folderCurrentURL = wcp_settings.page_url+"-1";
-			 jQuery(".form-loader-count").css("width", "100%");
+			jQuery(".form-loader-count").css("width", "100%");
 			jQuery("#wpbody").load(folderCurrentURL + " #wpbody-content", function () {
 
 				if (!jQuery(".tree-structure").length) {
-					//jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
+					jQuery(".wp-header-end").before('<div class="tree-structure"><ul></ul><div class="clear clearfix"></div></div>');
 				}
 				add_active_item_to_list();
 				triggerInlineUpdate();
@@ -760,7 +757,7 @@ jQuery(document).ready(function(){
 							success: function (res) {
 								//window.location.reload();
 								resetMediaAndPosts();
-                                ajaxAnimation();
+								ajaxAnimation();
 							}
 						});
 					}
@@ -773,7 +770,7 @@ jQuery(document).ready(function(){
 						success: function (res) {
 							//window.location.reload();
 							resetMediaAndPosts();
-                            ajaxAnimation();
+							ajaxAnimation();
 						}
 					});
 				} else if (ui.draggable.hasClass('attachment')) {
@@ -792,7 +789,7 @@ jQuery(document).ready(function(){
 						success: function (res) {
 							// window.location.reload();
 							resetMediaAndPosts();
-                            ajaxAnimation();
+							ajaxAnimation();
 						}
 					});
 				}
@@ -864,7 +861,7 @@ jQuery(document).ready(function(){
 							success: function (res) {
 								// window.location.reload();
 								resetMediaAndPosts();
-                                ajaxAnimation();
+								ajaxAnimation();
 							}
 						});
 					}
@@ -878,7 +875,7 @@ jQuery(document).ready(function(){
 						success: function (res) {
 							// window.location.reload();
 							resetMediaAndPosts();
-                            ajaxAnimation();
+							ajaxAnimation();
 						}
 					});
 				} else if( ui.draggable.hasClass( 'attachment' ) ){
@@ -897,7 +894,7 @@ jQuery(document).ready(function(){
 						success: function (res) {
 							// window.location.reload();
 							resetMediaAndPosts();
-                            ajaxAnimation();
+							ajaxAnimation();
 						}
 					});
 				}
@@ -1050,12 +1047,18 @@ jQuery(document).ready(function(){
 			isHigh = jQuery(this).closest("li.route").hasClass("is-high");
 			jQuery(".dynamic-menu").remove();
 			jQuery(".active-menu").removeClass("active-menu");
-			menuHtml = "<div class='dynamic-menu'><ul>" +
-			"<li class='new-folder'><a href='javascript:;'><span class='folder-icon-create_new_folder'></span> New Folder</a></li>" +
-			"<li class='rename-folder'><a href='javascript:;'><span class='folder-icon-border_color'><span class='path1'></span><span class='path2'></span></span> Rename</a></li>" +
-			"<li class='mark-folder'><a href='javascript:;'><span class='folder-icon-star_rate'></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>" +
-			"<li class='remove-folder'><a href='javascript:;'><span class='folder-icon-delete'></span> Delete</a></li>" +
-			"</ul></div>";
+            menuHtml = "<div class='dynamic-menu'><ul>" +
+                        "<li class='new-folder'><a href='javascript:;'><span class='folder-icon-create_new_folder'></span> New Folder</a></li>" +
+                        "<li class='rename-folder'><a href='javascript:;'><span class='folder-icon-border_color'><span class='path1'></span><span class='path2'></span></span> Rename</a></li>" +
+                        "<li class='mark-folder'><a href='javascript:;'><span class='folder-icon-star_rate'></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>";
+
+            /* checking for attachments */
+            hasPosts = parseInt(jQuery(this).closest("li.route").find("h3.title:first > .total-count").text());
+            if(wcp_settings.post_type == "attachment" && hasPosts) {
+                menuHtml += "<li class='download-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class='dashicons dashicons-media-archive'></span> Download Zip (Pro)</a></li>";
+            }
+            menuHtml += "<li class='remove-folder'><a href='javascript:;'><span class='folder-icon-delete'></span> Delete</a></li>" +
+                        "</ul></div>";
 			jQuery(this).after(menuHtml);
 			jQuery(this).parents("li.route").addClass("active-menu");
 			return false;
@@ -1105,7 +1108,7 @@ jQuery(document).ready(function(){
 							jQuery("#wcp_folder_"+res.id).removeClass("is-high");
 						}
 						add_menu_to_list();
-                        ajaxAnimation();
+						ajaxAnimation();
 					} else {
 						jQuery(".folder-popup-form").hide();
 						jQuery(".folder-popup-form").removeClass("disabled");
@@ -1206,7 +1209,7 @@ jQuery(document).ready(function(){
 									jQuery(".form-loader-count").css("width", "0");
 									add_menu_to_list();
 									resetMediaAndPosts();
-                                    ajaxAnimation();
+									ajaxAnimation();
 								} else {
 									jQuery(".folder-popup-form").hide();
 									jQuery(".folder-popup-form").removeClass("disabled");
@@ -1254,7 +1257,7 @@ jQuery(document).ready(function(){
 								jQuery("#error-folder-popup").show();
 							} else {
 								add_menu_to_list();
-                                ajaxAnimation();
+								ajaxAnimation();
 							}
 						}
 					});
@@ -1269,12 +1272,17 @@ jQuery(document).ready(function(){
 			isHigh = jQuery(this).closest("li.route").hasClass("is-high");
 			jQuery(".dynamic-menu").remove();
 			jQuery(".active-menu").removeClass("active-menu");
-			menuHtml = "<div class='dynamic-menu'><ul>" +
-			"<li class='new-folder'><a href='javascript:;'><span class='folder-icon-create_new_folder'></span> New Folder</a></li>" +
-			"<li class='rename-folder'><a href='javascript:;'><span class='folder-icon-border_color'><span class='path1'></span><span class='path2'></span></span> Rename</a></li>" +
-			"<li class='mark-folder'><a href='javascript:;'><span class='folder-icon-star_rate'></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>" +
-			"<li class='remove-folder'><a href='javascript:;'><span class='folder-icon-delete'></span> Delete</a></li>" +
-			"</ul></div>";
+            menuHtml = "<div class='dynamic-menu'><ul>" +
+                        "<li class='new-folder'><a href='javascript:;'><span class='folder-icon-create_new_folder'></span> New Folder</a></li>" +
+                        "<li class='rename-folder'><a href='javascript:;'><span class='folder-icon-border_color'><span class='path1'></span><span class='path2'></span></span> Rename</a></li>" +
+                        "<li class='mark-folder'><a href='javascript:;'><span class='folder-icon-star_rate'></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>";
+
+            hasPosts = parseInt(jQuery(this).closest("li.route").find("h3.title:first > .total-count").text());
+            if(wcp_settings.post_type == "attachment" && hasPosts) {
+                menuHtml += "<li class='download-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class='dashicons dashicons-media-archive'></span> Download Zip (Pro)</a></li>";
+            }
+            menuHtml += "<li class='remove-folder'><a href='javascript:;'><span class='folder-icon-delete'></span> Delete</a></li>" +
+                        "</ul></div>";
 			jQuery(this).closest("h3.title").after(menuHtml);
 			jQuery(this).parents("li.route").addClass("active-menu");
 		});
@@ -1315,7 +1323,7 @@ jQuery(document).ready(function(){
 							folderStatus = 1;
 						}
 						// add_menu_to_list();
-                        ajaxAnimation();
+						ajaxAnimation();
 					}
 				}
 			});

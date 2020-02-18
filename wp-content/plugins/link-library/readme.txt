@@ -1,4 +1,4 @@
-﻿﻿=== Link Library ===
+﻿=== Link Library ===
 Contributors: jackdewey
 Donate link: https://ylefebvre.home.blog/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
@@ -47,6 +47,23 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 6.3.9 =
+* Fixed typo that prevented link checker tools from working
+
+= 6.3.8 =
+* Fix problem with changes to link checker tools where check stops
+
+= 6.3.7 =
+* Changed FAQ link to open in new tab
+
+= 6.3.6 =
+* Edit links in reciprocal link checker, broken link checker and duplicate link checker now open in new tab
+* Valid links in reciprocal and broken link checkers are no longer displayed. Only links with issues
+* Added class tags around the No Links Found output messages
+
+= 6.3.5 =
+* Added edit links in results of reciprocal link checker, broken link checker and duplicate link checker
 
 = 6.3.4 =
 * Added new element to filters shortcode to be able to filter based on first letter of links

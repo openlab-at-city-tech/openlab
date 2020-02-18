@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2019  MiKa (wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -325,7 +325,8 @@ Server seams to be down
 			source: new ol.source.Vector({
 		  url:"'. trim($a_FileName).'",
 			  format: new ol.format.KML({ showPointNames: '.$a_showMarkerName.'})
-			})
+			}),
+         zIndex: 92
 		  });';
 		}
 
@@ -339,6 +340,7 @@ Server seams to be down
 					extractStyles: false
 				})
 			}),
+			zIndex: 92,
 			style: function(feature, resolution) {return style'.$a_Counter.'[feature.getGeometry().getType()];}
 		  });
 		  ';
@@ -359,7 +361,8 @@ Server seams to be down
 					source: new ol.source.Vector({
 						url:"' . trim($a_FileName) . '",
 						format: new ol.format.KML({ showPointNames: ' . $a_showMarkerName . '})
-					})
+					}),
+               zIndex: 92
 				});'
 			;
 		}
@@ -372,7 +375,8 @@ Server seams to be down
 						url:"' . trim($a_FileName) . '",
 						format: new ol.format.GPX({
 							extractStyles: false
-						})
+						}),
+                  zIndex: 92
 					}),
 					style: function(feature, resolution) {return style' . $a_Counter . '[feature.getGeometry().getType()];}
 				 });'

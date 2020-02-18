@@ -849,7 +849,9 @@ class Openlab_Clone_Course_Site {
 				$table        = $shardb_prefix . $table_hash . '.' . $table;
 			}
 
-			$wpdb->query( "DELETE FROM {$table}" );
+			// Drop existing table and recreate to ensure a schema match.
+			$wpdb->query( "DROP TABLE {$table}" );
+			$wpdb->query( "CREATE TABLE {$table} LIKE {$source_table}" );
 			$wpdb->query( "INSERT INTO {$table} SELECT * FROM {$source_table}" );
 		}
 

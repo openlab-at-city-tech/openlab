@@ -31,7 +31,7 @@ class CWS_PageLinksTo {
 	const DISMISSED_NOTICES = 'page_links_dismissed_options';
 	const MESSAGE_ID = 4;
 	const NEWSLETTER_URL = 'https://pages.convertkit.com/8eb23c1339/1ce4614706';
-	const CSS_JS_VERSION = '3.2.1';
+	const CSS_JS_VERSION = '3.2.2';
 
 	/**
 	 * Whether to replace WP links with their specified URLs.
@@ -174,6 +174,8 @@ class CWS_PageLinksTo {
 		$this->hook( 'enqueue_block_editor_assets' );
 		$this->hook( 'admin_menu' );
 
+		$this->hook( 'rest_api_init' );
+
 		// Gutenberg.
 		$this->hook( 'use_block_editor_for_post', 99999 );
 
@@ -214,6 +216,21 @@ class CWS_PageLinksTo {
 		}
 
 		return $use_block_editor;
+	}
+
+	/**
+	 * Adds custom-fields support to PLT-supporting post types during REST API initialization.
+	 *
+	 * @return void
+	 */
+	function rest_api_init() {
+		$post_type_names = array_keys( get_post_types() );
+
+		foreach ( $post_type_names as $type ) {
+			if ( self::is_supported_post_type( $type ) ) {
+				add_post_type_support( $type, 'custom-fields' );
+			}
+		}
 	}
 
 	/**
@@ -708,8 +725,11 @@ class CWS_PageLinksTo {
 		if ( ! is_singular() || ! get_queried_object_id() ) {
 			return false;
 		}
+		$link = self::get_link( get_queried_object_id() );
 
-		$link = self::absolute_url( self::get_link( get_queried_object_id() ) );
+		if ( $link ) {
+			$link = self::absolute_url( $link );
+		}
 
 		return $link;
 	}
@@ -1032,9 +1052,10 @@ class CWS_PageLinksTo {
 	 * @return array The modified post states array.
 	 */
 	public function display_post_states( $states, $post ) {
-		$link = $this->absolute_url( self::get_link( $post ) );
+		$link = self::get_link( $post );
 
 		if ( $link ) {
+			$link = $this->absolute_url( $link );
 			$output = '';
 			$output_parts = array(
 				'custom' => '<a title="' . __( 'Linked URL', 'page-links-to' ) . '" href="' . esc_url( $link ) . '" class="plt-post-state-link"><span class="dashicons dashicons-admin-links"></span><span class="url"> ' . esc_url( $link ) . '</span></a>',

@@ -82,8 +82,8 @@ class Mappress_Template extends Mappress_Obj {
 
 	static function load($footer) {
 		if ($footer) {
-			add_action('wp_footer', array(__CLASS__, 'print_templates'));
-			add_action('admin_footer', array(__CLASS__, 'print_templates'));
+			add_action('wp_footer', array(__CLASS__, 'print_templates'), -10);
+			add_action('admin_footer', array(__CLASS__, 'print_templates'), -10);
 		} else {
 			self::print_templates();
 		}

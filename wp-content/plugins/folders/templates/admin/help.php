@@ -23,6 +23,7 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
     </form>
 </div>
 <div class="folder-help-btn">
+    <!-- Free/Pro Only URL Change -->
     <a class="folder-help-tooltip" href="javascript:;"><img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/owner.png") ?>" alt="<?php esc_html_e("Need help?", WCP_FOLDER) ?>"  /></a>
 </div>
 <script>

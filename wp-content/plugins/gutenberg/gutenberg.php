@@ -3,7 +3,7 @@
  * Plugin Name: Gutenberg
  * Plugin URI: https://github.com/WordPress/gutenberg
  * Description: Printing since 1440. This is the development plugin for the new block editor in core.
- * Version: 7.1.0
+ * Version: 7.4.0
  * Author: Gutenberg Team
  * Text Domain: gutenberg
  *
@@ -11,8 +11,8 @@
  */
 
 ### BEGIN AUTO-GENERATED DEFINES
-define( 'GUTENBERG_VERSION', '7.1.0' );
-define( 'GUTENBERG_GIT_COMMIT', '61835551fc5d4e8138ecce0f5235e6da81143b29' );
+define( 'GUTENBERG_VERSION', '7.4.0' );
+define( 'GUTENBERG_GIT_COMMIT', '892d5c7e085621bdf23bcb737355059c5073c13a' );
 ### END AUTO-GENERATED DEFINES
 
 gutenberg_pre_init();
@@ -44,15 +44,27 @@ function gutenberg_menu() {
 		'gutenberg'
 	);
 
-	if ( get_option( 'gutenberg-experiments' ) && array_key_exists( 'gutenberg-widget-experiments', get_option( 'gutenberg-experiments' ) ) ) {
-		add_submenu_page(
-			'gutenberg',
-			__( 'Widgets (beta)', 'gutenberg' ),
-			__( 'Widgets (beta)', 'gutenberg' ),
-			'edit_theme_options',
-			'gutenberg-widgets',
-			'the_gutenberg_widgets'
-		);
+	if ( get_option( 'gutenberg-experiments' ) ) {
+		if ( array_key_exists( 'gutenberg-widget-experiments', get_option( 'gutenberg-experiments' ) ) ) {
+			add_submenu_page(
+				'gutenberg',
+				__( 'Widgets (beta)', 'gutenberg' ),
+				__( 'Widgets (beta)', 'gutenberg' ),
+				'edit_theme_options',
+				'gutenberg-widgets',
+				'the_gutenberg_widgets'
+			);
+		}
+		if ( array_key_exists( 'gutenberg-full-site-editing', get_option( 'gutenberg-experiments' ) ) ) {
+			add_submenu_page(
+				'gutenberg',
+				__( 'Site Editor (beta)', 'gutenberg' ),
+				__( 'Site Editor (beta)', 'gutenberg' ),
+				'edit_theme_options',
+				'gutenberg-edit-site',
+				'gutenberg_edit_site_page'
+			);
+		}
 	}
 
 	if ( current_user_can( 'edit_posts' ) ) {

@@ -106,7 +106,9 @@ add_action(
 			'priority'       => 130,
 		) );
 
-		$wp_customize->remove_section( 'custom_css' );
+		if ( ! is_super_admin() ) {
+			$wp_customize->remove_section( 'custom_css' );
+		}
 
 		// 'Theme Settings' subsections.
 		$wp_customize->remove_section( 'genesis_adsense' );

@@ -334,6 +334,9 @@ class Mappress_Map extends Mappress_Obj {
 		if (empty($this->query))
 			$this->prepare();
 
+		// Last chance to alter map before display
+		do_action('mappress_map_display', $this);
+
 		$html = Mappress_Template::get_template('map', array('map' => $this));
 		Mappress::load();
 		$script = "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };";
@@ -490,9 +493,6 @@ class Mappress_Map extends Mappress_Obj {
 
 		// Autoicons
 		$this->autoicons();
-
-		// Last chance to alter map before display
-		do_action('mappress_map_display', $this);
 	}
 
 	/**

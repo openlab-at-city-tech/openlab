@@ -97,7 +97,7 @@ $class_name = isset($display_status) && $display_status == "hide"?"hide-folders-
 $active_class = (isset($display_status) && $display_status == "hide")?"":"active";
 $active_class_2 = (isset($display_status) && $display_status == "hide")?"active":"";
 
-
+/* Do not change here, Free/Pro Class name */
 $post_type = WCP_Folders::get_custom_post_type($typenow);
 $active = "";
 $active_all_class = "";

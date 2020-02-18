@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.6.10
+ * Version: 1.7.0
  */
 
 /*
@@ -68,7 +68,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.6.10';
+	$wpa_version = '1.7.0';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_nav_menu', 'on' );
 		add_option( 'rta_from_page_lists', 'on' );
@@ -125,7 +125,7 @@ add_action( 'wp_enqueue_scripts', 'wpa_register_scripts' );
  * Register jQuery scripts.
  */
 function wpa_register_scripts() {
-	wp_register_script( 'skiplinks.webkit', plugins_url( 'wp-accessibility/js/skiplinks.webkit.js' ) );
+	wp_register_script( 'wpa-toolbar', plugins_url( 'wp-accessibility/js/wpa-toolbar.js' ), array( 'jquery' ), '1.0', true );
 	wp_register_script( 'ui-a11y.js', plugins_url( 'wp-accessibility/toolbar/js/a11y.js' ), array( 'jquery' ), '1.0', true );
 }
 
@@ -135,10 +135,12 @@ add_action( 'wp_enqueue_scripts', 'wpacc_enqueue_scripts' );
  */
 function wpacc_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' );
-	if ( 'on' === get_option( 'asl_enable' ) ) {
-		wp_enqueue_script( 'skiplinks.webkit' );
-	}
 	if ( 'on' === get_option( 'wpa_toolbar' ) || 'on' === get_option( 'wpa_widget_toolbar' ) ) {
+		if ( 'on' === get_option( 'wpa_toolbar' ) ) {
+			// Enqueue Toolbar JS if enabled.
+			wp_enqueue_script( 'wpa-toolbar' );
+			wp_localize_script( 'wpa-toolbar', 'wpa', wpa_toolbar_js() );
+		}
 		wp_enqueue_script( 'ui-a11y.js' );
 		$plugin_path = plugins_url( 'wp-accessibility/toolbar/css/a11y-contrast.css' );
 		if ( file_exists( get_stylesheet_directory() . '/a11y-contrast.css' ) ) {
@@ -166,9 +168,6 @@ function wpacc_enqueue_scripts() {
 		);
 		wp_localize_script( 'wpa-labels', 'wpalabels', $labels );
 	}
-	if ( 'on' === get_option( 'wpa_toolbar' ) ) {
-		add_action( 'wp_footer', 'wpa_toolbar_js' );
-	}
 	if ( 'link' === get_option( 'wpa_longdesc' ) ) {
 		wp_enqueue_script( 'longdesc.link', plugins_url( 'js/longdesc.link.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 	}
@@ -195,12 +194,7 @@ function wpa_stylesheet() {
 	$toolbar_size = ( false === stripos( $toolbar_size, 'em' ) ) ? $toolbar_size . 'px' : $toolbar_size;
 	// Only enable styles when required by options.
 	if ( get_option( 'wpa_toolbar_size' ) && 'on' === get_option( 'wpa_toolbar' ) ) {
-		echo "
-<style type='text/css'>
-.a11y-toolbar ul li button {
-	font-size: " . $toolbar_size . ' !important;
-}
-</style>';
+		wp_add_inline_style( 'ui-a11y.css', '.a11y-toolbar ul li button { font-size: ' . $toolbar_size . ' !important; }' );
 	}
 	if ( 'link' === get_option( 'wpa_longdesc' ) || 'jquery' === get_option( 'wpa_longdesc' ) || 'on' === get_option( 'asl_enable' ) ) {
 		wp_enqueue_style( 'wpa-style' );
@@ -247,7 +241,7 @@ add_action( 'wp_head', 'wpa_css' );
 function wpa_css() {
 	$styles = '';
 	if ( get_option( 'asl_enable' ) === 'on' ) {
-		$focus = get_option( 'asl_styles_focus' );
+		$focus = wp_kses( get_option( 'asl_styles_focus' ), array(), array() );
 		// these styles are derived from the WordPress skip link defaults.
 		$top = '7px';
 		if ( is_admin_bar_showing() ) {
@@ -262,7 +256,7 @@ function wpa_css() {
 		// Passive default styles derived from WordPress default focus styles.
 		$default_passive = 'background-color: #fff; box-shadow:  0 0 2px 2px rgba(0, 0, 0, 0.2); clip: auto; color: #333; display: block; font-weight: 600; height: auto; line-height: normal; padding: 15px 23px 14px; position: absolute; left: 6px; top: ' . $top . '; text-decoration: none; text-transform: none; width: auto; z-index: 100000;';
 
-		$passive = get_option( 'asl_styles_passive' );
+		$passive = wp_kses( get_option( 'asl_styles_passive' ), array(), array() );
 		$vis     = '';
 		$invis   = '';
 
@@ -622,7 +616,7 @@ $plugins_string
 			$sitename = substr( $sitename, 4 );
 		}
 		$from_email = 'wordpress@' . $sitename;
-		$from       = "From: \"$current_user->display_name\" <$from_email>\r\nReply-to: \"$current_user->display_name\" <$current_user->user_email>\r\n";
+		$from       = "From: $current_user->display_name <$from_email>\r\nReply-to: $current_user->display_name <$current_user->user_email>\r\n";
 
 		if ( ! $has_read_faq ) {
 			echo "<div class='message error'><p>" . __( 'Please read the FAQ and other Help documents before making a support request.', 'wp-accessibility' ) . '</p></div>';

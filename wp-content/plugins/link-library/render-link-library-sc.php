@@ -2213,14 +2213,14 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 						$output .= $current_cat_output;
 					}
 				} else {
-					$output .= __( 'No links found', 'link-library' );
+					$output .= '<span class="nolinksfoundincat">' . __( 'No links found', 'link-library' ) . '</span>';
 				}
 			}
 		} else {
 			$output .= '<span class="nolinkstodisplay">' . __( 'All of your links must be assigned at least to one category to be displayed', 'link-library') . '</span>';
 		}
 	} else {
-		$output .= __( 'No links found', 'link-library' );
+		$output .= '<span class="nolinksfoundallcats">' . __( 'No links found', 'link-library' ) . '</span>';
 	}
 
 	if ( isset( $_GET['searchll'] ) && $linkcount == 1 && $level == 0 ) {

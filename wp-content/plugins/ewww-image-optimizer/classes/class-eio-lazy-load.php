@@ -17,6 +17,22 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 	class EIO_Lazy_Load extends EIO_Page_Parser {
 
 		/**
+		 * A list of user-defined exclusions, populated by validate_user_exclusions().
+		 *
+		 * @access protected
+		 * @var array $user_exclusions
+		 */
+		protected $user_exclusions = array();
+
+		/**
+		 * A list of user-defined element exclusions, populated by validate_user_exclusions().
+		 *
+		 * @access protected
+		 * @var array $user_element_exclusions
+		 */
+		protected $user_element_exclusions = array();
+
+		/**
 		 * Base64-encoded placeholder image.
 		 *
 		 * @access protected
@@ -97,6 +113,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				// Load the minified, combined version of the lazy load script.
 				add_action( 'wp_enqueue_scripts', array( $this, 'min_script' ) );
 			}
+			$this->validate_user_exclusions();
 		}
 
 		/**
@@ -293,16 +310,24 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 							$srcset_sizes = $this->get_attribute( $image, 'sizes' );
 							// Return false on this filter to disable automatic sizes calculation,
 							// or use the sizes value passed via the filter to conditionally disable it.
-							if ( apply_filters( 'eio_lazy_responsive', $srcset_sizes ) ) {
+							if ( false === strpos( $image, 'skip-autoscale' ) && apply_filters( 'eio_lazy_responsive', $srcset_sizes ) ) {
 								$this->set_attribute( $image, 'data-sizes', 'auto', true );
 								$this->remove_attribute( $image, 'sizes' );
 							}
 						} else {
 							$this->set_attribute( $image, 'src', $placeholder_src, true );
 						}
+						$disable_native_lazy = false;
+						// Ignore native lazy loading images.
+						$loading_attr = $this->get_attribute( $image, 'loading' );
+						if ( $loading_attr && in_array( trim( $loading_attr ), array( 'auto', 'eager', 'lazy' ), true ) ) {
+							$disable_native_lazy = true;
+						}
+
 						if (
 							( ! defined( 'EWWWIO_DISABLE_NATIVE_LAZY' ) || ! EWWWIO_DISABLE_NATIVE_LAZY ) &&
-							( ! defined( 'EASYIO_DISABLE_NATIVE_LAZY' ) || ! EASYIO_DISABLE_NATIVE_LAZY )
+							( ! defined( 'EASYIO_DISABLE_NATIVE_LAZY' ) || ! EASYIO_DISABLE_NATIVE_LAZY ) &&
+							! $disable_native_lazy
 						) {
 							$this->set_attribute( $image, 'loading', 'lazy' );
 						}
@@ -319,6 +344,8 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			$buffer = $this->parse_background_images( $buffer, 'span' );
 			// Process background images on section elements.
 			$buffer = $this->parse_background_images( $buffer, 'section' );
+			// Process background images on a/link elements.
+			$buffer = $this->parse_background_images( $buffer, 'a' );
 			// Images listed as picture/source elements. Mostly for NextGEN, but should work anywhere.
 			$pictures = $this->get_picture_tags_from_html( $buffer );
 			if ( $this->is_iterable( $pictures ) ) {
@@ -377,6 +404,9 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 		 * @return string The modified content with LL markup.
 		 */
 		function parse_background_images( $buffer, $tag_type ) {
+			if ( in_array( $tag_type, $this->user_element_exclusions, true ) ) {
+				return $buffer;
+			}
 			$elements = $this->get_elements_from_html( $buffer, $tag_type );
 			if ( $this->is_iterable( $elements ) ) {
 				foreach ( $elements as $index => $element ) {
@@ -415,6 +445,36 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 		}
 
 		/**
+		 * Validate the user-defined exclusions.
+		 */
+		function validate_user_exclusions() {
+			$user_exclusions = $this->get_option( $this->prefix . 'll_exclude' );
+			if ( ! empty( $user_exclusions ) ) {
+				if ( is_string( $user_exclusions ) ) {
+					$user_exclusions = array( $user_exclusions );
+				}
+				if ( is_array( $user_exclusions ) ) {
+					foreach ( $user_exclusions as $exclusion ) {
+						if ( ! is_string( $exclusion ) ) {
+							continue;
+						}
+						if (
+							'a' === $exclusion ||
+							'div' === $exclusion ||
+							'li' === $exclusion ||
+							'section' === $exclusion ||
+							'span' === $exclusion
+						) {
+							$this->user_element_exclusions[] = $exclusion;
+							continue;
+						}
+						$this->user_exclusions[] = $exclusion;
+					}
+				}
+			}
+		}
+
+		/**
 		 * Checks if the tag is allowed to be lazy loaded.
 		 *
 		 * @param string $image The image (img) tag.
@@ -444,37 +504,34 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				return false;
 			}
 
-			// Ignore native lazy loading images.
-			$loading_attr = $this->get_attribute( $image, 'loading' );
-			if ( $loading_attr && in_array( trim( $loading_attr ), array( 'auto', 'eager', 'lazy' ), true ) ) {
-				return false;
-			}
-
 			$exclusions = apply_filters(
 				'eio_lazy_exclusions',
-				array(
-					'class="ls-bg',
-					'class="ls-l',
-					'class="rev-slidebg',
-					'data-bgposition=',
-					'data-envira-src=',
-					'data-lazy=',
-					'data-lazy-original=',
-					'data-lazy-src=',
-					'data-lazy-srcset=',
-					'data-lazyload=',
-					'data-lazysrc=',
-					'data-no-lazy=',
-					'data-src=',
-					'data-srcset=',
-					'ewww_webp_lazy_load',
-					'fullurl=',
-					'gazette-featured-content-thumbnail',
-					'lazy-slider-img=',
-					'mgl-lazy',
-					'skip-lazy',
-					'timthumb.php?',
-					'wpcf7_captcha/',
+				array_merge(
+					array(
+						'class="ls-bg',
+						'class="ls-l',
+						'class="rev-slidebg',
+						'data-bgposition=',
+						'data-envira-src=',
+						'data-lazy=',
+						'data-lazy-original=',
+						'data-lazy-src=',
+						'data-lazy-srcset=',
+						'data-lazyload=',
+						'data-lazysrc=',
+						'data-no-lazy=',
+						'data-src=',
+						'data-srcset=',
+						'ewww_webp_lazy_load',
+						'fullurl=',
+						'gazette-featured-content-thumbnail',
+						'lazy-slider-img=',
+						'mgl-lazy',
+						'skip-lazy',
+						'timthumb.php?',
+						'wpcf7_captcha/',
+					),
+					$this->user_exclusions
 				),
 				$image
 			);
@@ -496,12 +553,15 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			$exclusions = apply_filters(
 				'eio_lazy_bg_image_exclusions',
-				array(
-					'data-no-lazy=',
-					'header-gallery-wrapper ',
-					'lazyload',
-					'skip-lazy',
-					'avia-bg-style-fixed',
+				array_merge(
+					array(
+						'data-no-lazy=',
+						'header-gallery-wrapper ',
+						'lazyload',
+						'skip-lazy',
+						'avia-bg-style-fixed',
+					),
+					$this->user_exclusions
 				),
 				$tag
 			);
@@ -535,7 +595,11 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			$height = min( $height, 1920 );
 
 			$memory_required = 5 * $height * $width;
-			if ( function_exists( 'ewwwio_check_memory_available' ) && ! ewwwio_check_memory_available( $memory_required + 500000 ) ) {
+			if (
+				! $this->get_option( 'ewww_image_optimizer_cloud_key' ) &&
+				function_exists( 'ewwwio_check_memory_available' ) &&
+				! ewwwio_check_memory_available( $memory_required + 500000 )
+			) {
 				return $this->placeholder_src;
 			}
 
@@ -544,14 +608,28 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				global $exactdn;
 				return $exactdn->generate_url( $this->content_url . 'lazy/placeholder-' . $width . 'x' . $height . '.png' );
 			} elseif ( ! is_file( $piip_path ) ) {
-				$img   = imagecreatetruecolor( $width, $height );
-				$color = imagecolorallocatealpha( $img, 0, 0, 0, 127 );
-				imagefill( $img, 0, 0, $color );
-				imagesavealpha( $img, true );
-				imagecolortransparent( $img, imagecolorat( $img, 0, 0 ) );
-				imagetruecolortopalette( $img, false, 1 );
-				imagepng( $img, $piip_path, 9 );
+				if ( $this->get_option( 'ewww_image_optimizer_cloud_key' ) && ! defined( 'EWWW_IMAGE_OPTIMIZER_DISABLE_API_PIP' ) ) {
+					$piip_location = "http://optimize.exactlywww.com/resize/lazy.php?width=$width&height=$height";
+					$piip_response = wp_remote_get( $piip_location );
+					if ( ! is_wp_error( $piip_response ) && is_array( $piip_response ) && ! empty( $piip_response['body'] ) ) {
+						file_put_contents( $piip_path, $piip_response['body'] );
+						clearstatcache();
+					}
+				}
+				if ( ! is_file( $piip_path ) && function_exists( 'ewwwio_check_memory_available' ) && ewwwio_check_memory_available( $memory_required + 500000 ) ) {
+					$img   = imagecreatetruecolor( $width, $height );
+					$color = imagecolorallocatealpha( $img, 0, 0, 0, 127 );
+					imagefill( $img, 0, 0, $color );
+					imagesavealpha( $img, true );
+					imagecolortransparent( $img, imagecolorat( $img, 0, 0 ) );
+					imagetruecolortopalette( $img, false, 1 );
+					imagepng( $img, $piip_path, 9 );
+					if ( function_exists( 'ewww_image_optimizer' ) ) {
+						ewww_image_optimizer( $piip_path );
+					}
+				}
 			}
+			clearstatcache();
 			if ( is_file( $piip_path ) ) {
 				return $this->content_url . 'lazy/placeholder-' . $width . 'x' . $height . '.png';
 			}

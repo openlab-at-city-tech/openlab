@@ -4,8 +4,8 @@ Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
 Requires PHP: 5.3
-Tested up to: 5.2
-Stable tag: 1.6.10
+Tested up to: 5.3
+Stable tag: 1.7.0
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -26,6 +26,7 @@ All features can be disabled according to your theme's needs. For advanced users
 * Add a toolbar toggling between high contrast, large print, and desaturated (grayscale) views of your theme.
 * Add a long description to images. Use the image's "Description" field to add long descriptions.
 * Enforcement for alt attributes on images.
+* Easily identify images without alt attributes in the Media Library
 
 = Accessibility Issues fixed by WP Accessibility: =
 
@@ -64,6 +65,15 @@ The plug-in is intended to help with deficiencies commonly found in themes and t
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
 * Conflict with NextGen gallery to explore
+
+= 1.7.0 =
+
+* Add: test for specific common types of invalid alt attribute and label as invalid.
+* Change: Remove webkit skiplink polyfill (obsolete)
+* Change: Move toolbar JS to external file.
+* Change: Use wp inline style method for toolbar size.
+* Bug fix: Incorrect variable type matching in toolbar size setting.
+* Security: Minor authenticated XSS vulnerability in custom CSS.
 
 = 1.6.10 =
 

@@ -589,15 +589,16 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 * Validate the user-defined exclusions for "all the things" rewriting.
 		 */
 		function validate_user_exclusions() {
-			if ( defined( 'EXACTDN_EXCLUDE' ) && EXACTDN_EXCLUDE ) {
-				$user_exclusions = EXACTDN_EXCLUDE;
-			}
+			$user_exclusions = $this->get_option( 'exactdn_exclude' );
 			if ( ! empty( $user_exclusions ) ) {
 				if ( is_string( $user_exclusions ) ) {
 					$user_exclusions = array( $user_exclusions );
 				}
 				if ( is_array( $user_exclusions ) ) {
 					foreach ( $user_exclusions as $exclusion ) {
+						if ( ! is_string( $exclusion ) ) {
+							continue;
+						}
 						if ( false !== strpos( $exclusion, 'wp-content' ) ) {
 							$exclusion = preg_replace( '#([^"\'?>]+?)?wp-content/#i', '', $exclusion );
 						}
@@ -1144,6 +1145,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			$content = $this->filter_bg_images( $content, 'li' );
 			$content = $this->filter_bg_images( $content, 'span' );
 			$content = $this->filter_bg_images( $content, 'section' );
+			$content = $this->filter_bg_images( $content, 'a' );
 			if ( $this->filtering_the_page ) {
 				$content = $this->filter_prz_thumb( $content );
 			}
@@ -1271,7 +1273,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				}
 				// Pre-empt rewriting of wp-includes and wp-content if the extension is not allowed by using a temporary placeholder.
 				$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '([^"\'?>]+?)?/wp-content/([^"\'?>]+?)\.(htm|html|php|ashx|m4v|mov|wvm|qt|webm|ogv|mp4|m4p|mpg|mpeg|mpv)#i', '$1//' . $this->upload_domain . '$2/?wpcontent-bypass?/$3.$4', $content );
+				// Pre-empt partial paths that are used by JS to build other URLs.
 				$content = str_replace( 'wp-content/themes/jupiter"', '?wpcontent-bypass?/themes/jupiter"', $content );
+				$content = str_replace( 'wp-content/plugins/onesignal-free-web-push-notifications/sdk_files/"', '?wpcontent-bypass?/plugins/onesignal-free-web-push-notifications/sdk_files/"', $content );
+				$content = str_replace( 'wp-content/plugins/u-shortcodes/shortcodes/monthview/"', '?wpcontent-bypass?/plugins/u-shortcodes/shortcodes/monthview/"', $content );
 				if (
 					false !== strpos( $this->upload_domain, 'amazonaws.com' ) ||
 					false !== strpos( $this->upload_domain, 'digitaloceanspaces.com' ) ||
@@ -2564,7 +2569,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 
 			if ( isset( $image_url_parts['scheme'] ) && 'https' === $image_url_parts['scheme'] ) {
-				if ( is_array( $args ) ) {
+				if ( is_array( $args ) && false === strpos( $image_url, 'ssl=' ) ) {
 					$args['ssl'] = 1;
 				}
 				$scheme = 'https';
