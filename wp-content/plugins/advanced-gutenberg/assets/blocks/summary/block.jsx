@@ -1,3 +1,5 @@
+import latinize from "latinize";
+
 (function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents, wpData, wpHooks ) {
     wpBlockEditor = wp.blockEditor || wp.editor;
     const { __ } = wpI18n;
@@ -14,6 +16,9 @@
             <path d="M0 0h24v24H0z" fill="none"/>
         </svg>
     );
+
+    const previewImageData = 'data:image/png;base64,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';
+
     const summaryBlockTitle = __( 'Summary', 'advanced-gutenberg' );
 
     // Add button to insert summary inside table of contents component
@@ -73,6 +78,7 @@
         constructor() {
             super( ...arguments );
             this.updateSummary = this.updateSummary.bind( this );
+            this.latinise = this.latinise.bind(this);
         }
 
         componentWillMount() {
@@ -123,6 +129,20 @@
             return storeData;
         }
 
+        latinise(str) {
+            let lettersArr = str.split('');
+            let result = [];
+            lettersArr.map(letter => {
+                if(typeof latinMap[letter] === "undefined") {
+                    result.push(letter);
+                } else {
+                    result.push(latinMap[letter]);
+                }
+
+            });
+            return result.join('');
+        }
+
         updateSummary() {
             let headingDatas = [];
             let headingBlocks = [];
@@ -148,12 +168,18 @@
                     thisHead[ 'content' ] = heading.attributes.content.length
                         ? getBlockContent( heading ).replace( /<(?:.|\n)*?>/gm, '' )
                         : '';
+                    let lowerHead = unescape(thisHead[ 'content' ].toLowerCase());
+                    let headId = lowerHead.replace(/[!@#$%^&*()\/\\,?":{}|<>]/g, "");
+                    headId = headId.replace(/(amp;)+/g, "");
+                    headId = latinize(headId).replace(/\./g, ' ').replace(/[^\w ]+/g,'').replace(/ +/g,'-');
+                    headId = headId + '-' + heading.clientId;
+
                     thisHead[ 'clientId' ] = heading.clientId;
                     if (heading.attributes.anchor) {
                         thisHead[ 'anchor' ] = heading.attributes.anchor;
                     } else {
                         // Generate a random anchor for headings without it
-                        thisHead[ 'anchor' ] = 'advgb-toc-' + heading.clientId;
+                        thisHead[ 'anchor' ] = headId;
                         heading.attributes.anchor = thisHead[ 'anchor' ];
                     }
 
@@ -170,21 +196,24 @@
 
         render() {
             const { attributes, isSelected, setAttributes } = this.props;
-            const { headings, loadMinimized, anchorColor, align, headerTitle } = attributes;
+            const { headings, loadMinimized, anchorColor, align, headerTitle, isPreview } = attributes;
 
             // No heading blocks
             let summaryContent = (
-                <Placeholder
-                    icon={summaryBlockIcon}
-                    label={summaryBlockTitle}
-                    instructions={__( 'Your current post/page has no headings. Try add some headings and update this block later', 'advanced-gutenberg' )}
-                >
-                    <Button onClick={this.updateSummary}
-                            className={'button'}
+                isPreview ?
+                    <img alt={__('Summary', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
+                    <Placeholder
+                        icon={summaryBlockIcon}
+                        label={summaryBlockTitle}
+                        instructions={__( 'Your current post/page has no headings. Try add some headings and update this block later', 'advanced-gutenberg' )}
                     >
-                        {__( 'Update', 'advanced-gutenberg' )}
-                    </Button>
-                </Placeholder>
+                        <Button onClick={this.updateSummary}
+                                className={'button'}
+                        >
+                            {__( 'Update', 'advanced-gutenberg' )}
+                        </Button>
+                    </Placeholder>
             );
 
             // Having heading blocks
@@ -285,6 +314,10 @@
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType( 'advgb/summary', {
@@ -297,6 +330,11 @@
         category: 'advgb-category',
         keywords: [ __( 'summary', 'advanced-gutenberg' ), __( 'table of content', 'advanced-gutenberg' ), __( 'list', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         supports: {
             multiple: false,
         },

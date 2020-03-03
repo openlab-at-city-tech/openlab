@@ -13,6 +13,8 @@
         </g>
     );
 
+    const previewImageData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAACDCAYAAACkwQY0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAACNxJREFUeNrs3U1oFGkex/GqfplOogYTkawYQhBBZkTmIARkEHYQL173sCfPC54WPOxeFvYgzGluioNXLyMMc/UwexFnRy/DwrI6BxUkG5WY+P4S81JdU7+arvj4THX1U9XVHdP9/UCRpNOpp9Pdv+f5P09Vd3seAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAw+d3uoFarZe3H5y4GcgnbXb6xsdH/oFsB91P2R8iB7sMe2l+LBN4vIeBpG2EHug96mLJtXp4n8H7BkJtbpbX5xlfCDpQb8qaxbYY+CntYatCtkbxibqdOnWqcP3/+y/Hx8c9932+EYehHGw8ZUGQ+7fthEASv5ufnf5qbm/tPlCWFOzCCHpidgMvInifo9ihe1ba4uPiXiYmJf0Q3bjcPEVCuKMS/3L59+29Hjx693gr4hhV6p7BXcozmnhXy2sLCwunJycmvCTnQG1H2Pj1y5Mh3V65cORT9WNdFrfxVvPR1seIjujGab4b86tWrh06cOPFDFPJJHg6gt969e/fvaGr8p6iMX49+XLNG97DTXL3iEHJ7NI/Dfvz48a8IOdAfIyMjX9y6deu0Maqb62S+kdPipbtVAcRBr9frR7n7gf6Zmpr6Y6uiTjbno1uVHAH/oHyvVCqM5kAfVavVPdYc3Ty03fWI7qeU7k47B1AeHbb23q+TpZ2zUkrp3u7sNwD9YZ+U5ruU7XlLdzvwALYm7KmDbtaCHCM6sH3D7pU9ogP4eEKe5/Kugs6IDmx92J1zyIgODAGCDhB0AIOgxl1Qrmaz6b1+/dpbWVnx1tfX48vq9brXaDS88fFxr1Ipp299+fKlt7q6Gm9SrVa90dFRb8eOHXF7ZdDtf/PmTfy/BEEQX6b/Q+3s3LmTB5ugD6fnz597T548icNuUlBkaWnJ27Nnjzc5WfzsYXUiy8vLm52I/Tu1sXv37ridop2Kbr/2o87Epv9F/6c6k6mpqTj0oHQfGouLi3E47JDb1BHMz893vF67Nh49epQacrvDWVhYKNSGKgTdvrSQ26O92uh0PRD0gdFu9MsK08OHD3O18fTp09xtKIh5R3KXjsTufAg7QR94CpRG0LxUArsGRMFTJdCO5ssq1e25uW6bOghXaiMJuebi09PT8VeXjq5I9QCCvq3m5Zl3cDRPVgg1l7XnzK4hzLqeFvj27dsXz/vT5uTPnj1zHs3N/0Wdh+uim/6WUZ2gDzQtgJkUai2GJbRgpRBqdBwbG/vdSJ2smudpww66qoM7d+6k7kshTBYD87ShDkJluWtHkXUbsfVYde+ybLdLVo1s+/fvj8OuQ1Nm6ZscorL3kVUea//tymK1kbxiSR2MQpl2XQW90+q4/S6imgaoE0lun75XmJNOTHN5s2Nx6UzAiL4ttQugjmkrKApFMm9uN7J2epverBE/mZdrU9XgMp92fmJE04BkuqH963tt6rz0s6YLYEQfjl4yZU6cLJzt3bvXaS7f6U39ssJ77969eEogeVfYi0iO3ycnzYARfSi0C6FCbS5O6ft2q+adzmJTZ9Lt2XQuoXRpI+uwW5nVBAj6RydtVTop2RVwLWhpyyqPi7SRtwTvRKfO9rozAaX7tqVQ2yvOGtFdjq1PTEw4taGFsHaHrzod1nJtI1l8czlMpkVFe33CPNIAgj5wNJK5BsQudV3DoTZ03bTOI6vdZEHQlRb01GklC4c6ZCf63px6aMXdlHayDijdB44W3vLMUZNV6zxzb7WhDiVPyZ63Dd0uLe7l+Rvdpm5epAOCvn3uxCgYMzMzTqOn5tu6bpERUCffaPR0qQDURpEFMtdTX/U/q/PRbQKl+9CN7Ar7q1evvLdv38bHyDWfVWiSk066XZ3W6Llr1674eLbKbLONZJ7d7cKY9qWOQvtXO1ptV/mu/etwoDqrMl9bD4K+7SQnr/SynE3m3r1eAFOgeYMJSncABB0AQQdA0AEQdAAEHQBBBwg6AIIOgKAD+PhwCmwGvQRUb7Xc6e2egKL0WgW9iKjXzzGewRkhf/z4sXfw4EHuDPQ06Pfv3+/584zSvQ1Cjr6U1NFIrhdA9foDMPo6oqvn0ssePzZ6v7TZ2dkPLhsZGeFZiL6FfaDm6Ar5dv7onhs3bvCs7KNjx45xJ1C6AyDoAAg6MFTrANwF7g4fPsydAII+6PK83TIwtEHfTiNip085Bcp8rvX6EBtz9DZ0EoOO+wO9DvnS0pI3NjZG6b5VZboehLt373LyDHoadJ2sxbnuWzyq83FDGASU7gBBB0DQARB0AAQdAEEHQNABEHQABB0g6AAIOgCCDoCgAyDoAAg6AIIOgKADBB0AQQcwdEEPueuALRP2K+iEHeh3uiNW7kLXPFZyBnuzoSAIlrjrgf5ZW1tbLhLyoiN6HPYXL178i7se6JvmtWvXvm3lr2kNvh1VO/YElYrf+tZvdQzaaisrK/89efLkn6Pfj/IYAL0VDaw/zs3NfaNiOto2jK/N1hZmfYxY0dI9uHDhwvL169f/Gk0bVnkYgJ6W7I/OnTv3z1agAzPcZY7oZqdgjuqVy5cv///AgQM/zszM/KHRaOz3fb/KwwKUIwiClw8ePPj+7Nmzf7906dLD1giubd0Y1ZPQe81ms+2+/E6NtT4TKgm4gqwL6tH2SbJNT0+PXrx48YvZ2dnPqtVq47fFQQBFra6uvr558+bPZ86c+Z8V8DX9uvX9uhn2rNLdd2k0Crtvhb1ubJ+0wl9r/c43NgD5JSNl0yjX11M25zl6LWfDodGwGeSksarRIXiEHSgc8jAl6BvG9sEcPSvkzkE3PqjdDLrd8wQEHSgt7GbQm1bIA6Nkd1qQqxXoaTwr6KH3foGO0h0ov3Q3V9vtVfeOo3nuEbc1V/eMIFeMzTe+EnSgnKCHVrDtkDutfOcOo7EKn/ytHW6fsh0obZ7ebot/7zKaFw5jK+yeFWo/5TIAxYPu2cHOG3CvjDCmBJ6AA70JfKGA9zSURgcAoKCioQYAAAAAAAAAAAAAAAAAAAAAAAAAAABK8qsAAwCESp+/PGzWsQAAAABJRU5ErkJggg==';
+
     const socialBlockIcon = <svg width="20" height="20" viewBox="0 0 24 24">{socialBlockIconContent}</svg>;
 
     const ICONS_SET_NEW = {
@@ -162,11 +164,14 @@
 
         render() {
             const { attributes, setAttributes, isSelected } = this.props;
-            const { items, align, iconSize, iconSpace } = attributes;
+            const { items, align, iconSize, iconSpace, isPreview } = attributes;
             const { currentSelected, searchedText } = this.state;
             const matchedIcons = Object.keys( ICONS_SET_NEW ).filter( (key) => key.indexOf( searchedText.toLowerCase().trim() ) > -1 );
 
             return (
+                isPreview ?
+                    <img alt={__('Social Links', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <BlockControls>
                         <Toolbar>
@@ -349,30 +354,34 @@
     }
 
     const socialBlockAttrs = {
-            items: {
-                type: 'array',
-                default: [
-                    { icon: '', iconID: '', iconColor: '', link: '#' },
-                    { icon: '', iconID: '', iconColor: '', link: '#' },
-                    { icon: '', iconID: '', iconColor: '', link: '#' },
-                ],
-            },
-            align: {
+        items: {
+            type: 'array',
+            default: [
+                { icon: '', iconID: '', iconColor: '', link: '#' },
+                { icon: '', iconID: '', iconColor: '', link: '#' },
+                { icon: '', iconID: '', iconColor: '', link: '#' },
+            ],
+        },
+        align: {
                 type: 'string',
-            },
-            iconSize: {
-                type: 'number',
-                default: 48,
-            },
-            iconSpace: {
-                type: 'number',
-                default: 5,
-            },
-            changed: {
-                type: 'boolean',
-                default: false,
-            },
-        };
+        },
+        iconSize: {
+            type: 'number',
+            default: 48,
+        },
+        iconSpace: {
+            type: 'number',
+            default: 5,
+        },
+        changed: {
+            type: 'boolean',
+            default: false,
+        },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
+    };
 
     registerBlockType( 'advgb/social-links', {
         title: __( 'Social Links', 'advanced-gutenberg' ),
@@ -384,6 +393,11 @@
         category: 'advgb-category',
         keywords: [ __( 'social icons', 'advanced-gutenberg' ), __( 'shares', 'advanced-gutenberg' ), __( 'icon link', 'advanced-gutenberg' ) ],
         attributes: socialBlockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         edit: AdvSocialBlock,
         save: function ( { attributes } ) {
             const { items, align, iconSize, iconSpace } = attributes;

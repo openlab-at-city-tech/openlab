@@ -49,6 +49,8 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         )
     };
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class SearchBarEdit extends Component {
         constructor() {
             super( ...arguments );
@@ -93,6 +95,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                 searchButtonBgColor, searchButtonRadius, searchButtonOnLeft, searchBtnId,
                 searchBtnHoverColor, searchBtnHoverBgColor, searchBtnHoverShadow, searchBtnHoverShadowH, searchBtnHoverShadowV,
                 searchBtnHoverShadowBlur, searchBtnHoverShadowSpread, searchBtnHoverOpacity, searchBtnHoverTranSpeed,
+                isPreview,
             } = attributes;
 
             const searchBarIcon = (
@@ -125,6 +128,9 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             );
 
             return (
+                isPreview ?
+                    <img alt={__('Search Bar', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <InspectorControls>
                         <PanelBody title={ __( 'Search Bar State', 'advanced-gutenberg' ) }>
@@ -410,6 +416,10 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType('advgb/search-bar', {
@@ -422,6 +432,11 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         category: 'advgb-category',
         keywords: [ __( 'accordion', 'advanced-gutenberg' ), __( 'list', 'advanced-gutenberg' ), __( 'faq', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         supports: {
             align: true,
         },

@@ -8,6 +8,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
     const { InspectorControls, BlockControls, BlockAlignmentToolbar, RichText, PanelColorSettings, URLInput } = wpBlockEditor;
     const { BaseControl, RangeControl, PanelBody, ToggleControl, SelectControl, IconButton, Toolbar } = wpComponents;
 
+    const previewImageData = 'data:image/png;base64,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';
     class AdvButton extends Component {
         constructor() {
             super( ...arguments );
@@ -68,7 +69,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                 paddingTop, paddingRight, paddingBottom, paddingLeft,
                 borderWidth, borderColor, borderRadius, borderStyle,
                 hoverTextColor, hoverBgColor, hoverShadowColor, hoverShadowH, hoverShadowV, hoverShadowBlur, hoverShadowSpread,
-                hoverOpacity, transitionSpeed,
+                hoverOpacity, transitionSpeed, isPreview
             } = attributes;
 
             const isStyleSquared = className.indexOf('-squared') > -1;
@@ -96,7 +97,10 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             }
 
             return (
-                <Fragment>
+                isPreview ?
+                    <img alt={__('Advanced Button', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
+                    <Fragment>
                     <BlockControls>
                         <BlockAlignmentToolbar value={ align } onChange={ ( align ) => setAttributes( { align: align } ) } />
                         <Toolbar>
@@ -469,6 +473,10 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType( 'advgb/button', {
@@ -481,6 +489,11 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         category: 'advgb-category',
         keywords: [ __( 'button', 'advanced-gutenberg' ), __( 'link', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         transforms: {
             from: [
                 {

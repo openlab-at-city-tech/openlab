@@ -1,11 +1,13 @@
-(function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents ) {
+(function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents, wpCompose ) {
     wpBlockEditor = wp.blockEditor || wp.editor;
     const { __ } = wpI18n;
     const { Component, Fragment } = wpElement;
     const { registerBlockType, createBlock } = wpBlocks;
     const { InspectorControls, RichText, PanelColorSettings, InnerBlocks } = wpBlockEditor;
     const { Dashicon, Tooltip, PanelBody, RangeControl, SelectControl, Button } = wpComponents;
-    const { dispatch, select } = wp.data;
+    const { withDispatch, select, dispatch } = wp.data;
+    const { compose } = wpCompose;
+    const { times } = lodash;
 
     const svgPath = (
         <Fragment>
@@ -36,18 +38,24 @@
         {name: 'vert', label: __('Vertical', 'advanced-gutenberg'), icon: tabVerticalIcon},
     ];
 
+    const previewImageData = 'data:image/png;base64,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';
+
+    /**
+     * This allows for checking to see if the block needs to generate a new ID.
+     */
+    const advgbTabsUniqueIDs = [];
+
     class AdvTabsWrapper extends Component {
         constructor() {
             super( ...arguments );
             this.state = {
                 viewport: 'desktop',
-            }
+            };
         }
 
         componentWillMount() {
             const { attributes, setAttributes } = this.props;
             const currentBlockConfig = advgbDefaultConfig['advgb-adv-tabs'];
-
             // No override attributes of blocks inserted before
             if (attributes.changed !== true) {
                 if (typeof currentBlockConfig === 'object' && currentBlockConfig !== null) {
@@ -65,10 +73,39 @@
             }
         }
 
-        componentDidMount() {
-            if (!this.props.attributes.pid) {
-                this.props.setAttributes( { pid: `advgb-tabs-${this.props.clientId}` } );
+        componentDidUpdate() {
+            const { attributes, setAttributes } = this.props;
+            const { isTransform } = attributes;
+
+            if(isTransform) {
+                setAttributes( {
+                    isTransform: false
+                } );
+                this.props.updateTabActive( 0 );
             }
+        }
+
+        componentDidMount() {
+            if ( ! this.props.attributes.uniqueID ) {
+                this.props.setAttributes( {
+                    uniqueID: '_' + this.props.clientId.substr( 2, 9 ),
+                } );
+                advgbTabsUniqueIDs.push( '_' + this.props.clientId.substr( 2, 9 ) );
+            } else if ( advgbTabsUniqueIDs.includes( this.props.attributes.uniqueID ) ) {
+                this.props.setAttributes( {
+                    uniqueID: '_' + this.props.clientId.substr( 2, 9 ),
+                } );
+                advgbTabsUniqueIDs.push( '_' + this.props.clientId.substr( 2, 9 ) );
+            } else {
+                advgbTabsUniqueIDs.push( this.props.attributes.uniqueID );
+            }
+            if (!this.props.attributes.pid) {
+                this.props.setAttributes( {
+                    pid: `advgb-tabs-${this.props.clientId}`,
+                } );
+            }
+            this.updateTabHeaders();
+            this.props.resetOrder();
         }
 
         updateTabsAttr( attrs ) {
@@ -79,6 +116,7 @@
 
             setAttributes( attrs );
             childBlocks.forEach( childBlockId => updateBlockAttributes( childBlockId, attrs ) );
+            this.props.resetOrder();
         }
 
         updateTabsHeader(header, index) {
@@ -97,6 +135,17 @@
 
             setAttributes( { tabHeaders: newHeaders} );
             updateBlockAttributes(childBlocks[index], {header: header});
+            this.updateTabHeaders();
+        }
+
+        updateTabHeaders() {
+            const { attributes, clientId } = this.props;
+            const { tabHeaders } = attributes;
+            const { updateBlockAttributes } = !wp.blockEditor ? dispatch( 'core/editor' ) : dispatch( 'core/block-editor' );
+            const { getBlockOrder } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
+            const childBlocks = getBlockOrder(clientId);
+
+            childBlocks.forEach( childBlockId => updateBlockAttributes( childBlockId, {tabHeaders: tabHeaders} ) );
         }
 
         addTab() {
@@ -110,7 +159,8 @@
                     ...attributes.tabHeaders,
                     __('Tab header', 'advanced-gutenberg')
                 ]
-            } )
+            } );
+            this.props.resetOrder();
         }
 
         removeTab(index) {
@@ -123,7 +173,8 @@
             setAttributes( {
                 tabHeaders: attributes.tabHeaders.filter( (vl, idx) => idx !== index )
             } );
-            this.updateTabsAttr({tabActive: 0})
+            this.updateTabsAttr({tabActive: 0});
+            this.props.resetOrder();
         }
 
         render() {
@@ -147,6 +198,7 @@
                 pid,
                 activeTabBgColor,
                 activeTabTextColor,
+                isPreview,
             } = attributes;
             const blockClass = [
                 `advgb-tabs-wrapper`,
@@ -160,6 +212,9 @@
             if (viewport === 'mobile') deviceLetter = 'M';
 
             return (
+                isPreview ?
+                    <img alt={__('Advanced Tabs', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <InspectorControls>
                         <PanelBody title={ __( 'Tabs Style', 'advanced-gutenberg' ) }>
@@ -264,6 +319,7 @@
                                 label={ __( 'Border Style', 'advanced-gutenberg' ) }
                                 value={ borderStyle }
                                 options={ [
+                                    { label: __( 'None', 'advanced-gutenberg' ), value: 'none' },
                                     { label: __( 'Solid', 'advanced-gutenberg' ), value: 'solid' },
                                     { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
                                     { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
@@ -301,7 +357,7 @@
                         <ul className="advgb-tabs-panel">
                             {tabHeaders.map( ( item, index ) => (
                                 <li key={ index }
-                                    className={`advgb-tab ${tabActive === index && 'ui-tabs-active'}`}
+                                    className={`advgb-tab ${tabActive === index ? 'advgb-tab-active' : ''}`}
                                     style={ {
                                         backgroundColor: headerBgColor,
                                         borderStyle: borderStyle,
@@ -311,7 +367,9 @@
                                     } }
                                 >
                                     <a style={ { color: headerTextColor } }
-                                       onClick={ () => this.updateTabsAttr( {tabActive: index} ) }
+                                       onClick={ () => {
+                                           this.props.updateTabActive( index );
+                                       } }
                                     >
                                         <RichText
                                             tagName="p"
@@ -364,10 +422,10 @@
                     </div>
                     {!!pid &&
                     <style>
-                        {activeTabBgColor && `#block-${clientId} li.advgb-tab.ui-tabs-active {
+                        {activeTabBgColor && `#block-${clientId} li.advgb-tab.advgb-tab-active, #block-${clientId} li.advgb-tab.ui-tabs-active {
                                 background-color: ${activeTabBgColor} !important;
                             }`}
-                        {activeTabTextColor && `#block-${clientId} li.advgb-tab.ui-tabs-active a {
+                        {activeTabTextColor && `#block-${clientId} li.advgb-tab.advgb-tab-active a, #block-${clientId} li.advgb-tab.ui-tabs-active a {
                                 color: ${activeTabTextColor} !important;
                             }`}
                     </style>
@@ -456,6 +514,18 @@
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
+        uniqueID: {
+            type: 'string',
+            default: ''
+        },
+        isTransform: {
+            type: 'boolean',
+            default: false
+        }
     };
 
     registerBlockType( 'advgb/adv-tabs', {
@@ -468,7 +538,43 @@
         category: "advgb-category",
         keywords: [ __( 'tabs', 'advanced-gutenberg' ), __( 'cards', 'advanced-gutenberg' ) ],
         attributes: tabBlockAttrs,
-        edit: AdvTabsWrapper,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
+        edit: compose(
+            withDispatch( (dispatch, { clientId }, { select }) => {
+                const {
+                    getBlock,
+                } = select( 'core/block-editor' );
+                const {
+                    updateBlockAttributes,
+                } = dispatch( 'core/block-editor' );
+                const block = getBlock( clientId );
+                return {
+                    resetOrder() {
+                        times( block.innerBlocks.length, n => {
+                            updateBlockAttributes( block.innerBlocks[ n ].clientId, {
+                                id: n,
+                            } );
+                        } );
+                    },
+                    updateTabActive(tabActive) {
+                        updateBlockAttributes( block.clientId, {
+                            tabActive: tabActive,
+                        } );
+                        times( block.innerBlocks.length, n => {
+                            updateBlockAttributes( block.innerBlocks[ n ].clientId, {
+                                tabActive: tabActive,
+                            } );
+                        } );
+                        this.resetOrder();
+                    },
+                };
+
+            }),
+        )( AdvTabsWrapper ),
         save: function ( { attributes } ) {
             const {
                 tabHeaders,
@@ -484,17 +590,18 @@
                 borderWidth,
                 borderColor,
                 borderRadius,
-                pid,
+                pid
             } = attributes;
             const blockClass = [
                 `advgb-tabs-wrapper`,
                 `advgb-tab-${tabsStyleD}-desktop`,
                 `advgb-tab-${tabsStyleT}-tablet`,
                 `advgb-tab-${tabsStyleM}-mobile`,
+                pid
             ].filter( Boolean ).join( ' ' );
 
             return (
-                <div id={pid} className={blockClass} data-tab-active={tabActiveFrontend}>
+                <div className={blockClass} data-tab-active={tabActiveFrontend}>
                     <ul className="advgb-tabs-panel">
                         {tabHeaders.map( ( header, index ) => (
                             <li key={ index } className="advgb-tab"
@@ -506,7 +613,7 @@
                                     borderRadius: borderRadius + 'px',
                                 } }
                             >
-                                <a href={`#${pid}-${index}`}
+                                <a href={`#advgb-tabs-tab${index}`}
                                    style={ { color: headerTextColor } }
                                 >
                                     <span>{header}</span>
@@ -529,5 +636,146 @@
                 </div>
             );
         },
+        deprecated: [
+            {
+                attributes: {
+                    ...tabBlockAttrs,
+                    isTransform: {
+                        type: 'boolean',
+                        default: false
+                    }
+                },
+                save: function ( { attributes } ) {
+                    const {
+                        tabHeaders,
+                        tabActiveFrontend,
+                        tabsStyleD,
+                        tabsStyleT,
+                        tabsStyleM,
+                        headerBgColor,
+                        headerTextColor,
+                        bodyBgColor,
+                        bodyTextColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor,
+                        borderRadius,
+                        pid
+                    } = attributes;
+                    const blockClass = [
+                        `advgb-tabs-wrapper`,
+                        `advgb-tab-${tabsStyleD}-desktop`,
+                        `advgb-tab-${tabsStyleT}-tablet`,
+                        `advgb-tab-${tabsStyleM}-mobile`,
+                        pid
+                    ].filter( Boolean ).join( ' ' );
+
+                    return (
+                        <div className={blockClass} data-tab-active={tabActiveFrontend}>
+                            <ul className="advgb-tabs-panel">
+                                {tabHeaders.map( ( header, index ) => (
+                                    <li key={ index } className="advgb-tab"
+                                        style={ {
+                                            backgroundColor: headerBgColor,
+                                            borderStyle: borderStyle,
+                                            borderWidth: borderWidth + 'px',
+                                            borderColor: borderColor,
+                                            borderRadius: borderRadius + 'px',
+                                        } }
+                                    >
+                                        <a href={`#advgb-tabs-tab${index}`}
+                                           style={ { color: headerTextColor } }
+                                        >
+                                            <span>{header}</span>
+                                        </a>
+                                    </li>
+                                ) ) }
+                            </ul>
+                            <div className="advgb-tab-body-wrapper"
+                                 style={ {
+                                     backgroundColor: bodyBgColor,
+                                     color: bodyTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: borderWidth + 'px',
+                                     borderColor: borderColor,
+                                     borderRadius: borderRadius + 'px',
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                }
+            },
+            {
+                attributes: {
+                    ...tabBlockAttrs,
+                    uniqueID: {
+                        type: 'string',
+                        default: ''
+                    }
+                },
+                save: function ( { attributes } ) {
+                    const {
+                        tabHeaders,
+                        tabActiveFrontend,
+                        tabsStyleD,
+                        tabsStyleT,
+                        tabsStyleM,
+                        headerBgColor,
+                        headerTextColor,
+                        bodyBgColor,
+                        bodyTextColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor,
+                        borderRadius,
+                        pid,
+                    } = attributes;
+                    const blockClass = [
+                        `advgb-tabs-wrapper`,
+                        `advgb-tab-${tabsStyleD}-desktop`,
+                        `advgb-tab-${tabsStyleT}-tablet`,
+                        `advgb-tab-${tabsStyleM}-mobile`,
+                    ].filter( Boolean ).join( ' ' );
+
+                    return (
+                        <div id={pid} className={blockClass} data-tab-active={tabActiveFrontend}>
+                            <ul className="advgb-tabs-panel">
+                                {tabHeaders.map( ( header, index ) => (
+                                    <li key={ index } className="advgb-tab"
+                                        style={ {
+                                            backgroundColor: headerBgColor,
+                                            borderStyle: borderStyle,
+                                            borderWidth: borderWidth + 'px',
+                                            borderColor: borderColor,
+                                            borderRadius: borderRadius + 'px',
+                                        } }
+                                    >
+                                        <a href={`#${pid}-${index}`}
+                                           style={ { color: headerTextColor } }
+                                        >
+                                            <span>{header}</span>
+                                        </a>
+                                    </li>
+                                ) ) }
+                            </ul>
+                            <div className="advgb-tab-body-wrapper"
+                                 style={ {
+                                     backgroundColor: bodyBgColor,
+                                     color: bodyTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: borderWidth + 'px',
+                                     borderColor: borderColor,
+                                     borderRadius: borderRadius + 'px',
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                },
+            }
+        ]
     } );
-})( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components );
+})( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components, wp.compose );

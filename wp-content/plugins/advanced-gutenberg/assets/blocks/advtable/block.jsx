@@ -17,6 +17,8 @@
     let willSetContent = null;
     let lastValue = '';
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class AdvTable extends Component {
         constructor() {
             super( ...arguments );
@@ -889,7 +891,7 @@
 
         render() {
             const { attributes, setAttributes, className } = this.props;
-            const { head, body, foot, maxWidth, tableCollapsed, hasFixedLayout } = attributes;
+            const { head, body, foot, maxWidth, tableCollapsed, hasFixedLayout, isPreview } = attributes;
             const { initRow, initCol, selectedCell, rangeSelected, multiSelected } = this.state;
             const maxWidthVal = !!maxWidth ? maxWidth : undefined;
             const currentCell = selectedCell ? body[selectedCell.rowIndex].cells[selectedCell.colIndex] : null;
@@ -897,6 +899,9 @@
             // First time insert block, let user determine the table
             if (!body.length) {
                 return (
+                    isPreview ?
+                        <img alt={__('Advanced Table', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                        :
                     <Fragment>
                         <div className="advgb-init-table">
                             <TextControl
@@ -1155,6 +1160,9 @@
             ];
 
             return (
+                isPreview ?
+                    <img alt={__('Advanced Table', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <BlockControls>
                         <Toolbar>
@@ -1469,6 +1477,15 @@
             changed: {
                 type: 'boolean',
                 default: false,
+            },
+            isPreview: {
+                type: 'boolean',
+                default: false,
+            },
+        },
+        example: {
+            attributes: {
+                isPreview: true
             },
         },
         supports: {

@@ -15,6 +15,8 @@
         </svg>
     );
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class AdvImageSlider extends Component {
         constructor() {
             super( ...arguments );
@@ -155,10 +157,14 @@
                 textColor,
                 hAlign,
                 vAlign,
+                isPreview,
             } = attributes;
 
             if (images.length === 0) {
                 return (
+                    isPreview ?
+                        <img alt={__('Images Slider', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                        :
                     <Placeholder
                         icon={ imageSliderBlockIcon }
                         label={ __( 'Image Slider Block', 'advanced-gutenberg' ) }
@@ -197,6 +203,9 @@
             ].filter( Boolean ).join(' ');
 
             return (
+                isPreview ?
+                    <img alt={__('Images Slider', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <InspectorControls>
                         <PanelBody title={ __( 'Image Settings', 'advanced-gutenberg' ) }>
@@ -489,7 +498,11 @@
         changed: {
             type: 'boolean',
             default: false,
-        }
+        },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType( 'advgb/images-slider', {
@@ -502,6 +515,11 @@
         category: 'advgb-category',
         keywords: [ __( 'slide', 'advanced-gutenberg' ), __( 'gallery', 'advanced-gutenberg' ), __( 'photos', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         edit: AdvImageSlider,
         save: function ( { attributes } ) {
             const {
@@ -545,7 +563,7 @@
                                     <a className="advgb-image-slider-overlay"
                                        target="_blank"
                                        rel="noopener noreferrer"
-                                       href={ ( actionOnClick === 'link' && !!image.link ) ? image.link : undefined }
+                                       href={ ( actionOnClick === 'link' && !!image.link ) ? image.link : '#' }
                                        style={ {
                                            backgroundColor: hoverColor,
                                            opacity: alwaysShowOverlay ? 0.5 : undefined,
