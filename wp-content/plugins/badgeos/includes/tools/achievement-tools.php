@@ -9,7 +9,6 @@
  * @link https://wooninjas.com
  */
 
-$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 $achievement_types = badgeos_get_achievement_types_slugs();
 $args = array(
     'role'         => '',
@@ -47,7 +46,7 @@ $wp_users = get_users( $args );
                             <?php
                             if ( is_array( $achievement_types ) && ! empty( $achievement_types ) ) {
                                 foreach ( $achievement_types as $achievement_type ) {
-                                    if( $achievement_type == trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                                    if( $achievement_type == 'step' ) {
                                         continue;
                                     }
                                     $achievements = get_posts( array(

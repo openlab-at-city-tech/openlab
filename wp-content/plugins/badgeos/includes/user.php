@@ -71,10 +71,9 @@ function badgeos_get_user_achievements( $args = array() ) {
 				$where .= " AND post_type = '".$args['achievement_type']."'";
 			}
 		}
-
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+		
 		if( $args['no_step'] ) {
-            $where .= " AND post_type != '".trim( $badgeos_settings['achievement_step_post_type'] )."'";
+			$where .= " AND post_type != 'step'";
 		}
 	
 		if( $args['since'] > 1 ) {
@@ -249,7 +248,7 @@ function badgeos_user_points_section( $user = null ) {
 
                     <?php if( $can_manage ) {
                         ?>
-                        <div class="badgeos-edit-credit-wrapper" style="display:none">
+                        <div class="hidden badgeos-edit-credit-wrapper">
                             <?php echo __( 'Earned Credit: ' ); ?>
                             <input type="number" class="badgeos-edit-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
                         </div>
@@ -277,7 +276,6 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
     echo '<table class="form-table">';
     echo '<tr>';
@@ -320,7 +318,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 			foreach ( $achievements as $achievement ) {
 
-                if( $achievement->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                if( $achievement->post_type != 'step' ) {
                     $achievement_exists = true;
                     
 					echo '<tr>';
@@ -422,7 +420,6 @@ function delete_badgeos_bulk_achievements_records( ){
 
 	global $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $user_recs = $_POST['achievements'];
     $user_id = $_POST['user_id'];
     if( is_array( $user_recs ) && count( $user_recs ) > 0 ) {
@@ -442,7 +439,7 @@ function delete_badgeos_bulk_achievements_records( ){
         $new_achievements = array();
         $delete_achievement = array();
         foreach( $my_achievements as $my_achs ) {
-            if( $my_achs->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+            if( $my_achs->post_type != 'step' ) {
                 if( in_array( $index, $indexes ) && in_array( $my_achs->ID, $achievements ) ) {
                     $delete_achievement[] = $my_achs->ID;
                 } else {
@@ -750,7 +747,6 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	?>
 
 	<h2><?php _e( 'Award an Achievement', 'badgeos' ); ?></h2>
@@ -763,7 +759,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 				<option></option>
 				<?php
 				foreach ( $achievement_types as $achievement_slug => $achievement_type ) {
-                    if( $achievement_slug != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                    if( $achievement_slug != 'step' ) {
                         echo '<option value="'. $achievement_slug .'">' . ucwords( $achievement_type['single_name'] ) .'</option>';
                     }
                 }
@@ -773,7 +769,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 		</tr>
 		<tr><td id="boxes" colspan="2">
 			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) : ?>
-                <?php if( $achievement_slug != trim( $badgeos_settings['achievement_step_post_type'] ) ) { ?>
+                <?php if( $achievement_slug != 'step' ) { ?>
 				<table id="<?php echo esc_attr( $achievement_slug ); ?>" class="widefat badgeos-table">
                     <thead>
                     <tr>
@@ -945,38 +941,5 @@ function badgeos_can_notify_user( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-    return get_user_meta( $user_id, '_badgeos_can_notify_user', true )? true:false;
+	return 'false' !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
 }
-
-/**
- * Update the meta information.
- *
- * @since  3.5
- *
- * @param  int
- * @return none
- */
-function badgeos_update_can_notify_user_field( $user_id ){
-
-    update_user_meta( $user_id, '_badgeos_can_notify_user', 1 );
-}
-add_action( 'user_register', 'badgeos_update_can_notify_user_field', 10, 1 );
-
-/**
- * Update the meta information.
- *
- * @since  3.5
- *
- * @param  int
- * @return none
- */
-function badgeos_save_email_notify_field( $user_id ) {
-
-    if ( !current_user_can( 'edit_user', $user_id ) ) {
-        return false;
-    }
-
-    update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
-}
-add_action( 'personal_options_update', 'badgeos_save_email_notify_field' );
-add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );

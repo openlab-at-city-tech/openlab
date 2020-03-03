@@ -827,12 +827,11 @@ class BadgeOS_Credly {
      */
     public function badge_metabox_add() {
 
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $achievement_types_temp = badgeos_get_achievement_types_slugs();
         $achievement_types = array();
         if( $achievement_types_temp ) {
             foreach( $achievement_types_temp as $key=>$ach ) {
-                if( ! empty( $ach ) && $ach != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                if( ! empty( $ach ) && $ach != 'step' ) {
                     $achievement_types[] = $ach;
                 }
             }
@@ -1140,8 +1139,7 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
         case 'featured_image':
             $value = get_post_thumbnail_id( $post_id );
             if ( ! $value ) {
-                $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-                $parent_achievement = get_page_by_path( get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
+                $parent_achievement = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
                 $value = get_post_thumbnail_id( $parent_achievement->ID );
             }
 

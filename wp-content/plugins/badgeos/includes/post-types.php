@@ -19,9 +19,8 @@ function badgeos_register_post_types() {
 	global $badgeos;
 
 	// Register our Achivement Types CPT
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    register_post_type( $badgeos_settings['achievement_main_post_type'], array(
-        'labels'             => array(
+	register_post_type( 'achievement-type', array(
+		'labels'             => array(
 			'name'               => __( 'Achievement Types', 'badgeos' ),
 			'singular_name'      => __( 'Achievement Type', 'badgeos' ),
 			'add_new'            => __( 'Add New', 'badgeos' ),
@@ -51,7 +50,7 @@ function badgeos_register_post_types() {
 	) );
 
 	// Register our Step
-    register_post_type( trim( $badgeos_settings['achievement_step_post_type'] ), array(
+	register_post_type( 'step', array(
 		'labels'             => array(
 			'name'               => __( 'Steps', 'badgeos' ),
 			'singular_name'      => __( 'Step', 'badgeos' ),
@@ -80,7 +79,7 @@ function badgeos_register_post_types() {
 		'supports'           => array( 'title' ),
 
 	) );
-    badgeos_register_achievement_type( trim( $badgeos_settings['achievement_step_post_type'] ), 'steps' );
+	badgeos_register_achievement_type( 'step', 'steps' );
 
 	// Register Submissions CPT
 	register_post_type( 'submission', array(
@@ -231,10 +230,9 @@ function badgeos_register_achievement_type( $achievement_name_singular = '', $ac
  */
 function badgeos_register_achievement_type_cpt() {
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Grab all of our achievement type posts
 	$achievement_types = get_posts( array(
-		'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
+		'post_type'      =>	'achievement-type',
 		'posts_per_page' =>	-1,
 	) );
 
