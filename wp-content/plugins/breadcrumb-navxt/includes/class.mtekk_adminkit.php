@@ -1,6 +1,6 @@
 <?php
 /*
-	Copyright 2015-2019  John Havlik  (email : john.havlik@mtekk.us)
+	Copyright 2015-2020  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -792,7 +792,7 @@ abstract class mtekk_adminKit
 			$message->render();
 		}
 		//Old deprecated messages
-		if(count($this->message))
+		if(is_array($this->message) && count($this->message))
 		{
 			_deprecated_function( __FUNCTION__, '2.0.0', __('adminKit::message is deprecated, use new adminkit_messages instead.', $this->identifier) );
 			//Loop through our message classes
