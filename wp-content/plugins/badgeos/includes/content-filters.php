@@ -23,14 +23,15 @@ function badgeos_achievement_submissions( $content = '' ) {
 
 		// get achievement object for the current post type
 		$post_type = get_post_type( $post );
-		$achievement = get_page_by_title( $post_type, 'OBJECT', 'achievement-type' );
-		if ( !$achievement ) {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $achievement = get_page_by_title( $post_type, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
+        if ( !$achievement ) {
 			global $wp_post_types;
 
 			$labels = array( 'name', 'singular_name' );
 			// check for other variations
 			foreach ( $labels as $label ) {
-				$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
+                $achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
 				if ( $achievement )
 					break;
 			}
@@ -571,15 +572,7 @@ function badgeos_render_feedback_filters( $atts = array() ) {
  * @return string             Concatenated output
  */
 function badgeos_render_nomination( $nomination = null, $args = array() ) {
-	global $post;
-
-    $nomination_id = $nomination->ID;
-    $nomination_status = get_post_meta( $nomination_id, '_badgeos_nomination_status', true );
-
-    if( trim( $nomination_status ) != 'pending' ) {
-        return;
-    }
-
+    global $post;
 
     // If we weren't given a nomination, use the current post
 	if ( empty( $nomination ) ) {
@@ -630,14 +623,6 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
  */
 function badgeos_render_submission( $submission = null, $args = array() ) {
 	global $post;
-
-    $submission_id = $submission->ID;
-    $submission_status = get_post_meta( $submission_id, '_badgeos_submission_status', true );
-
-    if( trim( $submission_status ) != 'pending' ) {
-        return;
-    }
-
 
     // If we weren't given a submission, use the current post
 	if ( empty( $submission ) ) {

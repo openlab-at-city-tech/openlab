@@ -48,7 +48,7 @@ class Badgeos_Tools {
      */
     public function register_badgeos_tool() { ?>
 
-        <div class="wrap" >
+        <div class="wrap badgeos-tools-page">
             <div id="icon-options-general" class="icon32"></div>
             <h2><?php _e( 'Tools', 'gamify' ); ?></h2>
 
@@ -121,6 +121,8 @@ class Badgeos_Tools {
         if( ! $_POST || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
             return false;
         }
+
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         if( ( isset( $_POST['achievement_bulk_award'] ) && wp_verify_nonce( $_POST['achievement_bulk_award'], 'achievement_bulk_award' ) ) ||
             ( isset( $_POST['achievement_bulk_revoke'] ) && wp_verify_nonce( $_POST['achievement_bulk_revoke'], 'achievement_bulk_revoke' ) )
@@ -196,7 +198,7 @@ class Badgeos_Tools {
                                 $new_achievements = array();
                                 $delete_achievement = array();
                                 foreach( $my_achievements as $my_achs ) {
-                                    if( $my_achs->post_type != 'step' ) {
+                                    if( $my_achs->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
                                         if( in_array( $index, $indexes ) && in_array( $my_achs->ID, $achievements ) ) {
                                             $delete_achievement[] = $my_achs->ID;
                                         } else {

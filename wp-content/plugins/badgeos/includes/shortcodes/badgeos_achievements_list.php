@@ -7,27 +7,24 @@
  */
 function badgeos_register_achievements_list_shortcode() {
 
+    global $wpdb;
+
 	// Setup a custom array of achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
-        'post_type'      =>	'achievement-type',
+        'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
     ) );
 
+    $post_list = array();
     $types = array( 'all' => __( 'All', 'badgeos' ) );
     foreach( $achievement_types as $type ) {
         $types[ $type->post_name ] = $type->post_title;
-    }
 
-    $users = get_users();
-    $user_list = array();
-    foreach( $users as $user ) {
-        $user_list[ $user->ID ] = $user->user_login;
-    }
-
-    $posts = get_posts();
-    $post_list = array();
-    foreach( $posts as $post ) {
-        $post_list[ $post->ID ] = $post->post_title;
+        $posts = get_posts( array( 'post_type' => $type->post_name ) );
+        foreach( $posts as $post ) {
+            $post_list[ $post->ID ] = $post->post_title;
+        }
     }
 
     badgeos_register_shortcode( array(
@@ -90,12 +87,12 @@ function badgeos_register_achievements_list_shortcode() {
 				'type'        => 'select',
 				'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
 				'default'     => 'ASC',
-				),
-			'user_id' => array(
-				'name'          => __( 'User ID', 'badgeos' ),
+            ),
+            'user_id1' => array(
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
 				'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
-                'type'          => 'select',
-                'values'        => $user_list,
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
             ),
 			'include' => array(
 				'name'          => __( 'Include', 'badgeos' ),
