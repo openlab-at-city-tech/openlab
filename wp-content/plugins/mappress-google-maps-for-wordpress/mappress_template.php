@@ -104,7 +104,7 @@ class Mappress_Template extends Mappress_Obj {
 	static function locate_template($template_name) {
 		$template_name .= ".php";
 		$template_file = locate_template($template_name, false);
-		if (!Mappress::$pro || Mappress::is_admin() || empty($template_file))
+		if (!Mappress::$pro || is_admin() || empty($template_file))
 			$template_file = Mappress::$basedir . "/templates/$template_name";
 
 		// Template exists, return it

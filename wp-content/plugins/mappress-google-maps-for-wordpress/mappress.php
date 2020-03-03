@@ -4,7 +4,7 @@ Plugin Name: MapPress Maps for WordPress
 Plugin URI: https://www.mappresspro.com/mappress
 Author URI: https://www.mappresspro.com/chris-contact
 Description: MapPress makes it easy to add Google and Leaflet Maps to WordPress
-Version: 2.53.4
+Version: 2.53.5
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Matthias Stasiak for his wonderful icons (http://code.google.com/p/google-maps-icons/)
@@ -35,7 +35,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.53.4';
+	const VERSION = '2.53.5';
 
 	static
 		$baseurl,
@@ -288,12 +288,11 @@ class Mappress {
 		$mashup = new Mappress_Map($atts);
 		$mashup->query = Mappress_Query::parse_query($atts);
 
-		// If parameter test="true", output the query result without using a map
+		// If parameter test="true", output the query result (or global query) without using a map
 		if (isset($_GET['mp_test']) || (isset($atts['test']) && $atts['test'])) {
-			$wpq = new WP_Query($mashup->query);
+			$wpq = ($mashup->query) ? new WP_Query($mashup->query) : $wp_query;
 			return "<pre>" . print_r($wpq, true) . "</pre>";
 		}
-
 		// If using query 'current' then create a static map for current posts
 		if (empty($mashup->query))
 			$mashup->pois = Mappress_Query::get_pois($wp_query);
@@ -368,10 +367,11 @@ class Mappress {
 		update_option('mappress_version', self::VERSION);
 	}
 
-	// WP returns is_admin() = true during AJAX calls, this one returns false in that case
+	// Prevent shortcodes on admin screens
 	static function is_admin() {
 		$ajax = defined('DOING_AJAX') && DOING_AJAX;
-		return is_admin() && !$ajax;
+		$rest = defined('REST_REQUEST') && REST_REQUEST;
+		return (is_admin() && !$ajax) || $rest;
 	}
 
 	static function is_dev() {
@@ -622,23 +622,13 @@ class Mappress {
 	}
 
 	/**
-	* Map a shortcode in a post.
+	* Map shortcode
 	*
-	* @param mixed $atts - shortcode attributes
 	*/
 	static function shortcode_map($atts='') {
 		global $post;
 
-		// No feeds
-		if (is_feed())
-			return;
-
-		// No REST requests (e.g. Gutenberg)
-		if (defined('REST_REQUEST') && REST_REQUEST)
-			return;
-
-		// Try to protect against calls to do_shortcode() in the post editor...
-		if (self::is_admin())
+		if (self::is_admin() || is_feed())
 			return;
 
 		$atts = self::scrub_atts($atts);
@@ -666,16 +656,11 @@ class Mappress {
 	}
 
 	/**
-	* Process the mashup shortcode
+	* Mashup shortcode
 	*
 	*/
 	static function shortcode_mashup($atts='') {
-		// No feeds
-		if (is_feed())
-			return;
-
-		// Prevent do_shortcode() in the post editor, but allow for AJAX calls from other plugins (which run as admin)
-		if (self::is_admin())
+		if (self::is_admin() || is_feed())
 			return;
 
 		$atts = self::scrub_atts($atts);
