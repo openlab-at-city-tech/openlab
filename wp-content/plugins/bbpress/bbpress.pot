@@ -1,14 +1,14 @@
-# Copyright (C) 2019 The bbPress Contributors
+# Copyright (C) 2020 The bbPress Contributors
 # This file is distributed under the GPLv2 or later (license.txt).
 msgid ""
 msgstr ""
-"Project-Id-Version: bbPress 2.6.3\n"
+"Project-Id-Version: bbPress 2.6.4\n"
 "Report-Msgid-Bugs-To: https://bbpress.trac.wordpress.org\n"
-"POT-Creation-Date: 2019-12-10 20:28:53+00:00\n"
+"POT-Creation-Date: 2020-01-30 12:33:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Last-Translator: JOHN JAMES JACOBY <jjj@bbpress.org>\n"
 "Language-Team: ENGLISH <jjj@bbpress.org>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
@@ -39,6 +39,10 @@ msgstr ""
 
 #: bbpress.php:759
 msgid "bbPress Item Count"
+msgstr ""
+
+#: bbpress.php:796
+msgid "bbPress User Activity"
 msgstr ""
 
 #: includes/admin/actions.php:178 includes/admin/forums.php:538
@@ -638,7 +642,7 @@ msgid "View"
 msgstr ""
 
 #: includes/admin/classes/class-bbp-topic-replies-list-table.php:149
-#: includes/admin/settings.php:391 includes/common/template.php:2265
+#: includes/admin/settings.php:391 includes/common/template.php:2278
 #: includes/forums/template.php:54 includes/replies/template.php:55
 #: includes/replies/template.php:1848 includes/topics/template.php:53
 #: includes/topics/template.php:2403
@@ -1136,13 +1140,13 @@ msgid "Select whether to open or close the topic."
 msgstr ""
 
 #: includes/admin/metaboxes.php:431 includes/admin/metaboxes.php:495
-#: includes/extend/buddypress/groups.php:1188 includes/topics/template.php:65
+#: includes/extend/buddypress/groups.php:1347 includes/topics/template.php:65
 #: templates/default/bbpress/form-topic.php:124
 #: templates/default/bbpress/loop-search-forum.php:25
 msgid "Forum:"
 msgstr ""
 
-#: includes/admin/metaboxes.php:445 includes/extend/buddypress/groups.php:356
+#: includes/admin/metaboxes.php:445 includes/extend/buddypress/groups.php:487
 #: templates/default/bbpress/form-topic.php:127
 msgid "&mdash; No forum &mdash;"
 msgstr ""
@@ -1679,7 +1683,7 @@ msgid "Super Moderators"
 msgstr ""
 
 #: includes/admin/settings.php:224 includes/admin/settings.php:399
-#: includes/common/template.php:2380 includes/search/template.php:175
+#: includes/common/template.php:2393 includes/search/template.php:175
 #: templates/default/bbpress/form-reply-search.php:20
 #: templates/default/bbpress/form-search.php:21
 #: templates/default/bbpress/form-topic-search.php:20
@@ -3714,127 +3718,127 @@ msgid ""
 "Login and visit the topic to unsubscribe from these emails."
 msgstr ""
 
-#: includes/common/template.php:1563
+#: includes/common/template.php:1576
 msgid "No topics available"
 msgstr ""
 
-#: includes/common/template.php:1568
+#: includes/common/template.php:1581
 msgid "No forums available"
 msgstr ""
 
-#: includes/common/template.php:1573
+#: includes/common/template.php:1586
 msgid "None available"
 msgstr ""
 
-#: includes/common/template.php:2187
+#: includes/common/template.php:2200
 msgid "Home"
 msgstr ""
 
-#: includes/common/template.php:2257
+#: includes/common/template.php:2270
 msgid "(Edit)"
 msgstr ""
 
-#: includes/common/template.php:2261 includes/common/template.php:2376
-#: includes/common/template.php:2621 includes/core/theme-compat.php:794
+#: includes/common/template.php:2274 includes/common/template.php:2389
+#: includes/common/template.php:2634 includes/core/theme-compat.php:794
 #: templates/default/extras/taxonomy-topic-tag-edit.php:17
 #: templates/default/extras/taxonomy-topic-tag.php:17
 msgid "Topic Tag: %s"
 msgstr ""
 
-#: includes/common/template.php:2282
+#: includes/common/template.php:2295
 msgid "&lsaquo;"
 msgstr ""
 
-#: includes/common/template.php:2282
+#: includes/common/template.php:2295
 msgid "&rsaquo;"
 msgstr ""
 
-#: includes/common/template.php:2545
+#: includes/common/template.php:2558
 msgid "Log Out"
 msgstr ""
 
-#: includes/common/template.php:2585
+#: includes/common/template.php:2598
 msgid "Forum Edit: %s"
 msgstr ""
 
-#: includes/common/template.php:2590
+#: includes/common/template.php:2603
 msgid "Topic Edit: %s"
 msgstr ""
 
-#: includes/common/template.php:2595
+#: includes/common/template.php:2608
 msgid "Reply Edit: %s"
 msgstr ""
 
-#: includes/common/template.php:2600
+#: includes/common/template.php:2613
 msgid "Topic Tag Edit: %s"
 msgstr ""
 
-#: includes/common/template.php:2607
+#: includes/common/template.php:2620
 msgid "Forum: %s"
 msgstr ""
 
-#: includes/common/template.php:2612
+#: includes/common/template.php:2625
 msgid "Topic: %s"
 msgstr ""
 
-#: includes/common/template.php:2634
+#: includes/common/template.php:2647
 msgid "Your Topics"
 msgstr ""
 
-#: includes/common/template.php:2638
+#: includes/common/template.php:2651
 #. translators: user's display name
 msgid "%s's Topics"
 msgstr ""
 
-#: includes/common/template.php:2644
+#: includes/common/template.php:2657
 msgid "Your Replies"
 msgstr ""
 
-#: includes/common/template.php:2648
+#: includes/common/template.php:2661
 #. translators: user's display name
 msgid "%s's Replies"
 msgstr ""
 
-#: includes/common/template.php:2654
+#: includes/common/template.php:2667
 msgid "Your Favorites"
 msgstr ""
 
-#: includes/common/template.php:2658
+#: includes/common/template.php:2671
 #: templates/default/bbpress/user-details.php:57
 #. translators: user's display name
 msgid "%s's Favorites"
 msgstr ""
 
-#: includes/common/template.php:2664
+#: includes/common/template.php:2677
 msgid "Your Subscriptions"
 msgstr ""
 
-#: includes/common/template.php:2668
+#: includes/common/template.php:2681
 #: templates/default/bbpress/user-details.php:67
 #. translators: user's display name
 msgid "%s's Subscriptions"
 msgstr ""
 
-#: includes/common/template.php:2674
+#: includes/common/template.php:2687
 msgid "Your Profile"
 msgstr ""
 
-#: includes/common/template.php:2678
+#: includes/common/template.php:2691
 #: templates/default/bbpress/user-details.php:30
 #. translators: user's display name
 msgid "%s's Profile"
 msgstr ""
 
-#: includes/common/template.php:2687
+#: includes/common/template.php:2700
 msgid "Edit Your Profile"
 msgstr ""
 
-#: includes/common/template.php:2692
+#: includes/common/template.php:2705
 #: templates/default/bbpress/user-details.php:74
 msgid "Edit %s's Profile"
 msgstr ""
 
-#: includes/common/template.php:2700
+#: includes/common/template.php:2713
 msgid "View: %s"
 msgstr ""
 
@@ -4106,41 +4110,49 @@ msgstr ""
 msgid "%1$s replied to the topic %2$s in the forum %3$s"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:336
-#: includes/extend/buddypress/groups.php:339
+#: includes/extend/buddypress/groups.php:379
+msgid "<strong>ERROR</strong>: Forum ID is invalid."
+msgstr ""
+
+#: includes/extend/buddypress/groups.php:442
+msgid "<strong>ERROR</strong>: Reply To is invalid."
+msgstr ""
+
+#: includes/extend/buddypress/groups.php:467
+#: includes/extend/buddypress/groups.php:470
 msgid "Group Forum Settings"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:340
-#: includes/extend/buddypress/groups.php:539
+#: includes/extend/buddypress/groups.php:471
+#: includes/extend/buddypress/groups.php:670
 msgid ""
 "Create a discussion forum to allow members of this group to communicate in "
 "a structured, bulletin-board style fashion."
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:344
-#: includes/extend/buddypress/groups.php:542
+#: includes/extend/buddypress/groups.php:475
+#: includes/extend/buddypress/groups.php:673
 msgid "Yes. I want this group to have a forum."
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:347
+#: includes/extend/buddypress/groups.php:478
 msgid "Saying no will not delete existing forum content."
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:352
+#: includes/extend/buddypress/groups.php:483
 msgid "Group Forum:"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:360
+#: includes/extend/buddypress/groups.php:491
 msgid "Network administrators can reconfigure which forum belongs to this group."
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:365
+#: includes/extend/buddypress/groups.php:496
 msgid "Save Settings"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:400
-#: includes/extend/buddypress/groups.php:557
+#: includes/extend/buddypress/groups.php:531
+#: includes/extend/buddypress/groups.php:688
 #: includes/extend/buddypress/notifications.php:196
 #: includes/forums/functions.php:126 includes/forums/functions.php:393
 #: includes/replies/functions.php:134 includes/replies/functions.php:517
@@ -4150,15 +4162,15 @@ msgstr ""
 #: includes/topics/functions.php:1747 includes/topics/functions.php:1808
 #: includes/users/engagements.php:612 includes/users/engagements.php:853
 #: includes/users/functions.php:196 includes/users/functions.php:202
-#: includes/users/functions.php:382
+#: includes/users/functions.php:380
 msgid "<strong>ERROR</strong>: Are you sure you wanted to do that?"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:537
+#: includes/extend/buddypress/groups.php:668
 msgid "Group Forum"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:886
+#: includes/extend/buddypress/groups.php:1017
 msgid "This group does not currently have a forum."
 msgstr ""
 
@@ -4579,11 +4591,11 @@ msgid ""
 msgstr ""
 
 #: includes/replies/functions.php:1489
-msgid "<strong>ERROR:</strong> This reply could not be found or no longer exists."
+msgid "<strong>ERROR</strong>: This reply could not be found or no longer exists."
 msgstr ""
 
 #: includes/replies/functions.php:1495 includes/topics/functions.php:2025
-msgid "<strong>ERROR:</strong> You do not have permission to do that."
+msgid "<strong>ERROR</strong>: You do not have permission to do that."
 msgstr ""
 
 #: includes/replies/functions.php:1571
@@ -4957,7 +4969,7 @@ msgid ""
 msgstr ""
 
 #: includes/topics/functions.php:2019
-msgid "<strong>ERROR:</strong> This topic could not be found or no longer exists."
+msgid "<strong>ERROR</strong>: This topic could not be found or no longer exists."
 msgstr ""
 
 #: includes/topics/functions.php:2109
@@ -5294,15 +5306,15 @@ msgstr ""
 msgid "<strong>ERROR</strong>: That is not a valid email address."
 msgstr ""
 
-#: includes/users/functions.php:226 includes/users/functions.php:345
+#: includes/users/functions.php:226 includes/users/functions.php:343
 msgid "<strong>ERROR</strong>: That email address is already in use."
 msgstr ""
 
-#: includes/users/functions.php:408
+#: includes/users/functions.php:406
 msgid "<strong>ERROR</strong>: An error occurred while updating your email address."
 msgstr ""
 
-#: includes/users/functions.php:420
+#: includes/users/functions.php:418
 msgid ""
 "%1$s\n"
 "\n"
@@ -5321,7 +5333,7 @@ msgid ""
 "%5$s"
 msgstr ""
 
-#: includes/users/functions.php:455
+#: includes/users/functions.php:453
 msgid "[%s] New Email Address"
 msgstr ""
 
@@ -6257,7 +6269,7 @@ msgctxt "widgets"
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: includes/extend/buddypress/groups.php:497
+#: includes/extend/buddypress/groups.php:628
 msgctxt "group admin edit screen"
 msgid "Discussion Forum"
 msgstr ""
