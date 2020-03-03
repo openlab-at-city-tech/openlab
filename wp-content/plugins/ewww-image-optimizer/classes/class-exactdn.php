@@ -73,6 +73,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		private $exactdn_domain = false;
 
 		/**
+		 * The Easy IO Plan/Tier ID
+		 *
+		 * @access private
+		 * @var int $plan_id
+		 */
+		private $plan_id = 1;
+
+		/**
 		 * The detected site scheme (http/https).
 		 *
 		 * @access private
@@ -164,7 +172,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			add_filter( 'wp_resource_hints', array( $this, 'dns_prefetch' ), 10, 2 );
 
 			// Get all the script/css urls and rewrite them (if enabled).
-			if ( $this->get_option( 'exactdn_all_the_things' ) ) {
+			if ( $this->get_option( 'exactdn_all_the_things' ) && $this->plan_id > 1 ) {
 				add_filter( 'style_loader_src', array( $this, 'parse_enqueue' ), 20 );
 				add_filter( 'script_loader_src', array( $this, 'parse_enqueue' ), 20 );
 			}
@@ -178,31 +186,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			// Configure Autoptimize with our CDN domain.
 			add_filter( 'autoptimize_filter_cssjs_multidomain', array( $this, 'autoptimize_cdn_url' ) );
 
-			// Find the "local" domain.
-			$s3_active = false;
-			if ( class_exists( 'Amazon_S3_And_CloudFront' ) ) {
-				global $as3cf;
-				$s3_region = $as3cf->get_setting( 'region' );
-				$s3_bucket = $as3cf->get_setting( 'bucket' );
-				if ( is_wp_error( $s3_region ) ) {
-					$s3_region = '';
-				}
-				$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
-				$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
-				if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
-					$s3_active = true;
-				}
-			}
-
-			if ( $s3_active ) {
-				$upload_dir = array(
-					'baseurl' => 'https://' . $s3_domain,
-				);
-			} else {
-				$upload_dir = wp_upload_dir( null, false );
-			}
-			$upload_url_parts = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? $this->parse_url( EXACTDN_LOCAL_DOMAIN ) : $this->parse_url( $upload_dir['baseurl'] );
+			$upload_url_parts = $this->parse_url( $this->content_url() );
 			if ( empty( $upload_url_parts ) ) {
+				$this->debug_message( "could not break down URL: $this->site_url" );
 				return;
 			}
 			$this->upload_domain = $upload_url_parts['host'];
@@ -215,7 +201,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( "removing this from urls: $this->remove_path" );
 			}
 			$this->allowed_domains[] = $this->upload_domain;
-			if ( ! $s3_active && strpos( $this->upload_domain, 'www' ) === false ) {
+			if ( ! $this->s3_active && strpos( $this->upload_domain, 'www' ) === false ) {
 				$this->allowed_domains[] = 'www.' . $this->upload_domain;
 			} else {
 				$nonwww = ltrim( 'www.', $this->upload_domain );
@@ -242,6 +228,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		function setup() {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			// If we don't have a domain yet, go grab one.
+			$this->plan_id = $this->get_exactdn_option( 'plan_id' );
 			if ( ! $this->get_exactdn_domain() ) {
 				$this->debug_message( 'attempting to activate exactDN' );
 				$exactdn_domain = $this->activate_site();
@@ -259,6 +246,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( 'verified existing exactDN domain' );
 				$this->exactdn_domain = $exactdn_domain;
 				$this->debug_message( 'exactdn_domain: ' . $exactdn_domain );
+				$this->debug_message( 'exactdn_plan_id: ' . $this->plan_id );
 				return true;
 			}
 			delete_option( $this->prefix . 'exactdn_domain' );
@@ -273,27 +261,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 */
 		function activate_site() {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
-			$s3_active = false;
-			if ( class_exists( 'Amazon_S3_And_CloudFront' ) ) {
-				global $as3cf;
-				$s3_scheme = $as3cf->get_url_scheme();
-				$s3_region = $as3cf->get_setting( 'region' );
-				$s3_bucket = $as3cf->get_setting( 'bucket' );
-				if ( is_wp_error( $s3_region ) ) {
-					$s3_region = '';
-				}
-				$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
-				$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
-				if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
-					$s3_active = true;
-				}
-			}
 
-			if ( $s3_active ) {
-				$site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : $s3_scheme . '://' . $s3_domain;
-			} else {
-				$site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : get_home_url();
-			}
+			$site_url = $this->content_url();
+			$home_url = home_url();
+
 			$url = 'http://optimize.exactlywww.com/exactdn/activate.php';
 			$ssl = wp_http_supports( array( 'ssl' ) );
 			if ( $ssl ) {
@@ -306,6 +277,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					'timeout' => 10,
 					'body'    => array(
 						'site_url' => $site_url,
+						'home_url' => $home_url,
 					),
 				)
 			);
@@ -322,14 +294,30 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					if (
 						false !== strpos( $site_url, 'amazonaws.com' ) ||
 						false !== strpos( $site_url, 'digitaloceanspaces.com' ) ||
-						false !== strpos( $site_url, 'storage.googleapis.com' )
+						false !== strpos( $site_url, 'storage.googleapis.com' ) ||
+						$this->s3_active
 					) {
 						$this->set_exactdn_option( 'verify_method', -1, false );
+					}
+					if ( ! empty( $response['plan_id'] ) ) {
+						if ( 2 === (int) $response['plan_id'] ) {
+							$this->set_exactdn_option( 'plan_id', 2 );
+							$this->plan_id = 2;
+						} elseif ( 3 === (int) $response['plan_id'] ) {
+							$this->set_exactdn_option( 'plan_id', 3 );
+							$this->plan_id = 3;
+						} else {
+							$this->set_exactdn_option( 'plan_id', 1 );
+							$this->set_option( 'exactdn_all_the_things', true );
+							$this->plan_id = 1;
+						}
 					}
 					if ( get_option( 'exactdn_never_been_active' ) ) {
 						$this->set_option( $this->prefix . 'lazy_load', true );
 						$this->set_option( 'exactdn_lossy', true );
-						$this->set_option( 'exactdn_all_the_things', true );
+						if ( $this->plan_id > 1 ) {
+							$this->set_option( 'exactdn_all_the_things', true );
+						}
 						delete_option( 'exactdn_never_been_active' );
 					}
 					if ( 'external' === get_option( 'elementor_css_print_method' ) ) {
@@ -341,7 +329,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					}
 					return $this->set_exactdn_domain( $response['domain'] );
 				}
-			} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'error' ) !== false ) {
+			} elseif ( ! empty( $result['body'] ) && false !== strpos( $result['body'], 'error' ) ) {
 				$response      = json_decode( $result['body'], true );
 				$error_message = $response['error'];
 				$this->debug_message( "exactdn activation request failed: $error_message" );
@@ -365,12 +353,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			// Check the time, to see how long it has been since we verified the domain.
-			$last_checkin = $this->get_exactdn_option( 'checkin' );
-			if ( $this->get_exactdn_option( 'verified' ) ) {
+			$last_checkin = (int) $this->get_exactdn_option( 'checkin' );
+			if ( $this->get_exactdn_option( 'verified' ) && $last_checkin > time() ) {
+				$this->debug_message( 'not time yet: ' . $this->human_time_diff( $last_checkin ) );
 				return true;
 			}
 
 			$this->check_verify_method();
+			$this->set_exactdn_option( 'checkin', time() + 3600 );
 
 			// Set a default error.
 			global $exactdn_activate_error;
@@ -394,6 +384,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						( '89504e470d0a1a0a' === bin2hex( substr( $test_result['body'], 0, 8 ) ) || '52494646' === bin2hex( substr( $test_result['body'], 0, 4 ) ) ) ) {
 						$this->debug_message( 'exactdn (real-world) verification succeeded' );
 						$this->set_exactdn_option( 'verified', 1, false );
+						$this->set_exactdn_option( 'verify_method', -1, false ); // After initial activation, use API directly.
 						add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_success' );
 						return true;
 					}
@@ -432,9 +423,21 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'error' ) === false ) {
 				$response = json_decode( $result['body'], true );
 				if ( ! empty( $response['success'] ) ) {
-					$this->debug_message( 'exactdn (secondary) verification succeeded' );
+					if ( 2 === (int) $response['success'] ) {
+						$this->set_exactdn_option( 'plan_id', 2 );
+						$this->plan_id = 2;
+					} elseif ( 3 === (int) $response['success'] ) {
+						$this->set_exactdn_option( 'plan_id', 3 );
+						$this->plan_id = 3;
+					} elseif ( 1 !== (int) $this->plan_id ) {
+						$this->set_exactdn_option( 'plan_id', 1 );
+						$this->plan_id = 1;
+					}
+					$this->debug_message( 'exactdn verification via API succeeded' );
 					$this->set_exactdn_option( 'verified', 1, false );
-					add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_success' );
+					if ( empty( $last_checkin ) ) {
+						add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_success' );
+					}
 					return true;
 				}
 			} elseif ( ! empty( $result['body'] ) ) {
@@ -472,6 +475,15 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$this->debug_message( 'exactdn (simulated) verification request failed, error unknown' );
 				$this->set_exactdn_option( 'verify_method', -1, false );
 			}
+		}
+
+		/**
+		 * Allow external classes/functions to check the Easy IO Plan ID (to customize UI).
+		 *
+		 * @return int The currently validated plan ID (1-3).
+		 */
+		function get_plan_id() {
+			return (int) $this->plan_id;
 		}
 
 		/**
@@ -1149,7 +1161,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( $this->filtering_the_page ) {
 				$content = $this->filter_prz_thumb( $content );
 			}
-			if ( $this->filtering_the_page && $this->get_option( 'exactdn_all_the_things' ) ) {
+			if ( $this->filtering_the_page && $this->get_option( 'exactdn_all_the_things' ) && $this->plan_id > 1 ) {
 				$this->debug_message( 'rewriting all other wp-content/wp-includes urls' );
 				$content = $this->filter_all_the_things( $content );
 			}
@@ -1257,7 +1269,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 * @return string The filtered HTML content.
 		 */
 		function filter_all_the_things( $content ) {
-			if ( $this->exactdn_domain && $this->upload_domain ) {
+			if ( $this->exactdn_domain && $this->upload_domain && $this->plan_id > 1 ) {
 				$upload_domain = $this->upload_domain;
 				if ( 0 === strpos( $this->upload_domain, 'www.' ) ) {
 					$upload_domain = substr( $this->upload_domain, 4 );
@@ -2536,12 +2548,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( false === strpos( $image_url, 'strip=all' ) && $this->get_option( $this->prefix . 'metadata_remove' ) ) {
 				$more_args['strip'] = 'all';
 			}
-			if ( false === strpos( $image_url, 'lossy=' ) && ! $this->get_option( 'exactdn_lossy' ) ) {
+			if ( $this->plan_id > 1 && false === strpos( $image_url, 'lossy=' ) && ! $this->get_option( 'exactdn_lossy' ) ) {
 				$more_args['lossy'] = 0;
+			} elseif ( false === strpos( $image_url, 'lossy=' ) && 1 === $this->plan_id ) {
+				$more_args['lossy'] = 1;
 			} elseif ( false === strpos( $image_url, 'lossy=' ) && $this->get_option( 'exactdn_lossy' ) ) {
 				$more_args['lossy'] = is_numeric( $this->get_option( 'exactdn_lossy' ) ) ? (int) $this->get_option( 'exactdn_lossy' ) : 80;
 			}
-			if ( false === strpos( $image_url, 'quality=' ) && ! is_null( $jpg_quality ) && 82 !== (int) $jpg_quality ) {
+			if ( $this->plan_id > 1 && false === strpos( $image_url, 'quality=' ) && ! is_null( $jpg_quality ) && 82 !== (int) $jpg_quality ) {
 				$more_args['quality'] = $jpg_quality;
 			}
 			// Merge given args with the automatic (option-based) args, and also makes sure args is an array if it was previously a string.
@@ -2677,26 +2691,6 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 			$this->debug_message( "valid $scheme - $url" );
 			return preg_replace( '#^([a-z:]+)?//#i', "$scheme://", $url );
-		}
-
-		/**
-		 * A wrapper for PHP's parse_url, prepending assumed scheme for network path
-		 * URLs. PHP versions 5.4.6 and earlier do not correctly parse without scheme.
-		 *
-		 * @param string  $url The URL to parse.
-		 * @param integer $component Retrieve specific URL component.
-		 * @return mixed Result of parse_url.
-		 */
-		function parse_url( $url, $component = -1 ) {
-			if ( 0 === strpos( $url, '//' ) ) {
-				$url = ( is_ssl() ? 'https:' : 'http:' ) . $url;
-			}
-			if ( false === strpos( $url, 'http' ) && '/' !== substr( $url, 0, 1 ) ) {
-				$url = ( is_ssl() ? 'https://' : 'http://' ) . $url;
-			}
-			// Because encoded ampersands in the filename break things.
-			$url = str_replace( '&#038;', '&', $url );
-			return parse_url( $url, $component );
 		}
 
 		/**
