@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.16.11
+Version: 2.4.17.11
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.16.11';
+	public static $version = '2.4.17.11';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -620,14 +620,11 @@ class GFForms {
 	 * @return void
 	 */
 	public static function maybe_process_form() {
+		if ( isset( $_POST['gform_submit'] ) ) {
+			require_once( GFCommon::get_base_path() . '/form_display.php' );
+			$form_id = GFFormDisplay::is_submit_form_id_valid();
 
-		$form_id = isset( $_POST['gform_submit'] ) ? absint( $_POST['gform_submit'] ) : 0;
-		if ( $form_id ) {
-			$form_info     = RGFormsModel::get_form( $form_id );
-			$is_valid_form = $form_info && $form_info->is_active;
-
-			if ( $is_valid_form ) {
-				require_once( GFCommon::get_base_path() . '/form_display.php' );
+			if ( $form_id ) {
 				GFFormDisplay::process_form( $form_id );
 			}
 		} elseif ( isset( $_POST['gform_send_resume_link'] ) ) {
@@ -1613,6 +1610,16 @@ class GFForms {
 	 */
 	public static function parse_shortcode( $attributes, $content = null ) {
 
+		/**
+		 * @var string $title
+		 * @var string $description
+		 * @var int    $id
+		 * @var string $name
+		 * @var string $field_values
+		 * @var string $ajax
+		 * @var int    $tabindex
+		 * @var string $action
+		 */
 		extract(
 			shortcode_atts(
 				array(
@@ -1720,7 +1727,7 @@ class GFForms {
 	//----------- AJAX --------------------------------
 
 	/**
-	 * Parses AJAX requests.
+	 * Triggers parsing of AJAX requests and outputs the response.
 	 *
 	 * @since  Unknown
 	 * @access public
@@ -1729,19 +1736,39 @@ class GFForms {
 	 */
 	public static function ajax_parse_request( $wp ) {
 		if ( isset( $_POST['gform_ajax'] ) ) {
-			parse_str( $_POST['gform_ajax'], $args );
+			die( self::get_ajax_form_response() );
+		}
+	}
 
-			$form_id             = absint( $args['form_id'] );
-			$display_title       = (bool) $args['title'];
-			$display_description = (bool) $args['description'];
+	/**
+	 * Parses the ajax submission and returns the response.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @return mixed|string|void|WP_Error
+	 */
+	public static function get_ajax_form_response() {
+		parse_str( rgpost( 'gform_ajax' ), $args );
+
+		$form_id = isset( $args['form_id'] ) ? absint( $args['form_id'] ) : 0;
+
+		require_once( GFCommon::get_base_path() . '/form_display.php' );
+
+		if ( GFFormDisplay::is_submit_form_id_valid( $form_id ) ) {
+			$display_title       = ! isset( $args['title'] ) || ! empty( $args['title'] ) ? true : false;
+			$display_description = ! isset( $args['description'] ) || ! empty( $args['description'] ) ? true : false;
 			$tabindex            = isset( $args['tabindex'] ) ? absint( $args['tabindex'] ) : 0;
 
-			parse_str( $_POST['gform_field_values'], $field_values );
+			parse_str( rgpost( 'gform_field_values' ), $field_values );
 
-			require_once( GFCommon::get_base_path() . '/form_display.php' );
 			$result = GFFormDisplay::get_form( $form_id, $display_title, $display_description, false, $field_values, true, $tabindex );
-			die( $result );
+		} else {
+			// The form ID in the footer inputs has been tampered with; handling it like a honeypot failure and returning the default confirmation instead.
+			$default_confirmation = GFFormsModel::get_default_confirmation();
+			$result               = GFFormDisplay::get_ajax_postback_html( $default_confirmation['message'] );
 		}
+
+		return $result;
 	}
 
 	//------------------------------------------------------
