@@ -1427,6 +1427,7 @@ function ra_copy_blog_page( $group_id ) {
 							'home',
 							'new_admin_email',
 							'nonce_salt',
+							'openlab_rewrite_rules_flushed',
 							'random_seed',
 							'rewrite_rules',
 							'secret',
