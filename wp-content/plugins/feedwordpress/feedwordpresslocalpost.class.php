@@ -17,12 +17,8 @@ class FeedWordPressLocalPost {
 	}
 	
 	public function id () {
-		if (is_null($this->post) or !is_object($this->post)) :
-			return NULL;
-		else :
-			return $this->post->ID;
-		endif;
-	} /* FeedWordPressLocalPost::id () */
+		return $this->post->ID;
+	}
 	
 	public function meta ($what, $params = array()) {
 
@@ -35,12 +31,6 @@ class FeedWordPressLocalPost {
 		"unproxy" => false,
 		));
 	
-		// If we got put through the_content without a current
-		// $post object set, then bail out immediately.
-		if (is_null($this->post) or !is_object($this->post)) :
-			return $params['default'];
-		endif;
-
 		// This is a little weird, just bear with me here.
 		$results = array();
 		
@@ -162,41 +152,18 @@ class FeedWordPressLocalPost {
 	
 
 	public function content () {
-		if (is_null($this->post) or !is_object($this->post)) :
-			$post_content = NULL;
-			$post_id = NULL;
-		else :
-			$post_content = $this->post->post_content;
-			$post_id = $this->post->ID;
-		endif;
-		return apply_filters('the_content', $post_content, $post_id);
+		return apply_filters('the_content', $this->post->post_content, $this->post->ID);
 	}
 	
 	public function title () {
-		if (is_null($this->post) or !is_object($this->post)) :
-			$post_title = NULL;
-			$post_id = NULL;
-		else :
-			$post_title = $this->post->post_title;
-			$post_id = $this->post->ID;
-		endif;
-		return apply_filters('the_title', $post_title, $post_id);
+		return apply_filters('the_title', $this->post->post_title, $this->post->ID);
 	}
 
 	public function guid () {
-		if (is_null($this->post) or !is_object($this->post)) :
-			$post_guid = NULL;
-		else :
-			$post_guid = $this->post->guid;
-		endif;
-		return apply_filters('get_the_guid', $post_guid);
+		return apply_filters('get_the_guid', $this->post->guid);
 	}
 	
 	public function get_categories () {
-		if (is_null($this->post) or !is_object($this->post)) :
-			return array();
-		endif;
-
 		$terms = wp_get_object_terms(
 			$this->post->ID,
 			get_taxonomies(array(
