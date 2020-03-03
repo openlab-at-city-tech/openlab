@@ -10,7 +10,7 @@ class WCP_Folders
 
     private static $folders;
 
-    public $tlfs = 0;
+    public $total_folders = 0;
 
     private static $postIds;
 
@@ -89,7 +89,8 @@ class WCP_Folders
         add_filter('pre-upload-ui', array($this, 'show_dropdown_on_media_screen'));
         add_action('add_attachment', array($this, 'add_attachment_category'));
 
-
+        /* check for default folders */
+        add_filter('pre_get_posts', array($this, 'check_for_default_folders'));
 
         $options = get_option("folders_settings");
 
@@ -98,88 +99,29 @@ class WCP_Folders
         if (in_array("post", $options)) {
             add_filter('manage_posts_columns', array($this, 'wcp_manage_columns_head'));
             add_action('manage_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-
-            add_filter( 'bulk_actions-edit-post', array($this, 'custom_bulk_action' ));
         }
 
         if (in_array("page", $options)) {
             add_filter('manage_page_posts_columns', array($this, 'wcp_manage_columns_head'));
             add_action('manage_page_posts_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-
-            add_filter( 'bulk_actions-edit-page', array($this, 'custom_bulk_action' ));
         }
 
         if (in_array("attachment", $options)) {
             add_filter('manage_media_columns', array($this, 'wcp_manage_columns_head'));
             add_action('manage_media_custom_column', array($this, 'wcp_manage_columns_content'), 10, 2);
-
-            add_filter( 'bulk_actions-edit-media', array($this, 'custom_bulk_action' ));
         }
 
         foreach ($options as $option) {
             if ($option != "post" && $option != "page" && $option != "attachment") {
                 add_filter('manage_edit-'.$option.'_columns', array($this, 'wcp_manage_columns_head'), 99999);
                 add_action('manage_'.$option.'_posts_custom_column', array($this, 'wcp_manage_columns_content'), 2, 2);
-                add_filter( 'bulk_actions-edit-'.$option, array($this, 'custom_bulk_action' ));
             }
         }
-
-        /* check for default folders */
-        add_filter('pre_get_posts', array($this, 'check_for_default_folders'));
 
         add_action("wp_ajax_folder_update_status", array($this, 'folder_update_status'));
 
         /* load language files */
         add_action( 'plugins_loaded', array( $this, 'folders_text' ) );
-
-        add_filter('get_terms', array( $this, 'get_terms_filter_without_trash'), 10, 3);
-
-        add_filter('mla_media_modal_query_final_terms', array( $this, 'media_modal_query_final_terms'), 10, 3);
-    }
-
-    public function media_modal_query_final_terms($request) {
-        if(isset($_REQUEST['action']) && $_REQUEST['action'] == "mla-query-attachments") {
-            $query = isset($_REQUEST['query'])?$_REQUEST['query']:array();
-            if(isset($query['media_folder']) && !empty($query['media_folder'])) {
-                if($query['media_folder'] == -1) {
-                    $tax_query = array(
-                        'taxonomy'  => 'media_folder',
-                        'operator'  => 'NOT EXISTS',
-                    );
-                    $request['tax_query'] = array( $tax_query );
-                    $request = apply_filters( 'media_library_organizer_media_filter_attachments', $request, $_REQUEST );
-                } else {
-                    $request['media_folder'] = $query['media_folder'];
-                }
-            }
-        }
-        return $request;
-    }
-
-    public function get_terms_filter_without_trash($terms, $taxonomies, $args) {
-        global $wpdb;
-        if ( ! is_array($terms) && count($terms) < 1 ) {
-            return $terms;
-        }
-
-        $post_table = $wpdb->prefix."posts";
-        $term_table = $wpdb->prefix."term_relationships";
-        foreach ( $terms as $key=>$term ) {
-            if(isset($term->term_id)) {
-                $result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_id}' AND p.post_status != 'trash' LIMIT 1");
-                if (intval($result) > 0) {
-                    $terms[$key]->trash_count = intval($result);
-                } else {
-                    $terms[$key]->trash_count = 0;
-                }
-            }
-        }
-        return $terms;
-    }
-
-    public function custom_bulk_action($bulk_actions) {
-        $bulk_actions['move_to_folder'] = __( 'Move to Folder', 'email_to_eric');
-        return $bulk_actions;
     }
 
     public function folders_text() {
@@ -191,7 +133,7 @@ class WCP_Folders
         $customize_folders = get_option('customize_folders');
         if(isset($customize_folders['dropdown_color']) && !empty($customize_folders['dropdown_color'])) {
             ?>
-            #media-attachment-taxonomy-filter, .post-upload-ui .folder_for_media, select.media-select-folder { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
+            #media-attachment-taxonomy-filter, .post-upload-ui .folder_for_media { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
             .folder_for_media option {color:#000000;}
             .folder_for_media option:first-child {
             font-weight: bold;
@@ -206,24 +148,21 @@ class WCP_Folders
         $isAjax = (defined('DOING_AJAX') && DOING_AJAX)?1:0;
         $options = get_option('folders_settings');
         $options = (empty($options) || !is_array($options))?array():$options;
-        $post_status = filter_input(INPUT_GET, 'post_status', FILTER_SANITIZE_STRING);
-        if(empty($post_status) && !$isAjax && in_array($typenow, $options) && (isset($current_screen->base) && ($current_screen->base == "edit" || ($current_screen->base == "upload")))) {
-
+        if(!$isAjax && in_array($typenow, $options) && (isset($current_screen->base) && ($current_screen->base == "edit" || ($current_screen->base == "upload")))) {
             $default_folders = get_option('default_folders');
             $default_folders = (empty($default_folders) || !is_array($default_folders))?array():$default_folders;
 
             $status = 1;
             if(isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
                 $type = self::get_custom_post_type($typenow);
-                if($default_folders[$typenow] != -1) {
-                    $term = get_term_by('slug', $default_folders[$typenow], $type);
-                    if (empty($term) || !is_object($term)) {
-                        $status = 0;
-                    }
+                $term = get_term_by('slug', $default_folders[$typenow], $type);
+                if(empty($term) || !is_object($term)) {
+                    $status = 0;
                 }
             } else {
                 $status = 0;
             }
+
             if($status) {
                 if ($typenow == "attachment") {
                     $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
@@ -319,7 +258,7 @@ class WCP_Folders
             <p class="attachments-category"><?php esc_html_e("First select the folder, and the upload the files", WCP_FOLDER) ?><br/></p>
             <p>
                 <select name="folder_for_media" class="folder_for_media">
-                    <option value="-1">- <?php esc_html_e('Unassigned', WCP_FOLDER) ?></option>
+                    <option value="-1">- <?php esc_html_e('Uncategorized', WCP_FOLDER) ?></option>
                     <?php echo $options ?>
                     <?php if($typenow == "attachment" && isset($current_screen->base) && $current_screen->base == "upload") {?>
                         <option value="add-folder"><?php esc_html_e('+ Create a New Folder', WCP_FOLDER) ?></option>
@@ -502,9 +441,9 @@ class WCP_Folders
 
         $post_type = $postData['type'];
 
-        $ttpsts = wp_count_posts($post_type)->inherit;
+        $total_posts = wp_count_posts($post_type)->inherit;
 
-        $empty_items = self::get_tempt_posts($post_type);
+        $empty_items = self::get_total_empty_posts($post_type);
 
         $post_type = self::get_custom_post_type($post_type);
 
@@ -512,7 +451,7 @@ class WCP_Folders
 
         $response = array(
             'status' => 1,
-            'total_items' => $ttpsts,
+            'total_items' => $total_posts,
             'taxonomies' => $taxonomies,
             'empty_items' => $empty_items
         );
@@ -526,12 +465,12 @@ class WCP_Folders
         $post_type = $postData['type'];
 
         if($post_type != 'attachment') {
-            $ttpsts = self::get_ttlpst($post_type);
+            $total_posts = self::get_total_posts($post_type);
         } else {
-            $ttpsts = wp_count_posts($post_type)->inherit;
+            $total_posts = wp_count_posts($post_type)->inherit;
         }
 
-        $empty_items = self::get_tempt_posts($post_type);
+        $empty_items = self::get_total_empty_posts($post_type);
 
         $post_type = self::get_custom_post_type($post_type);
 
@@ -539,7 +478,7 @@ class WCP_Folders
 
         $response = array(
             'status' => 1,
-            'total_items' => $ttpsts,
+            'total_items' => $total_posts,
             'empty_items' => $empty_items,
             'taxonomies' => $taxonomies
         );
@@ -586,90 +525,33 @@ class WCP_Folders
         return $args;
     }
 
-    public function get_tempt_posts($post_type = "")
+    public function get_total_empty_posts($post_type = "")
     {
-        global $wpdb;
-
-        $post_table = $wpdb->prefix."posts";
-        $term_table = $wpdb->prefix."term_relationships";
-        $term_taxonomy_table = $wpdb->prefix."term_taxonomy";
         $taxonomy = self::get_custom_post_type($post_type);
+        $args = array(
+            'posts_per_page' => -1,
+            'post_type' => $post_type,
+            'post_status' => 'inherit'
+        );
         if ($post_type != "attachment") {
-            $query = "SELECT COUNT(DISTINCT({$post_table}.ID)) AS total_records FROM {$post_table} WHERE 1=1  AND (
-                  NOT EXISTS (
-                                SELECT 1
-                                FROM {$term_table}
-                                INNER JOIN {$term_taxonomy_table}
-                                ON {$term_taxonomy_table}.term_taxonomy_id = {$term_table}.term_taxonomy_id
-                                WHERE {$term_taxonomy_table}.taxonomy = '%s'
-                                AND {$term_table}.object_id = {$post_table}.ID
-                            )
-                ) AND {$post_table}.post_type = '%s' AND (({$post_table}.post_status = 'publish' OR {$post_table}.post_status = 'future' OR {$post_table}.post_status = 'draft' OR {$post_table}.post_status = 'private'))";
-        } else {
-            $query = "SELECT COUNT(DISTINCT({$post_table}.ID)) AS total_records FROM {$post_table} WHERE 1=1  AND (
-                  NOT EXISTS (
-                                SELECT 1
-                                FROM {$term_table}
-                                INNER JOIN {$term_taxonomy_table}
-                                ON {$term_taxonomy_table}.term_taxonomy_id = {$term_table}.term_taxonomy_id
-                                WHERE {$term_taxonomy_table}.taxonomy = '%s'
-                                AND {$term_table}.object_id = {$post_table}.ID
-                            )
-                ) AND {$post_table}.post_type = '%s' AND {$post_table}.post_status = 'inherit'";
+            $args['post_status'] = array('publish', 'draft', 'future', 'private');
         }
+        $args['tax_query'] = array(
+            array(
+                'taxonomy'  => $taxonomy,
+                'operator'  => 'NOT EXISTS',
+            ),
+        );
+        $result = get_posts($args);
 
-        $query = $wpdb->prepare($query, $taxonomy, $post_type);
-
-        $tlrcds = $wpdb->get_var($query);
-
-        if(!empty($tlrcds)) {
-            return $tlrcds;
+        if(!empty($result)) {
+            return (count($result));
         } else {
             return 0;
         }
     }
 
     public function output_backbone_view_filters() {
-
-        global $typenow, $current_screen;
-        $isAjax = (defined('DOING_AJAX') && DOING_AJAX)?1:0;
-        $options = get_option('folders_settings');
-        $options = (empty($options) || !is_array($options))?array():$options;
-        if(!$isAjax && in_array($typenow, $options) && (isset($current_screen->base) && ($current_screen->base == "edit" || ($current_screen->base == "upload")))) {
-
-            $default_folders = get_option('default_folders');
-            $default_folders = (empty($default_folders) || !is_array($default_folders))?array():$default_folders;
-
-            $status = 1;
-            if(isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
-                $type = self::get_custom_post_type($typenow);
-                if($default_folders[$typenow] != -1) {
-                    $term = get_term_by('slug', $default_folders[$typenow], $type);
-                    if (empty($term) || !is_object($term)) {
-                        $status = 0;
-                    }
-                }
-            } else {
-                $status = 0;
-            }
-            if($status) {
-                if ($typenow == "attachment") {
-                    $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
-                    if (!isset($_REQUEST['media_folder'])) {
-                        if (isset($default_folders[$typenow]) && !empty($default_folders[$typenow])) {
-                            $admin_url .= $default_folders[$typenow];
-                            ?>
-                            <script>
-                                window.location = '<?php echo $admin_url ?>';
-                            </script>
-                            <?php
-                            exit;
-                        }
-                    }
-                }
-            }
-        }
-
         /* Free/Pro URL Change */
         wp_enqueue_script( 'folders-media', WCP_FOLDER_URL.'assets/js/media.js', array( 'media-editor', 'media-views' ), WCP_FOLDER_VERSION, true );
         wp_localize_script( 'folders-media', 'folders_media_options', array(
@@ -1053,7 +935,7 @@ class WCP_Folders
         wp_die();
     }
 
-    public static function ttl_fldrs()
+    public static function total_term_folders()
     {
         $post_types = get_option(WCP_FOLDER_VAR);
         $post_types = is_array($post_types)?$post_types:array();
@@ -1554,7 +1436,7 @@ class WCP_Folders
             $response['status'] = 1;
             if (!self::check_has_valid_key()) {
                 $is_active = 0;
-                $folders = self::ttl_fldrs();
+                $folders = self::total_term_folders();
             }
             $response['folders'] = $folders;
             $response['is_key_active'] = $is_active;
@@ -1603,7 +1485,7 @@ class WCP_Folders
             $folders = -1;
             if (!self::check_has_valid_key()) {
                 $is_active = 0;
-                $folders = self::ttl_fldrs();
+                $folders = self::total_term_folders();
             }
             $response['folders'] = $folders;
             $response['is_key_active'] = $is_active;
@@ -1782,7 +1664,7 @@ class WCP_Folders
                     $folders = -1;
                     if (!self::check_has_valid_key()) {
                         $is_active = 0;
-                        $folders = self::ttl_fldrs();
+                        $folders = self::total_term_folders();
                     }
                     $response['is_key_active'] = $is_active;
                     $response['folders'] = $folders;
@@ -1851,7 +1733,7 @@ class WCP_Folders
             $folders = -1;
             if (!self::check_has_valid_key()) {
                 $is_active = 0;
-                $folders = self::ttl_fldrs();
+                $folders = self::total_term_folders();
             }
             $response['folders'] = $folders;
             $response['is_key_active'] = $is_active;
@@ -1877,9 +1759,9 @@ class WCP_Folders
 
             self::set_default_values_if_not_exists();
 
-            $ttpsts = self::get_ttlpst($typenow);
+            $total_posts = self::get_total_posts($typenow);
 
-            $ttemp = self::get_tempt_posts($typenow);
+            $total_empty = self::get_total_empty_posts($typenow);
 
             $folder_type = self::get_custom_post_type($typenow);
             /* Do not change: Free/Pro Class name change */
@@ -1897,7 +1779,7 @@ class WCP_Folders
         }
     }
 
-    public function get_ttlpst($post_type = "")
+    public function get_total_posts($post_type = "")
     {
         global $typenow;
         if ($post_type == "") {
@@ -2037,24 +1919,24 @@ class WCP_Folders
 
         $old_version = get_option("folder_old_plugin_status");
         if($old_version !== false && $old_version == 1) {
-            $tlfs = get_option("folder_old_plugin_folder_status");
-            if($tlfs === false) {
-                $total = self::ttl_fldrs();
+            $total_folders = get_option("folder_old_plugin_folder_status");
+            if($total_folders === false) {
+                $total = self::total_term_folders();
                 if($total <= 10) {
                     $total = 10;
                 };
                 update_option("folder_old_plugin_folder_status", $total);
                 self::$folders = $total;
             } else {
-                self::$folders = $tlfs;
+                self::$folders = $total_folders;
             }
         }
 
-        $tlfs = get_option("folder_old_plugin_folder_status");
-        if($tlfs === false) {
+        $total_folders = get_option("folder_old_plugin_folder_status");
+        if($total_folders === false) {
             self::$folders = 10;
         } else {
-            self::$folders = $tlfs;
+            self::$folders = $total_folders;
         }
     }
 
@@ -2268,7 +2150,7 @@ class WCP_Folders
             $folders = -1;
             if (!self::check_has_valid_key()) {
                 $is_active = 0;
-                $folders = self::ttl_fldrs();
+                $folders = self::total_term_folders();
             }
             /* For free: upgrade URL, for Pro: Register Key URL */
             $register_url = admin_url("admin.php?page=wcp_folders_upgrade");
@@ -2369,9 +2251,9 @@ class WCP_Folders
         update_option("folder_redirect_status", 1);
     }
 
-    public static function get_ttl_fldrs()
+    public static function get_total_term_folders()
     {
-        return self::ttl_fldrs();
+        return self::total_term_folders();
     }
 
     function folders_register_settings()

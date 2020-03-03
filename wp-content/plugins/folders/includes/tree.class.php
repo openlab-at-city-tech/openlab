@@ -1,9 +1,8 @@
 <?php
 defined('ABSPATH') or die('Nope, not accessing this');
 class WCP_Tree {
-
     public function __construct() {
-
+        parent::__construct();
     }
 
     public static function get_full_tree_data($post_type) {
@@ -63,7 +62,7 @@ class WCP_Tree {
                 }
                 $status = get_term_meta($term->term_id, "is_highlighted", true);
                 $class .= ($status == 1)?" is-high":"";
-                $count = ($term->trash_count != 0)?"<span class='total-count'>{$term->trash_count}</span>":"";
+                $count = ($term->count != 0)?"<span class='total-count'>{$term->count}</span>":"";
                 $delete_nonce = wp_create_nonce('wcp_folder_delete_term_'.$term->term_id);
                 $rename_nonce = wp_create_nonce('wcp_folder_rename_term_'.$term->term_id);
                 $highlight_nonce = wp_create_nonce('wcp_folder_highlight_term_'.$term->term_id);

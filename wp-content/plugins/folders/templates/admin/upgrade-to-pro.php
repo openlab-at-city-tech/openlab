@@ -37,8 +37,8 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                             <option data-header="Renewals for 25% off" data-price="25" value="<?php echo esc_url($pro_url."1") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 2 years" data-price="39" value="<?php echo esc_url($pro_url."13") ?>">
-                                                <?php esc_html_e("Updates & support for 2 years") ?>
+                                            <option data-header="For 3 years" data-price="49" value="<?php echo esc_url($pro_url."4") ?>">
+                                                <?php esc_html_e("Updates & support for 3 years") ?>
                                             </option>
                                             <option data-header="For lifetime" data-price="79" value="<?php echo esc_url($pro_url."5") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>
@@ -77,8 +77,8 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                             <option data-header="Renewals for 25% off" data-price="59" value="<?php echo esc_url($pro_url."2") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 2 years" data-price="89" value="<?php echo esc_url($pro_url."14") ?>">
-                                                <?php esc_html_e("Updates & support for 2 years") ?>
+                                            <option data-header="For 3 years" data-price="99" value="<?php echo esc_url($pro_url."6") ?>">
+                                                <?php esc_html_e("Updates & support for 3 years") ?>
                                             </option>
                                             <option data-header="For lifetime" data-price="149" value="<?php echo esc_url($pro_url."7") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>
@@ -119,8 +119,8 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                             <option data-header="Renewals for 25% off" data-price="99" value="<?php echo esc_url($pro_url."10") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 2 years" data-price="149" value="<?php echo esc_url($pro_url."15") ?>">
-                                                <?php esc_html_e("Updates & support for 2 years") ?>
+                                            <option data-header="For 3 years" data-price="179" value="<?php echo esc_url($pro_url."11") ?>">
+                                                <?php esc_html_e("Updates & support for 3 years") ?>
                                             </option>
                                             <option data-header="For lifetime" data-price="249" value="<?php echo esc_url($pro_url."12") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>

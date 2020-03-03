@@ -152,74 +152,19 @@ class folders_review_box {
                 vertical-align: middle;
                 border-radius: 15px;
             }
-            .review-thanks-img img {
-                width: 100%;
-                height: auto;
-                max-width: 200px;
-            }
-            .review-thanks-msg {
-                padding: 5px 0 0 10px;
-                display: inline-block;
-                text-align: left;
-            }
-            .review-thanks-box {
-                padding: 10px 0 10px 0;
-                position: relative;
-                text-align: center;
-                display: none;
-            }
-            .review-box-default {
-            }
-            .review-thanks-btn {
-                border: 0;
-                background: transparent;
-                position: absolute;
-                right: -30px;
-                top: 5px;
-            }
-            .review-thanks-img {
-                display: inline-block;
-                vertical-align: top;
-                width: 200px;
-            }
-            .thanks-msg-title {
-                font-weight: bold;
-                font-size: 18px;
-            }
-            .thanks-msg-desc {
-                padding: 24px 0;
-            }
-            .thanks-msg-footer {
-                font-weight: bold;
-            }
         </style>
         <div class="notice notice-info premio-notice <?php echo $this->plugin_slug ?>-premio-review-box <?php echo $this->plugin_slug ?>-premio-review-box">
-            <div class="review-box-default" id="default-review-box-<?php echo $this->plugin_slug ?>">
-                <p>
-                    Hi there, it seems like <b><?php echo $this->plugin_name ?></b> is bringing you some value, and that's pretty awesome! Can you please show us some love and rate <?php echo $this->plugin_name ?> on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word
-                    - <b>Gal Dubinski</b>, Co-founder <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__)."../assets/images/premio-owner.png") ?>" />
-                    <a href="javascript:;" class="dismiss-btn <?php echo $this->plugin_slug ?>-premio-review-dismiss-btn"><span class="dashicons dashicons-no-alt"></span></a>
-                </p>
-                <div class="clear clearfix"></div>
-                <ul>
-                    <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-hide-btn" href="https://wordpress.org/support/plugin/folders/reviews/?filter=5" target="_blank">I'd love to help :)</a></li>
-                    <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-future-btn" href="javascript:;">Not this time</a></li>
-                    <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-hide-btn" href="javascript:;">I've already rated you</a></li>
-                </ul>
-            </div>
-            <div class="review-thanks-box" id="review-thanks-<?php echo $this->plugin_slug ?>">
-                <button class="<?php echo $this->plugin_slug ?>-close-thanks-btn review-thanks-btn"><span class="dashicons dashicons-no-alt"></span></button>
-
-                <div class="review-thanks-img">
-                    <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__)."../assets/images/thanks.gif") ?>" />
-                </div>
-                <div class="review-thanks-msg">
-                    <div class="thanks-msg-title">You are awesome &#128591;</div>
-                    <div class="thanks-msg-desc">Thanks for your support, We really appreciate it!</div>
-                    <div class="thanks-msg-footer">Premio team</div>
-                </div>
-                <div class="clear clearfix"></div>
-            </div>
+            <p>
+                Hi there, it seems like <b><?php echo $this->plugin_name ?></b> is bringing you some value, and that's pretty awesome! Can you please show us some love and rate <?php echo $this->plugin_name ?> on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word
+                - <b>Gal Dubinski</b>, Co-founder <img width="30px" src="<?php echo esc_url(plugin_dir_url(__FILE__)."../assets/images/premio-owner.png") ?>" />
+                <a href="javascript:;" class="dismiss-btn <?php echo $this->plugin_slug ?>-premio-review-dismiss-btn"><span class="dashicons dashicons-no-alt"></span></a>
+            </p>
+            <div class="clear clearfix"></div>
+            <ul>
+                <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-hide-btn" href="https://wordpress.org/support/plugin/folders/reviews/?filter=5" target="_blank">I'd love to help :)</a></li>
+                <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-future-btn" href="javascript:;">Not this time</a></li>
+                <li><a class="<?php echo $this->plugin_slug ?>-premio-review-box-hide-btn" href="javascript:;">I've already rated you</a></li>
+            </ul>
         </div>
         <div class="<?php echo $this->plugin_slug ?>-review-box-popup">
             <div class="<?php echo $this->plugin_slug ?>-review-box-popup-content">
@@ -241,21 +186,8 @@ class folders_review_box {
                 jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-close-review-box-popup", function(){
                     jQuery(".<?php echo $this->plugin_slug ?>-review-box-popup").hide();
                 });
-                jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-close-thanks-btn", function(){
-                    jQuery(".<?php echo $this->plugin_slug ?>-review-box-popup").remove();
-                    jQuery(".<?php echo $this->plugin_slug ?>-premio-review-box").remove();
-                });
                 jQuery(document).on("click",".<?php echo $this->plugin_slug ?>-premio-review-box-hide-btn",function(){
-                    jQuery("#default-review-box-<?php echo $this->plugin_slug ?>").hide();
-                    jQuery("#review-thanks-<?php echo $this->plugin_slug ?>").show();
-                    jQuery.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
-                        data: "action=<?php echo esc_attr($this->plugin_slug) ?>_review_box&days=-1&nonce=<?php echo esc_attr(wp_create_nonce($this->plugin_slug."_review_box")) ?>",
-                        type: "post",
-                        success: function() {
-
-                        }
-                    });
+                    jQuery(".<?php echo $this->plugin_slug ?>-review-box-options a:last").trigger("click");
                 });
                 jQuery(document).on("click", ".<?php echo $this->plugin_slug ?>-review-box-options a", function(){
                     var dataDays = jQuery(this).attr("data-days");

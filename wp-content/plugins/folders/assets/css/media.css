@@ -5,15 +5,15 @@
 .media-modal-content .media-frame select.attachment-filters {
     width: 28% !important;
 }
-#media-attachment-taxonomy-filter, select.media-select-folder {
+#media-attachment-taxonomy-filter {
     border: solid 1px #FF5983;
     color: #FF5983;
     font-weight: bold;
 }
-#media-attachment-taxonomy-filter option, select.media-select-folder option {
+#media-attachment-taxonomy-filter option {
     color: #000000;
 }
-#media-attachment-taxonomy-filter option:first-child, select.media-select-folder option:first-child {
+#media-attachment-taxonomy-filter option:first-child {
     font-weight: bold;
 }
 .media-frame .uploader-inline {
@@ -24,4 +24,3 @@
     height: 100%;
     padding: 0 0 10px 0;
 }
-

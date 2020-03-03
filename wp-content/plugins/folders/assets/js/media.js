@@ -125,8 +125,7 @@
 })(jQuery, _);
 
 var selectedFolderMediaId = -1;
-var filesInQueue = 0;
-var uploadedFileCount = 0;
+
 jQuery(document).on("change", ".folder_for_media", function(){
     if(jQuery(this).val() != "add-folder") {
         selectedFolderMediaId = jQuery(this).val();
@@ -188,10 +187,6 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
         init: function () {
             if (this.uploader) {
                 this.uploader.bind('FileFiltered', function (up, file) {
-                    filesInQueue++;
-                    jQuery(".folder-meter").css("width", "0%");
-                    jQuery(".media-folder-loader").show();
-                    jQuery("#total_upload_files").text(filesInQueue);
                 });
                 this.uploader.bind('BeforeUpload', function (uploader, file) {
                     var folder_id = selectedFolderMediaId;
@@ -200,28 +195,12 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                     if (folder_id > 0) {
                         params.folder_for_media = folder_id;
                     }
-                    if(uploadedFileCount < filesInQueue) {
-                        jQuery(".media-folder-loader").show();
-                        var progress_width = uploadedFileCount/filesInQueue*100;
-                        jQuery(".folder-meter").css("width", progress_width+"%");
-                    }
-                    uploadedFileCount++;
-                    jQuery("#current_upload_files").text(uploadedFileCount);
-
                 });
                 this.uploader.bind('UploadComplete', function (up, files) {
                     selectedFolderMediaId = -1;
                 });
                 this.uploader.bind('UploadComplete', function (up, files) {
                     var wp_media = window.wp;
-
-                    jQuery(".folder-meter").css("width", "100%");
-                    setTimeout(function(){
-                        jQuery(".media-folder-loader").hide();
-                        jQuery(".folder-meter").css("width", "0%");
-                        filesInQueue = 0;
-                        uploadedFileCount = 0;
-                    }, 1250);
 
                     resetDDCounter();
 

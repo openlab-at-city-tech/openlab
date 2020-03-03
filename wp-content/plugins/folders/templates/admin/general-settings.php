@@ -183,16 +183,16 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
                         <tr>
                             <td colspan="2" style="padding: 10px 0">
                                 <?php
-                                $tlfs = get_option("folder_old_plugin_folder_status");
-                                if($tlfs == false || $tlfs < 10) {
-                                    $tlfs = 10;
+                                $total_folders = get_option("folder_old_plugin_folder_status");
+                                if($total_folders == false || $total_folders < 10) {
+                                    $total_folders = 10;
                                 }
-                                $total = WCP_Folders::get_ttl_fldrs();
-                                if($total > $tlfs) {
-                                    $tlfs = $total;
+                                $total = WCP_Folders::get_total_term_folders();
+                                if($total > $total_folders) {
+                                    $total_folders = $total;
                                 }
                                 ?>
-                                <span class="upgrade-message">You have used <span class='pink'><?php echo esc_attr($total) ?></span>/<?php echo esc_attr($tlfs) ?> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
+                                <span class="upgrade-message">You have used <span class='pink'><?php echo esc_attr($total) ?></span>/<?php echo esc_attr($total_folders) ?> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
                             </td>
                         </tr>
 
