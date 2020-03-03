@@ -2,6 +2,8 @@ jQuery(document).ready(function ($) {
 
     if (typeof addComment !== 'undefined') {
         addComment.moveForm = function( commId, parentId, respondId, postId ) {
+
+
             var div, element, style, cssHidden,
                 t           = this,
                 comm        = t.I( commId ),
