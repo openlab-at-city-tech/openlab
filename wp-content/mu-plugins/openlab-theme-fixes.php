@@ -17,7 +17,7 @@ function openlab_use_education_pro_new() {
 	global $current_blog;
 	$paths = [
 		'/boonetestcourse/' => 1,
-		'/jennasoerthemetesting' => 1,
+		'/jennasoerthemetesting/' => 1,
 	];
 
 	if ( ! isset( $paths[ $current_blog->path ] ) ) {
