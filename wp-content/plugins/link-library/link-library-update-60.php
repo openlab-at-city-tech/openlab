@@ -36,47 +36,41 @@ function link_library_60_update( $plugin_class, $continue = false ) {
 			}
 		}
 
-		$table_name = $plugin_class->db_prefix() . 'links_extrainfo';
-		$table_var = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
+		$wpdb->links_extrainfo = $plugin_class->db_prefix() . 'links_extrainfo';
 
-		if ( $table_var != $table_name ) {
+		$creationquery = "CREATE TABLE " . $wpdb->links_extrainfo . " (
+			link_id bigint(20) NOT NULL DEFAULT '0',
+			link_second_url varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+			link_telephone varchar(128) CHARACTER SET utf8 DEFAULT NULL,
+			link_email varchar(128) CHARACTER SET utf8 DEFAULT NULL,
+			link_visits bigint(20) DEFAULT '0',
+			link_reciprocal varchar(255) DEFAULT NULL,
+			link_submitter varchar(255) DEFAULT NULL,
+			link_submitter_name VARCHAR(128) CHARACTER SET utf8 NULL,
+			link_submitter_email VARCHAR(128) NULL,
+			link_textfield TEXT CHARACTER SET utf8 NULL,
+			link_no_follow VARCHAR(1) NULL,
+			link_featured VARCHAR(1) NULL,
+			link_manual_updated VARCHAR(1) NULL,
+			link_addl_rel VARCHAR(256) NULL,
+			PRIMARY KEY  (link_id)
+			)";
 
-			$wpdb->links_extrainfo = $plugin_class->db_prefix() . 'links_extrainfo';
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $creationquery );
 
-			$creationquery = "CREATE TABLE " . $wpdb->links_extrainfo . " (
-				link_id bigint(20) NOT NULL DEFAULT '0',
-				link_second_url varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-				link_telephone varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-				link_email varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-				link_visits bigint(20) DEFAULT '0',
-				link_reciprocal varchar(255) DEFAULT NULL,
-				link_submitter varchar(255) DEFAULT NULL,
-				link_submitter_name VARCHAR(128) CHARACTER SET utf8 NULL,
-				link_submitter_email VARCHAR(128) NULL,
-				link_textfield TEXT CHARACTER SET utf8 NULL,
-				link_no_follow VARCHAR(1) NULL,
-				link_featured VARCHAR(1) NULL,
-				link_manual_updated VARCHAR(1) NULL,
-				link_addl_rel VARCHAR(256) NULL,
-				PRIMARY KEY  (link_id)
-				)";
+		$wpdb->linkcategorymeta = $plugin_class->db_prefix() . 'linkcategorymeta';
 
-				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-				dbDelta( $creationquery );
+		$meta_creation_query =
+			'CREATE TABLE ' . $wpdb->linkcategorymeta . ' (
+	        meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	        linkcategory_id bigint(20) unsigned NOT NULL DEFAULT "0",
+	        meta_key varchar(255) DEFAULT NULL,
+	        meta_value longtext,
+	        PRIMARY KEY  (meta_id)
+	        );';
 
-			$wpdb->linkcategorymeta = $plugin_class->db_prefix() . 'linkcategorymeta';
-
-			$meta_creation_query =
-				'CREATE TABLE ' . $wpdb->linkcategorymeta . ' (
-		        meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		        linkcategory_id bigint(20) unsigned NOT NULL DEFAULT "0",
-		        meta_key varchar(255) DEFAULT NULL,
-		        meta_value longtext,
-		        PRIMARY KEY  (meta_id)
-		        );';
-
-			dbDelta ( $meta_creation_query );
-		}
+		dbDelta ( $meta_creation_query );
 
 		$links_import_query = "SELECT distinct l.link_id as import_link_id, l.link_name, l.link_url, l.link_rss, l.link_description, l.link_notes, ";
 		$links_import_query .= "GROUP_CONCAT( t.name ) as cat_name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, ";

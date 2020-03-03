@@ -981,40 +981,60 @@ class link_library_plugin_admin {
 					} else {
 						_e( 'Broken Link Checker Report', 'link-library' );
 					}
-				?></strong><br /><br />
+				?></strong><br />
+				<span class="loadingicon"><img src="<?php echo plugins_url( 'icons/Ajax-loader.gif', __FILE__ ); ?> " /></span><span class="processinglinks">Processing Link <span class="currentlinknumber">0</span> / <span class="totallinknumber">
+				<?php
+				$post_count = wp_count_posts( 'link_library_links' );
+				$total_post_count = $post_count->publish + $post_count->future + $post_count->draft + $post_count->pending + $post_count->private;
+				echo $total_post_count;
+				?>
+				</span></span>
+				<br />
 				<div class="nextcheckitem"></div>
 				<script type="text/javascript">
 					var currentlinkindex = 1;
-					function testlink() {
-						jQuery.ajax({
-							type   : 'POST',
-							url    : '<?php echo admin_url( 'admin-ajax.php' ); ?>',
-							data   : {
-								action      : 'link_library_recipbrokencheck',
-								_ajax_nonce : '<?php echo wp_create_nonce( 'link_library_recipbrokencheck' ); ?>',
-								mode        : '<?php if ( $_GET['message'] == '2' ) { echo 'reciprocal'; } elseif ( $_GET['message'] == 3 ) { echo 'broken'; } ?>',
-								index		: currentlinkindex,
-								RecipCheckAddress: jQuery('#recipcheckaddress').val(),
-								recipcheckdelete403 : jQuery('#recipcheckdelete403').is(':checked')
-							},
-							success: function (data) {
-								if (data != '' ) {
-									if ( ( data != 'There are no links with reciprocal links associated with them.<br />' && data != 'There are no links to check.<br />' ) || currentlinkindex == 1 ) {
-										jQuery('.nextcheckitem').replaceWith(data);
-									}
+					var linkcheckflag = 0;
+					var maxlinks = <?php echo $total_post_count; ?>;
 
-									if ( data != 'There are no links with reciprocal links associated with them.<br />' && data != 'There are no links to check.<br />' ) {
-										currentlinkindex++;
-										testlink();
+					linkloop = setInterval( function(){ testlink(); }, 3000 );
+
+					function testlink() {
+						if ( linkcheckflag == 0 ) {
+							linkcheckflag = 1;
+
+							jQuery('.currentlinknumber').html( currentlinkindex );
+
+							jQuery.ajax({
+								type   : 'POST',
+								url    : '<?php echo admin_url( 'admin-ajax.php' ); ?>',
+								data   : {
+									action      : 'link_library_recipbrokencheck',
+									_ajax_nonce : '<?php echo wp_create_nonce( 'link_library_recipbrokencheck' ); ?>',
+									mode        : '<?php if ( $_GET['message'] == '2' ) { echo 'reciprocal'; } elseif ( $_GET['message'] == 3 ) { echo 'broken'; } ?>',
+									index		: currentlinkindex,
+									RecipCheckAddress: jQuery('#recipcheckaddress').val(),
+									recipcheckdelete403 : jQuery('#recipcheckdelete403').is(':checked')
+								},
+								success: function (data) {
+									if (data != '' ) {
+										if ( ( data != 'There are no links with reciprocal links associated with them.<br />' && data != 'There are no links to check.<br />' ) || currentlinkindex == 1 ) {
+											jQuery('.nextcheckitem').replaceWith(data);
+										}
+
+										if ( data != 'There are no links with reciprocal links associated with them.<br />' && data != 'There are no links to check.<br />' ) {
+											currentlinkindex++;
+											if ( currentlinkindex > maxlinks ) {
+												clearInterval( linkloop );
+												jQuery( '.loadingicon' ).html( '' );
+												jQuery( '.processinglinks' ).html( 'All links processed' );
+											}
+											linkcheckflag = 0;
+										}
 									}
 								}
-							}
-						});
+							});
+						}
 					}
-
-					jQuery( document ).ready(function() {
-						testlink();
-					});
 				</script>
 				</p></div>
 			<?php } elseif ( isset( $_GET['message'] ) && $_GET['message'] == '4' ) {
@@ -2571,7 +2591,7 @@ class link_library_plugin_admin {
 						</tr>
 						<tr>
 							<td><?php _e( 'Re-import', 'link-library' ); ?></td>
-							<td><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1' \""; ?>><?php _e( 'Reset current Library', 'link-library' ); ?></button></td>
+							<td><button type="button" <?php echo "onclick=\"if ( confirm('" . esc_js( __( "Using the re-import function will delete all links in your Link Library and re-import links from the old Link Library 5.9 format to version 6.x. Only use this function if you recently upgraded from 5.9 to 6.x and are having issues with the converter links.", "link-library" ) ) . "') ) window.location.href='edit.php?page=link-library-general-options&amp;post_type=link_library_links&amp;ll60reupdate=1' \""; ?>><?php _e( 'Re-import links', 'link-library' ); ?></button></td>
 						</tr>
 						<tr>
 							<td><?php _e( 'Category mapping table', 'link-library' ); ?></td>
@@ -3260,9 +3280,7 @@ class link_library_plugin_admin {
 		<?php _e( 'If the stylesheet editor is empty after upgrading, reset to the default stylesheet using the button below or copy/paste your backup stylesheet into the editor.', 'link-library' ); ?>
 		<br /><br />
 
-		<textarea name='fullstylesheet' id='fullstylesheet' style='font-family:Courier' rows="30" cols="100">
-			<?php echo stripslashes( $genoptions['fullstylesheet'] ); ?>
-		</textarea>
+		<textarea name='fullstylesheet' id='fullstylesheet' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $genoptions['fullstylesheet'] ); ?></textarea>
 		<div>
 			<input type="submit" name="submitstyle" value="<?php _e( 'Submit', 'link-library' ); ?>" /><span style='padding-left: 650px'><input type="submit" name="resetstyle" value="<?php _e( 'Reset to default', 'link-library' ); ?>" /></span>
 		</div>
@@ -6187,11 +6205,11 @@ class link_library_plugin_admin {
 			if ( !empty( $link_updated ) ) {
 				$date_diff = time() - intval( $link_updated );
 
-				if ( $date_diff < 604800 ) {
-					echo '<strong>** RECENTLY UPDATED **</strong><br />';
-				}
-
 				echo date( "Y-m-d H:i", $link_updated );
+
+				if ( $date_diff < 604800 ) {
+					echo '<br /><strong>** RECENTLY UPDATED **</strong>';
+				}
 			}
 		} elseif ( 'link_library_url' == $column ) {
 			$link_url = esc_url( get_post_meta( get_the_ID(), 'link_url', true ) );
@@ -6234,6 +6252,7 @@ class link_library_plugin_admin {
 	}
 
 	function ll_column_sortable( $columns ) {
+		$columns['link_library_updated'] = 'link_library_updated';
 		$columns['link_library_url'] = 'link_library_url';
 		$columns['link_library_rating'] = 'link_library_rating';
 
@@ -6245,7 +6264,11 @@ class link_library_plugin_admin {
 			return $vars;
 		}
 
-		if ( isset( $vars['orderby'] ) && 'link_library_url' == $vars['orderby'] ) {
+		if ( isset( $vars['orderby'] ) && 'link_library_updated' == $vars['orderby'] ) {
+			$vars = array_merge( $vars, array(
+				'meta_key' => 'link_updated',
+				'orderby' => 'meta_value' ) );
+		} elseif ( isset( $vars['orderby'] ) && 'link_library_url' == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
 				'meta_key' => 'link_url',
 				'orderby' => 'meta_value' ) );
@@ -6511,8 +6534,6 @@ function link_library_reciprocal_link_checker() {
 				echo ' - <a target="linkedit' . get_the_ID() . '" href="' . esc_url( add_query_arg( array( 'action' => 'edit', 'post' => get_the_ID() ), admin_url( 'post.php' ) ) );
 				echo '">(' . __('Edit', 'link-library') . ')</a><br />';
 			}
-
-			echo '<div class="nextcheckitem"></div>';
 		} else {
 			if ( 'reciprocal' == $check_type ) {
 				echo __( 'There are no links with reciprocal links associated with them', 'link-library' ) . ".<br />";
