@@ -30,6 +30,7 @@ function bootstrap() {
 	remove_action( 'wp_ajax_nopriv_ajaxcomments', 'ajax_submit_comment' );
 
 	add_filter( 'body_class', __NAMESPACE__ . '\\body_class' );
+	add_filter( 'comments_open', __NAMESPACE__ . '\\enable_page_comments', 10, 2 );
 	add_filter( 'redux/args/highlighter_settings', __NAMESPACE__ . '\\filter_settings' );
 
 	add_action( 'wp_footer', __NAMESPACE__ . '\\render_comment_form' );
@@ -50,6 +51,23 @@ function body_class( $classes ) {
 	}
 
 	return $classes;
+}
+
+/**
+ * Enable comments for pages when plugin is active.
+ *
+ * @param bool $open
+ * @param string $post_id
+ * @return bool
+ */
+function enable_page_comments( $open, $post_id ) {
+	$post = get_post( $post_id );
+
+	if ( 'page' !== $post->post_type ) {
+		return $open;
+	}
+
+	return true;
 }
 
 /**
