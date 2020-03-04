@@ -1635,7 +1635,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.1.9' );
+		wp_enqueue_style('openlab-toolbar', $openlab_toolbar_url, array('font-awesome'), filemtime(WP_CONTENT_DIR . '/mu-plugins/css/openlab-toolbar.css'));
 	}
 
 	public function adminbar_special_body_class( $classes ) {
