@@ -441,7 +441,7 @@ class GFEntryList {
 				'label'   => esc_html_x( 'Starred', 'Entry List', 'gravityforms' ),
 			),
 		);
-		if ( GFCommon::spam_enabled( $form_id ) ) {
+		if ( ( $spam_count > 0 ) || GFCommon::spam_enabled( $form_id ) ) {
 			$filter_links[] = array(
 				'id' => 'spam',
 				'field_filters' => array(),

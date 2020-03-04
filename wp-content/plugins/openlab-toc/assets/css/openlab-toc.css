@@ -1,0 +1,90 @@
+.sidebar .ez-toc-widget-container {
+	background-color: #fff;
+	max-width: 280px;
+	overflow-y: scroll;
+	height: 100%;
+}
+
+.sidebar .ez-toc-widget-container .ez-toc-btn {
+	margin: 5px;
+	padding: 0;
+	background: none;
+	border: none;
+	text-shadow: none;
+	box-shadow: none;
+}
+
+.sidebar .ez-toc-widget-container .ez-toc-icon-toggle {
+	font-size: 20px;
+}
+
+.sidebar .ez-toc-widget-container .ez-toc-list {
+	height: 100%;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+.sidebar .ez-toc-widget-container .ez-toc-list ul {
+	margin-left: 0.5em;
+}
+
+.sidebar .ez-toc-list li {
+	padding: 0;
+}
+
+.sidebar .ez-toc-list li li {
+	margin: 0 0 0 0.5em;
+}
+
+.sidebar .toc-fixed {
+	position: fixed;
+	top: 32px;
+	padding: 5px;
+	overflow-y: scroll;
+	height: 90%;
+	height: calc(100% - 32px);
+}
+
+body:not(.admin-bar) .toc-fixed {
+	top: 0;
+	height: 100%;
+}
+
+.sidebar .toc-fixed:not(.ez-toc-expanded) {
+	height: auto;
+}
+
+.sidebar .toc-fixed:not(.ez-toc-expanded) .widget-title {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+@media only screen and (max-width: 1023px) {
+	.sidebar .ez-toc-widget-container {
+		position: fixed;
+		top: 32px;
+		right: 0;
+		padding: 5px;
+		overflow-y: scroll;
+		height: 90%;
+		height: calc(100% - 32px);
+		z-index: 100;
+	}
+
+	body:not(.admin-bar) .ez-toc-widget-container {
+		height: 100%;
+	}
+
+	.sidebar .ez-toc-widget-container:not(.ez-toc-expanded) {
+		height: auto;
+	}
+
+	.sidebar .ez-toc-widget-container:not(.ez-toc-expanded) .widget-title {
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+}
+
+

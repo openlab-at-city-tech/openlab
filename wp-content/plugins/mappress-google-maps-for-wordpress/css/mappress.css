@@ -30,6 +30,7 @@
 }
 
 .mapp-layout .mapp-main {
+	display: flex;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
 }
@@ -46,6 +47,7 @@
 */
 
 .mapp-canvas-panel {
+	flex: 1;
 	height: 100%;
 	margin: 0px;
 	overflow: hidden !important;
@@ -78,6 +80,7 @@
 /* Prevent theme interference with leaflet */
 .leaflet-popup-close-button {
 	box-shadow: none !important;			/* 2016, 2017 */
+	text-decoration: none !important;		/* 2019 */
 }
 
 a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
@@ -225,7 +228,7 @@ only screen and (min-device-pixel-ratio: 2) {
 
 .mapp-left .mapp-list {
 	border-right: 1px solid lightgray;
-	float: left;
+	/*float: left;*/
 	height: 100%;
 	max-width: 45%;
 	width: 250px;

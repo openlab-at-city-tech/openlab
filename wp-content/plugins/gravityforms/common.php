@@ -4595,7 +4595,7 @@ Content-Type: text/html;
 					'merge_tag' => '',
 					'condition' => '',
 					'value'     => '',
-				), $attributes
+				), $attributes, 'gravityforms_conditional'
 			)
 		);
 

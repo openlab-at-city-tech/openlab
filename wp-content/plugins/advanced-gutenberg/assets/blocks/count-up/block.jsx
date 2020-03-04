@@ -6,6 +6,8 @@
     const { InspectorControls, RichText, PanelColorSettings } = wpBlockEditor;
     const { RangeControl, PanelBody, TextControl, FormToggle } = wpComponents;
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class AdvCountUp extends Component {
         constructor() {
             super(...arguments);
@@ -59,9 +61,13 @@
                 descText3,
                 descTextColor,
                 columns,
+                isPreview,
             } = attributes;
 
             return (
+                isPreview ?
+                    <img alt={__('Count Up', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <InspectorControls>
                         <PanelBody title={ __( 'Count Up Settings', 'advanced-gutenberg' ) }>
@@ -488,6 +494,15 @@
             changed: {
                 type: 'boolean',
                 default: false,
+            },
+            isPreview: {
+                type: 'boolean',
+                default: false,
+            },
+        },
+        example: {
+            attributes: {
+                isPreview: true
             },
         },
         edit: AdvCountUp,

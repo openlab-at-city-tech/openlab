@@ -55,12 +55,12 @@ function bbp_map_primary_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 			if ( bbp_is_user_inactive( $user_id ) ) {
 				$caps = array( 'do_not_allow' );
 
-			// Keymasters can always moderate
+			// Keymasters can always moderate.
 			} elseif ( bbp_is_user_keymaster( $user_id ) ) {
 				$caps = array( 'spectate' );
 
-			// Default to the current cap.
-			} else {
+			// Check if user can moderate forum.
+			} elseif ( bbp_allow_forum_mods() ) {
 				$caps = array( $cap );
 
 				// Bail if no post to check.
@@ -103,8 +103,8 @@ function bbp_map_primary_meta_caps( $caps = array(), $cap = '', $user_id = 0, $a
 					break;
 				}
 
-				// If user is a per-forum moderator, make sure they can spectate.
-				if ( bbp_is_user_forum_moderator( $user_id, $forum_id ) ) {
+				// User is mod of this forum
+				if ( bbp_is_object_of_user( $forum_id, $user_id, '_bbp_moderator_id' ) ) {
 					$caps = array( 'spectate' );
 				}
 			}
@@ -484,9 +484,13 @@ function bbp_make_spam_user( $user_id = 0 ) {
 		$blogs[ $bbp_db->blogid ] = array();
 	}
 
-	// Make array of post types to mark as spam
-	$post_types  = array( bbp_get_topic_post_type(), bbp_get_reply_post_type() );
-	$post_types  = "'" . implode( "', '", $post_types ) . "'";
+	// Get array of post types to mark as spam
+	$post_types = array( bbp_get_topic_post_type(), bbp_get_reply_post_type() );
+	$post_types = "'" . implode( "', '", $post_types ) . "'";
+
+	// Get array of statuses to mark as spam
+	$post_statuses = bbp_get_public_topic_statuses();
+	$post_statuses = "'" . implode( "', '", $post_statuses ) . "'";
 
 	// Loop through blogs and remove their posts
 	foreach ( (array) array_keys( $blogs ) as $blog_id ) {
@@ -495,7 +499,7 @@ function bbp_make_spam_user( $user_id = 0 ) {
 		bbp_switch_to_site( $blog_id );
 
 		// Get topics and replies
-		$query = $bbp_db->prepare( "SELECT ID FROM {$bbp_db->posts} WHERE post_author = %d AND post_status = %s AND post_type IN ( {$post_types} )", $user_id, bbp_get_public_status_id() );
+		$query = $bbp_db->prepare( "SELECT ID FROM {$bbp_db->posts} WHERE post_author = %d AND post_status IN ( {$post_statuses} ) AND post_type IN ( {$post_types} )", $user_id );
 		$posts = $bbp_db->get_col( $query );
 
 		// Loop through posts and spam them
@@ -520,6 +524,9 @@ function bbp_make_spam_user( $user_id = 0 ) {
 		// Switch back to current site
 		bbp_restore_current_site();
 	}
+
+	// Delete user options
+	bbp_delete_user_options( $user_id );
 
 	// Success
 	return true;
@@ -562,9 +569,13 @@ function bbp_make_ham_user( $user_id = 0 ) {
 		$blogs[ $bbp_db->blogid ] = array();
 	}
 
-	// Make array of post types to mark as spam
+	// Get array of post types to mark as spam
 	$post_types = array( bbp_get_topic_post_type(), bbp_get_reply_post_type() );
 	$post_types = "'" . implode( "', '", $post_types ) . "'";
+
+	// Get array of statuses to unmark as spam
+	$post_statuses = array( bbp_get_spam_status_id() );
+	$post_statuses = "'" . implode( "', '", $post_statuses ) . "'";
 
 	// Loop through blogs and remove their posts
 	foreach ( (array) array_keys( $blogs ) as $blog_id ) {
@@ -573,7 +584,7 @@ function bbp_make_ham_user( $user_id = 0 ) {
 		bbp_switch_to_site( $blog_id );
 
 		// Get topics and replies
-		$query = $bbp_db->prepare( "SELECT ID FROM {$bbp_db->posts} WHERE post_author = %d AND post_status = %s AND post_type IN ( {$post_types} )", $user_id, bbp_get_spam_status_id() );
+		$query = $bbp_db->prepare( "SELECT ID FROM {$bbp_db->posts} WHERE post_author = %d AND post_status IN ( {$post_statuses} ) AND post_type IN ( {$post_types} )", $user_id );
 		$posts = $bbp_db->get_col( $query );
 
 		// Loop through posts and spam them
@@ -598,6 +609,13 @@ function bbp_make_ham_user( $user_id = 0 ) {
 		// Switch back to current site
 		bbp_restore_current_site();
 	}
+
+	// Update topic & reply counts
+	bbp_update_user_topic_count( $user_id, bbp_get_user_topic_count_raw( $user_id ) );
+	bbp_update_user_reply_count( $user_id, bbp_get_user_reply_count_raw( $user_id ) );
+
+	// Update last posted (to now)
+	bbp_update_user_last_posted( $user_id );
 
 	// Success
 	return true;

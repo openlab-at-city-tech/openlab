@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the MapPress Maps for WordPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.53.4\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.53.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
-"POT-Creation-Date: 2020-01-18 03:57:13+00:00\n"
+"POT-Creation-Date: 2020-02-12 23:20:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -122,19 +122,19 @@ msgstr ""
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:315 mappress.php:780
+#: mappress.php:314 mappress.php:765
 msgid "Version"
 msgstr ""
 
-#: mappress.php:316
+#: mappress.php:315
 msgid "Documentation"
 msgstr ""
 
-#: mappress.php:317
+#: mappress.php:316
 msgid "Support"
 msgstr ""
 
-#: mappress.php:319
+#: mappress.php:318
 msgid "Upgrade to MapPress Pro"
 msgstr ""
 

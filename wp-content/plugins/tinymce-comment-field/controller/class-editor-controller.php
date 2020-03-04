@@ -104,8 +104,10 @@ class TMCECF_EditorController {
 
         $script_version = '4.3.1';
 
-        if($wp_version_float >= 4.8) {
+        if($wp_version_float >= 4.8 && $wp_version_float <= 5) {
             $script_version = '4.8.0';
+        } else {
+            $script_version = '5.2.3';
         }
 
         wp_enqueue_script('jquery');

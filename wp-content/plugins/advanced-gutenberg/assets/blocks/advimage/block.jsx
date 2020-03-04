@@ -6,6 +6,7 @@
     const { InspectorControls, BlockControls, RichText, PanelColorSettings, MediaUpload } = wpBlockEditor;
     const { RangeControl, PanelBody, ToggleControl, SelectControl, TextControl, IconButton, Button, Toolbar, FocalPointPicker } = wpComponents;
 
+    const previewImageData = 'data:image/png;base64,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';
     class AdvImage extends Component {
         constructor() {
             super(...arguments);
@@ -51,6 +52,7 @@
                 blockIDX, openOnClick, openUrl, linkInNewTab, imageUrl, imageID,
                 title, titleColor, subtitle, subtitleColor, overlayColor, defaultOpacity,
                 fullWidth, width, height, vAlign, hAlign, overlayOpacity, focalPoint,
+                isPreview,
             } = attributes;
             const blockClassName = [
                 'advgb-image-block',
@@ -59,6 +61,9 @@
             ].filter( Boolean ).join( ' ' );
 
             return (
+                isPreview ?
+                    <img alt={__('Advanced Image', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     {imageID && (
                         <BlockControls>
@@ -348,6 +353,10 @@
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        }
     };
 
     registerBlockType( 'advgb/image', {
@@ -360,6 +369,11 @@
         category: 'advgb-category',
         keywords: [ __( 'image', 'advanced-gutenberg' ), __( 'photo', 'advanced-gutenberg' ), __( 'box', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         supports: {
             align: true,
         },

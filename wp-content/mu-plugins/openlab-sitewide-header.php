@@ -71,7 +71,7 @@ HTML;
         <label for="search-which-{$mode}-{$location}" class="sr-only">Select the Item Type to Search</label>
         <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
             <option value="members">People</option>
-            <option value="courses">Courses</option>
+            <option value="courses" selected="selected">Courses</option>
             <option value="projects">Projects</option>
             <option value="clubs">Clubs</option>
             <option value="portfolios">Portfolios</option>

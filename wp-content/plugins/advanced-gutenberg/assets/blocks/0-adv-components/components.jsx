@@ -3,7 +3,7 @@ export function AdvColorControl(props) {
     const {ColorPalette} = wp.blockEditor || wp.editor;
     const BaseLabel = BaseControl.VisualLabel ? BaseControl.VisualLabel : "span";
 
-    const {label, value, onChange} = props; ``
+    const {label, value, onChange} = props;
     return (
         <BaseControl
             className="editor-color-palette-control block-editor-color-palette-control"

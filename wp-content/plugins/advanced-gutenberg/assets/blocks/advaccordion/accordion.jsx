@@ -1,11 +1,13 @@
-(function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents ) {
+(function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents, wpCompose ) {
     wpBlockEditor = wp.blockEditor || wp.editor;
     const { __ } = wpI18n;
     const { Fragment, Component } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { RichText, InnerBlocks, InspectorControls, PanelColorSettings } = wpBlockEditor;
     const { RangeControl, PanelBody, BaseControl , SelectControl, ToggleControl } = wpComponents;
-    const { select, dispatch } = wp.data;
+    const { withDispatch, select } = wp.data;
+    const { compose } = wpCompose;
+    const { times } = lodash;
 
     const HEADER_ICONS = {
         plus: (
@@ -56,8 +58,6 @@
     class AccordionItemEdit extends Component {
         constructor() {
             super( ...arguments );
-
-            this.updateAccordionAttrs = this.updateAccordionAttrs.bind(this);
         }
 
         componentWillMount() {
@@ -80,19 +80,8 @@
             }
         }
 
-        updateAccordionAttrs( attrs ) {
-            const { clientId } = this.props;
-            const { updateBlockAttributes } = !wp.blockEditor ? dispatch( 'core/editor' ) : dispatch( 'core/block-editor' );
-            const { getBlockOrder, getBlockRootClientId } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
-            const rootBlockId = getBlockRootClientId(clientId);
-            const childBlocks = getBlockOrder(rootBlockId);
-
-            updateBlockAttributes( rootBlockId, attrs );
-            childBlocks.forEach( childBlockId => updateBlockAttributes( childBlockId, attrs ) );
-        }
-
         render() {
-            const { attributes, setAttributes, clientId } = this.props;
+            const { attributes, setAttributes } = this.props;
             const {
                 header,
                 headerBgColor,
@@ -106,14 +95,8 @@
                 borderColor,
                 borderRadius,
                 marginBottom,
-                collapsedAll: blockCollapsed,
+                collapsedAll,
             } = attributes;
-            const { getBlockRootClientId, getBlockAttributes } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
-            const { updateBlockAttributes } = !wp.blockEditor ? dispatch( 'core/editor' ) : dispatch( 'core/block-editor' );
-            const rootBlockId = getBlockRootClientId(clientId);
-            const rootBlockAttrs = getBlockAttributes(rootBlockId);
-            const { collapsedAll } = rootBlockAttrs;
-            if (blockCollapsed !== collapsedAll) setAttributes({collapsedAll: collapsedAll});
 
             return (
                 <Fragment>
@@ -125,16 +108,13 @@
                                 help={ __( 'Define space between each accordion (Frontend view only)', 'advanced-gutenberg' ) }
                                 min={ 0 }
                                 max={ 50 }
-                                onChange={ ( value ) => this.updateAccordionAttrs( { marginBottom: value } ) }
+                                onChange={ ( value ) => this.props.updateRootBlockAttrs( { marginBottom: value } ) }
                             />
                             <ToggleControl
                                 label={ __( 'Initial Collapsed', 'advanced-gutenberg' ) }
                                 help={ __( 'Make all accordions collapsed by default.', 'advanced-gutenberg' ) }
                                 checked={ collapsedAll }
-                                onChange={ () => {
-                                    updateBlockAttributes( rootBlockId, { collapsedAll: !collapsedAll } );
-                                    setAttributes( { collapsedAll: !collapsedAll } );
-                                } }
+                                onChange={ () => this.props.updateRootBlockAttrs({ collapsedAll: !collapsedAll })}
                             />
                         </PanelBody>
                         <PanelBody title={ __( 'Header Settings', 'advanced-gutenberg' ) }>
@@ -143,7 +123,7 @@
                                     {Object.keys( HEADER_ICONS ).map( ( key, index ) => (
                                         <div className="advgb-icon-item" key={ index }>
                                                 <span className={ key === headerIcon ? 'active' : '' }
-                                                      onClick={ () => this.updateAccordionAttrs( { headerIcon: key } ) }>
+                                                      onClick={ () => this.props.updateRootBlockAttrs( { headerIcon: key } ) }>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                                         { HEADER_ICONS[key] }
                                                     </svg>
@@ -159,17 +139,17 @@
                                     {
                                         label: __( 'Background Color', 'advanced-gutenberg' ),
                                         value: headerBgColor,
-                                        onChange: ( value ) => this.updateAccordionAttrs( { headerBgColor: value === undefined ? '#000' : value } ),
+                                        onChange: ( value ) => this.props.updateRootBlockAttrs( { headerBgColor: value === undefined ? '#000' : value } ),
                                     },
                                     {
                                         label: __( 'Text Color', 'advanced-gutenberg' ),
                                         value: headerTextColor,
-                                        onChange: ( value ) => this.updateAccordionAttrs( { headerTextColor: value === undefined ? '#eee' : value } ),
+                                        onChange: ( value ) => this.props.updateRootBlockAttrs( { headerTextColor: value === undefined ? '#eee' : value } ),
                                     },
                                     {
                                         label: __( 'Icon Color', 'advanced-gutenberg' ),
                                         value: headerIconColor,
-                                        onChange: ( value ) => this.updateAccordionAttrs( { headerIconColor: value === undefined ? '#fff' : value } ),
+                                        onChange: ( value ) => this.props.updateRootBlockAttrs( { headerIconColor: value === undefined ? '#fff' : value } ),
                                     },
                                 ] }
                             />
@@ -181,12 +161,12 @@
                                 {
                                     label: __( 'Background Color', 'advanced-gutenberg' ),
                                     value: bodyBgColor,
-                                    onChange: ( value ) => this.updateAccordionAttrs( { bodyBgColor: value } ),
+                                    onChange: ( value ) => this.props.updateRootBlockAttrs( { bodyBgColor: value } ),
                                 },
                                 {
                                     label: __( 'Text Color', 'advanced-gutenberg' ),
                                     value: bodyTextColor,
-                                    onChange: ( value ) => this.updateAccordionAttrs( { bodyTextColor: value } ),
+                                    onChange: ( value ) => this.props.updateRootBlockAttrs( { bodyTextColor: value } ),
                                 },
                             ] }
                         />
@@ -199,7 +179,7 @@
                                     { label: __( 'Dashed', 'advanced-gutenberg' ), value: 'dashed' },
                                     { label: __( 'Dotted', 'advanced-gutenberg' ), value: 'dotted' },
                                 ] }
-                                onChange={ ( value ) => this.updateAccordionAttrs( { borderStyle: value } ) }
+                                onChange={ ( value ) => this.props.updateRootBlockAttrs( { borderStyle: value } ) }
                             />
                             <PanelColorSettings
                                 title={ __( 'Color Settings', 'advanced-gutenberg' ) }
@@ -208,7 +188,7 @@
                                     {
                                         label: __( 'Border Color', 'advanced-gutenberg' ),
                                         value: borderColor,
-                                        onChange: ( value ) => this.updateAccordionAttrs( { borderColor: value } ),
+                                        onChange: ( value ) => this.props.updateRootBlockAttrs( { borderColor: value } ),
                                     },
                                 ] }
                             />
@@ -217,14 +197,14 @@
                                 value={ borderWidth }
                                 min={ 0 }
                                 max={ 10 }
-                                onChange={ ( value ) => this.updateAccordionAttrs( { borderWidth: value } ) }
+                                onChange={ ( value ) => this.props.updateRootBlockAttrs( { borderWidth: value } ) }
                             />
                             <RangeControl
                                 label={ __( 'Border radius', 'advanced-gutenberg' ) }
                                 value={ borderRadius }
                                 min={ 0 }
                                 max={ 100 }
-                                onChange={ ( value ) => this.updateAccordionAttrs( { borderRadius: value } ) }
+                                onChange={ ( value ) => this.props.updateRootBlockAttrs( { borderRadius: value } ) }
                             />
                         </PanelBody>
                     </InspectorControls>
@@ -344,9 +324,35 @@
             changed: {
                 type: 'boolean',
                 default: false,
+            },
+            rootBlockId: {
+                type: 'string',
+                default: ''
             }
         },
-        edit: AccordionItemEdit,
+        edit: compose([
+            withDispatch( ( dispatch, { clientId }, { select } ) => {
+                const {
+                    getBlockRootClientId,
+                    getBlocksByClientId
+                } = select( 'core/block-editor' );
+                const {
+                    updateBlockAttributes,
+                } = dispatch( 'core/block-editor' );
+                const rootID = getBlockRootClientId( clientId );
+                const accordionBlock = getBlocksByClientId( rootID );
+                return {
+                    updateRootBlockAttrs( attrs ) {
+                        updateBlockAttributes( rootID, attrs);
+                        times( accordionBlock[0].innerBlocks.length, n => {
+                            updateBlockAttributes( accordionBlock[0].innerBlocks[ n ].clientId, attrs);
+                        } );
+                    },
+
+                };
+            } ),
+        ]
+        )(AccordionItemEdit),
         save: function ( { attributes } ) {
             const {
                 header,
@@ -386,10 +392,11 @@
                          style={ {
                              backgroundColor: bodyBgColor,
                              color: bodyTextColor,
-                             borderStyle: borderStyle,
-                             borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
-                             borderColor: borderColor,
-                             borderRadius: !!borderRadius ? borderRadius + 'px' : undefined,
+                             borderStyle: borderStyle + ' !important',
+                             borderWidth: !!borderWidth ? borderWidth + 'px !important' : undefined,
+                             borderColor: borderColor + ' !important',
+                             borderTop: 'none !important',
+                             borderRadius: !!borderRadius ? borderRadius + 'px !important' : undefined,
                          } }
                     >
                         <InnerBlocks.Content />
@@ -397,5 +404,118 @@
                 </div>
             );
         },
+        deprecated: [
+            {
+                attributes: {
+                    header: {
+                        type: 'string',
+                        default: __( 'Header text', 'advanced-gutenberg' ),
+                    },
+                    headerBgColor: {
+                        type: 'string',
+                        default: '#000',
+                    },
+                    headerTextColor: {
+                        type: 'string',
+                        default: '#eee',
+                    },
+                    headerIcon: {
+                        type: 'string',
+                        default: 'unfold',
+                    },
+                    headerIconColor: {
+                        type: 'string',
+                        default: '#fff',
+                    },
+                    bodyBgColor: {
+                        type: 'string',
+                    },
+                    bodyTextColor: {
+                        type: 'string',
+                    },
+                    borderStyle: {
+                        type: 'string',
+                        default: 'solid',
+                    },
+                    borderWidth: {
+                        type: 'number',
+                        default: 0,
+                    },
+                    borderColor: {
+                        type: 'string',
+                    },
+                    borderRadius: {
+                        type: 'number',
+                        default: 2,
+                    },
+                    marginBottom: {
+                        type: 'number',
+                        default: 15,
+                    },
+                    collapsedAll: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    changed: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    rootBlockId: {
+                        type: 'string',
+                        default: ''
+                    }
+                },
+                save: function ( { attributes } ) {
+                    const {
+                        header,
+                        headerBgColor,
+                        headerTextColor,
+                        headerIcon,
+                        headerIconColor,
+                        bodyBgColor,
+                        bodyTextColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor,
+                        borderRadius,
+                        marginBottom,
+                    } = attributes;
+
+                    return (
+                        <div className="advgb-accordion-item" style={ { marginBottom } }>
+                            <div className="advgb-accordion-header"
+                                 style={ {
+                                     backgroundColor: headerBgColor,
+                                     color: headerTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                                     borderColor: borderColor,
+                                     borderRadius: !!borderRadius ? borderRadius + 'px' : undefined,
+                                 } }
+                            >
+                        <span className="advgb-accordion-header-icon">
+                            <svg fill={ headerIconColor } xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                { HEADER_ICONS[headerIcon] }
+                            </svg>
+                        </span>
+                                <h4 className="advgb-accordion-header-title" style={ { color: 'inherit' } }>{ header }</h4>
+                            </div>
+                            <div className="advgb-accordion-body"
+                                 style={ {
+                                     backgroundColor: bodyBgColor,
+                                     color: bodyTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                                     borderColor: borderColor,
+                                     borderRadius: !!borderRadius ? borderRadius + 'px' : undefined,
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                },
+            }
+        ]
     } )
-})( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components );
+})( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components, wp.compose );
