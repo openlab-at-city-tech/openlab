@@ -52,6 +52,9 @@
 			margin: 0 4px;
 			padding: 0;
 		}
+		.quicklinks {
+			border-left: none;
+		}
 		#wp-toolbar {
 			line-height: normal;
 			margin: 0 auto;
@@ -206,7 +209,7 @@
 				border: 1px solid @70gray;
 				border-top: none;
 				border-radius: 0 0 4px 4px;
-				margin-top: 2px;
+				margin-top: 1px;
 				width: 600%;
 				.ab-submenu {
 					padding: 0;
@@ -305,7 +308,6 @@
 					margin: 0;
 					.ab-submenu {
 						background: rgba(255, 255, 255, 0.42);
-						padding-left: 1%;
 						.ab-item {
 							padding: 6px 12px;
 							float: none;
@@ -396,19 +398,26 @@
 			#wp-admin-bar-openlab {
 				> .ab-item {
 					color: #000;
-					background: url("images/openlab_admin_bar_logo.png") #fff no-repeat
-						44% 58%;
-					padding: 51px 0 0;
+					background: #fff;
 					width: 127px;
 					overflow: hidden;
 					height: 0;
+					padding: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					.logo-wrapper {
+						max-width: 112px;
+						flex: 1 0 0;
+					}
 					@media (max-width: 479px) {
 						width: 37px;
 						background-position: -11% 58%;
 					}
 				}
 				.ab-sub-wrapper {
-					width: 170px;
+					width: 129px;
+					left: -1px;
 				}
 			}
 			#wp-admin-bar-my-openlab,
@@ -426,9 +435,11 @@
 			}
 			#wp-admin-bar-site-name {
 				border-left: none;
-				max-width: 320px;
-				@media (max-width: @screen-md-max) and (min-width: @screen-md-min){
-					max-width: 260px;
+				.ab-sub-wrapper {
+					width: 168px;
+					@media (min-width: @screen-sm-min) {
+						left: -1px;
+					}
 				}
 				> .ab-item {
 					white-space: normal;
@@ -492,17 +503,17 @@
 				}
 			}
 			#wp-admin-bar-my-openlab {
+				.ab-sub-wrapper {
+					width: 142px;
+					@media (min-width: @screen-sm-min) {
+						left: -1px;
+					}
+				}
 				@media (max-width: @screen-xs-max) {
 					.ab-sub-wrapper {
 						border: none;
 						border-top: 9px solid #d1d1d1;
 					}
-				}
-			}
-			#wp-admin-bar-invites,
-			#wp-admin-bar-my-openlab {
-				.ab-sub-wrapper {
-					left: -1px;
 				}
 			}
 			#wp-admin-bar-my-account {
@@ -573,6 +584,18 @@
 							left: 3px;
 						}
 					}
+				}
+			}
+			#wp-admin-bar-invites{
+				.ab-sub-wrapper{
+					@media (min-width: @screen-sm-min){
+						left: -1px;
+					}
+				}
+			}
+			#wp-admin-bar-new-content{
+				.ab-sub-wrapper{
+					width: 160px;
 				}
 			}
 			#wp-admin-bar-activity {
@@ -1145,7 +1168,6 @@
 				}
 				#wp-admin-bar-top-logout {
 					.box-sizing(border-box);
-					border-bottom: 1px solid @black;
 				}
 				#wp-admin-bar-bp-login {
 					.ab-sub-wrapper {

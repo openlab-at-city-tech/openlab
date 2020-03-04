@@ -207,11 +207,18 @@ HTML;
 	 * Add the main OpenLab menu
 	 */
 	public function add_network_menu( $wp_admin_bar ) {
+
+		ob_start();
+		include WPMU_PLUGIN_DIR . '/parts/persistent/svg-logo.php';
+		$openlab_logo = ob_get_clean();
+
+		$title = "<span class='logo-wrapper'>$openlab_logo</span>";
+
 		$wp_admin_bar->add_node(
 			array(
 				/*'parent' => 'top-secondary',*/
 				'id'    => 'openlab',
-				'title' => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
+				'title' => $title,
 				'href'  => bp_get_root_domain(),
 				'meta'  => array(
 					'tabindex' => 90,
