@@ -102,6 +102,7 @@
 			> ul {
 				> li {
 					position: relative;
+					max-height: 50px;
 					> .ab-item {
 						color: #ffffff;
 						cursor: pointer;
@@ -209,6 +210,7 @@
 				border: 1px solid @70gray;
 				border-top: none;
 				border-radius: 0 0 4px 4px;
+				top: 50px;
 				margin-top: 1px;
 				width: 600%;
 				.ab-submenu {
@@ -261,7 +263,8 @@
 					}
 					.nav-content-item {
 						padding-bottom: 16px;
-						margin-top: 16px;
+						padding-top: 16px;
+						margin-top: 0;
 						border-bottom: 1px solid #e5e5e5;
 						overflow: hidden;
 						.ab-item {
@@ -437,7 +440,7 @@
 				border-left: none;
 				max-width: 320px;
 				.ab-sub-wrapper {
-					width: calc(~'100% + 2px');
+					width: calc(~"100% + 2px");
 					@media (min-width: @screen-sm-min) {
 						left: -1px;
 					}
@@ -482,6 +485,9 @@
 						overflow: hidden;
 					}
 				}
+			}
+			#wp-admin-bar-site-name-default {
+				border-radius: 0;
 			}
 			#wp-admin-bar-my-openlab,
 			#wp-admin-bar-network-menu-mobile {
@@ -587,15 +593,15 @@
 					}
 				}
 			}
-			#wp-admin-bar-invites{
-				.ab-sub-wrapper{
-					@media (min-width: @screen-sm-min){
+			#wp-admin-bar-invites {
+				.ab-sub-wrapper {
+					@media (min-width: @screen-sm-min) {
 						left: -1px;
 					}
 				}
 			}
-			#wp-admin-bar-new-content{
-				.ab-sub-wrapper{
+			#wp-admin-bar-new-content {
+				.ab-sub-wrapper {
 					width: 160px;
 				}
 			}
@@ -1116,11 +1122,10 @@
 	&.adminbar-manual-bootstrap {
 		#wpadminbar {
 			top: 0;
-			height: auto;
-			max-height: 50px;
+			height: 50px;
 			&:before {
 				border-bottom: 1px solid @black;
-				bottom: -1px;
+				top: 50px;
 				content: "";
 				left: 0;
 				position: absolute;
@@ -1239,7 +1244,7 @@ html {
 
 body {
 	&.adminbar-special {
-		padding-top: 51px;
+		padding-top: 50.5px;
 		@media (max-width: 767px) {
 			padding-top: 114px;
 		}
