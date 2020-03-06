@@ -99,12 +99,6 @@ function openlab_hide_plugins( $plugins ) {
 		'fixed-toc/fixed-toc.php'         => array(
 			12249, // openlabguide - https://redmine.citytech.cuny.edu/issues/2562
 		),
-		'gravityformsdropbox/dropbox.php' => array(
-			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
-		),
-		'gravityformszapier/zapier.php'   => array(
-			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
-		),
 		'h5p/h5p.php'                     => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
