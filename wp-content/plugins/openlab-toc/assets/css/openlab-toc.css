@@ -1,8 +1,6 @@
 .sidebar .ez-toc-widget-container {
 	background-color: #fff;
 	max-width: 280px;
-	overflow-y: scroll;
-	height: 100%;
 }
 
 .sidebar .ez-toc-widget-container .ez-toc-btn {
@@ -41,8 +39,7 @@
 	top: 32px;
 	padding: 5px;
 	overflow-y: scroll;
-	height: 90%;
-	height: calc(100% - 32px);
+	max-height: 90%;
 }
 
 body:not(.admin-bar) .toc-fixed {
@@ -67,8 +64,7 @@ body:not(.admin-bar) .toc-fixed {
 		right: 0;
 		padding: 5px;
 		overflow-y: scroll;
-		height: 90%;
-		height: calc(100% - 32px);
+		max-height: 90%;
 		z-index: 100;
 	}
 

@@ -6,7 +6,8 @@ jQuery(document).ready( function( $ ) {
 	}
 
 	var hiddenByDefault = !! ezTOC.visibility_hide_by_default;
-	if ( ! hiddenByDefault ) {
+	var hiddenByUser = Cookies.get( 'ezTOC_hidetoc' ) === '1';
+	if ( ! hiddenByUser && ! hiddenByDefault ) {
 		sticky.addClass( 'ez-toc-expanded' );
 	}
 
@@ -17,7 +18,7 @@ jQuery(document).ready( function( $ ) {
 
 	stickyTop = hasAdminBar ? stickyTop - 32 : stickyTop;
 
-	function handleScroll( event ) {
+	function handleScroll() {
 		scrollTop = $window.scrollTop();
 
 		if ( scrollTop >= stickyTop ) {

@@ -38,6 +38,7 @@ function bootstrap() {
 	add_filter( 'comments_open', __NAMESPACE__ . '\\enable_page_comments', 10, 2 );
 	add_filter( 'redux/args/highlighter_settings', __NAMESPACE__ . '\\filter_settings' );
 
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
 	add_action( 'wp_footer', __NAMESPACE__ . '\\render_comment_form' );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
@@ -182,4 +183,20 @@ function render_content_stats( $content ) {
 	}
 
 	return $content;
+}
+
+/**
+ * Load assets for Highlighter Pro.
+ *
+ * @return void
+ */
+function enqueue_assets() {
+	$options   = \get_option( 'highlighter_settings' );
+	$types     = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
+
+	if ( ! \is_singular( $types ) ) {
+		return;
+	}
+
+	\wp_enqueue_style( 'openlab-highligter-pro', \content_url( 'mu-plugins/css/highlighter-pro.css' ) );
 }

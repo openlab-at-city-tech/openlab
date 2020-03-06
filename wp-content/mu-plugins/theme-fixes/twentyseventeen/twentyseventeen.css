@@ -2,3 +2,9 @@ body .site-header {
 	background-color: #515151;
 	position: relative;
 }
+
+@media screen and (min-width: 48em) {
+	.admin-bar .site-navigation-fixed.navigation-top {
+		top: 0;
+	}
+}

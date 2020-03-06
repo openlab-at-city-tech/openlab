@@ -152,7 +152,6 @@ add_filter(
 	}
 );
 
-remove_theme_support( 'genesis-footer-widgets' );
 $deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', /*'home-bottom',*/ 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
