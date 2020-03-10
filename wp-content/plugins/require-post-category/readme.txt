@@ -1,21 +1,22 @@
 ﻿=== Require Post Category ===
 Contributors: joshhartman
-Tags: post, category, taxonomy, require, force, publish, draft, admin
-Requires at least: 3.3
-Tested up to: 4.9
-Stable tag: 1.1
+Tags: post, category, tags, taxonomy, require, force, publish, save, admin, gutenberg, editor
+Requires at least: 5.3.2
+Tested up to: 5.3
+Stable tag: 2.0.3
 
-Require users to choose a post category before saving a draft, updating a post, or publishing a post.
+Require users to choose a post category before updating or publishing a post.
 
 == Description ==
 
-Tired of uncategorized posts? Use this simple plugin to require users to choose a post category before saving a draft, updating a post, or publishing a post.  This applies to normal posts in the normal WordPress admin editor. If you wish to require a category or other taxonomy for a custom post type see the FAQ for filter hook usage examples.
+Tired of uncategorized posts? Use this simple plugin to require users to choose a post category before updating or publishing a post. By default this only applies to normal posts. If you wish to require a category/taxonomy for a custom post type see the FAQ for filter hook usage examples.
 
 = Translators =
 
 * French (fr_FR) - Dominique V.
 * Spanish (es_ES) - [Andrew Kurtis - WebHostingHub](http://www.webhostinghub.com)
 * Polish (pl_PL) - Michał Papliński
+* Finnish (fi) - Sanapaino
 
 If you have created your own language pack, or have an update of an existing one, you can send the [PO and MO files](https://codex.wordpress.org/Translating_WordPress) to [me](https://www.warpconduit.net/contact) so that I can bundle it into the plugin. [Download the latest POT file](https://plugins.svn.wordpress.org/require-post-category/trunk/languages/require-post-category.pot).
 
@@ -73,12 +74,16 @@ add_filter( 'rpc_post_types', 'custom_rpc_post_types' );`
 The default `$post_types` contains the following:
 
 `$post_types['post'] = array(
-    'taxonomies' => array(
-        'category' => 'Please select a category before publishing this post.'
-    )
+ 	'category' => array(
+ 		'message' => 'Please select a category before publishing this post.'
+ 	)
 );`
 
 This maintains the plugin's original functionality. However, you can remove this functionality with `unset($post_types['post']);` or by redefining `$post_types` in your hook function.
+
+= You’ve added code to require a custom taxonomy but can’t get it to work in the Gutenberg editor? =
+
+One reason may be that your custom taxonomy does not have the `show_in_rest` argument enabled. Without it enabled the Gutenberg editor cannot access it.
 
 = Have a question that is not addressed here? =
 
@@ -86,9 +91,22 @@ Visit this plugin's WordPress support forum at https://wordpress.org/support/plu
 
 == Screenshots ==
 
-1. Alert appears when you try to save a post without choosing a category
+1. Notice appears when editing a post without selecting a category (Gutenberg)
+2. Alert appears when you try to save a post without selecting a category (Classic)
 
 == Changelog ==
+
+= 2.0.3 =
+* Added Finnish (fi) translation by Sanapaino
+
+= 2.0.2 =
+* FIXED: Custom taxonomy `rest_base` value of boolean false was not being properly handled.
+
+= 2.0.1 =
+* Repaired translation files.
+
+= 2.0 =
+* Rewritten for the new Gutenberg editor (first introduced in WordPress 5.0)
 
 = 1.1 =
 * NEW: Added a filter hook and related code to allow developers to easily add support for custom post types and custom taxonomies
