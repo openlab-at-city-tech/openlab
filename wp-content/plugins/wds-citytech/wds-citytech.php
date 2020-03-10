@@ -2691,7 +2691,7 @@ add_action(
 add_action(
 	'widgets_init',
 	function() {
-		unregister_widget( 'wp_accessibility_toolbar' );
+		unregister_widget( 'Wp_Accessibility_Toolbar' );
 	},
 	20
 );
