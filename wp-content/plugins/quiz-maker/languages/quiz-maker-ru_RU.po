@@ -1,0 +1,4530 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2020-02-14 21:09+0400\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
+"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"X-Generator: Poedit 2.2.4\n"
+
+#: ../admin/class-quiz-maker-admin.php:184
+#: ../public/class-quiz-maker-public.php:130
+msgid "You have not answered to this question"
+msgstr "Вы не ответили на этот вопрос"
+
+#: ../admin/class-quiz-maker-admin.php:185
+#: ../public/class-quiz-maker-public.php:131
+msgid "Do you want to finish the quiz? Are you sure?"
+msgstr "Вы хотите закончить викторину? Вы уверены?"
+
+#: ../admin/class-quiz-maker-admin.php:186
+#: ../public/class-quiz-maker-public.php:132
+msgid "Sorry"
+msgstr "Извините"
+
+#: ../admin/class-quiz-maker-admin.php:187
+#: ../public/class-quiz-maker-public.php:133
+msgid "We are unable to store your data"
+msgstr "Мы не можем хранить ваши данные"
+
+#: ../admin/class-quiz-maker-admin.php:188
+#: ../public/class-quiz-maker-public.php:134
+msgid "Connection is lost"
+msgstr "Соединение потеряно"
+
+#: ../admin/class-quiz-maker-admin.php:189
+#: ../public/class-quiz-maker-public.php:135
+msgid "Please check your connection and try again"
+msgstr "Пожалуйста, проверьте ваше соединение и попробуйте снова"
+
+#: ../admin/class-quiz-maker-admin.php:190
+#: ../public/class-quiz-maker-public.php:136
+#: ../public/class-quiz-maker-public.php:4237
+msgid "Select an answer"
+msgstr "Выберите ответ"
+
+#: ../admin/class-quiz-maker-admin.php:191
+#: ../public/class-quiz-maker-public.php:137
+msgid "Share Dialog"
+msgstr "Поделиться диалогом"
+
+#: ../admin/class-quiz-maker-admin.php:258
+#: ../admin/class-quiz-maker-admin.php:259
+#: ../admin/class-quiz-maker-admin.php:538
+#: ../admin/partials/quiz-maker-admin-display.php:154
+#: ../admin/partials/results/quiz-maker-results-display.php:14
+#: ../admin/partials/results/quiz-maker-results-display.php:210
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:11
+msgid "Quizzes"
+msgstr "Викторины"
+
+#: ../admin/class-quiz-maker-admin.php:269
+#: ../admin/class-quiz-maker-admin.php:270
+#: ../admin/class-quiz-maker-admin.php:563
+#: ../admin/class-quiz-maker-admin.php:1612
+#: ../admin/partials/quiz-maker-admin-display.php:62
+#: ../admin/partials/quiz-maker-admin-display.php:142
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:80
+#: ../admin/partials/results/quiz-maker-each-results-display.php:65
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:15
+#: ../public/class-quiz-maker-public.php:5193
+msgid "Questions"
+msgstr "Вопросы"
+
+#: ../admin/class-quiz-maker-admin.php:280
+#: ../admin/class-quiz-maker-admin.php:281
+#: ../admin/class-quiz-maker-admin.php:551
+#: ../admin/partials/quiz-maker-admin-display.php:160
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:10
+msgid "Quiz Categories"
+msgstr "Категории Викторины"
+
+#: ../admin/class-quiz-maker-admin.php:291
+#: ../admin/class-quiz-maker-admin.php:292
+#: ../admin/class-quiz-maker-admin.php:576
+#: ../admin/partials/quiz-maker-admin-display.php:148
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:10
+msgid "Question Categories"
+msgstr "Категории Вопросов"
+
+#: ../admin/class-quiz-maker-admin.php:302
+#: ../admin/class-quiz-maker-admin.php:303
+msgid "Custom Fields"
+msgstr "Пользовательские Поля"
+
+#: ../admin/class-quiz-maker-admin.php:313
+#: ../admin/class-quiz-maker-admin.php:314
+#: ../admin/class-quiz-maker-admin.php:624
+#: ../admin/partials/quiz-maker-admin-display.php:178
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:10
+msgid "Orders"
+msgstr "Заказы"
+
+#: ../admin/class-quiz-maker-admin.php:339
+msgid "Each"
+msgstr "Каждый"
+
+#: ../admin/class-quiz-maker-admin.php:352
+#: ../admin/class-quiz-maker-admin.php:353
+msgid "Dashboard"
+msgstr "Админ панел"
+
+#: ../admin/class-quiz-maker-admin.php:360
+#: ../admin/class-quiz-maker-admin.php:361
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:171
+#: ../admin/partials/quiz-maker-admin-display.php:190
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:667
+#: ../admin/partials/settings/quiz-maker-settings.php:101
+#: ../admin/partials/settings/quiz-maker-settings.php:129
+msgid "General Settings"
+msgstr "Общие Настройки"
+
+#: ../admin/class-quiz-maker-admin.php:369
+#: ../admin/class-quiz-maker-admin.php:370
+#: ../admin/partials/quiz-maker-admin-display.php:200
+msgid "Featured Plugins"
+msgstr "Рекомендуемые Плагины"
+
+#: ../admin/class-quiz-maker-admin.php:419
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:166
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:644
+msgid "Settings"
+msgstr "Параметры"
+
+#: ../admin/class-quiz-maker-admin.php:588
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:10
+msgid "Quiz Attributes"
+msgstr "Атрибут викторины"
+
+#: ../admin/class-quiz-maker-admin.php:600
+#: ../admin/class-quiz-maker-admin.php:612
+#: ../admin/partials/quiz-maker-admin-display.php:166
+#: ../admin/partials/results/quiz-maker-each-results-display.php:63
+#: ../includes/lists/class-quiz-maker-results-list-table.php:10
+msgid "Results"
+msgstr "Результаты"
+
+#: ../admin/class-quiz-maker-admin.php:1366
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:137
+msgid "The quiz has expired!"
+msgstr "Тест истек!"
+
+#: ../admin/class-quiz-maker-admin.php:1523
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3358
+msgid "User Information"
+msgstr "Информация о пользователе"
+
+#: ../admin/class-quiz-maker-admin.php:1527
+#: ../admin/class-quiz-maker-admin.php:1534
+#: ../admin/class-quiz-maker-admin.php:1539
+msgid "User"
+msgstr "Пользователь"
+
+#: ../admin/class-quiz-maker-admin.php:1531
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:64
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:165
+#: ../public/class-quiz-maker-public.php:5379
+#: ../public/class-quiz-maker-public.php:5501
+msgid "Guest"
+msgstr "Гость"
+
+#: ../admin/class-quiz-maker-admin.php:1545
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3428
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3473
+#: ../admin/partials/settings/quiz-maker-settings.php:619
+#: ../admin/partials/settings/quiz-maker-settings.php:748
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:188
+#: ../public/class-quiz-maker-public.php:504
+#: ../public/class-quiz-maker-public.php:506
+#: ../public/class-quiz-maker-public.php:3743
+msgid "Email"
+msgstr "Эл. адрес"
+
+#: ../admin/class-quiz-maker-admin.php:1551
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:45
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3422
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3467
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:271
+#: ../public/class-quiz-maker-public.php:498
+#: ../public/class-quiz-maker-public.php:500
+#: ../public/class-quiz-maker-public.php:3739
+#: ../public/class-quiz-maker-public.php:5370
+#: ../public/class-quiz-maker-public.php:5406
+#: ../public/class-quiz-maker-public.php:5492
+msgid "Name"
+msgstr "Имя"
+
+#: ../admin/class-quiz-maker-admin.php:1557
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3434
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3479
+#: ../public/class-quiz-maker-public.php:3747
+msgid "Phone"
+msgstr "Телефон"
+
+#: ../admin/class-quiz-maker-admin.php:1572
+msgid "Checked"
+msgstr "Проверено"
+
+#: ../admin/class-quiz-maker-admin.php:1583
+#: ../public/class-quiz-maker-public.php:5164
+msgid "Quiz Information"
+msgstr "Сведения o Викторине"
+
+#: ../admin/class-quiz-maker-admin.php:1587
+#: ../admin/class-quiz-maker-admin.php:1593
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:500
+#: ../public/class-quiz-maker-public.php:5168
+#: ../public/class-quiz-maker-public.php:5174
+msgid "Rate"
+msgstr "Оценка"
+
+#: ../admin/class-quiz-maker-admin.php:1588
+#: ../public/class-quiz-maker-public.php:5169
+msgid "Rate Score"
+msgstr "Оценка"
+
+#: ../admin/class-quiz-maker-admin.php:1589
+#: ../public/class-quiz-maker-public.php:5170
+msgid "Review"
+msgstr "Комментарий"
+
+#: ../admin/class-quiz-maker-admin.php:1598
+#: ../public/class-quiz-maker-public.php:5179
+msgid "Start date"
+msgstr "Дата начала"
+
+#: ../admin/class-quiz-maker-admin.php:1602
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:503
+#: ../public/class-quiz-maker-public.php:3756
+#: ../public/class-quiz-maker-public.php:5183
+#: ../public/class-quiz-maker-public.php:5372
+#: ../public/class-quiz-maker-public.php:5408
+#: ../public/class-quiz-maker-public.php:5494
+msgid "Duration"
+msgstr "Продолжительность"
+
+#: ../admin/class-quiz-maker-admin.php:1606
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:504
+#: ../public/class-quiz-maker-public.php:3764
+#: ../public/class-quiz-maker-public.php:3812
+#: ../public/class-quiz-maker-public.php:5045
+#: ../public/class-quiz-maker-public.php:5187
+#: ../public/class-quiz-maker-public.php:5371
+#: ../public/class-quiz-maker-public.php:5407
+#: ../public/class-quiz-maker-public.php:5493
+msgid "Score"
+msgstr "Результат"
+
+#: ../admin/class-quiz-maker-admin.php:1649
+#: ../admin/class-quiz-maker-admin.php:1662
+#: ../admin/class-quiz-maker-admin.php:1677
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:174
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:865
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4500
+#: ../admin/partials/results/quiz-maker-each-results-display.php:120
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:14
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1095
+#: ../public/class-quiz-maker-public.php:3787
+#: ../public/class-quiz-maker-public.php:3796
+#: ../public/class-quiz-maker-public.php:3838
+#: ../public/class-quiz-maker-public.php:5230
+#: ../public/class-quiz-maker-public.php:5243
+#: ../public/class-quiz-maker-public.php:5258
+msgid "Question"
+msgstr "Вопрос"
+
+#: ../admin/class-quiz-maker-admin.php:1650
+#: ../admin/class-quiz-maker-admin.php:1663
+#: ../public/class-quiz-maker-public.php:3788
+#: ../public/class-quiz-maker-public.php:3797
+#: ../public/class-quiz-maker-public.php:5231
+#: ../public/class-quiz-maker-public.php:5244
+msgid "Correct answer"
+msgstr "Правильный ответ"
+
+#: ../admin/class-quiz-maker-admin.php:1651
+#: ../admin/class-quiz-maker-admin.php:1664
+#: ../admin/class-quiz-maker-admin.php:1678
+#: ../public/class-quiz-maker-public.php:5232
+#: ../public/class-quiz-maker-public.php:5245
+#: ../public/class-quiz-maker-public.php:5259
+msgid "User answered"
+msgstr "Пользователь ответил"
+
+#: ../admin/class-quiz-maker-admin.php:1657
+#: ../public/class-quiz-maker-public.php:5238
+msgid "Succeed"
+msgstr "Успешно"
+
+#: ../admin/class-quiz-maker-admin.php:1671
+#: ../public/class-quiz-maker-public.php:5252
+msgid "Failed"
+msgstr "Не удалось"
+
+#: ../admin/class-quiz-maker-admin.php:1679
+#: ../public/class-quiz-maker-public.php:5260
+msgid "Answer point"
+msgstr "Очки Ответа"
+
+#: ../admin/class-quiz-maker-admin.php:1686
+#: ../public/class-quiz-maker-public.php:5267
+msgid "User explanation for this question"
+msgstr "Объяснение пользователя для этого вопроса"
+
+#: ../admin/class-quiz-maker-admin.php:1707
+#: ../admin/class-quiz-maker-admin.php:1726
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:442
+#: ../public/class-quiz-maker-public.php:5089
+#: ../public/class-quiz-maker-public.php:5108
+msgid "No rate provided"
+msgstr "Тариф не предоставляется"
+
+#: ../admin/class-quiz-maker-admin.php:1718
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:418
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:433
+#: ../public/class-quiz-maker-public.php:5100
+msgid "No review provided"
+msgstr "Отзыв не предоставлен"
+
+#: ../admin/class-quiz-maker-admin.php:1821
+#: ../admin/class-quiz-maker-admin.php:1871
+#: ../public/class-quiz-maker-public.php:3930
+msgid "The user have not answered to this question."
+msgstr "Пользователь не ответил на этот вопрос."
+
+#: ../admin/class-quiz-maker-admin.php:1939
+#: ../pb_templates/quiz_maker_elementor.php:9
+#: ../pb_templates/quiz_maker_wpbvc.php:23
+#: ../pb_templates/quiz_maker_wpbvc.php:33 ../quiz/quiz-maker-block.js:114
+msgid "Quiz Maker"
+msgstr "Quiz Maker"
+
+#: ../admin/class-quiz-maker-admin.php:1963
+#: ../pb_templates/quiz_maker_elementor.php:52
+msgid "Select Quiz"
+msgstr "Выбрать Викторину"
+
+#: ../admin/class-quiz-maker-admin.php:2510
+msgid "If you love our plugin, please do big favor and rate us on"
+msgstr ""
+"Если вам нравится наш плагин, пожалуйста, сделайте большую услугу и оцените "
+"нас на"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:18
+msgid "Add new field"
+msgstr "Добавить новое поле"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:21
+msgid "Edit field"
+msgstr "Редактировать поле"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:46
+msgid "The name of field. It will show up as a placeholder for text input."
+msgstr "Название поля. Он будет отображаться как заполнитель для ввода текста."
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:60
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:272
+msgid "Slug"
+msgstr "Slug"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:61
+msgid ""
+"Unique identifier for the field. You can use it in the integrations to show "
+"the user’s answer for this field."
+msgstr ""
+"Уникальный идентификатор поля. Вы можете использовать его в интеграциях, "
+"чтобы показать ответ пользователя для этого поля."
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:75
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:866
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4501
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:273
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1097
+msgid "Type"
+msgstr "Тип"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:76
+msgid "Choose what kind of field to add from the mentioned list."
+msgstr "Выберите, какое поле добавить из указанного списка."
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:83
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:109
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2984
+#: ../admin/partials/settings/quiz-maker-settings.php:82
+msgid "Text"
+msgstr "Text"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:84
+msgid "Textarea"
+msgstr "Textarea"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:85
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:86
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:111
+#: ../admin/partials/settings/quiz-maker-settings.php:84
+msgid "Number"
+msgstr "Number"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:87
+msgid "Telephone"
+msgstr "Telephone"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:88
+msgid "URL"
+msgstr "URL"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:89
+msgid "Select"
+msgstr "Select"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:90
+msgid "Checkbox"
+msgstr "Checkbox"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:95
+msgid "Options"
+msgstr "Параметры"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:96
+msgid "Please write your options separated by example: Red; Blue; Green"
+msgstr ""
+"Пожалуйста, напишите ваши варианты, разделенные, например: Красный; Синий; "
+"Зеленый"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:111
+msgid "Attribute status"
+msgstr "Статус атрибута"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:112
+msgid ""
+"Choose whether the attribute is active or not. If you choose Unpublished "
+"option, the attribute won’t be shown anywhere."
+msgstr ""
+"Опубликованные или Неопубликованные. Выберите, активен Викторина или нет. "
+"Если вы выберете опцию Неопубликованные, Викторина не будет отображаться "
+"нигде на вашем веб-сайте (вам не нужно удалять шорткоды)."
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:121
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:575
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:79
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:79
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:760
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:254
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:270
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1034
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:266
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1040
+msgid "Published"
+msgstr "Опубликовано"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:125
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:579
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:83
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:83
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:766
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1043
+msgid "Unpublished"
+msgstr "Неопубликованный"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:134
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:154
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:733
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:92
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:92
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:607
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4447
+msgid "Save and close"
+msgstr "Сохранить и закрыть"
+
+#: ../admin/partials/attributes/actions/quiz-maker-attributes-actions.php:136
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:158
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:737
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:94
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:93
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:608
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4448
+msgid "Save"
+msgstr "Сохранить"
+
+#: ../admin/partials/attributes/quiz-maker-attributes-display.php:14
+#: ../admin/partials/questions/quiz-maker-question-categories-display.php:14
+#: ../admin/partials/questions/quiz-maker-questions-display.php:21
+#: ../admin/partials/quizes/quiz-maker-quiz-categories-display.php:5
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:15
+msgid "Add New"
+msgstr "Добавить Новый"
+
+#: ../admin/partials/features/quiz-maker-plugin-featured-display.php:4
+msgid "Please feel free to use our other awesome plugins!"
+msgstr ""
+"Пожалуйста, не стесняйтесь использовать наши другие удивительные Плагины!"
+
+#: ../admin/partials/orders/quiz-maker-orders-display.php:4
+msgid "History of the users’ payments for passing the quiz."
+msgstr "История платежей пользователей за прохождение викторины."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:9
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:10
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:303
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:304
+msgid "Add Image"
+msgstr "Добавить Изображения"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:53
+msgid "Add new question"
+msgstr "Добавить новый вопрос"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:56
+msgid "Edit question"
+msgstr "Редактировать вопрос"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:82
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:89
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:307
+msgid "Edit Image"
+msgstr "Редактирование Изображения"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:106
+#: ../admin/partials/settings/quiz-maker-settings.php:79
+msgid "Radio"
+msgstr "Radio"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:107
+#: ../admin/partials/settings/quiz-maker-settings.php:80
+msgid "Checkbox( Multiple )"
+msgstr "Флажок (несколько)"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:108
+#: ../admin/partials/settings/quiz-maker-settings.php:81
+msgid "Dropdown"
+msgstr "Выпадающий"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:110
+#: ../admin/partials/settings/quiz-maker-settings.php:83
+msgid "Short Text"
+msgstr "Краткий Текст"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:156
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:735
+msgid "Save and new"
+msgstr "Сохранить и новый"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:163
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:638
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1933
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1941
+#: ../admin/partials/settings/quiz-maker-settings.php:114
+msgid "General"
+msgstr "Общие"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:193
+msgid "Question type"
+msgstr "Тип вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:196
+msgid "Choose the type of question."
+msgstr "Выберите тип вопроса."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:198
+msgid "Multiple choice question with one Correct answer."
+msgstr "Вопрос с множественным выбором с одним правильным ответом."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:199
+msgid "Multiple choice question with multiple Correct answers."
+msgstr "Вопрос с множественным выбором с несколькими правильными ответами."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:200
+msgid ""
+"Multiple choice questions with one Correct answer, which will be displayed "
+"as Dropdown."
+msgstr ""
+"Вопросы с несколькими вариантами ответов с одним правильным ответом, который "
+"будет отображаться в виде выпадающего списка."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:230
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:253
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:502
+#: ../admin/partials/quiz-maker-admin-display.php:78
+#: ../admin/partials/quiz-maker-admin-display.php:89
+#: ../admin/partials/quiz-maker-admin-display.php:100
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:96
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:107
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:118
+msgid "Answer"
+msgstr "Ответ"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:234
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:504
+msgid "Answers"
+msgstr "Ответы"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:249
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:864
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2981
+msgid "Ordering"
+msgstr "Заказ"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:250
+msgid "Correct"
+msgstr "Верный"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:252
+msgid "Weight/Point"
+msgstr "Вес / Очки"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:255
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2988
+msgid "Image"
+msgstr "Изображения"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:256
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:853
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:868
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:936
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2989
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:246
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:303
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:400
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:561
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:261
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:325
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1012
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1131
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:257
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:321
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1017
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1139
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:259
+msgid "Placeholder"
+msgstr "Placeholder"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:328
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:354
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:381
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:401
+msgid "Add"
+msgstr "Добавить"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:512
+msgid "Use HTML for answers"
+msgstr "Используйте HTML для ответов"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:513
+msgid "Allowed tags list"
+msgstr "Список разрешенных тегов"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:524
+msgid "Question weight"
+msgstr "Вес вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:525
+msgid ""
+"Specify the weight of the question. It’s not connected with answers points. "
+"It will be multiplied with chosen answer weight (if you choose quiz "
+"calculation by points). The default value is 1."
+msgstr ""
+"Укажите вес вопроса. Это не связано с точками ответов. Он будет умножен на "
+"выбранный вес ответа (если вы выберете расчет теста по баллам). Значением по "
+"умолчанию является 1."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:538
+msgid "Question category"
+msgstr "Вопрос Категории"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:539
+msgid "You can choose your desired category prepared in advance."
+msgstr "Вы можете выбрать желаемую категорию, подготовленную заранее."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:565
+msgid "Question status"
+msgstr "Статус вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:566
+msgid ""
+"Choose whether the question is active or not. If you choose Unpublished "
+"option, the question won’t be shown anywhere on your website."
+msgstr ""
+"Выберите, является ли вопрос активным или нет. Если вы выберете опцию "
+"Неопубликованные, вопрос больше не будет отображаться на вашем сайте."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:587
+msgid "Not influence to score"
+msgstr "Не влияет на результат"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:589
+msgid ""
+"If you enable this option, this question will not be counted in the final "
+"score."
+msgstr ""
+"Если вы включите эту опцию, этот вопрос не будет засчитан в окончательный "
+"результат."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:590
+msgid "So this question will be just a Survey question."
+msgstr "Таким образом, этот вопрос будет просто вопросом опроса."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:591
+msgid "There will not be correct/incorrect answers."
+msgstr "Там не будет правильных/неправильных ответов."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:592
+msgid "This is for just collecting data from users."
+msgstr "Это только для сбора данных от пользователей."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:607
+msgid "Question Settings"
+msgstr "Параметры Вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:612
+msgid "Question background image"
+msgstr "Фоновое изображение вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:613
+msgid ""
+"Background image of the container. You can choose different images for "
+"different questions."
+msgstr ""
+"Фоновое изображение контейнера. Вы можете выбрать разные изображения для "
+"разных вопросов."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:635
+msgid "User answer explanation"
+msgstr "Объяснение ответа пользователя"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:636
+msgid "The users can write an explanation for their answers."
+msgstr "Пользователи могут написать объяснение своих ответов."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:644
+msgid "Enabled"
+msgstr "Включен"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:648
+msgid "Disabled"
+msgstr "Отключен"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:656
+msgid "Question hint"
+msgstr "Подсказка вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:657
+msgid "Add extra information that can help users about the question."
+msgstr ""
+"Добавьте дополнительную информацию, которая может помочь пользователям по "
+"этому вопросу."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:675
+msgid "Question explanation"
+msgstr "Объяснение вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:676
+msgid "Provide descriptive or informative text about the question."
+msgstr "Предоставьте описательный или информативный текст по вопросу."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:694
+msgid "Text In case of wrong answer "
+msgstr "Текст в случае неправильного ответа "
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:694
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:713
+msgid "only for radio type"
+msgstr "только для типа radio"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:695
+msgid ""
+"You can write text which will be shown in case of the wrong answer. It "
+"doesn’t work when you chose Quiz calculation option By Weight/points from "
+"Quiz Settings."
+msgstr ""
+"Вы можете написать текст, который будет показан в случае неправильного "
+"ответа. Он не работает, когда вы выбрали опцию расчета викторины по весу / "
+"баллам в настройках викторины."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:713
+msgid "Text In case of right answer "
+msgstr "Текст в случае правильного ответа "
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-actions.php:714
+msgid ""
+"You can write text which will be shown in case of right answer.  It doesn’t "
+"work when you chose Quiz calculation option By Weight/points from Quiz "
+"Settings."
+msgstr ""
+"Вы можете написать текст, который будет показан в случае правильного ответа. "
+"Он не работает, когда вы выбрали опцию расчета викторины по весу / баллам в "
+"настройках викторины."
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:13
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:13
+msgid "Add new category"
+msgstr "Добавить новую категорию"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:16
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:16
+msgid "Edit category"
+msgstr "Редактировать категорию"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:38
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:38
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:672
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:294
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:290
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1102
+msgid "Title"
+msgstr "Название"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:39
+msgid "Title of the question category"
+msgstr "Название категории вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:52
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:52
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:701
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:295
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:291
+msgid "Description"
+msgstr "Описание"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:53
+msgid "Provide more information about the question category"
+msgstr "Предоставьте больше информации о категории вопроса"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:69
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:69
+msgid "Category status"
+msgstr "Статус категории"
+
+#: ../admin/partials/questions/actions/quiz-maker-questions-categories-actions.php:70
+msgid ""
+"Choose whether the question category is active or not. If you choose "
+"Unpublished option, the question category won’t be shown anywhere on your "
+"website"
+msgstr ""
+"Выберите, является ли категория вопроса активной или нет. Если вы выберете "
+"опцию Неопубликованные, категория вопросов не будет отображаться на вашем "
+"веб-сайте"
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:36
+msgid "For import XLS file your version of PHP must be over than 5.5."
+msgstr "Для импорта файла XLS ваша версия PHP должна быть более 5,5."
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:42
+msgid "Example"
+msgstr "Пример"
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:62
+#: ../admin/partials/results/quiz-maker-results-display.php:232
+msgid "Export to"
+msgstr "Экспортировать"
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:78
+msgid "Import"
+msgstr "Импорт"
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:85
+msgid ""
+"If you have questions in a .csv, .xlsx or .json format, you may add it by "
+"uploading it here."
+msgstr ""
+"Если у вас есть вопросы в формате .csv, .xlsx или .json, вы можете добавить "
+"их, загрузив здесь."
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:88
+msgid "Import file"
+msgstr "Импортировать файл"
+
+#: ../admin/partials/questions/quiz-maker-questions-display.php:89
+msgid "Upload now"
+msgstr "Загрузить сейчас"
+
+#: ../admin/partials/quiz-maker-admin-display.php:20
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:18
+msgid "Build your quiz in a few minutes"
+msgstr "Создайте свою викторину за несколько минут"
+
+#: ../admin/partials/quiz-maker-admin-display.php:23
+msgid "Simple step by step"
+msgstr "Пошаговая инструкция"
+
+#: ../admin/partials/quiz-maker-admin-display.php:27
+msgid "Create questions"
+msgstr "Создать вопросы"
+
+#: ../admin/partials/quiz-maker-admin-display.php:27
+#: ../admin/partials/quiz-maker-admin-display.php:30
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3511
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:31
+msgid "here"
+msgstr "здесь"
+
+#: ../admin/partials/quiz-maker-admin-display.php:30
+msgid "Create a quiz"
+msgstr "Создать Викторину"
+
+#: ../admin/partials/quiz-maker-admin-display.php:30
+msgid "and add questions to it."
+msgstr "и добавьте вопросы к нему."
+
+#: ../admin/partials/quiz-maker-admin-display.php:33
+msgid "Copy and paste quiz shortcode into your post/page."
+msgstr "Скопируйте и вставьте шорткод викторины на вашем посте/странице."
+
+#: ../admin/partials/quiz-maker-admin-display.php:46
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:64
+msgid "Build your quiz in few seconds"
+msgstr "Создайте свою Викторну в течение нескольких секунд"
+
+#: ../admin/partials/quiz-maker-admin-display.php:53
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:71
+#: ../pb_templates/quiz_maker_elementor.php:29
+msgid "Quiz Title"
+msgstr "Название Викторины"
+
+#: ../admin/partials/quiz-maker-admin-display.php:70
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:88
+msgid "Question Default Title"
+msgstr "Заголовок Вопроса по умолчанию"
+
+#: ../admin/partials/quiz-maker-admin-display.php:126
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:144
+msgid "Submit"
+msgstr "Разместить"
+
+#: ../admin/partials/quiz-maker-admin-display.php:136
+msgid "Quick Quiz"
+msgstr "Быстрый Тест"
+
+#: ../admin/partials/quiz-maker-admin-display.php:172
+msgid "Attributes"
+msgstr "Атрибутами"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:39
+msgid "Title of the category"
+msgstr "Название категории"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:53
+msgid "Provide more information about the quiz category"
+msgstr "Предоставьте больше информации о категории викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quiz-categories-actions.php:70
+msgid ""
+"Choose whether the quiz category is active or not. If you choose Unpublished "
+"option, the quiz category won’t be shown anywhere on your website."
+msgstr ""
+"Выберите, будет ли активна категория викторины. Если вы выберете опцию "
+"Неопубликованные, категория викторины не будет отображаться на вашем сайте."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:210
+msgid "Add new quiz"
+msgstr "Добавить новую викторину"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:214
+msgid "Edit quiz"
+msgstr "Редактировать викторину"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:257
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:265
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:284
+msgid "There are no lists"
+msgstr "Нет списков"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:274
+msgid "There are no conversations"
+msgstr "Пока нет вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:285
+msgid "There are no automations"
+msgstr "Пока нет вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:361
+msgid "Please click the stars to rate the quiz"
+msgstr "Пожалуйста, нажмите на звезды чтобы оценить викторину"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:619
+msgid "Shortcode text for editor"
+msgstr "Текст шорткода для редактора"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:623
+msgid "To insert the Quiz into a page, post or text widget, copy shortcode"
+msgstr ""
+"Чтобы вставить опрос на страницу, пост или текстовый виджет, скопируйте "
+"шорткод"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:625
+msgid "and paste it at the desired place in the editor."
+msgstr "и вставить его в нужное место в Редакторе."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:641
+msgid "Styles"
+msgstr "Стили"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:647
+msgid "Results Settings"
+msgstr "Настройки Результатов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:650
+msgid "Limitation Users"
+msgstr "Ограничение Пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:653
+msgid "User Data"
+msgstr "Пользовательские Данные"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:656
+msgid "E-Mail, Certificate"
+msgstr "Электронная Почта, Сертификат"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:659
+#: ../admin/partials/settings/quiz-maker-settings.php:117
+#: ../admin/partials/settings/quiz-maker-settings.php:218
+msgid "Integrations"
+msgstr "Интеграция"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:673
+msgid "Title of the quiz"
+msgstr "Название викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:686
+msgid "Quiz image"
+msgstr "Изображение викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:688
+msgid "Add image to the starting page of the quiz"
+msgstr "Добавить изображения на стартовой странице викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:702
+msgid ""
+"Provide more information about the quiz. You can choose whether to show it "
+"or not in the front end in the “Settings” tab."
+msgstr ""
+"Предоставьте дополнительную информацию о тесте. Вы можете выбрать, "
+"показывать его или нет в интерфейсе на вкладке \"Настройки\"."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:722
+msgid "Quiz category"
+msgstr "Категории викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:723
+msgid ""
+"Category of the quiz. For making a category please visit Quiz Categories "
+"page from left navbar"
+msgstr ""
+"Категория викторины. Для создания категории, пожалуйста, посетите страницу "
+"категорий викторины с левой панели навигации"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:749
+msgid "Quiz status"
+msgstr "Статус викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:750
+msgid ""
+"Choose whether the quiz is active or not.If you choose Unpublished option, "
+"the quiz won’t be shown anywhere in your website (You don’t need to remove "
+"shortcodes)."
+msgstr ""
+"Выберите, активна викторина или нет. Если вы выберете опцию "
+"Неопубликованные, викторина не будет отображаться на вашем веб-сайте (вам не "
+"нужно удалять шорткоды)."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:775
+msgid "Create post for quiz"
+msgstr "Создать пост для викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:776
+msgid ""
+"A new WordPress post will be created automatically and will include the "
+"shortcode of this quiz. This function will be executed only once. You can "
+"find this post on Posts page, which will have the same title as the quiz. "
+"The image of the quiz will be the featured image of the post."
+msgstr ""
+"Новый пост WordPress будет создан автоматически и будет включать шорткод "
+"этой викторины. Эта функция будет выполнена только один раз. Вы можете найти "
+"этот пост в записях, который будет иметь тот же заголовок, что и у "
+"викторины. Изображение викторины будет изображением поста."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:788
+msgid "Choose Post Categories"
+msgstr "Выберите категории поста"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:789
+msgid ""
+"You can choose one or several categories. These categories are WordPress "
+"default post categories. There is no connection with quiz categories."
+msgstr ""
+"Вы можете выбрать одну или несколько категорий. Эти категории являются "
+"стандартными категориями сообщений WordPress. Нет связи с категориями "
+"викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:817
+msgid "WP Post"
+msgstr "WP Post"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:818
+msgid ""
+"Via these two links you can see the connected post in front end and make "
+"changes in the dashboard."
+msgstr ""
+"Посредством этих двух ссылок вы можете увидеть связанный пост в передней "
+"части и внести изменения в консоле."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:840
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:919
+msgid "Add questions"
+msgstr "Добавить вопросы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:842
+msgid ""
+"For adding questions to the quiz you need to make questions first from the "
+"“Questions page” in the left navbar. After popup’s opening, you can filter "
+"and select your prepared questions for this quiz."
+msgstr ""
+"Чтобы добавить вопросы в викторину, сначала Вам нужно создать вопросы со "
+"страницы «Вопросы» в левой панели навигации. После открытия всплывающего "
+"окна вы можете отфильтровать и выбрать подготовленные вопросы для этой "
+"викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:842
+msgid ""
+"The ordering of the questions will be the same as you chose. Also, you can "
+"reorder them after selection. There are no limitations for questions "
+"quantity."
+msgstr ""
+"Сортировка вопросов будет такая же, как вы выбрали. Кроме того, вы можете "
+"изменить их порядок, после выбора. Нет ограничения для количество вопросов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:849
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:932
+msgid "items"
+msgstr "элементы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:856
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:939
+msgid "Select All"
+msgstr "Выбрать Все"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:867
+#: ../admin/partials/settings/quiz-maker-settings.php:615
+#: ../admin/partials/settings/quiz-maker-settings.php:744
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:274
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:506
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:191
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:297
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1101
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:293
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1109
+#: ../includes/lists/class-quiz-maker-results-list-table.php:341
+msgid "ID"
+msgstr "ID"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:911
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:948
+msgid "There are no questions yet."
+msgstr "Пока нет вопросов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:914
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4475
+msgid "Create question"
+msgstr "Создать вопрос"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:947
+msgid "Quiz Styles"
+msgstr "Стили Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:952
+msgid "Quiz Theme"
+msgstr "Тема Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:953
+msgid ""
+"You can choose your preferred template and customize it with options below "
+"Elegant Dark, Elegant Light, Classic Dark, Classic Light, Rect Dark, Rect "
+"Light, Modern Light and Modern Dark"
+msgstr ""
+"Вы можете выбрать подходящий шаблон и настроить его параметры под Elegant "
+"Dark, Elegant Light, Classic Dark, Classic Light, Rect Dark, Rect Light"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:962
+msgid "Elegant Dark"
+msgstr "Elegant Dark"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:968
+msgid "Elegant Light"
+msgstr "Elegant Light"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:974
+msgid "Classic Dark"
+msgstr "Classic Dark"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:980
+msgid "Classic Light"
+msgstr "Classic Light"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:986
+msgid "Rect Dark"
+msgstr "Rect Dark"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:992
+msgid "Rect Light"
+msgstr "Rect Light"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1001
+msgid "Modern Light"
+msgstr "Modern Light"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1007
+msgid "Modern Dark"
+msgstr "Modern Dark"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1029
+msgid "Animation effect"
+msgstr "Эффект анимации"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1030
+msgid "Animation effect of transition between questions."
+msgstr "Эффект анимации перехода между вопросами."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1043
+msgid "Animate!"
+msgstr "Animate!"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1050
+msgid "Quiz Color"
+msgstr "Цвет Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1051
+msgid ""
+"Colors of the quiz main attributes(buttons, hover effect, progress bar, etc.)"
+msgstr ""
+"Цвет главных атрибутов викторины (кнопки, hover эффект, прогресс-бар и т. д.)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1065
+msgid "Quiz Background Color"
+msgstr "Цвет Фона Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1066
+msgid ""
+"Background color of the quiz box. You can also choose the opacity(alfa) "
+"level on the right side"
+msgstr ""
+"Цвет фона контейнера викторины. Также можно выбрать уровень "
+"прозрачности(alfa) с правой стороны"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1081
+msgid "Text Color"
+msgstr "Цвет Текста"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1082
+msgid ""
+"Specify the text color inside the quiz and questions. It affects all kinds "
+"of texts and icons, including buttons."
+msgstr ""
+"Задать цвет текста внутри викторины и вопросов. Он влияет на все виды "
+"текстов и иконок, включая кнопки."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1097
+msgid "Quiz width"
+msgstr "Ширина викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1098
+msgid ""
+"Quiz container width in pixels.Set it 0 or leave it blank for making a quiz "
+"with 100% width. It accepts only numeric values."
+msgstr ""
+"Ширина контейнера Викторины в пикселях.Установите 0 или оставьте пустым для "
+"получение Викторины с шириной 100%. Он принимает только числовые значения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1107
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1124
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1164
+#: ../admin/partials/settings/quiz-maker-settings.php:600
+#: ../admin/partials/settings/quiz-maker-settings.php:729
+#, php-format
+msgid "For 100% leave blank"
+msgstr "For 100% leave blank"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1114
+msgid "Quiz max-width for mobile"
+msgstr "Максимальное ширина Викторины для мобильных устройств"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1115
+msgid ""
+"Quiz container max-width for mobile in percentage. This option will work for "
+"the screens with less than 640 pixels width."
+msgstr ""
+"Максимальная ширина контейнера викторины для мобильных устройств, в "
+"процентах. Эта опция будет работать для экранов с шириной менее 640 пикселей."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1131
+msgid "Quiz min height"
+msgstr "Минимальная высота Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1132
+msgid "Quiz minimal height in pixels"
+msgstr "Минимальная высота викторины в пикселях"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1148
+msgid "Questions Image Styles"
+msgstr "Стили Изображения Вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1149
+msgid ""
+"It affects the images chosen from “Add Image” not from “Add media” on the "
+"Edit question page"
+msgstr ""
+"Это влияет на изображения, выбранные в «Добавить изображение», а не в "
+"«Добавить медиа» на странице «Редактировать вопрос»"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1158
+msgid "Image Width"
+msgstr "Ширина Изображений"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1159
+msgid ""
+"Question image width in pixels. Set it 0 or leave it blank for making it "
+"100%. It accepts only numeric values."
+msgstr ""
+"Ширина изображения вопроса в пикселях. Установите 0 или оставьте пустым для "
+"100%. Опция принимает только числовые значения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1171
+msgid "Image Height"
+msgstr "Высота Изображений"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1172
+msgid "Question image height in pixels. It accepts only number values."
+msgstr ""
+"Высота изображения вопроса в пикселях. Опция принимает только числовые "
+"значения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1183
+msgid "Image sizing"
+msgstr "Размер изображения"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1184
+msgid ""
+"It helps to configure the scale of the images inside the quiz in case of "
+"differences between the sizes"
+msgstr ""
+"Это помогает настроить масштаб изображений внутри викторины в случае "
+"различий между размерами"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1189
+msgid "Cover"
+msgstr "Cover"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1190
+msgid "Contain"
+msgstr "Contain"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1191
+msgid "None"
+msgstr "None"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1192
+msgid "Unset"
+msgstr "Unset"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1202
+msgid "Quiz container border"
+msgstr "Граница контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1203
+msgid "Allow quiz container border"
+msgstr "Разрешить границы контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1217
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1582
+msgid "Border width"
+msgstr "Ширина рамки"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1218
+msgid "The width of quiz container border"
+msgstr "Ширина границы контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1228
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1592
+msgid "Border style"
+msgstr "Стиль границы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1229
+msgid "The style of quiz container border"
+msgstr "Стиль границы контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1249
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1611
+msgid "Border color"
+msgstr "Цвет границы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1250
+msgid "The color of the quiz container border"
+msgstr "Цвет границы контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1264
+msgid "Quiz border radius"
+msgstr "Радиус границы викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1265
+msgid "Quiz container border-radius in pixels. It accepts only numeric values."
+msgstr ""
+"Радиус граници контейнера викторины в пикселях. Опция принимает только "
+"числовые значения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1281
+msgid "Quiz box shadow"
+msgstr "Тень от викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1282
+msgid "Allow quiz container box shadow"
+msgstr "Разрешить тень контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1295
+msgid "Box shadow color"
+msgstr "Цвет тени контейнера"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1296
+msgid "The color of the shadow of the quiz container"
+msgstr "Цвет тени викторины контейнера"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1310
+msgid "Quiz background image"
+msgstr "Фоновое изображение викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1311
+msgid ""
+"Background image of the container. You can choose different images for each "
+"question from the Settings tab on the Edit question page. The background-"
+"size is set “Cover” by default for not scaling the image."
+msgstr ""
+"Фоновое изображение контейнера. Вы можете выбрать разные изображения для "
+"каждого вопроса на вкладке «Настройки» на странице «Изменить вопрос». Размер "
+"фона по умолчанию установлен как «Cover», чтобы изображение не "
+"масштабировалось."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1331
+msgid "Background image position"
+msgstr "Позиция фона изображения"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1332
+msgid "The position of background image of the quiz"
+msgstr "Положение фонового изображения викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1337
+msgid "Left Top"
+msgstr "Левый Верхний"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1338
+msgid "Left Center"
+msgstr "Левый Центр"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1339
+msgid "Left Bottom"
+msgstr "Слева Внизу"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1340
+msgid "Center Top"
+msgstr "Центр Вверх"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1341
+msgid "Center Center"
+msgstr "Центр Центр"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1342
+msgid "Center Bottom"
+msgstr "Центр Снизу"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1343
+msgid "Right Top"
+msgstr "Справа Вверху"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1344
+msgid "Right Center"
+msgstr "Справо Центр"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1345
+msgid "Right Bottom"
+msgstr "Справа Внизу"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1355
+msgid "Quiz background gradient"
+msgstr "Градиент фона викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1356
+msgid "Color gradient of the quiz background"
+msgstr "Цвет градиента фона викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1370
+msgid "Color 1"
+msgstr "Цвет 1"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1371
+msgid "Color 1 of the quiz background gradient"
+msgstr "Цвет 1 для градиента фона викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1379
+msgid "Color 2"
+msgstr "Цвет 2"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1380
+msgid "Color 2 of the quiz background gradient"
+msgstr "Цвет 2 для градиента фона викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1388
+msgid "Gradient direction"
+msgstr "Направление градиента"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1389
+msgid "The direction of the color gradient."
+msgstr "Направление цвета градиента."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1394
+msgid "Vertical"
+msgstr "Вертикальная"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1395
+msgid "Horizontal"
+msgstr "Горизонтальная"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1396
+msgid "Diagonal left to right"
+msgstr "Диагонально слево на право"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1397
+msgid "Diagonal right to left"
+msgstr "Диагонально справо на лево"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1407
+msgid "Progress bar style"
+msgstr "Стиль Индикатора выполнения"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1408
+msgid ""
+"Design of the progress bar which will appear on the finish page only. It "
+"will show the user’s score."
+msgstr ""
+"Дизайн прогресс-бара, который будет отображаться только на странице "
+"резултатов. Он покажет результат пользователя."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1415
+msgid "Rounded"
+msgstr "Округлые"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1416
+msgid "Rectangle"
+msgstr "Прямоугольник"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1417
+msgid "With stripes"
+msgstr "С полосками"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1418
+msgid "With stripes and animation"
+msgstr "С полосками и анимацией"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1455
+msgid "Custom class for quiz container"
+msgstr "Пользовательский класс для контейнера викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1456
+msgid ""
+"Custom HTML class for quiz container. You can use your class for adding your "
+"custom styles for quiz container. Example: p{color:red !important}"
+msgstr ""
+"Пользовательский класс HTML для контейнера викторины. Вы можете использовать "
+"свой класс для добавления ваших пользовательских стилей для контейнера "
+"викторины. Пример: p {цвет: красный! Важный}"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1476
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1490
+#: ../public/class-quiz-maker-public.php:909
+#: ../public/class-quiz-maker-public.php:5043
+msgid "Start"
+msgstr "Начать"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1500
+msgid "Answers Styles"
+msgstr "Стили ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1507
+msgid "Answers font size"
+msgstr "Размер шрифта ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1508
+msgid ""
+"The font size of the answers in pixels in the quiz. It accepts only numeric "
+"values."
+msgstr ""
+"Размер шрифта ответов в пикселях в викторине. Он принимает только числовые "
+"значения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1521
+msgid "Answers view"
+msgstr "Просмотр ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1522
+msgid "Specify the design of the answers of question."
+msgstr "Укажите оформление ответов на вопрос."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1530
+msgid "List"
+msgstr "Список"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1533
+msgid "Grid"
+msgstr "Grid"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1542
+msgid "Answers padding (px)"
+msgstr "Отступ ответов (px)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1543
+msgid "Padding of answers."
+msgstr "Отступ для ответов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1556
+msgid "Answers gap (px)"
+msgstr "Разрыв ответов (px)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1557
+msgid "Gap between answers."
+msgstr "Разрыв между ответами."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1570
+msgid "Answers border"
+msgstr "Граница ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1571
+msgid "Allow answer border"
+msgstr "Разрешить границу ответа"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1583
+msgid "The width of answers border"
+msgstr "Ширина границы ответа"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1593
+msgid "The style of answers border"
+msgstr "Стиль ответов границы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1612
+msgid "The color of the answers border"
+msgstr "Цвет границы ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1625
+msgid "Answers box shadow"
+msgstr "Тень для контейнера ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1626
+msgid "Allow answer container box shadow"
+msgstr "Разрешить тень для контейнера ответа"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1638
+msgid "Answers shadow color"
+msgstr "Цвет тени ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1639
+msgid "The shadow color of answers container"
+msgstr "Цвет тени контейнера ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1653
+msgid "Answers image height (px)"
+msgstr "Высота изображения ответов (px)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1654
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1685
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1702
+msgid "Height of answers images."
+msgstr "Высота для изображений ответов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1667
+msgid "Show answers caption"
+msgstr "Показать заголовок ответа"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1668
+msgid ""
+"Show answers caption near the answer image. This option will be work only "
+"when answer has image."
+msgstr ""
+"Показывать заголовок ответа рядом с изображением ответа. Эта опция будет "
+"работать только тогда, когда ответ имеет изображение."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1684
+msgid "Answers image caption style"
+msgstr "Стиль заголовка изображения ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1692
+msgid "Outside"
+msgstr "За пределами"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1693
+msgid "Inside"
+msgstr "Внутри"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1701
+msgid "Answers image caption position"
+msgstr "Позиция загаловка изоброжения ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1709
+msgid "Top"
+msgstr "С верху"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1710
+msgid "Bottom"
+msgstr "Снизу"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1718
+msgid "Right/wrong answers icons"
+msgstr "Значки правильных / неправильных ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1719
+msgid "asdasd"
+msgstr ""
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1724
+msgid "Show icons in live preview"
+msgstr "Показывать значки в режиме предварительного просмотра"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1729
+msgid "Show wrong icons in live preview"
+msgstr "Показывать неправильные значки в режиме предварительного просмотра"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1762
+msgid "Without images"
+msgstr "Без изображений"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1765
+msgid "With images"
+msgstr "С изображениями"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1770
+msgid "This species does not apply to themes Modern light and Modern dark"
+msgstr "Этот вид не относится к темам Modern light и Modern dark"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1844
+msgid "Custom CSS"
+msgstr "Пользовательские CSS"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1845
+msgid "Field for entering your own CSS code"
+msgstr "Поле для ввода собственного кода CSS"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1857
+msgid "Quiz Settings"
+msgstr "Параметры Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1862
+msgid "Show quiz head information"
+msgstr "Показать информацию в верхней части викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1863
+msgid ""
+"Enable to show the quiz title and description in the start page of the "
+"quiz(in the front-end)."
+msgstr ""
+"Включите, чтобы отобразить заголовок и описание викторины на начальной "
+"странице викторины (во внешнем интерфейсе)."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1872
+msgid "Show title"
+msgstr "Показать заголовок"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1877
+msgid "Show description"
+msgstr "Показать описание"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1885
+msgid "Enable randomize answers"
+msgstr "Включить случайные ответы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1886
+msgid ""
+"The possibility of showing the answers of the questions in an accidental "
+"sequence. Every time it will show answers in random order."
+msgstr ""
+"Возможность показывать ответы на вопросы в случайной последовательности. "
+"Каждый раз он будет показывать ответы в случайном порядке."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1901
+msgid "Enable randomize questions"
+msgstr "Включить случайный порядок вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1902
+msgid ""
+"The possibility of showing questions in an accidental sequence. It will show "
+"questions in random order. If you want to take a specific amount of "
+"questions from a pool of questions randomly you need to enable question bank "
+"option."
+msgstr ""
+"Возможность показа вопросов в случайной последовательности. Он покажет "
+"вопросы в случайном порядке. Если вы хотите задавать определенное количество "
+"вопросов случайным образом, вам нужно включить опцию банк вопросов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1917
+msgid "Enable question bank"
+msgstr "Включить банк вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1918
+msgid ""
+"Enable to take a specific amount of questions from the quiz randomly. For "
+"example, you can choose 20 questions from 50 randomly. Every time it will "
+"take different questions from the pool."
+msgstr ""
+"Позволяет произвольно отбирать определенное количество вопросов из "
+"викторины. Например, вы можете выбрать 20 вопросов из 50 случайным образом. "
+"Каждый раз он будет принимать различные вопросы."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1937
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1943
+msgid "By Category"
+msgstr "По категориям"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1940
+msgid "There are two ways of making question bank system."
+msgstr "Есть два способа создания системы банка вопросов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1942
+msgid ""
+"It will take the specified amount of questions from all the questions you "
+"include in this quiz."
+msgstr ""
+"Он примет указанное количество вопросов из всех вопросов, которые вы "
+"включили в эту викторину."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1944
+msgid ""
+"Here you can see all the categories of questions you have included in the "
+"general tab. You can provide different numbers for different categories. "
+"Also, you can reorder them as you want by drag and dropping. The category "
+"order will be kept in the front end, but questions will be printed randomly."
+msgstr ""
+"Здесь вы можете увидеть все категории вопросов, которые вы включили в общую "
+"вкладку. Вы можете предоставить разные номера для разных категорий. Кроме "
+"того, вы можете изменить их порядок, как вы хотите, перетаскивая. Порядок "
+"категорий будет сохранен в интерфейсе, но вопросы будут напечатаны случайным "
+"образом."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1949
+msgid "Refresh Categories"
+msgstr "Обновить категории"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1959
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2023
+msgid "Questions count"
+msgstr "Количество вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:1960
+msgid "Number of randomly selected questions"
+msgstr "Количество случайно выбранных вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2008
+msgid "Question count per page"
+msgstr "Количество вопросов на странице"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2009
+msgid "Allow more than one question per page"
+msgstr "Разрешить более одного вопроса на страницу"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2024
+msgid "Number of questions per page."
+msgstr "Количество вопросов на странице."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2041
+msgid "Show questions counter"
+msgstr "Показать счетчик вопросов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2042
+msgid ""
+"Show the number of the current question and the total amount of the question "
+"in the quiz. It will be shown on the right top corner of the quiz container. "
+"Example:3/7"
+msgstr ""
+"Показать номер текущего вопроса и общую сумму вопроса в викторине. Это будет "
+"показано в правом верхнем углу контейнера викторины. Пример: 3/7"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2057
+msgid "Use RTL Direction"
+msgstr "Использовать направление с право на с лево"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2058
+msgid ""
+"Enable Right to Left direction for the text. This option is intended for the "
+"Arabic language."
+msgstr ""
+"Включите направление справа налево для текста. Эта опция предназначена для "
+"арабского языка."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2073
+msgid "Enable copy protection"
+msgstr "Включить защиту от копирования"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2074
+msgid "Disable copy functionality in quiz page(CTRL+C) and Right-click"
+msgstr ""
+"Отключение функции копирования на странице викторины(клавишой Ctrl+C) и "
+"правый клик"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2089
+msgid "Show correct answers"
+msgstr "Показать правильные ответы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2090
+msgid ""
+"Show if the selected answer is right or wrong with green and red marks. To "
+"decide when the right/wrong answers will be shown go to “Text for right/"
+"wrong answers show option”."
+msgstr ""
+"Показать, является ли выбранный ответ правильным или неправильным с зелеными "
+"и красными метками. Чтобы решить, когда будут отображаться правильные / "
+"неправильные ответы, перейдите к пункту «Текст для варианта отображения "
+"правильных / неправильных ответов»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2104
+msgid "Display duration of right/wrong answer text (in seconds)"
+msgstr ""
+"Продолжительность показа правильный/неправильный ответ текстом (в секундах)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2106
+msgid ""
+"Display duration of right/wrong answer text (in seconds) after answering the "
+"question."
+msgstr ""
+"Продолжительность показа правильный/неправильный ответа текстом  (в "
+"секундах) после ответа на вопрос."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2123
+msgid "Text for right/wrong answers show"
+msgstr "Показать текст для правильных / неправильных ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2124
+msgid ""
+"Specify where to display right/wrong answers. Note that the “Show correct "
+"answers” option should be enabled."
+msgstr ""
+"Укажите, где отображать правильные / неправильные ответы. Обратите внимание, "
+"что опция «Показать правильные ответы» должна быть включена."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2132
+msgid "On passing the quiz"
+msgstr "При прохождении викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2136
+msgid "On results page"
+msgstr "На странице результатов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2140
+msgid "Both"
+msgstr "Оба"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2148
+msgid "Show passed users count"
+msgstr "Показать количество пройденных пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2149
+msgid ""
+"Show how many users passed the quiz. It will be shown at the bottom of the "
+"start page of the quiz"
+msgstr ""
+"Покажите, сколько пользователей прошли викторину. Это будет показано внизу "
+"стартовой страницы викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2164
+msgid "Show Quiz average rate"
+msgstr "Показать среднюю оценку Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2165
+msgid ""
+"Show the average rate of the quiz. It will be shown at the bottom of the "
+"start page of the quiz."
+msgstr ""
+"Показать среднюю оценку викторины. Он будет показан внизу стартовой страницы "
+"викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2180
+msgid "Show quiz creation date"
+msgstr "Показать дату создания викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2181
+msgid "Show quiz creation date in quiz start page"
+msgstr "Показать дату создания викторины в начальной странице"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2196
+msgid "Show quiz author"
+msgstr "Показать автора викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2197
+msgid "Show quiz author in quiz start page"
+msgstr "Показать автора викторины в начальной странице"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2212
+msgid "Show quiz category"
+msgstr "Показать категорию викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2213
+msgid "Show quiz category in quiz start page"
+msgstr "Показать категорию викторины в начальной странице"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2228
+msgid "Show question category"
+msgstr "Показать категорию вопроса"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2229
+msgid "Show question category in each question."
+msgstr "Показать категорию вопрос в каждом вопросе."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2244
+msgid "Enable Quiz assessment"
+msgstr "Включить оценивание викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2245
+msgid "Comment and rate the quiz with up to 5 stars at the end of the quiz."
+msgstr "Прокомментировать и оценить викторину до 5 звезд в конце викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2259
+msgid "Show last 5 reviews"
+msgstr "Показать последние 5 комментариев"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2260
+msgid "Show last 5 reviews after rating the quiz"
+msgstr "Показать последние 5 отзывов после оценки викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2275
+msgid "Rating form title"
+msgstr "Название формы рейтинга"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2276
+msgid "Text which will notify user that he can submit a feedback"
+msgstr "Текст, который уведомит пользователя, что он может оставить отзыв"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2296
+msgid "Enable live progressbar"
+msgstr "Включить текущий прогресс бар во время прохождения викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2297
+msgid ""
+"Show the current state of the user passing the quiz. It will be shown at the "
+"top of the quiz container."
+msgstr ""
+"Показать текущее состояние пользователя, проходящего викторину. Это будет "
+"показано в верхней части контейнера викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2311
+msgid "Enable percent view"
+msgstr "Включить просмотр процента во время прохождения викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2312
+msgid "Show the progress bar by percentage"
+msgstr "Показать индикатор выполнения в процентах"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2329
+msgid "Enable finish button"
+msgstr "Включить кнопку завершения"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2330
+msgid "Allow user to finish the quiz early"
+msgstr "Разрешить пользователю завершить викторину раньше времени"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2345
+msgid "Enable clear answer button"
+msgstr "Включить \"Очистить ответ\" кнопку"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2346
+msgid ""
+"Allow user to clear the selected answer. Button will not be displayed if "
+"Show correct answers option is enabled."
+msgstr ""
+"Разрешить пользователю очистить выбранный ответ. Кнопка не будет "
+"отображаться, если включена опция Показать правильные ответы."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2361
+msgid "Enable next button"
+msgstr "Включить кнопку Далее"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2362
+msgid ""
+"User can change the question forward manually. If you want to make the "
+"questions required just disable this option."
+msgstr ""
+"Пользователь может перейти на следующий вопрос вручную. Если вы хотите "
+"сделать вопросы обязательными, просто отключите эту опцию."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2373
+msgid "Enable previous button"
+msgstr "Включить кнопку назад"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2374
+msgid "User can change the question backward manually"
+msgstr "Пользователь может изменить вопрос назад вручную"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2385
+msgid "Use arrows instead of buttons"
+msgstr "Используйте стрелки вместо кнопок"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2386
+msgid "Buttons will be replaced to icons."
+msgstr "Кнопки будут заменены на иконки."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2400
+msgid "Enable Timer"
+msgstr "Включить Таймер"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2401
+msgid ""
+"Show countdown time in the quiz. It will be automatically submitted if the "
+"time is over."
+msgstr ""
+"Показать таймер обратного отсчета в викторине. Он будет автоматически "
+"отправлен, если время истекло."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2414
+msgid "Timer seconds"
+msgstr "Таймер в секундах"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2420
+msgid "Note!!"
+msgstr "Примечание!!"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2420
+msgid ""
+"After timer finished\n"
+"                                    countdowning, quiz will be submitted "
+"automatically."
+msgstr ""
+"После того, как таймер закончил\n"
+"                                    обратный отсчет, викторина автоматически "
+"будет завершено."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2438
+msgid "Show timer in page tab"
+msgstr "Показать таймер на вкладке страницы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2439
+msgid "Enable to show countdown timer in the browser tab."
+msgstr "Включите, чтобы показать таймер обратного отсчета во вкладке браузера."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2455
+msgid "Enable Background music"
+msgstr "Включить фоновую музыку"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2456
+msgid ""
+"Background music will play while passing the quiz. Upload your own audio "
+"file for the quiz."
+msgstr ""
+"Фоновая музыка будет играть во время прохождения викторины. Загрузите свой "
+"собственный аудиофайл для викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2468
+msgid "Select music"
+msgstr "Выберите музыку"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2478
+msgid "Schedule the Quiz"
+msgstr "Расписание викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2480
+msgid ""
+"The period of time when quiz will be active. When the date is out the "
+"expiration message will be shown."
+msgstr ""
+"Период времени, когда викторина будет активной. Когда дата истечет, будет "
+"показано сообщение об истечении срока действия."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2492
+msgid "Start date:"
+msgstr "Дата начала:"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2508
+msgid "End date:"
+msgstr "Дата окончания:"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2524
+msgid "Expiration message:"
+msgstr "Сообщение об истечении срока действия:"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2529
+msgid "This quiz has expired!"
+msgstr "Этот тест истек!"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2546
+msgid "Quiz results settings"
+msgstr "Настройки результатов Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2551
+msgid "Calculate the score"
+msgstr "Вычислить результат"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2552
+msgid ""
+"Calculate the score of results by the selected method. You can only choose "
+"one of these two options."
+msgstr ""
+"Рассчитайте балл результатов по выбранному методу. Вы можете выбрать только "
+"один из этих двух вариантов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2560
+msgid "By correctness"
+msgstr "По правильности"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2561
+msgid ""
+"It will calculate the score based on correct answers of the question. It "
+"will store the score by percentage. You can use Variables (General Settings) "
+"to show the quantity of the questions answered right."
+msgstr ""
+"Он будет рассчитывать балл на основе правильных ответов на вопрос. Это будет "
+"хранить счет в процентах. Вы можете использовать Переменные (в Общих "
+"настройках), чтобы показать количество правильных ответов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2567
+msgid "By weight / points"
+msgstr "По весу / очков"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2568
+msgid ""
+"It will calculate the score based on Answers points and Questions points. "
+"Again you can use Variables to show the user’s score at the end of the quiz. "
+"If you choose this option the features connected with correctness will be "
+"disabled."
+msgstr ""
+"Он будет рассчитывать балл на основе баллов за ответы и вопросы. Опять же, "
+"вы можете использовать переменные, чтобы показать счет пользователя в конце "
+"викторины. Если вы выберете эту опцию, функции, связанные с корректностью, "
+"будут отключены."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2578
+msgid "Disable data storing in database"
+msgstr "Отключить хранение данных в базе данных"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2579
+msgid ""
+"Disable data storing in the database, and results will not be displayed on "
+"the 'Results' page. (not recommended)"
+msgstr ""
+"Отключите хранение данных в базе данных, и результаты не будут отображаться "
+"на странице «Результаты». (не рекомендуется)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2594
+msgid "Redirect after submit"
+msgstr "Перенаправить после завершения"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2595
+msgid "Redirect to custom URL after user submit the form."
+msgstr "Перенаправить на пользовательский URL после завершения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2609
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2658
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3172
+msgid "Redirect URL"
+msgstr "URL-адрес перенаправления"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2610
+msgid "The URL for redirecting after the user submits the form."
+msgstr "URL-адрес перенаправления после завершения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2625
+msgid "Redirect delay (sec)"
+msgstr "Задержка перенаправления (сек)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2626
+msgid ""
+"The redirection delay in seconds after the user submits the form. Value "
+"should be greater than 0."
+msgstr ""
+"Задержка переадресации в секундах после завершения. Значение должно быть "
+"больше 0."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2643
+msgid "Enable EXIT button"
+msgstr "Включить кнопку EXIT"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2644
+msgid ""
+"Exit button will be displayed in the finish page and must redirect the user "
+"to a custom URL."
+msgstr ""
+"Кнопка Exit будет отображаться на конечной странице и должна перенаправить "
+"пользователя на пользовательский URL."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2659
+msgid "The custom URL address for EXIT button in finish page."
+msgstr "Пользовательский URL-адрес для кнопки EXIT на конечной странице."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2676
+msgid "Hide Result"
+msgstr "Скрыть Результат"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2677
+msgid "Text to show on final page instead of result page"
+msgstr ""
+"Текст для отображения на последней странице вместо страницы результатов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2691
+msgid "Text for showing after the quiz"
+msgstr "Текст для показа после викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2709
+msgid "Hide score"
+msgstr "Скрыть результат"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2710
+msgid ""
+"Disable to show the user score with percentage on the finish page. If you "
+"want to show points or correct answers count, you need to tick this option "
+"and use Variables (General Settings) in the “Text for showing after quiz "
+"completion” option."
+msgstr ""
+"Отключить отображение пользовательской оценки в процентах на конечной "
+"странице. Если вы хотите показать набранные очки или правильное количество "
+"ответов, вам нужно отметить эту опцию и использовать Переменные (Общие "
+"настройки) в опции «Текст для отображения после завершения викторины»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2725
+msgid "Enable progressbar"
+msgstr "Включить прогрессбар"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2726
+msgid "Show score via progressbar"
+msgstr "Показать результат в прогрессбар"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2741
+msgid "Enable restart button"
+msgstr "Включить кнопку Перезагрузить"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2742
+msgid ""
+"Show the restart button at the end of the quiz for restarting the quiz and "
+"pass it again."
+msgstr ""
+"Показать кнопку перезапуска в конце викторины, чтобы перезапустить викторину "
+"и пройти его снова."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2757
+msgid "Show all questions result in finish page"
+msgstr "Показать все вопросы результатов на финишной странице"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2758
+msgid ""
+"Show all questions with right and wrong answers after quiz.<br> This option "
+"will be disabled if the option 'Calculate the score' chosen 'By weight/"
+"points'."
+msgstr ""
+"Показать все вопросы с правильными и неправильными ответами после викторины. "
+"<br> Эта опция будет отключена, если опция «Рассчитать балл» выбрана «По "
+"весу / баллам»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2773
+msgid "Show the Average statistical"
+msgstr "Показать среднюю статистику"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2774
+msgid "Show average score according to all results of the quiz"
+msgstr "Показать средную оценку по всем результатам викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2789
+msgid "Show the Social buttons"
+msgstr "Показать социальные кнопки"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2790
+msgid ""
+"Display social buttons for sharing quiz page URL. LinkedIn, Facebook, "
+"Twitter."
+msgstr ""
+"Отображение социальных кнопок для обмена URL страницы викторины. LinkedIn, "
+"Facebook, Twitter."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2805
+msgid "Enable Social Media links"
+msgstr "Включить ссылки на социальные сети"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2806
+msgid ""
+"Display social media links at the end of the quiz to allow users to visit "
+"your pages in the Social media."
+msgstr ""
+"Показать ссылки на социальные сети в конце викторины, чтобы пользователи "
+"могли посещать ваши страницы в социальных сетях."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2821
+msgid "Linkedin link"
+msgstr "Ссылка LinkedIn"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2822
+msgid "Linkedin profile or page link for showing after quiz finish."
+msgstr ""
+"Linkedin профиль или ссылку на страницу для показа после завершения "
+"викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2837
+msgid "Facebook link"
+msgstr "Ссылка Facebook"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2838
+msgid "Facebook profile or page link for showing after quiz finish."
+msgstr ""
+"Профиль Facebook или ссылка на страницу для показа после завершения "
+"викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2853
+msgid "Twitter link"
+msgstr "Ссылка Twitter"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2854
+msgid "Twitter profile or page link for showing after quiz finish."
+msgstr ""
+"Профиль Twitter или ссылка на страницу для показа после завершения викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2870
+msgid "Select quiz loader"
+msgstr "Выберите загрузчик викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2871
+msgid ""
+"Choose the design of the loader on the finish page after submitting. It will "
+"inherit the Quiz Text color from the Styles tab."
+msgstr ""
+"Выберите дизайн загрузчика на завершающей странице после отправки. Он "
+"унаследует цвет текста викторины на вкладке «Стили»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2907
+#: ../admin/partials/settings/quiz-maker-settings.php:839
+#: ../admin/partials/settings/quiz-maker-settings.php:848
+msgid "Text for showing after quiz completion"
+msgstr "Текст для отображения после завершения викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2908
+msgid ""
+"The message will be displayed after submitting the quiz. You can use "
+"Variables (General Settings) to insert user data here. If you want to show "
+"results with points or with the number of correct answers, you need to use "
+"correspondent variables and enable the “Hide score” option."
+msgstr ""
+"Сообщение будет отображаться после отправки викторины. Вы можете "
+"использовать переменные (общие параметры), чтобы вставить данные "
+"пользователя здесь. Если вы хотите показать результаты в набранных очках или "
+"с количеством правильных ответов, вам нужно использовать соответствующие "
+"переменные и включить опцию «Скрыть счет»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2926
+msgid "Strong calculation of checkbox answers score"
+msgstr "Строгий подсчет баллов для checkbox ответов"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2927
+msgid ""
+"If this option is enabled then our system will calculate checkbox's answer "
+"as 1 or 0."
+msgstr ""
+"Если эта опция включена, наша система вычислит ответ флажка как 1 или 0."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2927
+msgid "If the user has one wrong answer he/she will get 0 points."
+msgstr "Если у пользователя один неверный ответ, он / она получит 0 баллов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2927
+msgid ""
+"If the option is disabled, the system will calculate the answer as a "
+"percentage."
+msgstr "Если опция отключена, система рассчитает ответ в процентах."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2927
+msgid ""
+"It means if you answer 2 of 3 correct answers then you will get 2/3 points."
+msgstr ""
+"Это означает, что если вы ответите 2 из 3 правильных ответов, вы получите "
+"2/3 балла."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2942
+msgid "Show interval message"
+msgstr "Показать интервальное сообщение"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2943
+msgid "Show an interval message after quiz completion in the finish page."
+msgstr ""
+"Показать интервальное сообщение после завершения викторины на финишной "
+"странице."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2956
+msgid "Intervals"
+msgstr "Интервалы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2960
+msgid ""
+"Specify different messages based on the user’s score. It is calculated by "
+"percentage. You need to cover the 0-100 range with as many intervals as you "
+"want. The message will be displayed at the end of the quiz."
+msgstr ""
+"Укажите разные сообщения в зависимости от оценки пользователя. Он "
+"рассчитывается в процентах. Вам нужно охватить диапазон 0-100 столько раз, "
+"сколько вы хотите. Сообщение будет отображаться в конце викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2982
+msgid "Min"
+msgstr "Min"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2983
+msgid "Max"
+msgstr "Max"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:2986
+msgid "WooCommerce Product"
+msgstr "WooCommerce продукт"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3109
+msgid "Limitation of Users"
+msgstr "Ограничение пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3114
+msgid "Limit Users to pass quiz only once"
+msgstr ""
+"Пользователи с ограниченным доступом проходят викотину по IP или по "
+"идентификатору пользователя"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3115
+msgid "This option allows to block the users who have already passed the quiz."
+msgstr ""
+"Эта опция позволяет блокировать пользователей, которые уже прошли викторину."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3130
+msgid "Limit users by"
+msgstr "Ограничить пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3131
+msgid "Limit users pass the quiz by IP or by User ID."
+msgstr ""
+"Пользователи с ограниченным доступом проходят викотину по IP или по "
+"идентификатору пользователя."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3131
+msgid ""
+"If you choose 'User ID', the 'Limit users' option will not work for the not "
+"logged in users. It works only with 'Only for logged in users' option."
+msgstr ""
+"Если вы выберете «Идентификатор пользователя», опция «Ограничить "
+"пользователей» не будет работать для не авторизованных пользователей. "
+"Работает только с опцией «Только для зарегистрированных пользователей»."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3139
+msgid "IP"
+msgstr "IP"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3143
+msgid "User ID"
+msgstr "ID пользователя"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3153
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3223
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3308
+msgid "Message"
+msgstr "Сообщение"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3154
+msgid "Message for those who have passed the quiz"
+msgstr "Сообщение для тех, кто прошел викторину"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3173
+msgid "Leave a current page to go to the link provided"
+msgstr "Покинуть текущую страницу, чтобы перейти по указанной ссылке"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3188
+msgid "Redirect delay"
+msgstr "Задержка перенаправлении"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3189
+msgid "Leave current page and go to the link provided after X second"
+msgstr ""
+"Покинуть текущую страницу и перейти по ссылке, указанной после X секунды"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3207
+msgid "Only for logged in users"
+msgstr "Только для зарегистрированных пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3208
+msgid ""
+"After enabling this option, only logged in users will be able to pass the "
+"quiz."
+msgstr ""
+"После включения этой опции, только зарегистрированные пользователи смогут "
+"пройти викторину."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3224
+msgid "Message for those who haven’t logged in"
+msgstr "Сообщение для не авторизованных пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3242
+msgid "Show Login form"
+msgstr "Показать форму входа"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3243
+msgid ""
+"Show the Login form at the bottom of the message for not logged in users."
+msgstr ""
+"Покажите форму авторизации внизу сообщения для не авторизованных "
+"пользователей."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3258
+msgid "Only for selected user role"
+msgstr "Только для выбранной роли пользователя"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3259
+msgid "Quiz is available only for the roles mentioned in the list."
+msgstr ""
+"Викторина доступна только для пользовательских ролей, указанных в списке."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3273
+msgid "User role"
+msgstr "Роль пользователя"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3274
+msgid "Role of the user on the website."
+msgstr "Роль пользователя на сайте."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3309
+msgid "Message for the users who aren’t included in the above-mentioned list."
+msgstr "Сообщение для не авторизованных пользователей."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3329
+msgid "Limitation count of takers"
+msgstr "Ограничение количества участников"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3330
+msgid "You can choose how many users can pass the quiz."
+msgstr "Вы можете выбрать, сколько пользователей могут пройти викторину."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3343
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1106
+msgid "Count"
+msgstr "Количество"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3344
+msgid "The number of users who can pass the quiz."
+msgstr "Количество пользователей, которые могут пройти викторину."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3363
+msgid "Information Form title"
+msgstr "Название информационной формы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3364
+msgid ""
+"Description of the Information Form which will be shown at the top of the "
+"Form Fields."
+msgstr ""
+"Описание информационной формы, которая будет отображаться в верхней части "
+"полей формы."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3382
+msgid "Information Form"
+msgstr "Информационная форма"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3383
+msgid ""
+"Data form for the user personal information. You can choose when the "
+"Information Form will be shown for completion."
+msgstr ""
+"Форма данных для личной информации пользователя. Вы можете выбрать, когда "
+"информационная форма будет показана для заполнения."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3392
+msgid "After Quiz"
+msgstr "После Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3395
+msgid "Before Quiz"
+msgstr "До Викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3398
+msgid "Disable"
+msgstr "Отключить"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3404
+msgid "Form Fields"
+msgstr "Поля Формы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3449
+msgid "Required Fields"
+msgstr "Обязательные Поля"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3502
+msgid "Add custom fields"
+msgstr "Добавить пользовательские поля"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3503
+msgid ""
+"You can add form custom fields from “Custom fields” page in Quiz Maker "
+"menu.  (text, textarea, checkbox, select, URL etc.)"
+msgstr ""
+"Пользовательские поля формы можно добавить со страницы «Пользовательские "
+"поля» в меню Quiz Maker. (text, textarea, checkbox, select, URL и т. д.)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3510
+msgid "For creating custom fields click "
+msgstr "Для создания пользовательских полей нажмите "
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3519
+msgid "Autofill logged in user data"
+msgstr "Автозаполнение данных пользователя вошедшего в систему"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3520
+msgid ""
+"After enabling this option, logged in  user’s name and email will be "
+"autofilled in Information Form."
+msgstr ""
+"После включения этой опции, вошедшие в систему имя пользователя и адрес "
+"электронной почты будут автоматически заполнены в информационной форме."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3533
+msgid "E-mail and Certificate settings"
+msgstr "Настройки электронной почты и сертификата"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3538
+msgid "Send Mail To User"
+msgstr "Отправить Письмо Пользователю"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3539
+msgid "Send mail to user after quiz completion."
+msgstr "Текст после завершения викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3553
+msgid "Mail message"
+msgstr "Сообщение электронной почты"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3554
+msgid ""
+"Provide the message text for sending to the user by email. You can use "
+"Variables from General Settings page to insert user’s data. (name, score, "
+"date etc.)"
+msgstr ""
+"Укажите текст сообщения для отправки пользователю по электронной почте. Вы "
+"можете использовать переменные на странице общих настроек для вставки данных "
+"пользователя. (имя, оценка, дата и т. д.)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3573
+msgid "Send Results to User"
+msgstr "Отправить результаты пользователю"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3574
+msgid "Send results report to user after quiz completion."
+msgstr "Отправить отчет о результатах пользователю после завершения викторины."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3589
+msgid "Send Interval message to User"
+msgstr "Интервал отправки сообщений для пользователей"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3590
+msgid ""
+"Send interval message to user after quiz completion. Your specified interval "
+"messages will be sent to the user. You can provide them at the bottom of the "
+"Results Settings page."
+msgstr ""
+"Отправить интервальное сообщение пользователю после завершения викторины. "
+"Указанные вами интервальные сообщения будут отправлены пользователю. Вы "
+"можете предоставить их в нижней части страницы настроек результатов."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3606
+msgid "Send Certificate To User"
+msgstr "Отправить Сертификат Для Пользователя"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3607
+msgid ""
+"Send Certificate PDF file to user after quiz completion. Configure the PDF "
+"file’s content with the following options."
+msgstr ""
+"Отправить сертификат PDF-файл пользователю после завершения викторины. "
+"Настройте содержимое файла PDF с помощью следующих параметров."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3621
+msgid "Certificate pass score"
+msgstr "Проходной балл для сертификата"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3622
+msgid "Minimum score to receive a certificate (by percentage)"
+msgstr "Минимальный балл для получения сертификата (в процентах)"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3635
+#: ../admin/partials/settings/quiz-maker-settings.php:841
+#: ../admin/partials/settings/quiz-maker-settings.php:850
+msgid "Certificate title"
+msgstr "Название сертификата"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3636
+msgid "Title of certificate"
+msgstr "Название сертификата"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3653
+#: ../admin/partials/settings/quiz-maker-settings.php:842
+#: ../admin/partials/settings/quiz-maker-settings.php:851
+msgid "Certificate body"
+msgstr "Содержание сертификата"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3654
+msgid ""
+"Specify the content of the certificate PDF file. You can copy Variables from "
+"General Settings and insert them here."
+msgstr ""
+"Укажите содержание сертификата в файле PDF. Вы можете скопировать переменные "
+"из общих настроек и вставить их здесь."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3674
+msgid "Use SMTP"
+msgstr "Использовать SMTP"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3675
+msgid "Recommended"
+msgstr "Рекомендуется"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3676
+msgid ""
+"For using this option you need to fill in the whole fields intended for it."
+msgstr ""
+"Для использования этой опции вам необходимо заполнить целые поля, "
+"предназначенные для этого."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3689
+msgid "SMTP Username"
+msgstr "Имя пользователя SMTP"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3699
+msgid "SMTP Password"
+msgstr "Пароль SMTP"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3709
+msgid "Host"
+msgstr "Host"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3719
+msgid "SMTP Secure"
+msgstr "Протокол SMTP"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3725
+msgid "SSL"
+msgstr "Протокол SSL"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3728
+msgid "TLS"
+msgstr "Протокол TLS"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3735
+msgid "Port"
+msgstr "Порт"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3749
+msgid "Send Mail To Admin"
+msgstr "Отправить письмо администратору"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3750
+msgid ""
+"Every time when someone passes the Quiz, it sends an email with information "
+"about each Quiz result to the admin email from WordPress General Settings."
+msgstr ""
+"Каждый раз, когда кто-то проходит викторину, он отправляет электронное "
+"письмо с информацией о каждом результате викторины на электронную почту "
+"администратора из общих настроек WordPress."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3764
+msgid "Additional Emails"
+msgstr "Дополнительныи адрес почты"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3765
+msgid "Send quiz results to additional emails. Insert emails comma seperated."
+msgstr ""
+"Отправить результаты викторины на дополнительные электронные почти. Вставьте "
+"название электронной почти через запятую."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3780
+msgid "Send Report table to Admin"
+msgstr "Отправить отчетную таблицу администратору"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3781
+msgid "You can send results to the admin after the quiz is completed"
+msgstr ""
+"Вы можете отправить результаты администратору после завершения викторины"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3795
+msgid "Send Interval message to Admin"
+msgstr "Отправить интервальное сообщение администратору"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3796
+msgid ""
+"If this option is enabled then the admin will get the Email with Interval "
+"message."
+msgstr ""
+"Если эта опция включена, то администратор получит сообщение электронной "
+"почты с интервалом."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3812
+msgid "Email Configuration"
+msgstr "Конфигурация Электронной Почты"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3813
+msgid "Attributes of Sending Mail"
+msgstr "Атрибуты отправки почты"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3822
+msgid "From Email"
+msgstr "Из Электронной Почты"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3823
+msgid ""
+"Specify from which email the results will be sent. If you leave it blank, it "
+"will take default value as quiz_maker@{your_site_url}"
+msgstr ""
+"Укажите, с какого письма будут отправлены результаты. Если вы оставите это "
+"поле пустым, он по умолчанию будет иметь значение quiz_maker@{your_site_url}"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3838
+msgid "From Name"
+msgstr "От Имени"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3839
+msgid ""
+"Specify from which name the results will be sent. It will take “Quiz Maker” "
+"if you don’t complete it."
+msgstr ""
+"Укажите, с какого имени будут отправлены результаты. Отправится «Quiz "
+"Maker», если вы не заполните его."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3854
+msgid "From Subject"
+msgstr "Из Темы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3855
+msgid ""
+"Provide the subject of the mail. It will take the quiz title if you don’t "
+"complete it."
+msgstr ""
+"Укажите тему письма. Он примет название викторины, если вы его не пройдете."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3870
+msgid "Integrations settings"
+msgstr "Настройки интеграции"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3875
+msgid "MailChimp Settings"
+msgstr "Настройки MailChimp"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3898
+msgid "Enable MailChimp"
+msgstr "Включить MailChimp"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3918
+msgid "MailChimp list"
+msgstr "Список MailChimp"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3963
+msgid "PayPal Settings"
+msgstr "Настройки PayPal"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:3984
+msgid "Enable PayPal"
+msgstr "Включить Систему PayPal"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4004
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:189
+msgid "Amount"
+msgstr "Сумма"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4025
+msgid "Currency"
+msgstr "Валюта"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4036
+msgid "United States Dollar"
+msgstr "Доллар США"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4038
+msgid "Euro"
+msgstr "Euro"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4040
+msgid "British Pound Sterling"
+msgstr "Британский фунт стерлинг"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4042
+msgid "Swiss Franc"
+msgstr "Швейцарский франк"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4044
+msgid "Japanese Yen"
+msgstr "Японская иена"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4046
+msgid "Indian Rupee"
+msgstr "Индийская рупия"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4048
+msgid "Chinese Yuan"
+msgstr "Китайский юань"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4050
+msgid "Canadian Dollar"
+msgstr "Канадский доллар"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4052
+msgid "United Arab Emirates Dirham"
+msgstr "ОАЭ Дирхам"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4054
+msgid "Russian Ruble"
+msgstr "Российский рубль"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4066
+msgid "Campaign Monitor Settings"
+msgstr "Настройки Campaign Monitor"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4090
+msgid "Enable Campaign Monitor"
+msgstr "Включить Campaign Monitor"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4110
+msgid "Campaign Monitor list"
+msgstr "Список Campaign Monitor"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4121
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4293
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4321
+msgid "Select List"
+msgstr "Выберите Список"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4155
+msgid "Zapier Integration Settings"
+msgstr "Настройки Zapier интеграции"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4177
+msgid "Enable Zapier Integration"
+msgstr "Включить интеграцию Zapier"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4197
+msgid "Send test data"
+msgstr "Отправка тестовых данных"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4200
+msgid ""
+"We will send you a test data, and you can catch it in your ZAP for configure "
+"it."
+msgstr ""
+"Мы вышлем вам тестовые данные, и вы можете перехватить их в своем ZAP для их "
+"настройки."
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4237
+msgid "ActiveCampaign Settings"
+msgstr "Параметры ActiveCampaign"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4261
+msgid "Enable ActiveCampaign"
+msgstr "Включить ActiveCampaign"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4281
+msgid "ActiveCampaign list"
+msgstr "Список ActiveCampaign"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4294
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4322
+msgid "Just create contact"
+msgstr "Просто создайте контакт"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4309
+msgid "ActiveCampaign automation"
+msgstr "Автоматизация ActiveCampaign"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4356
+msgid "Slack Settings"
+msgstr "Настройки Slack"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4380
+msgid "Enable Slack integration"
+msgstr "Включить Slack интеграцию"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4400
+msgid "Slack conversation"
+msgstr "Slack conversation"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4412
+msgid "Select Channel"
+msgstr "Выберите Канал"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4463
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4469
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4569
+msgid "Select questions"
+msgstr "Выберите вопросы"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4472
+msgid ""
+"For select questions click on question row and then click \"Select questions"
+"\" button"
+msgstr ""
+"Для выбора вопросов нажмите на строку вопроса и нажмите кнопку Выбрать "
+"\"вопросы\""
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4481
+msgid "Filter by category"
+msgstr "Фильтровать по категории"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4482
+#: ../admin/partials/results/quiz-maker-results-display.php:205
+#: ../admin/partials/results/quiz-maker-results-display.php:211
+#: ../public/class-quiz-maker-public.php:2816
+msgid "Clear"
+msgstr "Пустой"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4502
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1099
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1107
+msgid "Created"
+msgstr "Создан"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4503
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1096
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1103
+#: ../public/class-quiz-maker-public.php:2763
+msgid "Category"
+msgstr "Категория"
+
+#: ../admin/partials/quizes/actions/quiz-maker-quizes-actions.php:4504
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1100
+msgid "Used"
+msgstr "Используемый"
+
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:24
+msgid ""
+"If you haven't created questions yet, you need to create the questions at "
+"first."
+msgstr ""
+"Если вы не создали еще вопросы, нужно создавать вопросы в первую очередь."
+
+#: ../admin/partials/quizes/quiz-maker-quizes-display.php:29
+msgid "For creating a question go"
+msgstr "Для создания вопроса перейдите"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:54
+msgid "Back to results"
+msgstr "Вернуться к результатам"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:59
+msgid "Results for"
+msgstr "Результаты для"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:64
+msgid "Statistics"
+msgstr "Статистика"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:66
+#: ../admin/partials/results/quiz-maker-each-results-display.php:151
+#: ../admin/partials/results/quiz-maker-results-display.php:151
+msgid "Leaderboard"
+msgstr "Список Лидеров"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:89
+msgid "Reports count per day"
+msgstr "Количество отчетов в день"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:94
+msgid "Correct answers"
+msgstr "Правильные ответы"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:98
+msgid "Quiz passed users"
+msgstr "Викторина пройден пользователями"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:104
+msgid "Users count by score"
+msgstr "Количество пользователей по счету"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:109
+msgid "Users count by interval"
+msgstr "Количество пользователей по интервалу"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:121
+msgid "Correctness"
+msgstr "По правильности"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:122
+msgid "Amount of correct"
+msgstr "Сумма правильная"
+
+#: ../admin/partials/results/quiz-maker-each-results-display.php:195
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:399
+msgid "Detailed report"
+msgstr "Детальный отчет"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:11
+msgid "Export"
+msgstr "Экспорт"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:15
+msgid "Global Statistics"
+msgstr "Глобальная статистика"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:16
+msgid "Global Leaderboard"
+msgstr "Глобальная таблица лидеров"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:93
+msgid "Quiz Statistics"
+msgstr "Статистика викторины"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:97
+msgid "Number of Completes"
+msgstr "Количество завершенных"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:106
+msgid "Statistics Signboard"
+msgstr "Вывеска статистики"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:112
+msgid "Most popular quiz"
+msgstr "Самая популярная викторина"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:116
+msgid "Least popular quiz"
+msgstr "Наименее популярная викторина"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:135
+msgid "quizzes taken last"
+msgstr "викторины, принятые последними"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:135
+#: ../public/class-quiz-maker-public.php:4693
+msgid "day"
+msgstr "день"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:197
+msgid "Export Filter"
+msgstr "Фильтр экспорта"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:204
+msgid "Users"
+msgstr "Пользователей"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:216
+msgid "Start Date from"
+msgstr "Дата начала с"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:220
+msgid "Start Date to"
+msgstr "Дата начала до"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:233
+msgid "CSV"
+msgstr "CSV"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:234
+msgid "XLSX"
+msgstr "XLSX"
+
+#: ../admin/partials/results/quiz-maker-results-display.php:235
+msgid "JSON"
+msgstr "JSON"
+
+#: ../admin/partials/settings/quiz-maker-settings-actions.php:344
+msgid "Changes saved."
+msgstr "Изменения сохранены."
+
+#: ../admin/partials/settings/quiz-maker-settings-actions.php:346
+msgid "Quiz attribute ."
+msgstr "Атрибут викторины ."
+
+#: ../admin/partials/settings/quiz-maker-settings-actions.php:348
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:392
+msgid "Quiz attribute deleted."
+msgstr "Атрибут викторины удален."
+
+#: ../admin/partials/settings/quiz-maker-settings-actions.php:350
+msgid "Duration old data is successfully updated."
+msgstr "Продолжительность старых данных успешно обновляется."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:120
+#: ../admin/partials/settings/quiz-maker-settings.php:542
+msgid "Shortcodes"
+msgstr "Шорткоды"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:123
+#: ../admin/partials/settings/quiz-maker-settings.php:837
+msgid "Message variables"
+msgstr "Переменные сообщения"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:134
+msgid "Who will have permission to Quiz menu"
+msgstr "У кого будет разрешение на меню викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:139
+msgid "Select user role"
+msgstr "Выбрать роль пользователя"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:140
+#: ../admin/partials/settings/quiz-maker-settings.php:157
+msgid "Ability to manage Quiz Maker plugin only for selected user roles."
+msgstr ""
+"Возможность управления плагином Quiz Maker только для выбранных "
+"пользовательских ролей."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:164
+msgid "Default parameters for Quiz"
+msgstr "Параметры по умолчанию для викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:169
+msgid "Questions default type"
+msgstr "Тип вопросов по умолчанию"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:170
+msgid ""
+"You can choose default question type which will be selected in the Add new "
+"question page."
+msgstr ""
+"Вы можете выбрать тип вопроса по умолчанию, который будет выбран на странице "
+"Добавить новый вопрос."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:194
+msgid "Erase Quiz data"
+msgstr "Стереть данные викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:198
+msgid "Results up to a "
+msgstr "Результаты до "
+
+#: ../admin/partials/settings/quiz-maker-settings.php:205
+msgid "Delete results older then 'X' the month"
+msgstr "Удалить результаты старше 'X' месяца"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:206
+msgid ""
+"Specify count of months and save changes. Attention! it will remove "
+"submissions older than specified months permanently."
+msgstr ""
+"Укажите количество месяцев и сохраните изменения. Внимание! он удалит заявки "
+"старше указанных месяцев навсегда."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:223
+msgid "MailChimp"
+msgstr "MailChimp"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:230
+msgid "MailChimp Username"
+msgstr "Имя пользователя MailChimp"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:246
+msgid "MailChimp API Key"
+msgstr "MailChimp API Key"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:259
+msgid "You can get your API key from your "
+msgstr "Вы можете получить ваш API-ключ из своего "
+
+#: ../admin/partials/settings/quiz-maker-settings.php:268
+msgid "PayPal"
+msgstr "PayPal"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:275
+msgid "Paypal Client ID"
+msgstr "Клиент ID Paypal"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:291
+msgid "Payment terms"
+msgstr "Условия оплаты"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:297
+msgid "Lifetime payment"
+msgstr "Пожизненная оплата"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:301
+msgid "Onetime payment"
+msgstr "Одноразовый платеж"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:306
+msgid "You can get your Client ID from "
+msgstr "Вы можете получить свой ID из "
+
+#: ../admin/partials/settings/quiz-maker-settings.php:315
+msgid "Campaign Monitor"
+msgstr "Campaign Monitor"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:322
+msgid "Client ID"
+msgstr "ID клиента"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:338
+msgid "API Key"
+msgstr "Ключ API"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:351
+msgid "You can get your API key and Client ID from your Account Settings page."
+msgstr ""
+"Вы можете получить свой API-ключ и ID клиента из вашей учетной записи на "
+"странице настроек."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:360
+msgid "Zapier"
+msgstr "Zapier"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:367
+msgid "Zapier Webhook URL"
+msgstr "Zapier Webhook URL"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:380
+#, php-format
+msgid ""
+"If you don’t have any ZAP created, go <a href='%s' target='_blank'> here...</"
+"a>."
+msgstr ""
+"Если у вас нет созданного ZAP, перейдите <a href='%s' target='_blank'> "
+"сюда ... </a>."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:383
+msgid ""
+"We will send you all data from quiz information form with the “AysQuiz” key "
+"by POST method."
+msgstr ""
+"Мы отправим вам все данные из информационной формы викторины с ключом "
+"«AysQuiz» методом POST."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:392
+msgid "ActiveCampaign"
+msgstr "ActiveCampaign"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:399
+msgid "API Access URL"
+msgstr "API доступ URL"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:415
+msgid "API Access Key"
+msgstr "Ключ доступа к API"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:428
+msgid ""
+"Your API URL and Key can be found in your account on the My Settings page "
+"under the “Developer” tab."
+msgstr ""
+"URL-адрес и ключ API можно найти в своей учетной записи на странице «Мои "
+"настройки» на вкладке «Разработчик»."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:437
+msgid "Slack"
+msgstr "Slack"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:446
+msgid "Slack Integration Setup Instructions"
+msgstr "Инструкции по настройке Slack Integration"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:446
+msgid "Instructions"
+msgstr "Интеграция"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:448
+#, php-format
+msgid "1. You will need to <a href='%s' target='_blank'>%s</a> new Slack App."
+msgstr ""
+"1. Вам понадобится <a href='%s' target='_blank'>% s </a> новое приложение "
+"Slack."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:449
+msgid "2. Complete Project creation for get App credentials."
+msgstr "2. Завершите создание проекта для получения учетных данных приложения."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:450
+msgid ""
+"3. Next, go to the Features > OAuth & Permissions > Redirect URLs section."
+msgstr ""
+"3. Затем перейдите в раздел Features > OAuth & Permissions >Redirect URLs "
+"section."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:451
+msgid "4. Click Add a new Redirect URL."
+msgstr "4. Нажмите Добавить новый URL перенаправления."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:452
+msgid "5. In the shown input field, put this value below"
+msgstr "5. В показанном поле ввода поместите это значение ниже"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:456
+msgid "6. Then click the Add button."
+msgstr "6. Затем нажмите кнопку Добавить."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:457
+msgid "7. Then click the Save URLs button."
+msgstr "7. Затем нажмите кнопку Сохранить URL-адреса."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:465
+msgid "App Client ID"
+msgstr "ID клиента приложении"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:481
+msgid "Slack Authorization"
+msgstr "Авторизация Slack"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:487
+msgid "Authorized"
+msgstr "Авторизованный"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:491
+msgid "Authorize"
+msgstr "Авторизоваться"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:500
+msgid "App Client Secret"
+msgstr "App Client Secret"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:516
+msgid "App Access Token"
+msgstr "Доступ К Приложению Токен"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:524
+msgid "Access granted"
+msgstr "Доступ предоставлен"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:525
+msgid "Get it"
+msgstr "Возьми"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:528
+msgid "Need Authorization"
+msgstr "Необходима Авторизация"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:535
+msgid ""
+"You can get your App Client ID and Client Secret from your App’s Basic "
+"Information page."
+msgstr ""
+"Вы можете получить ваше App Client ID и Client Secret от вашего приложения "
+"основную информацию страницы."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:547
+msgid "Individual Leaderboard Settings"
+msgstr "Индивидуальные настройки таблицы лидеров"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:550
+msgid "It is designed for a particular quiz’s results."
+msgstr "Он предназначен для результатов конкретной викторины."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:556
+msgid "Individual Leaderboard shortcode"
+msgstr "Шорткод для Индивидуального лидерборда"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:557
+msgid ""
+"You can copy the shortcode and paste it to any post/page to see the list of "
+"the top user’s who passed this quiz."
+msgstr ""
+"Вы можете скопировать шорткод и вставить его в любой пост / страницу, чтобы "
+"увидеть список самых популярных пользователей, прошедших эту викторину."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:569
+#: ../admin/partials/settings/quiz-maker-settings.php:698
+msgid "Users count"
+msgstr "Количество пользователей"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:570
+#: ../admin/partials/settings/quiz-maker-settings.php:699
+msgid "How many users’ results will be shown in the leaderboard."
+msgstr "Сколько результатов пользователей будет показано в списке лидеров."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:587
+#: ../admin/partials/settings/quiz-maker-settings.php:716
+msgid "Width"
+msgstr "Ширина"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:588
+#, php-format
+msgid "The width of the Leaderboard box. For 100% leave it blank."
+msgstr "The width of the Leaderboard box. For 100% leave it blank."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:606
+#: ../admin/partials/settings/quiz-maker-settings.php:735
+msgid "Users group by"
+msgstr "Пользователи группируются по"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:607
+#: ../admin/partials/settings/quiz-maker-settings.php:736
+msgid ""
+"Select the way for grouping the results. If you want to make Leaderboard for "
+"logged in users, then choose ID. It will collect results by WP user ID. If "
+"you want to make Leaderboard for guests, then you need to choose Email and "
+"enable Information Form and Email, Name options from quiz settings. It will "
+"group results by emails and display guests Names."
+msgstr ""
+"Выберите способ группировки результатов. Если вы хотите сделать списку "
+"лидеров для авторизованных пользователей, выберите по ID. Он будет собирать "
+"результаты по идентификатору пользователя WP. Если вы хотите сделать списку "
+"лидеров для незарегистрированных пользователей, то вам нужно выбрать Email и "
+"включить Информационную форму и Email, Параметры имени в настройках "
+"викторины. Он будет группировать результаты по электронной почте и "
+"отображать имена незарегистрированных пользователей."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:626
+#: ../admin/partials/settings/quiz-maker-settings.php:755
+msgid "Show users result"
+msgstr "Показать результаты пользователей"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:627
+#: ../admin/partials/settings/quiz-maker-settings.php:756
+msgid "Show the users’ Average or Maximum results in the leaderboard."
+msgstr ""
+"Показывать средние или максимальные результаты пользователей в списке "
+"лидеров."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:635
+#: ../admin/partials/settings/quiz-maker-settings.php:764
+msgid "AVG"
+msgstr "AVG"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:639
+#: ../admin/partials/settings/quiz-maker-settings.php:768
+msgid "MAX"
+msgstr "MAX"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:646
+#: ../admin/partials/settings/quiz-maker-settings.php:775
+msgid "Color"
+msgstr "Цвет"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:647
+#: ../admin/partials/settings/quiz-maker-settings.php:776
+msgid "Top color of the leaderboard"
+msgstr "Верхний цвет таблицы лидеров"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:660
+#: ../admin/partials/settings/quiz-maker-settings.php:789
+msgid "Update duration field for old results"
+msgstr "Обновить поле длительности для старых результатов"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:661
+#: ../admin/partials/settings/quiz-maker-settings.php:790
+msgid ""
+"This button needs to work only once. If you see 0 in the Duration column for "
+"some results, please click once to this button and it will regenerate "
+"duration for old results. It may happen if you update our plugin from the "
+"old version to the latest."
+msgstr ""
+"Эта кнопка должна работать только один раз. Если вы видите 0 в столбце "
+"Длительность для некоторых результатов, нажмите один раз на эту кнопку, и "
+"она восстановит продолжительность для старых результатов. Это может "
+"произойти, если вы обновите наш плагин со старой версии до последней."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:667
+#: ../admin/partials/settings/quiz-maker-settings.php:796
+msgid "Update duration old data"
+msgstr "Обновить длительность старых данных"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:676
+msgid "Global Leaderboard Settings"
+msgstr "Глобальные настройки таблицы лидеров"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:679
+msgid "It is designed for all quizzes results."
+msgstr "Он предназначен для всех результатов викторин."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:685
+msgid "Global Leaderboard shortcode"
+msgstr "Шорткод для Глобал списока лидеров"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:686
+msgid ""
+"You can copy the shortcode and paste it to any post/page to see the list of "
+"the top user’s who passed any quiz."
+msgstr ""
+"Вы можете скопировать шорткод и вставить его в любой пост / страницу, чтобы "
+"увидеть список лучших пользователей, прошедших викторину."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:717
+#, php-format
+msgid ""
+"The width of the Leaderboard box. It accepts only numeric values. For "
+"100% leave it blank."
+msgstr ""
+"The width of the Leaderboard box. It accepts only numeric values. For "
+"100% leave it blank."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:805
+msgid "User Page Settings"
+msgstr "Настройки страницы пользователя"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:810
+msgid "User Page shortcode"
+msgstr "Шорткод для страницы пользователя"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:811
+msgid ""
+"You can copy the shortcode and insert it to any post to show the current "
+"user’s results history."
+msgstr ""
+"Вы можете скопировать шорткод и вставить его в любой пост, чтобы показать "
+"историю результатов текущего пользователя."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:823
+msgid "Show result report in user page"
+msgstr "Показать отчет о результатах на странице пользователя"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:824
+msgid "Disabling this option the details about the results won’t be shown."
+msgstr ""
+"При отключении этой опции подробности о результатах отображаться не будут."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:838
+#: ../admin/partials/settings/quiz-maker-settings.php:847
+msgid ""
+"You can copy these variables and paste them in the following options from "
+"the quiz settings"
+msgstr ""
+"Вы можете скопировать эти переменные и вставить их в следующих опциях в "
+"настройках викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:840
+#: ../admin/partials/settings/quiz-maker-settings.php:849
+msgid "Mail Message"
+msgstr "Сообщение электронной почты"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:862
+msgid "The name the user entered into information form"
+msgstr "Имя, введенное пользователем в информационной форме"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:871
+msgid "The E-mail the user entered into information form"
+msgstr "E-mail, введенный пользователем в информационную форму"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:880
+msgid "The title of the quiz"
+msgstr "Название викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:889
+msgid "The score of quiz which got the user"
+msgstr "Оценка викторины, который получил пользователь"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:898
+msgid "The points of quiz which got the user"
+msgstr "Очки викторины, который получил пользователь"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:907
+msgid "The number of correct answers of the user"
+msgstr "Число правильных ответов пользователей"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:916
+msgid "The number of questions that the user must pass."
+msgstr "Число правильных ответов пользователей."
+
+#: ../admin/partials/settings/quiz-maker-settings.php:925
+msgid "Maximum points which can get the user"
+msgstr "Максимальное количество баллов, которое может получить пользователь"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:934
+msgid "The date of the passing quiz"
+msgstr "Дата прохождения викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:943
+msgid "The quiz image which used for quiz start page"
+msgstr ""
+"Изображение викторины, которое использовалось для стартовой страницы "
+"викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:952
+msgid "The message which must display on the result page depending from score"
+msgstr ""
+"Сообщение, которое должно отображаться на странице результатов, в "
+"зависимости от Результатов"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:961
+msgid "The average score of the quiz of all time"
+msgstr "Средний балл викторины за все время"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:970
+msgid "The average rate of the quiz of all time"
+msgstr "Средняя оценка викторины за все время"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:979
+msgid "The time which spent that the user passed the quiz"
+msgstr "Время, которое потратил пользователь на прохождение викторины"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:988
+msgid "The time which must spend the user to the quiz"
+msgstr "Время, которое пользователь должен потратить на викторину"
+
+#: ../admin/partials/settings/quiz-maker-settings.php:1001
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:9
+msgid "Quiz Attribute"
+msgstr "Атрибут викторины"
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:188
+msgid "There are no quiz attributes yet."
+msgstr "Атрибутов для викторины пока нет."
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:243
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:257
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1010
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:253
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1015
+msgid "Edit"
+msgstr "Редактировать"
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:257
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:273
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1037
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:269
+msgid "Unublished"
+msgstr "Неопубликованный"
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:388
+msgid "Quiz attribute created."
+msgstr "Атрибут викторины создан."
+
+#: ../includes/lists/class-quiz-maker-attributes-list-table.php:390
+msgid "Quiz attribute saved."
+msgstr "Атрибут теста сохранен."
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:9
+msgid "Each result"
+msgstr "Каждый результат"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:10
+msgid "Each results"
+msgstr "Каждые результаты"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:56
+msgid "Select User"
+msgstr "Выберите пользователя"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:81
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:75
+msgid "Clear filters"
+msgstr "Очистить фильтры"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:340
+#: ../includes/lists/class-quiz-maker-results-list-table.php:191
+msgid "There are no results yet."
+msgstr "Пока нет результатов."
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:460
+msgid "No data"
+msgstr "Нет данных"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:495
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:186
+msgid "WP User"
+msgstr "Пользователь WP"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:496
+msgid "User IP"
+msgstr "IP пользователя"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:497
+msgid "User Name"
+msgstr "Имя пользователя"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:498
+msgid "User Email"
+msgstr "Электронная почта пользователя"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:499
+msgid "User Phone"
+msgstr "Телефон пользователя"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:501
+msgid "Start Date"
+msgstr "Дата начала"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:502
+msgid "End Date"
+msgstr "Дата окончания"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:505
+msgid "Points"
+msgstr "Очки"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:562
+msgid "Mark as read"
+msgstr "Пометить, как прочитанное"
+
+#: ../includes/lists/class-quiz-maker-each-results-list-table.php:647
+msgid "Report deleted."
+msgstr "Отчет удален."
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:9
+msgid "Order"
+msgstr "Заказ"
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:94
+msgid "There are no orders yet."
+msgstr "Там пока нет заказов."
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:184
+msgid "Order ID"
+msgstr "ID заказа"
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:185
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:10
+#: ../includes/lists/class-quiz-maker-results-list-table.php:336
+#: ../public/class-quiz-maker-public.php:5042
+msgid "Quiz"
+msgstr "Викторина"
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:187
+msgid "Full Name"
+msgstr "Полное имя"
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:190
+msgid "Payment date"
+msgstr "Дата оплаты"
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:302
+msgid "Order created."
+msgstr "Заказ создан."
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:304
+msgid "Order saved."
+msgstr "Заказ сохранен."
+
+#: ../includes/lists/class-quiz-maker-orders-list-table.php:306
+msgid "Order deleted."
+msgstr "Заказ удален."
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:9
+msgid "Question Category"
+msgstr "Категория вопроса"
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:196
+msgid "There are no question categories yet."
+msgstr "Пока нет категории для вопроса."
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:296
+msgid "Questions Count"
+msgstr "Количество вопросов"
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:403
+msgid "Question category created."
+msgstr "Категория вопроса создана."
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:405
+msgid "Question category saved."
+msgstr "Категория вопроса сохранена."
+
+#: ../includes/lists/class-quiz-maker-question-categories-list-table.php:407
+msgid "Question category deleted."
+msgstr "Категория вопроса удалена."
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:66
+msgid "Select Category"
+msgstr "Выберите Категорию"
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1011
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1016
+msgid "Duplicate"
+msgstr "Дублировать"
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1098
+msgid "Answers count"
+msgstr "Количество ответов"
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1211
+msgid "Question created."
+msgstr "Вопрос создан."
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1213
+msgid "Question saved."
+msgstr "Вопрос сохранен."
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1215
+msgid "Question duplicated."
+msgstr "Вопрос продублирован."
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1217
+msgid "Question deleted."
+msgstr "Вопрос удален."
+
+#: ../includes/lists/class-quiz-maker-questions-list-table.php:1219
+msgid "Questions are deleted successfully."
+msgstr "Вопросы удалены успешно."
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:9
+msgid "Quiz Category"
+msgstr "Категория викторины"
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:192
+msgid "There are no quiz categories yet."
+msgstr "Пока нет категории для викторины."
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:292
+msgid "Quizzes Count"
+msgstr "Количество тестов"
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:399
+msgid "Quiz category created."
+msgstr "Категория викторины создана."
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:401
+msgid "Quiz category saved."
+msgstr "Категория викторины сохранена."
+
+#: ../includes/lists/class-quiz-maker-quiz-categories-list-table.php:403
+msgid "Quiz category deleted."
+msgstr "Категория викторины удалена."
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:958
+msgid "There are no quizzes yet."
+msgstr "Викторинов пока нет."
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1104
+msgid "Shortcode"
+msgstr "Шорткод"
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1105
+msgid "Code include"
+msgstr "Код включает"
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1108
+msgid "Completed count"
+msgstr "Завершенный подсчет"
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1221
+#: ../includes/lists/class-quiz-maker-results-list-table.php:514
+msgid "Quiz created."
+msgstr "Викторина создана."
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1223
+#: ../includes/lists/class-quiz-maker-results-list-table.php:516
+msgid "Quiz saved."
+msgstr "Викторина сохранена."
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1225
+msgid "Quiz duplicated."
+msgstr "Викторина продублирована."
+
+#: ../includes/lists/class-quiz-maker-quizes-list-table.php:1227
+#: ../includes/lists/class-quiz-maker-results-list-table.php:518
+msgid "Quiz deleted."
+msgstr "Викторина удалена."
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:9
+msgid "Result"
+msgstr "Результат"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:255
+msgid "Quiz has been deleted"
+msgstr "Викторина была удалена"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:264
+msgid "View details"
+msgstr "Посмотреть детали"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:337
+msgid "Average Rate"
+msgstr "Средняя оценка"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:338
+msgid "Average Score"
+msgstr "Средний балл"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:339
+msgid "Passed Users Count"
+msgstr "Количество прошедших пользователей"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:340
+msgid "Unread results"
+msgstr "Непрочитанные результаты"
+
+#: ../includes/lists/class-quiz-maker-results-list-table.php:433
+#: ../includes/lists/class-quiz-maker-results-list-table.php:434
+msgid "You don't have popular quizzes yet"
+msgstr "У вас еще нет популярных викторин"
+
+#: ../pb_templates/quiz_maker_elementor.php:32
+#: ../pb_templates/quiz_maker_elementor.php:33
+msgid "Enter the quiz title"
+msgstr "Введите название викторины"
+
+#: ../pb_templates/quiz_maker_elementor.php:39
+msgid "Title Alignment"
+msgstr "Выравнивание названии"
+
+#: ../pb_templates/quiz_maker_wpbvc.php:25
+msgid "The Best Quiz Maker Ever"
+msgstr "Лучшая викторина за все время"
+
+#: ../pb_templates/quiz_maker_wpbvc.php:26
+msgid "Quiz Maker by AYS"
+msgstr "Создатель викторины AYS"
+
+#: ../pb_templates/quiz_maker_wpbvc.php:36
+msgid "Please select your quiz from dropdown"
+msgstr "Пожалуйста, выберите вашу викторину из выпадающего"
+
+#: ../public/class-quiz-maker-public.php:146
+#: ../public/class-quiz-maker-public.php:164
+msgid "Wrong shortcode initialized"
+msgstr "Неверный инициализированный шорткод"
+
+#: ../public/class-quiz-maker-public.php:191
+msgid "You need to pay to pass this quiz."
+msgstr "Вы должны заплатить, чтобы пройти эту викторину."
+
+#: ../public/class-quiz-maker-public.php:510
+#: ../public/class-quiz-maker-public.php:512
+msgid "Phone Number"
+msgstr "Номер Телефона"
+
+#: ../public/class-quiz-maker-public.php:902
+msgid "You need to add questions"
+msgstr "Вам нужно добавить вопросы"
+
+#: ../public/class-quiz-maker-public.php:952
+msgid "votes"
+msgstr "голосов"
+
+#: ../public/class-quiz-maker-public.php:952
+msgid "avg"
+msgstr "avg"
+
+#: ../public/class-quiz-maker-public.php:1009
+msgid "Created on"
+msgstr "Создан на"
+
+#: ../public/class-quiz-maker-public.php:1031
+msgid "By"
+msgstr "По"
+
+#: ../public/class-quiz-maker-public.php:1033
+msgid "Created by"
+msgstr "Создано"
+
+#: ../public/class-quiz-maker-public.php:1241
+msgid "Restart"
+msgstr "Начать сначала"
+
+#: ../public/class-quiz-maker-public.php:1264
+msgid "Exit"
+msgstr "Выход"
+
+#: ../public/class-quiz-maker-public.php:1432
+msgid "The average score is"
+msgstr "Средний балл"
+
+#: ../public/class-quiz-maker-public.php:1443
+msgid "Your score is "
+msgstr "Ваша оценка "
+
+#: ../public/class-quiz-maker-public.php:1479
+msgid "Send feedback"
+msgstr "Отправить отзыв"
+
+#: ../public/class-quiz-maker-public.php:1677
+msgid "Redirecting after"
+msgstr "Перенаправление после"
+
+#: ../public/class-quiz-maker-public.php:1686
+msgid "You already passed this quiz."
+msgstr "Вы уже прошли эту викторину."
+
+#: ../public/class-quiz-maker-public.php:1724
+msgid "You must log in to pass this quiz."
+msgstr "Вы должны войти, чтобы пройти эту викторину."
+
+#: ../public/class-quiz-maker-public.php:1737
+msgid "Permission Denied"
+msgstr "В доступе отказано"
+
+#: ../public/class-quiz-maker-public.php:1778
+msgid "This quiz is expired!"
+msgstr "Время викторины истек!"
+
+#: ../public/class-quiz-maker-public.php:1797
+#: ../public/class-quiz-maker-public.php:1813
+msgid "The quiz has expired."
+msgstr "Истек время викторины."
+
+#: ../public/class-quiz-maker-public.php:1900
+#: ../public/class-quiz-maker-public.php:2825
+#: ../public/class-quiz-maker-public.php:2828
+#: ../public/class-quiz-maker-public.php:2834
+msgid "See Result"
+msgstr "Посмотреть результат"
+
+#: ../public/class-quiz-maker-public.php:1912
+#: ../public/class-quiz-maker-public.php:2850
+msgid "Next"
+msgstr "Далее"
+
+#: ../public/class-quiz-maker-public.php:2440
+msgid "It seems PayPal Client ID is missing."
+msgstr "Кажется, отсутствует идентификатор клиента PayPal."
+
+#: ../public/class-quiz-maker-public.php:2461
+msgid "You need to log in to pass this quiz."
+msgstr "Вы должны войти, чтобы пройти эту викторину."
+
+#: ../public/class-quiz-maker-public.php:2788
+msgid "You can enter your answer explanation"
+msgstr "Вы можете ввести свой ответ объяснения"
+
+#: ../public/class-quiz-maker-public.php:2811
+#: ../public/class-quiz-maker-public.php:2831
+msgid "Finish"
+msgstr "Законченный"
+
+#: ../public/class-quiz-maker-public.php:2840
+#: ../public/class-quiz-maker-public.php:2847
+msgid "Prev"
+msgstr "Назад"
+
+#: ../public/class-quiz-maker-public.php:3635
+msgid "Add to cart"
+msgstr "Добавить в корзину"
+
+#: ../public/class-quiz-maker-public.php:3789
+#: ../public/class-quiz-maker-public.php:3798
+#: ../public/class-quiz-maker-public.php:3839
+msgid "User answer"
+msgstr "Ответ пользователя"
+
+#: ../public/class-quiz-maker-public.php:3791
+msgid "Success"
+msgstr "Успешно"
+
+#: ../public/class-quiz-maker-public.php:3800
+msgid "Fail"
+msgstr "Провал"
+
+#: ../public/class-quiz-maker-public.php:3840
+msgid "Point"
+msgstr "Балл"
+
+#: ../public/class-quiz-maker-public.php:3879
+msgid "The question was not answered."
+msgstr "На вопрос не было ответа."
+
+#: ../public/class-quiz-maker-public.php:4165
+#: ../public/class-quiz-maker-public.php:4191
+#: ../public/class-quiz-maker-public.php:4217
+msgid "Check"
+msgstr "Проверить"
+
+#: ../public/class-quiz-maker-public.php:4531
+msgid "Rated"
+msgstr "Оценённый"
+
+#: ../public/class-quiz-maker-public.php:4553
+msgid "Load more"
+msgstr "Загрузи больше"
+
+#: ../public/class-quiz-maker-public.php:4569
+msgid "No more reviews"
+msgstr "Больше нет отзывов"
+
+#: ../public/class-quiz-maker-public.php:4689
+msgid "year"
+msgstr "год"
+
+#: ../public/class-quiz-maker-public.php:4690
+msgid "years"
+msgstr "лет"
+
+#: ../public/class-quiz-maker-public.php:4691
+msgid "month"
+msgstr "месяц"
+
+#: ../public/class-quiz-maker-public.php:4692
+msgid "months"
+msgstr "месяцы"
+
+#: ../public/class-quiz-maker-public.php:4694
+msgid "days"
+msgstr "дней"
+
+#: ../public/class-quiz-maker-public.php:4695
+msgid "hour"
+msgstr "час"
+
+#: ../public/class-quiz-maker-public.php:4696
+msgid "hours"
+msgstr "часов"
+
+#: ../public/class-quiz-maker-public.php:4697
+msgid "minute"
+msgstr "минут"
+
+#: ../public/class-quiz-maker-public.php:4698
+msgid "minutes"
+msgstr "минут"
+
+#: ../public/class-quiz-maker-public.php:4699
+msgid "second"
+msgstr "секунд"
+
+#: ../public/class-quiz-maker-public.php:4700
+msgid "seconds"
+msgstr "секунд"
+
+#: ../public/class-quiz-maker-public.php:4943
+msgid "Your `"
+msgstr "Ваш `"
+
+#: ../public/class-quiz-maker-public.php:4948
+msgid ":"
+msgstr ":"
+
+#: ../public/class-quiz-maker-public.php:4950
+msgid "Score:"
+msgstr "Результат:"
+
+#: ../public/class-quiz-maker-public.php:5034
+msgid "You must log in to see your results."
+msgstr "Вы должны войти, чтобы увидеть свои результаты."
+
+#: ../public/class-quiz-maker-public.php:5044
+msgid "End"
+msgstr "Конец"
+
+#: ../public/class-quiz-maker-public.php:5065
+msgid "Details"
+msgstr "Детали"
+
+#: ../public/class-quiz-maker-public.php:5410
+msgid "There is no data yet"
+msgstr "Пока нет результатов"
+
+#: ../quiz-maker.php:192
+msgid "Wow!!! Excellent job!! Your quizzes was passed by more than "
+msgstr "Вау!!! Отличная работа!! Ваши викторины были пройдены более чем "
+
+#: ../quiz-maker.php:196
+msgid "Rate Us"
+msgstr "Оцените Нас"
+
+#: ../quiz/quiz-maker-block.js:126
+msgid "Something goes wrong please reload page"
+msgstr "Что-то пошло не так, пожалуйста, перезагрузите страницу"
+
+#: ../quiz/quiz-maker-block.js:132
+msgid "Loading..."
+msgstr "Загрузка..."
+
+#: ../quiz/quiz-maker-block.js:139
+msgid "There are no quizzes yet"
+msgstr "Здесь пока еще нет Викторины"
+
+#: ../quiz/quiz-maker-block.js:146
+msgid "-Select Quiz-"
+msgstr "-Выберите Викторину-"
+
+#: ../quiz/quiz-maker-block.php:68
+msgid "Please select quiz"
+msgstr "Пожалуйста, выберите викторину"
+
+#~ msgid "PRO Features"
+#~ msgstr "Возможности PRO"
+
+#~ msgid "Demo"
+#~ msgstr "Демо"
+
+#~ msgid "BUY NOW"
+#~ msgstr "КУПИТЬ СЕЙЧАС"
+
+#~ msgid "This feature available only in "
+#~ msgstr "Эта функция доступна только в "
+
+#~ msgid "PRO version!!!"
+#~ msgstr "PRO версии!!!"
+
+#~ msgid "Personal"
+#~ msgstr "Personal"
+
+#~ msgid "Business"
+#~ msgstr "Business"
+
+#~ msgid "Developer"
+#~ msgstr "Developer"
+
+#~ msgid "Free"
+#~ msgstr "Бесплатно"
+
+#~ msgid "Support for"
+#~ msgstr "Поддержка"
+
+#~ msgid "1 site"
+#~ msgstr "1 сайт"
+
+#~ msgid "5 site"
+#~ msgstr "5 сайтов"
+
+#~ msgid "Unlimited sites"
+#~ msgstr "Неограниченное количество сайтов"
+
+#~ msgid "Upgrade for"
+#~ msgstr "Обновление для"
+
+#~ msgid "12 months"
+#~ msgstr "12 месяцев"
+
+#~ msgid "Install on unlimited sites"
+#~ msgstr "Установить на неограниченное количество сайтов"
+
+#~ msgid "Reports in dashboard"
+#~ msgstr "Отчеты в Админ панели"
+
+#~ msgid "User locations"
+#~ msgstr "Местоположения пользователя"
+
+#~ msgid "Export and import questions"
+#~ msgstr "Экспорт и импорт вопросов"
+
+#~ msgid "Export results to CSV"
+#~ msgstr "Экспорт результатов в CSV"
+
+#~ msgid "Send email to user"
+#~ msgstr "Отправить письмо пользователю"
+
+#~ msgid "Result text according to result"
+#~ msgstr "Текст результата в соответствии с результатом"
+
+#~ msgid "Results with charts"
+#~ msgstr "Результаты с диаграммами"
+
+#~ msgid "Custom Attributes"
+#~ msgstr "Пользовательские Атрибуты"
+
+#~ msgid "Mailchimp integration"
+#~ msgstr "Интеграция MailChimp"
+
+#~ msgid "Schedule quiz"
+#~ msgstr "График Викторины"
+
+#~ msgid "Campaign Monitor integration"
+#~ msgstr "Интеграции Campaign Monitor"
+
+#~ msgid "Zapier integration"
+#~ msgstr "Интеграции Zapier"
+
+#~ msgid "Slack integration"
+#~ msgstr "Slack интеграции"
+
+#~ msgid "ActiveCampaign integration"
+#~ msgstr "ActiveCampaign интеграции"
+
+#~ msgid "User page shortcode"
+#~ msgstr "Шорткод страницы пользователя"
+
+#~ msgid "Email configuration"
+#~ msgstr "Конфигурация электронной почты"
+
+#~ msgid "Question weight/points"
+#~ msgstr "Вес вопроса"
+
+#~ msgid "Answer weight/points"
+#~ msgstr "Вес ответа"
+
+#~ msgid "Copy content protection"
+#~ msgstr "Защита от копирования контента"
+
+#~ msgid "PayPal integration"
+#~ msgstr "Интеграция PayPal"
+
+#~ msgid "Download"
+#~ msgstr "Скачать"
+
+#~ msgid "Buy now"
+#~ msgstr "Купить сейчас"
+
+#~ msgid "Developer package!!!"
+#~ msgstr "Пакете разработчика!!!"
+
+#~ msgid "PRO feature!!!"
+#~ msgstr "PRO особенность!!!"
+
+#~ msgid "This property aviable only in pro version"
+#~ msgstr "Это свойство доступно только в PRO версии"
+
+#~ msgid "Use"
+#~ msgstr "Использовать"
+
+#~ msgid "for showing time"
+#~ msgstr "для отображения времени"
+
+#, fuzzy
+#~| msgid "Hide score"
+#~ msgid "Display score"
+#~ msgstr "Скрыть результат"
+
+#, fuzzy
+#~| msgid "Show correct answers"
+#~ msgid "By correct answers count"
+#~ msgstr "Показать правильные ответы"
+
+#~ msgid "Show all questions with right and wrong answers after quiz"
+#~ msgstr ""
+#~ "Показать все вопросы с правильными и неправильными ответами после "
+#~ "викторины"
+
+#~ msgid "Limit Users"
+#~ msgstr "Лимит Пользователей"
+
+#~ msgid "Redirect url"
+#~ msgstr "URL-адрес перенаправления"
+
+#~ msgid "DEVELOPER package!!!"
+#~ msgstr "Пакет DEVELOPER!!!"
+
+#~ msgid ""
+#~ "In case of swithching this option the quiz can be passed only by logged "
+#~ "in users."
+#~ msgstr ""
+#~ "В случае переключения этой опции, викторина может быть пройден только "
+#~ "авторизованными пользователями."
+
+#~ msgid "Message for those whose position is not selected"
+#~ msgstr "Сообщение для тех, чья позиция не выбрана"
+
+#~ msgid "Title of data form for the user personal information"
+#~ msgstr "Название формы данных для личной информации пользователя"
+
+#~ msgid "Data form for the user personal information"
+#~ msgstr "Форма данных для личной информации пользователя"
+
+#~ msgid "Autofill logged in user name and email"
+#~ msgstr "Автозаполнение для входа имя пользователя и адрес электронной почты"
