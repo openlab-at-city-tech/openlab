@@ -1,0 +1,393 @@
+@import url(https://fonts.googleapis.com/css?family=Muli:300,400,700&subset=latin);
+
+#tidio-wrapper,
+#tidio-wrapper *,
+#tidio-wrapper *:before,
+#tidio-wrapper *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#tidio-wrapper {
+    background: #f1f1f1;
+    color: #080f1a;
+    font-family: 'Muli', sans-serif;
+    height: 100%;
+    font-size: 16px;
+    max-width: 1234px;
+    z-index: 1;
+    position: relative;
+    padding: 66px 24px 0 0;
+}
+
+.tidio-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    margin: -12px
+}
+
+.tidio-box {
+    background-color: #fff;
+    flex-grow: 0;
+    flex-shrink: 1;
+    margin: 12px;
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tidio-box-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+}
+
+.tidio-box-actions form {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 360px;
+}
+
+.tidio-box-george {
+    text-align: center;
+    position: relative;
+    padding-bottom: 324px;
+
+    background: url(../img/a-center.png) bottom center,
+    url(../img/4.svg) calc(50% + 223px) calc(100% - 82px),
+    url(../img/8.svg) calc(50% - 109px) calc(100% - 149px),
+    url(../img/16.svg) calc(50% + 234px) calc(100% - 183px),
+    url(../img/27.svg) calc(50% + 143px) calc(100% - 248px),
+    url(../img/28.svg) calc(50% - 214px) calc(100% - 55px),
+    url(../img/29.svg) calc(50% - 223px) calc(100% - 148px),
+    url(../img/34.svg) calc(50% - 159px) calc(100% - 226px),
+    #fff;
+    background-size: 314px 293px, 21px 15px, 23px 15px, 18px 19px, 16px 16px, 14px 22px, 43px 21px, 22px 20px;
+    background-repeat: no-repeat;
+}
+
+.tidio-box-george h2, .tidio-box-actions h1 {
+    font-size: 24px;
+    line-height: 34px;
+    font-weight: bold;
+    max-width: 400px;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.tidio-box-actions h1 {
+    margin: 32px 0;
+    padding-top: 48px;
+}
+
+.tidio-box p {
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 300;
+    max-width: 350px;
+    margin: 0;
+}
+
+.tidio-box-george-image {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 300px;
+    background-repeat: no-repeat;
+
+    background-position: bottom left;
+}
+
+.tidio-box-actions form label,
+.tidio-box-actions form input,
+.tidio-box-actions form select,
+.tidio-box-actions form button,
+.tidio-box-actions form .button {
+    width: 100%;
+}
+
+.tidio-box-actions form label {
+    font-size: 14px;
+}
+
+.tidio-box-actions form label + label {
+    margin-top: 16px;
+}
+
+.tidio-box-actions form input,
+.tidio-box-actions .select-selected {
+    margin-top: 8px;
+    height: 48px;
+    padding: 12px 16px 11px;
+    border-radius: 3px;
+    font-size: 16px;
+    line-height: 24px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: solid 1px #bcc5d7;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #080f1a;
+}
+
+.tidio-box-actions form input:focus,
+.tidio-box-actions form select:focus {
+    border-color: #0566ff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+.tidio-box-actions input::placeholder {
+    font-style: normal;
+    color: #8894ab;
+}
+
+.tidio-box-actions form button,
+.tidio-box-actions form .button {
+    font-size: 16px;
+    color: #fff;
+    background-color: #0566ff;
+    border-color: #0566ff;
+    border-radius: 3px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.tidio-box-actions form * + button,
+.tidio-box-actions form * + .button {
+    margin-top: 24px;
+}
+
+.tidio-box-actions form button:hover,
+.tidio-box-actions form button:focus,
+.tidio-box-actions form .button:hover,
+.tidio-box-actions form .button:focus {
+    color: #fff;
+    background-color: #0b5bda;
+    border-color: #0b5bda;
+}
+
+.tidio-box-actions form .btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: #0566ff;
+    margin-top: 8px;
+    box-shadow: none;
+}
+
+.tidio-box-actions form .btn-link:hover,
+.tidio-box-actions form .btn-link:active,
+.tidio-box-actions form .btn-link:focus {
+    text-decoration: underline;
+    outline: none;
+    background-color: transparent;
+    border-color: transparent;
+    color: #0566ff;
+    box-shadow: none;
+}
+
+@media only screen and (min-width: 480px) {
+    .tidio-box-actions {
+        padding-top: 64px;
+    }
+
+    .tidio-box-actions h1 {
+        margin-top: 44px;
+    }
+
+    .tidio-box-george h2 {
+        margin-top: 24px;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .tidio-box-wrapper {
+        flex-direction: row;
+    }
+
+    .tidio-box-actions {
+        flex-basis: 530px;
+        align-items: flex-start;
+    }
+
+    .tidio-box-actions h1 {
+        background-position: top left;
+    }
+
+    .tidio-box-george h2 {
+        margin-top: 32px;
+    }
+
+    .tidio-box-actions form {
+        align-items: flex-start;
+    }
+
+    .tidio-box-george {
+        flex-basis: 680px;
+    }
+}
+
+#after-install-text {
+    display: none;
+}
+
+.tidio-button {
+    font-family: 'Muli', sans-serif;
+    margin-top: 20px !important;
+    height: 40px !important;
+    line-height: 38px !important;
+    text-align: center;
+    width: 170px;
+}
+
+/* error */
+#tidio-wrapper .error {
+    display: none;
+    margin: 12px 0 -12px;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    color: #e81332;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#tidio-wrapper .error:before {
+    content: '!';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: #e81332;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 10px;
+    margin-right: 8px;
+}
+
+.custom-select {
+    position: relative;
+    font-family: 'Muli', sans-serif;
+}
+
+.custom-select select {
+    display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+    background-color: #fff;
+}
+
+.select-selected.disabled {
+    color: #8894ab;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 14px;
+    width: 20px;
+    height: 20px;
+    background: url(../img/chevron.svg) center center;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active {
+    border-color: #0566ff;
+}
+
+.select-selected.select-arrow-active:after {
+    transform: rotate(180deg);
+}
+
+/* style the items (options), including the selected item: */
+.select-items div, .select-selected {
+    color: #080f1a;
+    padding: 8px 15px;
+    line-height: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+    position: absolute;
+    background-color: #fff;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 99;
+    max-height: 212px;
+    overflow-y: auto;
+    border: 1px solid #bcc5d7;
+    border-radius: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+    display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+    background-color: rgba(5, 102, 255, 0.08);
+    color: #0566ff;
+}
+
+.logos {
+    position: absolute;
+    width: 100%;
+    max-width: 128px;
+    display: inline-flex;
+    background: url(../img/plus.svg) no-repeat;
+    background-position: 68px 18px;
+}
+
+@media only screen and (min-width: 480px) {
+    .logos {
+        max-width: 360px;
+    }
+}
+
+.logo {
+    position: relative;
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.logo + .logo {
+    margin-left: 53px;
+}
+
+.tidio-logo {
+    background: url(../img/tidio-logo.svg) no-repeat center center;
+    background-color: #fff;
+}
+
+.wp-logo {
+    background: url(../img/wp-logo.svg) no-repeat center center;
+    background-color: #fff;
+}
