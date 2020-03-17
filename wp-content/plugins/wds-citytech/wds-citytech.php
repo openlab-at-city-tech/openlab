@@ -2587,6 +2587,18 @@ add_filter( 'jetpack_get_available_modules', 'openlab_blacklist_jetpack_modules'
  */
 add_filter( 'option_wpa_toolbar', '__return_empty_string' );
 
+/*
+ * Disable WP_Accessibility alt image.
+ */
+add_filter(
+	'image_send_to_editor',
+	function( $retval ) {
+		remove_filter( 'image_send_to_editor', 'wpa_alt_attribute', 10, 8 );
+		return $retval;
+	},
+	0
+);
+
 /**
  * Hide WP Accessibility Toolbar settings.
  */
@@ -2679,7 +2691,7 @@ add_action(
 add_action(
 	'widgets_init',
 	function() {
-		unregister_widget( 'wp_accessibility_toolbar' );
+		unregister_widget( 'Wp_Accessibility_Toolbar' );
 	},
 	20
 );

@@ -1,0 +1,7 @@
+category_id,question,image,hint,type,published,wrong_answer_text,right_answer_text,explanation,user_explanation,answers
+1,Who is in the picture?,https://freedemo.ays-pro.com/wp-content/uploads/2018/07/416x416.jpg,,radio,1,,,,,Mark Zuckerberg::1;;Bill Gates::0;;Elon Musk::0;;Winston Churchill::0;;
+1,Do you know him?,https://freedemo.ays-pro.com/wp-content/uploads/2018/07/416x416-1.jpg,,radio,1,,,,,Mark Zuckerberg::0;;Steve Jobs::0;;Elon Musk::1;;Robert De Niro::0;;
+1,Select right answer?,https://freedemo.ays-pro.com/wp-content/uploads/2018/07/416x416-2.jpg,,radio,1,,,,,Elon Musk::0;;Bill Gates::1;;Steve Jobs::0;;Clint Eastwood::0;;
+1,5*40,,,radio,1,,,,,300::0;;100::0;;200::1;;
+1,10+20,,,radio,1,,,,,30::1;;40::0;;50::0;;
+1,150/3,,,radio,1,,,,,60::0;;50::1;;100::0;;

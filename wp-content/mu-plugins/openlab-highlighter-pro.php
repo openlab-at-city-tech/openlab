@@ -29,9 +29,16 @@ function bootstrap() {
 	remove_action( 'wp_ajax_nopriv_ajax-update-content', 'ajax_update_content' );
 	remove_action( 'wp_ajax_nopriv_ajaxcomments', 'ajax_submit_comment' );
 
+	// Override stats and fix stats.
+	remove_action( 'loop_start','highlighter_stats_conditional_title' );
+	remove_filter( 'the_content', 'highlighter_stats_content', 10, 2 );
+	add_filter( 'the_content', __NAMESPACE__ . '\\render_content_stats' );
+
 	add_filter( 'body_class', __NAMESPACE__ . '\\body_class' );
+	add_filter( 'comments_open', __NAMESPACE__ . '\\enable_page_comments', 10, 2 );
 	add_filter( 'redux/args/highlighter_settings', __NAMESPACE__ . '\\filter_settings' );
 
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
 	add_action( 'wp_footer', __NAMESPACE__ . '\\render_comment_form' );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
@@ -50,6 +57,23 @@ function body_class( $classes ) {
 	}
 
 	return $classes;
+}
+
+/**
+ * Enable comments for pages when plugin is active.
+ *
+ * @param bool $open
+ * @param string $post_id
+ * @return bool
+ */
+function enable_page_comments( $open, $post_id ) {
+	$post = get_post( $post_id );
+
+	if ( 'page' !== $post->post_type ) {
+		return $open;
+	}
+
+	return true;
 }
 
 /**
@@ -131,4 +155,48 @@ function render_comment_form() {
 	</div>
 
 	<?php
+}
+
+/**
+ * Override content stats display.
+ *
+ * @param string $content
+ * @return string $content
+ */
+function render_content_stats( $content ) {
+	$options   = \get_option( 'highlighter_settings' );
+	$types     = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
+	$placement = $options['stats_placement'];
+
+	if ( ! \is_singular( $types ) ) {
+		return $content;
+	}
+
+	if ( $placement === 'before_content' ) {
+		$content = \do_shortcode( '[highlighter-stats]' ) . $content;
+		return $content;
+	}
+
+	if ( $placement === 'after_content' ) {
+		$content = $content . \do_shortcode( '[highlighter-stats]' );
+		return $content;
+	}
+
+	return $content;
+}
+
+/**
+ * Load assets for Highlighter Pro.
+ *
+ * @return void
+ */
+function enqueue_assets() {
+	$options   = \get_option( 'highlighter_settings' );
+	$types     = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
+
+	if ( ! \is_singular( $types ) ) {
+		return;
+	}
+
+	\wp_enqueue_style( 'openlab-highligter-pro', \content_url( 'mu-plugins/css/highlighter-pro.css' ) );
 }

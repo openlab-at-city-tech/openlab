@@ -2,8 +2,8 @@
 Contributors: boonebgorges
 Tags: comments, grade, course, privacy
 Requires at least: 4.4
-Tested up to: 5.2
-Stable tag: 1.3.1
+Tested up to: 5.4
+Stable tag: 1.3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,9 @@ This plugin was developed for the [https://openlab.citytech.cuny.edu](City Tech 
 3. Grades are visible on Dashboard > Posts.
 
 == Changelog ==
+
+= 1.3.2 =
+* Add custom CSS selectors for private comments and comments with grades.
 
 = 1.3.1 =
 * Allow empty comments when a grade is present.

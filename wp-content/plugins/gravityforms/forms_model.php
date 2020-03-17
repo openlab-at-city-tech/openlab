@@ -826,7 +826,7 @@ class GFFormsModel {
 		foreach ( $forms as $form ) {
 			$sanitized_name = str_replace( '[', '', str_replace( ']', '', $form->title ) );
 			if ( $form->title == $form_title || $sanitized_name == $form_title ) {
-				return $form->id;
+				return absint( $form->id );
 			}
 		}
 
@@ -4452,10 +4452,11 @@ class GFFormsModel {
 		}
 
 		$form_unique_id = self::get_form_unique_id( $form_id );
-		$pathinfo       = pathinfo( $uploaded_filename );
+		$extension      = pathinfo( $uploaded_filename, PATHINFO_EXTENSION );
+		$temp_filename  = "{$form_unique_id}_{$input_name}.{$extension}";
 
-		GFCommon::log_debug( __METHOD__ . '(): Uploaded filename is ' . $uploaded_filename . ' and temporary filename is ' . $form_unique_id . '_' . $input_name . '.' . $pathinfo['extension'] );
-		return array( 'uploaded_filename' => $uploaded_filename, 'temp_filename' => "{$form_unique_id}_{$input_name}.{$pathinfo['extension']}" );
+		GFCommon::log_debug( __METHOD__ . '(): Uploaded filename is ' . $uploaded_filename . ' and temporary filename is ' . $temp_filename );
+		return array( 'uploaded_filename' => $uploaded_filename, 'temp_filename' => $temp_filename );
 
 	}
 

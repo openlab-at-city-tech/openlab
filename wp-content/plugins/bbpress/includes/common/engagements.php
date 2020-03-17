@@ -611,7 +611,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 */
 	private function get_cache_key( $meta_key = '', $object_id = 0 ) {
 
-		// No negative numbers in cache keys
+		// No negative numbers in cache keys (zero is weird, but not disallowed)
 		$object_id = absint( $object_id );
 
 		// Maybe guess at post type

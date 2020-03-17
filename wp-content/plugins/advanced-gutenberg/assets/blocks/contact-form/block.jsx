@@ -13,6 +13,8 @@
         </svg>
     );
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class AdvContactForm extends Component {
         constructor() {
             super( ...arguments );
@@ -57,9 +59,13 @@
                 submitBgColor,
                 submitRadius,
                 submitPosition,
+                isPreview
             } = attributes;
 
             return (
+                isPreview ?
+                    <img alt={__('Contact Form', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <InspectorControls>
                         <PanelBody title={ __( 'Form Settings', 'advanced-gutenberg' ) }>
@@ -301,7 +307,11 @@
         changed: {
             type: 'boolean',
             default: false,
-        }
+        },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType( 'advgb/contact-form', {
@@ -314,6 +324,11 @@
         category: 'advgb-category',
         keywords: [ __( 'contact', 'advanced-gutenberg' ), __( 'form', 'advanced-gutenberg' ) ],
         attributes: contactBlockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         edit: AdvContactForm,
         save: function ( { attributes } ) {
             const {

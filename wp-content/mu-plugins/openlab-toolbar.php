@@ -207,11 +207,18 @@ HTML;
 	 * Add the main OpenLab menu
 	 */
 	public function add_network_menu( $wp_admin_bar ) {
+
+		ob_start();
+		include WPMU_PLUGIN_DIR . '/parts/persistent/svg-logo.php';
+		$openlab_logo = ob_get_clean();
+
+		$title = "<span class='logo-wrapper'>$openlab_logo</span>";
+
 		$wp_admin_bar->add_node(
 			array(
 				/*'parent' => 'top-secondary',*/
 				'id'    => 'openlab',
-				'title' => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
+				'title' => $title,
 				'href'  => bp_get_root_domain(),
 				'meta'  => array(
 					'tabindex' => 90,
@@ -1628,7 +1635,7 @@ HTML;
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.7.1.9' );
+		wp_enqueue_style('openlab-toolbar', $openlab_toolbar_url, array('font-awesome'), filemtime(WP_CONTENT_DIR . '/mu-plugins/css/openlab-toolbar.css'));
 	}
 
 	public function adminbar_special_body_class( $classes ) {

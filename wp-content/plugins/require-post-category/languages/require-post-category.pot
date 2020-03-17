@@ -14,5 +14,5 @@ msgstr ""
 "Language: \n"
 
 #: require-post-category.php:44
-msgid "Please select a category before publishing this post."
+msgid "Please rpc_select a category before publishing this post."
 msgstr ""

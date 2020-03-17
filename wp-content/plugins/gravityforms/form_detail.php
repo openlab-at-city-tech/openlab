@@ -1676,7 +1676,7 @@ class GFFormDetail {
 				<?php esc_html_e( 'Card Icon Style', 'gravityforms' ); ?>
 				<?php gform_tooltip( 'form_field_card_style' ) ?>
 			</label>
-			<select id="credit_card_style" onchange="SetFieldProperty('creditCardStyle', this.value);">
+			<select id="credit_card_style" onchange="SetFieldProperty('creditCardStyle', this.value); jQuery('.gform_card_icon_container').toggleClass('gform_card_icon_style1 gform_card_icon_style2');">
 				<option value="style1"><?php esc_html_e( 'Standard', 'gravityforms' ) ?></option>
 				<option value="style2"><?php esc_html_e( '3D', 'gravityforms' ) ?></option>
 			</select>

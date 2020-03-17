@@ -342,7 +342,7 @@ float: left;'
         wp_enqueue_script(
             'advgb_blocks',
             plugins_url('assets/blocks/blocks.js', dirname(__FILE__)),
-            array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', 'wp-editor', 'wp-plugins' ),
+            array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-data', 'wp-editor', 'wp-plugins', 'wp-compose' ),
             ADVANCED_GUTENBERG_VERSION,
             true
         );
@@ -353,6 +353,8 @@ float: left;'
         wp_enqueue_script('slick_js');
 
         // Include needed CSS styles
+        wp_enqueue_style('material_icon_font');
+        wp_enqueue_style('material_icon_font_custom');
         wp_enqueue_style('slick_style');
         wp_enqueue_style('slick_theme_style');
 
@@ -382,6 +384,9 @@ float: left;'
         $recaptcha_config   = $recaptcha_config !== false ? $recaptcha_config : array('recaptcha_enable' => 0);
         $blocks_icon_color  = isset($saved_settings['blocks_icon_color']) ? $saved_settings['blocks_icon_color'] : '';
         $rp_default_thumb   = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
+        $icons              = array();
+        $icons['material']  = file_get_contents(plugin_dir_path(__DIR__) . 'assets/css/fonts/codepoints.json');
+        $icons['material']  = json_decode($icons['material'], true);
 
         wp_localize_script('wp-blocks', 'advgbBlocks', array(
             'color' => $blocks_icon_color,
@@ -396,6 +401,7 @@ float: left;'
             'customStyles' => !$custom_styles_data ? array() : $custom_styles_data,
             'captchaEnabled' => $recaptcha_config['recaptcha_enable'],
             'pluginUrl' => plugins_url('', ADVANCED_GUTENBERG_PLUGIN),
+            'iconList' => $icons,
             'registerEnabled' => get_option('users_can_register'),
         ));
 
@@ -420,16 +426,18 @@ float: left;'
         );
         wp_enqueue_style('dashicons');
 
-        if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true) {
-            wp_enqueue_style(
-                'advgb_blocks_styles',
-                plugins_url('assets/css/blocks_styles/blocks.css', dirname(__FILE__))
-            );
-        } else {
-            wp_enqueue_style(
-                'advgb_blocks_styles_min',
-                plugins_url('assets/css/blocks_styles/blocks.min.css', dirname(__FILE__))
-            );
+        if (is_admin()) {
+            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true) {
+                wp_enqueue_style(
+                    'advgb_blocks_styles',
+                    plugins_url('assets/css/blocks_styles/blocks.css', dirname(__FILE__))
+                );
+            } else {
+                wp_enqueue_style(
+                    'advgb_blocks_styles_min',
+                    plugins_url('assets/css/blocks_styles/blocks.min.css', dirname(__FILE__))
+                );
+            }
         }
 
         if (!function_exists('advgbAddScriptAttributes')) {
@@ -1341,6 +1349,10 @@ float: left;'
                 plugins_url('assets/css/fonts/material-icons.min.css', dirname(__FILE__))
             );
             wp_register_style(
+                'material_icon_font_custom',
+                plugins_url('assets/css/fonts/material-icons-custom.min.css', dirname(__FILE__))
+            );
+            wp_register_style(
                 'slick_style',
                 plugins_url('assets/css/slick.css', dirname(__FILE__))
             );
@@ -1465,6 +1477,10 @@ float: left;'
      */
     public function registerStylesScriptsFrontend()
     {
+        wp_register_script(
+            'advgb_blocks_frontend_scripts',
+            plugins_url('assets/blocks/frontend.js', dirname(__FILE__))
+        );
         wp_register_style(
             'colorbox_style',
             plugins_url('assets/css/colorbox.css', dirname(__FILE__)),
@@ -1478,6 +1494,14 @@ float: left;'
         wp_register_style(
             'slick_theme_style',
             plugins_url('assets/css/slick-theme.css', dirname(__FILE__))
+        );
+        wp_register_style(
+            'material_icon_font',
+            plugins_url('assets/css/fonts/material-icons.min.css', dirname(__FILE__))
+        );
+        wp_register_style(
+            'material_icon_font_custom',
+            plugins_url('assets/css/fonts/material-icons-custom.min.css', dirname(__FILE__))
         );
         wp_register_style(
             'advgb_bulma_styles',
@@ -1533,6 +1557,7 @@ float: left;'
     {
         wp_enqueue_style('roboto_font', 'https://fonts.googleapis.com/css?family=Roboto');
         wp_enqueue_style('material_icon_font');
+        wp_enqueue_style('material_icon_font_custom');
         wp_enqueue_style('advgb_quirk');
         wp_enqueue_style('waves_styles');
         if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true) {
@@ -2072,7 +2097,7 @@ float: left;'
             'count-up','images-slider', 'map', 'newsletter',
             'recent-posts', 'social-links', 'summary', 'adv-tabs',
             'testimonial', 'woo-products', 'columns', 'column',
-            'login-form', 'search-bar',
+            'login-form', 'search-bar', 'icon', 'infobox'
         );
 
         foreach ($advgb_block as $block) {
@@ -3893,6 +3918,368 @@ float: left;'
                     ),
                 )
             ),
+            'advgb-icon' => array(
+                array(
+                    'label'    => __('General Settings', 'advanced-gutenberg'),
+                    'settings' => array(
+                        array(
+                            'title' => __('Number of icons', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'numberItem',
+                            'min'   => 1,
+                            'max'   => 10,
+                        ),
+                    ),
+                ),
+
+            ),
+            'advgb-infobox' => array(
+                array(
+                    'label'    => __('Container Settings', 'advanced-gutenberg'),
+                    'settings' => array(
+                        array(
+                            'title' => __('Background Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'containerBackground',
+                        ),
+                        array(
+                            'title' => __('Border Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'containerBorderBackground',
+                        ),
+                        array(
+                            'title' => __('Border Width', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerBorderWidth',
+                            'min'   => 0,
+                            'max'   => 40,
+                        ),
+                        array(
+                            'title' => __('Border Radius', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerBorderRadius',
+                            'min'   => 0,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Padding Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerPaddingTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerPaddingBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerPaddingLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'containerPaddingRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                    ),
+                ),
+                array(
+                    'label'    => __('Icon Settings', 'advanced-gutenberg'),
+                    'settings' => array(
+                        array(
+                            'title' => __('Icon Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'iconColor',
+                        ),
+                        array(
+                            'title' => __('Icon Size', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconSize',
+                            'min'   => 1,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Background Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'iconBackground',
+                        ),
+                        array(
+                            'title' => __('Border Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'iconBorderBackground',
+                        ),
+                        array(
+                            'title' => __('Border Width', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconBorderWidth',
+                            'min'   => 0,
+                            'max'   => 40,
+                        ),
+                        array(
+                            'title' => __('Border Radius', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconBorderRadius',
+                            'min'   => 0,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Padding Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconPaddingTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconPaddingBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconPaddingLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconPaddingRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconMarginTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconMarginBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconMarginLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'iconMarginRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                    ),
+                ),
+                array(
+                    'label'    => __('Title Settings', 'advanced-gutenberg'),
+                    'settings' => array(
+                        array(
+                            'title' => __('Title Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'titleColor',
+                        ),
+                        array(
+                            'title' => __('Font Size (px)', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleSize',
+                            'min'   => 1,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Line Height (px)', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleLineHeight',
+                            'min'   => 1,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title'   => __('HTML Tag', 'advanced-gutenberg'),
+                            'type'    => 'select',
+                            'name'    => 'titleHtmlTag',
+                            'options' => array(
+                                array(
+                                    'label' => __('H1', 'advanced-gutenberg'),
+                                    'value' => 'h1',
+                                ),
+                                array(
+                                    'label' => __('H2', 'advanced-gutenberg'),
+                                    'value' => 'h2',
+                                ),
+                                array(
+                                    'label' => __('H3', 'advanced-gutenberg'),
+                                    'value' => 'h3',
+                                ),
+                                array(
+                                    'label' => __('H4', 'advanced-gutenberg'),
+                                    'value' => 'h4',
+                                ),
+                                array(
+                                    'label' => __('H5', 'advanced-gutenberg'),
+                                    'value' => 'h5',
+                                ),
+                                array(
+                                    'label' => __('H6', 'advanced-gutenberg'),
+                                    'value' => 'h6',
+                                ),
+                            ),
+                        ),
+                        array(
+                            'title' => __('Padding Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titlePaddingTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titlePaddingBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titlePaddingLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titlePaddingRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleMarginTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleMarginBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleMarginLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'titleMarginRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                    )
+                ),
+                array(
+                    'label'    => __('Text Settings', 'advanced-gutenberg'),
+                    'settings' => array(
+                        array(
+                            'title' => __('Color', 'advanced-gutenberg'),
+                            'type'  => 'color',
+                            'name'  => 'textColor',
+                        ),
+                        array(
+                            'title' => __('Font Size (px)', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textSize',
+                            'min'   => 1,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Line Height (px)', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textLineHeight',
+                            'min'   => 1,
+                            'max'   => 200,
+                        ),
+                        array(
+                            'title' => __('Padding Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textPaddingTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textPaddingBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textPaddingLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Padding Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textPaddingRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Top', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textMarginTop',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Bottom', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textMarginBottom',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Left', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textMarginLeft',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                        array(
+                            'title' => __('Margin Right', 'advanced-gutenberg'),
+                            'type'  => 'number',
+                            'name'  => 'textMarginRight',
+                            'min'   => 0,
+                            'max'   => 100,
+                        ),
+                    )
+                ),
+            ),
         );
 
         $advgb_blocks_default_config = get_option('advgb_blocks_default_config');
@@ -3994,26 +4381,7 @@ float: left;'
                 array('jquery')
             );
         }
-
         if (strpos($content, 'wp-block-advgb-count-up') !== false) {
-            wp_enqueue_script(
-                'waypoint_js',
-                'https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js',
-                array('jquery')
-            );
-            wp_enqueue_script(
-                'countup_lib_js',
-                plugins_url('assets/blocks/count-up/jquery.counterup.min.js', dirname(__FILE__)),
-                array('jquery'),
-                ADVANCED_GUTENBERG_VERSION
-            );
-            wp_enqueue_script(
-                'countup_js',
-                plugins_url('assets/blocks/count-up/countUp.js', dirname(__FILE__)),
-                array(),
-                ADVANCED_GUTENBERG_VERSION
-            );
-
             $content = preg_replace_callback(
                 '@<div[^>]*?advgb\-count\-up\-columns.*?(</p></div>)@s',
                 array($this, 'decodeHtmlEntity'),
@@ -4092,9 +4460,9 @@ float: left;'
         if (strpos($content, 'advgb-tabs-block') !== false) {
             wp_enqueue_script('jquery-ui-tabs');
             wp_add_inline_script('jquery-ui-tabs', 'jQuery(document).ready(function($){
-                $(".advgb-tab a:not(.ui-tabs-anchor)").unbind("click");
-                $(".advgb-tabs-block").tabs();
-            });');
+                 $(".advgb-tab a:not(.ui-tabs-anchor)").unbind("click");
+                 $(".advgb-tabs-block").tabs();
+             });');
         }
 
         if (strpos($content, 'advgb-tabs-wrapper') !== false) {
@@ -4238,7 +4606,48 @@ float: left;'
         $style_html = '';
         $blockName = $block['blockName'];
         $blockAttrs = $block['attrs'];
+        $availableBlocks = array(
+            'advgb/adv-tabs',
+            'advgb/adv-tab',
+            'advgb/columns',
+            'advgb/column',
+            'advgb/image',
+            'advgb/icon',
+            'advgb/accordions',
+            'advgb/accordion-item',
+            'advgb/table',
+            'advgb/infobox',
+            'advgb/button',
+            'advgb/login-form',
+            'advgb/count-up',
+            'advgb/summary',
+            'advgb/contact-form',
+            'advgb/images-slider',
+            'advgb/map',
+            'advgb/newsletter',
+            'advgb/testimonial',
+            'advgb/list',
+            'advgb/video',
+            'advgb/recent-posts',
+            'advgb/search-bar',
+            'advgb/social-links',
+            'advgb/woo-products',
+            'advgb/tabs'
+        );
         if ($blockName) {
+            if (in_array($blockName, $availableBlocks)) {
+                if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true) {
+                    wp_enqueue_style(
+                        'advgb_blocks_styles',
+                        plugins_url('assets/css/blocks_styles/blocks.css', dirname(__FILE__))
+                    );
+                } else {
+                    wp_enqueue_style(
+                        'advgb_blocks_styles_min',
+                        plugins_url('assets/css/blocks_styles/blocks.min.css', dirname(__FILE__))
+                    );
+                }
+            }
             if ($blockName === 'advgb/list') {
                 $block_class    = $blockAttrs['id'];
                 $font_size      = isset($blockAttrs['fontSize']) ? intval($blockAttrs['fontSize']) : 16;
@@ -4345,6 +4754,14 @@ float: left;'
                 $style_html .= isset($blockAttrs['gutter']) && $blockAttrs['gutter'] !== '0' ? 'padding-right: '.$blockAttrs['gutter'] / 2 .'px;' : '';
                 $style_html .= '}';
 
+                if ($blockName === 'advgb/column') {
+                    $childColID = $blockAttrs['colId'];
+                    $childColWidth = $blockAttrs['width'];
+                    if ($childColWidth !== 0) {
+                        $style_html .= '#' . $childColID . '{width: ' . $childColWidth . '%;}';
+                    }
+                }
+
                 // Styles for tablet
                 $style_html .= '@media screen and (max-width: 1023px) {';
                 $style_html .=  '#'. $colID . '{';
@@ -4435,19 +4852,238 @@ float: left;'
                     $style_html .= '}';
                 }
             } elseif ($blockName === 'advgb/adv-tabs') {
-                $block_id    = $blockAttrs['pid'];
+                $block_class    = isset($blockAttrs['pid']) ? $blockAttrs['pid'] : 'wp-block-advgb-adv-tabs';
                 $active_tab_bg_color  = isset($blockAttrs['activeTabBgColor']) ? $blockAttrs['activeTabBgColor'] : '#5954d6';
                 $active_tab_text_color  = isset($blockAttrs['activeTabTextColor']) ? $blockAttrs['activeTabTextColor'] : '#fff';
 
-                $style_html .= '#'. $block_id . ' li.advgb-tab.ui-tabs-active{';
+                $style_html .= '.'. $block_class . ' ul.advgb-tabs-panel li.advgb-tab.advgb-tab-active {';
                 $style_html .= 'background-color:'.$active_tab_bg_color.' !important;';
                 $style_html .= 'color:'.$active_tab_text_color.' !important;';
                 $style_html .= '}';
 
-                $style_html .= '#'. $block_id . ' .advgb-tab-body-header.header-active{';
+                $style_html .= '#'. $block_class . ' .advgb-tab-body-header.header-active, .'. $block_class . ' .advgb-tab-body-header.header-active{';
                 $style_html .= 'background-color:'.$active_tab_bg_color.' !important;';
                 $style_html .= 'color:'.$active_tab_text_color.' !important;';
                 $style_html .= '}';
+            } elseif ($blockName === 'advgb/icon') {
+                wp_enqueue_style('material_icon_font');
+                $block_id = $blockAttrs['blockIDX'];
+                $i = 0;
+                $default_items = array();
+                $item = array(
+                    'icon' => 'info',
+                    'iconType' => 'material',
+                    'size' => 120,
+                    'color' => '#111111',
+                    'style' => 'default',
+                    'bgColor' => '',
+                    'borderColor' => '#111',
+                    'borderSize' => 2,
+                    'borderRadius' => 0,
+                    'paddingTop' => 20,
+                    'paddingBottom' => 20,
+                    'paddingLeft' => 20,
+                    'paddingRight' => 20,
+                    'marginTop' => 0,
+                    'marginBottom' => 0,
+                    'marginLeft' => 0,
+                    'marginRight' => 0,
+                    'paddingUnit' => 'px',
+                    'marginUnit' => 'px',
+                    'link' => '',
+                    'linkTarget' => '_self',
+                    'title' => ''
+                );
+                while ($i < 10) {
+                    array_push($default_items, $item);
+                    $i++;
+                }
+                $items = !isset($blockAttrs['items']) ? $default_items : $blockAttrs['items'];
+                $text_align = !isset($blockAttrs['tAlign']) ? 'center' : $blockAttrs['tAlign'];
+
+                $style_html .= '#' . $block_id . ' .advgb-icons, .' . $block_id . ' .advgb-icons {';
+                $style_html .= 'text-align: ' . $text_align . ';';
+                $style_html .= '}';
+
+                foreach ($items as $k => $item) {
+                    $style_html .= '#' . $block_id . ' .advgb-item-'.$k.' .advgb-icon, .' . $block_id . ' .advgb-item-'.$k.' .advgb-icon {';
+                    $style_html .= 'display: flex;';
+                    $style_html .= 'align-items:center;';
+
+                    $style_html .= 'margin-top: ' . $item['marginTop'] . $item['marginUnit'] . ';';
+                    $style_html .= 'margin-bottom: ' . $item['marginBottom'] . $item['marginUnit'] . ';';
+                    $style_html .= 'margin-left: ' . $item['marginLeft'] . $item['marginUnit'] . ';';
+                    $style_html .= 'margin-right: ' . $item['marginRight'] . $item['marginUnit'] . ';';
+
+                    $style_html .= $item['style'] === 'default' ? 'padding-top: 0;' : 'padding-top: ' . $item['paddingTop'] . $item['paddingUnit'] . ';';
+                    $style_html .= $item['style'] === 'default' ? 'padding-bottom: 0;' : 'padding-bottom: ' . $item['paddingBottom'] . $item['paddingUnit'] . ';';
+                    $style_html .= $item['style'] === 'default' ? 'padding-left: 0;' : 'padding-left: ' . $item['paddingLeft'] . $item['paddingUnit'] . ';';
+                    $style_html .= $item['style'] === 'default' ? 'padding-right: 0;' : 'padding-right: ' . $item['paddingRight'] . $item['paddingUnit'] . ';';
+
+                    $style_html .= $item['style'] === 'default' ? 'border-width: 0;' : 'border-width: ' . $item['borderSize'] . 'px;';
+                    $style_html .= 'border-style: solid;';
+                    $style_html .= 'border-color: ' . $item['borderColor'] . ';';
+                    $style_html .= 'border-radius: ' . $item['borderRadius'] . '%;';
+
+                    $style_html .= isset($item['bgColor']) ? 'background-color: ' . $item['bgColor'] . ';' : 'background-color: transparent;';
+
+                    $style_html .= '}';
+
+                    $style_html .= '#' . $block_id . ' .advgb-item-'.$k.' .advgb-icon > i, .' . $block_id . ' .advgb-item-'.$k.' .advgb-icon > i{';
+                    $style_html .= 'font-size: ' . $item['size'] . 'px;';
+                    $style_html .= 'color: ' . $item['color'] . ';';
+                    $style_html .= '}';
+                }
+            } elseif ($blockName === 'advgb/infobox') {
+                wp_enqueue_style('material_icon_font');
+                $block_id = $blockAttrs['blockIDX'];
+
+                $container_bg = isset($blockAttrs['containerBackground']) ? $blockAttrs['containerBackground'] : '#f5f5f5';
+
+                $container_padding_unit = isset($blockAttrs['containerPaddingUnit']) ? $blockAttrs['containerPaddingUnit'] : 'px';
+                $container_padding = '';
+                $container_padding .= isset($blockAttrs['containerPaddingTop']) ? $blockAttrs['containerPaddingTop'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+                $container_padding .= isset($blockAttrs['containerPaddingRight']) ? $blockAttrs['containerPaddingRight'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+                $container_padding .= isset($blockAttrs['containerPaddingBottom']) ? $blockAttrs['containerPaddingBottom'] . $container_padding_unit . ' ' : '20' . $container_padding_unit . ' ';
+                $container_padding .= isset($blockAttrs['containerPaddingLeft']) ? $blockAttrs['containerPaddingLeft'] . $container_padding_unit : '20' . $container_padding_unit;
+
+                $container_border = '';
+                $container_border .= isset($blockAttrs['containerBorderWidth']) ? $blockAttrs['containerBorderWidth'] . 'px ' : '0px ';
+                $container_border .= 'solid ';
+                $container_border .= isset($blockAttrs['containerBorderBackground']) ? $blockAttrs['containerBorderBackground'] : '#e8e8e8 ';
+
+                $container_border_radius = '';
+                $container_border_radius .= isset($blockAttrs['containerBorderRadius']) ? $blockAttrs['containerBorderRadius'] : 0;
+
+                $style_html .= '#' . $block_id . ', .' . $block_id . ' {';
+                $style_html .= 'background-color: ' . $container_bg . ';';
+                $style_html .= 'padding: ' . $container_padding . ';';
+                $style_html .= 'border: ' . $container_border . ';';
+                $style_html .= 'border-radius: ' . $container_border_radius . 'px;';
+                $style_html .= '}'; //end container css
+
+                $icon_background_color = isset($blockAttrs['iconBackground']) ? $blockAttrs['iconBackground'] : '#f5f5f5';
+
+                $icon_padding = '';
+                $icon_padding_unit = isset($blockAttrs['iconPaddingUnit']) ? $blockAttrs['iconPaddingUnit'] : 'px';
+                $icon_padding .= isset($blockAttrs['iconPaddingTop']) ? $blockAttrs['iconPaddingTop'] . $icon_padding_unit . ' ' : '0 ';
+                $icon_padding .= isset($blockAttrs['iconPaddingRight']) ? $blockAttrs['iconPaddingRight'] . $icon_padding_unit . ' ' : '0 ';
+                $icon_padding .= isset($blockAttrs['iconPaddingBottom']) ? $blockAttrs['iconPaddingBottom'] . $icon_padding_unit . ' ' : '0 ';
+                $icon_padding .= isset($blockAttrs['iconPaddingLeft']) ? $blockAttrs['iconPaddingLeft'] . $icon_padding_unit : '0';
+                if ($icon_padding === '0 0 0 0') {
+                    $icon_padding = 0;
+                }
+
+                $icon_margin = '';
+                $icon_margin_unit = isset($blockAttrs['iconMarginUnit']) ? $blockAttrs['iconMarginUnit'] : 'px';
+                $icon_margin .= isset($blockAttrs['iconMarginTop']) ? $blockAttrs['iconMarginTop'] . $icon_margin_unit . ' ' : '0 ';
+                $icon_margin .= isset($blockAttrs['iconMarginRight']) ? $blockAttrs['iconMarginRight'] . $icon_margin_unit . ' ' : '0 ';
+                $icon_margin .= isset($blockAttrs['iconMarginBottom']) ? $blockAttrs['iconMarginBottom'] . $icon_margin_unit . ' ' : '0 ';
+                $icon_margin .= isset($blockAttrs['iconMarginLeft']) ? $blockAttrs['iconMarginLeft'] . $icon_margin_unit : '0';
+                if ($icon_margin === '0 0 0 0') {
+                    $icon_margin = 0;
+                }
+
+                $icon_border = '';
+                $icon_border .= isset($blockAttrs['iconBorderWidth']) ? $blockAttrs['iconBorderWidth'] . 'px ' : '0px ';
+                $icon_border .= 'solid ';
+                $icon_border .= isset($blockAttrs['iconBorderBackground']) ? $blockAttrs['iconBorderBackground'] : '#e8e8e8 ';
+
+                $icon_border_radius = '';
+                $icon_border_radius .= isset($blockAttrs['iconBorderRadius']) ? $blockAttrs['iconBorderRadius'] : 0;
+
+                $style_html .= '#' . $block_id . ' .advgb-infobox-icon-container, .' . $block_id . ' .advgb-infobox-icon-container {';
+                $style_html .= 'background-color: ' . $icon_background_color . ';';
+                $style_html .= 'padding: ' . $icon_padding . ';';
+                $style_html .= 'margin: ' . $icon_margin . ';';
+                $style_html .= 'border: ' . $icon_border . ';';
+                $style_html .= 'border-radius: ' . $icon_border_radius . 'px;';
+                $style_html .= '}';
+
+                $icon_color = isset($blockAttrs['iconColor']) ? $blockAttrs['iconColor'] : '#333';
+                $icon_size = isset($blockAttrs['iconSize']) ? $blockAttrs['iconSize'] : '70';
+                $icon_size_unit = isset($blockAttrs['iconSizeUnit']) ? $blockAttrs['iconSizeUnit'] : 'px';
+                $style_html .= '#' . $block_id . ' .advgb-infobox-icon-container i, .' . $block_id . ' .advgb-infobox-icon-container i {';
+                $style_html .= 'color: ' . $icon_color . ';';
+                $style_html .= 'font-size: ' . $icon_size . $icon_size_unit . ';';
+                $style_html .= 'display: block;';
+                $style_html .= '}'; //end icon style
+
+                $title_color = isset($blockAttrs['titleColor']) ? $blockAttrs['titleColor'] : '#333';
+
+                $title_padding = '';
+                $title_padding_unit = isset($blockAttrs['titlePaddingUnit']) ? $blockAttrs['titlePaddingUnit'] : 'px';
+                $title_padding .= isset($blockAttrs['titlePaddingTop']) ? $blockAttrs['titlePaddingTop'] . $title_padding_unit . ' ' : '0 ';
+                $title_padding .= isset($blockAttrs['titlePaddingRight']) ? $blockAttrs['titlePaddingRight'] . $title_padding_unit . ' ' : '0 ';
+                $title_padding .= isset($blockAttrs['titlePaddingBottom']) ? $blockAttrs['titlePaddingBottom'] . $title_padding_unit . ' ' : '0 ';
+                $title_padding .= isset($blockAttrs['titlePaddingLeft']) ? $blockAttrs['titlePaddingLeft'] . $title_padding_unit : '0';
+                if ($title_padding === '0 0 0 0') {
+                    $title_padding = 0;
+                }
+
+                $title_margin = '';
+                $title_margin_unit = isset($blockAttrs['titleMarginUnit']) ? $blockAttrs['titleMarginUnit'] : 'px';
+                $title_margin .= isset($blockAttrs['titleMarginTop']) ? $blockAttrs['titleMarginTop'] . $title_margin_unit . ' ' : '5' . $title_margin_unit . ' ';
+                $title_margin .= isset($blockAttrs['titleMarginRight']) ? $blockAttrs['titleMarginRight'] . $title_margin_unit . ' ' : '0 ';
+                $title_margin .= isset($blockAttrs['titleMarginBottom']) ? $blockAttrs['titleMarginBottom'] . $title_margin_unit . ' ' : '10' . $title_margin_unit . ' ';
+                $title_margin .= isset($blockAttrs['titleMarginLeft']) ? $blockAttrs['titleMarginLeft'] . $title_margin_unit : '0';
+                if ($title_margin === '0 0 0 0') {
+                    $title_margin = 0;
+                }
+
+                $title_size_unit = isset($blockAttrs['titleSizeUnit']) ? $blockAttrs['titleSizeUnit'] : 'px';
+                $title_lh_unit = isset($blockAttrs['titleLineHeightUnit']) ? $blockAttrs['titleLineHeightUnit'] : 'px';
+                $style_html .= '#' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-title, .' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-title {';
+                $style_html .= 'color: ' . $title_color . ';';
+                $style_html .= 'padding: ' . $title_padding . ';';
+                $style_html .= 'margin: ' . $title_margin . ';';
+                if (isset($blockAttrs['titleSize'])) {
+                    $style_html .= 'font-size: ' . $blockAttrs['titleSize'] . $title_size_unit . ';';
+                }
+                if (isset($blockAttrs['titleLineHeight'])) {
+                    $style_html .= 'line-height: ' . $blockAttrs['titleLineHeight'] . $title_lh_unit . ';';
+                }
+                $style_html .= 'white-space: pre-wrap;';
+                $style_html .= '}'; //end title style
+
+                $text_color = isset($blockAttrs['textColor']) ? $blockAttrs['textColor'] : '#333';
+
+                $text_padding = '';
+                $text_padding_unit = isset($blockAttrs['textPaddingUnit']) ? $blockAttrs['textPaddingUnit'] : 'px';
+                $text_padding .= isset($blockAttrs['textPaddingTop']) ? $blockAttrs['textPaddingTop'] . $text_padding_unit . ' ' : '0 ';
+                $text_padding .= isset($blockAttrs['textPaddingRight']) ? $blockAttrs['textPaddingRight'] . $text_padding_unit . ' ' : '0 ';
+                $text_padding .= isset($blockAttrs['textPaddingBottom']) ? $blockAttrs['textPaddingBottom'] . $text_padding_unit . ' ' : '0 ';
+                $text_padding .= isset($blockAttrs['textPaddingLeft']) ? $blockAttrs['textPaddingLeft'] . $text_padding_unit : '0';
+                if ($text_padding === '0 0 0 0') {
+                    $text_padding = 0;
+                }
+
+                $text_margin = '';
+                $text_margin_unit = isset($blockAttrs['textMarginUnit']) ? $blockAttrs['textMarginUnit'] : 'px';
+                $text_margin .= isset($blockAttrs['textMarginTop']) ? $blockAttrs['textMarginTop'] . $text_margin_unit . ' ' : '0 ';
+                $text_margin .= isset($blockAttrs['textMarginRight']) ? $blockAttrs['textMarginRight'] . $text_margin_unit . ' ' : '0 ';
+                $text_margin .= isset($blockAttrs['textMarginBottom']) ? $blockAttrs['textMarginBottom'] . $text_margin_unit . ' ' : '0 ';
+                $text_margin .= isset($blockAttrs['textMarginLeft']) ? $blockAttrs['textMarginLeft'] . $text_margin_unit : '0';
+                if ($text_margin === '0 0 0 0') {
+                    $text_margin = 0;
+                }
+
+                $text_size_unit = isset($blockAttrs['textSizeUnit']) ? $blockAttrs['textSizeUnit'] : 'px';
+                $text_lh_unit = isset($blockAttrs['textLineHeightUnit']) ? $blockAttrs['textLineHeightUnit'] : 'px';
+                $style_html .= '#' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-text, .' . $block_id . ' .advgb-infobox-textcontent .advgb-infobox-text {';
+                $style_html .= 'color: ' . $text_color . ';';
+                $style_html .= 'padding: ' . $text_padding . ';';
+                $style_html .= 'margin: ' . $text_margin . ';';
+                if (isset($blockAttrs['textSize'])) {
+                    $style_html .= 'font-size: ' . $blockAttrs['textSize'] . $text_size_unit . ';';
+                }
+                if (isset($blockAttrs['textLineHeight'])) {
+                    $style_html .= 'line-height: ' . $blockAttrs['textLineHeight'] . $text_lh_unit . ';';
+                }
+                $style_html .= 'white-space: pre-wrap;';
+                $style_html .= '}'; //end text style
+            } elseif ($blockName === 'advgb/count-up') {
+                wp_enqueue_script('advgb_blocks_frontend_scripts');
             }
         }
 

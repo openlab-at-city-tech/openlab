@@ -1,16 +1,16 @@
 <?php
 /*
 Plugin Name: Require Post Category
-Plugin URI: https://www.warpconduit.net/wordpress-plugins/require-post-category/
-Description: Require users to choose a post category before saving a draft or publishing.
-Version: 1.1
+Plugin URI: https://wordpress.org/plugins/require-post-category/
+Description: Require users to choose a post category before updating or publishing a post.
+Version: 2.0.3
 Author: Josh Hartman
 Author URI: https://www.warpconduit.net
 License: GPL2
 Text Domain: require-post-category
 */
 /*
-    Copyright 2018 Josh Hartman
+    Copyright 2020 Josh Hartman
     
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -38,6 +38,9 @@ function rpc_admin_enqueue_scripts_func( $hook ) {
 		return;
 	}
 	global $post_type;
+
+	$rpc_is_gutenberg_active = rpc_is_gutenberg_active();
+
 	$default_post_types = array(
 		'post' => array(
 			'category' => array(
@@ -87,25 +90,58 @@ function rpc_admin_enqueue_scripts_func( $hook ) {
 			continue;
 		}
 
+		$taxonomy_object = get_taxonomy( $taxonomy );
+		$taxonomy_labels = get_taxonomy_labels( $taxonomy_object );
+
 		$post_types[ $post_type ][ $taxonomy ]['type'] = $config['type'] = ( is_taxonomy_hierarchical( $taxonomy ) ? 'hierarchical' : 'non-hierarchical' );
 
 		if ( ! isset( $config['message'] ) || $taxonomy === $config ) {
-			$taxonomy_labels   = get_taxonomy_labels( get_taxonomy( $taxonomy ) );
 			$post_type_labels  = get_post_type_labels( get_post_type_object( $post_type ) );
 			$config['message'] = "Please choose at least one {$taxonomy_labels->singular_name} before publishing this {$post_type_labels->singular_name}.";
 		}
 
 		$post_types[ $post_type ][ $taxonomy ]['message'] = __( $config['message'], 'require-post-category' );
+
+		if ( $rpc_is_gutenberg_active && !empty($taxonomy_object->rest_base) && $taxonomy !== $taxonomy_object->rest_base ) {
+			$post_types[ $post_type ][ $taxonomy_object->rest_base ] = $post_types[ $post_type ][ $taxonomy ];
+			unset( $post_types[ $post_type ][ $taxonomy ] );
+		}
 	}
 
 	if ( empty( $post_types[ $post_type ] ) ) {
 		return;
 	}
 
-	wp_enqueue_script( 'jquery-rpc', plugin_dir_url( __FILE__ ) . 'require-post-category.js', array( 'jquery' ), false, true );
+	if ( $rpc_is_gutenberg_active ) {
+		wp_enqueue_script( 'jquery-rpc', plugin_dir_url( __FILE__ ) . 'require-post-category-gutenberg.js', array(
+			'jquery', 'wp-data', 'wp-editor', 'wp-edit-post'
+		));
+	} else {
+		wp_enqueue_script( 'jquery-rpc', plugin_dir_url( __FILE__ ) . 'require-post-category.js', array( 'jquery' ), false, true );
+	}
+
 	wp_localize_script( 'jquery-rpc', 'require_post_category', array(
 			'taxonomies' => $post_types[ $post_type ],
 			'error'      => false
 		)
 	);
+
+}
+
+function rpc_is_gutenberg_active() {
+	if ( function_exists( 'is_gutenberg_page' ) &&
+	     is_gutenberg_page()
+	) {
+		return true;
+	}
+
+	$current_screen = get_current_screen();
+
+	if ( method_exists( $current_screen, 'is_block_editor' ) &&
+	     $current_screen->is_block_editor()
+	) {
+		return true;
+	}
+	
+	return false;
 }

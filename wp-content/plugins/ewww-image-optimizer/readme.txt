@@ -1,11 +1,11 @@
 === EWWW Image Optimizer ===
 Contributors: nosilver4u
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MKMQKCBFFG3WW
+Donate link: https://ewww.io/donate/
 Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, seo, scale
 Requires at least: 5.0
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: 5.2.0
+Stable tag: 5.2.2
 License: GPLv3
 
 Speed up your website to better connect with your visitors. Properly compress and size/scale images. Includes lazy load and WebP convert.
@@ -172,6 +172,19 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 
 * Feature requests can be viewed and submitted at https://github.com/nosilver4u/ewww-image-optimizer/labels/enhancement
 * If you would like to help translate this plugin in your language, get started here: https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/
+
+= 5.2.2
+* added: automatic plan upgrade detection
+* changed: better compatibility with other implementations of "native lazy load"
+* updated: lazysizes.js to version 5.2
+* fixed: custom domain for Easy IO prevents auto-scaling
+* fixed: full-width background images auto-scaled due to scroll bars
+* fixed: overrides for array-style exclusions not being applied
+
+= 5.2.1 =
+* changed: WebP rewrite rules hidden for Cloudflare-protected sites
+* fixed: Smart Re-optimize not working for PDF files
+* fixed: Easy IO detects wrong domain when using separate domains for site and content
 
 = 5.2.0 =
 * added: Lazy Load, JS WebP, and Easy IO support background images on link elements

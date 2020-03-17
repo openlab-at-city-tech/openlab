@@ -391,6 +391,29 @@ jQuery(document).ready(function($){
         }
     });
 
+    var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
+    var eventer = window[eventMethod];
+    var messageEvent = (eventMethod == 'attachEvent') ? 'onmessage' : 'message';
+
+    // Listen to message from jutranslation window
+    eventer(messageEvent, function (e) {
+        var res = e.data;
+        if(typeof res != 'undefined' && typeof res.type != 'undefined' && res.type === 'translation_login'){
+            $.ajax({
+                url : jutranslation.base_url + 'task=jutranslation.saveJuToken',
+                type: 'POST',
+                data: {
+                    action : jutranslation.ajax_action,
+                    token: res.token,
+                    wp_nonce: jutranslation.token
+                },
+                success: function () {
+
+                }
+            });
+        }
+    }, false);
+
     function doTable(datas, options) {
         // DOM element containing the generated content
         var $_content;

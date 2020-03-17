@@ -30,6 +30,8 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         </svg>
     );
 
+    const previewImageData = 'data:image/png;base64,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';
+
     class LoginFormEdit extends Component {
         constructor() {
             super( ...arguments );
@@ -84,6 +86,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                 submitColor, submitBgColor, submitRadius, submitPosition, submitButtonId,
                 submitHoverColor, submitHoverBgColor, submitHoverShadow, submitHoverShadowH, submitHoverShadowV,
                 submitHoverShadowBlur, submitHoverShadowSpread, submitHoverOpacity, submitHoverTranSpeed,
+                isPreview,
             } = attributes;
 
             const logoElm = (
@@ -460,6 +463,9 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             );
 
             return (
+                isPreview ?
+                    <img alt={__('Login/Register Form', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
+                    :
                 <Fragment>
                     <BlockControls>
                         <Toolbar>
@@ -947,6 +953,10 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
             type: 'boolean',
             default: false,
         },
+        isPreview: {
+            type: 'boolean',
+            default: false,
+        },
     };
 
     registerBlockType( 'advgb/login-form', {
@@ -959,6 +969,11 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         category: 'advgb-category',
         keywords: [ __( 'accordion', 'advanced-gutenberg' ), __( 'list', 'advanced-gutenberg' ), __( 'faq', 'advanced-gutenberg' ) ],
         attributes: blockAttrs,
+        example: {
+            attributes: {
+                isPreview: true
+            },
+        },
         edit: LoginFormEdit,
         save: function ( { attributes } ) {
             const {

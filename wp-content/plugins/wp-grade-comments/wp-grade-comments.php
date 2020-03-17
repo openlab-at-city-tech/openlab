@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.3.1
+Version: 1.3.2
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -460,3 +460,26 @@ function olgc_prevent_private_comments_from_creating_bp_activity_items_on_transi
 	remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
 }
 add_action( 'transition_comment_status', 'olgc_prevent_private_comments_from_creating_bp_activity_items_on_transition', 0, 3 );
+
+/**
+ * Add custom classes for private and grade comments.
+ *
+ * @since 1.4.0
+ *
+ * @param string[]  $classes    An array of comment classes.
+ * @param string    $class      A comma-separated list of additional classes added to the list.
+ * @param int       $comment_id The comment id.
+ * @return string[] $classes    An array of classes.
+ */
+function olgc_add_comment_classes( $classes, $class, $comment_id ) {
+	if ( get_comment_meta( $comment_id, 'olgc_is_private', true ) ) {
+		$classes[] = 'comment-is-private';
+	}
+
+	if ( get_comment_meta( $comment_id, 'olgc_grade', true ) ) {
+		$classes[] = 'comment-has-grade';
+	}
+
+	return $classes;
+}
+add_filter( 'comment_class', 'olgc_add_comment_classes', 10, 3 );

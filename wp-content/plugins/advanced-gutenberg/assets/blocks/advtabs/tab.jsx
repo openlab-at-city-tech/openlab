@@ -14,6 +14,11 @@
         </svg>
     );
 
+    /**
+     * This allows for checking to see if the block needs to generate a new ID.
+     */
+    const advgbTabsUniqueIDs = [];
+
     class TabItemEdit extends Component {
         constructor() {
             super( ...arguments );
@@ -40,37 +45,45 @@
         }
 
         componentDidMount() {
-            const { setAttributes, clientId } = this.props;
-            const { getBlockRootClientId, getBlockIndex, getBlockAttributes } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
-            const rootBlockId = getBlockRootClientId( clientId );
-            const rootBlockAttrs = getBlockAttributes(rootBlockId);
-            const { pid, tabHeaders } = rootBlockAttrs;
-            const blockIndex = getBlockIndex(clientId, rootBlockId);
+            const { attributes, setAttributes } = this.props;
+            const {id, tabHeaders} = attributes;
 
-            setAttributes( {
-                pid: `${pid}-${blockIndex}`,
-                header: tabHeaders[blockIndex],
-            } )
+            if ( ! this.props.attributes.uniqueID ) {
+                this.props.setAttributes( {
+                    uniqueID: '_' + this.props.clientId.substr( 2, 9 ),
+                } );
+                advgbTabsUniqueIDs.push( '_' + this.props.clientId.substr( 2, 9 ) );
+            } else if ( advgbTabsUniqueIDs.includes( this.props.attributes.uniqueID ) ) {
+                this.props.setAttributes( {
+                    uniqueID: '_' + this.props.clientId.substr( 2, 9 ),
+                } );
+                advgbTabsUniqueIDs.push( '_' + this.props.clientId.substr( 2, 9 ) );
+            } else {
+                advgbTabsUniqueIDs.push( this.props.attributes.uniqueID );
+            }
+
+            setAttributes({
+                header: tabHeaders[id]
+            })
         }
 
         render() {
-            const { attributes, clientId } = this.props;
-            const {tabActive, pid} = attributes;
+            const { attributes } = this.props;
+            const {tabActive, id, uniqueID} = attributes;
 
-            const { getBlockRootClientId, getBlockIndex } = !wp.blockEditor ? select( 'core/editor' ) : select( 'core/block-editor' );
-            const rootBlockId = getBlockRootClientId( clientId );
-            const blockIndex = getBlockIndex(clientId, rootBlockId);
-
+            const tabClassName = [
+                `advgb-tab-${uniqueID}`,
+                'advgb-tab-body'
+            ].filter(Boolean).join(' ');
             return (
                 <Fragment>
-                    <div className="advgb-tab-body"
-                         id={pid}
-                         style={ {
-                             display: blockIndex === tabActive ? 'block' : 'none',
-                         } }
+                    <div className={tabClassName}
+                         style={{
+                             display: id === tabActive ? 'block' : 'none',
+                         }}
                     >
                         <InnerBlocks
-                            template={ [[ 'core/paragraph' ]] }
+                            template={[ [ 'core/paragraph' ] ]}
                             templateLock={false}
                         />
                     </div>
@@ -88,6 +101,10 @@
         },
         category: 'advgb-category',
         attributes: {
+            id: {
+                type: 'number',
+                default: 0
+            },
             pid: {
                 type: 'string',
             },
@@ -101,23 +118,86 @@
             changed: {
                 type: 'boolean',
                 default: false,
+            },
+            tabHeaders: {
+                type: 'array',
+                default: [
+                    __( 'Tab 1', 'advanced-gutenberg' ),
+                    __( 'Tab 2', 'advanced-gutenberg' ),
+                    __( 'Tab 3', 'advanced-gutenberg' ),
+                ]
+            },
+            uniqueID: {
+                type: 'string',
+                default: '',
             }
+        },
+        supports: {
+            reusable: false,
         },
         keywords: [ __( 'tab', 'advanced-gutenberg' ) ],
         edit: TabItemEdit,
         save: function( { attributes } ) {
-            const {pid, header} = attributes;
+            const {id, uniqueID, header} = attributes;
+
+            const tabClassName = [
+                `advgb-tab-${uniqueID}`,
+                'advgb-tab-body'
+            ].filter(Boolean).join(' ');
 
             return (
                 <div className="advgb-tab-body-container">
                     <div className="advgb-tab-body-header">{header}</div>
-                    <div className="advgb-tab-body" id={pid}>
+                    <div className={tabClassName} aria-labelledby={`advgb-tabs-tab${id}`}>
                         <InnerBlocks.Content />
                     </div>
                 </div>
             );
-        }
+        },
+        deprecated: [
+            {
+                attributes: {
+                    pid: {
+                        type: 'string',
+                    },
+                    header: {
+                        type: 'html',
+                    },
+                    tabActive: {
+                        type: 'number',
+                        default: 0,
+                    },
+                    changed: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    tabHeaders: {
+                        type: 'array',
+                        default: [
+                            __( 'Tab 1', 'advanced-gutenberg' ),
+                            __( 'Tab 2', 'advanced-gutenberg' ),
+                            __( 'Tab 3', 'advanced-gutenberg' ),
+                        ]
+                    },
+                    uniqueID: {
+                        type: 'string',
+                        default: '',
+                    }
+                },
+                save: function( { attributes } ) {
+                    const {pid, header} = attributes;
 
+                    return (
+                        <div className="advgb-tab-body-container">
+                            <div className="advgb-tab-body-header">{header}</div>
+                            <div className="advgb-tab-body" id={pid}>
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                }
+            }
+        ]
     });
 
 } ) ( wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components );
