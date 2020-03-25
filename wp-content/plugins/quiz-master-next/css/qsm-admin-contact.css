@@ -1,0 +1,39 @@
+.contact-form {
+	background-color: #0d97d8;
+    box-sizing: border-box;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.contact-form-field {
+  padding: 25px 10px 10px;
+  margin: 15px 10px;
+  background: #fff;
+  border: 5px solid #1DD969;
+}
+
+.contact-form-field.new {
+  background: #ffff66;
+}
+
+.contact-form-field.deleting {
+  background: #ff6666;
+}
+
+.contact-form-group {
+  margin: 0px 0px 15px;
+}
+
+.contact-form-label {
+  font-weight: bold;
+  margin-right: 10px;
+  display: block;
+}
+
+.contact-form-control {
+  height: 35px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 100%;
+}
