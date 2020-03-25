@@ -12,6 +12,7 @@ function lint( $dir = 'C:\dev\\' )
 	static $failed = array();
 
 	$excluded_dirs = [
+		'/vendor/',
 		'/wp-content/blogs.dir',
 		'/wp-content/uploads',
 		'/wp-content/plugins/buddypress/bp-forums/bbpress',
