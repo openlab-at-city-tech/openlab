@@ -1,0 +1,33 @@
+select.ays_quiz_maker_block_select {
+    text-align: center;
+    font-size: 18px;
+    width: 100%;
+    height: auto;
+    padding: 5px;
+}
+
+.components-panel__header.edit-post-sidebar-header button[aria-label="Unpin from toolbar"] {
+    display: none;
+}
+
+.quiz-maker-sidebar-content select {
+    width: 95%;
+}
+
+.quiz-maker-sidebar-content > div > div {
+    text-align: center;
+}
+
+.quiz-maker-sidebar-content label {
+    width: 100%;
+    text-align: left;
+    padding: 4px;
+}
+
+div[data-type="quiz-maker/quiz"] {
+    
+}
+
+.ays_quiz_maker_block_container {
+    box-sizing: border-box;
+}

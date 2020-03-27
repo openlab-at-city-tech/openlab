@@ -2447,7 +2447,7 @@ function openlab_flush_rewrite_rules( $blog_id ) {
 	update_option( 'openlab_rewrite_rules_flushed', 1 );
 	restore_current_blog();
 }
-add_action( 'wpmu_new_blog', 'openlab_flush_rewrite_rules', 9999 );
+//add_action( 'wpmu_new_blog', 'openlab_flush_rewrite_rules', 9999 );
 
 /**
  * Lazyloading rewrite rules repairer.
@@ -2691,7 +2691,7 @@ add_action(
 add_action(
 	'widgets_init',
 	function() {
-		unregister_widget( 'wp_accessibility_toolbar' );
+		unregister_widget( 'Wp_Accessibility_Toolbar' );
 	},
 	20
 );

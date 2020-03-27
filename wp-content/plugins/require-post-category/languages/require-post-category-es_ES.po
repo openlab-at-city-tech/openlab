@@ -14,5 +14,5 @@ msgstr ""
 "X-Generator: Poedit 1.5.5\n"
 
 #: require-post-category.php:44
-msgid "Please select a category before publishing this post."
+msgid "Please rpc_select a category before publishing this post."
 msgstr "Por favor seleccione una categoría antes de publicar este post"
