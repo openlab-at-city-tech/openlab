@@ -1,4 +1,4 @@
-define(["backbone"], function(Backbone) {
+define(["backbone", "jquery"], function(Backbone, $) {
 	var User = Backbone.Model.extend({
 		defaults: {
 			first_name: "john",
@@ -25,7 +25,7 @@ define(["backbone"], function(Backbone) {
 				ajaxurl + "?action=oplb_student_grades&nonce=" + oplbGradebook.nonce,
 				{ grade: grade, type: type, gbid: gbid, uid: uid },
 				function(data) {
-					Backbone.pubSub.trigger('editSuccess', data);
+					Backbone.pubSub.trigger("editSuccess", data);
 				},
 				"json"
 			).error(self.trigger("editError"));
