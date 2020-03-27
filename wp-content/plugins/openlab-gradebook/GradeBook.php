@@ -13,7 +13,6 @@
 //establishing some constants
 define("OPENLAB_GRADEBOOK_VERSION", "0.0.4");
 define("OPENLAB_GRADEBOOK_FEATURES_TRACKER", 0.3);
-define("OPLB_GRADEBOOK_STORAGE_SLUG", "zzoplb-gradebook-storagezz");
 
 /**
  * Legacy: includes database files, where most of the backend functionality lives
@@ -141,7 +140,6 @@ function enqueue_oplb_gradebook_scripts() {
 		'ajaxURL' => admin_url('admin-ajax.php'),
 		'depLocations' => oplb_gradebook_get_dep_locations(),
         'nonce' => wp_create_nonce('oplb_gradebook'),
-        'storagePage' => get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG),
 		'currentYear' => date('Y'),
 		'initName' => oplb_gradebook_gradebook_init_placeholder(),
 	));
@@ -354,48 +352,6 @@ function oplb_gradebook_custom_page($slug, $title) {
 }
 
 /**
- * Exclude custom pages from admin (so nobody messes with 'em)
- * @global type $pagenow
- * @global type $post_type
- * @param type $query
- * @return type
- */
-function oplb_gradebook_exclude_pages_from_admin($query) {
-
-    if (!is_admin())
-        return $query;
-
-    global $pagenow, $post_type;
-
-    if ($pagenow == 'edit.php' && $post_type == 'page') {
-
-        $csv_storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
-
-        $query->query_vars['post__not_in'] = array($csv_storage_page->ID);
-    }
-}
-
-add_filter('parse_query', 'oplb_gradebook_exclude_pages_from_admin');
-
-/**
- * Custom pages: remove link from admin bar
- * @global type $post
- * @global type $wp_admin_bar
- */
-function oplb_gradebook_remove_admin_bar_edit_link() {
-    global $post;
-
-    $exclusions = array(OPLB_GRADEBOOK_STORAGE_SLUG);
-
-    if ($post && in_array($post->post_name, $exclusions)) {
-        global $wp_admin_bar;
-        $wp_admin_bar->remove_menu('edit');
-    }
-}
-
-add_action('wp_before_admin_bar_render', 'oplb_gradebook_remove_admin_bar_edit_link');
-
-/**
  * Add param to modal upload to delineate type of upload
  * @todo: leverage this param to improve how upload differentiates between 
  * customized CSV upload and other types of uploads
@@ -426,40 +382,5 @@ $option = get_option('oplb_gradebook_features_tracker');
 
 //for legacy versions, add stoarge page
 if (!$option || floatval($option) < 0.3) {
-
-    oplb_gradebook_custom_page(OPLB_GRADEBOOK_STORAGE_SLUG, 'OpenLab Gradebook Storage');
     update_option('oplb_gradebook_features_tracker', OPENLAB_GRADEBOOK_FEATURES_TRACKER);
 }
-
-/**
- * Any custom storage pages we create need to be hidden from the fallback menu
- * @param array $args
- * @return type
- */
-function oplb_gradebook_wp_page_menu_args($args) {
-    $excludes = array();
-
-    $storage_page_obj = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
-    $excludes[] = $storage_page_obj->ID;
-    $args['exclude'] = implode(',', $excludes);
-
-    return $args;
-}
-
-add_filter('wp_page_menu_args', 'oplb_gradebook_wp_page_menu_args');
-
-/**
- * Add custom storage pages to wp_list_pages exclusions
- * Some menu fallbacks use wp_list_pages
- * @param type $exclude_array
- * @return type
- */
-function oplb_gradebook_wp_list_pages_excludes($exclude_array){
-    
-    $storage_page_obj = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
-    $exclude_array[] = $storage_page_obj->ID;
-    
-    return $exclude_array;
-}
-
-add_filter('wp_list_pages_excludes', 'oplb_gradebook_wp_list_pages_excludes');
