@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress v2.8 Google Maps for WordPress\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-15 14:26+0100\n"
-"PO-Revision-Date: 2013-01-15 17:52+0100\n"
 "Last-Translator: Michael Busch <busch@seo-traffic-guide.de>\n"
 "Language-Team: dewib <dewib@gmx.de>\n"
-"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2013-01-15 14:26+0100\n"
+"PO-Revision-Date: 2013-01-15 17:52+0100\n"
+"Language: de_DE\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Generator: Poedit 1.5.4\n"
@@ -36,27 +36,16 @@ msgid "Upgrade to MapPress Pro"
 msgstr "Upgrade auf MapPress Pro"
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:326
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"MapPress Datenbanktabellen fehlen. Bitte Plugin deaktivieren und erneut "
-"aktivieren zur Fehlerbehebung."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "MapPress Datenbanktabellen fehlen. Bitte Plugin deaktivieren und erneut aktivieren zur Fehlerbehebung."
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:331
-msgid ""
-"WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-"before using MapPress."
-msgstr ""
-"ACHTUNG: MapPress benötigt WordPress 3.2 oder höher. Bitte aktualisieren!"
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr "ACHTUNG: MapPress benötigt WordPress 3.2 oder höher. Bitte aktualisieren!"
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:336
-msgid ""
-"WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please "
-"deactivate or uninstall WP-Geo before using MapPress."
-msgstr ""
-"WARNUNG: MapPress ist nicht kompatibel mit dem WP-Geo Plugin. Vor der "
-"Nutzung von MapPress bitte WP-Geo deaktivieren oder entfernen."
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr "WARNUNG: MapPress ist nicht kompatibel mit dem WP-Geo Plugin. Vor der Nutzung von MapPress bitte WP-Geo deaktivieren oder entfernen."
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:529
 #: ../../mappress-google-maps-for-wordpress/templates/map_directions.php:6
@@ -72,12 +61,8 @@ msgid "One of the addresses could not be found."
 msgstr "Die Start- oder Zieladresse fehlt."
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:532
-msgid ""
-"Google cannot return directions between those addresses.  There is no route "
-"between them or the routing information is not available."
-msgstr ""
-"Google kann zu diesen Adressen keine Wegbeschreibung liefern. Es gibt keine "
-"Route zwischen ihnen oder es fehlen Routeninfos dazu."
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr "Google kann zu diesen Adressen keine Wegbeschreibung liefern. Es gibt keine Route zwischen ihnen oder es fehlen Routeninfos dazu."
 
 #: ../../mappress-google-maps-for-wordpress/mappress.php:533
 msgid "Unknown error, unable to return directions.  Status code = "
@@ -165,8 +150,7 @@ msgstr "Karte nicht gefunden"
 #: ../../mappress-google-maps-for-wordpress/mappress_map.php:196
 #: ../../mappress-google-maps-for-wordpress/mappress_map.php:202
 msgid "Internal error, your data has not been saved!"
-msgstr ""
-"Interner Fehler: Karte wurde nicht gefunden. Daten wurden nicht gespeichert! "
+msgstr "Interner Fehler: Karte wurde nicht gefunden. Daten wurden nicht gespeichert! "
 
 #: ../../mappress-google-maps-for-wordpress/mappress_map.php:427
 msgid "Edit"
@@ -391,10 +375,9 @@ msgid "language"
 msgstr "Sprache"
 
 #: ../../mappress-google-maps-for-wordpress/mappress_settings.php:277
-#, fuzzy, php-format
+#, fuzzy,php-format
 msgid "Use a specific %s for map controls and geocoding"
-msgstr ""
-"Bestimmte %s für Kartensteuerelemente verwenden (Standard: Browsersprache)"
+msgstr "Bestimmte %s für Kartensteuerelemente verwenden (Standard: Browsersprache)"
 
 #: ../../mappress-google-maps-for-wordpress/mappress_settings.php:285
 #: ../../mappress-google-maps-for-wordpress/mappress_settings.php:291
@@ -769,8 +752,9 @@ msgstr "Ort"
 
 #~ msgid "Internal error - unable to save map.  Your data has not been saved!"
 #~ msgstr ""
-#~ "Interner Fehler: Karte konnte nicht gesichert werden. Daten wurden nicht "
-#~ "gespeichert!"
+"\n"
+"Fehler: Karte konnte nicht gesichert werden. Daten wurden nicht \"\n"
+""
 
 #~ msgid "Marker list"
 #~ msgstr "Marker Liste"
@@ -794,18 +778,22 @@ msgstr "Ort"
 #~ msgstr "Größenänderung erzwingen"
 
 #~ msgid ""
-#~ "Allow your readers to change the map type (street, satellite, or hybrid)"
+"\n"
+"your readers to change the map type (street, satellite, or hybrid)\""
 #~ msgstr ""
-#~ "Betrachtern erlauben den Kartentyp zu ändern (Karte, Satellit, Hybrid)"
+"\n"
+"erlauben den Kartentyp zu ändern (Karte, Satellit, Hybrid)\""
 
 #~ msgid "Display the street view control \"peg man\""
 #~ msgstr "Street View Button \"Peg Man\" anzeigen"
 
 #~ msgid ""
-#~ "Select 'Google' if directions aren't displaying properly in your theme"
+"\n"
+"'Google' if directions aren't displaying properly in your theme\""
 #~ msgstr ""
-#~ "Wähle 'Google' wenn die Wegbeschreibung im Theme nicht korrekt "
-#~ "dargestellt wird"
+"\n"
+"'Google' wenn die Wegbeschreibung im Theme nicht korrekt \"\n"
+"wird\""
 
 #~ msgid "This setting requires %s."
 #~ msgstr "Diese Einstellung benötigt %s."
@@ -924,8 +912,9 @@ msgstr "Ort"
 
 #~ msgid "This setting requires %s.  Show a list of markers under each map."
 #~ msgstr ""
-#~ "Diese Einstellung benötigt %s.  Zeige eine Liste aller Marker unter jeder "
-#~ "Karte."
+"\n"
+"Einstellung benötigt %s.  Zeige eine Liste aller Marker unter jeder \"\n"
+""
 
 #, fuzzy
 #~ msgid "Marker title:"

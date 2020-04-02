@@ -7,7 +7,7 @@
 <div class="mapp-items">
 	<# _.forEach(pois, function(poi, i) { #>
 		<# if (!poi.visible) { return; } #>
-		<div class="mapp-item" data-mapp-action="open" data-mapp-poi="{{{i}}}">
+		<div class="mapp-item {{ (map.poi==poi) ? 'mapp-selected' : ''}}" data-mapp-action="open" data-mapp-poi="{{{i}}}">
 			<# print(poi.render('item')); #>
 		</div>
 	<# }); #>

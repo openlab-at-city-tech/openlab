@@ -22,10 +22,15 @@
 	vertical-align: middle;
 }
 
-/* WP uses different height, font size & padding on input elements, at different screen resolutions */
+/* Override WP settings */
 .mapp-media input[type="text"], .mapp-media select {
 	height: auto !important;
 	padding: 3px 6px 3px 6px;
+}
+
+.mapp-media select {
+    padding-right: 25px;
+    vertical-align: top;
 }
 
 .mapp-media-edit-panel {
