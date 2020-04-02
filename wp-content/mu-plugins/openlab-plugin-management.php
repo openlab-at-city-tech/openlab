@@ -36,7 +36,6 @@ function openlab_hide_plugins( $plugins ) {
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
-		'quiz-maker/quiz-maker.php',
 		'slideshare/slideshare.php',
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
