@@ -1,7 +1,6 @@
 <?php
 
 class Taxonomy_Walker extends Walker_Category {
-
 	
 	private $type = '';
 	private $defaults = array();
@@ -10,39 +9,19 @@ class Taxonomy_Walker extends Walker_Category {
 	private $multilastdepthchange = 0; //manually calculate depth on multiselects
 
 	function __construct($type = 'checkbox', $defaults = array())  {
-		// fetch the list of term ids for the given post
-		//$this->term_ids = wp_get_post_terms( $post_id, $taxonomy, 'fields=ids' );
 		
 		$this->type = $type;
 		$this->defaults = $defaults;
 	}
 
 	function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
-		/*$display = false;
 		
-		$id = $element->term_id;
-
-		$display = true;
-		if ( isset( $children_elements[ $id ] ) ) {
-			// the current term has children
-			foreach ( $children_elements[ $id ] as $child ) {
-				if ( in_array( $child->term_id, $this->term_ids ) ) {
-					// one of the term's children is in the list
-					$display = true;
-					// can stop searching now
-					break;
-				}
-			}
-		}
-
-		if ( $display )*/
-			parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
+		parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
 	}
 	
 	
 	function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 )
 	{
-	
 		if($this->type=="list")
 		{
 			extract($args);
@@ -119,15 +98,18 @@ class Taxonomy_Walker extends Walker_Category {
 			
 			if($defaults)
 			{
-				$noselected = count($this->defaults);
-
-				if(($noselected>0)&&(is_array($defaults)))
+				if(is_array($defaults))
 				{
-					foreach($defaults as $defaultid)
+					$noselected = count($defaults);
+
+					if($noselected>0)
 					{
-						if($defaultid==$cat_id)
+						foreach($defaults as $defaultid)
 						{
-							$checked = ' checked="checked"';
+							if($defaultid==$cat_id)
+							{
+								$checked = ' checked="checked"';
+							}
 						}
 					}
 				}
@@ -170,15 +152,18 @@ class Taxonomy_Walker extends Walker_Category {
 			$checked = "";
 			if($defaults)
 			{
-				$noselected = count($this->defaults);
-
-				if(($noselected>0)&&(is_array($defaults)))
+				if(is_array($defaults))
 				{
-					foreach($defaults as $defaultid)
+					$noselected = count($defaults);
+
+					if($noselected>0)
 					{
-						if($defaultid==$cat_id)
+						foreach($defaults as $defaultid)
 						{
-							$checked = ' selected="selected"';
+							if($defaultid==$cat_id)
+							{
+								$checked = ' selected="selected"';
+							}
 						}
 					}
 				}

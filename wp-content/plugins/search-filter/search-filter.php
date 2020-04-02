@@ -5,7 +5,7 @@ Plugin URI: http://www.designsandcode.com/447/wordpress-search-filter-plugin-for
 Description: Search and Filtering system for Pages, Posts, Categories, Tags and Taxonomies
 Author: Designs & Code
 Author URI: http://www.designsandcode.com/
-Version: 1.2.11
+Version: 1.2.12
 Text Domain: searchandfilter
 License: GPLv2
 */
@@ -14,7 +14,7 @@ License: GPLv2
 * Set up Plugin Globals
 */
 if (!defined('SEARCHANDFILTER_VERSION_NUM'))
-    define('SEARCHANDFILTER_VERSION_NUM', '1.2.11');
+    define('SEARCHANDFILTER_VERSION_NUM', '1.2.12');
 
 if (!defined('SEARCHANDFILTER_THEME_DIR'))
     define('SEARCHANDFILTER_THEME_DIR', ABSPATH . 'wp-content/themes/' . get_template());
@@ -1106,7 +1106,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 						{
 							foreach($post_types as $post_type)
 							{
-								$returnvar .= "<input type=\"hidden\" name=\"".SF_FPRE."post_types[]\" value=\"".$post_type."\" />";
+								$returnvar .= "<input type=\"hidden\" name=\"".SF_FPRE."post_types[]\" value=\"".esc_attr($post_type)."\" />";
 							}
 						}
 					}
@@ -1127,7 +1127,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 									$returnvar .= "<h4>".$labels[$i]."</h4>";
 								}
 								$clean_searchterm = (esc_attr($this->searchterm));
-								$returnvar .=  '<input type="text" name="'.SF_FPRE.'search" placeholder="'.$search_placeholder.'" value="'.$clean_searchterm.'">';
+								$returnvar .=  '<input type="text" name="'.SF_FPRE.'search" placeholder="'.esc_attr($search_placeholder).'" value="'.esc_attr($clean_searchterm).'">';
 								$returnvar .=  '</li>';
 							}
 							else if($field == "post_types") //a post can only every have 1 type, so checkboxes & multiselects will always be "OR"
@@ -1175,7 +1175,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 						
 						$returnvar .=
 							'<input type="hidden" name="'.SF_FPRE.'submitted" value="1">
-							<input type="submit" value="'.$submitlabel.'">
+							<input type="submit" value="'.esc_attr($submitlabel).'">
 						</li>';
 
 						$returnvar .= "</ul>";
@@ -1436,7 +1436,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 					
 					if(($operators[$i]=="and")||($operators[$i]=="or"))
 					{
-						$returnvar .= '<input type="hidden" name="'.SF_FPRE.$taxonomy.'_operator" value="'.$operators[$i].'" />';
+						$returnvar .= '<input type="hidden" name="'.esc_attr(SF_FPRE.$taxonomy).'_operator" value="'.esc_attr($operators[$i]).'" />';
 					}
 				}
 				
@@ -1520,7 +1520,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 			
 			$checked = ($defaultval=="0") ? " checked='checked'" : "";
 			$returnvar = '<ul>';
-			$returnvar .= '<li>'."<label><input type='radio' name='".$args['sf_name']."[]' value='0'$checked /> ".$show_option_all."</label>".'</li>';
+			$returnvar .= '<li>'."<label><input type='radio' name='".esc_attr($args['sf_name'])."[]' value='0'$checked /> ".$show_option_all."</label>".'</li>';
 			$returnvar .= walk_taxonomy('radio', $args);
 			$returnvar .= "</ul>";
 			
@@ -1600,7 +1600,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 						}
 					}
 				}
-				$returnvar .= '<li class="cat-item"><label><input class="postform cat-item" type="checkbox" name="'.SF_FPRE.$name.'[]" value="'.$dropdown->term_id.'"'.$checked.'> '.$dropdown->cat_name.'</label></li>';
+				$returnvar .= '<li class="cat-item"><label><input class="postform cat-item" type="checkbox" name="'.esc_attr(SF_FPRE.$name).'[]" value="'.esc_attr($dropdown->term_id).'"'.$checked.'> '.$dropdown->cat_name.'</label></li>';
 			
 			}
 			
@@ -1658,7 +1658,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 					$all_items_name = "All ".$labels->name;
 				}
 				
-				$returnvar .= '<li class="cat-item"><label><input class="postform" type="radio" name="'.SF_FPRE.$name.'[]" value="'.$defaultval.'"'.$checked.'> '.$all_items_name.'</label></li>';
+				$returnvar .= '<li class="cat-item"><label><input class="postform" type="radio" name="'.esc_attr(SF_FPRE.$name).'[]" value="'.esc_attr($defaultval).'"'.$checked.'> '.$all_items_name.'</label></li>';
 			}
 			
 			foreach($dropdata as $dropdown)
@@ -1683,7 +1683,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 						}
 					}
 				}
-				$returnvar .= '<li class="cat-item"><label><input class="postform" type="radio" name="'.SF_FPRE.$name.'[]" value="'.$dropdown->term_id.'"'.$checked.'> '.$dropdown->cat_name.'</label></li>';
+				$returnvar .= '<li class="cat-item"><label><input class="postform" type="radio" name="'.esc_attr(SF_FPRE.$name).'[]" value="'.esc_attr($dropdown->term_id).'"'.$checked.'> '.$dropdown->cat_name.'</label></li>';
 			
 			}
 			
@@ -1710,7 +1710,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 				}
 			}
 			
-			$returnvar .= '<input class="postform" type="date" name="'.SF_FPRE.$name.'[]" value="' . $current_date . '" />';
+			$returnvar .= '<input class="postform" type="date" name="'.esc_attr(SF_FPRE.$name).'[]" value="'. esc_attr($current_date) .'" />';
 
 			return $returnvar;
 		}
@@ -1722,11 +1722,10 @@ function walk_taxonomy( $type = "checkbox", $args = array() ) {
 
 	$args['walker'] = new Taxonomy_Walker($type, $args['sf_name']);
 	
-	//unset($args['sf_name']);
-	
 	$output = wp_list_categories($args);
-	if ( $output )
+	if ( $output ){
 		return $output;
+	}
 }
 
 
