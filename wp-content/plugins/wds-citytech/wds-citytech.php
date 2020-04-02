@@ -1827,6 +1827,26 @@ function openlab_remove_ip_address_from_comment_notifications( $message ) {
 add_filter( 'comment_moderation_text', 'openlab_remove_ip_address_from_comment_notifications' );
 
 /**
+ * Prevent IP addresses from being displayed on Dashboard > Comments.
+ */
+add_filter(
+	'get_comment_author_IP',
+	function( $ip ) {
+		global $pagenow;
+
+		if ( current_user_can( 'manage_network_options' ) ) {
+			return $ip;
+		}
+
+		if ( ! is_admin() || empty( $pagenow ) || 'edit-comments.php' !== $pagenow ) {
+			return $ip;
+		}
+
+		return '';
+	}
+);
+
+/**
  * Adds the URL of the user profile to the New User Registration admin emails
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/334
