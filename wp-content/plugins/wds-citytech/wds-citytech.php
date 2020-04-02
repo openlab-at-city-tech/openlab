@@ -1815,6 +1815,18 @@ function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
 add_action( 'comment_post', 'openlab_enable_duplicate_comments_comment_post', 1 );
 
 /**
+ * Removes IP addresses from comment notification messages.
+ */
+function openlab_remove_ip_address_from_comment_notifications( $message ) {
+	if ( false === strpos( $message, 'IP address' ) ) {
+		return $message;
+	}
+
+	return preg_replace( '|\(IP address: [^\)]+\)|', '', $message );
+}
+add_filter( 'comment_moderation_text', 'openlab_remove_ip_address_from_comment_notifications' );
+
+/**
  * Adds the URL of the user profile to the New User Registration admin emails
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/334
