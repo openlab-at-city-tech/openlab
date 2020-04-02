@@ -81,7 +81,7 @@ function WtiLikePostAdminContent() {
 				<div id="WtiLikePostOptions" class="postbox">
 					<h3><?php echo __('Configuration', 'wti-like-post'); ?></h3>
 					<div class="inside">
-						<form method="post" action="options.php">
+						<form method="post" action="options.php" id="wtilp_admin_settings">
 							<?php settings_fields('wti_like_post_options'); ?>
 							<table class="form-table">
 								<tr valign="top">
@@ -640,4 +640,20 @@ function WtiAdminNotice() {
 			echo '</p></div>';
 		}
 	}
+}
+
+/**
+ * Add the javascript for admin of the plugin
+ * @param no-param
+ * @return string
+ */
+function WtiLikePostEnqueueAdminScripts() {
+	wp_register_script( 'wti_like_post_admin_script', plugins_url( 'js/wti_like_post_admin.js', __FILE__ ), array('jquery') );
+	wp_localize_script( 'wti_like_post_admin_script', 'wtilp', array(
+												    'ajax_url' => admin_url( 'admin-ajax.php' ),
+												)
+				    );
+  
+	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'wti_like_post_admin_script' );
 }

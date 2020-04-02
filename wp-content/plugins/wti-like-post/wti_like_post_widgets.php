@@ -1,7 +1,7 @@
 <?php
 class MostLikedPostsWidget extends WP_Widget
 {
-     function MostLikedPostsWidget() {
+     function __construct() {
 	     load_plugin_textdomain( 'wti-like-post', false, 'wti-like-post/lang' );
           $widget_ops = array('description' => __('Widget to display most liked posts for a given time range.', 'wti-like-post'));
           parent::__construct(false, $name = __('Most Liked Posts', 'wti-like-post'), $widget_ops);
@@ -97,7 +97,7 @@ class MostLikedPostsWidget extends WP_Widget
 
 class WtiMostLikedPosts
 {
-     function WtiMostLikedPosts() {
+     function __construct() {
           add_action( 'widgets_init', array(&$this, 'init') );
      }
     
@@ -178,7 +178,7 @@ $MostLikedPosts = new WtiMostLikedPosts();
 //recently like posts
 class RecentlyLikedPostsWidget extends WP_Widget
 {
-     function RecentlyLikedPostsWidget() {
+     function __construct() {
 	     load_plugin_textdomain( 'wti-like-post', false, 'wti-like-post/lang' );
           $widget_ops = array('description' => __('Widget to show recently liked posts.', 'wti-like-post'));
           parent::__construct(false, $name = __('Recently Liked Posts', 'wti-like-post'), $widget_ops);
@@ -230,7 +230,7 @@ class RecentlyLikedPostsWidget extends WP_Widget
 
 class RecentlyLikedPosts
 {
-     function RecentlyLikedPosts() {
+     function __construct() {
           add_action( 'widgets_init', array(&$this, 'init') );
      }
     

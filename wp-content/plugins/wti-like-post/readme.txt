@@ -1,17 +1,20 @@
 === WTI Like Post ===
 Contributors: webtechideas
-Contributor's website: http://www.webtechideas.in/
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=http://www.webtechideas.in/thanks/
+Contributor's website: https://www.webtechideas.in/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=https://www.webtechideas.in/thanks/
 Tags: wp like post,wordpress like post,wp like page,wordpress like page,wplikepost,wplikepage,wti,webtechideas,wp vote page,wp vote post,wordpress vote page,wordpress vote post,thumbs up, thumbs down, most liked posts, recently liked posts
-Requires at least: 4.2
-Tested up to: 4.8.2
-Stable tag: 1.4.4
+Requires at least: 4.5
+Tested up to: 5.3.2
+Stable tag: 1.4.5
 
 A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO version is also available.
 
 == Description ==
 
 WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts.
+
+= Upcoming PRO Feature =
+1. Setting to control date range for voting.
 
 = PRO Features =
 1. Ability to change your vote even if multiple voting is disabled.
@@ -41,7 +44,7 @@ WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) f
 25. Most Liked/Unliked Category Posts widget to show posts liked/unliked on the specific category page.
 26. Functionality to show post excerpt, thumbnail on all the available widgets.
 
-**PRO Plugin URL:** http://www.webtechideas.in/product/wti-like-post-pro/ PRO manual is available for downloading on the last section of the page.
+**PRO Plugin URL:** https://www.webtechideas.in/product/wti-like-post-pro/ PRO manual is available for downloading on the last section of the page.
 
 **PRO Plugin Demo URL:** http://demowp.webtechideas.com/
 
@@ -70,11 +73,9 @@ WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) f
 20. Widgets to show most liked posts and recently liked posts
 21. Option to save plugin settings and table even after plugin uninstallation which will make upgradation smooth
 
-**Plugin URL:** http://www.webtechideas.in/wti-like-post-plugin/ Plugin manual is available for downloading on the last page of the plugin url.
+**Plugin URL:** https://www.webtechideas.in/wti-like-post-plugin/ Plugin manual is available for downloading on the last page of the plugin url.
 
-**Author's Blog:** <a href="http://www.webtechideas.in/" target="_blank">Webtechideas</a>
-
-**Author's Other Plugins:** <a href="http://wordpress.org/extend/plugins/wti-contact-back/" target="_blank">WTI Contact Back</a>
+**Author's Site:** <a href="https://www.webtechideas.in/" target="_blank">Webtechideas</a>
 
 == Installation ==
 
@@ -143,7 +144,7 @@ Yes apart from post title, you can use settings in the widgets section whether t
 Yes, you can do this. (PRO Version).
 
 = Can I sort the posts by like/unlike count as a normal blog page? =
-Yes, this is possible. This plugin (PRO Version) stores like/unlike count in terms of post meta, using that you can sort the posts. There is an example <a href="http://www.webtechideas.in/sorting-posts-by-meta-key-and-value/" target="_blank">here</a> for the same showing on category page.
+Yes, this is possible. This plugin (PRO Version) stores like/unlike count in terms of post meta, using that you can sort the posts. There is an example <a href="https://www.webtechideas.in/sorting-posts-by-meta-key-and-value/" target="_blank">here</a> for the same showing on category page.
 
 = Can I use text instead of like/unlike images? =
 Yes, this is also possible (PRO Version). Using this you can provide more meaningful message to the user which may not conveyed using images.
@@ -164,6 +165,9 @@ Yes, you can use this plugin against wordpress pages. You need to enable this fe
 In total there are 6 styles available. If you still need a different one, then place thumbs up/down images of same file name and same size.
 
 == Changelog ==
+
+= 1.4.5 =
+* Fixed XSS issue on plugin admin settings page
 
 = 1.4.4 =
 * Improved compatibility with wordpress 4.8.2
