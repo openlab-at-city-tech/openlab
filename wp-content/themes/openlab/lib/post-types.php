@@ -92,7 +92,8 @@ function openlab_register_help() {
         'query_var' => true,
         'menu_icon' => 'dashicons-editor-help',
         'can_export' => true,
-        'capability_type' => 'post'
+        'capability_type' => 'post',
+		'show_in_rest' => true,
     );
 
     register_post_type('help', $args);
