@@ -10663,6 +10663,22 @@ input.help-search {
   width: 100%;
   margin-bottom: 8px;
 }
+body.single-help .entry-content h2 {
+  font-size: 21px;
+}
+body.single-help .entry-content h3 {
+  font-size: 19px;
+}
+body.single-help .entry-content h4 {
+  font-size: 17px;
+}
+body.single-help .entry-content h5 {
+  font-size: 15px;
+}
+body.single-help .entry-content h6 {
+  font-size: 14px;
+  font-weight: normal;
+}
 #help-tags .btn-primary {
   background: #444444;
   border-color: #444444;
