@@ -2745,6 +2745,23 @@ add_filter(
 );
 
 /**
+ * Bypass auto-moderation for logged-in users.
+ *
+ * This skips the link limit and word restrictions inherited from the blog
+ * comment moderation settings since bbPress 2.6.
+ *
+ * @link https://redmine.gc.cuny.edu/issues/12487#note-1
+ * @link http://redmine.citytech.cuny.edu/issues/2730
+ */
+add_filter( 'bbp_bypass_check_for_moderation', function( $retval, $anon_data, $user_id ) {
+	if ( ! empty( $anon_data ) || empty( $user_id ) ) {
+		return $retval;
+	}
+
+	return true;
+}, 10, 3 );
+
+/**
  * Don't let Ultimate Category Excluder operate on loops other than the main loop.
  *
  * Prevents conflicts with Category Sticky Post. See #2263.
