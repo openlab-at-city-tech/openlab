@@ -1825,6 +1825,7 @@ function openlab_remove_ip_address_from_comment_notifications( $message ) {
 	return preg_replace( '|\(IP address: [^\)]+\)|', '', $message );
 }
 add_filter( 'comment_moderation_text', 'openlab_remove_ip_address_from_comment_notifications' );
+add_filter( 'comment_notification_text', 'openlab_remove_ip_address_from_comment_notifications' );
 
 /**
  * Prevent IP addresses from being displayed on Dashboard > Comments.
