@@ -2,19 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress Hungarian Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-15 09:08-0800\n"
-"PO-Revision-Date: 2013-02-16 23:56+0100\n"
 "Last-Translator: Zsolt Acsai <zsolt.acsai@visitszeged.com>\n"
 "Language-Team: Visit Szeged <zsolt.acsai@visitszeged.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2013-02-15 09:08-0800\n"
+"PO-Revision-Date: 2013-02-16 23:56+0100\n"
+"Language: Hungarian\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Generator: Poedit 1.5.4\n"
-"Language: Hungarian\n"
-"X-Poedit-SearchPath-0: C:\\wamp\\www\\wordpress\\wp-content\\plugins"
-"\\mappress-google-maps-for-wordpress\n"
+"X-Poedit-SearchPath-0: C:\wamp\www\wordpress\wp-content\plugins\mappress-google-maps-for-wordpress\n"
 
 #: ../mappress.php:122
 msgid "Version"
@@ -37,30 +36,19 @@ msgid "Upgrade to MapPress Pro"
 msgstr "Frissítés MapPress Pro-ra"
 
 #: ../mappress.php:330
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"Hiányoznak a MapPress táblák az adatbázisból. Kérem kapcsolja ki majd be a "
-"bővítményt a probléma megoldásához."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Hiányoznak a MapPress táblák az adatbázisból. Kérem kapcsolja ki majd be a bővítményt a probléma megoldásához."
 
 #: ../mappress.php:335
-msgid ""
-"WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-"before using MapPress."
-msgstr ""
-"FIGYELEM: a MapPress működéséhez legalább WordPress 3.2 szükséges. Kérem "
-"frissítsen a MapPress használata előtt."
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr "FIGYELEM: a MapPress működéséhez legalább WordPress 3.2 szükséges. Kérem frissítsen a MapPress használata előtt."
 
 #: ../mappress.php:340
-msgid ""
-"WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please "
-"deactivate or uninstall WP-Geo before using MapPress."
-msgstr ""
-"FIGYELEM: A MapPress nem kompatibilis a WP-Geo bővítménnyel. Kérem kapcsolja "
-"ki, vagy távolítsa el a WP-Geo bővítményt a MapPress használata előtt."
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr "FIGYELEM: A MapPress nem kompatibilis a WP-Geo bővítménnyel. Kérem kapcsolja ki, vagy távolítsa el a WP-Geo bővítményt a MapPress használata előtt."
 
-#: ../mappress.php:533 ../templates/map_directions.php:6
+#: ../mappress.php:533
+#: ../templates/map_directions.php:6
 msgid "Bicycling"
 msgstr "Kerékpárral"
 
@@ -73,18 +61,16 @@ msgid "One of the addresses could not be found."
 msgstr "A kiindulási- vagy célcím nem található."
 
 #: ../mappress.php:536
-msgid ""
-"Google cannot return directions between those addresses.  There is no route "
-"between them or the routing information is not available."
-msgstr ""
-"A Google nem talált útvonalat a két cím között. Vagy nincs ilyen útvonal, "
-"vagy az információ nem érhető el."
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr "A Google nem talált útvonalat a két cím között. Vagy nincs ilyen útvonal, vagy az információ nem érhető el."
 
 #: ../mappress.php:537
 msgid "Unknown error, unable to return directions.  Status code = "
 msgstr "Ismeretlen hiba, nem jeleníthető meg az útvonal. Állapot kód: "
 
-#: ../mappress.php:538 ../mappress_poi.php:282 ../mappress_settings.php:129
+#: ../mappress.php:538
+#: ../mappress_poi.php:282
+#: ../mappress_settings.php:129
 #: ../pro/mappress_widget.php:108
 msgid "Directions"
 msgstr "Útvonaltervezés"
@@ -105,7 +91,8 @@ msgstr "Nincs egyező cím"
 msgid "Unable to get your location"
 msgstr "Nem sikerült meghatározni a jelenlegi pozíciót"
 
-#: ../mappress.php:543 ../mappress_settings.php:321
+#: ../mappress.php:543
+#: ../mappress_settings.php:321
 msgid "Traffic"
 msgstr "Forgalom"
 
@@ -113,8 +100,11 @@ msgstr "Forgalom"
 msgid "Transit"
 msgstr "Tranzit"
 
-#: ../mappress.php:545 ../mappress_poi.php:331 ../mappress_settings.php:316
-#: ../mappress_settings.php:455 ../pro/mappress_widget.php:124
+#: ../mappress.php:545
+#: ../mappress_poi.php:331
+#: ../mappress_settings.php:316
+#: ../mappress_settings.php:455
+#: ../pro/mappress_widget.php:124
 msgid "Zoom"
 msgstr "Nagyítás"
 
@@ -130,7 +120,8 @@ msgstr "Fogd-és-vidd"
 msgid "Click to change"
 msgstr "Kattintás a változtatáshoz"
 
-#: ../mappress.php:553 ../mappress_map.php:428
+#: ../mappress.php:553
+#: ../mappress_map.php:428
 msgid "Delete"
 msgstr "Törlés"
 
@@ -162,7 +153,8 @@ msgstr "Térkép nem található"
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: ../mappress_map.php:427 ../forms/map_media.php:48
+#: ../mappress_map.php:427
+#: ../forms/map_media.php:48
 msgid "Insert into post"
 msgstr "Beszúrás a bejegyzésbe"
 
@@ -170,16 +162,19 @@ msgstr "Beszúrás a bejegyzésbe"
 msgid "Show map"
 msgstr "Térképen"
 
-#: ../mappress_map.php:479 ../mappress_settings.php:447
+#: ../mappress_map.php:479
+#: ../mappress_settings.php:447
 #: ../forms/map_editor.php:17
 msgid "Center map"
 msgstr "Középre"
 
-#: ../mappress_map.php:488 ../mappress_settings.php:448
+#: ../mappress_map.php:488
+#: ../mappress_settings.php:448
 msgid "Reset map"
 msgstr "Térkép visszaállítása"
 
-#: ../mappress_map.php:497 ../mappress_settings.php:446
+#: ../mappress_map.php:497
+#: ../mappress_settings.php:446
 msgid "Bigger map"
 msgstr "Nagyobb térkép"
 
@@ -187,11 +182,13 @@ msgstr "Nagyobb térkép"
 msgid "Smaller map"
 msgstr "Kicsi"
 
-#: ../mappress_poi.php:247 ../mappress_settings.php:456
+#: ../mappress_poi.php:247
+#: ../mappress_settings.php:456
 msgid "Directions to"
 msgstr "Útvonaltervezés"
 
-#: ../mappress_poi.php:249 ../mappress_settings.php:457
+#: ../mappress_poi.php:249
+#: ../mappress_settings.php:457
 msgid "Directions from"
 msgstr "Útvonaltervezés"
 
@@ -325,8 +322,7 @@ msgstr "Térképek betöltése"
 
 #: ../mappress_settings.php:221
 msgid "Use the settings below to automatically create maps from custom fields."
-msgstr ""
-"Használja az alábbi beállításokat a térképek létrehozásához egyedi mezőből."
+msgstr "Használja az alábbi beállításokat a térképek létrehozásához egyedi mezőből."
 
 #: ../mappress_settings.php:227
 msgid "Posts"
@@ -382,7 +378,8 @@ msgstr "nyelv"
 msgid "Use a specific %s for map controls and geocoding"
 msgstr "Egyedi %s használata a vezérlőkhöz"
 
-#: ../mappress_settings.php:283 ../mappress_settings.php:289
+#: ../mappress_settings.php:283
+#: ../mappress_settings.php:289
 #: ../mappress_settings.php:384
 msgid "Default"
 msgstr "Alapérték"
@@ -411,7 +408,8 @@ msgstr "Android"
 msgid "Open initially"
 msgstr "Először nyissa meg"
 
-#: ../mappress_settings.php:305 ../mappress_settings.php:307
+#: ../mappress_settings.php:305
+#: ../mappress_settings.php:307
 #: ../mappress_settings.php:309
 msgid "Checked initially"
 msgstr "Először ellenőrizzen"
@@ -424,7 +422,8 @@ msgstr "Menü"
 msgid "Enable"
 msgstr "Bekapcsolás"
 
-#: ../mappress_settings.php:311 ../mappress_settings.php:409
+#: ../mappress_settings.php:311
+#: ../mappress_settings.php:409
 msgid "Style"
 msgstr "Stílus"
 
@@ -460,15 +459,18 @@ msgstr "Kerékpárutak"
 msgid "Road map"
 msgstr "Utitérkép"
 
-#: ../mappress_settings.php:330 ../pro/mappress_widget.php:142
+#: ../mappress_settings.php:330
+#: ../pro/mappress_widget.php:142
 msgid "Satellite"
 msgstr "Műholdas"
 
-#: ../mappress_settings.php:331 ../pro/mappress_widget.php:143
+#: ../mappress_settings.php:331
+#: ../pro/mappress_widget.php:143
 msgid "Terrain"
 msgstr "Domborzati"
 
-#: ../mappress_settings.php:332 ../pro/mappress_widget.php:141
+#: ../mappress_settings.php:332
+#: ../pro/mappress_widget.php:141
 msgid "Hybrid"
 msgstr "Hibrid"
 
@@ -476,12 +478,14 @@ msgstr "Hibrid"
 msgid "Inline (in your blog)"
 msgstr "Sorban (térkép után)"
 
-#: ../mappress_settings.php:346 ../pro/mappress_pro_settings.php:165
+#: ../mappress_settings.php:346
+#: ../pro/mappress_pro_settings.php:165
 #: ../pro/mappress_widget.php:110
 msgid "Google"
 msgstr "Google"
 
-#: ../mappress_settings.php:347 ../pro/mappress_widget.php:111
+#: ../mappress_settings.php:347
+#: ../pro/mappress_widget.php:111
 msgid "None"
 msgstr "Nincs"
 
@@ -489,20 +493,22 @@ msgstr "Nincs"
 msgid "Automatically open the first POI when a map is displayed"
 msgstr "Automatikusan nyissa meg az első POI-t, amikor a térkép megjelenik"
 
-#: ../mappress_settings.php:359 ../mappress_settings.php:368
+#: ../mappress_settings.php:359
+#: ../mappress_settings.php:368
 msgid "Show control"
 msgstr "Irányító megjelenítése"
 
-#: ../mappress_settings.php:363 ../mappress_settings.php:372
+#: ../mappress_settings.php:363
+#: ../mappress_settings.php:372
 msgid "Enabled by default"
 msgstr "Alapértelmezettként bekapcsolva"
 
 #: ../mappress_settings.php:377
 msgid "Show POI titles as a \"tooltip\" on mouse-over"
-msgstr ""
-"Jelölő POI megjelenítése magyarázó szövegként, ha fölé visszük az egeret."
+msgstr "Jelölő POI megjelenítése magyarázó szövegként, ha fölé visszük az egeret."
 
-#: ../mappress_settings.php:385 ../pro/mappress_widget.php:116
+#: ../mappress_settings.php:385
+#: ../pro/mappress_widget.php:116
 msgid "Center"
 msgstr "Középre"
 
@@ -641,7 +647,8 @@ msgstr "PRO verzió frissítés érhető el: %s"
 msgid "Add POI"
 msgstr "POI hozzáadása"
 
-#: ../forms/map_editor.php:5 ../templates/map_directions.php:11
+#: ../forms/map_editor.php:5
+#: ../templates/map_directions.php:11
 msgid "My location"
 msgstr "Jelenlegi pozíció"
 
@@ -657,7 +664,8 @@ msgstr "Sor:"
 msgid "Weight"
 msgstr "Súly"
 
-#: ../forms/map_editor_infobox.php:25 ../forms/map_editor_infobox.php:31
+#: ../forms/map_editor_infobox.php:25
+#: ../forms/map_editor_infobox.php:31
 msgid "Opacity"
 msgstr "Áttetszőség"
 
@@ -673,11 +681,13 @@ msgstr "Látvány"
 msgid "HTML"
 msgstr "HTML"
 
-#: ../forms/map_editor_infobox.php:45 ../forms/map_media.php:46
+#: ../forms/map_editor_infobox.php:45
+#: ../forms/map_media.php:46
 msgid "Save"
 msgstr "Mentés"
 
-#: ../forms/map_editor_infobox.php:46 ../forms/map_media.php:47
+#: ../forms/map_editor_infobox.php:46
+#: ../forms/map_media.php:47
 #: ../pro/mappress_icons.php:64
 msgid "Cancel"
 msgstr "Mégsem"
@@ -711,7 +721,8 @@ msgstr "Nincs eredmény, a helymeghatározás beállítása ellenőrzésre szoru
 msgid "Invalid status: %s, address: %s"
 msgstr "Érvénytelen állapot: %s, cím: %s"
 
-#: ../pro/mappress_geocoders.php:85 ../pro/mappress_geocoders.php:149
+#: ../pro/mappress_geocoders.php:85
+#: ../pro/mappress_geocoders.php:149
 #, php-format
 msgid "No results for address: %s"
 msgstr "Nincs találat a következő címre: %s"
@@ -935,7 +946,8 @@ msgstr "Test"
 msgid "Map Zoom"
 msgstr "Nagyítás"
 
-#: ../pro/mappress_pro_settings.php:190 ../pro/mappress_widget.php:140
+#: ../pro/mappress_pro_settings.php:190
+#: ../pro/mappress_widget.php:140
 msgid "Map"
 msgstr "Térkép"
 
@@ -1075,7 +1087,8 @@ msgstr "Helyszín"
 
 #~ msgid "Internal error - unable to save map.  Your data has not been saved!"
 #~ msgstr ""
-#~ "Belső hiba, nem lehet menteni a térképet. Az adatok nem lettek mentve!"
+"\n"
+"hiba, nem lehet menteni a térképet. Az adatok nem lettek mentve!\""
 
 #~ msgid "Marker list"
 #~ msgstr "Jelölő címe"
@@ -1093,17 +1106,20 @@ msgstr "Helyszín"
 #~ msgstr "Egyedi CSS"
 
 #~ msgid ""
-#~ "Allow your readers to change the map type (street, satellite, or hybrid)"
+"\n"
+"your readers to change the map type (street, satellite, or hybrid)\""
 #~ msgstr "Az olvasók módosíthassák a térkép típusát (utca, szatelit, vegyes)"
 
 #~ msgid "Display the street view control \"peg man\""
 #~ msgstr "Utca nézet vezérlő megjelenítése (\"peg man\")"
 
 #~ msgid ""
-#~ "Select 'Google' if directions aren't displaying properly in your theme"
+"\n"
+"'Google' if directions aren't displaying properly in your theme\""
 #~ msgstr ""
-#~ "Válassza a 'Google' lehetőséget, ha az irány információk nem jól jelennek "
-#~ "meg az oldalon"
+"\n"
+"a 'Google' lehetőséget, ha az irány információk nem jól jelennek \"\n"
+"az oldalon\""
 
 #~ msgid "Show a button for real-time traffic conditions"
 #~ msgstr "Valós idejű forgalmi állapotok gomb megjelenítése"
@@ -1187,11 +1203,13 @@ msgstr "Helyszín"
 #~ msgstr "Térkép egyedi mező"
 
 #~ msgid ""
-#~ " Include your own CSS.  You must create a file named %s in the MapPress "
-#~ "%s sub-directory"
+"\n"
+"Include your own CSS.  You must create a file named %s in the MapPress \"\n"
+"sub-directory\""
 #~ msgstr ""
-#~ "Használhat saját CSS fájlt is. Készítsen egy %s nevű fájlt a MapPress %s "
-#~ "alkönyvtárában!"
+"\n"
+"saját CSS fájlt is. Készítsen egy %s nevű fájlt a MapPress %s \"\n"
+""
 
 #~ msgid "Map addresses from a %s : "
 #~ msgstr "Térkép címek innen %s:"

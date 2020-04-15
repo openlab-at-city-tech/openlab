@@ -17,11 +17,12 @@
 // TODO: check to see if we can use PHP and WP core is_countable functions.
 // TODO: make sure all settings (like lazy load) are in usage reporting.
 // TODO: can we show the last optimized date in the media library, perhaps in the details?
+// TODO: make sure we are using admin_url() rather than just linking to admin.php directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWWW_IMAGE_OPTIMIZER_VERSION', '522.0' );
+define( 'EWWW_IMAGE_OPTIMIZER_VERSION', '525.0' );
 
 // Initialize a couple globals.
 $eio_debug  = '';
@@ -55,13 +56,6 @@ use lsolesen\pel\PelTag;
 
 // If automatic optimization is NOT disabled.
 if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_noauto' ) ) {
-	if ( class_exists( 'S3_Uploads' ) ) {
-		// Resizes and auto-rotates images.
-		add_filter( 'wp_handle_upload_prefilter', 'ewww_image_optimizer_handle_upload', 8 );
-	} else {
-		// Resizes and auto-rotates images.
-		add_filter( 'wp_handle_upload', 'ewww_image_optimizer_handle_upload' );
-	}
 	if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_DISABLE_EDITOR' ) || ! EWWW_IMAGE_OPTIMIZER_DISABLE_EDITOR ) {
 		// Turns off the ewwwio_image_editor during uploads.
 		add_action( 'add_attachment', 'ewww_image_optimizer_add_attachment' );
@@ -76,6 +70,8 @@ if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_noauto' ) ) {
 		// Enables direct integration to the editor's save function.
 		add_filter( 'wp_image_editors', 'ewww_image_optimizer_load_editor', 60 );
 	}
+	// Resizes and auto-rotates images.
+	add_filter( 'wp_handle_upload', 'ewww_image_optimizer_handle_upload' );
 	// Processes an image via the metadata after upload.
 	add_filter( 'wp_generate_attachment_metadata', 'ewww_image_optimizer_resize_from_meta_data', 15, 2 );
 	// Add hook for PTE confirmation to make sure new resizes are optimized.
@@ -516,6 +512,11 @@ function ewww_image_optimizer_init() {
 		if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_debug' ) ) {
 			$ewwwio_temp_debug = true;
 		}
+	}
+
+	if ( class_exists( 'S3_Uploads' ) ) {
+		ewwwio_debug_message( 's3-uploads detected, deferring resize_upload' );
+		add_filter( 'ewww_image_optimizer_defer_resizing', '__return_true' );
 	}
 
 	$active_plugins = get_option( 'active_plugins' );
@@ -1290,6 +1291,7 @@ function ewww_image_optimizer_admin_background() {
 				return '#0073aa';
 		}
 	}
+	return '#0073aa';
 }
 
 /**
@@ -1813,6 +1815,9 @@ function ewww_image_optimizer_notice_reoptimization() {
  */
 function ewww_image_optimizer_load_editor( $editors ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	if ( class_exists( 'S3_Uploads_Image_Editor_Imagick' ) ) {
+		return $editors;
+	}
 	if ( ! class_exists( 'EWWWIO_GD_Editor' ) && ! class_exists( 'EWWWIO_Imagick_Editor' ) ) {
 		if ( class_exists( 'WP_Image_Editor_GD' ) ) {
 			require_once( plugin_dir_path( __FILE__ ) . '/classes/class-ewwwio-gd-editor.php' );
@@ -3133,6 +3138,10 @@ function ewww_image_optimizer_cloud_restore_from_meta_data( $id, $gallery = 'med
 			}
 		}
 	}
+	if ( class_exists( 'S3_Uploads' ) ) {
+		ewww_image_optimizer_remote_push( $meta, $id );
+		ewwwio_debug_message( 're-uploading to S3(_Uploads)' );
+	}
 	return $meta;
 }
 
@@ -3218,6 +3227,9 @@ function ewww_image_optimizer_cloud_restore_single_image( $image ) {
 		return false;
 	} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'missing' ) === false ) {
 		$enabled_types = array( 'image/jpeg', 'image/png', 'image/gif', 'application/pdf' );
+		if ( ! is_dir( dirname( $image['path'] ) ) ) {
+			wp_mkdir_p( dirname( $image['path'] ) );
+		}
 		file_put_contents( $image['path'] . '.tmp', $result['body'] );
 		$new_type = ewww_image_optimizer_mimetype( $image['path'] . '.tmp', 'i' );
 		$old_type = '';
@@ -4525,7 +4537,8 @@ function ewww_image_optimizer_check_table( $file, $orig_size ) {
 	ewwwio_debug_message( "checking for $file with size: $orig_size" );
 	global $s3_uploads_image;
 	global $ewww_image;
-	if ( class_exists( 'S3_Uploads' ) && ! empty( $s3_uploads_image ) && $s3_uploads_image !== $file ) {
+	// TODO: remove this conditional.
+	if ( false && class_exists( 'S3_Uploads' ) && ! empty( $s3_uploads_image ) && $s3_uploads_image !== $file ) {
 		$file = $s3_uploads_image;
 		ewwwio_debug_message( "overriding check with: $file" );
 	}
@@ -4594,7 +4607,8 @@ function ewww_image_optimizer_update_table( $attachment, $opt_size, $orig_size, 
 		$converted         = $original;
 	} else {
 		global $s3_uploads_image;
-		if ( class_exists( 'S3_Uploads' ) && ! empty( $s3_uploads_image ) && $s3_uploads_image !== $attachment ) {
+		// TODO: remove this conditional.
+		if ( false && class_exists( 'S3_Uploads' ) && ! empty( $s3_uploads_image ) && $s3_uploads_image !== $attachment ) {
 			$attachment = $s3_uploads_image;
 			ewwwio_debug_message( "overriding update with: $attachment" );
 		}
@@ -4916,6 +4930,8 @@ function ewww_image_optimizer_hidpi_optimize( $orig_path, $return_path = false, 
  * @return string The name of the file unaltered, or the s3 filename stored in $s3_uploads_image.
  */
 function ewww_image_optimizer_s3_uploads_image_cleanup( $file ) {
+	return $file;
+	// TODO: remove this function.
 	global $s3_uploads_image;
 	if ( ! ewww_image_optimizer_stream_wrapped( $file ) && strpos( $file, 's3-uploads' ) === false && ! empty( $s3_uploads_image ) ) {
 		if ( ewwwio_is_file( $file ) ) {
@@ -4967,6 +4983,74 @@ function ewww_image_optimizer_stream_wrapped( $filename ) {
 }
 
 /**
+ * Pushes images from local storage back to S3 after optimization.
+ *
+ * @param array $meta The attachment metadata.
+ * @param int   $id The attachment ID number.
+ * @return array $meta Send the metadata back from whence it came.
+ */
+function ewww_image_optimizer_remote_push( $meta, $id ) {
+	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	if ( class_exists( 'S3_Uploads' ) && ! empty( $meta['file'] ) ) {
+		$s3_path     = get_attached_file( $id );
+		$upload_path = trailingslashit( WP_CONTENT_DIR ) . 'uploads/';
+		$filename    = $upload_path . $meta['file'];
+		ewwwio_debug_message( "S3 Uploads fullsize path: $s3_path" );
+		ewwwio_debug_message( "unfiltered fullsize path: $filename" );
+		if ( 0 === strpos( $s3_path, 's3' ) && 0 === strpos( $filename, '/' ) && ewwwio_is_file( $filename ) ) {
+			copy( $filename, $s3_path );
+			unlink( $filename );
+		}
+		// Original image detected.
+		if ( isset( $meta['original_image'] ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_include_originals' ) ) {
+			// original_image doesn't contain a path, so we calculate one.
+			$base_dir = trailingslashit( dirname( $filename ) );
+			$base_s3  = trailingslashit( dirname( $s3_path ) );
+			// Build the paths for an original pre-scaled image.
+			$resize_path = $base_dir . $meta['original_image'];
+			$s3_rpath    = $base_s3 . $meta['original_image'];
+			ewwwio_debug_message( "pushing $resize_path to $s3_rpath" );
+			if ( 0 === strpos( $s3_rpath, 's3' ) && 0 === strpos( $resize_path, '/' ) && ewwwio_is_file( $resize_path ) ) {
+				copy( $resize_path, $s3_rpath );
+				unlink( $resize_path );
+			}
+		}
+		// Resized versions, so we'll grab those too.
+		if ( isset( $meta['sizes'] ) && ewww_image_optimizer_iterable( $meta['sizes'] ) ) {
+			$disabled_sizes = ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_resizes_opt', false, true );
+			ewwwio_debug_message( 'retrieving resizes' );
+			// Meta sizes don't contain a path, so we calculate one.
+			$base_dir = trailingslashit( dirname( $filename ) );
+			$base_s3  = trailingslashit( dirname( $s3_path ) );
+			foreach ( $meta['sizes'] as $size => $data ) {
+				ewwwio_debug_message( "processing size: $size" );
+				if ( preg_match( '/webp/', $size ) ) {
+					continue;
+				}
+				if ( ! empty( $disabled_sizes[ $size ] ) ) {
+					continue;
+				}
+				if ( empty( $data['file'] ) ) {
+					continue;
+				}
+				$resize_path = $base_dir . $data['file'];
+				$s3_rpath    = $base_s3 . $data['file'];
+				if ( ! ewwwio_is_file( $resize_path ) ) {
+					ewwwio_debug_message( "$resize_path does not exist" );
+					continue;
+				}
+				ewwwio_debug_message( "pushing $resize_path to $s3_rpath" );
+				if ( 0 === strpos( $s3_rpath, 's3' ) && 0 === strpos( $resize_path, '/' ) ) {
+					copy( $resize_path, $s3_rpath );
+					unlink( $resize_path );
+				}
+			}
+		} // End if().
+	} // End if().
+	return $meta;
+}
+
+/**
  * Fetches images from S3 or Azure storage so that they can be optimized locally.
  *
  * @global object $as3cf
@@ -4980,6 +5064,63 @@ function ewww_image_optimizer_remote_fetch( $id, $meta ) {
 	if ( ! function_exists( 'download_url' ) ) {
 		require_once( ABSPATH . '/wp-admin/includes/file.php' );
 	}
+	if ( class_exists( 'S3_Uploads' ) && ! empty( $meta['file'] ) ) {
+		$s3_path     = get_attached_file( $id );
+		$upload_path = trailingslashit( WP_CONTENT_DIR ) . 'uploads/';
+		$filename    = $upload_path . $meta['file'];
+		ewwwio_debug_message( "S3 Uploads fullsize path: $s3_path" );
+		ewwwio_debug_message( "unfiltered fullsize path: $filename" );
+		if ( ! is_dir( dirname( $filename ) ) ) {
+			wp_mkdir_p( dirname( $filename ) );
+		}
+		if ( 0 === strpos( $s3_path, 's3' ) && 0 === strpos( $filename, '/' ) && ! ewwwio_is_file( $filename ) ) {
+			copy( $s3_path, $filename );
+		}
+		// Original image detected.
+		if ( isset( $meta['original_image'] ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_include_originals' ) ) {
+			ewwwio_debug_message( 'processing original_image' );
+			// original_image doesn't contain a path, so we calculate one.
+			$base_dir = trailingslashit( dirname( $filename ) );
+			$base_s3  = trailingslashit( dirname( $s3_path ) );
+			// Build the paths for an original pre-scaled image.
+			$resize_path = $base_dir . $meta['original_image'];
+			$s3_rpath    = $base_s3 . $meta['original_image'];
+			ewwwio_debug_message( "fetching $s3_rpath to $resize_path" );
+			if ( 0 === strpos( $s3_rpath, 's3' ) && 0 === strpos( $resize_path, '/' ) ) {
+				copy( $s3_rpath, $resize_path );
+			}
+		}
+		// Resized versions, so we'll grab those too.
+		if ( isset( $meta['sizes'] ) && ewww_image_optimizer_iterable( $meta['sizes'] ) ) {
+			$disabled_sizes = ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_resizes_opt', false, true );
+			ewwwio_debug_message( 'retrieving resizes' );
+			// Meta sizes don't contain a path, so we calculate one.
+			$base_dir = trailingslashit( dirname( $filename ) );
+			$base_s3  = trailingslashit( dirname( $s3_path ) );
+			foreach ( $meta['sizes'] as $size => $data ) {
+				ewwwio_debug_message( "processing size: $size" );
+				if ( preg_match( '/webp/', $size ) ) {
+					continue;
+				}
+				if ( ! empty( $disabled_sizes[ $size ] ) ) {
+					continue;
+				}
+				if ( empty( $data['file'] ) ) {
+					continue;
+				}
+				$resize_path = $base_dir . $data['file'];
+				$s3_rpath    = $base_s3 . $data['file'];
+				if ( ewwwio_is_file( $resize_path ) ) {
+					ewwwio_debug_message( "$resize_path already exists" );
+					continue;
+				}
+				ewwwio_debug_message( "fetching $s3_rpath to $resize_path" );
+				if ( 0 === strpos( $s3_rpath, 's3' ) && 0 === strpos( $resize_path, '/' ) ) {
+					copy( $s3_rpath, $resize_path );
+				}
+			}
+		} // End if().
+	} // End if().
 	if ( class_exists( 'wpCloud\StatelessMedia\EWWW' ) && ! empty( $meta['gs_link'] ) ) {
 		$full_url = $meta['gs_link'];
 		$filename = get_attached_file( $id, true );
@@ -6115,6 +6256,9 @@ function ewww_image_optimizer_resize_from_meta_data( $meta, $id = null, $log = t
 	if ( ! empty( $ewww_new_image ) ) {
 		ewwwio_debug_message( 'this is a newly uploaded image with no metadata yet' );
 		$new_image = true;
+	} elseif ( $background_new ) {
+		ewwwio_debug_message( 'this is a newly uploaded image from the async queue' );
+		$new_image = true;
 	} else {
 		ewwwio_debug_message( 'this image already has metadata, so it is not new' );
 		$new_image = false;
@@ -6142,7 +6286,7 @@ function ewww_image_optimizer_resize_from_meta_data( $meta, $id = null, $log = t
 		$file_path = ewww_image_optimizer_remote_fetch( $id, $meta );
 	}
 	// If the local file is missing and we have valid metadata, see if we can fetch via CDN.
-	if ( ! ewwwio_is_file( $file_path ) || ( ewww_image_optimizer_stream_wrapped( $file_path ) && ! class_exists( 'S3_Uploads' ) ) ) {
+	if ( ! ewwwio_is_file( $file_path ) || ewww_image_optimizer_stream_wrapped( $file_path ) ) {
 		$file_path = ewww_image_optimizer_remote_fetch( $id, $meta );
 		if ( ! $file_path ) {
 			ewwwio_debug_message( 'could not retrieve path' );
@@ -6172,6 +6316,7 @@ function ewww_image_optimizer_resize_from_meta_data( $meta, $id = null, $log = t
 
 	// Resize here so long as this is not a new image AND resize existing is enabled, and imsanity isn't enabled with a max size.
 	if ( ( empty( $new_image ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_resize_existing' ) ) && ! function_exists( 'imsanity_get_max_width_height' ) ) {
+		ewwwio_debug_message( 'not a new image, resize existing enabled, and Imsanity not detected' );
 		$new_dimensions = ewww_image_optimizer_resize_upload( $file_path );
 		if ( is_array( $new_dimensions ) ) {
 			$meta['width']  = $new_dimensions[0];
@@ -6212,11 +6357,10 @@ function ewww_image_optimizer_resize_from_meta_data( $meta, $id = null, $log = t
 		}
 		return $meta;
 	}
-	if ( $background_new ) {
-		$new_image = true;
-	}
+
 	// Resize here if the user has used the filter to defer resizing, we have a new image OR resize existing is enabled, and imsanity isn't enabled with a max size.
 	if ( apply_filters( 'ewww_image_optimizer_defer_resizing', false ) && ( ! empty( $new_image ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_resize_existing' ) ) && ! function_exists( 'imsanity_get_max_width_height' ) ) {
+		ewwwio_debug_message( 'resizing defered and ( new image or resize existing enabled ) and Imsanity not detected' );
 		$new_dimensions = ewww_image_optimizer_resize_upload( $file_path );
 		if ( is_array( $new_dimensions ) ) {
 			$meta['width']  = $new_dimensions[0];
@@ -6548,6 +6692,10 @@ function ewww_image_optimizer_resize_from_meta_data( $meta, $id = null, $log = t
 			$as3cf->wp_generate_attachment_metadata( $meta, $id );
 			ewwwio_debug_message( 'uploading to Amazon S3' );
 		}
+	}
+	if ( class_exists( 'S3_Uploads' ) ) {
+		ewww_image_optimizer_remote_push( $meta, $id );
+		ewwwio_debug_message( 're-uploading to S3(_Uploads)' );
 	}
 	if ( $fullsize_opt_size && $fullsize_opt_size < $fullsize_size && class_exists( 'DreamSpeed_Services' ) ) {
 		global $dreamspeed;
@@ -9079,7 +9227,12 @@ function ewww_image_optimizer_options( $network = 'singlesite' ) {
 		}
 	}
 	if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-		$output[] = "<tr class='$network_class'><th scope='row'><label for='ewww_image_optimizer_cloud_notkey'>" . esc_html__( 'Optimization API Key', 'ewww-image-optimizer' ) . "</label></th><td><input type='text' id='ewww_image_optimizer_cloud_notkey' name='ewww_image_optimizer_cloud_notkey' readonly='readonly' value='****************************" . substr( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ), 28 ) . "' size='32' /> <a href='admin.php?action=ewww_image_optimizer_remove_cloud_key'>" . esc_html__( 'Remove API key', 'ewww-image-optimizer' ) . "</a></td></tr>\n";
+		$output[] = "<tr class='$network_class'><th scope='row'><label for='ewww_image_optimizer_cloud_notkey'>" .
+			esc_html__( 'Optimization API Key', 'ewww-image-optimizer' ) .
+			"</label></th><td><input type='text' id='ewww_image_optimizer_cloud_notkey' name='ewww_image_optimizer_cloud_notkey' readonly='readonly' value='****************************" .
+			substr( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ), 28 ) .
+			"' size='32' /> <a href='" . admin_url( 'admin.php?action=ewww_image_optimizer_remove_cloud_key' ) . "'>" .
+			esc_html__( 'Remove API key', 'ewww-image-optimizer' ) . "</a></td></tr>\n";
 		$output[] = "<input type='hidden' id='ewww_image_optimizer_cloud_key' name='ewww_image_optimizer_cloud_key' value='" . ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) . "' />\n";
 	} else {
 		$output[] = "<tr class='$network_class'><th scope='row'><label for='ewww_image_optimizer_cloud_key'>" . esc_html__( 'Optimization API Key', 'ewww-image-optimizer' ) . '</label>' . ewwwio_help_link( 'https://docs.ewww.io/article/7-basic-configuration', '585373d5c697912ffd6c0bb2,5ad0c8e7042863075092650b,5a9efec62c7d3a7549516550' ) . "</th><td><input type='text' id='ewww_image_optimizer_cloud_key' name='ewww_image_optimizer_cloud_key' value='' size='32' /> " . esc_html__( 'API Key will be validated when you save your settings.', 'ewww-image-optimizer' ) . " <a href='https://ewww.io/buy-credits/' target='_blank'>" . esc_html__( 'Purchase an API key.', 'ewww-image-optimizer' ) . "</a></td></tr>\n";
@@ -9685,7 +9838,10 @@ function ewww_image_optimizer_options( $network = 'singlesite' ) {
 	if ( ! empty( $eio_debug ) ) {
 		$debug_output = '<p style="clear:both"><b>' . esc_html__( 'Debugging Information', 'ewww-image-optimizer' ) . ':</b> <button id="ewww-copy-debug" class="button button-secondary" type="button">' . esc_html__( 'Copy', 'ewww-image-optimizer' ) . '</button>';
 		if ( ewwwio_is_file( WP_CONTENT_DIR . '/ewww/debug.log' ) ) {
-			$debug_output .= "&emsp;<a href='admin.php?action=ewww_image_optimizer_view_debug_log'>" . esc_html( 'View Debug Log', 'ewww-image-optimizer' ) . "</a> - <a href='admin.php?action=ewww_image_optimizer_delete_debug_log'>" . esc_html( 'Remove Debug Log', 'ewww-image-optimizer' ) . '</a>';
+			$debug_output .= "&emsp;<a href='" . admin_url( 'admin.php?action=ewww_image_optimizer_view_debug_log' ) . "'>" .
+				esc_html( 'View Debug Log', 'ewww-image-optimizer' ) . "</a> - <a href='" .
+				admin_url( 'admin.php?action=ewww_image_optimizer_delete_debug_log' ) . "'>" .
+				esc_html( 'Remove Debug Log', 'ewww-image-optimizer' ) . '</a>';
 		}
 		$debug_output .= '</p>';
 		$debug_output .= '<div id="ewww-debug-info" contenteditable="true">' . $eio_debug . '</div>';

@@ -204,6 +204,10 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			'data-no-lazy',
 			'data-orig-size',
 			'data-permalink',
+			'data-pin-description',
+			'data-pin-id',
+			'data-pin-media',
+			'data-pin-url',
 			'data-width',
 		);
 		foreach ( $attributes as $attribute ) {
@@ -339,6 +343,7 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			is_admin() ||
 			! empty( $_GET['cornerstone'] ) ||
 			strpos( $uri, 'cornerstone-endpoint' ) !== false ||
+			did_action( 'cornerstone_boot_app' ) || did_action( 'cs_before_preview_frame' ) ||
 			! empty( $_GET['et_fb'] ) ||
 			! empty( $_GET['tatsu'] ) ||
 			( ! empty( $_POST['action'] ) && 'tatsu_get_concepts' === $_POST['action'] ) ||
@@ -357,6 +362,9 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			}
 			if ( ! empty( $_GET['cornerstone'] ) || strpos( $uri, 'cornerstone-endpoint' ) !== false ) {
 				ewwwio_debug_message( 'cornerstone editor' );
+			}
+			if ( did_action( 'cornerstone_boot_app' ) || did_action( 'cs_before_preview_frame' ) ) {
+				ewwwio_debug_message( 'cornerstone app/preview' );
 			}
 			if ( ! empty( $_GET['et_fb'] ) ) {
 				ewwwio_debug_message( 'et_fb' );
@@ -487,7 +495,6 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 						ewwwio_debug_message( "found webp for Lazy Load: $real_file" );
 						$this->set_attribute( $new_image, 'data-lazysrc-webp', $this->generate_url( $real_file ) );
 					}
-					// TODO: should we be using the class, or will that be moot point?
 					if ( $new_image !== $image ) {
 						$this->set_attribute( $new_image, 'class', $this->get_attribute( $new_image, 'class' ) . ' ewww_webp_lazy_load', true );
 						$buffer = str_replace( $image, $new_image, $buffer );

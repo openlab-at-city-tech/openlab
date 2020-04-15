@@ -1,19 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
-# This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: MapPress Easy Google Maps in italiano\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-26 13:33+0100\n"
-"PO-Revision-Date: 2015-09-11 10:38+0100\n"
 "Last-Translator: Borisa Djuraskovic <borisad@webhostinghub.com>\n"
 "Language-Team: Gianni Diurno | gidibao.net & charmingpress.com\n"
-"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2014-01-26 13:33+0100\n"
+"PO-Revision-Date: 2015-09-11 10:38+0100\n"
+"Language: it_IT\n"
 "X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_html__;esc_html_e\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -24,7 +20,9 @@ msgstr ""
 msgid "Version"
 msgstr "Verzija"
 
-#: mappress.php:130 mappress_api.php:550 mappress_options.php:603
+#: mappress.php:130
+#: mappress_api.php:550
+#: mappress_options.php:603
 msgid "Documentation"
 msgstr "Dokumentacija"
 
@@ -41,30 +39,20 @@ msgid "Upgrade to MapPress Pro"
 msgstr "Nadogradnja na MapPress Pro"
 
 #: mappress.php:334
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"Nedostaju tabele baze podataka MapPress-a. Molimo deaktivirajte plugin i "
-"aktivirajte ga ponovo da biste ovo popravili."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Nedostaju tabele baze podataka MapPress-a. Molimo deaktivirajte plugin i aktivirajte ga ponovo da biste ovo popravili."
 
 #: mappress.php:339
-msgid ""
-"WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-"before using MapPress."
-msgstr ""
-"UPOZORENJE: MapPress sada zahteva WordPress 3.2 ili bolji. Molimo "
-"nadogradite pre upotrebe MapPress-a."
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr "UPOZORENJE: MapPress sada zahteva WordPress 3.2 ili bolji. Molimo nadogradite pre upotrebe MapPress-a."
 
 #: mappress.php:344
-msgid ""
-"WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please "
-"deactivate or uninstall WP-Geo before using MapPress."
-msgstr ""
-"UPOZORENJE: MapPress nije kompatibilan sa WP-Geo plugin-om. Molimo "
-"deaktivirajte ili deinstalirajte WP-Geo pre upotrebe MapPress-a."
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr "UPOZORENJE: MapPress nije kompatibilan sa WP-Geo plugin-om. Molimo deaktivirajte ili deinstalirajte WP-Geo pre upotrebe MapPress-a."
 
-#: mappress.php:542 mappress_api.php:739 templates/map_directions.php:6
+#: mappress.php:542
+#: mappress_api.php:739
+#: templates/map_directions.php:6
 msgid "Bicycling"
 msgstr "Biciklizam"
 
@@ -76,20 +64,22 @@ msgstr "Bicikl"
 msgid "One of the addresses could not be found."
 msgstr "Jedna od adresi nije mogla biti pronađena."
 
-#: mappress.php:545 mappress_api.php:662
-msgid ""
-"Google cannot return directions between those addresses.  There is no route "
-"between them or the routing information is not available."
-msgstr ""
-"Google ne može da vrati uputstva između tih adresa. Ne postoji ruta među "
-"njima, niti su dostupne informacije o ruti."
+#: mappress.php:545
+#: mappress_api.php:662
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr "Google ne može da vrati uputstva između tih adresa. Ne postoji ruta među njima, niti su dostupne informacije o ruti."
 
-#: mappress.php:546 mappress_api.php:663
+#: mappress.php:546
+#: mappress_api.php:663
 msgid "Unknown error, unable to return directions.  Status code = "
 msgstr "Nepoznata greška, ne može da vrati uputstva. Kod statusa ="
 
-#: mappress.php:547 mappress_api.php:667 mappress_options.php:103
-#: mappress_poi.php:281 mappress_settings.php:130 pro/mappress_widget.php:108
+#: mappress.php:547
+#: mappress_api.php:667
+#: mappress_options.php:103
+#: mappress_poi.php:281
+#: mappress_settings.php:130
+#: pro/mappress_widget.php:108
 msgid "Directions"
 msgstr "Uputstva"
 
@@ -101,7 +91,8 @@ msgstr "Greška u iščitavanju KML fajla"
 msgid "Loading..."
 msgstr "Učitavanje..."
 
-#: mappress.php:550 mappress_api.php:665
+#: mappress.php:550
+#: mappress_api.php:665
 msgid "No matching address"
 msgstr "Nema adresa koje se poklapaju"
 
@@ -109,7 +100,9 @@ msgstr "Nema adresa koje se poklapaju"
 msgid "Unable to get your location"
 msgstr "Ne može da pribavi vašu lokaciju"
 
-#: mappress.php:552 mappress_api.php:685 mappress_settings.php:318
+#: mappress.php:552
+#: mappress_api.php:685
+#: mappress_settings.php:318
 msgid "Traffic"
 msgstr "Saobraćaj"
 
@@ -117,13 +110,17 @@ msgstr "Saobraćaj"
 msgid "Transit"
 msgstr "Tranzit"
 
-#: mappress.php:554 mappress_api.php:684 mappress_poi.php:330
-#: mappress_settings.php:313 mappress_settings.php:452
+#: mappress.php:554
+#: mappress_api.php:684
+#: mappress_poi.php:330
+#: mappress_settings.php:313
+#: mappress_settings.php:452
 #: pro/mappress_widget.php:124
 msgid "Zoom"
 msgstr "Zoom"
 
-#: mappress.php:559 mappress_api.php:563
+#: mappress.php:559
+#: mappress_api.php:563
 msgid "Add"
 msgstr "Dodavanje"
 
@@ -135,7 +132,9 @@ msgstr "Kliknite & prevucite za pomeranje"
 msgid "Click to change"
 msgstr "Kliknite za izmenu"
 
-#: mappress.php:562 mappress_api.php:671 mappress_api.php:679
+#: mappress.php:562
+#: mappress_api.php:671
+#: mappress_api.php:679
 #: mappress_map.php:440
 msgid "Delete"
 msgstr "Obrišite"
@@ -144,7 +143,8 @@ msgstr "Obrišite"
 msgid "Delete this POI?"
 msgstr "Obrisati ovaj POI?"
 
-#: mappress.php:564 mappress_api.php:678
+#: mappress.php:564
+#: mappress_api.php:678
 msgid "Delete this map?"
 msgstr "Obrisati ovu mapu?"
 
@@ -156,7 +156,9 @@ msgstr "Molimo, prvo sačuvajte mapu"
 msgid "Shape"
 msgstr "Oblik"
 
-#: mappress.php:567 mappress_api.php:660 mappress_map.php:53
+#: mappress.php:567
+#: mappress_api.php:660
+#: mappress_map.php:53
 msgid "Untitled"
 msgstr "Bez naslova"
 
@@ -179,11 +181,13 @@ msgstr "Nema rezultata geo-kodiranja za adresu: %s"
 msgid "FAQ"
 msgstr "FAQ"
 
-#: mappress_api.php:552 mappress_options.php:604
+#: mappress_api.php:552
+#: mappress_options.php:604
 msgid "Report a bug"
 msgstr "Prijavite kvar"
 
-#: mappress_api.php:567 templates/map_poi_list.php:5
+#: mappress_api.php:567
+#: templates/map_poi_list.php:5
 msgid "Location"
 msgstr "Lokacija"
 
@@ -191,25 +195,35 @@ msgstr "Lokacija"
 msgid "Current Maps"
 msgstr "Trenutne mape"
 
-#: mappress_api.php:583 forms/map_media.php:12
+#: mappress_api.php:583
+#: forms/map_media.php:12
 msgid "New Map"
 msgstr "Nova mapa"
 
-#: mappress_api.php:592 mappress_api.php:659 forms/map_media.php:22
+#: mappress_api.php:592
+#: mappress_api.php:659
+#: forms/map_media.php:22
 msgid "Map ID"
 msgstr "Identifikacija mape"
 
-#: mappress_api.php:595 mappress_api.php:676 pro/mappress_pro_settings.php:199
+#: mappress_api.php:595
+#: mappress_api.php:676
+#: pro/mappress_pro_settings.php:199
 msgid "Title"
 msgstr "Naslov"
 
-#: mappress_api.php:608 mappress_api.php:669 forms/map_editor_infobox.php:45
+#: mappress_api.php:608
+#: mappress_api.php:669
+#: forms/map_editor_infobox.php:45
 #: forms/map_media.php:46
 msgid "Save"
 msgstr "Sačuvati"
 
-#: mappress_api.php:609 mappress_options.php:290 mappress_options.php:291
-#: mappress_settings.php:381 pro/mappress_widget.php:116
+#: mappress_api.php:609
+#: mappress_options.php:290
+#: mappress_options.php:291
+#: mappress_settings.php:381
+#: pro/mappress_widget.php:116
 msgid "Center"
 msgstr "Centar"
 
@@ -237,11 +251,14 @@ msgstr "Unesite adresu"
 msgid "Did you mean: "
 msgstr "Da li ste mislili:"
 
-#: mappress_api.php:668 mappress_map.php:438
+#: mappress_api.php:668
+#: mappress_map.php:438
 msgid "Edit"
 msgstr "Izmena"
 
-#: mappress_api.php:670 forms/map_editor_infobox.php:46 forms/map_media.php:47
+#: mappress_api.php:670
+#: forms/map_editor_infobox.php:46
+#: forms/map_media.php:47
 #: pro/mappress_icons.php:71
 msgid "Cancel"
 msgstr "Otkažite"
@@ -254,7 +271,9 @@ msgstr "Pregledajte"
 msgid "Back"
 msgstr "Nazad"
 
-#: mappress_api.php:674 mappress_map.php:439 forms/map_media.php:48
+#: mappress_api.php:674
+#: mappress_map.php:439
+#: forms/map_media.php:48
 msgid "Insert into post"
 msgstr "Ubacite u post"
 
@@ -290,11 +309,13 @@ msgstr "Standardne ikonice"
 msgid "My icons"
 msgstr "Moje ikonice"
 
-#: mappress_api.php:737 templates/map_directions.php:3
+#: mappress_api.php:737
+#: templates/map_directions.php:3
 msgid "By car"
 msgstr "Kolima"
 
-#: mappress_api.php:738 templates/map_directions.php:5
+#: mappress_api.php:738
+#: templates/map_directions.php:5
 msgid "Walking"
 msgstr "Peške"
 
@@ -302,7 +323,8 @@ msgstr "Peške"
 msgid "Start"
 msgstr "Početak"
 
-#: mappress_api.php:752 templates/map_directions.php:16
+#: mappress_api.php:752
+#: templates/map_directions.php:16
 msgid "Swap start and end"
 msgstr "Zamenite početak i kraj "
 
@@ -310,7 +332,8 @@ msgstr "Zamenite početak i kraj "
 msgid "End"
 msgstr "Kraj"
 
-#: mappress_api.php:767 templates/map_directions.php:29
+#: mappress_api.php:767
+#: templates/map_directions.php:29
 msgid "Get Directions"
 msgstr "Pribavite uputstva"
 
@@ -318,7 +341,8 @@ msgstr "Pribavite uputstva"
 msgid "Print Directions"
 msgstr "Odštampajte uputstva"
 
-#: mappress_api.php:769 templates/map_directions.php:31
+#: mappress_api.php:769
+#: templates/map_directions.php:31
 msgid "Close"
 msgstr "Zatvorite"
 
@@ -330,15 +354,19 @@ msgstr "Mapa nije nađena"
 msgid "Show map"
 msgstr "Prikazati mapu"
 
-#: mappress_map.php:491 mappress_settings.php:444 forms/map_editor.php:17
+#: mappress_map.php:491
+#: mappress_settings.php:444
+#: forms/map_editor.php:17
 msgid "Center map"
 msgstr "Centralna mapa"
 
-#: mappress_map.php:500 mappress_settings.php:445
+#: mappress_map.php:500
+#: mappress_settings.php:445
 msgid "Reset map"
 msgstr "Resetujte mapu"
 
-#: mappress_map.php:509 mappress_settings.php:443
+#: mappress_map.php:509
+#: mappress_settings.php:443
 msgid "Bigger map"
 msgstr "Veća mapa"
 
@@ -346,19 +374,23 @@ msgstr "Veća mapa"
 msgid "Smaller map"
 msgstr "Manja mapa"
 
-#: mappress_options.php:99 mappress_settings.php:127
+#: mappress_options.php:99
+#: mappress_settings.php:127
 msgid "Basic Settings"
 msgstr "Osnovna podešavanja"
 
-#: mappress_options.php:100 mappress_options.php:391
+#: mappress_options.php:100
+#: mappress_options.php:391
 msgid "Show a sample map on this page"
 msgstr "Prikazati mapu uzorak na ovoj stranici"
 
-#: mappress_options.php:101 mappress_settings.php:129
+#: mappress_options.php:101
+#: mappress_settings.php:129
 msgid "Automatic map display"
 msgstr "Automatski prikaz mape"
 
-#: mappress_options.php:102 mappress_settings.php:128
+#: mappress_options.php:102
+#: mappress_settings.php:128
 msgid "Post types"
 msgstr "Tipovi posta"
 
@@ -366,7 +398,8 @@ msgstr "Tipovi posta"
 msgid "Marker list"
 msgstr "Lista markera"
 
-#: mappress_options.php:105 mappress_settings.php:311
+#: mappress_options.php:105
+#: mappress_settings.php:311
 msgid "Map types"
 msgstr "Tipovi mapa"
 
@@ -374,11 +407,13 @@ msgstr "Tipovi mapa"
 msgid "Street View"
 msgstr "Pregled ulica"
 
-#: mappress_options.php:107 mappress_settings.php:135
+#: mappress_options.php:107
+#: mappress_settings.php:135
 msgid "Scroll wheel zoom"
 msgstr "Zumiranje točkića za skrolovanje"
 
-#: mappress_options.php:108 mappress_settings.php:134
+#: mappress_options.php:108
+#: mappress_settings.php:134
 msgid "Keyboard shortcuts"
 msgstr "Prečice za tastaturu"
 
@@ -390,11 +425,13 @@ msgstr "Otvorite prvi marker"
 msgid "Show traffic button"
 msgstr "Prikazati dugme za saobraćaj"
 
-#: mappress_options.php:111 mappress_settings.php:148
+#: mappress_options.php:111
+#: mappress_settings.php:148
 msgid "Tooltips"
 msgstr "Saveti za alatke"
 
-#: mappress_options.php:112 mappress_settings.php:316
+#: mappress_options.php:112
+#: mappress_settings.php:316
 msgid "Overview map"
 msgstr "Pregled mape"
 
@@ -402,27 +439,33 @@ msgstr "Pregled mape"
 msgid "CSS Settings"
 msgstr "CSS podešavanja"
 
-#: mappress_options.php:115 mappress_settings.php:141
+#: mappress_options.php:115
+#: mappress_settings.php:141
 msgid "Map alignment"
 msgstr "Poravnanje mape"
 
-#: mappress_options.php:116 mappress_settings.php:142
+#: mappress_options.php:116
+#: mappress_settings.php:142
 msgid "Map border"
 msgstr "Ivica mape"
 
-#: mappress_options.php:126 mappress_settings.php:158
+#: mappress_options.php:126
+#: mappress_settings.php:158
 msgid "Localization"
 msgstr "Lokalizacija"
 
-#: mappress_options.php:127 mappress_settings.php:159
+#: mappress_options.php:127
+#: mappress_settings.php:159
 msgid "Language"
 msgstr "Jezik"
 
-#: mappress_options.php:128 mappress_settings.php:160
+#: mappress_options.php:128
+#: mappress_settings.php:160
 msgid "Country"
 msgstr "Zemlja"
 
-#: mappress_options.php:129 mappress_settings.php:161
+#: mappress_options.php:129
+#: mappress_settings.php:161
 msgid "Directions server"
 msgstr "Server za uputstva"
 
@@ -446,11 +489,13 @@ msgstr "Uobičajena polja"
 msgid "Micsellaneous"
 msgstr "Mešano"
 
-#: mappress_options.php:141 mappress_settings.php:165
+#: mappress_options.php:141
+#: mappress_settings.php:165
 msgid "Map sizes"
 msgstr "Veličine mapa"
 
-#: mappress_options.php:142 pro/mappress_pro_settings.php:33
+#: mappress_options.php:142
+#: pro/mappress_pro_settings.php:33
 msgid "Force resize"
 msgstr "Prinudna promena veličine"
 
@@ -458,70 +503,77 @@ msgstr "Prinudna promena veličine"
 msgid "MapPress link"
 msgstr "Link za MapPress"
 
-#: mappress_options.php:188 mappress_settings.php:237
+#: mappress_options.php:188
+#: mappress_settings.php:237
 msgid "country code"
 msgstr "poštanski broj zemlje"
 
-#: mappress_options.php:190 mappress_settings.php:239
+#: mappress_options.php:190
+#: mappress_settings.php:239
 #, php-format
 msgid "Enter a %s to use when searching (leave blank for USA)"
-msgstr ""
-"Unesite %s da biste koristili prilikom pretrage (ostavite prazno za SAD)"
+msgstr "Unesite %s da biste koristili prilikom pretrage (ostavite prazno za SAD)"
 
-#: mappress_options.php:197 mappress_settings.php:246
+#: mappress_options.php:197
+#: mappress_settings.php:246
 msgid "Enter a google server URL for directions/printing"
 msgstr "Unesite URL Google servera za uputstva/štampanje"
 
-#: mappress_options.php:203 mappress_settings.php:260
+#: mappress_options.php:203
+#: mappress_settings.php:260
 msgid "Enable zoom with the mouse scroll wheel"
 msgstr "Omogućite zumiranje uz pomoć skrolovanja mišem"
 
-#: mappress_options.php:208 mappress_settings.php:264
+#: mappress_options.php:208
+#: mappress_settings.php:264
 msgid "Enable keyboard panning and zooming"
 msgstr "Omogućite pomeranje i zumiranje tastature"
 
-#: mappress_options.php:213 mappress_settings.php:270
+#: mappress_options.php:213
+#: mappress_settings.php:270
 msgid "language"
 msgstr "jezik"
 
 #: mappress_options.php:215
 #, php-format
 msgid "Use a specific %s for map controls (defaults to browser language)"
-msgstr ""
-"Koristite određeni %s za kontrolu mapa (uobičajeno za jezik pretraživača)"
+msgstr "Koristite određeni %s za kontrolu mapa (uobičajeno za jezik pretraživača)"
 
 #: mappress_options.php:222
-msgid ""
-"Allow your readers to change the map type (street, satellite, or hybrid)"
-msgstr ""
-"Dopustite vašim čitaovima da izmene tip mape (ulične, satelitske ili "
-"hibridne)"
+msgid "Allow your readers to change the map type (street, satellite, or hybrid)"
+msgstr "Dopustite vašim čitaovima da izmene tip mape (ulične, satelitske ili hibridne)"
 
 #: mappress_options.php:227
 msgid "Display the street view control \"peg man\""
 msgstr "Prikažite kontrolu \"peg man\" pregleda ulica"
 
-#: mappress_options.php:234 mappress_settings.php:342
+#: mappress_options.php:234
+#: mappress_settings.php:342
 msgid "Inline (in your blog)"
 msgstr "U liniji (u vašem blogu)"
 
-#: mappress_options.php:238 mappress_settings.php:343
-#: pro/mappress_pro_settings.php:177 pro/mappress_widget.php:110
+#: mappress_options.php:238
+#: mappress_settings.php:343
+#: pro/mappress_pro_settings.php:177
+#: pro/mappress_widget.php:110
 msgid "Google"
 msgstr "Google"
 
-#: mappress_options.php:242 mappress_settings.php:344
+#: mappress_options.php:242
+#: mappress_settings.php:344
 #: pro/mappress_widget.php:111
 msgid "None"
 msgstr "Ništa"
 
 #: mappress_options.php:244
 msgid "Select 'Google' if directions aren't displaying properly in your theme"
-msgstr ""
-"Odaberite ‘Google’ ukoliko se uputstva ne prikazuju ispravno na vašu temu "
+msgstr "Odaberite ‘Google’ ukoliko se uputstva ne prikazuju ispravno na vašu temu "
 
-#: mappress_options.php:250 mappress_options.php:444 mappress_options.php:451
-#: mappress_options.php:458 mappress_options.php:465
+#: mappress_options.php:250
+#: mappress_options.php:444
+#: mappress_options.php:451
+#: mappress_options.php:458
+#: mappress_options.php:465
 #, php-format
 msgid "This setting requires %s."
 msgstr "Ovo podešavanje zahteva %s."
@@ -554,70 +606,85 @@ msgstr "Prikazati pregled kontrole mape u donjem desnom uglu glavne mape"
 msgid "Automatically open the overview map"
 msgstr "Automatski otvoriti pregled mape"
 
-#: mappress_options.php:286 mappress_settings.php:280
-#: mappress_settings.php:286 mappress_settings.php:380
+#: mappress_options.php:286
+#: mappress_settings.php:280
+#: mappress_settings.php:286
+#: mappress_settings.php:380
 #: mappress_settings.php:489
 msgid "Default"
 msgstr "Uobičajeno"
 
-#: mappress_options.php:295 mappress_options.php:296 mappress_settings.php:382
+#: mappress_options.php:295
+#: mappress_options.php:296
+#: mappress_settings.php:382
 msgid "Left"
 msgstr "Levo"
 
-#: mappress_options.php:300 mappress_options.php:301 mappress_settings.php:383
+#: mappress_options.php:300
+#: mappress_options.php:301
+#: mappress_settings.php:383
 msgid "Right"
 msgstr "Desno"
 
 #: mappress_options.php:303
 #, php-format
 msgid "Choose 'default' to override this with CSS class %s in your theme's %s"
-msgstr ""
-"Odaberite ‘default’(uobičajeno) da biste prešli preko ovoga sa CSS klasom %s "
-"u %s vaše teme"
+msgstr "Odaberite ‘default’(uobičajeno) da biste prešli preko ovoga sa CSS klasom %s u %s vaše teme"
 
-#: mappress_options.php:311 mappress_settings.php:395
+#: mappress_options.php:311
+#: mappress_settings.php:395
 msgid "solid"
 msgstr "solidno"
 
-#: mappress_options.php:312 mappress_settings.php:396
+#: mappress_options.php:312
+#: mappress_settings.php:396
 msgid "dashed"
 msgstr "isprekidano"
 
-#: mappress_options.php:313 mappress_settings.php:397
+#: mappress_options.php:313
+#: mappress_settings.php:397
 msgid "dotted"
 msgstr "tačkasto"
 
-#: mappress_options.php:314 mappress_settings.php:398
+#: mappress_options.php:314
+#: mappress_settings.php:398
 msgid "double"
 msgstr "duplo"
 
-#: mappress_options.php:315 mappress_settings.php:399
+#: mappress_options.php:315
+#: mappress_settings.php:399
 msgid "groove"
 msgstr "žleb"
 
-#: mappress_options.php:316 mappress_settings.php:400
+#: mappress_options.php:316
+#: mappress_settings.php:400
 msgid "inset"
 msgstr "umetak"
 
-#: mappress_options.php:317 mappress_settings.php:401
+#: mappress_options.php:317
+#: mappress_settings.php:401
 msgid "outset"
 msgstr "polatzna tačka"
 
-#: mappress_options.php:321 mappress_settings.php:308
+#: mappress_options.php:321
+#: mappress_settings.php:308
 #: mappress_settings.php:405
 msgid "Style"
 msgstr "Stil"
 
-#: mappress_options.php:329 mappress_settings.php:413
+#: mappress_options.php:329
+#: mappress_settings.php:413
 #: mappress_settings.php:489
 msgid "Width"
 msgstr "Širina"
 
-#: mappress_options.php:337 mappress_settings.php:419
+#: mappress_options.php:337
+#: mappress_settings.php:419
 msgid "Corner radius"
 msgstr "Prečnik ugla"
 
-#: mappress_options.php:341 mappress_settings.php:428
+#: mappress_options.php:341
+#: mappress_settings.php:428
 msgid "Color"
 msgstr "Boja"
 
@@ -628,9 +695,7 @@ msgstr "Senka"
 #: mappress_options.php:348
 #, php-format
 msgid "Choose -none- to override settings with CSS class %s in your theme's %s"
-msgstr ""
-"Odaberite -nijedno- da pređete preko podešavanja putem CSS klase %s u %s "
-"vaše teme"
+msgstr "Odaberite -nijedno- da pređete preko podešavanja putem CSS klase %s u %s vaše teme"
 
 #: mappress_options.php:366
 msgid "Show the user's location on the map"
@@ -644,15 +709,18 @@ msgstr "Otvorite marker korisnika prilikom prikazivanja mape"
 msgid "Center the map on the user's location"
 msgstr "Centrirajte mapu na lokaciju korisnika"
 
-#: mappress_options.php:398 mappress_settings.php:468
+#: mappress_options.php:398
+#: mappress_settings.php:468
 msgid "Top of post"
 msgstr "Vrh posta"
 
-#: mappress_options.php:402 mappress_settings.php:469
+#: mappress_options.php:402
+#: mappress_settings.php:469
 msgid "Bottom of post"
 msgstr "Dno posta"
 
-#: mappress_options.php:406 mappress_settings.php:470
+#: mappress_options.php:406
+#: mappress_settings.php:470
 msgid "No automatic display"
 msgstr "Nema automatskog prikaza"
 
@@ -677,12 +745,14 @@ msgstr "stranica"
 msgid "Permanently resize existing maps:"
 msgstr "Trajno promenite veličinu postojećim mapama:"
 
-#: mappress_options.php:438 pro/mappress_pro_settings.php:229
+#: mappress_options.php:438
+#: pro/mappress_pro_settings.php:229
 #, php-format
 msgid "from %s to %s"
 msgstr "da %s a %s"
 
-#: mappress_options.php:439 pro/mappress_pro_settings.php:230
+#: mappress_options.php:439
+#: pro/mappress_pro_settings.php:230
 msgid "Force Resize"
 msgstr "Prinudna promena veličine"
 
@@ -711,7 +781,8 @@ msgstr "jednostavan GeoRSS"
 msgid "Enable %s for your RSS feeds"
 msgstr "Omogućite %s za vaše RSS snabdevanje"
 
-#: mappress_options.php:492 mappress_options.php:501
+#: mappress_options.php:492
+#: mappress_options.php:501
 msgid "No new items"
 msgstr "Nema novih stavki"
 
@@ -740,15 +811,18 @@ msgstr "*Rangirajte ga %s na WordPress.org"
 msgid "* Make a donation"
 msgstr "*Dajte donaciju"
 
-#: mappress_options.php:532 mappress_settings.php:513
+#: mappress_options.php:532
+#: mappress_settings.php:513
 msgid "Thanks for your support!"
 msgstr "Hvala Vam na podršci!"
 
-#: mappress_options.php:559 mappress_settings.php:540
+#: mappress_options.php:559
+#: mappress_settings.php:540
 msgid "MapPress"
 msgstr "MapPress"
 
-#: mappress_options.php:613 mappress_settings.php:590
+#: mappress_options.php:613
+#: mappress_settings.php:590
 msgid "Like this plugin?"
 msgstr "Dopada vam se ovaj plugin?"
 
@@ -756,23 +830,28 @@ msgstr "Dopada vam se ovaj plugin?"
 msgid "MapPress News"
 msgstr "MapPress novosti"
 
-#: mappress_options.php:618 mappress_settings.php:592
+#: mappress_options.php:618
+#: mappress_settings.php:592
 msgid "Sample Map"
 msgstr "Mapa uzorak"
 
-#: mappress_options.php:638 mappress_settings.php:611
+#: mappress_options.php:638
+#: mappress_settings.php:611
 msgid "Save Changes"
 msgstr "Sačuvajte promene"
 
-#: mappress_options.php:639 mappress_settings.php:612
+#: mappress_options.php:639
+#: mappress_settings.php:612
 msgid "Reset Defaults"
 msgstr "Resetujte deafault-ove"
 
-#: mappress_poi.php:246 mappress_settings.php:453
+#: mappress_poi.php:246
+#: mappress_settings.php:453
 msgid "Directions to"
 msgstr "Uputstva za"
 
-#: mappress_poi.php:248 mappress_settings.php:454
+#: mappress_poi.php:248
+#: mappress_settings.php:454
 msgid "Directions from"
 msgstr "Uputstva od"
 
@@ -858,9 +937,7 @@ msgstr "Mape učitajte poslednje"
 
 #: mappress_settings.php:218
 msgid "Use the settings below to automatically create maps from custom fields."
-msgstr ""
-"Koristite podešavanje ispod za automatsko kreiranje mapa iz uobičajenih "
-"polja."
+msgstr "Koristite podešavanje ispod za automatsko kreiranje mapa iz uobičajenih polja."
 
 #: mappress_settings.php:224
 msgid "Posts"
@@ -915,7 +992,8 @@ msgstr "Android"
 msgid "Open initially"
 msgstr "Prvobitno otvoreno"
 
-#: mappress_settings.php:302 mappress_settings.php:304
+#: mappress_settings.php:302
+#: mappress_settings.php:304
 #: mappress_settings.php:306
 msgid "Checked initially"
 msgstr "Prvobitno provereno"
@@ -952,15 +1030,18 @@ msgstr "Biciklističke rute"
 msgid "Road map"
 msgstr "Mapa puteva"
 
-#: mappress_settings.php:327 pro/mappress_widget.php:142
+#: mappress_settings.php:327
+#: pro/mappress_widget.php:142
 msgid "Satellite"
 msgstr "Satelit"
 
-#: mappress_settings.php:328 pro/mappress_widget.php:143
+#: mappress_settings.php:328
+#: pro/mappress_widget.php:143
 msgid "Terrain"
 msgstr "Teren"
 
-#: mappress_settings.php:329 pro/mappress_widget.php:141
+#: mappress_settings.php:329
+#: pro/mappress_widget.php:141
 msgid "Hybrid"
 msgstr "Hibrid"
 
@@ -968,11 +1049,13 @@ msgstr "Hibrid"
 msgid "Automatically open the first POI when a map is displayed"
 msgstr "Automatski otvorite prvi POI prilikom prikazivanja mape"
 
-#: mappress_settings.php:356 mappress_settings.php:365
+#: mappress_settings.php:356
+#: mappress_settings.php:365
 msgid "Show control"
 msgstr "Prikazati kontrolu"
 
-#: mappress_settings.php:360 mappress_settings.php:369
+#: mappress_settings.php:360
+#: mappress_settings.php:369
 msgid "Enabled by default"
 msgstr "Omogućeno po default-u"
 
@@ -1039,7 +1122,8 @@ msgstr "Ažuriranje PRO verzije je dostupno za manuelnu instalaciju: %s "
 msgid "Add POI"
 msgstr "Add POI"
 
-#: forms/map_editor.php:5 templates/map_directions.php:11
+#: forms/map_editor.php:5
+#: templates/map_directions.php:11
 msgid "My location"
 msgstr "Moja lokacija"
 
@@ -1055,7 +1139,8 @@ msgstr "Linija:"
 msgid "Weight"
 msgstr "Težina"
 
-#: forms/map_editor_infobox.php:25 forms/map_editor_infobox.php:31
+#: forms/map_editor_infobox.php:25
+#: forms/map_editor_infobox.php:31
 msgid "Opacity"
 msgstr "Neprozirnost"
 
@@ -1092,7 +1177,8 @@ msgstr "Nema rezultata, proverite da li je geo-koder konfigurisan"
 msgid "Invalid status: %s, address: %s"
 msgstr "Nevažeći status: %s, adresa: %s"
 
-#: pro/mappress_geocoders.php:94 pro/mappress_geocoders.php:158
+#: pro/mappress_geocoders.php:94
+#: pro/mappress_geocoders.php:158
 #, php-format
 msgid "No results for address: %s"
 msgstr "Nema rezultata za adresu: %s"
@@ -1229,8 +1315,7 @@ msgstr "Info kutija (može se stilizovati i produžiti izvan mape)"
 
 #: pro/mappress_pro_settings.php:111
 msgid "Disable map panning when infoWindow / infoBox is opened"
-msgstr ""
-"Onemogućite “panoramisanje” mape kada su Info prozor / Info kutija otvoreni"
+msgstr "Onemogućite “panoramisanje” mape kada su Info prozor / Info kutija otvoreni"
 
 #: pro/mappress_pro_settings.php:115
 msgid "Show featured image thumbnails in mashup POIs"
@@ -1313,7 +1398,8 @@ msgstr "Telo"
 msgid "Map Zoom"
 msgstr "Zum mape"
 
-#: pro/mappress_pro_settings.php:204 pro/mappress_widget.php:140
+#: pro/mappress_pro_settings.php:204
+#: pro/mappress_widget.php:140
 msgid "Map"
 msgstr "Mapa"
 
@@ -1408,12 +1494,14 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 
 #~ msgid "Internal error, map was missing.  Your data has not been saved!"
 #~ msgstr ""
-#~ "Errore interno: la mappa é stata smarrita.  I dati non sono stati salvati!"
+"\n"
+"interno: la mappa é stata smarrita.  I dati non sono stati salvati!\""
 
 #~ msgid "Internal error - unable to save map.  Your data has not been saved!"
 #~ msgstr ""
-#~ "Errore interno - non é possibile salvare la mappa.  I dati non sono stati "
-#~ "salvati!"
+"\n"
+"interno - non é possibile salvare la mappa.  I dati non sono stati \"\n"
+""
 
 #~ msgid "Custom CSS"
 #~ msgstr "CSS personalizzato"
@@ -1447,7 +1535,8 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 
 #~ msgid "Update map when address is changed by a program"
 #~ msgstr ""
-#~ "Aggiorna la mappa quando un indirizzo é stato modificato da un programma"
+"\n"
+"la mappa quando un indirizzo é stato modificato da un programma\""
 
 #~ msgid "Display powered by link"
 #~ msgstr "Attiva il link \"fornito da\"."
@@ -1472,8 +1561,9 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 
 #~ msgid "This setting requires %s.  Show a list of markers under each map."
 #~ msgstr ""
-#~ "Questa impostazione richiede %s.  Mostra una lista di marker sotto ogni "
-#~ "mappa."
+"\n"
+"impostazione richiede %s.  Mostra una lista di marker sotto ogni \"\n"
+""
 
 #~ msgid "Donate"
 #~ msgstr "Donazioni"
@@ -1502,11 +1592,13 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Campo personalizzato mappa"
 
 #~ msgid ""
-#~ " Include your own CSS.  You must create a file named %s in the MapPress "
-#~ "%s sub-directory"
+"\n"
+"Include your own CSS.  You must create a file named %s in the MapPress \"\n"
+"sub-directory\""
 #~ msgstr ""
-#~ " Includi CSS personalizzato.  Crea un file a nome %s nella sotto-cartella "
-#~ "%s di MapPress"
+"\n"
+"Includi CSS personalizzato.  Crea un file a nome %s nella sotto-cartella \"\n"
+"di MapPress\""
 
 #~ msgid "Map addresses from a %s : "
 #~ msgstr "Indirizzi mappa da un %s : "
@@ -1542,9 +1634,11 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Manca l'indirizzo di partenza o arrivo."
 
 #~ msgid ""
-#~ "Google cannot return those directions for legal or contractual reasons"
+"\n"
+"cannot return those directions for legal or contractual reasons\""
 #~ msgstr ""
-#~ "Google non può mostrare questi percorsi per ragioni contrattuali o legali"
+"\n"
+"non può mostrare questi percorsi per ragioni contrattuali o legali\""
 
 #~ msgid "Invalid map API key"
 #~ msgstr "Chiave API non valida"
@@ -1553,17 +1647,20 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "La tua chiave ha inoltrato in un solo giorno troppe richieste."
 
 #~ msgid ""
-#~ "Error: your browser does not seem to support the street view Flash player"
+"\n"
+"your browser does not seem to support the street view Flash player\""
 #~ msgstr ""
-#~ "Errore: pare che il tuo browser non supporti lo street view Flash player"
+"\n"
+"pare che il tuo browser non supporti lo street view Flash player\""
 
 #~ msgid "Sorry, no street view data is available for this location"
 #~ msgstr "nessuna visualizzazione stradale per questa località"
 
 #~ msgid "Sorry, Google was unable to display the street view in your browser"
 #~ msgstr ""
-#~ "Google non é in grado di potere mostrare nel tuo browser la "
-#~ "visualizzazione stradale"
+"\n"
+"non é in grado di potere mostrare nel tuo browser la \"\n"
+"stradale\""
 
 #~ msgid "Get directions"
 #~ msgstr "Ottieni i percorsi"
@@ -1581,12 +1678,14 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Inserisci la tua chiave API. Non hai una chiave API?  Vai qui "
 
 #~ msgid ""
-#~ "MapPress could not load google maps.  Either your browser is incompatible "
-#~ "or your API key is invalid.  Need an API key?  Get one "
+"\n"
+"could not load google maps.  Either your browser is incompatible \"\n"
+"your API key is invalid.  Need an API key?  Get one \""
 #~ msgstr ""
-#~ "MapPress non può caricare le mappe di Google.  Il problema potrebbe "
-#~ "dipendere dalla incompatibilità del tuo browser oppure da una chiave API "
-#~ "non valida.  Non hai una chiave API?  Vai "
+"\n"
+"non può caricare le mappe di Google.  Il problema potrebbe \"\n"
+"dalla incompatibilità del tuo browser oppure da una chiave API \"\n"
+"valida.  Non hai una chiave API?  Vai \""
 
 #~ msgid "here"
 #~ msgstr "qui"
@@ -1601,10 +1700,12 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Premi esci oppure clicca qui per cancellare:"
 
 #~ msgid ""
-#~ "MapPress isn't ready yet.  Please enter your Google Maps API Key on the "
+"\n"
+"isn't ready yet.  Please enter your Google Maps API Key on the \""
 #~ msgstr ""
-#~ "MapPress non é ancora pronto.  Inserisci la tua chiave API di Google Maps "
-#~ "nel "
+"\n"
+"non é ancora pronto.  Inserisci la tua chiave API di Google Maps \"\n"
+""
 
 #~ msgid "MapPress options screen."
 #~ msgstr "MapPress - opzioni schermo."
@@ -1620,13 +1721,15 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 
 #~ msgid "Click on a marker or use the links below to edit or delete markers."
 #~ msgstr ""
-#~ "Clicca su di un marker oppure utilizza i link qui sotto per modificare o "
-#~ "cancellare i marker."
+"\n"
+"su di un marker oppure utilizza i link qui sotto per modificare o \"\n"
+"i marker.\""
 
 #~ msgid "ACCESS DENIED: You don't have permission to do this."
 #~ msgstr ""
-#~ "ACCESSO NEGATO: non hai i permessi necessari per compiere questa "
-#~ "operazione."
+"\n"
+"NEGATO: non hai i permessi necessari per compiere questa \"\n"
+""
 
 #~ msgid "supported languages"
 #~ msgstr "lingue disponibili"
@@ -1635,9 +1738,11 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Opzioni MapPress"
 
 #~ msgid ""
-#~ "I spend many hours working on MapPress.  Please donate to keep me going!"
+"\n"
+"spend many hours working on MapPress.  Please donate to keep me going!\""
 #~ msgstr ""
-#~ "Ho dedicato molto tempo allo sviluppo di MapPress. Effettua una donazione!"
+"\n"
+"dedicato molto tempo allo sviluppo di MapPress. Effettua una donazione!\""
 
 #~ msgid "Address format"
 #~ msgstr "Formato indirizzo"
@@ -1652,24 +1757,29 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Codice paese (ricerche)"
 
 #~ msgid ""
-#~ "Enter a country code to use as a default when searching for an address."
+"\n"
+"a country code to use as a default when searching for an address.\""
 #~ msgstr ""
-#~ "Inserisci il codice paese da utilizzare come predefinito durante la "
-#~ "ricerca di un indirizzo."
+"\n"
+"il codice paese da utilizzare come predefinito durante la \"\n"
+"di un indirizzo.\""
 
 #~ msgid "Force Google to use a specific language for map controls."
 #~ msgstr ""
-#~ "Indica a Google l'utilizzo specifico di una lingua per i controlli della "
-#~ "mappa."
+"\n"
+"a Google l'utilizzo specifico di una lingua per i controlli della \"\n"
+""
 
 #~ msgid "Check to enable directions to/from map markers"
 #~ msgstr "Seleziona per attivare (marker della mappa) i percorsi da/a"
 
 #~ msgid ""
-#~ "Check to show large map controls; uncheck for a small zoom control instead"
+"\n"
+"to show large map controls; uncheck for a small zoom control instead\""
 #~ msgstr ""
-#~ "Seleziona per mostrare in esteso i controlli per la mappa; deseleziona "
-#~ "per il solo controllo sullo zoom "
+"\n"
+"per mostrare in esteso i controlli per la mappa; deseleziona \"\n"
+"il solo controllo sullo zoom \""
 
 #~ msgid "Check to enable the \"map types\" button on the map"
 #~ msgstr "Seleziona per attivare sulla mappa il pulsante \"tipi di mappa\""
@@ -1679,18 +1789,21 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 
 #~ msgid "Choose the map type to use when the map is first displayed"
 #~ msgstr ""
-#~ "Seleziona quale tipologia di mappa mostrare alla visualizzazione di "
-#~ "partenza"
+"\n"
+"quale tipologia di mappa mostrare alla visualizzazione di \"\n"
+""
 
 #~ msgid "(click the icon to choose)"
 #~ msgstr "(clicca sulla icona per scegliere)"
 
 #~ msgid ""
-#~ "The starting or ending address could not be found.  Please check that the "
-#~ "address is correct and completely entered."
+"\n"
+"starting or ending address could not be found.  Please check that the \"\n"
+"is correct and completely entered.\""
 #~ msgstr ""
-#~ "Non é stato possibile trovare l'indirizzo di partenza o arrivo.  Verifica "
-#~ "che l'indirizzo sia valido nonché sia stato inserito correttamente."
+"\n"
+"é stato possibile trovare l'indirizzo di partenza o arrivo.  Verifica \"\n"
+"l'indirizzo sia valido nonché sia stato inserito correttamente.\""
 
 #~ msgid "(leave blank for default)"
 #~ msgstr "(lascia in bianco per le predefinite)"
@@ -1714,17 +1827,21 @@ msgstr "Molimo omogućite javascript radi pregleda ove mape"
 #~ msgstr "Impostazioni avanzate"
 
 #~ msgid ""
-#~ "Check to show the \"GoogleBar\" search box for local business listings."
+"\n"
+"to show the \"GoogleBar\" search box for local business listings.\""
 #~ msgstr ""
-#~ "Seleziona per mostrare la casella di ricerca \"GoogleBar\" per l'elenco "
-#~ "delle attività commerciali locali."
+"\n"
+"per mostrare la casella di ricerca \"GoogleBar\" per l'elenco \"\n"
+"attività commerciali locali.\""
 
 #~ msgid ""
-#~ "Automatically center/zoom map when saved (uncheck to display map exactly "
-#~ "as shown below)"
+"\n"
+"center/zoom map when saved (uncheck to display map exactly \"\n"
+"shown below)\""
 #~ msgstr ""
-#~ "Centratura/Zoom in automatico al salvataggio della mappa (deseleziona per "
-#~ "mostrare la mappa esattamente come qui sotto)"
+"\n"
+"in automatico al salvataggio della mappa (deseleziona per \"\n"
+"la mappa esattamente come qui sotto)\""
 
 #~ msgid "Center/zoom now"
 #~ msgstr "Centratura/zoom"

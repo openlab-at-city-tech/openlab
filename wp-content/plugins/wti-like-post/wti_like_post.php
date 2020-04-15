@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WTI Like Post
-Plugin URI: http://www.webtechideas.in/wti-like-post-plugin/
-Description: WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts. Check out the <strong><a href="http://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">powerful PRO version</a></strong> with lots of useful features.
-Version: 1.4.4
+Plugin URI: https://www.webtechideas.in/wti-like-post-plugin/
+Description: WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts. Check out the <strong><a href="https://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">powerful PRO version</a></strong> with lots of useful features.
+Version: 1.4.5
 Author: webtechideas
-Author URI: http://www.webtechideas.in/
+Author URI: https://www.webtechideas.in/
 License: GPLv2 or later
 
 Copyright 2014  Webtechideas  (email : support@webtechideas.com)
@@ -30,7 +30,7 @@ GNU General Public License for more details.
 */
 
 global $wti_like_post_db_version, $wti_ip_address;
-$wti_like_post_db_version = "1.4.4";
+$wti_like_post_db_version = "1.4.5";
 $wti_ip_address = WtiGetRealIpAddress();
 
 add_action('init', 'WtiLoadPluginTextdomain');
@@ -62,7 +62,7 @@ function WtiLikePostPluginUpdateMessage() {
 function WtiLikePostUpdateNotice() {
     $info_title = __( 'In case there was any customization done with this plugin, then please take a backup first.', 'wti-like-post' );
     $info_text =  __( 'Check out the powerful PRO version with lots of useful features.', 'wti-like-post' );
-    echo '<div style="border-top:1px solid #CCC; margin-top:3px; padding-top:3px; font-weight:normal;"><strong style="color:#CC0000">' . strip_tags( $info_title ) . '</strong> <strong><a href="http://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">' . strip_tags( $info_text, '<br><a><strong><em><span>' ) . '</a></strong></div>';
+    echo '<div style="border-top:1px solid #CCC; margin-top:3px; padding-top:3px; font-weight:normal;"><strong style="color:#CC0000">' . strip_tags( $info_title ) . '</strong> <strong><a href="https://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">' . strip_tags( $info_text, '<br><a><strong><em><span>' ) . '</a></strong></div>';
 }
 
 add_filter('plugin_action_links', 'WtiLikePostPluginLinks', 10, 2);
@@ -218,8 +218,8 @@ function UpdateOptionsWtiLikePost() {
 		$wpdb->query("ALTER TABLE `{$wpdb->prefix}wti_like_post` CHANGE `ip` `ip` VARCHAR( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL");
 		
 		$user_col = $wpdb->get_row("SHOW COLUMNS FROM {$wpdb->prefix}wti_like_post LIKE 'user_id'");
-	
-		if (count($user_col) == 0) {
+
+		if (empty($user_col)) {
 			$wpdb->query("ALTER TABLE `{$wpdb->prefix}wti_like_post` ADD `user_id` INT NOT NULL DEFAULT '0'");
 		}
 
@@ -233,6 +233,7 @@ add_action('plugins_loaded', 'UpdateOptionsWtiLikePost');
 if (is_admin()) {
 	// Include the file for loading plugin settings
 	require_once('wti_like_post_admin.php');
+	add_action('init', 'WtiLikePostEnqueueAdminScripts');
 } else {
 	// Include the file for loading plugin settings for
 	require_once('wti_like_post_site.php');

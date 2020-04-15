@@ -25,8 +25,16 @@ function bootstrap() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
 	add_filter( 'genesis_attr_entry-title', __NAMESPACE__ . '\\add_anchor' );
 
-	// This breaks Highlighter Pro for some reason.
-	// add_filter( 'ez_toc_extract_headings_content', __NAMESPACE__ . '\\prepend_title' );
+	// Inject the entry title right before the widget is rendered.
+	add_filter( 'widget_title', function( $title, $instance, $id_base ) {
+		if ( 'ezw_tco' !== $id_base ) {
+			return $title;
+		}
+
+		add_filter( 'ez_toc_extract_headings_content', __NAMESPACE__ . '\\prepend_title' );
+
+		return $title;
+	}, 10, 3 );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
 
@@ -38,11 +46,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap' );
  * @return string
  */
 function prepend_title( $content ) {
-	$title = sprintf( '<h1 class="entry-title">%s</h1>', get_the_title() );
-
-	$title .= $content;
-
-	return $title;
+	return sprintf( '<h1 class="entry-title">%s</h1>%s', get_the_title(), $content );
 };
 
 /**

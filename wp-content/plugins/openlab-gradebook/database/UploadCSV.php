@@ -1344,9 +1344,7 @@ class gradebook_upload_csv_API
 function oplb_gradebook_wp_prepare_attachment_for_js($response, $attachment, $meta)
 {
 
-    $storage_page = get_page_by_path(OPLB_GRADEBOOK_STORAGE_SLUG);
-
-    if (isset($response['uploadedTo']) && $response['uploadedTo'] === $storage_page->ID) {
+    if (isset($response['uploadedTo'])) {
         wp_delete_attachment($response['id'], true);
     }
 

@@ -2,20 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AG translate RU\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-12 15:45-0800\n"
-"PO-Revision-Date: 2014-09-03 15:45+0400\n"
 "Last-Translator: AG <helirexi@gmail.com>\n"
 "Language-Team: helirexi <helirexi@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_attr_e;esc_attr__;"
-"esc_html_e;esc_html__\n"
+"POT-Creation-Date: 2014-04-12 15:45-0800\n"
+"PO-Revision-Date: 2014-09-03 15:45+0400\n"
+"Language: ru_RU\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e;esc_attr_e;esc_attr__;esc_html_e;esc_html__\n"
 "X-Poedit-Basepath: .\n"
 "X-Generator: Poedit 1.6.7\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
@@ -40,30 +38,19 @@ msgid "Upgrade to MapPress Pro"
 msgstr "обновить до MapPress Pro"
 
 #: ../mappress.php:333
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"Таблицы БД MapPress не найдены. Пожалуйста деактивируйте плагин и "
-"активируйте снова чтобы исправить это."
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Таблицы БД MapPress не найдены. Пожалуйста деактивируйте плагин и активируйте снова чтобы исправить это."
 
 #: ../mappress.php:338
-msgid ""
-"WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-"before using MapPress."
-msgstr ""
-"ВНИМАНИЕ: MapPress требует WordPress 3.2 и выше.  Обновитесь перед "
-"использованием MapPress."
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr "ВНИМАНИЕ: MapPress требует WordPress 3.2 и выше.  Обновитесь перед использованием MapPress."
 
 #: ../mappress.php:343
-msgid ""
-"WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please "
-"deactivate or uninstall WP-Geo before using MapPress."
-msgstr ""
-"ВНИМАНИЕ: MapPress не совместим с WP-Geo плагином.  Удалите или "
-"деактивируйте WP-Geo перед использованием MapPress."
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr "ВНИМАНИЕ: MapPress не совместим с WP-Geo плагином.  Удалите или деактивируйте WP-Geo перед использованием MapPress."
 
-#: ../mappress.php:547 ../templates/map_directions.php:6
+#: ../mappress.php:547
+#: ../templates/map_directions.php:6
 msgid "Bicycling"
 msgstr "На велосипеде"
 
@@ -76,18 +63,16 @@ msgid "One of the addresses could not be found."
 msgstr "Один из адресов не может быть найден"
 
 #: ../mappress.php:550
-msgid ""
-"Google cannot return directions between those addresses.  There is no route "
-"between them or the routing information is not available."
-msgstr ""
-"Google не может вернуть маршруты между этими адресами. Нет маршрутов между "
-"ними или информация о маршрутах недоступна."
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr "Google не может вернуть маршруты между этими адресами. Нет маршрутов между ними или информация о маршрутах недоступна."
 
 #: ../mappress.php:551
 msgid "Unknown error, unable to return directions.  Status code = "
 msgstr "Неизвестная ошибка, невозможно получить направления. Код статуса ="
 
-#: ../mappress.php:552 ../mappress_poi.php:251 ../mappress_settings.php:133
+#: ../mappress.php:552
+#: ../mappress_poi.php:251
+#: ../mappress_settings.php:133
 #: ../pro/mappress_widget.php:108
 msgid "Directions"
 msgstr "Направления"
@@ -108,7 +93,8 @@ msgstr "Нет подходящего адреса"
 msgid "Unable to get your location"
 msgstr "Невозможно определить ваше местонахождение"
 
-#: ../mappress.php:557 ../mappress_settings.php:322
+#: ../mappress.php:557
+#: ../mappress_settings.php:322
 msgid "Traffic"
 msgstr "Движение"
 
@@ -116,8 +102,11 @@ msgstr "Движение"
 msgid "Transit"
 msgstr "Проездом"
 
-#: ../mappress.php:559 ../mappress_poi.php:300 ../mappress_settings.php:317
-#: ../mappress_settings.php:456 ../pro/mappress_widget.php:124
+#: ../mappress.php:559
+#: ../mappress_poi.php:300
+#: ../mappress_settings.php:317
+#: ../mappress_settings.php:456
+#: ../pro/mappress_widget.php:124
 msgid "Zoom"
 msgstr "Масштаб"
 
@@ -133,7 +122,8 @@ msgstr "Кликните и удерживайте для перемещения
 msgid "Click to change"
 msgstr "Изменить"
 
-#: ../mappress.php:567 ../mappress_map.php:444
+#: ../mappress.php:567
+#: ../mappress_map.php:444
 msgid "Delete"
 msgstr "Удалить"
 
@@ -153,7 +143,8 @@ msgstr "Сохраните карту вначале"
 msgid "Shape"
 msgstr "Форма"
 
-#: ../mappress.php:572 ../mappress_map.php:55
+#: ../mappress.php:572
+#: ../mappress_map.php:55
 msgid "Untitled"
 msgstr "Без заголовка"
 
@@ -165,7 +156,8 @@ msgstr "Карта не найдена"
 msgid "Edit"
 msgstr "Редактировать"
 
-#: ../mappress_map.php:443 ../forms/map_media.php:48
+#: ../mappress_map.php:443
+#: ../forms/map_media.php:48
 msgid "Insert into post"
 msgstr "Вставить в публикацию"
 
@@ -173,16 +165,19 @@ msgstr "Вставить в публикацию"
 msgid "Show map"
 msgstr "Показать карту"
 
-#: ../mappress_map.php:495 ../mappress_settings.php:448
+#: ../mappress_map.php:495
+#: ../mappress_settings.php:448
 #: ../forms/map_editor.php:17
 msgid "Center map"
 msgstr "Центрировать карту"
 
-#: ../mappress_map.php:504 ../mappress_settings.php:449
+#: ../mappress_map.php:504
+#: ../mappress_settings.php:449
 msgid "Reset map"
 msgstr "Сброс карты"
 
-#: ../mappress_map.php:513 ../mappress_settings.php:447
+#: ../mappress_map.php:513
+#: ../mappress_settings.php:447
 msgid "Bigger map"
 msgstr "Увеличить карту"
 
@@ -190,11 +185,13 @@ msgstr "Увеличить карту"
 msgid "Smaller map"
 msgstr "Уменьшить карту"
 
-#: ../mappress_poi.php:216 ../mappress_settings.php:457
+#: ../mappress_poi.php:216
+#: ../mappress_settings.php:457
 msgid "Directions to"
 msgstr "Конечная точка"
 
-#: ../mappress_poi.php:218 ../mappress_settings.php:458
+#: ../mappress_poi.php:218
+#: ../mappress_settings.php:458
 msgid "Directions from"
 msgstr "Начальная точка"
 
@@ -336,9 +333,7 @@ msgstr "Загрузка карт последними"
 
 #: ../mappress_settings.php:222
 msgid "Use the settings below to automatically create maps from custom fields."
-msgstr ""
-"Используйте настройки ниже для автоматического создания карт из "
-"пользовательских полей."
+msgstr "Используйте настройки ниже для автоматического создания карт из пользовательских полей."
 
 #: ../mappress_settings.php:228
 msgid "Posts"
@@ -392,11 +387,12 @@ msgstr "язык"
 #: ../mappress_settings.php:276
 #, php-format
 msgid "Use a specific %s for map controls and geocoding"
-msgstr ""
-"Использовать специальные %s для управления картой и гео позиционирования"
+msgstr "Использовать специальные %s для управления картой и гео позиционирования"
 
-#: ../mappress_settings.php:284 ../mappress_settings.php:290
-#: ../mappress_settings.php:384 ../mappress_settings.php:497
+#: ../mappress_settings.php:284
+#: ../mappress_settings.php:290
+#: ../mappress_settings.php:384
+#: ../mappress_settings.php:497
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -424,7 +420,8 @@ msgstr ""
 msgid "Open initially"
 msgstr "Открыть вначале"
 
-#: ../mappress_settings.php:306 ../mappress_settings.php:308
+#: ../mappress_settings.php:306
+#: ../mappress_settings.php:308
 #: ../mappress_settings.php:310
 msgid "Checked initially"
 msgstr "Отмеченный изначально"
@@ -437,7 +434,8 @@ msgstr "Управление"
 msgid "Enable"
 msgstr "Включить"
 
-#: ../mappress_settings.php:312 ../mappress_settings.php:409
+#: ../mappress_settings.php:312
+#: ../mappress_settings.php:409
 msgid "Style"
 msgstr "Стиль"
 
@@ -473,15 +471,18 @@ msgstr "Велодорожки"
 msgid "Road map"
 msgstr "Дороги"
 
-#: ../mappress_settings.php:331 ../pro/mappress_widget.php:142
+#: ../mappress_settings.php:331
+#: ../pro/mappress_widget.php:142
 msgid "Satellite"
 msgstr "Со спутника"
 
-#: ../mappress_settings.php:332 ../pro/mappress_widget.php:143
+#: ../mappress_settings.php:332
+#: ../pro/mappress_widget.php:143
 msgid "Terrain"
 msgstr "Поверхность"
 
-#: ../mappress_settings.php:333 ../pro/mappress_widget.php:141
+#: ../mappress_settings.php:333
+#: ../pro/mappress_widget.php:141
 msgid "Hybrid"
 msgstr "Гибрид"
 
@@ -489,12 +490,14 @@ msgstr "Гибрид"
 msgid "Inline (in your blog)"
 msgstr "Вложенный (в вашем блоге)"
 
-#: ../mappress_settings.php:347 ../pro/mappress_pro_settings.php:179
+#: ../mappress_settings.php:347
+#: ../pro/mappress_pro_settings.php:179
 #: ../pro/mappress_widget.php:110
 msgid "Google"
 msgstr ""
 
-#: ../mappress_settings.php:348 ../pro/mappress_widget.php:111
+#: ../mappress_settings.php:348
+#: ../pro/mappress_widget.php:111
 msgid "None"
 msgstr "Ничего"
 
@@ -502,20 +505,22 @@ msgstr "Ничего"
 msgid "Automatically open the first POI when a map is displayed"
 msgstr "Автоматически открыть первую Точку при отображении карты"
 
-#: ../mappress_settings.php:360 ../mappress_settings.php:369
+#: ../mappress_settings.php:360
+#: ../mappress_settings.php:369
 msgid "Show control"
 msgstr "Показать управление"
 
-#: ../mappress_settings.php:364 ../mappress_settings.php:373
+#: ../mappress_settings.php:364
+#: ../mappress_settings.php:373
 msgid "Enabled by default"
 msgstr "Включено по умолчанию"
 
 #: ../mappress_settings.php:377
 msgid "Show POI titles as a \"tooltip\" on mouse-over"
-msgstr ""
-"Показать всплывающее описание точки \"tooltip\" при наведении курсора мыши"
+msgstr "Показать всплывающее описание точки \"tooltip\" при наведении курсора мыши"
 
-#: ../mappress_settings.php:385 ../pro/mappress_widget.php:116
+#: ../mappress_settings.php:385
+#: ../pro/mappress_widget.php:116
 msgid "Center"
 msgstr "По центру"
 
@@ -555,7 +560,8 @@ msgstr "утопленный"
 msgid "outset"
 msgstr "выступающий"
 
-#: ../mappress_settings.php:417 ../mappress_settings.php:497
+#: ../mappress_settings.php:417
+#: ../mappress_settings.php:497
 msgid "Width"
 msgstr "Ширина"
 
@@ -666,7 +672,8 @@ msgstr ""
 msgid "Add POI"
 msgstr "Добавить Точку"
 
-#: ../forms/map_editor.php:5 ../templates/map_directions.php:11
+#: ../forms/map_editor.php:5
+#: ../templates/map_directions.php:11
 msgid "My location"
 msgstr "Моё местоположение"
 
@@ -682,7 +689,8 @@ msgstr "Линия: "
 msgid "Weight"
 msgstr "Толщина"
 
-#: ../forms/map_editor_infobox.php:25 ../forms/map_editor_infobox.php:31
+#: ../forms/map_editor_infobox.php:25
+#: ../forms/map_editor_infobox.php:31
 msgid "Opacity"
 msgstr "Прозрачность"
 
@@ -698,11 +706,13 @@ msgstr "Визуально"
 msgid "HTML"
 msgstr ""
 
-#: ../forms/map_editor_infobox.php:45 ../forms/map_media.php:46
+#: ../forms/map_editor_infobox.php:45
+#: ../forms/map_media.php:46
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../forms/map_editor_infobox.php:46 ../forms/map_media.php:47
+#: ../forms/map_editor_infobox.php:46
+#: ../forms/map_media.php:47
 #: ../pro/mappress_icons.php:71
 msgid "Cancel"
 msgstr "Отменить"
@@ -736,7 +746,8 @@ msgstr "Нет результатов, проверьте конфигураци
 msgid "Invalid status: %s, address: %s"
 msgstr "Неверный статус: %s, адрес: %s"
 
-#: ../pro/mappress_geocoders.php:95 ../pro/mappress_geocoders.php:159
+#: ../pro/mappress_geocoders.php:95
+#: ../pro/mappress_geocoders.php:159
 #, php-format
 msgid "No results for address: %s"
 msgstr "Нет результатов для адреса: %s"
@@ -964,7 +975,8 @@ msgstr "Описание"
 msgid "Map Zoom"
 msgstr "Масштаб"
 
-#: ../pro/mappress_pro_settings.php:206 ../pro/mappress_widget.php:140
+#: ../pro/mappress_pro_settings.php:206
+#: ../pro/mappress_widget.php:140
 msgid "Map"
 msgstr "Карта"
 

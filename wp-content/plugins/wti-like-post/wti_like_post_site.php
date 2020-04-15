@@ -73,14 +73,14 @@ function GetWtiLikePost($arg = null) {
           
           $wti_like_post .= "<div class='action-like'>";
           $wti_like_post .= "<a class='lbg-" . $style . " like-" . $post_id . " jlk' href='javascript:void(0)' data-task='like' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
-          $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_like, 'wti-like-post') . "' />";
+          $wti_like_post .= "<img class='wti-pixel' src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_like, 'wti-like-post') . "' />";
           $wti_like_post .= "<span class='lc-" . $post_id . " lc'>" . $like_count . "</span>";
           $wti_like_post .= "</a></div>";
           
           if ($show_dislike) {
                $wti_like_post .= "<div class='action-unlike'>";
                $wti_like_post .= "<a class='unlbg-" . $style . " unlike-" . $post_id . " jlk' href='javascript:void(0)' data-task='unlike' data-post_id='" . $post_id . "' data-nonce='" . $nonce . "' rel='nofollow'>";
-               $wti_like_post .= "<img src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_unlike, 'wti-like-post') . "' />";
+               $wti_like_post .= "<img class='wti-pixel' src='" . plugins_url( 'images/pixel.gif' , __FILE__ ) . "' title='" . __($title_text_unlike, 'wti-like-post') . "' />";
                $wti_like_post .= "<span class='unlc-" . $post_id . " unlc'>" . $unlike_count . "</span>";
                $wti_like_post .= "</a></div> ";
           }
@@ -109,7 +109,7 @@ function PutWtiLikePost($content) {
      if ((is_page() && get_option('wti_like_post_show_on_pages')) || (!is_page())) {
           $show_on_pages = true;
      }
-  
+
      if (!is_feed() && $show_on_pages) {     
           $wti_like_post_content = GetWtiLikePost('put');
           $wti_like_post_position = get_option('wti_like_post_position');

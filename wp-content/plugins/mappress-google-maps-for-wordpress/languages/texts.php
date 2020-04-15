@@ -1,4 +1,9 @@
 <?php
+__("MapPress Maps for WordPress");
+__("https://www.mappresspro.com/mappress");
+__("MapPress makes it easy to add Google and Leaflet Maps to WordPress");
+__("Chris Richardson");
+__("https://www.mappresspro.com/chris-contact");
 __("Add KML");
 __("Visual");
 __("HTML");
@@ -171,8 +176,8 @@ __("Nominatim");
 __("MapBox");
 __("Standard");
 __("InfoBox");
-__("Below map");
 __("Left of map");
+__("Below map");
 __("Enter license to enable automatic updates");
 __("Active");
 __("Check Now");
@@ -233,9 +238,4 @@ __("Done");
 __("Reset");
 __("Results");
 __("Your Location");
-__("MapPress Maps for WordPress");
-__("https://www.mappresspro.com/mappress");
-__("MapPress makes it easy to add Google and Leaflet Maps to WordPress");
-__("Chris Richardson");
-__("https://www.mappresspro.com/chris-contact");
 ?>

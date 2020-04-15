@@ -1815,6 +1815,39 @@ function openlab_enable_duplicate_comments_comment_post( $comment_id ) {
 add_action( 'comment_post', 'openlab_enable_duplicate_comments_comment_post', 1 );
 
 /**
+ * Removes IP addresses from comment notification messages.
+ */
+function openlab_remove_ip_address_from_comment_notifications( $message ) {
+	if ( false === strpos( $message, 'IP address' ) ) {
+		return $message;
+	}
+
+	return preg_replace( '|\(IP address: [^\)]+\)|', '', $message );
+}
+add_filter( 'comment_moderation_text', 'openlab_remove_ip_address_from_comment_notifications' );
+add_filter( 'comment_notification_text', 'openlab_remove_ip_address_from_comment_notifications' );
+
+/**
+ * Prevent IP addresses from being displayed on Dashboard > Comments.
+ */
+add_filter(
+	'get_comment_author_IP',
+	function( $ip ) {
+		global $pagenow;
+
+		if ( current_user_can( 'manage_network_options' ) ) {
+			return $ip;
+		}
+
+		if ( ! is_admin() || empty( $pagenow ) || 'edit-comments.php' !== $pagenow ) {
+			return $ip;
+		}
+
+		return '';
+	}
+);
+
+/**
  * Adds the URL of the user profile to the New User Registration admin emails
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/334
@@ -2711,6 +2744,23 @@ add_filter(
 		return $roles;
 	}
 );
+
+/**
+ * Bypass auto-moderation for logged-in users.
+ *
+ * This skips the link limit and word restrictions inherited from the blog
+ * comment moderation settings since bbPress 2.6.
+ *
+ * @link https://redmine.gc.cuny.edu/issues/12487#note-1
+ * @link http://redmine.citytech.cuny.edu/issues/2730
+ */
+add_filter( 'bbp_bypass_check_for_moderation', function( $retval, $anon_data, $user_id ) {
+	if ( ! empty( $anon_data ) || empty( $user_id ) ) {
+		return $retval;
+	}
+
+	return true;
+}, 10, 3 );
 
 /**
  * Don't let Ultimate Category Excluder operate on loops other than the main loop.

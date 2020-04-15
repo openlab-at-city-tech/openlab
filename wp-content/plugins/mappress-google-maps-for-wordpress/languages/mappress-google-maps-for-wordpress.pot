@@ -1,16 +1,37 @@
-# Copyright (C) 2020 MapPress Maps for WordPress
-# This file is distributed under the same license as the MapPress Maps for WordPress package.
+# Copyright (C) 2020 Chris Richardson
+# This file is distributed under the same license as the MapPress Maps for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.53.5\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.53.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
-"POT-Creation-Date: 2020-02-12 23:20:38+00:00\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2020-03-29T22:09:32+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+
+#. Plugin Name of the plugin
+msgid "MapPress Maps for WordPress"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.mappresspro.com/mappress"
+msgstr ""
+
+#. Description of the plugin
+msgid "MapPress makes it easy to add Google and Leaflet Maps to WordPress"
+msgstr ""
+
+#. Author of the plugin
+msgid "Chris Richardson"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.mappresspro.com/chris-contact"
+msgstr ""
 
 #: forms/editor.php:11
 msgid "Add KML"
@@ -24,15 +45,21 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
-#: forms/editor.php:53 forms/media.php:49 forms/settings.php:41
+#: forms/editor.php:53
+#: forms/media.php:49
+#: forms/settings.php:41
 msgid "Save"
 msgstr ""
 
-#: forms/editor.php:54 forms/media.php:50 forms/settings.php:42
+#: forms/editor.php:54
+#: forms/media.php:50
+#: forms/settings.php:42
 msgid "Cancel"
 msgstr ""
 
-#: forms/editor.php:55 forms/media.php:72 forms/settings.php:44
+#: forms/editor.php:55
+#: forms/media.php:72
+#: forms/settings.php:44
 #: mappress_controls.php:102
 msgid "Delete"
 msgstr ""
@@ -45,7 +72,8 @@ msgstr ""
 msgid "This post"
 msgstr ""
 
-#: forms/media.php:10 pro/mappress_widget.php:84
+#: forms/media.php:10
+#: pro/mappress_widget.php:84
 msgid "All posts"
 msgstr ""
 
@@ -61,7 +89,10 @@ msgstr ""
 msgid "Map Title"
 msgstr ""
 
-#: forms/media.php:27 forms/media.php:63 forms/media.php:67 mappress.php:415
+#: forms/media.php:27
+#: forms/media.php:63
+#: forms/media.php:67
+#: mappress.php:415
 msgid "Untitled"
 msgstr ""
 
@@ -73,11 +104,14 @@ msgstr ""
 msgid "Save center / zoom"
 msgstr ""
 
-#: forms/media.php:51 forms/media.php:71
+#: forms/media.php:51
+#: forms/media.php:71
 msgid "Insert into post"
 msgstr ""
 
-#: forms/media.php:70 forms/settings.php:4 forms/settings.php:18
+#: forms/media.php:70
+#: forms/settings.php:4
+#: forms/settings.php:18
 msgid "Edit"
 msgstr ""
 
@@ -97,7 +131,8 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: forms/settings.php:28 mappress_settings.php:184
+#: forms/settings.php:28
+#: mappress_settings.php:184
 #: pro/mappress_pro_settings.php:219
 msgid "Default"
 msgstr ""
@@ -122,7 +157,8 @@ msgstr ""
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:314 mappress.php:765
+#: mappress.php:314
+#: mappress.php:765
 msgid "Version"
 msgstr ""
 
@@ -186,7 +222,8 @@ msgstr ""
 msgid "Improve this map"
 msgstr ""
 
-#: mappress.php:455 mappress.php:474
+#: mappress.php:455
+#: mappress.php:474
 msgid "Streets"
 msgstr ""
 
@@ -218,7 +255,8 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: mappress_map.php:91 mappress_settings.php:306
+#: mappress_map.php:91
+#: mappress_settings.php:306
 msgid "MapPress"
 msgstr ""
 
@@ -226,7 +264,8 @@ msgstr ""
 msgid "Map not found"
 msgstr ""
 
-#: mappress_map.php:423 pro/mappress_pro_settings.php:37
+#: mappress_map.php:423
+#: pro/mappress_pro_settings.php:37
 msgid "Filter"
 msgstr ""
 
@@ -282,7 +321,8 @@ msgstr ""
 msgid "Map alignment"
 msgstr ""
 
-#: mappress_settings.php:103 templates/map-popup.php:3
+#: mappress_settings.php:103
+#: templates/map-popup.php:3
 #: templates/mashup-popup.php:6
 msgid "Directions"
 msgstr ""
@@ -295,7 +335,8 @@ msgstr ""
 msgid "Default zoom"
 msgstr ""
 
-#: mappress_settings.php:107 mappress_settings.php:249
+#: mappress_settings.php:107
+#: mappress_settings.php:249
 msgid "Open first POI"
 msgstr ""
 
@@ -375,7 +416,8 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: mappress_settings.php:210 mappress_settings.php:254
+#: mappress_settings.php:210
+#: mappress_settings.php:254
 msgid "(list)"
 msgstr ""
 
@@ -387,7 +429,8 @@ msgstr ""
 msgid "Prevent other plugins/themes from loading the Google Maps API"
 msgstr ""
 
-#: mappress_settings.php:223 mappress_settings.php:232
+#: mappress_settings.php:223
+#: mappress_settings.php:232
 msgid "Google"
 msgstr ""
 
@@ -403,7 +446,8 @@ msgstr ""
 msgid "Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits."
 msgstr ""
 
-#: mappress_settings.php:240 mappress_settings.php:243
+#: mappress_settings.php:240
+#: mappress_settings.php:243
 msgid "Output scripts in footer"
 msgstr ""
 
@@ -443,11 +487,13 @@ msgstr ""
 msgid "Default size"
 msgstr ""
 
-#: mappress_settings.php:311 mappress_settings.php:319
+#: mappress_settings.php:311
+#: mappress_settings.php:319
 msgid "Save Changes"
 msgstr ""
 
-#: mappress_settings.php:312 mappress_settings.php:320
+#: mappress_settings.php:312
+#: mappress_settings.php:320
 msgid "Reset Defaults"
 msgstr ""
 
@@ -479,7 +525,8 @@ msgstr ""
 msgid "custom field"
 msgstr ""
 
-#: pro/mappress_filter.php:93 pro/mappress_filter.php:142
+#: pro/mappress_filter.php:93
+#: pro/mappress_filter.php:142
 #: pro/mappress_pro_settings.php:155
 msgid "Post type"
 msgstr ""
@@ -492,7 +539,8 @@ msgstr ""
 msgid "Post field"
 msgstr ""
 
-#: pro/mappress_filter.php:129 pro/mappress_pro_settings.php:314
+#: pro/mappress_filter.php:129
+#: pro/mappress_pro_settings.php:314
 msgid "Custom Field"
 msgstr ""
 
@@ -500,8 +548,10 @@ msgstr ""
 msgid "Invalid geocoder: %s"
 msgstr ""
 
-#: pro/mappress_geocoder.php:59 pro/mappress_geocoder.php:110
-#: pro/mappress_geocoder.php:147 pro/mappress_geocoder.php:183
+#: pro/mappress_geocoder.php:59
+#: pro/mappress_geocoder.php:110
+#: pro/mappress_geocoder.php:147
+#: pro/mappress_geocoder.php:183
 msgid "No results for address: %s"
 msgstr ""
 
@@ -581,7 +631,8 @@ msgstr ""
 msgid "Automatic icons"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:35 templates/map-search.php:2
+#: pro/mappress_pro_settings.php:35
+#: templates/map-search.php:2
 msgid "Search"
 msgstr ""
 
@@ -605,7 +656,8 @@ msgstr ""
 msgid "Thumbnail size"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:45 pro/mappress_pro_settings.php:47
+#: pro/mappress_pro_settings.php:45
+#: pro/mappress_pro_settings.php:47
 msgid "Styled maps"
 msgstr ""
 
@@ -649,7 +701,8 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:162 pro/mappress_pro_settings.php:309
+#: pro/mappress_pro_settings.php:162
+#: pro/mappress_pro_settings.php:309
 msgid "Icon"
 msgstr ""
 
@@ -706,11 +759,11 @@ msgid "InfoBox"
 msgstr ""
 
 #: pro/mappress_pro_settings.php:243
-msgid "Below map"
+msgid "Left of map"
 msgstr ""
 
 #: pro/mappress_pro_settings.php:244
-msgid "Left of map"
+msgid "Below map"
 msgstr ""
 
 #: pro/mappress_pro_settings.php:250
@@ -817,7 +870,8 @@ msgstr ""
 msgid "JSON from Google's %s"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:363 pro/mappress_pro_settings.php:379
+#: pro/mappress_pro_settings.php:363
+#: pro/mappress_pro_settings.php:379
 msgid "Style name"
 msgstr ""
 
@@ -951,23 +1005,4 @@ msgstr ""
 
 #: templates/map-search.php:4
 msgid "Your Location"
-msgstr ""
-#. Plugin Name of the plugin/theme
-msgid "MapPress Maps for WordPress"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://www.mappresspro.com/mappress"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "MapPress makes it easy to add Google and Leaflet Maps to WordPress"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Chris Richardson"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://www.mappresspro.com/chris-contact"
 msgstr ""

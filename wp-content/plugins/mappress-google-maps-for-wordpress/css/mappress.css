@@ -17,22 +17,37 @@
 	min-width: 200px;
 	padding: 0px;
 	position: relative;
+    font-family: sans-serif;
 }
 
 .mapp-layout * {
-	box-sizing: border-box;
-	font-size: 13px;
+    box-sizing: border-box;
+    font-size: 13px;
 }
 
+/* 2019 */
+.mapp-layout input, .mapp-layout button, .mapp-layout select, .mapp-layout textarea {
+    font-family: sans-serif;
+}
+
+/* Responsive wrapper */
 .mapp-layout .mapp-wrapper {
 	min-height: 200px;
 	position: relative;
 }
 
-.mapp-layout .mapp-main {
+/* Responsive content */
+.mapp-layout .mapp-content {
 	display: flex;
+	flex-direction: column;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.mapp-layout .mapp-main {
+	display: flex;
+    flex: 1;
+	overflow: hidden;
 }
 
 .mapp-hidden {
@@ -46,6 +61,7 @@
 	-----------------------------------------------------------------------------------
 */
 
+/* Map controls are rendered here, not on the canvas */
 .mapp-canvas-panel {
 	flex: 1;
 	height: 100%;
@@ -61,6 +77,7 @@
 }
 
 .mapp-canvas img {
+    background: none;
 	box-shadow: none !important;		/* 2012 */
 	border-radius: 0px !important;		/* 2012 */
 	visibility: inherit !important;
@@ -70,6 +87,7 @@
 	background-color: transparent;
 	margin: 0px;
 	max-height: none;
+	max-width: none !important;		/* Override gutenberg */
 	padding: 0px;
 }
 
@@ -141,9 +159,6 @@ only screen and (min-device-pixel-ratio: 2) {
 	text-align: center;
 }
 
-.mapp-list .mapp-items {
-}
-
 .mapp-list .mapp-item {
 	border-bottom: 1px solid lightgray;
 	cursor: pointer;
@@ -152,7 +167,7 @@ only screen and (min-device-pixel-ratio: 2) {
 }
 
 .mapp-list .mapp-item:hover, .mapp-list .mapp-item.mapp-selected {
-	background-color: #fafafa;
+	background-color: #f6f6f6;
 }
 
 .mapp-list .mapp-item .mapp-title {
@@ -222,13 +237,12 @@ only screen and (min-device-pixel-ratio: 2) {
 
 /*
 	-----------------------------------------------------------------------------------
-	layouts
+	Layouts
 	-----------------------------------------------------------------------------------
 */
 
 .mapp-left .mapp-list {
 	border-right: 1px solid lightgray;
-	/*float: left;*/
 	height: 100%;
 	max-width: 45%;
 	width: 250px;
@@ -247,33 +261,15 @@ only screen and (min-device-pixel-ratio: 2) {
 .mapp-header {
 	background-color: #eee;
 	border-bottom: 1px solid lightgray;
-	display: table;
-	height: 36px;
-	width: 100%;
-}
-
-.mapp-header > div {
-	display: table-row;
-	width: 100%;
-}
-
-.mapp-header > div > div {
-	display: table-cell;
-	padding: 0;
+	display: flex;
 }
 
 .mapp-header-button {
 	cursor: pointer;
-	height: 35px;
-	line-height: 35px;
 	min-width: 70px;
-	padding: 0 5px 0 5px;
+	padding: 5px;
 	text-align: center;
 	text-transform: uppercase;
-}
-
-.mapp-header input[type="text"] {
-	display: inline;
 }
 
 /*
@@ -282,8 +278,8 @@ only screen and (min-device-pixel-ratio: 2) {
 	-----------------------------------------------------------------------------------
 */
 .mapp-search {
+	flex: 1;
 	position: relative;
-	width: 100%;
 }
 
 .mapp-search input.mapp-error {
@@ -348,6 +344,7 @@ input.mapp-aa-input, input.mapp-aa-hint {
 }
 
 .mapp-aa-suggestion span, .mapp-aa-suggestion p {
+	margin: 0 !important;
 	white-space: nowrap !important;
 }
 
@@ -656,7 +653,6 @@ input.mapp-aa-input, input.mapp-aa-hint {
 	position: absolute;
 	top: 10px; left: 10px; bottom: 0; right: 0;
 	width: 32px;
-	z-index: 1000;
 }
 
 .mapp-menu {

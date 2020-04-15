@@ -2,112 +2,137 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress Easy Google Maps v2.45.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 16:44+0200\n"
-"PO-Revision-Date: 2017-09-03 16:44+0200\n"
 "Last-Translator: BONALDI <bonaldi.fr>\n"
 "Language-Team: Bonaldi <bonaldi.fr>\n"
-"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2017-09-03 16:44+0200\n"
+"PO-Revision-Date: 2017-09-03 16:44+0200\n"
+"Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;esc_attr_e;esc_html_e;_e;__ngettext:1,2;_n:1,2;"
-"__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;"
-"_nx_noop:4c,1,2\n"
+"X-Poedit-KeywordsList: __;esc_attr_e;esc_html_e;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: forms/map_editor.php:5 languages/texts.php:2
+#: forms/map_editor.php:5
+#: languages/texts.php:2
 msgid "Add POI"
 msgstr "Ajouter un point d’intérêt"
 
-#: forms/map_editor.php:12 languages/texts.php:3
+#: forms/map_editor.php:12
+#: languages/texts.php:3
 msgid "My location"
 msgstr "Mon emplacement"
 
-#: forms/map_editor.php:26 languages/texts.php:4 mappress_map.php:504
+#: forms/map_editor.php:26
+#: languages/texts.php:4
+#: mappress_map.php:504
 #: templates/map_controls.php:4
 msgid "Center map"
 msgstr "Centrer"
 
-#: forms/map_editor.php:27 languages/texts.php:5
+#: forms/map_editor.php:27
+#: languages/texts.php:5
 msgid "Click map for lat/lng: "
 msgstr "Cliquez sur la carte pour lat/lng :"
 
-#: forms/map_editor.php:50 forms/map_editor_infobox.php:33
+#: forms/map_editor.php:50
+#: forms/map_editor_infobox.php:33
 #: languages/texts.php:6
 msgid "Visual"
 msgstr "Visuel"
 
-#: forms/map_editor.php:50 forms/map_editor_infobox.php:33
+#: forms/map_editor.php:50
+#: forms/map_editor_infobox.php:33
 #: languages/texts.php:7
 msgid "HTML"
 msgstr "HTML"
 
-#: forms/map_editor.php:56 forms/map_editor_infobox.php:38
-#: forms/map_media.php:41 languages/texts.php:8
+#: forms/map_editor.php:56
+#: forms/map_editor_infobox.php:38
+#: forms/map_media.php:41
+#: languages/texts.php:8
 msgid "Save"
 msgstr "Enregistrer"
 
-#: forms/map_editor.php:57 forms/map_editor_infobox.php:39
-#: forms/map_media.php:42 languages/texts.php:9
+#: forms/map_editor.php:57
+#: forms/map_editor_infobox.php:39
+#: forms/map_media.php:42
+#: languages/texts.php:9
 msgid "Cancel"
 msgstr "Annuler"
 
-#: forms/map_editor.php:58 languages/texts.php:10 mappress.php:586
-#: mappress_controls.php:88 mappress_map.php:470
+#: forms/map_editor.php:58
+#: languages/texts.php:10
+#: mappress.php:586
+#: mappress_controls.php:88
+#: mappress_map.php:470
 msgid "Delete"
 msgstr "Supprimer"
 
-#: forms/map_editor_infobox.php:20 languages/texts.php:11
+#: forms/map_editor_infobox.php:20
+#: languages/texts.php:11
 msgid "Color"
 msgstr "Couleur"
 
-#: forms/map_editor_infobox.php:22 forms/map_editor_infobox.php:23
+#: forms/map_editor_infobox.php:22
+#: forms/map_editor_infobox.php:23
 #: languages/texts.php:12
 msgid "Opacity"
 msgstr "Opacité"
 
-#: forms/map_editor_infobox.php:24 languages/texts.php:13
+#: forms/map_editor_infobox.php:24
+#: languages/texts.php:13
 msgid "Line"
 msgstr "Ligne"
 
-#: forms/map_editor_infobox.php:25 languages/texts.php:14
+#: forms/map_editor_infobox.php:25
+#: languages/texts.php:14
 msgid "Weight"
 msgstr "Poids"
 
-#: forms/map_media.php:4 languages/texts.php:15
+#: forms/map_media.php:4
+#: languages/texts.php:15
 msgid "Maps for This Post"
 msgstr "Cartes pour cet article"
 
-#: forms/map_media.php:5 languages/texts.php:16
+#: forms/map_media.php:5
+#: languages/texts.php:16
 msgid "New Map"
 msgstr "Nouvelle carte"
 
-#: forms/map_media.php:14 languages/texts.php:17
+#: forms/map_media.php:14
+#: languages/texts.php:17
 msgid "Map ID"
 msgstr "ID de la carte"
 
-#: forms/map_media.php:19 languages/texts.php:18
+#: forms/map_media.php:19
+#: languages/texts.php:18
 msgid "Map Title"
 msgstr "Titre de la carte"
 
-#: forms/map_media.php:24 languages/texts.php:19
+#: forms/map_media.php:24
+#: languages/texts.php:19
 msgid "Display Size"
 msgstr "Taille d’affichage"
 
-#: forms/map_media.php:36 languages/texts.php:20
+#: forms/map_media.php:36
+#: languages/texts.php:20
 msgid "Viewport"
 msgstr "Fenêtre d’affichage"
 
-#: forms/map_media.php:37 languages/texts.php:21
+#: forms/map_media.php:37
+#: languages/texts.php:21
 msgid "Save center and zoom"
 msgstr "Enregistrer le centre et le zoom"
 
-#: forms/map_media.php:43 languages/texts.php:22 mappress_map.php:469
+#: forms/map_media.php:43
+#: languages/texts.php:22
+#: mappress_map.php:469
 msgid "Insert into post"
 msgstr "Insérer dans l’article"
 
@@ -115,59 +140,58 @@ msgstr "Insérer dans l’article"
 msgid "Size"
 msgstr "Taille"
 
-#: languages/texts.php:24 mappress.php:130
+#: languages/texts.php:24
+#: mappress.php:130
 msgid "Version"
 msgstr "Version"
 
-#: languages/texts.php:25 mappress.php:138
+#: languages/texts.php:25
+#: mappress.php:138
 msgid "Documentation"
 msgstr "Documentation"
 
-#: languages/texts.php:26 mappress.php:139
+#: languages/texts.php:26
+#: mappress.php:139
 msgid "Support"
 msgstr "Support"
 
-#: languages/texts.php:27 mappress.php:141
+#: languages/texts.php:27
+#: mappress.php:141
 msgid "Upgrade to MapPress Pro"
 msgstr "Mise à niveau vers MapPress Pro"
 
-#: languages/texts.php:28 mappress.php:415
-msgid ""
-"MapPress database tables are missing.  Please deactivate the plugin and "
-"activate it again to fix this."
-msgstr ""
-"Les tables de la base de données MapPress sont manquantes. Veuillez "
-"désactiver l’extension et l’activer à nouveau pour résoudre ce problème."
+#: languages/texts.php:28
+#: mappress.php:415
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Les tables de la base de données MapPress sont manquantes. Veuillez désactiver l’extension et l’activer à nouveau pour résoudre ce problème."
 
-#: languages/texts.php:29 mappress.php:420
-msgid ""
-"WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade "
-"before using MapPress."
-msgstr ""
-"AVERTISSEMENT : MapPress nécessite WordPress 3.2 ou suivantes. Veuillez la "
-"mettre à niveau avant d’utiliser MapPress."
+#: languages/texts.php:29
+#: mappress.php:420
+msgid "WARNING: MapPress now requires WordPress 3.2 or higher.  Please upgrade before using MapPress."
+msgstr "AVERTISSEMENT : MapPress nécessite WordPress 3.2 ou suivantes. Veuillez la mettre à niveau avant d’utiliser MapPress."
 
-#: languages/texts.php:30 mappress.php:425
-msgid ""
-"WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please "
-"deactivate or uninstall WP-Geo before using MapPress."
-msgstr ""
-"AVERTISSEMENT : MapPress n’est pas compatible avec l’extension WP-Geo. "
-"Veuillez la désactiver avant d’utiliser MapPress."
+#: languages/texts.php:30
+#: mappress.php:425
+msgid "WARNING: MapPress is not compfatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
+msgstr "AVERTISSEMENT : MapPress n’est pas compatible avec l’extension WP-Geo. Veuillez la désactiver avant d’utiliser MapPress."
 
-#: languages/texts.php:31 mappress.php:432
+#: languages/texts.php:31
+#: mappress.php:432
 msgid "A Google Maps API key is required"
 msgstr "Une clé API Google Maps est nécessaire"
 
-#: languages/texts.php:32 mappress.php:432
+#: languages/texts.php:32
+#: mappress.php:432
 msgid "Please update your"
 msgstr "Veuillez mettre à jour votre"
 
-#: languages/texts.php:33 mappress.php:432
+#: languages/texts.php:33
+#: mappress.php:432
 msgid "MapPress Settings"
 msgstr "Réglages MapPress"
 
-#: languages/texts.php:34 templates/map_controls.php:8
+#: languages/texts.php:34
+#: templates/map_controls.php:8
 #: templates/map_directions.php:6
 msgid "Bicycling"
 msgstr "A vélo"
@@ -176,84 +200,102 @@ msgstr "A vélo"
 msgid "Bike"
 msgstr "Cycles"
 
-#: languages/texts.php:36 mappress.php:570
+#: languages/texts.php:36
+#: mappress.php:570
 msgid "One of the addresses could not be found."
 msgstr "Une des adresses n’a pu être trouvée."
 
-#: languages/texts.php:37 mappress.php:571
-msgid ""
-"Google cannot return directions between those addresses.  There is no route "
-"between them or the routing information is not available."
-msgstr ""
-"Google ne peut afficher l’itinéraire. Il n’y a pas de route ou les "
-"informations sont indisponibles."
+#: languages/texts.php:37
+#: mappress.php:571
+msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
+msgstr "Google ne peut afficher l’itinéraire. Il n’y a pas de route ou les informations sont indisponibles."
 
-#: languages/texts.php:38 mappress.php:572
+#: languages/texts.php:38
+#: mappress.php:572
 msgid "Unknown error, unable to return directions.  Status code = "
 msgstr "Erreur inconnue, impossible de définir l’itinéraire. Code d’état ="
 
-#: languages/texts.php:39 mappress.php:573 mappress_poi.php:180
-#: mappress_poi.php:201 mappress_settings.php:104
+#: languages/texts.php:39
+#: mappress.php:573
+#: mappress_poi.php:180
+#: mappress_poi.php:201
+#: mappress_settings.php:104
 msgid "Directions"
 msgstr "Itinéraires"
 
-#: languages/texts.php:40 mappress.php:574
+#: languages/texts.php:40
+#: mappress.php:574
 msgid "Error reading KML file"
 msgstr "Erreur de lecture fichier KML"
 
-#: languages/texts.php:41 mappress.php:575
+#: languages/texts.php:41
+#: mappress.php:575
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: languages/texts.php:42 mappress.php:576
+#: languages/texts.php:42
+#: mappress.php:576
 msgid "No matching address"
 msgstr "Aucune adresse trouvée"
 
-#: languages/texts.php:43 mappress.php:577
+#: languages/texts.php:43
+#: mappress.php:577
 msgid "Unable to get your location"
 msgstr "Impossible de trouver votre emplacement"
 
-#: languages/texts.php:44 templates/map_controls.php:7
+#: languages/texts.php:44
+#: templates/map_controls.php:7
 msgid "Traffic"
 msgstr "Circulation"
 
-#: languages/texts.php:45 templates/map_controls.php:9
+#: languages/texts.php:45
+#: templates/map_controls.php:9
 msgid "Transit"
 msgstr "Transports"
 
-#: languages/texts.php:46 mappress.php:578
+#: languages/texts.php:46
+#: mappress.php:578
 msgid "Zoom"
 msgstr "Zoom"
 
-#: languages/texts.php:47 mappress.php:583 mappress_controls.php:81
+#: languages/texts.php:47
+#: mappress.php:583
+#: mappress_controls.php:81
 msgid "Add"
 msgstr "Ajouter"
 
-#: languages/texts.php:48 mappress.php:584
+#: languages/texts.php:48
+#: mappress.php:584
 msgid "Click & drag to move"
 msgstr "Cliquez & glissez pour déplacer"
 
-#: languages/texts.php:49 mappress.php:585
+#: languages/texts.php:49
+#: mappress.php:585
 msgid "Click to change"
 msgstr "Cliquez pour changer"
 
-#: languages/texts.php:50 mappress.php:587
+#: languages/texts.php:50
+#: mappress.php:587
 msgid "Delete this POI?"
 msgstr "Effacer ce point d’intérêt"
 
-#: languages/texts.php:51 mappress.php:588
+#: languages/texts.php:51
+#: mappress.php:588
 msgid "Delete this map?"
 msgstr "Supprimer cette carte ?"
 
-#: languages/texts.php:52 mappress.php:589
+#: languages/texts.php:52
+#: mappress.php:589
 msgid "Please save the map first"
 msgstr "Veuillez d’abord enregistrer la carte"
 
-#: languages/texts.php:53 mappress.php:590
+#: languages/texts.php:53
+#: mappress.php:590
 msgid "Shape"
 msgstr "Forme"
 
-#: languages/texts.php:54 mappress.php:591
+#: languages/texts.php:54
+#: mappress.php:591
 msgid "Untitled"
 msgstr "Sans titre"
 
@@ -261,27 +303,33 @@ msgstr "Sans titre"
 msgid "New"
 msgstr "Nouveau"
 
-#: languages/texts.php:56 mappress_map.php:114
+#: languages/texts.php:56
+#: mappress_map.php:114
 msgid "Map not found"
 msgstr "Carte non trouvée"
 
-#: languages/texts.php:57 mappress_map.php:468
+#: languages/texts.php:57
+#: mappress_map.php:468
 msgid "Edit"
 msgstr "Modifier"
 
-#: languages/texts.php:58 mappress_map.php:494
+#: languages/texts.php:58
+#: mappress_map.php:494
 msgid "Show map"
 msgstr "Afficher la carte"
 
-#: languages/texts.php:59 mappress_map.php:510
+#: languages/texts.php:59
+#: mappress_map.php:510
 msgid "Reset map"
 msgstr "Réinitialiser"
 
-#: languages/texts.php:60 mappress_map.php:516
+#: languages/texts.php:60
+#: mappress_map.php:516
 msgid "Bigger map"
 msgstr "Agrandir"
 
-#: languages/texts.php:61 mappress_map.php:517
+#: languages/texts.php:61
+#: mappress_map.php:517
 msgid "Smaller map"
 msgstr "Rétrécir"
 
@@ -293,11 +341,13 @@ msgstr "Itinéraires vers"
 msgid "Directions from"
 msgstr "Itinéraires de"
 
-#: languages/texts.php:64 mappress_settings.php:97
+#: languages/texts.php:64
+#: mappress_settings.php:97
 msgid "Basic Settings"
 msgstr "Réglages de base"
 
-#: languages/texts.php:65 mappress_settings.php:99
+#: languages/texts.php:65
+#: mappress_settings.php:99
 msgid "Post types"
 msgstr "Types de contenu"
 
@@ -337,7 +387,8 @@ msgstr "Type de carte"
 msgid "Map controls"
 msgstr "Contrôles de carte"
 
-#: languages/texts.php:75 mappress_settings.php:102
+#: languages/texts.php:75
+#: mappress_settings.php:102
 msgid "Map Settings"
 msgstr "Réglages de la carte"
 
@@ -345,15 +396,19 @@ msgstr "Réglages de la carte"
 msgid "Map links"
 msgstr "Liens sur la carte"
 
-#: languages/texts.php:77 mappress_settings.php:103
+#: languages/texts.php:77
+#: mappress_settings.php:103
 msgid "Map alignment"
 msgstr "Alignement de la carte"
 
-#: languages/texts.php:78 mappress_settings.php:108 mappress_settings.php:234
+#: languages/texts.php:78
+#: mappress_settings.php:108
+#: mappress_settings.php:234
 msgid "Open first POI"
 msgstr "Ouvrir le premier point d’intérêt"
 
-#: languages/texts.php:79 mappress_settings.php:106
+#: languages/texts.php:79
+#: mappress_settings.php:106
 msgid "POI Settings"
 msgstr "Réglages du point d’intérêt"
 
@@ -365,39 +420,49 @@ msgstr "Liens du point d’intérêt"
 msgid "Tooltips"
 msgstr "Infobulles"
 
-#: languages/texts.php:82 mappress_settings.php:107
+#: languages/texts.php:82
+#: mappress_settings.php:107
 msgid "Default zoom"
 msgstr "Zoom par défaut"
 
-#: languages/texts.php:83 mappress_settings.php:111
+#: languages/texts.php:83
+#: mappress_settings.php:111
 msgid "Mashups"
 msgstr "Agrégations"
 
-#: languages/texts.php:84 mappress_settings.php:112
+#: languages/texts.php:84
+#: mappress_settings.php:112
 msgid "Icons"
 msgstr "Icônes"
 
-#: languages/texts.php:85 mappress_settings.php:113
+#: languages/texts.php:85
+#: mappress_settings.php:113
 msgid "Styled Maps"
 msgstr "Styles de cartes"
 
-#: languages/texts.php:86 mappress_settings.php:114
+#: languages/texts.php:86
+#: mappress_settings.php:114
 msgid "Geocoding"
 msgstr "Géolocalisation"
 
-#: languages/texts.php:87 mappress_settings.php:118
+#: languages/texts.php:87
+#: mappress_settings.php:118
 msgid "Localization"
 msgstr "Localisation"
 
-#: languages/texts.php:88 mappress_settings.php:119 mappress_settings.php:238
+#: languages/texts.php:88
+#: mappress_settings.php:119
+#: mappress_settings.php:238
 msgid "Language"
 msgstr "Langue"
 
-#: languages/texts.php:89 mappress_settings.php:120
+#: languages/texts.php:89
+#: mappress_settings.php:120
 msgid "Country"
 msgstr "Pays"
 
-#: languages/texts.php:90 mappress_settings.php:121
+#: languages/texts.php:90
+#: mappress_settings.php:121
 msgid "Directions server"
 msgstr "Serveur d’itinéraires"
 
@@ -405,15 +470,18 @@ msgstr "Serveur d’itinéraires"
 msgid "Directions units"
 msgstr "Unités d’itinéraires"
 
-#: languages/texts.php:92 mappress_settings.php:123
+#: languages/texts.php:92
+#: mappress_settings.php:123
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: languages/texts.php:93 mappress_settings.php:124
+#: languages/texts.php:93
+#: mappress_settings.php:124
 msgid "Map sizes"
 msgstr "Tailles de carte"
 
-#: languages/texts.php:94 mappress_settings.php:125
+#: languages/texts.php:94
+#: mappress_settings.php:125
 msgid "Scripts"
 msgstr "Scripts"
 
@@ -427,23 +495,25 @@ msgstr "CSS"
 
 #: languages/texts.php:97
 msgid "Use the settings below to automatically create maps from custom fields."
-msgstr ""
-"Utilisez les paramètres ci-dessous pour créer automatiquement des cartes de "
-"champs personnalisés."
+msgstr "Utilisez les paramètres ci-dessous pour créer automatiquement des cartes de champs personnalisés."
 
-#: languages/texts.php:98 mappress_settings.php:180
+#: languages/texts.php:98
+#: mappress_settings.php:180
 msgid "Recenter maps when window is resized"
 msgstr "Recentrer la carte lorsque la fenêtre est redimensionnée"
 
-#: languages/texts.php:99 mappress_settings.php:196
+#: languages/texts.php:99
+#: mappress_settings.php:196
 msgid "more info"
 msgstr "plus d’informations"
 
-#: languages/texts.php:100 mappress_settings.php:197
+#: languages/texts.php:100
+#: mappress_settings.php:197
 msgid "Required to display maps"
 msgstr "Nécessaire pour afficher les cartes"
 
-#: languages/texts.php:101 mappress_settings.php:230
+#: languages/texts.php:101
+#: mappress_settings.php:230
 msgid "Output scripts in footer"
 msgstr "Déplacer les scripts en pied de page"
 
@@ -454,9 +524,7 @@ msgstr "Code pays"
 #: languages/texts.php:103
 #, php-format
 msgid "Enter a %s to use when searching (leave blank for USA)"
-msgstr ""
-"Saisissez un %s à utiliser par défaut pour les recherches d’adresse. "
-"(Laisser vide pour les USA)"
+msgstr "Saisissez un %s à utiliser par défaut pour les recherches d’adresse. (Laisser vide pour les USA)"
 
 #: languages/texts.php:104
 msgid "Enter a google server URL for directions/printing"
@@ -493,10 +561,10 @@ msgstr "Langue"
 #: languages/texts.php:112
 #, php-format
 msgid "Use a specific %s for map controls and geocoding"
-msgstr ""
-"Utilisez une %s spécifique pour les contrôles de carte et la géolocalisation"
+msgstr "Utilisez une %s spécifique pour les contrôles de carte et la géolocalisation"
 
-#: languages/texts.php:113 mappress_settings.php:185
+#: languages/texts.php:113
+#: mappress_settings.php:185
 msgid "Default"
 msgstr "Défaut"
 
@@ -584,22 +652,25 @@ msgstr "Reliefs"
 msgid "Hybrid"
 msgstr "Hybride"
 
-#: languages/texts.php:135 mappress_settings.php:219
+#: languages/texts.php:135
+#: mappress_settings.php:219
 msgid "Google"
 msgstr "Google"
 
-#: languages/texts.php:136 mappress_settings.php:218
+#: languages/texts.php:136
+#: mappress_settings.php:218
 msgid "Inline"
 msgstr "En ligne"
 
-#: languages/texts.php:137 mappress_settings.php:204 mappress_settings.php:220
+#: languages/texts.php:137
+#: mappress_settings.php:204
+#: mappress_settings.php:220
 msgid "None"
 msgstr "Aucun"
 
 #: languages/texts.php:138
 msgid "Automatically open the first POI when a map is displayed"
-msgstr ""
-"Ouvrir automatiquement le premier point d’intérêt à l’affichage d’une carte"
+msgstr "Ouvrir automatiquement le premier point d’intérêt à l’affichage d’une carte"
 
 #: languages/texts.php:139
 msgid "Show control"
@@ -611,35 +682,39 @@ msgstr "Activé par défaut"
 
 #: languages/texts.php:141
 msgid "Show POI titles as a \"tooltip\" on mouse-over"
-msgstr ""
-"Afficher les titres de points d’intérêts en « infobulles » au survol de la "
-"souris"
+msgstr "Afficher les titres de points d’intérêts en « infobulles » au survol de la souris"
 
 #: languages/texts.php:142
 msgid "Default alignment"
 msgstr "Alignement par défaut"
 
-#: languages/texts.php:143 mappress_settings.php:186
+#: languages/texts.php:143
+#: mappress_settings.php:186
 msgid "Center"
 msgstr "Centre"
 
-#: languages/texts.php:144 mappress_settings.php:187
+#: languages/texts.php:144
+#: mappress_settings.php:187
 msgid "Left"
 msgstr "Gauche"
 
-#: languages/texts.php:145 mappress_settings.php:188
+#: languages/texts.php:145
+#: mappress_settings.php:188
 msgid "Right"
 msgstr "Droite"
 
-#: languages/texts.php:146 mappress_settings.php:246
+#: languages/texts.php:146
+#: mappress_settings.php:246
 msgid "Default zoom for POIs entered by lat/lng"
 msgstr "Zoom par défaut des points d’intérêts entrés par lat/lng"
 
-#: languages/texts.php:147 mappress_settings.php:202
+#: languages/texts.php:147
+#: mappress_settings.php:202
 msgid "Top of post"
 msgstr "En haut de l’article"
 
-#: languages/texts.php:148 mappress_settings.php:203
+#: languages/texts.php:148
+#: mappress_settings.php:203
 msgid "Bottom of post"
 msgstr "En bas de l’article"
 
@@ -652,7 +727,8 @@ msgstr "Pas d’affichage automatique"
 msgid "Load %s"
 msgstr "Charger %s"
 
-#: languages/texts.php:151 mappress_settings.php:256
+#: languages/texts.php:151
+#: mappress_settings.php:256
 msgid "Default size"
 msgstr "Taille par défaut"
 
@@ -677,31 +753,38 @@ msgstr "Noter 5 étoiles"
 msgid "%s on WordPress.org"
 msgstr "%s sur WordPress.org"
 
-#: languages/texts.php:157 mappress_settings.php:290
+#: languages/texts.php:157
+#: mappress_settings.php:290
 msgid "Thanks for your support!"
 msgstr "Merci de votre soutien !"
 
-#: languages/texts.php:158 mappress_settings.php:297
+#: languages/texts.php:158
+#: mappress_settings.php:297
 msgid "Easy Google Maps"
 msgstr "Easy Google Maps"
 
-#: languages/texts.php:159 mappress_settings.php:288
+#: languages/texts.php:159
+#: mappress_settings.php:288
 msgid "Like this plugin?"
 msgstr "Vous aimez cette extension ?"
 
-#: languages/texts.php:160 mappress_settings.php:309
+#: languages/texts.php:160
+#: mappress_settings.php:309
 msgid "Sample Map"
 msgstr "Carte exemple"
 
-#: languages/texts.php:161 mappress_settings.php:330
+#: languages/texts.php:161
+#: mappress_settings.php:330
 msgid "Save Changes"
 msgstr "Enregistrer les modifications"
 
-#: languages/texts.php:162 mappress_settings.php:331
+#: languages/texts.php:162
+#: mappress_settings.php:331
 msgid "Reset Defaults"
 msgstr "Réinitialiser"
 
-#: languages/texts.php:163 mappress.php:124
+#: languages/texts.php:163
+#: mappress.php:124
 msgid "Settings"
 msgstr "Réglages"
 
@@ -881,9 +964,7 @@ msgstr "InfoBox"
 
 #: languages/texts.php:206
 msgid "Show featured image thumbnails in mashup POIs"
-msgstr ""
-"Afficher les miniatures d’image mise en avant dans l’agrégation de points "
-"d’intérêts"
+msgstr "Afficher les miniatures d’image mise en avant dans l’agrégation de points d’intérêts"
 
 #: languages/texts.php:207
 msgid "Use existing size: "
@@ -1035,96 +1116,116 @@ msgstr "Autres réglages"
 msgid "Example: traffic=\"false\" maplinks=\"\""
 msgstr "Exemple : traffic=\"false\" maplinks=\"\""
 
-#: languages/texts.php:244 templates/map_directions.php:3
+#: languages/texts.php:244
+#: templates/map_directions.php:3
 msgid "By car"
 msgstr "En voiture"
 
-#: languages/texts.php:245 templates/map_directions.php:4
+#: languages/texts.php:245
+#: templates/map_directions.php:4
 msgid "Public Transit"
 msgstr "Transports Publics"
 
-#: languages/texts.php:246 templates/map_directions.php:5
+#: languages/texts.php:246
+#: templates/map_directions.php:5
 msgid "Walking"
 msgstr "A pied"
 
-#: languages/texts.php:247 templates/map_directions.php:16
+#: languages/texts.php:247
+#: templates/map_directions.php:16
 msgid "Swap start and end"
 msgstr "Inverser Début et Fin"
 
-#: languages/texts.php:248 templates/map_directions.php:25
+#: languages/texts.php:248
+#: templates/map_directions.php:25
 msgid "Get Directions"
 msgstr "Itinéraires"
 
-#: languages/texts.php:249 templates/map_directions.php:26
+#: languages/texts.php:249
+#: templates/map_directions.php:26
 msgid "Print"
 msgstr "Imprimer"
 
-#: languages/texts.php:250 templates/map_directions.php:27
+#: languages/texts.php:250
+#: templates/map_directions.php:27
 msgid "Close"
 msgstr "Fermer"
 
-#: languages/texts.php:251 languages/texts.php:293
+#: languages/texts.php:251
+#: languages/texts.php:293
 msgid "MapPress Easy Google Maps"
 msgstr "MapPress Easy Google Maps"
 
-#: languages/texts.php:252 languages/texts.php:294 languages/texts.php:297
+#: languages/texts.php:252
+#: languages/texts.php:294
+#: languages/texts.php:297
 msgid "http://www.wphostreviews.com/mappress"
 msgstr "http://www.wphostreviews.com/mappress"
 
-#: languages/texts.php:253 languages/texts.php:295
-msgid ""
-"MapPress makes it easy to insert Google Maps in WordPress posts and pages."
-msgstr ""
-"MapPress rend facile l’insertion de cartes Google Maps dans les articles et "
-"pages de WordPress."
+#: languages/texts.php:253
+#: languages/texts.php:295
+msgid "MapPress makes it easy to insert Google Maps in WordPress posts and pages."
+msgstr "MapPress rend facile l’insertion de cartes Google Maps dans les articles et pages de WordPress."
 
-#: languages/texts.php:254 languages/texts.php:296
+#: languages/texts.php:254
+#: languages/texts.php:296
 msgid "Chris Richardson"
 msgstr "Chris Richardson"
 
-#: languages/texts.php:255 mappress_settings.php:95
+#: languages/texts.php:255
+#: mappress_settings.php:95
 msgid "License"
 msgstr "Licence"
 
-#: languages/texts.php:256 mappress_settings.php:98
+#: languages/texts.php:256
+#: mappress_settings.php:98
 msgid "Google API key"
 msgstr "Clé API Google"
 
-#: languages/texts.php:257 mappress_settings.php:100
+#: languages/texts.php:257
+#: mappress_settings.php:100
 msgid "Automatic display"
 msgstr "Affichage automatique"
 
-#: languages/texts.php:258 mappress_settings.php:115
+#: languages/texts.php:258
+#: mappress_settings.php:115
 msgid "Google Server API key"
 msgstr "Clé API du serveur Google"
 
-#: languages/texts.php:259 mappress_settings.php:211
+#: languages/texts.php:259
+#: mappress_settings.php:211
 msgid "Country code"
 msgstr "Code pays"
 
-#: languages/texts.php:260 mappress_settings.php:213
+#: languages/texts.php:260
+#: mappress_settings.php:213
 #, php-format
 msgid "%s for searching"
 msgstr "%s pour la recherche"
 
-#: languages/texts.php:261 mappress_settings.php:240
+#: languages/texts.php:261
+#: mappress_settings.php:240
 #, php-format
 msgid "%s for map controls"
 msgstr "%s pour les contrôles de carte"
 
-#: languages/texts.php:262 mappress_settings.php:256
+#: languages/texts.php:262
+#: mappress_settings.php:256
 msgid "Width (px or %)"
 msgstr "Largeur (px ou %)"
 
-#: languages/texts.php:263 mappress_settings.php:256
+#: languages/texts.php:263
+#: mappress_settings.php:256
 msgid "Height (px)"
 msgstr "Hauteur (px)"
 
-#: languages/texts.php:264 mappress_settings.php:287
+#: languages/texts.php:264
+#: mappress_settings.php:287
 msgid "rate it 5 Stars"
 msgstr "évaluez-la 5 étoiles"
 
-#: languages/texts.php:265 mappress_settings.php:289
+#: languages/texts.php:265
+#: mappress_settings.php:289
 #, php-format
 msgid "Please %s on WordPress.org."
 msgstr "S’il vous plaît %s sur WordPress.org."
@@ -1234,6 +1335,7 @@ msgstr "ou "
 msgid "Example: initialopeninfo=\"true\""
 msgstr "Exemple: initialopeninfo=\"true\""
 
-#: languages/texts.php:292 templates/map_controls.php:2
+#: languages/texts.php:292
+#: templates/map_controls.php:2
 msgid "Menu"
 msgstr "Menu"
