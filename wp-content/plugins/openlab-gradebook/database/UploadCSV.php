@@ -1333,22 +1333,3 @@ class gradebook_upload_csv_API
     }
 
 }
-
-/**
- * Use wp_prepare_attachment_for_js to clean up CSV and send cleaned confirmation data back to the upload modal
- * @param type $response
- * @param type $attachment
- * @param type $meta
- * @return type
- */
-function oplb_gradebook_wp_prepare_attachment_for_js($response, $attachment, $meta)
-{
-
-    if (isset($response['uploadedTo'])) {
-        wp_delete_attachment($response['id'], true);
-    }
-
-    return $response;
-}
-
-add_filter('wp_prepare_attachment_for_js', 'oplb_gradebook_wp_prepare_attachment_for_js', 10, 3);
