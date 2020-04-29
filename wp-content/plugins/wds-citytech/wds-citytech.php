@@ -20,6 +20,13 @@ require 'includes/print-this-page.php';
 require 'includes/license-widget.php';
 require 'includes/user-moderation.php';
 
+// Conditionally load Easy TOC modifications.
+add_action( 'plugins_loaded', function() {
+	if ( function_exists( 'ezTOC' ) ) {
+		require 'includes/toc.php';
+	}
+} );
+
 /**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
