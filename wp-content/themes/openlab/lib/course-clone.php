@@ -856,7 +856,6 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Loop through all posts and:
-		// - if it's by an admin, switch to draft
 		// - if it's not by an admin, delete
 		// - if it's a nav item, change the GUID and the menu item URL meta
 		switch_to_blog( $this->site_id );
@@ -868,7 +867,7 @@ class Openlab_Clone_Course_Site {
 		$source_site_url = preg_replace( '/^https?/', '', $source_site_url );
 		$dest_site_url   = preg_replace( '/^https?/', '', $dest_site_url );
 
-				// Copy over attachments. Whee!
+		// Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
 		self::copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
@@ -878,18 +877,8 @@ class Openlab_Clone_Course_Site {
 		$posts_to_delete_ids = [];
 		$atts_to_delete_ids  = [];
 		foreach ( $site_posts as $sp ) {
-			if ( in_array( $sp->post_author, $source_group_admins ) ) {
-				if ( 'publish' === $sp->post_status || 'private' === $sp->post_status ) {
-					$post_arr = array(
-						'ID'          => $sp->ID,
-						'post_status' => 'draft',
-					);
-					wp_update_post( $post_arr );
-
-					wp_update_comment_count_now( $sp->ID );
-				}
-			} else {
-				// Non-teachers have their stuff deleted.
+			// Non-teachers have their stuff deleted.
+			if ( ! in_array( $sp->post_author, $source_group_admins ) ) {
 				if ( 'attachment' === $sp->post_type ) {
 					$atts_to_delete_ids[] = $sp->ID;
 				} else {
@@ -969,7 +958,7 @@ class Openlab_Clone_Course_Site {
 
 		$this->source_group_admins = array_unique( $admin_ids );
 
-		return $this->source_group_admins;
+		return array_map( 'intval', $this->source_group_admins );
 	}
 
 	/**
