@@ -1842,7 +1842,7 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span>Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="<?php echo esc_attr( admin_url( 'edit.php' ) ); ?>">Posts</a> and <a href="<?php echo esc_attr( admin_url( 'edit.php?post_type=page' ) ); ?>">Pages</a>. Custom menus will need to be reactivated via <a href="<?php echo esc_attr( admin_url( 'nav-menus.php' ) ); ?>">Appearance > Menus</a>.</span>
+		<p><span>Please Note: Your cloned site has been published. Please preview the site and make any adjustments (ie: set selected pages and posts to draft) as needed. <strong>This is a change to cloning functionality, which used to keep posts and pages in draft.</strong></span>
 		<a class="ol-clone-message-dismiss" href="<?php echo esc_attr( esc_url( $dismiss_url ) ); ?>">Dismiss</a>
 		</p>
 	</div>
