@@ -522,6 +522,9 @@ class Openlab_Clone_Course_Group {
 		$source_group_admins = $this->get_source_group_admins();
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
+		$parent_term_info = wp_insert_term( 'g' . $this->group_id, 'group-documents-category' );
+		$parent_term_id   = $parent_term_info['term_id'];
+
 		foreach ( $source_files as $source_file ) {
 			if ( ! in_array( $source_file['user_id'], $source_group_admins ) ) {
 				continue;
@@ -537,6 +540,30 @@ class Openlab_Clone_Course_Group {
 			$document->description = $source_file['description'];
 			$document->file        = $source_file['file'];
 			$document->save( false ); // false is "don't check file upload"
+
+			// Categories/folders.
+			$source_file_categories = wp_get_object_terms( $source_file['id'], 'group-documents-category' );
+
+			$categories_to_add = [];
+			foreach ( $source_file_categories as $source_category ) {
+				$dest_category_id = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
+				if ( ! $dest_category_id ) {
+					$term_info = wp_insert_term(
+						$source_category->name,
+						'group-documents-category',
+						[
+							'parent' => $parent_term_id,
+						]
+					);
+					$dest_category_id = $term_info['term_id'];
+				}
+
+				$categories_to_add[] = $dest_category_id;
+			}
+
+			if ( $categories_to_add ) {
+				wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
+			}
 
 			// Copy the file itself
 			$destination_dir = bp_core_avatar_upload_path() . '/group-documents/' . $this->group_id;
