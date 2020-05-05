@@ -642,7 +642,6 @@ body .site-title a {
 /** COLOR SCHEMES ********************************************************/
 
 /* Blue */
-.education-pro-blue .footer-widgets .wrap a:hover,
 .education-pro-blue .slide-excerpt h2 a,
 .education-pro-blue .home-middle .entry-title a,
 .education-pro-blue .home-top .widget_text,
@@ -656,6 +655,11 @@ body .site-title a {
 .education-pro-blue a {
 	border-color: #185a7d;
 	color: #185a7d;
+}
+
+.education-pro-blue .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
 .education-pro-blue .entry-title a:hover,
@@ -800,7 +804,6 @@ body .site-title a {
 }
 
 /* Green */
-.education-pro-green .footer-widgets .wrap a:hover,
 .education-pro-green .slide-excerpt h2 a,
 .education-pro-green .home-middle .entry-title a,
 .education-pro-green .home-top .widget_text,
@@ -815,6 +818,11 @@ body .site-title a {
 .education-pro-green a {
 	border-color: #3e6120;
 	color: #3e6120;
+}
+
+.education-pro-green .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
 .education-pro-green .entry-title a:hover,
@@ -966,7 +974,6 @@ body .site-title a {
 }
 
 /* Red */
-.education-pro-red .footer-widgets .wrap a:hover,
 .education-pro-red .slide-excerpt h2 a,
 .education-pro-red .home-middle .entry-title a,
 .education-pro-red .home-top .widget_text,
@@ -981,6 +988,11 @@ body .site-title a {
 .education-pro-red a {
 	border-color: #aa2418;
 	color: #aa2418;
+}
+
+.education-pro-red .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
 .education-pro-red .entry-title a:hover,
