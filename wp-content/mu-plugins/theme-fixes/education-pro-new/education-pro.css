@@ -151,6 +151,22 @@ h4.widget-title.widgettitle {
     color: #444444 !important; /* Don't let color schemes override */
 }
 
+.home-bottom h4.widget-title.widgettitle,
+.footer-widgets h4.widget-title.widgettitle {
+    color: #fff !important; /* Don't let color schemes override */
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.home-bottom .widget-area .widget:last-of-type,
+.footer-widgets .widget-area .widget:last-of-type {
+	margin-bottom: 40px;
+}
+
+#openlab-footer {
+	display: none !important;
+}
+
 cite {
     font-size: .8em;
 }
@@ -252,10 +268,6 @@ body.header-image .title-area {
 
 .sidebar a:hover {
 	color: #444;
-}
-
-.site-footer {
-	padding: 10px 0;
 }
 
 a,
@@ -657,6 +669,15 @@ body .site-title a {
 .education-pro-blue input[type="submit"],
 .education-pro-blue a.wp-block-file__button,
 .education-pro-blue .footer-widgets a.button,
+.education-pro-blue .footer-widgets .wrap .widget .button,
+.education-pro-blue .footer-widgets .wrap button,
+.education-pro-blue .footer-widgets .wrap input[type="button"],
+.education-pro-blue .footer-widgets .wrap input[type="reset"],
+.education-pro-blue .footer-widgets .wrap input[type="submit"],
+.education-pro-blue .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-blue .home-bottom .widget input[type="button"],
+.education-pro-blue .home-bottom .widget input[type="reset"],
+.education-pro-blue .home-bottom .widget input[type="submit"],
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
 	color: #444;
@@ -807,6 +828,15 @@ body .site-title a {
 .education-pro-green input[type="submit"],
 .education-pro-green a.wp-block-file__button,
 .education-pro-green .footer-widgets a.button,
+.education-pro-green .footer-widgets .wrap .widget .button,
+.education-pro-green .footer-widgets .wrap button,
+.education-pro-green .footer-widgets .wrap input[type="button"],
+.education-pro-green .footer-widgets .wrap input[type="reset"],
+.education-pro-green .footer-widgets .wrap input[type="submit"],
+.education-pro-green .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-green .home-bottom .widget input[type="button"],
+.education-pro-green .home-bottom .widget input[type="reset"],
+.education-pro-green .home-bottom .widget input[type="submit"],
 .education-pro-green .site-footer a.button {
 	background-color: #d1deba;
 	color: #444;
@@ -1018,12 +1048,21 @@ body .site-title a {
 	color: #444;
 }
 
-.education-pro-red button:hover,
-.education-pro-red input[type="button"]:hover,
-.education-pro-red input[type="reset"]:hover,
-.education-pro-red input[type="submit"]:hover,
-.education-pro-red .button:hover,
-.education-pro-red div.wp-block-file__button a:hover {
+.education-pro-red button,
+.education-pro-red a.button,
+.education-pro-red input[type="submit"],
+.education-pro-red a.wp-block-file__button,
+.education-pro-red .footer-widgets a.button,
+.education-pro-red .footer-widgets .wrap .widget .button,
+.education-pro-red .footer-widgets .wrap button,
+.education-pro-red .footer-widgets .wrap input[type="button"],
+.education-pro-red .footer-widgets .wrap input[type="reset"],
+.education-pro-red .footer-widgets .wrap input[type="submit"],
+.education-pro-red .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-red .home-bottom .widget input[type="button"],
+.education-pro-red .home-bottom .widget input[type="reset"],
+.education-pro-red .home-bottom .widget input[type="submit"],
+.education-pro-red .site-footer a.button {
     background-color: #444;
     color: #ffd5d1;
 }
