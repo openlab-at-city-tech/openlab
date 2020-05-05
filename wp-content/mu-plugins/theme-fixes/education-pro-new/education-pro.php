@@ -483,3 +483,32 @@ add_filter(
 	},
 	0
 );
+
+/**
+ * Add featured image to the beginning of post content.
+ */
+add_action(
+	'genesis_entry_content',
+	function() {
+		if ( ! is_singular() ) {
+			return;
+		}
+
+		$img = genesis_get_image( array(
+			'format'  => 'html',
+			'size'    => 'full',
+			'context' => 'archive',
+			'attr'    => 'post-image entry-image',
+		) );
+
+		if ( ! empty( $img ) ) {
+			genesis_markup( array(
+				'open'    => '<a %s>',
+				'close'   => '</a>',
+				'content' => wp_make_content_images_responsive( $img ),
+				'context' => 'entry-image-link',
+			) );
+		}
+	},
+	8
+);

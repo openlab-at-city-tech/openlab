@@ -275,6 +275,7 @@ a.breadcrumb-link {
 	padding-bottom: 1px;
 }
 
+div.entry-content a.entry-image-link,
 div.entry-content .wp-block-image a {
 	border-bottom: 0;
 }
