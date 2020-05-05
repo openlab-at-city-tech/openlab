@@ -69,13 +69,13 @@ function openlab_help_loop() {
         if ($prev_post) {
             $back_next_nav .= '--><span class="nav-previous">';
             $back_next_nav .= '<span class="fa fa-chevron-circle-left"></span>';
-            $back_next_nav .= sprintf('<a href="%s">Back</a>', esc_url(get_permalink($prev_post)));
+            $back_next_nav .= sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $prev_post ) ), esc_html( $prev_post->post_title ) );
             $back_next_nav .= '</span><!--';
         }
 
         if ($next_post) {
             $back_next_nav .= '--><span class="nav-previous">';
-            $back_next_nav .= sprintf('<a href="%s">Next</a>', esc_url(get_permalink($next_post)));
+            $back_next_nav .= sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $next_post ) ), esc_html( $next_post->post_title ) );
             $back_next_nav .= '<span class="nav-next fa fa-chevron-circle-right"></span>';
             $back_next_nav .= '</span><!--';
         }
@@ -90,7 +90,6 @@ function openlab_help_loop() {
 
             <?php
             $nav_links = array(
-                '<span class="page-title">' . get_the_title() . '</span>',
                 $back_next_nav,
             );
 
@@ -124,6 +123,7 @@ function openlab_help_loop() {
         <?php endif; ?>
 
         <div class="entry-content">
+            <h2 class="page-title"><?php the_title(); ?></h2>
             <?php the_content(); ?>
             <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id) ); ?>
         </div>

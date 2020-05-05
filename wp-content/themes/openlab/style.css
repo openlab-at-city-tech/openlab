@@ -10626,8 +10626,15 @@ body.single-event #content .eo-event-venue-map {
 #help-title-nav {
   /* Overrides */
 }
-#help-title-nav .nav-previous {
+#help-title-nav > span {
+  border-right: 1px solid #333333;
+  margin-right: 8px;
   padding-right: 8px;
+}
+#help-title-nav > span:last-child {
+  border-right: none;
+  margin-right: none;
+  padding-right: none;
 }
 #help-title-nav span {
   color: #000000;
