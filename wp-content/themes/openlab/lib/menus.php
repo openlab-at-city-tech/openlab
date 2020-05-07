@@ -961,70 +961,74 @@ add_action('bp_screens', 'openlab_group_submenu_nav', 1);
  * Markup for group admin tabs
  */
 function openlab_group_admin_tabs($group = false) {
-    global $bp, $groups_template;
+	global $bp, $groups_template;
 
-    if (!$group)
-        $group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+	if ( !$group ) {
+		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
+	}
 
-    $current_tab = bp_action_variable(0);
+	$current_tab = bp_action_variable(0);
 
-    $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
+	$group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
 
-    // Portfolio tabs look different from other groups
-    ?>
-    <!--
-    <?php if (openlab_is_portfolio()) : ?>
-        <?php if ( $bp->is_item_admin ) { ?>
-            --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li><!--
-        <?php } ?>
+	// Portfolio tabs look different from other groups
+	?>
 
-        <?php if (!(int) bp_get_option('bp-disable-avatar-uploads')) : ?>
-            --><li<?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li><!--
-        <?php endif; ?>
+	<?php if (openlab_is_portfolio()) : ?>
+		<?php if ( $bp->is_item_admin ) { ?>
+			<li <?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li>
+		<?php } ?>
 
-        --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li><!--
+		<?php if (!(int) bp_get_option('bp-disable-avatar-uploads')) : ?>
+			<li <?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li>
+		<?php endif; ?>
 
-        <?php
-        $account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
-        if ($account_type == "Student") {
-            $profile = "ePortfolio";
-        } else {
-            $profile = "Portfolio";
-        }
-        ?>
+		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li>
 
-        --><li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li><!--
+		<?php
+		$account_type = xprofile_get_field_data('Account Type', $bp->loggedin_user->id);
+		if ($account_type == "Student") {
+			$profile = "ePortfolio";
+		} else {
+			$profile = "Portfolio";
+		}
+		?>
 
-    <?php else : ?>
+		<li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>">Clone <?php echo $profile; ?></a></li>
 
-        <?php if ( $bp->is_item_admin ) { ?>
-            --><li<?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress'); ?></a></li><!--
-        <?php } ?>
+		<li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>
 
-        <?php
-        if (!$bp->is_item_admin)
-            return false;
-        ?>
+	<?php else : ?>
 
-        --><li<?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li><!--
+		<?php if ( $bp->is_item_admin ) { ?>
+			<li <?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress'); ?></a></li>
+		<?php } ?>
 
-        --><li<?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li><!--
+		<?php
+			if ( !$bp->is_item_admin ) {
+				return false;
+			}
+		?>
 
-        <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )             ?>
+		<li <?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li>
 
-		--><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
+		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li>
 
-        --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
+		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ); ?>
 
-        <?php if ($group_type == "portfolio") : ?>
-                                                                                                                                                                                                                                                                                                                                                               <li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
-        <?php else : ?>
-                                                                                                                                                                                                                                                                                                                                                               <li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
-        <?php endif; ?>
+		<li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li>
 
-    <?php endif ?>
-    -->
-    <?php
+		<li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
+
+		<?php if ($group_type == "portfolio") : ?>
+			<li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
+		<?php else : ?>
+			<li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
+		<?php endif; ?>
+
+	<?php endif ?>
+
+	<?php
 }
 
 /**

@@ -822,7 +822,7 @@ function cuny_group_single() {
 
 							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
 								<div class="table-row row">
-                                    <div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.</div>
+                                    <div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in members.</div>
 
 								</div>
 							<?php endif; ?>
