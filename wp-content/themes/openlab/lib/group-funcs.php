@@ -807,7 +807,25 @@ function cuny_group_single() {
                                     <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
                                 </div>
 
+							<?php endif; ?>
+
+							<?php if ( $clone_history ) : ?>
+                                <div class="table-row row">
+                                    <div class="bold col-sm-7">Credits</div>
+                                    <div class="col-sm-17 row-content">
+                                        <ul class="group-credits">
+                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             <?php endif; ?>
+
+							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+								<div class="table-row row">
+                                    <div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.</div>
+
+								</div>
+							<?php endif; ?>
 
                         </div>
                     </div>
