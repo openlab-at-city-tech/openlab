@@ -403,7 +403,6 @@ function openlab_my_groups_submenu($group) {
 
     //if the current user is faculty or a super admin, they can create a course, otherwise no dice
 	$can_create = true;
-	$can_clone = openlab_group_type_can_be_cloned( $group );;
 	if ( 'course' === $group ) {
         // determines if there are any courses - if not, only show "create"
         $filters['wds_group_type'] = openlab_page_slug_to_grouptype();
@@ -416,15 +415,9 @@ function openlab_my_groups_submenu($group) {
 	}
 
 	if ( $can_create ) {
-		if ( $can_clone ) {
-            $menu_list = array(
-                $create_link => 'Create / Clone a ' . ucfirst( $group ),
-            );
-		} else {
-			$menu_list = array(
-				$create_link => 'Create a ' . ucfirst($group),
-			);
-		}
+		$menu_list = array(
+			$create_link => 'Create / Clone a ' . ucfirst( $group ),
+		);
 	}
 
     $menu_out['menu'] = openlab_submenu_gen($menu_list);
@@ -1019,9 +1012,7 @@ function openlab_group_admin_tabs($group = false) {
 
         <?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug )             ?>
 
-        <?php if ( openlab_group_type_can_be_cloned( $group_type ) ) : ?>
-            --><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
-        <?php endif ?>
+		--><li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 
         --><li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li><!--
 

@@ -200,17 +200,20 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
 /**
  * Outputs the markup for the Sharing Settings panel.
  *
- * @param int $group_id ID of the group.
+ * @param string $group_type Group type.
  */
-function openlab_group_sharing_settings_markup( $group_id ) {
-	$sharing_enabled = openlab_group_can_be_cloned( $group_id );
-
+function openlab_group_sharing_settings_markup( $group_type = null ) {
+	$sharing_enabled = openlab_group_can_be_cloned();
+	$group_label_uc = openlab_get_group_type_label( [
+		'case'       => 'upper',
+		'group_type' => $group_type
+	] );
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
 		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
-			<p>This setting enables other faculty to clone your course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
+			<p>This setting enables other faculty to clone your <?php echo $group_label_uc; ?>. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original <?php echo $group_label_uc; ?> authors will be included.</p>
 
 			<div class="checkbox">
 				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable shared cloning</label>
@@ -271,11 +274,6 @@ function openlab_add_clone_button_to_profile() {
 	}
 
 	$group_type = openlab_get_group_type( $group_id );
-
-	// Courses only for the moment.
-	if ( 'course' !== $group_type ) {
-		return;
-	}
 
 	$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
 	if ( ! is_super_admin() && 'Faculty' !== $user_type ) {

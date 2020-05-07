@@ -1751,17 +1751,9 @@ function openlab_add_badge_button_to_profile() {
 add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );
 
 add_action( 'bp_after_group_details_creation_step', function() {
-    if ( ! empty( $_GET['type'] ) ) {
-        $group_type = $_GET['type'];
-    } else {
-        $group_type = 'club';
-    }
+	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
 
-	$group_type_supports_cloning = openlab_group_type_can_be_cloned_by_others( $group_type );
-
-    if ( $group_type_supports_cloning ) {
-        openlab_group_sharing_settings_markup( 0 );
-    }
+	openlab_group_sharing_settings_markup( $group_type );
 }, 4 );
 
 /**

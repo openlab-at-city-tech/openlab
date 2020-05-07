@@ -674,7 +674,7 @@ function wds_bp_group_meta() {
 							</div>
 						</div>
 
-						<?php if ( bp_is_group_create() && isset( $_GET['type'] ) && openlab_group_type_can_be_cloned( $_GET['type'] ) ) : ?>
+						<?php if ( bp_is_group_create() ) : ?>
 							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
 								<div id="noo_clone_options">
 									<div class="row">

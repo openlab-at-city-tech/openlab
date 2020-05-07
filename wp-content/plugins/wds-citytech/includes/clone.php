@@ -87,15 +87,12 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
  *
  * @param int $group_id ID of the group.
  */
-function openlab_group_can_be_cloned( $group_id ) {
-	$group = groups_get_group( $group_id );
-	if ( $group->id ) {
-		$group_type = openlab_get_group_type( $group_id );
-	} else {
-		$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'club';
+function openlab_group_can_be_cloned( $group_id = null ) {
+	if ( null === $group_id ) {
+		$group_id = bp_get_current_group_id();
 	}
 
-	if ( ! openlab_group_type_can_be_cloned( $group_type ) ) {
+	if ( ! $group_id ) {
 		return false;
 	}
 
