@@ -41,7 +41,7 @@ function comment_row_actions( $actions, $comment ) {
 			'<button data-comment-id="%1$d" data-is-private="%2$d" class="button-link">%3$s</button>',
 			$comment_id,
 			(int) $is_private,
-			$label,
+			$label
 		)
 	];
 
