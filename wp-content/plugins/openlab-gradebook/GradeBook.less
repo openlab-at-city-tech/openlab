@@ -216,7 +216,7 @@ body {
 		.student-add-wrapper {
 			#addSingleStudent {
 				overflow-y: hidden;
-				max-height: 28px;
+				max-height: 38px;
 				transition-property: all;
 				transition-duration: 0.5s;
 				transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -413,6 +413,15 @@ td {
 }
 
 .students-header {
+	.btn-group-wrapper {
+		max-width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		margin-left: 8px;
+		margin-right: 8px;
+	}
 	.btn-group {
 		max-width: 100%;
 		.btn {
@@ -654,18 +663,23 @@ span.twitter-typeahead {
 			margin-bottom: 0;
 			.cell-wrapper {
 				display: flex;
+				height: 100%;
+				width: 100%;
+				justify-content: flex-start;
+				align-items: center;
 				.grade-numeric,
-				.checkbox {
-					flex: 1 0 60%;
-				}
+				.checkbox,
 				.grade-selector {
-					flex: 1 0 29%;
-					margin-right: 31%;
+					margin-right: 48px;
 					height: 28px;
+					width: 60px;
 					min-width: 60px;
+					line-height: 1.1;
+					margin-left: 8px;
+					display: flex;
+					align-items: center;
 				}
 				.comment-icon {
-					flex: 1 0 40%;
 					&.inactive {
 						button {
 							color: #8f8f8f;
@@ -675,6 +689,10 @@ span.twitter-typeahead {
 				.checkbox {
 					input {
 						opacity: 1;
+						-ms-transform: scale(1.4);
+						-webkit-transform: scale(1.4);
+						-o-transform: scale(1.4);
+						transform: scale(1.4);
 						&:before {
 							opacity: 1;
 						}
@@ -698,6 +716,17 @@ span.twitter-typeahead {
 		#students-header-pinned th,
 		#students-header th {
 			position: relative;
+			position: relative;
+			padding: 0;
+			height: 60px;
+			> span {
+				height: 100%;
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				margin-left: 8px;
+			}
 			&.pointer {
 				cursor: pointer;
 			}
@@ -767,7 +796,9 @@ span.twitter-typeahead {
 				}
 			}
 			td.student {
-				height: 59px;
+				height: 60px;
+				padding: 0;
+				line-height: 1.1;
 			}
 			.student-grades {
 				display: none;
@@ -778,6 +809,15 @@ span.twitter-typeahead {
 			#students-header-pinned th,
 			#students-pinned td {
 				text-overflow: ellipsis;
+				.column-frame-wrapper,
+				.header-span-wrapper {
+					height: 100%;
+					width: 100%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					margin-left: 8px;
+				}
 				.column-frame {
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -875,7 +915,7 @@ span.twitter-typeahead {
 			margin-left: 36%;
 			overflow: visible !important;
 			.jspContainer {
-				padding-top: 15px;
+				box-sizing: content-box;
 				.jspPane {
 					top: 0 !important;
 					margin-left: 0 !important;
@@ -910,7 +950,9 @@ span.twitter-typeahead {
 				}
 			}
 			td.student-grades {
-				height: 59px;
+				height: 60px;
+				padding: 0;
+				line-height: 1.1;
 			}
 			.student-grades {
 				min-width: 180px;
@@ -930,6 +972,7 @@ span.twitter-typeahead {
 					overflow: hidden;
 					display: inline-block;
 					text-overflow: ellipsis;
+					height: 100%;
 				}
 				.tooltip {
 					.tooltip-inner {
@@ -981,11 +1024,12 @@ span.twitter-typeahead {
 				text-overflow: ellipsis;
 			}
 			td {
-				padding-bottom: 17px;
+				height: 60px;
+				line-height: 1.1;
 				overflow: hidden;
+				padding: 0;
 				.grade-numeric {
 					display: block;
-					margin: 0 0 8px;
 					min-height: 22px;
 				}
 			}
