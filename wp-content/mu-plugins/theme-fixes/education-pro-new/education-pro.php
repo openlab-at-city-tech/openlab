@@ -201,58 +201,82 @@ add_filter(
 	2
 );
 
-register_default_headers( [
-	'foil' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
-		'description'   => 'Foil',
-	],
-	'leaves' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
-		'description'   => 'Leaves',
-	],
-	'numbers' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
-		'description'   => 'Numbers',
-	],
-	'candy' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
-		'description'   => 'Candy',
-	],
-	'firewood' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
-		'description'   => 'Firewood',
-	],
-	'circles' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
-		'description'   => 'Circles',
-	],
-	'fabric' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
-		'description'   => 'Fabric',
-	],
-	'water' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
-		'description'   => 'Water',
-	],
-	'stonefloor' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
-		'description'   => 'Stone Floor',
-	],
-	'riverrocks' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
-		'description'   => 'River Rocks',
-	],
-] );
+function openlab_education_pro_default_headers() {
+	return [
+		'foil' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+			'description'   => 'Foil',
+		],
+		'leaves' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+			'description'   => 'Leaves',
+		],
+		'numbers' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+			'description'   => 'Numbers',
+		],
+		'candy' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+			'description'   => 'Candy',
+		],
+		'firewood' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+			'description'   => 'Firewood',
+		],
+		'circles' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+			'description'   => 'Circles',
+		],
+		'fabric' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+			'description'   => 'Fabric',
+		],
+		'water' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+			'description'   => 'Water',
+		],
+		'stonefloor' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+			'description'   => 'Stone Floor',
+		],
+		'riverrocks' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+			'description'   => 'River Rocks',
+		],
+	];
+}
+
+register_default_headers( openlab_education_pro_default_headers() );
+
+/**
+ * Add 'default-header-image' class, when appropriate.
+ */
+add_filter(
+	'body_class',
+	function( $classes ) {
+		$header_image    = get_header_image();
+		$default_headers = openlab_education_pro_default_headers();
+
+		foreach ( $default_headers as $default_header ) {
+			if ( $header_image === $default_header['url'] ) {
+				$classes[] = 'default-header-image';
+				break;
+			}
+		};
+
+		return $classes;
+	}
+);
 
 add_action(
 	'wp_head',
@@ -322,9 +346,30 @@ function openlab_custom_header_style() {
 		break;
 	}
 
+	$default_headers = openlab_education_pro_default_headers();
+
+	$is_default_header = false;
+	foreach ( $default_headers as $default_header ) {
+		if ( $header_image === $default_header['url'] ) {
+			$is_default_header = true;
+			break;
+		}
+	};
+
 	// Header image CSS, if exists.
 	if ( $header_image ) {
-		$output .= sprintf( '%s { background: linear-gradient( %s, %s ), url(%s) no-repeat !important; }', $header_selector, $gradient, $gradient, esc_url( $header_image ) );
+		if ( $is_default_header ) {
+			$background_color = sprintf( 'linear-gradient( %s, %s ),', $gradient, $gradient );
+		} else {
+			$background_color = 'transparent';
+		}
+
+		$output .= sprintf(
+			'%s { background: %s url(%s) no-repeat !important; }',
+			$header_selector,
+			$background_color,
+			esc_url( $header_image )
+		);
 	}
 
 	// Header text color CSS, if showing text.
