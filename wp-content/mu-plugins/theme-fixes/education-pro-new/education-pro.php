@@ -124,20 +124,6 @@ add_theme_support( 'genesis-style-selector', array(
 	'education-pro-red'    => 'Red',
 ) );
 
-// Convert "Header Right" widget area to a nav area.
-unregister_sidebar( 'header-right' );
-register_nav_menu( 'title-menu', 'Main Nav' );
-add_action(
-	'genesis_header_right',
-	function() {
-		add_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
-		add_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
-		echo genesis_get_nav_menu( [ 'theme_location' => 'title-menu' ] );
-		remove_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
-		remove_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
-	}
-);
-
 add_filter(
 	'genesis_get_layouts',
 	function( $layouts ) {
@@ -189,8 +175,12 @@ add_action(
 add_action(
 	'after_setup_theme',
 	function() {
-		register_nav_menu( 'primary', 'Top Menu' );
+		register_nav_menu( 'primary', 'Main Nav' );
 		unregister_nav_menu( 'secondary' );
+
+		// Undo Education Pro's nav swap.
+		remove_action( 'genesis_before_header', 'genesis_do_nav' );
+		add_action( 'genesis_after_header', 'genesis_do_nav' );
 	},
 	20
 );
