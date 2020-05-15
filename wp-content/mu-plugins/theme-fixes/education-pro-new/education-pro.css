@@ -163,6 +163,11 @@ h4.widget-title.widgettitle {
 	margin-bottom: 40px;
 }
 
+.footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
 #openlab-footer {
 	display: none !important;
 }
