@@ -539,8 +539,9 @@ class Openlab_Clone_Course_Group {
 
 			$categories_to_add = [];
 			foreach ( $source_file_categories as $source_category ) {
-				$dest_category_id = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
-				if ( ! $dest_category_id ) {
+				$dest_category = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
+				$dest_category_id = null;
+				if ( ! $dest_category ) {
 					$term_info = wp_insert_term(
 						$source_category->name,
 						'group-documents-category',
@@ -548,14 +549,19 @@ class Openlab_Clone_Course_Group {
 							'parent' => $parent_term_id,
 						]
 					);
-					$dest_category_id = $term_info['term_id'];
+
+					if ( ! is_wp_error( $term_info ) ) {
+						$dest_category_id = $term_info['term_id'];
+					}
+				} else {
+					$dest_category_id = $dest_category['term_id'];
 				}
 
-				$categories_to_add[] = $dest_category_id;
+				$categories_to_add[] = (int) $dest_category_id;
 			}
 
 			if ( $categories_to_add ) {
-				wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
+				$added = wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
 			}
 
 			// Copy the file itself
