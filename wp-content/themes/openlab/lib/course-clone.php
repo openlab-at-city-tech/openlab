@@ -515,6 +515,17 @@ class Openlab_Clone_Course_Group {
 		$source_group_admins = $this->get_source_group_admins();
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
+		$source_group_parent_term = get_term_by( 'name', "g" . $this->source_group_id, 'group-documents-category' );
+		$source_group_cats        = get_terms(
+			'group-documents-category',
+			array(
+				'parent'     => $source_group_parent_term->term_id ,
+				'hide_empty' => false,
+			)
+		);
+
+		$used_cats = [];
+
 		$parent_term_info = wp_insert_term( 'g' . $this->group_id, 'group-documents-category' );
 		$parent_term_id   = $parent_term_info['term_id'];
 
@@ -558,6 +569,8 @@ class Openlab_Clone_Course_Group {
 				}
 
 				$categories_to_add[] = (int) $dest_category_id;
+
+				$used_cats[ $source_category->name ] = 1;
 			}
 
 			if ( $categories_to_add ) {
@@ -575,6 +588,21 @@ class Openlab_Clone_Course_Group {
 			$source_path = bp_core_avatar_upload_path() . '/group-documents/' . $this->source_group_id . '/' . $document->file;
 
 			copy( $source_path, $destination_path );
+		}
+
+		// Process empty folders.
+		foreach ( $source_group_cats as $source_group_cat ) {
+			if ( isset( $used_cats[ $source_group_cat->name ] ) ) {
+				continue;
+			}
+
+			$term_info = wp_insert_term(
+				$source_group_cat->name,
+				'group-documents-category',
+				[
+					'parent' => $parent_term_id,
+				]
+			);
 		}
 	}
 
