@@ -1,0 +1,1 @@
+jQuery(function(t){var e=function(){nextgen_lightbox_filter_selector(t,t([])).addClass("shutterset"),window.shutterSettings={imageCount:!0,msgLoading:nextgen_shutter_i18n.msgLoading,msgClose:nextgen_shutter_i18n.msgClose},shutterReloaded.init()};t(this).bind("refreshed",e);void 0===t(window).data("shutter")&&(t(window).data("shutter",!0),e())});

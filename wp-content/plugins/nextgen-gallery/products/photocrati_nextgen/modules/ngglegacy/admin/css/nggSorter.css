@@ -1,0 +1,76 @@
+.imageBox,.imageBoxHighlighted{
+	width:130px;	/* Total width of each image box */
+	height:160px;	/* Total height of each image box */
+	float:left;
+}
+.imageBox_theImage{
+	width:110px;	/* Width of image */
+	height:125px;	/* Height of image */
+	
+	/* 
+	Don't change these values *
+	*/
+	background-position: center;
+	background-repeat: no-repeat;		
+	margin: 0 auto;
+	margin-bottom:2px;
+}
+
+.imageBox .imageBox_theImage{
+	border:1px solid #DDD;	/* Border color for not selected images */
+	padding:2px;
+}
+.imageBoxHighlighted .imageBox_theImage{
+	border:3px solid #316AC5;	/* Border color for selected image */
+	padding:0px;
+
+}
+.imageBoxHighlighted span{	/* Title of selected image */
+	background-color: #316AC5;
+	color:#FFFFFF;
+	padding:2px;
+}
+
+.imageBox_label{	/* Title of images - both selected and not selected */
+	text-align:center;
+	font-family: arial;
+	font-size:11px;		
+	padding-top:2px;
+	margin: 0 auto;
+}
+
+/* 
+DIV that indicates where the dragged image will be placed	
+*/
+#insertionMarker{
+	height:150px;
+	width:6px;
+	position:absolute;
+}
+
+#insertionMarkerLine{
+	width:6px;	/* No need to change this value */
+	height:145px;	/* To adjust the height of the div that indicates where the dragged image will be dropped */
+
+}
+	
+#insertionMarker img{
+	float:left;
+}
+
+/*
+DIV that shows the image as you drag it 
+*/
+#dragDropContent{
+
+	opacity:0.4;	/* 40 % opacity */
+	filter:alpha(opacity=40);	/* 40 % opacity */
+
+	/* 
+	No need to change these three values 
+	*/
+	position:absolute;
+	z-index:10;
+	display:none;
+		
+}

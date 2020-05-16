@@ -1,0 +1,1 @@
+See the datamapper unit tests for details about the API

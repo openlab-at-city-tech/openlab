@@ -1,0 +1,84 @@
+/*
+CSS Name: K2 Theme
+Description: NextGEN Style for K2 Theme
+Author: Alex Rabe
+Version: 1.60
+
+This stylesheet modifies the NextGEN defaults to be more compatible with the K2 theme
+*/
+
+/* ----------- Album Styles Extend -------------*/
+
+.ngg-albumoverview {
+    margin: 10px 0px 0px 0px !important;
+}
+
+.ngg-album {
+    margin: 0px 0px 5px !important;
+}
+
+.ngg-albumtitle {
+    margin: 0px 0px 10px 0px !important;
+}
+
+.ngg-albumcontent {
+    margin: 0px !important;
+}
+
+.ngg-thumbnail {
+    float: left;
+    margin: 0px 12px 0px 0px !important;
+}
+
+.ngg-thumbnail img {
+    margin: 4px 0px 4px 5px !important;
+}
+
+/* ----------- Album Styles Compact -------------*/
+
+.ngg-album-link {
+    margin: 0px !important;
+}
+
+.ngg-album-compact h4 {
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    padding: 0px !important;
+}
+
+/* ----------- Gallery style -------------*/
+
+.ngg-gallery-thumbnail-box {
+    margin: 0px !important;
+}
+
+.ngg-gallery-thumbnail {
+    background: url('shadowAlpha.png') no-repeat bottom right !important;
+    background: url('shadow.gif') no-repeat bottom right;
+    margin: 10px 0 0 10px !important;
+}
+
+.ngg-gallery-thumbnail img {
+    margin: -6px 6px 6px -6px !important;
+}
+
+/* ----------- Gallery navigation -------------*/
+
+.ngg-navigation a.page-numbers,
+.ngg-navigation a.next,
+.ngg-navigation a.prev,
+.ngg-navigation span.page-numbers,
+.ngg-navigation span.next,
+.ngg-navigation span.prev {
+    padding: 3px 7px;
+}
+
+/* ----------- Related images -------------*/
+
+.ngg-related-gallery img {
+    margin: 0pt 2px;
+}
+
+.ngg-related-gallery img:hover {
+    border: 1px solid #000000;
+}

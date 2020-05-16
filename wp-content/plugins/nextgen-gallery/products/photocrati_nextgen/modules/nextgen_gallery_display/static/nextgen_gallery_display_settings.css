@@ -1,0 +1,62 @@
+.gallery_page_ngg_display_settings table {
+    height: 100%;
+}
+
+.gallery_page_ngg_display_settings table tr {
+    height: 28px;
+}
+
+.gallery_page_ngg_display_settings table tr td:first-child {
+    vertical-align: top;
+    /*text-align: right;*/
+    padding-right: 7px;
+    padding-top: 5px;
+}
+
+.gallery_page_ngg_display_settings textarea {
+    height: 60px;
+}
+
+.gallery_page_ngg_display_settings textarea,
+.gallery_page_ngg_display_settings input[type=text] {
+    width: 155px;
+}
+
+.gallery_page_ngg_display_settings input[type=number] {
+    text-align: center;
+}
+
+.gallery_page_ngg_display_settings select {
+    width: 155px;
+    text-align: center;
+}
+
+/* paired width & width unit field on same line */
+.gallery_page_ngg_display_settings select.nextgen_settings_field_width_and_unit,
+.gallery_page_ngg_display_settings input.nextgen_settings_field_width_and_unit {
+    text-align: center;
+    width: 75px;
+}
+
+/* paired width & height fields on same line */
+.gallery_page_ngg_display_settings input.nextgen_settings_field_width_and_height {
+    width: 65px;
+}
+
+.entity_errors {
+    color: red;
+}
+
+.entity_errors ul {
+    margin-left: 30px;
+}
+
+.entity_errors ul li {
+    list-style-type: disc;
+}
+
+.ngg_field_ecommerce_enabled_ssl_warning {
+    font-size: 13px;
+    line-height: 1.4;
+    color: red;
+}

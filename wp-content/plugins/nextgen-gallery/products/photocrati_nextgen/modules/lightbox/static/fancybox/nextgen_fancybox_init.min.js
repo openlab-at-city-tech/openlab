@@ -1,0 +1,1 @@
+jQuery(function(n){var e=function(){nextgen_lightbox_filter_selector(n,n(".ngg-fancybox")).fancybox({titlePosition:"inside",onComplete:function(){n("#fancybox-wrap").css("z-index",1e4)}})};n(window).bind("refreshed",e),e()});

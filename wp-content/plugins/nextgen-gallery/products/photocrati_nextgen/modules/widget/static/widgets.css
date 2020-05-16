@@ -1,0 +1,17 @@
+/* ----------- Sidebar widget -------------*/
+
+.ngg-widget,
+.ngg-widget-slideshow {
+    overflow: hidden;
+    margin: 0pt;
+    padding: 5px 0px 0px 0pt;
+    text-align: left;
+}
+
+.ngg-widget img {
+    border: 2px solid #A9A9A9;
+    margin: 0pt 2px 2px 0px;
+    padding: 1px;
+    height: auto; /* silly, but without this the images will appear distorted with some WP themes */
+    float: left;
+}

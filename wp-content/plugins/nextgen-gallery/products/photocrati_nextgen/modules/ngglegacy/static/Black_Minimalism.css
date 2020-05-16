@@ -1,0 +1,49 @@
+/*
+CSS Name: Black Minimalism Theme
+Description: For Black Minimalism Theme
+Author: Alex Rabe
+Version: 1.60
+
+This stylesheet modifies the NextGEN defaults to be more compatible with the Black Minimalism theme
+*/
+
+/* ----------- Album Styles Extend -------------*/
+
+.ngg-thumbnail {
+    margin: 0pt !important;
+    margin-right: 12px !important;
+}
+
+/* ----------- Gallery style -------------*/
+
+.ngg-gallery-thumbnail-box {
+    width: 20%;
+}
+
+.ngg-gallery-thumbnail {
+    background: url('shadowAlpha.png') no-repeat bottom right !important;
+    background: url('shadow.gif') no-repeat bottom right;
+    margin: 10px 0 0 10px !important;
+}
+
+.ngg-gallery-thumbnail img {
+    margin: -6px 6px 6px -6px;
+}
+
+/* ----------- Gallery navigation -------------*/
+
+.ngg-navigation a.page-numbers,
+.ngg-navigation a.next,
+.ngg-navigation a.prev,
+.ngg-navigation span.page-numbers,
+.ngg-navigation span.next,
+.ngg-navigation span.prev {
+    border: 1px solid #660000;
+    padding: 3px 7px;
+}
+
+/* ----------- Related images -------------*/
+
+.ngg-related-gallery img {
+    margin: 0pt 2px;
+}

@@ -1,0 +1,17 @@
+{
+    "name": "reactr-io/pope-framework",
+    "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "Imagely",
+            "email": "support@imagely.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+	"files": [
+	  "./lib/autoload.php"
+	]
+    }
+}

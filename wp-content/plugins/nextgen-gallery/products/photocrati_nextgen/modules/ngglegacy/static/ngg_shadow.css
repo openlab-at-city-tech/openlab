@@ -1,0 +1,24 @@
+/*
+CSS Name: Shadow Effect
+Description: NextGEN Default Style with a Shadow effect
+Author: Alex Rabe
+Version: 1.60
+
+Applies a shadow effect to gallery thumbnails and enables display of their description text
+*/
+
+/* ----------- Gallery style -------------*/
+
+.ngg-gallery-thumbnail {
+    background: url('shadowAlpha.png') no-repeat bottom right !important;
+    background: url('shadow.gif') no-repeat bottom right;
+    margin: 10px 0 0 10px !important;
+}
+
+.ngg-gallery-thumbnail img {
+    margin: -6px 6px 6px -6px;
+}
+
+.ngg-gallery-thumbnail span {
+    display: none;
+}
