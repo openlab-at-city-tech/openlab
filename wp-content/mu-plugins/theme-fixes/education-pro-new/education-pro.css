@@ -390,6 +390,11 @@ a.breadcrumb-link:hover {
 	}
 }
 
+.nav-primary {
+	position: sticky;
+	top: 0px;
+}
+
 .nav-primary .genesis-nav-menu {
 	text-align: center;
 }
