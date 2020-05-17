@@ -931,6 +931,11 @@ class Openlab_Clone_Course_Site {
 		$posts_to_delete_ids = [];
 		$atts_to_delete_ids  = [];
 		foreach ( $site_posts as $sp ) {
+			// Skip Custom CSS post.
+			if ( 'custom_css' === $sp->post_type) {
+				continue;
+			}
+
 			// Non-teachers have their stuff deleted.
 			if ( ! in_array( $sp->post_author, $source_group_admins ) ) {
 				if ( 'attachment' === $sp->post_type ) {
