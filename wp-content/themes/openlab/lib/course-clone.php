@@ -752,6 +752,7 @@ class Openlab_Clone_Course_Site {
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
+			$this->migrate_forms();
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -987,6 +988,48 @@ class Openlab_Clone_Course_Site {
 
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
+
+		restore_current_blog();
+	}
+
+	/**
+	 * Migrate Gravity Forms data.
+	 *
+	 * GF should be active on the main site, since `switch_to_blog()`
+	 * doesn't load site specific plugins.
+	 *
+	 * @return void
+	 */
+	protected function migrate_forms() {
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			return;
+		}
+
+		switch_to_blog( $this->source_site_id );
+
+		// Gravity Form isn't active. Bail early.
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		$forms = GFFormsModel::get_forms( null, 'title' );
+		if ( empty( $forms ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		// Prepare form data.
+		$ids = wp_list_pluck( $forms, 'id' );
+		$forms = GFFormsModel::get_form_meta_by_id( $ids );
+
+		switch_to_blog( $this->site_id );
+
+		// Ensure tables exist.
+		gf_upgrade()->upgrade_schema();
+
+		// Add forms to the cloned site.
+		GFAPI::add_forms( $forms );
 
 		restore_current_blog();
 	}
