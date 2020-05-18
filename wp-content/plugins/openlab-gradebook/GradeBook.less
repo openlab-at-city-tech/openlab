@@ -812,11 +812,17 @@ span.twitter-typeahead {
 				.column-frame-wrapper,
 				.header-span-wrapper {
 					height: 100%;
-					width: 100%;
+					max-width: 100%;
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;
-					margin-left: 8px;
+					padding: 0 8px;
+					> span {
+						max-width: 100%;
+						text-overflow: ellipsis;
+						display: block;
+						overflow: hidden;
+					}
 				}
 				.column-frame {
 					overflow: hidden;

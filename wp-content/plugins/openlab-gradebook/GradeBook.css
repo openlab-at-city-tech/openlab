@@ -709,11 +709,20 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .header-span-wrapper,
 #gradebookWrapper .table-wrapper .pinned #students-pinned td .header-span-wrapper {
   height: 100%;
-  width: 100%;
+  max-width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 8px;
+  padding: 0 8px;
+}
+#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper .pinned #students-pinned td .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper .pinned #students-pinned td .header-span-wrapper > span {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .column-frame,
 #gradebookWrapper .table-wrapper .pinned #students-pinned td .column-frame {
