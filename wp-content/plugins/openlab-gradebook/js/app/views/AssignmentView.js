@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'views/EditAssignmentView', 'views/DetailsAssignmentView', 'views/GradeBookView', 'jquery-ui'],
-        function ($, Backbone, _, AssignmentStatisticsView, EditAssignmentView, DetailsAssignmentView, GradeBookView) {
+define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'views/EditAssignmentView', 'views/DetailsAssignmentView', 'views/DeleteAssignmentView', 'views/GradeBookView', 'jquery-ui'],
+        function ($, Backbone, _, AssignmentStatisticsView, EditAssignmentView, DetailsAssignmentView, DeleteAssignmentView, GradeBookView) {
             var AssignmentView = Backbone.View.extend({
                 tagName: 'th',
                 className: 'assignment-tools assignment',
@@ -128,32 +128,11 @@ define(['jquery', 'backbone', 'underscore', 'views/AssignmentStatisticsView', 'v
                 },
                 deleteAssignment: function (ev) {
                     ev.preventDefault();
-
-                    this.$el.closest('#gradebookWrapper').find('#savingStatus').removeClass('hidden');
-
-                    var self = this;
-                    this.assignment.destroy({success:
-                                function (model, response) {
-                                    var _cells = self.gradebook.cells.where({amid: model.get('id')});
-                                    self.gradebook.cells.remove(_cells);
-                                    var _x = model.get('assign_order');
-                                    if (self.gradebook.assignments.models.length) {
-                                        var _y = _.max(self.gradebook.assignments.models, function (assignment) {
-                                            return assignment.get('assign_order');
-                                        });
-                                        for (i = _x; i < _y.get('assign_order'); i++) {
-                                            var _z = self.gradebook.assignments.findWhere({assign_order: i + 1});
-
-                                            if(typeof _z !== 'undefined'){
-                                                _z.save({assign_order: i});
-                                            }
-                                        }
-                                    }
-
-                                    self.checkForAverageGradeUpdates(response);
-
-                                }}
-                    );
+                    var view = new DeleteAssignmentView({
+                        gradebook: this.gradebook,
+                        course: this.course,
+                        assignment: this.assignment
+                    });
                 },
                 close: function (ev) {
                     this.remove();
