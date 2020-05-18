@@ -51,26 +51,9 @@ function gutenberg_render_block_core_tag_cloud( $attributes ) {
  * Registers the `core/tag-cloud` block on server.
  */
 function gutenberg_register_block_core_tag_cloud() {
-	register_block_type(
-		'core/tag-cloud',
+	register_block_type_from_metadata(
+		__DIR__ . '/tag-cloud',
 		array(
-			'attributes'      => array(
-				'align'         => array(
-					'type' => 'string',
-					'enum' => array( 'left', 'center', 'right', 'wide', 'full' ),
-				),
-				'className'     => array(
-					'type' => 'string',
-				),
-				'taxonomy'      => array(
-					'type'    => 'string',
-					'default' => 'post_tag',
-				),
-				'showTagCounts' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-			),
 			'render_callback' => 'gutenberg_render_block_core_tag_cloud',
 		)
 	);

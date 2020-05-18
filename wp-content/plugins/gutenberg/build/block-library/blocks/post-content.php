@@ -8,16 +8,19 @@
 /**
  * Renders the `core/post-content` block on the server.
  *
+ * @param array    $attributes Block attributes.
+ * @param string   $content    Block default content.
+ * @param WP_Block $block      Block instance.
  * @return string Returns the filtered post content of the current post.
  */
-function gutenberg_render_block_core_post_content() {
-	$post = gutenberg_get_post_from_context();
-	if ( ! $post ) {
+function gutenberg_render_block_core_post_content( $attributes, $content, $block ) {
+	if ( ! isset( $block->context['postId'] ) ) {
 		return '';
 	}
+
 	return (
 		'<div class="entry-content">' .
-			apply_filters( 'the_content', str_replace( ']]>', ']]&gt;', get_the_content( $post ) ) ) .
+			apply_filters( 'the_content', str_replace( ']]>', ']]&gt;', get_the_content( null, false, $block->context['postId'] ) ) ) .
 		'</div>'
 	);
 }
@@ -26,8 +29,8 @@ function gutenberg_render_block_core_post_content() {
  * Registers the `core/post-content` block on the server.
  */
 function gutenberg_register_block_core_post_content() {
-	register_block_type(
-		'core/post-content',
+	register_block_type_from_metadata(
+		__DIR__ . '/post-content',
 		array(
 			'render_callback' => 'gutenberg_render_block_core_post_content',
 		)
