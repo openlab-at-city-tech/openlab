@@ -1,0 +1,42 @@
+/*
+CSS Name: dkret3 Theme
+Description: NextGEN dkret3 style with a shadow effect
+Author: Jörn Kretzschmar (based on Alex Rabes Default Style)
+Version: 1.3
+
+This stylesheet modifies the NextGEN defaults to be more compatible with the dkret3 theme
+*/
+
+/* ----------- Gallery style -------------*/
+
+.ngg-gallery-thumbnail {
+    background: url('shadowAlpha.png') no-repeat bottom right !important;
+    background: url('shadow.gif') no-repeat bottom right;
+    margin: 10px 0 0 10px !important;
+}
+
+.ngg-gallery-thumbnail img {
+    margin: -6px 6px 6px -6px;
+}
+
+.ngg-gallery-thumbnail span {
+    display: none;
+}
+
+/* ----------- Gallery navigation -------------*/
+
+.ngg-navigation a.page-numbers,
+.ngg-navigation a.next,
+.ngg-navigation a.prev,
+.ngg-navigation span.page-numbers,
+.ngg-navigation span.next,
+.ngg-navigation span.prev {
+    padding: 3px 7px;
+}
+
+/* ----------- Sidebar widget -------------*/
+
+.ngg-widget,
+.ngg-widget-slideshow {
+    text-align: center;
+}

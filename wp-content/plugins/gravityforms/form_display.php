@@ -1130,14 +1130,20 @@ class GFFormDisplay {
 					$scroll_position['confirmation'] = is_numeric( $anchor['scroll'] ) ? 'jQuery(document).scrollTop(' . intval( $anchor['scroll'] ) . ');' : "jQuery(document).scrollTop(jQuery('{$anchor['id']}').offset().top - mt);";
 				}
 
-				$iframe_style = defined( 'GF_DEBUG' ) && GF_DEBUG ? 'display:block;width:600px;height:300px;border:1px solid #eee;' : 'display:none;width:0px;height:0px;';
-
-				$is_html5 = RGFormsModel::is_html5_enabled();
-
-				$iframe_title = $is_html5 ? " title='Ajax Frame'" : '';
+				// Accessibility enhancements to properly handle the iframe title and content.
+				$iframe_content = esc_html__( 'This iframe contains the logic required to handle Ajax powered Gravity Forms.', 'gravityforms' );
+				$iframe_title   = " title='{$iframe_content}'";
+				if ( defined( 'GF_DEBUG' ) && GF_DEBUG ) {
+					// In debug mode, display the iframe with the text content.
+					$iframe_style = 'display:block;width:600px;height:300px;border:1px solid #eee;';
+				} else {
+					// Hide the iframe and the content is not needed when not in debug mode.
+					$iframe_style   = 'display:none;width:0px;height:0px;';
+					$iframe_content = '';
+				}
 
 				$form_string .= "
-                <iframe style='{$iframe_style}' src='about:blank' name='gform_ajax_frame_{$form_id}' id='gform_ajax_frame_{$form_id}'" . $iframe_title . ">" . esc_html__( 'This iframe contains the logic required to handle Ajax powered Gravity Forms.', 'gravityforms' ) . "</iframe>
+                <iframe style='{$iframe_style}' src='about:blank' name='gform_ajax_frame_{$form_id}' id='gform_ajax_frame_{$form_id}'" . $iframe_title . ">" . $iframe_content . "</iframe>
                 <script type='text/javascript'>" . apply_filters( 'gform_cdata_open', '' ) . '' .
 					'jQuery(document).ready(function($){' .
 						"gformInitSpinner( {$form_id}, '{$spinner_url}' );" .
@@ -1929,40 +1935,223 @@ class GFFormDisplay {
 		return false;
 	}
 
+	/**
+	 * Enqueues scripts/styles for forms embedded via blocks and shortcodes.
+	 *
+	 * @since unknown
+	 * @since 2.4.18 Added support for blocks and the gform_post_enqueue_scripts hook.
+	 */
 	public static function enqueue_scripts() {
 		global $wp_query;
-		if ( isset( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
-			foreach ( $wp_query->posts as $post ) {
-				if ( ! $post instanceof WP_Post ) {
+
+		if ( ! isset( $wp_query->posts ) || ! is_array( $wp_query->posts ) ) {
+			return;
+		}
+
+		foreach ( $wp_query->posts as $post ) {
+			if ( ! $post instanceof WP_Post ) {
+				continue;
+			}
+
+			$found_forms = $found_blocks = array();
+			self::parse_forms( $post->post_content, $found_forms, $found_blocks );
+
+			if ( ! empty( $found_forms ) ) {
+				foreach ( $found_forms as $form_id => $ajax ) {
+					$form = GFAPI::get_form( $form_id );
+
+					if ( $form && $form['is_active'] && ! $form['is_trash'] ) {
+						self::enqueue_form_scripts( $form, $ajax );
+					}
+				}
+
+				/**
+				 * Allows custom actions to be performed when scripts/styles are enqueued.
+				 *
+				 * @since 2.4.18
+				 *
+				 * @param array   $found_forms  An array of found forms using the form ID as the key to the ajax status.
+				 * @param array   $found_blocks An array of found GF blocks.
+				 * @param WP_Post $post         The post which was processed.
+				 */
+				do_action( 'gform_post_enqueue_scripts', $found_forms, $found_blocks, $post );
+			}
+		}
+	}
+
+	/**
+	 * Parses the supplied post content for forms embedded via blocks and shortcodes.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param string $post_content The post content to be parsed.
+	 * @param array  $found_forms  An array of found forms using the form ID as the key to the ajax status.
+	 * @param array  $found_blocks An array of found GF blocks.
+	 */
+	public static function parse_forms( $post_content, &$found_forms, &$found_blocks ) {
+		if ( empty( $post_content ) ) {
+			return;
+		}
+
+		self::parse_forms_from_shortcode( $post_content, $found_forms );
+
+		if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $post_content ) ) {
+			return;
+		}
+
+		self::parse_forms_from_blocks( parse_blocks( $post_content ), $found_forms, $found_blocks );
+	}
+
+	/**
+	 * Finds forms embedded in the supplied blocks.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param array $blocks       The blocks found in the post content.
+	 * @param array $found_forms  An array of found forms using the form ID as the key to the ajax status.
+	 * @param array $found_blocks An array of found GF blocks.
+	 */
+	public static function parse_forms_from_blocks( $blocks, &$found_forms, &$found_blocks ) {
+		if ( ! method_exists( 'GF_Blocks', 'get_all_types' ) ) {
+			return;
+		}
+
+		$block_types = GF_Blocks::get_all_types();
+
+		foreach ( $blocks as $block ) {
+			if ( empty( $block['blockName'] ) ) {
+				continue;
+			}
+
+			if ( $block['blockName'] === 'core/block' ) {
+				self::parse_forms_from_reusable_block( $block, $found_forms, $found_blocks );
+				continue;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				self::parse_forms_from_blocks( $block['innerBlocks'], $found_forms, $found_blocks );
+				continue;
+			}
+
+			$supported_type = in_array( $block['blockName'], $block_types, true );
+
+			if ( ! $supported_type || ( $supported_type && empty( $block['attrs']['formId'] ) ) ) {
+				continue;
+			}
+
+			$found_blocks[] = $block;
+
+			// Get the form ID and AJAX attributes.
+			$form_id = (int) $block['attrs']['formId'];
+			$ajax    = isset( $block['attrs']['ajax'] ) ? (bool) $block['attrs']['ajax'] : false;
+
+			if ( self::is_applicable_form( $form_id, $ajax, $found_forms ) ) {
+				$found_forms[ $form_id ] = $ajax;
+			}
+		}
+	}
+
+	/**
+	 * Finds forms embedded in the supplied reusable block.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param array $block        The block to be processed.
+	 * @param array $found_forms  An array of found forms using the form ID as the key to the ajax status.
+	 * @param array $found_blocks An array of found GF blocks.
+	 */
+	public static function parse_forms_from_reusable_block( $block, &$found_forms, &$found_blocks ) {
+		if ( empty( $block['attrs']['ref'] ) ) {
+			return;
+		}
+
+		$reusable_block = get_post( $block['attrs']['ref'] );
+
+		if ( empty( $reusable_block ) || $reusable_block->post_type !== 'wp_block' ) {
+			return;
+		}
+
+		self::parse_forms( $reusable_block->post_content, $found_forms, $found_blocks );
+	}
+
+	/**
+	 * Finds forms embedded in the supplied post content.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param string $post_content The post content to be processed.
+	 * @param array  $found_forms  An array of found forms using the form ID as the key to the ajax status.
+	 */
+	public static function parse_forms_from_shortcode( $post_content, &$found_forms ) {
+		if ( empty( $post_content ) ) {
+			return;
+		}
+
+		if ( preg_match_all( '/\[gravityform[s]? +.*?((id=.+?)|(name=.+?))\]/is', $post_content, $matches, PREG_SET_ORDER ) ) {
+			foreach ( $matches as $match ) {
+				$attr    = shortcode_parse_atts( $match[1] );
+				$form_id = rgar( $attr, 'id' );
+
+				if ( empty( $form_id ) && ! empty( $attr['name'] ) ) {
+					$form_id = $attr['name'];
+				}
+
+				if ( $form_id && ! is_numeric( $form_id ) ) {
+					$form_id = GFFormsModel::get_form_id( $form_id );
+				}
+
+				if ( empty( $form_id ) ) {
 					continue;
 				}
 
-				$forms = self::get_embedded_forms( $post->post_content, $ajax );
-				foreach ( $forms as $form ) {
-					if ( isset( $form['id'] ) ) {
-						self::enqueue_form_scripts( $form, $ajax );
-					}
+				$form_id = (int) $form_id;
+				$ajax    = isset( $attr['ajax'] ) && strtolower( substr( $attr['ajax'], 0, 4 ) ) == 'true';
+
+				if ( self::is_applicable_form( $form_id, $ajax, $found_forms ) ) {
+					$found_forms[ $form_id ] = $ajax;
 				}
 			}
 		}
 	}
 
-	public static function get_embedded_forms( $post_content, &$ajax ) {
-		$forms = array();
-		if ( preg_match_all( '/\[gravityform[s]? +.*?((id=.+?)|(name=.+?))\]/is', $post_content, $matches, PREG_SET_ORDER ) ) {
-			$ajax = false;
-			foreach ( $matches as $match ) {
-				//parsing shortcode attributes
-				$attr    = shortcode_parse_atts( $match[1] );
-				$form_id = rgar( $attr, 'id' );
-				if ( ! is_numeric( $form_id ) ) {
-					$form_id = RGFormsModel::get_form_id( rgar( $attr, 'name' ) );
-				}
+	/**
+	 * Determines if the supplied form ID should be added to the found forms array.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param int   $form_id     The form ID to be checked.
+	 * @param bool  $ajax        Indicates if Ajax is enabled for the found form.
+	 * @param array $found_forms An array of found forms using the form ID as the key to the ajax status.
+	 *
+	 * @return bool
+	 */
+	public static function is_applicable_form( $form_id, $ajax, $found_forms ) {
+		return ! isset( $found_forms[ $form_id ] ) || ( isset( $found_forms[ $form_id ] ) && true === $ajax && false === $found_forms[ $form_id ] );
+	}
 
-				if ( ! empty( $form_id ) ){
-					$forms[] = RGFormsModel::get_form_meta( $form_id );
-					$ajax    = isset( $attr['ajax'] ) && strtolower( substr( $attr['ajax'], 0, 4 ) ) == 'true';
-				}
+	/**
+	 * Returns forms embedded in the supplied post content.
+	 *
+	 * @since unknown
+	 * @since 2.4.18 Updated to use GFFormDisplay::parse_forms_from_shortcode().
+	 *
+	 * @param string $post_content The post content to be processed.
+	 * @param bool   $ajax         Indicates if Ajax is enabled for at least one of the forms.
+	 *
+	 * @return array
+	 */
+	public static function get_embedded_forms( $post_content, &$ajax ) {
+		$found_forms = $forms = array();
+		self::parse_forms_from_shortcode( $post_content, $found_forms );
+
+		if ( empty( $found_forms ) ) {
+			return $forms;
+		}
+
+		foreach ( $found_forms as $form_id => $is_ajax ) {
+			$forms[] = GFAPI::get_form( $form_id );
+			if ( ! $ajax && $is_ajax ) {
+				$ajax = true;
 			}
 		}
 
@@ -3202,7 +3391,7 @@ class GFFormDisplay {
 		$progress_bar .= ! $progress_complete ? esc_html__( 'Step', 'gravityforms' ) . " {$current_page} " . esc_html__( 'of', 'gravityforms' ) . " {$page_count}{$page_name}" : "{$page_name}";
 		$progress_bar .= "
         </h3>
-            <div class='gf_progressbar'>
+            <div class='gf_progressbar' aria-hidden='true'>
                 <div class='gf_progressbar_percentage percentbar_{$style} percentbar_{$percent_number}' style='width:{$percent};{$color}{$bgcolor}'><span>{$percent}</span></div>
             </div></div>";
 		//close div for surrounding wrapper class when confirmation page
@@ -3490,6 +3679,10 @@ class GFFormDisplay {
 		if ( $ajax ) {
 			$ajax_fields = "<input type='hidden' name='gform_ajax' value='" . esc_attr( "form_id={$form_id}&amp;title=1&amp;description=1&amp;tabindex=1" ) . "' />";
 			$ajax_fields .= "<input type='hidden' name='gform_field_values' value='' />";
+
+			// Adding inputs required by GFFormDisplay::is_submit_form_id_valid() to verify the Ajax submission should be processed.
+			$ajax_fields .= "<input type='hidden' class='gform_hidden' name='is_submit_{$form_id}' value='1' />";
+			$ajax_fields .= "<input type='hidden' class='gform_hidden' name='gform_submit' value='{$form_id}' />";
 		}
 
 		$ajax_submit = $ajax ? "onclick='jQuery(\"#gform_{$form_id}\").trigger(\"submit\",[true]);'" : '';

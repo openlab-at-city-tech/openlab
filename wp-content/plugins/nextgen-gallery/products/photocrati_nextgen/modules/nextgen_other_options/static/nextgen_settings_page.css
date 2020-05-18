@@ -1,0 +1,151 @@
+.gallery_page_ngg_other_options table {
+	width: 80%;
+	height: 100%;
+}
+
+#ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
+    padding: 20px;
+    vertical-align: middle;
+    line-height: 1.8;
+    padding: 20px 20px;
+}
+
+.gallery_page_ngg_other_options #ngg_page_content .ngg_page_content_main table tr td:first-of-type,
+.gallery_page_ngg_other_options #ngg_page_content .ngg_page_content_main table tr th:first-of-type {
+    width: 325px !important;
+    max-width: 100% !important;
+}
+
+.gallery_page_ngg_other_options table.image_options {
+	width: 100%;
+}
+
+.gallery_page_ngg_other_options table td.column1 {
+	width: 240px;
+}
+.gallery_page_ngg_other_options table td.column2 {
+	width: 200px;
+}
+
+.gallery_page_ngg_other_options textarea {
+	height: 100px;
+    width: 100%;
+}
+
+.gallery_page_ngg_other_options .image_options td {
+	padding-bottom: 8px;
+}
+
+.gallery_page_ngg_other_options .select2-results__option--highlighted[aria-selected] {
+    background-color: #9fbb1a;
+}
+
+#image_quality,
+#image_sorting_direction {
+    width: 120px !important;
+}
+
+#ngg_page_content.ngg_settings_page .ngg_page_content_main table.nextgen_settings_position {
+    display: table !important;
+}
+
+.column_wrapper {
+	width: 100%;
+	padding-right: 7px;
+}
+
+#max_related_images {
+	width: auto;
+}
+
+#image_width,
+#image_height{
+	width: 40px;
+}
+
+#ngg_page_content #thumbnail_dimensions_width,
+#ngg_page_content #thumbnail_dimensions_height{
+	width: 75px;
+	vertical-align: middle;
+}
+
+.nextgen-thumb-size-custom br {
+	display:none;
+}
+
+.gallery_page_ngg_other_options select.thumbnail_dimensions {
+	width: 300px;
+	max-width: 100%;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.right-aligned {
+	text-align: right;
+}
+label.align-to-top,
+td.align-to-top {
+	vertical-align: top
+}
+
+#lightbox_library_advanced_settings td {
+	text-align: right;
+}
+
+.gallery_page_ngg_other_options .ngg_options_promo {
+    display: table-cell;
+}
+
+.gallery_page_ngg_other_options .ngg_options_promo a {
+    margin-left: 20px;
+}
+
+#advanced_stylesheet_form td {
+	width: 100% !important;
+}
+
+#cssfile_contents {
+	background: #F9F9F9;
+	font-family: Consolas,Monaco,monospace;
+	font-size: 12px;
+	width: 100%;
+	height: 300px;
+	outline: 0;
+}
+
+#writable_identicator {
+	display: inline;
+}
+
+.entity_errors {
+	color: red;
+}
+
+.entity_errors ul {
+	margin-left: 30px;
+}
+.entity_errors ul li{
+	list-style-type: disc;
+}
+
+#nextgen_settings_preview_refresh {
+    display: block;
+}
+
+@media (max-width: 782px) {
+	#ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
+	    width: 100%;
+	}
+	.gallery_page_ngg_other_options input[type="text"],
+	.gallery_page_ngg_other_options select,
+	.gallery_page_ngg_other_options .select2-container,
+	#image_quality, 
+	#image_sorting_direction {
+    	width: 100% !important;
+	} 
+	#ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
+	    padding: 5px 20px;
+	}
+}

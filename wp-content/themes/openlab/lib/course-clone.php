@@ -515,6 +515,17 @@ class Openlab_Clone_Course_Group {
 		$source_group_admins = $this->get_source_group_admins();
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
+		$source_group_parent_term = get_term_by( 'name', "g" . $this->source_group_id, 'group-documents-category' );
+		$source_group_cats        = get_terms(
+			'group-documents-category',
+			array(
+				'parent'     => $source_group_parent_term->term_id ,
+				'hide_empty' => false,
+			)
+		);
+
+		$used_cats = [];
+
 		$parent_term_info = wp_insert_term( 'g' . $this->group_id, 'group-documents-category' );
 		$parent_term_id   = $parent_term_info['term_id'];
 
@@ -539,8 +550,9 @@ class Openlab_Clone_Course_Group {
 
 			$categories_to_add = [];
 			foreach ( $source_file_categories as $source_category ) {
-				$dest_category_id = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
-				if ( ! $dest_category_id ) {
+				$dest_category = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
+				$dest_category_id = null;
+				if ( ! $dest_category ) {
 					$term_info = wp_insert_term(
 						$source_category->name,
 						'group-documents-category',
@@ -548,14 +560,21 @@ class Openlab_Clone_Course_Group {
 							'parent' => $parent_term_id,
 						]
 					);
-					$dest_category_id = $term_info['term_id'];
+
+					if ( ! is_wp_error( $term_info ) ) {
+						$dest_category_id = $term_info['term_id'];
+					}
+				} else {
+					$dest_category_id = $dest_category['term_id'];
 				}
 
-				$categories_to_add[] = $dest_category_id;
+				$categories_to_add[] = (int) $dest_category_id;
+
+				$used_cats[ $source_category->name ] = 1;
 			}
 
 			if ( $categories_to_add ) {
-				wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
+				$added = wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
 			}
 
 			// Copy the file itself
@@ -569,6 +588,21 @@ class Openlab_Clone_Course_Group {
 			$source_path = bp_core_avatar_upload_path() . '/group-documents/' . $this->source_group_id . '/' . $document->file;
 
 			copy( $source_path, $destination_path );
+		}
+
+		// Process empty folders.
+		foreach ( $source_group_cats as $source_group_cat ) {
+			if ( isset( $used_cats[ $source_group_cat->name ] ) ) {
+				continue;
+			}
+
+			$term_info = wp_insert_term(
+				$source_group_cat->name,
+				'group-documents-category',
+				[
+					'parent' => $parent_term_id,
+				]
+			);
 		}
 	}
 
@@ -718,6 +752,7 @@ class Openlab_Clone_Course_Site {
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
+			$this->migrate_forms();
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -897,6 +932,11 @@ class Openlab_Clone_Course_Site {
 		$posts_to_delete_ids = [];
 		$atts_to_delete_ids  = [];
 		foreach ( $site_posts as $sp ) {
+			// Skip Custom CSS post.
+			if ( 'custom_css' === $sp->post_type) {
+				continue;
+			}
+
 			// Non-teachers have their stuff deleted.
 			if ( ! in_array( $sp->post_author, $source_group_admins ) ) {
 				if ( 'attachment' === $sp->post_type ) {
@@ -948,6 +988,48 @@ class Openlab_Clone_Course_Site {
 
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
+
+		restore_current_blog();
+	}
+
+	/**
+	 * Migrate Gravity Forms data.
+	 *
+	 * GF should be active on the main site, since `switch_to_blog()`
+	 * doesn't load site specific plugins.
+	 *
+	 * @return void
+	 */
+	protected function migrate_forms() {
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			return;
+		}
+
+		switch_to_blog( $this->source_site_id );
+
+		// Gravity Form isn't active. Bail early.
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		$forms = GFFormsModel::get_forms( null, 'title' );
+		if ( empty( $forms ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		// Prepare form data.
+		$ids = wp_list_pluck( $forms, 'id' );
+		$forms = GFFormsModel::get_form_meta_by_id( $ids );
+
+		switch_to_blog( $this->site_id );
+
+		// Ensure tables exist.
+		gf_upgrade()->upgrade_schema();
+
+		// Add forms to the cloned site.
+		GFAPI::add_forms( $forms );
 
 		restore_current_blog();
 	}

@@ -8,13 +8,14 @@ const nanoid = require( 'nanoid' );
  */
 import { compose, withState } from '@wordpress/compose';
 import { dispatch, withSelect } from '@wordpress/data';
-import { RichTextToolbarButton } from '@wordpress/block-editor';
+import { IconButton, Toolbar } from '@wordpress/components';
+import { BlockFormatControls } from '@wordpress/block-editor';
 import { isCollapsed, insertObject } from '@wordpress/rich-text';
 
 /**
  * Internal dependencies
  */
-import { FormatIcon } from '../utils/format-icon';
+import icon from './icon';
 import Modal from '../components/modal';
 
 const addMarker = ( value, data ) => {
@@ -45,16 +46,19 @@ function Edit( {
 	setState,
 	onChange,
 } ) {
-	const icon = ( <FormatIcon /> );
-
 	return (
 		<>
-			<RichTextToolbarButton
-				icon={ icon }
-				title="Attribution"
-				onClick={ () => setState( { isOpen: true } ) }
-				isActive={ isActive }
-			/>
+			<BlockFormatControls>
+				<Toolbar>
+					<IconButton
+						icon={ icon }
+						label="Add Attribution"
+						className="components-toolbar__control"
+						onClick={ () => setState( { isOpen: true } ) }
+						isActive={ isActive }
+					/>
+				</Toolbar>
+			</BlockFormatControls>
 			{ isOpen && (
 				<Modal
 					isOpen={ isOpen }
