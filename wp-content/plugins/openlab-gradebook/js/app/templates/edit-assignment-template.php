@@ -78,14 +78,6 @@
                 </div>
                 <input type="hidden" name="gbid" value="<%= course.get('id') %>"/>	 											
             </form>    		
-            <div>
-                <% if (assignment.get('assign_name')) { %>
-                    <p class="text-right"><?php esc_html_e('Update assignment', 'openlab-gradebook') ?> <%= assignment.get('assign_name') %> <?php esc_html_e('from gradeboook', 'openlab-gradebook') ?> <%= course.get('name') %>?</p>
-                <% } else { %>
-                 <p class="text-right"><?php esc_html_e('Add to course', 'openlab-gradebook') ?> <%= course.get('name') %>?</p>
-                <% } %>
-
-            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e('Close', 'openlab-gradebook') ?></button>
