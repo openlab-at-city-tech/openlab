@@ -742,7 +742,7 @@ class GFFormDetail {
 			</label>
 			<select id="post_custom_field_type" onchange="if(jQuery(this).val() == '') return; jQuery('#field_settings').slideUp(function(){StartChangePostCustomFieldType(jQuery('#post_custom_field_type').val());});">
 				<optgroup class="option_header" label="<?php esc_attr_e( 'Standard Fields', 'gravityforms' ); ?>">
-					<option value="text"><?php esc_html_e( 'Single line text', 'gravityforms' ); ?></option>
+					<option value="text"><?php esc_html_e( 'Single Line Text', 'gravityforms' ); ?></option>
 					<option value="textarea"><?php esc_html_e( 'Paragraph Text', 'gravityforms' ); ?></option>
 					<option value="select"><?php esc_html_e( 'Drop Down', 'gravityforms' ); ?></option>
 					<option value="multiselect"><?php esc_html_e( 'Multi Select', 'gravityforms' ); ?></option>
@@ -771,7 +771,7 @@ class GFFormDetail {
 				<?php gform_tooltip( 'form_field_type' ) ?>
 			</label>
 			<select id="post_tag_type" onchange="if(jQuery(this).val() == '') return; jQuery('#field_settings').slideUp(function(){StartChangeInputType(jQuery('#post_tag_type').val());});">
-				<option value="text"><?php esc_html_e( 'Single line text', 'gravityforms' ); ?></option>
+				<option value="text"><?php esc_html_e( 'Single Line Text', 'gravityforms' ); ?></option>
 				<option value="select"><?php esc_html_e( 'Drop Down', 'gravityforms' ); ?></option>
 				<option value="multiselect"><?php esc_html_e( 'Multi Select', 'gravityforms' ); ?></option>
 				<option value="checkbox"><?php esc_html_e( 'Checkboxes', 'gravityforms' ); ?></option>
