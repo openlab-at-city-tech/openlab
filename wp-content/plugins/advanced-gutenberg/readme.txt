@@ -2,8 +2,8 @@
 Contributors: JoomUnited
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
-Tested up to: 5.3.2
-Stable tag: 2.3.5
+Tested up to: 5.4.1
+Stable tag: 2.3.9
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -140,6 +140,21 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 1. Latest posts and WooCommerce products blocks
 
 == Changelog ==
+
+= 2.3.9 =
+ * Fix : Wrong cell tag name in table head of Advanced Table block
+
+= 2.3.8 =
+ * Fix : Missing list content when convert the list block to advanced list block
+ * Fix : Display the overlay and action on click in Image Slider block
+
+= 2.3.7 =
+ * Fix : Image Slider on rtl language
+ * Fix : Columns block not display full width with 1 column layout
+
+= 2.3.6 =
+ * Fix : Icon block error invalid content
+ * Fix : Editor width option not working
 
 = 2.3.5 =
  * Fix : Tabs block error in version 2.3.3

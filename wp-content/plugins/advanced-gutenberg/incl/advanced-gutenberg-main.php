@@ -1455,7 +1455,7 @@ float: left;'
             if (isset($saved_settings['editor_width']) && $saved_settings['editor_width']) {
                 wp_add_inline_style(
                     'dashicons',
-                    '#editor div.editor-writing-flow {max-width: ' . $saved_settings['editor_width'] . '%}'
+                    '#editor div.block-editor-writing-flow {max-width: ' . $saved_settings['editor_width'] . '%;margin: 0 auto}#editor .wp-block {max-width: inherit}'
                 );
             }
 

@@ -38,7 +38,6 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         componentDidMount() {
             const { attributes, setAttributes, clientId } = this.props;
 
-
             if ( !attributes.id ) {
                 setAttributes( { id: 'advgbbtn-' + clientId } );
             }
