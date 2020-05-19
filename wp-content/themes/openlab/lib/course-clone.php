@@ -1002,7 +1002,6 @@ class Openlab_Clone_Course_Site {
 	 */
 	protected function migrate_forms() {
 		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
-			error_log( 'GF isn\'t active on main site' );
 			return;
 		}
 
@@ -1010,15 +1009,12 @@ class Openlab_Clone_Course_Site {
 
 		// Gravity Form isn't active. Bail early.
 		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
-			error_log( 'GF isn\'t active on source site.' );
 			restore_current_blog();
 			return;
 		}
 
 		$forms = GFFormsModel::get_forms( null, 'title' );
-		error_log( sprintf( 'Found %d forms.', count( $forms ) ) );
 		if ( empty( $forms ) ) {
-			error_log( 'There are no forms.' );
 			restore_current_blog();
 			return;
 		}
@@ -1035,10 +1031,10 @@ class Openlab_Clone_Course_Site {
 		// Add forms to the cloned site.
 		$form_ids = GFAPI::add_forms( $forms );
 
+		// Try to re-add forms after the error.
+		// Sometimes tables aren't available on first try.
 		if ( is_wp_error( $form_ids ) ) {
-			error_log( $form_ids->get_error_message() );
-		} else {
-			error_log( sprintf( 'Imported forms: %s', implode(', ', $form_ids ) ) );
+			GFAPI::add_forms( $forms );
 		}
 
 		restore_current_blog();
