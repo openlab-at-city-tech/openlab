@@ -27,7 +27,7 @@
     // Set a group label. The (e)Portfolio logic means we have to do an extra step
     if ( 'portfolio' == $group_type ) {
         $group_label = openlab_get_portfolio_label('case=upper&user_id=' . bp_loggedin_user_id());
-        $page_title = 'Create/Clone ' . openlab_get_portfolio_label('case=upper&leading_a=1&user_id=' . bp_loggedin_user_id());
+        $page_title = 'Create ' . openlab_get_portfolio_label('case=upper&leading_a=1&user_id=' . bp_loggedin_user_id());
     } else {
 		$group_label = $group_type;
 		$page_title = 'Create/Clone a ' . ucwords( $group_type );
@@ -57,7 +57,10 @@
                 <?php /* Group creation step 1: Basic group details */ ?>
                 <?php if (bp_is_group_creation_step('group-details')) : ?>
 
-                    <?php do_action('bp_before_group_details_creation_step'); ?>
+					<?php do_action('bp_before_group_details_creation_step'); ?>
+
+					<?php /* Create vs Clone for clonable group types */ ?>
+					<?php if ( 'portfolio' !== $group_type ) : ?>
 
                         <div class="panel panel-default create-or-clone-selector">
                             <div class="panel-heading semibold">Create New or Clone Existing?</div>
@@ -118,7 +121,9 @@
 
                             <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
                             </div>
-                        </div>
+						</div>
+
+					<?php endif; ?>
 
                     <?php /* Name/Description */ ?>
 

@@ -96,6 +96,10 @@ function openlab_group_can_be_cloned( $group_id = null ) {
 		return false;
 	}
 
+	if ( openlab_is_portfolio( $group_id ) ) {
+		return false;
+	}
+
 	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
 
 	return ! empty( $sharing_enabled_for_group );
