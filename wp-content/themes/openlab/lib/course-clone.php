@@ -1020,22 +1020,16 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Prepare form data.
-		$ids = wp_list_pluck( $forms, 'id' );
+		$ids   = wp_list_pluck( $forms, 'id' );
 		$forms = GFFormsModel::get_form_meta_by_id( $ids );
 
 		switch_to_blog( $this->site_id );
 
-		// Ensure tables exist.
-		gf_upgrade()->upgrade_schema();
+		// Properly install GF on new site.
+		gf_upgrade()->install();
 
 		// Add forms to the cloned site.
-		$form_ids = GFAPI::add_forms( $forms );
-
-		// Try to re-add forms after the error.
-		// Sometimes tables aren't available on first try.
-		if ( is_wp_error( $form_ids ) ) {
-			GFAPI::add_forms( $forms );
-		}
+		GFAPI::add_forms( $forms );
 
 		restore_current_blog();
 	}
