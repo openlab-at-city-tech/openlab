@@ -515,6 +515,10 @@ body .site-title a {
 
 /* Hamburger initialize at 1023px */
 @media only screen and (max-width: 1023px) {
+	.nav-primary .genesis-nav-menu {
+		font-size: 16px;
+	}
+
 	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
 	.genesis-nav-menu.responsive-menu {
 		display: none;
