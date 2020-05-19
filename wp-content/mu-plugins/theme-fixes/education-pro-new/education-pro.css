@@ -908,10 +908,10 @@ body .site-title a {
 }
 
 .education-pro-green .genesis-nav-menu li a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu a,
+.education-pro-green .genesis-nav-menu li.current-menu-item > a,
 .education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-green .genesis-nav-menu li.current-menu-item > a {
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #234326;
 	color: #fff;
 }
@@ -1070,10 +1070,10 @@ body .site-title a {
 }
 
 .education-pro-red .genesis-nav-menu li a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu a,
+.education-pro-red .genesis-nav-menu li.current-menu-item > a,
 .education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-red .genesis-nav-menu li.current-menu-item > a {
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #62231d;
 	color: #fff;
 }
