@@ -393,6 +393,7 @@ a.breadcrumb-link:hover {
 .nav-primary {
 	position: sticky;
 	top: 0px;
+	z-index: 99;
 }
 
 .nav-primary .genesis-nav-menu {
