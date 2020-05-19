@@ -42,7 +42,7 @@ p.site-title {
 }
 
 a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #f5f5f5;
 }
 
 .site-inner {
@@ -1054,7 +1054,7 @@ body .site-title a {
 }
 
 .education-pro-red a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #f5f5f5;
 }
 
 .education-pro-red .content .entry-header .entry-meta .entry-time {
