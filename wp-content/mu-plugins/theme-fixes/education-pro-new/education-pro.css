@@ -360,10 +360,6 @@ a.breadcrumb-link:hover {
 	body div.title-area {
 		width: 90% !important;
 	}
-
-	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
-		color: inherit;
-	}
 }
 
 @media screen and (min-width: 1023px) {
@@ -522,6 +518,14 @@ body .site-title a {
 	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
 	.genesis-nav-menu.responsive-menu {
 		display: none;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		color: inherit;
+	}
+
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		color: inherit !important;
 	}
 
 	.genesis-nav-menu.responsive-menu .menu-item,
