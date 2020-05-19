@@ -392,7 +392,7 @@ a.breadcrumb-link:hover {
 
 .nav-primary {
 	position: sticky;
-	top: 0px;
+	top: -1px;
 	z-index: 99;
 }
 
