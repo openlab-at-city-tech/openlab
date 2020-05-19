@@ -546,7 +546,7 @@ body .site-title a {
 	.genesis-nav-menu.responsive-menu li a:hover,
 	.header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
 	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: #444;
 		display: block;
 		line-height: 1;
