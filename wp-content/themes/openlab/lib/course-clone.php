@@ -204,6 +204,11 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
  */
 function openlab_group_sharing_settings_markup( $group_type = null ) {
 	$sharing_enabled = openlab_group_can_be_cloned();
+
+	if ( ! $sharing_enabled ) {
+		return;
+	}
+
 	$group_label_uc = openlab_get_group_type_label( [
 		'case'       => 'upper',
 		'group_type' => $group_type
