@@ -3109,3 +3109,17 @@ add_action(
 		remove_submenu_page( 'wonderplugin_gallery_overview', 'wonderplugin_gallery_register' );
 	}
 );
+
+/**
+ * Register wonderplugin-gallery customization scripts.
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function( $hook ) {
+		if ( 'wonder-gallery-pro_page_wonderplugin_gallery_add_new' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-wonderplugin-gallery', plugins_url( 'wds-citytech/assets/js/wonderplugin-gallery.js' ), [ 'jquery', 'wonderplugin-gallery-creator-script' ], OL_VERSION );
+	}
+);
