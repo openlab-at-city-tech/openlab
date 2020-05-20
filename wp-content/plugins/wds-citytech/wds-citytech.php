@@ -3073,3 +3073,39 @@ function openlab_sanitize_url_params( $url ) {
 
 	return $url;
 }
+
+/**
+ * wonderplugin-gallery license info.
+ */
+function openlab_wonderplugin_gallery_force_license_key( $value ) {
+	if ( ! defined( 'WONDERPLUGIN_GALLERY_LICENSE_KEY' ) ) {
+		return $value;
+	}
+
+	$info = unserialize( $value );
+	$info->key = WONDERPLUGIN_GALLERY_LICENSE_KEY;
+	$info->key_status = 'valid';
+	$info->key_expire = 0;
+
+	return serialize( $info );
+}
+add_filter( 'option_wonderplugin_gallery_information', 'openlab_wonderplugin_gallery_force_license_key' );
+add_filter( 'default_option_wonderplugin_gallery_information', 'openlab_wonderplugin_gallery_force_license_key' );
+
+/**
+ * Remove wonderplugin-gallery Register panel.
+ */
+add_action(
+	'admin_init',
+	function() {
+		if ( ! defined( 'WONDERPLUGIN_GALLERY_VERSION' ) ) {
+			return;
+		}
+
+		if ( is_super_admin() ) {
+			return;
+		}
+
+		remove_submenu_page( 'wonderplugin_gallery_overview', 'wonderplugin_gallery_register' );
+	}
+);
