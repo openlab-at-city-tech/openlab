@@ -204,12 +204,7 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
  */
 function openlab_group_sharing_settings_markup( $group_type = null ) {
 	$sharing_enabled = openlab_group_can_be_cloned();
-
-	if ( ! $sharing_enabled ) {
-		return;
-	}
-
-	$group_label_uc = openlab_get_group_type_label( [
+	$group_label_uc  = openlab_get_group_type_label( [
 		'case'       => 'upper',
 		'group_type' => $group_type
 	] );
@@ -278,13 +273,11 @@ function openlab_add_clone_button_to_profile() {
 		return;
 	}
 
-	$group_type = openlab_get_group_type( $group_id );
-
-	$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-	if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
+	if ( ! openlab_user_can_clone_group( get_current_user_id(), $group_id ) ) {
 		return;
 	}
 
+	$group_type       = openlab_get_group_type( $group_id );
 	$group_type_label = openlab_get_group_type_label(
 		array(
 			'group_id' => $group_id,

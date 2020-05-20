@@ -820,12 +820,6 @@ function cuny_group_single() {
                                 </div>
                             <?php endif; ?>
 
-							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
-								<div class="table-row row">
-									<div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.</div>
-								</div>
-							<?php endif; ?>
-
                         </div>
                     </div>
 
@@ -1769,6 +1763,10 @@ add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60
 
 add_action( 'bp_after_group_details_creation_step', function() {
 	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
 
 	openlab_group_sharing_settings_markup( $group_type );
 }, 4 );

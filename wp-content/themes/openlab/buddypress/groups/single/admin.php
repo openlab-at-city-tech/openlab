@@ -101,9 +101,8 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 
 			<?php if ( 'portfolio' !== $group_type ) : ?>
 				<?php openlab_group_member_role_settings( $group_type ); ?>
+				<?php openlab_group_sharing_settings_markup( $group_type ); ?>
 			<?php endif; ?>
-
-			<?php openlab_group_sharing_settings_markup(); ?>
 
 			<?php
 			$forum_enabled = openlab_is_forum_enabled_for_group();
