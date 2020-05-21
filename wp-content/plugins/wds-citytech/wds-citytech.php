@@ -3130,3 +3130,41 @@ add_action(
 		wp_enqueue_script( 'openlab-wonderplugin-gallery', plugins_url( 'wds-citytech/assets/js/wonderplugin-gallery.js' ), [ 'jquery', 'wonderplugin-gallery-creator-script' ], OL_VERSION );
 	}
 );
+
+/**
+ * Register dco-comment-attachment customization scripts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! function_exists( 'dco_ca' ) ) {
+			return;
+		}
+
+		if ( ! dco_ca()->is_comments_used() || ! dco_ca()->is_attachment_field_enabled() ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-dco-comment-attachment', plugins_url( 'wds-citytech/assets/js/dco-comment-attachment.js' ), [ 'jquery' ], OL_VERSION );
+
+		wp_localize_script(
+			'openlab-dco-comment-attachment',
+			'OpenLabDCOCommentAttachment',
+			[
+				'max_upload_size' => wp_max_upload_size(),
+			]
+		);
+	}
+);
+
+/**
+ * Filter the 'max upload size' field for dco-comment-attachment.
+ */
+add_filter(
+	'dco_ca_form_element_upload_size',
+	function( $field ) {
+		$field = str_replace( '<br>', '', $field );
+		$field = '<span class="comment-attachment-max-upload-size">' . $field . '</span>';
+		return '<br>' . $field;
+	}
+);
