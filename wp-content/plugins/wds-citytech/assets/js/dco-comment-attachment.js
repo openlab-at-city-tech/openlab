@@ -48,7 +48,6 @@
 			}
 
 			var fileExtension = file.name.split('.').pop();
-			console.log ( OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension) );
 			if ( -1 === OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension ) ) {
 				hasError = true;
 				addTypeNotice();
