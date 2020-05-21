@@ -3181,3 +3181,17 @@ add_filter(
 		return '<br>' . $field;
 	}
 );
+
+/**
+ * Filter the 'author_plugin_activated' option for author-profiles.
+ *
+ * It's triggering a fatal error, and it's used to send spam emails.
+ */
+add_filter(
+	'pre_option_author_plugin_activated',
+	function() {
+		return 'yes';
+	}
+);
+
+add_filter( 'pre_option_auth-ignore-notice', '__return_1' );
