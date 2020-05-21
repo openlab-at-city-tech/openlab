@@ -3152,6 +3152,7 @@ add_action(
 			'OpenLabDCOCommentAttachment',
 			[
 				'max_upload_size' => wp_max_upload_size(),
+				'allowed_types'   => dco_ca()->get_allowed_file_types( 'array' ),
 			]
 		);
 	}
@@ -3164,7 +3165,19 @@ add_filter(
 	'dco_ca_form_element_upload_size',
 	function( $field ) {
 		$field = str_replace( '<br>', '', $field );
-		$field = '<span class="comment-attachment-max-upload-size">' . $field . '</span>';
+		$field = '<span class="comment-attachment-info comment-attachment-max-upload-size">' . $field . '</span>';
+		return '<br>' . $field;
+	}
+);
+
+/**
+ * Filter the 'allowed file type' field for dco-comment-attachment.
+ */
+add_filter(
+	'dco_ca_form_element_file_types',
+	function( $field ) {
+		$field = str_replace( '<br>', '', $field );
+		$field = '<span class="comment-attachment-info comment-attachment-allowed-file-types">' . $field . '</span>';
 		return '<br>' . $field;
 	}
 );

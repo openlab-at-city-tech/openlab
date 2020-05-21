@@ -1,6 +1,7 @@
 (function($){
 	var $attachmentField,
 		$commentForm,
+		$typeNotice,
 		$uploadSizeNotice;
 
 	function enableForm() {
@@ -11,32 +12,55 @@
 		$commentSubmit.attr( 'disabled', 'disabled' );
 	}
 
-	function addNotice() {
+	function addSizeNotice() {
 		$uploadSizeNotice.addClass( 'has-error' );
 	}
 
-	function removeNotice() {
+	function removeSizeNotice() {
 		$uploadSizeNotice.removeClass( 'has-error' );
+	}
+
+	function addTypeNotice() {
+		$typeNotice.addClass( 'has-error' );
+	}
+
+	function removeTypeNotice() {
+		$typeNotice.removeClass( 'has-error' );
 	}
 
 	$(document).ready(function(){
 		$attachmentField = $('input#attachment');
 		$commentSubmit = $attachmentField.closest( 'form' ).find( 'input[type="submit"]' );
+		$typeNotice = $('.comment-attachment-allowed-file-types');
 		$uploadSizeNotice = $('.comment-attachment-max-upload-size');
 
 		$attachmentField.on('change',function(e){
 			var file = e.target.files[0];
 
+			var hasError = false;
+
 			if ( file.size > OpenLabDCOCommentAttachment.max_upload_size ) {
-				disableForm();
-				addNotice();
+				hasError = true;
+				addSizeNotice();
 			} else {
 				enableForm();
-				removeNotice();
+				removeSizeNotice();
 			}
 
-			console.log(file);
-			console.log(window.OpenLabDCOCommentAttachment);
+			var fileExtension = file.name.split('.').pop();
+			console.log ( OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension) );
+			if ( -1 === OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension ) ) {
+				hasError = true;
+				addTypeNotice();
+			} else {
+				removeTypeNotice();
+			}
+
+			if ( hasError ) {
+				disableForm();
+			} else {
+				enableForm();
+			}
 		});
 	});
 }(jQuery));
