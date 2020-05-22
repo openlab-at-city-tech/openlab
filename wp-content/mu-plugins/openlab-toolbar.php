@@ -139,6 +139,7 @@ class OpenLab_Admin_Bar {
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'remove_gallery' ), 9999 );
+			add_action( 'wp_before_admin_bar_render', array( $this, 'remove_duplicate_post' ), 9999 );
 
 			// removing the default account information item and menu so we can a custom Bootstrap-style one
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
@@ -1422,6 +1423,14 @@ HTML;
 	 */
 	public function remove_gallery( $wp_admin_bar ) {
 		$wp_admin_bar->remove_menu( 'ngg-menu' );
+	}
+
+	/**
+	 * Remove 'Copy to a new draft' (from duplicate-post).
+	 */
+	public function remove_duplicate_post() {
+		global $wp_admin_bar;
+		$wp_admin_bar->remove_menu( 'new_draft' );
 	}
 
 	/**
