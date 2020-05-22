@@ -3123,7 +3123,12 @@ add_action(
 add_action(
 	'admin_enqueue_scripts',
 	function( $hook ) {
-		if ( 'wonder-gallery-pro_page_wonderplugin_gallery_add_new' !== $hook ) {
+		$hooks = [
+			'wonder-gallery-pro_page_wonderplugin_gallery_add_new' => 1,
+			'admin_page_wonderplugin_gallery_edit_item' => 1,
+		];
+
+		if ( ! isset( $hooks[ $hook ] ) ) {
 			return;
 		}
 
