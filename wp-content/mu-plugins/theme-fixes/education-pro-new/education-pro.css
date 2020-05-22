@@ -2,11 +2,6 @@
 
 /* 1. Header */
 
-.title-area-link {
-	position: relative;
-	z-index: 100;
-}
-
 div.title-area {
     position: absolute;
 	top: 50%;
@@ -228,6 +223,8 @@ div.title-area {
 }
 
 .title-area-link {
+	position: relative;
+	z-index: 100;
 	/*
 	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
@@ -235,7 +232,6 @@ div.title-area {
 	*/
     background-color: #aa2418;
 	position: relative;
-	z-index: 2;
 	background-position: center top !important;
 	background-size: cover !important;
 	box-shadow: 0px 3px 7px 0px #00000063;
