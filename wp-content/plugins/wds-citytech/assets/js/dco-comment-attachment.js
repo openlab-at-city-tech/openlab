@@ -39,26 +39,32 @@
 
 			var hasError = false;
 
-			if ( file.size > OpenLabDCOCommentAttachment.max_upload_size ) {
-				hasError = true;
-				addSizeNotice();
-			} else {
-				enableForm();
-				removeSizeNotice();
-			}
+			if ( 'undefined' !== typeof file ) {
+				if ( file.size > OpenLabDCOCommentAttachment.max_upload_size ) {
+					hasError = true;
+					addSizeNotice();
+				} else {
+					enableForm();
+					removeSizeNotice();
+				}
 
-			var fileExtension = file.name.split('.').pop();
-			if ( -1 === OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension ) ) {
-				hasError = true;
-				addTypeNotice();
-			} else {
-				removeTypeNotice();
+				var fileExtension = file.name.split('.').pop();
+				if ( -1 === OpenLabDCOCommentAttachment.allowed_types.indexOf( fileExtension ) ) {
+					hasError = true;
+					addTypeNotice();
+				} else {
+					removeTypeNotice();
+				}
 			}
 
 			if ( hasError ) {
 				disableForm();
 			} else {
 				enableForm();
+
+				// Need duplicate logic in case file is removed.
+				removeSizeNotice();
+				removeTypeNotice();
 			}
 		});
 	});
