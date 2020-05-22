@@ -138,6 +138,7 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
+			add_action( 'admin_bar_menu', array( $this, 'remove_gallery' ), 9999 );
 
 			// removing the default account information item and menu so we can a custom Bootstrap-style one
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
@@ -1417,6 +1418,13 @@ HTML;
 	}
 
 	/**
+	 * Remove 'Gallery' (from NextGEN).
+	 */
+	public function remove_gallery( $wp_admin_bar ) {
+		$wp_admin_bar->remove_menu( 'ngg-menu' );
+	}
+
+	/**
 	 * Add a 'Log Out' link to the far right
 	 */
 	public function add_logout_item( $wp_admin_bar ) {
@@ -1732,7 +1740,7 @@ function openlab_wrap_adminbar_top() {
 		$classes[]     = ( is_user_member_of_blog() ? 'is-member' : 'not-member' );
 	?>
 		<div id="oplbBSAdminar" class="<?php echo implode( ' ', $classes ); ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
-		
+
 		<?php
 		$current_theme = wp_get_theme();
 		$classes[]     = esc_html( $current_theme->get( 'TextDomain' ) );
