@@ -242,7 +242,7 @@ function openlab_help_cats_loop() {
             <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
         <div id="help-title">
-            <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
+            <div class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics:</div> <?php echo esc_html( $parent_term->name ); ?></div>
         </div>
         <?php
     else:
