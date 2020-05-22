@@ -145,27 +145,6 @@ foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
 }
 
-add_action(
-	'template_redirect',
-	function() {
-		// Handled separately.
-		if ( is_front_page() ) {
-			return;
-		}
-
-		add_action(
-			'genesis_before_footer',
-			function() {
-				genesis_widget_area( 'home-bottom', array(
-					'before' => '<div class="home-bottom widget-area"><div class="wrap">',
-					'after'  => '</div></div>',
-				) );
-			}
-		);
-	}
-);
-
-
 /**
  * Modify Genesis default nav areas.
  *
