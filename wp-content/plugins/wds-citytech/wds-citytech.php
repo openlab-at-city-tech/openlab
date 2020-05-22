@@ -3195,3 +3195,17 @@ add_filter(
 );
 
 add_filter( 'pre_option_auth-ignore-notice', '__return_1' );
+
+/**
+ * Register nextgen-gallery customization scripts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'NGG_PLUGIN' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/js/nextgen-gallery.js' ), [ 'jquery' ], OL_VERSION );
+	}
+);
