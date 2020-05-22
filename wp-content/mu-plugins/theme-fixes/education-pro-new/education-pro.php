@@ -124,6 +124,8 @@ add_theme_support( 'genesis-style-selector', array(
 	'education-pro-red'    => 'Red',
 ) );
 
+unregister_sidebar( 'header-right' );
+
 add_filter(
 	'genesis_get_layouts',
 	function( $layouts ) {
@@ -138,7 +140,7 @@ add_filter(
 	}
 );
 
-$deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', /*'home-bottom',*/ 'sidebar-alt' ];
+$deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
 }
