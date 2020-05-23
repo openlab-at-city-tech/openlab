@@ -3156,7 +3156,7 @@ add_action(
 			'openlab-dco-comment-attachment',
 			'OpenLabDCOCommentAttachment',
 			[
-				'max_upload_size' => wp_max_upload_size(),
+				'max_upload_size' => dco_ca()->get_max_upload_size(),
 				'allowed_types'   => dco_ca()->get_allowed_file_types( 'array' ),
 			]
 		);
