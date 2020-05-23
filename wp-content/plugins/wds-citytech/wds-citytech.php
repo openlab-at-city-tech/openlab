@@ -3164,6 +3164,32 @@ add_action(
 );
 
 /**
+ * Filter dco-comment-attachment options, to force logged-in user setting.
+ */
+add_action(
+	'plugins_loaded',
+	function() {
+		if ( ! class_exists( 'DCO_CA_Settings' ) ) {
+			return;
+		}
+
+		$hooks = [
+			'option_' . DCO_CA_Settings::ID,
+			'default_option_' . DCO_CA_Settings::ID,
+		];
+
+		$callback = function( $value ) {
+			$value['who_can_upload'] = 2;
+			return $value;
+		};
+
+		foreach ( $hooks as $hook ) {
+			add_filter( $hook, $callback );
+		}
+	}
+);
+
+/**
  * Filter the 'max upload size' field for dco-comment-attachment.
  */
 add_filter(
