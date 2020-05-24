@@ -3225,7 +3225,12 @@ add_filter(
 	}
 );
 
-add_filter( 'pre_option_auth-ignore-notice', '__return_1' );
+add_filter(
+	'pre_option_auth-ignore-notice',
+	function() {
+		return 1;
+	}
+);
 
 /**
  * Register nextgen-gallery customization scripts.
