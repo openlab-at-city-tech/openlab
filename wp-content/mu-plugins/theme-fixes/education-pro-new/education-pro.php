@@ -145,6 +145,19 @@ foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
 }
 
+add_filter(
+	'is_active_sidebar',
+	function( $is_active, $sidebar ) {
+		if ( 'home-bottom' === $sidebar ) {
+			return false;
+		}
+
+		return $is_active;
+	},
+	10,
+	2
+);
+
 /**
  * Modify Genesis default nav areas.
  *
