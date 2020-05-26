@@ -317,7 +317,7 @@ jQuery(document).ready(function($){
 	/* Clone setup */
 	var group_type = $.urlParam( 'type' );
 
-	if ( OLGroupCreate.groupTypeCanBeCloned ) {
+	if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
 		var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
 
 		$create_or_clone = $('input[name="create-or-clone"]');
