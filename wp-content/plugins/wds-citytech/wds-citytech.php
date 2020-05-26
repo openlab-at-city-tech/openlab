@@ -3152,12 +3152,16 @@ add_action(
 
 		wp_enqueue_script( 'openlab-dco-comment-attachment', plugins_url( 'wds-citytech/assets/js/dco-comment-attachment.js' ), [ 'jquery' ], OL_VERSION );
 
+		dco_ca()->enable_filter_upload();
+		$allowed_types = dco_ca()->get_allowed_file_types( 'array' );
+		dco_ca()->disable_filter_upload();
+
 		wp_localize_script(
 			'openlab-dco-comment-attachment',
 			'OpenLabDCOCommentAttachment',
 			[
 				'max_upload_size' => dco_ca()->get_max_upload_size(),
-				'allowed_types'   => dco_ca()->get_allowed_file_types( 'array' ),
+				'allowed_types'   => $allowed_types,
 			]
 		);
 	}
