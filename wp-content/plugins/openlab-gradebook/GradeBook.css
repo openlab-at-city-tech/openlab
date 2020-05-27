@@ -611,6 +611,11 @@ span.twitter-typeahead {
   top: 15px;
   position: relative;
 }
+@media (max-width: 991px) {
+  #gradebookWrapper .table-wrapper #an-gradebook-container {
+    max-width: none;
+  }
+}
 #gradebookWrapper .table-wrapper #students-header td .column-frame-wrapper,
 #gradebookWrapper .table-wrapper #students-header-pinnned td .column-frame-wrapper,
 #gradebookWrapper .table-wrapper #students td .column-frame-wrapper,
