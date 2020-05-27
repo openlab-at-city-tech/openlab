@@ -713,6 +713,33 @@ span.twitter-typeahead {
 			position: relative;
 		}
 		position: relative;
+		#students-header,
+		#students-header-pinnned,
+		#students,
+		#students-pinned {
+			td,
+			th {
+				.column-frame-wrapper,
+				.header-span-wrapper {
+					height: 100%;
+					max-width: 100%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					padding: 0 8px;
+					> span {
+						max-width: 100%;
+						text-overflow: ellipsis;
+						display: block;
+						overflow: hidden;
+					}
+				}
+				.column-frame {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+		}
 		#students-header-pinned th,
 		#students-header th {
 			position: relative;
@@ -809,25 +836,6 @@ span.twitter-typeahead {
 			#students-header-pinned th,
 			#students-pinned td {
 				text-overflow: ellipsis;
-				.column-frame-wrapper,
-				.header-span-wrapper {
-					height: 100%;
-					max-width: 100%;
-					display: flex;
-					justify-content: flex-start;
-					align-items: center;
-					padding: 0 8px;
-					> span {
-						max-width: 100%;
-						text-overflow: ellipsis;
-						display: block;
-						overflow: hidden;
-					}
-				}
-				.column-frame {
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
 				.tooltip-wrapper {
 					max-width: 100%;
 					white-space: nowrap;
@@ -877,14 +885,6 @@ span.twitter-typeahead {
 							visibility: hidden;
 						}
 					}
-				}
-			}
-			#students-pinned td {
-				> span {
-					max-width: 100%;
-					text-overflow: ellipsis;
-					display: block;
-					overflow: hidden;
 				}
 			}
 			#students-header-pinned th.gradebook-student-column-interactive,
@@ -1044,6 +1044,7 @@ span.twitter-typeahead {
 				max-width: 50px;
 				min-width: 50px;
 				overflow: visible;
+				padding: 12px 8px;
 				button#download-csv-mobile {
 					background: #0073aa;
 					font-size: 22px;
