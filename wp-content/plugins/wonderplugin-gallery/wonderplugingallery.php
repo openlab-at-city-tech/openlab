@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Wonder Gallery Trial
+Plugin Name: Wonder Gallery Pro
 Plugin URI: http://www.wonderplugin.com
 Description: WordPress Photo Video Gallery Plugin
-Version: 13.1
+Version: 13.1C
 Author: Magic Hills Pty Ltd
 Author URI: http://www.wonderplugin.com
 License: Copyright 2019 Magic Hills Pty Ltd, All Rights Reserved
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) )
 if (defined('WONDERPLUGIN_GALLERY_VERSION'))
 	return;
 
-define('WONDERPLUGIN_GALLERY_VERSION', '13.1');
+define('WONDERPLUGIN_GALLERY_VERSION', '13.1C');
 define('WONDERPLUGIN_GALLERY_URL', plugin_dir_url( __FILE__ ));
 define('WONDERPLUGIN_GALLERY_PATH', plugin_dir_path( __FILE__ ));
 define('WONDERPLUGIN_GALLERY_PLUGIN', basename(dirname(__FILE__)) . '/' . basename(__FILE__));
@@ -72,8 +72,8 @@ class WonderPlugin_Gallery_Plugin {
 		$userrole = $settings['userrole'];
 		
 		$menu = add_menu_page(
-				__('Wonder Gallery Trial', 'wonderplugin_gallery'),
-				__('Wonder Gallery Trial', 'wonderplugin_gallery'),
+				__('Wonder Gallery Pro', 'wonderplugin_gallery'),
+				__('Wonder Gallery Pro', 'wonderplugin_gallery'),
 				$userrole,
 				'wonderplugin_gallery_overview',
 				array($this, 'show_overview'),
@@ -125,6 +125,14 @@ class WonderPlugin_Gallery_Plugin {
 				array($this, 'edit_settings' ) );
 		add_action( 'admin_print_styles-' . $menu, array($this, 'enqueue_admin_script') );
 		
+		$menu = add_submenu_page(
+				'wonderplugin_gallery_overview',
+				__('Register', 'wonderplugin_gallery'),
+				__('Register', 'wonderplugin_gallery'),
+				'manage_options',
+				'wonderplugin_gallery_register',
+				array($this, 'register' ) );
+		add_action( 'admin_print_styles-' . $menu, array($this, 'enqueue_admin_script') );
 
 		$menu = add_submenu_page(
 				null,
@@ -483,4 +491,4 @@ if ( !function_exists('wonderplugin_gallery_uninstall') )
 	}
 }
 
-define('WONDERPLUGIN_GALLERY_VERSION_TYPE', 'F');
+define('WONDERPLUGIN_GALLERY_VERSION_TYPE', 'C');

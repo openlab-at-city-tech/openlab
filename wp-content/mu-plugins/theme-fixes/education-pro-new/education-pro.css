@@ -2,10 +2,6 @@
 
 /* 1. Header */
 
-.title-area-link {
-	position: relative;
-}
-
 div.title-area {
     position: absolute;
 	top: 50%;
@@ -42,7 +38,7 @@ p.site-title {
 }
 
 a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #f5f5f5;
 }
 
 .site-inner {
@@ -227,6 +223,8 @@ div.title-area {
 }
 
 .title-area-link {
+	position: relative;
+	z-index: 100;
 	/*
 	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
@@ -234,10 +232,9 @@ div.title-area {
 	*/
     background-color: #aa2418;
 	position: relative;
-	z-index: 2;
 	background-position: center top !important;
 	background-size: cover !important;
-	box-shadow: 0px 3px 7px 0px #80808091;
+	box-shadow: 0px 3px 7px 0px #00000063;
 	display: block;
 	min-height: 130px;
 	width: 100%;
@@ -292,6 +289,7 @@ a.breadcrumb-link {
 	padding-bottom: 1px;
 }
 
+div.entry-content .ngg-gallery-thumbnail a,
 div.entry-content a.entry-image-link,
 div.entry-content .wp-block-image a {
 	border-bottom: 0;
@@ -392,7 +390,8 @@ a.breadcrumb-link:hover {
 
 .nav-primary {
 	position: sticky;
-	top: 0px;
+	top: -1px;
+	z-index: 99;
 }
 
 .nav-primary .genesis-nav-menu {
@@ -491,7 +490,7 @@ body .site-title a {
 	color: #3b3b3b;
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu .sub-menu {
+.genesis-nav-menu .sub-menu .sub-menu {
 	border-left: none;
 }
 
@@ -514,9 +513,22 @@ body .site-title a {
 
 /* Hamburger initialize at 1023px */
 @media only screen and (max-width: 1023px) {
+	.genesis-nav-menu .sub-menu a,
+	.nav-primary .genesis-nav-menu {
+		font-size: 16px;
+	}
+
 	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
 	.genesis-nav-menu.responsive-menu {
 		display: none;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		color: inherit;
+	}
+
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		color: inherit !important;
 	}
 
 	.genesis-nav-menu.responsive-menu .menu-item,
@@ -533,7 +545,7 @@ body .site-title a {
 	.genesis-nav-menu.responsive-menu li a:hover,
 	.header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
 	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: #444;
 		display: block;
 		line-height: 1;
@@ -620,7 +632,7 @@ body .site-title a {
 		background: #fff;
 		padding-left: 5%;
 		padding-right: 5%;
-		padding-top: 6px;
+		padding-top: 3%;
 	}
 
 	.nav-primary .genesis-nav-menu.responsive-menu li,
@@ -907,10 +919,10 @@ body .site-title a {
 }
 
 .education-pro-green .genesis-nav-menu li a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu a,
+.education-pro-green .genesis-nav-menu li.current-menu-item > a,
 .education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-green .genesis-nav-menu li.current-menu-item > a {
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #234326;
 	color: #fff;
 }
@@ -1041,7 +1053,7 @@ body .site-title a {
 }
 
 .education-pro-red a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #f5f5f5;
 }
 
 .education-pro-red .content .entry-header .entry-meta .entry-time {
@@ -1069,10 +1081,10 @@ body .site-title a {
 }
 
 .education-pro-red .genesis-nav-menu li a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu a,
+.education-pro-red .genesis-nav-menu li.current-menu-item > a,
 .education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-red .genesis-nav-menu li.current-menu-item > a {
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #62231d;
 	color: #fff;
 }

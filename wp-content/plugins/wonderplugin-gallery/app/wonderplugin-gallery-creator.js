@@ -1,4 +1,4 @@
-/** Wonderplugin Gallery Plugin Free Version
+/** Wonderplugin Gallery Plugin Commercial Version
  * Copyright 2019 Magic Hills Pty Ltd All Rights Reserved
  * Website: http://www.wonderplugin.com
  * Version 13.1 

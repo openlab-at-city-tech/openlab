@@ -204,7 +204,7 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
  */
 function openlab_group_sharing_settings_markup( $group_type = null ) {
 	$sharing_enabled = openlab_group_can_be_cloned();
-	$group_label_uc = openlab_get_group_type_label( [
+	$group_label_uc  = openlab_get_group_type_label( [
 		'case'       => 'upper',
 		'group_type' => $group_type
 	] );
@@ -213,7 +213,7 @@ function openlab_group_sharing_settings_markup( $group_type = null ) {
 	<div class="panel panel-default sharing-settings-panel">
 		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
-			<p>This setting enables other members to clone your <?php echo $group_label_uc; ?>. If enabled, other members can reuse, remix, transform, and build upon the material in this course. Attribution to original <?php echo $group_label_uc; ?> authors will be included.</p>
+			<p>This setting enables other faculty to clone your <?php echo $group_label_uc; ?>. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original <?php echo $group_label_uc; ?> authors will be included.</p>
 
 			<div class="checkbox">
 				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable shared cloning</label>
@@ -273,8 +273,11 @@ function openlab_add_clone_button_to_profile() {
 		return;
 	}
 
-	$group_type = openlab_get_group_type( $group_id );
+	if ( ! openlab_user_can_clone_group( get_current_user_id(), $group_id ) ) {
+		return;
+	}
 
+	$group_type       = openlab_get_group_type( $group_id );
 	$group_type_label = openlab_get_group_type_label(
 		array(
 			'group_id' => $group_id,
@@ -1020,13 +1023,13 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Prepare form data.
-		$ids = wp_list_pluck( $forms, 'id' );
+		$ids   = wp_list_pluck( $forms, 'id' );
 		$forms = GFFormsModel::get_form_meta_by_id( $ids );
 
 		switch_to_blog( $this->site_id );
 
-		// Ensure tables exist.
-		gf_upgrade()->upgrade_schema();
+		// Properly install GF on new site.
+		gf_upgrade()->install();
 
 		// Add forms to the cloned site.
 		GFAPI::add_forms( $forms );

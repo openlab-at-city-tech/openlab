@@ -638,7 +638,7 @@ class WonderPlugin_Gallery_Model {
 					}
 				}
 			}
-			if ('F' == 'F')
+			if ('C' == 'F')
 				$ret .= '<div class="wonderplugin-engine"><a href="http://www.wonderplugin.com/wordpress-gallery/" title="'. get_option('wonderplugin-gallery-engine')  .'">' . get_option('wonderplugin-gallery-engine') . '</a></div>';
 			$ret .= '</div>';
 			

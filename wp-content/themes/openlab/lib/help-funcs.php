@@ -94,9 +94,7 @@ function openlab_help_loop() {
             );
 
             $this_term = openlab_get_primary_help_term_name();
-            if ($this_term->parent != 0) {
-                $nav_links = array_merge(array('<a class="regular" href="' . get_term_link($this_term) . '">' . esc_html($this_term->name) . '</a>'), $nav_links);
-            }
+	    $nav_links = array_merge(array('<a class="regular" href="' . get_term_link($this_term) . '">' . esc_html($this_term->name) . '</a>'), $nav_links);
             ?>
 
             <div class="row help-nav">
@@ -242,7 +240,7 @@ function openlab_help_cats_loop() {
             <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
         <div id="help-title">
-            <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
+            <div class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics:</div> <?php echo esc_html( $parent_term->name ); ?></div>
         </div>
         <?php
     else:

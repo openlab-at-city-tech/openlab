@@ -124,6 +124,8 @@ add_theme_support( 'genesis-style-selector', array(
 	'education-pro-red'    => 'Red',
 ) );
 
+unregister_sidebar( 'header-right' );
+
 add_filter(
 	'genesis_get_layouts',
 	function( $layouts ) {
@@ -138,31 +140,23 @@ add_filter(
 	}
 );
 
-$deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', /*'home-bottom',*/ 'sidebar-alt' ];
+$deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
 }
 
-add_action(
-	'template_redirect',
-	function() {
-		// Handled separately.
-		if ( is_front_page() ) {
-			return;
+add_filter(
+	'is_active_sidebar',
+	function( $is_active, $sidebar ) {
+		if ( 'home-bottom' === $sidebar ) {
+			return false;
 		}
 
-		add_action(
-			'genesis_before_footer',
-			function() {
-				genesis_widget_area( 'home-bottom', array(
-					'before' => '<div class="home-bottom widget-area"><div class="wrap">',
-					'after'  => '</div></div>',
-				) );
-			}
-		);
-	}
+		return $is_active;
+	},
+	10,
+	2
 );
-
 
 /**
  * Modify Genesis default nav areas.

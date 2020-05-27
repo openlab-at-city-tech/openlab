@@ -3080,3 +3080,172 @@ function openlab_sanitize_url_params( $url ) {
 
 	return $url;
 }
+
+/**
+ * wonderplugin-gallery license info.
+ */
+function openlab_wonderplugin_gallery_force_license_key( $value ) {
+	if ( ! defined( 'WONDERPLUGIN_GALLERY_LICENSE_KEY' ) ) {
+		return $value;
+	}
+
+	$info = unserialize( $value );
+	$info->key = WONDERPLUGIN_GALLERY_LICENSE_KEY;
+	$info->key_status = 'valid';
+	$info->key_expire = 0;
+
+	return serialize( $info );
+}
+add_filter( 'option_wonderplugin_gallery_information', 'openlab_wonderplugin_gallery_force_license_key' );
+add_filter( 'default_option_wonderplugin_gallery_information', 'openlab_wonderplugin_gallery_force_license_key' );
+
+/**
+ * Remove wonderplugin-gallery Register panel.
+ */
+add_action(
+	'admin_init',
+	function() {
+		if ( ! defined( 'WONDERPLUGIN_GALLERY_VERSION' ) ) {
+			return;
+		}
+
+		if ( is_super_admin() ) {
+			return;
+		}
+
+		remove_submenu_page( 'wonderplugin_gallery_overview', 'wonderplugin_gallery_register' );
+	}
+);
+
+/**
+ * Register wonderplugin-gallery customization scripts.
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function( $hook ) {
+		$hooks = [
+			'wonder-gallery-pro_page_wonderplugin_gallery_add_new' => 1,
+			'admin_page_wonderplugin_gallery_edit_item' => 1,
+		];
+
+		if ( ! isset( $hooks[ $hook ] ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-wonderplugin-gallery', plugins_url( 'wds-citytech/assets/js/wonderplugin-gallery.js' ), [ 'jquery', 'wonderplugin-gallery-creator-script' ], OL_VERSION );
+	}
+);
+
+/**
+ * Register dco-comment-attachment customization scripts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! function_exists( 'dco_ca' ) ) {
+			return;
+		}
+
+		if ( ! dco_ca()->is_comments_used() || ! dco_ca()->is_attachment_field_enabled() ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-dco-comment-attachment', plugins_url( 'wds-citytech/assets/js/dco-comment-attachment.js' ), [ 'jquery' ], OL_VERSION );
+
+		dco_ca()->enable_filter_upload();
+		$allowed_types = dco_ca()->get_allowed_file_types( 'array' );
+		dco_ca()->disable_filter_upload();
+
+		wp_localize_script(
+			'openlab-dco-comment-attachment',
+			'OpenLabDCOCommentAttachment',
+			[
+				'max_upload_size' => dco_ca()->get_max_upload_size(),
+				'allowed_types'   => $allowed_types,
+			]
+		);
+	}
+);
+
+/**
+ * Filter dco-comment-attachment options, to force logged-in user setting.
+ */
+add_action(
+	'plugins_loaded',
+	function() {
+		if ( ! class_exists( 'DCO_CA_Settings' ) ) {
+			return;
+		}
+
+		$hooks = [
+			'option_' . DCO_CA_Settings::ID,
+			'default_option_' . DCO_CA_Settings::ID,
+		];
+
+		$callback = function( $value ) {
+			$value['who_can_upload'] = 2;
+			return $value;
+		};
+
+		foreach ( $hooks as $hook ) {
+			add_filter( $hook, $callback );
+		}
+	}
+);
+
+/**
+ * Filter the 'max upload size' field for dco-comment-attachment.
+ */
+add_filter(
+	'dco_ca_form_element_upload_size',
+	function( $field ) {
+		$field = str_replace( '<br>', '', $field );
+		$field = '<span class="comment-attachment-info comment-attachment-max-upload-size">' . $field . '</span>';
+		return '<br>' . $field;
+	}
+);
+
+/**
+ * Filter the 'allowed file type' field for dco-comment-attachment.
+ */
+add_filter(
+	'dco_ca_form_element_file_types',
+	function( $field ) {
+		$field = str_replace( '<br>', '', $field );
+		$field = '<span class="comment-attachment-info comment-attachment-allowed-file-types">' . $field . '</span>';
+		return '<br>' . $field;
+	}
+);
+
+/**
+ * Filter the 'author_plugin_activated' option for author-profiles.
+ *
+ * It's triggering a fatal error, and it's used to send spam emails.
+ */
+add_filter(
+	'pre_option_author_plugin_activated',
+	function() {
+		return 'yes';
+	}
+);
+
+add_filter(
+	'pre_option_auth-ignore-notice',
+	function() {
+		return 1;
+	}
+);
+
+/**
+ * Register nextgen-gallery customization scripts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'NGG_PLUGIN' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/js/nextgen-gallery.js' ), [ 'jquery' ], OL_VERSION );
+	}
+);

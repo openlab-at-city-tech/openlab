@@ -33,14 +33,9 @@ function gutenberg_render_block_core_block( $attributes ) {
  * Registers the `core/block` block.
  */
 function gutenberg_register_block_core_block() {
-	register_block_type(
-		'core/block',
+	register_block_type_from_metadata(
+		__DIR__ . '/block',
 		array(
-			'attributes'      => array(
-				'ref' => array(
-					'type' => 'number',
-				),
-			),
 			'render_callback' => 'gutenberg_render_block_core_block',
 		)
 	);
