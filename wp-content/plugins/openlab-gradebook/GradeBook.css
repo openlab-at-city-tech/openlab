@@ -676,6 +676,7 @@ span.twitter-typeahead {
   position: relative;
   padding: 0;
   height: 60px;
+  max-height: 60px;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th > span,
 #gradebookWrapper .table-wrapper #students-header th > span {
@@ -751,6 +752,7 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .pinned td.student {
   height: 60px;
+  max-height: 60px;
   padding: 0;
   line-height: 1.1;
 }
@@ -874,8 +876,17 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .scrollable td.student-grades {
   height: 60px;
+  max-height: 60px;
   padding: 0;
   line-height: 1.1;
+  position: relative;
+}
+#gradebookWrapper .table-wrapper .scrollable td.student-grades > span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 #gradebookWrapper .table-wrapper .scrollable .student-grades {
   min-width: 180px;
@@ -948,6 +959,7 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .scrollable td {
   height: 60px;
+  max-height: 60px;
   line-height: 1.1;
   overflow: hidden;
   padding: 0;

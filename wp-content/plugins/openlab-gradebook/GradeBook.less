@@ -749,6 +749,7 @@ span.twitter-typeahead {
 			position: relative;
 			padding: 0;
 			height: 60px;
+			max-height: 60px;
 			> span {
 				height: 100%;
 				width: 100%;
@@ -827,6 +828,7 @@ span.twitter-typeahead {
 			}
 			td.student {
 				height: 60px;
+				max-height: 60px;
 				padding: 0;
 				line-height: 1.1;
 			}
@@ -960,8 +962,17 @@ span.twitter-typeahead {
 			}
 			td.student-grades {
 				height: 60px;
+				max-height: 60px;
 				padding: 0;
 				line-height: 1.1;
+				position: relative;
+				> span {
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					right: 0;
+				}
 			}
 			.student-grades {
 				min-width: 180px;
@@ -1034,6 +1045,7 @@ span.twitter-typeahead {
 			}
 			td {
 				height: 60px;
+				max-height: 60px;
 				line-height: 1.1;
 				overflow: hidden;
 				padding: 0;
