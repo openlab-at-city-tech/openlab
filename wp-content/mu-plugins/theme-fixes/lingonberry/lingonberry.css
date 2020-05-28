@@ -148,3 +148,7 @@ a#cancel-comment-reply-link {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+.archive-nav a {
+	background: #595959;
+}
