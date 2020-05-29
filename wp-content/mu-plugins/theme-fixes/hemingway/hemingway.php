@@ -88,15 +88,18 @@ add_action(
 /**
  * Filter default Accent Color.
  */
-add_action(
-	'theme_mod_accent_color',
-	function( $color ) {
-		if ( ! empty( $color ) ) {
-			return $color;
+add_filter(
+	'customize_dynamic_setting_args',
+	function( $args, $id ) {
+		if ( 'accent_color' !== $id ) {
+			return $args;
 		}
 
-		return '#ad0000';
-	}
+		$args['default'] = '#ad0000';
+		return $args;
+	},
+	10,
+	2
 );
 
 /**
