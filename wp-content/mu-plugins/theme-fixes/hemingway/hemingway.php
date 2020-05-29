@@ -101,17 +101,3 @@ add_filter(
 	10,
 	2
 );
-
-/**
- * Ensure that accent_color overrides are in place.
- */
-add_action(
-	'wp_head',
-	function() {
-		$accent_color = get_theme_mod( 'accent_color' );
-		echo '<style type="text/css">';
-		echo sprintf( 'body .blog-menu li:hover > a { color: %s; }', esc_attr( $accent_color ) );
-		echo '</style>';
-	},
-	100
-);

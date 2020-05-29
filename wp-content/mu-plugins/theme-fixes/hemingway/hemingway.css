@@ -134,6 +134,9 @@ body .blog-description {
 body .blog-menu a {
 	color: #fff;
 }
+body .blog-menu li:hover > a {
+	color: #9e9e9e;
+}
 ::selection {
 	background: #eee;
 	color: #333;
