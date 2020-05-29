@@ -401,6 +401,17 @@ td {
 	display: inline-block;
 }
 
+.course-table-wrapper {
+	@media (max-width: 479px) {
+		.course-column-school,
+		.course-column-semester,
+		td.school,
+		td.semester {
+			display: none;
+		}
+	}
+}
+
 .students .selected td,
 .students .selected th,
 .students .selected,
@@ -817,7 +828,6 @@ span.twitter-typeahead {
 			table {
 				border-right: none;
 				border-left: none;
-				width: 100%;
 				table-layout: fixed;
 				width: 100%;
 				th {

@@ -16,7 +16,7 @@
         </div>	
     </div>   
     <div class="row">
-        <div class="col-md-12">    
+        <div class="col-md-12 course-table-wrapper">    
             <table class="table table-bordered table-striped table-hover">  
                 <thead>
                     <tr>		

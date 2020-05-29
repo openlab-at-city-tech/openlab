@@ -331,6 +331,14 @@ td {
 #oplb-gradebook button {
   display: inline-block;
 }
+@media (max-width: 479px) {
+  .course-table-wrapper .course-column-school,
+  .course-table-wrapper .course-column-semester,
+  .course-table-wrapper td.school,
+  .course-table-wrapper td.semester {
+    display: none;
+  }
+}
 .students .selected td,
 .students .selected th,
 .students .selected,
