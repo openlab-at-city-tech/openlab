@@ -88,27 +88,16 @@ add_action(
 /**
  * Filter default Accent Color.
  */
-add_action(
-	'theme_mod_accent_color',
-	function( $color ) {
-		if ( ! empty( $color ) ) {
-			return $color;
+add_filter(
+	'customize_dynamic_setting_args',
+	function( $args, $id ) {
+		if ( 'accent_color' !== $id ) {
+			return $args;
 		}
 
-		return '#ad0000';
-	}
-);
-
-/**
- * Ensure that accent_color overrides are in place.
- */
-add_action(
-	'wp_head',
-	function() {
-		$accent_color = get_theme_mod( 'accent_color' );
-		echo '<style type="text/css">';
-		echo sprintf( 'body .blog-menu li:hover > a { color: %s; }', esc_attr( $accent_color ) );
-		echo '</style>';
+		$args['default'] = '#ad0000';
+		return $args;
 	},
-	100
+	10,
+	2
 );
