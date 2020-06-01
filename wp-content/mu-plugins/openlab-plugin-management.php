@@ -33,6 +33,7 @@ function openlab_hide_plugins( $plugins ) {
 		'kb-gradebook/kb-gradebook.php',
 		'media-cleaner/media-cleaner.php',
 		'p3-profiler/p3-profiler.php',
+		'page-tagger/page-tagger.php',
 		'pdf-embedder/pdf_embedder.php',
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
