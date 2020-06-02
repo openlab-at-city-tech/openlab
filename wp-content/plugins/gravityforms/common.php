@@ -62,9 +62,24 @@ class GFCommon {
 		}
 	}
 
+	/**
+	 * Removes the currency symbol from the supplied value.
+	 *
+	 * @since unknown
+	 * @since 2.4.18 Updated to support the currency code being passed for the $currency param.
+	 *
+	 * @param string            $value    The value to be cleaned.
+	 * @param null|array|string $currency Null to use the default currency, an array of currency properties, or the currency code.
+	 *
+	 * @return string
+	 */
 	public static function remove_currency_symbol( $value, $currency = null ) {
-		if ( $currency == null ) {
-			$code = GFCommon::get_currency();
+		if ( empty( $value ) ) {
+			return $value;
+		}
+
+		if ( ! is_array( $currency ) ) {
+			$code = empty( $currency ) ? GFCommon::get_currency() : $currency;
 			if ( empty( $code ) ) {
 				$code = 'USD';
 			}
@@ -72,10 +87,15 @@ class GFCommon {
 			$currency = RGCurrency::get_currency( $code );
 		}
 
-		$value = str_replace( $currency['symbol_left'], '', $value );
-		$value = str_replace( $currency['symbol_right'], '', $value );
+		if ( ! empty( $currency['symbol_left'] ) ) {
+			$value = str_replace( $currency['symbol_left'], '', $value );
+		}
 
-		//some symbols can't be easily matched up, so this will catch any of them
+		if ( ! empty( $currency['symbol_right'] ) ) {
+			$value = str_replace( $currency['symbol_right'], '', $value );
+		}
+
+		// Some symbols can't be easily matched up, so this will catch any of them.
 		$value = preg_replace( '/[^,.\d]/', '', $value );
 
 		return $value;
@@ -1679,6 +1699,19 @@ class GFCommon {
 		return compact( 'to', 'from', 'bcc', 'reply_to', 'subject', 'message', 'from_name', 'message_format', 'attachments', 'disableAutoformat' );
 	}
 
+	/**
+	 * Prepare admin notification.
+	 *
+	 * @deprecated
+	 *
+	 * @since unknown
+	 *
+	 * @param array      $form             The form object.
+	 * @param array      $lead             The lead object.
+	 * @param bool|array $override_options Defaults to false, or can be an array to override options.
+	 *
+	 * @return array
+	 */
 	private static function prepare_admin_notification( $form, $lead, $override_options = false ) {
 		$form_id = $form['id'];
 
@@ -2560,6 +2593,7 @@ Content-Type: text/html;
 	/**
 	 * Returns all the plugin capabilities.
 	 *
+	 * @since 2.4.18 Added gravityforms_logging and gravityforms_api_settings.
 	 * @since 2.2.1.12 Added gravityforms_system_status.
 	 * @since unknown
 	 *
@@ -2583,6 +2617,8 @@ Content-Type: text/html;
 			'gravityforms_view_addons',
 			'gravityforms_preview_forms',
 			'gravityforms_system_status',
+			'gravityforms_logging',
+			'gravityforms_api_settings',
 		);
 	}
 
@@ -2854,19 +2890,24 @@ Content-Type: text/html;
 		update_option( 'rg_gforms_message', $message );
 	}
 
+	/**
+	 * Post request to Gravity Manager.
+	 *
+	 * @since unknown
+	 * @since 2.5     Remove Gravity Manager Proxy.
+	 *
+	 * @param string $file    The file.
+	 * @param string $query   The query string.
+	 * @param array  $options The options.
+	 *
+	 * @return array|WP_Error
+	 */
 	public static function post_to_manager( $file, $query, $options ) {
 
 		$request_url = GRAVITY_MANAGER_URL . '/' . $file . '?' . $query;
 		self::log_debug( __METHOD__ . '(): endpoint: ' . $request_url );
 		$raw_response = wp_remote_post( $request_url, $options );
 		self::log_remote_response( $raw_response );
-
-		if ( is_wp_error( $raw_response ) || 200 != $raw_response['response']['code'] ) {
-			self::log_error( __METHOD__ . '(): Error from manager. Sending to proxy...' );
-			$request_url  = GRAVITY_MANAGER_PROXY_URL . '/proxy.php?f=' . $file . '&' . $query;
-			$raw_response = wp_remote_post( $request_url, $options );
-			self::log_remote_response( $raw_response );
-		}
 
 		return $raw_response;
 	}

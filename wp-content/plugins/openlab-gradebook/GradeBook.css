@@ -180,7 +180,7 @@ body #modal-download-csv-success .fa-stack .fa-check {
 }
 .modal-body #edit-student-form .student-add-wrapper #addSingleStudent {
   overflow-y: hidden;
-  max-height: 28px;
+  max-height: 38px;
   transition-property: all;
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -331,6 +331,14 @@ td {
 #oplb-gradebook button {
   display: inline-block;
 }
+@media (max-width: 479px) {
+  .course-table-wrapper .course-column-school,
+  .course-table-wrapper .course-column-semester,
+  .course-table-wrapper td.school,
+  .course-table-wrapper td.semester {
+    display: none;
+  }
+}
 .students .selected td,
 .students .selected th,
 .students .selected,
@@ -339,6 +347,15 @@ td {
 }
 .students-header tr th {
   cursor: default;
+}
+.students-header .btn-group-wrapper {
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 .students-header .btn-group {
   max-width: 100%;
@@ -562,25 +579,32 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper {
   display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .grade-numeric,
-#gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox {
-  flex: 1 0 60%;
-}
+#gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox,
 #gradebookWrapper .table-wrapper .table .cell-wrapper .grade-selector {
-  flex: 1 0 29%;
-  margin-right: 31%;
+  margin-right: 48px;
   height: 28px;
-  min-width: 48px;
-}
-#gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon {
-  flex: 1 0 40%;
+  width: 60px;
+  min-width: 60px;
+  line-height: 1.1;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .comment-icon.inactive button {
   color: #8f8f8f;
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input {
   opacity: 1;
+  -ms-transform: scale(1.4);
+  -webkit-transform: scale(1.4);
+  -o-transform: scale(1.4);
+  transform: scale(1.4);
 }
 #gradebookWrapper .table-wrapper .table .cell-wrapper .checkbox input:before {
   opacity: 1;
@@ -594,10 +618,78 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper #an-gradebook-container {
   top: 15px;
   position: relative;
+  max-width: none;
+}
+#gradebookWrapper .table-wrapper #students-header td .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-header-pinnned td .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students td .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-pinned td .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-header th .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-header-pinnned th .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students th .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-pinned th .column-frame-wrapper,
+#gradebookWrapper .table-wrapper #students-header td .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students-header-pinnned td .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students td .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students-pinned td .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students-header th .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students-header-pinnned th .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students th .header-span-wrapper,
+#gradebookWrapper .table-wrapper #students-pinned th .header-span-wrapper {
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 8px;
+}
+#gradebookWrapper .table-wrapper #students-header td .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header-pinnned td .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students td .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-pinned td .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header th .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header-pinnned th .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students th .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-pinned th .column-frame-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header td .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header-pinnned td .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students td .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students-pinned td .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header th .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students-header-pinnned th .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students th .header-span-wrapper > span,
+#gradebookWrapper .table-wrapper #students-pinned th .header-span-wrapper > span {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+#gradebookWrapper .table-wrapper #students-header td .column-frame,
+#gradebookWrapper .table-wrapper #students-header-pinnned td .column-frame,
+#gradebookWrapper .table-wrapper #students td .column-frame,
+#gradebookWrapper .table-wrapper #students-pinned td .column-frame,
+#gradebookWrapper .table-wrapper #students-header th .column-frame,
+#gradebookWrapper .table-wrapper #students-header-pinnned th .column-frame,
+#gradebookWrapper .table-wrapper #students th .column-frame,
+#gradebookWrapper .table-wrapper #students-pinned th .column-frame {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th,
 #gradebookWrapper .table-wrapper #students-header th {
   position: relative;
+  padding: 0;
+  height: 60px;
+  max-height: 60px;
+}
+#gradebookWrapper .table-wrapper #students-header-pinned th > span,
+#gradebookWrapper .table-wrapper #students-header th > span {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 8px;
 }
 #gradebookWrapper .table-wrapper #students-header-pinned th.pointer,
 #gradebookWrapper .table-wrapper #students-header th.pointer {
@@ -663,7 +755,10 @@ span.twitter-typeahead {
   padding: 15px 8px;
 }
 #gradebookWrapper .table-wrapper .pinned td.student {
-  height: 59px;
+  height: 60px;
+  max-height: 60px;
+  padding: 0;
+  line-height: 1.1;
 }
 #gradebookWrapper .table-wrapper .pinned .student-grades {
   display: none;
@@ -673,11 +768,6 @@ span.twitter-typeahead {
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th,
 #gradebookWrapper .table-wrapper .pinned #students-pinned td {
-  text-overflow: ellipsis;
-}
-#gradebookWrapper .table-wrapper .pinned #students-header-pinned th .column-frame,
-#gradebookWrapper .table-wrapper .pinned #students-pinned td .column-frame {
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .tooltip-wrapper,
@@ -721,12 +811,6 @@ span.twitter-typeahead {
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th .sort-up .arrow-wrapper .glyphicon-triangle-bottom {
   visibility: hidden;
 }
-#gradebookWrapper .table-wrapper .pinned #students-pinned td > span {
-  max-width: 100%;
-  text-overflow: ellipsis;
-  display: block;
-  overflow: hidden;
-}
 #gradebookWrapper .table-wrapper .pinned #students-header-pinned th.gradebook-student-column-interactive,
 #gradebookWrapper .table-wrapper .pinned #students-pinned td.student-tools {
   overflow: visible;
@@ -764,7 +848,7 @@ span.twitter-typeahead {
   overflow: visible !important;
 }
 #gradebookWrapper .table-wrapper .scrollable .jspContainer {
-  padding-top: 15px;
+  box-sizing: content-box;
 }
 #gradebookWrapper .table-wrapper .scrollable .jspContainer .jspPane {
   top: 0 !important;
@@ -795,7 +879,18 @@ span.twitter-typeahead {
   }
 }
 #gradebookWrapper .table-wrapper .scrollable td.student-grades {
-  height: 59px;
+  height: 60px;
+  max-height: 60px;
+  padding: 0;
+  line-height: 1.1;
+  position: relative;
+}
+#gradebookWrapper .table-wrapper .scrollable td.student-grades > span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 #gradebookWrapper .table-wrapper .scrollable .student-grades {
   min-width: 180px;
@@ -816,6 +911,7 @@ span.twitter-typeahead {
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
+  height: 100%;
 }
 #gradebookWrapper .table-wrapper .scrollable .student-grades .tooltip .tooltip-inner {
   left: 25%;
@@ -866,12 +962,14 @@ span.twitter-typeahead {
   text-overflow: ellipsis;
 }
 #gradebookWrapper .table-wrapper .scrollable td {
-  padding-bottom: 17px;
+  height: 60px;
+  max-height: 60px;
+  line-height: 1.1;
   overflow: hidden;
+  padding: 0;
 }
 #gradebookWrapper .table-wrapper .scrollable td .grade-numeric {
   display: block;
-  margin: 0 0 8px;
   min-height: 22px;
 }
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive,
@@ -879,6 +977,7 @@ span.twitter-typeahead {
   max-width: 50px;
   min-width: 50px;
   overflow: visible;
+  padding: 12px 8px;
 }
 #gradebookWrapper .table-wrapper .scrollable #students-header th.gradebook-student-column-interactive button#download-csv-mobile,
 #gradebookWrapper .table-wrapper .scrollable #students td.student-tools button#download-csv-mobile {

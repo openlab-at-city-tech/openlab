@@ -1,0 +1,22 @@
+.ngg-tagcloud {
+    display: inline-block;
+}
+.ngg-tagcloud ul.wp-tag-cloud {
+    margin: 0;
+    padding: 0;
+}
+
+.ngg-tagcloud ul.wp-tag-cloud li {
+    list-style: none;
+    float: left;
+    height: 30pt;
+    margin: 0 4px 0 0;
+    padding: 0;
+}
+
+.ngg-tagcloud ul.wp-tag-cloud li a {
+    display: table-cell;
+    display: block\9;
+    vertical-align: bottom;
+    height: 30pt;
+}

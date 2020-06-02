@@ -365,7 +365,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 					selected = "selected='selected'";
 					is_selected = true;
 				}
-				product_field.append("<option value='" + productFields[i]["id"] + "' " + selected + ">" + productFields[i]["label"] + "</option>");
+				product_field.append("<option value='" + productFields[i]["id"] + "' " + selected + ">" + GetLabel(productFields[i]) + "</option>");
 			}
 
 			//Adds existing product field if it is not found in the list (to prevent confusion)

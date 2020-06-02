@@ -7,8 +7,8 @@ define([
 	"views/EditStudentView",
 	"views/EditAssignmentView",
 	"views/uploadModal",
-	"models/Course"
-], function(
+	"models/Course",
+], function (
 	$,
 	Backbone,
 	_,
@@ -22,7 +22,7 @@ define([
 	Backbone.pubSub = _.extend({}, Backbone.Events);
 
 	var GradebookView = Backbone.View.extend({
-		initialize: function(options) {
+		initialize: function (options) {
 			var self = this;
 			var _request = 0;
 			var currentScrollSize;
@@ -95,18 +95,18 @@ define([
 
 			this.initRender();
 
-			$(window).on("resize", function(e) {
+			$(window).on("resize", function (e) {
 				clearTimeout(this.resizeTimer);
-				this.resizeTimer = setTimeout(function() {
+				this.resizeTimer = setTimeout(function () {
 					self.handleTableResize(true);
 				}, 250);
 			});
 
 			return this;
 		},
-		clearSubViews: function() {
+		clearSubViews: function () {
 			var self = this;
-			_.each(self._subviews, function(view) {
+			_.each(self._subviews, function (view) {
 				view.close();
 			});
 			this._subviews = [];
@@ -119,15 +119,15 @@ define([
 			"click button#add-assignment": "addAssignment",
 			"click button#filter-assignments": "filterAssignments",
 			"click [class^=gradebook-student-column-]": "sortGradebookBy",
-			"click [class^=gradebook-student-column-] span": "sortGradebookBy"
+			"click [class^=gradebook-student-column-] span": "sortGradebookBy",
 		},
-		initRender: function(ev) {
+		initRender: function (ev) {
 			this.scrollSize = 0;
 			var self = this;
 			this.clearSubViews();
 			this.renderControl = 0;
 
-			console.log('ev on initRender', ev);
+			console.log("ev on initRender", ev);
 			if (typeof ev !== "undefined") {
 				console.log("ev, self.gradebook", ev, self.gradebook);
 
@@ -144,7 +144,7 @@ define([
 				}
 			}
 
-			var _x = _.map(self.gradebook.assignments.models, function(model) {
+			var _x = _.map(self.gradebook.assignments.models, function (model) {
 				return model.get("assign_category").trim();
 			});
 			var _assign_categories = _.without(_.uniq(_x), "") || null;
@@ -157,7 +157,7 @@ define([
 				assign_categories: _assign_categories,
 				role: this.gradebook.role,
 				total_weight: totalWeight,
-				assign_length: self.gradebook.assignments.length
+				assign_length: self.gradebook.assignments.length,
 			});
 			$("#wpbody-content").append(self.$el.html(compiled));
 
@@ -165,7 +165,7 @@ define([
 				$("#gradebook-interface-template-student-header").html()
 			);
 			var compiledStudentHeader = studentHeaderTemplate({
-				role: this.gradebook.role
+				role: this.gradebook.role,
 			});
 			self.$el.find("#students-header tr").append(compiledStudentHeader);
 			this.studentHeader = compiledStudentHeader;
@@ -180,7 +180,7 @@ define([
 
 			return this;
 		},
-		handleTableResize: function(widthChange) {
+		handleTableResize: function (widthChange) {
 			if (widthChange === undefined) {
 				widthChange = false;
 			}
@@ -207,17 +207,17 @@ define([
 						);
 
 						var scrollContainerDims = {
-							height: scrollContainerElem.height()
+							height: scrollContainerElem.height(),
 						};
 
 						scrollContainerElem.css({
-							"max-height": scrollContainerDims.height + 29 + "px"
+							"max-height": scrollContainerDims.height + 29 + "px",
 						});
 					}
 				}
 			}
 		},
-		render: function() {
+		render: function () {
 			var self = this;
 
 			switch (this.gradebook.sort_key) {
@@ -225,12 +225,12 @@ define([
 					$("#students").html("");
 					$("#students-pinned").html("");
 					$("#students-header tr").html(this.studentHeader);
-					_.each(this.sort_column, function(cell) {
+					_.each(this.sort_column, function (cell) {
 						var view = new StudentView({
 							model: self.gradebook.students.get(cell.get("uid")),
 							course: self.course,
 							gradebook: self.gradebook,
-							options: self.options
+							options: self.options,
 						});
 						self._subviews.push(view);
 						$("#students").append(
@@ -238,16 +238,16 @@ define([
 						);
 					});
 					var y = self.gradebook.assignments.models;
-					y = _.sortBy(y, function(assign) {
+					y = _.sortBy(y, function (assign) {
 						return assign.get("assign_order");
 					});
 
-					_.each(this.sort_column, function(cell) {
+					_.each(this.sort_column, function (cell) {
 						var view = new StudentView({
 							model: self.gradebook.students.get(cell.get("uid")),
 							course: self.course,
 							gradebook: self.gradebook,
-							options: self.options
+							options: self.options,
 						});
 						self._subviews.push(view);
 						$("#students-pinned").append(
@@ -255,15 +255,15 @@ define([
 						);
 					});
 					var y = self.gradebook.assignments.models;
-					y = _.sortBy(y, function(assign) {
+					y = _.sortBy(y, function (assign) {
 						return assign.get("assign_order");
 					});
 
-					_.each(y, function(assignment) {
+					_.each(y, function (assignment) {
 						var view = new AssignmentView({
 							model: assignment,
 							course: self.course,
-							gradebook: self.gradebook
+							gradebook: self.gradebook,
 						});
 						self._subviews.push(view);
 						$("#students-header tr").append(view.render());
@@ -274,24 +274,24 @@ define([
 					$("#students-pinned").html("");
 					$("#students-header tr").html(this.studentHeader);
 
-					_.each(this.gradebook.sort_column.models, function(student) {
+					_.each(this.gradebook.sort_column.models, function (student) {
 						var view = new StudentView({
 							model: student,
 							course: self.course,
 							gradebook: self.gradebook,
-							options: self.options
+							options: self.options,
 						});
 						self._subviews.push(view);
 						$("#students").append(
 							view.render("pinned", self.gradebook.assignments)
 						);
 					});
-					_.each(this.gradebook.sort_column.models, function(student) {
+					_.each(this.gradebook.sort_column.models, function (student) {
 						var view = new StudentView({
 							model: student,
 							course: self.course,
 							gradebook: self.gradebook,
-							options: self.options
+							options: self.options,
 						});
 						self._subviews.push(view);
 						$("#students-pinned").append(
@@ -299,14 +299,14 @@ define([
 						);
 					});
 					var y = self.gradebook.assignments;
-					y = _.sortBy(y.models, function(assign) {
+					y = _.sortBy(y.models, function (assign) {
 						return assign.get("assign_order");
 					});
-					_.each(y, function(assignment) {
+					_.each(y, function (assignment) {
 						var view = new AssignmentView({
 							model: assignment,
 							course: self.course,
-							gradebook: self.gradebook
+							gradebook: self.gradebook,
 						});
 						self._subviews.push(view);
 						$("#students-header tr").append(view.render());
@@ -331,17 +331,14 @@ define([
 
 				$('[data-toggle="tooltip"]').tooltip();
 
-				new ResizeSensor(
-					jQuery("#an-gradebook-container #students-header"),
-					function() {
-						self.handleTableResize();
-					}
-				);
+				new ResizeSensor(jQuery("#an-gradebook-container"), function () {
+					self.handleTableResize();
+				});
 			}
 
 			return this;
 		},
-		filterAssignments: function() {
+		filterAssignments: function () {
 			var self = this;
 			if (self.gradebook.role !== "instructor") {
 				return false;
@@ -350,22 +347,22 @@ define([
 			var _x = $("#filter-assignments-select").val();
 
 			this.filter_option = _x;
-			var _toHide = this.gradebook.assignments.filter(function(assign) {
+			var _toHide = this.gradebook.assignments.filter(function (assign) {
 				return assign.get("assign_category") !== _x;
 			});
-			var _toShow = this.gradebook.assignments.filter(function(assign) {
+			var _toShow = this.gradebook.assignments.filter(function (assign) {
 				return assign.get("assign_category") === _x;
 			});
 
 			if (_x === "default") {
-				this.gradebook.assignments.each(function(assign) {
+				this.gradebook.assignments.each(function (assign) {
 					assign.set({ visibility: true });
 				});
 			} else {
-				_.each(_toHide, function(assign) {
+				_.each(_toHide, function (assign) {
 					assign.set({ visibility: false });
 				});
-				_.each(_toShow, function(assign) {
+				_.each(_toShow, function (assign) {
 					assign.set({ visibility: true });
 				});
 			}
@@ -378,7 +375,7 @@ define([
 				}
 			}
 		},
-		adjustCellWidths: function() {
+		adjustCellWidths: function () {
 			var pinnedTable = $(".pinned .table");
 			var columnsToAdjust = pinnedTable.find(".adjust-widths");
 
@@ -388,68 +385,68 @@ define([
 
 			var pinnedTable_w = pinnedTable.width();
 
-			columnsToAdjust.each(function() {
+			columnsToAdjust.each(function () {
 				var thisElem = $(this);
 				var target_w = thisElem.data("targetwidth");
 
 				var target_pct = (target_w / pinnedTable_w) * 100;
 				thisElem.css({
-					width: target_pct + "%"
+					width: target_pct + "%",
 				});
 			});
 		},
-		calculateScrollBarPosition: function(event, isScrollable) {
+		calculateScrollBarPosition: function (event, isScrollable) {
 			var targetTable = $("#an-gradebook-container");
 			var scrollContainerElem = targetTable.closest(".jspContainer");
 			var adjustment = 16;
 			$("#an-gradebook-container").css("width", "auto");
 
 			if (targetTable.height() < 500) {
-				var targetTable_padding = 500 - targetTable.height();
+				var targetTable_padding = 500;
 
 				scrollContainerElem.css({
-					"padding-bottom": targetTable.height() + targetTable_padding + "px"
+					"padding-bottom": targetTable_padding + "px",
 				});
 				scrollContainerElem.find(".jspHorizontalBar").css({
-					bottom: targetTable_padding - 18 + "px"
+					bottom: targetTable_padding + "px",
 				});
 			}
 
 			var scrollContainerDims = {
-				height: scrollContainerElem.height()
+				height: scrollContainerElem.height(),
 			};
 
 			scrollContainerElem.css({
-				height: scrollContainerDims.height + 29 + "px"
+				height: scrollContainerDims.height + 29 + "px",
 			});
 
 			var paneLocation = $("#an-gradebook-container").offset();
 			scrollContainerElem.find(".jspHorizontalBar").css({
 				position: "fixed",
-				left: paneLocation.left - adjustment + "px"
+				left: paneLocation.left - adjustment + "px",
 			});
 
 			var waypoint = new Waypoint({
 				element: document.getElementById("an-gradebook-container"),
-				handler: function(direction) {
+				handler: function (direction) {
 					var target = scrollContainerElem.find(".jspHorizontalBar");
 
 					if (direction === "up") {
 						target.css({
 							position: "fixed",
-							left: paneLocation.left - adjustment + "px"
+							left: paneLocation.left - adjustment + "px",
 						});
 					} else {
 						target.css({
 							position: "absolute",
-							left: 0 - adjustment + "px"
+							left: 0 - adjustment + "px",
 						});
 					}
 				},
-				offset: "bottom-in-view"
+				offset: "bottom-in-view",
 			});
 		},
-		addAssignment: function(ev) {
+		addAssignment: function (ev) {
 			var checkElem = $("body").find("#modalDialogEditAssignment");
 
 			//prevent double modals
@@ -459,10 +456,10 @@ define([
 
 			var view = new EditAssignmentView({
 				course: this.course,
-				gradebook: this.gradebook
+				gradebook: this.gradebook,
 			});
 		},
-		addStudent: function(ev) {
+		addStudent: function (ev) {
 			var checkElem = $("body").find("#modalDialogEditStudent");
 
 			//prevent double modals
@@ -472,16 +469,16 @@ define([
 
 			var view = new EditStudentView({
 				course: this.course,
-				gradebook: this.gradebook
+				gradebook: this.gradebook,
 			});
 			$("body").append(view.render());
 		},
-		downloadCSV: function(e) {
+		downloadCSV: function (e) {
 			e.preventDefault();
 
 			this.course.export2csv();
 		},
-		uploadModal: function(e) {
+		uploadModal: function (e) {
 			var checkElem = $("body").find("#modalDialogUpload");
 
 			//prevent double modals
@@ -492,19 +489,19 @@ define([
 			var view = new uploadModal({
 				course: this.course,
 				gradebook: this.gradebook,
-				model: this.model
+				model: this.model,
 			});
 
 			$("body").append(view.render());
 		},
-		checkStudentSortDirection: function() {
+		checkStudentSortDirection: function () {
 			if (this.gradebook.students.sort_direction === "asc") {
 				this.gradebook.students.sort_direction = "desc";
 			} else {
 				this.gradebook.students.sort_direction = "asc";
 			}
 		},
-		sortGradebookBy: function(ev) {
+		sortGradebookBy: function (ev) {
 			ev.stopPropagation();
 
 			var thisElem = $(ev.srcElement);
@@ -536,9 +533,9 @@ define([
 				.find(".header-wrapper")
 				.addClass(direction);
 		},
-		sortByAssignment: function(ev) {
+		sortByAssignment: function (ev) {
 			var x = this.gradebook.cells.where({ amid: parseInt(ev.get("id")) });
-			this.sort_column = _.sortBy(x, function(cell) {
+			this.sort_column = _.sortBy(x, function (cell) {
 				if (ev.get("sorted") === "asc") {
 					return cell.get("assign_points_earned");
 				} else {
@@ -548,24 +545,24 @@ define([
 			this.gradebook.sort_key = "cell";
 			this.render();
 		},
-		handleDelete: function(ev) {
+		handleDelete: function (ev) {
 			this.$el
 				.closest("#gradebookWrapper")
 				.find("#savingStatus")
 				.removeClass("hidden");
 		},
-		close: function() {
+		close: function () {
 			this.clearSubViews();
-			_.map(this.xhrs, function(xhr) {
+			_.map(this.xhrs, function (xhr) {
 				xhr.abort();
 			});
 			this.remove();
 		},
-		getTotalWeight: function() {
+		getTotalWeight: function () {
 			var self = this;
 
 			var totalWeight = 0;
-			_.each(self.gradebook.assignments.models, function(assignment) {
+			_.each(self.gradebook.assignments.models, function (assignment) {
 				totalWeight = totalWeight + parseFloat(assignment.get("assign_weight"));
 			});
 
@@ -589,13 +586,13 @@ define([
 
 			return message;
 		},
-		updateAverageGrade: function(data) {
+		updateAverageGrade: function (data) {
 			var studentID = parseInt(data.uid);
 			var target = $("#average" + studentID);
 			target.html(data.current_grade_average);
 
 			var index = 0;
-			_.each(this.gradebook.students.models, function(student) {
+			_.each(this.gradebook.students.models, function (student) {
 				if (parseInt(student.get("id")) === studentID) {
 					student.set(
 						{ current_grade_average: data.current_grade_average },
@@ -606,7 +603,7 @@ define([
 			});
 
 			target.attr("title", data.current_grade_average).tooltip("fixTitle");
-		}
+		},
 	});
 	return GradebookView;
 });

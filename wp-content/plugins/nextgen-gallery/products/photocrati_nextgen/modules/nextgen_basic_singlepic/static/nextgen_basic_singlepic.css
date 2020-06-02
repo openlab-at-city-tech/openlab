@@ -1,0 +1,38 @@
+/* ----------- Single picture -------------*/
+
+.ngg-gallery-singlepic-image {
+margin: 0 auto 1em auto;
+}
+.ngg-gallery-singlepic-image a {
+max-width: 100%;
+}
+.ngg-gallery-singlepic-image img {
+margin: 0;
+max-width: 100%;
+border: none;
+}
+
+.ngg-singlepic {
+    background-color: #FFFFFF;
+    display: block;
+    padding: 4px;
+}
+
+.ngg-left {
+    float: left;
+    margin-right: 10px;
+}
+
+.ngg-right {
+    float: right;
+    margin-left: 10px;
+}
+
+.ngg-center {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.ngg-gallery-singlepic-image .ngg-trigger-buttons {
+margin: 5px 0 0 0;
+}

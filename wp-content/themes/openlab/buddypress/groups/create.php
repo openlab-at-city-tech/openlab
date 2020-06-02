@@ -21,27 +21,19 @@
         $group_type = 'club';
     }
 
-	$group_type_supports_cloning = openlab_group_type_can_be_cloned( $group_type );
-
     //this function doesn't work - explore for deprecation or fixing
     /* $group_type = openlab_get_current_group_type(); */
 
     // Set a group label. The (e)Portfolio logic means we have to do an extra step
-    if ('portfolio' == $group_type) {
+    if ( 'portfolio' == $group_type ) {
         $group_label = openlab_get_portfolio_label('case=upper&user_id=' . bp_loggedin_user_id());
         $page_title = 'Create ' . openlab_get_portfolio_label('case=upper&leading_a=1&user_id=' . bp_loggedin_user_id());
-    } elseif ( $group_type_supports_cloning ) {
+    } else {
 		$group_label = $group_type;
 		$page_title = 'Create/Clone a ' . ucwords( $group_type );
-	} else {
-        $group_label = $group_type;
-        $page_title = 'Create a ' . ucwords($group_type);
-    }
+	}
 
-    $group_id_to_clone = 0;
-    if ( openlab_group_type_can_be_cloned( $group_type ) && ! empty( $_GET['clone'] ) ) {
-        $group_id_to_clone = intval( $_GET['clone'] );
-    }
+    $group_id_to_clone = empty( $_GET['clone'] ) ? 0 : intval( $_GET['clone'] );
     ?>
     <h1 class="entry-title mol-title"><?php echo esc_html( $page_title ); ?></h1>
     <?php
@@ -65,10 +57,11 @@
                 <?php /* Group creation step 1: Basic group details */ ?>
                 <?php if (bp_is_group_creation_step('group-details')) : ?>
 
-                    <?php do_action('bp_before_group_details_creation_step'); ?>
+					<?php do_action('bp_before_group_details_creation_step'); ?>
 
-                    <?php /* Create vs Clone for clonable group types */ ?>
-                    <?php if ( $group_type_supports_cloning ) : ?>
+					<?php /* Create vs Clone for clonable group types */ ?>
+					<?php if ( 'portfolio' !== $group_type ) : ?>
+
                         <div class="panel panel-default create-or-clone-selector">
                             <div class="panel-heading semibold">Create New or Clone Existing?</div>
                             <div class="panel-body">
@@ -126,11 +119,11 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. Posts and pages will be set to "draft" mode and menus will need to be reactivated. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
+                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
                             </div>
-                        </div>
+						</div>
 
-                    <?php endif; ?>
+					<?php endif; ?>
 
                     <?php /* Name/Description */ ?>
 

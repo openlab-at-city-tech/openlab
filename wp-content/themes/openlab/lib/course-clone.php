@@ -200,17 +200,20 @@ function openlab_clone_course_site( $group_id, $source_group_id, $source_site_id
 /**
  * Outputs the markup for the Sharing Settings panel.
  *
- * @param int $group_id ID of the group.
+ * @param string $group_type Group type.
  */
-function openlab_group_sharing_settings_markup( $group_id ) {
-	$sharing_enabled = openlab_group_can_be_cloned( $group_id );
-
+function openlab_group_sharing_settings_markup( $group_type = null ) {
+	$sharing_enabled = openlab_group_can_be_cloned();
+	$group_label_uc  = openlab_get_group_type_label( [
+		'case'       => 'upper',
+		'group_type' => $group_type
+	] );
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
 		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
-			<p>This setting enables other faculty to clone your course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original course authors will be included.</p>
+			<p>This setting enables other faculty to clone your <?php echo $group_label_uc; ?>. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original <?php echo $group_label_uc; ?> authors will be included.</p>
 
 			<div class="checkbox">
 				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable shared cloning</label>
@@ -270,18 +273,11 @@ function openlab_add_clone_button_to_profile() {
 		return;
 	}
 
-	$group_type = openlab_get_group_type( $group_id );
-
-	// Courses only for the moment.
-	if ( 'course' !== $group_type ) {
+	if ( ! openlab_user_can_clone_group( get_current_user_id(), $group_id ) ) {
 		return;
 	}
 
-	$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-	if ( ! is_super_admin() && 'Faculty' !== $user_type ) {
-		return;
-	}
-
+	$group_type       = openlab_get_group_type( $group_id );
 	$group_type_label = openlab_get_group_type_label(
 		array(
 			'group_id' => $group_id,
@@ -522,6 +518,20 @@ class Openlab_Clone_Course_Group {
 		$source_group_admins = $this->get_source_group_admins();
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
+		$source_group_parent_term = get_term_by( 'name', "g" . $this->source_group_id, 'group-documents-category' );
+		$source_group_cats        = get_terms(
+			'group-documents-category',
+			array(
+				'parent'     => $source_group_parent_term->term_id ,
+				'hide_empty' => false,
+			)
+		);
+
+		$used_cats = [];
+
+		$parent_term_info = wp_insert_term( 'g' . $this->group_id, 'group-documents-category' );
+		$parent_term_id   = $parent_term_info['term_id'];
+
 		foreach ( $source_files as $source_file ) {
 			if ( ! in_array( $source_file['user_id'], $source_group_admins ) ) {
 				continue;
@@ -538,6 +548,38 @@ class Openlab_Clone_Course_Group {
 			$document->file        = $source_file['file'];
 			$document->save( false ); // false is "don't check file upload"
 
+			// Categories/folders.
+			$source_file_categories = wp_get_object_terms( $source_file['id'], 'group-documents-category' );
+
+			$categories_to_add = [];
+			foreach ( $source_file_categories as $source_category ) {
+				$dest_category = term_exists( $source_category->name, 'group-documents-category', $parent_term_id );
+				$dest_category_id = null;
+				if ( ! $dest_category ) {
+					$term_info = wp_insert_term(
+						$source_category->name,
+						'group-documents-category',
+						[
+							'parent' => $parent_term_id,
+						]
+					);
+
+					if ( ! is_wp_error( $term_info ) ) {
+						$dest_category_id = $term_info['term_id'];
+					}
+				} else {
+					$dest_category_id = $dest_category['term_id'];
+				}
+
+				$categories_to_add[] = (int) $dest_category_id;
+
+				$used_cats[ $source_category->name ] = 1;
+			}
+
+			if ( $categories_to_add ) {
+				$added = wp_set_object_terms( $document->id, $categories_to_add, 'group-documents-category' );
+			}
+
 			// Copy the file itself
 			$destination_dir = bp_core_avatar_upload_path() . '/group-documents/' . $this->group_id;
 			if ( ! is_dir( $destination_dir ) ) {
@@ -549,6 +591,21 @@ class Openlab_Clone_Course_Group {
 			$source_path = bp_core_avatar_upload_path() . '/group-documents/' . $this->source_group_id . '/' . $document->file;
 
 			copy( $source_path, $destination_path );
+		}
+
+		// Process empty folders.
+		foreach ( $source_group_cats as $source_group_cat ) {
+			if ( isset( $used_cats[ $source_group_cat->name ] ) ) {
+				continue;
+			}
+
+			$term_info = wp_insert_term(
+				$source_group_cat->name,
+				'group-documents-category',
+				[
+					'parent' => $parent_term_id,
+				]
+			);
 		}
 	}
 
@@ -698,6 +755,7 @@ class Openlab_Clone_Course_Site {
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
+			$this->migrate_forms();
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -856,7 +914,6 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// Loop through all posts and:
-		// - if it's by an admin, switch to draft
 		// - if it's not by an admin, delete
 		// - if it's a nav item, change the GUID and the menu item URL meta
 		switch_to_blog( $this->site_id );
@@ -868,7 +925,7 @@ class Openlab_Clone_Course_Site {
 		$source_site_url = preg_replace( '/^https?/', '', $source_site_url );
 		$dest_site_url   = preg_replace( '/^https?/', '', $dest_site_url );
 
-				// Copy over attachments. Whee!
+		// Copy over attachments. Whee!
 		$upload_dir = wp_upload_dir();
 		self::copyr( str_replace( $this->site_id, $this->source_site_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
@@ -878,18 +935,13 @@ class Openlab_Clone_Course_Site {
 		$posts_to_delete_ids = [];
 		$atts_to_delete_ids  = [];
 		foreach ( $site_posts as $sp ) {
-			if ( in_array( $sp->post_author, $source_group_admins ) ) {
-				if ( 'publish' === $sp->post_status || 'private' === $sp->post_status ) {
-					$post_arr = array(
-						'ID'          => $sp->ID,
-						'post_status' => 'draft',
-					);
-					wp_update_post( $post_arr );
+			// Skip Custom CSS post.
+			if ( 'custom_css' === $sp->post_type) {
+				continue;
+			}
 
-					wp_update_comment_count_now( $sp->ID );
-				}
-			} else {
-				// Non-teachers have their stuff deleted.
+			// Non-teachers have their stuff deleted.
+			if ( ! in_array( $sp->post_author, $source_group_admins ) ) {
 				if ( 'attachment' === $sp->post_type ) {
 					$atts_to_delete_ids[] = $sp->ID;
 				} else {
@@ -943,6 +995,48 @@ class Openlab_Clone_Course_Site {
 		restore_current_blog();
 	}
 
+	/**
+	 * Migrate Gravity Forms data.
+	 *
+	 * GF should be active on the main site, since `switch_to_blog()`
+	 * doesn't load site specific plugins.
+	 *
+	 * @return void
+	 */
+	protected function migrate_forms() {
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			return;
+		}
+
+		switch_to_blog( $this->source_site_id );
+
+		// Gravity Form isn't active. Bail early.
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		$forms = GFFormsModel::get_forms( null, 'title' );
+		if ( empty( $forms ) ) {
+			restore_current_blog();
+			return;
+		}
+
+		// Prepare form data.
+		$ids   = wp_list_pluck( $forms, 'id' );
+		$forms = GFFormsModel::get_form_meta_by_id( $ids );
+
+		switch_to_blog( $this->site_id );
+
+		// Properly install GF on new site.
+		gf_upgrade()->install();
+
+		// Add forms to the cloned site.
+		GFAPI::add_forms( $forms );
+
+		restore_current_blog();
+	}
+
 	protected function get_source_group_admins() {
 		if ( ! empty( $this->source_group_admins ) ) {
 			return $this->source_group_admins;
@@ -969,7 +1063,7 @@ class Openlab_Clone_Course_Site {
 
 		$this->source_group_admins = array_unique( $admin_ids );
 
-		return $this->source_group_admins;
+		return array_map( 'intval', $this->source_group_admins );
 	}
 
 	/**

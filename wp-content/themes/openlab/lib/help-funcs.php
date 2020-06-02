@@ -69,13 +69,13 @@ function openlab_help_loop() {
         if ($prev_post) {
             $back_next_nav .= '--><span class="nav-previous">';
             $back_next_nav .= '<span class="fa fa-chevron-circle-left"></span>';
-            $back_next_nav .= sprintf('<a href="%s">Back</a>', esc_url(get_permalink($prev_post)));
+            $back_next_nav .= sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $prev_post ) ), esc_html( $prev_post->post_title ) );
             $back_next_nav .= '</span><!--';
         }
 
         if ($next_post) {
             $back_next_nav .= '--><span class="nav-previous">';
-            $back_next_nav .= sprintf('<a href="%s">Next</a>', esc_url(get_permalink($next_post)));
+            $back_next_nav .= sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $next_post ) ), esc_html( $next_post->post_title ) );
             $back_next_nav .= '<span class="nav-next fa fa-chevron-circle-right"></span>';
             $back_next_nav .= '</span><!--';
         }
@@ -90,14 +90,11 @@ function openlab_help_loop() {
 
             <?php
             $nav_links = array(
-                '<span class="page-title">' . get_the_title() . '</span>',
                 $back_next_nav,
             );
 
             $this_term = openlab_get_primary_help_term_name();
-            if ($this_term->parent != 0) {
-                $nav_links = array_merge(array('<a class="regular" href="' . get_term_link($this_term) . '">' . esc_html($this_term->name) . '</a>'), $nav_links);
-            }
+	    $nav_links = array_merge(array('<a class="regular" href="' . get_term_link($this_term) . '">' . esc_html($this_term->name) . '</a>'), $nav_links);
             ?>
 
             <div class="row help-nav">
@@ -124,6 +121,7 @@ function openlab_help_loop() {
         <?php endif; ?>
 
         <div class="entry-content">
+            <h2 class="page-title"><?php the_title(); ?></h2>
             <?php the_content(); ?>
             <?php echo ( $post->post_name == 'openlab-help' || $post->post_name == 'contact-us' ? '' : openlab_get_help_tag_list($post_id) ); ?>
         </div>
@@ -242,7 +240,7 @@ function openlab_help_cats_loop() {
             <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
         </h1>
         <div id="help-title">
-            <h2 class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics: </div></h2>
+            <div class="page-title clearfix submenu"><div class="submenu-text pull-left bold">Topics:</div> <?php echo esc_html( $parent_term->name ); ?></div>
         </div>
         <?php
     else:

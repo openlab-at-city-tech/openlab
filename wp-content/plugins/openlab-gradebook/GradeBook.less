@@ -166,7 +166,7 @@ body {
 }
 
 .openlab-gradebook_page_oplb_gradebook_settings {
-	h2{
+	h2 {
 		margin-top: 28px;
 	}
 	p {
@@ -216,7 +216,7 @@ body {
 		.student-add-wrapper {
 			#addSingleStudent {
 				overflow-y: hidden;
-				max-height: 28px;
+				max-height: 38px;
 				transition-property: all;
 				transition-duration: 0.5s;
 				transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
@@ -401,6 +401,17 @@ td {
 	display: inline-block;
 }
 
+.course-table-wrapper {
+	@media (max-width: 479px) {
+		.course-column-school,
+		.course-column-semester,
+		td.school,
+		td.semester {
+			display: none;
+		}
+	}
+}
+
 .students .selected td,
 .students .selected th,
 .students .selected,
@@ -413,6 +424,15 @@ td {
 }
 
 .students-header {
+	.btn-group-wrapper {
+		max-width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		margin-left: 8px;
+		margin-right: 8px;
+	}
 	.btn-group {
 		max-width: 100%;
 		.btn {
@@ -654,18 +674,23 @@ span.twitter-typeahead {
 			margin-bottom: 0;
 			.cell-wrapper {
 				display: flex;
+				height: 100%;
+				width: 100%;
+				justify-content: flex-start;
+				align-items: center;
 				.grade-numeric,
-				.checkbox {
-					flex: 1 0 60%;
-				}
+				.checkbox,
 				.grade-selector {
-					flex: 1 0 29%;
-					margin-right: 31%;
+					margin-right: 48px;
 					height: 28px;
-					min-width: 48px;
+					width: 60px;
+					min-width: 60px;
+					line-height: 1.1;
+					margin-left: 8px;
+					display: flex;
+					align-items: center;
 				}
 				.comment-icon {
-					flex: 1 0 40%;
 					&.inactive {
 						button {
 							color: #8f8f8f;
@@ -675,6 +700,10 @@ span.twitter-typeahead {
 				.checkbox {
 					input {
 						opacity: 1;
+						-ms-transform: scale(1.4);
+						-webkit-transform: scale(1.4);
+						-o-transform: scale(1.4);
+						transform: scale(1.4);
 						&:before {
 							opacity: 1;
 						}
@@ -693,11 +722,51 @@ span.twitter-typeahead {
 		#an-gradebook-container {
 			top: 15px;
 			position: relative;
+			max-width: none;
 		}
 		position: relative;
+		#students-header,
+		#students-header-pinnned,
+		#students,
+		#students-pinned {
+			td,
+			th {
+				.column-frame-wrapper,
+				.header-span-wrapper {
+					height: 100%;
+					max-width: 100%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					padding: 0 8px;
+					> span {
+						max-width: 100%;
+						text-overflow: ellipsis;
+						display: block;
+						overflow: hidden;
+					}
+				}
+				.column-frame {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+		}
 		#students-header-pinned th,
 		#students-header th {
 			position: relative;
+			position: relative;
+			padding: 0;
+			height: 60px;
+			max-height: 60px;
+			> span {
+				height: 100%;
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				margin-left: 8px;
+			}
 			&.pointer {
 				cursor: pointer;
 			}
@@ -759,7 +828,6 @@ span.twitter-typeahead {
 			table {
 				border-right: none;
 				border-left: none;
-				width: 100%;
 				table-layout: fixed;
 				width: 100%;
 				th {
@@ -767,7 +835,10 @@ span.twitter-typeahead {
 				}
 			}
 			td.student {
-				height: 59px;
+				height: 60px;
+				max-height: 60px;
+				padding: 0;
+				line-height: 1.1;
 			}
 			.student-grades {
 				display: none;
@@ -778,10 +849,6 @@ span.twitter-typeahead {
 			#students-header-pinned th,
 			#students-pinned td {
 				text-overflow: ellipsis;
-				.column-frame {
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
 				.tooltip-wrapper {
 					max-width: 100%;
 					white-space: nowrap;
@@ -833,14 +900,6 @@ span.twitter-typeahead {
 					}
 				}
 			}
-			#students-pinned td {
-				> span {
-					max-width: 100%;
-					text-overflow: ellipsis;
-					display: block;
-					overflow: hidden;
-				}
-			}
 			#students-header-pinned th.gradebook-student-column-interactive,
 			#students-pinned td.student-tools {
 				overflow: visible;
@@ -875,7 +934,7 @@ span.twitter-typeahead {
 			margin-left: 36%;
 			overflow: visible !important;
 			.jspContainer {
-				padding-top: 15px;
+				box-sizing: content-box;
 				.jspPane {
 					top: 0 !important;
 					margin-left: 0 !important;
@@ -910,7 +969,18 @@ span.twitter-typeahead {
 				}
 			}
 			td.student-grades {
-				height: 59px;
+				height: 60px;
+				max-height: 60px;
+				padding: 0;
+				line-height: 1.1;
+				position: relative;
+				> span {
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					right: 0;
+				}
 			}
 			.student-grades {
 				min-width: 180px;
@@ -930,6 +1000,7 @@ span.twitter-typeahead {
 					overflow: hidden;
 					display: inline-block;
 					text-overflow: ellipsis;
+					height: 100%;
 				}
 				.tooltip {
 					.tooltip-inner {
@@ -981,11 +1052,13 @@ span.twitter-typeahead {
 				text-overflow: ellipsis;
 			}
 			td {
-				padding-bottom: 17px;
+				height: 60px;
+				max-height: 60px;
+				line-height: 1.1;
 				overflow: hidden;
+				padding: 0;
 				.grade-numeric {
 					display: block;
-					margin: 0 0 8px;
 					min-height: 22px;
 				}
 			}
@@ -994,6 +1067,7 @@ span.twitter-typeahead {
 				max-width: 50px;
 				min-width: 50px;
 				overflow: visible;
+				padding: 12px 8px;
 				button#download-csv-mobile {
 					background: #0073aa;
 					font-size: 22px;

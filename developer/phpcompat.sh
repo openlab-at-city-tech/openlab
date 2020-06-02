@@ -22,6 +22,7 @@ ignores=(
 #  'wp-content/plugins/extended-categories-widget/2.8'
   'wp-content/plugins/gravityforms'
   'wp-content/plugins/kb-gradebook'
+  'wp-content/plugins/nextgen-gallery/vendor/nikic/php-parser/lib/PhpParser/Lexer.php'
 #  'wp-content/plugins/newsletters-lite/vendor/phpseclib'
   'wp-content/plugins/osm'
   'wp-content/plugins/papercite/lib/PEAR.php'

@@ -3445,10 +3445,17 @@ body{
     }
 }
 #help-title-nav {
-
-    .nav-previous {
+	& > span {
+        border-right: 1px solid @80gray;
+        margin-right: 8px;
         padding-right: 8px;
-    }
+
+        &:last-child {
+          border-right: none;
+          margin-right: none;
+          padding-right: none;
+        }
+	}
 
     span {
         color: @black;

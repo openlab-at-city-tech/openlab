@@ -84,3 +84,20 @@ add_action(
 		<?php
 	}
 );
+
+/**
+ * Filter default Accent Color.
+ */
+add_filter(
+	'customize_dynamic_setting_args',
+	function( $args, $id ) {
+		if ( 'accent_color' !== $id ) {
+			return $args;
+		}
+
+		$args['default'] = '#ad0000';
+		return $args;
+	},
+	10,
+	2
+);

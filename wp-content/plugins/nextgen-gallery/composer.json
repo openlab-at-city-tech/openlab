@@ -1,0 +1,19 @@
+{
+    "name": "reactr-io/nextgen-gallery",
+    "version": "3.3.0",
+    "description": "The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 28 million downloads.",
+    "keywords": ["nextgen", "nextgen gallery", "gallery", "galleries", "image", "images", "image gallery", "photo", "photos", "photo gallery", "picture", "pictures", "picture gallery", "album", "albums", "photo albums", "image album", "media", "media gallery", "thumbnails", "thumbnail gallery", "thumbnail galleries", "slideshow", "slideshows", "slideshow gallery", "slideshow galleries", "fancybox", "lightbox", "responsive", "responsive gallery", "responsive galleries", "singlepic", "watermarks", "watermarking", "photography", "photographer"],
+    "homepage": "https://www.imagely.com/",
+    "license": "GPLv2",
+    "type": "wordpress-plugin",
+    "repositories": [
+        {"type": "composer", "url": "https://repo.packagist.com/reactr-io/"},
+        {"packagist.org": false}
+    ],
+    "require": {
+        "reactr-io/pope-framework": "v0.14"
+    },
+    "require-dev": {
+        "nikic/php-parser": "^4.3"
+    }
+}

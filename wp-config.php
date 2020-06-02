@@ -23,7 +23,7 @@ if ( !defined( 'DB_NAME' ) ) {
 }
 
 // Version of the OpenLab. Used for asset versioning and cache busting.
-define( 'OL_VERSION', '1.7.42' );
+define( 'OL_VERSION', '1.7.43' );
 
 if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
 	require __DIR__ . '/db-settings.php';
@@ -83,6 +83,8 @@ define ( 'BP_BLOGS_SLUG', 'sites' );
 define ( 'BP_FORUMS_SLUG', 'discussion' );
 define( 'BP_GROUP_DOCUMENTS_SLUG', 'files' );
 define( 'BP_USE_WP_ADMIN_BAR', true );
+
+define( 'NGG_JQUERY_CONFLICT_DETECTION', false );
 
 /* That's all, stop editing! Happy blogging. */
 

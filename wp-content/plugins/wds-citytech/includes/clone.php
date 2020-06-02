@@ -87,21 +87,51 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
  *
  * @param int $group_id ID of the group.
  */
-function openlab_group_can_be_cloned( $group_id ) {
-	$group = groups_get_group( $group_id );
-	if ( $group->id ) {
-		$group_type = openlab_get_group_type( $group_id );
-	} else {
-		$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'club';
+function openlab_group_can_be_cloned( $group_id = null ) {
+	if ( null === $group_id ) {
+		$group_id = bp_get_current_group_id();
 	}
 
-	if ( ! openlab_group_type_can_be_cloned( $group_type ) ) {
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	if ( openlab_is_portfolio( $group_id ) ) {
 		return false;
 	}
 
 	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
 
 	return ! empty( $sharing_enabled_for_group );
+}
+
+/**
+ * Determines whether a user can clone current group.
+ *
+ * @param int $user_id  Optional. User ID. Default current user ID.
+ * @param int $group_id Optional. Group ID. Default current group ID.
+ * @return bool
+ */
+function openlab_user_can_clone_group( $user_id = null, $group_id = null ) {
+	if ( is_super_admin() ) {
+		return true;
+	}
+
+	$user_id  = $user_id ?: get_current_user_id();
+	$group_id = $group_id ?: bp_get_current_group_id();
+
+	$group_type = openlab_get_group_type( $group_id );
+	$user_type = xprofile_get_field_data( 'Account Type', $user_id );
+
+	if ( 'course' === $group_type && 'Faculty' === $user_type ) {
+		return true;
+	}
+
+	if ( 'course' !== $group_type && ! empty( $user_type ) ) {
+		return true;
+	}
+
+	return false;
 }
 
 /** WIDGETS ******************************************************************/

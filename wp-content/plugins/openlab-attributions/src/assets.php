@@ -2,6 +2,7 @@
 
 namespace OpenLab\Attributions\Assets;
 
+use const OpenLab\Attributions\ROOT_DIR;
 use const OpenLab\Attributions\ROOT_FILE;
 use function OpenLab\Attributions\Helpers\get_licenses;
 use function OpenLab\Attributions\Helpers\get_supported_post_types;
@@ -12,18 +13,30 @@ use function OpenLab\Attributions\Helpers\get_supported_post_types;
  * @return void
  */
 function register_assets() {
+	$block_filepath   = ROOT_DIR . '/build/js/block-editor.asset.php';
+	$block_asset_file = file_exists( $block_filepath ) ? include $block_filepath : [
+		'dependencies' => [],
+		'version'      => false,
+	];
+
+	$classic_filepath   = ROOT_DIR . '/build/js/block-editor.asset.php';
+	$classic_asset_file = file_exists( $classic_filepath ) ? include $classic_filepath : [
+		'dependencies' => [],
+		'version'      => false,
+	];
+
 	wp_register_script(
 		'attribution-block-script',
 		plugins_url( '/build/js/block-editor.js', ROOT_FILE ),
-		[ 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element', 'wp-rich-text' ],
-		'20191118'
+		$block_asset_file['dependencies'],
+		$block_asset_file['version']
 	);
 
 	wp_register_script(
 		'attribution-classic-script',
 		plugins_url( '/build/js/classic-editor.js', ROOT_FILE ),
-		[ 'wp-tinymce', 'wp-components', 'wp-compose', 'wp-data', 'wp-dom-ready', 'wp-element' ],
-		'20191118'
+		array_merge( $classic_asset_file['dependencies'], [ 'wp-tinymce' ] ),
+		$classic_asset_file['version']
 	);
 
 	wp_register_style(

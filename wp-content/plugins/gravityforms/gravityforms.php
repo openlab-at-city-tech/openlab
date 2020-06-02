@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Gravity Forms
-Plugin URI: https://www.gravityforms.com
+Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.17.11
-Author: rocketgenius
-Author URI: https://www.rocketgenius.com
+Version: 2.4.18.3
+Author: Gravity Forms
+Author URI: https://gravityforms.com
 License: GPL-2.0+
 Text Domain: gravityforms
 Domain Path: /languages
@@ -142,16 +142,7 @@ if ( ! defined( 'GRAVITY_MANAGER_URL' ) ) {
 	 *
 	 * @var string GRAVITY_MANAGER_URL The full URL to the Gravity Manager.
 	 */
-	define( 'GRAVITY_MANAGER_URL', 'https://www.gravityhelp.com/wp-content/plugins/gravitymanager' );
-}
-
-if ( ! defined( 'GRAVITY_MANAGER_PROXY_URL' ) ) {
-	/**
-	 * Defines the Gravity Manager proxy URL.
-	 *
-	 * @var string GRAVITY_MANAGER_PROXY_URL The full URL to the Gravity Manager proxy.
-	 */
-	define( 'GRAVITY_MANAGER_PROXY_URL', 'http://proxy.gravityplugins.com' );
+	define( 'GRAVITY_MANAGER_URL', 'https://gravityapi.com/wp-content/plugins/gravitymanager' );
 }
 
 require_once( plugin_dir_path( __FILE__ ) . 'currency.php' );
@@ -176,6 +167,7 @@ add_action( 'init', array( 'GFForms', 'init' ) );
 add_action( 'wp', array( 'GFForms', 'maybe_process_form' ), 9 );
 add_action( 'admin_init', array( 'GFForms', 'maybe_process_form' ), 9 );
 add_action( 'wp', array( 'GFForms', 'process_exterior_pages' ) );
+add_action( 'admin_init', array( 'GFForms', 'process_exterior_pages' ) );
 add_filter( 'upgrader_pre_install', array( 'GFForms', 'validate_upgrade' ), 10, 2 );
 add_filter( 'tiny_mce_before_init', array( 'GFForms', 'modify_tiny_mce_4' ), 20 );
 add_filter( 'user_has_cap', array( 'RGForms', 'user_has_cap' ), 10, 3 );
@@ -215,7 +207,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.17.11';
+	public static $version = '2.4.18.3';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -620,16 +612,16 @@ class GFForms {
 	 * @return void
 	 */
 	public static function maybe_process_form() {
-		if ( isset( $_POST['gform_submit'] ) ) {
+		if ( isset( $_POST['gform_send_resume_link'] ) ) {
+			require_once( GFCommon::get_base_path() . '/form_display.php' );
+			GFFormDisplay::process_send_resume_link();
+		} elseif ( isset( $_POST['gform_submit'] ) ) {
 			require_once( GFCommon::get_base_path() . '/form_display.php' );
 			$form_id = GFFormDisplay::is_submit_form_id_valid();
 
 			if ( $form_id ) {
 				GFFormDisplay::process_form( $form_id );
 			}
-		} elseif ( isset( $_POST['gform_send_resume_link'] ) ) {
-			require_once( GFCommon::get_base_path() . '/form_display.php' );
-			GFFormDisplay::process_send_resume_link();
 		}
 	}
 
@@ -1246,6 +1238,8 @@ class GFForms {
 			'gravityforms_view_addons'      => esc_html__( 'Manage Add-Ons', 'gravityforms' ),
 			'gravityforms_system_status'    => esc_html__( 'View System Status', 'gravityforms' ),
 			'gravityforms_uninstall'        => esc_html__( 'Uninstall Gravity Forms', 'gravityforms' ),
+			'gravityforms_logging'          => esc_html__( 'Logging Settings', 'gravityforms' ),
+			'gravityforms_api_settings'     => esc_html__( 'REST API Settings', 'gravityforms' ),
 		);
 
 		foreach ( $caps as $cap => $label ) {
@@ -5956,5 +5950,67 @@ if ( ! function_exists( 'gf_do_action' ) ) {
 			$action .= $modifier;
 			do_action( $action, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8], $args[9] );
 		}
+	}
+}
+
+if ( ! function_exists( 'gf_has_filters' ) ) {
+	/**
+	 * Determines if a callback has been registered for the specified filter.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param array         $filter            An array containing the filter tag and modifiers.
+	 * @param bool|callable $function_to_check The optional callback to check for.
+	 *
+	 * @return bool
+	 */
+	function gf_has_filters( $filter, $function_to_check = false ) {
+		$modifiers = array_splice( $filter, 1, count( $filter ) );
+		$filter    = $filter[0];
+
+		// Adding empty modifier for the base filter.
+		array_unshift( $modifiers, '' );
+
+		foreach ( $modifiers as $modifier ) {
+			$modifier = rgblank( $modifier ) ? '' : sprintf( '_%s', $modifier );
+			$filter   .= $modifier;
+			if ( has_filter( $filter, $function_to_check ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'gf_has_filter' ) ) {
+	/**
+	 * Determines if a callback has been registered for the specified filter.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param array         $filter            An array containing the filter tag and modifiers.
+	 * @param bool|callable $function_to_check The optional callback to check for.
+	 *
+	 * @return bool
+	 */
+	function gf_has_filter( $filter, $function_to_check = false ) {
+		return gf_has_filters( $filter, $function_to_check );
+	}
+}
+
+if ( ! function_exists( 'gf_has_action' ) ) {
+	/**
+	 * Determines if a callback has been registered for the specified action.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @param array         $action            An array containing the action tag and modifiers.
+	 * @param bool|callable $function_to_check The optional callback to check for.
+	 *
+	 * @return bool
+	 */
+	function gf_has_action( $action, $function_to_check = false ) {
+		return gf_has_filters( $action, $function_to_check );
 	}
 }

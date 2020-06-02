@@ -1,0 +1,83 @@
+.dco-attachment-preview {
+	max-width: 100%;
+	height: auto !important;
+}
+
+.dco-attachment-actions {
+	display: flex;
+	align-items: center;
+	margin-top: 13px;
+}
+
+@media (max-width: 359px) {
+
+	.dco-attachment-actions {
+		display: block;
+	}
+}
+
+.dco-remove-attachment {
+	margin-left: 30px;
+	color: #a00;
+}
+
+@media (max-width: 359px) {
+
+	.dco-remove-attachment {
+		display: inline-block;
+		margin-top: 20px;
+		margin-left: 0;
+	}
+}
+
+.dco-remove-attachment:hover {
+	color: #dc3232;
+}
+
+.dco-hidden {
+	display: none !important;
+}
+
+.dco-file-type {
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 15px;
+}
+
+@media (max-width: 782px) {
+
+	.dco-file-type {
+		margin-bottom: 20px;
+	}
+}
+
+.dco-file-type-name {
+	display: inline-block;
+	margin-bottom: 5px;
+}
+
+@media (max-width: 782px) {
+
+	.dco-file-type-name {
+		margin-bottom: 10px;
+	}
+}
+
+.dco-file-type-item {
+	margin-bottom: 3px;
+}
+
+@media (max-width: 782px) {
+
+	.dco-file-type-item {
+		margin-bottom: 8px;
+	}
+}
+
+.dco-file-type-items-more {
+	display: none;
+}
+
+.dco-file-type-items-more.show {
+	display: block;
+}
