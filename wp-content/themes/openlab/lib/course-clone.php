@@ -519,13 +519,17 @@ class Openlab_Clone_Course_Group {
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
 		$source_group_parent_term = get_term_by( 'name', "g" . $this->source_group_id, 'group-documents-category' );
-		$source_group_cats        = get_terms(
-			'group-documents-category',
-			array(
-				'parent'     => $source_group_parent_term->term_id ,
-				'hide_empty' => false,
-			)
-		);
+		if ( $source_group_parent_term ) {
+			$source_group_cats = get_terms(
+				'group-documents-category',
+				array(
+					'parent'     => $source_group_parent_term->term_id ,
+					'hide_empty' => false,
+				)
+			);
+		} else {
+			$source_group_cats = [];
+		}
 
 		$used_cats = [];
 
