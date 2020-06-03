@@ -572,7 +572,7 @@ add_filter( 'bbp_is_forum_public', 'openlab_enforce_forum_privacy', 10, 2 );
  *
  * This can cause a costly tree rebuild. See bbPress #1799. See OL #1663,
  */
-function openlab_prevent_bbp_recounts() {
+function openlab_prevent_bbp_recounts( $r ) {
 	if ( (int) bbp_get_group_forums_root_id() === (int) $r['forum_id'] ) {
 		$r['forum_id'] = 0;
 	}
