@@ -243,16 +243,19 @@ function openlab_group_archive() {
         </div>
         <div id="group-list" class="item-list group-list row">
             <?php
-            $count = 1;
-            while (bp_groups()) : bp_the_group();
-                $group_id = bp_get_group_id();
+            while ( bp_groups() ) : bp_the_group();
+                $group_id       = bp_get_group_id();
+				$group_site_url = openlab_get_group_site_url( $group_id );
                 ?>
                 <div class="group-item col-xs-12">
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-6">
                                 <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr(bp_get_group_name()); ?>"/></a>
-								<?php do_action( 'bp_group_directory_after_avatar' ); ?>
+
+								<?php if ( $group_site_url && wds_site_can_be_viewed() ) : ?>
+									<a class="group-site-link" href="<?php echo esc_attr( $group_site_url ); ?>"><?php esc_html_e( 'Visit Site', 'openlab-theme' ); ?><span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
+								<?php endif; ?>
                             </div>
                             <div class="item col-xs-18">
 
@@ -281,7 +284,6 @@ function openlab_group_archive() {
                         </div><!--item-->
                     </div>
                 </div>
-                <?php $count++ ?>
             <?php endwhile; ?>
         </div>
 
