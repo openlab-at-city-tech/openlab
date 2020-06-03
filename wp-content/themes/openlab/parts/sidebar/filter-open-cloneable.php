@@ -6,12 +6,14 @@
 $is_open      = openlab_get_current_filter( 'open' );
 $is_cloneable = openlab_get_current_filter( 'cloneable' );
 
-// 'Open' is not yet implemented. See https://github.com/cuny-academic-commons/commons-in-a-box/issues/227
-$show_open = false;
+$group_type = openlab_get_group_directory_group_type();
+
+// Only show Open on group directories.
+// @todo search results
+$show_open = ! empty( $group_type );
 
 // Cloneable should not appear if the content type is not cloneable.
 // @todo search results
-$group_type     = openlab_get_group_directory_group_type();
 $show_cloneable = $group_type && 'portfolio' !== $group_type;
 
 // Don't render the element if there's nothing to show.

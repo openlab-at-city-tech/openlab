@@ -137,10 +137,16 @@ function openlab_group_archive() {
 		$group_type = 'course';
 	}
 
-	// Set up filters
+    $group_args = array(
+        'search_terms' => urldecode( openlab_get_current_filter( 'search' ) ),
+        'per_page'     => 12,
+		'type'         => openlab_get_current_filter( 'sort' ),
+    );
+
+	// @todo search results
     $meta_query = array(
         array(
-            'key' => 'wds_group_type',
+            'key'   => 'wds_group_type',
             'value' => $group_type,
         ),
     );
@@ -196,12 +202,18 @@ function openlab_group_archive() {
         );
 	}
 
-    $group_args = array(
-        'search_terms' => urldecode( openlab_get_current_filter( 'search' ) ),
-        'per_page'     => 12,
-        'meta_query'   => $meta_query,
-		'type'         => openlab_get_current_filter( 'sort' ),
-    );
+	$is_open = openlab_get_current_filter( 'is_open' );
+	if ( $is_open ) {
+		$meta_query['blog_public'] = array(
+			'key'      => 'blog_public',
+			'value'    => [ '1', '0' ],
+			'operator' => 'IN',
+		);
+
+		$group_args['status'] = 'public';
+	}
+
+	$group_args['meta_query'] = $meta_query;
 
 	$categories   = openlab_get_current_filter( 'cat' );
     if ( ! empty( $categories ) ) {
