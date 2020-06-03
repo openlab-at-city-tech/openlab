@@ -246,8 +246,13 @@ function openlab_group_archive() {
             while ( bp_groups() ) : bp_the_group();
                 $group_id       = bp_get_group_id();
 				$group_site_url = openlab_get_group_site_url( $group_id );
+
+				$classes = 'group-item col-xs-12';
+				if ( openlab_group_has_badges( $group_id ) ) {
+					$classes .= ' group-has-badges';
+				}
                 ?>
-                <div class="group-item col-xs-12">
+                <div class="<?php echo esc_attr( $classes ); ?>">
                     <div class="group-item-wrapper">
                         <div class="row">
                             <div class="item-avatar alignleft col-xs-6">
@@ -284,6 +289,8 @@ function openlab_group_archive() {
                                 </div>
                             </div>
                         </div><!--item-->
+
+						<?php do_action( 'openlab_theme_after_group_group_directory' ); ?>
                     </div>
                 </div>
             <?php endwhile; ?>
@@ -1880,3 +1887,38 @@ function openlab_group_add_to_portfolio_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
+
+/**
+ * Outputs the badge markup for the group directory.
+ *
+ * @since 1.2.0
+ */
+function openlab_group_directory_badges() {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return;
+	}
+
+	echo '<div class="col-xs-18 alignright group-directory-badges">';
+	\OpenLab\Badges\Template::badge_links( 'directory' );
+	echo '</div>';
+}
+add_action( 'openlab_theme_after_group_group_directory', 'openlab_group_directory_badges' );
+
+/**
+ * Checks whether a group has badges.
+ *
+ * @since 1.2.0
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_group_has_badges( $group_id ) {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return false;
+	}
+
+	$badge_group  = new \OpenLab\Badges\Group( $group_id );
+	$group_badges = $badge_group->get_badges();
+
+	return ! empty( $group_badges );
+}
