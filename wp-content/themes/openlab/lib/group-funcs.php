@@ -277,8 +277,7 @@ function openlab_group_archive() {
 
                                 <?php endif; ?>
                                 <div class="description-line">
-                                    <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?php echo bp_get_group_description_excerpt() ?></p>
-                                    <p class="original-copy hidden"><?php echo bp_get_group_description_excerpt() ?></p>
+                                    <p class="truncate-on-the-fly" data-basevalue="105" data-basewidth="250"><?php echo bp_get_group_description_excerpt() ?></p>
                                 </div>
                             </div>
                         </div><!--item-->
