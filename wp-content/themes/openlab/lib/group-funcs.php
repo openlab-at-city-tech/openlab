@@ -128,56 +128,16 @@ function openlab_group_privacy_settings($group_type) {
  *
  */
 function openlab_group_archive() {
-    global $wpdb, $bp, $groups_template, $post;
-
-    if (!bp_is_active('groups')) {
+    if ( ! bp_is_active( 'groups' ) ) {
         return;
     }
 
-//geting the grouptype by slug - the archive pages are curently WP pages and don't have a specific grouptype associated with them - this function uses the curent page slug to assign a grouptype
-//@to-do - get the archive page in the right spot to function correctly within the BP framework
     $group_type = openlab_page_slug_to_grouptype();
 	if ( ! in_array( $group_type, openlab_group_types(), 1 ) ) {
 		$group_type = 'course';
 	}
 
-    $sequence_type = '';
-    if (!empty($_GET['group_sequence'])) {
-        $sequence_type = "type=" . $_GET['group_sequence'] . "&";
-    }
-
-    $search_terms = $search_terms_raw = '';
-
-    if (!empty($_POST['group_search'])) {
-        $search_terms_raw = $_POST['group_search'];
-        $search_terms = "search_terms=" . $search_terms_raw . "&";
-    }
-    if (!empty($_GET['search'])) {
-        $search_terms_raw = $_GET['search'];
-        $search_terms = "search_terms=" . $search_terms_raw . "&";
-    }
-
-    if (!empty($_GET['school'])) {
-        $school = $_GET['school'];
-    }
-
-    if (!empty($_GET['department'])) {
-        $department = wp_unslash( $_GET['department'] );
-    }
-
-    if (!empty($_GET['cat'])) {
-        $categories = $_GET['cat'];
-    }
-
-    if (!empty($_GET['semester'])) {
-        $semester = str_replace("-", " ", $_GET['semester']);
-        $semester = explode(" ", $semester);
-        $semester_season = ucwords($semester[0]);
-        $semester_year = ucwords($semester[1]);
-        $semester = trim($semester_season . ' ' . $semester_year);
-    }
-
-// Set up filters
+	// Set up filters
     $meta_query = array(
         array(
             'key' => 'wds_group_type',
@@ -185,7 +145,8 @@ function openlab_group_archive() {
         ),
     );
 
-    if (!empty($school) && 'school_all' != strtolower($school)) {
+	$school = openlab_get_current_filter( 'school' );
+    if ( $school && 'all' !== strtolower( $school )) {
         $all_offices = openlab_get_office_list();
 
         $school_meta_key = isset( $all_offices[ $school ] ) ? 'openlab_office' : 'openlab_school';
@@ -195,42 +156,58 @@ function openlab_group_archive() {
         );
     }
 
-    if (!empty($department) && 'dept_all' != strtolower($department)) {
+	$department = openlab_get_current_filter( 'department' );
+    if ( $department && 'all' !== strtolower( $department ) ) {
         $meta_query[] = array(
             'key'   => 'openlab_department',
             'value' => $department,
         );
     }
 
-    if (!empty($semester) && 'semester_all' != strtolower($semester)) {
+	$semester = openlab_get_current_filter( 'term' );
+    if ( $semester && 'term_all' != strtolower( $semester ) ) {
+        $semester_parts  = explode('-', $semester);
+        $semester_season = ucwords( $semester_parts[0] );
+        $semester_year   = ucwords( $semester_parts[1] );
+
         $meta_query[] = array(
-            'key' => 'wds_semester',
+            'key'   => 'wds_semester',
             'value' => $semester_season,
         );
         $meta_query[] = array(
-            'key' => 'wds_year',
+            'key'   => 'wds_year',
             'value' => $semester_year,
         );
     }
 
-    if ( !empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype'] && in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
+	$member_type = openlab_get_current_filter( 'member_type' );
+    if ( $member_type && 'user_type_all' !== $member_type ) {
         $meta_query[] = array(
-            'key' => 'portfolio_user_type',
-            'value' => ucwords($_GET['usertype']),
+            'key'   => 'portfolio_user_type',
+            'value' => ucwords( $member_type ),
         );
     }
 
+	$is_cloneable = openlab_get_current_filter( 'is_cloneable' );
+	if ( $is_cloneable ) {
+        $meta_query['cloneable'] = array(
+            'key'     => 'enable_sharing',
+			'compare' => 'EXISTS',
+        );
+	}
+
     $group_args = array(
-        'search_terms' => $search_terms_raw,
-        'per_page' => 12,
-        'meta_query' => $meta_query,
+        'search_terms' => urldecode( openlab_get_current_filter( 'search' ) ),
+        'per_page'     => 12,
+        'meta_query'   => $meta_query,
+		'type'         => openlab_get_current_filter( 'sort' ),
     );
 
-    if (!empty($categories)) {
+	$categories   = openlab_get_current_filter( 'cat' );
+    if ( ! empty( $categories ) ) {
+        if ( 'cat_all' === strtolower( $categories ) ) {
 
-        if ('cat_all' === strtolower($categories)) {
-
-            $terms = get_terms('bp_group_categories');
+            $terms    = get_terms('bp_group_categories');
             $term_ids = wp_list_pluck($terms, 'term_id');
         } else {
             $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
@@ -240,17 +217,13 @@ function openlab_group_archive() {
         $group_args['tax_query'] = array(
             array(
                 'taxonomy' => 'bp_group_categories',
-                'terms' => $term_ids,
-                'field' => 'term_id',
+                'terms'    => $term_ids,
+                'field'    => 'term_id',
             )
         );
     }
 
-    if (!empty($_GET['group_sequence'])) {
-        $group_args['type'] = $_GET['group_sequence'];
-    }
-
-    if (bp_has_groups($group_args)) :
+    if ( bp_has_groups( $group_args ) ) :
         ?>
         <div class="row group-archive-header-row">
             <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">
@@ -1184,6 +1157,18 @@ add_filter('paginate_links', 'openlab_group_pagination_search_key');
 ////////////////////////////
 //    DIRECTORY FILTERS   //
 ////////////////////////////
+
+/**
+ * Gets the group type for the current directory.
+ *
+ * @return string
+ */
+function openlab_get_group_directory_group_type() {
+	$post_obj   = get_queried_object();
+	$group_type = openlab_page_slug_to_grouptype();
+
+	return $group_type;
+}
 
 /**
  * Get an array describing some details about filters

@@ -8369,6 +8369,9 @@ body form .checkbox-list-container {
 .page-loading #sidebarCustomSelect {
   visibility: hidden;
 }
+#sidebarCustomSelect {
+  margin-bottom: 1em;
+}
 @media (min-width: 768px) {
   #sidebarCustomSelect {
     min-height: 171px;
@@ -9284,6 +9287,29 @@ body form .checkbox-list-container {
 .sidebar .learn-more-sidebar a {
   font-weight: bold;
 }
+.sidebar-filter-search {
+  margin-top: 16px;
+}
+.sidebar-filter-open-cloneable .sidebar-filter-checkbox {
+  float: left;
+  margin-right: 16px;
+  width: calc(50% - 16px);
+}
+.sidebar-filter-open-cloneable .sidebar-filter-checkbox label {
+  margin-left: 4px;
+}
+.sidebar-filter-checkbox label {
+  font-weight: normal;
+  margin-left: 4px;
+}
+.sidebar-filter-badges {
+  border-top: 1px solid #ccc;
+  margin-top: 6px;
+  padding-top: 12px;
+}
+.sidebar-filter-badges .form-group {
+  margin-bottom: 0;
+}
 @media (max-width: 767px) {
   .mobile-enabled .sidebar-menu-wrapper {
     background: transparent;
@@ -9359,6 +9385,15 @@ body form .checkbox-list-container {
   .sidebar-mobile-dropdown #content {
     position: relative;
   }
+}
+.sidebar-filter {
+  overflow: hidden;
+}
+.sidebar-filter.sidebar-filter-open-cloneable {
+  margin-top: 8px;
+}
+.sidebar-buttons {
+  padding-bottom: 24px;
 }
 /**group archives**/
 .group-list {

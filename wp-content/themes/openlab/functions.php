@@ -338,32 +338,6 @@ function openlab_notify_group_members_of_this_action() {
 }
 
 /**
- * Add support for 'Cloneable Courses' filter in group directories.
- */
-add_filter(
-	'bp_before_has_groups_parse_args',
-	function( $args ) {
-		if ( ! isset( $_GET['group_badge'] ) || 'cloneable' !== $_GET['group_badge'] ) {
-			return $args;
-		}
-
-		remove_filter( 'bp_before_has_groups_parse_args', array( 'OpenLab\Badges\Template', 'filter_group_args' ) );
-
-
-		$mq   = $args['meta_query'] ?: [];
-		$mq[] = [
-			'key'   => 'enable_sharing',
-			'value' => '1',
-		];
-
-		$args['meta_query'] = $mq;
-		return $args;
-	},
-	5
-
-);
-
-/**
  * Prevent wpautop from running on group description excerpts.
  *
  * This breaks the markup necessary for auto-truncation.

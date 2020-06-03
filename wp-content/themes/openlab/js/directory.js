@@ -1,10 +1,10 @@
 (function($){
     var $departmentSelector,
         $schoolSelector,
-        deptAllOption = '<option value="dept_all" id="dept_all">All Departments</option>';
+        deptAllOption = '<option value="all" id="dept_all">All Departments</option>';
 
     $(document).ready(function(){
-        $departmentSelector = $('#dept-select');
+        $departmentSelector = $('#department-select');
         $schoolSelector = $('#school-select');
         rebuildDepartmentSelector();
 
@@ -15,11 +15,15 @@
         var currentSchool = $schoolSelector.val();
         var currentDepartment = OLAcademicUnits.currentDepartment;
 
-        if ( ! currentSchool ) {
-            $departmentSelector.prop('disabled', true);
-            $departmentSelector.val('dept_all').trigger('change');
-            return;
+				if ( ! currentSchool ) {
+            $departmentSelector.val('all').trigger('change');
         }
+
+        if ( ! currentSchool || 'all' === currentSchool ) {
+            $departmentSelector.prop('disabled', true);
+            return;
+				}
+
 
         $departmentSelector.empty();
 
