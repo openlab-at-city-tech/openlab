@@ -601,7 +601,16 @@ function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id 
 		}
 	}
 
-	if ( 'bbp_update_forum_reply_count' === $caller ) {
+	$cb_blacklist = [
+		'bbp_update_forum_reply_count',
+		'bbp_update_forum_last_topic_id',
+		'bbp_update_forum_last_reply_id',
+		'bbp_update_forum_last_active_id',
+		'bbp_update_forum_last_active_time',
+		'bbp_update_forum_subforum_count',
+	];
+
+	if ( in_array( $caller, $cb_blacklist ) ) {
 		return 0;
 	}
 
