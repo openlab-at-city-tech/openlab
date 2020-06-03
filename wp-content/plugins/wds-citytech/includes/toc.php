@@ -7,9 +7,15 @@ namespace OpenLab\TOC;
 
 const VERSION = '1.0.0';
 
-// Inject the entry title right before the widget is rendered.
-add_filter( 'widget_title', function( $title, $instance, $id_base ) {
-	if ( 'ezw_tco' !== $id_base ) {
+/**
+ * Inject the entry title right before the widget is rendered.
+ *
+ * @param string $title The widget title.
+ * @param array $args   The remaining arguments.
+ */
+add_filter( 'widget_title', function( $title = '', ...$args ) {
+	// Check for `$id_base` of ToC widget.
+	if ( ! isset( $args[1] ) || 'ezw_tco' !== $args[1] ) {
 		return $title;
 	}
 
