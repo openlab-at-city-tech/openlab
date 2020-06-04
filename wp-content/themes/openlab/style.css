@@ -9421,14 +9421,11 @@ body form .checkbox-list-container {
 .group-list .group-site-link:hover {
   text-decoration: underline;
 }
-.group-list .group-has-badges .group-item-wrapper {
-  padding-bottom: 36px;
-}
 .group-list .group-item-wrapper {
   border-radius: 4px;
   border: 1px solid #dddddd;
   padding: 1.2% 4% 1.2% 1.2%;
-  height: 180px;
+  height: 210px;
   margin-bottom: 12px;
   color: #666666;
   position: relative;
