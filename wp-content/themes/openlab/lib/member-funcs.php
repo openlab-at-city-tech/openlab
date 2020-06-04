@@ -188,9 +188,7 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
+            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">&nbsp;</div>
             <div class="col-md-6 col-sm-8 text-right"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
@@ -210,7 +208,7 @@ function openlab_list_members($view) {
                                 <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/></a>
                             </div>
                             <div class="item col-md-14 col-xs-16">
-                                <h2 class="item-title"><a class="no-deco" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
+                                <h2 class="item-title"><a class="truncate-on-the-fly no-deco" data-basewidth="100" data-basevalue="20" data-minvalue="20" data-srprovider="true" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
                                 <span class="member-since-line timestamp">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
                                     <span class="update"><?php bp_member_latest_update('length=10') ?></span>
