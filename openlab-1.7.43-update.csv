@@ -1,0 +1,47 @@
+﻿"Item Type","Item Name","Item Slug","Current Version","New Version","Update Type"
+plugin,"Advanced Gutenberg",advanced-gutenberg,2.3.5,2.3.9,minor
+plugin,"Akismet Anti-Spam",akismet,4.1.4,4.1.5,minor
+plugin,BadgeOS,badgeos,3.3,3.5.1,major
+plugin,"Breadcrumb NavXT",breadcrumb-navxt,6.3.0,6.4.0,major
+plugin,BuddyPress,buddypress,5.1.2,6.0.0,major
+plugin,"Category Order and Taxonomy Terms Order",taxonomy-terms-order,1.5.7.1,1.5.7.2,minor
+plugin,"Contact Form 7",contact-form-7,5.1.7,5.1.8,minor
+plugin,"Easy Table of Contents",easy-table-of-contents,1.7,2.0.11,major
+plugin,ElasticPress,elasticpress,3.3,3.4.1,major
+plugin,"EWWW Image Optimizer",ewww-image-optimizer,5.2.5,5.3.2,major
+plugin,FeedWordPress,feedwordpress,2017.1020,2020.0118,major
+plugin,Folders,folders,2.3.9,2.4.9,major
+plugin,"GP Media Library",gp-media-library,1.0.14,1.2.11,major
+plugin,"Gravity Forms",gravityforms,2.4.17.11,2.4.18,minor
+plugin,Gutenberg,gutenberg,7.6.1,8.1.0,major
+plugin,"Jetpack by WordPress.com",jetpack,8.0,8.5,major
+plugin,"Link Library",link-library,6.3.12,6.4.8,major
+plugin,"MapPress Maps for WordPress",mappress-google-maps-for-wordpress,2.53.8,2.54.6,major
+plugin,"Media Cleaner",media-cleaner,5.5.8,5.6.3,major
+plugin,"Mihdan: Ajax Edit Comments",wp-ajax-edit-comments,6.0.4,6.1,major
+plugin,OSM,osm,5.3.6,5.4.3,major
+plugin,"Page Links To",page-links-to,3.2.2,3.3.3,major
+plugin,"PDF Embedder",pdf-embedder,4.5,4.6,major
+plugin,"Query Monitor",query-monitor,3.5.2,3.6.0,major
+plugin,"Shortcodes Ultimate",shortcodes-ultimate,5.6.1,5.8.1,major
+plugin,Subscribe2,subscribe2,10.31,10.32,major
+plugin,"SyntaxHighlighter Evolved",syntaxhighlighter,3.5.2,3.5.4,minor
+plugin,"Table of Contents Plus",table-of-contents-plus,1601,2002,major
+plugin,TablePress,tablepress,1.10,1.11,major
+plugin,"Text Hover",text-hover,3.8,3.9.1,major
+plugin,"The Events Calendar",the-events-calendar,4.9.14,5.1.1,major
+plugin,"WordPress Importer",wordpress-importer,0.6.4,0.7,major
+plugin,"WP Accessibility",wp-accessibility,1.7.0,1.7.1,minor
+theme,Hamilton,hamilton,1.26,2.0.4,major
+theme,Hemingway,hemingway,1.75,2.0.3,major
+theme,Koji,koji,1.46,2.0.5,major
+theme,"Twenty Eleven",twentyeleven,3.3,3.4,major
+theme,"Twenty Fifteen",twentyfifteen,2.5,2.6,major
+theme,"Twenty Fourteen",twentyfourteen,2.7,2.8,major
+theme,"Twenty Nineteen",twentynineteen,1.4,1.5,major
+theme,"Twenty Seventeen",twentyseventeen,2.2,2.3,major
+theme,"Twenty Sixteen",twentysixteen,2.0,2.1,major
+theme,"Twenty Ten",twentyten,2.9,3.0,major
+theme,"Twenty Thirteen",twentythirteen,2.9,3.0,major
+theme,"Twenty Twelve",twentytwelve,3.0,3.1,major
+theme,"Twenty Twenty",twentytwenty,1.1,1.3,major
