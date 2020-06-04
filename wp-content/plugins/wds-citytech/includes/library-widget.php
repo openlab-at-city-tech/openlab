@@ -184,25 +184,25 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 
 		<?php if ( $settings['find_library_materials'] ) : ?>
 			<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
-			<div id="openlab-library-find-widget-content">
-				<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+			<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+				<div id="openlab-library-find-widget-content">
 				<?php echo $args['before_title']; ?>Find Library Materials<?php echo $args['after_title']; ?>
 
 				<?php openlab_library_search_form(); ?>
 
-				<?php echo $args['after_widget']; ?>
-			</div>
+				</div>
+			<?php echo $args['after_widget']; ?>
 		<?php endif; ?>
 
 		<?php if ( $settings['library_information'] ) : ?>
-			<div id="openlab-library-information-widget-content">
-				<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+			<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+				<div id="openlab-library-information-widget-content">
 				<?php echo $args['before_title']; ?>Library Information<?php echo $args['after_title']; ?>
 
 				<?php openlab_library_information(); ?>
 
-				<?php echo $args['after_widget']; ?>
-			</div>
+				</div>
+			<?php echo $args['after_widget']; ?>
 		<?php endif; ?>
 
 		<style type="text/css">
