@@ -100,6 +100,37 @@ function openlab_default_group_avatar_img( $html ) {
 }
 add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
 
+/**
+ * List of valid user types.
+ */
+function openlab_valid_user_types() {
+	return [
+		'student' => [
+			'label' => 'Student',
+		],
+		'faculty' => [
+			'label' => 'Faculty',
+		],
+		'alumni' => [
+			'label' => 'Alumni',
+		],
+		'staff' => [
+			'label' => 'Staff',
+		],
+	];
+}
+
+/**
+ * Checks whether a user type is valid.
+ *
+ * @param string $user_type Expected lowercase.
+ * @return bool
+ */
+function openlab_user_type_is_valid( $user_type ) {
+	$all_types = openlab_valid_user_types();
+	return isset( $all_types[ $user_type ] );
+}
+
 //
 //   This function creates an excerpt of the string passed to the length specified and
 //   breaks on a word boundary
@@ -3071,7 +3102,7 @@ function openlab_sanitize_url_params( $url ) {
 	parse_str( $request_params, $params );
 	$param_keys = array_keys( $params );
 
-	if ( isset( $params['usertype'] ) && ! in_array( $params['usertype'], openlab_valid_user_types(), true ) ) {
+	if ( isset( $params['usertype'] ) && ! openlab_user_type_is_valid( $params['usertype'] ) ) {
 		unset( $params['usertype'] );
 	}
 

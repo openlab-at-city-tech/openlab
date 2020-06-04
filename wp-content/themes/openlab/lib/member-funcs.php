@@ -21,26 +21,21 @@ function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors) 
 add_action('xprofile_updated_profile', 'openlab_flush_user_cache_on_save', 10, 3);
 
 /**
- * List of valid user types.
- */
-function openlab_valid_user_types() {
-    return [ 'student', 'faculty', 'alumni', 'staff' ];
-}
-
-/**
  * 	People archive page
  *
  */
 function openlab_list_members($view) {
     global $wpdb, $bp, $members_template, $wp_query;
 
+	$valid_user_types = openlab_valid_user_types();
+
     // Set up variables
     // There are two ways to specify user type: through the page name, or a URL param
     $user_type = $sequence_type = $search_terms = $user_school = $user_dept = '';
-    if (!empty($_GET['usertype']) && $_GET['usertype'] != 'user_type_all') {
-        if ( in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
-            $user_type = wp_unslash( $_GET['usertype'] );
-            $user_type = ucwords( $user_type );
+    if ( ! empty( $_GET['usertype'] ) && $_GET['usertype'] !== 'user_type_all' ) {
+        if ( openlab_user_type_is_valid( $_GET['usertype'] ) ) {
+            $user_type_slug = wp_unslash( $_GET['usertype'] );
+            $user_type      = $valid_user_types[ $user_type_slug ];
         }
     } else {
         $post_obj = $wp_query->get_queried_object();

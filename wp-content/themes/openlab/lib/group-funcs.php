@@ -1319,7 +1319,7 @@ function openlab_current_directory_filters() {
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
 
-            if ( 'usertype' === $ftype && ! in_array( $fvalue, openlab_valid_user_types(), true ) ) {
+            if ( 'usertype' === $ftype && ! openlab_user_type_is_valid( $fvalue ) ) {
                 continue;
             }
 

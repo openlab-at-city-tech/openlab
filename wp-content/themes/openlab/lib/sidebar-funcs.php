@@ -338,7 +338,9 @@ function openlab_get_current_filter( $param ) {
 
 		case 'member_type' :
 			if ( isset( $_GET['member_type'] ) ) {
-				$user_types    = array_merge( openlab_valid_user_types(), [ 'user_type_all' ] );
+				$valid_user_types = openlab_valid_user_types();
+
+				$user_types    = array_merge( array_keys( $valid_user_types ), [ 'user_type_all' ] );
 				$user_type_raw = $_GET['member_type'];
 				if ( in_array( $user_type_raw, $user_types ) ) {
 					$value = $user_type_raw;
