@@ -10691,12 +10691,8 @@ body.single-event #content .eo-event-venue-map {
   font-size: 14px;
   margin: 12px 0 35px;
 }
-.col-help .page-title span {
-  color: #49cabe;
-}
 .col-help span.page-title {
   font-weight: 600;
-  color: #49cabe;
   margin: auto;
   padding: 0 7px;
 }
