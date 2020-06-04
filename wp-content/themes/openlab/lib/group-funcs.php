@@ -281,7 +281,7 @@ function openlab_group_archive() {
                                     </div>
                                 <?php elseif ($group_type == 'portfolio'): ?>
 
-                                    <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
+                                    <div class="info-line uppercase"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
 
                                 <?php endif; ?>
                                 <div class="description-line">
