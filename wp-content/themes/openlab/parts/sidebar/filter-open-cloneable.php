@@ -27,13 +27,17 @@ if ( ! $show_cloneable && ! $show_open ) {
 	<div class="form-group">
 		<?php if ( $show_open ) : ?>
 			<div class="sidebar-filter-checkbox">
-				<input type="checkbox" name="is_open" id="checkbox-is-open" <?php checked( $is_open ); ?> value="1" /> <label for="checkbox-is-open"><?php esc_html_e( 'Open', 'openlab-theme' ); ?></label>
+				<label for="checkbox-is-open">
+					<input type="checkbox" name="is_open" id="checkbox-is-open" <?php checked( $is_open ); ?> value="1" /> <?php esc_html_e( 'Open', 'openlab-theme' ); ?>
+				</label>
 			</div>
 		<?php endif; ?>
 
 		<?php if ( $show_cloneable ) : ?>
 			<div class="sidebar-filter-checkbox">
-				<input type="checkbox" name="is_cloneable" id="checkbox-is-cloneable" <?php checked( $is_cloneable ); ?> value="1" /> <label for="checkbox-is-cloneable"><?php esc_html_e( 'Cloneable', 'openlab-theme' ); ?></label>
+				<label for="checkbox-is-cloneable">
+					<input type="checkbox" name="is_cloneable" id="checkbox-is-cloneable" <?php checked( $is_cloneable ); ?> value="1" /> <?php esc_html_e( 'Cloneable', 'openlab-theme' ); ?>
+				</label>
 			</div>
 		<?php endif; ?>
 	</div>

@@ -2118,17 +2118,15 @@ body form{
 		float: left;
 		margin-right: 16px;
 		width: calc(50% - 16px);
-
-		label {
-			margin-left: 4px;
-		}
 	}
 }
 
 .sidebar-filter-checkbox {
 	label {
 		font-weight: normal;
-		margin-left: 4px;
+	}
+	input {
+		margin-right: 4px;
 	}
 }
 
@@ -2139,6 +2137,12 @@ body form{
 
 	.form-group {
 		margin-bottom: 0;
+	}
+
+	label {
+		padding-left: 24px;
+		text-indent: -24px;
+		max-width: 80%;
 	}
 }
 &.mobile-enabled{

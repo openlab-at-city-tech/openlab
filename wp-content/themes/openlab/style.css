@@ -9295,12 +9295,11 @@ body form .checkbox-list-container {
   margin-right: 16px;
   width: calc(50% - 16px);
 }
-.sidebar-filter-open-cloneable .sidebar-filter-checkbox label {
-  margin-left: 4px;
-}
 .sidebar-filter-checkbox label {
   font-weight: normal;
-  margin-left: 4px;
+}
+.sidebar-filter-checkbox input {
+  margin-right: 4px;
 }
 .sidebar-filter-badges {
   border-top: 1px solid #ccc;
@@ -9309,6 +9308,11 @@ body form .checkbox-list-container {
 }
 .sidebar-filter-badges .form-group {
   margin-bottom: 0;
+}
+.sidebar-filter-badges label {
+  padding-left: 24px;
+  text-indent: -24px;
+  max-width: 80%;
 }
 @media (max-width: 767px) {
   .mobile-enabled .sidebar-menu-wrapper {
