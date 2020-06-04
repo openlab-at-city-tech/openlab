@@ -1,0 +1,2232 @@
+@font-face {
+    font-family: "socicon";
+    src: url("fonts/socicon.eot");
+    src: url("fonts/socicon.eot?#iefix") format("embedded-opentype"), url("fonts/socicon.woff") format("woff"), url("fonts/socicon.ttf") format("truetype"), url("fonts/socicon.svg#socicon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+ul.mks_social_widget_ul li a:before {
+    font-family: "socicon" !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+ul.mks_social_widget_ul li:before,
+ul.mks_social_widget_ul li:after{
+    display: none;
+}
+
+
+ul.mks_social_widget_ul li a {
+    background: none;
+    display: block;
+    height: 48px;
+    width: 48px;
+    float: left;
+    margin-right: 5px;
+    font-size: 0px;
+    margin-bottom: 5px;
+    position: relative;
+    border: none !important;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    letter-spacing: normal;
+}
+
+ul.mks_social_widget_ul li a span {
+    margin: 0;
+    padding: 0;
+    font-size: 0px;
+}
+
+ul.mks_social_widget_ul li a:before {
+    color: #FFF;
+}
+
+ul.mks_social_widget_ul li a.soc_rounded {
+    border-radius: 20%;
+}
+
+ul.mks_social_widget_ul li a.soc_circle {
+    border-radius: 50%;
+}
+
+ul.mks_social_widget_ul li:hover a {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+ul.mks_social_widget_ul li {
+    display: inline-block;
+    vertical-align: top;
+    border: none !important;
+    padding: 0;
+}
+
+
+/*--------------------------------------------------
+			    OLD ICONS STYLES
+---------------------------------------------------*/
+
+ul.mks_social_widget_ul .socicon-aim {
+    background-color: #e95a00;
+}
+
+ul.mks_social_widget_ul .socicon-evernote {
+    background-color: #77ba2f;
+}
+
+ul.mks_social_widget_ul .socicon-cargo {
+    background-color: #00c462;
+}
+
+ul.mks_social_widget_ul .socicon-icloud {
+    background-color: #fb913f;
+}
+
+ul.mks_social_widget_ul .socicon-picasa {
+    background-color: #444;
+}
+
+ul.mks_social_widget_ul .socicon-posterous {
+    background-color: #f9d560;
+}
+
+ul.mks_social_widget_ul .socicon-tencent {
+    background-color: #389FDA;
+}
+
+ul.mks_social_widget_ul .socicon-me2day {
+    background-color: #4e28ac;
+}
+
+/* Old social icons that don't have font */
+ul.mks_social_widget_ul .socicon-aim {
+    background-image: url('../img/social_icons/aim_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-cargo {
+    background-image: url('../img/social_icons/cargo_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-evernote {
+    background-image: url('../img/social_icons/evernote_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-icloud {
+    background-image: url('../img/social_icons/icloud_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-picasa {
+    background-image: url('../img/social_icons/picasa_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-posterous {
+    background-image: url('../img/social_icons/posterous_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-tencent {
+    background-image: url('../img/social_icons/tencent_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul.mks_social_widget_ul .socicon-me2day {
+    background-image: url('../img/social_icons/me2day_ico.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+/*--------------------------------------------------
+			    NEW ICONS STYLES
+---------------------------------------------------*/
+
+ul.mks_social_widget_ul .socicon-500px {
+	background: #58a9de;
+}
+
+ul.mks_social_widget_ul .socicon-500px:before {
+	content: "\e000"
+}
+
+ul.mks_social_widget_ul .socicon-8tracks {
+	background: #122c4b;
+}
+
+ul.mks_social_widget_ul .socicon-8tracks:before {
+	content: "\e001"
+}
+
+ul.mks_social_widget_ul .socicon-airbnb {
+	background: #ff5a5f;
+}
+
+ul.mks_social_widget_ul .socicon-airbnb:before {
+	content: "\e002"
+}
+
+ul.mks_social_widget_ul .socicon-alliance {
+	background: #144587;
+}
+
+ul.mks_social_widget_ul .socicon-alliance:before {
+	content: "\e003"
+}
+
+ul.mks_social_widget_ul .socicon-amazon {
+	background: #ff9900;
+}
+
+ul.mks_social_widget_ul .socicon-amazon:before {
+	content: "\e004"
+}
+
+ul.mks_social_widget_ul .socicon-amplement {
+	background: #0996c3;
+}
+
+ul.mks_social_widget_ul .socicon-amplement:before {
+	content: "\e005"
+}
+
+ul.mks_social_widget_ul .socicon-android {
+	background: #8ec047;
+}
+
+ul.mks_social_widget_ul .socicon-android:before {
+	content: "\e006"
+}
+
+ul.mks_social_widget_ul .socicon-angellist {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-angellist:before {
+	content: "\e007"
+}
+
+ul.mks_social_widget_ul .socicon-apple {
+	background: #B9BFC1;
+}
+
+ul.mks_social_widget_ul .socicon-apple:before {
+	content: "\e008"
+}
+
+ul.mks_social_widget_ul .socicon-appnet {
+	background: #494949;
+}
+
+ul.mks_social_widget_ul .socicon-appnet:before {
+	content: "\e009"
+}
+
+ul.mks_social_widget_ul .socicon-baidu {
+	background: #2629d9;
+}
+
+ul.mks_social_widget_ul .socicon-baidu:before {
+	content: "\e00a"
+}
+
+ul.mks_social_widget_ul .socicon-bandcamp {
+	background: #619aa9;
+}
+
+ul.mks_social_widget_ul .socicon-bandcamp:before {
+	content: "\e00b"
+}
+
+ul.mks_social_widget_ul .socicon-battlenet {
+	background: #0096CD;
+}
+
+ul.mks_social_widget_ul .socicon-battlenet:before {
+	content: "\e00c"
+}
+
+ul.mks_social_widget_ul .socicon-mixer {
+	background: #1FBAED;
+}
+
+ul.mks_social_widget_ul .socicon-mixer:before {
+	content: "\e00d"
+}
+
+ul.mks_social_widget_ul .socicon-bebee {
+	background: #f28f16;
+}
+
+ul.mks_social_widget_ul .socicon-bebee:before {
+	content: "\e00e"
+}
+
+ul.mks_social_widget_ul .socicon-bebo {
+	background: #EF1011;
+}
+
+ul.mks_social_widget_ul .socicon-bebo:before {
+	content: "\e00f"
+}
+
+ul.mks_social_widget_ul .socicon-behance {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-behance:before {
+	content: "\e010"
+}
+
+ul.mks_social_widget_ul .socicon-blizzard {
+	background: #01B2F1;
+}
+
+ul.mks_social_widget_ul .socicon-blizzard:before {
+	content: "\e011"
+}
+
+ul.mks_social_widget_ul .socicon-blogger {
+	background: #ec661c;
+}
+
+ul.mks_social_widget_ul .socicon-blogger:before {
+	content: "\e012"
+}
+
+ul.mks_social_widget_ul .socicon-buffer {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-buffer:before {
+	content: "\e013"
+}
+
+ul.mks_social_widget_ul .socicon-chrome {
+	background: #757575;
+}
+
+ul.mks_social_widget_ul .socicon-chrome:before {
+	content: "\e014"
+}
+
+ul.mks_social_widget_ul .socicon-coderwall {
+	background: #3E8DCC;
+}
+
+ul.mks_social_widget_ul .socicon-coderwall:before {
+	content: "\e015"
+}
+
+ul.mks_social_widget_ul .socicon-curse {
+	background: #f26522;
+}
+
+ul.mks_social_widget_ul .socicon-curse:before {
+	content: "\e016"
+}
+
+ul.mks_social_widget_ul .socicon-dailymotion {
+	background: #004e72;
+}
+
+ul.mks_social_widget_ul .socicon-dailymotion:before {
+	content: "\e017"
+}
+
+ul.mks_social_widget_ul .socicon-deezer {
+	background: #32323d;
+}
+
+ul.mks_social_widget_ul .socicon-deezer:before {
+	content: "\e018"
+}
+
+ul.mks_social_widget_ul .socicon-delicious {
+	background: #020202;
+}
+
+ul.mks_social_widget_ul .socicon-delicious:before {
+	content: "\e019"
+}
+
+ul.mks_social_widget_ul .socicon-deviantart {
+	background: #c5d200;
+}
+
+ul.mks_social_widget_ul .socicon-deviantart:before {
+	content: "\e01a"
+}
+
+ul.mks_social_widget_ul .socicon-diablo {
+	background: #8B1209;
+}
+
+ul.mks_social_widget_ul .socicon-diablo:before {
+	content: "\e01b"
+}
+
+ul.mks_social_widget_ul .socicon-digg {
+	background: #1d1d1b;
+}
+
+ul.mks_social_widget_ul .socicon-digg:before {
+	content: "\e01c"
+}
+
+ul.mks_social_widget_ul .socicon-discord {
+	background: #7289da;
+}
+
+ul.mks_social_widget_ul .socicon-discord:before {
+	content: "\e01d"
+}
+
+ul.mks_social_widget_ul .socicon-disqus {
+	background: #2e9fff;
+}
+
+ul.mks_social_widget_ul .socicon-disqus:before {
+	content: "\e01e"
+}
+
+ul.mks_social_widget_ul .socicon-douban {
+	background: #3ca353;
+}
+
+ul.mks_social_widget_ul .socicon-douban:before {
+	content: "\e01f"
+}
+
+ul.mks_social_widget_ul .socicon-draugiem {
+	background: #ffa32b;
+}
+
+ul.mks_social_widget_ul .socicon-draugiem:before {
+	content: "\e020"
+}
+
+ul.mks_social_widget_ul .socicon-dribbble {
+	background: #e84d88;
+}
+
+ul.mks_social_widget_ul .socicon-dribbble:before {
+	content: "\e021"
+}
+
+ul.mks_social_widget_ul .socicon-drupal {
+	background: #00598e;
+}
+
+ul.mks_social_widget_ul .socicon-drupal:before {
+	content: "\e022"
+}
+
+ul.mks_social_widget_ul .socicon-ebay {
+	background: #333333;
+}
+
+ul.mks_social_widget_ul .socicon-ebay:before {
+	content: "\e023"
+}
+
+ul.mks_social_widget_ul .socicon-ello {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-ello:before {
+	content: "\e024"
+}
+
+ul.mks_social_widget_ul .socicon-endomondo {
+	background: #86ad00;
+}
+
+ul.mks_social_widget_ul .socicon-endomondo:before {
+	content: "\e025"
+}
+
+ul.mks_social_widget_ul .socicon-envato {
+	background: #597c3a;
+}
+
+ul.mks_social_widget_ul .socicon-envato:before {
+	content: "\e026"
+}
+
+ul.mks_social_widget_ul .socicon-etsy {
+	background: #F56400;
+}
+
+ul.mks_social_widget_ul .socicon-etsy:before {
+	content: "\e027"
+}
+
+ul.mks_social_widget_ul .socicon-facebook {
+	background: #3e5b98;
+}
+
+ul.mks_social_widget_ul .socicon-facebook:before {
+	content: "\e028"
+}
+
+ul.mks_social_widget_ul .socicon-feedburner {
+	background: #ffcc00;
+}
+
+ul.mks_social_widget_ul .socicon-feedburner:before {
+	content: "\e029"
+}
+
+ul.mks_social_widget_ul .socicon-filmweb {
+	background: #ffc404;
+}
+
+ul.mks_social_widget_ul .socicon-filmweb:before {
+	content: "\e02a"
+}
+
+ul.mks_social_widget_ul .socicon-firefox {
+	background: #484848;
+}
+
+ul.mks_social_widget_ul .socicon-firefox:before {
+	content: "\e02b"
+}
+
+ul.mks_social_widget_ul .socicon-flattr {
+	background: #F67C1A;
+}
+
+ul.mks_social_widget_ul .socicon-flattr:before {
+	content: "\e02c"
+}
+
+ul.mks_social_widget_ul .socicon-flickr {
+	background: #1e1e1b;
+}
+
+ul.mks_social_widget_ul .socicon-flickr:before {
+	content: "\e02d"
+}
+
+ul.mks_social_widget_ul .socicon-formulr {
+	background: #ff5a60;
+}
+
+ul.mks_social_widget_ul .socicon-formulr:before {
+	content: "\e02e"
+}
+
+ul.mks_social_widget_ul .socicon-forrst {
+	background: #5B9A68;
+}
+
+ul.mks_social_widget_ul .socicon-forrst:before {
+	content: "\e02f"
+}
+
+ul.mks_social_widget_ul .socicon-foursquare {
+	background: #f94877;
+}
+
+ul.mks_social_widget_ul .socicon-foursquare:before {
+	content: "\e030"
+}
+
+ul.mks_social_widget_ul .socicon-friendfeed {
+	background: #2F72C4;
+}
+
+ul.mks_social_widget_ul .socicon-friendfeed:before {
+	content: "\e031"
+}
+
+ul.mks_social_widget_ul .socicon-github {
+	background: #221e1b;
+}
+
+ul.mks_social_widget_ul .socicon-github:before {
+	content: "\e032"
+}
+
+ul.mks_social_widget_ul .socicon-goodreads {
+	background: #463020;
+}
+
+ul.mks_social_widget_ul .socicon-goodreads:before {
+	content: "\e033"
+}
+
+ul.mks_social_widget_ul .socicon-google {
+	background: #4285f4;
+}
+
+ul.mks_social_widget_ul .socicon-google:before {
+	content: "\e034"
+}
+
+ul.mks_social_widget_ul .socicon-googlegroups {
+	background: #4F8EF5;
+}
+
+ul.mks_social_widget_ul .socicon-googlegroups:before {
+	content: "\e036"
+}
+
+ul.mks_social_widget_ul .socicon-googlephotos {
+	background: #212121;
+}
+
+ul.mks_social_widget_ul .socicon-googlephotos:before {
+	content: "\e037"
+}
+
+ul.mks_social_widget_ul .socicon-googleplus {
+	background: #dd4b39;
+}
+
+ul.mks_social_widget_ul .socicon-googleplus:before {
+	content: "\e038"
+}
+
+ul.mks_social_widget_ul .socicon-googlescholar {
+	background: #4285f4;
+}
+
+ul.mks_social_widget_ul .socicon-googlescholar:before {
+	content: "\e035"
+}
+
+ul.mks_social_widget_ul .socicon-grooveshark {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-grooveshark:before {
+	content: "\e039"
+}
+
+ul.mks_social_widget_ul .socicon-hackerrank {
+	background: #2ec866;
+}
+
+ul.mks_social_widget_ul .socicon-hackerrank:before {
+	content: "\e03a"
+}
+
+ul.mks_social_widget_ul .socicon-hearthstone {
+	background: #EC9313;
+}
+
+ul.mks_social_widget_ul .socicon-hearthstone:before {
+	content: "\e03b"
+}
+
+ul.mks_social_widget_ul .socicon-hellocoton {
+	background: #d30d66;
+}
+
+ul.mks_social_widget_ul .socicon-hellocoton:before {
+	content: "\e03c"
+}
+
+ul.mks_social_widget_ul .socicon-heroes {
+	background: #2397F7;
+}
+
+ul.mks_social_widget_ul .socicon-heroes:before {
+	content: "\e03d"
+}
+
+ul.mks_social_widget_ul .socicon-hitbox {
+	background: #99CC00;
+}
+
+ul.mks_social_widget_ul .socicon-hitbox:before {
+	content: "\e03e"
+}
+
+ul.mks_social_widget_ul .socicon-horde {
+	background: #84121C;
+}
+
+ul.mks_social_widget_ul .socicon-horde:before {
+	content: "\e03f"
+}
+
+ul.mks_social_widget_ul .socicon-houzz {
+	background: #7CC04B;
+}
+
+ul.mks_social_widget_ul .socicon-houzz:before {
+	content: "\e040"
+}
+
+ul.mks_social_widget_ul .socicon-icq {
+	background: #7EBD00;
+}
+
+ul.mks_social_widget_ul .socicon-icq:before {
+	content: "\e041"
+}
+
+ul.mks_social_widget_ul .socicon-identica {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-identica:before {
+	content: "\e042"
+}
+
+ul.mks_social_widget_ul .socicon-imdb {
+	background: #E8BA00;
+}
+
+ul.mks_social_widget_ul .socicon-imdb:before {
+	content: "\e043"
+}
+
+ul.mks_social_widget_ul .socicon-instagram {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-instagram:before {
+	content: "\e044"
+}
+
+ul.mks_social_widget_ul .socicon-issuu {
+	background: #F26F61;
+}
+
+ul.mks_social_widget_ul .socicon-issuu:before {
+	content: "\e045"
+}
+
+ul.mks_social_widget_ul .socicon-istock {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-istock:before {
+	content: "\e046"
+}
+
+ul.mks_social_widget_ul .socicon-itunes {
+	background: #ff5e51;
+}
+
+ul.mks_social_widget_ul .socicon-itunes:before {
+	content: "\e047"
+}
+
+ul.mks_social_widget_ul .socicon-keybase {
+	background: #FF7100;
+}
+
+ul.mks_social_widget_ul .socicon-keybase:before {
+	content: "\e048"
+}
+
+ul.mks_social_widget_ul .socicon-lanyrd {
+	background: #3c80c9;
+}
+
+ul.mks_social_widget_ul .socicon-lanyrd:before {
+	content: "\e049"
+}
+
+ul.mks_social_widget_ul .socicon-lastfm {
+	background: #d41316;
+}
+
+ul.mks_social_widget_ul .socicon-lastfm:before {
+	content: "\e04a"
+}
+
+ul.mks_social_widget_ul .socicon-line {
+	background: #00B901;
+}
+
+ul.mks_social_widget_ul .socicon-line:before {
+	content: "\e04b"
+}
+
+ul.mks_social_widget_ul .socicon-linkedin {
+	background: #3371b7;
+}
+
+ul.mks_social_widget_ul .socicon-linkedin:before {
+	content: "\e04c"
+}
+
+ul.mks_social_widget_ul .socicon-livejournal {
+	background: #0099CC;
+}
+
+ul.mks_social_widget_ul .socicon-livejournal:before {
+	content: "\e04d"
+}
+
+ul.mks_social_widget_ul .socicon-lyft {
+	background: #FF00BF;
+}
+
+ul.mks_social_widget_ul .socicon-lyft:before {
+	content: "\e04e"
+}
+
+ul.mks_social_widget_ul .socicon-macos {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-macos:before {
+	content: "\e04f"
+}
+
+ul.mks_social_widget_ul .socicon-mail {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-mail:before {
+	content: "\e050"
+}
+
+ul.mks_social_widget_ul .socicon-medium {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-medium:before {
+	content: "\e051"
+}
+
+ul.mks_social_widget_ul .socicon-meetup {
+	background: #e2373c;
+}
+
+ul.mks_social_widget_ul .socicon-meetup:before {
+	content: "\e052"
+}
+
+ul.mks_social_widget_ul .socicon-mixcloud {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-mixcloud:before {
+	content: "\e053"
+}
+
+ul.mks_social_widget_ul .socicon-modelmayhem {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-modelmayhem:before {
+	content: "\e054"
+}
+
+ul.mks_social_widget_ul .socicon-mumble {
+	background: #5AB5D1;
+}
+
+ul.mks_social_widget_ul .socicon-mumble:before {
+	content: "\e055"
+}
+
+ul.mks_social_widget_ul .socicon-myspace {
+	background: #323232;
+}
+
+ul.mks_social_widget_ul .socicon-myspace:before {
+	content: "\e056"
+}
+
+ul.mks_social_widget_ul .socicon-newsvine {
+	background: #075B2F;
+}
+
+ul.mks_social_widget_ul .socicon-newsvine:before {
+	content: "\e057"
+}
+
+ul.mks_social_widget_ul .socicon-nintendo {
+	background: #F58A33;
+}
+
+ul.mks_social_widget_ul .socicon-nintendo:before {
+	content: "\e058"
+}
+
+ul.mks_social_widget_ul .socicon-npm {
+	background: #C12127;
+}
+
+ul.mks_social_widget_ul .socicon-npm:before {
+	content: "\e059"
+}
+
+ul.mks_social_widget_ul .socicon-odnoklassniki {
+	background: #f48420;
+}
+
+ul.mks_social_widget_ul .socicon-odnoklassniki:before {
+	content: "\e05a"
+}
+
+ul.mks_social_widget_ul .socicon-openid {
+	background: #f78c40;
+}
+
+ul.mks_social_widget_ul .socicon-openid:before {
+	content: "\e05b"
+}
+
+ul.mks_social_widget_ul .socicon-opera {
+	background: #FF1B2D;
+}
+
+ul.mks_social_widget_ul .socicon-opera:before {
+	content: "\e05c"
+}
+
+ul.mks_social_widget_ul .socicon-outlook {
+	background: #0072C6;
+}
+
+ul.mks_social_widget_ul .socicon-outlook:before {
+	content: "\e05d"
+}
+
+ul.mks_social_widget_ul .socicon-overwatch {
+	background: #9E9E9E;
+}
+
+ul.mks_social_widget_ul .socicon-overwatch:before {
+	content: "\e05e"
+}
+
+ul.mks_social_widget_ul .socicon-patreon {
+	background: #F96854;
+}
+
+ul.mks_social_widget_ul .socicon-patreon:before {
+	content: "\e05f"
+}
+
+ul.mks_social_widget_ul .socicon-paypal {
+	background: #009cde;
+}
+
+ul.mks_social_widget_ul .socicon-paypal:before {
+	content: "\e060"
+}
+
+ul.mks_social_widget_ul .socicon-periscope {
+	background: #3AA4C6;
+}
+
+ul.mks_social_widget_ul .socicon-periscope:before {
+	content: "\e061"
+}
+
+ul.mks_social_widget_ul .socicon-persona {
+	background: #e6753d;
+}
+
+ul.mks_social_widget_ul .socicon-persona:before {
+	content: "\e062"
+}
+
+ul.mks_social_widget_ul .socicon-pinterest {
+	background: #c92619;
+}
+
+ul.mks_social_widget_ul .socicon-pinterest:before {
+	content: "\e063"
+}
+
+ul.mks_social_widget_ul .socicon-play {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-play:before {
+	content: "\e064"
+}
+
+ul.mks_social_widget_ul .socicon-player {
+	background: #6E41BD;
+}
+
+ul.mks_social_widget_ul .socicon-player:before {
+	content: "\e065"
+}
+
+ul.mks_social_widget_ul .socicon-playstation {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-playstation:before {
+	content: "\e066"
+}
+
+ul.mks_social_widget_ul .socicon-pocket {
+	background: #ED4055;
+}
+
+ul.mks_social_widget_ul .socicon-pocket:before {
+	content: "\e067"
+}
+
+ul.mks_social_widget_ul .socicon-qq {
+	background: #4297d3;
+}
+
+ul.mks_social_widget_ul .socicon-qq:before {
+	content: "\e068"
+}
+
+ul.mks_social_widget_ul .socicon-quora {
+	background: #cb202d;
+}
+
+ul.mks_social_widget_ul .socicon-quora:before {
+	content: "\e069"
+}
+
+ul.mks_social_widget_ul .socicon-raidcall {
+	background: #073558;
+}
+
+ul.mks_social_widget_ul .socicon-raidcall:before {
+	content: "\e06a"
+}
+
+ul.mks_social_widget_ul .socicon-ravelry {
+	background: #B6014C;
+}
+
+ul.mks_social_widget_ul .socicon-ravelry:before {
+	content: "\e06b"
+}
+
+ul.mks_social_widget_ul .socicon-reddit {
+	background: #e74a1e;
+}
+
+ul.mks_social_widget_ul .socicon-reddit:before {
+	content: "\e06c"
+}
+
+ul.mks_social_widget_ul .socicon-renren {
+	background: #2266b0;
+}
+
+ul.mks_social_widget_ul .socicon-renren:before {
+	content: "\e06d"
+}
+
+ul.mks_social_widget_ul .socicon-researchgate {
+	background: #00CCBB;
+}
+
+ul.mks_social_widget_ul .socicon-researchgate:before {
+	content: "\e06e"
+}
+
+ul.mks_social_widget_ul .socicon-residentadvisor {
+	background: #B3BE1B;
+}
+
+ul.mks_social_widget_ul .socicon-residentadvisor:before {
+	content: "\e06f"
+}
+
+ul.mks_social_widget_ul .socicon-reverbnation {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-reverbnation:before {
+	content: "\e070"
+}
+
+ul.mks_social_widget_ul .socicon-rss {
+	background: #f26109;
+}
+
+ul.mks_social_widget_ul .socicon-rss:before {
+	content: "\e071"
+}
+
+ul.mks_social_widget_ul .socicon-sharethis {
+	background: #01bf01;
+}
+
+ul.mks_social_widget_ul .socicon-sharethis:before {
+	content: "\e072"
+}
+
+ul.mks_social_widget_ul .socicon-skype {
+	background: #28abe3;
+}
+
+ul.mks_social_widget_ul .socicon-skype:before {
+	content: "\e073"
+}
+
+ul.mks_social_widget_ul .socicon-slideshare {
+	background: #4ba3a6;
+}
+
+ul.mks_social_widget_ul .socicon-slideshare:before {
+	content: "\e074"
+}
+
+ul.mks_social_widget_ul .socicon-smugmug {
+	background: #ACFD32;
+}
+
+ul.mks_social_widget_ul .socicon-smugmug:before {
+	content: "\e075"
+}
+
+ul.mks_social_widget_ul .socicon-snapchat {
+	background: #fffa37;
+}
+
+ul.mks_social_widget_ul .socicon-snapchat:before {
+	content: "\e076"
+}
+
+ul.mks_social_widget_ul .socicon-songkick {
+	background: #F80046;
+}
+
+ul.mks_social_widget_ul .socicon-songkick:before {
+	content: "\e077"
+}
+
+ul.mks_social_widget_ul .socicon-soundcloud {
+	background: #fe3801;
+}
+
+ul.mks_social_widget_ul .socicon-soundcloud:before {
+	content: "\e078"
+}
+
+ul.mks_social_widget_ul .socicon-spotify {
+	background: #7bb342;
+}
+
+ul.mks_social_widget_ul .socicon-spotify:before {
+	content: "\e079"
+}
+
+ul.mks_social_widget_ul .socicon-stackexchange {
+	background: #2f2f2f;
+}
+
+ul.mks_social_widget_ul .socicon-stackexchange:before {
+	content: "\e07a"
+}
+
+ul.mks_social_widget_ul .socicon-stackoverflow {
+	background: #FD9827;
+}
+
+ul.mks_social_widget_ul .socicon-stackoverflow:before {
+	content: "\e07b"
+}
+
+ul.mks_social_widget_ul .socicon-starcraft {
+	background: #002250;
+}
+
+ul.mks_social_widget_ul .socicon-starcraft:before {
+	content: "\e07c"
+}
+
+ul.mks_social_widget_ul .socicon-stayfriends {
+	background: #F08A1C;
+}
+
+ul.mks_social_widget_ul .socicon-stayfriends:before {
+	content: "\e07d"
+}
+
+ul.mks_social_widget_ul .socicon-steam {
+	background: #171a21;
+}
+
+ul.mks_social_widget_ul .socicon-steam:before {
+	content: "\e07e"
+}
+
+ul.mks_social_widget_ul .socicon-storehouse {
+	background: #25B0E6;
+}
+
+ul.mks_social_widget_ul .socicon-storehouse:before {
+	content: "\e07f"
+}
+
+ul.mks_social_widget_ul .socicon-strava {
+	background: #FC4C02;
+}
+
+ul.mks_social_widget_ul .socicon-strava:before {
+	content: "\e080"
+}
+
+ul.mks_social_widget_ul .socicon-streamjar {
+	background: #503a60;
+}
+
+ul.mks_social_widget_ul .socicon-streamjar:before {
+	content: "\e081"
+}
+
+ul.mks_social_widget_ul .socicon-stumbleupon {
+	background: #e64011;
+}
+
+ul.mks_social_widget_ul .socicon-stumbleupon:before {
+	content: "\e082"
+}
+
+ul.mks_social_widget_ul .socicon-swarm {
+	background: #FC9D3C;
+}
+
+ul.mks_social_widget_ul .socicon-swarm:before {
+	content: "\e083"
+}
+
+ul.mks_social_widget_ul .socicon-teamspeak {
+	background: #465674;
+}
+
+ul.mks_social_widget_ul .socicon-teamspeak:before {
+	content: "\e084"
+}
+
+ul.mks_social_widget_ul .socicon-teamviewer {
+	background: #168EF4;
+}
+
+ul.mks_social_widget_ul .socicon-teamviewer:before {
+	content: "\e085"
+}
+
+ul.mks_social_widget_ul .socicon-technorati {
+	background: #5cb030;
+}
+
+ul.mks_social_widget_ul .socicon-technorati:before {
+	content: "\e086"
+}
+
+ul.mks_social_widget_ul .socicon-telegram {
+	background: #0088cc;
+}
+
+ul.mks_social_widget_ul .socicon-telegram:before {
+	content: "\e087"
+}
+
+ul.mks_social_widget_ul .socicon-tripadvisor {
+	background: #4B7E37;
+}
+
+ul.mks_social_widget_ul .socicon-tripadvisor:before {
+	content: "\e088"
+}
+
+ul.mks_social_widget_ul .socicon-tripit {
+	background: #1982C3;
+}
+
+ul.mks_social_widget_ul .socicon-tripit:before {
+	content: "\e089"
+}
+
+ul.mks_social_widget_ul .socicon-triplej {
+	background: #E53531;
+}
+
+ul.mks_social_widget_ul .socicon-triplej:before {
+	content: "\e08a"
+}
+
+ul.mks_social_widget_ul .socicon-tumblr {
+	background: #45556c;
+}
+
+ul.mks_social_widget_ul .socicon-tumblr:before {
+	content: "\e08b"
+}
+
+ul.mks_social_widget_ul .socicon-twitch {
+	background: #6441a5;
+}
+
+ul.mks_social_widget_ul .socicon-twitch:before {
+	content: "\e08c"
+}
+
+ul.mks_social_widget_ul .socicon-twitter {
+	background: #4da7de;
+}
+
+ul.mks_social_widget_ul .socicon-twitter:before {
+	content: "\e08d"
+}
+
+ul.mks_social_widget_ul .socicon-uber {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-uber:before {
+	content: "\e08e"
+}
+
+ul.mks_social_widget_ul .socicon-ventrilo {
+	background: #77808A;
+}
+
+ul.mks_social_widget_ul .socicon-ventrilo:before {
+	content: "\e08f"
+}
+
+ul.mks_social_widget_ul .socicon-viadeo {
+	background: #e4a000;
+}
+
+ul.mks_social_widget_ul .socicon-viadeo:before {
+	content: "\e090"
+}
+
+ul.mks_social_widget_ul .socicon-viber {
+	background: #7b519d;
+}
+
+ul.mks_social_widget_ul .socicon-viber:before {
+	content: "\e091"
+}
+
+ul.mks_social_widget_ul .socicon-viewbug {
+	background: #2B9FCF;
+}
+
+ul.mks_social_widget_ul .socicon-viewbug:before {
+	content: "\e092"
+}
+
+ul.mks_social_widget_ul .socicon-vimeo {
+	background: #51b5e7;
+}
+
+ul.mks_social_widget_ul .socicon-vimeo:before {
+	content: "\e093"
+}
+
+ul.mks_social_widget_ul .socicon-vine {
+	background: #00b389;
+}
+
+ul.mks_social_widget_ul .socicon-vine:before {
+	content: "\e094"
+}
+
+ul.mks_social_widget_ul .socicon-vkontakte {
+	background: #5a7fa6;
+}
+
+ul.mks_social_widget_ul .socicon-vkontakte:before {
+	content: "\e095"
+}
+
+ul.mks_social_widget_ul .socicon-warcraft {
+	background: #1EB10A;
+}
+
+ul.mks_social_widget_ul .socicon-warcraft:before {
+	content: "\e096"
+}
+
+ul.mks_social_widget_ul .socicon-wechat {
+	background: #09b507;
+}
+
+ul.mks_social_widget_ul .socicon-wechat:before {
+	content: "\e097"
+}
+
+ul.mks_social_widget_ul .socicon-weibo {
+	background: #e31c34;
+}
+
+ul.mks_social_widget_ul .socicon-weibo:before {
+	content: "\e098"
+}
+
+ul.mks_social_widget_ul .socicon-whatsapp {
+	background: #20B038;
+}
+
+ul.mks_social_widget_ul .socicon-whatsapp:before {
+	content: "\e099"
+}
+
+ul.mks_social_widget_ul .socicon-wikipedia {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-wikipedia:before {
+	content: "\e09a"
+}
+
+ul.mks_social_widget_ul .socicon-windows {
+	background: #00BDF6;
+}
+
+ul.mks_social_widget_ul .socicon-windows:before {
+	content: "\e09b"
+}
+
+ul.mks_social_widget_ul .socicon-wordpress {
+	background: #464646;
+}
+
+ul.mks_social_widget_ul .socicon-wordpress:before {
+	content: "\e09c"
+}
+
+ul.mks_social_widget_ul .socicon-wykop {
+	background: #328efe;
+}
+
+ul.mks_social_widget_ul .socicon-wykop:before {
+	content: "\e09d"
+}
+
+ul.mks_social_widget_ul .socicon-xbox {
+	background: #92C83E;
+}
+
+ul.mks_social_widget_ul .socicon-xbox:before {
+	content: "\e09e"
+}
+
+ul.mks_social_widget_ul .socicon-xing {
+	background: #005a60;
+}
+
+ul.mks_social_widget_ul .socicon-xing:before {
+	content: "\e09f"
+}
+
+ul.mks_social_widget_ul .socicon-yahoo {
+	background: #6e2a85;
+}
+
+ul.mks_social_widget_ul .socicon-yahoo:before {
+	content: "\e0a0"
+}
+
+ul.mks_social_widget_ul .socicon-yammer {
+	background: #1175C4;
+}
+
+ul.mks_social_widget_ul .socicon-yammer:before {
+	content: "\e0a1"
+}
+
+ul.mks_social_widget_ul .socicon-yandex {
+	background: #FF0000;
+}
+
+ul.mks_social_widget_ul .socicon-yandex:before {
+	content: "\e0a2"
+}
+
+ul.mks_social_widget_ul .socicon-yelp {
+	background: #c83218;
+}
+
+ul.mks_social_widget_ul .socicon-yelp:before {
+	content: "\e0a3"
+}
+
+ul.mks_social_widget_ul .socicon-younow {
+	background: #61C03E;
+}
+
+ul.mks_social_widget_ul .socicon-younow:before {
+	content: "\e0a4"
+}
+
+ul.mks_social_widget_ul .socicon-youtube {
+	background: #e02a20;
+}
+
+ul.mks_social_widget_ul .socicon-youtube:before {
+	content: "\e0a5"
+}
+
+ul.mks_social_widget_ul .socicon-zapier {
+	background: #FF4A00;
+}
+
+ul.mks_social_widget_ul .socicon-zapier:before {
+	content: "\e0a6"
+}
+
+ul.mks_social_widget_ul .socicon-zerply {
+	background: #9DBC7A;
+}
+
+ul.mks_social_widget_ul .socicon-zerply:before {
+	content: "\e0a7"
+}
+
+ul.mks_social_widget_ul .socicon-zomato {
+	background: #cb202d;
+}
+
+ul.mks_social_widget_ul .socicon-zomato:before {
+	content: "\e0a8"
+}
+
+ul.mks_social_widget_ul .socicon-zynga {
+	background: #DC0606;
+}
+
+ul.mks_social_widget_ul .socicon-zynga:before {
+	content: "\e0a9"
+}
+
+ul.mks_social_widget_ul .socicon-spreadshirt {
+	background: #00b2a6;
+}
+
+ul.mks_social_widget_ul .socicon-spreadshirt:before {
+	content: "\e900"
+}
+
+ul.mks_social_widget_ul .socicon-trello {
+	background: #0079bf;
+}
+
+ul.mks_social_widget_ul .socicon-trello:before {
+	content: "\e902"
+}
+
+ul.mks_social_widget_ul .socicon-gamejolt {
+	background: #191919;
+}
+
+ul.mks_social_widget_ul .socicon-gamejolt:before {
+	content: "\e901"
+}
+
+ul.mks_social_widget_ul .socicon-tunein {
+	background: #36b4a7;
+}
+
+ul.mks_social_widget_ul .socicon-tunein:before {
+	content: "\e903"
+}
+
+ul.mks_social_widget_ul .socicon-bloglovin {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-bloglovin:before {
+	content: "\e904"
+}
+
+ul.mks_social_widget_ul .socicon-gamewisp {
+	background: #F8A853;
+}
+
+ul.mks_social_widget_ul .socicon-gamewisp:before {
+	content: "\e905"
+}
+
+ul.mks_social_widget_ul .socicon-messenger {
+	background: #0084ff;
+}
+
+ul.mks_social_widget_ul .socicon-messenger:before {
+	content: "\e906"
+}
+
+ul.mks_social_widget_ul .socicon-pandora {
+	background: #224099;
+}
+
+ul.mks_social_widget_ul .socicon-pandora:before {
+	content: "\e907"
+}
+
+ul.mks_social_widget_ul .socicon-microsoft {
+	background: #666666;
+}
+
+ul.mks_social_widget_ul .socicon-microsoft:before {
+	content: "\e90e"
+}
+
+ul.mks_social_widget_ul .socicon-mobcrush {
+	background: #FFEE00;
+}
+
+ul.mks_social_widget_ul .socicon-mobcrush:before {
+	content: "\e90d"
+}
+
+ul.mks_social_widget_ul .socicon-sketchfab {
+	background: #00A5D6;
+}
+
+ul.mks_social_widget_ul .socicon-sketchfab:before {
+	content: "\e90c"
+}
+
+ul.mks_social_widget_ul .socicon-yt-gaming {
+	background: #E91D00;
+}
+
+ul.mks_social_widget_ul .socicon-yt-gaming:before {
+	content: "\e90b"
+}
+
+ul.mks_social_widget_ul .socicon-fyuse {
+	background: #FF3143;
+}
+
+ul.mks_social_widget_ul .socicon-fyuse:before {
+	content: "\e90a"
+}
+
+ul.mks_social_widget_ul .socicon-bitbucket {
+	background: #243759;
+}
+
+ul.mks_social_widget_ul .socicon-bitbucket:before {
+	content: "\e909"
+}
+
+ul.mks_social_widget_ul .socicon-augment {
+	background: #E71204;
+}
+
+ul.mks_social_widget_ul .socicon-augment:before {
+	content: "\e908"
+}
+
+ul.mks_social_widget_ul .socicon-toneden {
+	background: #777BF9;
+}
+
+ul.mks_social_widget_ul .socicon-toneden:before {
+	content: "\e93a"
+}
+
+ul.mks_social_widget_ul .socicon-niconico {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-niconico:before {
+	content: "\e939"
+}
+
+ul.mks_social_widget_ul .socicon-zillow {
+	background: #0074e4;
+}
+
+ul.mks_social_widget_ul .socicon-zillow:before {
+	content: "\e938"
+}
+
+ul.mks_social_widget_ul .socicon-googlemaps {
+	background: #4285F4;
+}
+
+ul.mks_social_widget_ul .socicon-googlemaps:before {
+	content: "\e937"
+}
+
+ul.mks_social_widget_ul .socicon-booking {
+	background: #003580;
+}
+
+ul.mks_social_widget_ul .socicon-booking:before {
+	content: "\e936"
+}
+
+ul.mks_social_widget_ul .socicon-fundable {
+	background: #1d181f;
+}
+
+ul.mks_social_widget_ul .socicon-fundable:before {
+	content: "\e935"
+}
+
+ul.mks_social_widget_ul .socicon-upwork {
+	background: #5BBC2F;
+}
+
+ul.mks_social_widget_ul .socicon-upwork:before {
+	content: "\e934"
+}
+
+ul.mks_social_widget_ul .socicon-ghost {
+	background: #33393C;
+}
+
+ul.mks_social_widget_ul .socicon-ghost:before {
+	content: "\e933"
+}
+
+ul.mks_social_widget_ul .socicon-loomly {
+	background: #00425f;
+}
+
+ul.mks_social_widget_ul .socicon-loomly:before {
+	content: "\e932"
+}
+
+ul.mks_social_widget_ul .socicon-trulia {
+	background: #20BF63;
+}
+
+ul.mks_social_widget_ul .socicon-trulia:before {
+	content: "\e931"
+}
+
+ul.mks_social_widget_ul .socicon-ask {
+	background: #CF0000;
+}
+
+ul.mks_social_widget_ul .socicon-ask:before {
+	content: "\e930"
+}
+
+ul.mks_social_widget_ul .socicon-gust {
+	background: #1E2E3E;
+}
+
+ul.mks_social_widget_ul .socicon-gust:before {
+	content: "\e92f"
+}
+
+ul.mks_social_widget_ul .socicon-toptal {
+	background: #4C73AA;
+}
+
+ul.mks_social_widget_ul .socicon-toptal:before {
+	content: "\e92e"
+}
+
+ul.mks_social_widget_ul .socicon-squarespace {
+	background: #121212;
+}
+
+ul.mks_social_widget_ul .socicon-squarespace:before {
+	content: "\e92d"
+}
+
+ul.mks_social_widget_ul .socicon-bonanza {
+	background: #62764A;
+}
+
+ul.mks_social_widget_ul .socicon-bonanza:before {
+	content: "\e92c"
+}
+
+ul.mks_social_widget_ul .socicon-doodle {
+	background: #0064DC;
+}
+
+ul.mks_social_widget_ul .socicon-doodle:before {
+	content: "\e92b"
+}
+
+ul.mks_social_widget_ul .socicon-bing {
+	background: #008485;
+}
+
+ul.mks_social_widget_ul .socicon-bing:before {
+	content: "\e92a"
+}
+
+ul.mks_social_widget_ul .socicon-seedrs {
+	background: #7FBB31;
+}
+
+ul.mks_social_widget_ul .socicon-seedrs:before {
+	content: "\e929"
+}
+
+ul.mks_social_widget_ul .socicon-freelancer {
+	background: #0088CA;
+}
+
+ul.mks_social_widget_ul .socicon-freelancer:before {
+	content: "\e928"
+}
+
+ul.mks_social_widget_ul .socicon-shopify {
+	background: #5C6AC4;
+}
+
+ul.mks_social_widget_ul .socicon-shopify:before {
+	content: "\e927"
+}
+
+ul.mks_social_widget_ul .socicon-googlecalendar {
+	background: #3D81F6;
+}
+
+ul.mks_social_widget_ul .socicon-googlecalendar:before {
+	content: "\e926"
+}
+
+ul.mks_social_widget_ul .socicon-redfin {
+	background: #C82022;
+}
+
+ul.mks_social_widget_ul .socicon-redfin:before {
+	content: "\e925"
+}
+
+ul.mks_social_widget_ul .socicon-wix {
+	background: #0096FF;
+}
+
+ul.mks_social_widget_ul .socicon-wix:before {
+	content: "\e924"
+}
+
+ul.mks_social_widget_ul .socicon-craigslist {
+	background: #561A8B;
+}
+
+ul.mks_social_widget_ul .socicon-craigslist:before {
+	content: "\e923"
+}
+
+ul.mks_social_widget_ul .socicon-alibaba {
+	background: #FF6A00;
+}
+
+ul.mks_social_widget_ul .socicon-alibaba:before {
+	content: "\e922"
+}
+
+ul.mks_social_widget_ul .socicon-zoom {
+	background: #2D8CFF;
+}
+
+ul.mks_social_widget_ul .socicon-zoom:before {
+	content: "\e921"
+}
+
+ul.mks_social_widget_ul .socicon-homes {
+	background: #F7841B;
+}
+
+ul.mks_social_widget_ul .socicon-homes:before {
+	content: "\e920"
+}
+
+ul.mks_social_widget_ul .socicon-appstore {
+	background: #007AFF;
+}
+
+ul.mks_social_widget_ul .socicon-appstore:before {
+	content: "\e91f"
+}
+
+ul.mks_social_widget_ul .socicon-guru {
+	background: #4C81C0;
+}
+
+ul.mks_social_widget_ul .socicon-guru:before {
+	content: "\e91e"
+}
+
+ul.mks_social_widget_ul .socicon-aliexpress {
+	background: #E92C00;
+}
+
+ul.mks_social_widget_ul .socicon-aliexpress:before {
+	content: "\e91d"
+}
+
+ul.mks_social_widget_ul .socicon-gotomeeting {
+	background: #FD7A2B;
+}
+
+ul.mks_social_widget_ul .socicon-gotomeeting:before {
+	content: "\e91c"
+}
+
+ul.mks_social_widget_ul .socicon-fiverr {
+	background: #0DB62A;
+}
+
+ul.mks_social_widget_ul .socicon-fiverr:before {
+	content: "\e91b"
+}
+
+ul.mks_social_widget_ul .socicon-logmein {
+	background: #45B6F3;
+}
+
+ul.mks_social_widget_ul .socicon-logmein:before {
+	content: "\e91a"
+}
+
+ul.mks_social_widget_ul .socicon-openaigym {
+	background: #29A8B3;
+}
+
+ul.mks_social_widget_ul .socicon-openaigym:before {
+	content: "\e919"
+}
+
+ul.mks_social_widget_ul .socicon-slack {
+	background: #4B6BC6;
+}
+
+ul.mks_social_widget_ul .socicon-slack:before {
+	content: "\e918"
+}
+
+ul.mks_social_widget_ul .socicon-codepen {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-codepen:before {
+	content: "\e917"
+}
+
+ul.mks_social_widget_ul .socicon-angieslist {
+	background: #299F37;
+}
+
+ul.mks_social_widget_ul .socicon-angieslist:before {
+	content: "\e916"
+}
+
+ul.mks_social_widget_ul .socicon-homeadvisor {
+	background: #EF8B1D;
+}
+
+ul.mks_social_widget_ul .socicon-homeadvisor:before {
+	content: "\e915"
+}
+
+ul.mks_social_widget_ul .socicon-unsplash {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-unsplash:before {
+	content: "\e914"
+}
+
+ul.mks_social_widget_ul .socicon-mastodon {
+	background: #2986D6;
+}
+
+ul.mks_social_widget_ul .socicon-mastodon:before {
+	content: "\e913"
+}
+
+ul.mks_social_widget_ul .socicon-natgeo {
+	background: #222222;
+}
+
+ul.mks_social_widget_ul .socicon-natgeo:before {
+	content: "\e912"
+}
+
+ul.mks_social_widget_ul .socicon-qobuz {
+	background: #298FBF;
+}
+
+ul.mks_social_widget_ul .socicon-qobuz:before {
+	content: "\e911"
+}
+
+ul.mks_social_widget_ul .socicon-tidal {
+	background: #01FFFF;
+}
+
+ul.mks_social_widget_ul .socicon-tidal:before {
+	content: "\e910"
+}
+
+ul.mks_social_widget_ul .socicon-realtor {
+	background: #D52228;
+}
+
+ul.mks_social_widget_ul .socicon-realtor:before {
+	content: "\e90f"
+}
+
+ul.mks_social_widget_ul .socicon-calendly {
+	background: #00a3fa;
+}
+
+ul.mks_social_widget_ul .socicon-calendly:before {
+	content: "\e93d"
+}
+
+ul.mks_social_widget_ul .socicon-homify {
+	background: #7DCDA3;
+}
+
+ul.mks_social_widget_ul .socicon-homify:before {
+	content: "\e93c"
+}
+
+ul.mks_social_widget_ul .socicon-crunchbase {
+	background: #0288d1;
+}
+
+ul.mks_social_widget_ul .socicon-crunchbase:before {
+	content: "\e93b"
+}
+
+ul.mks_social_widget_ul .socicon-livemaster {
+	background: #e76d00;
+}
+
+ul.mks_social_widget_ul .socicon-livemaster:before {
+	content: "\e93e"
+}
+
+ul.mks_social_widget_ul .socicon-udemy {
+	background: #17aa1c;
+}
+
+ul.mks_social_widget_ul .socicon-udemy:before {
+	content: "\e93f"
+}
+
+ul.mks_social_widget_ul .socicon-nextdoor {
+	background: #01B247;
+}
+
+ul.mks_social_widget_ul .socicon-nextdoor:before {
+	content: "\e942"
+}
+
+ul.mks_social_widget_ul .socicon-origin {
+	background: #F56C2E;
+}
+
+ul.mks_social_widget_ul .socicon-origin:before {
+	content: "\e941"
+}
+
+ul.mks_social_widget_ul .socicon-codered {
+	background: #FF033B;
+}
+
+ul.mks_social_widget_ul .socicon-codered:before {
+	content: "\e940"
+}
+
+ul.mks_social_widget_ul .socicon-portfolio {
+	background: #54AFFF;
+}
+
+ul.mks_social_widget_ul .socicon-portfolio:before {
+	content: "\e943"
+}
+
+ul.mks_social_widget_ul .socicon-instructables {
+	background: #f8b514;
+}
+
+ul.mks_social_widget_ul .socicon-instructables:before {
+	content: "\e944"
+}
+
+ul.mks_social_widget_ul .socicon-gitlab {
+	background: #e65228;
+}
+
+ul.mks_social_widget_ul .socicon-gitlab:before {
+	content: "\e945"
+}
+
+ul.mks_social_widget_ul .socicon-mailru {
+	background: #FDA840;
+}
+
+ul.mks_social_widget_ul .socicon-mailru:before {
+	content: "\e94a"
+}
+
+ul.mks_social_widget_ul .socicon-bookbub {
+	background: #E70005;
+}
+
+ul.mks_social_widget_ul .socicon-bookbub:before {
+	content: "\e949"
+}
+
+ul.mks_social_widget_ul .socicon-kobo {
+	background: #BF0000;
+}
+
+ul.mks_social_widget_ul .socicon-kobo:before {
+	content: "\e948"
+}
+
+ul.mks_social_widget_ul .socicon-smashwords {
+	background: #4181C3;
+}
+
+ul.mks_social_widget_ul .socicon-smashwords:before {
+	content: "\e947"
+}
+
+ul.mks_social_widget_ul .socicon-hackernews {
+	background: #FF6601;
+}
+
+ul.mks_social_widget_ul .socicon-hackernews:before {
+	content: "\e946"
+}
+
+ul.mks_social_widget_ul .socicon-hackerone {
+	background: #ec1075;
+}
+
+ul.mks_social_widget_ul .socicon-hackerone:before {
+	content: "\e956"
+}
+
+ul.mks_social_widget_ul .socicon-beatport {
+	background: #94d500;
+}
+
+ul.mks_social_widget_ul .socicon-beatport:before {
+	content: "\e955"
+}
+
+ul.mks_social_widget_ul .socicon-napster {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-napster:before {
+	content: "\e954"
+}
+
+ul.mks_social_widget_ul .socicon-spip {
+	background: #E00D6F;
+}
+
+ul.mks_social_widget_ul .socicon-spip:before {
+	content: "\e953"
+}
+
+ul.mks_social_widget_ul .socicon-wickr {
+	background: #F29100;
+}
+
+ul.mks_social_widget_ul .socicon-wickr:before {
+	content: "\e952"
+}
+
+ul.mks_social_widget_ul .socicon-blackberry {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-blackberry:before {
+	content: "\e951"
+}
+
+ul.mks_social_widget_ul .socicon-myanimelist {
+	background: #2E51A2;
+}
+
+ul.mks_social_widget_ul .socicon-myanimelist:before {
+	content: "\e950"
+}
+
+ul.mks_social_widget_ul .socicon-pixiv {
+	background: #049CFF;
+}
+
+ul.mks_social_widget_ul .socicon-pixiv:before {
+	content: "\e94f"
+}
+
+ul.mks_social_widget_ul .socicon-gamefor {
+	background: #506F82;
+}
+
+ul.mks_social_widget_ul .socicon-gamefor:before {
+	content: "\e94e"
+}
+
+ul.mks_social_widget_ul .socicon-traxsource {
+	background: #40A0FF;
+}
+
+ul.mks_social_widget_ul .socicon-traxsource:before {
+	content: "\e94d"
+}
+
+ul.mks_social_widget_ul .socicon-indiedb {
+	background: #77C628;
+}
+
+ul.mks_social_widget_ul .socicon-indiedb:before {
+	content: "\e94c"
+}
+
+ul.mks_social_widget_ul .socicon-moddb {
+	background: #CC0300;
+}
+
+ul.mks_social_widget_ul .socicon-moddb:before {
+	content: "\e94b"
+}
+
+ul.mks_social_widget_ul .socicon-internet {
+	background: #000000;
+}
+
+ul.mks_social_widget_ul .socicon-internet:before {
+	content: "\e957"
+}
