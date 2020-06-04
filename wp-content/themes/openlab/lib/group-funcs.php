@@ -1898,6 +1898,16 @@ function openlab_group_directory_badges() {
 		return;
 	}
 
+	$group_id = bp_get_group_id();
+
+	$is_cloneable = openlab_group_can_be_cloned( $group_id );
+	$is_open      = openlab_group_is_open( $group_id );
+	$has_badges   = openlab_group_has_badges( $group_id );
+
+	if ( ! $is_cloneable && ! $is_open && ! $has_badges ) {
+		return;
+	}
+
 	echo '<div class="col-xs-18 alignright group-directory-badges">';
 	\OpenLab\Badges\Template::badge_links( 'directory' );
 	echo '</div>';
@@ -1906,8 +1916,6 @@ add_action( 'openlab_theme_after_group_group_directory', 'openlab_group_director
 
 /**
  * Checks whether a group has badges.
- *
- * @since 1.2.0
  *
  * @param int $group_id Group ID.
  * @return bool
@@ -1921,4 +1929,94 @@ function openlab_group_has_badges( $group_id ) {
 	$group_badges = $badge_group->get_badges();
 
 	return ! empty( $group_badges );
+}
+
+/**
+ * Filters the badge link markup to dynamically inject our badge-like flags.
+ *
+ * @param array  $badge_links Array of badge flags.
+ * @param int    $group_id    ID of the group.
+ * @param string $context     Context. 'directory' or 'single'.
+ * @return array
+ */
+function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
+	$faux_badges = [
+		'open'      => [
+			'add'        => openlab_group_is_open( $group_id ),
+			'link'       => 'somelink',
+			'name'       => 'Open',
+			'short_name' => 'Open',
+		],
+		'cloneable' => [
+			'add'        => openlab_group_can_be_cloned( $group_id ),
+			'link'       => 'someotherlink',
+			'name'       => 'Cloneable',
+			'short_name' => 'Clone',
+		],
+	];
+
+	foreach ( $faux_badges as $badge_type => $faux_badge ) {
+		if ( ! $faux_badge['add'] ) {
+			continue;
+		}
+
+		// Copied from \OpenLab\Badges\Badge::get_avatar_flag_html().
+		$group = groups_get_group( $group_id );
+
+		$tooltip_id = 'badge-tooltip-' . $group->slug . '-' . $badge_type;
+
+		$badge_link_start = '';
+		$badge_link_end   = '';
+
+		if ( 'single' === $context ) {
+			$badge_link_start = sprintf(
+				'<a class="group-badge-shortname" href="%s">',
+				esc_attr( $faux_badge['link'] )
+			);
+
+			$badge_link_end = '</a>';
+		} else {
+			$badge_link_start = '<span class="group-badge-shortname">';
+			$badge_link_end   = '</span>';
+		}
+
+		$html  = '<div class="group-badge">';
+		$html .= $badge_link_start;
+		$html .= esc_html( $faux_badge['short_name'] );
+		$html .= $badge_link_end;
+
+		$html .= '<div id="' . esc_attr( $tooltip_id ) . '" class="badge-tooltip" role="tooltip">';
+		$html .= esc_html( $faux_badge['name'] );
+		$html .= '</div>';
+		$html .= '</div>';
+
+		array_unshift( $badge_links, $html );
+	}
+
+	return $badge_links;
+}
+add_filter( 'openlab_badges_badge_links', 'openlab_filter_badge_links', 10, 3 );
+
+/**
+ * Checks whether a group is "open".
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_group_is_open( $group_id ) {
+	$group = groups_get_group( $group_id );
+
+	$is_open = false;
+	if ( 'public' === $group->status ) {
+		$site_id = openlab_get_site_id_by_group_id( $group_id );
+		if ( $site_id ) {
+			// Avoid switch_to_blog().
+			$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
+			$is_open     = '0' === $blog_public || '1' === $blog_public;
+		} else {
+			$is_open = true;
+		}
+	}
+
+	return $is_open;
 }
