@@ -29,41 +29,17 @@ function openlab_list_members($view) {
 
 	$valid_user_types = openlab_valid_user_types();
 
-    // Set up variables
-    // There are two ways to specify user type: through the page name, or a URL param
-    $user_type = $sequence_type = $search_terms = $user_school = $user_dept = '';
-    if ( ! empty( $_GET['usertype'] ) && $_GET['usertype'] !== 'user_type_all' ) {
-        if ( openlab_user_type_is_valid( $_GET['usertype'] ) ) {
-            $user_type_slug = wp_unslash( $_GET['usertype'] );
-            $user_type      = $valid_user_types[ $user_type_slug ];
-        }
-    } else {
-        $post_obj = $wp_query->get_queried_object();
-        $post_title = !empty($post_obj->post_title) ? ucwords($post_obj->post_title) : '';
-
-        if (in_array($post_title, array('Staff', 'Faculty', 'Students'))) {
-            if ('Students' == $post_title) {
-                $user_type = 'Student';
-            } else {
-                $user_type = $post_title;
-            }
-        }
+	$user_type = openlab_get_current_filter( 'member_type' );
+    if ( $user_type && $user_type !== 'user_type_all' ) {
+		$valid_user_types = openlab_valid_user_types();
+		$user_type        = $valid_user_types[ $user_type ]['label'];
     }
 
-    if (!empty($_GET['group_sequence'])) {
-        $sequence_type = $_GET['group_sequence'];
-    }
+	$search_terms = openlab_get_current_filter( 'search' );
 
-    if (!empty($_POST['people_search'])) {
-        $search_terms = $_POST['people_search'];
-    } else if (!empty($_GET['search'])) {
-        $search_terms = $_GET['search'];
-    } else if (!empty($_POST['group_search'])) {
-        $search_terms = $_POST['group_search'];
-    }
-
-    if (!empty($_GET['school'])) {
-        $user_school = urldecode($_GET['school']);
+	$school = openlab_get_current_filter( 'school' );
+    if ( $school ) {
+        $user_school = urldecode( $school );
 
         // Sanitize
         $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
@@ -72,18 +48,18 @@ function openlab_list_members($view) {
         }
     }
 
-    $user_department = NULL;
-    if (!empty($_GET['department'])) {
-        $user_department = urldecode($_GET['department']);
+    $user_department = openlab_get_current_filter( 'department' );
+    if ( $user_department ) {
+        $user_department = urldecode( $_GET['department'] );
     }
 
     // Set up the bp_has_members() arguments
     // Note that we're not taking user_type into account. We'll do that with a query filter
-    $args = array('per_page' => 48);
-
-    if ($sequence_type) {
-        $args['type'] = $sequence_type;
-    }
+    $args = [
+		'member_type' => null,
+		'per_page'    => 48,
+		'type'        => openlab_get_current_filter( 'sort' ),
+	];
 
     // Set up $include
     // $include_noop is a flag that gets triggered when one of the search
