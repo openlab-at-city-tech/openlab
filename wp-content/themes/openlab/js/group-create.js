@@ -243,11 +243,21 @@ jQuery( document ).ready(
 						// Description
 						$( '#group-desc' ).val( r.description );
 
-						// Schools and Departments
+						// Schools, Offices, Departments.
 						if ( r.hasOwnProperty( 'schools' ) ) {
 							$( 'input[name="schools[]"]' ).each(
 								function(k,v){
 									if ( -1 !== r.schools.indexOf( v.value ) ) {
+										$( v ).prop( 'checked', true );
+									}
+								}
+							);
+						}
+
+						if ( r.hasOwnProperty( 'offices' ) ) {
+							$( 'input[name="offices[]"]' ).each(
+								function(k,v){
+									if ( -1 !== r.offices.indexOf( v.value ) ) {
 										$( v ).prop( 'checked', true );
 									}
 								}

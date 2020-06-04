@@ -145,6 +145,7 @@ function openlab_group_clone_details( $group_id ) {
 		'name'                   => '',
 		'description'            => '',
 		'schools'                => array(),
+		'offices'                => array(),
 		'departments'            => array(),
 		'course_code'            => '',
 		'section_code'           => '',
