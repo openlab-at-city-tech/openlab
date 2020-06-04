@@ -633,6 +633,8 @@ function cuny_group_single() {
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
 
+					<?php openlab_group_single_badges(); ?>
+
 					<?php do_action( 'bp_group_header_after_avatar' ); ?>
                 </div>
 
@@ -1929,6 +1931,21 @@ function openlab_group_has_badges( $group_id ) {
 	$group_badges = $badge_group->get_badges();
 
 	return ! empty( $group_badges );
+}
+
+/**
+ * Outputs the badge markup for single group pages.
+ *
+ * @since 1.2.0
+ */
+function openlab_group_single_badges() {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return;
+	}
+
+	echo '<div class="group-single-badges">';
+	\OpenLab\Badges\Template::badge_links( 'single' );
+	echo '</div>';
 }
 
 /**

@@ -7974,6 +7974,7 @@ body .padded-img {
   border-radius: 4px;
   border: 25px solid #f0f0f0;
   background: #f0f0f0;
+  position: relative;
 }
 body .padded-img.darker {
   border-color: #444444;
@@ -7981,6 +7982,31 @@ body .padded-img.darker {
 }
 body .padded-img img {
   margin: 0 auto;
+}
+body .padded-img .group-single-badges {
+  position: absolute;
+  left: -30px;
+  top: 10px;
+}
+body .padded-img .group-single-badges ul.badge-links li {
+  display: block;
+  margin-bottom: 5px;
+}
+body .padded-img .group-single-badges ul.badge-links li:last-child {
+  margin-right: 10px;
+}
+body .padded-img .group-single-badges .group-badge {
+  box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);
+  font-weight: normal;
+  min-width: 0px;
+  padding: 0 4px;
+}
+body .padded-img .group-single-badges .group-badge a {
+  font-size: 16px;
+  text-decoration: none;
+}
+body .padded-img .group-single-badges .group-badge a:hover {
+  text-decoration: underline;
 }
 @media (max-width: 479px) {
   body .group-header-avatar {

@@ -811,6 +811,7 @@ body{
         border-radius: @border-radius-base;
         border: 25px solid @5gray;
         background: @5gray;
+		position: relative;
         &.darker{
             border-color: @70gray;
             background: @70gray;
@@ -818,6 +819,36 @@ body{
         img{
             margin: 0 auto;
         }
+		.group-single-badges {
+			position: absolute;
+			left: -30px;
+			top: 10px;
+
+			ul.badge-links li {
+				display: block;
+				margin-bottom: 5px;
+
+				&:last-child {
+					margin-right: 10px;
+				}
+			}
+
+			.group-badge {
+				box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.3);
+				font-weight: normal;
+				min-width: 0px;
+				padding: 0 4px;
+
+				a {
+					font-size: 16px;
+					text-decoration: none;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
+		}
     }
     .group-header-avatar{
         @media (max-width: @screen-xxs-max){
