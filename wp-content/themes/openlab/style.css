@@ -10701,10 +10701,13 @@ body.single-event #content .eo-event-venue-map {
 }
 .row.help-nav {
   margin-bottom: 35px;
-  /* Overrides - I'm not confident of the original purpose of these styles */
 }
-.row.help-nav .nav.nav-inline li:hover a {
+.nav.nav-inline li:hover #help-title-nav a {
   text-decoration: underline;
+}
+.nav.nav-inline li:hover #help-title-nav a:hover,
+.nav.nav-inline li:hover #help-title-nav a:focus {
+  text-decoration: none;
 }
 #help-title-nav {
   /* Overrides */
@@ -10724,11 +10727,6 @@ body.single-event #content .eo-event-venue-map {
 }
 #help-title-nav a {
   padding: 0;
-}
-#help-title-nav a:hover,
-#help-title-nav a:focus {
-  color: #3ba49b;
-  text-decoration: underline;
 }
 #help-title-nav .fa {
   padding: 0;

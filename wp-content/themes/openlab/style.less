@@ -3533,11 +3533,13 @@ body{
 }
 .row.help-nav {
     margin-bottom: 35px;
+}
+.nav.nav-inline li:hover #help-title-nav a {
+	text-decoration: underline;
 
-    /* Overrides - I'm not confident of the original purpose of these styles */
-    .nav.nav-inline li:hover a {
-        text-decoration: underline;
-    }
+	&:hover, &:focus {
+		text-decoration: none;
+	}
 }
 #help-title-nav {
 	& > span {
@@ -3559,11 +3561,6 @@ body{
     /* Overrides */
     a {
         padding: 0;
-
-        &:hover, &:focus {
-            color: @darkTeal;
-            text-decoration: underline;
-        }
     }
 
     .fa {
