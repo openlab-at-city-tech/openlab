@@ -2022,6 +2022,18 @@ add_filter(
 );
 
 /**
+ * Filters the group type of a group, as used by OpenLab Badges.
+ */
+add_filter(
+	'openlab_badges_group_type',
+	function( $group_type, $group_id ) {
+		return openlab_get_group_type( $group_id );
+	},
+	10,
+	2
+);
+
+/**
  * Checks whether a group is "open".
  *
  * @param int $group_id Group ID.
