@@ -141,6 +141,12 @@ body .blog-menu li:hover > a {
 	background: #eee;
 	color: #333;
 }
+.section.bg-dark a {
+	color: #fff;
+}
+.section.bg-dark a:hover {
+	color: #9e9e9e;
+}
 @media print {
 }
 
