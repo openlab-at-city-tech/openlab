@@ -37,8 +37,8 @@ function gutenberg_render_block_core_post_comments( $attributes, $content, $bloc
  * Registers the `core/post-comments` block on the server.
  */
 function gutenberg_register_block_core_post_comments() {
-	register_block_type(
-		'core/post-comments',
+	register_block_type_from_metadata(
+		__DIR__ . '/post-comments',
 		array(
 			'render_callback' => 'gutenberg_render_block_core_post_comments',
 		)
