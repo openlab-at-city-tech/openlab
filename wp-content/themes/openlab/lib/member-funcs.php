@@ -239,9 +239,7 @@ function openlab_list_members($view) {
         }
         ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-18">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
+            <div class="current-group-filters current-portfolio-filters col-sm-18">&nbsp;</div>
         </div>
 
         <div id="group-members-list" class="item-list group-list row">
