@@ -1998,6 +1998,29 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 add_filter( 'openlab_badges_badge_links', 'openlab_filter_badge_links', 10, 3 );
 
 /**
+ * Filters the list of group types used by OpenLab Badges.
+ */
+add_filter(
+	'openlab_badges_get_group_types',
+	function() {
+		$retval = [];
+
+		foreach ( openlab_group_types() as $type ) {
+			if ( 'school' === $type ) {
+				continue;
+			}
+
+			$retval[] = [
+				'slug' => $type,
+				'name' => ucwords( $type ),
+			];
+		}
+
+		return $retval;
+	}
+);
+
+/**
  * Checks whether a group is "open".
  *
  * @param int $group_id Group ID.

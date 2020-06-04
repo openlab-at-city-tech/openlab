@@ -4,11 +4,16 @@ if ( ! defined( 'OLBADGES_VERSION' ) ) {
 	return;
 }
 
-$badges = \OpenLab\Badges\Badge::get(
-	[
-		'hide_empty' => true,
-	]
-);
+$badge_query_args = [
+	'hide_empty' => false,
+];
+
+$group_type = openlab_get_group_directory_group_type();
+if ( $group_type ) {
+	$badge_query_args['group_types'] = $group_type;
+}
+
+$badges = \OpenLab\Badges\Badge::get( $badge_query_args );
 if ( ! $badges ) {
 	return;
 }
