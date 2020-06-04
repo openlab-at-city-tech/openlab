@@ -2043,3 +2043,19 @@ function openlab_group_is_open( $group_id ) {
 
 	return $is_open;
 }
+
+/**
+ * 'is_open' polyfill for the fact that 'status' is not implemented in bp_has_groups().
+ *
+ * See https://buddypress.trac.wordpress.org/ticket/8310
+ */
+add_filter(
+	'bp_before_groups_get_groups_parse_args',
+	function( $args ) {
+		$is_open = openlab_get_current_filter( 'is_open' );
+		if ( $is_open ) {
+			$args['status'] = 'public';
+		}
+		return $args;
+	}
+);
