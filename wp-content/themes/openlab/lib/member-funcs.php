@@ -30,7 +30,7 @@ function openlab_list_members($view) {
 	$valid_user_types = openlab_valid_user_types();
 
 	$user_type = openlab_get_current_filter( 'member_type' );
-    if ( $user_type && $user_type !== 'user_type_all' ) {
+    if ( $user_type && $user_type !== 'all' ) {
 		$valid_user_types = openlab_valid_user_types();
 		$user_type        = $valid_user_types[ $user_type ]['label'];
     }
@@ -134,7 +134,7 @@ function openlab_list_members($view) {
         }
     }
 
-    if ($user_department && !$include_noop && 'dept_all' !== $user_department) {
+    if ($user_department && !$include_noop && 'all' !== $user_department) {
         $user_department_matches = $wpdb->get_col( $wpdb->prepare(
             "SELECT user_id
             FROM {$wpdb->usermeta}
