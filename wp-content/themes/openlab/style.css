@@ -9512,8 +9512,22 @@ body form .checkbox-list-container {
   margin-right: 4px;
   border-right: none;
 }
+#group-list .group-item-wrapper .item-avatar {
+  position: relative;
+}
 #group-list .group-item-wrapper .item-avatar img {
   max-width: 95%;
+}
+#group-list .group-item-wrapper .group-type-flag {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 1px 0 1px 4px;
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 70%;
 }
 #group-list .group-item-wrapper .item-content-wrapper {
   padding: 0 2%;

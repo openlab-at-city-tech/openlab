@@ -154,6 +154,10 @@ if ( ! empty( $categories ) ) {
 				<div class="group-item-wrapper">
 					<div class="row">
 						<div class="item-avatar alignleft col-xs-6">
+							<?php if ( openlab_is_search_results_page() ) : ?>
+								<div class="group-type-flag"><?php echo openlab_get_group_type_label( [ 'case' => 'upper' ] ); ?></div>
+							<?php endif; ?>
+
 							<a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo $group_avatar; ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
 
 							<?php if ( $group_site_url && wds_site_can_be_viewed() ) : ?>
