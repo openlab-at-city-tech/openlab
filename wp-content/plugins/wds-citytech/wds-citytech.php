@@ -28,6 +28,23 @@ add_action( 'plugins_loaded', function() {
 } );
 
 /**
+ * Ensure that HTTP requests to openlabdev.org have the proper auth headers.
+ */
+add_filter(
+	'http_request_args',
+	function( $r, $url ) {
+		if ( ! defined( 'OPENLABDEV_BASIC_AUTH_USERNAME' ) || ! defined( 'OPENLABDEV_BASIC_AUTH_PASSWORD' ) ) {
+			return $r;
+		}
+
+		$r['headers']['Authorization'] = 'Basic ' . base64_encode( OPENLABDEV_BASIC_AUTH_USERNAME . ':' . OPENLABDEV_BASIC_AUTH_PASSWORD );
+		return $r;
+	},
+	10,
+	2
+);
+
+/**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
  * See http://openlab.citytech.cuny.edu/redmine/issues/31
