@@ -125,7 +125,7 @@ if ( ! empty( $categories ) ) {
 
 <div class="row group-archive-header-row">
 	<?php if ( openlab_is_my_profile() ) :
-		echo openlab_submenu_markup( 'groups', $filters['wds_group_type'], false );
+		echo openlab_submenu_markup( 'groups', $group_type, false );
 	else : ?>
 		<div class="col-lg-19 col-md-18 col-sm-16">&nbsp;</div>
 	<?php endif; ?>
