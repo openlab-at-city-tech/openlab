@@ -3,30 +3,6 @@
  * Theme-specific fixes.
  */
 
-function openlab_use_education_pro_new() {
-	// Never true on production.
-	if ( 'openlab.citytech.cuny.edu' === $_SERVER['HTTP_HOST'] ) {
-		return false;
-	}
-
-	$t = get_stylesheet();
-	if ( 'education-pro' !== $t ) {
-		return false;
-	}
-
-	global $current_blog;
-	$paths = [
-		'/boonetestcourse/' => 1,
-		'/jennasoerthemetesting/' => 1,
-	];
-
-	if ( ! isset( $paths[ $current_blog->path ] ) ) {
-		return false;
-	}
-
-	return true;
-}
-
 /**
  * Loads CSS theme fixes for OpenLab site themes.
  */
@@ -58,7 +34,7 @@ function openlab_load_theme_fixes() {
 		case 'twentyeleven':
 		case 'twentynineteen':
 		case 'twentyten':
-			$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+			$subdir = $t;
 
 			echo '<link rel="stylesheet" id="' . esc_attr( $t ) . '-fixes" type="text/css" media="screen" href="' . esc_attr( get_home_url() ) . '/wp-content/mu-plugins/theme-fixes/' . esc_attr( $subdir ) . '/' . esc_attr( $t ) . '.css" />
 ';
@@ -298,3 +274,30 @@ function openlab_themes_filter_search_form( $form ) {
 	return $form;
 }
 add_filter( 'get_search_form', 'openlab_themes_filter_search_form' );
+
+/**
+ * No longer used, but kept here for future reference.
+ */
+function openlab_use_education_pro_new() {
+	// Never true on production.
+	if ( 'openlab.citytech.cuny.edu' === $_SERVER['HTTP_HOST'] ) {
+		return false;
+	}
+
+	$t = get_stylesheet();
+	if ( 'education-pro' !== $t ) {
+		return false;
+	}
+
+	global $current_blog;
+	$paths = [
+		'/boonetestcourse/' => 1,
+		'/jennasoerthemetesting/' => 1,
+	];
+
+	if ( ! isset( $paths[ $current_blog->path ] ) ) {
+		return false;
+	}
+
+	return true;
+}
