@@ -15,8 +15,6 @@ function openlab_core_setup() {
     ));
 }
 
-// test
-
 add_action('after_setup_theme', 'openlab_core_setup');
 
 /* * creating a library to organize functions* */
@@ -25,6 +23,8 @@ require_once( STYLESHEETPATH . '/lib/core/page-control.php' );
 require_once( STYLESHEETPATH . '/lib/core/frontend-admin.php' );
 require_once( STYLESHEETPATH . '/lib/core/backend-admin.php' );
 
+require_once( STYLESHEETPATH . '/lib/wp-background-processing/wp-background-processing.php' );
+require_once( STYLESHEETPATH . '/lib/clone-wp-async-process.php' );
 require_once( STYLESHEETPATH . '/lib/course-clone.php' );
 require_once( STYLESHEETPATH . '/lib/header-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/post-types.php' );
@@ -42,6 +42,9 @@ require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
+
+// Initialize async cloning.
+openlab_clone_async_process();
 
 function openlab_load_scripts() {
     $stylesheet_dir_uri = get_stylesheet_directory_uri();

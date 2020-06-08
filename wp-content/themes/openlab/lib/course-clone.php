@@ -5,6 +5,19 @@
  */
 
 /**
+ * Fetches the current clone async process.
+ */
+function openlab_clone_async_process() {
+	static $process;
+
+	if ( null === $process ) {
+		$process = new \OpenLab\Clone_Async_Process();
+	}
+
+	return $process;
+}
+
+/**
  * Get the courses that a user is an admin of
  */
 function openlab_get_groups_of_type_owned_by_user( $user_id, $type ) {
@@ -53,7 +66,6 @@ function openlab_clone_create_form_catcher() {
 					return;
 				}
 
-				// Legacy.
 				groups_update_groupmeta( $new_group_id, 'clone_source_group_id', $clone_source_group_id );
 
 				// Store history.
@@ -61,7 +73,13 @@ function openlab_clone_create_form_catcher() {
 				$clone_history[] = $clone_source_group_id;
 				groups_update_groupmeta( $new_group_id, 'clone_history', $clone_history );
 
-				openlab_clone_course_group( $new_group_id, $clone_source_group_id );
+				$clone_steps = [
+					'groupmeta',
+					'avatar',
+					'docs',
+					'files',
+					'topics',
+				];
 
 				if ( isset( $_POST['new_or_old'] ) && ( 'clone' === $_POST['new_or_old'] ) && isset( $_POST['blog-id-to-clone'] ) && isset( $_POST['wds_website_check'] ) ) {
 					$clone_source_blog_id = groups_get_groupmeta( $clone_source_group_id, 'wds_bp_group_site_id' );
@@ -71,8 +89,13 @@ function openlab_clone_create_form_catcher() {
 					$clone_destination_path = friendly_url( stripslashes( $_POST['clone-destination-path'] ) );
 					groups_update_groupmeta( $new_group_id, 'clone_destination_path', $clone_destination_path );
 
-					openlab_clone_course_site( $new_group_id, $clone_source_group_id, $clone_source_blog_id, $clone_destination_path );
+					$clone_steps[] = 'site';
 				}
+
+				groups_update_groupmeta( $new_group_id, 'clone_steps', $clone_steps );
+
+				$async = openlab_clone_async_process();
+				$async->data( [ 'group_id' => $new_group_id ] )->dispatch();
 			}
 			break;
 
@@ -313,24 +336,7 @@ class Openlab_Clone_Course_Group {
 		$this->source_group_id = $source_group_id;
 	}
 
-	/**
-	 * Summary:
-	 * - Some groupmeta
-	 * - Docs posted by admins (but no comments)
-	 * - Files posted by admins
-	 * - Discussion topics posted by admins (but no replies)
-	 */
-	public function go() {
-		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
-		$this->migrate_groupmeta();
-		$this->migrate_avatar();
-		$this->migrate_docs();
-		$this->migrate_files();
-		$this->migrate_topics();
-		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
-	}
-
-	protected function migrate_groupmeta() {
+	public function migrate_groupmeta() {
 		$keys = array(
 			'ass_default_subscription',
 			'bpdocs',
@@ -347,7 +353,7 @@ class Openlab_Clone_Course_Group {
 		}
 	}
 
-	protected function migrate_avatar() {
+	public function migrate_avatar() {
 		$avatar_path       = trailingslashit( bp_core_avatar_upload_path() ) . trailingslashit( 'group-avatars' );
 		$source_avatar_dir = $avatar_path . $this->source_group_id;
 
@@ -364,7 +370,7 @@ class Openlab_Clone_Course_Group {
 		}
 	}
 
-	protected function migrate_docs() {
+	public function migrate_docs() {
 		$docs = array();
 
 		$bp_docs_query = new BP_Docs_Query();
@@ -515,7 +521,7 @@ class Openlab_Clone_Course_Group {
 		*/
 	}
 
-	protected function migrate_files() {
+	public function migrate_files() {
 		$source_group_admins = $this->get_source_group_admins();
 		$source_files        = BP_Group_Documents::get_list_by_group( $this->source_group_id );
 
@@ -614,7 +620,7 @@ class Openlab_Clone_Course_Group {
 		}
 	}
 
-	protected function migrate_topics() {
+	public function migrate_topics() {
 		$source_group_admins = $this->get_source_group_admins();
 		$forum_ids           = bbp_get_group_forum_ids( $this->group_id );
 
