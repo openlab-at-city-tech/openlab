@@ -321,6 +321,10 @@ a.breadcrumb-link:hover {
 	color: #444;
 }
 
+.entry-footer .entry-meta {
+	font-size: 14px;
+}
+
 .entry-footer .entry-meta a {
     color: #aa2418;
 	border-bottom: 1px solid #aa2418;
@@ -395,6 +399,7 @@ a.breadcrumb-link:hover {
 }
 
 .nav-primary .genesis-nav-menu {
+	font-size: 16px;
 	text-align: center;
 }
 
@@ -472,6 +477,7 @@ body .site-title a {
 .genesis-nav-menu .sub-menu a {
 	background-color: #fff;
 	color: #444;
+	font-size: 16px;
 }
 
 .genesis-nav-menu li a:hover,
