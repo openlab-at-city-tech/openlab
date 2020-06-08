@@ -37,6 +37,11 @@ add_filter(
 			return $r;
 		}
 
+		$host = parse_url( $url, PHP_URL_HOST );
+		if ( 'openlabdev.org' !== $host ) {
+			return $r;
+		}
+
 		$r['headers']['Authorization'] = 'Basic ' . base64_encode( OPENLABDEV_BASIC_AUTH_USERNAME . ':' . OPENLABDEV_BASIC_AUTH_PASSWORD );
 		return $r;
 	},
