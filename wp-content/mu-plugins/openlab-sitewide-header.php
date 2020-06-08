@@ -64,18 +64,8 @@ HTML;
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
-        <div class="sr-only">Search by People or Group Type</div>
-        <label for="search-terms-{$mode}-{$location}" class="sr-only">Search by People or Group Type</label>
+        <label for="search-terms-{$mode}-{$location}" class="sr-only">Search the OpenLab</label>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="Search" />
-
-        <label for="search-which-{$mode}-{$location}" class="sr-only">Select the Item Type to Search</label>
-        <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
-            <option value="members">People</option>
-            <option value="courses" selected="selected">Courses</option>
-            <option value="projects">Projects</option>
-            <option value="clubs">Clubs</option>
-            <option value="portfolios">Portfolios</option>
-        </select>
 
         <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i><span class="sr-only">Submit</span></button>
         <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
@@ -90,29 +80,16 @@ HTML;
 add_action('init', 'openlab_mu_search_override', 1);
 
 function openlab_mu_search_override() {
-    global $bp;
-    if (isset($_POST['search']) && $_POST['search-which']) {
-        $nonce = isset($_POST['_bp_search_nonce']) ? $_POST['_bp_search_nonce'] : '';
-        if (!wp_verify_nonce($nonce, 'bp_search_form')) {
+    if ( isset( $_POST['search'] ) ) {
+        $nonce = isset( $_POST['_bp_search_nonce'] ) ? $_POST['_bp_search_nonce'] : '';
+        if ( ! wp_verify_nonce( $nonce, 'bp_search_form' ) ) {
             return;
         }
 
-        if ($_POST['search-which'] == "members") {
-            wp_redirect($bp->root_domain . '/people/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "courses") {
-            wp_redirect($bp->root_domain . '/courses/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "projects") {
-            wp_redirect($bp->root_domain . '/projects/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "clubs") {
-            wp_redirect($bp->root_domain . '/clubs/?search=' . $_POST['search']);
-            exit();
-        } elseif ($_POST['search-which'] == "portfolios") {
-            wp_redirect($bp->root_domain . '/portfolios/?search=' . $_POST['search']);
-            exit();
-        }
+		$search_url   = get_home_url( bp_get_root_blog_id(), 'search' );
+		$redirect_url = add_query_arg( 'search', wp_unslash( $_POST['search'] ), $search_url );
+		wp_safe_redirect( $redirect_url );
+		die;
     }
 }
 

@@ -22,7 +22,6 @@ function openlab_group_types() {
 		'club',
 		'course',
 		'portfolio',
-		'school', // Legacy. Not sure what this is used for
 	);
 }
 
