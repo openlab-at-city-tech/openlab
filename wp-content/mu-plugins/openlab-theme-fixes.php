@@ -60,7 +60,7 @@ add_action(
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'twentynineteen':
-				$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+				$subdir = $t;
 				include __DIR__ . '/theme-fixes/' . $subdir . '/' . $t . '.php';
 			break;
 		}
@@ -81,7 +81,7 @@ add_action(
 			case 'hamilton':
 			case 'koji' :
 			case 'lingonberry' :
-				$subdir = openlab_use_education_pro_new() ? 'education-pro-new' : $t;
+				$subdir = $t;
 				wp_enqueue_script( $t, content_url( 'mu-plugins/theme-fixes/' . $subdir . '/' . $t . '.js', array( 'jquery' ) ) );
 			break;
 		}
