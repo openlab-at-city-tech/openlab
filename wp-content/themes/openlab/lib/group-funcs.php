@@ -143,7 +143,6 @@ function openlab_group_archive() {
 		'type'         => openlab_get_current_filter( 'sort' ),
     );
 
-	// @todo search results
     $meta_query = array(
         array(
             'key'   => 'wds_group_type',
