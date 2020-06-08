@@ -18,14 +18,10 @@ if ( bp_is_user_groups() ) {
 	}
 
 	$group_args['user_id'] = bp_loggedin_user_id();
+} elseif ( openlab_is_search_results_page() ) {
+	$group_type = openlab_get_current_filter( 'group-types' );
 } else {
 	$group_type = openlab_page_slug_to_grouptype();
-
-	$group_args = array(
-	'per_page'		=> 12,
-	'show_hidden'	=> true,
-	'user_id'		=> $bp->loggedin_user->id
-	);
 }
 
 $meta_query = array(
@@ -210,7 +206,7 @@ if ( ! empty( $categories ) ) {
 	</div>
 	<div id="group-list" class="item-list row">
 		<div class="widget-error query-no-results col-sm-24">
-			<p class="bold"><?php echo esc_html( 'There are no ' . esc_html( $group_type ) . 's to display.' ) ?></p>
+			<p class="bold">There are no items to display.</p>
 		</div>
 	</div>
 <?php endif; ?>

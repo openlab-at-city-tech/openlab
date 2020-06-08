@@ -350,3 +350,10 @@ add_filter(
 	},
 	0
 );
+
+/**
+ * Is this the search results page?
+ */
+function openlab_is_search_results_page() {
+	return is_page( 'search' );
+}

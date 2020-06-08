@@ -4,8 +4,9 @@ $group_slug = $group_type . 's';
 
 $is_people = 'people' === get_queried_object()->post_name;
 
-//conditional for people archive sidebar
-if ( $is_people ) {
+if ( openlab_is_search_results_page() ) {
+	$sidebar_title = 'Search';
+} elseif ( $is_people ) {
     $group_type = "people";
     $group_slug = $group_type;
     $sidebar_title = 'Find People';
@@ -22,6 +23,10 @@ if ( $is_people ) {
 
             <div id="sidebarCustomSelect" class="custom-select-parent">
 				<p>Narrow down your results using some of the filters below.</p>
+
+				<?php if ( openlab_is_search_results_page() ) : ?>
+					<?php get_template_part( 'parts/sidebar/filter-group-type' ); ?>
+				<?php endif; ?>
 
 				<div class="custom-select" id="schoolSelect">
 					<?php
