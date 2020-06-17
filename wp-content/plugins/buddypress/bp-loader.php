@@ -15,7 +15,7 @@
  * Description: BuddyPress adds community features to WordPress. Member Profiles, Activity Streams, Direct Messaging, Notifications, and more!
  * Author:      The BuddyPress Community
  * Author URI:  https://buddypress.org/
- * Version:     5.1.2
+ * Version:     6.0.0
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -26,7 +26,7 @@
  * PHP supported by WordPress.
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 // Required PHP version.
@@ -85,7 +85,7 @@ if ( version_compare( phpversion(), BP_REQUIRED_PHP_VERSION, '<' ) ) {
 	if ( defined( 'BUDDYPRESS_LATE_LOAD' ) ) {
 		add_action( 'plugins_loaded', 'buddypress', (int) BUDDYPRESS_LATE_LOAD );
 
-	// "And now here's something we hope you'll really like!"
+	// "And now here's something we hope you'll really like!".
 	} else {
 		$GLOBALS['bp'] = buddypress();
 	}

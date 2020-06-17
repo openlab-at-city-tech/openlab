@@ -89,12 +89,9 @@ body #buddypress .bp-list .action {
 	}
 	body.buddypress .entry-header {
 		float: none;
-		max-width: none;
 	}
-	body.buddypress .entry-content,
-	body.buddypress .entry .entry-content > * {
+	body.buddypress .entry-content {
 		float: none;
-		max-width: none;
 	}
 	body.buddypress .site-content {
 		padding-top: 2.5em;
@@ -752,7 +749,7 @@ body.buddypress article.page > .entry-header .entry-title {
 
 .buddypress-wrap .subnav-filters .user-messages-bulk-actions .bulk-apply {
 	border: 0;
-	border-radius: none;
+	border-radius: 0;
 	font-weight: 400;
 	line-height: 1.8;
 	margin: 0 10px 0 0;
@@ -1275,7 +1272,7 @@ body.buddypress article.page > .entry-header .entry-title {
 }
 
 .activity-list .activity-item.mini .activity-avatar {
-	margin-right: 0 auto;
+	margin-right: 0;
 	text-align: center;
 	width: auto;
 }
@@ -1875,6 +1872,11 @@ form.ac-form .ac-reply-content input {
 */
 .buddypress-wrap .members-list li .member-name {
 	margin-bottom: 10px;
+}
+
+.buddypress-wrap .members-list li .item-extra-content {
+	clear: both;
+	font-size: 14px;
 }
 
 .buddypress-wrap .members-list li .user-update {

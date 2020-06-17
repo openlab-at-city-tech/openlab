@@ -1,20 +1,18 @@
 <?php
 /**
- * XProfile: User's "Profile > Change Avatar" screen handler
+ * Members: Change Avatar screen handler
  *
  * @package BuddyPress
- * @subpackage XProfileScreens
- * @since 3.0.0
+ * @subpackage MembersScreens
+ * @since 6.0.0
  */
 
 /**
- * Handles the uploading and cropping of a user avatar. Displays the change avatar page.
+ * Handle the display of the profile Change Avatar page by loading the correct template file.
  *
- * @since 1.0.0
- *
+ * @since 6.0.0
  */
-function xprofile_screen_change_avatar() {
-
+function bp_members_screen_change_avatar() {
 	// Bail if not the correct screen.
 	if ( ! bp_is_my_profile() && ! bp_current_user_can( 'bp_moderate' ) ) {
 		return false;
@@ -40,7 +38,7 @@ function xprofile_screen_change_avatar() {
 		check_admin_referer( 'bp_avatar_upload' );
 
 		// Pass the file to the avatar upload handler.
-		if ( bp_core_avatar_handle_upload( $_FILES, 'xprofile_avatar_upload_dir' ) ) {
+		if ( bp_core_avatar_handle_upload( $_FILES, 'bp_members_avatar_upload_dir' ) ) {
 			$bp->avatar_admin->step = 'crop-image';
 
 			// Make sure we include the jQuery jCrop file for image cropping.
@@ -67,35 +65,43 @@ function xprofile_screen_change_avatar() {
 			bp_core_add_message( __( 'There was a problem cropping your profile photo.', 'buddypress' ), 'error' );
 		} else {
 
+			/** This action is documented in wp-includes/deprecated.php */
+			do_action_deprecated( 'xprofile_avatar_uploaded', array( (int) $args['item_id'], 'crop' ), '6.0.0', 'bp_members_avatar_uploaded' );
+
 			/**
 			 * Fires right before the redirect, after processing a new avatar.
 			 *
-			 * @since 1.1.0
-			 * @since 2.3.4 Add two new parameters to inform about the user id and
-			 *              about the way the avatar was set (eg: 'crop' or 'camera').
+			 * @since 6.0.0
 			 *
 			 * @param string $item_id Inform about the user id the avatar was set for.
 			 * @param string $value   Inform about the way the avatar was set ('crop').
 			 */
-			do_action( 'xprofile_avatar_uploaded', (int) $args['item_id'], 'crop' );
+			do_action( 'bp_members_avatar_uploaded', (int) $args['item_id'], 'crop' );
+
 			bp_core_add_message( __( 'Your new profile photo was uploaded successfully.', 'buddypress' ) );
 			bp_core_redirect( bp_displayed_user_domain() );
 		}
 	}
 
-	/**
-	 * Fires right before the loading of the XProfile change avatar screen template file.
-	 *
-	 * @since 1.0.0
-	 */
-	do_action( 'xprofile_screen_change_avatar' );
+	/** This action is documented in wp-includes/deprecated.php */
+	do_action_deprecated( 'xprofile_screen_change_avatar', array(), '6.0.0', 'bp_members_screen_change_avatar' );
 
 	/**
-	 * Filters the template to load for the XProfile change avatar screen.
+	 * Fires right before the loading of the Member Change Avatar screen template file.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $template Path to the XProfile change avatar template to load.
+	 * @since 6.0.0
 	 */
-	bp_core_load_template( apply_filters( 'xprofile_template_change_avatar', 'members/single/home' ) );
+	do_action( 'bp_members_screen_change_avatar' );
+
+	/** This filter is documented in wp-includes/deprecated.php */
+	$template = apply_filters_deprecated( 'xprofile_template_change_avatar', array( 'members/single/home' ), '6.0.0', 'bp_members_template_change_avatar' );
+
+	/**
+	 * Filters the template to load for the Member Change Avatar page screen.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param string $template Path to the Member template to load.
+	 */
+	bp_core_load_template( apply_filters( 'bp_members_template_change_avatar', $template ) );
 }

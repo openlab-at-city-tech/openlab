@@ -125,7 +125,7 @@ function bp_profile_group_has_fields() {
  * @since 1.0.0
  *
  * @param mixed $class Extra classes to append to class attribute.
- *                     Pass mutiple class names as an array or
+ *                     Pass multiple class names as an array or
  *                     space-delimited string.
  */
 function bp_field_css_class( $class = false ) {
@@ -593,12 +593,12 @@ function bp_the_profile_field_edit_value() {
 	function bp_get_the_profile_field_edit_value() {
 		global $field;
 
-		// Make sure field data object exists
+		// Make sure field data object exists.
 		if ( ! isset( $field->data ) ) {
 			$field->data = new stdClass;
 		}
 
-		// Default to empty value
+		// Default to empty value.
 		if ( ! isset( $field->data->value ) ) {
 			$field->data->value = '';
 		}
@@ -606,7 +606,7 @@ function bp_the_profile_field_edit_value() {
 		// Was a new value posted? If so, use it instead.
 		if ( isset( $_POST['field_' . $field->id] ) ) {
 
-			// This is sanitized via the filter below (based on the field type)
+			// This is sanitized via the filter below (based on the field type).
 			$field->data->value = $_POST['field_' . $field->id];
 		}
 
@@ -690,7 +690,7 @@ function bp_the_profile_field_input_name() {
 }
 
 	/**
-	 * Retursn the XProfile field input name.
+	 * Returns the XProfile field input name.
 	 *
 	 * @since 1.1.0
 	 *
@@ -1164,7 +1164,11 @@ function bp_profile_last_updated() {
 			 *
 			 * @param string $value Formatted last updated indicator string.
 			 */
-			return apply_filters( 'bp_get_profile_last_updated', sprintf( __( 'Profile updated %s', 'buddypress' ), bp_core_time_since( strtotime( $last_updated ) ) ) );
+			return apply_filters(
+				'bp_get_profile_last_updated',
+				/* translators: %s: last activity timestamp (e.g. "active 1 hour ago") */
+				sprintf( __( 'Profile updated %s', 'buddypress' ), bp_core_time_since( strtotime( $last_updated ) ) )
+			);
 		}
 
 		return false;
@@ -1202,34 +1206,6 @@ function bp_current_profile_group_id() {
 		 * @param int $profile_group_id Current profile group ID.
 		 */
 		return (int) apply_filters( 'bp_get_current_profile_group_id', $profile_group_id );
-	}
-
-/**
- * Render an avatar delete link.
- *
- * @since 1.1.0
- */
-function bp_avatar_delete_link() {
-	echo bp_get_avatar_delete_link();
-}
-
-	/**
-	 * Return an avatar delete link.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @return string
-	 */
-	function bp_get_avatar_delete_link() {
-
-		/**
-		 * Filters the link used for deleting an avatar.
-		 *
-		 * @since 1.1.0
-		 *
-		 * @param string $value Nonced URL used for deleting an avatar.
-		 */
-		return apply_filters( 'bp_get_avatar_delete_link', wp_nonce_url( bp_displayed_user_domain() . bp_get_profile_slug() . '/change-avatar/delete-avatar/', 'bp_delete_avatar_link' ) );
 	}
 
 /**

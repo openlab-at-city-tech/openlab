@@ -147,6 +147,14 @@ function bp_admin_repair_list() {
 		'bp_admin_reinstall_emails',
 	);
 
+	// Invitations:
+	// - maybe create the database table and migrate any existing group invitations.
+	$repair_list[110] = array(
+		'bp-invitations-table',
+		__( 'Create the database table for Invitations and migrate existing group invitations if needed.', 'buddypress' ),
+		'bp_admin_invitations_table',
+	);
+
 	ksort( $repair_list );
 
 	/**
@@ -173,6 +181,7 @@ function bp_admin_repair_friend_count() {
 		return;
 	}
 
+	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Counting the number of friends for each user&hellip; %s', 'buddypress' );
 	$result    = __( 'Failed!', 'buddypress' );
 
@@ -231,6 +240,7 @@ function bp_admin_repair_group_count() {
 		return;
 	}
 
+	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Counting the number of groups for each user&hellip; %s', 'buddypress' );
 	$result    = __( 'Failed!', 'buddypress' );
 
@@ -273,7 +283,7 @@ function bp_admin_repair_group_count() {
  */
 function bp_admin_repair_blog_records() {
 
-	// Description of this tool, displayed to the user.
+	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Repopulating Blogs records&hellip; %s', 'buddypress' );
 
 	// Default to failure text.
@@ -302,6 +312,7 @@ function bp_admin_repair_blog_records() {
  * @since 2.0.0
  */
 function bp_admin_repair_count_members() {
+	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Counting the number of active members on the site&hellip; %s', 'buddypress' );
 	delete_transient( 'bp_active_member_count' );
 	bp_core_get_active_member_count();
@@ -316,9 +327,65 @@ function bp_admin_repair_count_members() {
  * @since 2.0.0
  */
 function bp_admin_repair_last_activity() {
+	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Determining last activity dates for each user&hellip; %s', 'buddypress' );
 	bp_last_activity_migrate();
 	return array( 0, sprintf( $statement, __( 'Complete!', 'buddypress' ) ) );
+}
+
+/**
+ * Create the invitations database table if it does not exist.
+ * Migrate outstanding group invitations if needed.
+ *
+ * @since 6.0.0
+ *
+ * @return array
+ */
+function bp_admin_invitations_table() {
+	global $wpdb;
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once( buddypress()->plugin_dir . '/bp-core/admin/bp-core-admin-schema.php' );
+
+	/* translators: %s: the result of the action performed by the repair tool */
+	$statement = __( 'Creating the Invitations database table if it does not exist&hellip; %s', 'buddypress' );
+	$result    = __( 'Failed to create table!', 'buddypress' );
+
+	bp_core_install_invitations();
+
+	// Check for existence of invitations table.
+	$bp_prefix  = bp_core_get_table_prefix();
+	$table_name = "{$bp_prefix}bp_invitations";
+	$query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) );
+	if ( ! $wpdb->get_var( $query ) == $table_name ) {
+		// Early return if table creation failed.
+		return array( 2, sprintf( $statement, $result ) );
+	} else {
+		$result = __( 'Created invitations table!', 'buddypress' );
+	}
+
+	// Migrate group invitations if needed.
+	if ( bp_is_active( 'groups' ) ) {
+		$bp = buddypress();
+
+		/* translators: %s: the result of the action performed by the repair tool */
+		$migrate_statement = __( 'Migrating group invitations&hellip; %s', 'buddypress' );
+		$migrate_result    = __( 'Failed to migrate invitations!', 'buddypress' );
+
+		bp_groups_migrate_invitations();
+
+		// Check that there are no outstanding group invites in the group_members table.
+		$records = $wpdb->get_results( "SELECT id FROM {$bp->groups->table_name_members} WHERE is_confirmed = 0 AND is_banned = 0" );
+		if ( empty( $records ) ) {
+			$migrate_result = __( 'Migrated invitations!', 'buddypress' );
+			return array( 0, sprintf( $statement . ' ' . $migrate_statement , $result, $migrate_result ) );
+		} else {
+			return array( 2, sprintf( $statement . ' ' . $migrate_statement , $result, $migrate_result ) );
+		}
+	}
+
+	// Return a "create-only" success message.
+	return array( 0, sprintf( $statement, $result ) );
 }
 
 /**
@@ -407,7 +474,13 @@ function bp_core_admin_available_tools_intro() {
 		<h2><?php esc_html_e( 'BuddyPress Tools', 'buddypress' ) ?></h2>
 		<p>
 			<?php esc_html_e( 'BuddyPress keeps track of various relationships between users, groups, and activity items. Occasionally these relationships become out of sync, most often after an import, update, or migration.', 'buddypress' ); ?>
-			<?php printf( esc_html_x( 'Use the %s to repair these relationships.', 'buddypress tools intro', 'buddypress' ), '<a href="' . esc_url( $url ) . '">' . esc_html__( 'BuddyPress Tools', 'buddypress' ) . '</a>' ); ?>
+			<?php
+			printf(
+				/* translators: %s: the link to the BuddyPress repair tools */
+				esc_html_x( 'Use the %s to repair these relationships.', 'buddypress tools intro', 'buddypress' ),
+				'<a href="' . esc_url( $url ) . '">' . esc_html__( 'BuddyPress Tools', 'buddypress' ) . '</a>'
+			);
+			?>
 		</p>
 	</div>
 	<?php

@@ -1,10 +1,10 @@
 <?php
 /**
- * XProfile: Avatar deletion action handler
+ * Members: Avatar deletion action handler
  *
  * @package BuddyPress
- * @subpackage XProfileActions
- * @since 3.0.0
+ * @subpackage MembersActions
+ * @since 6.0.0
  */
 
 /**
@@ -13,10 +13,9 @@
  *
  * The function will delete the active avatar for a user.
  *
- * @since 1.0.0
- *
+ * @since 6.0.0
  */
-function xprofile_action_delete_avatar() {
+function bp_members_action_delete_avatar() {
 
 	if ( ! bp_is_user_change_avatar() || ! bp_is_action_variable( 'delete-avatar', 0 ) ) {
 		return false;
@@ -37,4 +36,4 @@ function xprofile_action_delete_avatar() {
 
 	bp_core_redirect( wp_get_referer() );
 }
-add_action( 'bp_actions', 'xprofile_action_delete_avatar' );
+add_action( 'bp_actions', 'bp_members_action_delete_avatar' );

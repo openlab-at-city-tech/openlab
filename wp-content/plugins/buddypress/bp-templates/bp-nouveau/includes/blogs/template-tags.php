@@ -3,7 +3,7 @@
  * Blogs Template tags
  *
  * @since 3.0.0
- * @version 3.0.0
+ * @version 6.0.0
  */
 
 // Exit if accessed directly.
@@ -71,13 +71,6 @@ function bp_nouveau_after_blogs_directory_content() {
 	 * @since 1.5.0
 	 */
 	do_action( 'bp_after_directory_blogs' );
-
-	/**
-	 * Fires at the bottom of the blogs directory template file.
-	 *
-	 * @since 2.3.0
-	 */
-	do_action( 'bp_after_directory_blogs_page' );
 }
 
 /**
@@ -228,6 +221,13 @@ function bp_nouveau_blogs_loop_buttons( $args = array() ) {
 				$parent_class = $args['parent_attr']['class'];
 			}
 
+			// Set defaults if not set.
+			$button_args = array_merge( array(
+				'wrapper_id' => '',
+				'link_id'    => '',
+				'link_rel'   => ''
+			), $button_args );
+
 			$buttons['visit_blog'] = array(
 				'id'                => 'visit_blog',
 				'position'          => 5,
@@ -265,7 +265,7 @@ function bp_nouveau_blogs_loop_buttons( $args = array() ) {
 		$buttons_group = apply_filters( 'bp_nouveau_get_blogs_buttons', $buttons, $blog, $type );
 
 		if ( ! $buttons_group ) {
-			return $buttons;
+			return array();
 		}
 
 		// It's the first entry of the loop, so build the Group and sort it

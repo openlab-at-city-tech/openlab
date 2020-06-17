@@ -694,6 +694,7 @@ function groups_get_group_members( $args = array() ) {
 
 	// Backward compatibility with old method of passing arguments.
 	if ( ! is_array( $args ) || count( $function_args ) > 1 ) {
+		/* translators: 1: the name of the method. 2: the name of the file. */
 		_deprecated_argument( __METHOD__, '2.0.0', sprintf( __( 'Arguments passed to %1$s should be in an associative array. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
 
 		$old_args_keys = array(
@@ -1689,6 +1690,7 @@ function groups_send_invites( $args = array() ) {
 		'force_resend'  => false,
 	), 'groups_send_invitation' );
 
+
 	$args = array(
 		'user_id'       => $r['user_id'],
 		'invitee_email' => $r['invitee_email'],
@@ -2077,7 +2079,8 @@ function groups_send_membership_request( $args = array() ) {
 function groups_accept_membership_request( $membership_id, $user_id = 0, $group_id = 0 ) {
 
 	if ( ! empty( $membership_id ) ) {
-		_deprecated_argument( __METHOD__, '5.0.0', sprintf( __( 'Argument `membership_id` passed to %1$s  is deprecated. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
+		/* translators: 1: the name of the method. 2: the name of the file. */
+		_deprecated_argument( __METHOD__, '5.0.0', sprintf( __( 'Argument `membership_id` passed to %1$s is deprecated. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
 	}
 
 	if ( ! $user_id || ! $group_id ) {
@@ -2147,6 +2150,7 @@ function groups_reject_membership_request( $membership_id, $user_id = 0, $group_
  */
 function groups_delete_membership_request( $membership_id, $user_id = 0, $group_id = 0 ) {
 	if ( ! empty( $membership_id ) ){
+		/* translators: 1: method name. 2: file name. */
 		_deprecated_argument( __METHOD__, '5.0.0', sprintf( __( 'Argument `membership_id` passed to %1$s  is deprecated. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
 	}
 
@@ -2413,8 +2417,23 @@ function groups_remove_data_for_user( $user_id ) {
 	do_action( 'groups_remove_data_for_user', $user_id );
 }
 add_action( 'wpmu_delete_user',  'groups_remove_data_for_user' );
-add_action( 'delete_user',       'groups_remove_data_for_user' );
 add_action( 'bp_make_spam_user', 'groups_remove_data_for_user' );
+
+/**
+ * Deletes user group data on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function bp_groups_remove_data_for_user_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'groups', $user_id ) ) {
+		return;
+	}
+
+	groups_remove_data_for_user( $user_id );
+}
+add_action( 'delete_user', 'bp_groups_remove_data_for_user_on_delete_user' );
 
 /**
  * Update orphaned child groups when the parent is deleted.
@@ -2750,6 +2769,12 @@ function bp_groups_get_group_type( $group_id, $single = true ) {
  */
 function bp_groups_remove_group_type( $group_id, $group_type ) {
 	if ( empty( $group_type ) || ! bp_groups_get_group_type_object( $group_type ) ) {
+		return false;
+	}
+
+	// No need to continue if the group doesn't have the type.
+	$existing_types = bp_groups_get_group_type( $group_id, false );
+	if ( ! in_array( $group_type, $existing_types, true ) ) {
 		return false;
 	}
 

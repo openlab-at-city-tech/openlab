@@ -313,6 +313,11 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 			return $fields_update;
 		}
 
+		// Set group type(s).
+		if ( ! empty( $request['types'] ) ) {
+			bp_groups_set_group_type( $group_id, $request['types'] );
+		}
+
 		$retval = array(
 			$this->prepare_response_for_collection(
 				$this->prepare_item_for_response( $group, $request )
@@ -602,6 +607,7 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 			'name'               => bp_get_group_name( $item ),
 			'slug'               => bp_get_group_slug( $item ),
 			'status'             => bp_get_group_status( $item ),
+			'types'              => bp_groups_get_group_type( $item->id, false ),
 			'admins'             => array(),
 			'mods'               => array(),
 			'total_member_count' => null,
@@ -614,14 +620,6 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 		// Avatars.
 		if ( ! empty( $schema['properties']['avatar_urls'] ) ) {
 			$data['avatar_urls'] = array(
-				'thumb' => bp_core_fetch_avatar(
-					array(
-						'html'    => false,
-						'object'  => 'group',
-						'item_id' => $item->id,
-						'type'    => 'thumb',
-					)
-				),
 				'full'  => bp_core_fetch_avatar(
 					array(
 						'html'    => false,
@@ -630,7 +628,20 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 						'type'    => 'full',
 					)
 				),
+				'thumb' => bp_core_fetch_avatar(
+					array(
+						'html'    => false,
+						'object'  => 'group',
+						'item_id' => $item->id,
+						'type'    => 'thumb',
+					)
+				),
 			);
+		}
+
+		// Get group type(s).
+		if ( false === $data['types'] ) {
+			$data['types'] = array();
 		}
 
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
@@ -698,7 +709,7 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Request object.
-	 * @return stdClass|WP_Error Object or WP_Error.
+	 * @return stdClass|WP_Error
 	 */
 	protected function prepare_item_for_database( $request ) {
 		$prepared_group = new stdClass();
@@ -766,6 +777,16 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 		// Group Parent ID.
 		if ( ! empty( $schema['properties']['parent_id'] ) && isset( $request['parent_id'] ) ) {
 			$prepared_group->parent_id = $request['parent_id'];
+		}
+
+		// Update group type(s).
+		if ( isset( $prepared_group->group_id ) && isset( $request['types'] ) ) {
+
+			// Append on update. Add on creation.
+			$append = WP_REST_Server::EDITABLE === $request->get_method();
+
+			// Add/Append group type(s).
+			bp_groups_set_group_type( $prepared_group->group_id, $request['types'], $append );
 		}
 
 		/**
@@ -922,6 +943,18 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 			$key                         = 'create_item';
 			$args['description']['type'] = 'string';
 
+			// Add group types.
+			$args['types'] = array(
+				'description'       => __( 'Set type(s) for a group.', 'buddypress' ),
+				'type'              => 'array',
+				'enum'              => bp_groups_get_group_types(),
+				'sanitize_callback' => 'bp_rest_sanitize_group_types',
+				'validate_callback' => 'bp_rest_validate_group_types',
+				'items'             => array(
+					'type' => 'string',
+				),
+			);
+
 			if ( WP_REST_Server::EDITABLE === $method ) {
 				$key = 'update_item';
 				unset( $args['slug'] );
@@ -1040,6 +1073,16 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 					'type'        => 'string',
 					'format'      => 'date-time',
 				),
+				'types'              => array(
+					'context'     => array( 'view', 'edit' ),
+					'description' => __( 'The type(s) of the Group.', 'buddypress' ),
+					'readonly'    => true,
+					'enum'        => bp_groups_get_group_types(),
+					'type'        => 'array',
+					'items'       => array(
+						'type' => 'string',
+					),
+				),
 				'admins'             => array(
 					'context'     => array( 'edit' ),
 					'description' => __( 'Group administrators.', 'buddypress' ),
@@ -1079,7 +1122,7 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 			$avatar_properties = array();
 
 			$avatar_properties['full'] = array(
-				/* translators: Full image size for the group Avatar */
+				/* translators: 1: Full avatar width in pixels. 2: Full avatar height in pixels */
 				'description' => sprintf( __( 'Avatar URL with full image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_full_width() ), number_format_i18n( bp_core_avatar_full_height() ) ),
 				'type'        => 'string',
 				'format'      => 'uri',
@@ -1087,7 +1130,7 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 			);
 
 			$avatar_properties['thumb'] = array(
-				/* translators: Thumb imaze size for the group Avatar */
+				/* translators: 1: Thumb avatar width in pixels. 2: Thumb avatar height in pixels */
 				'description' => sprintf( __( 'Avatar URL with thumb image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_thumb_width() ), number_format_i18n( bp_core_avatar_thumb_height() ) ),
 				'type'        => 'string',
 				'format'      => 'uri',

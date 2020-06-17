@@ -110,7 +110,7 @@ function bp_core_admin_get_static_pages() {
  */
 function bp_core_admin_slugs_options() {
 
-	// Get the existing WP pages
+	// Get the existing WP pages.
 	$existing_pages = bp_core_get_directory_page_ids();
 
 	// Set up an array of components (along with component names) that have directory pages.
@@ -145,7 +145,10 @@ function bp_core_admin_slugs_options() {
 
 							<?php if ( !empty( $existing_pages[$name] ) ) : ?>
 
-								<a href="<?php echo get_permalink( $existing_pages[$name] ); ?>" class="button-secondary" target="_bp"><?php _e( 'View', 'buddypress' ); ?></a>
+								<a href="<?php echo esc_url( get_permalink( $existing_pages[$name] ) ); ?>" class="button-secondary" target="_bp">
+									<?php _e( 'View', 'buddypress' ); ?> <span class="dashicons dashicons-external" aria-hidden="true"></span>
+									<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'buddypress' ); ?></span>
+								</a>
 
 							<?php endif; ?>
 
@@ -187,9 +190,19 @@ function bp_core_admin_slugs_options() {
 			<p><?php _e( 'Associate WordPress Pages with the following BuddyPress Registration pages.', 'buddypress' ); ?></p>
 		<?php else : ?>
 			<?php if ( is_multisite() ) : ?>
-				<p><?php printf( __( 'Registration is currently disabled.  Before associating a page is allowed, please enable registration by selecting either the "User accounts may be registered" or "Both sites and user accounts can be registered" option on <a href="%s">this page</a>.', 'buddypress' ), network_admin_url( 'settings.php' ) ); ?></p>
+				<p>
+					<?php
+					/* translators: %s: the link to the Network settings page */
+					printf( __( 'Registration is currently disabled.  Before associating a page is allowed, please enable registration by selecting either the "User accounts may be registered" or "Both sites and user accounts can be registered" option on <a href="%s">this page</a>.', 'buddypress' ), network_admin_url( 'settings.php' ) );
+					?>
+				</p>
 			<?php else : ?>
-				<p><?php printf( __( 'Registration is currently disabled.  Before associating a page is allowed, please enable registration by clicking on the "Anyone can register" checkbox on <a href="%s">this page</a>.', 'buddypress' ), admin_url( 'options-general.php' ) ); ?></p>
+				<p>
+					<?php
+					/* translators: %s: the link to the Site settings page */
+					printf( __( 'Registration is currently disabled.  Before associating a page is allowed, please enable registration by clicking on the "Anyone can register" checkbox on <a href="%s">this page</a>.', 'buddypress' ), admin_url( 'options-general.php' ) );
+					?>
+				</p>
 			<?php endif; ?>
 		<?php endif; ?>
 

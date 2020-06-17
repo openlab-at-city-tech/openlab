@@ -1262,6 +1262,35 @@ function bp_core_delete_account( $user_id = 0 ) {
 }
 
 /**
+ * Determines whether user data should be removed on the 'delete_user' hook.
+ *
+ * WordPress's 'delete_user' hook is ambiguous: on a standard installation, it means that a user
+ * account is being removed from the system, while on Multisite it simply means the user is
+ * being removed from a specific site (ie its roles are being revoked). As a rule, this means
+ * that BuddyPress should remove user data on the delete_user hook only on non-Multisite
+ * installations - only when the user account is being removed altogether. However, this behavior
+ * can be filtered in a global, per-user, or per-component fashion.
+ *
+ * @since 6.0.0
+ *
+ * @param string $data_type Type of data to be removed.
+ * @param int    $user_id   ID of the user, as passed to 'delete_user'.
+ * @return bool
+ */
+function bp_remove_user_data_on_delete_user_hook( $component, $user_id ) {
+	$remove = ! is_multisite();
+
+	/**
+	 * Filters whether to remove user data on the 'delete_user' hook.
+	 *
+	 * @param bool   $remove    Whether data should be removed.
+	 * @param string $data_type Type of data to be removed.
+	 * @param int    $user_id   ID of the user, as passed to 'delete_user'.
+	 */
+	return apply_filters( 'bp_remove_user_data_on_delete_user_hook', $remove, $component, $user_id );
+}
+
+/**
  * Delete a user's avatar when the user is deleted.
  *
  * @since 1.9.0
@@ -1276,7 +1305,22 @@ function bp_core_delete_avatar_on_user_delete( $user_id ) {
 	) );
 }
 add_action( 'wpmu_delete_user', 'bp_core_delete_avatar_on_user_delete' );
-add_action( 'delete_user', 'bp_core_delete_avatar_on_user_delete' );
+
+/**
+ * Deletes last_activity data on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function bp_core_delete_avatar_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'avatar', $user_id ) ) {
+		return;
+	}
+
+	bp_core_delete_avatar_on_user_delete( $user_id );
+}
+add_action( 'delete_user', 'bp_core_delete_avatar_on_delete_user' );
 
 /**
  * Multibyte-safe ucfirst() support.
@@ -1344,8 +1388,23 @@ function bp_core_remove_data( $user_id ) {
 	wp_cache_flush();
 }
 add_action( 'wpmu_delete_user',  'bp_core_remove_data' );
-add_action( 'delete_user',       'bp_core_remove_data' );
 add_action( 'bp_make_spam_user', 'bp_core_remove_data' );
+
+/**
+ * Deletes last_activity data on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function bp_core_remove_data_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'last_activity', $user_id ) ) {
+		return;
+	}
+
+	bp_core_remove_data( $user_id );
+}
+add_action( 'delete_user', 'bp_core_remove_data_on_delete_user' );
 
 /**
  * Check whether the logged-in user can edit settings for the displayed user.
@@ -1923,7 +1982,7 @@ function bp_core_activate_signup( $key ) {
 		// Set up data to pass to the legacy filter.
 		$user = array(
 			'user_id'  => $user_id,
-			'password' => $signup->meta['password'],
+			'password' => isset( $signup->meta['password'] ) ? $signup->meta['password'] : '',
 			'meta'     => $signup->meta,
 		);
 
@@ -2273,7 +2332,10 @@ function bp_core_signup_disable_inactive( $user = null, $username = '', $passwor
 		'bp-resend-activation'
 	);
 
-	$resend_string = '<br /><br />' . sprintf( __( 'If you have not received an email yet, <a href="%s">click here to resend it</a>.', 'buddypress' ), esc_url( $resend_url ) );
+	$resend_string = '<br /><br />';
+
+	/* translators: %s: the activation url */
+	$resend_string .= sprintf( __( 'If you have not received an email yet, <a href="%s">click here to resend it</a>.', 'buddypress' ), esc_url( $resend_url ) );
 
 	return new WP_Error( 'bp_account_not_activated', __( '<strong>ERROR</strong>: Your account has not been activated. Check your email for the activation link.', 'buddypress' ) . $resend_string );
 }
@@ -2719,6 +2781,12 @@ function bp_remove_member_type( $user_id, $member_type ) {
 		return false;
 	}
 
+	// No need to continue if the member doesn't have the type.
+	$existing_types = bp_get_member_type( $user_id, false );
+	if ( ! in_array( $member_type, $existing_types, true ) ) {
+		return false;
+	}
+
 	$deleted = bp_remove_object_terms( $user_id, $member_type, bp_get_member_type_tax_name() );
 
 	// Bust the cache if the type has been removed.
@@ -2828,7 +2896,22 @@ function bp_remove_member_type_on_user_delete( $user_id ) {
 	return bp_set_member_type( $user_id, '' );
 }
 add_action( 'wpmu_delete_user', 'bp_remove_member_type_on_user_delete' );
-add_action( 'delete_user', 'bp_remove_member_type_on_user_delete' );
+
+/**
+ * Deletes user member type on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function bp_remove_member_type_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'member_type', $user_id ) ) {
+		return;
+	}
+
+	bp_remove_member_type_on_user_delete( $user_id );
+}
+add_action( 'delete_user', 'bp_remove_member_type_on_delete_user' );
 
 /**
  * Get the "current" member type, if one is provided, in member directories.
@@ -2847,4 +2930,48 @@ function bp_get_current_member_type() {
 	 * @param string $value "Current" member type.
 	 */
 	return apply_filters( 'bp_get_current_member_type', buddypress()->current_member_type );
+}
+
+/**
+ * Setup the avatar upload directory for a user.
+ *
+ * @since 6.0.0
+ *
+ * @param string $directory The root directory name. Optional.
+ * @param int    $user_id   The user ID. Optional.
+ * @return array Array containing the path, URL, and other helpful settings.
+ */
+function bp_members_avatar_upload_dir( $directory = 'avatars', $user_id = 0 ) {
+
+	// Use displayed user if no user ID was passed.
+	if ( empty( $user_id ) ) {
+		$user_id = bp_displayed_user_id();
+	}
+
+	// Failsafe against accidentally nooped $directory parameter.
+	if ( empty( $directory ) ) {
+		$directory = 'avatars';
+	}
+
+	$path      = bp_core_avatar_upload_path() . '/' . $directory. '/' . $user_id;
+	$newbdir   = $path;
+	$newurl    = bp_core_avatar_url() . '/' . $directory. '/' . $user_id;
+	$newburl   = $newurl;
+	$newsubdir = '/' . $directory. '/' . $user_id;
+
+	/**
+	 * Filters the avatar upload directory for a user.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param array $value Array containing the path, URL, and other helpful settings.
+	 */
+	return apply_filters( 'bp_members_avatar_upload_dir', array(
+		'path'    => $path,
+		'url'     => $newurl,
+		'subdir'  => $newsubdir,
+		'basedir' => $newbdir,
+		'baseurl' => $newburl,
+		'error'   => false
+	) );
 }
