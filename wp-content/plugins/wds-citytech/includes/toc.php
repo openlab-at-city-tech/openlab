@@ -5,7 +5,7 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 
 /**
  * Inject the entry title right before the widget is rendered.
@@ -48,12 +48,18 @@ function add_anchor( $attributes ) {
 }
 add_filter( 'genesis_attr_entry-title', __NAMESPACE__ . '\\add_anchor' );
 
+// Don't load default styles.
+// add_filter( 'ez_toc_get_option_exclude_css', '__return_true' );
+
 /**
  * Enqueue our scripts and styles.
  *
  * @return void
  */
 function enqueue_assets() {
+	// Don't load default scripts.
+	wp_deregister_script( 'ez-toc-js' );
+
 	wp_enqueue_script(
 		'openalab-toc-script',
 		plugins_url( 'assets/js/openlab-toc.js', __DIR__ ),
@@ -69,4 +75,4 @@ function enqueue_assets() {
 		VERSION
 	);
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets', 20 );
