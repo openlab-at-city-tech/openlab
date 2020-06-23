@@ -48,18 +48,22 @@ function add_anchor( $attributes ) {
 }
 add_filter( 'genesis_attr_entry-title', __NAMESPACE__ . '\\add_anchor' );
 
-// Don't load default styles.
-// add_filter( 'ez_toc_get_option_exclude_css', '__return_true' );
+/**
+ * Don't load default Easy TOC script.
+ *
+ * @return void
+ */
+function deregister_default_script() {
+	wp_deregister_script( 'ez-toc-js' );
+}
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\deregister_default_script', 20 );
 
 /**
- * Enqueue our scripts and styles.
+ * Conditionally enqueue our assets when the widget is used.
  *
  * @return void
  */
 function enqueue_assets() {
-	// Don't load default scripts.
-	wp_deregister_script( 'ez-toc-js' );
-
 	wp_enqueue_script(
 		'openalab-toc-script',
 		plugins_url( 'assets/js/openlab-toc.js', __DIR__ ),
@@ -75,4 +79,4 @@ function enqueue_assets() {
 		VERSION
 	);
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets', 20 );
+add_action( 'ez_toc_after_widget', __NAMESPACE__ . '\\enqueue_assets' );
