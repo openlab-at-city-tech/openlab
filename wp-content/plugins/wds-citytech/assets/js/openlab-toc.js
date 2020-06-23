@@ -24,8 +24,13 @@ jQuery(document).ready( function( $ ) {
 			app.links = Array.from( document.querySelectorAll( '.ez-toc-list a' ) );
 			app.sections = app.links.map( function( link ) {
 				var id = link.getAttribute( 'href' );
-
 				return document.querySelector( id );
+			} ).filter( function( element ) {
+				if ( ! element ) {
+					return false;
+				}
+
+				return true;
 			} );
 		},
 
