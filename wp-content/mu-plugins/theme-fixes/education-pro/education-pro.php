@@ -12,7 +12,7 @@ remove_theme_support( 'genesis-auto-updates' );
 add_filter(
 	'genesis_favicon_url',
 	function( $url ) {
-		return home_url( 'favicon.ico' );
+		return get_home_url( 1, 'favicon.ico' );
 	}
 );
 
