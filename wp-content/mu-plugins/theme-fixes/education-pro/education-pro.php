@@ -8,6 +8,14 @@
  */
 remove_theme_support( 'genesis-auto-updates' );
 
+// Favicon fallback.
+add_filter(
+	'genesis_favicon_url',
+	function( $url ) {
+		return home_url( 'favicon.ico' );
+	}
+);
+
 //* Add support for custom header
 remove_theme_support( 'custom-header' );
 add_theme_support( 'custom-header', array(
