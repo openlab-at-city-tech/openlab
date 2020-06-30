@@ -972,8 +972,16 @@ class Openlab_Clone_Course_Site {
 				);
 
 				$url = get_post_meta( $sp->ID, '_menu_item_url', true );
+				$classes = get_post_meta( $sp->ID, '_menu_item_classes', true );
+
 				if ( $url ) {
 					update_post_meta( $sp->ID, '_menu_item_url', str_replace( $source_site_url, $dest_site_url, $url ) );
+				}
+
+				// Update "Group Profile" nav item url.
+				if ( ! empty( $classes ) && in_array( 'menu-item-group-profile-link', $classes ) ) {
+					$group = groups_get_group( $this->group_id );
+					update_post_meta( $sp->ID, '_menu_item_url', bp_get_group_permalink( $group ) );
 				}
 			}
 		}

@@ -30,6 +30,37 @@ function get_primary_menu_id() {
 }
 
 /**
+ * Insert "Home" menu item in the primary menu.
+ *
+ * @param int $menu_id  Optional. Primary menu ID.
+ * @return void
+ */
+function add_home_menu_item( $menu_id = null ) {
+	if ( ! $menu_id ) {
+		$menu_id = get_primary_menu_id();
+	}
+
+	if ( empty( $menu_id ) ) {
+		return false;
+	}
+
+	wp_update_nav_menu_item(
+		$menu_id,
+		0,
+		[
+			'menu-item-title'    => 'Home',
+			'menu-item-url'      => trailingslashit( home_url() ),
+			'menu-item-status'   => 'publish',
+			'menu-item-type'     => 'custom',
+			'menu-item-position' => -1,
+			'menu-item-classes'  => 'menu-item menu-item-home',
+		]
+	);
+	
+	return true;
+}
+
+/**
  * Insert "Group Profile" menu item in the primary menu.
  *
  * @param int $group_id Group ID.
@@ -41,13 +72,16 @@ function add_group_menu_item( $group_id = 0, $menu_id = null ) {
 		$menu_id = get_primary_menu_id();
 	}
 
+	if ( empty( $menu_id ) ) {
+		return false;
+	}
+
 	$group      = groups_get_group( $group_id );
 	$group_type = ucfirst( groups_get_groupmeta( $group_id, 'wds_group_type' ) );
-	$item_db_id = (int) get_term_meta( $menu_id, 'group_menu_item_id', true );
 
-	$group_menu_item_id = wp_update_nav_menu_item(
+	wp_update_nav_menu_item(
 		$menu_id,
-		$item_db_id,
+		0,
 		[
 			'menu-item-title'    => sprintf( '%s Profile', $group_type ),
 			'menu-item-url'      => bp_get_group_permalink( $group ),
@@ -57,13 +91,8 @@ function add_group_menu_item( $group_id = 0, $menu_id = null ) {
 			'menu-item-classes'  => 'menu-item menu-item-group-profile-link',
 		]
 	);
-
-	// Convert WP_Error to 0.
-	$group_menu_item_id = is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id;
 	
-
-	// Store menu item IDs. This is used to update URLs when cloning sites.
-	update_term_meta( $menu_id, 'group_menu_item_id', $group_menu_item_id );
+	return true;
 }
 
 /**

@@ -1444,6 +1444,12 @@ function ra_copy_blog_page( $group_id ) {
 								update_option( 'rewrite_rules', '' );
 							}
 
+							/**
+							 * Add "Home" and "Group Profile" nav menu items.
+							 */
+							OpenLab\NavMenus\add_group_menu_item( $group_id );
+							OpenLab\NavMenus\add_home_menu_item();
+
 							restore_current_blog();
 							$msg = __( 'Blog Copied' );
 						}
