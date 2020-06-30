@@ -189,8 +189,6 @@ add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
  * corresponding method for custom menus.
  */
 function my_page_menu_filter( $menu ) {
-	global $bp, $wpdb;
-
 	if ( strpos( $menu, 'Home' ) !== false ) {
 		$menu = str_replace( 'Site Home', 'Home', $menu );
 		$menu = str_replace( 'Home', 'Site Home', $menu );
@@ -222,92 +220,6 @@ function my_page_menu_filter( $menu ) {
 	return $menu;
 }
 add_filter( 'wp_page_menu', 'my_page_menu_filter' );
-
-//child theme menu filter to link to website
-function cuny_add_group_menu_items( $items, $args ) {
-	/**
-	 * Allows individual themes to opt out.
-	 */
-	$allow = apply_filters( 'openlab_add_dynamic_nav_items', true, $args );
-	if ( ! $allow ) {
-		return $items;
-	}
-
-	if ( bp_is_root_blog() ) {
-		return $items;
-	}
-
-	// Only add the Home link if one is not already found
-	// See http://openlab.citytech.cuny.edu/redmine/isues/1031
-	$has_home = false;
-	foreach ( $items as $item ) {
-		if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
-			$has_home = true;
-			break;
-		}
-	}
-
-	if ( ! $has_home ) {
-		$post_args          = new stdClass();
-		$home_link          = new WP_Post( $post_args );
-		$home_link->title   = 'Home';
-		$home_link->url     = trailingslashit( site_url() );
-		$home_link->slug    = 'home';
-		$home_link->ID      = 'home';
-		$home_link->classes = [ 'menu-item', 'menu-item-home' ];
-		$items              = array_merge( array( $home_link ), $items );
-	}
-
-	$items = array_merge( cuny_group_menu_items(), $items );
-
-	return $items;
-}
-add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-
-/**
- * Disable the filter above when we're in a sidebar.
- */
-add_action(
-	'dynamic_sidebar_before',
-	function() {
-		remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-
-		add_action(
-			'dynamic_sidebar_after',
-			function() {
-				add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-			}
-		);
-	},
-	0
-);
-
-function cuny_group_menu_items() {
-	global $bp, $wpdb;
-
-	$items = array();
-
-	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-
-	if ( $wds_bp_group_id ) {
-		$group = groups_get_group( $wds_bp_group_id );
-		if ( $group->is_visible ) {
-			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-
-			$post_args             = new stdClass();
-			$profile_item          = new WP_Post( $post_args );
-			$profile_item->ID      = 'group-profile-link';
-			$profile_item->title   = sprintf( '%s Profile', $group_type );
-			$profile_item->slug    = 'group-profile-link';
-			$profile_item->url     = bp_get_group_permalink( $group );
-			$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
-
-			$items[] = $profile_item;
-		}
-	}
-
-	return $items;
-}
 
 //Default BP Avatar Full
 if ( ! defined( 'BP_AVATAR_FULL_WIDTH' ) ) {

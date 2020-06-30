@@ -598,7 +598,7 @@ a.close-popup-login {
     padding: 0;
 }
 
-#menu-item-group-profile-link {
+.menu-item-group-profile-link {
 	padding-right: 17px;
 	margin-right: 10px;
 	background: transparent url( "/wp-content/themes/openlab/images/site-sidebar-icon.png" ) no-repeat right center;
