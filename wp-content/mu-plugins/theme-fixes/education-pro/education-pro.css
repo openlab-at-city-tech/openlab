@@ -240,8 +240,17 @@ div.title-area {
 	padding-top: 20px;
 }
 
-body.header-image .title-area {
-	background: transparent !important;
+body.header-image .title-area-wrap {
+	min-height: 110px;
+	margin: 0 auto;
+	max-width: 960px;
+	position: relative;
+}
+
+body.header-image div.title-area {
+	background: rgba(255, 255, 255, 0.9) !important;
+	height: 100%;
+	padding-top: 12px;
 }
 
 /*
@@ -1054,8 +1063,12 @@ body .site-title a {
 	color: #fff;
 }
 
+.education-pro-red.header-image .title-area {
+	color: #812f27;
+}
+
 .education-pro-red a.title-area-link:hover div.title-area .site-title {
-	color: #f5f5f5;
+	color: #61241f;
 }
 
 .education-pro-red .content .entry-header .entry-meta .entry-time {

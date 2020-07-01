@@ -403,7 +403,7 @@ function openlab_genesis_do_header() {
 	global $wp_registered_sidebars;
 
 	genesis_markup( array(
-		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div %s>',
+		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div class="title-area-wrap"><div %s>',
 		'context' => 'title-area',
 	) );
 
@@ -422,7 +422,7 @@ function openlab_genesis_do_header() {
 		do_action( 'genesis_site_description' );
 
 	genesis_markup( array(
-		'close'   => '</div></a>',
+		'close'   => '</div></div></a>',
 		'context' => 'title-area',
 	) );
 
