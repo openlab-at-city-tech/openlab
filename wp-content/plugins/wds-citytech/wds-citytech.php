@@ -2751,6 +2751,15 @@ add_action(
 	function( $query ) {
 		if ( ! $query->is_main_query() ) {
 			remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+
+			// Then add it back for future queries.
+			add_action(
+				'pre_get_posts',
+				function( $query ) {
+					add_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+				},
+				20
+			);
 		}
 	},
 	0
