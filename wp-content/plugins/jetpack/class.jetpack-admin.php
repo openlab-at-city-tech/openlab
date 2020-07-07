@@ -10,11 +10,6 @@ class Jetpack_Admin {
 	 **/
 	private static $instance = null;
 
-	/**
-	 * @var Jetpack
-	 **/
-	private $jetpack;
-
 	static function init() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === 'jetpack' ) {
 			add_filter( 'nocache_headers', array( 'Jetpack_Admin', 'add_no_store_header' ), 100 );
@@ -32,8 +27,6 @@ class Jetpack_Admin {
 	}
 
 	private function __construct() {
-		$this->jetpack = Jetpack::init();
-
 		jetpack_require_lib( 'admin-pages/class.jetpack-react-page' );
 		$this->jetpack_react = new Jetpack_React_Page();
 
@@ -44,7 +37,9 @@ class Jetpack_Admin {
 		$this->jetpack_about = new Jetpack_About_Page();
 
 		add_action( 'admin_menu', array( $this->jetpack_react, 'add_actions' ), 998 );
+		add_action( 'admin_menu', array( $this->jetpack_react, 'add_actions' ), 998 );
 		add_action( 'jetpack_admin_menu', array( $this->jetpack_react, 'jetpack_add_dashboard_sub_nav_item' ) );
+		add_action( 'jetpack_admin_menu', array( $this->jetpack_react, 'jetpack_add_set_up_sub_nav_item' ) );
 		add_action( 'jetpack_admin_menu', array( $this->jetpack_react, 'jetpack_add_settings_sub_nav_item' ) );
 		add_action( 'jetpack_admin_menu', array( $this, 'admin_menu_debugger' ) );
 		add_action( 'jetpack_admin_menu', array( $this->fallback_page, 'add_actions' ) );
@@ -177,7 +172,7 @@ class Jetpack_Admin {
 			}
 		}
 
-		uasort( $modules, array( $this->jetpack, 'sort_modules' ) );
+		uasort( $modules, array( 'Jetpack', 'sort_modules' ) );
 
 		if ( ! Jetpack::is_active() ) {
 			uasort( $modules, array( __CLASS__, 'sort_requires_connection_last' ) );
@@ -195,6 +190,20 @@ class Jetpack_Admin {
 		 * We never want to show VaultPress as activatable through Jetpack.
 		 */
 		if ( 'vaultpress' === $module['module'] ) {
+			return false;
+		}
+
+		/*
+		 * WooCommerce Analytics should only be available
+		 * when running WooCommerce 3+
+		 */
+		if (
+			'woocommerce-analytics' === $module['module']
+			&& (
+				! class_exists( 'WooCommerce' )
+				|| version_compare( WC_VERSION, '3.0', '<' )
+			)
+		) {
 			return false;
 		}
 

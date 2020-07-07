@@ -70,7 +70,6 @@ class Listener {
 	 * This is necessary because you can't use "new" when you declare instance properties >:(
 	 */
 	protected function __construct() {
-		Main::init();
 		$this->set_defaults();
 		$this->init();
 	}
@@ -300,6 +299,9 @@ class Listener {
 		 * it exceeds some limit AND the oldest item exceeds the age limit (i.e. sending has stopped).
 		 */
 		if ( ! $this->can_add_to_queue( $queue ) ) {
+			if ( 'sync' === $queue->id ) {
+				$this->sync_data_loss( $queue );
+			}
 			return;
 		}
 
@@ -347,11 +349,37 @@ class Listener {
 
 		// since we've added some items, let's try to load the sender so we can send them as quickly as possible.
 		if ( ! Actions::$sender ) {
-			add_filter( 'jetpack_sync_sender_should_load', '__return_true' );
+			add_filter( 'jetpack_sync_sender_should_load', __NAMESPACE__ . '\Actions::should_initialize_sender_enqueue' );
 			if ( did_action( 'init' ) ) {
 				Actions::add_sender_shutdown();
 			}
 		}
+	}
+
+	/**
+	 * Sync Data Loss Handler
+	 *
+	 * @param Queue $queue Sync queue.
+	 * @return boolean was send successful
+	 */
+	public function sync_data_loss( $queue ) {
+		if ( ! Settings::is_sync_enabled() ) {
+			return;
+		}
+		$updated = Health::update_status( Health::STATUS_OUT_OF_SYNC );
+
+		if ( ! $updated ) {
+			return;
+		}
+
+		$data = array(
+			'timestamp'  => microtime( true ),
+			'queue_size' => $queue->size(),
+			'queue_lag'  => $queue->lag(),
+		);
+
+		$sender = Sender::get_instance();
+		return $sender->send_action( 'jetpack_sync_data_loss', $data );
 	}
 
 	/**

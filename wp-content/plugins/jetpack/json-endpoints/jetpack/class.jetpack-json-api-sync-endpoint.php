@@ -48,8 +48,8 @@ class Jetpack_JSON_API_Sync_Endpoint extends Jetpack_JSON_API_Endpoint {
 			return new WP_Error( 'invalid_queue', 'Queue name is required', 400 );
 		}
 
-		if ( ! in_array( $query, array( 'sync', 'full_sync' ) ) ) {
-			return new WP_Error( 'invalid_queue', 'Queue name should be sync or full_sync', 400 );
+		if ( ! in_array( $query, array( 'sync', 'full_sync', 'immediate' ) ) ) {
+			return new WP_Error( 'invalid_queue', 'Queue name should be sync, full_sync or immediate', 400 );
 		}
 		return $query;
 	}
@@ -191,6 +191,14 @@ class Jetpack_JSON_API_Sync_Checkout_Endpoint extends Jetpack_JSON_API_Sync_Endp
 
 		$number_of_items = absint( $args['number_of_items'] );
 
+		if ( 'immediate' === $queue_name ) {
+			return $this->immediate_full_sync_pull( $number_of_items );
+		}
+
+		return $this->queue_pull( $queue_name, $number_of_items, $args );
+	}
+
+	function queue_pull( $queue_name, $number_of_items, $args ){
 		$queue = new Queue( $queue_name );
 
 		if ( 0 === $queue->size() ) {
@@ -233,6 +241,43 @@ class Jetpack_JSON_API_Sync_Checkout_Endpoint extends Jetpack_JSON_API_Sync_Endp
 		);
 	}
 
+	public $items = [];
+
+	public function jetpack_sync_send_data_listener() {
+		foreach ( func_get_args()[0] as $key => $item ) {
+			$this->items[ $key ] = $item;
+		}
+	}
+
+	/**
+	 * Check out a buffer of full sync actions.
+	 *
+	 * @param null $number_of_items Number of Actions to check-out.
+	 *
+	 * @return array Sync Actions to be returned to requestor
+	 */
+	public function immediate_full_sync_pull( $number_of_items = null ) {
+		// try to give ourselves as much time as possible.
+		set_time_limit( 0 );
+
+		$original_send_data_cb = array( 'Automattic\Jetpack\Sync\Actions', 'send_data' );
+		$temp_send_data_cb     = array( $this, 'jetpack_sync_send_data_listener' );
+
+		Sender::get_instance()->set_enqueue_wait_time( 0 );
+		remove_filter( 'jetpack_sync_send_data', $original_send_data_cb );
+		add_filter( 'jetpack_sync_send_data', $temp_send_data_cb, 10, 6 );
+		Sender::get_instance()->do_full_sync();
+		remove_filter( 'jetpack_sync_send_data', $temp_send_data_cb );
+		add_filter( 'jetpack_sync_send_data', $original_send_data_cb, 10, 6 );
+
+		return array(
+			'items'          => $this->items,
+			'codec'          => Sender::get_instance()->get_codec()->name(),
+			'sent_timestamp' => time(),
+			'status'         => Actions::get_sync_status(),
+		);
+	}
+
 	protected function get_buffer( $queue, $number_of_items ) {
 		$start = time();
 		$max_duration = 5; // this will try to get the buffer
@@ -256,6 +301,7 @@ class Jetpack_JSON_API_Sync_Checkout_Endpoint extends Jetpack_JSON_API_Sync_Endp
 
 class Jetpack_JSON_API_Sync_Close_Endpoint extends Jetpack_JSON_API_Sync_Endpoint {
 	protected function result() {
+
 		$request_body = $this->input();
 		$queue_name = $this->validate_queue( $request_body['queue'] );
 
@@ -279,13 +325,28 @@ class Jetpack_JSON_API_Sync_Close_Endpoint extends Jetpack_JSON_API_Sync_Endpoin
 
 		$items = $queue->peek_by_id( $request_body['item_ids'] );
 
-		/** This action is documented in packages/sync/src/modules/Full_Sync.php */
-		$full_sync_module = Modules::get_module( 'full-sync' );
+		// Update Full Sync Status if queue is "full_sync".
+		if ( 'full_sync' === $queue_name ) {
+			$full_sync_module = Modules::get_module( 'full-sync' );
 
-		$full_sync_module->update_sent_progress_action( $items );
+			$full_sync_module->update_sent_progress_action( $items );
+		}
 
 		$buffer = new Queue_Buffer( $request_body['buffer_id'], $request_body['item_ids'] );
 		$response = $queue->close( $buffer, $request_body['item_ids'] );
+
+		// Perform another checkout?
+		if ( isset( $request_body['continue'] ) && $request_body['continue'] ) {
+			if ( in_array( $queue_name, array( 'full_sync', 'immediate' ), true ) ) {
+				// Send Full Sync Actions.
+				Sender::get_instance()->do_full_sync();
+			} else {
+				// Send Incremental Sync Actions.
+				if ( $queue->has_any_items() ) {
+					Sender::get_instance()->do_sync();
+				}
+			}
+		}
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
