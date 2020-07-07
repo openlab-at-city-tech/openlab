@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-05-14T21:50:09+00:00\n"
+"POT-Creation-Date: 2020-07-01T01:15:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: buddypress\n"
@@ -1669,9 +1669,9 @@ msgstr ""
 #: bp-groups/classes/class-bp-rest-attachments-group-avatar-endpoint.php:178
 #: bp-groups/classes/class-bp-rest-group-invites-endpoint.php:211
 #: bp-groups/classes/class-bp-rest-group-invites-endpoint.php:461
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:324
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:484
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:621
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:328
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:488
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:625
 #: bp-groups/classes/class-bp-rest-group-membership-request-endpoint.php:207
 #: bp-groups/classes/class-bp-rest-group-membership-request-endpoint.php:449
 #: bp-groups/classes/class-bp-rest-groups-endpoint.php:245
@@ -4705,29 +4705,29 @@ msgstr ""
 msgid "%1$s and %2$s are now friends"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:62
+#: bp-friends/bp-friends-filters.php:66
 msgid "BuddyPress Friends"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:64
+#: bp-friends/bp-friends-filters.php:68
 msgctxt "BuddyPress Friends data exporter friendly name"
 msgid "Friends"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:68
+#: bp-friends/bp-friends-filters.php:72
 msgid "BuddyPress Friend Requests (Sent)"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:70
+#: bp-friends/bp-friends-filters.php:74
 msgctxt "BuddyPress Friend Requests data exporter friendly name"
 msgid "Friend Requests (Sent)"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:74
+#: bp-friends/bp-friends-filters.php:78
 msgid "BuddyPress Friend Requests (Received)"
 msgstr ""
 
-#: bp-friends/bp-friends-filters.php:76
+#: bp-friends/bp-friends-filters.php:80
 msgctxt "BuddyPress Friend Requests data exporter friendly name"
 msgid "Friend Requests (Received)"
 msgstr ""
@@ -4848,7 +4848,7 @@ msgstr ""
 
 #. translators: %d: total friend count
 #: bp-friends/bp-friends-template.php:268
-#: bp-friends/bp-friends-template.php:739
+#: bp-friends/bp-friends-template.php:738
 msgid "%d friend"
 msgid_plural "%d friends"
 msgstr[0] ""
@@ -4983,8 +4983,8 @@ msgstr ""
 #: bp-friends/classes/class-bp-rest-friends-endpoint.php:132
 #: bp-friends/classes/class-bp-rest-friends-endpoint.php:213
 #: bp-friends/classes/class-bp-rest-friends-endpoint.php:305
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:416
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:511
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:427
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:522
 msgid "There was a problem confirming if user is valid."
 msgstr ""
 
@@ -4999,80 +4999,84 @@ msgid "Sorry, you need to be logged in to perform this action."
 msgstr ""
 
 #: bp-friends/classes/class-bp-rest-friends-endpoint.php:228
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:350
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:361
 msgid "Friendship does not exist."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:318
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:316
+msgid "Those users are already friends or have sent friendship request(s) recently."
+msgstr ""
+
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:329
 #: bp-templates/bp-nouveau/includes/groups/functions.php:488
 msgid "You are not allowed to perform this action."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:335
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:346
 msgid "There was an error trying to create the friendship."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:431
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:526
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:442
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:537
 msgid "Invalid friendship ID."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:442
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:453
 msgid "Could not accept friendship."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:560
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:571
 msgid "Could not delete friendship."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:715
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:726
 msgid "A unique numeric ID of a user."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:734
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:745
 msgid "Whether to force the friendship agreement."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:746
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:757
 msgid "Whether to force friendship removal."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:806
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:876
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:817
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:887
 msgid "Unique numeric identifier of the friendship."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:811
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:884
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:822
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:895
 msgid "The ID of the user who is requesting the Friendship."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:816
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:892
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:827
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:903
 msgid "The ID of the user who is invited to agree to the Friendship request."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:821
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:832
 msgid "Whether the friendship been confirmed/accepted."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:827
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:838
 msgid "The date the friendship was created, in the site's timezone."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:859
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:870
 msgid "ID of the member whose friendships are being retrieved."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:868
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:879
 msgid "Wether the friendship has been accepted."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:900
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:911
 msgid "Column name to order the results by."
 msgstr ""
 
-#: bp-friends/classes/class-bp-rest-friends-endpoint.php:909
+#: bp-friends/classes/class-bp-rest-friends-endpoint.php:920
 msgid "Order results ascending or descending."
 msgstr ""
 
@@ -6688,125 +6692,125 @@ msgstr ""
 msgid "A unique numeric ID for the Group Member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:219
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:347
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:223
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:351
 msgid "Could not join the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:244
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:248
 msgid "Could not add member to the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:301
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:305
 msgid "Sorry, you need to be logged in to join a group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:313
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:473
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:610
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:317
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:477
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:614
 msgid "Invalid group member ID."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:386
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:390
 msgid "Could not promote member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:396
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:400
 msgid "Could not demote member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:405
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:409
 msgid "Could not demote member from the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:406
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:410
 msgid "Could not ban member from the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:407
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:411
 msgid "Could not unban member from the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:461
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:465
 #: bp-groups/classes/class-bp-rest-group-membership-request-endpoint.php:546
 msgid "Sorry, you need to be logged in to make an update."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:500
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:504
 msgid "Sorry, you are not allowed to ban this group member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:501
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:505
 msgid "Sorry, you are not allowed to unban this group member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:502
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:506
 msgid "Sorry, you are not allowed to promote this group member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:503
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:507
 msgid "Sorry, you are not allowed to demote this group member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:549
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:553
 msgid "Could not remove member from this group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:598
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:639
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:655
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:602
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:643
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:659
 msgid "Sorry, you need to be logged in to view a group membership."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:774
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:778
 msgid "Group role to assign the user to."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:788
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:792
 msgid "A unique numeric ID for the Member to add to the Group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:799
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:803
 msgid "Action used to update a group member."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:839
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:843
 msgid "Whether the member is a group moderator."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:845
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:849
 msgid "Whether the member has been banned from the group."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:851
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:855
 msgid "Whether the member is a group administrator."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:857
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:861
 msgid "Whether the membership of this user has been confirmed."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:863
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:867
 msgid "The date of the last time the membership of this user was modified, in the site's timezone."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:893
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:897
 msgid "Sort the order of results by the status of the group members."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:902
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:906
 msgid "Ensure result set includes specific group roles."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:914
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:918
 msgid "Ensure result set excludes specific member IDs."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:923
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:927
 msgid "Whether results should exclude group admins and mods."
 msgstr ""
 
-#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:931
+#: bp-groups/classes/class-bp-rest-group-membership-endpoint.php:935
 msgid "Whether results should exclude banned group members."
 msgstr ""
 
@@ -7244,104 +7248,104 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1073
+#: bp-members/bp-members-functions.php:1104
 msgid "User last_activity data is no longer stored in usermeta. Use bp_get_user_last_activity() instead."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1108
+#: bp-members/bp-members-functions.php:1139
 msgid "User last_activity data is no longer stored in usermeta. Use bp_update_user_last_activity() instead."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1367
-#: bp-members/bp-members-functions.php:2516
+#: bp-members/bp-members-functions.php:1398
+#: bp-members/bp-members-functions.php:2547
 msgid "<strong>ERROR</strong>: Your account has been marked as a spammer."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1615
+#: bp-members/bp-members-functions.php:1646
 msgid "Please check your email address."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1619
-#: bp-members/bp-members-functions.php:1623
+#: bp-members/bp-members-functions.php:1650
+#: bp-members/bp-members-functions.php:1654
 msgid "Sorry, that email address is not allowed!"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1627
+#: bp-members/bp-members-functions.php:1658
 msgid "Sorry, that email address is already used!"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1667
+#: bp-members/bp-members-functions.php:1698
 msgid "Please enter a username"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1673
+#: bp-members/bp-members-functions.php:1704
 msgid "That username is not allowed"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1678
+#: bp-members/bp-members-functions.php:1709
 msgid "Usernames can contain only letters, numbers, ., -, and @"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1683
+#: bp-members/bp-members-functions.php:1714
 msgid "Username must be at least 4 characters"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1688
+#: bp-members/bp-members-functions.php:1719
 msgid "Sorry, usernames may not contain the character \"_\"!"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1695
+#: bp-members/bp-members-functions.php:1726
 msgid "Sorry, usernames must have letters too!"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1707
+#: bp-members/bp-members-functions.php:1738
 msgid "Sorry, that username already exists!"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1926
-#: bp-members/bp-members-functions.php:1953
+#: bp-members/bp-members-functions.php:1957
+#: bp-members/bp-members-functions.php:1984
 #: bp-members/classes/class-bp-rest-signup-endpoint.php:666
 msgid "Invalid activation key."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1933
+#: bp-members/bp-members-functions.php:1964
 msgid "The user is already active."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1935
+#: bp-members/bp-members-functions.php:1966
 msgid "The site is already active."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1965
+#: bp-members/bp-members-functions.php:1996
 msgid "Could not create user"
 msgstr ""
 
-#: bp-members/bp-members-functions.php:1979
+#: bp-members/bp-members-functions.php:2010
 msgid "That username is already activated."
 msgstr ""
 
 #. translators: %s: the activation url
-#: bp-members/bp-members-functions.php:2338
+#: bp-members/bp-members-functions.php:2369
 msgid "If you have not received an email yet, <a href=\"%s\">click here to resend it</a>."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2340
+#: bp-members/bp-members-functions.php:2371
 msgid "<strong>ERROR</strong>: Your account has not been activated. Check your email for the activation link."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2371
+#: bp-members/bp-members-functions.php:2402
 msgid "<strong>ERROR</strong>: Your account has already been activated."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2373
+#: bp-members/bp-members-functions.php:2404
 msgid "Activation email resent! Please check your inbox or spam folder."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2603
+#: bp-members/bp-members-functions.php:2634
 msgid "Member type already exists."
 msgstr ""
 
-#: bp-members/bp-members-functions.php:2626
+#: bp-members/bp-members-functions.php:2657
 msgid "You may not register a member type with this name."
 msgstr ""
 
@@ -8967,11 +8971,11 @@ msgstr ""
 msgid "No new notifications"
 msgstr ""
 
-#: bp-notifications/bp-notifications-filters.php:24
+#: bp-notifications/bp-notifications-filters.php:28
 msgid "BuddyPress Notifications Data"
 msgstr ""
 
-#: bp-notifications/bp-notifications-filters.php:26
+#: bp-notifications/bp-notifications-filters.php:30
 msgctxt "BuddyPress Notifications data exporter friendly name"
 msgid "Notifications Data"
 msgstr ""
@@ -11663,11 +11667,11 @@ msgstr ""
 msgid "Friendship cancelled."
 msgstr ""
 
-#: bp-templates/bp-nouveau/includes/friends/loader.php:101
+#: bp-templates/bp-nouveau/includes/friends/loader.php:105
 msgid "Accepted friendship requests"
 msgstr ""
 
-#: bp-templates/bp-nouveau/includes/friends/loader.php:106
+#: bp-templates/bp-nouveau/includes/friends/loader.php:110
 msgid "Pending friendship requests"
 msgstr ""
 
