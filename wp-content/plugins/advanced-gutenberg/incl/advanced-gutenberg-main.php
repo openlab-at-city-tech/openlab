@@ -1526,7 +1526,7 @@ float: left;'
 
             wp_add_inline_style(
                 'dashicons',
-                '.entry-content > * {margin-bottom: ' . $blocks_spacing . 'px}'
+                '.entry-content > * {margin-bottom: ' . $blocks_spacing . 'px !important}'
             );
         }
     }
