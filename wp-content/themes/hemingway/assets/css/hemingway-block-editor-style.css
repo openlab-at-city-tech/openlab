@@ -1,36 +1,21 @@
 /*---------------------------------------------------------------------------------
-	Gutenberg editor styles for Hemingway
+	Block Editor styles for Hemingway
 ---------------------------------------------------------------------------------*/
 
 
 /* Structure ---------------------------------------------- */
 
-.block-editor__container .editor-styles-wrapper {
+:root .editor-styles-wrapper {
+	color: #444;
+}
+
+.editor-styles-wrapper > * {
+	font-family: 'Lato', sans-serif;
 	font-size: 19px;
 }
 
-.editor-rich-text__tinymce {
-	color: #444;
-	font-family: 'Lato', sans-serif;
-	-webkit-font-smoothing: antialiased;
-}
-
-.editor-rich-text__tinymce * {
-	font-family: inherit !important;
-}
-
-.editor-styles-wrapper .editor-default-block-appender, 
-.editor-styles-wrapper .editor-block-list__block,
-.editor-styles-wrapper .editor-post-title__block {
-    max-width: 676px;
-}
-
-.editor-styles-wrapper .editor-block-list__block[data-align="wide"] {
-    max-width: 756px;
-}
-
-.editor-styles-wrapper .editor-block-list__block[data-align="full"] {
-    max-width: none;
+.wp-block {
+	max-width: 676px;
 }
 
 .editor-styles-wrapper .editor-block-list__block[data-align="right"] .editor-block-list__block-edit,
@@ -38,52 +23,53 @@
     max-width: 50%;
 }
 
-.editor-styles-wrapper .editor-rich-text__tinymce,
-.editor-styles-wrapper .editor-rich-text__tinymce.mce-content-body {
-	line-height: 1.7;
-}
-
-
-/* Typography --------------------------------------------- */
-
+/* Typography -------------------------------- */
 
 .editor-post-title__block .editor-post-title__input {
 	font-family: 'Lato', sans-serif;
-	font-size: 2.36em;
+	font-size: 45px;
 	font-weight: 700;
 	line-height: 1.2;
 }
 
-.editor-styles-wrapper a {
-	color: #1abc9c;
-}
-
-.block-editor__container .editor-styles-wrapper p {
+.block-editor-default-block-appender textarea.block-editor-default-block-appender__content {
+	font-family: inherit;
 	font-size: inherit;
 }
 
-.wp-block-heading h1,
-.wp-block-heading h2,
-.wp-block-heading h3,
-.wp-block-heading h4,
-.wp-block-heading h5,
-.wp-block-heading h6 {
+.editor-styles-wrapper .editor-block-list__layout a,
+.editor-styles-wrapper .block-editor-block-list__layout a {
+	color: #1abc9c;
+	text-decoration: underline;
+}
+
+:root .editor-styles-wrapper p {
+	font-size: inherit;
+	line-height: 1.5;
+}
+
+.wp-block h1,
+.wp-block h2,
+.wp-block h3,
+.wp-block h4,
+.wp-block h5,
+.wp-block h6 {
 	font-weight: 700;
 	line-height: 1.2 !important;
 }
 
-.wp-block-heading h4,
-.wp-block-heading h5 {
+.wp-block h4,
+.wp-block h5 {
 	font-weight: 400;
 }
 
-.wp-block-heading h1 { font-size: 2em; }
-.wp-block-heading h2 { font-size: 1.75em; }
-.wp-block-heading h3 { font-size: 1.5em; }
-.wp-block-heading h4 { font-size: 1.25em; }
-.wp-block-heading h5 { font-size: 1.1em; }
+.wp-block h1 { font-size: 2em; }
+.wp-block h2 { font-size: 1.75em; }
+.wp-block h3 { font-size: 1.5em; }
+.wp-block h4 { font-size: 1.25em; }
+.wp-block h5 { font-size: 1.1em; }
 
-.wp-block-heading h6 {
+.wp-block h6 {
 	font-size: .9em;
 	letter-spacing: 1px;
 	text-transform: uppercase;
@@ -95,8 +81,7 @@ p.has-drop-cap:not(:focus):first-letter {
 }
 
 
-/* Custom Text Sizes -------------------------------------- */
-
+/* Custom Text Sizes ------------------------- */
 
 .editor-styles-wrapper p.has-large-font-size,
 .editor-styles-wrapper p.has-large-font-size.mce-content-body,
@@ -106,7 +91,7 @@ p.has-drop-cap:not(:focus):first-letter {
 }
 
 
-/* Monospace -------------------------------------- */
+/* Monospace --------------------------------- */
 
 .editor-styles-wrapper code, 
 .editor-styles-wrapper kbd, 
@@ -273,6 +258,7 @@ hr.wp-block-separator {
 /* Block: Quote -------------------------------------------- */
 
 blockquote {
+	font-family: 'Raleway', 'Helvetica Neue', sans-serif;
 	margin: 0;
 }
 
@@ -399,4 +385,8 @@ pre.wp-block-verse {
 	font-size: 0.9em;
 	line-height: 1.1;
 	padding: 16px 18px;
+}
+
+.wp-block-button__link {
+	background-color: #1d1d1d;
 }

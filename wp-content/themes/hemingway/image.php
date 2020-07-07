@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="wrapper section-inner">
+<div class="wrapper section-inner group">
 
 	<div class="content left">
 											        
@@ -14,15 +14,7 @@
 					
 						<div class="content-inner">
 											
-							<div class="featured-media">
-							
-								<?php $image_array = wp_get_attachment_image_src( $post->ID, 'full', false ); ?>
-							
-								<a href="<?php echo esc_url( $image_array[0] ); ?>" rel="attachment">
-									<?php echo wp_get_attachment_image( $post->ID, 'post-image' ); ?>
-								</a>
-							
-							</div><!-- .featured-media -->
+							<?php hemingway_the_featured_media( $post ); ?>
 							
 							<div class="post-header">
 							
@@ -41,27 +33,31 @@
 							</div><!-- .post-header -->
 			
 							<?php if ( ! empty( $post->post_excerpt ) ) : ?>
-							
 								<div class="post-content">
-								
 									<?php the_excerpt(); ?>
-									
 								</div><!-- .post-content -->
-								
 							<?php endif; ?>
 													
 						</div><!-- .content-inner -->
 						
 						<div class="post-meta-bottom">
 										
-							<div class="post-nav">
+							<div class="post-nav group">
 							
 								<?php
 								/**
 								 * Grab the IDs of all the image attachments in a gallery so we can get the URL of the next adjacent image in a gallery,
 								 * or the first image (if we're looking at the last image in a gallery), or, in a gallery of one, just the link to that image file
 								 */
-								$attachments = array_values( get_children( array( 'post_parent' => $post->post_parent, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID' ) ) );
+								$attachments = array_values( get_children( array( 
+									'post_parent' 		=> $post->post_parent, 
+									'post_status' 		=> 'inherit', 
+									'post_type' 		=> 'attachment', 
+									'post_mime_type' 	=> 'image', 
+									'order' 			=> 'ASC', 
+									'orderby' 			=> 'menu_order ID' 
+								) ) );
+								
 								foreach ( $attachments as $k => $attachment ) :
 									if ( $attachment->ID == $post->ID )
 										break;
@@ -79,11 +75,9 @@
 									$next_attachment_url = get_attachment_link( $attachments[ 0 ]->ID );
 								endif;
 								?>
-								<a href="<?php echo esc_url( $prev_attachment_url ); ?>" class="post-nav-older" rel="attachment"><?php _e('&laquo; Previous<span> attachment</span>', 'hemingway'); ?></a>
-								<a href="<?php echo esc_url( $next_attachment_url ); ?>" class="post-nav-newer" rel="attachment"><?php _e('Next<span> attachment</span> &raquo;', 'hemingway'); ?></a>
-							
-								<div class="clear"></div>
-							
+								<a href="<?php echo esc_url( $prev_attachment_url ); ?>" class="post-nav-older" rel="attachment"><?php _e( '&laquo; Previous<span> attachment</span>', 'hemingway' ); ?></a>
+								<a href="<?php echo esc_url( $next_attachment_url ); ?>" class="post-nav-newer" rel="attachment"><?php _e( 'Next<span> attachment</span> &raquo;', 'hemingway' ); ?></a>
+														
 							</div><!-- .post-nav -->
 						
 						</div><!-- .post-meta-bottom -->
@@ -106,8 +100,6 @@
 	
 	<?php get_sidebar(); ?>
 	
-	<div class="clear"></div>
-
 </div><!-- .wrapper.section-inner -->
 		
 <?php get_footer(); ?>
