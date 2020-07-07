@@ -125,6 +125,21 @@ function openlab_sync_group_site_blog_public( $old_value, $value ) {
 }
 add_action( 'update_option_blog_public', 'openlab_sync_group_site_blog_public', 10, 2 );
 
+/**
+ * Syncs the group site's blog_public setting to the linked group when group is saved.
+ */
+function openlab_sync_group_blog_public_on_group_save( $group ) {
+	$site_id = openlab_get_site_id_by_group_id( $group->id );
+	if ( ! $site_id ) {
+		return;
+	}
+
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+
+	groups_update_groupmeta( $group->id, 'blog_public', (int) $blog_public );
+}
+add_action( 'groups_group_after_save', 'openlab_sync_group_blog_public_on_group_save' );
+
 // Ensure that old-style blog comment activity is enabled.
 add_filter( 'bp_disable_blogforum_comments', '__return_true' );
 
