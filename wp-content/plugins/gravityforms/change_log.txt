@@ -1,3 +1,7 @@
+### 2.4.18.4
+- API: Fixed an issue where leading and trailing spaces are not removed from values included in the temporary entry produced by GFFormsModel::create_lead().
+
+
 ### 2.4.18.3
 - Fixed an issue where the maximum files reached message is not removed from the multi-file upload field when an upload is cancelled or errors.
 
