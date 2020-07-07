@@ -68,12 +68,11 @@ if ( is_single() && ! $disable_related_posts ) :
 
 				<?php
 
+				global $post;
+
 				foreach ( $related_posts as $post ) {
-
 					setup_postdata( $post );
-
 					get_template_part( 'preview', get_post_type() );
-
 				}
 
 				wp_reset_postdata();
