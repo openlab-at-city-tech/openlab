@@ -73,7 +73,7 @@ class subscriber_widget extends WP_Widget
 		$option8 = unserialize(get_option('sfsi_section8_options', false));
 		$sfsi_feediid = sanitize_text_field(get_option('sfsi_feed_id'));
 		if ($sfsi_feediid == "") {
-			$url = "https://api.follow.it/subscription-form/clUvQVJZazRWeXZkTS9FUGVZU1Nnay9wRzgycTVDV0FqNmpHZUNyc0NJbS9ucnVEbnR6UFJDMnJmTTRBSU45T1RMenl2ZVNBeHIrRTdrdHFNd29hVEU4a3BkVGJsMEdWaDdNZjBDY2dZclFLdFp4NGxRMUwwaWpCOTFxdUFjdUp8a1VGN1FvbVVGcW9MUWFKSU9Rbk5ScFYzZVR3Q1hVdEdtNDUwWmRtYnErZz0=/8/";
+			$url = "https://api.follow.it/subscribe";
 		} else {
 			$url = "https://api.follow.it/subscription-form/";
 			$url = $url . $sfsi_feediid . '/8/';

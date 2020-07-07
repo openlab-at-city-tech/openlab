@@ -39,7 +39,7 @@ function sfsi_update_plugin()
         update_option("sfsi_custom_icons", "yes");
     }
     //Install version
-    update_option("sfsi_pluginVersion", "2.56");
+    update_option("sfsi_pluginVersion", "2.57");
 
     if (!get_option('sfsi_serverphpVersionnotification')) {
         add_option("sfsi_serverphpVersionnotification", "yes");
@@ -1765,8 +1765,4 @@ function sfsi_was_displaying_addthis()
         update_option('sfsi_section6_options', serialize($sfsi_section6));
     }
 }
-
-
-
-
 ?>

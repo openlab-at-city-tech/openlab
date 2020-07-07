@@ -11,18 +11,18 @@
         $sfsi_dismiss_gdpr = unserialize(get_option('sfsi_dismiss_gdpr', false));
         $sfsi_dismiss_google_analytic = unserialize(get_option('sfsi_dismiss_google_analytic', false));
         // var_dump($sfsi_dismiss_sharecount,$sfsi_dismiss_gallery,$sfsi_dismiss_optimization,$sfsi_dismiss_gdpr,$sfsi_dismiss_google_analytic);
-        foreach ($gallery_plugins as $key => $gallery_plugin) {
-            $sfsi_show_gallery_banner = sfsi_check_on_plugin_page($gallery_plugin['dir_slug'], $gallery_plugin['option_name'], $current_site_url);
-            if( $gallery_plugin['option_name'] == 'robo-gallery-settings'){
-                // var_dump(($sfsi_show_gallery_banner),'lfjgdjkf');
-            }
-            // var_dump($sfsi_show_gallery_banner,$gallery_plugin['option_name'] );
-        
-        }
+        // foreach ($gallery_plugins as $key => $gallery_plugin) {
+        //     $sfsi_show_gallery_banner = sfsi_check_on_plugin_page($gallery_plugin['dir_slug'], $gallery_plugin['option_name'], $current_site_url);
+        //     if ($gallery_plugin['option_name'] == 'robo-gallery-settings') {
+        //         // var_dump(($sfsi_show_gallery_banner),'lfjgdjkf');
+        //     }
+        //     // var_dump($sfsi_show_gallery_banner,$gallery_plugin['option_name'] );
+
+        // }
         $socialObj = new sfsi_SocialHelper();
             $current_url = site_url();
             $fb_data = $socialObj->sfsi_get_fb($current_url);
-            $check_fb_count_more_than_one = ((!empty($socialObj->format_num($fb_data['like_count'])) || !empty($socialObj->format_num($fb_data['share_count']))) && !empty($socialObj->sfsi_get_pinterest($current_url)));
+            $check_fb_count_more_than_one = ( $fb_data>0 && !empty($socialObj->sfsi_get_pinterest($current_url)));
         ?>
        <?php
             if (is_ssl() && $check_fb_count_more_than_one && ($sfsi_dismiss_sharecount['show_banner'] == "yes" || false == $sfsi_dismiss_sharecount)) {
@@ -65,7 +65,11 @@
                     $sfsi_show_gallery_banner = sfsi_check_on_plugin_page($gallery_plugin['dir_slug'], $gallery_plugin['option_name'], $current_site_url);
 
                     if ($sfsi_show_gallery_banner) {
-                        $plugin = sfsi_get_plugin($gallery_plugin['dir_slug']);
+                        if(function_exists("sfsi_get_plugin")){
+                            $plugin = sfsi_get_plugin($gallery_plugin['dir_slug']);
+                        }else{
+                            $plugin = array();
+                        }
                         ?>
                    <div class="sfsi_new_prmium_follw sfsi_banner_body">
                        <div>
@@ -146,7 +150,11 @@
                         ?>
                    <div class="sfsi_new_prmium_follw sfsi_banner_body">
                        <p style="font-size:18px !important">
-                           <b>Make sure your site is GDPR compliant </b>– As part of the Ultimate Social Media Premium Plugin you can request a review (at no extra charge) to check if your sharing icons are GDPR compliant. <a href="https://www.ultimatelysocial.com/usm-premium/?withqp=1&discount=GDPRCOMPLIANT&utm_source=usmi_other_plugins_settings_page&utm_campaign=gdpr_compliance&utm_medium=banner" class="sfsi_font_inherit" target="_blank" style="color:#1a1d20 !important;font-weight: bold;"><span>&#10151;</span> <span style="text-decoration: underline;"></span> <span style="text-decoration: underline;">Get it now at 20% discount</span> </a>
+                           <b>Make sure your site is GDPR compliant </b>– As part of the Ultimate Social Media
+                           <a href="https://www.ultimatelysocial.com/usm-premium/?utm_source=usmi_other_plugins_settings_page&utm_campaign=website_load_faster&utm_medium=banner" class="sfsi_font_inherit" target="_blank" style="color:#1a1d20 !important;text-decoration: underline;"><span></span>
+                               Premium Plugin
+                           </a>
+                           you can request a review (at no extra charge) to check if your sharing icons are GDPR compliant. <a href="https://www.ultimatelysocial.com/usm-premium/?withqp=1&discount=GDPRCOMPLIANT&utm_source=usmi_other_plugins_settings_page&utm_campaign=gdpr_compliance&utm_medium=banner" class="sfsi_font_inherit" target="_blank" style="color:#1a1d20 !important;font-weight: bold;"><span>&#10151;</span> <span style="text-decoration: underline;"></span> <span style="text-decoration: underline;">Get it now at 20% discount</span> </a>
                        </p>
                        <div style="text-align:right;">
 

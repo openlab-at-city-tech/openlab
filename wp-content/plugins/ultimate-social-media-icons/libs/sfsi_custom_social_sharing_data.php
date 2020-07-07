@@ -151,7 +151,7 @@ function sfsi_social_media_metabox( $post ) { ?>
                     <div class="imgTopTxt">
                         <?php _e('<strong>Title </strong>(leave blank to use the post title)',SFSI_DOMAIN); ?></div>
 
-                    <div class="social_title"><textarea readonly name="social_fbGLTw_title_textarea" class="sfsi_textarea"
+                    <div class="social_title"><textarea readonly class="sfsi_textarea"
                             maxlength="95"></textarea>
                     </div>
 
@@ -176,7 +176,7 @@ function sfsi_social_media_metabox( $post ) { ?>
                         <?php _e('<strong>Description </strong>(leave blank to use the post exerpt)',SFSI_DOMAIN); ?>
                     </div>
 
-                    <div class="social_description_container"><textarea name="social_fbGLTw_description_textarea" readonly 
+                    <div class="social_description_container"><textarea  readonly 
                             class="sfsi_textarea"
                             maxlength="297"></textarea>
                     </div>
@@ -233,7 +233,7 @@ function sfsi_social_media_metabox( $post ) { ?>
                         <?php _e('<strong>Pinterest description </strong>(leave blank to use the post title)',SFSI_DOMAIN); ?>
                     </div>
 
-                    <div class="social_title"><textarea readonly name="social_pinterest_description_textarea" class="sfsi_textarea"
+                    <div class="social_title"><textarea readonly class="sfsi_textarea"
                             ></textarea></div>
 
                     <div class="social_description">
@@ -250,8 +250,8 @@ function sfsi_social_media_metabox( $post ) { ?>
 
                     <div class="imgTopTxt"><?php _e('<strong>Tweet </strong>',SFSI_DOMAIN); ?></div>
 
-                    <div class="social_description_container"><textarea name="social_twitter_description_textarea" readonly
-                            class="sfsi_textarea"
+                    <div class="social_description_container"><textarea  readonly
+                            class="sfsi_textarea"name
                             maxlength="106"></textarea>
                     </div>
 

@@ -6,7 +6,7 @@ Description: Easy to use and 100% FREE social media plugin which adds social med
 
 Author: UltimatelySocial
 Author URI: http://ultimatelysocial.com
-Version: 2.5.6
+Version: 2.5.7
 License: GPLv2 or later
 */
 require_once 'analyst/main.php';
@@ -90,7 +90,7 @@ register_deactivation_hook(__FILE__, 'sfsi_deactivate_plugin');
 
 register_uninstall_hook(__FILE__, 'sfsi_Unistall_plugin');
 
-if (!get_option('sfsi_pluginVersion') || get_option('sfsi_pluginVersion') < 2.56) {
+if (!get_option('sfsi_pluginVersion') || get_option('sfsi_pluginVersion') < 2.57) {
     add_action("init", "sfsi_update_plugin");
 }
 /* redirect setting page hook */
@@ -2031,6 +2031,22 @@ function sfsi_plugin_redirect()
                 array('option_name' => 'foogallery-settings', 'dir_slug' => 'foogallery/foogallery.php'),
                 array('option_name' => 'modula', 'dir_slug' => 'modula-best-grid-gallery/Modula.php'),
                 array('option_name' => 'robo-gallery-settings', 'dir_slug' => 'robo-gallery/robogallery.php'),
+                array('option_name' => 'envira', 'dir_slug' => 'envira-gallery-lite/envira-gallery-lite.php'),
+                array('option_name' => 'supsystic-gallery', 'dir_slug' => 'gallery-by-supsystic/index.php'),
+                array('option_name' => 'ftg-lite-gallery-admin', 'dir_slug' => 'final-tiles-grid-gallery-lite/FinalTilesGalleryLite.php'),
+                array('option_name' => 'everest-gallery-lite', 'dir_slug' => 'everest-gallery-lite/everest-gallery-lite.php'),
+                array('option_name' => 'photonic-options-manager', 'dir_slug' => 'photonic/photonic.php'),
+                array('option_name' => 'meowapps-main-menu', 'dir_slug' => 'meow-gallery/meow-gallery.php'),
+                array('option_name' => 'video_galleries_origincode_video_gallery', 'dir_slug' => 'smart-grid-gallery/smart-video-gallery.php'),
+                array('option_name' => 'wpape_gallery_type', 'dir_slug' => 'gallery-images-ape/index.php'),
+                array('option_name' => 'wc-gallery', 'dir_slug' => 'wc-gallery/wc-gallery.php'),
+                array('option_name' => 'elementor', 'dir_slug' => 'elementor/elementor.php'),
+                array('option_name' => 'robo_gallery_table', 'dir_slug' => 'robo-gallery/robogallery.php'),
+                array('option_name' => 'awl_filter_gallery', 'dir_slug' => 'portfolio-filter-gallery/portfolio-filter-gallery.php'),
+                array('option_name' => 'gallery_box', 'dir_slug' => 'gallery-box/gallery-box.php'),
+                array('option_name' => 'maxgalleria-settings', 'dir_slug' => 'maxgalleria/maxgalleria.php'),
+                array('option_name' => 'fa_gallery', 'dir_slug' => 'flickr-album-gallery/flickr-album-gallery.php'),
+                array('option_name' => 'grid_gallery', 'dir_slug' => 'new-grid-gallery/grid-gallery.php'),
             );
             $sharecount_plugins  = array(
                 array("dir_slug" => "optinmonster/optin-monster-wp-api.php", 'option_name' => 'optin-monster-api-welcome'),
@@ -2062,7 +2078,12 @@ function sfsi_plugin_redirect()
                 array("dir_slug" => "google-analytics-for-wordpress/googleanalytics.php", 'option_name' => 'monsterinsights_settings'),
                 array("dir_slug" => "onesignal-free-web-push-notifications/onesignal-push", 'option_name' => 'onesignal-push'),
                 array("dir_slug" => "access-watch/index.php", 'option_name' => 'access-watch-dashboard'),
-
+                array("dir_slug" => "tweet-old-post/tweet-old-post.php", 'option_name' => 'TweetOldPost'),
+                array("dir_slug" => "mailoptin/mailoptin.php", 'option_name' => 'mailoptin-settings'),
+                array("dir_slug" => "NextScripts_SNAP/NextScripts_SNAP.php", 'option_name' => 'nxssnap-reposter'),
+                array("dir_slug" => "social-pug-author-box/index.php", 'option_name' => 'social_pug_author_box'),
+                array("dir_slug" => "google-analytics-for-wordpress/googleanalytics.php", 'option_name' => 'monsterinsights-getting-started'),
+                array("dir_slug" => "onesignal-free-web-push-notifications/onesignal.php", 'option_name' => 'onesignal-push'),
             );
             $optimization_plugins  = array(
                 array('dir_slug' => 'litespeed-cache/litespeed-cache.php', 'option_name' => 'lscache-settings'),
@@ -2104,7 +2125,10 @@ function sfsi_plugin_redirect()
                 array('dir_slug' => 'flying-pages/flying-pages.php', 'option_name' => 'flying-pages'),
                 array('dir_slug' => 'speed-booster-pack/speed-booster-pack.php', 'option_name' => 'sbp-options'),
                 array('dir_slug' => 'baqend/baqend.php', 'option_name' => 'baqend'),
-                array('dir_slug' => 'wp-smushit/wp-smush.php', 'option_name' => 'smush')
+                array('dir_slug' => 'wp-smushit/wp-smush.php', 'option_name' => 'smush'),
+                array('dir_slug' => 'varnish-http-purge/varnish-http-purge.php', 'option_name' => 'varnish-page'),
+                array('dir_slug' => 'varnish-http-purge/varnish-http-purge.php', 'option_name' => 'varnish-check-caching'),
+            
             );
             $gdpr_plugins  = array(
                 array('dir_slug' => 'cookie-law-info/cookie-law-info.php', 'option_name' => 'cookie-law-info'),
@@ -2126,7 +2150,25 @@ function sfsi_plugin_redirect()
                 array('dir_slug' => 'gdpr-cookies-pro/gdpr-cookies-pro.php', 'option_name' => 'gdpr-cookies-pro'),
                 array('dir_slug' => 'seahorse-gdpr-data-manager/seahorse-gdpr-data-manager.php', 'option_name' => 'seahorse_gdpr_data_manager_plugin'),
                 array('dir_slug' => 'dsgvo-tools-kommentar-ip-entfernen/main.php', 'option_name' => 'fhw_dsgvo_kommentar_options'),
-                array('dir_slug' => 'gdpr-tools/gdpr-tools.php', 'option_name' => 'gdpr-tools-settings')
+                array('dir_slug' => 'gdpr-tools/gdpr-tools.php', 'option_name' => 'gdpr-tools-settings'),
+                array('dir_slug' => 'gdpr-cookie-compliance/moove-gdpr.php', 'option_name' => 'moove-gdpr'),
+                array('dir_slug' => 'cookie-notice/cookie-notice.php', 'option_name' => 'cookie-notice'),
+                array('dir_slug' => 'tarteaucitronjs/tarteaucitron.php', 'option_name' => 'tarteaucitronjs'),
+                array('dir_slug' => 'wp-gdpr-compliance/wp-gdpr-compliance.php', 'option_name' => 'wp_gdpr_compliance'),
+                array('dir_slug' => 'iubenda_cookie_solution/iubenda_cookie_solution.php', 'option_name' => 'iubenda'),
+                array('dir_slug' => 'easy-wp-cookie-popup/easy-wp-cookie-popup.php', 'option_name' => 'cookii_settings'),
+                array('dir_slug' => 'gdpr-compliance-cookie-consent/gdpr-compliance-cookie-consent.php', 'option_name' => 'gdpr-compliance-cookie-consent'),
+                array('dir_slug' => 'yetience-plugin/yetience-plugin.php', 'option_name' => 'yetience-yeloni'),
+                array('dir_slug' => 'cwis-antivirus-malware-detected/cwis-antivirus-malware-detected.php', 'option_name' => 'cwis-scanner'),
+                array('dir_slug' => 'gdpr-compliance-by-supsystic/grs.php', 'option_name' => 'gdpr-compliance-by-supsystic'),
+                array('dir_slug' => 'auto-terms-of-service-privacy-policy/auto-terms-of-service-privacy-policy.php', 'option_name' => 'wpautoterms_page'),
+                array('dir_slug' => 'google-analytics-opt-out/google-analytics-opt-out.php', 'option_name' => 'gaoo-options'),
+                array('dir_slug' => 'surbma-gdpr-proof-google-analytics/surbma-gdpr-proof-google-analytics.php', 'option_name' => 'surbma-gpga-menu'),
+                array('dir_slug' => 'bp-gdpr/buddypress-gdpr.php', 'option_name' => 'buddyboss-bp-gdpr'),
+                array('dir_slug' => 'beautiful-and-responsive-cookie-consent/nsc_bar-cookie-consent.php', 'option_name' => 'nsc_bar-cookie-consent'),
+                array('dir_slug' => 'simple-gdpr/simple-gdpr.php', 'option_name' => 'SGDPR_settings'),
+                array('dir_slug' => 'wonderpush-web-push-notifications/wonderpush.php', 'option_name' => 'wonderpush'),
+                array('dir_slug' => 'ns-gdpr/ns-gdpr.php', 'option_name' => 'ns-gdpr'), 
             );
             $google_analytics  = array(
                 array('dir_slug' => 'really-simple-ssl/rlrsssl-really-simple-ssl.php', 'option_name' => 'rlrsssl_really_simple_ssl'),
@@ -2276,7 +2318,7 @@ function sfsi_plugin_redirect()
                     // }
                 }
             }
-            if (empty($global_banners_filters ) && empty($global_banners_criteria_filters)) {
+            if (empty($global_banners_filters) && empty($global_banners_criteria_filters)) {
                 foreach ($global_banners as $key => $global_banner) {
 
                     $todaysdate = date("Y-m-d h:i:s");

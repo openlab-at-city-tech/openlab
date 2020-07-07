@@ -25,4 +25,3 @@ function sfsi_twitter_followers(){
 
 	return $count;
 }
-

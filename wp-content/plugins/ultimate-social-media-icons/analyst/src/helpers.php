@@ -106,17 +106,6 @@ if (!function_exists('dd')) {
 // 	return is_plugin_active($dir_slug) && isset($_GET) && isset($_GET["page"]) && ($_GET['page']==$option_name);
 // }
 
-function sfsi_get_plugin($dir_slug)
-{
-	// if(is_plugin_active($dir_slug)){
-	$plugins  = get_plugins();
-	if (isset($plugins[$dir_slug])) {
-		return $plugins[$dir_slug];
-	} else {
-		return null;
-	}
-	// }
-}
 
 function sfsi_plugin_waiting_time($option)
 {
@@ -156,5 +145,3 @@ function sfsi_check_pinterest_icon_placed()
 	}
 	return false;
 }
-
-
