@@ -7,7 +7,6 @@
  
 ( function( $ ) {
 
-
 	// Site Name
 	wp.customize( 'blogname', function( value ) {
 		value.bind( function( newval ) {
@@ -15,14 +14,12 @@
 		} );
 	} );
 
-
 	// Background color
 	wp.customize( 'background_color', function( value ) {
 		value.bind( function( newval ) {
 			$( '.site-nav, .site-nav footer' ).css( 'background', newval );
 		} );
 	} );
-
 
 	// Dark Mode
 	wp.customize( 'hamilton_dark_mode', function( value ) {
@@ -35,7 +32,6 @@
 		} );
 	} );
 	
-	
 	// Alt Nav
 	wp.customize( 'hamilton_alt_nav', function( value ) {
 		value.bind( function( newval ) {
@@ -47,7 +43,6 @@
 			}
 		} );
 	} );
-	
 	
 	// Three grid columns
 	wp.customize( 'hamilton_max_columns', function( value ) {
@@ -67,7 +62,6 @@
 		} );
 	} );
 	
-	
 	// Show preview titles
 	wp.customize( 'hamilton_show_titles', function( value ) {
 		value.bind( function( newval ) {
@@ -78,6 +72,5 @@
 			}
 		} );
 	} );
-	
 	
 } )( jQuery );

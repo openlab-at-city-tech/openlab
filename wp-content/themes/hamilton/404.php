@@ -20,6 +20,6 @@
 
 	</header><!-- .page-header -->
 
-</div> <!-- .post -->
+</div><!-- .post -->
 
 <?php get_footer(); ?>

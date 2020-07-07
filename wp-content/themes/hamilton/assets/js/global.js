@@ -161,25 +161,12 @@ jQuery( document ).ready( function( $ ) {
 		} );
 
 	}
-
-	
-	// Intercept the Jetpack Load More button when it's reinserted
-	$( document ).bind( 'DOMNodeInserted', function( e ) {
-		var $target = $( e.target );
-		if ( $target.is( '#infinite-handle' ) ) {
-			$target.hide();
-		}
-	} );
-	
 	
 	// Triggers re-layout on Jetpack infinite scroll
-	infinite_count = 0;
     $( document.body ).on( 'post-load', function() {
-
-        infinite_count = infinite_count + 1;
 		
 		// Target the new items and hide them
-		var $selector = $( '#infinite-view-' + infinite_count ),
+		var $selector = $( '.infinite-wrap' ).last(),
         	$elements = $selector.find( '.post-preview' );
 			
 		$elements.hide();

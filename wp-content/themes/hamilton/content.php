@@ -16,11 +16,11 @@ if ( has_post_thumbnail() && ! post_password_required() ) {
 	$extra_classes .= ' fallback-image';
 }
 
-$image_style_attr = ( has_post_thumbnail() && ! post_password_required() ) ? ' style="background-image: url( ' . get_the_post_thumbnail_url( $post->ID, 'hamilton_preview-image' ) . ' );"' : '';
+$image_style_attr = ( has_post_thumbnail() && ! post_password_required() ) ? ' style="background-image: url( ' . esc_url( get_the_post_thumbnail_url( $post->ID, 'hamilton_preview-image' ) ) . ' );"' : '';
 
 ?>
 
-<a <?php post_class( $extra_classes ); ?> id="post-<?php the_ID(); ?>" href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+<a <?php post_class( $extra_classes ); ?> id="post-<?php the_ID(); ?>" href="<?php the_permalink(); ?>">
 	
 	<div class="preview-image"<?php echo $image_style_attr; ?>>
 		<?php 
