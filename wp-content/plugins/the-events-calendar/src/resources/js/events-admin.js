@@ -251,7 +251,7 @@ jQuery( document ).ready( function( $ ) {
 				section.find( '.move-linked-post-group' ).hide();
 			}
 
-			fields.find( '.tribe-dropdown' ).tribe_dropdowns().trigger( 'change' );
+			fields.find( '.tribe-dropdown' ).tribe_dropdowns();
 		});
 
 		section.on( 'change', '.linked-post-dropdown', toggle_linked_post_fields );
@@ -335,7 +335,7 @@ jQuery( document ).ready( function( $ ) {
 				add_sticky_linked_post_data( post_type, tribe_events_linked_posts.post_types[ post_type ], fields );
 			}
 
-			fields.find( '.tribe-dropdown' ).tribe_dropdowns().trigger( 'change' );
+			fields.find( '.tribe-dropdown' ).tribe_dropdowns();
 			group.append( fields );
 		} );
 
@@ -372,38 +372,44 @@ jQuery( document ).ready( function( $ ) {
 	};
 
 	var toggle_linked_post_fields = function( event ) {
-		var $select    = $( this );
-		var selectData = $select.select2( 'data' );
-		var $group     = $select.closest( 'tbody' );
-		var $edit      = $group.find( '.edit-linked-post-link a' );
-		var choice     = 'undefined' === typeof event.added ? {} : event.added;
-		var editLink   = '';
 
-		if ( null !== selectData && 'string' === typeof selectData.edit ) {
-			editLink = selectData.edit;
+		const $select = $( this );
+		const $group = $select.closest( 'tbody' );
+		const $edit = $group.find( '.edit-linked-post-link a' );
+		const value = $select.val();
+		const $selected = $select.find( ':selected' );
+		const selectedVal = $selected.val();
+		let editLink = '';
+		let existingPost = false;
+
+		if ( selectedVal === value ) {
+			editLink = $selected.data( 'editLink' );
+			existingPost = !! $selected.data( 'existingPost' );
 		}
 
-		// Maybe Hide Edit link
-		if ( _.isEmpty( editLink ) ) {
-			$edit.hide();
-		}
+		// Always hide the edit link unless we have an edit link to show (handled below).
+		$edit.hide();
 
-		if ( 'undefined' !== typeof choice.new && choice.new ) {
+		if (
+			! existingPost &&
+			'-1' !== value &&
+			$selected.length
+		) {
 			// Apply the New Given Title to the Correct Field
-			$group.find( '.linked-post-name' ).val( choice.id ).parents( '.linked-post' ).eq( 0 ).attr( 'data-hidden', true );
+			$group.find( '.linked-post-name' ).val( value ).parents( '.linked-post' ).eq( 0 ).attr( 'data-hidden', true );
 
-			$select.val( '' );
+			$select.val( '-1' );
 
 			// Display the Fields
 			$group
 				.find( '.linked-post' ).not( '[data-hidden]' ).show()
-				.find( '.tribe-dropdown' ).trigger( 'change' );
+				.find( '.tribe-dropdown' );
 
 			$group.parents( '.tribe-section' ).addClass( 'tribe-is-creating-linked-post' );
 
 		} else {
 			// Hide all fields and remove their values
-			$group.find( '.linked-post' ).hide().find( 'input' ).val( '' );
+			$group.find( '.linked-post' ).hide().find( 'input, select' ).val( '' );
 
 			$group.parents( '.tribe-section' ).removeClass( 'tribe-is-creating-linked-post' );
 
@@ -608,8 +614,8 @@ jQuery( document ).ready( function( $ ) {
 	$( 'body' ).on( 'change', '#EventCountry', function () {
 		var $country        = $( this );
 		var $container      = $country.parents( 'div.eventForm' ).eq( 0 );
-		var $state_dropdown = $container.find( '#s2id_StateProvinceSelect' );
 		var $state_select   = $container.find( '#StateProvinceSelect' );
+		var $state_dropdown = $state_select.next( '.select2-container' );
 		var $state_text     = $container.find( '#StateProvinceText' );
 		var country         = $( this ).val();
 
@@ -807,5 +813,4 @@ jQuery( document ).ready( function( $ ) {
 			$el.val( tribeDateFormat( $el.datepicker( 'getDate' ), 'tribeQuery' ) );
 		} );
 	} );
-
-});
+} );

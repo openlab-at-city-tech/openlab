@@ -146,6 +146,16 @@ class Tribe__Events__Aggregator__Tabs__New extends Tribe__Events__Aggregator__Ta
 		$record->update_meta( 'post_status', $data['post_status'] );
 		$record->update_meta( 'ids_to_import', empty( $data['selected_rows'] ) ? 'all' : json_decode( stripslashes( $data['selected_rows'] ) ) );
 
+		/**
+		 * Allow hooking into the import record saving process.
+		 *
+		 * @since 5.1.0
+		 *
+		 * @param Tribe__Events__Aggregator__Record__Abstract $record Import record.
+		 * @param array                                       $data   List of import options.
+		 */
+		do_action( 'tribe_events_aggregator_tabs_new_handle_import_finalize', $record, $data );
+
 		// if we get here, we're good! Set the status to pending
 		$record->set_status_as_pending();
 
@@ -271,6 +281,20 @@ class Tribe__Events__Aggregator__Tabs__New extends Tribe__Events__Aggregator__Ta
 				$messages['success'][] = sprintf( // add image import count
 					_n( '%1$d new image was imported.', '%1$d new images were imported.', $queue->activity->count( 'images', 'created' ), 'the-events-calendar' ),
 					$queue->activity->count( 'images', 'created' )
+				);
+			}
+
+			$images_scheduled = $queue->activity->get( 'images', 'scheduled' );
+			if ( ! empty( $images_scheduled ) ) {
+				$messages['success'][] = sprintf(
+						// translators: %1$d is replaced with a number of scheduled images.
+						_n(
+								'%1$d new image was scheduled for import.',
+								'%1$d new images were scheduled for import.',
+								$queue->activity->count( 'images', 'scheduled' ),
+								'the-events-calendar'
+						),
+						$queue->activity->count( 'images', 'scheduled' )
 				);
 			}
 
