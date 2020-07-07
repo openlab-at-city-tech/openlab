@@ -1,10 +1,10 @@
 === Mihdan: Ajax Edit Comments ===
 Contributors: Ajay, ronalfy, joshben, blepoxp, mihdan, jtbfocus
-Tags: ajax, comments,move comments,blacklist, blacklist comments,edit comments, edit, comment, admin
+Tags: ajax, comments, move comments, blacklist, blacklist comments, edit comments, edit, comment, admin, seo, seo-friendly
 Requires at least: 3.1
-Tested up to: 5.1
+Tested up to: 5.3
 License: GPLv2 or later
-Stable tag: 6.0.4
+Stable tag: 6.1
 
 Allow users to edit comments for a limited time, while admins can edit all comments.
 
@@ -50,6 +50,11 @@ Please watch this video demonstrating the <a href='http://www.youtube.com/watch?
 </ul>
 
 == Changelog ==
+
+= 6.1 (13.01.2020) =
+* Fixed bug [11328313](https://wordpress.org/support/?p=11328313) (No Colorbox on smartphone)
+* Fixed bug [12071102](https://wordpress.org/support/?p=12071102) (I can not turn off a Countdown Timer)
+* Fixed bug [11447876](https://wordpress.org/support/?p=11447876) (BUG: backslashes removed after editing comments)
 
 = 6.0.4 (20.02.2019) =
 * Added functionality to load scripts on post type archive pages

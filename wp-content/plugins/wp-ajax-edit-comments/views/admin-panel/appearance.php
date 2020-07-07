@@ -12,6 +12,7 @@ if (isset($_POST['update'])) {
 	$error = false;
 	
 	//Update global settings
+	$options['show_timer'] = $_POST['show_timer'];
 	$options['show_pages'] = $_POST['show_pages'];
 	$options['use_rtl'] = "false";
 	$options['clear_after'] = $_POST['clear_after'];
@@ -69,7 +70,7 @@ if (isset($_POST['update'])) {
 		}
 	}
 	$options['drop_down'] = $dropdown;
-
+	
 	//Classic menu
 	$classic = $options['classic'];
 	foreach ($classic as $info => $value) {
