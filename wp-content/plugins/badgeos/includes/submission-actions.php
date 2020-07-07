@@ -658,10 +658,19 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
  */
 function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
-	// Award achievement
-	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+    global $wpdb;
 
-	// Check if user can be notified
+	// Award achievement
+    if ( ! badgeos_achievement_user_exceeded_max_earnings( $args[ 'user_id' ], $args[ 'achievement_id' ] ) ) {
+
+        $strQuery = 'select * from '.$wpdb->prefix."badgeos_achievements where sub_nom_id='".$args['submission_id']."' and ID='".$args[ 'achievement_id' ]."' and user_id='".$args[ 'user_id' ]."'";
+        $records = $wpdb->get_results( $strQuery );
+        if( count( $records ) == 0 ) {
+            badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ], '', 0, $args );
+        }
+    }
+
+    // Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
 		return $messages;
 	}
@@ -724,10 +733,19 @@ add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_s
  */
 function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
-	// Award achievement
-	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+    global $wpdb;
 
-	// Check if user can be notified
+	// Award achievement
+    if ( ! badgeos_achievement_user_exceeded_max_earnings( $args[ 'user_id' ], $args[ 'achievement_id' ] ) ) {
+
+        $strQuery = 'select * from '.$wpdb->prefix."badgeos_achievements where sub_nom_id='".$args['submission_id']."' and ID='".$args[ 'achievement_id' ]."' and user_id='".$args[ 'user_id' ]."'";
+        $records = $wpdb->get_results( $strQuery );
+        if( count( $records ) == 0 ) {
+            badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ], '', 0, $args );
+        }
+    }
+
+    // Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
 		return $messages;
 	}
@@ -1036,7 +1054,18 @@ function badgeos_get_comment_form( $post_id = 0 ) {
         $attachment = render_attachment_from_draft_submission($attachment_data);
     }
 
-	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
+    wp_enqueue_script(
+        'ck_editor_cdn',
+        ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), array( 'jquery' ), 'v3', true
+    );
+
+    wp_enqueue_script(
+        'custom_script',
+        badgeos_get_directory_url().'js/ckeditor.js',
+        array( 'jquery' ),	BadgeOS::$version,true
+    );
+
+    $sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
 
 		// comment form heading
 		$sub_form .= '<legend>'. wp_kses_post( $language['heading'] ) .'</legend>';
@@ -1057,8 +1086,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
         }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit" style="margin-top:10px;"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" />
-		<input type="submit" name="badgeos_comment_draft" value="Save Draft" />
+		$sub_form .= '<p class="badgeos-submission-submit" style="margin-top:10px;"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" /> <input type="submit" name="badgeos_comment_draft" value="Save Draft" />
 		</p>';
 
 		// Hidden Fields
@@ -1415,7 +1443,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 	);
 
 	// Available filter for changing the language
-	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+    $defaults = apply_filters( 'badgeos_nomination_form_language', $defaults );
 
 	// Patch in our achievement and user IDs
 	$defaults['achievement_id'] = $post->ID;
@@ -1508,8 +1536,7 @@ function badgeos_get_submission_form( $args = array() ) {
             $sub_form .= '</fieldset>';
         }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" />
-		<input type="submit" name="badgeos_submission_draft" value="Save Draft" />
+		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /> <input type="submit" name="badgeos_submission_draft" value="Save Draft" />
 		</p>';
 		// hidden fields
 		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );

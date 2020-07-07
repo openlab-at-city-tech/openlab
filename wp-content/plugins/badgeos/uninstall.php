@@ -22,7 +22,7 @@ global $wpdb;
 /**
  * Delete Achievements post types data
  */
-$achievement_types = $wpdb->get_results( "SELECT `ID`, `post_title` FROM $wpdb->posts WHERE post_type = 'achievement-type';" );
+$achievement_types = $wpdb->get_results( "SELECT `ID`, `post_title` FROM $wpdb->posts WHERE post_type = '".$badgeos_settings['achievement_main_post_type']."';" );
 if( is_array( $achievement_types ) && !empty( $achievement_types ) && !is_null( $achievement_types ) ) {
     $to_delete = array();
     $child_post_types = array();
@@ -67,7 +67,7 @@ if( !empty( $badgeos_settings ) ) {
 /**
  * Delete Step post type data
  */
-$steps_ids = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = 'step';" );
+$steps_ids = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = '".trim( $badgeos_settings['achievement_step_post_type'] )."';" );
 if( is_array( $steps_ids ) && !empty( $steps_ids ) && !is_null( $steps_ids ) ) {
     foreach( $steps_ids as $steps_id ) {
         $wpdb->query( "DELETE FROM $wpdb->posts WHERE ID = '$steps_id->ID';" );
@@ -139,3 +139,8 @@ $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2pmeta" );
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_points");
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_ranks");
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_achievements");
+
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'badgeos_assertion_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'badgeos_issuer_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='badgeos_json_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='badgeos_evidence_url';");

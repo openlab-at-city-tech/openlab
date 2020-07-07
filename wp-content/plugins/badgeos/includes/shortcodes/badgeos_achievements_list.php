@@ -7,27 +7,25 @@
  */
 function badgeos_register_achievements_list_shortcode() {
 
+    global $wpdb;
+
 	// Setup a custom array of achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
-        'post_type'      =>	'achievement-type',
+        'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
+        'post_status'=> 'publish'
     ) );
 
+    $post_list = array();
     $types = array( 'all' => __( 'All', 'badgeos' ) );
     foreach( $achievement_types as $type ) {
         $types[ $type->post_name ] = $type->post_title;
-    }
 
-    $users = get_users();
-    $user_list = array();
-    foreach( $users as $user ) {
-        $user_list[ $user->ID ] = $user->user_login;
-    }
-
-    $posts = get_posts();
-    $post_list = array();
-    foreach( $posts as $post ) {
-        $post_list[ $post->ID ] = $post->post_title;
+        $posts = get_posts( array( 'post_type' => $type->post_name, 'posts_per_page' =>	-1 ) );
+        foreach( $posts as $post ) {
+            $post_list[ $post->ID ] = $post->post_title;
+        }
     }
 
     badgeos_register_shortcode( array(
@@ -90,12 +88,12 @@ function badgeos_register_achievements_list_shortcode() {
 				'type'        => 'select',
 				'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
 				'default'     => 'ASC',
-				),
-			'user_id' => array(
-				'name'          => __( 'User ID', 'badgeos' ),
+            ),
+            'user_id1' => array(
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
 				'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
-                'type'          => 'select',
-                'values'        => $user_list,
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
             ),
 			'include' => array(
 				'name'          => __( 'Include', 'badgeos' ),
@@ -119,7 +117,70 @@ function badgeos_register_achievements_list_shortcode() {
 					),
 				'default'     => 'false',
 				),
-		),
+            'default_view' => array (
+                'name'        => __( 'Default View', 'badgeos' ),
+                'description' => __( 'Default Listing i.e. List or Grid.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    '' => '',
+                    'list'  => __( 'List', 'badgeos' ),
+                    'grid' => __( 'Grid', 'badgeos' )
+                ),
+                'default'     => '',
+            ),
+            'show_title' => array (
+                'name'        => __( 'Show Title', 'badgeos' ),
+                'description' => __( 'Display Achievement Title.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array (
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_thumb' => array (
+                'name'        => __( 'Show Thumbnail', 'badgeos' ),
+                'description' => __( 'Display Thumbnail Image.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_description' => array (
+                'name'        => __( 'Show Description', 'badgeos' ),
+                'description' => __( 'Display Short Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_steps' => array (
+                'name'        => __( 'Show Steps', 'badgeos' ),
+                'description' => __( 'Display Steps after the Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'image_width' => array (
+                'name'        => __( 'Thumnail Width', 'badgeos' ),
+                'description' => __( "Achievement's image width.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+            ),
+            'image_height' => array (
+                'name'        => __( 'Thumnail Height', 'badgeos' ),
+                'description' => __( "Achievement's image height.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+            ),
+        ),
 	) );
 }
 add_action( 'init', 'badgeos_register_achievements_list_shortcode' );
@@ -164,31 +225,19 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'include'     => array(),
 		'exclude'     => array(),
 		'meta_key'    => '',
-		'meta_value'  => ''
-	), $atts, 'badgeos_achievements_list' ) );
+		'meta_value'  => '',
+        'show_title'  => 'true',
+        'show_thumb'  => 'true',
+        'show_description'  => 'true',
+        'show_steps'  => 'true',
+        'default_view'  => '',
+        'image_width'  => '',
+        'image_height'  => '',
+
+    ), $atts, 'badgeos_achievements_list' ) );
 
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
-
-	$data = array(
-		'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-		'type'        => $type,
-		'limit'       => $limit,
-		'show_filter' => $show_filter,
-		'show_search' => $show_search,
-        'show_child'  => $show_child,
-        'show_parent' => $show_parent,
-        'group_id'    => $group_id,
-		'user_id'     => $user_id,
-		'wpms'        => $wpms,
-		'orderby'     => $orderby,
-		'order'       => $order,
-		'include'     => $include,
-		'exclude'     => $exclude,
-		'meta_key'    => $meta_key,
-		'meta_value'  => $meta_value
-	);
-//	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
 	// If we're dealing with multiple achievement types
 	if ( 'all' == $type ) {
@@ -273,7 +322,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
         $exclude = implode(',', $exclude);
     }
 
-    $maindiv = '<div class="badgeos_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_child="'.$show_child.'" data-show_parent="'.$show_parent.'" data-show_filter="'.$show_filter.'" data-show_search="'.$show_search.'" data-group_id="'.$group_id.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-meta_key="'.$meta_key.'" data-meta_value="'.$meta_value.'">';
+    $maindiv = '<div class="badgeos_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_child="'.$show_child.'" data-show_parent="'.$show_parent.'" data-show_filter="'.$show_filter.'" data-show_search="'.$show_search.'" data-group_id="'.$group_id.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-meta_key="'.$meta_key.'" data-meta_value="'.$meta_value.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-show_steps="'.$show_steps.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $badges;
     $maindiv .= '</div>';
 

@@ -27,11 +27,13 @@ function badgeos_achievment_type_metaboxes() {
 	// Setup our $post_id, if available
 	$post_id = isset( $_GET['post'] ) ? $_GET['post'] : 0;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
 	// New Achievement Types
     $cmb_obj = new_cmb2_box( array(
         'id'            => 'achievement_type_data',
         'title'         => esc_html__( 'Achievement Type Data', 'badgeos' ),
-        'object_types'  => array( 'achievement-type' ), // Post type
+        'object_types'  => array( $badgeos_settings['achievement_main_post_type'] ),
         'context'    => 'normal',
         'priority'   => 'high',
         'show_names' => true, // Show field names on the left
@@ -48,15 +50,17 @@ function badgeos_achievment_type_metaboxes() {
         'id'      => $prefix . 'show_in_menu',
         'type'	 => 'checkbox',
     ));
-    $cmb_obj->add_field(array(
-        'name' => __( 'Default Badge Image', 'badgeos' ),
-        'desc' => esc_html__(  sprintf(
-            __( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
-            badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) )
-        ), 'cmb2' ),
-        'id'   => $prefix . 'upload_badge_image_achievement',
-        'type' => 'text_only',
-    ));
+    if( badgeos_first_time_installed() ) {
+        $cmb_obj->add_field(array(
+            'name' => __( 'Default Badge Image', 'badgeos' ),
+            'desc' => esc_html__(  sprintf(
+                __( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
+                badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) )
+            ), 'cmb2' ),
+            'id'   => $prefix . 'upload_badge_image_achievement',
+            'type' => 'text_only',
+        ));
+    }
 
 }
 add_action( 'cmb2_admin_init', 'badgeos_achievment_type_metaboxes' );
@@ -90,13 +94,17 @@ function badgeos_achievment_metaboxes( ) {
     // Start with an underscore to hide fields from custom fields list
     $prefix = '_badgeos_';
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
     // Grab our achievement types as an array
     $achievement_types_temp = badgeos_get_achievement_types_slugs();
     $achievement_types = array();
     if( $achievement_types_temp ) {
         foreach( $achievement_types_temp as $key=>$ach ) {
-            if( ! empty( $ach ) && $ach != 'step' ) {
-                $achievement_types[] = $ach;
+            if( ! empty( $ach ) && $ach != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                if (!empty($ach) && $ach != 'step') {
+                    $achievement_types[] = $ach;
+                }
             }
         }
     }
@@ -113,17 +121,19 @@ function badgeos_achievment_metaboxes( ) {
         'priority'   => 'high',
         'show_names' => true, // Show field names on the left
     ) );
-    $cmb_obj->add_field(array(
-        'name' => __( 'Upload Badge Image', 'badgeos' ),
-        'desc' => sprintf(
-            __( '<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
-            badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) ),
-            '<a href="' . admin_url('edit.php?post_type=achievement-type') . '">' . __( 'Achievement Type\'s', 'badgeos' ) . '</a>'
+    if( badgeos_first_time_installed() ) {
+        $cmb_obj->add_field(array(
+            'name' => __( 'Upload Badge Image', 'badgeos' ),
+            'desc' => sprintf(
+                __( '<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
+                badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) ),
+                '<a href="' . admin_url('edit.php?post_type=' . $badgeos_settings[ 'achievement_main_post_type' ] ) . '">' . __( 'Achievement Type\'s', 'badgeos' ) . '</a>'
 
-        ),
-        'id'   => $prefix . 'upload_badge_image_achievement',
-        'type' => 'text_only',
-    ));
+            ),
+            'id'   => $prefix . 'upload_badge_image_achievement',
+            'type' => 'text_only',
+        ));
+    }
     $cmb_obj->add_field(array(
         'name' => __( 'Points Awarded', 'badgeos' ),
         'desc' => ' '.__( 'Points awarded for earning this achievement (optional). Leave empty if no points are awarded.', 'badgeos' ),
