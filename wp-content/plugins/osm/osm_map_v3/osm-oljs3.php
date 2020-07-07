@@ -25,6 +25,8 @@ class Osm_OLJS3
 	var attribution = new ol.control.Attribution({
         collapsible: false
       });
+
+
       ';
     if(($a_Type == "osm") || ($a_Type == "brezhoneg")) {
       $TileLayer .= '
@@ -45,6 +47,20 @@ class Osm_OLJS3
            });
           ';
     }
+    if ($a_Type == "opentopomap"){
+      $TileLayer .= '
+          var raster = new ol.layer.Tile({
+            source: new ol.source.XYZ({
+               attributions: "Kartendarstellung: &copy;" + "<a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)" + "Maps &copy; " +
+               "<a href=\"http://viewfinderpanoramas.org\">SRTM</a>" + ol.source.OSM.ATTRIBUTION,
+               url: "'.Osm_OpenTopoMap_Tiles.'"
+             }),
+             zIndex: 90
+           });
+          ';
+    }
+             
+
 
     else if ($a_Type == "stamen_toner"){
       $TileLayer .= '
@@ -216,7 +232,8 @@ Server seams to be down
 
       var source_basemap = new ol.source.WMTS({
         projection: "EPSG:3857",
-        layer: hiDPI ? "bmaphidpi" : "geolandbasemap",
+        //layer: hiDPI ? "bmaphidpi" : "geolandbasemap",
+        layer: "geolandbasemap",
         tilePixelRatio: hiDPI ? 2 : 1,
         style: "normal",
         matrixSet: "google3857",
