@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 21:30+0000\n"
+"POT-Creation-Date: 2020-05-28 21:36+0000\n"
 "PO-Revision-Date: 2016-11-27T01:17:05+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -123,7 +123,7 @@ msgid "Displays a list of events"
 msgstr "Kuvab sündmuste nimekirja"
 
 #: classes/class-eo-event-list-widget.php:14
-#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
+#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:468
 #: event-organiser.php:149 includes/event-organiser-cpt.php:226
 #: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
@@ -243,7 +243,7 @@ msgstr ""
 msgid "A list or dropdown of event categories"
 msgstr ""
 
-#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:346
+#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:347
 msgid "Event Categories"
 msgstr "Sündmuse rubriigid"
 
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Event Venues"
 msgstr "Sündmuse toimumispaigad"
 
-#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:336
+#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:337
 #: event-organiser-venues.php:185 includes/event-organiser-cpt.php:31
 msgid "Venues"
 msgstr "Toimumispaigad"
@@ -315,26 +315,26 @@ msgstr ""
 msgid "Calendar View"
 msgstr "Kalendri vaade"
 
-#: event-organiser-calendar.php:72 includes/event-organiser-register.php:96
+#: event-organiser-calendar.php:72 includes/event-organiser-register.php:100
 msgid "today"
 msgstr "täna"
 
-#: event-organiser-calendar.php:73 includes/event-organiser-register.php:97
-#: includes/event-organiser-register.php:285
+#: event-organiser-calendar.php:73 includes/event-organiser-register.php:101
+#: includes/event-organiser-register.php:290
 msgid "day"
 msgstr "päev"
 
-#: event-organiser-calendar.php:74 includes/event-organiser-register.php:98
-#: includes/event-organiser-register.php:287
+#: event-organiser-calendar.php:74 includes/event-organiser-register.php:102
+#: includes/event-organiser-register.php:292
 msgid "week"
 msgstr "nädal"
 
-#: event-organiser-calendar.php:75 includes/event-organiser-register.php:99
-#: includes/event-organiser-register.php:289
+#: event-organiser-calendar.php:75 includes/event-organiser-register.php:103
+#: includes/event-organiser-register.php:294
 msgid "month"
 msgstr "kuu"
 
-#: event-organiser-calendar.php:76 includes/event-organiser-register.php:100
+#: event-organiser-calendar.php:76 includes/event-organiser-register.php:104
 msgid "go to date"
 msgstr "mine kuupäevale"
 
@@ -640,7 +640,7 @@ msgstr "valitud nädalapäeval"
 
 #: event-organiser-edit.php:225
 #: includes/event-organiser-event-functions.php:856
-#: includes/event-organiser-register.php:302
+#: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "kuni"
 
@@ -652,12 +652,12 @@ msgstr ""
 msgid "Include/Exclude occurrences:"
 msgstr "Lisa/eemalda toimumisi"
 
-#: event-organiser-edit.php:240 includes/event-organiser-register.php:279
+#: event-organiser-edit.php:240 includes/event-organiser-register.php:284
 msgid "Show dates"
 msgstr "Näita kuupäevi"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1030
+#: includes/event-organiser-venue-functions.php:1034
 msgid "Select a venue"
 msgstr "Vali toimumispaik"
 
@@ -672,7 +672,7 @@ msgid ""
 "maps on your site, %1$splease enter your key%2$s."
 msgstr ""
 
-#: event-organiser-edit.php:495
+#: event-organiser-edit.php:498
 msgid "Event dates were not saved."
 msgstr "Sündmuse kuupäevi ei salvestatud."
 
@@ -896,7 +896,7 @@ msgstr "Kommentaarid"
 msgid "Revisions"
 msgstr "Versioonid"
 
-#: event-organiser-settings.php:154 event-organiser-settings.php:355
+#: event-organiser-settings.php:154 event-organiser-settings.php:356
 #: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Sündmuse sildid"
@@ -994,36 +994,40 @@ msgstr ""
 msgid "Google Maps"
 msgstr ""
 
-#: event-organiser-settings.php:255
+#: event-organiser-settings.php:250 event-organiser-settings.php:717
+msgid "None"
+msgstr "Mitte ükski"
+
+#: event-organiser-settings.php:256
 msgid "Google API key:"
 msgstr ""
 
-#: event-organiser-settings.php:261
+#: event-organiser-settings.php:262
 #, php-format
 msgid ""
 "To use Google Maps you need to register an API key with Google. You can "
 "register for a free API key by %sfollowing these instructions%s."
 msgstr ""
 
-#: event-organiser-settings.php:271
+#: event-organiser-settings.php:272
 msgid "Templates:"
 msgstr ""
 
-#: event-organiser-settings.php:276
+#: event-organiser-settings.php:277
 msgid "Disable CSS:"
 msgstr "Keela CSS:"
 
-#: event-organiser-settings.php:282
+#: event-organiser-settings.php:283
 msgid ""
 "Check this option to prevent any stylesheets from Event Organiser being "
 "loaded on the front-end"
 msgstr "Vali, kui soovid vältida Event Organiser'i enda CSS failide laadimist."
 
-#: event-organiser-settings.php:291
+#: event-organiser-settings.php:292
 msgid "Enable event pretty permalinks:"
 msgstr "Aktiveeri kohandatud sündmuste püsiviited:"
 
-#: event-organiser-settings.php:297
+#: event-organiser-settings.php:298
 msgid ""
 "If you have pretty permalinks enabled, select to have pretty premalinks for "
 "events."
@@ -1031,68 +1035,68 @@ msgstr ""
 "Kui kohandatud püsiviited on aktiveeritud, siis aktiveeri need ka sündmuste "
 "jaoks."
 
-#: event-organiser-settings.php:301
+#: event-organiser-settings.php:302
 msgid "Event (single)"
 msgstr "Sündmuse (üksik)"
 
-#: event-organiser-settings.php:310
+#: event-organiser-settings.php:311
 msgid "Events page"
 msgstr "Sündmuste leht"
 
-#: event-organiser-settings.php:323
+#: event-organiser-settings.php:324
 msgid "Event (date archive)"
 msgstr ""
 
-#: event-organiser-settings.php:329
+#: event-organiser-settings.php:330
 msgid "Year archive"
 msgstr "Aasta arhiiv"
 
-#: event-organiser-settings.php:330
+#: event-organiser-settings.php:331
 msgid "Month archive"
 msgstr "Kuu arhiiv"
 
-#: event-organiser-settings.php:331
+#: event-organiser-settings.php:332
 msgid "Day archive"
 msgstr "Päeva arhiiv"
 
-#: event-organiser-settings.php:374
+#: event-organiser-settings.php:375
 msgid "Enable theme compatability mode (default)"
 msgstr ""
 
-#: event-organiser-settings.php:375
+#: event-organiser-settings.php:376
 msgid ""
 "Event Organiser will attempt to ensure compatability with your theme and "
 "apply additional styles."
 msgstr ""
 
-#: event-organiser-settings.php:378
+#: event-organiser-settings.php:379
 msgid "Enable template handling"
 msgstr ""
 
-#: event-organiser-settings.php:379
+#: event-organiser-settings.php:380
 msgid ""
 "Event Organiser's page templates will be used if your theme does not provide "
 "appropriate templates."
 msgstr ""
 
-#: event-organiser-settings.php:382
+#: event-organiser-settings.php:383
 msgid "Disable template handling"
 msgstr ""
 
-#: event-organiser-settings.php:383
+#: event-organiser-settings.php:384
 msgid "Event Organiser's page templates will not be used."
 msgstr ""
 
-#: event-organiser-settings.php:598
+#: event-organiser-settings.php:599
 msgid "Event Settings"
 msgstr ""
 
-#: event-organiser-settings.php:599
+#: event-organiser-settings.php:600
 #, php-format
 msgid "Event Settings: %s"
 msgstr ""
 
-#: event-organiser-settings.php:676
+#: event-organiser-settings.php:677
 msgid ""
 "For each of the pages, the corresponding template is used. To use your own "
 "template simply give it the same name and store in your theme folder. By "
@@ -1101,23 +1105,23 @@ msgid ""
 "will then decide which template from your theme's folder to use."
 msgstr ""
 
-#: event-organiser-settings.php:683
+#: event-organiser-settings.php:684
 msgid "Events archives:"
 msgstr "Sündmuste arhiiv:"
 
-#: event-organiser-settings.php:684
+#: event-organiser-settings.php:685
 msgid "Event page:"
 msgstr "Sündmuse lehekülg:"
 
-#: event-organiser-settings.php:685
+#: event-organiser-settings.php:686
 msgid "Venue page:"
 msgstr "Toimumispaiga lehekülg:"
 
-#: event-organiser-settings.php:686
+#: event-organiser-settings.php:687
 msgid "Events Category page:"
 msgstr "Sündmuste rubriigi leht:"
 
-#: event-organiser-settings.php:689
+#: event-organiser-settings.php:690
 #, php-format
 msgid ""
 "For more information see documentation <a href='%s'>on editing the "
@@ -1125,23 +1129,19 @@ msgid ""
 msgstr ""
 "Rohkema info jaoks vaata dokumentatsiooni <a href='%s'>teema muutmises</a>"
 
-#: event-organiser-settings.php:699
+#: event-organiser-settings.php:700
 msgid "Event management permissions"
 msgstr "Sündmuste muutmise õigused"
 
-#: event-organiser-settings.php:700
+#: event-organiser-settings.php:701
 msgid "Set permissions for events and venue management"
 msgstr "Sätesta sündmuste ja toimumispaikade haldamise õigused"
 
-#: event-organiser-settings.php:705
+#: event-organiser-settings.php:706
 msgid "Role"
 msgstr "Roll"
 
-#: event-organiser-settings.php:716
-msgid "None"
-msgstr "Mitte ükski"
-
-#: event-organiser-settings.php:745
+#: event-organiser-settings.php:746
 msgid ""
 "Choose a custom permalink structure for events, venues, event categories and "
 "event tags."
@@ -1149,7 +1149,7 @@ msgstr ""
 "Vali sündmustele, toimumispaikadele, sündmuste rubriikidele ja siltidele "
 "kohandatud püsiviite struktuur."
 
-#: event-organiser-settings.php:746
+#: event-organiser-settings.php:747
 msgid ""
 "Please note to enable these structures you must first have pretty permalinks "
 "enabled on WordPress in Settings > Permalinks."
@@ -1157,7 +1157,7 @@ msgstr ""
 "Et aktiveerida kohandatud sündmuste püsiviiteid, tuleb need kõigepealt "
 "aktiveerida WordPressi jaoks: Sätted > Püsiviited."
 
-#: event-organiser-settings.php:747
+#: event-organiser-settings.php:748
 msgid ""
 "You may also need to go to WordPress Settings > Permalinks and click 'Save "
 "Changes' before any changes will take effect."
@@ -1165,11 +1165,11 @@ msgstr ""
 "Võib olla, et tehtud muudatuste jõustamiseks, tuleb minna Sätted > "
 "Permalinks ning valida 'Salvesta muudatused'."
 
-#: event-organiser-settings.php:783
+#: event-organiser-settings.php:784
 msgid "Do not add to menu"
 msgstr "Ära lisa menüüsse"
 
-#: event-organiser-settings.php:787
+#: event-organiser-settings.php:788
 msgid "Page list (fallback)"
 msgstr "Lehekülgede nimekiri (varuvariant)"
 
@@ -1226,19 +1226,19 @@ msgstr ""
 msgid "Latitude/Longitude:"
 msgstr ""
 
-#: event-organiser-venues.php:430
+#: event-organiser-venues.php:432
 msgid "Venue name"
 msgstr "Saali nimi"
 
-#: event-organiser-venues.php:436
+#: event-organiser-venues.php:438
 msgid "Permalink:"
 msgstr "Püsiviide:"
 
-#: event-organiser-venues.php:443
+#: event-organiser-venues.php:445
 msgid "Get Link"
 msgstr "Viide"
 
-#: event-organiser-venues.php:465
+#: event-organiser-venues.php:467
 msgid "Slug"
 msgstr "Lühipealkiri"
 
@@ -1812,15 +1812,15 @@ msgstr ""
 msgid "This event has been broken from a recurring event."
 msgstr ""
 
-#: includes/event-organiser-cpt.php:527
+#: includes/event-organiser-cpt.php:530
 msgid "Creating events"
 msgstr "Sündmuste loomine"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:531
 msgid "Creating events:"
 msgstr "Sündmuste loomine:"
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:533
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1828,7 +1828,7 @@ msgstr ""
 "Alguskuupäev on kuupäev, millal sündmus algab. Kui sündmus on korduv, siis "
 "see on esimese sündmuse kuupäev."
 
-#: includes/event-organiser-cpt.php:531
+#: includes/event-organiser-cpt.php:534
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1836,7 +1836,7 @@ msgstr ""
 "Lõppkuupäev on kuupäev, millal sündmus lõpeb. Kui sündmus on korduv, siis "
 "see on viimase sündmuse kuupäev."
 
-#: includes/event-organiser-cpt.php:532
+#: includes/event-organiser-cpt.php:535
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1844,11 +1844,11 @@ msgstr ""
 "Kõik kuupäevad ja kellaajad peavad olema sisestatud antud vormingus. "
 "Vormingut on võimalik muuta sätete lehel."
 
-#: includes/event-organiser-cpt.php:537
+#: includes/event-organiser-cpt.php:540
 msgid "Repeating events"
 msgstr "Korduvad sündmused"
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1857,11 +1857,11 @@ msgstr ""
 "Sündmuste kordamiseks regulaarse mustri järgi, kasuta kordumiste rippmenüüd, "
 "et määrata kuidas sündmused korduvad. Seejärel ilmuvad täpsustavad valikud,"
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:543
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Vali kui tihti sündmus peaks korduma (vaikimisi 1)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:544
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1869,7 +1869,7 @@ msgstr ""
 "Vali kordumise lõppkuupäev. Peale seda kuupäeva uusi toimumisi ei lisata, "
 "kuid toimumine, mis algab enne määratud kuupäeva võib lõppeda peale seda."
 
-#: includes/event-organiser-cpt.php:542
+#: includes/event-organiser-cpt.php:545
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1879,7 +1879,7 @@ msgstr ""
 "mingil päeval kuus (näiteks 24.) või mingi nädalapäeval (näiteks 3. "
 "teisipäeval)"
 
-#: includes/event-organiser-cpt.php:543
+#: includes/event-organiser-cpt.php:546
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1889,15 +1889,15 @@ msgstr ""
 "tuleb sündmus korrata. Kui ühtegi päeva pole valitud, siis kasutatakse "
 "alguskuupäeva nädalapäeva"
 
-#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551 includes/event-organiser-cpt.php:552
 msgid "Selecting a venue"
 msgstr "Valin toimumispaika"
 
-#: includes/event-organiser-cpt.php:551
+#: includes/event-organiser-cpt.php:554
 msgid "Use the venues input field to search for existing venues"
 msgstr "Kasuta toimumispaiga sisendkasti, et otsida olemasolevate hulgast"
 
-#: includes/event-organiser-cpt.php:552
+#: includes/event-organiser-cpt.php:555
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -1905,11 +1905,12 @@ msgstr ""
 "Ainult olemasolevaid toimumispaiku saab valida. Uue lisamiseks, mine "
 "toimumispaikade lehele."
 
-#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:587
 msgid "Overview"
 msgstr "Ülevaade"
 
-#: includes/event-organiser-cpt.php:563
+#: includes/event-organiser-cpt.php:566
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1919,7 +1920,7 @@ msgstr ""
 "<strong>korduvad sündmused kuvatakse ühe reana</strong>, ning alguskuupäeva "
 "ja lõppkuupäeva viitavad esimesele sündmusele."
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1927,7 +1928,7 @@ msgstr ""
 "Minnes hiirega toimumispaikade tabeli rea kohale kuvatakse võimalikud "
 "haldamise toimingud. On võimalik sooritada järgmisi toiminguid:"
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:576
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1935,15 +1936,15 @@ msgstr ""
 "Muuda viib sind antud toimumispaiga redigeerimislehele. Ka pealkirjal "
 "klikkides on võimalik sinna lehele saada."
 
-#: includes/event-organiser-cpt.php:572
+#: includes/event-organiser-cpt.php:577
 msgid "Delete will permanently remove the venue"
 msgstr "Kustuta eemaldab jäädavalt toimumispaiga."
 
-#: includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:578
 msgid "View will take you to the venue's page"
 msgstr "Vaata viib sind toimumispaiga lehele."
 
-#: includes/event-organiser-cpt.php:582
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1953,7 +1954,7 @@ msgstr ""
 "võimalik näha kokkuvõtet. Kui on olemas vajalikud õigused, siis kuvatakse ka "
 "viide sündmuse muutmiseks."
 
-#: includes/event-organiser-cpt.php:583
+#: includes/event-organiser-cpt.php:589
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1964,11 +1965,11 @@ msgstr ""
 "toimumispaikade alusel. 'Mine kuupäevale' nupp võimaldab kiirelt liikuda "
 "kindlale kuupäevale."
 
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:593
 msgid "Add Event"
 msgstr "Lisa sündmus"
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:594
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1982,53 +1983,53 @@ msgstr ""
 "kirjelduse. Sündmuse saab koheselt avaldada või salvestada mustandina. Igal "
 "juhul luuakse sündmus ning suunatakse edasi sündmuse muutmise lehele. "
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:600
 msgid "For more information"
 msgstr "Lisainformatsiooni jaoks"
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:601
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Uuri <a %s> dokumentatsiooni</a>"
 
-#: includes/event-organiser-cpt.php:596
+#: includes/event-organiser-cpt.php:602
 msgid "Debugging Event Organiser"
 msgstr "Ürituste Organiseerija vigade leidmine"
 
-#: includes/event-organiser-cpt.php:597
+#: includes/event-organiser-cpt.php:603
 msgid "Go Pro!"
 msgstr "Go Pro!"
 
-#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
+#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
 msgid "Color"
 msgstr "Värv"
 
-#: includes/event-organiser-cpt.php:714
+#: includes/event-organiser-cpt.php:719
 msgid "Assign the category a colour."
 msgstr "Määra rubriigile värv."
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:308
+#: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "viimane"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:304
+#: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "esimene"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:305
+#: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "teine"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:306
+#: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "kolmas"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:307
+#: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "neljas"
 
@@ -2041,34 +2042,34 @@ msgid "custom recurrence"
 msgstr "kohandatud kordumine"
 
 #: includes/event-organiser-event-functions.php:797
-#: includes/event-organiser-register.php:293
+#: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "iga päev"
 
 #: includes/event-organiser-event-functions.php:799
-#: includes/event-organiser-register.php:294
+#: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "iga %d. päev"
 
 #: includes/event-organiser-event-functions.php:805
-#: includes/event-organiser-register.php:295
+#: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "iga nädal"
 
 #: includes/event-organiser-event-functions.php:807
-#: includes/event-organiser-register.php:296
+#: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "iga %d. nädal"
 
 #: includes/event-organiser-event-functions.php:818
-#: includes/event-organiser-register.php:297
+#: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "iga kuu"
 
 #: includes/event-organiser-event-functions.php:820
-#: includes/event-organiser-register.php:298
+#: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "iga %d. kuu"
@@ -2082,69 +2083,69 @@ msgstr "iga aasta"
 msgid "every %d years"
 msgstr "iga %d. aasta"
 
-#: includes/event-organiser-register.php:94
+#: includes/event-organiser-register.php:98
 msgid "Show More"
 msgstr "Näita rohkem"
 
-#: includes/event-organiser-register.php:95
+#: includes/event-organiser-register.php:99
 msgid "Show Less"
 msgstr "Näita vähem"
 
-#: includes/event-organiser-register.php:104
+#: includes/event-organiser-register.php:108
 #, fuzzy
 msgid "View all organisers"
 msgstr "Vaata kõiki rubriike"
 
-#: includes/event-organiser-register.php:280
+#: includes/event-organiser-register.php:285
 msgid "Hide dates"
 msgstr "Peida kuupäevad"
 
-#: includes/event-organiser-register.php:283
+#: includes/event-organiser-register.php:288
 msgid "Hour"
 msgstr "Tund"
 
-#: includes/event-organiser-register.php:284
+#: includes/event-organiser-register.php:289
 msgid "Minute"
 msgstr "Minut"
 
-#: includes/event-organiser-register.php:286
+#: includes/event-organiser-register.php:291
 msgid "days"
 msgstr "päevad"
 
-#: includes/event-organiser-register.php:288
+#: includes/event-organiser-register.php:293
 msgid "weeks"
 msgstr "nädalad"
 
-#: includes/event-organiser-register.php:290
+#: includes/event-organiser-register.php:295
 msgid "months"
 msgstr "kuud"
 
-#: includes/event-organiser-register.php:291
+#: includes/event-organiser-register.php:296
 msgid "year"
 msgstr "aasta"
 
-#: includes/event-organiser-register.php:292
+#: includes/event-organiser-register.php:297
 msgid "years"
 msgstr "aastad"
 
-#: includes/event-organiser-register.php:299
+#: includes/event-organiser-register.php:304
 msgid "every year on the"
 msgstr "iga aasta"
 
-#: includes/event-organiser-register.php:300
+#: includes/event-organiser-register.php:305
 #, php-format
 msgid "every %d years on the"
 msgstr "iga %d. aasta"
 
-#: includes/event-organiser-register.php:301
+#: includes/event-organiser-register.php:306
 msgid "This event will repeat"
 msgstr "See sündmus kordub"
 
-#: includes/event-organiser-register.php:424
+#: includes/event-organiser-register.php:429
 msgid "Settings"
 msgstr "Sätted"
 
-#: includes/event-organiser-register.php:592
+#: includes/event-organiser-register.php:597
 msgid ""
 "<h4>The Default Templates Have Changed</h4>Don't panic! If you've set up "
 "your own templates in your theme you won't notice any change. </br> If you "
@@ -2152,33 +2153,33 @@ msgid ""
 "com/blog/new-default-templates-in-1-7'>see this post</a>."
 msgstr ""
 
-#: includes/event-organiser-register.php:609
+#: includes/event-organiser-register.php:614
 #, php-format
 msgid "Your site timezone is %s"
 msgstr "Sinu lehe ajavöönd on %s"
 
-#: includes/event-organiser-register.php:610
+#: includes/event-organiser-register.php:615
 msgid ""
 "Is this correct? Using a fixed offset from UTC may cause unexpected "
 "behaviour, particular if you observe Daylight Savings Time."
 msgstr ""
 
-#: includes/event-organiser-register.php:611
+#: includes/event-organiser-register.php:616
 msgid ""
 "It is strongly recommended you select a city instead, even if you don't "
 "observe Daylight Savings Time."
 msgstr ""
 
-#: includes/event-organiser-register.php:612
+#: includes/event-organiser-register.php:617
 #, php-format
 msgid "You can <a href='%s'>change your timezone settings here</a>."
 msgstr ""
 
-#: includes/event-organiser-register.php:622
+#: includes/event-organiser-register.php:627
 msgid "Enter a Google Maps API key"
 msgstr ""
 
-#: includes/event-organiser-register.php:624
+#: includes/event-organiser-register.php:629
 #, php-format
 msgid ""
 "Google Maps now requires you register for an API key. If you wish to use "
@@ -2189,23 +2190,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Address"
 msgstr "Aadress"
 
-#: includes/event-organiser-venue-functions.php:996
+#: includes/event-organiser-venue-functions.php:1000
 msgid "City"
 msgstr "Linn"
 
-#: includes/event-organiser-venue-functions.php:997
+#: includes/event-organiser-venue-functions.php:1001
 msgid "State / Province"
 msgstr "Maakond"
 
-#: includes/event-organiser-venue-functions.php:998
+#: includes/event-organiser-venue-functions.php:1002
 msgid "Post Code"
 msgstr "Postiindeks"
 
-#: includes/event-organiser-venue-functions.php:999
+#: includes/event-organiser-venue-functions.php:1003
 msgid "Country"
 msgstr "Riik"
 

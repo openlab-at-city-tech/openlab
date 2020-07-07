@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 21:30+0000\n"
+"POT-Creation-Date: 2020-05-28 21:36+0000\n"
 "PO-Revision-Date: 2017-08-23T05:39:57+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -123,7 +123,7 @@ msgid "Displays a list of events"
 msgstr "Mostra la lista degli eventi"
 
 #: classes/class-eo-event-list-widget.php:14
-#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
+#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:468
 #: event-organiser.php:149 includes/event-organiser-cpt.php:226
 #: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
@@ -248,7 +248,7 @@ msgstr "Mostra &#8220;%s&#8221;"
 msgid "A list or dropdown of event categories"
 msgstr "Una lista o men&ugrave; a discesa delle categorie di eventi"
 
-#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:346
+#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:347
 msgid "Event Categories"
 msgstr "Categorie degli eventi"
 
@@ -285,7 +285,7 @@ msgstr "Una lista o menu a cascata dei luoghi degli eventi"
 msgid "Event Venues"
 msgstr "Luoghi Evento"
 
-#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:336
+#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:337
 #: event-organiser-venues.php:185 includes/event-organiser-cpt.php:31
 msgid "Venues"
 msgstr "Luoghi"
@@ -322,26 +322,26 @@ msgstr "Scopri di più …"
 msgid "Calendar View"
 msgstr "Vista calendario"
 
-#: event-organiser-calendar.php:72 includes/event-organiser-register.php:96
+#: event-organiser-calendar.php:72 includes/event-organiser-register.php:100
 msgid "today"
 msgstr "oggi"
 
-#: event-organiser-calendar.php:73 includes/event-organiser-register.php:97
-#: includes/event-organiser-register.php:285
+#: event-organiser-calendar.php:73 includes/event-organiser-register.php:101
+#: includes/event-organiser-register.php:290
 msgid "day"
 msgstr "giorno"
 
-#: event-organiser-calendar.php:74 includes/event-organiser-register.php:98
-#: includes/event-organiser-register.php:287
+#: event-organiser-calendar.php:74 includes/event-organiser-register.php:102
+#: includes/event-organiser-register.php:292
 msgid "week"
 msgstr "settimana"
 
-#: event-organiser-calendar.php:75 includes/event-organiser-register.php:99
-#: includes/event-organiser-register.php:289
+#: event-organiser-calendar.php:75 includes/event-organiser-register.php:103
+#: includes/event-organiser-register.php:294
 msgid "month"
 msgstr "mese"
 
-#: event-organiser-calendar.php:76 includes/event-organiser-register.php:100
+#: event-organiser-calendar.php:76 includes/event-organiser-register.php:104
 msgid "go to date"
 msgstr "vai alla data"
 
@@ -673,7 +673,7 @@ msgstr "giorno della settimana"
 
 #: event-organiser-edit.php:225
 #: includes/event-organiser-event-functions.php:856
-#: includes/event-organiser-register.php:302
+#: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "fino a"
 
@@ -685,12 +685,12 @@ msgstr "Ripeti questo evento fino a:"
 msgid "Include/Exclude occurrences:"
 msgstr "Includi/Escludi eventi"
 
-#: event-organiser-edit.php:240 includes/event-organiser-register.php:279
+#: event-organiser-edit.php:240 includes/event-organiser-register.php:284
 msgid "Show dates"
 msgstr "Mostra date"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1030
+#: includes/event-organiser-venue-functions.php:1034
 msgid "Select a venue"
 msgstr "Seleziona un luogo"
 
@@ -707,7 +707,7 @@ msgstr ""
 "Google Maps ora richiede la registrazione di una API key. Se si desidera "
 "usare le mappe nel sito, %1$sinserire la propria chiave%2$s."
 
-#: event-organiser-edit.php:495
+#: event-organiser-edit.php:498
 msgid "Event dates were not saved."
 msgstr "Le date dell'evento non sono state salvate"
 
@@ -945,7 +945,7 @@ msgstr "Commenti"
 msgid "Revisions"
 msgstr "Revisioni"
 
-#: event-organiser-settings.php:154 event-organiser-settings.php:355
+#: event-organiser-settings.php:154 event-organiser-settings.php:356
 #: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Tag degli eventi"
@@ -1049,11 +1049,15 @@ msgstr ""
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: event-organiser-settings.php:255
+#: event-organiser-settings.php:250 event-organiser-settings.php:717
+msgid "None"
+msgstr "Nessuno"
+
+#: event-organiser-settings.php:256
 msgid "Google API key:"
 msgstr "Google API key:"
 
-#: event-organiser-settings.php:261
+#: event-organiser-settings.php:262
 #, php-format
 msgid ""
 "To use Google Maps you need to register an API key with Google. You can "
@@ -1062,15 +1066,15 @@ msgstr ""
 "Per usare Google Maps hai bisogno di registrare una API key con Google. Puoi "
 "registrare una API key gratuita %sseguendo queste istruzioni%s."
 
-#: event-organiser-settings.php:271
+#: event-organiser-settings.php:272
 msgid "Templates:"
 msgstr "Template:"
 
-#: event-organiser-settings.php:276
+#: event-organiser-settings.php:277
 msgid "Disable CSS:"
 msgstr "Disabilita CSS:"
 
-#: event-organiser-settings.php:282
+#: event-organiser-settings.php:283
 msgid ""
 "Check this option to prevent any stylesheets from Event Organiser being "
 "loaded on the front-end"
@@ -1078,46 +1082,46 @@ msgstr ""
 "Abilita questa opzione per impedire il caricamento nell'interfaccia utente "
 "di qualsiasi foglio di stile di Event Organiser."
 
-#: event-organiser-settings.php:291
+#: event-organiser-settings.php:292
 msgid "Enable event pretty permalinks:"
 msgstr "Attiva permalink eventi:"
 
-#: event-organiser-settings.php:297
+#: event-organiser-settings.php:298
 msgid ""
 "If you have pretty permalinks enabled, select to have pretty premalinks for "
 "events."
 msgstr ""
 "Usa i \"pretty permalink\" anche per gli eventi, se sono attivati nel sito."
 
-#: event-organiser-settings.php:301
+#: event-organiser-settings.php:302
 msgid "Event (single)"
 msgstr "Evento (singolo)"
 
-#: event-organiser-settings.php:310
+#: event-organiser-settings.php:311
 msgid "Events page"
 msgstr "Pagina eventi"
 
-#: event-organiser-settings.php:323
+#: event-organiser-settings.php:324
 msgid "Event (date archive)"
 msgstr "Evento (archivio per data)"
 
-#: event-organiser-settings.php:329
+#: event-organiser-settings.php:330
 msgid "Year archive"
 msgstr "Archivio annuale"
 
-#: event-organiser-settings.php:330
+#: event-organiser-settings.php:331
 msgid "Month archive"
 msgstr "Archivio mensile"
 
-#: event-organiser-settings.php:331
+#: event-organiser-settings.php:332
 msgid "Day archive"
 msgstr "Archivio giornaliero"
 
-#: event-organiser-settings.php:374
+#: event-organiser-settings.php:375
 msgid "Enable theme compatability mode (default)"
 msgstr "Abilita la modalità di compatibilità con il tema (default)"
 
-#: event-organiser-settings.php:375
+#: event-organiser-settings.php:376
 msgid ""
 "Event Organiser will attempt to ensure compatability with your theme and "
 "apply additional styles."
@@ -1125,12 +1129,12 @@ msgstr ""
 "Event Organiser cercherà di assicurare la compatibilità con il tuo tema e "
 "applicherà degli stili aggiuntivi"
 
-#: event-organiser-settings.php:378
+#: event-organiser-settings.php:379
 #, fuzzy
 msgid "Enable template handling"
 msgstr "Abilita l'utilizzo di template"
 
-#: event-organiser-settings.php:379
+#: event-organiser-settings.php:380
 #, fuzzy
 msgid ""
 "Event Organiser's page templates will be used if your theme does not provide "
@@ -1139,25 +1143,25 @@ msgstr ""
 "I template di pagina di Event Organizer saranno utilizzati se il tuo tema "
 "non ha template appropriati"
 
-#: event-organiser-settings.php:382
+#: event-organiser-settings.php:383
 #, fuzzy
 msgid "Disable template handling"
 msgstr "Disabilita l'utilizzo di template"
 
-#: event-organiser-settings.php:383
+#: event-organiser-settings.php:384
 msgid "Event Organiser's page templates will not be used."
 msgstr "Non saranno utilizzati i template di pagina di Event Organizer"
 
-#: event-organiser-settings.php:598
+#: event-organiser-settings.php:599
 msgid "Event Settings"
 msgstr "Impostazioni Evento"
 
-#: event-organiser-settings.php:599
+#: event-organiser-settings.php:600
 #, php-format
 msgid "Event Settings: %s"
 msgstr "Impostazioni Evento: %s"
 
-#: event-organiser-settings.php:676
+#: event-organiser-settings.php:677
 #, fuzzy
 msgid ""
 "For each of the pages, the corresponding template is used. To use your own "
@@ -1172,23 +1176,23 @@ msgstr ""
 "tema, utilizzarà il suo template standard. Puoi disabilitare questo setting. "
 "WordPress sceglierà il template da usare dalla cartella del tuo tema."
 
-#: event-organiser-settings.php:683
+#: event-organiser-settings.php:684
 msgid "Events archives:"
 msgstr "Archivio eventi:"
 
-#: event-organiser-settings.php:684
+#: event-organiser-settings.php:685
 msgid "Event page:"
 msgstr "Pagina eventi:"
 
-#: event-organiser-settings.php:685
+#: event-organiser-settings.php:686
 msgid "Venue page:"
 msgstr "Pagina luoghi:"
 
-#: event-organiser-settings.php:686
+#: event-organiser-settings.php:687
 msgid "Events Category page:"
 msgstr "Pagine della categoria degli eventi:"
 
-#: event-organiser-settings.php:689
+#: event-organiser-settings.php:690
 #, php-format
 msgid ""
 "For more information see documentation <a href='%s'>on editing the "
@@ -1197,23 +1201,19 @@ msgstr ""
 "Per maggiori informazioni consulta la documentazione sulla <a "
 "href='%s'>modifica dei template</a>."
 
-#: event-organiser-settings.php:699
+#: event-organiser-settings.php:700
 msgid "Event management permissions"
 msgstr "Permessi gestione eventi"
 
-#: event-organiser-settings.php:700
+#: event-organiser-settings.php:701
 msgid "Set permissions for events and venue management"
 msgstr "Imposta i permessi per la gestione degli eventi e dei luoghi"
 
-#: event-organiser-settings.php:705
+#: event-organiser-settings.php:706
 msgid "Role"
 msgstr "Ruolo"
 
-#: event-organiser-settings.php:716
-msgid "None"
-msgstr "Nessuno"
-
-#: event-organiser-settings.php:745
+#: event-organiser-settings.php:746
 msgid ""
 "Choose a custom permalink structure for events, venues, event categories and "
 "event tags."
@@ -1221,7 +1221,7 @@ msgstr ""
 "Scegli una struttura permalink personalizzata per eventi, luoghi, categorie "
 "e tag degli eventi."
 
-#: event-organiser-settings.php:746
+#: event-organiser-settings.php:747
 msgid ""
 "Please note to enable these structures you must first have pretty permalinks "
 "enabled on WordPress in Settings > Permalinks."
@@ -1229,7 +1229,7 @@ msgstr ""
 "Nota che per attivare queste strutture devi prima avere i permalink attivati "
 "in Impostazioni > Permalink."
 
-#: event-organiser-settings.php:747
+#: event-organiser-settings.php:748
 msgid ""
 "You may also need to go to WordPress Settings > Permalinks and click 'Save "
 "Changes' before any changes will take effect."
@@ -1237,11 +1237,11 @@ msgstr ""
 "Potresti anche avere bisogno di andare in Impostazioni > Permalink e "
 "cliccare 'Salva le modifiche' prima che le modifiche abbiano effetto."
 
-#: event-organiser-settings.php:783
+#: event-organiser-settings.php:784
 msgid "Do not add to menu"
 msgstr "Non aggiungere al menu"
 
-#: event-organiser-settings.php:787
+#: event-organiser-settings.php:788
 msgid "Page list (fallback)"
 msgstr "Pagina lista (fallback)"
 
@@ -1298,19 +1298,19 @@ msgstr "Menu a tendina: Posizione"
 msgid "Latitude/Longitude:"
 msgstr "Latitudine/Longitudine:"
 
-#: event-organiser-venues.php:430
+#: event-organiser-venues.php:432
 msgid "Venue name"
 msgstr "Nome luogo"
 
-#: event-organiser-venues.php:436
+#: event-organiser-venues.php:438
 msgid "Permalink:"
 msgstr "Permalink:"
 
-#: event-organiser-venues.php:443
+#: event-organiser-venues.php:445
 msgid "Get Link"
 msgstr "Apri il link"
 
-#: event-organiser-venues.php:465
+#: event-organiser-venues.php:467
 msgid "Slug"
 msgstr "Slug"
 
@@ -1907,15 +1907,15 @@ msgstr ""
 msgid "This event has been broken from a recurring event."
 msgstr "Questo evento è stato interrotto da un errore ripetuto"
 
-#: includes/event-organiser-cpt.php:527
+#: includes/event-organiser-cpt.php:530
 msgid "Creating events"
 msgstr "Sto creando un evento"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:531
 msgid "Creating events:"
 msgstr "Eventi creati:"
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:533
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1924,7 +1924,7 @@ msgstr ""
 "&egrave; un evento ricorrente, la data d'inizio corrisponde alla data della "
 "prima ricorrenza."
 
-#: includes/event-organiser-cpt.php:531
+#: includes/event-organiser-cpt.php:534
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1932,7 +1932,7 @@ msgstr ""
 "La data di fine &egrave; la data in cui termina l'evento. Se l'evento "
 "&egrave; ricorrente, &egrave; la data di fine dell'ultima ricorrenza."
 
-#: includes/event-organiser-cpt.php:532
+#: includes/event-organiser-cpt.php:535
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1940,11 +1940,11 @@ msgstr ""
 "Tutte le date e gli orari devono essere inseriti nel formato indicato. Puoi "
 "cambiare i formati nella pagine delle impostazioni."
 
-#: includes/event-organiser-cpt.php:537
+#: includes/event-organiser-cpt.php:540
 msgid "Repeating events"
 msgstr "Eventi ripetuti"
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1954,11 +1954,11 @@ msgstr ""
 "selezionare come l'evento deve essere ripetuto. Altre opzioni saranno "
 "aggiunte, "
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:543
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Specifica quale regola l'evento deve ripetere (default 1)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:544
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1967,7 +1967,7 @@ msgstr ""
 "dopo questa data, ma un occorrenza che inizia prima di questa data potrebbe "
 "finire dopo."
 
-#: includes/event-organiser-cpt.php:542
+#: includes/event-organiser-cpt.php:545
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1976,7 +1976,7 @@ msgstr ""
 "Se &egrave; selezionata la ricorrenza mensile, seleziona in quale data "
 "avviene l'evento (es. il 24) o il giorno del mese (es. il terzo Martedì) "
 
-#: includes/event-organiser-cpt.php:543
+#: includes/event-organiser-cpt.php:546
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1986,15 +1986,15 @@ msgstr ""
 "della settimana l'evento deve essere ripetuto. Se non &egrave; selezionato "
 "nessun giorno, viene usato il giorno della data d'inizio."
 
-#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551 includes/event-organiser-cpt.php:552
 msgid "Selecting a venue"
 msgstr "Seleziona un luogo"
 
-#: includes/event-organiser-cpt.php:551
+#: includes/event-organiser-cpt.php:554
 msgid "Use the venues input field to search for existing venues"
 msgstr "Usa il campo per inserire il luogo per cercare luoghi esistenti"
 
-#: includes/event-organiser-cpt.php:552
+#: includes/event-organiser-cpt.php:555
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -2002,11 +2002,12 @@ msgstr ""
 "Pu&ograve; essere selezionato solo un luogo gi&agrave; esistente. Per "
 "aggiungere un luogo, vai alla relativa pagina"
 
-#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:587
 msgid "Overview"
 msgstr "Panoramica"
 
-#: includes/event-organiser-cpt.php:563
+#: includes/event-organiser-cpt.php:566
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -2016,7 +2017,7 @@ msgstr ""
 "eventi ripetitivi appaiono come una riga singola</strong> nella tabella e la "
 "data d'inizio e fine si riferiscono alla prima occorrenza dell'evento."
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -2024,7 +2025,7 @@ msgstr ""
 "Passando il mouse su un luogo della lista saranno mostrate le azioni per la "
 "gestione del luogo. &Egrave; possibile eseguire le seguenti azioni:"
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:576
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -2032,15 +2033,15 @@ msgstr ""
 "'Modifica' va alla schermata di modifica del luogo. Si pu&ograve; anche "
 "raggiungere la schermata cliccando sul nome del luogo."
 
-#: includes/event-organiser-cpt.php:572
+#: includes/event-organiser-cpt.php:577
 msgid "Delete will permanently remove the venue"
 msgstr "'Elimina' permette di eliminare il luogo definitivamente"
 
-#: includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:578
 msgid "View will take you to the venue's page"
 msgstr "'Mostra' permette di visualizzare la pagina del luogo"
 
-#: includes/event-organiser-cpt.php:582
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -2050,7 +2051,7 @@ msgstr ""
 "riassunto dell'evento cliccandoci sopra. Se si dispone dei permessi "
 "necessari, sar&agrave; mostrato anche un link alla pagina di modifica."
 
-#: includes/event-organiser-cpt.php:583
+#: includes/event-organiser-cpt.php:589
 #, fuzzy
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
@@ -2061,11 +2062,11 @@ msgstr ""
 "giornalieri. Puoi anche filtrare gli eventi per categoria o luogo. Il "
 "pulsante 'alla data' permette di vedere gli eventi di una data specifica."
 
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:593
 msgid "Add Event"
 msgstr "Aggiungi evento"
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:594
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -2080,54 +2081,54 @@ msgstr ""
 "pubblicato subito o salvato come bozza. In ogni caso, l'evento viene creato "
 "e verrai reindirizzato alla sua pagina di modifica."
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:600
 msgid "For more information"
 msgstr "Per ulteriori informazioni"
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:601
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Guarda la <a %s>documentazione</a>"
 
-#: includes/event-organiser-cpt.php:596
+#: includes/event-organiser-cpt.php:602
 #, fuzzy
 msgid "Debugging Event Organiser"
 msgstr "Debug di Event Organiser"
 
-#: includes/event-organiser-cpt.php:597
+#: includes/event-organiser-cpt.php:603
 msgid "Go Pro!"
 msgstr "Diventa Pro!"
 
-#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
+#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
 msgid "Color"
 msgstr "Colore"
 
-#: includes/event-organiser-cpt.php:714
+#: includes/event-organiser-cpt.php:719
 msgid "Assign the category a colour."
 msgstr "Assegna un colore alla categoria"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:308
+#: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "ultimo"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:304
+#: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "primo"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:305
+#: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "secondo"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:306
+#: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "terzo"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:307
+#: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "quarto"
 
@@ -2140,34 +2141,34 @@ msgid "custom recurrence"
 msgstr "Ricorrenza personalizzata"
 
 #: includes/event-organiser-event-functions.php:797
-#: includes/event-organiser-register.php:293
+#: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "ogni giorno"
 
 #: includes/event-organiser-event-functions.php:799
-#: includes/event-organiser-register.php:294
+#: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "ogni %d giorni"
 
 #: includes/event-organiser-event-functions.php:805
-#: includes/event-organiser-register.php:295
+#: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "ogni settimana il"
 
 #: includes/event-organiser-event-functions.php:807
-#: includes/event-organiser-register.php:296
+#: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "ogni %d settimane il"
 
 #: includes/event-organiser-event-functions.php:818
-#: includes/event-organiser-register.php:297
+#: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "ogni mese il"
 
 #: includes/event-organiser-event-functions.php:820
-#: includes/event-organiser-register.php:298
+#: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "ogni %d mesi il"
@@ -2181,69 +2182,69 @@ msgstr "ogni anno"
 msgid "every %d years"
 msgstr "ogni %d anni"
 
-#: includes/event-organiser-register.php:94
+#: includes/event-organiser-register.php:98
 msgid "Show More"
 msgstr "Mostra tutto"
 
-#: includes/event-organiser-register.php:95
+#: includes/event-organiser-register.php:99
 msgid "Show Less"
 msgstr "Riduci"
 
-#: includes/event-organiser-register.php:104
+#: includes/event-organiser-register.php:108
 #, fuzzy
 msgid "View all organisers"
 msgstr "Visualizza tutte le categorie"
 
-#: includes/event-organiser-register.php:280
+#: includes/event-organiser-register.php:285
 msgid "Hide dates"
 msgstr "Nascondi appuntamento"
 
-#: includes/event-organiser-register.php:283
+#: includes/event-organiser-register.php:288
 msgid "Hour"
 msgstr "Ora"
 
-#: includes/event-organiser-register.php:284
+#: includes/event-organiser-register.php:289
 msgid "Minute"
 msgstr "Minuto"
 
-#: includes/event-organiser-register.php:286
+#: includes/event-organiser-register.php:291
 msgid "days"
 msgstr "giorni"
 
-#: includes/event-organiser-register.php:288
+#: includes/event-organiser-register.php:293
 msgid "weeks"
 msgstr "settimane"
 
-#: includes/event-organiser-register.php:290
+#: includes/event-organiser-register.php:295
 msgid "months"
 msgstr "mesi"
 
-#: includes/event-organiser-register.php:291
+#: includes/event-organiser-register.php:296
 msgid "year"
 msgstr "anno"
 
-#: includes/event-organiser-register.php:292
+#: includes/event-organiser-register.php:297
 msgid "years"
 msgstr "anni"
 
-#: includes/event-organiser-register.php:299
+#: includes/event-organiser-register.php:304
 msgid "every year on the"
 msgstr "ogni anno il"
 
-#: includes/event-organiser-register.php:300
+#: includes/event-organiser-register.php:305
 #, php-format
 msgid "every %d years on the"
 msgstr "ogni %d anni il"
 
-#: includes/event-organiser-register.php:301
+#: includes/event-organiser-register.php:306
 msgid "This event will repeat"
 msgstr "Questo evento si ripeter&agrave;"
 
-#: includes/event-organiser-register.php:424
+#: includes/event-organiser-register.php:429
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: includes/event-organiser-register.php:592
+#: includes/event-organiser-register.php:597
 msgid ""
 "<h4>The Default Templates Have Changed</h4>Don't panic! If you've set up "
 "your own templates in your theme you won't notice any change. </br> If you "
@@ -2255,12 +2256,12 @@ msgstr ""
 "l'hai fatto e rivuoi i vecchi templates, <a href='http://wp-event-organiser."
 "com/blog/new-default-templates-in-1-7'>leggi questo post</a>."
 
-#: includes/event-organiser-register.php:609
+#: includes/event-organiser-register.php:614
 #, fuzzy, php-format
 msgid "Your site timezone is %s"
 msgstr "Il fuso orario del tuo sito è: %s"
 
-#: includes/event-organiser-register.php:610
+#: includes/event-organiser-register.php:615
 #, fuzzy
 msgid ""
 "Is this correct? Using a fixed offset from UTC may cause unexpected "
@@ -2269,7 +2270,7 @@ msgstr ""
 "E' corretto? Utilizzare un fuso orario fisso rispetto al UTC può causare "
 "problemi inattesi, in particolare per quanto riguarda l'ora solare."
 
-#: includes/event-organiser-register.php:611
+#: includes/event-organiser-register.php:616
 #, fuzzy
 msgid ""
 "It is strongly recommended you select a city instead, even if you don't "
@@ -2277,16 +2278,16 @@ msgid ""
 msgstr ""
 "E' consigliato selezionare una città, anche se non si utilizza l'ora solare."
 
-#: includes/event-organiser-register.php:612
+#: includes/event-organiser-register.php:617
 #, fuzzy, php-format
 msgid "You can <a href='%s'>change your timezone settings here</a>."
 msgstr "Qui <a href='%s'>puoi cambiare il fuso orario</a>."
 
-#: includes/event-organiser-register.php:622
+#: includes/event-organiser-register.php:627
 msgid "Enter a Google Maps API key"
 msgstr "Inserisci una API key di Google Maps"
 
-#: includes/event-organiser-register.php:624
+#: includes/event-organiser-register.php:629
 #, php-format
 msgid ""
 "Google Maps now requires you register for an API key. If you wish to use "
@@ -2299,23 +2300,23 @@ msgstr ""
 msgid "Help"
 msgstr "Aiuto"
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Address"
 msgstr "Indirizzo"
 
-#: includes/event-organiser-venue-functions.php:996
+#: includes/event-organiser-venue-functions.php:1000
 msgid "City"
 msgstr "Citta"
 
-#: includes/event-organiser-venue-functions.php:997
+#: includes/event-organiser-venue-functions.php:1001
 msgid "State / Province"
 msgstr "Stato"
 
-#: includes/event-organiser-venue-functions.php:998
+#: includes/event-organiser-venue-functions.php:1002
 msgid "Post Code"
 msgstr "CAP"
 
-#: includes/event-organiser-venue-functions.php:999
+#: includes/event-organiser-venue-functions.php:1003
 msgid "Country"
 msgstr "Nazione"
 
