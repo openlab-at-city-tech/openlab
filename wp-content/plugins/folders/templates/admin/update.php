@@ -1,3 +1,4 @@
+<?php if(!defined('ABSPATH')) exit; ?>
 <style>
 
     .updates-form-form {

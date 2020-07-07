@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <!-- do not change here, Free/Pro URL Change -->
 <link rel='stylesheet' href='<?php echo WCP_FOLDER_URL ?>assets/css/settings.css' type='text/css' media='all' />
@@ -102,13 +102,14 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
         $default_folders = (empty($default_folders) || !is_array($default_folders))?array():$default_folders;
         do_settings_sections( __FILE__ );
         ?>
+        <input type="hidden" name="folder_nonce" value="<?php echo wp_create_nonce("folder_settings") ?>">
         <div class="accordion">
             <div class="accordion-header">Folders Settings <span class="dashicons dashicons-arrow-down-alt2"></span></div>
             <div class="accordion-content" style="display: block">
                 <div class="accordion-left">
                     <table class="form-table">
                         <?php
-                        $post_types = get_post_types( array( 'public' => true ), 'objects' );
+                        $post_types = get_post_types( array( ), 'objects' );
                         $post_array = array("page", "post", "attachment");
                         foreach ( $post_types as $post_type ) : ?>
                             <?php
@@ -170,12 +171,12 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
                             <?php } endforeach; ?>
                         <tr>
                             <th>
-                                <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Show Folders in Menu:', WCP_FOLDER ); ?></label>
+                                <label for="folders_show_in_menu" ><?php esc_html_e( 'Show Folders in Menu:', WCP_FOLDER ); ?></label>
                             </th>
                             <td>
                                 <?php $val = get_option("folders_show_in_menu"); ?>
                                 <input type="hidden" name="folders_show_in_menu" value="off" />
-                                <input type="checkbox" name="folders_show_in_menu" value="on" <?php echo ($val == "on")?"checked='checked'":"" ?>/>
+                                <input type="checkbox" id="folders_show_in_menu" name="folders_show_in_menu" value="on" <?php echo ($val == "on")?"checked='checked'":"" ?>/>
                             </td>
                         </tr>
                         <!-- Do not make changes here, Only for Free -->
@@ -183,16 +184,16 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
                         <tr>
                             <td colspan="2" style="padding: 10px 0">
                                 <?php
-                                $total_folders = get_option("folder_old_plugin_folder_status");
-                                if($total_folders == false || $total_folders < 10) {
-                                    $total_folders = 10;
+                                $tlfs = get_option("folder_old_plugin_folder_status");
+                                if($tlfs == false || $tlfs < 10) {
+                                    $tlfs = 10;
                                 }
-                                $total = WCP_Folders::get_total_term_folders();
-                                if($total > $total_folders) {
-                                    $total_folders = $total;
+                                $total = WCP_Folders::get_ttl_fldrs();
+                                if($total > $tlfs) {
+                                    $tlfs = $total;
                                 }
                                 ?>
-                                <span class="upgrade-message">You have used <span class='pink'><?php echo esc_attr($total) ?></span>/<?php echo esc_attr($total_folders) ?> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
+                                <span class="upgrade-message">You have used <span class='pink'><?php echo esc_attr($total) ?></span>/<?php echo esc_attr($tlfs) ?> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
                             </td>
                         </tr>
 
@@ -214,92 +215,92 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
             <div class="accordion-content">
                 <div class="accordion-left">
                     <table class="form-table">
-                        <?php
-                        $color = !isset($customize_folders['new_folder_color'])||empty($customize_folders['new_folder_color'])?"#F51366":$customize_folders['new_folder_color'];
-                        ?>
-                        <tr>
-                            <th width="220px">
-                                <label for="new_folder_color" >New Folder button color</label>
-                            </th>
-                            <td width="32px">
-                                <input type="text" class="color-field" name="customize_folders[new_folder_color]" id="new_folder_color" value="<?php echo esc_attr($color) ?>" />
-                            </td>
-                            <td rowspan="4" >
+                    <?php
+                    $color = !isset($customize_folders['new_folder_color'])||empty($customize_folders['new_folder_color'])?"#F51366":$customize_folders['new_folder_color'];
+                    ?>
+                    <tr>
+                        <th width="220px">
+                            <label for="new_folder_color" >New Folder button color</label>
+                        </th>
+                        <td width="32px">
+                            <input type="text" class="color-field" name="customize_folders[new_folder_color]" id="new_folder_color" value="<?php echo esc_attr($color) ?>" />
+                        </td>
+                        <td rowspan="4" >
 
-                            </td>
-                        </tr>
-                        <?php
-                        $color = !isset($customize_folders['bulk_organize_button_color'])||empty($customize_folders['bulk_organize_button_color'])?"#F51366":$customize_folders['bulk_organize_button_color'];
-                        ?>
-                        <tr>
-                            <th>
-                                <label for="bulk_organize_button_color" >Bulk Organize button color</label>
-                            </th>
-                            <td>
-                                <input type="text" class="color-field" name="customize_folders[bulk_organize_button_color]" id="bulk_organize_button_color" value="<?php echo esc_attr($color) ?>" />
-                            </td>
-                        </tr>
-                        <?php
-                        $color = !isset($customize_folders['dropdown_color'])||empty($customize_folders['dropdown_color'])?"#F51366":$customize_folders['dropdown_color'];
-                        ?>
-                        <tr>
-                            <th>
-                                <label for="dropdown_color" >Dropdown color</label>
-                            </th>
-                            <td>
-                                <input type="text" class="color-field" name="customize_folders[dropdown_color]" id="dropdown_color" value="<?php echo esc_attr($color) ?>" />
-                            </td>
-                        </tr>
-                        <?php
-                        $color = !isset($customize_folders['folder_bg_color'])||empty($customize_folders['folder_bg_color'])?"#008ec2":$customize_folders['folder_bg_color'];
-                        ?>
-                        <tr>
-                            <th>
-                                <label for="folder_bg_color" >Folders background color</label>
-                            </th>
-                            <td>
-                                <input type="text" class="color-field" name="customize_folders[folder_bg_color]" id="folder_bg_color" value="<?php echo esc_attr($color) ?>" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="folder_font" >Folders font</label>
-                            </th>
-                            <td colspan="2">
-                                <?php
-                                $font = !isset($customize_folders['folder_font'])||empty($customize_folders['folder_font'])?"":$customize_folders['folder_font'];
-                                $index = 0;
-                                ?>
-                                <select name="customize_folders[folder_font]" id="folder_font" >
-                                    <?php $group = '';
-                                    foreach ($fonts as $key => $value):
-                                        $title = $key;
-                                        if($index == 0) {
-                                            $key = "";
-                                        }
-                                        $index++;
-                                        if ($value != $group) {
-                                            echo '<optgroup label="' . $value . '">';
-                                            $group = $value;
-                                        }
-                                        ?>
-                                        <option value="<?php echo $key; ?>" <?php selected($font, $key); ?>><?php echo $title; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="folder_size" >Folders size</label>
-                            </th>
-                            <td colspan="2">
-                                <?php
-                                $sizes = array(
-                                    "12" => "Small",
-                                    "16" => "Medium",
-                                    "20" => "Large"
-                                );
-                                $size = !isset($customize_folders['folder_size'])||empty($customize_folders['folder_size'])?"16":$customize_folders['folder_size'];
+                        </td>
+                    </tr>
+                    <?php
+                    $color = !isset($customize_folders['bulk_organize_button_color'])||empty($customize_folders['bulk_organize_button_color'])?"#F51366":$customize_folders['bulk_organize_button_color'];
+                    ?>
+                    <tr>
+                        <th>
+                            <label for="bulk_organize_button_color" >Bulk Organize button color</label>
+                        </th>
+                        <td>
+                            <input type="text" class="color-field" name="customize_folders[bulk_organize_button_color]" id="bulk_organize_button_color" value="<?php echo esc_attr($color) ?>" />
+                        </td>
+                    </tr>
+                    <?php
+                    $color = !isset($customize_folders['dropdown_color'])||empty($customize_folders['dropdown_color'])?"#F51366":$customize_folders['dropdown_color'];
+                    ?>
+                    <tr>
+                        <th>
+                            <label for="dropdown_color" >Dropdown color</label>
+                        </th>
+                        <td>
+                            <input type="text" class="color-field" name="customize_folders[dropdown_color]" id="dropdown_color" value="<?php echo esc_attr($color) ?>" />
+                        </td>
+                    </tr>
+                    <?php
+                    $color = !isset($customize_folders['folder_bg_color'])||empty($customize_folders['folder_bg_color'])?"#008ec2":$customize_folders['folder_bg_color'];
+                    ?>
+                    <tr>
+                        <th>
+                            <label for="folder_bg_color" >Folders background color</label>
+                        </th>
+                        <td>
+                            <input type="text" class="color-field" name="customize_folders[folder_bg_color]" id="folder_bg_color" value="<?php echo esc_attr($color) ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="folder_font" >Folders font</label>
+                        </th>
+                        <td colspan="2">
+                            <?php
+                            $font = !isset($customize_folders['folder_font'])||empty($customize_folders['folder_font'])?"":$customize_folders['folder_font'];
+                            $index = 0;
+                            ?>
+                            <select name="customize_folders[folder_font]" id="folder_font" >
+                                <?php $group = '';
+                                foreach ($fonts as $key => $value):
+                                    $title = $key;
+                                    if($index == 0) {
+                                        $key = "";
+                                    }
+                                    $index++;
+                                    if ($value != $group) {
+                                        echo '<optgroup label="' . $value . '">';
+                                        $group = $value;
+                                    }
+                                    ?>
+                                    <option value="<?php echo $key; ?>" <?php selected($font, $key); ?>><?php echo $title; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="folder_size" >Folders size</label>
+                        </th>
+                        <td colspan="2">
+                            <?php
+                            $sizes = array(
+                                "12" => "Small",
+                                "16" => "Medium",
+                                "20" => "Large"
+                            );
+                            $size = !isset($customize_folders['folder_size'])||empty($customize_folders['folder_size'])?"16":$customize_folders['folder_size'];
                                 ?>
                                 <select name="customize_folders[folder_size]" id="folder_size" >
                                     <?php
@@ -309,6 +310,19 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
                                     }
                                     ?>
                                 </select>
+                            </td>
+                        </tr>
+                        <?php
+                        $show_in_page = !isset($customize_folders['show_in_page'])||empty($customize_folders['show_in_page'])?"show":$customize_folders['show_in_page'];
+                        if(empty($show_in_page)) {
+                            $show_in_page = "show";
+                        }
+                        ?>
+                        <tr>
+                            <th><label for="">Show Folders in upper position</label></th>
+                            <td colspan="2">
+                                <input type="hidden" name="customize_folders[show_in_page]" value="hide">
+                                <input <?php checked($show_in_page, "show") ?> type="checkbox" name="customize_folders[show_in_page]" value="show">
                             </td>
                         </tr>
                     </table>

@@ -1,8 +1,9 @@
 <?php
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=";
 ?>
-<link href="<?php echo esc_url(WCP_FOLDER_URL."assets/css/admin-setting.css") ?>" type="text/css" rel="stylesheet" />
+<link href="<?php echo esc_url(WCP_FOLDER_URL."assets/css/select2.min.css?ver=".WCP_FOLDER_VERSION) ?>" type="text/css" rel="stylesheet" />
+<link href="<?php echo esc_url(WCP_FOLDER_URL."assets/css/admin-setting.css?ver=".WCP_FOLDER_VERSION) ?>" type="text/css" rel="stylesheet" />
 <div class="wrap">
     <div class="key-table">
         <div class="modal-upgrade upgrade-block" id="folder-modal">
@@ -32,13 +33,14 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                     <div class="rpt_feature rpt_feature_0-3"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create additional 2 tires of sub-folders</span>Sub-folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create unlimited folders and sub-folders. On the Free plan it is limited to 10 folders in total</span>Unlimited folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can use this feature to download all the content of any media library folder as a ZIP file.</span>Download folders as ZIP<span class="rpt_tooltip_plus"> +</span></a></div>
+                                    <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>Pin selected folders to the upper part of the folders navigation area for easy access.</span>Sticky Folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-5">
                                         <select data-key="0" class="multiple-options">
                                             <option data-header="Renewals for 25% off" data-price="25" value="<?php echo esc_url($pro_url."1") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 3 years" data-price="49" value="<?php echo esc_url($pro_url."4") ?>">
-                                                <?php esc_html_e("Updates & support for 3 years") ?>
+                                            <option data-header="For 2 years" data-price="39" value="<?php echo esc_url($pro_url."13") ?>">
+                                                <?php esc_html_e("Updates & support for 2 years") ?>
                                             </option>
                                             <option data-header="For lifetime" data-price="79" value="<?php echo esc_url($pro_url."5") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>
@@ -72,13 +74,14 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                     <div class="rpt_feature rpt_feature_0-3"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create additional 2 tires of sub-folders</span>Sub-folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create unlimited folders and sub-folders. On the Free plan it is limited to 10 folders in total</span>Unlimited folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can use this feature to download all the content of any media library folder as a ZIP file.</span>Download folders as ZIP<span class="rpt_tooltip_plus"> +</span></a></div>
+                                    <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>Pin selected folders to the upper part of the folders navigation area for easy access.</span>Sticky Folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-5">
                                         <select data-key="0" class="multiple-options">
                                             <option data-header="Renewals for 25% off" data-price="59" value="<?php echo esc_url($pro_url."2") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 3 years" data-price="99" value="<?php echo esc_url($pro_url."6") ?>">
-                                                <?php esc_html_e("Updates & support for 3 years") ?>
+                                            <option data-header="For 2 years" data-price="89" value="<?php echo esc_url($pro_url."14") ?>">
+                                                <?php esc_html_e("Updates & support for 2 years") ?>
                                             </option>
                                             <option data-header="For lifetime" data-price="149" value="<?php echo esc_url($pro_url."7") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>
@@ -106,7 +109,13 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                     <div style="clear:both;"></div>
                                 </div>
                                 <div class="rpt_features rpt_features_2">
-                                    <div class="rpt_feature rpt_feature_2-0"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b><?php esc_html_e('Use Folders on 50 domains', WCP_FOLDER); ?></span><?php esc_html_e('50 website', WCP_FOLDER); ?><span class="rpt_tooltip_plus"> +</span></a> </div>
+                                    <div class="rpt_feature rpt_feature_2-0" style="padding: 0px 16px 6px">
+                                        <select class="multiple-web-options">
+                                            <option value="50_websites">50 websites</option>
+                                            <option value="500_websites">500 websites</option>
+                                            <option value="1000_websites">1000 websites</option>
+                                        </select>
+                                    </div>
                                     <div class="rpt_feature rpt_feature_1-1">
                                         <?php esc_html_e('Organize Pages, Posts and Media files', WCP_FOLDER); ?>
                                     </div>
@@ -114,15 +123,16 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                     <div class="rpt_feature rpt_feature_0-3"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create additional 2 tires of sub-folders</span>Sub-folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can create unlimited folders and sub-folders. On the Free plan it is limited to 10 folders in total</span>Unlimited folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>You can use this feature to download all the content of any media library folder as a ZIP file.</span>Download folders as ZIP<span class="rpt_tooltip_plus"> +</span></a></div>
+                                    <div class="rpt_feature rpt_feature_0-4"><a href="javascript:void(0)" class="rpt_tooltip"><span class="intool"><b></b>Pin selected folders to the upper part of the folders navigation area for easy access.</span>Sticky Folders<span class="rpt_tooltip_plus"> +</span></a></div>
                                     <div class="rpt_feature rpt_feature_0-5">
-                                        <select data-key="0" class="multiple-options">
-                                            <option data-header="Renewals for 25% off" data-price="99" value="<?php echo esc_url($pro_url."10") ?>">
+                                        <select data-key="0" class="multiple-options has-multiple-websites">
+                                            <option data-option="1_year" data-header="Renewals for 25% off" data-price="99" value="<?php echo esc_url($pro_url."10") ?>">
                                                 <?php esc_html_e("Updates & support for 1 year") ?>
                                             </option>
-                                            <option data-header="For 3 years" data-price="179" value="<?php echo esc_url($pro_url."11") ?>">
-                                                <?php esc_html_e("Updates & support for 3 years") ?>
+                                            <option data-option="2_year" data-header="For 2 years" data-price="149" value="<?php echo esc_url($pro_url."15") ?>">
+                                                <?php esc_html_e("Updates & support for 2 years") ?>
                                             </option>
-                                            <option data-header="For lifetime" data-price="249" value="<?php echo esc_url($pro_url."12") ?>">
+                                            <option data-option="lifetime" data-header="For lifetime" data-price="249" value="<?php echo esc_url($pro_url."12") ?>">
                                                 <?php esc_html_e("Updates & support for lifetime") ?>
                                             </option>
                                         </select>
@@ -164,16 +174,45 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
         </div>
     </div>
 </div>
-
+<script src="<?php echo esc_url(WCP_FOLDER_URL."assets/js/select2.min.js?ver=".WCP_FOLDER_VERSION) ?>" type="text/javascript" ></script>
 <script>
+    var priceOptions = {"50_websites":{"1_year":{"price":99,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=10"},"2_year":{"price":149,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=15"},"lifetime":{"price":249,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=12"}},"500_websites":{"1_year":{"price":179,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=16"},"2_year":{"price":269,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=17"},"lifetime":{"price":449,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=18"}},"1000_websites":{"1_year":{"price":249,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=19"},"2_year":{"price":375,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=20"},"lifetime":{"price":619,"link":"https:\/\/go.premio.io\/?edd_action=add_to_cart&download_id=687&edd_options[price_id]=21"}}};
     jQuery(document).ready(function(){
-        jQuery(".multiple-options").change(function(){
-            thisValue = jQuery(this).val();
-            jQuery(this).closest(".rpt_plan").find("a.rpt_foot").attr("href", thisValue);
-            thisPrice = jQuery(this).find("option:selected").attr("data-price");
-            jQuery(this).closest(".rpt_plan").find(".rpt_price").text("$"+thisPrice);
+        if(jQuery(".multiple-options").length) {
+            jQuery(".multiple-options").select2({
+                minimumResultsForSearch: -1
+            });
+        }
+        if(jQuery(".multiple-web-options").length) {
+            jQuery(".multiple-web-options").select2({
+                minimumResultsForSearch: -1
+            });
+        }
+//        priceOptions = jQuery.parseJSON(priceOptions);
+        jQuery(document).on("change", ".multiple-options", function(){
             priceText = jQuery(this).find("option:selected").attr("data-header");
+            thisValue = jQuery(this).val();
+            thisPrice = jQuery(this).find("option:selected").attr("data-price");
+            if(!jQuery(this).hasClass("has-multiple-websites")) {
+                jQuery(this).closest(".rpt_plan").find("a.rpt_foot").attr("href", thisValue);
+                jQuery(this).closest(".rpt_plan").find(".rpt_price").text("$" + thisPrice);
+            } else {
+                var webOption = jQuery(".multiple-web-options").val();
+                var priceSettings = priceOptions[webOption];
+                var yearPlan = jQuery(".multiple-options.has-multiple-websites option:selected").attr("data-option");
+                if(priceSettings[yearPlan] != undefined) {
+                    priceSettings = priceSettings[yearPlan];
+                    thisValue = priceSettings.link;
+                    thisPrice = priceSettings.price;
+                }
+            }
+            jQuery(this).closest(".rpt_plan").find("a.rpt_foot").attr("href", thisValue);
+            jQuery(this).closest(".rpt_plan").find(".rpt_price").text("$" + thisPrice);
             jQuery(this).closest(".rpt_plan").find(".rpt_desc").text(priceText);
+        });
+
+        jQuery(document).on("change", ".multiple-web-options", function(){
+            jQuery(".multiple-options.has-multiple-websites").trigger("change");
         });
     });
 </script>

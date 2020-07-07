@@ -1,11 +1,11 @@
 .wcp-custom-menu {
-    padding-left: 0px;
+    padding-left: 0
 }
 .wcp-custom-menu {
-    position: relative;
+    position: relative
 }
 .wcp-container ul {
-    list-style: none;
+    list-style: none
 }
 .wcp-container .route {
     position: relative;
@@ -13,13 +13,12 @@
     border: 0;
     margin: 0;
     padding: 0;
-    top: 0px;
-    margin-top: 0px;
+    top: 0;
     max-height: 100% !important;
     width: 100%;
     border-radius: 2px;
     z-index: -1;
-    background: transparent;
+    background: 0 0
 }
 .wcp-container .route span {
     position: absolute;
@@ -30,29 +29,27 @@
     height: 18px;
     text-indent: 0;
     font-size: 20px;
-    background: no-repeat;
+    background: no-repeat
 }
 .wcp-container .route .title {
     position: absolute;
     border: 0;
     margin: 0;
     padding: 0;
-    padding-top: 0px;
     height: 30px;
     width: 200px;
     text-indent: 30px;
-    background: transparent;
-    border-radius: 0px;
+    background: 0 0;
     box-shadow: none;
     font-size: 14px;
     line-height: 26px;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
-    overflow: hidden;
+    overflow: hidden
 }
 .wcp-container .first-title {
-    margin-left: 10px;
+    margin-left: 10px
 }
 .wcp-container .space {
     position: relative;
@@ -63,74 +60,74 @@
     width: 40px;
     top: 30px;
     height: 100%;
-    z-index: 1;
+    z-index: 1
 }
 .wcp-container .first-space {
     margin-left: 10px;
-    top: 10px;
+    top: 10px
 }
 i.fa-caret-right {
-    transition: 0.1s;
-    -webkit-transition: 0.1s;
-    -moz-transition: 0.1s;
+    transition: .1s;
+    -webkit-transition: .1s;
+    -moz-transition: .1s
 }
 li.active > span > i.fa-caret-right {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
+    -moz-transform: rotate(90deg)
 }
 li.active > span > i.fa-folder:before {
-    content: "\f07c";
+    content: "\f07c"
 }
-.has-sub-tree > ul.ui-sortable  li {
-    display: none;
+.has-sub-tree > ul.ui-sortable li {
+    display: none
 }
 .has-sub-tree.active > ul.ui-sortable > li {
-    display: block;
+    display: block
 }
 .nav-icon {
     display: none;
-    left: -20px !important;
+    left: -20px !important
 }
 .has-sub-tree > .nav-icon {
-    display: block;
+    display: block
 }
 .wcp-content {
     position: fixed !important;
     top: 32px;
     left: 160px;
     bottom: 0;
-    width: 305px;
+    width: 315px;
     box-sizing: border-box;
     z-index: 1;
     direction: ltr;
-    transition: all 0.15s linear;
-    -webkit-transition: all 0.15s linear;
-    -moz-transition: all 0.15s linear;
+    transition: all .15s linear;
+    -webkit-transition: all .15s linear;
+    -moz-transition: all .15s linear
 }
-html[dir="rtl"] .wcp-content {
+html[dir=rtl] .wcp-content {
     left: auto;
-    right: 160px;
+    right: 160px
 }
 body.folded .wcp-content {
-    left: 36px;
+    left: 36px
 }
-html[dir="rtl"] body.folded .wcp-content {
+html[dir=rtl] body.folded .wcp-content {
     left: auto;
-    right: 36px;
+    right: 36px
 }
 body.wp-admin #wpcontent {
-    padding-left: 310px;
-    transition: all 0.15s linear;
-    -webkit-transition: all 0.15s linear;
-    -moz-transition: all 0.15s linear;
+    padding-left: 335px;
+    transition: all .15s linear;
+    -webkit-transition: all .15s linear;
+    -moz-transition: all .15s linear
 }
-html[dir="rtl"] body.wp-admin #wpcontent {
-    padding-left: 0px;
-    padding-right: 320px;
+html[dir=rtl] body.wp-admin #wpcontent {
+    padding-left: 0;
+    padding-right: 320px
 }
 .wcp-container {
-    padding: 20px 20px 20px 16px;
+    padding: 20px 20px 20px 16px
 }
 .form-title {
     font-size: 23px;
@@ -138,16 +135,16 @@ html[dir="rtl"] body.wp-admin #wpcontent {
     margin: 0;
     padding: 0 0 10px 0;
     line-height: 29px;
-    min-height: 36px;
+    min-height: 36px
 }
 .form-operations {
     border: solid 1px #e5e5e5;
     border-right: none;
-    margin-bottom: 20px;
+    margin-bottom: 20px
 }
 .form-operations ul {
     margin: 0;
-    padding: 0  ;
+    padding: 0
 }
 .form-operations li {
     display: block;
@@ -156,52 +153,52 @@ html[dir="rtl"] body.wp-admin #wpcontent {
     text-align: center;
     background: #fff;
     margin: 0;
-    padding: 0;
+    padding: 0
 }
 .form-operations li a {
     display: block;
     padding: 10px 0;
     border-right: solid 1px #e5e5e5;
     font-size: 16px;
-    color: #727272;
+    color: #727272
 }
 .clearfix {
-    clear: both;
+    clear: both
 }
 .wcp-parent-data {
-    position: relative;
+    position: relative
 }
 .wcp-parent {
     position: absolute;
     left: -21px;
-    font-weight: bold;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 14px
 }
 .wcp-parent .fa {
     font-size: 18px;
-    margin-right: 8px;
+    margin-right: 8px
 }
 .wcp-form-data {
     background: #fff;
     border: solid 1px #f1f1f1;
     padding: 15px;
     display: none;
-    margin-bottom: 20px;
+    margin-bottom: 20px
 }
 .wcp-form-title {
     color: #727272;
     font-size: 14px;
     text-transform: uppercase;
-    padding: 0 0 10px 0;
+    padding: 0 0 10px 0
 }
 .wcp-form-data .form-field {
-    padding: 0 0 10px 0;
+    padding: 0 0 10px 0
 }
 .wcp-form-data .form-field input, .wcp-form-data .form-field select {
-    width: 100%;
+    width: 100%
 }
 button#wcp-save-folder {
-    float: right;
+    float: right
 }
 .wcp-form-message span {
     display: block;
@@ -210,12 +207,12 @@ button#wcp-save-folder {
     margin-bottom: 10px;
     color: #000;
     border: solid 1px #8c0000;
-    border-radius: 4px;
+    border-radius: 4px
 }
 .wcp-container .route.active-item > h3.title {
     background: #008ec2;
     color: #fff;
-    border-radius: 4px;
+    border-radius: 4px
 }
 .wcp-container .route span.ui-icon {
     line-height: 24px;
@@ -223,45 +220,58 @@ button#wcp-save-folder {
     cursor: move;
     left: 5px;
     top: 2px;
-    height: 26px;
+    height: 26px
 }
 .route.active-item > span.ui-icon {
     background: #008ec2;
-    color: #fff;
+    color: #fff
 }
 #custom-menu.active > ul > li.route {
-    display: block;
+    display: block
 }
 .wcp-parent.active > i.fa-caret-right {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
+    -moz-transform: rotate(90deg)
 }
 .wcp-parent.active > i.fa-folder:before {
-    content: "\f07c";
-}
-.wcp-container .route .title:hover {
-    background: #dfdfdf;
-    cursor: pointer;
+    content: "\f07c"
 }
 .wcp-container .route .title img {
     display: none;
     width: 14px;
     height: 14px;
-    margin: 5px auto 0;
+    margin: 5px auto 0
 }
 .wcp-container .route .title:hover {
     background: #dfdfdf;
-    cursor: pointer;
+    cursor: pointer
 }
-.wcp-container .route .title:hover img {
+.wcp-container .route .title.wcp-drop-hover .ui-icon img.folder-sticky-icon {
+
+}
+body:not(.no-hover-css) .wcp-container .route .title:hover img.move-folder-icon, .wcp-container .route .title.wcp-drop-hover img.move-folder-icon {
+    display: block
+}
+body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon i, body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon img.folder-sticky-icon, .wcp-container .route .title.wcp-drop-hover .ui-icon i, .wcp-container .route .title.wcp-drop-hover .ui-icon img.folder-sticky-icon {
+    display: none
+}
+.route.is-sticky > h3.title > .ui-icon > .folder-sticky-icon {
     display: block;
+    width: 100%;
+    height: auto;
+    margin: 3px auto 0;
 }
-.wcp-container .route .title:hover .ui-icon i {
+.route.is-sticky.active-item > h3.title > .ui-icon > .folder-sticky-icon {
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
+.route.is-sticky > h3.title > .ui-icon > i {
     display: none;
 }
-body.no-hover-css .wcp-container .route .title:hover {
-    background: transparent;
+.wcp-container .route .title.wcp-drop-hover img {
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
 }
 .add-new-folder {
     text-decoration: none;
@@ -269,141 +279,139 @@ body.no-hover-css .wcp-container .route .title:hover {
     float: right;
     font-size: 14px;
     padding: 4px 10px;
-    background: #F51366;
+    background: #f51366;
     color: #fff;
-    border: solid 1px #F51366;
+    border: solid 1px #f51366;
     border-radius: 3px;
     line-height: 24px;
-    -webkit-box-shadow: 0 3px 5px -3px #333333;
-    -moz-box-shadow: 0 3px 5px -3px #333333;
-    box-shadow: 0 3px 5px -3px #333333;
-    position: relative;
+    -webkit-box-shadow: 0 3px 5px -3px #333;
+    -moz-box-shadow: 0 3px 5px -3px #333;
+    box-shadow: 0 3px 5px -3px #333;
+    position: relative
 }
-.add-new-folder:hover, .add-new-folder:focus {
-    /*background: #bc0f50;*/
-    color: #ffffff;
-    /*border: solid 1px #bc0f50;*/
+.add-new-folder:focus, .add-new-folder:hover {
+    color: #fff
 }
 .add-new-folder:hover:after {
     content: "";
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.10);
+    background: rgba(0, 0, 0, .1);
     position: absolute;
     top: 0;
-    left: 0;
+    left: 0
 }
 .add-new-folder span {
     display: block;
     float: left;
     line-height: 20px;
     font-size: 14px;
-    margin-right: 5px;
+    margin-right: 5px
 }
 .add-new-folder span.folder-icon-create_new_folder {
-    font-size: 20px;
+    font-size: 20px
 }
 .form-options {
     background: #fff;
-    padding: 10px 0px 0 10px;
-    margin: 0 0px;
+    padding: 10px 0 0 10px;
+    margin: 0 0
 }
 .form-options ul {
     margin: 0;
-    padding: 0;
+    padding: 0
 }
-.form-options li {
+.form-options > ul > li {
     display: inline-block;
-    margin: 0 5px 0 0;
-    vertical-align: top;
+    margin: 0 2px 0 0;
+    vertical-align: top
 }
-.form-options li.last {
-    margin: 0;
+.form-options > ul > li.last {
+    margin: 0
 }
-.form-options li a {
+.form-options > ul > li > a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 10px;
+    padding: 5px 5px;
     color: #000;
     background: #ccc;
     box-shadow: 0 1px 0 #ccc;
     vertical-align: middle;
     border: solid 1px #ccc;
     border-radius: 3px;
-    margin: 0 0 12px 0;
+    margin: 0 0 12px 0
 }
-.form-options li.last a {
-    padding: 3px;
+.form-options > ul > li.last > a {
+    padding: 3px
 }
-.form-options li.last a span.icon{
+.form-options > ul > li.last > a span.icon {
     font-size: 28px;
-    line-height: 22px;
+    line-height: 22px
 }
 a#expand-collapse-list.all-open span:before {
-    content: "\e911";
+    content: "\e911"
 }
-.form-options li a:hover {
+.form-options > ul > li > a:hover {
     background: #404040;
-    color: #ffffff;
-    border: solid 1px #404040;
+    color: #fff;
+    border: solid 1px #404040
 }
 .form-options span.icon {
     font-size: 18px;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: top
 }
 .un-categorised-items {
-    border-radius: 3px;
+    border-radius: 3px
 }
 .header-posts a, .un-categorised-items a {
-    color: #444444;
+    color: #444;
     padding: 7px;
     border-radius: 3px;
     display: block;
     text-decoration: none;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 18px
 }
-.header-posts a:hover, .un-categorised-items:hover, .un-categorised-items.active-item {
+.header-posts a:hover, .un-categorised-items.active-item, .un-categorised-items:hover {
     background: #dfdfdf;
-    border-radius: 3px;
+    border-radius: 3px
 }
 .header-posts a.active-item, .un-categorised-items.active-item {
     background: #008ec2 !important;
-    color: #fff !important;
+    color: #fff !important
 }
 .un-categorised-items.active-item a {
-    color: #fff !important;
+    color: #fff !important
 }
-.un-categorised-items.active-item a span, .header-posts a.active-item span.total-count {
-    color: #444444 !important;
+.header-posts a.active-item span.total-count, .un-categorised-items.active-item a span {
+    color: #444 !important
 }
 span.total-count {
     float: right;
     background: #fff;
     padding: 0 5px;
-    border: solid 1px #cccccc;
+    border: solid 1px #ccc;
     font-size: 10px;
     line-height: 16px;
-    border-radius: 2px;
+    border-radius: 2px
 }
 .wcp-icon {
     display: inline-block;
     font-size: 16px;
     vertical-align: top;
-    margin-right: 3px;
+    margin-right: 3px
 }
 #custom-menu .wcp-icon {
     font-size: 20px;
-    line-height: 24px;
+    line-height: 24px
 }
 .route.active > .nav-icon > .folder-icon-arrow_right {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
+    -moz-transform: rotate(90deg)
 }
 .route.active > .ui-icon > .folder-icon-folder:before {
-    content: "\e90c";
+    content: "\e90c"
 }
 .wcp-container .route span.total-count {
     position: relative;
@@ -416,7 +424,7 @@ span.total-count {
     margin: 4px 3px 3px 3px;
     color: #23282d !important;
     line-height: 16px;
-    height: 16px;
+    height: 16px
 }
 .dynamic-menu {
     position: absolute;
@@ -425,15 +433,20 @@ span.total-count {
     width: 170px;
     padding: 0;
     z-index: 101;
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+    -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25)
+}
+.sticky-folders .dynamic-menu {
+    left: auto;
+    right: 50px;
 }
 .dynamic-menu li {
     position: relative;
-    display: block !important;
+    width: 100%;
+    display: inline-block !important;
     padding: 2px 0;
-    margin: 0;
+    margin: 0
 }
 .dynamic-menu a {
     text-decoration: none;
@@ -442,66 +455,73 @@ span.total-count {
     display: block;
     padding: 5px 10px;
     line-height: 18px;
-    white-space: nowrap;
+    white-space: nowrap
 }
-.wcp-container .route .dynamic-menu ul > li > a > span, .wcp-container .route .dynamic-menu ul > li > a > span span {
-    position: relative;
-    top: auto;
+.dynamic-menu ul > li > a > span, .dynamic-menu ul > li > a > span span {
+    position: relative !important;
     display: inline-block;
     vertical-align: top;
     margin-right: 5px;
+    top: 0 !important;
 }
-.wcp-container .route .dynamic-menu ul > li > a > span span {
+.dynamic-menu ul > li > a > span span {
     top: auto;
     height: auto;
     width: auto;
     margin: 0;
     left: auto;
     vertical-align: baseline;
-    display: inline;
+    display: inline
 }
 .dynamic-menu li.new-folder {
-    border-bottom: solid 1px #d8d8d8;
+    border-bottom: solid 1px #d8d8d8
 }
-.dynamic-menu a:hover {
+.dynamic-menu a:hover, .dynamic-menu a.active {
     background: #efefef;
-    color: #000;
+    color: #000
+}
+.dynamic-menu ul li span {
+    font-size: 20px;
+    vertical-align: middle;
+}
+.dynamic-menu ul li span.sticky-folder-icon {
+    width: 20px;
 }
 .wcp-form-input {
     padding-left: 35px;
     box-sizing: border-box;
-    position: relative;
+    position: relative
 }
 .wcp-form-input input {
-    width: 100%;
+    width: 100%
 }
 .wcp-form-btn {
-    padding: 4px 0 4px 2px;
+    padding: 4px 0 4px 2px
 }
 .wcp-form-input:before {
     content: "\e90d";
-    font-family: 'folder-icon' !important;
+    font-family: folder-icon !important;
     speak: none;
     position: absolute;
     left: 0;
     font-size: 28px;
-    top: 5px;
+    top: 5px
 }
 .add-new-folder-btn {
-    margin-right: 5px !important;
+    margin-right: 5px !important
 }
 .form-loader {
     width: 100%;
     height: 5px;
-    margin: 0 0 10px;
+    margin: 0 0 10px
 }
 .form-loader-count {
     width: 0;
     height: 5px;
-    background: url("../images/form-loader.png");
+    background: url(../images/form-loader.png);
     transition: all 2.5s linear;
     -webkit-transition: all 2s linear;
-    -moz-transition: all 2.5s linear;
+    -moz-transition: all 2.5s linear
 }
 .route.is-high > .ui-icon > i:before {
     content: "\e900" !important
@@ -510,7 +530,7 @@ span.total-count {
     content: "\e90c" !important;
     z-index: 11;
     color: #444;
-    font-size: 20px;
+    font-size: 20px
 }
 .route.is-high.active > .ui-icon > i:after {
     content: "\e907";
@@ -518,60 +538,69 @@ span.total-count {
     color: #444;
     font-size: 11px;
     top: 1px;
-    position: absolute;
+    position: absolute
 }
-.route.is-high.active.active-item > .ui-icon > i:before, .route.is-high.active.active-item > .ui-icon > i:after {
-    color: #ffffff;
+.route.is-high.active.active-item > .ui-icon > i:after, .route.is-high.active.active-item > .ui-icon > i:before {
+    color: #fff
 }
 li.active-menu {
-    z-index: 2 !important;
+    z-index: 2 !important
 }
-th#wcp_move {
-    width: 20px;
+.wp-list-table th {
+    width: auto !important
+}
+.wp-list-table th.column-title {
+    width: 35% !important;
+}
+.fixed .column-author, .fixed .column-date, .fixed .column-format, .fixed .column-links, .fixed .column-parent, .fixed .column-posts {
+    width: 10% !important;
+}
+.wp-list-table #wcp_move {
+    width: 20px !important
 }
 td.wcp_move.column-wcp_move {
-    vertical-align: middle;
+    vertical-align: middle
 }
 .wp-list-table tr td .wcp-move-file {
     vertical-align: middle;
-    opacity: 0;
+    opacity: 0
 }
-.wp-list-table tr:hover td .wcp-move-file, .wp-list-table td.wcp_move.column-wcp_move.wcp-draggable {
-    opacity: 1;
+.wp-list-table td.wcp_move.column-wcp_move.wcp-draggable, .wp-list-table tr:hover td .wcp-move-file {
+    opacity: 1
 }
 .wcp-drop-hover {
     background: #0073aa !important;
     z-index: 2 !important;
-    color: #fff !important;
+    color: #fff !important
 }
 .wcp-drop-hover span {
-    color: #fff !important;
+    color: #fff !important
 }
 .ui-draggable-dragging {
-    z-index: 1051 !important;
+    z-index: 1051 !important
 }
 .wcp-hover-list {
     background: #008ec2 !important;
     color: #fff;
-    position: relative;
+    position: relative
 }
 .wcp-hover-list a {
-    color: #fff;
+    color: #fff
 }
 .wcp-hover-list span.total-count {
-    color: #000;
+    color: #000
 }
 span.wcp-item {
-    display: none;
+    display: none
 }
 .wcp-move-file {
-    cursor: move;
+    cursor: move
 }
 .wcp-drop-hover-list a.folder-view {
     background: #008ec2;
     color: #fff;
     border: solid 1px #fff;
-    position: relative;
+    position: relative
 }
 .tree-structure .folder-view {
     display: block;
@@ -582,11 +611,11 @@ span.wcp-item {
     -webkit-border-radius: 4px;
     position: relative;
     cursor: pointer;
-    background: #fff;
+    background: #fff
 }
 .tree-structure .folder-view:hover {
     background: #008ec2;
-    color: #ffffff;
+    color: #fff
 }
 .wcp-drop-hover-list a.folder-view:before {
     width: 100%;
@@ -599,7 +628,7 @@ span.wcp-item {
     padding: 1px;
     border-radius: 4px;
     -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
+    -webkit-border-radius: 4px
 }
 .ui-draggable-dragging.wcp-move-file {
     z-index: 5001;
@@ -612,16 +641,16 @@ span.wcp-item {
     position: fixed !important;
     max-width: 230px;
     overflow: hidden;
-    width: auto !important;
+    width: auto !important
 }
 .ui-draggable-dragging.wcp-move-file span {
     display: block;
-    float: left;
+    float: left
 }
 .ui-draggable-dragging.wcp-move-file span.wcp-move {
     margin-right: 5px;
     display: block;
-    float: left;
+    float: left
 }
 .wcp-container .route span.title-text {
     position: relative;
@@ -633,7 +662,7 @@ span.wcp-item {
     height: 30px;
     width: calc(100% - 80px);
     overflow: hidden;
-    white-space: nowrap;
+    white-space: nowrap
 }
 .ui-resizable-handle.ui-resizable-e {
     position: absolute;
@@ -643,7 +672,7 @@ span.wcp-item {
     width: 1px;
     right: 0;
     border-right: 1px solid #ccc;
-    cursor: col-resize;
+    cursor: col-resize
 }
 .ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {
     content: "";
@@ -653,7 +682,7 @@ span.wcp-item {
     position: absolute;
     border-left: solid 1px #ccc;
     border-right: solid 1px #ccc;
-    left: -1px;
+    left: -1px
 }
 .ui-resizable-handle.ui-resizable-w {
     position: absolute;
@@ -663,58 +692,63 @@ span.wcp-item {
     width: 1px;
     left: 0;
     border-right: 1px solid #ccc;
-    cursor: col-resize;
+    cursor: col-resize
 }
 div#custom-menu {
-    padding-bottom: 120px;
-    padding-left: 4px;
+    padding-bottom: 150px;
+    padding-left: 4px
 }
-.wcp-container .route span.star-icon {
+.wcp-container .route span.star-icon, .sticky-folders li a span.star-icon {
     position: relative;
     top: 2px;
     left: auto;
     float: right;
-    font-family: 'folder-icon' !important;
+    font-family: folder-icon !important;
     speak: none;
     color: #ffc90e;
     display: none;
+    font-size: 20px;
+    font-weight: bold;
 }
-.wcp-container .route span.update-inline-record {
+.wcp-container .route span.update-inline-record, .sticky-folders li a span.update-inline-record {
     position: relative;
     left: auto;
     top: 2px;
     float: right;
-    width: 0px;
+    width: 0;
     height: 22px;
-    font-family: 'folder-icon' !important;
+    font-family: folder-icon !important;
     font-size: 16px;
     overflow: hidden;
-    transition: all 0.25s linear;
-    -webkit-transition: all 0.25s linear;
-    -moz-transition: all 0.25s linear;
+    transition: all .25s linear;
+    -webkit-transition: all .25s linear;
+    -moz-transition: all .25s linear
 }
-.wcp-container .route h3:hover >  span.update-inline-record {
-    width: 18px;
+body:not(.no-hover-css) .wcp-container .route h3:hover > span.update-inline-record, body:not(.no-hover-css) .sticky-folders li a:hover span.update-inline-record {
+    width: 18px
 }
-.wcp-container .route span.update-inline-record:after {
-    content: "\e910";
+.sticky-folders li a:hover .folder-count {
+    margin: 0px 3px 0px 0px;
 }
-.wcp-container .route.is-high > h3 > span.star-icon {
+.wcp-container .route span.update-inline-record:after, .sticky-folders li a span.update-inline-record:after {
+    content: "\e910"
+}
+.wcp-container .route.is-high > h3 > span.star-icon, .sticky-folders li.is-high a span.star-icon {
     display: block;
 }
- .wcp-container .route span.star-icon:after {
-    content: "\e907";
+.wcp-container .route span.star-icon:after, .sticky-folders li a span.star-icon:after {
+    content: "\e907"
 }
 .tree-structure li {
     display: block;
-    width: 16.667%;
+    width: auto;
     float: left;
     margin: 0;
-    padding: 0;
+    padding: 0
 }
 .tree-structure .folder-item {
     padding: 8px;
-    position: relative;
+    position: relative
 }
 .tree-structure .folder-view {
     display: block;
@@ -725,7 +759,7 @@ div#custom-menu {
     -webkit-border-radius: 4px;
     position: relative;
     cursor: pointer;
-    background: #fff;
+    background: #fff
 }
 .tree-structure .folder-view span.item-name {
     display: block;
@@ -735,121 +769,138 @@ div#custom-menu {
     overflow: hidden;
     height: 38px;
     font-size: 16px;
-    box-sizing: border-box;
+    box-sizing: border-box
 }
 .folder-view span.item-name:before {
     content: "\e90d";
-    font-family: 'folder-icon' !important;
+    font-family: folder-icon !important;
     position: absolute;
     left: 15px;
-    font-size: 24px;
+    font-size: 24px
 }
 .folder-view.is-high span.item-name:before {
-    content: "\e900";
+    content: "\e900"
 }
 .folder-view.is-post span.item-name:before {
-    content: "\e901";
+    content: "\e901"
 }
 .tree-structure span.folder-option {
     position: absolute;
     right: 0;
-    font-family: 'folder-icon' !important;
-    top: 0px;
+    font-family: folder-icon !important;
+    top: 0;
     font-size: 20px;
     line-height: 38px;
     z-index: 1;
     cursor: pointer;
-    display: none;
+    display: none
 }
 .tree-structure .folder-view:hover span.folder-option {
-    display: block;
+    display: block
 }
 .tree-structure span.folder-option:hover {
-    color: #F51366;
+    color: #f51366
 }
 .tree-structure span.folder-option:after {
-    content: "\e90a";
+    content: "\e90a"
 }
 .tree-structure li {
-    position: relative;
+    position: relative
 }
 .tree-structure {
     margin-left: -8px;
-    margin-right: -8px;
+    margin-right: -8px
 }
 .tree-structure .folder-view span.folder-title {
     overflow: hidden;
     width: 100%;
     height: 18px;
-    display: block;
+    display: block
 }
 .swal2-popup .swal2-title {
-    line-height: 36px;
+    line-height: 36px
 }
-.attachments-browser.ui-draggable-dragging .media-sidebar, .attachments-browser.ui-draggable-dragging .uploader-inline, .attachments-browser.ui-draggable-dragging .media-toolbar, .attachments-browser.ui-draggable-dragging ul.attachments {
-    display: none;
+.attachments-browser.ui-draggable-dragging .media-sidebar, .attachments-browser.ui-draggable-dragging .media-toolbar, .attachments-browser.ui-draggable-dragging .uploader-inline, .attachments-browser.ui-draggable-dragging ul.attachments {
+    display: none
 }
 .attachments.ui-sortable.ui-draggable-dragging {
-    z-index: 5000;;
+    z-index: 5000
 }
 .selected-items {
     background: #0073aa;
-    color: #ffffff;
+    color: #fff;
     padding: 10px 20px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    margin-top: 0px;
+    margin-top: 0;
     cursor: none;
-    font-size: 12px;
+    font-size: 12px
 }
-.media-frame, .media-frame-content, .media-frame .attachments-browser {
-    overflow: inherit;
+.media-frame, .media-frame .attachments-browser, .media-frame-content {
+    overflow: inherit
+}
+.mCS-3d-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-3d.mCSB_scrollTools .mCSB_draggerRail {
+    width: 2px !important;
+    background-color: #0073aa !important;
+    background-color: rgba(0, 115, 170, .6) !important;
+    box-shadow: none !important
+}
+.mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background-color: #0073aa !important
+}
+.mCSB_outside + .mCSB_scrollTools {
+    right: -15px !important
 }
 body.upload-php.eml-grid #wpbody {
     position: relative !important;
-    top: 0px !important;
+    top: 0 !important;
     bottom: auto !important;
     left: auto !important;
-    right: auto !important;;
-    height: auto;
+    right: auto !important;
+    height: auto
 }
 #footer-thankyou {
-    display: none;
+    display: none
 }
 span.upgrade-message {
-    padding: 0px 0 10px;
+    padding: 0 0 10px;
     background: #fff;
     display: inline-block;
     font-size: 14px;
-    color: #000;
+    color: #000
 }
 span.upgrade-message a.pink, span.upgrade-message span.pink {
-    color: #FF5983;
+    color: #ff5983;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700
 }
 .media-toolbar.sticky-media {
     position: fixed;
     top: 32px;
     right: 18px !important;
-    left: auto;
+    left: auto
 }
 .media-position {
     width: 1px;
-    height: 1px;
+    height: 1px
 }
 .media-frame.mode-grid .media-toolbar {
-    margin: 0 !important;
+    margin: 0 !important
 }
 .button-disabled {
     cursor: no-drop;
-    pointer-events: none;
+    pointer-events: none
 }
 .wcp-hide-show-buttons {
     position: absolute;
     top: 25px;
     right: -20px;
+    z-index: 10001;
+}
+html[dir="rtl"] .wcp-hide-show-buttons {
+    left: -20px;
+    right: auto;
 }
 .wcp-hide-show-buttons .toggle-buttons {
     background: #f51366;
@@ -868,13 +919,13 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
     width: 20px;
     height: 20px;
     cursor: pointer;
-    position: relative;
+    position: relative
 }
 .wcp-hide-show-buttons:hover .toggle-buttons:after {
     content: "";
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.10);
+    background: transparent;
     position: absolute;
     top: 0;
     left: 0;
@@ -883,19 +934,34 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
     -moz-border-radius-topright: 50%;
     -moz-border-radius-bottomright: 50%;
     border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
+    border-bottom-right-radius: 50%
+}
+html[dir="rtl"] .wcp-hide-show-buttons .toggle-buttons {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-top-left-radius: 50%;
+    -webkit-border-bottom-left-radius: 50%;
+    -moz-border-radius-top-left: 50%;
+    -moz-border-radius-bottom-left: 50%;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+html[dir="rtl"] .wcp-hide-show-buttons .toggle-buttons span {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 .hide-folders-area .wcp-content {
-    width: 0px !important;
+    width: 0 !important
 }
 .hide-folders-area .wcp-container {
-    display: none;
+    display: none
 }
 .wcp-hide-show-buttons .toggle-buttons.active {
-    display: block;
+    display: block
 }
 #wcp-content.no-transition .wcp-container {
-    display: none;
+    display: none
 }
 button.button.organize-button {
     vertical-align: middle;
@@ -903,33 +969,31 @@ button.button.organize-button {
     display: inline-block;
     font-size: 14px;
     padding: 4px 10px;
-    background: #F51366;
+    background: #f51366;
     color: #fff;
-    border: solid 1px #F51366;
+    border: solid 1px #f51366;
     border-radius: 3px;
     line-height: 14px;
-    -webkit-box-shadow: 0 3px 5px -3px #333333;
-    -moz-box-shadow: 0 3px 5px -3px #333333;
-    box-shadow: 0 3px 5px -3px #333333;
-    position: relative;
+    -webkit-box-shadow: 0 3px 5px -3px #333;
+    -moz-box-shadow: 0 3px 5px -3px #333;
+    box-shadow: 0 3px 5px -3px #333;
+    position: relative
 }
-button.button.organize-button:hover, button.button.organize-button:focus {
-    /*background: #bc0f50;*/
-    color: #ffffff;
-    /*border: solid 1px #bc0f50;*/
+button.button.organize-button:focus, button.button.organize-button:hover {
+    color: #fff
 }
 button.button.organize-button:hover:after {
     content: "";
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.10);
+    background: rgba(0, 0, 0, .1);
     position: absolute;
     top: 0;
-    left: 0;
+    left: 0
 }
 .tree-structure-content ul {
     margin: 0;
-    padding: 0;
+    padding: 0
 }
 .tree-structure-content {
     padding: 10px 20px 10px;
@@ -938,25 +1002,25 @@ button.button.organize-button:hover:after {
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    border: solid 1px #cccccc;
+    border: solid 1px #ccc
 }
 .tree-structure-content .tree-structure {
     height: 55px;
     overflow: hidden;
-    transition: 0.1s;
-    -webkit-transition: 0.1s;
-    -moz-transition: 0.1s;
+    transition: .1s;
+    -webkit-transition: .1s;
+    -moz-transition: .1s
 }
 .tree-structure-content.active .tree-structure {
-    height: auto;
+    height: auto
 }
 .folders-toggle-button {
     height: 15px;
     text-align: center;
-    position: relative;
+    position: relative
 }
 .folders-toggle-button span {
-    background: #F51366;
+    background: #f51366;
     color: #fff;
     height: 20px;
     width: 30px;
@@ -970,41 +1034,40 @@ button.button.organize-button:hover:after {
     cursor: pointer;
     font-family: dashicons;
     font-size: 20px;
-    line-height: 20px;
+    line-height: 20px
 }
 .folders-toggle-button span:after {
-    content: "\f347";
+    content: "\f347"
 }
 .tree-structure-content.active .folders-toggle-button span:after {
-    content: "\f343";
+    content: "\f343"
 }
 span.media-info-message {
     vertical-align: middle;
     line-height: 20px;
-    font-weight: bold;
+    font-weight: 700;
     color: #f51366;
     padding: 0 0 10px 0;
-    display: none !important;;
+    display: none !important
 }
 span.media-info-message.active {
-    display: block !important;
+    display: block !important
 }
-/* custom popup css */
 .folder-popup-form {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, .5);
     top: 0;
     left: 0;
     z-index: 10001;
-    display: none;
+    display: none
 }
 .folder-popup-form.disabled {
-    pointer-events: none;
+    pointer-events: none
 }
 .popup-form-content {
-    background: #ffffff;
+    background: #fff;
     min-height: 100px;
     width: 400px;
     text-align: center;
@@ -1021,7 +1084,7 @@ span.media-info-message.active {
     padding: 20px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px
 }
 .folder-form-buttons a, .folder-form-buttons button {
     display: inline-block;
@@ -1031,42 +1094,35 @@ span.media-info-message.active {
     font-size: 18px;
     line-height: 22px;
     border-radius: .25em;
-    color: #ffffff;
-    border: none;
+    color: #fff;
+    border: none
 }
 .folder-form-buttons a span, .folder-form-buttons button span {
-    -webkit-animation: fa-spin 0.75s infinite linear;
-    animation: fa-spin 0.75s infinite linear;
+    -webkit-animation: fa-spin .75s infinite linear;
+    animation: fa-spin .75s infinite linear
 }
 [data-tooltip] {
-    position: relative; /* opinion 1 */
+    position: relative
 }
-/* Applies to all tooltips */
-[data-tooltip]::before,
-[data-tooltip]::after {
-    text-transform: none; /* opinion 2 */
-    font-size: .9em; /* opinion 3 */
+[data-tooltip]::after, [data-tooltip]::before {
+    text-transform: none;
+    font-size: .9em;
     line-height: 1;
     user-select: none;
     pointer-events: none;
     position: absolute;
     display: none;
-    opacity: 0;
+    opacity: 0
 }
 [data-tooltip]::before {
     content: '';
-    border: 5px solid transparent; /* opinion 4 */
-    z-index: 1001; /* absurdity 1 */
+    border: 5px solid transparent;
+    z-index: 1001
 }
 [data-tooltip]::after {
-    content: attr(data-tooltip); /* magic! */
-    /* most of the rest of this is opinion */
+    content: attr(data-tooltip);
     font-family: Helvetica, sans-serif;
     text-align: center;
-    /*
-      Let the content set the size of the tooltips
-      but this will also keep them from being obnoxious
-      */
     min-width: 3em;
     max-width: 21em;
     white-space: nowrap;
@@ -1074,81 +1130,71 @@ span.media-info-message.active {
     text-overflow: ellipsis;
     padding: 1ch 1.5ch;
     border-radius: .3ch;
-    box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
+    box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, .35);
     background: #333;
     color: #fff;
-    z-index: 1000; /* absurdity 2 */
+    z-index: 1000
 }
-/* Make the tooltips respond to hover */
-[data-tooltip]:hover::before,
-[data-tooltip]:hover::after {
+[data-tooltip]:hover::after, [data-tooltip]:hover::before {
     display: block;
-    opacity: 1;
+    opacity: 1
 }
-/* FLOW: UP */
-[data-tooltip]:not([flow])::before,
-[data-tooltip][flow^="up"]::before {
+[data-tooltip]:not([flow])::before, [data-tooltip][flow^=up]::before {
     bottom: 100%;
     border-bottom-width: 0;
-    border-top-color: #333;
+    border-top-color: #333
 }
-[data-tooltip]:not([flow])::after,
-[data-tooltip][flow^="up"]::after {
-    bottom: calc(100% + 5px);
+[data-tooltip]:not([flow])::after, [data-tooltip][flow^=up]::after {
+    bottom: calc(100% + 5px)
 }
-[data-tooltip]:not([flow])::before,
-[data-tooltip]:not([flow])::after,
-[data-tooltip][flow^="up"]::before,
-[data-tooltip][flow^="up"]::after {
+[data-tooltip]:not([flow])::after, [data-tooltip]:not([flow])::before, [data-tooltip][flow^=up]::after, [data-tooltip][flow^=up]::before {
     left: 50%;
-    transform: translate(-50%, -.5em);
+    transform: translate(-50%, -.5em)
 }
 #remove-folder-item {
-    width: 126px !important;
+    width: 126px !important
 }
 .wp-core-ui .button-primary.select-all-item-btn {
     margin: 11px 11px 11px 0;
-    display: none !important;
+    display: none !important
 }
 .wp-core-ui .button-primary.select-all-item-btn.active {
-    display: inline-block !important;
+    display: inline-block !important
 }
-.form-options li.last.folder-checkbox {
-    padding: 8px 0 0 6px;
+.form-options > ul > li.last.folder-checkbox {
+    padding: 8px 0 0 6px
 }
 #custom-menu input.checkbox {
-    display: none;
+    display: none
 }
 #custom-menu.show-folder-checkbox input.checkbox {
     display: block;
-    margin: 5px 0 0 0;
+    margin: 5px 0 0 0
 }
-#custom-menu.show-folder-checkbox h3.title > .ui-icon > i, #custom-menu.show-folder-checkbox h3.title > .ui-icon > img{
-    display: none !important;
+#custom-menu.show-folder-checkbox h3.title > .ui-icon > i, #custom-menu.show-folder-checkbox h3.title > .ui-icon > img {
+    display: none !important
 }
 @-webkit-keyframes fa-spin {
     0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+    }    100% {
         -webkit-transform: rotate(359deg);
-        transform: rotate(359deg);
-    }
-}
-.folder-form-buttons a:hover, .folder-form-buttons a:focus, .folder-form-buttons button:hover, .folder-form-buttons button:focus {
-    color: #ffffff;
-    background-image: linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1));
+        transform: rotate(359deg)
+    }}
+.folder-form-buttons a:focus, .folder-form-buttons a:hover, .folder-form-buttons button:focus, .folder-form-buttons button:hover {
+    color: #fff;
+    background-image: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1))
 }
 .folder-form-buttons a:focus {
     outline: 0;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50,100,150,.4);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, .4)
 }
 .form-cancel-btn {
-    background-color: #aaaaaa;
+    background-color: #aaa
 }
 .form-submit-btn {
-    background-color: #3085d6;
+    background-color: #3085d6
 }
 .add-update-folder-title {
     display: block;
@@ -1162,239 +1208,450 @@ span.media-info-message.active {
     text-align: center;
     text-transform: none;
     word-wrap: break-word;
-    line-height: 30px;
+    line-height: 30px
 }
 .folder-form-input input {
     width: 100%;
-    transition: border-color .3s,box-shadow .3s;
+    transition: border-color .3s, box-shadow .3s;
     border: 1px solid #d9d9d9;
     border-radius: .1875em;
     font-size: 1.125em;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.06);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .06);
     box-sizing: border-box;
     height: 2.625em;
     padding: 0 .75em;
-    margin: 1em auto;
+    margin: 1em auto
 }
 .folder-form-message {
     font-size: 16px;
     line-height: 20px;
-    margin: 25px 0;
+    margin: 25px 0
 }
 .folder-form-errors {
     margin: 0 0 10px 0;
     padding: 8px 0;
     background: #ffe4e4;
     color: #a20000;
-    display: none;
+    display: none
 }
 .folder-form-errors.active {
-    display: block;
+    display: block
 }
 .sticky-menu #adminmenuwrap {
-    position: relative !important;
+    position: relative !important
 }
 span.folder-loader-ajax {
     float: right;
-    margin: 0px 8px 0 0;
+    margin: 0 8px 0 0;
     line-height: 30px;
-    display:none;
+    display: none
 }
 .folder-loader-ajax.active {
-    display: inline-block;
+    display: inline-block
 }
 @-webkit-keyframes scaleAnimation {
     0% {
         opacity: 0;
         -webkit-transform: scale(1.5);
-        transform: scale(1.5);
-    }
-    100% {
+        transform: scale(1.5)
+    }    100% {
         opacity: 1;
         -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+        transform: scale(1)
+    }}
 @keyframes scaleAnimation {
     0% {
         opacity: 0;
         -webkit-transform: scale(1.5);
-        transform: scale(1.5);
-    }
-    100% {
+        transform: scale(1.5)
+    }    100% {
         opacity: 1;
         -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+        transform: scale(1)
+    }}
 @-webkit-keyframes drawCircle {
     0% {
-        stroke-dashoffset: 151px;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
-}
+        stroke-dashoffset: 151px
+    }    100% {
+        stroke-dashoffset: 0
+    }}
 @keyframes drawCircle {
     0% {
-        stroke-dashoffset: 151px;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
-}
+        stroke-dashoffset: 151px
+    }    100% {
+        stroke-dashoffset: 0
+    }}
 @-webkit-keyframes drawCheck {
     0% {
-        stroke-dashoffset: 36px;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
-}
+        stroke-dashoffset: 36px
+    }    100% {
+        stroke-dashoffset: 0
+    }}
 @keyframes drawCheck {
     0% {
-        stroke-dashoffset: 36px;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
-}
+        stroke-dashoffset: 36px
+    }    100% {
+        stroke-dashoffset: 0
+    }}
 @-webkit-keyframes fadeOut {
     0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
+        opacity: 1
+    }    100% {
+        opacity: 0
+    }}
 @keyframes fadeOut {
     0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
+        opacity: 1
+    }    100% {
+        opacity: 0
+    }}
 @-webkit-keyframes fadeIn {
     0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
+        opacity: 0
+    }    100% {
+        opacity: 1
+    }}
 @keyframes fadeIn {
     0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
+        opacity: 0
+    }    100% {
+        opacity: 1
+    }}
 #successAnimationCircle {
     stroke-dasharray: 151px 151px;
-    stroke: #2CE0A7;
+    stroke: #2ce0a7
 }
 #successAnimationCheck {
     stroke-dasharray: 36px 36px;
-    stroke: #2CE0A7;
+    stroke: #2ce0a7
 }
 #successAnimationResult {
-    fill: #2CE0A7;
-    opacity: 0;
+    fill: #2ce0a7;
+    opacity: 0
 }
 svg#successAnimation {
     width: 34px;
     height: 34px;
-    padding: 0 0 0px 0;
+    padding: 0;
     display: none;
-    float: left;
+    float: left
 }
 #successAnimation.active {
-    display: inline-block;
+    display: inline-block
 }
 .folder-loader-ajax img {
-    display: none;
+    display: none
 }
 .folder-loader-ajax img.active {
-    display: inline-block;
+    display: inline-block
 }
 #successAnimation.animated {
     -webkit-animation: 1s ease-out 0s 1 both scaleAnimation;
-    animation: 1s ease-out 0s 1 both scaleAnimation;
+    animation: 1s ease-out 0s 1 both scaleAnimation
 }
 #successAnimation.animated #successAnimationCircle {
-    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
-    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
+    -webkit-animation: 1s cubic-bezier(.77, 0, .175, 1) 0s 1 both drawCircle, .3s linear .9s 1 both fadeOut;
+    animation: 1s cubic-bezier(.77, 0, .175, 1) 0s 1 both drawCircle, .3s linear .9s 1 both fadeOut
 }
 #successAnimation.animated #successAnimationCheck {
-    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
-    animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
+    -webkit-animation: 1s cubic-bezier(.77, 0, .175, 1) 0s 1 both drawCheck, .3s linear .9s 1 both fadeOut;
+    animation: 1s cubic-bezier(.77, 0, .175, 1) 0s 1 both drawCheck, .3s linear .9s 1 both fadeOut
 }
 #successAnimation.animated #successAnimationResult {
-    -webkit-animation: 0.3s linear 0.9s both fadeIn;
-    animation: 0.3s linear 0.9s both fadeIn;
+    -webkit-animation: .3s linear .9s both fadeIn;
+    animation: .3s linear .9s both fadeIn
 }
-.mCSB_scrollTools a+.mCSB_draggerContainer {
-    margin: 10px 0 !important;
+.mCSB_scrollTools a + .mCSB_draggerContainer {
+    margin: 10px 0 !important
 }
-@media screen and (max-width: 1300px) {
-    .tree-structure li {
-        width: 20%;
-    }
+.popup-folder-title {
+    font-weight: 700;
+    font-size: 24px;
+    padding: 0 0 20px 0
+}
+.select-box {
+    padding: 20px 0 10px 0
+}
+.select-box select {
+    width: 100%;
+    max-width: 300px
+}
+.actions #media_folder, select.media-select-folder {
+    width: 132px
+}
+select#media-attachment-taxonomy-filter {
+    width: 132px
+}
+.custom-media-select {
+    float: right;
+    padding: 10px 0 0 0;
+    display: none
+}
+.custom-media-select.active {
+    display: block
+}
+.folder-progress {
+    background: #b4b9be;
+    border-radius: 4px;
+    margin: 5px 0 0 0;
+    position: relative
+}
+.folder-meter {
+    height: 20px;
+    position: relative;
+    background: #f1f1f1;
+    padding: 0;
+    width: 0%;
+    border-radius: 4px;
+    -webkit-transition: all .2s linear;
+    transition: all .2s linear
+}
+.folder-meter > span {
+    display: block;
+    height: 100%;
+    -webkit-box-shadow: inset 0 2px 9px rgba(255, 255, 255, .3), inset 0 -2px 6px rgba(0, 0, 0, .4);
+    -moz-box-shadow: inset 0 2px 9px rgba(255, 255, 255, .3), inset 0 -2px 6px rgba(0, 0, 0, .4);
+    box-shadow: inset 0 2px 9px rgba(255, 255, 255, .3), inset 0 -2px 6px rgba(0, 0, 0, .4);
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px
+}
+.folder-animate > span > span, .folder-meter > span:after, .folder-progress:after {
+    content: "";
+    position: absolute;
+    border-radius: 4px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent));
+    background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+    z-index: 1;
+    -webkit-background-size: 50px 50px;
+    -moz-background-size: 50px 50px;
+    -webkit-animation: move 2s linear infinite;
+    overflow: hidden
+}
+.folder-animate > span:after {
+    display: none
+}
+@-webkit-keyframes move {
+    0% {
+        background-position: 0 0
+    }    100% {
+        background-position: 50px 50px
+    }}
+.orange-bg > span {
+    background-color: #ff5983
+}
+.media-folder-loader {
+    padding: 10px 0 15px;
+    display: none
+}
+.media-folder-loader > span {
+    font-weight: 700
+}
+.sticky-folders {
+    display: none;
+    padding: 0 0 5px;
+    margin: 0 0 5px;
+    border-bottom: solid 1px #ccc;
+}
+.top-settings {
+    padding: 0 0 5px;
+    margin: 0 0 5px;
+    border-bottom: solid 1px #ccc;
+}
+.sticky-folders.active {
+    display: block;
+}
+.sticky-folders ul {
+    margin: 0;
+    padding: 0;
+}
+.sticky-folders > ul > li {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.sticky-folders > ul > li > a {
+    display: block;
+    color: #444;
+    padding: 7px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 18px;
+}
+.sticky-folders ul li a:hover, .sticky-folders ul li a.active {
+    background: #dfdfdf;
+    border-radius: 3px;
+}
+.sticky-folders ul li a.active-item {
+    background-color: #008ec2 !important;
+    color: #ffffff;
+}
+.sticky-folders ul li a.active-item img {
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+}
+.sticky-folders ul li a span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.sticky-folders ul li a span.sticky-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 3px;
+}
+.sticky-folders ul li a span.sticky-icon img {
+    width: 100%;
+    height: 100%;
+}
+.sticky-wcp-custom-form a:focus {
+    box-shadow: none;
+    outline: none;
+}
+span.folder-count {
+    float: right;
+    background: #fff;
+    padding: 0 5px;
+    border: solid 1px #ccc;
+    font-size: 10px;
+    line-height: 16px;
+    border-radius: 2px;
+    color: #444 !important;
+}
+span.folder-count:empty {
+    display: none;
+}
+.sticky-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 7px;
+}
+.sticky-title img {
+    display: inline-block;
+    vertical-align: middle;
+    height: 20px;
+    width: 20px;
+}
+.sticky-folder-icon img {
+    width: 100%;
+    filter: invert(50%);
+    -webkit-filter: invert(50%);
+}
+.dynamic-menu .sticky-folder:hover img {
+    filter: invert(0%);
+    -webkit-filter: invert(0%);
+}
+.form-options > ul > li.last > a.sort-folder-order {
+    width: 32px;
+    height: 30px;
+    padding: 7px;
+    text-align: center;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.sort-folder-order svg {
+    width: 100%;
+    height: 100%;
+    fill: #000;
+}
+.sort-folder-order:hover svg {
+    fill: #ffffff;
+}
+.folder-order {
+    position: relative;
+}
+.folder-sort-menu {
+    position: absolute;
+    right: 0;
+    width: 120px;
+    z-index: 101;
+    background: #fff;
+    -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
+    display: none;
+}
+.folder-order.active .folder-sort-menu {
+    display: block;
+}
+.folder-order.active .sort-folder-order {
+    background: #404040;
+    color: #fff;
+    border: solid 1px #404040;
+}
+.folder-order.active .sort-folder-order svg {
+    fill: #fff;
+}
+.folder-sort-menu li {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+.folder-sort-menu li a {
+    display: block;
+    margin: 0;
+    padding: 3px 5px;
+    background: transparent;
+    color: #848484;
+    text-decoration: none;
+    font-size: 14px;
+}
+.folder-sort-menu li a:hover, .folder-sort-menu li a.active {
+    background: #efefef;
+    color: #000;
+}
+.dynamic-menu.bottom-fix {
+    bottom: 0;
 }
 @media screen and (max-width: 960px) {
     .wcp-content {
-        left: 36px;
+        left: 36px
     }
-    html[dir="rtl"] .wcp-content {
+    html[dir=rtl] .wcp-content {
         right: 36px;
-        left: auto;
-    }
-    .tree-structure li {
-        width: 25%;
+        left: auto
     }
 }
 @media screen and (max-width: 780px) {
     .wcp-content {
-        left: 0px;
+        left: 0
     }
-    html[dir="rtl"] .wcp-content {
-        right: 0px;
-    }
-    .tree-structure li {
-        width: 33.33%;
+    html[dir=rtl] .wcp-content {
+        right: 0
     }
 }
 @media screen and (max-width: 640px) {
     .wcp-content {
-        left: 0px;
+        left: 0;
         position: relative !important;
         width: 100% !important;
         padding-bottom: 100px;
         top: 0;
         right: 0;
-        display: block;
+        display: block
     }
     .ui-resizable-handle.ui-resizable-e {
-        display: none !important;
+        display: none !important
     }
     .hide-folders-area .wcp-container {
-        display: block;
+        display: block
     }
     .wcp-hide-show-buttons {
-        display: none;
+        display: none
     }
     .hide-folders-area .wcp-content {
-        width: 100% !important;
+        width: 100% !important
     }
     body.wp-admin #wpcontent {
-        padding: 0 !important;
+        padding: 0 !important
     }
     #wpbody-content {
-        padding-bottom: 30px;
-    }
-    .tree-structure li {
-        width: 50%;
+        padding-bottom: 30px
     }
 }

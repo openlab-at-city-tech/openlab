@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <div class="folder-help-form">
     <form action="<?php echo esc_url(admin_url( 'admin-ajax.php' )) ?>" method="post" id="folder-help-form">

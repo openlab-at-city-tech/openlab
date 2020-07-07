@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
     <style>
         .folder-hidden {

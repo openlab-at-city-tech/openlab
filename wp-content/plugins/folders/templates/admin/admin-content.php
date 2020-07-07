@@ -1,5 +1,5 @@
 <?php
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <style>
     .ui-state-highlight {
@@ -13,7 +13,7 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
     global $typenow;
     $width = get_option("wcp_dynamic_width_for_" . $typenow);
     if($width == null || empty($width)) {
-        $width = 292;
+        $width = 315;
     }
     $width = $width - 40;
     $customize_folders = get_option('customize_folders');
@@ -45,12 +45,12 @@ defined('ABSPATH') or wp_die('Nope, not accessing this');
 }
 if(isset($customize_folders['dropdown_color']) && !empty($customize_folders['dropdown_color'])) {
     ?>
-    #media-attachment-taxonomy-filter { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
+    #media-attachment-taxonomy-filter, select.media-select-folder { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
     <?php
 }
 if(isset($customize_folders['folder_bg_color']) && !empty($customize_folders['folder_bg_color'])) {
     ?>
-    .wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
+    .orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
     <?php
 }
 if(isset($customize_folders['bulk_organize_button_color']) && !empty($customize_folders['bulk_organize_button_color'])) {
@@ -121,11 +121,20 @@ if(!empty($post_type)) {
             <div class='wcp-container'>
                 <div class="sticky-wcp-custom-form">
                     <?php echo $form_html ?>
-                    <div class="header-posts">
-                        <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><span class="wcp-icon folder-icon-insert_drive_file"></span> <?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $total_posts ?></span></a>
+                    <div class="top-settings">
+                        <div class="header-posts">
+                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><span class="wcp-icon folder-icon-insert_drive_file"></span> <?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
+                        </div>
+                        <div class="un-categorised-items <?php echo esc_attr($active) ?>">
+                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, WCP_FOLDER) ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
+                        </div>
                     </div>
-                    <div class="un-categorised-items <?php echo esc_attr($active) ?>">
-                        <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, WCP_FOLDER) ?> <span class="total-count total-empty"><?php echo $total_empty ?></span> </a>
+
+                    <div class="sticky-folders <?php echo (!empty($sticky_string)?"active":"") ?>">
+                        <div class="sticky-title"><img src='<?php echo WCP_FOLDER_URL ?>assets/images/pin.png' /> Sticky Folders</div>
+                        <ul>
+                            <?php echo $sticky_string ?>
+                        </ul>
                     </div>
                 </div>
                 <div id="custom-scroll-menu">
@@ -219,4 +228,23 @@ if(!empty($post_type)) {
             <a href="javascript:;" class="form-cancel-btn">Close</a>
         </div>
     </div>
+</div>
+
+<div class="folder-popup-form" id="bulk-move-folder">
+    <form action="" method="post" id="bulk-folder-form">
+        <div class="popup-form-content">
+            <div class="popup-folder-title">
+                Select Folder
+            </div>
+            <div class="select-box">
+                <select id="bulk-select">
+                    <option value="">Select Folder</option>
+                </select>
+            </div>
+            <div class="folder-form-buttons">
+                <a href="javascript:;" class="form-cancel-btn">Cancel</a>
+                <button type="submit" class="form-submit-btn" id="move-to-folder" style="width: 200px">Move to Folder</button>
+            </div>
+        </div>
+    </form>
 </div>
