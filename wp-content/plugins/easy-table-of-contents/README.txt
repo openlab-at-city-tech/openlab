@@ -2,10 +2,10 @@
 Contributors: shazahm1@hotmail.com
 Donate link: http://connections-pro.com/
 Tags: table of contents, toc
-Requires at least: 4.4
-Tested up to: 4.9
-Requires PHP: 5.3
-Stable tag: 1.7
+Requires at least: 5.2
+Tested up to: 5.4
+Requires PHP: 5.6.20
+Stable tag: 2.0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,9 @@ A user friendly, featured focused plugin which allows you to insert a table of c
 
 = Features =
 * Automatically generate a table of contents for your posts, pages and custom post types by parsing its contents for headers.
+* Supports the `<!--nextpage-->` tag.
+* Supports the Rank Math plugin.
+* Works with the Classic Editor, Gutenberg, Divi, Elementor, WPBakery Page Builder and Visual Composer page editors.
 * Optionally enable for pages and/or posts. Custom post types are supported, as long as their content is output with the `the_content()` template tag.
 * Optionally auto insert the table of contents into the page, selectable by enabled post type.
 * Provides many easy to understand options to configure when and where to insert the table of contents.
@@ -43,13 +46,9 @@ Here are links to documentation pages for several of the premium templates for t
 
 = Roadmap =
 * Fragment caching for improved performance.
-* Support for `<!--nextpage-->`.
-* Customizer support.
-
-= Requirements =
-
-* **WordPress version:** >= 3.2
-* **PHP version:** >= 5.2.4
+* Improve SEO by adding options to add nofollow to TOC link and wrap TOC nav in noindex tag.
+* Improve accessibility.
+* Add Bullet and Arrow options for list counter style.
 
 = Credit =
 
@@ -89,6 +88,117 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.11 05/01/2020 =
+* COMPATIBILITY: Add support for the Uncode theme.
+* COMPATIBILITY: Do not run on WooCommerce pages.
+* DEV: Correct typo in phpDoc.
+
+= 2.0.10 04/20/2020 =
+* TWEAK: Add trailing `span` to heading, to prepare for `#` option and to fix duplicate heading title matching.
+* TWEAK: Add second heading search/replace function to search for heading in content with heading html entities decoded. May help Beaver Builder users as it seems like it does not encode HTML entities as WP core does.
+
+
+= 2.0.9 04/08/2020 =
+* TWEAK: AMP/Caching plugins seems to break anchors with colons and periods even though they are valid characters for the id attribute in HTML5.
+* TWEAK: Replace multiple underscores with a single underscore.
+* DEV: Update the UWS library which fixes the deprecation notice for PHP 7.4.
+* DEV: Add phpcs.xml.dist.
+* DEV: Strict type checks.
+* DEV: Inline doc updates.
+
+= 2.0.8 04/03/2020 =
+* TWEAK: Convert `<br />` tags in headings to a space.
+* TWEAK: Add additional widget classes.
+* TWEAK: Improve the sanitization of the excluded headings field post setting.
+* TWEAK: Minor optimization of creating the matching pattern for excluding headings for improved performance.
+* COMPATIBILITY: Exclude Create by Mediavine from heading eligibility.
+* BUG: Ensure excluded headings are removed from the headings array.
+* BUG: Ensure empty headings are removed from the headings array.
+
+= 2.0.7 04/02/2020 =
+* NEW: Exclude any HTML nodes with the class of `.ez-toc-exclude-headings`.
+* TWEAK: Change smooth scroll selector from `'body a'` to `'a.ez-toc-link'`.
+* TWEAK: Declare JS variables.
+* TWEAK: Support unicode characters for the `id` attribute. Permitted by HTML5.
+* TWEAK: Move the in-page anchor/span to before the heading text to account for long headings where it line wraps.
+* TWEAK: Slight rework to ezTOC widget container classes logic.
+* TWEAK: Cache bust the JS to make dev easier.
+* TWEAK: JavaScript cleanup.
+* TWEAK: URI Encode the id attribute to deal with reserved characters in JavaScript. Technically not necessary for the id attribute but needed to work with the jQuery smoothScroll library.
+* COMPATIBILITY: Reintroduce filter to exclude Ultimate Addons for VC Composer Tabs from heading eligibility.
+* BUG: Correct array iteration logic when processing headings.
+* BUG: Tighten matching for headings in excluded HTML nodes. The loose matching was excluding far too many headings.
+* BUG: Use `esc_attr()` instead of `esc_url()` for the anchor href because valid id attribute characters would cause it to return an empty href which cause a nonworking link.
+
+= 2.0.6 03/30/2020 =
+* BUG: Ensure minified files are current.
+
+= 2.0.5 03/27/2020 =
+* BUG: Prevent possible "strpos(): Empty needle in" warnings when excluding nodes from TOC eligibility.
+
+= 2.0.4 03/16/2020 =
+* NEW: Introduce the `ez_toc_container_class` filter.
+* TWEAK: Slight rework to ezTOC container classes logic.
+* BUG: `sprintf()` was eating `%` in the TOC heading item.
+* BUG: Do not insert TOC at top of post if before first heading option is selected even if first heading can not be found. Some page builders cause the TOC to insert twice or on blog pages.
+
+= 2.0.3 03/12/2020 =
+* TWEAK: Slightly tighten heading matching, last update made it a little too loose.
+* BUG: Correct logic required to place TOC before first heading which is required for the more lax heading matching required for page builders.
+
+= 2.0.2 03/12/2020 =
+* COMPATIBILITY: Remove filter to exclude Ultimate Addons for VC Composer Tabs from heading eligibility.
+* COMPATIBILITY: Add additional filters to improve Elementor compatibility.
+* TWEAK: Loosen heading matching when doing find/replace to insert in page links. Excluding the opening heading tag to allow matching heading where page builders dynamically add classes and id which break heading matching during find/replace.
+
+= 2.0.1 03/09/2020 =
+* COMPATIBILITY: Exclude the WordPress Related Posts plugin nodes.
+* COMPATIBILITY: Exclude a couple Atomic Block plugin nodes.
+* COMPATIBILITY: Exclude JetPack Related Posts from heading eligibility.
+* COMPATIBILITY: Exclude Ultimate Addons for VC Composer Tabs from heading eligibility.
+* COMPATIBILITY: Exclude WP Product Reviews from heading eligibility.
+* TWEAK: Prevent possible "strpos(): Empty needle in" warnings when excluding nodes from TOC eligibility.
+
+= 2.0 02/01/2020 =
+* NEW: Major rewrite of all code and processing logic to make it faster and more reliable.
+* NEW: Support for the <!--nextpage--> tag.
+* NEW: Introduce helper functions for devs.
+* NEW: Support WPML.
+* NEW: Support Polylang.
+* NEW: Add filter to support the Rank Math plugin.
+* NEW: Introduce the `ez_toc_maybe_apply_the_content_filter` filter.
+* TWEAK: Improve translation compatibility.
+* TWEAK: Rework widget logic to allow multi-line TOC items, improve active item highlighting while removing the use of the jQuery Waypoints library.
+* TWEAK Add additional classes to TOC list items.
+* TWEAK: Add WOFF2 format for icon format and change font references in CSS.
+* TWEAK: Add font-display: swap for toggle icon.
+* TWEAK: Update JS Cookie to 2.2.1.
+* TWEAK: Update jQuery Smooth Scroll to 2.2.0.
+* TWEAK: Allow forward slash and angle brackets in headings and alternate headings.
+* TWEAK: Allow forward slash in  excluded headings.
+* TWEAK: Remove new line/returns when matching excluded headings.
+* TWEAK: Simple transient cache to ensure a post is only processed once per request for a TOC.
+* TWEAK: Improve sanitization of alternate headings field value.
+* TWEAK: Deal with non-breaking-spaces in alternate headings.
+* TWEAK: Add the ability to exclude by selector content eligible to be included in the TOC.
+* TWEAK: Change the shortcode priority to a higher value.
+* TWEAK: Add filter to remove shortcodes from the content prior to the `the_content` filter being run to exclude shortcode content from being eligible as TOC items.
+* TWEAK: Add compatibility filters to remove shortcodes for Connections and Striking theme to remove them from eligible TOC item content.
+* TWEAK: Do not execute if root current filter is the `wp_head` or `get_the_excerpt` filters.
+* TWEAK: Add filter to exclude content by selector.
+* TWEAK: Move in-page anchor to after the heading instead of wrapping the heading to prevent conflicts with theme styling.
+* TWEAK: Utilize the `ez_toc_exclude_by_selector` filter the exclude the JetPack share buttons from eligible headings.
+* TWEAK: Remove the Elegant Themes Bloom plugin node from the post content before extracting headings.
+* TWEAK: Add compatibility filter for the Visual Composer plugin.
+* TWEAK: Utilize the `ez_toc_exclude_by_selector` filter the exclude the Starbox author heading from eligible headings.
+* I18N: Add wpml-config.xml file.
+* BUG: Correct option misspelling.
+* BUG: Do not need to run values for alternate and exclude headings thru `wp_unslash()` because `update_post_meta()` already does.
+* BUG: Do not need to run `stripslashes()` when escaping the alternate heading value.
+* BUG: Sanitize the excluded heading string before saving post meta.
+* DEV: Change PHP keywords to comply with PSR2.
+* DEV:Bump minimum PHP version to 5.6.20 which matches WP core.
 
 = 1.7 05/09/2018 =
 * NEW: Introduce the `ez_toc_shortcode` filter.
@@ -269,3 +379,39 @@ Requires WordPress >= 4.4 and PHP >= 5.3. PHP version >= 7.1 recommended.
 
 = 1.7 =
 Requires WordPress >= 4.4 and PHP >= 5.3. PHP version >= 7.1 recommended.
+
+= 2.0-rc4 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.1 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.2 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.3 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.4 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.5 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.6 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.7 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.8 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.9 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.10 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.11 =
+Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
