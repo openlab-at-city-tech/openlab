@@ -2,7 +2,7 @@
  * This file is part of the TinyMCE Advanced WordPress plugin and is released under the same license.
  * For more information please see tinymce-advanced.php.
  *
- * Copyright (c) 2007-2019 Andrew Ozz. All rights reserved.
+ * Copyright (c) 2007-2020 Andrew Ozz. All rights reserved.
  */
 
 ( function( tinymce ) {
@@ -122,21 +122,29 @@
 		editor.addCommand( 'tmaRemoveTableStyles', function() {
 			var node = editor.selection.getStart();
 			var table = editor.dom.getParents( node, 'table' );
+			var attr = {
+				style: null,
+				'data-mce-style': null,
+				width: null,
+				height: null,
+				minWidth: null,
+				maxWidth: null,
+				minHeight: null,
+				maxHeight: null,
+				align: null,
+				valign: null,
+				axis: null,
+				'char': null,
+				charoff: null,
+				bgcolor: null,
+				border: null,
+				cellspacing: null,
+				cellpadding: null
+			};
 
 			if ( table ) {
-				editor.$( table ).attr({
-					style: null,
-					width: null,
-					height: null,
-					border: null,
-					cellspacing: null,
-					cellpadding: null
-				}).find( 'tr, td' ).each( function( i, element ) {
-					editor.$( element ).attr({
-						style: null,
-						width: null,
-						height: null
-					});
+				editor.$( table ).attr( attr ).find( 'tr, th, td, thead, tbody, tfoot' ).each( function( i, element ) {
+					editor.$( element ).attr( attr );
 				} );
 			}
 		} );
@@ -146,21 +154,34 @@
 			var table = editor.dom.getParents( node, 'table' );
 
 			if ( table ) {
-				removeInlineSizes( table );
+				removeInlineSizes( null, table );
 
-				editor.$( table ).find( 'tr, td' ).each( function( i, element ) {
-					removeInlineSizes( element );
-				} );
+				editor.$( table ).find( 'tr, th, td, thead, tbody, tfoot' ).each( removeInlineSizes );
 			}
 		} );
 
-		function removeInlineSizes( node ) {
+		function removeInlineSizes( i, node ) {
 			var element = editor.$( node );
+
+			element.attr( {
+				width: null,
+				height: null,
+				minWidth: null,
+				maxWidth: null,
+				minHeight: null,
+				maxHeight: null
+			} );
 
 			element.css({ width: null, height: null });
 
+			if ( element.is( 'table' ) ) {
+				element.css({ 'border-collapse': 'collapse', width: '100%;' });
+			}
+
 			if ( ! element.attr( 'style' ) ) {
-				element.attr({ style: null });
+				element.attr({ style: null, 'data-mce-style': null });
+			} else {
+				element.attr( 'data-mce-style', element.attr( 'style' ) );
 			}
 		}
 
