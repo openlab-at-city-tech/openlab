@@ -1,10 +1,12 @@
 <?php
 
 su_add_shortcode( array(
+		'deprecated' => true,
 		'id' => 'slider',
 		'callback' => 'su_shortcode_slider',
 		'image' => su_get_plugin_url() . 'admin/images/shortcodes/slider.svg',
-		'name' => __( 'Slider', 'shortcodes-ultimate' ),
+		// translators: Dep. – Deprecated
+		'name' => __( 'Slider (Dep.)', 'shortcodes-ultimate' ),
 		'type' => 'single',
 		'group' => 'gallery',
 		'note'  => sprintf(
@@ -172,6 +174,11 @@ function su_shortcode_slider( $atts = null, $content = null ) {
 		foreach ( $slides as $slide ) {
 			// Crop the image
 			$image = su_image_resize( $slide['image'], $atts['width'], $atts['height'] );
+
+			if ( is_wp_error( $image ) ) {
+				continue;
+			}
+
 			// Prepare slide title
 			$title = ( $atts['title'] === 'yes' && $slide['title'] ) ? '<span class="su-slider-slide-title">' . stripslashes( $slide['title'] ) . '</span>' : '';
 			// Open slide

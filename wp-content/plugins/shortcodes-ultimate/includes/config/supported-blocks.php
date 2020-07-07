@@ -1,4 +1,4 @@
-<?php
+<?php defined( 'ABSPATH' ) || exit;
 
 return apply_filters(
 	'su/config/supported_blocks',

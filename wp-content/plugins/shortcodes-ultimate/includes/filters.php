@@ -26,6 +26,7 @@ function su_filter_disable_wptexturize( $shortcodes ) {
 		$prefix . 'list',
 		$prefix . 'note',
 		$prefix . 'box',
+		$prefix . 'quote',
 	);
 
 	return array_merge( $shortcodes, $exclude );
@@ -52,34 +53,12 @@ function su_filter_custom_formatting( $content ) {
 }
 
 /**
- * Adds 'Slide Link' field at attachment page.
+ * Simple filter to apply the_content filters.
  *
- * @since  5.0.5
+ * @since 5.8.1
+ * @param  string $content Raw content
+ * @return string          Parsed content
  */
-function su_slide_link_input( $form_fields, $post ) {
-
-	$form_fields['su_slide_link'] = array(
-		'label' => __( 'Slide link', 'shortcodes-ultimate' ),
-		'input' => 'text',
-		'value' => get_post_meta( $post->ID, 'su_slide_link', true ),
-		'helps' => sprintf( '<strong>%s</strong><br>%s', __( 'Shortcodes Ultimate', 'shortcodes-ultimate' ), __( 'Use this field to add custom links to slides used with Slider, Carousel and Custom Gallery shortcodes', 'shortcodes-ultimate' ) ),
-	);
-
-	return $form_fields;
-
-}
-
-/**
- * Saves 'Slide Link' field.
- *
- * @since  5.0.5
- */
-function su_slide_link_save( $post, $attachment ) {
-
-	if ( isset( $attachment['su_slide_link'] ) ) {
-		update_post_meta( $post['ID'], 'su_slide_link', $attachment['su_slide_link'] );
-	}
-
-	return $post;
-
+function su_filter_the_content( $content ) {
+	return apply_filters( 'the_content', $content );
 }

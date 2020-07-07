@@ -127,9 +127,9 @@ function su_hex_shift( $supplied_hex, $shift_method, $percentage = 50 ) {
 		trigger_error( "Invalid hex color length", E_USER_NOTICE );
 	}
 	// Start shifting
-	$RGB_values['R'] = hexdec( $supplied_hex{0} . $supplied_hex{1} );
-	$RGB_values['G'] = hexdec( $supplied_hex{2} . $supplied_hex{3} );
-	$RGB_values['B'] = hexdec( $supplied_hex{4} . $supplied_hex{5} );
+	$RGB_values['R'] = hexdec( $supplied_hex[0] . $supplied_hex[1] );
+	$RGB_values['G'] = hexdec( $supplied_hex[2] . $supplied_hex[3] );
+	$RGB_values['B'] = hexdec( $supplied_hex[4] . $supplied_hex[5] );
 	foreach ( $RGB_values as $c => $v ) {
 		switch ( $shift_method ) {
 		case '-':

@@ -38,6 +38,11 @@ su_add_shortcode(
 				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
 				'default' => '',
 			),
+			'id'         => array(
+				'name'    => __( 'HTML Anchor', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Enter a word or two, without spaces, to make a unique web address just for this element. Then, you\'ll be able to link directly to this section of your page.', 'shortcodes-ultimate' ),
+				'default' => '',
+			),
 		),
 		'content'  => __( 'Note text', 'shortcodes-ultimate' ),
 		'desc'     => __( 'Colored box', 'shortcodes-ultimate' ),
@@ -55,6 +60,7 @@ function su_shortcode_note( $atts = null, $content = null ) {
 			'color'      => null, // 3.x
 			'radius'     => '3',
 			'class'      => '',
+			'id'         => '',
 		),
 		$atts,
 		'note'
@@ -75,6 +81,6 @@ function su_shortcode_note( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-note' . su_get_css_class( $atts ) . '" style="border-color:' . su_adjust_brightness( $atts['note_color'], -10 ) . ';' . $radius . '"><div class="su-note-inner su-u-clearfix su-u-trim" style="background-color:' . $atts['note_color'] . ';border-color:' . su_adjust_brightness( $atts['note_color'], 80 ) . ';color:' . $atts['text_color'] . ';' . $radius . '">' . su_do_nested_shortcodes( $content, 'note' ) . '</div></div>';
+	return '<div class="su-note' . su_get_css_class( $atts ) . '" id="' . sanitize_html_class( $atts['id'] ) . '" style="border-color:' . su_adjust_brightness( $atts['note_color'], -10 ) . ';' . $radius . '"><div class="su-note-inner su-u-clearfix su-u-trim" style="background-color:' . $atts['note_color'] . ';border-color:' . su_adjust_brightness( $atts['note_color'], 80 ) . ';color:' . $atts['text_color'] . ';' . $radius . '">' . su_do_nested_shortcodes( $content, 'note' ) . '</div></div>';
 
 }

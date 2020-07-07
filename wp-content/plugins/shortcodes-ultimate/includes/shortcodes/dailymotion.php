@@ -145,10 +145,14 @@ function su_shortcode_dailymotion( $atts = null, $content = null ) {
 	}
 
 	$params     = array();
-	$dm_options = array( 'autoplay', 'background', 'foreground', 'highlight', 'logo', 'quality', 'related', 'info' );
+	$dm_options = array( 'autoplay', 'background', 'foreground', 'highlight', 'logo', 'quality', 'info' );
 
 	foreach ( $dm_options as $dm_option ) {
 		$params[] = $dm_option . '=' . str_replace( array( 'yes', 'no', '#' ), array( '1', '0', '' ), $atts[ $dm_option ] );
+	}
+
+	if ( 'no' === $atts['related'] ) {
+		$params[] = 'queue-enable=false';
 	}
 
 	su_query_asset( 'css', 'su-shortcodes' );

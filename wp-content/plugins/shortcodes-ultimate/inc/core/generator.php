@@ -173,7 +173,7 @@ class Su_Generator {
 		}
 
 		$tools = apply_filters( 'su/generator/tools', array(
-				'<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate' ) . '#tab-1" target="_blank" title="' . __( 'Settings', 'shortcodes-ultimate' ) . '">' . __( 'Plugin settings', 'shortcodes-ultimate' ) . '</a>',
+				'<a href="' . admin_url( 'admin.php?page=shortcodes-ultimate-settings' ) . '" target="_blank" title="' . __( 'Settings', 'shortcodes-ultimate' ) . '">' . __( 'Plugin settings', 'shortcodes-ultimate' ) . '</a>',
 				'<a href="https://getshortcodes.com/" target="_blank" title="' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '">' . __( 'Plugin homepage', 'shortcodes-ultimate' ) . '</a>',
 			) );
 
@@ -203,6 +203,9 @@ class Su_Generator {
 				$shortcode['icon'] = 'icon:' . $shortcode['icon'];
 			}
 			$shortcode['name'] = ( isset( $shortcode['name'] ) ) ? $shortcode['name'] : $name;
+			if ( ! isset( $shortcode['desc'] ) ) {
+				$shortcode['desc'] = '';
+			}
 			echo '<span data-name="' . $shortcode['name'] . '" data-shortcode="' . $name . '" title="' . esc_attr( $shortcode['desc'] ) . '" data-desc="' . esc_attr( $shortcode['desc'] ) . '" data-group="' . $shortcode['group'] . '">' . su_html_icon( $shortcode['icon'] ) . $shortcode['name'] . '</span>' . "\n";
 		}
 ?>
@@ -212,6 +215,7 @@ class Su_Generator {
 			<input type="hidden" name="su-generator-selected" id="su-generator-selected" value="<?php echo plugins_url( '', SU_PLUGIN_FILE ); ?>" />
 			<input type="hidden" name="su-generator-url" id="su-generator-url" value="<?php echo plugins_url( '', SU_PLUGIN_FILE ); ?>" />
 			<input type="hidden" name="su-compatibility-mode-prefix" id="su-compatibility-mode-prefix" value="<?php echo su_get_shortcode_prefix(); ?>" />
+			<input type="hidden" name="su-generator-option-skip" id="su-generator-option-skip" value="<?php echo esc_attr( get_option( 'su_option_skip', '' ) ); ?>" />
 			<div id="su-generator-result" style="display:none"></div>
 		</div>
 	</div>

@@ -1,10 +1,12 @@
 <?php
 
 su_add_shortcode( array(
+		'deprecated' => true,
 		'id' => 'carousel',
 		'callback' => 'su_shortcode_carousel',
 		'image' => su_get_plugin_url() . 'admin/images/shortcodes/carousel.svg',
-		'name' => __( 'Carousel', 'shortcodes-ultimate' ),
+		// translators: Dep. – Deprecated
+		'name' => __( 'Carousel (Dep.)', 'shortcodes-ultimate' ),
 		'type' => 'single',
 		'group' => 'gallery',
 		'note'  => sprintf(
@@ -193,6 +195,11 @@ function su_shortcode_carousel( $atts = null, $content = null ) {
 		foreach ( (array) $slides as $slide ) {
 			// Crop the image
 			$image = su_image_resize( $slide['image'], ( round( $atts['width'] / $atts['items'] ) - 18 ), $atts['height'] );
+
+			if ( is_wp_error( $image ) ) {
+				continue;
+			}
+
 			// Prepare slide title
 			$title = ( $atts['title'] === 'yes' && $slide['title'] ) ? '<span class="su-carousel-slide-title">' . stripslashes( $slide['title'] ) . '</span>' : '';
 			// Open slide

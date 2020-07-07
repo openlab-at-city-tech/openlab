@@ -124,6 +124,11 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 		foreach ( $slides as $slide ) {
 			// Crop image
 			$image = su_image_resize( $slide['image'], $atts['width'], $atts['height'] );
+
+			if ( is_wp_error( $image ) ) {
+				continue;
+			}
+
 			// Prepare slide title
 			$title = ( $slide['title'] ) ? '<span class="su-custom-gallery-title">' . stripslashes( $slide['title'] ) . '</span>' : '';
 			// Open slide

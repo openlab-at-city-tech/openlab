@@ -109,6 +109,8 @@ function su_shortcode_qrcode( $atts = null, $content = null ) {
 	if ( ! $atts['data'] ) {
 		return su_error_message( 'QR code', __( 'please specify the data', 'shortcodes-ultimate' ) );
 	}
+	$atts['data'] = su_do_attribute( $atts['data'] );
+	$atts['data'] = sanitize_text_field( $atts['data'] );
 	// Prepare link
 	$href = ( $atts['link'] ) ? ' href="' . $atts['link'] . '"' : '';
 	// Prepare clickable class

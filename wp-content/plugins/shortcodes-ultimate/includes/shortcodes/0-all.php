@@ -47,6 +47,7 @@ require_once $this->plugin_path . 'includes/shortcodes/slider.php';
 require_once $this->plugin_path . 'includes/shortcodes/carousel.php';
 require_once $this->plugin_path . 'includes/shortcodes/custom-gallery.php';
 require_once $this->plugin_path . 'includes/shortcodes/posts.php';
+// require_once $this->plugin_path . 'includes/shortcodes/display-posts.php';
 require_once $this->plugin_path . 'includes/shortcodes/dummy-text.php';
 require_once $this->plugin_path . 'includes/shortcodes/dummy-image.php';
 require_once $this->plugin_path . 'includes/shortcodes/animate.php';
