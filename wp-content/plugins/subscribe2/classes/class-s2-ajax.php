@@ -10,6 +10,7 @@ class S2_Ajax {
 			add_action( 'wp_ajax_nopriv_subscribe2_form', array( &$this, 's2_ajax_form_handler' ) );
 			add_action( 'wp_ajax_nopriv_subscribe2_submit', array( &$this, 's2_ajax_submit_handler' ) );
 			add_filter( 's2_ajax_form', array( &$this, 's2_ajax_form_class' ), 1 );
+			add_filter( 'safe_style_css', array( &$this, 's2_safe_css' ) );
 
 			global $s2_frontend;
 			require_once S2PATH . 'classes/class-s2-core.php';
@@ -58,7 +59,34 @@ class S2_Ajax {
 		global $s2_frontend;
 		$content = $s2_frontend->shortcode( $atts );
 		$content = apply_filters( 's2_ajax_form', $content );
-		echo $content;
+
+		$allowed_tags = array(
+			'form'  => array(
+				'action' => true,
+				'id'     => true,
+				'method' => true,
+				'name'   => true,
+			),
+			'span'  => array(
+				'style' => true,
+			),
+			'label' => array(
+				'for' => true,
+			),
+			'input' => array(
+				'id'      => true,
+				'name'    => true,
+				'onblur'  => true,
+				'onfocus' => true,
+				'size'    => true,
+				'type'    => true,
+				'value'   => true,
+			),
+			'p'     => true,
+			'br'    => true,
+		);
+
+		echo wp_kses( $content, $allowed_tags );
 		exit();
 	}
 
@@ -67,13 +95,13 @@ class S2_Ajax {
 	 */
 	public function s2_ajax_submit_handler() {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 's2_ajax_form_nonce' ) ) {
-			echo '<p>' . __( 'There was an error validating your request. Please try again later.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'There was an error validating your request. Please try again later.', 'subscribe2' ) . '</p>';
 			wp_die();
 		}
 		$data = $_POST['data'];
 		if ( ( isset( $data['firstname'] ) && '' !== $data['firstname'] ) || ( isset( $data['lastname'] ) && '' !== $data['lastname'] ) || ( isset( $data['uri'] ) && 'http://' !== $data['uri'] ) ) {
 			// looks like some invisible-to-user fields were changed; falsely report success
-			echo '<p>' . __( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
 			wp_die();
 		}
 
@@ -81,21 +109,21 @@ class S2_Ajax {
 		$s2_frontend->email = $s2_frontend->sanitize_email( $data['email'] );
 		$s2_frontend->ip    = $data['ip'];
 		if ( false === $s2_frontend->validate_email( $s2_frontend->email ) ) {
-			echo '<p>' . __( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
 		} elseif ( $s2_frontend->is_barred( $s2_frontend->email ) ) {
-			echo '<p>' . __( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
+			echo '<p>' . esc_html__( 'Sorry, email addresses at that domain are currently barred due to spam, please use an alternative email address.', 'subscribe2' ) . '</p>';
 		} else {
 			if ( is_int( $s2_frontend->lockout ) && $s2_frontend->lockout > 0 ) {
 				$date = gmdate( 'H:i:s.u', $s2_frontend->lockout );
 				$ips  = $wpdb->get_col( $wpdb->prepare( "SELECT ip FROM $wpdb->subscribe2 WHERE date = CURDATE() AND time > SUBTIME(CURTIME(), %s)", $date ) );
 				if ( in_array( $s2_frontend->ip, $ips, true ) ) {
-					echo '<p>' . __( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'Slow down, you move too fast.', 'subscribe2' ) . '</p>';
 				}
 			}
 			$check = $wpdb->get_var( $wpdb->prepare( "SELECT user_email FROM $wpdb->users WHERE user_email = %s", $s2_frontend->email ) );
 			if ( null !== $check ) {
 				// Translators: Link to login page
-				printf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' );
+				printf( wp_kses_post( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ) ), esc_url( get_option( 'siteurl' ) . '/wp-login.php' ) );
 			}
 			if ( 'subscribe' === $data['button'] ) {
 				if ( '1' !== $s2_frontend->is_public( $s2_frontend->email ) ) {
@@ -103,23 +131,23 @@ class S2_Ajax {
 					$s2_frontend->add( $s2_frontend->email );
 					$status = $s2_frontend->send_confirm( 'add' );
 					if ( $status ) {
-						echo '<p>' . __( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
 					} else {
-						echo '<p>' . __( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
 					}
 				} else {
 					// they're already subscribed
-					echo '<p>' . __( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
 				}
 			} elseif ( 'unsubscribe' === $data['button'] ) {
 				if ( false === $s2_frontend->is_public( $s2_frontend->email ) ) {
-					echo '<p>' . __( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
+					echo '<p>' . esc_html__( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
 				} else {
 					$status = $s2_frontend->send_confirm( 'del' );
 					if ( $status ) {
-						echo '<p>' . __( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
 					} else {
-						echo '<p>' . __( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
+						echo '<p>' . esc_html__( 'Sorry, there seems to be an error on the server. Please try again later.', 'subscribe2' ) . '</p>';
 					}
 				}
 			}
@@ -134,5 +162,13 @@ class S2_Ajax {
 		$content = str_replace( '<form', '<form id="s2ajaxform"', $content );
 		$content = str_replace( 'wp-login.php"', 'wp-login.php" style="text-decoration: underline;"', $content );
 		return $content;
+	}
+
+	/**
+	 * Add display attribute to safe CSS
+	 */
+	public function s2_safe_css( $style_attributes ) {
+		$style_attributes[] = 'display';
+		return $style_attributes;
 	}
 }

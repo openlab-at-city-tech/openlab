@@ -5,11 +5,11 @@ class S2_Frontend extends S2_Core {
 	 */
 	public function load_strings() {
 		// Translators: Link to login page
-		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
+		$this->please_log_in = '<p class="s2_message">' . sprintf( __( 'To manage your subscription options please <a href="%1$s">login</a>.', 'subscribe2' ), get_option( 'siteurl' ) . '/wp-login.php' ) . '</p>';
 
 		$profile = apply_filters( 's2_profile_link', get_option( 'siteurl' ) . '/wp-admin/admin.php?page=s2' );
 		// Translators: Link to Profile page
-		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>', 'subscribe2' ), $profile ) . '</p>';
+		$this->profile = '<p class="s2_message">' . sprintf( __( 'You may manage your subscription options from your <a href="%1$s">profile</a>.', 'subscribe2' ), $profile ) . '</p>';
 		if ( true === $this->s2_mu ) {
 			global $blog_id;
 			$user_ID = get_current_user_id();
@@ -152,9 +152,9 @@ class S2_Frontend extends S2_Core {
 
 		// build default form
 		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
 		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_html( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br /><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . $value . '" size="' . $args['size'] . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
@@ -401,7 +401,7 @@ class S2_Frontend extends S2_Core {
 	 */
 	public function add_minimeta() {
 		if ( 0 !== $this->subscribe2_options['s2page'] ) {
-			echo '<li><a href="' . get_permalink( $this->subscribe2_options['s2page'] ) . '">' . __( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
+			echo '<li><a href="' . esc_url( get_permalink( $this->subscribe2_options['s2page'] ) ) . '">' . esc_html__( '[Un]Subscribe to Posts', 'subscribe2' ) . '</a></li>' . "\r\n";
 		}
 	}
 
@@ -520,7 +520,22 @@ class S2_Frontend extends S2_Core {
 	 * Add ip updater library to footer
 	 */
 	public function js_ip_library_script() {
-		echo '<script async="async" src="https://api.ipify.org?format=jsonp&callback=getip"></script>' . "\r\n"; // phpcs:ignore WordPress.WP.EnqueuedResources
+		$args = array(
+			'format'   => 'jsonp',
+			'callback' => 'getip',
+		);
+		wp_enqueue_script( 's2_ip_library', add_query_arg( $args, 'https://api.ipify.org' ), array(), S2VERSION, true );
+	}
+
+	/**
+	 * Reformat WordPress escaped link to IPify library
+	 */
+	public function tag_replace_ampersand( $tag ) {
+		if ( strstr( $tag, 'ipify' ) !== false ) {
+			$tag = str_replace( '&#038;', '&', $tag );
+		}
+
+		return $tag;
 	}
 
 	/* ===== define some variables ===== */

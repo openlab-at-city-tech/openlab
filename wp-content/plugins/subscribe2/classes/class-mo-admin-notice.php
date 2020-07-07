@@ -46,11 +46,11 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 				);
 				$this->notice_css();
 				$install_url = wp_nonce_url(
-					admin_url( 'update.php?action=install-plugin&plugin=mailoptin' ),
+					admin_url( 'plugin-install.php?s=wemail&tab=search&type=term' ),
 					'install-plugin_mailoptin'
 				);
 
-				$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=mailoptin%2Fmailoptin.php' ), 'activate-plugin_mailoptin/mailoptin.php' );
+				$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=wemail%2Fwemail.php' ), 'activate-plugin_wemail/wemail.php' );
 				?>
 				<div class="mo-admin-notice notice notice-success">
 					<div class="mo-notice-first-half">
@@ -58,7 +58,7 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 							<?php
 							printf(
 								// Translators: Mail Optin admin notice
-								__( 'Free optin form plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
+								__( 'Free email newsletter plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
 								'<span class="mo-stylize"><strong>',
 								'</strong></span>'
 							);
@@ -69,16 +69,16 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 					<div class="mo-notice-other-half">
 						<?php if ( ! $this->is_plugin_installed() ) : ?>
 							<a class="button button-primary button-hero" id="mo-install-mailoptin-plugin" href="<?php echo $install_url; ?>">
-								<?php _e( 'Install MailOptin Now for Free!', 'subscribe2' ); ?>
+								<?php _e( 'Install weMail Now for Free!', 'subscribe2' ); ?>
 							</a>
 						<?php endif; ?>
 						<?php if ( $this->is_plugin_installed() && ! $this->is_plugin_active() ) : ?>
 							<a class="button button-primary button-hero" id="mo-activate-mailoptin-plugin" href="<?php echo $activate_url; ?>">
-								<?php _e( 'Activate MailOptin Now!', 'subscribe2' ); ?>
+								<?php _e( 'Activate weMail Now!', 'subscribe2' ); ?>
 							</a>
 						<?php endif; ?>
 						<div class="mo-notice-learn-more">
-							<a target="_blank" href="https://mailoptin.io">Learn more</a>
+							<a target="_blank" href="https://getwemail.io">Learn more</a>
 						</div>
 					</div>
 					<a href="<?php echo $dismiss_url; ?>">
@@ -107,11 +107,11 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 		public function is_plugin_installed() {
 			$installed_plugins = get_plugins();
 
-			return isset( $installed_plugins['mailoptin/mailoptin.php'] );
+			return isset( $installed_plugins['wemail/wemail.php'] );
 		}
 
 		public function is_plugin_active() {
-			return is_plugin_active( 'mailoptin/mailoptin.php' );
+			return is_plugin_active( 'wemail/wemail.php' );
 		}
 
 		public function notice_css() {
