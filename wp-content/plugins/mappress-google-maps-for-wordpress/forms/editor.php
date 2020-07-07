@@ -1,7 +1,10 @@
 <div class='mapp-edit'></div>
 
 <script type='text/template' id='mapp-tmpl-edit-map'>
-		<?php echo Mappress_Template::get_template('map', array('map' => $map)); ?>
+    <?php
+        $map = new Mappress_Map(array('editable' => true, 'layout' => 'left', 'name' => 'mapp0', 'poiList' => true));
+        echo Mappress_Template::get_template('map', array('map' => $map));
+    ?>
 </script>
 
 <script type='text/template' id='mapp-tmpl-edit-loop'>

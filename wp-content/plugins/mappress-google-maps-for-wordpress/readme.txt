@@ -3,14 +3,13 @@ Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
 Tags: leaflet, openstreetmap, osm, mapbox, map box, google maps,google,map,maps,easy,poi,mapping,mapper,gps,lat,lon,latitude,longitude,geocoder,geocoding,georss,geo rss,geo,v3,marker,mashup,mash,api,v3,buddypress,mashup,geo,wp-geo,geo mashup,simplemap,simple,wpml
 Requires at least: 4.5
-Tested up to: 5.2
-Stable tag: 2.53.8
+Tested up to: 5.5
+Stable tag: 2.54.6
 
 == Description ==
 MapPress adds beautiful, interactive Google or Leaflet maps to WordPress.
 
 When editing a post or page just enter any addresses you'd like to map and the plugin will automatically insert an interactive map into your blog.
-
 The free version supports unlimited maps and multiple maps per post.
 
 For additional features, try [MapPress Pro](https://mappresspro.com/mappress)
@@ -85,6 +84,37 @@ Please see the plugin documentation pages:
 4. Get directions from any map marker
 
 == Changelog ==
+
+= 2.54.6 =
+* Fixed: added additional security to template display function
+
+= 2.54.5 =
+* Fixed: error is media JS on post/page list screen
+
+= 2.54.4 =
+* Added: authorization checks added for saving maps ('edit_posts') and templates ('manage_options')
+
+= 2.54.3 =
+* Fixed: POI list not displaying in sidebar widgets
+
+= 2.54.2 =
+* Fixed: script loading error in Gutenberg editor
+
+= 2.54.1 =
+* Fixed: removed wp_set_script_translations for older WP versions
+* Changed: internal separation of media and editor classes
+
+= 2.54 =
+* Changed: Google map type control is hidden in frontend, visible only in editor
+* Changed: scrollwheel zoom and keyboard shortcuts are now enabled by default (to match Google API defaults)
+* Changed: filters 'mappress_tile_providers' and 'mappress_baselayers' replaced by filter 'mappress_options'
+* Changed: map filters taxonomy can only be defined via settings, not in shortcodes
+* Changed: improved handling of user location in directions form
+* Changed: directions form closes when map is dragged or clicked
+* Changed: internal updates to template editor, icon/color pickers, JavaScript loading
+
+= 2.53.9 =
+* Fixed: internal updates to ajax functions with nonces
 
 = 2.53.8 =
 * Changed: mashups no longer automatically focus the search box, since this can cause unwanted scrolling

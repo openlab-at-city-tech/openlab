@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MapPress Maps for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.53.8\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.54.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-03-29T22:09:32+00:00\n"
+"POT-Creation-Date: 2020-05-06T02:27:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 
@@ -33,33 +33,33 @@ msgstr ""
 msgid "https://www.mappresspro.com/chris-contact"
 msgstr ""
 
-#: forms/editor.php:11
+#: forms/editor.php:14
 msgid "Add KML"
 msgstr ""
 
-#: forms/editor.php:47
+#: forms/editor.php:50
 msgid "Visual"
 msgstr ""
 
-#: forms/editor.php:47
+#: forms/editor.php:50
 msgid "HTML"
 msgstr ""
 
-#: forms/editor.php:53
+#: forms/editor.php:56
 #: forms/media.php:49
-#: forms/settings.php:41
+#: forms/settings.php:27
 msgid "Save"
 msgstr ""
 
-#: forms/editor.php:54
+#: forms/editor.php:57
 #: forms/media.php:50
-#: forms/settings.php:42
+#: forms/settings.php:28
 msgid "Cancel"
 msgstr ""
 
-#: forms/editor.php:55
+#: forms/editor.php:58
 #: forms/media.php:72
-#: forms/settings.php:44
+#: forms/settings.php:30
 #: mappress_controls.php:102
 msgid "Delete"
 msgstr ""
@@ -92,7 +92,7 @@ msgstr ""
 #: forms/media.php:27
 #: forms/media.php:63
 #: forms/media.php:67
-#: mappress.php:415
+#: mappress.php:427
 msgid "Untitled"
 msgstr ""
 
@@ -111,7 +111,6 @@ msgstr ""
 
 #: forms/media.php:70
 #: forms/settings.php:4
-#: forms/settings.php:18
 msgid "Edit"
 msgstr ""
 
@@ -119,135 +118,147 @@ msgstr ""
 msgid "No maps found"
 msgstr ""
 
-#: forms/settings.php:24
+#: forms/settings.php:3
+msgid "Map popup"
+msgstr ""
+
+#: forms/settings.php:3
+msgid "Map list item"
+msgstr ""
+
+#: forms/settings.php:3
+msgid "Mashup popup"
+msgstr ""
+
+#: forms/settings.php:3
+msgid "Mashup list item"
+msgstr ""
+
+#: forms/settings.php:10
 msgid "New"
 msgstr ""
 
-#: forms/settings.php:24
+#: forms/settings.php:10
 msgid "Custom"
 msgstr ""
 
-#: forms/settings.php:27
+#: forms/settings.php:13
 msgid "Editor"
 msgstr ""
 
-#: forms/settings.php:28
-#: mappress_settings.php:184
+#: forms/settings.php:14
+#: mappress_settings.php:177
 #: pro/mappress_pro_settings.php:219
 msgid "Default"
 msgstr ""
 
-#: mappress.php:153
+#: mappress.php:156
 msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
 msgstr ""
 
-#: mappress.php:158
+#: mappress.php:161
 msgid "WARNING: MapPress is not compatible with the WP-Geo plugin.  Please deactivate or uninstall WP-Geo before using MapPress."
 msgstr ""
 
-#: mappress.php:163
+#: mappress.php:166
 msgid "A Google Maps API key is required"
 msgstr ""
 
-#: mappress.php:163
+#: mappress.php:166
 msgid "Please update your"
 msgstr ""
 
-#: mappress.php:163
+#: mappress.php:166
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:314
-#: mappress.php:765
+#: mappress.php:318
+#: mappress.php:825
 msgid "Version"
 msgstr ""
 
-#: mappress.php:315
-msgid "Documentation"
+#: mappress.php:320
+msgid "Help"
 msgstr ""
 
-#: mappress.php:316
-msgid "Support"
-msgstr ""
-
-#: mappress.php:318
+#: mappress.php:322
 msgid "Upgrade to MapPress Pro"
 msgstr ""
 
-#: mappress.php:404
+#: mappress.php:416
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: mappress.php:405
+#: mappress.php:417
 msgid "Delete this map?"
 msgstr ""
 
-#: mappress.php:406
+#: mappress.php:418
 msgid "Google cannot return directions between those addresses.  There is no route between them or the routing information is not available."
 msgstr ""
 
-#: mappress.php:407
+#: mappress.php:419
 msgid "Error reading KML file"
 msgstr ""
 
-#: mappress.php:408
+#: mappress.php:420
 msgid "URL for KML file"
 msgstr ""
 
-#: mappress.php:409
+#: mappress.php:421
 msgid "Loading"
 msgstr ""
 
-#: mappress.php:410
-msgid "%d of %d shown"
+#: mappress.php:422
+msgid "%1d of %2d shown"
 msgstr ""
 
-#: mappress.php:411
+#: mappress.php:423
 msgid "Unable to get your location"
 msgstr ""
 
-#: mappress.php:412
+#: mappress.php:424
 msgid "No results"
 msgstr ""
 
-#: mappress.php:413
+#: mappress.php:425
 msgid "Save changes?"
 msgstr ""
 
-#: mappress.php:414
+#: mappress.php:426
 msgid "Shape"
 msgstr ""
 
-#: mappress.php:439
+#: mappress.php:453
 msgid "Improve this map"
 msgstr ""
 
-#: mappress.php:455
-#: mappress.php:474
+#: mappress.php:469
+#: mappress.php:488
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:456
+#: mappress.php:470
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:457
+#: mappress.php:471
 msgid "Light"
 msgstr ""
 
-#: mappress.php:458
+#: mappress.php:472
 msgid "Dark"
 msgstr ""
 
-#: mappress.php:459
+#: mappress.php:473
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:460
+#: mappress.php:474
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress.php:548
+#: mappress.php:604
 msgid "Settings"
 msgstr ""
 
@@ -255,30 +266,18 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: mappress_map.php:91
-#: mappress_settings.php:306
+#: mappress_map.php:90
+#: mappress_settings.php:320
 msgid "MapPress"
 msgstr ""
 
-#: mappress_map.php:163
+#: mappress_map.php:165
 msgid "Map not found"
 msgstr ""
 
-#: mappress_map.php:423
+#: mappress_map.php:426
 #: pro/mappress_pro_settings.php:37
 msgid "Filter"
-msgstr ""
-
-#: mappress_map.php:456
-msgid "Show map"
-msgstr ""
-
-#: mappress_map.php:460
-msgid "Map"
-msgstr ""
-
-#: mappress_map.php:461
-msgid "List"
 msgstr ""
 
 #: mappress_settings.php:84
@@ -327,201 +326,215 @@ msgstr ""
 msgid "Directions"
 msgstr ""
 
-#: mappress_settings.php:105
+#: mappress_settings.php:106
 msgid "POI Settings"
 msgstr ""
 
-#: mappress_settings.php:106
+#: mappress_settings.php:107
 msgid "Default zoom"
 msgstr ""
 
-#: mappress_settings.php:107
-#: mappress_settings.php:249
+#: mappress_settings.php:108
+#: mappress_settings.php:242
 msgid "Open first POI"
 msgstr ""
 
-#: mappress_settings.php:110
+#: mappress_settings.php:111
 msgid "Mashups"
 msgstr ""
 
-#: mappress_settings.php:111
+#: mappress_settings.php:112
 msgid "Icons"
 msgstr ""
 
-#: mappress_settings.php:112
+#: mappress_settings.php:113
 msgid "Styled Maps"
 msgstr ""
 
-#: mappress_settings.php:113
+#: mappress_settings.php:114
 msgid "Geocoding"
 msgstr ""
 
-#: mappress_settings.php:114
+#: mappress_settings.php:115
 msgid "Templates"
 msgstr ""
 
-#: mappress_settings.php:117
+#: mappress_settings.php:118
 msgid "Localization"
 msgstr ""
 
-#: mappress_settings.php:118
+#: mappress_settings.php:119
 msgid "Language"
 msgstr ""
 
-#: mappress_settings.php:119
+#: mappress_settings.php:120
 msgid "Country"
 msgstr ""
 
-#: mappress_settings.php:120
+#: mappress_settings.php:121
 msgid "Directions server"
 msgstr ""
 
-#: mappress_settings.php:122
+#: mappress_settings.php:123
 msgid "Miscellaneous"
 msgstr ""
 
-#: mappress_settings.php:124
+#: mappress_settings.php:125
 msgid "Compatiblity"
 msgstr ""
 
-#: mappress_settings.php:125
+#: mappress_settings.php:126
 msgid "Scripts"
 msgstr ""
 
-#: mappress_settings.php:126
+#: mappress_settings.php:127
 msgid "Map sizes"
 msgstr ""
 
-#: mappress_settings.php:185
+#: mappress_settings.php:178
 msgid "Center"
 msgstr ""
 
-#: mappress_settings.php:186
+#: mappress_settings.php:179
 msgid "Left"
 msgstr ""
 
-#: mappress_settings.php:187
+#: mappress_settings.php:180
 msgid "Right"
 msgstr ""
 
-#: mappress_settings.php:201
+#: mappress_settings.php:194
 msgid "Top of post"
 msgstr ""
 
-#: mappress_settings.php:202
+#: mappress_settings.php:195
 msgid "Bottom of post"
 msgstr ""
 
-#: mappress_settings.php:203
+#: mappress_settings.php:196
 msgid "None"
 msgstr ""
 
-#: mappress_settings.php:210
-#: mappress_settings.php:254
+#: mappress_settings.php:203
+#: mappress_settings.php:247
 msgid "(list)"
 msgstr ""
 
-#: mappress_settings.php:215
+#: mappress_settings.php:208
 msgid "Country code for searches"
 msgstr ""
 
-#: mappress_settings.php:219
+#: mappress_settings.php:212
 msgid "Prevent other plugins/themes from loading the Google Maps API"
 msgstr ""
 
-#: mappress_settings.php:223
-#: mappress_settings.php:232
+#: mappress_settings.php:216
+#: mappress_settings.php:225
 msgid "Google"
 msgstr ""
 
-#: mappress_settings.php:223
+#: mappress_settings.php:216
 msgid "Inline"
 msgstr ""
 
-#: mappress_settings.php:232
+#: mappress_settings.php:225
 msgid "Leaflet"
 msgstr ""
 
-#: mappress_settings.php:234
+#: mappress_settings.php:227
 msgid "Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits."
 msgstr ""
 
-#: mappress_settings.php:240
-#: mappress_settings.php:243
+#: mappress_settings.php:233
+#: mappress_settings.php:236
 msgid "Output scripts in footer"
 msgstr ""
 
-#: mappress_settings.php:241
+#: mappress_settings.php:234
 msgid "Disabled because Jetpack Infinite Scroll is active"
 msgstr ""
 
-#: mappress_settings.php:244
+#: mappress_settings.php:237
 msgid "disable if maps are output using AJAX"
 msgstr ""
 
-#: mappress_settings.php:257
+#: mappress_settings.php:250
 msgid "Language for map controls"
 msgstr ""
 
-#: mappress_settings.php:261
+#: mappress_settings.php:254
 msgid "Enter token to use Mapbox map tiles"
 msgstr ""
 
-#: mappress_settings.php:268
+#: mappress_settings.php:261
+#: mappress_settings.php:266
+msgid "Map type control"
+msgstr ""
+
+#: mappress_settings.php:262
+msgid "Street view control"
+msgstr ""
+
+#: mappress_settings.php:263
+#: mappress_settings.php:267
+msgid "Zoom control"
+msgstr ""
+
+#: mappress_settings.php:282
 msgid "Default zoom when displaying a single POI"
 msgstr ""
 
-#: mappress_settings.php:281
+#: mappress_settings.php:295
 msgid "Easy Google Maps"
 msgstr ""
 
-#: mappress_settings.php:289
+#: mappress_settings.php:303
 msgid "Width (px or %)"
 msgstr ""
 
-#: mappress_settings.php:289
+#: mappress_settings.php:303
 msgid "Height (px)"
 msgstr ""
 
-#: mappress_settings.php:289
+#: mappress_settings.php:303
 msgid "Default size"
 msgstr ""
 
-#: mappress_settings.php:311
-#: mappress_settings.php:319
+#: mappress_settings.php:325
+#: mappress_settings.php:333
 msgid "Save Changes"
 msgstr ""
 
-#: mappress_settings.php:312
-#: mappress_settings.php:320
+#: mappress_settings.php:326
+#: mappress_settings.php:334
 msgid "Reset Defaults"
 msgstr ""
 
-#: mappress_template.php:25
+#: mappress_template.php:33
 msgid "address"
 msgstr ""
 
-#: mappress_template.php:26
+#: mappress_template.php:34
 msgid "body"
 msgstr ""
 
-#: mappress_template.php:27
+#: mappress_template.php:35
 msgid "icon"
 msgstr ""
 
-#: mappress_template.php:28
+#: mappress_template.php:36
 msgid "thumbnail"
 msgstr ""
 
-#: mappress_template.php:29
+#: mappress_template.php:37
 msgid "title"
 msgstr ""
 
-#: mappress_template.php:30
+#: mappress_template.php:38
 msgid "url"
 msgstr ""
 
-#: mappress_template.php:31
+#: mappress_template.php:39
 msgid "custom field"
 msgstr ""
 
@@ -727,7 +740,7 @@ msgid "Format"
 msgstr ""
 
 #: pro/mappress_pro_settings.php:212
-msgid "Permanently resize existing maps"
+msgid "Permanently resize existing maps (classic editor only)"
 msgstr ""
 
 #: pro/mappress_pro_settings.php:214
@@ -891,35 +904,19 @@ msgstr ""
 msgid "WordPress 4.9 or higher is needed to use the template editor."
 msgstr ""
 
-#: pro/mappress_pro_settings.php:405
-msgid "Map popup"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:406
-msgid "Map list item"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:407
-msgid "Mashup popup"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:408
-msgid "Mashup list item"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:422
+#: pro/mappress_pro_settings.php:413
 msgid "or "
 msgstr ""
 
-#: pro/mappress_pro_settings.php:430
+#: pro/mappress_pro_settings.php:421
 msgid "Show featured image thumbnails in mashup POIs"
 msgstr ""
 
-#: pro/mappress_updater.php:117
+#: pro/mappress_updater.php:116
 msgid "Communication error"
 msgstr ""
 
-#: pro/mappress_updater.php:123
+#: pro/mappress_updater.php:122
 msgid "JSON error"
 msgstr ""
 
@@ -963,23 +960,23 @@ msgstr ""
 msgid "Example: initialopeninfo=\"true\""
 msgstr ""
 
-#: templates/map-controls.php:1
+#: templates/map-controls.php:2
 msgid "Menu"
 msgstr ""
 
-#: templates/map-controls.php:3
+#: templates/map-controls.php:4
 msgid "Center map"
 msgstr ""
 
-#: templates/map-controls.php:6
+#: templates/map-controls.php:7
 msgid "Traffic"
 msgstr ""
 
-#: templates/map-controls.php:7
+#: templates/map-controls.php:8
 msgid "Bicycling"
 msgstr ""
 
-#: templates/map-controls.php:8
+#: templates/map-controls.php:9
 msgid "Transit"
 msgstr ""
 
@@ -987,7 +984,7 @@ msgstr ""
 msgid "My location"
 msgstr ""
 
-#: templates/map-directions.php:16
+#: templates/map-directions.php:13
 msgid "Get Directions"
 msgstr ""
 

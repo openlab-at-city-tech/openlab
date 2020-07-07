@@ -10,6 +10,7 @@ class Mappress_Template extends Mappress_Obj {
 		;
 
 	static $tokens;
+	static $queue = array();
 
 	function __construct($atts = null) {
 		parent::__construct($atts);
@@ -20,6 +21,13 @@ class Mappress_Template extends Mappress_Obj {
 		add_action('wp_ajax_mapp_tpl_save', array(__CLASS__, 'ajax_save'));
 		add_action('wp_ajax_mapp_tpl_delete', array(__CLASS__, 'ajax_delete'));
 		add_filter('mappress_poi_props', array(__CLASS__, 'filter_poi_props'), 0, 3);
+
+
+		// Print queued templates
+		add_action('wp_print_scripts', array(__CLASS__, 'print_templates'), -1);
+		add_action('admin_print_scripts', array(__CLASS__, 'print_templates'), -1);
+		add_action('wp_print_footer_scripts', array(__CLASS__, 'print_footer_templates'), -10);
+		add_action('admin_print_footer_scripts', array(__CLASS__, 'print_footer_templates'), -10);
 
 		self::$tokens = array(
 			'address' => __('address', 'mappress-google-maps-for-wordpress'),
@@ -33,6 +41,11 @@ class Mappress_Template extends Mappress_Obj {
 	}
 
 	static function ajax_delete() {
+        check_ajax_referer('mappress', 'nonce');
+
+        if (!current_user_can('manage_options'))
+            Mappress::ajax_response('Not authorized');
+
 		$name = (isset($_POST['name'])) ? $_POST['name'] : null;
 		$filepath = get_stylesheet_directory() . '/' . $name . '.php';
 
@@ -44,13 +57,22 @@ class Mappress_Template extends Mappress_Obj {
 	}
 
 	static function ajax_get() {
+        check_ajax_referer('mappress', 'nonce');
+
+        if (!current_user_can('manage_options'))
+            Mappress::ajax_response('Not authorized');
+
 		$name = (isset($_GET['name'])) ? $_GET['name'] : null;
-
-		$filename = $name . '.php';
+		$filename = basename($name) . '.php';
 		$filepath = get_stylesheet_directory() . '/' . $filename;
-
 		$html = @file_get_contents($filepath);
-		$standard = @file_get_contents(Mappress::$basedir . "/templates/$filename");
+
+        // Verify legitimate path
+        $standard_path = realpath(Mappress::$basedir . "/templates/$filename");
+        if (strpos($standard_path, realpath(Mappress::$basedir)) !== 0)
+            Mappress::ajax_response('Invalid template path');
+
+		$standard = @file_get_contents($standard_path);
 
 		if (!$standard)
 			Mappress::ajax_response('Invalid template');
@@ -68,6 +90,11 @@ class Mappress_Template extends Mappress_Obj {
 
 
 	static function ajax_save() {
+        check_ajax_referer('mappress', 'nonce');
+
+        if (!current_user_can('manage_options'))
+            Mappress::ajax_response('Not authorized');
+
 		$name = (isset($_POST['name'])) ? $_POST['name'] : null;
 		$content = (isset($_POST['content'])) ? stripslashes($_POST['content']) : null;
 		$filepath = get_stylesheet_directory() . '/' . $name . '.php';
@@ -78,27 +105,6 @@ class Mappress_Template extends Mappress_Obj {
 
 		// Return filepath after save
 		Mappress::ajax_response('OK', $filepath);
-	}
-
-	static function load($footer) {
-		if ($footer) {
-			add_action('wp_footer', array(__CLASS__, 'print_templates'), -10);
-			add_action('admin_footer', array(__CLASS__, 'print_templates'), -10);
-		} else {
-			self::print_templates();
-		}
-	}
-
-	static function print_templates() {
-		// Parse tokens and print
-		$names = array('map-controls', 'map-popup', 'map-loop', 'map-item');
-		if (Mappress::$pro)
-			$names = array_merge($names, array('mashup-popup', 'mashup-loop', 'mashup-item'));
-
-		foreach($names as $name) {
-			$template = self::get_template($name);
-			printf("<script type='text/html' id='mapp-tmpl-$name'>%s</script>", $template);
-		}
 	}
 
 	static function locate_template($template_name) {
@@ -156,6 +162,32 @@ class Mappress_Template extends Mappress_Obj {
 		// Remove standard tokens, make a unique list
 		$tokens = array_unique(array_diff($tokens, self::$tokens));
 		return $tokens;
+	}
+
+	static function enqueue_template($template_name, $footer) {
+		if (!array_key_exists($template_name, self::$queue))
+			self::$queue[$template_name] = $footer;
+	}
+
+	static function print_footer_templates() {
+		foreach(self::$queue as $template_name => $footer) {
+			if ($footer)
+				self::print_template($template_name);
+		}
+	}
+
+	static function print_templates() {
+		foreach(self::$queue as $template_name => $footer) {
+			if (!$footer)
+				self::print_template($template_name);
+		}
+	}
+
+	static function print_template($template_name) {
+		if (in_array($template_name, array('editor', 'media', 'settings')))
+			require(self::locate_template($template_name));
+		else
+			printf("<script type='text/html' id='mapp-tmpl-$template_name'>%s</script>", self::get_template($template_name));
 	}
 }
 ?>

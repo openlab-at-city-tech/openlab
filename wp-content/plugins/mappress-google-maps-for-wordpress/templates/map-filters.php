@@ -1,6 +1,6 @@
 <div class='mapp-filters'>
 	<div class='mapp-filters-list'>
-		<?php $filter = new Mappress_Filter(array('key' => $map->filter, 'format' => null)); ?>
+		<?php $filter = new Mappress_Filter(array('key' => Mappress::$options->filter, 'format' => null)); ?>
 		<div class='mapp-filter mapp-<?php echo $filter->key; ?>'>
 			<div class='mapp-filter-label'><?php echo $filter->get_label(); ?></div>
 			<div class='mapp-filter-values'><?php echo $filter->get_html(); ?></div>

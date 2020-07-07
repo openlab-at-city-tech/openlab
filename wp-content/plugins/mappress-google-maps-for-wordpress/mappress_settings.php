@@ -26,6 +26,7 @@ class Mappress_Options extends Mappress_Obj {
 		$language,
 		$layout = 'left',
 		$license,
+        // TBD $mapOptions = array('mapTypeControl' => true, 'streetViewControl' => true, 'zoomControl' => true),
 		$mapbox,
 		$mapboxStyles = array(),
 		$mashupBody = 'poi',
@@ -46,8 +47,7 @@ class Mappress_Options extends Mappress_Obj {
 		$thumbs = true,
 		$thumbSize,
 		$thumbWidth = 64,
-		$thumbHeight = 64,
-		$tiles = 'google'
+		$thumbHeight = 64
 		;
 
 	function __construct($options = '') {
@@ -101,6 +101,7 @@ class Mappress_Settings {
 		$this->add_field('autodisplay', __('Automatic display', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('alignment', __('Map alignment', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('directions', __('Directions', 'mappress-google-maps-for-wordpress'), 'maps');
+        // TBD $this->add_field('mapOptions', __('Map options'), 'maps');
 
 		$this->add_section('pois', __('POI Settings', 'mappress-google-maps-for-wordpress'));
 		$this->add_field('poiZoom', __('Default zoom', 'mappress-google-maps-for-wordpress'), 'pois');
@@ -149,18 +150,10 @@ class Mappress_Settings {
 				$input[$key] = trim($input[$key]);
 		}
 
-		// Sizes
+		// Sizes - strip 'px' from value if user entered it
 		foreach( $input['sizes'] as &$size ) {
-			// Strip 'px' from value but allow '%'.  also, % min/max = 5%/100%, px min/max = 200/2048
-			if (strpos($size['width'], '%'))
-				$size['width'] = max(5, min(100, (int) $size['width'])) . '%';
-			else
-				$size['width'] = max(200, min(2048, (int) $size['width']));
-
-			if (strpos($size['height'], '%'))
-				$size['height'] = max(5, min(100, (int) $size['height'])) . '%';
-			else
-				$size['height'] = max(200, min(2048, (int) $size['height']));
+            $size['width'] = str_ireplace('px', '', $size['width']);
+            $size['height'] = str_ireplace('px', '', $size['height']);
 		}
 
 		// If NO post types selected, set value to empty array
@@ -261,6 +254,27 @@ class Mappress_Settings {
 		echo Mappress_Controls::input($name, $this->options->mapbox, array('size' => '50', 'placeholder' => __('Enter token to use Mapbox map tiles', 'mappress-google-maps-for-wordpress')));
 		echo Mappress_Controls::help('', 'https://www.mapbox.com/help/define-access-token/');
 	}
+
+    function set_map_options($name) {
+        $labels = array(
+            'google' => array(
+                'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
+                'streetViewControl' => __("Street view control", 'mappress-google-maps-for-wordpress'),
+                'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
+            ),
+            'leaflet' => array(
+                'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
+                'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
+            )
+        );
+
+        $mapOptions = $this->options->mapOptions;
+
+        foreach($labels[$this->options->engine] as $option => $label) {
+            $value = (isset($mapOptions->$option)) ? $mapOptions->$option : false;
+            echo Mappress_Controls::checkmark($name . "[$option]", $value, $label);
+        }
+    }
 
 	function set_poi_zoom($name) {
 		$zooms = array_combine(range(1, 17), range(1,17));
