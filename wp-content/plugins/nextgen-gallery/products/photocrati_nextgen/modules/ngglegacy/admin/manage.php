@@ -865,11 +865,17 @@ class nggManageGallery {
 					$this->gallery = $mapper->find($this->gid, TRUE);
 				}
 
-				if ($this->gallery)
-				{
-					foreach ($_POST as $key => $value) {
-						$this->gallery->$key = $value;
-					}
+                if ($this->gallery)
+                {
+                    foreach ($_POST as $key => $value) {
+                        // Yet another IIS hack: gallery paths can be mangled into \\wp-content\\blah\\ which causes
+                        // later errors when validating the gallery path: just automatically replace \\ with / here.
+                        if ($key === 'path')
+                            $value = str_replace('\\\\', '/', $value);
+
+                        $this->gallery->$key = $value;
+                    }
+
 					$mapper->save($this->gallery);
 
 					if ($this->gallery->is_invalid())

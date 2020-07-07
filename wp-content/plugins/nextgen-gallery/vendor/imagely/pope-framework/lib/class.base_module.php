@@ -63,14 +63,18 @@ abstract class C_Base_Module
 
 	function load()
 	{
-	    // Package files may not exist until releases are built
-	    $path = $this->get_package_abspath();
-		if (@file_exists($path))
-		    @include_once($path);
+	    // Package files may not exist until releases are built; do not use require_once() here
+        $path = $this->get_package_abspath();
+        ini_set('track_errors', true);
+        if (@file_exists($path))
+            include_once($path);
 
-		$this->_register_utilities();
-		$this->_register_adapters();
-		$this->_register_hooks();
+        if (isset($php_errormsg) && defined('NGG_DEBUG') && constant('NGG_DEBUG'))
+            error_log($php_errormsg);
+
+        $this->_register_utilities();
+        $this->_register_adapters();
+        $this->_register_hooks();
 	}
 
 	function get_package_abspath()

@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'c4ed057a6919e316c176e816418cc6a3' => $vendorDir . '/reactr-io/pope-framework/lib/autoload.php',
+    'a5dbe7df96665c0b6c16ae8d91231502' => $vendorDir . '/imagely/pope-framework/lib/autoload.php',
 );

@@ -213,6 +213,14 @@ class Mixin_Album_Mapper extends Mixin
         return $retval;
     }
     /**
+     * @param string $slug
+     * @return null|stdClass|C_Album
+     */
+    public function get_by_slug($slug)
+    {
+        return array_pop($this->object->select()->where(['slug = %s', sanitize_title($slug)])->limit(1)->run_query());
+    }
+    /**
      * Sets the defaults for an album
      * @param C_DataMapper_Model|C_Album|stdClass $entity
      */
@@ -839,6 +847,21 @@ class Mixin_Gallery_Mapper extends Mixin
     function get_post_title($entity)
     {
         return $entity->title;
+    }
+    /**
+     * @param string $slug
+     * @return C_Gallery|stdClass|null
+     */
+    public function get_by_slug($slug)
+    {
+        $sanitized_slug = sanitize_title($slug);
+        // Try finding the gallery by slug first; if nothing is found assume that the user passed a gallery id
+        $retval = $this->object->select()->where(array('slug = %s', $sanitized_slug))->limit(1)->run_query();
+        // NextGen used to turn "This & That" into "this-&amp;-that" when assigning gallery slugs
+        if (empty($retval) && strpos($slug, '&') !== FALSE) {
+            return $this->get_by_slug(str_replace('&', '&amp;', $slug));
+        }
+        return reset($retval);
     }
     function _save_entity($entity)
     {
@@ -3446,11 +3469,15 @@ class Mixin_GalleryStorage_Base extends Mixin
     }
     /**
      * Sets a NGG image as a post thumbnail for the given post
+     *
+     * @param int $postId
+     * @param int|C_Image|stdClass $image
+     * @param bool $only_create_attachment
+     * @return int
      */
     function set_post_thumbnail($postId, $image, $only_create_attachment = FALSE)
     {
         $retval = FALSE;
-        // attachment_id or FALSE
         // Get the post ID
         if (is_object($postId)) {
             $post = $postId;
@@ -4009,7 +4036,7 @@ class Mixin_GalleryStorage_Base_Dynamic extends Mixin
             $params = $this->object->get_image_size_params($image, $size, $params, $skip_defaults);
             $settings = C_NextGen_Settings::get_instance();
             // Get the image filename
-            $filename = $this->object->get_original_abspath($image, 'original');
+            $filename = $this->object->get_image_abspath($image, 'original');
             $thumbnail = null;
             if ($size == 'full' && $settings->imgBackup == 1) {
                 // XXX change this? 'full' should be the resized path and 'original' the _backup path
@@ -4313,6 +4340,11 @@ class Mixin_GalleryStorage_Base_Getters extends Mixin
     }
     function get_gallery_relpath($gallery)
     {
+        // Special hack for home.pl: their document root is just '/'
+        $root = $this->object->get_gallery_root();
+        if ($root === '/') {
+            return $this->get_gallery_abspath($gallery);
+        }
         return str_replace($this->object->get_gallery_root(), '', $this->get_gallery_abspath($gallery));
     }
     /**
@@ -5049,14 +5081,16 @@ class Mixin_GalleryStorage_Base_Management extends Mixin
 }
 /**
  * This class contains methods C_Gallery_Storage needs to interact with (like say, importing from) the WP Media Library
+ *
  * * @property C_Gallery_Storage $object
  */
 class Mixin_GalleryStorage_Base_MediaLibrary extends Mixin
 {
     /**
      * Copies a NGG image to the media library and returns the attachment_id
-     * @param C_Image $image
-     * @retval FALSE|int attachment_id
+     *
+     * @param C_Image|int|stdClass $image
+     * @return FALSE|int attachment_id
      */
     function copy_to_media_library($image)
     {
@@ -5068,23 +5102,25 @@ class Mixin_GalleryStorage_Base_MediaLibrary extends Mixin
             $image = $mapper->find($imageId);
         }
         if ($image) {
+            $subdir = apply_filters('ngg_import_to_media_library_subdir', 'nggallery_import');
             $wordpress_upload_dir = wp_upload_dir();
-            // $wordpress_upload_dir['path'] is the full server path to wp-content/uploads/2017/05, for multisite works good as well
-            // $wordpress_upload_dir['url'] the absolute URL to the same folder, actually we do not need it, just to show the link to file
-            $i = 1;
-            // number of tries when the file with the same name is already exists
+            $path = $wordpress_upload_dir['path'] . DIRECTORY_SEPARATOR . $subdir;
+            if (!file_exists($path)) {
+                wp_mkdir_p($path);
+            }
             $image_abspath = C_Gallery_Storage::get_instance()->get_image_abspath($image, "full");
-            $new_file_path = $wordpress_upload_dir['path'] . '/' . $image->filename;
+            $new_file_path = $path . DIRECTORY_SEPARATOR . $image->filename;
             $image_data = getimagesize($image_abspath);
             $new_file_mime = $image_data['mime'];
+            $i = 1;
             while (file_exists($new_file_path)) {
                 $i++;
-                $new_file_path = $wordpress_upload_dir['path'] . '/' . $i . '_' . $image->filename;
+                $new_file_path = $path . DIRECTORY_SEPARATOR . $i . '_' . $image->filename;
             }
             if (@copy($image_abspath, $new_file_path)) {
-                $upload_id = wp_insert_attachment(array('guid' => $new_file_path, 'post_mime_type' => $new_file_mime, 'post_title' => preg_replace('/\\.[^.]+$/', '', $image->alttext), 'post_content' => '', 'post_status' => 'inherit'), $new_file_path);
+                $upload_id = wp_insert_attachment(['guid' => $new_file_path, 'post_mime_type' => $new_file_mime, 'post_title' => preg_replace('/\\.[^.]+$/', '', $image->alttext), 'post_content' => '', 'post_status' => 'inherit'], $new_file_path);
                 update_post_meta($upload_id, '_ngg_image_id', intval($image->pid));
-                // wp_generate_attachment_metadata() won't work if you do not include this file
+                // wp_generate_attachment_metadata() comes from this file
                 require_once ABSPATH . 'wp-admin/includes/image.php';
                 $image_meta = wp_generate_attachment_metadata($upload_id, $new_file_path);
                 // Generate and save the attachment metas into the database
@@ -5096,6 +5132,7 @@ class Mixin_GalleryStorage_Base_MediaLibrary extends Mixin
     }
     /**
      * Delete the given NGG image from the media library
+     *
      * @var int|stdClass $imageId
      */
     function delete_from_media_library($imageId)
@@ -5113,7 +5150,7 @@ class Mixin_GalleryStorage_Base_MediaLibrary extends Mixin
      * Determines if the given NGG image id has been uploaded to the media library
      *
      * @param integer $imageId
-     * @retval FALSE|int attachment_id
+     * @return FALSE|int attachment_id
      */
     function is_in_media_library($imageId)
     {
