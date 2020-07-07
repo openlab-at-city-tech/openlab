@@ -4,7 +4,7 @@
  * Plugin Name: PDF Embedder
  * Plugin URI: http://wp-pdf.com/
  * Description: Embed PDFs straight into your posts and pages, with flexible width and height. No third-party services required. Compatible with Gutenberg Editor WordPress
- * Version: 4.5
+ * Version: 4.6
  * Author: Lever Technology LLC
  * Author URI: http://wp-pdf.com/
  * License: GPL3
@@ -15,7 +15,7 @@ require_once( plugin_dir_path(__FILE__).'/core/core_pdf_embedder.php' );
 
 class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
 
-	protected $PLUGIN_VERSION = '4.5';
+	protected $PLUGIN_VERSION = '4.6';
 	
 	// Singleton
 	private static $instance = null;
@@ -43,23 +43,23 @@ class pdfemb_basic_pdf_embedder extends core_pdf_embedder {
     }
 
     public function pdfemb_wp_enqueue_scripts() {
-    	
+
     			if (!$this->useminified()) {
-    				wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'js/grabtopan-basic.js', array('jquery'), $this->PLUGIN_VERSION);
-    				wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'js/pdfemb-pv-core.js',
+    				wp_register_script( 'pdfemb_grabtopan_js', $this->my_plugin_url().'js/grabtopan-basic-'.$this->PLUGIN_VERSION.'.js', array('jquery'), $this->PLUGIN_VERSION);
+    				wp_register_script( 'pdfemb_pv_core_js', $this->my_plugin_url().'js/pdfemb-pv-core-'.$this->PLUGIN_VERSION.'.js',
     	                array('pdfemb_grabtopan_js', 'jquery'), $this->PLUGIN_VERSION );
-    				wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'js/pdfemb-basic.js',
+    				wp_register_script( 'pdfemb_versionspecific_pdf_js', $this->my_plugin_url().'js/pdfemb-basic-'.$this->PLUGIN_VERSION.'.js',
     	                array('jquery', 'pdfemb_pv_core_js'), $this->PLUGIN_VERSION);
-    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/pdfemb-embed-pdf.js',
+    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/pdfemb-embed-pdf-'.$this->PLUGIN_VERSION.'.js',
     					array('pdfemb_pv_core_js', 'pdfemb_versionspecific_pdf_js'), $this->PLUGIN_VERSION );
     			}
     			else {
-    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/all-pdfemb-basic.min.js', array('jquery'), $this->PLUGIN_VERSION );
+    				wp_register_script( 'pdfemb_embed_pdf_js', $this->my_plugin_url().'js/all-pdfemb-basic-'.$this->PLUGIN_VERSION.'.min.js', array('jquery'), false);
     			}
     			
     			wp_localize_script( 'pdfemb_embed_pdf_js', 'pdfemb_trans', $this->get_translation_array() );
     		
-    			wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'js/pdfjs/pdf'.($this->useminified() ? '.min' : '').'.js', array(), $this->PLUGIN_VERSION);
+    			wp_register_script( 'pdfemb_pdf_js', $this->my_plugin_url().'js/pdfjs/pdf-'.$this->PLUGIN_VERSION.''.($this->useminified() ? '.min' : '').'.js', array('jquery'), $this->PLUGIN_VERSION);
     		
     }
 	

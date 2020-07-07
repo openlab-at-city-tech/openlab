@@ -26,13 +26,13 @@ class core_pdf_embedder {
 			
 			wp_enqueue_script( 'pdfemb_pdf_js' );
 			
-			wp_enqueue_style( 'pdfemb_embed_pdf_css', $this->my_plugin_url().'css/pdfemb-embed-pdf.css', array(), $this->PLUGIN_VERSION );
+			wp_enqueue_style( 'pdfemb_embed_pdf_css', $this->my_plugin_url().'css/pdfemb-embed-pdf-'.$this->PLUGIN_VERSION.'.css', array(), $this->PLUGIN_VERSION );
 		}
 	}
 	
 	protected function get_translation_array() {
 		$options = $this->get_option_pdfemb();
-		return Array('worker_src' => $this->my_plugin_url().'js/pdfjs/pdf.worker'.($this->useminified() ? '.min' : '').'.js',
+		return Array('worker_src' => $this->my_plugin_url().'js/pdfjs/pdf-'.$this->PLUGIN_VERSION.'.worker'.($this->useminified() ? '.min' : '').'.js',
 		        'cmap_url' => $this->my_plugin_url().'js/pdfjs/cmaps/',
 		        'poweredby'=>$options['poweredby'],
             'objectL10n' => array(
@@ -224,8 +224,8 @@ class core_pdf_embedder {
 	
 	public function pdfemb_options_do_page() {
 
-        wp_enqueue_script( 'pdfemb_admin_js', $this->my_plugin_url().'js/admin/pdfemb-admin.js', array('jquery') );
-        wp_enqueue_style( 'pdfemb_admin_css', $this->my_plugin_url().'css/pdfemb-admin.css', array(), $this->PLUGIN_VERSION  );
+        wp_enqueue_script( 'pdfemb_admin_js', $this->my_plugin_url().'js/admin/pdfemb-admin-'.$this->PLUGIN_VERSION.'.js', array('jquery'), $this->PLUGIN_VERSION );
+        wp_enqueue_style( 'pdfemb_admin_css', $this->my_plugin_url().'css/pdfemb-admin-'.$this->PLUGIN_VERSION.'.css', array(), $this->PLUGIN_VERSION  );
 
         $submit_page = $this->is_multisite_and_network_activated() ? 'edit.php?action='.$this->get_options_menuname() : 'options.php';
 	
@@ -584,7 +584,7 @@ class core_pdf_embedder {
 
 		add_filter( 'attachment_fields_to_edit', array($this, 'pdfemb_attachment_fields_to_edit'), 10, 2 );
 
-		wp_enqueue_style( 'pdfemb_admin_other_css', $this->my_plugin_url().'css/pdfemb-admin-other.css', array(), $this->PLUGIN_VERSION  );
+		wp_enqueue_style( 'pdfemb_admin_other_css', $this->my_plugin_url().'css/pdfemb-admin-other-'.$this->PLUGIN_VERSION.'.css', array(), $this->PLUGIN_VERSION  );
 		if (is_admin()) {
 			add_action( 'enqueue_block_editor_assets', array($this, 'gutenberg_enqueue_block_editor_assets') );
 		}
@@ -657,14 +657,14 @@ class core_pdf_embedder {
 	function gutenberg_enqueue_block_editor_assets() {
 		wp_enqueue_script(
 			'pdfemb-gutenberg-block-js', // Unique handle.
-			$this->my_plugin_url(). 'js/pdfemb-blocks.js',
+			$this->my_plugin_url(). 'js/pdfemb-blocks-'.$this->PLUGIN_VERSION.'.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element' ), // Dependencies, defined above.
 			$this->PLUGIN_VERSION
 		);
 
 		wp_enqueue_style(
 			'pdfemb-gutenberg-block-css', // Handle.
-			$this->my_plugin_url(). 'css/pdfemb-blocks.css', // editor.css: This file styles the block within the Gutenberg editor.
+			$this->my_plugin_url(). 'css/pdfemb-blocks-'.$this->PLUGIN_VERSION.'.css', // editor.css: This file styles the block within the Gutenberg editor.
 			//array( 'wp-edit-blocks' ), // Dependencies, defined above.
 			$this->PLUGIN_VERSION
 		);
@@ -673,7 +673,7 @@ class core_pdf_embedder {
 	function gutenberg_enqueue_block_assets() {
 		wp_enqueue_style(
 			'pdfemb-gutenberg-block-backend-js', // Handle.
-			$this->my_plugin_url(). 'css/pdfemb-blocks.css', // style.css: This file styles the block on the frontend.
+			$this->my_plugin_url(). 'css/pdfemb-blocks-'.$this->PLUGIN_VERSION.'.css', // style.css: This file styles the block on the frontend.
 			//array( 'wp-blocks' ), // Dependencies, defined above.
 			$this->PLUGIN_VERSION
 		);
