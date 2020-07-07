@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Text Replace
- * Version:     3.8
+ * Version:     3.9
  * Plugin URI:  http://coffee2code.com/wp-plugins/text-replace/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
  * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: text-replace
  * Description: Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
  *
- * Compatible with WordPress 4.7+ through 4.9+.
+ * Compatible with WordPress 4.9+ through 5.3+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,21 +18,11 @@
  *
  * @package Text_Replace
  * @author  Scott Reilly
- * @version 3.8
+ * @version 3.9
  */
 
 /*
- * TODO:
- * = Facilitate multi-line replacement strings
- * - Shortcode and template tag (and widget?) to display listing of all
- *   supported text replacements (filterable)
- * - Prevent replacement text from getting replacements. "e.g. given
- *   ['test this' => 'good test', 'test' => 'cat'], the text 'test this' should
- *   become 'good test' and not 'good cat'
-*/
-
-/*
-	Copyright (c) 2004-2018 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2004-2020 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -55,7 +45,7 @@ if ( ! class_exists( 'c2c_TextReplace' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
+final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 
 	/**
 	 * Name of plugin's setting.
@@ -89,7 +79,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.8', 'text-replace', 'c2c', __FILE__, array() );
+		parent::__construct( '3.9', 'text-replace', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -170,6 +160,13 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 				'label'            => __( 'Case sensitive text replacement?', 'text-replace' ),
 				'help'             => __( 'If unchecked, then a replacement for :wp: would also replace :WP:.', 'text-replace' ),
 			),
+			'when' => array(
+				'input'            => 'select',
+				'default'          => 'early',
+				'options'          => array( 'early', 'late' ),
+				'label'            => __( 'When to process text?', 'text-replace' ),
+				'help'             => sprintf( __( "Text replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the <code>%s</code> filter.", 'text-replace' ), 'c2c_text_replace_filter_priority' ),
+			),
 		);
 	}
 
@@ -177,9 +174,73 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 	 * Override the plugin framework's register_filters() to actually register actions against filters.
 	 */
 	public function register_filters() {
-		$filters = (array) apply_filters( 'c2c_text_replace_filters', array( 'the_content', 'the_excerpt', 'widget_text' ) );
+		$options = $this->get_options();
+
+		/**
+		 * Filters third party plugin/theme hooks that get processed for hover text.
+		 *
+		 * Use this to amend or remove support for hooks present in third party
+		 * plugins and themes.
+		 *
+		 * Currently supported plugins:
+		 * - Advanced Custom Fields
+		 *    'acf/format_value/type=text',
+		 *    'acf/format_value/type=textarea',
+		 *    'acf/format_value/type=url',
+		 *    'acf_the_content',
+		 * - Elementor
+		 *    'elementor/frontend/the_content',
+		 *    'elementor/widget/render_content',
+		 *
+		 * @since 3.9
+		 *
+		 * @param array $filters The third party filters that get processed for
+		 *                       hover text. See filter inline docs for defaults.
+		 */
+		$filters = (array) apply_filters( 'c2c_text_replace_third_party_filters', array(
+			// Support for Advanced Custom Fields plugin.
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			// Support for Elementor plugin.
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		) );
+
+		// Add in relevant stock WP filters.
+		$filters = array_merge( $filters, array( 'the_content', 'the_excerpt', 'widget_text' ) );
+
+		/**
+		 * Filters the hooks that get processed for hover text.
+		 *
+		 * @since 3.0
+		 *
+		 * @param array $filters The filters that get processed for text.
+		 *                       replacement Default ['the_content',
+		 *                       'the_excerpt', 'widget_text'] plus third-party
+		 *                       filters defined via the
+		 *                       `c2c_text_replace_third_party_filters` filter.
+		 */
+		$filters = (array) apply_filters( 'c2c_text_replace_filters', $filters );
+
+		$default_priority = ( 'late' === $options[ 'when'] ) ? 1000 : 2;
+
 		foreach ( $filters as $filter ) {
-			add_filter( $filter, array( $this, 'text_replace' ), 2 );
+			/**
+			 * Filters the priority for attaching the text replacement handler to
+			 * a hook.
+			 *
+			 * @since 3.9
+			 *
+			 * @param int    $priority The priority for the 'c2c_text_replace'
+			 *                         filter. Default 2 if 'when' setting
+			 *                         value is 'early', else 1000.
+			 * @param string $filter   The filter name.
+			 */
+			$priority = (int) apply_filters( 'c2c_text_replace_filter_priority', $default_priority, $filter );
+
+			add_filter( $filter, array( $this, 'text_replace' ), $priority );
 		}
 
 		// Note that the priority must be set high enough to avoid <img> tags inserted by the text replace process from
@@ -204,8 +265,6 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 		echo '<p>' . __( 'Where <code>:wp:</code> is the shortcut you intend to use in your posts and the <code>&lt;a href=\'https://wordpress.org\'>WordPress&lt;/a></code> would be what you want the shortcut to be replaced with when the post is shown on your site.', 'text-replace' ) . '</p>';
 		echo '<p>' . __( 'Other considerations:', 'text-replace' ) . '</p>';
 		echo '<ul class="c2c-plugin-list"><li>';
-		echo __( 'List the more specific matches early, to avoid stomping on another of your shortcuts.  For example, if you have both <code>:p</code> and <code>:pout:</code> as shortcuts, put <code>:pout:</code> first; otherwise, the <code>:p</code> will match against all the <code>:pout:</code> in your text.', 'text-replace' );
-		echo '</li><li>';
 		echo __( 'Be careful not to define text that could match partially when you don\'t want it to:<br />i.e.  <code>Me => Scott</code> would also inadvertently change "Men" to be "Scottn"', 'text-replace' );
 		echo '</li><li>';
 		echo __( 'If you intend to use this plugin to handle smilies, you should probably disable WordPress\'s default smilie handler.', 'text-replace' );
@@ -233,6 +292,16 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 	public function text_replace_comment_text( $text ) {
 		$options = $this->get_options();
 
+		/**
+		 * Filters if comments should be processed for text replacement.
+		 *
+		 * @since 3.0
+		 *
+		 * @param bool $include_comments Should comments be processed for text
+		 *                               replacement? Default is value set in
+		 *                               plugin settings, which is initially
+		 *                               false.
+		 */
 		if ( (bool) apply_filters( 'c2c_text_replace_comments', $options['text_replace_comments'] ) ) {
 			$text = $this->text_replace( $text );
 		}
@@ -248,11 +317,49 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 	 */
 	public function text_replace( $text ) {
 		$options         = $this->get_options();
+
+		/**
+		 * Filters the list of text that will get replaced.
+		 *
+		 * @since 3.0
+		 *
+		 * @param array $text_to_replace Associative array of text to replace
+		 *                               and respective replacement text. Default
+		 *                               is value set in plugin settings.
+		 */
 		$text_to_replace = (array) apply_filters( 'c2c_text_replace',                $options['text_to_replace'] );
+
+		/**
+		 * Filters if text matching for text replacement should be case sensitive.
+		 *
+		 * @since 3.0
+		 *
+		 * @param bool $case_sensitive Should text matching for text replacement
+		 *                             be case sensitive? Default is value set in
+		 *                             plugin settings, which is initially true.
+		 */
 		$case_sensitive  = (bool)  apply_filters( 'c2c_text_replace_case_sensitive', $options['case_sensitive'] );
-		$limit           = (bool)  apply_filters( 'c2c_text_replace_once',           $options['replace_once'] ) ? 1 : -1;
+
+		/**
+		 * Filters if text replacement should be limited to once per phrase per
+		 * piece of text being processed regardless of how many times the phrase
+		 * appears.
+		 *
+		 * @since 3.5
+		 *
+		 * @param bool $replace_once Should text hovering be limited to once
+		 *                           per term per post? Default is value set in
+		 *                           plugin settings, which is initially false.
+		 */
+		$limit           = (bool)  apply_filters( 'c2c_text_replace_once',           $options['replace_once'] );
+
 		$preg_flags      = $case_sensitive ? 'ms' : 'msi';
 		$mb_regex_encoding = null;
+
+		// Bail early if there are no replacements defined.
+		if ( ! $text_to_replace || ( isset( $text_to_replace[0] ) && ! $text_to_replace[0] ) ) {
+			return $text;
+		}
 
 		$text = ' ' . $text . ' ';
 
@@ -281,7 +388,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 			if ( strpos( $old_text, '<' ) !== false || strpos( $old_text, '>' ) !== false ) {
 				// If only doing one replacement, need to handle specially since there is
 				// no built-in, non-preg_replace method to do a single replacement.
-				if ( 1 === $limit ) {
+				if ( $limit ) {
 					$pos = $case_sensitive ? strpos( $text, $old_text ) : stripos( $text, $old_text );
 					if ( $pos !== false ) {
 						$text = substr_replace( $text, $new_text, $pos, strlen( $old_text ) );
@@ -308,6 +415,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 				// Allow spaces in linkable text to represent any number of whitespace chars.
 				$old_text = preg_replace( '/\s+/', '\s+', $old_text );
 
+				// WILL match string within string, but WON'T match within tags.
 				$regex = "(?!<.*?){$old_text}(?![^<>]*?>)";
 
 				// If the text to be replaced has multibyte character(s), use
@@ -315,7 +423,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 				if ( $can_do_mb && ( strlen( $old_text ) != mb_strlen( $old_text ) ) ) {
 					// NOTE: mb_ereg_replace() does not support limiting the number of
 					// replacements, hence the different handling if replacing once.
-					if ( 1 === $limit ) {
+					if ( $limit ) {
 						// Find first occurrence of the search string.
 						mb_ereg_search_init( $text, $old_text, $preg_flags );
 						$pos = mb_ereg_search_pos();
@@ -331,7 +439,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 						$text = mb_ereg_replace( $regex, $new_text, $text, $preg_flags );
 					}
 				} else {
-					$text = preg_replace( "~{$regex}~{$preg_flags}", $new_text, $text, $limit );
+					$text = preg_replace( "~{$regex}~{$preg_flags}", $new_text, $text, ( $limit ? 1 : -1 ) );
 				}
 			}
 
@@ -347,6 +455,6 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_048 {
 
 } // end c2c_TextReplace
 
-c2c_TextReplace::get_instance();
+add_action( 'plugins_loaded', array( 'c2c_TextReplace', 'get_instance' ) );
 
 endif; // end if !class_exists()
