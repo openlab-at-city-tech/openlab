@@ -4,8 +4,8 @@ Donate link: https://tablepress.org/donate/
 Tags: table,spreadsheet,data,csv,excel,html,tables
 Requires at least: 5.3
 Requires PHP: 5.6.20
-Tested up to: 5.3
-Stable tag: 1.10
+Tested up to: 5.4
+Stable tag: 1.11
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,7 +62,7 @@ In short: WordPress 5.3 or higher, while the latest version of WordPress is alwa
 = Languages and Localization? =
 TablePress uses the ["Translate WordPress" platform](https://translate.wordpress.org/). Please see the sidebar on the TablePress page in the [WordPress Plugin Directory](https://wordpress.org/plugins/tablepress/) for available translations.
 
-To make TablePress available in your language, go to the [TablePress translations page](https://translate.wordpress.org/projects/wp-plugins/tablepress), log in with a free wordpress.org account and start translating.
+To make TablePress available in your language, go to the [TablePress translations page](https://translate.wordpress.org/projects/wp-plugins/tablepress/), log in with a free wordpress.org account and start translating.
 
 = Migration from WP-Table Reloaded =
 Several years ago, TablePress has superseded the now discontinued WP-Table Reloaded plugin. If you are still using that, please see the [migration guide](https://tablepress.org/migration-from-wp-table-reloaded/) and switch to TablePress.
@@ -97,8 +97,18 @@ You may use it free of charge for any purpose.
 
 Recent changes are shown below. For earlier changes, please see the [changelog history](https://tablepress.org/info/#changelog).
 
+= Version 1.11 =
+* Full compatibility with WordPress 5.4.
+* Enhancement: Update list of allowed CSS features in "Custom CSS".
+* Enhancement: Allow more complex "Extra CSS classes", to support more CSS frameworks.
+* Enhancement: Modernize the arrow icons web font loading for faster loading.
+* Enhancement: Support the table markup structure of HTML 5.1.
+* Bugfix: Prevent fatal error due to misspelled function name during Excel import.
+* Updated external libraries (SimpleXLSX, CSSTidy, Build tools).
+* Some internal changes for better stability, translations, and documentation.
+
 = Version 1.10 =
-* Full compatibility with WordPress 5.3
+* Full compatibility with WordPress 5.3.
 * Enhancement: Allow importing with replacing/appending existing tables with ZIP archives of JSON files.
 * Enhancement: Greatly enhance the code quality by removing old code and using modern features of PHP.
 * Enhancement: Flush the caches of more caching plugins when the "Custom CSS" was modified.
@@ -111,15 +121,10 @@ Recent changes are shown below. For earlier changes, please see the [changelog h
 * Removed the migration/import code for the discontinued WP-Table Reloaded plugin.
 * TablePress 1.10 requires WordPress 5.3!
 
-= Version 1.9.2 =
-* Compatibility with WordPress 5.1
-* Enhancement: Make the save process more robust against data corruption.
-* Minor internal changes on CSS and typos in the documentation.
-
 == Upgrade Notice ==
 
-= 1.10 =
+= 1.11 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.
 
-= 1.9.2 =
+= 1.10 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.
