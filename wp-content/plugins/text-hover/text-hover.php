@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Text Hover
- * Version:     3.8
+ * Version:     3.9.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/text-hover/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
  * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: text-hover
  * Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms mentioned in your blog.
  *
- * Compatible with WordPress 4.7+ through 4.9+.
+ * Compatible with WordPress 4.7+ through 5.3+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Text_Hover
  * @author  Scott Reilly
- * @version 3.8
+ * @version 3.9.1
  */
 
 /*
@@ -29,10 +29,12 @@
  * - Smarter input form for text hovers. Repeatable field with sub-fields name and hover text. (This will allow having multiline hover text).
  * - Ability for users to set the text color, background color, and border color of their tooltips.
  * - Settings page text area for testing sample text. Use AJAX to fetch parsed text from server for display. Applies same styles as it would on frontend.
+ * - Add setting to specify additional filters to be handled by the plugin.
+ * - Add support for `c2c_text_hover_filter_priority`, similar to what Text Replace does
  */
 
 /*
-	Copyright (c) 2007-2018 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2007-2020 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -55,7 +57,7 @@ if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
+final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 
 	/**
 	 * Name of plugin's setting.
@@ -89,7 +91,7 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.8', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '3.9.1', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -107,7 +109,7 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	/**
 	 * Handles uninstallation tasks, such as deleting plugin options.
 	 */
-	public function uninstall() {
+	public static function uninstall() {
 		delete_option( self::SETTING_NAME );
 	}
 
@@ -164,7 +166,51 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	 * Override the plugin framework's register_filters() to actually actions against filters.
 	 */
 	public function register_filters() {
-		$filters = (array) apply_filters( 'c2c_text_hover_filters', array( 'the_content', 'get_the_excerpt', 'widget_text' ) );
+		/**
+		 * Filters third party plugin/theme hooks that get processed for hover text.
+		 *
+		 * Use this to amend or remove support for hooks present in third party
+		 * plugins and themes.
+		 *
+		 * Currently supported plugins:
+		 * - Advanced Custom Fields
+		 *    'acf/format_value/type=text',
+		 *    'acf/format_value/type=textarea',
+		 *    'acf/format_value/type=url',
+		 *    'acf_the_content',
+		 * - Elementor
+		 *    'elementor/frontend/the_content',
+		 *    'elementor/widget/render_content',
+		 *
+		 * @since 3.9
+		 *
+		 * @param array $filters The third party filters that get processed for
+		 *                       hover text. See filter inline docs for defaults.
+		 */
+		$filters = (array) apply_filters( 'c2c_text_hover_third_party_filters', array(
+			// Support for Advanced Custom Fields plugin.
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			// Support for Elementor plugin.
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		) );
+
+		// Add in relevant stock WP filters.
+		$filters = array_merge( $filters, array( 'the_content', 'the_excerpt', 'widget_text' ) );
+
+		/**
+		 * Filters the hooks that get processed for hover text.
+		 *
+		 * @since 3.0
+		 *
+		 * @param array $filters The filters that get processed for hover text.
+		 *                       Default ['the_content', 'the_excerpt',
+		 *                       'widget_text'].
+		 */
+		$filters = (array) apply_filters( 'c2c_text_hover_filters', $filters );
 		foreach ( $filters as $filter ) {
 			add_filter( $filter, array( $this, 'text_hover' ), 3 );
 		}
@@ -224,14 +270,26 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	public function enqueue_scripts() {
 		$options = $this->get_options();
 
+		/**
+		 * Filters if pretty tooltips should be used.
+		 *
+		 * Pretty tooltips are rendered using the qTip2 JS library.
+		 *
+		 * @since 3.5
+		 *
+		 * @param bool $use Should pretty tooltips be used? Default is value set
+		 *                  in plugin settings, which is initially true.
+		 */
 		if ( ! (bool) apply_filters( 'c2c_text_hover_use_pretty_tooltips', $options['use_pretty_tooltips'] ) ) {
 			return;
 		}
 
-		wp_enqueue_style( 'qtip2', plugins_url( 'assets/jquery.qtip.min.css', __FILE__ ), array(), '3.0.3' );
+		$qtip2_version = '3.0.3';
+
+		wp_enqueue_style( 'qtip2', plugins_url( 'assets/jquery.qtip.min.css', __FILE__ ), array(), $qtip2_version );
 		wp_enqueue_style( 'text-hover', plugins_url( 'assets/text-hover.css', __FILE__ ), array(), $this->version );
 
-		wp_enqueue_script( 'qtip2', plugins_url( 'assets/jquery.qtip.min.js', __FILE__ ), array( 'jquery' ), '2.2.0', true );
+		wp_enqueue_script( 'qtip2', plugins_url( 'assets/jquery.qtip.min.js', __FILE__ ), array( 'jquery' ), $qtip2_version, true );
 		wp_enqueue_script( 'text-hover', plugins_url( 'assets/text-hover.js', __FILE__ ), array( 'jquery', 'qtip2' ), $this->version, true );
 	}
 
@@ -246,6 +304,15 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	public function text_hover_comment_text( $text ) {
 		$options = $this->get_options();
 
+		/**
+		 * Filters if comments should be processed for text hovers.
+		 *
+		 * @since 3.5
+		 *
+		 * @param bool $include_comments Should comments be processed for text
+		 *                               hovers? Default is value set in plugin
+		 *                               settings, which is initially false.
+		 */
 		if ( (bool) apply_filters( 'c2c_text_hover_comments', $options['text_hover_comments'] ) ) {
 			$text = $this->text_hover( $text );
 		}
@@ -260,11 +327,43 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 	 * @return string Text with hovertexts already processed.
 	 */
 	public function text_hover( $text ) {
-		$options        = $this->get_options();
-		$text_to_hover  = (array) apply_filters( 'c2c_text_hover',                $options['text_to_hover'] );
-		$case_sensitive = (bool)  apply_filters( 'c2c_text_hover_case_sensitive', $options['case_sensitive'] );
-		$limit          = (bool)  apply_filters( 'c2c_text_hover_once',           $options['replace_once'] );
-		$preg_flags     = $case_sensitive ? 'ms' : 'msi';
+		$options = $this->get_options();
+
+		/**
+		 * Filters the list of text that have associated hover text.
+		 *
+		 * @since 3.0
+		 *
+		 * @param array $text_to_hover Associative array of text to hover and
+		 *                             respective hover text. Default is value
+		 *                             set in plugin settings.
+		 */
+		$text_to_hover = (array) apply_filters( 'c2c_text_hover', $options['text_to_hover'] );
+
+		/**
+		 * Filters if text matching for text hover should be case sensitive.
+		 *
+		 * @since 3.0
+		 *
+		 * @param bool $case_sensitive Should text matching for text hover be
+		 *                             case sensitive? Default is value set in
+		 *                             plugin settings, which is initially true.
+		 */
+		$case_sensitive = (bool) apply_filters( 'c2c_text_hover_case_sensitive', $options['case_sensitive'] );
+
+		/**
+		 * Filters if text hovering should be limited to once per term per piece
+		 * of text being processed regardless of how many times the term appears.
+		 *
+		 * @since 3.5
+		 *
+		 * @param bool $replace_once Should text hovering be limited to once
+		 *                           per term per post? Default is value set in
+		 *                           plugin settings, which is initially false.
+		 */
+		$limit = (bool) apply_filters( 'c2c_text_hover_once', $options['replace_once'] );
+
+		$preg_flags = $case_sensitive ? 'ms' : 'msi';
 		$mb_regex_encoding = null;
 
 		$text = ' ' . $text . ' ';
@@ -378,6 +477,6 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_048 {
 
 } // end c2c_TextHover
 
-c2c_TextHover::get_instance();
+add_action( 'plugins_loaded', array( 'c2c_TextHover', 'get_instance' ) );
 
 endif; // end if !class_exists()

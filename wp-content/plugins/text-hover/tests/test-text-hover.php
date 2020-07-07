@@ -4,6 +4,8 @@ defined( 'ABSPATH' ) or die();
 
 class Text_Hover_Test extends WP_UnitTestCase {
 
+	protected $captured_filter_value = array();
+
 	protected static $text_to_hover = array(
 		'WP Tavern'      => 'Site for WordPress-related news',
 		'WP'             => 'WordPress',
@@ -36,11 +38,14 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		// Reset options
 		c2c_TextHover::get_instance()->reset_options();
 
+		$this->captured_filter_value = array();
+
 		remove_filter( 'c2c_text_hover',                array( $this, 'add_text_to_hover' ) );
 		remove_filter( 'c2c_text_hover_once',           '__return_true' );
 		remove_filter( 'c2c_text_hover_case_sensitive', '__return_false' );
 		remove_filter( 'c2c_text_hover_comments',       '__return_true' );
 		remove_filter( 'c2c_text_hover_filters',        array( $this, 'add_custom_filter' ) );
+		remove_filter( 'c2c_text_hover_third_party_filters', array( $this, 'add_custom_filter' ) );
 	}
 
 
@@ -54,7 +59,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	public static function get_default_filters() {
 		return array(
 			array( 'the_content' ),
-			array( 'get_the_excerpt' ),
+			array( 'the_excerpt' ),
 			array( 'widget_text' ),
 		);
 	}
@@ -63,6 +68,17 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		return array(
 			array( 'get_comment_text' ),
 			array( 'get_comment_excerpt' ),
+		);
+	}
+
+	public static function get_third_party_filters() {
+		return array(
+			array( 'acf/format_value/type=text' ),
+			array( 'acf/format_value/type=textarea' ),
+			array( 'acf/format_value/type=url' ),
+			array( 'acf_the_content' ),
+			array( 'elementor/frontend/the_content' ),
+			array( 'elementor/widget/render_content' ),
 		);
 	}
 
@@ -147,6 +163,10 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		return $filters;
 	}
 
+	public function capture_filter_value( $value ) {
+		return $this->captured_filter_value[ current_filter() ] = $value;
+	}
+
 
 	/*
 	 *
@@ -160,19 +180,33 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextHover_Plugin_048' ) );
+		$this->assertTrue( class_exists( 'c2c_TextHover_Plugin_049' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '048', c2c_TextHover::get_instance()->c2c_plugin_version() );
+		$this->assertEquals( '049', c2c_TextHover::get_instance()->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '3.8', c2c_TextHover::get_instance()->version() );
+		$this->assertEquals( '3.9.1', c2c_TextHover::get_instance()->version() );
 	}
 
 	public function test_instance_object_is_returned() {
 		$this->assertTrue( is_a( c2c_TextHover::get_instance(), 'c2c_TextHover' ) );
+	}
+
+	public function test_hooks_plugins_loaded() {
+		$this->assertEquals( 10, has_action( 'plugins_loaded', array( 'c2c_TextHover', 'get_instance' ) ) );
+	}
+
+	public function test_no_text_change_when_no_hovers_defined() {
+		$text = 'This is a 2019 test.';
+
+		$this->set_option( array( 'text_to_hover' => '' ) );
+
+		$this->assertEquals( $text, $this->text_hover( $text ) );
+
+		$this->set_option( array( 'text_to_hover' => $this->text_hovers() ) );
 	}
 
 	public function test_hovers_text() {
@@ -467,7 +501,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	public function test_hover_applies_to_default_filters( $filter ) {
 		$expected = $this->expected_text( 'coffee2code' );
 
-		$this->assertNotFalse( has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover' ), 3 ) );
+		$this->assertEquals( 3, has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover' ) ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
 	}
 
@@ -479,14 +513,52 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 		add_filter( 'c2c_text_hover_comments', '__return_true' );
 
-		$this->assertNotFalse( has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover_comment_text' ), 11 ) );
+		$this->assertEquals( 11, has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover_comment_text' ) ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
+	}
+
+	/**
+	 * @dataProvider get_third_party_filters
+	 */
+	public function test_hover_applies_to_third_party_filters( $filter ) {
+		$expected = $this->expected_text( 'coffee2code' );
+
+		$this->assertEquals( 3, has_filter( $filter, array( c2c_TextHover::get_instance(), 'text_hover' ) ) );
+		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a coffee2code' ), $expected ) );
+	}
+
+	public function test_third_party_filters_are_part_of_c2c_text_hover_filters() {
+		$filters = array_map(
+			function ( $x ) { return reset( $x ); },
+			array_merge(
+				$this->get_third_party_filters(),
+				$this->get_default_filters()
+			)
+		 );
+
+		add_filter( 'c2c_text_hover_filters', array( $this, 'capture_filter_value' ) );
+
+		c2c_TextHover::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertSame( $filters, $this->captured_filter_value[ 'c2c_text_hover_filters' ] );
+
+		remove_filter( 'c2c_text_hover_filters', array( $this, 'capture_filter_value' ) );
 	}
 
 	public function test_hover_applies_to_custom_filter_via_filter() {
 		$this->assertEquals( 'coffee2code', apply_filters( 'custom_filter', 'coffee2code' ) );
 
 		add_filter( 'c2c_text_hover_filters', array( $this, 'add_custom_filter' ) );
+
+		c2c_TextHover::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertEquals( $this->expected_text( 'coffee2code' ), apply_filters( 'custom_filter', 'coffee2code' ) );
+	}
+
+	public function test_hover_applies_to_custom_third_party_filter_via_filter() {
+		$this->assertEquals( 'coffee2code', apply_filters( 'custom_filter', 'coffee2code' ) );
+
+		add_filter( 'c2c_text_hover_third_party_filters', array( $this, 'add_custom_filter' ) );
 
 		c2c_TextHover::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
 
