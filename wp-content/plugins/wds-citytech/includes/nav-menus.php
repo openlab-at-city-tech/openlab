@@ -26,6 +26,10 @@ function get_primary_menu_id() {
 		return (int) $locations['top'];
 	}
 
+	if ( ! empty( $locations['expanded'] ) ) {
+		return (int) $locations['expanded'];
+	}
+
 	return 0;
 }
 
