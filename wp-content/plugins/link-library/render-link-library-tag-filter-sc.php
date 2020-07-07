@@ -14,7 +14,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	$output = '<div class="linklibrary-filters">';
 	$output .= '<fieldset>';
 	$output .= '<legend>' . __( 'Filters', 'link-library' ) . '</legend>';
-	
+
 	if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
 		$prev_link_price = $_GET['link_price'];
 	} else {
@@ -26,7 +26,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	} else {
 		$prev_link_letter = '';
 	}
-	
+
 	if ( isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
 		$searchstring = $_GET['searchll'];
 	} else {
@@ -87,7 +87,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
 			$output .= " + '&'";
-			
+
 			if ( 'free' == $prev_link_price ) {
 				$output .= " + 'link_price=free'";
 			} else {
@@ -98,7 +98,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		if ( !empty( $searchstring ) ) {
 			$output .= " + '&searchll=" . $searchstring . "'";
 		}
-		
+
 		$output .= "});\n";
 
 		$output .= '</script>';
@@ -113,11 +113,11 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= '<div class="price-filters-choices">';
 		$output .= '<input type="checkbox" name="link_price" class="link_price" ' . checked( $prev_link_price, 'free', false ) . ' value="free"/> ' . __( 'Free', 'link-library' ) . '<br/>';
 		$output .= '</div>';
-		
+
 		$output .= '<script type="text/javascript">';
 
 		$output .= "jQuery('.link_price').click( function() {\n";
-		
+
 		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
 			$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
 			$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
@@ -129,9 +129,8 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		}
 
 		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
-		
+
 		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-			$output .= " + '&'";
 			$output .= " + 'link_tags=' + current_link_tags";
 		}
 
@@ -139,19 +138,19 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 			$output .= " + '&'";
 			$output .= " + 'link_letter=' + current_link_letter";
 		}
-		
+
 		if ( 'free' == $prev_link_price ) {
-			$output .= " + 'link_price='";
+			$output .= " + '&link_price='";
 		} else {
-			$output .= " + 'link_price=free'";
+			$output .= " + '&link_price=free'";
 		}
-		
+
 		if ( !empty( $searchstring ) ) {
 			$output .= " + '&searchll='" . $searchstring . "'";
 		}
 
 		$output .= ";\n";
-		
+
 		$output .= "});\n";
 
 		$output .= '</script>';

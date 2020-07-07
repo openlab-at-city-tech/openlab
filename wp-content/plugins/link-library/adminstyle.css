@@ -21,3 +21,45 @@
 #ll-usage table.widefat td {
 	padding: 2px 4px 2px 10px;
 }
+
+@media screen and (max-width: 1699px) {
+  .accessibebanner {
+    margin-bottom: 12px;
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .accessibebanner {
+    float: right;
+  }
+}
+
+.accessibead .button {
+  margin:30px;
+}
+
+.accessibead a {
+  color:#fff;
+}
+
+.accessibead .large_text {
+  font-size: 20px;
+}
+
+.accessibead .mid_text {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 665px) {
+  .accessibead .large_text {
+    font-size: 12px;
+  }
+
+  .accessibead .mid_text {
+    font-size: 10px;
+  }
+
+  .accessibead .button {
+    margin:8px;
+  }
+}

@@ -276,6 +276,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['showupdatedtooltip']              = false;
 	$options['linkimagelabel']                  = __( 'Link Image (jpg, jpeg, png)', 'link-library' ) ;
 	$options['showaddlinkimage']                = 'hide';
+	$options['datesource']                      = 'updateddate';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;
@@ -332,6 +333,10 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['bp_link_page_url']             = '';
 	$genoptions['bp_link_settings']             = '';
 	$genoptions['defaultprotocoladmin']         = 'http';
+	$genoptions['shrinkthewebaccesskey']        = '';
+	$genoptions['pagepeekersize']               = 'm';
+	$genoptions['pagepeekerid']                 = '';
+	$genoptions['stwthumbnailsize']             = '120x90';
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );

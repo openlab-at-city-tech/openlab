@@ -344,7 +344,7 @@ class link_library_plugin_admin {
 			}
 		}
 
-		if ( isset( $_GET['page'] ) && ( ( $_GET['page'] == 'link-library-general-options' ) || $_GET['page'] == 'link-library-settingssets' || $_GET['page'] == 'link-library-moderate' || $_GET['page'] == 'link-library-stylesheet' || $_GET['page'] == 'link-library-reciprocal' ) ) {
+		if ( isset( $_GET['page'] ) && ( ( $_GET['page'] == 'link-library-general-options' ) || $_GET['page'] == 'link-library-settingssets' || $_GET['page'] == 'link-library-moderate' || $_GET['page'] == 'link-library-stylesheet' || $_GET['page'] == 'link-library-reciprocal' || $_GET['page'] == 'link-library-accessibe' ) ) {
 			wp_enqueue_style( 'LibraryLibraryAdminStyle', plugins_url( 'link-library-admin.css', __FILE__ ) );
 		}
 	}
@@ -389,16 +389,26 @@ class link_library_plugin_admin {
 	function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
 		if ( $url != "" && $name != "" ) {
 			if ( $mode == 'thumb' || $mode == 'thumbonly' ) {
+				$protocol = is_ssl() ? 'https://' : 'http://';
+
 				if ( $thumbnailgenerator == 'robothumb' ) {
-					$genthumburl = "http://www.robothumb.com/src/?url=" . esc_html( $url ) . "&size=" . $thumbnailsize;
+					$genthumburl = $protocol . "www.robothumb.com/src/?url=" . esc_html( $url ) . "&size=" . $thumbnailsize;
+				} elseif ( $thumbnailgenerator == 'pagepeeker' ) {
+					if ( empty( $cid ) ) {
+						$genthumburl = $protocol . "free.pagepeeker.com/v2/thumbs.php?size=" . $thumbnailsize . "&url=" . esc_html( $url );
+					} else {
+						$genthumburl = $protocol . "api.pagepeeker.com/v2/thumbs.php?size=" . $thumbnailsize . "&url=" . esc_html( $url );
+					}
+				} elseif ( $thumbnailgenerator == 'shrinktheweb' ) {
+					$genthumburl .= $protocol . "images.shrinktheweb.com/xino.php?stwembed=1&stwaccesskeyid=" . $cid . "&stwsize=" . $thumbnailsize . "&stwurl=" . esc_html( $url );
 				} elseif ( $thumbnailgenerator == 'thumbshots' ) {
 					if ( !empty ( $cid ) ) {
-						$genthumburl = "http://images.thumbshots.com/image.aspx?cid=" . rawurlencode( $cid ) . "&v1=w=120&url=" . esc_html( $url );
+						$genthumburl = $protocol . "images.thumbshots.com/image.aspx?cid=" . rawurlencode( $cid ) . "&v1=w=120&url=" . esc_html( $url );
 					}
 				}
 
 			} elseif ( $mode == 'favicon' || $mode == 'favicononly' ) {
-				$genthumburl = "http://www.google.com/s2/favicons?domain=" . $url;
+				$genthumburl = $protocol . "www.google.com/s2/favicons?domain=" . $url;
 			}
 
 			$uploads = wp_upload_dir();
@@ -512,11 +522,8 @@ class link_library_plugin_admin {
 				add_action( 'admin_notices', array( $this, 'll_thumbshots_warning' ) );
 			}
 
-			if ( ( !isset( $genoptions['ll_60_welcome'] ) || !$genoptions['ll_60_welcome'] ) && !isset( $_GET['dismiss_ll_60_welcome'] ) ) {
-				add_action( 'admin_notices', array( $this, 'll_60_welcome' ) );
-			} elseif ( ( !isset( $genoptions['ll_60_welcome'] ) || !$genoptions['ll_60_welcome'] ) && isset( $_GET['dismiss_ll_60_welcome'] ) ) {
-				$genoptions['ll_60_welcome'] = true;
-				update_option( 'LinkLibraryGeneral', $genoptions );
+			if ( $thumbshotsactive && empty( $genoptions['shrinkthewebaccesskey'] ) && $genoptions['thumbnailgenerator'] == 'shrinktheweb' ) {
+				add_action( 'admin_notices', array( $this, 'll_shrinktheweb_warning' ) );
 			}
 		}
 
@@ -573,12 +580,12 @@ class link_library_plugin_admin {
 
 	function ll_thumbshots_warning() {
 		echo "
-        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: Missing Thumbshots API Key', 'link-library' ) . "</strong></p> <p>" . __( 'One of your link libraries is configured to use Thumbshots for link thumbails, but you have not entered your Thumbshots.com API Key. Please visit Thumbshots.com to apply for a free or paid account and enter your API in the Link Library admin panel.', 'link-library' ) . " <a href='" . esc_url( add_query_arg( array( 'page' => 'link-library' ), admin_url( 'admin.php' ) ) ) . "'>" . __( 'Jump to Link Library admin', 'link-library' ) . "</a></p></div>";
+        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: Missing Thumbshots API Key', 'link-library' ) . "</strong></p> <p>" . __( 'One of your link libraries is configured to use Thumbshots for link thumbails, but you have not entered your Thumbshots.com API Key. Please visit Thumbshots.com to apply for a free or paid account and enter your API in the Link Library admin panel.', 'link-library' ) . " <a href='" . esc_url( add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-general-options', 'currenttab' => 'll-general' ), admin_url( 'edit.php' ) ) ) . "'>" . __( 'Jump to Link Library admin', 'link-library' ) . "</a></p></div>";
 	}
 
-	function ll_60_welcome() {
+	function ll_shrinktheweb_warning() {
 		echo "
-        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Welcome to Link Library 6.0', 'link-library' ) . "</strong></p> <p>" . __( 'After many months of beta testing, Link Library 6.0 has finally been released. I hope you will appreciate the new version. If you run into any issues, please use the official plugin forum to ask questions. If you have major issues that prevents your site from working correctly, you can revert back to the previous version until a solution for your issue is available. A link to the previous version is provided below. Here are some of the most commonly asked questions after the upgrade:<br /><br /><strong>FAQ</strong><br /><br />Q: My links have been duplicated one or more times. My links no longer have categories assigned to them.<br />A: Go to the <strong>General Options</strong> section of Link Library and press the <strong>Re-import links</strong> button<br /><br />Q: I can see my links in admin, but they no longer appear on site.<br />A: You are probably using some options with your <strong>[link-library]</strong> shortcode to determine which categories will be displayed. The category IDs have changed when your links were imported into the new version of Link Library. You will need to get the new IDs from the <strong>Categories</strong> page and update your shortcodes.<br /><br />Q: Where did my Links widget go?!?<br />A: The Links widget that you were using was actually not part of Link Library, but part of the core WordPress Link Manager, which Link Library was previously based on. As such, Link Library is no longer compatible with that widget. To create a widget displaying links, you can use the new Link Library widget and select one of your library configurations. If you need your links in the widget to look different from your main list of links, go to General Options to increase your number of libraries, then configure your new library and select it in the widget configuration.', 'link-library' ) . "<br /><br /><a target='_blank' href='https://wordpress.org/support/plugin/link-library'>" . __( 'Link Library Support Forum', 'link-library' ) . "</a><br /><a target='_blank' href='https://downloads.wordpress.org/plugin/link-library.LinkLibrary_5.9.15.8.zip'>" . __( 'Download previous version of Link Library', 'link-library' ) . "</a><br /><br /><a class='button' href='" . esc_url( add_query_arg( array( 'post_type' => 'link_library_links', 'dismiss_ll_60_welcome' => 1 ), admin_url( 'edit.php' ) ) ) . "'>Dismiss this message</a></p></div>";
+        <div id='ll-warning' class='updated fade'><p><strong>" . __( 'Link Library: Missing Shrink the Web API Key', 'link-library' ) . "</strong></p> <p>" . __( 'One of your link libraries is configured to use Shrink the Web for link thumbails, but you have not entered your shrinktheweb.com API Key. Please visit Shrink the Web.com to apply for a free or paid account and enter your API in the Link Library admin panel.', 'link-library' ) . " <a href='" . esc_url( add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-general-options', 'currenttab' => 'll-general' ), admin_url( 'edit.php' ) ) ) . "'>" . __( 'Jump to Link Library admin', 'link-library' ) . "</a></p></div>";
 	}
 
 	function ll_missing_categories() {
@@ -644,7 +651,7 @@ class link_library_plugin_admin {
 	//extend the admin menu
 	function on_admin_menu() {
 		//add our own option page, you can also add it to different sections or use your own one
-		global $pagehookmoderate, $pagehooksettingssets, $pagehookstylesheet, $pagehookreciprocal;
+		global $pagehookmoderate, $pagehooksettingssets, $pagehookstylesheet, $pagehookreciprocal, $pagehookaccessibe;
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
@@ -688,6 +695,8 @@ class link_library_plugin_admin {
 
 		$pagehooksettingssets = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Configurations', 'link-library' ), __( 'Library Configurations', 'link-library' ), $admin_capability, 'link-library-settingssets', array( $this, 'on_show_page' ) );
 
+		$pagehookaccessibe = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Accessibe', 'Accessibe', $admin_capability, 'link-library-accessibe', array( $this, 'on_show_page' ) );
+
 		if ( $linkmoderatecount == 0 ) {
 			$pagehookmoderate = add_submenu_page( LINK_LIBRARY_ADMIN_PAGE_NAME, 'Link Library - ' . __( 'Moderate', 'link-library' ), __( 'Moderate', 'link-library' ), $admin_capability, 'link-library-moderate', array( $this, 'on_show_page' ) );
 		} else {
@@ -706,6 +715,7 @@ class link_library_plugin_admin {
 		add_action( 'load-' . $pagehookmoderate, array( $this, 'on_load_page' ) );
 		add_action( 'load-' . $pagehookstylesheet, array( $this, 'on_load_page' ) );
 		add_action( 'load-' . $pagehookreciprocal, array( $this, 'on_load_page' ) );
+		add_action( 'load-' . $pagehookaccessibe, array( $this, 'on_load_page' ) );
 	}
 
 	//will be executed if wordpress core detects this page has to be rendered
@@ -827,7 +837,13 @@ class link_library_plugin_admin {
 						$link_image = get_post_meta( get_the_ID(), 'link_image', true );
 
 						if ( !$options['uselocalimagesoverthumbshots'] || ( $options['uselocalimagesoverthumbshots'] && empty( $link_image ) ) ) {
-							$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['thumbshotscid'], $filepath, $genoptions['imagefilepath'], $genoptions['thumbnailsize'], $genoptions['thumbnailgenerator'] );
+							if ( 'robothumb' == $genoptions['thumbnailgenerator'] || 'thumbshots' == $genoptions['thumbnailgenerator'] ) {
+								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['thumbshotscid'], $filepath, $genoptions['imagefilepath'], $genoptions['thumbnailsize'], $genoptions['thumbnailgenerator'] );
+							} elseif ( 'pagepeeker' == $genoptions['thumbnailgenerator'] ) {
+								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['pagepeekerid'], $filepath, $genoptions['imagefilepath'], $genoptions['pagepeekersize'], $genoptions['thumbnailgenerator'] );
+							} elseif ( 'shrinktheweb' == $genoptions['thumbnailgenerator'] ) {
+								$this->ll_get_link_image( $link_url, get_the_title(), $genmode, get_the_ID(), $genoptions['shrinkthewebaccesskey'], $filepath, $genoptions['imagefilepath'], $genoptions['stwthumbnailsize'], $genoptions['thumbnailgenerator'] );
+							}
 						}
 						$linkname = get_the_title();
 					}
@@ -1042,6 +1058,8 @@ class link_library_plugin_admin {
 				$this->link_library_duplicate_link_checker( $this );
 				echo "</p></div>";
 			}
+		} elseif ( $_GET['page'] == 'link-library-accessibe' ) {
+			$formvalue = 'save_link_library_accessibe';
 		}
 
 		$data               = array();
@@ -1164,6 +1182,9 @@ class link_library_plugin_admin {
 									$this->general_save_meta_box();
 
 								} elseif ( $_GET['page'] == 'link-library-settingssets' ) {
+									if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) {
+										$this->display_accessibe_ad();
+									}
 									$this->settingssets_selection_meta_box( $data );
 									$this->display_menu( 'settingsset' );
 									$this->settingssets_usage_meta_box( $data );
@@ -1189,6 +1210,8 @@ class link_library_plugin_admin {
 									do_meta_boxes( $pagehookstylesheet, 'normal', $data );
 								} elseif ( $_GET['page'] == 'link-library-reciprocal' ) {
 									do_meta_boxes( $pagehookreciprocal, 'normal', $data );
+								} elseif ( $_GET['page'] == 'link-library-accessibe' ) {
+									$this->display_accessibe_page( $data );
 								}
 								?>
 							</div>
@@ -1204,7 +1227,7 @@ class link_library_plugin_admin {
 				// close postboxes that should be closed
 				$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 				// postboxes setup
-				postboxes.add_postbox_toggles('<?php 
+				postboxes.add_postbox_toggles('<?php
 				if ($_GET['page'] == 'link-library-settingssets')
 					{echo $pagehooksettingssets;}
 				elseif ($_GET['page'] == 'link-library-moderate')
@@ -1213,6 +1236,8 @@ class link_library_plugin_admin {
 					{echo $pagehookstylesheet;}
 				elseif ($_GET['page'] == 'link-library-reciprocal')
 					{echo $pagehookreciprocal;}
+				elseif ($_GET['page'] == 'link-library-accessibe')
+					{echo $pagehookstylesheet;}
 				?>');
 			});
 			//]]>
@@ -1343,7 +1368,7 @@ class link_library_plugin_admin {
 		$row              = 0;
 		$successfulimport = 0;
 		$successfulupdate = 0;
-		
+
 		if ( isset( $_POST['importlinks'] ) ) {
 			wp_defer_term_counting( true );
 			wp_defer_comment_counting( true );
@@ -1408,7 +1433,7 @@ class link_library_plugin_admin {
 								}
 							}
 						}
-						
+
 						if ( ( isset( $import_columns['Tag Slugs'] ) && !empty( $data[$import_columns['Tag Slugs']] ) ) ) {
 							$new_link_tags_slugs_array = array();
 							if ( isset( $import_columns['Tag Slugs'] ) ) {
@@ -1882,7 +1907,7 @@ class link_library_plugin_admin {
 								$link_cats_slugs = implode( ', ', $link_cats_slugs_array );
 							}
 						}
-						
+
 						$link_tags_array = array();
 						$link_tags_slugs_array = array();
 						$link_tags = wp_get_post_terms( get_the_ID(), 'link_library_tags' );
@@ -2051,7 +2076,7 @@ class link_library_plugin_admin {
 					'moderatorname', 'moderatoremail', 'rejectedemailtitle', 'approvalemailbody', 'rejectedemailbody', 'moderationnotificationtitle',
 					'linksubmissionthankyouurl', 'recipcheckaddress', 'imagefilepath', 'catselectmethod', 'expandiconpath', 'collapseiconpath', 'updatechannel',
 					'extraprotocols', 'thumbnailsize', 'thumbnailgenerator', 'rsscachedelay', 'single_link_layout', 'rolelevel', 'editlevel', 'cptslug',
-					'defaultlinktarget', 'bp_link_page_url', 'bp_link_settings', 'defaultprotocoladmin'
+					'defaultlinktarget', 'bp_link_page_url', 'bp_link_settings', 'defaultprotocoladmin', 'pagepeekerid', 'pagepeekersize', 'stwthumbnailsize', 'shrinkthewebaccesskey'
 				) as $option_name
 			) {
 				if ( isset( $_POST[$option_name] ) ) {
@@ -2223,7 +2248,7 @@ class link_library_plugin_admin {
 					'beforecatlist1', 'beforecatlist2', 'beforecatlist3', 'catnameoutput', 'linkaddfrequency',
 					'defaultsinglecat_cpt', 'rsspreviewcount', 'rssfeedinlinecount', 'linksperpage', 'catdescpos',
 					'catlistdescpos', 'rsspreviewwidth', 'rsspreviewheight', 'numberofrssitems',
-					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname', 'childcatdepthlimit', 'showcurrencyplacement', 'tooltipname', 'showupdatedpos'
+					'displayweblink', 'sourceweblink', 'showtelephone', 'sourcetelephone', 'showemail', 'sourceimage', 'sourcename', 'popup_width', 'popup_height', 'rssfeedinlinedayspublished', 'tooltipname', 'childcatdepthlimit', 'showcurrencyplacement', 'tooltipname', 'showupdatedpos', 'datesource'
 				)
 				as $option_name
 			) {
@@ -2574,11 +2599,6 @@ class link_library_plugin_admin {
 		extract( $genoptions );
 
 		?>
-		<script type="text/javascript">
-			jQuery( document ).ready(function() {
-
-			});
-		</script>
 
 		<div style='padding-top:15px' id="ll-general" class="content-section">
 		<table>
@@ -2737,6 +2757,8 @@ class link_library_plugin_admin {
 							<td>
 								<select id="thumbnailgenerator" name="thumbnailgenerator">
 									<option value="robothumb" <?php selected( $genoptions['thumbnailgenerator'], 'robothumb' ); ?>>Robothumb.com
+									<option value="shrinktheweb" <?php selected( $genoptions['thumbnailgenerator'], 'shrinktheweb' ); ?>>Shrink The Web
+									<option value="pagepeeker" <?php selected( $genoptions['thumbnailgenerator'], 'pagepeeker' ); ?>>PagePeeker
 									<option value="thumbshots" <?php selected( $genoptions['thumbnailgenerator'], 'thumbshots' ); ?>>Thumbshots.org
 								</select>
 							</td>
@@ -2747,6 +2769,54 @@ class link_library_plugin_admin {
 							<td class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Thumbshots API Key', 'link-library' ); ?></td>
 							<td colspan='4' class='lltooltip' title='<?php _e( 'API Key for Thumbshots.com thumbnail generation accounts', 'link-library' ); ?>'>
 								<input type="text" id="thumbshotscid" name="thumbshotscid" size="20" value="<?php echo $genoptions['thumbshotscid']; ?>" />
+							</td>
+						</tr>
+						<tr class="shrinkthewebaccesskey" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'><?php _e( 'Shrink The Web Access Key', 'link-library' ); ?></td>
+							<td colspan='4' class='lltooltip' title='<?php _e( 'Access Key for shrinktheweb.com thumbnail generation accounts', 'link-library' ); ?>'>
+								<input type="text" id="shrinkthewebaccesskey" name="shrinkthewebaccesskey" size="20" value="<?php echo $genoptions['shrinkthewebaccesskey']; ?>" />
+							</td>
+						</tr>
+						<tr class="shrinkthewebsizes" <?php if ( $genoptions['thumbnailgenerator'] != 'shrinktheweb' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td><?php _e( 'Shrink the web Thumbnail size' ); ?>
+							</td>
+							<td>
+								<select id="stwthumbnailsize" name="stwthumbnailsize">
+									<?php $sizes = array( '75x57', '90x68', '100x75', '120x90', '200x150', '320x240' );
+
+									foreach ( $sizes as $size ) { ?>
+									<option value="<?php echo $size; ?>" <?php selected( $genoptions['stwthumbnailsize'], $size ); ?>><?php echo $size; ?>
+										<?php } ?>
+								</select>
+							</td>
+						</tr>
+						<tr class="pagepeekersizes" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td><?php _e( 'PagePeeker Thumbnail size' ); ?>
+							</td>
+							<td>
+								<select id="pagepeekersize" name="pagepeekersize">
+									<?php $sizes = array( 't' => '90 x 68', 's' => '120x90', 'm' => '200 x 150', 'l' => '400 x 300', 'x'=> '480 x 360' );
+
+									foreach ( $sizes as $code => $size ) { ?>
+									<option value="<?php echo $code; ?>" <?php selected( $genoptions['pagepeekersize'], $code ); ?>><?php echo $size; ?>
+										<?php } ?>
+								</select>
+							</td>
+						</tr>
+						<tr class="pagepeekerid" <?php if ( $genoptions['thumbnailgenerator'] != 'pagepeeker' ) {
+							echo 'style="display:none;"';
+						} ?>>
+							<td><?php _e( 'PagePeeker API Key (for paid account holders)' ); ?>
+							</td>
+							<td colspan='4' class='lltooltip' title='<?php _e( 'Pagepeeker API Key for premium thumbnail generation', 'link-library' ); ?>'>
+								<input type="text" id="pagepeekerid" name="pagepeekerid" size="20" value="<?php echo $genoptions['pagepeekerid']; ?>" />
+							</td>
 							</td>
 						</tr>
 						<tr class="robothumbsize" <?php if ( $genoptions['thumbnailgenerator'] != 'robothumb' ) {
@@ -2851,7 +2921,8 @@ class link_library_plugin_admin {
 					</table>
 				</td>
 				<?php if ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) { ?>
-					<td style='padding: 8px; border: 1px solid #cccccc;vertical-align:top !important;'>
+				<td style='padding: 8px; border: 1px solid #cccccc;vertical-align:top !important;'>
+
 						<div style="width: 400px"><h3>Support the author - Second Edition</h3><br />
 							<table>
 								<tr>
@@ -2862,8 +2933,10 @@ class link_library_plugin_admin {
 									</td>
 								</tr>
 							</table>
-						</div>
-					</td>
+						</div><br /><br />
+
+					<a href="https://accessibe.go2cloud.org/SHL"><img src='<?php echo plugins_url( 'icons/Accessibe.png', __FILE__ ); ?>'>
+				</td>
 				<?php } ?>
 		</table>
 		</div>
@@ -2876,8 +2949,24 @@ class link_library_plugin_admin {
 				);
 
 				jQuery("#thumbnailgenerator").change(function () {
-					jQuery(".thumbshotsapikey").toggle();
-					jQuery(".robothumbsize").toggle();
+					jQuery(".thumbshotsapikey").hide();
+					jQuery(".robothumbsize").hide();
+					jQuery(".pagepeekerid").hide();
+					jQuery(".pagepeekersizes").hide();
+					jQuery(".shrinkthewebsizes").hide();
+					jQuery(".shrinkthewebaccesskey").hide();
+
+					if ( jQuery( '#thumbnailgenerator').val() == 'thumbshots' ) {
+						jQuery(".thumbshotsapikey").show();
+					} else if ( jQuery( '#thumbnailgenerator').val() == 'robothumb' ) {
+						jQuery(".robothumbsize").show();
+					} else if ( jQuery( '#thumbnailgenerator').val() == 'pagepeeker' ) {
+						jQuery(".pagepeekerid").show();
+						jQuery(".pagepeekersizes").show();
+					} else if ( jQuery( '#thumbnailgenerator').val() == 'shrinktheweb' ) {
+						jQuery(".shrinkthewebsizes").show();
+						jQuery(".shrinkthewebaccesskey").show();
+					}
 				});
 			});
 		</script>
@@ -3327,6 +3416,23 @@ class link_library_plugin_admin {
 			<INPUT type="button" name="copy" value="<?php _e( 'Copy', 'link-library' ); ?>!" onClick="if (confirm('Are you sure you want to copy the contents of the selected library over the current library settings?')) { var copyurl = <?php echo $copypath; ?> window.location.href = copyurl; };">
 		<?php endif; ?>
 		</div>
+	<?php }
+
+	function display_accessibe_ad() { ?>
+		<div class="accessibebanner"><a href="https://accessibe.go2cloud.org/SHL"><img src='<?php echo plugins_url( 'icons/AccessibeBanner.png', __FILE__ ); ?>'></a></div>
+	<?php }
+
+	function display_accessibe_page( $data ) { ?>
+
+	<div class="accessibead" style="width: 50%; background-color: #fff; padding: 20px; text-align: center">
+		<img src="<?php echo plugins_url( 'icons/AccessibeLogoLarge.png', __FILE__ ) ?>" style="max-width: 100%" />
+		<h1 style="font-size: 30px">The Forefront of <strong>Web Accessibility</strong> Technology</h1>
+		accessiBe is the first and only fully automated web accessibility technology that complies with the WCAG 2.1 and keeps your website accessible at all times.<br /><br />
+
+		<a href="https://accessibe.go2cloud.org/SHL"><div class="button button-primary"><span class="large_text">Get started now</span><br />7-day FREE trial</div></a>
+		<a href="https://accessibe.go2cloud.org/aff_c?offer_id=5&aff_id=8&url_id=7"><div class="button button-primary"><span class="mid_text">Run a free accesssibility test<br /> on your site</span></div></a>
+	</div>
+
 	<?php }
 
 	function settingssets_usage_meta_box( $data ) {
@@ -4401,7 +4507,12 @@ class link_library_plugin_admin {
 							<td style='background: #FFF' class="lltooltip" title='<?php _e( 'Code/Text to be displayed after each date', 'link-library' ); ?>'>
 								<input type="text" id="afterdate" name="afterdate" size="22" value="<?php echo stripslashes( $options['afterdate'] ); ?>" />
 							</td>
-							<td style='background: #FFF'></td>
+							<td style='background: #FFF'>
+								<select name="datesource" id="datesource" style="width:200px;">
+									<option value="linkupdated"<?php selected( $options['datesource'] == "linkupdated" ); ?>><?php _e( 'Updated Date', 'link-library' ); ?></option>
+									<option value="linkpublication"<?php selected( $options['datesource'] == "linkpublication" ); ?>><?php _e( 'Publication Date', 'link-library' ); ?></option>
+								</select>
+							</td>
 							<td style='background: #FFF'></td>
 						</tr>
 						<?php break;
@@ -5744,10 +5855,10 @@ class link_library_plugin_admin {
 			<?php if ( isset( $link->ID ) && !empty( $link->ID ) ): ?>
 				<tr>
 					<td><?php _e( 'Automatic Image Generation', 'link-library' ); ?></td>
-					<td title="<?php if ( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ) {
+					<td title="<?php if ( ( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ) || ( $genoptions['thumbnailgenerator'] == 'shrinktheweb' && empty( $genoptions['shrinkthewebaccesskey'] ) ) ) {
 						_e( 'This button is only available when a valid API key is entered under the Link Library General Settings.', 'link-library' );
 					} ?>">
-						<INPUT type="button" id="genthumbs" name="genthumbs" <?php disabled( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) );?>value="<?php _e( 'Generate Thumbnail and Store locally', 'link-library' ); ?>">
+						<INPUT type="button" id="genthumbs" name="genthumbs" <?php disabled( ( $genoptions['thumbnailgenerator'] == 'thumbshots' && empty( $genoptions['thumbshotscid'] ) ) || ( $genoptions['thumbnailgenerator'] == 'shrinktheweb' && empty( $genoptions['shrinkthewebaccesskey'] ) ) );?>value="<?php _e( 'Generate Thumbnail and Store locally', 'link-library' ); ?>">
 						<INPUT type="button" id="genfavicons" name="genfavicons" value="<?php _e( 'Generate Favorite Icon and Store locally', 'link-library' ); ?>">
 					</td>
 				</tr>
@@ -6096,7 +6207,7 @@ class link_library_plugin_admin {
 						 * presume it needs http:// prepended (unless a relative
 						 * link starting with /, # or ? or a php file).
 						 */
-						if ( strpos( $submitted_url, ':' ) === false && ! preg_match( '/^[a-z0-9-]+?\.php/i', $submitted_url ) ) {
+						if ( !empty( $submitted_url ) && strpos( $submitted_url, ':' ) === false && ! preg_match( '/^[a-z0-9-]+?\.php/i', $submitted_url ) ) {
 							$submitted_url = 'https://' . $submitted_url;
 						}
 					}
