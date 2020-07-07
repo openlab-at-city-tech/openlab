@@ -7,6 +7,8 @@
 		$paged = isset ( $_GET[ 'paged' ] ) ? sanitize_text_field( $_GET[ 'paged' ] ) : 1;
 		$s = isset ( $_GET[ 's' ] ) ? sanitize_text_field( $_GET[ 's' ] ) : null;
 		$f = isset ( $_GET[ 'f' ] ) ? sanitize_text_field( $_GET[ 'f' ] ) : null;
+		$orderby = isset ( $_GET[ 'orderby' ] ) ? sanitize_text_field( $_GET[ 'orderby' ] ) : '';
+		$order = isset ( $_GET[ 'order' ] ) ? sanitize_text_field( $_GET[ 'order' ] ) : 'asc';
 		$table_scan = $wpdb->prefix . "mclean_scan";
 		$table_refs = $wpdb->prefix . "mclean_refs";
 		$filterByTypeSQL = '';
@@ -51,28 +53,40 @@
 		$ignored_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE ignored = 1" . $filterByTypeSQL );
 		$deleted_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE deleted = 1" . $filterByTypeSQL );
 
+		// Create the Order By
+		$sqlOrderBy = "path, time";
+		if ( $orderby === 'size' ) {
+			$sqlOrderBy = "size " . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+		else if ( $orderby === 'path' ) {
+			$sqlOrderBy = "path " . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+		else if ( $orderby === 'id' ) {
+			$sqlOrderBy = "postId " . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+
 		if ( $view == 'deleted' ) {
 			$items_count = $deleted_count;
 			$items = $wpdb->get_results( $wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
 				FROM $table_scan WHERE ignored = 0 AND deleted = 1 AND path LIKE %s $filterByTypeSQL
-				ORDER BY path, time
-				DESC LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
+				ORDER BY $sqlOrderBy
+				LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
 		}
 		else if ( $view == 'ignored' ) {
 			$items_count = $ignored_count;
 			$items = $wpdb->get_results( $wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
 				FROM $table_scan
 				WHERE ignored = 1 AND deleted = 0 AND path LIKE %s $filterByTypeSQL
-				ORDER BY path, time
-				DESC LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
+				ORDER BY $sqlOrderBy
+				LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
 		}
 		else {
 			$items_count = $issues_count;
 			$items = $wpdb->get_results( $wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
 				FROM $table_scan
 				WHERE ignored = 0 AND deleted = 0  AND path LIKE %s $filterByTypeSQL
-				ORDER BY path, time
-				DESC LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
+				ORDER BY $sqlOrderBy
+				LIMIT %d, %d", '%' . $s . '%', ( $paged - 1 ) * $posts_per_page, $posts_per_page ), OBJECT );
 		}
 	?>
 
@@ -159,9 +173,11 @@
 				}
 
 				if ( !MEDIA_TRASH ) {
-					echo "<div class='notice notice-warning'>";
-					_e( "<p>The trash for the Media Library is disabled. Any media removed by the plugin will be <b>permanently deleted</b>. To enable it, modify your wp-config.php file and add this line (preferably at the top): <b>define( 'MEDIA_TRASH', true );</b>", 'media-cleaner' );
-					echo "</p></div>";
+					echo "<div class='notice notice-warning columned'>";
+					_e(  "<p>The trash for the Media Library is disabled. Any media removed by the plugin will be <b>permanently deleted</b>. To enable it, modify your wp-config.php file and add this line (preferably at the top): <b>define( 'MEDIA_TRASH', true );</b>", 'media-cleaner' );
+					echo '</p>';
+					echo '<div><a href="#" id="wpmc_enable_media_trash" class="button-primary">'. __( 'Add it automatically', 'media-cleaner' ) .'</a></div>';
+					echo '</div>';
 				}
 			}
 
@@ -235,6 +251,10 @@
 				if ( class_exists( 'ImageMapPro' ) )
 					array_push( $unsupported, 'Image Map Pro' );
 
+				if ( class_exists( 'YOOtheme\Builder\Wordpress\BuilderListener' ) ) {
+					array_push( $unsupported, 'YooTheme Builder' );
+				}
+
 				if ( !empty( $unsupported ) ) {
 					echo "<div class='notice notice-error'><p>";
 					_e( "<b>Important note about the following plugin(s): </b>", 'media-cleaner' );
@@ -307,8 +327,14 @@
 
 	<div id='wpmc-paging'>
 	<?php
+
+	function create_link( $s, $f, $orderby, $order, $view ) {
+		return '?page=media-cleaner&s=' . urlencode( $s ) . '&f=' . urlencode( $f ) . 
+		'&orderby=' . urlencode( $orderby ) . '&order=' . urlencode( $order ) . '&view=' . $view;
+	}
+
 	echo paginate_links(array(
-		'base' => '?page=media-cleaner&s=' . urlencode($s) . '&f=' . urlencode($f) . '&view=' . $view . '%_%',
+		'base' => create_link( $s, $f, $orderby, $order, $view ) . '%_%',
 		'current' => $paged,
 		'format' => '&paged=%#%',
 		'total' => ceil( $items_count / $posts_per_page ),
@@ -340,9 +366,19 @@
 					<th style='width: 70px;'><?php _e( 'LR ID', 'media-cleaner' ) ?></th>
 				<?php endif; ?>
 
-				<th><?php _e( 'Path', 'media-cleaner' ) ?></th>
+				<th class='manage-column sortable <?= $order === "asc" ? "desc" : "asc" ?>'>
+					<a href='<?= create_link( $s, $f, 'path', ( $order === "asc" ? "desc" : "asc" ), $view ) ?>'>
+						<span><?php _e( 'Path', 'media-cleaner' ) ?></span>
+						<span class="sorting-indicator"></span>
+					</a>
+				</th>
 				<th style='width: 220px;'><?php _e( 'Issue', 'media-cleaner' ) ?></th>
-				<th style='width: 80px; text-align: right;'><?php _e( 'Size', 'media-cleaner' ) ?></th>
+				<th class='manage-column sortable <?= $order === "asc" ? "desc" : "asc" ?>' style='width: 120px; text-align: right;'>
+					<a href='<?= create_link( $s, $f, 'size', ( $order === "asc" ? "desc" : "asc" ), $view ) ?>'>
+						<span><?php _e( 'Size', 'media-cleaner' ) ?></span>
+						<span class="sorting-indicator"></span>
+					</a>
+				</th>
 			</tr>
 		</thead>
 
@@ -440,4 +476,8 @@
 <div id="wpmc-error-dialog" class="hidden" style="max-width:800px">
 	<h3><!-- The content will be inserted by JS --></h3>
 	<p>Please check your logs.<br>Do you want to <a href="#" class="retry">try again</a>, or <a href="#" class="skip">skip this entry</a>?</p>
+	<div class="options">
+		<a href="#" class="always-retry"><?php _e( 'Always Retry', 'media-cleaner' ) ?></a>
+		<a href="#" class="skip-all"><?php _e( 'Skip All', 'media-cleaner' ) ?></a>
+	</div>
 </div>

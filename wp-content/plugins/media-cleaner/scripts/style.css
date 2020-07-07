@@ -55,6 +55,15 @@
 	margin-left: 5px;
 }
 
+/* Error Dialog */
+#wpmc-error-dialog .options {
+	margin-top: 20px;
+	text-align: right;
+}
+#wpmc-error-dialog .options a + a {
+	margin-left: 16px;
+}
+
 /* Settings */
 .wrap-media-cleaner .meow-box form input:invalid {
 	color: red;
@@ -66,4 +75,16 @@
 }
 .wrap-media-cleaner .notice:first-of-type {
 	margin: 10px 0px 15px;
+}
+.wrap-media-cleaner .notice.columned {
+	display: flex;
+	flex-direction: row;
+}
+.wrap-media-cleaner .notice.columned > *:first-child {
+	flex: auto;
+	margin-right: 12px;
+}
+.wrap-media-cleaner .notice.columned > *:last-child {
+	margin: 12px 0;
+	padding-left: 12px;
 }

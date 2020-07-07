@@ -104,6 +104,9 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 
 			// SUBMENU > Settings > Filters
 			add_settings_section( 'wpmc_filters_settings', null, null, 'wpmc_filters_settings-menu' );
+			add_settings_field( 'wpmc_images_only', __( 'Images Only', 'media-cleaner' ),
+				array( $this, 'admin_images_only_callback' ),
+				'wpmc_filters_settings-menu', 'wpmc_filters_settings' );
 			add_settings_field( 'wpmc_thumbnails_only', __( 'Thumbnails Only', 'media-cleaner' ),
 				array( $this, 'admin_thumbnails_only_callback' ),
 				'wpmc_filters_settings-menu', 'wpmc_filters_settings' );
@@ -161,6 +164,7 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 		register_setting( 'wpmc_settings', 'wpmc_media_library' );
 		register_setting( 'wpmc_settings', 'wpmc_debuglogs' );
 
+		register_setting( 'wpmc_filters_settings', 'wpmc_images_only' );
 		register_setting( 'wpmc_filters_settings', 'wpmc_thumbnails_only' );
 		register_setting( 'wpmc_filters_settings', 'wpmc_dirs_filter' );
 		register_setting( 'wpmc_filters_settings', 'wpmc_files_filter' );
@@ -413,12 +417,19 @@ HTML;
 		echo $html;
 	}
 
+	function admin_images_only_callback( $args ) {
+		$html = '<input type="checkbox" id="wpmc_images_only" name="wpmc_images_only" value="1" ' .
+			disabled( get_option( 'wpmc_method', 'media' ) == 'media', false, false ) . ' ' .
+			checked( 1, get_option( 'wpmc_images_only' ), false ) . '/>';
+		$html .= '<label>' . __( 'Enable', 'media-cleaner' ) . '</label><br /><small>' . __( 'Restrict the Media Library scan to images. Therefore, no documents or anything else will be scanned.', 'media-cleaner' ) . '</small>';
+		echo $html;
+	}
+
 	function admin_thumbnails_only_callback( $args ) {
-		$value = get_option( 'wpmc_thumbnails_only', false );
 		$html = '<input type="checkbox" id="wpmc_thumbnails_only" name="wpmc_thumbnails_only" value="1" ' .
 			disabled( get_option( 'wpmc_method', 'media' ) == 'files', false, false ) . ' ' .
 			checked( 1, get_option( 'wpmc_thumbnails_only' ), false ) . '/>';
-		$html .= '<label>' . __( 'Enable', 'media-cleaner' ) . '</label><br /><small>' . __( 'Restrict the filesystem scan to thumbnails (files containing the resolution). If none of the checks above are selected, you will get the list of all the thumbnails and be able to remove them.', 'media-cleaner' ) . '</small>';
+		$html .= '<label>' . __( 'Enable', 'media-cleaner' ) . '</label><br /><small>' . __( 'Restrict the Filesystem scan to thumbnails (files containing the resolution). If none of the checks above are selected, you will get the list of all the images and be able to remove them.', 'media-cleaner' ) . '</small>';
 		echo $html;
 	}
 
