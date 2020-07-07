@@ -1,7 +1,7 @@
 === Twenty Twenty ===
 Contributors: the WordPress team
 Tested up to: 5.3
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,10 +22,25 @@ you pick, ensuring a high, accessible color contrast for your visitors.
 
 == Changelog ==
 
+= 1.4 =
+* Released: June 10, 2020
+
+https://wordpress.org/support/article/twenty-twenty-changelog/#Version_1.4
+
+= 1.3 =
+* Released: May 14, 2020
+
+https://wordpress.org/support/article/twenty-twenty-changelog/#Version_1.3
+
+= 1.2 =
+* Released: March 31, 2020
+
+https://wordpress.org/support/article/twenty-twenty-changelog/#Version_1.2
+
 = 1.1 =
 * Released: December 12, 2019
 
-https://wordpress.org/support/article/twenty-twenty-changelog/
+https://wordpress.org/support/article/twenty-twenty-changelog/#Version_1.1
 
 = 1.0 =
 * Released: November 12, 2019
@@ -34,7 +49,7 @@ Initial release
 
 == Copyright ==
 
-Twenty Twenty WordPress Theme, Copyright 2019 WordPress.org
+Twenty Twenty WordPress Theme, Copyright 2019-2020 WordPress.org
 Twenty Twenty is distributed under the terms of the GNU GPL.
 
 This program is free software: you can redistribute it and/or modify
@@ -52,7 +67,7 @@ Chaplin Theme is distributed under the terms of the GNU GPL version 2.0
 
 Twenty Twenty bundles the following third-party resources:
 
-Illustrations in screenshot.png by Tammie Lister
+Illustrations by Tammie Lister
 License: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/  
 
 Inter Font
@@ -72,13 +87,18 @@ License: MIT License, https://opensource.org/licenses/MIT
 Source: https://feathericons.com
 Used for post meta icons, and the link icon in the social menu.
 
+TikTok Icon
+License: GPLv2
+Source: Émilie Lebrun - @Emlebrun
+Used for TikTok social icon.
+
 Social Icons
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Source: WordPress Social Link Block (See wp-includes\blocks\social-link.php)
 
 Code from Twenty Nineteen
-Copyright (c) 2018-2019 WordPress.org
+Copyright (c) 2018-2020 WordPress.org
 License: GPLv2
 Source: https://wordpress.org/themes/twentynineteen/
 Included as part of the following classes and functions:
@@ -88,7 +108,7 @@ Included as part of the following classes and functions:
 - twentytwenty_nav_menu_social_icons()
 
 Code from Twenty Seventeen
-Copyright (c) 2016-2019 WordPress.org
+Copyright (c) 2016-2020 WordPress.org
 License: GPLv2
 Source: https://wordpress.org/themes/twentyseventeen/
 Included as part of the following classes and functions:
