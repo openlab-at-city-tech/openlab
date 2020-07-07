@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.9.2
- * Plugin URI:  http://coffee2code.com/wp-plugins/admin-commenters-comments-count/
+ * Version:     1.9.3
+ * Plugin URI:  https://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
- * Author URI:  http://coffee2code.com/
+ * Author URI:  https://coffee2code.com/
  * Text Domain: admin-commenters-comments-count
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 5.3+.
+ * Compatible with WordPress 4.6 through 5.4+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,20 +18,7 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.9.2
- */
-
-/*
- * TODO:
- * - When a comment gets approved/unapproved via comment action links, update commenter's count accordingly
- * - Allow admin to manually group commenters with different email addresses (allows grouping a person who
- *   may be using multiple email addresses, or maybe admin prefers to group people per organization). The reported
- *   counts would be for the group and not the individual. The link to see the emails would search for all of the
- *   email addresses in the group. Via filter maybe?
- * - Add sortability to 'Comments' column in user table
- * - Consider inserting commenter bomment bubble via 'comment_row_actions' hook like Akismet does, though that
- *   requires introducing a JS dependency.
- *
+ * @version 1.9.3
  */
 
 /*
@@ -106,7 +93,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.9.2';
+		return '1.9.3';
 	}
 
 	/**
@@ -324,9 +311,9 @@ class c2c_AdminCommentersCommentsCount {
 	 *                                   address.
 	 * @param int    $pending_count      The number of pending comments for the
 	 *                                   email address.
-	 * @param string $msg.               String to use as title attribute for
+	 * @param string $msg                String to use as title attribute for
 	 *                                   comment bubble.
-	 * @param bool.  $no_comments_bubble Should the comment bubble be shown if the
+	 * @param bool   $no_comments_bubble Should the comment bubble be shown if the
 	 *                                   email address has no comments?
 	 *
 	 * @return string

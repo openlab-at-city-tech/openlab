@@ -9,6 +9,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 		c2c_AdminCommentersCommentsCount::reset_cache();
 	}
 
+
 	//
 	//
 	// HELPER FUNCTIONS
@@ -111,28 +112,56 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 
 	//
 	//
+	// DATA PROVIDERS
+	//
+	//
+
+
+	public static function get_default_hooks() {
+		return array(
+			array( 'filter', 'comment_author',                      'comment_author',          10 ),
+			array( 'filter', 'get_comment_author_link',             'get_comment_author_link', 10 ),
+			array( 'action', 'admin_enqueue_scripts',               'enqueue_admin_css',       10 ),
+			array( 'filter', 'manage_users_columns',                'add_user_column',         10 ),
+			array( 'filter', 'manage_users_custom_column',          'handle_column_data',      10 ),
+			array( 'filter', 'akismet_show_user_comments_approved', '__return_false',          10, false ),
+		);
+	}
+
+
+	//
+	//
 	// TESTS
 	//
 	//
 
+
 	public function test_plugin_version() {
-		$this->assertEquals( '1.9.2', c2c_AdminCommentersCommentsCount::version() );
+		$this->assertEquals( '1.9.3', c2c_AdminCommentersCommentsCount::version() );
 	}
 
 	public function test_class_is_available() {
 		$this->assertTrue( class_exists( 'c2c_AdminCommentersCommentsCount' ) );
-	}
 
+	}
 	public function test_plugins_loaded_action_triggers_do_init() {
 		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_AdminCommentersCommentsCount', 'init' ) ) );
 	}
 
-	public function test_get_comment_author_link_filter_is_registered() {
-		$this->assertEquals( 10, has_filter( 'get_comment_author_link', array( 'c2c_AdminCommentersCommentsCount', 'get_comment_author_link' ) ) );
-	}
+	/**
+	 * @dataProvider get_default_hooks
+	 */
+	public function test_default_hooks( $hook_type, $hook, $function, $priority, $class_method = true ) {
+		$callback = $class_method ? array( 'c2c_AdminCommentersCommentsCount', $function ) : $function;
 
-	public function test_comment_author_filter_is_registered() {
-		$this->assertEquals( 10, has_filter( 'comment_author', array( 'c2c_AdminCommentersCommentsCount', 'comment_author' ) ) );
+		$prio = $hook_type === 'action' ?
+			has_action( $hook, $callback ) :
+			has_filter( $hook, $callback );
+
+		$this->assertNotFalse( $prio );
+		if ( $priority ) {
+			$this->assertEquals( $priority, $prio );
+		}
 	}
 
 	public function test_get_comment_author_link_unaffected_on_frontend() {

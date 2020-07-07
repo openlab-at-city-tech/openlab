@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.3 _(2020-06-03)_
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it (and add to it)
+* Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and remove commented-out code)
+* Change: Note compatibility through WP 5.4+
+* Change: Update links to coffee2code.com to be HTTPS
+* New: Unit tests: Add test and data provider for hooking actions and filters
+
 ## 1.9.2 _(2019-12-07)_
 * Fix: Correct typo in GitHub URL
 * Unit test:

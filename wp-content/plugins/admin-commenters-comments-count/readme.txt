@@ -5,8 +5,8 @@ Tags: commenters, comment count, comment author, comments, comment, admin, coffe
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
-Tested up to: 5.3
-Stable tag: 1.9.2
+Tested up to: 5.4
+Stable tag: 1.9.3
 
 Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
 
@@ -34,7 +34,7 @@ Specifically, the linked comment count appears next to commenters in:
 
 Commenters are identified by the email address they provided when commenting. If your site does not require that commenters submit their email address when commenting, this plugin will use the commenter's name as the identifier, though since this is a publicly viewable piece of data it's possible that multiple people could be posting under the same "name", so this method has the potential to be not as accurate.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [GitHub](https://github.com/coffee2code/admin-commenters-comments-count/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/admin-commenters-comments-count/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-commenters-comments-count/) | [GitHub](https://github.com/coffee2code/admin-commenters-comments-count/) | [Author Homepage](https://coffee2code.com)
 
 
 == Installation ==
@@ -82,6 +82,13 @@ Yes.
 
 == Changelog ==
 
+= 1.9.3 (2020-06-03) =
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it (and add to it)
+* Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and remove commented-out code)
+* Change: Note compatibility through WP 5.4+
+* Change: Update links to coffee2code.com to be HTTPS
+* New: Unit tests: Add test and data provider for hooking actions and filters
+
 = 1.9.2 (2019-12-07) =
 * Fix: Correct typo in GitHub URL
 * Unit test:
@@ -100,23 +107,13 @@ Yes.
 * Change: Update License URI to be HTTPS
 * Change: Split paragraph in README.md's "Support" section into two
 
-= 1.9 (2017-11-06) =
-* Bugfix: Explicitly set comment count font color to avoid style conflict with Akismet that resulted in gray text on dark gray background
-* Bugfix: Disable Akismet's version of the functionality since it is duplicative and interferes with author section layout
-* Change: Omit unnecessary `wp_register_style()` and instead provide all arguments to `wp_enqueue_style()`
-* Harden: Use 'esc_like()` on the pingback/trackback URL prior to use in queries
-* Bugfix: Use proper existing variable when searching for other pingbacks/trackbacks
-* Change: Omit unnecessary appending of '%' to author_url value in call to `get_comments_count()`
-* New: Add README.md
-* Change: Add GitHub link to readme
-* Change: Note compatibility through WP 4.9+
-* Change: Update copyright date (2018)
-* Change: Minor whitespace tweaks in unit test bootstrap
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/admin-commenters-comments-count/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.9.3 =
+Trivial update: Added TODO.md file, updated a few URLs to be HTTPS, expanded unit testing, and noted compatibility through WP 5.4+
 
 = 1.9.2 =
 Trivial update: modernized unit tests, noted compatibility through WP 5.3+, and updated copyright date (2020)
