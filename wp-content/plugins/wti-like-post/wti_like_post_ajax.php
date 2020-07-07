@@ -19,7 +19,7 @@ function WtiLikePostProcessVote() {
 		if ( $login_required && !$is_logged_in ) {
 			// User needs to login to vote but has not logged in
 			$error = 1;
-			$msg = get_option( 'wti_like_post_login_message' );
+			$msg = esc_html(get_option( 'wti_like_post_login_message' ));
 		} else {
 			$has_already_voted = HasWtiAlreadyVoted( $post_id, $wti_ip_address );
 			$voting_period = get_option( 'wti_like_post_voting_period' );
@@ -28,7 +28,7 @@ function WtiLikePostProcessVote() {
 			if ( "once" == $voting_period && $has_already_voted ) {
 				// User can vote only once and has already voted.
 				$error = 1;
-				$msg = get_option( 'wti_like_post_voted_message' );
+				$msg = esc_html(get_option( 'wti_like_post_voted_message' ));
 			} elseif ( '0' == $voting_period ) {
 				// User can vote as many times as he want
 				$can_vote = true;
@@ -108,7 +108,7 @@ function WtiLikePostProcessVote() {
 			
 			if ($success) {
 				$error = 0;
-				$msg = get_option( 'wti_like_post_thank_message' );
+				$msg = esc_html(get_option( 'wti_like_post_thank_message' ));
 			} else {
 				$error = 1;
 				$msg = __( 'Could not process your vote.', 'wti-like-post' );
@@ -134,7 +134,7 @@ function WtiLikePostProcessVote() {
 		
 		echo json_encode($result);
 	} else {
-		header( "location:" . $_SERVER["HTTP_REFERER"] );
+		wp_safe_redirect($_SERVER["HTTP_REFERER"]);
 	}
 	
 	exit;

@@ -4,8 +4,8 @@ Contributor's website: https://www.webtechideas.in/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@webtechideas.com&item_name=WTI%20Like%20Post&return=https://www.webtechideas.in/thanks/
 Tags: wp like post,wordpress like post,wp like page,wordpress like page,wplikepost,wplikepage,wti,webtechideas,wp vote page,wp vote post,wordpress vote page,wordpress vote post,thumbs up, thumbs down, most liked posts, recently liked posts
 Requires at least: 4.5
-Tested up to: 5.3.2
-Stable tag: 1.4.5
+Tested up to: 5.4.1
+Stable tag: 1.4.6
 
 A smooth ajax-based thumbs up/down functionality for wordpress posts/pages. PRO version is also available.
 
@@ -165,6 +165,10 @@ Yes, you can use this plugin against wordpress pages. You need to enable this fe
 In total there are 6 styles available. If you still need a different one, then place thumbs up/down images of same file name and same size.
 
 == Changelog ==
+
+= 1.4.6 =
+* Added more checks for XSS issue on plugin admin settings page
+* Set default voting period to once
 
 = 1.4.5 =
 * Fixed XSS issue on plugin admin settings page

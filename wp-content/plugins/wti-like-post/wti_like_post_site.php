@@ -10,8 +10,8 @@ function GetWtiLikePost($arg = null) {
      $wti_like_post = "";
      
      // Get the posts ids where we do not need to show like functionality
-     $allowed_posts = explode(",", get_option('wti_like_post_allowed_posts'));
-     $excluded_posts = explode(",", get_option('wti_like_post_excluded_posts'));
+     $allowed_posts = explode(",", esc_html(get_option('wti_like_post_allowed_posts')));
+     $excluded_posts = explode(",", esc_html(get_option('wti_like_post_excluded_posts')));
      $excluded_categories = get_option('wti_like_post_excluded_categories');
      $excluded_sections = get_option('wti_like_post_excluded_sections');
      
@@ -23,7 +23,7 @@ function GetWtiLikePost($arg = null) {
           $excluded_sections = array();
      }
      
-     $title_text = get_option('wti_like_post_title_text');
+     $title_text = esc_html(get_option('wti_like_post_title_text'));
      $category = get_the_category();
      $excluded = false;
      
@@ -49,7 +49,7 @@ function GetWtiLikePost($arg = null) {
           $title_text_like = __('Like', 'wti-like-post');
           $title_text_unlike = __('Unlike', 'wti-like-post');
      } else {
-          $title_text = explode('/', get_option('wti_like_post_title_text'));
+          $title_text = explode('/', esc_html(get_option('wti_like_post_title_text')));
           $title_text_like = $title_text[0];
           $title_text_unlike = isset( $title_text[1] ) ? $title_text[1] : '';
      }
@@ -169,7 +169,7 @@ function GetWtiVotedMessage($post_id, $ip = null) {
      $wti_has_voted = $wpdb->get_var($query);
      
      if ($wti_has_voted > 0) {
-          $wti_voted_message = get_option('wti_like_post_voted_message');
+          $wti_voted_message = esc_html(get_option('wti_like_post_voted_message'));
      }
      
      return $wti_voted_message;
@@ -188,7 +188,7 @@ function WtiMostLikedPostsShortcode($args) {
      $where = '';
      
      if (isset($args['limit'])) {
-          $limit = $args['limit'];
+          $limit = intval($args['limit']);
      } else {
           $limit = 10;
      }
@@ -199,11 +199,14 @@ function WtiMostLikedPostsShortcode($args) {
      }
      
      $posts = $wpdb->get_results(
-                              "SELECT post_id, SUM(value) AS like_count, post_title
-                              FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
-                              WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where
-                              GROUP BY post_id ORDER BY like_count DESC, post_title ASC LIMIT $limit"
-                         );
+          $wpdb->prepare(
+               "SELECT post_id, SUM(value) AS like_count, post_title
+               FROM `{$wpdb->prefix}wti_like_post` L, {$wpdb->prefix}posts P 
+               WHERE L.post_id = P.ID AND post_status = 'publish' AND value > 0 $where
+               GROUP BY post_id ORDER BY like_count DESC, post_title ASC LIMIT %d",
+               $limit
+          )
+     );
  
      if (count($posts) > 0) {
           $most_liked_post .= '<table class="most-liked-posts-table">';
@@ -213,7 +216,7 @@ function WtiMostLikedPostsShortcode($args) {
           $most_liked_post .= '</tr>';
        
           foreach ($posts as $post) {
-               $post_title = stripslashes($post->post_title);
+               $post_title = esc_html($post->post_title);
                $permalink = get_permalink($post->post_id);
                $like_count = $post->like_count;
                
@@ -250,8 +253,8 @@ function WtiRecentlyLikedPostsShortcode($args) {
      }
      
      $show_excluded_posts = get_option('wti_like_post_show_on_widget');
-	$excluded_posts = trim( get_option('wti_like_post_excluded_posts') );
-     $excluded_post_ids = explode(',', get_option('wti_like_post_excluded_posts'));
+	$excluded_posts = trim( esc_html(get_option('wti_like_post_excluded_posts')) );
+     $excluded_post_ids = explode(',', $excluded_posts);
      
      if ( !$show_excluded_posts && !empty( $excluded_posts ) ) {
           $where = "AND post_id NOT IN (" . $excluded_posts . ")";
@@ -278,9 +281,9 @@ function WtiRecentlyLikedPostsShortcode($args) {
                $recently_liked_post .= '<tr>';
                $recently_liked_post .= '<td>' . __('Title', 'wti-like-post') .'</td>';
                $recently_liked_post .= '</tr>';
-            
+               
                foreach ( $posts as $post ) {
-                    $post_title = stripslashes($post->post_title);
+                    $post_title = esc_html($post->post_title);
                     $permalink = get_permalink($post->post_id);
                     
                     $recently_liked_post .= '<tr>';
