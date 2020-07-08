@@ -19,7 +19,7 @@ ignores=(
   'wp-content/plugins/dw-question-answer/lib/recaptcha-php/recaptchalib.php'
   'wp-content/plugins/edge-suite/includes/edge-suite-general.php'
   'wp-content/plugins/easy-table-of-contents/includes/inc.string-functions.php'
-  'wp-content/plugins/easy-table-of-contents/includes/vendor/ultimate-web-scraper/emulate-curl.php'
+  'wp-content/plugins/easy-table-of-contents/includes/vendor/ultimate-web-scraper/emulate_curl.php'
   'wp-content/plugins/easy-table-of-contents/includes/vendor/ultimate-web-scraper/web_browser.php'
   'wp-content/plugins/event-organiser/event-organiser-debug.php'
 #  'wp-content/plugins/extended-categories-widget/2.8'
