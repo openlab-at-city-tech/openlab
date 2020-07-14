@@ -117,3 +117,14 @@ add_filter(
 		return $value;
 	}
 );
+
+/**
+ * Post titles should have the accent color.
+ */
+add_filter(
+	'hemingway_accent_color_elements',
+	function( $els ) {
+		$els['color'][] = '.post-title a';
+		return $els;
+	}
+);
