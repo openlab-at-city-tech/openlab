@@ -3027,7 +3027,7 @@ add_filter(
 	'classic_editor_network_default_settings',
 	function() {
 		return [
-			'editor'      => 'classic',
+			'editor'      => 'block',
 			'allow-users' => true,
 		];
 	}
