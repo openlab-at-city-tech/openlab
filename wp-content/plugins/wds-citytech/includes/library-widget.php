@@ -653,9 +653,10 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 
 		?>
 
+		<?php echo $args['before_widget']; ?>
+
 		<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
 		<div class="openlab-library-tools-widget" id="<?php echo esc_attr( $this->get_field_id( '' ) ); ?>">
-			<?php echo $args['before_widget']; ?>
 			<?php echo $args['before_title']; ?><?php echo count( $selected_guides ) > 1 ? 'Library Subject Guides' : 'Library Subject Guide'; ?><?php echo $args['after_title']; ?>
 
 			<ul>
@@ -663,13 +664,18 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 					<li><?php echo $selected_guide; ?></li>
 				<?php endforeach; ?>
 			</ul>
-			<?php echo $args['after_widget']; ?>
 		</div>
+
+		<?php echo $args['after_widget']; ?>
 
 		<style type="text/css">
 			.widget_openlab-library-tools-widget input[type="text"],
 			.widget_openlab-library-tools-widget select {
 				margin-bottom: .5rem;
+			}
+
+			.openlab-library-subject-guides-widget .widget-content ul > li:first-child {
+				border-top: 0;
 			}
 
 			#openlab-library-information-widget-content ul {
