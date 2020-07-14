@@ -10,7 +10,7 @@ $badge_query_args = [
 
 $group_type = openlab_get_group_directory_group_type();
 if ( $group_type ) {
-	$badge_query_args['group_types'] = $group_type;
+	$badge_query_args['group_type'] = $group_type;
 }
 
 $badges = \OpenLab\Badges\Badge::get( $badge_query_args );
