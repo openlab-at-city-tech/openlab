@@ -3239,3 +3239,19 @@ if ( is_admin() ) {
 
 	add_action( 'enqueue_block_editor_assets', 'jba_disable_editor_fullscreen_by_default' );
 }
+
+/**
+ * Gravity Forms Quiz field width.
+ */
+add_action(
+	'admin_print_scripts-toplevel_page_gf_edit_forms',
+	function() {
+		?>
+		<style type="text/css">
+		.gquiz-choice-weight {
+		width: 40px;
+		}
+		</style>
+		<?php
+	}
+);
