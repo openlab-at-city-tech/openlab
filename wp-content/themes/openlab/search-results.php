@@ -10,9 +10,7 @@
     <?php openlab_bp_sidebar( 'groups', true ); ?>
 	<div <?php post_class( 'col-sm-18 col-xs-24' ); ?>>
 		<div id="openlab-main-content"  class="content-wrapper">
-			<div class="entry-title">
-				<h1>OpenLab Search Results</h1>
-			</div>
+			<h1 class="entry-title">OpenLab Search Results</h1>
 
 			<div class="entry-content">
 				<?php bp_get_template_part( 'groups/groups-loop' ); ?>
