@@ -123,7 +123,13 @@ if ( ! empty( $categories ) ) {
 	<?php if ( openlab_is_my_profile() ) :
 		echo openlab_submenu_markup( 'groups', $group_type, false );
 	else : ?>
-		<div class="col-lg-19 col-md-18 col-sm-16">&nbsp;</div>
+		<div class="col-lg-19 col-md-18 col-sm-16">
+			<?php if ( openlab_is_search_results_page() ) : ?>
+				Narrow down your results using the search filters.
+			<?php else : ?>
+				&nbsp;
+			<?php endif; ?>
+		</div>
 	<?php endif; ?>
 
 	<div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count( ucwords( $group_type ) . 's' ); ?></div>
