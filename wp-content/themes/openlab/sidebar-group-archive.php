@@ -3,8 +3,9 @@ $group_type = openlab_get_group_directory_group_type();
 $group_slug = $group_type . 's';
 
 $is_people = 'people' === get_queried_object()->post_name;
+$is_search = openlab_is_search_results_page();
 
-if ( openlab_is_search_results_page() ) {
+if ( $is_search ) {
 	$sidebar_title = 'Search';
 } elseif ( $is_people ) {
     $group_type = "people";
@@ -24,7 +25,7 @@ if ( openlab_is_search_results_page() ) {
             <div id="sidebarCustomSelect" class="custom-select-parent">
 				<p>Narrow down your results using some of the filters below.</p>
 
-				<?php if ( openlab_is_search_results_page() ) : ?>
+				<?php if ( $is_search ) : ?>
 					<?php get_template_part( 'parts/sidebar/filter-group-type' ); ?>
 				<?php endif; ?>
 
@@ -47,11 +48,11 @@ if ( openlab_is_search_results_page() ) {
 					<?php get_template_part( 'parts/sidebar/filter-group-categories' ); ?>
 				<?php endif; ?>
 
-				<?php if ( $group_type == 'course' ) : ?>
+				<?php if ( $group_type == 'course' || $is_search ) : ?>
 					<?php get_template_part( 'parts/sidebar/filter-term' ); ?>
 				<?php endif; ?>
 
-				<?php if ( $group_type === 'portfolio' || $is_people ) : ?>
+				<?php if ( $group_type === 'portfolio' || $is_people || $is_search ) : ?>
 					<?php get_template_part( 'parts/sidebar/filter-member-type' ); ?>
 				<?php endif; ?>
 
