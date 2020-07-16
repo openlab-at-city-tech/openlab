@@ -9,7 +9,7 @@ $badge_query_args = [
 ];
 
 $group_type = openlab_get_group_directory_group_type();
-if ( $group_type ) {
+if ( $group_type && 'not-archive' !== $group_type ) {
 	$badge_query_args['group_type'] = $group_type;
 }
 
