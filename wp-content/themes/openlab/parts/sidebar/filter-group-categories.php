@@ -1,5 +1,9 @@
 <?php
 $group_type  = openlab_get_group_directory_group_type();
+if ( 'not-archive' === $group_type ) {
+	$group_type = '';
+}
+
 $group_terms = bpcgc_get_terms_by_group_type( $group_type );
 
 $option_value_bpcgc = openlab_get_current_filter( 'cat' );
