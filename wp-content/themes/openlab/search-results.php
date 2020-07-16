@@ -11,7 +11,7 @@
 	<div <?php post_class( 'col-sm-18 col-xs-24' ); ?>>
 		<div id="openlab-main-content"  class="content-wrapper">
 			<div class="entry-title">
-				<h1><?php esc_html_e( 'Search Results', 'openlab-theme' ); ?></h1>
+				<h1>OpenLab Search Results</h1>
 			</div>
 
 			<div class="entry-content">
