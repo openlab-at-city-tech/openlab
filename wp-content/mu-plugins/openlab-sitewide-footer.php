@@ -39,7 +39,7 @@ function cuny_local_env_flag() {
         </style>
 
         <div id="local-env-flag">
-            <?php echo esc_html(strtoupper($env_type)) ?> ENVIRONMENT
+            <?php echo esc_html(strtoupper($env_type)) ?>
         </div>
 
         <?php
