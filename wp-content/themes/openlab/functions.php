@@ -90,16 +90,14 @@ function openlab_load_scripts() {
         wp_register_script( 'openlab-validators', $stylesheet_dir_uri . '/js/validators.js', array('parsley') );
     }
 
-    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
+    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) || openlab_is_search_results_page() ) {
         wp_enqueue_script( 'openlab-directory', $stylesheet_dir_uri . '/js/directory.js', array( 'jquery' ) );
         wp_localize_script(
             'openlab-directory',
-            'OLAcademicUnits',
-            array(
-                'departments'       => openlab_get_entity_departments(),
-                'currentSchool'     => isset( $_GET['school'] ) ? wp_unslash( $_GET['school'] ) : '',
-                'currentDepartment' => isset( $_GET['department'] ) ? wp_unslash( $_GET['department'] ) : '',
-            )
+            'OLDirectory',
+			[
+				'groupTypeDisabledFilters' => openlab_group_type_disabled_filters(),
+            ]
         );
     }
 

@@ -9,7 +9,7 @@
 <div id="content" class="hfeed row">
     <?php openlab_bp_sidebar( 'groups', true ); ?>
 	<div <?php post_class( 'col-sm-18 col-xs-24' ); ?>>
-		<div id="openlab-main-content"  class="content-wrapper">
+		<div id="openlab-main-content"  class="content-wrapper openlab-search-results">
 			<h1 class="entry-title">OpenLab Search Results</h1>
 
 			<div class="entry-content">

@@ -1904,3 +1904,41 @@ add_filter(
 		return $args;
 	}
 );
+
+/**
+ * Gets a list of directory filter fields for each group type.
+ */
+function openlab_group_type_disabled_filters() {
+	$disabled = [
+		'course'    => [
+			'bp-group-categories-select',
+			'portfolio-user-member-type-select',
+		],
+		'project'   => [
+			'course-term-select',
+			'portfolio-user-member-type-select',
+		],
+		'club'      => [
+			'course-term-select',
+			'portfolio-user-member-type-select',
+		],
+		'portfolio' => [
+			'bp-group-categories-select',
+			'checkbox-is-cloneable',
+			'course-term-select',
+		],
+	];
+
+	if ( defined( 'OLBADGES_VERSION' ) ) {
+		$all_badges = \OpenLab\Badges\Badge::get();
+		foreach ( $all_badges as $badge ) {
+			foreach ( $disabled as $group_type => &$type_disabled ) {
+				if ( ! in_array( $group_type, $badge->get_group_types(), true ) ) {
+					$type_disabled[] = 'checkbox-badge-' . $badge->get_id();
+				}
+			}
+		}
+	}
+
+	return $disabled;
+}

@@ -1,48 +1,73 @@
 (function($){
-    var $departmentSelector,
-        $schoolSelector,
-        deptAllOption = '<option value="all" id="dept_all">All Departments</option>';
+		var $groupTypeCheckboxes,
+			allSidebarFilters = [];
 
     $(document).ready(function(){
-        $departmentSelector = $('#department-select');
-        $schoolSelector = $('#school-select');
-        rebuildDepartmentSelector();
+			if ( 0 !== $('.openlab-search-results').length ) {
+				$('.sidebar-filter input[type="checkbox"], .custom-select select' ).each( function() {
+					allSidebarFilters.push( this.id );
+				} );
 
-        $schoolSelector.on( 'change', rebuildDepartmentSelector );
+				$groupTypeCheckboxes = $('.sidebar-filter-checkbox input.group-type-checkbox');
+				$groupTypeCheckboxes.on( 'change', calculateFilterStates );
+				calculateFilterStates();
+			}
     });
 
-    rebuildDepartmentSelector = function() {
-        var currentSchool = $schoolSelector.val();
-        var currentDepartment = OLAcademicUnits.currentDepartment;
+		calculateSelectedGroupTypes = function() {
+			var allGroupTypes = [];
+			var selectedGroupTypes = [];
 
-				if ( ! currentSchool ) {
-            $departmentSelector.val('all').trigger('change');
-        }
+			$groupTypeCheckboxes.each(function(){
+				var thisGroupType = this;
 
-        if ( ! currentSchool || 'all' === currentSchool ) {
-            $departmentSelector.prop('disabled', true);
-            return;
+				allGroupTypes.push( thisGroupType.value );
+				if ( thisGroupType.checked ) {
+					selectedGroupTypes.push( thisGroupType.value );
+				}
+			});
+
+			if ( 0 === selectedGroupTypes.length ) {
+				return allGroupTypes;
+			} else {
+				return selectedGroupTypes;
+			}
+		};
+
+		/**
+		 * Determines whether filters should be disabled based on select group types.
+		 */
+		calculateFilterStates = function() {
+			var selectedGroupTypes = calculateSelectedGroupTypes();
+			var disabledFilters = {};
+
+			// Convert group-type disabled filters lists to an array of arrays (to use reduce() below).
+			var disabledFiltersArray = []
+			for ( var i in window.OLDirectory.groupTypeDisabledFilters ) {
+				if ( -1 === selectedGroupTypes.indexOf( i ) ) {
+					continue;
 				}
 
+				if ( ! window.OLDirectory.groupTypeDisabledFilters.hasOwnProperty( i ) ) {
+					continue;
+				}
 
-        $departmentSelector.empty();
+				disabledFiltersArray.push( window.OLDirectory.groupTypeDisabledFilters[ i ] );
+			}
 
-        var nullOption = $(deptAllOption);
-        if ( 0 === currentDepartment.length ) {
-            nullOption.prop('selected', true);
-        }
-        $departmentSelector.append( nullOption );
+			// Intersect of all disabled fields.
+			var disabledFilters = disabledFiltersArray.reduce((a, b) => a.filter(c => b.includes(c)));
 
-        $.each( OLAcademicUnits.departments[ currentSchool ], function( deptSlug, deptData ) {
-            var opt = $('<option value="' + deptSlug + '">' + deptData.label + '</option>');
+			allSidebarFilters.forEach( function( sidebarFilterId ) {
+				var $el = $( '#' + sidebarFilterId );
 
-            if ( deptSlug === currentDepartment ) {
-                opt.prop('selected', true);
-            }
+				// Everything is enabled by default.
+				$el.removeProp( 'disabled' );
 
-            $departmentSelector.append(opt);
-        } )
+				if ( -1 !== disabledFilters.indexOf( sidebarFilterId ) ) {
+					$el.prop( 'disabled', true );
+				}
+			} );
+		};
 
-        $departmentSelector.prop('disabled', false).trigger('change');
-    }
 }(jQuery));
