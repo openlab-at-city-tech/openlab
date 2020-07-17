@@ -60,12 +60,15 @@
 
 			allSidebarFilters.forEach( function( sidebarFilterId ) {
 				var $el = $( '#' + sidebarFilterId );
+				var $elLabel = $( 'label[for="' + sidebarFilterId + '"]' );
 
 				// Everything is enabled by default.
-				$el.removeProp( 'disabled' );
+				$el.removeProp( 'disabled' ).removeClass( 'disabled-checkbox' );
+				$elLabel.removeClass( 'disabled-label' );
 
 				if ( -1 !== disabledFilters.indexOf( sidebarFilterId ) ) {
-					$el.prop( 'disabled', true );
+					$el.prop( 'disabled', true ).addClass( 'disabled-checkbox' );
+					$elLabel.addClass( 'disabled-label' );
 				}
 			} );
 		};

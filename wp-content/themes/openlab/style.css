@@ -7538,6 +7538,10 @@ input[type="submit"] {
 .carousel-inner > .item > a > img {
   max-width: 100%;
 }
+.disabled-label,
+.disabled-checkbox {
+  opacity: 0.4;
+}
 .form-control {
   margin-bottom: 15px;
 }
