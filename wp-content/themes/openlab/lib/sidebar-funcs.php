@@ -375,17 +375,12 @@ function openlab_get_current_filter( $param ) {
 		break;
 
 		case 'group-types' :
-			$raw_group_types = wp_unslash( $_GET['group-types'] );
-			if ( empty( $raw_group_types ) ) {
-				$value = openlab_group_types();
-			} else {
-				$value = array_filter(
-					wp_unslash( $_GET['group-types'] ),
-					function( $group_type ) {
-						return in_array( $group_type, openlab_group_types(), true );
-					}
-				);
-			}
+			$value = array_filter(
+				wp_unslash( $_GET['group-types'] ),
+				function( $group_type ) {
+					return in_array( $group_type, openlab_group_types(), true );
+				}
+			);
 		break;
 
 		default :

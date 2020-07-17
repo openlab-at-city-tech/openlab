@@ -20,6 +20,9 @@ if ( bp_is_user_groups() ) {
 	$group_args['user_id'] = bp_loggedin_user_id();
 } elseif ( openlab_is_search_results_page() ) {
 	$group_type = openlab_get_current_filter( 'group-types' );
+	if ( ! $group_type ) {
+		$group_type = openlab_group_types();
+	}
 } else {
 	$group_type = openlab_page_slug_to_grouptype();
 }
