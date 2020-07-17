@@ -16,7 +16,7 @@ function cuny_local_env_flag() {
 				#local-env-flag {
 					position: fixed;
 					left: 0;
-					top: 35px;
+					bottom: 35px;
 					width: 150px;
 					padding: 10px 15px;
 					text-align: center;
