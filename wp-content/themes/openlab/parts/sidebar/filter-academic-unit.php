@@ -35,12 +35,12 @@ switch ( get_query_var( 'academic_unit_type' ) ) {
 		$url_param = 'department';
 
 		$units_of_type = [];
-		foreach ( openlab_get_department_list() as $school => $depts ) {
-			foreach ( $depts as $dept_slug => $dept_name ) {
+		foreach ( openlab_get_entity_departments() as $parent => $depts ) {
+			foreach ( $depts as $dept_slug => $dept_data ) {
 				$units_of_type[] = [
-					'name'   => $dept_name,
+					'name'   => $dept_data['label'],
 					'slug'   => $dept_slug,
-					'parent' => $school,
+					'parent' => $parent,
 				];
 			}
 		}
