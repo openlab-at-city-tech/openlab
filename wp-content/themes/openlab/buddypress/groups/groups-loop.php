@@ -141,8 +141,9 @@ if ( ! empty( $categories ) ) {
 	<div id="group-list" class="item-list group-list row">
 		<?php
 		while ( bp_groups() ) : bp_the_group();
-			$group_id       = bp_get_group_id();
-			$group_site_url = openlab_get_group_site_url( $group_id );
+			$group_id        = bp_get_group_id();
+			$group_site_url  = openlab_get_group_site_url( $group_id );
+			$this_group_type = openlab_get_group_type( $group_id );
 
 			$classes = 'group-item col-xs-12';
 			if ( openlab_group_has_badges( $group_id ) ) {
@@ -180,7 +181,7 @@ if ( ! empty( $categories ) ) {
 								<span class="original-copy hidden"><?php bp_group_name() ?></span>
 							</p>
 
-							<?php if ( 'course' === $group_type ) : ?>
+							<?php if ( 'course' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase">
 									<?php echo openlab_output_course_faculty_line( $group_id ); ?>
@@ -189,7 +190,7 @@ if ( ! empty( $categories ) ) {
 									<?php echo openlab_output_course_info_line($group_id); ?>
 								</div>
 
-							<?php elseif ( 'portfolio' ===$group_type ) : ?>
+							<?php elseif ( 'portfolio' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
 
