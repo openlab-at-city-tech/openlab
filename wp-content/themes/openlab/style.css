@@ -9327,7 +9327,7 @@ body form .checkbox-list-container {
   width: calc(50% - 16px);
 }
 .sidebar-filter-group-type {
-  margin-bottom: 16px;
+  margin: 5px 5px 15px 5px;
 }
 .sidebar-filter-checkbox label {
   font-weight: normal;
@@ -9336,7 +9336,6 @@ body form .checkbox-list-container {
   margin-right: 4px;
 }
 .sidebar-filter-badges {
-  border-top: 1px solid #ccc;
   margin-top: 6px;
   padding-top: 12px;
 }
@@ -9428,10 +9427,15 @@ body form .checkbox-list-container {
   overflow: hidden;
 }
 .sidebar-filter.sidebar-filter-open-cloneable {
-  margin-top: 8px;
+  margin-top: 16px;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 }
 .sidebar-buttons {
   padding-bottom: 24px;
+  padding-top: 10px;
 }
 /**group archives**/
 .group-list {
@@ -9545,10 +9549,12 @@ body form .checkbox-list-container {
 .filter {
   width: 93%;
   margin: 0 auto;
-  padding-bottom: 7px;
+  padding-bottom: 24px;
 }
 .filter p:first-child {
   margin-top: 7px;
+  margin-left: 3px;
+  margin-right: 3px;
 }
 .filter .custom-select {
   width: 100%;
