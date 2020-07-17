@@ -68,13 +68,13 @@ if ( 'school' === $url_param && 'all' !== $current_unit ) {
 			<option value="" <?php selected( '', $current_unit ); ?>>Select School / Office</option>
 			<optgroup label="All Schools">
 			<?php foreach ( openlab_get_school_list() as $school_key => $school_label ) : ?>
-				<option value="<?php echo esc_attr( $school_key ); ?>" <?php selected( $school_key, $current_unit ); ?>><?php echo esc_html( $school_label ); ?></option>
+				<option class="academic-unit academic-unit-nonempty" value="<?php echo esc_attr( $school_key ); ?>" <?php selected( $school_key, $current_unit ); ?>><?php echo esc_html( $school_label ); ?></option>
 			<?php endforeach; ?>
 			</optgroup>
 
 			<optgroup label="All Offices">
 			<?php foreach ( openlab_get_office_list() as $office_key => $office_label ) : ?>
-				<option value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $office_key, $current_unit ); ?>><?php echo esc_html( $office_label ); ?></option>
+				<option class="academic-unit academic-unit-nonempty" value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $office_key, $current_unit ); ?>><?php echo esc_html( $office_label ); ?></option>
 			<?php endforeach; ?>
 
 			</optgroup>
