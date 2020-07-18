@@ -28,6 +28,8 @@ ignores=(
   'wp-content/plugins/nextgen-gallery/vendor/nikic/php-parser/lib/PhpParser/Lexer.php'
 #  'wp-content/plugins/newsletters-lite/vendor/phpseclib'
   'wp-content/plugins/osm'
+  'wp-content/plugins/out-of-the-box/includes/phpThumb'
+  'wp-content/plugins/out-of-the-box/includes/dropbox-sdk/src/Dropbox/Security/'
   'wp-content/plugins/papercite/lib/PEAR.php'
   'wp-content/plugins/query-monitor/collectors/environment.php'
   'wp-content/plugins/query-monitor/wp-content/db.php'
