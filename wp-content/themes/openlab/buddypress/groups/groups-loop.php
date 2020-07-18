@@ -146,7 +146,7 @@ if ( ! empty( $categories ) ) {
 			$this_group_type = openlab_get_group_type( $group_id );
 
 			$classes = 'group-item col-xs-12';
-			if ( openlab_group_has_badges( $group_id ) ) {
+			if ( openlab_group_has_badges( $group_id ) || openlab_group_can_be_cloned( $group_id ) || openlab_group_is_open( $group_id ) ) {
 				$classes .= ' group-has-badges';
 			}
 

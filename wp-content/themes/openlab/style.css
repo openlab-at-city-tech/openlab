@@ -9440,8 +9440,18 @@ body form .checkbox-list-container {
   margin-left: 3px;
 }
 /**group archives**/
+@media (max-width: 767px) {
+  .group-archive-header-row .group-count {
+    margin-top: 24px;
+  }
+}
 .group-list {
   margin-top: 50px;
+}
+@media (max-width: 767px) {
+  .group-list {
+    margin-top: 6px;
+  }
 }
 .group-list .group-directory-badges {
   position: absolute;
@@ -9449,9 +9459,14 @@ body form .checkbox-list-container {
   padding-left: 25%;
   width: 100%;
 }
-@media (max-width: 1199px) {
+@media (max-width: 479px) {
   .group-list .group-directory-badges {
-    padding-left: 23%;
+    bottom: 0;
+    position: relative;
+  }
+  .group-list .group-directory-badges .badge-links {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
   }
 }
 .group-list .group-site-link {
