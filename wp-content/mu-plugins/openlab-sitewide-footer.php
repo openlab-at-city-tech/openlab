@@ -15,7 +15,7 @@ function cuny_local_env_flag() {
 			@media screen {
 				#local-env-flag {
 					position: fixed;
-					left: 0;
+					right: 0;
 					bottom: 35px;
 					width: 150px;
 					padding: 10px 15px;
