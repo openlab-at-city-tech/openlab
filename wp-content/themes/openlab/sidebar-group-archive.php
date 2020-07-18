@@ -44,7 +44,7 @@ if ( $is_search ) {
 					?>
 				</div>
 
-				<?php if ( function_exists( 'bpcgc_get_terms_by_group_type' ) ) :  ?>
+				<?php if ( ! $is_people && function_exists( 'bpcgc_get_terms_by_group_type' ) ) :  ?>
 					<?php get_template_part( 'parts/sidebar/filter-group-categories' ); ?>
 				<?php endif; ?>
 
