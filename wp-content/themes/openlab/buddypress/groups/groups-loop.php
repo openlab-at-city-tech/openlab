@@ -130,7 +130,7 @@ if ( ! empty( $categories ) ) {
 			<?php if ( openlab_is_search_results_page() ) : ?>
 				Narrow down your results using the search filters.
 			<?php else : ?>
-				&nbsp;
+				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
@@ -215,7 +215,7 @@ if ( ! empty( $categories ) ) {
 <?php else: ?>
 	<div class="row group-archive-header-row">
 		<div class="current-group-filters current-portfolio-filters col-sm-19">
-			<?php openlab_current_directory_filters(); ?>
+			&nbsp;
 		</div>
 	</div>
 	<div id="group-list" class="item-list row">
