@@ -1,0 +1,191 @@
+.tim-row{
+  margin-bottom: 20px;
+  padding-top: 50px;
+}
+.tim-row h3{
+  margin-top: 0;
+}
+
+#navbar-full .navbar{
+  border-radius: 0 !important;
+  margin-bottom: 15px;
+  z-index: 2;
+}
+
+#buttons .btn{
+  margin: 0 0px 15px;
+}
+
+.parallax{
+  width:100%;
+  height:570px;
+
+  display: block;
+  background-attachment: fixed;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position: center center;
+
+}
+
+.logo-container .logo{
+  width: 280px;
+  float: left;
+}
+
+.logo-container .brand{
+  font-size: 16px;
+  color: #FFFFFF;
+  line-height: 18px;
+  float: left;
+  margin-left: 10px;
+  margin-top: 7px;
+  width: 70px;
+  height: 40px;
+  text-align: left;
+}
+
+.logo-container .logo img{
+  width: 100%;
+}
+
+.navbar{
+  margin:0;
+  border-radius: 0;    
+}
+
+.navbar-small .logo-container .brand{
+  color: #333333;
+}
+
+.fixed-section{
+  top: 5%;
+  max-height: 85vh;
+  overflow: hidden;
+}
+
+.fixed-section.affix {
+  width: 275px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.fixed-section ul{
+  padding:0;
+}
+.fixed-section ul li{
+  list-style: none;
+  margin-bottom: 10px;
+}
+.fixed-section li a{
+  font-size: 14px;
+  padding: 2px;
+  display: block;
+  font-weight: bold;
+}
+.fixed-section li a.active{
+  color: #00bbff;
+}
+.fixed-section ul.sub{
+  padding-left:20px;
+}
+.fixed-section ul.sub li{
+  margin-bottom: 0px;
+}
+.fixed-section ul.sub li a{
+  font-weight: normal;
+}
+
+.fixed-section.float{
+  position: fixed;
+  top: 100px;
+  width: 200px;
+  margin-top: 0;
+}
+
+
+.parallax .parallax-image{
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+.parallax .parallax-image img{
+  width: 100%;
+}
+
+@media (max-width: 768px){
+  .parallax .parallax-image{
+    width: 100%;
+    height: 640px;
+    overflow: hidden;
+  }
+  .parallax .parallax-image img{
+    height: 100%;
+    width: auto;
+  }
+}
+
+.separator{
+  content: "Separator";
+  color: #FFFFFF;
+  display: block;
+  width: 100%;
+  padding: 20px;
+}
+.separator-line{
+  background-color: #EEE;
+  height: 1px;
+  width: 100%;
+  display: block;
+}
+.separator.separator-gray{
+  background-color: #EEEEEE;
+}
+.social-buttons-demo .btn{
+  margin-right: 5px;
+  margin-bottom: 7px;
+}
+
+.img-container{
+  width: 100%;
+  overflow: hidden;
+}
+.img-container img{
+  width: 100%;
+}
+
+
+@media (max-width: 991px){
+  .fixed-section.affix{
+    position: relative;
+    margin-bottom: 100px;
+  }
+}
+@media (max-width: 768px){
+  .btn, .btn-morphing{
+    margin-bottom: 10px;
+  }
+  .parallax .motto{
+    top: 170px;
+    margin-top: 0;
+    font-size: 60px;
+    width: 270px;
+  }
+}
+
+
+.animate {
+  transition: 1.5s ease-in-out;
+  -moz-transition: 1.5s ease-in-out;
+  -webkit-transition: 1.5s ease-in-out;
+}
+
+.navbar-default.navbar-small .logo-container .brand{
+  color: #333333;
+}
+.navbar-transparent.navbar-small .logo-container .brand{
+  color: #FFFFFF;
+}
+.navbar-default.navbar-small .logo-container .brand{
+  color: #333333;
+}

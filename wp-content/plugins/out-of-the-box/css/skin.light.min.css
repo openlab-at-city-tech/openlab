@@ -1,0 +1,253 @@
+#OutoftheBox,
+#OutoftheBox a,
+.OutoftheBox,
+.OutoftheBox a,
+.OutoftheBox p {
+    color: %dark1%
+}
+
+#OutoftheBox .nav-search.inuse,
+#OutoftheBox a:hover,
+.OutoftheBox a:hover {
+    color: %accent%
+}
+
+#OutoftheBox,
+#OutoftheBox .loading,
+#OutoftheBox .loading.search,
+#OutoftheBox div.scroll-to-top {
+    background-color: %background%
+}
+
+#OutoftheBox .loading .loader-beat {
+    background-color: %accent%
+}
+
+#OutoftheBox .loading .loader-spinner .path {
+    stroke: %accent%
+}
+
+#OutoftheBox .fileupload-info-container,
+#OutoftheBox .fileuploadform,
+#OutoftheBox .nav-header,
+#OutoftheBox .selected-folder {
+    background-color: %light1%
+}
+
+#OutoftheBox .nav-header {
+    border-color: %light2%
+}
+
+#OutoftheBox .entry,
+#OutoftheBox .newfolder {
+    background-color: %white%
+}
+
+#OutoftheBox .entry.hasfocus,
+#OutoftheBox .entry.isdragged,
+#OutoftheBox .entry.isselected,
+#OutoftheBox .entry.popupopen,
+#OutoftheBox .entry:hover,
+#OutoftheBox .image-container .entry-text,
+#OutoftheBox .image-folder,
+#OutoftheBox .image-folder .folder-text {
+    background-color: %accent%
+}
+
+#OutoftheBox .entry.hasfocus,
+#OutoftheBox .entry.hasfocus a,
+#OutoftheBox .entry.isdragged,
+#OutoftheBox .entry.isdragged a,
+#OutoftheBox .entry.isselected,
+#OutoftheBox .entry.isselected a,
+#OutoftheBox .entry.popupopen,
+#OutoftheBox .entry.popupopen a,
+#OutoftheBox .entry:hover,
+#OutoftheBox .entry:hover a,
+#OutoftheBox .image-container .entry-text,
+#OutoftheBox .image-folder .folder-text,
+.oftb-mobile #OutoftheBox .gridgallery .entry_edit a,
+.oftb-mobile #OutoftheBox .oftb-grid .entry_edit a {
+    color: %white%
+}
+
+#OutoftheBox div.preloading,
+.OutoftheBox div.preloading {
+    background-color: %accent%
+}
+
+.OutoftheBox .download-zip-menu li>a,
+.OutoftheBox .gear-menu li>a,
+.OutoftheBox .oftb-dropdown-menu li>a {
+    color: %dark1%
+}
+
+.OutoftheBox .download-zip-menu li>a:hover,
+.OutoftheBox .gear-menu li>a:hover,
+.OutoftheBox .oftb-dropdown-menu li>a:hover {
+    background-color: %accent%;
+    color: %white%
+}
+
+#outofthebox-modal-action .modal-account-selector .nav-account-selector {
+    background: %light2%;
+    color: %dark1%
+}
+
+.qtip.OutoftheBox {
+    background-color: %light1%;
+    color: %dark1%
+}
+
+.OutoftheBox.outofthebox-modal.light a {
+    color: %dark1%
+}
+
+.OutoftheBox.outofthebox-modal.light .modal-content {
+    background-color: %light1%;
+    color: %dark1%
+}
+
+.OutoftheBox.outofthebox-modal.light .outofthebox-modal-body,
+.OutoftheBox.outofthebox-modal.light .outofthebox-modal-body h1,
+.OutoftheBox.outofthebox-modal.light .outofthebox-modal-body h2,
+.OutoftheBox.outofthebox-modal.light .outofthebox-modal-body h3 {
+    color: %dark1%
+}
+
+#OutoftheBox .button,
+#OutoftheBox .button:focus,
+#OutoftheBox .button:hover,
+.OutoftheBox .button,
+.OutoftheBox .button:focus,
+.OutoftheBox .button:hover {
+    background: %accent%
+}
+
+#OutoftheBox .button,
+.OutoftheBox .button {
+    color: %white%
+}
+
+#OutoftheBox .button.secondary,
+#OutoftheBox .button.secondary:focus,
+#OutoftheBox .button.secondary:hover,
+.OutoftheBox .button.secondary,
+.OutoftheBox .button.secondary:focus,
+.OutoftheBox .button.secondary:hover {
+    background: %white%;
+    border: 1px solid %accent%
+}
+
+#OutoftheBox .button.secondary,
+.OutoftheBox .button.secondary {
+    color: %accent%
+}
+
+#OutoftheBox input[type=checkbox]:focus,
+#OutoftheBox input[type=radio]:focus,
+#OutoftheBox input[type=search]:focus,
+#OutoftheBox input[type=text]:focus,
+#OutoftheBox select:focus,
+#OutoftheBox textarea:focus,
+.OutoftheBox input[type=checkbox]:focus,
+.OutoftheBox input[type=radio]:focus,
+.OutoftheBox input[type=search]:focus,
+.OutoftheBox input[type=text]:focus,
+.OutoftheBox select:focus,
+.OutoftheBox textarea:focus {
+    border-color: %accent%;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .4);
+    -webkit-box-shadow: 0 0 8px 0 rgba(0, 0, 0, .4);
+    -moz-box-shadow: 0 0 8px 0 rgba(0, 0, 0, .4)
+}
+
+#OutoftheBox .fileuploadform {
+    border-color: %light2%
+}
+
+#OutoftheBox .fileupload-buttonbar,
+#OutoftheBox .template-download,
+#OutoftheBox .template-upload {
+    background: %background%
+}
+
+#OutoftheBox .template-download,
+#OutoftheBox .template-upload {
+    border-color: %light2% !important
+}
+
+#OutoftheBox .in .fileuploadform {
+    border-style: dotted
+}
+
+#OutoftheBox .hover .fileuploadform {
+    border-color: %accent% !important
+}
+
+#OutoftheBox .fileuploadform a:hover i,
+#OutoftheBox .hover .fileupload-drag-drop {
+    color: %accent%
+}
+
+#OutoftheBox .upload-progress .ui-progressbar-value {
+    background: %accent%
+}
+
+#OutoftheBox.light .wpcp__playlist-selector-list {
+    background: %background%
+}
+
+#OutoftheBox.light .wpcp__container.wpcp__video .wpcp__controls {
+    background: %accent%;
+    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, .35));
+    background: linear-gradient(transparent, rgba(0, 0, 0, .35))
+}
+
+#OutoftheBox.light .wpcp__container.wpcp__audio .wpcp__controls {
+    background: %accent%
+}
+
+#OutoftheBox.light .wpcp__ads-skip-block,
+#OutoftheBox.light .wpcp__overlay-button,
+#OutoftheBox.light .wpcp__overlay-button:hover,
+.wpcp__contextmenu-item:hover {
+    background-color: %accent%;
+    color: %white%
+}
+
+#OutoftheBox.light .wpcp__playlist-item-thumbnail {
+    background: %black%
+}
+
+#OutoftheBox.light .wpcp__playlist-selector-list-item {
+    color: %black%
+}
+
+#OutoftheBox.light .wpcp__playlist-selector-list-item:nth-child(even) {
+    background: %light1%
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item.wpcp__playlist-selector-list-item-folder-header,
+#OutoftheBox.light .wpcp__playlist-selector-list-item:hover {
+    background: %light2%
+}
+
+#OutoftheBox.light .wpcp__playlist-selected,
+#OutoftheBox.light .wpcp__playlist-selector-list-item.wpcp__playlist-selector-list-item-folder-header:hover {
+    background: %accent% !important;
+    color: %white% !important
+}
+
+#OutoftheBox.light .wpcp__captions-selected,
+#OutoftheBox.light .wpcp__chapters-selected,
+#OutoftheBox.light .wpcp__speed-selected {
+    color: %accent%
+}
+
+#OutoftheBox.light .wpcp__playlist-layer::-webkit-scrollbar-thumb,
+#OutoftheBox.light .wpcp__playlist-selector-list::-webkit-scrollbar-thumb,
+#OutoftheBox.light .wpcp__time-current,
+#OutoftheBox.light .wpcp__volume-current {
+    background-color: %accent%
+}
