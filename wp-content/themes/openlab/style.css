@@ -9494,7 +9494,7 @@ body form .checkbox-list-container {
 }
 .group-list .group-item-wrapper h2,
 .group-list .group-item-wrapper p.h2 {
-  margin: 6px 0;
+  margin: 4px 0;
 }
 .group-list .group-item-wrapper a :not(.btn-primary) {
   color: inherit;
@@ -9502,10 +9502,11 @@ body form .checkbox-list-container {
 .group-list .group-item-wrapper p {
   color: #333333;
   margin-bottom: 12px;
+  margin-top: 6px;
 }
 .group-list .group-item-wrapper .info-line {
   font-size: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 @media (max-width: 1199px) {
   .group-list .group-item-wrapper .item {
