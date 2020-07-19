@@ -211,10 +211,10 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 				margin-bottom: .5rem;
 			}
 
-			#openlab-library-information-widget-content ul {
-				list-style-type: disc;
+			.openlab-library-information ul {
+				list-style-type: none;
 				margin-top: .5rem;
-				padding-left: 20px;
+				padding-left: 0;
 			}
 
 			.library-search-advanced-link {
@@ -222,7 +222,7 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 				white-space: nowrap;
 			}
 
-			.openlab-library-information p {
+			#openlab-library-information-widget-content p {
 				margin-bottom: 0;
 			}
 		</style>
@@ -674,23 +674,14 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 				margin-bottom: .5rem;
 			}
 
+			.openlab-library-tools-widget ul {
+				list-style-type: none;
+				margin-top: .5rem;
+				padding-left: 0;
+			}
+
 			.openlab-library-subject-guides-widget .widget-content ul > li:first-child {
 				border-top: 0;
-			}
-
-			#openlab-library-information-widget-content ul {
-				list-style-type: disc;
-				margin-top: .5rem;
-				padding-left: 20px;
-			}
-
-			.library-search-advanced-link {
-				font-size: .9rem;
-				white-space: nowrap;
-			}
-
-			.openlab-library-information p {
-				margin-bottom: 0;
 			}
 		</style>
 
