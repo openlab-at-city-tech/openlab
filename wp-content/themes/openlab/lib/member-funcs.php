@@ -188,7 +188,7 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">&nbsp;</div>
+            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">Use the search and filters to find People.</div>
             <div class="col-md-6 col-sm-8 text-right"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
