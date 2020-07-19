@@ -8002,10 +8002,13 @@ body .padded-img .group-single-badges .group-badge {
   padding: 0 4px;
 }
 body .padded-img .group-single-badges .group-badge a {
-  font-size: 16px;
+  color: #4f4f4f;
+  font-size: 12px;
+  font-weight: 600;
   text-decoration: none;
 }
 body .padded-img .group-single-badges .group-badge a:hover {
+  color: #000;
   text-decoration: underline;
 }
 @media (max-width: 479px) {
