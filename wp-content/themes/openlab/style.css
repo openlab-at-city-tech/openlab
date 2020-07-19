@@ -7276,10 +7276,6 @@ body .hover-darken-for-accessibility a:hover,
 body .hover-darken-for-accessibility a:active {
   color: #3ba49b;
 }
-body .links-lighter-hover a:hover,
-body .links-lighter-hover a:focus {
-  color: #49cabe;
-}
 ul,
 ol {
   margin: 10px 0 15px 0;
@@ -8768,7 +8764,6 @@ body form .checkbox-list-container {
 .home-page #cac-featured .cfcw-content p.cfcw-title a {
   font-size: 18px;
   line-height: 1.25;
-  text-decoration: none;
 }
 .home-page #cac-featured .cfcw-content:after {
   clear: both;
