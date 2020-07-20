@@ -14,6 +14,16 @@ if ( $is_search ) {
 } else {
     $sidebar_title = 'Find a ' . ucfirst( $group_type );
 }
+
+$reset_url = '';
+if ( bp_is_members_directory() ) {
+	$reset_url = home_url( 'people' );
+} elseif ( openlab_is_search_results_page() ) {
+	$reset_url = home_url( 'search' );
+} else {
+	$reset_url = home_url( $group_slug );
+}
+
 ?>
 
 <h2 class="sidebar-title"><?php echo $sidebar_title; ?></h2>
@@ -66,7 +76,7 @@ if ( $is_search ) {
 
 			<div class="sidebar-buttons">
 				<input class="btn btn-primary" type="submit" onchange="document.forms['group_seq_form'].submit();" value="Submit">
-				<input class="btn btn-default" type="button" value="Reset" onClick="window.location.href = '<?php echo esc_html( home_url( $group_slug ) )?>'">
+				<input class="btn btn-default" type="button" value="Reset" onClick="window.location.href = '<?php echo esc_html( $reset_url )?>'">
 			</div>
         </form>
     </div><!--filter-->
