@@ -85,6 +85,17 @@
 	background-color: #089D80;
 	border-color: #089D80;
 }
+
+#wp-calendar,
+.footer .widget-content,
+.footer .widget-title {
+	color: #a8a8a8;
+}
+
+#wp-calendar a {
+	color: #fff;
+}
+
 /**contrast error fixing**/
 body .tagcloud a{
 	background: #595959;
