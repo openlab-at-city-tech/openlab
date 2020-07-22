@@ -1,0 +1,48 @@
+/**
+ * SetMore Plus widget stylesheet
+ */
+
+ul.setmore-style {
+	border: 1px solid #ddd;
+	margin-top: 3px;
+}
+
+ul.setmore-style li {
+	border-bottom: 1px dotted #ddd;
+	display: block;
+	margin-bottom: 0;
+	padding: 8px 0 8px 6px;
+}
+
+ul.setmore-style li:last-child {
+	border-bottom: 0;
+}
+
+ul.setmore-style label {
+	width: 100%;
+}
+
+ul.setmore-style input[type="radio"] {
+	margin-right: 3px;
+}
+
+ul.setmore-style li p {
+	margin-bottom: 0;
+}
+
+.widget a.setmore {
+	background: #ddd;
+	border-radius: 20px;
+	color: #333;
+	display: inline-block;
+	/*margin: 10px 0;*/
+	padding: 10px 20px;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.9);
+}
+
+.widget a.setmore:hover {
+	background: #eee;
+	color: #000;
+	text-decoration: none;
+}
