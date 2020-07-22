@@ -25,6 +25,10 @@ if ( bp_is_user_groups() ) {
 	}
 } else {
 	$group_type = openlab_page_slug_to_grouptype();
+
+	if ( openlab_is_my_groups_directory() ) {
+		$group_args['user_id'] = bp_loggedin_user_id();
+	}
 }
 
 $meta_query = array(
