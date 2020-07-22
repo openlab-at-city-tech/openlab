@@ -16,8 +16,15 @@ namespace TheLion\OutoftheBox;
 define('OUTOFTHEBOX_VERSION', '1.16.10');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
-define('OUTOFTHEBOX_CACHEDIR', WP_CONTENT_DIR.'/out-of-the-box-cache/');
-define('OUTOFTHEBOX_CACHEURL', WP_CONTENT_URL.'/out-of-the-box-cache/');
+
+if ( ! defined( 'OUTOFTHEBOX_CACHEDIR' ) ) {
+	define('OUTOFTHEBOX_CACHEDIR', WP_CONTENT_DIR.'/out-of-the-box-cache/');
+}
+if ( ! defined( 'OUTOFTHEBOX_CACHEURL' ) ) {
+	define('OUTOFTHEBOX_CACHEURL', WP_CONTENT_URL.'/out-of-the-box-cache/');
+}
+
+
 define('OUTOFTHEBOX_SLUG', dirname(plugin_basename(__FILE__)).'/out-of-the-box.php');
 define('OUTOFTHEBOX_ADMIN_URL', admin_url('admin-ajax.php'));
 
