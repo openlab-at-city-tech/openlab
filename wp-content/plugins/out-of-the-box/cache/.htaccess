@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} \.(cache|index|access_token|shortcodes)$ [NC]
+RewriteRule ^.* - [F,L]
