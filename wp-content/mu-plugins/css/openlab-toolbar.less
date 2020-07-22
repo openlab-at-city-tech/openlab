@@ -833,9 +833,6 @@
 			cursor: pointer;
 			color: @70gray;
 			margin-right: -6px; /* align with Log Out */
-			&:hover {
-				color: @aqua;
-			}
 			.search-trigger {
 				display: block;
 				font-weight: 700;
@@ -859,11 +856,11 @@
 				box-sizing: padding-box;
 				height: 67px;
 				z-index: 999999;
-				span {
-					color: @aqua;
-				}
 			}
 			@media (max-width: @screen-xs-max) {
+				height: 59px;
+				margin-right: 0;
+				width: 30px;
 				span {
 					line-height: 4;
 				}

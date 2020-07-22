@@ -8017,9 +8017,6 @@ button.oplb-bs .close {
   margin-right: -6px;
   /* align with Log Out */
 }
-.oplb-bs .search .search-trigger-wrapper:hover {
-  color: #49cabe;
-}
 .oplb-bs .search .search-trigger-wrapper .search-trigger {
   display: block;
   font-weight: 700;
@@ -8044,10 +8041,12 @@ button.oplb-bs .close {
   height: 67px;
   z-index: 999999;
 }
-.oplb-bs .search .search-trigger-wrapper.search-live span {
-  color: #49cabe;
-}
 @media (max-width: 767px) {
+  .oplb-bs .search .search-trigger-wrapper {
+    height: 59px;
+    margin-right: 0;
+    width: 30px;
+  }
   .oplb-bs .search .search-trigger-wrapper span {
     line-height: 4;
   }
