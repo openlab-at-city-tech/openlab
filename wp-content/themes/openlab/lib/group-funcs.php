@@ -106,7 +106,17 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php /* Site privacy markup */ ?>
 
-    <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
+	<?php
+	$site_id = openlab_get_site_id_by_group_id();
+	if ( $site_id ) {
+		$has_site = true;
+	} else {
+		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$has_site    = in_array( 'site', $clone_steps, true );
+	}
+	?>
+
+    <?php if ( $has_site ) : ?>
         <div class="panel panel-default">
             <div class="panel-heading semibold">Privacy Settings: <?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
