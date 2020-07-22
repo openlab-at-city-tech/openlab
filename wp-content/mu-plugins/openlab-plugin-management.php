@@ -197,6 +197,19 @@ add_filter( 'option_pdfemb', 'openlab_pdfemb_filter_license_key' );
 add_filter( 'default_option_pdfemb', 'openlab_pdfemb_filter_license_key' );
 
 /**
+ * License key for out-of-the-box.
+ */
+add_filter(
+	'pre_site_option_outofthebox_purchaseid',
+	function( $pre ) {
+		if ( defined( 'OUTOFTHEBOX_PURCHASEID' ) ) {
+			$pre = OUTOFTHEBOX_PURCHASEID;
+		}
+		return $pre;
+	}
+);
+
+/**
  * Load stylesheet for TablePress.
  */
 function openlab_tablepress_stylesheet( $atts ) {
