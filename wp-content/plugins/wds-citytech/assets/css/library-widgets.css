@@ -3,27 +3,18 @@
 	margin-bottom: .5rem;
 }
 
-.openlab-library-tools-widget ul {
-	list-style-type: none;
-	margin-top: .5rem;
-	padding-left: 0;
-}
-
 .openlab-library-subject-guides-widget .widget-content ul > li:first-child {
 	border-top: 0;
 }
 
-.openlab-library-information ul {
+#openlab-library-information-widget-content ul {
 	list-style-type: none;
 	margin-top: .5rem;
 	padding-left: 0;
+	margin-left: 0;
 }
 
 .library-search-advanced-link {
 	font-size: .9rem;
 	white-space: nowrap;
-}
-
-#openlab-library-information-widget-content p {
-	margin-bottom: 0;
 }
