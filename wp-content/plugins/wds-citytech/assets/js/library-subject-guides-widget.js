@@ -20,6 +20,7 @@
 		});
 
 		$document.on('widget-updated', initAccordions);
+		$document.on('widget-added', initAccordions);
 	});
 
 	var initAccordions = function() {
