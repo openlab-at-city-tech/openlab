@@ -178,6 +178,8 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		wp_enqueue_style( 'openlab-library-widgets', content_url( 'plugins/wds-citytech/assets/css/library-widgets.css' ), [], OL_VERSION );
+
 		$settings = $this->parse_settings( $instance );
 
 		?>
@@ -204,28 +206,6 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 				</div>
 			<?php echo $args['after_widget']; ?>
 		<?php endif; ?>
-
-		<style type="text/css">
-			.widget_openlab-library-tools-widget input[type="text"],
-			.widget_openlab-library-tools-widget select {
-				margin-bottom: .5rem;
-			}
-
-			.openlab-library-information ul {
-				list-style-type: none;
-				margin-top: .5rem;
-				padding-left: 0;
-			}
-
-			.library-search-advanced-link {
-				font-size: .9rem;
-				white-space: nowrap;
-			}
-
-			#openlab-library-information-widget-content p {
-				margin-bottom: 0;
-			}
-		</style>
 
 		<?php
 
@@ -633,6 +613,8 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		wp_enqueue_style( 'openlab-library-widgets', content_url( 'plugins/wds-citytech/assets/css/library-widgets.css' ), [], OL_VERSION );
+
 		$checked = isset( $instance['selected_guides'] ) ? $instance['selected_guides'] : [];
 		$guides  = openlab_get_library_subject_guides();
 
@@ -667,23 +649,6 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 		</div>
 
 		<?php echo $args['after_widget']; ?>
-
-		<style type="text/css">
-			.widget_openlab-library-tools-widget input[type="text"],
-			.widget_openlab-library-tools-widget select {
-				margin-bottom: .5rem;
-			}
-
-			.openlab-library-tools-widget ul {
-				list-style-type: none;
-				margin-top: .5rem;
-				padding-left: 0;
-			}
-
-			.openlab-library-subject-guides-widget .widget-content ul > li:first-child {
-				border-top: 0;
-			}
-		</style>
 
 		<?php
 
