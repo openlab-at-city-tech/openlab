@@ -593,12 +593,6 @@ button.related-link-action.related-link-add {
                         padding: 22px 11px;
                     }
                 }
-                &.current-menu-item{
-                    a{
-                        background: @cyan;
-                        color: @black;
-                    }
-                }
                 &:first-child{
                     a{
                         @media (min-width: @screen-md){
@@ -609,6 +603,11 @@ button.related-link-action.related-link-add {
             }
         }
     }
+}
+.navbar-default .current-menu-item a,
+.navbar-right .current-menu-item {
+	background: @cyan;
+	color: @black;
 }
 .sidebar-mobile-dropdown{
     .navbar.navbar-default{

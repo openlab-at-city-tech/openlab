@@ -7798,11 +7798,12 @@ button.related-link-action.related-link-add .fa {
     padding: 22px 11px;
   }
 }
-.navbar-default .container-fluid ul.nav li.current-menu-item a {
+@media (min-width: 992px) {
+}
+.navbar-default .current-menu-item a,
+.navbar-right .current-menu-item {
   background: #63dfd2;
   color: #000000;
-}
-@media (min-width: 992px) {
 }
 @media (max-width: 767px) {
   .sidebar-mobile-dropdown .navbar.navbar-default {

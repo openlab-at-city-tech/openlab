@@ -795,7 +795,7 @@
 			background: #fff;
 			display: none;
 			position: absolute;
-			right: 0;
+			right: -6px;
 			top: 65px;
 			width: 336px;
 			border: 1px solid @10gray;
@@ -825,19 +825,22 @@
 			}
 		}
 		.search-trigger-wrapper {
-			height: 59px;
+			height: 63px;
 			position: absolute;
 			right: 0;
 			text-align: center;
-			width: 30px;
+			width: 100px;
 			cursor: pointer;
 			color: @70gray;
+			margin-right: -6px; /* align with Log Out */
 			&:hover {
 				color: @aqua;
 			}
 			.search-trigger {
 				display: block;
+				font-weight: 700;
 				outline: none;
+				width: 100%;
 				padding: 0 0 0 4px;
 				&:focus {
 					outline: thin dotted;

@@ -49,12 +49,14 @@ function openlab_mu_site_wide_bp_search($mode = 'desktop', $location) {
     $mobile_mup = '';
 
     if ($mode == 'desktop'):
+		$wrapper_class = 'search-trigger-wrapper';
+		if ( openlab_is_search_results_page() ) {
+			$wrapper_class .= ' current-menu-item';
+		}
 
-        $mobile_mup .= <<<HTML
-<div class="search-trigger-wrapper">
-    <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Open Search</span></button>
-</div>
-HTML;
+        $mobile_mup = '<div class="' . esc_attr( $wrapper_class ) .  '">
+    <button class="search-trigger btn-link" data-mode="desktop" data-location="' . esc_attr( $location ) . '" href="#">Search <span class="fa fa-search" aria-hidden="true"></span></button>
+</div>';
     endif;
 
     $form_action = bp_search_form_action();
