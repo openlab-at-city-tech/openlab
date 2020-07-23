@@ -3055,6 +3055,44 @@ add_filter(
 );
 
 /**
+ * Shows the Editor admin notice for sites that should see it.
+ */
+add_action(
+	'admin_notices',
+	function() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return;
+		}
+
+		if ( 'classic' === get_option( 'classic-editor-replace' ) ) {
+			return;
+		}
+
+		if ( get_user_meta( get_current_user_id(), 'openlab_hide_editor_admin_notice' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-editor-admin-notice', content_url( 'wp-content/mu-plugins/js/openlab-editor-admin-notice.js' ), [ 'jquery' ], OL_VERSION );
+
+		?>
+		<div class="notice notice-info is-dismissible openlab-editor-admin-notice">
+			<p>Welcome to the new Block Editor! <a href="https://openlab.citytech.cuny.edu/blog/help/what-is-the-block-editor/">What is the Block Editor?</a> The Block Editor is more powerful than the Classic Editor, but we have <a href="https://openlab.citytech.cuny.edu/blog/help/what-is-the-block-editor/#switch-block-classic">help for you</a> if you’d like to stick with Classic.
+			<?php wp_nonce_field( 'openlab-editor-admin-notice-dismiss', 'openlab-editor-admin-notice-dismiss-nonce', false ); ?>
+		</div>
+		<?php
+	}
+);
+
+add_action(
+	'wp_ajax_openlab_editor_admin_notice_dismiss',
+	function() {
+		check_admin_referer( 'openlab-editor-admin-notice-dismiss' );
+
+		update_user_meta( get_current_user_id(), 'openlab_hide_editor_admin_notice', 1 );
+	}
+);
+
+/**
  * Enqueue custom JS for Search & Filter, when activated.
  */
 add_action(
