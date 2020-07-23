@@ -3035,6 +3035,26 @@ add_filter(
 );
 
 /**
+ * Backward compatibility for legacy sites using the Classic Editor.
+ *
+ * Sites that have never had their editor defaults set, and are older than 2020-08-04, should
+ * default to Classic rather than Block.
+ */
+add_filter(
+	'default_option_classic-editor-replace',
+	function( $retval ) {
+		$legacy_date = '2020-08-04 15:00:00';
+
+		$site = get_site();
+		if ( strtotime( $site->registered ) <= strtotime( $legacy_date ) ) {
+			$retval = 'classic';
+		}
+
+		return $retval;
+	}
+);
+
+/**
  * Enqueue custom JS for Search & Filter, when activated.
  */
 add_action(
