@@ -2656,6 +2656,7 @@ add_action(
 		?>
 		<style type="text/css">
 			#link-options .link-target,
+			.block-editor-link-control__settings,
 			.editor-url-popover .editor-url-popover__settings-toggle {
 				display: none;
 			}
