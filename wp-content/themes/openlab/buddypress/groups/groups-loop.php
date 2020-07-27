@@ -217,11 +217,15 @@ if ( ! empty( $categories ) ) {
 			<?php echo openlab_groups_pagination_links() ?>
 		</div>
 <?php else: ?>
+
 	<div class="row group-archive-header-row">
-		<div class="current-group-filters current-portfolio-filters col-sm-19">
-			&nbsp;
-		</div>
+		<?php if ( openlab_is_my_profile() ) : ?>
+			<?php echo openlab_submenu_markup( 'groups', $group_type, false ); ?>
+		<?php else : ?>
+			<div class="current-group-filters current-portfolio-filters col-sm-19">&nbsp;</div>
+		<?php endif; ?>
 	</div>
+
 	<div id="group-list" class="item-list row">
 		<div class="widget-error query-no-results col-sm-24">
 			<p class="bold">There are no items to display.</p>
