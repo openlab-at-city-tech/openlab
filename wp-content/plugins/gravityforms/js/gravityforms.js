@@ -97,7 +97,7 @@ function Currency(currency){
 	 */
     this.numberFormat = function(number, decimals, dec_point, thousands_sep, padded){
 
-    	var padded = typeof padded == 'undefined';
+    	padded = typeof padded == 'undefined' ? true : padded;
         number = (number+'').replace(',', '').replace(' ', '');
         var n = !isFinite(+number) ? 0 : +number,
         prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),

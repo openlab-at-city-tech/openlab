@@ -651,8 +651,10 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		if ( $performed_authorization && ! rgar( $this->authorization, 'is_authorized' ) ) {
 			$validation_result = $this->get_validation_result( $validation_result, $this->authorization );
 
-			//Setting up current page to point to the credit card page since that will be the highlighted field
-			GFFormDisplay::set_current_page( $validation_result['form']['id'], $validation_result['credit_card_page'] );
+			// Setting up current page to point to the credit card page since that will be the highlighted field.
+			// If "credit_card_page" is missing from $validation_result, the current page will be set to 0.
+			$current_page = intval( rgar( $validation_result, 'credit_card_page' ) );
+			GFFormDisplay::set_current_page( $validation_result['form']['id'], $current_page );
 		}
 
 		return $validation_result;
@@ -1434,6 +1436,11 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			);
 			$amount += $products['shipping']['price'];
 		}
+
+		// Round amount to resolve floating point precision issues.
+		$currency = RGCurrency::get_currency( $entry['currency'] );
+		$decimals = rgar( $currency, 'decimals', 0 );
+		$amount   = GFCommon::round_number( $amount, $decimals );
 
 		return array(
 			'payment_amount' => $amount,
