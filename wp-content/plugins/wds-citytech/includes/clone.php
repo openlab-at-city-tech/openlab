@@ -384,7 +384,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 			if ( 'course' === $group_type ) {
 				echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' ) );
 			} else {
-				echo sprintf( 'Logged-in OpenLab members can clone this %s. <a href="%s">Learn More!</a>', esc_html( $group_type_label ), esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' ) );
+				echo sprintf( 'Logged-in OpenLab members can clone this %s. <a href="%s">Learn More!</a>', esc_html( $group_type_label ), esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-projects-and-clubs/' ) );
 			}
 		}
 		echo '</p>';
