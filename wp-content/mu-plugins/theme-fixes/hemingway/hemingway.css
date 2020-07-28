@@ -97,6 +97,10 @@
 	color: #fff;
 }
 
+#wp-calendar caption, #wp-calendar thead {
+	color: #a8a8a8;
+}
+
 /**contrast error fixing**/
 body .tagcloud a{
 	background: #595959;
