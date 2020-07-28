@@ -429,8 +429,18 @@ add_filter(
 
 			// Files
 			groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
+
+			$doc_settings = apply_filters(
+				'bp_docs_default_group_settings',
+				array(
+					'group-enable' => 0,
+					'can-create'   => 'member',
+				)
+			);
+
+			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
 		} else {
-			$settings = apply_filters(
+			$doc_settings = apply_filters(
 				'bp_docs_default_group_settings',
 				array(
 					'group-enable' => 1,
@@ -438,7 +448,7 @@ add_filter(
 				)
 			);
 
-			groups_update_groupmeta( $group_id, 'bp-docs', $settings );
+			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
 		}
 	}
 );
