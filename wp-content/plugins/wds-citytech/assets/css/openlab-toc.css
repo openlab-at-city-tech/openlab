@@ -1,7 +1,7 @@
 .sidebar .toc-fixed {
 	background-color: #fff;
 	position: fixed;
-	top: 0;
+	top: 48px;
 	margin: 0;
 	width: 360px;
 }
@@ -53,6 +53,11 @@ body:not(.admin-bar) .toc-fixed {
 	display: none;
 }
 
+/** In page TOC */
+#ez-toc-container[aria-expanded="false"] nav {
+	display: none;
+}
+
 @media only screen and (max-width: 1023px) {
 	.sidebar .ez-toc {
 		position: fixed;
@@ -78,6 +83,10 @@ body:not(.admin-bar) .toc-fixed {
 @media (max-width: 767px) {
 	.sidebar .ez-toc {
 		top: 113px;
+	}
+
+	.sidebar .ez-toc[aria-expanded="false"] .ez-toc-title {
+		display: none;
 	}
 }
 

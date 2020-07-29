@@ -12,6 +12,9 @@ jQuery(document).ready( function( $ ) {
 			} else {
 				app.container.attr( 'aria-expanded', 'true' );
 			}
+
+			// Set aria-expanded for "In Page TOC".
+			$( '#ez-toc-container' ).attr( 'aria-expanded', 'true' );
 		},
 
 		cache: function() {
@@ -21,7 +24,8 @@ jQuery(document).ready( function( $ ) {
 			app.containerTop = app.container.offset().top;
 			app.previousSection = null;
 			app.offset = app.getTopNavOffeset();
-			app.links = Array.from( document.querySelectorAll( '.ez-toc-list a' ) );
+			app.footerCollapse = false;
+			app.links = Array.from( document.querySelectorAll( '.ez-toc .ez-toc-list a' ) );
 			app.sections = app.links.map( function( link ) {
 				var id = link.getAttribute( 'href' );
 				return document.querySelector( id );
@@ -38,6 +42,7 @@ jQuery(document).ready( function( $ ) {
 			app.window.on( 'scroll', app.handleScroll );
 			app.window.on( 'resize', app.handleResize );
 			app.container.on( 'click', '.ez-toc-toggle', app.handleToggle );
+			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
 		},
 
 		setUpObserver: function() {
@@ -53,7 +58,7 @@ jQuery(document).ready( function( $ ) {
 		handleObserver: function( entries ) {
 			entries.forEach( function( entry ) {
 				var id = entry.target.getAttribute( 'id' );
-				var element = document.querySelector( '.ez-toc-list li a[href="#' + id + '"]' );
+				var element = document.querySelector( '.ez-toc li a[href="#' + id + '"]' );
 	
 				if ( entry.intersectionRatio > 0 ) {
 					element.classList.add( 'is-visible' );
@@ -93,12 +98,13 @@ jQuery(document).ready( function( $ ) {
 
 		handleScroll: function() {
 			var scrollTop = app.window.scrollTop();
+			var containerHeight = window.innerHeight - app.offset
 
 			if ( scrollTop >= app.containerTop ) {
 				app.container.addClass( 'toc-fixed' );
 
 				if ( 'true' === app.container.attr( 'aria-expanded' ) ) {
-					app.container.css( 'height', window.innerHeight - app.offset );
+					app.container.css( 'height', containerHeight );
 					app.setNavHeight();
 				}
 			} else if ( scrollTop < app.containerTop ) {
@@ -106,7 +112,7 @@ jQuery(document).ready( function( $ ) {
 				app.container.css( 'height', 'auto' );
 			}
 
-			app.maybeCollapse();
+			app.maybeCollapse( containerHeight );
 		},
 
 		handleResize: function() {
@@ -134,9 +140,24 @@ jQuery(document).ready( function( $ ) {
 			app.container.css( 'height', 'auto' );
 		},
 
+		handleInPageToggle: function( event ) {
+			event.preventDefault();
+
+			var container = $(this).closest( '#ez-toc-container' );
+			var isExpanded = container.attr( 'aria-expanded' );
+
+			container.attr( 'aria-expanded', ( isExpanded === 'true' ) ? 'false' : 'true' );
+		},
+
 		getTopNavOffeset: function() {
 			var offset = 0;
 			var hasAdminBar = $('body').hasClass( 'admin-bar' );
+			var navPrimary = document.querySelector( '.nav-primary' );
+
+			// Handles EduPro sticky nav menu.
+			if ( navPrimary ) {
+				offset += 48;
+			}
 
 			if ( hasAdminBar && window.innerWidth <= 1023 ) {
 				offset += 50;
@@ -149,13 +170,23 @@ jQuery(document).ready( function( $ ) {
 			return offset;
 		},
 
-		maybeCollapse: function() {
-			var containerOffset = app.container.offset().top + app.container.height();
+		maybeCollapse: function( containerHeight ) {
+			var containerOffset = app.container.offset().top + containerHeight;
 			var contentOffset = app.content.offset().top + app.content.height();
 
 			if ( containerOffset > contentOffset ) {
 				app.container.attr( 'aria-expanded', 'false' );
 				app.container.css( 'height', 'auto' );
+
+				// Set flag when collapse is triggered by footer.
+				app.footerCollapse = true;
+			}
+			
+			if ( containerOffset < contentOffset && app.footerCollapse ) {
+				app.container.attr( 'aria-expanded', 'true' );
+				app.container.css( 'height', containerHeight );
+
+				app.footerCollapse = false;
 			}
 		},
 	};

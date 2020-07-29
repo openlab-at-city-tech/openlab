@@ -5,7 +5,7 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 /**
  * Inject the entry title right before the widget is rendered.
@@ -17,6 +17,11 @@ add_filter( 'widget_title', function( $title = '', ...$args ) {
 	// Check for `$id_base` of ToC widget.
 	if ( ! isset( $args[1] ) || 'ezw_tco' !== $args[1] ) {
 		return $title;
+	}
+
+	// Provide default title fallback.
+	if ( empty( $title ) ) {
+		$title = 'Contents';
 	}
 
 	add_filter( 'ez_toc_extract_headings_content', __NAMESPACE__ . '\\prepend_title' );
