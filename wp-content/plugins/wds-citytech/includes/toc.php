@@ -5,7 +5,7 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.2.0';
+const VERSION = '1.2.1';
 
 /**
  * Inject the entry title right before the widget is rendered.

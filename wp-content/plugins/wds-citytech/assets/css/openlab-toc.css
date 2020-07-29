@@ -1,3 +1,7 @@
+.ez-toc-section {
+	scroll-margin-top: 50px;
+}
+
 .sidebar .toc-fixed {
 	background-color: #fff;
 	position: fixed;
