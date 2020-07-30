@@ -995,9 +995,11 @@ class Openlab_Clone_Course_Site {
 		);
 
 		// Bulk delete metadata and revisions.
-		$sql_ids = implode( ',', array_map( 'intval', $posts_to_delete_ids ) );
-		$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type = 'revision' AND post_parent IN ({$sql_ids})" );
-		$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN ({$sql_ids})" );
+		if ( $posts_to_delete_ids ) {
+			$sql_ids = implode( ',', array_map( 'intval', $posts_to_delete_ids ) );
+			$wpdb->query( "DELETE FROM {$wpdb->posts} WHERE post_type = 'revision' AND post_parent IN ({$sql_ids})" );
+			$wpdb->query( "DELETE FROM {$wpdb->postmeta} WHERE post_id IN ({$sql_ids})" );
+		}
 
 		foreach ( $atts_to_delete_ids as $att_id ) {
 			// Will delete file as well.
