@@ -204,6 +204,7 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
 			$sidebar = 'primary-widget-area';
 			break;
 
+		case 'gillian' :
 		case 'twentyfifteen':
 		case 'twentyfourteen':
 		case 'twentyeleven':
