@@ -44,7 +44,7 @@ function openlab_group_privacy_settings($group_type) {
     }
 
     // If this is a cloned group/site, fetch the clone source's details
-    $clone_source_group_status = ''
+    $clone_source_group_status = '';
 	$clone_source_blog_status  = 0;
     if ( bp_is_group_create() ) {
         $new_group_id = bp_get_new_group_id();
