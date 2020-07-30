@@ -6,4 +6,4 @@
 	url = https://github.com/hard-g/elasticpress-buddypress
 [submodule "wp-content/plugins/openlab-badges"]
 	path = wp-content/plugins/openlab-badges
-	url = git://github.com/livinglab/openlab-badges
+	url = https://github.com/livinglab/openlab-badges.git
