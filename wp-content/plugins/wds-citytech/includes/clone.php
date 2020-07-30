@@ -196,6 +196,7 @@ add_action(
 function openlab_add_widget_to_main_sidebar( $widget ) {
 	switch ( get_template() ) {
 		case 'hemingway' :
+		case 'genesis' :
 			$sidebar = 'sidebar';
 			break;
 
