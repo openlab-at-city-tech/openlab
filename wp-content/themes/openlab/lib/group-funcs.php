@@ -107,12 +107,17 @@ function openlab_group_privacy_settings($group_type) {
     <?php /* Site privacy markup */ ?>
 
 	<?php
-	$site_id = openlab_get_site_id_by_group_id();
+	$site_id          = openlab_get_site_id_by_group_id();
+	$selected_privacy = 1;
 	if ( $site_id ) {
-		$has_site = true;
+		$has_site         = true;
+		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
 		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
 		$has_site    = in_array( 'site', $clone_steps, true );
+		if ( $has_site ) {
+			$selected_privacy = $clone_source_blog_status;
+		}
 	}
 	?>
 
@@ -121,7 +126,7 @@ function openlab_group_privacy_settings($group_type) {
             <div class="panel-heading semibold">Privacy Settings: <?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
                 <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Site.</p>
-                <?php openlab_site_privacy_settings_markup($site_id) ?>
+                <?php openlab_site_privacy_settings_markup( $site_id, $selected_privacy ) ?>
             </div>
         </div>
     <?php endif ?>
@@ -291,16 +296,16 @@ function openlab_get_active_semesters() {
 /**
  * Markup for groupblog privacy settings
  */
-function openlab_site_privacy_settings_markup($site_id = 0) {
-    global $blogname, $current_site;
+function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy = null ) {
+	if ( ! $site_id ) {
+		$site_id     = get_current_blog_id();
+		$blog_public = $selected_privacy;
+	} else {
+		$blog_public = get_blog_option( $site_id, 'blog_public' );
+	}
 
-    if (!$site_id) {
-        $site_id = get_current_blog_id();
-    }
+	$group_type = openlab_get_current_group_type( 'case=upper' );
 
-    $blog_name = get_blog_option($site_id, 'blogname');
-    $blog_public = get_blog_option($site_id, 'blog_public');
-    $group_type = openlab_get_current_group_type('case=upper');
     ?>
 
     <div class="radio group-site">
