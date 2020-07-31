@@ -826,8 +826,18 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta' );
 function openlab_group_member_role_settings( $group_type ) {
 	global $bp;
 
-	$site_id = openlab_get_site_id_by_group_id();
-	if ( ! $site_id ) {
+	$show_panel = false;
+	$site_id    = null;
+	if ( bp_is_group_create() ) {
+		// Is this an asynchronous clone that includes site creation?
+		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$show_panel  = in_array( 'site', $clone_steps, true );
+	} else {
+		$site_id    = openlab_get_site_id_by_group_id();
+		$show_panel = ! empty( $site_id );
+	}
+
+	if ( ! $show_panel ) {
 		return;
 	}
 
