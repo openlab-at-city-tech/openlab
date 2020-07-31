@@ -1793,13 +1793,13 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 	$faux_badges = [
 		'cloneable' => [
 			'add'        => openlab_group_can_be_cloned( $group_id ),
-			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/help-category/openlab-basics/',
+			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Cloneable',
 			'short_name' => 'Clone',
 		],
 		'open'      => [
 			'add'        => openlab_group_is_open( $group_id ),
-			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/help-category/openlab-basics/',
+			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Open',
 			'short_name' => 'Open',
 		],
