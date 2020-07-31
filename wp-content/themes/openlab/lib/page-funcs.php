@@ -555,7 +555,7 @@ function openlab_registration_page() {
 									data-parsley-errors-container="#signup_username_error"
 									/>
 
-								<p class="register-field-note">IMPORTANT: Your username will be visible in the URL of your member profile and cannot be changed. You don't need to use your real name. You can choose how you identify yourself by changing your display name at any time.</p>
+								<p class="register-field-note">IMPORTANT: <strong>You don't need to use your real name.</strong> Your username cannot be changed after you sign up. You need it to sign in, and it will be visible in the URL of your member profile. You can use your display name below to identify yourself publicly as you choose.
 							</div>
 
 
