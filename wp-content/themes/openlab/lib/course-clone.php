@@ -882,6 +882,11 @@ class Openlab_Clone_Course_Site {
 			openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
 		}
 
+		$enable_sharing = groups_get_groupmeta( $group->id, 'enable_sharing', true );
+		if ( $enable_sharing ) {
+			openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
+		}
+
 		restore_current_blog();
 	}
 
