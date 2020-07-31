@@ -1455,6 +1455,15 @@ function ra_copy_blog_page( $group_id ) {
 						}
 					}
 				}
+
+				// Add the Sharing widget if the group is set to 'Enable sharing'.
+				switch_to_blog( $new_id );
+				$enable_sharing = groups_get_groupmeta( $group_id, 'enable_sharing', true );
+				if ( $enable_sharing ) {
+					openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
+				}
+				restore_current_blog();
+
 			} else {
 				$msg = $id->get_error_message();
 			}
