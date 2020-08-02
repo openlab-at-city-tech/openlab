@@ -13,6 +13,8 @@
 
 namespace OpenLab\PrivateComments;
 
+const VERSION = '1.0.0';
+
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';
 }
@@ -24,6 +26,52 @@ function load_textdomain() {
 	load_plugin_textdomain( 'openlab-private-comments' );
 }
 add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
+
+/**
+ * Only allow comment authors to edit private comments.
+ *
+ * @param string[] $caps    Array of the user's capabilities.
+ * @param string   $cap     Capability name.
+ * @param int      $user_id The user ID.
+ * @param array    $args    Adds the context to the cap. Typically the object ID.
+ * @return string[] $caps
+ */
+function map_meta_cap( $caps, $cap, $user_id, $args ) {
+	if ( 'edit_comment' !== $cap || is_admin() ) {
+		return $caps;
+	}
+
+	$comment_id = $args[0];
+	$is_private = (bool) get_comment_meta( $comment_id, 'ol_is_private', true );
+
+	if ( ! $is_private ) {
+		return $caps;
+	}
+
+	$comment = get_comment( $comment_id );
+
+	if ( $user_id !== (int) $comment->user_id ) {
+		$caps[] = 'do_not_allow';
+	}
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', __NAMESPACE__ . '\\map_meta_cap', 10, 4 );
+
+/**
+ * Register our assets.
+ *
+ * @return void
+ */
+function register_assets() {
+	wp_register_style(
+		'openlab-private-comments',
+		plugins_url( 'assets/css/private-comments.css' , __FILE__ ),
+		[],
+		VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 
 /**
  * Is the current user the post author?
@@ -47,9 +95,15 @@ function is_author( $post_id = null ) {
  * @return void
  */
 function render_checkbox() {
-	if ( is_user_logged_in() ) {
-		include __DIR__ . '/views/form-checkbox.php';
+	if ( ! is_user_logged_in() ) {
+		return;
 	}
+
+	// Add markup.
+	include __DIR__ . '/views/form-checkbox.php';
+
+	// Enqueue assets.
+	wp_enqueue_style( 'openlab-private-comments' );
 }
 add_action( 'comment_form_logged_in_after', __NAMESPACE__ . '\\render_checkbox' );
 
