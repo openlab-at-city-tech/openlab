@@ -65,10 +65,18 @@ add_filter( 'map_meta_cap', __NAMESPACE__ . '\\map_meta_cap', 10, 4 );
  */
 function register_assets() {
 	wp_register_style(
-		'openlab-private-comments',
+		'ol-private-comments-style',
 		plugins_url( 'assets/css/private-comments.css' , __FILE__ ),
 		[],
 		VERSION
+	);
+
+	wp_register_script(
+		'ol-private-comments-script',
+		plugins_url( 'assets/js/private-comments.js' , __FILE__ ),
+		[ 'jquery' ],
+		VERSION,
+		true
 	);
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
@@ -103,7 +111,8 @@ function render_checkbox() {
 	include __DIR__ . '/views/form-checkbox.php';
 
 	// Enqueue assets.
-	wp_enqueue_style( 'openlab-private-comments' );
+	wp_enqueue_style( 'ol-private-comments-style' );
+	wp_enqueue_script( 'ol-private-comments-script' );
 }
 add_action( 'comment_form_logged_in_after', __NAMESPACE__ . '\\render_checkbox' );
 
@@ -131,6 +140,46 @@ function insert_comment( $comment_id, $comment ) {
 	}
 }
 add_action( 'wp_insert_comment', __NAMESPACE__ . '\\insert_comment', 10, 2 );
+
+/**
+ * Add "Private" comment notice.
+ *
+ * @param string     $text    Comment text.
+ * @param WP_Comment $comment Comment object.
+ * @return string
+ */
+function comment_notice( $text, $comment ) {
+	global $pagenow;
+
+	if ( 'edit-comments.php' === $pagenow ) {
+		return $text;
+	}
+
+	$is_private = (bool) get_comment_meta( $comment->comment_ID, 'ol_is_private', true );
+	if ( ! $is_private ) {
+		return $text;
+	}
+
+	$comment_text = sprintf(
+		'<div class="ol-private-comment-display ol-private-comment-hidden">' .
+			'<strong class="ol-private-comment-notice">%s</strong>&nbsp;' .
+			'<a href="#" class="ol-private-comment-show ol-private-comment-toggle">%s</a>' .
+			'<noscript>' .
+				'<span class="ol-private-comment-value-noscript">%s</span>' .
+			'</noscript>' .
+			'<a href="#" class="ol-private-comment-hide ol-private-comment-toggle">%s</a>' .
+			'<span class="ol-private-comment-value"><br />%s</span>' .
+		'</div>',
+		esc_html__( 'Comment (Private):', 'openlab-private-comments' ),
+		esc_html__( '(show)', 'openlab-private-comments' ),
+		esc_html( $text ),
+		esc_html__( '(hide)', 'openlab-private-comments' ),
+		esc_html( $text )
+	);
+
+	return $comment_text;
+}
+add_filter( 'get_comment_text', __NAMESPACE__ . '\\comment_notice', 100, 2 );
 
 /**
  * Display private comments only for specific users.

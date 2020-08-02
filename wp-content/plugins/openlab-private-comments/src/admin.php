@@ -64,14 +64,14 @@ function enqueue_assets( $hook_suffix ) {
 	}
 
 	wp_enqueue_script(
-		'openlab-private-comments',
-		plugins_url( 'assets/js/private-comments.js' , __DIR__ ),
+		'ol-private-comments-admin',
+		plugins_url( 'assets/js/private-comments-admin.js' , __DIR__ ),
 		[ 'jquery' ],
 		'1.0.0',
 		true
 	);
 
-	wp_localize_script( 'openlab-private-comments', 'olPrivateComments', [
+	wp_localize_script( 'ol-private-comments-admin', 'olPrivateComments', [
 		'nonce' => wp_create_nonce( 'ol_private_comments_nonce' ),
 	 ] );
 }
