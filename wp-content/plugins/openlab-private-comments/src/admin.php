@@ -5,6 +5,8 @@
 
 namespace OpenLab\PrivateComments\Admin;
 
+use const OpenLab\PrivateComments\VERSION;
+
 /**
  * Insert a value or key/value pair after a specific key in an array. If key doesn't exist, value is appended
  * to the end of the array.
@@ -67,7 +69,7 @@ function enqueue_assets( $hook_suffix ) {
 		'ol-private-comments-admin',
 		plugins_url( 'assets/js/private-comments-admin.js' , __DIR__ ),
 		[ 'jquery' ],
-		'1.0.0',
+		VERSION,
 		true
 	);
 
