@@ -85,3 +85,19 @@ function enqueue_assets() {
 	);
 }
 add_action( 'ez_toc_after_widget', __NAMESPACE__ . '\\enqueue_assets' );
+
+/**
+ * Override default Easy TOC options.
+ *
+ * @param array $defaults Default options.
+ * @return array $defaults Default options.
+ */
+function override_default_options( array $defaults = [] ) {
+	$override = [
+		'enabled_post_types' => [ 'post', 'page' ],
+		'counter'            => 'none',
+	];
+
+	return array_merge( $defaults, $override );
+}
+add_filter( 'ez_toc_get_default_options', __NAMESPACE__ . '\\override_default_options' );
