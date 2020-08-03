@@ -213,7 +213,7 @@ add_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
  * @param int $post_id Optional. ID of the post.
  * @return int[]       Array of comment IDs.
  */
-function get_inaccessible_comments( $user_id, $post_id = 0 ) {
+function get_inaccessible_comments( $user_id = null, $post_id = 0 ) {
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
 
@@ -246,6 +246,16 @@ function get_inaccessible_comments( $user_id, $post_id = 0 ) {
 		if ( $user_id ) {
 			$comment_post = get_post( $private_comment->comment_post_ID );
 			if ( $user_id == $comment_post->post_author ) {
+				continue;
+			}
+		}
+
+		// Comment authors should see private replies.
+		if ( ! empty( $private_comment->comment_parent ) ) {
+			$parent_id      = (int) $private_comment->comment_parent;
+			$parent_comment = get_comment( $parent_id );
+
+			if ( $user_id == $parent_comment->user_id ) {
 				continue;
 			}
 		}
