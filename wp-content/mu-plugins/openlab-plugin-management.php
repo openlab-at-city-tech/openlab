@@ -44,6 +44,7 @@ function openlab_hide_plugins( $plugins ) {
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'media-cleaner/media-cleaner.php',
+		'openlab-private-comments/openlab-private-comments.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
 		'pagemash/pagemash.php',
