@@ -228,7 +228,7 @@
                         <MediaUpload
                             allowedTypes={ ['image'] }
                             value={ imageID }
-                            onSelect={ (image) => setAttributes( { imageUrl: image.url, imageID: image.id, focalPoint: {} } ) }
+                            onSelect={ (image) => setAttributes( { imageUrl: image.url, imageID: image.id, focalPoint: {"x":"0.50","y":"0.50"} } ) }
                             render={ ( { open } ) => (
                                 <Button
                                     className="button button-large advgb-browse-image-btn"

@@ -466,7 +466,7 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 	$field->field_id = $field_id;
 	$field->user_id  = $user_id;
 
-	// Gets un/reserialized via xprofile_sanitize_data_value_before_save()
+	// Gets un/reserialized via xprofile_sanitize_data_value_before_save().
 	$field->value    = maybe_serialize( $value );
 
 	return $field->save();
@@ -479,7 +479,7 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
  *
  * @param int    $field_id         The ID of the xprofile field.
  * @param int    $user_id          The ID of the user to whom the data belongs.
- * @param string $visibility_level What the visibity setting should be.
+ * @param string $visibility_level What the visibility setting should be.
  * @return bool True on success
  */
 function xprofile_set_field_visibility_level( $field_id = 0, $user_id = 0, $visibility_level = '' ) {
@@ -706,52 +706,6 @@ function xprofile_override_user_fullnames() {
 add_action( 'bp_setup_globals', 'xprofile_override_user_fullnames', 100 );
 
 /**
- * Setup the avatar upload directory for a user.
- *
- * @since 1.0.0
- *
- * @package BuddyPress Core
- *
- * @param string $directory The root directory name. Optional.
- * @param int    $user_id   The user ID. Optional.
- * @return array Array containing the path, URL, and other helpful settings.
- */
-function xprofile_avatar_upload_dir( $directory = 'avatars', $user_id = 0 ) {
-
-	// Use displayed user if no user ID was passed.
-	if ( empty( $user_id ) ) {
-		$user_id = bp_displayed_user_id();
-	}
-
-	// Failsafe against accidentally nooped $directory parameter.
-	if ( empty( $directory ) ) {
-		$directory = 'avatars';
-	}
-
-	$path      = bp_core_avatar_upload_path() . '/' . $directory. '/' . $user_id;
-	$newbdir   = $path;
-	$newurl    = bp_core_avatar_url() . '/' . $directory. '/' . $user_id;
-	$newburl   = $newurl;
-	$newsubdir = '/' . $directory. '/' . $user_id;
-
-	/**
-	 * Filters the avatar upload directory for a user.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @param array $value Array containing the path, URL, and other helpful settings.
-	 */
-	return apply_filters( 'xprofile_avatar_upload_dir', array(
-		'path'    => $path,
-		'url'     => $newurl,
-		'subdir'  => $newsubdir,
-		'basedir' => $newbdir,
-		'baseurl' => $newburl,
-		'error'   => false
-	) );
-}
-
-/**
  * When search_terms are passed to BP_User_Query, search against xprofile fields.
  *
  * @since 2.0.0
@@ -893,8 +847,23 @@ function xprofile_remove_data( $user_id ) {
 	BP_XProfile_ProfileData::delete_data_for_user( $user_id );
 }
 add_action( 'wpmu_delete_user',  'xprofile_remove_data' );
-add_action( 'delete_user',       'xprofile_remove_data' );
 add_action( 'bp_make_spam_user', 'xprofile_remove_data' );
+
+/**
+ * Deletes user XProfile data on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function xprofile_remove_data_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'xprofile', $user_id ) ) {
+		return;
+	}
+
+	xprofile_remove_data( $user_id );
+}
+add_action( 'delete_user', 'xprofile_remove_data_on_delete_user' );
 
 /*** XProfile Meta ****************************************************/
 
@@ -1197,7 +1166,7 @@ function bp_xprofile_get_hidden_fields_for_user( $displayed_user_id = 0, $curren
 		$current_user_id = bp_loggedin_user_id();
 	}
 
-	// @todo - This is where you'd swap out for current_user_can() checks
+	// @todo - This is where you'd swap out for current_user_can() checks.
 	$hidden_levels = bp_xprofile_get_hidden_field_types_for_user( $displayed_user_id, $current_user_id );
 	$hidden_fields = bp_xprofile_get_fields_by_visibility_levels( $displayed_user_id, $hidden_levels );
 
@@ -1342,7 +1311,7 @@ function bp_xprofile_maybe_format_datebox_post_data( $field_id ) {
  *
  * @since 4.0.0
  *
- * @param string $email_address  The userss email address.
+ * @param string $email_address  The users email address.
  * @return array An array of personal data.
  */
 function bp_xprofile_personal_data_exporter( $email_address ) {

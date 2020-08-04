@@ -6,14 +6,15 @@ if ( have_posts() )  :
 
 	while ( have_posts() ) : the_post(); ?>
 
-		<div <?php post_class( 'section-inner' ); ?>>
+		<article <?php post_class( 'entry section-inner' ); ?>>
 		
 			<header class="page-header section-inner thin<?php if ( has_post_thumbnail() ) echo ' fade-block'; ?>">
 			
 				<div>
 			
 					<?php 
-					the_title( '<h1 class="title">', '</h1>' );
+
+					the_title( '<h1 class="title entry-title">', '</h1>' );
 
 					// Make sure we have a custom excerpt
 					if ( has_excerpt() ) the_excerpt();
@@ -36,7 +37,7 @@ if ( have_posts() )  :
 								); ?>
 							<?php endif; ?>
 
-						</div>
+						</div><!-- .meta -->
 
 					<?php endif; ?>
 					
@@ -46,17 +47,20 @@ if ( have_posts() )  :
 
 			<?php if ( has_post_thumbnail() && ! post_password_required() ) : ?>
 
-				<div class="featured-image">
-					<?php the_post_thumbnail( 'hamilton_fullscreen-image' ); ?>
-				</div>
+				<figure class="entry-image featured-image">
+					<?php the_post_thumbnail(); ?>
+				</figure>
 
 			<?php endif; ?>
 
 			<div class="entry-content section-inner thin">
 
-				<?php the_content(); ?>
+				<?php 
+				the_content();
+				edit_post_link(); 
+				?>
 
-			</div> <!-- .content -->
+			</div><!-- .content -->
 
 			<?php 
 			
@@ -66,32 +70,32 @@ if ( have_posts() )  :
 			
 			if ( get_post_type() == 'post' ) : ?>
 
-				<div class="meta bottom section-inner thin group">
+				<div class="meta bottom section-inner thin">
 				
 					<?php if ( get_the_tags() ) : ?>
 				
-						<p class="tags"><?php the_tags( ' #', ' #', ' ' ); ?></p>
+						<p class="tags"><?php the_tags( '<span>#', '</span><span>#', '</span> ' ); ?></p>
 					
 					<?php endif; ?>
 
-					<p><a href="<?php the_permalink(); ?>" title="<?php the_time( get_option( 'date_format' ) ); ?> <?php the_time( get_option( 'time_format' ) ); ?>"><?php the_date( get_option( 'date_format' ) ); ?></a>
+					<p class="post-date"><a href="<?php the_permalink(); ?>"><?php the_date( get_option( 'date_format' ) ); ?></a>
 
-				</div> <!-- .meta -->
+				</div><!-- .meta -->
 
 			<?php endif; ?>
 			
 			<?php 
 			
-			// Output comments wrapper if it's a post, or if comments are open, or if there's a comment number – and check for password
-			if ( ( $post_type == 'post' || comments_open() || get_comments_number() ) && ! post_password_required() ) : ?>
+			// Output comments wrapper if comments are open, or if there's a comment number – and check for password
+			if ( ( comments_open() || get_comments_number() ) && ! post_password_required() ) : ?>
 			
 				<div class="section-inner thin">
 					<?php comments_template(); ?>
-				</div>
+				</div><!-- .section-inner -->
 			
 			<?php endif; ?>
 
-		</div> <!-- .post -->
+		</article><!-- .entry -->
 
 		<?php 
 		

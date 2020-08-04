@@ -195,10 +195,16 @@ add_action(
  */
 function openlab_add_widget_to_main_sidebar( $widget ) {
 	switch ( get_template() ) {
+		case 'hemingway' :
+		case 'genesis' :
+			$sidebar = 'sidebar';
+			break;
+
 		case 'twentyten':
 			$sidebar = 'primary-widget-area';
 			break;
 
+		case 'gillian' :
 		case 'twentyfifteen':
 		case 'twentyfourteen':
 		case 'twentyeleven':
@@ -349,10 +355,12 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 			)
 		);
 
+		$group_type = openlab_get_group_type( $group_id );
+
 		$clone_link = add_query_arg(
 			array(
 				'clone' => $group_id,
-				'type'  => openlab_get_group_type( $group_id ),
+				'type'  => $group_type,
 			),
 			bp_get_groups_directory_permalink() . 'create/step/group-details/'
 		);
@@ -363,15 +371,23 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		$can_clone = false;
 		if ( is_user_logged_in() ) {
-			$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-			$can_clone = 'faculty' === strtolower( $user_type );
+			if ( 'course' === $group_type ) {
+				$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+				$can_clone = 'faculty' === strtolower( $user_type );
+			} else {
+				$can_clone = true;
+			}
 		}
 
 		echo '<p>';
 		if ( $can_clone ) {
 			echo sprintf( '<a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
 		} else {
-			echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' );
+			if ( 'course' === $group_type ) {
+				echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' ) );
+			} else {
+				echo sprintf( 'Logged-in OpenLab members can clone this %s. <a href="%s">Learn More!</a>', esc_html( $group_type_label ), esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-projects-and-clubs/' ) );
+			}
 		}
 		echo '</p>';
 

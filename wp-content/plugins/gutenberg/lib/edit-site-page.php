@@ -127,6 +127,7 @@ function gutenberg_edit_site_init( $hook ) {
 	}
 
 	$settings = array(
+		'alignWide'              => get_theme_support( 'align-wide' ),
 		'disableCustomColors'    => get_theme_support( 'disable-custom-colors' ),
 		'disableCustomFontSizes' => get_theme_support( 'disable-custom-font-sizes' ),
 		'imageSizes'             => $available_image_sizes,
@@ -142,32 +143,19 @@ function gutenberg_edit_site_init( $hook ) {
 	if ( false !== $font_sizes ) {
 		$settings['fontSizes'] = $font_sizes;
 	}
+	$settings['styles'] = gutenberg_get_editor_styles();
 
-	$template_ids      = array();
-	$template_part_ids = array();
-	foreach ( get_template_types() as $template_type ) {
-		// Skip 'embed' for now because it is not a regular template type.
-		// Skip 'index' because it's a fallback that we handle differently.
-		if ( in_array( $template_type, array( 'embed', 'index' ), true ) ) {
-			continue;
-		}
+	$settings['editSiteInitialState'] = array();
 
-		$template_hierarchy = array_merge( get_template_hierachy( $template_type ), get_template_hierachy( 'index' ) );
-		$current_template   = gutenberg_find_template_post_and_parts( $template_hierarchy );
-		if ( isset( $current_template ) ) {
-			$template_ids[ $current_template['template_post']->post_name ] = $current_template['template_post']->ID;
-			$template_part_ids = $template_part_ids + $current_template['template_part_ids'];
-		}
-	}
-
-	$current_template_id = $template_ids['front-page'];
-
-	$settings['templateId']      = $current_template_id;
-	$settings['homeTemplateId']  = $current_template_id;
-	$settings['templateType']    = 'wp_template';
-	$settings['templateIds']     = array_values( $template_ids );
-	$settings['templatePartIds'] = array_values( $template_part_ids );
-	$settings['styles']          = gutenberg_get_editor_styles();
+	$settings['editSiteInitialState']['templateType'] = 'wp_template';
+	$settings['editSiteInitialState']['showOnFront']  = get_option( 'show_on_front' );
+	$settings['editSiteInitialState']['page']         = array(
+		'path'    => '/',
+		'context' => 'page' === $settings['editSiteInitialState']['showOnFront'] ? array(
+			'postType' => 'page',
+			'postId'   => get_option( 'page_on_front' ),
+		) : array(),
+	);
 
 	// This is so other parts of the code can hook their own settings.
 	// Example: Global Styles.
@@ -179,9 +167,9 @@ function gutenberg_edit_site_init( $hook ) {
 	$preload_paths = array(
 		'/',
 		'/wp/v2/types?context=edit',
-		'/wp/v2/taxonomies?per_page=-1&context=edit',
+		'/wp/v2/taxonomies?per_page=100&context=edit',
+		'/wp/v2/pages?per_page=100&context=edit',
 		'/wp/v2/themes?status=active',
-		sprintf( '/wp/v2/templates/%s?context=edit', $current_template_id ),
 		array( '/wp/v2/media', 'OPTIONS' ),
 	);
 	$preload_data  = array_reduce(

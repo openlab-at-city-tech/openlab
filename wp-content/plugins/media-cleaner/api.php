@@ -1,11 +1,30 @@
 <?php
 
 class Meow_WPMC_API {
+	private $core;
+	private $admin;
+	private $engine;
 
+	// Error code enums
+	// Should be able to referred from the JS client
+	const E = array (
+		'INVALID_NONCE' => 1,
+		'INVALID_PARAMS' => 2,
+		'FILE_OPEN_FAILURE' => 10,
+		'FILE_WRITE_FAILURE' => 11
+	);
+
+	/**
+	 * @param Meow_WPMC_Core   $core
+	 * @param Meow_WPMC_Admin  $admin
+	 * @param Meow_WPMC_Engine $engine
+	 */
 	function __construct( $core, $admin, $engine ) {
 		$this->core = $core;
 		$this->engine = $engine;
 		$this->admin = $admin;
+		add_action( 'wp_ajax_wpmc_define', array( $this, 'wp_ajax_wpmc_define' ) );
+		add_action( 'wp_ajax_wpmc_get_num_posts', array( $this, 'wp_ajax_wpmc_get_num_posts' ) );
 		add_action( 'wp_ajax_wpmc_extract_references', array( $this, 'wp_ajax_wpmc_extract_references' ) );
 		add_action( 'wp_ajax_wpmc_retrieve_targets', array( $this, 'wp_ajax_wpmc_retrieve_targets' ) );
 		add_action( 'wp_ajax_wpmc_check_targets', array( $this, 'wp_ajax_wpmc_check_targets' ) );
@@ -21,17 +40,165 @@ class Meow_WPMC_API {
 	 * ASYNCHRONOUS AJAX FUNCTIONS
 	 ******************************************************************************/
 
-	// Anayze the posts to extract the references.
+	/**
+	 * Writes a constant definition on wp-config.php
+	 *
+	 * Method: POST
+	 * Params:
+	 *  - nonce: Nonce
+	 *  - name:  Name of the constant to define
+	 *  - value: Value of the constant
+	 * Return:
+	 *  - data.action:  'wpmc_define'
+	 *  - data.message: <string> (on failure)
+	 *  - data.code:    <int>    (on failure)
+	 */
+	function wp_ajax_wpmc_define() {
+		try {
+			$action = 'wpmc_define';
+			$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
+			if ( !wp_verify_nonce( $nonce, $action ) ) throw new Exception( "Nonce check failed", self::E['INVALID_NONCE'] );
+
+			$name = isset( $_POST['name'] ) ? $_POST['name'] : '';
+			$value = isset( $_POST['value'] ) ? $_POST['value'] : '';
+			$result = array (
+				'success' => false,
+				'data' => array ( 'action' => $action )
+			);
+
+			/* Check the constant name and type */
+			$supported = false;
+			$constants = array ( // Supported constants
+				/* We can add more constants to support */
+				'MEDIA_TRASH' => array ( 'type' => 'boolean' )
+			);
+			foreach ( $constants as $i => $item ) {
+				if ( $i != $name ) continue;
+				$supported = true;
+				/* Transform the value into a proper format */
+				switch ( $item['type'] ) {
+				case 'boolean':
+				case 'bool':
+					$value = boolval( $value ) ? 'true' : 'false';
+					break;
+				case 'integer':
+				case 'int':
+					$value = intval( $value );
+					break;
+				case 'string':
+					$value = "'" . strval( $value ) . "'";
+					break;
+				}
+				break;
+			}
+			if ( !$supported ) throw new Exception( "Invalid parameters", self::E['INVALID_PARAMS'] );
+
+			/* Open wp-config.php */
+			$conf = ABSPATH . 'wp-config.php';
+			$stream = fopen( $conf, 'r+' );
+			if ( $stream === false ) throw new Exception( "Failed to open the config file", self::E['FILE_OPEN_FAILURE'] );
+
+			try {
+				if ( !flock( $stream, LOCK_EX ) ) throw new Exception( "Failed to lock the config file", self::E['FILE_OPEN_FAILURE'] );
+				$stat = fstat( $stream );
+
+				/* Find out the ideal position to write on */
+				$found = false;
+				$patterns = array (
+					array (
+						'regex' => '^\/\*\s*' . preg_quote( "That's all, stop editing!" ) . '.*?\s*\*\/',
+						'where' => 'above'
+					)
+				);
+				$current = 0;
+				while ( !feof( $stream ) ) {
+					$line = fgets( $stream ); // Read line by line
+					if ( $line === false ) break; // No more lines
+					$prev = $current; // Previous position
+					$current = ftell( $stream ); // Current position
+
+					foreach ( $patterns as $item ) {
+						if ( !preg_match( '/'.$item['regex'].'/', trim( $line ) ) ) continue;
+						/* Found */
+						$found = true;
+						if ( $item['where'] == 'above' ) {
+							fseek( $stream, $prev );
+							$current = $prev;
+						}
+						break 2;
+					}
+				}
+
+				/* Check if the position is found */
+				if ( !$found ) throw new Exception( "Cannot determine the position to write on", self::E['FILE_WRITE_FAILURE'] );
+
+				/* Write the constant definition line */
+				$new = "define( '{$name}', {$value} );" . PHP_EOL;
+				$rest = fread( $stream, $stat['size'] - $current );
+				fseek( $stream, $current );
+				$written = fwrite( $stream, $new . $rest );
+
+				/* All done */
+				if ( $written === false ) throw new Exception( "Failed to write on the config file", self::E['FILE_WRITE_FAILURE'] );
+				fclose( $stream );
+
+			} catch( Exception $e ) {
+				fclose( $stream );
+				throw $e;
+			}
+
+		} catch( Exception $e ) {
+			$result['data']['message'] = $e->getMessage();
+			$result['data']['code'] = $e->getCode();
+			exit( json_encode( $result ) );
+		}
+
+		$result['success'] = true;
+		exit( json_encode( $result ) );
+	}
+
+	/**
+	 * Method: POST
+	 * Params:
+	 *  - source: 'content' | 'media'
+	 * Return:
+	 *  - data.action: 'get_num_posts'
+	 *  - data.num:    A number of the posts
+	 */
+	function wp_ajax_wpmc_get_num_posts() {
+		$src = isset( $_POST['source'] ) ? $_POST['source'] : null;
+		$num = 0;
+
+		switch ($src) {
+		case 'content':
+			$num = count( $this->engine->get_posts_to_check() );
+			break;
+		case 'media':
+			$num = count( $this->engine->get_media_entries() );
+			break;
+		}
+
+		exit( json_encode( array (
+			'success' => true,
+			'data'    => array (
+				'action'  => 'get_num_posts',
+				'num'     => $num
+			)
+		)));
+	}
+
+	// Analyze the posts to extract the references.
 	function wp_ajax_wpmc_extract_references() {
 		$limit = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
 		$source = isset( $_POST['source'] ) ? $_POST['source'] : null;
 		$limitsize = get_option( 'wpmc_posts_buffer', 5 );
 
 		$finished = false;
+		$message = ""; // will be filled by extractRefsFrom...
 		if ( $source === 'content' )
-			$finished = $this->engine->extractRefsFromContent( $limit, $limitsize, $message ); // $message is set by run()
+			$finished = $this->engine->extractRefsFromContent( $limit, $limitsize, $message );
 		else if ( $source === 'media' )
-			$finished = $this->engine->extractRefsFromLibrary( $limit, $limitsize, $message ); // $message is set by run()
+			$finished = $this->engine->extractRefsFromLibrary( $limit, $limitsize, $message );
 		else {
 			error_log('Media Cleaner: No source was mentioned while calling the extract_references action.');
 		}

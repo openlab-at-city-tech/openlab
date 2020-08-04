@@ -9,19 +9,18 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version 4.9.11
+ * @since 5.0.0
  *
  * @var WP_Post $event The event post object with properties added by the `tribe_get_event` function.
  *
  * @see tribe_get_event() For the format of the event object.
  */
 
-$classes = get_post_class( [ 'tribe-common-g-row', 'tribe-common-g-row--gutters', 'tribe-events-calendar-day__event' ], $event->ID );
+$classes = tribe_get_post_class( [ 'tribe-common-g-row', 'tribe-common-g-row--gutters', 'tribe-events-calendar-day__event' ], $event->ID );
 
-if ( $event->featured ) {
+if ( ! empty( $event->featured ) ) {
 	$classes[] = 'tribe-events-calendar-day__event--featured';
 }
-
 ?>
 <article <?php tribe_classes( $classes ); ?>>
 	<div class="tribe-events-calendar-day__event-content tribe-common-g-col">

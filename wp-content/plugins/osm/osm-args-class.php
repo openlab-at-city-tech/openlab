@@ -204,6 +204,10 @@ private function setMapAPIkey($a_map_api_key){
   $this->map_api_key = $a_map_api_key;
 }
 
+private function setMapZoom($a_map_zoom){
+  $this->zoom = $a_map_zoom;
+}
+
 public function setMap_event($a_map_event){
   $this->map_event = $a_map_event;  
 }
@@ -212,9 +216,11 @@ public function setTaxonomy($a_tagged_filter_type){
   $this->tagged_filter_type = $a_tagged_filter_type;  
 }
 
-  function __construct($a_width, $a_height, $a_map_center, $zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, $a_map_event, 
+  function __construct($a_width, $a_height, $a_map_center, $a_zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, $a_map_event, 
     $marker_name, $a_marker_size, $control, $wms_address, $wms_param, $wms_attr_name,  $wms_type, $wms_attr_url, 
-    $tagged_type, $a_tagged_filter_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color){
+    $tagged_type, $a_tagged_filter_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color, 
+    $file_title, $file_link, $setup_zoom, $setup_layer, $setup_center, $setup_trigger, $setup_map_name, $file_select_box, $bckgrndimg
+    ){
         
     $this->setLatLon($a_map_center) ;
     $this->setMapSize($a_width,  $a_height);
@@ -228,6 +234,7 @@ public function setTaxonomy($a_tagged_filter_type){
 	$this->setMapType($a_type); // needs to be done after setMapAPIkey
 	$this->setMap_event($a_map_event);
         $this->setTaxonomy($a_tagged_filter_type);
+        $this-> setMapZoom($a_zoom);
 }
 
 public function getPostMarkers(){
@@ -235,10 +242,49 @@ public function getPostMarkers(){
 }
 
 public function getMapCenterLat(){
-  return $this->map_Lat;
+  if ($this->map_Lat == "autolat"){
+    return 58.213;
+  }
+  else{
+    return $this->map_Lat;
+  }
 }
+
+
 public function getMapCenterLon(){
-  return $this->map_Lon;
+  if ($this->map_Lon == "autolon"){
+    return 6.378;
+  }
+  else{
+    return $this->map_Lon;
+  }
+}
+
+public function getMapZoom(){
+  if ($this->zoom == "autozoom"){
+    return 9;
+  }
+  else{
+    return $this->zoom;
+  }
+}
+
+public function isAutozoom(){
+  if ($this->zoom == "autozoom"){
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+public function isAutocenter(){
+  if (($this->map_Lat == "autolat")||($this->map_Lon == "autolon")||($this->zoom == "autozoom")){
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 public function getMapAPIkey(){

@@ -18,5 +18,6 @@
     "jcarousellite": "^1.9.2",
     "jit-grunt": "^0.9.1"
   },
-  "description": ""
+  "description": "",
+  "dependencies": {}
 }

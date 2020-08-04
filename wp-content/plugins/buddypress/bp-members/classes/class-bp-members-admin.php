@@ -642,6 +642,22 @@ class BP_Members_Admin {
 			 */
 			$js = apply_filters( 'bp_members_admin_js', $js );
 			wp_enqueue_script( 'bp-members-js', $js, array( 'jquery' ), bp_get_version(), true );
+
+			if ( ! bp_core_get_root_option( 'bp-disable-avatar-uploads' ) && buddypress()->avatar->show_avatars ) {
+				/**
+				 * Get Thickbox.
+				 *
+				 * We cannot simply use add_thickbox() here as WordPress is not playing
+				 * nice with Thickbox width/height see https://core.trac.wordpress.org/ticket/17249
+				 * Using media-upload might be interesting in the future for the send to editor stuff
+				 * and we make sure the tb_window is wide enough
+				 */
+				wp_enqueue_style ( 'thickbox' );
+				wp_enqueue_script( 'media-upload' );
+
+				// Get Avatar Uploader.
+				bp_attachments_enqueue_scripts( 'BP_Attachment_Avatar' );
+			}
 		}
 
 		/**
@@ -723,6 +739,7 @@ class BP_Members_Admin {
 	 * help, and setting up screen options.
 	 *
 	 * @since 2.0.0
+	 * @since 6.0.0 The `delete_avatar` action is now managed into this method.
 	 */
 	public function user_admin_load() {
 
@@ -819,15 +836,34 @@ class BP_Members_Admin {
 				$display_name = __( 'Member', 'buddypress' );
 			}
 
+			// Set the screen id.
+			$screen_id = get_current_screen()->id;
+
 			// User Stat metabox.
 			add_meta_box(
 				'bp_members_admin_user_stats',
-				sprintf( _x( "%s's Stats", 'members user-admin edit screen', 'buddypress' ), $display_name ),
+				sprintf(
+					/* translators: %s: member name */
+					_x( "%s's Stats", 'members user-admin edit screen', 'buddypress' ),
+					$display_name
+				),
 				array( $this, 'user_admin_stats_metabox' ),
-				get_current_screen()->id,
+				$screen_id,
 				sanitize_key( $this->stats_metabox->context ),
 				sanitize_key( $this->stats_metabox->priority )
 			);
+
+			if ( buddypress()->avatar->show_avatars ) {
+				// Avatar Metabox.
+				add_meta_box(
+					'bp_members_user_admin_avatar',
+					_x( 'Profile Photo', 'members user-admin edit screen', 'buddypress' ),
+					array( $this, 'user_admin_avatar_metabox' ),
+					$screen_id,
+					'side',
+					'low'
+				);
+			}
 
 			// Member Type metabox. Only added if member types have been registered.
 			$member_types = bp_get_member_types();
@@ -836,7 +872,7 @@ class BP_Members_Admin {
 					'bp_members_admin_member_type',
 					_x( 'Member Type', 'members user-admin edit screen', 'buddypress' ),
 					array( $this, 'user_admin_member_type_metabox' ),
-					get_current_screen()->id,
+					$screen_id,
 					'side',
 					'core'
 				);
@@ -870,6 +906,22 @@ class BP_Members_Admin {
 				$redirect_to = add_query_arg( 'updated', $doaction, $redirect_to );
 			} else {
 				$redirect_to = add_query_arg( 'error', $doaction, $redirect_to );
+			}
+
+			bp_core_redirect( $redirect_to );
+
+		// Eventually delete avatar.
+		} elseif ( 'delete_avatar' === $doaction ) {
+
+			// Check the nonce.
+			check_admin_referer( 'delete_avatar' );
+
+			$redirect_to = remove_query_arg( '_wpnonce', $redirect_to );
+
+			if ( bp_core_delete_existing_avatar( array( 'item_id' => $user_id ) ) ) {
+				$redirect_to = add_query_arg( 'updated', 'avatar', $redirect_to );
+			} else {
+				$redirect_to = add_query_arg( 'error', 'avatar', $redirect_to );
 			}
 
 			bp_core_redirect( $redirect_to );
@@ -1090,7 +1142,12 @@ class BP_Members_Admin {
 						$datef = __( 'M j, Y @ G:i', 'buddypress' );
 						$date  = date_i18n( $datef, strtotime( $user->user_registered ) );
 						?>
-						<span id="timestamp"><?php printf( __( 'Registered on: %s', 'buddypress' ), '<strong>' . $date . '</strong>' ); ?></span>
+						<span id="timestamp">
+							<?php
+							/* translators: %s: registration date */
+							printf( __( 'Registered on: %s', 'buddypress' ), '<strong>' . $date . '</strong>' );
+							?>
+						</span>
 					</div>
 				</div> <!-- #misc-publishing-actions -->
 
@@ -1120,7 +1177,12 @@ class BP_Members_Admin {
 	 */
 	public function user_admin_spammer_metabox( $user = null ) {
 	?>
-		<p><?php printf( __( '%s has been marked as a spammer. All BuddyPress data associated with the user has been removed', 'buddypress' ), esc_html( bp_core_get_user_displayname( $user->ID ) ) ) ;?></p>
+		<p>
+			<?php
+			/* translators: %s: member name */
+			printf( __( '%s has been marked as a spammer. All BuddyPress data associated with the user has been removed', 'buddypress' ), esc_html( bp_core_get_user_displayname( $user->ID ) ) );
+			?>
+		</p>
 	<?php
 	}
 
@@ -1151,7 +1213,12 @@ class BP_Members_Admin {
 		$date  = date_i18n( $datef, strtotime( $last_active ) ); ?>
 
 		<ul>
-			<li class="bp-members-profile-stats"><?php printf( __( 'Last active: %1$s', 'buddypress' ), '<strong>' . $date . '</strong>' ); ?></li>
+			<li class="bp-members-profile-stats">
+				<?php
+				/* translators: %s: date */
+				printf( __( 'Last active: %1$s', 'buddypress' ), '<strong>' . $date . '</strong>' );
+				?>
+			</li>
 
 			<?php
 			// Loading other stats only if user has activated their account.
@@ -1170,6 +1237,61 @@ class BP_Members_Admin {
 			?>
 		</ul>
 
+		<?php
+	}
+
+	/**
+	 * Render the Avatar metabox to moderate inappropriate images.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param WP_User|null $user The WP_User object for the user being edited.
+	 */
+	public function user_admin_avatar_metabox( $user = null ) {
+
+		if ( empty( $user->ID ) ) {
+			return;
+		} ?>
+
+		<div class="avatar">
+
+			<?php echo bp_core_fetch_avatar( array(
+				'item_id' => $user->ID,
+				'object'  => 'user',
+				'type'    => 'full',
+				'title'   => $user->display_name
+			) ); ?>
+
+			<?php if ( bp_get_user_has_avatar( $user->ID ) ) :
+
+				$query_args = array(
+					'user_id' => $user->ID,
+					'action'  => 'delete_avatar'
+				);
+
+				if ( ! empty( $_REQUEST['wp_http_referer'] ) ) {
+					$wp_http_referer = wp_unslash( $_REQUEST['wp_http_referer'] );
+					$wp_http_referer = remove_query_arg( array( 'action', 'updated' ), $wp_http_referer );
+					$wp_http_referer = wp_validate_redirect( esc_url_raw( $wp_http_referer ) );
+					$query_args['wp_http_referer'] = urlencode( $wp_http_referer );
+				}
+
+				$community_url = add_query_arg( $query_args, $this->edit_profile_url );
+				$delete_link   = wp_nonce_url( $community_url, 'delete_avatar' ); ?>
+
+				<a href="<?php echo esc_url( $delete_link ); ?>" class="bp-members-avatar-user-admin"><?php esc_html_e( 'Delete Profile Photo', 'buddypress' ); ?></a>
+
+			<?php endif;
+
+			// Load the Avatar UI templates if user avatar uploads are enabled.
+			if ( ! bp_core_get_root_option( 'bp-disable-avatar-uploads' ) ) : ?>
+				<a href="#TB_inline?width=800px&height=400px&inlineId=bp-members-avatar-editor" class="thickbox bp-members-avatar-user-edit"><?php esc_html_e( 'Edit Profile Photo', 'buddypress' ); ?></a>
+				<div id="bp-members-avatar-editor" style="display:none;">
+					<?php bp_attachments_get_template_part( 'avatars/index' ); ?>
+				</div>
+			<?php endif; ?>
+
+		</div>
 		<?php
 	}
 
@@ -1438,8 +1560,10 @@ class BP_Members_Admin {
 			$base_url = bp_get_admin_url( 'users.php' );
 		}
 
-		$url     = add_query_arg( 'page', 'bp-signups', $base_url );
-		$text    = sprintf( _x( 'Pending %s', 'signup users', 'buddypress' ), '<span class="count">(' . number_format_i18n( $signups ) . ')</span>' );
+		$url = add_query_arg( 'page', 'bp-signups', $base_url );
+
+		/* translators: %s: number of pending accounts */
+		$text = sprintf( _x( 'Pending %s', 'signup users', 'buddypress' ), '<span class="count">(' . number_format_i18n( $signups ) . ')</span>' );
 
 		$views['registered'] = sprintf( '<a href="%1$s" class="%2$s">%3$s</a>', esc_url( $url ), $class, $text );
 
@@ -1708,6 +1832,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['resent'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of activation emails sent */
 							_nx( '%s activation email successfully sent! ', '%s activation emails successfully sent! ',
 							 absint( $_REQUEST['resent'] ),
 							 'signup resent',
@@ -1719,6 +1844,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['notsent'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of unsent activation emails */
 							_nx( '%s activation email was not sent.', '%s activation emails were not sent.',
 							 absint( $_REQUEST['notsent'] ),
 							 'signup notsent',
@@ -1742,6 +1868,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['activated'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of activated accounts */
 							_nx( '%s account successfully activated! ', '%s accounts successfully activated! ',
 							 absint( $_REQUEST['activated'] ),
 							 'signup resent',
@@ -1753,6 +1880,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['notactivated'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of accounts not activated */
 							_nx( '%s account was not activated.', '%s accounts were not activated.',
 							 absint( $_REQUEST['notactivated'] ),
 							 'signup notsent',
@@ -1776,6 +1904,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['deleted'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of deleted signups */
 							_nx( '%s sign-up successfully deleted!', '%s sign-ups successfully deleted!',
 							 absint( $_REQUEST['deleted'] ),
 							 'signup deleted',
@@ -1787,6 +1916,7 @@ class BP_Members_Admin {
 
 					if ( ! empty( $_REQUEST['notdeleted'] ) ) {
 						$notice['message'] .= sprintf(
+							/* translators: %s: number of deleted signups not deleted */
 							_nx( '%s sign-up was not deleted.', '%s sign-ups were not deleted.',
 							 absint( $_REQUEST['notdeleted'] ),
 							 'signup notdeleted',
@@ -2155,14 +2285,40 @@ class BP_Members_Admin {
 
 								<?php endif; ?>
 
+								<?php
+								/**
+								 * Fires inside the table listing the activate action confirmation details.
+								 *
+								 * @since 6.0.0
+								 *
+								 * @param object $signup The Sign-up Object.
+								 */
+								do_action( 'bp_activate_signup_confirmation_details', $signup );
+								?>
+
 							</tbody>
 						</table>
+
+						<?php
+						/**
+						 * Fires outside the table listing the activate action confirmation details.
+						 *
+						 * @since 6.0.0
+						 *
+						 * @param object $signup The Sign-up Object.
+						 */
+						do_action( 'bp_activate_signup_confirmation_after_details', $signup );
+						?>
+
 					<?php endif; ?>
 
 					<?php if ( 'resend' == $action ) : ?>
 
 						<p class="description">
-							<?php printf( esc_html__( 'Last notified: %s', 'buddypress'), $last_notified ) ;?>
+							<?php
+							/* translators: %s: notification date */
+							printf( esc_html__( 'Last notified: %s', 'buddypress'), $last_notified );
+							?>
 
 							<?php if ( ! empty( $signup->recently_sent ) ) : ?>
 

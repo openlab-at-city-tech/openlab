@@ -1,0 +1,259 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Excerpt\n"
+"POT-Creation-Date: 2020-07-10 10:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: WPKube <noreply@wpkube.com>\n"
+"Language-Team: WPKube <noreply@wpkube.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class/advanced-excerpt.php:204 template/options.php:2
+msgid "Advanced Excerpt Options"
+msgstr ""
+
+#: class/advanced-excerpt.php:204
+msgid "Excerpt"
+msgstr ""
+
+#: class/advanced-excerpt.php:225
+msgid "Settings"
+msgstr ""
+
+#: class/advanced-excerpt.php:458
+msgid "Home Page"
+msgstr ""
+
+#: class/advanced-excerpt.php:459
+msgid "Posts RSS Feed"
+msgstr ""
+
+#: class/advanced-excerpt.php:460
+msgid "Search Archive"
+msgstr ""
+
+#: class/advanced-excerpt.php:461
+msgid "Author Archive"
+msgstr ""
+
+#: class/advanced-excerpt.php:462
+msgid "Category Archive"
+msgstr ""
+
+#: class/advanced-excerpt.php:463
+msgid "Tag Archive"
+msgstr ""
+
+#: class/advanced-excerpt.php:464
+msgid "WooCommerce Products"
+msgstr ""
+
+#: template/options.php:4
+msgid "Options saved."
+msgstr ""
+
+#: template/options.php:17
+msgid "Excerpt Length:"
+msgstr ""
+
+#: template/options.php:23
+msgid "Characters"
+msgstr ""
+
+#: template/options.php:24
+msgid "Words"
+msgstr ""
+
+#: template/options.php:31
+msgid "Ellipsis:"
+msgstr ""
+
+#: template/options.php:37
+#, php-format
+msgid "(use <a href=\"%s\" target=\"_blank\">HTML entities</a>)"
+msgstr ""
+
+#: template/options.php:39
+msgid "Will substitute the part of the post that is omitted in the excerpt."
+msgstr ""
+
+#: template/options.php:44
+msgid "Finish:"
+msgstr ""
+
+#: template/options.php:50
+msgid "Exact"
+msgstr ""
+
+#: template/options.php:53
+msgid "Exact <small>(count spaces as well)</small>"
+msgstr ""
+
+#: template/options.php:57
+msgid "Word"
+msgstr ""
+
+#: template/options.php:61
+msgid "Sentence"
+msgstr ""
+
+#: template/options.php:65
+msgid ""
+"Prevents cutting a word or sentence at the end of an excerpt. This option "
+"can result in (slightly) longer excerpts."
+msgstr ""
+
+#: template/options.php:70
+msgid "Read More Link:"
+msgstr ""
+
+#: template/options.php:76
+msgid "Add read more link to excerpt"
+msgstr ""
+
+#: template/options.php:85
+msgid "Open read more link in new tab"
+msgstr ""
+
+#: template/options.php:91
+msgid "Screen readers compatibility"
+msgstr ""
+
+#: template/options.php:91
+msgid "(appends post title with class .screen-reader-text to the link)"
+msgstr ""
+
+#: template/options.php:97
+msgid "Remove link if the whole post content shown"
+msgstr ""
+
+#: template/options.php:107
+msgid "No Custom Excerpts:"
+msgstr ""
+
+#: template/options.php:113
+msgid "Generate excerpts even if a post has a custom excerpt attached."
+msgstr ""
+
+#: template/options.php:120
+msgid "Link Whole Excerpt:"
+msgstr ""
+
+#: template/options.php:126
+msgid ""
+"Makes the whole excerpt be a link to the post. If this is enabled it's "
+"advised to turn on the Strip Tags option."
+msgstr ""
+
+#: template/options.php:133
+msgid "Strip Shortcodes:"
+msgstr ""
+
+#: template/options.php:139
+msgid "Remove shortcodes from the excerpt. <em>(recommended)</em>"
+msgstr ""
+
+#: template/options.php:145
+msgid "Filter:"
+msgstr ""
+
+#: template/options.php:162
+msgid ""
+"Only filter <span class='monospaced'>the_content()</span> when there's no "
+"break (&lt;!--more--&gt;) tag in the post content"
+msgstr ""
+
+#: template/options.php:168
+msgid ""
+"Themes may use <code>the_excerpt()</code> for some pages (e.g. search "
+"results) and <code>the_content()</code> on others (e.g. blog archives). "
+"Depending on your theme and what pages you want this plugin to affect, you "
+"may need to adjust these settings."
+msgstr ""
+
+#: template/options.php:174
+msgid "Disable On:"
+msgstr ""
+
+#: template/options.php:188
+msgid "Disables excerpt filtering for certain page types."
+msgstr ""
+
+#: template/options.php:194
+msgid "Strip Tags:"
+msgstr ""
+
+#: template/options.php:203
+msgid "Don't remove any tags"
+msgstr ""
+
+#: template/options.php:207
+msgid "Remove all tags except the following"
+msgstr ""
+
+#: template/options.php:237
+msgid "Select all"
+msgstr ""
+
+#: template/options.php:237
+msgid "Select none"
+msgstr ""
+
+#: template/options.php:238
+msgid "More tags"
+msgstr ""
+
+#: template/options.php:245
+msgid "Add tag"
+msgstr ""
+
+#: template/options.php:251
+msgid "Save Changes"
+msgstr ""
+
+#: template/sidebar.php:7
+msgid "Maintained by"
+msgstr ""
+
+#: template/sidebar.php:10
+msgid "Website"
+msgstr ""
+
+#: template/sidebar.php:16
+msgid "WordPress Themes, Plugins, Reviews, & Tutorials"
+msgstr ""
+
+#: template/sidebar.php:19
+msgid "Get awesome content delivered straight to your inbox."
+msgstr ""
+
+#. Name of the plugin
+msgid "Advanced Excerpt"
+msgstr ""
+
+#. Description of the plugin
+msgid "Control the appearance of WordPress post excerpts"
+msgstr ""
+
+#. URI of the plugin
+msgid "http://wordpress.org/plugins/advanced-excerpt/"
+msgstr ""
+
+#. Author of the plugin
+msgid "WPKube"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://wpkube.com"
+msgstr ""

@@ -176,7 +176,7 @@ class BP_Friends_Component extends BP_Component {
 			sprintf(
 				'<span class="%s">%s</span>',
 				esc_attr( $class ),
-				bp_core_number_format( $count )
+				esc_html( $count )
 			)
 		);
 
@@ -296,7 +296,11 @@ class BP_Friends_Component extends BP_Component {
 				$bp->bp_options_avatar = bp_core_fetch_avatar( array(
 					'item_id' => bp_displayed_user_id(),
 					'type'    => 'thumb',
-					'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_displayed_user_fullname() )
+					'alt'     => sprintf(
+						/* translators: %s: member name */
+						__( 'Profile picture of %s', 'buddypress' ),
+						bp_get_displayed_user_fullname()
+					),
 				) );
 				$bp->bp_options_title = bp_get_displayed_user_fullname();
 			}
@@ -320,5 +324,17 @@ class BP_Friends_Component extends BP_Component {
 		) );
 
 		parent::setup_cache_groups();
+	}
+
+	/**
+	 * Init the BP REST API.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
+	 *                           description.
+	 */
+	public function rest_api_init( $controllers = array() ) {
+		parent::rest_api_init( array( 'BP_REST_Friends_Endpoint' ) );
 	}
 }

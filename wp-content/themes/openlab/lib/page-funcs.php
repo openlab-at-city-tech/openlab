@@ -456,38 +456,6 @@ function openlab_registration_page() {
 							<?php /* Basic Account Details */ ?>
 
 							<div class="form-group">
-								<label class="control-label" for="signup_username"><?php esc_html_e( 'Username', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?> (lowercase & no special characters)</label>
-								<div id="signup_username_error" class="error-container"></div>
-								<?php do_action( 'bp_signup_username_errors' ); ?>
-								<?php
-								$remote_attr = add_query_arg(
-									array(
-										'action' => 'openlab_unique_login_check',
-										'login'  => '{value}',
-									),
-									$ajaxurl
-								);
-								?>
-								<input
-									class="form-control"
-									type="text"
-									name="signup_username"
-									id="signup_username"
-									value="<?php bp_signup_username_value(); ?>"
-									data-parsley-lowercase
-									data-parsley-nospecialchars
-									data-parsley-required
-									data-parsley-required-message="Username is required."
-									data-parsley-minlength="4"
-									data-parsley-remote="<?php echo esc_attr( $remote_attr ); ?>"
-									data-parsley-remote-message="That username is already taken."
-									data-parsley-errors-container="#signup_username_error"
-									/>
-
-								<p class="register-field-note">IMPORTANT: Your username will be visible in the URL of your member profile and cannot be changed. You don't need to use your real name. You can choose how you identify yourself by changing your display name at any time.</p>
-							</div>
-
-							<div class="form-group">
 								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>">First Name (required, but not displayed on Public Profile)</label>
 								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
 								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ); ?>
@@ -557,6 +525,39 @@ function openlab_registration_page() {
 									data-parsley-errors-container="#signup_email_confirm_error"
 									/>
 							</div>
+
+							<div class="form-group">
+								<label class="control-label" for="signup_username"><?php esc_html_e( 'Username', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?> (lowercase & no special characters)</label>
+								<div id="signup_username_error" class="error-container"></div>
+								<?php do_action( 'bp_signup_username_errors' ); ?>
+								<?php
+								$remote_attr = add_query_arg(
+									array(
+										'action' => 'openlab_unique_login_check',
+										'login'  => '{value}',
+									),
+									$ajaxurl
+								);
+								?>
+								<input
+									class="form-control"
+									type="text"
+									name="signup_username"
+									id="signup_username"
+									value="<?php bp_signup_username_value(); ?>"
+									data-parsley-lowercase
+									data-parsley-nospecialchars
+									data-parsley-required
+									data-parsley-required-message="Username is required."
+									data-parsley-minlength="4"
+									data-parsley-remote="<?php echo esc_attr( $remote_attr ); ?>"
+									data-parsley-remote-message="That username is already taken."
+									data-parsley-errors-container="#signup_username_error"
+									/>
+
+								<p class="register-field-note">IMPORTANT: <strong>You don't need to use your real name.</strong> Your username cannot be changed after you sign up. You need it to sign in, and it will be visible in the URL of your member profile. You can use your display name below to identify yourself publicly as you choose.
+							</div>
+
 
 							<div data-parsley-children-should-match class="form-group">
 								<label class="control-label" for="signup_password"><?php esc_html_e( 'Choose a Password', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?></label>

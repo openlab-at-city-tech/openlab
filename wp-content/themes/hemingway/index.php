@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="wrapper section-inner">
+<div class="wrapper section-inner group">
 
 	<div class="content left">
 		
@@ -10,37 +10,32 @@
 		
 			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-			$archive_title = '';
-			$archive_subtitle = '';
+			$archive_title = get_the_archive_title();
+			$archive_description = get_the_archive_description( '', '' );
 
-			if ( is_archive() ) {
-				$archive_title = get_the_archive_title();
-			} elseif ( is_search() ) {
-				$archive_title = sprintf( _x( 'Search results: "%s"', 'Variable: search query text', 'hemingway' ), get_search_query() );
-			} elseif ( $paged > 1 ) {
-				$archive_title = sprintf( __( 'Page %1$s of %2$s', 'hemingway' ), $paged, $wp_query->max_num_pages );
-			}
+			$archive_current_page_str = sprintf( __( 'Page %1$s of %2$s', 'hemingway' ), $paged, $wp_query->max_num_pages );
+
+			$archive_subtitle = sprintf( __( 'Page %1$s of %2$s', 'hemingway' ), $paged, $wp_query->max_num_pages );
 
 			if ( ( is_archive() || is_search() ) && 1 < $wp_query->max_num_pages ) {
-				$archive_subtitle = sprintf( __( '(page %1$s of %2$s)', 'hemingway' ), $paged, $wp_query->max_num_pages );
+				$archive_title .= ' <span>(' . $archive_current_page_str . ')</span>';
+			} else if ( ! $archive_title && $paged != 1 ) {
+				$archive_title = $archive_current_page_str;
 			}
 
-			if ( $archive_title ) : ?>
+			if ( $archive_title || $archive_description ) : ?>
 
-				<div class="page-title">
+				<header class="archive-header">
 
-					<h4>
-						<?php 
-						echo $archive_title;
-						
-						if ( $archive_subtitle ) {
-							echo ' <span>' . $archive_subtitle . '</span>';
-						} 
-						?>
-						
-					</h4>
+					<?php if ( $archive_title ) : ?>
+						<h1 class="archive-title"><?php echo wp_kses_post( $archive_title ); ?></h1>
+					<?php endif; ?>
+
+					<?php if ( $archive_description ) : ?>
+						<div class="archive-description"><?php echo wpautop( wp_kses_post( $archive_description ) ); ?></div>
+					<?php endif; ?>
 					
-				</div><!-- .page-title -->
+				</header><!-- .archive-header -->
 
 				<?php 
 			endif;
@@ -68,9 +63,7 @@
 						</div><!-- .post-content -->
 					
 					</div><!-- .content-inner -->
-					
-					<div class="clear"></div>
-				
+									
 				</div><!-- .post -->
 			
 			<?php endif; ?>
@@ -79,14 +72,12 @@
 		
 		<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 		
-			<div class="post-nav archive-nav">
+			<div class="post-nav archive-nav group">
 						
 				<?php echo get_next_posts_link( __( '&laquo; Older<span> posts</span>', 'hemingway' ) ); ?>
 							
 				<?php echo get_previous_posts_link( __( 'Newer<span> posts</span> &raquo;', 'hemingway' ) ); ?>
-				
-				<div class="clear"></div>
-				
+								
 			</div><!-- .post-nav.archive-nav -->
 		
 		<?php endif; ?>
@@ -95,8 +86,6 @@
 		
 	<?php get_sidebar(); ?>
 	
-	<div class="clear"></div>
-
 </div><!-- .wrapper -->
 	              	        
 <?php get_footer(); ?>

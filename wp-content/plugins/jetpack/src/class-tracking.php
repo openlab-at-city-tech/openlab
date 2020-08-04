@@ -91,8 +91,10 @@ class Tracking {
 		}
 
 		$connection_manager = new Connection_Manager();
-		$wpcom_user_data = $connection_manager->get_connected_user_data( $user_id );
-		update_user_meta( $user_id, 'jetpack_tracks_wpcom_id', $wpcom_user_data['ID'] );
+		$wpcom_user_data    = $connection_manager->get_connected_user_data( $user_id );
+		if ( isset( $wpcom_user_data['ID'] ) ) {
+			update_user_meta( $user_id, 'jetpack_tracks_wpcom_id', $wpcom_user_data['ID'] );
+		}
 
 		$this->tracking->record_user_event( 'wpa_user_linked', array() );
 	}
@@ -193,7 +195,7 @@ class Tracking {
 	 *
 	 * @param String                   $action the action name, i.e., 'remote_authorize'.
 	 * @param String                   $stage  the execution stage, can be 'begin', 'success', 'error', etc.
-	 * @param Array|WP_Error|IXR_Error $parameters (optional) extra parameters to be passed to the tracked action.
+	 * @param array|WP_Error|IXR_Error $parameters (optional) extra parameters to be passed to the tracked action.
 	 * @param WP_User                  $user (optional) the acting user.
 	 */
 	public function jetpack_xmlrpc_server_event( $action, $stage, $parameters = array(), $user = null ) {

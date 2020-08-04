@@ -31,6 +31,7 @@ function openlab_conditional_body_classes($classes) {
     if (( isset($post->post_name) && in_array($post->post_name, $group_archives) ) ||
             bp_is_single_item() ||
             bp_is_user() ||
+			openlab_is_search_results_page() ||
             ( isset($post->post_name) && $post->ID == $about_page_obj->ID ) ||
             ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
             ( isset($post->post_parent) && $post->post_parent == $calendar_page_obj->ID ) ||

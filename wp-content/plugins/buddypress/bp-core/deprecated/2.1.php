@@ -7,7 +7,7 @@
  * @deprecated 2.1.0
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -189,7 +189,7 @@ function bp_adminbar_login_menu() {
 
 	echo '<li class="bp-login no-arrow"><a href="' . wp_login_url() . '">' . __( 'Log In', 'buddypress' ) . '</a></li>';
 
-	// Show "Sign Up" link if user registrations are allowed
+	// Show "Sign Up" link if user registrations are allowed.
 	if ( bp_get_signup_allowed() ) {
 		echo '<li class="bp-signup no-arrow"><a href="' . bp_get_signup_page() . '">' . __( 'Sign Up', 'buddypress' ) . '</a></li>';
 	}
@@ -213,7 +213,7 @@ function bp_adminbar_account_menu() {
 	echo __( 'My Account', 'buddypress' ) . '</a>';
 	echo '<ul>';
 
-	// Loop through each navigation item
+	// Loop through each navigation item.
 	$counter = 0;
 	foreach( (array) $bp->bp_nav as $nav_item ) {
 		$alt = ( 0 == $counter % 2 ) ? ' class="alt"' : '';
@@ -326,7 +326,7 @@ function bp_core_load_buddybar_css() {
 
 	$min = bp_core_get_minified_asset_suffix();
 
-	if ( file_exists( get_stylesheet_directory() . '/_inc/css/adminbar.css' ) ) { // Backwards compatibility
+	if ( file_exists( get_stylesheet_directory() . '/_inc/css/adminbar.css' ) ) { // Backwards compatibility.
 		$stylesheet = get_stylesheet_directory_uri() . '/_inc/css/adminbar.css';
 	} else {
 		$stylesheet = buddypress()->plugin_url . "bp-core/css/buddybar{$min}.css";
@@ -355,7 +355,7 @@ function bp_groups_adminbar_admin_menu() {
 		return false;
 	}
 
-	// Only group admins and site admins can see this menu
+	// Only group admins and site admins can see this menu.
 	if ( !current_user_can( 'edit_users' ) && !bp_current_user_can( 'bp_moderate' ) && !bp_is_item_admin() ) {
 		return false;
 	} ?>
@@ -406,7 +406,7 @@ add_action( 'bp_adminbar_menus', 'bp_groups_adminbar_admin_menu', 20 );
  */
 function bp_adminbar_notifications_menu() {
 
-	// Bail if notifications is not active
+	// Bail if notifications is not active.
 	if ( ! bp_is_active( 'notifications' ) ) {
 		return false;
 	}
@@ -423,12 +423,12 @@ add_action( 'bp_adminbar_menus', 'bp_adminbar_notifications_menu', 8 );
 function bp_adminbar_authors_menu() {
 	global $wpdb;
 
-	// Only for multisite
+	// Only for multisite.
 	if ( ! is_multisite() ) {
 		return false;
 	}
 
-	// Hide on root blog
+	// Hide on root blog.
 	if ( bp_is_root_blog( $wpdb->blogid ) || ! bp_is_active( 'blogs' ) ) {
 		return false;
 	}
@@ -437,7 +437,7 @@ function bp_adminbar_authors_menu() {
 	$authors     = $wpdb->get_results( "SELECT user_id, user_login, user_nicename, display_name, user_email, meta_value as caps FROM $wpdb->users u, $wpdb->usermeta um WHERE u.ID = um.user_id AND meta_key = '{$blog_prefix}capabilities' ORDER BY um.user_id" );
 
 	if ( !empty( $authors ) ) {
-		// This is a blog, render a menu with links to all authors
+		// This is a blog, render a menu with links to all authors.
 		echo '<li id="bp-adminbar-authors-menu"><a href="/">';
 		_e('Blog Authors', 'buddypress');
 		echo '</a>';
@@ -456,7 +456,11 @@ function bp_adminbar_authors_menu() {
 				'email'   => $author->user_email,
 				'width'   => 15,
 				'height'  => 15,
-				'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), $author->display_name )
+				'alt'     => sprintf(
+					/* translators: %s: member name */
+					__( 'Profile picture of %s', 'buddypress' ),
+					$author->display_name
+				),
 			) );
 			echo ' ' . $author->display_name . '</a>';
 			echo '<div class="admin-bar-clear"></div>';
@@ -478,12 +482,12 @@ add_action( 'bp_adminbar_menus', 'bp_adminbar_authors_menu', 12 );
  */
 function bp_members_adminbar_admin_menu() {
 
-	// Only show if viewing a user
+	// Only show if viewing a user.
 	if ( ! bp_displayed_user_id() ) {
 		return false;
 	}
 
-	// Don't show this menu to non site admins or if you're viewing your own profile
+	// Don't show this menu to non site admins or if you're viewing your own profile.
 	if ( !current_user_can( 'edit_users' ) || bp_is_my_profile() ) {
 		return false;
 	} ?>
@@ -495,15 +499,36 @@ function bp_members_adminbar_admin_menu() {
 		<ul>
 			<?php if ( bp_is_active( 'xprofile' ) ) : ?>
 
-				<li><a href="<?php bp_members_component_link( 'profile', 'edit' ); ?>"><?php printf( __( "Edit %s's Profile", 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) ) ?></a></li>
+				<li>
+					<a href="<?php bp_members_component_link( 'profile', 'edit' ); ?>">
+						<?php
+						/* translators: %s: member name */
+						printf( __( "Edit %s's Profile", 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) );
+						?>
+					</a>
+				</li>
 
 			<?php endif ?>
 
-			<li><a href="<?php bp_members_component_link( 'profile', 'change-avatar' ); ?>"><?php printf( __( "Edit %s's Profile Photo", 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) ) ?></a></li>
+			<li>
+				<a href="<?php bp_members_component_link( 'profile', 'change-avatar' ); ?>">
+					<?php
+					/* translators: %s: member name */
+					printf( _x( "Edit %s's Profile Photo", 'deprecated string', 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) );
+					?>
+				</a>
+			</li>
 
 			<li><a href="<?php bp_members_component_link( 'settings', 'capabilities' ); ?>"><?php _e( 'User Capabilities', 'buddypress' ); ?></a></li>
 
-			<li><a href="<?php bp_members_component_link( 'settings', 'delete-account' ); ?>"><?php printf( __( "Delete %s's Account", 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) ); ?></a></li>
+			<li>
+				<a href="<?php bp_members_component_link( 'settings', 'delete-account' ); ?>">
+					<?php
+					/* translators: %s: member name */
+					printf( _x( "Delete %s's Account", 'deprecated string', 'buddypress' ), esc_attr( bp_get_displayed_user_fullname() ) );
+					?>
+				</a>
+			</li>
 
 			<?php do_action( 'bp_members_adminbar_admin_menu' ) ?>
 

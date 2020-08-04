@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || exit;
  * Output the BuddyPress version.
  *
  * @since 1.6.0
- *
  */
 function bp_version() {
 	echo bp_get_version();
@@ -36,7 +35,6 @@ function bp_version() {
  * Output the BuddyPress database version.
  *
  * @since 1.6.0
- *
  */
 function bp_db_version() {
 	echo bp_get_db_version();
@@ -56,7 +54,6 @@ function bp_db_version() {
  * Output the BuddyPress database version.
  *
  * @since 1.6.0
- *
  */
 function bp_db_version_raw() {
 	echo bp_get_db_version_raw();
@@ -236,7 +233,7 @@ function bp_core_number_format( $number = 0, $decimals = false ) {
  *
  * @since 1.6.0
  *
- * @param array $old_args_keys Old argument indexs, keyed to their positions.
+ * @param array $old_args_keys Old argument indexes, keyed to their positions.
  * @param array $func_args     The parameters passed to the originating function.
  * @return array $new_args The parsed arguments.
  */
@@ -321,7 +318,7 @@ function bp_parse_args( $args, $defaults = array(), $filter_key = '' ) {
 /**
  * Sanitizes a pagination argument based on both the request override and the
  * original value submitted via a query argument, likely to a template class
- * responsible for limiting the resultset of a template loop.
+ * responsible for limiting the result set of a template loop.
  *
  * @since 2.2.0
  *
@@ -505,7 +502,7 @@ function bp_core_get_packaged_component_ids() {
 function bp_core_get_directory_page_ids( $status = 'active' ) {
 	$page_ids = bp_get_option( 'bp-pages', array() );
 
-	// Loop through pages
+	// Loop through pages.
 	foreach ( $page_ids as $component_name => $page_id ) {
 
 		// Ensure that empty indexes are unset. Should only matter in edge cases.
@@ -909,19 +906,6 @@ function bp_core_create_root_component_page() {
 }
 
 /**
- * Add illegal blog names to WP so that root components will not conflict with blog names on a subdirectory installation.
- *
- * For example, it would stop someone creating a blog with the slug "groups".
- *
- * @since 1.0.0
- *
- * @todo Deprecate?
- */
-function bp_core_add_illegal_names() {
-	update_site_option( 'illegal_names', get_site_option( 'illegal_names' ), array() );
-}
-
-/**
  * Get the 'search' query argument for a given component.
  *
  * @since 2.4.0
@@ -1201,7 +1185,11 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 	 *
 	 * @param string $value String representing the time since the older date.
 	 */
-	$ago_text       = apply_filters( 'bp_core_time_since_ago_text',       __( '%s ago',    'buddypress' ) );
+	$ago_text = apply_filters(
+		'bp_core_time_since_ago_text',
+		/* translators: %s: the human time diff. */
+		__( '%s ago', 'buddypress' )
+	);
 
 	// Array of time period chunks.
 	$chunks = array(
@@ -1262,24 +1250,31 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 			// Set output var.
 			switch ( $seconds ) {
 				case YEAR_IN_SECONDS :
+					/* translators: %s: the number of years. */
 					$output = sprintf( _n( '%s year',   '%s years',   $count, 'buddypress' ), $count );
 					break;
 				case 30 * DAY_IN_SECONDS :
+					/* translators: %s: the number of months. */
 					$output = sprintf( _n( '%s month',  '%s months',  $count, 'buddypress' ), $count );
 					break;
 				case WEEK_IN_SECONDS :
+					/* translators: %s: the number of weeks. */
 					$output = sprintf( _n( '%s week',   '%s weeks',   $count, 'buddypress' ), $count );
 					break;
 				case DAY_IN_SECONDS :
+					/* translators: %s: the number of days. */
 					$output = sprintf( _n( '%s day',    '%s days',    $count, 'buddypress' ), $count );
 					break;
 				case HOUR_IN_SECONDS :
+					/* translators: %s: the number of hours. */
 					$output = sprintf( _n( '%s hour',   '%s hours',   $count, 'buddypress' ), $count );
 					break;
 				case MINUTE_IN_SECONDS :
+					/* translators: %s: the number of minutes. */
 					$output = sprintf( _n( '%s minute', '%s minutes', $count, 'buddypress' ), $count );
 					break;
 				default:
+					/* translators: %s: the number of seconds. */
 					$output = sprintf( _n( '%s second', '%s seconds', $count, 'buddypress' ), $count );
 			}
 
@@ -1299,21 +1294,27 @@ function bp_core_time_since( $older_date, $newer_date = false ) {
 
 					switch ( $seconds2 ) {
 						case 30 * DAY_IN_SECONDS :
+							/* translators: %s: the number of months. */
 							$output .= sprintf( _n( '%s month',  '%s months',  $count2, 'buddypress' ), $count2 );
 							break;
 						case WEEK_IN_SECONDS :
+							/* translators: %s: the number of weeks. */
 							$output .= sprintf( _n( '%s week',   '%s weeks',   $count2, 'buddypress' ), $count2 );
 							break;
 						case DAY_IN_SECONDS :
+							/* translators: %s: the number of days. */
 							$output .= sprintf( _n( '%s day',    '%s days',    $count2, 'buddypress' ), $count2 );
 							break;
 						case HOUR_IN_SECONDS :
+							/* translators: %s: the number of hours. */
 							$output .= sprintf( _n( '%s hour',   '%s hours',   $count2, 'buddypress' ), $count2 );
 							break;
 						case MINUTE_IN_SECONDS :
+							/* translators: %s: the number of minutes. */
 							$output .= sprintf( _n( '%s minute', '%s minutes', $count2, 'buddypress' ), $count2 );
 							break;
 						default:
+							/* translators: %s: the number of seconds. */
 							$output .= sprintf( _n( '%s second', '%s seconds', $count2, 'buddypress' ), $count2 );
 					}
 				}
@@ -1422,7 +1423,6 @@ function bp_core_add_message( $message, $type = '' ) {
  * so that the message is not shown to the user multiple times.
  *
  * @since 1.1.0
- *
  */
 function bp_core_setup_message() {
 
@@ -1506,8 +1506,6 @@ function bp_core_render_message() {
  *
  * @since 1.0.0
  *
- *       usermeta table.
- *
  * @return false|null Returns false if there is nothing to do.
  */
 function bp_core_record_activity() {
@@ -1563,8 +1561,6 @@ add_action( 'wp_head', 'bp_core_record_activity' );
  *
  * @since 1.0.0
  *
- *       representation of the time elapsed.
- *
  * @param int|string $last_activity_date The date of last activity.
  * @param string     $string             A sprintf()-able statement of the form 'active %s'.
  * @return string $last_active A string of the form '3 years ago'.
@@ -1573,7 +1569,7 @@ function bp_core_get_last_activity( $last_activity_date = '', $string = '' ) {
 
 	// Setup a default string if none was passed.
 	$string = empty( $string )
-		? '%s'     // Gettext placeholder.
+		? '%s'     // Gettext library's placeholder.
 		: $string;
 
 	// Use the string if a last activity date was passed.
@@ -1598,7 +1594,7 @@ function bp_core_get_last_activity( $last_activity_date = '', $string = '' ) {
 /**
  * Get the meta_key for a given piece of user metadata
  *
- * BuddyPress stores a number of pieces of userdata in the WordPress central
+ * BuddyPress stores a number of pieces of user data in the WordPress central
  * usermeta table. In order to allow plugins to enable multiple instances of
  * BuddyPress on a single WP installation, BP's usermeta keys are filtered
  * through this function, so that they can be altered on the fly.
@@ -2739,7 +2735,7 @@ function bp_core_get_suggestions( $args ) {
 		 * @since 2.1.0
 		 *
 		 * @param string $value Custom class to use. Default: none.
-		 * @param array  $args  Array of arguments for sugggestions.
+		 * @param array  $args  Array of arguments for suggestions.
 		 */
 		$class = apply_filters( 'bp_suggestions_services', '', $args );
 	}
@@ -3110,11 +3106,11 @@ function bp_get_email( $email_type ) {
  *
  * @param string                   $email_type Type of email being sent.
  * @param string|array|int|WP_User $to         Either a email address, user ID, WP_User object,
- *                                             or an array containg the address and name.
+ *                                             or an array containing the address and name.
  * @param array                    $args {
  *     Optional. Array of extra parameters.
  *
- *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
+ *     @type array $tokens Optional. Associative arrays of string replacements for the email.
  * }
  * @return bool|WP_Error True if the email was sent successfully. Otherwise, a WP_Error object
  *                       describing why the email failed to send. The contents will vary based
@@ -3155,7 +3151,12 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	}
 
 	// From, subject, content are set automatically.
-	$email->set_to( $to );
+	if ( 'settings-verify-email-change' === $email_type && isset( $args['tokens']['displayname'] ) ) {
+		$email->set_to( $to, $args['tokens']['displayname'] );
+	} else {
+		$email->set_to( $to );
+	}
+
 	$email->set_tokens( $args['tokens'] );
 
 	/**
@@ -3166,11 +3167,11 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	 * @param BP_Email                 $email      The email (object) about to be sent.
 	 * @param string                   $email_type Type of email being sent.
 	 * @param string|array|int|WP_User $to         Either a email address, user ID, WP_User object,
-	 *                                             or an array containg the address and name.
+	 *                                             or an array containing the address and name.
      * @param array                    $args {
 	 *     Optional. Array of extra parameters.
 	 *
-	 *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
+	 *     @type array $tokens Optional. Associative arrays of string replacements for the email.
 	 * }
 	 */
 	do_action_ref_array( 'bp_send_email', array( &$email, $email_type, $to, $args ) );
@@ -3220,7 +3221,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	 * @param array        $args {
 	 *     Optional. Array of extra parameters.
 	 *
-	 *     @type array $tokens Optional. Assocative arrays of string replacements for the email.
+	 *     @type array $tokens Optional. Associative arrays of string replacements for the email.
 	 * }
 	 */
 	$delivery_class = apply_filters( 'bp_send_email_delivery_class', 'BP_PHPMailer', $email_type, $to, $args );
@@ -3247,7 +3248,7 @@ function bp_send_email( $email_type, $to, $args = array() ) {
 	} else {
 
 		/**
-		 * Fires after BuddyPress has succesfully sent an email.
+		 * Fires after BuddyPress has successfully sent an email.
 		 *
 		 * @since 2.5.0
 		 *
@@ -3270,10 +3271,10 @@ function bp_send_email( $email_type, $to, $args = array() ) {
  * @return array
  */
 function bp_email_get_appearance_settings() {
-	/* translators: This is the copyright text for email footers. 1. Copyright year, 2. Site name */
 	$footer_text = array(
 		sprintf(
-			_x( '&copy; %1$s %2$s', 'email', 'buddypress' ),
+			/* translators: 1. Copyright year, 2. Site name */
+			_x( '&copy; %1$s %2$s', 'copyright text for email footers', 'buddypress' ),
 			date_i18n( 'Y' ),
 			bp_get_option( 'blogname' )
 		)

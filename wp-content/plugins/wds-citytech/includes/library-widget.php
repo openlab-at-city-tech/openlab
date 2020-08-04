@@ -135,13 +135,9 @@ function openlab_library_search_form() {
 function openlab_library_information() {
 	?>
 	<div class="openlab-library-information">
-		<p><a class="bold" href="https://library.citytech.cuny.edu">Ursula C. Schwerin Library</a></p>
-		<p>New York City College of Technology, C.U.N.Y</p>
-		<p>300 Jay Street, Library&nbsp;Building - 4th Floor</p>
+		<p><a class="bold" href="https://library.citytech.cuny.edu">Ursula C. Schwerin Library</a><br />New York City College of Technology, C.U.N.Y<br />300 Jay Street, Library&nbsp;Building - 4th Floor</p>
 
-		<ul>
-			<li><a href="https://library.citytech.cuny.edu/help/ask/index.php">Ask Us</a></li>
-		</ul>
+		<p class="library-widget-ask-us"><a href="https://library.citytech.cuny.edu/help/ask/index.php">Ask Us</a></p>
 	</div>
 	<?php
 }
@@ -178,54 +174,34 @@ class OpenLab_Library_Tools_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		wp_enqueue_style( 'openlab-library-widgets', content_url( 'plugins/wds-citytech/assets/css/library-widgets.css' ), [], OL_VERSION );
+
 		$settings = $this->parse_settings( $instance );
 
 		?>
 
 		<?php if ( $settings['find_library_materials'] ) : ?>
 			<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
-			<div id="openlab-library-find-widget-content">
-				<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+			<?php echo str_replace( 'id="', 'id="find-', $args['before_widget'] ); ?>
+				<div id="openlab-library-find-widget-content">
 				<?php echo $args['before_title']; ?>Find Library Materials<?php echo $args['after_title']; ?>
 
 				<?php openlab_library_search_form(); ?>
 
-				<?php echo $args['after_widget']; ?>
-			</div>
+				</div>
+			<?php echo $args['after_widget']; ?>
 		<?php endif; ?>
 
 		<?php if ( $settings['library_information'] ) : ?>
-			<div id="openlab-library-information-widget-content">
-				<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+			<?php echo str_replace( 'id="', 'id="information-', $args['before_widget'] ); ?>
+				<div id="openlab-library-information-widget-content">
 				<?php echo $args['before_title']; ?>Library Information<?php echo $args['after_title']; ?>
 
 				<?php openlab_library_information(); ?>
 
-				<?php echo $args['after_widget']; ?>
-			</div>
+				</div>
+			<?php echo $args['after_widget']; ?>
 		<?php endif; ?>
-
-		<style type="text/css">
-			.widget_openlab-library-tools-widget input[type="text"],
-			.widget_openlab-library-tools-widget select {
-				margin-bottom: .5rem;
-			}
-
-			#openlab-library-information-widget-content ul {
-				list-style-type: disc;
-				margin-top: .5rem;
-				padding-left: 20px;
-			}
-
-			.library-search-advanced-link {
-				font-size: .9rem;
-				white-space: nowrap;
-			}
-
-			.openlab-library-information p {
-				margin-bottom: 0;
-			}
-		</style>
 
 		<?php
 
@@ -633,6 +609,8 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		wp_enqueue_style( 'openlab-library-widgets', content_url( 'plugins/wds-citytech/assets/css/library-widgets.css' ), [], OL_VERSION );
+
 		$checked = isset( $instance['selected_guides'] ) ? $instance['selected_guides'] : [];
 		$guides  = openlab_get_library_subject_guides();
 
@@ -653,9 +631,10 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 
 		?>
 
+		<?php echo $args['before_widget']; ?>
+
 		<?php /* Divs with ids help with CSS specificity and theme overrides */ ?>
 		<div class="openlab-library-tools-widget" id="<?php echo esc_attr( $this->get_field_id( '' ) ); ?>">
-			<?php echo $args['before_widget']; ?>
 			<?php echo $args['before_title']; ?><?php echo count( $selected_guides ) > 1 ? 'Library Subject Guides' : 'Library Subject Guide'; ?><?php echo $args['after_title']; ?>
 
 			<ul>
@@ -663,30 +642,9 @@ class OpenLab_Library_Subject_Guides_Widget extends WP_Widget {
 					<li><?php echo $selected_guide; ?></li>
 				<?php endforeach; ?>
 			</ul>
-			<?php echo $args['after_widget']; ?>
 		</div>
 
-		<style type="text/css">
-			.widget_openlab-library-tools-widget input[type="text"],
-			.widget_openlab-library-tools-widget select {
-				margin-bottom: .5rem;
-			}
-
-			#openlab-library-information-widget-content ul {
-				list-style-type: disc;
-				margin-top: .5rem;
-				padding-left: 20px;
-			}
-
-			.library-search-advanced-link {
-				font-size: .9rem;
-				white-space: nowrap;
-			}
-
-			.openlab-library-information p {
-				margin-bottom: 0;
-			}
-		</style>
+		<?php echo $args['after_widget']; ?>
 
 		<?php
 

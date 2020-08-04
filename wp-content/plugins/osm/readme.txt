@@ -2,14 +2,18 @@
 Contributors: MiKa
 Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, travelogue, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, WMS, OpenSeaMap, stamen, basemap, meta, thunderforest
 Requires at least: 3.0
-Tested up to: 5.3
-Stable tag: 5.3.6
+Tested up to: 5.4
+Stable tag: 5.4.3
 License: GPLv2
 Requires PHP: 5.3
 
 Customize maps in your post, pages and widgets. GPX, KML and more. The easy way to map!
 
 == Description ==
+Add a map with marker in less than 100 sec:
+
+[youtube https://www.youtube.com/watch?v=GDoiXO1SfJ0]
+
 If you want to get detailed information about the OSM-plugin visit these pages:
 
 * Homepage: [WP-OSM-Plugin](http://wp-osm-plugin.hanblog.net/ "OSM-plugin")
@@ -18,7 +22,7 @@ If you want to get detailed information about the OSM-plugin visit these pages:
 
 Features of the OSM-plugin:
 
-* OpenStreetMap, OpenSeaMap, OpenWeatherMap, BaseMap (AT), Stamen, WMS in posts/pages
+* OpenStreetMap, HOT, OpenSeaMap, OpenTopoMap, BaseMap (AT), Stamen, WMS in posts/pages
 * Integration in post / page / widget
 * HTML Popup Marker
 * GPX and KML (incl. upload in Mediathek)
@@ -39,9 +43,12 @@ Languages - thanks to:
 * Spanish [by Colegota]
 * Romanian [by Sorin Pop]
 
+* [OpenLayers](http://openlayers.org): Open Source JavaScript, released under the 2-clause BSD
+
 Licenses of the maps:
 
 * OpenStreetMap: [OpenStreetMap License](http://wiki.openstreetmap.org/wiki/OpenStreetMap_License)
+* OpenTopoMap: [OpenTopoMap License](https://opentopomap.org/about)
 * Stamen Maps: [Stamen License](http://maps.stamen.com)
 * BaseMap:  [BaseMap License](http://basemap.at)
 * Thunderforest (API key): [Thunderforest License](http://www.thunderforest.com/terms/)

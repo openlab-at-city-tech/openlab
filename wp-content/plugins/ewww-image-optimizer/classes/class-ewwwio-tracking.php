@@ -75,7 +75,7 @@ class EWWWIO_Tracking {
 		$data['wp_version']     = get_bloginfo( 'version' );
 		$data['php_version']    = PHP_VERSION_ID;
 		$data['libxml_version'] = defined( 'LIBXML_VERSION' ) ? LIBXML_VERSION : '';
-		$data['server']         = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : '';
+		$data['server']         = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
 		$data['multisite']      = is_multisite();
 		$data['theme']          = $theme;
 
@@ -133,6 +133,7 @@ class EWWWIO_Tracking {
 			}
 		}
 
+		$data['lazyload']               = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_lazy_load' );
 		$data['optipng_level']          = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? 0 : (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_optipng_level' );
 		$data['disable_pngout']         = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_pngout' );
 		$data['pngout_level']           = ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ? 9 : (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_pngout_level' );
@@ -149,6 +150,7 @@ class EWWWIO_Tracking {
 		$data['resize_indirect_width']  = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_maxotherwidth' );
 		$data['resize_indirect_height'] = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_maxotherheight' );
 		$data['resize_existing']        = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_resize_existing' );
+		$data['resize_other']           = (bool) ewww_image_optimizer_get_option( 'ewww_image_optimizer_resize_other_existing' );
 		$data['total_sizes']            = (int) count( ewww_image_optimizer_get_image_sizes() );
 		$data['disabled_opt_sizes']     = is_array( get_option( 'ewww_image_optimizer_disable_resizes_opt' ) ) ? count( get_option( 'ewww_image_optimizer_disable_resizes_opt' ) ) : 0;
 		$data['disabled_create_sizes']  = is_array( get_option( 'ewww_image_optimizer_disable_resizes' ) ) ? count( get_option( 'ewww_image_optimizer_disable_resizes' ) ) : 0;
@@ -230,11 +232,11 @@ class EWWWIO_Tracking {
 	public function check_for_settings_optin( $input ) {
 		ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		// Send an intial check in on settings save.
-		if ( isset( $_POST['ewww_image_optimizer_allow_tracking'] ) && $_POST['ewww_image_optimizer_allow_tracking'] ) {
+		if ( $input ) {
 			$this->send_checkin( true );
 			ewww_image_optimizer_set_option( 'ewww_image_optimizer_tracking_notice', 1 );
 		}
-		return $input;
+		return (bool) $input;
 	}
 
 	/**
@@ -245,7 +247,7 @@ class EWWWIO_Tracking {
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_allow_tracking', 1 );
 		$this->send_checkin( true );
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_tracking_notice', 1 );
-		wp_redirect( remove_query_arg( 'action', wp_get_referer() ) );
+		wp_safe_redirect( remove_query_arg( 'action', wp_get_referer() ) );
 		exit;
 	}
 
@@ -257,7 +259,7 @@ class EWWWIO_Tracking {
 		delete_option( 'ewww_image_optimizer_allow_tracking' );
 		delete_network_option( null, 'ewww_image_optimizer_allow_tracking' );
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_tracking_notice', 1 );
-		wp_redirect( remove_query_arg( 'action', wp_get_referer() ) );
+		wp_safe_redirect( remove_query_arg( 'action', wp_get_referer() ) );
 		exit;
 	}
 
@@ -321,7 +323,9 @@ class EWWWIO_Tracking {
 	 * @return void
 	 */
 	public function admin_notice() {
+		// If network-active and network notice is hidden, or single-active and single site notice has been hidden, don't show it again.
 		$hide_notice = ewww_image_optimizer_get_option( 'ewww_image_optimizer_tracking_notice' );
+		// But what if they allow overrides? Then the above was checking single-site settings, so we need to check the network admin.
 		if ( is_multisite() && get_site_option( 'ewww_image_optimizer_allow_multisite_override' ) && get_site_option( 'ewww_image_optimizer_tracking_notice' ) ) {
 			$hide_notice = true;
 		}
@@ -345,6 +349,9 @@ class EWWWIO_Tracking {
 		if ( is_multisite() && is_plugin_active_for_network( EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE_REL ) && ! current_user_can( 'manage_network_options' ) ) {
 			return;
 		}
+		if ( is_multisite() && ! is_plugin_active_for_network( EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE_REL ) && is_network_admin() ) {
+			return;
+		}
 		if (
 			stristr( network_site_url( '/' ), '.local' ) !== false ||
 			stristr( network_site_url( '/' ), 'dev' ) !== false ||
@@ -353,12 +360,12 @@ class EWWWIO_Tracking {
 		) {
 			ewww_image_optimizer_set_option( 'ewww_image_optimizer_tracking_notice', 1 );
 		} else {
-			$admin_email = '<strong>' . esc_html( get_bloginfo( 'admin_email' ) ) . '</strong>';
-			$optin_url   = 'admin.php?action=ewww_opt_into_tracking';
-			$optout_url  = 'admin.php?action=ewww_opt_out_of_tracking';
+			$admin_email = '<strong>' . get_bloginfo( 'admin_email' ) . '</strong>';
+			$optin_url   = admin_url( 'admin.php?action=ewww_opt_into_tracking' );
+			$optout_url  = admin_url( 'admin.php?action=ewww_opt_out_of_tracking' );
 			echo '<div class="updated"><p>';
 				/* translators: %s: admin email as configured in settings */
-				printf( esc_html__( 'Allow EWWW Image Optimizer to track plugin usage? Opt-in to tracking and receive 500 free image credits in your admin email: %s. No sensitive data is tracked.', 'ewww-image-optimizer' ), $admin_email );
+				printf( esc_html__( 'Allow EWWW Image Optimizer to track plugin usage? Opt-in to tracking and receive 500 free image credits in your admin email: %s. No sensitive data is tracked.', 'ewww-image-optimizer' ), wp_kses_post( $admin_email ) );
 				echo '&nbsp;<a href="https://docs.ewww.io/article/23-usage-tracking" target="_blank" data-beacon-article="591f3a8e2c7d3a057f893d91">' . esc_html__( 'Learn more.', 'ewww-image-optimizer' ) . '</a>';
 				echo '<a href="' . esc_url( $optin_url ) . '" class="button-secondary" style="margin-left:5px;">' . esc_html__( 'Allow', 'ewww-image-optimizer' ) . '</a>';
 				echo '<a href="' . esc_url( $optout_url ) . '" class="button-secondary" style="margin-left:5px">' . esc_html__( 'Do not allow', 'ewww-image-optimizer' ) . '</a>';

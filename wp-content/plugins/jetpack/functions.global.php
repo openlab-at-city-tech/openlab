@@ -11,44 +11,14 @@
  */
 
 use Automattic\Jetpack\Connection\Client;
+use Automattic\Jetpack\Redirect;
+use Automattic\Jetpack\Device_Detection;
 
 /**
  * Disable direct access.
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-}
-
-if ( ! function_exists( 'wp_timezone' ) ) {
-	/**
-	 * Shim for WordPress 5.3's wp_timezone() function.
-	 *
-	 * This is a mix of wp_timezone(), which calls wp_timezone_string().
-	 * We don't need both in Jetpack, so providing only one function.
-	 *
-	 * @since 7.9.0
-	 * @todo Remove when WP 5.3 is Jetpack's minimum
-	 *
-	 * @return DateTimeZone Site's DateTimeZone
-	 */
-	function wp_timezone() {
-		$timezone_string = get_option( 'timezone_string' );
-
-		if ( $timezone_string ) {
-			return new DateTimeZone( $timezone_string );
-		}
-
-		$offset  = (float) get_option( 'gmt_offset' );
-		$hours   = (int) $offset;
-		$minutes = ( $offset - $hours );
-
-		$sign      = ( $offset < 0 ) ? '-' : '+';
-		$abs_hour  = abs( $hours );
-		$abs_mins  = abs( $minutes * 60 );
-		$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
-
-		return new DateTimeZone( $tz_offset );
-	}
 }
 
 /**
@@ -113,7 +83,7 @@ function jetpack_store_migration_data( $option_name, $option_value ) {
 		'post_title'            => $option_name,
 		'post_content_filtered' => $option_value,
 		'post_type'             => 'jetpack_migration',
-		'post_date'             => date( 'Y-m-d H:i:s', time() ),
+		'post_date'             => gmdate( 'Y-m-d H:i:s', time() ),
 	);
 
 	$post = get_page_by_title( $option_name, 'OBJECT', 'jetpack_migration' );
@@ -161,8 +131,8 @@ function jetpack_render_tos_blurb() {
 				'strong' => true,
 			)
 		),
-		'https://wordpress.com/tos',
-		'https://jetpack.com/support/what-data-does-jetpack-sync'
+		esc_url( Redirect::get_url( 'wpcom-tos' ) ),
+		esc_url( Redirect::get_url( 'jetpack-support-what-data-does-jetpack-sync' ) )
 	);
 }
 
@@ -335,4 +305,62 @@ function jetpack_is_file_supported_for_sideloading( $file ) {
 	}
 
 	return in_array( $type, $supported_mime_types, true );
+}
+
+/**
+ * Determine if the current User Agent matches the passed $kind
+ *
+ * @param string $kind Category of mobile device to check for.
+ *                         Either: any, dumb, smart.
+ * @param bool   $return_matched_agent Boolean indicating if the UA should be returned.
+ *
+ * @return bool|string Boolean indicating if current UA matches $kind. If
+ *                              $return_matched_agent is true, returns the UA string
+ */
+function jetpack_is_mobile( $kind = 'any', $return_matched_agent = false ) {
+
+	/**
+	 * Filter the value of jetpack_is_mobile before it is calculated.
+	 *
+	 * Passing a truthy value to the filter will short-circuit determining the
+	 * mobile type, returning the passed value instead.
+	 *
+	 * @since  4.2.0
+	 *
+	 * @param bool|string $matches Boolean if current UA matches $kind or not. If
+	 *                             $return_matched_agent is true, should return the UA string
+	 * @param string      $kind Category of mobile device being checked
+	 * @param bool        $return_matched_agent Boolean indicating if the UA should be returned
+	 */
+	$pre = apply_filters( 'pre_jetpack_is_mobile', null, $kind, $return_matched_agent );
+	if ( $pre ) {
+		return $pre;
+	}
+
+	$return      = false;
+	$device_info = Device_Detection::get_info();
+
+	if ( 'any' === $kind ) {
+		$return = $device_info['is_phone'];
+	} elseif ( 'smart' === $kind ) {
+		$return = $device_info['is_smartphone'];
+	} elseif ( 'dumb' === $kind ) {
+		$return = $device_info['is_phone'] && ! $device_info['is_smartphone'];
+	}
+
+	if ( $return_matched_agent && true === $return ) {
+		$return = $device_info['is_phone_matched_ua'];
+	}
+
+	/**
+	 * Filter the value of jetpack_is_mobile
+	 *
+	 * @since  4.2.0
+	 *
+	 * @param bool|string $matches Boolean if current UA matches $kind or not. If
+	 *                             $return_matched_agent is true, should return the UA string
+	 * @param string      $kind Category of mobile device being checked
+	 * @param bool        $return_matched_agent Boolean indicating if the UA should be returned
+	 */
+	return apply_filters( 'jetpack_is_mobile', $return, $kind, $return_matched_agent );
 }

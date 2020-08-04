@@ -1,0 +1,11 @@
+#OutoftheBox .jp-video-full {
+  /*width:480px;
+  height:270px;*/
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  position: fixed !important;
+  position: relative;
+  z-index: 9999999;
+}

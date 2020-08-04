@@ -22,7 +22,14 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 	 * Downloads test images.
 	 */
 	public static function setUpBeforeClass() {
-		self::$test_gif = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/gifsiclelogo.gif' );
+		$wp_upload_dir   = wp_upload_dir();
+		$temp_upload_dir = trailingslashit( $wp_upload_dir['basedir'] ) . 'testing/';
+		wp_mkdir_p( $temp_upload_dir );
+
+		$test_gif = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/gifsiclelogo.gif' );
+		rename( $test_gif, $temp_upload_dir . basename( $test_gif ) );
+		self::$test_gif = $temp_upload_dir . basename( $test_gif );
+
 		ewww_image_optimizer_set_defaults();
 		update_option( 'ewww_image_optimizer_gif_level', 10 );
 		update_site_option( 'ewww_image_optimizer_gif_level', 10 );
@@ -48,7 +55,8 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 		if ( ! $original ) {
 			$original = self::$test_gif;
 		}
-		$_REQUEST['ewww_force'] = 1;
+		global $ewww_force;
+		$ewww_force = 1;
 		$filename = $original . ".gif";
 		copy( $original, $filename );
 		$results = ewww_image_optimizer( $filename, 1 );
@@ -70,7 +78,7 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( $results_msg );
 
 		$ewww_image = false;
-		$file_size = filesize( $opt_file );
+		$file_size = ewww_image_optimizer_filesize( $opt_file );
 		$results_msg = ewww_image_optimizer_check_table( $opt_file, $file_size );
 		$this->assertStringStartsWith( 'Reduced by', $results_msg );
 
@@ -85,6 +93,7 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 		$record = ewww_image_optimizer_find_already_optimized( $opt_file );
 		unset( $record['id'] );
 		$record['image_size'] = $file_size;
+		$record['path']       = ewww_image_optimizer_relativize_path( $opt_file );
 		$wpdb->insert( $wpdb->ewwwio_images, $record );
 		$record['image_size'] = 0;
 		$record['results'] = '';

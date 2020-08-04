@@ -174,10 +174,8 @@ $dashicons_arrow = is_rtl() ? 'dashicons-arrow-left' : 'dashicons-arrow-right';
 				<li><?php _e( 'The Align Left, Align Center, Align Right, Bold, Italic, and Link buttons cannot be moved or arranged.', 'tinymce-advanced' ); ?></li>
 				<li><?php _e( 'All other buttons are always shown in a drop-down. The users are not allowed to add any of them to the main toolbar.', 'tinymce-advanced' ); ?></li>
 				<li><?php _e( 'All buttons that are shown in the drop-down are auto-arranged by alphabetical order. The users are not allowed to arrange them.', 'tinymce-advanced' ); ?></li>
+				<li><?php _e( 'The drop-down cannot be empty and the Inline Image and Text Color items cannot be placed in the side toolbar.', 'tinymce-advanced' ); ?>
 			</ol>
-			<p>
-				<?php _e( 'Also currently the drop-down should not be empty and the Inline Image item cannot be placed in the side toolbar.', 'tinymce-advanced' ); ?>
-			</p>
 		</div>
 
 		<div class="toolbar-block-wrap toolbar-wrap">
@@ -270,7 +268,7 @@ $dashicons_arrow = is_rtl() ? 'dashicons-arrow-left' : 'dashicons-arrow-right';
 					<ul id="toolbar_block" class="toolbar-block-dropdown container-block">
 					<?php
 
-					// Block editor limitation: only the buttons in the overflow drop-down sub-toolbar can be moved or arranged.
+					// Block editor limitation: only the buttons in the overflow drop-down/sub-toolbar can be moved (but not arranged).
 					$excluded_block_buttons = array(
 						'core/bold',
 						'core/italic',
@@ -380,7 +378,10 @@ $dashicons_arrow = is_rtl() ? 'dashicons-arrow-left' : 'dashicons-arrow-right';
 
 			<table class="form-table panel-block-colors-settings"><tbody>
 				<tr class="panel-block-colors-settings__text">
-					<th><?php _e( 'Enable setting of selected text color', 'tinymce-advanced' ); ?></th>
+					<th>
+						<?php _e( 'Enable setting of selected text color', 'tinymce-advanced' ); ?>
+						<span class="small-info"><?php _e( '(this will replace the default text color popup in WP 5.4 and newer)', 'tinymce-advanced' ); ?></span>
+					</th>
 					<td>
 						<p>
 							<input type="radio" name="selected_text_color" id="selected_text_color_yes" value="yes"<?php if ( $this->check_user_setting( 'selected_text_color' ) ) echo ' checked'; ?>>

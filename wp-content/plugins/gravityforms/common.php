@@ -488,11 +488,11 @@ class GFCommon {
 
 				if ( $group_label ) {
 					?>
-					<optgroup label="<?php echo $group_label; ?>">
+					<optgroup label="<?php esc_attr_e( $group_label ); ?>">
 				<?php } ?>
 
 				<?php foreach ( $tags as $tag ) { ?>
-					<option value="<?php echo $tag['tag']; ?>"><?php echo $tag['label']; ?></option>
+					<option value="<?php esc_attr_e( $tag['tag'] ); ?>"><?php esc_html_e( $tag['label'] ); ?></option>
 					<?php
 				}
 				if ( $group_label ) {
@@ -3930,7 +3930,17 @@ Content-Type: text/html;
 		return array( 'name' => $name, 'price' => $price );
 	}
 
+	/**
+	 * Prints or enqueues form scripts and processes shortcodes found in the supplied content.
+	 *
+	 * @since unknown
+	 *
+	 * @param string $content The content to be processed.
+	 *
+	 * @return string
+	 */
 	public static function gform_do_shortcode( $content ) {
+		require_once self::get_base_path() . '/form_display.php';
 
 		$is_ajax = false;
 		$forms   = GFFormDisplay::get_embedded_forms( $content, $is_ajax );
@@ -4033,10 +4043,18 @@ Content-Type: text/html;
 		}
 
 		// if no option is set, leave akismet enabled; otherwise, use option value true/false
-		$enabled_by_setting = get_option( 'rg_gforms_enable_akismet' ) === false ? true : get_option( 'rg_gforms_enable_akismet' ) == true;
-		$enabled_by_filter  = gf_apply_filters( array( 'gform_akismet_enabled', $form_id ), $enabled_by_setting );
+		$enabled = get_option( 'rg_gforms_enable_akismet' ) === false ? true : get_option( 'rg_gforms_enable_akismet' ) == true;
 
-		return $enabled_by_filter;
+		/**
+		 * Allows the Akismet integration to be enabled or disabled.
+		 *
+		 * @since 1.6.3
+		 * @since 2.4.19 Added the $form_id param.
+		 *
+		 * @param bool $enabled Indicates if the Akismet integration is enabled.
+		 * @param int  $form_id The ID of the form being processed.
+		 */
+		return gf_apply_filters( array( 'gform_akismet_enabled', $form_id ), $enabled, $form_id );
 
 	}
 
@@ -4062,8 +4080,8 @@ Content-Type: text/html;
 
 		global $akismet_api_host, $akismet_api_port;
 
-		$fields = self::get_akismet_fields( $form, $lead );
 		$as     = $is_spam ? 'spam' : 'ham';
+		$fields = self::get_akismet_fields( $form, $lead, $as );
 
 		// Submitting info to Akismet
 		if ( defined( 'AKISMET_VERSION' ) && AKISMET_VERSION < 3.0 ) {
@@ -4074,30 +4092,53 @@ Content-Type: text/html;
 		}
 	}
 
-	private static function get_akismet_fields( $form, $lead ) {
+	/**
+	 * Prepares a query string containing the data to be sent to Akismet.
+	 *
+	 * @since unknown
+	 * @since 2.4.19 Added the $action param.
+	 *
+	 * @param array  $form   The form which created the entry.
+	 * @param array  $entry  The entry being processed.
+	 * @param string $action The action triggering the Akismet request: submit, spam, or ham.
+	 *
+	 * @return string
+	 */
+	private static function get_akismet_fields( $form, $entry, $action = 'submit' ) {
 
 		$is_form_editor  = GFCommon::is_form_editor();
 		$is_entry_detail = GFCommon::is_entry_detail();
 		$is_admin        = $is_form_editor || $is_entry_detail;
 
 		// Gathering Akismet information
-		$akismet_info                         = array();
-		$akismet_info['comment_type']         = 'gravity_form';
-		$akismet_info['comment_author']       = self::get_akismet_field( 'name', $form, $lead );
-		$akismet_info['comment_author_email'] = self::get_akismet_field( 'email', $form, $lead );
-		$akismet_info['comment_author_url']   = self::get_akismet_field( 'website', $form, $lead );
-		$akismet_info['comment_content']      = self::get_akismet_field( 'textarea', $form, $lead );
-		$akismet_info['contact_form_subject'] = $form['title'];
-		$akismet_info['comment_author_IP']    = $lead['ip'];
-		$akismet_info['permalink']            = $lead['source_url'];
-		$akismet_info['user_ip']              = preg_replace( '/[^0-9., ]/', '', $lead['ip'] );
-		$akismet_info['user_agent']           = $lead['user_agent'];
-		$akismet_info['referrer']             = $is_admin ? '' : $_SERVER['HTTP_REFERER'];
-		$akismet_info['blog']                 = get_option( 'home' );
+		$akismet_fields                         = array();
+		$akismet_fields['comment_type']         = 'gravity_form';
+		$akismet_fields['comment_author']       = self::get_akismet_field( 'name', $form, $entry );
+		$akismet_fields['comment_author_email'] = self::get_akismet_field( 'email', $form, $entry );
+		$akismet_fields['comment_author_url']   = self::get_akismet_field( 'website', $form, $entry );
+		$akismet_fields['comment_content']      = self::get_akismet_field( 'textarea', $form, $entry );
+		$akismet_fields['contact_form_subject'] = $form['title'];
+		$akismet_fields['comment_author_IP']    = rgar( $entry, 'ip' );
+		$akismet_fields['permalink']            = rgar( $entry, 'source_url' );
+		$akismet_fields['user_ip']              = preg_replace( '/[^0-9., ]/', '', rgar( $entry, 'ip' ) );
+		$akismet_fields['user_agent']           = rgar( $entry, 'user_agent' );
+		$akismet_fields['referrer']             = $is_admin ? '' : rgar( $_SERVER, 'HTTP_REFERER' );
+		$akismet_fields['blog']                 = get_option( 'home' );
 
-		$akismet_info = gf_apply_filters( array( 'gform_akismet_fields', $form['id'] ), $akismet_info, $form, $lead );
+		/**
+		 * Allows the data to be sent to Akismet to be overridden.
+		 *
+		 * @since unknown
+		 * @since 2.4.19 Added the $action param.
+		 *
+		 * @param array  $akismet_fields The data to be sent to Akismet.
+		 * @param array  $form           The form which created the entry.
+		 * @param array  $entry          The entry being processed.
+		 * @param string $action         The action triggering the Akismet request: submit, spam, or ham.
+		 */
+		$akismet_fields = gf_apply_filters( array( 'gform_akismet_fields', $form['id'] ), $akismet_fields, $form, $entry, $action );
 
-		return http_build_query( $akismet_info );
+		return http_build_query( $akismet_fields );
 	}
 
 	private static function get_akismet_field( $field_type, $form, $lead ) {
@@ -4815,6 +4856,24 @@ Content-Type: text/html;
 			$gf_vars['addressTypes']       = $address_field->get_address_types( $form['id'] );
 			$gf_vars['defaultAddressType'] = $address_field->get_default_address_type( $form['id'] );
 
+		}
+
+		$prefixes = array_unique( array_filter( array(
+			__( 'Mr.', 'gravityforms' ),
+			__( 'Mrs.', 'gravityforms' ),
+			__( 'Miss', 'gravityforms' ),
+			__( 'Ms.', 'gravityforms' ),
+			__( 'Dr.', 'gravityforms' ),
+			__( 'Prof.', 'gravityforms' ),
+			__( 'Rev.', 'gravityforms' ),
+		) ) );
+		sort( $prefixes );
+
+		$gf_vars['nameFieldDefaultPrefixes'] = array();
+		foreach ( $prefixes as $prefix ) {
+			$prefix = wp_strip_all_tags( $prefix );
+
+			$gf_vars['nameFieldDefaultPrefixes'][] = array( 'text' => $prefix, 'value' => $prefix );
 		}
 
 		$gf_vars_json = 'var gf_vars = ' . json_encode( $gf_vars ) . ';';
@@ -5881,8 +5940,13 @@ Content-Type: text/html;
 			$value = esc_attr( $value );
 		}
 
-		if ( $modifier == 'label' ) {
-			$value = empty( $value ) ? '' : $field->label;
+		if ( in_array( 'label', $modifiers ) ) {
+			if ( empty( $value ) ) {
+				$value = '';
+			} else {
+				$field->set_context_property( 'use_admin_label', in_array( 'admin', $modifiers ) );
+				$value = $format == 'text' ? sanitize_text_field( self::get_label( $field ) ) : esc_html( self::get_label( $field ) );
+			}
 		} else if ( $modifier == 'numeric' ) {
 			$number_format = $field->numberFormat ? $field->numberFormat : 'decimal_dot';
 			$value         = self::clean_number( $value, $number_format );

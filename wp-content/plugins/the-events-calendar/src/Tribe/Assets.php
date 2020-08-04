@@ -16,6 +16,7 @@ class Tribe__Events__Assets {
 	public function hook() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'dequeue_incompatible' ), 200 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin' ) );
+		add_filter( 'tribe_customizer_inline_stylesheets', [ $this, 'customizer_inline_stylesheets' ], 10, 2 );
 	}
 
 	/**
@@ -714,7 +715,7 @@ class Tribe__Events__Assets {
 			'date_with_year'          => tribe_get_date_option( 'dateWithYearFormat', Tribe__Date_Utils::DBDATEFORMAT ),
 			'date_no_year'            => tribe_get_date_option( 'dateWithoutYearFormat', Tribe__Date_Utils::DBDATEFORMAT ),
 			'datepicker_format'       => Tribe__Date_Utils::datepicker_formats( tribe_get_option( 'datepickerFormat' ) ),
-			'datepicker_format_index' => tribe_get_option( 'datepickerFormat' ),
+			'datepicker_format_index' => Tribe__Date_Utils::get_datepicker_format_index(),
 			'days'              => array(
 				__( 'Sunday' ),
 				__( 'Monday' ),
@@ -772,6 +773,24 @@ class Tribe__Events__Assets {
 		);
 
 		return $data;
+	}
+
+	/**
+	 * Add legacy stylesheets to customizer styles array to check.
+	 *
+	 * @since 5.1.1
+	 *
+	 * @param array  $sheets Array of sheets to search for.
+	 * @param string $css_template String containing the inline css to add.
+	 *
+	 * @return array Modified array of sheets to search for.
+	 */
+	public function customizer_inline_stylesheets( $sheets, $css_template ) {
+		$tec_sheets = [
+			'tribe-events-calendar-style',
+		];
+
+		return array_merge( $sheets, $tec_sheets );
 	}
 
 }

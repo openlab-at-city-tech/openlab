@@ -481,24 +481,28 @@ function bp_members_pagination_count() {
 			if ( 1 == $members_template->total_member_count ) {
 				$pag = __( 'Viewing 1 active member', 'buddypress' );
 			} else {
+				/* translators: 1: active member from number. 2: active member to number. 3: total active members. */
 				$pag = sprintf( _n( 'Viewing %1$s - %2$s of %3$s active member', 'Viewing %1$s - %2$s of %3$s active members', $members_template->total_member_count, 'buddypress' ), $from_num, $to_num, $total );
 			}
 		} elseif ( 'popular' == $members_template->type ) {
 			if ( 1 == $members_template->total_member_count ) {
 				$pag = __( 'Viewing 1 member with friends', 'buddypress' );
 			} else {
+				/* translators: 1: member with friends from number. 2: member with friends to number. 3: total members with friends. */
 				$pag = sprintf( _n( 'Viewing %1$s - %2$s of %3$s member with friends', 'Viewing %1$s - %2$s of %3$s members with friends', $members_template->total_member_count, 'buddypress' ), $from_num, $to_num, $total );
 			}
 		} elseif ( 'online' == $members_template->type ) {
 			if ( 1 == $members_template->total_member_count ) {
 				$pag = __( 'Viewing 1 online member', 'buddypress' );
 			} else {
+				/* translators: 1: online member from number. 2: online member to number. 3: total online members. */
 				$pag = sprintf( _n( 'Viewing %1$s - %2$s of %3$s online member', 'Viewing %1$s - %2$s of %3$s online members', $members_template->total_member_count, 'buddypress' ), $from_num, $to_num, $total );
 			}
 		} else {
 			if ( 1 == $members_template->total_member_count ) {
 				$pag = __( 'Viewing 1 member', 'buddypress' );
 			} else {
+				/* translators: 1: member from number. 2: member to number. 3: total members. */
 				$pag = sprintf( _n( 'Viewing %1$s - %2$s of %3$s member', 'Viewing %1$s - %2$s of %3$s members', $members_template->total_member_count, 'buddypress' ), $from_num, $to_num, $total );
 			}
 		}
@@ -1040,6 +1044,7 @@ function bp_member_latest_update( $args = '' ) {
 		 */
 		$update_content = apply_filters( 'bp_get_activity_latest_update_excerpt', trim( strip_tags( bp_create_excerpt( $update['content'], $length ) ) ), $r );
 
+		/* translators: %s: the member latest activity update */
 		$update_content = sprintf( _x( '- &quot;%s&quot;', 'member latest update in member directory', 'buddypress' ), $update_content );
 
 		// If $view_link is true and the text returned by bp_create_excerpt() is different from the original text (ie it's
@@ -1205,6 +1210,7 @@ function bp_member_registered( $args = array() ) {
 			return esc_attr( $members_template->member->user_registered );
 		}
 
+		/* translators: %s: last activity timestamp (e.g. "active 1 hour ago") */
 		$registered = esc_attr( bp_core_get_last_activity( $members_template->member->user_registered, _x( 'registered %s', 'Records the timestamp that the user registered into the activity stream', 'buddypress' ) ) );
 
 		/**
@@ -1417,7 +1423,7 @@ function bp_displayed_user_get_front_template( $displayed_user = null ) {
 
 	// Init the hierarchy
 	$template_names = array(
-		'members/single/front-id-' . sanitize_file_name( $displayed_user->id ) . '.php',
+		'members/single/front-id-' . (int) $displayed_user->id . '.php',
 		'members/single/front-nicename-' . sanitize_file_name( $displayed_user->userdata->user_nicename ) . '.php',
 	);
 
@@ -1510,7 +1516,7 @@ function bp_get_displayed_user_nav() {
  *              False otherwise
  */
 function bp_displayed_user_use_cover_image_header() {
-	return (bool) bp_is_active( 'xprofile', 'cover_image' ) && ! bp_disable_cover_image_uploads() && bp_attachments_is_wp_version_supported();
+	return (bool) bp_is_active( 'members', 'cover_image' ) && ! bp_disable_cover_image_uploads();
 }
 
 /** Avatars *******************************************************************/
@@ -2007,6 +2013,7 @@ function bp_current_member_type_message() {
 	function bp_get_current_member_type_message() {
 		$type_object = bp_get_member_type_object( bp_get_current_member_type() );
 
+		/* translators: %s: member type singular name */
 		$message = sprintf( __( 'Viewing members of the type: %s', 'buddypress' ), '<strong>' . $type_object->labels['singular_name'] . '</strong>' );
 
 		/**
@@ -2644,4 +2651,35 @@ function bp_members_component_link( $component, $action = '', $query_args = '', 
 		// Return the url, if there is one.
 		if ( !empty( $url ) )
 			return $url;
+	}
+
+
+/**
+ * Render an avatar delete link.
+ *
+ * @since 1.1.0
+ * @since 6.0.0 Moved from /bp-xprofile/bp-xprofile-template.php to this file.
+ */
+function bp_avatar_delete_link() {
+	echo bp_get_avatar_delete_link();
+}
+
+	/**
+	 * Return an avatar delete link.
+	 *
+	 * @since 1.1.0
+	 * @since 6.0.0 Moved from /bp-xprofile/bp-xprofile-template.php to this file.
+	 *
+	 * @return string
+	 */
+	function bp_get_avatar_delete_link() {
+
+		/**
+		 * Filters the link used for deleting an avatar.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string $value Nonced URL used for deleting an avatar.
+		 */
+		return apply_filters( 'bp_get_avatar_delete_link', wp_nonce_url( bp_displayed_user_domain() . bp_get_profile_slug() . '/change-avatar/delete-avatar/', 'bp_delete_avatar_link' ) );
 	}

@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2019  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ function osm_map_create() {
                    'map_controls' => '',
                    'geotag_nonce' => wp_create_nonce( 'osm_geotag_nonce'),
                    'marker_nonce' => wp_create_nonce( 'osm_marker_nonce'),
-                   'plugin_url' => OSM_PLUGIN_URL
+                   'plugin_url' => OSM_PLUGIN_URL,
+                   'map_name' => ''
             ));
 
   $post_types = get_post_types();
@@ -58,7 +59,7 @@ function osm_map_create_shortcode_function( $post ) {
 		var tab_id = jQuery(this).attr('data-tab');
 
 		jQuery('ul.osm-tabs li').removeClass('current');
-		jQuery('.tab-content').removeClass('current');
+		jQuery('.osm-tab-content').removeClass('current');
 
 		jQuery(this).addClass('current');
 		jQuery("#"+tab_id).addClass('current');
@@ -123,7 +124,7 @@ function osm_map_create_shortcode_function( $post ) {
 		<li class="tab-link" data-tab="tab_about"><?php _e('About','OSM') ?></li>
 	</ul>
 
-    <div id="tab_add_marker" class="tab-content current"><br/>
+    <div id="tab_add_marker" class="osm-tab-content current"><br/>
       <b>1. <?php _e('map type','OSM') ?></b>:
       <select name="osm_add_marker_map_type" id="osm_add_marker_map_type">
       <?php include('osm-maptype-select.php'); ?>
@@ -133,9 +134,10 @@ function osm_map_create_shortcode_function( $post ) {
       <?php include('osm-color-select.php'); ?>
       </select><br/><br/>
        <b>3. <?php _e('map controls','OSM') ?></b>:
-        <input type="checkbox" name="osm_add_marker_fullscreen" id="osm_add_marker_fullscreen" value="fullscreen"> <?php _e('fullscreen','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_fullscreen" id="osm_add_marker_fullscreen" value="fullscreen"> <?php _e('fullscreen button','OSM') ?>
         <input type="checkbox" name="osm_add_marker_scaleline" id="osm_add_marker_scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
-        <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?> <br/>
+        <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?>
+        <input type="checkbox" name="osm_add_marker_bckgrnd_img" id="osm_add_marker_bckgrnd_img" value="osm_add_marker_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/>
        <br/>
        <b>4. <?php _e('marker icon','OSM') ?></b>:
        <br/>
@@ -150,16 +152,18 @@ function osm_map_create_shortcode_function( $post ) {
       echo $link; ?></b>
 
 	  <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-	echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'AddMarker')); ?>
+	echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'75%','height'=>'450', 'map_event'=>'AddMarker')); ?>
 
       <div id="Marker_Div"><br/></div><br/>
         <a class="button" onClick="osm_savePostMarker();"> <?php _e('Save marker and generate shortcode','OSM')?> </a><br/><br/>      <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>
 
 
- </div> <!-- id="tab_geotag" -->
+
+
+ </div> <!-- id="tab_add_marker" -->
 
   <!-- id="add map with gpx or kml file" -->
-	<div id="tab_file_list" class="tab-content">
+	<div id="tab_file_list" class="osm-tab-content">
 	  <?php _e('Add a map with an GPX or KML file. <br/>Copy file address at Meditathek.','OSM') ?><br/><br/>
       <b>1. <?php _e('Map type','OSM') ?></b>:
       <select name="osm_file_list_map_type" id="osm_file_list_map_type">
@@ -171,13 +175,14 @@ function osm_map_create_shortcode_function( $post ) {
       </select>
       <br/><br/>
       <b>3. <?php _e('map controls','OSM') ?></b>:
-        <input type="checkbox" name="file_fullscreen" id="file_fullscreen" value="file_fullscreen"> <?php _e('fullscreen','OSM') ?>
+        <input type="checkbox" name="file_fullscreen" id="file_fullscreen" value="file_fullscreen"> <?php _e('fullscreen button','OSM') ?>
         <input type="checkbox" name="file_scaleline" id="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
-        <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?> <br/><br/>
+        <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?>
+        <input type="checkbox" name="file_bckgrnd_img" id="file_bckgrnd_img" value="file_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/><br/>
 
     <b>4. <?php _e('Paste the local URL of file here: ','OSM') ?></b>
 	<p><?php _e('Do not save any of your personal data in the plugins/osm folder but in the upload folder!','OSM') ?></p>
-	<input type="text" class="osmFileName" name="osm_file_list_URL[0]" value="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
+	<input type="text" class="osmFileName" name="osm_file_list_URL[0]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
 	<input type="text" class="osmFileTitle" name="osm_file_list_title[0]" placeholder="<?php _e('file title','OSM') ?>" />
 	<input type="color" class="osmFileColor"  name="osm_file_list_color[0]" />
 	<br />
@@ -204,13 +209,12 @@ function osm_map_create_shortcode_function( $post ) {
       $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
       echo $link;?></b><br/><br/>
 
-    <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-	  echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_event'=>'FileSC')); ?>
-
+     <div id="File_Div"><br/></div><br/>
+     <a class="button" onClick="osm_generateFileSC();"> <?php _e('Generate shortcode for map with GPX/KML file','OSM')?> </a><br/><br/>      <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>
 
      </div> <!-- id="tab_file_list" -->
 
-    <div id="tab_geotag" class="tab-content">
+    <div id="tab_geotag" class="osm-tab-content">
 
 	<?php _e('Add a map with all geotagged posts / pages of your site. <br/>Set geotag to your post at [Set geotag] tab.','OSM') ?><br/><br/>
   <ol>
@@ -264,7 +268,7 @@ function osm_map_create_shortcode_function( $post ) {
 
      </div> <!-- id="tab_geotag" -->
 
-    <div id="tab_set_geotag" class="tab-content">
+    <div id="tab_set_geotag" class="osm-tab-content">
         <?php _e('You can set a geotag (lat/lon) and an icon for this post / page.') ?><br/>
         <b>1. <?php _e('post icon','OSM') ?></b>:
         <br/>
@@ -279,7 +283,7 @@ function osm_map_create_shortcode_function( $post ) {
        <a class="button" onClick="osm_saveGeotag();"> <?php _e('Save','OSM')?> </a><br/><br/>
     </div>  <!-- class="tab_set_geotag" -->
 
-     <div id="tab_about" class="tab-content">
+     <div id="tab_about" class="osm-tab-content">
      <b><?php echo 'WordPress OSM Plugin '.PLUGIN_VER.' '; ?></b><br/>
      <b><font color="#FF0000"><?php echo 'We need help for translations!'; ?></b></font>
      <table border="0" >
@@ -305,6 +309,14 @@ function osm_map_create_shortcode_function( $post ) {
        <li><?php _e('Follow us on twitter: ','OSM') ?><a target="_new" href="https://twitter.com/wp_osm_plugin">wp-osm-plugin</a>.</li>
       <li><?php _e('download the last version at WordPress.org ','OSM') ?><a target="_new" href="http://wordpress.org/extend/plugins/osm/">osm-plugin download</a>.</li>
     </ol>
+     <b><?php _e('Info about your site:','OSM') ?></b>
+     <ol>
+       <li><?php _e('WP OSM Plugin URL: ','OSM'); echo OSM_PLUGIN_URL ?></li>
+    </ol>
+
+
+
+
     </div> <!-- id="tab_about" -->
 
 </div>  <!-- class="tabs" --><br/><br/>

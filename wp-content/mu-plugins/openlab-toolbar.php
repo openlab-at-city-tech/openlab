@@ -148,8 +148,6 @@ class OpenLab_Admin_Bar {
 
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 8 );
 
-			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_menu' ), 0 );
-
 			// add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
 			// creating custom menus for comments, new content, and editing
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 50 );
@@ -1479,56 +1477,6 @@ HTML;
 				'meta'   => array(
 					'class' => $class,
 					'title' => __( 'My Account' ),
-				),
-			)
-		);
-	}
-
-	/**
-	 * Custom account menu.
-	 *
-	 * @param type $wp_admin_bar
-	 * @return type
-	 */
-	public function openlab_custom_my_account_menu( $wp_admin_bar ) {
-		$user_login   = '';
-		$user_id      = get_current_user_id();
-		$current_user = wp_get_current_user();
-		$profile_url  = get_edit_profile_url( $user_id );
-
-		if ( ! $user_id ) {
-			return;
-		}
-
-		if ( $current_user->display_name !== $current_user->user_login ) {
-			$user_login = "<span class='username'>{$current_user->user_login}</span>";
-		}
-
-		// Avatar.
-		$user_info = '<div class="ol-toolbar-row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
-			array(
-				'item_id' => $user_id,
-				'object'  => 'member',
-				'type'    => 'full',
-				'html'    => false,
-			)
-		) . '" alt="Profile picture of ' . $current_user->display_name . '"/></a></div></div>';
-
-		// Name link.
-		$user_info .= '<div class="col-sm-16"><p class="item-title"><span class="display-name hyphenate bold">' . $current_user->display_name . '</span>';
-		$user_info .= $user_login !== '' ? '<a href="' . $profile_url . '">' . $user_login . '</a>' : '';
-		$user_info .= '</p>';
-
-		// Accept/reject buttons.
-		$user_info .= '<p class="actions clearfix inline-links"><a href="' . $profile_url . '">' . __( 'Edit My Profile' ) . '</a> | <span class="exit"><a href="' . wp_logout_url() . '">' . __( 'Log Out' ) . '</a></span></p></div></div>';
-
-		$wp_admin_bar->add_node(
-			array(
-				'parent' => 'my-account',
-				'id'     => 'user-listing',
-				'title'  => $user_info,
-				'meta'   => array(
-					'class' => 'nav-content-item',
 				),
 			)
 		);

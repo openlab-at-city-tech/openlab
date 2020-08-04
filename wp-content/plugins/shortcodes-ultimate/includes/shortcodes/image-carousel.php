@@ -132,7 +132,7 @@ su_add_shortcode(
 					'lightbox'   => __( 'Lightbox', 'shortcodes-ultimate' ),
 					'custom'     => __( 'Custom link (added in media editor)', 'shortcodes-ultimate' ),
 					'attachment' => __( 'Attachment page', 'shortcodes-ultimate' ),
-					'post'       => __( 'Post', 'shortcodes-ultimate' ),
+					'post'       => __( 'Post permalink', 'shortcodes-ultimate' ),
 				),
 				'default' => 'none',
 				'name'    => __( 'Link to', 'shortcodes-ultimate' ),
@@ -208,17 +208,11 @@ function su_shortcode_image_carousel( $atts = null, $content = null ) {
 	$atts['image_size']     = sanitize_key( $atts['image_size'] );
 	$atts['align']          = sanitize_key( $atts['align'] );
 	$atts['speed']          = sanitize_key( $atts['speed'] );
+	$atts['limit']          = intval( $atts['limit'] );
 
 	$items            = array();
 	$styles           = array();
-	$slides           = su_get_gallery_slides(
-		$atts['source'],
-		array(
-			'limit'          => $atts['limit'],
-			'link'           => $atts['link'],
-			'prefer_caption' => $atts['prefer_caption'],
-		)
-	);
+	$slides           = su_get_gallery_slides( $atts );
 	$link_target_attr = 'blank' === $atts['target']
 		? ' target="_blank" rel="noopener noreferrer"'
 		: '';

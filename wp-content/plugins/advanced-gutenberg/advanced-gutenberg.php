@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Advanced Gutenberg
- * Plugin URI: https://www.joomunited.com/wordpress-products/advanced-gutenberg
+ * Plugin URI: https://advancedgutenberg.com
  * Description: Enhanced tools for Gutenberg editor
- * Version: 2.3.9
- * Tested up to: 5.4.1
- * Author: JoomUnited
- * Author URI: https://www.joomunited.com
+ * Version: 2.3.11
+ * Tested up to: 5.4.2
+ * Author: Advanced Gutenberg
+ * Author URI: https://advancedgutenberg.com
  * License: GPL2
  * Text Domain: advanced-gutenberg
  * Domain Path: /languages
@@ -15,7 +15,8 @@
 /**
  * Copyright
  *
- * @copyright 2014  Joomunited  ( email : contact _at_ joomunited.com )
+ * @copyright 2014-2020  Joomunited
+ * @copyright 2020       Advanced Gutenberg. help@advancedgutenberg.com
  *
  *  Original development of this plugin was kindly funded by Joomunited
  *
@@ -74,7 +75,7 @@ if (version_compare(PHP_VERSION, '5.6.20', '<')) {
 }
 
 if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-    define('ADVANCED_GUTENBERG_VERSION', '2.3.9');
+    define('ADVANCED_GUTENBERG_VERSION', '2.3.11');
 }
 
 if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {

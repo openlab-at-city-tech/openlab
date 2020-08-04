@@ -311,3 +311,82 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
         <?php
     endif;
 }
+
+/**
+ * Get the current filter value out of GET parameters.
+ */
+function openlab_get_current_filter( $param ) {
+	$value = '';
+
+	switch ( $param ) {
+		case 'school' :
+			if ( isset( $_GET['school'] ) ) {
+				$value_raw           = wp_unslash( $_GET['school'] );
+				$schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
+
+				if ( 'school_all' === $value_raw ) {
+					$value = 'school_all';
+				} elseif ( isset( $schools_and_offices[ $value_raw ] ) ) {
+					$value = $value_raw;
+				}
+			}
+		break;
+
+		case 'group_types' :
+			$value = isset( $_GET['group_types'] ) ? wp_unslash( $_GET['group_types'] ) : [];
+		break;
+
+		case 'member_type' :
+			if ( isset( $_GET['member_type'] ) ) {
+				$valid_user_types = openlab_valid_user_types();
+
+				$user_types    = array_merge( array_keys( $valid_user_types ), [ 'user_type_all' ] );
+				$user_type_raw = $_GET['member_type'];
+				if ( in_array( $user_type_raw, $user_types ) ) {
+					$value = $user_type_raw;
+				}
+			}
+		break;
+
+		case 'order' :
+			$whitelist = [ 'alphabetical', 'newest', 'active' ];
+			$value     =  isset( $_GET['order'] ) && in_array( $_GET['order'], $whitelist, true ) ? $_GET['order'] : 'active';
+		break;
+
+		case 'open' :
+			$value = ! empty( $_GET['is_open'] );
+		break;
+
+		case 'cloneable' :
+			$value = ! empty( $_GET['is_cloneable'] );
+		break;
+
+		case 'badges' :
+			$value = isset( $_GET['badges'] ) ? array_map( 'intval', $_GET['badges'] ) : [];
+		break;
+
+		case 'sort' :
+			$valid = [ 'newest', 'alphabetical', 'active' ];
+			if ( isset( $_GET['sort'] ) && in_array( $_GET['sort'], $valid, true ) ) {
+				$value = $_GET['sort'];
+			} else {
+				$value = 'active';
+			}
+		break;
+
+		case 'group-types' :
+			$value = array_filter(
+				wp_unslash( $_GET['group-types'] ),
+				function( $group_type ) {
+					return in_array( $group_type, openlab_group_types(), true );
+				}
+			);
+		break;
+
+		default :
+			$value = isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : '';
+		break;
+	}
+
+	return $value;
+}

@@ -2058,6 +2058,8 @@ class GFFormDetail {
 
 				<?php
 				do_action( 'gform_field_appearance_settings', 400, $form_id );
+
+				$size_choices = GF_Fields::get( 'text' )->get_size_choices();
 				?>
 
 				<li class="size_setting field_setting">
@@ -2065,11 +2067,14 @@ class GFFormDetail {
 						<?php esc_html_e( 'Field Size', 'gravityforms' ); ?>
 						<?php gform_tooltip( 'form_field_size' ) ?>
 					</label>
-					<select id="field_size" onchange="SetFieldSize(jQuery(this).val());">
-						<option value="small"><?php esc_html_e( 'Small', 'gravityforms' ); ?></option>
-						<option value="medium"><?php esc_html_e( 'Medium', 'gravityforms' ); ?></option>
-						<option value="large"><?php esc_html_e( 'Large', 'gravityforms' ); ?></option>
-					</select>
+					<select id="field_size" onchange="SetFieldSize(jQuery(this).val());"><?php
+						foreach ( $size_choices as $size_choice ) {
+							if ( empty( $size_choice['value'] ) || empty( $size_choice['text'] ) ) {
+								continue;
+							}
+							printf( '<option value="%s">%s</option>', esc_attr( $size_choice['value'] ), esc_html( $size_choice['text'] ) );
+						}
+					?></select>
 				</li>
 
 	            <?php

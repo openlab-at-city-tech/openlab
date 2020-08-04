@@ -2,6 +2,10 @@
  * Infinite scroll
  */
 
+#infinite-footer {
+	z-index: 1;
+}
+
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
 .infinite-scroll .pagination-wrapper,
 .infinite-scroll.neverending .footer-nav-widgets-wrapper,
@@ -16,8 +20,12 @@
 	display: block;
 }
 
+.infinity-end.neverending #site-footer {
+	margin: 8rem 0 0;
+}
+
 .infinite-loader {
-	margin: calc(3 * 1rem) auto;
+	margin: 5rem auto;
 }
 
 .infinite-loader .spinner {
@@ -26,7 +34,7 @@
 }
 
 #site-content #infinite-handle {
-	margin: 0 auto;
+	margin: 5rem auto;
 	max-width: 58rem;
 	width: calc(100% - 8rem);
 }
@@ -102,6 +110,7 @@
 
 /* Authors widget */
 .widget_authors ul {
+	list-style: none;
 	margin-left: 0;
 }
 
@@ -112,6 +121,11 @@
 
 .widget_authors li:first-child {
 	margin-top: 2rem;
+}
+
+/* Flickr */
+.widget_flickr .flickr-size-thumbnail .flickr-images  {
+	justify-content: left;
 }
 
 /* EU cookie law */
@@ -147,6 +161,28 @@
 		padding: 1rem;
 		margin: 0;
 	}
+}
+
+/* Subscriptions Widget */
+
+.jetpack_subscription_widget .widget-title label {
+	font-size: 2.8rem;
+	font-weight: 700;
+	margin: 0;
+}
+@media ( min-width: 700px ) {
+	.jetpack_subscription_widget .widget-title label {
+			font-size: 4rem;
+	}
+}
+
+/*
+ * This overwrites inline styles added to the wpcom widget,
+ * hence the use of !important
+ */
+.widget_blog_subscription form p:not(#subscribe-email) input[type="text"] {
+	padding: 1.5rem 1.8rem !important;
+	width: 100% !important;
 }
 
 /* Related Posts */
@@ -207,6 +243,11 @@
 	width: 100%;
 }
 
+/* Tiled Galleries in Classic Blocks */
+.entry-content .tiled-gallery {
+	margin: 0 auto 1.5em;
+}
+
 /**
  * Shortcodes
  */
@@ -229,4 +270,27 @@
 .wp-block-jetpack-gif {
 	/* !important because the gif block styles are loaded in the footer after this file */
 	margin: 1em auto !important;
+}
+
+/**
+ * Images
+ */
+
+/* Beautiful Math */
+.entry-content img.latex {
+	display: inline;
+}
+
+/**
+ * .com Toolbar
+ */
+
+/* fix wordpress.com notification iframe width */
+iframe#wpnt-notes-iframe2.wide {
+	width: auto !important;
+}
+
+/* fix site position when overflow nav modal  */
+.admin-bar {
+	position: unset !important;
 }

@@ -75,16 +75,22 @@ class Meow_WPMC_UI {
 	}
 
 	function wp_enqueue_scripts() {
+		global $wpmc_version;
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_style( 'media-cleaner-css', plugins_url( '/scripts/style.css', __FILE__ ) );
 
 		$screen = get_current_screen();
-		global $wpmc_version;
 		switch ( $screen->id ) {
 		case 'media_page_media-cleaner': // Media > Cleaner
-			wp_enqueue_script( 'media-cleaner', plugins_url( '/scripts/dashboard.js', __FILE__ ), array( 'jquery', 'jquery-ui-dialog' ),
-				$wpmc_version, true );
+			$handle = 'media-cleaner';
+			wp_enqueue_script( $handle, plugins_url( '/scripts/dashboard.js', __FILE__ ), array( 'jquery', 'jquery-ui-dialog' ), $wpmc_version, true );
+
+			$actions = array ( 'wpmc_define' );
+			$nonces = array (); // action => nonce
+			foreach ( $actions as $item ) $nonces[$item] = wp_create_nonce( $item );
+			wp_localize_script( $handle, 'WPMC_NONCES', $nonces );
+			wp_localize_script( $handle, 'WPMC_E', Meow_WPMC_API::E ); // Error code enums
 			break;
 		case 'meow-apps_page_wpmc_settings-menu': // Meow Apps > Media Cleaner (Settings)
 			wp_enqueue_script( 'media-cleaner-settings', plugins_url( '/scripts/settings.js', __FILE__ ), array( 'jquery' ),

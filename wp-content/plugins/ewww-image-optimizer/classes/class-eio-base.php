@@ -36,9 +36,17 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * Site (URL) for the plugin to use.
 		 *
 		 * @access public
-		 * @var string $content_url
+		 * @var string $site_url
 		 */
 		public $site_url = '';
+
+		/**
+		 * Home (URL) for the plugin to use.
+		 *
+		 * @access public
+		 * @var string $home_url
+		 */
+		public $home_url = '';
 
 		/**
 		 * Plugin version for the plugin.
@@ -70,6 +78,8 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @param string $child_class_path The location of the child class extending the base class.
 		 */
 		function __construct( $child_class_path = '' ) {
+			$this->home_url          = trailingslashit( get_site_url() );
+			$this->relative_home_url = preg_replace( '/https?:/', '', $this->home_url );
 			if ( strpos( $child_class_path, 'plugins/ewww' ) ) {
 				$this->content_url = content_url( 'ewww/' );
 				$this->content_dir = WP_CONTENT_DIR . '/ewww/';
@@ -79,10 +89,17 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				$this->content_dir = WP_CONTENT_DIR . '/easyio/';
 				$this->version     = EASYIO_VERSION;
 				$this->prefix      = 'easyio_';
+			} elseif ( strpos( $child_class_path, 'plugins/swis' ) ) {
+				$this->content_url = content_url( 'swis/' );
+				$this->content_dir = WP_CONTENT_DIR . '/swis/';
+				$this->version     = SWIS_PLUGIN_VERSION;
+				$this->prefix      = 'swis_';
 			} else {
 				$this->content_url = content_url( 'ewww/' );
 			}
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			$this->debug_message( "home url: $this->home_url" );
+			$this->debug_message( "relative home url: $this->relative_home_url" );
 		}
 
 		/**
@@ -94,12 +111,20 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			global $eio_debug;
 			global $ewwwio_temp_debug;
 			global $easyio_temp_debug;
+			global $swis_temp_debug;
 			$debug_log = $this->content_dir . 'debug.log';
-			if ( is_writable( WP_CONTENT_DIR ) && ! is_dir( $this->content_dir ) ) {
-				mkdir( $this->content_dir );
+			if ( ! is_dir( $this->content_dir ) && is_writable( WP_CONTENT_DIR ) ) {
+				wp_mkdir_p( $this->content_dir );
 			}
 			$debug_enabled = $this->get_option( $this->prefix . 'debug' );
-			if ( ! empty( $eio_debug ) && empty( $ewwwio_temp_debug ) && empty( $easyio_temp_debug ) && $debug_enabled && is_writable( $this->content_dir ) ) {
+			if (
+				! empty( $eio_debug ) &&
+				empty( $easyio_temp_debug ) &&
+				empty( $swis_temp_debug ) &&
+				$debug_enabled &&
+				is_dir( $this->content_dir ) &&
+				is_writable( $this->content_dir )
+			) {
 				$memory_limit = $this->memory_limit();
 				clearstatcache();
 				$timestamp = gmdate( 'Y-m-d H:i:s' ) . "\n";
@@ -129,13 +154,17 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		 * @param string $message Debug information to add to the log.
 		 */
 		function debug_message( $message ) {
+			if ( ! is_string( $message ) ) {
+				return;
+			}
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
 				WP_CLI::debug( $message );
 				return;
 			}
 			global $ewwwio_temp_debug;
 			global $easyio_temp_debug;
-			if ( $easyio_temp_debug || $ewwwio_temp_debug || $this->get_option( $this->prefix . 'debug' ) ) {
+			global $swis_temp_debug;
+			if ( $swis_temp_debug || $easyio_temp_debug || $ewwwio_temp_debug || $this->get_option( $this->prefix . 'debug' ) ) {
 				$memory_limit = $this->memory_limit();
 				if ( strlen( $message ) + 4000000 + memory_get_usage( true ) <= $memory_limit ) {
 					global $eio_debug;
@@ -161,13 +190,13 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			if ( function_exists( 'ini_get' ) ) {
 				$disabled = @ini_get( 'disable_functions' );
 				if ( $debug ) {
-					easyio_debug_message( "disable_functions: $disabled" );
+					$this->debug_message( "disable_functions: $disabled" );
 				}
 			}
 			if ( extension_loaded( 'suhosin' ) && function_exists( 'ini_get' ) ) {
 				$suhosin_disabled = @ini_get( 'suhosin.executor.func.blacklist' );
 				if ( $debug ) {
-					easyio_debug_message( "suhosin_blacklist: $suhosin_disabled" );
+					$this->debug_message( "suhosin_blacklist: $suhosin_disabled" );
 				}
 				if ( ! empty( $suhosin_disabled ) ) {
 					$suhosin_disabled = explode( ',', $suhosin_disabled );
@@ -236,6 +265,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			if (
 				! $single &&
 				is_multisite() &&
+				defined( strtoupper( $this->prefix ) . 'PLUGIN_FILE_REL' ) &&
 				is_plugin_active_for_network( constant( strtoupper( $this->prefix ) . 'PLUGIN_FILE_REL' ) ) &&
 				! get_site_option( $this->prefix . 'allow_multisite_override' )
 			) {
@@ -289,6 +319,43 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			}
 			return false;
 		}
+		/**
+		 * Check if file exists, and that it is local rather than using a protocol like http:// or phar://
+		 *
+		 * @param string $file The path of the file to check.
+		 * @return bool True if the file exists and is local, false otherwise.
+		 */
+		function is_file( $file ) {
+			if ( false !== strpos( $file, '://' ) ) {
+				return false;
+			}
+			if ( false !== strpos( $file, 'phar://' ) ) {
+				return false;
+			}
+			$file       = realpath( $file );
+			$wp_dir     = realpath( ABSPATH );
+			$upload_dir = wp_get_upload_dir();
+			$upload_dir = realpath( $upload_dir['basedir'] );
+
+			$content_dir = realpath( WP_CONTENT_DIR );
+			if ( empty( $content_dir ) ) {
+				$content_dir = $wp_dir;
+			}
+			if ( empty( $upload_dir ) ) {
+				$upload_dir = $content_dir;
+			}
+			$plugin_dir = realpath( constant( strtoupper( $this->prefix ) . 'PLUGIN_PATH' ) );
+			if (
+				false === strpos( $file, $upload_dir ) &&
+				false === strpos( $file, $content_dir ) &&
+				false === strpos( $file, $wp_dir ) &&
+				false === strpos( $file, $plugin_dir )
+			) {
+				return false;
+			}
+			return is_file( $file );
+		}
+
 
 		/**
 		 * Make sure an array/object can be parsed by a foreach().
@@ -358,6 +425,35 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 		}
 
 		/**
+		 * Converts a URL to a file-system path and checks if the resulting path exists.
+		 *
+		 * @param string $url The URL to mangle.
+		 * @param string $extension An optional extension to append during is_file().
+		 * @return bool|string The path if a local file exists correlating to the URL, false otherwise.
+		 */
+		function url_to_path_exists( $url, $extension = '' ) {
+			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if ( 0 === strpos( $url, $this->relative_home_url ) ) {
+				$path = str_replace( $this->relative_home_url, ABSPATH, $url );
+			} elseif ( 0 === strpos( $url, $this->home_url ) ) {
+				$path = str_replace( $this->home_url, ABSPATH, $url );
+			} else {
+				$this->debug_message( 'not a valid local image' );
+				return false;
+			}
+			$path_parts = explode( '?', $path );
+			if ( $this->is_file( $path_parts[0] . $extension ) ) {
+				$this->debug_message( 'local file found' );
+				return $path_parts[0];
+			}
+			if ( $this->is_file( $path . $extension ) ) {
+				$this->debug_message( 'local file found' );
+				return $path;
+			}
+			return false;
+		}
+
+		/**
 		 * A wrapper for PHP's parse_url, prepending assumed scheme for network path
 		 * URLs. PHP versions 5.4.6 and earlier do not correctly parse without scheme.
 		 *
@@ -387,6 +483,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 			if ( $this->site_url ) {
 				return $this->site_url;
 			}
+			$this->site_url = get_home_url();
 			if ( class_exists( 'Amazon_S3_And_CloudFront' ) ) {
 				global $as3cf;
 				$s3_scheme = $as3cf->get_url_scheme();
@@ -395,10 +492,13 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				if ( is_wp_error( $s3_region ) ) {
 					$s3_region = '';
 				}
-				$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
-				$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
+				$s3_domain = '';
+				if ( ! empty( $s3_bucket ) && ! is_wp_error( $s3_bucket ) ) {
+					$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
+				}
 				if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
 					$this->s3_active = true;
+					$this->debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
 				}
 			}
 
@@ -408,7 +508,7 @@ if ( ! class_exists( 'EIO_Base' ) ) {
 				// Normally, we use this one, as it will be shorter for sub-directory installs.
 				$home_url    = get_home_url();
 				$site_url    = get_site_url();
-				$upload_dir  = wp_upload_dir( null, false );
+				$upload_dir  = wp_get_upload_dir();
 				$home_domain = $this->parse_url( $home_url, PHP_URL_HOST );
 				$site_domain = $this->parse_url( $site_url, PHP_URL_HOST );
 				// If the home domain does not match the upload url, and the site domain does match...

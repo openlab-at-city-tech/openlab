@@ -8,6 +8,14 @@
  */
 remove_theme_support( 'genesis-auto-updates' );
 
+// Favicon fallback.
+add_filter(
+	'genesis_favicon_url',
+	function( $url ) {
+		return get_home_url( 1, 'favicon.ico' );
+	}
+);
+
 //* Add support for custom header
 remove_theme_support( 'custom-header' );
 add_theme_support( 'custom-header', array(
@@ -395,7 +403,7 @@ function openlab_genesis_do_header() {
 	global $wp_registered_sidebars;
 
 	genesis_markup( array(
-		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div %s>',
+		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div class="title-area-wrap"><div %s>',
 		'context' => 'title-area',
 	) );
 
@@ -414,7 +422,7 @@ function openlab_genesis_do_header() {
 		do_action( 'genesis_site_description' );
 
 	genesis_markup( array(
-		'close'   => '</div></a>',
+		'close'   => '</div></div></a>',
 		'context' => 'title-area',
 	) );
 

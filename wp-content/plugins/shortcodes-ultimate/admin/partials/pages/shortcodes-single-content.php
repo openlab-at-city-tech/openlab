@@ -5,7 +5,9 @@
 	<span><?php $this->shortcode_image( $data, 60 ); ?></span>
 	<h2><?php echo esc_html( $data['name'] ); ?></h2>
 	<p>
-		<?php echo esc_html( $data['desc'] ); ?>
+		<?php if ( isset( $data['desc'] ) ) : ?>
+			<?php echo esc_html( $data['desc'] ); ?>
+		<?php endif; ?>
 		<?php if ( isset( $data['article'] ) ) : ?>
 			<br><a href="<?php echo esc_url( $data['article'] ); ?>" target="_blank"><strong><?php esc_html_e( 'Shortcode documentation', 'shortcodes-ultimate' ); ?></strong></a>.
 		<?php endif; ?>

@@ -10,7 +10,7 @@ $s2_forms->init();
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) && 'user' === $_POST['s2_admin'] ) {
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-user_subscribers' . S2VERSION ) ) {
-		die( '<p>' . __( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 	do_action( 's2_subscription_submit' );
 }
@@ -23,9 +23,9 @@ $userid = $s2_forms->get_userid();
 $user   = get_userdata( $userid );
 
 if ( $userid === $user_ID ) {
-	echo '<h1>' . __( 'Your Notification Settings', 'subscribe2' ) . "</h1>\r\n";
+	echo '<h1>' . esc_html__( 'Your Notification Settings', 'subscribe2' ) . "</h1>\r\n";
 } else {
-	echo '<h1>' . __( 'Notification Settings for user:', 'subscribe2' ) . ' <span style="color: red;">' . $user->display_name . '</span></h1>' . "\r\n";
+	echo '<h1>' . esc_html__( 'Notification Settings for user:', 'subscribe2' ) . ' <span style="color: red;">' . esc_html( $user->display_name ) . '</span></h1>' . "\r\n";
 }
 
 
@@ -37,7 +37,7 @@ echo '<p>';
 do_action( 's2_subscription_form', $userid );
 
 // submit
-echo '<p class="submit"><input type="submit" class="button-primary" name="submit" value="' . __( 'Update Preferences', 'subscribe2' ) . ' &raquo;" /></p>';
+echo '<p class="submit"><input type="submit" class="button-primary" name="submit" value="' . esc_attr( __( 'Update Preferences', 'subscribe2' ) ) . ' &raquo;" /></p>';
 echo '</form>' . "\r\n";
 
 echo '</div>' . "\r\n";

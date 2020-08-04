@@ -1,14 +1,17 @@
 (function($) {
 	var $add_a_grade = $( '#olgc-add-a-grade' ),
+		$comment_field = $( 'textarea#comment' );
 		$grade_entry = $( '.olgc-grade-entry' ),
 		$private_checkbox = $( '#olgc-private-comment' ),
 		$reply_to_com = $( '.comment-reply-link' );
 
 	$( document ).ready( function() {
 		toggle_grade_visibility();
+		toggle_comment_required();
 
 		$add_a_grade.on( 'click', function() {
 			toggle_grade_visibility();
+			toggle_comment_required();
 		} );
 
 		$reply_to_com.on( 'click', function() {
@@ -26,6 +29,14 @@
 			$grade_entry.show();
 		} else {
 			$grade_entry.hide();
+		}
+	}
+
+	function toggle_comment_required() {
+		if ( $add_a_grade.is( ':checked' ) ) {
+			$comment_field.prop( 'required', false );
+		} else {
+			$comment_field.prop( 'required', true );
 		}
 	}
 

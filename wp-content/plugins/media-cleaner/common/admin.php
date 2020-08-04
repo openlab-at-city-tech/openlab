@@ -7,7 +7,7 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 		public static $logo = 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB2aWV3Qm94PSIwIDAgMTY1IDE2NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8c3R5bGU+CiAgICAuc3Qye2ZpbGw6IzgwNDYyNX0uc3Qze2ZpbGw6I2ZkYTk2MH0KICA8L3N0eWxlPgogIDxwYXRoIGQ9Ik03MiA3YTc2IDc2IDAgMCAxIDg0IDkxQTc1IDc1IDAgMSAxIDcyIDd6IiBmaWxsPSIjNGE2YjhjIi8+CiAgPHBhdGggZD0iTTQ4IDQ4YzIgNSAyIDEwIDUgMTQgNSA4IDEzIDE3IDIyIDIwbDEtMTBjMS0yIDMtMyA1LTNoMTNjMiAwIDQgMSA1IDNsMyA5IDQtMTBjMi0zIDYtMiA5LTJoMTFjMyAyIDMgNSAzIDhsMiAzN2MwIDMtMSA3LTQgOGgtMTJjLTIgMC0zLTItNS00LTEgMS0yIDMtNCAzLTUgMS05IDEtMTMtMS0zIDItNSAyLTkgMnMtOSAxLTEwLTNjLTItNC0xLTggMC0xMi04LTMtMTUtNy0yMi0xMi03LTctMTUtMTQtMjAtMjMtMy00LTUtOC01LTEzIDEtNCAzLTEwIDYtMTMgNC0zIDEyLTIgMTUgMnoiIGZpbGw9IiMxMDEwMTAiLz4KICA8cGF0aCBjbGFzcz0ic3QyIiBkPSJNNDMgNTFsNCAxMS02IDVoLTZjLTMtNS0zLTExIDAtMTYgMi0yIDYtMyA4IDB6Ii8+CiAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTQ3IDYybDMgNmMwIDMgMCA0LTIgNnMtNCAyLTcgMmwtNi05aDZsNi01eiIvPgogIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik01MCA2OGw4IDljLTMgMy01IDYtOSA4bC04LTljMyAwIDUgMCA3LTJzMy0zIDItNnoiLz4KICA8cGF0aCBkPSJNODIgNzRoMTJsNSAxOCAzIDExIDgtMjloMTNsMiA0MmgtOGwtMS0yLTEtMzEtMTAgMzItNyAxLTktMzMtMSAyOS0xIDRoLThsMy00MnoiIGZpbGw9IiNmZmYiLz4KICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNTggNzdsNSA1Yy0xIDQtMiA4LTcgOGwtNy01YzQtMiA2LTUgOS04eiIvPgogIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik02MyA4Mmw5IDUtNiA5LTEwLTZjNSAwIDYtNCA3LTh6Ii8+CiAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTcyIDg3bDMgMS0xIDExLTgtMyA2LTEweiIvPgo8L3N2Zz4K';
 
 		public static $loaded = false;
-		public static $admin_version = "2.4";
+		public static $admin_version = "2.6";
 
 		public $prefix; 		// prefix used for actions, filters (mfrh)
 		public $mainfile; 	// plugin main file (media-file-renamer.php)
@@ -389,27 +389,26 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 				?>
 				</p>
 
-				<h2 style="margin-bottom: 0px; margin-top: 25px;"><?php _e( 'Featured Plugins', $this->domain ); ?></h2>
+				<h2 style="margin-bottom: 0px; margin-top: 25px;"><?php _e( 'Recommended Meow Apps Plugins', $this->domain ); ?></h2>
 				<div class="meow-row meow-featured-plugins">
 					<div class="meow-box meow-col meow-span_1_of_2">
 						<ul class="">
 							<li><img src='<?= $this->common_url( 'img/media-cleaner.jpg' ) ?>' />
 								<a href='https://meowapps.com/plugin/media-cleaner/'><b>Media Cleaner</b></a>
 								<?php echo $this->check_install( 'media-cleaner' ) ?><br />
-								<?php _e( 'Detect the files which are not in use.', $this->domain ); ?></li>
+								<?php _e( 'Very complex plugin which analyzes your WordPress deeply to find out which files are in use, or not. Then you can trash them, before deleting them permanently.', $this->domain ); ?></li>
 							<li><img src='<?= $this->common_url( 'img/media-file-renamer.jpg' ) ?>' />
 								<a href='https://meowapps.com/plugin/media-file-renamer/'><b>Media File Renamer</b></a>
 								<?php echo $this->check_install( 'media-file-renamer' ) ?><br />
-								<?php _e( 'For nicer filenames and a better SEO.', $this->domain ); ?></li>
+								<?php _e( 'The Renamer will help you in getting nicer filenames, a better SEO and well-organized files. Extremely popular.', $this->domain ); ?></li>
 							<li><img src='<?= $this->common_url( 'img/default.png' ) ?>' />
 								<a href='https://meowapps.com/plugin/contact-form-block/'><b>Contact Form Block</b></a>
 								<?php echo $this->check_install( 'contact-form-block' ) ?><br />
-								<?php _e( 'A simpler, nicer, prettier contact form.', $this->domain ); ?></li>
-							<!--li><img src='<?= $this->common_url( 'img/wp-retina-2x.jpg' ) ?>' />
-								<a href='https://meowapps.com/plugin/wp-retina-2x/'><b>WP Retina 2x</b></a>
-								<?php echo $this->check_install( 'wp-retina-2x' ) ?><br />
-								<?php _e( 'The famous plugin that adds Retina support.', $this->domain ); ?></li-->
-
+								<?php _e( 'A simpler, nicer, prettier contact form. If you simply want your visitors to get in touch with you, this very light plugin will make your life easier.', $this->domain ); ?></li>
+								<li><img src='<?= $this->common_url( 'img/default.png' ) ?>' />
+							<a href='https://meowapps.com/plugin/meow-analytics/'><b>Meow Analytics</b></a>
+								<?php echo $this->check_install( 'meow-analytics' ) ?><br />
+								<?php _e( 'Tired of those fat plugins which are messing-up with your install? Switch to Meow Analytics, it\'s extremely light and features a cute dashboard.', $this->domain ); ?></li>
 						</ul>
 					</div>
 					<div class="meow-box meow-col meow-span_1_of_2 ">
@@ -421,37 +420,59 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 							<li><img src='<?= $this->common_url( 'img/meow-lightbox.jpg' ) ?>' />
 								<a href='https://meowapps.com/plugin/meow-lightbox/'><b>Meow Lightbox</b></a>
 								<?php echo $this->check_install( 'meow-lightbox' ) ?><br />
-								<?php _e( 'Pretty and ultra-optimized Lightbox which can also display your EXIF data. You will love it.', $this->domain ); ?></li>
+								<?php _e( 'A very smooth and fast Lightbox which will also display your EXIF data (camera, lens, etc). Try it, you will love it.', $this->domain ); ?></li>
 							<li><img src='<?= $this->common_url( 'img/wplr-sync.jpg' ) ?>' />
 								<a href='https://meowapps.com/plugin/wplr-sync/'><b>WP/LR Sync</b></a>
 								<?php echo $this->check_install( 'wplr-sync' ) ?><br />
-								<?php _e( 'Synchronize your Lightroom to your WordPress. This plugin is loved by all the photographers using Lightroom and WordPress.', $this->domain ); ?></li>
+								<?php _e( 'Synchronize your Lightroom to your WordPress. This plugin is loved by a huge community of photographers.', $this->domain ); ?></li>
+							<li><img src='<?= $this->common_url( 'img/wp-retina-2x.jpg' ) ?>' />
+								<a href='https://meowapps.com/plugin/wp-retina-2x/'><b>WP Retina 2x</b></a>
+								<?php echo $this->check_install( 'wp-retina-2x' ) ?><br />
+								<?php _e( 'Here is the very famous plugin that adds Retina support to any website.', $this->domain ); ?></li>
 						</ul>
 					</div>
 				</div>
 
-				<h2><?php _e( 'WordPress Performance & Recommendations', $this->domain ); ?></h2>
+				<h2><?php _e( 'WordPress Performance', $this->domain ); ?></h2>
 				<div style="background: white; padding: 5px 15px 5px 15px; box-shadow: 2px 2px 1px rgba(0,0,0,.02); margin-bottom: 15px;">
 					<p><?php _e( 'The <b>Empty Request Time</b> helps you analyzing the raw performance of your install by giving you the average time it takes to run an empty request to your server. You can try to disable some plugins (or change their options) then and click on Reset to see how it influences the results. With <b>File Operation Time</b>, you will find out if your server is slow with files. An excellent install would have an Empty Request Time of less than 500 ms. Keep it absolutely under 2,000 ms. File Operation Time should take only a few milliseconds more than the Empty Request Time. For more information about this, <a href="https://meowapps.com/clean-optimize-wordpress/#Optimize_your_Empty_Request_Time" target="_blank">click here</a>.', $this->domain ); ?></p>
 				</div>
 
-				<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
-					<div style='font-size: 14px; line-height: 14px; margin-bottom: 20px;'><?php _e( 'Empty Request Time', $this->domain ); ?></div>
-					<div style='font-size: 32px; line-height: 32px; margin-bottom: 10px;' id='meow-perf-load-average'><?php _e( 'N/A', $this->domain ); ?></div>
-					<div style='font-size: 12px; line-height: 12px; margin-bottom: 20px;'><?php _e( 'Based on', $this->domain ); ?>
-						<span id='meow-perf-load-count'>0</span> <?php _e( 'request(s)', $this->domain ); ?>
+				<div>
+
+					<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
+						<div style='font-size: 14px; line-height: 14px; margin-bottom: 20px;'><?php _e( 'Empty Request Time', $this->domain ); ?></div>
+						<div style='font-size: 32px; line-height: 32px; margin-bottom: 10px;' id='meow-perf-load-average'><?php _e( 'N/A', $this->domain ); ?></div>
+						<div style='font-size: 12px; line-height: 12px; margin-bottom: 20px;'><?php _e( 'Based on', $this->domain ); ?>
+							<span id='meow-perf-load-count'>0</span> <?php _e( 'request(s)', $this->domain ); ?>
+						</div>
+						<input type='submit' style='text-align: center; width: 100%;' id="meow-perf-reset" value="Reset" class="button button-primary">
 					</div>
-					<input type='submit' style='text-align: center; width: 100%;' id="meow-perf-reset" value="Reset" class="button button-primary">
-				</div>
 
-				<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
-					<div style='font-size: 14px; line-height: 14px; margin-bottom: 20px;'><?php _e( 'File Operation Time', $this->domain ); ?></div>
-					<div style='font-size: 32px; line-height: 32px; margin-bottom: 10px;' id='meow-file-check-time'><?php _e( 'N/A', $this->domain ); ?></div>
-					<div style='font-size: 12px; line-height: 12px; margin-bottom: 20px;'><?php _e( 'Create temporary file and delete it.', $this->domain ); ?></div>
-					<input type='submit' style='text-align: center; width: 100%;' id="meow-file-check-start" value="<?php _e( 'Check', $this->domain ); ?>" class="button button-primary">
-				</div>
+					<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
+						<div style='font-size: 14px; line-height: 14px; margin-bottom: 20px;'><?php _e( 'File Operation Time', $this->domain ); ?></div>
+						<div style='font-size: 32px; line-height: 32px; margin-bottom: 10px;' id='meow-file-check-time'><?php _e( 'N/A', $this->domain ); ?></div>
+						<div style='font-size: 12px; line-height: 12px; margin-bottom: 20px;'><?php _e( 'Create temporary file and delete it.', $this->domain ); ?></div>
+						<input type='submit' style='text-align: center; width: 100%;' id="meow-file-check-start" value="<?php _e( 'Check', $this->domain ); ?>" class="button button-primary">
+					</div>
 
-				<div style="clear: both;"></div>
+					<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
+						<a target='_blank'  href='https://kinsta.com/?kaid=MFROFDOOINML'>
+							<img style='height: 116px;' src='<?= $this->common_url( 'img/kinsta.png' ) ?>'>
+							<div>Meow's 2020 Favorite Hosting</div>
+						</a>
+					</div>
+
+					<div style="float: left; margin-right: 10px; text-align: center; padding: 10px; background: white; width: 200px; border: 1px solid #e2e2e2;">
+						<a target='_blank'  href='https://tracking.maxcdn.com/rPK13'>
+							<img style='height: 116px;' src='<?= $this->common_url( 'img/stackpath.png' ) ?>'>
+							<div>Meow's 2020 Favorite CDN</div>
+						</a>
+					</div>
+
+					<div style="clear: both;"></div>
+
+				</div>
 
 				<script>
 					(function ($) {
@@ -512,6 +533,7 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 					})(jQuery);
 				</script>
 
+				<h2><?php _e( 'WordPress Recommendations', $this->domain ); ?></h2>
 				<div style="background: white; padding: 5px 15px 5px 15px; box-shadow: 2px 2px 1px rgba(0,0,0,.02); margin-top: 15px;">
 					<p>
 						<?php _e( 'Too many WordPress installs are blown-up with useless and/or huge plugins, and bad practices. But that is because most users are overwhelmed by the diversity and immensity of the WordPress jungle. One rule of thumb is to keep your install the simplest as possible, with the least number of plugins (avoiding heavy ones too) and a good hosting service (avoid VPS except if you know exactly what you are doing). Articles are kept being updated on the Meow Apps website, with all the latest recommendations: ', $this->domain )?>

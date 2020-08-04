@@ -310,7 +310,7 @@ a.mapp-help {
 	width: 800px;
 	max-width: 90%;
 	max-height: 90%;
-	padding: 5px;
+	padding: 10px;
 }
 
 .mapp-tp-detail .mapp-tp-name {
@@ -410,13 +410,11 @@ a.mapp-help {
 	box-shadow: 5px 5px 10px #888;
 	box-sizing: content-box;
 	display: inline-block;
-	padding: 5px 20px 5px 5px;
 	z-index: 100005;	/* Keep above popup-max */
 }
 
-.mapp-popup-fixed {
-	background-color: white;
-	border: 2px solid black;
+/* Center modals */
+.mapp-popup-modal {
 	position: fixed;
 	left: 50%;
 	top: 50%;
@@ -425,19 +423,31 @@ a.mapp-help {
 }
 
 .mapp-popup-max {
-	transform: none;
-	top: 80px; 	left: 80px; bottom: 80px; right: 80px;
+    left: 5%;
+    right: 5%;
+    top: 5%;
+    bottom: 5%;
+    transform: none;
+}
+
+@media only screen and (max-width: 780px) {
+    .mapp-popup-max {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
 }
 
 /* Prevent scrollbars on body when popup is open */
-body.mapp-popup-modal {
+body.mapp-popup-noscroll {
 	overflow: hidden;
 }
 
 .mapp-popup-backdrop {
 	background-color: black;
+	display: none;
 	opacity: 0.8;
-	overflow: hidden;
 	position: fixed;
 	top: 0; right: 0; bottom: 0; left : 0;
 	user-select: none;
@@ -451,6 +461,7 @@ body.mapp-popup-modal {
 */
 
 .mapp-iconpicker {
+	padding: 5px;
 	width: 260px;
 }
 
@@ -490,6 +501,7 @@ img.mapp-iconpicker-toggle {
 */
 
 .mapp-colorpicker {
+	padding: 5px;
 	width: 260px;
 	max-height: 250px;
 }

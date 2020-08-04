@@ -11,7 +11,7 @@ get_header();
             <h1 class="entry-title"><?php echo ucfirst(openlab_page_slug_to_grouptype()) . 's'; ?> on the OpenLab <button data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button"><span class="fa fa-binoculars"></span><span class="sr-only">Search</span></button></h1>
 
             <div class="entry-content">
-                <?php openlab_group_archive(); ?>
+                <?php bp_get_template_part( 'groups/groups-loop' ); ?>
             </div><!--entry-content-->
         </div><!--hentry-->
     </div>

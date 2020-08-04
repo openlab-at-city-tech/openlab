@@ -26,7 +26,7 @@
 }
 
 /* 2019 */
-.mapp-layout input, .mapp-layout button, .mapp-layout select, .mapp-layout textarea {
+.mapp-layout input, .mapp-layout button, .mapp-layout select, .mapp-layout textarea, .mapp-layout p, .mapp-layout a {
     font-family: sans-serif;
 }
 
@@ -309,8 +309,7 @@ only screen and (min-device-pixel-ratio: 2) {
 	display: block !important;
 }
 
-/* Important is used to override themes */
-input.mapp-aa-input, input.mapp-aa-hint {
+.mapp-places {
 	border: 1px solid #bbb ;
 	box-shadow: none ;
 	color: black ;
@@ -551,31 +550,50 @@ input.mapp-aa-input, input.mapp-aa-hint {
 
 /*
 	-----------------------------------------------------------------------------------
-	Mini view - on hold
+	Mini view
 	-----------------------------------------------------------------------------------
 */
 
-/*
-.mapp-has-filters .mapp-header, .mapp-has-search .mapp-header, .mapp-view-mini .mapp-header {
-	display: block;
+.mapp-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid lightgray;
+    display: none;
+    padding: 7px;
+    text-align: center;
 }
 
-.mapp-left.mapp-mini .mapp-list {
-	display: none !important;
+.mapp-footer [data-mapp-action="view-map"] { display: none; }
+
+/* In mini view place the list under the map */
+.mapp-view-mini .mapp-main {
+    flex-direction: column-reverse;
 }
 
-.mapp-left [data-mapp-action="view-map"] { display: none; }
-.mapp-left.mapp-view-list [data-mapp-action="view-list"] { display: none; }
-.mapp-left.mapp-view-list [data-mapp-action="view-map"] { display: block; }
-
-.mapp-left.mapp-view-mini .mapp-list {
-	display: none;
+/* List must be positioned absolute, otherwise it will compress map bounds */
+.mapp-view-mini .mapp-main {
+    position: relative;
 }
 
-.mapp-left.mapp-view-list .mapp-list {
-	display: block;
-	width: 100%;
-	max-width: none;
+.mapp-view-mini .mapp-list {
+    bottom: 0;
+    height: 0;;
+    max-width: none;
+    position: absolute;
+    transition-property : all;
+    transition-duration: .3s;
+    width: 100%;
+    z-index: 10000;
+}
+
+.mapp-view-mini .mapp-footer {
+    display: block;
+}
+
+.mapp-view-list .mapp-footer [data-mapp-action="view-list"] { display: none; }
+.mapp-view-list .mapp-footer [data-mapp-action="view-map"] { display: block; }
+
+.mapp-view-list .mapp-list {
+    height: 100%;
 }
 
 
@@ -591,6 +609,12 @@ input.mapp-aa-input, input.mapp-aa-hint {
 	padding: 10px;
 	position: relative;
 }
+
+.mapp-directions input {
+    border: 1px solid gray;     /* 2020 */
+    padding: 3px;
+}
+
 
 .mapp-dir-toolbar {
 	margin-top: 10px;
@@ -619,21 +643,28 @@ input.mapp-aa-input, input.mapp-aa-hint {
 	margin: 10px 0 0px 0 ;
 }
 
-.mapp-dir-addr {
+.mapp-dir-saddr, .mapp-dir-daddr {
 	width: 80% ;
 	line-height: normal ;
 }
 
-.mapp-dir-arrows {
-	background: transparent url('../images/directions.png') no-repeat center center;
-	cursor: pointer;
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	vertical-align: middle;
+.mapp-dir-saddr {
+    margin-bottom: 5px;
 }
 
-.mapp-dir-arrows { width: 10px; height: 12px; background-position: -10px -489px; position: relative; top: 10px; left: 5px; }
+.mapp-dir-arrows {
+	background: transparent url('../images/directions.png') no-repeat center center;
+    background-position: -10px -489px;
+	cursor: pointer;
+	display: inline-block;
+    height: 12px;
+	margin: 0;
+	padding: 0;
+    position: relative;
+    top: 10px; left: 5px;
+	vertical-align: middle;
+    width: 10px;
+}
 
 /*
 	-----------------------------------------------------------------------------------
@@ -653,6 +684,7 @@ input.mapp-aa-input, input.mapp-aa-hint {
 	position: absolute;
 	top: 10px; left: 10px; bottom: 0; right: 0;
 	width: 32px;
+    z-index: 1000;
 }
 
 .mapp-menu {

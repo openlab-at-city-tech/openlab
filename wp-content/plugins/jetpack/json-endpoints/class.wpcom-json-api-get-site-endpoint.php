@@ -26,32 +26,37 @@ new WPCOM_JSON_API_GET_Site_Endpoint( array(
 class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 
 	public static $site_format = array(
-		'ID'                => '(int) Site ID',
-		'name'              => '(string) Title of site',
-		'description'       => '(string) Tagline or description of site',
-		'URL'               => '(string) Full URL to the site',
-		'user_can_manage'   => '(bool) The current user can manage this site', // deprecated
-		'capabilities'      => '(array) Array of capabilities for the current user on this site.',
-		'jetpack'           => '(bool)  Whether the site is a Jetpack site or not',
-		'is_multisite'      => '(bool) Whether the site is a Multisite site or not. Always true for WP.com sites.',
-		'post_count'        => '(int) The number of posts the site has',
-		'subscribers_count' => '(int) The number of subscribers the site has',
-		'lang'              => '(string) Primary language code of the site',
-		'icon'              => '(array) An array of icon formats for the site',
-		'logo'              => '(array) The site logo, set in the Customizer',
-		'visible'           => '(bool) If this site is visible in the user\'s site list',
-		'is_private'        => '(bool) If the site is a private site or not',
-		'single_user_site'  => '(bool) Whether the site is single user. Only returned for WP.com sites and for Jetpack sites with version 3.4 or higher.',
-		'is_vip'            => '(bool) If the site is a VIP site or not.',
-		'is_following'      => '(bool) If the current user is subscribed to this site in the reader',
-		'options'           => '(array) An array of options/settings for the blog. Only viewable by users with post editing rights to the site. Note: Post formats is deprecated, please see /sites/$id/post-formats/',
-		'plan'              => '(array) Details of the current plan for this site.',
-		'updates'           => '(array) An array of available updates for plugins, themes, wordpress, and languages.',
-		'jetpack_modules'   => '(array) A list of active Jetpack modules.',
-		'meta'              => '(object) Meta data',
-		'quota'             => '(array) An array describing how much space a user has left for uploads',
-		'launch_status'     => '(string) A string describing the launch status of a site',
-		'is_fse_active'     => '(bool) If the site has Full Site Editing active or not.',
+		'ID'                          => '(int) Site ID',
+		'name'                        => '(string) Title of site',
+		'description'                 => '(string) Tagline or description of site',
+		'URL'                         => '(string) Full URL to the site',
+		'user_can_manage'             => '(bool) The current user can manage this site', // deprecated.
+		'capabilities'                => '(array) Array of capabilities for the current user on this site.',
+		'jetpack'                     => '(bool)  Whether the site is a Jetpack site or not',
+		'is_multisite'                => '(bool) Whether the site is a Multisite site or not. Always true for WP.com sites.',
+		'post_count'                  => '(int) The number of posts the site has',
+		'subscribers_count'           => '(int) The number of subscribers the site has',
+		'lang'                        => '(string) Primary language code of the site',
+		'icon'                        => '(array) An array of icon formats for the site',
+		'logo'                        => '(array) The site logo, set in the Customizer',
+		'visible'                     => '(bool) If this site is visible in the user\'s site list',
+		'is_private'                  => '(bool) If the site is a private site or not',
+		'is_coming_soon'              => '(bool) If the site is marked as "coming soon" or not',
+		'single_user_site'            => '(bool) Whether the site is single user. Only returned for WP.com sites and for Jetpack sites with version 3.4 or higher.',
+		'is_vip'                      => '(bool) If the site is a VIP site or not.',
+		'is_following'                => '(bool) If the current user is subscribed to this site in the reader',
+		'options'                     => '(array) An array of options/settings for the blog. Only viewable by users with post editing rights to the site. Note: Post formats is deprecated, please see /sites/$id/post-formats/',
+		'plan'                        => '(array) Details of the current plan for this site.',
+		'updates'                     => '(array) An array of available updates for plugins, themes, wordpress, and languages.',
+		'jetpack_modules'             => '(array) A list of active Jetpack modules.',
+		'meta'                        => '(object) Meta data',
+		'quota'                       => '(array) An array describing how much space a user has left for uploads',
+		'launch_status'               => '(string) A string describing the launch status of a site',
+		'site_migration'              => '(array) Data about any migration into the site.',
+		'is_fse_active'               => '(bool) If the site has Full Site Editing active or not.',
+		'is_fse_eligible'             => '(bool) If the site is capable of Full Site Editing or not',
+		'is_core_site_editor_enabled' => '(bool) If the site has the core site editor enabled.',
+		'is_white_glove'              => '(bool) If the product being purchased is coming from the white glove offer, check pau2Xa-13X-p2',
 	);
 
 	protected static $no_member_fields = array(
@@ -68,10 +73,14 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'logo',
 		'visible',
 		'is_private',
+		'is_coming_soon',
 		'is_following',
 		'meta',
 		'launch_status',
+		'site_migration',
 		'is_fse_active',
+		'is_fse_eligible',
+		'is_core_site_editor_enabled',
 	);
 
 	protected static $site_options_format = array(
@@ -134,15 +143,20 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'site_goals',
 		'site_segment',
 		'import_engine',
+		'is_wpforteams_site',
+		'site_creation_flow',
+		'is_cloud_eligible',
 	);
 
 	protected static $jetpack_response_field_additions = array(
 		'subscribers_count',
+		'site_migration',
 	);
 
 	protected static $jetpack_response_field_member_additions = array(
 		'capabilities',
 		'plan',
+		'products',
 	);
 
 	protected static $jetpack_response_option_additions = array(
@@ -304,6 +318,13 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			case 'is_private' :
 				$response[ $key ] = $this->site->is_private();
 				break;
+			case 'is_coming_soon' :
+				// This option is stored on wp.com for both simple and atomic sites. @see mu-plugins/private-blog.php
+				$response[ $key ] = $this->site->is_coming_soon();;
+				break;
+			case 'launch_status' :
+				$response[ $key ] = $this->site->get_launch_status();
+				break;
 			case 'visible' :
 				$response[ $key ] = $this->site->is_visible();
 				break;
@@ -374,14 +395,26 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			case 'plan' :
 				$response[ $key ] = $this->site->get_plan();
 				break;
+			case 'products' :
+				$response[ $key ] = $this->site->get_products();
+				break;
 			case 'quota' :
 				$response[ $key ] = $this->site->get_quota();
 				break;
-			case 'launch_status' :
-				$response[ $key ] = $this->site->get_launch_status();
+			case 'site_migration' :
+				$response[ $key ] = $this->site->get_migration_meta();
 				break;
 			case 'is_fse_active':
 				$response[ $key ] = $this->site->is_fse_active();
+				break;
+			case 'is_fse_eligible':
+				$response[ $key ] = $this->site->is_fse_eligible();
+				break;
+			case 'is_core_site_editor_enabled':
+				$response[ $key ] = $this->site->is_core_site_editor_enabled();
+				break;
+			case 'is_white_glove':
+				$response[ $key ] = $this->site->is_white_glove();
 				break;
 		}
 
@@ -585,6 +618,19 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				case 'import_engine':
 					$options[ $key ] = $site->get_import_engine();
 					break;
+
+				case 'is_wpforteams_site':
+					$options[ $key ] = $site->is_wpforteams_site();
+					break;
+				case 'site_creation_flow':
+					$site_creation_flow = $site->get_site_creation_flow();
+					if ( $site_creation_flow ) {
+						$options[ $key ] = $site_creation_flow;
+					}
+					break;
+				case 'is_cloud_eligible':
+					$options[ $key ] = $site->is_cloud_eligible();
+					break;
 			}
 		}
 
@@ -636,11 +682,13 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			unset( $response->is_vip );
 			unset( $response->single_user_site );
 			unset( $response->is_private );
+			unset( $response->is_coming_soon );
 			unset( $response->capabilities );
 			unset( $response->lang );
 			unset( $response->user_can_manage );
 			unset( $response->is_multisite );
 			unset( $response->plan );
+			unset( $response->products );
 		}
 
 		// render additional options

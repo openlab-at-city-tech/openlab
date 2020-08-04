@@ -876,7 +876,7 @@ class AECAjax {
 			//Condition the data for returning
 			do_action('wp_ajax_comments_remove_content_filter');
 			$response = array(
-						'content' => stripslashes(apply_filters('comment_text',apply_filters('get_comment_text',AECUtility::encode($comment->comment_content)))),
+						'content' => apply_filters('comment_text',apply_filters('get_comment_text',AECUtility::encode($comment->comment_content))),
 						'comment_author' => stripslashes(apply_filters('comment_author', apply_filters('get_comment_author', AECUtility::encode($comment->comment_author)))),
 						'comment_author_url' => stripslashes(apply_filters('comment_url', apply_filters('get_comment_author_url', $comment->comment_author_url))),
 						'comment_date' =>  get_comment_date('F jS, Y'),

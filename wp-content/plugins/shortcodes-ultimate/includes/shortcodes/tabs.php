@@ -125,11 +125,12 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 	$atts = shortcode_atts(
 		array(
-			'active'   => 1,
-			'vertical' => 'no',
-			'style'    => 'default', // 3.x
-			'mobile'   => 'stack',
-			'class'    => '',
+			'active'        => 1,
+			'vertical'      => 'no',
+			'style'         => 'default', // 3.x
+			'mobile'        => 'stack',
+			'scroll_offset' => 0,
+			'class'         => '',
 		),
 		$atts,
 		'tabs'
@@ -166,7 +167,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 	$atts['mobile'] = sanitize_key( $atts['mobile'] );
 
-	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
+	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '" data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
 
 	// Reset tabs
 	$shortcodes_ultimate_global_tabs       = array();

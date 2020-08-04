@@ -26,7 +26,7 @@ su_add_shortcode(
 				'desc'    => __( 'Text for the login link', 'shortcodes-ultimate' ),
 			),
 			'login_url'  => array(
-				'default' => did_action( 'plugins_loaded' ) ? wp_login_url() : '',
+				'default' => '',
 				'name'    => __( 'Login link url', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Login link url', 'shortcodes-ultimate' ),
 			),
@@ -45,20 +45,20 @@ su_add_shortcode(
 
 function su_shortcode_members( $atts = null, $content = null ) {
 
-	$atts = shortcode_atts(
-		array(
-			'message'    => __( 'This content is for registered users only. Please %login%.', 'shortcodes-ultimate' ),
-			'color'      => '#ffcc00',
-			'style'      => null, // 3.x
-			'login_text' => __( 'login', 'shortcodes-ultimate' ),
-			'login_url'  => wp_login_url(),
-			'login'      => null, // 3.x
-			'class'      => '',
-		),
+	$atts = su_parse_shortcode_atts(
+		'members',
 		$atts,
-		'members'
+		array(
+			'style' => null,
+			'login' => null,
+		)
 	);
 
+	if ( empty( $atts['login_url'] ) ) {
+		$atts['login_url'] = wp_login_url();
+	}
+
+	// 3.x
 	if ( null !== $atts['style'] ) {
 		$atts['color'] = str_replace( array( '0', '1', '2' ), array( '#fff', '#FFFF29', '#1F9AFF' ), $atts['style'] );
 	}

@@ -137,6 +137,21 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		}
 
 		/**
+		 * Match all <style> tags in a block of HTML.
+		 *
+		 * @param string $content Some HTML.
+		 * @return array An array of $styles matches, containing full elements with ending tags.
+		 */
+		function get_style_tags_from_html( $content ) {
+			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			$styles = array();
+			if ( preg_match_all( '#(?:<style[^>]*?>\s*).*?</style>?#is', $content, $styles ) ) {
+				return $styles[0];
+			}
+			return array();
+		}
+
+		/**
 		 * Match all elements by tag name in a block of HTML. Does not retrieve contents or closing tags.
 		 *
 		 * @param string $content Some HTML.
@@ -288,6 +303,21 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		}
 
 		/**
+		 * Get CSS background-image rules from HTML.
+		 *
+		 * @param string $html The code containing potential background images.
+		 * @return array The URLs with background/background-image properties.
+		 */
+		function get_background_images( $html ) {
+			if ( ( false !== strpos( $html, 'background:' ) || false !== strpos( $html, 'background-image:' ) ) && false !== strpos( $html, 'url(' ) ) {
+				if ( preg_match_all( '#background(-image)?:\s*?[^;}]*?url\([^)]+\)#', $html, $matches ) ) {
+					return $matches[0];
+				}
+			}
+			return array();
+		}
+
+		/**
 		 * Set an attribute on an HTML element.
 		 *
 		 * @param string $element The HTML element to modify. Passed by reference.
@@ -304,11 +334,16 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			if ( $replace ) {
 				// Don't forget, back references cannot be used in character classes.
 				$new_element = preg_replace( '#\s' . $name . '\s*=\s*("|\')(?!\1).*?\1#is', " $name=$1$value$1", $element );
-				if ( strpos( $new_element, "$name=" ) ) {
+				if ( strpos( $new_element, "$name=" ) && $new_element !== $element ) {
 					$element = $new_element;
 					return;
 				}
-				$element = preg_replace( '#\s' . $name . '\s*=\s*[^"\'][^\s>]+#is', ' ', $element );
+				$new_element = preg_replace( '#\s' . $name . '\s*=\s*[^"\'][^\s>]+#is', ' ', $element );
+				if ( preg_match( '#\s' . $name . '\s*=\s*#', $new_element ) && $new_element === $element ) {
+					$this->debug_message( "$name replacement failed, still exists in $element" );
+					return;
+				}
+				$element = $new_element;
 			}
 			$closing = ' />';
 			if ( false === strpos( $element, '/>' ) ) {

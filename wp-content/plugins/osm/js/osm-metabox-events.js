@@ -1,4 +1,4 @@
-/*  (c) Copyright 2019  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.HanBlog.Net)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,159 +18,7 @@
 // This namespace covers the eventhandler in the metabox to
 // generate the shortcodes
 var MetaboxEventhandler = {
-
-  MarkerSC: function osm_addMarkerMapEvent(a_mapname) {
-    a_mapname.on('click', function(evt) {
 	
-      var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-      var lon = lonlat[0].toFixed(4);
-      var lat = lonlat[1].toFixed(4);
-      var zoom = a_mapname.getView().getZoom();
-      var Controls = "";
-
-	   MarkerId = "";
-      BorderField  = "";
-      MapTypeField = "";
-
-      
-      if (jQuery('#osm_marker_map_type').val() != "Mapnik"){
-        MapTypeField = " type=\"" + $('#osm_marker_map_type').val() + "\"";
-      }
-
-      if (jQuery('#osm_marker_id').val() != "no"){
-        MarkerId = " post_markers=\"" + $('#osm_marker_id').val() + "\"";
-      }
-
-      if (jQuery('#osm_marker_border').val() != "none"){
-        BorderField = " map_border=\"thin solid "  + $('#osm_marker_border').val()+ "\"";
-      }
-
-
-      if(jQuery('#fullscreen').prop('checked') == true) {
-        Controls = "fullscreen,";
-      }
-
-      if(jQuery('#scaleline').prop('checked') == true) {
-        Controls = Controls + "scaleline,";
-      }
-
-      if(jQuery('#mouseposition').prop('checked') == true) {
-        Controls = Controls + "mouseposition,";
-      }
-
-
-      if (Controls != ""){
-        Controls = Controls.substr(0, Controls.length-1);
-        ControlField = " control=\"" + Controls + "\"";
-      }
-      else {
-        ControlField ="";
-      }
-
-      GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + BorderField + MarkerId + MapTypeField + ControlField +"]";
-
-      //div = document.getElementById("ShortCode_Div");
-      //div.innerHTML = GenTxt;
-      jQuery('#ShortCode_Div').html(GenTxt);      
-      
-    });
-  },
-
-	FileSC: function osm_addFilesMapEvent(a_mapname) {
-	  a_mapname.on('click', function(evt) {
-
-jQuery( document ).ready( function( $ ) { 
-
-      var lonlat = ol.proj.transform(a_mapname.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-      var lon = lonlat[0].toFixed(4);
-      var lat = lonlat[1].toFixed(4);
-      var zoom = a_mapname.getView().getZoom();
-
-      var FileList_ColorField  = "";
-      var FileList_TypeField   = "";
-      var FileList_MapTypeField = "";
-      var FileList_FileField = "";
-	   var FileList_TitleField = "";
-		var FileList_SelectBoxField = "";
-      var DisplayName = "";
-      var Controls = "";
-      var ControlField ="";
-      BorderField = "";
-	    fileUrls = [];
-	    fileTitles = [];
-	    fileColors = [];
-
-
-      if ($('#osm_file_list_map_type').val() != "Mapnik"){
-        FileList_MapTypeField = " type=\"" + $('#osm_file_list_map_type').val() + "\"";
-      }
-
-      if ($('#osm_file_border').val() != "none"){
-        BorderField = " map_border=\"thin solid "  + $('#osm_file_border').val()+ "\"";
-      }
-
-
-      if($('#file_fullscreen').prop('checked') == true) {
-        Controls = "fullscreen,";
-      }
-
-      if($('#file_scaleline').prop('checked') == true) {
-        Controls = Controls + "scaleline,";
-      }
-
-      if($('#file_mouseposition').prop('checked') == true) {
-        Controls = Controls + "mouseposition,";
-      }
-
-      if($('#show_selection_box').prop('checked') == true) {
-        FileList_SelectBoxField = " file_select_box=\"one\"";
-      }
-      if (Controls != ""){
-        Controls = Controls.substr(0, Controls.length-1);
-        ControlField = " control=\"" + Controls + "\"";
-      }
-      else {
-        ControlField ="";
-      }
-
-
-			  /** handle multiple form fields in metabox with same input (layers and their files/colors/titles - links still missing (tbc) */
-  	  $(".osmFileName").each(function(i,e) {
-  	    if (jQuery(e).val() != "") {
-	  	  fileUrls.push( jQuery(e).val());
-	  	}
-  	  });
-
-  	  $(".osmFileTitle").each(function(i,e) {
-  	    if (jQuery(e).val() != "" && fileUrls[i] != "") {
-  		  fileTitles.push( jQuery(e).val());
-  		  }
-				else if ((fileUrls[i] != "") && (typeof fileUrls[i] !== "undefined")) {
-				  var filename = fileUrls[i];
-					var filename = filename.replace(/^.*[\\\/]/, '')
-          fileTitles.push(filename);
-				}
-  	  });
-
-  	  $(".osmFileColor").each(function(i,e) {
-  	    if (jQuery(e).val() != "" && typeof(fileUrls[i]) == "string") {
-  		  fileColors.push( jQuery(e).val());
-  		}
-  	  });
-
-	  FileList_FileField = " file_list=\"" + fileUrls.join() + "\"";
-	  FileList_ColorField = " file_color_list=\"" + fileColors.join() + "\"";
-	  FileList_TitleField = " file_title=\"" + fileTitles.join() + "\"";
-
-	  GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + FileList_TitleField + FileList_SelectBoxField +"]";
-
-     $('#ShortCode_Div').html(GenTxt);
-     
-} ); /** JQuery **/
-
-	});
-    },
-
     TaggedPostsSC: function osm_addTaggedPostsMapEvent(a_mapname) {
       a_mapname.on('click', function(evt) {
    
@@ -269,6 +117,7 @@ jQuery( document ).ready( function( $ ) {
       var lat = lonlat[1].toFixed(4);
       var zoom = a_mapname.getView().getZoom();
       var Controls = "";
+      var BckgrndImg = "";
 
       MarkerId = "";
       BorderField  = "";
@@ -294,6 +143,11 @@ jQuery( document ).ready( function( $ ) {
       if($('#osm_add_marker_mouseposition').prop('checked') == true) {
         Controls = Controls + "mouseposition,";
       }
+      
+      if($('#osm_add_marker_bckgrnd_img').prop('checked') == true) {
+        BckgrndImg = "GDPR_bckgrnd.png";
+      }
+      
       
       if (Controls != ""){
         Controls = Controls.substr(0, Controls.length-1);
@@ -328,7 +182,8 @@ jQuery( document ).ready( function( $ ) {
       osm_ajax_object.map_type = MapTypeField;
       osm_ajax_object.map_border = BorderField;
       osm_ajax_object.map_controls = ControlField;
-
+      osm_ajax_object.map_name = a_mapname;
+      osm_ajax_object.bckgrnd_img = BckgrndImg;
 
       GenTxt = "<br> Marker_Id: "+ MarkerId + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+lat+","+lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save] to store marker!</b>";
 

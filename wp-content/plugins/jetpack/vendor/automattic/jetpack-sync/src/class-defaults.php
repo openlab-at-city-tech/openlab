@@ -7,10 +7,7 @@
 
 namespace Automattic\Jetpack\Sync;
 
-require_once JETPACK__PLUGIN_DIR . 'modules/sso/class.jetpack-sso-helpers.php';
-
 use Automattic\Jetpack\Status;
-use Automattic\Jetpack\Sync\Functions;
 
 /**
  * Just some defaults that we share with the server.
@@ -105,6 +102,7 @@ class Defaults {
 		'jetpack_autoupdate_translations',
 		'carousel_background_color',
 		'carousel_display_exif',
+		'carousel_display_comments',
 		'jetpack_portfolio',
 		'jetpack_portfolio_posts_per_page',
 		'jetpack_testimonial',
@@ -157,10 +155,16 @@ class Defaults {
 		'wordads_display_page',
 		'wordads_display_archive',
 		'wordads_custom_adstxt',
+		'wordads_custom_adstxt_enabled',
+		'wordads_ccpa_enabled',
+		'wordads_ccpa_privacy_policy_url',
 		'site_segment',
 		'site_user_type',
 		'site_vertical',
 		'jetpack_excluded_extensions',
+		'jetpack_publicize_options',
+		'jetpack_connection_active_plugins',
+		'jetpack_sync_non_blocking', // is non-blocking Jetpack Sync flow enabled.
 	);
 
 	/**
@@ -271,6 +275,7 @@ class Defaults {
 		'is_main_network'                  => array( __CLASS__, 'is_multi_network' ),
 		'is_multi_site'                    => 'is_multisite',
 		'main_network_site'                => array( 'Automattic\\Jetpack\\Sync\\Functions', 'main_network_site_url' ),
+		'main_network_site_wpcom_id'       => array( 'Automattic\\Jetpack\\Sync\\Functions', 'main_network_site_wpcom_id' ),
 		'site_url'                         => array( 'Automattic\\Jetpack\\Sync\\Functions', 'site_url' ),
 		'home_url'                         => array( 'Automattic\\Jetpack\\Sync\\Functions', 'home_url' ),
 		'single_user_site'                 => array( 'Jetpack', 'is_single_user_site' ),
@@ -283,11 +288,6 @@ class Defaults {
 		'shortcodes'                       => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_shortcodes' ),
 		'rest_api_allowed_post_types'      => array( 'Automattic\\Jetpack\\Sync\\Functions', 'rest_api_allowed_post_types' ),
 		'rest_api_allowed_public_metadata' => array( 'Automattic\\Jetpack\\Sync\\Functions', 'rest_api_allowed_public_metadata' ),
-		'sso_is_two_step_required'         => array( 'Jetpack_SSO_Helpers', 'is_two_step_required' ),
-		'sso_should_hide_login_form'       => array( 'Jetpack_SSO_Helpers', 'should_hide_login_form' ),
-		'sso_match_by_email'               => array( 'Jetpack_SSO_Helpers', 'match_by_email' ),
-		'sso_new_user_override'            => array( 'Jetpack_SSO_Helpers', 'new_user_override' ),
-		'sso_bypass_default_login_form'    => array( 'Jetpack_SSO_Helpers', 'bypass_login_forward_wpcom' ),
 		'wp_version'                       => array( 'Automattic\\Jetpack\\Sync\\Functions', 'wp_version' ),
 		'get_plugins'                      => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_plugins' ),
 		'get_plugins_action_links'         => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_plugins_action_links' ),
@@ -346,6 +346,19 @@ class Defaults {
 	 * @return array Whitelist of callables allowed to be managed via the JSON API.
 	 */
 	public static function get_callable_whitelist() {
+		$default = self::$default_callable_whitelist;
+
+		if ( defined( 'JETPACK__PLUGIN_DIR' ) && include_once JETPACK__PLUGIN_DIR . 'modules/sso/class.jetpack-sso-helpers.php' ) {
+			$sso_helpers = array(
+				'sso_is_two_step_required'      => array( 'Jetpack_SSO_Helpers', 'is_two_step_required' ),
+				'sso_should_hide_login_form'    => array( 'Jetpack_SSO_Helpers', 'should_hide_login_form' ),
+				'sso_match_by_email'            => array( 'Jetpack_SSO_Helpers', 'match_by_email' ),
+				'sso_new_user_override'         => array( 'Jetpack_SSO_Helpers', 'new_user_override' ),
+				'sso_bypass_default_login_form' => array( 'Jetpack_SSO_Helpers', 'bypass_login_forward_wpcom' ),
+			);
+			$default     = array_merge( $default, $sso_helpers );
+		}
+
 		/**
 		 * Filter the list of callables that are manageable via the JSON API.
 		 *
@@ -355,7 +368,7 @@ class Defaults {
 		 *
 		 * @param array The default list of callables.
 		 */
-		return apply_filters( 'jetpack_sync_callable_whitelist', self::$default_callable_whitelist );
+		return apply_filters( 'jetpack_sync_callable_whitelist', $default );
 	}
 
 	/**
@@ -366,11 +379,15 @@ class Defaults {
 	 * @var array Blacklisted post types.
 	 */
 	public static $blacklisted_post_types = array(
+		'ai_log', // Logger - https://github.com/alleyinteractive/logger.
 		'ai1ec_event',
 		'bwg_album',
 		'bwg_gallery',
 		'customize_changeset', // WP built-in post type for Customizer changesets.
 		'dn_wp_yt_log',
+		'flamingo_contact', // https://wordpress.org/plugins/flamingo/.
+		'flamingo_inbound',
+		'flamingo_outbound',
 		'http',
 		'idx_page',
 		'jetpack_migration',
@@ -381,6 +398,7 @@ class Defaults {
 		'jp_sitemap_master',
 		'jp_vid_sitemap',
 		'jp_vid_sitemap_index',
+		'msm_sitemap', // Metro Sitemap Plugin.
 		'postman_sent_mail',
 		'rssap-feed',
 		'rssmi_feed_item',
@@ -390,6 +408,8 @@ class Defaults {
 		'snitch',
 		'vip-legacy-redirect',
 		'wp_automatic',
+		'wp_log', // WP Logging Plugin.
+		'wp-rest-api-log', // https://wordpress.org/plugins/wp-rest-api-log/.
 		'wpephpcompat_jobs',
 		'wprss_feed_item',
 	);
@@ -789,6 +809,8 @@ class Defaults {
 		'jetpack-responsive-videos',
 		'infinite-scroll',
 		'site-logo',
+		'editor-color-palette',
+		'editor-gradient-presets',
 	);
 
 	/**
@@ -1018,14 +1040,14 @@ class Defaults {
 	 *
 	 * @var int Number of seconds.
 	 */
-	public static $default_sync_wait_threshold = 5;
+	public static $default_sync_wait_threshold = 10;
 
 	/**
 	 * Default wait between attempting to continue a full sync via requests.
 	 *
 	 * @var int Number of seconds.
 	 */
-	public static $default_enqueue_wait_time = 10;
+	public static $default_enqueue_wait_time = 1;
 
 	/**
 	 * Maximum queue size.
@@ -1034,14 +1056,14 @@ class Defaults {
 	 *
 	 * @var int Number of queue items.
 	 */
-	public static $default_max_queue_size = 1000;
+	public static $default_max_queue_size = 5000;
 
 	/**
 	 * Default maximum lag allowed in the queue.
 	 *
 	 * @var int Number of seconds
 	 */
-	public static $default_max_queue_lag = 900; // 15 minutes.
+	public static $default_max_queue_lag = 7200; // 2 hours.
 
 	/**
 	 * Default for default writes per sec.
@@ -1130,6 +1152,13 @@ class Defaults {
 	public static $default_max_queue_size_full_sync = 1000; // max number of total items in the full sync queue.
 
 	/**
+	 * Default max time for sending in immediate mode.
+	 *
+	 * @var float Number of Seconds
+	 */
+	public static $default_full_sync_send_duration = 9;
+
+	/**
 	 * Defaul for time between syncing callables.
 	 *
 	 * @var int Number of seconds.
@@ -1154,7 +1183,7 @@ class Defaults {
 	 *
 	 * @var int Number of seconds.
 	 */
-	public static $default_cron_sync_time_limit = 30; // 30 seconds.
+	public static $default_cron_sync_time_limit = 4 * MINUTE_IN_SECONDS;
 
 	/**
 	 * Default for number of term relationship items sent in an full sync item.
@@ -1176,4 +1205,51 @@ class Defaults {
 	 * @var int 1 for true.
 	 */
 	public static $default_full_sync_sender_enabled = 1; // Should send full sync items.
+
+	/**
+	 * Default Full Sync config
+	 *
+	 * @var array list of module names.
+	 */
+	public static $default_full_sync_config = array(
+		'constants'          => 1,
+		'functions'          => 1,
+		'options'            => 1,
+		'updates'            => 1,
+		'themes'             => 1,
+		'users'              => 1,
+		'terms'              => 1,
+		'posts'              => 1,
+		'comments'           => 1,
+		'term_relationships' => 1,
+	);
+
+	/**
+	 * Default Full Sync max objects to send on a single request.
+	 *
+	 * @var array list of module => max.
+	 */
+	public static $default_full_sync_limits = array(
+		'users'              => array(
+			'chunk_size' => 100,
+			'max_chunks' => 10,
+		),
+		'terms'              => array(
+			'chunk_size' => 1000,
+			'max_chunks' => 10,
+		),
+		'posts'              => array(
+			'chunk_size' => 100,
+			'max_chunks' => 1,
+		),
+		'comments'           => array(
+			'chunk_size' => 100,
+			'max_chunks' => 10,
+		),
+		'term_relationships' => array(
+			'chunk_size' => 1000,
+			'max_chunks' => 10,
+		),
+	);
+
 }

@@ -4,7 +4,7 @@
 
 Plugin Name:  SyntaxHighlighter Evolved
 Plugin URI:   https://alex.blog/wordpress-plugins/syntaxhighlighter/
-Version:      3.5.4
+Version:      3.5.5
 Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>. Includes a new editor block.
 Author:       Alex Mills (Viper007Bond)
 Author URI:   https://alex.blog/
@@ -16,7 +16,7 @@ License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 
 class SyntaxHighlighter {
 	// All of these variables are private. Filters are provided for things that can be modified.
-	var $pluginver            = '3.5.4';  // Plugin version
+	var $pluginver            = '3.5.5';  // Plugin version
 	var $agshver              = false;    // Alex Gorbatchev's SyntaxHighlighter version (dynamically set below due to v2 vs v3)
 	var $shfolder             = false;    // Controls what subfolder to load SyntaxHighlighter from (v2 or v3)
 	var $settings             = array();  // Contains the user's settings
@@ -123,6 +123,7 @@ class SyntaxHighlighter {
 		// Register brush scripts
 		wp_register_script( 'syntaxhighlighter-core',             plugins_url( $this->shfolder . '/scripts/shCore.js',            __FILE__ ), array(),                         $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-as3',        plugins_url( $this->shfolder . '/scripts/shBrushAS3.js',        __FILE__ ), array('syntaxhighlighter-core'), $this->agshver );
+		wp_register_script( 'syntaxhighlighter-brush-arduino',    plugins_url( $this->shfolder . '/scripts/shBrushArduino.js',    __FILE__ ), array('syntaxhighlighter-core'), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-bash',       plugins_url( $this->shfolder . '/scripts/shBrushBash.js',       __FILE__ ), array('syntaxhighlighter-core'), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-coldfusion', plugins_url( $this->shfolder . '/scripts/shBrushColdFusion.js', __FILE__ ), array('syntaxhighlighter-core'), $this->agshver );
 		wp_register_script( 'syntaxhighlighter-brush-cpp',        plugins_url( $this->shfolder . '/scripts/shBrushCpp.js',        __FILE__ ), array('syntaxhighlighter-core'), $this->agshver );
@@ -172,6 +173,7 @@ class SyntaxHighlighter {
 		$this->brushes = (array) apply_filters( 'syntaxhighlighter_brushes', array(
 			'as3'           => 'as3',
 			'actionscript3' => 'as3',
+			'arduino'       => 'arduino',
 			'bash'          => 'bash',
 			'shell'         => 'bash',
 			'coldfusion'    => 'coldfusion',
@@ -232,6 +234,7 @@ class SyntaxHighlighter {
 
 		$this->brush_names = (array) apply_filters( 'syntaxhighlighter_brush_names', array(
 			'as3'        => __( 'ActionScript',              'syntaxhighlighter' ),
+			'arduino'    => __( 'Arduino',                   'syntaxhighlighter' ),
 			'bash'       => __( 'BASH / Shell',              'syntaxhighlighter' ),
 			'coldfusion' => __( 'ColdFusion',                'syntaxhighlighter' ),
 			'clojure'    => __( 'Clojure',                   'syntaxhighlighter' ),
@@ -500,6 +503,7 @@ class SyntaxHighlighter {
 	 */
 	public function render_block( $attributes, $content ) {
 		$remaps = array(
+			'className'         => 'classname',
 			'lineNumbers'       => 'gutter',
 			'firstLineNumber'   => 'firstline',
 			'highlightLines'    => 'highlight',
@@ -1243,7 +1247,7 @@ class SyntaxHighlighter {
 
 			// Sanitize the "classname" parameter
 			if ( 'class-name' == $key )
-				$value = trim( preg_replace( '/[^a-zA-Z0-9 _-]/i', '', $value ) );
+				$value = "'" . trim( preg_replace( '/[^a-zA-Z0-9 _-]/i', '', $value ) ) . "'";
 
 			// Special sanitization for "pad-line-numbers"
 			if ( 'pad-line-numbers' == $key ) {
@@ -1384,7 +1388,7 @@ class SyntaxHighlighter {
 			<td>
 				<fieldset>
 					<legend class="hidden"><?php esc_html_e( 'Load All Brushes', 'syntaxhighlighter' ); ?></legend>
-					<label for="syntaxhighlighter-loadallbrushes"><input name="syntaxhighlighter_settings[loadallbrushes]" type="checkbox" id="syntaxhighlighter-loadallbrushes" value="1" <?php checked( $this->settings['loadallbrushes'], 1 ); ?> /> <?php esc_html_e( 'Always load all language files (for directly using <code>&lt;pre&gt;</code> tags rather than shortcodes)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If left unchecked (default), then language files will only be loaded when needed<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If unsure, leave this box unchecked', 'syntaxhighlighter' ); ?></label>
+					<label for="syntaxhighlighter-loadallbrushes"><input name="syntaxhighlighter_settings[loadallbrushes]" type="checkbox" id="syntaxhighlighter-loadallbrushes" value="1" <?php checked( $this->settings['loadallbrushes'], 1 ); ?> /> <?php wp_kses( _e( 'Always load all language files (for directly using <code>&lt;pre&gt;</code> tags rather than shortcodes). If left unchecked (default), then language files will only be loaded when needed. If unsure, leave this box unchecked.', 'syntaxhighlighter' ), array( 'code' => array(), 'br' => array() ) ); ?></label>
 				</fieldset>
 			</td>
 		</tr>

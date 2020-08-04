@@ -2,17 +2,17 @@
 /**
  * @package C2C_Plugins
  * @author  Scott Reilly
- * @version 048
+ * @version 049
  */
 /*
 Basis for other plugins.
 
-Compatible with WordPress 4.7 through 4.9+.
+Compatible with WordPress 4.7 through 5.1+.
 
 */
 
 /*
-	Copyright (c) 2010-2018 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2010-2019 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -31,9 +31,9 @@ Compatible with WordPress 4.7 through 4.9+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_TextHover_Plugin_048' ) ) :
+if ( ! class_exists( 'c2c_TextHover_Plugin_049' ) ) :
 
-abstract class c2c_TextHover_Plugin_048 {
+abstract class c2c_TextHover_Plugin_049 {
 	protected $plugin_css_version = '009';
 	protected $options            = array();
 	protected $options_from_db    = '';
@@ -65,7 +65,7 @@ abstract class c2c_TextHover_Plugin_048 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '048';
+		return '049';
 	}
 
 	/**
@@ -288,7 +288,7 @@ abstract class c2c_TextHover_Plugin_048 {
 		add_settings_section( 'default', '', array( $this, 'options_page_description' ), $this->plugin_file );
 		add_filter( 'whitelist_options', array( $this, 'whitelist_options' ) );
 		foreach ( $this->get_option_names( false ) as $opt ) {
-			add_settings_field( $opt, $this->get_option_label( $opt ), array( $this, 'display_option' ), $this->plugin_file, 'default', $opt );
+			add_settings_field( $opt, $this->get_option_label( $opt ), array( $this, 'display_option' ), $this->plugin_file, 'default', array( 'label_for' => $opt ) );
 		}
 	}
 
@@ -620,7 +620,7 @@ abstract class c2c_TextHover_Plugin_048 {
 		.wrap {margin-bottom:30px !important;}
 		.c2c-form .hr, .c2c-hr {border-bottom:1px solid #ccc;padding:0 2px;margin-bottom:6px;}
 		.c2c-fieldset {border:1px solid #ccc; padding:2px 8px;}
-		.c2c-textarea, .c2c-inline_textarea {width:98%;font-family:"Courier New", Courier, mono;}
+		.c2c-textarea, .c2c-inline_textarea {width:98%;font-family:"Courier New", Courier, mono; display: block;}
 		.see-help {font-size:x-small;font-style:italic;}
 		.more-help {display:block;margin-top:8px;}
 		</style>
@@ -871,6 +871,8 @@ HTML;
 	 * @param string $opt The name/key of the option.
 	 */
 	public function display_option( $opt ) {
+		$opt = ! empty( $opt['label_for'] ) ? $opt['label_for'] : $opt;
+
 		do_action( $this->get_hook( 'pre_display_option' ), $opt );
 
 		$options = $this->get_options();
@@ -960,7 +962,11 @@ HTML;
 			echo "<input type='{$input}' {$attribs} value='" . esc_attr( $value ) . "' />\n";
 		}
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt ) ) {
-			echo "<p class='description'>{$help}</p>\n";
+			if ( 'checkbox' === $input ) {
+				echo "<label class='description' for='{$opt}'>{$help}</label>\n";
+			} else {
+				echo "<p class='description'>{$help}</p>\n";
+			}
 		}
 
 		do_action( $this->get_hook( 'post_display_option' ), $opt );

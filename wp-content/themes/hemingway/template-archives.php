@@ -1,10 +1,10 @@
 <?php
 
-/* Template Name: Archive template */
+/* Template Name: Archive Template */
 
 get_header(); ?>
 
-<div class="wrapper section-inner">						
+<div class="wrapper section-inner group">
 
 	<div class="content left">
 			
@@ -16,33 +16,7 @@ get_header(); ?>
 					
 					while ( have_posts() ) : the_post(); ?>
 					
-						<?php if ( has_post_thumbnail() ) : ?>
-						
-						<div class="featured-media">
-						
-							<a href="<?php the_permalink(); ?>" rel="bookmark">
-							
-								<?php 
-								
-								the_post_thumbnail( 'post-image' );
-
-								$image_caption = get_post( get_post_thumbnail_id() )->post_excerpt;
-								
-								if ( $image_caption ) : ?>
-												
-									<div class="media-caption-container">
-									
-										<p class="media-caption"><?php echo $image_caption; ?></p>
-										
-									</div>
-									
-								<?php endif; ?>
-								
-							</a>
-									
-						</div><!-- .featured-media -->
-							
-					<?php endif; ?>
+						<?php hemingway_the_featured_media( $post ); ?>
 														
 						<div class="post-header">
 													
@@ -52,7 +26,14 @@ get_header(); ?>
 																						
 						<div class="post-content">
 																			
-							<?php the_content(); ?>
+							<?php 
+							the_content(); 
+							wp_link_pages( array(
+								'before'           => '<nav class="post-nav-links"><span class="label">' . __( 'Pages:', 'hemingway' ) . '</span>',
+								'after'            => '</nav>',
+							) );
+							edit_post_link( __( 'Edit', 'hemingway' ), '<p>', '</p>' ); 
+							?>
 							
 							<div class="archive-box">
 						
@@ -103,7 +84,7 @@ get_header(); ?>
 								
 								</div><!-- .archive-col -->
 								
-								<div class="archive-col">
+								<div class="archive-col group">
 								
 									<h3><?php _e( 'Contributors', 'hemingway' ); ?></h3>
 									
@@ -130,8 +111,6 @@ get_header(); ?>
 									</ul>
 								
 								</div><!-- .archive-col -->
-								
-								<div class="clear"></div>
 						
 							</div><!-- .archive-box -->
 							
@@ -142,8 +121,6 @@ get_header(); ?>
 							<?php endif; ?>
 																												
 						</div><!-- .post-content -->
-												
-						<div class="clear"></div>
 						
 						<?php 
 						
@@ -160,8 +137,6 @@ get_header(); ?>
 	</div><!-- .content -->
 	
 	<?php get_sidebar(); ?>
-
-	<div class="clear"></div>
 	
 </div><!-- .wrapper section-inner -->
 								

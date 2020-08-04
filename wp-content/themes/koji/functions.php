@@ -5,7 +5,6 @@
    --------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'koji_setup' ) ) :
-
 	function koji_setup() {
 
 		// Automatic feed
@@ -16,9 +15,7 @@ if ( ! function_exists( 'koji_setup' ) ) :
 
 		// Set content-width
 		global $content_width;
-		if ( ! isset( $content_width ) ) {
-			$content_width = 520;
-		}
+		$content_width = 560;
 
 		// Post thumbnails
 		add_theme_support( 'post-thumbnails' );
@@ -55,29 +52,31 @@ if ( ! function_exists( 'koji_setup' ) ) :
 
 	}
 	add_action( 'after_setup_theme', 'koji_setup' );
-
 endif;
+
+
+/*	-----------------------------------------------------------------------------------------------
+	REQUIRED FILES
+	Include required files
+--------------------------------------------------------------------------------------------------- */
+
+// Handle Customizer settings
+require get_template_directory() . '/inc/classes/class-koji-customize.php';
 
 
 /* ---------------------------------------------------------------------------------------------
    ENQUEUE STYLES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_load_style' ) ) :
-
 	function koji_load_style() {
-		if ( ! is_admin() ) :
 
-			wp_register_style( 'koji-fontawesome', get_template_directory_uri() . '/assets/font-awesome/css/font-awesome.css' );
+		if ( is_admin() ) return;
 
-			$dependencies = array( 'koji-fontawesome' );
+		wp_enqueue_style( 'koji-style', get_template_directory_uri() . '/style.css', array(), wp_get_theme( 'koji' )->get( 'Version' ) );
 
-			wp_enqueue_style( 'koji-style', get_template_directory_uri() . '/style.css', $dependencies, wp_get_theme()->get( 'Version' ) );
-		endif;
 	}
 	add_action( 'wp_enqueue_scripts', 'koji_load_style' );
-
 endif;
 
 
@@ -85,16 +84,15 @@ endif;
    ADD EDITOR STYLES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_add_editor_styles' ) ) :
-
 	function koji_add_editor_styles() {
+
 		add_editor_style( array(
-			'koji-editor-styles.css',
+			'/assets/css/koji-classic-editor-styles.css',
 		) );
+
 	}
 	add_action( 'init', 'koji_add_editor_styles' );
-
 endif;
 
 
@@ -102,12 +100,10 @@ endif;
    ENQUEUE SCRIPTS
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_enqueue_scripts' ) ) :
-
 	function koji_enqueue_scripts() {
 
-		wp_enqueue_script( 'koji_construct', get_template_directory_uri() . '/assets/js/construct.js', array( 'jquery', 'imagesloaded', 'masonry' ), wp_get_theme()->get( 'Version' ), true );
+		wp_enqueue_script( 'koji_construct', get_template_directory_uri() . '/assets/js/construct.js', array( 'jquery', 'imagesloaded', 'masonry' ), wp_get_theme( 'koji' )->get( 'Version' ), true );
 
 		if ( ( ! is_admin() ) && is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
@@ -122,7 +118,6 @@ if ( ! function_exists( 'koji_enqueue_scripts' ) ) :
 
 	}
 	add_action( 'wp_enqueue_scripts', 'koji_enqueue_scripts' );
-
 endif;
 
 
@@ -130,9 +125,7 @@ endif;
    POST CLASSES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_post_classes' ) ) :
-
 	function koji_post_classes( $classes ) {
 
 		global $post;
@@ -141,9 +134,9 @@ if ( ! function_exists( 'koji_post_classes' ) ) :
 		$classes[] = ( has_post_thumbnail() ? 'has-thumbnail' : 'missing-thumbnail' );
 
 		return $classes;
+
 	}
 	add_action( 'post_class', 'koji_post_classes' );
-
 endif;
 
 
@@ -151,9 +144,7 @@ endif;
    BODY CLASSES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_body_classes' ) ) :
-
 	function koji_body_classes( $classes ) {
 
 		global $post;
@@ -193,7 +184,6 @@ if ( ! function_exists( 'koji_body_classes' ) ) :
 
 	}
 	add_action( 'body_class', 'koji_body_classes' );
-
 endif;
 
 
@@ -201,16 +191,15 @@ endif;
    ADD HTML CLASS IF THERE'S JAVASCRIPT
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_has_js' ) ) :
-
 	function koji_has_js() {
+
 		?>
 		<script>document.documentElement.className = document.documentElement.className.replace( 'no-js', 'js' );</script>
 		<?php
+
 	}
 	add_action( 'wp_head', 'koji_has_js' );
-
 endif;
 
 
@@ -218,9 +207,7 @@ endif;
    CUSTOM LOGO OUTPUT
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_custom_logo' ) ) :
-
 	function koji_custom_logo() {
 
 		$logo_id = get_theme_mod( 'custom_logo' );
@@ -254,7 +241,6 @@ if ( ! function_exists( 'koji_custom_logo' ) ) :
 		}
 
 	}
-
 endif;
 
 
@@ -262,9 +248,7 @@ endif;
    REGISTER WIDGET AREAS
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_widget_areas' ) ) :
-
 	function koji_widget_areas() {
 
 		register_sidebar( array(
@@ -273,7 +257,7 @@ if ( ! function_exists( 'koji_widget_areas' ) ) :
 			'description' 	=> __( 'Widgets in this area will be shown below the main menu.', 'koji' ),
 			'before_title' 	=> '<h2 class="widget-title">',
 			'after_title' 	=> '</h2>',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 		) );
 
@@ -283,7 +267,7 @@ if ( ! function_exists( 'koji_widget_areas' ) ) :
 			'description' 	=> __( 'Widgets in this area will be shown in the first footer column.', 'koji' ),
 			'before_title' 	=> '<h2 class="widget-title">',
 			'after_title' 	=> '</h2>',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 		) );
 
@@ -293,7 +277,7 @@ if ( ! function_exists( 'koji_widget_areas' ) ) :
 			'description' 	=> __( 'Widgets in this area will be shown in the second footer column.', 'koji' ),
 			'before_title' 	=> '<h2 class="widget-title">',
 			'after_title' 	=> '</h2>',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 		) );
 
@@ -303,13 +287,12 @@ if ( ! function_exists( 'koji_widget_areas' ) ) :
 			'description' 	=> __( 'Widgets in this area will be shown in the third footer column.', 'koji' ),
 			'before_title' 	=> '<h2 class="widget-title">',
 			'after_title' 	=> '</h2>',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 		) );
 
 	}
 	add_action( 'widgets_init', 'koji_widget_areas' );
-
 endif;
 
 
@@ -317,10 +300,9 @@ endif;
    REMOVE ARCHIVE PREFIXES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_remove_archive_title_prefix' ) ) :
-
 	function koji_remove_archive_title_prefix( $title ) {
+
 		if ( is_category() ) {
 			$title = single_cat_title( '', false );
 		} elseif ( is_tag() ) {
@@ -363,9 +345,9 @@ if ( ! function_exists( 'koji_remove_archive_title_prefix' ) ) :
 			$title = __( 'Archives', 'koji' );
 		} // End if().
 		return $title;
+		
 	}
 	add_filter( 'get_the_archive_title', 'koji_remove_archive_title_prefix' );
-
 endif;
 
 
@@ -373,10 +355,9 @@ endif;
    GET ARCHIVE PREFIX
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_get_archive_title_prefix' ) ) :
-
 	function koji_get_archive_title_prefix() {
+
 		if ( is_category() ) {
 			$title_prefix = __( 'Category', 'koji' );
 		} elseif ( is_tag() ) {
@@ -398,8 +379,8 @@ if ( ! function_exists( 'koji_get_archive_title_prefix' ) ) :
 			$title_prefix = __( 'Archives', 'koji' );
 		}
 		return $title_prefix;
-	}
 
+	}
 endif;
 
 
@@ -407,9 +388,7 @@ endif;
    GET FALLBACK IMAGE
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_get_fallback_image_url' ) ) :
-
 	function koji_get_fallback_image_url() {
 
 		$disable_fallback_image = get_theme_mod( 'koji_disable_fallback_image' );
@@ -429,7 +408,6 @@ if ( ! function_exists( 'koji_get_fallback_image_url' ) ) :
 		return $fallback_image_url;
 
 	}
-
 endif;
 
 
@@ -438,7 +416,6 @@ endif;
    --------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'koji_the_fallback_image' ) ) :
-
 	function koji_the_fallback_image() {
 
 		$fallback_image_url = koji_get_fallback_image_url();
@@ -450,7 +427,6 @@ if ( ! function_exists( 'koji_the_fallback_image' ) ) :
 		echo '<img class="fallback-image" src="' . $fallback_image_url . '" alt="' . __( 'Fallback image', 'koji' ) . '" />';
 
 	}
-
 endif;
 
 
@@ -459,7 +435,6 @@ endif;
    --------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'koji_get_preview_image_size' ) ) :
-
 	function koji_get_preview_image_size() {
 
 		// Check if low-resolution images are activated in the customizer
@@ -475,7 +450,6 @@ if ( ! function_exists( 'koji_get_preview_image_size' ) ) :
 		}
 
 	}
-
 endif;
 
 
@@ -487,15 +461,12 @@ endif;
    @param	$location string	Which post meta location to output – single or preview
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_the_post_meta' ) ) :
-
 	function koji_the_post_meta( $post_id = null, $location = 'single' ) {
 
 		echo koji_get_post_meta( $post_id, $location );
 
 	}
-
 endif;
 
 
@@ -507,9 +478,7 @@ endif;
    @param	$location string	Which post meta location to output – single or preview
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_get_post_meta' ) ) :
-
 	function koji_get_post_meta( $post_id = null, $location = 'single' ) {
 
 		// Require post ID
@@ -676,7 +645,6 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 		return;
 
 	}
-
 endif;
 
 
@@ -684,9 +652,7 @@ endif;
    	CUSTOM CUSTOMIZER CONTROLS
    --------------------------------------------------------------------------------------------- */
 
-
 if ( class_exists( 'WP_Customize_Control' ) ) :
-
 	if ( ! class_exists( 'Koji_Customize_Control_Checkbox_Multiple' ) ) :
 
 		// Custom Customizer control that outputs a specified number of checkboxes
@@ -730,7 +696,6 @@ if ( class_exists( 'WP_Customize_Control' ) ) :
 		}
 
 	endif;
-
 endif;
 
 
@@ -738,9 +703,7 @@ endif;
    FILTER COMMENT TEXT TO OUTPUT "BY POST AUTHOR" TEXT
 ------------------------------------------------------------------------------------------------ */
 
-
 if ( ! function_exists( 'koji_loading_indicator' ) ) :
-
 	function koji_filter_comment_text( $comment_text, $comment, $args ) {
 
 		$comment_author_user_id = $comment->user_id;
@@ -754,7 +717,6 @@ if ( ! function_exists( 'koji_loading_indicator' ) ) :
 
 	}
 	add_filter( 'comment_text', 'koji_filter_comment_text', 10, 3 );
-
 endif;
 
 
@@ -762,15 +724,12 @@ endif;
    OUTPUT LOADING INDICATOR
 ------------------------------------------------------------------------------------------------ */
 
-
 if ( ! function_exists( 'koji_loading_indicator' ) ) :
-
 	function koji_loading_indicator() {
 
 		echo '<div class="loader"></div>';
 
 	}
-
 endif;
 
 
@@ -779,9 +738,7 @@ endif;
 	Called in construct.js when the user has clicked the load more button
 --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_ajax_load_more' ) ) :
-
 	function koji_ajax_load_more() {
 
 		$query_args = json_decode( wp_unslash( $_POST['json_data'] ), true );
@@ -807,259 +764,10 @@ if ( ! function_exists( 'koji_ajax_load_more' ) ) :
 		endif;
 
 		die();
+
 	}
 	add_action( 'wp_ajax_nopriv_koji_ajax_load_more', 'koji_ajax_load_more' );
 	add_action( 'wp_ajax_koji_ajax_load_more', 'koji_ajax_load_more' );
-
-endif;
-
-
-/* ---------------------------------------------------------------------------------------------
-   CUSTOMIZER SETTINGS
-   --------------------------------------------------------------------------------------------- */
-
-
-if ( ! class_exists( 'Koji_Customize' ) ) :
-
-	class Koji_Customize {
-
-		public static function koji_register( $wp_customize ) {
-
-			/* 2X Header Logo ----------------------------- */
-
-			$wp_customize->add_setting( 'koji_retina_logo', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'koji_sanitize_checkbox',
-				'transport'			=> 'postMessage',
-			) );
-
-			$wp_customize->add_control( 'koji_retina_logo', array(
-				'type' 			=> 'checkbox',
-				'section' 		=> 'title_tagline',
-				'priority'		=> 10,
-				'label' 		=> __( 'Retina logo', 'koji' ),
-				'description' 	=> __( 'Scales the logo to half its uploaded size, making it sharp on high-res screens.', 'koji' ),
-			) );
-
-			/* ------------------------------------
-			 * Fallback Image Options
-			 * ------------------------------------ */
-
-			$wp_customize->add_section( 'koji_image_options', array(
-				'title' 		=> __( 'Images', 'koji' ),
-				'priority' 		=> 40,
-				'capability' 	=> 'edit_theme_options',
-				'description' 	=> __( 'Settings for images in Koji.', 'koji' ),
-			) );
-
-			// Activate low-resolution images setting
-			$wp_customize->add_setting( 'koji_activate_low_resolution_images', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'koji_sanitize_checkbox'
-			) );
-
-			$wp_customize->add_control( 'koji_activate_low_resolution_images', array(
-				'type' 			=> 'checkbox',
-				'section' 		=> 'koji_image_options',
-				'priority'		=> 5,
-				'label' 		=> __( 'Use Low-Resolution Images', 'koji' ),
-				'description'	=> __( 'Checking this will decrease load times, but also make images look less sharp on high-resolution screens.', 'koji' ),
-			) );
-
-			// Fallback image setting
-			$wp_customize->add_setting( 'koji_fallback_image', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'absint'
-			) );
-
-			$wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, 'koji_fallback_image', array(
-				'label'			=> __( 'Fallback Image', 'koji' ),
-				'description'	=> __( 'The selected image will be used when a post is missing a featured image. A default fallback image included in the theme will be used if no image is set.', 'koji' ),
-				'priority'		=> 10,
-				'mime_type'		=> 'image',
-				'section' 		=> 'koji_image_options',
-			) ) );
-
-			// Disable fallback image setting
-			$wp_customize->add_setting( 'koji_disable_fallback_image', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'koji_sanitize_checkbox'
-			) );
-
-			$wp_customize->add_control( 'koji_disable_fallback_image', array(
-				'type' 			=> 'checkbox',
-				'section' 		=> 'koji_image_options',
-				'priority'		=> 15,
-				'label' 		=> __( 'Disable Fallback Image', 'koji' )
-			) );
-
-			/* ------------------------------------
-			 * Post Meta Options
-			 * ------------------------------------ */
-
-			$wp_customize->add_section( 'koji_post_meta_options', array(
-				'title' 		=> __( 'Post Meta', 'koji' ),
-				'priority' 		=> 41,
-				'capability' 	=> 'edit_theme_options',
-				'description' 	=> __( 'Choose which meta information to display in Koji.', 'koji' ),
-			) );
-
-			/* Post Meta Setting ----------------------------- */
-
-			$post_meta_choices = apply_filters( 'koji_post_meta_choices_in_the_customizer', array(
-				'author'		=> __( 'Author', 'koji' ),
-				'categories'	=> __( 'Categories', 'koji' ),
-				'comments'		=> __( 'Comments', 'koji' ),
-				'edit-link'		=> __( 'Edit link (for logged in users)', 'koji' ),
-				'post-date'		=> __( 'Post date', 'koji' ),
-				'sticky'		=> __( 'Sticky status', 'koji' ),
-				'tags'			=> __( 'Tags', 'koji' ),
-			) );
-
-			// Post Meta Single Setting
-			$wp_customize->add_setting( 'koji_post_meta_single', array(
-				'capability' 		=> 'edit_theme_options',
-				'default'           => array( 'post-date', 'categories' ),
-				'sanitize_callback' => 'koji_sanitize_multiple_checkboxes',
-			) );
-
-			$wp_customize->add_control( new Koji_Customize_Control_Checkbox_Multiple( $wp_customize, 'koji_post_meta_single', array(
-				'section' 		=> 'koji_post_meta_options',
-				'label'   		=> __( 'Post Meta On Single:', 'koji' ),
-				'description'	=> __( 'Select the post meta values to show on single posts.', 'koji' ),
-				'choices' 		=> $post_meta_choices,
-			) ) );
-
-			// Post Meta Preview Setting
-			$wp_customize->add_setting( 'koji_post_meta_preview', array(
-				'capability' 		=> 'edit_theme_options',
-				'default'           => array( 'post-date', 'comments' ),
-				'sanitize_callback' => 'koji_sanitize_multiple_checkboxes',
-			) );
-
-			$wp_customize->add_control( new Koji_Customize_Control_Checkbox_Multiple( $wp_customize, 'koji_post_meta_preview', array(
-				'section' 		=> 'koji_post_meta_options',
-				'label'   		=> __( 'Post Meta In Previews:', 'koji' ),
-				'description'	=> __( 'Select the post meta values to show in previews.', 'koji' ),
-				'choices' 		=> $post_meta_choices,
-			) ) );
-
-			/* ------------------------------------
-			 * Pagination Options
-			 * ------------------------------------ */
-
-			$wp_customize->add_section( 'koji_pagination_options', array(
-				'title' 		=> __( 'Pagination', 'koji' ),
-				'priority' 		=> 45,
-				'capability' 	=> 'edit_theme_options',
-				'description' 	=> __( 'Choose which type of pagination to display.', 'koji' ),
-			) );
-
-			/* Pagination Type Setting ----------------------------- */
-
-			$wp_customize->add_setting( 'koji_pagination_type', array(
-				'capability' 		=> 'edit_theme_options',
-				'default'           => 'button',
-				'sanitize_callback' => 'koji_sanitize_radio',
-			) );
-
-			$wp_customize->add_control( 'koji_pagination_type', array(
-				'type'			=> 'radio',
-				'section' 		=> 'koji_pagination_options',
-				'label'   		=> __( 'Pagination Type:', 'koji' ),
-				'choices' 		=> array(
-					'button'		=> __( 'Load more on button click', 'koji' ),
-					'scroll'		=> __( 'Load more on scroll', 'koji' ),
-					'links'			=> __( 'Previous and next page links', 'koji' ),
-				),
-			) );
-
-			/* ------------------------------------
-			 * Search Options
-			 * ------------------------------------ */
-
-			$wp_customize->add_section( 'koji_search_options', array(
-				'title' 		=> __( 'Search', 'koji' ),
-				'priority' 		=> 50,
-				'capability' 	=> 'edit_theme_options',
-				'description' 	=> '',
-			) );
-
-			/* Disable Search Setting ----------------------------- */
-
-			$wp_customize->add_setting( 'koji_disable_search', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'koji_sanitize_checkbox',
-			) );
-
-			$wp_customize->add_control( 'koji_disable_search', array(
-				'type' 			=> 'checkbox',
-				'section' 		=> 'koji_search_options',
-				'priority'		=> 10,
-				'label' 		=> __( 'Disable Search Toggle', 'koji' ),
-				'description' 	=> __( 'Check to remove the search toggle from the row of icons.', 'koji' ),
-			) );
-
-			/* ------------------------------------
-			 * Related Posts Options
-			 * ------------------------------------ */
-
-			$wp_customize->add_section( 'koji_related_posts_options', array(
-				'title' 		=> __( 'Related Posts', 'koji' ),
-				'priority' 		=> 60,
-				'capability' 	=> 'edit_theme_options',
-				'description' 	=> '',
-			) );
-
-			/* Disable Related Posts Setting ----------------------------- */
-
-			$wp_customize->add_setting( 'koji_disable_related_posts', array(
-				'capability' 		=> 'edit_theme_options',
-				'sanitize_callback' => 'koji_sanitize_checkbox',
-			) );
-
-			$wp_customize->add_control( 'koji_disable_related_posts', array(
-				'type' 			=> 'checkbox',
-				'section' 		=> 'koji_related_posts_options',
-				'priority'		=> 10,
-				'label' 		=> __( 'Disable Related Posts', 'koji' ),
-				'description' 	=> __( 'Check to hide the related posts section on single posts.', 'koji' ),
-			) );
-
-			/* Sanitation functions ----------------------------- */
-
-			// Sanitize boolean for checkbox
-			function koji_sanitize_checkbox( $checked ) {
-				return ( ( isset( $checked ) && true == $checked ) ? true : false );
-			}
-
-			// Sanitize booleans for multiple checkboxes
-			function koji_sanitize_multiple_checkboxes( $values ) {
-				$multi_values = ! is_array( $values ) ? explode( ',', $values ) : $values;
-				return ! empty( $multi_values ) ? array_map( 'sanitize_text_field', $multi_values ) : array();
-			}
-
-			function koji_sanitize_radio( $input, $setting ) {
-				$input = sanitize_key( $input );
-				$choices = $setting->manager->get_control( $setting->id )->choices;
-				return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
-			}
-
-		}
-
-		// Initiate the customize controls js
-		public static function koji_customize_controls() {
-			wp_enqueue_script( 'koji-customize-controls', get_template_directory_uri() . '/assets/js/customize-controls.js', array( 'jquery', 'customize-controls' ), '', true );
-		}
-
-	}
-
-	// Setup the Theme Customizer settings and controls
-	add_action( 'customize_register', array( 'Koji_Customize', 'koji_register' ) );
-
-	// Enqueue customize controls javascript in Theme Customizer admin screen
-	add_action( 'customize_controls_init', array( 'Koji_Customize', 'koji_customize_controls' ) );
-
 endif;
 
 
@@ -1067,9 +775,7 @@ endif;
    SPECIFY GUTENBERG SUPPORT
 ------------------------------------------------------------------------------------------------ */
 
-
 if ( ! function_exists( 'koji_add_gutenberg_features' ) ) :
-
 	function koji_add_gutenberg_features() {
 
 		/* Gutenberg Feature Opt-Ins --------------------------------------- */
@@ -1126,10 +832,10 @@ if ( ! function_exists( 'koji_add_gutenberg_features' ) ) :
 				'slug' 		=> 'small',
 			),
 			array(
-				'name' 		=> _x( 'Regular', 'Name of the regular font size in Gutenberg', 'koji' ),
-				'shortName' => _x( 'M', 'Short name of the regular font size in the Gutenberg editor.', 'koji' ),
+				'name' 		=> _x( 'Normal', 'Name of the regular font size in Gutenberg', 'koji' ),
+				'shortName' => _x( 'N', 'Short name of the regular font size in the Gutenberg editor.', 'koji' ),
 				'size' 		=> 19,
-				'slug' 		=> 'regular',
+				'slug' 		=> 'normal',
 			),
 			array(
 				'name' 		=> _x( 'Large', 'Name of the large font size in Gutenberg', 'koji' ),
@@ -1147,7 +853,6 @@ if ( ! function_exists( 'koji_add_gutenberg_features' ) ) :
 
 	}
 	add_action( 'after_setup_theme', 'koji_add_gutenberg_features' );
-
 endif;
 
 
@@ -1155,12 +860,11 @@ endif;
    GUTENBERG EDITOR STYLES
    --------------------------------------------------------------------------------------------- */
 
-
 if ( ! function_exists( 'koji_block_editor_styles' ) ) :
-
 	function koji_block_editor_styles() {
-		wp_enqueue_style( 'koji-block-editor-styles', get_template_directory_uri() . '/koji-gutenberg-editor-style.css', array(), '1.0', 'all' );
+
+		wp_enqueue_style( 'koji-block-editor-styles', get_template_directory_uri() . '/assets/css/koji-block-editor-styles.css', array(), '1.0', 'all' );
+
 	}
 	add_action( 'enqueue_block_editor_assets', 'koji_block_editor_styles', 1 );
-
 endif;

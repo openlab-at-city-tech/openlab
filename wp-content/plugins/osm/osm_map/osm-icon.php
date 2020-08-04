@@ -51,8 +51,8 @@ class Osm_icon
      return array("height"=>2,"width"=>"2","offset_height"=>"-1","offset_width"=>"-1");
    }
    else {
-     $this->traceText(DEBUG_INFO, "e_unknown_icon");
-     $this->traceText(DEBUG_INFO, "Error: (marker_name: ".$a_IconName.")!"); 
+     Osm::traceText(DEBUG_INFO, "e_unknown_icon");
+     Osm::traceText(DEBUG_INFO, "Error: (marker_name: ".$a_IconName.")!"); 
      return array("height"=>41,"width"=>"32","offset_height"=>"-41","offset_width"=>"-16");
    }
  }

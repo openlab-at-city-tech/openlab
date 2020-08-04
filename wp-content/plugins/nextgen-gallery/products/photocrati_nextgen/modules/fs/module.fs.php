@@ -19,7 +19,7 @@ class M_Fs extends C_Base_Module
 			'photocrati-fs',
 			'Filesystem',
 			'Provides a filesystem abstraction layer for Pope modules',
-			'3.1.8',
+			'3.3.6',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

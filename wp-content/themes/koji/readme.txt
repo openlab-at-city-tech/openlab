@@ -2,7 +2,8 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.2
+Tested up to: 5.4.1
+Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -74,6 +75,68 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.0.6 (2020-06-05)
+-------------------------
+- Added a visual indicator to link in archive description (thanks, @adamshand).
+- Bumped "Tested up to" to 5.4.1.
+- Added "Requires PHP" to readme.txt.
+- Added "Requires PHP" and "Tested up to" to style.css, per new theme requirements.
+
+Version 2.0.5 (2020-05-02)
+-------------------------
+- Fixed max-width issue with pull quote set to style: solid color.
+- Gave the cite element a base top margin.
+- Added `global $post;` before `setup_postdata()` in `related-posts.php`
+- Added edit post link after the post content to post types other than posts (which include them as part of the post meta).
+- Modified the CSS reset to make elements inherit styles instead of reset them.
+- Fixed blockquotes not properly supporting text alignment being set to center and right.
+- Fixed blockquotes with solid background color all of a sudden having huge font sizes (thanks, Core styles).
+- Fixed the left/right margins of image block alignright/alignleft being overwritten by Core styles.
+- Block editor styles: Fixed alignleft and alignright elements having the wrong width.
+- Improved styles of buttons block and social block.
+- More foolproof removal of top/bottom margin of first/last elements in the entry content.
+- Tweaked image caption margins.
+
+Version 2.0.4 (2020-04-30)
+-------------------------
+- Removed the fontawesome.css file, since it wasn't being used (and the font files it pointed to doesn't exist – oops).
+
+Version 2.0.3 (2020-04-30)
+-------------------------
+- Modified the targeting of block editor colors and font sizes to be able to hit elements outside of the entry content.
+- Renamed the "Regular" Block Editor font size to "Normal", which is the expected Block Editor name for the default font size.
+- Fixed incorrect targeting of the social block in the base block margins.
+
+Version 2.0.2 (2020-04-06)
+-------------------------
+- Fixed a calculation issue causing alignfull blocks to have the wrong margin on some screen sizes.
+
+Version 2.0.2 (2020-04-06)
+-------------------------
+- Fixed a calculation issue causing alignfull blocks to have the wrong margin on some screen sizes.
+
+Version 2.0.1 (2020-04-04)
+-------------------------
+- Fixed the $content_width variable not matching the new content width set in 2.0.0.
+
+Version 2.0.0 (2020-04-04)
+-------------------------
+- Fixed handling of large logos on mobile, made the navigation toggle styles more flexible.
+- Updates for WordPress 5.4.
+	- Added styles for the new social icons and buttons blocks.
+	- Updated "Tested up to" to 5.4.
+- Renamed editor style files and moved them to /assets/css/.
+- Improved block editor styles, fixed issues caused by markup changes.
+- Code formatting cleanup in functions.php.
+- Updated the register_sidebar() calls to ensure the widget ID is included in the output.
+- Moved the Koji_Customize class from functions.php to its own file.
+- Tweaked gallery block styles.
+- Updated FontAwesome to only include font files for IE10 and up, reducing theme file size by ~1.5 MB.
+- Improved text antialiasing in Firefox.
+- Increased the width of the content in Koji by 40 pixels, making text a bit more readable.
+- Changed the theme screenshot to the JPG format, reducing file size.
+- Lossless compression of the fallback avatar and fallback image.
 
 Version 1.46 (2019-07-16)
 -------------------------

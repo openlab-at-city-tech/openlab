@@ -434,7 +434,7 @@ function bp_core_filter_blog_welcome_email( $welcome_email, $blog_id, $user_id, 
 	if ( ! bp_has_custom_signup_page() )
 		return $welcome_email;
 
-	// [User Set] Replaces $password in welcome email; Represents value set by user
+	// [User Set] Replaces $password in welcome email; Represents value set by user.
 	return str_replace( $password, __( '[User Set]', 'buddypress' ), $welcome_email );
 }
 add_filter( 'update_welcome_email', 'bp_core_filter_blog_welcome_email', 10, 4 );
@@ -600,6 +600,7 @@ function bp_modify_page_title( $title = '', $sep = '&raquo;', $seplocation = 'ri
 		$bp_title_parts['site'] = $blogname;
 
 		if ( ( $paged >= 2 || $page >= 2 ) && ! is_404() && ! bp_is_single_activity() ) {
+			/* translators: %s: the page number. */
 			$bp_title_parts['page'] = sprintf( __( 'Page %s', 'buddypress' ), max( $paged, $page ) );
 		}
 	}
@@ -811,7 +812,7 @@ add_filter( 'customize_nav_menu_available_items', 'bp_customizer_nav_menus_get_i
  *
  * @since 2.3.3
  *
- * @param array $item_types An associative array structured for the customizer.
+ * @param  array $item_types An associative array structured for the customizer.
  * @return array $item_types An associative array structured for the customizer.
  */
 function bp_customizer_nav_menus_set_item_types( $item_types = array() ) {
@@ -1168,3 +1169,18 @@ function bp_core_render_email_template( $template ) {
 	return '';
 }
 add_action( 'bp_template_include', 'bp_core_render_email_template', 12 );
+
+/**
+ * Adds BuddyPress components' slugs to the WordPress Multisite subdirectory reserved names.
+ *
+ * @since 6.0.0
+ *
+ * @param array $names The WordPress Multisite subdirectory reserved names.
+ * @return array       The WordPress & BuddyPress Multisite subdirectory reserved names.
+ */
+function bp_core_components_subdirectory_reserved_names( $names = array() ) {
+	$bp_pages = (array) buddypress()->pages;
+
+	return array_merge( $names, wp_list_pluck( $bp_pages, 'slug' ) );
+}
+add_filter( 'subdirectory_reserved_names', 'bp_core_components_subdirectory_reserved_names' );

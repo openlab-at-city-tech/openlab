@@ -9,7 +9,7 @@ a.featured {
 }
 
 table.linklisttable {
-	width:100%; 
+	width:100%;
 	border-width: 0px 0px 0px 0px;
 	border-spacing: 5px;
 	/* border-style: outset outset outset outset;
@@ -53,7 +53,7 @@ table.linklisttable td {
 
 
 .linklistcolumnheader{
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 div.rsscontent{color: #333333; font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;font-size: 11px;line-height: 1.25em;
@@ -161,6 +161,10 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
 
 .LinksInCat {
     display:none;
+}
+
+.SubCategories {
+  display:none;
 }
 
 .allcatalphafilterlinkedletter, .catalphafilterlinkedletter, .catalphafilteremptyletter, .catalphafilterselectedletter, .allcatalphafilterselectedletter {

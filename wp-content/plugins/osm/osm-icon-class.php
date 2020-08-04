@@ -208,7 +208,7 @@ $a_IconName == "mic_black_wifi_10.png" || $a_IconName == "mic_black_wifino_10.pn
 $a_IconName == "mic_black_windsurf_10.png" || $a_IconName == "mic_black_wine_10.png" || 
 $a_IconName == "mic_black_xgames_10.png" || $a_IconName == "mic_black_xgames_11.png" || 
 $a_IconName == "mic_black_yoga_10.png" || $a_IconName == "mic_black_youthhostel_10.png" || 
-$a_IconName == "mic_black_zoo_10.png" 
+$a_IconName == "mic_black_zoo_10.png" || $a_IconName == "mic_black_soccer_10.png"
 ){
     return true;
    }

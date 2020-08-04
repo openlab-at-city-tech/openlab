@@ -1,3 +1,7 @@
+.post-title a:hover {
+	text-decoration: underline;
+}
+
 .post-content .searchform input.s {
 	-webkit-appearance: none;
 	width: 99%;
@@ -81,6 +85,22 @@
 	background-color: #089D80;
 	border-color: #089D80;
 }
+
+#wp-calendar,
+.footer .widget h2,
+.footer .widget-content,
+.footer .widget-title {
+	color: #a8a8a8;
+}
+
+#wp-calendar a {
+	color: #fff;
+}
+
+#wp-calendar caption, #wp-calendar thead {
+	color: #a8a8a8;
+}
+
 /**contrast error fixing**/
 body .tagcloud a{
 	background: #595959;
@@ -140,6 +160,12 @@ body .blog-menu li:hover > a {
 ::selection {
 	background: #eee;
 	color: #333;
+}
+.section.bg-dark a {
+	color: #fff;
+}
+.section.bg-dark a:hover {
+	color: #9e9e9e;
 }
 @media print {
 }

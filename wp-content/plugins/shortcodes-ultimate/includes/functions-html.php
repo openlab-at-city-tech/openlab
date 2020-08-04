@@ -184,3 +184,26 @@ function su_csv_to_html( $csv, $delimiter = ',', $header = false ) {
 	return '<table>' . $html . '</table>';
 
 }
+
+/**
+ * Convert array with CSS rules into a style attribute (escaped).
+ *
+ * Expected input:
+ *
+ *   [ 'margin: 5px', 'color: red' ]
+ *
+ * Output:
+ *
+ *   ' style="margin: 5px;color: red"'
+ *
+ * @since 5.8.1
+ * @param  array $rules Array with CSS rules.
+ * @return string        Formatted style attribute.
+ */
+function su_html_style( $rules ) {
+
+	return ! empty( $rules )
+		? ' style="' . esc_attr( implode( ';', $rules ) ) . '"'
+		: '';
+
+}

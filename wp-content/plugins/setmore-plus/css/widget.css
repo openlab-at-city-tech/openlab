@@ -1,0 +1,22 @@
+/*
+ * SetMore Plus widget stylesheet
+ *
+ * Default style for SetMore link to iframe lightbox.
+ */
+
+.widget a.setmore {
+	background: #ddd;
+	border-radius: 20px;
+	color: #333;
+	display: inline-block;
+	margin: 10px 0;
+	padding: 10px 20px;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px rgba(255,255,255,0.9);
+}
+
+.widget a.setmore:hover {
+	background: #eee;
+	color: #000;
+	text-decoration: none;
+}

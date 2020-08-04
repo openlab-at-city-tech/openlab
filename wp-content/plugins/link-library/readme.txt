@@ -3,7 +3,7 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.home.blog/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 5.3
+Tested up to: 5.4
 Stable tag: trunk
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
@@ -32,21 +32,79 @@ All pages are generated using different configurations all managed by Link Libra
 To get a basic Link Library list showing on one of your Wordpress pages:<br />
 1. In the Wordpress Admin, create a new page and type the following text, where # should be replaced by the Settings Set number:<br />
    [link-library settings=#]
-   
+
 1. To add a list of categories to jump to a certain point in the list, add the following text to your page:<br />
    [link-library-cats settings=#]<br />
-   
+
 1. To add a search box to your Link Library list, add the following text to your page:<br />
    [link-library-search]
-   
+
 1. To add a form for users to be able to submit new links:<br />
    [link-library-addlink settings=#]
-   
+
 In addition to specifying a library, categories to be displayed can be specified using addition keywords. Read the FAQ for more information on this topic.
-   
+
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 6.5.5 =
+* Added menu item promoting Accessibe service
+
+= 6.5.4 =
+* Fixed issue with category unordered list not rendering correctly in Firefox
+
+= 6.5.3 =
+* Fix to load thumbnails using appropriate protocol (http or https) based on site protocol
+
+= 6.5.2 =
+* Integrated Shrink the Web and Pagepeeker thmbnail generation services
+* Added option to display either the Updated date or the publication date for links
+
+= 6.5.1 =
+* New ads are now removed if you choose to hide donation links
+* Ad no longer blocks selections from drop-down lists
+
+= 6.5 =
+* Removed Link Library 6.0 upgrade message from admin
+* Fix for Plain Web Address Web link not displaying secondary address correctly
+* Fix issue with pagination
+
+= 6.4.9 =
+* Search improvements. When searching for multiple terms in Link Library, it will search for these terms separately in the link description, large description and notes instead of only looking for them next to each other
+* Fixed issue with link counts in category list
+* Fixed issue with pagination system displaying too many dots if there are a lot of pages in library
+
+= 6.4.8 =
+* Fixed bug with using a search box defined in a library with a number higher than 1
+
+= 6.4.7 =
+* Add tags around all possible instances of category name
+* Fix to properly close link tags when linking to dedicated page
+
+= 6.4.6 =
+* Fixed issue with image display introduced by 6.4.4
+
+= 6.4.5 =
+* Fixed layout issues introduced by 6.4.4 update
+
+= 6.4.4 =
+* Sub-categories now work with expansion and collapse
+* Before and after tags now more consistently output, especially if there is no value in the field
+* Fix for category list with pagination mode enabled
+
+= 6.4.3 =
+* Fixed bug with link category description being displayed twice
+* Added missing div tag to search results
+
+= 6.4.2 =
+* Fixed issue with free price filter
+
+= 6.4.1 =
+* Corrects issue with custom post type permalinks introduced in version 6.4
+
+= 6.4 =
+* Permalinks for links now use the link URL is links are set not to be accessible publicly
 
 = 6.3.12 =
 * Corrected bug where extra spaces were added to the first line of the stylesheet editor content
@@ -1405,7 +1463,7 @@ Further configuration is available under the Link Library Settings panel.
 = 5.4 =
 * Redesigned user submission processing code to send post data to external php file and redirect back after data storage and validation
 
-= 5.3.3 = 
+= 5.3.3 =
 * Fixed duplicate check on user-submitted links
 * Fixed problem with other plugins causing shortcode to be evaluated multiple times, resulting in multiple links submission
 

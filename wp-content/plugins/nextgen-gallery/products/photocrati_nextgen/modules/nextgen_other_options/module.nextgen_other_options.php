@@ -23,7 +23,7 @@ class M_NextGen_Other_Options extends C_Base_Module
 			'photocrati-nextgen_other_options',
 			'Other Options',
 			'NextGEN Gallery Others Options Page',
-			'3.2.21',
+			'3.3.6',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'
@@ -83,6 +83,7 @@ class M_NextGen_Other_Options extends C_Base_Module
 	{
         $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Watermarking_Ajax_Actions');
         $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Stylesheet_Ajax_Actions');
+        $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_Other_Options_Misc_Tab_Ajax');
 
         if (is_admin()) {
             $this->get_registry()->add_adapter(
@@ -155,6 +156,7 @@ class M_NextGen_Other_Options extends C_Base_Module
     function get_type_list()
     {
         return array(
+            'A_Other_Options_Misc_Tab_Ajax' => 'adapter.other_options_misc_tab_ajax.php',
             'A_Image_Options_Form' => 'adapter.image_options_form.php',
             'A_Lightbox_Manager_Form' => 'adapter.lightbox_manager_form.php',
             'A_Miscellaneous_Form' => 'adapter.miscellaneous_form.php',
@@ -167,7 +169,6 @@ class M_NextGen_Other_Options extends C_Base_Module
             'A_Watermarking_Ajax_Actions' => 'adapter.watermarking_ajax_actions.php',
             'A_Watermarks_Form' => 'adapter.watermarks_form.php',
             'A_Stylesheet_Ajax_Actions' => 'adapter.stylesheet_ajax_actions.php',
-			'C_Settings_Model'	=>	'class.settings_model.php',
             'A_Custom_Lightbox_Form' => 'adapter.custom_lightbox_form.php',
 			'C_Settings_Model'	=>	'class.settings_model.php'
         );

@@ -60,6 +60,7 @@ class Jetpack_Options {
 					'unique_connection',           // (array)  A flag to determine a unique connection to wordpress.com two values "connected" and "disconnected" with values for how many times each has occured
 					'protect_whitelist',           // (array) IP Address for the Protect module to ignore
 					'sync_error_idc',              // (bool|array) false or array containing the site's home and siteurl at time of IDC error
+					'sync_health_status',          // (bool|array) An array of data relating to Jetpack's sync health.
 					'safe_mode_confirmed',         // (bool) True if someone confirms that this site was correctly put into safe mode automatically after an identity crisis is discovered.
 					'migrate_for_idc',             // (bool) True if someone confirms that this site should migrate stats and subscribers from its previous URL
 					'dismissed_connection_banner', // (bool) True if the connection banner has been dismissed
@@ -70,6 +71,7 @@ class Jetpack_Options {
 					'mapbox_api_key',              // (string) Mapbox API Key, for use with Map block.
 					'mailchimp',                   // (string) Mailchimp keyring data, for mailchimp block.
 					'xmlrpc_errors',               // (array) Keys are XML-RPC signature error codes. Values are truthy.
+					'dismissed_wizard_banner',     // (int) True if the Wizard banner has been dismissed.
 				);
 
 			case 'private':
@@ -108,6 +110,8 @@ class Jetpack_Options {
 			'sso_first_login',              // (bool)   Is this the first time the user logins via SSO.
 			'dismissed_hints',              // (array)  Part of Plugin Search Hints. List of cards that have been dismissed.
 			'first_admin_view',             // (bool)   Set to true the first time the user views the admin. Usually after the initial connection.
+			'setup_wizard_questionnaire',   // (array)  List of user choices from the setup wizard.
+			'setup_wizard_status',          // (string) Status of the setup wizard.
 		);
 	}
 
@@ -477,7 +481,7 @@ class Jetpack_Options {
 
 	/**
 	 * This function checks for a constant that, if present, will disable direct DB queries Jetpack uses to manage certain options and force Jetpack to always use Options API instead.
-	 * Options can be selectively managed via a blacklist by filtering option names via the jetpack_disabled_raw_option filter.
+	 * Options can be selectively managed via a blocklist by filtering option names via the jetpack_disabled_raw_option filter.
 	 *
 	 * @param string $name Option name.
 	 *
@@ -493,7 +497,7 @@ class Jetpack_Options {
 		 *
 		 * @since 5.5.0
 		 *
-		 * @param array $disabled_raw_options An array of option names that you can selectively blacklist from being managed via direct database queries.
+		 * @param array $disabled_raw_options An array of option names that you can selectively blocklist from being managed via direct database queries.
 		 */
 		$disabled_raw_options = apply_filters( 'jetpack_disabled_raw_options', array() );
 		return isset( $disabled_raw_options[ $name ] );
@@ -557,9 +561,6 @@ class Jetpack_Options {
 			'disabled_likes',
 			'disabled_reblogs',
 			'jetpack_comments_likes_enabled',
-			'wp_mobile_excerpt',
-			'wp_mobile_featured_images',
-			'wp_mobile_app_promos',
 			'stats_options',
 			'stats_dashboard_widget',
 			'safecss_preview_rev',
@@ -570,7 +571,6 @@ class Jetpack_Options {
 			'jetpack_portfolio_posts_per_page',
 			'jetpack_testimonial',
 			'jetpack_testimonial_posts_per_page',
-			'wp_mobile_custom_css',
 			'sharedaddy_disable_resources',
 			'sharing-options',
 			'sharing-services',

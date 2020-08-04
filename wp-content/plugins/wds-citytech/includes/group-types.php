@@ -22,7 +22,6 @@ function openlab_group_types() {
 		'club',
 		'course',
 		'portfolio',
-		'school', // Legacy. Not sure what this is used for
 	);
 }
 
@@ -235,6 +234,14 @@ function openlab_group_is_hidden( $group_id = 0 ) {
 		return isset( $group->status ) && 'hidden' == $group->status;
 	}
 }
+
+/**
+ * Determines whether this is a "my-{grouptype}" directory.
+ */
+function openlab_is_my_groups_directory() {
+	return is_page( 'my-courses' ) || is_page( 'my-clubs' ) || is_page( 'my-projects' ) || is_page( 'my-sites' );
+}
+
 /**
  * This function is for the group archive pages, which are currently literally pages with specified templates
  * It attaches a group type to a specific page slug

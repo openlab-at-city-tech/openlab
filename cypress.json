@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://openlabdev.org",
+  "env": {
+    "wp_user": "testuser",
+    "wp_pass": "pw",
+    "basic_auth_user": "citytech",
+    "basic_auth_pass": "devsonly"
+  }
+}

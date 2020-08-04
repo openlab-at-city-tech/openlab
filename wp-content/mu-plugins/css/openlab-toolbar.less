@@ -45,6 +45,11 @@
 		.bold {
 			font-weight: 700;
 		}
+		.btn-primary {
+			color: #fff;
+			background-color: #444;
+			text-transform: none;
+		}
 		.fa {
 			color: #fff;
 			font-size: 14px;
@@ -213,6 +218,11 @@
 				top: 50px;
 				margin-top: 1px;
 				width: 600%;
+
+				&:empty {
+					display: none;
+				}
+
 				.ab-submenu {
 					padding: 0;
 					background: #fff;
@@ -730,9 +740,6 @@
 			margin: 0 auto;
 			.navbar-right {
 				&.search {
-					input[type="text"] {
-						width: 43%;
-					}
 					.btn {
 						height: 34px;
 						padding: 0 2%;
@@ -788,7 +795,7 @@
 			background: #fff;
 			display: none;
 			position: absolute;
-			right: 0;
+			right: -6px;
 			top: 65px;
 			width: 336px;
 			border: 1px solid @10gray;
@@ -796,6 +803,10 @@
 			.form-group {
 				margin-left: 18px;
 				padding: 5px 0;
+				width: 100%;
+			}
+			#search-terms-desktop-header {
+				width: 258px;
 			}
 			@media (max-width: @screen-xs-max) {
 				position: relative;
@@ -807,30 +818,26 @@
 						display: inline-block;
 						vertical-align: top;
 						&.search-terms-mobile {
-							width: 50%;
-						}
-						&.search-which-mobile {
-							width: 32%;
-							height: 35px;
+							width: calc(100% - 6% - 62px);
 						}
 					}
 				}
 			}
 		}
 		.search-trigger-wrapper {
-			height: 59px;
+			height: 63px;
 			position: absolute;
 			right: 0;
 			text-align: center;
-			width: 30px;
+			width: 100px;
 			cursor: pointer;
 			color: @70gray;
-			&:hover {
-				color: @aqua;
-			}
+			margin-right: -6px; /* align with Log Out */
 			.search-trigger {
 				display: block;
+				font-weight: 700;
 				outline: none;
+				width: 100%;
 				padding: 0 0 0 4px;
 				&:focus {
 					outline: thin dotted;
@@ -849,11 +856,11 @@
 				box-sizing: padding-box;
 				height: 67px;
 				z-index: 999999;
-				span {
-					color: @aqua;
-				}
 			}
 			@media (max-width: @screen-xs-max) {
+				height: 59px;
+				margin-right: 0;
+				width: 30px;
 				span {
 					line-height: 4;
 				}
@@ -1314,13 +1321,15 @@ body {
 	}
 }
 
-.interface-interface-skeleton {
-	top: 52px;
+.interface-interface-skeleton,
+.block-editor-editor-skeleton {
+	top: 112px;
 }
 
 .block-editor-block-toolbar {
 	overflow: hidden;
 }
+
 
 @media (min-width: 782px) {
 	#editor {
@@ -1334,6 +1343,10 @@ body {
 	}
 	.block-editor__container {
 		min-height: calc(100vh - 79px);
+	}
+	.interface-interface-skeleton,
+	.block-editor-editor-skeleton {
+		top: 52px;
 	}
 }
 @media screen and (min-width: 600px) and (max-width: 781px) {

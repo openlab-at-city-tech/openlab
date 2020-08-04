@@ -86,13 +86,13 @@ function bp_get_querystring( n ) {
  * Released under the MIT license
  */
 (function(factory) {
-	// AMD
+	// AMD.
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
-	// CommonJS
+	// CommonJS.
 	} else if (typeof exports === 'object') {
 		factory(require('jquery'));
-	// Browser globals
+	// Browser globals.
 	} else {
 		factory(jQuery);
 	}
@@ -135,7 +135,7 @@ function bp_get_querystring( n ) {
 
 	var config = $.cookie = function(key, value, options) {
 
-		// Write
+		// Write.
 
 		if (value !== undefined && !$.isFunction(value)) {
 			options = $.extend({}, config.defaults, options);
@@ -154,7 +154,7 @@ function bp_get_querystring( n ) {
 			].join(''));
 		}
 
-		// Read
+		// Read.
 
 		var result = key ? undefined : {};
 
@@ -209,13 +209,13 @@ function bp_get_querystring( n ) {
  */
 
 (function(factory) {
-	// AMD
+	// AMD.
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
-	// CommonJS
+	// CommonJS.
 	} else if (typeof exports === 'object') {
 		factory(require('jquery'));
-	// Browser globals
+	// Browser globals.
 	} else {
 		factory(jQuery);
 	}
@@ -232,13 +232,13 @@ function bp_get_querystring( n ) {
 	};
 
 	// Returns the element that needs to be animated to scroll the window.
-	// Kept for backwards compatibility (specially for localScroll & serialScroll)
+	// Kept for backwards compatibility (specially for localScroll & serialScroll).
 	$scrollTo.window = function() {
 		return $(window)._scrollable();
 	};
 
 	// Hack, hack, hack :)
-	// Returns the real elements to scroll (supports window/iframes, documents and regular nodes)
+	// Returns the real elements to scroll (supports window/iframes, documents and regular nodes).
 	$.fn._scrollable = function() {
 		return this.map(function() {
 			var elem = this,
@@ -270,12 +270,12 @@ function bp_get_querystring( n ) {
 		}
 
 		settings = $.extend({}, $scrollTo.defaults, settings);
-		// Speed is still recognized for backwards compatibility
+		// Speed is still recognized for backwards compatibility.
 		duration = duration || settings.duration;
-		// Make sure the settings are given right
+		// Make sure the settings are given right.
 		settings.queue = settings.queue && settings.axis.length > 1;
 
-		// Let's keep the overall duration
+		// Let's keep the overall duration.
 		if (settings.queue) {
 			duration /= 2;
 		}
@@ -285,7 +285,7 @@ function bp_get_querystring( n ) {
 
 		return this._scrollable().each(function() {
 
-			// Null target yields nothing, just like jQuery does
+			// Null target yields nothing, just like jQuery does.
 			if (target === null) {
 				return;
 			}
@@ -296,7 +296,7 @@ function bp_get_querystring( n ) {
 					win = $elem.is('html,body');
 
 			switch (typeof targ) {
-				// A number will pass the regex
+				// A number will pass the regex.
 				case 'number':
 				case 'string':
 					if (/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)) {
@@ -311,9 +311,9 @@ function bp_get_querystring( n ) {
 					}
 					/* falls through */
 				case 'object':
-					// DOMElement / jQuery
+					// DOMElement / jQuery.
 					if (targ.is || targ.style) {
-						// Get the real position of the target
+						// Get the real position of the target.
 						toff = (targ = $(targ)).offset();
 					}
 			}
@@ -327,10 +327,10 @@ function bp_get_querystring( n ) {
 						old = elem[key],
 						max = $scrollTo.max(elem, axis);
 
-				if (toff) {// jQuery / DOMElement
+				if (toff) { // jQuery / DOMElement.
 					attr[key] = toff[pos] + (win ? 0 : old - $elem.offset()[pos]);
 
-					// If it's a dom element, reduce the margin
+					// If it's a dom element, reduce the margin.
 					if (settings.margin) {
 						attr[key] -= parseInt(targ.css('margin' + Pos)) || 0;
 						attr[key] -= parseInt(targ.css('border' + Pos + 'Width')) || 0;
@@ -338,29 +338,29 @@ function bp_get_querystring( n ) {
 
 					attr[key] += offset[pos] || 0;
 
-					// Scroll to a fraction of its width/height
+					// Scroll to a fraction of its width/height.
 					if (settings.over[pos]) {
 						attr[key] += targ[axis === 'x' ? 'width' : 'height']() * settings.over[pos];
 					}
 				} else {
 					var val = targ[pos];
-					// Handle percentage values
+					// Handle percentage values.
 					attr[key] = val.slice && val.slice(-1) === '%' ?
 							parseFloat(val) / 100 * max
 							: val;
 				}
 
-				// Number or 'number'
+				// Number or 'number'.
 				if (settings.limit && /^\d+$/.test(attr[key])) {
 					// Check the limits
 					attr[key] = attr[key] <= 0 ? 0 : Math.min(attr[key], max);
 				}
 
-				// Queueing axes
+				// Queueing axes.
 				if (!i && settings.queue) {
 					// Don't waste time animating, if there's no need.
 					if (old !== attr[key]) {
-						// Intermediate animation
+						// Intermediate animation.
 						animate(settings.onAfterFirst);
 					}
 					// Don't animate this axis again in the next iteration.
@@ -400,7 +400,7 @@ function bp_get_querystring( n ) {
 		return $.isFunction(val) || typeof val === 'object' ? val : {top: val, left: val};
 	}
 
-	// AMD requirement
+	// AMD requirement.
 	return $scrollTo;
 }));;jQuery(document).ready( function($) {
 
@@ -613,7 +613,7 @@ function bp_get_querystring( n ) {
     });
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like enviroments that support module.exports,
+    // only CommonJS-like environments that support module.exports,
     // like Node.
     module.exports = factory(require("jquery"));
   } else {
@@ -1049,7 +1049,7 @@ $.fn.caret.apis = methods;
  */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module unless amdModuleId is set
+    // AMD. Register as an anonymous module unless amdModuleId is set.
     define(["jquery"], function (a0) {
       return (factory(a0));
     });
@@ -2342,7 +2342,7 @@ window.bp = window.bp || {};
 				 * @since 2.1.0
 				 */
 				before_reposition: function( offset ) {
-					// get the iframe, if any, already applied with atwho
+					// get the iframe, if any, already applied with atwho.js library.
 					var caret,
 							line,
 							iframeOffset,
@@ -2364,7 +2364,7 @@ window.bp = window.bp || {};
 						caret = this.$inputor.caret( 'offset' );
 					}
 
-					// If the caret is past horizontal half, then flip it, yo
+					// If the caret is past horizontal half, then flip it, yo.
 					if ( caret.left > ( $body.width() / 2 ) ) {
 						$view.addClass( 'right' );
 						move = caret.left - offset.left - this.view.$el.width();
@@ -2373,15 +2373,15 @@ window.bp = window.bp || {};
 						move = caret.left - offset.left + 1;
 					}
 
-					// If we're on a small screen, scroll to caret
+					// If we're on a small screen, scroll to caret.
 					if ( $body.width() <= 400 ) {
 						$( document ).scrollTop( caret.top - 6 );
 					}
 
-					// New position is under the caret (never above) and positioned to follow
-					// Dynamic sizing based on the input area (remove 'px' from end)
+					// New position is under the caret (never above) and positioned to follow.
+					// Dynamic sizing based on the input area (remove 'px' from end).
 					line = parseInt( this.$inputor.css( 'line-height' ).substr( 0, this.$inputor.css( 'line-height' ).length - 2 ), 10 );
-					if ( !line || line < 5 ) { // sanity check, and catch no line-height
+					if ( !line || line < 5 ) { // Sanity check, and catch no line-height.
 						line = 19;
 					}
 
@@ -2390,11 +2390,11 @@ window.bp = window.bp || {};
 				},
 
 				/**
-				 * Override default behaviour which inserts junk tags in the WordPress Visual editor.
+				 * Override default behavior which inserts junk tags in the WordPress Visual editor.
 				 *
 				 * @param {unknown} $inputor Element which we're inserting content into.
-				 * @param {string) content The content that will be inserted.
-				 * @param {string) suffix Applied to the end of the content string.
+				 * @param {string} content The content that will be inserted.
+				 * @param {string} suffix Applied to the end of the content string.
 				 * @return {string}
 				 * @since 2.1.0
 				 */

@@ -31,7 +31,7 @@ class CWS_PageLinksTo {
 	const DISMISSED_NOTICES = 'page_links_dismissed_options';
 	const MESSAGE_ID = 4;
 	const NEWSLETTER_URL = 'https://pages.convertkit.com/8eb23c1339/1ce4614706';
-	const CSS_JS_VERSION = '3.2.2';
+	const CSS_JS_VERSION = '3.3.3';
 
 	/**
 	 * Whether to replace WP links with their specified URLs.
@@ -194,6 +194,7 @@ class CWS_PageLinksTo {
 			if ( self::is_supported_post_type( $type ) ) {
 				$this->register_meta( self::LINK_META_KEY, $type );
 				$this->register_meta( self::TARGET_META_KEY, $type );
+				do_action( 'page_links_to_register_meta_for_post_type', $type );
 			}
 		}
 	}
@@ -313,7 +314,9 @@ class CWS_PageLinksTo {
 	 * @return void
 	 */
 	public function wp_enqueue_scripts() {
-		wp_enqueue_script( 'page-links-to', $this->get_url() . 'dist/new-tab.js', array(), self::CSS_JS_VERSION, true );
+		if ( self::supports( 'new_tab' ) ) {
+			wp_enqueue_script( 'page-links-to', $this->get_url() . 'dist/new-tab.js', array(), self::CSS_JS_VERSION, true );
+		}
 	}
 
 	/**
@@ -337,7 +340,13 @@ class CWS_PageLinksTo {
 	public function enqueue_block_editor_assets() {
 		// Gutenberg.
 		if ( self::is_block_editor() && self::is_supported_post_type() ) {
-			wp_enqueue_script( 'plt-gutenberg', $this->get_url() . 'dist/block-editor.js', array( 'wp-edit-post', 'wp-element', 'wp-plugins' ), self::CSS_JS_VERSION, true );
+			wp_enqueue_script( 'plt-block-editor', $this->get_url() . 'dist/block-editor.js', array( 'wp-edit-post', 'wp-element', 'wp-plugins' ), self::CSS_JS_VERSION, true );
+			wp_localize_script( 'plt-block-editor', 'pltOptions', [
+				'supports' => [
+					'newTab' => self::supports( 'new_tab' ),
+				],
+			]);
+			do_action( 'page_links_to_enqueue_block_editor_assets' );
 		}
 	}
 
@@ -521,7 +530,9 @@ class CWS_PageLinksTo {
 		<p><label><input type="radio" id="cws-links-to-choose-custom" name="cws_links_to_choice" value="custom" <?php checked( $linked ); ?> /> <?php _e( 'A custom URL', 'page-links-to' ); ?></label></p>
 		<div id="cws-links-to-custom-section" class="<?php echo ! $linked ? 'hide-if-js' : ''; ?>">
 			<p><input placeholder="http://" name="cws_links_to" type="text" id="cws-links-to" value="<?php echo esc_attr( $url ); ?>" /></p>
-			<p><label for="cws-links-to-new-tab"><input type="checkbox" name="cws_links_to_new_tab" id="cws-links-to-new-tab" value="_blank" <?php checked( (bool) self::get_target( $post->ID ) ); ?>> <?php _e( 'Open this link in a new tab', 'page-links-to' ); ?></label></p>
+			<?php if ( $this->supports('new_tab') ) { ?>
+				<p><label for="cws-links-to-new-tab"><input type="checkbox" name="cws_links_to_new_tab" id="cws-links-to-new-tab" value="_blank" <?php checked( (bool) self::get_target( $post->ID ) ); ?>> <?php _e( 'Open this link in a new tab', 'page-links-to' ); ?></label></p>
+			<?php } ?>
 			<?php do_action( 'page_links_to_meta_box_bottom' ); ?>
 		</div>
 
@@ -539,6 +550,14 @@ class CWS_PageLinksTo {
 		return $this->save_post( $post_id );
 	}
 
+	public static function supports( $feature = '' ) {
+		switch( $feature ) {
+			case 'new_tab':
+			default:
+				return apply_filters( 'page_links_to_supports_' . $feature, true );
+		}
+	}
+
 	/**
 	 * Saves data on post save.
 	 *
@@ -550,7 +569,7 @@ class CWS_PageLinksTo {
 			if ( ( ! isset( $_POST['cws_links_to_choice'] ) || 'custom' == $_POST['cws_links_to_choice'] ) && isset( $_POST['cws_links_to'] ) && strlen( $_POST['cws_links_to'] ) > 0 && $_POST['cws_links_to'] !== 'http://' ) {
 				$url = self::clean_url( stripslashes( $_POST['cws_links_to'] ) );
 				self::set_link( $post_id, $url );
-				if ( isset( $_POST['cws_links_to_new_tab'] ) ) {
+				if ( isset( $_POST['cws_links_to_new_tab'] ) && self::supports( 'new_tab' ) ) {
 					self::set_link_new_tab( $post_id );
 				} else {
 					self::set_link_same_tab( $post_id );
@@ -644,7 +663,7 @@ class CWS_PageLinksTo {
 			if ( $meta_link ) {
 				$link = apply_filters( 'page_links_to_link', $meta_link, $post, $link );
 				$link = esc_url( $link );
-				if ( ! is_admin() && !  (defined( 'REST_REQUEST' ) && REST_REQUEST ) && self::get_target( $post->ID ) ) {
+				if ( self::supports( 'new_tab' ) && ! is_admin() && !  (defined( 'REST_REQUEST' ) && REST_REQUEST ) && self::get_target( $post->ID ) ) {
 					$link .= '#new_tab';
 				}
 			}
@@ -668,6 +687,18 @@ class CWS_PageLinksTo {
 	}
 
 	/**
+	 * Whether the request has a flag that should halt the redirect.
+	 *
+	 * @return bool
+	 */
+	function has_non_redirect_flag() {
+		return (
+			isset( $_GET['customize_theme'] ) ||
+			isset( $_GET['elementor-preview'] )
+		);
+	}
+
+	/**
 	 * Performs a redirect.
 	 *
 	 * @return void
@@ -675,7 +706,7 @@ class CWS_PageLinksTo {
 	function template_redirect() {
 		$link = self::get_redirect();
 
-		if ( $link ) {
+		if ( $link && !self::has_non_redirect_flag() ) {
 			do_action( 'page_links_to_redirect_url', get_queried_object_id(), $link );
 			wp_redirect( $link, 301 );
 			exit;

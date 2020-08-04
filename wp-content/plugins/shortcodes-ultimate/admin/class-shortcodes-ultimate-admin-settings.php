@@ -134,7 +134,9 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 			return;
 		}
 
-		wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+			wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+		}
 
 		wp_enqueue_style(
 			'shortcodes-ultimate-admin-settings',
@@ -287,6 +289,17 @@ final class Shortcodes_Ultimate_Admin_Settings extends Shortcodes_Ultimate_Admin
 				'section'     => $this->plugin_prefix . 'advanced',
 				'title'       => __( 'Hide deprecated shortcodes', 'shortcodes-ultimate' ),
 				'description' => __( 'This option hides all deprecated shortcodes from the Insert Shortcode window and at the Available Shortcodes page. Hidden shortcodes will continue to work.', 'shortcodes-ultimate' ),
+			);
+
+			$this->plugin_settings[] = array(
+				'id'          => 'su_option_do_nested_shortcodes_alt',
+				'type'        => 'checkbox',
+				'sanitize'    => array( $this, 'sanitize_checkbox' ),
+				'page'        => $this->plugin_prefix . 'advanced-settings',
+				'group'       => $this->plugin_prefix . 'advanced-settings',
+				'section'     => $this->plugin_prefix . 'advanced',
+				'title'       => __( 'Nested shortcodes alternative mode', 'shortcodes-ultimate' ),
+				'description' => __( 'This option enables alternative (deprecated) mode for nested shortcodes.', 'shortcodes-ultimate' ),
 			);
 
 		}

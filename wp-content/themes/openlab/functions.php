@@ -15,8 +15,6 @@ function openlab_core_setup() {
     ));
 }
 
-// test
-
 add_action('after_setup_theme', 'openlab_core_setup');
 
 /* * creating a library to organize functions* */
@@ -25,6 +23,8 @@ require_once( STYLESHEETPATH . '/lib/core/page-control.php' );
 require_once( STYLESHEETPATH . '/lib/core/frontend-admin.php' );
 require_once( STYLESHEETPATH . '/lib/core/backend-admin.php' );
 
+require_once( STYLESHEETPATH . '/lib/wp-background-processing/wp-background-processing.php' );
+require_once( STYLESHEETPATH . '/lib/clone-wp-async-process.php' );
 require_once( STYLESHEETPATH . '/lib/course-clone.php' );
 require_once( STYLESHEETPATH . '/lib/header-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/post-types.php' );
@@ -42,6 +42,9 @@ require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
+
+// Initialize async cloning.
+openlab_clone_async_process();
 
 function openlab_load_scripts() {
     $stylesheet_dir_uri = get_stylesheet_directory_uri();
@@ -87,16 +90,14 @@ function openlab_load_scripts() {
         wp_register_script( 'openlab-validators', $stylesheet_dir_uri . '/js/validators.js', array('parsley') );
     }
 
-    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) ) {
+    if ( is_page( 'people' ) || is_page( 'courses' ) || is_page( 'projects' ) || is_page( 'clubs' ) || is_page( 'portfolios' ) || openlab_is_search_results_page() ) {
         wp_enqueue_script( 'openlab-directory', $stylesheet_dir_uri . '/js/directory.js', array( 'jquery' ) );
         wp_localize_script(
             'openlab-directory',
-            'OLAcademicUnits',
-            array(
-                'departments'       => openlab_get_entity_departments(),
-                'currentSchool'     => isset( $_GET['school'] ) ? wp_unslash( $_GET['school'] ) : '',
-                'currentDepartment' => isset( $_GET['department'] ) ? wp_unslash( $_GET['department'] ) : '',
-            )
+            'OLDirectory',
+			[
+				'groupTypeDisabledFilters' => openlab_group_type_disabled_filters(),
+            ]
         );
     }
 
@@ -338,32 +339,6 @@ function openlab_notify_group_members_of_this_action() {
 }
 
 /**
- * Add support for 'Cloneable Courses' filter in group directories.
- */
-add_filter(
-	'bp_before_has_groups_parse_args',
-	function( $args ) {
-		if ( ! isset( $_GET['group_badge'] ) || 'cloneable' !== $_GET['group_badge'] ) {
-			return $args;
-		}
-
-		remove_filter( 'bp_before_has_groups_parse_args', array( 'OpenLab\Badges\Template', 'filter_group_args' ) );
-
-
-		$mq   = $args['meta_query'] ?: [];
-		$mq[] = [
-			'key'   => 'enable_sharing',
-			'value' => '1',
-		];
-
-		$args['meta_query'] = $mq;
-		return $args;
-	},
-	5
-
-);
-
-/**
  * Prevent wpautop from running on group description excerpts.
  *
  * This breaks the markup necessary for auto-truncation.
@@ -376,3 +351,10 @@ add_filter(
 	},
 	0
 );
+
+/**
+ * Is this the search results page?
+ */
+function openlab_is_search_results_page() {
+	return is_page( 'search' );
+}

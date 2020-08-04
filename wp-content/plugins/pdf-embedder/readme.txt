@@ -203,6 +203,12 @@ the Plugins section of your Wordpress admin
 
 == Changelog ==
 
+= 4.6 =
+
+Fix language compatibility issue in viewer
+Fixes js and css files cache issue
+Added compatibility for Wordpress 5.3.2
+
 = 4.5 =
 
 Added compatibility for Wordpress 5.3

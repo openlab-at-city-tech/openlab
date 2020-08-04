@@ -12,9 +12,9 @@
 
 <?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
 
-<?php if (!bp_get_new_group_id()) : ?>
+<?php if ( ! bp_get_new_group_id() ) : ?>
     <form action="<?php bp_group_permalink(groups_get_current_group()) ?>/invite-anyone/send/" method="post" class="form-panel" id="send-invite-form">
-    <?php endif; ?>
+<?php endif; ?>
 
     <div id="topgroupinvite" class="panel panel-default">
         <div class="panel-heading semibold">Invite OpenLab Members to Your <?php echo ucfirst($group_type); ?></div>
@@ -111,7 +111,7 @@
     }
     ?>
 
-    <?php if (!bp_get_new_group_id()) : ?>
+<?php if (!bp_get_new_group_id()) : ?>
     </form>
 <?php endif; ?>
 
@@ -127,7 +127,10 @@
 		$import_results = groups_get_groupmeta( bp_get_current_group_id(), 'import_' . $import_id );
 	}
 	?>
-	<form method="post" id="import-members-form" class="form-panel" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
+	<?php if ( ! bp_get_new_group_id() ) : ?>
+		<form method="post" id="import-members-form" class="form-panel" action="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>invite-anyone/">
+	<?php endif; ?>
+
 		<div class="panel panel-default">
 			<div class="panel-heading semibold">Import Members to Your Course</div>
 			<div class="panel-body">
@@ -230,5 +233,8 @@
 		</div>
 
 		<?php wp_nonce_field( 'group_import_members', 'group-import-members-nonce' ) ?>
-	</form>
+
+	<?php if ( ! bp_get_new_group_id() ) : ?>
+		</form>
+	<?php endif; ?>
 <?php endif; ?>

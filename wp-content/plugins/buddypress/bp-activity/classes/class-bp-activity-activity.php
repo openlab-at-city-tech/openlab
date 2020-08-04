@@ -268,10 +268,30 @@ class BP_Activity_Activity {
 				return false;
 			} else {
 				if ( empty( $this->component ) ) {
-					$this->errors->add( 'bp_activity_missing_component' );
+					$this->errors->add( 'bp_activity_missing_component', __( 'You need to define a component parameter to insert activity.', 'buddypress' ) );
 				} else {
-					$this->errors->add( 'bp_activity_missing_type' );
+					$this->errors->add( 'bp_activity_missing_type', __( 'You need to define a type parameter to insert activity.', 'buddypress' ) );
 				}
+
+				return $this->errors;
+			}
+		}
+
+		/**
+		 * Use this filter to make the content of your activity required.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param bool   $value True if the content of the activity type is required.
+		 *                      False otherwise.
+		 * @param string $type  The type of the activity we are about to insert.
+		 */
+		$type_requires_content = (bool) apply_filters( 'bp_activity_type_requires_content', $this->type === 'activity_update', $this->type );
+		if ( $type_requires_content && ! $this->content ) {
+			if ( 'bool' === $this->error_type ) {
+				return false;
+			} else {
+				$this->errors->add( 'bp_activity_missing_content', __( 'Please enter some content to post.', 'buddypress' ) );
 
 				return $this->errors;
 			}
@@ -364,7 +384,16 @@ class BP_Activity_Activity {
 
 		// Backward compatibility with old method of passing arguments.
 		if ( !is_array( $args ) || count( $function_args ) > 1 ) {
-			_deprecated_argument( __METHOD__, '1.6', sprintf( __( 'Arguments passed to %1$s should be in an associative array. See the inline documentation at %2$s for more details.', 'buddypress' ), __METHOD__, __FILE__ ) );
+			_deprecated_argument(
+				__METHOD__,
+				'1.6',
+				sprintf(
+					/* translators: 1: the name of the method. 2: the name of the file. */
+					__( 'Arguments passed to %1$s should be in an associative array. See the inline documentation at %2$s for more details.', 'buddypress' ),
+					__METHOD__,
+					__FILE__
+				)
+			);
 
 			$old_args_keys = array(
 				0 => 'max',

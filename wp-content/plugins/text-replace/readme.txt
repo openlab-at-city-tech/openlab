@@ -3,10 +3,10 @@ Contributors: coffee2code
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
 Tags: text, replace, shortcut, shortcuts, post, post content, coffee2code
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.7
-Tested up to: 4.9
-Stable tag: 3.8
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 4.9
+Tested up to: 5.3
+Stable tag: 3.9
 
 Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
 
@@ -36,9 +36,6 @@ Otherwise, you risk proper but undesired replacements:
 
 Would have the effect of changing "His majesty" to "Hellos majesty".
 
-* List the more specific matches early, to avoid stomping on another of your shortcuts. For example, if you have both
-`:p` and `:pout:` as shortcuts, put `:pout:` first, otherwise, the `:p` will match against all the `:pout:` in your text.
-
 * If you intend to use this plugin to handle smilies, you should probably disable WordPress's default smilie handler.
 
 * This plugin is set to filter the_content, the_excerpt, widget_text, and optionally, get_comment_text and get_comment_excerpt. The filter 'c2c_text_replace_filters' can be used to add or modify the list of filters affected.
@@ -49,7 +46,7 @@ Would have the effect of changing "His majesty" to "Hellos majesty".
 
 * However, a benefit of the replacement text not being saved to the database and instead evaluated when the data is being loaded into a web page is that if the replacement text is modified, all pages making use of the shortcut will henceforth use the updated replacement text.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [GitHub](https://github.com/coffe2code/text-replace/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [GitHub](https://github.com/coffee2code/text-replace/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -72,7 +69,7 @@ Yes, if they include strings that you've now defined as shortcuts.
 
 = What post fields get handled by this plugin? =
 
-By default, the plugin filters the post content, post excerpt fields, widget text, and optionally comments and comment excerpts. You can use the 'c2c_text_replace_filters' filter to modify that behavior (see Filters section).
+By default, the plugin filters the post content, post excerpt fields, widget text, and optionally comments and comment excerpts. You can use the 'c2c_text_replace_filters' filter to modify that behavior (see Hooks section).
 
 = How can I get text replacements to apply for post titles (or something not text-replaced by default)? =
 
@@ -88,7 +85,7 @@ add_filter( 'c2c_text_replace_filters', 'more_text_replacements' );
 
 = Is the plugin case sensitive? =
 
-By default, yes. There is a setting you can change to make it case insensitive. Or you can use the 'c2c_text_replace_case_sensitive' filter (see Filters section).
+By default, yes. There is a setting you can change to make it case insensitive. Or you can use the 'c2c_text_replace_case_sensitive' filter (see Hooks section).
 
 = I use :wp: all the time as a shortcut for WordPress, but when I search posts for the term "WordPress", I don't see posts where I used the shortcut; why not? =
 
@@ -96,7 +93,11 @@ Rest assured search engines will see those posts since they only ever see the po
 
 = Will all instances of a given term be replaced in a single post? =
 
-By default, yes. There is a setting you can change so that only the first occurrence of the term in the post gets replaced. Or if you are a coder, you can use the 'c2c_text_replace_once' filter (see Filters section).
+By default, yes. There is a setting you can change so that only the first occurrence of the term in the post gets replaced. Or if you are a coder, you can use the 'c2c_text_replace_once' filter (see Hooks section).
+
+= Does this plugin explicitly support any third-party plugins? =
+
+Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. This plugin provides hooks that can be used to enable compatibility with other plugins and themes.
 
 = Does this plugin include unit tests? =
 
@@ -110,7 +111,7 @@ Yes.
 
 == Hooks ==
 
-The plugin exposes five filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
+The plugin exposes a number of filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
 
 **c2c_text_replace_filters (filter)**
 
@@ -134,6 +135,57 @@ function more_text_replacements( $filters ) {
 	return $filters;
 }
 add_filter( 'c2c_text_replace_filters', 'more_text_replacements' );
+`
+
+**c2c_text_replace_third_party_filters (filter)**
+
+The 'c2c_text_replace_third_party_filters' hook allows you to customize what third-party hooks get text replacement applied to them. Note: the results of this filter are then passed through the `c2c_text_replace_filters` filter, so third-party filters can be modified using either hook.
+
+Arguments:
+
+* $filters (array): The third-party filters whose text should have text replacement applied. Default `array( 'acf/format_value/type=text', 'acf/format_value/type=textarea', 'acf/format_value/type=url', 'acf_the_content', 'elementor/frontend/the_content', 'elementor/widget/render_content' )`.
+
+Example:
+
+`
+/**
+ * Stop text replacements for ACF text fields and add text replacements for a custom filter.
+ *
+ * @param array $filters
+ * @return array
+ */
+function my_c2c_text_replace_third_party_filters( $filters ) {
+	// Remove a filter already in the list.
+	unset( $filters[ 'acf/format_value/type=text' ] );
+	// Add a filter to the list.
+	$filters[] = 'my_plugin_filter';
+	return $filters;
+}
+add_filter( 'c2c_text_replace_third_party_filters', 'my_c2c_text_replace_third_party_filters' );
+`
+
+**c2c_text_replace_filter_priority (filter)**
+
+The 'c2c_text_replace_filter_priority' hook allows you to override the default priority for the 'c2c_text_replace' filter.
+
+Arguments:
+
+* $priority (int): The priority for the 'c2c_text_replace' filter. The default value is 2.
+* $filter (string): The filter name.
+
+Example:
+
+`
+/**
+ * Change the default priority of the 'c2c_text_replace' filter to run after most other plugins.
+ *
+ * @param int $priority The priority for the 'c2c_text_replace' filter.
+ * @return int
+ */
+function my_change_priority_for_c2c_text_replace( $priority, $filter ) {
+	return 1000;
+}
+add_filter( 'c2c_text_replace_filter_priority', 'my_change_priority_for_c2c_text_replace', 10, 2 );
 `
 
 **c2c_text_replace (filter)**
@@ -206,6 +258,58 @@ add_filter( 'c2c_text_replace_once', '__return_true' );`
 
 
 == Changelog ==
+
+= 3.9 (2020-01-15) =
+Highlights:
+* This feature release adds support for Advanced Custom Fields and Elementor, adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, adds a number of filters, updates compatibility to be WP 4.9-5.3+, and more.
+
+Details:
+* New: Add support for third-party plugins: Advanced Custom Fields, Elementor
+* New: Add filter `c2c_text_replace_third_party_filters` for filtering third party filters
+* New: Add new setting to allow control over when text replacements are handled early or late in text processing process
+* New: Add filter `c2c_text_replace_filter_priority` for filtering hook priority for text replacement handler
+* Fix: Ensure the lack of any defined replacements doesn't remove zeroes from text
+* Change: Alter handling of `replace_once` value to ensure a valid value is used as arg for `preg_replace()`
+* Change: Initialize plugin on `plugins_loaded` action instead of on load
+* Change: Remove plugin setting page help text indicating order matters (it hasn't since v3.8)
+* Change: Update plugin framework to 050
+    * 050:
+    * Allow a hash entry to literally have '0' as a value without being entirely omitted when saved
+    * Output donation markup using `printf()` rather than using string concatenation
+    * Update copyright date (2020)
+    * Note compatibility through WP 5.3+
+    * Drop compatibility with version of WP older than 4.9
+    * 049:
+    * Correct last arg in call to `add_settings_field()` to be an array
+    * Wrap help text for settings in `label` instead of `p`
+    * Only use `label` for help text for checkboxes, otherwise use `p`
+    * Ensure a `textarea` displays as a block to prevent orphaning of subsequent help text
+    * Note compatibility through WP 5.1+
+    * Update copyright date (2019)
+* New: Add CHANGELOG.md and move all but most recent changelog entries into it
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it (and add more items to the list)
+* New: Add inline documentation for hooks
+* Unit tests:
+    * New: Add `capture_filter_value()` as a method for capturing default values provided for a filter
+    * New: Add `get_filter_names()` as a helper method for getting the default and third-party filter names
+    * New: Add `unhook_default_filters()` as a helper method to unhook plugin's default filters hooked to `text_replace()`
+    * New: Add tests for setting defaults
+    * New: Add text_to_replace example values to verify replacement to 0 and an empty string are valid
+    * New: Add failing tests for replacements affecting shortcode tags and shortcode attributes (though current behavior may be desired)
+    * New: Add failing test for replacement text itself getting a replacement (though current behavior may be desired)
+    * New: Add new `test_does_not_replace_within_markup_attributes()`
+    * Change: Rename old `test_does_not_replace_within_markup_attributes()` to `test_does_not_replace_within_markup_attributes_but_does_between_tags()`
+    * Change: Update unit test install script and bootstrap to use latest WP unit test repo
+    * Change: Explicitly check hook priority when checking that hook is registered
+    * Change: Update some inline docs and function names to reflect their relevance to this plugin (and not to the plugin they were copied from)
+    * Fix: Fix unit test function name so that it is treated as a unit test
+* Change: Note compatibility through WP 5.3+
+* Change: Drop compatibility with version of WP older than 4.9
+* Change: Tweak some documentation in readme.txt
+* Change: Update copyright date (2020)
+* Change: Update License URI to be HTTPS
+* Change: Split paragraph in README.md's "Support" section into two
+* Fix: Correct typo in GitHub URL
 
 = 3.8 (2018-07-14) =
 Highlights:
@@ -280,190 +384,14 @@ Details:
 * Change: Dropped compatibility with version of WP older than 4.1.
 * Change: Update copyright date (2016).
 
-= 3.6.1 (2015-02-19) =
-* Revert back to using `dirname(__FILE__)`; __DIR__ is only PHP 5.3+
+_Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-replace/blob/master/CHANGELOG.md)._
 
-= 3.6 (2015-02-18) =
-* Improve support of '&' in text to be replaced by recognizing its encoded alternatives ('&amp;', '&#038;') as equivalents
-* Support replacing multibyte strings. NOTE: Multibyte strings don't honor limiting their replacement within a piece of text to once
-* Update plugin framework to 039
-* Add more unit tests
-* Explicitly declare `activation()` static
-* Cast filtered value of 'c2c_text_replace' filter as array
-* Reformat plugin header
-* Use __DIR__ instead of `dirname(__FILE__)`
-* Change regex delimiter from '|' to '~'
-* Change documentation links to wp.org to be https
-* Minor documentation spacing changes throughout
-* Note compatibility through WP 4.1+
-* Update copyright date (2015)
-* Add plugin icon
-* Regenerate .pot
-
-= 3.5.1 (2014-01-28) =
-* Fix logic evaluation to properly honor case_sensitive and replace_once checkbox values
-
-= 3.5 (2014-01-05) =
-* Fix to allow case insensitivity to work when the text being replaced includes HTML
-* Add setting to allow limiting text replacement to once per term per text
-* Add filter 'c2c_text_replace_once'
-* Change to just-in-time (rather than on init) determination if comments should be filtered
-* Add text_replace_comment_text()
-* Add unit tests
-* Update plugin framework to 037
-* Better singleton implementation:
-    * Add `get_instance()` static method for returning/creating singleton instance
-    * Make static variable 'instance' private
-    * Make constructor protected
-    * Make class final
-    * Additional related changes in plugin framework (protected constructor, erroring `__clone()` and `__wakeup()`)
-* Add checks to prevent execution of code if file is directly accessed
-* Re-license as GPLv2 or later (from X11)
-* Add 'License' and 'License URI' header tags to readme.txt and plugin file
-* Use explicit path for require_once()
-* Discontinue use of PHP4-style constructor
-* Discontinue use of explicit pass-by-reference for objects
-* Remove ending PHP close tag
-* Documentation improvements
-* Minor code reformatting (spacing)
-* Note compatibility through WP 3.8+
-* Drop compatibility with version of WP older than 3.6
-* Update copyright date (2014)
-* Regenerate .pot
-* Change donate link
-* Add assets directory to plugin repository checkout
-* Update screenshot
-* Move screenshot into repo's assets directory
-* Add banner
-
-= 3.2.2 =
-* Fix bug where special characters were being double-escaped prior to use in regex
-* Update plugin framework to 034
-* Minor readme.txt formatting tweaks
-
-= 3.2.1 =
-* Fix bug where $x (where x is number) when used in replacement text gets removed on display
-* Fix to properly escape shortcut keys prior to internal use in preg_replace()
-* Change default for case_sensitive to true
-* Add handle_plugin_upgrade() to fix logic inversion for case_sensitive setting
-* Fix incorrect help text (inverted logic) for case_sensitive setting
-* Update plugin framework to 032
-* Regenerate .pot
-
-= 3.2 =
-* Fix bug with settings form not appearing in MS
-* Update plugin framework to 030
-* Remove support for 'c2c_text_replace' global
-* Note compatibility through WP 3.3+
-* Drop support for versions of WP older than 3.1
-* Regenerate .pot
-* Add 'Domain Path' directive to top of main plugin file
-* Add link to plugin directory page to readme.txt
-* Update copyright date (2012)
-
-= 3.1.1 =
-* Fix cross-browser (namely IE) handling of non-wrapping textarea text (flat out can't use CSS for it)
-* Update plugin framework to version 028
-* Change parent constructor invocation
-* Create 'lang' subdirectory and move .pot file into it
-* Regenerate .pot
-
-= 3.1 =
-* Fix to properly register activation and uninstall hooks
-* Update plugin framework to version v023
-* Save a static version of itself in class variable $instance
-* Deprecate use of global variable $c2c_text_replace to store instance
-* Add __construct() and activation()
-* Note compatibility through WP 3.2+
-* Drop compatibility with version of WP older than 3.0
-* Minor code formatting changes (spacing)
-* Fix plugin homepage and author links in description in readme.txt
-
-= 3.0.2 =
-* Update plugin framework to version 021
-* Delete plugin options upon uninstallation
-* Explicitly declare all class functions public static
-* Note compatibility through WP 3.1+
-* Update copyright date (2011)
-
-= 3.0.1 =
-* Update plugin framework to version 018
-* Fix so that textarea displays vertical scrollbar when lines exceed visible textarea space
-
-= 3.0 =
-* Re-implementation by extending C2C_Plugin_012, which among other things adds support for:
-    * Reset of options to default values
-    * Better sanitization of input values
-    * Offload of core/basic functionality to generic plugin framework
-    * Additional hooks for various stages/places of plugin operation
-    * Easier localization support
-* Full localization support
-* Allow for replacement of tags, not just text wrapped by tags
-* Disable auto-wrapping of text in the textarea input field for replacements
-* Support localization of strings
-* Add option to indicate if text replacement should be case sensitive. Default is true.
-* NOTE: The plugin is now by default case sensitive when searching for potential replacements
-* For text_replace(), remove 'case_sensitive' argument
-* Allow filtering of text replacements via 'c2c_text_replace' filter
-* Allow filtering of hooks that get text replaced via 'c2c_text_replace_filters' filter
-* Allow filtering/overriding of text_replace_comments option via 'c2c_text_replace_comments' filter
-* Allow filtering/overriding of case_sensitive option via 'c2c_text_replace_case_sensitive' filter
-* Filter 'widget_text' for text replacement
-* Rename class from 'TextReplace' to 'c2c_TextReplace'
-* Assign object instance to global variable, $c2c_text_replace, to allow for external manipulation
-* Remove docs from top of plugin file (all that and more are in readme.txt)
-* Change description
-* Update readme
-* Minor code reformatting (spacing)
-* Add Filters and Upgrade Notice sections to readme.txt
-* Add .pot file
-* Update screenshot
-* Add PHPDoc documentation
-* Add package info to top of file
-* Update copyright date
-* Remove trailing whitespace
-
-= 2.5 =
-* Fixed path-related issue for options page
-* Added 'Settings' link for plugin on admin Plugins page
-* Changed permission check
-* More localization-related work
-* Minor code reformatting (spacing)
-* Removed hardcoded path
-* Updated copyright
-* Noted compatibility through 2.8+
-* Dropped compatibility with versions of WP older than 2.6
-
-= 2.0 =
-* Handled case where shortcut appears at the very beginning or ending of the text
-* Created its own class to encapsulate plugin functionality
-* Added an admin options page
-* Added option text_replace_comments (defaulted to false) to control whether text replacements should occur in comments
-* Tweaked description and installation instructions
-* Added compatibility note
-* Updated copyright date
-* Added readme.txt and screenshot
-* Tested compatibility with WP 2.3.3 and 2.5
-
-= 1.0 =
-* Moved the array $text_to_replace outside of the function and into global space
-* Renamed function from text_replace() to c2c_text_replace()
-* Added installation instruction and notes to plugin file
-* Verified that plugin works for WordPress v1.2+ and v1.5+
-
-= 0.92 =
-* Added optional argument $case_sensitive (defaulted to "false")
-* Changed from BSD-new to MIT license
-
-= 0.91 =
-* Removed the need to escape special characters used in the shortcut text. Now "?", "(", ")", "[", "]", etc can be used without problems. However, the backspace character "\" should be avoided.
-* Employed a new pattern for matching and replacing text. A huge advantage of this new matching pattern is that it won't match text in a tag (text appearing between "<" and ">").
-
-= 0.9 =
-* Initial release
 
 
 == Upgrade Notice ==
+
+= 3.9 =
+Feature update: added support for Advanced Custom Fields and Elementor, added new setting to allow the plugin to run later to avoid potential conflicts with other plugins, added a number of filters, updated compatibility to be WP 4.9-5.3+, added CHANGELOG.md and TODO.md, and more.
 
 = 3.8 =
 Recommended update: fixed to honor 'replace once' setting, including for multibyte strings; allow for whitespace in text to replace to represent any number of whitespace; updated plugin framework to v048; compatibility is now WP 4.7-4.9; added README.md; more.

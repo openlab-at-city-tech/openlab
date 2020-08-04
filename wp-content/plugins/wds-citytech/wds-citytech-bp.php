@@ -409,7 +409,10 @@ function openlab_pre_save_comment_activity( $activity ) {
 add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
- * Auto-enable BuddyPress Docs for all group types, except portfolios.
+ * Feature toggling for new groups.
+ *
+ * Groups with sites should have Docs, Discussion, Files disabled. Groups without sites
+ * should have these features enabled.
  */
 add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
 add_filter(
@@ -419,15 +422,34 @@ add_filter(
 			return;
 		}
 
-		$settings = apply_filters(
-			'bp_docs_default_group_settings',
-			array(
-				'group-enable' => 1,
-				'can-create'   => 'member',
-			)
-		);
+		$site_id = openlab_get_site_id_by_group_id( $group_id );
+		if ( $site_id ) {
+			// Discussion
+			groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
 
-		groups_update_groupmeta( $group_id, 'bp-docs', $settings );
+			// Files
+			groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
+
+			$doc_settings = apply_filters(
+				'bp_docs_default_group_settings',
+				array(
+					'group-enable' => 0,
+					'can-create'   => 'member',
+				)
+			);
+
+			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
+		} else {
+			$doc_settings = apply_filters(
+				'bp_docs_default_group_settings',
+				array(
+					'group-enable' => 1,
+					'can-create'   => 'member',
+				)
+			);
+
+			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
+		}
 	}
 );
 

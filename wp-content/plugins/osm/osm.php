@@ -3,7 +3,7 @@
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.HanBlog.net
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.HanBlog.net">OSM plugin page</a>.
-Version: 5.3.6
+Version: 5.4.4
 Author: MiKa
 Author URI: http://www.HanBlog.net
 Minimum WordPress Version Required: 3.0
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V5.3.6");
+define ("PLUGIN_VER", "V5.4.4");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -99,10 +99,10 @@ include ('osm-config.php');
 
 
 // do not edit this
-define ("Osm_TraceLevel", DEBUG_ERROR);
+//define ("Osm_TraceLevel", DEBUG_ERROR);
 //define ("Osm_TraceLevel", DEBUG_OFF);
 
-//define ("Osm_TraceLevel", DEBUG_INFO);
+define ("Osm_TraceLevel", DEBUG_ERROR);
 
 
 // If the function exists this file is called as upload_mimes.
@@ -160,9 +160,15 @@ function savePostMarker(){
   $zoom    = $_POST['map_zoom'];
   $BorderField = ' map_border="thin solid '.$_POST['map_border'].'" ';
   $MarkerId = $MarkerId;
-  $MapTypeField = 'type="'.$_POST['map_type'].'" ';
+  if ($_POST['map_type'] != ""){
+    $MapTypeField = 'type="'.$_POST['map_type'].'" ';
+  }
+  else {
+   $MapTypeField = "";
+  }
   $ControlField = ' control="'.$_POST['map_controls'].'" ';
-
+  $BckgrndImageField = ' bckgrndimg="'.$_POST['bckgrnd_image'].'" ';
+  
   if (!wp_verify_nonce($nonce, 'osm_marker_nonce')){
     echo "Error: Bad ajax request";
   }
@@ -176,7 +182,7 @@ function savePostMarker(){
     add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Icon', $MarkerIcon, true );
     add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Text', $MarkerText, true );
 
-    $GenTxt = '<br>'.'[osm_map_v3 map_center= "'.$MarkerLatLon.'" zoom="'.$zoom.'" width="95%" height="450" '.$BorderField.'post_markers="'.$MarkerId.'" '.$MapTypeField . $ControlField .']';
+    $GenTxt = '<br>'.'[osm_map_v3 map_center= "'.$MarkerLatLon.'" zoom="'.$zoom.'" width="95%" height="450" '.$BorderField.'post_markers="'.$MarkerId.'" '.$MapTypeField . $ControlField .$BckgrndImageField.']';
 
     echo $GenTxt;
   }
@@ -217,11 +223,15 @@ include('osm-icon-class.php');
 // with this namespace
 class Osm
 {
+  static $OSM_ErrorMsg;
+  
   function __construct(){
-  $this->localizionName = 'Osm';
-    //$this->TraceLevel = DEBUG_INFO;
-	$this->ErrorMsg = new WP_Error();
-	$this->initErrorMsg();
+  $this->localizionName = 'OSM';
+
+  // create error object and add our errors
+  self::$OSM_ErrorMsg = new WP_Error();
+  include('osm-error-msg.php');
+
 
     // add the WP action
     add_action('wp_head', array(&$this, 'wp_head'));
@@ -239,17 +249,9 @@ class Osm
     add_shortcode('osm_info',array(&$this, 'sc_info'));
   }
 
-  function initErrorMsg()
-  {
-    include('osm-error-msg.php');
-  }
-
   public static function traceErrorMsg($e = '')
   {
-   if (!isset($this) || $this == null){
-     return $e;
-   }
-   $EMsg = $this->ErrorMsg->get_error_message($e);
+   $EMsg = self::$OSM_ErrorMsg->get_error_message($e);
    if ($EMsg == null){
      return $e;
      //return__("Unknown errormessage",$this->localizionName);
@@ -374,6 +376,10 @@ var HTTP_GET_VARS = [];
       Osm::traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': did not add geo meta tags.');
     return;
     }
+    
+
+
+    
 
     // let's store geo data with W3 standard
 	echo "<meta name=\"ICBM\" content=\"{$lat}, {$lon}\" />\n";

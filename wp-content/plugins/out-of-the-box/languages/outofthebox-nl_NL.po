@@ -1,0 +1,4794 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Out-of-the-Box\n"
+"POT-Creation-Date: 2019-11-26 10:24+0100\n"
+"PO-Revision-Date: 2019-11-26 10:26+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: templates\n"
+"X-Poedit-SearchPath-1: out-of-the-box.php\n"
+"X-Poedit-SearchPath-2: skins\n"
+"X-Poedit-SearchPath-3: includes\n"
+
+#: includes/Admin.php:148 includes/Admin.php:203 out-of-the-box.php:570
+#: templates/admin.php:82 templates/admin.php:87 templates/admin_network.php:20
+#: templates/admin_network.php:25
+msgid "Settings"
+msgstr "Instellingen"
+
+#: includes/Admin.php:158 includes/Admin.php:161
+#: templates/admin_dashboard.php:8
+msgid "Reports"
+msgstr "Rapporten"
+
+#: includes/Admin.php:168 includes/Admin.php:171 templates/tinymce_popup.php:71
+#: templates/tinymce_popup.php:80 templates/tinymce_popup.php:83
+#: templates/tinymce_popup.php:86
+msgid "Shortcode Builder"
+msgstr "Shortcode Builder"
+
+#: includes/Admin.php:178 includes/Admin.php:181 includes/LinkUsers.php:28
+msgid "Link Private Folders"
+msgstr "Link Privemappen"
+
+#: includes/Admin.php:188 includes/Admin.php:191 includes/Admin.php:206
+#: templates/admin_filebrowser.php:5
+msgid "File Browser"
+msgstr "Bestandsbrowser"
+
+#: includes/Admin.php:235 includes/Admin.php:450 includes/Admin.php:459
+#: includes/Admin.php:467 includes/Admin.php:475
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Je hebt onvoldoende rechten om deze pagina te bekijken."
+
+#: includes/Admin.php:383
+#, php-format
+msgid ""
+"If you like %1$s please leave us a %2$s rating. A huge thanks in advance!"
+msgstr "Bevalt %1$s je? Geef ons dan een %2$s waardering. Alvast bedankt!"
+
+#: includes/Admin.php:383
+msgid "Out-of-the-Box"
+msgstr "Out-of-the-Box"
+
+#: includes/Admin.php:383
+msgid "Thanks :)"
+msgstr "Bedankt :)"
+
+#: includes/Admin.php:497
+msgid ""
+"The plugin is <strong>Activated</strong> and the <strong>Auto-Updater</"
+"strong> enabled"
+msgstr ""
+"De plugin is <strong>geactiveerd</strong> en de <strong>automatische update "
+"is</strong> ingeschakeld"
+
+#: includes/Admin.php:497
+msgid "Your purchase code"
+msgstr "Uw aankoopcode"
+
+#: includes/Admin.php:500
+msgid ""
+"The plugin is <strong>Not Activated</strong> and the <strong>Auto-Updater</"
+"strong> disabled"
+msgstr ""
+"De plugin is <strong>niet geactiveerd</strong> en de <strong>automatische "
+"update is</strong> uitgeschakeld"
+
+#: includes/Admin.php:500
+msgid "Please activate your copy in order to use the plugin"
+msgstr "Gelieve uw exemplaar te activeren om de plugin te kunnen gebruiken"
+
+#: includes/Admin.php:503
+msgid "Activate"
+msgstr "Activeer"
+
+#: includes/Admin.php:503
+msgid "Or insert your purchase code manually and press Activate"
+msgstr "Of voer uw aankoopcode handmatig in en druk op Activeren"
+
+#: includes/Admin.php:504
+msgid "Where can I find my purchase code?"
+msgstr "Waar vind ik de aankoopcode?"
+
+#: includes/Admin.php:508
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:395
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:128
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:128
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:128
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:128
+msgid "Check for updates"
+msgstr "Controleren op updates"
+
+#: includes/Admin.php:510
+msgid "Deactivate License"
+msgstr "Deactiveer licentie"
+
+#: includes/Admin.php:520
+msgid "Revoke"
+msgstr "Intrekken"
+
+#: includes/Admin.php:521
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: includes/Admin.php:522 templates/frontend.php:79 templates/gallery.php:70
+msgid "Refresh"
+msgstr "Vernieuwen"
+
+#: includes/Admin.php:530 includes/Admin.php:549 includes/Admin.php:563
+msgid "Account isn't linked to the plugin anymore."
+msgstr "Account is niet meer gekoppeld aan de plugin."
+
+#: includes/Admin.php:530 includes/Admin.php:549 includes/Admin.php:563
+msgid "Please re-authorize!"
+msgstr "Gelieve opnieuw te autoriseren!"
+
+#: includes/Admin.php:552
+msgid ""
+"If the problem persists, fall back to the default App via the settings on "
+"the Advanced tab"
+msgstr ""
+"Als het probleem aanhoudt, ga dan terug naar de standaardapplicatie via de "
+"instellingen op het tabblad Geavanceerd"
+
+#: includes/Admin.php:572
+#, php-format
+msgid ""
+"Your Dropbox account is not verified. Please take a look at %sthis Dropbox "
+"Article%s for more information how to verify your account"
+msgstr ""
+"Uw Dropbox account is niet geverifieerd. Kijk eens naar%sthis Dropbox Article"
+"%s voor meer informatie over het verifiëren van uw account"
+
+#: includes/Admin.php:581
+msgid "Out-of-the-Box uses a cache to improve performance"
+msgstr "Out-of-the-Box gebruikt een cache om de prestaties te verbeteren"
+
+#: includes/Admin.php:581
+msgid "If the plugin somehow is causing issues, try to reset the cache first"
+msgstr ""
+"Als de plugin op een of andere manier problemen veroorzaakt, probeer dan "
+"eerst de cache opnieuw in te stellen"
+
+#: includes/Admin.php:583 templates/admin.php:1038
+#: templates/admin_network.php:202
+msgid "Reset Cache"
+msgstr "Cache opnieuw instellen"
+
+#: includes/Admin.php:590
+msgid ""
+"Out-of-the-Box <u>requires at least PHP 5.5</u> to be able to use the "
+"Dropbox API Library"
+msgstr ""
+"Out-of-the-Box <u>vereist minstens PHP 5.5</u> om de Dropbox API-bibliotheek "
+"te kunnen gebruiken"
+
+#: includes/Admin.php:591
+msgid "You are using PHP version:"
+msgstr "U gebruikt PHP-versie:"
+
+#: includes/Admin.php:595
+msgid ""
+"You don't have the cURL PHP extension installed (couldn't find function "
+"\"curl_reset\"), please enable or install this extension"
+msgstr ""
+"U heeft de cURL PHP-extensie niet geïnstalleerd (kon de functie \"curl_reset"
+"\" niet vinden), schakel deze extensie in of installeer deze"
+
+#: includes/Admin.php:598
+#, php-format
+msgid "Cannot create the cache directory %s, or it is not writable"
+msgstr "Kan de cache directory %s niet schrijven"
+
+#: includes/Admin.php:599
+#, php-format
+msgid ""
+"Please check if the directory exists on your server and has %s writing "
+"permissions %s"
+msgstr ""
+"Controleer of de directory op uw server bestaat en %s schrijfrechten%s heeft"
+
+#: includes/Admin.php:601
+#, php-format
+msgid "Cannot find .htaccess file in cache directory %s"
+msgstr "Kan .htaccess bestand niet vinden in cache directory %s"
+
+#: includes/Admin.php:602
+#, php-format
+msgid ""
+"Please check if the file exists on your server or copy it from the %s folder"
+msgstr ""
+"Controleer of het bestand op uw server bestaat of kopieer het uit de %s map"
+
+#: includes/Admin.php:615
+#, php-format
+msgid "The plugin isn't longer linked to the %s account"
+msgstr "De plugin is niet langer gekoppeld aan het %s account"
+
+#: includes/Admin.php:616
+msgid "Refresh the authorization!"
+msgstr "Vernieuw de machtiging!"
+
+#: includes/Admin.php:633
+msgid "The plugin is not yet activated"
+msgstr "De plugin is nog niet geactiveerd"
+
+#: includes/Admin.php:633
+msgid "Please activate the plugin to manage the plugin settings"
+msgstr "Activeer de plugin om de plugin-instellingen te beheren"
+
+#: includes/Admin.php:634
+msgid "Activate the plugin!"
+msgstr "Activeer de plugin!"
+
+#: includes/Admin.php:657
+msgid "cURL installed but unable to retrieve version."
+msgstr "cURL geïnstalleerd, maar niet in staat om de versie te halen."
+
+#: includes/App.php:215
+msgid "error communicating with Dropbox API: "
+msgstr "Er is een fout opgetreden tijdens de communicatie met de Dropbox API: "
+
+#: includes/Client.php:763
+#, php-format
+msgid ""
+"The sharing permissions on this file is preventing you from accessing a %s "
+"shared link. Please contact the administrator to change the Dropbox sharing "
+"settings for this document."
+msgstr ""
+"De deelrechten op dit bestand verhinderen dat u toegang krijgt tot een %s "
+"gedeelde link. Neem contact op met de beheerder om de Dropbox-instellingen "
+"voor het delen van dit document te wijzigen."
+
+#: includes/Client.php:878 includes/Processor.php:416
+msgid "Failed to add folder"
+msgstr "De map kan niet worden aangemaakt"
+
+#: includes/Client.php:923 includes/Processor.php:359
+msgid "Failed to rename entry"
+msgstr "Het bestand kan niet worden hernoemd"
+
+#: includes/Client.php:1050 includes/Processor.php:332
+msgid "Failed to delete entry"
+msgstr "Het bestand kan niet worden verwijderd"
+
+#: includes/ContactForm7.php:64
+msgid "Generate a form-tag for a Out-of-the-Box Upload field."
+msgstr "Genereer een formulier-tag voor een Out-of-the-Box Upload veld."
+
+#: includes/ContactForm7.php:72 includes/ContactForm7.php:75
+msgid "Field type"
+msgstr "Veldtype"
+
+#: includes/ContactForm7.php:76
+msgid "Required field"
+msgstr "Verplicht veld"
+
+#: includes/ContactForm7.php:82 includes/LinkUsers.php:203
+#: templates/admin_dashboard.php:121 templates/admin_dashboard.php:205
+#: templates/frontend.php:122 templates/system_information.php:433
+#: templates/tinymce_popup.php:757
+msgid "Name"
+msgstr "Naam"
+
+#: includes/ContactForm7.php:87
+msgid "Out-of-the-Box Shortcode"
+msgstr "Bouw hier uw Out-of-the-Box shortcode"
+
+#: includes/ContactForm7.php:91 includes/GravityForms.php:133
+msgid "Build your Out-of-the-Box shortcode"
+msgstr "Bouw uw shortcode voor Out-of-the-Box"
+
+#: includes/ContactForm7.php:106
+msgid "Insert Tag"
+msgstr "Voeg label toe"
+
+#: includes/ContactForm7.php:172 includes/GravityForms.php:246
+#, php-format
+msgid "%d file(s) uploaded to %s:"
+msgstr "%d bestand(en) geüpload naar %s:"
+
+#: includes/ContactForm7.php:223 includes/UserFolders.php:293
+#: includes/WooCommerce.php:55
+msgid "Guests"
+msgstr "Gasten"
+
+#: includes/Events.php:426 includes/Events.php:443
+msgid "Visitors"
+msgstr "Bezoekers"
+
+#: includes/Events.php:432
+msgid "Visitor"
+msgstr "Bezoeker"
+
+#: includes/Events.php:432 includes/Events.php:449 includes/Events.php:516
+#: includes/Events.php:692 includes/Events.php:773
+msgid "Deleted"
+msgstr "Verwijderd"
+
+#: includes/Events.php:510 includes/Events.php:768
+msgid "A visitor"
+msgstr "Een bezoeker"
+
+#: includes/Events.php:646
+msgid "Previewed"
+msgstr "Bekeken"
+
+#: includes/Events.php:655
+msgid "Downloaded"
+msgstr "Gedownload"
+
+#: includes/Events.php:664
+msgid "Streamed"
+msgstr "Streams"
+
+#: includes/Events.php:674 templates/admin_dashboard.php:173
+msgid "Shared"
+msgstr "Gedeeld"
+
+#: includes/Events.php:683
+msgid "Renamed"
+msgstr "Hernoemd"
+
+#: includes/Events.php:701
+msgid "Created"
+msgstr "Gemaakt"
+
+#: includes/Events.php:710
+msgid "Updated metadata"
+msgstr "Metagegevens geüpdatet"
+
+#: includes/Events.php:719
+msgid "Moved"
+msgstr "Verplaatst"
+
+#: includes/Events.php:728
+msgid "Uploaded"
+msgstr "Geupload"
+
+#: includes/Events.php:737
+msgid "Searched"
+msgstr "Gezocht"
+
+#: includes/Events.php:773 templates/admin_dashboard.php:101
+#: templates/admin_dashboard.php:120 templates/admin_dashboard.php:204
+msgid "User"
+msgstr "Gebruiker"
+
+#: includes/Events.php:777
+msgid "folder"
+msgstr "map"
+
+#: includes/Events.php:777
+msgid "file"
+msgstr "bestand"
+
+#: includes/Events.php:795
+#, php-format
+msgid "%s previewed the %s %s"
+msgstr "%s heeft %s %s bekeken"
+
+#: includes/Events.php:801
+#, php-format
+msgid "%s downloaded the %s %s"
+msgstr "%s heeft %s %s gedownload"
+
+#: includes/Events.php:804
+#, php-format
+msgid "%s downloaded the %s %s as %s file"
+msgstr "%s heeft %s %s gedownload als %s bestand"
+
+#: includes/Events.php:808
+#, php-format
+msgid "%s streamed the %s %s"
+msgstr "%s heeft %s %s gestreamd"
+
+#: includes/Events.php:811
+msgid "Shared link"
+msgstr "Gedeelde links"
+
+#: includes/Events.php:812
+#, php-format
+msgid "%s created a %s for the %s %s"
+msgstr "%s heeft een %s gecreëerd voor %s %s"
+
+#: includes/Events.php:816
+#, php-format
+msgid "%s renamed the %s %s to %s"
+msgstr "%s heeft %s %s hernoemd naar %s"
+
+#: includes/Events.php:819
+#, php-format
+msgid "%s deleted the %s %s"
+msgstr "%s heeft %s %s verwijderd"
+
+#: includes/Events.php:822 includes/Events.php:832
+#, php-format
+msgid "%s added the %s %s in %s"
+msgstr "%s heeft %s %s toegevoegd in %s"
+
+#: includes/Events.php:826
+#, php-format
+msgid "%s updated the %s of the %s %s"
+msgstr "%s heeft %s veranderd van %s %s"
+
+#: includes/Events.php:829
+#, php-format
+msgid "%s moved the %s %s to %s"
+msgstr "%s heeft %s %s verplaatst naar %s"
+
+#: includes/Events.php:836
+#, php-format
+msgid "%s searched for \"%s\" in %s"
+msgstr "%s gezocht naar \"%s\" in %s"
+
+#: includes/Events.php:839
+#, php-format
+msgid "%s performed an action: %s"
+msgstr "%s heeft de volgende actie uitgevoerd: %s"
+
+#: includes/Events.php:912
+msgid "The file you are looking for cannot be found"
+msgstr "Dit bestand kan helaas niet meer worden gevonden"
+
+#: includes/Events.php:912
+msgid "The file is probably deleted from the cloud"
+msgstr "Het bestand is waarschijnlijk verwijderd uit de Cloud"
+
+#: includes/Events.php:996
+#, php-format
+msgid "Out-of-the-Box activity for %s"
+msgstr "Out-of-the-Box activiteit voor %s"
+
+#: includes/Events.php:1013 out-of-the-box.php:939
+msgid "Could not send email"
+msgstr "Kon geen e-mail versturen"
+
+#: includes/Filebrowser.php:90 includes/Gallery.php:61
+msgid "Previous folder"
+msgstr "Vorige map"
+
+#: includes/Filebrowser.php:192 includes/Gallery.php:137
+#, php-format
+msgid "Results for %s"
+msgstr "Resultaten voor %s"
+
+#: includes/Filebrowser.php:237 includes/Filebrowser.php:244
+#: includes/Gallery.php:111
+msgid "No files or folders found"
+msgstr "Geen bestanden of mappen gevonden"
+
+#: includes/Filebrowser.php:265 includes/Filebrowser.php:301
+msgid "Select folder"
+msgstr "Selecteer map"
+
+#: includes/Filebrowser.php:362 includes/Filebrowser.php:433
+#: includes/Filebrowser.php:627 includes/Filebrowser.php:630
+#: includes/Gallery.php:284 includes/Gallery.php:322 includes/Gallery.php:326
+#: skins/Default_Skin/Player.php:31 templates/admin_dashboard.php:146
+msgid "Download"
+msgstr "Download bestand"
+
+#: includes/Filebrowser.php:535
+msgid "Your browser does not support HTML5. You can only download this file"
+msgstr ""
+"Uw browser ondersteunt geen HTML5. U kunt dit bestand alleen downloaden"
+
+#: includes/Filebrowser.php:613 includes/Filebrowser.php:618
+msgid "Preview"
+msgstr "Bekijken"
+
+#: includes/Filebrowser.php:614 includes/Filebrowser.php:620
+msgid "Preview (new window)"
+msgstr "Bekijk in nieuw tabblad"
+
+#: includes/Filebrowser.php:635 includes/Gallery.php:331
+msgid "Share"
+msgstr "Delen"
+
+#: includes/Filebrowser.php:640 includes/Gallery.php:336 out-of-the-box.php:659
+msgid "Rename"
+msgstr "Hernoemen"
+
+#: includes/Filebrowser.php:645 includes/Gallery.php:341
+#: templates/frontend.php:58 templates/gallery.php:53
+msgid "Move to"
+msgstr "Verplaats naar"
+
+#: includes/Filebrowser.php:650 includes/Gallery.php:346 out-of-the-box.php:650
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: includes/Filebrowser.php:669 includes/Filebrowser.php:689
+#: includes/Gallery.php:363 out-of-the-box.php:662 templates/frontend.php:39
+#: templates/gallery.php:34
+msgid "Add folder"
+msgstr "Nieuwe map toevoegen"
+
+#: includes/Filebrowser.php:670
+msgid "Add a new folder in this directory"
+msgstr "Voeg een nieuwe map toe in deze map"
+
+#: includes/GravityForms.php:108
+msgid "Upload your Files"
+msgstr "Upload je bestanden"
+
+#: includes/GravityForms.php:143
+msgid "Out-of-the-Box Upload"
+msgstr ""
+
+#: includes/GravityForms.php:149
+msgid "Build here your Out-of-the-Box shortcode"
+msgstr "Bouw hier uw Out-of-the-Box shortcode"
+
+#: includes/GravityForms.php:168
+msgid "This field is required. Please upload your files."
+msgstr "Dit veld is verplicht. Gelieve uw bestanden te uploaden."
+
+#: includes/GravityForms.php:281
+msgid "Yes"
+msgstr "Ja"
+
+#: includes/GravityForms.php:282 includes/GravityForms.php:284
+msgid "No"
+msgstr "Nee"
+
+#: includes/Helpers.php:143 includes/Helpers.php:205 includes/LinkUsers.php:290
+#: includes/UserFolders.php:289 includes/WooCommerce.php:1054
+msgid "Anonymous user"
+msgstr "Anonieme gebruiker"
+
+#: includes/Helpers.php:206
+msgid "Everyone"
+msgstr "Iedereen"
+
+#: includes/Helpers.php:207 skins/Default_Skin/Player.php:49
+msgid "None"
+msgstr "Geen"
+
+#: includes/LinkUsers.php:202 templates/admin_dashboard.php:102
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: includes/LinkUsers.php:204
+msgid "Email"
+msgstr "Email"
+
+#: includes/LinkUsers.php:205
+msgid "Role"
+msgstr "Rol"
+
+#: includes/LinkUsers.php:206
+msgid "Private Folder"
+msgstr "Privémap"
+
+#: includes/LinkUsers.php:250
+#, php-format
+msgctxt "users"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] "Alle <span class=\"count\">(%s)</span>"
+msgstr[1] "Alle <span class=\"count\">(%s)</span>"
+
+#: includes/LinkUsers.php:268
+msgid "No role"
+msgstr "Geen rol"
+
+#: includes/LinkUsers.php:291
+msgid "Default folder for Guests and non-linked Users"
+msgstr "Standaardmap voor gasten en gebruikers die niet gelinkt zijn"
+
+#: includes/LinkUsers.php:371
+#, php-format
+msgid "Account with ID: %s not found"
+msgstr "Account met ID: %s niet gevonden"
+
+#: includes/LinkUsers.php:384
+msgid "Create link with Private Folder"
+msgstr "Maak een link aan met een Privemap"
+
+#: includes/LinkUsers.php:384
+msgid "Link to Private Folder"
+msgstr "Link naar Privemap"
+
+#: includes/LinkUsers.php:385
+msgid "Break link with Private Folder"
+msgstr "Verwijder link met Privemap"
+
+#: includes/LinkUsers.php:385
+msgid "Unlink"
+msgstr "Loskoppelen"
+
+#: includes/LinkUsers.php:400
+msgid "No users found."
+msgstr "Geen gebruikers gevonden."
+
+#: includes/LinkUsers.php:412
+msgctxt "no user roles"
+msgid "None"
+msgstr "Niemand"
+
+#: includes/Notification.php:193
+msgid "An anonymous user"
+msgstr "Een anonieme gebruiker"
+
+#: includes/Processor.php:166
+msgid "Out-of-the-Box needs your help!"
+msgstr "Out-of-the-Box heeft je aandacht nodig!"
+
+#: includes/Processor.php:166
+msgid "Authorize the plugin."
+msgstr "Volmachtig de App."
+
+#: includes/Processor.php:346
+msgid "Not all entries could be deleted"
+msgstr "Niet alle bestanden kunnen worden verwijderd"
+
+#: includes/Processor.php:350
+msgid "Entry was deleted"
+msgstr "Gegevens zijn verwijderd"
+
+#: includes/Processor.php:372
+msgid "Entry was renamed"
+msgstr "Gegevens zijn hernoemd"
+
+#: includes/Processor.php:384
+msgid "Failed to move"
+msgstr "Het bestand kan niet worden verplaatst"
+
+#: includes/Processor.php:400
+msgid "Not all entries could be moved"
+msgstr "Niet alle bestanden kunnen worden verplaatst"
+
+#: includes/Processor.php:404
+msgid "Successfully moved to new location"
+msgstr "Succesvol verplaatst naar nieuwe locatie"
+
+#: includes/Processor.php:431
+msgid "Folder"
+msgstr "Map"
+
+#: includes/Processor.php:431
+msgid "was added"
+msgstr "is toegevoegd"
+
+#: includes/Processor.php:493 out-of-the-box.php:648
+#: templates/tinymce_popup.php:626
+msgid "Start"
+msgstr "Start"
+
+#: includes/Processor.php:597 includes/Processor.php:758 out-of-the-box.php:885
+msgid "ERROR: Contact the Administrator to see this content"
+msgstr "FOUT: Neem contact op met de beheerder om deze inhoud te zien"
+
+#: includes/Processor.php:808
+msgid ""
+"To view the Dropbox folders, you need to have JavaScript enabled in your "
+"browser"
+msgstr "Om de Dropbox mappen te bekijken moet Javascript zijn ingeschakeld"
+
+#: includes/Processor.php:809
+msgid "To do so, please follow these instructions"
+msgstr "Volg hiervoor deze instructies om dit te doen"
+
+#: includes/Processor.php:819
+msgid "Use the Root Folder of your Account"
+msgstr "Gebruik de hoofdmap van uw account"
+
+#: includes/Processor.php:828
+msgid "Selected folder"
+msgstr "Geselecteerde map"
+
+#: includes/StorageInfo.php:16 out-of-the-box.php:643
+msgid "Unlimited"
+msgstr "Onbeperkt"
+
+#: includes/Upload.php:61
+msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini"
+msgstr ""
+"Dit bestand is te groot om te worden verzonden (php upload_max_filesize)"
+
+#: includes/Upload.php:62
+msgid ""
+"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in "
+"the HTML form"
+msgstr "Dit bestand is te groot om te worden verzonden (html max_file_size)"
+
+#: includes/Upload.php:63
+msgid "The uploaded file was only partially uploaded"
+msgstr "Het bestand is slechts gedeeltelijk geüpload"
+
+#: includes/Upload.php:64
+msgid "No file was uploaded"
+msgstr "Er zijn geen bestanden geüpload"
+
+#: includes/Upload.php:65
+msgid "Missing a temporary folder"
+msgstr "Het bestand kan niet worden weggeschreven (missing temp dir)"
+
+#: includes/Upload.php:66
+msgid "Failed to write file to disk"
+msgstr "Het bestand kan niet worden weggeschreven (no writeable temp dir )"
+
+#: includes/Upload.php:67
+msgid "A PHP extension stopped the file upload"
+msgstr "De bestandsoverdacht is gestopt"
+
+#: includes/Upload.php:68
+msgid "The uploaded file exceeds the post_max_size directive in php.ini"
+msgstr "Dit bestand is te groot om te worden verzonden (php post_max_filesize)"
+
+#: includes/Upload.php:69
+msgid "File is too big"
+msgstr "Het bestand is te groot"
+
+#: includes/Upload.php:70 out-of-the-box.php:678
+msgid "File is too small"
+msgstr "Het bestand is te klein"
+
+#: includes/Upload.php:71
+msgid "Filetype not allowed"
+msgstr "Dit bestandtype is niet toegestaan"
+
+#: includes/Upload.php:72 out-of-the-box.php:675
+msgid "Maximum number of files exceeded"
+msgstr "Maximale aantal uploads is bereikt"
+
+#: includes/Upload.php:73
+msgid "Image exceeds maximum width"
+msgstr "Afbeelding is te breed"
+
+#: includes/Upload.php:74
+msgid "Image requires a minimum width"
+msgstr "Afbeelding is te smal"
+
+#: includes/Upload.php:75
+msgid "Image exceeds maximum height"
+msgstr "Afbeelding is te hoog"
+
+#: includes/Upload.php:76
+msgid "Image requires a minimum height"
+msgstr "Afbeeldingshoogte is te laag"
+
+#: includes/Upload.php:103 includes/Upload.php:197
+msgid "You have reached your usage limit of"
+msgstr "U heeft uw upload limiet bereikt van"
+
+#: includes/Upload.php:146
+msgid "Not uploaded to Dropbox"
+msgstr "Niet geüpload naar Dropbox"
+
+#: includes/Upload.php:156
+msgid "Uploading failed"
+msgstr "Uploaden mislukt"
+
+#: includes/WooCommerce.php:45
+msgid "WooCommerce Dropbox"
+msgstr "WooCommerce Dropbox"
+
+#: includes/WooCommerce.php:46
+msgid "Easily add downloadable products right from your Dropbox."
+msgstr "Voeg eenvoudig downloadbare producten toe vanaf uw Dropbox."
+
+#: includes/WooCommerce.php:47
+#, php-format
+msgid ""
+"To be able to use this integration, you only need to link your Dropbox "
+"Account to the plugin on the %s."
+msgstr ""
+"Om deze integratie te kunnen gebruiken, hoeft u alleen uw Dropbox-account te "
+"koppelen aan de plugin op de %s."
+
+#: includes/WooCommerce.php:192
+msgid "Choose from Dropbox"
+msgstr "Kies van Dropbox"
+
+#: includes/WooCommerce.php:219 includes/WooCommerce.php:235
+#: includes/WooCommerce.php:291
+msgid "File not found"
+msgstr "Bestand niet gevonden"
+
+#: includes/WooCommerce.php:228
+msgid "No valid file provided"
+msgstr "Geen geldig bestand verstrekt"
+
+#: includes/WooCommerce.php:546
+#, php-format
+msgid "%d file(s) uploaded for product"
+msgstr "%d bestand(en) geüpload voor product"
+
+#: includes/WooCommerce.php:582
+msgid "Uploaded Files"
+msgstr "Geüploade bestanden"
+
+#: includes/WooCommerce.php:598
+#, php-format
+msgid "You can now %sstart uploading your documents%s"
+msgstr "U kunt nu %sstarten met het uploaden van uw documenten%s"
+
+#: includes/WooCommerce.php:611 templates/admin_dashboard.php:182
+msgid "Uploads"
+msgstr "Uploads"
+
+#: includes/WooCommerce.php:612
+msgid "Allows your customers to upload files when ordering this product."
+msgstr ""
+"Stelt uw klanten in staat om bestanden te uploaden bij het bestellen van dit "
+"product."
+
+#: includes/WooCommerce.php:625 includes/WooCommerce.php:648
+msgid "Upload to Dropbox"
+msgstr "Upload naar Dropbox"
+
+#: includes/WooCommerce.php:653
+msgid "Upload Box Settings"
+msgstr "Upload Box Instelinngen"
+
+#: includes/WooCommerce.php:661
+msgid "Title Upload Box"
+msgstr "Titel Upload Box"
+
+#: includes/WooCommerce.php:664
+msgid "Enter the title for the upload box"
+msgstr "Voer de titel van het upload-vak in"
+
+#: includes/WooCommerce.php:664
+msgid ""
+"You can use the placeholders <code>%wc_order_id%</code>, <code>%wc_product_id"
+"%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_name%</code>, "
+"<code>%jjjj-mm-dd%</code>"
+msgstr ""
+"U kunt de placeholders <code>%wc_order_id%</code>, <code>%wc_product_id%</"
+"code>, <code>%wc_product_sku%</code>, <code>%wc_product_naam%</code>, <code>"
+"%jjjjj-mm-dd%</code> gebruiken"
+
+#: includes/WooCommerce.php:675
+msgid "Description Upload Box"
+msgstr "Omschrijving Upload Box"
+
+#: includes/WooCommerce.php:678
+msgid "Enter a short description of what the customer needs to upload"
+msgstr "Voer een korte beschrijving in van wat de klant moet uploaden"
+
+#: includes/WooCommerce.php:686
+msgid "Build your Upload Box"
+msgstr "Creëer je Upload Box"
+
+#: includes/WooCommerce.php:687
+msgid "Edit Shortcode Manually"
+msgstr "Handmatig de shortcode bewerken"
+
+#: includes/WooCommerce.php:699
+msgid "Upload Folder Name"
+msgstr "Upload Folder naam"
+
+#: includes/WooCommerce.php:700
+msgid ""
+"Unique folder name where the uploads should be stored. Make sure that "
+"Private Folder feature is enabled in the shortcode"
+msgstr ""
+"Unieke mapnaam waar de uploads moeten worden opgeslagen. Zorg ervoor dat de "
+"functie Privé-map is ingeschakeld in de shortcode"
+
+#: includes/WooCommerce.php:700
+msgid ""
+"You can use the placeholders <code>%wc_order_id%</code>, <code>"
+"%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>"
+"%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>"
+"%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</"
+"code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</"
+"code>, <code>%jjjj-mm-dd%</code>"
+msgstr ""
+"U kunt de placeholders <code>%wc_order_id%</code>, <code>%wc_order_kwantity"
+"%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>"
+"%wc_product_hoeveelheid%</code>, <code>%wc_product_naam%, %wc_naam%</code>, "
+"<code>%user_login%</code>, <code>%user_email%</code>, <code>%display_naam%</"
+"code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjjjj-mm-dd%</"
+"code> gebruiken"
+
+#: includes/WooCommerce.php:715
+msgid "Show when Order is"
+msgstr "Laat zien wanneer Bestelling is"
+
+#: includes/WooCommerce.php:869 templates/frontend.php:45
+#: templates/gallery.php:40
+msgid "Upload files"
+msgstr "Bestanden uploaden"
+
+#: includes/WooCommerce.php:983
+#, php-format
+msgid "Please %sconfigure%s the upload location for this product"
+msgstr "Gelieve de upload locatie voor dit product te %sconfigureren%s"
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:432
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:54
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:54
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:54
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:54
+msgid "View details"
+msgstr "Bekijk details"
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:455
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:77
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:77
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:77
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:77
+#, php-format
+msgid "More information about %s"
+msgstr "Meer informatie over %s"
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:548
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:213
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:213
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:213
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:213
+#, php-format
+msgctxt "the plugin title"
+msgid "The %s plugin is up to date."
+msgstr "De plugin %s is up to date."
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:550
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:215
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:215
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:215
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:215
+#, php-format
+msgctxt "the plugin title"
+msgid "A new version of the %s plugin is available."
+msgstr "Een nieuwe versie van de plugin %s is beschikbaar."
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:552
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:217
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:217
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:217
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:217
+#, php-format
+msgctxt "the plugin title"
+msgid "Could not determine if updates are available for %s."
+msgstr "Kon niet bepalen of updates beschikbaar zijn voor %s."
+
+#: includes/plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:558
+#: includes/plugin-update-checker/Puc/v4p5/Plugin/Ui.php:223
+#: includes/plugin-update-checker/Puc/v4p6/Plugin/Ui.php:223
+#: includes/plugin-update-checker/Puc/v4p7/Plugin/Ui.php:223
+#: includes/plugin-update-checker/Puc/v4p8/Plugin/Ui.php:223
+#, php-format
+msgid "Unknown update checker status \"%s\""
+msgstr "Onbekende update status \"%s\""
+
+#: includes/plugin-update-checker/Puc/v4p4/Vcs/PluginUpdateChecker.php:98
+#: includes/plugin-update-checker/Puc/v4p5/Vcs/PluginUpdateChecker.php:98
+#: includes/plugin-update-checker/Puc/v4p6/Vcs/PluginUpdateChecker.php:98
+#: includes/plugin-update-checker/Puc/v4p7/Vcs/PluginUpdateChecker.php:98
+#: includes/plugin-update-checker/Puc/v4p8/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr "Er is geen changelog beschikbaar."
+
+#: out-of-the-box.php:570
+msgid "Download latest package"
+msgstr "Download de laatste versie"
+
+#: out-of-the-box.php:570
+msgid "Documentation"
+msgstr "Documentatie"
+
+#: out-of-the-box.php:570 templates/admin.php:105 templates/admin.php:1030
+#: templates/admin_network.php:33 templates/admin_network.php:194
+msgid "Support"
+msgstr "Support"
+
+#: out-of-the-box.php:638
+msgid "Hang on. Waiting for the files..."
+msgstr "Wacht even. Wachten op de bestanden ..."
+
+#: out-of-the-box.php:639
+msgid "Processing..."
+msgstr "Laden..."
+
+#: out-of-the-box.php:640
+msgid "Success"
+msgstr "Succes"
+
+#: out-of-the-box.php:641 out-of-the-box.php:646
+msgid "Error"
+msgstr "Fout"
+
+#: out-of-the-box.php:642
+msgid "Waiting"
+msgstr "In wachtrij"
+
+#: out-of-the-box.php:644
+msgid "Uploading to Server"
+msgstr "Uploaden naar server"
+
+#: out-of-the-box.php:645
+msgid "Uploading to Cloud"
+msgstr "Uploaden naar Cloud"
+
+#: out-of-the-box.php:647 out-of-the-box.php:685
+#: skins/Default_Skin/Player.php:38 skins/Default_Skin/Player.php:39
+msgid "Close"
+msgstr "Sluiten"
+
+#: out-of-the-box.php:649
+msgid "Cancel"
+msgstr "Terug"
+
+#: out-of-the-box.php:651
+msgid "Move"
+msgstr "Verplaats"
+
+#: out-of-the-box.php:652
+msgid "Copy"
+msgstr ""
+
+#: out-of-the-box.php:653
+msgid "Create zip file"
+msgstr "Zip file genereren"
+
+#: out-of-the-box.php:654
+msgid "Select account"
+msgstr "Selecteer account"
+
+#: out-of-the-box.php:655
+msgid "Copy to clipboard"
+msgstr "Kopiëren naar klembord"
+
+#: out-of-the-box.php:656
+msgid "Do you really want to delete:"
+msgstr "Weet je zeker dat je dit wilt verwijderen:"
+
+#: out-of-the-box.php:657
+msgid "Do you really want to delete these files?"
+msgstr "Wilt u deze bestanden verwijderen?"
+
+#: out-of-the-box.php:658
+msgid ""
+"That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the "
+"filename?"
+msgstr ""
+"Dat werkt niet. Zijn er illegale karakters (<>: \"/ \\ |? *) In de "
+"bestandsnaam?"
+
+#: out-of-the-box.php:660
+msgid "Rename to:"
+msgstr "Hernoemen naar:"
+
+#: out-of-the-box.php:661
+msgid "Can't receive filelist"
+msgstr "Kan geen bestanden weergeven"
+
+#: out-of-the-box.php:663
+msgid "New folder"
+msgstr "Nieuwe map"
+
+#: out-of-the-box.php:664
+msgid "No files found or selected"
+msgstr "Geen bestanden gevonden of geselecteerd"
+
+#: out-of-the-box.php:665
+msgid "Creating zip file"
+msgstr "Zip file genereren"
+
+#: out-of-the-box.php:666
+msgid "Share file"
+msgstr "Bestand delen"
+
+#: out-of-the-box.php:667
+msgid "Creating shared link..."
+msgstr "Link genereren..."
+
+#: out-of-the-box.php:668 skins/Default_Skin/Player.php:40
+msgid "Previous"
+msgstr "Vorige"
+
+#: out-of-the-box.php:669 skins/Default_Skin/Player.php:41
+msgid "Next"
+msgstr "Volgende"
+
+#: out-of-the-box.php:670
+msgid "This content failed to load"
+msgstr "Deze inhoud kan niet worden geladen"
+
+#: out-of-the-box.php:671
+msgid "This image failed to load"
+msgstr "Deze afbeelding kan niet worden geladen"
+
+#: out-of-the-box.php:672
+msgid "Start slideshow"
+msgstr "Start slideshow"
+
+#: out-of-the-box.php:673
+msgid "Stop slideshow"
+msgstr "Stop slideshow"
+
+#: out-of-the-box.php:674
+msgid "Not yet linked to a folder"
+msgstr "Nog niet gelinkt aan een folder"
+
+#: out-of-the-box.php:676
+msgid "File type not allowed"
+msgstr "Dit bestandtype is niet toegestaan"
+
+#: out-of-the-box.php:677
+msgid "File is too large"
+msgstr "Het bestand is te groot"
+
+#: out-of-the-box.php:679
+msgid "Still Waiting?"
+msgstr "Nog steeds aan het wachten?"
+
+#: out-of-the-box.php:679
+msgid ""
+"If the document doesn't open, you are probably trying to access a protected "
+"file which requires you to be logged in on Dropbox."
+msgstr ""
+"Als het document niet wordt geopend, probeert u waarschijnlijk toegang tot "
+"een beveiligd bestand, dat vereist dat u ingelogd bent op Dropbox."
+
+#: out-of-the-box.php:679
+msgid "Try to open the file in a new window."
+msgstr "Probeer het bestand in een nieuw venster te openen."
+
+#: out-of-the-box.php:686
+msgid "Details"
+msgstr "Details"
+
+#: out-of-the-box.php:881
+msgid "Please browse to the page to see this content"
+msgstr "Blader naar de pagina om deze inhoud te zien"
+
+#: out-of-the-box.php:921
+msgid "ACTION REQUIRED: WP Cloud Plugin lost authorization to Dropbox account"
+msgstr ""
+"ACTIE VEREIST: WP Cloud Plugin verloor de toestemming om het Dropbox-account "
+"te gebruiken"
+
+#: out-of-the-box.php:956
+msgid "Enjoying Out-of-the-Box?"
+msgstr "Blij met Out-of-the-Box?"
+
+#: out-of-the-box.php:958
+msgid "Not really"
+msgstr "Niet echt"
+
+#: out-of-the-box.php:959
+msgid "Yes!"
+msgstr "Ja!"
+
+#: out-of-the-box.php:964
+msgid "Great! How about a review, then?"
+msgstr "Gaaf! Wat denk je van een review?"
+
+#: out-of-the-box.php:966 out-of-the-box.php:974
+msgid "No, thanks"
+msgstr "Nee, dank je"
+
+#: out-of-the-box.php:967 out-of-the-box.php:975
+msgid "Ok, sure!"
+msgstr "Ok, prima!"
+
+#: out-of-the-box.php:972
+msgid "Would you mind giving us some feedback?"
+msgstr "Wilt u ons wat feedback geven?"
+
+#: skins/Default_Skin/Player.php:27
+msgid ""
+"You are using a browser that does not have Flash player enabled or "
+"installed. Please turn on your Flash player plugin or download the latest "
+"version from https://get.adobe.com/flashplayer/"
+msgstr ""
+"Je gebruikt een browser die geen Flash-player heeft ingeschakeld of "
+"geïnstalleerd. Zet de Flash-player-plugin aan of download de nieuwste versie "
+"van https://get.adobe.com/flashplayer/"
+
+#: skins/Default_Skin/Player.php:28
+msgid "Turn off Fullscreen"
+msgstr "Schakel het volledige scherm uit"
+
+#: skins/Default_Skin/Player.php:29
+msgid "Go Fullscreen"
+msgstr "Ga volledig scherm"
+
+#: skins/Default_Skin/Player.php:30
+msgid "Download Video"
+msgstr "Download Video"
+
+#: skins/Default_Skin/Player.php:32
+msgid "Purchase"
+msgstr "Aanschaffen"
+
+#: skins/Default_Skin/Player.php:33
+msgid "Fullscreen"
+msgstr "Volledig scherm"
+
+#: skins/Default_Skin/Player.php:34
+msgid "Jump forward 1 second"
+msgstr "Spring 1 seconde vooruit"
+
+#: skins/Default_Skin/Player.php:34
+msgid "Jump forward %1 seconds"
+msgstr "Spring %1 seconden vooruit"
+
+#: skins/Default_Skin/Player.php:35
+msgid "Toggle Loop"
+msgstr "Loop aan-/uitzetten"
+
+#: skins/Default_Skin/Player.php:36
+msgid "Play"
+msgstr "Afspelen"
+
+#: skins/Default_Skin/Player.php:37
+msgid "Pause"
+msgstr "Pauzeren"
+
+#: skins/Default_Skin/Player.php:42
+msgid "Loop"
+msgstr "Continu afspelen"
+
+#: skins/Default_Skin/Player.php:43
+msgid "Shuffle"
+msgstr "Shuffle"
+
+#: skins/Default_Skin/Player.php:44
+msgid "Time Slider"
+msgstr "Tijdschuif"
+
+#: skins/Default_Skin/Player.php:45
+msgid ""
+"Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance "
+"ten seconds."
+msgstr ""
+"Gebruik de linker/rechter pijltjestoetsen om één seconde vooruit te gaan, de "
+"pijlen omhoog/omlaag om tien seconden vooruit te gaan."
+
+#: skins/Default_Skin/Player.php:46
+msgid "Skip back 1 second"
+msgstr "1 seconde terugspringen"
+
+#: skins/Default_Skin/Player.php:46
+msgid "Skip back %1 seconds"
+msgstr "%1 seconden terugspringen"
+
+#: skins/Default_Skin/Player.php:47
+msgid "Captions/Subtitles"
+msgstr "Ondertitels"
+
+#: skins/Default_Skin/Player.php:48
+msgid "Chapters"
+msgstr "Hoofdstukken"
+
+#: skins/Default_Skin/Player.php:50
+msgid "Mute Toggle"
+msgstr "Dempen"
+
+#: skins/Default_Skin/Player.php:51
+msgid "Use Up/Down Arrow keys to increase or decrease volume."
+msgstr ""
+"Gebruik de pijltjestoetsen omhoog/omlaag om het volume te verhogen of te "
+"verlagen."
+
+#: skins/Default_Skin/Player.php:52
+msgid "Unmute"
+msgstr "Niet meer dempen"
+
+#: skins/Default_Skin/Player.php:53
+msgid "Mute"
+msgstr "Dempen"
+
+#: skins/Default_Skin/Player.php:54
+msgid "Volume Slider"
+msgstr "Volumeschuifknop"
+
+#: skins/Default_Skin/Player.php:55
+msgid "Video Player"
+msgstr "Videospeler"
+
+#: skins/Default_Skin/Player.php:56
+msgid "Audio Player"
+msgstr "Audio Player"
+
+#: skins/Default_Skin/Player.php:57
+msgid "Skip ad"
+msgstr "Advertentie overslaan"
+
+#: skins/Default_Skin/Player.php:58
+msgid "Skip in 1 second"
+msgstr "Overslaan in 1 seconde"
+
+#: skins/Default_Skin/Player.php:58
+msgid "Skip in %1 seconds"
+msgstr "Overslaan over %1 seconden"
+
+#: skins/Default_Skin/Player.php:59
+msgid "Source Chooser"
+msgstr "Bronkiezer"
+
+#: skins/Default_Skin/Player.php:60
+msgid "Stop"
+msgstr "Stop"
+
+#: skins/Default_Skin/Player.php:61
+msgid "Speed Rate"
+msgstr "Snelheid"
+
+#: skins/Default_Skin/Player.php:62
+msgid "Live Broadcast"
+msgstr "Live-uitzending"
+
+#: skins/Default_Skin/Player.php:63
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+#: skins/Default_Skin/Player.php:64
+msgid "Albanian"
+msgstr "Albanees"
+
+#: skins/Default_Skin/Player.php:65
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: skins/Default_Skin/Player.php:66
+msgid "Belarusian"
+msgstr "Wit Russisch"
+
+#: skins/Default_Skin/Player.php:67
+msgid "Bulgarian"
+msgstr "Bulgaars"
+
+#: skins/Default_Skin/Player.php:68
+msgid "Catalan"
+msgstr "Catalaans"
+
+#: skins/Default_Skin/Player.php:69
+msgid "Chinese"
+msgstr "Chinees"
+
+#: skins/Default_Skin/Player.php:70
+msgid "Chinese (Simplified)"
+msgstr "Chinees (Vereenvoudigd)"
+
+#: skins/Default_Skin/Player.php:71
+msgid "Chinese (Traditional)"
+msgstr "Chinees (traditioneel)"
+
+#: skins/Default_Skin/Player.php:72
+msgid "Croatian"
+msgstr "Kroatisch"
+
+#: skins/Default_Skin/Player.php:73
+msgid "Czech"
+msgstr "Tsjechisch"
+
+#: skins/Default_Skin/Player.php:74
+msgid "Danish"
+msgstr "Deens"
+
+#: skins/Default_Skin/Player.php:75
+msgid "Dutch"
+msgstr "Nederlands"
+
+#: skins/Default_Skin/Player.php:76
+msgid "English"
+msgstr "Engels"
+
+#: skins/Default_Skin/Player.php:77
+msgid "Estonian"
+msgstr "Ests"
+
+#: skins/Default_Skin/Player.php:78
+msgid "Filipino"
+msgstr "Filippijns"
+
+#: skins/Default_Skin/Player.php:79
+msgid "Finnish"
+msgstr "Fins"
+
+#: skins/Default_Skin/Player.php:80
+msgid "French"
+msgstr "Frans"
+
+#: skins/Default_Skin/Player.php:81
+msgid "Galician"
+msgstr "Galicisch"
+
+#: skins/Default_Skin/Player.php:82
+msgid "German"
+msgstr "Duits"
+
+#: skins/Default_Skin/Player.php:83
+msgid "Greek"
+msgstr "Grieks"
+
+#: skins/Default_Skin/Player.php:84
+msgid "Haitian Creole"
+msgstr "Haïtiaans Creools"
+
+#: skins/Default_Skin/Player.php:85
+msgid "Hebrew"
+msgstr "Hebreeuws"
+
+#: skins/Default_Skin/Player.php:86
+msgid "Hindi"
+msgstr "Hindi"
+
+#: skins/Default_Skin/Player.php:87
+msgid "Hungarian"
+msgstr "Hongaars"
+
+#: skins/Default_Skin/Player.php:88
+msgid "Icelandic"
+msgstr "IJslands"
+
+#: skins/Default_Skin/Player.php:89
+msgid "Indonesian"
+msgstr "Indonesisch"
+
+#: skins/Default_Skin/Player.php:90
+msgid "Irish"
+msgstr "Iers"
+
+#: skins/Default_Skin/Player.php:91
+msgid "Italian"
+msgstr "Italiaans"
+
+#: skins/Default_Skin/Player.php:92
+msgid "Japanese"
+msgstr "Japans"
+
+#: skins/Default_Skin/Player.php:93
+msgid "Korean"
+msgstr "Koreaans"
+
+#: skins/Default_Skin/Player.php:94
+msgid "Latvian"
+msgstr "Lets"
+
+#: skins/Default_Skin/Player.php:95
+msgid "Lithuanian"
+msgstr "Litouws"
+
+#: skins/Default_Skin/Player.php:96
+msgid "Macedonian"
+msgstr "Macedonisch"
+
+#: skins/Default_Skin/Player.php:97
+msgid "Malay"
+msgstr "Maleis"
+
+#: skins/Default_Skin/Player.php:98
+msgid "Maltese"
+msgstr "Maltees"
+
+#: skins/Default_Skin/Player.php:99
+msgid "Norwegian"
+msgstr "Noors"
+
+#: skins/Default_Skin/Player.php:100
+msgid "Persian"
+msgstr "Perzisch"
+
+#: skins/Default_Skin/Player.php:101
+msgid "Polish"
+msgstr "Pools"
+
+#: skins/Default_Skin/Player.php:102
+msgid "Portuguese"
+msgstr "Portugees"
+
+#: skins/Default_Skin/Player.php:103
+msgid "Romanian"
+msgstr "Roemeens"
+
+#: skins/Default_Skin/Player.php:104
+msgid "Russian"
+msgstr "Russisch"
+
+#: skins/Default_Skin/Player.php:105
+msgid "Serbian"
+msgstr "Servisch"
+
+#: skins/Default_Skin/Player.php:106
+msgid "Slovak"
+msgstr "Slowaaks"
+
+#: skins/Default_Skin/Player.php:107
+msgid "Slovenian"
+msgstr "Sloveens"
+
+#: skins/Default_Skin/Player.php:108
+msgid "Spanish"
+msgstr "Spaans"
+
+#: skins/Default_Skin/Player.php:109
+msgid "Swahili"
+msgstr "Swahili"
+
+#: skins/Default_Skin/Player.php:110
+msgid "Swedish"
+msgstr "Zweeds"
+
+#: skins/Default_Skin/Player.php:111
+msgid "Tagalog"
+msgstr "Tagalog"
+
+#: skins/Default_Skin/Player.php:112
+msgid "Thai"
+msgstr "Thais"
+
+#: skins/Default_Skin/Player.php:113
+msgid "Turkish"
+msgstr "Turks"
+
+#: skins/Default_Skin/Player.php:114
+msgid "Ukrainian"
+msgstr "Oekraïens"
+
+#: skins/Default_Skin/Player.php:115
+msgid "Vietnamese"
+msgstr "Vietnamees"
+
+#: skins/Default_Skin/Player.php:116
+msgid "Welsh"
+msgstr "Welsh"
+
+#: skins/Default_Skin/Player.php:117
+msgid "Yiddish"
+msgstr "Jiddisch"
+
+#: templates/admin.php:53 templates/admin.php:1121
+msgid "Remove Media"
+msgstr "Media verwijderen"
+
+#: templates/admin.php:54 templates/admin.php:63
+msgid "Default"
+msgstr "Standaard"
+
+#: templates/admin.php:60
+msgid "Select Image"
+msgstr "Selecteer afbeelding"
+
+#: templates/admin.php:60
+msgid "Upload or select a file from the media library"
+msgstr "Een bestand uploaden of selecteren uit de mediabibliotheek"
+
+#: templates/admin.php:63
+msgid "Fallback to the default value"
+msgstr "Laat leeg om de standaardwaarde te gebruiken"
+
+#: templates/admin.php:81 templates/admin_network.php:19
+msgid "Save Settings"
+msgstr "Bewaar instellingen"
+
+#: templates/admin.php:90 templates/admin.php:125
+#: templates/admin_network.php:28 templates/admin_network.php:51
+#: templates/tinymce_popup.php:191 templates/tinymce_popup.php:209
+msgid "General"
+msgstr "Algemeen"
+
+#: templates/admin.php:94 templates/admin.php:180
+#: templates/tinymce_popup.php:193 templates/tinymce_popup.php:442
+msgid "Layout"
+msgstr "Opmaak"
+
+#: templates/admin.php:95 templates/admin.php:375
+msgid "Private Folders"
+msgstr "Privémappen"
+
+#: templates/admin.php:96 templates/admin.php:536
+#: templates/admin_network.php:30 templates/admin_network.php:114
+#: templates/tinymce_popup.php:195 templates/tinymce_popup.php:791
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: templates/admin.php:97 templates/admin.php:700
+#: templates/system_information.php:350
+msgid "Integrations"
+msgstr "Integraties"
+
+#: templates/admin.php:98 templates/admin.php:754
+#: templates/tinymce_popup.php:198 templates/tinymce_popup.php:1011
+msgid "Notifications"
+msgstr "Notificaties"
+
+#: templates/admin.php:99 templates/admin.php:929
+msgid "Permissions"
+msgstr "Rechten"
+
+#: templates/admin.php:100 templates/admin.php:973
+msgid "Statistics"
+msgstr "Statistieken"
+
+#: templates/admin.php:101 templates/admin.php:1023
+#: templates/admin_network.php:32 templates/admin_network.php:187
+msgid "System information"
+msgstr "Systeem informatie"
+
+#: templates/admin.php:109 templates/admin_network.php:36
+msgid "Other Cloud Plugins"
+msgstr "Andere Cloud Plugins"
+
+#: templates/admin.php:116 templates/admin_network.php:43
+#: templates/system_information.php:438
+msgid "Version"
+msgstr "Versie"
+
+#: templates/admin.php:128 templates/admin_network.php:71
+msgid "Accounts"
+msgstr "Accounts"
+
+#: templates/admin.php:139 templates/admin.php:142
+#: templates/admin_network.php:81 templates/admin_network.php:84
+msgid "Add account"
+msgstr "Account toevoegen"
+
+#: templates/admin.php:144 templates/admin_network.php:86
+msgid "Link a new account to the plugin"
+msgstr "Een nieuw account koppelen aan de plugin"
+
+#: templates/admin.php:155
+#, php-format
+msgid ""
+"The authorization is managed by the Network Admin via the <a "
+"href='%s'>Network Settings Page</a> of the plugin"
+msgstr ""
+"De machtiging wordt beheerd door de netwerkbeheerder via de <a "
+"href='%s'>netwerkinstellingenpagina</a> van de plug-in"
+
+#: templates/admin.php:170 templates/admin_network.php:53
+msgid "Plugin License"
+msgstr "Plugin licentie"
+
+#: templates/admin.php:184
+msgid "Loading Spinner & Images"
+msgstr "Spinner & Afbeeldingen"
+
+#: templates/admin.php:187
+msgid "Select Loader Spinner"
+msgstr "Laderspinner kiezen"
+
+#: templates/admin.php:189
+msgid "Beat"
+msgstr "Beat"
+
+#: templates/admin.php:190
+msgid "Spinner"
+msgstr "Spinner"
+
+#: templates/admin.php:191
+msgid "Custom Image (selected below)"
+msgstr "Aangepaste afbeelding (hieronder geselecteerd)"
+
+#: templates/admin.php:194
+msgid "General Loader"
+msgstr "Algemene lader"
+
+#: templates/admin.php:199
+msgid "Upload Loader"
+msgstr "Upload Loader"
+
+#: templates/admin.php:204
+msgid "No Results"
+msgstr "Geen resultaten"
+
+#: templates/admin.php:209
+msgid "Access Forbidden Image"
+msgstr ""
+
+#: templates/admin.php:214
+msgid "Error Image"
+msgstr "Fout"
+
+#: templates/admin.php:221
+msgid "Color Palette"
+msgstr "Kleurenpalet"
+
+#: templates/admin.php:224
+msgid "Content Skin"
+msgstr ""
+
+#: templates/admin.php:225
+msgid "Select the general content skin"
+msgstr "Selecteer de skin"
+
+#: templates/admin.php:227
+msgid "Dark"
+msgstr "Donker"
+
+#: templates/admin.php:228
+msgid "Light"
+msgstr "Licht"
+
+#: templates/admin.php:235
+msgid "Content Background Color"
+msgstr "Achtergrondkleur Berichten"
+
+#: templates/admin.php:239
+msgid "Accent Color"
+msgstr "Accentkleur"
+
+#: templates/admin.php:243
+msgid "Black"
+msgstr "Zwart"
+
+#: templates/admin.php:247
+msgid "Dark 1"
+msgstr "Donker 1"
+
+#: templates/admin.php:251
+msgid "Dark 2"
+msgstr "Donker 2"
+
+#: templates/admin.php:255
+msgid "White"
+msgstr "Wit"
+
+#: templates/admin.php:259
+msgid "Light 1"
+msgstr "Licht 1"
+
+#: templates/admin.php:263
+msgid "Light 2"
+msgstr "Licht 2"
+
+#: templates/admin.php:272
+msgid "Icons"
+msgstr "Pictogrammen"
+
+#: templates/admin.php:275
+msgid "Icon Set"
+msgstr "Pictogram Set"
+
+#: templates/admin.php:279 templates/admin.php:727
+#: templates/tinymce_popup.php:891 templates/tinymce_popup.php:1038
+msgid "NOTICE"
+msgstr "LET OP"
+
+#: templates/admin.php:279
+msgid "Modifications to the default icons set will be lost during an update."
+msgstr ""
+"Wijzigingen aan de standaardpictogrammen gaan tijdens een update verloren."
+
+#: templates/admin.php:285
+msgid "Lightbox"
+msgstr "Lightbox"
+
+#: templates/admin.php:287
+msgid "Lightbox Skin"
+msgstr "Lightbox uiterlijk"
+
+#: templates/admin.php:288
+msgid "Select which skin you want to use for the lightbox"
+msgstr ""
+"Selecteer de skin die gebruikt dient te worden voor de lightbox styling"
+
+#: templates/admin.php:311
+msgid "Lightbox Scroll"
+msgstr "Lightbox uiterlijk"
+
+#: templates/admin.php:312
+msgid ""
+"Sets path for switching windows. Possible values are 'vertical' and "
+"'horizontal' and the default is 'vertical"
+msgstr ""
+"Stelt een pad in voor het wisselen van vensters. Mogelijke waarden zijn "
+"'verticaal' en 'horizontaal' en de standaardwaarde is 'verticaal"
+
+#: templates/admin.php:318
+msgid "Allow Mouse Click on Image"
+msgstr "Muisklik op de afbeelding toestaan"
+
+#: templates/admin.php:325
+msgid ""
+"Should people be able to access the right click context menu to e.g. save "
+"the image?"
+msgstr ""
+"Moeten mensen toegang hebben tot het contextmenu met de rechtermuisknop om "
+"bijvoorbeeld de afbeelding op te slaan?"
+
+#: templates/admin.php:327
+msgid "Lightbox Caption"
+msgstr "Lightbox Bijschrift"
+
+#: templates/admin.php:328
+msgid ""
+"Choose when the caption containing the title and (if available) description "
+"are shown"
+msgstr ""
+"Kies wanneer het bijschrift met de titel en (indien beschikbaar) een "
+"beschrijving wordt getoond"
+
+#: templates/admin.php:330
+msgid "Show caption after clicking on the Lightbox"
+msgstr "Toon bijschrift na het klikken op de Lightbox"
+
+#: templates/admin.php:331
+msgid "Show caption when Lightbox opens"
+msgstr "Toon bijschriften bij het openen van de Lightbox"
+
+#: templates/admin.php:338 templates/tinymce_popup.php:462
+msgid "Media Player Skin"
+msgstr "Mediaplayer skin"
+
+#: templates/admin.php:340
+msgid "Default Media Player Skin"
+msgstr "Algemene Mediaplayer skin"
+
+#: templates/admin.php:341 templates/tinymce_popup.php:464
+msgid "Select which skin you want to use for the Media Player"
+msgstr "Selecteer welke skin u wilt gebruiken voor de Media Player"
+
+#: templates/admin.php:363 templates/admin.php:365
+msgid "Custom CSS"
+msgstr "Eigen CSS"
+
+#: templates/admin.php:366
+msgid ""
+"If you want to modify the looks of the plugin slightly, you can insert here "
+"your custom CSS. Don't edit the CSS files itself, because those "
+"modifications will be lost during an update."
+msgstr ""
+"Als u de look van de plugin iets wilt wijzigen, kunt u hier uw aangepaste "
+"CSS invoegen. Verander de CSS-bestanden zelf niet omdat deze wijzigingen "
+"tijdens een update verloren gaan."
+
+#: templates/admin.php:379
+msgid "Global settings automatically linked Private Folders"
+msgstr "Globale instellingen automatisch gelinkt Privémappen"
+
+#: templates/admin.php:383
+msgid ""
+"The following settings are only used for all shortcodes with automatically "
+"linked Private Folders"
+msgstr ""
+
+#: templates/admin.php:387
+msgid "Create Private Folders on registration"
+msgstr "Creëer Prive mappen bij registratie"
+
+#: templates/admin.php:394
+msgid ""
+"Create a new Private Folders automatically after a new user has been created"
+msgstr ""
+"Maak een nieuwe Prive map automatisch nadat een nieuwe gebruiker is "
+"aangemaakt"
+
+#: templates/admin.php:396 templates/admin.php:403
+msgid "Create all Private Folders on first visit"
+msgstr "Maak alle Prive mappen op het eerste bezoek"
+
+#: templates/admin.php:409
+msgid "Update Private Folders after profile update"
+msgstr "Update Prive Mappen na Profiel Update"
+
+#: templates/admin.php:416
+msgid ""
+"Update the folder name of the user after they have updated their profile"
+msgstr ""
+"Update de mapnaam van de gebruiker nadat ze hun profiel hebben bijgewerkt"
+
+#: templates/admin.php:418
+msgid "Remove Private Folders after account removal"
+msgstr "Verwijder Privé-mappen nadat account is verwijderd"
+
+#: templates/admin.php:425
+msgid "Try to remove Private Folders after they are deleted"
+msgstr "Probeer Privé-mappen te verwijderen nadat ze zijn verwijderd"
+
+#: templates/admin.php:427
+msgid "Name Template"
+msgstr "Naam Template"
+
+#: templates/admin.php:428
+msgid ""
+"Template name for automatically created Private Folders. You can use <code>"
+"%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, "
+"<code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>"
+msgstr ""
+"Sjabloon naam voor automatisch gecreëerde Prive Mappen. U kunt <code>"
+"%user_login%</code> , <code>%user_email%</code> , <code>%display_name%</"
+"code> , <code>%ID%</code> , <code>%user_role%</code> , <code>%jjjj-mm-dd%</"
+"code>"
+
+#: templates/admin.php:438
+msgid "Private Folders in WP Admin Dashboard"
+msgstr "Privémappen in WP Admin Dashboard"
+
+#: templates/admin.php:442
+msgid ""
+"This setting only restrict access of the File Browsers in the Admin "
+"Dashboard (e.g. the ones in the Shortcode Builder and the File Browser "
+"menu). To enable Private Folders for your own Shortcodes, use the Shortcode "
+"Builder"
+msgstr ""
+"Deze instelling beperkt alleen de toegang tot de File Browsers in het Admin "
+"Dashboard (bijv. die in de Shortcode Builder en het File Browser menu). "
+"Gebruik de Shortcode Builder om privémappen voor uw eigen shortcodes in te "
+"schakelen"
+
+#: templates/admin.php:445
+msgid ""
+"Enables Private Folders in the Shortcode Builder and Back-End File Browser"
+msgstr ""
+"Schakelt Prive Mappen in de Shortcode Builder en Back-End File Browser aan"
+
+#: templates/admin.php:448
+msgid "Yes, I link the users Manually"
+msgstr "Ja, ik link de gebruikers handmatig"
+
+#: templates/admin.php:449
+msgid "Yes, let the plugin create the User Folders for me"
+msgstr "Ja, laat de plugin de gebruikersmappen voor mij maken"
+
+#: templates/admin.php:454
+msgid "Root folder for Private Folders"
+msgstr "Hoofdmap voor Privefolders"
+
+#: templates/admin.php:455
+msgid "Select in which folder the Private Folders should be created"
+msgstr "Selecteer in welke map de privémappen moeten worden aangemaakt"
+
+#: templates/admin.php:455
+msgid "Current selected folder"
+msgstr "Geselecteerde map"
+
+#: templates/admin.php:484
+msgid "Select Folder"
+msgstr "Selecteer Map"
+
+#: templates/admin.php:511 templates/tinymce_popup.php:420
+msgid "Full Access"
+msgstr "Volledige toegang"
+
+#: templates/admin.php:512 templates/tinymce_popup.php:421
+msgid ""
+"By default only Administrator users will be able to navigate through all "
+"Private Folders"
+msgstr ""
+"Standaard kunnen alleen beheerders gebruikers navigeren door alle Prive "
+"Mappen"
+
+#: templates/admin.php:512 templates/tinymce_popup.php:421
+msgid ""
+"When you want other User Roles to be able do browse to the Private Folders "
+"as well, please check them below"
+msgstr ""
+"Als u ook wilt dat andere gebruikersrollen in staat zij te bladeren  door "
+"all prive mappen geeft dat dan hieronder aan"
+
+#: templates/admin.php:539 templates/admin_network.php:116
+msgid "\"Lost Authorization\" notification"
+msgstr "'Autorisatie verloren' melding"
+
+#: templates/admin.php:540 templates/admin_network.php:117
+msgid ""
+"If the plugin somehow loses its authorization, a notification email will be "
+"send to the following email address"
+msgstr ""
+"Als de plugin op de een of andere manier de machtiging verliest, wordt een e-"
+"mailbericht verzonden naar het volgende e-mailadres"
+
+#: templates/admin.php:543 templates/admin_network.php:120
+msgid "Own Dropbox App"
+msgstr "Eigen Dropbox App"
+
+#: templates/admin.php:560 templates/admin_network.php:137
+msgid "Dropbox App Key"
+msgstr "Dropbox App Key"
+
+#: templates/admin.php:561 templates/admin_network.php:138
+msgid ""
+"<strong>Only</strong> if you want to use your own App, insert your Dropbox "
+"App Key here"
+msgstr ""
+"<strong>Alleen</strong> als u uw eigen App wilt gebruiken, voegt u hier uw "
+"Dropbox App Key in"
+
+#: templates/admin.php:562 templates/admin.php:566
+#: templates/admin_network.php:139 templates/admin_network.php:143
+msgid "Leave empty for easy setup"
+msgstr "Laat leeg voor een gemakkelijk setup"
+
+#: templates/admin.php:564 templates/admin_network.php:141
+msgid "Dropbox App Secret"
+msgstr "Dropbox App Secret"
+
+#: templates/admin.php:565 templates/admin_network.php:142
+msgid "If you want to use your own App, insert your Dropbox App Secret here"
+msgstr "Als u uw eigen App wilt gebruiken, vul hier uw  Dropbox App Secret in"
+
+#: templates/admin.php:569 templates/admin_network.php:146
+msgid "OAuth 2.0 Redirect URI"
+msgstr ""
+
+#: templates/admin.php:570 templates/admin_network.php:147
+msgid "Set the redirect URI in your application to the following"
+msgstr "Stel de omleiding van de URI in uw toepassing in op het volgende in"
+
+#: templates/admin.php:576 templates/admin_network.php:153
+msgid ""
+"Enter Client Key and Secret, save settings and reload the page to see the "
+"Redirect URI you will need"
+msgstr ""
+
+#: templates/admin.php:587 templates/admin_network.php:164
+msgid "Business Accounts"
+msgstr "Business Accounts"
+
+#: templates/admin.php:587 templates/admin_network.php:164
+msgid "Dropbox Team Folders"
+msgstr "Dropbox Team Mappen"
+
+#: templates/admin.php:594 templates/admin_network.php:171
+msgid "Allows you to access your Dropbox Team Folders"
+msgstr "Biedt u toegang tot uw Dropbox Team Folders"
+
+#: templates/admin.php:597 templates/admin_network.php:174
+msgid ""
+"Please check your existing Shortcodes and Manually linked Private Folders "
+"when changing this setting. Your Dropbox root folder will not longer be your "
+"Personal Folder when Team Folders are enabled"
+msgstr ""
+"Controleer uw bestaande shortcodes en handmatig gekoppelde privémappen "
+"wanneer u deze instelling wijzigt. Uw Dropbox-hoofdmap zal niet langer uw "
+"persoonlijke map zijn wanneer Team Folders zijn ingeschakeld"
+
+#: templates/admin.php:604
+msgid "Load Javascripts on all pages"
+msgstr "Javascripts op alle pagina's laden"
+
+#: templates/admin.php:610
+msgid ""
+"By default the plugin will only load it scripts when the shortcode is "
+"present on the page. If you are dynamically loading content via AJAX calls "
+"and the plugin does not show up, please enable this setting"
+msgstr ""
+"Standaard zal de plugin alleen scripts laden als de shortcode op de pagina "
+"aanwezig is. Als u dynamisch inhoud laadt via AJAX en de plug-in verschijnt "
+"niet, schakel dan deze instelling in"
+
+#: templates/admin.php:613
+msgid "Enable Font Awesome Library v4 compatibility"
+msgstr "Schakel Font Awesome Library uit"
+
+#: templates/admin.php:619
+msgid ""
+"If your theme is loading the old Font Awesome icon library (v4), it can "
+"cause conflict with the (v5) icons of this plugin. If you are having trouble "
+"with the icons, please enable this setting for backwards compatibility"
+msgstr ""
+"Als uw thema de oude Font Awesome icon library (v4) aan het laden is, kan "
+"dit een conflict veroorzaken met de (v5) pictogrammen van deze plugin. Als u "
+"problemen hebt met de pictogrammen, schakelt u deze instelling in voor "
+"achterwaartse compatibiliteit"
+
+#: templates/admin.php:619
+msgid ""
+"To disable the Font Awesome library of this plugin completely, add this to "
+"your wp-config.php file"
+msgstr ""
+"Om de Font Awesome bibliotheek van deze plugin volledig uit te schakelen, "
+"voeg dit toe aan uw wp-config.php bestand"
+
+#: templates/admin.php:622
+msgid "Enable Gzip compression"
+msgstr "Gzip compressie inschakelen"
+
+#: templates/admin.php:634
+msgid "Nonce Validation"
+msgstr "Nonce Validatie"
+
+#: templates/admin.php:640
+msgid ""
+"The plugin uses, among others, the WordPress Nonce system to protect you "
+"against several types of attacks including CSRF. Disable this in case you "
+"are encountering a conflict with a plugin that alters this system"
+msgstr ""
+"De plugin gebruikt onder andere het WordPress Nonce systeem om u te "
+"beschermen tegen verschillende soorten aanvallen, waaronder CSRF. Schakel "
+"dit uit als u een conflict ondervindt met een plugin die dit systeem "
+"verandert"
+
+#: templates/admin.php:645
+msgid "Max Age Cache Request"
+msgstr "Max. leeftijd Cache"
+
+#: templates/admin.php:646
+msgid ""
+"How long are the requests to view the plugin cached? Number is in minutes"
+msgstr "Hoe lang moeten de verzoeken van de plugin worden gecached? In minuten"
+
+#: templates/admin.php:647
+msgid "Minutes"
+msgstr "Minuten"
+
+#: templates/admin.php:649
+msgid "Download method"
+msgstr "Download Methode"
+
+#: templates/admin.php:650
+msgid ""
+"Select the method that should be used to download your files. Default is to "
+"redirect the user to a temporarily url on the Dropbox Server. If you want to "
+"use your server as a proxy to the Dropbox Server just set it to Download via "
+"Server"
+msgstr ""
+"Selecteer de methode die moet worden gebruikt om uw bestanden te downloaden. "
+"Standaard wordt de gebruiker omgeleid naar een tijdelijke url op de Dropbox "
+"Server. Als u uw server wilt gebruiken als een proxy voor de Dropbox Server, "
+"stelt u deze in op Download via Server"
+
+#: templates/admin.php:652
+msgid "Redirect to download url (fast)"
+msgstr "Doorsturen naar tijdelijk url (snel)"
+
+#: templates/admin.php:653
+msgid "Use your Server as proxy (slow)"
+msgstr "Gebruik uw server als proxy (langzaam)"
+
+#: templates/admin.php:656
+msgid "Shortlinks API"
+msgstr "Shortlinks API"
+
+#: templates/admin.php:657
+msgid "Select which Url Shortener Service you want to use"
+msgstr "Selecteer welke Url Shortener Service u wilt gebruiken"
+
+#: templates/admin.php:667
+msgid "Sign up for Shorte.st"
+msgstr "Aanmelden voor Shorte.st"
+
+#: templates/admin.php:669
+msgid "API token"
+msgstr "API-token"
+
+#: templates/admin.php:674
+msgid "Sign up for Bitly"
+msgstr "Meld je aan voor Bitly"
+
+#: templates/admin.php:676
+msgid "Bitly login"
+msgstr "Bitly login"
+
+#: templates/admin.php:679
+msgid "Bitly apiKey"
+msgstr ""
+
+#: templates/admin.php:684
+msgid "Sign up for Rebrandly"
+msgstr "Aanmelden voor Rebrandly"
+
+#: templates/admin.php:686
+msgid "Rebrandly apiKey"
+msgstr "Rebrandly apiKey"
+
+#: templates/admin.php:689
+msgid "Rebrandly Domain (optional)"
+msgstr "Rebrandly Domein (optioneel)"
+
+#: templates/admin.php:704
+msgid "ReCaptcha V3"
+msgstr "ReCaptcha V3"
+
+#: templates/admin.php:707
+msgid ""
+"reCAPTCHA protects you against spam and other types of automated abuse. With "
+"this reCAPTCHA (V3) integration module, you can block abusive downloads of "
+"your files by bots. Create your own credentials via the link below."
+msgstr ""
+"reCAPTCHA beschermt u tegen spam en andere vormen van geautomatiseerd "
+"misbruik. Met deze reCAPTCHA (V3) integratiemodule kunt u het misbruiken van "
+"uw bestanden door bots blokkeren. Maak uw eigen gegevens aan via "
+"onderstaande link."
+
+#: templates/admin.php:709
+msgid "Site Key"
+msgstr "Website sleutel"
+
+#: templates/admin.php:712
+msgid "Secret Key"
+msgstr "Geheime sleutel"
+
+#: templates/admin.php:719
+msgid "Video Advertisements (IMA/VAST)"
+msgstr "Videoreclame (IMA/VAST)"
+
+#: templates/admin.php:721
+msgid ""
+"The mediaplayer of the plugin supports VAST XML advertisments to offer "
+"monetization options for your videos. You can enable advertisments for the "
+"complete site and per Media Player shortcode. Currently, this plugin only "
+"supports Linear elements with MP4"
+msgstr ""
+"De mediaspeler van de plugin ondersteunt VAST XML-advertenties om geld te "
+"verdienen met je video's. U kunt advertenties inschakelen voor de volledige "
+"site en per Media Player shortcode. Op dit moment ondersteunt deze plugin "
+"alleen lineaire elementen met MP4"
+
+#: templates/admin.php:724
+msgid "Leave empty to disable Ads"
+msgstr "Laat leeg om Advertenties uit te schakelen"
+
+#: templates/admin.php:727 templates/tinymce_popup.php:891
+msgid ""
+"If you are unable to see the example VAST url below, please make sure you do "
+"not have an ad blocker enabled."
+msgstr ""
+"Als u het voorbeeld van de VAST-url hieronder niet kunt zien, zorg er dan "
+"voor dat u geen advertentieblokker hebt ingeschakeld."
+
+#: templates/admin.php:732 templates/tinymce_popup.php:896
+msgid "Enable Skip Button"
+msgstr "Knop voor overslaan inschakelen"
+
+#: templates/admin.php:741 templates/tinymce_popup.php:904
+msgid "Skip button visible after (seconds)"
+msgstr "Overslaan-knop zichtbaar na (seconden)"
+
+#: templates/admin.php:743 templates/tinymce_popup.php:906
+msgid ""
+"Allow user to skip advertisment after after the following amount of seconds "
+"have elapsed"
+msgstr ""
+"Sta de gebruiker toe om reclame over te slaan nadat het volgende aantal "
+"seconden is verstreken"
+
+#: templates/admin.php:757
+msgid "Download Notifications"
+msgstr "Download melding"
+
+#: templates/admin.php:759
+msgid "Subject download notification"
+msgstr "Onderwerp download notificatie"
+
+#: templates/admin.php:762
+msgid "Subject zip notification"
+msgstr "Onderwerp zip notificatie"
+
+#: templates/admin.php:765
+msgid "Template download"
+msgstr "Template voor download"
+
+#: templates/admin.php:780 templates/admin.php:822 templates/admin.php:866
+#: templates/admin.php:906
+msgid "Available placeholders"
+msgstr "Beschikbare plaatshouders"
+
+#: templates/admin.php:802
+msgid "Upload Notifications"
+msgstr "Upload meldingen"
+
+#: templates/admin.php:804
+msgid "Subject upload notification"
+msgstr "Onderwerp upload notificatie"
+
+#: templates/admin.php:807
+msgid "Template upload"
+msgstr "Template voor uploaden"
+
+#: templates/admin.php:845
+msgid "Delete Notifications"
+msgstr "Verwijder Notificatie"
+
+#: templates/admin.php:847
+msgid "Subject delete notification"
+msgstr "Onderwerp verwijder melding"
+
+#: templates/admin.php:850
+msgid "Template deletion"
+msgstr "Template voor verwijderen"
+
+#: templates/admin.php:889
+msgid "Template File line in %filelist%"
+msgstr "Sjabloon Bestandslijn in% filelist%"
+
+#: templates/admin.php:891
+msgid ""
+"Template for File item in File List in the download/upload/delete template"
+msgstr ""
+"Sjabloon voor Bestandlijn in de bestandslijst in het sjabloon downloaden / "
+"uploaden / verwijderen"
+
+#: templates/admin.php:922
+msgid "Reset to default notifications"
+msgstr "Terugzetten naar standaardmeldingen"
+
+#: templates/admin.php:932
+msgid "Change Plugin Settings"
+msgstr "Wijzig plugin instellingen"
+
+#: templates/admin.php:937
+msgid "Link Users to Private Folders"
+msgstr "Link gebruikers naar Prive mappen"
+
+#: templates/admin.php:942
+msgid "See Reports"
+msgstr "Zie rapporten"
+
+#: templates/admin.php:947
+msgid "See Back-End Filebrowser"
+msgstr "Zie Back-End Filebrowser"
+
+#: templates/admin.php:952
+msgid "Add Plugin Shortcodes"
+msgstr "Voeg plug-in shortcode toe"
+
+#: templates/admin.php:957
+msgid "Add Direct Links"
+msgstr "Voeg directe links toe"
+
+#: templates/admin.php:962
+msgid "Embed Documents"
+msgstr "Documenten insluiten"
+
+#: templates/admin.php:975
+msgid "Log Events"
+msgstr "Log Gebeurtenissen"
+
+#: templates/admin.php:982
+msgid "Register all plugin events"
+msgstr "Registreer alle plugin gebeurtenissen"
+
+#: templates/admin.php:985
+msgid "Summary Email"
+msgstr "Samenvatting e-mail"
+
+#: templates/admin.php:992
+msgid "Email a summary of all the events that are logged with the plugin"
+msgstr ""
+"E-mail een overzicht van alle gebeurtenissen die met de plug-in zijn gelogd"
+
+#: templates/admin.php:996
+msgid "Interval"
+msgstr "Interval"
+
+#: templates/admin.php:997
+msgid "Please select the interval the summary needs to be send"
+msgstr "Selecteer het interval waarin de samenvatting moet worden verzonden"
+
+#: templates/admin.php:999
+msgid "Every day"
+msgstr "Elke dag"
+
+#: templates/admin.php:1000
+msgid "Weekly"
+msgstr "Wekelijks"
+
+#: templates/admin.php:1001
+msgid "Monthly"
+msgstr "Maandelijks"
+
+#: templates/admin.php:1004 templates/tinymce_popup.php:1033
+msgid "Recipients"
+msgstr "Ontvanger"
+
+#: templates/admin.php:1005
+msgid "Send the summary to the following email address(es)"
+msgstr ""
+"Stuur de samenvatting naar het volgende e-mailadres of de volgende e-"
+"mailadressen"
+
+#: templates/admin.php:1010
+msgid "Google Analytics"
+msgstr "Google Analytics"
+
+#: templates/admin.php:1017
+msgid ""
+"Would you like to see some statistics about your files? Out-of-the-Box can "
+"send all download/upload events to Google Analytics"
+msgstr ""
+"Wilt u statistieken over uw bestanden zien? Out-of-the-Box kan alle "
+"download / upload gebeurtenissen naar Google Analytics verzenden"
+
+#: templates/admin.php:1017
+#, php-format
+msgid ""
+"If you enable this feature, please make sure you already added your %s "
+"Google Analytics web tracking %s code to your site."
+msgstr ""
+"Als u deze functie inschakelt, zorg er dan voor dat u reeds uw %s Google "
+"Analytics web tracking %s code aan uw site heeft toegevoegd."
+
+#: templates/admin.php:1032 templates/admin_network.php:196
+msgid "Support & Documentation"
+msgstr "Support & Documentatie"
+
+#: templates/admin.php:1034 templates/admin_network.php:198
+msgid ""
+"Check the documentation of the plugin in case you encounter any problems or "
+"are looking for support."
+msgstr ""
+"Controleer de documentatie van de plugin voor het geval u problemen "
+"ondervindt of op zoek bent naar ondersteuning."
+
+#: templates/admin.php:1035 templates/admin_network.php:199
+msgid "Open Documentation"
+msgstr "Open documentatie"
+
+#: templates/admin.php:1081
+msgid "Select your image"
+msgstr "Kies afbeelding"
+
+#: templates/admin.php:1083
+msgid "Use this Image"
+msgstr "Gebruik deze afbeelding"
+
+#: templates/admin_dashboard.php:7
+msgid "Clear all Statistics"
+msgstr "Alle statistieken wissen"
+
+#: templates/admin_dashboard.php:16
+msgid "Total Previews"
+msgstr "Totaal Voorvertoningen"
+
+#: templates/admin_dashboard.php:29
+msgid "Total Downloads"
+msgstr "Totaal downloads"
+
+#: templates/admin_dashboard.php:41
+msgid "Items Shared"
+msgstr "Items Gedeeld"
+
+#: templates/admin_dashboard.php:53
+msgid "Documents Uploaded"
+msgstr "Documenten geüpload"
+
+#: templates/admin_dashboard.php:66
+msgid "From"
+msgstr "Van"
+
+#: templates/admin_dashboard.php:68
+msgid "to"
+msgstr "tot"
+
+#: templates/admin_dashboard.php:71
+msgid "Events per Day"
+msgstr "Gebeurtenissen per dag"
+
+#: templates/admin_dashboard.php:81
+msgid "Top 25 Downloads"
+msgstr "Top 25 Downloads"
+
+#: templates/admin_dashboard.php:86
+msgid "Document"
+msgstr "Document"
+
+#: templates/admin_dashboard.php:87
+msgid "Total"
+msgstr "Totaal"
+
+#: templates/admin_dashboard.php:96
+msgid "Top 25 Users with most Downloads"
+msgstr "Top 25 Gebruikers met meeste downloads"
+
+#: templates/admin_dashboard.php:103 templates/admin_dashboard.php:164
+msgid "Downloads"
+msgstr "Downloads"
+
+#: templates/admin_dashboard.php:112
+msgid "All Events"
+msgstr "Alle gebeurtenissen"
+
+#: templates/admin_dashboard.php:117 templates/admin_dashboard.php:201
+msgid "Description"
+msgstr "Omschrijving"
+
+#: templates/admin_dashboard.php:118 templates/admin_dashboard.php:202
+msgid "Date"
+msgstr "Datum"
+
+#: templates/admin_dashboard.php:119 templates/admin_dashboard.php:203
+msgid "Event"
+msgstr "Gebeurtenis"
+
+#: templates/admin_dashboard.php:122 templates/admin_dashboard.php:206
+msgid "Location"
+msgstr "Locatie"
+
+#: templates/admin_dashboard.php:123 templates/admin_dashboard.php:207
+msgid "Page"
+msgstr "Pagina"
+
+#: templates/admin_dashboard.php:124 templates/admin_dashboard.php:208
+msgid "Extra"
+msgstr "Extra"
+
+#: templates/admin_dashboard.php:138
+msgid "Visit Profile"
+msgstr "Bezoek Profiel"
+
+#: templates/admin_dashboard.php:155
+msgid "Previews"
+msgstr "Voorvertoningen"
+
+#: templates/admin_dashboard.php:196
+msgid "Logged Events"
+msgstr "Gelogde gebeurtenissen"
+
+#: templates/admin_network.php:59
+msgid "Network Wide Authorization"
+msgstr "Netwerk Brede Autorisatie"
+
+#: templates/frontend.php:7 templates/gallery.php:6
+msgid "Back to our first folder"
+msgstr "Terug naar de eerste map"
+
+#: templates/frontend.php:10 templates/gallery.php:9
+msgid "Loading..."
+msgstr "Laden..."
+
+#: templates/frontend.php:20 templates/gallery.php:19 templates/search.php:5
+msgid "Search"
+msgstr "Zoeken"
+
+#: templates/frontend.php:20 templates/gallery.php:19 templates/search.php:5
+msgid "Search filenames"
+msgstr "Zoek op bestandsnaam"
+
+#: templates/frontend.php:20 templates/gallery.php:19 templates/search.php:5
+msgid "and within contents"
+msgstr "en inhoud"
+
+#: templates/frontend.php:23 templates/gallery.php:26
+msgid "Options"
+msgstr "Opties"
+
+#: templates/frontend.php:28 templates/frontend.php:29
+msgid "Thumbnails view"
+msgstr "Miniaturen"
+
+#: templates/frontend.php:32 templates/frontend.php:33
+msgid "List view"
+msgstr "Lijstweergave"
+
+#: templates/frontend.php:51 templates/gallery.php:46
+msgid "Download all"
+msgstr "Alle bestanden downloaden"
+
+#: templates/frontend.php:52 templates/gallery.php:47
+msgid "Download selected"
+msgstr "Download geselecteerde bestanden"
+
+#: templates/frontend.php:64 templates/gallery.php:59
+msgid "Delete selected"
+msgstr "Verwijder geselecteerde bestanden"
+
+#: templates/frontend.php:69
+msgid "Share folder"
+msgstr "Deel map"
+
+#: templates/frontend.php:73 templates/gallery.php:63
+msgid "No options..."
+msgstr "Geen opties..."
+
+#: templates/frontend.php:112 templates/tinymce_popup.php:761
+msgid "Size"
+msgstr "Grootte"
+
+#: templates/frontend.php:118 templates/tinymce_popup.php:765
+msgid "Date modified"
+msgstr "Laatst gewijzigd"
+
+#: templates/noaccess.php:7
+msgid "Your account doesn't have the right permissions to use this"
+msgstr "Je account heeft te weinig rechten om dit te bekijken"
+
+#: templates/noaccess.php:7
+msgid "Contact the webmaster if you would like to have access"
+msgstr "Neem contact op met de webmaster als u toegang wenst te krijgen"
+
+#: templates/notifications/event_summary.php:191
+#: templates/notifications/lost_authorization.php:191
+msgid "Hi there!"
+msgstr "Hallo daar!"
+
+#: templates/notifications/event_summary.php:199
+#, php-format
+msgid ""
+"This is the latest summary of all the activites that are logged since %s"
+msgstr ""
+"Dit is het laatste overzicht van alle activiteiten die sinds %s zijn gelogd"
+
+#: templates/notifications/event_summary.php:227
+msgid "No downloads found in this period"
+msgstr "Geen downloads gevonden in deze periode"
+
+#: templates/notifications/event_summary.php:287
+msgid "No activities found in this period"
+msgstr "Geen activiteiten gevonden in deze periode"
+
+#: templates/notifications/event_summary.php:352
+#, php-format
+msgid "View more activites (%s left)"
+msgstr "Bekijk meer activiteiten (%s links)"
+
+#: templates/notifications/event_summary.php:354
+msgid "View all activites"
+msgstr "Bekijk alle activiteiten"
+
+#: templates/notifications/lost_authorization.php:234
+msgid "Authorize the plugin!"
+msgstr "Volmachtig de App!"
+
+#: templates/system_information.php:27
+msgid "WordPress environment"
+msgstr "WordPress omgeving"
+
+#: templates/system_information.php:32
+msgid "WordPress address (URL)"
+msgstr "WordPress adres (URL)"
+
+#: templates/system_information.php:33
+msgid "The root URL of your site."
+msgstr "De root-URL van je website."
+
+#: templates/system_information.php:37
+msgid "Site address (URL)"
+msgstr "Site adres (URL)"
+
+#: templates/system_information.php:38
+msgid "The homepage URL of your site."
+msgstr "De URL van uw site's homepage."
+
+#: templates/system_information.php:42
+msgid "Out-of-the-Box version"
+msgstr "Out-of-the-Box versie"
+
+#: templates/system_information.php:43
+msgid "The version of Out-of-the-Box installed on your site."
+msgstr "De versie van Out-of-the-Box die op uw site is geïnstalleerd."
+
+#: templates/system_information.php:47
+msgid "WordPress version"
+msgstr "WordPress versie"
+
+#: templates/system_information.php:48
+msgid "The version of WordPress installed on your site."
+msgstr "Geïnstalleerde WordPress versie."
+
+#: templates/system_information.php:67
+#, php-format
+msgid "%1$s - There is a newer version of WordPress available (%2$s)"
+msgstr "%1$s - er is een nieuwere versie van WordPress beschikbaar (%2$s)"
+
+#: templates/system_information.php:75
+msgid "WordPress multisite"
+msgstr "WordPress Multisite"
+
+#: templates/system_information.php:76
+msgid "Whether or not you have WordPress Multisite enabled."
+msgstr "Of je hebt Wordpress meerdere locaties ingeschakeld."
+
+#: templates/system_information.php:80
+msgid "WordPress memory limit"
+msgstr "WordPress geheugenlimiet"
+
+#: templates/system_information.php:81
+msgid "The maximum amount of memory (RAM) that your site can use at one time."
+msgstr "Het maximaal geheugen (RAM) waarover de website beschikt."
+
+#: templates/system_information.php:86
+#, php-format
+msgid "%1$s - We recommend setting memory to at least 256MB. See: %2$s"
+msgstr ""
+"%1$s - We raden aan om het geheugen in te stellen op minstens 256MB. Zie je: "
+"%2$s"
+
+#: templates/system_information.php:86
+msgid "Increasing memory allocated to PHP"
+msgstr "Geheugen uitbreiding toewijzen aan PHP"
+
+#: templates/system_information.php:94
+msgid "WordPress debug mode"
+msgstr "WordPress debug-modus"
+
+#: templates/system_information.php:95
+msgid "Displays whether or not WordPress is in Debug Mode."
+msgstr "Toont of WordPress in Debug Mode staat of niet."
+
+#: templates/system_information.php:105
+msgid "WordPress cron"
+msgstr "WordPress cron"
+
+#: templates/system_information.php:106
+msgid "Displays whether or not WP Cron Jobs are enabled."
+msgstr "Geeft aan of WP Cron-opdrachten al dan niet zijn ingeschakeld."
+
+#: templates/system_information.php:116
+msgid "Language"
+msgstr "Taal"
+
+#: templates/system_information.php:117
+msgid "The current language used by WordPress. Default = English"
+msgstr "De huidige taal die wordt gebruikt door WordPress. Standaard = Engels"
+
+#: templates/system_information.php:121
+msgid "External object cache"
+msgstr "Externe object cache"
+
+#: templates/system_information.php:122
+msgid "Displays whether or not WordPress is using an external object cache."
+msgstr "Geeft aan of WordPress al dan niet een externe object cache gebruikt."
+
+#: templates/system_information.php:139
+msgid "Server environment"
+msgstr "Serveromgeving"
+
+#: templates/system_information.php:144
+msgid "Server info"
+msgstr "Server info"
+
+#: templates/system_information.php:145
+msgid "Information about the web server that is currently hosting your site."
+msgstr "Informatie over de webserver die momenteel je site host."
+
+#: templates/system_information.php:149
+msgid "PHP version"
+msgstr "PHP versie"
+
+#: templates/system_information.php:150
+msgid "The version of PHP installed on your hosting server."
+msgstr "De PHP versie welke is geïnstalleerd op je hosting server."
+
+#: templates/system_information.php:156
+msgid "How to update your PHP version"
+msgstr "Hoe uw PHP-versie bijwerken"
+
+#: templates/system_information.php:160
+msgid ""
+"Out-of-the-Box will run under this version of PHP, however, it has reached "
+"end of life. We recommend using PHP version 7.2 or above for greater "
+"performance and security."
+msgstr ""
+"Out-of-the-Box zal onder deze versie van PHP draaien, maar het heeft het "
+"einde van de levensduur bereikt. Wij adviseren het gebruik van PHP versie "
+"7.2 of hoger voor betere prestaties en veiligheid."
+
+#: templates/system_information.php:162
+msgid ""
+"We recommend using PHP version 7.2 or above for greater performance and "
+"security."
+msgstr ""
+"We raden u aan om PHP-versie 7.2 of hoger te gebruiken voor betere "
+"prestaties en beveiliging."
+
+#: templates/system_information.php:173
+msgid "PHP post max size"
+msgstr "PHP post max. grootte"
+
+#: templates/system_information.php:174
+msgid "The largest filesize that can be contained in one post."
+msgstr "De grootste bestandsgrootte die kan worden opgenomen in een bericht."
+
+#: templates/system_information.php:178
+msgid "PHP time limit"
+msgstr ""
+
+#: templates/system_information.php:179
+msgid ""
+"The amount of time (in seconds) that your site will spend on a single "
+"operation before timing out (to avoid server lockups)"
+msgstr ""
+"De hoeveelheid tijd (in seconden) die je site aan 1 enkele operatie mag "
+"besteden, voordat er een timing out optreedt (om vastlopen van servers te "
+"voorkomen)."
+
+#: templates/system_information.php:183
+msgid "PHP max input vars"
+msgstr ""
+
+#: templates/system_information.php:184
+msgid ""
+"The maximum number of variables your server can use for a single function to "
+"avoid overloads."
+msgstr ""
+"Het maximum aantal variabelen dat je server mag gebruiken voor 1 enkele "
+"functie (om overload te voorkomen)."
+
+#: templates/system_information.php:188
+msgid "cURL version"
+msgstr "cURL versie"
+
+#: templates/system_information.php:189
+msgid "The version of cURL installed on your server."
+msgstr "De versie van cURL die geïnstalleerd is op je server."
+
+#: templates/system_information.php:195
+msgid "Max upload size"
+msgstr "Max upload grootte"
+
+#: templates/system_information.php:196
+msgid ""
+"The largest filesize that can be uploaded to your WordPress installation."
+msgstr ""
+"De grootste bestandsgrootte die geüpload kan worden naar je installatie van "
+"WordPress."
+
+#: templates/system_information.php:200
+msgid "Default timezone is UTC"
+msgstr "Standaard tijdzone is UTC"
+
+#: templates/system_information.php:201
+msgid "The default timezone for your server."
+msgstr "De standaard tijdzone voor je server."
+
+#: templates/system_information.php:206
+#, php-format
+msgid "Default timezone is %s - it should be UTC"
+msgstr "Standaardtijdzone is %s - het zou UTC moeten zijn"
+
+#: templates/system_information.php:214
+msgid "cURL"
+msgstr "cURL"
+
+#: templates/system_information.php:215
+msgid "We use cURL and fopen to communicate with API services."
+msgstr "We gebruiken cURL en fopen om te communiceren met API-diensten."
+
+#: templates/system_information.php:221
+msgid ""
+"Your server does not cURL enabled - The plugin cannot communicate with the "
+"API service. Contact your hosting provider."
+msgstr ""
+"Uw server is niet cURL ingeschakeld - De plugin kan niet communiceren met de "
+"API-service. Neem contact op met uw hostingprovider."
+
+#: templates/system_information.php:228
+msgid "GZip (zlib) is used to compress the output of the plugin."
+msgstr ""
+
+#: templates/system_information.php:235
+#, php-format
+msgid ""
+"Your server does not support the %s function - this is required to compress "
+"the output of the plugin."
+msgstr ""
+"Uw server ondersteunt de functie %s niet - dit is nodig om de uitvoer van de "
+"plugin te comprimeren."
+
+#: templates/system_information.php:241
+msgid "Multibyte string"
+msgstr ""
+
+#: templates/system_information.php:242
+msgid ""
+"Multibyte String (mbstring) is used to convert character encoding, like for "
+"emails or converting characters to lowercase."
+msgstr ""
+"Multibyte String (mbstring) wordt gebruikt om tekencodering om te zetten, "
+"zoals bij e-mails of het omzetten van tekens naar kleine letters."
+
+#: templates/system_information.php:249
+#, php-format
+msgid ""
+"Your server does not support the %s functions - this is required for better "
+"character encoding. Some fallbacks will be used instead for it."
+msgstr ""
+"Uw server ondersteunt niet de %s functies - deze zijn vereist voor beter "
+"gebruik van karaktersets. Enkele fallbacks worden in plaats ervan gebruikt."
+
+#: templates/system_information.php:256
+msgid ""
+"Portable advisory file locking (flock) is used to for the caching mechanism."
+msgstr ""
+
+#: templates/system_information.php:263
+#, php-format
+msgid ""
+"Your server does not support the %s function - this is required for the "
+"caching mechanisms. Please enable this function to prevent caching problems."
+msgstr ""
+"Uw server ondersteunt de functie %s niet - dit is vereist voor de caching "
+"mechanismen. Schakel deze functie in om problemen met het cachen te "
+"voorkomen."
+
+#: templates/system_information.php:270
+msgid ""
+"This extension (ZipArchive) is used when creating zip files while "
+"downloading multiple files at once."
+msgstr ""
+"Deze extensie (ZipArchive) wordt gebruikt bij het maken van zip-bestanden "
+"tijdens het downloaden van meerdere bestanden tegelijk."
+
+#: templates/system_information.php:277
+#, php-format
+msgid ""
+"Your server does not support the %s function - this is required for creating "
+"zip files."
+msgstr ""
+"Uw server ondersteunt de functie %s niet - dit is vereist voor het maken van "
+"zip-bestanden."
+
+#: templates/system_information.php:312
+msgid "Security"
+msgstr "Beveiliging"
+
+#: templates/system_information.php:317
+msgid "Secure connection (HTTPS)"
+msgstr "Beveiligde verbinding (HTTPS)"
+
+#: templates/system_information.php:318
+msgid "Is the connection to your store secure?"
+msgstr "Is de verbinding met uw winkel veilig?"
+
+#: templates/system_information.php:326
+#, php-format
+msgid ""
+"Your store is not using HTTPS. <a href=\"%s\" target=\"_blank\">Learn more "
+"about HTTPS and SSL Certificates</a>."
+msgstr ""
+"Je winkel gebruikt geen HTTPS. <a href=\"%s\" target=\"_blank\">Meer "
+"informatie over HTTPS-en SSL-certificaten</a>."
+
+#: templates/system_information.php:333
+msgid "Hide errors from visitors"
+msgstr "Fouten verbergen voor bezoekers"
+
+#: templates/system_information.php:334
+msgid ""
+"Error messages can contain sensitive information about your store "
+"environment. These should be hidden from untrusted visitors."
+msgstr ""
+"Foutberichten kunnen gevoelige informatie bevatten over uw winkelomgeving. "
+"Deze moeten verborgen zijn voor onbetrouwbare bezoekers."
+
+#: templates/system_information.php:339
+msgid "Error messages should not be shown to visitors."
+msgstr "Foutberichten mogen niet aan bezoekers worden getoond."
+
+#: templates/system_information.php:356
+msgid "You can use the plugin in WooCommerce for your Digital Products."
+msgstr "U kunt de plugin in WooCommerce gebruiken voor uw digitale producten."
+
+#: templates/system_information.php:360 templates/system_information.php:373
+#: templates/system_information.php:386 templates/system_information.php:399
+#: templates/system_information.php:413
+msgid "Not active"
+msgstr "Niet actief"
+
+#: templates/system_information.php:369
+msgid ""
+"You can use the plugin in the Product Documents extension of WooCommerce."
+msgstr ""
+"U kunt de plugin gebruiken in de Product Documenten extensie van WooCommerce."
+
+#: templates/system_information.php:382
+msgid "You can use the plugin in Gravity Forms."
+msgstr "U kunt de plugin gebruiken in Gravity Forms."
+
+#: templates/system_information.php:395
+msgid ""
+"The Gravity PDF integrations allow you to store your Gravity Forms "
+"submissions directly in the cloud."
+msgstr ""
+
+#: templates/system_information.php:408
+msgid "You can use the plugin in Contact Form 7."
+msgstr "U kunt de plugin gebruiken in Contact Formulier 7."
+
+#: templates/system_information.php:428
+msgid "Theme"
+msgstr "Thema"
+
+#: templates/system_information.php:434
+msgid "The name of the current active theme."
+msgstr "De naam van het huidig actieve thema."
+
+#: templates/system_information.php:439
+msgid "The installed version of the current active theme."
+msgstr "De geïnstalleerde versie van de huidige actieve thema."
+
+#: templates/system_information.php:443
+msgid "Author URL"
+msgstr "URL van auteur"
+
+#: templates/system_information.php:444
+msgid "The theme developers URL."
+msgstr "Link naar thema developers website."
+
+#: templates/system_information.php:448
+msgid "Child theme"
+msgstr "Subthema"
+
+#: templates/system_information.php:449
+msgid "Displays whether or not the current theme is a child theme."
+msgstr "Geeft aan of het huidige thema een kind-thema is."
+
+#: templates/system_information.php:463
+msgid "Parent theme name"
+msgstr "Hoofdthema naam"
+
+#: templates/system_information.php:464
+msgid "The name of the parent theme."
+msgstr "De naam van het huidige actieve parent thema."
+
+#: templates/system_information.php:468
+msgid "Parent theme version"
+msgstr "Hoofdthema versie"
+
+#: templates/system_information.php:469
+msgid "The installed version of the parent theme."
+msgstr "De geïnstalleerde versie van het parent thema."
+
+#: templates/system_information.php:473
+msgid "Parent theme author URL"
+msgstr "URL van de maker van het hoofdthema"
+
+#: templates/system_information.php:474
+msgid "The parent theme developers URL."
+msgstr "De parent thema ontwikkelaars URL."
+
+#: templates/system_information.php:485
+msgid "Active plugins"
+msgstr "Actieve Plugins"
+
+#: templates/system_information.php:497
+msgid "Visit plugin homepage"
+msgstr ""
+
+#: templates/system_information.php:502
+msgid "Network enabled"
+msgstr "Netwerk ingeschakeld"
+
+#: templates/system_information.php:511
+#, php-format
+msgid "by %s"
+msgstr "door %s"
+
+#: templates/tinymce_popup.php:74
+msgid "Insert direct Links"
+msgstr "Voeg directe links in"
+
+#: templates/tinymce_popup.php:77
+msgid "Embed files"
+msgstr "Bestanden insluiten"
+
+#: templates/tinymce_popup.php:109 templates/tinymce_popup.php:111
+msgid "Get raw Shortcode"
+msgstr "Kopieer Shortcode"
+
+#: templates/tinymce_popup.php:109
+msgid "Create Shortcode"
+msgstr "Shortcode maken"
+
+#: templates/tinymce_popup.php:111
+msgid "Raw"
+msgstr "Raw"
+
+#: templates/tinymce_popup.php:112 templates/tinymce_popup.php:119
+#: templates/tinymce_popup.php:121 templates/tinymce_popup.php:123
+msgid "Insert Shortcode"
+msgstr "Shortcode toevoegen"
+
+#: templates/tinymce_popup.php:115
+msgid "Insert Links"
+msgstr "Voeg links toe"
+
+#: templates/tinymce_popup.php:117
+msgid "Embed Files"
+msgstr "Bestanden insluiten"
+
+#: templates/tinymce_popup.php:134
+msgid "Please note that the embedded files need to be public (with link)"
+msgstr ""
+"Houd er rekening mee dat de ingesloten bestanden openbaar moeten zijn (met "
+"een link)"
+
+#: templates/tinymce_popup.php:189
+msgid "Shortcode Options"
+msgstr "Shortcode opties"
+
+#: templates/tinymce_popup.php:192 templates/tinymce_popup.php:253
+msgid "Folders"
+msgstr "Mappen"
+
+#: templates/tinymce_popup.php:194 templates/tinymce_popup.php:749
+msgid "Sorting"
+msgstr "Sorteren"
+
+#: templates/tinymce_popup.php:196 templates/tinymce_popup.php:915
+msgid "Exclusions"
+msgstr "Uitsluiten"
+
+#: templates/tinymce_popup.php:197 templates/tinymce_popup.php:219
+#: templates/tinymce_popup.php:942
+msgid "Upload Box"
+msgstr "Upload Box"
+
+#: templates/tinymce_popup.php:199 templates/tinymce_popup.php:1053
+msgid "File Manipulation"
+msgstr "Bestanden wijzigen"
+
+#: templates/tinymce_popup.php:200 templates/tinymce_popup.php:343
+#: templates/tinymce_popup.php:950 templates/tinymce_popup.php:1100
+#: templates/tinymce_popup.php:1107
+msgid "User Permissions"
+msgstr "Gebruikersrechten"
+
+#: templates/tinymce_popup.php:211
+msgid "Plugin Mode"
+msgstr "Plug-in modus"
+
+#: templates/tinymce_popup.php:212
+msgid "Select how you want to use Out-of-the-Box in your post or page"
+msgstr ""
+"Selecteer hoe u de Out-of-the-Box in uw bericht of pagina wilt gebruiken"
+
+#: templates/tinymce_popup.php:215
+msgid "File browser"
+msgstr "Bestandslijst"
+
+#: templates/tinymce_popup.php:224
+msgid "Photo gallery"
+msgstr "Afbeeldingengalerij"
+
+#: templates/tinymce_popup.php:228
+msgid "Audio player"
+msgstr "Audio player"
+
+#: templates/tinymce_popup.php:232
+msgid "Video player"
+msgstr "Video player"
+
+#: templates/tinymce_popup.php:236
+msgid "Search Box"
+msgstr "Zoekvak"
+
+#: templates/tinymce_popup.php:243
+msgid ""
+"Don't forget to check the Upload Permissions on the User Permissions tab"
+msgstr ""
+"Vergeet niet om de Upload Permissions op het tabblad gebruikersmachtigingen "
+"te controleren"
+
+#: templates/tinymce_popup.php:243
+msgid "By default, only logged-in users can upload files"
+msgstr "Standaard kunnen alleen ingelogde gebruikers bestanden uploaden"
+
+#: templates/tinymce_popup.php:256
+msgid "Use single cloud account"
+msgstr ""
+
+#: templates/tinymce_popup.php:262
+msgid ""
+"Use a folder from one of the linked account. Disabling this option allows "
+"your users to navigate through the folders of all your linked accounts"
+msgstr ""
+
+#: templates/tinymce_popup.php:267
+msgid "Select start Folder"
+msgstr "Selecteer startmap"
+
+#: templates/tinymce_popup.php:268
+msgid ""
+"Select which folder should be used as starting point, or in case the Smart "
+"Client Area is enabled should be used for the Private Folders"
+msgstr ""
+"Selecteer welke map als startpunt moet worden gebruikt, of als de Smart "
+"Client Area is ingeschakeld, wel map gebruikt moet worden voor de Prive "
+"Mappen"
+
+#: templates/tinymce_popup.php:268
+msgid "Users will not be able to navigate outside this folder"
+msgstr "Gebruikers kunnen niet buiten deze map navigeren"
+
+#: templates/tinymce_popup.php:331
+msgid "Smart Client Area"
+msgstr "Smart Client Area"
+
+#: templates/tinymce_popup.php:333
+msgid "Use Private Folders"
+msgstr "Gebruik Prive Mappen"
+
+#: templates/tinymce_popup.php:341
+#, php-format
+msgid ""
+"The plugin can easily and securily share documents on your %s with your "
+"users/clients"
+msgstr ""
+"De plugin kan gemakkelijk en veilig documenten delen op uw %s met uw "
+"gebruikers / klanten"
+
+#: templates/tinymce_popup.php:342
+msgid ""
+"This allows your clients to preview, download and manage their documents in "
+"their own private folder"
+msgstr ""
+"Dit stelt uw klanten in staat hun voorbeelden te bekijken, te downloaden en "
+"te beheren in hun eigen map"
+
+#: templates/tinymce_popup.php:343
+#, php-format
+msgid "Specific permissions can always be set via %s"
+msgstr "Specifieke machtigingen kunnen altijd ingesteld worden via %s"
+
+#: templates/tinymce_popup.php:345
+msgid "The Smart Client Area can be useful in some situations, for example"
+msgstr ""
+"Het Smart Client Area kan bijvoorbeeld nuttig zijn in de volgende situaties"
+
+#: templates/tinymce_popup.php:347
+msgid "You want to share documents with your clients privately"
+msgstr "U wilt documenten met uw klanten privé delen"
+
+#: templates/tinymce_popup.php:348
+msgid "You want your clients, users or guests upload files to their own folder"
+msgstr ""
+"U wilt dat uw klanten, gebruikers of gasten bestanden naar hun eigen map "
+"uploaden"
+
+#: templates/tinymce_popup.php:349
+msgid ""
+"You want to give your customers a private folder already filled with some "
+"files directly after they register"
+msgstr ""
+"U wilt uw klanten direct een privé folder geven die al met een aantal "
+"bestanden is gevuld, nadat ze zich hebben geregistreerd"
+
+#: templates/tinymce_popup.php:355
+msgid "Mode"
+msgstr "Mode"
+
+#: templates/tinymce_popup.php:356
+msgid ""
+"Do you want to link your users manually to their Private Folder or should "
+"the plugin handle this automatically for you"
+msgstr ""
+"Wilt u uw gebruikers handmatig koppelen aan hun privé-map of moet de plugin "
+"dit automatisch voor u afhandelen?"
+
+#: templates/tinymce_popup.php:366
+#, php-format
+msgid "I will link the users manually via %sthis page%s"
+msgstr "Ik zal de gebruikers handmatig koppelen via %s this page %s"
+
+#: templates/tinymce_popup.php:370
+msgid ""
+"Let the plugin automatically manage the Private Folders for me in the folder "
+"I have selected above"
+msgstr ""
+"Laat de plugin automatisch de Prive Mappen voor mij in de map die ik "
+"hierboven heb geselecteerd, beheren"
+
+#: templates/tinymce_popup.php:374
+msgid "Template Folder"
+msgstr "Template map"
+
+#: templates/tinymce_popup.php:381
+msgid ""
+"Newly created Private Folders can be prefilled with files from a template"
+msgstr ""
+"Nieuw aangemaakte privémappen kunnen vooraf worden gevuld met bestanden uit "
+"een template folder"
+
+#: templates/tinymce_popup.php:381
+msgid ""
+"The content of the template folder selected will be copied to the user folder"
+msgstr ""
+"De inhoud van de geselecteerde template map wordt naar de gebruikersmap "
+"gekopieerd"
+
+#: templates/tinymce_popup.php:429
+msgid "Quota"
+msgstr "Quotum"
+
+#: templates/tinymce_popup.php:430
+msgid ""
+"Set maximum size of the User Folder (e.g. 10M, 100M, 1G). When the Upload "
+"function is enabled, the user will not be able to upload when the limit is "
+"reached"
+msgstr ""
+"Stel de maximale grootte van de gebruikersmap (bijv. 10M, 100M, 1G) in. "
+"Wanneer de Upload-functie is ingeschakeld, kan de gebruiker niet uploaden "
+"wanneer de limiet is bereikt"
+
+#: templates/tinymce_popup.php:430
+msgid "Leave this field empty or set it to -1 for unlimited disk space"
+msgstr "Laat dit veld leeg of stel het op -1 voor onbeperkt schijfruimte"
+
+#: templates/tinymce_popup.php:444
+msgid "Plugin container width"
+msgstr "Container breedte"
+
+#: templates/tinymce_popup.php:445
+msgid "Set max width for the Out-of-the-Box container"
+msgstr "Maximale breedte van de Out-of-the-Box container"
+
+#: templates/tinymce_popup.php:445 templates/tinymce_popup.php:451
+msgid "You can use pixels or percentages, eg '360px', '480px', '70%'"
+msgstr "Gebuik pixels of percentages: '360px', '480px', '70%'"
+
+#: templates/tinymce_popup.php:445 templates/tinymce_popup.php:451
+#: templates/tinymce_popup.php:707
+msgid "Leave empty for default value"
+msgstr "Laat leeg om de standaardwaarde te gebruiken"
+
+#: templates/tinymce_popup.php:450
+msgid "Plugin container height"
+msgstr "Container hoogte"
+
+#: templates/tinymce_popup.php:451
+msgid "Set max height for the Out-of-the-Box container"
+msgstr "Stel maximale hoogte in voor de Out-of-the-Box container"
+
+#: templates/tinymce_popup.php:455
+msgid "Custom CSS Class"
+msgstr "Aangepaste CSS class"
+
+#: templates/tinymce_popup.php:456
+msgid ""
+"Add your own custom classes to the plugin container. Multiple classes can be "
+"added seperated by a whitespace"
+msgstr ""
+"Voeg uw eigen aangepaste CSS classes toe aan de plugin container. Meerdere "
+"klassen kunnen worden toegevoegd, gescheiden door een witruimte"
+
+#: templates/tinymce_popup.php:483
+msgid "Mediaplayer Buttons"
+msgstr "Mediaspeler Knoppen"
+
+#: templates/tinymce_popup.php:484
+msgid "Set which buttons (if supported) should be visible in the mediaplayer"
+msgstr ""
+"Stel in welke knoppen (indien ondersteund) zichtbaar moeten zijn in de "
+"mediaspeler"
+
+#: templates/tinymce_popup.php:520
+msgid "Show Playlist"
+msgstr "Afspeellijst tonen"
+
+#: templates/tinymce_popup.php:528
+msgid "Playlist open on start"
+msgstr "Toon afspeellijst aan het begin"
+
+#: templates/tinymce_popup.php:536
+msgid "Playlist opens on top of player"
+msgstr "Afspeellijst opent boven op de speler"
+
+#: templates/tinymce_popup.php:544
+msgid "Display thumbnails"
+msgstr "Toon miniaturen"
+
+#: templates/tinymce_popup.php:550
+msgid "Show thumbnails of your files in the Playlist"
+msgstr "Toon thumbnails van uw bestanden in de afspeellijst"
+
+#: templates/tinymce_popup.php:550
+msgid ""
+"The plugin show the thumbnail provided by the cloud server or you can use "
+"your own one"
+msgstr ""
+"De plugin toont de thumbnail die door de cloud server wordt geleverd of u "
+"kunt uw eigen thumbnail gebruiken"
+
+#: templates/tinymce_popup.php:550
+msgid ""
+"If you want to use your own thumbnail, add a *.png or *.jpg file with the "
+"same name in the same folder. You can also add a cover with the name of the "
+"folder to show the cover for all files"
+msgstr ""
+"Als u uw eigen thumbnail wilt gebruiken, voeg dan een *.png of *.jpg bestand "
+"met dezelfde naam in dezelfde map toe. U kunt ook een omslag met de naam van "
+"de map toevoegen om de omslag van alle bestanden weer te geven"
+
+#: templates/tinymce_popup.php:550
+msgid "If no cover is available, a placeholder will be used"
+msgstr "Als er geen omslag beschikbaar is, wordt er een eigen omslag gebruikt"
+
+#: templates/tinymce_popup.php:552 templates/tinymce_popup.php:652
+msgid "Show last modified date"
+msgstr "Laatste bewerkingsdatum"
+
+#: templates/tinymce_popup.php:559
+msgid "Download Button"
+msgstr "Download knop"
+
+#: templates/tinymce_popup.php:566
+msgid "Purchase Button"
+msgstr "Aankoopknop"
+
+#: templates/tinymce_popup.php:574
+msgid "Link to webshop"
+msgstr "Link naar webshop"
+
+#: templates/tinymce_popup.php:594
+msgid "File Browser view"
+msgstr "Bestandbrowser weergave"
+
+#: templates/tinymce_popup.php:600
+msgid "Grid/Thumbnail View"
+msgstr "Raster / Miniatuurweergave"
+
+#: templates/tinymce_popup.php:604
+msgid "List View"
+msgstr "Lijst weergave"
+
+#: templates/tinymce_popup.php:609
+msgid "Show header"
+msgstr "Toon Koptekst"
+
+#: templates/tinymce_popup.php:617
+msgid "Show refresh button"
+msgstr "Vernieuw knop weergeven"
+
+#: templates/tinymce_popup.php:623
+msgid ""
+"Add a refresh button in the header so users can refresh the file list and "
+"pull changes"
+msgstr ""
+"Voeg een vernieuwknop in de koptekst toe zodat gebruikers de bestandslijst "
+"kunnen vernieuwen"
+
+#: templates/tinymce_popup.php:625
+msgid "Breadcrumb text for top folder"
+msgstr "Breadcrumb tekst voor de bovenste map"
+
+#: templates/tinymce_popup.php:632
+msgid "Show columnnames"
+msgstr "Kolomnamen weergeven"
+
+#: templates/tinymce_popup.php:638
+msgid ""
+"Display the columnnames of the date and filesize in the List View of the "
+"File Browser"
+msgstr ""
+"Toon de kolomnamen van de datum en bestandsgrootte in de lijstweergave van "
+"de File Browser"
+
+#: templates/tinymce_popup.php:642
+msgid "Show file size"
+msgstr "Bestandsgrootte weergeven"
+
+#: templates/tinymce_popup.php:648
+msgid "Display or Hide column with file sizes in List view"
+msgstr "Kolom weergeven of verbergen met bestandsgroottes in Lijstweergave"
+
+#: templates/tinymce_popup.php:658
+msgid "Display or Hide column with last modified date in List view"
+msgstr ""
+"Kolom weergeven of verbergen met laatst gewijzigde datum in lijstweergave"
+
+#: templates/tinymce_popup.php:664
+msgid "Show file extension"
+msgstr "Toon bestandsextensie"
+
+#: templates/tinymce_popup.php:670
+msgid "Display or Hide the file extensions"
+msgstr "Toon of verberg de bestandsextensies"
+
+#: templates/tinymce_popup.php:672
+msgid "Show files"
+msgstr "Bestanden tonen"
+
+#: templates/tinymce_popup.php:678
+msgid "Display or Hide files"
+msgstr "Bestanden weergeven of verbergen"
+
+#: templates/tinymce_popup.php:681
+msgid "Show folders"
+msgstr "Mappen tonen"
+
+#: templates/tinymce_popup.php:687
+msgid "Display or Hide child folders"
+msgstr "Weergeven of verbergen submappen"
+
+#: templates/tinymce_popup.php:690
+msgid "Amount of files"
+msgstr "Aantal bestanden"
+
+#: templates/tinymce_popup.php:692
+msgid "Number of files to show"
+msgstr "Aantal bestanden om te laten zien"
+
+#: templates/tinymce_popup.php:692
+msgid "Can be used for instance to only show the last 5 updated documents"
+msgstr ""
+"Kan bijvoorbeeld gebruikt worden om alleen de laatste 5 bijgewerkte "
+"documenten te tonen"
+
+#: templates/tinymce_popup.php:692
+msgid "Leave this field empty or set it to -1 for no limit"
+msgstr "Laat dit veld leeg of stel het op -1 voor geen limiet"
+
+#: templates/tinymce_popup.php:698
+msgid "Show file names"
+msgstr "Bestandsnamen tonen"
+
+#: templates/tinymce_popup.php:704
+msgid "Display or Hide the file names in the gallery"
+msgstr "Toon of verberg de bestandnamen in de Gallerij"
+
+#: templates/tinymce_popup.php:706
+msgid "Gallery row height"
+msgstr "Galerij rijhoogte"
+
+#: templates/tinymce_popup.php:707
+msgid "The ideal height you want your grid rows to be"
+msgstr "De ideale rij hoogte van het grid"
+
+#: templates/tinymce_popup.php:707
+msgid ""
+"It won't set it exactly to this as plugin adjusts the row height to get the "
+"correct width"
+msgstr ""
+"De plugin zal de rijhoogte wat aanpassen als dat nodig is om goede breedte "
+"te krijgen"
+
+#: templates/tinymce_popup.php:710
+msgid "Number of images lazy loaded"
+msgstr "Aantal afbeeldingen 'lazy' laden"
+
+#: templates/tinymce_popup.php:711
+msgid "Number of images to be loaded each time"
+msgstr "Aantal beelden die elke keer moeten worden geladen"
+
+#: templates/tinymce_popup.php:711
+msgid "Set to 0 to load all images at once"
+msgstr "Stel op 0 om alle beelden tegelijk te laden"
+
+#: templates/tinymce_popup.php:714
+msgid "Show Folder Thumbnails in Gallery"
+msgstr "Toon Map thumbnails in Gallery"
+
+#: templates/tinymce_popup.php:720
+msgid "Do you want to show thumbnails for the Folders in the gallery mode?"
+msgstr "Wilt u miniaturen voor de mappen in de galerijmodus weergeven?"
+
+#: templates/tinymce_popup.php:720
+msgid ""
+"Please note, when enabled the loading performance can drop proportional to "
+"the number of folders present in the Gallery"
+msgstr ""
+"Let op, wanneer deze is ingeschakeld, kan de laadprestatie evenredig zijn "
+"met het aantal mappen die aanwezig zijn in de galerij"
+
+#: templates/tinymce_popup.php:722
+msgid "Crop Thumbnails"
+msgstr ""
+
+#: templates/tinymce_popup.php:729
+msgid "Slideshow"
+msgstr "Slideshow"
+
+#: templates/tinymce_popup.php:737
+msgid "Enable or disable the Slideshow mode in the Lightbox"
+msgstr "Schakel de diashow-modus in of in de lightbox in of uit"
+
+#: templates/tinymce_popup.php:738
+msgid "Delay between cycles (ms)"
+msgstr "Vertraging tussen cycli (ms)"
+
+#: templates/tinymce_popup.php:739
+msgid "Delay between cycles in milliseconds, the default is 5000"
+msgstr "Vertraging tussen cycli in milliseconden, de standaard is 5000"
+
+#: templates/tinymce_popup.php:751
+msgid "Sort field"
+msgstr "Sorteer veld"
+
+#: templates/tinymce_popup.php:769
+msgid "Shuffle/Random"
+msgstr "Shuffle"
+
+#: templates/tinymce_popup.php:773
+msgid "Sort order"
+msgstr "Sorteervolgorde"
+
+#: templates/tinymce_popup.php:780
+msgid "Ascending"
+msgstr "Oplopend"
+
+#: templates/tinymce_popup.php:784
+msgid "Descending"
+msgstr "Aflopend"
+
+#: templates/tinymce_popup.php:794
+msgid "Allow Preview"
+msgstr "Voorvertoning"
+
+#: templates/tinymce_popup.php:803
+msgid "Inline Preview"
+msgstr "Voorvertoning"
+
+#: templates/tinymce_popup.php:809
+msgid "Open preview inside a lightbox or open in a new window"
+msgstr "Open voorvertoning in een lightbox of open in een nieuw venster"
+
+#: templates/tinymce_popup.php:813
+msgid "Enable Google pop out Button"
+msgstr "Schakel Google pop-out knop in"
+
+#: templates/tinymce_popup.php:819
+msgid ""
+"Disables the Google Pop Out button which is visible in the inline preview "
+"for a couple of file formats"
+msgstr ""
+"Schakelt de knop Google Pop Out uit die zichtbaar is in de voorvertoning "
+"voor een aantal bestandsindelingen"
+
+#: templates/tinymce_popup.php:821
+msgid "Lightbox navigation"
+msgstr ""
+
+#: templates/tinymce_popup.php:827
+msgid ""
+"Navigate through your documents in the lightbox. Disable when each document "
+"should be shown individually without navigation arrows"
+msgstr ""
+
+#: templates/tinymce_popup.php:832
+msgid "Allow Searching"
+msgstr "Zoeken toestaan"
+
+#: templates/tinymce_popup.php:838
+msgid ""
+"The search function allows your users to find files by filename and content "
+"(when files are indexed)"
+msgstr ""
+"De zoekfunctie stelt uw gebruikers in staat om bestanden te vinden op "
+"bestandsnaam en inhoud (wanneer bestanden zijn geïndexeerd)"
+
+#: templates/tinymce_popup.php:843
+msgid "Perform Full-Text search"
+msgstr "Zoek in de volledige tekst"
+
+#: templates/tinymce_popup.php:849
+msgid "Business Accounts only"
+msgstr "Alleen Business Accounts"
+
+#: templates/tinymce_popup.php:856
+msgid "Allow ZIP Download"
+msgstr "Laat ZIP Download toe"
+
+#: templates/tinymce_popup.php:862
+msgid "Allow users to download multiple files at once"
+msgstr "Gebruikers toestaan ​​om meerdere bestanden tegelijk te downloaden"
+
+#: templates/tinymce_popup.php:868
+msgid "Auto Play"
+msgstr "Automatisch afspelen"
+
+#: templates/tinymce_popup.php:873
+msgid ""
+"Autoplay is generally not recommended as it is seen as a negative user "
+"experience. It is also disabled in many browsers"
+msgstr ""
+"Autoplay wordt over het algemeen niet aanbevolen, omdat het wordt gezien als "
+"een negatieve gebruikerservaring. Het is ook in veel browsers uitgeschakeld"
+
+#: templates/tinymce_popup.php:878
+msgid "Enable Video Advertisements"
+msgstr "Videoreclame inschakelen"
+
+#: templates/tinymce_popup.php:883
+msgid ""
+"The mediaplayer of the plugin supports VAST XML advertisments to offer "
+"monetization options for your videos. You can enable advertisments for the "
+"complete site on the Advanced tab of the plugin settings page and per "
+"shortcode. Currently, this plugin only supports Linear elements with MP4"
+msgstr ""
+"De mediaspeler van de plugin ondersteunt VAST XML-advertenties om geld te "
+"verdienen met je video's. U kunt advertenties voor de volledige site "
+"inschakelen op het tabblad Geavanceerd van de plugin-instellingenpagina en "
+"per shortcode. Op dit moment ondersteunt deze plugin alleen lineaire "
+"elementen met MP4"
+
+#: templates/tinymce_popup.php:917
+msgid "Only show files with those extensions"
+msgstr "Toon alleen bestanden met die extensies"
+
+#: templates/tinymce_popup.php:918 templates/tinymce_popup.php:971
+msgid "Add extensions separated with | e.g. (jpg|png|gif)"
+msgstr "Voeg extensies gescheiden met | toe (jpg|png|gif)."
+
+#: templates/tinymce_popup.php:918
+msgid "Leave empty to show all files"
+msgstr "Laat leeg om alle bestanden weer te geven"
+
+#: templates/tinymce_popup.php:921
+msgid "Only show the following files or folders"
+msgstr "Toon alleen de volgende bestanden of mappen"
+
+#: templates/tinymce_popup.php:922 templates/tinymce_popup.php:926
+msgid ""
+"Add files or folders by name separated with | e.g. (file1.jpg|long folder "
+"name)"
+msgstr ""
+"Voeg bestanden of mappen toe met naam gescheiden met | bijv. (file1.jpg | "
+"lange mapnaam)"
+
+#: templates/tinymce_popup.php:925
+msgid "Hide the following files or folders"
+msgstr "Verberg de volgende bestanden of mappen"
+
+#: templates/tinymce_popup.php:929
+msgid "Show system files"
+msgstr "Toon systeembestanden"
+
+#: templates/tinymce_popup.php:935
+msgid "Display hidden system (dot) files (e.g. .DS_store, .config)"
+msgstr "Verborgen systeem (.)-bestanden weergeven (bijv. .DS_store, .config)"
+
+#: templates/tinymce_popup.php:944
+msgid "Allow Upload"
+msgstr "Upload toestaan"
+
+#: templates/tinymce_popup.php:950
+msgid "Allow users to upload files"
+msgstr "Gebruikers toestaan ​​om bestanden te uploaden"
+
+#: templates/tinymce_popup.php:950
+#, php-format
+msgid "You can select which Users Roles should be able to upload via %s"
+msgstr "U kunt kiezen welke gebruikersrollen kunnen uploaden via %s"
+
+#: templates/tinymce_popup.php:954
+msgid "Allow folder upload"
+msgstr "Map uploads toestaan"
+
+#: templates/tinymce_popup.php:960
+msgid "Adds an Add Folder button to the upload form if the browser supports it"
+msgstr ""
+"Voegt een Add Folder-knop toe aan het uploadformulier als de browser dit "
+"ondersteunt"
+
+#: templates/tinymce_popup.php:962
+msgid "Overwrite existing files"
+msgstr "Overschrijf bestaande bestanden"
+
+#: templates/tinymce_popup.php:968
+msgid "Overwrite already existing files or auto-rename the new uploaded files"
+msgstr ""
+"Overschrijf al bestaande bestanden of hernoem de nieuwe geüploade bestanden "
+"automatisch"
+
+#: templates/tinymce_popup.php:970
+msgid "Restrict file extensions"
+msgstr "Beperk bestands extensies"
+
+#: templates/tinymce_popup.php:971 templates/tinymce_popup.php:975
+#: templates/tinymce_popup.php:986
+msgid "Leave empty for no restriction"
+msgstr "Laat leeg voor geen enkele beperking"
+
+#: templates/tinymce_popup.php:974
+msgid "Max uploads per session"
+msgstr "Max uploads per sessie"
+
+#: templates/tinymce_popup.php:975
+msgid "Number of maximum uploads per upload session"
+msgstr "Aantal maximale uploads per uploadsessie"
+
+#: templates/tinymce_popup.php:978
+msgid "Minimum file size"
+msgstr "Minimale bestandsgrootte"
+
+#: templates/tinymce_popup.php:986
+msgid "Min filesize (e.g. 1 MB) for uploading"
+msgstr "Minimale bestandsgrootte (bijv. 1 MB) voor het uploaden van bestanden"
+
+#: templates/tinymce_popup.php:989
+msgid "Maximum file size"
+msgstr "Maximale bestandsgrootte"
+
+#: templates/tinymce_popup.php:1001
+msgid "Max filesize for uploading"
+msgstr "Maximale bestandsgrootte voor uploaden"
+
+#: templates/tinymce_popup.php:1001
+msgid "Leave empty for server maximum"
+msgstr "Laat leeg om de maximale waarde te gebruiken"
+
+#: templates/tinymce_popup.php:1013
+msgid "Download email notification"
+msgstr "Download e-mailnotificatie"
+
+#: templates/tinymce_popup.php:1020
+msgid "Upload email notification"
+msgstr "Upload e-mailnotificatie"
+
+#: templates/tinymce_popup.php:1026
+msgid "Delete email notification"
+msgstr "Verwijder e-mailnotificatie"
+
+#: templates/tinymce_popup.php:1034
+msgid ""
+"On which email address would you like to receive the notification? You can "
+"use <code>%admin_email%</code> and <code>%user_email%</code> (user that "
+"executes the action) and <code>%linked_user_email%</code> (Private Folders "
+"owners)"
+msgstr ""
+"Op welk e-mailadres wilt u de melding ontvangen? Je kunt <code>%admin_email"
+"%</code> en <code>%user_email%</code> (gebruiker die de actie uitvoert) en "
+"<code>%linked_user_email%</code> (privé mappen eigenaren) gebruiken"
+
+#: templates/tinymce_popup.php:1038
+#, php-format
+msgid ""
+"%s can be used to send notications to the owner(s) of the Private Folder"
+msgstr ""
+"%s kunnen worden gebruikt voor het verzenden van notificaties naar de "
+"eigenaar(s) van de privéfolder"
+
+#: templates/tinymce_popup.php:1038
+#, php-format
+msgid ""
+"When using this placeholder in combination with automatically linked Private "
+"Folders, the %sName Template%s should contain %s"
+msgstr ""
+
+#: templates/tinymce_popup.php:1038
+msgid "I.e. the Private Folder name needs to contain the email address"
+msgstr "D.w.z. de naam van de privé-map moet het e-mailadres bevatten"
+
+#: templates/tinymce_popup.php:1041
+msgid "Skip notification of the user that executes the action"
+msgstr "Melding voor de gebruiker die de actie uitvoert overslaan"
+
+#: templates/tinymce_popup.php:1058
+msgid "Allow Sharing"
+msgstr "Deling toestaan"
+
+#: templates/tinymce_popup.php:1064
+msgid "Allow users to generate permanent shared links to the files"
+msgstr ""
+"Gebruikers toestaan ​​om permanente gedeelde links te genereren naar de "
+"bestanden"
+
+#: templates/tinymce_popup.php:1066
+msgid "Rename files and folders"
+msgstr "Mappen &amp; bestanden hernoemen"
+
+#: templates/tinymce_popup.php:1073
+msgid "Move files and folders"
+msgstr "Bestanden en mappen verplaatsen"
+
+#: templates/tinymce_popup.php:1080
+msgid "Delete files and folders"
+msgstr "Mappen &amp; bestanden verwijderen"
+
+#: templates/tinymce_popup.php:1089
+msgid "Create new folders"
+msgstr "Nieuwe mappen aanmaken"
+
+#: templates/tinymce_popup.php:1100
+#, php-format
+msgid "Select via %s which User Roles are able to perform the actions"
+msgstr "Selecteer via %s welke gebruikersrol de acties kunnen uitvoeren"
+
+#: templates/tinymce_popup.php:1112
+msgid "Who can see the plugin"
+msgstr "Wie kan de plugin zien"
+
+#: templates/tinymce_popup.php:1122
+msgid "Who can preview"
+msgstr "Wie kan een preview zien"
+
+#: templates/tinymce_popup.php:1132
+msgid "Who can download"
+msgstr "Wie kan bestanden downloaden"
+
+#: templates/tinymce_popup.php:1142
+msgid "Who can upload"
+msgstr "Wie mag uploaden"
+
+#: templates/tinymce_popup.php:1152
+msgid "Who can share content"
+msgstr "Wie kan bestanden delen"
+
+#: templates/tinymce_popup.php:1162
+msgid "Who can rename files"
+msgstr "Wie kan bestanden hernoemen"
+
+#: templates/tinymce_popup.php:1172
+msgid "Who can rename folders"
+msgstr "Wie kan mappen hernoemen"
+
+#: templates/tinymce_popup.php:1182
+msgid "Who can move files and folders"
+msgstr "Wie kan bestanden en mappen verplaatsen"
+
+#: templates/tinymce_popup.php:1192
+msgid "Who can delete files"
+msgstr "Wie kan bestanden verwijderen"
+
+#: templates/tinymce_popup.php:1202
+msgid "Who can delete folders"
+msgstr "Wie kan mappen verwijderen"
+
+#: templates/tinymce_popup.php:1212
+msgid "Who can create new folders"
+msgstr "Wie kan nieuwe mappen aanmaken"
+
+#: templates/uploadform.php:12
+msgid "Drag your files here"
+msgstr "Sleep bestanden hiernaar toe"
+
+#: templates/uploadform.php:25
+msgid "... or find documents on your device"
+msgstr "... of selecteer bestanden"
+
+#: templates/uploadform.php:27
+msgid "Add files"
+msgstr "Voeg bestanden toe"
+
+#: templates/uploadform.php:32
+msgid "Upload folder"
+msgstr "Upload map"
+
+#: templates/uploadform.php:59
+msgid "Min file size: "
+msgstr "Minimale bestandsgrootte"
+
+#: templates/uploadform.php:61
+msgid "Max file size: "
+msgstr "Maximale bestandsgrootte: "
+
+#: templates/uploadform.php:66
+msgid "Allowed formats: "
+msgstr "Toegestane extensies: "
+
+#~ msgid "Out-of-the-Box has encountered an error"
+#~ msgstr "Er is een fout opgetreden in de Out-of-the-Box"
+
+#~ msgid "Error Details"
+#~ msgstr "Foutmeldingsdetails"
+
+#~ msgid "(Re) Authorize the Plugin!"
+#~ msgstr "Volmachtig de App!"
+
+#, php-format
+#~ msgid ""
+#~ "Out-of-the-Box is succesfully authorized and linked with Dropbox (%s) "
+#~ "account:"
+#~ msgstr ""
+#~ "Out-of-the-Box is succesvol geautoriseerd en gekoppeld met Dropbox (%s) "
+#~ "account:"
+
+#~ msgid "Plugin isn't linked to your Dropbox... Please Authorize!"
+#~ msgstr ""
+#~ "De plugin is niet langer gelinkt met Dropbox. Doe de App goedkeuring "
+#~ "opnieuw!"
+
+#~ msgid "Authorization"
+#~ msgstr "Authorisatie"
+
+#~ msgid "Every hour"
+#~ msgstr "Elk uur"
+
+#~ msgid "Twice a day"
+#~ msgstr "Twee keer per dag"
+
+#~ msgid "Plugin version"
+#~ msgstr "Plugin versie"
+
+#~ msgid "Memory limit"
+#~ msgstr "Geheugen limiet"
+
+#~ msgid "You need at least PHP 5.5 if you want to use Out-of-the-Box"
+#~ msgstr "U hebt minstens PHP 5.5 nodig als u Out-of-the-Box wilt gebruiken"
+
+#~ msgid "cURL PHP extension"
+#~ msgstr "cURL PHP extensie"
+
+#~ msgid "You have the cURL PHP extension installed"
+#~ msgstr "Je hebt de cURL PHP extensie geinstalleerd"
+
+#~ msgid ""
+#~ "You don't have the cURL PHP extension installed (couldn't find function "
+#~ "\"curl_init\"), please enable or install this extension"
+#~ msgstr ""
+#~ "Je hebt de cURL PHP extensie niet geinstalleerd (kan de functie "
+#~ "\"curl_init\" niet vinden). Installeer deze extensie"
+
+#~ msgid "Is CACHE directory writable?"
+#~ msgstr "Is de CACHE folder beschrijfbaar?"
+
+#~ msgid "CACHE directory"
+#~ msgstr "CACHE folder"
+
+#~ msgid "isn't writable. The plugin will load very slowly."
+#~ msgstr "is niet schrijfbaar. De plugin laad erg langzaam."
+
+#~ msgid "Make sure CACHE directory is writable"
+#~ msgstr "Zorg ervoor dat de CACHE folder beschrijfbaar is"
+
+#~ msgid "CACHE directory is now writable"
+#~ msgstr "CACHE folder is nu beschrijfbaar"
+
+#~ msgid "CACHE directory is writable"
+#~ msgstr "CACHE folder is beschrijfbaar"
+
+#~ msgid "Is CACHE-index file writable?"
+#~ msgstr "Is het CACHE-index bestand beschrijfbaar?"
+
+#~ msgid "-index file"
+#~ msgstr "-index bestand"
+
+#~ msgid "Make sure CACHE-index file is writable"
+#~ msgstr ""
+#~ "Zorg er voor dat het CACHE-index bestand bestaat en dat deze schrijfbaar "
+#~ "is"
+
+#~ msgid "CACHE-index file is now writable"
+#~ msgstr "CACHE-index bestand is nu beschrijfbaar"
+
+#~ msgid "CACHE-index file is writable"
+#~ msgstr "CACHE-index bestand is beschrijfbaar"
+
+#~ msgid "Is THUMBNAIL directory writable?"
+#~ msgstr "Is THUMBNAIL directory schrijfbaar?"
+
+#~ msgid "THUMBNAIL directory"
+#~ msgstr "Thumbnail directory"
+
+#~ msgid "isn't writable. The gallery will load very slowly."
+#~ msgstr ""
+#~ "kan niet worden beschreven. De fotogalerij en audio/video speler zal "
+#~ "traag laden."
+
+#~ msgid "Make sure THUMBNAIL directory is writable"
+#~ msgstr "Zorg ervoor dat de directory THUMBNAIL beschrijfbaar is"
+
+#~ msgid "THUMBNAIL directory is now writable"
+#~ msgstr "THUMBNAIL directory is nu schrijfbaar"
+
+#~ msgid "THUMBNAIL directory is writable"
+#~ msgstr "THUMBNAIL directory is schrijfbaar"
+
+#~ msgid "Can resize the following images"
+#~ msgstr "Kan de volgende afbeeldingen aanpassen"
+
+#~ msgid ""
+#~ "If your server doesn't support resizing an image type, we try to use "
+#~ "Dropbox own thumbnails"
+#~ msgstr ""
+#~ "Als de server een bepaalde afbeelding niet kan bewerken dan zal Dropbox's "
+#~ "eigen thumbnail worden gebruikt"
+
+#~ msgid "Download files as ZIP"
+#~ msgstr "Bestanden downloaden als ZIP"
+
+#~ msgid "You cannot download files as ZIP"
+#~ msgstr "U kunt bestanden niet als ZIP downloaden"
+
+#~ msgid "mbstring extension enabled?"
+#~ msgstr "mbstring extensie ingeschakeld?"
+
+#~ msgid ""
+#~ "The required mbstring extension is not enabled on your server. Please "
+#~ "enable this extension."
+#~ msgstr ""
+#~ "De vereiste mbstring-extensie is niet ingeschakeld op uw server. Activeer "
+#~ "deze extensie alstublieft."
+
+#~ msgid "You have WooCommerce ("
+#~ msgstr "Je hebt WooCommerce ("
+
+#~ msgid "Guest"
+#~ msgstr "Gast"
+
+#~ msgid "A guest"
+#~ msgstr "Een gast"
+
+#~ msgid "Entry was moved"
+#~ msgstr "Bestand is verplaatst"
+
+#~ msgid "Wait..."
+#~ msgstr "Even geduld..."
+
+#~ msgid ""
+#~ "Please activate your copy in order to have direct access to the latest "
+#~ "updates and to get support"
+#~ msgstr ""
+#~ "Activeer uw exemplaar om direct toegang te krijgen tot de laatste updates "
+#~ "en om ondersteuning te krijgen"
+
+#~ msgid "Check for Updates"
+#~ msgstr "Controleren op updates"
+
+#~ msgid "Please update your mediaplayer shortcode"
+#~ msgstr "Update alstublieft uw mediaplayer shortcode"
+
+#~ msgid "Busy loading playlist"
+#~ msgstr "Druk bezig met laden"
+
+#~ msgid "Need help?"
+#~ msgstr "Hulp nodig?"
+
+#~ msgid ""
+#~ "If your theme is already loading the FontAwesome library, it can be "
+#~ "useful to disable the library of this plugin"
+#~ msgstr ""
+#~ "Als uw thema al de FontAwesome bibliotheek aan het laden is, kan het "
+#~ "nuttig zijn om de bibliotheek van deze plugin uit te schakelen"
+
+#~ msgid "Media Files"
+#~ msgstr "Media bestanden"
+
+#~ msgid "Provided formats"
+#~ msgstr "Toegestane extensies"
+
+#~ msgid "Select which sort of media files you will provide"
+#~ msgstr "Selecteer welke media bestanden u verstrekt"
+
+#~ msgid ""
+#~ "You may provide the same file with different extensions to increase cross-"
+#~ "browser support"
+#~ msgstr ""
+#~ "U kunt hetzelfde bestand met verschillende extensies aanleveren om cross-"
+#~ "browser ondersteuning te verhogen"
+
+#~ msgid ""
+#~ "Do always supply a mp3 (audio) or m4v/mp4 (video)file to support all "
+#~ "browsers"
+#~ msgstr ""
+#~ "Zorg altijd voor een mp3 (audio) of m4v / mp4 (video) bestand om alle "
+#~ "browsers te ondersteunen"
+
+#~ msgid "Saved!"
+#~ msgstr "Opgeslagen!"
+
+#~ msgid ""
+#~ "If you would like to receive updates, please insert your Purchase code"
+#~ msgstr "Als u updates wilt ontvangen, vul dan uw aankoopcode in"
+
+#~ msgid "Link users to folder"
+#~ msgstr "Link gebruikers"
+
+#~ msgid "Cannot get image"
+#~ msgstr "Kan afbeelding niet ophalen"
+
+#~ msgid "Cannot get thumbnail image"
+#~ msgstr "Kan geen miniatuurafbeelding krijgen"
+
+#~ msgid "Cannot generate thumbnail image"
+#~ msgstr "Kan geen miniatuurbeeld genereren"
+
+#~ msgid "Couldn't load Dropbox SDK libary"
+#~ msgstr "Kan de Dropbox SDK niet laden"
+
+#~ msgid "Update Required"
+#~ msgstr "Update Vereist"
+
+#~ msgid ""
+#~ "To play the media you will need to either update your browser to a recent "
+#~ "version or update your"
+#~ msgstr "Om media af te spelen moet je je browser updaten of update"
+
+#~ msgid "Updates"
+#~ msgstr "Updates"
+
+#~ msgid "Visit the Out-of-the-Box website"
+#~ msgstr "Bezoek de Out-of-the-Box website"
+
+#~ msgid "for documentation and installation details"
+#~ msgstr "voor documentatie en installatie gegevens"
+
+#~ msgid "Discovered a bug or just need some help with the plugin?"
+#~ msgstr "Heb je een fout ontdekt of heb je vragen over de plugin?"
+
+#~ msgid "Visit the support page"
+#~ msgstr "Bezoek de support pagina"
+
+#~ msgid "Using SSL"
+#~ msgstr "Gebruikt SSL"
+
+#~ msgid "You are using a secure connection"
+#~ msgstr "Je gebruikt een beveiligde verbinding!"
+
+#~ msgid "You are using running a server on 'localhost'."
+#~ msgstr "Je draait WordPress momenteel op localhost."
+
+#~ msgid ""
+#~ "If your using this Plugin somewhere else and would like to have a secure "
+#~ "connection, you probably need a SSL certificate."
+#~ msgstr ""
+#~ "Als je de Plugin ergens anders gaat gebruiken en je een veilige "
+#~ "verbinding wilt gebruiken, zal je hoogstwaarschijnlijk SSL certificaat "
+#~ "nodig hebben."
+
+#~ msgid "SSL is required for authentication with the Dropbox API."
+#~ msgstr "SSL is nodig voor het creeren van een geldige Token."
+
+#~ msgid ""
+#~ "See our documentation how to obtain a SSL certificate or use Out-of-the-"
+#~ "Box without one."
+#~ msgstr ""
+#~ "Bekijk onze documentatie hoe je een SSL certificaat kunt bemachtigen of "
+#~ "gebruik Out-of-the-Box zonder een."
+
+#~ msgid "isn't writable. You are not able to upload files to Dropbox."
+#~ msgstr ""
+#~ "kan niet worden beschreven. Het is niet mogelijk om bestanden naar "
+#~ "Dropbox te uploaden."
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Er is iets fout gegaan"
+
+#~ msgid "Something went wrong... See settings page"
+#~ msgstr ""
+#~ "Oeps... er is wat fout gegaan. Controleer de plugin instellingen pagina."
+
+#~ msgid ""
+#~ "Authorize the plugin. If you would like to use your own Dropbox App, "
+#~ "enter your App key &amp; secret and re-authorize"
+#~ msgstr ""
+#~ "Volmacht de Dropbox App. Als je een eigen Dropbox App gebruikt vul dan de "
+#~ "key en secret in en verleen de App opnieuw toestemming"
+
+#~ msgid "Your Dropbox App key or token seems to be invalid: "
+#~ msgstr "Je Dropbox App key of secret lijkt ongeldig te zijn"
+
+#~ msgid "Error in getClient: "
+#~ msgstr "Error in getClient: "
+
+#~ msgid "/dropbox-auth-start: could not start authorization: "
+#~ msgstr "/dropbox-auth-start: could not start authorization: "
+
+#~ msgid "/dropbox-auth-finish: bad request: "
+#~ msgstr "/dropbox-auth-finish: bad request: "
+
+#~ msgid "/dropbox-auth-finish: CSRF mismatch: "
+#~ msgstr "/dropbox-auth-finish: CSRF mismatch: "
+
+#~ msgid "/dropbox-auth-finish: not approved: "
+#~ msgstr "/dropbox-auth-finish: not approved: "
+
+#~ msgid "/dropbox-auth-finish: error redirect from Dropbox: "
+#~ msgstr "/dropbox-auth-finish: error redirect from Dropbox: "
+
+#~ msgid "Invalid <dropbox-path>"
+#~ msgstr "Ongeldige Dropbox map"
+
+#~ msgid "No new name set"
+#~ msgstr "Geen geldige nieuwe naam"
+
+#~ msgid "No new foldername set"
+#~ msgstr "Geen geldige naam"
+
+#~ msgid "already exists"
+#~ msgstr "bestaat al"
+
+#~ msgid "Failed to add user folder"
+#~ msgstr "De gebruikersmap kan niet worden aangemaakt"
+
+#~ msgid "Requested directory isn't allowed"
+#~ msgstr "Opgevraagde map is niet toegestaan"
+
+#~ msgid "Can't create link"
+#~ msgstr "Kan geen link creëren"
+
+#~ msgid "File downloaded"
+#~ msgstr "Bestand gedownload"
+
+#~ msgid "New file(s) on your Dropbox"
+#~ msgstr "Nieuw(e) bestand(en) op je Dropbox"
+
+#~ msgid "File deleted on your Dropbox"
+#~ msgstr "Bestand verwijderd op je Dropbox"
+
+#~ msgid "Files deleted on your Dropbox"
+#~ msgstr "Bestanden verwijderd op je Dropbox"
+
+#~ msgid "User folder name"
+#~ msgstr "User Folder naam"
+
+#~ msgid "Auto-updater"
+#~ msgstr "Auto-updater"
+
+#~ msgid "Use plugin as"
+#~ msgstr "Gebruik de plugin als"
+
+#~ msgid "Use user specific folders"
+#~ msgstr "Gebruik gebruiker specifieke mappen"
+
+#~ msgid "Automatically create the user folders"
+#~ msgstr "Automatisch gebruikersmappen aanmaken"
+
+#~ msgid ""
+#~ "By default guests (not logged in users) will also get their own folder"
+#~ msgstr ""
+#~ "Standaard krijgen niet ingelogde gebruikers krijgen ook een eigen map"
+
+#~ msgid "Use a template folder"
+#~ msgstr "Gebruik een template folder"
+
+#~ msgid "Select the template folder"
+#~ msgstr "Selecteer template map"
+
+#~ msgid "Who can access all user folders"
+#~ msgstr "Alle gebruikers mappen beheren"
+
+#~ msgid "Automatically start playing"
+#~ msgstr "Automatisch met afspelen beginnen"
+
+#~ msgid "Root breadcrumb title"
+#~ msgstr "Titel start breadcrumb folder"
+
+#~ msgid ""
+#~ "Should the plugin show all the parents of the root folder in breadcrumb?"
+#~ msgstr "Mappen onder startmap weergeven"
+
+#~ msgid "Display refresh button"
+#~ msgstr "Vernieuw knop weergeven"
+
+#~ msgid "Display date last modified"
+#~ msgstr "Laatste wijziging bestand weergeven"
+
+#~ msgid "Crop images to squares"
+#~ msgstr "Afbeeldingen uitsnijden voor een vierkant grid"
+
+#~ msgid "Crop images for a squared grid"
+#~ msgstr "Afbeeldingen uitsnijden voor een vierkant grid"
+
+#~ msgid "Sort by"
+#~ msgstr "Sorteren op"
+
+#~ msgid "Sort files and folders by their properties"
+#~ msgstr "Sorteer bestanden en mappen bij:"
+
+#~ msgid "Enable search"
+#~ msgstr "Zoekfunctie gebruiken"
+
+#~ msgid ""
+#~ "Search only in the current folder or search from the selected root "
+#~ "folder  "
+#~ msgstr "Alleen in de huidige folder zoeken, of ook daar buiten"
+
+#~ msgid "Enable link sharing"
+#~ msgstr "Links delen"
+
+#~ msgid "Force a 'Save as'"
+#~ msgstr "Forceer een 'Opslaan als'"
+
+#~ msgid "Force a 'Save as' Dialog on downloading file"
+#~ msgstr "'Opslaan als' forceren bij downloaden"
+
+#~ msgid "Enable ZIP-download"
+#~ msgstr "ZIP downloads toestaan"
+
+#~ msgid "Include upload form"
+#~ msgstr "Uploaden toestaan"
+
+#~ msgid "Should the plugin overwrite existing files?"
+#~ msgstr "Overschrijf bestaande bestanden"
+
+#~ msgid "Limit upload by extension"
+#~ msgstr "Limiteer upload bestanden met extensie"
+
+#~ msgid "How to calculate?"
+#~ msgstr "Hoe reken ik in bytes?"
+
+#~ msgid ""
+#~ "Would you like to receive a notification email when someone downloads a "
+#~ "file?"
+#~ msgstr "Wil je een melding ontvangen als iemand een bestand download?"
+
+#~ msgid ""
+#~ "Would you like to receive a notification email when someone uploads a "
+#~ "file?"
+#~ msgstr "Wil je een melding ontvangen als iemand een bestand upload?"
+
+#~ msgid ""
+#~ "Would you like to receive a notification email when someone deletes a "
+#~ "file?"
+#~ msgstr "Wil je een melding ontvangen als iemand een bestand verwijderd?"
+
+#~ msgid "Send notification to"
+#~ msgstr "Stuur melding naar"
+
+#~ msgid ""
+#~ "Out-of-the-Box uses Wordpress Roles to determine how an user can use the "
+#~ "plugin"
+#~ msgstr ""
+#~ "Out-of-the-Box gebruikt Wordpress Rollen om te bepalen hoe een gebruiker "
+#~ "de plugin kan gebruiekn"
+
+#~ msgid "Should it be possible to rename files and folders?"
+#~ msgstr "Moeten bestanden en mappen kunnen worden hernoemd?"
+
+#~ msgid "Should it be possible to move files and folders?"
+#~ msgstr "Moeten bestanden en mappen kunnen worden verplaatst?"
+
+#~ msgid "Should it be possible to delete files and folders?"
+#~ msgstr "Moeten bestanden en mappen kunnen worden verwijderd"
+
+#~ msgid "Should it be possible to create new folders?"
+#~ msgstr "Moeten er nieuwe folders kunnen worden aangemaakt?"
+
+#~ msgid "Select which WordPress Roles can view and use the plugin"
+#~ msgstr "Selecteer welke WordPress Rolen de plugin mogen gebruiken"
+
+#~ msgid "Select which WordPress Roles can download files"
+#~ msgstr "Selecteer welke WordPress Rolen bestanden mogen downloaden"
+
+#~ msgid "Select which WordPress Roles can upload files"
+#~ msgstr "Selecteer welke WordPress Rolen bestanden mogen uploaded"
+
+#~ msgid "Select which WordPress Roles can rename files"
+#~ msgstr "Selecteer welke WordPress Rolen bestanden mogen hernoemen"
+
+#~ msgid "Select which WordPress Roles can rename folders"
+#~ msgstr "Selecteer welke WordPress Rolen mappen mogen hernoemen"
+
+#~ msgid "Select which WordPress Roles can move files and folders"
+#~ msgstr ""
+#~ "Selecteer welke WordPress Rolen bestanden en mappen mogen verplaatsen"
+
+#~ msgid "Select which WordPress Roles can delete files"
+#~ msgstr "Selecteer welke WordPress Rolen bestanden mogen verwijderen"
+
+#~ msgid "Select which WordPress Roles can delete folders"
+#~ msgstr "Selecteer welke WordPress Rolen mappen mogen verwijderen"
+
+#~ msgid "Select which WordPress Roles can create new folders"
+#~ msgstr "Selecteer welke WordPress Rolen nieuwe mappen mogen aanmaken"
+
+#~ msgid "Embed"
+#~ msgstr "Bestanden insluiten"
+
+#~ msgid "Load more..."
+#~ msgstr "Meer..."
+
+#~ msgid "File(s) deleted in Dropbox"
+#~ msgstr "Bestanden verwijderd op Dropbox"
+
+#~ msgid "Limit by extension"
+#~ msgstr "Limiteer bestanden met extensie"
+
+#~ msgid "Limit by name"
+#~ msgstr "Limiteer bij naam"
+
+#~ msgid "Exclude by name"
+#~ msgstr "Uitsluiten bij naam"
+
+#~ msgid "Simple upload"
+#~ msgstr "Eenvoudige upload"
+
+#~ msgid "Start upload"
+#~ msgstr "Start upload"
+
+#~ msgid "Cancel upload"
+#~ msgstr "Upload afbreken"
+
+#~ msgid "Max. "
+#~ msgstr "Max."
+
+#~ msgid ""
+#~ "The Dropbox SDK uses 64-bit integers, but it looks like we're running on "
+#~ "a version of PHP that doesn't support 64-bit integers"
+#~ msgstr ""
+#~ "The Dropbox SDK uses 64-bit integers, but it looks like we're running on "
+#~ "a version of PHP that doesn't support 64-bit integers"
+
+#~ msgid ""
+#~ "Because you can still use the Dropbox SDK with 32-bit integers we "
+#~ "disabled the 64-bit check"
+#~ msgstr ""
+#~ "Because you can still use the Dropbox SDK with 32-bit integers we "
+#~ "disabled the 64-bit check"
+
+#~ msgid "64-bit integers"
+#~ msgstr "64-bit integers"
+
+#~ msgid ""
+#~ "It looks like we're running on a version of PHP that does support 64-bit "
+#~ "integers"
+#~ msgstr ""
+#~ "It looks like we're running on a version of PHP that does support 64-bit "
+#~ "integers"
+
+#~ msgid "No valid Dropbox token found... Please Authorize!"
+#~ msgstr ""
+#~ "Er is geen geldige Dropbox Token gevonden. Doe de App goedkeuring opnieuw!"
+
+#~ msgid "Notify email templates"
+#~ msgstr "Templates email meldingen"
+
+#~ msgid ""
+#~ "If you created your own Dropbox App, please enter your settings below."
+#~ msgstr ""
+#~ "Vul de App key & secret in als je een eigen Dropbox App hebt aangemaakt."
+
+#~ msgid "How do I create a Dropbox App?"
+#~ msgstr "Hoe moet ik een Dropbox App aanmaken?"
+
+#~ msgid "and"
+#~ msgstr "en"
+
+#~ msgid "You can use"
+#~ msgstr "Gebruik"
+
+#~ msgid ""
+#~ "To make things easier for you, we added a <u>Shortcode button</u> in the "
+#~ "MCE editor"
+#~ msgstr ""
+#~ "Om het wat gemakkelijker te makken hebben we een <u>Shortcode button</u> "
+#~ "toegevoegd aan de MCE editor"
+
+#~ msgid "Overview of your system settings"
+#~ msgstr "Overzicht van je systeem"
+
+#~ msgid "Couldn't create zip file"
+#~ msgstr "Kan geen Zip file creëren"
+
+#~ msgid "Filelist"
+#~ msgstr "Bestandenlijst"
+
+#~ msgid "Show folders breadcrumb"
+#~ msgstr "Breadcrumb weergeven"
+
+#~ msgid "Show download button (zip-archive)"
+#~ msgstr "Download knop weergeven (zip-file)"
+
+#~ msgid "Gallery options"
+#~ msgstr "Galerij opties"
+
+#~ msgid "Don't stretch last row to fit grid width"
+#~ msgstr "Laatste afbeelding niet uitrekken om rij te vullen"
+
+#~ msgid "Include files or folders (only show these items)"
+#~ msgstr "Alleen deze bestanden of folders weergeven"
+
+#~ msgid "Exclude files or folders"
+#~ msgstr "Mappen of bestanden uitsluiten"
+
+#~ msgid "Upload form options"
+#~ msgstr "Upload opties"
+
+#~ msgid "Edit files &amp; folders"
+#~ msgstr "Wijzig bestanden &amp; mappen"
+
+#~ msgid "Files &amp; folders can be renamed"
+#~ msgstr "Bestanden &amp; mappen kunnen worden hernoemd"
+
+#~ msgid "Files &amp; folders can be deleted"
+#~ msgstr "Bestanden &amp; mappen kunnen worden verwijderd"
+
+#~ msgid "User management"
+#~ msgstr "Gebruikrechten"
+
+#~ msgid "Add folders"
+#~ msgstr "Nieuwe mappen toevoegen"
+
+#~ msgid "Could not write to tmp dir. Make sure it exists and is writable"
+#~ msgstr ""
+#~ "Kan bestand niet wegschrijven naar tmp folder. Zorg er voor dat deze "
+#~ "schrijfbaar is"
+
+#~ msgid "After you created a Dropbox App, please enter your settings below."
+#~ msgstr ""
+#~ "Vul de App key & secret in nadat je een Dropbox App hebt aangemaakt."
+
+#~ msgid ""
+#~ "This field is set when you authorize your Dropbox App. Only change this "
+#~ "if you know what your doing."
+#~ msgstr ""
+#~ "Dit veld wordt automatisch ingevuld als je je Dropbox App toegang hebt "
+#~ "verleend. Verander dit alleen als je weet wat je aan doet."
+
+#~ msgid "Authorize Dropbox API"
+#~ msgstr "Volmachtig de App"
+
+#~ msgid ""
+#~ "See our documentation how to obtain a SSL certificate or how to use Out-"
+#~ "of-the-Box without one."
+#~ msgstr ""
+#~ "Bekijk onze documentatie hoe je een SSL certificaat kunt bemachtigen of "
+#~ "hoe je Out-of-the-Box kunt gebruiken zonder een certificaat."
+
+#~ msgid "(Re) Authorize"
+#~ msgstr "Machtiging verstrekken"
+
+#~ msgid ""
+#~ "If your using this Plugin somewhere else, you need a SSL certificate to "
+#~ "ensure a secure connection."
+#~ msgstr ""
+#~ "Als je de Plugin ergens anders gaat gebruiken, heb je een SSL certificaat "
+#~ "nodig voor een veilige verbinding."
+
+#~ msgid ""
+#~ "No Token found! Please enter your App key and secret and re-authorize"
+#~ msgstr ""
+#~ "Geen token gevonden! Vul een geldige Dropbox App key en secret in en "
+#~ "verleen de App opnieuw toestemming"
+
+#~ msgid ""
+#~ "Dropbox App settings are not complete. Please insert Key and Secret "
+#~ "values below."
+#~ msgstr "Vul een geldige Dropbox App key en secret in."
+
+#~ msgid "System settings"
+#~ msgstr "Systeeminstellingen"
+
+#~ msgid "Renaming"
+#~ msgstr "Hernoemen"
+
+#~ msgid "Deleting"
+#~ msgstr "Verwijderen"
+
+#~ msgid "Adding folders"
+#~ msgstr "Mappen toevoegen"
+
+#~ msgid "Minimum Role for renaming"
+#~ msgstr "Minimale Rol om te hernoemen"
+
+#~ msgid "Minimum Role for deleting"
+#~ msgstr "Minimale Rol om te verwijderen"
+
+#~ msgid "Minimum Role for adding folders"
+#~ msgstr "Minimale Rol om mappen te kunnen aanmaken"
+
+#~ msgid "Administrator"
+#~ msgstr "Administrator"
+
+#~ msgid "List of capabilities"
+#~ msgstr "Lijst van Capabilities"
+
+#~ msgid "Load how many images each time?"
+#~ msgstr "Hoeveel afbeeldingen per keer laden?"
+
+#~ msgid ""
+#~ "Out-of-the-Box cannot save information if sessions are disabled. You "
+#~ "cannot use Out-of-the-Box"
+#~ msgstr ""
+#~ "Out-of-the-Box kan geen informatie opslaan als Sessies zijn "
+#~ "uitgeschakeld. Zorg er voor dat het mogelijk is om Sessies te gebruiken. "
+#~ "Momenteel kan Out-of-the-Box niet worden gebruikt"
+
+#~ msgid ""
+#~ "The Dropbox SDK requires the cURL PHP extension, but it looks like you "
+#~ "don't have it (couldn't find function \"curl_init\")"
+#~ msgstr ""
+#~ "The Dropbox SDK requires the cURL PHP extension, but it looks like you "
+#~ "don't have it (couldn't find function \"curl_init\")"
+
+#~ msgid "Show columnnames so you can sort your files and folders"
+#~ msgstr "Kolomnamen weergeven zodat je de bestanden en mappen kan sorteren"
+
+#~ msgid "Last edited on "
+#~ msgstr "Laatst gewijzigd op"
+
+#~ msgid "Gallery"
+#~ msgstr "Galerij"
+
+#~ msgid "Media player (audio &amp; video)"
+#~ msgstr "Media player (audio &amp; video)"
+
+#~ msgid "Show name of root directory"
+#~ msgstr "Naam hoofdmap weergeven"
+
+#~ msgid "Check documentation for more details"
+#~ msgstr "Bekijk de documentatie voor meer details"
+
+#~ msgid "play"
+#~ msgstr "Afspelen"
+
+#~ msgid "next"
+#~ msgstr "Volgende"
+
+#~ msgid "mute"
+#~ msgstr "Dempen"
+
+#~ msgid "max volume"
+#~ msgstr "Max volume"
+
+#~ msgid "restore screen"
+#~ msgstr "Herstel scherm"
+
+#~ msgid "shuffle off"
+#~ msgstr "Geen shuffle"
+
+#~ msgid "repeat"
+#~ msgstr "Herhalen"
+
+#~ msgid "repeat off"
+#~ msgstr "Niet herhalen"
+
+#~ msgid ""
+#~ "Because the Dropbox SDK can use 64-bit integers we recommend that you "
+#~ "comment out line 15 in 'includes/dropbox-sdk/Dropbox/RequestUtil.php'"
+#~ msgstr ""
+#~ "Because the Dropbox SDK can use 64-bit integers we recommend that you "
+#~ "comment out line 15 in 'includes/dropbox-sdk/Dropbox/RequestUtil.php'"
+
+#~ msgid "Dropbox is not succesfully linked. Please Authorize!"
+#~ msgstr ""
+#~ "Er is geen goede connectie gemaakt met Dropbox. Machtig de App opnieuw!"
+
+#~ msgid ""
+#~ "The Dropbox SDK requires the JSON PHP extension, but it looks like you "
+#~ "don't have it (couldn't find function \"json_decode\")"
+#~ msgstr ""
+#~ "The Dropbox SDK requires the JSON PHP extension, but it looks like you "
+#~ "don't have it (couldn't find function \"json_decode\")"
+
+#~ msgid "You are <strong>not able</strong> to use OutoftheBox."
+#~ msgstr "You are <strong>not able</strong> to use Out-of-the-Box."
+
+#~ msgid ""
+#~ "To enable SSL on your website, you will need to get an SSL Certificate "
+#~ "that identifies you and install it on the server"
+#~ msgstr ""
+#~ "To enable SSL on your website, you will need to get an SSL Certificate "
+#~ "that identifies you and install it on the server"
+
+#~ msgid ""
+#~ "If you dont have a certificate yet, use or Google skills to get one for "
+#~ "free (for example Startssl.com)"
+#~ msgstr ""
+#~ "If you dont have a certificate yet, use or Google skills to get one for "
+#~ "free (for example Startssl.com)"
+
+#~ msgid "No Dropbox token found... Please Authorize!"
+#~ msgstr ""
+#~ "Er is geen Dropbox Token gevonden. Keur de App goed via de plugin "
+#~ "instellingen!"
+
+#~ msgid ""
+#~ "No Token file found and could not create one. Please be sure the file ."
+#~ "token exists in the plugin rootdir and is writeable"
+#~ msgstr ""
+#~ "No Token file found and could not create one. Please be sure the file ."
+#~ "token exists in the plugin rootdir and is writeable"
+
+#~ msgid ""
+#~ "/dropbox-auth-finish: Could not store token! Make sure that the file `."
+#~ "token` exists and is writable!"
+#~ msgstr ""
+#~ "/dropbox-auth-finish: Could not store token! Make sure that the file `."
+#~ "token` exists and is writable!"
+
+#~ msgid "Unable to load app-info.json: "
+#~ msgstr "Unable to load app-info.json: "
+
+#~ msgid "Be sure you have an valid SSL certificate on your web server"
+#~ msgstr "Be sure you have an valid SSL certificate on your web server"
+
+#~ msgid "Shortcode OutoftheBox"
+#~ msgstr "Shortcode OutoftheBox"
+
+#~ msgid "Current root"
+#~ msgstr "Huidige pad"
+
+#~ msgid "Leave empty for default value (max filesize allowed)"
+#~ msgstr ""
+#~ "Laat leeg om de standaardwaarde te gebruiken (maximale toegestane "
+#~ "bestandsgrootte)"
+
+#~ msgid "shows all folders/files in the root of your Dropbox"
+#~ msgstr "Alle mappen/bestanden weergeven van je Dropbox"
+
+#~ msgid "shows all folders/files in a specific directory of your Dropbox"
+#~ msgstr ""
+#~ "Alleen mappen/bestanden weergeven vanaf een specifieke folder in je "
+#~ "Dropbox"
+
+#~ msgid "NOTE the double quote!!"
+#~ msgstr "LET OP de dubbele aanhalingstekens!!"
+
+#~ msgid ""
+#~ "add uploadform and overwrite existing files. If overwrite=0 the files "
+#~ "will be renamed"
+#~ msgstr ""
+#~ "Voeg een uploadformulier toe en overschrijf bestaande bestanden. Gebruik "
+#~ "overwrite=0 om bestanden te hernoemen"
+
+#~ msgid "only allow specific extensions for upload"
+#~ msgstr ""
+#~ "Alleen toestaan om bestanden met een bepaalde extensie up-te-loaden."
+
+#~ msgid "Will give some basic debug information"
+#~ msgstr "Geeft wat algemene debug informatie"

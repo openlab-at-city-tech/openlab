@@ -28,27 +28,13 @@ if ( ! class_exists( 'EIO_HS_Beacon' ) ) {
 		}
 
 		/**
-		 * Check for a new opt-in on settings save
-		 *
-		 * @param bool $input The enable_help setting.
-		 * @return bool The unaltered setting.
-		 */
-		public function check_for_settings_optin( $input ) {
-			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
-			if ( isset( $_POST[ $this->prefix . 'enable_help' ] ) && $_POST[ $this->prefix . 'enable_help' ] ) {
-				$this->set_option( $this->prefix . 'enable_help_notice', 1 );
-			}
-			return $input;
-		}
-
-		/**
 		 * Check for a new opt-in via the admin notice
 		 */
 		public function check_for_optin() {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			$this->set_option( $this->prefix . 'enable_help', 1 );
 			$this->set_option( $this->prefix . 'enable_help_notice', 1 );
-			wp_redirect( remove_query_arg( 'action', wp_get_referer() ) );
+			wp_safe_redirect( remove_query_arg( 'action', wp_get_referer() ) );
 			exit;
 		}
 
@@ -60,7 +46,7 @@ if ( ! class_exists( 'EIO_HS_Beacon' ) ) {
 			delete_option( $this->prefix . 'enable_help' );
 			delete_network_option( null, $this->prefix . 'enable_help' );
 			$this->set_option( $this->prefix . 'enable_help_notice', 1 );
-			wp_redirect( remove_query_arg( 'action', wp_get_referer() ) );
+			wp_safe_redirect( remove_query_arg( 'action', wp_get_referer() ) );
 			exit;
 		}
 
@@ -74,10 +60,10 @@ if ( ! class_exists( 'EIO_HS_Beacon' ) ) {
 		public function admin_notice( $network_class = '' ) {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			$hide_notice = $this->get_option( $this->prefix . 'enable_help_notice' );
-			if ( 'network-multisite' === $network_class && get_site_option( $this->prefix . 'allow_multisite_override' ) ) {
+			if ( 'network-multisite-over' === $network_class ) {
 				return;
 			}
-			if ( 'network-singlesite' === $network_class && ! get_site_option( $this->prefix . 'allow_multisite_override' ) ) {
+			if ( 'network-singlesite' === $network_class ) {
 				return;
 			}
 

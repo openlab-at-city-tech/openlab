@@ -23,14 +23,15 @@ function badgeos_achievement_submissions( $content = '' ) {
 
 		// get achievement object for the current post type
 		$post_type = get_post_type( $post );
-		$achievement = get_page_by_title( $post_type, 'OBJECT', 'achievement-type' );
-		if ( !$achievement ) {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $achievement = get_page_by_title( $post_type, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
+        if ( !$achievement ) {
 			global $wp_post_types;
 
 			$labels = array( 'name', 'singular_name' );
 			// check for other variations
 			foreach ( $labels as $label ) {
-				$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
+                $achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
 				if ( $achievement )
 					break;
 			}
@@ -136,7 +137,7 @@ function badgeos_reformat_entries( $content ) {
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_render_earned_achievement_text( $badge_id, get_current_user_id() );
 
-	$badge_image = badgeos_get_achievement_post_thumbnail( $badge_id );
+    $badge_image = badgeos_get_achievement_post_thumbnail( $badge_id, 'boswp-badgeos-achievement' );
 	
 	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
 	$class = count( $achievements ) > 0 ? ' earned' : '';
@@ -191,7 +192,7 @@ function badgeos_is_main_loop( $id = false ) {
 }
 
 /**
- * Gets achivement's required steps and returns HTML markup for these steps
+ * Gets achievement's required steps and returns HTML markup for these steps
  *
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement's post ID
@@ -329,13 +330,20 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
 		$point_value 	= $points['_badgeos_points'];
 		$points_type 	= $points['_badgeos_points_type'];
-		
-		$points_type_lbl = get_the_title( $points_type );
+
+        $points_type_lbl = badgeos_points_type_display_title( $points_type );
 
 		return '<div class="badgeos-item-points">' . sprintf( __( '%d %s', 'badgeos' ), $point_value, $points_type_lbl) . '</div>';
-	} else { 
-		return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';	
-	}
+	} else {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
+        $point_type = badgeos_points_type_display_title( $default_point_type );
+        if( !empty( $point_type ) ) {
+            return '<div class="badgeos-item-points">0 '.$point_type.'</div>';
+        } else {
+            return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';
+        }
+    }
 }
 
 /**
@@ -399,32 +407,38 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
  * @param  integer $achievement The achievement's post ID
  * @return string               Concatenated markup
  */
-function badgeos_render_achievement( $achievement = 0 ) {
-	global $user_ID;
+function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true', $image_width = '', $image_height = '' ) {
 
-	// If we were given an ID, get the post
-	if ( is_numeric( $achievement ) )
-		$achievement = get_post( $achievement );
+    global $user_ID;
 
-	// make sure our JS and CSS is enqueued
-	wp_enqueue_script( 'badgeos-achievements' );
-	wp_enqueue_style( 'badgeos-widget' );
+    // If we were given an ID, get the post
+    if ( is_numeric( $achievement ) )
+        $achievement = get_post( $achievement );
 
-	// check if user has earned this Achievement, and add an 'earned' class
-	$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+    // make sure our JS and CSS is enqueued
+    wp_enqueue_script( 'badgeos-achievements' );
+    wp_enqueue_style( 'badgeos-widget' );
 
-	// Setup our credly classes
-	$credly_class = '';
-	$credly_ID = '';
+    // check if user has earned this Achievement, and add an 'earned' class
+    $earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
-	// If the achievement is earned and givable, override our credly classes
-	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
-		$credly_class = ' share-credly addCredly';
-		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
-	}
+    // Setup our credly classes
+    $credly_class = '';
+    $credly_ID = '';
 
-	// Each Achievement
-	$output = '';
+    $giveable = false;
+    if( badgeos_first_time_installed() ) {
+        $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID );
+    }
+
+    // If the achievement is earned and givable, override our credly classes
+    if ( 'user-has-earned' == $earned_status && $giveable ) {
+        $credly_class = ' share-credly addCredly';
+        $credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
+    }
+
+    // Each Achievement
+    $output = '';
     //exclude step CPT entries from displaying in the widget
     $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
     if( $is_hidden != 'hidden' ) {
@@ -432,38 +446,48 @@ function badgeos_render_achievement( $achievement = 0 ) {
         $output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
         // Achievement Image
-        $output .= '<div class="badgeos-item-image">';
-        $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
-        $output .= '</div><!-- .badgeos-item-image -->';
-
+        if( $show_thumb == 'true' ) {
+            $output .= '<div class="badgeos-item-image">';
+            $image_size = 'boswp-badgeos-achievement';
+            if( !empty( $image_width ) || !empty( $image_height) ) {
+                $image_size = array( $image_width,  $image_height );
+            }
+            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
+            $output .= '</div><!-- .badgeos-item-image -->';
+        }
 
         // Achievement Content
         $output .= '<div class="badgeos-item-description">';
 
         // Achievement Title
-        $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
-
-        // Achievement Short Description
-        $output .= '<div class="badgeos-item-excerpt">';
-        $output .= badgeos_achievement_points_markup( $achievement->ID );
-        $excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
-        $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
-        $output .= '</div><!-- .badgeos-item-excerpt -->';
-
-        // Render our Steps
-        if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
-            $output.='<div class="badgeos-item-attached">';
-            $output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
-            $output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
-            $output.= '</div><!-- .badgeos-item-attached -->';
+        if( $show_title == 'true' ) {
+            $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
         }
 
+        // Achievement Short Description
+        if( $show_description == 'true' ) {
+            $output .= '<div class="badgeos-item-excerpt">';
+            $output .= badgeos_achievement_points_markup( $achievement->ID );
+            $excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
+            $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+            $output .= '</div><!-- .badgeos-item-excerpt -->';
+        }
+
+        // Render our Steps
+        if( $show_steps == 'true' ) {
+            if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
+                $output.='<div class="badgeos-item-attached">';
+                $output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
+                $output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
+                $output.= '</div><!-- .badgeos-item-attached -->';
+            }
+        }
         $output .= '</div><!-- .badgeos-item-description -->';
         $output .= '</div><!-- .badgeos-achievements-list-item -->';
     }
 
     // Return our filterable markup
-	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
+    return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 
 }
 
@@ -571,15 +595,7 @@ function badgeos_render_feedback_filters( $atts = array() ) {
  * @return string             Concatenated output
  */
 function badgeos_render_nomination( $nomination = null, $args = array() ) {
-	global $post;
-
-    $nomination_id = $nomination->ID;
-    $nomination_status = get_post_meta( $nomination_id, '_badgeos_nomination_status', true );
-
-    if( trim( $nomination_status ) != 'pending' ) {
-        return;
-    }
-
+    global $post;
 
     // If we weren't given a nomination, use the current post
 	if ( empty( $nomination ) ) {
@@ -630,14 +646,6 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
  */
 function badgeos_render_submission( $submission = null, $args = array() ) {
 	global $post;
-
-    $submission_id = $submission->ID;
-    $submission_status = get_post_meta( $submission_id, '_badgeos_submission_status', true );
-
-    if( trim( $submission_status ) != 'pending' ) {
-        return;
-    }
-
 
     // If we weren't given a submission, use the current post
 	if ( empty( $submission ) ) {
@@ -829,7 +837,13 @@ function badgeos_get_current_page_post_id() {
  */
 function badgeos_hide_next_hidden_achievement_link($link) {
 
-	if($link) {
+    $slugs = badgeos_get_achievement_types_slugs();
+    // only run our filters on the badgeos singular pages
+    if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) ) {
+        return $link;
+    }
+
+    if($link) {
 
 		//Get current achievement id
 		$achievement_id = badgeos_get_current_page_post_id();
@@ -853,7 +867,13 @@ add_filter('next_post_link', 'badgeos_hide_next_hidden_achievement_link');
 function badgeos_hide_previous_hidden_achievement_link($link) {
 
 
-	if($link) {
+    $slugs = badgeos_get_achievement_types_slugs();
+    // only run our filters on the badgeos singular pages
+    if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) ) {
+        return $link;
+    }
+
+    if($link) {
 
 		//Get current achievement id
 		$achievement_id = badgeos_get_current_page_post_id();

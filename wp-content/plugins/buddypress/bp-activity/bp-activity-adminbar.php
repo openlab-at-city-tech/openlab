@@ -26,7 +26,7 @@ function bp_activity_admin_menu() {
 		return;
 	}
 
-	// Only show this menu to super admins
+	// Only show this menu to super admins.
 	if ( ! bp_current_user_can( 'bp_moderate' ) ) {
 		return;
 	}
@@ -38,7 +38,7 @@ function bp_activity_admin_menu() {
 	), bp_get_admin_url( 'admin.php' ) );
 
 	// Add the top-level Edit Activity button.
-	$wp_admin_bar->add_menu( array(
+	$wp_admin_bar->add_node( array(
 		'id'    => 'activity-admin',
 		'title' => __( 'Edit Activity', 'buddypress' ),
 		'href'  => esc_url( $activity_edit_link ),
