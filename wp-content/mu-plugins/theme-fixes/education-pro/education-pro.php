@@ -532,10 +532,11 @@ add_action(
 		}
 
 		$img = genesis_get_image( array(
-			'format'  => 'html',
-			'size'    => 'full',
-			'context' => 'archive',
-			'attr'    => 'post-image entry-image',
+			'format'   => 'html',
+			'size'     => 'full',
+			'context'  => 'archive',
+			'attr'     => 'post-image entry-image',
+			'fallback' => '',
 		) );
 
 		if ( ! empty( $img ) ) {
