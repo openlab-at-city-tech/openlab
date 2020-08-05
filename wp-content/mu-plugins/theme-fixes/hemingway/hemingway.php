@@ -119,6 +119,21 @@ add_filter(
 );
 
 /**
+ * And more filter default Accent Color.
+ *
+ * Hemingway sometimes passes a 'default' and this is the only way to override.
+ */
+add_filter(
+    'option_theme_mods_hemingway',
+    function( $mods ) {
+        if ( ! isset( $mods['accent_color'] ) ) {
+            $mods['accent_color'] = '#ad0000';
+        }
+        return $mods;
+    }
+);
+
+/**
  * Post titles should have the accent color.
  */
 add_filter(
