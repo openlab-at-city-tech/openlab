@@ -227,6 +227,10 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		$group_id = openlab_fallback_group();
 	}
 
+	if ( ! $group_id ) {
+		return [];
+	}
+
 	$cache_key  = 'member_portfolios_' . $sort_by;
 	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
 
