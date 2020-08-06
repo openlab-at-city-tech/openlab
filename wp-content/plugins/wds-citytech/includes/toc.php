@@ -5,7 +5,7 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.2.1';
+const VERSION = '1.2.2';
 
 /**
  * Inject the entry title right before the widget is rendered.
@@ -84,6 +84,7 @@ function enqueue_assets() {
 		VERSION
 	);
 }
+add_action( 'ez_toc_after', __NAMESPACE__ . '\\enqueue_assets' );
 add_action( 'ez_toc_after_widget', __NAMESPACE__ . '\\enqueue_assets' );
 
 /**

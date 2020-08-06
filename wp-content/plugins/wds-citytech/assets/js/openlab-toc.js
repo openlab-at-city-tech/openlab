@@ -1,6 +1,15 @@
 jQuery(document).ready( function( $ ) {
 	var app = {
 		init: function() {
+			// Handle "In Page TOC".
+			$( '#ez-toc-container' ).attr( 'aria-expanded', 'true' );
+			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
+
+			// No need to continue if we don't have widget.
+			if ( ! app.hasWidget() ) {
+				return;
+			}
+
 			app.cache();
 			app.bindEvents();
 			app.setUpObserver();
@@ -12,9 +21,6 @@ jQuery(document).ready( function( $ ) {
 			} else {
 				app.container.attr( 'aria-expanded', 'true' );
 			}
-
-			// Set aria-expanded for "In Page TOC".
-			$( '#ez-toc-container' ).attr( 'aria-expanded', 'true' );
 		},
 
 		cache: function() {
@@ -42,7 +48,10 @@ jQuery(document).ready( function( $ ) {
 			app.window.on( 'scroll', app.handleScroll );
 			app.window.on( 'resize', app.handleResize );
 			app.container.on( 'click', '.ez-toc-toggle', app.handleToggle );
-			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
+		},
+
+		hasWidget: function() {
+			return !! $( '.ez-toc' ).length;
 		},
 
 		setUpObserver: function() {
