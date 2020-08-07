@@ -8537,3 +8537,9 @@ a.cc-widget-icon-link {
   color: #f00;
   font-weight: bold;
 }
+.widget-content form.searchandfilter ul {
+  display: block;
+}
+.widget-content form.searchandfilter li {
+  display: block;
+}
