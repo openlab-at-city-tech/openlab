@@ -91,7 +91,7 @@ function add_group_menu_item( $group_id = 0, $menu_id = null ) {
 			'menu-item-url'      => bp_get_group_permalink( $group ),
 			'menu-item-status'   => 'publish',
 			'menu-item-type'     => 'custom',
-			'menu-item-position' => -1,
+			'menu-item-position' => -2,
 			'menu-item-classes'  => 'menu-item menu-item-group-profile-link',
 		]
 	);
