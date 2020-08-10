@@ -5,17 +5,19 @@ if (!defined('CSS_DEBUG')) {
 }
 
 function openlab_core_setup() {
-    add_theme_support('post-thumbnails');
-    global $content_width;
-    register_nav_menus(array(
-        'main' => __('Main Menu', 'openlab'),
-        'aboutmenu' => __('About Menu', 'openlab'),
-        'helpmenu' => __('Help Menu', 'openlab'),
-        'helpmenusec' => __('Help Menu Secondary', 'openlab')
-    ));
-}
+	global $content_width;
+	
+	add_theme_support( 'post-thumbnails' );
+	add_theme_support( 'responsive-embeds' );
 
-add_action('after_setup_theme', 'openlab_core_setup');
+	register_nav_menus( array(
+		'main'        => __( 'Main Menu', 'openlab' ),
+		'aboutmenu'   => __( 'About Menu', 'openlab' ),
+		'helpmenu'    => __( 'Help Menu', 'openlab' ),
+		'helpmenusec' => __( 'Help Menu Secondary', 'openlab' ),
+	) );
+}
+add_action( 'after_setup_theme', 'openlab_core_setup' );
 
 /* * creating a library to organize functions* */
 /* * core* */
