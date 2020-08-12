@@ -68,7 +68,6 @@
 								'container' => '',
 								'items_wrap' => '%3$s',
 								'theme_location' => 'primary',
-								'walker' => new hemingway_nav_walker
 							) ) ?>
 						<?php else : ?>
 							<?php wp_list_pages( array(
@@ -85,7 +84,6 @@
 								'container' => '',
 								'items_wrap' => '%3$s',
 								'theme_location' => 'primary',
-								'walker' => new hemingway_nav_walker
 							) );
 						} else {
 							wp_list_pages( array(
