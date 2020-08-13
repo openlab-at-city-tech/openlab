@@ -34,7 +34,6 @@ function openlab_hide_plugins( $plugins ) {
 		'embed-google-map/embed_google_map.php',
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
-		'expire-sticky-posts/expire-sticky-posts.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
