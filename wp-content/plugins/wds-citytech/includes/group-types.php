@@ -494,7 +494,7 @@ function openlab_group_faculty_save( $group ) {
 	}
 
 	// Admins only.
-	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+	if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
 		return;
 	}
 
