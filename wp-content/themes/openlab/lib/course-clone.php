@@ -354,6 +354,31 @@ class Openlab_Clone_Course_Group {
 	}
 
 	public function migrate_avatar() {
+		// Don't allow avatar to be migrated if cloning another's group.
+		$group_admin_ids = [];
+		if ( openlab_is_course( $this->source_group_id ) ) {
+			$primary_faculty = groups_get_groupmeta( $this->source_group_id, 'primary_faculty', true );
+			if ( $primary_faculty ) {
+				$group_admin_ids[] = (int) $primary_faculty;
+			}
+
+			$additional_faculty = groups_get_groupmeta( $this->source_group_id, 'additional_faculty', false );
+			if ( $additional_faculty ) {
+				foreach ( $additional_faculty as $additional_faculty_id ) {
+					$group_admin_ids[] = (int) $additional_faculty_id;
+				}
+			}
+		} else {
+			$group_contacts = groups_get_groupmeta( $this->source_group_id, 'group_contact', false );
+			foreach ( $group_contacts as $group_contact ) {
+				$group_admin_ids[] = (int) $group_contact;
+			}
+		}
+
+		if ( ! in_array( $group_admin_ids, bp_loggedin_user_id() ) ) {
+			return;
+		}
+
 		$avatar_path       = trailingslashit( bp_core_avatar_upload_path() ) . trailingslashit( 'group-avatars' );
 		$source_avatar_dir = $avatar_path . $this->source_group_id;
 
