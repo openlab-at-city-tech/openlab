@@ -55,20 +55,20 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 		);
 
 		$group_admin_ids = [];
-		if ( openlab_is_course( $group_id ) ) {
-			$primary_faculty = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+		if ( openlab_is_course( $source_id ) ) {
+			$primary_faculty = groups_get_groupmeta( $source_id, 'primary_faculty', true );
 			if ( $primary_faculty ) {
 				$group_admin_ids[] = (int) $primary_faculty;
 			}
 
-			$additional_faculty = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+			$additional_faculty = groups_get_groupmeta( $source_id, 'additional_faculty', false );
 			if ( $additional_faculty ) {
 				foreach ( $additional_faculty as $additional_faculty_id ) {
 					$group_admin_ids[] = (int) $additional_faculty_id;
 				}
 			}
 		} else {
-			$group_contacts = groups_get_groupmeta( $group_id, 'group_contact', false );
+			$group_contacts = groups_get_groupmeta( $source_id, 'group_contact', false );
 			foreach ( $group_contacts as $group_contact ) {
 				$group_admin_ids[] = (int) $group_contact;
 			}
