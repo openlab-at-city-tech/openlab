@@ -375,7 +375,7 @@ class Openlab_Clone_Course_Group {
 			}
 		}
 
-		if ( ! in_array( $group_admin_ids, bp_loggedin_user_id() ) ) {
+		if ( ! in_array( bp_loggedin_user_id(), $group_admin_ids, true ) ) {
 			return;
 		}
 
