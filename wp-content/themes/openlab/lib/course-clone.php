@@ -357,9 +357,11 @@ class Openlab_Clone_Course_Group {
 		// Don't allow avatar to be migrated if cloning another's group.
 		$group_admin_ids = [];
 		if ( openlab_is_course( $this->source_group_id ) ) {
-			$primary_faculty = groups_get_groupmeta( $this->source_group_id, 'primary_faculty', true );
+			$primary_faculty = openlab_get_primary_faculty( $this->source_group_id );
 			if ( $primary_faculty ) {
-				$group_admin_ids[] = (int) $primary_faculty;
+				foreach ( $primary_faculty as $primary_faculty_id ) {
+					$group_admin_ids[] = (int) $primary_faculty_id;
+				}
 			}
 
 			$additional_faculty = groups_get_groupmeta( $this->source_group_id, 'additional_faculty', false );

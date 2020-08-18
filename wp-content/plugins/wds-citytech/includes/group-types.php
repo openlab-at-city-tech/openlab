@@ -365,16 +365,20 @@ function openlab_course_faculty_metabox() {
 	if ( bp_is_group_create() ) {
 		$primary_faculty = bp_loggedin_user_id();
 	} else {
-		$primary_faculty = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+		$primary_faculty = openlab_get_primary_faculty( $group_id );
 	}
 
-	$primary_faculty_data = array();
+	$primary_faculty_data  = array();
+	$primary_faculty_first = null;
 	if ( $primary_faculty ) {
-		$primary_faculty_user   = new WP_User( $primary_faculty );
-		$primary_faculty_data[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
-			'value' => esc_attr( $primary_faculty_user->user_nicename ),
-		);
+		$primary_faculty_first = $primary_faculty[0];
+		foreach ( $primary_faculty as $primary_faculty_id ) {
+			$primary_faculty_user   = new WP_User( $primary_faculty_id );
+			$primary_faculty_data[] = array(
+				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
+				'value' => esc_attr( $primary_faculty_user->user_nicename ),
+			);
+		}
 	}
 
 	$addl_faculty      = groups_get_groupmeta( $group_id, 'additional_faculty', false );
@@ -415,7 +419,7 @@ function openlab_course_faculty_metabox() {
 					<ul id="primary-faculty-list" class="inline-element-list"></ul>
 
 					<label class="sr-only hide-if-js" for="primary-faculty">Primary Faculty</label>
-					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty ); ?>" />
+					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty_first ); ?>" />
 				</div>
 
 				<div class="subpanel">
@@ -713,4 +717,21 @@ function openlab_get_group_contacts( $group_id ) {
 		$contact_ids = [];
 	}
 	return array_map( 'intval', $contact_ids );
+}
+
+/**
+ * Gets a list of group primary faculty IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_primary_faculty( $group_id ) {
+	$primary_faculty_ids = [];
+
+	$primary_faculty_id = groups_get_groupmeta( bp_get_current_group_id(), 'primary_faculty', true );
+	if ( $primary_faculty_id ) {
+		$primary_faculty_ids[] = (int) $primary_faculty_id;
+	}
+
+	return $primary_faculty_ids;
 }
