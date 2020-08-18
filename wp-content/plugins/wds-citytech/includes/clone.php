@@ -318,8 +318,16 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$group    = groups_get_group( $group_id );
-		$history  = openlab_get_group_clone_history_data( $group_id, $group->creator_id );
-		$markup   = openlab_format_group_clone_history_data_list( $history );
+
+		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+		if ( $all_group_contacts <= 1 ) {
+			$exclude_creator = $all_group_contacts[0];
+		} else {
+			$exclude_creator = null;
+		}
+
+		$history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
+		$markup  = openlab_format_group_clone_history_data_list( $history );
 
 		echo $args['before_widget'];
 

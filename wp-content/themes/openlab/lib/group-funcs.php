@@ -426,8 +426,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
+	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+	if ( $all_group_contacts <= 1 ) {
+		$exclude_creator = $all_group_contacts[0];
+	} else {
+		$exclude_creator = null;
+	}
+
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+    $clone_history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
 	$clone_history = array_filter(
 		$clone_history,
 		function( $item ) {
