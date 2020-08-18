@@ -554,7 +554,7 @@ function cuny_group_single() {
                             $group_units     = openlab_get_group_academic_units( $group_id );
                             $wds_school      = openlab_generate_school_office_name( $group_units );
                             $wds_departments = openlab_generate_department_name( $group_units );
-                            $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
+                            $group_contacts  = openlab_get_group_contacts( $group_id );
 
                             // Show 'School' field for Projects, Clubs, or staff Portfolios.
                             $show_school = 'project' === $group_type || 'club' === $group_type;

@@ -369,7 +369,7 @@ class Openlab_Clone_Course_Group {
 				}
 			}
 		} else {
-			$group_contacts = groups_get_groupmeta( $this->source_group_id, 'group_contact', false );
+			$group_contacts = openlab_get_group_contacts( $this->source_group_id );
 			foreach ( $group_contacts as $group_contact ) {
 				$group_admin_ids[] = (int) $group_contact;
 			}

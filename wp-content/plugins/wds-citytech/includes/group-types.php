@@ -567,7 +567,7 @@ function openlab_group_contact_field() {
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
 		$group_id          = bp_get_current_group_id();
-		$existing_contacts = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
+		$existing_contacts = openlab_get_group_contacts();
 	}
 
 	$existing_contacts_data = array();
@@ -680,7 +680,7 @@ function openlab_group_contact_save( $group ) {
 	}
 
 	// Delete all existing items.
-	$existing = groups_get_groupmeta( $group->id, 'group_contact', false );
+	$existing = openlab_get_group_contacts( $group->id );
 	foreach ( $existing as $e ) {
 		groups_delete_groupmeta( $group->id, 'group_contact', $e );
 	}
@@ -700,3 +700,17 @@ function openlab_group_contact_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_contact_save' );
+
+/**
+ * Gets a list of group contact IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_group_contacts( $group_id ) {
+	$contact_ids = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
+	if ( ! $contact_ids ) {
+		$contact_ids = [];
+	}
+	return array_map( 'intval', $contact_ids );
+}

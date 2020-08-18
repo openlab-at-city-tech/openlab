@@ -68,7 +68,7 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 				}
 			}
 		} else {
-			$group_contacts = groups_get_groupmeta( $source_id, 'group_contact', false );
+			$group_contacts = openlab_get_group_contacts( $source_id );
 			foreach ( $group_contacts as $group_contact ) {
 				$group_admin_ids[] = (int) $group_contact;
 			}
