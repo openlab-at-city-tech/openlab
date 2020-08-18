@@ -363,7 +363,7 @@ function openlab_course_faculty_metabox() {
 	}
 
 	if ( bp_is_group_create() ) {
-		$primary_faculty = bp_loggedin_user_id();
+		$primary_faculty = [ bp_loggedin_user_id() ];
 	} else {
 		$primary_faculty = openlab_get_primary_faculty( $group_id );
 	}
@@ -712,7 +712,7 @@ add_action( 'groups_group_after_save', 'openlab_group_contact_save' );
  * @return array
  */
 function openlab_get_group_contacts( $group_id ) {
-	$contact_ids = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
+	$contact_ids = groups_get_groupmeta( $group_id, 'group_contact', false );
 	if ( ! $contact_ids ) {
 		$contact_ids = [];
 	}
@@ -728,12 +728,12 @@ function openlab_get_group_contacts( $group_id ) {
 function openlab_get_primary_faculty( $group_id ) {
 	$primary_faculty_ids = [];
 
-	$primary_faculty_id = groups_get_groupmeta( bp_get_current_group_id(), 'primary_faculty', true );
+	$primary_faculty_id = groups_get_groupmeta( $group_id, 'primary_faculty', true );
 	if ( $primary_faculty_id ) {
 		$primary_faculty_ids[] = (int) $primary_faculty_id;
 	}
 
-	return $primary_faculty_ids;
+	return array_map( 'intval', $primary_faculty_ids );
 }
 
 /**
@@ -743,10 +743,26 @@ function openlab_get_primary_faculty( $group_id ) {
  * @return array
  */
 function openlab_get_additional_faculty( $group_id ) {
-	$additional_faculty_ids = groups_get_groupmeta( bp_get_current_group_id(), 'additional_faculty', false );
+	$additional_faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
 	if ( ! $additional_faculty_ids ) {
 		$additional_faculty_ids = [];
 	}
 
-	return $additional_faculty_ids;
+	return array_map( 'intval', $additional_faculty_ids );
+}
+
+/**
+ * Gets a list of IDs of all group faculty/contacts.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_all_group_contact_ids( $group_id ) {
+	if ( openlab_is_course( $group_id ) ) {
+		$group_admin_ids = array_merge( openlab_get_primary_faculty( $group_id ), openlab_get_additional_faculty( $group_id ) );
+	} else {
+		$group_admin_ids = openlab_get_group_contacts( $group_id );
+	}
+
+	return array_unique( $group_admin_ids );
 }

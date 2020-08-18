@@ -54,27 +54,7 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 			)
 		);
 
-		$group_admin_ids = [];
-		if ( openlab_is_course( $source_id ) ) {
-			$primary_faculty = openlab_get_primary_faculty( $source_id );
-			if ( $primary_faculty ) {
-				foreach ( $primary_faculty as $primary_faculty_id ) {
-					$group_admin_ids[] = (int) $primary_faculty_id;
-				}
-			}
-
-			$additional_faculty = openlab_get_additional_faculty( $source_id );
-			if ( $additional_faculty ) {
-				foreach ( $additional_faculty as $additional_faculty_id ) {
-					$group_admin_ids[] = (int) $additional_faculty_id;
-				}
-			}
-		} else {
-			$group_contacts = openlab_get_group_contacts( $source_id );
-			foreach ( $group_contacts as $group_contact ) {
-				$group_admin_ids[] = (int) $group_contact;
-			}
-		}
+		$group_admin_ids = openlab_get_all_group_contact_ids( $source_id );
 
 		$admins = [];
 		foreach ( $group_admin_ids as $group_admin_id ) {

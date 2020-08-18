@@ -355,27 +355,7 @@ class Openlab_Clone_Course_Group {
 
 	public function migrate_avatar() {
 		// Don't allow avatar to be migrated if cloning another's group.
-		$group_admin_ids = [];
-		if ( openlab_is_course( $this->source_group_id ) ) {
-			$primary_faculty = openlab_get_primary_faculty( $this->source_group_id );
-			if ( $primary_faculty ) {
-				foreach ( $primary_faculty as $primary_faculty_id ) {
-					$group_admin_ids[] = (int) $primary_faculty_id;
-				}
-			}
-
-			$additional_faculty = openlab_get_additional_faculty( $this->source_group_id );
-			if ( $additional_faculty ) {
-				foreach ( $additional_faculty as $additional_faculty_id ) {
-					$group_admin_ids[] = (int) $additional_faculty_id;
-				}
-			}
-		} else {
-			$group_contacts = openlab_get_group_contacts( $this->source_group_id );
-			foreach ( $group_contacts as $group_contact ) {
-				$group_admin_ids[] = (int) $group_contact;
-			}
-		}
+		$group_admin_ids = openlab_get_all_group_contact_ids( $this->source_group_id );
 
 		if ( ! in_array( bp_loggedin_user_id(), $group_admin_ids, true ) ) {
 			return;
