@@ -669,7 +669,7 @@ function openlab_group_contact_save( $group ) {
 	}
 
 	// Admins only.
-	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) && ! current_user_can( 'bp_moderate' ) ) {
 		return;
 	}
 
