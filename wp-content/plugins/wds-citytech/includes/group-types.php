@@ -381,7 +381,7 @@ function openlab_course_faculty_metabox() {
 		}
 	}
 
-	$addl_faculty      = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+	$addl_faculty      = openlab_get_additional_faculty( $group_id );
 	$addl_faculty_data = array();
 
 	if ( ! empty( $addl_faculty ) ) {
@@ -515,7 +515,7 @@ function openlab_group_faculty_save( $group ) {
 
 	// Delete all existing items.
 	groups_delete_groupmeta( $group->id, 'primary_faculty' );
-	$existing = groups_get_groupmeta( $group->id, 'additional_faculty', false );
+	$existing = openlab_get_additional_faculty( $group->id );
 	foreach ( $existing as $e ) {
 		groups_delete_groupmeta( $group->id, 'additional_faculty', $e );
 	}
@@ -734,4 +734,19 @@ function openlab_get_primary_faculty( $group_id ) {
 	}
 
 	return $primary_faculty_ids;
+}
+
+/**
+ * Gets a list of group additional faculty IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_additional_faculty( $group_id ) {
+	$additional_faculty_ids = groups_get_groupmeta( bp_get_current_group_id(), 'additional_faculty', false );
+	if ( ! $additional_faculty_ids ) {
+		$additional_faculty_ids = [];
+	}
+
+	return $additional_faculty_ids;
 }

@@ -1447,7 +1447,7 @@ function openlab_get_faculty_list( $group_id = null ) {
 
 	$group = groups_get_group( $group_id );
 
-	$faculty_ids = array_merge( openlab_get_primary_faculty( $group_id ), groups_get_groupmeta( $group_id, 'additional_faculty', false ) );
+	$faculty_ids = array_merge( openlab_get_primary_faculty( $group_id ), openlab_get_additional_faculty( $group_id ) );
 
 	$faculty = array();
 	foreach ( $faculty_ids as $id ) {

@@ -364,7 +364,7 @@ class Openlab_Clone_Course_Group {
 				}
 			}
 
-			$additional_faculty = groups_get_groupmeta( $this->source_group_id, 'additional_faculty', false );
+			$additional_faculty = openlab_get_additional_faculty( $this->source_group_id );
 			if ( $additional_faculty ) {
 				foreach ( $additional_faculty as $additional_faculty_id ) {
 					$group_admin_ids[] = (int) $additional_faculty_id;

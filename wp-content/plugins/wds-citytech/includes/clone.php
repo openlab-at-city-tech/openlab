@@ -63,7 +63,7 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 				}
 			}
 
-			$additional_faculty = groups_get_groupmeta( $source_id, 'additional_faculty', false );
+			$additional_faculty = openlab_get_additional_faculty( $source_id );
 			if ( $additional_faculty ) {
 				foreach ( $additional_faculty as $additional_faculty_id ) {
 					$group_admin_ids[] = (int) $additional_faculty_id;
