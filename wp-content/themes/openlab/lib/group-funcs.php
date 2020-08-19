@@ -427,7 +427,7 @@ function cuny_group_single() {
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
 	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
-	if ( $all_group_contacts <= 1 ) {
+	if ( count( $all_group_contacts ) <= 1 ) {
 		$exclude_creator = $all_group_contacts[0];
 	} else {
 		$exclude_creator = null;

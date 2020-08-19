@@ -320,7 +320,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 		$group    = groups_get_group( $group_id );
 
 		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
-		if ( $all_group_contacts <= 1 ) {
+		if ( count( $all_group_contacts ) <= 1 ) {
 			$exclude_creator = $all_group_contacts[0];
 		} else {
 			$exclude_creator = null;

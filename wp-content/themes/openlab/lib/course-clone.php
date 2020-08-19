@@ -886,7 +886,7 @@ class Openlab_Clone_Course_Site {
 		// Only add the Credits widget if there are non-self ancestors.
 		$group              = groups_get_group( $this->group_id );
 		$all_group_contacts = openlab_get_all_group_contact_ids( $this->group_id );
-		if ( $all_group_contacts <= 1 ) {
+		if ( count( $all_group_contacts ) <= 1 ) {
 			$exclude_creator = $all_group_contacts[0];
 		} else {
 			$exclude_creator = null;
