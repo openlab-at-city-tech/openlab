@@ -133,6 +133,7 @@ function openlab_hide_plugins( $plugins ) {
 		'h5p/h5p.php'                     => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
+			15333, // ssw-fall2020 - http://redmine.citytech.cuny.edu/issues/2847
 		),
 		'openlab-comd-gform.php'          => array(
 			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
