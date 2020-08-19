@@ -571,7 +571,7 @@ function openlab_group_contact_field() {
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
 		$group_id          = bp_get_current_group_id();
-		$existing_contacts = openlab_get_group_contacts();
+		$existing_contacts = openlab_get_group_contacts( $group_id );
 	}
 
 	$existing_contacts_data = array();
