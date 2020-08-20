@@ -363,21 +363,25 @@ function openlab_course_faculty_metabox() {
 	}
 
 	if ( bp_is_group_create() ) {
-		$primary_faculty = bp_loggedin_user_id();
+		$primary_faculty = [ bp_loggedin_user_id() ];
 	} else {
-		$primary_faculty = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+		$primary_faculty = openlab_get_primary_faculty( $group_id );
 	}
 
-	$primary_faculty_data = array();
+	$primary_faculty_data  = array();
+	$primary_faculty_first = null;
 	if ( $primary_faculty ) {
-		$primary_faculty_user   = new WP_User( $primary_faculty );
-		$primary_faculty_data[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
-			'value' => esc_attr( $primary_faculty_user->user_nicename ),
-		);
+		$primary_faculty_first = $primary_faculty[0];
+		foreach ( $primary_faculty as $primary_faculty_id ) {
+			$primary_faculty_user   = new WP_User( $primary_faculty_id );
+			$primary_faculty_data[] = array(
+				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
+				'value' => esc_attr( $primary_faculty_user->user_nicename ),
+			);
+		}
 	}
 
-	$addl_faculty      = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+	$addl_faculty      = openlab_get_additional_faculty( $group_id );
 	$addl_faculty_data = array();
 
 	if ( ! empty( $addl_faculty ) ) {
@@ -415,7 +419,7 @@ function openlab_course_faculty_metabox() {
 					<ul id="primary-faculty-list" class="inline-element-list"></ul>
 
 					<label class="sr-only hide-if-js" for="primary-faculty">Primary Faculty</label>
-					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty ); ?>" />
+					<input class="hide-if-js" type="textbox" name="primary-faculty" id="primary-faculty" value="<?php echo esc_attr( $primary_faculty_first ); ?>" />
 				</div>
 
 				<div class="subpanel">
@@ -494,7 +498,7 @@ function openlab_group_faculty_save( $group ) {
 	}
 
 	// Admins only.
-	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+	if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
 		return;
 	}
 
@@ -511,7 +515,7 @@ function openlab_group_faculty_save( $group ) {
 
 	// Delete all existing items.
 	groups_delete_groupmeta( $group->id, 'primary_faculty' );
-	$existing = groups_get_groupmeta( $group->id, 'additional_faculty', false );
+	$existing = openlab_get_additional_faculty( $group->id );
 	foreach ( $existing as $e ) {
 		groups_delete_groupmeta( $group->id, 'additional_faculty', $e );
 	}
@@ -567,7 +571,7 @@ function openlab_group_contact_field() {
 		$existing_contacts[] = bp_loggedin_user_id();
 	} else {
 		$group_id          = bp_get_current_group_id();
-		$existing_contacts = groups_get_groupmeta( bp_get_current_group_id(), 'group_contact', false );
+		$existing_contacts = openlab_get_group_contacts( $group_id );
 	}
 
 	$existing_contacts_data = array();
@@ -669,7 +673,7 @@ function openlab_group_contact_save( $group ) {
 	}
 
 	// Admins only.
-	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) && ! current_user_can( 'bp_moderate' ) ) {
 		return;
 	}
 
@@ -680,7 +684,7 @@ function openlab_group_contact_save( $group ) {
 	}
 
 	// Delete all existing items.
-	$existing = groups_get_groupmeta( $group->id, 'group_contact', false );
+	$existing = openlab_get_group_contacts( $group->id );
 	foreach ( $existing as $e ) {
 		groups_delete_groupmeta( $group->id, 'group_contact', $e );
 	}
@@ -700,3 +704,65 @@ function openlab_group_contact_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_contact_save' );
+
+/**
+ * Gets a list of group contact IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_group_contacts( $group_id ) {
+	$contact_ids = groups_get_groupmeta( $group_id, 'group_contact', false );
+	if ( ! $contact_ids ) {
+		$contact_ids = [];
+	}
+	return array_map( 'intval', $contact_ids );
+}
+
+/**
+ * Gets a list of group primary faculty IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_primary_faculty( $group_id ) {
+	$primary_faculty_ids = [];
+
+	$primary_faculty_id = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+	if ( $primary_faculty_id ) {
+		$primary_faculty_ids[] = (int) $primary_faculty_id;
+	}
+
+	return array_map( 'intval', $primary_faculty_ids );
+}
+
+/**
+ * Gets a list of group additional faculty IDs.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_additional_faculty( $group_id ) {
+	$additional_faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
+	if ( ! $additional_faculty_ids ) {
+		$additional_faculty_ids = [];
+	}
+
+	return array_map( 'intval', $additional_faculty_ids );
+}
+
+/**
+ * Gets a list of IDs of all group faculty/contacts.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function openlab_get_all_group_contact_ids( $group_id ) {
+	if ( openlab_is_course( $group_id ) ) {
+		$group_admin_ids = array_merge( openlab_get_primary_faculty( $group_id ), openlab_get_additional_faculty( $group_id ) );
+	} else {
+		$group_admin_ids = openlab_get_group_contacts( $group_id );
+	}
+
+	return array_unique( $group_admin_ids );
+}

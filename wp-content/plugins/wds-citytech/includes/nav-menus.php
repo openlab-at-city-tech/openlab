@@ -91,7 +91,7 @@ function add_group_menu_item( $group_id = 0, $menu_id = null ) {
 			'menu-item-url'      => bp_get_group_permalink( $group ),
 			'menu-item-status'   => 'publish',
 			'menu-item-type'     => 'custom',
-			'menu-item-position' => -1,
+			'menu-item-position' => -2,
 			'menu-item-classes'  => 'menu-item menu-item-group-profile-link',
 		]
 	);
@@ -246,3 +246,31 @@ function register_customize_nav_menu_items( $items = [], $type = '', $object = '
 	return $items;
 }
 add_filter( 'customize_nav_menu_available_items', __NAMESPACE__ . '\\register_customize_nav_menu_items', 10, 4 );
+
+/**
+ * Setup custom OpenLab menu items.
+ *
+ * @param object $menu_item The menu item.
+ * @return object $menu_item The modified menu item object.
+ */
+function setup_nav_menu_item( $menu_item ) {
+	if ( is_admin() ) {
+		return $menu_item;
+	}
+
+	// Skip if not "Group Profile" menu item.
+	if ( ! in_array( 'menu-item-group-profile-link', $menu_item->classes, true ) ) {
+		return $menu_item;
+	}
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group    = groups_get_group( $group_id );
+	
+	// Hide "Group Profile" when a group is inaccessible.
+	if ( ! $group->is_visible ) {
+		$menu_item->_invalid = true;
+	}
+
+	return $menu_item;
+}
+add_filter( 'wp_setup_nav_menu_item', __NAMESPACE__ . '\\setup_nav_menu_item' );

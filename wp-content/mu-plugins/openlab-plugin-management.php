@@ -31,10 +31,12 @@ function openlab_hide_plugins( $plugins ) {
 		'cardboard/cardboard.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'elasticpress/elasticpress.php',
+		'elasticpress-buddypress/elasticpress-buddypress.php',
+		'elasticpress-buddypress/elasticpress-rest.php',
 		'embed-google-map/embed_google_map.php',
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
-		'expire-sticky-posts/expire-sticky-posts.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
@@ -45,6 +47,7 @@ function openlab_hide_plugins( $plugins ) {
 		'kb-gradebook/kb-gradebook.php',
 		'media-cleaner/media-cleaner.php',
 		'openlab-private-comments/openlab-private-comments.php',
+		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
 		'pagemash/pagemash.php',
@@ -130,6 +133,7 @@ function openlab_hide_plugins( $plugins ) {
 		'h5p/h5p.php'                     => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
+			15333, // ssw-fall2020 - http://redmine.citytech.cuny.edu/issues/2847
 		),
 		'openlab-comd-gform.php'          => array(
 			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693

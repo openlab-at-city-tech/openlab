@@ -426,8 +426,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
+	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+	if ( count( $all_group_contacts ) <= 1 ) {
+		$exclude_creator = $all_group_contacts[0];
+	} else {
+		$exclude_creator = null;
+	}
+
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+    $clone_history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
 	$clone_history = array_filter(
 		$clone_history,
 		function( $item ) {
@@ -435,15 +442,7 @@ function cuny_group_single() {
 		}
 	);
 
-	$credits_groups = array_map( function( $clone_group ) {
-		return sprintf(
-			'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
-			esc_attr( $clone_group['group_url'] ),
-			esc_html( $clone_group['group_name'] ),
-			esc_attr( $clone_group['group_creator_url'] ),
-			esc_html( $clone_group['group_creator_name'] )
-		);
-	}, $clone_history );
+	$credits_markup = openlab_format_group_clone_history_data_list( $clone_history );
 
     ?>
 
@@ -532,7 +531,7 @@ function cuny_group_single() {
                                     <div class="bold col-sm-7">Credits</div>
                                     <div class="col-sm-17 row-content">
                                         <ul class="group-credits">
-                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                            <?php echo $credits_markup; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -562,7 +561,7 @@ function cuny_group_single() {
                             $group_units     = openlab_get_group_academic_units( $group_id );
                             $wds_school      = openlab_generate_school_office_name( $group_units );
                             $wds_departments = openlab_generate_department_name( $group_units );
-                            $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
+                            $group_contacts  = openlab_get_group_contacts( $group_id );
 
                             // Show 'School' field for Projects, Clubs, or staff Portfolios.
                             $show_school = 'project' === $group_type || 'club' === $group_type;
@@ -635,7 +634,7 @@ function cuny_group_single() {
                                     <div class="bold col-sm-7">Credits</div>
                                     <div class="col-sm-17 row-content">
                                         <ul class="group-credits">
-                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                            <?php echo $credits_markup; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -1455,10 +1454,7 @@ function openlab_get_faculty_list( $group_id = null ) {
 
 	$group = groups_get_group( $group_id );
 
-	$faculty_id = groups_get_groupmeta( $group_id, 'primary_faculty', true );
-
-	$faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-	array_unshift( $faculty_ids, $faculty_id );
+	$faculty_ids = array_merge( openlab_get_primary_faculty( $group_id ), openlab_get_additional_faculty( $group_id ) );
 
 	$faculty = array();
 	foreach ( $faculty_ids as $id ) {

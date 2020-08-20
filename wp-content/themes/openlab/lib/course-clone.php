@@ -354,6 +354,13 @@ class Openlab_Clone_Course_Group {
 	}
 
 	public function migrate_avatar() {
+		// Don't allow avatar to be migrated if cloning another's group.
+		$group_admin_ids = openlab_get_all_group_contact_ids( $this->source_group_id );
+
+		if ( ! in_array( bp_loggedin_user_id(), $group_admin_ids, true ) ) {
+			return;
+		}
+
 		$avatar_path       = trailingslashit( bp_core_avatar_upload_path() ) . trailingslashit( 'group-avatars' );
 		$source_avatar_dir = $avatar_path . $this->source_group_id;
 
@@ -877,8 +884,15 @@ class Openlab_Clone_Course_Site {
 		flush_rewrite_rules();
 
 		// Only add the Credits widget if there are non-self ancestors.
-		$group = groups_get_group( $this->group_id );
-		if ( openlab_get_group_clone_history_data( $group->id, $group->creator_id ) ) {
+		$group              = groups_get_group( $this->group_id );
+		$all_group_contacts = openlab_get_all_group_contact_ids( $this->group_id );
+		if ( count( $all_group_contacts ) <= 1 ) {
+			$exclude_creator = $all_group_contacts[0];
+		} else {
+			$exclude_creator = null;
+		}
+
+		if ( openlab_get_group_clone_history_data( $group->id, $exclude_creator ) ) {
 			openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
 		}
 
