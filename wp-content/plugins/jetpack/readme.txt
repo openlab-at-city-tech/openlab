@@ -1,10 +1,10 @@
 === Jetpack by WordPress.com ===
-Contributors: automattic, adamkheckler, aduth, akirk, allendav, alternatekev, andy, annezazu, apeatling, azaozz, batmoo, barry, beaulebens, blobaugh, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, roccotripaldi, samhotchkiss, scarstocea, sdquirk, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
+Contributors: automattic, adamkheckler, aduth, akirk, allendav, alternatekev, andy, annezazu, apeatling, azaozz, batmoo, barry, beaulebens, blobaugh, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, roccotripaldi, samhotchkiss, scarstocea, scottsweb, sdquirk, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Jetpack, WordPress.com, backup, security, related posts, CDN, speed, anti-spam, social sharing, SEO, video, stats
-Stable tag: 8.0
-Requires at least: 5.2
+Stable tag: 8.6.1
+Requires at least: 5.3
 Requires PHP: 5.6
-Tested up to: 5.3
+Tested up to: 5.4
 
 The ideal plugin for stats, related posts, search engine optimization, social sharing, protection, backups, security, and more.
 
@@ -27,7 +27,7 @@ Activate site accelerator tools and watch your page load times decrease -- we'll
 
 * Images and static files, like CSS and JavaScript, served from our servers, not yours.
 * Elasticsearch-powered related content and site search, for relevant results with no drain on your servers.
-* Lazy image loading for a faster mobile experience.
+* Lazy load images for a faster mobile experience.
 * Unlimited and high-speed video via our content delivery network.
 
 = Effortless Site Management =
@@ -96,44 +96,67 @@ There are opportunities for developers at all levels to contribute. [Learn more 
 
 == Changelog ==
 
-= 8.0 =
+= 8.7 =
 
-* Release date: December 3, 2019
-* Release post: https://wp.me/p1moTy-lGH
+* Release date: July 7, 2020
+* Release post: https://wp.me/p1moTy-qiH
 
-**Major enhancements**
+**Major Enhancements**
 
-* Block Editor: new Pinterest block allowing you to easily embed boards, profiles, and pins.
-* Block Editor: new Ratings block allowing you to add star ratings any post or page.
-* Mailchimp block: you can now create forms for a subset (group) of your Mailchimp list, and add a field to track which form the signups are coming from.
+* When inserting images into your posts, you can now choose images from your Google Photos account, or from the Pexels Free Photos library.
+* WhatsApp block: this new block adds a button so your site's visitors can contact you via WhatsApp with the tap of a button.
+* You can now import Twitter threads into a post with the click of a button.
+* Jetpack Search now includes more options to customize the look of the Search overlay: you can choose between minimal and expanded results, you can hide the Sort option, or change the default sorting option.
+* Jetpack Ads: you can now enable a "Do Not Sell My Personal Information" link as specified in the California Consumer Privacy Act (CCPA) for California site visitors to opt-out of targeted advertising.
 
 **Enhancements**
 
-* Blocks: start using the @wordpress/block-editor package introduced in WordPress 5.2.
-* Contact Form: make the Form block reusable on a single post / page.
-* Dashboard: add support for Jetpack Backup display.
-* Image CDN: expand number of images using the new subdomain determination function.
-* Recurring Payments block: improve display of buttons inside the block in the editor.
-* Shortcodes: add new customization options and improve Schema.org markup of the Recipe shortcode.
-* Shortcodes: add AMP views for 5 shortcodes: `vimeo`, `instagram`, `dailymotion`, `tweet`, and `soundcloud`.
-* Support Tools: improve the reliability of the tools on slower sites.
+* Blocks: add more options to customize the look of the Payments block.
+* Blocks: allowing playing a Jetpack video in the block editor.
+* Blocks: add episode link and improve the look of the Podcast player when displaying only one episode.
+* Blocks: add more customization options to the buttons offered by the following blocks: Calendly, Mailchimp, Eventbrite.
+* Blocks: rename "Earn" blocks: "Simple Payments" becomes "Pay with Paypal"; "Recurring Payments" becomes "Payments".
+* Connection Flow: improve the display of connection errors when a site cannot be connected to WordPress.com.
+* Contact Form: improve the "Empty Spam" process to better handle large amount of Spam.
+* Jetpack Search: use the full width of the browser when the site does not use any Jetpack Search Sidebar.
+* Performance: switch from JavaScript library to CSS animations to display loading spinners.
+* Related Posts: improve accessibility of the titles of each Related Post.
+* Site Stats: improve accessibility of the Stats dashboard.
+* Social Logos: update Facebook Logo design.
+* Widgets: improve accessibility of the Contact Info Widget as well as the Blog Stats Widget.
+* Widgets: improve performance of the Display Posts widget by fetching less data.
 
 **Improved compatibility**
 
-* AMP: improve display of the Map block on AMP views.
-* General: As WordPress 5.3 is now available, Jetpack now requires WordPress 5.2.
-* Shortcodes: ensure Vimeo videos can be displayed properly when using the AMP plugin.
+* Autoloader: improve the way Jetpack librairies are loaded when used in multiple plugins.
+* Blocks: improve the display of the Tiled Gallery block when used with the AMP plugin.
+* Custom Content Types: ensure that the Comic Post Type is compatible with the AMP plugin.
+* Custom Content Types: allow third-party themes to enqueue their own Portfolio styles.
+* Gravatar Hovercards: avoid validation errors when used with the AMP plugin.
+* Open Graph Meta Tags: avoid displaying Jetpack's Tags when the Rank Math plugin is active.
+* Shortcodes / Embeds: ensure better compatibility of multiple embeds with the AMP plugin.
+* Sharing: ensure that all button styles can be used with the AMP plugin.
+* Sitemaps: avoid conflicts with the Sitemap option that will be available in the upcoming version of WordPress.
+* WordPress.com Toolbar: ensure it is accessible when using the Twenty Twenty theme.
+* WooCommerce: avoid broken resources when using the WooCommerce plugin alongside Jetpack.
 
 **Bug fixes**
 
-* Connection: fix communication between Jetpack sites and WordPress.com for some sites hosted on non-standard ports.
-* Connection management: fix issue that prevented the Connection transfer banner from appearing in some situations.
-* Feature Hints: disable when plugins cannot be installed on site.
-* Image CDN: avoid blurry images when using Jetpack's Image CDN alongside other image-focussed blocks.
-* SEO Tools: do not display any HTML tags in title meta tags.
-* Sharing: improve accessibility of the sharing buttons by updating the buttons' color.
-* Sync: avoid conflicts when two processes are synchronized to WordPress.com at the same time.
-* WordPress.com Block Editor: ensure that the Justify button works well on any paragraph using that button.
+* Blocks: avoid layout issues when using the Image Compare block alongside older themes.
+* Blocks: ensure the Eventbrite button can be centered.
+* Blocks: ensure the Podcast block can be loaded when the page is loaded via Infinite Scroll.
+* Blocks: do not render the Slideshow block's markup when no images have been added to the block.
+* Blocks: avoid errors when one adds and edits 2 Image Compare Blocks in a single post.
+* Blocks: fix Form block issues with checkbox fields not being checked by default when the option is selected.
+* Blocks: add missing "Required" option to the Form block's Checkbox field settings.
+* Blocks: avoid caching results from the Latest Instagram Posts block when there are errors with the fetched data.
+* Forms: improve accessibility of the "Required" text used in form fields.
+* Image CDN: avoid using CDN image URL when inserting an image using the image block.
+* Jetpack Search: load translations in the Search overlay on International sites.
+* Publicize: avoid layout issues when displaying broken connections in the Publicize block toolbar.
+* Sharing: avoid relying on jQuery for the official Facebook button.
+* Shortcodes / Embeds: fix the Twitch embed according to new Twitch embed requirements.
+* SEO Tools / Open Graph: improve cleaning up of description meta tags.
 
 --------
 

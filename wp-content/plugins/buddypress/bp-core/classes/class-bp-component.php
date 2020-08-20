@@ -461,9 +461,14 @@ class BP_Component {
 		// Generate rewrite rules.
 		add_action( 'bp_generate_rewrite_rules', array( $this, 'generate_rewrite_rules' ), 10 );
 
-		// Register BP REST Endpoints
+		// Register BP REST Endpoints.
 		if ( bp_rest_in_buddypress() && bp_rest_api_is_available() ) {
 			add_action( 'bp_rest_api_init', array( $this, 'rest_api_init' ), 10 );
+		}
+
+		// Register BP Blocks.
+		if ( bp_support_blocks() ) {
+			add_action( 'bp_blocks_init', array( $this, 'blocks_init' ), 10 );
 		}
 
 		/**
@@ -578,7 +583,7 @@ class BP_Component {
 				} else {
 					$pos = $nav['position'];
 
-					// Reset not set pos to 1
+					// Reset not set pos to 1.
 					if ( $pos % 10 === 0 ) {
 						$not_set_pos = 1;
 					}
@@ -596,7 +601,7 @@ class BP_Component {
 
 			// Add each admin menu.
 			foreach( $this->admin_menu as $admin_menu ) {
-				$wp_admin_bar->add_menu( $admin_menu );
+				$wp_admin_bar->add_node( $admin_menu );
 			}
 		}
 
@@ -905,6 +910,41 @@ class BP_Component {
 		 * @since 5.0.0
 		 */
 		do_action( 'bp_' . $this->id . '_rest_api_init' );
+	}
+
+	/**
+	 * Register the BP Blocks.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param array $blocks The list of BP Blocks to register.
+	 */
+	public function blocks_init( $blocks = array() ) {
+		if ( is_array( $blocks ) && $blocks ) {
+			/**
+			 * Filter here to disable all or some BP Blocks for a component.
+			 *
+			 * This is a dynamic hook that is based on the component string ID.
+			 *
+			 * @since 6.0.0
+			 *
+			 * @param array $blocks The list of BP Blocks for the component.
+			 */
+			$blocks = (array) apply_filters( 'bp_' . $this->id . '_register_blocks', $blocks );
+
+			foreach ( $blocks as $block ) {
+				bp_register_block( $block );
+			}
+		}
+
+		/**
+		 * Fires in the blocks_init method inside BP_Component.
+		 *
+		 * This is a dynamic hook that is based on the component string ID.
+		 *
+		 * @since 6.0.0
+		 */
+		do_action( 'bp_' . $this->id . '_blocks_init' );
 	}
 }
 endif; // BP_Component.

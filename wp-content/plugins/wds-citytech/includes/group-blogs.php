@@ -112,6 +112,34 @@ function openlab_set_group_site_id( $group_id, $site_id ) {
 	do_action( 'openlab_set_group_site_id', $group_id, $site_id );
 }
 
+/**
+ * Syncs the group site's blog_public setting to the linked group.
+ */
+function openlab_sync_group_site_blog_public( $old_value, $value ) {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return;
+	}
+
+	groups_update_groupmeta( $group_id, 'blog_public', $value );
+}
+add_action( 'update_option_blog_public', 'openlab_sync_group_site_blog_public', 10, 2 );
+
+/**
+ * Syncs the group site's blog_public setting to the linked group when group is saved.
+ */
+function openlab_sync_group_blog_public_on_group_save( $group ) {
+	$site_id = openlab_get_site_id_by_group_id( $group->id );
+	if ( ! $site_id ) {
+		return;
+	}
+
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+
+	groups_update_groupmeta( $group->id, 'blog_public', (int) $blog_public );
+}
+add_action( 'groups_group_after_save', 'openlab_sync_group_blog_public_on_group_save' );
+
 // Ensure that old-style blog comment activity is enabled.
 add_filter( 'bp_disable_blogforum_comments', '__return_true' );
 
@@ -798,8 +826,18 @@ add_action( 'bp_after_group_details_admin', 'wds_bp_group_meta' );
 function openlab_group_member_role_settings( $group_type ) {
 	global $bp;
 
-	$site_id = openlab_get_site_id_by_group_id();
-	if ( ! $site_id ) {
+	$show_panel = false;
+	$site_id    = null;
+	if ( bp_is_group_create() ) {
+		// Is this an asynchronous clone that includes site creation?
+		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$show_panel  = in_array( 'site', $clone_steps, true );
+	} else {
+		$site_id    = openlab_get_site_id_by_group_id();
+		$show_panel = ! empty( $site_id );
+	}
+
+	if ( ! $show_panel ) {
 		return;
 	}
 

@@ -3,7 +3,7 @@
 Plugin Name: FeedWordPress
 Plugin URI: http://feedwordpress.radgeek.com/
 Description: simple and flexible Atom/RSS syndication for WordPress
-Version: 2017.1020
+Version: 2020.0118
 Author: C. Johnson
 Author URI: https://feedwordpress.radgeek.com/contact/
 License: GPL
@@ -11,28 +11,25 @@ License: GPL
 
 /**
  * @package FeedWordPress
- * @version 2017.1020
+ * @version 2020.0118
  */
 
-# This uses code derived from:
+# This plugin uses code derived from:
 # -	wp-rss-aggregate.php by Kellan Elliot-McCrea <kellan@protest.net>
 # -	SimplePie feed parser by Ryan Parman, Geoffrey Sneddon, Ryan McCue, et al.
 # -	MagpieRSS feed parser by Kellan Elliot-McCrea <kellan@protest.net>
 # -	Ultra-Liberal Feed Finder by Mark Pilgrim <mark@diveintomark.org>
 # -	WordPress Blog Tool and Publishing Platform <http://wordpress.org/>
+# -	Github contributors @Flynsarmy, @BandonRandon, @david-robinson-practiceweb,
+# 	@daidais, @thegreatmichael, @stedaniels, @alexiskulash, @quassy, @zoul0813,
+# 	@timmmmyboy, @vobornik, and @inanimatt
 # according to the terms of the GNU General Public License.
-#
-# INSTALLATION: see readme.txt or <http://feedwordpress.radgeek.com/install>
-#
-# USAGE: once FeedWordPress is installed, you manage just about everything from
-# the WordPress Dashboard, under the Syndication menu. To keep fresh content
-# coming in as it becomes available, you'll have to either check for updates
-# manually, or set up one of the automatically-scheduled update methods. See
-# <http://feedwordpress.radgeek.com/wiki/quick-start/> for some details.
 
-# -- Don't change these unless you know what you're doing...
+####################################################################################
+## CONSTANTS & DEFAULTS ############################################################
+####################################################################################
 
-define ('FEEDWORDPRESS_VERSION', '2017.1020');
+define ('FEEDWORDPRESS_VERSION', '2020.0118');
 define ('FEEDWORDPRESS_AUTHOR_CONTACT', 'http://feedwordpress.radgeek.com/contact');
 
 if (!defined('FEEDWORDPRESS_BLEG')) :
@@ -41,11 +38,10 @@ endif;
 define('FEEDWORDPRESS_BLEG_BTC', '15EsQ9QMZtLytsaVYZUaUCmrkSMaxZBTso');
 define('FEEDWORDPRESS_BLEG_PAYPAL', '22PAJZZCK5Z3W');
 
-define('FEEDWORDPRESS_BOILERPLATE_DEFAULT_HOOK_ORDER', 11000); // at the tail end of the filtering process
-
 // Defaults
 define ('DEFAULT_SYNDICATION_CATEGORY', 'Contributors');
 define ('DEFAULT_UPDATE_PERIOD', 60); // value in minutes
+define ('FEEDWORDPRESS_DEFAULT_CHECKIN_INTERVAL', DEFAULT_UPDATE_PERIOD/10);
 
 if (isset($_REQUEST['feedwordpress_debug'])) :
 	$feedwordpress_debug = $_REQUEST['feedwordpress_debug'];
@@ -66,9 +62,7 @@ define ('FEEDVALIDATOR_URI', 'http://feedvalidator.org/check.cgi');
 
 define ('FEEDWORDPRESS_FRESHNESS_INTERVAL', 10*60); // Every ten minutes
 
-define ('FWP_SCHEMA_HAS_USERMETA', 2966);
-define ('FWP_SCHEMA_USES_ARGS_TAXONOMY', 12694); // Revision # for using $args['taxonomy'] to get link categories
-define ('FWP_SCHEMA_30', 12694); // Database schema # for WP 3.0
+define('FEEDWORDPRESS_BOILERPLATE_DEFAULT_HOOK_ORDER', 11000); // at the tail end of the filtering process
 
 if (FEEDWORDPRESS_DEBUG) :
 	// Help us to pick out errors, if any.
@@ -91,8 +85,9 @@ else :
 	define('FEEDWORDPRESS_FETCH_TIMEOUT_DEFAULT', 20);
 endif;
 
-// Use our the cache settings that we want.
-add_filter('wp_feed_cache_transient_lifetime', array('FeedWordPress', 'cache_lifetime'));
+####################################################################################
+## CORE DEPENDENCIES & PLUGIN MODULES ##############################################
+####################################################################################
 
 // Dependencies: modules packaged with WordPress core
 $wpCoreDependencies = array(
@@ -129,7 +124,11 @@ endif;
 // Dependences: modules packaged with FeedWordPress plugin
 $dir = dirname(__FILE__);
 require_once("${dir}/externals/myphp/myphp.class.php");
+require_once("${dir}/feedwordpressadminpage.class.php");
+require_once("${dir}/feedwordpresssettingsui.class.php");
+require_once("${dir}/feedwordpressdiagnostic.class.php");
 require_once("${dir}/admin-ui.php");
+require_once("${dir}/template-functions.php");
 require_once("${dir}/feedwordpresssyndicationpage.class.php");
 require_once("${dir}/compatability.php"); // Legacy API
 require_once("${dir}/syndicatedpost.class.php");
@@ -146,12 +145,21 @@ require_once("${dir}/feedwordpressrpc.class.php");
 require_once("${dir}/feedwordpresshttpauthenticator.class.php");
 require_once("${dir}/feedwordpresslocalpost.class.php");
 
-// Magic quotes are just about the stupidest thing ever.
+####################################################################################
+## GLOBAL PARAMETERS ###############################################################
+####################################################################################
+
+// $fwp_post used to be a global variable used to make it easier to cope
+// with the frustrating sometime presence of "Magic Quotes" in earlier
+// versions of PHP (<http://php.net/manual/en/security.magicquotes.php>).
+// Magic quotes were DEPRECATED as of PHP 5.3.0, and REMOVED as of PHP
+// 5.4.0, so for the time being $fwp_post just gets a copy of $_POST.
+global $fwp_post;
+
 if (is_array($_POST)) :
 	$fwp_post = $_POST;
-	if (get_magic_quotes_gpc()) :
-		$fwp_post = stripslashes_deep($fwp_post);
-	endif;
+else:
+	$fwp_post = null;
 endif;
 
 // Get the path relative to the plugins directory in which FWP is stored
@@ -166,6 +174,10 @@ if (isset($ref[1])) :
 else : // Something went wrong. Let's just guess.
 	$fwp_path = 'feedwordpress';
 endif;
+
+####################################################################################
+## FEEDWORDPRESS: INITIALIZE OBJECT AND FILTERS ####################################
+####################################################################################
 
 $feedwordpress = new FeedWordPress;
 if (!$feedwordpress->needs_upgrade()) : // only work if the conditions are safe!
@@ -281,63 +293,23 @@ if (!$feedwordpress->needs_upgrade()) : // only work if the conditions are safe!
 	add_action('plugins_loaded', array($feedwordpress, 'admin_api'));
 	add_action('all_admin_notices', array($feedwordpress, 'all_admin_notices'));
 
+	// Use our the cache settings that we want.
+	add_filter('wp_feed_cache_transient_lifetime', array('FeedWordPress', 'cache_lifetime'));
+
+
 else :
 	# Hook in the menus, which will just point to the upgrade interface
 	add_action('admin_menu', 'fwp_add_pages');
 endif; // if (!FeedWordPress::needs_upgrade())
 
+register_deactivation_hook(__FILE__, 'feedwordpress_deactivate');
+function feedwordpress_deactivate () {
+	wp_clear_scheduled_hook('fwp_scheduled_update_checkin');
+} /* feedwordpress_deactivate () */
+
 ################################################################################
 ## LOGGING FUNCTIONS: log status updates to error_log if you want it ###########
 ################################################################################
-
-class FeedWordPressDiagnostic {
-	public static function feed_error ($error, $old, $link) {
-		$wpError = $error['object'];
-		$url = $link->uri();
-		
-		// check for effects of an effective-url filter
-		$effectiveUrl = $link->uri(array('fetch' => true));
-		if ($url != $effectiveUrl) : $url .= ' | ' . $effectiveUrl; endif;
-
-		$mesgs = $wpError->get_error_messages();
-		foreach ($mesgs as $mesg) :
-			$mesg = esc_html($mesg);
-			FeedWordPress::diagnostic(
-				'updated_feeds:errors',
-				"Feed Error: [${url}] update returned error: $mesg"
-			);
-
-			$hours = get_option('feedwordpress_diagnostics_persistent_errors_hours', 2);
-			$span = ($error['ts'] - $error['since']);
-
-			if ($span >= ($hours * 60 * 60)) :
-				$since = date('r', $error['since']);
-				$mostRecent = date('r', $error['ts']);
-				FeedWordPress::diagnostic(
-					'updated_feeds:errors:persistent',
-					"Feed Update Error: [${url}] returning errors"
-					." since ${since}:<br/><code>$mesg</code>",
-					$url, $error['since'], $error['ts']
-				);
-			endif;
-		endforeach;
-	}
-
-	function admin_emails ($id = '') {
-		$users = get_users_of_blog($id);
-		$recipients = array();
-		foreach ($users as $user) :
-			$user_id = (isset($user->user_id) ? $user->user_id : $user->ID);
-			$dude = new WP_User($user_id);
-			if ($dude->has_cap('administrator')) :
-				if ($dude->user_email) :
-					$recipients[] = $dude->user_email;
-				endif;
-			endif;
-		endforeach;
-		return $recipients;
-	}
-} /* class FeedWordPressDiagnostic */
 
 function debug_out_human_readable_bytes ($quantity) {
 	$quantity = (int) $quantity;
@@ -351,7 +323,7 @@ function debug_out_human_readable_bytes ($quantity) {
 }
 
 function debug_out_feedwordpress_footer () {
-	if (FeedWordPress::diagnostic_on('memory_usage')) :
+	if (FeedWordPressDiagnostic::is_on('memory_usage')) :
 		if (function_exists('memory_get_usage')) :
 			FeedWordPress::diagnostic ('memory_usage', "Memory: Current usage: ".debug_out_human_readable_bytes(memory_get_usage()));
 		endif;
@@ -360,161 +332,6 @@ function debug_out_feedwordpress_footer () {
 		endif;
 	endif;
 } /* debug_out_feedwordpress_footer() */
-
-################################################################################
-## TEMPLATE API: functions to make your templates syndication-aware ############
-################################################################################
-
-/**
- * is_syndicated: Tests whether the current post in a Loop context, or a post
- * given by ID number, was syndicated by FeedWordPress. Useful for templates
- * to determine whether or not to retrieve syndication-related meta-data in
- * displaying a post.
- *
- * @param int $id The post to check for syndicated status. Defaults to the current post in a Loop context.
- * @return bool TRUE if the post's meta-data indicates it was syndicated; FALSE otherwise
- */
-function is_syndicated ($id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->is_syndicated();
-} /* function is_syndicated() */
-
-function feedwordpress_display_url ($url, $before = 60, $after = 0) {
-	$bits = parse_url($url);
-
-	// Strip out crufty subdomains
-	if (isset($bits['host'])) :
-  		$bits['host'] = preg_replace('/^www[0-9]*\./i', '', $bits['host']);
-  	endif;
-
-  	// Reassemble bit-by-bit with minimum of crufty elements
-	$url = (isset($bits['user'])?$bits['user'].'@':'')
-		.(isset($bits['host'])?$bits['host']:'')
-		.(isset($bits['path'])?$bits['path']:'')
-		.(isset($uri_bits['port'])?':'.$uri_bits['port']:'')
-		.(isset($bits['query'])?'?'.$bits['query']:'');
-
-	if (strlen($url) > ($before+$after)) :
-		$url = substr($url, 0, $before).'.'.substr($url, 0 - $after, $after);
-	endif;
-
-	return $url;
-} /* feedwordpress_display_url () */
-
-function get_syndication_source_property ($original, $id, $local, $remote = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->meta($local, array("unproxy" => $original, "unproxied setting" => $remote));
-} /* function get_syndication_source_property () */
-
-function get_syndication_source_link ($original = NULL, $id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->syndication_source_link($original);
-} /* function get_syndication_source_link() */
-
-function the_syndication_source_link ($original = NULL, $id = NULL) {
-	echo get_syndication_source_link($original, $id);
-} /* function the_syndication_source_link() */
-
-function get_syndication_source ($original = NULL, $id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->syndication_source($original);
-} /* function get_syndication_source() */
-
-function the_syndication_source ($original = NULL, $id = NULL) {
-	echo get_syndication_source($original, $id);
-} /* function the_syndication_source () */
-
-function get_syndication_feed ($original = NULL, $id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->syndication_feed($original);
-} /* function get_syndication_feed() */
-
-function the_syndication_feed ($original = NULL, $id = NULL) {
-	echo get_syndication_feed($original, $id);
-} /* function the_syndication_feed() */
-
-function get_syndication_feed_guid ($original = NULL, $id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->syndication_feed_guid($original);
-} /* function get_syndication_feed_guid () */
-
-function the_syndication_feed_guid ($original = NULL, $id = NULL) {
-	echo get_syndication_feed_guid($original, $id);
-} /* function the_syndication_feed_guid () */
-
-function get_syndication_feed_id ($id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->feed_id();
-} /* function get_syndication_feed_id () */
-
-function the_syndication_feed_id ($id = NULL) {
-	echo get_syndication_feed_id($id);
-} /* function the_syndication_feed_id () */
-
-function get_syndication_feed_object ($id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->feed();
-} /* function get_syndication_feed_object() */
-
-function get_feed_meta ($key, $id = NULL) {
-	$ret = NULL;
-
-	$link = get_syndication_feed_object($id);
-	if (is_object($link) and isset($link->settings[$key])) :
-		$ret = $link->settings[$key];
-	endif;
-	return $ret;
-} /* function get_feed_meta() */
-
-function get_syndication_permalink ($id = NULL) {
-	$p = new FeedWordPressLocalPost($id);
-	return $p->syndication_permalink();
-} /* function get_syndication_permalink () */
-
-function the_syndication_permalink ($id = NULL) {
-	echo get_syndication_permalink($id);
-} /* function the_syndication_permalink () */
-
-/**
- * get_local_permalink: returns a string containing the internal permalink
- * for a post (whether syndicated or not) on your local WordPress installation.
- * This may be useful if you want permalinks to point to the original source of
- * an article for most purposes, but want to retrieve a URL for the local
- * representation of the post for one or two limited purposes (for example,
- * linking to a comments page on your local aggregator site).
- *
- * @param $id The numerical ID of the post to get the permalink for. If empty,
- * 	defaults to the current post in a Loop context.
- * @return string The URL of the local permalink for this post.
- *
- * @uses get_permalink()
- * @global $feedwordpress_the_original_permalink
- *
- * @since 2010.0217
- */
-function get_local_permalink ($id = NULL) {
-	global $feedwordpress_the_original_permalink;
-
-	// get permalink, and thus activate filter and force global to be filled
-	// with original URL.
-	$url = get_permalink($id);
-	return $feedwordpress_the_original_permalink;
-} /* get_local_permalink() */
-
-/**
- * the_original_permalink: displays the contents of get_original_permalink()
- *
- * @param $id The numerical ID of the post to get the permalink for. If empty,
- * 	defaults to the current post in a Loop context.
- *
- * @uses get_local_permalinks()
- * @uses apply_filters
- *
- * @since 2010.0217
- */
-function the_local_permalink ($id = NULL) {
-	print apply_filters('the_permalink', get_local_permalink($id));
-} /* function the_local_permalink() */
 
 ################################################################################
 ## FILTERS: syndication-aware handling of post data for templates and feeds ####
@@ -862,7 +679,7 @@ function fwp_publish_post_hook ($post_id) {
 		
 		add_filter('user_can_richedit', array($feedwordpress, 'user_can_richedit'), 1000, 1);
 
-		if (FeedWordPress::diagnostic_on('syndicated_posts:static_meta_data')) :
+		if (FeedWordPressDiagnostic::is_on('syndicated_posts:static_meta_data')) :
 			$inspectPostMeta = new InspectPostMeta;
 		endif;
 	} // function feedwordpress_add_post_edit_controls ()
@@ -882,7 +699,7 @@ function fwp_publish_post_hook ($post_id) {
 		global $post;
 
 		$frozen_values = get_post_custom_values('_syndication_freeze_updates', $post->ID);
-		$frozen_post = (count($frozen_values) > 0 and 'yes' == $frozen_values[0]);
+		$frozen_post = ($frozen_values !== null and count($frozen_values) > 0 and 'yes' == $frozen_values[0]);
 
 		if (is_syndicated($post->ID)) :
 		?>
@@ -1187,6 +1004,7 @@ class FeedWordPress {
 		$this->feeds = array ();
 		$this->feedurls  = array();
 		$links = FeedWordPress::syndicated_links();
+
 		if ($links): foreach ($links as $link):
 			$id = intval($link->link_id);
 			$url = $link->link_rss;
@@ -1198,8 +1016,12 @@ class FeedWordPress {
 			endif;
 		endforeach; endif;
 
-		add_filter('feedwordpress_update_complete', array($this, 'process_retirements'), 1000, 1);
+		// System-related event hooks
+		add_filter('cron_schedules', array($this, 'cron_schedules'), 10, 1);
 
+		// FeedWordPress-related event hooks
+		add_filter('feedwordpress_update_complete', array($this, 'process_retirements'), 1000, 1);
+		
 		$this->httpauth = new FeedWordPressHTTPAuthenticator;
 	} /* FeedWordPress::__construct () */
 
@@ -1490,7 +1312,7 @@ class FeedWordPress {
 
 			// This should never happen.
 			else :
-				FeedWordPress::critical_bug('FeedWordPress::stale::last', $last, __LINE__, __FILE__);
+				FeedWordPressDiagnostic::critical_bug('FeedWordPress::stale::last', $last, __LINE__, __FILE__);
 			endif;
 
 		else :
@@ -1713,10 +1535,6 @@ class FeedWordPress {
 
 			wp_enqueue_style('dashboard');
 			wp_enqueue_style('feedwordpress-elements');
-
-			/*if (function_exists('wp_admin_css')) :
-				wp_admin_css('css/dashboard');
-			endif;*/
 		endif;
 
 		// These are a special post statuses for hiding posts that have
@@ -1765,6 +1583,27 @@ class FeedWordPress {
 		$this->update_magic_url();
 	} /* FeedWordPress::wp_loaded () */
 	
+	/**
+	 * FeedWordPress::cron_schedules(): Filter hook to add WP-Cron schedules
+	 * that plugins like FeedWordPress can use to carry out scheduled events.
+	 *
+	 * @param array $schedules An associative array containing the current set of cron schedules (hourly, daily, etc.)
+	 * @return array The same array, with a new entry ('fwp_checkin_interval') added to the list.
+	 *
+	 * @since 2017.1021
+	 */
+	public function cron_schedules ($schedules) {
+		$interval = FEEDWORDPRESS_DEFAULT_CHECKIN_INTERVAL*60 /*sec/min*/;
+
+		// add 'fwp_checkin_interval' to the existing set
+		$schedules['fwp_checkin_interval'] = array(
+		'interval' => $interval,
+		'display' => 'FeedWordPress update schedule check-in',
+		);
+
+		return $schedules;
+	} /* FeedWordPress::cron_schedules () */
+
 	public function fwp_feeds () {
 		$feeds = array();
 		$feed_ids = $this->feeds;
@@ -2496,40 +2335,6 @@ class FeedWordPress {
 	} /* FeedWordPress::affirmative () */
 
 	# Internal debugging functions
-	static function critical_bug ($varname, $var, $line, $file = NULL) {
-		global $wp_version;
-
-		if (!is_null($file)) :
-			$location = "line # ${line} of ".basename($file);
-		else :
-			$location = "line # ${line}";
-		endif;
-
-		print '<p><strong>Critical error:</strong> There may be a bug in FeedWordPress. Please <a href="'.FEEDWORDPRESS_AUTHOR_CONTACT.'">contact the author</a> and paste the following information into your e-mail:</p>';
-		print "\n<plaintext>";
-		print "Triggered at ${location}\n";
-		print "FeedWordPress: ".FEEDWORDPRESS_VERSION."\n";
-		print "WordPress:     {$wp_version}\n";
-		print "PHP:           ".phpversion()."\n";
-		print "Error data:    ";
-		print  $varname.": "; var_dump($var); echo "\n";
-		die;
-	} /* FeedWordPress::critical_bug () */
-
-	static function noncritical_bug ($varname, $var, $line, $file = NULL) {
-		if (FEEDWORDPRESS_DEBUG) : // halt only when we are doing debugging
-			FeedWordPress::critical_bug($varname, $var, $line, $file);
-		endif;
-	} /* FeedWordPress::noncritical_bug () */
-
-	static function val ($v, $no_newlines = false) {
-		return MyPHP::val($v, $no_newlines);
-	} /* FeedWordPress::val () */
-
-	static function diagnostic_on ($level) {
-		$show = get_option('feedwordpress_diagnostics_show', array());
-		return (in_array($level, $show));
-	} /* FeedWordPress::diagnostic_on () */
 
 	static function diagnostic ($level, $out, $persist = NULL, $since = NULL, $mostRecent = NULL) {
 		global $feedwordpress_admin_footer;
@@ -2539,7 +2344,7 @@ class FeedWordPress {
 
 		$diagnostic_nesting = count(explode(":", $level));
 
-		if (self::diagnostic_on($level)) :
+		if (FeedWordPressDiagnostic::is_on($level)) :
 			foreach ($output as $method) :
 				switch ($method) :
 				case 'echo' :
@@ -2772,9 +2577,13 @@ EOMAIL;
 		return $path;
 	} /* FeedWordPress::path () */
 
-	// These are superceded by MyPHP::param/post/get/request, but kept
-	// here for backward compatibility.
-
+	// -- DEPRCATED UTILITY FUNCTIONS -------------------------------------
+	// These are superceded by later code re-organization, (for example
+	// MyPHP::param/post/get/request, or FeedWordPressDiagnostic methods),
+	// but for the last several versions have been kept here for backward
+	// compatibility with add-ons, older code, etc. Maybe someday they
+	// will go away.
+	// -------------------------------------------------------------------
 	static function param ($key, $type = 'REQUEST', $default = NULL) {
 		return MyPHP::param($key, $default, $type);
 	} /* FeedWordPress::param () */
@@ -2782,6 +2591,22 @@ EOMAIL;
 	static function post ($key, $default = NULL) {
 		return MyPHP::post($key, $default);
 	} /* FeedWordPress::post () */
+
+	static function val ($v, $no_newlines = false) {
+		return MyPHP::val($v, $no_newlines);
+	} /* FeedWordPress::val () */
+
+	static function critical_bug ($varname, $var, $line, $file = NULL) {
+		FeedWordPressDiagnostic::critical_bug($varname, $var, $line, $file);
+	} /* FeedWordPress::critical_bug () */
+
+	static function noncritical_bug ($varname, $var, $line, $file = NULL) {
+		FeedWordPressDiagnostic::noncritical_bug($varname, $var, $line, $file);		
+	} /* FeedWordPress::noncritical_bug () */
+
+	static function diagnostic_on ($level) {
+		return FeedWordPressDiagnostic::is_on($level);
+	} /* FeedWordPress::diagnostic_on () */
 
 } /* class FeedWordPress */
 

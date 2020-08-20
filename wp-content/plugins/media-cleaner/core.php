@@ -834,47 +834,81 @@ class Meow_WPMC_Core {
 		return $paths;
 	}
 
+	function is_media_ignored( $attachmentId ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE postId = %d", $attachmentId ), OBJECT );
+		error_log( $attachmentId );
+		error_log( print_r( $issue, 1 ) );
+		if ( $issue && $issue->ignored )
+			return true;
+		return false;
+	}
+
 	function check_media( $attachmentId, $checkOnly = false ) {
+
+		// Is Media ID ignored, consider as used.
+		if ( $this->is_media_ignored( $attachmentId ) ) {
+			return true;
+		}
+
 		$size = 0;
 		$countfiles = 0;
 		$check_broken_media = !$this->check_content;
 		$fullpath = get_attached_file( $attachmentId );
 		$is_broken = !file_exists( $fullpath );
 
-		if ( $check_broken_media && !$is_broken )
-			return true;
+		// It's a broken-only scan
+		if ( $check_broken_media && !$is_broken ) {
+			$is_considered_used = apply_filters( 'wpmc_check_media', true, $attachmentId, false );
+			return $is_considered_used;
+		}
 
+		// Let's analyze the usage of each path (thumbnails included) for this Media ID.
 		$issue = 'NO_CONTENT';
 		$paths = $this->get_paths_from_attachment( $attachmentId );
 		foreach ( $paths as $path ) {
-			if ( $this->check_content && $this->reference_exists( $path, $attachmentId ) )
-				return true;
+			
+			// If it's found in the content, we stop the scan right away
+			if ( $this->check_content && $this->reference_exists( $path, $attachmentId ) ) {
+				$is_considered_used = apply_filters( 'wpmc_check_media', true, $attachmentId, false );
+				if ( $is_considered_used ) {
+					return true;
+				}
+			}
+
+			// Let's count the size of the files for later, in case it's unused
 			$filepath = trailingslashit( $this->upload_folder['basedir'] ) . $path;
 			if ( file_exists( $filepath ) )
 				$size += filesize( $filepath );
 			$countfiles++;
 		}
 		
-		if ( $is_broken ) {
-			$this->log( "File {$fullpath} does not exist." );
-			$issue = 'ORPHAN_MEDIA';
+		// This Media ID seems not in used (or broken)
+		// Let's double-check through the filter (overridable by users)
+		$is_considered_used = apply_filters( 'wpmc_check_media', false, $attachmentId, $is_broken );
+		if ( !$is_considered_used ) {
+			if ( $is_broken ) {
+				$this->log( "File {$fullpath} does not exist." );
+				$issue = 'ORPHAN_MEDIA';
+			}
+			if ( !$checkOnly ) {
+				global $wpdb;
+				$table_name = $wpdb->prefix . "mclean_scan";
+				$mainfile = $this->clean_uploaded_filename( $fullpath );
+				$wpdb->insert( $table_name,
+					array(
+						'time' => current_time('mysql'),
+						'type' => 1,
+						'size' => $size,
+						'path' => $mainfile . ( $countfiles > 0 ? ( " (+ " . $countfiles . " files)" ) : "" ),
+						'postId' => $attachmentId,
+						'issue' => $issue
+						)
+					);
+			}
 		}
-		if ( !$checkOnly ) {
-			global $wpdb;
-			$table_name = $wpdb->prefix . "mclean_scan";
-			$mainfile = $this->clean_uploaded_filename( $fullpath );
-			$wpdb->insert( $table_name,
-				array(
-					'time' => current_time('mysql'),
-					'type' => 1,
-					'size' => $size,
-					'path' => $mainfile . ( $countfiles > 0 ? ( " (+ " . $countfiles . " files)" ) : "" ),
-					'postId' => $attachmentId,
-					'issue' => $issue
-					)
-				);
-		}
-		return false;
+		return $is_considered_used;
 	}
 
 	// Delete all issues
@@ -936,8 +970,8 @@ function wpmc_reset () {
 }
 
 function wpmc_uninstall () {
-	wpmc_remove_options();
-	wpmc_remove_database();
+	//wpmc_remove_options();
+	//wpmc_remove_database();
 }
 
 function wpmc_create_database() {

@@ -14,43 +14,72 @@ function openlab_hide_plugins( $plugins ) {
 
 	$super_admin_only = array(
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
+		'achievements/achievements.php',
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
 		'ambrosite-nextprevious-post-link-plus/ambrosite-post-link-plus.php',
 		'an-gradebook/GradeBook.php',
+		'awesome-flickr-gallery-plugin/index.php',
+		'badgeos/badgeos.php',
+		'badgeos-badgestack-add-on/badgeos-badgestack.php',
 		'bbpress/bbpress.php',
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
+		'cac-featured-content/cac-featured-content.php',
 		'cac-non-cuny-signup/loader.php',
+		'captcha/captcha.php',
+		'cardboard/cardboard.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'elasticpress/elasticpress.php',
+		'elasticpress-buddypress/elasticpress-buddypress.php',
+		'elasticpress-buddypress/elasticpress-rest.php',
 		'embed-google-map/embed_google_map.php',
+		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
+		'fix-simplepie-errors/_fix-simplepie-errors.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
+		'gravity-forms-addons/gravity-forms-addons.php',
 		'highlighter-pro/highlighter.php',
+		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'media-cleaner/media-cleaner.php',
+		'openlab-private-comments/openlab-private-comments.php',
+		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
+		'page-links-to/page-links-to.php',
+		'pagemash/pagemash.php',
 		'page-tagger/page-tagger.php',
 		'pdf-embedder/pdf_embedder.php',
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
+		'simple-drop-cap/simple-drop-cap.php',
+		'simple-pull-quote/simple-pull-quote.php',
 		'slideshare/slideshare.php',
 		'social/social.php',
 		'static-html-output-plugin/wp-static-html-output.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'table-of-contents-plus/toc.php',
+		'taxonomy-terms-order/taxonomy-terms-order.php',
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
+		'video-conferencing-with-zoom-api/video-conferencing-with-zoom-api.php',
 		'webwork/webwork.php',
 		'wp-accessibility/wp-accessibility',
+		'wp-ajax-edit-comments/wp-ajax-edit-comments.php',
 		'wp-dpla/wp-dpla.php',
 		'wp-latex/wp-latex.php',
+		'wp-pro-quiz/wp-pro-quiz.php',
 		'wp-post-to-pdf/wp-post-to-pdf.php',
 		'wp-simile-timeline/timeline.php',
+		'wp-simple-anchors-links/wp-simple-anchors-links.php',
+		'wp-swfobject/wp-swfobject.php',
+		'wpbadgedisplay/wpbadgedisplay.php',
+		'wpbadger/wpbadger.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -104,6 +133,7 @@ function openlab_hide_plugins( $plugins ) {
 		'h5p/h5p.php'                     => array(
 			11188, // bio-oer - https://redmine.citytech.cuny.edu/issues/2088
 			11261, // openstax-bio - https://redmine.citytech.cuny.edu/issues/2088
+			15333, // ssw-fall2020 - http://redmine.citytech.cuny.edu/issues/2847
 		),
 		'openlab-comd-gform.php'          => array(
 			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
@@ -174,6 +204,19 @@ function openlab_pdfemb_filter_license_key( $opt ) {
 }
 add_filter( 'option_pdfemb', 'openlab_pdfemb_filter_license_key' );
 add_filter( 'default_option_pdfemb', 'openlab_pdfemb_filter_license_key' );
+
+/**
+ * License key for out-of-the-box.
+ */
+add_filter(
+	'pre_site_option_outofthebox_purchaseid',
+	function( $pre ) {
+		if ( defined( 'OUTOFTHEBOX_PURCHASEID' ) ) {
+			$pre = OUTOFTHEBOX_PURCHASEID;
+		}
+		return $pre;
+	}
+);
 
 /**
  * Load stylesheet for TablePress.

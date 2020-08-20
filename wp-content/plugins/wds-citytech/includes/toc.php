@@ -5,12 +5,23 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.0.0';
+const VERSION = '1.2.2';
 
-// Inject the entry title right before the widget is rendered.
-add_filter( 'widget_title', function( $title, $instance, $id_base ) {
-	if ( 'ezw_tco' !== $id_base ) {
+/**
+ * Inject the entry title right before the widget is rendered.
+ *
+ * @param string $title The widget title.
+ * @param array $args   The remaining arguments.
+ */
+add_filter( 'widget_title', function( $title = '', ...$args ) {
+	// Check for `$id_base` of ToC widget.
+	if ( ! isset( $args[1] ) || 'ezw_tco' !== $args[1] ) {
 		return $title;
+	}
+
+	// Provide default title fallback.
+	if ( empty( $title ) ) {
+		$title = 'Contents';
 	}
 
 	add_filter( 'ez_toc_extract_headings_content', __NAMESPACE__ . '\\prepend_title' );
@@ -43,7 +54,17 @@ function add_anchor( $attributes ) {
 add_filter( 'genesis_attr_entry-title', __NAMESPACE__ . '\\add_anchor' );
 
 /**
- * Enqueue our scripts and styles.
+ * Don't load default Easy TOC script.
+ *
+ * @return void
+ */
+function deregister_default_script() {
+	wp_deregister_script( 'ez-toc-js' );
+}
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\deregister_default_script', 20 );
+
+/**
+ * Conditionally enqueue our assets when the widget is used.
  *
  * @return void
  */
@@ -63,4 +84,21 @@ function enqueue_assets() {
 		VERSION
 	);
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
+add_action( 'ez_toc_after', __NAMESPACE__ . '\\enqueue_assets' );
+add_action( 'ez_toc_after_widget', __NAMESPACE__ . '\\enqueue_assets' );
+
+/**
+ * Override default Easy TOC options.
+ *
+ * @param array $defaults Default options.
+ * @return array $defaults Default options.
+ */
+function override_default_options( array $defaults = [] ) {
+	$override = [
+		'enabled_post_types' => [ 'post', 'page' ],
+		'counter'            => 'none',
+	];
+
+	return array_merge( $defaults, $override );
+}
+add_filter( 'ez_toc_get_default_options', __NAMESPACE__ . '\\override_default_options' );

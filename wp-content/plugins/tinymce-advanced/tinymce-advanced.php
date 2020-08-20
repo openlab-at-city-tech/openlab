@@ -3,7 +3,7 @@
 Plugin Name: TinyMCE Advanced
 Plugin URI: http://www.laptoptips.ca/projects/tinymce-advanced/
 Description: Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMCE).
-Version: 5.3.0
+Version: 5.4.0
 Author: Andrew Ozz
 Author URI: http://www.laptoptips.ca/
 License: GPL2
@@ -24,19 +24,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with TinyMCE Advanced or WordPress. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
 
-Copyright (c) 2007-2019 Andrew Ozz. All rights reserved.
+Copyright (c) 2007-2020 Andrew Ozz. All rights reserved.
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists('Tinymce_Advanced') ) :
+if ( ! class_exists( 'Tinymce_Advanced' ) ) :
 
 class Tinymce_Advanced {
 
-	private $required_wp_version = '5.2';
-	private $plugin_version = 5210;
+	private $required_wp_version = '5.4-beta';
+	private $plugin_version = 5400;
 
 	private $user_settings;
 	private $admin_settings;
@@ -156,6 +156,7 @@ class Tinymce_Advanced {
 			'core/code'   => array( 'name' => 'Code', 'icon' => '<span class="dashicons dashicons-editor-code"></span>' ),
 
 			'core/image'  => array( 'name' => 'Inline Image', 'icon' => '<span class="dashicons">' . $inline_img_icon . '</span>' ),
+			'core/text-color' => array( 'name' => 'Text Color', 'icon' => '<span class="dashicons dashicons-editor-textcolor"></span>' ),
 
 			'tadv/mark'   => array( 'name' => 'Mark', 'icon' => '<span class="dashicons dashicons-editor-textcolor"></span>' ),
 			'tadv/removeformat' => array( 'name' => 'Clear formatting', 'icon' => '<span class="dashicons dashicons-editor-removeformatting"></span>' ),
@@ -474,6 +475,24 @@ class Tinymce_Advanced {
 					$user_settings['toolbar_block'] = 'core/image';
 				} else {
 					$user_settings['toolbar_block'] = $user_settings['toolbar_block'] . ',core/image';
+				}
+			}
+
+			// Add the new text colot popup in 5.4 if 'tadv/color-panel' is not enabled.
+			// 'core/text-color' duplicates the functionality...
+			if ( $version < 5400 ) {
+				if ( ! empty( $user_settings['panels_block'] ) && is_string( $user_settings['panels_block'] ) ) {
+					$has_color_panel = ( strpos( $user_settings['panels_block'], 'tadv/color-panel' ) !== false );
+				} else {
+					$has_color_panel = false;
+				}
+
+				if ( ! $has_color_panel ) {
+					if ( empty( $user_settings['toolbar_block'] ) ) {
+						$user_settings['toolbar_block'] = 'core/text-color';
+					} else {
+						$user_settings['toolbar_block'] = $user_settings['toolbar_block'] . ',core/text-color';
+					}
 				}
 			}
 
@@ -1080,7 +1099,7 @@ class Tinymce_Advanced {
 		} elseif ( ! empty( $_POST[ 'toolbar_block' ] ) && is_array( $_POST[ 'toolbar_block' ] ) ) {
 			$settings[ 'toolbar_block' ] = $this->validate_settings( $_POST[ 'toolbar_block' ], $this->block_buttons_filter );
 		} else {
-			$settings[ 'toolbar_block' ] = array();
+			$settings[ 'toolbar_block' ] = '';
 		}
 
 		if ( ! empty( $user_settings[ 'toolbar_block_side' ] ) ) {
@@ -1088,7 +1107,7 @@ class Tinymce_Advanced {
 		} elseif ( ! empty( $_POST[ 'toolbar_block_side' ] ) && is_array( $_POST[ 'toolbar_block_side' ] ) ) {
 			$settings[ 'toolbar_block_side' ] = $this->validate_settings( $_POST[ 'toolbar_block_side' ], $this->block_buttons_filter );
 		} else {
-			$settings[ 'toolbar_block_side' ] = array();
+			$settings[ 'toolbar_block_side' ] = '';
 		}
 
 		if ( ! empty( $user_settings[ 'panels_block' ] ) ) {
@@ -1102,6 +1121,15 @@ class Tinymce_Advanced {
 
 			if ( ! empty( $_POST[ 'selected_text_background_color' ] ) && $_POST[ 'selected_text_background_color' ] === 'yes' ) {
 				$panels_block[] = 'tadv/background-color-panel';
+			}
+
+			// core/text-color is a duplicate of tadv/color-panel :(
+			// Remove it if both are set
+			$toolbar_block = explode( ',', $settings[ 'toolbar_block' ] );
+
+			if ( in_array( 'tadv/color-panel', $panels_block, true ) && in_array( 'core/text-color', $toolbar_block, true ) ) {
+				$toolbar_block = array_diff( $toolbar_block, array( 'core/text-color' ) );
+				$settings[ 'toolbar_block' ] = implode( ',', $toolbar_block );
 			}
 
 			$panels_block = implode( ',', $panels_block );

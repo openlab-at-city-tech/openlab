@@ -11,8 +11,8 @@
  */
 class Shortcodes_Ultimate_Activator {
 
-	static private $required_php;
-	static private $required_wp;
+	private static $required_php;
+	private static $required_wp;
 
 	/**
 	 * Plugin activation.
@@ -21,8 +21,8 @@ class Shortcodes_Ultimate_Activator {
 	 */
 	public static function activate() {
 
-		self::$required_php = '5.2';
-		self::$required_wp  = '3.5';
+		self::$required_php = '5.3';
+		self::$required_wp  = '4.5';
 
 		self::check_php_version();
 		self::check_wp_version();
@@ -96,7 +96,7 @@ class Shortcodes_Ultimate_Activator {
 				continue;
 			}
 
-			update_option( $option, $value, false );
+			add_option( $option, $value );
 
 		}
 

@@ -3,7 +3,6 @@ class Mappress_Map extends Mappress_Obj {
 	var $alignment,
 		$center,
 		$editable,
-		$filter,
 		$height,
 		$hideEmpty,
 		$initialOpenDirections,
@@ -98,9 +97,9 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	static function meta_box($post) {
-		Mappress::load('editor');
-		$map = new Mappress_Map(array('editable' => true, 'layout' => 'left', 'name' => 'mapp0', 'poiList' => true));
-		require(Mappress::$basedir . '/forms/media.php');
+		Mappress::scripts_enqueue('editor');
+        $map = new Mappress_Map(array('editable' => true, 'layout' => 'left', 'name' => 'mapp0', 'poiList' => true));
+        require(Mappress::$basedir . '/forms/media.php');
 	}
 
 	static function find($args) {
@@ -131,6 +130,7 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	static function ajax_find() {
+        check_ajax_referer('mappress', 'nonce');
 		Mappress::ajax_response('OK', self::find($_GET));
 	}
 
@@ -156,6 +156,8 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	static function ajax_get() {
+        check_ajax_referer('mappress', 'nonce');
+
 		ob_start();
 		$mapid = (isset($_GET['mapid'])) ? $_GET['mapid']  : null;
 		$map = ($mapid) ? self::get($mapid) : null;
@@ -194,7 +196,7 @@ class Mappress_Map extends Mappress_Obj {
 		}
 	}
 
-	function save($postid) {
+	function save() {
 		global $wpdb;
 		$maps_table = $wpdb->prefix . 'mappress_maps';
 		$posts_table = $wpdb->prefix . 'mappress_posts';
@@ -219,8 +221,8 @@ class Mappress_Map extends Mappress_Obj {
 			return false;
 
 		// Update posts
-		$result = $wpdb->query($wpdb->prepare("INSERT INTO $posts_table (postid, mapid) VALUES(%d, %d) ON DUPLICATE KEY UPDATE postid = %d, mapid = %d", $postid, $this->mapid,
-			$postid, $this->mapid));
+		$result = $wpdb->query($wpdb->prepare("INSERT INTO $posts_table (postid, mapid) VALUES(%d, %d) ON DUPLICATE KEY UPDATE postid = %d, mapid = %d", $this->postid, $this->mapid,
+			$this->postid, $this->mapid));
 
 		if ($result === false)
 			return false;
@@ -230,16 +232,19 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	static function ajax_save() {
-		ob_start();
+        check_ajax_referer('mappress', 'nonce');
 
+        if (!current_user_can('edit_posts'))
+            Mappress::ajax_response('Not authorized');
+
+		ob_start();
 		$mapdata = (isset($_POST['map'])) ? json_decode(stripslashes($_POST['map']), true) : null;
-		$postid = (isset($_POST['postid'])) ? $_POST['postid'] : null;
 
 		if (!$mapdata)
 			Mappress::ajax_response('Internal error, your data has not been saved!');
 
 		$map = new Mappress_Map($mapdata);
-		$mapid = $map->save($postid);
+		$mapid = $map->save();
 
 		if ($mapid === false)
 			Mappress::ajax_response('Internal error, your data has not been saved!');
@@ -274,8 +279,12 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	static function ajax_delete() {
-		ob_start();
+        check_ajax_referer('mappress', 'nonce');
 
+        if (!current_user_can('edit_posts'))
+            Mappress::ajax_response('Not authorized');
+
+		ob_start();
 		$mapid = (isset($_POST['mapid'])) ? $_POST['mapid'] : null;
 		$result = Mappress_Map::delete($mapid);
 
@@ -338,7 +347,7 @@ class Mappress_Map extends Mappress_Obj {
 		do_action('mappress_map_display', $this);
 
 		$html = Mappress_Template::get_template('map', array('map' => $this));
-		Mappress::load();
+		Mappress::scripts_enqueue();
 		$script = "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };";
 
 		// Use inline scripts for XHTML and some themes which match tags (incorrectly) in the content
@@ -375,7 +384,10 @@ class Mappress_Map extends Mappress_Obj {
 
 			case 'filters' :
 			case 'filters-toggle' :
-				return $this->query && $this->filter;
+				return $this->query && Mappress::$options->filter;
+
+            case 'footer' :
+                return $this->check('list');
 
 			case 'header' :
 				return $this->check('filters') || $this->check('search');
@@ -388,13 +400,6 @@ class Mappress_Map extends Mappress_Obj {
 
 			case 'search' :
 				return $this->editable || ($this->query && Mappress::$options->search);
-
-			case 'show' :
-				return $this->hidden;
-
-			case 'view-toggles' :
-				return $this->layout == 'left';
-
 		}
 		return true;
 	}
@@ -405,11 +410,9 @@ class Mappress_Map extends Mappress_Obj {
 
 		switch ($part) {
 			case 'controls' :
-				$html = "<div class='mapp-controls'></div>";
-				break;
-
 			case 'directions' :
 			case 'filters' :
+            case 'footer' :
 			case 'header' :
 			case 'search' :
 				$html = Mappress_Template::get_template("map-$part", array('map' => $this));
@@ -437,10 +440,6 @@ class Mappress_Map extends Mappress_Obj {
 					$class .= ' mobile';
 				if (!$this->editable)
 					$class .= ($this->alignment) ? " mapp-align-{$this->alignment}" : '';
-				if ($this->check('filters'))
-					$class .= ' mapp-has-filters';
-				if ($this->check('search'))
-					$class .= ' mapp-has-search';
 
 				$style = sprintf("width: %s;", $this->width());
 				$html = "id='$id' class='$class' style='$style'";
@@ -449,16 +448,6 @@ class Mappress_Map extends Mappress_Obj {
 			case 'list-inline' :
 			case 'list-left' :
 				$html = "<div class='mapp-list'></div>";
-				break;
-
-			case 'show' :
-				// Should be onclick...
-				$html = sprintf("<a href='#' data-mapp-action='show'>%s</a>", __('Show map', 'mappress-google-maps-for-wordpress'));
-				break;
-
-			case 'view-toggles' :
-				$html = sprintf("<div class='mapp-header-button' data-mapp-action='view-map'>%s</div>", __('Map', 'mappress-google-maps-for-wordpress'));
-				$html .= sprintf("<div class='mapp-header-button' data-mapp-action='view-list'>%s</div>", __('List', 'mappress-google-maps-for-wordpress'));
 				break;
 
 			case 'wrapper-style' :

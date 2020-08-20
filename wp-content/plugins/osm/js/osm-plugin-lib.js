@@ -221,7 +221,7 @@ function osm_saveGeotag(){
 
 function osm_savePostMarker(){
   if ((osm_ajax_object.MarkerLat == '') || (osm_ajax_object.MarkerLon == '')){
-    alert('Place geotag in the map before save');
+    alert('Place marker in the map before save');
   }
   else
   {
@@ -233,12 +233,13 @@ function osm_savePostMarker(){
       MarkerIcon: osm_ajax_object.MarkerIcon,
       MarkerText: osm_ajax_object.MarkerText,
       MarkerName: osm_ajax_object.MarkerName,
-      map_zoom: osm_ajax_object.map_zoom,
+      map_zoom: osm_ajax_object.map_name.getView().getZoom().toFixed(0),
       map_type: osm_ajax_object.map_type,
       map_border: osm_ajax_object.map_border,
       map_controls: osm_ajax_object.map_controls,
       post_id: osm_ajax_object.post_id,
-      marker_nonce: osm_ajax_object.marker_nonce
+      marker_nonce: osm_ajax_object.marker_nonce,
+      bckgrnd_image: osm_ajax_object.bckgrnd_img
     };
     jQuery.post(osm_ajax_object.ajax_url, data, function(response) {
       div = document.getElementById("Marker_Div");
@@ -246,6 +247,115 @@ function osm_savePostMarker(){
     });
   }
 }
+
+function osm_generateFileSC(){
+
+ var GenTxt = "";
+
+jQuery( document ).ready( function( $ ) { 
+
+      var lon = "autolon";
+      var lat = "autolat";
+      var zoom = "autozoom";
+
+      var FileList_ColorField  = "";
+      var FileList_TypeField   = "";
+      var FileList_MapTypeField = "";
+      var FileList_FileField = "";
+      var FileList_TitleField = "";
+      var FileList_SelectBoxField = "";
+      var DisplayName = "";
+      var Controls = "";
+      var ControlField ="";
+      BorderField = "";
+	    fileUrls = [];
+	    fileTitles = [];
+	    fileColors = [];
+
+
+      if ($('#osm_file_list_map_type').val() != "Mapnik"){
+        FileList_MapTypeField = " type=\"" + $('#osm_file_list_map_type').val() + "\"";
+      }
+
+      if ($('#osm_file_border').val() != "none"){
+        BorderField = " map_border=\"thin solid "  + $('#osm_file_border').val()+ "\"";
+      }
+
+
+      if($('#file_fullscreen').prop('checked') == true) {
+        Controls = "fullscreen,";
+      }
+
+      if($('#file_scaleline').prop('checked') == true) {
+        Controls = Controls + "scaleline,";
+      }
+
+      if($('#file_mouseposition').prop('checked') == true) {
+        Controls = Controls + "mouseposition,";
+      }
+
+      if($('#show_selection_box').prop('checked') == true) {
+        FileList_SelectBoxField = " file_select_box=\"one\"";
+      }
+      if (Controls != ""){
+        Controls = Controls.substr(0, Controls.length-1);
+        ControlField = " control=\"" + Controls + "\"";
+      }
+      else {
+        ControlField ="";
+      }
+      
+      if($('#file_bckgrnd_img').prop('checked') == true) {
+        $BckgrndImageField = ' bckgrndimg="GDPR_bckgrnd.png" ';
+      }
+      else {
+       $BckgrndImageField = "";
+      }
+
+
+	  /** handle multiple form fields in metabox with same input (layers and their files/colors/titles - links still missing (tbc) */
+  	  $(".osmFileName").each(function(i,e) {
+  	    if (jQuery(e).val() != "") {
+	  	  fileUrls.push( jQuery(e).val());
+	  	}
+  	  });
+
+  	  $(".osmFileTitle").each(function(i,e) {
+  	    if (jQuery(e).val() != "" && fileUrls[i] != "") {
+  		  fileTitles.push( jQuery(e).val());
+  		  }
+				else if ((fileUrls[i] != "") && (typeof fileUrls[i] !== "undefined")) {
+				  var filename = fileUrls[i];
+					var filename = filename.replace(/^.*[\\\/]/, '')
+          fileTitles.push(filename);
+				}
+  	  });
+
+  	  $(".osmFileColor").each(function(i,e) {
+  	    if (jQuery(e).val() != "" && typeof(fileUrls[i]) == "string") {
+  		  fileColors.push( jQuery(e).val());
+  		}
+  	  });
+
+	  FileList_FileField = " file_list=\"" + fileUrls.join() + "\"";
+	  FileList_ColorField = " file_color_list=\"" + fileColors.join() + "\"";
+	  FileList_TitleField = " file_title=\"" + fileTitles.join() + "\"";
+
+	  GenTxt = "[osm_map_v3 map_center=\"" + lat + "," + lon + "\" zoom=\"" + zoom + "\" width=\"100%\" height=\"450\" " + FileList_FileField + FileList_MapTypeField + FileList_ColorField + DisplayName + ControlField + BorderField + FileList_TitleField + FileList_SelectBoxField + $BckgrndImageField +"]";
+     
+     
+     
+     
+} ); /** JQuery **/
+  	  
+  
+      div = document.getElementById("File_Div");
+      div.innerHTML = GenTxt;
+  //  });
+
+  }
+
+
 
 function getTileURL(bounds) {
   var res = this.map.getResolution();

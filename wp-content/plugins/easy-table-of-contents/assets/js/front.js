@@ -1,4 +1,13 @@
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
+
+	/**
+	 * @typedef ezTOC
+	 * @type {Object} ezTOC
+	 * @property {string} affixSelector
+	 * @property {string} scroll_offset
+	 * @property {string} smooth_scroll
+	 * @property {string} visibility_hide_by_default
+	 */
 
 	if ( typeof ezTOC != 'undefined' ) {
 
@@ -17,13 +26,13 @@ jQuery( document ).ready( function( $ ) {
 			// check offset setting
 			if ( typeof ezTOC.scroll_offset != 'undefined' ) {
 
-				affixOffset =  ezTOC.scroll_offset;
+				affixOffset = parseInt( ezTOC.scroll_offset );
 			}
 
-			$( ezTOC.affixSelector ).stick_in_parent({
-				inner_scrolling : false,
-				offset_top : parseInt( affixOffset )
-			});
+			$( ezTOC.affixSelector ).stick_in_parent( {
+				inner_scrolling: false,
+				offset_top:      affixOffset
+			} )
 		}
 
 		$.fn.shrinkTOCWidth = function() {
@@ -37,40 +46,40 @@ jQuery( document ).ready( function( $ ) {
 				$( this ).css( 'width', '' );
 		};
 
-		if ( ezTOC.smooth_scroll == 1 ) {
+		var smoothScroll = parseInt( ezTOC.smooth_scroll );
 
-			var target = hostname = pathname = qs = hash = null;
+		if ( 1 === smoothScroll ) {
 
-			$( 'body a' ).click( function( event ) {
+			$( 'a.ez-toc-link' ).on( 'click', function() {
 
-				hostname = $( this ).prop( 'hostname' );
-				pathname = $( this ).prop( 'pathname' );
-				qs = $( this ).prop( 'search' );
-				hash = $( this ).prop( 'hash' );
+				var self = $( this );
+
+				var target = '';
+				var hostname = self.prop( 'hostname' );
+				var pathname = self.prop( 'pathname' );
+				var qs = self.prop( 'search' );
+				var hash = self.prop( 'hash' );
 
 				// ie strips out the preceding / from pathname
 				if ( pathname.length > 0 ) {
-					if ( pathname.charAt( 0 ) != '/' ) {
+					if ( pathname.charAt( 0 ) !== '/' ) {
 						pathname = '/' + pathname;
 					}
 				}
 
-				if ( (window.location.hostname == hostname) && (window.location.pathname == pathname) && (window.location.search == qs) && (hash !== '') ) {
+				if ( ( window.location.hostname === hostname ) &&
+					( window.location.pathname === pathname ) &&
+					( window.location.search === qs ) &&
+					( hash !== '' )
+				) {
 
-					// escape jquery selector chars, but keep the #
-					var hash_selector = hash.replace( /([ !"$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$1' );
+					// var id = decodeURIComponent( hash.replace( '#', '' ) );
+					target = '[id="' + hash.replace( '#', '' ) + '"]';
 
-					// check if element exists with id=__
-					if ( $( hash_selector ).length > 0 )
-						target = hash;
-					else {
-						// must be an anchor (a name=__)
-						anchor = hash;
-						anchor = anchor.replace( '#', '' );
-						target = 'a[name="' + anchor + '"]';
-						// verify it exists
-						if ( $( target ).length == 0 )
-							target = '';
+					// verify it exists
+					if ( $( target ).length === 0 ) {
+						console.log( 'ezTOC scrollTarget Not Found: ' + target );
+						target = '';
 					}
 
 					// check offset setting
@@ -99,8 +108,11 @@ jQuery( document ).ready( function( $ ) {
 					if ( target ) {
 						$.smoothScroll( {
 							scrollTarget: target,
-							offset:       offset
+							offset:       offset,
+                            beforeScroll: deactivateSetActiveEzTocListElement,
+                            afterScroll: function() { setActiveEzTocListElement(); activateSetActiveEzTocListElement(); }
 						} );
+
 					}
 				}
 			} );
@@ -108,6 +120,7 @@ jQuery( document ).ready( function( $ ) {
 
 		if ( typeof ezTOC.visibility_hide_by_default != 'undefined' ) {
 
+			var toc = $( 'ul.ez-toc-list' );
 			var toggle = $( 'a.ez-toc-toggle' );
 			var invert = ezTOC.visibility_hide_by_default;
 
@@ -127,10 +140,10 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( ! toggle.data( 'visible' ) ) {
 
-				$( 'ul.ez-toc-list' ).hide();
+				toc.hide();
 			}
 
-			toggle.click( function( event ) {
+			toggle.on( 'click', function( event ) {
 
 				event.preventDefault();
 
@@ -146,7 +159,7 @@ jQuery( document ).ready( function( $ ) {
 							Cookies.set( 'ezTOC_hidetoc', '1', { expires: 30, path: '/' } );
 					}
 
-					$( 'ul.ez-toc-list' ).hide( 'fast' );
+					toc.hide( 'fast' );
 
 				} else {
 
@@ -160,61 +173,135 @@ jQuery( document ).ready( function( $ ) {
 							Cookies.set( 'ezTOC_hidetoc', null, { path: '/' } );
 					}
 
-					$( 'ul.ez-toc-list' ).show( 'fast' );
+					toc.show( 'fast' );
 
 				}
 
 			} );
 		}
 
-		// ======================================
-		// Waypoints helper functions
-		// ======================================
 
-		// Get link by section or article id
-		function getRelatedNavigation( element ) {
-			return $( '.ez-toc-widget-container .ez-toc-list a[href="#' + $( element ).attr( 'id' ) + '"]' );
-		}
+        // ======================================
+        // Set active heading in ez-toc-widget list
+        // ======================================
 
-		function getScrollOffset( element ) {
+        var headings = $( 'span.ez-toc-section' ).toArray();
+        var headingToListElementLinkMap = getHeadingToListElementLinkMap( headings );
+        var listElementLinks = $.map( headingToListElementLinkMap, function ( value, key ) {
+            return value
+        } );
+        var scrollOffset = getScrollOffset();
 
-			var scrollOffset = ( typeof ezTOC.scroll_offset != 'undefined' ) ? parseInt( ezTOC.scroll_offset ) : 30;
-			var offset       = $( element ).height() + scrollOffset;
+        activateSetActiveEzTocListElement();
 
-			var adminbar = $( '#wpadminbar' );
+        function setActiveEzTocListElement() {
+            var activeHeading = getActiveHeading( scrollOffset, headings );
+            if ( activeHeading ) {
+                var activeListElementLink = headingToListElementLinkMap[ activeHeading.id ];
+                removeStyleFromNonActiveListElement( activeListElementLink, listElementLinks );
+                setStyleForActiveListElementElement( activeListElementLink );
+            }
+        }
 
-			if ( 0 === adminbar.length ) {
+        function activateSetActiveEzTocListElement() {
+            if ( headings.length > 0 && $('.ez-toc-widget-container').length) {
+                $( window ).on( 'load resize scroll', setActiveEzTocListElement );
+            }
+        }
 
-				offset = offset-30;
-			}
+        function deactivateSetActiveEzTocListElement() {
+            $( window ).off( 'load resize scroll', setActiveEzTocListElement );
+        }
 
-			return parseInt( offset );
-		}
+        function getEzTocListElementLinkByHeading( heading ) {
+            return $( '.ez-toc-widget-container .ez-toc-list a[href="#' + $( heading ).attr( 'id' ) + '"]' );
+        }
 
-		// ======================================
-		// Waypoints
-		// ======================================
+        function getHeadingToListElementLinkMap( headings ) {
+            return headings.reduce( function ( map, heading ) {
+                map[ heading.id ] = getEzTocListElementLinkByHeading( heading );
+                return map;
+            }, {} );
+        }
 
-		$('span.ez-toc-section')
-			.waypoint( function( direction ) {
-				// Highlight element when related content is 10% percent from the bottom - remove if below.
-				var item = getRelatedNavigation( this.element ).toggleClass( 'active', direction === 'down' );
-				item.toggleClass( 'active', direction === 'down' ).parent().toggleClass( 'active', direction === 'down' );
-			}, {
-				offset: '90%' //
-			});
-		$('span.ez-toc-section')
-			.waypoint( function( direction ) {
-				// Highlight element when bottom of related content is 30px from the top - remove if less.
-				var item = getRelatedNavigation( this.element ).toggleClass( 'active', direction === 'up' );
-				item.toggleClass( 'active', direction === 'up' ).parent().toggleClass( 'active', direction === 'up' );
-			}, {
-				offset: getScrollOffset( this.element )
-			});
+        function getScrollOffset() {
+            var scrollOffset = 5; // so if smooth offset is off, the correct title is set as active
+            if ( typeof ezTOC.smooth_scroll != 'undefined' && parseInt( ezTOC.smooth_scroll ) === 1 ) {
+                scrollOffset = ( typeof ezTOC.scroll_offset != 'undefined' ) ? parseInt( ezTOC.scroll_offset ) : 30;
+            }
 
+            var adminbar = $( '#wpadminbar' );
 
-		var div_height = $('.ez-toc-widget-container ul.ez-toc-list li').css('line-height');
+            if ( adminbar.length ) {
+                scrollOffset += adminbar.height();
+            }
+            return scrollOffset;
+        }
 
-		$('<style>.ez-toc-widget-container ul.ez-toc-list li::before{line-height:' + div_height + ';height:' + div_height + '}</style>').appendTo('head');
-	}
+        function getActiveHeading( topOffset, headings ) {
+            var scrollTop = $( window ).scrollTop();
+            var relevantOffset = scrollTop + topOffset + 1;
+            var activeHeading = headings[ 0 ];
+            var closestHeadingAboveOffset = relevantOffset - $( activeHeading ).offset().top;
+            headings.forEach( function ( section ) {
+                var topOffset = relevantOffset - $( section ).offset().top;
+                if ( topOffset > 0 && topOffset < closestHeadingAboveOffset ) {
+                    closestHeadingAboveOffset = topOffset;
+                    activeHeading = section;
+                }
+            } );
+            return activeHeading;
+        }
+
+        function removeStyleFromNonActiveListElement( activeListElementLink, listElementLinks ) {
+            listElementLinks.forEach( function ( listElementLink ) {
+                if ( activeListElementLink !== listElementLink && listElementLink.parent().hasClass( 'active' ) ) {
+                    listElementLink.parent().removeClass( 'active' );
+                }
+            } );
+        }
+
+        function correctActiveListElementBackgroundColorHeight( activeListElement ) {
+            var listElementHeight = getListElementHeightWithoutUlChildren( activeListElement );
+            addListElementBackgroundColorHeightStyleToHead( listElementHeight );
+        }
+
+        function getListElementHeightWithoutUlChildren( listElement ) {
+            var $listElement = $( listElement );
+            var content = $listElement.html();
+            // Adding list item with class '.active' to get the real height.
+            // When adding a class to an existing element and using jQuery(..).height() directly afterwards,
+            // the height is the 'old' height. The height might change due to text-wraps when setting the text-weight bold for example
+            // When adding a new item, the height is calculated correctly.
+            // But only when it might be visible (so display:none; is not possible...)
+            // But because it get's directly removed afterwards it never will be rendered by the browser
+            // (at least in my tests in FF, Chrome, IE11 and Edge)
+            $listElement.parent().append( '<li id="ez-toc-height-test" class="active">' + content + '</li>' );
+            var listItem = $( '#ez-toc-height-test' );
+            var height = listItem.height();
+	        listItem.remove();
+            return height - $listElement.children( 'ul' ).first().height();
+        }
+
+        function addListElementBackgroundColorHeightStyleToHead( listElementHeight ) {
+            // Remove existing
+            $( '#ez-toc-active-height' ).remove();
+            // jQuery(..).css(..) doesn't work, because ::before is a pseudo element and not part of the DOM
+            // Workaround is to add it to head
+            $( '<style id="ez-toc-active-height">' +
+                '.ez-toc-widget-container ul.ez-toc-list li.active::before {' +
+                // 'line-heigh:' + listElementHeight + 'px; ' +
+                'height:' + listElementHeight + 'px;' +
+                '} </style>' )
+                .appendTo( 'head' );
+        }
+
+        function setStyleForActiveListElementElement( activeListElementLink ) {
+            var activeListElement = activeListElementLink.parent();
+            if ( !activeListElement.hasClass( 'active' ) ) {
+                activeListElement.addClass( 'active' );
+            }
+            correctActiveListElementBackgroundColorHeight( activeListElement );
+        }
+    }
 } );

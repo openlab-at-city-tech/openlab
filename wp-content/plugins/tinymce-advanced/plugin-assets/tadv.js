@@ -116,7 +116,10 @@ jQuery( document ).ready( function( $ ) {
 				$(this).parent().removeClass( 'highlighted' );
 			},
 			receive: function( event, ui ) {
-				if ( $( event.target ).is( '#toolbar_block_side' ) && ui.item.is( 'li.core-image' ) ) {
+				if (
+					$( event.target ).is( '#toolbar_block_side' ) &&
+					( ui.item.is( 'li.core-image' ) || ui.item.is( 'li.core-text-color' ) )
+				) {
 					block.sortable( 'cancel' );
 				}
 			},

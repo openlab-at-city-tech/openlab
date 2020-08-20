@@ -39,6 +39,14 @@ class BP_Activity_List_Table extends WP_List_Table {
 	public $spam_count = 0;
 
 	/**
+	 * Total number of activities.
+	 *
+	 * @since 6.0.0
+	 * @var int $all_count
+	 */
+	public $all_count = 0;
+
+	/**
 	 * Store activity-to-user-ID mappings for use in the In Response To column.
 	 *
 	 * @since 1.6.0
@@ -97,22 +105,17 @@ class BP_Activity_List_Table extends WP_List_Table {
 		$per_page = $this->get_items_per_page( str_replace( '-', '_', "{$this->screen->id}_per_page" ) );
 
 		// Check if we're on the "Spam" view.
-		if ( !empty( $_REQUEST['activity_status'] ) && 'spam' == $_REQUEST['activity_status'] ) {
+		if ( ! empty( $_REQUEST['activity_status'] ) && 'spam' === $_REQUEST['activity_status'] ) {
 			$spam       = 'spam_only';
 			$this->view = 'spam';
 		}
 
-		// Sort order.
-		if ( !empty( $_REQUEST['order'] ) && 'desc' != $_REQUEST['order'] )
-			$sort = 'ASC';
-
-		// Order by.
-		/*if ( !empty( $_REQUEST['orderby'] ) ) {
-		}*/
-
 		// Filter.
 		if ( ! empty( $_REQUEST['activity_type'] ) ) {
 			$filter = array( 'action' => $_REQUEST['activity_type'] );
+
+			// Set the view as a filtered one.
+			$this->view = 'filtered';
 
 			/**
 			 * Filter here to override the filter with a filter query
@@ -124,21 +127,29 @@ class BP_Activity_List_Table extends WP_List_Table {
 			$has_filter_query = apply_filters( 'bp_activity_list_table_filter_activity_type_items', $filter );
 
 			if ( ! empty( $has_filter_query['filter_query'] ) ) {
-				// Reset the filter
+				// Reset the filter.
 				$filter       = array();
 
-				// And use the filter query instead
+				// And use the filter query instead.
 				$filter_query = $has_filter_query['filter_query'];
 			}
 		}
 
 		// Are we doing a search?
-		if ( !empty( $_REQUEST['s'] ) )
+		if ( ! empty( $_REQUEST['s'] ) ) {
 			$search_terms = $_REQUEST['s'];
 
+			// Set the view as a search request.
+			$this->view = 'search';
+		}
+
 		// Check if user has clicked on a specific activity (if so, fetch only that, and any related, activity).
-		if ( !empty( $_REQUEST['aid'] ) )
+		if ( ! empty( $_REQUEST['aid'] ) ) {
 			$include_id = (int) $_REQUEST['aid'];
+
+			// Set the view as a single activity.
+			$this->view = 'single';
+		}
 
 		// Get the spam total (ignoring any search query or filter).
 		$spams = bp_activity_get( array(
@@ -160,7 +171,6 @@ class BP_Activity_List_Table extends WP_List_Table {
 			'search_terms'     => $search_terms,
 			'filter_query'     => $filter_query,
 			'show_hidden'      => true,
-			// 'sort'             => $sort,
 			'spam'             => $spam,
 			'count_total'      => 'count_query',
 		) );
@@ -184,7 +194,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 		}
 
 		// Set raw data to display.
-		$this->items       = $new_activities;
+		$this->items = $new_activities;
 
 		// Store information needed for handling table pagination.
 		$this->set_pagination_args( array(
@@ -195,6 +205,25 @@ class BP_Activity_List_Table extends WP_List_Table {
 
 		// Don't truncate activity items; bp_activity_truncate_entry() needs to be used inside a BP_Activity_Template loop.
 		remove_filter( 'bp_get_activity_content_body', 'bp_activity_truncate_entry', 5 );
+
+		// Set the Total number of activities.
+		if ( 'all' === $this->view ) {
+			$this->all_count = (int) $activities['total'];
+
+		// Only perform a query if not on the main list view.
+		} elseif ( 'single' !== $this->view ) {
+			$count_activities = bp_activity_get(
+				array(
+					'fields'      => 'ids',
+					'show_hidden' => true,
+					'count_total' => 'count_query',
+				)
+			);
+
+			if ( $count_activities['total'] ) {
+				$this->all_count = (int) $count_activities['total'];
+			}
+		}
 	}
 
 	/**
@@ -309,12 +338,34 @@ class BP_Activity_List_Table extends WP_List_Table {
 
 		<h2 class="screen-reader-text"><?php
 			/* translators: accessibility text */
-			_e( 'Filter activities list', 'buddypress' );
+			esc_html_e( 'Filter activities list', 'buddypress' );
 		?></h2>
 
 		<ul class="subsubsub">
-			<li class="all"><a href="<?php echo esc_url( $url_base ); ?>" class="<?php if ( 'spam' != $this->view ) echo 'current'; ?>"><?php _e( 'All', 'buddypress' ); ?></a> |</li>
-			<li class="spam"><a href="<?php echo esc_url( add_query_arg( array( 'activity_status' => 'spam' ), $url_base ) ); ?>" class="<?php if ( 'spam' == $this->view ) echo 'current'; ?>"><?php printf( __( 'Spam <span class="count">(%s)</span>', 'buddypress' ), number_format_i18n( $this->spam_count ) ); ?></a></li>
+			<li class="all">
+				<a href="<?php echo esc_url( $url_base ); ?>" class="<?php if ( 'all' === $this->view ) echo 'current'; ?>">
+				<?php printf(
+						/* translators: %s is the placeholder for the count html tag `<span class="count"/>` */
+						esc_html__( 'All %s', 'buddypress' ),
+						sprintf(
+							'<span class="count">(%s)</span>',
+							number_format_i18n( $this->all_count )
+						)
+					); ?>
+				</a> |
+			</li>
+			<li class="spam">
+				<a href="<?php echo esc_url( add_query_arg( array( 'activity_status' => 'spam' ), $url_base ) ); ?>" class="<?php if ( 'spam' === $this->view ) echo 'current'; ?>">
+					<?php printf(
+						/* translators: %s is the placeholder for the count html tag `<span class="count"/>` */
+						esc_html__( 'Spam %s', 'buddypress' ),
+						sprintf(
+							'<span class="count">(%s)</span>',
+							number_format_i18n( $this->spam_count )
+						)
+					); ?>
+				</a>
+			</li>
 
 			<?php
 
@@ -553,6 +604,7 @@ class BP_Activity_List_Table extends WP_List_Table {
 		if ( isset( $actions[ $item['type'] ] ) ) {
 			echo $actions[ $item['type'] ];
 		} else {
+			/* translators: %s: the name of the activity type */
 			printf( __( 'Unregistered action - %s', 'buddypress' ), $item['type'] );
 		}
 	}
@@ -645,21 +697,20 @@ class BP_Activity_List_Table extends WP_List_Table {
 		// End timestamp.
 		echo '</div>';
 
+		$activity = new BP_Activity_Activity( $item['id'] );
+
 		// Get activity content - if not set, use the action.
 		if ( ! empty( $item['content'] ) ) {
-			$activity = new BP_Activity_Activity( $item['id'] );
-
 			/** This filter is documented in bp-activity/bp-activity-template.php */
 			$content = apply_filters_ref_array( 'bp_get_activity_content_body', array( $item['content'], &$activity ) );
 		} else {
-			/**
-			 * Filters current activity item action.
-			 *
-			 * @since 1.2.0
-			 *
-			 * @var array $item Array index holding current activity item action.
-			 */
-			$content = apply_filters_ref_array( 'bp_get_activity_action', array( $item['action'] ) );
+			// Emulate bp_get_activity_action().
+			$r = array(
+				'no_timestamp' => false,
+			);
+
+			/** This filter is documented in bp-activity/bp-activity-template.php */
+			$content = apply_filters_ref_array( 'bp_get_activity_action', array( $item['action'], &$activity, $r ) );
 		}
 
 		/**

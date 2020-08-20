@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or wp_die('Nope, not accessing this');
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Exit if accessed directly
 

@@ -161,6 +161,17 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 					/*checkbox=*/ true
 				);
 			} /* for */
+			
+			// Let's make the interface for the PAUSE/RESUME a bit better
+			jQuery('<tr id="reveal-pause-resume"><th></th><td><button id="pause-resume-reveal-button">&#8212; PAUSE or RESUME UPDATES &#8212;</button></td></tr>').insertBefore('#pause-resume');
+			jQuery('#pause-resume').hide();
+			jQuery('#pause-resume-reveal-button').click(function(ev) {
+				ev.preventDefault();
+
+				jQuery('#pause-resume').toggle();
+				return false;
+			});
+
 		} );
 
 		<?php
@@ -186,7 +197,7 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 		<?php if ($page->for_default_settings()) : ?>
 
 		<tr>
-		<th scope="row">Updates:</th>
+		<th scope="row">Update Method:</th>
 		<td><select id="automatic-updates-selector" name="automatic_updates" size="1" onchange="contextual_appearance('automatic-updates-selector', 'cron-job-explanation', null, 'no');">
 		<option value="shutdown"<?php echo ($automatic_updates=='shutdown')?' selected="selected"':''; ?>>automatically check for updates after pages load</option>
 		<option value="init"<?php echo ($automatic_updates=='init')?' selected="selected"':''; ?>>automatically check for updates before pages load</option>
@@ -198,23 +209,25 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 		// If it's available, use it to execute `which` to try to get a realistic path to curl,
 		// or to wget. If everything fails or shell_exec() isn't available, then just make
 		// up something for the sake of example.
+		$curlOrWgetPath = NULL;
+
 		$shellExecAvailable = (is_callable('shell_exec') && false === stripos(ini_get('disable_functions'), 'shell_exec'));		
 
 		if ($shellExecAvailable) :
-			$path = `which curl`; $opts = '--silent %s';
+			$curlOrWgetPath = `which curl`; $opts = '--silent %s';
 		endif;
 
-		if ($shellExecAvailable and (is_null($path) or strlen(trim($path))==0)) :
-			$path = `which wget`; $opts = '-q -O - %s';
+		if ($shellExecAvailable and (is_null($curlOrWgetPath) or strlen(trim($curlOrWgetPath))==0)) :
+			$curlOrWgetPath = `which wget`; $opts = '-q -O - %s';
 		endif;
 
-		if (is_null($path) or strlen(trim($path))==0) :
-			$path = '/usr/bin/curl'; $opts = '--silent %s';
+		if (is_null($curlOrWgetPath) or strlen(trim($curlOrWgetPath))==0) :
+			$curlOrWgetPath = '/usr/bin/curl'; $opts = '--silent %s';
 		endif;
 
-		$path = preg_replace('/\n+$/', '', $path);
+		$curlOrWgetPath = preg_replace('/\n+$/', '', $curlOrWgetPath);
 		
-		$cmdline = $path . ' ' . sprintf($opts, get_bloginfo('url').'?update_feedwordpress=1');
+		$cmdline = $curlOrWgetPath . ' ' . sprintf($opts, get_bloginfo('url').'?update_feedwordpress=1');
 		
 		?>If you want to use a cron job,
 		you can perform scheduled updates by sending regularly-scheduled
@@ -267,7 +280,25 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 		</select></td></tr>
 		
 		<?php endif; ?>
-		
+
+		<tr id="pause-resume">
+		<th scope="row"><?php print __('Pause/Resume:'); ?></th>
+		<td><?php
+		$this->setting_radio_control(
+			'update/pause', 'update_pause',
+			/*options=*/ array(
+				'no' => '<strong>UPDATE:</strong> import new posts as normal',
+				'yes' => '<strong>PAUSE:</strong> do not import new posts until I unpause updates',
+			),
+			/*params=*/ array(
+				'setting-default' => NULL,
+				'global-setting-default' => 'no',
+				'default-input-value' => 'default',
+			)
+		);
+		?></td>
+		</tr>
+
 		<tr>
 		<th scope="row"><?php print __('Update scheduling:') ?></th>
 		<td><p style="margin-top:0px">How long should FeedWordPress wait between updates before it considers this feed ready to be polled for updates again?</p>
@@ -506,11 +537,7 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 			$cat_id = FeedWordPress::link_category_id();
 
 			$params = array();
-			if (FeedWordPressCompatibility::test_version(FWP_SCHEMA_USES_ARGS_TAXONOMY)) :
-				$params['taxonomy'] = 'link_category';
-			else :
-				$params['type'] = 'link';
-			endif;
+			$params['taxonomy'] = 'link_category';
 			$params['hide_empty'] = false;
 			$results = get_categories($params);
 				
@@ -1215,6 +1242,10 @@ class FeedWordPressFeedsPage extends FeedWordPressAdminPage {
 			
 		endif;
 		
+		if (isset($post['update_pause'])) :
+			$this->update_setting('update/pause', $post['update_pause']);
+		endif;
+
 		if (isset($post['fetch_timeout'])) :
 			if (isset($post['fetch_timeout_default']) and $post['fetch_timeout_default']=='yes') :
 				$timeout = NULL;

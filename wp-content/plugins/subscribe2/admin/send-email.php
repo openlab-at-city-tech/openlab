@@ -8,7 +8,7 @@ global $current_user;
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 	if ( false === wp_verify_nonce( $_REQUEST['_wpnonce'], 'subscribe2-write_subscribers' . S2VERSION ) ) {
-		die( '<p>' . __( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
+		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
 	$subject = html_entity_decode( stripslashes( wp_kses( $this->substitute( $_POST['subject'] ), '' ) ), ENT_QUOTES );
@@ -97,12 +97,12 @@ if ( isset( $_POST['s2_admin'] ) && 'mail' === $_POST['s2_admin'] ) {
 		global $phpmailer;
 		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2' ) . '</p>' . $error_message . $phpmailer->ErrorInfo;
 	}
-	echo '<div id="message" class="updated"><strong><p>' . $message . '</p></strong></div>' . "\r\n";
+	echo '<div id="message" class="updated"><strong><p>' . wp_kses_post( $message ) . '</p></strong></div>' . "\r\n";
 }
 
 // show our form
 echo '<div class="wrap">';
-echo '<h1>' . __( 'Send an email to subscribers', 'subscribe2' ) . '</h1>' . "\r\n";
+echo '<h1>' . esc_html__( 'Send an email to subscribers', 'subscribe2' ) . '</h1>' . "\r\n";
 echo '<form method="post" enctype="multipart/form-data">' . "\r\n";
 
 wp_nonce_field( 'subscribe2-write_subscribers' . S2VERSION );
@@ -115,15 +115,15 @@ if ( isset( $_POST['subject'] ) ) {
 if ( ! isset( $_POST['content'] ) ) {
 	$body = '';
 }
-echo '<p>' . __( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . $subject . '" /> <br /><br />';
-echo '<textarea rows="12" cols="75" name="content">' . $body . '</textarea>';
-echo "<br /><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
-echo '<input type="button" class="button-secondary" name="addmore" value="' . __( 'Add More Files', 'subscribe2' ) . "\" onClick=\"add_file_upload();\" />\r\n";
-echo "<br /><br />\r\n";
-echo __( 'Recipients:', 'subscribe2' ) . ' ';
+echo '<p>' . esc_html__( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
+echo '<textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea>';
+echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
+echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
+echo "<br><br>\r\n";
+echo esc_html__( 'Recipients:', 'subscribe2' ) . ' ';
 $this->display_subscriber_dropdown( apply_filters( 's2_subscriber_dropdown_default', 'registered' ), false );
 echo '<input type="hidden" name="s2_admin" value="mail" />';
-echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . __( 'Preview', 'subscribe2' ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . __( 'Send', 'subscribe2' ) . '" /></p>';
+echo '<p class="submit"><input type="submit" class="button-secondary" name="preview" value="' . esc_attr( __( 'Preview', 'subscribe2' ) ) . '" />&nbsp;<input type="submit" class="button-primary" name="send" value="' . esc_attr( __( 'Send', 'subscribe2' ) ) . '" /></p>';
 echo '</form></div>' . "\r\n";
 echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 ?>

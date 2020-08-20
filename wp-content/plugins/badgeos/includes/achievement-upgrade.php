@@ -6,8 +6,6 @@
  * @since 3.2
  */
 function badgeos_migrate_fields_points_to_point_types_callback() {
-    ini_set( 'display_errors', 'On' );
-    error_reporting( E_ALL );
     $action = ( isset( $_POST['action'] ) ? $_POST['action'] : '' );
     if( $action !== 'badgeos_migrate_fields_points_to_point_types' &&  $action !== 'badgeos_migrate_fields_points_to_point_types' ) {
         exit;
@@ -44,7 +42,7 @@ function badgeos_update_old_points_to_point_types() {
     if( ! empty( $default_point_type ) ) {
         // Grab all of our achievement type posts
         $achievement_types = get_posts( array(
-            'post_type'      =>	'achievement-type',
+            'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
             'posts_per_page' =>	-1,
         ) );
 
@@ -96,4 +94,3 @@ function badgeos_update_old_points_to_point_types() {
 
     }
 }
-?>

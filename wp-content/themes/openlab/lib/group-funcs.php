@@ -44,17 +44,19 @@ function openlab_group_privacy_settings($group_type) {
     }
 
     // If this is a cloned group/site, fetch the clone source's details
-    $clone_source_group_status = $clone_source_blog_status = '';
-    if (bp_is_group_create()) {
+    $clone_source_group_status = '';
+	$clone_source_blog_status  = 0;
+    if ( bp_is_group_create() ) {
         $new_group_id = bp_get_new_group_id();
-        if ('course' === $group_type) {
-            $clone_source_group_id = groups_get_groupmeta($new_group_id, 'clone_source_group_id');
-            $clone_source_site_id = groups_get_groupmeta($new_group_id, 'clone_source_blog_id');
+		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
+		if ( $clone_source_group_id ) {
+			$clone_source_group        = groups_get_group( $clone_source_group_id );
+			$clone_source_group_status = $clone_source_group->status;
 
-            $clone_source_group = groups_get_group(array('group_id' => $clone_source_group_id));
-            $clone_source_group_status = $clone_source_group->status;
-
-            $clone_source_blog_status = get_blog_option($clone_source_site_id, 'blog_public');
+			$clone_source_site_id = groups_get_groupmeta( $new_group_id, 'clone_source_blog_id' );
+			if ( $clone_source_site_id ) {
+				$clone_source_blog_status = get_blog_option( $clone_source_site_id, 'blog_public' );
+			}
         }
     }
     ?>
@@ -106,12 +108,27 @@ function openlab_group_privacy_settings($group_type) {
 
     <?php /* Site privacy markup */ ?>
 
-    <?php if ($site_id = openlab_get_site_id_by_group_id()) : ?>
+	<?php
+	$site_id          = openlab_get_site_id_by_group_id();
+	$selected_privacy = 1;
+	if ( $site_id ) {
+		$has_site         = true;
+		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
+	} else {
+		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$has_site    = in_array( 'site', $clone_steps, true );
+		if ( $has_site ) {
+			$selected_privacy = $clone_source_blog_status;
+		}
+	}
+	?>
+
+    <?php if ( $has_site ) : ?>
         <div class="panel panel-default">
             <div class="panel-heading semibold">Privacy Settings: <?php echo esc_html( $group_type_name_uc ); ?> Site</div>
             <div class="panel-body">
                 <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Site.</p>
-                <?php openlab_site_privacy_settings_markup($site_id) ?>
+                <?php openlab_site_privacy_settings_markup( $site_id, $selected_privacy ) ?>
             </div>
         </div>
     <?php endif ?>
@@ -121,204 +138,6 @@ function openlab_group_privacy_settings($group_type) {
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
         <?php
     endif;
-}
-
-/**
- * This function outputs the full archive for a specific group, currently delineated by the archive page slug
- *
- */
-function openlab_group_archive() {
-    global $wpdb, $bp, $groups_template, $post;
-
-    if (!bp_is_active('groups')) {
-        return;
-    }
-
-//geting the grouptype by slug - the archive pages are curently WP pages and don't have a specific grouptype associated with them - this function uses the curent page slug to assign a grouptype
-//@to-do - get the archive page in the right spot to function correctly within the BP framework
-    $group_type = openlab_page_slug_to_grouptype();
-	if ( ! in_array( $group_type, openlab_group_types(), 1 ) ) {
-		$group_type = 'course';
-	}
-
-    $sequence_type = '';
-    if (!empty($_GET['group_sequence'])) {
-        $sequence_type = "type=" . $_GET['group_sequence'] . "&";
-    }
-
-    $search_terms = $search_terms_raw = '';
-
-    if (!empty($_POST['group_search'])) {
-        $search_terms_raw = $_POST['group_search'];
-        $search_terms = "search_terms=" . $search_terms_raw . "&";
-    }
-    if (!empty($_GET['search'])) {
-        $search_terms_raw = $_GET['search'];
-        $search_terms = "search_terms=" . $search_terms_raw . "&";
-    }
-
-    if (!empty($_GET['school'])) {
-        $school = $_GET['school'];
-    }
-
-    if (!empty($_GET['department'])) {
-        $department = wp_unslash( $_GET['department'] );
-    }
-
-    if (!empty($_GET['cat'])) {
-        $categories = $_GET['cat'];
-    }
-
-    if (!empty($_GET['semester'])) {
-        $semester = str_replace("-", " ", $_GET['semester']);
-        $semester = explode(" ", $semester);
-        $semester_season = ucwords($semester[0]);
-        $semester_year = ucwords($semester[1]);
-        $semester = trim($semester_season . ' ' . $semester_year);
-    }
-
-// Set up filters
-    $meta_query = array(
-        array(
-            'key' => 'wds_group_type',
-            'value' => $group_type,
-        ),
-    );
-
-    if (!empty($school) && 'school_all' != strtolower($school)) {
-        $all_offices = openlab_get_office_list();
-
-        $school_meta_key = isset( $all_offices[ $school ] ) ? 'openlab_office' : 'openlab_school';
-        $meta_query[] = array(
-            'key'   => $school_meta_key,
-            'value' => $school,
-        );
-    }
-
-    if (!empty($department) && 'dept_all' != strtolower($department)) {
-        $meta_query[] = array(
-            'key'   => 'openlab_department',
-            'value' => $department,
-        );
-    }
-
-    if (!empty($semester) && 'semester_all' != strtolower($semester)) {
-        $meta_query[] = array(
-            'key' => 'wds_semester',
-            'value' => $semester_season,
-        );
-        $meta_query[] = array(
-            'key' => 'wds_year',
-            'value' => $semester_year,
-        );
-    }
-
-    if ( !empty($_GET['usertype']) && 'user_type_all' != $_GET['usertype'] && in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
-        $meta_query[] = array(
-            'key' => 'portfolio_user_type',
-            'value' => ucwords($_GET['usertype']),
-        );
-    }
-
-    $group_args = array(
-        'search_terms' => $search_terms_raw,
-        'per_page' => 12,
-        'meta_query' => $meta_query,
-    );
-
-    if (!empty($categories)) {
-
-        if ('cat_all' === strtolower($categories)) {
-
-            $terms = get_terms('bp_group_categories');
-            $term_ids = wp_list_pluck($terms, 'term_id');
-        } else {
-            $term_obj = get_term_by('slug', $categories, 'bp_group_categories');
-            $term_ids = $term_obj->term_id;
-        }
-
-        $group_args['tax_query'] = array(
-            array(
-                'taxonomy' => 'bp_group_categories',
-                'terms' => $term_ids,
-                'field' => 'term_id',
-            )
-        );
-    }
-
-    if (!empty($_GET['group_sequence'])) {
-        $group_args['type'] = $_GET['group_sequence'];
-    }
-
-    if (bp_has_groups($group_args)) :
-        ?>
-        <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-lg-19 col-md-18 col-sm-16">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
-            <div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count(ucwords($group_type) . 's'); ?></div>
-        </div>
-        <div id="group-list" class="item-list group-list row">
-            <?php
-            $count = 1;
-            while (bp_groups()) : bp_the_group();
-                $group_id = bp_get_group_id();
-                ?>
-                <div class="group-item col-xs-12">
-                    <div class="group-item-wrapper">
-                        <div class="row">
-                            <div class="item-avatar alignleft col-xs-6">
-                                <a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr(bp_get_group_name()); ?>"/></a>
-								<?php do_action( 'bp_group_directory_after_avatar' ); ?>
-                            </div>
-                            <div class="item col-xs-18">
-
-                                <p class="item-title h2">
-                                    <a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="<?php echo ($group_type == 'course' ? 50 : 65 ) ?>" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
-                                    <span class="original-copy hidden"><?php bp_group_name() ?></span>
-                                </p>
-                                <?php
-                                //course group type
-                                if ($group_type == 'course'):
-                                    ?>
-
-                                    <div class="info-line uppercase">
-                                        <?php echo openlab_output_course_info_line($group_id); ?>
-                                    </div>
-                                <?php elseif ($group_type == 'portfolio'): ?>
-
-                                    <div class="info-line"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></div>
-
-                                <?php endif; ?>
-                                <div class="description-line">
-                                    <p class="truncate-on-the-fly" data-link="<?php echo bp_get_group_permalink() ?>" data-basevalue="105" data-basewidth="290"><?php echo bp_get_group_description_excerpt() ?></p>
-                                    <p class="original-copy hidden"><?php echo bp_get_group_description_excerpt() ?></p>
-                                </div>
-                            </div>
-                        </div><!--item-->
-                    </div>
-                </div>
-                <?php $count++ ?>
-            <?php endwhile; ?>
-        </div>
-
-        <div class="pagination-links" id="group-dir-pag-top">
-            <?php echo openlab_groups_pagination_links() ?>
-        </div>
-    <?php else: ?>
-        <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-19">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
-        </div>
-        <div id="group-list" class="item-list row">
-            <div class="widget-error query-no-results col-sm-24">
-                <p class="bold"><?php _e('There are no ' . esc_html( $group_type ) . 's to display.', 'buddypress') ?></p>
-            </div>
-        </div>
-
-    <?php endif; ?>
-    <?php
 }
 
 function openlab_groups_pagination_links() {
@@ -479,16 +298,16 @@ function openlab_get_active_semesters() {
 /**
  * Markup for groupblog privacy settings
  */
-function openlab_site_privacy_settings_markup($site_id = 0) {
-    global $blogname, $current_site;
+function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy = null ) {
+	if ( ! $site_id ) {
+		$site_id     = get_current_blog_id();
+		$blog_public = $selected_privacy;
+	} else {
+		$blog_public = get_blog_option( $site_id, 'blog_public' );
+	}
 
-    if (!$site_id) {
-        $site_id = get_current_blog_id();
-    }
+	$group_type = openlab_get_current_group_type( 'case=upper' );
 
-    $blog_name = get_blog_option($site_id, 'blogname');
-    $blog_public = get_blog_option($site_id, 'blog_public');
-    $group_type = openlab_get_current_group_type('case=upper');
     ?>
 
     <div class="radio group-site">
@@ -607,8 +426,15 @@ function cuny_group_single() {
     $section = groups_get_groupmeta($group_id, 'wds_section_code');
     $html = groups_get_groupmeta($group_id, 'wds_course_html');
 
+	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+	if ( count( $all_group_contacts ) <= 1 ) {
+		$exclude_creator = $all_group_contacts[0];
+	} else {
+		$exclude_creator = null;
+	}
+
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id, groups_get_current_group()->creator_id );
+    $clone_history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
 	$clone_history = array_filter(
 		$clone_history,
 		function( $item ) {
@@ -616,15 +442,7 @@ function cuny_group_single() {
 		}
 	);
 
-	$credits_groups = array_map( function( $clone_group ) {
-		return sprintf(
-			'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
-			esc_attr( $clone_group['group_url'] ),
-			esc_html( $clone_group['group_name'] ),
-			esc_attr( $clone_group['group_creator_url'] ),
-			esc_html( $clone_group['group_creator_name'] )
-		);
-	}, $clone_history );
+	$credits_markup = openlab_format_group_clone_history_data_list( $clone_history );
 
     ?>
 
@@ -638,6 +456,8 @@ function cuny_group_single() {
             <div id="<?php echo esc_attr( $group_type ); ?>-header-avatar" class="alignleft group-header-avatar col-sm-8 col-xs-12">
                 <div class="padded-img darker">
                     <img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => $group_id, 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr($group_name); ?>"/>
+
+					<?php openlab_group_single_badges(); ?>
 
 					<?php do_action( 'bp_group_header_after_avatar' ); ?>
                 </div>
@@ -711,7 +531,7 @@ function cuny_group_single() {
                                     <div class="bold col-sm-7">Credits</div>
                                     <div class="col-sm-17 row-content">
                                         <ul class="group-credits">
-                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                            <?php echo $credits_markup; ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -741,7 +561,7 @@ function cuny_group_single() {
                             $group_units     = openlab_get_group_academic_units( $group_id );
                             $wds_school      = openlab_generate_school_office_name( $group_units );
                             $wds_departments = openlab_generate_department_name( $group_units );
-                            $group_contacts  = groups_get_groupmeta( $group_id, 'group_contact', false );
+                            $group_contacts  = openlab_get_group_contacts( $group_id );
 
                             // Show 'School' field for Projects, Clubs, or staff Portfolios.
                             $show_school = 'project' === $group_type || 'club' === $group_type;
@@ -814,11 +634,18 @@ function cuny_group_single() {
                                     <div class="bold col-sm-7">Credits</div>
                                     <div class="col-sm-17 row-content">
                                         <ul class="group-credits">
-                                            <?php echo implode( "\n", $credits_groups ); ?>
+                                            <?php echo $credits_markup; ?>
                                         </ul>
                                     </div>
                                 </div>
                             <?php endif; ?>
+
+							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+								<div class="table-row row">
+									<div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.</div>
+
+								</div>
+							<?php endif; ?>
 
                         </div>
                     </div>
@@ -1186,6 +1013,18 @@ add_filter('paginate_links', 'openlab_group_pagination_search_key');
 ////////////////////////////
 
 /**
+ * Gets the group type for the current directory.
+ *
+ * @return string
+ */
+function openlab_get_group_directory_group_type() {
+	$post_obj   = get_queried_object();
+	$group_type = openlab_page_slug_to_grouptype();
+
+	return $group_type;
+}
+
+/**
  * Get an array describing some details about filters
  *
  * This is the master function where filter data should be stored
@@ -1313,7 +1152,7 @@ function openlab_current_directory_filters() {
         foreach ($active_filters as $ftype => $fvalue) {
             $filter_data = openlab_get_directory_filter($ftype, 'short');
 
-            if ( 'usertype' === $ftype && ! in_array( $fvalue, openlab_valid_user_types(), true ) ) {
+            if ( 'usertype' === $ftype && ! openlab_user_type_is_valid( $fvalue ) ) {
                 continue;
             }
 
@@ -1495,18 +1334,12 @@ function openlab_show_site_posts_and_comments() {
 function openlab_output_course_info_line($group_id) {
     $infoline_mup = '';
 
-    $admins = groups_get_group_admins($group_id);
-    $wds_faculty = openlab_get_faculty_list();
     $wds_course_code = groups_get_groupmeta($group_id, 'wds_course_code');
     $wds_semester = groups_get_groupmeta($group_id, 'wds_semester');
     $wds_year = groups_get_groupmeta($group_id, 'wds_year');
     $wds_departments = openlab_shortened_text(groups_get_groupmeta($group_id, 'wds_departments'), 15, false);
 
     $infoline_elems = array();
-
-    if (openlab_not_empty($wds_faculty)) {
-        array_push($infoline_elems, $wds_faculty);
-    }
     if (openlab_not_empty($wds_departments)) {
         array_push($infoline_elems, $wds_departments);
     }
@@ -1522,6 +1355,20 @@ function openlab_output_course_info_line($group_id) {
 
     return $infoline_mup;
 }
+
+/**
+ * Generates the 'faculty' line that appears under group names in course directories.
+ *
+ * @param int $group_id ID of the group.
+ * @return string
+ */
+function openlab_output_course_faculty_line( $group_id ) {
+	// The world's laziest technique.
+	$list = strip_tags( openlab_get_faculty_list( $group_id ) );
+
+	return '<span class="truncate-on-the-fly" data-basevalue="35">' . $list . '</span>';
+}
+
 
 /**
  * Displays per group or porftolio site links
@@ -1592,29 +1439,33 @@ function openlab_bp_group_site_pages( $mobile = false ) {
     } // !empty( $group_site_settings['site_url'] )
 }
 
-function openlab_get_faculty_list() {
+function openlab_get_faculty_list( $group_id = null ) {
     global $bp;
 
     $faculty_list = '';
 
-    if (isset($bp->groups->current_group->admins)) {
-        $group_id = $bp->groups->current_group->id;
-        $faculty_id = groups_get_groupmeta( $group_id, 'primary_faculty', true );
+	if ( null === $group_id ) {
+		$group_id = bp_get_group_id();
+	}
 
-        $faculty_ids = groups_get_groupmeta( $group_id, 'additional_faculty', false );
-        array_unshift($faculty_ids, $faculty_id);
+	if ( ! $group_id ) {
+		return '';
+	}
 
-        $faculty = array();
-        foreach ($faculty_ids as $id) {
-			$link = sprintf( '<a href="%s">%s</a>', bp_core_get_user_domain( $id ), bp_core_get_user_displayname( $id ) );
+	$group = groups_get_group( $group_id );
 
-            array_push( $faculty, $link );
-        }
+	$faculty_ids = array_merge( openlab_get_primary_faculty( $group_id ), openlab_get_additional_faculty( $group_id ) );
 
-        $faculty = array_unique($faculty);
+	$faculty = array();
+	foreach ( $faculty_ids as $id ) {
+		$link = sprintf( '<a href="%s">%s</a>', bp_core_get_user_domain( $id ), bp_core_get_user_displayname( $id ) );
 
-        $faculty_list = implode(', ', $faculty);
-    }
+		array_push( $faculty, $link );
+	}
+
+	$faculty = array_unique( $faculty );
+
+	$faculty_list = implode( ', ', $faculty );
 
     return $faculty_list;
 }
@@ -1866,3 +1717,241 @@ function openlab_group_add_to_portfolio_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
+
+/**
+ * Outputs the badge markup for the group directory.
+ *
+ * @since 1.2.0
+ */
+function openlab_group_directory_badges() {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return;
+	}
+
+	$group_id = bp_get_group_id();
+
+	$is_cloneable = openlab_group_can_be_cloned( $group_id );
+	$is_open      = openlab_group_is_open( $group_id );
+	$has_badges   = openlab_group_has_badges( $group_id );
+
+	if ( ! $is_cloneable && ! $is_open && ! $has_badges ) {
+		return;
+	}
+
+	echo '<div class="col-xs-18 alignright group-directory-badges">';
+	\OpenLab\Badges\Template::badge_links( 'directory' );
+	echo '</div>';
+}
+add_action( 'openlab_theme_after_group_group_directory', 'openlab_group_directory_badges' );
+
+/**
+ * Checks whether a group has badges.
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_group_has_badges( $group_id ) {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return false;
+	}
+
+	$badge_group  = new \OpenLab\Badges\Group( $group_id );
+	$group_badges = $badge_group->get_badges();
+
+	return ! empty( $group_badges );
+}
+
+/**
+ * Outputs the badge markup for single group pages.
+ *
+ * @since 1.2.0
+ */
+function openlab_group_single_badges() {
+	if ( ! defined( 'OLBADGES_VERSION' ) ) {
+		return;
+	}
+
+	echo '<div class="group-single-badges">';
+	\OpenLab\Badges\Template::badge_links( 'single' );
+	echo '</div>';
+}
+
+/**
+ * Filters the badge link markup to dynamically inject our badge-like flags.
+ *
+ * @param array  $badge_links Array of badge flags.
+ * @param int    $group_id    ID of the group.
+ * @param string $context     Context. 'directory' or 'single'.
+ * @return array
+ */
+function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
+	// Note that they're applied in reverse order, so 'open' is first.
+	$faux_badges = [
+		'cloneable' => [
+			'add'        => openlab_group_can_be_cloned( $group_id ),
+			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
+			'name'       => 'Cloneable',
+			'short_name' => 'Clone',
+		],
+		'open'      => [
+			'add'        => openlab_group_is_open( $group_id ),
+			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
+			'name'       => 'Open',
+			'short_name' => 'Open',
+		],
+	];
+
+	foreach ( $faux_badges as $badge_type => $faux_badge ) {
+		if ( ! $faux_badge['add'] ) {
+			continue;
+		}
+
+		// Copied from \OpenLab\Badges\Badge::get_avatar_flag_html().
+		$group = groups_get_group( $group_id );
+
+		$tooltip_id = 'badge-tooltip-' . $group->slug . '-' . $badge_type;
+
+		$badge_link_start = '';
+		$badge_link_end   = '';
+
+		if ( 'single' === $context ) {
+			$badge_link_start = sprintf(
+				'<a class="group-badge-shortname" href="%s">',
+				esc_attr( $faux_badge['link'] )
+			);
+
+			$badge_link_end = '</a>';
+		} else {
+			$badge_link_start = '<span class="group-badge-shortname">';
+			$badge_link_end   = '</span>';
+		}
+
+		$html  = '<div class="group-badge">';
+		$html .= $badge_link_start;
+		$html .= esc_html( $faux_badge['short_name'] );
+		$html .= $badge_link_end;
+
+		$html .= '<div id="' . esc_attr( $tooltip_id ) . '" class="badge-tooltip" role="tooltip">';
+		$html .= esc_html( $faux_badge['name'] );
+		$html .= '</div>';
+		$html .= '</div>';
+
+		array_unshift( $badge_links, $html );
+	}
+
+	return $badge_links;
+}
+add_filter( 'openlab_badges_badge_links', 'openlab_filter_badge_links', 10, 3 );
+
+/**
+ * Filters the list of group types used by OpenLab Badges.
+ */
+add_filter(
+	'openlab_badges_get_group_types',
+	function() {
+		$retval = [];
+
+		foreach ( openlab_group_types() as $type ) {
+			if ( 'school' === $type ) {
+				continue;
+			}
+
+			$retval[] = [
+				'slug' => $type,
+				'name' => ucwords( $type ),
+			];
+		}
+
+		return $retval;
+	}
+);
+
+/**
+ * Filters the group type of a group, as used by OpenLab Badges.
+ */
+add_filter(
+	'openlab_badges_group_type',
+	function( $group_type, $group_id ) {
+		return openlab_get_group_type( $group_id );
+	},
+	10,
+	2
+);
+
+/**
+ * Checks whether a group is "open".
+ *
+ * @param int $group_id Group ID.
+ * @return bool
+ */
+function openlab_group_is_open( $group_id ) {
+	$group = groups_get_group( $group_id );
+
+	$is_open = false;
+	if ( 'public' === $group->status ) {
+		$site_id = openlab_get_site_id_by_group_id( $group_id );
+		if ( $site_id ) {
+			// Avoid switch_to_blog().
+			$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
+			$is_open     = '0' === $blog_public || '1' === $blog_public;
+		} else {
+			$is_open = true;
+		}
+	}
+
+	return $is_open;
+}
+
+/**
+ * 'is_open' polyfill for the fact that 'status' is not implemented in bp_has_groups().
+ *
+ * See https://buddypress.trac.wordpress.org/ticket/8310
+ */
+add_filter(
+	'bp_before_groups_get_groups_parse_args',
+	function( $args ) {
+		$is_open = openlab_get_current_filter( 'is_open' );
+		if ( $is_open ) {
+			$args['status'] = 'public';
+		}
+		return $args;
+	}
+);
+
+/**
+ * Gets a list of directory filter fields for each group type.
+ */
+function openlab_group_type_disabled_filters() {
+	$disabled = [
+		'course'    => [
+			'bp-group-categories-select',
+			'portfolio-user-member-type-select',
+		],
+		'project'   => [
+			'course-term-select',
+			'portfolio-user-member-type-select',
+		],
+		'club'      => [
+			'course-term-select',
+			'portfolio-user-member-type-select',
+		],
+		'portfolio' => [
+			'bp-group-categories-select',
+			'checkbox-is-cloneable',
+			'course-term-select',
+		],
+	];
+
+	if ( defined( 'OLBADGES_VERSION' ) ) {
+		$all_badges = \OpenLab\Badges\Badge::get();
+		foreach ( $all_badges as $badge ) {
+			foreach ( $disabled as $group_type => &$type_disabled ) {
+				if ( ! in_array( $group_type, $badge->get_group_types(), true ) ) {
+					$type_disabled[] = 'checkbox-badge-' . $badge->get_id();
+				}
+			}
+		}
+	}
+
+	return $disabled;
+}

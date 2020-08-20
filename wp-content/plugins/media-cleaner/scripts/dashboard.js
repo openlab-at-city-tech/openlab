@@ -4,10 +4,19 @@ Description: Clean your Media Library and Uploads Folder.
 Author: Jordy Meow
 */
 
+if (WPMC_E) { // WPMC_E is supposed to be passed from PHP with wp_localize_script()
+	// Since wp_localize_script() forces any values to be strings,
+	// we need to cast these error-codes back into integers.
+	// This issue will be fixed in a future version of WP.
+	for (code in WPMC_E) WPMC_E[code] = parseInt(WPMC_E[code]);
+}
+
 const WPMC_TARGET_FILES = 'files';
 const WPMC_TARGET_MEDIAS = 'media';
 const WPMC_SOURCE_CONTENT = 'content';
 const WPMC_SOURCE_MEDIAS = 'media';
+
+var wpmc = null; // Global Context
 
 function wpmc_pop_array(items, count) {
 	var newItems = [];
@@ -164,11 +173,12 @@ function wpmc_ignore_do(items, totalcount) {
  *
  */
 
-var wpmc = wpmc_new_context();
-
 /**
  * Creates a context object that preserves various states and variables for scanning
  * @return {object}
+ * 
+ * TODO: Make this an actual class
+ * TODO: Create 'Phase' class as the base class of each kind of phase
  */
 function wpmc_new_context() {
 	return {
@@ -181,16 +191,49 @@ function wpmc_new_context() {
 		isPause: false,
 		isPendingPause: false,
 		currentPhase: null,
+		errorHandler: new ErrorHandler(),
 
 		phases: {
 			extractReferencesFromPosts: {
 				init: function () {
 					this.progress = 0; // Scanned posts count
 					this.progressPrev = 0;
+					this.progressMax = 0;
 					return this;
 				},
 				run: function () {
-					wpmc_extract_references_from(WPMC_SOURCE_CONTENT);
+					var me = this;
+					var src = WPMC_SOURCE_CONTENT;
+					
+					if (!this.progressMax) {
+						jQuery.ajax(ajaxurl, {
+							type: 'POST',
+							dataType: 'text',
+							data: {
+								action: 'wpmc_get_num_posts',
+								source: src
+							},
+							timeout: wpmc_cfg.timeout + 5000
+							
+						}).done(function (result) {
+							result = wpmc_parse_response(result);
+							me.progressMax = result.data.num;
+							wpmc_extract_references_from(src);
+							
+						}).fail(function (e) {
+							wpmc.errorHandler.handle(e.statusText, e.status);
+						});
+						
+						return;
+					}
+					
+					if (this.progress >= this.progressMax) {
+						wpmc.currentPhase = this.nextPhase().init();
+						wpmc.currentPhase.run();
+						return;
+					}
+					
+					wpmc_extract_references_from(src);
 				},
 				pause: function () {
 					jQuery('#wpmc_progression').html('<span class="dashicons dashicons-controls-pause"></span> Paused at preparing posts (' + 
@@ -207,10 +250,42 @@ function wpmc_new_context() {
 				init: function () {
 					this.progress = 0; // Scanned posts count
 					this.progressPrev = 0;
+					this.progressMax = 0;
 					return this;
 				},
 				run: function () {
-					wpmc_extract_references_from(WPMC_SOURCE_MEDIAS);
+					var me = this;
+					var src = WPMC_SOURCE_MEDIAS;
+					
+					if (!this.progressMax) {
+						jQuery.ajax(ajaxurl, {
+							type: 'POST',
+							dataType: 'text',
+							data: {
+								action: 'wpmc_get_num_posts',
+								source: src
+							},
+							timeout: wpmc_cfg.timeout + 5000
+							
+						}).done(function (result) {
+							result = wpmc_parse_response(result);
+							me.progressMax = result.data.num;
+							wpmc_extract_references_from(src);
+							
+						}).fail(function (e) {
+							wpmc.errorHandler.handle(e.statusText, e.status);
+						});
+						
+						return
+					}
+					
+					if (this.progress >= this.progressMax) {
+						wpmc.currentPhase = this.nextPhase().init();
+						wpmc.currentPhase.run();
+						return;
+					}
+
+					wpmc_extract_references_from(src);
 				},
 				pause: function () {
 					jQuery('#wpmc_progression').html('<span class="dashicons dashicons-controls-pause"></span> Paused at preparing medias (' + 
@@ -302,7 +377,7 @@ function wpmc_extract_references_from(source) {
 				if (!wpmc.currentPhase) return; // Aborted
 				var reply = wpmc_parse_response(response);
 				if (!reply.success)
-					return wpmc_handle_error(reply.message);
+					return wpmc.errorHandler.handle(reply.message);
 				if (!reply.finished) {
 					wpmc.currentPhase.progressPrev = wpmc.currentPhase.progress;
 					wpmc.currentPhase.progress = reply.limit;
@@ -310,7 +385,7 @@ function wpmc_extract_references_from(source) {
 				else wpmc.currentPhase = wpmc.currentPhase.nextPhase().init();
 				return wpmc.currentPhase.run();
 			}).fail(function (e) { // Server Error
-				wpmc_handle_error(e.statusText, e.status);
+				wpmc.errorHandler.handle(e.statusText, e.status);
 			});
 		}, wpmc_cfg.delay
 	);
@@ -354,7 +429,7 @@ function wpmc_retrieve_targets_for(target, path = null, limit = 0) {
 				wpmc.currentPhase.method = method;
 
 				if (!reply.success)
-					return wpmc_handle_error(reply.message);
+					return wpmc.errorHandler.handle(reply.message);
 
 				// Store results
 				for (var i = 0, len = reply.results.length; i < len; i++) {
@@ -394,7 +469,7 @@ function wpmc_retrieve_targets_for(target, path = null, limit = 0) {
 				wpmc.currentPhase.run();
 
 			}).fail(function (e) { // Server Error
-				wpmc_handle_error(e.statusText, e.status);
+				wpmc.errorHandler.handle(e.statusText, e.status);
 			});
 
 		}, wpmc_cfg.delay
@@ -447,26 +522,6 @@ function wpmc_parse_response(response) {
 		console.error('Media File Cleaner got a broken reply from the server:', response);
 	}
 	return r;
-}
-
-/**
- * Pauses the scan and Displays an error dialog
- * @param {string} msg=null The error message
- * @param {int} status=null The actual status code that the server responded
- */
-function wpmc_handle_error(msg = null, status = null) {
-	wpmc.isPendingPause = true;
-	wpmc_update_to_pause();
-
-	var errDialog = jQuery('#wpmc-error-dialog');
-	if (!msg) msg = 'An error happened'; // Default error message
-	if (status) {
-		console.error('Media Cleaner got an error from server:', status + ' ' + msg);
-		msg = '<span class="error-status">' + status + '</span> ' + msg;
-	} else
-		console.error(msg);
-	errDialog.find('h3').html(msg);
-	errDialog.dialog('open');
 }
 
 function wpmc_update_to_error() {
@@ -524,11 +579,11 @@ function wpmc_check_targets() {
 			}).done(function (response) {
 				var reply = wpmc_parse_response(response);
 				if (!reply.success)
-					return wpmc_handle_error(reply.message);
+					return wpmc.errorHandler.handle(reply.message);
 				wpmc.issues += expectedSuccess - reply.results;
 				wpmc_check_targets();
 			}).fail(function (e) { // Server Error
-				wpmc_handle_error(e.statusText, e.status);
+				wpmc.errorHandler.handle(e.statusText, e.status);
 			});
 		}, wpmc_cfg.delay
 	);
@@ -562,11 +617,69 @@ function wpmc_open_dialog(content) {
 }
 
 /**
+ * @constructor
+ */
+function ErrorHandler() {
+	this.mode = 'ASK'; // 'RETRY', 'SKIP'
+	this.MAX_RETRY = 30; // 30;
+	this.RETRY_DELAY = 5; // in sec
+	this.nRetried = 0;
+	this.nSkipped = 0;
+}
+ErrorHandler.prototype.setMode = function (mode) {
+	this.mode = mode;
+	return this;
+};
+ErrorHandler.prototype.handle = function (msg = null, status = null) {
+	var me = this;
+	switch (this.mode) {
+	case 'RETRY':
+		if (this.nRetried >= this.MAX_RETRY - 1) {
+			// Too many retries, switch back to ASK mode
+			console.warn('Auto-Retry is turned off due to too many fruitless attempts');
+			this.setMode('ASK');
+			this.nRetried = 0;
+		}
+		// Retry after few seconds
+		console.log('Retry starts in ' + this.RETRY_DELAY + ' seconds...');
+		setTimeout(function () {
+			me.nRetried++;
+			wpmc.currentPhase.run();
+			
+		}, this.RETRY_DELAY * 1000);
+		break;
+	case 'SKIP':
+		wpmc.currentPhase.skip();
+		this.nSkipped++;
+		console.warn(this.nSkipped + ' ' + (this.nSkipped > 1 ? 'errors are' : 'error is') + ' ignored automatically');
+		wpmc.currentPhase.run();
+		break;
+	default: // ASK
+		wpmc.isPendingPause = true;
+		wpmc_update_to_pause();
+		
+		// Show Error Dialog
+		var errDialog = jQuery('#wpmc-error-dialog');
+		if (!msg) msg = 'An error happened'; // Default error message
+		if (status) {
+			console.error('Media Cleaner got an error from server:', status + ' ' + msg);
+			msg = '<span class="error-status">' + status + '</span> ' + msg;
+		} else
+			console.error(msg);
+		
+		errDialog.find('h3').html(msg);
+		errDialog.dialog('open');
+	}
+};
+
+/**
  *
  * INIT
  *
  */
 (function ($) {
+	// Initialize Global Context
+	wpmc = wpmc_new_context();
 
 	// Bulk Selection
 	$('#wpmc-cb-select-all').on('change', function (cb) {
@@ -714,6 +827,60 @@ function wpmc_open_dialog(content) {
 					)
 			});
 		});
+		
+		// "Enable MEDIA_TRASH" Button
+		$('#wpmc_enable_media_trash').on('click', function (ev) {
+			var self = $(this);
+			var action = 'wpmc_define';
+			
+			$.ajax(ajaxurl, {
+				type: 'POST',
+				dataType: 'text',
+				data: {
+					action: action,
+					nonce:  WPMC_NONCES[action],
+					name:   'MEDIA_TRASH',
+					value:  1
+				}
+			
+			}).done(function (result) {
+				result = wpmc_parse_response(result);
+				if (!result.success) {
+					console.error(result.data.message);
+					var msg = {
+						title: 'Warning',
+						head:  '',
+						body:  result.data.message
+					};
+					switch (result.data.code) {
+					case WPMC_E['INVALID_NONCE']:
+						msg.head = "Invalid Request";
+						msg.body = "Something wrong is going on here.<br>Please try it again after reloading the page";
+						break;
+					case WPMC_E['FILE_OPEN_FAILURE']:
+						msg.head = "Cannot open wp-config.php";
+						msg.body = "You still have a chance to enable it by manually editing wp-config.php";
+						break;
+					case WPMC_E['FILE_WRITE_FAILURE']:
+						msg.head = "Cannot modify wp-config.php";
+						msg.body = "You still have a chance to enable it by manually editing wp-config.php";
+						break;
+					}
+					wpmc_open_dialog(msg);
+					return;
+				}
+				self.closest('.notice').remove();
+				
+			}).fail(function (e) {
+				console.error(e.status + " " + e.statusText);
+				var msg = {
+					title: "Request Error",
+					head:  e.status + " " + e.statusText,
+					body:  "You still have a chance to enable it by manually editing wp-config.php"
+				};
+				wpmc_open_dialog(msg);
+			});
+		});
 	})();
 
 	// Dialog
@@ -792,6 +959,27 @@ function wpmc_open_dialog(content) {
 			wpmc_pause(); // Resume
 			errDialog.dialog('close');
 		});
+
+		// Always Retry
+		errDialog.find('a.always-retry').on('click', function (ev) {
+			ev.preventDefault();
+			
+			wpmc.errorHandler.setMode('RETRY');
+
+			wpmc_pause(); // Resume
+			errDialog.dialog('close');
+		});
+		
+		// Skip All
+		errDialog.find('a.skip-all').on('click', function (ev) {
+			ev.preventDefault();
+
+			wpmc.errorHandler.setMode('SKIP');
+			
+			wpmc_pause(); // Resume
+			errDialog.dialog('close');
+		});
+
 	})();
 
 })(jQuery);

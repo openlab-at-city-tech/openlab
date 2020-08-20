@@ -11,6 +11,7 @@ env.php
 
 # Don't include .htaccess, which causes problems with the dev site
 .htaccess
+!/wp-content/plugins/out-of-the-box/cache/.htaccess
 
 # Don't include the dev site
 openlabdev

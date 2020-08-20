@@ -3,11 +3,14 @@
 <html <?php language_attributes(); ?>>
 
 	<head>
-		
-		<meta charset="<?php bloginfo( 'charset' ); ?>">
-		<meta name="viewport" content="width=device-width, initial-scale=1" >
+
+		<meta http-equiv="content-type" content="<?php bloginfo( 'html_type' ); ?>" charset="<?php bloginfo( 'charset' ); ?>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" >
+
+		<link rel="profile" href="http://gmpg.org/xfn/11">
+
 		<?php wp_head(); ?>
-	
+
 	</head>
 	
 	<body <?php body_class(); ?>>
@@ -22,35 +25,52 @@
 	
 			<div class="header-cover section bg-dark-light no-padding">
 
-				<?php $header_image_url = get_header_image() ? get_header_image() : get_template_directory_uri() . '/images/header.jpg'; ?>
+				<?php $header_image_url = get_header_image() ? get_header_image() : get_template_directory_uri() . '/assets/images/header.jpg'; ?>
 		
 				<div class="header section" style="background-image: url( <?php echo  $header_image_url; ?> );">
 							
 					<div class="header-inner section-inner">
 					
-						<?php if ( get_theme_mod( 'hemingway_logo' ) ) : ?>
+						<?php 
+
+						$custom_logo_id 	= get_theme_mod( 'custom_logo' );
+						$legacy_logo_url 	= get_theme_mod( 'hemingway_logo' );
+
+						$blog_title 		= get_bloginfo( 'title' );
+						$blog_description 	= get_bloginfo( 'description' );
+
+						$blog_title_elem 	= ( ( is_front_page() || is_home() ) && ! is_page() ) ? 'h1' : 'div';
 						
-							<div class='blog-logo'>
+						if ( $custom_logo_id || $legacy_logo_url ) : 
+
+							$custom_logo_url = $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : $legacy_logo_url;
+						
+							?>
+						
+							<<?php echo $blog_title_elem; ?> class="blog-logo">
 							
-						        <a href='<?php echo esc_url( home_url( '/' ) ); ?>' title='<?php echo esc_attr( get_bloginfo( 'title' ) ); ?> &mdash; <?php echo esc_attr( get_bloginfo( 'description' ) ); ?>' rel='home'>
-						        	<img src='<?php echo esc_url( get_theme_mod( 'hemingway_logo' ) ); ?>' alt='<?php echo esc_attr( get_bloginfo( 'title' ) ); ?>'>
+						        <a href="<?php echo esc_url( home_url( "/" ) ); ?>" rel="home">
+						        	<img src="<?php echo esc_url( $custom_logo_url ); ?>">
+									<?php if ( $blog_title ) : ?>
+										<span class="screen-reader-text"><?php echo $blog_title; ?></span>
+									<?php endif; ?>
 						        </a>
 						        
-						    </div><!-- .blog-logo -->
+						    </<?php echo $blog_title_elem; ?>><!-- .blog-logo -->
 					
-						<?php elseif ( get_bloginfo( 'description' ) || get_bloginfo( 'title' ) ) : ?>
+						<?php elseif ( $blog_title || $blog_description ) : ?>
 					
 							<div class="blog-info">
 							
-								<h2 class="blog-title">
-									<a href="<?php echo esc_url( home_url() ); ?>" rel="home"><?php echo esc_attr( get_bloginfo( 'title' ) ); ?></a>
-								</h2>
+								<?php if ( $blog_title ) : ?>
+									<<?php echo $blog_title_elem; ?> class="blog-title">
+										<a href="<?php echo esc_url( home_url() ); ?>" rel="home"><?php echo $blog_title; ?></a>
+									</<?php echo $blog_title_elem; ?>>
+								<?php endif; ?>
 								
-								<?php if ( get_bloginfo( 'description' ) ) { ?>
-								
-									<h3 class="blog-description"><?php echo esc_attr( get_bloginfo( 'description' ) ); ?></h3>
-									
-								<?php } ?>
+								<?php if ( $blog_description ) : ?>
+									<p class="blog-description"><?php echo $blog_description; ?></p>
+								<?php endif; ?>
 							
 							</div><!-- .blog-info -->
 							
@@ -64,44 +84,36 @@
 			
 			<div class="navigation section no-padding bg-dark">
 			
-				<div class="navigation-inner section-inner">
+				<div class="navigation-inner section-inner group">
 				
-					<div class="toggle-container hidden">
+					<div class="toggle-container section-inner hidden">
 			
 						<button type="button" class="nav-toggle toggle">
-								
 							<div class="bar"></div>
 							<div class="bar"></div>
 							<div class="bar"></div>
-						
+							<span class="screen-reader-text"><?php _e( 'Toggle mobile menu', 'hemingway' ); ?></span>
 						</button>
 						
 						<button type="button" class="search-toggle toggle">
-								
 							<div class="metal"></div>
 							<div class="glass"></div>
 							<div class="handle"></div>
-						
+							<span class="screen-reader-text"><?php _e( 'Toggle search field', 'hemingway' ); ?></span>
 						</button>
-						
-						<div class="clear"></div>
-					
+											
 					</div><!-- .toggle-container -->
 					
 					<div class="blog-search hidden">
-					
 						<?php get_search_form(); ?>
-					
-					</div>
+					</div><!-- .blog-search -->
 				
 					<ul class="blog-menu">
-					
 						<?php if ( has_nav_menu( 'primary' ) ) {
 							wp_nav_menu( array( 
 								'container' 		=> '', 
 								'items_wrap' 		=> '%3$s',
 								'theme_location' 	=> 'primary', 
-								'walker' 			=> new hemingway_nav_walker
 							) );
 						} else {
 							wp_list_pages( array(
@@ -109,10 +121,7 @@
 								'title_li' 	=> ''
 							) );
 						} ?>
-
-					 </ul>
-
-					 <div class="clear"></div>
+					 </ul><!-- .blog-menu -->
 					 
 					 <ul class="mobile-menu">
 					
@@ -122,7 +131,6 @@
 								'container' 		=> '', 
 								'items_wrap' 		=> '%3$s',
 								'theme_location' 	=> 'primary', 
-								'walker' 			=> new hemingway_nav_walker
 							) ); 
 						
 						} else {
@@ -134,7 +142,7 @@
 							
 						} ?>
 						
-					 </ul>
+					 </ul><!-- .mobile-menu -->
 				 
 				</div><!-- .navigation-inner -->
 				

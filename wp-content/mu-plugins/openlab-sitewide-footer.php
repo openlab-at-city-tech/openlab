@@ -15,8 +15,8 @@ function cuny_local_env_flag() {
 			@media screen {
 				#local-env-flag {
 					position: fixed;
-					left: 0;
-					top: 35px;
+					right: 0;
+					bottom: 35px;
 					width: 150px;
 					padding: 10px 15px;
 					text-align: center;
@@ -39,7 +39,7 @@ function cuny_local_env_flag() {
         </style>
 
         <div id="local-env-flag">
-            <?php echo esc_html(strtoupper($env_type)) ?> ENVIRONMENT
+            <?php echo esc_html(strtoupper($env_type)) ?>
         </div>
 
         <?php

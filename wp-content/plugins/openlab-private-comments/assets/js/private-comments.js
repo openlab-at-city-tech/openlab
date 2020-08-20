@@ -1,20 +1,28 @@
-(function($) {
-	var $action = $('.ol-private-comment');
+jQuery( document ).ready( function( $ ) {
+	/**
+	 * When responding to a private comment, comment privacy should be enforced.
+	 */
+	$( '.comment-reply-link' ).on( 'click', function() {
+		var parent = $( this ).closest( '.comment' );
+		var privateCheckbox = $( '#ol-private-comment' );
 
-	$action.on( 'click', 'button', function(event) {
+		if ( parent.length && parent.find( '.ol-private-comment-notice' ).length ) {
+			privateCheckbox.prop( 'checked', true );
+			privateCheckbox.prop( 'disabled', true );
+		} else {
+			privateCheckbox.prop( 'checked', false );
+			privateCheckbox.prop( 'disabled', false );
+		}
+	} );
+
+	/**
+	 * Toggle private comment visibility.
+	 */
+	$( '.ol-private-comment-toggle' ).on( 'click', function( event ) {
 		event.preventDefault();
 
-		$button = $(this);
-		$.post( ajaxurl, {
-			id: $(this).data('comment-id'),
-			is_private: $(this).data('is-private'),
-			action: 'openlab_private_comments',
-			_ajax_nonce: olPrivateComments.nonce,
-		}, function( response ) {
-			if ( response.success ) {
-				$button.data( 'is-private', response.data.is_private );
-				$button.html( response.data.label );
-			}
-		} );
+		$( this )
+			.closest( '.ol-private-comment-display' )
+			.toggleClass( 'ol-private-comment-hidden' );
 	} );
-})(jQuery);
+} );

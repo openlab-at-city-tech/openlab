@@ -4,7 +4,7 @@
  *
  * Contains extra logic for our Customizer controls & settings.
  *
- * @since 1.0.0
+ * @since Twenty Twenty 1.0
  */
 
 ( function() {
@@ -35,12 +35,23 @@
 				} );
 			} );
 		} );
+
+		// Show or hide retina_logo setting on the first load.
+		twentyTwentySetRetineLogoVisibility( !! wp.customize( 'custom_logo' )() );
+
+		// Add a listener for custom_logo changes.
+		wp.customize( 'custom_logo', function( value ) {
+			value.bind( function( to ) {
+				// Show or hide retina_logo setting on changing custom_logo.
+				twentyTwentySetRetineLogoVisibility( !! to );
+			} );
+		} );
 	} );
 
 	/**
 	 * Updates the value of the "accent_accessible_colors" setting.
 	 *
-	 * @since 1.0.0
+	 * @since Twenty Twenty 1.0
 	 *
 	 * @param {string} context The area for which we want to get colors. Can be for example "content", "header" etc.
 	 * @param {string} backgroundColor The background color (HEX value).
@@ -86,5 +97,18 @@
 
 		// Small hack to save the option.
 		wp.customize( 'accent_accessible_colors' )._dirty = true;
+	}
+
+	/**
+	 * Shows or hides the "retina_logo" setting based on the given value.
+	 *
+	 * @since Twenty Twenty 1.3
+	 *
+	 * @param {boolean} visible The visible value.
+	 *
+	 * @return {void}
+	 */
+	function twentyTwentySetRetineLogoVisibility( visible ) {
+		wp.customize.control( 'retina_logo' ).container.toggle( visible );
 	}
 }( jQuery ) );

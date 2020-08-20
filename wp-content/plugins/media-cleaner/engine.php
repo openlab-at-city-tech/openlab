@@ -11,6 +11,37 @@ class Meow_WPMC_Engine {
 		STEP 1: Parse the content, and look for references
 	*/
 
+	/**
+	 * Returns the posts to check the references
+	 * @param int $offset Negative number means no limit
+	 * @param int $size   Negative number means no limit
+	 * @return NULL|array
+	 */
+	function get_posts_to_check( $offset = -1, $size = -1 ) {
+		global $wpdb;
+		$r = null;
+
+		// Maybe we could avoid to check more post_types.
+		// SELECT post_type, COUNT(*) FROM `wp_posts` GROUP BY post_type
+		$q = <<<SQL
+SELECT p.ID FROM $wpdb->posts p
+WHERE p.post_status NOT IN ('inherit', 'trash', 'auto-draft')
+AND p.post_type NOT IN ('attachment', 'shop_order', 'shop_order_refund', 'nav_menu_item', 'revision', 'auto-draft', 'wphb_minify_group', 'customize_changeset', 'oembed_cache', 'nf_sub')
+AND p.post_type NOT LIKE 'dlssus_%'
+AND p.post_type NOT LIKE 'ml-slide%'
+AND p.post_type NOT LIKE '%acf-%'
+AND p.post_type NOT LIKE '%edd_%'
+SQL;
+		if ( $offset >= 0 && $size >= 0 ) {
+			$q .= " LIMIT %d, %d";
+			$r = $wpdb->get_col( $wpdb->prepare( $q, $offset, $size ) );
+
+		} else // No limit
+			$r = $wpdb->get_col( $q );
+
+		return $r;
+	}
+
 	// Parse the posts for references (based on $limit and $limitsize for paging the scan)
 	function extractRefsFromContent( $limit, $limitsize, &$message = '' ) {
 		if ( empty( $limit ) )
@@ -36,18 +67,7 @@ class Meow_WPMC_Engine {
 		do_action( 'wpmc_initialize_parsers' );
 
 		global $wpdb;
-		// Maybe we could avoid to check more post_types.
-		// SELECT post_type, COUNT(*) FROM `wp_posts` GROUP BY post_type
-		$posts = $wpdb->get_col( $wpdb->prepare( "SELECT p.ID FROM $wpdb->posts p
-			WHERE p.post_status NOT IN ('inherit', 'trash', 'auto-draft')
-			AND p.post_type NOT IN ('attachment', 'shop_order', 'shop_order_refund', 'nav_menu_item', 'revision', 'auto-draft', 'wphb_minify_group', 'customize_changeset', 'oembed_cache', 'nf_sub')
-			AND p.post_type NOT LIKE 'dlssus_%'
-			AND p.post_type NOT LIKE 'ml-slide%'
-			AND p.post_type NOT LIKE '%acf-%'
-			AND p.post_type NOT LIKE '%edd_%'
-			LIMIT %d, %d", $limit, $limitsize
-			)
-		);
+		$posts = $this->get_posts_to_check( $limit, $limitsize );
 
 		// Only at the beginning
 		if ( empty( $limit ) ) {
@@ -116,12 +136,7 @@ class Meow_WPMC_Engine {
 		}
 
 		global $wpdb;
-		$medias = $wpdb->get_col( $wpdb->prepare( "SELECT p.ID FROM $wpdb->posts p
-			WHERE p.post_status = 'inherit'
-			AND p.post_type = 'attachment'
-			LIMIT %d, %d", $limit, $limitsize
-			)
-		);
+		$medias = $this->get_media_entries( $limit, $limitsize );
 
 		// Only at the beginning
 		if ( empty( $limit ) ) {
@@ -158,15 +173,34 @@ class Meow_WPMC_Engine {
 		return $files;
 	}
 
-	function get_media_entries( $limit, $limitsize ) {
+	/**
+	 * Returns the media entries to check the references
+	 * @param int $offset Negative number means no limit
+	 * @param int $size   Negative number means no limit
+	 * @return NULL|array
+	 */
+	function get_media_entries( $offset = -1, $size = -1 ) {
 		global $wpdb;
-		$results = $wpdb->get_col( $wpdb->prepare( "SELECT p.ID FROM $wpdb->posts p
-			WHERE p.post_status = 'inherit'
-			AND p.post_type = 'attachment'
-			LIMIT %d, %d", $limit, $limitsize
-			)
-		);
-		return $results;
+		$r = null;
+
+		$q = <<<SQL
+SELECT p.ID FROM $wpdb->posts p
+WHERE p.post_status = 'inherit'
+AND p.post_type = 'attachment'
+SQL;
+		if ( get_option( 'wpmc_images_only' ) ) {
+			// Get only media entries which are images
+			$q .= " AND p.post_mime_type IN ( 'image/jpeg' )";
+		}
+
+		if ( $offset >= 0 && $size >= 0 ) {
+			$q .= " LIMIT %d, %d";
+			$r = $wpdb->get_col( $wpdb->prepare( $q, $offset, $size ) );
+
+		} else // No limit
+			$r = $wpdb->get_col( $q );
+
+		return $r;
 	}
 
 	/*

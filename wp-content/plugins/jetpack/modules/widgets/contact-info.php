@@ -1,6 +1,7 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 
 use Automattic\Jetpack\Assets;
+use Automattic\Jetpack\Redirect;
 
 if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 
@@ -252,10 +253,14 @@ if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'address' ) ); ?>"><?php esc_html_e( 'Address:', 'jetpack' ); ?></label>
 				<textarea class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'address' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'address' ) ); ?>"><?php echo esc_textarea( $instance['address'] ); ?></textarea>
+			</p>
 
+			<p>
 				<input class="jp-contact-info-showmap" id="<?php echo esc_attr( $this->get_field_id( 'showmap' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'showmap' ) ); ?>" value="1" type="checkbox" <?php checked( $instance['showmap'], 1 ); ?> />
 				<label for="<?php echo esc_attr( $this->get_field_id( 'showmap' ) ); ?>"><?php esc_html_e( 'Show map', 'jetpack' ); ?></label>
 			</p>
+
+			<?php if ( ! has_filter( 'jetpack_google_maps_api_key' ) || false === apply_filters( 'jetpack_google_maps_api_key', false ) ) { ?>
 
 			<p class="jp-contact-info-admin-map" style="<?php echo $instance['showmap'] ? '' : 'display: none;'; ?>">
 				<label for="<?php echo esc_attr( $this->get_field_id( 'apikey' ) ); ?>">
@@ -274,12 +279,18 @@ if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 								),
 							)
 						),
-						'https://jetpack.com/support/extra-sidebar-widgets/contact-info-widget/'
+						( defined( 'IS_WPCOM' ) && IS_WPCOM ) ? 'https://wordpress.com/support/widgets/contact-info/' : esc_url( Redirect::get_url( 'jetpack-support-extra-sidebar-widgets-contact-info-widget' ) )
 					);
 					?>
 					</small>
 				</label>
 			</p>
+
+			<?php } else { ?>
+
+			<input type="hidden" id="<?php echo esc_attr( $this->get_field_id( 'apikey' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'apikey' ) ); ?>" value="<?php echo esc_attr( $apikey ); ?>" />
+
+			<?php } // end if jetpack_google_maps_api_key check. ?>
 
 			<p class="jp-contact-info-admin-map jp-contact-info-embed-map" style="<?php echo $instance['showmap'] ? '' : 'display: none;'; ?>">
 				<?php
@@ -287,7 +298,7 @@ if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 					echo $this->build_map( $instance['address'], $apikey ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				} elseif ( true !== $instance['goodmap'] && ! empty( $instance['goodmap'] ) ) {
 					printf(
-						'<span class="notice notice-warning" style="display: block;">%s</span>',
+						'<span class="button-link-delete">%s</span>',
 						esc_html( $instance['goodmap'] )
 					);
 				}
@@ -344,9 +355,10 @@ if ( ! class_exists( 'Jetpack_Contact_Info_Widget' ) ) {
 			$height = 216;
 
 			$iframe_attributes = sprintf(
-				' height="%d" frameborder="0" src="%s" class="contact-map"',
+				' height="%d" frameborder="0" src="%s" title="%s" class="contact-map"',
 				esc_attr( $height ),
-				esc_url( $src )
+				esc_url( $src ),
+				__( 'Google Map Embed', 'jetpack' )
 			);
 
 			$iframe_html = sprintf( '<iframe width="600" %s></iframe>', $iframe_attributes );

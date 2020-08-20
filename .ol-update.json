@@ -1,0 +1,423 @@
+{
+    "data": {
+        "plugin": {
+            "advanced-gutenberg": {
+                "type": "plugin",
+                "name": "advanced-gutenberg",
+                "title": "Advanced Gutenberg",
+                "current_version": "2.3.5",
+                "update_type": "minor",
+                "update_series": "2.3",
+                "new_version": "2.3.9"
+            },
+            "akismet": {
+                "type": "plugin",
+                "name": "akismet",
+                "title": "Akismet Anti-Spam",
+                "current_version": "4.1.4",
+                "update_type": "minor",
+                "update_series": "4.1",
+                "new_version": "4.1.5"
+            },
+            "badgeos": {
+                "type": "plugin",
+                "name": "badgeos",
+                "title": "BadgeOS",
+                "current_version": "3.3",
+                "update_type": "major",
+                "update_series": "3.5",
+                "new_version": "3.5.1"
+            },
+            "breadcrumb-navxt": {
+                "type": "plugin",
+                "name": "breadcrumb-navxt",
+                "title": "Breadcrumb NavXT",
+                "current_version": "6.3.0",
+                "update_type": "major",
+                "update_series": "6.4",
+                "new_version": "6.4.0"
+            },
+            "buddypress": {
+                "type": "plugin",
+                "name": "buddypress",
+                "title": "BuddyPress",
+                "current_version": "5.1.2",
+                "update_type": "major",
+                "update_series": "6.0",
+                "new_version": "6.0.0"
+            },
+            "taxonomy-terms-order": {
+                "type": "plugin",
+                "name": "taxonomy-terms-order",
+                "title": "Category Order and Taxonomy Terms Order",
+                "current_version": "1.5.7.1",
+                "update_type": "minor",
+                "update_series": "1.5",
+                "new_version": "1.5.7.2"
+            },
+            "contact-form-7": {
+                "type": "plugin",
+                "name": "contact-form-7",
+                "title": "Contact Form 7",
+                "current_version": "5.1.7",
+                "update_type": "minor",
+                "update_series": "5.1",
+                "new_version": "5.1.8"
+            },
+            "easy-table-of-contents": {
+                "type": "plugin",
+                "name": "easy-table-of-contents",
+                "title": "Easy Table of Contents",
+                "current_version": "1.7",
+                "update_type": "major",
+                "update_series": "2.0",
+                "new_version": "2.0.11"
+            },
+            "elasticpress": {
+                "type": "plugin",
+                "name": "elasticpress",
+                "title": "ElasticPress",
+                "current_version": "3.3",
+                "update_type": "major",
+                "update_series": "3.4",
+                "new_version": "3.4.1"
+            },
+            "ewww-image-optimizer": {
+                "type": "plugin",
+                "name": "ewww-image-optimizer",
+                "title": "EWWW Image Optimizer",
+                "current_version": "5.2.5",
+                "update_type": "major",
+                "update_series": "5.3",
+                "new_version": "5.3.2"
+            },
+            "feedwordpress": {
+                "type": "plugin",
+                "name": "feedwordpress",
+                "title": "FeedWordPress",
+                "current_version": "2017.1020",
+                "update_type": "major",
+                "update_series": "2020.118",
+                "new_version": "2020.0118"
+            },
+            "folders": {
+                "type": "plugin",
+                "name": "folders",
+                "title": "Folders",
+                "current_version": "2.3.9",
+                "update_type": "major",
+                "update_series": "2.4",
+                "new_version": "2.4.9"
+            },
+            "gp-media-library": {
+                "type": "plugin",
+                "name": "gp-media-library",
+                "title": "GP Media Library",
+                "current_version": "1.0.14",
+                "update_type": "major",
+                "update_series": "1.2",
+                "new_version": "1.2.11"
+            },
+            "gravityforms": {
+                "type": "plugin",
+                "name": "gravityforms",
+                "title": "Gravity Forms",
+                "current_version": "2.4.17.11",
+                "update_type": "minor",
+                "update_series": "2.4",
+                "new_version": "2.4.18"
+            },
+            "gutenberg": {
+                "type": "plugin",
+                "name": "gutenberg",
+                "title": "Gutenberg",
+                "current_version": "7.6.1",
+                "update_type": "major",
+                "update_series": "8.1",
+                "new_version": "8.1.0"
+            },
+            "jetpack": {
+                "type": "plugin",
+                "name": "jetpack",
+                "title": "Jetpack by WordPress.com",
+                "current_version": "8.0",
+                "update_type": "major",
+                "update_series": "8.5",
+                "new_version": "8.5"
+            },
+            "link-library": {
+                "type": "plugin",
+                "name": "link-library",
+                "title": "Link Library",
+                "current_version": "6.3.12",
+                "update_type": "major",
+                "update_series": "6.4",
+                "new_version": "6.4.8"
+            },
+            "mappress-google-maps-for-wordpress": {
+                "type": "plugin",
+                "name": "mappress-google-maps-for-wordpress",
+                "title": "MapPress Maps for WordPress",
+                "current_version": "2.53.8",
+                "update_type": "major",
+                "update_series": "2.54",
+                "new_version": "2.54.6"
+            },
+            "media-cleaner": {
+                "type": "plugin",
+                "name": "media-cleaner",
+                "title": "Media Cleaner",
+                "current_version": "5.5.8",
+                "update_type": "major",
+                "update_series": "5.6",
+                "new_version": "5.6.3"
+            },
+            "wp-ajax-edit-comments": {
+                "type": "plugin",
+                "name": "wp-ajax-edit-comments",
+                "title": "Mihdan: Ajax Edit Comments",
+                "current_version": "6.0.4",
+                "update_type": "major",
+                "update_series": "6.1",
+                "new_version": "6.1"
+            },
+            "osm": {
+                "type": "plugin",
+                "name": "osm",
+                "title": "OSM",
+                "current_version": "5.3.6",
+                "update_type": "major",
+                "update_series": "5.4",
+                "new_version": "5.4.3"
+            },
+            "page-links-to": {
+                "type": "plugin",
+                "name": "page-links-to",
+                "title": "Page Links To",
+                "current_version": "3.2.2",
+                "update_type": "major",
+                "update_series": "3.3",
+                "new_version": "3.3.3"
+            },
+            "pdf-embedder": {
+                "type": "plugin",
+                "name": "pdf-embedder",
+                "title": "PDF Embedder",
+                "current_version": "4.5",
+                "update_type": "major",
+                "update_series": "4.6",
+                "new_version": "4.6"
+            },
+            "query-monitor": {
+                "type": "plugin",
+                "name": "query-monitor",
+                "title": "Query Monitor",
+                "current_version": "3.5.2",
+                "update_type": "major",
+                "update_series": "3.6",
+                "new_version": "3.6.0"
+            },
+            "shortcodes-ultimate": {
+                "type": "plugin",
+                "name": "shortcodes-ultimate",
+                "title": "Shortcodes Ultimate",
+                "current_version": "5.6.1",
+                "update_type": "major",
+                "update_series": "5.8",
+                "new_version": "5.8.1"
+            },
+            "subscribe2": {
+                "type": "plugin",
+                "name": "subscribe2",
+                "title": "Subscribe2",
+                "current_version": "10.31",
+                "update_type": "major",
+                "update_series": "10.32",
+                "new_version": "10.32"
+            },
+            "syntaxhighlighter": {
+                "type": "plugin",
+                "name": "syntaxhighlighter",
+                "title": "SyntaxHighlighter Evolved",
+                "current_version": "3.5.2",
+                "update_type": "minor",
+                "update_series": "3.5",
+                "new_version": "3.5.4"
+            },
+            "table-of-contents-plus": {
+                "type": "plugin",
+                "name": "table-of-contents-plus",
+                "title": "Table of Contents Plus",
+                "current_version": "1601",
+                "update_type": "major",
+                "update_series": "2002.0",
+                "new_version": "2002"
+            },
+            "tablepress": {
+                "type": "plugin",
+                "name": "tablepress",
+                "title": "TablePress",
+                "current_version": "1.10",
+                "update_type": "major",
+                "update_series": "1.11",
+                "new_version": "1.11"
+            },
+            "text-hover": {
+                "type": "plugin",
+                "name": "text-hover",
+                "title": "Text Hover",
+                "current_version": "3.8",
+                "update_type": "major",
+                "update_series": "3.9",
+                "new_version": "3.9.1"
+            },
+            "the-events-calendar": {
+                "type": "plugin",
+                "name": "the-events-calendar",
+                "title": "The Events Calendar",
+                "current_version": "4.9.14",
+                "update_type": "major",
+                "update_series": "5.1",
+                "new_version": "5.1.1"
+            },
+            "wordpress-importer": {
+                "type": "plugin",
+                "name": "wordpress-importer",
+                "title": "WordPress Importer",
+                "current_version": "0.6.4",
+                "update_type": "major",
+                "update_series": "0.7",
+                "new_version": "0.7"
+            },
+            "wp-accessibility": {
+                "type": "plugin",
+                "name": "wp-accessibility",
+                "title": "WP Accessibility",
+                "current_version": "1.7.0",
+                "update_type": "minor",
+                "update_series": "1.7",
+                "new_version": "1.7.1"
+            }
+        },
+        "theme": {
+            "hamilton": {
+                "type": "theme",
+                "name": "hamilton",
+                "title": "Hamilton",
+                "current_version": "1.26",
+                "update_type": "major",
+                "update_series": "2.0",
+                "new_version": "2.0.4"
+            },
+            "hemingway": {
+                "type": "theme",
+                "name": "hemingway",
+                "title": "Hemingway",
+                "current_version": "1.75",
+                "update_type": "major",
+                "update_series": "2.0",
+                "new_version": "2.0.3"
+            },
+            "koji": {
+                "type": "theme",
+                "name": "koji",
+                "title": "Koji",
+                "current_version": "1.46",
+                "update_type": "major",
+                "update_series": "2.0",
+                "new_version": "2.0.5"
+            },
+            "twentyeleven": {
+                "type": "theme",
+                "name": "twentyeleven",
+                "title": "Twenty Eleven",
+                "current_version": "3.3",
+                "update_type": "major",
+                "update_series": "3.4",
+                "new_version": "3.4"
+            },
+            "twentyfifteen": {
+                "type": "theme",
+                "name": "twentyfifteen",
+                "title": "Twenty Fifteen",
+                "current_version": "2.5",
+                "update_type": "major",
+                "update_series": "2.6",
+                "new_version": "2.6"
+            },
+            "twentyfourteen": {
+                "type": "theme",
+                "name": "twentyfourteen",
+                "title": "Twenty Fourteen",
+                "current_version": "2.7",
+                "update_type": "major",
+                "update_series": "2.8",
+                "new_version": "2.8"
+            },
+            "twentynineteen": {
+                "type": "theme",
+                "name": "twentynineteen",
+                "title": "Twenty Nineteen",
+                "current_version": "1.4",
+                "update_type": "major",
+                "update_series": "1.5",
+                "new_version": "1.5"
+            },
+            "twentyseventeen": {
+                "type": "theme",
+                "name": "twentyseventeen",
+                "title": "Twenty Seventeen",
+                "current_version": "2.2",
+                "update_type": "major",
+                "update_series": "2.3",
+                "new_version": "2.3"
+            },
+            "twentysixteen": {
+                "type": "theme",
+                "name": "twentysixteen",
+                "title": "Twenty Sixteen",
+                "current_version": "2.0",
+                "update_type": "major",
+                "update_series": "2.1",
+                "new_version": "2.1"
+            },
+            "twentyten": {
+                "type": "theme",
+                "name": "twentyten",
+                "title": "Twenty Ten",
+                "current_version": "2.9",
+                "update_type": "major",
+                "update_series": "3.0",
+                "new_version": "3.0"
+            },
+            "twentythirteen": {
+                "type": "theme",
+                "name": "twentythirteen",
+                "title": "Twenty Thirteen",
+                "current_version": "2.9",
+                "update_type": "major",
+                "update_series": "3.0",
+                "new_version": "3.0"
+            },
+            "twentytwelve": {
+                "type": "theme",
+                "name": "twentytwelve",
+                "title": "Twenty Twelve",
+                "current_version": "3.0",
+                "update_type": "major",
+                "update_series": "3.1",
+                "new_version": "3.1"
+            },
+            "twentytwenty": {
+                "type": "theme",
+                "name": "twentytwenty",
+                "title": "Twenty Twenty",
+                "current_version": "1.1",
+                "update_type": "major",
+                "update_series": "1.3",
+                "new_version": "1.3"
+            }
+        }
+    },
+    "header": "OpenLab upgrades for 1.7.43"
+}

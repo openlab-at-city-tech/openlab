@@ -2,15 +2,12 @@
 
 /* 1. Header */
 
-.title-area-link {
-	position: relative;
-}
-
 div.title-area {
-    position: absolute;
+	left: 0;
+	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-    width: 100%;
+	width: 100%;
 	box-shadow: none;
 	background-color: inherit;
 }
@@ -23,10 +20,6 @@ div.title-area {
 
 .site-header {
     background-color: #fff;
-}
-
-.header-image .site-header {
-	background-color: #000;
 }
 
 .site-title {
@@ -42,7 +35,11 @@ p.site-title {
 }
 
 a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #f5f5f5;
+}
+
+body.header-image a.title-area-link:hover div.title-area .site-title {
+	color: #61241f;
 }
 
 .site-inner {
@@ -151,6 +148,27 @@ h4.widget-title.widgettitle {
     color: #444444 !important; /* Don't let color schemes override */
 }
 
+.home-bottom h4.widget-title.widgettitle,
+.footer-widgets h4.widget-title.widgettitle {
+    color: #fff !important; /* Don't let color schemes override */
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.home-bottom .widget-area .widget:last-of-type,
+.footer-widgets .widget-area .widget:last-of-type {
+	margin-bottom: 40px;
+}
+
+.footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+#openlab-footer {
+	display: none !important;
+}
+
 cite {
     font-size: .8em;
 }
@@ -206,6 +224,8 @@ div.title-area {
 }
 
 .title-area-link {
+	position: relative;
+	z-index: 100;
 	/*
 	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
@@ -213,21 +233,30 @@ div.title-area {
 	*/
     background-color: #aa2418;
 	position: relative;
-	z-index: 2;
 	background-position: center top !important;
 	background-size: cover !important;
-	box-shadow: 0px 3px 7px 0px #80808091;
+	box-shadow: 0px 3px 7px 0px #00000063;
 	display: block;
 	min-height: 130px;
 	width: 100%;
 }
 
 .header-image a.title-area-link {
-	padding-top: 20px;
+	padding-top: 14px;
 }
 
-body.header-image .title-area {
-	background: transparent !important;
+body.header-image .title-area-wrap {
+	min-height: 116px;
+	margin: 0 auto;
+	max-width: 1140px;
+	position: relative;
+}
+
+body.header-image div.title-area {
+	color: #812f27;
+	background: rgba(255, 255, 255, 0.9) !important;
+	height: 100%;
+	padding-top: 1.4rem;
 }
 
 /*
@@ -254,10 +283,6 @@ body.header-image .title-area {
 	color: #444;
 }
 
-.site-footer {
-	padding: 10px 0;
-}
-
 a,
 div.entry-content a,
 .breadcrumb a,
@@ -275,6 +300,8 @@ a.breadcrumb-link {
 	padding-bottom: 1px;
 }
 
+div.entry-content .ngg-gallery-thumbnail a,
+div.entry-content a.entry-image-link,
 div.entry-content .wp-block-image a {
 	border-bottom: 0;
 }
@@ -303,6 +330,10 @@ a.breadcrumb-link:hover {
 .content .entry-header .entry-meta .entry-time {
 	background-color: #e3f2fa;
 	color: #444;
+}
+
+.entry-footer .entry-meta {
+	font-size: 14px;
 }
 
 .entry-footer .entry-meta a {
@@ -340,12 +371,6 @@ a.breadcrumb-link:hover {
 	}
 
 	body div.title-area {
-		width: 90% !important;
-	}
-
-	.header-widget-area .genesis-nav-menu.responsive-menu {
-		padding-left: 5%;
-		padding-right: 5%;
 	}
 }
 
@@ -377,7 +402,14 @@ a.breadcrumb-link:hover {
 	}
 }
 
+.nav-primary {
+	position: sticky;
+	top: -1px;
+	z-index: 99;
+}
+
 .nav-primary .genesis-nav-menu {
+	font-size: 16px;
 	text-align: center;
 }
 
@@ -399,6 +431,9 @@ a.breadcrumb-link:hover {
 
 /* Adjustments for header + nav at medium widths */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
+	body.header-image .title-area-wrap {
+		max-width: 740px;
+	}
 	.header-image div.title-area {
 		margin-bottom: 0;
 	}
@@ -455,6 +490,7 @@ body .site-title a {
 .genesis-nav-menu .sub-menu a {
 	background-color: #fff;
 	color: #444;
+	font-size: 16px;
 }
 
 .genesis-nav-menu li a:hover,
@@ -473,7 +509,7 @@ body .site-title a {
 	color: #3b3b3b;
 }
 
-.header-widget-area .genesis-nav-menu .sub-menu .sub-menu {
+.genesis-nav-menu .sub-menu .sub-menu {
 	border-left: none;
 }
 
@@ -496,9 +532,22 @@ body .site-title a {
 
 /* Hamburger initialize at 1023px */
 @media only screen and (max-width: 1023px) {
+	.genesis-nav-menu .sub-menu a,
+	.nav-primary .genesis-nav-menu {
+		font-size: 16px;
+	}
+
 	.genesis-nav-menu.responsive-menu > .menu-item > .sub-menu,
 	.genesis-nav-menu.responsive-menu {
 		display: none;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
+		color: inherit;
+	}
+
+	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
+		color: inherit !important;
 	}
 
 	.genesis-nav-menu.responsive-menu .menu-item,
@@ -515,7 +564,7 @@ body .site-title a {
 	.genesis-nav-menu.responsive-menu li a:hover,
 	.header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
 	.genesis-nav-menu.responsive-menu li.current-menu-item > a {
-		background: none;
+		background: none !important;
 		color: #444;
 		display: block;
 		line-height: 1;
@@ -593,14 +642,21 @@ body .site-title a {
 		padding-bottom: 16px;
 	}
 
-	.nav-primary .genesis-nav-menu.responsive-menu li a {
-		background: none;
-		color: #fff;
+	.nav-primary .wrap {
+		padding-left: 0;
+		padding-right: 0;
 	}
 
-	.nav-primary .genesis-nav-menu.responsive-menu li a:hover {
-		background: none;
-		color: #e7e7e7;
+	.nav-primary .genesis-nav-menu.responsive-menu {
+		background: #fff;
+		padding-left: 5%;
+		padding-right: 5%;
+		padding-top: 3%;
+	}
+
+	.nav-primary .genesis-nav-menu.responsive-menu li,
+	.nav-primary .genesis-nav-menu.responsive-menu li a {
+		color: #444;
 	}
 
 	.education-pro-home .slide-excerpt {
@@ -629,7 +685,6 @@ body .site-title a {
 /** COLOR SCHEMES ********************************************************/
 
 /* Blue */
-.education-pro-blue .footer-widgets .wrap a:hover,
 .education-pro-blue .slide-excerpt h2 a,
 .education-pro-blue .home-middle .entry-title a,
 .education-pro-blue .home-top .widget_text,
@@ -645,6 +700,11 @@ body .site-title a {
 	color: #185a7d;
 }
 
+.education-pro-blue .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
 .education-pro-blue .entry-title a:hover,
 .education-pro-blue .entry-footer .entry-meta a:hover,
 .education-pro-blue a:hover {
@@ -656,6 +716,15 @@ body .site-title a {
 .education-pro-blue input[type="submit"],
 .education-pro-blue a.wp-block-file__button,
 .education-pro-blue .footer-widgets a.button,
+.education-pro-blue .footer-widgets .wrap .widget .button,
+.education-pro-blue .footer-widgets .wrap button,
+.education-pro-blue .footer-widgets .wrap input[type="button"],
+.education-pro-blue .footer-widgets .wrap input[type="reset"],
+.education-pro-blue .footer-widgets .wrap input[type="submit"],
+.education-pro-blue .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-blue .home-bottom .widget input[type="button"],
+.education-pro-blue .home-bottom .widget input[type="reset"],
+.education-pro-blue .home-bottom .widget input[type="submit"],
 .education-pro-blue .site-footer a.button {
 	background-color: #e3f2fa;
 	color: #444;
@@ -686,6 +755,7 @@ body .site-title a {
 .education-pro-blue .home-featured #genesis-responsive-slider .more-link:hover,
 .education-pro-blue button:hover,
 .education-pro-blue .title-area,
+body.education-pro-blue.header-image .title-area,
 .education-pro-blue input:hover[type="button"],
 .education-pro-blue input:hover[type="reset"],
 .education-pro-blue input:hover[type="submit"] {
@@ -697,7 +767,8 @@ body .site-title a {
 	background-color: #bad0de;
 }
 
-.education-pro-blue a.title-area-link:hover div.title-area .site-title {
+.education-pro-blue a.title-area-link:hover div.title-area .site-title,
+body.header-image.education-pro-blue a.title-area-link:hover div.title-area .site-title {
 	color: #185a7d;
 }
 
@@ -722,14 +793,6 @@ body .site-title a {
 .education-pro-blue .genesis-nav-menu li.current-menu-item > a {
 	background-color: #113f58;
 	color: #fff;
-}
-
-.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
-.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
-.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-	background-color: #e3f2fb;
-	color: #3b3b3b;
 }
 
 .education-pro-blue .genesis-nav-menu .sub-menu a {
@@ -763,22 +826,14 @@ body .site-title a {
 }
 
 @media only screen and (max-width: 1023px) {
-	.education-pro-blue .header-widget-area .genesis-nav-menu li a:hover,
-	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li a:hover {
-		background-color: inherit;
-		color: inherit;
-	}
 
-	.education-pro-blue .genesis-nav-menu li.current-menu-item > a,
-	.education-pro-blue .header-widget-area .genesis-nav-menu li.current-menu-item > a,
-	.education-pro-blue .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
+	.education-pro-blue .genesis-nav-menu li.current-menu-item > a {
 		background: none !important;
 		color: inherit;
 	}
 }
 
 /* Green */
-.education-pro-green .footer-widgets .wrap a:hover,
 .education-pro-green .slide-excerpt h2 a,
 .education-pro-green .home-middle .entry-title a,
 .education-pro-green .home-top .widget_text,
@@ -795,6 +850,11 @@ body .site-title a {
 	color: #3e6120;
 }
 
+.education-pro-green .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
 .education-pro-green .entry-title a:hover,
 .education-pro-green .entry-footer .entry-meta a:hover,
 .education-pro-green a:hover {
@@ -806,6 +866,15 @@ body .site-title a {
 .education-pro-green input[type="submit"],
 .education-pro-green a.wp-block-file__button,
 .education-pro-green .footer-widgets a.button,
+.education-pro-green .footer-widgets .wrap .widget .button,
+.education-pro-green .footer-widgets .wrap button,
+.education-pro-green .footer-widgets .wrap input[type="button"],
+.education-pro-green .footer-widgets .wrap input[type="reset"],
+.education-pro-green .footer-widgets .wrap input[type="submit"],
+.education-pro-green .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-green .home-bottom .widget input[type="button"],
+.education-pro-green .home-bottom .widget input[type="reset"],
+.education-pro-green .home-bottom .widget input[type="submit"],
 .education-pro-green .site-footer a.button {
 	background-color: #d1deba;
 	color: #444;
@@ -847,10 +916,12 @@ body .site-title a {
 	background-color: #d1deba;
 }
 
+body.education-pro-green.header-image .title-area,
 .education-pro-green .title-area {
 	color: #234326;
 }
 
+body.header-image.education-pro-green a.title-area-link:hover div.title-area .site-title,
 .education-pro-green a.title-area-link:hover div.title-area .site-title {
 	color: #336136;
 }
@@ -871,20 +942,12 @@ body .site-title a {
 }
 
 .education-pro-green .genesis-nav-menu li a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-green .genesis-nav-menu .sub-menu a,
+.education-pro-green .genesis-nav-menu li.current-menu-item > a,
 .education-pro-green .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-green .genesis-nav-menu li.current-menu-item > a {
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-green .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #234326;
 	color: #fff;
-}
-
-.education-pro-green .header-widget-area .genesis-nav-menu li a:hover,
-.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-green .header-widget-area .genesis-nav-menu li.current-menu-item > a,
-.education-pro-green .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-	background-color: #d1deba;
-	color: #3b3b3b;
 }
 
 .education-pro-green .genesis-nav-menu .sub-menu a {
@@ -935,7 +998,6 @@ body .site-title a {
 }
 
 /* Red */
-.education-pro-red .footer-widgets .wrap a:hover,
 .education-pro-red .slide-excerpt h2 a,
 .education-pro-red .home-middle .entry-title a,
 .education-pro-red .home-top .widget_text,
@@ -950,6 +1012,11 @@ body .site-title a {
 .education-pro-red a {
 	border-color: #aa2418;
 	color: #aa2418;
+}
+
+.education-pro-red .footer-widgets .wrap a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
 .education-pro-red .entry-title a:hover,
@@ -1008,8 +1075,12 @@ body .site-title a {
 	color: #fff;
 }
 
+.education-pro-red.header-image .title-area {
+	color: #812f27;
+}
+
 .education-pro-red a.title-area-link:hover div.title-area .site-title {
-	color: #ffd5d1;
+	color: #61241f;
 }
 
 .education-pro-red .content .entry-header .entry-meta .entry-time {
@@ -1017,31 +1088,32 @@ body .site-title a {
 	color: #444;
 }
 
-.education-pro-red button:hover,
-.education-pro-red input[type="button"]:hover,
-.education-pro-red input[type="reset"]:hover,
-.education-pro-red input[type="submit"]:hover,
-.education-pro-red .button:hover,
-.education-pro-red div.wp-block-file__button a:hover {
+.education-pro-red button,
+.education-pro-red a.button,
+.education-pro-red input[type="submit"],
+.education-pro-red a.wp-block-file__button,
+.education-pro-red .footer-widgets a.button,
+.education-pro-red .footer-widgets .wrap .widget .button,
+.education-pro-red .footer-widgets .wrap button,
+.education-pro-red .footer-widgets .wrap input[type="button"],
+.education-pro-red .footer-widgets .wrap input[type="reset"],
+.education-pro-red .footer-widgets .wrap input[type="submit"],
+.education-pro-red .home-bottom .widget .button, .home-bottom .widget button,
+.education-pro-red .home-bottom .widget input[type="button"],
+.education-pro-red .home-bottom .widget input[type="reset"],
+.education-pro-red .home-bottom .widget input[type="submit"],
+.education-pro-red .site-footer a.button {
     background-color: #444;
     color: #ffd5d1;
 }
 
 .education-pro-red .genesis-nav-menu li a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu .current-menu-item > a:hover,
-.education-pro-red .genesis-nav-menu .sub-menu a,
+.education-pro-red .genesis-nav-menu li.current-menu-item > a,
 .education-pro-red .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-red .genesis-nav-menu li.current-menu-item > a {
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a:hover,
+.education-pro-red .genesis-nav-menu li .sub-menu li.current-menu-item > a {
 	background-color: #62231d;
 	color: #fff;
-}
-
-.education-pro-red .header-widget-area .genesis-nav-menu li a:hover,
-.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li a:hover,
-.education-pro-red .header-widget-area .genesis-nav-menu li.current-menu-item > a,
-.education-pro-red .header-widget-area .genesis-nav-menu li .sub-menu li.current-menu-item > a {
-	background-color: #ffd5d1;
-	color: #3b3b3b;
 }
 
 .education-pro-red .genesis-nav-menu .sub-menu a {

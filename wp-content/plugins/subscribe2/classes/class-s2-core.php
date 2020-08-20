@@ -461,9 +461,17 @@ class S2_Core {
 		$plaintext = $post->post_content;
 		$plaintext = strip_shortcodes( $plaintext );
 
-		$plaintext   = preg_replace( '/<s[^>]*>(.*)<\/s>/Ui', '', $plaintext );
-		$plaintext   = preg_replace( '/<strike[^>]*>(.*)<\/strike>/Ui', '', $plaintext );
-		$plaintext   = preg_replace( '/<del[^>]*>(.*)<\/del>/Ui', '', $plaintext );
+		$plaintext = preg_replace( '/<s[^>]*>(.*)<\/s>/Ui', '', $plaintext );
+		$plaintext = preg_replace( '/<strike[^>]*>(.*)<\/strike>/Ui', '', $plaintext );
+		$plaintext = preg_replace( '/<del[^>]*>(.*)<\/del>/Ui', '', $plaintext );
+
+		// Fix for how the Block Editor stores lists
+		if ( true === $this->block_editor ) {
+			$plaintext = str_replace( '</li><', "</li>\n<", $plaintext );
+		}
+
+		// Add filter here so $plaintext can be filtered to correct for layout needs
+		$plaintext   = apply_filters( 's2_plaintext', $plaintext );
 		$excerpttext = $plaintext;
 
 		if ( strstr( $mailtext, '{REFERENCELINKS}' ) ) {
@@ -534,9 +542,9 @@ class S2_Core {
 		// prepare mail body texts
 		$plain_excerpt_body = str_replace( '{POST}', $excerpt, $mailtext );
 		$plain_body         = str_replace( '{POST}', $plaintext, $mailtext );
-		$html_body          = str_replace( "\r\n", "<br />\r\n", $mailtext );
+		$html_body          = str_replace( "\r\n", "<br>\r\n", $mailtext );
 		$html_body          = str_replace( '{POST}', $content, $html_body );
-		$html_excerpt_body  = str_replace( "\r\n", "<br />\r\n", $mailtext );
+		$html_excerpt_body  = str_replace( "\r\n", "<br>\r\n", $mailtext );
 		$html_excerpt_body  = str_replace( '{POST}', $html_excerpt, $html_excerpt_body );
 
 		if ( '' !== $preview ) {
@@ -1241,12 +1249,12 @@ class S2_Core {
 		}
 		if ( 'wpreg' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><label>';
-			echo __( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . ':<br />' . "\r\n";
+			echo esc_html__( 'Check here to Subscribe to email notifications for new posts', 'subscribe2' ) . ':<br>' . "\r\n";
 			echo '<input type="checkbox" name="reg_subscribe"' . checked( $this->subscribe2_options['wpregdef'], 'yes', false ) . ' />';
 			echo '</label></p>' . "\r\n";
 		} elseif ( 'yes' === $this->subscribe2_options['autosub'] ) {
 			echo '<p><center>' . "\r\n";
-			echo __( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br />' . "\r\n";
+			echo esc_html__( 'By registering with this blog you are also agreeing to receive email notifications for new posts but you can unsubscribe at anytime', 'subscribe2' ) . '.<br>' . "\r\n";
 			echo '</center></p>' . "\r\n";
 		}
 	}
@@ -1279,7 +1287,7 @@ class S2_Core {
 		if ( 'before' === $this->subscribe2_options['comment_subs'] ) {
 			return $comment_meta_form . $submit_field;
 		} else {
-			return $submit_field . '<br />' . $comment_meta_form;
+			return $submit_field . '<br>' . $comment_meta_form;
 		}
 	}
 
@@ -1471,8 +1479,13 @@ class S2_Core {
 				$posts = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 		} else {
-			// we are sending a preview
-			$posts = get_posts( 'numberposts=1' );
+			// we are sending a preview, use global if possible otherwise get last post
+			global $post;
+			if ( empty( $post ) ) {
+				$posts = get_posts( 'numberposts=1' );
+			} else {
+				$posts = array( $post );
+			}
 		}
 
 		// Collect sticky posts if desired
@@ -1517,14 +1530,14 @@ class S2_Core {
 		$this->post_count = count( $posts );
 		$s2_taxonomies    = apply_filters( 's2_taxonomies', array( 'category' ) );
 
-		foreach ( $posts as $post ) {
+		foreach ( $posts as $digest_post ) {
 			// keep an array of post ids and skip if we've already done it once
-			if ( in_array( $post->ID, $ids, true ) ) {
+			if ( in_array( $digest_post->ID, $ids, true ) ) {
 				continue;
 			}
-			$ids[]            = $post->ID;
+			$ids[]            = $digest_post->ID;
 			$post_cats        = wp_get_object_terms(
-				$post->ID,
+				$digest_post->ID,
 				$s2_taxonomies,
 				array(
 					'fields' => 'ids',
@@ -1538,7 +1551,7 @@ class S2_Core {
 			if ( '' === $preview ) {
 				// Pages are put into category 1 so make sure we don't exclude
 				// pages if category 1 is excluded
-				if ( 'page' !== $post->post_type ) {
+				if ( 'page' !== $digest_post->post_type ) {
 					// is the current post assigned to any categories
 					// which should not generate a notification email?
 					foreach ( explode( ',', $this->subscribe2_options['exclude'] ) as $cat ) {
@@ -1549,18 +1562,18 @@ class S2_Core {
 				}
 				// is the current post set by the user to
 				// not generate a notification email?
-				$s2mail = get_post_meta( $post->ID, '_s2mail', true );
+				$s2mail = get_post_meta( $digest_post->ID, '_s2mail', true );
 				if ( 'no' === strtolower( trim( $s2mail ) ) ) {
 					$check = true;
 				}
 				// is the current post private
 				// and should this not generate a notification email?
-				if ( 'no' === $this->subscribe2_options['password'] && '' !== $post->post_password ) {
+				if ( 'no' === $this->subscribe2_options['password'] && '' !== $digest_post->post_password ) {
 					$check = true;
 				}
 				// is the post assigned a format that should
 				// not be included in the notification email?
-				$post_format      = get_post_format( $post->ID );
+				$post_format      = get_post_format( $digest_post->ID );
 				$excluded_formats = explode( ',', $this->subscribe2_options['exclude_formats'] );
 				if ( false !== $post_format && in_array( $post_format, $excluded_formats, true ) ) {
 					$check = true;
@@ -1574,18 +1587,18 @@ class S2_Core {
 			}
 			// is the current post set by the user to
 			// not generate a notification email?
-			$s2mail = get_post_meta( $post->ID, '_s2mail', true );
+			$s2mail = get_post_meta( $digest_post->ID, '_s2mail', true );
 			if ( 'no' === strtolower( trim( $s2mail ) ) ) {
 				$check = true;
 			}
 			// is the current post private
 			// and should this not generate a notification email?
-			if ( 'no' === $this->subscribe2_options['password'] && '' !== $post->post_password ) {
+			if ( 'no' === $this->subscribe2_options['password'] && '' !== $digest_post->post_password ) {
 				$check = true;
 			}
 			// is the post assigned a format that should
 			// not be included in the notification email?
-			$post_format      = get_post_format( $post->ID );
+			$post_format      = get_post_format( $digest_post->ID );
 			$excluded_formats = explode( ',', $this->subscribe2_options['exclude_formats'] );
 			if ( false !== $post_format && in_array( $post_format, $excluded_formats, true ) ) {
 				$check = true;
@@ -1596,15 +1609,15 @@ class S2_Core {
 				continue;
 			}
 
-			$digest_post_ids[] = $post->ID;
+			$digest_post_ids[] = $digest_post->ID;
 
-			$post_title                           = html_entity_decode( $post->post_title, ENT_QUOTES );
+			$post_title                           = html_entity_decode( $digest_post->post_title, ENT_QUOTES );
 			( '' === $table ) ? $table           .= '* ' . $post_title : $table .= "\r\n* " . $post_title;
 			( '' === $tablelinks ) ? $tablelinks .= '* ' . $post_title : $tablelinks .= "\r\n* " . $post_title;
 			$message_post                        .= $post_title;
 			$message_posttime                    .= $post_title;
 			if ( strstr( $mailtext, '{AUTHORNAME}' ) ) {
-				$author = get_userdata( $post->post_author );
+				$author = get_userdata( $digest_post->post_author );
 				if ( '' !== $author->display_name ) {
 					$message_post     .= ' (' . __( 'Author', 'subscribe2' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
 					$message_posttime .= ' (' . __( 'Author', 'subscribe2' ) . ': ' . html_entity_decode( apply_filters( 'the_author', $author->display_name ), ENT_QUOTES ) . ')';
@@ -1613,9 +1626,9 @@ class S2_Core {
 			$message_post     .= "\r\n";
 			$message_posttime .= "\r\n";
 
-			$message_posttime .= __( 'Posted on', 'subscribe2' ) . ': ' . mysql2date( $datetime, $post->post_date ) . "\r\n";
+			$message_posttime .= __( 'Posted on', 'subscribe2' ) . ': ' . mysql2date( $datetime, $digest_post->post_date ) . "\r\n";
 			if ( strstr( $mailtext, '{TINYLINK}' ) ) {
-				$tinylink = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( get_permalink( $post->ID ) ) ) );
+				$tinylink = wp_safe_remote_get( 'http://tinyurl.com/api-create.php?url=' . rawurlencode( $this->get_tracking_link( get_permalink( $digest_post->ID ) ) ) );
 			} else {
 				$tinylink = false;
 			}
@@ -1624,16 +1637,16 @@ class S2_Core {
 				$message_post     .= $tinylink . "\r\n";
 				$message_posttime .= $tinylink . "\r\n";
 			} else {
-				$tablelinks       .= "\r\n" . $this->get_tracking_link( get_permalink( $post->ID ) ) . "\r\n";
-				$message_post     .= $this->get_tracking_link( get_permalink( $post->ID ) ) . "\r\n";
-				$message_posttime .= $this->get_tracking_link( get_permalink( $post->ID ) ) . "\r\n";
+				$tablelinks       .= "\r\n" . $this->get_tracking_link( get_permalink( $digest_post->ID ) ) . "\r\n";
+				$message_post     .= $this->get_tracking_link( get_permalink( $digest_post->ID ) ) . "\r\n";
+				$message_posttime .= $this->get_tracking_link( get_permalink( $digest_post->ID ) ) . "\r\n";
 			}
 
 			if ( strstr( $mailtext, '{CATS}' ) ) {
 				$post_cat_names    = implode(
 					', ',
 					wp_get_object_terms(
-						$post->ID,
+						$digest_post->ID,
 						$s2_taxonomies,
 						array(
 							'fields' => 'names',
@@ -1647,7 +1660,7 @@ class S2_Core {
 				$post_tag_names = implode(
 					', ',
 					wp_get_post_tags(
-						$post->ID,
+						$digest_post->ID,
 						array(
 							'fields' => 'names',
 						)
@@ -1661,12 +1674,12 @@ class S2_Core {
 			$message_post     .= "\r\n";
 			$message_posttime .= "\r\n";
 
-			( ! empty( $post->post_excerpt ) ) ? $excerpt = trim( $post->post_excerpt ) : $excerpt = '';
+			( ! empty( $digest_post->post_excerpt ) ) ? $excerpt = trim( $digest_post->post_excerpt ) : $excerpt = '';
 			if ( '' === $excerpt ) {
-				$excerpt = apply_filters( 'the_content', $post->post_content );
+				$excerpt = apply_filters( 'the_content', $digest_post->post_content );
 				// no excerpt, is there a <!--more--> ?
-				if ( false !== strpos( $post->post_content, '<!--more-->' ) ) {
-					list($excerpt, $more) = explode( '<!--more-->', $post->post_content, 2 );
+				if ( false !== strpos( $digest_post->post_content, '<!--more-->' ) ) {
+					list($excerpt, $more) = explode( '<!--more-->', $digest_post->post_content, 2 );
 					$excerpt              = wp_strip_all_tags( $excerpt );
 					$excerpt              = strip_shortcodes( $excerpt );
 				} else {
@@ -1981,8 +1994,11 @@ class S2_Core {
 			// subscriber page options handler
 			add_filter( 'set-screen-option', array( &$this, 'subscribers_set_screen_option' ), 10, 3 );
 
-			// MailOptin admin notices
-			require_once S2PATH . 'classes/class-mo-admin-notice.php';
+            // MailOptin admin notices
+            require_once S2PATH . 'classes/class-mo-admin-notice.php';
+
+			// register uninstall functions
+			register_uninstall_hook( S2PLUGIN, array( 'S2_Admin', 's2_uninstall' ) );
 
 			// capture CSV export
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
@@ -1992,7 +2008,7 @@ class S2_Core {
 				header( "Content-Disposition: attachment; filename=subscribe2_users_$date.csv" );
 				header( 'Pragma: no-cache' );
 				header( 'Expires: 0' );
-				echo $this->prepare_export( $_POST['exportcsv'] );
+				echo esc_html( $this->prepare_export( $_POST['exportcsv'] ) );
 				exit( 0 );
 			}
 		} else {

@@ -1,13 +1,37 @@
-### 2.4.18.3
-- Fixed an issue where the maximum files reached message is not removed from the multi-file upload field when an upload is cancelled or errors.
+### 2.4.19.3
+- Updated the translated countries list to be sorted alphabetically.
+- API: Added GF_Field_Address::get_default_countries() which returns the default array of countries using the ISO 3166-1 alpha-2 code as the key to the country name.
+- API: Fixed the value not being padded when true is passed for the fifth argument of the Currency.numberFormat method in gravityforms.js.
+- API: Fixed an issue where GF_Field_Address::get_country_code() would return null for some translated countries.
 
 
-### 2.4.18.2
-- Fixed an issue with Ajax enabled forms where the default Confirmation is displayed instead of the Save and Continue Email Sent Confirmation.
+### 2.4.19.2
+- Fixed a fatal error which occurs when the PowerPack for Beaver Builder plugin uses `GFCommon::gform_do_shortcode()`.
 
 
-### 2.4.18.1
+### 2.4.19.1
+- Fixed an issue with the empty form validation ignoring the values of fields with visibility set to hidden.
+
+
+### 2.4.19 | 2020-07-15
+- Added security enhancements.
 - Added [gform_preview_header](https://docs.gravityforms.com/gform_preview_header), [gform_preview_body_open](https://docs.gravityforms.com/gform_preview_body_open) actions to Preview Form page.
+- Added the [gform_field_size_choices](https://docs.gravityforms.com/gform_field_size_choices/) filter allowing the choices for the Field Size setting in the form editor to be customized.
+- Updated recommended minimum PHP version on the System Status page to 7.3, matching the WordPress recommendation.
+- Updated minimum WordPress version on the System Status page to 5.3.
+- Updated the gravityforms.php examples for defining the reCAPTCHA constants: [GF_RECAPTCHA_PRIVATE_KEY](https://docs.gravityforms.com/gf_recaptcha_private_key/) and [GF_RECAPTCHA_PUBLIC_KEY](https://docs.gravityforms.com/gf_recaptcha_public_key/).
+- Updated the [field merge tag](https://docs.gravityforms.com/field-merge-tags/) to support the admin modifier.
+- Updated the [gform_akismet_enabled](https://docs.gravityforms.com/gform_akismet_enabled/) filter to include $form_id as the second parameter.
+- Updated the [gform_akismet_fields](https://docs.gravityforms.com/gform_akismet_fields/) filter to include $action as the fourth parameter.
+- Fixed an issue where the maximum files reached message is not removed from the multi-file upload field when an upload is cancelled or errors.
+- Fixed an issue with Ajax enabled forms where the default Confirmation is displayed instead of the Save and Continue Email Sent Confirmation.
+- Fixed an issue where the default prefixes for new Name fields can include duplicates when translated.
+- Fixed an issue with the saving of the screen options on the Forms and Entries list pages introduced by changes in WordPress 5.4.2.
+- Fixed an issue where the empty form validation error is applied to unsuitable fields such as HTML and Section.
+- Fixed an issue where PHP notice thrown when a payment add-on failed without providing proper error messages.
+- Fixed submissions which fail honeypot validation or are marked as spam using the configured confirmation. The default "Thanks for contacting us! We will get in touch with you shortly." message will be used instead.
+- AF: Fixed a floating point precision issue which can occur for some payment amounts when combined with a 100% coupon resulting in an error from the payment gateway.
+- API: Fixed an issue where leading and trailing spaces are not removed from values included in the temporary entry produced by GFFormsModel::create_lead().
 
 
 ### 2.4.18 | 2020-05-06

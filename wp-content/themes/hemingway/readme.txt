@@ -1,8 +1,8 @@
 === Hemingway ===
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
-Requires at least: 4.4
-Tested up to: 5.0
+Requires at least: 4.5
+Tested up to: 5.4.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -18,11 +18,11 @@ All theme specific options are handled through the WordPress Customizer.
 
 == Licenses ==
 
-Lato
+Lato Font
 License: SIL Open Font License, 1.1 
 Source: https://fonts.google.com/specimen/Lato
 
-Raleway
+Raleway Font
 License: SIL Open Font License, 1.1 
 Source: https://fonts.google.com/specimen/Raleway
 
@@ -40,6 +40,76 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 2.0.3 (2020-05-05)
+-------------------------
+- Updated the targeting of styles removing the padding, margin and border of the last post/page, to account for code added after the closing body tag.
+- Added the `.clear` selector to the clearfix styles, to account for cached markup and markup in child themes.
+
+Version 2.0.2 (2020-05-04)
+-------------------------
+- Fixed the title and featured image being displayed for post formats on archive pages when it shouldn't be (thanks, @daimonialisch).
+- Fixed the style of the `cite` element in the quote post format having been unintentionally changed in 2.0.0 (thanks again).
+- Adjusted the font size of the cite element in quote blocks with the large style.
+- Tweaked blockquote margins.
+- Block editor styles: Fixed the block appender paragraph having the wrong font family.
+- Bumped "Tested up to" to 5.4.1.
+
+Version 2.0.1 (2020-04-22)
+-------------------------
+- Media & Text block: Removed top margin of first item, and bottom margin of last item.
+- Post meta: Added a filter for setting which post types should display post meta (defaults to post).
+- Post meta: Added actions before and after post meta output.
+- Post meta: Don't output the comments link if comments are closed.
+
+Version 2.0.0 (2020-04-09)
+-------------------------
+- Added "block-styles" to the theme tags in `style.css`.
+- Deleted license.txt from the theme files.
+- Deleted the `languages` folder, since the language files were incomplete and translations are handled by GlotPress on WordPress.org.
+- Added the new `/assets/` sub folder, and moved the `/js/` and `/images/` folders into it.
+- Renamed the editor style CSS files, and moved them to the new `/assets/css/` folder.
+- Renamed `hemingway_add_gutenberg_features()` to `hemingway_block_editor_features()`.
+- Created a separate file for the Hemingway_Customize class in `/inc/classes/`.
+- Moved the `/widgets/` folder to the new `/inc/` folder.
+- Removed the unused `hemingway_options` Customizer section.
+- Added support for the core custom_logo setting, and updated the old hemingway_logo setting to only be displayed if you already have a hemingway_logo image set.
+- Bumped the "Requires at least" tag to 4.5.0, since Baskerville is now using custom_logo.
+- Updated "Tested up to" to 5.4.
+- Header: Updated markup for better SEO, cleaned up code.
+- Added screen reader text to the menu toggle and search toggle.
+- Removed the `hemingway_nav_walker` navigation walker class, since it wasn't needed.
+- Updated main menu sub menu targeting to use the built-in `has-children` class, instead of the one added by the custom walker.
+- Remove text antialiasing in Webkit browsers.
+- Updated widget area registration to include widget IDs in output.
+- Removed `<div class="clear"></div>` elements, and replaced them with pseudo clearing or flexing.
+- Customizer: Removed postMessage updating, due to faulty implementation in the theme.
+- Set links to get underline on hover by default.
+- Updated the light gray text color (#999) to have higher contrast (#767676).
+- Removed `hemingway_body_classes()`, since the only class added wasn't being used in the stylesheets.
+- Removed admin CSS setting a max width on the post thumbnail when editing a post, since it hasn't been needed for 5+ years.
+- Added a helper function used for getting the Google Fonts URL, used when enqueueing style.css and the editor styles.
+- Made the Google Fonts families used filterable.
+- Added new function for checking if a comment is posted by the post author.
+- Made the entire comment timestamp string translateable.
+- Removed output of "Comments are closed" on posts.
+- Set the post title to use the `h1` heading element on singularm, and `h2` on archive pages.
+- Added a sensible element base, so elements like headings have hierarchical font sizes outside of the post content.
+- Removed removal of outline on focus.
+- Restructured Block Editor specific CSS entirely.
+- Removed the border around images in the content – it was causing too many issues with images used in blocks.
+- Don't output the inline color styles if the color is the same as the default color.
+- Restructured the custom accent color output code to be more compact and flexible, and added a filter for the selectors targeted.
+- Updated the calendar widget styles for 5.4.
+- Updated edit post link output to not include a custom permissions check.
+- Updated the screenshot to be 1200x900px, and changed the file format to JPG for smaller file size.
+- Output excerpts instead of the full content on the search results page.
+- Restructured the archive header, and added output of archive description.
+- Added a helper function for output of the featured media, to reduce the amount of repeated code.
+- Updated featured media to use HTML5 elements, and fixed markup structure issue with links in featured media captions.
+- Updated `singular.php`, ´template-fullwidth.php` and ´template-nosidebar.php` to use `content.php`, reducing duplicate code.
+- Better Block Editor styles.
+- Cleaned up the custom widgets.
 
 Version 1.75 (2019-04-07)
 -------------------------

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 21:30+0000\n"
+"POT-Creation-Date: 2020-05-28 21:36+0000\n"
 "PO-Revision-Date: 2017-04-14T22:58:58+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -123,7 +123,7 @@ msgid "Displays a list of events"
 msgstr "Prikaži listu događanja"
 
 #: classes/class-eo-event-list-widget.php:14
-#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:466
+#: classes/class-eo-event-list-widget.php:28 event-organiser-venues.php:468
 #: event-organiser.php:149 includes/event-organiser-cpt.php:226
 #: includes/event-organiser-cpt.php:238
 #: includes/event-organiser-install.php:106 templates/archive-event.php:40
@@ -246,7 +246,7 @@ msgstr ""
 msgid "A list or dropdown of event categories"
 msgstr "Lista ili padajuća lista kategorija događanja."
 
-#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:346
+#: classes/class-eo-widget-categories.php:11 event-organiser-settings.php:347
 msgid "Event Categories"
 msgstr "Kategorije događaja"
 
@@ -283,7 +283,7 @@ msgstr "LIsta ili padajući izbornik sastajlišta događanja"
 msgid "Event Venues"
 msgstr "Sastajališta događanja"
 
-#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:336
+#: classes/class-eo-widget-venues.php:29 event-organiser-settings.php:337
 #: event-organiser-venues.php:185 includes/event-organiser-cpt.php:31
 msgid "Venues"
 msgstr "Sastajlišta"
@@ -318,26 +318,26 @@ msgstr ""
 msgid "Calendar View"
 msgstr "Pregled Kalendara"
 
-#: event-organiser-calendar.php:72 includes/event-organiser-register.php:96
+#: event-organiser-calendar.php:72 includes/event-organiser-register.php:100
 msgid "today"
 msgstr "danas"
 
-#: event-organiser-calendar.php:73 includes/event-organiser-register.php:97
-#: includes/event-organiser-register.php:285
+#: event-organiser-calendar.php:73 includes/event-organiser-register.php:101
+#: includes/event-organiser-register.php:290
 msgid "day"
 msgstr "dan"
 
-#: event-organiser-calendar.php:74 includes/event-organiser-register.php:98
-#: includes/event-organiser-register.php:287
+#: event-organiser-calendar.php:74 includes/event-organiser-register.php:102
+#: includes/event-organiser-register.php:292
 msgid "week"
 msgstr "tjedan"
 
-#: event-organiser-calendar.php:75 includes/event-organiser-register.php:99
-#: includes/event-organiser-register.php:289
+#: event-organiser-calendar.php:75 includes/event-organiser-register.php:103
+#: includes/event-organiser-register.php:294
 msgid "month"
 msgstr "mjesec"
 
-#: event-organiser-calendar.php:76 includes/event-organiser-register.php:100
+#: event-organiser-calendar.php:76 includes/event-organiser-register.php:104
 msgid "go to date"
 msgstr "odi na datum"
 
@@ -645,7 +645,7 @@ msgstr "dan u tjednu"
 
 #: event-organiser-edit.php:225
 #: includes/event-organiser-event-functions.php:856
-#: includes/event-organiser-register.php:302
+#: includes/event-organiser-register.php:307
 msgid "until"
 msgstr "do"
 
@@ -657,12 +657,12 @@ msgstr "Ponavljanje događaja:"
 msgid "Include/Exclude occurrences:"
 msgstr "Uključi/isključi ponavljanja"
 
-#: event-organiser-edit.php:240 includes/event-organiser-register.php:279
+#: event-organiser-edit.php:240 includes/event-organiser-register.php:284
 msgid "Show dates"
 msgstr "prikaži datume"
 
 #: event-organiser-edit.php:274
-#: includes/event-organiser-venue-functions.php:1030
+#: includes/event-organiser-venue-functions.php:1034
 msgid "Select a venue"
 msgstr "Izaberi sastajalište"
 
@@ -677,7 +677,7 @@ msgid ""
 "maps on your site, %1$splease enter your key%2$s."
 msgstr ""
 
-#: event-organiser-edit.php:495
+#: event-organiser-edit.php:498
 msgid "Event dates were not saved."
 msgstr "Datum događanja nije spremljen."
 
@@ -901,7 +901,7 @@ msgstr "Komentari"
 msgid "Revisions"
 msgstr "Revizija"
 
-#: event-organiser-settings.php:154 event-organiser-settings.php:355
+#: event-organiser-settings.php:154 event-organiser-settings.php:356
 #: includes/event-organiser-cpt.php:152
 msgid "Event Tags"
 msgstr "Oznake događaja"
@@ -1003,104 +1003,108 @@ msgstr ""
 msgid "Google Maps"
 msgstr ""
 
-#: event-organiser-settings.php:255
+#: event-organiser-settings.php:250 event-organiser-settings.php:717
+msgid "None"
+msgstr "Nijedan"
+
+#: event-organiser-settings.php:256
 msgid "Google API key:"
 msgstr ""
 
-#: event-organiser-settings.php:261
+#: event-organiser-settings.php:262
 #, php-format
 msgid ""
 "To use Google Maps you need to register an API key with Google. You can "
 "register for a free API key by %sfollowing these instructions%s."
 msgstr ""
 
-#: event-organiser-settings.php:271
+#: event-organiser-settings.php:272
 msgid "Templates:"
 msgstr ""
 
-#: event-organiser-settings.php:276
+#: event-organiser-settings.php:277
 msgid "Disable CSS:"
 msgstr ""
 
-#: event-organiser-settings.php:282
+#: event-organiser-settings.php:283
 msgid ""
 "Check this option to prevent any stylesheets from Event Organiser being "
 "loaded on the front-end"
 msgstr ""
 
-#: event-organiser-settings.php:291
+#: event-organiser-settings.php:292
 msgid "Enable event pretty permalinks:"
 msgstr "Omogući stalne veze:"
 
-#: event-organiser-settings.php:297
+#: event-organiser-settings.php:298
 msgid ""
 "If you have pretty permalinks enabled, select to have pretty premalinks for "
 "events."
 msgstr ""
 "Ako imate omogućene stalne veze, izaberi da imate stalne veze i za događanja."
 
-#: event-organiser-settings.php:301
+#: event-organiser-settings.php:302
 msgid "Event (single)"
 msgstr "Događaj(pojedinačan)"
 
-#: event-organiser-settings.php:310
+#: event-organiser-settings.php:311
 msgid "Events page"
 msgstr ""
 
-#: event-organiser-settings.php:323
+#: event-organiser-settings.php:324
 msgid "Event (date archive)"
 msgstr ""
 
-#: event-organiser-settings.php:329
+#: event-organiser-settings.php:330
 msgid "Year archive"
 msgstr "Godišnja arhiva"
 
-#: event-organiser-settings.php:330
+#: event-organiser-settings.php:331
 msgid "Month archive"
 msgstr "Mjesečna arhiva"
 
-#: event-organiser-settings.php:331
+#: event-organiser-settings.php:332
 msgid "Day archive"
 msgstr "Dnevna arhiva"
 
-#: event-organiser-settings.php:374
+#: event-organiser-settings.php:375
 msgid "Enable theme compatability mode (default)"
 msgstr ""
 
-#: event-organiser-settings.php:375
+#: event-organiser-settings.php:376
 msgid ""
 "Event Organiser will attempt to ensure compatability with your theme and "
 "apply additional styles."
 msgstr ""
 
-#: event-organiser-settings.php:378
+#: event-organiser-settings.php:379
 msgid "Enable template handling"
 msgstr ""
 
-#: event-organiser-settings.php:379
+#: event-organiser-settings.php:380
 msgid ""
 "Event Organiser's page templates will be used if your theme does not provide "
 "appropriate templates."
 msgstr ""
 
-#: event-organiser-settings.php:382
+#: event-organiser-settings.php:383
 msgid "Disable template handling"
 msgstr ""
 
-#: event-organiser-settings.php:383
+#: event-organiser-settings.php:384
 msgid "Event Organiser's page templates will not be used."
 msgstr ""
 
-#: event-organiser-settings.php:598
+#: event-organiser-settings.php:599
 msgid "Event Settings"
 msgstr ""
 
-#: event-organiser-settings.php:599
+#: event-organiser-settings.php:600
 #, php-format
 msgid "Event Settings: %s"
 msgstr ""
 
-#: event-organiser-settings.php:676
+#: event-organiser-settings.php:677
 msgid ""
 "For each of the pages, the corresponding template is used. To use your own "
 "template simply give it the same name and store in your theme folder. By "
@@ -1109,46 +1113,42 @@ msgid ""
 "will then decide which template from your theme's folder to use."
 msgstr ""
 
-#: event-organiser-settings.php:683
+#: event-organiser-settings.php:684
 msgid "Events archives:"
 msgstr "Arhiva događanja:"
 
-#: event-organiser-settings.php:684
+#: event-organiser-settings.php:685
 msgid "Event page:"
 msgstr "Stranica događanja:"
 
-#: event-organiser-settings.php:685
+#: event-organiser-settings.php:686
 msgid "Venue page:"
 msgstr "Stranica sastajališta:"
 
-#: event-organiser-settings.php:686
+#: event-organiser-settings.php:687
 msgid "Events Category page:"
 msgstr "Stranica kategorije događanja:"
 
-#: event-organiser-settings.php:689
+#: event-organiser-settings.php:690
 #, php-format
 msgid ""
 "For more information see documentation <a href='%s'>on editing the "
 "templates</a>"
 msgstr ""
 
-#: event-organiser-settings.php:699
+#: event-organiser-settings.php:700
 msgid "Event management permissions"
 msgstr ""
 
-#: event-organiser-settings.php:700
+#: event-organiser-settings.php:701
 msgid "Set permissions for events and venue management"
 msgstr "Postavljanje dozvola za upravljanje događajima i sastajalištima"
 
-#: event-organiser-settings.php:705
+#: event-organiser-settings.php:706
 msgid "Role"
 msgstr "Uloge"
 
-#: event-organiser-settings.php:716
-msgid "None"
-msgstr "Nijedan"
-
-#: event-organiser-settings.php:745
+#: event-organiser-settings.php:746
 msgid ""
 "Choose a custom permalink structure for events, venues, event categories and "
 "event tags."
@@ -1156,7 +1156,7 @@ msgstr ""
 "Izaberi prilagođenu strukturu stalnih veza za događaje, sastajlišta, "
 "kategorije događaja i oznake događaja."
 
-#: event-organiser-settings.php:746
+#: event-organiser-settings.php:747
 msgid ""
 "Please note to enable these structures you must first have pretty permalinks "
 "enabled on WordPress in Settings > Permalinks."
@@ -1164,7 +1164,7 @@ msgstr ""
 "Uzmite u obzir da sa omogućavanje ove strukture prvo morate imati omogućene "
 "stalne veze u postavkama wordpress-a"
 
-#: event-organiser-settings.php:747
+#: event-organiser-settings.php:748
 msgid ""
 "You may also need to go to WordPress Settings > Permalinks and click 'Save "
 "Changes' before any changes will take effect."
@@ -1172,11 +1172,11 @@ msgstr ""
 "Morate otići na Wordpress postavke>stalne veze i kliknut na 'Spremi "
 "postavke' prije pregleda bilo kakvih promjena."
 
-#: event-organiser-settings.php:783
+#: event-organiser-settings.php:784
 msgid "Do not add to menu"
 msgstr "Ne dodavaj u navigaciju"
 
-#: event-organiser-settings.php:787
+#: event-organiser-settings.php:788
 msgid "Page list (fallback)"
 msgstr "Lista stranica(rezervna)"
 
@@ -1233,19 +1233,19 @@ msgstr ""
 msgid "Latitude/Longitude:"
 msgstr ""
 
-#: event-organiser-venues.php:430
+#: event-organiser-venues.php:432
 msgid "Venue name"
 msgstr "Naziv sastajališta"
 
-#: event-organiser-venues.php:436
+#: event-organiser-venues.php:438
 msgid "Permalink:"
 msgstr "Stalne veze:"
 
-#: event-organiser-venues.php:443
+#: event-organiser-venues.php:445
 msgid "Get Link"
 msgstr "Uzmi poveznicu"
 
-#: event-organiser-venues.php:465
+#: event-organiser-venues.php:467
 msgid "Slug"
 msgstr "Slug"
 
@@ -1815,15 +1815,15 @@ msgstr ""
 msgid "This event has been broken from a recurring event."
 msgstr ""
 
-#: includes/event-organiser-cpt.php:527
+#: includes/event-organiser-cpt.php:530
 msgid "Creating events"
 msgstr "Kreiranje događaja"
 
-#: includes/event-organiser-cpt.php:528
+#: includes/event-organiser-cpt.php:531
 msgid "Creating events:"
 msgstr "Kreiranje događaja:"
 
-#: includes/event-organiser-cpt.php:530
+#: includes/event-organiser-cpt.php:533
 msgid ""
 "The start date is the date the event starts. If the event is a recurring "
 "event, this is the start date of the first occurrence."
@@ -1831,7 +1831,7 @@ msgstr ""
 "Datum početka događaja. Ako se događaj ponavlja , ovo je onda datum njegovog "
 "prvog održavanja."
 
-#: includes/event-organiser-cpt.php:531
+#: includes/event-organiser-cpt.php:534
 msgid ""
 "The end date is the date the event finishes. If the event is a recurring "
 "event, this is the end date of the first occurrence."
@@ -1839,7 +1839,7 @@ msgstr ""
 "Datum završetka događanja. Ako se događaj ponavlja, ovo je onda datum "
 "završetka prvog održavanja."
 
-#: includes/event-organiser-cpt.php:532
+#: includes/event-organiser-cpt.php:535
 msgid ""
 "All dates and times must be entered in the specified format. This format can "
 "changed in the settings page."
@@ -1847,11 +1847,11 @@ msgstr ""
 "Svi datumi i vremena moraju biti upisani u zadanom formatu. ovaj format se "
 "može promijeniti u postavkama stranice."
 
-#: includes/event-organiser-cpt.php:537
+#: includes/event-organiser-cpt.php:540
 msgid "Repeating events"
 msgstr "Ponavljanje događaja:"
 
-#: includes/event-organiser-cpt.php:538
+#: includes/event-organiser-cpt.php:541
 msgid ""
 "To repeat an event according to some regular pattern, use the recurrence "
 "dropdown menu to select how the event is to repeat. Further options then "
@@ -1861,11 +1861,11 @@ msgstr ""
 "ponavljanja da odredite kako želite da se događaj ponavlja. Dodatne se "
 "mogućnosti onda pojavljuju,"
 
-#: includes/event-organiser-cpt.php:540
+#: includes/event-organiser-cpt.php:543
 msgid "Specify how regularly the event should repeat (default 1)"
 msgstr "Odredi koliko bi se događaj trebao ponavljati (zadano 1)"
 
-#: includes/event-organiser-cpt.php:541
+#: includes/event-organiser-cpt.php:544
 msgid ""
 "Choose the recurrence end date. No further occurrences are added after this "
 "date, but an occurrence that starts before may finish after this date."
@@ -1874,7 +1874,7 @@ msgstr ""
 "ovog datuma, ali ponvaljanje koje počinje prije može završiti poslje ovog "
 "datuma."
 
-#: includes/event-organiser-cpt.php:542
+#: includes/event-organiser-cpt.php:545
 msgid ""
 "If monthly recurrence is selected, select whether this should repeat on that "
 "date of the month (e.g. on the 24th) or on the day of the month (e.g. on the "
@@ -1884,7 +1884,7 @@ msgstr ""
 "mjesecu (npr. u sljedečih 24 sata) ili na dan u mjesecu (npr. sljedeći "
 "četvrtak)"
 
-#: includes/event-organiser-cpt.php:543
+#: includes/event-organiser-cpt.php:546
 msgid ""
 "If weekly recurrence is selected, select which days of the week the event "
 "should be repeated. If no days are selected, the day of the start date is "
@@ -1894,15 +1894,15 @@ msgstr ""
 "događaj biti ponavljan. Ako ni jedan dan nije označen, dan startnog datum sa "
 "koristi"
 
-#: includes/event-organiser-cpt.php:548 includes/event-organiser-cpt.php:549
+#: includes/event-organiser-cpt.php:551 includes/event-organiser-cpt.php:552
 msgid "Selecting a venue"
 msgstr "Odabir sastajališta"
 
-#: includes/event-organiser-cpt.php:551
+#: includes/event-organiser-cpt.php:554
 msgid "Use the venues input field to search for existing venues"
 msgstr "Koristite ovo polje za pretraživanje postoječih sastajlišta"
 
-#: includes/event-organiser-cpt.php:552
+#: includes/event-organiser-cpt.php:555
 msgid ""
 "Only pre-existing venues can be selected. To add a venue, go to the venues "
 "page."
@@ -1910,11 +1910,12 @@ msgstr ""
 "Samo postoječa stastajlišta mogu biti izabrana. Da bi ste dodali sastajlište "
 "odite na stranicu sastajališta."
 
-#: includes/event-organiser-cpt.php:562 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:587
 msgid "Overview"
 msgstr "pregled"
 
-#: includes/event-organiser-cpt.php:563
+#: includes/event-organiser-cpt.php:566
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1924,7 +1925,7 @@ msgstr ""
 "događaji se pojavljuju kao jedan red</strong>u tablici, početni i krajni "
 "datumse odnose na prvo pojavljivanje ovog događanja."
 
-#: includes/event-organiser-cpt.php:569
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1933,7 +1934,7 @@ msgstr ""
 "vam omogućava upravljanje sa tim sastajalištem. Možete izvoditi sljedeće "
 "radnje:"
 
-#: includes/event-organiser-cpt.php:571
+#: includes/event-organiser-cpt.php:576
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1941,15 +1942,15 @@ msgstr ""
 "Uređivanje vas vodi na zaslon uređivanja sastajališta. Do istog pregleda "
 "možet doći klikon na naslov sastajališta"
 
-#: includes/event-organiser-cpt.php:572
+#: includes/event-organiser-cpt.php:577
 msgid "Delete will permanently remove the venue"
 msgstr "Brisanje će trajno maknuti sastajatlište"
 
-#: includes/event-organiser-cpt.php:573
+#: includes/event-organiser-cpt.php:578
 msgid "View will take you to the venue's page"
 msgstr "Pregled će vas odvesti na stranicu sastajališta"
 
-#: includes/event-organiser-cpt.php:582
+#: includes/event-organiser-cpt.php:588
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1959,7 +1960,7 @@ msgstr ""
 "događaja klikom na njega. Ako imate potreben dozvole, pojavit će se i dugem "
 "za uređivanje stranice."
 
-#: includes/event-organiser-cpt.php:583
+#: includes/event-organiser-cpt.php:589
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1970,11 +1971,11 @@ msgstr ""
 "sastajalištu. Dugme 'idi na datum' omogućava Vam brzi skok na specifičan "
 "datum."
 
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:593
 msgid "Add Event"
 msgstr "dodaj događaj"
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:594
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1988,53 +1989,53 @@ msgstr ""
 "objavljen ili biti spremljen kao skica. U svakom slučaju, događaj je kreiran "
 "i biti ćete preusmjereni na stranicu događanja."
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:600
 msgid "For more information"
 msgstr "Za više informacija"
 
-#: includes/event-organiser-cpt.php:595
+#: includes/event-organiser-cpt.php:601
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Pogledaj <a %s>dokumentaciju</a>"
 
-#: includes/event-organiser-cpt.php:596
+#: includes/event-organiser-cpt.php:602
 msgid "Debugging Event Organiser"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:597
+#: includes/event-organiser-cpt.php:603
 msgid "Go Pro!"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:708 includes/event-organiser-cpt.php:731
+#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
 msgid "Color"
 msgstr "Boja"
 
-#: includes/event-organiser-cpt.php:714
+#: includes/event-organiser-cpt.php:719
 msgid "Assign the category a colour."
 msgstr "Dodjeli kategoriji boju"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:308
+#: includes/event-organiser-register.php:313
 msgid "last"
 msgstr "zadnji"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:304
+#: includes/event-organiser-register.php:309
 msgid "first"
 msgstr "prvi"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:305
+#: includes/event-organiser-register.php:310
 msgid "second"
 msgstr "drugi"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:306
+#: includes/event-organiser-register.php:311
 msgid "third"
 msgstr "treči"
 
 #: includes/event-organiser-event-functions.php:777
-#: includes/event-organiser-register.php:307
+#: includes/event-organiser-register.php:312
 msgid "fourth"
 msgstr "četvrti"
 
@@ -2047,34 +2048,34 @@ msgid "custom recurrence"
 msgstr "prilagođeno sjedište"
 
 #: includes/event-organiser-event-functions.php:797
-#: includes/event-organiser-register.php:293
+#: includes/event-organiser-register.php:298
 msgid "every day"
 msgstr "svaki dan"
 
 #: includes/event-organiser-event-functions.php:799
-#: includes/event-organiser-register.php:294
+#: includes/event-organiser-register.php:299
 #, php-format
 msgid "every %d days"
 msgstr "svaki %d dan/e"
 
 #: includes/event-organiser-event-functions.php:805
-#: includes/event-organiser-register.php:295
+#: includes/event-organiser-register.php:300
 msgid "every week on"
 msgstr "svaki tjedan u"
 
 #: includes/event-organiser-event-functions.php:807
-#: includes/event-organiser-register.php:296
+#: includes/event-organiser-register.php:301
 #, php-format
 msgid "every %d weeks on"
 msgstr "sve %d tjedne u"
 
 #: includes/event-organiser-event-functions.php:818
-#: includes/event-organiser-register.php:297
+#: includes/event-organiser-register.php:302
 msgid "every month on the"
 msgstr "svaki mjesec na"
 
 #: includes/event-organiser-event-functions.php:820
-#: includes/event-organiser-register.php:298
+#: includes/event-organiser-register.php:303
 #, php-format
 msgid "every %d months on the"
 msgstr "svaki %d mjesec na"
@@ -2088,69 +2089,69 @@ msgstr "svake godine"
 msgid "every %d years"
 msgstr "svake %d godine"
 
-#: includes/event-organiser-register.php:94
+#: includes/event-organiser-register.php:98
 msgid "Show More"
 msgstr "Prikaži više"
 
-#: includes/event-organiser-register.php:95
+#: includes/event-organiser-register.php:99
 msgid "Show Less"
 msgstr "Prikaži manje"
 
-#: includes/event-organiser-register.php:104
+#: includes/event-organiser-register.php:108
 #, fuzzy
 msgid "View all organisers"
 msgstr "Pregledaj sve kategorije"
 
-#: includes/event-organiser-register.php:280
+#: includes/event-organiser-register.php:285
 msgid "Hide dates"
 msgstr "Sakrij datume"
 
-#: includes/event-organiser-register.php:283
+#: includes/event-organiser-register.php:288
 msgid "Hour"
 msgstr "Sat"
 
-#: includes/event-organiser-register.php:284
+#: includes/event-organiser-register.php:289
 msgid "Minute"
 msgstr "Minuta"
 
-#: includes/event-organiser-register.php:286
+#: includes/event-organiser-register.php:291
 msgid "days"
 msgstr "dani"
 
-#: includes/event-organiser-register.php:288
+#: includes/event-organiser-register.php:293
 msgid "weeks"
 msgstr "tjedni"
 
-#: includes/event-organiser-register.php:290
+#: includes/event-organiser-register.php:295
 msgid "months"
 msgstr "mjeseci"
 
-#: includes/event-organiser-register.php:291
+#: includes/event-organiser-register.php:296
 msgid "year"
 msgstr "godina "
 
-#: includes/event-organiser-register.php:292
+#: includes/event-organiser-register.php:297
 msgid "years"
 msgstr "godine"
 
-#: includes/event-organiser-register.php:299
+#: includes/event-organiser-register.php:304
 msgid "every year on the"
 msgstr "svake godine na"
 
-#: includes/event-organiser-register.php:300
+#: includes/event-organiser-register.php:305
 #, php-format
 msgid "every %d years on the"
 msgstr "svake %d godine na"
 
-#: includes/event-organiser-register.php:301
+#: includes/event-organiser-register.php:306
 msgid "This event will repeat"
 msgstr "Ovaj se događaj ponavlja"
 
-#: includes/event-organiser-register.php:424
+#: includes/event-organiser-register.php:429
 msgid "Settings"
 msgstr "Postavke"
 
-#: includes/event-organiser-register.php:592
+#: includes/event-organiser-register.php:597
 msgid ""
 "<h4>The Default Templates Have Changed</h4>Don't panic! If you've set up "
 "your own templates in your theme you won't notice any change. </br> If you "
@@ -2158,33 +2159,33 @@ msgid ""
 "com/blog/new-default-templates-in-1-7'>see this post</a>."
 msgstr ""
 
-#: includes/event-organiser-register.php:609
+#: includes/event-organiser-register.php:614
 #, php-format
 msgid "Your site timezone is %s"
 msgstr ""
 
-#: includes/event-organiser-register.php:610
+#: includes/event-organiser-register.php:615
 msgid ""
 "Is this correct? Using a fixed offset from UTC may cause unexpected "
 "behaviour, particular if you observe Daylight Savings Time."
 msgstr ""
 
-#: includes/event-organiser-register.php:611
+#: includes/event-organiser-register.php:616
 msgid ""
 "It is strongly recommended you select a city instead, even if you don't "
 "observe Daylight Savings Time."
 msgstr ""
 
-#: includes/event-organiser-register.php:612
+#: includes/event-organiser-register.php:617
 #, php-format
 msgid "You can <a href='%s'>change your timezone settings here</a>."
 msgstr ""
 
-#: includes/event-organiser-register.php:622
+#: includes/event-organiser-register.php:627
 msgid "Enter a Google Maps API key"
 msgstr ""
 
-#: includes/event-organiser-register.php:624
+#: includes/event-organiser-register.php:629
 #, php-format
 msgid ""
 "Google Maps now requires you register for an API key. If you wish to use "
@@ -2195,23 +2196,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/event-organiser-venue-functions.php:995
+#: includes/event-organiser-venue-functions.php:999
 msgid "Address"
 msgstr "Adresa"
 
-#: includes/event-organiser-venue-functions.php:996
+#: includes/event-organiser-venue-functions.php:1000
 msgid "City"
 msgstr "Grad"
 
-#: includes/event-organiser-venue-functions.php:997
+#: includes/event-organiser-venue-functions.php:1001
 msgid "State / Province"
 msgstr "Država/pokrajna"
 
-#: includes/event-organiser-venue-functions.php:998
+#: includes/event-organiser-venue-functions.php:1002
 msgid "Post Code"
 msgstr "Poštanski broj"
 
-#: includes/event-organiser-venue-functions.php:999
+#: includes/event-organiser-venue-functions.php:1003
 msgid "Country"
 msgstr "Država"
 

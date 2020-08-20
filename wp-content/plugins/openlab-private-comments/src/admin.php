@@ -5,6 +5,8 @@
 
 namespace OpenLab\PrivateComments\Admin;
 
+use const OpenLab\PrivateComments\VERSION;
+
 /**
  * Insert a value or key/value pair after a specific key in an array. If key doesn't exist, value is appended
  * to the end of the array.
@@ -32,10 +34,15 @@ function array_insert_after( array $array, $key, array $new ) {
   * @return array $actions
   */
 function comment_row_actions( $actions, $comment ) {
-	$comment_id = (int) $comment->comment_ID;
-	$is_private = get_comment_meta( $comment_id, 'ol_is_private', true );
+	$comment_id        = (int) $comment->comment_ID;
+	$is_parent_private = (bool) get_comment_meta( $comment->comment_parent, 'ol_is_private', true );
+	$is_private        = (bool) get_comment_meta( $comment_id, 'ol_is_private', true );
 
-	$label  = ! empty( $is_private ) ? __( 'Make Public', 'openlab-private-comments' ) : __( 'Make Private', 'openlab-private-comments' );
+	if ( $is_parent_private && $is_private ) {
+		return $actions;
+	}
+
+	$label  = $is_private ? __( 'Make Public', 'openlab-private-comments' ) : __( 'Make Private', 'openlab-private-comments' );
 	$action = [
 		'ol-private-comment' => sprintf(
 			'<button data-comment-id="%1$d" data-is-private="%2$d" class="button-link">%3$s</button>',
@@ -64,14 +71,14 @@ function enqueue_assets( $hook_suffix ) {
 	}
 
 	wp_enqueue_script(
-		'openlab-private-comments',
-		plugins_url( 'assets/js/private-comments.js' , __DIR__ ),
+		'ol-private-comments-admin',
+		plugins_url( 'assets/js/private-comments-admin.js' , __DIR__ ),
 		[ 'jquery' ],
-		'1.0.0',
+		VERSION,
 		true
 	);
 
-	wp_localize_script( 'openlab-private-comments', 'olPrivateComments', [
+	wp_localize_script( 'ol-private-comments-admin', 'olPrivateComments', [
 		'nonce' => wp_create_nonce( 'ol_private_comments_nonce' ),
 	 ] );
 }

@@ -1,0 +1,232 @@
+/**
+ * SetMore Plus admin stylesheet
+ */
+
+button.demo {
+	font-size: 0.9em;
+}
+
+.wrap.setmore h2 {
+	margin-bottom: 0.5em;
+}
+
+.wrap.setmore p,
+.wrap.setmore code,
+.wrap.setmore li {
+	font-size: 14px;
+}
+
+.wrap.setmore code {
+	color: #0000CC;
+	font-size: 14px;
+	font-family: Consolas, monospace;
+	padding: 3px 2px 2px 2px;
+}
+
+.wrap.setmore td p {
+	margin: 7px 4px;
+}
+
+.wrap.setmore td p:not(.help):last-child {
+	margin-bottom: 0;
+}
+
+.wrap.setmore em.hilite {
+	background: #99FF99;
+	font-style: normal;
+	padding: 0 2px 1px 1px;
+	display: inline-block;
+	line-height: 1;
+}
+
+.settings-page {
+	margin-top: 2em;
+}
+
+input.four-digits {
+	width: 4em;
+}
+
+.wrap.setmore div.inline {
+	display: inline-block;
+	min-height: 29px;
+	line-height: 29px;
+}
+
+.wrap.setmore div.inline.spacer {
+	margin-right: 1em;
+}
+
+/*--------------------------------------------------*
+ * Sizes table
+ *--------------------------------------------------*/
+
+table.sizes {
+	border-collapse: collapse;
+	margin: 10px 0;
+}
+
+table.sizes th,
+table.sizes td {
+	border: 1px solid #D4D4D4;
+	padding: 5px 10px;
+	width: auto;
+}
+
+
+/*--------------------------------------------------*
+ * Colorbox for screenshots
+ *--------------------------------------------------*/
+
+#cboxTitle {
+	font-size: 18px;
+	line-height: 1;
+	font-weight: 700;
+}
+
+#cboxLoadedContent .cboxPhoto {
+	/*border: 1px solid #444;*/
+}
+
+/*--------------------------------------------------*
+ * Dimensions table
+ *--------------------------------------------------*/
+
+table.dimensions {
+	border-collapse: collapse;
+	margin: 10px 0;
+}
+
+table.dimensions td {
+	border: 1px solid #D4D4D4;
+	text-align: center;
+}
+
+table.dimensions td:first-child {
+	text-align: left;
+}
+
+table.dimensions tr:first-of-type td:first-child {
+	border: 0;
+}
+
+table.dimensions tr:first-of-type td:nth-child(n+2) {
+	/*width: 150px;*/
+}
+
+table.dimensions td {
+	padding: 5px 15px;
+}
+
+table.dimensions input.next-to-select {
+	height: 28px;
+	position: relative;
+	top: 1px;
+}
+
+/*--------------------------------------------------*
+ * Staff table
+ *--------------------------------------------------*/
+.table {
+	display: table;
+}
+
+.row {
+	display: table-row;
+}
+
+.cell {
+	display: table-cell;
+}
+
+.table-wrapper {
+	border: 1px solid #D4D4D4;
+	margin-bottom: 10px;
+	padding: 0 1px 1px;
+}
+
+#staff-urls {
+	margin-top: 7px;
+	width: 100%;
+}
+
+.staff-header .cell {
+	line-height: 1.3;
+	padding-left: 3px;
+	padding-bottom: 3px;
+}
+
+
+.staff-header .staff-ids {
+	text-align: center;
+	width: 35px;
+}
+
+.staff-row .staff-id {
+	text-align: center;
+	border: 1px solid #DFDFDF;
+	margin: 1px;
+	line-height: 26px;
+	background: #F8F8F8;
+}
+
+.staff-name {
+	width: 10em;
+}
+
+.staff-url input {
+	width: 100%;
+}
+
+.staff-delete {
+	box-sizing: border-box;
+	height: 28px;
+	width: 30px;
+	line-height: 28px;
+	padding: 0 5px;
+}
+
+.staff-delete:before {
+	content: "\f335";
+	font-family: dashicons;
+	text-align: center;
+	font-size: 1.5em;
+	vertical-align: middle;
+}
+
+.staff-delete:hover {
+	color: #CD0000;
+	cursor: pointer;
+}
+
+/*--------------------------------------------------*
+ * Instructions tab
+ *--------------------------------------------------*/
+.setmore-instructions {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.setmore-instructions td {
+	border: 1px solid #DFDFDF;
+}
+
+.setmore-instructions td.code {
+	font-size: 14px;
+	color: #0000CC;
+	font-family: Consolas, monospace;
+	margin-left: 0;
+	padding: 0.5em;
+}
+
+.wrap .setmore-instructions td ol {
+	margin-right: 0.5em;
+}
+
+.wrap .setmore-instructions td p {
+	margin: 0.5em !important;
+}
+
+.lang-wrap {
+	max-width: 600px;
+}

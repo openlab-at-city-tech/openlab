@@ -17,6 +17,7 @@ get_header(); ?>
 				<header class="page-header">
 					<h1 class="page-title">
 					<?php
+						/* translators: %s: Tag title. */
 						printf( __( 'Tag Archives: %s', 'twentyeleven' ), '<span>' . single_tag_title( '', false ) . '</span>' );
 					?>
 					</h1>
@@ -38,8 +39,8 @@ get_header(); ?>
 
 				<?php twentyeleven_content_nav( 'nav-above' ); ?>
 
-				<?php /* Start the Loop */ ?>
 				<?php
+				// Start the Loop.
 				while ( have_posts() ) :
 					the_post();
 					?>

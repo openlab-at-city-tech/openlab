@@ -28,6 +28,28 @@ add_action( 'plugins_loaded', function() {
 } );
 
 /**
+ * Ensure that HTTP requests to openlabdev.org have the proper auth headers.
+ */
+add_filter(
+	'http_request_args',
+	function( $r, $url ) {
+		if ( ! defined( 'OPENLABDEV_BASIC_AUTH_USERNAME' ) || ! defined( 'OPENLABDEV_BASIC_AUTH_PASSWORD' ) ) {
+			return $r;
+		}
+
+		$host = parse_url( $url, PHP_URL_HOST );
+		if ( 'openlabdev.org' !== $host ) {
+			return $r;
+		}
+
+		$r['headers']['Authorization'] = 'Basic ' . base64_encode( OPENLABDEV_BASIC_AUTH_USERNAME . ':' . OPENLABDEV_BASIC_AUTH_PASSWORD );
+		return $r;
+	},
+	10,
+	2
+);
+
+/**
  * Loading BP-specific stuff in the global scope will cause issues during activation and upgrades
  * Ensure that it's only loaded when BP is present.
  * See http://openlab.citytech.cuny.edu/redmine/issues/31
@@ -42,6 +64,7 @@ function openlab_load_custom_bp_functions() {
 	require( dirname( __FILE__ ) . '/includes/portfolios.php' );
 	require( dirname( __FILE__ ) . '/includes/related-links.php' );
 	require( dirname( __FILE__ ) . '/includes/search.php' );
+	require( dirname( __FILE__ ) . '/includes/nav-menus.php' );
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
@@ -100,6 +123,37 @@ function openlab_default_group_avatar_img( $html ) {
 }
 add_filter( 'bp_core_fetch_avatar', 'openlab_default_group_avatar_img' );
 
+/**
+ * List of valid user types.
+ */
+function openlab_valid_user_types() {
+	return [
+		'student' => [
+			'label' => 'Student',
+		],
+		'faculty' => [
+			'label' => 'Faculty',
+		],
+		'alumni' => [
+			'label' => 'Alumni',
+		],
+		'staff' => [
+			'label' => 'Staff',
+		],
+	];
+}
+
+/**
+ * Checks whether a user type is valid.
+ *
+ * @param string $user_type Expected lowercase.
+ * @return bool
+ */
+function openlab_user_type_is_valid( $user_type ) {
+	$all_types = openlab_valid_user_types();
+	return isset( $all_types[ $user_type ] );
+}
+
 //
 //   This function creates an excerpt of the string passed to the length specified and
 //   breaks on a word boundary
@@ -135,8 +189,6 @@ add_action( 'bp_after_activation_page', 'wds_bp_complete_signup' );
  * corresponding method for custom menus.
  */
 function my_page_menu_filter( $menu ) {
-	global $bp, $wpdb;
-
 	if ( strpos( $menu, 'Home' ) !== false ) {
 		$menu = str_replace( 'Site Home', 'Home', $menu );
 		$menu = str_replace( 'Home', 'Site Home', $menu );
@@ -168,92 +220,6 @@ function my_page_menu_filter( $menu ) {
 	return $menu;
 }
 add_filter( 'wp_page_menu', 'my_page_menu_filter' );
-
-//child theme menu filter to link to website
-function cuny_add_group_menu_items( $items, $args ) {
-	/**
-	 * Allows individual themes to opt out.
-	 */
-	$allow = apply_filters( 'openlab_add_dynamic_nav_items', true, $args );
-	if ( ! $allow ) {
-		return $items;
-	}
-
-	if ( bp_is_root_blog() ) {
-		return $items;
-	}
-
-	// Only add the Home link if one is not already found
-	// See http://openlab.citytech.cuny.edu/redmine/isues/1031
-	$has_home = false;
-	foreach ( $items as $item ) {
-		if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
-			$has_home = true;
-			break;
-		}
-	}
-
-	if ( ! $has_home ) {
-		$post_args          = new stdClass();
-		$home_link          = new WP_Post( $post_args );
-		$home_link->title   = 'Home';
-		$home_link->url     = trailingslashit( site_url() );
-		$home_link->slug    = 'home';
-		$home_link->ID      = 'home';
-		$home_link->classes = [ 'menu-item', 'menu-item-home' ];
-		$items              = array_merge( array( $home_link ), $items );
-	}
-
-	$items = array_merge( cuny_group_menu_items(), $items );
-
-	return $items;
-}
-add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-
-/**
- * Disable the filter above when we're in a sidebar.
- */
-add_action(
-	'dynamic_sidebar_before',
-	function() {
-		remove_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-
-		add_action(
-			'dynamic_sidebar_after',
-			function() {
-				add_filter( 'wp_nav_menu_objects', 'cuny_add_group_menu_items', 10, 2 );
-			}
-		);
-	},
-	0
-);
-
-function cuny_group_menu_items() {
-	global $bp, $wpdb;
-
-	$items = array();
-
-	$wds_bp_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-
-	if ( $wds_bp_group_id ) {
-		$group = groups_get_group( $wds_bp_group_id );
-		if ( $group->is_visible ) {
-			$group_type = ucfirst( groups_get_groupmeta( $wds_bp_group_id, 'wds_group_type' ) );
-
-			$post_args             = new stdClass();
-			$profile_item          = new WP_Post( $post_args );
-			$profile_item->ID      = 'group-profile-link';
-			$profile_item->title   = sprintf( '%s Profile', $group_type );
-			$profile_item->slug    = 'group-profile-link';
-			$profile_item->url     = bp_get_group_permalink( $group );
-			$profile_item->classes = [ 'menu-item', 'menu-item-group-profile-link' ];
-
-			$items[] = $profile_item;
-		}
-	}
-
-	return $items;
-}
 
 //Default BP Avatar Full
 if ( ! defined( 'BP_AVATAR_FULL_WIDTH' ) ) {
@@ -1478,11 +1444,26 @@ function ra_copy_blog_page( $group_id ) {
 								update_option( 'rewrite_rules', '' );
 							}
 
+							/**
+							 * Add "Home" and "Group Profile" nav menu items.
+							 */
+							OpenLab\NavMenus\add_group_menu_item( $group_id );
+							OpenLab\NavMenus\add_home_menu_item();
+
 							restore_current_blog();
 							$msg = __( 'Blog Copied' );
 						}
 					}
 				}
+
+				// Add the Sharing widget if the group is set to 'Enable sharing'.
+				switch_to_blog( $new_id );
+				$enable_sharing = groups_get_groupmeta( $group_id, 'enable_sharing', true );
+				if ( $enable_sharing ) {
+					openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
+				}
+				restore_current_blog();
+
 			} else {
 				$msg = $id->get_error_message();
 			}
@@ -2684,6 +2665,7 @@ add_action(
 		?>
 		<style type="text/css">
 			#link-options .link-target,
+			.block-editor-link-control__settings,
 			.editor-url-popover .editor-url-popover__settings-toggle {
 				display: none;
 			}
@@ -2779,6 +2761,15 @@ add_action(
 	function( $query ) {
 		if ( ! $query->is_main_query() ) {
 			remove_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+
+			// Then add it back for future queries.
+			add_action(
+				'pre_get_posts',
+				function( $query ) {
+					add_filter( 'pre_get_posts', 'ksuce_exclude_categories' );
+				},
+				20
+			);
 		}
 	},
 	0
@@ -3046,9 +3037,67 @@ add_filter(
 	'classic_editor_network_default_settings',
 	function() {
 		return [
-			'editor'      => 'classic',
+			'editor'      => 'block',
 			'allow-users' => true,
 		];
+	}
+);
+
+/**
+ * Backward compatibility for legacy sites using the Classic Editor.
+ *
+ * Sites that have never had their editor defaults set, and are older than 2020-08-04, should
+ * default to Classic rather than Block.
+ */
+add_filter(
+	'default_option_classic-editor-replace',
+	function( $retval ) {
+		$legacy_date = '2020-08-04 15:00:00';
+
+		$site = get_site();
+		if ( strtotime( $site->registered ) <= strtotime( $legacy_date ) ) {
+			$retval = 'classic';
+		}
+
+		return $retval;
+	}
+);
+
+/**
+ * Shows the Editor admin notice for sites that should see it.
+ */
+add_action(
+	'admin_notices',
+	function() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return;
+		}
+
+		if ( 'classic' === get_option( 'classic-editor-replace' ) ) {
+			return;
+		}
+
+		if ( get_user_meta( get_current_user_id(), 'openlab_hide_editor_admin_notice' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-editor-admin-notice', content_url( 'wp-content/mu-plugins/js/openlab-editor-admin-notice.js' ), [ 'jquery' ], OL_VERSION );
+
+		?>
+		<div class="notice notice-info is-dismissible openlab-editor-admin-notice">
+			<p>Welcome to the new Block Editor! <a href="https://openlab.citytech.cuny.edu/blog/help/what-is-the-block-editor/">What is the Block Editor?</a> The Block Editor is more powerful than the Classic Editor, but we have <a href="https://openlab.citytech.cuny.edu/blog/help/what-is-the-block-editor/#switch-block-classic">help for you</a> if you’d like to stick with Classic.
+			<?php wp_nonce_field( 'openlab-editor-admin-notice-dismiss', 'openlab-editor-admin-notice-dismiss-nonce', false ); ?>
+		</div>
+		<?php
+	}
+);
+
+add_action(
+	'wp_ajax_openlab_editor_admin_notice_dismiss',
+	function() {
+		check_admin_referer( 'openlab-editor-admin-notice-dismiss' );
+
+		update_user_meta( get_current_user_id(), 'openlab_hide_editor_admin_notice', 1 );
 	}
 );
 
@@ -3071,7 +3120,7 @@ function openlab_sanitize_url_params( $url ) {
 	parse_str( $request_params, $params );
 	$param_keys = array_keys( $params );
 
-	if ( isset( $params['usertype'] ) && ! in_array( $params['usertype'], openlab_valid_user_types(), true ) ) {
+	if ( isset( $params['usertype'] ) && ! openlab_user_type_is_valid( $params['usertype'] ) ) {
 		unset( $params['usertype'] );
 	}
 
@@ -3247,5 +3296,30 @@ add_action(
 		}
 
 		wp_enqueue_script( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/js/nextgen-gallery.js' ), [ 'jquery' ], OL_VERSION );
+	}
+);
+
+if ( is_admin() ) {
+    function jba_disable_editor_fullscreen_by_default() {
+		$script = "jQuery( window ).load(function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } });";
+		wp_add_inline_script( 'wp-blocks', $script );
+	}
+
+	add_action( 'enqueue_block_editor_assets', 'jba_disable_editor_fullscreen_by_default' );
+}
+
+/**
+ * Gravity Forms Quiz field width.
+ */
+add_action(
+	'admin_print_scripts-toplevel_page_gf_edit_forms',
+	function() {
+		?>
+		<style type="text/css">
+		.gquiz-choice-weight {
+		width: 40px;
+		}
+		</style>
+		<?php
 	}
 );

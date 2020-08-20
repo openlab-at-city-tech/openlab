@@ -14,6 +14,6 @@
 			</div>
 		<?php endif; ?>
 
-	</div> <!-- .pagination -->
+	</div><!-- .pagination -->
 
 <?php endif; ?>

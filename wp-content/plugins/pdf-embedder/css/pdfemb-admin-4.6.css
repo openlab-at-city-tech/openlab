@@ -1,0 +1,114 @@
+
+#pdfemb-tabs {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0;
+    padding-left: 10px;
+}
+
+.pdfembtab.active {
+    display: block;
+}
+
+.pdfembtab {
+    display: none;
+}
+
+label {
+    float: left;
+    margin-left: 6px;
+}
+
+input.textinput, textarea.textinput, select.select, input.checkbox {
+    float: left;
+    margin: 12px 3px 0 0;
+    padding: 5px;
+}
+
+textarea#pdfemb_wm_text {
+    width: 350px;
+    height: 150px;
+    border: 1px solid;
+}
+
+label.radio {
+    float: none;
+    margin-left: 6px;
+}
+
+select.select {
+    padding: 2px 5px;
+}
+
+input.checkbox.double {
+    margin-top: 2px;
+}
+
+label.textinput, label.select, label.checkbox {
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10px 0 5px;
+    width: 180px;
+    font-weight: bold;
+}
+
+label.checkbox.plain {
+    font-weight: normal;
+    width: 400px;
+}
+
+label.big {
+    font-size: 1.3em;
+    padding-top: 8px;
+}
+
+p.desc {
+    font-style: italic;
+    margin: 6px 0 10px;
+    padding: 0 0 8px 22px;
+}
+
+p.desc.big {
+    padding-left: 180px;
+}
+
+a#pdfemb-personalinstrlink {
+    color: #0074A2;
+    text-decoration: underline;
+}
+
+#pdfemb-tablewrapper {
+    display: table;
+    width: 100%;
+}
+
+#pdfemb-tableleft {
+
+}
+
+#pdfemb-tableright {
+    padding: 0 0 0 40px;
+    width: 281px;
+}
+
+#pdfemb-tableright div {
+    width: 235px;
+    padding: 5px;
+    background-color: #E4E4E4;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#pdfemb-tableright div span {
+    padding: 5px;
+}
+
+#pdfemb-tableright div ul li {
+    font-weight: bold;
+}
+
+.pdfemb-tablecell {
+    display: table-cell;
+    height: 500px;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}

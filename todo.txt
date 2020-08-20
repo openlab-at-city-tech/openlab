@@ -1,0 +1,3 @@
+- Open doesn't work yet
+- Convert Badges filter to checkboxes
+- group types doesn't make sense as checkboxes

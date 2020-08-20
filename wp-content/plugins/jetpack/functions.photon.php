@@ -154,7 +154,7 @@ function jetpack_photon_url( $image_url, $args = array(), $scheme = null ) {
 	if ( ! apply_filters( 'jetpack_photon_any_extension_for_domain', false, $image_url_parts['host'] ) ) {
 		// Photon doesn't support query strings so we ignore them and look only at the path.
 		// However some source images are served via PHP so check the no-query-string extension.
-		// For future proofing, this is a blacklist of common issues rather than a whitelist.
+		// For future proofing, this is an excluded list of common issues rather than an allow list.
 		$extension = pathinfo( $image_url_parts['path'], PATHINFO_EXTENSION );
 		if ( empty( $extension ) || in_array( $extension, array( 'php', 'ashx' ), true ) ) {
 			return $image_url;
@@ -174,20 +174,6 @@ function jetpack_photon_url( $image_url, $args = array(), $scheme = null ) {
 	 * Valid values are 0, 1, and 2.
 	 */
 	$subdomain = abs( crc32( $image_host_path ) % 3 );
-
-	/*
-	 * Need to perform a slowroll out per pMz3w-arH-p2
-	 *
-	 * 7.9 - Use the old method if the value is not 0 (thus 1 or 2).
-	 * 8.0 - Use the old method if the value is 2 (thus not 0 or 1). [current step]
-	 * 8.1 - Remove this completely.
-	 */
-	if ( 2 === $subdomain ) {
-		// Figure out which CDN subdomain to use.
-		srand( crc32( $image_host_path ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_seeding_srand
-		$subdomain = rand( 0, 2 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
-		srand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_seeding_srand
-	}
 
 	/**
 	 * Filters the domain used by the Photon module.
@@ -234,6 +220,12 @@ function jetpack_photon_url( $image_url, $args = array(), $scheme = null ) {
 
 	return jetpack_photon_url_scheme( $photon_url, $scheme );
 }
+
+/**
+ * Add an easy way to photon-ize a URL that is safe to call even if Jetpack isn't active.
+ *
+ * See: https://jetpack.com/2013/07/11/photon-and-themes/
+ */
 add_filter( 'jetpack_photon_url', 'jetpack_photon_url', 10, 3 );
 
 /**
@@ -360,6 +352,7 @@ function jetpack_photon_banned_domains( $skip, $image_url ) {
 		'/\.paypalobjects\.com$/',
 		'/\.dropbox\.com$/',
 		'/\.cdninstagram\.com$/',
+		'/\.wikimedia\.org$/',
 	);
 
 	$host = wp_parse_url( $image_url, PHP_URL_HOST );

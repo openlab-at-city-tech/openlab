@@ -3,7 +3,7 @@
 Plugin Name: WTI Like Post
 Plugin URI: https://www.webtechideas.in/wti-like-post-plugin/
 Description: WTI Like Post is a plugin for adding like (thumbs up) and unlike (thumbs down) functionality for posts/pages. On admin end alongwith handful of configuration settings, it will show a list of most liked posts/pages. If you have already liked a post/page and now you dislike it, then the old voting will be cancelled and vice-versa. You can reset the settings to default and the like/unlike counts for all/selected posts/pages as well. It comes with two widgets, one to display the most liked posts/pages for a given time range and another to show recently liked posts. Check out the <strong><a href="https://www.webtechideas.in/product/wti-like-post-pro/" target="_blank">powerful PRO version</a></strong> with lots of useful features.
-Version: 1.4.5
+Version: 1.4.6
 Author: webtechideas
 Author URI: https://www.webtechideas.in/
 License: GPLv2 or later
@@ -30,7 +30,7 @@ GNU General Public License for more details.
 */
 
 global $wti_like_post_db_version, $wti_ip_address;
-$wti_like_post_db_version = "1.4.5";
+$wti_like_post_db_version = "1.4.6";
 $wti_ip_address = WtiGetRealIpAddress();
 
 add_action('init', 'WtiLoadPluginTextdomain');
@@ -118,7 +118,7 @@ function SetOptionsWtiLikePost() {
 	
      // Adding options for the like post plugin
      add_option('wti_like_post_drop_settings_table', '0', '', 'yes');
-     add_option('wti_like_post_voting_period', '0', '', 'yes');
+     add_option('wti_like_post_voting_period', 'once', '', 'yes');
      add_option('wti_like_post_voting_style', 'style1', '', 'yes');
      add_option('wti_like_post_alignment', 'left', '', 'yes');
      add_option('wti_like_post_position', 'bottom', '', 'yes');
@@ -134,7 +134,7 @@ function SetOptionsWtiLikePost() {
      add_option('wti_like_post_show_on_widget', '1', '', 'yes');
      add_option('wti_like_post_show_symbols', '1', '', 'yes');
      add_option('wti_like_post_show_dislike', '1', '', 'yes');
-     add_option('wti_like_post_title_text', 'Like/Unlike', '', 'yes');
+     add_option('wti_like_post_title_text', __('Like/Unlike', 'wti-like-post'), '', 'yes');
      add_option('wti_like_post_db_version', $wti_like_post_db_version, '', 'yes');
 }
 
@@ -172,6 +172,7 @@ function UnsetOptionsWtiLikePost() {
 		delete_option('wti_like_post_show_symbols');
 		delete_option('wti_like_post_show_dislike');
 		delete_option('wti_like_post_title_text');
+		delete_option('wti_like_post_lite_notify_author');
 	}
 }
 
@@ -233,7 +234,7 @@ add_action('plugins_loaded', 'UpdateOptionsWtiLikePost');
 if (is_admin()) {
 	// Include the file for loading plugin settings
 	require_once('wti_like_post_admin.php');
-	add_action('init', 'WtiLikePostEnqueueAdminScripts');
+	// add_action('init', 'WtiLikePostEnqueueAdminScripts');
 } else {
 	// Include the file for loading plugin settings for
 	require_once('wti_like_post_site.php');

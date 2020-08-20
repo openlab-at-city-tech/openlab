@@ -101,3 +101,45 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * More filter default Accent Color.
+ *
+ * The above is only for the Customizer.
+ */
+add_filter(
+	'theme_mod_accent_color',
+	function( $value ) {
+		if ( false === $value ) {
+			$value = '#ad0000';
+		}
+
+		return $value;
+	}
+);
+
+/**
+ * And more filter default Accent Color.
+ *
+ * Hemingway sometimes passes a 'default' and this is the only way to override.
+ */
+add_filter(
+    'option_theme_mods_hemingway',
+    function( $mods ) {
+        if ( ! isset( $mods['accent_color'] ) ) {
+            $mods['accent_color'] = '#ad0000';
+        }
+        return $mods;
+    }
+);
+
+/**
+ * Post titles should have the accent color.
+ */
+add_filter(
+	'hemingway_accent_color_elements',
+	function( $els ) {
+		$els['color'][] = '.post-title a';
+		return $els;
+	}
+);

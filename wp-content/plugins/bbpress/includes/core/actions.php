@@ -407,12 +407,15 @@ add_action( 'bbp_user_edit_after', 'bbp_user_edit_after' );
 // Clean bbPress post caches when WordPress's is cleaned
 add_action( 'clean_post_cache', 'bbp_clean_post_cache', 10, 2 );
 
-// User Creation
-add_action( 'invite_user',         'bbp_user_add_role_on_invite',   10, 3 );
-add_action( 'wpmu_activate_user',  'bbp_user_add_role_on_activate', 10, 3 );
-add_action( 'bbp_user_register',   'bbp_user_add_role_on_register', 10, 1 );
+// User Registration
 add_action( 'added_existing_user', 'bbp_user_add_role_on_register', 10, 1 );
-add_action( 'register_new_user',   'bbp_user_add_role_on_register', 10, 1 );
+add_action( 'bbp_user_register',   'bbp_user_add_role_on_register', 10, 1 );
+
+// Invite a New User
+add_action( 'invite_user',         'bbp_user_add_role_on_invite',   10, 3 );
+
+// Multisite Activation (does not work in wp-activate.php)
+add_action( 'wpmu_activate_user',  'bbp_user_add_role_on_activate', 10, 3 );
 
 /**
  * bbPress needs to redirect the user around in a few different circumstances:
@@ -432,6 +435,9 @@ add_action( 'bbp_template_redirect', 'bbp_check_forum_edit',      10 );
 add_action( 'bbp_template_redirect', 'bbp_check_topic_edit',      10 );
 add_action( 'bbp_template_redirect', 'bbp_check_reply_edit',      10 );
 add_action( 'bbp_template_redirect', 'bbp_check_topic_tag_edit',  10 );
+
+// Must be after bbp_template_include_theme_compat
+add_action( 'bbp_template_redirect', 'bbp_remove_adjacent_posts', 10 );
 
 // Theme-side POST requests
 add_action( 'bbp_post_request', 'bbp_do_ajax',                1  );

@@ -3,13 +3,13 @@
  * Plugin Name: Easy Table of Contents
  * Plugin URI: http://connections-pro.com/
  * Description: Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
- * Version: 1.7
+ * Version: 2.0.11
  * Author: Steven A. Zahm
  * Author URI: http://connections-pro.com/
  * Text Domain: easy-table-of-contents
  * Domain Path: /languages
  *
- * Copyright 2018  Steven A. Zahm  ( email : helpdesk@connections-pro.com )
+ * Copyright 2020  Steven A. Zahm  ( email : helpdesk@connections-pro.com )
  *
  * Easy Table of Contents is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -26,8 +26,10 @@
  * @package  Easy Table of Contents
  * @category Plugin
  * @author   Steven A. Zahm
- * @version  1.7
+ * @version  2.0.11
  */
+
+use function Easy_Plugins\Table_Of_Contents\String\mb_find_replace;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -45,7 +47,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @since 1.0
 		 * @var string
 		 */
-		const VERSION = '1.7';
+		const VERSION = '2.0.11';
 
 		/**
 		 * Stores the instance of this class.
@@ -59,15 +61,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		private static $instance;
 
 		/**
-		 * Keeps a track of used anchors for collision detecting.
-		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
-		 *
+		 * @since 2.0
 		 * @var array
 		 */
-		private static $collision_collector = array();
+		private static $store = array();
 
 		/**
 		 * A dummy constructor to prevent the class from being loaded more than once.
@@ -132,7 +129,12 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				require_once( EZ_TOC_PATH . 'includes/class.admin.php' );
 			}
 
+			require_once( EZ_TOC_PATH . 'includes/class.post.php' );
 			require_once( EZ_TOC_PATH . 'includes/class.widget-toc.php' );
+			require_once( EZ_TOC_PATH . 'includes/inc.functions.php' );
+			require_once( EZ_TOC_PATH . 'includes/inc.string-functions.php' );
+
+			require_once( EZ_TOC_PATH . 'includes/inc.plugin-compatibility.php' );
 		}
 
 		/**
@@ -198,11 +200,13 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			} else {
 
 				// Load the default language files
-				load_plugin_textdomain( $domain, FALSE, $languagesDirectory );
+				load_plugin_textdomain( $domain, false, $languagesDirectory );
 			}
 		}
 
 		/**
+		 * Call back for the `wp_enqueue_scripts` action.
+		 *
 		 * Register and enqueue CSS and javascript files for frontend.
 		 *
 		 * @access private
@@ -212,18 +216,24 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		public static function enqueueScripts() {
 
 			// If SCRIPT_DEBUG is set and TRUE load the non-minified JS files, otherwise, load the minified files.
-			$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 			$js_vars = array();
 
 			wp_register_style( 'ez-icomoon', EZ_TOC_URL . "vendor/icomoon/style$min.css", array(), ezTOC::VERSION );
 			wp_register_style( 'ez-toc', EZ_TOC_URL . "assets/css/screen$min.css", array( 'ez-icomoon' ), ezTOC::VERSION );
 
-			wp_register_script( 'js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie$min.js", array(), '2.0.3', TRUE );
-			wp_register_script( 'jquery-smooth-scroll', EZ_TOC_URL . "vendor/smooth-scroll/jquery.smooth-scroll$min.js", array( 'jquery' ), '1.5.5', TRUE );
+			wp_register_script( 'js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie$min.js", array(), '2.2.1', TRUE );
+			wp_register_script( 'jquery-smooth-scroll', EZ_TOC_URL . "vendor/smooth-scroll/jquery.smooth-scroll$min.js", array( 'jquery' ), '2.2.0', TRUE );
 			wp_register_script( 'jquery-sticky-kit', EZ_TOC_URL . "vendor/sticky-kit/jquery.sticky-kit$min.js", array( 'jquery' ), '1.9.2', TRUE );
-			wp_register_script( 'jquery-waypoints', EZ_TOC_URL . "vendor/waypoints/jquery.waypoints$min.js", array( 'jquery' ), '1.9.2', TRUE );
-			wp_register_script( 'ez-toc-js', EZ_TOC_URL . "assets/js/front$min.js", array( 'jquery-smooth-scroll', 'js-cookie', 'jquery-sticky-kit', 'jquery-waypoints' ), ezTOC::VERSION, TRUE );
+
+			wp_register_script(
+				'ez-toc-js',
+				EZ_TOC_URL . "assets/js/front$min.js",
+				array( 'jquery-smooth-scroll', 'js-cookie', 'jquery-sticky-kit' ),
+				ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "assets/js/front$min.js" ),
+				true
+			);
 
 			if ( ! ezTOC_Option::get( 'exclude_css' ) ) {
 
@@ -233,16 +243,16 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			if ( ezTOC_Option::get( 'smooth_scroll' ) ) {
 
-				$js_vars['smooth_scroll'] = TRUE;
+				$js_vars['smooth_scroll'] = true;
 			}
 
 			//wp_enqueue_script( 'ez-toc-js' );
 
 			if ( ezTOC_Option::get( 'show_heading_text' ) && ezTOC_Option::get( 'visibility' ) ) {
 
-				$width = ezTOC_Option::get( 'width' ) != 'custom' ? ezTOC_Option::get( 'width' ) : ezTOC_Option::get( 'width_custom' ) . ezTOC_Option::get( 'width_custom_units' );
+				$width = ezTOC_Option::get( 'width' ) !== 'custom' ? ezTOC_Option::get( 'width' ) : ezTOC_Option::get( 'width_custom' ) . ezTOC_Option::get( 'width_custom_units' );
 
-				$js_vars['visibility_hide_by_default'] = ezTOC_Option::get( 'visibility_hide_by_default' ) ? TRUE : FALSE;
+				$js_vars['visibility_hide_by_default'] = ezTOC_Option::get( 'visibility_hide_by_default' ) ? true : false;
 
 				$js_vars['width'] = esc_js( $width );
 			}
@@ -279,20 +289,20 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				$css .= 'div#ez-toc-container p.ez-toc-title {font-weight: ' . ezTOC_Option::get( 'title_font_weight', 500 ) . ';}';
 				$css .= 'div#ez-toc-container ul li {font-size: ' . ezTOC_Option::get( 'font_size' ) . ezTOC_Option::get( 'font_size_units' ) . ';}';
 
-				if ( ezTOC_Option::get( 'theme' ) == 'custom' || ezTOC_Option::get( 'width' ) != 'auto' ) {
+				if ( ezTOC_Option::get( 'theme' ) === 'custom' || ezTOC_Option::get( 'width' ) != 'auto' ) {
 
 					$css .= 'div#ez-toc-container {';
 
-					if ( ezTOC_Option::get( 'theme' ) == 'custom' ) {
+					if ( ezTOC_Option::get( 'theme' ) === 'custom' ) {
 
 						$css .= 'background: ' . ezTOC_Option::get( 'custom_background_colour' ) . ';border: 1px solid ' . ezTOC_Option::get( 'custom_border_colour' ) . ';';
 					}
 
-					if ( 'auto' != ezTOC_Option::get( 'width' ) ) {
+					if ( 'auto' !== ezTOC_Option::get( 'width' ) ) {
 
 						$css .= 'width: ';
 
-						if ( 'custom' != ezTOC_Option::get( 'width' ) ) {
+						if ( 'custom' !== ezTOC_Option::get( 'width' ) ) {
 
 							$css .= ezTOC_Option::get( 'width' );
 
@@ -307,7 +317,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$css .= '}';
 				}
 
-				if ( 'custom' ==  ezTOC_Option::get( 'theme' ) ) {
+				if ( 'custom' === ezTOC_Option::get( 'theme' ) ) {
 
 					$css .= 'div#ez-toc-container p.ez-toc-title {color: ' . ezTOC_Option::get( 'custom_title_colour' ) . ';}';
 					//$css .= 'div#ez-toc-container p.ez-toc-title a,div#ez-toc-container ul.ez-toc-list a {color: ' . ezTOC_Option::get( 'custom_link_colour' ) . ';}';
@@ -321,505 +331,6 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 				wp_add_inline_style( 'ez-toc', $css );
 			}
-		}
-
-		/**
-		 * Returns a URL to be used as the destination anchor target.
-		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
-		 *
-		 * @param string $title
-		 *
-		 * @return bool|string
-		 */
-		private static function url_anchor_target( $title ) {
-
-			$return = FALSE;
-
-			if ( $title ) {
-
-				// WP entity encodes the post content.
-				$return = html_entity_decode( $title, ENT_QUOTES, get_option( 'blog_charset' ) );
-
-				$return = trim( strip_tags( $return ) );
-
-				// Convert accented characters to ASCII.
-				$return = remove_accents( $return );
-
-				// replace newlines with spaces (eg when headings are split over multiple lines)
-				$return = str_replace( array( "\r", "\n", "\n\r", "\r\n" ), ' ', $return );
-
-				// Remove `&amp;` and `&nbsp;` NOTE: in order to strip "hidden" `&nbsp;`,
-				// title needs to be converted to HTML entities.
-				// @link https://stackoverflow.com/a/21801444/5351316
-				$return = htmlentities2( $return );
-				$return = str_replace( array( '&amp;', '&nbsp;' ), ' ', $return );
-				$return = html_entity_decode( $return, ENT_QUOTES, get_option( 'blog_charset' ) );
-
-				// remove non alphanumeric chars
-				$return = preg_replace( '/[^a-zA-Z0-9 \-_]*/', '', $return );
-
-				// convert spaces to _
-				$return = preg_replace( '/\s+/', '_', $return );
-
-				// remove trailing - and _
-				$return = rtrim( $return, '-_' );
-
-				// lowercase everything?
-				if ( ezTOC_Option::get( 'lowercase' ) ) {
-
-					$return = strtolower( $return );
-				}
-
-				// if blank, then prepend with the fragment prefix
-				// blank anchors normally appear on sites that don't use the latin charset
-				if ( ! $return ) {
-
-					$return = ( ezTOC_Option::get( 'fragment_prefix' ) ) ? ezTOC_Option::get( 'fragment_prefix' ) : '_';
-				}
-
-				// hyphenate?
-				if ( ezTOC_Option::get( 'hyphenate' ) ) {
-
-					$return = str_replace( '_', '-', $return );
-					$return = str_replace( '--', '-', $return );
-				}
-			}
-
-			if ( array_key_exists( $return, self::$collision_collector ) ) {
-
-				self::$collision_collector[ $return ]++;
-				$return .= '-' . self::$collision_collector[ $return ];
-
-			} else {
-
-				self::$collision_collector[ $return ] = 1;
-			}
-
-			return apply_filters( 'ez_toc_url_anchor_target', $return, $title );
-		}
-
-		/**
-		 * Generates a nested unordered list for the table of contents.
-		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
-		 *
-		 * @param array $matches
-		 * @param array $headings Array of headers to be considered for a TOC item.
-		 *
-		 * @return string
-		 */
-		private static function build_hierarchy( &$matches, $headings ) {
-
-			$current_depth      = 100;    // headings can't be larger than h6 but 100 as a default to be sure
-			$html               = '';
-			$numbered_items     = array();
-			$numbered_items_min = NULL;
-
-			// reset the internal collision collection
-			self::$collision_collector = array();
-
-			// find the minimum heading to establish our baseline
-			for ( $i = 0; $i < count( $matches ); $i ++ ) {
-				if ( $current_depth > $matches[ $i ][2] ) {
-					$current_depth = (int) $matches[ $i ][2];
-				}
-			}
-
-			$numbered_items[ $current_depth ] = 0;
-			$numbered_items_min               = $current_depth;
-
-			for ( $i = 0; $i < count( $matches ); $i ++ ) {
-
-				if ( $current_depth == (int) $matches[ $i ][2] ) {
-
-					$html .= '<li>';
-				}
-
-				// start lists
-				if ( $current_depth != (int) $matches[ $i ][2] ) {
-
-					for ( $current_depth; $current_depth < (int) $matches[ $i ][2]; $current_depth++ ) {
-
-						$numbered_items[ $current_depth + 1 ] = 0;
-						$html .= '<ul><li>';
-					}
-				}
-
-				// list item
-				if ( in_array( $matches[ $i ][2], $headings ) ) {
-
-					//$title = apply_filters( 'ez_toc_title', strip_tags( wp_kses_post( $matches[ $i ][0] ) ) );
-					$title = strip_tags( apply_filters( 'ez_toc_title', $matches[ $i ][0] ), apply_filters( 'ez_toc_title_allowable_tags', '' ) );
-
-					//$html .= '<a href="#' . self::url_anchor_target( $title ) . '">';
-					$html .= sprintf(
-						'<a href="%1$s" title="%2$s">',
-						esc_url( '#' . self::url_anchor_target( $matches[ $i ][0] ) ),
-						esc_attr( strip_tags( $title ) )
-					);
-
-					//if ( 'decimal' == ezTOC_Option::get( 'counter' ) ) {
-					//
-					//	// attach leading numbers when lower in hierarchy
-					//	$html .= '<span class="ez-toc-number ez-toc-depth_' . ( $current_depth - $numbered_items_min + 1 ) . '">';
-					//
-					//	for ( $j = $numbered_items_min; $j < $current_depth; $j ++ ) {
-					//
-					//		$number = ( $numbered_items[ $j ] ) ? $numbered_items[ $j ] : 0;
-					//		$html .= $number . '.';
-					//	}
-					//
-					//	$html .= ( $numbered_items[ $current_depth ] + 1 ) . '</span> ';
-					//	$numbered_items[ $current_depth ] ++;
-					//}
-
-					$html .= $title . '</a>';
-				}
-
-				// end lists
-				if ( $i != count( $matches ) - 1 ) {
-
-					if ( $current_depth > (int) $matches[ $i + 1 ][2] ) {
-
-						for ( $current_depth; $current_depth > (int) $matches[ $i + 1 ][2]; $current_depth-- ) {
-
-							$html .= '</li></ul>';
-							$numbered_items[ $current_depth ] = 0;
-						}
-					}
-
-					if ( $current_depth == (int) @$matches[ $i + 1 ][2] ) {
-
-						$html .= '</li>';
-					}
-
-				} else {
-
-					// this is the last item, make sure we close off all tags
-					for ( $current_depth; $current_depth >= $numbered_items_min; $current_depth -- ) {
-
-						$html .= '</li>';
-
-						if ( $current_depth != $numbered_items_min ) {
-							$html .= '</ul>';
-						}
-					}
-				}
-			}
-
-			return $html;
-		}
-
-		/**
-		 * Returns a string with all items from the $find array replaced with their matching
-		 * items in the $replace array.  This does a one to one replacement (rather than globally).
-		 *
-		 * This function is multibyte safe.
-		 *
-		 * $find and $replace are arrays, $string is the haystack.  All variables are passed by reference.
-		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
-		 *
-		 * @param bool   $find
-		 * @param bool   $replace
-		 * @param string $string
-		 *
-		 * @return mixed|string
-		 */
-		private static function mb_find_replace( &$find = FALSE, &$replace = FALSE, &$string = '' ) {
-
-			if ( is_array( $find ) && is_array( $replace ) && $string ) {
-
-				// check if multibyte strings are supported
-				if ( function_exists( 'mb_strpos' ) ) {
-
-					for ( $i = 0; $i < count( $find ); $i ++ ) {
-
-						$string = mb_substr(
-							          $string,
-							          0,
-							          mb_strpos( $string, $find[ $i ] )
-						          ) .    // everything before $find
-						          $replace[ $i ] . // its replacement
-						          mb_substr(
-							          $string,
-							          mb_strpos( $string, $find[ $i ] ) + mb_strlen( $find[ $i ] )
-						          )    // everything after $find
-						;
-					}
-
-				} else {
-
-					for ( $i = 0; $i < count( $find ); $i ++ ) {
-
-						$string = substr_replace(
-							$string,
-							$replace[ $i ],
-							strpos( $string, $find[ $i ] ),
-							strlen( $find[ $i ] )
-						);
-					}
-				}
-			}
-
-			return $string;
-		}
-
-		/**
-		 * This function extracts headings from the html formatted $content.  It will pull out
-		 * only the required headings as specified in the options.  For all qualifying headings,
-		 * this function populates the $find and $replace arrays (both passed by reference)
-		 * with what to search and replace with.
-		 *
-		 * Returns a HTML formatted string of list items for each qualifying heading.  This
-		 * is everything between and NOT including <ul> and </ul>
-		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
-		 *
-		 * @param array   $find
-		 * @param array   $replace
-		 * @param WP_Post $post
-		 *
-		 * @return bool|string
-		 */
-		public static function extract_headings( &$find, &$replace, $post ) {
-
-			$matches = array();
-			$anchor  = '';
-			$items   = '';
-
-			$headings = get_post_meta( $post->ID, '_ez-toc-heading-levels', TRUE );
-			$exclude  = get_post_meta( $post->ID, '_ez-toc-exclude', TRUE );
-			$altText  = get_post_meta( $post->ID, '_ez-toc-alttext', TRUE );
-
-			if ( ! is_array( $headings ) ) {
-
-				$headings = array();
-			}
-
-			if ( empty( $headings ) ) {
-
-				$headings = ezTOC_Option::get( 'heading_levels', array() );
-			}
-
-			if ( empty( $exclude ) ) {
-
-				$exclude = ezTOC_Option::get( 'exclude' );
-			}
-
-			// reset the internal collision collection as the_content may have been triggered elsewhere
-			// eg by themes or other plugins that need to read in content such as metadata fields in
-			// the head html tag, or to provide descriptions to twitter/facebook
-			self::$collision_collector = array();
-
-			$content = apply_filters( 'ez_toc_extract_headings_content', $post->post_content );
-
-			if ( is_array( $find ) && is_array( $replace ) && $content ) {
-
-				// get all headings
-				// the html spec allows for a maximum of 6 heading depths
-				if ( preg_match_all( '/(<h([1-6]{1})[^>]*>).*<\/h\2>/msuU', $content, $matches, PREG_SET_ORDER ) ) {
-
-					// remove undesired headings (if any) as defined by heading_levels
-					if ( count( $headings ) != 6 ) {
-
-						$new_matches = array();
-
-						for ( $i = 0; $i < count( $matches ); $i ++ ) {
-
-							if ( in_array( $matches[ $i ][2], $headings ) ) {
-
-								$new_matches[] = $matches[ $i ];
-							}
-						}
-						$matches = $new_matches;
-					}
-
-					// remove specific headings if provided via the 'exclude' property
-					if ( $exclude ) {
-
-						$excluded_headings = explode( '|', $exclude );
-						$excluded_count    = count( $excluded_headings );
-
-						if ( $excluded_count > 0 ) {
-
-							for ( $j = 0; $j < $excluded_count; $j++ ) {
-
-								$excluded_headings[ $j ] = preg_quote( $excluded_headings[ $j ] );
-
-								// escape some regular expression characters
-								// others: http://www.php.net/manual/en/regexp.reference.meta.php
-								$excluded_headings[ $j ] = str_replace(
-									array( '\*' ),
-									array( '.*' ),
-									trim( $excluded_headings[ $j ] )
-								);
-							}
-
-							$new_matches = array();
-
-							for ( $i = 0; $i < count( $matches ); $i++ ) {
-
-								$found = FALSE;
-
-								for ( $j = 0; $j < $excluded_count; $j++ ) {
-
-									// Since WP manipulates the post content it is required that the excluded header and
-									// the actual header be manipulated similarly so a match can be made.
-									$pattern = html_entity_decode(
-										wptexturize( $excluded_headings[ $j ] ),
-										ENT_NOQUOTES,
-										get_option( 'blog_charset' )
-									);
-
-									$against = html_entity_decode(
-										wptexturize( strip_tags( $matches[ $i ][0] ) ),
-										ENT_NOQUOTES,
-										get_option( 'blog_charset' )
-									);
-
-									if ( @preg_match( '/^' . $pattern . '$/imU', $against ) ) {
-
-										$found = TRUE;
-										break;
-									}
-								}
-
-								if ( ! $found ) {
-
-									$new_matches[] = $matches[ $i ];
-								}
-							}
-
-							if ( count( $matches ) != count( $new_matches ) ) {
-
-								$matches = $new_matches;
-							}
-						}
-					}
-
-					// remove empty headings
-					$new_matches = array();
-
-					for ( $i = 0; $i < count( $matches ); $i ++ ) {
-
-						if ( trim( strip_tags( $matches[ $i ][0] ) ) != FALSE ) {
-
-							$new_matches[] = $matches[ $i ];
-						}
-					}
-
-					if ( count( $matches ) != count( $new_matches ) ) {
-
-						$matches = $new_matches;
-					}
-
-					$toc = $matches;
-
-					// Replace headers with toc alt text.
-					if ( $altText ) {
-
-						$alt_headings         = array();
-						$split_headings       = preg_split( '/\r\n|[\r\n]/', $altText );
-						$split_headings_count = count( $split_headings );
-
-						if ( $split_headings ) {
-
-							for ( $k = 0; $k < $split_headings_count; $k++ ) {
-
-								$explode_headings = explode( '|', $split_headings[ $k ] );
-
-								if ( 0 < strlen( $explode_headings[0] ) && 0 < strlen( $explode_headings[1] ) ) {
-
-									$alt_headings[ $explode_headings[0] ] = $explode_headings[1];
-								}
-							}
-
-						}
-
-						if ( 0 <  count( $alt_headings ) ) {
-
-							for ( $i = 0; $i < count( $toc ); $i++ ) {
-
-								foreach ( $alt_headings as $original_heading => $alt_heading ) {
-
-									$original_heading = preg_quote( $original_heading );
-
-									// escape some regular expression characters
-									// others: http://www.php.net/manual/en/regexp.reference.meta.php
-									$original_heading = str_replace(
-										array( '\*' ),
-										array( '.*' ),
-										trim( $original_heading )
-									);
-
-									if ( @preg_match( '/^' . $original_heading . '$/imU', strip_tags( $toc[ $i ][0] ) ) ) {
-
-										//$matches[ $i ][0] = str_replace( $original_heading, $alt_heading, $matches[ $i ][0] );
-										$toc[ $i ][0] = $alt_heading;
-									}
-								}
-							}
-						}
-					}
-
-					// check minimum number of headings
-					if ( count( $matches ) >= ezTOC_Option::get( 'start' ) ) {
-
-						for ( $i = 0; $i < count( $matches ); $i++ ) {
-
-							// get anchor and add to find and replace arrays
-							$anchor    = isset( $toc[ $i ][0] ) ? self::url_anchor_target( $toc[ $i ][0] ) : self::url_anchor_target( $matches[ $i ][0] );
-							$find[]    = $matches[ $i ][0];
-							$replace[] = str_replace(
-								array(
-									$matches[ $i ][1],                // start of heading
-									'</h' . $matches[ $i ][2] . '>'   // end of heading
-								),
-								array(
-									$matches[ $i ][1] . '<span class="ez-toc-section" id="' . $anchor . '">',
-									'</span></h' . $matches[ $i ][2] . '>'
-								),
-								$matches[ $i ][0]
-							);
-
-							// assemble flat list
-							if ( ! ezTOC_Option::get( 'show_hierarchy' ) ) {
-
-								$items .= '<li><a href="' . esc_url( '#' . $anchor ) . '">';
-								//$title  = apply_filters( 'ez_toc_title', strip_tags( wp_kses_post( $toc[ $i ][0] ) ) );
-								$title = strip_tags( apply_filters( 'ez_toc_title', $matches[ $i ][0] ), apply_filters( 'ez_toc_title_allowable_tags', '' ) );
-
-								//if ( 'decimal' == ezTOC_Option::get( 'counter' ) ) {
-								//
-								//	$items .= count( $replace ) . ' ';
-								//}
-
-								$items .= $title . '</a></li>';
-							}
-						}
-
-						// build a hierarchical toc?
-						// we could have tested for $items but that var can be quite large in some cases
-						if ( ezTOC_Option::get( 'show_hierarchy' ) ) {
-
-							$items = self::build_hierarchy( $toc, $headings );
-						}
-
-					}
-				}
-			}
-
-			return $items;
 		}
 
 		/**
@@ -840,247 +351,123 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			foreach ( new RecursiveIteratorIterator( new RecursiveArrayIterator( $array ) ) as $key => $value ) {
 
 				if ( $search === ${${"mode"}} ) {
-					return TRUE;
+					return true;
 				}
 			}
 
-			return FALSE;
+			return false;
 		}
 
 		/**
 		 * Returns true if the table of contents is eligible to be printed, false otherwise.
 		 *
+		 * NOTE: Must bve use only within the loop.
+		 *
 		 * @access public
 		 * @since  1.0
 		 * @static
 		 *
+		 * @param WP_Post $post
+		 *
 		 * @return bool
 		 */
-		public static function is_eligible() {
+		public static function is_eligible( $post ) {
 
-			global $wp_query;
+			//global $wp_current_filter;
 
-			$post = $wp_query->post;
-
-			if ( empty( $post ) ) {
-				return FALSE;
+			if ( empty( $post ) || ! $post instanceof WP_Post ) {
+				return false;
 			}
 
-			if ( has_shortcode( $post->post_content, 'toc' ) || has_shortcode( $post->post_content, 'ez-toc' ) ) {
-				return TRUE;
+			// This can likely be removed since it is checked in maybeApplyTheContentFilter().
+			// Do not execute if root filter is one of those in the array.
+			//if ( in_array( $wp_current_filter[0], array( 'get_the_excerpt', 'wp_head' ), true ) ) {
+			//
+			//	return false;
+			//}
+
+			if ( has_shortcode( $post->post_content, apply_filters( 'ez_toc_shortcode', 'toc' ) ) ||
+			     has_shortcode( $post->post_content, 'ez-toc' ) ) {
+				return true;
 			}
 
 			if ( is_front_page() && ! ezTOC_Option::get( 'include_homepage' ) ) {
-				return FALSE;
+				return false;
 			}
 
 			$type = get_post_type( $post->ID );
 
-			$enabled = in_array( $type, ezTOC_Option::get( 'enabled_post_types', array() ) );
-			$insert  = in_array( $type, ezTOC_Option::get( 'auto_insert_post_types', array() ) );
+			$enabled = in_array( $type, ezTOC_Option::get( 'enabled_post_types', array() ), true );
+			$insert  = in_array( $type, ezTOC_Option::get( 'auto_insert_post_types', array() ), true );
 
 			if ( $insert || $enabled ) {
 
 				if ( ezTOC_Option::get( 'restrict_path' ) ) {
 
-					//if ( strpos( $_SERVER['REQUEST_URI'], ezTOC_Option::get( 'restrict_path' ) ) === 0 ) {
-					//
-					//	return TRUE;
-					//
-					//} else {
-					//
-					//	return FALSE;
-					//}
-
 					/**
 					 * @link https://wordpress.org/support/topic/restrict-path-logic-does-not-work-correctly?
 					 */
-					if ( FALSE !== strpos( ezTOC_Option::get( 'restrict_path' ), $_SERVER['REQUEST_URI'] ) ) {
+					if ( false !== strpos( ezTOC_Option::get( 'restrict_path' ), $_SERVER['REQUEST_URI'] ) ) {
 
-						return FALSE;
+						return false;
 
 					} else {
 
-						return TRUE;
+						return true;
 					}
 
 				} else {
 
-					if ( $insert && 1 == get_post_meta( $post->ID, '_ez-toc-disabled', TRUE ) ) {
+					if ( $insert && 1 == get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
 
-						return FALSE;
+						return false;
 
-					} elseif ( $insert && 0 == get_post_meta( $post->ID, '_ez-toc-disabled', TRUE ) ) {
+					} elseif ( $insert && 0 == get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
 
-						return TRUE;
+						return true;
 
-					} elseif ( $enabled && 1 == get_post_meta( $post->ID, '_ez-toc-insert', TRUE ) ) {
+					} elseif ( $enabled && 1 == get_post_meta( $post->ID, '_ez-toc-insert', true ) ) {
 
-						return TRUE;
+						return true;
 					}
 
-					return FALSE;
-					//return TRUE;
+					return false;
 				}
 
 			} else {
 
-				return FALSE;
+				return false;
 			}
 		}
 
 		/**
-		 * Build the table of contents.
+		 * Get TOC from store and if not in store process post and add it to the store.
 		 *
-		 * @access private
-		 * @since  1.3
-		 * @static
+		 * @since 2.0
 		 *
-		 * @param WP_Post $post The page/post content.
+		 * @param int $id
 		 *
-		 * @return array
+		 * @return ezTOC_Post|null
 		 */
-		public static function build( $post ) {
+		public static function get( $id ) {
 
-			$css_classes = '';
+			$post = null;
 
-			$html    = '';
-			$find    = array();
-			$replace = array();
-			$items   = self::extract_headings( $find, $replace, $post );
+			if ( isset( self::$store[ $id ] ) && self::$store[ $id ] instanceof ezTOC_Post ) {
 
-			if ( $items ) {
+				$post = self::$store[ $id ];
 
-				// wrapping css classes
-				switch ( ezTOC_Option::get( 'wrapping' ) ) {
+			} else {
 
-					case 'left':
-						$css_classes .= ' ez-toc-wrap-left';
-						break;
+				$post = ezTOC_Post::get( get_the_ID() );
 
-					case 'right':
-						$css_classes .= ' ez-toc-wrap-right';
-						break;
+				if ( $post instanceof ezTOC_Post ) {
 
-					case 'none':
-					default:
-						// do nothing
+					self::$store[ $id ] = $post;
 				}
-
-				if ( ezTOC_Option::get( 'show_hierarchy' ) ) {
-
-					$css_classes .= ' counter-hierarchy';
-
-				} else {
-
-					$css_classes .= ' counter-flat';
-				}
-
-				switch ( ezTOC_Option::get( 'counter' ) ) {
-
-					case 'numeric':
-						$css_classes .= ' counter-numeric';
-						break;
-
-					case 'roman':
-						$css_classes .= ' counter-roman';
-						break;
-
-					case 'decimal':
-						$css_classes .= ' counter-decimal';
-						break;
-				}
-
-				// colour themes
-				switch ( ezTOC_Option::get( 'theme' ) ) {
-
-					case 'light-blue':
-						$css_classes .= ' ez-toc-light-blue';
-						break;
-
-					case 'white':
-						$css_classes .= ' ez-toc-white';
-						break;
-
-					case 'black':
-						$css_classes .= ' ez-toc-black';
-						break;
-
-					case 'transparent':
-						$css_classes .= ' ez-toc-transparent';
-						break;
-
-					case 'grey':
-						$css_classes .= ' ez-toc-grey';
-						break;
-
-					default:
-						// do nothing
-				}
-
-				if ( ezTOC_Option::get( 'css_container_class' ) ) {
-
-					$css_classes .= ' ' . ezTOC_Option::get( 'css_container_class' );
-				}
-
-				$css_classes = trim( $css_classes );
-
-				// an empty class="" is invalid markup!
-				if ( ! $css_classes ) {
-
-					$css_classes = ' ';
-				}
-
-				// add container, toc title and list items
-				$html .= '<div id="ez-toc-container" class="' . $css_classes . '">' . PHP_EOL;
-
-				if ( ezTOC_Option::get( 'show_heading_text' ) ) {
-
-					$toc_title = ezTOC_Option::get( 'heading_text' );
-
-					if ( strpos( $toc_title, '%PAGE_TITLE%' ) !== FALSE ) {
-
-						$toc_title = str_replace( '%PAGE_TITLE%', get_the_title(), $toc_title );
-					}
-
-					if ( strpos( $toc_title, '%PAGE_NAME%' ) !== FALSE ) {
-
-						$toc_title = str_replace( '%PAGE_NAME%', get_the_title(), $toc_title );
-					}
-
-					$html .= '<div class="ez-toc-title-container">' . PHP_EOL;
-
-					$html .= '<p class="ez-toc-title">' . esc_html( htmlentities( $toc_title, ENT_COMPAT, 'UTF-8' ) ). '</p>' . PHP_EOL;
-
-					$html .= '<span class="ez-toc-title-toggle">';
-
-					if ( ezTOC_Option::get( 'visibility' ) ) {
-
-							$html .= '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
-					}
-
-					$html .= '</span>';
-
-					$html .= '</div>' . PHP_EOL;
-				}
-
-				ob_start();
-				do_action( 'ez_toc_before' );
-				$html .= ob_get_clean();
-
-				$html .= '<nav><ul class="ez-toc-list">' . $items . '</ul></nav>';
-
-				ob_start();
-				do_action( 'ez_toc_after' );
-				$html .= ob_get_clean();
-
-				$html .= '</div>' . PHP_EOL;
-
-				// Enqueue the script.
-				wp_enqueue_script( 'ez-toc-js' );
 			}
 
-			return array( 'find' => $find, 'replace' => $replace, 'content' => $html );
+			return $post;
 		}
 
 		/**
@@ -1090,27 +477,67 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 *
 		 * @access private
 		 * @since  1.3
-		 * @static
 		 *
 		 * @param array|string $atts    Shortcode attributes array or empty string.
 		 * @param string       $content The enclosed content (if the shortcode is used in its enclosing form)
 		 * @param string       $tag     Shortcode name.
 		 *
-		 * @return mixed
+		 * @return string
 		 */
 		public static function shortcode( $atts, $content, $tag ) {
 
-			static $run = TRUE;
-			$out = '';
+			static $run = true;
+			$html = '';
 
 			if ( $run ) {
 
-				$args = self::build( get_post( get_the_ID() ) );
-				$out  = $args['content'];
-				$run  = FALSE;
+				if ( is_null( $post = self::get( get_the_ID() ) ) ) {
+
+					return $content;
+				}
+
+				$html = $post->getTOC();
+				$run  = false;
 			}
 
-			return $out;
+			return $html;
+		}
+
+		/**
+		 * Whether or not apply `the_content` filter.
+		 *
+		 * @since 2.0
+		 *
+		 * @return bool
+		 */
+		private static function maybeApplyTheContentFilter() {
+
+			$apply = true;
+
+			global $wp_current_filter;
+
+			// Do not execute if root current filter is one of those in the array.
+			if ( in_array( $wp_current_filter[0], array( 'get_the_excerpt', 'init', 'wp_head' ), true ) ) {
+
+				$apply = false;
+			}
+
+			// bail if feed, search or archive
+			if ( is_feed() || is_search() || is_archive() ) {
+
+				$apply = false;
+			}
+
+			/**
+			 * Whether or not to apply `the_content` filter callback.
+			 *
+			 * @see ezTOC::the_content()
+			 *
+			 * @since 2.0
+			 *
+			 * @param bool $apply
+			 */
+			return apply_filters( 'ez_toc_maybe_apply_the_content_filter', $apply );
 		}
 
 		/**
@@ -1129,69 +556,79 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 */
 		public static function the_content( $content ) {
 
-			// bail if feed, search or archive
-			if ( is_feed() || is_search() || is_archive() ) {
+			if ( ! self::maybeApplyTheContentFilter() ) {
+
 				return $content;
 			}
 
 			// bail if post not eligible and widget is not active
-			$is_eligible = self::is_eligible();
+			$is_eligible = self::is_eligible( get_post() );
 
 			if ( ! $is_eligible && ! is_active_widget( false, false, 'ezw_tco' ) ) {
 
 				return $content;
 			}
 
-			/*
-			 * get_post() does not return post_content filtered via `the_content` filter, which is good otherwise this
-			 * might cause an infinite loop.
-			 *
-			 * Since the ezTOC `the_content` filter is added at priority 100, it should run last in most situations
-			 * and already be filtered by other plugins/themes which ezTOC should take into account when building the
-			 * TOC. So, take the post content past via `the_content` filter callback and replace the post_content with
-			 * it before building the TOC.
-			 */
-			$post = get_post( get_the_ID() );
-			$post->post_content = $content;
-
-			// build toc
-			$args    = self::build( $post );
-			$find    = $args['find'];
-			$replace = $args['replace'];
-			$html    = $args['content'];
-
-			// bail if no headings found
-			if ( empty( $find ) ) {
+			if ( is_null( $post = self::get( get_the_ID() ) ) ) {
 
 				return $content;
 			}
 
+			// bail if no headings found
+			if ( ! $post->hasTOCItems() ) {
+
+				return $content;
+			}
+
+			$find    = $post->getHeadings();
+			$replace = $post->getHeadingsWithAnchors();
+			$html    = $post->getTOC();
+
 			// if shortcode used or post not eligible, return content with anchored headings
 			if ( strpos( $content, 'ez-toc-container' ) || ! $is_eligible ) {
 
-				return self::mb_find_replace( $find, $replace, $content );
+				return mb_find_replace( $find, $replace, $content );
 			}
 
 			// else also add toc to content
 			switch ( ezTOC_Option::get( 'position' ) ) {
 
 				case 'top':
-					$content = $html . self::mb_find_replace( $find, $replace, $content );
+					$content = $html . mb_find_replace( $find, $replace, $content );
 					break;
 
 				case 'bottom':
-					$content = self::mb_find_replace( $find, $replace, $content ) . $html;
+					$content = mb_find_replace( $find, $replace, $content ) . $html;
 					break;
 
 				case 'after':
 					$replace[0] = $replace[0] . $html;
-					$content    = self::mb_find_replace( $find, $replace, $content );
+					$content    = mb_find_replace( $find, $replace, $content );
 					break;
 
 				case 'before':
 				default:
-					$replace[0] = $html . $replace[0];
-					$content    = self::mb_find_replace( $find, $replace, $content );
+					//$replace[0] = $html . $replace[0];
+					$content    = mb_find_replace( $find, $replace, $content );
+
+					$pattern = '`<h[1-6]{1}[^>]*' . preg_quote( $replace[0], '`' ) . '`msuU';
+					$result  = preg_match( $pattern, $content, $matches );
+
+					/*
+					 * Try to place TOC before the first heading found in eligible heading, failing that,
+					 * insert TOC at top of content.
+					 */
+					if ( 1 === $result ) {
+
+						$start   = strpos( $content, $matches[0] );
+						$content = substr_replace( $content, $html, $start, 0 );
+
+					} else {
+
+						// Somehow, there are scenarios where the processing get this far and
+						// the TOC is being added to pages where it should not. Disable for now.
+						//$content = $html . $content;
+					}
 			}
 
 			return $content;
@@ -1219,50 +656,3 @@ if ( ! class_exists( 'ezTOC' ) ) {
 	// Start Easy Table of Contents.
 	add_action( 'plugins_loaded', 'ezTOC' );
 }
-
-
-/**
- * Returns a HTML formatted string of the table of contents without the surrounding UL or OL
- * tags to enable the theme editor to supply their own ID and/or classes to the outer list.
- *
- * There are three optional parameters you can feed this function with:
- *
- *        - $content is the entire content with headings.  If blank, will default to the current $post
- *
- *        - $link is the URL to prefix the anchor with.  If provided a string, will use it as the prefix.
- *        If set to true then will try to obtain the permalink from the $post object.
- *
- *        - $apply_eligibility bool, defaults to false.  When set to true, will apply the check to
- *        see if bit of content has the prerequisites needed for a TOC, eg minimum number of headings
- *        enabled post type, etc.
- */
-//function toc_get_index( $content = '', $prefix_url = '', $apply_eligibility = FALSE ) {
-//
-//	global $wp_query, $tic;
-//
-//	$return  = '';
-//	$find    = $replace = array();
-//	$proceed = TRUE;
-//
-//	if ( ! $content ) {
-//		$post    = get_post( $wp_query->post->ID );
-//		$content = wptexturize( $post->post_content );
-//	}
-//
-//	if ( $apply_eligibility ) {
-//		if ( ! $tic->is_eligible() ) {
-//			$proceed = FALSE;
-//		}
-//	} else {
-//		$tic->set_option( array( 'start' => 0 ) );
-//	}
-//
-//	if ( $proceed ) {
-//		$return = $tic->extract_headings( $find, $replace, $content );
-//		if ( $prefix_url ) {
-//			$return = str_replace( 'href="#', 'href="' . $prefix_url . '#', $return );
-//		}
-//	}
-//
-//	return $return;
-//}

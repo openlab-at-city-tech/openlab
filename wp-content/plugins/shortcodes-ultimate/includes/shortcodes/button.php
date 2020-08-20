@@ -326,7 +326,7 @@ function su_shortcode_button( $atts = null, $content = null ) {
 			su_query_asset( 'css', 'su-icons' );
 
 		} else {
-			$icon = '<img src="' . $atts['icon'] . '" alt="' . esc_attr( $content ) . '" style="' . implode( $img_css, ';' ) . '" />';
+			$icon = '<img src="' . $atts['icon'] . '" alt="' . esc_attr( $content ) . '" style="' . implode( ';', $img_css ) . '" />';
 		}
 
 	} else {
@@ -335,7 +335,7 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 	// Prepare <small> with description
 	$desc = $atts['desc']
-		? '<small style="' . implode( $small_css, ';' ) . '">' . su_do_attribute( $atts['desc'] ) . '</small>'
+		? '<small style="' . implode( ';', $small_css ) . '">' . su_do_attribute( $atts['desc'] ) . '</small>'
 		: '';
 
 	// Wrap with div if button centered
@@ -388,6 +388,6 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return $before . '<a href="' . su_do_attribute( $atts['url'] ) . '" class="' . implode( $classes, ' ' ) . '" style="' . implode( $a_css, ';' ) . '" target="_' . $atts['target'] . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . implode( $span_css, ';' ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
+	return $before . '<a href="' . su_do_attribute( $atts['url'] ) . '" class="' . implode( ' ', $classes ) . '" style="' . implode( ';', $a_css ) . '" target="_' . $atts['target'] . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . implode( ';', $span_css ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
 
 }

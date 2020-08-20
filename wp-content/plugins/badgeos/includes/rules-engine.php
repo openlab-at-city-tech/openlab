@@ -150,8 +150,10 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
 function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_trigger, $site_id = 0, $args = array() ) {
 		
 	if( trim( $this_trigger ) == 'badgeos_daily_visit' ) {
-		
-		if ( 'step' != get_post_type( $achievement_id ) ) {
+
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        if ( trim( $badgeos_settings['achievement_step_post_type'] ) != get_post_type( $achievement_id ) ) {
             return false;
         }
 		
@@ -199,6 +201,48 @@ function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_t
 	return $return;
 }
 add_filter( 'badgeos_user_has_access_to_achievement', 'badgeos_daily_visit_access', 16, 6 );
+
+/**
+ * Check if user has earned the multisteps access/earn daily visit.
+ *
+ * @param  integer $return        	True / False
+ * @param  integer $user_id        	The given user's ID
+ * @param  integer $achievement_id 	The given achievement's post ID
+ * @param  string $this_trigger    	The trigger
+ * @param  integer $site_id        	The triggered site id
+ * @param  array $args        		The triggered args
+ * @return bool                    	True if user has access, false otherwise
+ */
+function badgeos_check_access_of_multi_steps( $return, $user_id, $achievement_id, $this_trigger, $site_id, $args=[] ) {
+
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $achievement_id ) )
+        return $return;
+
+    $earned_achievements = badgeos_get_user_achievements( array(
+        'user_id'          	=> $user_id,
+        'achievement_id' 	=> $achievement_id
+    ) );
+    $total_earned = count( $earned_achievements );
+
+    $children = badgeos_get_achievements( array( 'children_of' => $achievement_id, 'fields'=>'ids'  ) );
+    if( count( $children ) > 0 ) {
+        foreach( $children as $child_id ) {
+
+            $child_achievements = badgeos_get_user_achievements( array(
+                'user_id'          	=> $user_id,
+                'achievement_id' 	=> $child_id
+            ) );
+
+            if( count($child_achievements) <= $total_earned ) {
+                return false;
+            }
+        }
+    }
+
+    return $return;
+}
+add_filter( 'user_deserves_achievement', 'badgeos_check_access_of_multi_steps', 16, 6 );
 
 /**
  * Award an achievement to a user
@@ -410,6 +454,29 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
 /**
+ * Update user meta to limit the repeated award process
+ *
+ * @since  1.0.0
+ * @param  integer $user_id
+ * @param  integer $achievement_id
+ * @param  integer $this_trigger
+ * @param  integer $site_id
+ * @param  integer $args
+ * @param  integer $user_id
+ * @param  integer $entry_id
+ * @return void
+ */
+function badgeos_maybe_update_submission_nomination_meta_of_user( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = 0, $args=array(), $entry_id = 0 ) {
+    global $wpdb;
+    if( isset( $args['submission_id'] ) && intval( $args['submission_id'] ) > 0 ) {
+
+        $strQuery = 'Update '.$wpdb->prefix."badgeos_achievements set sub_nom_id='".$args['submission_id']."' where entry_id='".$entry_id."'";
+        $wpdb->query( $strQuery );
+    }
+}
+add_action( 'badgeos_award_achievement', 'badgeos_maybe_update_submission_nomination_meta_of_user', 10, 6 );
+
+/**
  * Check if a user has unlocked all achievements of a given type
  *
  * Triggers hook badgeos_unlock_all_{$post_type}
@@ -446,7 +513,7 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
 			// Assume the user hasn't earned this achievement
 			$found_achievement = false;
 
-			// Loop through each eacrned achivement and see if we've earned it
+			// Loop through each earned achievement and see if we've earned it
 			foreach ( $earned_achievements as $earned_achievement ) {
 				if ( $earned_achievement->ID == $achievement->ID ) {
 					$found_achievement = true;
@@ -579,8 +646,9 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_not_lo
 function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_id = 0 ) {
 
 	// If we're not working with a step, bail here
-	if ( 'step' != get_post_type( $step_id ) )
-		return $return;
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) != get_post_type( $step_id ) )
+        return $return;
 
 	// Prevent user from earning steps with no parents
 	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
@@ -671,7 +739,8 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_check_if_all_enabled', 15
 function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = [] ) {
 
 	// Only override the $return data if we're working on a step
-    if( 'step' == get_post_type( $step_id ) ) {
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $step_id ) ) {
         // Get the required number of checkins for the step.
         $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
         if( ! isset( $minimum_activity_count ) || empty( $minimum_activity_count ) )
@@ -719,8 +788,13 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 	// Grab the requirements for this step
 	$step_requirements = badgeos_get_step_requirements( $step_id );
 
-	// Determine which type of trigger we're using and return the corresponding activities
-	switch( $step_requirements['trigger_type'] ) {
+    $trigger_type = $step_requirements['trigger_type'];
+    if( !empty( $step_requirements['badgeos_subtrigger_id'] ) && !empty( $step_requirements['badgeos_subtrigger_value'] ) ) {
+        $trigger_type = $step_requirements['badgeos_subtrigger_value'];
+    }
+
+    // Determine which type of trigger we're using and return the corresponding activities
+    switch( $trigger_type ) {
 		case 'specific-achievement' :
 
 			// Get our parent achievement
@@ -747,7 +821,7 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_all_' . $step_requirements['achievement_type'] );
 			break;
 		default :
-			$activities = badgeos_get_user_trigger_count( $user_id, $step_requirements['trigger_type'] );
+            $activities = badgeos_get_user_trigger_count( $user_id, $trigger_type );
 			break;
 	}
 

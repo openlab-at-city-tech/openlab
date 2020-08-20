@@ -5,7 +5,7 @@ Donate link: https://commerce.coinbase.com/checkout/d047546a-77a8-41c8-9ea9-4a95
 Requires at least: 4.8
 Tested up to: 5.3
 Requires PHP: 7.0
-Stable tag: 5.5.8
+Stable tag: 5.6.3
 
 Clean your WordPress from unused or broken media and files. It has its own trash system and recovery features. Please read the description.
 
@@ -74,6 +74,21 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 == Changelog ==
 
+= 5.6.3 =
+* Fix: There was an issue with the "Ignore" feature which was not working in some cases.
+* Add: Filter to allow developers to override the decisions of the plugin.
+* Add: Auto-add MEDIA_TRASH.
+* Fix: Fuzzier pattern matching for wording variety.
+* Info: This plugin is a lot of work. Please help me by giving it a nice review, [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post).
+
+= 5.6.2 =
+* Add: Always Skip/Retry feature.
+* Add: "Images Only" for Media Library scan.
+* Add: Support for Salient theme.
+
+= 5.6.1 =
+* Add: You can now sort the results by size and path. Little present for the week-end ;)
+
 = 5.5.8 =
 * Add: Support for Image Map Pro.
 * Add: Support for Directories.
@@ -82,7 +97,6 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Fix: Check if the filename exists in the trash for every new upload (and if yes, give it a different filename). 
 * Fix: Avoid crash related to unserialization.
 * Fix: Ignore some other plugins' files which are not supposed to be scanned.
-* Info: This plugin is a lot of work. Please help me by giving it a nice review, [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post).
 
 = 5.5.7 =
 * Update: UI improved in many ways, I hope you will love it more!
@@ -111,7 +125,6 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Fix: Issue with the URLs pointing at the plugin's tutorial page.
 * Fix: Avoid the scan to be halted by error logging.
 * Add: Basic support for WCFM MarketPlace.
-* Info: This plugin is a lot of work. Please help by giving it a nice review, here: https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post. Thank you :)
 
 = 5.5.1 =
 * Update: Admin refreshed to 2.4.
@@ -258,7 +271,7 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 * Fix: Avoid checking the empty arrays.
 
 = 4.2.0 =
-* Info: This is a MAJOR UPDATE both in term of optimization and detection. Keep my motivation up and give a good review to the plugin here: https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post. That helps me a lot.
+* Info: This is a MAJOR UPDATE both in term of optimization and detection.
 * Add: Support for Fusion Builder (Avada).
 * Add: Cache the results found in posts to analyze them much faster later.
 * Add: Debugging log file (option).
@@ -293,14 +306,12 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 
 = 3.6.4 =
 * Fix: Plugin was not working properly with broken Media metadata. It now handles it properly.
-* Info: If you want to give me a bit of motivation, write a review on https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post.
 
 = 3.6.2 =
 * Fix: When over 1 GO, was displaying a lower size value.
 * Fix: Counting wasn't exact with a Filesystem scan.
 * Info: Please read the previous changelog as it didn't appear in WP for some reason.
 * Add: Check Posts also look for the Media ID in the classes (more secure).
-* Info: If you want to give me a bit of motivation, write a review on https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post.
 
 = 3.6.0 =
 * Add: Now the Media can be recovered! You can remove your Media through the plugin, make sure they are not in use (by testing your website thoroughly) and later delete them definitely from the trash. I think you will find it awesome.

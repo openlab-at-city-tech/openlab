@@ -321,27 +321,57 @@ function ( response ) {
 			} 
 		}, 'json' );
 	};
-	function _thickbox(obj) {
-		obj = $j(obj);
+
+	function _thickbox( obj ) {
+		obj = $j( obj );
+
 		//try to detect mobile browsers
+		var is_mobile = false,
+			uagent    = navigator.userAgent.toLowerCase();
+
 		try {
-			uagent = navigator.userAgent.toLowerCase();
-			if (uagent.search('iphone') > -1) { return true; }
-			if (uagent.search('ipod') > -1) { return true; }
-			if (uagent.search('webkit') > -1) { 
-				if (uagent.search('series60') > -1) { 
-					if (uagent.search('symbian') > -1) { return true; } 
+
+			if ( uagent.search( 'iphone' ) > - 1 ) {
+				is_mobile = true;
+			}
+			if ( uagent.search( 'ipod' ) > - 1 ) {
+				is_mobile = true;
+			}
+			if ( uagent.search( 'webkit' ) > - 1 ) {
+				if ( uagent.search( 'series60' ) > - 1 ) {
+					if ( uagent.search( 'symbian' ) > - 1 ) {
+						is_mobile = true;
+					}
 				}
 			}
-			if (uagent.search('android') > -1) { return true; }
-			if (uagent.search('windows ce') > -1) { return true; }
-			if (uagent.search('blackberry') > -1) { return true; }
-			if (uagent.search('palm') > -1) { return true; }
-		} catch(err) { }
-		var data = pre_process(obj);
-		remove_dropdown(data.cid);
-		$j("a#" + obj.attr("id") ).colorbox({iframe:true, scrolling: false, width:wpajaxeditcomments.AEC_colorbox_width, height: wpajaxeditcomments.AEC_colorbox_height, opacity:0.6});
+			if ( uagent.search( 'android' ) > - 1 ) {
+				is_mobile = true;
+			}
+			if ( uagent.search( 'windows ce' ) > - 1 ) {
+				is_mobile = true;
+			}
+			if ( uagent.search( 'blackberry' ) > - 1 ) {
+				is_mobile = true;
+			}
+			if ( uagent.search( 'palm' ) > - 1 ) {
+				is_mobile = true;
+			}
+		} catch ( err ) {
+		}
+		var data = pre_process( obj );
+
+		remove_dropdown( data.cid );
+
+		$j( 'a#' + obj.attr( 'id' ) ).colorbox( {
+			iframe: true,
+			scrolling: false,
+			width: is_mobile ? '100%' : wpajaxeditcomments.AEC_colorbox_width,
+			height: wpajaxeditcomments.AEC_colorbox_height,
+			opacity: 0.6
+		} );
+
 		//$j("a#" + obj.attr("id") + ":first").trigger("click.colorbox"); //Getting rid of this stops the stack overflow issues
+
 		return false;
 	};
 	function _update_comment_interface( response, comment_id ) {

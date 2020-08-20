@@ -2,13 +2,14 @@
 
 su_add_shortcode(
 	array(
-		'id'       => 'document',
-		'callback' => 'su_shortcode_document',
-		'image'    => su_get_plugin_url() . 'admin/images/shortcodes/document.svg',
-		'name'     => __( 'Document', 'shortcodes-ultimate' ),
-		'type'     => 'single',
-		'group'    => 'media',
-		'atts'     => array(
+		'deprecated' => true,
+		'id'         => 'document',
+		'callback'   => 'su_shortcode_document',
+		'image'      => su_get_plugin_url() . 'admin/images/shortcodes/document.svg',
+		'name'       => __( 'Document', 'shortcodes-ultimate' ),
+		'type'       => 'single',
+		'group'      => 'media',
+		'atts'       => array(
 			'url'        => array(
 				'type'    => 'upload',
 				'default' => '',
@@ -51,8 +52,8 @@ su_add_shortcode(
 				'default' => '',
 			),
 		),
-		'desc'     => __( 'Document viewer by Google', 'shortcodes-ultimate' ),
-		'icon'     => 'file-text',
+		'desc'       => __( 'Document viewer by Google', 'shortcodes-ultimate' ),
+		'icon'       => 'file-text',
 	)
 );
 

@@ -67,7 +67,7 @@
                             <div class="panel-body">
 							<?php
 							if ( 'course' === $group_type ) {
-								$clone_tooltip = 'If you taught the same course in a previous semester or year, cloning can save you time.';
+								$clone_tooltip = sprintf( 'If a course has been taught previously on the OpenLab by you or another faculty member, cloning can save you time. Check the <a href="%s">Courses Directory</a> and with your Department course coordinators to see if there are courses in your discipline available for cloning.', esc_html( home_url( 'courses/?is_cloneable=1' ) ) );
 							} else {
 								$clone_tooltip = sprintf( 'You can clone an existing %s to save time.', $group_type );
 							}

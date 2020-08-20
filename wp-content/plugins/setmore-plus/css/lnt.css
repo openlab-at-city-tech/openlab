@@ -1,0 +1,9 @@
+/**
+ * Leave No Trace icon
+ */
+
+.lnt {
+	background: url(lnt.png) center left no-repeat;
+	color: #228B22;
+	padding-left: 20px;
+}

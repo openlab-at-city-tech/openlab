@@ -1,0 +1,51 @@
+/* ADMIN STYLING */
+
+ul.mks_social_container {
+	margin-top: 0;
+}
+
+ul.mks_social_container li {
+    background: rgba(0, 0, 0, 0.02);
+    padding: 20px 15px;
+    cursor: move;
+    position: relative;
+}
+
+.mks-option-label {
+	display: inline-block;
+	width: 30%;
+}
+
+.mks-option-radio-wrapper {
+	margin-top: -27px;
+}
+label.mks-option-radio {
+	margin-left: 30%;
+}
+
+label.mks-sw-icon {
+	display: inline-block;
+	width: 40px;
+}
+span.mks-remove-social {
+	position: absolute;
+    right: -3px;
+    top: 0px;
+    padding: 6px;
+    color: #a00;
+    font-size: 17px;
+    cursor: pointer;
+}
+span.mks-remove-social:hover {
+	color: red !important;
+}
+
+ul.mks_social_container .mks-social-sortable-drop {
+	background: transparent;
+	border: 1px dashed rgba(0, 0, 0, 0.1);
+	height: 58px;
+}
+
+h4.mks-icons-title {
+	margin-bottom: 9px;
+}

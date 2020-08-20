@@ -265,8 +265,8 @@ class Jutranslation
 
         //Show documentation link
         echo '<p>You can refer to the 
-        <a href="https://www.joomunited.com/documentation/ju-translation-translate-wordpress-and-joomla-extensions" 
-        target="_blank">documentation page on Joomunited</a> for more informations about extension translation</p>';
+        <a href="https://advancedgutenberg.com/knowledge-base/create-and-share-translations/"
+        target="_blank">documentation</a> for more information about translations.</p>';
 
         echo '<p>';
         foreach ($addons as $addon) {

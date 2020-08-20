@@ -443,8 +443,17 @@ if (
 								)
 							);
 
+							/**
+							 * Hook into the Crowdsignal shortcode before rendering.
+							 *
+							 * @since 8.4.0
+							 *
+							 * @param int $poll Poll ID.
+							 */
+							do_action( 'crowdsignal_shortcode_before', intval( $poll ) );
+
 							return sprintf(
-								'<a name="pd_a_%1$d"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$d" data-settings="%2$s" style="display:inline-block;%3$s%4$s"></div><div id="PD_superContainer"></div><noscript>%5$s</noscript>',
+								'<a name="pd_a_%1$d"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$d" data-settings="%2$s" style="%3$s%4$s"></div><div id="PD_superContainer"></div><noscript>%5$s</noscript>',
 								absint( $poll ),
 								esc_attr( wp_json_encode( $data ) ),
 								$float,
@@ -464,8 +473,11 @@ if (
 								true
 							);
 
+							/** This action is already documented in modules/shortcodes/crowdsignal.php */
+							do_action( 'crowdsignal_shortcode_before', intval( $poll ) );
+
 							return sprintf(
-								'<a id="pd_a_%1$s"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$s" style="display:inline-block;%2$s%3$s"></div><div id="PD_superContainer"></div><noscript>%4$s</noscript>',
+								'<a id="pd_a_%1$s"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$s" style="%2$s%3$s"></div><div id="PD_superContainer"></div><noscript>%4$s</noscript>',
 								absint( $poll ),
 								$float,
 								$margins,
@@ -514,16 +526,6 @@ if (
 					);
 
 					$settings = array();
-
-					// Do we want a full embed code or a link?
-					if (
-						$no_script
-						|| $inline
-						|| $infinite_scroll
-						|| ( class_exists( 'Jetpack_AMP_Support' ) && Jetpack_AMP_Support::is_amp_request() )
-					) {
-						return $survey_link;
-					}
 
 					if ( 'iframe' === $attributes['type'] ) {
 						if ( 'auto' !== $attributes['height'] ) {
@@ -729,8 +731,8 @@ if (
 
 	if ( ! function_exists( 'crowdsignal_link' ) ) {
 		/**
-		 * Replace link by embed.
-		 * Example: http://polldaddy.com/poll/1562975/?view=results&msg=voted
+		 * Replace link with shortcode.
+		 * Examples: https://poll.fm/10499328 | https://7iger.survey.fm/test-embed
 		 *
 		 * @param string $content Post content.
 		 */
@@ -742,25 +744,25 @@ if (
 				return $content;
 			}
 
-			return jetpack_preg_replace_outside_tags(
+			// Replace poll links.
+			$content = jetpack_preg_replace_outside_tags(
 				'!(?:\n|\A)https?://(polldaddy\.com/poll|poll\.fm)/([0-9]+?)(/.*)?(?:\n|\Z)!i',
-				"\n<script type='text/javascript' charset='utf-8' src='//static.polldaddy.com/p/$2.js'></script><noscript> <a href='https://poll.fm/$2'>View Poll</a></noscript>\n", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-				$content,
-				'polldaddy.com/poll'
+				'[crowdsignal poll=$2]',
+				$content
 			);
+
+			// Replace survey.fm links.
+			$content = preg_replace(
+				'!(?:\n|\A)https?://(.*).survey.fm/(.*)(/.*)?(?:\n|\Z)!i',
+				'[crowdsignal type="iframe" survey="true" height="auto" domain="$1" id="$2"]',
+				$content
+			);
+
+			return $content;
 		}
 
 		// higher priority because we need it before auto-link and autop get to it.
 		add_filter( 'the_content', 'crowdsignal_link', 1 );
 		add_filter( 'the_content_rss', 'crowdsignal_link', 1 );
 	}
-
-	/**
-	 * Note that Core has the oembed of '#https?://survey\.fm/.*#i' as of 5.1.
-	 * This should be removed after Core has the current regex is in our minimum version.
-	 *
-	 * @see https://core.trac.wordpress.org/ticket/46467
-	 * @todo Remove once 5.2 is the minimum version.
-	 */
-	wp_oembed_add_provider( '#https?://.+\.survey\.fm/.*#i', 'https://api.crowdsignal.com/oembed', true );
 }

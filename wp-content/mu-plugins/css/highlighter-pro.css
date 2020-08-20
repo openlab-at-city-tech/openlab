@@ -1,3 +1,11 @@
 body.label-compact .highlighter-note.top-highlight {
 	text-indent: 200vw;
 }
+
+html {
+	margin-left: 0;
+}
+
+.no-scroll {
+	overflow: initial;
+}

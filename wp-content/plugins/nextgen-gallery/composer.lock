@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "225bb075e183bbcb8bf66528d238ac68",
+    "content-hash": "82ce22d8971d1f742e7c2238cf7840d8",
     "packages": [
         {
-            "name": "reactr-io/pope-framework",
-            "version": "v0.14",
+            "name": "imagely/pope-framework",
+            "version": "v0.16",
             "source": {
                 "type": "git",
-                "url": "https://github.com/reactr-io/pope-framework.git",
-                "reference": "a157586db8705910b33f7f05157dddcb88631110"
+                "url": "https://github.com/imagely/pope-framework.git",
+                "reference": "a14bdc1f5153664770df00d53577a9954f1e691c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactr-io/pope-framework/zipball/a157586db8705910b33f7f05157dddcb88631110",
-                "reference": "a157586db8705910b33f7f05157dddcb88631110",
+                "url": "https://api.github.com/repos/imagely/pope-framework/zipball/a14bdc1f5153664770df00d53577a9954f1e691c",
+                "reference": "a14bdc1f5153664770df00d53577a9954f1e691c",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "https://repo.packagist.com/reactr-io/dists/%package%/%version%/%reference%.%type%",
+                        "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -32,7 +32,7 @@
                     "./lib/autoload.php"
                 ]
             },
-            "notification-url": "https://repo.packagist.com/reactr-io/downloads/",
+            "notification-url": "https://repo.packagist.com/imagely/downloads/",
             "license": [
                 "GPL-2.0-only"
             ],
@@ -44,29 +44,29 @@
             ],
             "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
             "support": {
-                "source": "https://github.com/reactr-io/pope-framework/tree/v0.14",
-                "issues": "https://github.com/reactr-io/pope-framework/issues"
+                "source": "https://github.com/imagely/pope-framework/tree/v0.16",
+                "issues": "https://github.com/imagely/pope-framework/issues"
             },
-            "time": "2020-02-10T18:04:47+00:00"
+            "time": "2020-06-11T20:23:55+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "nikic/php-parser",
-            "version": "v4.3.0",
+            "version": "v4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc"
+                "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9a9981c347c5c49d6dfe5cf826bb882b824080dc",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/53c2753d756f5adb586dca79c2ec0e2654dd9463",
+                "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463",
                 "shasum": "",
                 "mirrors": [
                     {
-                        "url": "https://repo.packagist.com/reactr-io/dists/%package%/%version%/%reference%.%type%",
+                        "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/%reference%.%type%",
                         "preferred": true
                     }
                 ]
@@ -93,7 +93,7 @@
                     "PhpParser\\": "lib/PhpParser"
                 }
             },
-            "notification-url": "https://repo.packagist.com/reactr-io/downloads/",
+            "notification-url": "https://repo.packagist.com/imagely/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -107,7 +107,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-11-08T13:50:10+00:00"
+            "time": "2020-06-03T07:24:19+00:00"
         }
     ],
     "aliases": [],

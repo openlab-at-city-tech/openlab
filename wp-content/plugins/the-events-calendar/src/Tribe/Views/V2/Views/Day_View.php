@@ -11,10 +11,13 @@ namespace Tribe\Events\Views\V2\Views;
 use Tribe\Events\Views\V2\Messages;
 use Tribe\Events\Views\V2\Url;
 use Tribe\Events\Views\V2\View;
+use Tribe\Events\Views\V2\Views\Traits\With_Fast_Forward_Link;
 use Tribe__Date_Utils as Dates;
 use Tribe__Utils__Array as Arr;
 
 class Day_View extends View {
+	use With_Fast_Forward_Link;
+
 	/**
 	 * Slug for this view
 	 *
@@ -38,11 +41,17 @@ class Day_View extends View {
 	 * {@inheritDoc}
 	 */
 	public function prev_url( $canonical = false, array $passthru_vars = [] ) {
+		$cache_key = __METHOD__ . '_' . md5( wp_json_encode( func_get_args() ) );
+
+		if ( isset( $this->cached_urls[ $cache_key ] ) ) {
+			return $this->cached_urls[ $cache_key ];
+		}
+
 		$date = $this->context->get( 'event_date', $this->context->get( 'today', 'today' ) );
 
 		$one_day       = new \DateInterval( 'P1D' );
 		$url_date      = Dates::build_date_object( $date )->sub( $one_day );
-		$earliest      = tribe_get_option( 'earliest_date', $url_date );
+		$earliest      = $this->context->get( 'earliest_event_date', $url_date );
 		$earliest_date = Dates::build_date_object( $earliest )->setTime( 0, 0, 0 );
 
 		if ( $url_date < $earliest_date ) {
@@ -51,18 +60,28 @@ class Day_View extends View {
 			$url = $this->build_url_for_date( $url_date, $canonical, $passthru_vars );
 		}
 
-		return $this->filter_prev_url( $canonical, $url );
+		$url = $this->filter_prev_url( $canonical, $url );
+
+		$this->cached_urls[ $cache_key ] = $url;
+
+		return $url;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function next_url( $canonical = false, array $passthru_vars = [] ) {
+		$cache_key = __METHOD__ . '_' . md5( wp_json_encode( func_get_args() ) );
+
+		if ( isset( $this->cached_urls[ $cache_key ] ) ) {
+			return $this->cached_urls[ $cache_key ];
+		}
+
 		$date = $this->context->get( 'event_date', $this->context->get( 'today', 'today' ) );
 
 		$one_day     = new \DateInterval( 'P1D' );
 		$url_date    = Dates::build_date_object( $date )->add( $one_day );
-		$latest      = tribe_get_option( 'latest_date', $url_date );
+		$latest      = $this->context->get( 'latest_event_date', $url_date );
 		$latest_date = Dates::build_date_object( $latest )->setTime( 0, 0, 0 );
 
 		if ( $url_date > $latest_date ) {
@@ -71,13 +90,18 @@ class Day_View extends View {
 			$url = $this->build_url_for_date( $url_date, $canonical, $passthru_vars );
 		}
 
-		return $this->filter_next_url( $canonical, $url );
+		$url = $this->filter_next_url( $canonical, $url );
+
+		$this->cached_urls[ $cache_key ] = $url;
+
+		return $url;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function setup_repository_args( \Tribe__Context $context = null ) {
+
 		$context = null !== $context ? $context : $this->context;
 
 		$args = parent::setup_repository_args( $context );
@@ -108,7 +132,7 @@ class Day_View extends View {
 	 * @param mixed $url_date          The date to build the URL for, a \DateTime object, a string or a timestamp.
 	 * @param bool  $canonical         Whether to return the canonical (pretty) version of the URL or not.
 	 * @param array $passthru_vars     An optional array of query variables that should pass thru the method untouched
-	 *                                 in key in value.
+	 *                                 in key and value.
 	 *
 	 * @return string The Day View URL for the date.
 	 */
@@ -130,8 +154,7 @@ class Day_View extends View {
 			}
 
 			// Make sure the view slug is always set to correctly match rewrites.
-			$input_url = add_query_arg( [ 'eventDisplay' => $this->slug ], $input_url );
-
+			$input_url     = add_query_arg( [ 'eventDisplay' => $this->slug ], $input_url );
 			$canonical_url = tribe( 'events.rewrite' )->get_clean_url( $input_url );
 
 			if ( ! empty( $passthru_vars ) ) {
@@ -158,9 +181,9 @@ class Day_View extends View {
 	}
 
 	/**
-	 * Add timeslot and sort events for the day view.
+	 * Add time slot and sort events for the day view.
 	 *
-	 * Iterate over the day events to add timeslots and sort them.
+	 * Iterate over the day events to add time slots and sort them.
 	 *
 	 * @since 4.9.11
 	 *
@@ -207,17 +230,31 @@ class Day_View extends View {
 
 			if ( $keyword ) {
 				$this->messages->insert( Messages::TYPE_NOTICE, Messages::for_key( 'no_results_found_w_keyword', trim( $keyword ) ) );
-			} else {
-				$date_time  = Dates::build_date_object( $this->context->get( 'event_date', 'today' ) );
-				$date_label = date_i18n(
-					tribe_get_date_format( true ),
-					$date_time->getTimestamp() + $date_time->getOffset()
-				);
+
+				return;
+			}
+
+			$date_time  = Dates::build_date_object( $this->context->get( 'event_date', 'today' ) );
+			$date_label = date_i18n(
+				tribe_get_date_format( true ),
+				$date_time->getTimestamp() + $date_time->getOffset()
+			);
+
+			$fast_forward_link = $this->get_fast_forward_link( true );
+
+			if ( ! empty( $fast_forward_link ) ) {
 				$this->messages->insert(
 					Messages::TYPE_NOTICE,
-					Messages::for_key( 'day_no_results_found', $date_label )
+					Messages::for_key( 'day_no_results_found_w_ff_link', $date_label, $fast_forward_link )
 				);
+
+				return;
 			}
+
+			$this->messages->insert(
+				Messages::TYPE_NOTICE,
+				Messages::for_key( 'day_no_results_found', $date_label )
+			);
 		}
 	}
 

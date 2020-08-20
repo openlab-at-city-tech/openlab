@@ -3987,7 +3987,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             allowedTypes: ['image'],
                             value: imageID,
                             onSelect: function onSelect(image) {
-                                return setAttributes({ imageUrl: image.url, imageID: image.id, focalPoint: {} });
+                                return setAttributes({ imageUrl: image.url, imageID: image.id, focalPoint: { "x": "0.50", "y": "0.50" } });
                             },
                             render: function render(_ref2) {
                                 var open = _ref2.open;
@@ -23341,10 +23341,10 @@ var domParserOptions = { decodeEntities: true, lowerCaseAttributeNames: false };
 /**
  * Converts HTML string to React elements.
  *
- * @param  {String}   html              - The HTML string to parse to React.
- * @param  {Object}   [options]         - The parser options.
- * @param  {Function} [options.replace] - The replace method.
- * @return {ReactElement|Array|String}  - When parsed with HTML string, returns React elements; otherwise, returns string or empty array.
+ * @param  {String}   html                    - The HTML string to parse to React.
+ * @param  {Object}   [options]               - The parser options.
+ * @param  {Function} [options.replace]       - The replace method.
+ * @return {JSX.Element|JSX.Element[]|String} - Returns React element(s), string, or empty array.
  */
 function HTMLReactParser(html, options) {
   if (typeof html !== 'string') {
@@ -23356,6 +23356,7 @@ function HTMLReactParser(html, options) {
 HTMLReactParser.domToReact = domToReact;
 HTMLReactParser.htmlToDOM = htmlToDOM;
 
+// support CommonJS and ES Modules
 module.exports = HTMLReactParser;
 module.exports.default = HTMLReactParser;
 
@@ -23439,26 +23440,24 @@ function attributesToProps(attributes) {
 }
 
 /**
- * Converts CSS style string to JS style object.
+ * Converts inline CSS style to POJO (Plain Old JavaScript Object).
  *
- * @param  {String} style - The CSS style.
- * @return {Object}       - The JS style object.
+ * @param  {String} style - The inline CSS style.
+ * @return {Object}       - The style object.
  */
 function cssToJs(style) {
-  if (typeof style !== 'string') {
-    throw new TypeError('First argument must be a string.');
+  var styleObject = {};
+
+  if (style) {
+    styleToObject(style, function (property, value) {
+      // skip CSS comment
+      if (property && value) {
+        styleObject[camelCase(property)] = value;
+      }
+    });
   }
 
-  var styleObj = {};
-
-  styleToObject(style, function(property, value) {
-    // skip if it's a comment node
-    if (property && value) {
-      styleObj[camelCase(property)] = value;
-    }
-  });
-
-  return styleObj;
+  return styleObject;
 }
 
 module.exports = attributesToProps;
@@ -23618,7 +23617,7 @@ function camelCase(string) {
   // convert to camelCase
   return string
     .toLowerCase()
-    .replace(hyphenPatternRegex, function(_, character) {
+    .replace(hyphenPatternRegex, function (_, character) {
       return character.toUpperCase();
     });
 }
@@ -25037,7 +25036,6 @@ var printWarning = function() {};
 if (true) {
   var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "./node_modules/prop-types/lib/ReactPropTypesSecret.js");
   var loggedTypeFailures = {};
-  var has = Function.call.bind(Object.prototype.hasOwnProperty);
 
   printWarning = function(text) {
     var message = 'Warning: ' + text;
@@ -25067,7 +25065,7 @@ if (true) {
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
   if (true) {
     for (var typeSpecName in typeSpecs) {
-      if (has(typeSpecs, typeSpecName)) {
+      if (typeSpecs.hasOwnProperty(typeSpecName)) {
         var error;
         // Prop type validation may throw. In case they do, we don't want to
         // fail the render phase where it didn't fail before. So we log it.
@@ -25095,7 +25093,8 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
             'You may have forgotten to pass an argument to the type checker ' +
             'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
             'shape all require an argument).'
-          );
+          )
+
         }
         if (error instanceof Error && !(error.message in loggedTypeFailures)) {
           // Only monitor this failure once because there tends to be a lot of the
@@ -25110,17 +25109,6 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
         }
       }
     }
-  }
-}
-
-/**
- * Resets warning cache when testing.
- *
- * @private
- */
-checkPropTypes.resetWarningCache = function() {
-  if (true) {
-    loggedTypeFailures = {};
   }
 }
 
@@ -27796,39 +27784,39 @@ module.exports = StyleToObject;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/0-adv-components/components.jsx */"./assets/blocks/0-adv-components/components.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/0-adv-components/icon-class.jsx */"./assets/blocks/0-adv-components/icon-class.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/accordion/block.jsx */"./assets/blocks/accordion/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advaccordion/accordion.jsx */"./assets/blocks/advaccordion/accordion.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advaccordion/block.jsx */"./assets/blocks/advaccordion/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advbutton/block.jsx */"./assets/blocks/advbutton/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advicon/block.jsx */"./assets/blocks/advicon/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advimage/block.jsx */"./assets/blocks/advimage/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advlist/block.jsx */"./assets/blocks/advlist/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advtable/block.jsx */"./assets/blocks/advtable/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advtabs/block.jsx */"./assets/blocks/advtabs/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advtabs/tab.jsx */"./assets/blocks/advtabs/tab.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/advvideo/block.jsx */"./assets/blocks/advvideo/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/columns/block.jsx */"./assets/blocks/columns/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/columns/column.jsx */"./assets/blocks/columns/column.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/contact-form/block.jsx */"./assets/blocks/contact-form/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/container/block.jsx */"./assets/blocks/container/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/count-up/block.jsx */"./assets/blocks/count-up/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/customstyles/custom-styles.jsx */"./assets/blocks/customstyles/custom-styles.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/editor-sidebar/sidebar.jsx */"./assets/blocks/editor-sidebar/sidebar.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/images-slider/block.jsx */"./assets/blocks/images-slider/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/infobox/block.jsx */"./assets/blocks/infobox/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/login-form/block.jsx */"./assets/blocks/login-form/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/map/block.jsx */"./assets/blocks/map/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/newsletter/block.jsx */"./assets/blocks/newsletter/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/recent-posts/block.jsx */"./assets/blocks/recent-posts/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/search-bar/block.jsx */"./assets/blocks/search-bar/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/social-links/block.jsx */"./assets/blocks/social-links/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/summary/block.jsx */"./assets/blocks/summary/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/tabs/block.jsx */"./assets/blocks/tabs/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/testimonial/block.jsx */"./assets/blocks/testimonial/block.jsx");
-__webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/blocks/woo-products/block.jsx */"./assets/blocks/woo-products/block.jsx");
-module.exports = __webpack_require__(/*! /home/pdutie94/Development/Wordpress Extensions/Advanced Gutenberg/advanced-gutenberg/assets/js/editor.jsx */"./assets/js/editor.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/0-adv-components/components.jsx */"./assets/blocks/0-adv-components/components.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/0-adv-components/icon-class.jsx */"./assets/blocks/0-adv-components/icon-class.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/accordion/block.jsx */"./assets/blocks/accordion/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advaccordion/accordion.jsx */"./assets/blocks/advaccordion/accordion.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advaccordion/block.jsx */"./assets/blocks/advaccordion/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advbutton/block.jsx */"./assets/blocks/advbutton/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advicon/block.jsx */"./assets/blocks/advicon/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advimage/block.jsx */"./assets/blocks/advimage/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advlist/block.jsx */"./assets/blocks/advlist/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advtable/block.jsx */"./assets/blocks/advtable/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advtabs/block.jsx */"./assets/blocks/advtabs/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advtabs/tab.jsx */"./assets/blocks/advtabs/tab.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/advvideo/block.jsx */"./assets/blocks/advvideo/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/columns/block.jsx */"./assets/blocks/columns/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/columns/column.jsx */"./assets/blocks/columns/column.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/contact-form/block.jsx */"./assets/blocks/contact-form/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/container/block.jsx */"./assets/blocks/container/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/count-up/block.jsx */"./assets/blocks/count-up/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/customstyles/custom-styles.jsx */"./assets/blocks/customstyles/custom-styles.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/editor-sidebar/sidebar.jsx */"./assets/blocks/editor-sidebar/sidebar.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/images-slider/block.jsx */"./assets/blocks/images-slider/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/infobox/block.jsx */"./assets/blocks/infobox/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/login-form/block.jsx */"./assets/blocks/login-form/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/map/block.jsx */"./assets/blocks/map/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/newsletter/block.jsx */"./assets/blocks/newsletter/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/recent-posts/block.jsx */"./assets/blocks/recent-posts/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/search-bar/block.jsx */"./assets/blocks/search-bar/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/social-links/block.jsx */"./assets/blocks/social-links/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/summary/block.jsx */"./assets/blocks/summary/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/tabs/block.jsx */"./assets/blocks/tabs/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/testimonial/block.jsx */"./assets/blocks/testimonial/block.jsx");
+__webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/blocks/woo-products/block.jsx */"./assets/blocks/woo-products/block.jsx");
+module.exports = __webpack_require__(/*! /Users/valentingarcia/Github/advg/assets/js/editor.jsx */"./assets/js/editor.jsx");
 
 
 /***/ })

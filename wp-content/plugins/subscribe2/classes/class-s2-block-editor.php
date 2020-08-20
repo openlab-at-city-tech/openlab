@@ -120,7 +120,12 @@ class S2_Block_Editor {
 			return false;
 		}
 
-		$mysubscribe2->publish( $post, $current_user->user_email );
+		if ( 'never' !== $this->subscribe2_options['email_freq'] ) {
+			$mysubscribe2->subscribe2_cron( $current_user->user_email );
+		} else {
+			$mysubscribe2->publish( $post, $current_user->user_email );
+		}
+
 		return true;
 	}
 

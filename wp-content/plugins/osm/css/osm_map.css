@@ -212,7 +212,7 @@ li.active a:hover {
 			border-bottom: none;
 		}
 
-		.tab-content{
+		.osm-tab-content{
 			margin: -7px 0px 0px 0px;
                         padding:15px;
                         border-radius:3px;
@@ -221,7 +221,7 @@ li.active a:hover {
 			border: 1px solid #D8D8D8;
 		}
 
-		.tab-content.current{
+		.osm-tab-content.current{
 			display: inherit;
 		}
 

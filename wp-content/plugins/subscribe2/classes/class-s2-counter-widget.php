@@ -28,18 +28,18 @@ class S2_Counter_Widget extends WP_Widget {
 		$s2w_height = empty( $instance['s2w_height'] ) ? '16' : $instance['s2w_height'];
 		$s2w_font   = empty( $instance['s2w_font'] ) ? '11' : $instance['s2w_font'];
 
-		echo $args['before_widget'];
+		echo wp_kses_post( $args['before_widget'] );
 		if ( ! empty( $title ) ) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo wp_kses_post( $args['before_title'] ) . esc_html( $title ) . wp_kses_post( $args['after_title'] );
 		}
 		global $mysubscribe2;
 		$registered = $mysubscribe2->get_registered();
 		$confirmed  = $mysubscribe2->get_public();
 		$count      = ( count( $registered ) + count( $confirmed ) );
-		echo '<ul><div style="text-align:center; background-color:' . $s2w_bg . '; color:' . $s2w_fg . '; width:' . $s2w_width . 'px; height:' . $s2w_height . 'px; font:' . $s2w_font . 'pt Verdana, Arial, Helvetica, sans-serif; vertical-align:middle; padding:3px; border:1px solid #444;">';
-		echo $count;
+		echo wp_kses_post( '<ul><div style="text-align:center; background-color:' . $s2w_bg . '; color:' . $s2w_fg . '; width:' . $s2w_width . 'px; height:' . $s2w_height . 'px; font:' . $s2w_font . 'pt Verdana, Arial, Helvetica, sans-serif; vertical-align:middle; padding:3px; border:1px solid #444;">' );
+		echo esc_html( $count );
 		echo '</div></ul>';
-		echo $args['after_widget'];
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 	/**
@@ -99,9 +99,9 @@ class S2_Counter_Widget extends WP_Widget {
 		echo '<fieldset>' . "\r\n";
 		echo '<legend>' . esc_html__( 'Color Scheme', 'subscribe2' ) . '</legend>' . "\r\n";
 		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Body', 'subscribe2' ) . '</label><br />' . "\r\n";
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_bg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_bg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_bg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Body', 'subscribe2' ) . '</label><br>' . "\r\n";
 		echo '<label>' . "\r\n";
-		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Text', 'subscribe2' ) . '</label><br />' . "\r\n";
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 's2w_fg' ) ) . '" id="' . esc_attr( $this->get_field_id( 's2w_fg' ) ) . '" maxlength="6" value="' . esc_attr( $s2w_fg ) . '" class="colorpickerField" style="width:60px;" /> ' . esc_html__( 'Text', 'subscribe2' ) . '</label><br>' . "\r\n";
 		echo '<div class="s2_colorpicker" id ="' . esc_attr( $this->get_field_id( 's2_colorpicker' ) ) . '"></div>';
 		echo '</fieldset>';
 

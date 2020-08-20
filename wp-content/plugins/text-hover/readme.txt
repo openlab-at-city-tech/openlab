@@ -3,10 +3,10 @@ Contributors: coffee2code
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, tooltips, coffee2code
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.7
-Tested up to: 4.9
-Stable tag: 3.8
+Tested up to: 5.3
+Stable tag: 3.9.1
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms mentioned in posts/pages.
 
@@ -89,6 +89,10 @@ By default, yes. There is a setting you can change so that only the first occurr
 
 Yes, but only if you have the pretty tooltips enabled (via settings or the filter). The class you want to style in your custom CSS is '.text-hover-qtip'.
 
+= Does this plugin explicitly support any third-party plugins? =
+
+Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. This plugin provides hooks that can be used to enable compatibility with other plugins and themes.
+
 = Does this plugin include unit tests? =
 
 Yes.
@@ -96,7 +100,7 @@ Yes.
 
 == Hooks ==
 
-The plugin exposes five filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
+The plugin exposes a number of filters for hooking. Typically, the code to utilize these hooks would go inside your active theme's functions.php file. Bear in mind that all of the features controlled by these filters are configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
 
 **c2c_text_hover_filters (filter)**
 
@@ -120,6 +124,33 @@ function more_text_hovers( $filters ) {
 	return $filters;
 }
 add_filter( 'c2c_text_hover_filters', 'more_text_hovers' );
+`
+
+**c2c_text_hover_third_party_filters (filter)**
+
+The 'c2c_text_hover_third_party_filters' hook allows you to customize what third-party hooks get text hover applied to them. Note: the results of this filter are then passed through the `c2c_text_hover_filters` filter, so third-party filters can be modified using either hook.
+
+Arguments:
+
+* $filters (array): The third-party filters whose text should have text hover applied. Default `array( 'acf/format_value/type=text', 'acf/format_value/type=textarea', 'acf/format_value/type=url', 'acf_the_content', 'elementor/frontend/the_content', 'elementor/widget/render_content' )`.
+
+Example:
+
+`
+/**
+ * Stop text hovers for ACF text fields and add text hovers for a custom filter.
+ *
+ * @param array $filters
+ * @return array
+ */
+function my_c2c_text_hover_third_party_filters( $filters ) {
+	// Remove a filter already in the list.
+	unset( $filters[ 'acf/format_value/type=text' ] );
+	// Add a filter to the list.
+	$filters[] = 'my_plugin_filter';
+	return $filters;
+}
+add_filter( 'c2c_text_hover_third_party_filters', 'my_c2c_text_hover_third_party_filters' );
 `
 
 **c2c_text_hover (filter)**
@@ -206,6 +237,44 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
+= 3.9.1 (2020-01-12) =
+* Fix: Revert to apply to the `the_excerpt` filter, which was mistakenly changed to `get_the_excerpt`
+* Change: Update some inline documentation relating to third-party plugin hook support
+* Unit tests:
+    * Change: Implement a more generic approach to capture default values provided for a filter
+    * New: Add test to verify the lack of any defined hover text doesn't remove zeroes from text
+    * Fix: Correct typo in function name used
+
+= 3.9 (2020-01-08) =
+Highlights:
+
+* This minor release adds support for select third-party plugins (Advanced Custom Fields, Elementor), tweaks plugin initialization, fixes a minor bug, updates the plugin framework to 049, notes compatibility through WP 5.3+, creates CHANGELOG.md, and updates copyright date (2020).
+
+Details:
+
+* New: Add support for third-party plugins: Advanced Custom Fields, Elementor
+* New: Add filter `c2c_text_hover_third_party_filters` for filtering third party filters
+* Fix: Define `uninstall()` as being `static`
+* Change: Initialize plugin on `plugins_loaded` action instead of on load
+* Change: Update plugin framework to 049
+    * 049:
+    * Correct last arg in call to `add_settings_field()` to be an array
+    * Wrap help text for settings in `label` instead of `p`
+    * Only use `label` for help text for checkboxes, otherwise use `p`
+    * Ensure a `textarea` displays as a block to prevent orphaning of subsequent help text
+    * Note compatibility through WP 5.1+
+    * Update copyright date (2019)
+* Change: Variablize the qTip2 version and use it when enqueuing its JS and CSS
+* New: Add CHANGELOG.md and move all but most recent changelog entries into it
+* New: Add inline documentation for hooks
+* Unit tests:
+     * Change: Update unit test install script and bootstrap to use latest WP unit test repo
+     * Change: Explicitly check hook priority when checking that hook is registered
+* Change: Note compatibility through WP 5.3+
+* Change: Update copyright date (2020)
+* Change: Update License URI to be HTTPS
+* Change: Split paragraph in README.md's "Support" section into two
+
 = 3.8 (2018-08-01) =
 * New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
 * New: Add support for finding text to hover that may span more than one line or whose internal spaces vary in number and type
@@ -249,214 +318,16 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 * Change: Update installation instruction to prefer built-in installer over .zip file
 * Change: Update copyright date (2018)
 
-= 3.7.1 (2016-06-10) =
-* Change: Update qTip2 to v3.0.3.
-    * Fixes a JS invalid .min.map file reference.
-    * Add plugin IE6 support.
-* Change: Update plugin framework to 044.
-    * Add `reset_caches()` to clear caches and memoized data. Use it in `reset_options()` and `verify_config()`.
-    * Add `verify_options()` with logic extracted from `verify_config()` for initializing default option attributes.
-    * Add  `add_option()` to add a new option to the plugin's configuration.
-    * Add filter 'sanitized_option_names' to allow modifying the list of whitelisted option names.
-    * Change: Refactor `get_option_names()`.
-
-= 3.7 (2016-04-28) =
-* New: Allow HTML to be matched for text hovering. Recommended only for non-block level tags.
-* New: Allow single replacement (based on setting) for multibyte strings.
-* Bugfix: Improve text replacement regex to account for text immediately bounded by HTML tags.
-* Change: Update plugin framework to 043:
-    * Change class name to c2c_TextHover_Plugin_043 to be plugin-specific.
-    * Disregard invalid lines supplied as part of a hash option value.
-    * Set textdomain using a string instead of a variable.
-    * Don't load textdomain from file.
-    * Change admin page header from 'h2' to 'h1' tag.
-    * Add `c2c_plugin_version()`.
-    * Formatting improvements to inline docs.
-* Change: Add support for language packs:
-    * Set textdomain using a string instead of a variable.
-    * Remove .pot file and /lang subdirectory.
-    * Remove 'Domain Path' from plugin header.
-* Change: Add many more unit tests.
-* Change: Prevent web invocation of unit test bootstrap.php.
-* New: Add LICENSE file.
-* New: Add empty index.php to prevent files from being listed if web server has enabled directory listings.
-* Change: Minor code reformatting.
-* Change: Add proper docblocks to examples in readme.txt.
-* Change: Note compatibility through WP 4.5+.
-* Change: Dropped compatibility with version of WP older than 4.1.
-* Change: Update copyright date (2016).
-
-= 3.6 (2015-02-19) =
-* Improve support of '&' in text to be replaced by recognizing its encoded alternatives ('`&amp;`', '`&#038;`') as equivalents
-* Support replacing multibyte strings. NOTE: Multibyte strings don't honor limiting their replacement within a piece of text to once
-* Add class of 'c2c-text-hover' to acronym tags added by plugin
-* Update packaged qTip2 JS library to v2.2.1
-* Limit qTip2 only to acronyms added by the plugin
-* Update plugin framework to 039
-* Add more unit tests
-* Explicitly declare `activation()` static
-* Cast filtered value of 'c2c_text_hover' filter as array
-* Reformat plugin header
-* Change regex delimiter from '|' to '~'
-* Change documentation links to wp.org to be https
-* Minor documentation spacing changes throughout
-* Note compatibility through WP 4.1+
-* Update copyright date (2015)
-* Add plugin icon
-* Regenerate .pot
-
-= 3.5.1 (2014-01-28) =
-* Fix logic evaluation to properly honor replace_once checkbox value
-* Minor code reformatting
-
-= 3.5 (2014-01-05) =
-* Add setting to allow limiting text replacement to once per term per text
-* Add filter 'c2c_text_hover_once'
-* Add qTip2 library for better looking hover popups
-* Add setting to allow use of prettier tooltips (i.e. the qTip2 library). Default is true.
-* Add filter 'c2c_text_hover_use_pretty_tooltips'
-* Add setting to allow text hover to apply to comments (default is for it not to)
-* Add filter 'c2c_text_hover_comments'
-* Add text_hover_comment_text()
-* Add preview for tooltips to plugin's settings page
-* Add unit tests
-* Add file assets/text-hover.js (to enable qTip)
-* Add file assets/text-hover.css (to provide default styling for qTip)
-* Update plugin framework to 037
-* Better singleton implementation:
-    * Add `get_instance()` static method for returning/creating singleton instance
-    * Make static variable 'instance' private
-    * Make constructor protected
-    * Make class final
-    * Additional related changes in plugin framework (protected constructor, erroring `__clone()` and `__wakeup()`)
-* Add checks to prevent execution of code if file is directly accessed
-* Re-license as GPLv2 or later (from X11)
-* Add 'License' and 'License URI' header tags to readme.txt and plugin file
-* Use explicit path for require_once()
-* Discontinue use of PHP4-style constructor
-* Discontinue use of explicit pass-by-reference for objects
-* Remove ending PHP close tag
-* Minor documentation improvements
-* Minor code reformatting (spacing)
-* Note compatibility through WP 3.8+
-* Drop compatibility with version of WP older than 3.6
-* Update copyright date (2014)
-* Regenerate .pot
-* Change donate link
-* Add assets directory to plugin repository checkout
-* Update screenshots
-* Add third screenshot
-* Move screenshots into repo's assets directory
-* Add banner
-
-= 3.2.2 =
-* Fix bug where special characters were being double-escaped prior to use in regex
-* Update plugin framework to 034
-
-= 3.2.1 =
-* Fix bug where $x (where x is number) when used in hover text gets removed on display
-* Fix to properly escape shortcut keys prior to internal use in preg_replace()
-* Update plugin framework to 032
-
-= 3.2 =
-* Fix bug with settings form not appearing in MS
-* Update plugin framework to 030
-* Remove support for 'c2c_text_hover' global
-* Note compatibility through WP 3.3+
-* Drop support for versions of WP older than 3.1
-* Regenerate .pot
-* Add 'Domain Path' directive to top of main plugin file
-* Add link to plugin directory page to readme.txt
-* Update copyright date (2012)
-
-= 3.1.1 =
-* Fix cross-browser (namely IE) handling of non-wrapping textarea text (flat out can't use CSS for it)
-* Update plugin framework to version 028
-* Change parent constructor invocation
-* Create 'lang' subdirectory and move .pot file into it
-* Regenerate .pot
-* Tweaked description
-
-= 3.1 =
-* Fix to properly register activation and uninstall hooks
-* Update plugin framework to version 023
-* Save a static version of itself in class variable $instance
-* Deprecate use of global variable $c2c_text_hover to store instance
-* Add __construct() and activation()
-* Note compatibility through WP 3.2+
-* Drop compatibility with version of WP older than 3.0
-* Minor code formatting changes (spacing)
-* Fix plugin homepage and author links in description in readme.txt
-
-= 3.0.3 =
-* Update plugin framework to version 021
-* Delete plugin options upon uninstallation
-* Explicitly declare all class functions public static
-* Note compatibility through WP 3.1+
-* Update copyright date (2011)
-
-= 3.0.2 =
-* Update plugin framework to version 018
-* Fix so that textarea displays vertical scrollbar when lines exceed visible textarea space
-
-= 3.0.1 =
-* Update plugin framework to version 016
-
-= 3.0 =
-* Re-implementation by extending C2C_Plugin_015, which among other things adds support for:
-    * Reset of options to default values
-    * Better sanitization of input values
-    * Offload of core/basic functionality to generic plugin framework
-    * Additional hooks for various stages/places of plugin operation
-    * Easier localization support
-* Full localization support
-* Disable auto-wrapping of text in the textarea input field for hovers
-* Allow filtering of text hover terms and replacement via 'c2c_text_hover' filter
-* Allow filtering of hooks that get text hover processing via 'c2c_text_hover_filters' filter
-* Allow filtering/overriding of case_sensitive option via 'c2c_text_hover_case_sensitive' filter
-* Filter 'widget_text' for text hover
-* Rename class from 'TextHover' to 'c2c_TextHover'
-* Assign object instance to global variable, $c2c_text_hover, to allow for external manipulation
-* Remove docs from top of plugin file (all that and more are in readme.txt)
-* Update readme.txt
-* Minor code reformatting (spacing)
-* Add Filters and Upgrade Notice sections to readme.txt
-* Note compatibility with WP 3.0+
-* Drop support for versions of WordPress older than 2.8
-* Add .pot file
-* Update screenshot
-* Add PHPDoc documentation
-* Add package info to top of file
-* Update copyright date
-* Remove trailing whitespace
-
-= 2.2 =
-* Fixed bug that allowed text within tag attributes to be potentially replaced
-* Fixed bug that prevented case sensitivity-related option from being taken into account
-* Removed 'case_sensitive' argument from text_replace() function since it is controlled by a setting
-* Changed pattern matching criteria to allow text-to-be-hovered to be book-ended on either side with single or double quotes (either plain or curly), square brackets, curly braces, or parentheses
-* Added ability to filter text hover shortcuts via 'c2c_text_hover_option_text_to_hover'
-* Changed the number of rows for textarea input from 5 to 15
-* Changed plugin_basename to be a class variable initialized during constructor
-* Removed use of single-use temp variable (and instead directly used the value it was holding)
-* Minor code reformatting (mostly spacing)
-
-= 2.1 =
-* (Privately released betas previewing features released as part of v2.2)
-
-= 2.0 =
-* Encapsulated all functionality into its own class
-* Added 'Settings' link to plugin's plugin listing entry
-* Noted compatibility with WP2.8+
-* Dropped support for pre-WP2.6
-* Updated screenshots
-* Updated copyright date
-
-= 1.0 =
-* Initial release
+_Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-hover/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 3.9.1 =
+Minor bugfix release: restored hooking of WP's `the_excerpt` filter instead of `get_the_excerpt`, corrected some inline documentation, and made minor improvements to unit tests.
+
+= 3.9 =
+Recommended update: added support for select third-party plugins (Advanced Custom Fields, Elementor), tweaked plugin initialization, minor bugfix, updated plugin framework to 049, noted compatibility through WP 5.3+, created CHANGELOG.md, and updated copyright date (2020)
 
 = 3.8 =
 Major update: changed default appearance of better-looking tooltip; switched to using `abbr` tag instead of `acronym` tag; misc improvements; updated plugin framework to 048; verified compatibility through WP 4.9; dropped compatibility with WP older than 4.7; updated copyright date (2018)

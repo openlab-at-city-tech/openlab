@@ -3212,6 +3212,8 @@ class GFFormsModel {
 			$value = rgpost( $input_name );
 		}
 
+		$value = self::maybe_trim_input( $value, $form['id'], $field );
+
 		$is_form_editor = GFCommon::is_form_editor();
 		$is_entry_detail = GFCommon::is_entry_detail();
 		$is_admin = $is_form_editor || $is_entry_detail;

@@ -221,7 +221,7 @@ function su_is_valid_template_name( $path ) {
 	foreach ( $allowed as $dir ) {
 
 		$dir  = untrailingslashit( $dir );
-		$real = realpath( $dir . DIRECTORY_SEPARATOR . $path );
+		$real = realpath( path_join( $dir, $path ) );
 
 		$dir  = str_replace( '\\', '/', $dir );
 		$real = str_replace( '\\', '/', $real );
@@ -252,7 +252,7 @@ function su_set_file_extension( $path, $extension ) {
 		return path_join( $path_info['dirname'], $path_info['filename'] );
 	}
 
-	if ( $path_info['extension'] !== $extension ) {
+	if ( empty( $path_info['extension'] ) || $path_info['extension'] !== $extension ) {
 		$path .= ".{$extension}";
 	}
 
@@ -275,5 +275,53 @@ function su_get_utm_link( $url, $utm ) {
 		),
 		$url
 	);
+
+}
+
+/**
+ * Helper function to check if a passed value is a positive number.
+ *
+ * Returns true for positive numbers, allows integers and strings.
+ *
+ * @param  mixed  $value Value to test
+ * @return bool          True if passed value is a positive number (integer or string), False otherwise
+ */
+function su_is_positive_number( $value ) {
+
+	if ( ! is_string( $value ) && ! is_int( $value ) ) {
+		return false;
+	}
+
+	if ( ! ctype_digit( (string) $value ) ) {
+		return false;
+	}
+
+	return (int) $value > 0;
+
+}
+
+/**
+ * Helper function to join multiple path pieces into one.
+ *
+ * @return string Merged path pieces
+ */
+function su_join_paths() {
+
+	$is_absolute = func_get_arg( 0 ) !== ltrim( func_get_arg( 0 ), '\\/' );
+
+	$pieces = array_map(
+		function( $piece ) {
+			return trim( $piece, '\\/' );
+		},
+		func_get_args()
+	);
+
+	$path = implode( DIRECTORY_SEPARATOR, $pieces );
+
+	if ( $is_absolute ) {
+		$path = DIRECTORY_SEPARATOR . $path;
+	}
+
+	return $path;
 
 }

@@ -1,6 +1,6 @@
 	<div class="footer section large-padding bg-dark">
 		
-		<div class="footer-inner section-inner">
+		<div class="footer-inner section-inner group">
 		
 			<?php if ( is_active_sidebar( 'footer-a' ) ) : ?>
 			
@@ -43,29 +43,23 @@
 				</div>
 				
 			<?php endif; ?><!-- .footer-c -->
-			
-			<div class="clear"></div>
-		
+					
 		</div><!-- .footer-inner -->
 	
 	</div><!-- .footer -->
 	
 	<div class="credits section bg-dark no-padding">
 	
-		<div class="credits-inner section-inner">
+		<div class="credits-inner section-inner group">
 	
 			<p class="credits-left">
-			
 				&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo home_url(); ?>"><?php bloginfo( 'name' ); ?></a>
-			
 			</p>
 			
 			<p class="credits-right">
 				<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'hemingway' ), 'https://www.andersnoren.se' ); ?></span> &mdash; <a title="<?php _e( 'To the top', 'hemingway' ); ?>" class="tothetop"><?php _e( 'Up', 'hemingway' ); ?> &uarr;</a>
 			</p>
-			
-			<div class="clear"></div>
-		
+					
 		</div><!-- .credits-inner -->
 		
 	</div><!-- .credits -->

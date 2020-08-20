@@ -476,7 +476,7 @@ class TablePress_Render {
 		$css_classes = apply_filters( 'tablepress_table_css_classes', $css_classes, $this->table['id'] );
 		// $css_classes might contain several classes in one array entry.
 		$css_classes = explode( ' ', implode( ' ', $css_classes ) );
-		$css_classes = array_map( 'sanitize_html_class', $css_classes );
+		$css_classes = array_map( array( 'TablePress', 'sanitize_css_class' ), $css_classes );
 		$css_classes = array_unique( $css_classes );
 		$css_classes = trim( implode( ' ', $css_classes ) );
 		if ( ! empty( $css_classes ) ) {
@@ -520,7 +520,7 @@ class TablePress_Render {
 		$table_attributes = $this->_attributes_array_to_string( $table_attributes );
 
 		$output .= "\n<table{$table_attributes}>\n";
-		$output .= $caption . $colgroup . $thead . $tfoot . $tbody;
+		$output .= $caption . $colgroup . $thead . $tbody . $tfoot;
 		$output .= "</table>\n";
 
 		// name/description below table (HTML already generated above).

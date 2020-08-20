@@ -138,78 +138,92 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 
 			if ( is_404() || is_archive() || is_search() || ( ! is_front_page() && is_home() )  ) return;
 
-			global $wp_query;
+			//global $wp_query;
 
-			$css_classes = '';
-
-			$find    = $replace = array();
-			$post    = get_post( $wp_query->post->ID );
+			//$find    = $replace = array();
+			//$post    = get_post( $wp_query->post->ID );
+			//$post = ezTOC_Post::get( get_the_ID() );//->applyContentFilter()->process();
+			$post = ezTOC::get( get_the_ID() );
 
 			/*
 			 * Ensure the ezTOC content filter is not applied when running `the_content` filter.
 			 */
-			remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
-			$post->post_content = apply_filters( 'the_content', $post->post_content );
-			add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+			//remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+			//$post->post_content = apply_filters( 'the_content', $post->post_content );
+			//add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
 
-			/**
-			 * @var string $before_widget
-			 * @var string $after_widget
-			 * @var string $before_title
-			 * @var string $after_title
-			 */
-			extract( $args );
+			if ( $post->hasTOCItems() ) {
 
-			$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
-			$items = ezTOC::extract_headings( $find, $replace, $post );
+				/**
+				 * @var string $before_widget
+				 * @var string $after_widget
+				 * @var string $before_title
+				 * @var string $after_title
+				 */
+				extract( $args );
 
-			if ( FALSE !== strpos( $title, '%PAGE_TITLE%' ) || FALSE !== strpos( $title, '%PAGE_NAME%' ) ) {
+				$class = array(
+					'ez-toc-v' . str_replace( '.', '_', ezTOC::VERSION ),
+					'ez-toc-widget',
+				);
 
-				$title = str_replace( '%PAGE_TITLE%', get_the_title(), $title );
-			}
+				$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
+				//$items = ezTOC::extract_headings( $find, $replace, $post );
 
-			if ( ezTOC_Option::get( 'show_hierarchy' ) ) {
+				if ( false !== strpos( $title, '%PAGE_TITLE%' ) || false !== strpos( $title, '%PAGE_NAME%' ) ) {
 
-				$css_classes = ' counter-hierarchy';
+					$title = str_replace( '%PAGE_TITLE%', get_the_title(), $title );
+				}
 
-			} else {
+				if ( ezTOC_Option::get( 'show_hierarchy' ) ) {
 
-				$css_classes .= ' counter-flat';
-			}
+					$class[] = 'counter-hierarchy';
 
-			switch ( ezTOC_Option::get( 'counter' ) ) {
+				} else {
 
-				case 'numeric':
-					$css_classes .= ' counter-numeric';
-					break;
+					$class[] = 'counter-flat';
+				}
 
-				case 'roman':
-					$css_classes .= ' counter-roman';
-					break;
+				switch ( ezTOC_Option::get( 'counter' ) ) {
 
-				case 'decimal':
-					$css_classes .= ' counter-decimal';
-					break;
-			}
+					case 'numeric':
+						$class[] = 'counter-numeric';
+						break;
 
-			if ( $instance['affix'] ) {
+					case 'roman':
+						$class[] = 'counter-roman';
+						break;
 
-				$css_classes .= ' ez-toc-affix';
-			}
+					case 'decimal':
+						$class[] = 'counter-decimal';
+						break;
+				}
 
-			$css_classes = trim( $css_classes );
+				if ( $instance['affix'] ) {
 
-			// an empty class="" is invalid markup!
-			if ( ! $css_classes ) {
+					$class[] = 'ez-toc-affix';
+				}
 
-				$css_classes = ' ';
-			}
+				$custom_classes = ezTOC_Option::get( 'css_container_class', '' );
 
-			if ( $items ) {
+				if ( 0 < strlen( $custom_classes ) ) {
+
+					$custom_classes = explode( ' ', $custom_classes );
+					$custom_classes = apply_filters( 'ez_toc_container_class', $custom_classes, $this );
+
+					if ( is_array( $custom_classes ) ) {
+
+						$class = array_merge( $class, $custom_classes );
+					}
+				}
+
+				$class = array_filter( $class );
+				$class = array_map( 'trim', $class );
+				$class = array_map( 'sanitize_html_class', $class );
 
 				echo $before_widget;
 
-				echo '<div class="ez-toc-widget-container ' . $css_classes . '">' . PHP_EOL;
+				echo '<div class="ez-toc-widget-container ' . implode( ' ', $class ) . '">' . PHP_EOL;
 
 				do_action( 'ez_toc_before_widget' );
 
@@ -255,7 +269,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 					<?php
 				}
 
-				echo '<nav><ul class="ez-toc-list">'. PHP_EOL . $items . '</ul></nav>' . PHP_EOL;
+				echo '<nav>'. PHP_EOL . $post->getTOCList() . '</nav>' . PHP_EOL;
 
 				do_action( 'ez_toc_after_widget' );
 

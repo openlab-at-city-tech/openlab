@@ -138,19 +138,13 @@ class nggGallery {
 	}
 
 	/**
-	 * nggGallery::graphic_library() - switch between GD and ImageMagick
+	 * Returns the path to lib/gd.thumbnail.inc.php
 	 *
 	 * @return string Path to the selected library
 	 */
-	static function graphic_library() {
-
-		$ngg_options = get_option('ngg_options');
-
-		if ( $ngg_options['graphicLibrary'] == 'im')
-			return NGGALLERY_ABSPATH . '/lib/imagemagick.inc.php';
-		else
-			return NGGALLERY_ABSPATH . '/lib/gd.thumbnail.inc.php';
-
+	static function graphic_library()
+    {
+        return NGGALLERY_ABSPATH . '/lib/gd.thumbnail.inc.php';
 	}
 
 	/**

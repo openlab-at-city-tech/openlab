@@ -1,10 +1,10 @@
 === TinyMCE Advanced ===
 Contributors: azaozz
 Tags: block editor, classic editor, editor, Gutenberg, formatting, tinymce, write
-Requires at least: 5.3
-Tested up to: 5.3
-Stable tag: 5.2.1
-Requires PHP: 5.2
+Requires at least: 5.4
+Tested up to: 5.4
+Stable tag: 5.4.0
+Requires PHP: 5.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,16 +12,16 @@ Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMC
 
 == Description ==
 
-TinyMCE Advanced introduces a "Classic Paragraph" block for the block editor (Gutenberg). 
+TinyMCE Advanced introduces a "Classic Paragraph" block for the block editor (Gutenberg).
 If you are not quite ready to switch to the block editor, or have plugins that cannot be used there (yet), using the Classic Paragraph block is your best option. It lets you to continue to use the familiar TinyMCE editor for most tasks, and at the same time gives you full access to all blocks and new features in the block editor.
 
-Version 5.3 continues to improve and enhance the new features introduced in version 5.0 of TinyMCE Advanced. It includes an improved "Clear Formatting" button, several advanced settings for tables, and importing and exporting of the settings to a file. 
+Version 5.4 continues to improve and enhance the new features introduced in version 5.0 of TinyMCE Advanced. It includes an improved "Clear Formatting" button, several advanced settings for tables, and importing and exporting of the settings to a file.
 
 If you want to continue to use the previous ("classic") editor in WordPress 5.0 and newer, this plugin has an option to replace the new editor with the previous one. If you prefer to have access to both editors side by side or to allow your users to switch editors, it would be better to install the [Classic Editor plugin](https://wordpress.org/plugins/classic-editor/). TinyMCE Advanced is fully compatible with the classic editor plugin and similar plugins that restore use of the previous WordPress editor.
 
-As always this plugin will let you add, remove and arrange the buttons that are shown on the Visual Editor toolbar in the Classic Paragraph and Classic blocks in the block editor, and in the classic editor (when enabled by a plugin). There you can configure up to four rows of buttons including Font Sizes, Font Family, text and background colors, tables, etc. 
+As always this plugin will let you add, remove and arrange the buttons that are shown on the Visual Editor toolbar in the Classic Paragraph and Classic blocks in the block editor, and in the classic editor (when enabled by a plugin). There you can configure up to four rows of buttons including Font Sizes, Font Family, text and background colors, tables, etc.
 
-It includes 15 plugins for [TinyMCE](https://tinymce.com/) that are automatically enabled or disabled depending on the buttons you have chosen.
+It includes 15 plugins for [TinyMCE](https://www.tiny.cloud/) that are automatically enabled or disabled depending on the buttons you have chosen.
 In addition this plugin adds options for keeping the paragraph tags in text mode and importing the CSS classes from the theme's editor-style.css.
 
 = Some of the features added by this plugin =
@@ -47,6 +47,11 @@ Best is to install directly from WordPress. If manual installation is required, 
 
 == Changelog ==
 
+= 5.4.0 =
+* Updated for WordPress 5.4.
+* Improved "Reset Table Size" to reset all table elements (tr, th, td, thead, tbody, tfoot).
+* Improved "Remove Table Styling" to remove all current and deprecated styling attributes from all table elements.
+
 = 5.3.0 =
 * Updated for WordPress 5.3 and TinyMCE 4.9.6.
 
@@ -68,7 +73,7 @@ Best is to install directly from WordPress. If manual installation is required, 
 * Fixed importing of backed-up settings.
 * Updated the FAQ section in the readme.
 
-= 5.0.0 = 
+= 5.0.0 =
 * Added several new buttons to the rich-text toolbar in the block editor.
 * Added functionality to add, remove and arrange most buttons on the rich-text toolbar in the block editor.
 * Added alternative location for buttons for the rich-text component. That lets users move buttons that are not used frequently out of the way.
@@ -90,7 +95,7 @@ Best is to install directly from WordPress. If manual installation is required, 
 * Fixed (removed) setting of inline CSS for table cells when inserting a table. Inline CSS is still added when a table is resized by dragging.
 
 = 4.8.0 =
-* Updated for WordPress 4.9.8 and TinyMCE 4.8.0. 
+* Updated for WordPress 4.9.8 and TinyMCE 4.8.0.
 
 = 4.7.13 =
 * Updated the table and anchor plugins to 4.7.13 (2018-05-16). Fixes a bug in the table plugin in Edge.

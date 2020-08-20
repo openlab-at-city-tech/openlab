@@ -1,64 +1,50 @@
 <?php get_header(); ?>
 
-	<div class="section-inner">
-	
-		<?php if ( is_home() && $paged == 0 && get_theme_mod( 'hamilton_home_title' ) ) : ?>
-		
-			<header class="page-header fade-block">
-				<div>
-					<h2 class="title"><?php echo esc_html( get_theme_mod( 'hamilton_home_title' ) ); ?></h2>
-				</div>
-			</header>
-		
-		<?php elseif ( is_archive() ) : ?>
-		
-			<header class="page-header fade-block">
-				<div>
-					<h2 class="title"><?php the_archive_title(); ?></h2>
-					<?php the_archive_description(); ?>
-				</div>
-			</header>
-		
-		<?php elseif ( is_search() && have_posts() ) : ?>
-		
-			<header class="page-header fade-block">
-				<div>
-					<h2 class="title"><?php printf( __( 'Search: %s', 'hamilton' ), '&ldquo;' . get_search_query() . '&rdquo;' ); ?></h2>
-					<p><?php global $found_posts; printf( __( 'We found %s results matching your search.', 'hamilton' ), $wp_query->found_posts ); ?></p>
-				</div>
-			</header>
-		
-		<?php elseif ( is_search() ) : ?>
+<div class="section-inner">
 
-			<div class="section-inner">
+	<?php 
 
-				<header class="page-header fade-block">
-					<div>
-						<h2 class="title"><?php _e( 'No results found', 'hamilton' ); ?></h2>
-						<p><?php global $found_posts; printf( __( 'We could not find any results for the search query "%s".', 'hamilton' ), get_search_query() ); ?></p>
-						<?php get_search_form(); ?>
-					</div>
-				</header>
+	$archive_title_elem 	= is_front_page() || ( is_home() && get_option( 'show_on_front' ) == 'posts' ) ? 'h2' : 'h1';
+	$archive_title 			= get_the_archive_title();
+	$archive_description 	= get_the_archive_description();
+
+	if ( $archive_title || $archive_description ) : ?>
+
+		<header class="page-header fade-block">
+			<div>
+
+				<?php if ( $archive_title ) : ?>
+					<<?php echo $archive_title_elem; ?> class="title"><?php echo wp_kses_post( $archive_title ); ?></<?php echo $archive_title_elem; ?>>
+				<?php endif; ?>
+
+				<?php if ( $archive_description ) : ?>
+					<div class="archive-description"><?php echo wpautop( $archive_description ); ?></div>
+				<?php endif; ?>
+
+				<?php if ( is_search() && ! have_posts() ) get_search_form(); ?>
 
 			</div>
+		</header><!-- .page-header -->
 
-		<?php endif;
-		
-		if ( have_posts() ) : ?>
+	<?php endif; ?>
 
-			<div class="posts" id="posts">
+	<?php if ( have_posts() ) : ?>
 
-				<?php while ( have_posts() ) : the_post();
+		<div class="posts" id="posts">
 
-					get_template_part( 'content' );
+			<?php 
+			while ( have_posts() ) : the_post();
 
-				endwhile; ?>
+				get_template_part( 'content' );
 
-			</div><!-- .posts -->
-		
-		<?php endif; ?>
+			endwhile; 
+			?>
+
+		</div><!-- .posts -->
 	
-	</div><!-- .section-inner -->
+	<?php endif; ?>
+
+</div><!-- .section-inner -->
 
 <?php 
 

@@ -177,7 +177,7 @@ class BP_XProfile_Field {
 		if ( ! empty( $id ) ) {
 			$this->populate( $id, $user_id, $get_data );
 
-		// Initialise the type obj to prevent fatals when creating new profile fields.
+		// Initialize the type obj to prevent fatals when creating new profile fields.
 		} else {
 			$this->type_obj            = bp_xprofile_create_field_type( 'textbox' );
 			$this->type_obj->field_obj = $this;
@@ -639,7 +639,7 @@ class BP_XProfile_Field {
 				}
 			}
 
-			// If no member types have been saved, intepret as *all* member types.
+			// If no member types have been saved, interpret as *all* member types.
 			if ( empty( $types ) ) {
 				$types = array_values( $registered_types );
 
@@ -784,6 +784,7 @@ class BP_XProfile_Field {
 				$member_type_labels[] = __( 'Users with no member type', 'buddypress' );
 			}
 
+			/* translators: %s: comma separated list of member types */
 			$label = sprintf( __( '(Member types: %s)', 'buddypress' ), implode( ', ', array_map( 'esc_html', $member_type_labels ) ) );
 		} else {
 			$label = '<span class="member-type-none-notice">' . __( '(Unavailable to all members)', 'buddypress' ) . '</span>';
@@ -862,7 +863,15 @@ class BP_XProfile_Field {
 			}
 		}
 
-		return $this->do_autolink;
+		/**
+		 * Filters the autolink property of the field.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param bool              $do_autolink The autolink property of the field.
+		 * @param BP_XProfile_Field $this Field object.
+		 */
+		return apply_filters( 'bp_xprofile_field_do_autolink', $this->do_autolink, $this );
 	}
 
 	/* Static Methods ********************************************************/
@@ -1072,7 +1081,7 @@ class BP_XProfile_Field {
 	}
 
 	/**
-	 * Validate form field data on sumbission.
+	 * Validate form field data on submission.
 	 *
 	 * @since 2.2.0
 	 *
@@ -1103,11 +1112,12 @@ class BP_XProfile_Field {
 
 		// Check that field is of valid type.
 		if ( ! in_array( $_POST['fieldtype'], array_keys( bp_xprofile_get_field_types() ), true ) ) {
+			/* translators: %s: field type name */
 			$message = sprintf( esc_html__( 'The profile field type %s is not registered.', 'buddypress' ), '<code>' . esc_attr( $_POST['fieldtype'] ) . '</code>' );
 			return false;
 		}
 
-		// Get field type so we can check for and lavidate any field options.
+		// Get field type so we can check for and validate any field options.
 		$field_type = bp_xprofile_create_field_type( $_POST['fieldtype'] );
 
 		// Field type requires options.
@@ -1129,12 +1139,14 @@ class BP_XProfile_Field {
 
 			// Check for missing or malformed options.
 			if ( 0 === $field_count ) {
+				/* translators: %s: field type name */
 				$message = sprintf( esc_html__( '%s require at least one option.', 'buddypress' ), $field_type->name );
 				return false;
 			}
 
 			// If only one option exists, it cannot be an empty string.
 			if ( ( 1 === $field_count ) && ( '' === $field_options[0] ) ) {
+				/* translators: %s: field type name */
 				$message = sprintf( esc_html__( '%s require at least one option.', 'buddypress' ), $field_type->name );
 				return false;
 			}
@@ -1175,10 +1187,10 @@ class BP_XProfile_Field {
 	 */
 	public function render_admin_form( $message = '' ) {
 
-		// Users Admin URL
+		// Users Admin URL.
 		$users_url = bp_get_admin_url( 'users.php' );
 
-		// Add New
+		// Add New.
 		if ( empty( $this->id ) ) {
 			$title  = __( 'Add New Field', 'buddypress' );
 			$button	= __( 'Save',          'buddypress' );
@@ -1200,7 +1212,7 @@ class BP_XProfile_Field {
 				}
 			}
 
-		// Edit
+		// Edit.
 		} else {
 			$title  = __( 'Edit Field', 'buddypress' );
 			$button	= __( 'Update',     'buddypress' );
@@ -1613,7 +1625,7 @@ class BP_XProfile_Field {
 	 */
 	private function default_field_hidden_inputs() {
 
-		// Nonce
+		// Nonce.
 		wp_nonce_field( 'bp_xprofile_admin_field', 'bp_xprofile_admin_field' );
 
 		// Field 1 is the fullname field, which cannot have custom visibility.

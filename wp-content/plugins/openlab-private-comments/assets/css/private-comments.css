@@ -1,0 +1,16 @@
+.openlab-private-comments {
+	text-align: right;
+}
+
+.openlab-private-comments label {
+	display: inline;
+}
+
+.ol-private-comment-hidden .ol-private-comment-hide,
+.ol-private-comment-hidden .ol-private-comment-value {
+	display: none;
+}
+
+.ol-private-comment-display:not(.ol-private-comment-hidden) .ol-private-comment-show {
+	display: none;
+}

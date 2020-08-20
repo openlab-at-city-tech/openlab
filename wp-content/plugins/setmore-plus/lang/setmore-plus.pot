@@ -1,0 +1,431 @@
+# Copyright (C) 2017 Setmore Plus
+# This file is distributed under the same license as the Setmore Plus package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Setmore Plus 3.7\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/setmore-plus\n"
+"POT-Creation-Date: 2017-02-19 10:28-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-02-19 10:28-0500\n"
+"X-Generator: Poedit 1.8.2\n"
+"Last-Translator: Chris Dillon <chris@wpmission.com>\n"
+"Language-Team: \n"
+
+#: inc/class-setmore-plus-admin.php:125
+msgid "Preferred Language"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:133 inc/class-setmore-plus-widget.php:121
+msgid "Link Text"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:141
+msgid "Your Booking Page URL"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:149
+msgid "Your Staff Booking Pages"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:157
+msgid "Scheduler Sizes"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:165
+msgid "Popup Dimensions"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:173
+msgid "Embed Dimensions"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:181
+msgid "Script Loading"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:189 inc/class-setmore-plus-admin.php:275
+msgid "Leave No Trace"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:228
+msgid "Book Appointment"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:255 inc/class-setmore-plus-admin.php:304
+msgid "Settings"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:291
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: inc/class-setmore-plus-admin.php:296 inc/class-setmore-plus-widget.php:9
+msgid "Setmore Plus"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:307
+msgid "Instructions"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:383
+msgid "use site language"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:392
+msgid ""
+"Setmore supports %d languages. If using your site language and the language "
+"is not supported, the default is English."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:395 inc/class-setmore-plus-admin.php:428
+msgid "<a href=\"%s\" target=\"_blank\">Help</a>"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:417
+msgid "Setmore Booking Page URL"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:421
+msgid ""
+"To find your unique URL, <a href=\"%s\" target=\"_blank\">sign in to "
+"Setmore</a> and click on <b>Apps & Integrations</b>."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:443
+msgid "ID"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:444
+msgid "Staff Name"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:445
+msgid "Staff Booking Page URL"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:457
+msgid "Add New"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:462
+msgid ""
+"To find your individual Staff Booking Pages, <a href=\"%s\" target=\"_blank"
+"\">sign in to Setmore</a> and navigate to <b>Settings > Staff</b>."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:482
+msgid "staff name"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:487
+msgid "Staff Booking Page"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:496
+msgid ""
+"The scheduler has three similar versions depending on the width of the popup "
+"or embed frame."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:496
+msgid "See examples"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:499
+msgid "Size"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:500
+msgid "Intended Use"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:501 inc/class-setmore-plus-admin.php:539
+#: inc/class-setmore-plus-admin.php:608
+msgid "Width"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:504 inc/class-setmore-plus-admin.php:521
+msgid "Small"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:505
+msgid "mobile devices"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:506
+msgid "less than 582 pixels, at least 320 pixels recommended"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:509 inc/class-setmore-plus-admin.php:523
+msgid "Medium"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:510
+msgid "desktops"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:511
+msgid "at least 582 pixels"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:514 inc/class-setmore-plus-admin.php:525
+msgid "Large"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:515
+msgid "desktop full-width pages"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:516
+msgid "at least 873 pixels"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:534
+msgid ""
+"When using <code>[setmoreplus link]</code> or <code>[setmoreplus button]</"
+"code>:"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:540 inc/class-setmore-plus-admin.php:609
+msgid "Height"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:543 inc/class-setmore-plus-admin.php:612
+msgid "Desktop"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:557 inc/class-setmore-plus-admin.php:575
+#: inc/class-setmore-plus-admin.php:589 inc/class-setmore-plus-admin.php:626
+#: inc/class-setmore-plus-admin.php:637 inc/class-setmore-plus-admin.php:649
+#: inc/class-setmore-plus-admin.php:657
+msgid "pixels"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:558 inc/class-setmore-plus-admin.php:576
+#: inc/class-setmore-plus-admin.php:627
+msgid "percent"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:582 inc/class-setmore-plus-admin.php:642
+msgid "Mobile"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:585
+msgid "100% <b>screen</b> width and height below"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:594 inc/class-setmore-plus-admin.php:662
+msgid "Restore Defaults"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:603
+msgid ""
+"When using <code>[setmoreplus]</code> to embed the scheduler directly in a "
+"page:"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:645
+msgid "100% <b>container</b> width below"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:673
+msgid "Normal (default)"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:676
+msgid "Priority"
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:681
+msgid "<strong>Normal</strong> works well in the majority of cases."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:682
+msgid ""
+"Try <strong>Priority</strong> if your Setmore link fails to produce a popup."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:694
+msgid "Yes - Deleting this plugin will also delete these settings."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:697
+msgid "No - These settings will remain after deleting this plugin."
+msgstr ""
+
+#: inc/class-setmore-plus-admin.php:702
+msgid "Deactivating this plugin will not delete anything."
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:10
+msgid "Add a \"Book Appointment\" button."
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:49
+msgid "Book an appointment"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:102
+msgid "Title"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:102 inc/class-setmore-plus-widget.php:111
+msgid "(optional)"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:111
+msgid "Text"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:129
+msgid "Style"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:139
+msgid "(default image)"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:158
+msgid "Unstyled.<br>Use CSS class: <code>.widget a.setmore</code>"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:165
+msgid "Booking Page"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:168
+msgid "Main (default)"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:183
+msgid "Language"
+msgstr ""
+
+#: inc/class-setmore-plus-widget.php:187
+msgid "preferred language (in Settings)"
+msgstr ""
+
+#: inc/instructions.php:5
+msgid "How to add Setmore to your site"
+msgstr ""
+
+#: inc/instructions.php:10
+msgid "To add a button in a <b>sidebar</b> that opens the scheduler in a popup"
+msgstr ""
+
+#: inc/instructions.php:11
+msgid "widget"
+msgstr ""
+
+#: inc/instructions.php:14
+msgid "To <b>embed</b> the scheduler directly in a page"
+msgstr ""
+
+#: inc/instructions.php:19
+msgid "To add a <b>link</b> to the popup scheduler in a page"
+msgstr ""
+
+#: inc/instructions.php:20
+msgid "The link will be styled by your theme."
+msgstr ""
+
+#: inc/instructions.php:26
+msgid "To add a <b>button</b> to the popup scheduler in a page"
+msgstr ""
+
+#: inc/instructions.php:27
+msgid "The button will be styled by your theme."
+msgstr ""
+
+#: inc/instructions.php:33
+msgid "To select a language"
+msgstr ""
+
+#: inc/instructions.php:41
+msgid "To select a Staff Booking Page"
+msgstr ""
+
+#: inc/instructions.php:51
+msgid "For a <b>menu link</b>"
+msgstr ""
+
+#: inc/instructions.php:52
+msgid "screenshot"
+msgstr ""
+
+#: inc/instructions.php:57
+msgid "go to Appearance > Menus"
+msgstr ""
+
+#: inc/instructions.php:58
+msgid "click \"Screen Options\" in the upper right corner"
+msgstr ""
+
+#: inc/instructions.php:59
+msgid "if necessary, check the \"Custom Links\" and \"CSS Classes\" boxes"
+msgstr ""
+
+#: inc/instructions.php:60
+msgid "add a custom link using your Setmore URL and link text"
+msgstr ""
+
+#: inc/instructions.php:61
+msgid "enter %s in the CSS Classes field"
+msgstr ""
+
+#: inc/instructions.php:66
+msgid ""
+"To add the popup scheduler to a <b>plain URL</b>, append <code>#setmoreplus</"
+"code>"
+msgstr ""
+
+#: inc/instructions.php:67
+msgid ""
+"For example, if your theme already has a \"Book Appointment\" option and you "
+"can only enter your URL."
+msgstr ""
+
+#: inc/instructions.php:80
+msgid ""
+"With <code>link</code> or <code>button</code>, you can customize the text"
+msgstr ""
+
+#: inc/instructions.php:81
+msgid "Make an appointment today!"
+msgstr ""
+
+#: inc/instructions.php:84
+msgid "and/or add CSS classes from your theme or custom CSS."
+msgstr ""
+
+#: inc/instructions.php:92
+msgid ""
+"The width and height shortcode attributes were removed.<br>Use the settings "
+"instead."
+msgstr ""
+
+#: inc/settings.php:7
+msgid ""
+"This plugin is offered by <a href=\"%s\" target=\"_blank\">WP Mission</a>. "
+"<em>We have no affiliation with <a href=\"%s\" target=\"_blank\">Setmore "
+"Appointments</a> and provide no technical support for their service.</em>"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.wpmission.com/plugins/setmore-plus"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Easy online appointments with a widget, shortcode, or menu link."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Chris Dillon"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.wpmission.com"
+msgstr ""

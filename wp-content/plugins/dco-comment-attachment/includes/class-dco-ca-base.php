@@ -132,7 +132,7 @@ class DCO_CA_Base {
 			return false;
 		}
 
-		$embed_type = $this->get_embed_type( $url );
+		$embed_type = $this->get_embed_type( $attachment_id );
 
 		switch ( $embed_type ) {
 			case 'image':
@@ -168,15 +168,15 @@ class DCO_CA_Base {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $url The attachment URL.
+	 * @param int $attachment_id The attachment ID.
 	 * @return string The embed type (image, video, audio, misc).
 	 */
-	public function get_embed_type( $url ) {
+	public function get_embed_type( $attachment_id ) {
 		if ( ! $this->get_option( 'embed_attachment' ) ) {
 			return 'misc';
 		}
 
-		$ext = wp_check_filetype( $url )['ext'];
+		$ext = wp_check_filetype( get_attached_file( $attachment_id ) )['ext'];
 
 		if ( in_array( $ext, $this->get_image_exts(), true ) ) {
 			return 'image';

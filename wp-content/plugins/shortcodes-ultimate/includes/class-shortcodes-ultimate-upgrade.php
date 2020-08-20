@@ -67,6 +67,7 @@ final class Shortcodes_Ultimate_Upgrade {
 		$this->maybe_upgrade_to( '5.2.0' );
 		$this->maybe_upgrade_to( '5.4.0' );
 		$this->maybe_upgrade_to( '5.6.0' );
+		$this->maybe_upgrade_to( '5.9.1' );
 
 		$this->update_saved_version();
 
@@ -80,7 +81,7 @@ final class Shortcodes_Ultimate_Upgrade {
 	 */
 	private function maybe_upgrade_to( $version ) {
 
-		if ( ! $this->is_saved_version_less_than( $version ) ) {
+		if ( ! $this->is_saved_version_lower_than( $version ) ) {
 			return;
 		}
 
@@ -114,17 +115,17 @@ final class Shortcodes_Ultimate_Upgrade {
 	 * @return boolean True if plugin was updated, False otherwise.
 	 */
 	private function is_version_changed() {
-		return $this->is_saved_version_less_than( $this->current_version );
+		return $this->is_saved_version_lower_than( $this->current_version );
 	}
 
 	/**
-	 * Conditional check if previous version of the plugin less than passed one.
+	 * Conditional check if previous version of the plugin lower than passed one.
 	 *
 	 * @since  5.0.0
 	 * @access private
-	 * @return boolean True if previous version of the plugin less than passed one, False otherwise.
+	 * @return boolean True if previous version of the plugin lower than passed one, False otherwise.
 	 */
-	private function is_saved_version_less_than( $version ) {
+	private function is_saved_version_lower_than( $version ) {
 
 		return version_compare(
 			get_option( $this->saved_version_option, 0 ),

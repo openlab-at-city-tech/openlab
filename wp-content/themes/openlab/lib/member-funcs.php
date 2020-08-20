@@ -21,54 +21,25 @@ function openlab_flush_user_cache_on_save($user_id, $posted_field_ids, $errors) 
 add_action('xprofile_updated_profile', 'openlab_flush_user_cache_on_save', 10, 3);
 
 /**
- * List of valid user types.
- */
-function openlab_valid_user_types() {
-    return [ 'student', 'faculty', 'alumni', 'staff' ];
-}
-
-/**
  * 	People archive page
  *
  */
 function openlab_list_members($view) {
     global $wpdb, $bp, $members_template, $wp_query;
 
-    // Set up variables
-    // There are two ways to specify user type: through the page name, or a URL param
-    $user_type = $sequence_type = $search_terms = $user_school = $user_dept = '';
-    if (!empty($_GET['usertype']) && $_GET['usertype'] != 'user_type_all') {
-        if ( in_array( $_GET['usertype'], openlab_valid_user_types(), true ) ) {
-            $user_type = wp_unslash( $_GET['usertype'] );
-            $user_type = ucwords( $user_type );
-        }
-    } else {
-        $post_obj = $wp_query->get_queried_object();
-        $post_title = !empty($post_obj->post_title) ? ucwords($post_obj->post_title) : '';
+	$valid_user_types = openlab_valid_user_types();
 
-        if (in_array($post_title, array('Staff', 'Faculty', 'Students'))) {
-            if ('Students' == $post_title) {
-                $user_type = 'Student';
-            } else {
-                $user_type = $post_title;
-            }
-        }
+	$user_type = openlab_get_current_filter( 'member_type' );
+    if ( $user_type && $user_type !== 'all' ) {
+		$valid_user_types = openlab_valid_user_types();
+		$user_type        = $valid_user_types[ $user_type ]['label'];
     }
 
-    if (!empty($_GET['group_sequence'])) {
-        $sequence_type = $_GET['group_sequence'];
-    }
+	$search_terms = openlab_get_current_filter( 'search' );
 
-    if (!empty($_POST['people_search'])) {
-        $search_terms = $_POST['people_search'];
-    } else if (!empty($_GET['search'])) {
-        $search_terms = $_GET['search'];
-    } else if (!empty($_POST['group_search'])) {
-        $search_terms = $_POST['group_search'];
-    }
-
-    if (!empty($_GET['school'])) {
-        $user_school = urldecode($_GET['school']);
+	$school = openlab_get_current_filter( 'school' );
+    if ( $school ) {
+        $user_school = urldecode( $school );
 
         // Sanitize
         $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
@@ -77,18 +48,18 @@ function openlab_list_members($view) {
         }
     }
 
-    $user_department = NULL;
-    if (!empty($_GET['department'])) {
-        $user_department = urldecode($_GET['department']);
+    $user_department = openlab_get_current_filter( 'department' );
+    if ( $user_department ) {
+        $user_department = urldecode( $_GET['department'] );
     }
 
     // Set up the bp_has_members() arguments
     // Note that we're not taking user_type into account. We'll do that with a query filter
-    $args = array('per_page' => 48);
-
-    if ($sequence_type) {
-        $args['type'] = $sequence_type;
-    }
+    $args = [
+		'member_type' => null,
+		'per_page'    => 48,
+		'type'        => openlab_get_current_filter( 'sort' ),
+	];
 
     // Set up $include
     // $include_noop is a flag that gets triggered when one of the search
@@ -163,7 +134,7 @@ function openlab_list_members($view) {
         }
     }
 
-    if ($user_department && !$include_noop && 'dept_all' !== $user_department) {
+    if ($user_department && !$include_noop && 'all' !== $user_department) {
         $user_department_matches = $wpdb->get_col( $wpdb->prepare(
             "SELECT user_id
             FROM {$wpdb->usermeta}
@@ -217,9 +188,7 @@ function openlab_list_members($view) {
 
     <?php if (bp_has_members($args)) : ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
+            <div class="current-group-filters current-portfolio-filters col-md-18 col-sm-16">Use the search and filters to find People.</div>
             <div class="col-md-6 col-sm-8 text-right"><?php cuny_members_pagination_count('members'); ?></div>
         </div>
 
@@ -239,7 +208,7 @@ function openlab_list_members($view) {
                                 <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/></a>
                             </div>
                             <div class="item col-md-14 col-xs-16">
-                                <h2 class="item-title"><a class="no-deco" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
+                                <h2 class="item-title"><a class="truncate-on-the-fly no-deco" data-basewidth="100" data-basevalue="20" data-minvalue="20" data-srprovider="true" href="<?php bp_member_permalink() ?>" title="<?php bp_member_name() ?>"><?php bp_member_name() ?></a></h2>
                                 <span class="member-since-line timestamp">Member since <?php echo $registered; ?></span>
                                 <?php if (bp_get_member_latest_update()) : ?>
                                     <span class="update"><?php bp_member_latest_update('length=10') ?></span>
@@ -270,9 +239,7 @@ function openlab_list_members($view) {
         }
         ?>
         <div class="row group-archive-header-row">
-            <div class="current-group-filters current-portfolio-filters col-sm-18">
-                <?php openlab_current_directory_filters(); ?>
-            </div>
+            <div class="current-group-filters current-portfolio-filters col-sm-18">&nbsp;</div>
         </div>
 
         <div id="group-members-list" class="item-list group-list row">

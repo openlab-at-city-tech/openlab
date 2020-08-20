@@ -87,7 +87,6 @@ class Su_Assets {
 				'presets_prompt_msg'   => __( 'Please enter a name for new preset', 'shortcodes-ultimate' ),
 				'presets_prompt_value' => __( 'New preset', 'shortcodes-ultimate' ),
 				'last_used'            => __( 'Last used settings', 'shortcodes-ultimate' ),
-				'hotkey'               => get_option( 'su_option_hotkey' )
 			) );
 		// Shortcodes stylesheets
 		wp_register_style( 'su-shortcodes', plugins_url( 'includes/css/shortcodes.css', SU_PLUGIN_FILE ), false, SU_PLUGIN_VERSION, 'all' );

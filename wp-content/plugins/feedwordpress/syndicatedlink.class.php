@@ -81,7 +81,7 @@ class SyndicatedLink {
 			$stale = true; // update on the next timed update
 		elseif ( !$this->setting('update/last') ) :
 			$stale = true; // initial update
-		elseif ( ! empty( $feedwordpress ) && method_exists( $feedwordpress, 'force_update_all' ) && $feedwordpress->force_update_all()) :
+		elseif ($feedwordpress->force_update_all()) :
 			$stale = true; // forced general updating
 		else :
 			$after = (
@@ -127,6 +127,10 @@ class SyndicatedLink {
 		endif;
 		return $ret;
 	} /* SyndicatedLink::live_posts () */
+
+	protected function pause_updates () {
+		return ('yes'==$this->setting("update/pause", "update_pause", 'no'));
+	} /* SyndicatedLink::pause_updates () */
 
 	public function poll ($crash_ts = NULL) {
 		global $wpdb;
@@ -211,6 +215,8 @@ class SyndicatedLink {
 				endif;
 			endif;
 
+			$this->update_setting('link/feed_type', $this->simplepie->get_type());
+
 			$this->merge_settings($channel, 'feed/');
 
 			$this->update_setting('update/last', time());
@@ -275,23 +281,24 @@ class SyndicatedLink {
 
 			if (is_array($posts)) :
 				foreach ($posts as $key => $item) :
-					$post = new SyndicatedPost($item, $this);
+					if (!$this->pause_updates()) :
+						$post = new SyndicatedPost($item, $this);
 
-					if (!$resume or !in_array(trim($post->guid()), $processed)) :
-						$processed[] = $post->guid();
-						if (!$post->filtered()) :
-							$new = $post->store();
-							if ( $new !== false ) $new_count[$new]++;
+						if (!$resume or !in_array(trim($post->guid()), $processed)) :
+							$processed[] = $post->guid();
+							if (!$post->filtered()) :
+								$new = $post->store();
+								if ( $new !== false ) $new_count[$new]++;
+							endif;
+
+							if (!is_null($crash_ts) and (time() > $crash_ts)) :
+								$crashed = true;
+								break;
+							endif;
 						endif;
 
-						if (!is_null($crash_ts) and (time() > $crash_ts)) :
-							$crashed = true;
-							break;
-						endif;
-					endif;
-
-					unset($post);
-					
+						unset($post);
+					endif;					
 				endforeach;
 			endif;
 
@@ -299,7 +306,7 @@ class SyndicatedLink {
 				// Check for use of Atom tombstones. Spec:
 				// <http://tools.ietf.org/html/draft-snell-atompub-tombstones-18>
 				$tombstones = $this->simplepie->get_feed_tags('http://purl.org/atompub/tombstones/1.0', 'deleted-entry');
-				if (count($tombstones) > 0) :
+				if (!is_null($tombstones) && count($tombstones) > 0) :
 					foreach ($tombstones as $tombstone) :
 						$ref = NULL;
 						foreach (array('', 'http://purl.org/atompub/tombstones/1.0') as $ns) :
@@ -740,6 +747,42 @@ class SyndicatedLink {
 		return ('complete'==$this->setting('update_incremental', 'update_incremental', 'incremental'));
 	} /* SyndicatedLink::is_non_incremental () */
 
+	public function get_feed_type () {
+		$type_code = $this->setting('link/feed_type');
+		
+		// list derived from: <http://simplepie.org/api/class-SimplePie.html>, retrieved 2020/01/18
+		$bitmasks = array(
+			SIMPLEPIE_TYPE_RSS_090 => 'RSS 0.90',
+			SIMPLEPIE_TYPE_RSS_091_NETSCAPE => 'RSS 0.91 (Netscape)',
+			SIMPLEPIE_TYPE_RSS_091_USERLAND => 'RSS 0.91 (Userland)',
+			SIMPLEPIE_TYPE_RSS_091 => 'RSS 0.91',
+			SIMPLEPIE_TYPE_RSS_092 => 'RSS 0.92',
+			SIMPLEPIE_TYPE_RSS_093 => 'RSS 0.93',
+			SIMPLEPIE_TYPE_RSS_094 => 'RSS 0.94',
+			SIMPLEPIE_TYPE_RSS_10 => 'RSS 1.0',
+			SIMPLEPIE_TYPE_RSS_20 => 'RSS 2.0.x',
+			SIMPLEPIE_TYPE_RSS_RDF => 'RDF-based RSS',
+			SIMPLEPIE_TYPE_RSS_SYNDICATION => 'Non-RDF-based RSS',
+			SIMPLEPIE_TYPE_RSS_ALL => 'Any version of RSS',
+			SIMPLEPIE_TYPE_ATOM_03 => 'Atom 0.3',
+			SIMPLEPIE_TYPE_ATOM_10 => 'Atom 1.0',
+			SIMPLEPIE_TYPE_ATOM_ALL => 'Atom (any version)',
+			SIMPLEPIE_TYPE_ALL => 'Supported Feed (unspecified format)',
+		);
+
+		$type = "Unknown or unsupported format";
+		foreach ($bitmasks as $format_flag => $format_string) :
+			if (is_numeric($format_flag)) : // Guard against failure of constants to be defined.
+				if ($type_code & $format_flag) :
+					$type = $format_string;
+					break; // foreach
+				endif;
+			endif;
+		endforeach;
+		
+		return $type;
+	} /* SyndicatedLink::get_feed_type () */
+	
 	public function uri ($params = array()) {
 		$params = wp_parse_args($params, array(
 		'add_params' => false,

@@ -1,0 +1,77 @@
+#OutoftheBox div.jp-playlist {
+  background-color: %background%
+}
+
+#OutoftheBox .jp-progress .jp-seek-bar .jp-seek-bar {
+  background-color: %light1%
+}
+
+#OutoftheBox.jp-progress .jp-seek-bar {
+  background-color: %light2%
+}
+
+#OutoftheBox .jp-progress .jp-seek-bar .jp-play-bar,
+#OutoftheBox .jp-progress .jp-seek-bar:after,
+#OutoftheBox .jp-volume-bar .currentVolume .jp-volume-bar-value,
+#OutoftheBox .jp-progress .jp-seek-bar .jp-play-bar:after {
+  background-color: %accent%
+}
+
+#OutoftheBox .audio .jp-progress .jp-seek-bar .jp-play-bar,
+#OutoftheBox .audio .jp-progress .jp-seek-bar:after,
+#OutoftheBox .audio .jp-volume-bar .currentVolume .jp-volume-bar-value,
+#OutoftheBox .audio .jp-progress .jp-seek-bar .jp-play-bar:after {
+  background-color: %black%
+}
+
+#OutoftheBox.light div.jp-playlist {
+  background: %background%;
+}
+
+#OutoftheBox .jp-gui {
+  background: %accent%;
+  background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.35));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.35));
+}
+
+#OutoftheBox.audio .jp-gui,
+#OutoftheBox.audio .jp-progress {
+  background: %accent%;
+}
+
+#OutoftheBox.light .playerScreen .jp-video-play-button,
+#OutoftheBox.light .playerScreen .jp-video-play-button:hover {
+  background-color: %accent%;
+  color: %black%;
+}
+
+#OutoftheBox.light .media .jp-playlist-item-imgl {
+  background: %white%;
+}
+
+#OutoftheBox div.jp-playlist li,
+#OutoftheBox.light div.jp-playlist-item-song-title,
+#OutoftheBox.light div.jp-playlist-item-song-artist {
+  color: %white%
+}
+
+#OutoftheBox.light div.jp-playlist li:nth-child(even) {
+  background: %dark1%;
+}
+
+#OutoftheBox.light div.jp-playlist .jp-playlist-folder-header,
+#OutoftheBox.light div.jp-playlist li:hover {
+  background: %dark2%;
+}
+
+#OutoftheBox.light div.jp-playlist .jp-playlist-folder-header:hover,
+#OutoftheBox.light div.jp-playlist .jp-playlist-current,
+#OutoftheBox.light div.jp-playlist .jp-playlist-current .jp-playlist-item-song-title,
+#OutoftheBox.light div.jp-playlist .jp-playlist-current .jp-playlist-item-song-artist {
+  background: %accent% !important;
+  color: %black% !important;
+}
+
+#OutoftheBox div.jp-playlist::-webkit-scrollbar-thumb {
+  background-color: %accent%;
+}

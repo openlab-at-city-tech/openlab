@@ -54,14 +54,27 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 			)
 		);
 
+		$group_admin_ids = openlab_get_all_group_contact_ids( $source_id );
+
+		$admins = [];
+		foreach ( $group_admin_ids as $group_admin_id ) {
+			$admins[] = [
+				'id'   => $group_admin_id,
+				'name' => bp_core_get_user_displayname( $group_admin_id ),
+				'url'  => bp_core_get_user_domain( $group_admin_id ),
+			];
+		};
+
 		$source_data = array(
 			'group_id'           => $source_id,
 			'group_url'          => bp_get_group_permalink( $source_group ),
 			'group_name'         => $course_code ? $course_code : $group_type,
+			'group_admins'       => $admins,
 			'group_creator_id'   => $source_group->creator_id,
 			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
 			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
 		);
+
 
 		$source_datas[] = $source_data;
 	}
@@ -80,6 +93,40 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 	}
 
 	return $source_datas;
+}
+
+/**
+ * Formats the clone history as unordered list items of structured links.
+ *
+ * Note that you need to provide the <ul> wrapper yourself.
+ */
+function openlab_format_group_clone_history_data_list( $history ) {
+	$credits_groups = array_map(
+		function( $clone_group ) {
+			$admin_links = array_map(
+				function( $admin ) {
+					$link = sprintf(
+						'<a href="%s">%s</a>',
+						esc_attr( $admin['url'] ),
+						esc_html( $admin['name'] )
+					);
+
+					return $link;
+				},
+				$clone_group['group_admins']
+			);
+
+			return sprintf(
+				'<li><a href="%s">%s</a> &mdash; %s</li>',
+				esc_attr( $clone_group['group_url'] ),
+				esc_html( $clone_group['group_name'] ),
+				implode( ', ', $admin_links )
+			);
+		},
+		$history
+	);
+
+	return implode( "\n", $credits_groups );
 }
 
 /**
@@ -195,10 +242,16 @@ add_action(
  */
 function openlab_add_widget_to_main_sidebar( $widget ) {
 	switch ( get_template() ) {
+		case 'hemingway' :
+		case 'genesis' :
+			$sidebar = 'sidebar';
+			break;
+
 		case 'twentyten':
 			$sidebar = 'primary-widget-area';
 			break;
 
+		case 'gillian' :
 		case 'twentyfifteen':
 		case 'twentyfourteen':
 		case 'twentyeleven':
@@ -265,26 +318,22 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$group    = groups_get_group( $group_id );
-		$history  = openlab_get_group_clone_history_data( $group_id, $group->creator_id );
 
-		$credits_groups = array_map(
-			function( $clone_group ) {
-					return sprintf(
-						'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
-						esc_attr( $clone_group['group_url'] ),
-						esc_html( $clone_group['group_name'] ),
-						esc_attr( $clone_group['group_creator_url'] ),
-						esc_html( $clone_group['group_creator_name'] )
-					);
-			},
-			$history
-		);
+		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+		if ( count( $all_group_contacts ) <= 1 ) {
+			$exclude_creator = $all_group_contacts[0];
+		} else {
+			$exclude_creator = null;
+		}
+
+		$history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
+		$markup  = openlab_format_group_clone_history_data_list( $history );
 
 		echo $args['before_widget'];
 
 		echo $args['before_title'] . 'Credits' . $args['after_title'];
 		echo '<ul class="clone-credits">';
-		echo implode( '', $credits_groups );
+		echo $markup;
 		echo '</ul>';
 		echo $args['after_widget'];
 	}
@@ -349,10 +398,12 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 			)
 		);
 
+		$group_type = openlab_get_group_type( $group_id );
+
 		$clone_link = add_query_arg(
 			array(
 				'clone' => $group_id,
-				'type'  => openlab_get_group_type( $group_id ),
+				'type'  => $group_type,
 			),
 			bp_get_groups_directory_permalink() . 'create/step/group-details/'
 		);
@@ -363,15 +414,23 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 
 		$can_clone = false;
 		if ( is_user_logged_in() ) {
-			$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
-			$can_clone = 'faculty' === strtolower( $user_type );
+			if ( 'course' === $group_type ) {
+				$user_type = xprofile_get_field_data( 'Account Type', get_current_user_id() );
+				$can_clone = 'faculty' === strtolower( $user_type );
+			} else {
+				$can_clone = true;
+			}
 		}
 
 		echo '<p>';
 		if ( $can_clone ) {
 			echo sprintf( '<a class="btn btn-default btn-block btn-primary link-btn" href="%s"><i class="fa fa-clone" aria-hidden="true"></i> Clone this %s</a>', esc_attr( $clone_link ), esc_html( $group_type_label ) );
 		} else {
-			echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' );
+			if ( 'course' === $group_type ) {
+				echo sprintf( 'Logged-in faculty members can clone this course. <a href="%s">Learn More!</a>', esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-faculty-only/' ) );
+			} else {
+				echo sprintf( 'Logged-in OpenLab members can clone this %s. <a href="%s">Learn More!</a>', esc_html( $group_type_label ), esc_attr( 'https://openlab.citytech.cuny.edu/blog/help/shared-cloning-for-projects-and-clubs/' ) );
+			}
 		}
 		echo '</p>';
 

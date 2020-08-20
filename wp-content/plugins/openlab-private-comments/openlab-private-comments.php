@@ -13,6 +13,8 @@
 
 namespace OpenLab\PrivateComments;
 
+const VERSION = '1.0.0';
+
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';
 }
@@ -24,6 +26,60 @@ function load_textdomain() {
 	load_plugin_textdomain( 'openlab-private-comments' );
 }
 add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
+
+/**
+ * Only allow comment authors to edit private comments.
+ *
+ * @param string[] $caps    Array of the user's capabilities.
+ * @param string   $cap     Capability name.
+ * @param int      $user_id The user ID.
+ * @param array    $args    Adds the context to the cap. Typically the object ID.
+ * @return string[] $caps
+ */
+function map_meta_cap( $caps, $cap, $user_id, $args ) {
+	if ( 'edit_comment' !== $cap || is_admin() ) {
+		return $caps;
+	}
+
+	$comment_id = $args[0];
+	$is_private = (bool) get_comment_meta( $comment_id, 'ol_is_private', true );
+
+	if ( ! $is_private ) {
+		return $caps;
+	}
+
+	$comment = get_comment( $comment_id );
+
+	if ( $user_id !== (int) $comment->user_id ) {
+		$caps[] = 'do_not_allow';
+	}
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', __NAMESPACE__ . '\\map_meta_cap', 10, 4 );
+
+/**
+ * Register our assets.
+ *
+ * @return void
+ */
+function register_assets() {
+	wp_register_style(
+		'ol-private-comments-style',
+		plugins_url( 'assets/css/private-comments.css' , __FILE__ ),
+		[],
+		VERSION
+	);
+
+	wp_register_script(
+		'ol-private-comments-script',
+		plugins_url( 'assets/js/private-comments.js' , __FILE__ ),
+		[ 'jquery' ],
+		VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\register_assets' );
 
 /**
  * Is the current user the post author?
@@ -47,9 +103,16 @@ function is_author( $post_id = null ) {
  * @return void
  */
 function render_checkbox() {
-	if ( is_user_logged_in() ) {
-		include __DIR__ . '/views/form-checkbox.php';
+	if ( ! is_user_logged_in() ) {
+		return;
 	}
+
+	// Add markup.
+	include __DIR__ . '/views/form-checkbox.php';
+
+	// Enqueue assets.
+	wp_enqueue_style( 'ol-private-comments-style' );
+	wp_enqueue_script( 'ol-private-comments-script' );
 }
 add_action( 'comment_form_logged_in_after', __NAMESPACE__ . '\\render_checkbox' );
 
@@ -77,6 +140,46 @@ function insert_comment( $comment_id, $comment ) {
 	}
 }
 add_action( 'wp_insert_comment', __NAMESPACE__ . '\\insert_comment', 10, 2 );
+
+/**
+ * Add "Private" comment notice.
+ *
+ * @param string     $text    Comment text.
+ * @param WP_Comment $comment Comment object.
+ * @return string
+ */
+function comment_notice( $text, $comment ) {
+	global $pagenow;
+
+	if ( 'edit-comments.php' === $pagenow ) {
+		return $text;
+	}
+
+	$is_private = (bool) get_comment_meta( $comment->comment_ID, 'ol_is_private', true );
+	if ( ! $is_private ) {
+		return $text;
+	}
+
+	$comment_text = sprintf(
+		'<div class="ol-private-comment-display ol-private-comment-hidden">' .
+			'<strong class="ol-private-comment-notice">%s</strong>&nbsp;' .
+			'<a href="#" class="ol-private-comment-show ol-private-comment-toggle">%s</a>' .
+			'<noscript>' .
+				'<span class="ol-private-comment-value-noscript">%s</span>' .
+			'</noscript>' .
+			'<a href="#" class="ol-private-comment-hide ol-private-comment-toggle">%s</a>' .
+			'<span class="ol-private-comment-value"><br />%s</span>' .
+		'</div>',
+		esc_html__( 'Comment (Private):', 'openlab-private-comments' ),
+		esc_html__( '(show)', 'openlab-private-comments' ),
+		esc_html( $text ),
+		esc_html__( '(hide)', 'openlab-private-comments' ),
+		esc_html( $text )
+	);
+
+	return $comment_text;
+}
+add_filter( 'get_comment_text', __NAMESPACE__ . '\\comment_notice', 100, 2 );
 
 /**
  * Display private comments only for specific users.
@@ -110,7 +213,7 @@ add_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
  * @param int $post_id Optional. ID of the post.
  * @return int[]       Array of comment IDs.
  */
-function get_inaccessible_comments( $user_id, $post_id = 0 ) {
+function get_inaccessible_comments( $user_id = null, $post_id = 0 ) {
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', __NAMESPACE__ . '\\remove_private_comments' );
 
@@ -143,6 +246,16 @@ function get_inaccessible_comments( $user_id, $post_id = 0 ) {
 		if ( $user_id ) {
 			$comment_post = get_post( $private_comment->comment_post_ID );
 			if ( $user_id == $comment_post->post_author ) {
+				continue;
+			}
+		}
+
+		// Comment authors should see private replies.
+		if ( ! empty( $private_comment->comment_parent ) ) {
+			$parent_id      = (int) $private_comment->comment_parent;
+			$parent_comment = get_comment( $parent_id );
+
+			if ( $user_id == $parent_comment->user_id ) {
 				continue;
 			}
 		}

@@ -1,19 +1,23 @@
 jQuery(document).ready(function($) {
 	var ewww_table_action = 'bulk_aux_images_table';
-	var ewww_table_count_action = 'bulk_aux_images_table_count';
 	var ewww_total_pages = 0;
 	var ewww_pointer = 0;
 	var ewww_search_total = 0;
+	var ewww_clean_meta_total = 0;
+	var ewww_table_debug = 0;
 	$('#ewww-show-table').submit(function() {
 		ewww_pointer = 0;
 		ewww_total_pages = Math.ceil(ewww_vars.image_count / 50);
 		$('.displaying-num').text(ewww_vars.count_string);
 		$('#ewww-table-info').hide();
 		$('#ewww-show-table').hide();
+		$('#ewww-debug-table-info').hide();
+		$('#ewww-show-debug-table').hide();
 	        var ewww_table_data = {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 	        };
 		$.post(ajaxurl, ewww_table_data, function(response) {
@@ -40,6 +44,14 @@ jQuery(document).ready(function($) {
 		});
 		return false;
 	});
+	$('#ewww-show-debug-table').submit(function() {
+		ewww_table_debug = 1;
+		ewww_pointer = 0;
+		$('#ewww-show-table').submit();
+		document.body.scrollTop = 0; // For Safari.
+		document.documentElement.scrollTop = 0; // For everyone else.
+		return false;
+	});
 	$('.ewww-search-form').submit(function() {
 		ewww_pointer = 0;
 		var ewww_search = $('.ewww-search-input').val();
@@ -47,6 +59,7 @@ jQuery(document).ready(function($) {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 			ewww_search: ewww_search,
 	        };
@@ -84,6 +97,7 @@ jQuery(document).ready(function($) {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 			ewww_search: ewww_search,
 	        };
@@ -122,6 +136,7 @@ jQuery(document).ready(function($) {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 			ewww_search: ewww_search,
 	        };
@@ -159,6 +174,7 @@ jQuery(document).ready(function($) {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 			ewww_search: ewww_search,
 	        };
@@ -191,6 +207,7 @@ jQuery(document).ready(function($) {
 	                action: ewww_table_action,
 			ewww_wpnonce: ewww_vars._wpnonce,
 			ewww_offset: ewww_pointer,
+			ewww_debug: ewww_table_debug,
 			ewww_total_pages: ewww_total_pages,
 			ewww_search: ewww_search,
 	        };
@@ -251,7 +268,6 @@ jQuery(document).ready(function($) {
 	});
 	function ewwwCleanup(total_pages){
 		total_pages--;
-		console.log(total_pages + '/' + ewww_total_pages);
 		var ewww_table_data = {
 			action: 'bulk_aux_images_table_clean',
 			ewww_wpnonce: ewww_vars._wpnonce,
@@ -281,23 +297,53 @@ jQuery(document).ready(function($) {
 			ewwwCleanup(total_pages);
 		});
 	}
-});
-function ewwwCleanup(ewww_total_pages){
-	ewww_total_pages--;
-	var ewww_table_data = {
-		action: 'bulk_aux_images_table_clean',
-		ewww_wpnonce: ewww_vars._wpnonce,
-		ewww_offset: ewww_total_pages,
-	};
-	$.post(ajaxurl, ewww_table_data, function(response) {
-		$('#ewww-table-info').hide();
-		$('#ewww-show-table').hide();
-		$('#ewww-clear-table').hide();
-		$('#ewww-clear-table-info').html(response);
-		ewwwCleanup(ewww_total_pages);
+	$('#ewww-clean-meta').submit(function() {
+		$('.ewww-tool-info').hide();
+		$('.ewww-tool-form').hide();
+		$('.ewww-tool-divider').hide();
+		$('#ewww-clean-meta-progressbar').progressbar({ max: ewww_vars.attachment_count });
+		console.log( $('#ewww-clean-meta-progressbar').progressbar("option","max"));
+		$('#ewww-clean-meta-progress').html('<p>0/' + ewww_vars.attachment_string + '</p>');
+		$('#ewww-clean-meta-progressbar').show();
+		$('#ewww-clean-meta-progress').show();
+		ewwwCleanupMeta();
+		return false;
 	});
-
-}
+	function ewwwCleanupMeta(){
+		var ewww_cleanmeta_data = {
+			action: 'bulk_aux_images_meta_clean',
+			ewww_wpnonce: ewww_vars._wpnonce,
+			ewww_offset: ewww_clean_meta_total,
+		};
+		$.post(ajaxurl, ewww_cleanmeta_data, function(response) {
+			try {
+				var ewww_response = $.parseJSON(response);
+			} catch (err) {
+				$('#ewww-clean-meta-progressbar').hide();
+				$('#ewww-clean-meta-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log( response );
+				return false;
+			}
+			if ( ewww_response.error ) {
+				$('#ewww-clean-meta-progressbar').hide();
+				$('#ewww-clean-meta-progress').html('<span style="color: red"><b>' + ewww_response.error + '</b></span>');
+				return false;
+			}
+			if(ewww_response.done) {
+				$('#ewww-clean-meta-progress').html(ewww_vars.finished);
+				$('#ewww-clean-meta-progressbar').progressbar("value", parseInt(ewww_vars.attachment_count));
+				return;
+			}
+			ewww_clean_meta_total += ewww_response.success;
+			if (ewww_clean_meta_total > ewww_vars.attachment_count) {
+				ewww_clean_meta_total = ewww_vars.attachment_count;
+			}
+			$('#ewww-clean-meta-progressbar').progressbar("value", ewww_clean_meta_total);
+			$('#ewww-clean-meta-progress').html('<p>' + ewww_clean_meta_total + '/' + ewww_vars.attachment_string + '</p>');
+			ewwwCleanupMeta();
+		});
+	}
+});
 function ewwwRemoveImage(imageID) {
 	var ewww_image_removal = {
 		action: 'bulk_aux_images_remove',

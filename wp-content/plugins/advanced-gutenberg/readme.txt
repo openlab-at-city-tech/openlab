@@ -1,9 +1,9 @@
-=== Advanced Gutenberg ===
-Contributors: JoomUnited
+=== Advanced Gutenberg - Blocks, Permissions, Layouts, Forms and CSS Styles ===
+Contributors: JoomUnited, advancedgutenberg
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
-Tested up to: 5.4.1
-Stable tag: 2.3.9
+Tested up to: 5.4.2
+Stable tag: 2.3.11
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -59,26 +59,13 @@ Advanced Gutenberg adds the missing blocks and configuration you need to build p
 
 [vimeo https://vimeo.com/264060718]
 
-<a href="https://www.joomunited.com/wordpress-products/advanced-gutenberg" title="WordPress Advanced Gutenberg" rel="friend">Read the plugin presentation on our website</a>
-
-## OTHERS PLUGINS
-
-Yes we do plugins and we've got some popular ones :)
-
-Main plugins from JoomUnited:
-
-* <a href="https://www.joomunited.com/wordpress-products/wp-media-folder" rel="friend">WP Media Folder:</a>  Supercharge your media library with folders
-* <a href="https://www.joomunited.com/wordpress-products/wp-file-download" rel="friend">WP File Download: </a>  Best in class file and document manager
-* <a href="https://www.joomunited.com/wordpress-products/wp-meta-seo" rel="friend">WP Meta SEO: </a>  Search Engine Optimization made easy
-* <a href="https://www.joomunited.com/wordpress-products/wp-speed-of-light" rel="friend">WP Speed of Light: </a>  Speedup your website in an easy way
-* <a href="https://www.joomunited.com/wordpress-products/wp-latest-posts" rel="friend">WP Latest Posts: </a>  Super flexible latest posts and content
-* <a href="https://www.joomunited.com/wordpress-products/wp-table-manager" rel="friend"> WP Table Manager: </a>  Create and manage tables with style
+<a href="https://advancedgutenberg.com/" title="WordPress Advanced Gutenberg" rel="friend">Read the plugin presentation on our website</a>
 
 
 = Support =
 
 Before leaving a review >> Feel free to ask questions here in the support section, we reply to every question!
-We also have a forum on www.joomunited.com for feature requests.
+We also have a forum on [advancedgutenberg.com](https://advancedgutenberg.com/) for feature requests.
 
 == Installation ==
 
@@ -104,7 +91,7 @@ We also have a forum on www.joomunited.com for feature requests.
 4. You can define a custom color for the new blocks, by default it's a kind of purple color
 
 = Can I get support for the editor use? =
-We reply to every question about the editor on the forum here, just ask :) We also have an online documentation here: https://www.joomunited.com/documentation/advanced-gutenberg
+We reply to every question about the editor on the forum here, just ask :) We also have an online documentation here: [https://advancedgutenberg.com/knowledge-base/](https://advancedgutenberg.com/knowledge-base/)
 
 = Does Advanced Gutenberg slowing down my website? =
 The plugin has almost NO impact on page load for your visitors, it's only loaded during the edition process.
@@ -140,6 +127,13 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 1. Latest posts and WooCommerce products blocks
 
 == Changelog ==
+
+= 2.3.11 =
+ * Fix: Improve default background position for new Advanced image block
+
+= 2.3.10 =
+ * Fix: Blocks spacing
+ * Fix: Default background position for new Advanced image block
 
 = 2.3.9 =
  * Fix : Wrong cell tag name in table head of Advanced Table block
@@ -516,8 +510,6 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
  * Add : Blocks access: Define which editor blocks Users / User roles can use
  * Add : Make gallery blocks images can be opened in a popup lightbox
  * Add : Option to display alt text as caption when a gallery lightbox is opened
-
-
 
 
 == Upgrade Notice ==

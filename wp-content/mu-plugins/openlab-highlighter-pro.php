@@ -191,12 +191,17 @@ function render_content_stats( $content ) {
  * @return void
  */
 function enqueue_assets() {
-	$options   = \get_option( 'highlighter_settings' );
-	$types     = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
+	$options = \get_option( 'highlighter_settings' );
+	$types   = ! empty( $options['highlighter_enable'] ) ? $options['highlighter_enable'] : [];
 
 	if ( ! \is_singular( $types ) ) {
 		return;
 	}
 
-	\wp_enqueue_style( 'openlab-highligter-pro', \content_url( 'mu-plugins/css/highlighter-pro.css' ) );
+	\wp_enqueue_style(
+		'openlab-highligter-pro',
+		\content_url( 'mu-plugins/css/highlighter-pro.css' ),
+		[],
+		'1.0.0'
+	);
 }

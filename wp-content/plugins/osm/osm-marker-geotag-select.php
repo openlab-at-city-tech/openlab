@@ -253,6 +253,10 @@
   <input type="radio" name="geotag_marker_icon" id="geotag_marker_icon" value="mic_black_roller_10.png"/>
   <?php  echo '<img src="'.OSM_PLUGIN_ICONS_URL.'/mic_black_roller_10.png" align="left" hspace="5" alt="mic_black_roller_10.png">'; ?>
 </label>
+<label class="metabox-label">
+  <input type="radio" name="geotag_marker_icon" id="geotag_marker_icon" value="mic_black_soccer_10.png"/>
+  <?php  echo '<img src="'.OSM_PLUGIN_ICONS_URL.'/mic_black_soccer_10.png" align="left" hspace="5" alt="mic_black_soccer_10.png">'; ?>
+</label>
 </div> <!-- id="tab_sport" -->
 
 

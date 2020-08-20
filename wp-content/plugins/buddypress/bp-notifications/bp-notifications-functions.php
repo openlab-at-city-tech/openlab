@@ -233,8 +233,8 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 					$notification_object->content = $content;
 					$notification_object->href    = bp_loggedin_user_domain();
 				} else {
-					$notification_object->content = $content['text'];
-					$notification_object->href    = $content['link'];
+					$notification_object->content = isset( $content['text'] ) ? $content['text'] : '';
+					$notification_object->href    = isset( $content['link'] ) ? $content['link'] : '';
 				}
 
 				$renderable[] = $notification_object;
@@ -445,7 +445,23 @@ function bp_notifications_delete_notifications_on_user_delete( $user_id ) {
 	) );
 }
 add_action( 'wpmu_delete_user', 'bp_notifications_delete_notifications_on_user_delete' );
-add_action( 'delete_user', 'bp_notifications_delete_notifications_on_user_delete' );
+
+/**
+ * Deletes user notifications data on the 'delete_user' hook.
+ *
+ * @since 6.0.0
+ *
+ * @param int $user_id The ID of the deleted user.
+ */
+function bp_notifications_delete_notifications_on_delete_user( $user_id ) {
+	if ( ! bp_remove_user_data_on_delete_user_hook( 'notifications', $user_id ) ) {
+		return;
+	}
+
+	bp_notifications_delete_notifications_on_user_delete( $user_id );
+}
+
+add_action( 'delete_user', 'bp_notifications_delete_notifications_on_delete_user' );
 
 /** Mark **********************************************************************/
 

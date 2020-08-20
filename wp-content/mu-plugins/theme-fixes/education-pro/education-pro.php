@@ -8,6 +8,14 @@
  */
 remove_theme_support( 'genesis-auto-updates' );
 
+// Favicon fallback.
+add_filter(
+	'genesis_favicon_url',
+	function( $url ) {
+		return get_home_url( 1, 'favicon.ico' );
+	}
+);
+
 //* Add support for custom header
 remove_theme_support( 'custom-header' );
 add_theme_support( 'custom-header', array(
@@ -124,19 +132,7 @@ add_theme_support( 'genesis-style-selector', array(
 	'education-pro-red'    => 'Red',
 ) );
 
-// Convert "Header Right" widget area to a nav area.
 unregister_sidebar( 'header-right' );
-register_nav_menu( 'title-menu', 'Main Nav' );
-add_action(
-	'genesis_header_right',
-	function() {
-		add_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
-		add_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
-		echo genesis_get_nav_menu( [ 'theme_location' => 'title-menu' ] );
-		remove_filter( 'wp_nav_menu_args', 'genesis_header_menu_args' );
-		remove_filter( 'wp_nav_menu', 'genesis_header_menu_wrap' );
-	}
-);
 
 add_filter(
 	'genesis_get_layouts',
@@ -152,11 +148,23 @@ add_filter(
 	}
 );
 
-remove_theme_support( 'genesis-footer-widgets' );
 $deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
 	unregister_sidebar( $deregister_sidebar );
 }
+
+add_filter(
+	'is_active_sidebar',
+	function( $is_active, $sidebar ) {
+		if ( 'home-bottom' === $sidebar ) {
+			return false;
+		}
+
+		return $is_active;
+	},
+	10,
+	2
+);
 
 /**
  * Modify Genesis default nav areas.
@@ -169,8 +177,12 @@ foreach ( $deregister_sidebars as $deregister_sidebar ) {
 add_action(
 	'after_setup_theme',
 	function() {
-		register_nav_menu( 'primary', 'Top Menu' );
+		register_nav_menu( 'primary', 'Main Nav' );
 		unregister_nav_menu( 'secondary' );
+
+		// Undo Education Pro's nav swap.
+		remove_action( 'genesis_before_header', 'genesis_do_nav' );
+		add_action( 'genesis_after_header', 'genesis_do_nav' );
 	},
 	20
 );
@@ -191,58 +203,82 @@ add_filter(
 	2
 );
 
-register_default_headers( [
-	'foil' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
-		'description'   => 'Foil',
-	],
-	'leaves' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
-		'description'   => 'Leaves',
-	],
-	'numbers' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
-		'description'   => 'Numbers',
-	],
-	'candy' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
-		'description'   => 'Candy',
-	],
-	'firewood' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
-		'description'   => 'Firewood',
-	],
-	'circles' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
-		'description'   => 'Circles',
-	],
-	'fabric' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
-		'description'   => 'Fabric',
-	],
-	'water' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
-		'description'   => 'Water',
-	],
-	'stonefloor' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
-		'description'   => 'Stone Floor',
-	],
-	'riverrocks' => [
-		'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
-		'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
-		'description'   => 'River Rocks',
-	],
-] );
+function openlab_education_pro_default_headers() {
+	return [
+		'foil' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/foil.png' ),
+			'description'   => 'Foil',
+		],
+		'leaves' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/leaves.png' ),
+			'description'   => 'Leaves',
+		],
+		'numbers' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/numbers.png' ),
+			'description'   => 'Numbers',
+		],
+		'candy' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/candy.png' ),
+			'description'   => 'Candy',
+		],
+		'firewood' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/firewood.png' ),
+			'description'   => 'Firewood',
+		],
+		'circles' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/circles.png' ),
+			'description'   => 'Circles',
+		],
+		'fabric' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/fabric.png' ),
+			'description'   => 'Fabric',
+		],
+		'water' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/water.png' ),
+			'description'   => 'Water',
+		],
+		'stonefloor' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/stonefloor.png' ),
+			'description'   => 'Stone Floor',
+		],
+		'riverrocks' => [
+			'url'           => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+			'thumbnail_url' => content_url( 'mu-plugins/theme-fixes/education-pro/images/riverrocks.png' ),
+			'description'   => 'River Rocks',
+		],
+	];
+}
+
+register_default_headers( openlab_education_pro_default_headers() );
+
+/**
+ * Add 'default-header-image' class, when appropriate.
+ */
+add_filter(
+	'body_class',
+	function( $classes ) {
+		$header_image    = get_header_image();
+		$default_headers = openlab_education_pro_default_headers();
+
+		foreach ( $default_headers as $default_header ) {
+			if ( $header_image === $default_header['url'] ) {
+				$classes[] = 'default-header-image';
+				break;
+			}
+		};
+
+		return $classes;
+	}
+);
 
 add_action(
 	'wp_head',
@@ -312,9 +348,30 @@ function openlab_custom_header_style() {
 		break;
 	}
 
+	$default_headers = openlab_education_pro_default_headers();
+
+	$is_default_header = false;
+	foreach ( $default_headers as $default_header ) {
+		if ( $header_image === $default_header['url'] ) {
+			$is_default_header = true;
+			break;
+		}
+	};
+
 	// Header image CSS, if exists.
 	if ( $header_image ) {
-		$output .= sprintf( '%s { background: linear-gradient( %s, %s ), url(%s) no-repeat !important; }', $header_selector, $gradient, $gradient, esc_url( $header_image ) );
+		if ( $is_default_header ) {
+			$background_color = sprintf( 'linear-gradient( %s, %s ),', $gradient, $gradient );
+		} else {
+			$background_color = 'transparent';
+		}
+
+		$output .= sprintf(
+			'%s { background: %s url(%s) no-repeat !important; }',
+			$header_selector,
+			$background_color,
+			esc_url( $header_image )
+		);
 	}
 
 	// Header text color CSS, if showing text.
@@ -346,7 +403,7 @@ function openlab_genesis_do_header() {
 	global $wp_registered_sidebars;
 
 	genesis_markup( array(
-		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div %s>',
+		'open'    => '<a class="title-area-link" href="' . home_url() . '"><div class="title-area-wrap"><div %s>',
 		'context' => 'title-area',
 	) );
 
@@ -365,7 +422,7 @@ function openlab_genesis_do_header() {
 		do_action( 'genesis_site_description' );
 
 	genesis_markup( array(
-		'close'   => '</div></a>',
+		'close'   => '</div></div></a>',
 		'context' => 'title-area',
 	) );
 
@@ -462,4 +519,34 @@ add_filter(
 		return $image_data;
 	},
 	0
+);
+
+/**
+ * Add featured image to the beginning of post content.
+ */
+add_action(
+	'genesis_entry_content',
+	function() {
+		if ( ! is_singular() ) {
+			return;
+		}
+
+		$img = genesis_get_image( array(
+			'format'   => 'html',
+			'size'     => 'full',
+			'context'  => 'archive',
+			'attr'     => 'post-image entry-image',
+			'fallback' => '',
+		) );
+
+		if ( ! empty( $img ) ) {
+			genesis_markup( array(
+				'open'    => '<a %s>',
+				'close'   => '</a>',
+				'content' => wp_make_content_images_responsive( $img ),
+				'context' => 'entry-image-link',
+			) );
+		}
+	},
+	8
 );

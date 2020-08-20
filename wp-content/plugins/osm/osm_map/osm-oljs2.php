@@ -790,8 +790,8 @@ class Osm_OpenLayers
         }
         else {
           // set it do invidual marker
-          $this->traceText(DEBUG_INFO, "e_not_osm_icon");
-          $this->traceText(DEBUG_INFO, $a_MarkerArray[$row][Marker]);
+          Osm::traceText(DEBUG_INFO, "e_not_osm_icon");
+          Osm::traceText(DEBUG_INFO, $a_MarkerArray[$row][Marker]);
         }
       }
       else {

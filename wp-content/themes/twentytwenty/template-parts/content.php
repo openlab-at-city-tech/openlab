@@ -8,7 +8,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Twenty
- * @since 1.0.0
+ * @since Twenty Twenty 1.0
  */
 
 ?>
@@ -57,7 +57,7 @@
 		// Single bottom post meta.
 		twentytwenty_the_post_meta( get_the_ID(), 'single-bottom' );
 
-		if ( is_single() ) {
+		if ( post_type_supports( get_post_type( get_the_ID() ), 'author' ) && is_single() ) {
 
 			get_template_part( 'template-parts/entry-author-bio' );
 

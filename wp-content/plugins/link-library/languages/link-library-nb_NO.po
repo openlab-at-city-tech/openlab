@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Bookmarks: 136,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 2.2.3\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;esc_html;esc_html__;esc_html_e;"
 "esc_attr__;esc_attr_e\n"
@@ -1522,8 +1522,8 @@ msgstr "Kategoribeskrivelse"
 msgid "Tags"
 msgstr "Tagger"
 
-#: link-library-admin.php:3402 link-library-admin.php:5039
-#: link-library.php:894 render-link-library-sc.php:993
+#: link-library-admin.php:3402 link-library-admin.php:5039 link-library.php:894
+#: render-link-library-sc.php:993
 msgid "Price"
 msgstr "Pris"
 
@@ -3075,7 +3075,7 @@ msgid "#%d (no title)"
 msgstr "#%d (ingen tittel)"
 
 msgid "Filters"
-msgstr "Filter"
+msgstr "Sorter"
 
 #~ msgid "Link Library - Additional Link Parameters"
 #~ msgstr "Link Library - Paramètres Additionels"

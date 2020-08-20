@@ -4,6 +4,8 @@ defined( 'ABSPATH' ) or die();
 
 class Text_Replace_Test extends WP_UnitTestCase {
 
+	protected $captured_filter_value = array();
+
 	protected static $text_to_link = array(
 		':wp:'           => 'WordPress',
 		":coffee2code:"  => "<a href='http://coffee2code.com' title='coffee2code'>coffee2code</a>",
@@ -24,6 +26,8 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		'iPhone 6'       => 'http://example.com/aople2',
 		'test'           => 'http://example.com/txst1',
 		'test place'     => 'http://example.com/txst2',
+		'zero'           => '0',
+		'empty string'   => '',
 	);
 
 	public static function setUpBeforeClass() {
@@ -39,6 +43,8 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 
+		$this->captured_filter_value = array();
+
 		// Reset options
 		c2c_TextReplace::get_instance()->reset_options();
 
@@ -47,6 +53,7 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		remove_filter( 'c2c_text_replace_case_sensitive', '__return_false' );
 		remove_filter( 'c2c_text_replace_comments',       '__return_true' );
 		remove_filter( 'c2c_text_replace_filters',        array( $this, 'add_custom_filter' ) );
+		remove_filter( 'c2c_text_replace_third_party_filters', array( $this, 'add_custom_filter' ) );
 	}
 
 
@@ -69,6 +76,17 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		return array(
 			array( 'get_comment_text' ),
 			array( 'get_comment_excerpt' ),
+		);
+	}
+
+	public static function get_third_party_filters() {
+		return array(
+			array( 'acf/format_value/type=text' ),
+			array( 'acf/format_value/type=textarea' ),
+			array( 'acf/format_value/type=url' ),
+			array( 'acf_the_content' ),
+			array( 'elementor/frontend/the_content' ),
+			array( 'elementor/widget/render_content' ),
 		);
 	}
 
@@ -111,6 +129,25 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		return $this->text_replacements( $term );
 	}
 
+	protected function get_filter_names() {
+		return array_map(
+			function ( $x ) { return reset( $x ); },
+			array_merge(
+				$this->get_third_party_filters(),
+				$this->get_default_filters()
+			)
+		);
+	}
+
+	public function unhook_default_filters( $priority = 2 ) {
+		$filters = $this->get_filter_names();
+
+		// Unhook filters.
+		foreach ( $filters as $filter ) {
+			remove_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace' ), $priority );
+		}
+	}
+
 	public function add_text_to_replace( $text_to_replace ) {
 		$text_to_replace = (array) $text_to_replace;
 		$text_to_replace['bbPress'] = '<a href="https://bbpress.org">bbPress - Forum Software</a>';
@@ -120,6 +157,14 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	public function add_custom_filter( $filters ) {
 		$filters[] = 'custom_filter';
 		return $filters;
+	}
+
+	public function c2c_text_replace_filter_priority( $priority, $filter = '' ) {
+		return ( 'filter_20' === $filter ) ? 20 : 11;
+	}
+
+	public function capture_filter_value( $value ) {
+		return $this->captured_filter_value[ current_filter() ] = $value;
 	}
 
 
@@ -135,19 +180,82 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextReplace_Plugin_048' ) );
+		$this->assertTrue( class_exists( 'c2c_TextReplace_Plugin_050' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '048', c2c_TextReplace::get_instance()->c2c_plugin_version() );
+		$this->assertEquals( '050', c2c_TextReplace::get_instance()->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '3.8', c2c_TextReplace::get_instance()->version() );
+		$this->assertEquals( '3.9', c2c_TextReplace::get_instance()->version() );
 	}
 
 	public function test_instance_object_is_returned() {
 		$this->assertTrue( is_a( c2c_TextReplace::get_instance(), 'c2c_TextReplace' ) );
+	}
+
+	public function test_hooks_plugins_loaded() {
+		$this->assertEquals( 10, has_action( 'plugins_loaded', array( 'c2c_TextReplace', 'get_instance' ) ) );
+	}
+
+	/*
+	 * Setting defaults.
+	 */
+
+	public function test_default_value_of_text_to_replace() {
+		c2c_TextReplace::get_instance()->reset_options();
+		$options = c2c_TextReplace::get_instance()->get_options();
+
+		$expected = array(
+			':wp:'          => "<a href='https://wordpress.org'>WordPress</a>",
+			':codex:'       => "<a href='https://codex.wordpress.org'>WordPress Codex</a>",
+			':coffee2code:' => "<a href='http://coffee2code.com' title='coffee2code'>coffee2code</a>",
+		);
+
+		$this->assertEquals( $expected, $options['text_to_replace'] );
+	}
+
+	public function test_default_value_of_text_replace_comments() {
+		c2c_TextReplace::get_instance()->reset_options();
+		$options = c2c_TextReplace::get_instance()->get_options();
+
+		$this->assertFalse( $options['text_replace_comments'] );
+	}
+
+	public function test_default_value_of_replace_once() {
+		c2c_TextReplace::get_instance()->reset_options();
+		$options = c2c_TextReplace::get_instance()->get_options();
+
+		$this->assertFalse( $options['replace_once'] );
+	}
+
+	public function test_default_value_of_case_sensitive() {
+		c2c_TextReplace::get_instance()->reset_options();
+		$options = c2c_TextReplace::get_instance()->get_options();
+
+		$this->assertTrue( $options['case_sensitive'] );
+	}
+
+	public function test_default_value_of_when() {
+		c2c_TextReplace::get_instance()->reset_options();
+		$options = c2c_TextReplace::get_instance()->get_options();
+
+		$this->assertEquals( 'early', $options['when'] );
+	}
+
+	/*
+	 * Text replacements
+	 */
+
+	public function test_no_text_change_when_no_replacements_defined() {
+		$text = 'This is a 2019 test.';
+
+		$this->set_option( array( 'text_to_replace' => '' ) );
+
+		$this->assertEquals( $text, $this->text_replace( $text ) );
+
+		$this->set_option( array( 'text_to_replace' => $this->text_replacements() ) );
 	}
 
 	public function test_replaces_text() {
@@ -216,6 +324,12 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	}
 
 	public function test_does_not_replace_within_markup_attributes() {
+		$expected = '<a href="http://test.com" title="A test site">gibberish</a>';
+
+		$this->assertEquals( $expected, $this->text_replace( $expected ) );
+	}
+
+	public function test_does_not_replace_within_markup_attributes_but_does_between_tags() {
 		$format = '<a href="http://%s/file.png">http://%s/file.png</a>';
 		$old    = 'example.com/wp-content/uploads';
 		$new    = $this->expected_text( $old );
@@ -243,10 +357,10 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	}
 
 	/*
-	 * With 'Apple iPhone 6' followed by 'iPhone 6' as link defines, the string
-	 * 'Apple iPhone 6' should not have the 'iPhone 6' linkification applied to it.
+	 * With 'Apple iPhone 6' followed by 'iPhone 6' as replacement defines, the string
+	 * 'Apple iPhone 6' should not have the 'iPhone 6' replacement applied to it.
 	 */
-	public function test_does_not_linkify_a_general_term_that_is_included_in_earlier_listed_term() {
+	public function test_does_not_replace_a_general_term_that_is_included_in_earlier_listed_term() {
 		$string = 'Apple iPhone 6';
 
 		$this->assertEquals( $this->expected_text( $string ), $this->text_replace( $string ) );
@@ -258,7 +372,7 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	 *
 	 *  MAYBE! Not sure if this is desired. But the theory is if both
 	 * "test" and "test place" are defined, then the text "test place" should get
-	 * linked, even though "test" was defined first.
+	 * replaced, even though "test" was defined first.
 	 */
 	public function test_does_not_replace_a_more_general_term_when_general_is_first() {
 		$expected = $this->expected_text( 'test place' );
@@ -266,7 +380,7 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		$this->assertEquals( "This $expected is true", $this->text_replace( 'This test place is true' ) );
 	}
 
-	public function tests_linkifies_term_split_across_multiple_lines() {
+	public function test_replaces_term_split_across_multiple_lines() {
 		$expected = array(
 			"See my " . $this->expected_text( 'test place' ) . " site to read."
 				=> $this->text_replace( "See my test\nplace site to read." ),
@@ -285,7 +399,41 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		}
 	}
 
-	public function test_linkifies_multibyte_text_once_via_setting() {
+	// Note: This KNOWN FAILURE test presumes that replacement text should not
+	// be at risk of seeing a replacement itself. This may not be a valid
+	// presumption though.
+	public function test_does_not_replace_a_previous_replacement_KNOWN_FAILURE() {
+		$expected = 'this KNOWN FAILURE may not actually be considered a valid test';
+
+		$this->set_option( array(
+			'text_to_replace' => array(
+				'test'       => 'http://example.com/txst1',
+				'test thing' => $expected,
+			)
+		) );
+
+		$this->assertEquals( $expected, $this->text_replace( 'test thing' ) );
+	}
+
+	// Note: This KNOWN FAILURE test presumes that shortcode attributes should
+	// not be at risk of seeing a replacement itself. This may not be a valid
+	// presumption though.
+	public function test_does_not_replace_shortcode_KNOWN_FAILURE() {
+		$expected = '[test title="This KNOWN FAILURE may not actually be a valid test"]gibberish[/test]';
+
+		$this->assertEquals( $expected, $this->text_replace( $expected ) );
+	}
+
+	// Note: This KNOWN FAILURE test presumes that shortcode attributes should
+	// not be at risk of seeing a replacement itself. This may not be a valid
+	// presumption though.
+	public function test_does_not_replace_within_shortcodes_attributes_KNOWN_FAILURE() {
+		$expected = '[caption title="This KNOWN FAILURE may not actually be a valid test"]gibberish[/caption]';
+
+		$this->assertEquals( $expected, $this->text_replace( $expected ) );
+	}
+
+	public function test_replaces_multibyte_text_once_via_setting() {
 		$linked = $this->expected_text( 'Cocktail glacé' );
 
 		$this->set_option( array( 'replace_once' => true ) );
@@ -405,10 +553,10 @@ class Text_Replace_Test extends WP_UnitTestCase {
 	/**
 	 * @dataProvider get_default_filters
 	 */
-	public function test_replace_applies_to_default_filters( $filter ) {
+	public function test_replace_applies_to_default_filters( $filter, $priority = 2 ) {
 		$expected = $this->expected_text( ':coffee2code:' );
 
-		$this->assertNotFalse( has_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace' ), 12 ) );
+		$this->assertEquals( $priority, has_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace' ) ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a :coffee2code:' ), $expected ) );
 	}
 
@@ -420,8 +568,30 @@ class Text_Replace_Test extends WP_UnitTestCase {
 
 		add_filter( 'c2c_text_replace_comments', '__return_true' );
 
-		$this->assertNotFalse( has_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace_comment_text' ), 11 ) );
+		$this->assertEquals( 11, has_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace_comment_text' ) ) );
 		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a :coffee2code:' ), $expected ) );
+	}
+
+	/**
+	 * @dataProvider get_third_party_filters
+	 */
+	public function test_replace_applies_to_third_party_filters( $filter ) {
+		$expected = $this->expected_text( ':coffee2code:' );
+
+		$this->assertEquals( 2, has_filter( $filter, array( c2c_TextReplace::get_instance(), 'text_replace' ) ) );
+		$this->assertGreaterThan( 0, strpos( apply_filters( $filter, 'a :coffee2code:' ), $expected ) );
+	}
+
+	public function test_third_party_filters_are_part_of_c2c_text_replace_filters() {
+		$filters = $this->get_filter_names();
+
+		add_filter( 'c2c_text_replace_filters', array( $this, 'capture_filter_value' ) );
+
+		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertSame( $filters, $this->captured_filter_value[ 'c2c_text_replace_filters' ] );
+
+		remove_filter( 'c2c_text_replace_filters', array( $this, 'capture_filter_value' ) );
 	}
 
 	public function test_replace_applies_to_custom_filter_via_filter() {
@@ -432,6 +602,54 @@ class Text_Replace_Test extends WP_UnitTestCase {
 		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
 
 		$this->assertEquals( $this->expected_text( ':coffee2code:' ), apply_filters( 'custom_filter', ':coffee2code:' ) );
+	}
+
+	public function test_hover_applies_to_custom_third_party_filter_via_filter() {
+		$this->assertEquals( ':coffee2code:', apply_filters( 'custom_filter', ':coffee2code:' ) );
+
+		add_filter( 'c2c_text_replace_third_party_filters', array( $this, 'add_custom_filter' ) );
+
+		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertEquals( $this->expected_text( ':coffee2code:' ), apply_filters( 'custom_filter', ':coffee2code:' ) );
+	}
+
+	/*
+	 * filter: c2c_text_replace_filter_priority
+	 */
+
+	public function test_changing_priority_via_c2c_text_replace_filter_priority() {
+		$filters = $this->get_filter_names();
+
+		$this->unhook_default_filters();
+
+		add_filter( 'c2c_text_replace_filter_priority', array( $this, 'c2c_text_replace_filter_priority' ) );
+
+		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$priority = 11;
+
+		foreach ( $filters as $filter ) {
+			$this->test_replace_applies_to_default_filters( $filter, $priority );
+		}
+	}
+
+	public function test_default_priority_for_filter_c2c_text_replace_filter_priority_is_based_on_when_setting() {
+		$this->unhook_default_filters();
+
+		add_filter( 'c2c_text_replace_filter_priority', array( $this, 'capture_filter_value' ) );
+
+		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertEquals( 2, $this->captured_filter_value[ 'c2c_text_replace_filter_priority' ] );
+
+		$this->unhook_default_filters();
+		$this->set_option( array( 'when' => 'late' ) );
+		c2c_TextReplace::get_instance()->register_filters(); // Plugins would typically register their filter before this originally fires
+
+		$this->assertEquals( 1000, $this->captured_filter_value[ 'c2c_text_replace_filter_priority' ] );
+
+		$this->unhook_default_filters( 1000 );
 	}
 
 	/*

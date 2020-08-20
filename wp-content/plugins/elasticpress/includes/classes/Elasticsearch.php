@@ -101,7 +101,7 @@ class Elasticsearch {
 		$request_args = array(
 			'body'     => $encoded_document,
 			'method'   => 'POST',
-			'timeout'  => 15,
+			'timeout'  => apply_filters( 'ep_index_document_timeout', 15 ),
 			'blocking' => $blocking,
 		);
 
@@ -323,7 +323,19 @@ class Elasticsearch {
 			$hits       = $this->get_hits_from_query( $response );
 			$total_hits = $this->get_total_hits_from_query( $response );
 
-			// Check for and store aggregations.
+			if ( ! empty( $response['aggregations'] ) ) {
+				/**
+				 * Deprecated way to retrieve aggregations.
+				 *
+				 * @hook ep_retrieve_aggregations
+				 * @param {array} $aggregations Elasticsearch aggregations
+				 * @param  {array} $query Prepared Elasticsearch query
+				 * @param {string} $scope Backwards compat for scope parameter.
+				 * @param  {array} $query_args Current WP Query arguments
+				 */
+				do_action( 'ep_retrieve_aggregations', $response['aggregations'], $query, '', $query_args );
+			}
+
 			/**
 			 * Fires after valid Elasticsearch query
 			 *
@@ -530,7 +542,7 @@ class Elasticsearch {
 		}
 
 		/**
-		 * Filter Elasticsearch response headers
+		 * Filter Elasticsearch request headers
 		 *
 		 * @hook ep_format_request_headers
 		 * @param {array} $headers Current headers
@@ -790,7 +802,7 @@ class Elasticsearch {
 		$request_args = array(
 			'method'  => 'POST',
 			'body'    => $body,
-			'timeout' => 30,
+			'timeout' => apply_filters( 'ep_bulk_index_timeout', 30 ),
 		);
 
 		$request = $this->remote_request( $path, $request_args, [], 'bulk_index' );
@@ -912,9 +924,10 @@ class Elasticsearch {
 
 			$request_response_code = (int) wp_remote_retrieve_response_code( $request );
 
-			$is_valid_res = ( $request_response_code >= 200 && $request_response_code <= 299 );
+			$is_valid_res            = ( $request_response_code >= 200 && $request_response_code <= 299 );
+			$is_non_blocking_request = ( 0 === $request_response_code );
 
-			if ( false === $request || is_wp_error( $request ) || ! $is_valid_res ) {
+			if ( false === $request || is_wp_error( $request ) || ( ! $is_valid_res && ! $is_non_blocking_request ) ) {
 				$failures++;
 
 				/**

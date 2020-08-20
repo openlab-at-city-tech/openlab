@@ -49,7 +49,9 @@ class Su_Generator_Views {
 		$types = get_post_types( array(), 'objects', 'or' );
 
 		// Prepare empty array for values
-		$field['values'] = array();
+		$field['values'] = array(
+			'any' => _x( 'Any post type', 'shortcodes-ultimate' ),
+		);
 
 		// Fill the array
 		foreach( $types as $type ) {

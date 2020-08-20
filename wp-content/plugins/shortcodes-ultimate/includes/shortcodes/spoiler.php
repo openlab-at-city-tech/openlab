@@ -75,12 +75,13 @@ su_add_shortcode(
 function su_shortcode_spoiler( $atts = null, $content = null ) {
 	$atts           = shortcode_atts(
 		array(
-			'title'  => __( 'Spoiler title', 'shortcodes-ultimate' ),
-			'open'   => 'no',
-			'style'  => 'default',
-			'icon'   => 'plus',
-			'anchor' => '',
-			'class'  => '',
+			'title'         => __( 'Spoiler title', 'shortcodes-ultimate' ),
+			'open'          => 'no',
+			'style'         => 'default',
+			'icon'          => 'plus',
+			'anchor'        => '',
+			'scroll_offset' => 0,
+			'class'         => '',
 		),
 		$atts,
 		'spoiler'
@@ -95,5 +96,5 @@ function su_shortcode_spoiler( $atts = null, $content = null ) {
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'su-shortcodes' );
 	do_action( 'su/shortcode/spoiler', $atts );
-	return '<div class="su-spoiler su-spoiler-style-' . $atts['style'] . ' su-spoiler-icon-' . $atts['icon'] . su_get_css_class( $atts ) . '"' . $atts['anchor'] . '><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'] ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
+	return '<div class="su-spoiler su-spoiler-style-' . $atts['style'] . ' su-spoiler-icon-' . $atts['icon'] . su_get_css_class( $atts ) . '"' . $atts['anchor'] . ' data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '"><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'] ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
 }

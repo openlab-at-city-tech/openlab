@@ -136,18 +136,19 @@ su_add_shortcode(
 			'orderby'             => array(
 				'type'    => 'select',
 				'values'  => array(
-					'none'          => __( 'None', 'shortcodes-ultimate' ),
-					'id'            => __( 'Post ID', 'shortcodes-ultimate' ),
-					'author'        => __( 'Post author', 'shortcodes-ultimate' ),
-					'title'         => __( 'Post title', 'shortcodes-ultimate' ),
-					'name'          => __( 'Post slug', 'shortcodes-ultimate' ),
-					'date'          => __( 'Date', 'shortcodes-ultimate' ),
-					'modified'      => __( 'Last modified date', 'shortcodes-ultimate' ),
-					'parent'        => __( 'Post parent', 'shortcodes-ultimate' ),
-					'rand'          => __( 'Random', 'shortcodes-ultimate' ),
-					'comment_count' => __( 'Comments number', 'shortcodes-ultimate' ),
-					'menu_order'    => __( 'Menu order', 'shortcodes-ultimate' ),
-					'meta_value'    => __( 'Meta key values', 'shortcodes-ultimate' ),
+					'none'           => __( 'None', 'shortcodes-ultimate' ),
+					'id'             => __( 'Post ID', 'shortcodes-ultimate' ),
+					'author'         => __( 'Post author', 'shortcodes-ultimate' ),
+					'title'          => __( 'Post title', 'shortcodes-ultimate' ),
+					'name'           => __( 'Post slug', 'shortcodes-ultimate' ),
+					'date'           => __( 'Date', 'shortcodes-ultimate' ),
+					'modified'       => __( 'Last modified date', 'shortcodes-ultimate' ),
+					'parent'         => __( 'Post parent', 'shortcodes-ultimate' ),
+					'rand'           => __( 'Random', 'shortcodes-ultimate' ),
+					'comment_count'  => __( 'Comments number', 'shortcodes-ultimate' ),
+					'menu_order'     => __( 'Menu order', 'shortcodes-ultimate' ),
+					'meta_value'     => __( 'Meta key values', 'shortcodes-ultimate' ),
+					'meta_value_num' => __( 'Meta key values (Numeric)', 'shortcodes-ultimate' ),
 				),
 				'default' => 'date',
 				'name'    => __( 'Order by', 'shortcodes-ultimate' ),
@@ -225,11 +226,6 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 		$atts,
 		'posts'
 	);
-
-	// Validate template name
-	if ( ! su_is_valid_template_name( $atts['template'] ) ) {
-		return su_error_message( 'Posts', __( 'invalid template name', 'shortcodes-ultimate' ) );
-	}
 
 	$author              = sanitize_text_field( $atts['author'] );
 	$id                  = $atts['id']; // Sanitized later as an array of integers
@@ -377,42 +373,71 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 		}
 		$args['post_parent'] = intval( $post_parent );
 	}
+
+	$atts['template'] = su_shortcode_posts_locate_template( $atts['template'] );
+
+	if ( ! $atts['template'] ) {
+
+		return su_error_message(
+			'Posts',
+			__( 'invalid template name', 'shortcodes-ultimate' )
+		);
+
+	}
+
 	// Save original posts
 	global $posts;
 	$original_posts = $posts;
 	// Query posts
 	$posts = new WP_Query( $args );
-	// Add extension to template name
-	$atts['template'] = su_set_file_extension( $atts['template'], 'php' );
-	// Buffer output
-	ob_start();
-	// Search for template in stylesheet directory
-	if ( file_exists( get_stylesheet_directory() . '/' . $atts['template'] ) ) {
-		load_template( get_stylesheet_directory() . '/' . $atts['template'], false );
-	}
-	// Search for template in theme directory
-	elseif ( file_exists( get_template_directory() . '/' . $atts['template'] ) ) {
-		load_template( get_template_directory() . '/' . $atts['template'], false );
-	}
-	// Search for template in plugin directory
-	elseif ( file_exists( path_join( dirname( SU_PLUGIN_FILE ), $atts['template'] ) ) ) {
-		load_template(
-			path_join( dirname( SU_PLUGIN_FILE ), $atts['template'] ),
-			false
-		);
-	}
-	// Template not found
-	else {
-		echo su_error_message(
-			'Posts',
-			__( 'template not found', 'shortcodes-ultimate' )
-		);
-	}
-	$output = ob_get_clean();
+	// Load the template
+	$output = su_shortcode_posts_include_template( $atts, $posts );
 	// Return original posts
 	$posts = $original_posts;
 	// Reset the query
 	wp_reset_postdata();
 	su_query_asset( 'css', 'su-shortcodes' );
 	return $output;
+}
+
+function su_shortcode_posts_include_template( $atts, $posts ) {
+
+	ob_start();
+
+	include $atts['template'];
+
+	return ob_get_clean();
+
+}
+
+function su_shortcode_posts_locate_template( $template ) {
+
+	$template = su_set_file_extension( $template, 'php' );
+	$template = ltrim( $template, '\\/' );
+
+	$locations = array(
+		get_stylesheet_directory(),
+		get_template_directory(),
+		path_join(
+			su_get_plugin_path(),
+			'includes/partials/shortcodes/posts'
+		),
+	);
+
+	foreach ( $locations as $base ) {
+
+		$base = untrailingslashit( $base );
+		$base = realpath( $base );
+
+		$path = path_join( $base, $template );
+		$path = realpath( $path );
+
+		if ( file_exists( $path ) && strpos( $path, $base ) === 0 ) {
+			return $path;
+		}
+
+	}
+
+	return false;
+
 }

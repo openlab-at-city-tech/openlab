@@ -3,6 +3,7 @@
     $.nggProgressBar = function(options){
         var progressBar = {
             defaults: {
+                title: '',
                 starting_value: 0,
                 infinite: false,
                 in_progress_text: 'In progress...',

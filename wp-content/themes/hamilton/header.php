@@ -25,47 +25,52 @@
     
         <header class="section-inner site-header">
 		
-			<?php if ( function_exists( 'the_custom_logo' ) && get_theme_mod( 'custom_logo' ) ) :
-				$logo = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' );
-				$logo_url = $logo[0];
-				
-				$width = $logo[1];
-				$height = $logo[2];
+			<?php 
+			
+			$site_title_elem 	= is_front_page() || ( is_home() && get_option( 'show_on_front' ) == 'posts' ) ? 'h1' : 'div'; 
+			$custom_logo_id 	= get_theme_mod( 'custom_logo' );
+			$custom_logo 		= wp_get_attachment_image_src( $custom_logo_id, 'full' );
+			$site_title 		= get_bloginfo( 'name' );
+			
+			?>
 
-				// Determine which height logo we need the mobile nav to adjust for
-				$adjusted_height = $height < 100 ? $height : 100;
-				?>
+			<<?php echo $site_title_elem; ?> class="site-title">
 
-				<style>
-					.site-nav {
-						padding-top: <?php echo $adjusted_height + 160; ?>px;
-					}
-					@media ( max-width: 620px ) {
-						.site-nav {
-							padding-top: <?php echo $adjusted_height + 100; ?>px;
+				<?php if ( $custom_logo ) : 
+
+					$logo_url 	= $custom_logo[0];
+					$height 	= $custom_logo[2];
+
+					// Determine which height logo we need the mobile nav to adjust for
+					$adjusted_height = $height < 100 ? $height : 100;
+					?>
+
+					<style>
+						.site-nav { padding-top: <?php echo $adjusted_height + 160; ?>px; }
+						@media ( max-width: 620px ) {
+							.site-nav { padding-top: <?php echo $adjusted_height + 100; ?>px; }
 						}
-					}
-				</style>
-				
-				<a href="<?php echo esc_url( home_url() ); ?>" title="<?php bloginfo( 'name' ); ?>" class="custom-logo" style="background-image: url( <?php echo $logo_url; ?> );">
-					<img src="<?php echo $logo_url; ?>" />
-				</a>
-				
-			<?php elseif ( is_singular() ) : ?>
+					</style>
+					
+					<a href="<?php echo esc_url( home_url() ); ?>" class="custom-logo" style="background-image: url( <?php echo esc_url( $logo_url ); ?> );">
+						<img src="<?php echo esc_url( $logo_url ); ?>" />
+						<span class="screen-reader-text"><?php echo $site_title; ?></span>
+					</a>
 
-            	<h1 class="site-title"><a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php bloginfo( 'name' ); ?></a></h1>
+				<?php else : ?>
+					<a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php echo $site_title; ?></a>
+				<?php endif; ?>
+
+			</<?php echo $site_title_elem; ?>>
 			
-			<?php else : ?>
-			
-				<h2 class="site-title"><a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php bloginfo( 'name' ); ?></a></h2>
-			
-			<?php endif; ?>
-			
-			<div class="nav-toggle">
-				<div class="bar"></div>
-				<div class="bar"></div>
-				<div class="bar"></div>
-			</div>
+			<button class="nav-toggle">
+				<span class="screen-reader-text"><?php _e( 'Toggle menu', 'hamilton' ); ?></span>
+				<div class="bars">
+					<div class="bar"></div>
+					<div class="bar"></div>
+					<div class="bar"></div>
+				</div>
+			</button><!-- .nav-toggle -->
 
 			<div class="alt-nav-wrapper">
 			
@@ -88,16 +93,15 @@
 
 			</div><!-- .alt-nav-wrapper -->
 
-        </header> <!-- header -->
+        </header><!-- header -->
 		
 		<?php 
-		$bg_declaration = "";
-		if ( get_background_color() && get_background_color() != 'ffffff' ) {
-			$bg_declaration = ' style="background-color: #' . get_background_color() . ';"';
-		}
+		$bg_color = get_background_color();
+		$bg_color_default = 'ffffff';
+		$bg_css = $bg_color && $bg_color != $bg_color_default ? ' style="background-color: #' . esc_attr( $bg_color ) . ';"' : '';
 		?>
 		
-		<nav class="site-nav"<?php echo $bg_declaration; ?>>
+		<nav class="site-nav"<?php echo $bg_css; ?>>
 		
 			<div class="section-inner menus group">
 		
@@ -129,9 +133,9 @@
 			
 			</div>
 		
-			<footer<?php echo $bg_declaration; ?>>
+			<footer<?php echo $bg_css; ?>>
 			
-				<div class="section-inner">
+				<div class="section-inner group">
 
 					<p>&copy; <?php echo date( 'Y' ); ?> <a href="<?php echo esc_url( home_url() ); ?>" class="site-name"><?php bloginfo( 'name' ); ?></a></p>
 					<p class="theme-by"><?php _e( 'Theme by', 'hamilton' ); ?> <a href="https://www.andersnoren.se">Anders Nor&eacute;n</a></p>
@@ -139,7 +143,7 @@
 				</div>
 
 			</footer>
-			
-		</nav>
+				
+		</nav><!-- .site-nav -->
 
 		<main id="site-content">

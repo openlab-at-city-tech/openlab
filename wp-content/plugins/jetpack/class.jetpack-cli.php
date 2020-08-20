@@ -63,7 +63,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 
 			$cxntests->output_results_for_cli();
 
-			WP_CLI::error( __( 'Jetpack connection is broken.', 'jetpack' ) ); // Exit CLI.
+			WP_CLI::error( __( 'One or more tests did not pass. Please investigate!', 'jetpack' ) ); // Exit CLI.
 		}
 
 		/* translators: %s is current version of Jetpack, for example 7.3 */
@@ -563,20 +563,20 @@ class Jetpack_CLI extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * whitelist: Whitelist an IP address.  You can also read or clear the whitelist.
+	 * allow: Add an IP address to an always allow list.  You can also read or clear the allow list.
 	 *
 	 *
 	 * ## EXAMPLES
 	 *
-	 * wp jetpack protect whitelist <ip address>
-	 * wp jetpack protect whitelist list
-	 * wp jetpack protect whitelist clear
+	 * wp jetpack protect allow <ip address>
+	 * wp jetpack protect allow list
+	 * wp jetpack protect allow clear
 	 *
-	 * @synopsis <whitelist> [<ip|ip_low-ip_high|list|clear>]
+	 * @synopsis <allow> [<ip|ip_low-ip_high|list|clear>]
 	 */
 	public function protect( $args, $assoc_args ) {
 		$action = isset( $args[0] ) ? $args[0] : 'prompt';
-		if ( ! in_array( $action, array( 'whitelist' ) ) ) {
+		if ( ! in_array( $action, array( 'whitelist', 'allow' ), true ) ) { // Still allow "whitelist" for legacy support.
 			/* translators: %s is a command like "prompt" */
 			WP_CLI::error( sprintf( __( '%s is not a valid command.', 'jetpack' ), $action ) );
 		}
@@ -585,96 +585,96 @@ class Jetpack_CLI extends WP_CLI_Command {
 			/* translators: %s is a module name */
 			WP_CLI::error( sprintf( _x( '%1$s is not active. You can activate it with "wp jetpack module activate %2$s"', '"wp jetpack module activate" is a command - do not translate', 'jetpack' ), __FUNCTION__, __FUNCTION__ ) );
 		}
-		if ( in_array( $action, array( 'whitelist' ) ) ) {
+		if ( in_array( $action, array( 'allow', 'whitelist' ), true ) ) {
 			if ( isset( $args[1] ) ) {
-				$action = 'whitelist';
+				$action = 'allow';
 			} else {
 				$action = 'prompt';
 			}
 		}
 		switch ( $action ) {
-			case 'whitelist':
-				$whitelist         = array();
-				$new_ip            = $args[1];
-				$current_whitelist = get_site_option( 'jetpack_protect_whitelist', array() );
+			case 'allow':
+				$allow         = array();
+				$new_ip        = $args[1];
+				$current_allow = get_site_option( 'jetpack_protect_whitelist', array() ); // @todo Update the option name.
 
-				// Build array of IPs that are already whitelisted.
+				// Build array of IPs that are already on the allowed list.
 				// Re-build manually instead of using jetpack_protect_format_whitelist() so we can easily get
 				// low & high range params for jetpack_protect_ip_address_is_in_range();
-				foreach ( $current_whitelist as $whitelisted ) {
+				foreach ( $current_allow as $allowed ) {
 
 					// IP ranges
-					if ( $whitelisted->range ) {
+					if ( $allowed->range ) {
 
-						// Is it already whitelisted?
-						if ( jetpack_protect_ip_address_is_in_range( $new_ip, $whitelisted->range_low, $whitelisted->range_high ) ) {
+						// Is it already on the allowed list?
+						if ( jetpack_protect_ip_address_is_in_range( $new_ip, $allowed->range_low, $allowed->range_high ) ) {
 							/* translators: %s is an IP address */
-							WP_CLI::error( sprintf( __( '%s has already been whitelisted', 'jetpack' ), $new_ip ) );
+							WP_CLI::error( sprintf( __( '%s is already on the always allow list.', 'jetpack' ), $new_ip ) );
 							break;
 						}
-						$whitelist[] = $whitelisted->range_low . ' - ' . $whitelisted->range_high;
+						$allow[] = $allowed->range_low . ' - ' . $allowed->range_high;
 
 					} else { // Individual IPs
 
-						// Check if the IP is already whitelisted (single IP only)
-						if ( $new_ip == $whitelisted->ip_address ) {
+						// Check if the IP is already on the allow list (single IP only).
+						if ( $new_ip === $allowed->ip_address ) {
 							/* translators: %s is an IP address */
-							WP_CLI::error( sprintf( __( '%s has already been whitelisted', 'jetpack' ), $new_ip ) );
+							WP_CLI::error( sprintf( __( '%s is already on the always allow list.', 'jetpack' ), $new_ip ) );
 							break;
 						}
-						$whitelist[] = $whitelisted->ip_address;
+						$allow[] = $allowed->ip_address;
 
 					}
 				}
 
 				/*
-				 * List the whitelist
-				 * Done here because it's easier to read the $whitelist array after it's been rebuilt
+				 * List the allowed IPs.
+				 * Done here because it's easier to read the $allow array after it's been rebuilt.
 				 */
 				if ( isset( $args[1] ) && 'list' == $args[1] ) {
-					if ( ! empty( $whitelist ) ) {
-						WP_CLI::success( __( 'Here are your whitelisted IPs:', 'jetpack' ) );
-						foreach ( $whitelist as $ip ) {
+					if ( ! empty( $allow ) ) {
+						WP_CLI::success( __( 'Here are your always allowed IPs:', 'jetpack' ) );
+						foreach ( $allow as $ip ) {
 							WP_CLI::line( "\t" . str_pad( $ip, 24 ) );
 						}
 					} else {
-						WP_CLI::line( __( 'Whitelist is empty.', 'jetpack' ) );
+						WP_CLI::line( __( 'Always allow list is empty.', 'jetpack' ) );
 					}
 					break;
 				}
 
 				/*
-				 * Clear the whitelist
+				 * Clear the always allow list.
 				 */
 				if ( isset( $args[1] ) && 'clear' == $args[1] ) {
-					if ( ! empty( $whitelist ) ) {
-						$whitelist = array();
-						jetpack_protect_save_whitelist( $whitelist );
-						WP_CLI::success( __( 'Cleared all whitelisted IPs', 'jetpack' ) );
+					if ( ! empty( $allow ) ) {
+						$allow = array();
+						jetpack_protect_save_whitelist( $allow ); // @todo Need to update function name in the Protect module.
+						WP_CLI::success( __( 'Cleared all IPs from the always allow list.', 'jetpack' ) );
 					} else {
-						WP_CLI::line( __( 'Whitelist is empty.', 'jetpack' ) );
+						WP_CLI::line( __( 'Always allow list is empty.', 'jetpack' ) );
 					}
 					break;
 				}
 
-				// Append new IP to whitelist array
-				array_push( $whitelist, $new_ip );
+				// Append new IP to allow array.
+				array_push( $allow, $new_ip );
 
-				// Save whitelist if there are no errors
-				$result = jetpack_protect_save_whitelist( $whitelist );
+				// Save allow list if there are no errors.
+				$result = jetpack_protect_save_whitelist( $allow ); // @todo Need to update function name in the Protect module.
 				if ( is_wp_error( $result ) ) {
 					WP_CLI::error( $result );
 				}
 
 				/* translators: %s is an IP address */
-				WP_CLI::success( sprintf( __( '%s has been whitelisted.', 'jetpack' ), $new_ip ) );
+				WP_CLI::success( sprintf( __( '%s has been added to the always allowed list.', 'jetpack' ), $new_ip ) );
 				break;
 			case 'prompt':
 				WP_CLI::error(
 					__( 'No command found.', 'jetpack' ) . "\n" .
-					__( 'Please enter the IP address you want to whitelist.', 'jetpack' ) . "\n" .
-					_x( 'You can save a range of IPs {low_range}-{high_range}. No spaces allowed.  (example: 1.1.1.1-2.2.2.2)', 'Instructions on how to whitelist IP ranges - low_range/high_range should be translated.', 'jetpack' ) . "\n" .
-					_x( "You can also 'list' or 'clear' the whitelist.", "'list' and 'clear' are commands and should not be translated", 'jetpack' ) . "\n"
+					__( 'Please enter the IP address you want to always allow.', 'jetpack' ) . "\n" .
+					_x( 'You can save a range of IPs {low_range}-{high_range}. No spaces allowed.  (example: 1.1.1.1-2.2.2.2)', 'Instructions on how to add IP ranges - low_range/high_range should be translated.', 'jetpack' ) . "\n" .
+					_x( "You can also 'list' or 'clear' the always allowed list.", "'list' and 'clear' are commands and should not be translated", 'jetpack' ) . "\n"
 				);
 				break;
 		}
@@ -904,11 +904,14 @@ class Jetpack_CLI extends WP_CLI_Command {
 						WP_CLI::error( __( 'Jetpack sync is not currently allowed for this site. Jetpack is not connected.', 'jetpack' ) );
 						return;
 					}
-					if ( ( new Status() )->is_development_mode() ) {
+
+					$status = new Status();
+
+					if ( $status->is_development_mode() ) {
 						WP_CLI::error( __( 'Jetpack sync is not currently allowed for this site. The site is in development mode.', 'jetpack' ) );
 						return;
 					}
-					if ( Jetpack::is_staging_site() ) {
+					if ( $status->is_staging_site() ) {
 						WP_CLI::error( __( 'Jetpack sync is not currently allowed for this site. The site is in staging mode.', 'jetpack' ) );
 						return;
 					}
@@ -924,6 +927,7 @@ class Jetpack_CLI extends WP_CLI_Command {
 						'enqueue_wait_time'        => 0,
 						'queue_max_writes_sec'     => 10000,
 						'max_queue_size_full_sync' => 100000,
+						'full_sync_send_duration'  => HOUR_IN_SECONDS,
 					)
 				);
 				Settings::update_settings( $sync_settings );
@@ -1809,15 +1813,17 @@ class Jetpack_CLI extends WP_CLI_Command {
 	 * --slug: Specific slug to identify the block that overrides the one generated based on the title.
 	 * --description: Allows to provide a text description of the block.
 	 * --keywords: Provide up to three keywords separated by comma so users can find this block when they search in Gutenberg's inserter.
+	 * --variation: Allows to decide whether the block should be a production block, experimental, or beta. Defaults to Beta when arg not provided.
 	 *
 	 * ## BLOCK TYPE EXAMPLES
 	 *
 	 * wp jetpack scaffold block "Cool Block"
 	 * wp jetpack scaffold block "Amazing Rock" --slug="good-music" --description="Rock the best music on your site"
 	 * wp jetpack scaffold block "Jukebox" --keywords="music, audio, media"
+	 * wp jetpack scaffold block "Jukebox" --variation="experimental"
 	 *
 	 * @subcommand scaffold block
-	 * @synopsis <type> <title> [--slug] [--description] [--keywords]
+	 * @synopsis <type> <title> [--slug] [--description] [--keywords] [--variation]
 	 *
 	 * @param array $args       Positional parameters, when strings are passed, wrap them in quotes.
 	 * @param array $assoc_args Associative parameters like --slug="nice-block".
@@ -1853,6 +1859,11 @@ class Jetpack_CLI extends WP_CLI_Command {
 			? $assoc_args['slug']
 			: sanitize_title( $title );
 
+		$variation_options = array( 'production', 'experimental', 'beta' );
+		$variation         = ( isset( $assoc_args['variation'] ) && in_array( $assoc_args['variation'], $variation_options, true ) )
+			? $assoc_args['variation']
+			: 'beta';
+
 		if ( preg_match( '#^jetpack/#', $slug ) ) {
 			$slug = preg_replace( '#^jetpack/#', '', $slug );
 		}
@@ -1879,16 +1890,17 @@ class Jetpack_CLI extends WP_CLI_Command {
 		$hasKeywords = isset( $assoc_args['keywords'] );
 
 		$files = array(
-			"$path/$slug.php"   => $this->render_block_file(
+			"$path/$slug.php"     => $this->render_block_file(
 				'block-register-php',
 				array(
-					'slug'            => $slug,
-					'title'           => $title,
-					'underscoredSlug' => str_replace( '-', '_', $slug ),
-					'jetpackVersion'  => substr( JETPACK__VERSION, 0, strpos( JETPACK__VERSION, '.' ) ) . '.x',
+					'slug'             => $slug,
+					'title'            => $title,
+					'underscoredSlug'  => str_replace( '-', '_', $slug ),
+					'underscoredTitle' => str_replace( ' ', '_', $title ),
+					'jetpackVersion'   => substr( JETPACK__VERSION, 0, strpos( JETPACK__VERSION, '.' ) ) . '.x',
 				)
 			),
-			"$path/index.js"    => $this->render_block_file(
+			"$path/index.js"      => $this->render_block_file(
 				'block-index-js',
 				array(
 					'slug'        => $slug,
@@ -1908,21 +1920,23 @@ class Jetpack_CLI extends WP_CLI_Command {
 					'hasKeywords' => $hasKeywords,
 				)
 			),
-			"$path/editor.js"   => $this->render_block_file( 'block-editor-js' ),
-			"$path/editor.scss" => $this->render_block_file(
+			"$path/editor.js"     => $this->render_block_file( 'block-editor-js' ),
+			"$path/editor.scss"   => $this->render_block_file(
 				'block-editor-scss',
 				array(
 					'slug'  => $slug,
 					'title' => $title,
 				)
 			),
-			"$path/edit.js"     => $this->render_block_file(
+			"$path/edit.js"       => $this->render_block_file(
 				'block-edit-js',
 				array(
 					'title'     => $title,
 					'className' => str_replace( ' ', '', ucwords( str_replace( '-', ' ', $slug ) ) ),
 				)
 			),
+			"$path/icon.js"       => $this->render_block_file( 'block-icon-js' ),
+			"$path/attributes.js" => $this->render_block_file( 'block-attributes-js' ),
 		);
 
 		$files_written = array();
@@ -1939,15 +1953,15 @@ class Jetpack_CLI extends WP_CLI_Command {
 		if ( empty( $files_written ) ) {
 			WP_CLI::log( esc_html__( 'No files were created', 'jetpack' ) );
 		} else {
-			// Load index.json and insert the slug of the new block in the production array
+			// Load index.json and insert the slug of the new block in its block variation array.
 			$block_list_path = JETPACK__PLUGIN_DIR . 'extensions/index.json';
 			$block_list      = $wp_filesystem->get_contents( $block_list_path );
 			if ( empty( $block_list ) ) {
 				/* translators: %s is the path to the file with the block list */
 				WP_CLI::error( sprintf( esc_html__( 'Error fetching contents of %s', 'jetpack' ), $block_list_path ) );
 			} elseif ( false === stripos( $block_list, $slug ) ) {
-				$new_block_list         = json_decode( $block_list );
-				$new_block_list->beta[] = $slug;
+				$new_block_list                   = json_decode( $block_list );
+				$new_block_list->{ $variation }[] = $slug;
 
 				// Format the JSON to match our coding standards.
 				$new_block_list_formatted = wp_json_encode( $new_block_list, JSON_PRETTY_PRINT ) . "\n";
@@ -1967,23 +1981,35 @@ class Jetpack_CLI extends WP_CLI_Command {
 				}
 			}
 
+			if ( 'beta' === $variation || 'experimental' === $variation ) {
+				$block_constant = sprintf(
+					/* translators: the placeholder is a constant name */
+					esc_html__( 'To load the block, add the constant %1$s as true to your wp-config.php file', 'jetpack' ),
+					( 'beta' === $variation ? 'JETPACK_BETA_BLOCKS' : 'JETPACK_EXPERIMENTAL_BLOCKS' )
+				);
+			} else {
+				$block_constant = '';
+			}
+
 			WP_CLI::success(
 				sprintf(
 					/* translators: the placeholders are a human readable title, and a series of words separated by dashes */
 					esc_html__( 'Successfully created block %1$s with slug %2$s', 'jetpack' ) . ' 🎉' . "\n" .
 					"--------------------------------------------------------------------------------------------------------------------\n" .
 					/* translators: the placeholder is a directory path */
-					esc_html__( 'The files were created at %s', 'jetpack' ) . "\n" .
+					esc_html__( 'The files were created at %3$s', 'jetpack' ) . "\n" .
 					esc_html__( 'To start using the block, build the blocks with yarn run build-extensions', 'jetpack' ) . "\n" .
 					/* translators: the placeholder is a file path */
-					esc_html__( 'The block slug has been added to the beta list at %s', 'jetpack' ) . "\n" .
-					esc_html__( 'To load the block, add the constant JETPACK_BETA_BLOCKS as true to your wp-config.php file', 'jetpack' ) . "\n" .
+					esc_html__( 'The block slug has been added to the %4$s list at %5$s', 'jetpack' ) . "\n" .
+					'%6$s' . "\n" .
 					/* translators: the placeholder is a URL */
-					"\n" . esc_html__( 'Read more at %s', 'jetpack' ) . "\n",
+					"\n" . esc_html__( 'Read more at %7$s', 'jetpack' ) . "\n",
 					$title,
 					$slug,
 					$path,
+					$variation,
 					$block_list_path,
+					$block_constant,
 					'https://github.com/Automattic/jetpack/blob/master/extensions/README.md#develop-new-blocks'
 				) . '--------------------------------------------------------------------------------------------------------------------'
 			);

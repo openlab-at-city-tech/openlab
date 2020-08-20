@@ -130,6 +130,7 @@ class BP_Groups_Component extends BP_Component {
 			'functions',
 			'notifications',
 			'cssjs',
+			'blocks',
 		);
 
 		// Conditional includes.
@@ -649,7 +650,11 @@ class BP_Groups_Component extends BP_Component {
 				 * Only add the members subnav if it's not the home's nav.
 				 */
 				$sub_nav[] = array(
-					'name'            => sprintf( _x( 'Members %s', 'My Group screen nav', 'buddypress' ), '<span>' . number_format( $this->current_group->total_member_count ) . '</span>' ),
+					'name'            => sprintf(
+						/* translators: %s: total member count */
+						_x( 'Members %s', 'My Group screen nav', 'buddypress' ),
+						'<span>' . number_format( $this->current_group->total_member_count ) . '</span>'
+					),
 					'slug'            => 'members',
 					'parent_url'      => $group_link,
 					'parent_slug'     => $this->current_group->slug,
@@ -866,7 +871,11 @@ class BP_Groups_Component extends BP_Component {
 				$bp->bp_options_avatar = bp_core_fetch_avatar( array(
 					'item_id' => bp_displayed_user_id(),
 					'type'    => 'thumb',
-					'alt'     => sprintf( __( 'Profile picture of %s', 'buddypress' ), bp_get_displayed_user_fullname() )
+					'alt'     => sprintf(
+						/* translators: %s: member name */
+						__( 'Profile picture of %s', 'buddypress' ),
+						bp_get_displayed_user_fullname()
+					),
 				) );
 				$bp->bp_options_title = bp_get_displayed_user_fullname();
 
@@ -927,17 +936,81 @@ class BP_Groups_Component extends BP_Component {
 	 * Init the BP REST API.
 	 *
 	 * @since 5.0.0
+	 * @since 6.0.0 Adds the Group Cover REST endpoint.
 	 *
 	 * @param array $controllers Optional. See BP_Component::rest_api_init() for
 	 *                           description.
 	 */
 	public function rest_api_init( $controllers = array() ) {
-		parent::rest_api_init( array(
+		$controllers = array(
 			'BP_REST_Groups_Endpoint',
 			'BP_REST_Group_Membership_Endpoint',
 			'BP_REST_Group_Invites_Endpoint',
 			'BP_REST_Group_Membership_Request_Endpoint',
 			'BP_REST_Attachments_Group_Avatar_Endpoint',
-		) );
+		);
+
+		// Support to Group Cover.
+		if ( bp_is_active( 'groups', 'cover_image' ) ) {
+			$controllers[] = 'BP_REST_Attachments_Group_Cover_Endpoint';
+		}
+
+		parent::rest_api_init( $controllers );
+	}
+
+	/**
+	 * Register the BP Groups Blocks.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param array $blocks Optional. See BP_Component::blocks_init() for
+	 *                      description.
+	 */
+	public function blocks_init( $blocks = array() ) {
+		parent::blocks_init(
+			array(
+				'bp/group' => array(
+					'name'               => 'bp/group',
+					'editor_script'      => 'bp-group-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/group.js', dirname(  __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-editor',
+						'wp-compose',
+						'wp-data',
+						'wp-block-editor',
+						'bp-block-components',
+					),
+					'style'              => 'bp-group-block',
+					'style_url'          => plugins_url( 'css/blocks/group.css', dirname( __FILE__ ) ),
+					'render_callback'    => 'bp_groups_render_group_block',
+					'attributes'         => array(
+						'itemID'              => array(
+							'type'    => 'integer',
+							'default' => 0,
+						),
+						'avatarSize'          => array(
+							'type'    => 'string',
+							'default' => 'full',
+						),
+						'displayDescription'  => array(
+							'type'    => 'boolean',
+							'default' => true,
+						),
+						'displayActionButton' => array(
+							'type'    => 'boolean',
+							'default' => true,
+						),
+						'displayCoverImage'   => array(
+							'type'    => 'boolean',
+							'default' => true,
+						),
+					),
+				),
+			)
+		);
 	}
 }

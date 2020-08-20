@@ -41,7 +41,7 @@ if ( have_comments() ) : ?>
 					
 					</h3>
 				
-					<ol class="pingbacklist">
+					<ol class="pingback-list">
 						<?php 
 						wp_list_comments( array( 
 							'type' 		=> 'pings', 
@@ -58,14 +58,12 @@ if ( have_comments() ) : ?>
 			
 		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : ?>
 		
-			<div class="comment-nav-below" role="navigation">
+			<div class="comment-nav-below group" role="navigation">
 								
 				<div class="post-nav-older"><?php previous_comments_link( __( '&laquo; Older<span> Comments</span>', 'hemingway' ) ); ?></div>
 				
 				<div class="post-nav-newer"><?php next_comments_link( __( 'Newer<span> Comments</span> &raquo;', 'hemingway' ) ); ?></div>
-				
-				<div class="clear"></div>
-				
+								
 			</div><!-- .comment-nav-below -->
 			
 		<?php endif; ?>
@@ -75,12 +73,6 @@ if ( have_comments() ) : ?>
 	<?php 
 endif;
 
-if ( ! comments_open() && !is_page() ) : ?>
-
-	<p class="nocomments"><?php _e( 'Comments are closed.', 'hemingway' ); ?></p>
-	
-<?php endif;
-
-comment_form();
-
-?>
+if ( comments_open() || pings_open() ) {
+	comment_form();
+}

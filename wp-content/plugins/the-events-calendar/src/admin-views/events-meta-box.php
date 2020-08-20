@@ -25,7 +25,7 @@ $events_label_plural_lowercase   = tribe_get_event_label_plural_lowercase();
 	do_action( 'tribe_events_post_errors', $event->ID, true );
 	?>
 </div>
-<div id='eventDetails' class="inside eventForm" data-datepicker_format="<?php echo esc_attr( tribe_get_option( 'datepickerFormat' ) ); ?>">
+<div id='eventDetails' class="inside eventForm" data-datepicker_format="<?php echo esc_attr( \Tribe__Date_Utils::get_datepicker_format_index() ); ?>">
 	<?php
 	/**
 	 * Fires inside the opening #eventDetails div of The Events Calendar meta box
@@ -134,6 +134,7 @@ $events_label_plural_lowercase   = tribe_get_event_label_plural_lowercase();
 								class="tribe-field-timezone tribe-dropdown hide-if-js"
 								data-timezone-label="<?php esc_attr_e( 'Time Zone:', 'the-events-calendar' ) ?>"
 								data-timezone-value="<?php echo esc_attr( Tribe__Events__Timezones::get_event_timezone_string() ) ?>"
+								data-prevent-clear
 							>
 								<?php echo tribe_events_timezone_choice( Tribe__Events__Timezones::get_event_timezone_string() ); ?>
 							</select>
@@ -236,6 +237,7 @@ $events_label_plural_lowercase   = tribe_get_event_label_plural_lowercase();
 						id="EventCurrencyPosition"
 						name="EventCurrencyPosition"
 						class="tribe-dropdown"
+						data-prevent-clear
 					>
 						<?php
 						if ( isset( $_EventCurrencyPosition ) && 'suffix' === $_EventCurrencyPosition ) {

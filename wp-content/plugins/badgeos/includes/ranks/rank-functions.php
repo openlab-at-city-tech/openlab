@@ -1017,7 +1017,7 @@ function badgeos_get_rank_earners_list( $rank_id = 0 ) {
         $output .= '<ul class="badgeos-rank-earners-list rank-' . $rank_id . '-earners-list">';
         foreach ( $earners as $user ) {
             $user_content = '<li><a href="' . get_author_posts_url( $user->ID ) . '">' . get_avatar( $user->ID ) . '</a></li>';
-            $output .= apply_filters( 'badgeos_get_rank_earners_list_user', $user_content, $user->ID );
+            $output .= apply_filters( 'badgeos_get_rank_earners_list_user', $user_content, $rank_id, $user->ID );
         }
         $output .= '</ul>';
     }
@@ -1469,7 +1469,7 @@ function badgeos_display_ranks_to_award() {
                     $not_available = false;
                     while( $ranks_to_award->have_posts() ) {
                         $ranks_to_award->the_post();
-                        $ranks_image = badgeos_get_rank_image( get_the_ID() );
+                        $ranks_image = badgeos_get_rank_image( get_the_ID(), 50, 50 );
 
                         /**
                          * If not default rank, bail here
@@ -1664,12 +1664,14 @@ function badgeos_add_rank( $args = array() ) {
             'credit_amount'         => $args['credit_amount'],
             'user_id'               => absint( $args['user_id'] ),
             'admin_id'              => $args['admin_id'],
-            'this_trigger'          =>  $args['this_trigger'],
-            'priority'              =>  $priority,
-            'dateadded'             => date("Y-m-d H:i:s")
+            'this_trigger'          => $args['this_trigger'],
+            'priority'              => $priority,
+            'dateadded'             => current_time( 'mysql' )
         ));
 
-        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $wpdb->insert_id );
+        $rank_entry_id = $wpdb->insert_id;
+
+        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $rank_entry_id );
         update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank_earned_time', $new_rank->date_earned );
 
         /**
@@ -1683,7 +1685,8 @@ function badgeos_add_rank( $args = array() ) {
             $args['credit_id'],
             $args['credit_amount'],
             $args['admin_id'],
-            $args['this_trigger']
+            $args['this_trigger'],
+            $rank_entry_id
         );
 
         return $wpdb->insert_id;
@@ -1843,8 +1846,24 @@ function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
  * 
  * @return $ranks_image
  */
-function badgeos_get_rank_image( $rank_id = 0, $rank_width = '50', $rank_height = '50' ) {
-    
+function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = '' ) {
+
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+    if( intval( $rank_width ) == 0 ) {
+        $rank_width = '50';
+        if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
+            $rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
+        }
+    }
+
+    if( intval( $rank_height ) == 0 ) {
+        $rank_height = '50';
+        if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
+            $rank_height = intval( $badgeos_settings['badgeos_rank_global_image_height'] );
+        }
+    }
+
     $ranks_image = wp_get_attachment_image( get_post_thumbnail_id( $rank_id ), array( $rank_width, $rank_height ) );
 
     if( empty( $ranks_image ) ) {

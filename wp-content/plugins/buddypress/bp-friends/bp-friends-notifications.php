@@ -38,9 +38,11 @@ function friends_format_notifications( $action, $item_id, $secondary_item_id, $t
 
 			// Set up the string and the filter.
 			if ( (int) $total_items > 1 ) {
+				/* translators: %d: the number of friends */
 				$text = sprintf( __( '%d friends accepted your friendship requests', 'buddypress' ), (int) $total_items );
 				$amount = 'multiple';
 			} else {
+				/* translators: %s: friend name */
 				$text = sprintf( __( '%s accepted your friendship request', 'buddypress' ),  bp_core_get_user_displayname( $item_id ) );
 				$amount = 'single';
 			}
@@ -54,9 +56,11 @@ function friends_format_notifications( $action, $item_id, $secondary_item_id, $t
 
 			// Set up the string and the filter.
 			if ( (int) $total_items > 1 ) {
+				/* translators: %d: the number of pending requests */
 				$text = sprintf( __( 'You have %d pending friendship requests', 'buddypress' ), (int) $total_items );
 				$amount = 'multiple';
 			} else {
+				/* translators: %s: friend name */
 				$text = sprintf( __( 'You have a friendship request from %s', 'buddypress' ),  bp_core_get_user_displayname( $item_id ) );
 				$amount = 'single';
 			}
@@ -78,20 +82,20 @@ function friends_format_notifications( $action, $item_id, $secondary_item_id, $t
 		 *   - bp_friends_multiple_friendship_request_notification
 		 *
 		 * @since 1.0.0
+		 * @since 6.0.0 Adds the $secondary_item_id parameter.
 		 *
-		 * @param string|array $value       Depending on format, an HTML link to new requests profile
-		 *                                  tab or array with link and text.
-		 * @param int          $total_items The total number of messaging-related notifications
-		 *                                  waiting for the user.
-		 * @param int          $item_id     The primary item ID.
+		 * @param string|array $value             Depending on format, an HTML link to new requests profile tab or array with link and text.
+		 * @param int          $total_items       The total number of messaging-related notifications waiting for the user.
+		 * @param int          $item_id           The primary item ID.
+		 * @param int          $secondary_item_id The secondary item ID.
 		 */
-		$return = apply_filters( 'bp_friends_' . $amount . '_friendship_' . $action . '_notification', '<a href="' . esc_url( $link ) . '">' . esc_html( $text ) . '</a>', (int) $total_items, $item_id );
+		$return = apply_filters( 'bp_friends_' . $amount . '_friendship_' . $action . '_notification', '<a href="' . esc_url( $link ) . '">' . esc_html( $text ) . '</a>', (int) $total_items, $item_id, $secondary_item_id );
 	} else {
 		/** This filter is documented in bp-friends/bp-friends-notifications.php */
 		$return = apply_filters( 'bp_friends_' . $amount . '_friendship_' . $action . '_notification', array(
 			'link' => $link,
 			'text' => $text
-		), (int) $total_items, $item_id );
+		), (int) $total_items, $item_id, $secondary_item_id );
 	}
 
 	/**
