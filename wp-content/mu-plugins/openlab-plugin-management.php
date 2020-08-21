@@ -27,7 +27,6 @@ function openlab_hide_plugins( $plugins ) {
 		'bp-reply-by-email/loader.php',
 		'cac-featured-content/cac-featured-content.php',
 		'cac-non-cuny-signup/loader.php',
-		'captcha/captcha.php',
 		'cardboard/cardboard.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
