@@ -237,7 +237,7 @@ function openlab_group_post_count($filters, $group_args) {
 }
 
 //a variation on bp_groups_pagination_count() to match design
-function cuny_groups_pagination_count($group_name) {
+function cuny_groups_pagination_count($group_name = '') {
     global $bp, $groups_template;
 
     $start_num = intval(( $groups_template->pag_page - 1 ) * $groups_template->pag_num) + 1;

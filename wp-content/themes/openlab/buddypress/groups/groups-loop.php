@@ -139,7 +139,7 @@ if ( ! empty( $categories ) ) {
 		</div>
 	<?php endif; ?>
 
-	<div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count( ucwords( $group_type ) . 's' ); ?></div>
+	<div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count(); ?></div>
 </div>
 
 	<div id="group-list" class="item-list group-list row">
