@@ -12,8 +12,10 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 		return $sql;
 	}
 
+	// Split based either on "quoted phrases" or spaces.
 	preg_match_all( '/"(?:\\\\.|[^\\\\"])*"|\S+/', $r['search_terms'], $matches );
 
+	// Support for BP's search_columns parameter.
 	$search_columns_allowed = [ 'name', 'description' ];
 	if ( ! empty( $r['search_columns'] ) ) {
 		$search_columns = array_intersect( $r['search_columns'], $search_columns_allowed );
@@ -29,6 +31,7 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 		// Quotes have served their purpose and can be trimmed.
 		$search = trim( $term, '\'"' );
 
+		// BP's 'name'/'description' supports wildcards, so we borrow their logic.
 		$leading_wild  = ( ltrim( $search, '*' ) !== $search );
 		$trailing_wild = ( rtrim( $search, '*' ) !== $search );
 		if ( $leading_wild && $trailing_wild ) {
@@ -45,11 +48,11 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 
 		$term_clauses = [];
 
-		// Avoid doing this search twice.
+		// Avoid doing the user search twice in one pageload.
 		if ( isset( $user_id_matches[ $search ] ) ) {
 			$term_user_id_matches = $user_id_matches[ $search ];
 		} else {
-			// Match users, for creator/contact/faculty searches.
+			// Match users, for contact/faculty searches.
 			$users_query = new BP_User_Query(
 				[
 					'search_terms'    => $search,
@@ -68,6 +71,7 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 
 			// Creator may not be public information
 			// $term_clauses[] = $wpdb->prepare( "( g.creator_id IN ({$user_ids_sql}) )" );
+
 			$term_clauses[] = "( groupcontact.meta_key IN ( 'primary_faculty', 'additional_faculty', 'group_contact' ) AND groupcontact.meta_value IN ({$user_ids_sql}) )";
 		}
 
@@ -81,8 +85,10 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 			$searches[] = $wpdb->prepare( "g.$search_column LIKE %s", $wildcarded );
 		}
 
+		// These are the clauses for the current search term...
 		$term_clauses[] = '(' . implode( ' OR ', $searches ) . ')';
 
+		// ...which are added to the list of all search clauses.
 		$match_clauses[] = '(' . implode( ' OR ', $term_clauses ) . ')';
 	}
 
