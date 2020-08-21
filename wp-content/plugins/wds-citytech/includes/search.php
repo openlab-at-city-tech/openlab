@@ -5,7 +5,7 @@
  */
 
 function openlab_group_search_breakup( $sql, $s, $r ) {
-	static $user_matches = [];
+	static $user_id_matches = [];
 	global $wpdb, $bp;
 
 	if ( empty( $r['search_terms'] ) ) {
@@ -45,15 +45,23 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 
 		$term_clauses = [];
 
-		// Match users, for creator/contact/faculty searches.
-		$users_query = new BP_User_Query(
-			[
-				'search_terms'    => $search,
-				'populate_extras' => false,
-			]
-		);
+		// Avoid doing this search twice.
+		if ( isset( $user_id_matches[ $search ] ) ) {
+			$term_user_id_matches = $user_id_matches[ $search ];
+		} else {
+			// Match users, for creator/contact/faculty searches.
+			$users_query = new BP_User_Query(
+				[
+					'search_terms'    => $search,
+					'populate_extras' => false,
+				]
+			);
 
-		if ( ! empty( $users_query->user_ids ) ) {
+			$term_user_id_matches       = $users_query->user_ids;
+			$user_id_matches[ $search ] = $term_user_id_matches;
+		}
+
+		if ( ! empty( $term_user_id_matches ) ) {
 			$join_contact_tables = true;
 
 			$user_ids_sql = implode( ',', array_map( 'intval', $users_query->user_ids ) );
@@ -61,8 +69,6 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 			// Creator may not be public information
 			// $term_clauses[] = $wpdb->prepare( "( g.creator_id IN ({$user_ids_sql}) )" );
 			$term_clauses[] = "( groupcontact.meta_key IN ( 'primary_faculty', 'additional_faculty', 'group_contact' ) AND groupcontact.meta_value IN ({$user_ids_sql}) )";
-//			$term_clauses[] = "( additionalfaculty.meta_value IN ({$user_ids_sql}) )";
-//			$term_clauses[] = "( groupcontact.meta_value IN ({$user_ids_sql}) )";
 		}
 
 		// Rebuild the 'name' and 'description' clause - borrowed from BP.
@@ -82,9 +88,6 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 
 	$search_clause = '( ' . implode( ' AND ', $match_clauses ) . ' )';
 
-	// Swap out the search clause in the SQL string as well
-	// as the array (in case other plugins have modified,
-	// or are going to further modify, the query)
 	$old_where = $s['where'];
 	$new_where = preg_replace( '/\(name LIKE[^)]+\)/', $search_clause, $old_where );
 	$sql       = str_replace( $old_where, $new_where, $sql );
