@@ -5,7 +5,7 @@
 
 namespace OpenLab\TOC;
 
-const VERSION = '1.2.2';
+const VERSION = '1.2.3';
 
 /**
  * Inject the entry title right before the widget is rendered.
@@ -82,6 +82,15 @@ function enqueue_assets() {
 		plugins_url( 'assets/css/openlab-toc.css', __DIR__ ),
 		[],
 		VERSION
+	);
+
+	$options = [
+		'hideByDefault' => \ezTOC_Option::get( 'visibility_hide_by_default' ) ? true : false,
+	];
+
+	wp_add_inline_script(
+		'openalab-toc-script',
+		sprintf( 'var OpenLabTOC = %s;', wp_json_encode( $options ) )
 	);
 }
 add_action( 'ez_toc_after', __NAMESPACE__ . '\\enqueue_assets' );
