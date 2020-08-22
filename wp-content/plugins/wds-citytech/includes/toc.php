@@ -88,6 +88,11 @@ function enqueue_assets() {
 		'hideByDefault' => \ezTOC_Option::get( 'visibility_hide_by_default' ) ? true : false,
 	];
 
+	// This option also hides the "In-Page TOC" toggle button, makes it impossible to expand its content.
+	if ( ! \ezTOC_Option::get( 'show_heading_text' ) ) {
+		$options['hideByDefault'] = false;
+	}
+
 	wp_add_inline_script(
 		'openalab-toc-script',
 		sprintf( 'var OpenLabTOC = %s;', wp_json_encode( $options ) )
