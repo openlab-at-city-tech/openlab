@@ -388,8 +388,12 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		// Don't show if the user can't clone.
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+		// Don't show any widget content if Sharing is not enabled.
+		if ( ! openlab_group_can_be_cloned( $group_id ) ) {
+			return;
+		}
 
 		$group_type_label = openlab_get_group_type_label(
 			array(
