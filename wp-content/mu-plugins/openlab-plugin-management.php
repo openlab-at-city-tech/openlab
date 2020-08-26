@@ -38,6 +38,7 @@ function openlab_hide_plugins( $plugins ) {
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
+		'google-document-embedder/gviewer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
