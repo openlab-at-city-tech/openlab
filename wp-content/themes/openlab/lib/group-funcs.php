@@ -1791,7 +1791,7 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 			'add'        => openlab_group_can_be_cloned( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Cloneable',
-			'short_name' => 'Clone',
+			'short_name' => 'Cloneable',
 		],
 		'open'      => [
 			'add'        => openlab_group_is_open( $group_id ),
