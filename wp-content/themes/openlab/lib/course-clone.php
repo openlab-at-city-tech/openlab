@@ -68,10 +68,8 @@ function openlab_clone_create_form_catcher() {
 
 				groups_update_groupmeta( $new_group_id, 'clone_source_group_id', $clone_source_group_id );
 
-				// Store history.
-				$clone_history   = openlab_get_group_clone_history( $clone_source_group_id );
-				$clone_history[] = $clone_source_group_id;
-				groups_update_groupmeta( $new_group_id, 'clone_history', $clone_history );
+				// Bust ancestor cache.
+				openlab_invalidate_ancestor_clone_cache( $new_group_id );
 
 				$clone_steps = [
 					'groupmeta',
@@ -322,6 +320,28 @@ function openlab_add_clone_button_to_profile() {
 	<?php
 }
 add_action( 'bp_group_header_actions', 'openlab_add_clone_button_to_profile', 50 );
+
+/**
+ * 'descendant-of' parameter support for group directories.
+ */
+add_filter(
+	'bp_before_groups_get_groups_parse_args',
+	function( $args ) {
+		$group_id = openlab_get_current_filter( 'descendant-of' );
+		if ( ! $group_id ) {
+			return $args;
+		}
+
+		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id );
+		if ( ! $descendant_ids ) {
+			$descendant_ids = [ 0 ];
+		}
+
+		$args['include'] = $descendant_ids;
+
+		return $args;
+	}
+);
 
 /** CLASSES ******************************************************************/
 

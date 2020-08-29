@@ -13,19 +13,88 @@
  * @return array
  */
 function openlab_get_group_clone_history( $group_id ) {
-	$history = groups_get_groupmeta( $group_id, 'clone_history', true );
-	if ( empty( $history ) ) {
-		$history = array();
+	$history = [];
 
-		// Legacy.
-		$clone_source_group = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-		if ( $clone_source_group ) {
-			$history[] = $clone_source_group;
-		}
+	$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
+	if ( ! $clone_source_group_id ) {
+		return $history;
 	}
+
+	$history[] = $clone_source_group_id;
+
+	$source_history = openlab_get_group_clone_history( $clone_source_group_id );
+
+	$history = array_merge( $source_history, $history );
 
 	return array_map( 'intval', $history );
 }
+
+/**
+ * Gets all clones of a group.
+ *
+ * Returns only direct children.
+ *
+ * @param int $group_id ID of the parent group.
+ * @return array Array of IDs.
+ */
+function openlab_get_clones_of_group( $group_id ) {
+	global $wpdb, $bp;
+
+	$clone_ids = wp_cache_get( $group_id, 'openlab_clones_of_group' );
+	if ( false === $clone_ids ) {
+		$clone_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'clone_source_group_id' AND meta_value = %s", $group_id ) );
+
+		wp_cache_set( $group_id, $clone_ids, 'openlab_clones_of_group' );
+	}
+
+	return array_map( 'intval', $clone_ids );
+}
+
+/**
+ * Returns all clone descendants of a group.
+ *
+ * @param int $group_id ID of the group.
+ * @return array Array of IDs.
+ */
+function openlab_get_clone_descendants_of_group( $group_id ) {
+	$descendants = openlab_get_clones_of_group( $group_id );
+	if ( ! $descendants ) {
+		return [];
+	}
+
+	foreach ( $descendants as $descendant ) {
+		$descendants = array_merge( $descendants, openlab_get_clone_descendants_of_group( $descendant ) );
+	}
+
+	return $descendants;
+}
+
+/**
+ * Returns clone descendants count of a group.
+ *
+ * @param int $group_id ID of the group.
+ * @return int
+ */
+function openlab_get_clone_descendant_count_of_group( $group_id ) {
+	$descendants = openlab_get_clone_descendants_of_group( $group_id );
+
+	return count( $descendants );
+}
+
+/**
+ * Busts the cache of ancestor clone caches.
+ */
+function openlab_invalidate_ancestor_clone_cache( $group_id ) {
+	$ancestor_ids = openlab_get_group_clone_history( $group_id );
+	foreach ( $ancestor_ids as $ancestor_id ) {
+		wp_cache_delete( $ancestor_id, 'openlab_clones_of_group' );
+	}
+}
+
+/**
+ * Ensures that the cache of ancestor clones is invalidated on group deletion.
+ */
+add_action( 'groups_before_delete_group', 'openlab_invalidate_ancestor_clone_cache' );
 
 /**
  * Get more complete data about the clone history of a group.
