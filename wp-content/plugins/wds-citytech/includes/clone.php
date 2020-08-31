@@ -53,10 +53,11 @@ function openlab_get_clones_of_group( $group_id ) {
 /**
  * Returns all clone descendants of a group.
  *
- * @param int $group_id ID of the group.
+ * @param int   $group_id            ID of the group.
+ * @param array $exclude_creator_ids Exclude groups created by these users.
  * @return array Array of IDs.
  */
-function openlab_get_clone_descendants_of_group( $group_id ) {
+function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids = [] ) {
 	$descendants = openlab_get_clones_of_group( $group_id );
 	if ( ! $descendants ) {
 		return [];
@@ -64,6 +65,16 @@ function openlab_get_clone_descendants_of_group( $group_id ) {
 
 	foreach ( $descendants as $descendant ) {
 		$descendants = array_merge( $descendants, openlab_get_clone_descendants_of_group( $descendant ) );
+	}
+
+	if ( $exclude_creator_ids ) {
+		$descendants = array_filter(
+			$descendants,
+			function( $descendant_id ) use ( $exclude_creator_ids ) {
+				$descendant = groups_get_group( $descendant_id );
+				return ! in_array( $descendant->creator_id, $exclude_creator_ids, true );
+			}
+		);
 	}
 
 	return $descendants;
@@ -76,7 +87,9 @@ function openlab_get_clone_descendants_of_group( $group_id ) {
  * @return int
  */
 function openlab_get_clone_descendant_count_of_group( $group_id ) {
-	$descendants = openlab_get_clone_descendants_of_group( $group_id );
+	$group = groups_get_group( $group_id );
+
+	$descendants = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ] );
 
 	return count( $descendants );
 }

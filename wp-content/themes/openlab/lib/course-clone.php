@@ -332,7 +332,9 @@ add_filter(
 			return $args;
 		}
 
-		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id );
+		$group = groups_get_group( $group_id );
+
+		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ] );
 		if ( ! $descendant_ids ) {
 			$descendant_ids = [ 0 ];
 		}
