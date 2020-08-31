@@ -795,7 +795,6 @@ class Openlab_Clone_Course_Site {
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
-			$this->migrate_forms();
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -965,6 +964,9 @@ class Openlab_Clone_Course_Site {
 			$wpdb->query( "INSERT INTO {$table} SELECT * FROM {$source_table}" );
 		}
 
+		// Clone Gravity Forms tables.
+		$this->migrate_forms( $source_site_prefix, $site_prefix );
+
 		// Loop through all posts and:
 		// - if it's not by an admin, delete
 		// - if it's a nav item, change the GUID and the menu item URL meta
@@ -1060,43 +1062,50 @@ class Openlab_Clone_Course_Site {
 	/**
 	 * Migrate Gravity Forms data.
 	 *
-	 * GF should be active on the main site, since `switch_to_blog()`
-	 * doesn't load site specific plugins.
-	 *
+	 * @param string $source_prefix Source site DB prefix.
+	 * @param string $site_prefix   Cloned site DB prefix.
 	 * @return void
 	 */
-	protected function migrate_forms() {
-		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+	protected function migrate_forms( $source_prefix, $site_prefix ) {
+		global $wpdb;
+
+		$has_forms = $wpdb->query( $wpdb->prepare( "SHOW TABLES LIKE %s", $source_prefix . 'gf_form' ) );
+
+		// Sanitiy check.
+		if ( ! $has_forms ) {
 			return;
 		}
 
-		switch_to_blog( $this->source_site_id );
+		$tables_to_copy = [
+			'gf_draft_submissions',
+			'gf_entry',
+			'gf_entry_meta',
+			'gf_entry_notes',
+			'gf_form',
+			'gf_form_meta',
+			'gf_form_revisions',
+			'gf_form_view',
+		];
 
-		// Gravity Form isn't active. Bail early.
-		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
-			restore_current_blog();
-			return;
+		$with_data = [
+			'gf_form',
+			'gf_form_meta',
+			'gf_form_revisions',
+		];
+
+		foreach ( $tables_to_copy as $ttc ) {
+			$source_table = $source_prefix . $ttc;
+			$table        = $site_prefix . $ttc;
+
+			// Drop existing table and recreate to ensure a schema match.
+			$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+			$wpdb->query( "CREATE TABLE {$table} LIKE {$source_table}" );
+
+			// Clone form database objects.
+			if ( in_array( $ttc, $with_data, true ) ) {
+				$wpdb->query( "INSERT INTO {$table} SELECT * FROM {$source_table}" );
+			}
 		}
-
-		$forms = GFFormsModel::get_forms( null, 'title' );
-		if ( empty( $forms ) ) {
-			restore_current_blog();
-			return;
-		}
-
-		// Prepare form data.
-		$ids   = wp_list_pluck( $forms, 'id' );
-		$forms = GFFormsModel::get_form_meta_by_id( $ids );
-
-		switch_to_blog( $this->site_id );
-
-		// Properly install GF on new site.
-		gf_upgrade()->install();
-
-		// Add forms to the cloned site.
-		GFAPI::add_forms( $forms );
-
-		restore_current_blog();
 	}
 
 	protected function get_source_group_admins() {
