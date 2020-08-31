@@ -993,7 +993,7 @@ class Openlab_Clone_Course_Site {
 			}
 
 			// Non-admins have their stuff deleted.
-			if ( ! is_super_admin( $user_id ) && ! in_array( $sp->post_author, $source_group_admins ) && 'nav_menu_item' !== $sp->post_type ) {
+			if ( ! is_super_admin( $sp->post_author ) && ! in_array( $sp->post_author, $source_group_admins ) && 'nav_menu_item' !== $sp->post_type ) {
 				if ( 'attachment' === $sp->post_type ) {
 					$atts_to_delete_ids[] = $sp->ID;
 				} else {
