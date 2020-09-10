@@ -2,8 +2,8 @@
 Contributors: johnbillion
 Tags: debug, debug-bar, debugging, development, developer, performance, profiler, queries, query monitor, rest-api
 Requires at least: 3.7
-Tested up to: 5.4
-Stable tag: 3.6.0
+Tested up to: 5.5
+Stable tag: 3.6.4
 License: GPLv2 or later
 Requires PHP: 5.3
 
@@ -112,6 +112,34 @@ Yes. You can enable this on the Settings panel.
 No, I do not accept donations. If you like the plugin, I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about the plugin too!
 
 ## Changelog ##
+
+### 3.6.4 ###
+
+* Correct an error introduced in 3.6.3 with the extra early error handling (ironic).
+
+### 3.6.3 ###
+
+* Correct the size of the close icon.
+
+### 3.6.2 ###
+
+  * Capture and display the most recent PHP error that occurred before QM loaded.
+  * Add support for the environment type added in WP 5.5.
+  * Avoid a potentially blank translation for some plural forms.
+  * Increase some contrast in dark mode.
+  * Combine the response-related sections of the Request panel.
+  * Add extra sanity checking when attempting to fetch the posix user information.
+
+### 3.6.1 ###
+
+* Adjust the bottom margin when the QM panel is open so QM doesn't cover the bottom of the page. Works more often than not.
+* Prevent QM from triggering a fatal itself if a fatal occurs before the HTML dispatcher is loaded.
+* Add an informational message to the template output when template hooks are in use.
+* Fix errors caused by missing user or group IDs when collecting environment data.
+* Add TextMate to list of supported editors.
+* Demote some cache warnings to informational messages.
+* Support passing backtrace to `QM_Backtrace`.
+
 
 ### 3.6.0 ###
 
@@ -432,41 +460,3 @@ New features! Read about them here: https://querymonitor.com/blog/2019/02/new-fe
 * More defensive CSS.
 * Fix the size of the expand/contract buttons.
 * Avoid showing two unnecessary functions in the call stack for textdomain loading.
-
-### 2.13.4 ###
-
-* Highlight the main query to make it easier to find.
-* Allow filtering the db queries list to see just the main query.
-* Visual fixes for buttons, toggles, and filters.
-* Add some missing i18n.
-* Add some missing table row text.
-* Correct the Drop-in Plugins URL for network admin
-
-### 2.13.3 ###
-
-- Several RTL and i18n fixes
-- More compatibility with funky object cache controllers
-- Link to the Dropins screen when an object cache is in use
-- Always display the cache information in the overview
-- Correct filename output for Timber templates
-- Use latest HHVM on Trusty during Travis testing
-
-
-### 2.13.2 ###
-
-- Fix the layout of QM when the Twenty Seventeen theme is in use.
-- Display QM at the bottom of GlotPress' output.
-- Add support for logging queries made through HyperDB.
-- Display a more appropriate message when a conflicting db.php file is present.
-- `paged.php` is no longer part of the template hierarchy.
-- Some more CSS fixes to prevent themes having an effect.
-- Increase some contrast.
-- Correct the template hierarchy for templates that have a `theme-compat` version in core. Currently only affects `embed.php`.
-- Include a back-compat version of `wp_normalize_path()` for WordPress < 3.9.
-- Ensure the use of newer conditional functions such as `is_embed()` don't cause PHP warnings on older versions of WordPress.
-
-
-### 2.13.1 ###
-
-- Correct the filter names used for the template hierarchy collection. This corrects the hierarchy when `is_front_page()` is true.
-
