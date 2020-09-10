@@ -205,8 +205,9 @@ if ( $descendant_of ) {
 							<?php if ( 'course' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase">
-									<?php echo openlab_output_course_faculty_line( $group_id ); ?>
+									<?php echo openlab_output_group_contact_line( $group_id ); ?>
 								</div>
+
 								<div class="info-line uppercase">
 									<?php echo openlab_output_course_info_line($group_id); ?>
 								</div>
@@ -214,6 +215,12 @@ if ( $descendant_of ) {
 							<?php elseif ( 'portfolio' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
+
+							<?php else : ?>
+
+								<div class="info-line uppercase">
+									<?php echo openlab_output_group_contact_line( $group_id ); ?>
+								</div>
 
 							<?php endif; ?>
 
