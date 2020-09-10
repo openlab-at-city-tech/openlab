@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit08ada974fcfe93d170fabf937c6505d7
+class ComposerStaticInitfc6697a255d4a04313f1cefa4a0744d6
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -55,6 +55,7 @@ class ComposerStaticInit08ada974fcfe93d170fabf937c6505d7
         'Tribe\\Events\\Views\\V2\\Template\\Featured_Title' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Featured_Title.php',
         'Tribe\\Events\\Views\\V2\\Template\\JSON_LD' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/JSON_LD.php',
         'Tribe\\Events\\Views\\V2\\Template\\Page' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Page.php',
+        'Tribe\\Events\\Views\\V2\\Template\\Promo' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Promo.php',
         'Tribe\\Events\\Views\\V2\\Template\\Settings\\Advanced_Display' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Settings/Advanced_Display.php',
         'Tribe\\Events\\Views\\V2\\Template\\Title' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Title.php',
         'Tribe\\Events\\Views\\V2\\Template_Bootstrap' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template_Bootstrap.php',
@@ -83,9 +84,9 @@ class ComposerStaticInit08ada974fcfe93d170fabf937c6505d7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit08ada974fcfe93d170fabf937c6505d7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit08ada974fcfe93d170fabf937c6505d7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit08ada974fcfe93d170fabf937c6505d7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfc6697a255d4a04313f1cefa4a0744d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfc6697a255d4a04313f1cefa4a0744d6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfc6697a255d4a04313f1cefa4a0744d6::$classMap;
 
         }, null, ClassLoader::class);
     }

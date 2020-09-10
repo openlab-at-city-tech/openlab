@@ -40,6 +40,7 @@ return array(
     'Tribe\\Events\\Views\\V2\\Template\\Featured_Title' => $baseDir . '/src/Tribe/Views/V2/Template/Featured_Title.php',
     'Tribe\\Events\\Views\\V2\\Template\\JSON_LD' => $baseDir . '/src/Tribe/Views/V2/Template/JSON_LD.php',
     'Tribe\\Events\\Views\\V2\\Template\\Page' => $baseDir . '/src/Tribe/Views/V2/Template/Page.php',
+    'Tribe\\Events\\Views\\V2\\Template\\Promo' => $baseDir . '/src/Tribe/Views/V2/Template/Promo.php',
     'Tribe\\Events\\Views\\V2\\Template\\Settings\\Advanced_Display' => $baseDir . '/src/Tribe/Views/V2/Template/Settings/Advanced_Display.php',
     'Tribe\\Events\\Views\\V2\\Template\\Title' => $baseDir . '/src/Tribe/Views/V2/Template/Title.php',
     'Tribe\\Events\\Views\\V2\\Template_Bootstrap' => $baseDir . '/src/Tribe/Views/V2/Template_Bootstrap.php',
