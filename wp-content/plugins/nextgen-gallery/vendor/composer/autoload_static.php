@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitd944cb3ad10f834222db970b76dd976d
 {
     public static $files = array (
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'a5dbe7df96665c0b6c16ae8d91231502' => __DIR__ . '/..' . '/imagely/pope-framework/lib/autoload.php',
     );
 
@@ -24,11 +25,22 @@ class ComposerStaticInitd944cb3ad10f834222db970b76dd976d
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }

@@ -51,6 +51,6 @@ jQuery(function($) {
         }
     };
 
-    $(this).bind('refreshed', ngg_imagebrowser_init);
+    $(this).on('refreshed', ngg_imagebrowser_init);
     ngg_imagebrowser_init();
 });

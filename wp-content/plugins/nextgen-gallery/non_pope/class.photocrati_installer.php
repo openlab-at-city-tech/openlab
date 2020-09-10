@@ -226,7 +226,7 @@ if (!class_exists('C_Photocrati_Installer'))
 				$local_settings->save();
 
 				// Set role capabilities
-				self::set_role_caps();
+                C_NextGEN_Bootstrap::set_role_caps();
             }
 
             // Another workaround to an issue caused by NextGen's lack of multisite compatibility. It's possible
@@ -242,41 +242,12 @@ if (!class_exists('C_Photocrati_Installer'))
             }
 
 			// Update the module list, and remove the update flag
-			if ($can_upgrade) {
+			if ($can_upgrade)
+			{
 				update_option('pope_module_list', $current_module_list);
 				self::done_upgrade();
 			}
 		}
-
-		public static function set_role_caps()
-		{
-			// Set the capabilities for the administrator
-			$role = get_role('administrator');
-	
-			// We need this role, no other chance
-			if (empty($role))
-			{
-				update_option("ngg_init_check", __('Sorry, NextGEN Gallery works only with a role called administrator',"nggallery"));
-				return;
-			}
-	
-			$capabilities = array(
-				'NextGEN Attach Interface',
-				'NextGEN Change options',
-				'NextGEN Change style',
-				'NextGEN Edit album',
-				'NextGEN Gallery overview',
-				'NextGEN Manage gallery',
-				'NextGEN Manage others gallery',
-				'NextGEN Manage tags',
-				'NextGEN Upload images',
-				'NextGEN Use TinyMCE'
-			);
-	
-			foreach ($capabilities as $capability) {
-				$role->add_cap($capability);
-			}
-		}		
 
         static function _get_last_module_list($reset=FALSE)
         {

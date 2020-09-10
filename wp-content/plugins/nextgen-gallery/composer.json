@@ -11,7 +11,8 @@
         {"packagist.org": false}
     ],
     "require": {
-        "imagely/pope-framework": "v0.16"
+        "imagely/pope-framework": "v0.16",
+        "ezyang/htmlpurifier": "^4.13"
     },
     "require-dev": {
         "nikic/php-parser": "^4.3"

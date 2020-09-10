@@ -26,7 +26,7 @@ class M_NextGen_Admin extends C_Base_Module
             'photocrati-nextgen_admin',
             'NextGEN Administration',
             'Provides a framework for adding Administration pages',
-            '3.3.2',
+            '3.3.11',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -134,6 +134,13 @@ class M_NextGen_Admin extends C_Base_Module
             // enqueue calls
             do_action($enqueue_action, $slug);
         }
+
+        // Have the toplevel "NextGEN Gallery" link to the Manage Galleries page 
+        wp_add_inline_script('common', "jQuery(function($){
+            var parent = $('.toplevel_page_nextgen-gallery');
+            var manageGalleryUrl = parent.find('a[href*=\"manage-gallery\"]').attr('href');
+            parent.attr('href', manageGalleryUrl);
+        })");
     }
 
     // Enqueues static resources that should be enqueued in the FOOTER on a NextGEN Admin Page
@@ -232,6 +239,8 @@ class M_NextGen_Admin extends C_Base_Module
         $notices->add($review_notice_3->get_name(), $review_notice_3);
 
         $notices->add('nextgen.beginner.gallery_creation_igw', 'C_NextGen_First_Run_Notification_Wizard');
+
+        $notices->add('mailchimp_opt_in', 'C_Mailchimp_OptIn_Notice');
     }
 
     /**
@@ -736,11 +745,12 @@ class M_NextGen_Admin extends C_Base_Module
             'C_Admin_Requirements_Manager'            => 'class.admin_requirements_manager.php',
             'C_Form'                                  => 'class.form.php',
             'C_Form_Manager'                          => 'class.form_manager.php',
+            'C_Mailchimp_OptIn_Notice'                => 'class.mailchimp_optin_notice.php',
             'C_NextGEN_Wizard_Manager'                => 'class.nextgen_wizard_manager.php',
             'C_NextGen_Admin_Page_Manager'            => 'class.nextgen_admin_page_manager.php',
+            'C_NextGen_First_Run_Notification_Wizard' => 'class.nextgen_first_run_notification_wizard.php',
             'C_Nextgen_Admin_Installer'               => 'class.nextgen_admin_installer.php',
-            'C_Nextgen_Admin_Page_Controller'         => 'class.nextgen_admin_page_controller.php',
-            'C_NextGen_First_Run_Notification_Wizard' => 'class.nextgen_first_run_notification_wizard.php'
+            'C_Nextgen_Admin_Page_Controller'         => 'class.nextgen_admin_page_controller.php'
         );
     }
 }

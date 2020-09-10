@@ -20,14 +20,13 @@
  *      interfaces will use the same styling, be they basic or pro. Adding it here also acts to 
  *      ensure style consistency for users who update to the NextGEN redesign version, while still 
  *      running an older version of NextGEN Pro.
- *  7) NGG Admin CSS: Freemius Customizations
  *  8) NGG Admin CSS: Media Queries
  *
  ***/
 
 /***** 1) NGG Admin CSS: Original 2.0 CSS *****/
 
-.ngg-admin .notice, 
+.ngg-admin .notice,
 .ngg-admin div.updated, 
 .ngg-admin div.error {
     margin: 20px 15px 0 0;
@@ -36,7 +35,7 @@
 .ngg-admin #ngg_page_content .notice, 
 .ngg-admin #ngg_page_content div.updated, 
 .ngg-admin #ngg_page_content div.error {
-    margin: 20px 0 20px 0;
+    margin: 20px 0 25px 0;
 }
 
 .hidden {
@@ -470,6 +469,10 @@ table.nextgen_settings_position {
     width: 100%;
 }
 
+#ngg_page_content .ngg_gallery_sort .ngg_page_content_main {
+    min-height: 0;
+}
+
 .gallery_page_nggallery-manage-gallery #ngg_page_content .ngg_page_content_main,
 .gallery_page_nggallery-manage-album #ngg_page_content .ngg_page_content_main {
     padding: 0 10px 30px;
@@ -746,46 +749,6 @@ table.nextgen_settings_position {
     margin: 0 0 0 20px !important;
     font-size: 13px !important;
     letter-spacing: 1.5px;
-}
-
-.ngg_options_promo {
-    background: black;
-    color: #fff;
-    font-family: Lato, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    background: #9ebc1b;
-    line-height: 50px !important;
-    display: none;
-}
-
-#attach_to_post_tabs #displayed_tab .ngg_options_promo {
-    display: table-cell;
-}
-
-.ngg_options_promo a {
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 10px;
-    background: black;
-    color: #fff !important;
-    padding: 10px 20px;
-    font-size: 12px !important;
-    text-transform: uppercase;
-}
-
-.ngg_options_promo a:after {
-    content: "\f345";
-    font: normal 13px dashicons;
-    color: white !important;
-    display: inline-block;
-    position: relative;
-    top: 2px;
-    left: 6px;
-}
-
-.gallery_page_ngg_other_options #ngg_page_content .ngg_page_content_main tbody tr td.ngg_options_promo {
-    width: 100% !important;
 }
 
 #tr_photocrati-nextgen_basic_imagebrowser_ngg_triggers_display,
@@ -1130,116 +1093,10 @@ table.nextgen_settings_position {
     background: black !important;
 }
 
-/* 7) NGG Admin CSS: Freemius Customizations */
-
-.ngg-admin #fs_connect {
-    box-shadow: none;
-    border: 1px solid #e0e0e0;
-    margin-left: 10px;
-}
-
-.ngg-admin #fs_connect .fs-content p {
-    font-size: 17px;
-    font-family: Lato, sans-serif;
-}
-
-.ngg-admin #fs_connect a {
-    color: #9fbb1a;
-}
-
-.ngg-admin #fs_connect a:hover {
-    color: #b8d433;
-}
-
-.ngg-admin #fs_connect .fs-visual {
-    padding: 30px 20px !important;
-    background: #fff;
-}
-
-.ngg-admin #fs_connect .fs-visual .fs-plugin-icon, 
-.ngg-admin #fs_connect .fs-visual .fs-connect-logo, 
-.ngg-admin #fs_connect .fs-visual .fs-site-icon {
-    border: none;
-    padding: 0;
-    top: 30px;
-}
-
-.ngg-admin #fs_connect .fs-content {
-    padding: 30px 20px;
-}
-
-.ngg-admin #fs_connect .fs-actions,
-.ngg-admin #fs_connect .fs-permissions,
-.ngg-admin #fs_connect .fs-permissions.fs-open,
-.ngg-admin #fs_connect .fs-terms {
-    background: black;
-    color: #fff;
-    padding: 0 !important;
-}
-
-.ngg-admin #fs_connect .fs-actions {
-    padding: 30px 20px !important;
-}
-
-.ngg-admin #fs_connect .fs-permissions ul li i.dashicons {
-    color: #9fbb1a;
-}
-
-.ngg-admin #fs_connect .fs-permissions.fs-open ul {
-    margin-bottom: 0;
-    padding-bottom: 20px;
-}
-
-.ngg-admin #fs_connect .fs-permissions ul li div span {
-    color: #fff;
-}
-
-.ngg-admin #fs_connect .fs-terms {
-    padding-bottom: 15px !important;
-}
-
-.ngg-admin #fs_connect .fs-actions .button.button-primary {
-    background-color: #9fbb1a !important;
-    color: #fff !important;
-    border: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    height: 35px !important;
-    padding: 0 24px !important;
-    line-height: 35px;
-    width: auto !important;
-    border-radius: 0;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: .5px;
-    font-family: Lato, sans-serif;
-}
-
-.ngg-admin #fs_connect .fs-actions .button.button-secondary {
-    border: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    height: 35px !important;
-    padding: 0 24px !important;
-    line-height: 35px;
-    width: auto !important;
-    border-radius: 0;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: .5px;
-    font-family: Lato, sans-serif;
-}
-
-.ngg-admin #fs_connect .fs-permissions a:hover,
-.ngg-admin #fs_connect .fs-terms a:hover {
-    color: #fff;
-}
-
 /* 8) NGG Admin CSS: Media Queries */
 
 @media (max-width: 1240px) {
-    #ngg_page_content .ngg_page_content_header p,
-    .ngg_options_promo {
+    #ngg_page_content .ngg_page_content_header p {
         display: none !important;
     }
 }
@@ -1304,13 +1161,6 @@ table.nextgen_settings_position {
     }
     #ngg_page_content.ngg_settings_page .ngg_page_content_main table.nextgen_settings_position tr td {
         display: table-cell;
-    }
-    #ngg_page_content.ngg_settings_page td.ngg_options_promo {
-        line-height: 20px !important;
-        padding: 20px !important;
-    }
-    .ngg_options_promo a {
-        margin-left: 0;
     }
     #ngg_page_content.ngg_settings_page .ngg_page_content_main h2,
     #ngg_page_content.ngg_settings_page .ngg_page_content_main h3 {
@@ -1416,4 +1266,9 @@ table.nextgen_settings_position {
     #ngg_page_content .ngg_page_content_menu a:active:after {
         display:none;
     }
+}
+
+.ngg_admin_notice.notice-success,
+.ngg_admin_notice.updated {
+    border-left-color: #9dbd1b;
 }

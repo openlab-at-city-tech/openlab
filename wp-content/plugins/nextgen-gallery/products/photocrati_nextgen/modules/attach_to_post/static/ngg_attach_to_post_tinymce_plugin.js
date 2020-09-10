@@ -55,7 +55,7 @@
 			});
 
 			editor.on('SaveContent', function(event) {
-				if (wp.blocks) {
+				if ($('body').hasClass('block-editor-page')) {
 					handle_shortcode(event, '[ngg_images ');
 					handle_shortcode(event, '[ngg ');
 				}

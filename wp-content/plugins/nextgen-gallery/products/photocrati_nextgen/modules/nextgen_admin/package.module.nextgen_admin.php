@@ -872,10 +872,80 @@ class Mixin_Form_Manager extends Mixin
         return $this->object->add_form_before($type, $after, $form_names, 1);
     }
 }
+class C_Mailchimp_OptIn_Notice
+{
+    /** @var C_Mailchimp_OptIn_Notice $_instance */
+    static $_instance = NULL;
+    /**
+     * @return C_Mailchimp_OptIn_Notice
+     */
+    static function get_instance()
+    {
+        if (!self::$_instance) {
+            $klass = get_class();
+            self::$_instance = new $klass();
+        }
+        return self::$_instance;
+    }
+    /**
+     * @return string
+     */
+    function get_css_class()
+    {
+        return 'notice notice-success';
+    }
+    /**
+     * @return bool
+     */
+    public function is_dismissable()
+    {
+        return TRUE;
+    }
+    /**
+     * @param $code
+     * @return array
+     */
+    public function dismiss($code)
+    {
+        return array('handled' => TRUE);
+    }
+    /**
+     * @return bool
+     */
+    function is_renderable()
+    {
+        if (!C_NextGen_Admin_Page_Manager::is_requested()) {
+            return FALSE;
+        }
+        if (defined('NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME') || defined('NGG_PRO_PLUGIN_BASENAME')) {
+            return FALSE;
+        }
+        $settings = C_NextGen_Settings::get_instance();
+        try {
+            $time = time();
+            $install = new DateTime("@" . $settings->get('installDate'));
+            $now = new DateTime("@" . $time);
+            $diff = (int) $install->diff($now)->format('%a days');
+            if ($diff >= 14) {
+                return TRUE;
+            }
+        } catch (Exception $exception) {
+        }
+        return FALSE;
+    }
+    /**
+     * @return string
+     */
+    function render()
+    {
+        $manager = C_Admin_Notification_Manager::get_instance();
+        $view = new C_MVC_View('photocrati-nextgen_admin#mailchimp_optin', ['dismiss_url' => $manager->_dismiss_url . '&name=mailchimp_opt_in&code=1', 'i18n' => ['headline' => __('Thank you for using NextGEN Gallery!', 'nggallery'), 'message' => __('Get NextGEN Gallery updates, photography tips, business tips, tutorials, and resources straight to your mailbox.', 'nggallery'), 'submit' => __('Yes, Please!', 'nggallery'), 'confirmation' => __('Thank you for subscribing!', 'nggallery'), 'email_placeholder' => __('Email Address', 'nggallery'), 'name_placeholder' => __('First Name', 'nggallery'), 'connect_error' => __('Cannot connect to the registration server right now. Please try again later.', 'nggallery')]]);
+        return $view->render(TRUE);
+    }
+}
 if (!class_exists('C_NextGen_Admin_Installer')) {
 }
 /**
- * Class C_NextGen_Admin_Page_Controller
  * @mixin Mixin_NextGen_Admin_Page_Instance_Methods
  * @implements I_NextGen_Admin_Page
  */
@@ -906,6 +976,9 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
         $this->implement('I_NextGen_Admin_Page');
     }
 }
+/**
+ * @property Mixin_NextGen_Admin_Page_Instance_Methods|C_MVC_Controller|A_MVC_Validation $object
+ */
 class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
 {
     /**
@@ -997,19 +1070,9 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
      */
     function get_header_message()
     {
+        $message = '';
         if (defined('NGG_PRO_PLUGIN_VERSION') || defined('NGG_PLUS_PLUGIN_VERSION')) {
             $message = '<p>' . __("Good work. Keep making the web beautiful.", 'nggallery') . '</p>';
-        } else {
-            // Experiment
-            $currentDate = date('Y-m-d');
-            $currentDate = date('Y-m-d', strtotime($currentDate));
-            $bf_sale_start = date('Y-m-d', strtotime("12/02/2019"));
-            $bf_sale_end = date('Y-m-d', strtotime("12/05/2019"));
-            if ($currentDate >= $bf_sale_start && $currentDate <= $bf_sale_end) {
-                $message = '<p class="ngg-header-promo black-friday"><span>' . __('Cyber Monday Sale!') . '</span><br>' . __('40% Off NextGEN Pro!') . '<a href="https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/?utm_source=ngg&utm_medium=ngguser&utm_campaign=ngpro" class="button-primary" target="_blank">' . __('Upgrade to NextGEN Pro') . '</a></p>';
-            } else {
-                $message = '<p class="ngg-header-promo">' . __('Tip: Want more beautiful galleries, a stunning lightbox, image social sharing, ecommerce, PRO support, and more?') . '<a href="https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/?utm_source=ngg&utm_medium=ngguser&utm_campaign=ngpro" class="button-primary" target="_blank">' . __('Upgrade to NextGEN Pro') . '</a></p>';
-            }
         }
         return $message;
     }
@@ -1043,7 +1106,7 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
         $forms = array();
         $form_manager = C_Form_Manager::get_instance();
         foreach ($form_manager->get_forms($this->object->get_form_type()) as $form) {
-            $forms[] = $this->get_registry()->get_utility('I_Form', $form);
+            $forms[] = $this->object->get_registry()->get_utility('I_Form', $form);
         }
         return $forms;
     }
@@ -1089,14 +1152,14 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
             $tabs = array();
             $errors = array();
             $action = $this->object->_get_action();
-            $success = $this->param('message');
+            $success = $this->object->param('message');
             if ($success) {
                 $success = $this->object->get_success_message();
             } else {
                 $success = $this->object->is_post_request() ? $this->object->get_success_message() : '';
             }
             // First, process the Post request
-            if ($this->object->is_post_request() && $this->has_method($action)) {
+            if ($this->object->is_post_request() && $this->object->has_method($action)) {
                 $this->object->{$action}($this->object->param($this->context));
             }
             $index_template = $this->object->index_template();
@@ -1127,11 +1190,11 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
                 }
             }
             // Render the view
-            $index_params = array('page_heading' => $this->object->get_page_heading(), 'tabs' => $tabs, 'forms' => $forms, 'errors' => $errors, 'success' => $success, 'form_header' => FALSE, 'header_message' => $this->object->get_header_message(), 'nonce' => M_Security::create_nonce($this->object->get_required_permission()), 'show_save_button' => $this->object->show_save_button(), 'model' => $this->object->has_method('get_model') ? $this->get_model() : NULL, 'logo' => $this->get_router()->get_static_url('photocrati-nextgen_admin#imagely_icon.png'));
+            $index_params = array('page_heading' => $this->object->get_page_heading(), 'tabs' => $tabs, 'forms' => $forms, 'errors' => $errors, 'success' => $success, 'form_header' => FALSE, 'header_message' => $this->object->get_header_message(), 'nonce' => M_Security::create_nonce($this->object->get_required_permission()), 'show_save_button' => $this->object->show_save_button(), 'model' => $this->object->has_method('get_model') ? $this->object->get_model() : NULL, 'logo' => $this->object->get_router()->get_static_url('photocrati-nextgen_admin#imagely_icon.png'));
             $index_params = array_merge($index_params, $this->object->get_index_params());
-            $this->render_partial($index_template, $index_params);
+            $this->object->render_partial($index_template, $index_params);
         } else {
-            $this->render_view('photocrati-nextgen_admin#not_authorized', array('name' => $this->object->name, 'title' => $this->object->get_page_title()));
+            $this->object->render_view('photocrati-nextgen_admin#not_authorized', array('name' => $this->object->name, 'title' => $this->object->get_page_title()));
         }
     }
 }

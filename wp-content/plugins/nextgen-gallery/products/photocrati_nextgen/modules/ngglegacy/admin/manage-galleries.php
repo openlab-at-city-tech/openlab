@@ -250,6 +250,8 @@ function nggallery_manage_gallery_main()
                        name="nggpage"
                        value="manage-galleries"/>
 
+
+
                 <div class="tablenav top">
 
                     <div class="alignleft actions">
@@ -286,6 +288,11 @@ function nggallery_manage_gallery_main()
                     <?php $ngg->manage_page->pagination('top', $_GET['paged'], $total_number_of_galleries, $items_per_page ); ?>
 
                 </div>
+
+                <?php
+                // Allows for additional content to be injected between the bulk actions and the actual tabular data
+                do_action('ngg_manage_galleries_above_table');
+                ?>
 
                 <table class="wp-list-table widefat" cellspacing="0">
 
@@ -408,6 +415,8 @@ function nggallery_manage_gallery_main()
                     <?php $ngg->manage_page->pagination('bottom', $_GET['paged'], $total_number_of_galleries, $items_per_page ); ?>
                 </div>
             </form>
+
+            <?php do_action('ngg_manage_galleries_marketing_block'); ?>
 
         </div> <!-- /.ngg_page_content_main -->
     </div> <!-- /.wrap -->

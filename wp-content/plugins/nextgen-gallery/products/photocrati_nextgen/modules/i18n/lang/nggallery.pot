@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2014-02-20 19:45-0800\n"
-"PO-Revision-Date: 2020-02-28 12:08+08\n"
+"PO-Revision-Date: 2020-06-29 12:57+08\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: nggallery\n"
 
@@ -61,10 +61,6 @@ msgstr ""
 
 #: nggallery.php:947
 msgid "Hey %s, "
-msgstr ""
-
-#: nggallery.php:948
-msgid "Please help us improve NextGEN Gallery! If you opt-in, some data about your usage of NextGEN Gallery will be sent to freemius.com. If you skip this, that's okay! NextGEN Gallery will still work just fine."
 msgstr ""
 
 #: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:168
