@@ -1403,13 +1403,28 @@ class GFFormDisplay {
 		return $page;
 	}
 
+	/**
+	 * Creates the honeypot field object for the given form.
+	 *
+	 * @since unknown
+	 *
+	 * @param array $form The form the honeypot field is to be created for.
+	 *
+	 * @return GF_Field
+	 */
 	private static function get_honeypot_field( $form ) {
 		$max_id     = self::get_max_field_id( $form );
 		$labels     = self::get_honeypot_labels();
-		$properties = array( 'type' => 'honeypot', 'label' => $labels[ rand( 0, 3 ) ], 'id' => $max_id + 1, 'cssClass' => 'gform_validation_container', 'description' => __( 'This field is for validation purposes and should be left unchanged.', 'gravityforms' ) );
-		$field      = GF_Fields::create( $properties );
+		$properties = array(
+			'type'        => 'honeypot',
+			'label'       => $labels[ rand( 0, 3 ) ],
+			'id'          => $max_id + 1,
+			'cssClass'    => 'gform_validation_container',
+			'description' => __( 'This field is for validation purposes and should be left unchanged.', 'gravityforms' ),
+			'formId'      => absint( $form['id'] ),
+		);
 
-		return $field;
+		return GF_Fields::create( $properties );
 	}
 
 	/**
