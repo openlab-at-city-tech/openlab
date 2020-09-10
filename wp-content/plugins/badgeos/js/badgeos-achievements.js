@@ -2,116 +2,80 @@ jQuery(function ($) {
 
 	var $body = $('body');
 
-	// Retrieve feedback posts when an approriate action is taken
-	$body.on('change', '.badgeos-feedback-filter select', badgeos_get_feedback);
-	$body.on('submit', '.badgeos-feedback-search-form', function (event) {
-		event.preventDefault();
-		badgeos_get_feedback();
-	});
+	function show_ranks_list_html($mainobj) {
 
-	function badgeos_hide_submission_comments(submissions_wrapper) {
-		submissions_wrapper.find('.badgeos-submission-comments-wrap').hide();
-		submissions_wrapper.find('.badgeos-comment-form').hide();
-		//submissions_wrapper.find( '.submission-comment-toggle' ).show();
-	}
-
-	function badgeos_hide_submission_comments(submissions_wrapper) {
-		submissions_wrapper.find('.badgeos-submission-comments-wrap').hide();
-		submissions_wrapper.find('.badgeos-comment-form').hide();
-		//submissions_wrapper.find( '.submission-comment-toggle' ).show();
-	}
-
-	// Hide comment form on feedback posts with toggle
-	var $submissions_wrapper = $('.badgeos-feedback-container');
-	if ($('div.badgeos-feedback-container .badgeos-submissions').length) {
-		$submissions_wrapper = $('.badgeos-feedback-container');
-	} else {
-		$submissions_wrapper = $('.badgeos-submissions');
-	}
-
-	badgeos_hide_submission_comments($submissions_wrapper);
-	$submissions_wrapper.on('click', '.submission-comment-toggle', function (event) {
-		event.preventDefault();
-
-		var $button = $(this);
-		$button.parent().siblings('.badgeos-submission-comments-wrap').fadeIn('fast');
-		$button.parent().siblings('.badgeos-comment-form').fadeIn('fast');
-		$button.hide();
-		$button.parent().siblings('.badgeos-comment-form').fadeIn('fast');
-		var value = $button.parent().siblings('.badgeos-comment-form').find('.badgeos_comment').val();
-		if (value) {
-			alert('Comment is saved in draft mode.');
-		}
-	});
-
-	// Get feedback posts
-	function badgeos_get_feedback() {
-		$('.badgeos-spinner').show();
-
-		badgeos_setup_feedback_filters();
+		var data_ajaxurl = $mainobj.attr("data-url");
+		var types = $mainobj.attr("data-types");
+		var data_limit = $mainobj.attr("data-limit");
+		var data_show_search = $mainobj.attr("data-show_search");
+		var data_user_id = $mainobj.attr("data-user_id");
+		var data_orderby = $mainobj.attr("data-orderby");
+		var data_order = $mainobj.attr("data-order");
+		var data_show_title = $mainobj.attr("data-show_title");
+		var data_show_thumb = $mainobj.attr("data-show_thumb");
+		var data_show_description = $mainobj.attr("data-show_description");
+		var data_default_view = $mainobj.attr("data-default_view");
+		var data_image_width = $mainobj.attr("data-image_width");
+		var data_image_height = $mainobj.attr("data-image_height");
+		$mainobj.find('div.badgeos-rank-lists-spinner').show();
 
 		$.ajax({
-			url: badgeos_feedback.ajax_url,
-			data: badgeos_feedback,
-			dataType: 'json',
-			success: function (response) {
-				$('.badgeos-spinner').hide();
-				$submissions_wrapper.html(response.data.feedback);
-				badgeos_hide_submission_comments($submissions_wrapper);
-			},
-			error: function (x, t, m) {
-				if (window.console) {
-					console.log([t, m]);
-				}
-			}
-		});
-	}
-
-	// Setup feedback filters
-	function badgeos_setup_feedback_filters() {
-		if ('undefined' != typeof badgeos_feedback.filters && badgeos_feedback.filters) {
-			for (var field_selector in badgeos_feedback.filters) {
-				if ('' !== badgeos_feedback.filters[field_selector]) {
-					badgeos_feedback[field_selector] = $(badgeos_feedback.filters[field_selector]).val();
-				}
-			}
-		}
-	}
-
-	// Approve/deny feedback
-	$body.on('click', '.badgeos-feedback-buttons .button', function (event) {
-		event.preventDefault();
-		var $button = $(this);
-		$.ajax({
-			url: badgeos_feedback_buttons.ajax_url,
+			url: data_ajaxurl,
 			data: {
-				'action': 'update-feedback',
-				'status': $button.data('action'),
-				'feedback_id': $button.data('feedback-id'),
-				'feedback_type': $button.siblings('input[name=feedback_type]').val(),
-				'achievement_id': $button.siblings('input[name=achievement_id]').val(),
-				'user_id': $button.siblings('input[name=user_id]').val(),
-				'wpms': $button.siblings('input[name=wpms]').val(),
-				'nonce': $button.siblings('input[name=badgeos_feedback_review]').val(),
+				'action': 'get-ranks-list',
+				'types': types,
+				'limit': data_limit,
+				'user_id': data_user_id,
+				'offset': $mainobj.find('#badgeos_rank_lists_offset').val(),
+				'count': $mainobj.find('#badgeos_ranks_count').val(),
+				'search': $mainobj.find('#rank_lists_list_search').val(),
+				'orderby': data_orderby,
+				'order': data_order,
+				'show_title': data_show_title,
+				'show_thumb': data_show_thumb,
+				'default_view': data_default_view,
+				'show_description': data_show_description,
+				'image_width': data_image_width,
+				'image_height': data_image_height,
 			},
 			dataType: 'json',
 			success: function (response) {
-				$('.badgeos-feedback-response', $button.parent()).remove();
-				$(response.data.message).appendTo($button.parent()).fadeOut(3000);
-				$('.badgeos-feedback-' + $button.data('feedback-id') + ' .badgeos-feedback-status').html(response.data.status);
-				$('.cmb2-id--badgeos-submission-current .cmb-td, .cmb2-id--badgeos-nomination-current .cmb-td').html(response.data.status);
-				$('.badgeos-comment-date-by').html('<span class="badgeos-status-label">Status:</span> ' + response.data.status);
-
-				var feed_back_id = $button.data('feedback-id');
-
-				if (response.data.status != 'Approved') {
-					$('.comment-toggle-' + feed_back_id + '').show();
+				$mainobj.find('div.badgeos-rank-lists-spinner').hide();
+				if (response.data.message === null) {
+					//alert("That's all folks!");
 				} else {
-					$('.comment-toggle-' + feed_back_id + '').hide();
+					var offset_val = $mainobj.find('#badgeos_rank_lists_offset').val();
+					if (parseInt(offset_val) > 0) {
+						$mainobj.find('div#badgeos-list-ranks-container .ls_grid_container').append(response.data.message);
+					}
+					else
+						$mainobj.find('div#badgeos-list-ranks-container').append(response.data.message);
+
+					$mainobj.find('#badgeos_rank_lists_offset').val(response.data.offset);
+					$mainobj.find('#badgeos_ranks_count').val(response.data.badge_count);
+
+					//hide/show load more button
+					if (response.data.query_count <= response.data.offset) {
+						$mainobj.find('.rank_lists_list_load_more').hide();
+
+					} else {
+						$mainobj.find('.rank_lists_list_load_more').show();
+					}
+
+					$('.badgeos-arrange-buttons button').on('click', function () {
+						$('.badgeos-arrange-buttons button').removeClass('selected');
+						$(this).addClass('selected');
+						if ($(this).hasClass('grid')) {
+							$('#badgeos-list-ranks-container ul').removeClass('list').addClass('grid');
+						}
+						else if ($(this).hasClass('list')) {
+							$('#badgeos-list-ranks-container ul').removeClass('grid').addClass('list');
+						}
+					});
 				}
 			}
 		});
-	});
+	}
 
 	function show_earned_rank_list_html($mainobj) {
 
@@ -386,6 +350,16 @@ jQuery(function ($) {
 	}
 
 	// Our main achievement list AJAX call
+	function badgeos_ajax_ranks_list() {
+		$('.badgeos_rank_lists_offset').val('0');
+		$(".badgeos_ranks_list_main_container").each(function (index) {
+			var $mainobj = $(this);
+			show_ranks_list_html($mainobj)
+		});
+	}
+
+
+	// Our main achievement list AJAX call
 	function badgeos_ajax_achievement_list() {
 		$(".badgeos_achievement_main_container").each(function (index) {
 			var $mainobj = $(this);
@@ -435,6 +409,30 @@ jQuery(function ($) {
 		badgeos_ajax_achievement_list_reset($div);
 
 	}).change();
+
+	// Reset all our base query vars and run an AJAX call
+	function badgeos_ajax_rank_lists_shortcode_reset($parentdiv) {
+
+		$parentdiv.find('#badgeos_rank_lists_offset').val(0);
+		$parentdiv.find('#badgeos_ranks_count').val(0);
+
+		$parentdiv.find('div#badgeos-list-ranks-container').html('');
+		$parentdiv.find('.rank_lists_list_load_more').hide();
+		show_ranks_list_html($parentdiv)
+	}
+
+	// Listen for search queries
+	$('.rank_lists_list_search_go_form').submit(function (event) {
+
+		event.preventDefault();
+
+		var $div = $(this).parents('div[class^="badgeos_ranks_list_main_container"]').eq(0);
+
+		badgeos_ajax_rank_lists_shortcode_reset($div);
+
+		//Disabled submit button
+		//$div.find('.rank_lists_list_search_go').attr('disabled', false );
+	});
 
 	// Listen for search queries
 	$('.earned_ranks_list_search_go').click(function (event) {
@@ -503,6 +501,13 @@ jQuery(function ($) {
 		var $loadmoreparent = $(this).parents('div[class^="badgeos_earned_rank_main_container"]').eq(0);
 		$loadmoreparent.find('.badgeos-earned-ranks-spinner').show();
 		show_earned_rank_list_html($loadmoreparent);
+	});
+
+	// Listen for users clicking the "Load More" button
+	$('.rank_lists_list_load_more').click(function () {
+		var $loadmoreparent = $(this).parents('div[class^="badgeos_ranks_list_main_container"]').eq(0);
+		$loadmoreparent.find('.badgeos-rank-lists-spinner').show();
+		show_ranks_list_html($loadmoreparent);
 	});
 
 	// Listen for users clicking the show/hide details link
@@ -674,6 +679,7 @@ jQuery(function ($) {
 
 	badgeos_ajax_earned_achievement_list();
 	badgeos_ajax_earned_ranks_list();
+	badgeos_ajax_ranks_list();
 
 	$(document).on('click', '.bos_ob_convert_to_ob_btn', function (e) {
 		e.preventDefault();
@@ -712,7 +718,10 @@ jQuery(function ($) {
 			$('#open-badge-setting-section').show();
 	}).change();
 
-
+	$('.badgeos_verification_close').click(function () {
+		$(".badgeos_verification_modal_popup").fadeToggle();
+		$(".badgeos_verification_modal_popup").css({ "visibility": "hidden", "display": "none" });
+	});
 	function badgeos_ob_verification_process($this) {
 		$('#badgeos-ob-verification-res-list').html('');
 
@@ -720,7 +729,10 @@ jQuery(function ($) {
 		var entry_id = $($this).data('eid');
 		var user_id = $($this).data('uid');
 
-		tb_show('Verification', '#TB_inline?width=250&height=200&inlineId=badgeos-open-badge-verification-popup-box');
+		$(".badgeos_verification_modal_popup").fadeToggle();
+		$(".badgeos_verification_modal_popup").css({ "visibility": "visible", "display": "block" });
+
+		var return_result = 0;
 		$.ajax({
 			url: BadgeosCredlyData.ajax_url,
 			type: 'POST',
@@ -729,44 +741,102 @@ jQuery(function ($) {
 				bg: achievement_id,
 				eid: entry_id,
 				uid: user_id,
+				type: 'issued_on'
 			},
 			dataType: 'json',
 			success: function (returndata1) {
-				if (returndata1.type == 'success')
-					$('#badgeos-ob-verification-res-list').html('<li class="success">' + returndata1.message + '</li>');
+				if (returndata1.type == 'success' && parseInt(returndata1.result) > 0)
+					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
 				else
-					$('#badgeos-ob-verification-res-list').html('<li class="error">' + returndata1.message + '</li>');
+					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
+
+				return_result += parseInt(returndata1.result);
 				$.ajax({
 					url: BadgeosCredlyData.ajax_url,
 					type: 'POST',
 					data: {
-						action: 'badgeos_validate_revoked',
+						action: 'badgeos_validate_open_badge',
 						bg: achievement_id,
 						eid: entry_id,
 						uid: user_id,
+						type: 'issued_by'
 					},
 					dataType: 'json',
 					success: function (returndata2) {
 
-						if (returndata2.type == 'success')
-							$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata2.message + '</li>');
+						if (returndata2.type == 'success' && parseInt(returndata2.result) > 0)
+							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
 						else
-							$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata2.message + '</li>');
+							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
+
+						return_result += parseInt(returndata2.result);
+
 						$.ajax({
 							url: BadgeosCredlyData.ajax_url,
 							type: 'POST',
 							data: {
-								action: 'badgeos_validate_expiry',
+								action: 'badgeos_validate_open_badge',
 								bg: achievement_id,
 								eid: entry_id,
 								uid: user_id,
+								type: 'issued_using'
 							},
 							dataType: 'json',
 							success: function (returndata3) {
-								if (returndata3.type == 'success')
-									$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata3.message + '</li>');
+
+								if (returndata3.type == 'success' && parseInt(returndata3.result) > 0)
+									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
 								else
-									$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata3.message + '</li>');
+									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
+
+								return_result += parseInt(returndata3.result);
+								$.ajax({
+									url: BadgeosCredlyData.ajax_url,
+									type: 'POST',
+									data: {
+										action: 'badgeos_validate_open_badge',
+										bg: achievement_id,
+										eid: entry_id,
+										uid: user_id,
+										type: 'issued_to'
+									},
+									dataType: 'json',
+									success: function (returndata4) {
+
+										if (returndata4.type == 'success' && parseInt(returndata4.result) > 0)
+											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
+										else
+											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
+
+										return_result += parseInt(returndata4.result);
+										$.ajax({
+											url: BadgeosCredlyData.ajax_url,
+											type: 'POST',
+											data: {
+												action: 'badgeos_validate_open_badge',
+												bg: achievement_id,
+												eid: entry_id,
+												uid: user_id,
+												type: 'expiry_date'
+											},
+											dataType: 'json',
+											success: function (returndata5) {
+												if (returndata5.type == 'success' && parseInt(returndata5.result) > 0)
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');
+												else
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');
+
+												return_result += parseInt(returndata5.result);
+
+												if (return_result < 5) {
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span class="badgeos_verified">' + returndata5.notverified_label + '</span></div></div>');
+												} else {
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span class="badgeos_verified">' + returndata5.verified_label + '</span></div></div>');
+												}
+											}
+										});
+									}
+								});
 							}
 						});
 					}

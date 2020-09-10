@@ -1,9 +1,8 @@
 jQuery(document).ready(function ($) {
 
-	/**
+    /**
 	 * For Tool Page
      */
-
     $('.open_badge_enable_baking_blk_field').change(function () {
         if ($(this).val() == '1') {
             $(this).parents('fieldset').find('.sub_ob_badgeos_blk_fields').css('display', 'block');
@@ -11,6 +10,46 @@ jQuery(document).ready(function ($) {
             $(this).parents('fieldset').find('.sub_ob_badgeos_blk_fields').css('display', 'none');
         }
     }).trigger("change");
+
+    $('#badgeos_tools_email_allow_unsubscribe_email').change(function () {
+        if ($(this).val() == 'Yes') {
+            $('.badgeos_tools_email_unsubscribe_page_fields').css('display', 'block');
+        } else {
+            $('.badgeos_tools_email_unsubscribe_page_fields').css('display', 'none');
+        }
+    }).trigger("change");
+
+    $('.btn_badgeos_download_assets').click(function () {
+        var self = $(this);
+        self.attr("disabled", true);
+        self.parent().find('#btn_badgeos_download_assets_loader').css('visibility', 'visible');
+        var assets_id = self.parent().find('.badgeos_assets_id').val();
+        var ajaxURL = self.data('ajax_url');
+
+        self.parent().parent().find('.badgeos_download_asset_success_message').css('display', 'none');
+        self.parent().parent().find('.badgeos_download_asset_failed_message').css('display', 'none');
+
+        var data = {
+            'action': 'badgeos_download_asset',
+            'assets_id': assets_id
+        };
+
+        jQuery.post(ajaxURL, data, function (response) {
+            var popup_id = self.parent().parent().find('.badgeos_template_info_log').attr('id');
+            self.parent().find('#btn_badgeos_download_assets_loader').css('visibility', 'hidden');
+
+            if (response == 'done') {
+                self.parent().parent().find('.badgeos_download_asset_success_message').css('display', 'block');
+            } else {
+                self.parent().parent().find('.badgeos_download_asset_failed_message').css('display', 'block').html(response);
+            }
+
+            self.attr("disabled", false);
+        });
+
+        return false;
+    });
+
 
     $('.badgeos-profile-points-update-button').click(function () {
         var self = $(this);
@@ -340,6 +379,7 @@ jQuery(document).ready(function ($) {
             });
         }
     });
+
     $('.badgeos-credly-disconnection-notice .notice-dismiss').on('click', function (e) {
         e.preventDefault();
 

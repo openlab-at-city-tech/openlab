@@ -764,7 +764,11 @@ function badgeos_get_user_ranks( $args = array() ) {
         'start_date'        => false, // A specific achievement type
 		'end_date'          => false, // A specific achievement type
         'since'             => 0,
-        'no_steps'          => true
+        'no_steps'          => true,
+        'pagination'	    => false,// if true the pagination will be applied
+		'limit'	            => 10,
+		'page'	            => 1,
+		'total_only'        => false
     );
     $args = wp_parse_args( $args, $defaults );
 
@@ -819,10 +823,27 @@ function badgeos_get_user_ranks( $args = array() ) {
         $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $where .= " AND ( rank_type != '" .trim( $settings['ranks_step_post_type'] ). "')";
     }
-
+    
     global $wpdb;
+    
+    $user_ranks = [];
     $table_name = $wpdb->prefix . 'badgeos_ranks';
-    $user_ranks = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where" );
+    if( $args['total_only'] == true ) {
+        $user_ranks = $wpdb->get_var( "SELECT count(id) as id FROM $table_name WHERE $where" );
+    } else {
+        
+        $paginate_str = '';
+        if( $args['pagination'] == true ||  $args['pagination'] == 'true' ) { 
+            $offset = (intval( $args['page'] )-1) * intval( $args['limit'] );
+            if( $offset < 0 ) {
+                $offset = 0;
+            }
+            $paginate_str = ' limit '.$offset.', '.$args['limit'];
+        }
+        
+        $user_ranks = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where".$paginate_str );
+    }
+
     return $user_ranks;
 }
 
@@ -1847,16 +1868,16 @@ function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
  * @return $ranks_image
  */
 function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = '' ) {
-
+    
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-
+ 
     if( intval( $rank_width ) == 0 ) {
         $rank_width = '50';
         if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
             $rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
         }
     }
-
+    
     if( intval( $rank_height ) == 0 ) {
         $rank_height = '50';
         if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
