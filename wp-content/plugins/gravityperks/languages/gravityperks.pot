@@ -1,4 +1,4 @@
-# Copyright (C) 2019 Gravity Perks
+# Copyright (C) 2020 Gravity Perks
 # This file is distributed under the same license as the Gravity Perks package.
 msgid ""
 msgstr ""
@@ -165,7 +165,7 @@ msgstr ""
 msgid "License successfully refreshed."
 msgstr ""
 
-#: ../admin/manage_perks.php:833, ../gravityperks.php:186, ../gravityperks.php:698
+#: ../admin/manage_perks.php:833, ../gravityperks.php:190, ../gravityperks.php:727
 msgid "Manage Perks"
 msgstr ""
 
@@ -213,79 +213,83 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: ../gravityperks.php:461
+#: ../gravityperks.php:253
+msgid "Register Gravity Perks to enable auto-updates."
+msgstr ""
+
+#: ../gravityperks.php:469
 msgid "Current Gravity Forms version (%1$s) does not meet minimum Gravity Forms version requirement (%2$s)."
 msgstr ""
 
-#: ../gravityperks.php:464
+#: ../gravityperks.php:472
 msgid "Gravity Forms %1$s or greater is required. Activate it now or %2$spurchase it today!%3$s"
 msgstr ""
 
-#: ../gravityperks.php:471
+#: ../gravityperks.php:479
 msgid "%1$s requires WordPress %2$s or greater. You must upgrade WordPress in order to use this perk."
 msgstr ""
 
-#: ../gravityperks.php:474
+#: ../gravityperks.php:482
 msgid "Gravity Perks requires WordPress %1$s or greater. You must upgrade WordPress in order to use Gravity Perks."
 msgstr ""
 
-#: ../gravityperks.php:479
+#: ../gravityperks.php:487
 msgid "%1$s requires Gravity Perks %2$s or greater. Activate it now or %3$spurchase it today!%4$s"
 msgstr ""
 
-#: ../gravityperks.php:484
+#: ../gravityperks.php:492
 msgid "%1$sRegister%2$s your copy of Gravity Perks to receive access to automatic upgrades and support for this perk. Need a license key? %3$sPurchase one now.%2$s"
 msgstr ""
 
-#: ../gravityperks.php:487
+#: ../gravityperks.php:495
 msgid "%1$sRegister%2$s your copy of Gravity Perks to receive access to automatic upgrades and support. Need a license key? %3$sPurchase one now.%2$s"
 msgstr ""
 
-#: ../gravityperks.php:695
+#: ../gravityperks.php:724
 msgid "Back to Manage Perks"
 msgstr ""
 
-#: ../gravityperks.php:702
+#: ../gravityperks.php:731
 msgid "Activate Perk"
 msgstr ""
 
-#: ../gravityperks.php:861
+#: ../gravityperks.php:890
 msgid "<strong>Gravity Perks</strong> must be network activated before a <strong>perk</strong> can be network activated."
 msgstr ""
 
-#: ../gravityperks.php:900
+#: ../gravityperks.php:929
 msgid "No, Return to Manage Perks page"
 msgstr ""
 
-#: ../gravityperks.php:992
+#: ../gravityperks.php:1021
 msgid "Oops! Your site is having some trouble communicating with the our API."
 msgstr ""
 
-#: ../gravityperks.php:993
+#: ../gravityperks.php:1022
 msgid "Let's get this fixed."
 msgstr ""
 
-#: ../gravityperks.php:1165, ../gravityperks.php:1187, ../gravityperks.php:1621, ../gravityperks.php:1625
+#: ../gravityperks.php:1194, ../gravityperks.php:1216, ../gravityperks.php:1650, ../gravityperks.php:1654
 msgid "Perks"
 msgstr ""
 
-#: ../gravityperks.php:1211, ../gravityperks.php:1211
+#: ../gravityperks.php:1240, ../gravityperks.php:1240
 msgid "Return to Perks Page"
 msgstr ""
 
-#: ../gravityperks.php:1406
+#: ../gravityperks.php:1435
 msgid "Welcome to Gravity Perks"
 msgstr ""
 
-#: ../gravityperks.php:1407
+#: ../gravityperks.php:1436
 msgid "Ready to get started? Click the <strong>Perks</strong> link (to the left) to take a quick tour."
 msgstr ""
 
-#: ../gravityperks.php:1492
+#: ../gravityperks.php:1521
 msgid "Does this page look strange? Your PHP version is out-of-date. <strong>Please upgrade.</strong>"
 msgstr ""
 
-#: ../gravityperks.php:1559
+#: ../gravityperks.php:1588
 msgid "Gravity Perks"
 msgstr ""
 

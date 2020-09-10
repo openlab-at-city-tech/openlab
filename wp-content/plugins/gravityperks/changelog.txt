@@ -1,6 +1,14 @@
 
 # Changelog
 
+## 2.1.11
+
+	- Fixed issue where extraneous HTTP requests checking for announcements would be sent from the WordPress admin dashboard when used in conjunction with W3 Total Cache's Object Caching.
+
+## 2.1.10
+
+	- Fixed issue where checking for add-on-specific requirement would create infinite recursion.
+
 ## 2.1.9
 
 	- Removed deprecated Markdown library.
