@@ -95,7 +95,19 @@ class WCP_Tree {
                 $highlight_nonce = wp_create_nonce('wcp_folder_highlight_term_'.$term->term_id);
                 $term_nonce = wp_create_nonce('wcp_folder_term_'.$term->term_id);
                 /* Free/Pro URL Change*/
-                $string .= "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$term->slug}' class='ui-state-default route wcp_folder_{$term->term_id} {$class}' id='wcp_folder_{$term->term_id}' data-folder-id='{$term->term_id}'><h3 class='title' title='{$term->name}' id='title_{$term->term_id}'><span class='ui-icon'><i class='wcp-icon folder-icon-folder'></i><img src='".esc_url(WCP_FOLDER_URL."assets/images/pin.png")."' class='folder-sticky-icon' /><img src='".esc_url(WCP_FOLDER_URL."assets/images/move-option.png")."' class='move-folder-icon' ><input type='checkbox' class='checkbox' value='{$term->term_id}' /> </span><span class='title-text'>{$term->name}</span> <span class='update-inline-record'></span> {$count} <span class='star-icon'></span></h3><span class='nav-icon'><i class='wcp-icon folder-icon-arrow_right'></i></span>	<ul class='space' id='space_{$term->term_id}'>";
+                $string .= "<li data-nonce='{$term_nonce}' data-star='{$highlight_nonce}' data-rename='{$rename_nonce}' data-delete='{$delete_nonce}' data-slug='{$term->slug}' class='ui-state-default route wcp_folder_{$term->term_id} {$class}' id='wcp_folder_{$term->term_id}' data-folder-id='{$term->term_id}'>";
+                $string .= "<h3 class='title' title='{$term->name}' id='title_{$term->term_id}'>";
+                $string .= "<span class='ui-icon'>";
+                $string .= "<i class='wcp-icon pfolder-folder-close'></i>";
+                $string .= "<input type='checkbox' class='checkbox' value='{$term->term_id}' />";
+                $string .= "</span>";
+                $string .= "<span class='title-text'>{$term->name}</span>";
+                $string .= "{$count} <span class='update-inline-record'><i class='pfolder-edit-folder'></i></span> <span class='star-icon'><i class='pfolder-star'></i></span>";
+                $string .= "<span class='folder-sticky-icon'><i class='pfolder-pin'></i></span>";
+//                $string .= "<span class='move-folder-icon' ><i class='pfolder-move'></i></span>";
+                $string .= "</h3>";
+                $string .= "<span class='nav-icon'><i class='wcp-icon pfolder-arrow-down'></i></span>";
+                $string .= "<ul class='space' id='space_{$term->term_id}'>";
                 $string .= $return['string'];
                 $string .= "</ul></li>";
 

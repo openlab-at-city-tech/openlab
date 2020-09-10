@@ -174,7 +174,7 @@ jQuery(document).on("change", ".folder_for_media", function(){
                     jQuery("body").append("<div class='folder-media-popup-form' id='custom-folder-media-popup-form'></div>");
                     jQuery("#custom-folder-media-popup-form").append("<div class='media-popup-form' id='custom-popup-form-content'></div>");
                     jQuery("#custom-popup-form-content").append("<form action='#' id='folder-media-popup-form' method='post'></form>");
-                    jQuery("#folder-media-popup-form").append('<div id="add-update-folder-title" class="add-update-folder-title">Add Folder</div>');
+                    jQuery("#folder-media-popup-form").append('<div id="add-update-folder-title" class="add-update-folder-title">Add new folder</div>');
                     jQuery("#folder-media-popup-form").append('<div class="folder-form-input"><input id="media-folder-name" autocomplete="off" placeholder="Folder name" class=""></div>');
                     jQuery("#folder-media-popup-form").append('<div class="folder-form-errors" id="media-form-error"><span class="dashicons dashicons-info"></span> Please enter folder name</div>');
                     jQuery("#folder-media-popup-form").append('<div class="folder-form-buttons"><button type="submit" class="form-submit-btn" id="save-media-folder" style="width: 106px">Submit</button><a href="javascript:;" class="remove-media-form">Cancel</a></div>');
@@ -269,7 +269,9 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                 }
 
                 if(!jQuery("#wcp-content").length) {
-                    jQuery(".attachment-filters").val(selectedFolderPageID).trigger("change");
+                    if(jQuery(".editor-post-featured-image").length) {
+                        jQuery(".attachment-filters").val(selectedFolderPageID).trigger("change");
+                    }
                 }
             }
         },100);
@@ -317,7 +319,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
 
                     resetDDCounter();
 
-                    if( wp_media.media.frame.content.get() !== null) {
+                    if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null) {
                         wp_media.media.frame.content.get().collection.props.set({ignore: (+ new Date())});
                         wp_media.media.frame.content.get().options.selection.reset();
                     } else {

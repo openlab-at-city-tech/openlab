@@ -1,18 +1,18 @@
-﻿=== Folders - Organize Media Library Folders, Pages, Posts And Media Categories with Drag & Drop ===
+=== Folders - Organize Media Library Folders, Pages, Posts, Media Categories Folder, File Manager ===
 Contributors: galdub, tomeraharon, premio
-Tags: folder, folders, organize, pages folders, media library, posts folders, media folders, subfolders, file manager, directories
+Tags: folder, folders, organize, pages folders, media library, posts folders, media folders, subfolders, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 5.4
-Stable tag: 2.5.1
+Tested up to: 5.5
+Stable tag: 2.5.8
 Plugin URI: https://premio.io/downloads/folders/
 
-Folders is a WordPress plugin that will help you quickly organize and manage all of your Pages, Posts and Media library files in folders.
+Folders is a WordPress plugin that will help you quickly organize and manage your Media library files, Pages, Posts, and Custom Posts in folders
 
 == Description ==
 
 Folders is a WordPress plugin that enables users to quickly organize all of their Pages, Posts and Media files in folders. You can easily drag and drop items into directories and change the folders tree view (hierarchy) as you wish. Need more than 10 folders? Check out <a href="https://premio.io/downloads/folders" target="_blank" title="Folders pro plans"><strong>Folders Pro Plans</strong></a>.
 
-[youtube  https://www.youtube.com/watch?v=RqkWGRYek0w]
+[youtube  https://www.youtube.com/watch?v=GKq5jvuoRY0]
 
 = How Folders Plugin Can Help You =
 
@@ -60,6 +60,8 @@ Digital Agencies: You're creating all sorts of content for your clients daily - 
 * You can also move media library files, pages, posts, or any custom post to folders without using our drag and drop feature. Whenever you select any element or select some elements in bulk, you can move it to a folder using our dropdown menu
 * Select specific folders when you add media to your pages, posts or any other post type
 * Drag and drop folders, change order, and hierarchy
+* Search folder names
+* Duplicate folders - duplicate an existing folder with all its content
 * Upload directly to a media library folder - you can easily upload images or any other kind of files to a specific folder
 * Select a default folder for your media library, posts, pages, and custom posts - you can select the folder that will load by default when you open your media library, pages, posts, and custom posts. For example, you can show all the unassigned files whenever you open the media library.
 * New! Sort your folders - you can sort your folders based on name and creation date
@@ -118,6 +120,7 @@ Download this plugin today for free and get 10 folders to organize your WP conte
 3. Organize WordPress media library folders
 4. Organize WordPress pages folders
 5. Organize WordPress posts folders
+6. Advanced Folders settings like download folder as zip, duplicate folder, add a star, sticky folders, and more
 
 == Installation ==
 
@@ -158,6 +161,27 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.5.8 =
+Folders settings checkbox bug fix and some other minor bugs were fixed
+
+= 2.5.7 =
+Quick edit and search folder fix
+
+= 2.5.6 =
+CSS bug fixed
+
+= 2.5.5 =
+Various bugs were fixed after our last major release
+
+= 2.5.4 =
+Divi bug fixed
+
+= 2.5.3 =
+New and better design! We've added a search field, the minimum size of the Folders area is much smaller now, we've added Folders to the add media view, added a duplicate option, and many other cool features and bug fixes.
+
+= 2.5.2 =
+WP 5.5
 
 = 2.5.1 =
 Sort your folders based on name and creation date. We've also added some usability improvements, fixed some WPML and Polylang issue, and fixed some bugs
