@@ -67,7 +67,7 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 		if ( ! empty( $term_user_id_matches ) ) {
 			$join_contact_tables = true;
 
-			$user_ids_sql = implode( ',', array_map( 'intval', $users_query->user_ids ) );
+			$user_ids_sql = implode( ',', array_map( 'intval', $term_user_id_matches ) );
 
 			// Creator may not be public information
 			// $term_clauses[] = $wpdb->prepare( "( g.creator_id IN ({$user_ids_sql}) )" );
