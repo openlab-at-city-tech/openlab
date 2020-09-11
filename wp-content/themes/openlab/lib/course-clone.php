@@ -900,7 +900,7 @@ class Openlab_Clone_Course_Site {
 		}
 
 		if ( openlab_get_group_clone_history_data( $group->id, $exclude_creator ) ) {
-			openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget' );
+			openlab_add_widget_to_main_sidebar( 'openlab_clone_credits_widget', 9999 );
 		}
 
 		$enable_sharing = groups_get_groupmeta( $group->id, 'enable_sharing', true );

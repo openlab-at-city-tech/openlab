@@ -315,8 +315,9 @@ add_action(
  * This function includes some guesswork about what the "main" sidebar is, based on the theme.
  *
  * @param string $widget
+ * @param int    $index
  */
-function openlab_add_widget_to_main_sidebar( $widget ) {
+function openlab_add_widget_to_main_sidebar( $widget, $index = null ) {
 	switch ( get_template() ) {
 		case 'hemingway' :
 		case 'genesis' :
@@ -367,6 +368,7 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
 		array(
 			'id_base'    => $widget,
 			'sidebar_id' => $sidebar,
+			'index'      => $index,
 		)
 	);
 }
