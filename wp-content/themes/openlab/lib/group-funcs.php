@@ -43,22 +43,6 @@ function openlab_group_privacy_settings($group_type) {
         ));
     }
 
-    // If this is a cloned group/site, fetch the clone source's details
-    $clone_source_group_status = '';
-	$clone_source_blog_status  = 0;
-    if ( bp_is_group_create() ) {
-        $new_group_id = bp_get_new_group_id();
-		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
-		if ( $clone_source_group_id ) {
-			$clone_source_group        = groups_get_group( $clone_source_group_id );
-			$clone_source_group_status = $clone_source_group->status;
-
-			$clone_source_site_id = groups_get_groupmeta( $new_group_id, 'clone_source_blog_id' );
-			if ( $clone_source_site_id ) {
-				$clone_source_blog_status = get_blog_option( $clone_source_site_id, 'blog_public' );
-			}
-        }
-    }
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -73,8 +57,8 @@ function openlab_group_privacy_settings($group_type) {
 
             <?php
             $new_group_status = bp_get_new_group_status();
-            if (!$new_group_status) {
-                $new_group_status = !empty($clone_source_group_status) ? $clone_source_group_status : 'public';
+            if ( ! $new_group_status ) {
+                $new_group_status = 'public';
             }
             ?>
             <div class="row">
@@ -115,11 +99,9 @@ function openlab_group_privacy_settings($group_type) {
 		$has_site         = true;
 		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
-		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
-		$has_site    = in_array( 'site', $clone_steps, true );
-		if ( $has_site ) {
-			$selected_privacy = $clone_source_blog_status;
-		}
+		$clone_steps      = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$has_site         = in_array( 'site', $clone_steps, true );
+		$selected_privacy = 1;
 	}
 	?>
 
