@@ -185,24 +185,18 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 function openlab_format_group_clone_history_data_list( $history ) {
 	$credits_groups = array_map(
 		function( $clone_group ) {
-			$admin_links = array_map(
+			$admin_names = array_map(
 				function( $admin ) {
-					$link = sprintf(
-						'<a href="%s">%s</a>',
-						esc_attr( $admin['url'] ),
-						esc_html( $admin['name'] )
-					);
-
-					return $link;
+					return $admin['name'];
 				},
 				$clone_group['group_admins']
 			);
 
 			return sprintf(
-				'<li><a href="%s">%s</a> &mdash; %s</li>',
+				'<li><a href="%s">%s</a> by %s</li>',
 				esc_attr( $clone_group['group_url'] ),
 				esc_html( $clone_group['group_name'] ),
-				implode( ', ', $admin_links )
+				implode( ', ', $admin_names )
 			);
 		},
 		$history
