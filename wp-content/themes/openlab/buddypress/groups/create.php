@@ -119,7 +119,7 @@
                                 </li>
                             </ul>
 
-                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
+                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The %s profile, site set-up, and all docs, files, discussions, posts, and pages created by %s admins will be copied to the cloned %s. %s membership or member-created documents, files, discussions, comments or posts will not be copied.', $group_type, $group_type, $group_type, ucfirst( $group_type ) ); ?></p>
                             </div>
 						</div>
 
