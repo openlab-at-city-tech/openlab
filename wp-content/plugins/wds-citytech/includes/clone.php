@@ -380,7 +380,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_clone_credits_widget',
-			'Credits',
+			'Acknowledgments',
 			array(
 				'description' => '',
 			)
@@ -397,6 +397,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$group    = groups_get_group( $group_id );
 
+		$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
+
 		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
 		if ( count( $all_group_contacts ) <= 1 ) {
 			$exclude_creator = $all_group_contacts[0];
@@ -409,7 +411,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Credits' . $args['after_title'];
+		echo $args['before_title'] . 'Acknowledgments' . $args['after_title'];
+		echo '<p>' . sprintf( 'This %s is based on the following %s(s):', esc_html( $group_type_label ), esc_html( $group_type_label ) ) . '</p>';
 		echo '<ul class="clone-credits">';
 		echo $markup;
 		echo '</ul>';
