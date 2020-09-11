@@ -222,12 +222,19 @@ function openlab_group_sharing_settings_markup( $group_type = null ) {
 		'case'       => 'upper',
 		'group_type' => $group_type
 	] );
+
+	if ( 'course' === $group_type ) {
+		$gloss = 'This setting enables other faculty to clone your Course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this Course, using it as their own. Acknowledgement of original Course authors will be included on the Course Profile and in the sidebar of the Site.';
+	} else {
+		$gloss = sprintf( 'This setting enables other OpenLab members to clone your %s. If enabled, other OpenLab members can reuse, remix, transform, and build upon the material in this %s, using it as their own. Acknowledgement of original %s authors will be included on the %s Profile and in the sidebar of the Site.', esc_html( $group_label_uc ), esc_html( $group_label_uc ), esc_html( $group_label_uc ), esc_html( $group_label_uc ) );
+	}
+
 	?>
 
 	<div class="panel panel-default sharing-settings-panel">
 		<div class="panel-heading semibold">Sharing Settings</div>
 		<div class="panel-body">
-			<p>This setting enables other faculty to clone your <?php echo $group_label_uc; ?>. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original <?php echo $group_label_uc; ?> authors will be included.</p>
+			<p><?php echo esc_html( $gloss ); ?></p>
 
 			<div class="checkbox">
 				<label><input type="checkbox" name="openlab-enable-sharing" id="openlab-enable-sharing" value="1"<?php checked( $sharing_enabled ); ?> /> Enable shared cloning</label>
