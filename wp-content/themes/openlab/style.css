@@ -8239,7 +8239,7 @@ body .group-header .bp-template-notice {
   text-align: left;
 }
 body .clone-acknowledgements p {
-  margin-bottom: 0;
+  margin-bottom: 0.5em;
 }
 body .group-credits {
   list-style-type: none;
@@ -8247,7 +8247,7 @@ body .group-credits {
   padding-left: 15px;
 }
 body .group-credits li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 body .group-credits li:last-child {
   margin-bottom: 0;
