@@ -622,21 +622,21 @@ function cuny_group_single() {
 
 							<?php endif; ?>
 
-							<?php if ( $clone_history ) : ?>
-                                <div class="table-row row">
-                                    <div class="bold col-sm-7">Credits</div>
-                                    <div class="col-sm-17 row-content">
-                                        <ul class="group-credits">
-                                            <?php echo $credits_markup; ?>
-                                        </ul>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-
 							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
 								<div class="table-row row">
 									<div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.</div>
 
+								</div>
+							<?php endif; ?>
+
+							<?php if ( $clone_history ) : ?>
+								<div class="table-row row">
+									<div class="col-xs-24 status-message clone-acknowledgements">
+										<p>Acknowledgements: This <?php echo esc_html( $group_type ); ?> is based on the following <?php echo esc_html( $group_type ); ?>(s):</p>
+										<ul class="group-credits">
+											<?php echo $credits_markup; ?>
+										</ul>
+									</div>
 								</div>
 							<?php endif; ?>
 
