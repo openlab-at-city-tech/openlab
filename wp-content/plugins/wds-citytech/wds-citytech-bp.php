@@ -422,6 +422,33 @@ add_filter(
 			return;
 		}
 
+		// Cloned groups should keep their cloned settings.
+		$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
+		if ( $clone_source_group_id ) {
+			if ( openlab_is_forum_enabled_for_group( $clone_source_group_id ) ) {
+				groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
+			} else {
+				groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
+			}
+
+			if ( openlab_is_files_enabled_for_group( $clone_source_group_id ) ) {
+				groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
+			} else {
+				groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
+			}
+
+			$doc_settings = bp_docs_get_group_settings( $clone_source_group_id );
+			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
+
+			if ( openlab_is_calendar_enabled_for_group( $clone_source_group_id ) ) {
+				groups_update_groupmeta( $group_id, 'calendar_is_disabled', '0' );
+			} else {
+				groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
+			}
+
+			return;
+		}
+
 		$site_id = openlab_get_site_id_by_group_id( $group_id );
 		if ( $site_id ) {
 			// Discussion
