@@ -243,7 +243,7 @@ jQuery( document ).ready(
 						// Shared cloning UI
 						var $sharedCloningSettings = $('#shared-cloning-authorship-settings');
 						var $sharedCloningToggle   = $('#change-cloned-content-attribution');
-						if ( r.is_shared_clone ) {
+						if ( r.group_id > 0 && r.is_shared_clone ) {
 							$sharedCloningSettings.removeClass( 'hidden' );
 							$sharedCloningToggle.prop('checked', true);
 						} else {
