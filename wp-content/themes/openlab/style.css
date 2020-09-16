@@ -9542,6 +9542,9 @@ body form .checkbox-list-container {
   margin-right: 4px;
   border-right: none;
 }
+.shared-cloning-authorship-settings label {
+  font-weight: normal;
+}
 #group-list .group-item-wrapper .item-avatar {
   position: relative;
 }
