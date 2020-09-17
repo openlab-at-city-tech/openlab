@@ -1101,15 +1101,18 @@ class Openlab_Clone_Course_Site {
 	protected function migrate_forms() {
 		global $wpdb;
 
-		$source_prefix = $wpdb->get_blog_prefix( $this->source_site_id );
-		$site_prefix   = $wpdb->get_blog_prefix( $this->site_id );
+		switch_to_blog( $this->source_site_id );
 
-		$has_forms = $wpdb->query( $wpdb->prepare( "SHOW TABLES LIKE %s", $source_prefix . 'gf_form' ) );
-
-		// Sanitiy check.
-		if ( ! $has_forms ) {
+		// Gravity Forms isn't active. Bail early.
+		if ( ! is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			restore_current_blog();
 			return;
 		}
+
+		restore_current_blog();
+
+		$source_prefix = $wpdb->get_blog_prefix( $this->source_site_id );
+		$site_prefix   = $wpdb->get_blog_prefix( $this->site_id );
 
 		$tables_to_copy = [
 			'gf_draft_submissions',
