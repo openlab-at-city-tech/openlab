@@ -820,6 +820,7 @@ class Openlab_Clone_Course_Site {
 		if ( ! empty( $this->site_id ) ) {
 			$this->migrate_site_settings();
 			$this->migrate_posts();
+			$this->migrate_forms();
 		}
 
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
@@ -990,9 +991,6 @@ class Openlab_Clone_Course_Site {
 			$wpdb->query( "INSERT INTO {$table} SELECT * FROM {$source_table}" );
 		}
 
-		// Clone Gravity Forms tables.
-		$this->migrate_forms( $source_site_prefix, $site_prefix );
-
 		// Loop through all posts and:
 		// - if it's not by an admin, delete
 		// - if it's a nav item, change the GUID and the menu item URL meta
@@ -1098,12 +1096,13 @@ class Openlab_Clone_Course_Site {
 	/**
 	 * Migrate Gravity Forms data.
 	 *
-	 * @param string $source_prefix Source site DB prefix.
-	 * @param string $site_prefix   Cloned site DB prefix.
 	 * @return void
 	 */
-	protected function migrate_forms( $source_prefix, $site_prefix ) {
+	protected function migrate_forms() {
 		global $wpdb;
+
+		$source_prefix = $wpdb->get_blog_prefix( $this->source_site_id );
+		$site_prefix   = $wpdb->get_blog_prefix( $this->site_id );
 
 		$has_forms = $wpdb->query( $wpdb->prepare( "SHOW TABLES LIKE %s", $source_prefix . 'gf_form' ) );
 
@@ -1132,6 +1131,17 @@ class Openlab_Clone_Course_Site {
 		foreach ( $tables_to_copy as $ttc ) {
 			$source_table = $source_prefix . $ttc;
 			$table        = $site_prefix . $ttc;
+
+			// Handle SharDB.
+			if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
+				global $shardb_hash_length, $shardb_prefix;
+
+				$source_table_hash = strtoupper( substr( md5( $this->source_site_id ), 0, $shardb_hash_length ) );
+				$table_hash        = strtoupper( substr( md5( $this->site_id ), 0, $shardb_hash_length ) );
+
+				$source_table = $shardb_prefix . $source_table_hash . '.' . $source_table;
+				$table        = $shardb_prefix . $table_hash . '.' . $table;
+			}
 
 			// Drop existing table and recreate to ensure a schema match.
 			$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
