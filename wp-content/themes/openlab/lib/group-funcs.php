@@ -624,17 +624,18 @@ function cuny_group_single() {
 
 							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
 								<div class="table-row row">
-									<div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.</div>
+									<div class="col-xs-24 status-message italics">
+										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.
 
-									<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
-									<?php if ( $descendant_count > 0 ) : ?>
-										<?php
-										$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
-										$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
-										?>
-										It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
-									<?php endif; ?>
-
+										<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
+										<?php if ( $descendant_count > 0 ) : ?>
+											<?php
+											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
+											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
+											?>
+											It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
+										<?php endif; ?>
+									</div>
 								</div>
 							<?php endif; ?>
 
