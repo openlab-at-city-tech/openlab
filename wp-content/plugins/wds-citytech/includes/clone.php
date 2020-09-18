@@ -167,7 +167,7 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 		$source_count    = count( $source_datas );
 		for ( $i = 0; $i <= $source_count; $i++ ) {
 			if ( $source_datas[ $i ]['group_creator_id'] !== $exclude_creator ) {
-				break;
+				continue;
 			}
 
 			unset( $source_datas[ $i ] );
