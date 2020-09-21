@@ -259,7 +259,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 		    	var findFrameHierarchy = function (root, targetDoc) {
 				  	var iframes = root.find("iframe");
 				  	var ret = [];
-				  	for (var i = 0; i < iframes.size(); i++) {
+				  	for (var i = 0; i < iframes.length; i++) {
 				  		var iframe = jQuery(iframes.get(i));
 				  		try {
 								if (iframe.prop("contentWindow").document == targetDoc)
@@ -484,7 +484,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 					}
 				}
 				
-				if (jContext.size() == 0)
+				if (jContext.length == 0)
 					jContext = jQuery([]);
 			}
 			else
@@ -506,7 +506,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 			if (target != null) {
 				jTarget = jContext.find(target);
 				
-				if (jTarget.size() > 0)
+				if (jTarget.length > 0)
 					isTargeted = true;
 				else
 					jTarget = this.anchor;
@@ -523,7 +523,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 			if (view != null) {
 				jView = jContext.find(view);
 				
-				if (jView.size() > 0)
+				if (jView.length > 0)
 					viewOb = this.getViewFor(jView, wizard.id, step['id']);
 			}
 			
@@ -607,10 +607,10 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 								}
 								
 								if (tourStep != null) {
-									if (tourStep.target == null || tourStep.target.size() == 0 || tourStep.target.attr('id') == 'ngg-wizard-anchor') {
+									if (tourStep.target == null || tourStep.target.length == 0 || tourStep.target.attr('id') == 'ngg-wizard-anchor') {
 										canNext = wizard.manager.computeStepTarget(wizard, stepNext, tourStep);
 										
-										if (canNext && (tourStep.target == null || tourStep.target.size() == 0 || tourStep.target.attr('id') == 'ngg-wizard-anchor'))
+										if (canNext && (tourStep.target == null || tourStep.target.length == 0 || tourStep.target.attr('id') == 'ngg-wizard-anchor'))
 											canNext = false;
 									}
 									else
@@ -667,7 +667,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 							$ob = wizard.manager.getContextObject(condCtx).find(condOb);
 						}
 						
-						if ($ob.size() > 0) {
+						if ($ob.length > 0) {
 							var doc = $ob.get(0).ownerDocument;
 							obWin = doc.defaultView || doc.parentWindow;
 						}
@@ -686,7 +686,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 							}
 							case 'event_bind':
 							case 'plupload_bind': {
-								var doBind = $ob.size() > 0;
+								var doBind = $ob.length > 0;
 							
 								if (condType == 'plupload_bind') {
 									if (typeof($ob.pluploadQueue) !== 'undefined')
@@ -698,7 +698,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 								if (doBind) {
 									this.condition_setup = true;
 									var tourStep = this;
-									$ob.bind(condValue, function () {
+									$ob.on(condValue, function () {
 										tourStep.condition_met = true;
 									});
 								}
@@ -711,7 +711,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 									this.condition_met = true;
 								else {
 									var tourStep = this;
-									jQuery(window.top.document).find('body').bind('nextgen_event', function (e, type) {
+									jQuery(window.top.document).find('body').on('nextgen_event', function (e, type) {
 										if (type == condValue)
 											tourStep.condition_met = true;
 									});
@@ -776,7 +776,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 					  view.currentWizard = tour.ngg_wizard_id;
 					  view.currentStep = this.ngg_step_id;
 					  view.setup();
-					  view.bind('done', this.onDone);
+					  view.on('done', this.onDone);
 					  view.enable();
 					}
 			  };
@@ -789,7 +789,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 						
 					if (view != null) {
 					  view.disable();
-					  view.unbind('done', this.onDone);
+					  view.off('done', this.onDone);
 					  view.reset();
 					}
 			  };

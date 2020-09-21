@@ -122,6 +122,21 @@ if ( ! empty( $categories ) ) {
 	);
 }
 
+$descendant_of = openlab_get_current_filter( 'descendant-of' );
+if ( $descendant_of ) {
+	$descendant_of_group = groups_get_group( $descendant_of );
+
+	$descendant_of_admin_ids   = openlab_get_all_group_contact_ids( $descendant_of );
+	$descendant_of_admin_links = array_map( 'bp_core_get_userlink', $descendant_of_admin_ids );
+
+	$descendant_of_string = sprintf(
+		'Displaying clones of <a href="%s">%s</a> by %s.',
+		esc_attr( bp_get_group_permalink( $descendant_of_group ) ),
+		esc_html( $descendant_of_group->name ),
+		implode( ', ', $descendant_of_admin_links )
+	);
+}
+
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -133,13 +148,15 @@ if ( ! empty( $categories ) ) {
 		<div class="col-lg-19 col-md-18 col-sm-16">
 			<?php if ( openlab_is_search_results_page() ) : ?>
 				Narrow down your results using the search filters.
+			<?php elseif ( $descendant_of ) : ?>
+				<?php echo $descendant_of_string; ?>
 			<?php else : ?>
 				Use the search and filters to find a <?php echo esc_html( ucwords( $group_type ) ); ?>.
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
-	<div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count( ucwords( $group_type ) . 's' ); ?></div>
+	<div class="group-count col-lg-5 col-md-6 col-sm-8"><?php cuny_groups_pagination_count(); ?></div>
 </div>
 
 	<div id="group-list" class="item-list group-list row">
@@ -188,8 +205,9 @@ if ( ! empty( $categories ) ) {
 							<?php if ( 'course' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase">
-									<?php echo openlab_output_course_faculty_line( $group_id ); ?>
+									<?php echo openlab_output_group_contact_line( $group_id ); ?>
 								</div>
+
 								<div class="info-line uppercase">
 									<?php echo openlab_output_course_info_line($group_id); ?>
 								</div>
@@ -197,6 +215,12 @@ if ( ! empty( $categories ) ) {
 							<?php elseif ( 'portfolio' === $this_group_type ) : ?>
 
 								<div class="info-line uppercase"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
+
+							<?php else : ?>
+
+								<div class="info-line uppercase">
+									<?php echo openlab_output_group_contact_line( $group_id ); ?>
+								</div>
 
 							<?php endif; ?>
 

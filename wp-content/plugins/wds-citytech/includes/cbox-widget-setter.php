@@ -11,6 +11,7 @@ class CBox_Widget_Setter {
 				'id_base'    => '',
 				'sidebar_id' => '',
 				'settings'   => array(),
+				'index'      => null,
 			)
 		);
 
@@ -23,106 +24,20 @@ class CBox_Widget_Setter {
 			$widget_options['_multiwidget'] = 1;
 		}
 		unset( $option_keys['_multiwidget'] );
-		$option_keys                     = array_keys( $option_keys );
-		$last_key                        = array_pop( $option_keys );
-		$option_index                    = $last_key + 1;
+
+		if ( null === $r['index'] ) {
+			$option_keys  = array_keys( $option_keys );
+			$last_key     = array_pop( $option_keys );
+			$option_index = $last_key + 1;
+		} else {
+			$option_index = intval( $r['index'] );
+		}
+
 		$widget_options[ $option_index ] = self::sanitize_widget_options( $id_base, $settings, array() );
 		update_option( 'widget_' . $id_base, $widget_options );
 
 		$widget_id = $id_base . '-' . $option_index;
 		self::move_sidebar_widget( $widget_id, null, $sidebar_id, null, $option_index );
-		return;
-
-		// Don't try to set a widget if it hasn't been registered
-		if ( ! self::widget_exists( $id_base ) ) {
-			return new WP_Error( 'widget_does_not_exist', 'Widget does not exist' );
-		}
-
-		global $wp_registered_sidebars;
-		if ( ! isset( $wp_registered_sidebars[ $sidebar_id ] ) ) {
-			return new WP_Error( 'sidebar_does_not_exist', 'Sidebar does not exist' );
-		}
-
-		$sidebars = wp_get_sidebars_widgets();
-
-		$sidebar = isset( $sidebar[ $sidebar_id ] ) ? $sidebars[ $sidebar_id ] : array();
-
-		// Reset multiwidgets to updated=false, or `update_callback()` will fail.
-		global $wp_registered_widgets;
-		foreach ( $wp_registered_widgets as $primary_widget_id => $primary_widget ) {
-			if ( 0 !== strpos( $primary_widget_id, $id_base ) ) {
-				continue;
-			}
-
-			if ( ! isset( $primary_widget['callback'][0] ) || ! ( $primary_widget['callback'][0] instanceof WP_Widget ) ) {
-				continue;
-			}
-
-			$primary_widget['callback'][0]->updated = false;
-		}
-
-		// Multi-widgets can only be detected by looking at their settings
-		$option_name = 'widget_' . $id_base;
-
-		// Don't let it get pulled from the cache
-		wp_cache_delete( $option_name, 'options' );
-		$all_settings = get_option( $option_name );
-
-		if ( is_array( $all_settings ) ) {
-			$skeys = array_keys( $all_settings );
-
-			// Find the highest numeric key
-			rsort( $skeys );
-
-			foreach ( $skeys as $k ) {
-				if ( is_numeric( $k ) ) {
-					$multi_number = $k + 1;
-					break;
-				}
-			}
-
-			if ( ! isset( $multi_number ) ) {
-				$multi_number = 1;
-			}
-
-			$all_settings[ $multi_number ] = $settings;
-			//$all_settings = array( $multi_number => $settings );
-		} else {
-			$multi_number = 1;
-			$all_settings = array( $multi_number => $settings );
-		}
-
-		$widget_id = $id_base . '-' . $multi_number;
-		$sidebar[] = $widget_id;
-
-		$all_settings = array_filter( $all_settings );
-
-		// Because of the way WP_Widget::update_callback() works, gotta fake the $_POST
-		$_POST[ 'widget-' . $id_base ] = $all_settings;
-
-		global $wp_registered_widget_updates, $wp_registered_widget_controls;
-		foreach ( (array) $wp_registered_widget_updates as $name => $control ) {
-
-			if ( $name == $id_base ) {
-				if ( ! is_callable( $control['callback'] ) ) {
-					continue;
-				}
-
-				if ( isset( $control['callback'][0] ) && ( $control['callback'][0] instanceof WP_Widget ) ) {
-					$control['callback'][0]->updated = false;
-				}
-
-				ob_start();
-					call_user_func_array( $control['callback'], $control['params'] );
-				ob_end_clean();
-				break;
-			}
-		}
-
-		$sidebars[ $sidebar_id ] = $sidebar;
-		wp_set_sidebars_widgets( $sidebars );
-
-		return update_option( $option_name, $all_settings );
 	}
 
 	/**

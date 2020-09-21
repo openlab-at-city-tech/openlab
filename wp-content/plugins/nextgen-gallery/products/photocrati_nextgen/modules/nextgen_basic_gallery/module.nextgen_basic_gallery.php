@@ -37,7 +37,7 @@ class M_NextGen_Basic_Gallery extends C_Base_Module
             NGG_BASIC_GALLERY,
             'NextGEN Basic Gallery',
             "Provides NextGEN Gallery's basic thumbnail/slideshow integrated gallery",
-            '3.1.8',
+            '3.3.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

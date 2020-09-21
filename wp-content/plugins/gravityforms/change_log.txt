@@ -1,16 +1,27 @@
-### 2.4.19.3
+### 2.4.20.3
+- Fixed an issue where the honeypot field description can be assigned the same id attribute as other forms on the page.
+
+
+### 2.4.20.2
+- Updated background updates to work more seamlessly with WordPress's automatic updates.
+- Fixed an issue with WordPress 5.5 where the select all checkbox on the export entries page can stop functioning.
+
+
+### 2.4.20.1
+- API: Updated REST API for WordPress 5.5.
+
+
+### 2.4.20 | 2020-08-06
+- Added support for WordPress 5.5.
+- Updated background updates to be compatible with automatic updates in WordPress 5.5.
 - Updated the translated countries list to be sorted alphabetically.
+- Fixed a fatal error which occurs when the PowerPack for Beaver Builder plugin uses `GFCommon::gform_do_shortcode()`.
+- Fixed an issue with the empty form validation ignoring the values of fields with visibility set to hidden.
+- AF: Fixed a JavaScript error with WordPress 5.5 which prevents dynamic and generic mapping type settings rendering correctly.
+- AF: Fixed an issue with WordPress 5.5 that breaks the layout of the results pages.
 - API: Added GF_Field_Address::get_default_countries() which returns the default array of countries using the ISO 3166-1 alpha-2 code as the key to the country name.
 - API: Fixed the value not being padded when true is passed for the fifth argument of the Currency.numberFormat method in gravityforms.js.
 - API: Fixed an issue where GF_Field_Address::get_country_code() would return null for some translated countries.
-
-
-### 2.4.19.2
-- Fixed a fatal error which occurs when the PowerPack for Beaver Builder plugin uses `GFCommon::gform_do_shortcode()`.
-
-
-### 2.4.19.1
-- Fixed an issue with the empty form validation ignoring the values of fields with visibility set to hidden.
 
 
 ### 2.4.19 | 2020-07-15

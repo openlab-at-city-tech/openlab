@@ -105,109 +105,134 @@ if ( ! defined( 'ABSPATH' ) ) exit;
         <input type="hidden" name="folder_nonce" value="<?php echo wp_create_nonce("folder_settings") ?>">
         <div class="accordion">
             <div class="accordion-header">Folders Settings <span class="dashicons dashicons-arrow-down-alt2"></span></div>
-            <div class="accordion-content" style="display: block">
+            <div class="accordion-content no-bp" style="display: block">
                 <div class="accordion-left">
                     <table class="form-table">
-                        <?php
-                        $post_types = get_post_types( array( ), 'objects' );
-                        $post_array = array("page", "post", "attachment");
-                        foreach ( $post_types as $post_type ) : ?>
+                        <tboby>
                             <?php
-                            if ( ! $post_type->show_ui) continue;
-                            $is_checked = !in_array( $post_type->name, $options )?"hide-option":"";
-                            $selected_id = (isset($default_folders[$post_type->name]))?$default_folders[$post_type->name]:"all";
-                            if(in_array($post_type->name, $post_array)){
-                                ?>
-                                <tr>
-                                    <th width="220px">
-                                        <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?></label>
-                                    </th>
-                                    <td>
-                                        <input type="checkbox" class="folder-select" id="folders_<?php echo esc_attr($post_type->name); ?>" name="folders_settings[]" value="<?php echo esc_attr($post_type->name); ?>"<?php if ( in_array( $post_type->name, $options ) ) echo ' checked="checked"'; ?>/>
-                                    </td>
-                                    <th class="default-folder">
-                                        <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', WCP_FOLDER ) ?></label>
-                                    </th>
-                                    <td>
-                                        <select class="hide-show-option <?php echo esc_attr($is_checked) ?>" id="folders_for_<?php echo esc_attr($post_type->name); ?>" name="default_folders[<?php echo esc_attr($post_type->name); ?>]" ?>">
-                                            <option value="">All <?php echo esc_attr($post_type->label) ?> Folder</option>
-                                            <option value="-1" <?php echo ($selected_id == -1)?"selected":"" ?>>Unassigned <?php echo esc_attr($post_type->label) ?></option>
-                                            <?php
-                                            if(isset($terms_data[$post_type->name]) && !empty($terms_data[$post_type->name])) {
-                                                foreach ($terms_data[$post_type->name] as $term) {
-                                                    $selected = ($selected_id == $term->slug)?"selected":"";
-                                                    echo "<option ".esc_attr($selected)." value='".esc_attr($term->slug)."'>".esc_attr($term->name)."</option>";
-                                                }
-                                            } ?>
-                                        </select>
-                                    </td>
-                                </tr>
+                            $post_types = get_post_types( array( ), 'objects' );
+                            $post_array = array("page", "post", "attachment");
+                            foreach ( $post_types as $post_type ) : ?>
                                 <?php
-                            } else { ?>
-                                <tr>
-                                    <th>
-                                        <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?></label>
-                                    </th>
-                                    <td>
-                                        <input type="checkbox" class="folder-select" id="folders_<?php echo esc_attr($post_type->name); ?>" name="folders_settings[]" value="<?php echo esc_attr($post_type->name); ?>"<?php if ( in_array( $post_type->name, $options ) ) echo ' checked="checked"'; ?>/>
-                                    </td>
-                                    <th class="default-folder">
-                                        <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', WCP_FOLDER ) ?></label>
-                                    </th>
-                                    <td>
-                                        <select class="hide-show-option <?php echo esc_attr($is_checked) ?>" id="folders_for_<?php echo esc_attr($post_type->name); ?>" name="default_folders[<?php echo esc_attr($post_type->name); ?>]" ?>">
-                                            <option value="">All <?php echo esc_attr($post_type->label) ?> Folder</option>
-                                            <option value="-1" <?php echo ($selected_id == -1)?"selected":"" ?>>Unassigned <?php echo esc_attr($post_type->label) ?></option>
-                                            <?php
-                                            if(isset($terms_data[$post_type->name]) && !empty($terms_data[$post_type->name])) {
-                                                foreach ($terms_data[$post_type->name] as $term) {
-                                                    $selected = ($selected_id == $term->slug)?"selected":"";
-                                                    echo "<option ".esc_attr($selected)." value='".esc_attr($term->slug)."'>".esc_attr($term->name)."</option>";
-                                                }
-                                            } ?>
-                                        </select>
-                                    </td>
-                                </tr>
-                            <?php } endforeach; ?>
-                        <tr>
-                            <th>
-                                <label for="folders_show_in_menu" ><?php esc_html_e( 'Show Folders in Menu:', WCP_FOLDER ); ?></label>
-                            </th>
-                            <td>
-                                <?php $val = get_option("folders_show_in_menu"); ?>
-                                <input type="hidden" name="folders_show_in_menu" value="off" />
-                                <input type="checkbox" id="folders_show_in_menu" name="folders_show_in_menu" value="on" <?php echo ($val == "on")?"checked='checked'":"" ?>/>
-                            </td>
-                        </tr>
-                        <!-- Do not make changes here, Only for Free -->
-
-                        <tr>
-                            <td colspan="2" style="padding: 10px 0">
-                                <?php
-                                $tlfs = get_option("folder_old_plugin_folder_status");
-                                if($tlfs == false || $tlfs < 10) {
-                                    $tlfs = 10;
-                                }
-                                $total = WCP_Folders::get_ttl_fldrs();
-                                if($total > $tlfs) {
-                                    $tlfs = $total;
-                                }
-                                ?>
-                                <span class="upgrade-message">You have used <span class='pink'><?php echo esc_attr($total) ?></span>/<?php echo esc_attr($tlfs) ?> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
-                            </td>
-                        </tr>
-
+                                if ( ! $post_type->show_ui) continue;
+                                $is_checked = !in_array( $post_type->name, $options )?"hide-option":"";
+                                $selected_id = (isset($default_folders[$post_type->name]))?$default_folders[$post_type->name]:"all";
+                                if(in_array($post_type->name, $post_array)){
+                                    ?>
+                                    <tr>
+                                        <td class="no-padding">
+                                            <label for="folders_<?php echo esc_attr($post_type->name); ?>" class="custom-checkbox">
+                                                <input type="checkbox" class="folder-select sr-only" id="folders_<?php echo esc_attr($post_type->name); ?>" name="folders_settings[]" value="<?php echo esc_attr($post_type->name); ?>"<?php if ( in_array( $post_type->name, $options ) ) echo ' checked="checked"'; ?>/>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td width="220px">
+                                            <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?></label>
+                                        </td>
+                                        <td class="default-folder">
+                                            <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', WCP_FOLDER ) ?></label>
+                                        </td>
+                                        <td>
+                                            <select class="hide-show-option <?php echo esc_attr($is_checked) ?>" id="folders_for_<?php echo esc_attr($post_type->name); ?>" name="default_folders[<?php echo esc_attr($post_type->name); ?>]" ?>">
+                                                <option value="">All <?php echo esc_attr($post_type->label) ?> Folder</option>
+                                                <option value="-1" <?php echo ($selected_id == -1)?"selected":"" ?>>Unassigned <?php echo esc_attr($post_type->label) ?></option>
+                                                <?php
+                                                if(isset($terms_data[$post_type->name]) && !empty($terms_data[$post_type->name])) {
+                                                    foreach ($terms_data[$post_type->name] as $term) {
+                                                        $selected = ($selected_id == $term->slug)?"selected":"";
+                                                        echo "<option ".esc_attr($selected)." value='".esc_attr($term->slug)."'>".esc_attr($term->name)."</option>";
+                                                    }
+                                                } ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                } else { ?>
+                                    <tr>
+                                        <td class="no-padding">
+                                            <label for="folders_<?php echo esc_attr($post_type->name); ?>" class="custom-checkbox">
+                                                <input type="checkbox" class="sr-only folder-select" id="folders_<?php echo esc_attr($post_type->name); ?>" name="folders_settings[]" value="<?php echo esc_attr($post_type->name); ?>"<?php if ( in_array( $post_type->name, $options ) ) echo ' checked="checked"'; ?>/>
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?></label>
+                                        </td>
+                                        <td class="default-folder">
+                                            <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', WCP_FOLDER ) ?></label>
+                                        </td>
+                                        <td>
+                                            <select class="hide-show-option <?php echo esc_attr($is_checked) ?>" id="folders_for_<?php echo esc_attr($post_type->name); ?>" name="default_folders[<?php echo esc_attr($post_type->name); ?>]" ?>">
+                                                <option value="">All <?php echo esc_attr($post_type->label) ?> Folder</option>
+                                                <option value="-1" <?php echo ($selected_id == -1)?"selected":"" ?>>Unassigned <?php echo esc_attr($post_type->label) ?></option>
+                                                <?php
+                                                if(isset($terms_data[$post_type->name]) && !empty($terms_data[$post_type->name])) {
+                                                    foreach ($terms_data[$post_type->name] as $term) {
+                                                        $selected = ($selected_id == $term->slug)?"selected":"";
+                                                        echo "<option ".esc_attr($selected)." value='".esc_attr($term->slug)."'>".esc_attr($term->name)."</option>";
+                                                    }
+                                                } ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                <?php } endforeach; ?>
+                            <tr>
+                                <td width="20" class="no-padding">
+                                    <?php $val = get_option("folders_show_in_menu"); ?>
+                                    <input type="hidden" name="folders_show_in_menu" value="off" />
+                                    <label  for="folders_show_in_menu" class="custom-checkbox">
+                                        <input class="sr-only" type="checkbox" id="folders_show_in_menu" name="folders_show_in_menu" value="on" <?php echo ($val == "on")?"checked='checked'":"" ?>/>
+                                        <span></span>
+                                    </label>
+                                </td>
+                                <td colspan="3">
+                                    <label for="folders_show_in_menu" ><?php esc_html_e( 'Show Folders in Menu:', WCP_FOLDER ); ?></label>
+                                </td>
+                            </tr>
+                            <!-- Do not make changes here, Only for Free -->
+                        </tboby>
                     </table>
                     <input type="hidden" name="folders_settings1[premio_folder_option]" value="yes" />
                 </div>
                 <div class="accordion-right">
                     <div class="premio-help">
                         <a href="https://premio.io/help/folders/?utm_source=pluginspage" target="_blank">
-                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/premio-help.png") ?>" alt="Premio Help" class="Premio Help" />
+                            <div class="premio-help-btn">
+                                <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/premio-help.png") ?>" alt="Premio Help" class="Premio Help" />
+                                <div class="need-help">Need Help</div>
+                                <div class="visit-our">Visit our</div>
+                                <div class="knowledge-base">knowledge base</div>
+                            </div>
                         </a>
                     </div>
                 </div>
                 <div class="clear"></div>
+                <div class="separator"></div>
+                <table class="form-table">
+                    <tfoot>
+                    <tr>
+                        <td class="no-padding" width="20px">
+                            <span class="dashicons dashicons-editor-help"></span>
+                        </td>
+                        <td width="220px">
+                            <?php
+                            $tlfs = get_option("folder_old_plugin_folder_status");
+                            if($tlfs == false || $tlfs < 10) {
+                                $tlfs = 10;
+                            }
+                            $total = WCP_Folders::get_ttl_fldrs();
+                            if($total > $tlfs) {
+                                $tlfs = $total;
+                            }
+                            ?>
+                            You have used <b><?php echo esc_attr($total) ?></b>/<?php echo esc_attr($tlfs) ?> Folders.
+                        </td>
+                        <td class="no-padding" colspan="2">
+                            <a class="upgrade-btn" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
         <div class="accordion">
@@ -216,12 +241,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                 <div class="accordion-left">
                     <table class="form-table">
                     <?php
-                    $color = !isset($customize_folders['new_folder_color'])||empty($customize_folders['new_folder_color'])?"#F51366":$customize_folders['new_folder_color'];
+                    $color = !isset($customize_folders['new_folder_color'])||empty($customize_folders['new_folder_color'])?"#FA166B":$customize_folders['new_folder_color'];
                     ?>
                     <tr>
-                        <th width="220px">
-                            <label for="new_folder_color" >New Folder button color</label>
-                        </th>
+                        <td width="220px" class="no-padding">
+                            <label for="new_folder_color" ><b>"New Folder"</b> button color</label>
+                        </td>
                         <td width="32px">
                             <input type="text" class="color-field" name="customize_folders[new_folder_color]" id="new_folder_color" value="<?php echo esc_attr($color) ?>" />
                         </td>
@@ -230,42 +255,42 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         </td>
                     </tr>
                     <?php
-                    $color = !isset($customize_folders['bulk_organize_button_color'])||empty($customize_folders['bulk_organize_button_color'])?"#F51366":$customize_folders['bulk_organize_button_color'];
+                    $color = !isset($customize_folders['bulk_organize_button_color'])||empty($customize_folders['bulk_organize_button_color'])?"#FA166B":$customize_folders['bulk_organize_button_color'];
                     ?>
                     <tr>
-                        <th>
-                            <label for="bulk_organize_button_color" >Bulk Organize button color</label>
-                        </th>
+                        <td class="no-padding">
+                            <label for="bulk_organize_button_color" ><b>"Bulk Organize"</b> button color</label>
+                        </td>
                         <td>
                             <input type="text" class="color-field" name="customize_folders[bulk_organize_button_color]" id="bulk_organize_button_color" value="<?php echo esc_attr($color) ?>" />
                         </td>
                     </tr>
                     <?php
-                    $color = !isset($customize_folders['dropdown_color'])||empty($customize_folders['dropdown_color'])?"#F51366":$customize_folders['dropdown_color'];
+                    $color = !isset($customize_folders['dropdown_color'])||empty($customize_folders['dropdown_color'])?"#484848":$customize_folders['dropdown_color'];
                     ?>
                     <tr>
-                        <th>
+                        <td class="no-padding">
                             <label for="dropdown_color" >Dropdown color</label>
-                        </th>
+                        </td>
                         <td>
                             <input type="text" class="color-field" name="customize_folders[dropdown_color]" id="dropdown_color" value="<?php echo esc_attr($color) ?>" />
                         </td>
                     </tr>
                     <?php
-                    $color = !isset($customize_folders['folder_bg_color'])||empty($customize_folders['folder_bg_color'])?"#008ec2":$customize_folders['folder_bg_color'];
+                    $color = !isset($customize_folders['folder_bg_color'])||empty($customize_folders['folder_bg_color'])?"#FA166B":$customize_folders['folder_bg_color'];
                     ?>
                     <tr>
-                        <th>
+                        <td class="no-padding">
                             <label for="folder_bg_color" >Folders background color</label>
-                        </th>
+                        </td>
                         <td>
                             <input type="text" class="color-field" name="customize_folders[folder_bg_color]" id="folder_bg_color" value="<?php echo esc_attr($color) ?>" />
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <td class="no-padding">
                             <label for="folder_font" >Folders font</label>
-                        </th>
+                        </td>
                         <td colspan="2">
                             <?php
                             $font = !isset($customize_folders['folder_font'])||empty($customize_folders['folder_font'])?"":$customize_folders['folder_font'];
@@ -290,9 +315,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <td class="no-padding">
                             <label for="folder_size" >Folders size</label>
-                        </th>
+                        </td>
                         <td colspan="2">
                             <?php
                             $sizes = array(
@@ -319,10 +344,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         }
                         ?>
                         <tr>
-                            <th><label for="">Show Folders in upper position</label></th>
-                            <td colspan="2">
+                            <td colspan="3" class="no-padding">
                                 <input type="hidden" name="customize_folders[show_in_page]" value="hide">
-                                <input <?php checked($show_in_page, "show") ?> type="checkbox" name="customize_folders[show_in_page]" value="show">
+                                <div class="custom-checkbox">
+                                    <input id="show_folders" class="sr-only" <?php checked($show_in_page, "show") ?> type="checkbox" name="customize_folders[show_in_page]" value="show">
+                                    <span></span>
+                                </div>
+                                <label for="show_folders">Show Folders in upper position</label>
                             </td>
                         </tr>
                     </table>
@@ -338,7 +366,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <div class="form-title">
                                     Folders
                                     <a href="javascript:;" class="add-new-folder" id="add-new-folder">
-                                        <span class="folder-icon-create_new_folder"></span>
+                                        <span class="create_new_folder"><i class="pfolder-add-folder"></i></span>
                                         <span>New Folder</span>
                                     </a>
                                     <div class="clear"></div>
@@ -346,39 +374,51 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <div class="form-options">
                                     <ul>
                                         <li>
-                                            <a href="javascript:;" id="inline-update"><span class="icon folder-icon-border_color"><span class="path1"></span><span class="path2"></span></span> <span class="text">Rename</span> </a>
+                                            <div class="custom-checkbox">
+                                                <input type="checkbox" class="sr-only" >
+                                                <span></span>
+                                            </div>
                                         </li>
                                         <li>
-                                            <a href="javascript:;" id="inline-remove"><span class="icon folder-icon-delete"></span> <span class="text">Delete</span> </a>
+                                            <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit-folder"><span class="path2"></span></span> <span class="text">Rename</span> </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text">Delete</span> </a>
                                         </li>
                                         <li class="last">
-                                            <a href="javascript:;" id="expand-collapse-list" class="folder-tooltip" data-tooltip="Expand"><span class="icon folder-icon-expand_more"></span></a>
+                                            <a href="javascript:;" id="expand-collapse-list" data-tooltip="Expand"><span class="icon pfolder-arrow-down"></span></a>
+                                        </li>
+                                        <li class="last">
+                                            <a href="javascript:;" ><span class="icon pfolder-arrow-sort"></span></a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="header-posts">
-                                <a href="javascript:;" class="all-posts active-item"><span class="wcp-icon folder-icon-insert_drive_file"></span> All Files <span class="total-count">0</span></a>
+                            <div class="shadow-box">
+                                <div class="header-posts">
+                                    <a href="javascript:;" class="all-posts active-item">All Files <span class="total-count">215</span></a>
+                                </div>
+                                <div class="un-categorised-items  ui-droppable">
+                                    <a href="javascript:;" class="un-categorized-posts">Unassigned Files <span class="total-count total-empty">191</span> </a>
+                                </div>
+                                <div class="separator"></div>
+                                <ul class="folder-list">
+                                    <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 1</span><span class="total-count">20</span><span class="clear"></span></a></li>
+                                    <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 2</span><span class="total-count">13</span><span class="clear"></span></a></li>
+                                    <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 3</span><span class="total-count">5</span><span class="clear"></span></a></li>
+                                </ul>
+                                <div class="separator"></div>
+                                <div class="media-buttons">
+                                    <select class="media-select">
+                                        <option>All Files</option>
+                                        <option>Folder 1</option>
+                                        <option>Folder 2</option>
+                                        <option>Folder 3</option>
+                                    </select>
+                                    <button type="button" class="button organize-button">Bulk Organize</button>
+                                    <div style="clear: both;"></div>
+                                </div>
                             </div>
-                            <div class="un-categorised-items  ui-droppable">
-                                <a href="javascript:;" class="un-categorized-posts">Unassigned Files <span class="total-count total-empty">0</span> </a>
-                            </div>
-
-                            <ul class="folder-list">
-                                <li><a href="javascript:;"><i class="wcp-icon folder-icon-folder"></i> <span>Folder 1</span></a></li>
-                                <li><a href="javascript:;"><i class="wcp-icon folder-icon-folder"></i> <span>Folder 2</span></a></li>
-                                <li><a href="javascript:;"><i class="wcp-icon folder-icon-folder"></i> <span>Folder 3</span></a></li>
-                            </ul>
-                        </div>
-                        <div class="media-buttons">
-                            <select class="media-select">
-                                <option>All Files</option>
-                                <option>Folder 1</option>
-                                <option>Folder 2</option>
-                                <option>Folder 3</option>
-                            </select>
-                            <button type="button" class="button organize-button">Bulk Organize</button>
-                            <div style="clear: both;"></div>
                         </div>
                     </div>
                 </div>

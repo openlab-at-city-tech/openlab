@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 5.0
-Stable tag: 1.9.1
+Tested up to: 5.5
+Stable tag: 1.9.2
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -44,64 +44,16 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 5) You are done!
 
-== Other Notes ==
-
-**Known Issues:**
-
-* In order for Group Avatars to show on blogs please adjust the bp-core-avatars.php file. I realize this is a nono, but I don't see another way. Patches and ideas are welcome. For know adjust the last two functions for plugins/buddypress/bp-core/bp-core-avatars.php to the following:
-
-`
-/**
- * bp_core_avatar_upload_path()
- *
- * Returns the absolute upload path for the WP installation
- *
- * @global object $current_blog Current blog information
- * @uses wp_upload_dir To get upload directory info
- * @return string Absolute path to WP upload directory
- */
-function bp_core_avatar_upload_path() {
-	global $current_blog;
-
-	// Get upload directory information from current site
-	$upload_dir = wp_upload_dir();
-
-	// If multisite, and current blog does not match root blog, make adjustments
-	if ( bp_core_is_multisite() && BP_ROOT_BLOG != $current_blog->blog_id )
-		$upload_dir['basedir'] = WP_CONTENT_DIR . '/uploads/';
-
-	return apply_filters( 'bp_core_avatar_upload_path', $upload_dir['basedir'] );
-}
-
-/**
- * bp_core_avatar_url()
- *
- * Returns the raw base URL for root site upload location
- *
- * @global object $current_blog Current blog information
- * @uses wp_upload_dir To get upload directory info
- * @return string Full URL to current upload location
- */
-function bp_core_avatar_url() {
-	global $current_blog;
-
-	// Get upload directory information from current site
-	$upload_dir = wp_upload_dir();
-
-	// If multisite, and current blog does not match root blog, make adjustments
-	if ( bp_core_is_multisite() && BP_ROOT_BLOG != $current_blog->blog_id )
-		$upload_dir['baseurl'] = WP_CONTENT_URL . '/uploads';
-
-	return apply_filters( 'bp_core_avatar_url', $upload_dir['baseurl'] );
-}
-`
-
 == Screenshots ==
 
 1. Screenshot of the group blog creation stage.
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.2 =
+* Use group avatar on Site Directory for groupblogs, rather than creator user avatar.
+* Allow query args for page butons on blog tab to be filtered.
 
 = 1.9.1 =
 * Fixed activity stream behavior for comments from non-logged-in comments.

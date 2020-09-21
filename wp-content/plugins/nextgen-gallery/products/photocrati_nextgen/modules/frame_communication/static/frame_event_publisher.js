@@ -175,7 +175,7 @@ window.Frame_Event_Publisher = {
 
 	listen_for: function(signal, callback){
 		var publisher = this;
-		jQuery(window).bind(signal, function(e, event){
+		jQuery(window).on(signal, function(e, event){
 			var context = event.context;
 			var event_id = event.id;
 			if (!publisher.has_received_event(event_id)) {

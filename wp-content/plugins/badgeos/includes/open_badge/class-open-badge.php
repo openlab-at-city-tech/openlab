@@ -195,7 +195,6 @@ class BadgeOS_Open_Badge {
 				$directory_url = badgeos_get_directory_url();
 				$thumbnail_url = $directory_url. 'images/default_badge.png';
 			}
-			
 
 			$badgeos_assertion_url 	= get_permalink( $this->badgeos_assertion_page_id );
 			$badgeos_assertion_url  = add_query_arg( 'bg', $achievement_id, $badgeos_assertion_url );
@@ -494,8 +493,11 @@ class BadgeOS_Open_Badge {
 	 */ 
 	function get_identity_id( $user_id, $entry_id, $achievement_id ) {
 		$user = get_user_by( 'ID', $user_id );
-
-		return 'sha256$' . hash('sha256', $user->user_email . $this->badgeos_salt);
+		$user_email = '';
+		if( $user ) {
+			$user_email = $user->user_email;
+		}
+		return 'sha256$' . hash('sha256',$user_email.$this->badgeos_salt);
 	}
 
 	/**

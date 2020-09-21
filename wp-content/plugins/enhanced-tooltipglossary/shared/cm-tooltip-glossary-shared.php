@@ -171,6 +171,7 @@ class CMTooltipGlossaryShared {
             'has_archive'         => false,
             'rewrite'             => array( 'slug' => $glossaryPermalink, 'with_front' => false, 'feeds' => true, 'feed' => true ),
             'query_var'           => true,
+            'show_in_rest'        => true, // to compability with guttenberg editor
             'supports'            => array( 'title', 'editor', 'author', 'comments', 'excerpt', 'revisions',
                 'custom-fields', 'page-attributes' ) );
 

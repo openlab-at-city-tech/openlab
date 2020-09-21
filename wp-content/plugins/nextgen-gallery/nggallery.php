@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 28 million downloads.
- * Version: 3.3.6
+ * Version: 3.3.17
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -392,12 +392,6 @@ class C_NextGEN_Bootstrap
 		add_filter('pre_update_option_' . $this->_settings_option_name, array($this, 'persist_settings'));
 		add_filter('pre_update_site_option_' . $this->_settings_option_name, array($this, 'persist_settings'));
 
-		// This plugin uses jQuery extensively
-		if (NGG_FIX_JQUERY) {
-			add_action('wp_enqueue_scripts', array(&$this, 'fix_jquery'));
-			add_action('wp_print_scripts', array(&$this, 'fix_jquery'));
-		}
-
 		// If the selected stylesheet is using an unsafe path, then notify the user
 		add_action('all_admin_notices', array(&$this, 'display_stylesheet_notice'));
 
@@ -539,44 +533,6 @@ class C_NextGEN_Bootstrap
 	}
 
 	/**
-	 * Ensures that the version of JQuery used is expected for NextGEN Gallery
-	 */
-	function fix_jquery()
-	{
-		global $wp_scripts;
-
-		// Determine which version of jQuery to include
-		$src = '/wp-includes/js/jquery/jquery.js';
-
-		// Ensure that jQuery is always set to the default
-		if (isset($wp_scripts->registered['jquery'])) {
-			$jquery = $wp_scripts->registered['jquery'];
-
-			// There's an exception to the rule. We'll allow the same
-			// version of jQuery as included with WP to be fetched from
-			// Google AJAX libraries, as we have a systematic means of verifying
-			// that won't cause any troubles
-			$version = preg_quote($jquery->ver, '#');
-			if (!preg_match("#ajax\\.googleapis\\.com/ajax/libs/jquery/{$version}/jquery\\.min\\.js#", $jquery->src)) {
-				$jquery->src = FALSE;
-				if (array_search('jquery-core', $jquery->deps) === FALSE) {
-					$jquery->deps[] = 'jquery-core';
-				}
-				if (array_search('jquery-migrate', $jquery->deps) === FALSE) {
-					$jquery->deps[] = 'jquery-migrate';
-				}
-			}
-		}
-
-		// Ensure that jquery-core is used, as WP intended
-		if (isset($wp_scripts->registered['jquery-core'])) {
-			$wp_scripts->registered['jquery-core']->src = $src;
-		}
-
-		wp_enqueue_script('jquery');
-	}
-
-	/**
 	 * Displays a notice to the user that the current stylesheet location is unsafe
 	 */
 	function display_stylesheet_notice()
@@ -666,12 +622,23 @@ class C_NextGEN_Bootstrap
 		// Set the capabilities for the administrator
         $role = get_role('administrator');
 
+        if (!$role)
+        {
+            if (!class_exists('WP_Roles'))
+                include_once(ABSPATH.'/wp-includes/class-wp-roles.php');
+            $roles = new WP_Roles();
+            $roles->init_roles();
+        }
+
         // We need this role, no other chance
-        if (empty($role))
+        $role = get_role('administrator');
+        if (!$role)
         {
             update_option("ngg_init_check", __('Sorry, NextGEN Gallery works only with a role called administrator',"nggallery"));
             return;
         }
+
+        delete_option("ngg_init_check");
 
         $capabilities = array(
             'NextGEN Attach Interface',
@@ -713,7 +680,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.3.6');
+		define('NGG_PLUGIN_VERSION', '3.3.17');
 
 		define(
 			'NGG_SCRIPT_VERSION',
@@ -767,11 +734,6 @@ class C_NextGEN_Bootstrap
 		// Don't enforce interfaces
 		if (!defined('EXTENSIBLE_OBJECT_ENFORCE_INTERFACES')) {
 			define('EXTENSIBLE_OBJECT_ENFORCE_INTERFACES', FALSE);
-		}
-
-		// Fix jquery
-		if (!defined('NGG_FIX_JQUERY')) {
-			define('NGG_FIX_JQUERY', TRUE);
 		}
 
 		// Use Pope's new caching mechanism?
@@ -918,161 +880,5 @@ class C_NextGEN_Bootstrap
 		return $this->path($file_name);
 	}
 }
-
-#region Freemius
-
-/**
- * Customize the opt-in message.
- *
- * @author Vova Feldman (@svovaf)
- * @since 2.1.32
- *
- * @param string $message
- * @param string $user_first_name
- * @param string $plugin_title
- * @param string $user_login
- * @param string $site_link
- * @param string $freemius_link
- *
- * @return string
- */
-function ngg_fs_custom_connect_message(
-	$message,
-	$user_first_name,
-	$plugin_title,
-	$user_login,
-	$site_link,
-	$freemius_link
-) {
-	return sprintf(
-		__( 'Hey %s, ', 'nggallery' ) . '<br>' .
-		__( 'Please help us improve NextGEN Gallery! If you opt-in, some data about your usage of NextGEN Gallery will be sent to freemius.com. If you skip this, that\'s okay! NextGEN Gallery will still work just fine.', 'nggallery' ),
-		$user_first_name,
-		'<b>' . __('NextGEN Gallery', 'nggallery') . '</b>',
-		'<b>' . $user_login . '</b>',
-		$site_link,
-		$freemius_link,
-		'<b>' . __('Imagely', 'nggallery') . '</b>'
-	);
-}
-
-/**
- * Add custom NextGEN Gallery icon for Freemius
- *
- * @author Erick Danzer
- */
-function ngg_fs_custom_icon() {
-	return M_Static_Assets::get_static_abspath('photocrati-nextgen_admin#imagely_icon.png');
-}
-
-/**
- * Uninstall cleanup script.
- */
-function ngg_fs_uninstall() {
-	// Your cleanup script.
-}
-
-/**
- * Send custom event about 1st gallery creation.
- *
- * @author Vova Feldman (@svovaf)
- */
-function fs_track_new_gallery() {
-	global $ngg_fs;
-
-	$galleries = C_Gallery_Mapper::get_instance()->count();
-	if (1 == $galleries) {
-		// Only track event on 1st gallery creation.
-		$ngg_fs->track_event_once( 'new_gallery' );
-	}
-}
-
-/**
- * Create a helper function for easy SDK access.
- *
- * @author Vova Feldman (@svovaf)
- * @since  2.1.32
- *
- * @param bool $activate_for_all If true, activate Freemius for all users. Was added for testing.
- *
- * @return bool|\Freemius
- */
-function ngg_fs( $activate_for_all = false ) {
-	global $ngg_fs;
-
-	if ( ! $activate_for_all ) {
-		$ngg_options      = get_option( 'ngg_options' );
-		$ngg_run_freemius = get_option( 'ngg_run_freemius', null );
-
-		if ( false === $ngg_options ) {
-			// New plugin installation.
-            $run_freemius = true;
-
-			update_option( 'ngg_run_freemius', $run_freemius );
-
-			// Compare both bool or string 0/1 because get_option() may give us either
-		} else if ( ( is_bool( $ngg_run_freemius ) && $ngg_run_freemius ) || '1' === $ngg_run_freemius ) {
-			// If runFreemius was set, use the value.
-			$run_freemius = $ngg_run_freemius;
-		} else {
-			// Don't run Freemius for plugin updates.
-			$run_freemius = false;
-			if (is_null($ngg_run_freemius))
-				update_option('ngg_run_freemius', FALSE);
-			}
-
-			if ( ! $run_freemius ) {
-				return false;
-			}
-	}
-
-	if ( ! isset( $ngg_fs ) ) {
-		// Include Freemius SDK.
-		require_once dirname( __FILE__ ) . '/freemius/start.php';
-
-		$ngg_fs = fs_dynamic_init( array(
-			'id'             => '266',
-			'slug'           => 'nextgen-gallery',
-			'public_key'     => 'pk_009356711cd548837f074e1ef60a4',
-			'is_premium'     => false,
-			'has_addons'     => false,
-			'has_paid_plans' => false,
-			'menu'           => array(
-				'slug'    => 'nextgen-gallery',
-				'account' => false,
-				'contact' => false,
-				'support' => false,
-			),
-			'permissions'    => array(
-				'newsletter' => true,
-			),
-		) );
-	}
-
-	/*
-	// Optional button override.
-	if ( function_exists( 'fs_override_i18n' ) ) {
-		fs_override_i18n( array(
-			'opt-in-connect' => __('OK - I\'m in!', 'nggallery'),
-		), 'nextgen-gallery' );
-	}
-	*/
-
-	// Hook to the custom message filter.
-	$ngg_fs->add_action( 'after_uninstall', 'ngg_fs_uninstall' );
-	$ngg_fs->add_filter( 'connect_message', 'ngg_fs_custom_connect_message', 10, 6);
-	$ngg_fs->add_filter( 'plugin_icon' , 'ngg_fs_custom_icon' );
-
-	// Hook to new gallery creation event.
-	add_action( 'ngg_created_new_gallery', 'fs_track_new_gallery' );
-	
-	return $ngg_fs;
-}
-
-// Init Freemius
-if (!defined('NGG_DISABLE_FREEMIUS') || !NGG_DISABLE_FREEMIUS)
-    ngg_fs();
-
-// #endregion Freemius
 
 new C_NextGEN_Bootstrap();

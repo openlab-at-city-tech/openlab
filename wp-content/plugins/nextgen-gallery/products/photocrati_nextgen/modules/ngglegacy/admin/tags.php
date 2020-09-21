@@ -258,7 +258,7 @@ if ($nb_tags < $tag_count && $offset>0) {
   	// <![CDATA[
   		// Register onclick event
   		function registerClick() {
-  			jQuery('#taglist ul li span').bind("click", function(){
+  			jQuery('#taglist ul li span').on("click", function(){
 				addTag(this.innerHTML, "renametag_old");
 				addTag(this.innerHTML, "deletetag_name");
 				addTag(this.innerHTML, "tagname_match");

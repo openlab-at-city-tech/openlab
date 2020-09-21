@@ -5,8 +5,8 @@ Tags: text, replace, shortcut, shortcuts, post, post content, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.9
-Tested up to: 5.3
-Stable tag: 3.9
+Tested up to: 5.4
+Stable tag: 3.9.1
 
 Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
 
@@ -19,6 +19,7 @@ Additional features of the plugin controlled both via settings and filters:
 * Text replacement can be enabled for comments (it isn't by default)
 * Text replacement can be made case insensitive (it is case sensitive by default)
 * Text replacement can be limited to doing only one replacement per term, per post (by default, all occurrences of a term are replaced)
+* Text replacement can be handled early or late in WordPress's text filtering process (it's early by default)
 
 A few things to keep these things in mind:
 
@@ -36,9 +37,9 @@ Otherwise, you risk proper but undesired replacements:
 
 Would have the effect of changing "His majesty" to "Hellos majesty".
 
-* If you intend to use this plugin to handle smilies, you should probably disable WordPress's default smilie handler.
+* If you intend to use this plugin to handle smilies, you should probably disable WordPress's default smilie handler on the Writing Settings admin page.
 
-* This plugin is set to filter the_content, the_excerpt, widget_text, and optionally, get_comment_text and get_comment_excerpt. The filter 'c2c_text_replace_filters' can be used to add or modify the list of filters affected.
+* This plugin is set to filter the_content, the_excerpt, widget_text, and optionally, get_comment_text and get_comment_excerpt. Filters from popular plugins such as Advanced Custom Fields (ACF) and Elementor are also handled by default (see FAQ for specifics). The filter 'c2c_text_replace_filters' can be used to add or modify the list of filters affected.
 
 * Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can't expect the :mycss: shortcut to work in: &lt;a href="" :mycss:&gt;text&lt;/a&gt;.'.
 
@@ -46,7 +47,7 @@ Would have the effect of changing "His majesty" to "Hellos majesty".
 
 * However, a benefit of the replacement text not being saved to the database and instead evaluated when the data is being loaded into a web page is that if the replacement text is modified, all pages making use of the shortcut will henceforth use the updated replacement text.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [GitHub](https://github.com/coffee2code/text-replace/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/text-replace/) | [Plugin Directory Page](https://wordpress.org/plugins/text-replace/) | [GitHub](https://github.com/coffee2code/text-replace/) | [Author Homepage](https://coffee2code.com)
 
 
 == Installation ==
@@ -97,7 +98,7 @@ By default, yes. There is a setting you can change so that only the first occurr
 
 = Does this plugin explicitly support any third-party plugins? =
 
-Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. This plugin provides hooks that can be used to enable compatibility with other plugins and themes.
+Yes. While this plugin is compatible with many other plugins that modify post and widget text, this plugin has explicit built-in support for Advanced Custom Fields and Elementor, which provide additional content areas. See documentation on the hook c2c_text_replace_third_party_filters for a complete list of default supported third-party filters and how to enable compatibility with other plugins and themes.
 
 = Does this plugin include unit tests? =
 
@@ -259,11 +260,33 @@ add_filter( 'c2c_text_replace_once', '__return_true' );`
 
 == Changelog ==
 
+= 3.9.1 (2020-07-11) =
+Highlights:
+
+* This minor release updates a bunch of documentation, updates a few URLs to be HTTPS, improves unit testing, and notes compatibility through WP 5.4+.
+
+Details:
+
+* Change: Revamp a lot of the help text on the settings page
+* Change: Improve and expand upon documentation
+* Change: Note compatibility through WP 5.4+
+* Change: Update links to coffee2code.com to be HTTPS
+* Change: Add a number of new TODO items
+* Unit tests:
+    * New: Add test for `options_page_description()`
+    * New: Add test for setting name
+    * Change: Remove unnecessary unregistering of hooks in `tearDown()`
+    * Change: Remove duplicative `reset_options()` call
+    * Change: Store plugin instance in test object to simplify referencing it
+    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and delete commented-out code)
+
 = 3.9 (2020-01-15) =
 Highlights:
+
 * This feature release adds support for Advanced Custom Fields and Elementor, adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, adds a number of filters, updates compatibility to be WP 4.9-5.3+, and more.
 
 Details:
+
 * New: Add support for third-party plugins: Advanced Custom Fields, Elementor
 * New: Add filter `c2c_text_replace_third_party_filters` for filtering third party filters
 * New: Add new setting to allow control over when text replacements are handled early or late in text processing process
@@ -317,6 +340,7 @@ Highlights:
 * This release adds a setting for links to open in a new window, adds support for linkable text spanning multiple lines in your post, adds a filter for customizing link attributes, improves performance, and makes numerous behind-the-scenes improvements and changes.
 
 Details:
+
 * New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
 * Fix: Honor setting to limit text replacements to just once a post for multibyte strings
 * New: Add support for finding text to replace that may span more than one line or whose internal spaces vary in number and type
@@ -360,35 +384,14 @@ Details:
 * Change: Update URLs used in examples and docs to be HTTPS where appropriate
 * Change: Update copyright date (2018)
 
-= 3.7 (2016-05-01) =
-* Change: Update plugin framework to 043:
-    * Fix error message when text replacement field has trailing blank line.
-    * Change class name to c2c_TextReplace_Plugin_043 to be plugin-specific.
-    * Disregard invalid lines supplied as part of hash option value.
-    * Set textdomain using a string instead of a variable.
-    * Don't load textdomain from file.
-    * Change admin page header from 'h2' to 'h1' tag.
-    * Add `c2c_plugin_version()`.
-    * Formatting improvements to inline docs.
-* Change: Add support for language packs:
-    * Set textdomain using a string instead of a variable.
-    * Remove .pot file and /lang subdirectory.
-    * Remove 'Domain Path' from plugin header.
-* Change: Add many more unit tests.
-* Change: Prevent web invocation of unit test bootstrap.php.
-* New: Add LICENSE file.
-* New: Add empty index.php to prevent files from being listed if web server has enabled directory listings.
-* Change: Minor code reformatting.
-* Change: Add proper docblocks to examples in readme.txt.
-* Change: Note compatibility through WP 4.5+.
-* Change: Dropped compatibility with version of WP older than 4.1.
-* Change: Update copyright date (2016).
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-replace/blob/master/CHANGELOG.md)._
 
 
 
 == Upgrade Notice ==
+
+= 3.9.1 =
+Minor update: updated a bunch of documentation, updated a few URLs to be HTTPS, improved unit testing, and noted compatibility through WP 5.4+.
 
 = 3.9 =
 Feature update: added support for Advanced Custom Fields and Elementor, added new setting to allow the plugin to run later to avoid potential conflicts with other plugins, added a number of filters, updated compatibility to be WP 4.9-5.3+, added CHANGELOG.md and TODO.md, and more.

@@ -56,7 +56,6 @@ function badgeos_settings_validate( $input = '' ) {
 	switch( $input['tab_action'] ) {
 		case "general":
 			$original_settings['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
-			$original_settings['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
 			$original_settings['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
 			$original_settings['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
 			$original_settings['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
@@ -64,12 +63,12 @@ function badgeos_settings_validate( $input = '' ) {
 			$original_settings['achievement_list_shortcode_default_view'] = isset( $input['achievement_list_shortcode_default_view'] ) ? sanitize_text_field( $input['achievement_list_shortcode_default_view'] ) : $original_settings['achievement_list_shortcode_default_view'];
 			$original_settings['earned_achievements_shortcode_default_view'] = isset( $input['earned_achievements_shortcode_default_view'] ) ? sanitize_text_field( $input['earned_achievements_shortcode_default_view'] ) : $original_settings['earned_achievements_shortcode_default_view'];
 			$original_settings['earned_ranks_shortcode_default_view'] = isset( $input['earned_ranks_shortcode_default_view'] ) ? sanitize_text_field( $input['earned_ranks_shortcode_default_view'] ) : $original_settings['earned_ranks_shortcode_default_view'];
-			$original_settings['submission_email'] = isset( $input['submission_email'] ) ? sanitize_text_field( $input['submission_email'] ) : $original_settings['submission_email'];
-			$original_settings['submission_email_addresses'] = isset( $input['submission_email_addresses'] ) ? sanitize_text_field( $input['submission_email_addresses'] ) : $original_settings['submission_email_addresses'];
 			$original_settings['badgeos_achievement_global_image_width'] = isset( $input['badgeos_achievement_global_image_width'] ) ? sanitize_text_field( $input['badgeos_achievement_global_image_width'] ) : $original_settings['badgeos_achievement_global_image_width'];
 			$original_settings['badgeos_achievement_global_image_height'] = isset( $input['badgeos_achievement_global_image_height'] ) ? sanitize_text_field( $input['badgeos_achievement_global_image_height'] ) : $original_settings['badgeos_achievement_global_image_height'];
 			$original_settings['badgeos_rank_global_image_width'] = isset( $input['badgeos_rank_global_image_width'] ) ? sanitize_text_field( $input['badgeos_rank_global_image_width'] ) : $original_settings['badgeos_rank_global_image_width'];
 			$original_settings['badgeos_rank_global_image_height'] = isset( $input['badgeos_rank_global_image_height'] ) ? sanitize_text_field( $input['badgeos_rank_global_image_height'] ) : $original_settings['badgeos_rank_global_image_height'];
+			$original_settings['badgeos_point_global_image_width'] = isset( $input['badgeos_point_global_image_width'] ) ? sanitize_text_field( $input['badgeos_point_global_image_width'] ) : $original_settings['badgeos_point_global_image_width'];
+			$original_settings['badgeos_point_global_image_height'] = isset( $input['badgeos_point_global_image_height'] ) ? sanitize_text_field( $input['badgeos_point_global_image_height'] ) : $original_settings['badgeos_point_global_image_height'];
 			break;
 		case "ptypes":
 			
@@ -329,6 +328,10 @@ function badgeos_settings_page() {
 	wp_enqueue_script( 'badgeos-admin-tools-js' );
 	$licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
 	$setting_page_tab = isset( $_GET['bos_s_tab'] ) ? $_GET['bos_s_tab'] : 'general';
+	if( !isset( $setting_page_tab ) || empty( $setting_page_tab ) ) {
+		$setting_page_tab = 'general';
+	}
+	$base_tabs = [ 'general', 'ptypes', 'dupgrades', 'licenses' ];
 	?>
 	<div class="wrap badgeos-tools-page">
 		<div id="icon-options-general" class="icon32"></div>
@@ -347,6 +350,7 @@ function badgeos_settings_page() {
 				<i class="fa fa-shield" aria-hidden="true"></i>
 				<?php _e( 'Data Upgrade', 'badgeos' ); ?>
 			</a>
+			<?php do_action( 'badgeos_settings_main_tab_header', $setting_page_tab ); ?>
 			<?php if( count( $licensed_addons ) ) { ?>
 				<a href="admin.php?page=badgeos_settings&bos_s_tab=licenses" class="nav-tab <?php echo $setting_page_tab == 'licenses'? 'nav-tab-active' : ''; ?>">
 					<i class="fa fa-shield" aria-hidden="true"></i>
@@ -354,12 +358,11 @@ function badgeos_settings_page() {
 				</a>
 			<?php } ?>
 		</div>
-		<?php 
-			if( !isset( $setting_page_tab ) || empty( $setting_page_tab ) ) {
-				$setting_page_tab = 'general';
-			}
+		<?php if( in_array( $setting_page_tab, $base_tabs ) ) {
 			include( 'settings/' . $setting_page_tab . '.php' );
-		?>
+		} else { ?> 
+			<?php do_action( 'badgeos_settings_main_tab_content', $setting_page_tab ); ?>
+		<?php } ?>
 	</div>
 	<?php
 }
@@ -837,32 +840,4 @@ add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10,
 function badgeos_get_manager_capability() {
 	$badgeos_settings = get_option( 'badgeos_settings' );
 	return isset( $badgeos_settings[ 'minimum_role' ] ) ? $badgeos_settings[ 'minimum_role' ] : 'manage_options';
-}
-
-/**
- * Get capability required for Submission management.
- *
- * @since  1.4.0
- *
- * @return string User capability.
- */
-function badgeos_get_submission_manager_capability() {
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	return isset( $badgeos_settings[ 'submission_manager_role' ] ) ? $badgeos_settings[ 'submission_manager_role' ] : badgeos_get_manager_capability();
-}
-
-/**
- * Check if a user can manage submissions.
- *
- * @since  1.4.0
- *
- * @param  integer $user_id User ID.
- * @return bool             True if user can manaage submissions, otherwise false.
- */
-function badgeos_user_can_manage_submissions( $user_id = 0 ) {
-	if ( empty( $user_id ) ) {
-		$user_id = get_current_user_id();
-	}
-
-    return ( user_can( $user_id, badgeos_get_submission_manager_capability() ) );
 }

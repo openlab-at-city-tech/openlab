@@ -883,10 +883,12 @@ div .progressbar span {
 	box-sizing: border-box;
     border: 1px solid #eee;
     padding: 10px 10px 20px;
-    width: 32%;
     margin: 0 1% 0 0;
-    float: left;
-    box-shadow: 0 0 4px 2px rgba(0 0 4px 2px rgba(0,0,0,.02));
+    width: 100%;
+}
+
+.ngg_manage_albums .widget:last-of-type {
+	margin-right: 0;
 }
 
 .container {
@@ -895,6 +897,9 @@ div .progressbar span {
 
 .ngg_manage_albums .container {
 	margin-top: 30px;
+	display: flex;
+	flex-direction: row;
+    justify-content: center;
 }
 
 .ngg_select_album {

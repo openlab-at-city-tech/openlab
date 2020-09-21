@@ -5,7 +5,7 @@
 ( function( $ ) {
 
 	// Multiple checkboxes: Add the values of the checked checkboxes to the hidden input
-	$( '.customize-control-checkbox-multiple input[type="checkbox"]' ).live( 'change', function() {
+	$( document ).on( 'change', '.customize-control-checkbox-multiple input[type="checkbox"]', function() {
 
 		// Get the values of all of the checkboxes into a comma seperated variable
 		checkbox_values = $( this ).parents( '.customize-control' ).find( 'input[type="checkbox"]:checked' ).map(

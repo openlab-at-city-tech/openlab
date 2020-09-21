@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Perks
  * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.1.9
+ * Version: 2.1.11
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
@@ -11,7 +11,7 @@
  * Domain Path: /languages
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.1.9' );
+define( 'GRAVITY_PERKS_VERSION', '2.1.11' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -117,6 +117,7 @@ class GravityPerks {
 
             // show various plugin messages after the plugin row
             add_action('after_plugin_row_' . self::$basename, array('GWPerks', 'after_plugin_row'), 10, 2);
+            add_action('after_plugin_row', array('GWPerks', 'after_perk_plugin_row'), 10, 2);
 
             if( self::is_gravity_perks_page() ) {
 
@@ -157,6 +158,9 @@ class GravityPerks {
 
 	    add_action( 'admin_notices', array(__class__, 'get_dashboard_announcements' ) );
 
+	    if ( ! self::has_valid_license() ) {
+		    add_filter( 'plugin_auto_update_setting_html', array( __CLASS__, 'disable_auto_updater' ), 10, 3 );
+	    }
 
         // load and init all active perks
         self::initialize_perks();
@@ -244,6 +248,14 @@ class GravityPerks {
         self::init_perk_as_plugin_functionality();
     }
 
+    public static function disable_auto_updater( $html, $plugin_file, $plugin_data ) {
+	    if ( in_array( $plugin_file, array_keys( GWPerks::get_installed_perks() ) ) ) {
+		    $html = '<em>' . __( 'Register Gravity Perks to enable auto-updates.', 'gravityperks' ) . '</em>';
+	    }
+
+	    return $html;
+    }
+
     /**
     * Get all active perks, load Perk objects, and initialize.
     *
@@ -278,7 +290,7 @@ class GravityPerks {
 
             $perk = GWPerk::get_perk($perk_file);
 
-            // New perks (which have a 'parent' property) will be initialized by Gravity Forms via the Add-on Framework.
+	        // New perks (which have a 'parent' property) will be initialized by Gravity Forms via the Add-on Framework.
             if( is_wp_error( $perk ) || ! $perk->is_old_school() ) {
                 continue;
             }
@@ -376,7 +388,6 @@ class GravityPerks {
 
             add_action('admin_notices', $message_function);
             add_action('network_admin_notices', $message_function);
-            add_action('after_plugin_row_' . $plugin_file, $action, 10, 2);
 
             break;
 
@@ -391,7 +402,6 @@ class GravityPerks {
 
             add_action('admin_notices', $message_function);
             add_action('network_admin_notices', $message_function);
-            add_action('after_plugin_row_' . $plugin_file, $action, 10, 2);
 
             break;
 
@@ -407,7 +417,6 @@ class GravityPerks {
 
             add_action('admin_notices', $message_function);
             add_action('network_admin_notices', $message_function);
-            add_action('after_plugin_row_' . $plugin_file, $action, 10, 2);
 
             break;
 
@@ -420,7 +429,6 @@ class GravityPerks {
 
             add_action('admin_notices', $message_function);
             add_action('network_admin_notices', $message_function);
-            add_action('after_plugin_row_' . $plugin_file, $action, 10, 2);
 
         }
 
@@ -493,28 +501,25 @@ class GravityPerks {
         return '';
     }
 
+
 	public static function after_plugin_row($plugin_file, $plugin_data) {
 
 		$template = '<p>%s</p>';
 
-		if(!self::is_gravity_forms_supported()) {
+		if(!self::has_valid_license()) {
+
+			$message = self::get_message('register_gravity_perks');
+			self::display_plugin_row_message( sprintf( $template, $message ), $plugin_data, true, $plugin_file );
+
+		} else if(!self::is_gravity_forms_supported()) {
 
 			$message = self::get_message('gravity_forms_required');
 			self::display_plugin_row_message( sprintf( $template, $message ), $plugin_data, true, $plugin_file );
 
-		}
-		else if(!self::is_wp_supported()) {
+		} else if(!self::is_wp_supported()) {
 
 			$message = self::get_message('wp_required');
 			self::display_plugin_row_message( sprintf( $template, $message ), $plugin_data, true, $plugin_file );
-
-		}
-		else {
-
-			if(!self::has_valid_license()) {
-				$message = self::get_message('register_gravity_perks');
-				self::display_plugin_row_message( sprintf( $template, $message ), $plugin_data, true, $plugin_file );
-			}
 
 		}
 
@@ -522,24 +527,26 @@ class GravityPerks {
 
     public static function after_perk_plugin_row($plugin_file, $plugin_data) {
 
-        $perk = GWPerk::get_perk($plugin_file);
-
-        if(is_wp_error($perk))
+        if ( empty($plugin_data['Perk']) ) {
             return;
+        }
+
+	    if ( ! self::has_valid_license() ) {
+		    $message = self::get_message( 'register_gravity_perks', $plugin_file );
+		    self::display_plugin_row_message( "<p>{$message}</p>", $plugin_data, true, $plugin_file );
+	    }
+
+	    $perk = GWPerk::get_perk($plugin_file);
+
+	    if ( is_wp_error( $perk ) ) {
+		    return;
+	    }
 
         if( !$perk->is_supported() ) {
 
             $messages = $perk->get_requirement_messages( $perk->get_failed_requirements() );
-            $message = count($messages) > 1 ? '<ul><li>' . implode( '</li><li>', $messages ) . '</li></ul>' : $messages[0];
+            $message = count($messages) > 1 ? '<ul><li>' . implode( '</li><li>', $messages ) . '</li></ul>' : "<p>{$messages[0]}</p>";
             self::display_plugin_row_message(  $message, $plugin_data, true, $plugin_file );
-
-        }
-        else {
-
-            if(!self::has_valid_license()) {
-                $message = self::get_message('register_gravity_perks', $plugin_file);
-                self::display_plugin_row_message($message, $plugin_data, $plugin_file );
-            }
 
         }
 
@@ -566,13 +573,35 @@ class GravityPerks {
 
 	    ?>
 
-	    <style type="text/css" scoped>
-		    <?php printf( '#%1$s td, #%1$s th', $id ); ?>,
-		    <?php printf( 'tr[data-slug="%1$s"] td, tr[data-slug="%1$s"] th', $id ); ?> { border-bottom: 0; box-shadow: none !important; -webkit-box-shadow: none !important; }
-	    </style>
+        <style type="text/css" scoped>
+            <?php printf( '#%1$s td, #%1$s th', $id ); ?>,
+            <?php printf( 'tr[data-slug="%1$s"] td, tr[data-slug="%1$s"] th', $id ); ?>
+            {
+                border-bottom: 0;
+                box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+            }
+
+            .gwp-plugin-notice td {
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+
+            .gwp-plugin-notice + tr[data-slug]:not(.plugin-update-tr) {
+                box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            .gwp-plugin-notice + tr.active[data-slug]:not(.plugin-update-tr) > * {
+                box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .plugin-update-tr[data-slug^="gp-"] + tr[data-slug]:not(.plugin-update-tr) {
+                box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+            }
+        </style>
 
 	    <tr class="plugin-update-tr <?php echo $active; ?> gwp-plugin-notice">
-		    <td colspan="3" class="colspanchange">
+		    <td colspan="4" class="colspanchange">
 			    <div class="update-message notice inline notice-error notice-alt"><?php echo $message ?></div>
 		    </td>
 	    </tr>

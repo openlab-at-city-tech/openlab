@@ -1762,8 +1762,8 @@ final class GF_Entry_List_Table extends WP_List_Table {
 
 			function resetResendNotificationsUI() {
 
-				jQuery(".gform_notifications").attr('checked', false);
-				jQuery('#notifications_container .message, #notifications_override_settings').hide();
+				jQuery( '.gform_notifications' ).prop( 'checked' , false );
+				jQuery( '#notifications_container .message, #notifications_override_settings' ).hide();
 
 			}
 
@@ -1805,7 +1805,7 @@ final class GF_Entry_List_Table extends WP_List_Table {
 
 			function resetPrintUI() {
 
-				jQuery('#print_options input[type="checkbox"]').attr('checked', false);
+				jQuery( '#print_options input[type="checkbox"]' ).prop( 'checked', false );
 
 			}
 
@@ -1839,10 +1839,11 @@ final class GF_Entry_List_Table extends WP_List_Table {
 
 			}
 
-			function closeModal(isSuccess) {
+			function closeModal( isSuccess ) {
 
-				if (isSuccess)
-					jQuery('.check-column input[type="checkbox"]').attr('checked', false);
+				if ( isSuccess ){
+					jQuery( '.check-column input[type="checkbox"]' ).prop( 'checked', false );
+				}
 
 				tb_remove();
 

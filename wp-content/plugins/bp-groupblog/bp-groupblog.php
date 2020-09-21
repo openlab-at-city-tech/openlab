@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.9.1' );
+define ( 'BP_GROUPBLOG_VERSION', '1.9.2' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -1718,4 +1718,41 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 }
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
-?>
+/**
+ * Use the group avatar on the Site Directory page for groupblogs.
+ *
+ * If a site in the site loop is a groupblog, use the group logo only if
+ * the site doesn't already have a customized site icon.
+ *
+ * @since 1.9.2
+ *
+ * @param  string $retval  Current site avatar
+ * @param  int    $blog_id Site ID in loop
+ * @param  array  $r       Avatar arguments
+ * @return string
+ */
+function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
+	// Not a groupblog? Bail.
+	$group_id = get_groupblog_group_id( $blog_id );
+	if ( empty( $group_id ) ) {
+		return $retval;
+	}
+
+	// Already using a site icon, so bail.
+	$site_icon = bp_blogs_get_blogmeta( $blog_id, "site_icon_url_{$r['type']}" );
+	if ( ! empty( $site_icon ) ) {
+		return $retval;
+	}
+
+	// Site is using the site admin's avatar, so switch to group logo.
+	return bp_core_fetch_avatar( array(
+		'item_id'    => $group_id,
+		'avatar_dir' => 'group-avatars',
+		'object'     => 'group',
+		'type'       => $r['type'],
+		'alt'        => 'Group logo',
+		'width'      => $r['width'],
+		'height'     => $r['height'],
+	) );
+}
+add_filter( 'bp_get_blog_avatar', 'bp_groupblog_use_group_avatar_in_site_loop', 10, 3 );

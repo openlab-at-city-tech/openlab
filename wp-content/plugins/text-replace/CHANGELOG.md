@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.9.1 _(2020-07-11)_
+
+### Highlights:
+
+This minor release updates a bunch of documentation, updates a few URLs to be HTTPS, improves unit testing, and notes compatibility through WP 5.4+.
+
+### Details:
+
+* Change: Revamp a lot of the help text on the settings page
+* Change: Improve and expand upon documentation
+* Change: Note compatibility through WP 5.4+
+* Change: Update links to coffee2code.com to be HTTPS
+* Change: Add a number of new TODO items
+* Unit tests:
+    * New: Add test for `options_page_description()`
+    * New: Add test for setting name
+    * Change: Remove unnecessary unregistering of hooks in `tearDown()`
+    * Change: Remove duplicative `reset_options()` call
+    * Change: Store plugin instance in test object to simplify referencing it
+    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and delete commented-out code)
+
 ## 3.9 _(2020-01-15)_
 
 ### Highlights:

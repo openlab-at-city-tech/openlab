@@ -8,7 +8,7 @@
         </div>
         <div class="folder-popup-content">
             Select the places where you want Folders to appear (Media Library, Posts, Pages, Custom Posts). Need help? Visit our <a target="_blank" href="https://premio.io/help/folders/?utm_soruce=wordpressfolders">Help Center</a>.
-            <iframe width="420" height="240" src="https://www.youtube.com/embed/RqkWGRYek0w?rel=0&start=22"></iframe>
+            <iframe width="420" height="240" src="https://www.youtube.com/embed/GKq5jvuoRY0?rel=0&start=14"></iframe>
         </div>
         <div class="folder-popup-footer">
             <button type="button">Go to Folders</button>

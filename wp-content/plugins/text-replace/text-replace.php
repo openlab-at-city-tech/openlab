@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Text Replace
- * Version:     3.9
- * Plugin URI:  http://coffee2code.com/wp-plugins/text-replace/
+ * Version:     3.9.1
+ * Plugin URI:  https://coffee2code.com/wp-plugins/text-replace/
  * Author:      Scott Reilly
- * Author URI:  http://coffee2code.com/
+ * Author URI:  https://coffee2code.com/
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: text-replace
  * Description: Replace text with other text. Handy for creating shortcuts to common, lengthy, or frequently changing text/HTML, or for smilies.
  *
- * Compatible with WordPress 4.9+ through 5.3+.
+ * Compatible with WordPress 4.9+ through 5.4+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Text_Replace
  * @author  Scott Reilly
- * @version 3.9
+ * @version 3.9.1
  */
 
 /*
@@ -79,7 +79,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.9', 'text-replace', 'c2c', __FILE__, array() );
+		parent::__construct( '3.9.1', 'text-replace', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -134,7 +134,7 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 				'default'          => array(
 					":wp:"          => "<a href='https://wordpress.org'>WordPress</a>",
 					":codex:"       => "<a href='https://codex.wordpress.org'>WordPress Codex</a>",
-					":coffee2code:" => "<a href='http://coffee2code.com' title='coffee2code'>coffee2code</a>"
+					":coffee2code:" => "<a href='https://coffee2code.com' title='coffee2code'>coffee2code</a>"
 				),
 				'allow_html'       => true,
 				'no_wrap'          => true,
@@ -260,24 +260,29 @@ final class c2c_TextReplace extends c2c_TextReplace_Plugin_050 {
 		echo '<p>' . __( 'Text Replace is a plugin that allows you to replace text with other text in posts, etc. Very handy to create shortcuts to commonly-typed and/or lengthy text/HTML, or for smilies.', 'text-replace' ) . '</p>';
 		echo '<div class="c2c-hr">&nbsp;</div>';
 		echo '<h3>' . __( 'Shortcuts and text replacements', 'text-replace' ) . '</h3>';
-		echo '<p>' . __( 'Define shortcuts and text replacement expansions here. The format should be like this:', 'text-replace' ) . '</p>';
+		echo '<p>' . __( 'Shortcuts and text replacement expansions defined below should be formatted like this:', 'text-replace' ) . '</p>';
 		echo "<blockquote><code>:wp: => &lt;a href='https://wordpress.org'>WordPress&lt;/a></code></blockquote>";
-		echo '<p>' . __( 'Where <code>:wp:</code> is the shortcut you intend to use in your posts and the <code>&lt;a href=\'https://wordpress.org\'>WordPress&lt;/a></code> would be what you want the shortcut to be replaced with when the post is shown on your site.', 'text-replace' ) . '</p>';
+		echo '<ul class="c2c-plugin-list">';
+		echo '<li>' . sprintf( __( "The %s represents the text in your existing posts that you want to get replaced. (The colons aren't necessary, but is a good technique to use to reduce unexpected replacements.)", 'text-replace' ), '<code>:wp:</code>' ) . "</li>\n";
+		echo '<li>' . sprintf( __( 'The %s is the separator between the text to replace and the text replacement.', 'text-replace' ), '<code> => </code>' ) . "</li>\n";
+		echo '<li>' . sprintf( __( 'The %s represents the replacement text.', 'text-replace' ), '<code>&lt;a href=\'https://wordpress.org\'&gt;WordPress&lt;/a&gt;</code>' ) . "</li>\n";
+		echo "</ul>\n";
+		printf( '<p>' . __( 'If you are solely interested in replacing words or phrases with links to the URLs of your choosing, then check out my <a href="%s">Linkify Text</a> plugin, which better facilitates that variety of replacements.', 'text-replace' ) . '</p>', 'https://wordpress.org/plugins/linkify-text/' );
 		echo '<p>' . __( 'Other considerations:', 'text-replace' ) . '</p>';
 		echo '<ul class="c2c-plugin-list"><li>';
 		echo __( 'Be careful not to define text that could match partially when you don\'t want it to:<br />i.e.  <code>Me => Scott</code> would also inadvertently change "Men" to be "Scottn"', 'text-replace' );
 		echo '</li><li>';
-		echo __( 'If you intend to use this plugin to handle smilies, you should probably disable WordPress\'s default smilie handler.', 'text-replace' );
+		printf( __( 'If you intend to use this plugin to handle smilies, you should probably disable WordPress\'s default smilie/emoticon handler on the <a href="%s">Writing Settings</a> page.', 'text-replace' ), admin_url( 'options-writing.php' ) );
 		echo '</li><li>';
-		echo __( 'Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can\'t expect the :mycss: shortcut to work in: &lt;a href="" :mycss:&gt;text&lt;/a&gt;.', 'text-replace' );
+		echo __( 'Text inside of HTML tags (such as tag names and attributes) will not be matched. So, for example, you can\'t expect a <code>:mycss:</code> shortcut to work in: <code>&lt;a href="" :mycss:&gt;text&lt;/a&gt;.</code>', 'text-replace' );
 		echo '</li><li>';
-		echo __( 'HTML is allowed.', 'text-replace' );
+		echo __( 'HTML is allowed for both text to replace and text replacements.', 'text-replace' );
 		echo '</li><li>';
-		echo __( 'Only use quotes it they are actual part of the original or replacement strings.', 'text-replace' );
+		echo __( 'Only use quotes if they are an actual part of the original or replacement strings.', 'text-replace' );
 		echo '</li><li><strong><em>';
 		echo __( 'Define only one shortcut per line.', 'text-replace' );
 		echo '</em></strong></li><li><strong><em>';
-		echo __( 'Shortcuts must not span multiple lines.', 'text-replace' );
+		echo __( 'Define a shortcut fully on a single line without spanning onto multiple lines.', 'text-replace' );
 		echo '</em></strong></li></ul>';
 	}
 

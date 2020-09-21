@@ -2,8 +2,8 @@
 Contributors: mamaduka
 Tags: highlight, format, block editor, gutenberg
 Requires at least: 5.3
-Tested up to: 5.4
-Stable tag: 1.0.1
+Tested up to: 5.5
+Stable tag: 1.0.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -16,11 +16,14 @@ Spice up your text by giving it a color highlight.
 
 Report issues, or collaborate, on [Github](https://github.com/Mamaduka/highlight/issues).
 
-== Screensht ==
+== Screenshot ==
 
 Clickety. Click. Highlight.
 
 == Changelog ==
+
+= 1.0.2 =
+* Make sure plugin is ready for WP 5.5.
 
 = 1.0.0 =
 * Initial release.

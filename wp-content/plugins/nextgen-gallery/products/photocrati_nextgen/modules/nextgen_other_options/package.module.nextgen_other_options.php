@@ -279,11 +279,13 @@ class A_Lightbox_Manager_Form extends Mixin
         // Highslide and jQuery.Lightbox were removed in 2.0.73 due to licensing. If a user has selected
         // either of those options we silently make their selection fallback to Fancybox
         $selected = $this->object->get_model()->thumbEffect;
-        if (in_array($selected, array('highslide', 'lightbox'))) {
+        if (in_array($selected, ['highslide', 'lightbox'])) {
             $selected = 'fancybox';
         }
+        $libraries = C_Lightbox_Library_Manager::get_instance()->get_all();
+        $libraries = apply_filters('ngg_manage_lightbox_select_options', $libraries);
         // Render container tab
-        return $this->render_partial('photocrati-nextgen_other_options#lightbox_library_tab', array('lightbox_library_label' => __('What lightbox would you like to use?', 'nggallery'), 'libs' => C_Lightbox_Library_Manager::get_instance()->get_all(), 'selected' => $selected, 'sub_fields' => $sub_fields, 'lightbox_global' => $this->object->get_model()->thumbEffectContext), TRUE);
+        return $this->render_partial('photocrati-nextgen_other_options#lightbox_library_tab', ['lightbox_library_label' => __('What lightbox would you like to use?', 'nggallery'), 'libs' => $libraries, 'selected' => $selected, 'sub_fields' => $sub_fields, 'lightbox_global' => $this->object->get_model()->thumbEffectContext], TRUE);
     }
     function save_action()
     {

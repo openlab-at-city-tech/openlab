@@ -36,10 +36,10 @@ jQuery(document).on("change", ".folder_for_media", function(){
                     jQuery("body").append("<div class='folder-media-popup-form' id='custom-folder-media-popup-form'></div>");
                     jQuery("#custom-folder-media-popup-form").append("<div class='media-popup-form' id='custom-popup-form-content'></div>");
                     jQuery("#custom-popup-form-content").append("<form action='#' id='folder-media-popup-form' method='post'></form>");
-                    jQuery("#folder-media-popup-form").append('<div id="add-update-folder-title" class="add-update-folder-title">Add Folder</div>');
-                    jQuery("#folder-media-popup-form").append('<div class="folder-form-input"><input id="media-folder-name" autocomplete="off" placeholder="Folder name" class=""></div>');
+                    jQuery("#folder-media-popup-form").append('<div id="add-update-folder-title" class="add-update-folder-title">Add new folder</div>');
+                    jQuery("#folder-media-popup-form").append('<div class="folder-form-input"><div class="folder-group"><input id="media-folder-name" autocomplete="off" required="required" class=""><span class="highlight"></span><span class="folder-bar"></span><label for="media-folder-name">Folder name</label></div></div>');
                     jQuery("#folder-media-popup-form").append('<div class="folder-form-errors" id="media-form-error"><span class="dashicons dashicons-info"></span> Please enter folder name</div>');
-                    jQuery("#folder-media-popup-form").append('<div class="folder-form-buttons"><button type="submit" class="form-submit-btn" id="save-media-folder" style="width: 106px">Submit</button><a href="javascript:;" class="remove-media-form">Cancel</a></div>');
+                    jQuery("#folder-media-popup-form").append('<div class="folder-form-buttons"><a href="javascript:;" class="remove-media-form">Cancel</a><button type="submit" class="form-submit-btn" id="save-media-folder" style="width: 106px">Submit</button></div>');
                     jQuery("#media-folder-name").focus();
                 }
             }

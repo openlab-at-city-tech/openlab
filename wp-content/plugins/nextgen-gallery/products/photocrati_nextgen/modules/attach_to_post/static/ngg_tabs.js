@@ -32,7 +32,7 @@ jQuery(function($) {
 		});
 
 		// When the selected tab changes, then we need to re-adjust
-		this.bind('tabsactivate', function(event, ui) {
+		this.on('tabsactivate', function(event, ui) {
 			// Ensure that all tabs are still displayed, but hidden ;)
 			$.fn.ngg_tabs.hide_tab($.fn.ngg_tabs.get_tab_by_li(ui.oldTab), options.onHideTab);
 			$.fn.ngg_tabs.show_tab($.fn.ngg_tabs.get_tab_by_li(ui.newTab), options.onShowTab);

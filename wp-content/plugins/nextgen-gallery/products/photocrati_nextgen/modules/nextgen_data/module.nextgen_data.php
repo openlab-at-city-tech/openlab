@@ -22,7 +22,7 @@ class M_NextGen_Data extends C_Base_Module
 			'photocrati-nextgen-data',
 			'NextGEN Data Tier',
 			"Provides a data tier for NextGEN gallery based on the DataMapper module",
-			'3.3.6',
+			'3.3.14',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'
@@ -130,123 +130,48 @@ class M_NextGen_Data extends C_Base_Module
 
     static function strip_html($data, $just_scripts=FALSE)
 	{
-		$retval = $data;
-
-		if (!$just_scripts)
-		{
-			// Remove *ALL* HTML and tag contents
-			$retval = wp_strip_all_tags($retval, TRUE);
+		// NGG 3.3.11 fix. Some of the data persisted with 3.3.11 didn't strip out all HTML
+		if (strpos($data, 'ngg_data_strip_html_placeholder') !== FALSE) {
+			if (class_exists('DomDocument')) {
+				$dom = new DOMDocument('1.0', 'UTF-8');
+				$dom->loadHTML($data);
+				$el = $dom->getElementById('ngg_data_strip_html_placeholder');
+				$parts = array_map(
+					function($el) use ($dom) {
+						$part = $dom->saveHTML($el);
+						return $part instanceof DOMText ? $part->data : (string) $part;
+					},
+					$el->childNodes ? iterator_to_array($el->childNodes) : []
+				);
+				return self::strip_html(implode(" ", $parts), $just_scripts);
+			}
+			else return strip_tags($data);
 		}
-		else if (class_exists('DOMDocument')) {
 
-			// Allows HTML to remain but we strip nearly all attributes, strip all
-			// <script> tags, and sanitize hrefs to prevent javascript.
-			//
+		// Remove all HTML elements
+		if (!$just_scripts) return strip_tags($data);
+
+		// Remove unsafe HTML
+		else if (class_exists('DOMDocument')) {
 			// This can generate a *lot* of warnings when given improper texts
 			libxml_use_internal_errors(true);
 			libxml_clear_errors();
 
-			$allowed_attributes = array(
-			    '*' => array('id', 'class', 'href', 'name', 'title', 'rel', 'style'),
-                'a' => array('target', 'rel'),
-                'img' => array('src', 'alt', 'title')
-            );
-
-			if (is_object($data))
-			{
-				// First... recurse to the deepest elements and work back & upwards
-				if ($data->hasChildNodes())
-				{
-					foreach (range($data->childNodes->length - 1, 0) as $i) {
-						self::strip_html($data->childNodes->item($i), TRUE);
-					}
-				}
-
-				// Remove disallowed elements and content
-				if ($data instanceof DOMElement) {
-					foreach ($data->getElementsByTagName('script') as $deleteme) {
-						/**
-						 * @var DOMNode $deleteme
-						 */
-						$data->removeChild($deleteme);
-					}
-				}
-
-				// Strip (nearly) all attributes
-				if (!empty($data->attributes))
-				{
-					// DOMDocument reindexes as soon as any changes are made so we
-					// must loop through attributes backwards
-					for ($i = $data->attributes->length - 1; $i >= 0; --$i) {
-						$item = $data->attributes->item($i);
-						$name = $item->nodeName;
-
-						$allowed = FALSE;
-						foreach ($allowed_attributes as $element_type => $attributes) {
-                            if (($data->tagName == $element_type || $element_type == '*')
-                            &&  in_array($name, $attributes)) {
-                                    $allowed = TRUE;
-                            }
-                        }
-
-                        if (!$allowed)
-							$data->removeAttribute($name);
-
-						// DO NOT EVER allow href="javascript:...."
-						if (strpos($item->nodeValue, 'javascript:') === 0)
-							$item->nodeValue = '#';
-					}
-				}
+			if (!class_exists("HTMLPurifier_Config")) {
+				require_once(NGG_PLUGIN_DIR."vendor/ezyang/htmlpurifier/library/HTMLPurifier.auto.php");
 			}
-			else {
-				$dom = new DOMDocument('1.0', 'UTF-8');
-
-				if (!empty($data))
-				{
-					// Because DOMDocument wraps saveHTML() with HTML headers & tags we use
-					// this placeholder to retrieve *just* the original given text
-					$id = 'ngg_data_strip_html_placeholder';
-					$start = "<div id=\"{$id}\">";
-					$end = '</div>';
-					$start_length = strlen($start);
-					$end_length = strlen($end);
-
-					// Prevent attempted work-arounds using &lt; and &gt; or other html entities
-					$data = html_entity_decode($data);
-
-					// This forces DOMDocument to treat the HTML as UTF-8
-					$meta = '<meta http-equiv="Content-Type" content="charset=utf-8"/>';
-					$data = $meta . $start . $data . $end;
-
-					$dom->loadHTML($data);
-
-					// Invoke the actual work
-					self::strip_html($dom->documentElement, TRUE);
-
-					// Export back to text
-					//
-					// TODO: When PHP 5.2 support is dropped we can use the target parameter
-					// of the following saveHTML and rid ourselves of some of the nonsense
-					// workarounds to the fact that DOMDocument used to force the output to
-					// include full HTML/XML doctype and root elements.
-					$retval = $dom->saveXML();
-
-					// saveXML includes the full doctype and <html><body></body></html> wrappers
-					// so we first drop everything generated up to our wrapper and chop off the
-					// added end wrappers
-					$position = strpos($retval, $start);
-					$retval  = substr($retval, $position, -15);
-
-					// Lastly remove our wrapper
-					$retval = substr($retval, $start_length, -$end_length);
-				}
-				else {
-					$retval = '';
-				}
-			}
+			$config = HTMLPurifier_Config::createDefault();
+			$config->set('Cache', 'DefinitionImpl', NULL);
+			$purifier = new HTMLPurifier($config);
+			return $purifier->purify($data);
+		}
+		else  {
+			// wp_strip_all_tags() is misleading in a way - it only removes <script> and <style>
+			// tags, nothing
+			return wp_strip_all_tags($data, TRUE);
 		}
 
-		return $retval;
+		return $data;
 	}
 
     function get_type_list()

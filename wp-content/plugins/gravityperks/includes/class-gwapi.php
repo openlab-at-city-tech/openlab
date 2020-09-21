@@ -121,7 +121,11 @@ class GWAPI {
 		$response_body = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response_body, $output === ARRAY_A);
 
-		if ( ! $response ) {
+		/**
+		 * We check that the response is not an array as an empty array evaluates as false when it is a valid response
+		 * in this situation.
+		 */
+		if ( ! $response && ! is_array ( $response ) ) {
 			if ( $cache ) {
 				set_transient( $transient, null, $cache_expiration );
 			}
