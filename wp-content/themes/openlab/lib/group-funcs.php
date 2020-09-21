@@ -43,22 +43,6 @@ function openlab_group_privacy_settings($group_type) {
         ));
     }
 
-    // If this is a cloned group/site, fetch the clone source's details
-    $clone_source_group_status = '';
-	$clone_source_blog_status  = 0;
-    if ( bp_is_group_create() ) {
-        $new_group_id = bp_get_new_group_id();
-		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
-		if ( $clone_source_group_id ) {
-			$clone_source_group        = groups_get_group( $clone_source_group_id );
-			$clone_source_group_status = $clone_source_group->status;
-
-			$clone_source_site_id = groups_get_groupmeta( $new_group_id, 'clone_source_blog_id' );
-			if ( $clone_source_site_id ) {
-				$clone_source_blog_status = get_blog_option( $clone_source_site_id, 'blog_public' );
-			}
-        }
-    }
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -73,8 +57,8 @@ function openlab_group_privacy_settings($group_type) {
 
             <?php
             $new_group_status = bp_get_new_group_status();
-            if (!$new_group_status) {
-                $new_group_status = !empty($clone_source_group_status) ? $clone_source_group_status : 'public';
+            if ( ! $new_group_status ) {
+                $new_group_status = 'public';
             }
             ?>
             <div class="row">
@@ -115,11 +99,9 @@ function openlab_group_privacy_settings($group_type) {
 		$has_site         = true;
 		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
-		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
-		$has_site    = in_array( 'site', $clone_steps, true );
-		if ( $has_site ) {
-			$selected_privacy = $clone_source_blog_status;
-		}
+		$clone_steps      = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
+		$has_site         = in_array( 'site', $clone_steps, true );
+		$selected_privacy = 1;
 	}
 	?>
 
@@ -237,7 +219,7 @@ function openlab_group_post_count($filters, $group_args) {
 }
 
 //a variation on bp_groups_pagination_count() to match design
-function cuny_groups_pagination_count($group_name) {
+function cuny_groups_pagination_count($group_name = '') {
     global $bp, $groups_template;
 
     $start_num = intval(( $groups_template->pag_page - 1 ) * $groups_template->pag_num) + 1;
@@ -526,10 +508,27 @@ function cuny_group_single() {
                                 <div class="col-sm-17 row-content"><?php echo apply_filters('the_content', $group_description); ?></div>
                             </div>
 
+							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
+								<div class="table-row row">
+                                    <div class="col-xs-24 status-message italics">
+										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.
+
+										<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
+										<?php if ( $descendant_count > 0 ) : ?>
+											<?php
+											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
+											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
+											?>
+											It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
+										<?php endif; ?>
+									</div>
+								</div>
+							<?php endif; ?>
+
                             <?php if ( $clone_history ) : ?>
                                 <div class="table-row row">
-                                    <div class="bold col-sm-7">Credits</div>
-                                    <div class="col-sm-17 row-content">
+                                    <div class="col-xs-24 status-message clone-acknowledgements">
+										<p>Acknowledgements: This <?php echo esc_html( $group_type ); ?> is based on the following <?php echo esc_html( $group_type ); ?>(s):</p>
                                         <ul class="group-credits">
                                             <?php echo $credits_markup; ?>
                                         </ul>
@@ -537,12 +536,6 @@ function cuny_group_single() {
                                 </div>
                             <?php endif; ?>
 
-							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
-								<div class="table-row row">
-                                    <div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.</div>
-
-								</div>
-							<?php endif; ?>
                         </div>
 
                     </div>
@@ -629,21 +622,31 @@ function cuny_group_single() {
 
 							<?php endif; ?>
 
-							<?php if ( $clone_history ) : ?>
-                                <div class="table-row row">
-                                    <div class="bold col-sm-7">Credits</div>
-                                    <div class="col-sm-17 row-content">
-                                        <ul class="group-credits">
-                                            <?php echo $credits_markup; ?>
-                                        </ul>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-
 							<?php if ( openlab_group_can_be_cloned( bp_get_current_group_id() ) ) : ?>
 								<div class="table-row row">
-									<div class="col-xs-24 status-message italics">This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.</div>
+									<div class="col-xs-24 status-message italics">
+										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.
 
+										<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
+										<?php if ( $descendant_count > 0 ) : ?>
+											<?php
+											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
+											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
+											?>
+											It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
+										<?php endif; ?>
+									</div>
+								</div>
+							<?php endif; ?>
+
+							<?php if ( $clone_history ) : ?>
+								<div class="table-row row">
+									<div class="col-xs-24 status-message clone-acknowledgements">
+										<p>Acknowledgements: This <?php echo esc_html( $group_type ); ?> is based on the following <?php echo esc_html( $group_type ); ?>(s):</p>
+										<ul class="group-credits">
+											<?php echo $credits_markup; ?>
+										</ul>
+									</div>
 								</div>
 							<?php endif; ?>
 
@@ -1359,6 +1362,8 @@ function openlab_output_course_info_line($group_id) {
 /**
  * Generates the 'faculty' line that appears under group names in course directories.
  *
+ * No longer used. See openlab_output_group_contact_line().
+ *
  * @param int $group_id ID of the group.
  * @return string
  */
@@ -1369,6 +1374,24 @@ function openlab_output_course_faculty_line( $group_id ) {
 	return '<span class="truncate-on-the-fly" data-basevalue="35">' . $list . '</span>';
 }
 
+/**
+ * Generates the 'contact' line that appears under group names in directories.
+ *
+ * @param int $group_id ID of the group.
+ * @return string
+ */
+function openlab_output_group_contact_line( $group_id ) {
+	$names = array_map(
+		function( $user_id ) {
+			return bp_core_get_user_displayname( $user_id );
+		},
+		openlab_get_all_group_contact_ids( $group_id )
+	);
+
+	$list = implode( ', ', $names );
+
+	return '<span class="truncate-on-the-fly" data-basevalue="35">' . esc_html( $list ) . '</span>';
+}
 
 /**
  * Displays per group or porftolio site links
@@ -1791,7 +1814,7 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 			'add'        => openlab_group_can_be_cloned( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Cloneable',
-			'short_name' => 'Clone',
+			'short_name' => 'Cloneable',
 		],
 		'open'      => [
 			'add'        => openlab_group_is_open( $group_id ),

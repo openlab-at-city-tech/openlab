@@ -614,6 +614,8 @@ function ngg_confirm_delete_album(form) {
 
 		</div><!-- /#container -->
 
+        <?php do_action('ngg_manage_albums_marketing_block'); ?>
+
 	</div> <!-- /.ngg_page_content_main -->
 
 </div><!-- /#wrap -->

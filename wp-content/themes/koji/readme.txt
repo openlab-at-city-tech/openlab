@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.4.1
+Tested up to: 5.5
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2 or later
@@ -75,6 +75,19 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.0.9 (2020-08-24)
+-------------------------
+- Fixed the Post Meta Customizer setting being broken in WordPress 5.5.
+
+Version 2.0.8 (2020-08-12)
+-------------------------
+- Added escaping of `get_template_directory_uri()`.
+
+Version 2.0.7 (2020-08-12)
+-------------------------
+- JS: Fixed compatibility with WordPress 5.5 by replacing `live()` with `on()`.
+- Updated "Tested up to".
 
 Version 2.0.6 (2020-06-05)
 -------------------------

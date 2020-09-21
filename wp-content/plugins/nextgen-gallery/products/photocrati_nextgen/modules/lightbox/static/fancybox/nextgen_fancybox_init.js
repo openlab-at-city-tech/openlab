@@ -10,6 +10,6 @@ jQuery(function($) {
             }
         });
     };
-    $(window).bind('refreshed', nextgen_fancybox_init);
+    $(window).on('refreshed', nextgen_fancybox_init);
     nextgen_fancybox_init();
 });

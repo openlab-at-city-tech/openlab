@@ -240,6 +240,17 @@ jQuery( document ).ready(
 					success: function( response ) {
 						var r = JSON.parse( response );
 
+						// Shared cloning UI
+						var $sharedCloningSettings = $('#shared-cloning-authorship-settings');
+						var $sharedCloningToggle   = $('#change-cloned-content-attribution');
+						if ( r.group_id > 0 && r.is_shared_clone ) {
+							$sharedCloningSettings.removeClass( 'hidden' );
+							$sharedCloningToggle.prop('checked', true);
+						} else {
+							$sharedCloningSettings.addClass( 'hidden' );
+							$sharedCloningToggle.prop('checked', false);
+						}
+
 						// Description
 						$( '#group-desc' ).val( r.description );
 

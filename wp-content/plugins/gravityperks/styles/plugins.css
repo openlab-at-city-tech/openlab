@@ -24,6 +24,7 @@ div.gp-requirements-notice ul li {
 
 .gwp-plugin-notice td {
 	padding: 0 !important;
+	box-shadow: none !important;
 }
 
 .gwp-plugin-notice ul {

@@ -81,7 +81,7 @@ koji.toggles = {
 
 	toggle: function() {
 
-		$( '*[data-toggle-target]' ).live( 'click toggle', function( e ) {
+		$( '*[data-toggle-target]' ).on( 'click toggle', function( e ) {
 
 			var $toggle = $( this );
 
@@ -149,7 +149,7 @@ koji.toggles = {
 // ======================================================================= Search Modal
 koji.searchModal = {
 
-	init: function () {
+	init: function() {
 
 		if ( $( '.search-overlay' ).length ) {
 
@@ -168,7 +168,7 @@ koji.searchModal = {
 
 	conditionalScrollLockOnToggle: function() {
 
-		$( '.search-overlay' ).live( 'toggled', function() {
+		$( '.search-overlay' ).on( 'toggled', function() {
 
 			var winWidth = $( window ).width();
 
@@ -182,7 +182,7 @@ koji.searchModal = {
 
 	outsideUntoggle: function() {
 
-		$( document ).live( 'click', function( e ) {
+		$( document ).on( 'click', function( e ) {
 
 			var $target = $( e.target ),
 				modal = '.search-overlay',

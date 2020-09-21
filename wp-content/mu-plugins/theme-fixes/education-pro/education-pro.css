@@ -285,6 +285,7 @@ body.header-image div.title-area {
 
 a,
 div.entry-content a,
+div.archive-pagination li a,
 .breadcrumb a,
 .comment-reply-link,
 #ol-print-this-page a,
@@ -308,6 +309,8 @@ div.entry-content .wp-block-image a {
 
 .entry-content a:hover,
 .breadcrumb a:hover,
+div.archive-pagination li a:hover,
+div.archive-pagination li.active a,
 #ol-print-this-page a:hover,
 a.breadcrumb-link:hover {
     color: #444;
@@ -694,6 +697,7 @@ body .site-title a {
 .education-pro-blue #ol-print-this-page a,
 .education-pro-blue .comment-reply-link,
 .education-pro-blue .entry-title a,
+.education-pro-blue div.archive-pagination li a,
 .education-pro-blue a.breadcrumb-link,
 .education-pro-blue a {
 	border-color: #185a7d;
@@ -707,6 +711,8 @@ body .site-title a {
 
 .education-pro-blue .entry-title a:hover,
 .education-pro-blue .entry-footer .entry-meta a:hover,
+.education-pro-blue div.archive-pagination li a:hover,
+.education-pro-blue div.archive-pagination li.active a,
 .education-pro-blue a:hover {
 	color: #444;
 }
@@ -845,6 +851,7 @@ body.header-image.education-pro-blue a.title-area-link:hover div.title-area .sit
 .education-pro-green .comment-reply-link,
 .education-pro-green .entry-title a,
 .education-pro-green a.breadcrumb-link,
+.education-pro-green div.archive-pagination li a,
 .education-pro-green a {
 	border-color: #3e6120;
 	color: #3e6120;
@@ -857,6 +864,8 @@ body.header-image.education-pro-blue a.title-area-link:hover div.title-area .sit
 
 .education-pro-green .entry-title a:hover,
 .education-pro-green .entry-footer .entry-meta a:hover,
+.education-pro-green div.archive-pagination li a:hover,
+.education-pro-green div.archive-pagination li.active a,
 .education-pro-green a:hover {
 	color: #444;
 }
@@ -1009,6 +1018,7 @@ body.header-image.education-pro-green a.title-area-link:hover div.title-area .si
 .education-pro-red .comment-reply-link,
 .education-pro-red .entry-title a,
 .education-pro-red a.breadcrumb-link,
+.education-pro-red div.archive-pagination li a,
 .education-pro-red a {
 	border-color: #aa2418;
 	color: #aa2418;
@@ -1021,6 +1031,8 @@ body.header-image.education-pro-green a.title-area-link:hover div.title-area .si
 
 .education-pro-red .entry-title a:hover,
 .education-pro-red .entry-footer .entry-meta a:hover,
+.education-pro-red div.archive-pagination li a:hover,
+.education-pro-red div.archive-pagination li.active a,
 .education-pro-red a:hover {
 	color: #444;
 }

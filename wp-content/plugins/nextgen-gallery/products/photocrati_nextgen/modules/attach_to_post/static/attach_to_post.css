@@ -324,19 +324,17 @@ table {
 
 #displayed_tab .ngg_igw_promo {
     display: block !important;
-    padding: 10px 20px;
-    position: relative;
-    top: -187px;
-    left: 608px;
-    background: #9ebc1b;
-    color: #fff;
-    /*border-bottom: 5px solid #9ebc1b;*/
-    font-family: Lato,sans-serif;
+    padding: 15px 7px;
+    color: #666;
+	font-family: "Lato", sans-serif;
+	font-size: 10pt;
     letter-spacing: .5px;
     box-sizing: border-box;
-    width: 200px;
     height: 172px;
-    margin-bottom: -170px;
+}
+
+#displayed_tab .ngg_igw_promo p {
+	text-align: center;
 }
 
 #displayed_tab .ngg_igw_promo p:nth-of-type(1) {
@@ -350,21 +348,11 @@ table {
 #displayed_tab .ngg_igw_promo a {
     text-decoration: none;
     font-weight: 600;
-    background: black;
-    color: #fff;
+    background: #9ebc1b;
+    color: white;
     padding: 10px 16px;
     font-size: 11px;
     text-transform: uppercase;
-}
-
-#displayed_tab .ngg_igw_promo a:after {
-	content: "\f345";
-    font: normal 12px dashicons;
-    color: white !important;
-    display: inline-block;
-    position: relative;
-    top: 2px;
-    left: 6px;
 }
 
 #displayed_tab .ngg_igw_coupon {
@@ -845,6 +833,10 @@ h3#preview_tab {
 	#displayed_tab #ngg_page_content .responsive-menu-icon {
 		padding: 10px 0 15px !important;
 	}
+}
+
+.ngg-marketing-popup {
+	font-family: "Lato", sans-serif;	
 }
 
 @media (max-width: 400px) {

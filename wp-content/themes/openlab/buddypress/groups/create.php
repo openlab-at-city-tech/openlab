@@ -34,6 +34,15 @@
 	}
 
     $group_id_to_clone = empty( $_GET['clone'] ) ? 0 : intval( $_GET['clone'] );
+
+	$is_shared_clone = false;
+	if ( $group_id_to_clone ) {
+		$source_group_admin_ids = openlab_get_all_group_contact_ids( $group_id_to_clone );
+		if ( ! in_array( bp_loggedin_user_id(), $source_group_admin_ids, true ) ) {
+			$is_shared_clone = true;
+		}
+	}
+
     ?>
     <h1 class="entry-title mol-title"><?php echo esc_html( $page_title ); ?></h1>
     <?php
@@ -65,63 +74,69 @@
                         <div class="panel panel-default create-or-clone-selector">
                             <div class="panel-heading semibold">Create New or Clone Existing?</div>
                             <div class="panel-body">
-							<?php
-							if ( 'course' === $group_type ) {
-								$clone_tooltip = sprintf( 'If a course has been taught previously on the OpenLab by you or another faculty member, cloning can save you time. Check the <a href="%s">Courses Directory</a> and with your Department course coordinators to see if there are courses in your discipline available for cloning.', esc_html( home_url( 'courses/?is_cloneable=1' ) ) );
-							} else {
-								$clone_tooltip = sprintf( 'You can clone an existing %s to save time.', $group_type );
-							}
-							?>
-                            <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-2"><?php echo $clone_tooltip; ?></p>
+								<?php
+								if ( 'course' === $group_type ) {
+									$clone_tooltip = sprintf( 'If a course has been taught previously on the OpenLab by you or another faculty member, cloning can save you time. Check the <a href="%s">Courses Directory</a> and with your Department course coordinators to see if there are courses in your discipline available for cloning.', esc_html( home_url( 'courses/?is_cloneable=1' ) ) );
+								} else {
+									$clone_tooltip = sprintf( 'You can clone an existing %s to save time.', $group_type );
+								}
+								?>
+								<p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-2"><?php echo $clone_tooltip; ?></p>
 
-                            <ul class="create-or-clone-options">
-                                <li class="radio">
-                                    <label for="create-or-clone-create"><input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked(!(bool) $group_id_to_clone) ?> />
-                                        Create a New <?php echo ucfirst( $group_type ); ?></label>
-                                </li>
+								<ul class="create-or-clone-options">
+									<li class="radio">
+										<label for="create-or-clone-create"><input type="radio" name="create-or-clone" id="create-or-clone-create" value="create" <?php checked(!(bool) $group_id_to_clone) ?> />
+											Create a New <?php echo ucfirst( $group_type ); ?></label>
+									</li>
 
-                                <?php $user_groups = openlab_get_groups_of_type_owned_by_user( get_current_user_id(), $group_type ) ?>
+									<?php $user_groups = openlab_get_groups_of_type_owned_by_user( get_current_user_id(), $group_type ) ?>
 
-                                <?php /* "Sharable" groups should be added to list if not present */ ?>
-                                <?php
-                                if ( ! empty( $_GET['clone'] ) ) {
-                                    $group_id = intval( $_GET['clone'] );
-                                    if ( openlab_group_can_be_cloned( $group_id ) ) {
-                                        $in_list = false;
-                                        foreach ( $user_groups['groups'] as $_g ) {
-                                            if ( $group_id === $_g->id ) {
-                                                $in_list = true;
-                                                break;
-                                            }
-                                        }
+									<?php /* "Sharable" groups should be added to list if not present */ ?>
+									<?php
+									if ( ! empty( $_GET['clone'] ) ) {
+										$group_id = intval( $_GET['clone'] );
+										if ( openlab_group_can_be_cloned( $group_id ) ) {
+											$in_list = false;
+											foreach ( $user_groups['groups'] as $_g ) {
+												if ( $group_id === $_g->id ) {
+													$in_list = true;
+													break;
+												}
+											}
 
-                                        if ( ! $in_list ) {
-                                            $user_groups['groups'][] = groups_get_group( $group_id );
-                                            $user_groups['total']++;
-                                        }
-                                    }
-                                }
-                                ?>
+											if ( ! $in_list ) {
+												$user_groups['groups'][] = groups_get_group( $group_id );
+												$user_groups['total']++;
+											}
+										}
+									}
+									?>
 
-                                <li class="disable-if-js form-group radio form-inline">
-                                    <label for="create-or-clone-clone" <?php echo ( empty( $user_groups['groups'] ) ? 'class="disabled-opt"' : '' ); ?>><input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked((bool) $group_id_to_clone) ?> <?php disabled( empty( $user_groups['groups'] ) ); ?> />
-                                        Clone an Existing <?php echo ucfirst( $group_type ); ?></label>
+									<li class="disable-if-js form-group radio form-inline">
+										<label for="create-or-clone-clone" <?php echo ( empty( $user_groups['groups'] ) ? 'class="disabled-opt"' : '' ); ?>><input type="radio" name="create-or-clone" id="create-or-clone-clone" value="clone" <?php checked((bool) $group_id_to_clone) ?> <?php disabled( empty( $user_groups['groups'] ) ); ?> />
+											Clone an Existing <?php echo ucfirst( $group_type ); ?></label>
 
 
-                                    <label class="sr-only" for="group-to-clone">Choose a <?php echo ucfirst( $group_type ); ?></label>
-                                    <select class="form-control" id="group-to-clone" name="group-to-clone">
-                                        <option value="" <?php selected($group_id_to_clone, 0) ?>>- choose a <?php echo esc_attr( $group_type ); ?> -</option>
+										<label class="sr-only" for="group-to-clone">Choose a <?php echo ucfirst( $group_type ); ?></label>
+										<select class="form-control" id="group-to-clone" name="group-to-clone">
+											<option value="" <?php selected($group_id_to_clone, 0) ?>>- choose a <?php echo esc_attr( $group_type ); ?> -</option>
 
-                                        <?php foreach ($user_groups['groups'] as $user_group) : ?>
-                                            <option value="<?php echo esc_attr($user_group->id) ?>" <?php selected($group_id_to_clone, $user_group->id) ?>><?php echo esc_attr($user_group->name) ?></option>
-                                        <?php endforeach ?>
-                                    </select>
-                                </li>
-                            </ul>
+											<?php foreach ($user_groups['groups'] as $user_group) : ?>
+												<option value="<?php echo esc_attr($user_group->id) ?>" <?php selected($group_id_to_clone, $user_group->id) ?>><?php echo esc_attr($user_group->name) ?></option>
+											<?php endforeach ?>
+										</select>
+									</li>
+								</ul>
 
-                            <p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The cloned %s will copy the %s profile, site set-up, and all docs, files, discussions, posts, and pages you\'ve created. The cloned %s will not copy %s membership or member-created documents, files, discussions, comments or posts.', $group_type, $group_type, $group_type, $group_type ); ?></p>
-                            </div>
-						</div>
+								<p class="ol-clone-description italics" id="ol-clone-description"><?php printf( 'Note: The %s profile, site set-up, and all docs, files, discussions, posts, and pages created by %s admins will be copied to the cloned %s. %s membership or member-created documents, files, discussions, comments or posts will not be copied.', $group_type, $group_type, $group_type, ucfirst( $group_type ) ); ?></p>
+
+								<?php $authorship_settings_clone_class = $is_shared_clone ? '' : 'hidden'; ?>
+								<div id="shared-cloning-authorship-settings" class="shared-cloning-authorship-settings <?php echo esc_attr( $authorship_settings_clone_class ); ?>">
+									<p>Shared cloning is enabled for the group you are cloning. The author for all materials copied will be switched to you, unless you uncheck the box below:</p>
+									<input type="checkbox" <?php checked( $is_shared_clone ); ?> name="change-cloned-content-attribution" id="change-cloned-content-attribution" value="1" /> <label for="change-cloned-content-attribution">Switch author to cloner (recommended)</label>
+								</div>
+                            </div><!-- .panel-body -->
+						</div><!-- .panel -->
 
 					<?php endif; ?>
 

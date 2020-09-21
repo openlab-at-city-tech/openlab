@@ -31,7 +31,7 @@ class CWS_PageLinksTo {
 	const DISMISSED_NOTICES = 'page_links_dismissed_options';
 	const MESSAGE_ID = 4;
 	const NEWSLETTER_URL = 'https://pages.convertkit.com/8eb23c1339/1ce4614706';
-	const CSS_JS_VERSION = '3.3.3';
+	const CSS_JS_VERSION = '3.3.4';
 
 	/**
 	 * Whether to replace WP links with their specified URLs.
@@ -183,19 +183,12 @@ class CWS_PageLinksTo {
 		$this->hook( 'page_row_actions' );
 		$this->hook( 'post_row_actions', 'page_row_actions' );
 
+		$this->hook( 'init', 'register_meta_keys', 9999 );
+		$this->hook( 'rest_api_init', 'register_meta_keys', 9999 );
+
 		// Notices.
 		if ( self::should_display_message() ) {
 			$this->hook( 'admin_notices', 'notify_generic' );
-		}
-
-		$post_type_names = array_keys( get_post_types() );
-
-		foreach ( $post_type_names as $type ) {
-			if ( self::is_supported_post_type( $type ) ) {
-				$this->register_meta( self::LINK_META_KEY, $type );
-				$this->register_meta( self::TARGET_META_KEY, $type );
-				do_action( 'page_links_to_register_meta_for_post_type', $type );
-			}
 		}
 	}
 
@@ -230,6 +223,23 @@ class CWS_PageLinksTo {
 		foreach ( $post_type_names as $type ) {
 			if ( self::is_supported_post_type( $type ) ) {
 				add_post_type_support( $type, 'custom-fields' );
+			}
+		}
+	}
+
+	/**
+	 * Registers the PLT post meta keys for supported post types.
+	 *
+	 * @return void
+	 */
+	public function register_meta_keys() {
+		$post_type_names = array_keys( get_post_types() );
+
+		foreach ( $post_type_names as $type ) {
+			if ( self::is_supported_post_type( $type ) ) {
+				$this->register_meta( self::LINK_META_KEY, $type );
+				$this->register_meta( self::TARGET_META_KEY, $type );
+				do_action( 'page_links_to_register_meta_for_post_type', $type );
 			}
 		}
 	}
@@ -345,6 +355,7 @@ class CWS_PageLinksTo {
 				'supports' => [
 					'newTab' => self::supports( 'new_tab' ),
 				],
+				'panelTitle' => self::get_panel_title(),
 			]);
 			do_action( 'page_links_to_enqueue_block_editor_assets' );
 		}
@@ -472,7 +483,7 @@ class CWS_PageLinksTo {
 	 */
 	public function do_meta_boxes( $page, $context ) {
 		if ( ! self::is_block_editor() && self::is_supported_post_type( $page ) && 'advanced' === $context ) {
-			add_meta_box( 'page-links-to', _x( 'Page Links To', 'Meta box title', 'page-links-to' ), array( $this, 'meta_box' ), $page, 'advanced', 'low' );
+			add_meta_box( 'page-links-to', self::get_panel_title(), array( $this, 'meta_box' ), $page, 'advanced', 'low' );
 		}
 	}
 
@@ -644,6 +655,8 @@ class CWS_PageLinksTo {
 		// Old, unused data that we can delete on the fly.
 		delete_post_meta( $post_id, '_links_to_type' );
 
+		do_action( 'page_links_to_delete_link', $post_id );
+
 		return $return;
 	}
 
@@ -657,6 +670,10 @@ class CWS_PageLinksTo {
 	public function link( $link, $post ) {
 		if ( $this->replace ) {
 			$post = get_post( $post );
+
+			if (! $post instanceof \WP_Post) {
+				return $link;
+			}
 
 			$meta_link = self::get_link( $post->ID );
 
@@ -1025,6 +1042,15 @@ class CWS_PageLinksTo {
 	}
 
 	/**
+	 * Returns the panel title.
+	 *
+	 * @return string The panel title.
+	 */
+	public static function get_panel_title() {
+		return apply_filters( 'page_links_to_panel_title', _x( 'Page Links To', 'Meta box title', 'page-links-to' ) );
+	}
+
+	/**
 	 * Outputs a notice that the current post item is pointed to a custom URL.
 	 *
 	 * @return void
@@ -1032,10 +1058,10 @@ class CWS_PageLinksTo {
 	public static function notify_of_external_link() {
 		if ( self::is_block_editor() ) {
 			// Disabled, currently, because these notifications can block the title, which is annoying.
-			false && self::block_editor_notification( 'Note: This content is pointing to a custom URL. Use the “Custom Link” area in “Status and Visibility” to control this.', 'info' );
+			false && self::block_editor_notification( 'Note: This content is pointing to a custom URL. Use the “Page Links To” area in the sidebar to control this.', 'info' );
 		} else {
 			?>
-				<div class="notice updated"><p><?php _e( '<strong>Note</strong>: This content is pointing to a custom URL. Use the &#8220;Page Links To&#8221; box to change this behavior.', 'page-links-to' ); ?></p></div>
+				<div class="notice updated"><p><?php printf( __( '<strong>Note</strong>: This content is pointing to a custom URL. Use the &#8220;%s&#8221; box to change this behavior.', 'page-links-to' ), self::get_panel_title() ); ?></p></div>
 			<?php
 		}
 	}

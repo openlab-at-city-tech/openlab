@@ -48,25 +48,41 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 			switch ( $privacy ) {
 				case '1':
-				break;
+					continue 2;
+					break;
 
 				case '0':
-				case '1':
-					$remove_from_stream = ! is_user_logged_in();
-				break;
+					if ( $current_user != 0 ) {
+						continue 2;
+						}
+					else {
+						$remove_from_stream = true;
+					}
+					break;
+
+
+				case '-1':
+					if ( $current_user != 0 )
+						continue 2;
+					else {
+						$remove_from_stream = true;
+					}
+					break;
 
 				case '-2':
 					if ( is_user_logged_in() ) {
 						$meta_key = 'wp_' . $blog_id . '_capabilities';
 						$caps = get_user_meta( $current_user, $meta_key, true );
 
-						if ( empty( $caps ) ) {
+						if ( !empty( $caps ) ) {
+							continue 2;
+						} else {
 							$remove_from_stream = true;
 						}
 					} else {
 						$remove_from_stream = true;
 					}
-				break;
+					break;
 
 				case '-3':
 					if ( is_user_logged_in() ) {
@@ -74,14 +90,16 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 
 						$user = new WP_User( $current_user );
 
-						if ( ! in_array( 'administrator', $user->roles ) ) {
+						if ( in_array( 'administrator', $user->roles ) )
+							continue 2;
+						else {
 							$remove_from_stream = true;
 						}
 						restore_current_blog();
 					} else {
 						$remove_from_stream = true;
 					}
-				break;
+					break;
 
 			}
 

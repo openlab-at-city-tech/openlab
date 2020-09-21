@@ -138,6 +138,7 @@ return array(
     'Tribe\\Traits\\Cache_User' => $baseDir . '/src/Tribe/Traits/Cache_User.php',
     'Tribe\\Traits\\With_DB_Lock' => $baseDir . '/src/Tribe/Traits/With_DB_Lock.php',
     'Tribe\\Traits\\With_Meta_Updates_Handling' => $baseDir . '/src/Tribe/Traits/With_Meta_Updates_Handling.php',
+    'Tribe\\Traits\\With_Post_Attribute_Detection' => $baseDir . '/src/Tribe/Traits/With_Post_Attribute_Detection.php',
     'Tribe\\Utils\\Body_Classes' => $baseDir . '/src/Tribe/Utils/Body_Classes.php',
     'Tribe\\Utils\\Collection_Interface' => $baseDir . '/src/Tribe/Utils/Collection_Interface.php',
     'Tribe\\Utils\\Collection_Trait' => $baseDir . '/src/Tribe/Utils/Collection_Trait.php',

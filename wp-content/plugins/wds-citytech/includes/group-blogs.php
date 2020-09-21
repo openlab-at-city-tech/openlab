@@ -868,17 +868,11 @@ function openlab_group_member_role_settings( $group_type ) {
 	);
 
 	if ( bp_is_group_create() ) {
-		$new_group_id          = bp_get_new_group_id();
-		$clone_source_group_id = groups_get_groupmeta( $new_group_id, 'clone_source_group_id' );
-		if ( $clone_source_group_id ) {
-			$settings = openlab_get_group_member_role_settings( $clone_source_group_id );
-		} else {
-			$settings = array(
-				'admin'  => 'administrator',
-				'mod'    => 'editor',
-				'member' => 'author',
-			);
-		}
+		$settings = array(
+			'admin'  => 'administrator',
+			'mod'    => 'editor',
+			'member' => 'author',
+		);
 	} else {
 		$settings = openlab_get_group_member_role_settings( bp_get_current_group_id() );
 	}

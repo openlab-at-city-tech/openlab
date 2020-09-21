@@ -2,18 +2,13 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <style>
-    .ui-state-highlight {
-        background: transparent;
-        border: dashed 1px #0073AA;
-        width:150px;
-        height: 25px !important;
-    }
+
     <?php
     $string = "";
     global $typenow;
     $width = get_option("wcp_dynamic_width_for_" . $typenow);
     if($width == null || empty($width)) {
-        $width = 315;
+        $width = 280;
     }
     $width = $width - 40;
     $customize_folders = get_option('customize_folders');
@@ -27,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             $string .= " .space > .route >";
             $new_width = $width - (13+(20*$i));
                 echo "#custom-menu > {$string} .title { width: {$new_width}px !important; } ";
+                echo "#custom-menu > {$string} .dynamic-menu { left: ".($new_width-190)."px !important; } ";
             }
         ?>
     </style>
@@ -35,22 +31,31 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 </div>
 <style>
+    .ui-state-highlight {
+        background: transparent;
+        border: dashed 1px #0073AA;
+        width:150px;
+        height: 25px !important;
+    }
     <?php
     if(isset($customize_folders['new_folder_color']) && !empty($customize_folders['new_folder_color'])) {
         ?>
     .add-new-folder { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?> }
     .wcp-hide-show-buttons .toggle-buttons { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; }
     .folders-toggle-button span { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; }
-    <?php
-}
-if(isset($customize_folders['dropdown_color']) && !empty($customize_folders['dropdown_color'])) {
-    ?>
-    #media-attachment-taxonomy-filter, select.media-select-folder { border-color: <?php echo esc_attr($customize_folders['dropdown_color']) ?>; color: <?php echo esc_attr($customize_folders['dropdown_color']) ?> }
+    .ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>;}
     <?php
 }
 if(isset($customize_folders['folder_bg_color']) && !empty($customize_folders['folder_bg_color'])) {
+    $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']);
     ?>
     .orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
+    body:not(.no-hover-css) .wcp-container .route .title:hover, .header-posts a:hover, .un-categorised-items.active-item, .un-categorised-items:hover {background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>);}
+    .wcp-drop-hover {
+        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
+    }
+    .ui-state-highlight { border-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?> !important;}
+    #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
     <?php
 }
 if(isset($customize_folders['bulk_organize_button_color']) && !empty($customize_folders['bulk_organize_button_color'])) {
@@ -62,9 +67,15 @@ if(isset($customize_folders['bulk_organize_button_color']) && !empty($customize_
 $font_family = "";
 if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
     $font_family = $customize_folders['folder_font'];
+    $folder_fonts = self::get_font_list();
+    if(isset($folder_fonts[$font_family])) {
     ?>
     .wcp-container, .folder-popup-form { font-family: "<?php echo esc_attr($font_family) ?>"; }
     <?php
+    }
+    if($folder_fonts[$font_family] == "Default") {
+        $font_family = "";
+    }
 }
 if(isset($customize_folders['folder_size']) && !empty($customize_folders['folder_size'])) {
     ?>
@@ -122,6 +133,13 @@ if(!empty($post_type)) {
                 <div class="sticky-wcp-custom-form">
                     <?php echo $form_html ?>
                     <div class="top-settings">
+                        <div class="folder-search-form">
+                            <div class="form-search-input">
+                                <input type="text" value="" id="folder-search" autocomplete="off" />
+                                <span><i class="pfolder-search"></i></span>
+                            </div>
+                        </div>
+                        <div class="folder-separator"></div>
                         <div class="header-posts">
                             <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><span class="wcp-icon folder-icon-insert_drive_file"></span> <?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
                         </div>
@@ -149,88 +167,97 @@ if(!empty($post_type)) {
         </div>
     </div>
 </div>
-<div class="folder-popup-form" id="add-update-folder">
-    <div class="popup-form-content">
-        <form action="" method="post" id="save-folder-form">
-            <div id="add-update-folder-title" class="add-update-folder-title">
-                Add Folder
+<div id="folder-add-update-content">
+    <div class="folder-popup-form" id="add-update-folder">
+        <div class="popup-form-content">
+            <form action="" method="post" id="save-folder-form">
+                <div id="add-update-folder-title" class="add-update-folder-title">
+                    Add new folder
+                </div>
+                <div class="folder-form-input">
+                    <div class="folder-group">
+                        <input id="add-update-folder-name" autocomplete="off" required="required">
+                        <span class="highlight"></span><span class="folder-bar"></span>
+                        <label for="add-update-folder-name">Folder name</label>
+                    </div>
+                </div>
+                <div class="folder-form-errors">
+                    <span class="dashicons dashicons-info"></span> Please enter folder name
+                </div>
+                <div class="folder-form-buttons">
+                    <a href="javascript:;" class="form-cancel-btn">Cancel</a>
+                    <button type="submit" class="form-submit-btn" id="save-folder-data" style="width: 160px">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="folder-popup-form" id="update-folder-item">
+        <div class="popup-form-content">
+            <form action="" method="post" id="update-folder-form">
+                <div id="update-folder-title" class="add-update-folder-title">
+                    Rename folder
+                </div>
+                <div class="folder-form-input">
+                    <div class="folder-group">
+                        <input id="update-folder-item-name" autocomplete="off" required="required">
+                        <span class="highlight"></span><span class="folder-bar"></span>
+                        <label for="update-folder-item-name">Folder name</label>
+                    </div>
+                </div>
+                <div class="folder-form-errors">
+                    <span class="dashicons dashicons-info"></span> Please enter folder name
+                </div>
+                <div class="folder-form-buttons">
+                    <a href="javascript:;" class="form-cancel-btn">Cancel</a>
+                    <button type="submit" class="form-submit-btn" id="update-folder-data" style="width: 160px">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="folder-popup-form" id="confirm-remove-folder">
+        <div class="popup-form-content">
+            <div class="add-update-folder-title" id="remove-folder-message">
+                Are you sure you want to delete the selected folder?
             </div>
-            <div class="folder-form-input">
-                <input id="add-update-folder-name" autocomplete="off" placeholder="Folder name">
-            </div>
-            <div class="folder-form-errors">
-                <span class="dashicons dashicons-info"></span> Please enter folder name
+            <div class="folder-form-message" id="remove-folder-notice">
+                Items in the folder will not be deleted.
             </div>
             <div class="folder-form-buttons">
-                <button type="submit" class="form-submit-btn" id="save-folder-data" style="width: 106px">Submit</button>
-                <a href="javascript:;" class="form-cancel-btn">Cancel</a>
+                <a href="javascript:;" class="form-cancel-btn">No, Keep it</a>
+                <a href="javascript:;" class="form-submit-btn" id="remove-folder-item">Yes, Delete it!</a>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div class="folder-popup-form" id="update-folder-item">
-    <div class="popup-form-content">
-        <form action="" method="post" id="update-folder-form">
-            <div id="update-folder-title" class="add-update-folder-title">
-                Rename Folder
+    <div class="folder-popup-form" id="no-more-folder-credit">
+        <div class="popup-form-content">
+            <div class="add-update-folder-title" id="folder-limitation-message">
+
             </div>
-            <div class="folder-form-input">
-                <input id="update-folder-item-name" autocomplete="off" placeholder="Folder name">
-            </div>
-            <div class="folder-form-errors">
-                <span class="dashicons dashicons-info"></span> Please enter folder name
+            <div class="folder-form-message">
+                Unlock unlimited amount of folders by upgrading to one of our pro plans.
             </div>
             <div class="folder-form-buttons">
-                <button type="submit" class="form-submit-btn" id="update-folder-data" style="width: 106px">Submit</button>
                 <a href="javascript:;" class="form-cancel-btn">Cancel</a>
+                <a href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>" target="_blank" class="form-submit-btn">See Pro Plans</a>
             </div>
-        </form>
-    </div>
-</div>
-
-<div class="folder-popup-form" id="confirm-remove-folder">
-    <div class="popup-form-content">
-        <div class="add-update-folder-title" id="remove-folder-message">
-            Are you sure you want to delete the selected folder?
-        </div>
-        <div class="folder-form-message" id="remove-folder-notice">
-            Items in the folder will not be deleted.
-        </div>
-        <div class="folder-form-buttons">
-            <a href="javascript:;" class="form-cancel-btn">No, Keep it</a>
-            <a href="javascript:;" class="form-submit-btn" id="remove-folder-item">Yes, Delete it!</a>
         </div>
     </div>
-</div>
 
-<div class="folder-popup-form" id="no-more-folder-credit">
-    <div class="popup-form-content">
-        <div class="add-update-folder-title" id="folder-limitation-message">
+    <div class="folder-popup-form" id="error-folder-popup">
+        <div class="popup-form-content">
+            <div class="add-update-folder-title" id="error-folder-popup-message">
 
-        </div>
-        <div class="folder-form-message">
-            Unlock unlimited amount of folders by upgrading to one of our pro plans.
-        </div>
-        <div class="folder-form-buttons">
-            <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-            <a href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>" target="_blank" class="form-submit-btn">See Pro Plans</a>
+            </div>
+            <div class="folder-form-buttons">
+                <a href="javascript:;" class="form-cancel-btn">Close</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="folder-popup-form" id="error-folder-popup">
-    <div class="popup-form-content">
-        <div class="add-update-folder-title" id="error-folder-popup-message">
-
-        </div>
-        <div class="folder-form-buttons">
-            <a href="javascript:;" class="form-cancel-btn">Close</a>
-        </div>
-    </div>
-</div>
-
-<div class="folder-popup-form" id="bulk-move-folder">
+    <div class="folder-popup-form" id="bulk-move-folder">
     <form action="" method="post" id="bulk-folder-form">
         <div class="popup-form-content">
             <div class="popup-folder-title">
@@ -247,4 +274,5 @@ if(!empty($post_type)) {
             </div>
         </div>
     </form>
+</div>
 </div>

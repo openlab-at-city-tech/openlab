@@ -13,19 +13,101 @@
  * @return array
  */
 function openlab_get_group_clone_history( $group_id ) {
-	$history = groups_get_groupmeta( $group_id, 'clone_history', true );
-	if ( empty( $history ) ) {
-		$history = array();
+	$history = [];
 
-		// Legacy.
-		$clone_source_group = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-		if ( $clone_source_group ) {
-			$history[] = $clone_source_group;
-		}
+	$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
+	if ( ! $clone_source_group_id ) {
+		return $history;
 	}
+
+	$history[] = $clone_source_group_id;
+
+	$source_history = openlab_get_group_clone_history( $clone_source_group_id );
+
+	$history = array_merge( $source_history, $history );
 
 	return array_map( 'intval', $history );
 }
+
+/**
+ * Gets all clones of a group.
+ *
+ * Returns only direct children.
+ *
+ * @param int $group_id ID of the parent group.
+ * @return array Array of IDs.
+ */
+function openlab_get_clones_of_group( $group_id ) {
+	global $wpdb, $bp;
+
+	$clone_ids = wp_cache_get( $group_id, 'openlab_clones_of_group' );
+	if ( false === $clone_ids ) {
+		$clone_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'clone_source_group_id' AND meta_value = %s", $group_id ) );
+
+		wp_cache_set( $group_id, $clone_ids, 'openlab_clones_of_group' );
+	}
+
+	return array_map( 'intval', $clone_ids );
+}
+
+/**
+ * Returns all clone descendants of a group.
+ *
+ * @param int   $group_id            ID of the group.
+ * @param array $exclude_creator_ids Exclude groups created by these users.
+ * @return array Array of IDs.
+ */
+function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids = [] ) {
+	$descendants = openlab_get_clones_of_group( $group_id );
+	if ( ! $descendants ) {
+		return [];
+	}
+
+	foreach ( $descendants as $descendant ) {
+		$descendants = array_merge( $descendants, openlab_get_clone_descendants_of_group( $descendant ) );
+	}
+
+	if ( $exclude_creator_ids ) {
+		$descendants = array_filter(
+			$descendants,
+			function( $descendant_id ) use ( $exclude_creator_ids ) {
+				$descendant = groups_get_group( $descendant_id );
+				return ! in_array( $descendant->creator_id, $exclude_creator_ids, true );
+			}
+		);
+	}
+
+	return $descendants;
+}
+
+/**
+ * Returns clone descendants count of a group.
+ *
+ * @param int $group_id ID of the group.
+ * @return int
+ */
+function openlab_get_clone_descendant_count_of_group( $group_id ) {
+	$group = groups_get_group( $group_id );
+
+	$descendants = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ] );
+
+	return count( $descendants );
+}
+
+/**
+ * Busts the cache of ancestor clone caches.
+ */
+function openlab_invalidate_ancestor_clone_cache( $group_id ) {
+	$ancestor_ids = openlab_get_group_clone_history( $group_id );
+	foreach ( $ancestor_ids as $ancestor_id ) {
+		wp_cache_delete( $ancestor_id, 'openlab_clones_of_group' );
+	}
+}
+
+/**
+ * Ensures that the cache of ancestor clones is invalidated on group deletion.
+ */
+add_action( 'groups_before_delete_group', 'openlab_invalidate_ancestor_clone_cache' );
 
 /**
  * Get more complete data about the clone history of a group.
@@ -82,10 +164,10 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 	// Trim exclude_creator groups.
 	if ( $source_datas && null !== $exclude_creator ) {
 		$exclude_creator = intval( $exclude_creator );
-		$source_count    = count( $source_datas ) - 1;
-		for ( $i = $source_count; $i >= 0; $i-- ) {
+		$source_count    = count( $source_datas );
+		for ( $i = 0; $i <= $source_count; $i++ ) {
 			if ( $source_datas[ $i ]['group_creator_id'] !== $exclude_creator ) {
-				break;
+				continue;
 			}
 
 			unset( $source_datas[ $i ] );
@@ -103,24 +185,18 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 function openlab_format_group_clone_history_data_list( $history ) {
 	$credits_groups = array_map(
 		function( $clone_group ) {
-			$admin_links = array_map(
+			$admin_names = array_map(
 				function( $admin ) {
-					$link = sprintf(
-						'<a href="%s">%s</a>',
-						esc_attr( $admin['url'] ),
-						esc_html( $admin['name'] )
-					);
-
-					return $link;
+					return $admin['name'];
 				},
 				$clone_group['group_admins']
 			);
 
 			return sprintf(
-				'<li><a href="%s">%s</a> &mdash; %s</li>',
+				'<li><a href="%s">%s</a> by %s</li>',
 				esc_attr( $clone_group['group_url'] ),
 				esc_html( $clone_group['group_name'] ),
-				implode( ', ', $admin_links )
+				implode( ', ', $admin_names )
 			);
 		},
 		$history
@@ -239,8 +315,9 @@ add_action(
  * This function includes some guesswork about what the "main" sidebar is, based on the theme.
  *
  * @param string $widget
+ * @param int    $index
  */
-function openlab_add_widget_to_main_sidebar( $widget ) {
+function openlab_add_widget_to_main_sidebar( $widget, $index = null ) {
 	switch ( get_template() ) {
 		case 'hemingway' :
 		case 'genesis' :
@@ -291,6 +368,7 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
 		array(
 			'id_base'    => $widget,
 			'sidebar_id' => $sidebar,
+			'index'      => $index,
 		)
 	);
 }
@@ -302,7 +380,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'openlab_clone_credits_widget',
-			'Credits',
+			'Acknowledgments',
 			array(
 				'description' => '',
 			)
@@ -319,6 +397,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$group    = groups_get_group( $group_id );
 
+		$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
+
 		$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
 		if ( count( $all_group_contacts ) <= 1 ) {
 			$exclude_creator = $all_group_contacts[0];
@@ -331,7 +411,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
-		echo $args['before_title'] . 'Credits' . $args['after_title'];
+		echo $args['before_title'] . 'Acknowledgments' . $args['after_title'];
+		echo '<p>' . sprintf( 'This %s is based on the following %s(s):', esc_html( $group_type_label ), esc_html( $group_type_label ) ) . '</p>';
 		echo '<ul class="clone-credits">';
 		echo $markup;
 		echo '</ul>';
@@ -388,8 +469,12 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-		// Don't show if the user can't clone.
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+		// Don't show any widget content if Sharing is not enabled.
+		if ( ! openlab_group_can_be_cloned( $group_id ) ) {
+			return;
+		}
 
 		$group_type_label = openlab_get_group_type_label(
 			array(

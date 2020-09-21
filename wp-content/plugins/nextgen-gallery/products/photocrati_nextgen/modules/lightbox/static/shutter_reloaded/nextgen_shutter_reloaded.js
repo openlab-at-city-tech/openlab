@@ -7,7 +7,7 @@ jQuery(function($){
         }
         shutterReloaded.Init();
     };
-    $(this).bind('refreshed', callback);
+    $(this).on('refreshed', callback);
 
     var flag = 'shutterReloaded';
     if (typeof($(window).data(flag)) == 'undefined')

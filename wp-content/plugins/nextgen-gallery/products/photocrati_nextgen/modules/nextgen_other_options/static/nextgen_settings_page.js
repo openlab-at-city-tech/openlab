@@ -84,7 +84,7 @@ jQuery(function($){
     $('input[name="style_settings[activateCSS]"]')
         .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_styles_activated_stylesheet'))
         .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_styles_show_more'))
-        .bind('change', function() {
+        .on('change', function() {
             var $this = $(this);
             if ($this.val() == '0') {
                 $('#cssfile_contents').prop('disabled', true);

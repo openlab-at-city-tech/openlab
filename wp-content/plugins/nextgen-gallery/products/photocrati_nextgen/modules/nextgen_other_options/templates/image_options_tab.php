@@ -90,7 +90,7 @@
 					<?php esc_html_e($resize_images_label) ?>
 			</label>
 		</td>
-		<td class="column2">
+		<td class="column2" style="white-space: nowrap">
 			<label for="image_width"><?php esc_html_e($resized_image_width_label)?></label>
 			<input
 				type="text"

@@ -3,8 +3,8 @@ Contributors: simplecalendar, sureswiftcapital, pderksen, nickyoung87, nekojira,
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
 Requires PHP: 5.3+
-Tested up to: 4.9
-Stable tag: 3.1.27
+Tested up to: 5.5
+Stable tag: 3.1.32
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,8 +97,20 @@ We'd love your help! Here's a few things you can do:
 
 == Changelog ==
 
+= 3.1.32 =
+* Fix: Undefined index error when saving calendar.
+* Fix: Updated Carbon library to latest version.
+* Fix: Update date check on list view to remove PHP deprecated warnings.
+* Dev: Tested up to WordPress 5.4.2
+
+= 3.1.28 =
+* Feature: Automatically sort events with the same day and time alphabetically.
+* Fix: Issue with jQuery not being added as a script dependency.
+* Fix: Updated google/apiclient to ^2.0 to fix Gmail conflicts with other SMTP plugins.
+* Security: Updated dependencies.
+
 = 3.1.27 =
-* Revert to 3.1.22 version to skip recent update that has an error.
+* Reverted codebase to 3.1.22 version to skip recent update that has an error.
 
 = 3.1.22 =
 * This bumps the version number but is the same code as 3.1.20 so plugins can auto update to the fixed version.

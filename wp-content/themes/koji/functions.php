@@ -543,7 +543,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 						<li class="post-date">
 							<a class="meta-wrapper" href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<span class="screen-reader-text"><?php _e( 'Post date', 'koji' ); ?></span>
-								<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/calendar.svg" /></div>
+								<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/calendar.svg" /></div>
 								<span class="meta-content"><?php the_time( get_option( 'date_format' ) ); ?></span>
 							</a>
 						</li>
@@ -554,7 +554,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 						<li class="post-author">
 							<span class="screen-reader-text"><?php _e( 'Posted by', 'koji' ); ?></span>
 							<a class="meta-wrapper" href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>">
-								<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/user.svg" /></div>
+								<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/user.svg" /></div>
 								<span class="meta-content"><?php the_author_meta( 'nickname' ); ?></span>
 							</a>
 						</li>
@@ -564,7 +564,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 					// Categories
 					if ( in_array( 'categories', $post_meta ) ) : ?>
 						<li class="post-categories meta-wrapper">
-							<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/folder.svg" /></div>
+							<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/folder.svg" /></div>
 							<span class="screen-reader-text"><?php _e( 'Posted in', 'koji' ); ?></span>
 							<span class="meta-content"><?php the_category( ', ' ); ?></span>
 						</li>
@@ -574,7 +574,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 					// Tags
 					if ( in_array( 'tags', $post_meta ) && has_tag() ) : ?>
 						<li class="post-tags meta-wrapper">
-							<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/tag.svg" /></div>
+							<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/tag.svg" /></div>
 							<span class="screen-reader-text"><?php _e( 'Tagged with', 'koji' ); ?></span>
 							<span class="meta-content"><?php the_tags( '', ', ', '' ); ?></span>
 						</li>
@@ -586,7 +586,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 						<li class="post-comment-link">
 							<a class="meta-wrapper" href="<?php echo esc_url( get_comments_link( $post_id ) ); ?>">
 								<span class="screen-reader-text"><?php _e( 'Comments', 'koji' ); ?></span>
-								<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/comment.svg" /></div>
+								<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/comment.svg" /></div>
 								<span class="meta-content"><?php echo get_comments_number(); ?></span>
 							</a>
 						</li>
@@ -596,7 +596,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 					// Sticky
 					if ( in_array( 'sticky', $post_meta ) && is_sticky() ) : ?>
 						<li class="post-sticky meta-wrapper">
-							<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/bookmark.svg" /></div>
+							<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/bookmark.svg" /></div>
 							<span class="meta-content"><?php _e( 'Sticky post', 'koji' ); ?></span>
 						</li>
 					<?php endif;
@@ -609,7 +609,7 @@ if ( ! function_exists( 'koji_get_post_meta' ) ) :
 							// Make sure we display something in the customizer, as edit_post_link() doesn't output anything there
 							if ( is_customize_preview() ) { ?>
 								<div class="meta-wrapper">
-									<div class="meta-icon"><img aria-hidden="true" src="<?php echo get_template_directory_uri(); ?>/assets/images/icons/edit.svg" /></div>
+									<div class="meta-icon"><img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/edit.svg" /></div>
 									<span class="meta-content"><?php _e( 'Edit', 'koji' ); ?></span>
 								</div>
 								<?php

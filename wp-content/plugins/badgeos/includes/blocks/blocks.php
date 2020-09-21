@@ -61,6 +61,100 @@ function badgeos_render_user_earned_points_block( $attributes ) {
 }
 
 /**
+ * Renders the rank block
+ *
+ * @param $attributes
+ *
+ * @return output html
+ */
+function badgeos_render_single_rank_block( $attributes ) {
+
+    if( isset( $attributes['rank'] ) && !empty( $attributes['rank'] ) ){
+        $data = json_decode( $attributes['rank'] );
+        if( ! empty( $data->value  ) ) {
+            
+            $param = '';
+            if( !empty( $attributes['show_description'] ) ) {
+                $param .= ' show_description="'.sanitize_text_field( $attributes['show_description'] ).'"';
+            } else {
+                $param .= ' show_description="true"';
+            }
+        
+            if( !empty( $attributes['show_thumb'] ) ) {
+                $param .= ' show_thumb="'.sanitize_text_field( $attributes['show_thumb'] ).'"';
+            } else {
+                $param .= ' show_thumb="true"';
+            }
+        
+            if( !empty( $attributes['show_title'] ) ) {
+                $param .= ' show_title="'.sanitize_text_field( $attributes['show_title'] ).'"';
+            } else {
+                $param .= ' show_title="true"';
+            }
+        
+            if( !empty( $attributes['image_width'] ) ) {
+                $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+            }
+            
+            if( !empty( $attributes['image_height'] ) ) {
+                $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+            }
+
+            return do_shortcode( '[badgeos_rank id="'.$data->value.'" '.$param.' ]' );
+        } else {
+            return '<div class="inner-content">'.__( 'No rank found.', 'badgeos' ).'</div>';
+        }
+    } else {
+        return '<div class="inner-content">'.__( 'Please, select a rank to display.', 'badgeos' ).'</div>';
+    }
+}
+
+/**
+ * Renders the achievement block
+ *
+ * @param $attributes
+ *
+ * @return output html
+ */
+function badgeos_render_evidence_blocks( $attributes ) {
+
+    if( isset( $attributes['award_id'] ) && !empty( $attributes['award_id'] ) ){
+
+        $data = json_decode( $attributes['award_id'] );
+        if( ! empty( $data->value  ) ) {
+            
+            $param = '';
+            if( !empty( $attributes['achievement'] ) ) {
+                $achi_data = json_decode( $attributes['achievement'] );
+                $param .= ' achievement="'.sanitize_text_field( $achi_data->value ).'"';
+            } else {
+                $param .= ' achievement="0"';
+            }
+        
+            $param = '';
+            if( !empty( $attributes['user_id'] ) ) {
+                $user_data = json_decode( $attributes['user_id'] );
+                $param .= ' user_id="'.sanitize_text_field( $user_data->value ).'"';
+            } else {
+                $param .= ' user_id="0"';
+            }
+
+            $body = do_shortcode( '[badgeos_evidence award_id="'.$data->value.'" '.$param.' ]' );
+            if( empty($body  ) ) {
+                return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
+            } else {
+                return do_shortcode( '[badgeos_evidence award_id="'.$data->value.'" '.$param.' ]' );
+            }
+            
+        } else {
+            return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
+        }
+    } else {
+        return '<div class="inner-content">'.__( 'Please, select an award id to display.', 'badgeos' ).'</div>';
+    }
+}
+
+/**
  * Renders the achievement block
  *
  * @param $attributes
@@ -113,49 +207,6 @@ function badgeos_render_achievement_block( $attributes ) {
     } else {
         return '<div class="inner-content">'.__( 'Please, select an achievement to display.', 'badgeos' ).'</div>';
     }
-}
-
-/**
- * Renders the nomination form block
- *
- * @param $attributes
- *
- * @return output html
- */
-function badgeos_render_nomination_form_block( $attributes ) {
-
-    if( isset( $attributes['achievement'] ) && !empty( $attributes['achievement'] ) ){
-        $data = json_decode( $attributes['achievement'] );
-        if( ! empty( $data->value  ) ) {
-            return do_shortcode( '[badgeos_nomination achievement_id="'.$data->value.'"]' );
-        } else {
-            return '<div class="inner-content">'.__( 'No nomination found.', 'badgeos' ).'</div>';
-        }
-    } else {
-        return '<div class="inner-content">'.__( 'Please, select a nomination to display.', 'badgeos' ).'</div>';
-    }
-}
-
-/**
- * Renders the submission form block
- *
- * @param $attributes
- *
- * @return output html
- */
-function badgeos_render_submission_form_block( $attributes ) {
-
-    if( isset( $attributes['achievement'] ) && !empty( $attributes['achievement'] ) ){
-        $data = json_decode( $attributes['achievement'] );
-        if( ! empty( $data->value  ) ) {
-            return do_shortcode( '[badgeos_submission achievement_id="'.$data->value.'"]' );
-        } else {
-            return '<div class="inner-content">'.__( 'No submission found.', 'badgeos' ).'</div>';
-        }
-    } else {
-        return '<div class="inner-content">'.__( 'Please, select a submission to display.', 'badgeos' ).'</div>';
-    }
-
 }
 
 /**
@@ -258,34 +309,6 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
 }
 
 /**
- * Renders the nominations list block
- *
- * @param $attributes
- *
- * @return output html
- */
-function badgeos_render_nominations_list_blocks( $attributes ) {
-
-    $param = '';
-    if( !empty( $attributes['limit'] ) && intval( $attributes['limit'] ) > 0 ) {
-        $param .= ' limit="'.sanitize_text_field( $attributes['limit'] ).'"';
-    }
-    if( !empty( $attributes['status'] ) ) {
-        $param .= ' status="'.sanitize_text_field( $attributes['status'] ).'"';
-    }
-    if( !empty( $attributes['show_filter'] ) ) {
-        $param .= ' show_filter="'.sanitize_text_field( $attributes['show_filter'] ).'"';
-    }
-    if( !empty( $attributes['show_search'] ) ) {
-        $param .= ' show_search="'.sanitize_text_field( $attributes['show_search'] ).'"';
-    } else {
-        $param .= ' show_search="true"';
-    }
-
-    return do_shortcode( '[badgeos_nominations '.$param.']' );
-}
-
-/**
  * Renders the credly assertion page block
  *
  * @param $attributes
@@ -307,41 +330,78 @@ function badgeos_render_credly_assertion_page_blocks( $attributes ) {
 
     return do_shortcode( '[credly_assertion_page '.$param.']' );
 }
-
 /**
- * Renders the submission list block
+ * Renders the ranks list block
  *
  * @param $attributes
  *
  * @return output html
  */
-function badgeos_render_submission_list_blocks( $attributes ) {
+function badgeos_render_ranks_list_blocks( $attributes ) {
 
     $param = '';
     if( !empty( $attributes['limit'] ) && intval( $attributes['limit'] ) > 0 ) {
         $param .= ' limit="'.sanitize_text_field( $attributes['limit'] ).'"';
     }
-    if( !empty( $attributes['status'] ) ) {
-        $param .= ' status="'.sanitize_text_field( $attributes['status'] ).'"';
-    }
-    if( !empty( $attributes['show_filter'] ) ) {
-        $param .= ' show_filter="'.sanitize_text_field( $attributes['show_filter'] ).'"';
-    } else {
-        $param .= ' show_filter="true"';
-    }
+
     if( !empty( $attributes['show_search'] ) ) {
         $param .= ' show_search="'.sanitize_text_field( $attributes['show_search'] ).'"';
     } else {
         $param .= ' show_search="true"';
     }
-    if( !empty( $attributes['show_attachments'] ) ) {
-        $param .= ' show_attachments="'.sanitize_text_field( $attributes['show_attachments'] ).'"';
-    }
-    if( !empty( $attributes['show_comments'] ) ) {
-        $param .= ' show_comments="'.sanitize_text_field( $attributes['show_comments'] ).'"';
+    if( !empty( $attributes['orderby'] ) ) {
+        $param .= ' orderby="'.sanitize_text_field( $attributes['orderby'] ).'"';
     }
 
-    return do_shortcode( '[badgeos_submissions '.$param.']' );
+    if( !empty( $attributes['show_description'] ) ) {
+        $param .= ' show_description="'.sanitize_text_field( $attributes['show_description'] ).'"';
+    }
+
+    if( !empty( $attributes['show_thumb'] ) ) {
+        $param .= ' show_thumb="'.sanitize_text_field( $attributes['show_thumb'] ).'"';
+    }
+
+    if( !empty( $attributes['show_title'] ) ) {
+        $param .= ' show_title="'.sanitize_text_field( $attributes['show_title'] ).'"';
+    }
+
+    if( !empty( $attributes['order'] ) ) {
+        $param .= ' order="'.sanitize_text_field( $attributes['order'] ).'"';
+    }
+
+    if( !empty( $attributes['user_id'] ) ) {
+        $user_id_obj = json_decode( sanitize_text_field( $attributes['user_id'] ) );
+        if( $user_id_obj ) {
+            $param .= ' user_id="'.$user_id_obj->value.'"';
+        }
+    }
+
+    if( !empty( $attributes['types'] ) ) {
+        $data = json_decode( sanitize_text_field( $attributes['types'] ) );
+        $types = '';
+        if( count( $data ) > 0 ) {
+            foreach( $data as $dt ) {
+                $types .= empty( $types )?"":",";
+                $types .= $dt->value;
+            }
+        }
+        if( ! empty( $types ) )
+            $param .= ' types="'.$types.'"';
+    }
+
+    if( ! empty( $attributes['default_view'] ) ) {
+        $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
+    }
+
+    if( ! empty( $attributes['image_width'] ) ) {
+        $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+    }
+    
+    if( ! empty( $attributes['image_height'] ) ) {
+        $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+    }
+
+    return do_shortcode( '[badgeos_ranks_list '.$param.']' );
 }
 
 /**
@@ -696,6 +756,37 @@ function badgeos_render_my_php_block(  ) {
         )
     ));
 
+    register_block_type( 'bos/badgeos-single-rank-block', array(
+        'render_callback' => 'badgeos_render_single_rank_block',
+        'category' => 'badgeos-blocks',
+        'attributes' => array(
+            'rank' => array(
+                'type' => 'string', 
+                'default'=> ''
+            ),
+            'show_description' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'show_thumb' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'show_title' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+        )
+    ));
+
     register_block_type( 'bos/badgeos-single-achievement-block', array(
         'render_callback' => 'badgeos_render_achievement_block',
         'category' => 'badgeos-blocks',
@@ -731,25 +822,54 @@ function badgeos_render_my_php_block(  ) {
         )
     ));
 
-    register_block_type( 'bos/badgeos-submission-form-block', array(
-        'render_callback' => 'badgeos_render_submission_form_block',
+    register_block_type( 'bos/badgeos-ranks-list-block', array(
+        'render_callback' => 'badgeos_render_ranks_list_blocks',
         'category' => 'badgeos-blocks',
         'attributes' => array(
-            'achievement' => array(
+            'types' => array(
                 'type' => 'string',
                 'default'=> ''
-            )
-        )
-    ));
-
-    register_block_type( 'bos/badgeos-nomination-form-block', array(
-        'render_callback' => 'badgeos_render_nomination_form_block',
-        'category' => 'badgeos-blocks',
-        'attributes' => array(
-            'achievement' => array(
+            ),
+            'limit' => array(
+                'type' => 'string',
+                'default'=> '10'
+            ),
+            'order' => array(
+                'type' => 'string',
+                'default'=> 'ASC'
+            ),
+            'orderby' => array(
+                'type' => 'string',
+                'default'=> 'rank_id'
+            ),
+            'user_id' => array(
                 'type' => 'string',
                 'default'=> ''
-            )
+            ),
+            'show_search' => array(
+                'type' => 'string',
+                'default'=> 'false'
+            ),
+            'show_description' => array(
+                'type' => 'string',
+                'default' => 'true'
+            ),
+            'show_thumb' => array(
+                'type' => 'string',
+                'default' => 'true'
+            ),
+            'show_title' => array(
+                'type' => 'string',
+                'default' => 'true'
+            ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
         )
     ));
 
@@ -804,29 +924,6 @@ function badgeos_render_my_php_block(  ) {
         )
     ));
 
-    register_block_type( 'bos/badgeos-nominations-list-block', array(
-        'render_callback' => 'badgeos_render_nominations_list_blocks',
-        'category' => 'badgeos-blocks',
-        'attributes' => array(
-            'limit' => array(
-                'type' => 'string',
-                'default'=> '10'
-            ),
-            'status' => array(
-                'type' => 'string',
-                'default'=> 'all'
-            ),
-            'show_filter' => array(
-                'type' => 'string',
-                'default'=> 'true'
-            ),
-            'show_search' => array(
-                'type' => 'string',
-                'default'=> 'true'
-            ),
-        )
-    ));
-
     register_block_type( 'bos/block-credly-assertion-page-block', array(
         'render_callback' => 'badgeos_render_credly_assertion_page_blocks',
         'category' => 'badgeos-blocks',
@@ -846,37 +943,23 @@ function badgeos_render_my_php_block(  ) {
         )
     ));
 
-    register_block_type( 'bos/badgeos-submission-list-block', array(
-        'render_callback' => 'badgeos_render_submission_list_blocks',
+    register_block_type( 'bos/badgeos-evidence-block', array(
+        'render_callback' => 'badgeos_render_evidence_blocks',
         'category' => 'badgeos-blocks',
         'attributes' => array(
-            'limit' => array(
+            'achievement' => array(
                 'type' => 'string',
-                'default'=> '10'
+                'default'=> ''
             ),
-            'status' => array(
+            'user_id' => array(
                 'type' => 'string',
-                'default'=> 'all'
+                'default'=> ''
             ),
-            'show_filter' => array(
+            'award_id' => array(
                 'type' => 'string',
-                'default'=> 'true'
+                'default'=> ''
             ),
-            'show_search' => array(
-                'type' => 'string',
-                'default'=> 'true'
-            ),
-            'show_attachments' => array(
-                'type' => 'string',
-                'default'=> 'true'
-            ),
-            'show_comments' => array(
-                'type' => 'string',
-                'default'=> 'true'
-            )
         )
     ));
-
-
 }
 add_action( 'init', 'badgeos_render_my_php_block');

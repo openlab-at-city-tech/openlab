@@ -3,7 +3,7 @@
 Plugin Name: BP MPO Activity Filter
 Plugin URI: http://github.com/boonebgorges/bp-mpo-activity-filter
 Description: When using More Privacy Options, this plugin removes items from BP activity streams according to user roles
-Version: 1.3.1
+Version: 1.3.2
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
 */

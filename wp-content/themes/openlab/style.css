@@ -8238,13 +8238,16 @@ body .group-header .bp-template-notice {
   padding: 6px 12px;
   text-align: left;
 }
+body .clone-acknowledgements p {
+  margin-bottom: 0.5em;
+}
 body .group-credits {
   list-style-type: none;
   margin: 0;
-  padding-left: 0;
+  padding-left: 15px;
 }
 body .group-credits li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
 }
 body .group-credits li:last-child {
   margin-bottom: 0;
@@ -9538,6 +9541,9 @@ body form .checkbox-list-container {
 #content .create-group-submenu .submenu-title {
   margin-right: 4px;
   border-right: none;
+}
+.shared-cloning-authorship-settings label {
+  font-weight: normal;
 }
 #group-list .group-item-wrapper .item-avatar {
   position: relative;

@@ -4236,7 +4236,7 @@ S2.define('select2/dropdown/attachBody',[
         // Modified 2018-02-22 by benjamin@imagely.com
         // See: https://github.com/select2/select2/issues/3125 -- without this if()
         // select2 will prevent scrolling inside the IGW window after being opened once
-        if ($(this).find('.select2-container--open').size() > 0) {
+        if ($(this).find('.select2-container--open').length > 0) {
             $(this).scrollTop(position.y);
         }
     });

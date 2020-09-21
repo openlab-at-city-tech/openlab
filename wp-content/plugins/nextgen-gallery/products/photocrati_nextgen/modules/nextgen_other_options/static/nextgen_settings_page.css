@@ -58,9 +58,9 @@
 	width: auto;
 }
 
-#image_width,
-#image_height{
-	width: 40px;
+#ngg_page_content .ngg_page_content_main #image_width,
+#ngg_page_content .ngg_page_content_main #image_height{
+	width: 53px;
 }
 
 #ngg_page_content #thumbnail_dimensions_width,
@@ -92,14 +92,6 @@ td.align-to-top {
 
 #lightbox_library_advanced_settings td {
 	text-align: right;
-}
-
-.gallery_page_ngg_other_options .ngg_options_promo {
-    display: table-cell;
-}
-
-.gallery_page_ngg_other_options .ngg_options_promo a {
-    margin-left: 20px;
 }
 
 #advanced_stylesheet_form td {

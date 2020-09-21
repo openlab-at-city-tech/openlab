@@ -793,7 +793,7 @@ jQuery(function($){
                     if (display_tab.length == 0) return;
                     else if (display_tab.css('visibility') == 'hidden') return;
                 }
-                var display_type = new this.DisplayType;
+                var display_type = new Ngg.DisplayTab.Views.DisplayType;
                 display_type.model = item;
                 display_type.on('selected', this.selection_changed, this);
                 if (!this.display_types.selected_value()) {
@@ -811,47 +811,49 @@ jQuery(function($){
             return this;
         },
 
-        DisplayType: Backbone.View.extend({
-            className: 'display_type_preview',
-
-            events: {
-                click: 'clicked'
-            },
-
-            clicked: function(e){
-                this.trigger('selected', this.model.get('name'));
-            },
-
-            render: function() {
-                // Create all elements
-                var image_container = $('<label style="display: block; cursor: pointer;"/>').addClass('image_container');
-
-                var img = $('<img/>').attr({
-                    src: this.model.get('preview_image_url'),
-                    title: this.model.get('title'),
-                    alt: this.model.get('alt')
-                });
-                var inner_div = $('<div/>');
-                var radio_button = $('<input/>').prop({
-                    type: 'radio',
-                    value: this.model.get('name'),
-                    title: this.model.get('title'),
-                    name: 'display_type',
-                    checked: this.model.get('selected')
-                });
-                var line_break = $('<br>');
-                image_container.append(inner_div);
-                image_container.append(img);
-                image_container.append('<br>');
-                image_container.append(this.model.get('title').replace(/nextgen /gi, ''));
-                inner_div.append(radio_button);
-                inner_div.append(line_break);
-                // inner_div.append(this.model.get('title').replace(/nextgen /gi, ''));
-                this.$el.append(image_container);
-                return this;
-            }
-        })
+        
     });
+
+    Ngg.DisplayTab.Views.DisplayType = Backbone.View.extend({
+        className: 'display_type_preview',
+
+        events: {
+            click: 'clicked'
+        },
+
+        clicked: function(e){
+            this.trigger('selected', this.model.get('name'));
+        },
+
+        render: function() {
+            // Create all elements
+            var image_container = $('<label style="display: block; cursor: pointer;"/>').addClass('image_container');
+
+            var img = $('<img/>').attr({
+                src: this.model.get('preview_image_url'),
+                title: this.model.get('title'),
+                alt: this.model.get('alt')
+            });
+            var inner_div = $('<div/>');
+            var radio_button = $('<input/>').prop({
+                type: 'radio',
+                value: this.model.get('name'),
+                title: this.model.get('title'),
+                name: 'display_type',
+                checked: this.model.get('selected')
+            });
+            var line_break = $('<br>');
+            image_container.append(inner_div);
+            image_container.append(img);
+            image_container.append('<br>');
+            image_container.append(this.model.get('title').replace(/nextgen /gi, ''));
+            inner_div.append(radio_button);
+            inner_div.append(line_break);
+            // inner_div.append(this.model.get('title').replace(/nextgen /gi, ''));
+            this.$el.append(image_container);
+            return this;
+        }
+    })
 
     Ngg.DisplayTab.Views.Preview_Area = Backbone.View.extend({
         el: '#preview_area',
@@ -1748,10 +1750,10 @@ jQuery(function($){
             new Ngg.DisplayTab.Views.SaveButton();
         }
     });
+    window.Ngg = Ngg;
+    $(window).trigger('ngg_before_igw_render');
     Ngg.DisplayTab.instance = new Ngg.DisplayTab.App();
     Ngg.DisplayTab.instance.render();
-
-    window.Ngg = Ngg;
 
     // Invoke styling libraries
     $('span.tooltip, label.tooltip').tooltip();

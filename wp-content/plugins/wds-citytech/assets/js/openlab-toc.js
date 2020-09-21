@@ -1,8 +1,10 @@
 jQuery(document).ready( function( $ ) {
+	var options = window.OpenLabTOC;
+
 	var app = {
 		init: function() {
 			// Handle "In Page TOC".
-			$( '#ez-toc-container' ).attr( 'aria-expanded', 'true' );
+			$( '#ez-toc-container' ).attr( 'aria-expanded', ! options.hideByDefault );
 			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
 
 			// No need to continue if we don't have widget.
@@ -16,7 +18,7 @@ jQuery(document).ready( function( $ ) {
 			app.observeSections();
 
 			// Hide by default on
-			if ( window.innerWidth < 1023 ) {
+			if ( window.innerWidth < 1023 || options.hideByDefault ) {
 				app.container.attr( 'aria-expanded', 'false' );
 			} else {
 				app.container.attr( 'aria-expanded', 'true' );

@@ -7,15 +7,13 @@ add_action( 'widgets_init', 'badgeos_register_widgets' );
 function badgeos_register_widgets() {
 
 	register_widget( 'earned_user_achievements_widget' );
-    if( badgeos_first_time_installed() ) {
-        register_widget( 'credly_credit_issuer_widget' );
-    }
-
+	
+	if( badgeos_first_time_installed() ) {
+		register_widget( 'credly_credit_issuer_widget' );
+	}
 }
 
 require_once( badgeos_get_directory_path() .'includes/widgets/earned-user-achievements-widget.php' );
 if( badgeos_first_time_installed() ) {
-    require_once( badgeos_get_directory_path() .'includes/widgets/credly-credit-issuer-widget.php' );
+	require_once( badgeos_get_directory_path() .'includes/widgets/credly-credit-issuer-widget.php' );
 }
-
-

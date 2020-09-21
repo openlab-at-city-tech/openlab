@@ -1,3 +1,7 @@
+#ngg_page_content .ngg_page_content_main {
+    min-height: 0;
+}
+
 #gallery_selection {
     background-color: #fff;
     padding: 7px;
