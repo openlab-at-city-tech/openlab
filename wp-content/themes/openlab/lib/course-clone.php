@@ -1123,6 +1123,7 @@ class Openlab_Clone_Course_Site {
 			'gf_form_meta',
 			'gf_form_revisions',
 			'gf_form_view',
+			'gf_addon_feed',
 			'rg_form',
 			'rg_form_meta',
 			'rg_form_view',
