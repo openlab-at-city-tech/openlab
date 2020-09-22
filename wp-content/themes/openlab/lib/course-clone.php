@@ -1123,12 +1123,23 @@ class Openlab_Clone_Course_Site {
 			'gf_form_meta',
 			'gf_form_revisions',
 			'gf_form_view',
+			'rg_form',
+			'rg_form_meta',
+			'rg_form_view',
+			'rg_incomplete_submissions',
+			'rg_lead',
+			'rg_lead_detail',
+			'rg_lead_detail_long',
+			'rg_lead_meta',
+			'rg_lead_notes',
 		];
 
 		$with_data = [
 			'gf_form',
 			'gf_form_meta',
 			'gf_form_revisions',
+			'rg_form',
+			'rg_form_meta',
 		];
 
 		foreach ( $tables_to_copy as $ttc ) {
