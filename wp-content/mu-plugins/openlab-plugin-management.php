@@ -42,7 +42,6 @@ function openlab_hide_plugins( $plugins ) {
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
-		'highlighter-pro/highlighter.php',
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'media-cleaner/media-cleaner.php',
