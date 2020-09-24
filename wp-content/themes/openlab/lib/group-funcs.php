@@ -513,7 +513,11 @@ function cuny_group_single() {
                                     <div class="col-xs-24 status-message italics">
 										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in faculty.
 
-										<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
+										<?php
+										$exclude_hidden   = ! current_user_can( 'bp_moderate' );
+										$descendant_count = openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden );
+										?>
+
 										<?php if ( $descendant_count > 0 ) : ?>
 											<?php
 											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
@@ -628,7 +632,11 @@ function cuny_group_single() {
 									<div class="col-xs-24 status-message italics">
 										This <?php echo esc_html( $group_type ); ?> may be cloned by logged-in OpenLab members.
 
-										<?php $descendant_count = openlab_get_clone_descendant_count_of_group( $group_id ); ?>
+										<?php
+										$exclude_hidden   = ! current_user_can( 'bp_moderate' );
+										$descendant_count = openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden );
+										?>
+
 										<?php if ( $descendant_count > 0 ) : ?>
 											<?php
 											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
