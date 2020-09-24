@@ -518,8 +518,9 @@ function cuny_group_single() {
 											<?php
 											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
 											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
+											$count_message    = _n( 'It has been cloned or re-cloned %s time', 'It has been cloned or re-cloned %s times', $descendant_count, 'commons-in-a-box' );
 											?>
-											It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
+											<?php echo esc_html( sprintf( $count_message, number_format_i18n( $descendant_count ) ) ); ?>; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
 										<?php endif; ?>
 									</div>
 								</div>
@@ -632,8 +633,9 @@ function cuny_group_single() {
 											<?php
 											$view_clones_link = trailingslashit( home_url( $group_type . 's' ) );
 											$view_clones_link = add_query_arg( 'descendant-of', $group_id, $view_clones_link );
+											$count_message    = _n( 'It has been cloned or re-cloned %s time', 'It has been cloned or re-cloned %s times', $descendant_count, 'commons-in-a-box' );
 											?>
-											It has been cloned or re-cloned <?php echo esc_html( $descendant_count ); ?> times; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
+											<?php echo esc_html( sprintf( $count_message, number_format_i18n( $descendant_count ) ) ); ?>; <a href="<?php echo esc_attr( $view_clones_link ); ?>">view clones</a>.
 										<?php endif; ?>
 									</div>
 								</div>
