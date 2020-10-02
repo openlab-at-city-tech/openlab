@@ -1,5 +1,5 @@
 <p>
-    <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title: (defaults to "")'); ?></label>
+    <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title: (defaults to "Course GradeBook")'); ?></label>
     <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_html($title); ?>" />
 </p>
 <p>
