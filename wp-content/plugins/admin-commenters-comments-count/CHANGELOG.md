@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.4 _(2020-09-13)_
+* Change: Convert to use of strict equality checks
+* Change: Restructure unit test file structure
+    * New: Create new subdirectory `phpunit/` to house all files related to unit testing
+    * Change: Move `bin/` to `phpunit/bin/`
+    * Change: Move `tests/bootstrap.php` to `phpunit/`
+    * Change: Move `tests/` to `phpunit/tests/`
+    * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+* Change: Note compatibility through WP 5.5+
+* Change: Tweak inline function documentation
+* Change: Update list of TODO items to add some considerations to an existing item, fix a type, change sublist syntax
+* Unit tests:
+    * New: Add tests for `add_user_column()`, `enqueue_admin_css()`, `handle_column_data()`
+
 ## 1.9.3 _(2020-06-03)_
 * New: Add TODO.md and move existing TODO list from top of main plugin file into it (and add to it)
 * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and remove commented-out code)
