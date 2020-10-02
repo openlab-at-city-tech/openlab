@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.4.1
-Stable tag: 3.6.4
+Tested up to: 5.5.1
+Stable tag: 3.6.6
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -245,6 +245,19 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 3.6.6 =
+* New: Award users for completing the number of years
+* New: Award points to users for user's birthday
+* New: Award author when a user visits post/page
+* New: Award points when a certain rank is achieved
+* Fix: Updated Congratulations message note
+* Fix: Daily Visit Website trigger is not working
+* Fix: Fix UI issues in Welcome screen
+
+= 3.6.5 =
+* New: Added a Welcome page
+* New: Added Global and individual BCC and CC options on badgeos emails
+* New: Added multi-site support
 
 = 3.6.4 =
 * New: Open Badge Verification pop-up enhancements to add issuer, issued by, expire date and issue date

@@ -27,7 +27,7 @@ function badgeos_achievment_type_metaboxes() {
 	// Setup our $post_id, if available
 	$post_id = isset( $_GET['post'] ) ? $_GET['post'] : 0;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 	// New Achievement Types
     $cmb_obj = new_cmb2_box( array(
@@ -94,7 +94,7 @@ function badgeos_achievment_metaboxes( ) {
     // Start with an underscore to hide fields from custom fields list
     $prefix = '_badgeos_';
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
     // Grab our achievement types as an array
     $achievement_types_temp = badgeos_get_achievement_types_slugs();
@@ -174,9 +174,13 @@ function badgeos_achievment_metaboxes( ) {
         'id'   => $prefix . 'show_earners',
         'type' => 'checkbox',
     ));
+    $note_text = __( 'Displayed after achievement is earned. If you would like the message to appear as a pop-up, please install <a href="https://badgeos.org/downloads/congratulations/" target="_blank">Congratulations Add-On</a>.', 'badgeos' );
+    $note_text .= "<br>";
+    $note_text .= __( ' If sending to Credly, a great place for a testimonial for those who complete this achievement. ', 'badgeos' );
+    
     $cmb_obj->add_field(array(
-        'name' => __( 'Congratulations Text', 'badgeos' ),
-        'desc' => __( 'Displayed after achievement is earned. If sending to Credly, a great place for a testimonial for those who complete this achievement.', 'badgeos' ),
+        'name' => __( 'Congratulations Text', 'badgeos' ), 
+        'desc' => $note_text,
         'id'   => $prefix . 'congratulations_text',
         'type' => 'textarea',
     ));

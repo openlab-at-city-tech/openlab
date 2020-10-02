@@ -21,7 +21,7 @@ if( !defined( 'ABSPATH' ) ) exit;
  * @return false|string
  */
 function badgeos_get_post_type( $post_id = null ) {
-    return get_post_type( $post_id );
+    return badgeos_utilities::get_post_type( $post_id );
 }
 
 /**
@@ -41,7 +41,7 @@ function badgeos_is_rank( $post = null ) {
     if( gettype( $post ) === 'string' ) {
         $post_type = $post;
     } else {
-        $post_type = badgeos_get_post_type( $post );
+        $post_type = badgeos_utilities::get_post_type( $post );
     }
 
     /**
@@ -121,7 +121,7 @@ function badgeos_get_user_rank_id( $user_id = null, $rank_type = '' ) {
         $meta = "_badgeos_{$rank_type}_rank";
     }
 
-    $current_rank_id = get_user_meta( $user_id, $meta );
+    $current_rank_id = badgeos_utilities::get_user_meta( $user_id, $meta );
 
     if( ! $current_rank_id ) {
 
@@ -160,7 +160,7 @@ function badgeos_get_user_rank( $user_id = null, $rank_type = '' ) {
     }
 
     $current_rank_id = badgeos_get_user_rank_id( $user_id, $rank_type );
-    $rank = get_post( $current_rank_id );
+    $rank = badgeos_utilities::badgeos_get_post( $current_rank_id );
 
     if( $rank ) {
         return apply_filters( 'badgeos_get_user_rank', $rank, $user_id, $current_rank_id );
@@ -231,7 +231,7 @@ function badgeos_get_next_rank_id( $rank_id = null ) {
         $rank_id = get_the_ID();
     }
 
-    $rank_type = badgeos_get_post_type( $rank_id );
+    $rank_type = badgeos_utilities::get_post_type( $rank_id );
 
     /**
      * Get lowest priority rank but bigger than current one
@@ -319,7 +319,7 @@ function badgeos_get_next_rank( $rank_id = null ) {
         return false;
     }
 
-    $rank = badgeos_get_post( $next_rank_id );
+    $rank = badgeos_utilities::badgeos_get_post( $next_rank_id );
 
     if( $rank ) {
         return apply_filters( 'badgeos_get_next_rank', $rank, $next_rank_id, $rank_id );
@@ -342,7 +342,7 @@ function badgeos_get_prev_rank_id( $rank_id = null ) {
         $rank_id = get_the_ID();
     }
 
-    $rank_type = badgeos_get_post_type( $rank_id );
+    $rank_type = badgeos_utilities::get_post_type( $rank_id );
 
     /**
      * Get highest priority rank but less than current one
@@ -386,7 +386,7 @@ function badgeos_get_prev_rank( $rank_id = null ) {
         return false;
     }
 
-    $rank = badgeos_get_post( $prev_rank_id );
+    $rank = badgeos_utilities::badgeos_get_post( $prev_rank_id );
 
     if( $rank ) {
         return apply_filters( 'badgeos_get_prev_rank', $rank, $prev_rank_id, $rank_id );
@@ -409,7 +409,7 @@ function badgeos_get_prev_user_rank_id( $user_id = null, $rank_type = '' ) {
     }
 
     $old_meta = "_badgeos_{$rank_type}_previous_rank";
-    $prev_user_rank_id = absint( get_user_meta( $user_id, $old_meta ) );
+    $prev_user_rank_id = absint( badgeos_utilities::get_user_meta( $user_id, $old_meta ) );
 
     /**
      * Check if there is a previous rank stored, if not, try to get previous rank of current user rank
@@ -544,7 +544,7 @@ function badgeos_log_users_ranks( $rank_id, $user_id, $action, $admin_id = 0  ) 
      */
 	$user  = get_userdata( $user_id );
 	$admin = get_userdata( $admin_id );
-    $rank = get_post( $rank_id );
+    $rank = badgeos_utilities::badgeos_get_post( $rank_id );
 
     if( $action == 'Revoked'){
 
@@ -572,11 +572,11 @@ function badgeos_log_users_ranks( $rank_id, $user_id, $action, $admin_id = 0  ) 
 	/**
      * Add relevant meta to our log entry
      */
-	update_post_meta( $log_entry_id, '_badgeos_rank_id', $rank_id );
-    update_post_meta( $log_entry_id, '_badgeos_user_id', $user_id );
-    update_post_meta( $log_entry_id, '_badgeos_action', $action );
+	badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_rank_id', $rank_id );
+    badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_user_id', $user_id );
+    badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_action', $action );
 	if ( $admin_id ) {
-        update_post_meta( $log_entry_id, '_badgeos_admin_id', $admin_id );
+        badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_admin_id', $admin_id );
     }
 }
 
@@ -610,8 +610,8 @@ function badgeos_update_user_rank( $args = array() ) {
         return false;
     }
 
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if( badgeos_user_has_a_rank( $args['rank_id'], $args['user_id'] ) && get_post_type( $args['rank_id'] ) != trim( $settings['ranks_step_post_type'] ) ) {
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( badgeos_user_has_a_rank( $args['rank_id'], $args['user_id'] ) && badgeos_utilities::get_post_type( $args['rank_id'] ) != trim( $settings['ranks_step_post_type'] ) ) {
         return false;
     }
 
@@ -727,7 +727,7 @@ function badgeos_build_rank_object( $rank_id = 0 ) {
 	/**
      * Grab the new rank's $post data, and bail if it doesn't exist
      */
-	$rank = get_post( $rank_id );
+	$rank = badgeos_utilities::badgeos_get_post( $rank_id );
 	if ( is_null( $rank ) )
 		return false;
 
@@ -820,7 +820,7 @@ function badgeos_get_user_ranks( $args = array() ) {
     }
 
     if( $args['no_steps'] == true ) {
-        $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
         $where .= " AND ( rank_type != '" .trim( $settings['ranks_step_post_type'] ). "')";
     }
     
@@ -873,7 +873,7 @@ function badgeos_get_rank_requirement_rank( $rank_requirement_id = 0 ) {
         /**
          * If has parent, return his post object
          */
-        return get_post( $rank_id );
+        return badgeos_utilities::badgeos_get_post( $rank_id );
     } else {
         return false;
     }
@@ -888,7 +888,7 @@ function badgeos_get_rank_requirement_rank( $rank_requirement_id = 0 ) {
  */
 function badgeos_get_rank_earned_time( $user_id = 0, $rank_type = '' ) {
 
-    $earned_time = absint( get_user_meta( $user_id, "_badgeos_{$rank_type}_rank_earned_time" ) );
+    $earned_time = absint( badgeos_utilities::get_user_meta( $user_id, "_badgeos_{$rank_type}_rank_earned_time" ) );
 
     /**
      * If user has not earned a rank of this type, try to get the lowest priority rank and get its publish date
@@ -923,93 +923,13 @@ function badgeos_get_rank_requirements( $rank_id = 0, $post_status = 'publish' )
         $rank_id = $post->ID;
     }
 
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $requirements = $wpdb->get_results( $wpdb->prepare( "SELECT p.*, pp.* FROM $wpdb->p2p as pp inner join $wpdb->posts as p on(pp.p2p_from = p.ID) WHERE pp.p2p_to = %d and p.post_type = %s", $rank_id, trim( $settings['ranks_step_post_type'] )  ) );
 
     /**
      * Return rank requirements array
      */
     return $requirements;
-}
-
-/**
- * Return rank post thumbnail
- *
- * @param int $post_id
- * @param string $image_size
- * @param string $class
- * @return bool|string
- */
-function badgeos_get_rank_post_thumbnail( $post_id = 0, $image_size = 'badgeos-rank', $class = 'badgeos-rank-thumbnail' ) {
-
-    /**
-     * Get our rank thumbnail
-     */
-    $image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
-
-    /**
-     * If we don't have an image.
-     */
-    if ( ! $image ) {
-
-        /**
-         * Grab our rank type's post thumbnail
-         */
-        $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-        $rank = get_page_by_path( badgeos_get_post_type( $post_id ), OBJECT, trim( $settings['ranks_main_post_type'] ) );
-        $image = is_object( $rank ) ? get_the_post_thumbnail( $rank->ID, $image_size, array( 'class' => $class ) ) : false;
-
-        /**
-         * If we still have no image
-         */
-        if ( ! $image ) {
-
-            /**
-             * If we already have an array for image size
-             */
-            if ( is_array( $image_size ) ) {
-
-                /**
-                 * Write our sizes to an associative array
-                 */
-                $image_sizes['width'] = $image_size[0];
-                $image_sizes['height'] = $image_size[1];
-
-                /**
-                 * Otherwise, attempt to grab the width/height from our specified image size
-                 */
-            } else {
-                global $_wp_additional_image_sizes;
-                if ( isset( $_wp_additional_image_sizes[$image_size] ) )
-                    $image_sizes = $_wp_additional_image_sizes[$image_size];
-            }
-
-            /**
-             * If we can't get the defined width/height, set our own
-             */
-            if ( empty( $image_sizes ) ) {
-                $image_sizes = array(
-                    'width'  => 100,
-                    'height' => 100
-                );
-            }
-
-            /**
-             * Available filter: 'badgeos_default_rank_post_thumbnail'
-             */
-            $default_thumbnail = apply_filters( 'badgeos_default_rank_post_thumbnail', '', $rank, $image_sizes );
-
-            if( ! empty( $default_thumbnail ) ) {
-                $image = '<img src="' . $default_thumbnail . '" width="' . $image_sizes['width'] . '" height="' . $image_sizes['height'] . '" class="' . $class . '">';
-            }
-
-        }
-    }
-
-    /**
-     * Return our image tag
-     */
-    return $image;
 }
 
 /**
@@ -1059,7 +979,7 @@ function badgeos_get_rank_earners( $rank_id = 0 ) {
 
     global $wpdb;
 
-    $rank_type = badgeos_get_post_type( $rank_id );
+    $rank_type = badgeos_utilities::get_post_type( $rank_id );
 
     $meta = '_badgeos_rank';
 
@@ -1116,7 +1036,7 @@ function badgeos_get_rank_priority( $rank_id = 0 ) {
 
     if( badgeos_get_post_field( 'post_status', $rank_id ) === 'auto-draft' ) {
 
-        $rank_type = badgeos_get_post_type( $rank_id );
+        $rank_type = badgeos_utilities::get_post_type( $rank_id );
 
         /**
          * Get higher menu order
@@ -1147,7 +1067,7 @@ function badgeos_get_rank_priority( $rank_id = 0 ) {
  */
 function badgeos_flush_rewrite_on_published_rank( $new_status, $old_status, $post ) {
     
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' )) ? $exists : array();
     if ( trim( $settings['ranks_main_post_type'] ) === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
         badgeos_flush_rewrite_rules();
     }
@@ -1176,7 +1096,7 @@ function badgeos_maybe_update_rank_type( $data = array(), $post_args = array() )
     /**
      * Bail if not is a points type
      */
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     if( $post_args['post_type'] !== trim( $settings['ranks_main_post_type'] )) {
         return $data;
     }
@@ -1196,7 +1116,7 @@ function badgeos_maybe_update_rank_type( $data = array(), $post_args = array() )
 
     if ( badgeos_rank_type_changed( $post_args ) ) {
 
-        $original_type = badgeos_get_post( $post_args['ID'] )->post_name;
+        $original_type = badgeos_utilities::badgeos_get_post( $post_args['ID'] )->post_name;
         $new_type = $post_args['post_name'];
         $data['post_name'] = badgeos_update_rank_types( $new_type, $new_type );
         add_filter( 'redirect_post_location', 'badgeos_rank_type_rename_redirect', 99 );
@@ -1213,7 +1133,7 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_rank_type' , 99, 2 );
  */
 function badgeos_get_rank_types_list() {
 
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 	$rank_types = get_posts( array(
 		'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
@@ -1230,7 +1150,7 @@ function badgeos_get_rank_types_list() {
  */
 function badgeos_get_rank_types_slugs_detailed() {
 
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 	$rank_types = get_posts( array(
 		'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
@@ -1238,7 +1158,7 @@ function badgeos_get_rank_types_slugs_detailed() {
 	) );
 	$main = array();
 	foreach ( $rank_types as $rtype ) {
-		$plural_name = get_post_meta( $rtype->ID, '_badgeos_plural_name', true );
+		$plural_name = badgeos_utilities::get_post_meta( $rtype->ID, '_badgeos_plural_name', true );
 		$main[ $rtype->post_name ] = array( 'singular_name' => $rtype->post_title, 'plural_name' => $plural_name );
 	}
 	
@@ -1257,9 +1177,9 @@ function badgeos_rank_type_changed( $post_args = array() ) {
         return false;
     }
 
-    $original_post = ( !empty( $post_args['ID'] ) && isset( $post_args['ID'] ) ) ? get_post( $post_args['ID'] ) : null;
+    $original_post = ( !empty( $post_args['ID'] ) && isset( $post_args['ID'] ) ) ? badgeos_utilities::badgeos_get_post( $post_args['ID'] ) : null;
     $status = false;
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     if ( is_object( $original_post ) ) {
         if (
             trim( $settings['ranks_main_post_type'] ) === $post_args['post_type']
@@ -1365,7 +1285,7 @@ function badgeos_rank_type_rename_redirect( $location = '' ) {
  * @return mixed
  */
 function badgeos_rank_type_update_messages( $messages ) {
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $messages[ trim( $settings['ranks_main_post_type'] ) ] = array_fill( 1, 10, __( 'Rank Type saved successfully.', 'badgeos' ) );
     $messages[ trim( $settings['ranks_main_post_type'] ) ][ '99' ] = sprintf( __('Rank Type renamed successfully. <p>All ranks of this type, and all active and earned user ranks, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old rank type slug must be updated <strong>manually</strong>.', 'badgeos'), '<a href="' . esc_url( admin_url( 'widgets.php' ) ) . '">' . __( 'widgets', 'badgeos' ) . '</a>' );
 
@@ -1495,16 +1415,16 @@ function badgeos_display_ranks_to_award() {
                         /**
                          * If not default rank, bail here
                          */
-                        $rank = get_post( get_the_ID() );
+                        $rank = badgeos_utilities::badgeos_get_post( get_the_ID() );
                         $id = '';
                         if( $rank->menu_order < 1 ) {
                             $id = 'default-rank';
                         }
 
-                        $return .= '<tr class="'. get_post_type( get_the_ID() ) .'" id="'. $id .'">';
+                        $return .= '<tr class="'. badgeos_utilities::get_post_type( get_the_ID() ) .'" id="'. $id .'">';
                         $return .= '<td>' . $ranks_image . '</td>';
                         $return .= '<td>' . get_the_title() . '</td>';
-                        $return .= '<td>' . get_post_type( get_the_ID() ) . '</td>';
+                        $return .= '<td>' . badgeos_utilities::get_post_type( get_the_ID() ) . '</td>';
                         $return .= '<td class="award-rank-column"><span class="award-rank" data-user-id="'. $user_id .'" data-admin-ajax="'. admin_url( 'admin-ajax.php' ) .'" data-rank-id="'. get_the_ID() .'">';
                         $return .= __( 'Award Rank', 'badgeos' );
                         $return .= '</span>';
@@ -1553,11 +1473,12 @@ function badgeos_award_rank_using_get_param() {
     $rank_id = ( isset( $_GET['rank_id'] ) ? $_GET['rank_id'] : 0 );
 
     if( $user_id != 0 && $rank_id != 0 ) {
+        
         badgeos_update_user_rank( array(
             'user_id'           => $user_id,
             'site_id'           => get_current_blog_id(),
             'rank_id'           => (int) $rank_id,
-            'credit_id'         => 0,
+            'credit_id'         =>  0,
             'credit_amount'     => 0,
             'admin_id'          => ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ),
         )  );
@@ -1605,7 +1526,7 @@ function award_default_ranks_to_user( $user_id ) {
                     /**
                      * If not default rank, bail here
                      */
-                    $rank = get_post( get_the_ID() );
+                    $rank = badgeos_utilities::badgeos_get_post( get_the_ID() );
                     if( $rank->menu_order > 0 ) {
                         continue;
                     }
@@ -1659,7 +1580,17 @@ function badgeos_add_rank( $args = array() ) {
      */
     $new_rank = $args['new_rank'];
     if( $new_rank !== false ) {
-
+        
+        if( ( ! isset( $args['credit_id'] ) || intval( $args['credit_id'] ) == 0 ) || ( ! isset( $args['credit_amount'] ) || intval( $args['credit_amount'] ) == 0 ) ) {
+            $points = badgeos_utilities::get_post_meta( $new_rank->ID, '_ranks_points', true );
+            if( is_array( $points ) && count( $points ) > 0 ) {
+                if( array_key_exists( '_ranks_points', $points ) && array_key_exists( '_ranks_points_type', $points ) )  {
+                    $args['credit_amount']  = $points['_ranks_points'];
+                    $args['credit_id']	    = $points['_ranks_points_type'];
+                } 
+            }
+        }
+        
         /**
          * Available action to trigger
          * Before awarding
@@ -1687,13 +1618,14 @@ function badgeos_add_rank( $args = array() ) {
             'admin_id'              => $args['admin_id'],
             'this_trigger'          => $args['this_trigger'],
             'priority'              => $priority,
+            'actual_date_earned'    => badgeos_default_datetime( 'mysql_ranks' ),
             'dateadded'             => current_time( 'mysql' )
         ));
 
         $rank_entry_id = $wpdb->insert_id;
 
-        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $rank_entry_id );
-        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank_earned_time', $new_rank->date_earned );
+        badgeos_utilities::update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $rank_entry_id );
+        badgeos_utilities::update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank_earned_time', $new_rank->date_earned );
 
         /**
          * Available action to trigger
@@ -1709,6 +1641,11 @@ function badgeos_add_rank( $args = array() ) {
             $args['this_trigger'],
             $rank_entry_id
         );
+
+        if( ( isset( $args['credit_id'] ) && intval( $args['credit_id'] ) > 0 ) && ( isset( $args['credit_amount'] ) && intval( $args['credit_amount'] ) > 0 ) ) {
+            badgeos_award_credit( $args['credit_id'], $args['user_id'], 'Award', $args['credit_amount'], 'user_ranks_awarded_points', $args['user_id'], '', $new_rank->ID );
+        }
+        
 
         return $wpdb->insert_id;
     }
@@ -1780,7 +1717,7 @@ function badgeos_remove_rank( $ranks = array() ) {
             $user_triggers = badgeos_ranks_get_user_triggers( $req->ID, $args['user_id'], false  );
             $user_triggers[ $site_id ][ $trigger . "_" . $req->ID ] = 0;
 
-            update_user_meta( $args['user_id'], '_badgeos_ranks_triggers', $user_triggers );
+            badgeos_utilities::update_user_meta( $args['user_id'], '_badgeos_ranks_triggers', $user_triggers );
         }
 
         $where_req = array( 'user_id' => $args['user_id'] );
@@ -1869,7 +1806,7 @@ function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
  */
 function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = '' ) {
     
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
  
     if( intval( $rank_width ) == 0 ) {
         $rank_width = '50';
@@ -1886,9 +1823,13 @@ function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = 
     }
 
     $ranks_image = wp_get_attachment_image( get_post_thumbnail_id( $rank_id ), array( $rank_width, $rank_height ) );
-
+    
+    $ranks_image = apply_filters( 'badgeos_rank_post_thumbnail', $ranks_image, $rank_id, $rank_width, $rank_height );
+    
     if( empty( $ranks_image ) ) {
-        $ranks_image = '<img src="'.badgeos_get_directory_url() . 'images/rank-default.png" width="'.$rank_width.'px" height="'.$rank_height.'px" />';
+        
+        $default_image = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url() . 'images/rank-default.png', $rank_id, $rank_width, $rank_height );
+        $ranks_image = '<img src="'.$default_image.'" width="'.$rank_width.'px" height="'.$rank_height.'px" />';
     }
 
     return $ranks_image;
@@ -1904,11 +1845,11 @@ function badgeos_ranks_set_default_thumbnail( $post_id ) {
 
     global $pagenow;
 
-    $badgeos_settings = get_option( 'badgeos_settings' );
+    $badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
     if (
         ! (
             badgeos_is_rank( $post_id )
-            || $badgeos_settings['ranks_main_post_type'] == get_post_type( $post_id )
+            || $badgeos_settings['ranks_main_post_type'] == badgeos_utilities::get_post_type( $post_id )
         )
         || ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
         || ! current_user_can( 'edit_post', $post_id )
@@ -1924,7 +1865,7 @@ function badgeos_ranks_set_default_thumbnail( $post_id ) {
     if ( empty( $thumbnail_id ) ) {
         global $wpdb;
 
-        $rank = get_page_by_path( badgeos_get_post_type( $post_id ), OBJECT, trim( $badgeos_settings['ranks_main_post_type'] ) );
+        $rank = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, trim( $badgeos_settings['ranks_main_post_type'] ) );
 
         // Grab the default image
         $file = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url().'images/rank-main.png', $rank, array() );
