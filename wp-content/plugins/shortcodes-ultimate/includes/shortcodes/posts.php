@@ -187,7 +187,7 @@ su_add_shortcode(
 				'default' => 'no',
 				'name'    => __( 'Ignore sticky', 'shortcodes-ultimate' ),
 				'desc'    => __(
-					'Select Yes to ignore posts that is sticked',
+					'Set to yes to prevent sticky posts from being moved to the start of the returned list of posts. They are still included, but appear in regular order.',
 					'shortcodes-ultimate'
 				),
 			),

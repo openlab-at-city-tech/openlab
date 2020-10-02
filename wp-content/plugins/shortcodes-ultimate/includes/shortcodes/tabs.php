@@ -12,7 +12,7 @@ su_add_shortcode(
 		'icon'           => 'list-alt',
 		'image'          => su_get_plugin_url() . 'admin/images/shortcodes/tabs.svg',
 		'atts'           => array(
-			'style'    => array(
+			'style'         => array(
 				'type'    => 'select',
 				'values'  => array(
 					'default' => __( 'Default', 'shortcodes-ultimate' ),
@@ -21,7 +21,7 @@ su_add_shortcode(
 				'name'    => __( 'Style', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Choose style for this tabs', 'shortcodes-ultimate' ) . '%su_skins_link%',
 			),
-			'active'   => array(
+			'active'        => array(
 				'type'    => 'number',
 				'min'     => 1,
 				'max'     => 100,
@@ -30,13 +30,13 @@ su_add_shortcode(
 				'name'    => __( 'Active tab', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Select which tab is open by default', 'shortcodes-ultimate' ),
 			),
-			'vertical' => array(
+			'vertical'      => array(
 				'type'    => 'bool',
 				'default' => 'no',
 				'name'    => __( 'Vertical', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Align tabs vertically', 'shortcodes-ultimate' ),
 			),
-			'mobile'   => array(
+			'mobile'        => array(
 				'type'    => 'select',
 				'values'  => array(
 					'stack'   => __( 'Stack – tab handles will stack vertically', 'shortcodes-ultimate' ),
@@ -47,7 +47,13 @@ su_add_shortcode(
 				'name'    => __( 'Appearance on mobile devices', 'shortcodes-ultimate' ),
 				'desc'    => __( 'This option controls how shortcode will look and function on mobile devices.', 'shortcodes-ultimate' ),
 			),
-			'class'    => array(
+			'anchor_in_url' => array(
+				'type'    => 'bool',
+				'default' => 'no',
+				'name'    => __( 'Anchor in URL', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option specifies whether an anchor will be added to page URL after clicking a tab', 'shortcodes-ultimate' ),
+			),
+			'class'         => array(
 				'type'    => 'extra_css_class',
 				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
@@ -130,6 +136,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 			'style'         => 'default', // 3.x
 			'mobile'        => 'stack',
 			'scroll_offset' => 0,
+			'anchor_in_url' => 'no',
 			'class'         => '',
 		),
 		$atts,
@@ -167,7 +174,7 @@ function su_shortcode_tabs( $atts = null, $content = null ) {
 
 	$atts['mobile'] = sanitize_key( $atts['mobile'] );
 
-	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '" data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
+	$output = '<div class="su-tabs su-tabs-style-' . $atts['style'] . ' su-tabs-mobile-' . $atts['mobile'] . su_get_css_class( $atts ) . '" data-active="' . (string) $atts['active'] . '" data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-tabs-nav">' . implode( '', $tabs ) . '</div><div class="su-tabs-panes">' . implode( "\n", $panes ) . '</div></div>';
 
 	// Reset tabs
 	$shortcodes_ultimate_global_tabs       = array();

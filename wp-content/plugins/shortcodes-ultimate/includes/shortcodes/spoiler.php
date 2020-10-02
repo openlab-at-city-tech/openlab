@@ -8,18 +8,18 @@ su_add_shortcode(
 		'type'     => 'wrap',
 		'group'    => 'box',
 		'atts'     => array(
-			'title'  => array(
+			'title'         => array(
 				'default' => __( 'Spoiler title', 'shortcodes-ultimate' ),
 				'name'    => __( 'Title', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Text in spoiler title', 'shortcodes-ultimate' ),
 			),
-			'open'   => array(
+			'open'          => array(
 				'type'    => 'bool',
 				'default' => 'no',
 				'name'    => __( 'Open', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Is spoiler content visible by default', 'shortcodes-ultimate' ),
 			),
-			'style'  => array(
+			'style'         => array(
 				'type'    => 'select',
 				'values'  => array(
 					'default' => __( 'Default', 'shortcodes-ultimate' ),
@@ -30,7 +30,7 @@ su_add_shortcode(
 				'name'    => __( 'Style', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Choose style for this spoiler', 'shortcodes-ultimate' ) . '%su_skins_link%',
 			),
-			'icon'   => array(
+			'icon'          => array(
 				'type'    => 'select',
 				'values'  => array(
 					'plus'           => __( 'Plus', 'shortcodes-ultimate' ),
@@ -51,12 +51,18 @@ su_add_shortcode(
 				'name'    => __( 'Icon', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Icons for spoiler', 'shortcodes-ultimate' ),
 			),
-			'anchor' => array(
+			'anchor'        => array(
 				'default' => '',
 				'name'    => __( 'Anchor', 'shortcodes-ultimate' ),
 				'desc'    => __( 'You can use unique anchor for this spoiler to access it with hash in page url. For example: type here <b%value>Hello</b> and then use url like http://example.com/page-url#Hello. This spoiler will be open and scrolled in', 'shortcodes-ultimate' ),
 			),
-			'class'  => array(
+			'anchor_in_url' => array(
+				'type'    => 'bool',
+				'default' => 'no',
+				'name'    => __( 'Anchor in URL', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option specifies whether an anchor will be added to page URL after clicking the spoiler', 'shortcodes-ultimate' ),
+			),
+			'class'         => array(
 				'type'    => 'extra_css_class',
 				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
@@ -80,6 +86,7 @@ function su_shortcode_spoiler( $atts = null, $content = null ) {
 			'style'         => 'default',
 			'icon'          => 'plus',
 			'anchor'        => '',
+			'anchor_in_url' => 'no',
 			'scroll_offset' => 0,
 			'class'         => '',
 		),
@@ -96,5 +103,5 @@ function su_shortcode_spoiler( $atts = null, $content = null ) {
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'su-shortcodes' );
 	do_action( 'su/shortcode/spoiler', $atts );
-	return '<div class="su-spoiler su-spoiler-style-' . $atts['style'] . ' su-spoiler-icon-' . $atts['icon'] . su_get_css_class( $atts ) . '"' . $atts['anchor'] . ' data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '"><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'] ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
+	return '<div class="su-spoiler su-spoiler-style-' . $atts['style'] . ' su-spoiler-icon-' . $atts['icon'] . su_get_css_class( $atts ) . '"' . $atts['anchor'] . ' data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'] ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
 }

@@ -182,6 +182,12 @@ su_add_shortcode(
 				'name'    => __( 'Outline on focus', 'shortcodes-ultimate' ),
 				'desc'    => __( 'This option enables outline when carousel gets focus. The outline improves keyboard navigation.', 'shortcodes-ultimate' ),
 			),
+			'random'         => array(
+				'type'    => 'bool',
+				'default' => 'no',
+				'name'    => __( 'Random order', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option enables random order for selected images', 'shortcodes-ultimate' ),
+			),
 			'class'          => array(
 				'type'    => 'extra_css_class',
 				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
