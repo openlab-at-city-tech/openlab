@@ -1746,7 +1746,7 @@ body.my-account #bbpress-forums {
 }
 
 .wpcf7-not-valid-tip {
-	color: #f00;
+	color: #dc3232;
 	font-size: 1em;
 	font-weight: normal;
 	display: block;
@@ -1757,7 +1757,7 @@ body.my-account #bbpress-forums {
 	top: 20%;
 	left: 20%;
 	z-index: 100;
-	border: 1px solid #ff0000;
+	border: 1px solid #dc3232;
 	background: #fff;
 	padding: .2em .8em;
 }
