@@ -5,8 +5,8 @@ Tags: commenters, comment count, comment author, comments, comment, admin, coffe
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.6
-Tested up to: 5.4
-Stable tag: 1.9.3
+Tested up to: 5.5
+Stable tag: 1.9.4
 
 Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
 
@@ -82,6 +82,20 @@ Yes.
 
 == Changelog ==
 
+= 1.9.4 (2020-09-13) =
+* Change: Convert to use of strict equality checks
+* Change: Restructure unit test file structure
+    * New: Create new subdirectory `phpunit/` to house all files related to unit testing
+    * Change: Move `bin/` to `phpunit/bin/`
+    * Change: Move `tests/bootstrap.php` to `phpunit/`
+    * Change: Move `tests/` to `phpunit/tests/`
+    * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
+* Change: Note compatibility through WP 5.5+
+* Change: Tweak inline function documentation
+* Change: Update list of TODO items to add some considerations to an existing item, fix a type, change sublist syntax
+* Unit tests:
+    * New: Add tests for `add_user_column()`, `enqueue_admin_css()`, `handle_column_data()`
+
 = 1.9.3 (2020-06-03) =
 * New: Add TODO.md and move existing TODO list from top of main plugin file into it (and add to it)
 * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and remove commented-out code)
@@ -97,20 +111,13 @@ Yes.
 * Change: Note compatibility through WP 5.3+
 * Change: Update copyright date (2020)
 
-= 1.9.1 (2019-04-05) =
-* Change: Initialize plugin on `plugins_loaded` action instead of on load
-* Change: Merge `do_init()` into `init()`
-* New: Add CHANGELOG.md file and move all but most recent changelog entries into it
-* Change: Unit tests: Specify hook priority when testing via `has_filter()`
-* Change: Note compatibility through WP 5.1+
-* Change: Update copyright date (2019)
-* Change: Update License URI to be HTTPS
-* Change: Split paragraph in README.md's "Support" section into two
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/admin-commenters-comments-count/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 1.9.4 =
+Trivial update: Restructured unit test file structure, expanded unit test coverage, and noted compatibility through WP 5.5+.
 
 = 1.9.3 =
 Trivial update: Added TODO.md file, updated a few URLs to be HTTPS, expanded unit testing, and noted compatibility through WP 5.4+

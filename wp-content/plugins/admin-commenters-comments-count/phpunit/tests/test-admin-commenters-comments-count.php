@@ -7,6 +7,9 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 	public function tearDown() {
 		parent::tearDown();
 		c2c_AdminCommentersCommentsCount::reset_cache();
+
+		wp_deregister_style( 'c2c_AdminCommentersCommentsCount_admin' );
+		wp_dequeue_style( 'c2c_AdminCommentersCommentsCount_admin' );
 	}
 
 
@@ -137,13 +140,13 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 
 
 	public function test_plugin_version() {
-		$this->assertEquals( '1.9.3', c2c_AdminCommentersCommentsCount::version() );
+		$this->assertEquals( '1.9.4', c2c_AdminCommentersCommentsCount::version() );
 	}
 
 	public function test_class_is_available() {
 		$this->assertTrue( class_exists( 'c2c_AdminCommentersCommentsCount' ) );
-
 	}
+
 	public function test_plugins_loaded_action_triggers_do_init() {
 		$this->assertNotFalse( has_filter( 'plugins_loaded', array( 'c2c_AdminCommentersCommentsCount', 'init' ) ) );
 	}
@@ -308,7 +311,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 	}
 
 	/*
-	 * get_comments_url()
+	 * get_comments_bubble()
 	 */
 
 	public function test_get_comments_bubble() {
@@ -331,4 +334,58 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 			c2c_AdminCommentersCommentsCount::get_comments_bubble( 'test@example.com', 0, 0, '0 comments', true )
 		);
 	}
+
+	/*
+	 * enqueue_admin_css()
+	 */
+
+	 public function test_enqueue_admin_css() {
+		$this->assertFalse( wp_style_is( 'c2c_AdminCommentersCommentsCount_admin', 'registered' ) );
+		$this->assertFalse( wp_style_is( 'c2c_AdminCommentersCommentsCount_admin', 'enqueued' ) );
+
+		c2c_AdminCommentersCommentsCount::enqueue_admin_css();
+
+		$this->assertTrue( wp_style_is( 'c2c_AdminCommentersCommentsCount_admin', 'registered' ) );
+		$this->assertTrue( wp_style_is( 'c2c_AdminCommentersCommentsCount_admin', 'enqueued' ) );
+	}
+
+	/*
+	 * add_user_column()
+	 */
+
+	public function test_add_user_column() {
+		$expected = array( 'a' => 'A', 'b' => 'B', 'commenters_count' => 'Comments' );
+		$actual = c2c_AdminCommentersCommentsCount::add_user_column( array( 'a' => 'A', 'b' => 'B' ) );
+
+		$this->assertEquals( $expected, $actual );
+		$this->assertEquals( array_keys( $expected ), array_keys( $actual ) );
+	}
+
+	/*
+	 * handle_column_data()
+	 */
+
+	public function test_handle_column_data_with_some_other_column() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		$post_id = $this->factory->post->create( array( 'comment_status' => 'open' ) );
+
+		$expected = 'something';
+
+		$this->assertEquals( $expected, c2c_AdminCommentersCommentsCount::handle_column_data( $expected, 'address', $post_id ) );
+	}
+
+	public function test_handle_column_data() {
+		$post_id = $this->factory->post->create();
+		$user = self::factory()->user->create_and_get( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user->ID );
+
+		$this->create_comments( $post_id, 5, 'alpha' );
+		$this->create_comments( $post_id, 5, 'alpha', array( 'comment_approved' => '0' ) );
+		$this->create_comments( $post_id, 5, 'alpha', array( 'comment_author_email' => 'notalpha@example.com', 'user_id' => $user->ID ) );
+
+		$expected = $this->expected_output( 5, 0, '', $user->user_email, true );
+
+		$this->assertEquals( $expected, c2c_AdminCommentersCommentsCount::handle_column_data( $expected, 'commenters_count', $user->ID ) );
+	}
+
 }

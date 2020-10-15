@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.9.3
+ * Version:     1.9.4
  * Plugin URI:  https://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
  * Author URI:  https://coffee2code.com/
@@ -10,7 +10,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 5.4+.
+ * Compatible with WordPress 4.6 through 5.5+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,7 +18,7 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.9.3
+ * @version 1.9.4
  */
 
 /*
@@ -93,7 +93,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.9.3';
+		return '1.9.4';
 	}
 
 	/**
@@ -151,16 +151,17 @@ class c2c_AdminCommentersCommentsCount {
 	}
 
 	/**
-	 * Outputs a linked count of the user's comments.
+	 * Outputs the markup for a linked count of the user's comments.
 	 *
 	 * @since 1.4
 	 *
 	 * @param string $output      Custom column output. Default empty.
 	 * @param string $column_name Column name.
 	 * @param int    $user_id     ID of the currently-listed user.
+	 * @return string
 	 */
 	public static function handle_column_data( $output, $column_name, $user_id ) {
-		if ( self::$field != $column_name ) {
+		if ( self::$field !== $column_name ) {
 			return $output;
 		}
 
@@ -259,7 +260,7 @@ class c2c_AdminCommentersCommentsCount {
 		global $comment;
 		$type = get_comment_type();
 
-		if ( 'comment' == $type ) {
+		if ( 'comment' === $type ) {
 			$author_email = $comment->comment_author_email;
 			$author_name  = $comment->comment_author;
 			if ( ! $author_email ) {
@@ -271,7 +272,7 @@ class c2c_AdminCommentersCommentsCount {
 			}
 			list( $comment_count, $pending_count ) = self::get_comments_count( $field, $value, $type );
 			$msg = sprintf( _n( '%d comment', '%d comments', $comment_count, 'admin-commenters-comments-count' ), $comment_count );
-		} elseif ( 'pingback' == $type || 'trackback' == $type ) {
+		} elseif ( 'pingback' === $type || 'trackback' === $type ) {
 			$author_url = $comment->comment_author_url;
 			// Want to get the root domain and not use the exact pingback/trackback source link
 			$parsed_url = parse_url( $author_url );
@@ -288,7 +289,7 @@ class c2c_AdminCommentersCommentsCount {
 		// If appearing on the dashboard, then don't need to break out of
 		// pre-existing <strong> tags.
 		$screen = get_current_screen();
-		$is_dashboard = $screen && 'dashboard' == $screen->id;
+		$is_dashboard = $screen && 'dashboard' === $screen->id;
 
 		$html = $is_dashboard ? '' : '</strong>';
 

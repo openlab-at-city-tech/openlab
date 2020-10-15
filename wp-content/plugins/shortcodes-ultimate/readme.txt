@@ -4,9 +4,9 @@ License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
 Requires at least: 4.6
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 5.9.2
+Stable tag: 5.9.3
 
 A comprehensive collection of visual components for your site
 
@@ -146,19 +146,17 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.9.2
+### 5.9.3
 
 **What's new**
 
-- `[su_qrcode]` now supports nested shortcodes in the `data` attribute
-- Improved performance by reducing the number of DB queries
+- New option `anchor_in_url` for `[su_tabs]` and `[su_spoiler]`. This option specifies whether an anchor will be added to page URL after clicking a tab or a spoiler.
+- New option `random` for `[su_image_carousel]` which allows to shuffle carousel images
 
 **Fixes**
 
-- Fixed issue in the Insert Shortcode tool with Taxonomy and Tax terms fields
-- Fixed error `Posts: invalid template name` on some installations
-- This update also fixes the plugin options issue present in 5.9.1
+- Fixed issue in `[su_image_carousel]` where images were hidden on some themes
 
 
 ---
-[Older changelog entries](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt).
+[Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

@@ -1,3 +1,17 @@
+### 5.9.2
+
+**What's new**
+
+- `[su_qrcode]` now supports nested shortcodes in the `data` attribute
+- Improved performance by reducing the number of DB queries
+
+**Fixes**
+
+- Fixed issue in the Insert Shortcode tool with Taxonomy and Tax terms fields
+- Fixed error `Posts: invalid template name` on some installations
+- This update also fixes the plugin options issue present in 5.9.1
+
+
 ### 5.9.1
 
 **What's new**

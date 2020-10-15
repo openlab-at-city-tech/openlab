@@ -55,16 +55,17 @@ function openlab_get_clones_of_group( $group_id ) {
  *
  * @param int   $group_id            ID of the group.
  * @param array $exclude_creator_ids Exclude groups created by these users.
+ * @param bool  $exclude_hidden      Whether to exclude hidden groups.
  * @return array Array of IDs.
  */
-function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids = [] ) {
+function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids = [], $exclude_hidden = false ) {
 	$descendants = openlab_get_clones_of_group( $group_id );
 	if ( ! $descendants ) {
 		return [];
 	}
 
 	foreach ( $descendants as $descendant ) {
-		$descendants = array_merge( $descendants, openlab_get_clone_descendants_of_group( $descendant ) );
+		$descendants = array_merge( $descendants, openlab_get_clone_descendants_of_group( $descendant, $exclude_creator_ids, $exclude_hidden ) );
 	}
 
 	if ( $exclude_creator_ids ) {
@@ -77,19 +78,30 @@ function openlab_get_clone_descendants_of_group( $group_id, $exclude_creator_ids
 		);
 	}
 
+	if ( $exclude_hidden ) {
+		$descendants = array_filter(
+			$descendants,
+			function( $descendant_id ) {
+				$descendant = groups_get_group( $descendant_id );
+				return 'hidden' !== $descendant->status;
+			}
+		);
+	}
+
 	return $descendants;
 }
 
 /**
  * Returns clone descendants count of a group.
  *
- * @param int $group_id ID of the group.
+ * @param int  $group_id       ID of the group.
+ * @param bool $exclude_hidden Whether to exclude hidden groups from the count.
  * @return int
  */
-function openlab_get_clone_descendant_count_of_group( $group_id ) {
+function openlab_get_clone_descendant_count_of_group( $group_id, $exclude_hidden = false ) {
 	$group = groups_get_group( $group_id );
 
-	$descendants = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ] );
+	$descendants = openlab_get_clone_descendants_of_group( $group_id, [ $group->creator_id ], $exclude_hidden );
 
 	return count( $descendants );
 }

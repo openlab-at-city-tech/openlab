@@ -4,7 +4,7 @@
  *
  * @package     WP Accessibility
  * @author      Joe Dolson
- * @copyright   2012-2019 Joe Dolson
+ * @copyright   2012-2020 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 1.7.1
+ * Version: 1.7.3
  */
 
 /*
@@ -38,8 +38,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-require_once( dirname( __FILE__ ) . '/class-wp-accessibility-toolbar.php' );
-require_once( dirname( __FILE__ ) . '/wp-accessibility-toolbar.php' );
+if ( 'on' === get_option( 'wpa_toolbar' ) || 'on' === get_option( 'wpa_widget_toolbar' ) ) {
+	require_once( dirname( __FILE__ ) . '/wp-accessibility-toolbar.php' );
+}
 require_once( dirname( __FILE__ ) . '/wp-accessibility-longdesc.php' );
 require_once( dirname( __FILE__ ) . '/wp-accessibility-alt.php' );
 require_once( dirname( __FILE__ ) . '/wp-accessibility-contrast.php' );
@@ -68,7 +69,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '1.7.0';
+	$wpa_version = '1.7.3';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_nav_menu', 'on' );
 		add_option( 'rta_from_page_lists', 'on' );
@@ -120,34 +121,12 @@ function wpa_plugin_action( $links, $file ) {
 	return $links;
 }
 
-add_action( 'wp_enqueue_scripts', 'wpa_register_scripts' );
-/**
- * Register jQuery scripts.
- */
-function wpa_register_scripts() {
-	wp_register_script( 'wpa-toolbar', plugins_url( 'wp-accessibility/js/wpa-toolbar.js' ), array( 'jquery' ), '1.0', true );
-	wp_register_script( 'ui-a11y.js', plugins_url( 'wp-accessibility/toolbar/js/a11y.js' ), array( 'jquery' ), '1.0', true );
-}
-
 add_action( 'wp_enqueue_scripts', 'wpacc_enqueue_scripts' );
 /**
  * Enqueue accessibility scripts dependent on options.
  */
 function wpacc_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' );
-	if ( 'on' === get_option( 'wpa_toolbar' ) || 'on' === get_option( 'wpa_widget_toolbar' ) ) {
-		if ( 'on' === get_option( 'wpa_toolbar' ) ) {
-			// Enqueue Toolbar JS if enabled.
-			wp_enqueue_script( 'wpa-toolbar' );
-			wp_localize_script( 'wpa-toolbar', 'wpa', wpa_toolbar_js() );
-		}
-		wp_enqueue_script( 'ui-a11y.js' );
-		$plugin_path = plugins_url( 'wp-accessibility/toolbar/css/a11y-contrast.css' );
-		if ( file_exists( get_stylesheet_directory() . '/a11y-contrast.css' ) ) {
-			$plugin_path = get_stylesheet_directory_uri() . '/a11y-contrast.css';
-		}
-		wp_localize_script( 'ui-a11y.js', 'a11y_stylesheet_path', $plugin_path );
-	}
 	if ( 'on' === get_option( 'wpa_insert_roles' ) ) {
 		wp_enqueue_script( 'wpa-complementary', plugins_url( 'js/roles.jquery.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 		if ( get_option( 'wpa_complementary_container' ) ) {
@@ -184,24 +163,8 @@ add_action( 'wp_enqueue_scripts', 'wpa_stylesheet' );
 function wpa_stylesheet() {
 	// Respects SSL, Style.css is relative to the current file.
 	wp_register_style( 'wpa-style', plugins_url( 'css/wpa-style.css', __FILE__ ) );
-	wp_register_style( 'ui-font.css', plugins_url( 'toolbar/fonts/css/a11y-toolbar.css', __FILE__ ) );
-	$toolbar = apply_filters( 'wpa_toolbar_css', plugins_url( 'toolbar/css/a11y.css', __FILE__ ) );
-	wp_register_style( 'ui-a11y.css', $toolbar, array( 'ui-font.css' ) );
-	$fontsize_stylesheet = ( 'on' === get_option( 'wpa_alternate_fontsize' ) ) ? 'a11y-fontsize-alt' : 'a11y-fontsize';
-	$fontsize            = apply_filters( 'wpa_fontsize_css', plugins_url( 'toolbar/css/' . $fontsize_stylesheet . '.css', __FILE__ ) );
-	wp_register_style( 'ui-fontsize.css', $fontsize );
-	$toolbar_size = get_option( 'wpa_toolbar_size' );
-	$toolbar_size = ( false === stripos( $toolbar_size, 'em' ) ) ? $toolbar_size . 'px' : $toolbar_size;
-	// Only enable styles when required by options.
-	if ( get_option( 'wpa_toolbar_size' ) && 'on' === get_option( 'wpa_toolbar' ) ) {
-		wp_add_inline_style( 'ui-a11y.css', '.a11y-toolbar ul li button { font-size: ' . $toolbar_size . ' !important; }' );
-	}
 	if ( 'link' === get_option( 'wpa_longdesc' ) || 'jquery' === get_option( 'wpa_longdesc' ) || 'on' === get_option( 'asl_enable' ) ) {
 		wp_enqueue_style( 'wpa-style' );
-	}
-	if ( 'on' === get_option( 'wpa_toolbar' ) || 'on' === get_option( 'wpa_widget_toolbar' ) && ( $toolbar && $fontsize ) ) {
-		wp_enqueue_style( 'ui-a11y.css' );
-		wp_enqueue_style( 'ui-fontsize.css' );
 	}
 	if ( current_user_can( 'edit_files' ) && 'on' === get_option( 'wpa_diagnostics' ) ) {
 		wp_register_style( 'diagnostic', plugins_url( 'css/diagnostic.css', __FILE__ ) );
@@ -675,12 +638,4 @@ function wpa_accessible_theme() {
 		return true;
 	}
 	return false;
-}
-
-add_action( 'widgets_init', 'wpa_register_toolbar_widget' );
-/**
- * Register toolbar widget.
- */
-function wpa_register_toolbar_widget() {
-	register_widget( 'Wp_Accessibility_Toolbar' );
 }

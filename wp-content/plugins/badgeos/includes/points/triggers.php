@@ -22,10 +22,14 @@ function get_badgeos_points_award_activity_triggers() {
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
             'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
-			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'Points on User Birthday', 'badgeos' ),
+            'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->award_points_activity_triggers );
@@ -45,10 +49,13 @@ function get_badgeos_points_deduct_activity_triggers() {
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
             'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
-			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->deduct_points_activity_triggers );
@@ -151,7 +158,7 @@ function badgeos_dynamic_points_award_trigger_event() {
 
             $parent_point_id = badgeos_get_parent_id( $point->post_id );
 
-            $step_params = get_post_meta( $point->post_id, '_badgeos_fields_data', true );
+            $step_params = badgeos_utilities::get_post_meta( $point->post_id, '_badgeos_fields_data', true );
             $step_params = badgeos_extract_array_from_query_params( $step_params );
 
             /**
@@ -223,7 +230,7 @@ function badgeos_dynamic_points_deduct_trigger_event() {
 
             $parent_point_id = badgeos_get_parent_id( $point->post_id );
 
-            $step_params = get_post_meta( $point->post_id, '_badgeos_fields_data', true );
+            $step_params = badgeos_utilities::get_post_meta( $point->post_id, '_badgeos_fields_data', true );
             $step_params = badgeos_extract_array_from_query_params( $step_params );
 
             /**
@@ -281,21 +288,21 @@ function badgeos_points_award_trigger_event() {
     }
 
     $triggered_points = '';
-	if( 'badgeos_specific_new_comment' == $this_trigger ) {
+    if( 'badgeos_specific_new_comment' == $this_trigger ) {
         $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
         if( $trigger_data ) {
             $comment_post_id = $args[3]['comment_post_ID'];
             foreach( $trigger_data as $data ) {
-                $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+                $post_specific_id = badgeos_utilities::get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
                 if( absint( $post_specific_id ) == absint($comment_post_id) ) {
                     /**
                      * Now determine if any badges are earned based on this trigger event
                      */
                     $triggered_points = $wpdb->get_results( $wpdb->prepare(
                         "SELECT p.ID as post_id 
-        FROM $wpdb->postmeta AS pm
-        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
-        ",
+                            FROM $wpdb->postmeta AS pm
+                            INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+                        ",
                         $this_trigger
                     ) );
                     break;
@@ -309,18 +316,18 @@ function badgeos_points_award_trigger_event() {
          */
         $triggered_points = $wpdb->get_results( $wpdb->prepare(
             "SELECT p.ID as post_id 
-        FROM $wpdb->postmeta AS pm
-        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
-        ",
+                FROM $wpdb->postmeta AS pm
+                INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+            ",
             $this_trigger
         ) );
     }
-
+    
 	if( !empty( $triggered_points ) ) {
 		foreach ( $triggered_points as $point ) { 
 
 			$parent_point_id = badgeos_get_parent_id( $point->post_id );
-
+            
 			/**
 			 * Update hook count for this user
 			 */
@@ -397,7 +404,7 @@ function badgeos_points_deduct_trigger_event() {
         if( $trigger_data ) {
             $comment_post_id = $args[3]['comment_post_ID'];
             foreach( $trigger_data as $data ) {
-                $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+                $post_specific_id = badgeos_utilities::get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
                 if( absint( $post_specific_id ) == absint($comment_post_id) ) {
                     /**
                      * Now determine if any Achievements are earned based on this trigger event
@@ -458,9 +465,9 @@ function badgeos_points_get_user_triggers( $point_step_id, $user_id = 0, $site_i
      * Grab all of the users triggers
      */
 	if( $type == 'Deduct' ) {
-		$user_triggers = ( $array_exists = get_user_meta( $user_id, '_point_deduct_triggers', true ) ) ? $array_exists : array();
+		$user_triggers = ( $array_exists = badgeos_utilities::get_user_meta( $user_id, '_point_deduct_triggers', true ) ) ? $array_exists : array();
 	} else {
-		$user_triggers = ( $array_exists = get_user_meta( $user_id, '_point_award_triggers', true ) ) ? $array_exists : array();
+		$user_triggers = ( $array_exists = badgeos_utilities::get_user_meta( $user_id, '_point_award_triggers', true ) ) ? $array_exists : array();
 	}
 
 
@@ -555,9 +562,9 @@ function badgeos_points_update_user_trigger_count( $point_step_id = 0, $point_pa
 	$user_triggers[$site_id][$trigger."_".$point_step_id] = $trigger_count;
 
 	if( $type == 'Deduct' ) {
-		update_user_meta( $user_id, '_point_deduct_triggers', $user_triggers );
+		badgeos_utilities::update_user_meta( $user_id, '_point_deduct_triggers', $user_triggers );
 	} else {
-		update_user_meta( $user_id, '_point_award_triggers', $user_triggers );
+		badgeos_utilities::update_user_meta( $user_id, '_point_award_triggers', $user_triggers );
 	}
 
 	/**
