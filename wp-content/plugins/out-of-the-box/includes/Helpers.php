@@ -67,6 +67,10 @@ class Helpers
         $ext = isset($pathinfo['extension']) ? ($pathinfo['extension']) : false;
         $fn = isset($pathinfo['filename']) ? ($pathinfo['filename']) : false;
 
+        if (!extension_loaded('mbstring')) {
+            return $fn.($ext ? '.'.$ext : '');
+        }
+
         return mb_strcut($fn, 0, 255 - ($ext ? strlen($ext) + 1 : 0), mb_detect_encoding($fn)).($ext ? '.'.$ext : '');
     }
 
@@ -152,7 +156,7 @@ class Helpers
     public static function get_user_name()
     {
         if (!is_user_logged_in()) {
-            return __('Anonymous user', 'outofthebox');
+            return __('Anonymous user', 'wpcloudplugins');
         }
 
         $current_user = wp_get_current_user();
@@ -220,19 +224,34 @@ class Helpers
         $wp_roles_names = $wp_roles->get_names();
 
         // Add custom roles
-        $wp_roles_names['guest'] = __('Anonymous user', 'outofthebox');
-        $wp_roles_names['all'] = __('Everyone', 'outofthebox');
-        $wp_roles_names['none'] = __('None', 'outofthebox');
+        $wp_roles_names['guest'] = __('Anonymous user', 'wpcloudplugins');
+        $wp_roles_names['all'] = __('Everyone', 'wpcloudplugins');
+        $wp_roles_names['none'] = __('None', 'wpcloudplugins');
 
         foreach ($wp_roles_names as $wp_role_id => $wp_role_name) {
-            $list[] = ['value' => (string) $wp_role_id, 'id' => (string) $wp_role_id, 'text' => $wp_role_name, 'type' => 'role', 'searchBy' => $wp_role_name, 'img' => get_avatar_url('role', ['size' => '32'])];
+            $list[] = [
+                'value' => (string) $wp_role_id,
+                'id' => (string) $wp_role_id,
+                'text' => $wp_role_name,
+                'type' => 'role',
+                'searchBy' => $wp_role_name,
+                'img' => get_avatar_url('role', ['size' => '32']),
+            ];
         }
 
         // Get Users
         $users = get_users(['fields' => ['user_login', 'display_name', 'id']]);
+        $user_count = count($users);
 
         foreach ($users as $wp_user) {
-            $list[] = ['value' => (string) $wp_user->id, 'id' => (string) $wp_user->id, 'text' => (empty($wp_user->display_name) ? $wp_user->user_login : $wp_user->display_name), 'type' => 'user', 'searchBy' => $wp_user->user_login, 'img' => get_avatar_url($wp_user->id, ['size' => '32'])];
+            $list[] = [
+                'value' => (string) $wp_user->id,
+                'id' => (string) $wp_user->id,
+                'text' => (empty($wp_user->display_name) ? $wp_user->user_login : $wp_user->display_name),
+                'type' => 'user',
+                'searchBy' => $wp_user->user_login,
+                'img' => ($user_count < 1000) ? get_avatar_url($wp_user->id, ['size' => '32']) : OUTOFTHEBOX_ROOTPATH.'/css/images/usericon.png',
+            ];
         }
 
         // Sort the list by name ASC. First Roles, than Users
@@ -359,7 +378,7 @@ class Helpers
      *
      * @param string $string
      *
-     * @return boolean|string
+     * @return bool|string
      */
     public static function extract_email_from_string($string)
     {
@@ -518,6 +537,43 @@ class Helpers
         $time .= $value['seconds'];
 
         return $time;
+    }
+
+    /**
+     * Add $dep (script handle) to the array of dependencies for $handle.
+     *
+     * @param string $handle Script handle for which you want to add a dependency
+     * @param string $dep    Script handle - the dependency you wish to add
+     */
+    public static function append_dependency($handle, $dep)
+    {
+        global $wp_scripts;
+
+        $script = $wp_scripts->query($handle, 'registered');
+        if (!$script) {
+            return false;
+        }
+        if (!in_array($dep, $script->deps)) {
+            $script->deps[] = $dep;
+        }
+
+        return true;
+    }
+
+    public static function set_cookie($name, $value, $expire, $path, $domain, $secure, $httponly, $samesite = 'None')
+    {
+        if (PHP_VERSION_ID < 70300) {
+            @setcookie($name, $value, $expire, "{$path}; samesite={$samesite}", $domain, $secure, $httponly);
+        } else {
+            @setcookie($name, $value, [
+                'expires' => $expire,
+                'path' => $path,
+                'domain' => $domain,
+                'samesite' => $samesite,
+                'secure' => $secure,
+                'httponly' => $httponly,
+            ]);
+        }
     }
 
     public static function get_mimetype($extension = '')

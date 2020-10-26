@@ -15,7 +15,7 @@ class StorageInfo
     public function get_quota_total()
     {
         if (empty($this->_quota_total)) {
-            return __('Unlimited', 'outofthebox');
+            return __('Unlimited', 'wpcloudplugins');
         }
 
         return Helpers::bytes_to_size_1024($this->_quota_total, 1);

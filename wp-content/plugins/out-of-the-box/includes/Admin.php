@@ -54,6 +54,7 @@ class Admin
         // Notices
         add_action('admin_notices', [&$this, 'get_admin_notice_not_authorized']);
         add_action('admin_notices', [&$this, 'get_admin_notice_not_activated']);
+        add_action('admin_notices', [&$this, 'get_admin_notice_php_7']);
 
         add_filter('admin_footer_text', [$this, 'admin_footer_text'], 1);
 
@@ -91,7 +92,7 @@ class Admin
     {
         if (isset($data['upgrade_notice'])) {
             printf(
-                '<br /><br /><span style="display:inline-block;background-color: #0078d7; padding: 10px; color: white;"><span class="dashicons dashicons-warning"></span>&nbsp;<strong>UPGRADE NOTICE</strong> <br /><br />%s</span><br /><br />',
+                '<br /><br /><span style="display:inline-block;background-color: #522058; padding: 10px; color: white;"><span class="dashicons dashicons-warning"></span>&nbsp;<strong>UPGRADE NOTICE</strong> <br /><br />%s</span><br /><br />',
                 $data['upgrade_notice']
             );
         }
@@ -106,14 +107,13 @@ class Admin
             wp_enqueue_script('jquery-effects-fade');
             wp_enqueue_script('WPCloudplugin.Libraries');
 
-            wp_enqueue_style('qtip');
-            wp_enqueue_style('OutoftheBox.tinymce');
+            wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
             wp_enqueue_style('Awesome-Font-5-css');
         }
 
         if ($hook == $this->networksettingspage || $hook == $this->settingspage) {
             wp_enqueue_script('jquery-form');
-            wp_enqueue_script('OutoftheBox.tinymce');
+            wp_enqueue_script('OutoftheBox.ShortcodeBuilder');
             wp_enqueue_script('wp-color-picker-alpha', plugins_url('/wp-color-picker-alpha/wp-color-picker-alpha.min.js', __FILE__), ['wp-color-picker'], '1.0.0', true);
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('jquery-ui-accordion');
@@ -154,40 +154,40 @@ class Admin
         if (Helpers::check_user_role($this->settings['permissions_see_dashboard']) && ('Yes' === $this->settings['log_events'])) {
             if (!$menuadded) {
                 $this->dashboardpage = add_menu_page('Out-of-the-Box', 'Out-of-the-Box', 'read', $this->plugin_options_key, [&$this, 'load_dashboard_page'], plugin_dir_url(__FILE__).'../css/images/dropbox_logo_small.png');
-                $this->dashboardpage = add_submenu_page($this->plugin_options_key, __('Reports', 'outofthebox'), __('Reports', 'outofthebox'), 'read', $this->plugin_options_key, [&$this, 'load_dashboard_page']);
+                $this->dashboardpage = add_submenu_page($this->plugin_options_key, __('Reports', 'wpcloudplugins'), __('Reports', 'wpcloudplugins'), 'read', $this->plugin_options_key, [&$this, 'load_dashboard_page']);
                 $menuadded = true;
             } else {
-                $this->dashboardpage = add_submenu_page($this->plugin_options_key, __('Reports', 'outofthebox'), __('Reports', 'outofthebox'), 'read', $this->plugin_options_key.'_dashboard', [&$this, 'load_dashboard_page']);
+                $this->dashboardpage = add_submenu_page($this->plugin_options_key, __('Reports', 'wpcloudplugins'), __('Reports', 'wpcloudplugins'), 'read', $this->plugin_options_key.'_dashboard', [&$this, 'load_dashboard_page']);
             }
         }
 
         if (Helpers::check_user_role($this->settings['permissions_add_shortcodes'])) {
             if (!$menuadded) {
                 $this->shortcodebuilderpage = add_menu_page('Out-of-the-Box', 'Out-of-the-Box', 'read', $this->plugin_options_key, [&$this, 'load_shortcodebuilder_page'], OUTOFTHEBOX_ROOTPATH.'/css/images/dropbox_logo_small.png');
-                $this->shortcodebuilderpage = add_submenu_page($this->plugin_options_key, __('Shortcode Builder', 'outofthebox'), __('Shortcode Builder', 'outofthebox'), 'read', $this->plugin_options_key, [&$this, 'load_shortcodebuilder_page']);
+                $this->shortcodebuilderpage = add_submenu_page($this->plugin_options_key, __('Shortcode Builder', 'wpcloudplugins'), __('Shortcode Builder', 'wpcloudplugins'), 'read', $this->plugin_options_key, [&$this, 'load_shortcodebuilder_page']);
                 $menuadded = true;
             } else {
-                $this->shortcodebuilderpage = add_submenu_page($this->plugin_options_key, __('Shortcode Builder', 'outofthebox'), __('Shortcode Builder', 'outofthebox'), 'read', $this->plugin_options_key.'_shortcodebuilder', [&$this, 'load_shortcodebuilder_page']);
+                $this->shortcodebuilderpage = add_submenu_page($this->plugin_options_key, __('Shortcode Builder', 'wpcloudplugins'), __('Shortcode Builder', 'wpcloudplugins'), 'read', $this->plugin_options_key.'_shortcodebuilder', [&$this, 'load_shortcodebuilder_page']);
             }
         }
 
         if (Helpers::check_user_role($this->settings['permissions_link_users'])) {
             if (!$menuadded) {
                 $this->userpage = add_menu_page('Out-of-the-Box', 'Out-of-the-Box', 'read', $this->plugin_options_key, [&$this, 'load_linkusers_page'], OUTOFTHEBOX_ROOTPATH.'/css/images/dropbox_logo_small.png');
-                $this->userpage = add_submenu_page($this->plugin_options_key, __('Link Private Folders', 'outofthebox'), __('Link Private Folders', 'outofthebox'), 'read', $this->plugin_options_key, [&$this, 'load_linkusers_page']);
+                $this->userpage = add_submenu_page($this->plugin_options_key, __('Link Private Folders', 'wpcloudplugins'), __('Link Private Folders', 'wpcloudplugins'), 'read', $this->plugin_options_key, [&$this, 'load_linkusers_page']);
                 $menuadded = true;
             } else {
-                $this->userpage = add_submenu_page($this->plugin_options_key, __('Link Private Folders', 'outofthebox'), __('Link Private Folders', 'outofthebox'), 'read', $this->plugin_options_key.'_linkusers', [&$this, 'load_linkusers_page']);
+                $this->userpage = add_submenu_page($this->plugin_options_key, __('Link Private Folders', 'wpcloudplugins'), __('Link Private Folders', 'wpcloudplugins'), 'read', $this->plugin_options_key.'_linkusers', [&$this, 'load_linkusers_page']);
             }
         }
 
         if (Helpers::check_user_role($this->settings['permissions_see_filebrowser'])) {
             if (!$menuadded) {
                 $this->filebrowserpage = add_menu_page('Out-of-the-Box', 'Out-of-the-Box', 'read', $this->plugin_options_key, [&$this, 'load_filebrowser_page'], OUTOFTHEBOX_ROOTPATH.'/css/images/dropbox_logo_small.png');
-                $this->filebrowserpage = add_submenu_page($this->plugin_options_key, __('File Browser', 'outofthebox'), __('File Browser', 'outofthebox'), 'read', $this->plugin_options_key, [&$this, 'load_filebrowser_page']);
+                $this->filebrowserpage = add_submenu_page($this->plugin_options_key, __('File Browser', 'wpcloudplugins'), __('File Browser', 'wpcloudplugins'), 'read', $this->plugin_options_key, [&$this, 'load_filebrowser_page']);
                 $menuadded = true;
             } else {
-                $this->filebrowserpage = add_submenu_page($this->plugin_options_key, __('File Browser', 'outofthebox'), __('File Browser', 'outofthebox'), 'read', $this->plugin_options_key.'_filebrowser', [&$this, 'load_filebrowser_page']);
+                $this->filebrowserpage = add_submenu_page($this->plugin_options_key, __('File Browser', 'wpcloudplugins'), __('File Browser', 'wpcloudplugins'), 'read', $this->plugin_options_key.'_filebrowser', [&$this, 'load_filebrowser_page']);
             }
         }
     }
@@ -203,7 +203,7 @@ class Admin
         $this->networksettingspage = add_submenu_page($this->plugin_network_options_key, 'Out-of-the-Box - '.__('Settings'), __('Settings'), 'read', $this->plugin_network_options_key, [&$this, 'load_settings_network_page']);
 
         if ($this->get_processor()->is_network_authorized()) {
-            $this->filebrowserpage = add_submenu_page($this->plugin_network_options_key, __('File Browser', 'outofthebox'), __('File Browser', 'outofthebox'), 'read', $this->plugin_network_options_key.'_filebrowser', [&$this, 'load_filebrowser_page']);
+            $this->filebrowserpage = add_submenu_page($this->plugin_network_options_key, __('File Browser', 'wpcloudplugins'), __('File Browser', 'wpcloudplugins'), 'read', $this->plugin_network_options_key.'_filebrowser', [&$this, 'load_filebrowser_page']);
         }
     }
 
@@ -235,15 +235,15 @@ class Admin
     public function load_settings_page()
     {
         if (!\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'outofthebox'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wpcloudplugins'));
         }
 
-        include sprintf('%s/templates/admin.php', OUTOFTHEBOX_ROOTDIR);
+        include sprintf('%s/templates/admin/settings.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     public function load_settings_network_page()
     {
-        include sprintf('%s/templates/admin_network.php', OUTOFTHEBOX_ROOTDIR);
+        include sprintf('%s/templates/admin/settings_network.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     public function save_settings($new_settings, $old_settings)
@@ -315,6 +315,7 @@ class Admin
             if ('Yes' === $settings['network_wide'] && isset($_REQUEST['out_of_the_box_settings']['dropbox_app_token'])) {
                 $settings['dropbox_app_token'] = $_REQUEST['out_of_the_box_settings']['dropbox_app_token'];
                 $settings['dropbox_app_own'] = ('on' === $_REQUEST['out_of_the_box_settings']['dropbox_app_own'] ? 'Yes' : 'No');
+                $settings['use_app_folder'] = ('on' === $_REQUEST['out_of_the_box_settings']['use_app_folder'] ? 'Yes' : 'No');
                 $settings['dropbox_root_namespace_id'] = $_REQUEST['out_of_the_box_settings']['dropbox_root_namespace_id'];
                 $settings['dropbox_account_type'] = $_REQUEST['out_of_the_box_settings']['dropbox_account_type'];
                 $settings['use_team_folders'] = isset($_REQUEST['out_of_the_box_settings']['use_team_folders']) ? $_REQUEST['out_of_the_box_settings']['use_team_folders'] : 'No';
@@ -325,6 +326,7 @@ class Admin
                 } else {
                     $settings['dropbox_app_key'] = '';
                     $settings['dropbox_app_secret'] = '';
+                    $settings['use_app_folder'] = 'No';
                 }
             }
 
@@ -353,9 +355,9 @@ class Admin
             $onclick = "jQuery.post( '".OUTOFTHEBOX_ADMIN_URL."', { action: 'outofthebox-rating-asked' });jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) )";
 
             $footer_text = sprintf(
-                __('If you like %1$s please leave us a %2$s rating. A huge thanks in advance!', 'outofthebox'),
-                sprintf('<strong>%s</strong>', esc_html__('Out-of-the-Box', 'outofthebox')),
-                '<a href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2Freviews%2F5529125" target="_blank" class="outofthebox-rating-link" data-rated="'.esc_attr__('Thanks :)', 'outofthebox').'"  onclick="'.$onclick.'">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+                __('If you like %1$s please leave us a %2$s rating. A huge thanks in advance!', 'wpcloudplugins'),
+                sprintf('<strong>%s</strong>', 'Out-of-the-Box'),
+                '<a href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2Freviews%2F5529125" target="_blank" class="outofthebox-rating-link" data-rated="'.esc_attr__('Thanks :)', 'wpcloudplugins').'"  onclick="'.$onclick.'">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
             );
         }
 
@@ -364,6 +366,10 @@ class Admin
 
     public function is_activated()
     {
+        if (defined('OUTOFTHEBOX_3RD_PARTY_INSTALL')) {
+            return true;
+        }
+
         $purchase_code = $this->get_purchase_code();
 
         if (empty($purchase_code)) {
@@ -382,15 +388,21 @@ class Admin
 
     public function validate_activation()
     {
-        $validation_result = false;
         $purchase_code = $this->get_purchase_code();
         $response = wp_remote_get('https://www.wpcloudplugins.com/updates/?action=get_metadata&slug=out-of-the-box&purchase_code='.$purchase_code.'&plugin_id='.$this->plugin_id.'&siteurl='.rawurldecode(get_site_url()));
 
-        if (!is_wp_error($response)) {
-            $validation_result = (200 === wp_remote_retrieve_response_code($response));
+        $response_code = wp_remote_retrieve_response_code($response);
+
+        if (empty($response_code)) {
+            if (is_wp_error($response)) {
+                error_log($response->get_error_message());
+            }
+
+            return false;
         }
 
-        if (false === $validation_result) {
+        if (401 === $response_code) {
+            // Revoke license if invalid
             $this->settings['purcasecode'] = '';
             update_option($this->settings_key, $this->settings);
             delete_transient('outofthebox_activation_validated');
@@ -402,6 +414,7 @@ class Admin
         }
 
         set_transient('outofthebox_activation_validated', true, WEEK_IN_SECONDS);
+        set_site_transient('outofthebox_activation_validated', true, WEEK_IN_SECONDS);
 
         return true;
     }
@@ -423,16 +436,16 @@ class Admin
     public function load_filebrowser_page()
     {
         if (!\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_see_filebrowser'])) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'outofthebox'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wpcloudplugins'));
         }
 
-        include sprintf('%s/templates/admin_filebrowser.php', OUTOFTHEBOX_ROOTDIR);
+        include sprintf('%s/templates/admin/file_browser.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     public function load_linkusers_page()
     {
         if (!\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_link_users'])) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'outofthebox'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wpcloudplugins'));
         }
         $linkusers = new LinkUsers($this->get_main());
         $linkusers->render();
@@ -441,19 +454,19 @@ class Admin
     public function load_shortcodebuilder_page()
     {
         if (!\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_shortcodes'])) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'outofthebox'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wpcloudplugins'));
         }
 
-        echo "<iframe src='".OUTOFTHEBOX_ADMIN_URL."?action=outofthebox-getpopup&standaloneshortcodebuilder=1' width='90%' height='1000' tabindex='-1' frameborder='0'></iframe>";
+        echo "<iframe src='".OUTOFTHEBOX_ADMIN_URL."?action=outofthebox-getpopup&type=shortcodebuilder&standalone' width='90%' height='1000' tabindex='-1' frameborder='0'></iframe>";
     }
 
     public function load_dashboard_page()
     {
         if (!Helpers::check_user_role($this->settings['permissions_see_dashboard'])) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'outofthebox'));
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wpcloudplugins'));
         }
 
-        include sprintf('%s/templates/admin_dashboard.php', OUTOFTHEBOX_ROOTDIR);
+        include sprintf('%s/templates/admin/event_dashboard.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     public function get_plugin_activated_box()
@@ -473,19 +486,19 @@ class Admin
         $box_class = 'oftb-updated';
         $box_input = '<input type="hidden" name="out_of_the_box_settings[purcasecode]" id="purcase_code" value="'.esc_attr($purchase_code).'">';
 
-        $box_text = __('The plugin is <strong>Activated</strong> and the <strong>Auto-Updater</strong> enabled', 'outofthebox').'. '.__('Your purchase code', 'outofthebox').":<br/><code style='user-select: initial;'>".esc_attr($purchase_code).'</code>';
+        $box_text = __('The plugin is <strong>Activated</strong> and the <strong>Auto-Updater</strong> enabled', 'wpcloudplugins').'. '.__('Your purchase code', 'wpcloudplugins').":<br/><code style='user-select: initial;'>".esc_attr($purchase_code).'</code>';
         if (empty($purchase_code)) {
             $box_class = 'oftb-error';
-            $box_text = __('The plugin is <strong>Not Activated</strong> and the <strong>Auto-Updater</strong> disabled', 'outofthebox').'. '.__('Please activate your copy in order to use the plugin', 'outofthebox').'. ';
+            $box_text = __('The plugin is <strong>Not Activated</strong> and the <strong>Auto-Updater</strong> disabled', 'wpcloudplugins').'. '.__('Please activate your copy in order to use the plugin', 'wpcloudplugins').'. ';
             if (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG) || true === is_network_admin()) {
-                $box_text .= "</p><p><input id='updater_button' type='button' class='simple-button blue' value='".__('Activate', 'outofthebox')."' /><span><a href='#' onclick='jQuery(\".outofthebox_purchasecode_manual\").slideToggle()'>".__('Or insert your purchase code manually and press Activate', 'outofthebox').'</a></span></p> ';
-                $box_text .= '<div class="outofthebox_purchasecode_manual" style="display:none" ><h3>Activate manually</h3><input name="out_of_the_box_settings[purcasecode]" id="purcasecode" class="outofthebox-option-input-large" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" value="'.esc_attr($purchase_code).'"><a href="https://florisdeleeuwnl.zendesk.com/hc/en-us/articles/201834487">'.__('Where can I find my purchase code?', 'outofthebox').'</a></div>';
+                $box_text .= "</p><p><input id='updater_button' type='button' class='simple-button blue' value='".__('Activate', 'wpcloudplugins')."' /><span><a href='#' onclick='jQuery(\".outofthebox_purchasecode_manual\").slideToggle()'>".__('Or insert your purchase code manually and press Activate', 'wpcloudplugins').'</a></span></p> ';
+                $box_text .= '<div class="outofthebox_purchasecode_manual" style="display:none" ><h3>Activate manually</h3><input name="out_of_the_box_settings[purcasecode]" id="purcasecode" class="outofthebox-option-input-large" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" value="'.esc_attr($purchase_code).'"><a href="https://florisdeleeuwnl.zendesk.com/hc/en-us/articles/201834487" target="_blank">'.__('Where can I find my purchase code?', 'wpcloudplugins').'</a></div>';
                 $box_input = '';
             }
         } else {
-            $box_text .= "</p><p><input id='check_updates_button' type='button' class='simple-button blue' value='".__('Check for updates', 'outofthebox')."' />";
+            $box_text .= "</p><p><input id='check_updates_button' type='button' class='simple-button blue' value='".__('Check for updates', 'wpcloudplugins')."' />";
             if (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG) || true === is_network_admin()) {
-                $box_text .= "<input id='deactivate_license_button' type='button' class='simple-button default' value='".__('Deactivate License', 'outofthebox')."' />";
+                $box_text .= "<input id='deactivate_license_button' type='button' class='simple-button default' value='".__('Deactivate License', 'wpcloudplugins')."' />";
             }
         }
 
@@ -496,9 +509,9 @@ class Admin
     {
         $app = $this->get_app();
 
-        $revokebutton = "<div type='button' class='revoke_dropbox_button simple-button default small' data-account-id='{$account->get_id()}' data-force='false' title='".__('Revoke', 'outofthebox')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
-        $deletebutton = "<div type='button' class='delete_dropbox_button simple-button default small' data-account-id='{$account->get_id()}' data-force='true' title='".__('Remove', 'outofthebox')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
-        $refreshbutton = "<div type='button' class='refresh_dropbox_button simple-button red small' data-account-id='{$account->get_id()}' data-url='{$app->get_auth_url(['force_reapprove' => 'true'])}' title='".__('Refresh', 'outofthebox')."'><i class='fas fa-redo' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
+        $revokebutton = "<div type='button' class='revoke_dropbox_button simple-button default small' data-account-id='{$account->get_id()}' data-force='false' title='".__('Revoke', 'wpcloudplugins')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
+        $deletebutton = "<div type='button' class='delete_dropbox_button simple-button default small' data-account-id='{$account->get_id()}' data-force='true' title='".__('Remove', 'wpcloudplugins')."'><i class='fas fa-trash' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
+        $refreshbutton = "<div type='button' class='refresh_dropbox_button simple-button red small' data-account-id='{$account->get_id()}' data-url='{$app->get_auth_url(['force_reapprove' => 'true'])}' title='".__('Refresh', 'wpcloudplugins')."'><i class='fas fa-redo' aria-hidden='true'></i><div class='oftb-spinner'></div></div>";
 
         $account_info_html = "<div class='account-info-name'>{$account->get_name()} <code class='account-info-id'>ID: {$account->get_id()}</code></div><span class='account-info-email'>{$account->get_email()}</span>";
         $status_info_html = '';
@@ -506,7 +519,7 @@ class Admin
 
         // Check if plugin is still linked
         if (false === $account->get_authorization()->has_access_token()) {
-            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'outofthebox').' '.__('Please re-authorize!', 'outofthebox');
+            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.__('Please re-authorize!', 'wpcloudplugins');
 
             return "<div class='account account-error'><img class='account-image' src='{$account->get_image()}' onerror='this.src=\"".OUTOFTHEBOX_ROOTPATH."/css/images/dropbox_logo.png\"'/><div class='account-info-container'><div class='account-actions'>{$refreshbutton} {$deletebutton}</div><div class='account-info'>{$account_info_html}</div><div class='account-info-status'>{$status_info_html}</div><div class='account-info-error'>{$errror_details_html}</div></div></div>";
         }
@@ -525,10 +538,10 @@ class Admin
             } catch (\Exception $ex) {
                 $this->get_processor()->get_current_account()->get_authorization()->set_is_valid(false);
                 set_transient($transient_name, false, 5 * MINUTE_IN_SECONDS);
-                $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'outofthebox').' '.__('Please re-authorize!', 'outofthebox');
+                $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.__('Please re-authorize!', 'wpcloudplugins');
 
                 if ($app->has_plugin_own_app()) {
-                    $status_info_html .= ' '.__('If the problem persists, fall back to the default App via the settings on the Advanced tab', 'outofthebox').'.';
+                    $status_info_html .= ' '.__('If the problem persists, fall back to the default App via the settings on the Advanced tab', 'wpcloudplugins').'.';
                 }
 
                 $errror_details_html = '<p>Error Details:</p><pre>'.$ex->getMessage().'</pre>';
@@ -539,7 +552,7 @@ class Admin
 
         // Return information why authorization is invalid
         if (false === $is_authorized) {
-            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'outofthebox').' '.__('Please re-authorize!', 'outofthebox');
+            $status_info_html = "<i class='fas fa-exclamation-triangle' aria-hidden='true'></i>&nbsp;".__("Account isn't linked to the plugin anymore.", 'wpcloudplugins').' '.__('Please re-authorize!', 'wpcloudplugins');
 
             return "<div class='account account-error'><img class='account-image' src='{$account->get_image()}' onerror='this.src=\"".OUTOFTHEBOX_ROOTPATH."/css/images/dropbox_logo.png\"'/><div class='account-info-container'><div class='account-actions'>{$refreshbutton} {$deletebutton}</div><div class='account-info'>{$account_info_html}</div><div class='account-info-status'>{$status_info_html}</div><div class='account-info-error'>{$errror_details_html}</div></div></div>";
         }
@@ -549,7 +562,7 @@ class Admin
         }
 
         // Show if account is verified by Dropbox or not
-        $errror_details_html .= ($account->is_verified()) ? '' : '<p>'.sprintf(__('Your Dropbox account is not verified. Please take a look at %sthis Dropbox Article%s for more information how to verify your account', 'outofthebox'), '<a href="https://www.dropbox.com/help/sign-in/verify-email" target="blank">', '</a>').'</p>';
+        $errror_details_html .= ($account->is_verified()) ? '' : '<p>'.sprintf(__('Your Account is not verified. Please take a look at %sthis Article%s for more information how to verify your account', 'wpcloudplugins'), '<a href="https://www.dropbox.com/help/sign-in/verify-email" target="blank">', '</a>').'</p>';
 
         $storageinfo = $account->get_storage_info();
         $account_info_html = "<div class='account-info-name'>{$account->get_name()} <code class='account-info-id'>ID: {$account->get_id()}</code></div><span class='account-info-email'>{$account->get_email()}</span> - <span class='account-info-space'>{$storageinfo->get_quota_used()}/{$storageinfo->get_quota_total()}</span>";
@@ -557,11 +570,20 @@ class Admin
         return "<div class='account'><img class='account-image' src='{$account->get_image()}' onerror='this.src=\"".OUTOFTHEBOX_ROOTPATH."/css/images/dropbox_logo.png\"'/><div class='account-info-container'><div class='account-actions'>{$revokebutton}</div><div class='account-info'>{$account_info_html}</div><div class='account-info-error'>{$errror_details_html}</div></div></div>";
     }
 
-    public function get_plugin_reset_box()
+    public function get_plugin_reset_cache_box()
     {
-        $box_text = __('Out-of-the-Box uses a cache to improve performance', 'outofthebox').'. '.__('If the plugin somehow is causing issues, try to reset the cache first', 'outofthebox').'.<br/>';
+        $box_text = __('WP Cloud Plugins uses a cache to improve performance', 'wpcloudplugins').'. '.__('If the plugin somehow is causing issues, try to reset the cache first', 'wpcloudplugins').'.<br/>';
 
-        $box_button = "<div id='resetDropbox_button' type='button' class='simple-button blue'/>".__('Reset Cache', 'outofthebox')."&nbsp;<div class='oftb-spinner'></div></div>";
+        $box_button = "<div id='resetDropbox_button' type='button' class='simple-button blue'/>".__('Reset Cache', 'wpcloudplugins')."&nbsp;<div class='oftb-spinner'></div></div>";
+
+        return "<div id='message'><p>{$box_text}</p><p>{$box_button}</p> </div>";
+    }
+
+    public function get_plugin_reset_plugin_box()
+    {
+        $box_text = __('Need to revert back to the default settings? This button will instantly reset your settings to the defaults', 'wpcloudplugins').'. '.__('When you reset the settings, the plugin will not longer be linked to your accounts, but their authorization will not be revoked', 'wpcloudplugins').'. '.__('You can revoke the authorization via the General tab', 'wpcloudplugins').'.<br/>';
+
+        $box_button = "<div id='resetSettings_button' type='button' class='simple-button blue'/>".__('Reset Plugin', 'wpcloudplugins')."&nbsp;<div class='oftb-spinner'></div></div>";
 
         return "<div id='message'><p>{$box_text}</p><p>{$box_button}</p> </div>";
     }
@@ -569,20 +591,28 @@ class Admin
     public function get_admin_notice()
     {
         if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.__('Out-of-the-Box <u>requires at least PHP 5.5</u> to be able to use the Dropbox API Library', 'outofthebox').'. '.
-            __('You are using PHP version:', 'outofthebox').' <u><a href="https://secure.php.net/releases/#'.phpversion().'" target="_blank" >'.phpversion().'</a></u>.'.
-            '<ul><li><strong>Please update your PHP version</strong> on your server to a recent PHP version of at least version 5.5, and if possible to version 7. Contact your webhost if you need help to update your PHP version.</li></ul>'.
-            '</p></div>';
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('You need at least PHP %s if you want to use this plugin', 'wpcloudplugins'), '5.5').'. '.
+                __('You are using:', 'wpcloudplugins').' <u>'.phpversion().'</u></p></div>';
         } elseif (!function_exists('curl_reset')) {
-            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.__("You don't have the cURL PHP extension installed (couldn't find function \"curl_reset\"), please enable or install this extension", 'outofthebox').'. '.
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.__("You don't have the cURL PHP extension installed (couldn't find function \"curl_reset\"), please enable or install this extension", 'wpcloudplugins').'. '.
+            '</p></div>';
+        } elseif (!extension_loaded('mbstring')) {
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.
+            sprintf(
+                __("You don't have the %s mbstring PHP extension%s enabled in your PHP configuration/package", 'wpcloudplugins'),
+                '<a href="https://www.php.net/manual/en/mbstring.installation.php" target="_blank"><strong>',
+                '</strong></a>'
+            ).'. '.
+            __('Multibyte string is required to handle (e.g.) non-Latin file names.', 'wpcloudplugins').
+            __(' In most cases this can be enabled via your server configuration panel. Otherwise, ask your web host how to enable this extension for your server.', 'wpcloudplugins').
             '</p></div>';
         } elseif (!file_exists(OUTOFTHEBOX_CACHEDIR) || !is_writable(OUTOFTHEBOX_CACHEDIR)) {
-            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('Cannot create the cache directory %s, or it is not writable', 'outofthebox'), '<code>'.OUTOFTHEBOX_CACHEDIR.'</code>').'. '.
-            sprintf(__('Please check if the directory exists on your server and has %s writing permissions %s', 'outofthebox'), '<a href="https://codex.wordpress.org/Changing_File_Permissions" target="_blank">', '</a>').'</p></div>';
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('Cannot create the cache directory %s, or it is not writable', 'wpcloudplugins'), '<code>'.OUTOFTHEBOX_CACHEDIR.'</code>').'. '.
+            sprintf(__('Please check if the directory exists on your server and has %s writing permissions %s', 'wpcloudplugins'), '<a href="https://codex.wordpress.org/Changing_File_Permissions" target="_blank">', '</a>').'</p></div>';
         }
         if (!file_exists(OUTOFTHEBOX_CACHEDIR.'/.htaccess')) {
-            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('Cannot find .htaccess file in cache directory %s', 'outofthebox'), '<code>'.OUTOFTHEBOX_CACHEDIR.'</code>').'. '.
-            sprintf(__('Please check if the file exists on your server or copy it from the %s folder', 'outofthebox'), OUTOFTHEBOX_ROOTDIR.'/cache').'</p></div>';
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('Cannot find .htaccess file in cache directory %s', 'wpcloudplugins'), '<code>'.OUTOFTHEBOX_CACHEDIR.'</code>').'. '.
+            sprintf(__('Please check if the file exists on your server or copy it from the %s folder', 'wpcloudplugins'), OUTOFTHEBOX_ROOTDIR.'/cache').'</p></div>';
         }
     }
 
@@ -595,8 +625,8 @@ class Admin
 
                 foreach ($this->get_main()->get_accounts()->list_accounts() as $account_id => $account) {
                     if (false === $account->get_authorization()->has_access_token() || (false !== wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
-                        echo '<div id="message" class="error"><p><span class="dashicons dashicons-warning"></span>&nbsp;<strong>Out-of-the-Box: </strong>'.sprintf(__("The plugin isn't longer linked to the %s account", 'outofthebox'), '<strong>'.$account->get_email().'</strong>').'.</p>'.
-                        "<p><a href='{$location}' class='button-primary'>".__('Refresh the authorization!', 'outofthebox').'</a></p></div>';
+                        echo '<div id="message" class="error"><p><span class="dashicons dashicons-warning"></span>&nbsp;<strong>Out-of-the-Box: </strong>'.sprintf(__("The plugin isn't longer linked to the %s account", 'wpcloudplugins'), '<strong>'.$account->get_email().'</strong>').'.</p>'.
+                        "<p><a href='{$location}' class='button-primary'>".__('Refresh the authorization!', 'wpcloudplugins').'</a></p></div>';
                     }
                 }
             }
@@ -614,8 +644,25 @@ class Admin
         if ('index.php' == $pagenow || 'plugins.php' == $pagenow) {
             if (current_user_can('manage_options') || current_user_can('edit_theme_options')) {
                 $location = get_admin_url(null, 'admin.php?page=OutoftheBox_settings');
-                echo '<div id="message" class="error"><p><strong>Out-of-the-Box: </strong>'.__('The plugin is not yet activated', 'outofthebox').'. '.__('Please activate the plugin to manage the plugin settings', 'outofthebox').'. '.
-                "<a href='{$location}' class='button-primary'>".__('Activate the plugin!', 'outofthebox').'</a></p></div>';
+                echo '<div id="message" class="error"><p><strong>Out-of-the-Box: </strong>'.__('The plugin is not yet activated', 'wpcloudplugins').'. '.__('Please activate the plugin to manage the plugin settings', 'wpcloudplugins').'. '.
+                "<a href='{$location}' class='button-primary'>".__('Activate the plugin!', 'wpcloudplugins').'</a></p></div>';
+            }
+        }
+    }
+
+    public function get_admin_notice_php_7()
+    {
+        global $pagenow;
+
+        if (version_compare(PHP_VERSION, '7') > 0) {
+            return;
+        }
+
+        if ('index.php' == $pagenow || 'plugins.php' == $pagenow) {
+            if (current_user_can('manage_options') || current_user_can('edit_theme_options')) {
+                $location = 'https://wordpress.org/support/update-php/';
+                echo '<div id="message" class="error"><p><strong>Out-of-the-Box: </strong>'.__('The next major update will not longer be compatible with the PHP version your server is running', 'wpcloudplugins').'. '.__('You are using:', 'wpcloudplugins').' <u>'.phpversion().'</u>. '.__('Please upgrade your PHP version to at least PHP 7.0', 'wpcloudplugins').'.</p><p> '.
+                "<a href='{$location}' target='_blank'  class='button-primary'>".__('Learn move about updating PHP', 'wpcloudplugins').'</a></p></div>';
             }
         }
     }
@@ -639,7 +686,7 @@ class Admin
             $curl_version = curl_version();
             $curl_version = $curl_version['version'].', '.$curl_version['ssl_version'];
         } elseif (extension_loaded('curl')) {
-            $curl_version = __('cURL installed but unable to retrieve version.', 'outofthebox');
+            $curl_version = __('cURL installed but unable to retrieve version.', 'wpcloudplugins');
         }
 
         // WP memory limit.
@@ -679,8 +726,10 @@ class Admin
             'secure_connection' => is_ssl(),
             'hide_errors' => !(defined('WP_DEBUG') && defined('WP_DEBUG_DISPLAY') && WP_DEBUG && WP_DEBUG_DISPLAY) || 0 === intval(ini_get('display_errors')),
             'gravity_forms' => class_exists('GFForms'),
+            'formidableforms' => class_exists('FrmAppHelper'),
             'gravity_pdf' => class_exists('GFPDF_Core'),
             'gravity_wpdatatables' => class_exists('WPDataTable'),
+            'wpforms' => defined('WPFORMS_VERSION'),
             'contact_form_7' => defined('WPCF7_PLUGIN'),
             'woocommerce' => class_exists('WC_Integration'),
             'woocommerce_product_documents' => class_exists('WC_Product_Documents'),
@@ -744,7 +793,7 @@ class Admin
             ];
         }
 
-        include sprintf('%s/templates/system_information.php', OUTOFTHEBOX_ROOTDIR);
+        include sprintf('%s/templates/admin/system_information.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     private function _check_colors($colors, $old_colors)

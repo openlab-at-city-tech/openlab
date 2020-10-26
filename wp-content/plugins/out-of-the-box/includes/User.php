@@ -17,8 +17,11 @@ class User
     private $_can_rename_files = false;
     private $_can_rename_folders = false;
     private $_can_add_folders = false;
+    private $_can_create_document = false;
     private $_can_upload = false;
     private $_can_move = false;
+    private $_can_copy_files = false;
+    private $_can_copy_folders = false;
     private $_can_share = false;
     private $_can_deeplink = false;
 
@@ -47,8 +50,15 @@ class User
         }
 
         $this->_can_add_folders = ('1' === $this->get_processor()->get_shortcode_option('addfolder')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('addfolder_role'));
+        $this->_can_create_document = ('1' === $this->get_processor()->get_shortcode_option('create_document')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('create_document_role'));
         $this->_can_upload = ('1' === $this->get_processor()->get_shortcode_option('upload')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('upload_role'));
         $this->_can_move = ('1' === $this->get_processor()->get_shortcode_option('move')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('move_role'));
+
+        if ('1' === $this->get_processor()->get_shortcode_option('copy')) {
+            $this->_can_copy_files = Helpers::check_user_role($this->get_processor()->get_shortcode_option('copy_files_role'));
+            $this->_can_copy_folders = Helpers::check_user_role($this->get_processor()->get_shortcode_option('copy_folders_role'));
+        }
+
         $this->_can_share = ('1' === $this->get_processor()->get_shortcode_option('show_sharelink')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('share_role'));
 
         $this->_can_deeplink = ('1' === $this->get_processor()->get_shortcode_option('deeplink')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('deeplink_role'));
@@ -99,6 +109,11 @@ class User
         return $this->_can_add_folders;
     }
 
+    public function can_create_document()
+    {
+        return $this->_can_create_document;
+    }
+
     public function can_upload()
     {
         return $this->_can_upload;
@@ -117,6 +132,16 @@ class User
     public function can_move_folders()
     {
         return $this->can_move();
+    }
+
+    public function can_copy_files()
+    {
+        return $this->_can_copy_files;
+    }
+
+    public function can_copy_folders()
+    {
+        return $this->_can_copy_folders;
     }
 
     public function can_share()

@@ -132,8 +132,6 @@ class Shortcodes
     public function reset_cache()
     {
         $this->_nodes = [];
-        $this->set_last_check_for_update();
-        $this->set_last_check_token(null);
         $this->update_cache();
     }
 
@@ -217,7 +215,7 @@ class Shortcodes
             @file_put_contents($file, $this->_serialize_cache());
 
             if (!is_writable($file)) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Shortcode file (%s) is not writable', $file));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Shortcode file (%s) is not writable', $file));
                 die(sprintf('Shortcode file (%s) is not writable', $file));
             }
         }
@@ -235,7 +233,7 @@ class Shortcodes
         if (empty($handle)) {
             $handle = fopen($file, 'c+');
             if (!is_resource($handle)) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Shortcode file (%s) is not writable', $file));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Shortcode file (%s) is not writable', $file));
                 die(sprintf('Shortcode file (%s) is not writable', $file));
             }
             $this->_set_cache_file_handle($handle);

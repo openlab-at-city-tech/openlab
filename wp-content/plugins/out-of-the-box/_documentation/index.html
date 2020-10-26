@@ -174,6 +174,8 @@
 
                     <ul class='sub'>
                       <li><a href="#woocommerce">WooCommerce</a></li>
+                      <li><a href="#wpforms">WPForms</a></li>
+                      <li><a href="#formidableforms">Formidable Forms</a></li>
                       <li><a href="#contact-form">Contact Form 7</a></li>
                       <li><a href="#gravity-forms">Gravity Forms</a></li>
                       <li><a href="#gravity-pdf">Gravity PDF</a></li>
@@ -192,7 +194,7 @@
                     </ul>
 
                   </li>
-                  <li><a href="#releasenotes">Release Notes (version 1.16.9)</a></li>
+                  <li><a href="#releasenotes">Release Notes (version 1.17.12)</a></li>
 
                 </ul>
               </div>
@@ -272,12 +274,27 @@
                         <div class="alert-icon">
                           <i class="material-icons">warning</i>
                         </div>
-                        Are you seeing the meessage <strong>Error: Cannot create the cache directory ... , or it is not
+                        Are you seeing the message <strong>Error: Cannot create the cache directory ... , or it is not
                           writable</strong>? Please take a look at this FAQ article: <a
                           href="https://florisdeleeuwnl.zendesk.com/hc/en-us/articles/360010380940"
                           style="text-decoration: underline" target="_blank">FAQ: Cannot create the cache directory</a>
                       </div>
                     </div>
+
+                    <br />
+                    <h4>Multi Site / Network</h4>
+                    <p>The plugin does support WordPress Multi Sites. You can activate the plugin on network level or on
+                      the sub sites individually.</p>
+                    <p>
+                      When you have activated the plugin on network level, you can link the plugin to multiple accounts.
+                      In that case, each sub site will have access to the accounts that are linked in the network
+                      configuration. You can also link the plugin to multiple Drive accounts per sub site when you
+                      haven't linked the plugin on network level.
+                    </p>
+                    <p><em>Please keep in mind that the <a href="#licensing">Licenses</a> only covers the usage in one
+                        End Product, which means that you will need a separate license for each site when the sites
+                        contain a different End</em>.
+                    </p>
                   </div>
 
                   <div class="tim-row" id="activation">
@@ -498,10 +515,9 @@
                     <h5>Add shortcode via the <strong>Gutenberg Editor</strong></h5>
                     <ol>
                       <li><b>Create</b> a new Page/Post or edit an existing one. </li>
-                      <li>To open the Shortcode Builder, add a Classic Block to your content, and <b>press</b> the first
-                        Out-of-the-Box button in the toolbar of the Classic Block.</li>
-                      <li><b>Adjust</b> the shortcode in the Shortcode Builder via all the controls and options</li>
-                      <li><b>Press</b> the <b>"Insert Shortcode"</b> button, to add an instance to your Page</li>
+                      <li>Open the WP Cloud Plugin section and add a the plugins block</li>
+                      <li><b>Adjust</b> the configuration in the panel on the right by pressing the 'Edit via Shortcode
+                        Builder' button</li>
                       <li><b>Publish</b> or <b>Update</b> the page and you are finished!</li>
                     </ol>
 
@@ -517,20 +533,57 @@
                       </div>
 
                       <div class="col-sm-4">
-                        <a href="assets/img/instructions/open-shortcode-builder-2.png" data-title="Shortcode Builder"
+                        <a href="assets/img/instructions/open-shortcode-builder-3.png" data-title="Shortcode Builder"
                           data-footer="Configure Shortcode Settings, and insert Shortcode"
                           data-gallery="shortcode-gallery" data-toggle="lightbox">
-                          <img src="assets/img/instructions/open-shortcode-builder-2.png"
+                          <img src="assets/img/instructions/open-shortcode-builder-3.png"
                             class="img-responsive img-raised">
                         </a>
                       </div>
 
                       <div class="col-sm-4">
-                        <a href="assets/img/instructions/open-shortcode-builder-3.png" data-title="Shortcode Builder"
+                        <a href="assets/img/instructions/open-shortcode-builder-2.png" data-title="Shortcode Builder"
                           data-footer="The Shortcode is added to your page" data-gallery="shortcode-gallery"
                           data-toggle="lightbox">
-                          <img src="assets/img/instructions/open-shortcode-builder-3.png"
+                          <img src="assets/img/instructions/open-shortcode-builder-2.png"
                             class="img-responsive img-raised">
+                        </a>
+                      </div>
+                    </div>
+                    <br /><br />
+
+                    <h5>Add shortcode via <strong>Elementor</strong></h5>
+                    <ol>
+                      <li><b>Create</b> a new Page/Post or edit an existing one. </li>
+                      <li>Open the WP Cloud Plugin section and add a the plugins block</li>
+                      <li><b>Adjust</b> the configuration in the panel on the right by pressing the 'Edit via Shortcode
+                        Builder' button</li>
+                      <li><b>Publish</b> or <b>Update</b> the page and you are finished!</li>
+                    </ol>
+
+                    <br />
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <a href="assets/img/instructions/elementor-1.png" data-title="Shortcode Builder"
+                          data-footer="Open the Shortcode Builder" data-gallery="shortcode-gallery"
+                          data-toggle="lightbox">
+                          <img src="assets/img/instructions/elementor-1.png" class="img-responsive img-raised">
+                        </a>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <a href="assets/img/instructions/elementor-2.png" data-title="Shortcode Builder"
+                          data-footer="Configure Shortcode Settings, and insert Shortcode"
+                          data-gallery="shortcode-gallery" data-toggle="lightbox">
+                          <img src="assets/img/instructions/elementor-2.png" class="img-responsive img-raised">
+                        </a>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <a href="assets/img/instructions/elementor-3.png" data-title="Shortcode Builder"
+                          data-footer="The Shortcode is added to your page" data-gallery="shortcode-gallery"
+                          data-toggle="lightbox">
+                          <img src="assets/img/instructions/elementor-3.png" class="img-responsive img-raised">
                         </a>
                       </div>
                     </div>
@@ -1040,10 +1093,10 @@
                     </p>
                     <br />
                     <b>Example</b>
-                    <pre class='pre-scrollable'><code>add_filter('outofthebox_notification_set_template','change_notification_email', 10, 1);
+                    <pre class='pre-scrollable'><code>add_filter('outofthebox_notification_set_template','change_notification_email', 10, 2);
 
-public function change_notification_email($template_location, $notification){
-    return WP_CONTENT_DIR .'/custom_notifications/default_notification.php'
+function change_notification_email($template_location, $notification){
+    return WP_CONTENT_DIR .'/custom_notifications/default_notification.php';
 }</code></pre>
 
                   </div>
@@ -1319,7 +1372,7 @@ public function change_event_summary_email($template_location, $notification){
                       This allows your clients to preview, download and manage their documents in their own private
                       folder. Specific permissions can always be set via <a
                         href="#shortcode-builder-options-user-permissions"><b>User Permissions tab</b></a>.</p>
-                    <p> The Smart Client Area can be useful in some situations, for example:</p>
+                    <p> The Smart Client Area can be useful in some situations, for example::</p>
 
                     <ul>
                       <li>You want to share documents with your clients privately;</li>
@@ -1390,10 +1443,10 @@ public function change_event_summary_email($template_location, $notification){
                         <tr>
                           <th>Sort field</th>
                           <td>Select the field that should be used to sort the documents. Values: <code>Name</code>,
-                            <code>Size</code>, <code>Date modified</code>, <code>Shuffle</code></td>
+                            <code>Size</code>, <code>Last modified date</code>, <code>Shuffle</code></td>
                         </tr>
                         <tr>
-                          <th>Sort order</th>
+                          <th>Sort order:</th>
                           <td>Select the sorting order of the documents: <code>Ascending</code> or
                             <code>Descending</code></td>
                         </tr>
@@ -1481,6 +1534,12 @@ public function change_event_summary_email($template_location, $notification){
                         </tr>
                       </thead>
                       <tbody>
+                        <tr>
+                          <th>Number of files to show</th>
+                          <td>Can be used to only show an x number of files. Useful in situation where (e.g.) just want
+                            to show the last 5
+                            updated documents. Leave this field empty or set it to -1 for no limit.</td>
+                        </tr>
                         <tr>
                           <th>Show files with those extensions</th>
                           <td>Add extensions separated with | e.g. <code>jpg|png|gif</code>. Leave empty to show all
@@ -1918,6 +1977,25 @@ public function change_event_summary_email($template_location, $notification){
                       data-title="WooCommerce Digitial Downloads Integration" data-toggle="lightbox">
                       <img src="assets/img/instructions/woocommerce.png" class="img-responsive img-raised">
                     </a>
+
+                    <br /><br />
+
+                    <div class="alert alert-warning">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">warning</i>
+                        </div>
+                        Please note that using the <b>'Force Download'</b> as <b>File Download Method</b>
+                        (<b>WooCommerce > Settings > Products > Downloadable Products</b>), will download the files via
+                        your server. It is recommended to use the download method <b>'Redirect only'</b> to let your
+                        customers
+                        download the files directly via the cloud.
+                        </br>
+                        In contrast with downloads stored on your server,
+                        this setting isn't insecure for the downloads of this plugin as your customers will be
+                        redirected to a temporarily download.
+                      </div>
+                    </div>
                   </div>
 
                   <div class="tim-row">
@@ -1960,9 +2038,86 @@ public function change_event_summary_email($template_location, $notification){
                       data-title="WooCommerce Uploads Integration" data-toggle="lightbox">
                       <img src="assets/img/instructions/woocommerce-upload-1.png" class="img-responsive img-raised">
                     </a>
+                  </div>
 
+                  <div class="tim-row" id="wpforms">
+                    <h3>WPforms Integration</h3>
+                    <legend></legend>
 
+                    <p>Do you want more flexibility than the Upload Form that is included? Out-of-the-Box seamlessly
+                      integrates into the WPForms plugin allowing you the create the perfect form! To add
+                      the plugin in your form, follow these instructions:</p>
 
+                    <ol>
+                      <li><b>Create</b> a new Form (<b>[WPForms] -> [Add New]</b>) or <b>open</b> an existing
+                        one</li>
+                      <li><b>Open</b> the WP Cloud Plugins Fields tab</li>
+                      <li><b>Drag</b> the plugins form element to your form</li>
+                      <li><b>Open</b> the details of the newly added form element</li>
+                      <li><b>Click</b> on the <b>"Open Shortcode Builder"</b> button</li>
+                      <li>In the Shortcode Builder that opens, <b>create</b> the shortcode that you need</li>
+                      <li><b>Press "Insert Shortcode"</b> to update the shortcode</li>
+                      <li><b>Save</b> the Form</li>
+                      <li>Done!</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        You can use the available input fields in your form to name the upload folder based on
+                        user input. To do so, just add the CSS class <code>outofthebox_private_folder_name</code> to
+                        your input field(s).
+                        <br />
+                      </div>
+                    </div>
+
+                    <br /><br />
+                    <a href="assets/img/instructions/wpforms.png" data-title="WPForms Integration"
+                      data-toggle="lightbox">
+                      <img src="assets/img/instructions/wpforms.png" class="img-responsive img-raised">
+                    </a>
+                  </div>
+
+                  <div class="tim-row" id="formidableforms">
+                    <h3>Formidable Forms Integration</h3>
+                    <legend></legend>
+
+                    <p>Do you want more flexibility than the Upload Form that is included? Out-of-the-Box seamlessly
+                      integrates into the Formidable Forms plugin allowing you the create the perfect form! To add
+                      the plugin in your form, follow these instructions:</p>
+
+                    <ol>
+                      <li><b>Create</b> a new Form (<b>[Formidable] -> [Forms] -> [Add New]</b>) or <b>open</b> an
+                        existing one</li>
+                      <li><b>Open</b> the Add Fields tab</li>
+                      <li><b>Drag</b> the plugins form element to your form</li>
+                      <li><b>Open</b> the details of the newly added form element</li>
+                      <li><b>Click</b> on the <b>"Open Shortcode Builder"</b> button on the Advanced tab</li>
+                      <li>In the Shortcode Builder that opens, <b>create</b> the shortcode that you need</li>
+                      <li><b>Press "Insert Shortcode"</b> to update the shortcode</li>
+                      <li><b>Save</b> the Form</li>
+                      <li>Done!</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        You can use the available input fields in your form to name the upload folder based on
+                        user input. To do so, just add the CSS class <code>outofthebox_private_folder_name</code> to
+                        your input field(s).
+                        <br />
+                      </div>
+                    </div>
+
+                    <br /><br />
+                    <a href="assets/img/instructions/formidableforms.png" data-title="Formidable Forms Integration"
+                      data-toggle="lightbox">
+                      <img src="assets/img/instructions/formidableforms.png" class="img-responsive img-raised">
+                    </a>
                   </div>
 
                   <div class="tim-row" id="contact-form">
@@ -1997,6 +2152,19 @@ public function change_event_summary_email($template_location, $notification){
                       </div>
                     </div>
 
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        Want to hide the Upload Box before all required fields on the form are filled? Take a look at
+                        the free <b><a href="https://wordpress.org/plugins/cf7-conditional-fields/">Contact Form 7 –
+                            Conditional Fields</a></b> plugin.
+                        <br />
+                      </div>
+                    </div>
+
                     <br /><br />
                     <a href="assets/img/instructions/contact-form.png" data-title="Contact Form 7 Integration"
                       data-toggle="lightbox">
@@ -2024,6 +2192,18 @@ public function change_event_summary_email($template_location, $notification){
                       <li><b>Save</b> the Form by pressing the <b>"Update Form"</b> button</li>
                       <li>Done!</li>
                     </ol>
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        You can use the available input fields in your Gravity Form to name the upload folder based on
+                        user input. To do so, just add the <code>outofthebox_private_folder_name</code> to the Custom
+                        CSS Class of your input field (Appearance tab).
+                        <br />
+                      </div>
+                    </div>
 
                     <br /><br />
                     <a href="assets/img/instructions/gravity-forms.png" data-title="Gravity Forms Integration"
@@ -2152,8 +2332,7 @@ public function change_event_summary_email($template_location, $notification){
                     <ul>
                       <li>You have read the documentation provided</li>
                       <li>Searched the answer within our <a href="https://florisdeleeuwnl.zendesk.com/hc/"
-                          target="_blank">FAQ articles</a> and the <a
-                          href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2F5529125%2Fcomments"
+                          target="_blank">FAQ articles</a> and the <a href="https://1.envato.market/vLjyO"
                           target="_blank">comment section</a> of the product page</li>
                       <li>Make sure you have the <b>latest version</b> installed.</li>
                     </ul>
@@ -2163,8 +2342,7 @@ public function change_event_summary_email($template_location, $notification){
                       <i class="material-icons">question_answer</i> &nbsp; FAQ section
                     </a>
 
-                    <a href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2F5529125%2Fcomments"
-                      class="btn btn-primary" target="_blank" rel="nofollow">
+                    <a href="https://1.envato.market/vLjyO" class="btn btn-primary" target="_blank" rel="nofollow">
                       <i class="material-icons">question_answer</i> &nbsp; Comments section
                     </a>
 
@@ -2218,6 +2396,222 @@ public function change_event_summary_email($template_location, $notification){
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>1.17.12</td>
+                        <td>17 October 2020</td>
+                        <td>
+                          <ul>
+                            <li>Added: Formidable Forms integration</li>
+                            <li>Fix: Layout description box in Gallery aligning long descriptions incorrectly</li>
+                            <li>Fix: File Browser in WooCommerce Orders not starting uploads</li>
+                            <li>Improved: Removed ReCaptcha from Admin Dashboard pages with plugin when ReCaptcha is
+                              enabled</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.11</td>
+                        <td>12 October 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Upload Box could create folders when file name contained special characters</li>
+                            <li>Fix: Upload Form integrations was submitting Forms even if a file in the queue failed to
+                              upload.</li>
+                            <li>Fix: Conflict in WPForms Builder when having multiple WP Cloud Plugins running</li>
+                            <li>Updated: Font Awesome library to version 5.15.1</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.10</td>
+                        <td>26 September 2020</td>
+                        <td>
+                          <ul>
+                            <li>Added: 'Max number of files' option for Media Player shortcode</li>
+                            <li>Fix: Previous folder button not working when inside Shortcut Folder</li>
+                            <li>Fix: Click event to open lightbox not fired correctly on mobile devices</li>
+                            <li>Fix: Gutenberg & Elementor block incorrectly displaying error message when user doesn't
+                              have permissions to display the plugin</li>
+                            <li>Fix: Speed Selector was removed from the Media Player when loading a next file in the
+                              playlist</li>
+                            <li>Improved: Drag & Drop upload of folders is now supported</li>
+                            <li>Improved: Support for moving multiple items at once via drag&drop</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.9</td>
+                        <td>14 September 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Bit.ly URL shortener now compatible with v4 of their API</li>
+                            <li>Fix: Uploads of files with the same name but in different folders could fail</li>
+                            <li>Fix: Indirect uploads to Dropbox could fail on specific servers</li>
+                            <li>Fix: Description/Info button not working properly</li>
+                            <li>Fix: Updated cacert.pem to latest Mozilla CA certificate store to fix connection
+                              problems with the API</li>
+                            <li>Updated: Plugin Update Checker to version 4.10</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.8</td>
+                        <td>2 September 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Prevent plugin from crashing when required mbstring extension isn't enabled on
+                              server</li>
+                            <li>Fix: Manually linked private folders without account information will now use the
+                              primary account as default</li>
+                            <li>Removed: Outdated jQuery code attrFn()</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.7</td>
+                        <td>18 August 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Bug preventing to delete folder/files for not logged in users while having the
+                              correct permissions</li>
+                            <li>Fix: Upload queue in small containers not showing progress indicator</li>
+                            <li>Fix: Media Player Playlist not working correctly for folders containing quotes</li>
+                            <li>Fix: Incorrect API settings/requests for custom Dropbox Apps using App Folder
+                              permissions. Please check if the 'OAuth 2.0
+                              Redirect URI' value on the Advanced tab matches the value in your Dropbox App
+                              configuration if you encounter problems authorizing your Dropbox account with your own App
+                            </li>
+                            <li>Updated: MediaElement.js to version 4.2.16</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.6</td>
+                        <td>6 August 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Deactivating plugin not possible when use WP CLI</li>
+                            <li>Fix: Resolved cookie SameSite warnings</li>
+                            <li>Fix: Uploads of many files at once could cause problems on servers restricting the
+                              number of simultaneous connections</li>
+                            <li>Fix: Vertical thumbnails in LightBox not fitting on screen</li>
+                            <li>Fix: CSS issues in IE / Safari due class names with double hypens</li>
+                            <li>Improved: Media Player now loading files without extension but with valid mimetype as
+                              well</li>
+                            <li>Improved: Few Layout changes</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.5</td>
+                        <td>24 July 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Direct links preventing File Browsers/Galleries to initiate properly when multiple
+                              instance are placed on the same page.
+                            <li>Fix: Uninstall can cause problems</li>
+                            <li>Fix: Not rendering Lightbox information for last file in list</li>
+                            <li>Improved: Pressing (+) directly trigger file selector when folder uploads are disabled
+                            </li>
+                            <li>Improved: Changed placeholder text in the search box. Not longer showing 'search in
+                              content' when files are hidden in the shortcode</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.4.1</td>
+                        <td>16 July 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Cache not updated correctly after upload</li>
+                            <li>Fix: Shortcode Builder not saving data in FireFox</li>
+                            <li>Fix: Download button in Gallery not firing correctly</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.4</td>
+                        <td>10 July 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Deeplinks not opening files</li>
+                            <li>Fix: Integrations not loading correctly when using WP-CLI</li>
+                            <li>Fix: Bug in Lightbox causing problems in IE 11</li>
+                            <li>Fix: Uploads not storing file information due to missing File IDs. Causing problems in
+                              Form integrations and Upload notifications</li>
+                            <li>Fix: Modal conflict with themes using Bootstrap preventing you to scroll the page after
+                              closing the modal</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.3</td>
+                        <td>7 July 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Thumbnail in List View popup can overflow its container</li>
+                            <li>Fix: File Browser not always showing files that are just uploaded
+                              via the Upload Box</li>
+                            <li>Fix: Missing RTL stylesheet for Media Player skins</li>
+                            <li>Added: Make copy action for Folders & Files</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.2</td>
+                        <td>1 July 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Bug preventing you to download a single folder as ZIP via the folder action menu
+                            </li>
+                            <li>Fix: Bug preventing you to delete files and folders via action menu</li>
+                            <li>Fix: Bug preventing a file selection in Embed or Add link Popup</li>
+                            <li>Fix: Plugin shortcode not visible when added in a Classic Block in the Gutenberg Editor
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.1</td>
+                        <td>29 June 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Uploads not working when using XHR</li>
+                            <li>Fix: Breadcrumb conflict with themes using Bootstrap library</li>
+                            <li>Fix: Layout problems on small devices </li>
+                            <li>Added: New translations files. If you have corrections or want a
+                              new translation, please inform us via a support ticket!</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17</td>
+                        <td>26 June 2020</td>
+                        <td>
+                          <ul>
+                            <li><span class="label label-danger">IMPORTANT</span> Dropped support for IE 10 and lower
+                            </li>
+                            <li>Fix: Skiping Ad loads first media item in playlist instead of the selected media</li>
+                            <li>Fix: Wrong order of including javascripts could cause problems with Upload Box</li>
+                            <li>Fix: ZIP functionality not working properly when used in search results</li>
+                            <li>Added: New button to do a factory reset via the plugin settings page</li>
+                            <li>Added: Setting to show descriptions in gallery directly on top of images </li>
+                            <li>Added: Setting to add initial search term in File Browser and Gallery </li>
+                            <li>Added: Gutenberg Editor block</li>
+                            <li>Added: Elementor block</li>
+                            <li>Added: WPForms integration</li>
+                            <li>Added: Support for seting Private Folder names via Gravity Form fields</li>
+                            <li>Improved: Uninstalling the plugin will now remove all its setting and data unless this
+                              has been disabled on the Advanced tab</li>
+                            <li>Improved: Scroll to top button not longer hidding bottom documents in File Browser</li>
+                            <li>Improved: Layout of File Browser, Gallery and Upload Box</li>
+                            <li>Improved: Replaced outdated javascript tooltip library </li>
+                            <li>Improved: Add/Edit descriptions dialogs</li>
+                            <li>Improved: Added better support for sites using RTL </li>
+                            <li>Improved: Various other layout updates</li>
+                          </ul>
+                        </td>
+                      </tr>
                       <tr>
                         <td>1.16.10</td>
                         <td>1 May 2020</td>
@@ -2913,84 +3307,6 @@ public function change_event_summary_email($template_location, $notification){
                           </ul>
                         </td>
                       </tr>
-                      <tr>
-                        <td>1.11.4.2</td>
-                        <td>22 March 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug preventing Gravity Form submission when no files are uploaded</li>
-                            <li>Add: New filter outofthebox_sort_filelist_settings, outofthebox_sort_filelist to modify
-                              the file sorting</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11.4.1</td>
-                        <td>21 March 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Plugin not started for Private Folders selection</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11.4</td>
-                        <td>21 March 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: WooCommerce Bug not setting download location properly</li>
-                            <li>Fix: CSS issue of settings fields in FireFox</li>
-                            <li>Added: Gravity Forms validation for Upload Box</li>
-                            <li>Added: Gravity Forms only start uploads on submitting form</li>
-                            <li>Added: outofthebox_gallery_entry_text filter to change the file and folder names in
-                              gallery</li>
-                            <li>Improved: Plugin properly initating when it is loaded dynamically (AJAX)</li>
-                            <li>Improved: Changed gzcompress() to gzencode()</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11.3</td>
-                        <td>13 February 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Search results on mobile devices not properly displayed</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11.2</td>
-                        <td>31 Januari 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Solved conflict with PHPThumb library</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11.1</td>
-                        <td>25 Januari 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix Buttons not using the right CSS styles</li>
-                            <li>Fix: Shuffle mode causing plugins to stop responding</li>
-                            <li>Fix: Corrupt WooCommerce download links</li>
-                            <li>Added: New outofthebox_shortcode_set_options($options, $processor) hook to dynamicaly
-                              change the shortcode options</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.11</td>
-                        <td>17 Januari 2018</td>
-                        <td>
-                          <ul>
-                            <li>Added: Grid/Thumbnail view for File Browser providing thumbnails for most common formats
-                            </li>
-                            <li>Improved: CSS for mobile devices</li>
-                          </ul>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
 
@@ -2998,7 +3314,7 @@ public function change_event_summary_email($template_location, $notification){
 
                   <a href="https://florisdeleeuwnl.zendesk.com/hc/en-us/requests/new" class="btn btn-primary"
                     target="_blank" rel="nofollow">
-                    <i class="material-icons">email</i> &nbsp; Looking for earlier changes? Ask!
+                    <i class="material-icons">email</i> &nbsp; Looking for earlier changes? Just ask!
                   </a>
 
                 </div>

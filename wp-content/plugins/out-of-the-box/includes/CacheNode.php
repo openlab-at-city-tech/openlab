@@ -10,6 +10,14 @@ class CacheNode implements \Serializable
      * @var string
      */
     private $_id;
+
+    /**
+     * ID of the Account.
+     *
+     * @var mixed
+     */
+    private $_account_id;
+
     private $_rev;
     private $_shared_links;
     private $_media_info = [];
@@ -28,6 +36,7 @@ class CacheNode implements \Serializable
     {
         $data = [
             '_id' => $this->_id,
+            '_account_id' => $this->_account_id,
             '_rev' => $this->_rev,
             '_shared_links' => $this->_shared_links,
             '_media_info' => $this->_media_info,
@@ -48,6 +57,11 @@ class CacheNode implements \Serializable
     public function get_id()
     {
         return $this->_id;
+    }
+
+    public function get_account_id()
+    {
+        return $this->_account_id;
     }
 
     public function get_rev()

@@ -1,0 +1,12 @@
+.button.insert-outofthebox,
+.button.insert-outofthebox:hover,
+.button.insert-outofthebox:active,
+.button.insert-outofthebox:focus {
+  float: right;
+  margin-right: 7px;
+  background-image: url("../../../css/images/dropbox_logo.svg");
+  background-repeat: no-repeat;
+  background-position: 6px center;
+  padding-left: 25px;
+  background-size: 1em;
+}

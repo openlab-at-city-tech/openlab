@@ -10,6 +10,12 @@
       /* Remove no JS message */
       this.element.removeClass('jsdisabled');
       this.element.show();
+      this.element.on("contextmenu", function (e) {
+        /* Disable right clicks */
+        return false;
+      });
+
+      this.options.main = this;
       this.options.topContainer = this.element.parent();
       this.options.loadingContainer = this.element.find('.loading');
 
@@ -19,19 +25,17 @@
       /* Set the shortcode ID */
       this.options.listtoken = this.element.attr('data-token');
       this.options.account_id = this.element.attr('data-account-id');
+      this.options.instance_action = this.element.attr('data-type');
+
+      /* Set initual search term */
+      this.searchQuery = this.element.attr('data-query');
 
       /* Local Cache */
       this.cache = {};
 
-      /* Upload values */
-      this.uploaded_files = [];
-      this.uploaded_files_storage = {};
-      this.number_of_uploaded_files = {
-        'Max': this.element.find('input[name="maxnumberofuploads"]').val(),
-        'Counter': 0
-      };
-
       /* Mobile? */
+      this.options.userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      this.options.supportTouch = (!!('ontouchstart' in window) && (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(this.options.userAgent))) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       this.options.mobile = false;
       if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         var userAgent = navigator.userAgent.toLowerCase();
@@ -50,6 +54,9 @@
       if (this.options.mobile) {
         $('html').addClass('oftb-mobile');
       }
+
+      /* RTL */
+      this.is_rtl = window.getComputedStyle(document.body, null).getPropertyValue('direction') === 'rtl';
 
       this.recaptcha_passed = false;
 
@@ -84,7 +91,7 @@
           self._initFilebrowser();
         }
 
-        if (self.element.find('.fileuploadform').length > 0) {
+        if (self.element.find('.fileupload-box').length > 0) {
           self._initUploadBox();
         }
 
@@ -93,6 +100,19 @@
         }
       });
 
+      /* Check if Deep link */
+      var url = new URL(window.location);
+      var search_params = new URLSearchParams(url.search);
+      var deeplink = search_params.get('wpcp_link');
+
+      if (deeplink !== null) {
+        var hash_params = JSON.parse(decodeURIComponent(window.atob(deeplink)));
+        if (hash_params.source === this.element.attr('data-source')) {
+          self.options.topContainer.addClass('initiate')
+        }
+      }
+
+      /* Initiate if needed even when not in view */
       if (self.options.topContainer.hasClass('initiate')) {
         self.options.topContainer.trigger('inview');
       }
@@ -100,6 +120,8 @@
       window.setTimeout(function () {
         self.initated = true;
       }, 2000);
+
+      self.element.trigger('outofthebox-loaded', self);
     },
 
     _initFilebrowser: function () {
@@ -114,7 +136,7 @@
       if (deeplink !== null) {
         var hash_params = JSON.parse(decodeURIComponent(window.atob(deeplink)));
 
-        if (hash_params.org_path === this.element.attr('data-org-path')) {
+        if (hash_params.source === this.element.attr('data-source')) {
           this.options.account_id = hash_params.account_id;
           this.element.attr('data-path', hash_params.last_path);
           this.option.focus_id = hash_params.focus_id;
@@ -134,377 +156,7 @@
 
     _initUploadBox: function () {
       var self = this;
-
-      var is_standalone = self.options.topContainer.hasClass('upload');
-      var upload_box = self.element.find('.fileuploadform');
-      var upload_form = upload_box.closest('form');
-      var autoUpload = true;
-
-      /* Drag & Drop functionality for the Upload Box */
-      this._initDragDrop();
-
-      /* Remove Folder upload button if isn't supported by browser */
-      if (self._helperIsIE() !== false && self._helperIsIE() < 10) {
-        $('.upload-multiple-files').parent().remove();
-      }
-
-      /* Set Cookie for Guest uploads */
-      if (is_standalone && document.cookie.indexOf("OftB-ID=") == -1) {
-        var date = new Date();
-        date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-        var expires = "; expires=" + date.toUTCString();
-        var id = Math.random().toString(36).substr(2, 16);
-        document.cookie = "OftB-ID=" + id + expires + "; path=" + self.options.cookie_path + "; domain=" + self.options.cookie_domain + ";";
-      }
-
-      /* Add custom Upload Button on forms to start upload before submitting form*/
-      if (upload_form.length > 0) {
-        var $form_submit_btn = upload_form.find('input[type="submit"]:visible, input[type="button"].gform_next_button:visible, button[id^="gform_submit_button"]:visible, button[class*="cf7md-submit-btn"]:visible');
-        var $form_upload_btn = upload_form.find('#wpcp_form_submit');
-
-        if ($form_upload_btn.length === 0) {
-          $form_upload_btn = $form_submit_btn.clone().attr('id', 'wpcp_form_submit').prop('onclick', null).prop('onkeypress', null).off().addClass('wpcf7-submit');
-        }
-
-        $form_upload_btn.click(function (e) {
-
-          if ((upload_box.closest('.gfield_contains_required').length) && (self.number_of_uploaded_files.Counter === 0)) {
-            upload_box.css('border-color', 'red');
-            return false;
-          }
-
-          $(this).addClass("firing").prop("disabled", true).fadeTo(400, 0.3);
-
-          if (upload_box.find(".template-upload").length > 0) {
-            upload_box.css('border-color', '');
-            upload_box.trigger('outofthebox-startupload');
-            $(this).val(self.options.str_processing);
-            return false;
-          }
-
-          if (upload_form.find(".template-upload").length === 0 && upload_form.hasClass('submitting') === false) {
-
-            upload_form.addClass("submitting")
-
-            $(this).remove();
-            $form_submit_btn.prop("disabled", false).show().fadeTo(400, 0.3).trigger('click').prop("disabled", true);
-
-            $('html, body').animate({
-              scrollTop: $form_submit_btn.offset().top
-            }, 1500);
-          }
-        });
-      }
-
-      /* Disable Auto Upload in case the Upload Box is part of a Gravity Form or Contact Form */
-      if (upload_form.length > 0 && upload_form.find('#gravityflow_update_button').length === 0 && !self.options.topContainer.hasClass('auto_upload')) {
-        autoUpload = false;
-
-        /* Do the upload before the form is submitted */
-        if (upload_form.find('#wpcp_form_submit').length === 0) {
-          $form_upload_btn.insertBefore($form_submit_btn);
-          $form_submit_btn.prop("disabled", true).hide();
-
-          // Trigger Contact Form 7 'required field' events
-          upload_box.trigger('outofthebox-removeupload');
-        }
-      }
-
-      /* If the Upload Box is part of a Gravity Form or Contact Form, render the rows of the already uploaded content */
-      if (upload_form.length > 0 && self.element.find('input[name="fileupload-filelist_' + self.options.listtoken + '"]').val().length > 0) {
-        self.uploaded_files_storage = JSON.parse(self.element.find('input[name="fileupload-filelist_' + self.options.listtoken + '"]').val());
-
-        $.each(self.uploaded_files_storage, function (index, file) {
-          self._uploadRenderRow(file);
-          self._uploadRenderRowOnFinish(file, true);
-          self.number_of_uploaded_files.Counter++;
-        });
-      }
-
-      /* Update form input fields to store upload files */
-      self.element.find('.fileupload-filelist').change(function () {
-        self.element.parent().next('.fileupload-input-filelist').val($(this).val());
-      });
-      self.element.find('.fileupload-filelist').trigger('change');
-
-      self.element.find('.fileupload-list').click(function () {
-        self.element.find(".upload-input-button:first").trigger("click");
-      });
-
-      /* The following browsers support XHR and(CHUNKED) file uploads, 
-       * which allows advanced usage of the file upload
-       * 
-       * ###Desktop browsers###
-       * - Google Chrome
-       * - Apple Safari 5.0+ (6.0+)
-       * - Mozilla Firefox 4.0+ (4.0+)
-       * - Opera 12.0+ (12.0+)
-       * Microsoft Internet Explorer 10.0+ (10.0+)
-       * 
-       * ###Mobile browsers###
-       * Apple Safari Mobile on iOS 6.0+  (6.0+)
-       * Google Chrome on iOS 6.0+ (6.0+)
-       * Google Chrome on Android 4.0+  (4.0+)
-       * Default Browser on Android 3.2+  (NOT SUPPORTED)
-       * Opera Mobile 12.0+ (NOT SUPPORTED)
-       */
-      var support_xhr = $.support.xhrFileUpload;
-      var support_chunked = false;
-
-      var multipart_val = (support_xhr) ? false : true;
-      var method_val = 'POST';
-      var singlefileuploads_val = true;
-      var maxchunksize_val = (support_chunked) ? 20 * 320 * 1000 : 0; //Multiple of 320kb, the recommended fragment size is between 5-10 MB.
-
-      /* Update max file upload for direct uploads */
-      //if (support_xhr && self.element.find('input[name="maxfilesize"]').attr('data-limit') === '0') {
-      self.element.find('input[name="maxfilesize"]').val('');
-      //  self.element.find('.fileupload-container').find('.max-file-size').text(self.options.str_uploading_no_limit);
-      //}
-
-      /* Initiate the Blueimp File Upload plugin*/
-      upload_box.fileupload({
-        url: self.options.ajax_url,
-        type: method_val,
-        maxChunkSize: maxchunksize_val,
-        singleFileUploads: singlefileuploads_val,
-        multipart: multipart_val,
-        dataType: 'json',
-        autoUpload: autoUpload,
-        maxFileSize: (support_xhr && self.element.find('input[name="maxfilesize"]').attr('data-limit') === '0') ? 'undefined' : self.options.post_max_size,
-        acceptFileTypes: new RegExp(self.element.find('input[name="acceptfiletypes"]').val(), "i"),
-        dropZone: self.element,
-        messages: {
-          maxNumberOfFiles: self.options.maxNumberOfFiles,
-          acceptFileTypes: self.options.acceptFileTypes,
-          maxFileSize: self.options.maxFileSize,
-          minFileSize: self.options.minFileSize
-        },
-        limitConcurrentUploads: 3,
-        disableImageLoad: true,
-        disableImageResize: true,
-        disableImagePreview: true,
-        disableAudioPreview: true,
-        disableVideoPreview: true,
-        uploadTemplateId: null,
-        downloadTemplateId: null,
-        add: function (e, data) {
-
-          $.each(data.files, function (index, file) {
-            self.number_of_uploaded_files.Counter++;
-            file.hash = file.name.hashCode() + '_' + Math.floor(Math.random() * 1000000);
-            file.listtoken = self.options.listtoken;
-
-            if ("webkitRelativePath" in file) {
-              file.path = file.webkitRelativePath.replace(file.name, '');
-            } else {
-              file.path = '';
-            }
-
-            /* Files larger than 300MB cannot be uploaded directly to Dropbox :( */
-            file.directupload = support_xhr && (file.size < 314572800);
-
-            file = self._uploadValidateFile(file);
-            var row = self._uploadRenderRow(file);
-
-            if (file.error !== false) {
-              upload_box.trigger('outofthebox-removeupload', [data.files[index]]);
-              data.files.splice(index, 1);
-            }
-
-            row.find('.cancel-upload').on('click', function (e) {
-              e.preventDefault();
-              e.stopPropagation();
-
-              data.files.splice(index, 1);
-              self.number_of_uploaded_files.Counter--;
-              self._uploadDeleteRow(file, 0);
-
-              upload_box.trigger('outofthebox-removeupload', [data.files[index]]);
-            });
-
-          });
-
-          upload_box.trigger('outofthebox-addupload', [data]);
-
-          if (data.autoUpload || (data.autoUpload !== false &&
-                  $(this).fileupload('option', 'autoUpload'))) {
-            if (data.files.length > 0) {
-              data.process().done(function () {
-                self._uploadDoRequest(data);
-              });
-            }
-          } else {
-            $(this).on('outofthebox-startupload', function () {
-              if (data.files.length > 0) {
-                data.process().done(function () {
-                  self._uploadDoRequest(data);
-                });
-              }
-            });
-          }
-        },
-        submit: function (e, data) {
-          /*  Enable navigation prompt */
-          window.onbeforeunload = function () {
-            return true;
-          };
-
-          self.element.attr('uploading', 'true');
-
-          var filehash;
-          var file;
-
-          $.each(data.files, function (index, entry) {
-            file = entry;
-            self._uploadRenderRowOnStart(file);
-            filehash = file.hash;
-          });
-
-          if (autoUpload === false && self.element.visible(true) === false) {
-            $('html, body').stop().animate({
-              scrollTop: self.element.offset().top - 200
-            }, 1000);
-          }
-
-
-          /* Do Direct Upload */
-          if (file.directupload) {
-            var $this = $(this);
-
-            self.element.find('.fileuploadform').fileupload('option', 'multipart', false);
-
-            $.ajax({type: "POST",
-              url: OutoftheBox_vars.ajax_url,
-              data: {
-                action: 'outofthebox-upload-file',
-                account_id: self.options.account_id,
-                type: 'get-direct-url',
-                filename: file.name,
-                file_size: file.size,
-                file_path: file.path,
-                mimetype: file.type,
-                orgin: (!window.location.origin) ? window.location.protocol + "//"
-                        + window.location.hostname
-                        + (window.location.port ? ':' + window.location.port : '') : window.location.origin,
-                lastpath: self.element.attr('data-path'),
-                listtoken: self.options.listtoken,
-                _ajax_nonce: self.options.upload_nonce,
-              },
-              error: function () {
-                file.error = self.options.str_error;
-                self._uploadRenderRowOnFinish(file);
-              },
-              success: function (response) {
-                if (typeof response.result === 'undefined' || typeof response.url === 'undefined') {
-                  file.error = self.options.str_error;
-                  self._uploadRenderRowOnFinish(file);
-                } else {
-                  data.url = response.url;
-                  file.fileid = response.id;
-                  file.convert = response.convert;
-                  data.jqXHR = $this.fileupload('send', data);
-                }
-              },
-              dataType: 'json'
-            });
-            return false;
-
-            /* Do Upload via Server */
-          } else {
-            self.element.find('.fileuploadform').fileupload('option', 'multipart', true);
-
-            data.formData = {
-              action: 'outofthebox-upload-file',
-              account_id: self.options.account_id,
-              type: 'do-upload',
-              hash: filehash,
-              file_path: file.path,
-              lastpath: self.element.attr('data-path'),
-              listtoken: self.options.listtoken,
-              _ajax_nonce: self.options.upload_nonce
-            };
-          }
-
-        }
-      }).on('fileuploadsubmit', function (e, data) {
-
-      }).on('fileuploadprogress', function (e, data) {
-
-        var file = data.files[0];
-        if (file.directupload) {
-          /* Upload Progress for direct upload */
-          var progress = parseInt(data.loaded / data.total * 100, 10);
-          self._uploadRenderRowOnProgress(file, {percentage: progress, progress: 'uploading_to_cloud'});
-        } else {
-          /* Upload Progress for upload via server*/
-          var progress = parseInt(data.loaded / data.total * 100, 10) / 2;
-
-          self._uploadRenderRowOnProgress(file, {percentage: progress, progress: 'uploading_to_server'});
-
-          if (progress >= 50) {
-            self._uploadRenderRowOnProgress(file, {percentage: 50, progress: 'uploading_to_cloud'});
-
-            setTimeout(function () {
-              self._uploadGetProgress(file);
-            }, 2000);
-          }
-        }
-
-      }).on('fileuploadstopped', function () {
-
-      }).on('fileuploaddone', function (e, data) {
-        sendGooglePageView('Upload file');
-      }).on('fileuploadalways', function (e, data) {
-
-        var file = data.files[0];
-        if (data.result === null) {
-          file.error = self.options.str_error;
-          self._uploadRenderRowOnFinish(file);
-        }
-
-        if (file.directupload) {
-          /* Final Event after upload for Direct upload */
-          if (file.convert) {
-            self._uploadDoConvert(file);
-          } else {
-            self._uploadRenderRowOnFinish(file);
-          }
-        } else {
-          /* Final Event after upload for upload via Server*/
-          if (typeof data.result !== 'undefined') {
-            if (typeof data.result.status !== 'undefined') {
-              if (data.result.status.progress === 'finished' || data.result.status.progress === 'failed') {
-                self._uploadRenderRowOnFinish(data.result.file);
-              }
-            } else {
-              data.result.file.error = self.options.str_error;
-              self._uploadRenderRowOnFinish(data.result.file);
-            }
-          } else {
-            file.error = self.options.str_error;
-            self._uploadRenderRowOnFinish(file);
-          }
-        }
-
-      }).on('fileuploaddrop', function (e, data) {
-        var uploadcontainer = $(this);
-        $('html, body').animate({
-          scrollTop: uploadcontainer.offset().top
-        }, 1500);
-      }).on('outofthebox-upload-finished', function (e) {
-
-        self.element.attr('uploading', '');
-
-        if ($('.OutoftheBox[uploading=true]').length > 0) {
-          return;
-        }
-
-        if (upload_form.length > 0 && upload_form.find('#gravityflow_update_button').length === 0 && !self.options.topContainer.hasClass('auto_upload')) {
-          $form_upload_btn.trigger('click');
-        }
-
-      });
+      self.element.find('.fileupload-box').OutoftheBoxUploadbox(self.options);
     },
 
     _getFileList: function (data) {
@@ -521,7 +173,7 @@
 
       var self = this;
 
-      return  this._pipeline({
+      return this._pipeline({
         url: self.options.ajax_url,
         type: "POST",
         dataType: "json",
@@ -532,13 +184,13 @@
           d.lastpath = self.element.attr('data-path');
           d.sort = self.element.attr('data-sort');
           d.deeplink = self.element.attr('data-deeplink');
-          d.filelayout = self.element.attr('data-layout');
           d.action = 'outofthebox-get-filelist';
           d._ajax_nonce = self.options.refresh_nonce;
           d.mobile = self.options.mobile;
 
           if (self.element.attr('data-list') === 'gallery') {
             d.action = 'outofthebox-get-gallery';
+            d.type = 'gallery';
             d._ajax_nonce = self.options.gallery_nonce;
           }
 
@@ -554,44 +206,45 @@
      */
     _initSearchBox: function () {
       var self = this;
-      var $nav_search_box = this.element.find('.nav-search');
+      var nav_search_box = self.element[0].querySelector('.nav-search');
 
-      /* Search qtip popup */
-      $nav_search_box.qtip({
-        prerender: false,
-        id: 'search-' + self.options.listtoken,
-        content: {
-          text: $nav_search_box.next('.search-div'),
-          button: $nav_search_box.next('.search-div').find('.search-remove')
+      if (typeof nav_search_box === 'undefined' || nav_search_box === null) {
+        self._initSearchBoxActions(self.element);
+        return;
+      }
+
+      nav_search_box.click(function (e) {
+        e.stopPropagation();
+      });
+
+      nav_search_box.nextElementSibling.classList.remove('tippy-content-holder');
+
+      tippy(nav_search_box, {
+        trigger: 'click',
+        content: nav_search_box.nextElementSibling,
+        allowHTML: true,
+        placement: (self.is_rtl) ? 'bottom-start' : 'bottom-end',
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        interactiveDebounce: 500,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShown: function (instance) {
+          // Focus on element
+          $('input', instance.popper).focus();
         },
-        position: {
-          my: 'top right',
-          at: 'bottom center',
-          target: $nav_search_box,
-          viewport: $(window),
-          adjust: {
-            scroll: false
-          }
-        },
-        style: {
-          classes: 'OutoftheBox search ' + self.options.content_skin
-        },
-        show: {
-          effect: function () {
-            $(this).fadeTo(90, 1, function () {
-              $('input', this).focus();
-            });
-          }
-        },
-        hide: {
-          fixed: true,
-          delay: 1500,
-          event: 'unfocus'
+        onCreate: function (instance) {
+          // Search Box functionality
+          self._initSearchBoxActions($(instance.popper));
         }
       });
 
+    },
+    _initSearchBoxActions: function (element) {
+      var self = this;
+
       /* Search Key Up event */
-      self.element.find('.search-input').on("keyup", function (event) {
+      element.find('.search-input').on("keyup", function (event) {
 
         self.searchQuery = $(this).val();
 
@@ -610,12 +263,14 @@
           if (self.element.hasClass('searchlist')) {
             self.element.find('.loading, .ajax-filelist').hide();
             self.element.find('.ajax-filelist').html('');
+          } else {
+            self._getFileList({});
           }
         }
       });
 
       /* Search submit button event [Search Mode] */
-      self.element.find('.submit-search').click(function () {
+      element.find('.submit-search').click(function () {
 
         self.searchQuery = $(this).val();
 
@@ -633,83 +288,73 @@
         }
       });
 
-      self.element.find('.search-remove').click(function () {
-        if ($(this).parent().find('.search-input').val() !== '') {
-          self.clearSearchBox();
-        }
+      element.find('.search-remove').click(function () {
+        self.clearSearchBox();
       });
+
+      /* Preset value in search box*/
+      element.find('.search-input').val(self.searchQuery);
 
     },
 
     clearSearchBox: function () {
-      $('[data-qtip-id="search-' + this.options.listtoken + '"] .search-input').val('').trigger('keyup');
+      var self = this;
+      self.element.find('.search-input').val('').trigger('keyup');
+      self.searchQuery = '';
     },
 
     /* Initiate the Settings menu functionality */
-    _initGearMenu: function () {
+    _initNavActionMenu: function () {
       var self = this;
-      var $gearmenu = this.element.find('.nav-gear');
+      var actionmenu = self.element[0].querySelector('.nav-gear');
 
-      $gearmenu.qtip({
-        prerender: false,
-        id: 'nav-' + self.options.listtoken,
-        content: {
-          text: $gearmenu.next('.gear-menu')
-        },
-        position: {
-          my: 'top right',
-          at: 'bottom center',
-          target: $gearmenu,
-          viewport: $(window),
-          adjust: {
-            scroll: false
-          }
-        },
-        style: {
-          classes: 'OutoftheBox ' + self.options.content_skin
-        },
-        show: {
-          event: 'click, mouseenter',
-          solo: true
-        },
-        hide: {
-          event: 'mouseleave unfocus',
-          fixed: true,
-          delay: 200
-        },
-        events: {
-          show: function (event, api) {
-            var selectedboxes = self._helperReadArrCheckBoxes("[data-token='" + self.options.listtoken + "'] input[name='selected-files[]']");
+      if (typeof actionmenu === 'undefined' || actionmenu === null) {
+        return;
+      }
 
-            if (selectedboxes.length === 0) {
-              api.elements.content.find(".selected-files-to-zip").parent().hide();
-              api.elements.content.find(".all-files-to-zip").parent().show();
-              api.elements.content.find(".selected-files-delete").parent().hide();
-              api.elements.content.find(".selected-files-move").parent().hide();
-            } else {
-              api.elements.content.find(".selected-files-to-zip").parent().show();
-              api.elements.content.find(".all-files-to-zip").parent().hide();
-              api.elements.content.find(".selected-files-delete").parent().show();
-              api.elements.content.find(".selected-files-move").parent().show();
-            }
+      $(actionmenu).click(function (e) {
+        e.stopPropagation();
+      });
 
-            var visibleelements = api.elements.content.find('ul > li').not('.gear-menu-no-options').filter(function () {
-              return $(this).css('display') !== 'none';
-            });
+      actionmenu.nextElementSibling.classList.remove('tippy-content-holder');
 
-            if (visibleelements.length > 0) {
-              api.elements.content.find('.gear-menu-no-options').hide();
-            } else {
-              api.elements.content.find('.gear-menu-no-options').show();
-            }
+      tippy(actionmenu, {
+        trigger: 'click',
+        content: actionmenu.nextElementSibling,
+        maxWidth: 350,
+        allowHTML: true,
+        placement: (self.is_rtl) ? 'bottom-start' : 'bottom-end',
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShow: function (instance) {
 
-          }
+          /* Hide menu on mouseleave. Default on click */
+          //$(instance.popper).on('mouseleave', function (e) {
+          //  instance.hideWithInteractivity(e);
+          //});
+
+          self._initNavActionMenuEvents(instance);
+
         }
       });
 
+    },
 
+    _initNavActionMenuEvents: function (instance) {
+      var self = this;
+      var $entry = $('<div>').attr('data-id', self.element.attr('data-id'));
+
+      /* Submenu actions */
+      $(instance.popper).find('ul').unbind('click').click(function () {
+        $(this).toggleClass("menu-opened")
+      });
+      
       /* Layout button is the Switch between table and grid mode */
-      this.element.find('.nav-layout').unbind('click').click(function () {
+      $(instance.popper).find('.nav-layout').unbind('click').click(function () {
+
+        instance.hide();
 
         if (self.element.attr('data-layout') === 'list') {
           self.element.attr('data-layout', 'grid');
@@ -720,17 +365,46 @@
         self._getFileList({});
       });
 
+      switch (self.element.attr('data-layout')) {
+        case 'list':
+          $(instance.popper).find('.nav-layout-grid').closest('li').show();
+          $(instance.popper).find('.nav-layout-list').closest('li').hide();
+          break;
+
+        case 'grid':
+          $(instance.popper).find('.nav-layout-grid').closest('li').hide();
+          $(instance.popper).find('.nav-layout-list').closest('li').show();
+          break;
+      }
+
       /* Zip button*/
-      this.element.find('.select-all-files').unbind('click').click(function () {
-        self.element.find(".selected-files:checkbox").prop("checked", $(this).prop("checked"));
-        if ($(this).prop("checked") === true) {
-          self.element.find('.entry:not(".newfolder")').addClass('isselected');
-        } else {
-          self.element.find('.entry:not(".newfolder")').removeClass('isselected');
-        }
+      var selectedboxes = self._helperReadArrCheckBoxes("[data-token='" + self.options.listtoken + "'] input[name='selected-files[]']");
+
+      if (selectedboxes.length === 0) {
+        $(instance.popper).find(".selected-files-to-zip").parent().hide();
+        $(instance.popper).find(".all-files-to-zip").parent().show();
+        $(instance.popper).find(".selected-files-delete").parent().hide();
+        $(instance.popper).find(".selected-files-move").parent().hide();
+      } else {
+        $(instance.popper).find(".selected-files-to-zip").parent().show();
+        $(instance.popper).find(".all-files-to-zip").parent().hide();
+        $(instance.popper).find(".selected-files-delete").parent().show();
+        $(instance.popper).find(".selected-files-move").parent().show();
+      }
+
+      var visibleelements = $(instance.popper).find('ul > li').not('.gear-menu-no-options').filter(function () {
+        return $(this).css('display') !== 'none';
       });
 
-      this.element.find('.all-files-to-zip, .selected-files-to-zip').unbind('click').click(function (event) {
+      if (visibleelements.length > 0) {
+        $(instance.popper).find('.gear-menu-no-options').hide();
+      } else {
+        $(instance.popper).find('.gear-menu-no-options').show();
+      }
+
+      $(instance.popper).find('.all-files-to-zip, .selected-files-to-zip').unbind('click').click(function (event) {
+
+        instance.hide();
 
         var entries = [];
 
@@ -743,38 +417,16 @@
           entries = self._helperReadArrCheckBoxes("[data-token='" + self.options.listtoken + "'] input[name='selected-files[]']");
         }
 
-        var data = {
-          action: 'outofthebox-create-zip',
-          account_id: self.options.account_id,
-          listtoken: self.options.listtoken,
-          lastpath: self.element.attr('data-path'),
-          _ajax_nonce: self.options.createzip_nonce,
-          files: entries
-        };
-
-        var $processor_icon = $('<div class="processor_icon"><i class="fas fa-cog fa-spin fa-1x fa-fw"></i></div>').css({'margin-right': '5px', 'display': 'inline-grid'});
-        self.element.find(".layout-grid input:checked[name='selected-files[]']").closest('.entry').find(".entry-name-view").prepend($processor_icon);
-        self.element.find(".layout-list input:checked[name='selected-files[]']").closest('.entry').find(".entry_name").prepend($processor_icon);
-
-        self.element.find('.processor_icon').delay(5000).fadeOut('slow', function () {
-          $(this).remove();
-        });
-
-        if ($(event.target).hasClass('all-files-to-zip')) {
-          self.element.find('.select-all-files').trigger('click');
-        }
-
-        $('.qtip').qtip('hide');
-        $(this).attr('href', self.options.ajax_url + "?" + $.param(data));
+        self._actionDownloadZip(entries, event)
 
         return;
       });
 
       /* Add scroll event to nav-upload */
-      self.element.find('.nav-upload').click(function () {
-        $('.qtip').qtip('hide');
+      $(instance.popper).find('.nav-upload').click(function () {
+        instance.hide();
 
-        var uploadcontainer = self.element.find('.fileupload-container');
+        var uploadcontainer = self.element.find('.fileupload-box');
 
         $('html, body').animate({
           scrollTop: uploadcontainer.offset().top
@@ -784,9 +436,27 @@
         }
       });
 
+      /* Create New Document Event */
+      $(instance.popper).find('.newentry').unbind('click').click(function (e) {
+        instance.hide();
+        if (typeof self.searchQuery != 'undefined' && self.searchQuery !== '') {
+          return false;
+        }
+        self._actionCreateEntry($entry, $(this).data('mimetype'), e);
+      });
+
+      /* Create New Folder Event */
+      $(instance.popper).find('.newfolder').unbind('click').click(function (e) {
+        instance.hide();
+        if (typeof self.searchQuery != 'undefined' && self.searchQuery !== '') {
+          return false;
+        }
+        self._actionCreateEntry($entry, $(this).data('mimetype'), e);
+      });
+
       /* Move multiple files at once */
-      self.element.find('.selected-files-move').click(function () {
-        $('.qtip').qtip('hide');
+      $(instance.popper).find('.selected-files-move').click(function (e) {
+        instance.hide();
 
         var entries = self.element.find("input[name='selected-files[]']:checked");
 
@@ -798,8 +468,8 @@
       });
 
       /* Delete multiple files at once */
-      self.element.find('.selected-files-delete').click(function () {
-        $('.qtip').qtip('hide');
+      $(instance.popper).find('.selected-files-delete').click(function (e) {
+
 
         var entries = self.element.find("input[name='selected-files[]']:checked");
 
@@ -807,18 +477,81 @@
           return false;
         }
 
-        self._actionDeleteEntries(entries);
+        self._actionDeleteEntries(entries, e);
       });
 
       /* Direct Link Folder */
-      self.element.find('.entry_action_deeplink_folder').unbind('click').click(function (e) {
-        self._actionCreateDeepLink($(this));
+      $(instance.popper).find('.entry_action_deeplink_folder').unbind('click').click(function (e) {
+        instance.hide();
+        self._actionCreateDeepLink($entry, e);
       });
 
       /* Social Share Folder */
-      self.element.find('.entry_action_shortlink_folder').unbind('click').click(function (e) {
-        self._actionShareEntry($(this));
+      $(instance.popper).find('.entry_action_shortlink_folder').unbind('click').click(function (e) {
+        instance.hide();
+        self._actionShareEntry($entry, e);
       });
+    },
+
+    /* Initiate the Sortings menu functionality */
+    _initSortMenu: function () {
+      var self = this;
+
+      var sortmenu = self.element[0].querySelector('.nav-sort');
+
+      if (typeof sortmenu === 'undefined' || sortmenu === null) {
+        return;
+      }
+
+      $(sortmenu).click(function (e) {
+        e.stopPropagation();
+      });
+
+      sortmenu.nextElementSibling.classList.remove('tippy-content-holder');
+
+      tippy(sortmenu, {
+        trigger: 'click',
+        content: sortmenu.nextElementSibling,
+        maxWidth: 350,
+        allowHTML: true,
+        placement: (self.is_rtl) ? 'bottom-start' : 'bottom-end',
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShow: function (instance) {
+          self._initSortEvents(instance);
+        }
+      });
+
+    },
+
+    _initSortEvents: function (instance) {
+
+      var self = this;
+
+      $(instance.popper).find('.nav-sorting-field').unbind('click').click(function () {
+        $(instance.popper).find('.nav-sorting-field').removeClass('sort-selected');
+        $(this).addClass('sort-selected');
+
+        var sort_str = $(instance.popper).find('.nav-sorting-field.sort-selected').data('field') + ":" + $(instance.popper).find('.nav-sorting-order.sort-selected').data('order');
+        self.element.attr('data-sort', sort_str);
+
+        self._getFileList({});
+        tippy.hideAll()
+      });
+
+      $(instance.popper).find('.nav-sorting-order').unbind('click').click(function () {
+        $(instance.popper).find('.nav-sorting-order').removeClass('sort-selected');
+        $(this).addClass('sort-selected');
+
+        var sort_str = $(instance.popper).find('.nav-sorting-field.sort-selected').data('field') + ":" + $(instance.popper).find('.nav-sorting-order.sort-selected').data('order');
+        self.element.attr('data-sort', sort_str);
+
+        self._getFileList({});
+        tippy.hideAll()
+      });
+
     },
 
     _initAccountSelector: function () {
@@ -850,13 +583,23 @@
           self.element.attr('data-path', json.lastpath);
         }
 
+        self.element.removeClass('-is-virtual-folder');
+        if (json.virtual === true) {
+          self.element.addClass('-is-virtual-folder');
+        }
+
       }
 
-      self.element.find('.breadcrumb').one('inview', function (event, isInView) {
+      self.element.find('.wpcp-breadcrumb').one('inview', function (event, isInView) {
         self.renderBreadCrumb();
       });
 
       self.element.find('.nav-refresh i').removeClass('fa-spin');
+
+      if (self.element.attr('data-layout') === 'grid') {
+        self.element.find('.entry_thumbnail img.hidden').removeClass('hidden');
+      }
+
       self.unveilImages();
 
       if (self.element.hasClass('gridgallery')) {
@@ -884,12 +627,12 @@
 
       /* Hover Events */
       self.element.find('.entry').unbind('hover').hover(
-              function () {
-                $(this).addClass('hasfocus');
-              },
-              function () {
-                $(this).removeClass('hasfocus');
-              }
+        function () {
+          $(this).addClass('hasfocus');
+        },
+        function () {
+          $(this).removeClass('hasfocus');
+        }
       ).on('mouseover', function () {
         $(this).addClass('hasfocus');
       }).unbind('click').click(function () {
@@ -897,6 +640,7 @@
         //$(this).find('.entry_checkbox input[type="checkbox"]').trigger('click');
       }).on("contextmenu", function (e) {
         /* Disable right clicks */
+        $(this).find('.entry-action-menu-button').trigger('click');
         return false;
       });
 
@@ -924,15 +668,46 @@
 
       });
 
-      /* Create New Folder Event */
+     /* Create New Folder Event */
       self.element.find('.newfolder').unbind('click').click(function (e) {
         if (typeof self.searchQuery != 'undefined' && self.searchQuery !== '') {
           return false;
         }
-        self._actionCreateEntry($(this));
+        self._actionCreateEntry($(this), $(this).data('mimetype'), e);
       });
 
+      /* Entry Click Events*/
+      self.element.find('.entry.file').unbind('click').click(function (e) {
+        if (self.options.instance_action === 'embedded' || self.options.instance_action === 'links') {
+          $(this).find('.entry_checkbox :checkbox').trigger('click');
+          e.stopPropagation();
+        } else if (self.options.instance_action === 'shortcode') {
+
+        } else {
+          var link = $(this).find(".entry_link");
+          if (self.options.supportTouch && link.hasClass('ilightbox-group')) {
+            link.trigger('itap');
+          } else {
+            link[0].click()
+          }
+        }
+      });
+
+      self.element.find('.entry').each(function () {
+        self._initEntryActions($(this));
+      })
+
       /* CheckBox Events */
+      self.element.find('.select-all-files').unbind('click').click(function () {
+
+        self.element.find(".selected-files:checkbox").prop("checked", $(this).prop("checked"));
+        if ($(this).prop("checked") === true) {
+          self.element.find('.entry:not(".newfolder")').addClass('isselected');
+        } else {
+          self.element.find('.entry:not(".newfolder")').removeClass('isselected');
+        }
+      });
+
       self.element.find('.entry_checkbox').unbind('click').click(function (e) {
         e.stopPropagation();
         return true;
@@ -944,12 +719,16 @@
         } else {
           $(this).closest('.entry').removeClass('isselected');
         }
+        e.stopPropagation();
       });
 
 
-      self._initEditMenu();
+      self._initActionMenu();
+      self._initDescriptionBox();
       self._initLightbox();
-      self.renderThumbnailsPopup();
+      if (self.element.attr('data-layout') === 'list') {
+        self._initThumbnailsPopup();
+      }
       self._initMove();
       self._initLinkEvent();
       self._initScrollToTop();
@@ -960,13 +739,17 @@
 
       self.options.loadingContainer.fadeOut(300);
 
-      if (self.option.focus_id !== null) {
+      if (typeof self.option.focus_id !== 'undefined' && self.option.focus_id !== null) {
         var entry = self.element.find('.entry[data-id="' + self.option.focus_id + '"]');
         entry.addClass('hasfocus');
 
         if (entry.find('a.ilightbox-group').length > 0) {
           entry.find('a.ilightbox-group').trigger('click');
         }
+
+        $('html, body').animate({
+          scrollTop: entry.offset().top
+        }, 1500);
 
         self.option.focus_id = null;
       }
@@ -978,32 +761,22 @@
     renderContentForBrowser: function () {
       var self = this;
 
+      var $layout = self.element.find('.files');
       switch (this.element.attr('data-layout')) {
         case 'list':
           self.element.removeClass('oftb-grid').addClass('oftb-list');
-          $(".qtip[data-qtip-id='nav-" + self.options.listtoken + "']").find('.fa-th-large').closest('li').show();
-          self.element.find('.fa-th-large').closest('li').show();
-          $(".qtip[data-qtip-id='nav-" + self.options.listtoken + "']").find('.fa-th-list').closest('li').hide();
-          self.element.find('.fa-th-list').closest('li').hide();
           break;
 
         case 'grid':
           self.element.removeClass('oftb-list').addClass('oftb-grid');
-          $(".qtip[data-qtip-id='nav-" + self.options.listtoken + "']").find('.fa-th-large').closest('li').hide();
-          self.element.find('.fa-th-large').closest('li').hide();
-          $(".qtip[data-qtip-id='nav-" + self.options.listtoken + "']").find('.fa-th-list').closest('li').show();
-          self.element.find('.fa-th-list').closest('li').show();
 
           /* Update files to fit in container */
-          var $layoutgrid = self.element.find('.files.layout-grid');
-          self.fitEntriesInContainer($layoutgrid.find('.folders-container '), 250);
-          self.fitEntriesInContainer($layoutgrid.find('.files-container '), 250);
-
-          $layoutgrid.fadeTo(0, 0).delay(100).fadeTo(200, 1);
-
-
+          self.fitEntriesInContainer($layout.find('.folders-container '), 250);
+          self.fitEntriesInContainer($layout.find('.files-container '), 250);
           break;
       }
+
+      $layout.fadeTo(0, 0).delay(100).fadeTo(200, 1);
     },
 
     renderContentForGallery: function () {
@@ -1013,12 +786,16 @@
       var image_collage = self.element.find(".image-collage");
 
       image_container.hover(
-              function () {
-                $(this).find('.image-rollover').stop().animate({opacity: 1}, 400);
-              },
-              function () {
-                $(this).find('.image-rollover').stop().animate({opacity: 0}, 400);
-              }).find('.image-rollover').css("opacity", "0");
+        function () {
+          $(this).find('.image-rollover').stop().animate({
+            opacity: 1
+          }, 400);
+        },
+        function () {
+          $(this).find('.image-rollover').stop().animate({
+            opacity: 0
+          }, 400);
+        }).find('.image-rollover').css("opacity", "0");
 
       image_collage.outerWidth(self.element.find('.ajax-filelist').width() - 1, true);
 
@@ -1120,9 +897,12 @@
       }
 
       grecaptcha.ready(function () {
-        grecaptcha.execute(self.options.recaptcha, {action: 'wpcloudplugins'}).then(function (token) {
+        grecaptcha.execute(self.options.recaptcha, {
+          action: 'wpcloudplugins'
+        }).then(function (token) {
 
-          $.ajax({type: "POST",
+          $.ajax({
+            type: "POST",
             url: self.options.ajax_url,
             data: {
               action: 'outofthebox-check-recaptcha',
@@ -1197,10 +977,17 @@
             $scroll_to_top_container.show().fadeIn(40);
 
             var positionbutton = heightContainer;
+            var positionright = '50%';
+
             if (bottomContainer > bottomWindow) {
               positionbutton = bottomWindow - positionContainer.top - 30;
+              positionright = 0;
             }
-            $scroll_to_top_container.stop().animate({top: Math.round(positionbutton - 50)});
+
+            $scroll_to_top_container.stop().animate({
+              top: Math.round(positionbutton - 50),
+              right: positionright
+            });
           } else {
             $scroll_to_top_container.fadeOut(400);
           }
@@ -1221,19 +1008,32 @@
 
       this.element.find('.moveable').draggable({
         stack: ".moveable",
+        zIndex: 999999,
         cursor: 'move',
-        cursorAt: {top: 10, left: 10},
+        cursorAt: {
+          top: 10,
+          left: 10
+        },
         containment: self.element,
-        helper: "clone",
+        helper: function () {
+          var selected = self.element.find('.moveable .entry_checkbox input:checked').closest('.moveable');
+          if (selected.length === 0) {
+            selected = $(this);
+          }
+          var container = $('<div/>').attr('id', 'dragging_container');
+          container.append(selected.clone());
+          return container;
+        },
         distance: 10,
         delay: 50,
         start: function (event, ui) {
           $(this).addClass('isdragged');
         },
         stop: function (event, ui) {
+          var $element = $(this);
           setTimeout(function () {
-            $(this).removeClass('isdragged');
-          }, 300);
+            $element.removeClass('isdragged');
+          }, 100);
         }
       });
       this.element.find('.folder, .image-folder').droppable({
@@ -1242,8 +1042,7 @@
         hoverClass: "ui-state-active",
         tolerance: "pointer",
         drop: function (event, ui) {
-          //ui.draggable.fadeOut();
-          self._actionMoveEntry(ui.draggable, $(this));
+          self._actionMoveEntry(ui.helper.children(), $(this));
         }
       });
     },
@@ -1279,7 +1078,8 @@
           return true;
         }
 
-        $.ajax({type: "POST",
+        $.ajax({
+          type: "POST",
           url: self.options.ajax_url,
           data: {
             action: 'outofthebox-linkusertofolder',
@@ -1327,101 +1127,171 @@
     },
 
     /* Bind event which shows the edit menu */
-    _initEditMenu: function () {
+    _initEntryActions: function ($entry) {
       var self = this;
-      self.element.find(' .entry .entry_edit_menu').each(function () {
-
-        $(this).click(function (e) {
-          e.stopPropagation();
-        });
-
-        $(this).qtip({
-          content: {
-            text: $(this).next('.oftb-dropdown-menu')
-          },
-          position: {
-            my: 'top center',
-            at: 'bottom center',
-            target: $(this),
-            scroll: false,
-            viewport: self.element
-          },
-          show: {
-            event: 'click',
-            solo: true
-          },
-          hide: {
-            event: 'mouseleave unfocus',
-            delay: 200,
-            fixed: true
-          },
-          events: {
-            show: function (event, api) {
-              api.elements.target.closest('.entry').addClass('hasfocus').addClass('popupopen');
-            },
-            hide: function (event, api) {
-              api.elements.target.closest('.entry').removeClass('hasfocus').removeClass('popupopen');
-            }
-          },
-          style: {
-            classes: 'OutoftheBox ' + self.options.content_skin
-          }
-        });
-      });
 
       /* Preview Event */
-      self.element.find('.entry_action_view').unbind('click').click(function () {
-        self._actionPreviewEntry($(this));
+      $entry.find('.entry_action_view').unbind('click').click(function (e) {
+        tippy.hideAll()
+        self._actionPreviewEntry($entry, e);
       });
 
       /* Download Event */
-      self.element.find('.entry_action_download').unbind('click').click(function (e) {
-        self._actionDownloadEntry($(this));
+      $entry.find('.entry_action_download').unbind('click').click(function (e) {
+        tippy.hideAll()
+        e.stopPropagation();
+
+        if ($entry.hasClass('folder')) {
+          self._actionDownloadZip([$entry.attr('data-id')], e)
+        } else {
+          return self._actionDownloadEntry($entry, e);
+        }
+
+      });
+
+      /* Save As Event */
+      $entry.find('.entry_action_export').unbind('click').click(function (e) {
+        tippy.hideAll()
+        e.stopPropagation();
+        return self._actionExportEntry($entry, e);
       });
 
       /* Social Share Event */
-      self.element.find('.entry_action_shortlink').unbind('click').click(function (e) {
-        self._actionShareEntry($(this));
+      $entry.find('.entry_action_shortlink').unbind('click').click(function (e) {
+        e.stopPropagation();
+        tippy.hideAll()
+        self._actionShareEntry($entry, e);
       });
 
       /* Delete Event*/
-      self.element.find('.entry_action_delete').unbind('click').click(function (e) {
-        var datapath = $(this).closest("ul").attr('data-path');
-        self.element.find(".entry[data-url='" + datapath + "'] .selected-files:checkbox").prop("checked", true);
+      $entry.find('.entry_action_delete').unbind('click').click(function (e) {
+        tippy.hideAll()
+        $entry.find(".selected-files:checkbox").prop("checked", true);
         var entries = self.element.find("input[name='selected-files[]']:checked");
-        self._actionDeleteEntries(entries);
+        self._actionDeleteEntries(entries, e);
       });
 
       /* Move Event*/
-      self.element.find('.entry_action_move').unbind('click').click(function (e) {
-        var datapath = $(this).closest("ul").attr('data-path');
-        self.element.find(".entry[data-url='" + datapath + "'] .selected-files:checkbox").prop("checked", true);
+      $entry.find('.entry_action_move').unbind('click').click(function (e) {
+        tippy.hideAll()
+        $entry.find(".selected-files:checkbox").prop("checked", true);
         var entries = self.element.find("input[name='selected-files[]']:checked");
-        self._actionMoveEntries(entries);
+        self._actionMoveEntries(entries, e);
+      });
+
+      /* Copy Event*/
+      $entry.find('.entry_action_copy').unbind('click').click(function (e) {
+        tippy.hideAll()
+        self._actionCopyEntry($entry, e);
       });
 
       /* Rename Event */
-      self.element.find('.entry_action_rename').unbind('click').click(function (e) {
-        self._actionRenameEntry($(this));
+      $entry.find('.entry_action_rename').unbind('click').click(function (e) {
+        tippy.hideAll()
+        self._actionRenameEntry($entry, e);
+      });
+
+      /* Description Box Event */
+      $entry.find('.entry_action_description').unbind('click').click(function (e) {
+        tippy.hideAll()
+        self._actionEditDescriptionEntry($entry, e);
       });
 
       /* DeepLink Event */
-      self.element.find('.entry_action_deeplink').unbind('click').click(function (e) {
-        self._actionCreateDeepLink($(this));
+      $entry.find('.entry_action_deeplink').unbind('click').click(function (e) {
+        e.stopPropagation();
+        tippy.hideAll()
+        self._actionCreateDeepLink($entry, e);
+      });
+    },
+
+    /* Bind event which shows the action menu */
+    _initActionMenu: function () {
+      var self = this;
+      var menus = self.element[0].querySelectorAll('.entry .entry-action-menu-button')
+
+      $(menus).click(function (e) {
+        e.stopPropagation();
+      });
+
+      tippy(menus, {
+        trigger: 'click',
+        content: function (reference) {
+          return $(reference).find('.tippy-content-holder').clone(true).get(0);
+        },
+        maxWidth: 350,
+        allowHTML: true,
+        placement: (self.is_rtl) ? 'top-start' : 'top-end',
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShow: function (instance) {
+
+          $(instance.popper).find('.tippy-content-holder').removeClass('tippy-content-holder');
+
+          var $entry = $(instance.reference).closest('.entry');
+
+          $entry.addClass('hasfocus').addClass('popupopen');
+
+          /* Hide menu on mouseleave. Default on click */
+          //$(instance.popper).on('mouseleave', function (e) {
+          //  instance.hideWithInteractivity(e);
+          //});
+
+        },
+        onHide: function (instance) {
+          $(instance.reference).closest('.entry').removeClass('hasfocus').removeClass('popupopen');
+        },
+
+      });
+
+    },
+
+    _initDescriptionBox: function () {
+      var self = this;
+
+      var description_tooltips = self.element[0].querySelectorAll('.entry .entry-description-button');
+
+      $(description_tooltips).click(function (e) {
+        e.stopPropagation();
+      });
+
+      tippy(description_tooltips, {
+        trigger: 'mouseenter focus click',
+        content: function (reference) {
+          return reference.querySelector('.tippy-content-holder').innerHTML
+        },
+        maxWidth: 350,
+        allowHTML: true,
+        placement: 'bottom',
+        delay: [100, null],
+        offset: [0, -10],
+        interactiveBorder: 15,
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShow: function (instance) {
+          $(instance.reference).closest('.entry').addClass('popupopen');
+        },
+        onHide: function (instance) {
+          $(instance.reference).closest('.entry').removeClass('popupopen');
+        },
       });
     },
 
     /* Make the BreadCrumb responsive */
     renderBreadCrumb: function () {
       var self = this;
-      var $breadcrumb_element = self.element.find('.breadcrumb');
+      var $breadcrumb_element = self.element.find('.wpcp-breadcrumb');
 
       $breadcrumb_element.asBreadcrumbs('destroy');
 
       $breadcrumb_element.asBreadcrumbs({
-        namespace: "oftb",
+        namespace: "wpcp",
         toggleIconClass: "fas fa-caret-down",
-        dropdownMenuClass: "oftb-dropdown-menu",
+        dropdownMenuClass: "tippy-content",
 
         dropdownItem: function dropdownItem(classes, label, href) {
           if (!href) {
@@ -1431,17 +1301,17 @@
         }
       });
 
-      $breadcrumb_element.find('.oftb-dropdown-menu li').click(function () {
+      $breadcrumb_element.find('.tippy-content li').click(function () {
         $breadcrumb_element.find('li a.folder[href="' + $(this).find('a').attr("href") + '"]').trigger('click');
-        $breadcrumb_element.find('.oftb-dropdown').removeClass('open');
+        $breadcrumb_element.find('.wpcp-dropdown').removeClass('dropdown-open');
       });
 
-      $breadcrumb_element.find('.oftb-toggle').click(function () {
-        $breadcrumb_element.find('.oftb-dropdown').addClass('open');
+      $breadcrumb_element.find('.wpcp-toggle').click(function () {
+        $breadcrumb_element.find('.wpcp-dropdown').addClass('dropdown-open');
       });
 
       $(document).mouseup(function (e) {
-        var container = $breadcrumb_element.find('.oftb-dropdown-menu');
+        var container = $breadcrumb_element.find('.tippy-content');
 
         if (!container.is(e.target) && container.has(e.target).length === 0) {
           container.parent().removeClass('open');
@@ -1450,42 +1320,43 @@
     },
 
     /* Bind event which shows popup with thumbnail on hover in file list */
-    renderThumbnailsPopup: function () {
+    _initThumbnailsPopup: function () {
       var self = this;
-      self.element.find('.entry[data-tooltip] .entry_name, .entry[data-tooltip] .entry_lastedit').each(function () {
-        $(this).qtip({
-          suppress: true,
-          content: {
-            text: function (event, api) {
-              var descriptionbox = $(this).parent().find('.description_textbox').clone();
-              descriptionbox.find("img.preloading").removeClass('hidden').unveil(200, null, function () {
-                $(this).load(function () {
-                  $(this).removeClass('preloading').removeAttr('data-src');
-                  $(this).prev('.preloading').remove();
-                });
-              }).trigger('unveil');
+      var thumbnail_tooltips = self.element[0].querySelectorAll('.entry[data-tooltip]');
 
-              return descriptionbox;
-            }
-          },
-          position: {
-            target: 'mouse',
-            adjust: {x: 5, y: 5, scroll: false},
-            viewport: self.element
-          },
-          show: {
-            delay: 500,
-            solo: true
-          },
-          hide: {
-            event: 'click mouseleave unfocus'
-          },
-          style: {
-            classes: 'OutoftheBox description ' + self.options.content_skin
-          }
-        });
+      tippy(thumbnail_tooltips, {
+        content: function (reference) {
+          return reference.querySelector('.entry_thumbnail-view-center')
+        },
+        maxWidth: (self.options.mobile) ? 128 : 256,
+        allowHTML: true,
+        placement: 'auto',
+        delay: [250, null],
+        offset: [0, 10],
+        appendTo: self.element[0],
+        moveTransition: 'transform 0.2s ease-out',
+        interactive: true,
+        theme: 'wpcloudplugins-' + self.options.content_skin,
+        onShow: function (instance) {
+
+          var thumbnail = $(instance.popper).find('img.preloading')
+          thumbnail.removeClass('hidden').unveil(null, null, function () {
+            $(this).load(function () {
+              $(this).removeClass('preloading').removeAttr('data-src');
+              $(this).prev('.preloading').remove();
+
+              if (instance.popperInstance !== null) {
+                instance.popperInstance.update();
+              }
+            });
+          }).trigger('unveil');
+        },
+        onHide: function (instance) {
+          $(instance.reference).removeClass('hasfocus');
+        },
       });
     },
+
 
     /* Unveil Images */
     unveilImages: function () {
@@ -1523,7 +1394,8 @@
 
       /* Fire up the search functionality*/
       this._initSearchBox();
-      this._initGearMenu();
+      this._initNavActionMenu();
+      this._initSortMenu();
       this._initAccountSelector();
 
       /* Refresh button does a hard refresh for the current folder*/
@@ -1539,23 +1411,9 @@
       this.element.find('.nav-home').click(function () {
         self.clearSearchBox();
         self.element.attr('data-path', self.element.attr('data-org-path'));
-        self._getFileList({'OutoftheBoxpath': self.element.attr('data-org-path')});
-      });
-
-      /* Sortable column Names */
-      self.element.find('.sortable').click(function () {
-
-        var newclass = 'asc';
-        if ($(this).hasClass('asc')) {
-          newclass = 'desc';
-        }
-
-        self.element.find('.sortable').removeClass('asc').removeClass('desc');
-        $(this).addClass(newclass);
-        var sortstr = $(this).attr('data-sortname') + ':' + newclass;
-        self.element.attr('data-sort', sortstr);
-
-        self._getFileList({});
+        self._getFileList({
+          'OutoftheBoxpath': self.element.attr('data-org-path')
+        });
       });
     },
 
@@ -1577,7 +1435,7 @@
         minScale: 0.05,
 
         slideshow: {
-          pauseOnHover: true,
+          pauseOnHover: false,
           pauseTime: self.element.attr('data-pausetime'),
           startPaused: ((self.element.attr('data-list') === 'gallery') && (self.element.attr('data-slideshow') === '1')) ? false : true
         },
@@ -1594,6 +1452,7 @@
         keepAspectRatio: true,
         callback: {
           onBeforeLoad: function (api, position) {
+            self._renderLightboxCaption(api);
             $('.ilightbox-holder').addClass('OutoftheBox');
             $('.ilightbox-holder .oftb-hidepopout').remove();
 
@@ -1605,7 +1464,8 @@
             var element = $('.ilightbox-holder').find('iframe').addClass('oftb-embedded');
             self._helperIframeFix(element);
           },
-          onBeforeChange: function () {
+          onBeforeChange: function (api) {
+            self._renderLightboxCaption(api);
             /* Stop all HTML 5 players */
             var players = $('.ilightbox-holder video, .ilightbox-holder audio');
             $.each(players, function (i, element) {
@@ -1615,6 +1475,8 @@
             });
           },
           onAfterChange: function (api) {
+            self._renderLightboxCaption(api);
+
             /* Auto Play new players*/
             var players = api.currentElement.find('video, audio');
             $.each(players, function (i, element) {
@@ -1624,29 +1486,17 @@
             });
           },
           onRender: function (api, position) {
-            /* Auto-size HTML 5 player */
+            self._renderLightboxCaption(api);
+
             var $video_html5_players = $('.ilightbox-holder').find('video, audio');
             $.each($video_html5_players, function (i, video_html5_player) {
-
               var $video_html5_player = $(this);
-
-              video_html5_player.addEventListener('playing', function () {
-                var container_width = api.currentElement.find('.ilightbox-container').width() - 1;
-                var container_height = api.currentElement.find('.ilightbox-container').height() - 1;
-
-                $video_html5_player.width(container_width);
-
-                $video_html5_player.parent().width(container_width)
-
-                if ($video_html5_player.height() > api.currentElement.find('.ilightbox-container').height() - 2) {
-                  $video_html5_player.height(container_height);
-                }
-              }, false);
-              $video_html5_player.find('source').attr('src', $video_html5_player.find('source').attr('data-src'));
+              $(this).find('source').attr('src', $video_html5_player.find('source').attr('data-src'));
             });
-
           },
           onShow: function (api) {
+            self._renderLightboxCaption(api);
+
             if (api.currentElement.find('.empty_iframe').length === 0) {
               api.currentElement.find('.oftb-embedded').after(self.options.str_iframe_loggedin);
             }
@@ -1705,7 +1555,11 @@
             });
 
             if (self.options.mobile) {
-              $('.ilightbox-container img').panzoom({disablePan: true, minScale: 1, contain: 'invert'});
+              $('.ilightbox-container img').panzoom({
+                disablePan: true,
+                minScale: 1,
+                contain: 'invert'
+              });
               $('.ilightbox-container img').on('panzoomzoom', function (e, panzoom, scale) {
                 if (scale == 1) {
                   panzoom.options.disablePan = true;
@@ -1716,10 +1570,10 @@
             }
 
             /* Log preview event if needed */
-            var $img = api.currentElement.find('img');
-            if ($img.length > 0 && $img.data('logged') !== 1 && ($img.attr('src').indexOf('action=outofthebox-') === -1)) {
-              var entry_id = $('a[href="' + $img.attr('src') + '"]').closest('[data-id]').data('id');
-              $img.data('logged', 1);
+            var $source = api.currentElement.find('[src]')
+            if ($source.length > 0 && $source.data('logged') !== 1) {
+              var entry_id = $('a[href="' + $source.attr('src') + '"]').closest('.entry').data('id');
+              $source.data('logged', 1);
               self._logEvent('log_preview_event', entry_id);
             }
           }
@@ -1758,7 +1612,81 @@
           self.lightBox.push($(this).iLightBox(options));
         });
       }
+    },
 
+    _renderLightboxCaption: function (api) {
+      var self = this;
+
+      if (api.currentElement.find('.entry-info').length > 0) {
+        return;
+      }
+
+      if (self.options.topContainer.hasClass('files') || self.options.lightbox_showcaption === 'mouseenter') {
+        $('.ilightbox-container').addClass('caption-visible');
+      }
+
+      var caption_div = api.currentElement.find('.ilightbox-caption');
+      if (caption_div.length === 0) {
+        caption_div = $('<div class="ilightbox-caption"/>');
+        caption_div.appendTo(api.currentElement.children().first())
+      }
+
+      /* Find Entry by ID */
+      var entry_id = api.currentElement.find('span[data-id]').data('id');
+      if (typeof entry_id !== 'undefined') {
+        var menu = self.element.find('.entry[data-id="' + entry_id + '"]').find('.entry-info');
+      } else {
+        /* Find Entry by source */
+        var source = api.currentElement.find('[src]').attr('src')
+        var menu = self.element.find('a[href="' + source + '"]').closest('.entry').find('.entry-info');
+      }
+
+      menu.clone(true).appendTo(caption_div);
+
+      if (api.currentElement.find('.entry-action-menu-button').length) {
+        tippy(api.currentElement.find('.entry-action-menu-button').get(0), {
+          trigger: 'click',
+          content: function (reference) {
+            return $(reference).find('.tippy-content-holder').clone(true).get(0);
+          },
+          maxWidth: 350,
+          allowHTML: true,
+          placement: (self.is_rtl) ? 'bottom-start' : 'bottom-end',
+          appendTo: api.currentElement.get(0),
+          moveTransition: 'transform 0.2s ease-out',
+          interactive: true,
+          theme: 'wpcloudplugins-' + self.options.content_skin,
+          onShow: function (instance) {
+            $(instance.popper).find('.tippy-content-holder').removeClass('tippy-content-holder');
+
+          },
+          onHide: function (instance) {
+          },
+        });
+      }
+
+      if (api.currentElement.find('.entry-description-button').length) {
+        tippy(api.currentElement.find('.entry-description-button').get(0), {
+          trigger: 'mouseenter focus click',
+          content: function (reference) {
+            return reference.querySelector('.tippy-content-holder').innerHTML
+          },
+          maxWidth: 350,
+          allowHTML: true,
+          placement: (self.is_rtl) ? 'bottom-start' : 'bottom-end',
+          delay: [100, null],
+
+          moveTransition: 'transform 0.2s ease-out',
+          interactive: true,
+          theme: 'wpcloudplugins-' + self.options.content_skin,
+          onShow: function (instance) {
+            $(instance.reference).closest('.entry').addClass('hasfocus');
+          },
+          onHide: function (instance) {
+            $(instance.reference).closest('.entry').removeClass('hasfocus');
+          },
+        });
+      }
     },
 
     /**
@@ -1770,26 +1698,24 @@
 
       var self = this;
 
-      $('.qtip').qtip('hide');
+      var datapath, is_folder, entry_id, entry_name;
 
-      var datapath = entry.closest("ul").attr('data-path');
-      var is_folder, entry_id;
-
-      if (entry.hasClass('entry_action_deeplink_folder')) {
-        var datapath = self.element.attr('data-path');
+      if (entry.hasClass('entry') === false) { // Nav menu -> Direct link button
+        // Nav menu -> Direct link button
+        datapath = self.element.attr('data-path');
+        entry_name = self.element.find('.wpcp-breadcrumb li:last').text();
         is_folder = true;
       } else {
-        var entry_element = self.element.find(".entry[data-url='" + datapath + "']");
-        var entry_name = entry_element.attr('data-name');
-        entry_id = entry_element.attr('data-id');
-        is_folder = entry_element.hasClass('folder') || entry_element.hasClass('image-folder');
+        entry_name = entry.attr('data-name');
+        entry_id = entry.attr('data-id');
+        is_folder = entry.hasClass('folder') || entry.hasClass('image-folder');
       }
 
       /* Generate Direct link */
       var hash_params = {
+        'source': self.element.attr('data-source'),
         'account_id': self.element.attr('data-account-id'),
-        'last_path': (is_folder) ? datapath : self.element.attr('data-path'),
-        'org_path': self.element.attr('data-org-path'),
+        'last_path': (is_folder) ? '' : self.element.attr('data-path'),
         'focus_id': entry_id
       };
 
@@ -1856,6 +1782,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -1879,7 +1806,8 @@
         return false;
       }
 
-      $.ajax({type: "POST",
+      $.ajax({
+        type: "POST",
         url: self.options.ajax_url,
         data: {
           action: 'outofthebox-event-stats',
@@ -1891,52 +1819,167 @@
       });
     },
 
-    _actionPreviewEntry: function (entry) {
-      var self = this;
-      $('.qtip').qtip('hide');
-      var datapath = entry.closest("ul").attr('data-path');
-      var link = self.element.find(".entry[data-url='" + datapath + "']").find(".entry_link")[0].click();
+    /**
+    * Preview an entry
+    */
+    _actionPreviewEntry: function (entry, mouseevent) {
+      var link = entry.find(".entry_link");
+      if (self.options.supportTouch && link.hasClass('ilightbox-group')) {
+        link.trigger('itap');
+      } else {
+        link[0].click()
+      }
     },
+
     /**
      * Download an entry
      * @param {Object} entry
      * @param {string} mimetype
      */
-    _actionDownloadEntry: function (entry) {
+    _actionDownloadEntry: function (entry, mouseevent) {
       var self = this;
 
-      var dataname = entry.attr('data-filename');
+      sendGooglePageView('Download', entry.attr('data-filename'));
 
-      sendGooglePageView('Download', dataname);
-
-      var dataid = entry.closest("ul").attr('data-path');
-      if (typeof dataid === 'undefined') {
-        dataid = entry.closest(".entry").attr('data-url');
-      }
-
-      var $processor_icon = $('<div><i class="fas fa-cog fa-spin fa-1x fa-fw"></i></div>').css({'margin-right': '5px', 'display': 'inline-grid'}).delay(5000).fadeOut('slow', function () {
+      var $processor_icon = $('<div><i class="fas fa-cog fa-spin fa-1x fa-fw"></i></div>').css({
+        'margin-right': '5px',
+        'display': 'inline-grid'
+      }).delay(5000).fadeOut('slow', function () {
         $(this).remove();
       });
-      self.element.find(".layout-grid .entry[data-url='" + dataid + "'] .entry-name-view").prepend($processor_icon);
-      self.element.find(".layout-list .entry[data-url='" + dataid + "'] .entry_name").prepend($processor_icon);
+
+      entry.find('.entry-info-name span').prepend($processor_icon);
 
       // Delay a few milliseconds for Tracking event
       setTimeout(function () {
-        $('.qtip').qtip('hide');
+
         return true;
       }, 300);
 
     },
 
-    _actionShareEntry: function (entry) {
+    /**
+         * Download files as ZIP
+         */
+    _actionDownloadZip: function (entries, mouseevent) {
       var self = this;
 
-      $('.qtip').qtip('hide');
+      /* Close any open modal windows */
+      $('#outofthebox-modal-action').remove();
+
+      /* Build the Dialog */
+      var modalbuttons = '';
+      var modalheader = $('<a tabindex="0" class="close-button" title="' + self.options.str_close_title + '" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
+      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" ><div class="zip-loading-bar label-center" data-preset="circle" data-value="0"></div><h3 class="zip-status">' + self.options.str_processing + '</h3></div>');
+      var modalfooter = $('<div class="outofthebox-modal-footer"><div class="outofthebox-modal-buttons">' + modalbuttons + '</div></div>');
+      var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal ' + self.options.content_skin + '"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
+      $('body').append(modaldialog);
+      $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
+
+      self.zip_download_bar = new ldBar(modalbody.find('.zip-loading-bar').get(0), {
+        "preset": "circle"
+      });
+
+      self._zipDownload(entries);
+
+      /* Open the Dialog and load the images inside it */
+      var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
+        dialogOpenClass: 'animated slideInDown',
+        dialogCloseClass: 'animated slideOutUp',
+        escapeClose: true
+      });
+      document.addEventListener('keydown', function (ev) {
+        modal_action.keydown(ev);
+      }, false);
+      modal_action.open();
+      window.modal_action = modal_action;
+
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').prop('disabled', true);
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').html('<i class="fas fa-cog fa-spin fa-fw"></i><span> ' + self.options.str_processing + '</span>');
+
+      return false;
+    },
+
+    _zipDownload: function (entries, request_id) {
+      var self = this;
+
+      if (typeof request_id === 'undefined') {
+        request_id = new Date().getTime();
+      }
+
+      var data = {
+        action: 'outofthebox-create-zip',
+        type: 'do-zip',
+        request_id: request_id,
+        account_id: self.options.account_id,
+        listtoken: self.options.listtoken,
+        lastFolder: self.element.attr('data-id'),
+        _ajax_nonce: self.options.createzip_nonce,
+        files: entries
+      }
+
+      self._helperDownloadUrlInline(self.options.ajax_url + "?" + $.param(data))
+      setTimeout(function () {
+        self._watchZipProgres(request_id);
+      }, 2000);
+
+    },
+
+    _watchZipProgres: function (request_id) {
+      var self = this;
+
+      self._getZipProgress(request_id).then(function (response) {
+
+        if ($.isEmptyObject(response) || typeof response.status === 'undefined' || response.status.progress === 'failed') {
+          $('#outofthebox-modal-action').remove();
+          return;
+        }
+
+        $('.zip-status').html(response.status.progress_str);
+        self.zip_download_bar.set(response.status.percentage);
+
+        if (response.status.progress === 'finished') {
+          $('#outofthebox-modal-action').remove();
+          return
+        }
+
+        setTimeout(function () {
+          self._watchZipProgres(request_id);
+        }, 2000);
+
+      })
+    },
+
+    _getZipProgress: function (request_id) {
+      var self = this;
+
+      return $.ajax({
+        type: "POST",
+        url: self.options.ajax_url,
+        data: {
+          action: 'outofthebox-create-zip',
+          type: 'get-progress',
+          request_id: request_id,
+          account_id: self.options.account_id,
+          listtoken: self.options.listtoken,
+          lastFolder: self.element.attr('data-id'),
+          _ajax_nonce: self.options.createzip_nonce,
+        },
+        dataType: 'json',
+      });
+    },
+
+    /**
+     * Share an Entry
+     */
+    _actionShareEntry: function (entry, mouseevent) {
+      var self = this;
 
       var account_id = self.element.attr('data-account-id');
       var datapath = entry.closest("ul").attr('data-path');
-      var dataurl = self.element.find(".entry[data-url='" + datapath + "']").attr('data-url');
-      var dataname = self.element.find(".entry[data-url='" + datapath + "']").attr('data-name');
+      var dataurl = entry.attr('data-url');
+      var dataname = entry.attr('data-name');
 
       if (entry.hasClass('entry_action_shortlink_folder')) {
         var dataurl = self.element.attr('data-path');
@@ -1956,7 +1999,8 @@
       $('body').append(modaldialog);
       $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
-      $.ajax({type: "POST",
+      $.ajax({
+        type: "POST",
         url: self.options.ajax_url,
         data: {
           action: 'outofthebox-create-link',
@@ -1971,6 +2015,9 @@
         success: function (response) {
           if (response !== null) {
             if (response.link !== null) {
+
+              response.link = response.link.replace('?dl=1', '');
+
               $('.outofthebox-modal-body').append('<input type="text" class="shared-link-url" value="' + response.link + '" style="width: 98%;" readonly/><div class="outofthebox-shared-social"></div>');
               sendGooglePageView('Create shared link');
 
@@ -1997,7 +2044,7 @@
 
 
               var clipboard = new ClipboardJS('.jssocials-share-directlink', {
-                text: function (trigger) {
+                text: function () {
                   return $('.shared-link-url').val();
                 }
               });
@@ -2007,7 +2054,7 @@
                 e.clearSelection();
               });
 
-              clipboard.on('error', function (e) {
+              clipboard.on('error', function () {
                 if (self.options.mobile) {
                   $('.shared-link-url').select();
                 } else {
@@ -2026,6 +2073,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2046,20 +2094,20 @@
      * @param {String} template_name
      * @param {String} mimetype
      */
-    _actionCreateEntry: function (entry) {
+    _actionCreateEntry: function (entry, mimetype, mouseevent) {
       var self = this;
 
-      $('.qtip').qtip('hide');
+
 
       /* Close any open modal windows */
       $('#outofthebox-modal-action').remove();
       /* Build the Rename Dialog */
       var modalbuttons = '';
       modalbuttons += '<button class="button outofthebox-modal-cancel-btn secondary" data-action="cancel" type="button" onclick="modal_action.close();" title="' + self.options.str_cancel_title + '" >' + self.options.str_cancel_title + '</button>';
-      modalbuttons += '<button class="button outofthebox-modal-confirm-btn" data-action="rename" type="button" title="' + self.options.str_addfolder_title + '" >' + self.options.str_addfolder_title + '</button>';
-      var addfolder_input = '<input type="text" id="outofthebox-modal-addfolder-input" name="outofthebox-modal-addfolder-input" value="" style="width:100%"/>';
+      modalbuttons += '<button class="button outofthebox-modal-confirm-btn" data-action="rename" type="button" title="' + self.options.str_addnew_title + '" >' + self.options.str_addnew_title + '</button>';
+      var create_entry_input = '<input type="text" id="outofthebox-modal-create-entry-input" name="outofthebox-modal-create-entry-input" value="" style="width:100%"/>';
       var modalheader = $('<a tabindex="0" class="close-button" title="' + self.options.str_close_title + '" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
-      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" >' + self.options.str_addfolder + ' <br/>' + addfolder_input + '</div>');
+      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" >' + self.options.str_addnew_name + ': <br/>' + create_entry_input + '</div>');
       var modalfooter = $('<div class="outofthebox-modal-footer"><div class="outofthebox-modal-buttons">' + modalbuttons + '</div></div>');
       var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal ' + self.options.content_skin + '"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
 
@@ -2067,8 +2115,8 @@
       $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
       /* Set the button actions */
 
-      $('#outofthebox-modal-action #outofthebox-modal-addfolder-input').unbind('keyup');
-      $('#outofthebox-modal-action #outofthebox-modal-addfolder-input').on("keyup", function (event) {
+      $('#outofthebox-modal-action #outofthebox-modal-create-entry-input').unbind('keyup');
+      $('#outofthebox-modal-action #outofthebox-modal-create-entry-input').on("keyup", function (event) {
         if (event.which == 13 || event.keyCode == 13) {
           $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').trigger('click');
         }
@@ -2076,18 +2124,19 @@
       $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').unbind('click');
       $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
 
-        var newinput = $('#outofthebox-modal-addfolder-input').val();
+        var filename = $('#outofthebox-modal-create-entry-input').val();
         /* Check if there are illegal characters in the new name*/
-        if (/[<>:"/\\|?*]/g.test($('#outofthebox-modal-addfolder-input').val())) {
+        if (/[<>:"/\\|?*]/g.test($('#outofthebox-modal-create-entry-input').val())) {
           $('#outofthebox-modal-action .outofthebox-modal-error').remove();
-          $('#outofthebox-modal-addfolder-input').after('<div class="outofthebox-modal-error">' + self.options.str_rename_failed + '</div>');
+          $('#outofthebox-modal-create-entry-input').after('<div class="outofthebox-modal-error">' + self.options.str_rename_failed + '</div>');
           $('#outofthebox-modal-action .outofthebox-modal-error').fadeIn();
         } else {
 
           var data = {
-            action: 'outofthebox-add-folder',
-            newfolder: encodeURIComponent(newinput),
-            _ajax_nonce: self.options.addfolder_nonce
+            action: 'outofthebox-create-entry',
+            mimetype: mimetype,
+            name: encodeURIComponent(filename),
+            _ajax_nonce: self.options.createentry_nonce
           };
           self._actionDoModifyEntry(data);
 
@@ -2098,6 +2147,80 @@
       });
       /* Open the dialog */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
+        dialogOpenClass: 'animated slideInDown',
+        dialogCloseClass: 'animated slideOutUp',
+        escapeClose: true
+      });
+      document.addEventListener('keydown', function (ev) {
+        modal_action.keydown(ev);
+      }, false);
+      modal_action.open();
+      window.modal_action = modal_action;
+      return false;
+    },
+
+    /**
+             * Create a Dialog for copying an entry
+             */
+    _actionCopyEntry: function (entry, mouseevent) {
+
+      var self = this;
+
+      var dataid = entry.attr('data-id');
+      var dataname = entry.attr('data-name');
+      var dataurl = entry.attr('data-url');
+
+      /* Close any open modal windows */
+      $('#outofthebox-modal-action').remove();
+
+      /* Build the Rename Dialog */
+      var modalbuttons = '';
+      modalbuttons += '<button class="button outofthebox-modal-cancel-btn secondary" data-action="cancel" type="button" onclick="modal_action.close();" title="' + self.options.str_cancel_title + '" >' + self.options.str_cancel_title + '</button>';
+      modalbuttons += '<button class="button outofthebox-modal-confirm-btn" data-action="rename" type="button" title="' + self.options.str_copy_title + '" >' + self.options.str_copy_title + '</button>';
+      var copynameinput = '<input id="outofthebox-modal-rename-input" name="outofthebox-modal-rename-input" type="text" value="' + dataname + '" style="width:100%"/>';
+      var modalheader = $('<a tabindex="0" class="close-button" title="' + self.options.str_close_title + '" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
+      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" >' + self.options.str_copy + '<br/>' + copynameinput + '</div>');
+      var modalfooter = $('<div class="outofthebox-modal-footer"><div class="outofthebox-modal-buttons">' + modalbuttons + '</div></div>');
+      var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal ' + self.options.content_skin + '"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
+
+      $('body').append(modaldialog);
+      $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
+      /* Set the button actions */
+
+      $('#outofthebox-modal-action #outofthebox-modal-rename-input').unbind('keyup');
+      $('#outofthebox-modal-action #outofthebox-modal-rename-input').on("keyup", function (event) {
+        if (event.which == 13 || event.keyCode == 13) {
+          $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').trigger('click');
+        }
+      });
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').unbind('click');
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
+
+        var filename = $('#outofthebox-modal-rename-input').val();
+        /* Check if there are illegal characters in the new name*/
+        if (/[<>:"/\\|?*]/g.test($('#outofthebox-modal-rename-input').val())) {
+          $('#outofthebox-modal-action .outofthebox-modal-error').remove();
+          $('#outofthebox-modal-rename-input').after('<div class="outofthebox-modal-error">' + self.options.str_rename_failed + '</div>');
+          $('#outofthebox-modal-action .outofthebox-modal-error').fadeIn();
+        } else {
+
+          var data = {
+            action: 'outofthebox-copy-entry',
+            OutoftheBoxpath: dataurl,
+            newname: encodeURIComponent(filename),
+            _ajax_nonce: self.options.copy_nonce
+          };
+          self._actionDoModifyEntry(data);
+
+          $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').prop('disabled', true);
+          $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').html('<i class="fas fa-cog fa-spin fa-fw"></i><span> ' + self.options.str_processing + '</span>');
+        }
+
+      });
+      /* Open the dialog */
+      var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2114,14 +2237,13 @@
      * Create a Dialog for renaming an entry
      * @param {Object} entry
      */
-    _actionRenameEntry: function (entry) {
+    _actionRenameEntry: function (entry, mouseevent) {
 
       var self = this;
-      $('.qtip').qtip('hide');
 
       var datapath = entry.closest("ul").attr('data-path');
-      var dataname = self.element.find(".entry[data-url='" + datapath + "']").attr('data-name');
-      var dataurl = self.element.find(".entry[data-url='" + datapath + "']").attr('data-url');
+      var dataname = entry.attr('data-name');
+      var dataurl = entry.attr('data-url');
 
       /* Close any open modal windows */
       $('#outofthebox-modal-action').remove();
@@ -2172,6 +2294,7 @@
       });
       /* Open the dialog */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2183,23 +2306,109 @@
       window.modal_action = modal_action;
       return false;
     },
+
+    /**
+     * Create a Dialog for changing the description of an entry
+     * @param {Object} entry
+     */
+    _actionEditDescriptionEntry: function (entry, mouseevent) {
+
+      var self = this;
+
+
+      var dataid = entry.attr('data-id');
+      var account_id = self.element.attr('data-account-id');
+      var description = entry.find('.description-text').html();
+
+      if (typeof description === 'undefined') {
+        description = '';
+      }
+
+      /* Close any open modal windows */
+      $('#outofthebox-modal-action').remove();
+
+      /* Build the Rename Dialog */
+      var modalbuttons = '';
+      modalbuttons += '<button class="button outofthebox-modal-cancel-btn secondary" data-action="cancel" type="button" onclick="modal_action.close();" title="' + self.options.str_cancel_title + '" >' + self.options.str_cancel_title + '</button>';
+      modalbuttons += '<button class="button outofthebox-modal-confirm-btn" data-action="editdescription" type="button" title="' + self.options.str_save_title + '" >' + self.options.str_save_title + '</button>';
+      var modalheader = $('<a tabindex="0" class="close-button" title="' + self.options.str_close_title + '" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
+      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" ><textarea id="outofthebox-modal-description-input" name="outofthebox-modal-description-input" style="width:100%" rows="8" ></textarea></div>');
+      var modalfooter = $('<div class="outofthebox-modal-footer"><div class="outofthebox-modal-buttons">' + modalbuttons + '</div></div>');
+      var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal ' + self.options.content_skin + '"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
+
+      $('body').append(modaldialog);
+      $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
+
+      /* Fill Textarea */
+      $('#outofthebox-modal-description-input').val(description.replace(/<br\s?\/?>/g, "\r"));
+
+      /* Set the button actions */
+      $('#outofthebox-modal-action #outofthebox-modal-description-input').unbind('keyup');
+      $('#outofthebox-modal-action #outofthebox-modal-description-input').on("keyup", function (event) {
+        if (event.which == 13 || event.keyCode == 13) {
+          $('#outofthebox-modal-action .outofthebox-modal-description-btn').trigger('click');
+        }
+      });
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').unbind('click');
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
+
+        var new_description = $('#outofthebox-modal-description-input').val();
+
+        var data = {
+          action: 'outofthebox-edit-description-entry',
+          account_id: account_id,
+          id: dataid,
+          newdescription: new_description,
+          listtoken: self.options.listtoken,
+          _ajax_nonce: self.options.description_nonce
+        };
+        self._actionDoModifyEntry(data);
+
+        $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').prop('disabled', true);
+        $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').html('<i class="fas fa-cog fa-spin fa-fw"></i><span> ' + self.options.str_processing + '</span>');
+
+
+      });
+      /* Open the dialog */
+      var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
+        dialogOpenClass: 'animated slideInDown',
+        dialogCloseClass: 'animated slideOutUp',
+        escapeClose: true
+      });
+      document.addEventListener('keydown', function (ev) {
+        modal_action.keydown(ev);
+      }, false);
+      modal_action.open();
+      window.modal_action = modal_action;
+      return false;
+    },
+
+
     /**
      * Create a request to move the selected enties
      * @param {UI element} entry
      * @param {UI element} to_folder
      */
-    _actionMoveEntry: function (entry, to_folder) {
+    _actionMoveEntry: function (entries, to_folder, mouseevent) {
+
+      var self = this;
+
+      var files = [];
+
+      $.each(entries, function () {
+        files.push($(this).attr('data-id'));
+      });
 
       var data = {
         action: 'outofthebox-move-entries',
-        entries: [entry.attr('data-url')],
+        entries: files,
         copy: false,
         target: to_folder.attr('data-url'),
-        listtoken: this.options.listtoken,
-        _ajax_nonce: this.options.move_nonce
+        _ajax_nonce: self.options.move_nonce
       };
 
-      this._actionDoModifyEntry(data);
+      self._actionDoModifyEntry(data);
 
     },
 
@@ -2207,14 +2416,16 @@
      * Open a Dialog to move selected entries
      * @param {Object} entries
      */
-    _actionMoveEntries: function (entries) {
+    _actionMoveEntries: function (entries, mouseevent) {
 
       /* Close any open modal windows */
-      $('.qtip').qtip('hide');
+
       $('#outofthebox-modal-action').remove();
 
       /* Build the data request variable and make a list of the selected entries */
-      var self = this, list_of_files = '', files = [];
+      var self = this,
+        list_of_files = '',
+        files = [];
       $.each(entries, function () {
         files.push($(this).val());
       });
@@ -2255,6 +2466,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2272,14 +2484,16 @@
      * Open a Dialog to delete selected entries
      * @param {Object} entries
      */
-    _actionDeleteEntries: function (entries) {
+    _actionDeleteEntries: function (entries, mouseevent) {
 
       /* Close any open modal windows */
-      $('.qtip').qtip('hide');
+
       $('#outofthebox-modal-action').remove();
 
       /* Build the data request variable and make a list of the selected entries */
-      var self = this, list_of_files = '', files = [];
+      var self = this,
+        list_of_files = '',
+        files = [];
       $.each(entries, function () {
         var $entry = $(this).closest('.entry');
         var $img = $entry.find('img:first()');
@@ -2320,6 +2534,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2338,7 +2553,7 @@
      */
     _actionSelectAccount: function () {
       /* Close any open modal windows */
-      $('.qtip').qtip('hide');
+
       $('#outofthebox-modal-action').remove();
 
       /* Build the data request variable and make a list of the selected entries */
@@ -2367,6 +2582,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true
@@ -2417,342 +2633,6 @@
       });
     },
 
-    /* ***** Helper functions for File Upload ***** */
-    /* Validate File for Upload */
-    _uploadValidateFile: function (file, position) {
-      var self = this;
-
-      var minFileSize = self.element.find('input[name="minfilesize"]').val();
-      var maxFileSize = self.element.find('input[name="maxfilesize"]').val();
-      var acceptFileType = new RegExp(self.element.find('input[name="acceptfiletypes"]').val(), "i");
-
-      file.error = false;
-      if (file.name.length && !acceptFileType.test(file.name)) {
-        file.error = self.options.acceptFileTypes;
-      }
-
-      if (minFileSize !== '' && file.size <= minFileSize) {
-        file.error = self.options.minFileSize;
-      }
-
-      if (maxFileSize !== '' && file.size > 0 && file.size > maxFileSize) {
-        file.error = self.options.maxFileSize;
-      }
-
-      if (self.number_of_uploaded_files.Max > 0 && (self.number_of_uploaded_files.Counter > self.number_of_uploaded_files.Max)) {
-        var max_reached = true;
-        /* Allow upload of the same file */
-        $.each(self.uploaded_files_storage, function () {
-          if (this.name === file.name) {
-            max_reached = false;
-            self.number_of_uploaded_files.Counter--; // Don't count this as an extra file
-          }
-        });
-
-        if (max_reached) {
-          file.error = self.options.maxNumberOfFiles;
-        }
-      }
-
-      return file;
-    },
-
-    /* Get Progress for uploading files to cloud*/
-    _uploadGetProgress: function (file) {
-      var self = this;
-
-      $.ajax({type: "POST",
-        url: self.options.ajax_url,
-        data: {
-          action: 'outofthebox-upload-file',
-          account_id: self.element.attr('data-account-id'),
-          type: 'get-status',
-          listtoken: self.options.listtoken,
-          hash: file.hash,
-          _ajax_nonce: self.options.upload_nonce
-        },
-        dataType: 'json',
-        success: function (response) {
-          if (response !== null) {
-            if (typeof response.status !== 'undefined') {
-              if (response.status.progress === 'starting' || response.status.progress === 'uploading') {
-                setTimeout(function () {
-                  self._uploadGetProgress(response.file);
-                }, 1500);
-              }
-              self._uploadRenderRowOnProgress(response.file, {percentage: 50 + (response.status.percentage / 2), progress: response.status.progress});
-            } else {
-              file.error = self.options.str_error;
-              self._uploadRenderRowOnFinish(file);
-            }
-          }
-        },
-        error: function (response) {
-          file.error = self.options.str_error;
-          self._uploadRenderRowOnFinish(file);
-        }
-      });
-
-    },
-
-    /* Render file in upload list */
-    _uploadRenderRow: function (file) {
-      var self = this;
-
-      var row = self.element.find('.template-row').clone().removeClass('template-row');
-      var cancel_button = $('<a class="cancel-upload"><i class="fas fa-ban" aria-hidden="true"></i> ' + self.options.str_delete_title + '</a>');
-
-      row.attr('data-file', file.name).attr('data-id', file.hash);
-      row.find('.file-name').text(file.path.replace(file.name, '') + file.name);
-      if (file.size !== 'undefined' && file.size > 0) {
-        row.find('.file-size').text(self._helperFormatBytes(file.size, 1));
-      }
-      row.find('.upload-thumbnail img').attr('src', self._uploadGetThumbnail(file));
-
-      row.addClass('template-upload');
-      row.find('.upload-status').removeClass().addClass('upload-status queue').append(cancel_button);
-      row.find('.upload-status-icon').removeClass().addClass('upload-status-icon fas fa-circle').hide();
-
-      self.element.find('.fileupload-list .files').append(row);
-      self.element.find('div.fileupload-drag-drop').fadeOut();
-
-      if (typeof file.error !== 'undefined' && file.error !== false) {
-        self._uploadRenderRowOnFinish(file, 'invalid_file');
-      }
-
-      return row;
-
-    },
-    _uploadRenderRowOnStart: function (file) {
-      var self = this;
-
-      var row = self.element.find(".fileupload-list [data-id='" + file.hash + "']");
-
-      row.find('.upload-status').removeClass().addClass('upload-status succes').text(self.options.str_uploading_local);
-      row.find('.upload-status-icon').removeClass().addClass('upload-status-icon fas fa-circle-notch fa-spin').fadeIn();
-      row.find('.upload-progress').slideDown();
-    },
-
-    /* Render the progress of uploading cloud files */
-    _uploadRenderRowOnProgress: function (file, status) {
-      var self = this;
-
-      var row = self.element.find(".fileupload-list [data-id='" + file.hash + "']");
-      var progress_bar = row.find('.ui-progressbar');
-      var progress_bar_value = progress_bar.find('.ui-progressbar-value');
-
-      progress_bar_value.fadeIn().animate({
-        width: (status.percentage / 100) * progress_bar.width()
-      }, 50);
-
-      if (status.progress === 'uploading_to_cloud') {
-        row.find('.upload-status').text(self.options.str_uploading_cloud);
-      }
-    },
-
-    _uploadRenderRowOnFinish: function (file, haserror) {
-      var self = this;
-
-      var row = self.element.find(".fileupload-list [data-id='" + file.hash + "']");
-
-      row.addClass('template-download').removeClass('template-upload');
-      row.find('.file-name').text(file.path.replace(file.name, '') + file.name);
-      row.find('.upload-thumbnail img').attr('src', self._uploadGetThumbnail(file));
-      row.find('.upload-progress').slideUp();
-
-      if (typeof file.error !== 'undefined' && file.error !== false) {
-        row.find('.upload-error').html('<i class="fas fa-exclamation-circle"></i> <strong>' + self.options.str_error + ":</strong> " + file.error).slideUp().delay(500).slideDown();
-      } else {
-        row.find('.upload-status').removeClass().addClass('upload-status succes').text(self.options.str_success);
-        row.find('.upload-status-icon').removeClass().addClass('upload-status-icon fas fa-check-circle');
-
-        self.uploaded_files.push(file.fileid);
-      }
-
-      if (typeof haserror === 'undefined' && self.element.find('.template-upload').length < 1) {
-        clearTimeout(self.uploadPostProcessTimer);
-        self.uploadPostProcessTimer = setTimeout(function () {
-          self._uploadDoPostProcess();
-        }, 500);
-      }
-
-      if (row.closest('.gform_wrapper').length > 0 || row.closest('.wpcf7').length > 0 || (self.element.hasClass('upload') === true)) {
-        /* Keep the upload listed in Forms */
-      } else {
-        self._uploadDeleteRow(file, 5000);
-      }
-    },
-
-    _uploadDeleteRow: function (file, delayms) {
-      var self = this;
-
-      var row = self.element.find(".fileupload-list [data-id='" + file.hash + "']");
-
-      row.delay(delayms).animate({"opacity": "0"}, "slow", function () {
-        $(this).remove();
-
-        if (self.element.find('.template-upload').length < 1) {
-          self.element.find('div.fileupload-drag-drop').fadeIn();
-        }
-      });
-
-      if (typeof file.error !== 'undefined' && file.error !== false) {
-        self.number_of_uploaded_files.Counter--;
-      }
-    },
-
-    _uploadDoRequest: function (data) {
-      var self = this;
-
-      if ($.active === 0) {
-        data.submit();
-      } else {
-        window.setTimeout(function () {
-          self._uploadDoRequest(data)
-        }, 200);
-      }
-    },
-
-    /* Upload Notification function to send notifications if needed after upload */
-    _uploadDoPostProcess: function () {
-      var self = this;
-
-      $.ajax({type: "POST",
-        url: self.options.ajax_url,
-        data: {
-          action: 'outofthebox-upload-file',
-          account_id: self.element.attr('data-account-id'),
-          type: 'upload-postprocess',
-          listtoken: self.options.listtoken,
-          files: self.uploaded_files,
-          lastpath: self.element.attr('data-path'),
-          _ajax_nonce: self.options.upload_nonce
-        },
-        success: function (response) {
-          if (response !== null) {
-            self.uploaded_files = [];
-
-            $.each(response.files, function (fileid, file) {
-              self.uploaded_files_storage[fileid] = {
-                "hash": fileid,
-                "name": file.name,
-                "type": file.type,
-                "path": file.completepath,
-                "size": file.filesize,
-                "link": file.link,
-                "account_id": file.account_id,
-                "folderurl": file.folderurl,
-              };
-            });
-
-            self.element.find('.fileupload-filelist').val(JSON.stringify(self.uploaded_files_storage)).trigger('change');
-          }
-        },
-        complete: function (response) {
-
-          if (self.element.hasClass('upload') === false) {
-            self.options.clearLocalCache = true;
-
-            clearTimeout(self.updateTimer);
-            self._getFileList({});
-          }
-
-          if (self.element.find('.fileupload-list').find('.template-upload').length < 1) {
-            /* Remove navigation prompt */
-            window.onbeforeunload = null;
-
-            self.element.find('.fileuploadform').trigger('outofthebox-upload-finished');
-          }
-        },
-        dataType: 'json'
-      });
-    },
-
-    _uploadGetThumbnail: function (file) {
-      var self = this;
-
-      var thumbnailUrl = self.options.icons_set + '128x128/';
-      if (typeof file.thumbnail === 'undefined' || file.thumbnail === null || file.thumbnail === '') {
-        var icon;
-
-        if (typeof file.type === 'undefined' || file.type === null) {
-          icon = 'unknown';
-        } else if (file.type.indexOf("word") >= 0) {
-          icon = 'application-msword';
-        } else if (file.type.indexOf("excel") >= 0 || file.type.indexOf("spreadsheet") >= 0) {
-          icon = 'application-vnd.ms-excel';
-        } else if (file.type.indexOf("powerpoint") >= 0 || file.type.indexOf("presentation") >= 0) {
-          icon = 'application-vnd.ms-powerpoint';
-        } else if (file.type.indexOf("access") >= 0 || file.type.indexOf("mdb") >= 0) {
-          icon = 'application-vnd.ms-access';
-        } else if (file.type.indexOf("image") >= 0) {
-          icon = 'image-x-generic';
-        } else if (file.type.indexOf("audio") >= 0) {
-          icon = 'audio-x-generic';
-        } else if (file.type.indexOf("video") >= 0) {
-          icon = 'video-x-generic';
-        } else if (file.type.indexOf("pdf") >= 0) {
-          icon = 'application-pdf';
-        } else if (file.type.indexOf("zip") >= 0 ||
-                file.type.indexOf("archive") >= 0 ||
-                file.type.indexOf("tar") >= 0 ||
-                file.type.indexOf("compressed") >= 0
-                ) {
-          icon = 'application-zip';
-        } else if (file.type.indexOf("html") >= 0) {
-          icon = 'text-xml';
-        } else if (file.type.indexOf("application/exe") >= 0 ||
-                file.type.indexOf("application/x-msdownload") >= 0 ||
-                file.type.indexOf("application/x-exe") >= 0 ||
-                file.type.indexOf("application/x-winexe") >= 0 ||
-                file.type.indexOf("application/msdos-windows") >= 0 ||
-                file.type.indexOf("application/x-executable") >= 0
-                ) {
-          icon = 'application-x-executable';
-        } else if (file.type.indexOf("text") >= 0) {
-          icon = 'text-x-generic';
-        } else {
-          icon = 'unknown';
-        }
-        return thumbnailUrl + icon + '.png';
-      } else {
-        return file.thumbnail;
-      }
-    },
-
-    _initDragDrop: function () {
-      var self = this;
-      $(document).bind('dragover', function (e) {
-        var dropZone = self.element,
-                timeout = window.dropZoneTimeout;
-        if (!timeout) {
-          dropZone.addClass('in');
-        } else {
-          clearTimeout(timeout);
-        }
-        var found = false, node = e.target;
-        do {
-          if ($(node).is(dropZone)) {
-            found = true;
-            break;
-          }
-          node = node.parentNode;
-        } while (node !== null);
-        if (found) {
-          $(node).addClass('hover');
-        } else {
-          dropZone.removeClass('hover');
-        }
-        window.dropZoneTimeout = setTimeout(function () {
-          window.dropZoneTimeout = null;
-          dropZone.removeClass('in hover');
-        }, 100);
-      });
-      $(document).bind('drop dragover', function (e) {
-        e.preventDefault();
-      });
-    },
-
     _initResizeHandler: function () {
       var self = this;
       self._orgininal_width = self.element.width();
@@ -2778,7 +2658,7 @@
       }
 
       self.element.find('.image-collage').fadeTo(100, 0);
-      self.element.find('.layout-grid').fadeTo(100, 0);
+      self.element.find('.files').fadeTo(100, 0);
 
       self.resizeTimer = setTimeout(function () {
         if (self.options.topContainer.hasClass('files') || self.options.topContainer.hasClass('search')) {
@@ -2806,7 +2686,7 @@
 
         var d = conf.data(request);
         $.extend(request, d);
-        var storage_key = 'CloudPlugin_' + (request.listtoken + request._ajax_nonce + (typeof request.account_id === 'undefined' ? '' : request.account_id) + request.filelayout + request.OutoftheBoxpath + request.lastpath + request.sort + request.query).hashCode();
+        var storage_key = 'CloudPlugin_' + (request.listtoken + request._ajax_nonce + (typeof request.account_id === 'undefined' ? '' : request.account_id) + request.OutoftheBoxpath + request.lastpath + request.sort + request.query).hashCode();
 
         if (self.options.clearLocalCache) {
           self._cacheRemove('all');
@@ -2883,23 +2763,23 @@
 
       try {
         var storage = window['sessionStorage'],
-                x = '__storage_test__';
+          x = '__storage_test__';
         storage.setItem(x, x);
         storage.removeItem(x);
         return true;
       } catch (e) {
         return e instanceof DOMException && (
-                // everything except Firefox
-                e.code === 22 ||
-                // Firefox
-                e.code === 1014 ||
-                // test name field too, because code might not be present
-                // everything except Firefox
-                e.name === 'QuotaExceededError' ||
-                // Firefox
-                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-                // acknowledge QuotaExceededError only if there's something already stored
-                storage.length !== 0;
+          // everything except Firefox
+          e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          storage.length !== 0;
       }
     },
 
@@ -2988,6 +2868,31 @@
       var i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     },
+    _helperReturnBytes: function (size) {
+      if (size == '')
+        return 0;
+
+      var unit = size.charAt(size.length - 1);
+
+      if (('B' === unit || 'b' === unit) && (isNaN(size.charAt(size.length - 2)))) {
+        unit = size.charAt(size.length - 2);
+      }
+
+      switch (unit) {
+        case 'M':
+        case 'm':
+          return parseInt(size) * 1048576
+        case 'k':
+        case 'k':
+          return parseInt(size) * 1024
+        case 'G':
+        case 'g':
+          return parseInt(size) * 1073741824
+        default:
+          return parseInt(size)
+      }
+    },
+
     _helperIframeFix: function ($element) {
       /* Safari bug fix for embedded iframes*/
       if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
@@ -3021,7 +2926,7 @@
     },
     _helperReadArrCheckBoxes: function (element) {
       var values = $(element + ":checked").map(function () {
-        return this.value;
+        return $(this).closest('.entry').attr('data-id');
       }).get();
 
       return values;
