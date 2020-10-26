@@ -38,6 +38,9 @@ switch ( $template ) {
 	case 'twentynineteen' :
 		echo '<section id="primary" class="content-area twentynineteen"><main id="main" class="site-main" role="main">';
 		break;
+	case 'busify-pro' :
+		echo '<div id="primary" class="content-area">';
+		break;
 	default :
 		echo '<div class="content-area container"><main id="main" class="site-main" role="main">';
 		break;

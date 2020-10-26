@@ -10,18 +10,25 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="vczapi-settings-admin-support-bg red">
         <h3>Need more features ?</h3>
         <p>If you need more features for Video Conferencing with Zoom extension then
-            <a href="<?php echo admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-addons' ); ?>">Check out</a> the addons here
-            to download.
+            <a href="<?php echo admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-addons' ); ?>">Check out</a> the addons here to download.
     </div>
 
     <div class="vczapi-settings-admin-support-bg">
         <p>Support for this plugin is free! If you encounter any issues or have any queries please use the
             <a href="https://wordpress.org/support/plugin/video-conferencing-with-zoom-api/" target="_blank">support forums</a> or
-            <a href="https://deepenbajracharya.com.np/say-hello/" target="_blank">send a support mail</a>. I will reply to you at the earliest
-            possible.</p>
+            <a href="https://deepenbajracharya.com.np/say-hello/" target="_blank">send a support mail</a>. I will reply to you at the earliest possible.
+        </p>
         <p>If you are planning to do something creative with Video conferencing with Zoom, you might want to
             <a href="https://deepenbajracharya.com.np/say-hello/" target="_blank">hire a freelance developer</a> to assist you.</p>
     </div>
+
+    <div class="vczapi-settings-admin-support-bg">
+        <h3>Facebook Group</h3>
+        <p>We have created a facebook group in order to raise and solve questions as well as provide necessary updates to the plugin changes and so on. </p><p>You can follow our
+            <a href="https://www.facebook.com/groups/zoomwp/">Facebook Group</a> where you can see what others are facing and also post the issues that you are facing and let the community solve it for you.
+        </p>
+    </div>
+
 
     <div class="vczapi-settings-admin-support-bg">
         <h3>Premium Support Ticket for premium users</h3>
@@ -39,13 +46,13 @@ if ( ! defined( 'ABSPATH' ) ) {
         <h3>Support This Plugin</h3>
         <p>I spend most of my spare time developing this plugin so you can use it for free.</p>
         <p>If you are using and benefiting from this plugin and wish to show your support, you can buy me a
-            <a href="https://deepenbajracharya.com.np/donate/" target="_blank">coffee</a> you should know that I greatly appreciate this gesture.
-            Every little bit helps!</p>
+            <a href="https://deepenbajracharya.com.np/donate/" target="_blank">coffee</a> you should know that I greatly appreciate this gesture. Every little bit helps!
+        </p>
     </div>
 
     <div class="vczapi-settings-admin-support-bg">
         <h3>Developer</h3>
-        <p>Feel free to reach me from <a href="https://deepenbajracharya.com.np/say-hello/" target="_blank">Here</a>, if you have any questions or
-            queries.</p>
+        <p>Feel free to reach me from
+            <a href="https://deepenbajracharya.com.np/say-hello/" target="_blank">Here</a>, if you have any questions or queries.</p>
     </div>
 </div>

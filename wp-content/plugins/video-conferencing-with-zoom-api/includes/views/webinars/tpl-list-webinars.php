@@ -25,7 +25,7 @@ $get_host_id = isset( $_GET['host_id'] ) ? $_GET['host_id'] : null;
             <select name="action" id="bulk-action-selector-top">
                 <option value="trash"><?php _e( "Move to Trash", "video-conferencing-with-zoom-api" ); ?></option>
             </select>
-            <input type="submit" id="bulk_delete_meeting_listings" data-hostid="<?php echo $get_host_id; ?>" class="button action" value="Apply">
+            <input type="submit" id="bulk_delete_meeting_listings" data-type="webinar" class="button action" value="Apply">
             <a href="<?php echo add_query_arg( array(
 				'post_type' => 'zoom-meetings',
 				'new'       => 'zoom-video-conferencing-webinars-add'
@@ -69,7 +69,8 @@ $get_host_id = isset( $_GET['host_id'] ) ? $_GET['host_id'] : null;
 					?>
                     <tr>
                         <td class="zvc-text-center">
-                            <input type="checkbox" name="meeting_id_check[]" class="checkthis" value="<?php echo $webinar->id; ?>"/></td>
+                            <input type="checkbox" name="meeting_id_check[]" class="checkthis" value="<?php echo $webinar->id; ?>"/>
+                        </td>
                         <td><?php echo $webinar->id; ?></td>
                         <td>
                             <input class="text" id="meeting-shortcode-<?php echo $webinar->id; ?>" type="text" readonly value='[zoom_api_webinar webinar_id="<?php echo $webinar->id; ?>" link_only="no"]' onclick="this.select(); document.execCommand('copy'); alert('Copied to clipboard');"/>
@@ -83,7 +84,7 @@ $get_host_id = isset( $_GET['host_id'] ) ? $_GET['host_id'] : null;
 							$start_meeting_via_browser = '<a class="start-meeting-btn reload-meeting-started-button" target="_blank" href="' . esc_url( $zoom_host_url ) . '" class="join-link">' . __( 'Start via Browser', 'video-conferencing-with-zoom-api' ) . '</a>';
 							?>
                             <div class="row-actionss">
-                                <span class="trash"><a style="color:red;" href="javascript:void(0);" data-meetingid="<?php echo $webinar->id; ?>" data-hostid="<?php echo $webinar->host_id; ?>" class="submitdelete delete-meeting"><?php _e( 'Trash', 'video-conferencing-with-zoom-api' ); ?></a> | </span>
+                                <span class="trash"><a style="color:red;" href="javascript:void(0);" data-meetingid="<?php echo $webinar->id; ?>" data-type="webinar" class="submitdelete delete-meeting"><?php _e( 'Trash', 'video-conferencing-with-zoom-api' ); ?></a> | </span>
                                 <span class="view"><a href="<?php echo ! empty( $webinar->start_url ) ? $webinar->start_url : $webinar->join_url; ?>" rel="permalink" target="_blank"><?php _e( 'Start via App', 'video-conferencing-with-zoom-api' ); ?></a></span>
                                 <span class="view"> | <?php echo $start_meeting_via_browser; ?></span>
                             </div>

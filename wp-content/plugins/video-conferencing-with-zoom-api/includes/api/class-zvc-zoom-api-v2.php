@@ -1,7 +1,5 @@
 <?php
 
-require ZVC_PLUGIN_DIR_PATH . '/vendor/autoload.php';
-
 use \Firebase\JWT\JWT;
 
 /**
@@ -96,6 +94,10 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 				$args['body']   = ! empty( $data ) ? json_encode( $data ) : array();
 				$args['method'] = "PATCH";
 				$response       = wp_remote_request( $request_url, $args );
+			} else if ( $request == "PUT" ) {
+				$args['body']   = ! empty( $data ) ? json_encode( $data ) : array();
+				$args['method'] = "PUT";
+				$response       = wp_remote_request( $request_url, $args );
 			} else {
 				$args['body']   = ! empty( $data ) ? json_encode( $data ) : array();
 				$args['method'] = "POST";
@@ -151,14 +153,19 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * User Function to List
 		 *
 		 * @param $page
+		 * @param $params
 		 *
 		 * @return array
 		 */
-		public function listUsers( $page = 1 ) {
+		public function listUsers( $page = 1, $params = array() ) {
 			$listUsersArray                = array();
 			$listUsersArray['page_size']   = 300;
 			$listUsersArray['page_number'] = absint( $page );
 			$listUsersArray                = apply_filters( 'vczapi_listUsers', $listUsersArray );
+
+			if ( ! empty( $params ) ) {
+				$listUsersArray = array_merge( $listUsersArray, $params );
+			}
 
 			return $this->sendRequest( 'users', $listUsersArray, "GET" );
 		}
@@ -235,13 +242,13 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 			$createAMeetingArray['password']   = ! empty( $data['password'] ) ? $data['password'] : "";
 			$createAMeetingArray['duration']   = ! empty( $data['duration'] ) ? $data['duration'] : 60;
 			$createAMeetingArray['settings']   = array(
-				'join_before_host'  => ! empty( $data['join_before_host'] ) ? true : false,
-				'host_video'        => ! empty( $data['option_host_video'] ) ? true : false,
-				'participant_video' => ! empty( $data['option_participants_video'] ) ? true : false,
-				'mute_upon_entry'   => ! empty( $data['option_mute_participants'] ) ? true : false,
-				'enforce_login'     => ! empty( $data['option_enforce_login'] ) ? true : false,
-				'auto_recording'    => ! empty( $data['option_auto_recording'] ) ? $data['option_auto_recording'] : "none",
-				'alternative_hosts' => isset( $alternative_host_ids ) ? $alternative_host_ids : ""
+				'meeting_authentication' => ! empty( $data['meeting_authentication'] ) ? true : false,
+				'join_before_host'       => ! empty( $data['join_before_host'] ) ? true : false,
+				'host_video'             => ! empty( $data['option_host_video'] ) ? true : false,
+				'participant_video'      => ! empty( $data['option_participants_video'] ) ? true : false,
+				'mute_upon_entry'        => ! empty( $data['option_mute_participants'] ) ? true : false,
+				'auto_recording'         => ! empty( $data['option_auto_recording'] ) ? $data['option_auto_recording'] : "none",
+				'alternative_hosts'      => isset( $alternative_host_ids ) ? $alternative_host_ids : ""
 			);
 
 			$createAMeetingArray = apply_filters( 'vczapi_createAmeeting', $createAMeetingArray );
@@ -255,44 +262,44 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		/**
 		 * Updating Meeting Info
 		 *
-		 * @param array $update_data
+		 * @param array $data
 		 *
 		 * @return array|bool|string|void|WP_Error
 		 */
-		public function updateMeetingInfo( $update_data = array() ) {
-			$post_time  = $update_data['start_date'];
+		public function updateMeetingInfo( $data = array() ) {
+			$post_time  = $data['start_date'];
 			$start_time = gmdate( "Y-m-d\TH:i:s", strtotime( $post_time ) );
 
 			$updateMeetingInfoArray = array();
 
-			if ( ! empty( $update_data['alternative_host_ids'] ) ) {
-				if ( count( $update_data['alternative_host_ids'] ) > 1 ) {
-					$alternative_host_ids = implode( ",", $update_data['alternative_host_ids'] );
+			if ( ! empty( $data['alternative_host_ids'] ) ) {
+				if ( count( $data['alternative_host_ids'] ) > 1 ) {
+					$alternative_host_ids = implode( ",", $data['alternative_host_ids'] );
 				} else {
-					$alternative_host_ids = $update_data['alternative_host_ids'][0];
+					$alternative_host_ids = $data['alternative_host_ids'][0];
 				}
 			}
 
-			$updateMeetingInfoArray['topic']      = $update_data['topic'];
-			$updateMeetingInfoArray['agenda']     = ! empty( $update_data['agenda'] ) ? $update_data['agenda'] : "";
-			$updateMeetingInfoArray['type']       = ! empty( $update_data['type'] ) ? $update_data['type'] : 2; //Scheduled
+			$updateMeetingInfoArray['topic']      = $data['topic'];
+			$updateMeetingInfoArray['agenda']     = ! empty( $data['agenda'] ) ? $data['agenda'] : "";
+			$updateMeetingInfoArray['type']       = ! empty( $data['type'] ) ? $data['type'] : 2; //Scheduled
 			$updateMeetingInfoArray['start_time'] = $start_time;
-			$updateMeetingInfoArray['timezone']   = $update_data['timezone'];
-			$updateMeetingInfoArray['password']   = ! empty( $update_data['password'] ) ? $update_data['password'] : "";
-			$updateMeetingInfoArray['duration']   = ! empty( $update_data['duration'] ) ? $update_data['duration'] : 60;
+			$updateMeetingInfoArray['timezone']   = $data['timezone'];
+			$updateMeetingInfoArray['password']   = ! empty( $data['password'] ) ? $data['password'] : "";
+			$updateMeetingInfoArray['duration']   = ! empty( $data['duration'] ) ? $data['duration'] : 60;
 			$updateMeetingInfoArray['settings']   = array(
-				'join_before_host'  => ! empty( $update_data['option_jbh'] ) ? true : false,
-				'host_video'        => ! empty( $update_data['option_host_video'] ) ? true : false,
-				'participant_video' => ! empty( $update_data['option_participants_video'] ) ? true : false,
-				'mute_upon_entry'   => ! empty( $update_data['option_mute_participants'] ) ? true : false,
-				'enforce_login'     => ! empty( $update_data['option_enforce_login'] ) ? true : false,
-				'auto_recording'    => ! empty( $update_data['option_auto_recording'] ) ? $update_data['option_auto_recording'] : "none",
-				'alternative_hosts' => isset( $alternative_host_ids ) ? $alternative_host_ids : ""
+				'meeting_authentication' => ! empty( $data['meeting_authentication'] ) ? true : false,
+				'join_before_host'       => ! empty( $data['join_before_host'] ) ? true : false,
+				'host_video'             => ! empty( $data['option_host_video'] ) ? true : false,
+				'participant_video'      => ! empty( $data['option_participants_video'] ) ? true : false,
+				'mute_upon_entry'        => ! empty( $data['option_mute_participants'] ) ? true : false,
+				'auto_recording'         => ! empty( $data['option_auto_recording'] ) ? $data['option_auto_recording'] : "none",
+				'alternative_hosts'      => isset( $alternative_host_ids ) ? $alternative_host_ids : ""
 			);
 
 			$updateMeetingInfoArray = apply_filters( 'vczapi_updateMeetingInfo', $updateMeetingInfoArray );
 			if ( ! empty( $updateMeetingInfoArray ) ) {
-				return $this->sendRequest( 'meetings/' . $update_data['meeting_id'], $updateMeetingInfoArray, "PATCH" );
+				return $this->sendRequest( 'meetings/' . $data['meeting_id'], $updateMeetingInfoArray, "PATCH" );
 			} else {
 				return;
 			}
@@ -316,14 +323,23 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		/**
 		 * Delete A Meeting
 		 *
-		 * @param $meeting_id [int]
+		 * @param $meeting_id
 		 *
-		 * @return array
+		 * @return array|bool|string|WP_Error
 		 */
 		public function deleteAMeeting( $meeting_id ) {
-			$deleteAMeetingArray = array();
+			return $this->sendRequest( 'meetings/' . $meeting_id, false, "DELETE" );
+		}
 
-			return $this->sendRequest( 'meetings/' . $meeting_id, $deleteAMeetingArray, "DELETE" );
+		/**
+		 * Delete a Webinar
+		 *
+		 * @param $webinar_id
+		 *
+		 * @return array|bool|string|WP_Error
+		 */
+		public function deleteAWebinar( $webinar_id ) {
+			return $this->sendRequest( 'webinars/' . $webinar_id, false, "DELETE" );
 		}
 
 		/*Functions for management of reports*/
@@ -460,8 +476,8 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * @return bool|mixed
 		 */
 		public function listRecording( $host_id, $data = array() ) {
-			$from     = date( 'Y-m-d', strtotime( '-1 year', time() ) );
-			$to       = date( 'Y-m-d' );
+			$from = date( 'Y-m-d', strtotime( '-1 year', time() ) );
+			$to   = date( 'Y-m-d' );
 
 			$data['from'] = ! empty( $data['from'] ) ? $data['from'] : $from;
 			$data['to']   = ! empty( $data['to'] ) ? $data['to'] : $to;
