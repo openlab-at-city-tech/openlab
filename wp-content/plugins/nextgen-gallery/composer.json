@@ -1,7 +1,7 @@
 {
     "name": "imagely/nextgen-gallery",
-    "version": "3.3.5",
-    "description": "The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 28 million downloads.",
+    "version": "3.3.18",
+    "description": "The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.",
     "keywords": ["nextgen", "nextgen gallery", "gallery", "galleries", "image", "images", "image gallery", "photo", "photos", "photo gallery", "picture", "pictures", "picture gallery", "album", "albums", "photo albums", "image album", "media", "media gallery", "thumbnails", "thumbnail gallery", "thumbnail galleries", "slideshow", "slideshows", "slideshow gallery", "slideshow galleries", "fancybox", "lightbox", "responsive", "responsive gallery", "responsive galleries", "singlepic", "watermarks", "watermarking", "photography", "photographer"],
     "homepage": "https://www.imagely.com/",
     "license": "GPLv2",
@@ -15,6 +15,5 @@
         "ezyang/htmlpurifier": "^4.13"
     },
     "require-dev": {
-        "nikic/php-parser": "^4.3"
     }
 }

@@ -2,7 +2,7 @@
     <?php
     $review_1_anchor = 'href="https://wordpress.org/support/plugin/nextgen-gallery/reviews/?rate=5#new-post" target="_blank"';
     $user = get_userdata(get_current_user_id());
-    echo sprintf(__("Hey <strong>%s</strong>, you've created %d NextGEN galleries! Awesome! Could I ask you to give us a 5-star rating really quickly on <a %s>WordPress.org</a>? It helps other WordPress users and motivates us to keep improving. You can also just send us feedback <a %s>here</a>. Thanks! ~ Erick Danzer (founder of Imagely/NextGEN Gallery)", 'nggallery'),
+    echo sprintf(__("Hey <strong>%s</strong>, you've created %d NextGEN galleries! Awesome! Could I ask you to give us a 5-star rating really quickly on <a %s>WordPress.org</a>? It helps other WordPress users and motivates us to keep improving. You can also just send us feedback <a %s>here</a>. Thanks! ~ Nathan Singh (founder of Imagely/NextGEN Gallery)", 'nggallery'),
         $user->display_name,
         $number,
         $review_1_anchor,

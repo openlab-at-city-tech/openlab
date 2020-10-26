@@ -72,7 +72,7 @@
 				});
 				
 				// Support for IGW placeholder images. NGG <= 2.1.50
-				if (e.target.tagName == 'IMG') {
+				if (e.target.tagName === 'IMG') {
 					if (self.get_class_name(e.target).indexOf('ngg_displayed_gallery') >= 0) {
 						editor.dom.events.cancel(e);
 						var id = e.target.src.match(/\d+$/);

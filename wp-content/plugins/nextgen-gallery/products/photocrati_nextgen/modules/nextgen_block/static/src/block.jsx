@@ -1,34 +1,17 @@
-// Dependencies
-import { createNggEditComponent } from './edit.min'
-import icons from './icons.min';
+import NGGEditor from './edit.jsx'
+import icons     from './icons.min';
+import React     from 'react';
 
-const { __ } 					            = wp.i18n
-const { RawHTML } 	                        = wp.element
-const { registerBlockType }                 = wp.blocks
-const { withSelect}                         = wp.data
-const { omit }                              = lodash
-const { memo }                              = React
-
-// Provides a higher order component that is aware when the freeform block becomes available
-const withFreeform = withSelect((select, props) => {
-    return {
-        Freeform: select('core/blocks').getBlockType('core/freeform')
-    }
-})
-
-// When the freeform block is available, we create our edit component for NGG and render it
-const edit = withFreeform(memo(props => {
-    const editProps  = omit(props, ['Freeform'])
-    const NggEdit = createNggEditComponent(jQuery, props.Freeform.edit)
-    return <NggEdit {...editProps} isSelected={true}/>
-}))
+const { __ } 				= wp.i18n
+const { RawHTML } 	        = wp.element
+const { registerBlockType } = wp.blocks
 
 // Register our block
 registerBlockType('imagely/nextgen-gallery', {
 
     title: __('NextGEN Gallery'),
 
-    desription: __('A block for adding NextGEN Galleries.'),
+    description: __('A block for adding NextGEN Galleries.'),
 
     icon: icons.nextgen,
 
@@ -46,12 +29,15 @@ registerBlockType('imagely/nextgen-gallery', {
         customClassName: false,
     },
 
-    edit,
+    edit({attributes, setAttributes}) {
+        return <NGGEditor content={attributes.content}
+                          onInsertGallery={(shortcode) => {
+                              setAttributes({content: shortcode});
+                          }}/>
+    },
 
-    save( { attributes } ) {
+    save({ attributes }) {
         const { content } = attributes;
         return <RawHTML>{ content }</RawHTML>
-    },
+    }
 });
-
-
