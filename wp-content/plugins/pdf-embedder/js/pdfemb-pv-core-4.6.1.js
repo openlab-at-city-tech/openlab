@@ -238,7 +238,7 @@ jQuery(document).ready(function($) {
         divContainer.data('pageNumPending', null);
 
         var startZoom = divContainer.data('fullScreen') == 'on' ? parseInt(divContainer.data('startfpzoom')) : parseInt(divContainer.data('startzoom'));
-        if (isNaN(startZoom) || startZoom < 20 || startZoom > 500) {
+        if (isNaN(startZoom) || startZoom < 20 || startZoom > 800) {
             startZoom = 100;
         }
         this.zoom = startZoom;
@@ -935,7 +935,7 @@ jQuery(document).ready(function($) {
         });
 
         zoominbtn.on('click', function (e) {
-            if (self.zoom >= 500) {
+            if (self.zoom >= 800) {
                 return;
             }
             self.changeZoom(10);
@@ -1034,8 +1034,8 @@ jQuery(document).ready(function($) {
         if (newzoom < 20) {
             newzoom = 20;
         }
-        if (newzoom > 500) {
-            newzoom = 500;
+        if (newzoom > 800) {
+            newzoom = 800;
         }
         this.zoom = newzoom;
         this.divContainer.find('span.pdfemb-zoom').text(newzoom + '%');
