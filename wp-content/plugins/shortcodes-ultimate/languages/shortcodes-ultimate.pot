@@ -174,7 +174,7 @@ msgstr ""
 msgid "Available shortcodes"
 msgstr ""
 
-#: admin/class-shortcodes-ultimate-admin-shortcodes.php:88, admin/class-shortcodes-ultimate-admin-top-level.php:39, admin/class-shortcodes-ultimate-admin.php:267, includes/functions-galleries.php:294, inc/core/widget.php:14, inc/core/widget.php:40, admin/partials/help/sidebar.php:3
+#: admin/class-shortcodes-ultimate-admin-shortcodes.php:88, admin/class-shortcodes-ultimate-admin-top-level.php:39, admin/class-shortcodes-ultimate-admin.php:267, includes/functions-galleries.php:297, inc/core/widget.php:14, inc/core/widget.php:40, admin/partials/help/sidebar.php:3
 msgid "Shortcodes Ultimate"
 msgstr ""
 
@@ -272,15 +272,15 @@ msgstr ""
 msgid "Shortcodes Ultimate is not activated, because it requires WordPress version %1$s (or higher). You have version %2$s."
 msgstr ""
 
-#: includes/functions-galleries.php:255
+#: includes/functions-galleries.php:258
 msgid "Original image size"
 msgstr ""
 
-#: includes/functions-galleries.php:289
+#: includes/functions-galleries.php:292
 msgid "Slide link"
 msgstr ""
 
-#: includes/functions-galleries.php:295
+#: includes/functions-galleries.php:298
 msgid "Use this field to add custom links to slides used with Slider, Carousel and Custom Gallery shortcodes"
 msgstr ""
 
@@ -3900,18 +3900,6 @@ msgid "Details & Pricing"
 msgstr ""
 
 #: admin/partials/help/addons.php:4
-msgid "How to install add-on"
-msgstr ""
-
-#: admin/partials/help/addons.php:5
-msgid "How to get updates"
-msgstr ""
-
-#: admin/partials/help/addons.php:6
-msgid "How to activate license key"
-msgstr ""
-
-#: admin/partials/help/addons.php:7
 msgid "Full add-ons documentation"
 msgstr ""
 

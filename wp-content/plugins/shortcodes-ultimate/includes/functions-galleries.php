@@ -50,6 +50,7 @@ function su_get_gallery_slides( $atts ) {
 			: get_the_title( $post->ID );
 
 		$slide = array(
+			'post_id'       => $post->ID,
 			'attachment_id' => intval( $attachment_id ),
 			'caption'       => trim( $caption ),
 		);
@@ -83,6 +84,8 @@ function su_get_gallery_slides( $atts ) {
 		$slides[] = $slide;
 
 	}
+
+	$slides = apply_filters( 'su/get_gallery_slides/slides', $slides, $atts );
 
 	return $slides;
 
