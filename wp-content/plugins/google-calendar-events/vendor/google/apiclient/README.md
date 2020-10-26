@@ -2,6 +2,11 @@
 
 # Google APIs Client Library for PHP #
 
+<dl>
+  <dt>Reference Docs</dt><dd><a href="https://googleapis.github.io/google-api-php-client/master/">https://googleapis.github.io/google-api-php-client/master/</a></dd>
+  <dt>License</dt><dd>Apache 2.0</dd>
+</dl>
+
 The Google API Client Library enables you to work with Google APIs such as Gmail, Drive or YouTube on your server.
 
 These client libraries are officially supported by Google.  However, the libraries are considered complete and are in maintenance mode. This means that we will address critical bugs and security issues but will not add any new features.
@@ -131,8 +136,11 @@ $client->setApplicationName("Client_Library_Examples");
 $client->setDeveloperKey("YOUR_APP_KEY");
 
 $service = new Google_Service_Books($client);
-$optParams = array('filter' => 'free-ebooks');
-$results = $service->volumes->listVolumes('Henry David Thoreau', $optParams);
+$optParams = array(
+  'filter' => 'free-ebooks',
+  'q' => 'Henry David Thoreau'
+);
+$results = $service->volumes->listVolumes($optParams);
 
 foreach ($results->getItems() as $item) {
   echo $item['volumeInfo']['title'], "<br /> \n";
