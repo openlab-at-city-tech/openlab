@@ -1,0 +1,1061 @@
+# WordPress Blank Pot
+# Copyright (C) 2014 ...
+# This file is distributed under the GNU General Public License v2 or later.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ARI "
+"Fancy Lightbox v 1.2.6\n"
+"POT-Creation-Date: "
+"2017-08-16 14:04+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Your "
+"Name <you@example.com>\n"
+"Language-Team: ARI Soft "
+"<info@ari-soft.com>\n"
+"Report-Msgid-Bugs-To: "
+"Translator Name "
+"<translations@example."
+"com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/"
+"plain; charset=UTF-8\n"
+"Content-Transfer-"
+"Encoding: 8bit\n"
+"Plural-Forms: "
+"nplurals=2; plural=n != "
+"1;\n"
+"X-Textdomain-Support: "
+"yesX-Generator: Poedit "
+"1.6.4\n"
+"X-Poedit-SourceCharset: "
+"UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;esc_html_e;"
+"esc_html_x:1,2c;"
+"esc_html__;esc_attr_e;"
+"esc_attr_x:1,2c;"
+"esc_attr__;_ex:1,2c;"
+"_nx:4c,1,2;"
+"_nx_noop:4c,1,2;_x:1,2c;"
+"_n:1,2;_n_noop:1,2;"
+"__ngettext:1,2;"
+"__ngettext_noop:1,2;_c,"
+"_nc:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"Language: en_US\n"
+"X-Generator: Poedit "
+"2.0.3\n"
+"X-Poedit-"
+"SearchPath-0: .\n"
+"X-Poedit-"
+"SearchPathExcluded-0: "
+"assets\n"
+"X-Poedit-"
+"SearchPathExcluded-1: "
+"languages\n"
+"X-Poedit-"
+"SearchPathExcluded-2: "
+"readme.txt\n"
+
+#: ari-fancy-lightbox.php:44
+#, php-format
+msgid ""
+"update PHP version on "
+"your server from v. %s "
+"to at least v. %s"
+msgstr ""
+
+#: ari-fancy-lightbox.php:50
+msgid ""
+"install PHP SPL extension"
+msgstr ""
+
+#: ari-fancy-lightbox.php:54
+#, php-format
+msgid ""
+"update WordPress v. %s "
+"to at least v. %s"
+msgstr ""
+
+#: ari-fancy-lightbox.php:61
+#, php-format
+msgid ""
+"\"ARI Fancy Lightbox\" "
+"can not be activated. It "
+"requires PHP version "
+"5.4.0+ with SPL "
+"extension and WordPress "
+"4.0+.<br /><br /"
+"><b>Recommendations:</b> "
+"%s.<br /><br /><a href="
+"\"%s\" class=\"button "
+"button-primary\">Back</a>"
+msgstr ""
+
+#: ari-fancy-lightbox.php:84
+#, php-format
+msgid ""
+"\"ARI Fancy Lightbox\" "
+"requires PHP v. 5.4.0+, "
+"but PHP version %s is "
+"used on the site."
+msgstr ""
+
+#: includes/class-plugin.php:19
+#: includes/class-plugin.php:67
+#: includes/class-plugin.php:68
+#: includes/class-plugin.php:170
+msgid "ARI Fancy Lightbox"
+msgstr ""
+
+#: includes/class-plugin.php:154
+msgid "Settings"
+msgstr ""
+
+#: includes/class-plugin.php:155
+msgid "Support"
+msgstr ""
+
+#: includes/class-plugin.php:156
+#: includes/views/settings/class-html.php:138
+msgid "Upgrade"
+msgstr ""
+
+#: includes/forms/class-settings.php:21
+#, php-format
+msgid ""
+"Select \"ARI Fancy "
+"Lightbox\" option on "
+"\"Lightbox Effects\" tab "
+"on %s page in NextGEN "
+"plugin settings."
+msgstr ""
+
+#: includes/forms/class-settings.php:25
+msgid "Other Options"
+msgstr ""
+
+#: includes/forms/class-settings.php:32
+msgid "WordPress Galleries"
+msgstr ""
+
+#: includes/forms/class-settings.php:34
+msgid ""
+"Use parameters from this "
+"section to integrate the "
+"lightbox with native "
+"WordPress and Jetpack "
+"galleries."
+msgstr ""
+
+#: includes/forms/class-settings.php:40
+msgid "NextGEN Galleries"
+msgstr ""
+
+#: includes/forms/class-settings.php:46
+msgid "Images"
+msgstr ""
+
+#: includes/forms/class-settings.php:48
+msgid ""
+"Use parameters from this "
+"section to open links to "
+"images into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:52
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/forms/class-settings.php:54
+msgid ""
+"WooCommerce product "
+"images will be opened "
+"into the lightbox if the "
+"parameter is enabled."
+msgstr ""
+
+#: includes/forms/class-settings.php:58
+msgid "YouTube videos"
+msgstr ""
+
+#: includes/forms/class-settings.php:60
+msgid ""
+"Use parameters from this "
+"section to open links to "
+"YouTube videos into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:64
+msgid "Vimeo videos"
+msgstr ""
+
+#: includes/forms/class-settings.php:66
+msgid ""
+"Use parameters from this "
+"section to open links to "
+"Vimeo videos into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:70
+msgid "Metacafe videos"
+msgstr ""
+
+#: includes/forms/class-settings.php:72
+msgid ""
+"Use parameters from this "
+"section to open Metacafe "
+"videos into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:76
+msgid "Dailymotion videos"
+msgstr ""
+
+#: includes/forms/class-settings.php:78
+msgid ""
+"Use parameters from this "
+"section to open "
+"Dailymotion videos into "
+"the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:82
+msgid "Vine videos"
+msgstr ""
+
+#: includes/forms/class-settings.php:84
+msgid ""
+"Use parameters from this "
+"section to open videos "
+"from Vine service into "
+"the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:88
+msgid "Instagram content"
+msgstr ""
+
+#: includes/forms/class-settings.php:90
+msgid ""
+"Use parameters from this "
+"section to open "
+"Instagram content into "
+"the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:94
+msgid "Google Maps links"
+msgstr ""
+
+#: includes/forms/class-settings.php:96
+msgid ""
+"Use parameters from this "
+"section to open Google "
+"Maps links into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:100
+msgid ""
+"Open external links into "
+"lightbox"
+msgstr ""
+
+#: includes/forms/class-settings.php:102
+msgid ""
+"Use parameters from this "
+"section to open external "
+"pages into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:106
+#: includes/views/settings/class-html.php:88
+msgid "Lightbox"
+msgstr ""
+
+#: includes/forms/class-settings.php:108
+msgid ""
+"The parameters from this "
+"section is used to "
+"configure lightbox "
+"behavior."
+msgstr ""
+
+#: includes/forms/class-settings.php:114
+msgid "PDF files"
+msgstr ""
+
+#: includes/forms/class-settings.php:133
+msgid "Overlay background"
+msgstr ""
+
+#: includes/forms/class-settings.php:135
+msgid ""
+"Background color of "
+"lightbox overlay."
+msgstr ""
+
+#: includes/forms/class-settings.php:145
+msgid "Overlay opacity"
+msgstr ""
+
+#: includes/forms/class-settings.php:147
+msgid ""
+"Opacity of lightbox "
+"overlay."
+msgstr ""
+
+#: includes/forms/class-settings.php:167
+msgid ""
+"Thumbnails pane "
+"background"
+msgstr ""
+
+#: includes/forms/class-settings.php:169
+msgid ""
+"Background color of pane "
+"with thumbnails."
+msgstr ""
+
+#: includes/forms/class-settings.php:179
+msgid "Lightbox z-index"
+msgstr ""
+
+#: includes/forms/class-settings.php:181
+msgid ""
+"z-Index of lightbox "
+"container element. Can "
+"be used to resolve style "
+"conflicts when lightbox "
+"is hidden under theme "
+"elements."
+msgstr ""
+
+#: includes/forms/class-settings.php:197
+msgid "Custom CSS"
+msgstr ""
+
+#: includes/forms/class-settings.php:199
+msgid ""
+"The defined CSS rules "
+"will be added on "
+"frontend pages. Can be "
+"used to resolve style "
+"conflicts or for "
+"customization."
+msgstr ""
+
+#: includes/forms/class-settings.php:217
+msgid ""
+"Convert WordPress "
+"galleries"
+msgstr ""
+
+#: includes/forms/class-settings.php:219
+msgid ""
+"If the parameter is "
+"enabled, links in native "
+"WordPress galleries will "
+"be opened into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:233
+msgid ""
+"Navigate between items"
+msgstr ""
+
+#: includes/forms/class-settings.php:235
+msgid ""
+"If the parameter is "
+"enabled, it will be "
+"possible to navigate "
+"between gallery items "
+"into the lightbox and "
+"run slideshow."
+msgstr ""
+
+#: includes/forms/class-settings.php:248
+msgid ""
+"Convert links to images"
+msgstr ""
+
+#: includes/forms/class-settings.php:250
+msgid ""
+"If the parameter is "
+"enabled, links to images "
+"will be opened into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:258
+msgid ""
+"Navigate between "
+"attachments"
+msgstr ""
+
+#: includes/forms/class-settings.php:260
+msgid ""
+"If the parameter is "
+"enabled, navigation "
+"between all attached "
+"images from current post "
+"will be possible into "
+"the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:268
+msgid ""
+"Custom grouping selectors"
+msgstr ""
+
+#: includes/forms/class-settings.php:270
+msgid ""
+"It will be possible to "
+"navigate between images "
+"which are matched to CSS "
+"selector(s) which are "
+"specified in the "
+"textbox. Place a "
+"selector on a new line "
+"for each separate group."
+msgstr ""
+
+#: includes/forms/class-settings.php:282
+msgid ""
+"Get title from EXIF data"
+msgstr ""
+
+#: includes/forms/class-settings.php:284
+msgid ""
+"If a title is not "
+"specified and image "
+"contains EXIF data, the "
+"plugin will try to load "
+"title from it."
+msgstr ""
+
+#: includes/forms/class-settings.php:292
+msgid ""
+"Convert file name to "
+"title"
+msgstr ""
+
+#: includes/forms/class-settings.php:294
+msgid ""
+"If a title is not "
+"defined, file name will "
+"be used."
+msgstr ""
+
+#: includes/forms/class-settings.php:302
+msgid "Smart title"
+msgstr ""
+
+#: includes/forms/class-settings.php:304
+msgid ""
+"The parameter is used "
+"with \"Convert file name "
+"to title\" parameter, if "
+"it is enabled the plugin "
+"will try to convert file "
+"name to more human-"
+"readable format."
+msgstr ""
+
+#: includes/forms/class-settings.php:317
+msgid ""
+"Attach to product images"
+msgstr ""
+
+#: includes/forms/class-settings.php:319
+msgid ""
+"If the parameter is "
+"enabled, product images "
+"will be shown into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:332
+msgid ""
+"Convert YouTube links"
+msgstr ""
+
+#: includes/forms/class-settings.php:334
+msgid ""
+"If the parameter is "
+"enabled, links to "
+"YouTube videos will be "
+"opened into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:347
+msgid "Convert Vimeo links"
+msgstr ""
+
+#: includes/forms/class-settings.php:349
+msgid ""
+"If the parameter is "
+"enabled, links to Vimeo "
+"videos will be opened "
+"into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:362
+msgid ""
+"Convert Metacafe links"
+msgstr ""
+
+#: includes/forms/class-settings.php:364
+msgid ""
+"If the parameter is "
+"enabled, links to "
+"Metacafe videos will be "
+"opened into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:377
+msgid ""
+"Convert Dailymotion links"
+msgstr ""
+
+#: includes/forms/class-settings.php:379
+msgid ""
+"If the parameter is "
+"enabled, links to "
+"Dailymotion videos will "
+"be opened into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:392
+msgid "Convert Vine links"
+msgstr ""
+
+#: includes/forms/class-settings.php:394
+msgid ""
+"If the parameter is "
+"enabled, links to Vine "
+"videos will be opened "
+"into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:407
+msgid ""
+"Convert Instagram links"
+msgstr ""
+
+#: includes/forms/class-settings.php:409
+msgid ""
+"If the parameter is "
+"enabled, links to "
+"Instagram items will be "
+"opened into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:422
+msgid ""
+"Convert Google Maps links"
+msgstr ""
+
+#: includes/forms/class-settings.php:424
+msgid ""
+"If the parameter is "
+"enabled, links to Google "
+"Maps will be opened into "
+"the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:432
+msgid "Show marker"
+msgstr ""
+
+#: includes/forms/class-settings.php:434
+msgid ""
+"If the parameter is "
+"enabled, the marker will "
+"be shown for the "
+"selected place."
+msgstr ""
+
+#: includes/forms/class-settings.php:447
+msgid "Convert PDF links"
+msgstr ""
+
+#: includes/forms/class-settings.php:449
+msgid ""
+"If the parameter is "
+"enabled, links to PDF "
+"files will be opened "
+"into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:463
+msgid "Local PDF files"
+msgstr ""
+
+#: includes/forms/class-settings.php:465
+msgid ""
+"Enable this parameter to "
+"open local PDF files "
+"(from the same domain as "
+"your site) into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:475
+msgid "Local PDF viewer"
+msgstr ""
+
+#: includes/forms/class-settings.php:477
+msgid ""
+"Select PDF viewer which "
+"will be used for local "
+"PDF documents."
+msgstr ""
+
+#: includes/forms/class-settings.php:482
+msgid "IFrame"
+msgstr ""
+
+#: includes/forms/class-settings.php:484
+msgid "PDFJS"
+msgstr ""
+
+#: includes/forms/class-settings.php:493
+msgid "External PDF files"
+msgstr ""
+
+#: includes/forms/class-settings.php:495
+msgid ""
+"Enable this parameter to "
+"open external PDF files "
+"(from another domain as "
+"your site) into the "
+"lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:510
+msgid "Convert links"
+msgstr ""
+
+#: includes/forms/class-settings.php:512
+msgid ""
+"If the parameter is "
+"enabled, links to "
+"external pages will be "
+"opened into the lightbox."
+msgstr ""
+
+#: includes/forms/class-settings.php:526
+msgid "Animation effect"
+msgstr ""
+
+#: includes/forms/class-settings.php:528
+msgid ""
+"Open/close animation "
+"effect."
+msgstr ""
+
+#: includes/forms/class-settings.php:540
+msgid ""
+"Animation speed (ms)"
+msgstr ""
+
+#: includes/forms/class-settings.php:542
+msgid ""
+"Specify duration of "
+"animation in "
+"milliseconds."
+msgstr ""
+
+#: includes/forms/class-settings.php:558
+msgid "Transition effect"
+msgstr ""
+
+#: includes/forms/class-settings.php:560
+msgid ""
+"Transition effect "
+"between slides."
+msgstr ""
+
+#: includes/forms/class-settings.php:572
+msgid ""
+"Transition fx speed (ms)"
+msgstr ""
+
+#: includes/forms/class-settings.php:574
+msgid ""
+"Specify duration for "
+"transition animation in "
+"milliseconds."
+msgstr ""
+
+#: includes/forms/class-settings.php:590
+msgid "Idle time (sec)"
+msgstr ""
+
+#: includes/forms/class-settings.php:592
+msgid ""
+"Info bar, controls, "
+"comments and other "
+"controls will be hidden "
+"when a user is inactive "
+"for the defined period "
+"of time in seconds. Set "
+"the parameter to 0, if "
+"do not want to hide "
+"controls."
+msgstr ""
+
+#: includes/forms/class-settings.php:608
+msgid ""
+"Slideshow pause (ms)"
+msgstr ""
+
+#: includes/forms/class-settings.php:610
+msgid ""
+"Specify pause in "
+"milliseconds before "
+"showing next slide in "
+"slideshow mode."
+msgstr ""
+
+#: includes/forms/class-settings.php:626
+msgid ""
+"Slideshow auto start"
+msgstr ""
+
+#: includes/forms/class-settings.php:628
+msgid ""
+"SlideShow will be "
+"started automatically "
+"when the lightbox is "
+"opened."
+msgstr ""
+
+#: includes/forms/class-settings.php:638
+msgid "Loop navigation"
+msgstr ""
+
+#: includes/forms/class-settings.php:640
+msgid ""
+"Enable infinite gallery "
+"navigation."
+msgstr ""
+
+#: includes/forms/class-settings.php:650
+msgid ""
+"Show navigation arrows"
+msgstr ""
+
+#: includes/forms/class-settings.php:652
+msgid ""
+"Enable/disable "
+"navigation arrows at the "
+"screen edges."
+msgstr ""
+
+#: includes/forms/class-settings.php:662
+msgid ""
+"Close on outside click"
+msgstr ""
+
+#: includes/forms/class-settings.php:664
+msgid ""
+"Close the lightbox when "
+"click outside of the "
+"content."
+msgstr ""
+
+#: includes/forms/class-settings.php:674
+msgid "Keyboard navigation"
+msgstr ""
+
+#: includes/forms/class-settings.php:676
+msgid ""
+"Activate keyboard "
+"shortcuts to close the "
+"lightbox, run slideshow, "
+"slides navigation and "
+"etc."
+msgstr ""
+
+#: includes/forms/class-settings.php:686
+msgid "Enable gestures"
+msgstr ""
+
+#: includes/forms/class-settings.php:688
+msgid ""
+"Enable gestures (tap, "
+"zoom, pan and pinch)."
+msgstr ""
+
+#: includes/forms/class-settings.php:698
+msgid ""
+"Focus the first element"
+msgstr ""
+
+#: includes/forms/class-settings.php:700
+msgid ""
+"Try to focus on first "
+"focusable element after "
+"opening."
+msgstr ""
+
+#: includes/forms/class-settings.php:710
+msgid "Show info bar"
+msgstr ""
+
+#: includes/forms/class-settings.php:712
+msgid ""
+"Show/hide information "
+"about slides (number of "
+"slides, current slide "
+"index, navigation "
+"arrows)."
+msgstr ""
+
+#: includes/forms/class-settings.php:722
+msgid "Show buttons"
+msgstr ""
+
+#: includes/forms/class-settings.php:724
+msgid ""
+"Switch off the parameter "
+"if want to hide all "
+"buttons (fullscreen, "
+"slideshow, close, "
+"thumbnails)."
+msgstr ""
+
+#: includes/forms/class-settings.php:741
+msgid "Buttons"
+msgstr ""
+
+#: includes/forms/class-settings.php:743
+msgid ""
+"Content items with the "
+"selected type(s) will "
+"not be shared."
+msgstr ""
+
+#: includes/forms/class-settings.php:748
+msgid "Slideshow"
+msgstr ""
+
+#: includes/forms/class-settings.php:750
+msgid "Fullscreen"
+msgstr ""
+
+#: includes/forms/class-settings.php:752
+msgid "Thumbnails"
+msgstr ""
+
+#: includes/forms/class-settings.php:754
+msgid "Close"
+msgstr ""
+
+#: includes/forms/class-settings.php:769
+msgid "Clean uninstall"
+msgstr ""
+
+#: includes/forms/class-settings.php:771
+msgid ""
+"If the parameter is "
+"enabled, all data will "
+"be removed from a "
+"database when the plugin "
+"is uninstalled. Do not "
+"activate the parameter "
+"if want to re-install/"
+"upgrade the plugin and "
+"need to save all "
+"settings."
+msgstr ""
+
+#: includes/forms/class-settings.php:781
+msgid ""
+"Remove 3rd party plugins"
+msgstr ""
+
+#: includes/forms/class-settings.php:783
+msgid ""
+"When the parameter is "
+"enabled, the plugin will "
+"try to remove includes "
+"of Fancybox jQuery "
+"library which are "
+"registered by 3rd party "
+"plugins."
+msgstr ""
+
+#: includes/forms/class-settings.php:791
+msgid "Protect mode"
+msgstr ""
+
+#: includes/forms/class-settings.php:793
+msgid ""
+"If the parameter is "
+"enabled, mouse right "
+"click will be disabled "
+"and a simple protection "
+"will be used for images."
+msgstr ""
+
+#: includes/forms/class-settings.php:801
+msgid "Custom JS code"
+msgstr ""
+
+#: includes/forms/class-settings.php:803
+msgid ""
+"You can enter any valid "
+"JavaScript code in this "
+"textarea. It will be "
+"executed before "
+"initializing of the "
+"lightbox. Can be used to "
+"resolve javascript "
+"conflicts with 3rd party "
+"plugins or theme widgets."
+msgstr ""
+
+#: includes/forms/class-settings.php:820
+#: includes/forms/class-settings.php:832
+msgid "- None -"
+msgstr ""
+
+#: includes/forms/class-settings.php:822
+#: includes/forms/class-settings.php:836
+msgid "Fade"
+msgstr ""
+
+#: includes/forms/class-settings.php:824
+msgid "Zoom"
+msgstr ""
+
+#: includes/forms/class-settings.php:826
+#: includes/forms/class-settings.php:844
+msgid "Zoom In-Out"
+msgstr ""
+
+#: includes/forms/class-settings.php:834
+msgid "Circular"
+msgstr ""
+
+#: includes/forms/class-settings.php:838
+msgid "Rotate"
+msgstr ""
+
+#: includes/forms/class-settings.php:840
+msgid "Slide"
+msgstr ""
+
+#: includes/forms/class-settings.php:842
+msgid "Tube"
+msgstr ""
+
+#: includes/forms/fields/class-mailchimp-apikey-list.php:19
+msgid "The key is valid"
+msgstr ""
+
+#: includes/forms/fields/class-mailchimp-apikey-list.php:20
+msgid ""
+"The key can not be empty"
+msgstr ""
+
+#: includes/forms/fields/class-mailchimp-apikey-list.php:21
+msgid ""
+"Do you want to remove "
+"the selected key?"
+msgstr ""
+
+#: includes/forms/fields/tmpl/mailchimp-apikey-list.php:3
+msgid "Add API key"
+msgstr ""
+
+#: includes/forms/fields/tmpl/mailchimp-apikey-list.php:7
+msgid "Enter API key"
+msgstr ""
+
+#: includes/forms/fields/tmpl/mailchimp-apikey-list.php:8
+msgid "Check API key"
+msgstr ""
+
+#: includes/forms/fields/tmpl/mailchimp-apikey-list.php:14
+msgid "Where get API key?"
+msgstr ""
+
+#: includes/helpers/class-screen.php:11
+msgid "Help"
+msgstr ""
+
+#: includes/helpers/class-screen.php:13
+#, php-format
+msgid ""
+"User's guide is "
+"available <a href=\"%s\" "
+"target=\"_blank\">here</"
+"a>."
+msgstr ""
+
+#: includes/helpers/class-settings.php:263
+msgid "Previous"
+msgstr ""
+
+#: includes/helpers/class-settings.php:265
+msgid "Next"
+msgstr ""
+
+#: includes/helpers/class-settings.php:267
+msgid "Start slideshow (P)"
+msgstr ""
+
+#: includes/helpers/class-settings.php:269
+msgid "Stop slideshow (P)"
+msgstr ""
+
+#: includes/helpers/class-settings.php:271
+msgid "Full screen (F)"
+msgstr ""
+
+#: includes/helpers/class-settings.php:273
+msgid "Thumbnails (G)"
+msgstr ""
+
+#: includes/helpers/class-settings.php:275
+msgid "Close (Esc)"
+msgstr ""
+
+#: includes/helpers/class-settings.php:277
+msgid ""
+"The requested content "
+"cannot be loaded. <br/> "
+"Please try again later."
+msgstr ""
+
+#: includes/views/settings/class-html.php:13
+msgid ""
+"ARI Fancy Lightbox - "
+"Settings"
+msgstr ""
+
+#: includes/views/settings/class-html.php:35
+msgid "Integration"
+msgstr ""
+
+#: includes/views/settings/class-html.php:106
+msgid "Style"
+msgstr ""
+
+#: includes/views/settings/class-html.php:122
+msgid "Advanced"
+msgstr ""
+
+#: includes/views/settings/tmpl/default.php:14
+msgid "Save Changes"
+msgstr ""
