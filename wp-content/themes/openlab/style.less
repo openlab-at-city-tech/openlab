@@ -1366,6 +1366,7 @@ body form{
                         padding-right: 5px;
                     }
                     #user-info{
+                        display: flex;
                         margin-bottom: 23px;
                         .avatar{
                             img{
@@ -1383,6 +1384,14 @@ body form{
                         }
                         &.multi-line{
                             margin-bottom: 5px;
+                        }
+                        .user-links{
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                        }
+                        .my-profile a{
+                            font-weight: bold;
                         }
                     }
                 }

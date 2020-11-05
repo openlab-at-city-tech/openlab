@@ -29,13 +29,18 @@ function cuny_home_login() {
 						)
 					);
 					?>
-														" alt="Avatar for <?php echo esc_attr( bp_core_get_user_displayname( bp_loggedin_user_id() ) ); ?>" />
+					" alt="Avatar for <?php echo esc_attr( bp_core_get_user_displayname( bp_loggedin_user_id() ) ); ?>" />
 				</a>
+				
+				<span class="user-links">
+					<span class="my-profile">
+						<a href="<?php echo esc_url( bp_loggedin_user_domain() ); ?>">My Profile</a>
+					</span>
 
-				<ul class="content-list">
-					<li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo esc_attr( wp_logout_url( bp_get_root_domain() ) ); ?>">Not <?php echo esc_html( bp_core_get_username( bp_loggedin_user_id() ) ); ?>?</a></li>
-					<li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo esc_html( wp_logout_url( bp_get_root_domain() ) ); ?>">Log Out</a></li>
-				</ul>
+					<ul class="content-list">
+						<li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo esc_attr( wp_logout_url( bp_get_root_domain() ) ); ?>">Not <?php echo esc_html( bp_core_get_username( bp_loggedin_user_id() ) ); ?>?</a></li>
+						<li class="no-margin no-margin-bottom"><a class="button logout font-size font-12 roll-over-loss" href="<?php echo esc_html( wp_logout_url( bp_get_root_domain() ) ); ?>">Log Out</a></li>
+					</ul>
 				</span><!--user-info-->
 			</div>
 			<?php do_action( 'bp_sidebar_me' ); ?>

@@ -8525,6 +8525,7 @@ body form .checkbox-list-container {
   padding-right: 5px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info {
+  display: flex;
   margin-bottom: 23px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info .avatar img {
@@ -8541,6 +8542,14 @@ body form .checkbox-list-container {
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info.multi-line {
   margin-bottom: 5px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .user-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .my-profile a {
+  font-weight: bold;
 }
 .home-page .row-home-top .login .log-box#login-help h4 {
   margin: 12px 0;
