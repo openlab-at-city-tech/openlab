@@ -7832,6 +7832,16 @@ h1.entry-title {
   padding-bottom: 6px;
   position: relative;
 }
+h1.entry-title .directory-title-meta {
+  font-size: 14px;
+  font-weight: 600;
+}
+h1.entry-title .directory-title-meta a {
+  text-decoration: none;
+}
+h1.entry-title .directory-title-meta a:hover {
+  text-decoration: underline;
+}
 h1.entry-title .direct-toggle {
   background: #d1d1d1;
   height: 47px;

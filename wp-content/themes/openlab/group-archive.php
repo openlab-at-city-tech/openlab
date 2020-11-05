@@ -1,22 +1,41 @@
 <?php
 /* Template Name: Group Archive */
-/* * begin layout* */
 get_header();
+
+$group_type  = openlab_page_slug_to_grouptype();
+$can_create  = is_user_logged_in() && bp_user_can_create_groups();
+$create_link = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=' . $group_type . '&new=true';
+
+if ( $group_type === 'course' ) {
+	$user_type  = xprofile_get_field_data( 'Account Type', bp_loggedin_user_id() );
+	$can_create = ( is_super_admin() || 'Faculty' === $user_type );
+} elseif ( $group_type === 'portfolio' ) {
+	$can_create = false;
+}
 ?>
 
 <div id="content" class="hfeed row">
-    <?php openlab_bp_sidebar('groups', true); ?>
-    <div <?php post_class('col-sm-18 col-xs-24'); ?>>
-        <div id="openlab-main-content" class="content-wrapper">
-            <h1 class="entry-title"><?php echo ucfirst(openlab_page_slug_to_grouptype()) . 's'; ?> on the OpenLab <button data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button"><span class="fa fa-binoculars"></span><span class="sr-only">Search</span></button></h1>
+	<?php openlab_bp_sidebar('groups', true); ?>
+	<div <?php post_class('col-sm-18 col-xs-24'); ?>>
+		<div id="openlab-main-content" class="content-wrapper">
+			<h1 class="entry-title"><?php echo ucfirst( $group_type ) . 's'; ?> on the OpenLab
 
-            <div class="entry-content">
-                <?php bp_get_template_part( 'groups/groups-loop' ); ?>
-            </div><!--entry-content-->
-        </div><!--hentry-->
-    </div>
-</div><!--content-->
+			<?php if ( $can_create ) : ?>
+				<span class="directory-title-meta pull-right">
+					<i aria-hidden="true" class="fa fa-plus-circle hidden-xs"></i>
+					<a class="hidden-xs" href="<?php echo esc_attr( $create_link ); ?>">Create / Clone</a>
+				</span>
+			<?php endif; ?>
+
+			<button data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button"><span class="fa fa-binoculars"></span><span class="sr-only">Search</span></button>
+			</h1>
+
+			<div class="entry-content">
+				<?php bp_get_template_part( 'groups/groups-loop' ); ?>
+			</div><!--entry-content-->
+		</div><!--hentry-->
+	</div>
+</div>content
 
 <?php
 get_footer();
-/**end layout**/
