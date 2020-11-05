@@ -432,7 +432,7 @@ function openlab_registration_page() {
 	$first_name_field_id = openlab_get_xprofile_field_id( 'First Name' );
 	$last_name_field_id  = openlab_get_xprofile_field_id( 'Last Name' );
 
-	$first_name_submitted = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $field_name_field_id ] : '';
+	$first_name_submitted = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $first_name_field_id ] : '';
 	$last_name_submitted  = isset( $_POST[ 'field_' . $last_name_field_id ] ) ? $_POST[ 'field_' . $last_name_field_id ] : '';
 	?>
 
