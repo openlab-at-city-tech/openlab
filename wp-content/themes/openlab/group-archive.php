@@ -21,9 +21,9 @@ if ( $group_type === 'course' ) {
 			<h1 class="entry-title"><?php echo ucfirst( $group_type ) . 's'; ?> on the OpenLab
 
 			<?php if ( $can_create ) : ?>
-				<span class="directory-title-meta pull-right">
-					<i aria-hidden="true" class="fa fa-plus-circle hidden-xs"></i>
-					<a class="hidden-xs" href="<?php echo esc_attr( $create_link ); ?>">Create / Clone</a>
+				<span class="directory-title-meta pull-right hidden-xs">
+					<i aria-hidden="true" class="fa fa-plus-circle"></i>
+					<a href="<?php echo esc_attr( $create_link ); ?>">Create / Clone</a>
 				</span>
 			<?php endif; ?>
 

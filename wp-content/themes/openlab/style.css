@@ -7835,6 +7835,9 @@ h1.entry-title {
 h1.entry-title .directory-title-meta {
   font-size: 14px;
   font-weight: 600;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
 }
 h1.entry-title .directory-title-meta a {
   text-decoration: none;
