@@ -98,6 +98,7 @@ function insert_comment( $comment_id, $comment ) {
 	}
 
 	$is_private = ! empty( $_POST['ol-private-comment'] );
+	$revisions = [];
 
 	// Inherit comment status from parent.
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
@@ -105,10 +106,54 @@ function insert_comment( $comment_id, $comment ) {
 	}
 
 	if ( $is_private ) {
+		// Strips 'disabledupes' string from comments.
+		$content = preg_replace( '/disabledupes\{.*\}disabledupes/', '', $comment->comment_content );
+
+		// Add initial revision.
+		$revisions[ time() ] = $content;
+
 		update_comment_meta( $comment_id, 'ol_is_private', '1' );
+		update_comment_meta( $comment_id, 'ol_private_comment_rev', $revisions );
 	}
 }
 add_action( 'wp_insert_comment', __NAMESPACE__ . '\\insert_comment', 10, 2 );
+
+/**
+ * Stores private comment revisions.
+ * Fires before comment data is updated in DB.
+ *
+ * @param array $data The new, processed comment data, or WP_Error.
+ * @return array $data Data isn't modifiied in anyway.
+ */
+function save_comment_revision( $data ) {
+	if ( is_wp_error( $data ) ) {
+		return $data;
+	}
+
+	// Bail if comment is edited by comment author.
+	if ( get_current_user_id() === (int) $data['user_id'] ) {
+		return $data;
+	}
+
+	$comment_id = (int) $data['comment_ID'];
+	$is_private = (bool) get_comment_meta( $comment_id, 'ol_is_private', true );
+
+	if ( ! $is_private ) {
+		return $data;
+	}
+
+	$comment   = get_comment( $comment_id );
+	$revisions = get_comment_meta( $comment_id, 'ol_private_comment_rev', true );
+	$revisions = empty( $revisions ) ? [] : $revisions;
+
+	// Add new revision.
+	$revisions[ time() ] = $comment->comment_content;
+
+	update_comment_meta( $comment_id, 'ol_private_comment_rev', $revisions );
+
+	return $data;
+}
+add_filter( 'wp_update_comment_data', __NAMESPACE__ . '\\save_comment_revision' );
 
 /**
  * Add "Private" comment notice.
