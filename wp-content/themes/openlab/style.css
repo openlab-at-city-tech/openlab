@@ -7832,6 +7832,19 @@ h1.entry-title {
   padding-bottom: 6px;
   position: relative;
 }
+h1.entry-title .directory-title-meta {
+  font-size: 14px;
+  font-weight: 600;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+}
+h1.entry-title .directory-title-meta a {
+  text-decoration: none;
+}
+h1.entry-title .directory-title-meta a:hover {
+  text-decoration: underline;
+}
 h1.entry-title .direct-toggle {
   background: #d1d1d1;
   height: 47px;
@@ -8525,6 +8538,7 @@ body form .checkbox-list-container {
   padding-right: 5px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info {
+  display: flex;
   margin-bottom: 23px;
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info .avatar img {
@@ -8541,6 +8555,14 @@ body form .checkbox-list-container {
 }
 .home-page .row-home-top .login .log-box#open-lab-login #user-info.multi-line {
   margin-bottom: 5px;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .user-links {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.home-page .row-home-top .login .log-box#open-lab-login #user-info .my-profile a {
+  font-weight: bold;
 }
 .home-page .row-home-top .login .log-box#login-help h4 {
   margin: 12px 0;

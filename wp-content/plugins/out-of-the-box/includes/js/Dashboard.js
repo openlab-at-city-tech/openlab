@@ -948,6 +948,7 @@
 
       /* Open the Dialog and load the images inside it */
       var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
         dialogOpenClass: 'animated slideInDown',
         dialogCloseClass: 'animated slideOutUp',
         escapeClose: true

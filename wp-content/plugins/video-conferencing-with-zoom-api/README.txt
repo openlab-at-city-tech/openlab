@@ -3,8 +3,8 @@ Contributors: j__3rk, codemanas, digamberpradhan
 Tags: zoom video conference, video conference, zoom, zoom video conferencing, web conferencing, online meetings
 Donate link: https://deepenbajracharya.com.np/donate
 Requires at least: 4.9
-Tested up to: 5.4
-Stable tag: 3.5.0
+Tested up to: 5.5
+Stable tag: 3.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,51 +12,40 @@ Gives you the power to manage Zoom Meetings, Webinars, Recordings, Reports and c
 
 == Description ==
 
-Simple plugin which gives you the extensive functionality to manage zoom meetings, webinars, recordings, users, reports from your WordPress Dashboard. Now, with capability to add your own post as a meeting. Create posts as meetings directly from your WordPress dashboard to show in the frontend as a meeting page. Allow users to directly join via that page with click of a button.
-
-Now, from 3.2.0 allows you to Join meetings directly from Browser without Zoom App using Zoom WebSDK. For audio/video issues check FAQ section. Check here on how it <a target="_blank" href="https://deepenbajracharya.com.np/joining-meetings-in-zoom-directly-from-browser">Works</a>
+Simple plugin which gives you the extensive functionality to manage Zoom Meetings, Webinars, Recordings, Users, Reports from your WordPress Dashboard. Now, with capability to add your own post as a meeting. Create posts as meetings directly from your WordPress dashboard to show in the frontend as a meeting page. Allow users to directly join via that page with click of a button.
 
 **FEATURES:**
 
-* Manage WordPress posts and link them to Live Zoom meetings and Zoom Webinars ( NEW from 3.0.0+ )
-* Override single and archive page templates via your theme. ( NEW from 3.0.0+ )
-* Join links directly from frontend. ( NEW from 3.0.0+ )
-* JOIN DIRECTLY VIA WEB BROWSER FROM FRONTEND ( From v3.2.0+ ) !
-* Start Links for post authors. ( NEW from 3.0.0+ )
-* CountDown timer to Meeting start shows in individual meeting page. ( NEW from 3.0.0+ )
-* Allow posts to be only shown to logged in users. ( NEW from 3.0.0+ )
+* Manage WordPress posts and link them to Live Zoom meetings and Zoom Webinars.
+* Override single and archive page templates via your theme.
+* JOIN DIRECTLY VIA WEB BROWSER FROM FRONTEND !
+* Start Links for post authors.
+* CountDown timer to Meeting start shows in individual meeting page.
 * Start time and join links are shown according to local time compared with zoom timezone.
-* Manage Live Zoom Meetings.
-* Manage Zoom Webinars
 * Show user recordings based on Zoom Account.
 * Display Webinars via Shortcode
-* Listing Users.
+* WCFM Integration( See EXTENDING AND MAKING MEETINGS PURCHASABLE section )
+* WooCommerce Integration( See EXTENDING AND MAKING MEETINGS PURCHASABLE section )
+* WooCommerce Appointments Integration( See EXTENDING AND MAKING MEETINGS PURCHASABLE section )
+* WooCommerce Bookings Integration( See EXTENDING AND MAKING MEETINGS PURCHASABLE section )
 * Developer Friendly
 * Daily and Account Reports
 * Shortcode
 * Shortcode Template Customize
-
-**Please flush your permalink from wp-admin > settings > permalink, if your links to single zoom meetings does not work.**
+* Import your Zoom Meetings into your WordPress Dashboard in one click.
 
 **DOCUMENTATION LINKS:**
 
-**NOTE: If you getting an error called "API_CREDENTIALS_NOT_FOUDN" at the time of generation API keys then this is an error from zoom side. Please contact zoom support in this case.**
-
 * [Full Documentation](https://zoom.codemanas.com/ "Usage Documentation")
-* [Key Generation Only Documentation](https://deepenbajracharya.com.np/zoom-conference-wp-plugin-documentation/ "Key Generation Only Documentation")
 * [Usage Documentation /w WP](https://deepenbajracharya.com.np/zoom-api-integration-with-wordpress/ "Usage Documentation")
 
-**OVERRIDDING TEMPLATES:**
+**EXTENDING AND MAKING MEETINGS PURCHASABLE:**
 
-If you use Zoom Meetings > Add new section i.e Post Type meetings then you might need to override the template. Currently this plugin supports default templates.
-
-REFER FAQ to override page templates!
-
-**EXTEND OTHER FEATURES:**
-
-Addon: **[WooCommerce Integration](https://www.codemanas.com/downloads/zoom-meetings-for-woocommerce/ "WooCommerce Integration")** for:
-Addon: **[WCFM Integration](https://www.codemanas.com/downloads/wcfm-integration-for-zoom/ "WCFM Integration")** for:
-Addon: **[WooCommerce Booking Integration](https://www.codemanas.com/downloads/zoom-integration-for-woocommerce-booking/ "WooCommerce Booking Integration")** for:
+Addon: **[WooCommerce Integration](https://www.codemanas.com/downloads/zoom-meetings-for-woocommerce/ "WooCommerce Integration")**:
+Addon: **[WCFM Integration](https://www.codemanas.com/downloads/wcfm-integration-for-zoom/ "WCFM Integration")**:
+Addon: **[WooCommerce Booking Integration](https://www.codemanas.com/downloads/zoom-integration-for-woocommerce-booking/ "WooCommerce Booking Integration")**:
+Addon: **[Booked Appointments Integration](https://www.codemanas.com/downloads/zoom-meetings-for-booked-appointments/ "Booked Appointments Integration")**:
+Addon: **[WooCommerce Appointments Integration](https://www.codemanas.com/downloads/zoom-for-woocommerce-appointments/ "WooCommerce Appointments Integration")**:
 
 * Integration with WooCommerce and Zoom Meetings Countdown page.
 * Purchasable Single Meetings !
@@ -69,10 +58,18 @@ Addon: **[WooCommerce Booking Integration](https://www.codemanas.com/downloads/z
 * Individual Booking product meeting links for each bookings.
 * Integration with WCFM
 * Integration with WooCommerce Product Vendors
+* Integration with Booked Appointments.
+* Integration with WooCommerce Appointments.
 
 & more functionalities and integrations are on its way!
 
 You can find more information on the Pro version on website: **[codemanas.com](https://www.codemanas.com/ "codemanas.com")**
+
+**OVERRIDDING TEMPLATES:**
+
+If you use Zoom Meetings > Add new section i.e Post Type meetings then you might need to override the template. Currently this plugin supports default templates.
+
+REFER FAQ to override page templates!
 
 **COMPATIBILITY:**
 
@@ -97,17 +94,25 @@ As an extension of the Zoom browser client, this SDK is intended for implementat
 
 * [zoom_api_webinar webinar_id="YOUR_WEBINAR_ID" link_only="no"] - Show webinar details based on webinar ID.
 
-* [zoom_list_meetings per_page="5" category="test,test2,test3" order="DESC"] - Show list of meetings in frontend via category, Edit shortcode template for table view.
+* [zoom_list_meetings per_page="5" category="test,test2,test3" order="DESC" filter="no"] - Show list of meetings in frontend via category, Edit shortcode template for table view.
+
+* [zoom_list_webinars per_page="5" category="test,test2,test3" order="DESC" filter="no"] - Show list of webinars in frontend via category, Edit shortcode template for table view.
 
 * [zoom_list_host_meetings host="your_host_id"] - Show list of meetings in frontend for specific HOST ID.
 
-* [zoom_recordings host_id="YOUR_HOST_ID"] - Show list of recordings based on HOST ID.
+* [zoom_recordings host_id="YOUR_HOST_ID" downloadable="yes"] - Show list of recordings based on HOST ID. By default downloadable is set to false.
+
+* [zoom_recordings_by_meeting meeting_id="MEETING_ID" downloadable="yes"] - which shows recordings based on meeting ID.
+
+**CONTRIBUTING**
+
+There’s a [GIT repository](https://github.com/techies23/video-conference-zoom "GIT repository") if you want to contribute a patch. Please check issues. Pull requests are welcomed and your contributions will be appreciated.
+
+Please consider giving a 5 star thumbs up if you found this useful.
 
 **QUICK DEMO:**
 
 [youtube https://www.youtube.com/watch?v=5Z2Ii0PnHRQ]
-
-Any additional features, suggestions related to translations, contact me via [email](https://deepenbajracharya.com.np/say-hello/ "Deepen Bajracharya"). Send me your wordpress.org username handle as well if you are willing to contribute in translations.
 
 == Installation ==
 Search for the plugin -> add new dialog and click install, or download and extract the plugin, and copy the the Zoom plugin folder into your wp-content/plugins directory and activate.
@@ -134,6 +139,10 @@ If countdown is not working for you then the first thing you'll nweed to verify 
 
 However, even though meeting is created and you are not seeing countdown timer then, you might want to check your browser console and see if there is any "guess is undefined" error. If so, there might be a plugin conflict using the same moment.js library. **Report to me in this case**
 
+= Forminator plugin conflict fix =
+
+Please check this thread: https://wordpress.org/support/topic/conflict-with-forminator-2/
+
 = How to show Zoom Meetings on Front =
 
 * By using shortcode like [zoom_api_link meeting_id="123456789"] you can show the link of your meeting in front.
@@ -149,6 +158,10 @@ However, even though meeting is created and you are not seeing countdown timer t
 
 Yes, you should be registered in Zoom. Also, on the plan you are using there depends the number of hosts and users you can add.
 
+= Questions/ Follow ups ? =
+
+Join our facebook group which we have created in order to stay up to date with updates and common issues faced. [Join here](https://www.facebook.com/groups/zoomwp/ "Join here")
+
 == Screenshots ==
 1. Join via browser
 2. Meetings Listings. Select a User in order to list meetings for that user.
@@ -161,6 +174,65 @@ Yes, you should be registered in Zoom. Also, on the plan you are using there dep
 9. Shortcode Output
 
 == Changelog ==
+
+= 3.6.6 =
+* Added: Global option to disable join via browser.
+
+= 3.6.5 October 13th, 2020 =
+* Changed: Assign Zoom Users to WordPress users to be more flexible with PRO version.
+* Fixed: Zoom WebSDK when joining in IFRAME redirection in the same iframe window. Fixed it to redirect back to main screen without users noticing the iframe.
+* Added: Pending Users view page.
+* Changed: Cache Helper functions updated.
+* Fixed: Rank Math SEO tab not working in Elementor because of script loading error from the plugin.
+* Minor bug fixes.
+
+= 3.6.4 October 7th, 2020 =
+* Removed: Enforce login field from "Live Meetings" because Zoom API has removed this field.
+* Added: Support for Personal Meeting ID in shortcode [zoom_api_link]
+
+= 3.6.3 October 2nd, 2020 =
+* Added: Arguement "passcode" to [zoom_join_via_browser] browser shortcode. If passed "passcode" then join via browser will not require password to join the meeting.
+* Added: Webinar capability for join via browser shortcode.
+* Bug Fixes
+
+= 3.6.2 September 17th, 2020 =
+* Updated: Zoom WebSDK to version 1.8.0
+* Added: CDN loading support for zoom webSDK static resources. Add "VCZAPI_STATIC_CDN" to true in config file for this.
+* Added: Zoom API notice error if connection is not established with API in wp-admin.
+* Added: Ability to display same "zoom_list_meetings" shortcode twice in same page.
+
+= 3.6.1 August 17th, 2020 =
+* Fixed: Deprecated warning issue on PHP 7.4 using {} syntax reported by <a href="https://wordpress.org/support/users/antonyjosephsmith/">@antonyjosephsmith</a>
+* Fixed: Sync Date not syncing properly when editing synced meeting.
+* Fixed: Deprecated ternary operator multiple usage in same check function.
+* Fixed: Join via browser - Error joining if email field is disabled.
+* Updated: Join via browser page - CSS identifiers changed.
+
+= 3.6.0 August 11th, 2020 =
+* Added: Webinar post type module.
+* Added: Meetings importer.
+* Updated: Translations
+* Added: Support for recurring meetings based on PRO version.
+* Added: Email field when joining via browser.
+* Fixed: Webinar bulk delete.
+* Fix: Major bug fixes and code refactor.
+* Updated: Transitioning to PSR-4 Standard
+
+= 3.5.2 July 27th, 2020 =
+* Added: [zoom_recordings_by_meeting meeting_id="MEETING_ID" downloadable="yes"] which shows recordings based on meeting ID.
+* Added: Elementor Widgets for new shortcodes.
+* Fixed: Time shown in fronted with shortcode and singe meetings pages changed.
+* Updated: Old global variable pull removed. New variable assigned for more performance loading and accurate meeting details and timings.
+
+= 3.5.1 July 23rd, 2020 =
+* Fixed: Time Locale Fixed.
+* Added: Support for Recurring meetings via Pro Version.
+* Fixed: Shortcode [zoom_list_meetings] for upcoming meetings. Added new meta field for showing exact meetings based on local timezones. Users will need to re-update the old meetings.
+* Added: Hook vczapi_join_via_browser_footer in join via browser page to enable users to enqueue personal scripts or code in the join via browser footer page.
+* Added: Shortcode parameter "downloadable" which disables users from downloading the recordings. Set to "false" by default (https://wordpress.org/support/topic/recordings-api-ignores-download-settings/).
+* Added: Datatable Responsive added (https://wordpress.org/support/topic/responsive-datatables-js/)
+* Changed: Table design fixes
+* Fixed: Minor bug fixes.
 
 = 3.5.0 July 10th, 2020 =
 * Added: Recordings API

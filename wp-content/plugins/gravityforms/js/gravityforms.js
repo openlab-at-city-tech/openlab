@@ -1660,11 +1660,6 @@ function gformFormatNumber(number, rounding, decimalSeparator, thousandSeparator
     return currency.numberFormat(number, rounding, decimalSeparator, thousandSeparator, false)
 }
 
-function gformToNumber(text) {
-    var currency = new Currency(gf_global.gf_currency_config);
-    return currency.toNumber(text);
-}
-
 /**
  * @deprecated. Use GFMergeTags.parseMergeTag() instead
  */

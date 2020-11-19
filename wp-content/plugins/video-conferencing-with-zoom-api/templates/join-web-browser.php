@@ -26,27 +26,36 @@ if ( video_conference_zoom_check_login() ) {
 	 */
 	do_action( 'vczoom_jbh_before_content', $zoom );
 	?>
-    <div id="dpen-zoom-browser-meeting" class="dpen-zoom-browser-meeting-wrapper">
-        <div id="dpen-zoom-browser-meeting--container">
+    <div id="vczapi-zoom-browser-meeting" class="vczapi-zoom-browser-meeting-wrapper">
+        <div id="vczapi-zoom-browser-meeting--container">
 			<?php
 			$bypass_notice = apply_filters( 'vczapi_api_bypass_notice', false );
 			if ( ! $bypass_notice ) {
 				?>
-                <div class="dpen-zoom-browser-meeting--info">
+                <div class="vczapi-zoom-browser-meeting--info">
 					<?php if ( ! is_ssl() ) { ?>
                         <p style="line-height: 1.5;">
                             <strong style="color:red;"><?php _e( '!!!ALERT!!!: ', 'video-conferencing-with-zoom-api' ); ?></strong><?php _e(
 								'Browser did not detect a valid SSL certificate. Audio and Video for Zoom meeting will not work on a non HTTPS site, please install a valid SSL certificate to allow audio and video in your Meetings via browser.', 'video-conferencing-with-zoom-api' ); ?>
                         </p>
 					<?php } ?>
-                    <div class="dpen-zoom-browser-meeting--info__browser"></div>
+                    <div class="vczapi-zoom-browser-meeting--info__browser"></div>
                 </div>
 			<?php } ?>
-            <form class="dpen-zoom-browser-meeting--meeting-form" id="dpen-zoom-browser-meeting-join-form" action="">
+            <form class="vczapi-zoom-browser-meeting--meeting-form" id="vczapi-zoom-browser-meeting-join-form" action="">
                 <div class="form-group">
-                    <input type="text" name="display_name" id="display_name" value="" placeholder="Your Name Here" class="form-control" required>
+                    <input type="text" name="display_name" id="vczapi-jvb-display-name" value="" placeholder="Your Name Here" class="form-control" required>
                 </div>
-				<?php if ( ! isset( $_GET['pak'] ) ) { ?>
+				<?php
+				$hide_email = get_option( 'zoom_api_hide_in_jvb' );
+				if ( empty( $hide_email ) ) {
+					?>
+                    <div class="form-group">
+                        <input type="email" name="display_email" id="vczapi-jvb-email" value="" placeholder="Your Email Here" class="form-control">
+                    </div>
+				<?php }
+
+				if ( ! isset( $_GET['pak'] ) ) { ?>
                     <div class="form-group">
                         <input type="password" name="meeting_password" id="meeting_password" value="" placeholder="Meeting Password" class="form-control" required>
                     </div>
@@ -76,7 +85,7 @@ if ( video_conference_zoom_check_login() ) {
 				}
 				?>
 
-                <button type="submit" class="btn btn-primary" id="dpen-zoom-browser-meeting-join-mtg">
+                <button type="submit" class="btn btn-primary" id="vczapi-zoom-browser-meeting-join-mtg">
 					<?php _e( 'Join', 'video-conferencing-with-zoom-api' ); ?>
                 </button>
             </form>

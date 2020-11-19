@@ -30,6 +30,17 @@ class Upload
         }
     }
 
+    public function upload_pre_process()
+    {
+        do_action('outofthebox_upload_pre_process', $this->_processor);
+
+        $result = ['result' => 1];
+
+        $result = apply_filters('outofthebox_upload_pre_process_result', $result, $this->_processor);
+
+        echo json_encode($result);
+    }
+
     public function do_upload()
     {
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
@@ -56,38 +67,42 @@ class Upload
         ];
 
         $error_messages = [
-            1 => __('The uploaded file exceeds the upload_max_filesize directive in php.ini', 'outofthebox'),
-            2 => __('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'outofthebox'),
-            3 => __('The uploaded file was only partially uploaded', 'outofthebox'),
-            4 => __('No file was uploaded', 'outofthebox'),
-            6 => __('Missing a temporary folder', 'outofthebox'),
-            7 => __('Failed to write file to disk', 'outofthebox'),
-            8 => __('A PHP extension stopped the file upload', 'outofthebox'),
-            'post_max_size' => __('The uploaded file exceeds the post_max_size directive in php.ini', 'outofthebox'),
-            'max_file_size' => __('File is too big', 'outofthebox'),
-            'min_file_size' => __('File is too small', 'outofthebox'),
-            'accept_file_types' => __('Filetype not allowed', 'outofthebox'),
-            'max_number_of_files' => __('Maximum number of files exceeded', 'outofthebox'),
-            'max_width' => __('Image exceeds maximum width', 'outofthebox'),
-            'min_width' => __('Image requires a minimum width', 'outofthebox'),
-            'max_height' => __('Image exceeds maximum height', 'outofthebox'),
-            'min_height' => __('Image requires a minimum height', 'outofthebox'),
+            1 => __('The uploaded file exceeds the upload_max_filesize directive in php.ini', 'wpcloudplugins'),
+            2 => __('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'wpcloudplugins'),
+            3 => __('The uploaded file was only partially uploaded', 'wpcloudplugins'),
+            4 => __('No file was uploaded', 'wpcloudplugins'),
+            6 => __('Missing a temporary folder', 'wpcloudplugins'),
+            7 => __('Failed to write file to disk', 'wpcloudplugins'),
+            8 => __('A PHP extension stopped the file upload', 'wpcloudplugins'),
+            'post_max_size' => __('The uploaded file exceeds the post_max_size directive in php.ini', 'wpcloudplugins'),
+            'max_file_size' => __('File is too big', 'wpcloudplugins'),
+            'min_file_size' => __('File is too small', 'wpcloudplugins'),
+            'accept_file_types' => __('Filetype not allowed', 'wpcloudplugins'),
+            'max_number_of_files' => __('Maximum number of files exceeded', 'wpcloudplugins'),
+            'max_width' => __('Image exceeds maximum width', 'wpcloudplugins'),
+            'min_width' => __('Image requires a minimum width', 'wpcloudplugins'),
+            'max_height' => __('Image exceeds maximum height', 'wpcloudplugins'),
+            'min_height' => __('Image requires a minimum height', 'wpcloudplugins'),
         ];
+
+        $hash = $_REQUEST['hash'];
+        $path = $_REQUEST['file_path'];
+
+        delete_transient('outofthebox_upload_'.substr($hash, 0, 40));
 
         $this->upload_handler = new \WPC_UploadHandler($options, false, $error_messages);
         $response = $this->upload_handler->post(false);
-        $hash = $_REQUEST['hash'];
-        $path = $_REQUEST['file_path'];
 
         // Upload files to Dropbox
         foreach ($response['files'] as &$file) {
             // Set return Object
             $file->listtoken = $this->get_processor()->get_listtoken();
+            $file->name = Helpers::filter_filename(stripslashes(rawurldecode($file->name)), false);
             $file->hash = $hash;
             $file->path = $path;
 
             if (!isset($file->error)) {
-                $return = ['file' => $file, 'status' => ['bytes_down_so_far' => 0, 'total_bytes_down_expected' => $file->size, 'percentage' => 0, 'progress' => 'starting']];
+                $return = ['file' => $file, 'status' => ['bytes_up_so_far' => 0, 'total_bytes_up_expected' => $file->size, 'percentage' => 0, 'progress' => 'starting']];
                 self::set_upload_progress($hash, $return);
 
                 /** Check if the user hasn't reached its usage limit */
@@ -96,8 +111,8 @@ class Upload
                     $disk_usage_after_upload = $this->get_client()->get_folder_size() + $file->size;
                     $max_allowed_bytes = Helpers::return_bytes($max_user_folder_size);
                     if ($disk_usage_after_upload > $max_allowed_bytes) {
-                        $return['status']['progress'] = 'failed';
-                        $file->error = __('You have reached your usage limit of', 'outofthebox').' '.Helpers::bytes_to_size_1024($max_allowed_bytes);
+                        $return['status']['progress'] = 'upload-failed';
+                        $file->error = __('You have reached your usage limit of', 'wpcloudplugins').' '.Helpers::bytes_to_size_1024($max_allowed_bytes);
                         self::set_upload_progress($hash, $return);
                         echo json_encode($return);
                         die();
@@ -137,22 +152,22 @@ class Upload
                     $entry = $this->do_upload_to_dropbox($temp_file_path, $new_file_path, $params);
                     $file->completepath = $this->get_processor()->get_relative_path($entry->get_path_display());
                     $file->account_id = $this->get_processor()->get_current_account()->get_id();
-                    $file->fileid = $entry->get_id();
+                    $file->fileid = base64_encode($new_file_path);
                     $file->filesize = \TheLion\OutoftheBox\Helpers::bytes_to_size_1024($entry->get_size());
-                    $file->link = false; // Currently no direct link available
+                    $file->link = false; // Currently no Direct link available
                 } catch (\Exception $ex) {
                     error_log($ex->getMessage());
-                    $file->error = __('Not uploaded to Dropbox', 'outofthebox').$ex->getMessage();
+                    $file->error = __('Not uploaded to the cloud', 'wpcloudplugins').$ex->getMessage();
                 }
 
-                $return['status']['progress'] = 'finished';
+                $return['status']['progress'] = 'upload-finished';
                 $return['status']['percentage'] = '100';
 
                 CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
             } else {
                 error_log($file->error);
-                $return['status']['progress'] = 'failed';
-                $file->error = __('Uploading failed', 'outofthebox');
+                $return['status']['progress'] = 'upload-failed';
+                $file->error = __('Uploading failed', 'wpcloudplugins');
             }
         }
 
@@ -180,7 +195,7 @@ class Upload
             die();
         }
 
-        $name = $_REQUEST['filename'];
+        $name = Helpers::filter_filename(stripslashes(rawurldecode($_REQUEST['filename'])), false);
         $size = $_REQUEST['file_size'];
         $path = $_REQUEST['file_path'];
         $mimetype = $_REQUEST['mimetype'];
@@ -195,7 +210,7 @@ class Upload
             $disk_usage_after_upload = $this->get_client()->get_folder_size() + $size;
             $max_allowed_bytes = Helpers::return_bytes($max_user_folder_size);
             if ($disk_usage_after_upload > $max_allowed_bytes) {
-                error_log('[Out-of-the-Box message]: '.__('You have reached your usage limit of', 'outofthedrove').' '.Helpers::bytes_to_size_1024($max_allowed_bytes));
+                error_log('[WP Cloud Plugin message]: '.__('You have reached your usage limit of', 'outofthedrove').' '.Helpers::bytes_to_size_1024($max_allowed_bytes));
                 echo json_encode(['result' => 0]);
                 die();
             }
@@ -226,7 +241,7 @@ class Upload
             $temporarily_link = $this->get_client()->get_library()->getTemporarilyUploadLink($new_file_path, $params, $origin);
             echo json_encode(['result' => 1, 'url' => $temporarily_link->getLink(), 'convert' => false, 'id' => base64_encode($new_file_path)]);
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Not uploaded to Dropbox: %s', $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('Not uploaded to the cloud on line %s: %s', __LINE__, $ex->getMessage()));
             echo json_encode(['result' => 0]);
         }
 
@@ -249,11 +264,11 @@ class Upload
         $hash = $_REQUEST['hash'];
 
         // Try to get the upload status of the file
-        for ($_try = 1; $_try < 6; ++$_try) {
+        for ($_try = 1; $_try < 10; ++$_try) {
             $result = self::get_upload_progress($hash);
 
             if (false !== $result) {
-                if ('failed' === $result['status']['progress'] || 'finished' === $result['status']['progress']) {
+                if ('upload-failed' === $result['status']['progress'] || 'upload-finished' === $result['status']['progress']) {
                     delete_transient('outofthebox_upload_'.substr($hash, 0, 40));
                 }
 
@@ -261,15 +276,20 @@ class Upload
             }
 
             // Wait a moment, perhaps the upload still needs to start
-            usleep(500000 * $_try);
+            usleep(1000000 * $_try);
         }
 
         if (false === $result) {
-            $result = ['file' => false, 'status' => ['bytes_down_so_far' => 0, 'total_bytes_down_expected' => 0, 'percentage' => 0, 'progress' => 'failed']];
+            $result = ['file' => false, 'status' => ['bytes_up_so_far' => 0, 'total_bytes_up_expected' => 0, 'percentage' => 0, 'progress' => 'no-progress-found']];
         }
 
         echo json_encode($result);
         die();
+    }
+
+    public function upload_convert()
+    {
+        // NOT IMPLEMENTED
     }
 
     public function upload_post_process()
@@ -335,7 +355,7 @@ class Upload
         do_action('outofthebox_upload_post_process', $_uploaded_entries, $this->_processor);
 
         // Clear Cached Requests
-        CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+        CacheRequest::clear_request_cache();
 
         echo json_encode(['result' => 1, 'files' => $files]);
     }

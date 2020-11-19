@@ -1,33 +1,24 @@
 // Give this window an ID
 this.id = 'ngg-attach_to_post';
 
-// Provides a function to close the TinyMCE popup window
-function close_attach_to_post_window() {
-	var src = jQuery(top.document).find("#TB_window iframe").attr('src');
-	if (src && src.match('attach_to_post')) {
-		top.tb_remove();
-	} else {
-		top.tinyMCE.activeEditor.windowManager.close(window);
-	}
-}
-
 // This function is only necessary on iOS because iframe's scrollable='yes' attribute
 // is ignored there. To work around this we give each iframe a height matching its contents
 // height and set overflow-y:scroll on the wrapping parent div.
 function adjust_height_for_frame(parent_window, current_window, callback) {
-    if (!/crios|iP(hone|od|ad)/i.test(navigator.userAgent)) {
-        if (callback !== undefined) {
-            return callback(parent_window, current_window);
-        } else {
-            return true;
-        }
-    }
+	// TODO: ADD BLOCK CHECK AND DO NOTHING
+	if (!/crios|iP(hone|od|ad)/i.test(navigator.userAgent)) {
+		if (callback !== undefined) {
+			return callback(parent_window, current_window);
+		} else {
+			return true;
+		}
+	}
 
 	// Adjust height of the frame
 	var $frame			= jQuery(current_window.frameElement);
 	var new_height		= $frame.contents().height()/3;
-    var new_height_body = $frame.contents().find('#wpbody').height();
-    var parent_height   = jQuery(parent_window.document).height();
+	var new_height_body = $frame.contents().find('#wpbody').height();
+	var parent_height   = jQuery(parent_window.document).height();
 	var current_height	= $frame.height();
 
 	// because #wpbody may have zero height
@@ -35,35 +26,104 @@ function adjust_height_for_frame(parent_window, current_window, callback) {
 		new_height_body = $frame.contents().height();
 	}
 
-    if (new_height < new_height_body) { new_height = new_height_body; }
-    if (new_height < parent_height)   { new_height = parent_height; }
+	if (new_height < new_height_body) { new_height = new_height_body; }
+	if (new_height < parent_height)   { new_height = parent_height; }
 
-    if (current_height < new_height) {
-        var frame_id = $frame.attr('id');
-        if (frame_id && frame_id.indexOf('ngg-iframe-') === 0) {
-            var tab_id = frame_id.substr(11);
-            if (tab_id) {
-                jQuery('#' + tab_id).height(new_height);
-            }
-        }
-    }
+	if (current_height < new_height) {
+		var frame_id = $frame.attr('id');
+		if (frame_id && frame_id.indexOf('ngg-iframe-') === 0) {
+			var tab_id = frame_id.substr(11);
+			if (tab_id) {
+				jQuery('#' + tab_id).height(new_height);
+			}
+		}
+	}
 
 	if (callback !== undefined) {
-        return callback(parent_window, current_window, new_height);
-    } else {
-        return true;
-    }
+		return callback(parent_window, current_window, new_height);
+	} else {
+		return true;
+	}
+}
+
+// Provides a function to close the TinyMCE popup window
+function close_attach_to_post_window() {
+	// Block editor
+	if (is_block_editor()) {
+		const iframe = parent.document.getElementById(window.name);
+		const event = new Event('NGG_Close_Modal');
+		iframe.dispatchEvent(event);
+
+	// TinyMCE editor
+	} else {
+		const src = jQuery(top.document).find("#TB_window iframe").attr('src');
+		if (src && src.match('attach_to_post')) {
+			top.tb_remove();
+		} else {
+			top.tinyMCE.activeEditor.windowManager.close(window);
+		}
+
+	}
+}
+
+function insert_into_editor(snippet, ref_or_id) {
+    if (is_block_editor()) {
+		const iframe = parent.document.getElementById(window.name);
+		const event = new CustomEvent('NGG_Insert_Gallery', { detail: {
+			shortcode: snippet
+		}});
+		iframe.dispatchEvent(event);
+	}
+	else if (is_visual_editor()) {
+		var editor = top.tinyMCE.activeEditor;
+		if (editor.selection.getNode().outerHTML.indexOf(ref_or_id) >= 0) {
+			jQuery(editor.selection.getNode()).attr('data-shortcode', snippet.substring(1, snippet.length-1));
+		} else {
+			editor.execCommand('mceInsertContent', false, snippet);
+		}
+		editor.selection.collapse(false);
+
+	} else {
+		myField = top.document.getElementById('content');
+
+		myValue = snippet;
+
+		//IE support
+		if (document.selection) {
+			myField.focus();
+			sel = document.selection.createRange();
+			sel.text = myValue;
+		} else if (myField.selectionStart || myField.selectionStart === '0') {
+			//MOZILLA and others
+			var startPos = myField.selectionStart;
+			var endPos = myField.selectionEnd;
+			myField.value = myField.value.substring(0, startPos)
+				+ myValue
+				+ myField.value.substring(endPos, myField.value.length);
+		} else {
+			myField.value += myValue;
+		}
+	}
+}
+
+function is_visual_editor() {
+	return jQuery(top.document).find('.html-active:visible').length === 0;
+}
+
+function is_block_editor() {
+	return typeof window.name !== 'undefined' && window.name === 'add-ngg-gallery-block-iframe';
 }
 
 // This overrides certain parts of shutter.js' positioning & sizing code
 function ngg_get_measures_for_frame(frame) {
+	// TODO: DETECT BLOCK EDITOR AND IMPLEMENTATION
 	var $frame			= jQuery(frame);
 	var frame_id = $frame.attr('id');
 	var measures = {};
 
 	if (frame_id && frame_id.indexOf('ngg-iframe-') === 0) {
 		var tab_id = frame_id.substr(11);
-		
+
 		if (tab_id) {
 			var jDoc = jQuery(document);
 
@@ -84,7 +144,7 @@ function ngg_get_measures_for_frame(frame) {
             }
 		}
 	}
-	
+
 	return measures;
 }
 
@@ -152,7 +212,7 @@ jQuery(function($) {
 		if (e.keyCode === 27) {
 			close_attach_to_post_window();
         }
-		return;
+		return true;
 	});
 
 	// Fade in now that all GUI elements are intact
@@ -163,11 +223,7 @@ jQuery(function($) {
 		opacity: 1.0
 	});
 
-});
-
-/* Open and close IGW video tutorial */
-jQuery(function($) {
-
+	/* Open and close IGW video tutorial */
 	$('#displayed_tab .ngg_igw_video_open').click( function(e) {
         $('#displayed_tab .ngg_igw_video_inner').append('<iframe class="ngg_igw_video_iframe" width="1050" height="590" src="https://www.youtube.com/embed/mNEnY23i9DE?rel=0" frameborder="0" allowfullscreen></iframe>');
         $('#displayed_tab .ngg_igw_video_inner').css("display", "block");
@@ -179,60 +235,25 @@ jQuery(function($) {
         $('#displayed_tab .ngg_igw_video_inner').css("display", "none");
         $('#displayed_tab .ngg_igw_video_open').css("display", "block");
     });
-    
-});
 
-/* Show Pro gallery promo only on Choose Display tab */
-jQuery(function($) {
-
+	/* Show Pro gallery promo only on Choose Display tab */
 	$('.ngg_page_content_menu a').click( function(e) {
-        
+
         var id = $(this).attr('data-id');
-        if (id == "choose_display") { 
+        if (id == "choose_display") {
             $("#displayed_tab .ngg_igw_video_open").css("display", "block");
         }
-        else { 
+        else {
             $("#displayed_tab .ngg_igw_video_open").css("display", "none");
             $("#displayed_tab .ngg_igw_video_inner").css("display", "none");
         }
-
     });
 
-});
-
-function is_visual_editor() {
-	return jQuery(top.document).find('.html-active:visible').length === 0;
-}
-
-function insert_into_editor(snippet, ref_or_id) {
-	if (is_visual_editor()) {
-		var editor = top.tinyMCE.activeEditor;
-		if (editor.selection.getNode().outerHTML.indexOf(ref_or_id) >= 0) {
-			jQuery(editor.selection.getNode()).attr('data-shortcode', snippet.substring(1, snippet.length-1));
-		} else {
-			editor.execCommand('mceInsertContent', false, snippet);
-		}
-		editor.selection.collapse(false);
-
-	} else {
-		myField = top.document.getElementById('content');
-
-		myValue = snippet;
-
-		//IE support
-		if (document.selection) {
-			myField.focus();
-			sel = document.selection.createRange();
-			sel.text = myValue;
-		} else if (myField.selectionStart || myField.selectionStart === '0') {
-            //MOZILLA and others
-			var startPos = myField.selectionStart;
-			var endPos = myField.selectionEnd;
-			myField.value = myField.value.substring(0, startPos)
-				+ myValue
-				+ myField.value.substring(endPos, myField.value.length);
-		} else {
-			myField.value += myValue;
-		}
+	// The Block plugin will wait for this event to trigger before removing its loading spinner
+	if (is_block_editor()) {
+		const iframe = parent.document.getElementById(window.name);
+		const event = new Event('NGG_Iframe_Ready');
+		iframe.dispatchEvent(event);
 	}
-}
+
+});

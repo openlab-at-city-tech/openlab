@@ -3296,6 +3296,8 @@ add_action(
 		}
 
 		wp_enqueue_script( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/js/nextgen-gallery.js' ), [ 'jquery' ], OL_VERSION );
+
+		wp_enqueue_style( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/css/nextgen-gallery.css' ), null, OL_VERSION );
 	}
 );
 

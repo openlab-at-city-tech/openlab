@@ -11,20 +11,6 @@ class ComposerStaticInitd944cb3ad10f834222db970b76dd976d
         'a5dbe7df96665c0b6c16ae8d91231502' => __DIR__ . '/..' . '/imagely/pope-framework/lib/autoload.php',
     );
 
-    public static $prefixLengthsPsr4 = array (
-        'P' => 
-        array (
-            'PhpParser\\' => 10,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'PhpParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
-        ),
-    );
-
     public static $prefixesPsr0 = array (
         'H' => 
         array (
@@ -38,8 +24,6 @@ class ComposerStaticInitd944cb3ad10f834222db970b76dd976d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitd944cb3ad10f834222db970b76dd976d::$prefixesPsr0;
 
         }, null, ClassLoader::class);

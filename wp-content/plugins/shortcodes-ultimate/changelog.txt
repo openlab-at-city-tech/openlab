@@ -1,3 +1,15 @@
+### 5.9.3
+
+**What's new**
+
+- New option `anchor_in_url` for `[su_tabs]` and `[su_spoiler]`. This option specifies whether an anchor will be added to page URL after clicking a tab or a spoiler.
+- New option `random` for `[su_image_carousel]` which allows to shuffle carousel images
+
+**Fixes**
+
+- Fixed issue in `[su_image_carousel]` where images were hidden on some themes
+
+
 ### 5.9.2
 
 **What's new**

@@ -95,17 +95,7 @@ class Mediaplayer
         //Create Filelist array
         if ($this->_folder->has_children()) {
             foreach ($this->_folder->get_children() as $child) {
-                if (($child->is_dir())) {
-                    continue;
-                }
-
-                if ('audio' === $this->get_processor()->get_shortcode_option('mode')) {
-                    $allowedextensions = ['mp3', 'm4a', 'ogg', 'oga', 'wav'];
-                } else {
-                    $allowedextensions = ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'webm'];
-                }
-
-                if (empty($child->extension) || !in_array($child->extension, $allowedextensions)) {
+                if (false === $this->is_media_file($child)) {
                     continue;
                 }
 
@@ -164,6 +154,34 @@ class Mediaplayer
             }
         }
 
+        if ('-1' !== $this->get_processor()->get_shortcode_option('max_files')) {
+            $files = array_slice($files, 0, $this->get_processor()->get_shortcode_option('max_files'));
+        }
+
         return array_values($files);
+    }
+
+    public function is_media_file(Entry $entry)
+    {
+        if ($entry->is_dir()) {
+            return false;
+        }
+
+        $extension = $entry->get_extension();
+        $mimetype = $entry->get_mimetype();
+
+        if ('audio' === $this->get_processor()->get_shortcode_option('mode')) {
+            $allowedextensions = ['mp3', 'm4a', 'ogg', 'oga', 'wav'];
+            $allowedimimetypes = ['audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/x-wav'];
+        } else {
+            $allowedextensions = ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'webm'];
+            $allowedimimetypes = ['video/mp4', 'video/ogg', 'video/webm'];
+        }
+
+        if (!empty($extension) && in_array($extension, $allowedextensions)) {
+            return true;
+        }
+
+        return in_array($mimetype, $allowedimimetypes);
     }
 }

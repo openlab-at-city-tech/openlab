@@ -28,7 +28,7 @@ class Authorization
     /**
      * Is the current authorization still valid or can it no longer be used.
      *
-     * @var boolean
+     * @var bool
      */
     private $_is_valid = true;
 
@@ -161,14 +161,14 @@ class Authorization
                 @chmod($this->get_token_location(), 0755);
 
                 if (!is_writable($this->get_token_location())) {
-                    error_log('[Out-of-the-Box message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
+                    error_log('[WP Cloud Plugin message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
                     die(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
                 }
             }
 
             $this->_token_file_handle = fopen($this->get_token_location(), 'c+');
             if (!is_resource($this->_token_file_handle)) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
                 die(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
             }
         }

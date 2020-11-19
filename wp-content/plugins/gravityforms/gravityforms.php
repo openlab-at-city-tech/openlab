@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.20.3
+Version: 2.4.21
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -210,7 +210,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.20.3';
+	public static $version = '2.4.21';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -4640,7 +4640,7 @@ class GFForms {
 							array(
 								'id'     => 'gform-form-' . $recent_form_id,
 								'parent' => 'gform-form-recent-forms',
-								'title'  => $form['title'],
+								'title'  => esc_html( $form['title'] ),
 								'href'   => GFCommon::current_user_can_any( 'gravityforms_edit_forms' ) ? admin_url( 'admin.php?page=gf_edit_forms&id=' . $recent_form_id ) : '',
 							)
 						);

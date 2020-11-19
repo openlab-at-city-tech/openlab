@@ -1,7 +1,9 @@
 <?php
 /**
- * @author Deepen.
- * @created_on 11/20/19
+ * This template can be overridden by copying it to yourtheme/video-conferencing-zoom/fragments/image.php.
+ *
+ * @author      Deepen Bajracharya (CodeManas)
+ * @created     3.0.0
  */
 ?>
 

@@ -365,7 +365,7 @@ class C_Admin_Notification_Manager
             // Does the handler want to render?
             $has_method = method_exists($handler, 'is_renderable');
             if ($has_method && $handler->is_renderable() || !$has_method) {
-                $show_dismiss_button = method_exists($handler, 'show_dismiss_button') ? $handler->show_dismiss_button() : method_exists($handler, 'is_dismissable') ? $handler->is_dismissable() : FALSE;
+                $show_dismiss_button = method_exists($handler, 'show_dismiss_button') ? $handler->show_dismiss_button() : (method_exists($handler, 'is_dismissable') ? $handler->is_dismissable() : FALSE);
                 $template = method_exists($handler, 'get_mvc_template') ? $handler->get_mvc_template() : 'photocrati-nextgen_admin#admin_notice';
                 // The 'inline' class is necessary to prevent our notices from being moved in the DOM
                 // see https://core.trac.wordpress.org/ticket/34570 for reference

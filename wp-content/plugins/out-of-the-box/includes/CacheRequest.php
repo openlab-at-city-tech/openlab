@@ -156,6 +156,32 @@ class CacheRequest
         }
     }
 
+    public static function clear_request_cache()
+    {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(OUTOFTHEBOX_CACHEDIR, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+            if ($path->isDir()) {
+                continue;
+            }
+            if ('.htaccess' === $path->getFilename()) {
+                continue;
+            }
+
+            if (false === strpos($path->getFilename(), 'request_')) {
+                continue;
+            }
+
+            if (!file_exists($path) || !is_writable($path)) {
+                continue;
+            }
+
+            try {
+                @unlink($path->getPathname());
+            } catch (\Exception $ex) {
+                continue;
+            }
+        }
+    }
+
     protected function _set_cache_file_handle($handle)
     {
         return $this->_cache_file_handle = $handle;

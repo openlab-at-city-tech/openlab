@@ -67,6 +67,20 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </td>
                 </tr>
                 <tr>
+                    <th><label><?php _e( 'Disable Join via browser ?', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                    <td>
+                        <input type="checkbox" name="meeting_disable_join_via_browser" <?php ! empty( $disable_jvb ) ? checked( $disable_jvb, 'on' ) : false; ?>>
+                        <span class="description"><?php _e( 'Checking this will hide all Join via Browser Buttons.', 'video-conferencing-with-zoom-api' ); ?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label><?php _e( 'Disable Email field when join via browser ?', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                    <td>
+                        <input type="checkbox" name="meeting_show_email_field" <?php ! empty( $hide_email_jvb ) ? checked( $hide_email_jvb, 'on' ) : false; ?>>
+                        <span class="description"><?php _e( 'Checking this show will hide email field in Join via Browser window.', 'video-conferencing-with-zoom-api' ); ?></span>
+                    </td>
+                </tr>
+                <tr>
                     <th><label><?php _e( 'Meeting Started Text', 'video-conferencing-with-zoom-api' ); ?></label></th>
                     <td>
                         <input type="text" style="width: 400px;" name="zoom_api_meeting_started_text" id="zoom_api_meeting_started_text" value="<?php echo ! empty( $zoom_started ) ? esc_html( $zoom_started ) : ''; ?>" placeholder="Leave empty for default text">
@@ -88,26 +102,35 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <th><label><?php _e( 'DateTime Format', 'video-conferencing-with-zoom-api' ); ?></label></th>
                     <td>
                         <div>
-                            <input type="radio" value="LLLL" name="zoom_api_date_time_format" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'LLLL', false ) : 'checked'; ?> class="zoom_api_date_time_format">
-                            Wednesday, May 6, 2020 05:00 PM
+                            <input type="radio" value="LLLL" name="zoom_api_date_time_format" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'LLLL', false ) : 'checked'; ?> class="zoom_api_date_time_format"> Wednesday, May 6, 2020 05:00 PM
                         </div>
                         <div style="padding-top:10px;">
-                            <input type="radio" value="lll" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'lll', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format">
-                            May 6, 2020 05:00 AM
+                            <input type="radio" value="lll" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'lll', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format"> May 6, 2020 05:00 AM
                         </div>
                         <div style="padding-top:10px;">
-                            <input type="radio" value="llll" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'llll', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format">
-                            Wed, May 6, 2020 05:00 AM
+                            <input type="radio" value="llll" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'llll', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format"> Wed, May 6, 2020 05:00 AM
                         </div>
                         <div style="padding-top:10px;">
-                            <input type="radio" value="L LT" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'L LT', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format">
-                            05/06/2020 03:00 PM
+                            <input type="radio" value="L LT" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'L LT', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format"> 05/06/2020 03:00 PM
                         </div>
                         <div style="padding-top:10px;">
-                            <input type="radio" value="l LT" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'l LT', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format">
-                            5/6/2020 03:00 PM
+                            <input type="radio" value="l LT" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'l LT', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format"> 5/6/2020 03:00 PM
                         </div>
                         <p class="description"><?php _e( 'Change date time formats according to your choice. Please edit this properly. Failure to correctly put value will result in failure to show date in frontend.', 'video-conferencing-with-zoom-api' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label><?php _e( 'Use 24-hour format', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                    <td>
+                        <input type="checkbox" name="zoom_api_twenty_fourhour_format" <?php echo ! empty( $twentyfour_format ) ? checked( $twentyfour_format, 'on' ) : false; ?> class="zoom_api_date_time_format">
+                        <span class="description"><?php _e( 'Checking this option will show 24 hour time format in all event dates.', 'video-conferencing-with-zoom-api' ); ?></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label><?php _e( 'Use full month label format ?', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                    <td>
+                        <input type="checkbox" name="zoom_api_full_month_format" <?php echo ! empty( $full_month_format ) ? checked( $full_month_format, 'on' ) : false; ?> class="zoom_api_date_time_format">
+                        <span class="description"><?php _e( 'Checking this option will show full month label for example: June, July, August etc.', 'video-conferencing-with-zoom-api' ); ?></span>
                     </td>
                 </tr>
                 </tbody>
@@ -122,30 +145,29 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="zvc-position-floater-right">
         <ul class="zvc-information-sec">
             <li>
+                <a target="_blank" href="https://www.facebook.com/groups/zoomwp/"><?php _e( 'Facebook Group', 'video-conferencing-with-zoom-api' ); ?></a>
+            </li>
+            <li>
                 <a target="_blank" href="https://zoom.codemanas.com"><?php _e( 'Documentation', 'video-conferencing-with-zoom-api' ); ?></a>
             </li>
             <li>
                 <a target="_blank" href="https://www.codemanas.com"><?php _e( 'Contact for additional Support', 'video-conferencing-with-zoom-api' ); ?></a>
             </li>
-            <li><a target="_blank" href="https://deepenbajracharya.com.np"><?php _e( 'Developer', 'video-conferencing-with-zoom-api' ); ?></a>
-            </li>
+            <li><a target="_blank" href="https://deepenbajracharya.com.np"><?php _e( 'Developer', 'video-conferencing-with-zoom-api' ); ?></a></li>
             <li>
                 <a target="_blank" href="<?php echo admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-addons' ); ?>"><?php _e( 'Addons', 'video-conferencing-with-zoom-api' ); ?></a>
             </li>
         </ul>
         <div class="zvc-information-sec">
             <h3>WooCommerce Addon</h3>
-            <p>Integrate your Zoom Meetings directly to WooCommerce or WooCommerce booking products. Zoom Integration for WooCommerce allows you to
-                automate your zoom meetings directly from your WordPress dashboard by linking zoom meetings to your WooCommerce or WooCommerce Booking
-                products automatically. Users will receive join links in their booking confirmation emails.</p>
+            <p>Integrate your Zoom Meetings directly to WooCommerce or WooCommerce booking products. Zoom Integration for WooCommerce allows you to automate your zoom meetings directly from your WordPress dashboard by linking zoom meetings to your WooCommerce or WooCommerce Booking products automatically. Users will receive join links in their booking confirmation emails.</p>
             <p><a href="https://www.codemanas.com/downloads/zoom-integration-for-woocommerce-booking/" class="button button-primary">More Details</a>
             </p>
         </div>
         <div class="zvc-information-sec">
             <h3>Need Idle Auto logout ?</h3>
             <p>Protect your WordPress users' sessions from shoulder surfers and snoopers!</p>
-            <p>Use the Inactive Logout plugin to automatically terminate idle user sessions, thus protecting the site if the users leave unattended
-                sessions.</p>
+            <p>Use the Inactive Logout plugin to automatically terminate idle user sessions, thus protecting the site if the users leave unattended sessions.</p>
             <p>
                 <a target="_blank" href="https://wordpress.org/plugins/inactive-logout/"><?php _e( 'Try inactive logout', 'video-conferencing-with-zoom-api' ); ?></a>
         </div>

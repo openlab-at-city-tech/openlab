@@ -124,7 +124,14 @@ class GFExport {
 
 		unset( $forms['version'] );
 
-		$form_ids = GFAPI::add_forms( $forms );
+		$clean_forms = array();
+
+		foreach ( $forms as $form ) {
+			$form          = GFFormsModel::convert_field_objects( $form );
+			$clean_forms[] = GFFormsModel::sanitize_settings( $form );
+		}
+
+		$form_ids = GFAPI::add_forms( $clean_forms );
 
 		if ( is_wp_error( $form_ids ) ) {
 			GFCommon::log_debug( __METHOD__ . '(): Import Failed => ' . print_r( $form_ids, 1 ) );

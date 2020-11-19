@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	global $post;
 	$meeting_details = get_post_meta( $post->ID, '_meeting_zoom_details', true );
+	$meeting_fields  = ! empty( $meeting_fields ) ? $meeting_fields : array();
+	if ( empty( $meeting_fields['meeting_type'] ) ) {
+		$meeting_fields['meeting_type'] = 1;
+	}
+
 	if ( $post->post_status == 'publish' && is_object( $meeting_details ) && isset( $meeting_details->id ) ) {
 		?>
         <tr>
@@ -37,18 +42,30 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
                 <td>
 					<?php
-					if ( ! empty( $users ) ) {
-						foreach ( $users as $user ) {
-							if ( $meeting_details->host_id === $user->id ) {
+					if ( ! empty( $meeting_details->host_id ) ) {
+						$user = json_decode( zoom_conference()->getUserInfo( $meeting_details->host_id ) );
+						if( !empty($user) ) {
+							if ( ! empty( $user->code ) ) {
+								echo $user->message;
+							} else {
 								echo '<input type="hidden" name="userId" value="' . $user->id . '">';
 								echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )';
-								break;
 							}
-						}
+                        } else {
+							_e( 'Please check your internet connection or API connection.', 'video-conferencing-with-zoom-api' );
+                        }
 					} else {
 						printf( __( 'Did not find any hosts here ? Please %scheck here%s to verify your API keys are working correctly.', 'video-conferencing-with-zoom-api' ), '<a href="' . admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-settings' ) . '">', '</a>' );
 					} ?>
                     <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                <td>
+                    <p><?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? __( 'Zoom Webinar', 'video-conferencing-with-zoom-api' ) : __( 'Zoom Meeting', 'video-conferencing-with-zoom-api' ); ?></p>
+                    <p class="description"><?php _e( 'You cannot update meeting type. This is not allowed to avoid any conflict issues.', 'video-conferencing-with-zoom-api' ); ?></p>
+                    <input type="hidden" name="meeting_type" value="<?php esc_attr_e( $meeting_fields['meeting_type'] ); ?>">
                 </td>
             </tr>
 			<?php
@@ -58,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
                 <td>
 					<?php if ( ! empty( $users ) ) { ?>
-                        <select name="userId" required class="zvc-hacking-select">
+                        <select name="userId" required class="zvc-hacking-select vczapi-admin-post-type-host-selector">
                             <option value=""><?php _e( 'Select a Host', 'video-conferencing-with-zoom-api' ); ?></option>
 							<?php foreach ( $users as $user ) { ?>
                                 <option value="<?php echo $user->id; ?>" <?php ! empty( $meeting_fields['userId'] ) ? selected( esc_attr( $meeting_fields['userId'] ), $user->id ) : false; ?> ><?php echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )'; ?></option>
@@ -70,20 +87,20 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
                 </td>
             </tr>
+            <tr class="zoom-meeting-type-selection-admin">
+                <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
+                <td>
+                    <select id="vczapi-admin-meeting-ype" name="meeting_type" class="meeting-type-selection">
+                        <option value="1" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 1 ) : false; ?>>Meeting</option>
+                        <option value="2" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 2 ) : false; ?>>Webinar</option>
+                    </select>
+                    <p class="description" id="userId-description"><?php _e( 'Which type of meeting do you want to create. Note: Webinar requires Zoom Webinar Plan enabled in your account.', 'video-conferencing-with-zoom-api' ); ?>
+                        ?</p>
+                </td>
+            </tr>
 		<?php }
 	}
 	?>
-    <!--<tr class="zoom-meeting-type-selection-admin">
-        <th scope="row"><label for="meeting_type"><?php /*_e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); */?></label></th>
-        <td>
-            <select id="meeting_type" name="meeting_type" class="meeting-type-selection">
-                <option value="1">Meeting</option>
-                <option value="2">Webinar</option>
-            </select>
-            <p class="description" id="userId-description"><?php /*_e( 'Which type of meeting do you want to create', 'video-conferencing-with-zoom-api' ); */?>
-                ?</p>
-        </td>
-    </tr>-->
     <tr>
         <th scope="row"><label for="start_date"><?php _e( 'Start Date/Time *', 'video-conferencing-with-zoom-api' ); ?></label></th>
         <td>
@@ -102,8 +119,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$wp_timezone = zvc_get_timezone_offset_wp();
 			?>
             <select id="timezone" name="timezone" class="zvc-hacking-select">
-				<?php foreach ( $tzlists as $k => $tzlist ) { ?>
-                    <option value="<?php echo $k; ?>" <?php ! empty( $meeting_fields['timezone'] ) ? selected( $k, $meeting_fields['timezone'] ) : ( ! empty( $wp_timezone ) && ! empty( $tzlists[ $wp_timezone ] ) && $tzlists[ $wp_timezone ] !== false ) ? selected( $k, $wp_timezone ) : false; ?>><?php echo esc_html( $tzlist ); ?></option>
+				<?php foreach ( $tzlists as $k => $tzlist ) {
+					$option_tz_selected = false;
+					if ( ! empty( $meeting_fields['timezone'] ) ) {
+						$option_tz_selected = selected( $k, $meeting_fields['timezone'], false );
+					} else if ( ! empty( $wp_timezone ) && ! empty( $tzlists[ $wp_timezone ] ) && $tzlists[ $wp_timezone ] !== false ) {
+						$option_tz_selected = selected( $k, $wp_timezone, false );
+					}
+					?>
+                    <option value="<?php echo $k; ?>" <?php echo $option_tz_selected; ?>><?php echo esc_html( $tzlist ); ?></option>
 				<?php } ?>
             </select>
             <p class="description" id="timezone-description"><?php _e( 'Meeting Timezone', 'video-conferencing-with-zoom-api' ); ?></p>
@@ -124,6 +148,14 @@ if ( ! defined( 'ABSPATH' ) ) {
         </td>
     </tr>
     <tr>
+        <th scope="row"><label for="meeting-authentication"><?php _e( 'Meeting Authentication', 'video-conferencing-with-zoom-api' ); ?></label></th>
+        <td>
+            <p class="description" id="meeting-authentication">
+                <input type="checkbox" name="meeting_authentication" value="1" <?php ! empty( $meeting_fields['meeting_authentication'] ) ? checked( '1', $meeting_fields['meeting_authentication'] ) : false; ?> class="regular-text"><?php _e( 'Only loggedin users in Zoom App can join this Meeting.', 'video-conferencing-with-zoom-api' ); ?>
+            </p>
+        </td>
+    </tr>
+    <tr class="vczapi-admin-hide-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? 'style="display: none;"' : false; ?>>
         <th scope="row"><label for="join_before_host"><?php _e( 'Join Before Host', 'video-conferencing-with-zoom-api' ); ?></label></th>
         <td>
             <p class="description" id="join_before_host-description">
@@ -132,14 +164,14 @@ if ( ! defined( 'ABSPATH' ) ) {
         </td>
     </tr>
     <tr>
-        <th scope="row"><label for="option_host_video"><?php _e( 'Host join start', 'video-conferencing-with-zoom-api' ); ?></label></th>
+        <th scope="row"><label for="option_host_video"><?php _e( 'Start When Host Joins', 'video-conferencing-with-zoom-api' ); ?></label></th>
         <td>
             <p class="description" id="option_host_video-description">
                 <input type="checkbox" name="option_host_video" value="1" <?php ! empty( $meeting_fields['option_host_video'] ) ? checked( '1', $meeting_fields['option_host_video'] ) : false; ?> class="regular-text"><?php _e( 'Start video when host join meeting.', 'video-conferencing-with-zoom-api' ); ?>
             </p>
         </td>
     </tr>
-    <tr>
+    <tr class="vczapi-admin-hide-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? 'style="display: none;"' : false; ?>>
         <th scope="row"><label for="option_participants_video"><?php _e( 'Participants Video', 'video-conferencing-with-zoom-api' ); ?></label></th>
         <td>
             <p class="description" id="option_participants_video-description">
@@ -147,13 +179,53 @@ if ( ! defined( 'ABSPATH' ) ) {
             </p>
         </td>
     </tr>
-    <tr>
+    <tr class="vczapi-admin-hide-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? 'style="display: none;"' : false; ?>>
         <th scope="row">
             <label for="option_mute_participants_upon_entry"><?php _e( 'Mute Participants upon entry', 'video-conferencing-with-zoom-api' ); ?></label>
         </th>
         <td>
             <p class="description" id="option_mute_participants_upon_entry">
                 <input type="checkbox" name="option_mute_participants" value="1" <?php ! empty( $meeting_fields['option_mute_participants'] ) ? checked( '1', $meeting_fields['option_mute_participants'] ) : false; ?> class="regular-text"><?php _e( 'Mutes Participants when entering the meeting.', 'video-conferencing-with-zoom-api' ); ?>
+            </p>
+        </td>
+    </tr>
+    <tr class="vczapi-admin-show-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 1 ? 'style="display: none;"' : false; ?>>
+        <th scope="row">
+            <label for="panelists_video"><?php _e( 'When Panelists Join', 'video-conferencing-with-zoom-api' ); ?></label>
+        </th>
+        <td>
+            <p class="description">
+                <input type="checkbox" name="panelists_video" value="1" <?php ! empty( $meeting_fields['panelists_video'] ) ? checked( '1', $meeting_fields['panelists_video'] ) : false; ?> class="regular-text"><?php _e( 'Start video when panelists join webinar.', 'video-conferencing-with-zoom-api' ); ?>
+            </p>
+        </td>
+    </tr>
+    <tr class="vczapi-admin-show-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 1 ? 'style="display: none;"' : false; ?>>
+        <th scope="row">
+            <label for="practice_session"><?php _e( 'Practise Session', 'video-conferencing-with-zoom-api' ); ?></label>
+        </th>
+        <td>
+            <p class="description">
+                <input type="checkbox" name="practice_session" value="1" <?php ! empty( $meeting_fields['practice_session'] ) ? checked( '1', $meeting_fields['practice_session'] ) : false; ?> class="regular-text"><?php _e( 'Enable Practise Session.', 'video-conferencing-with-zoom-api' ); ?>
+            </p>
+        </td>
+    </tr>
+    <tr class="vczapi-admin-show-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 1 ? 'style="display: none;"' : false; ?>>
+        <th scope="row">
+            <label for="hd_video"><?php _e( 'HD Video', 'video-conferencing-with-zoom-api' ); ?></label>
+        </th>
+        <td>
+            <p class="description">
+                <input type="checkbox" name="hd_video" value="1" <?php ! empty( $meeting_fields['hd_video'] ) ? checked( '1', $meeting_fields['hd_video'] ) : false; ?> class="regular-text"><?php _e( 'Defaults to HD video.', 'video-conferencing-with-zoom-api' ); ?>
+            </p>
+        </td>
+    </tr>
+    <tr class="vczapi-admin-show-on-webinar" <?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 1 ? 'style="display: none;"' : false; ?>>
+        <th scope="row">
+            <label for="allow_multiple_devices"><?php _e( 'Allow Multiple Devices', 'video-conferencing-with-zoom-api' ); ?></label>
+        </th>
+        <td>
+            <p class="description">
+                <input type="checkbox" name="allow_multiple_devices" value="1" <?php ! empty( $meeting_fields['allow_multiple_devices'] ) ? checked( '1', $meeting_fields['allow_multiple_devices'] ) : false; ?> class="regular-text"><?php _e( 'Allow attendess to join from multiple devices.', 'video-conferencing-with-zoom-api' ); ?>
             </p>
         </td>
     </tr>

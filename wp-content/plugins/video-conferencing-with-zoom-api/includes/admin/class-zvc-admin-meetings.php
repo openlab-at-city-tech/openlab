@@ -27,7 +27,7 @@ class Zoom_Video_Conferencing_Admin_Meetings {
 		wp_enqueue_script( 'video-conferencing-with-zoom-api-datable-js' );
 
 		//Get Template
-		require_once ZVC_PLUGIN_VIEWS_PATH . '/tpl-list-meetings.php';
+		require_once ZVC_PLUGIN_VIEWS_PATH . '/live/tpl-list-meetings.php';
 	}
 
 	/**
@@ -49,14 +49,14 @@ class Zoom_Video_Conferencing_Admin_Meetings {
 			}
 
 			//Get Editin Template
-			require_once ZVC_PLUGIN_VIEWS_PATH . '/tpl-edit-meeting.php';
+			require_once ZVC_PLUGIN_VIEWS_PATH . '/live/tpl-edit-meeting.php';
 		} else {
 			if ( isset( $_POST['create_meeting'] ) ) {
 				self::create_meeting();
 			}
 
 			//Get Template
-			require_once ZVC_PLUGIN_VIEWS_PATH . '/tpl-add-meetings.php';
+			require_once ZVC_PLUGIN_VIEWS_PATH . '/live/tpl-add-meetings.php';
 		}
 	}
 
@@ -77,11 +77,10 @@ class Zoom_Video_Conferencing_Admin_Meetings {
 			'timezone'                  => filter_input( INPUT_POST, 'timezone' ),
 			'password'                  => filter_input( INPUT_POST, 'password' ),
 			'duration'                  => filter_input( INPUT_POST, 'duration' ),
-			'option_jbh'                => filter_input( INPUT_POST, 'join_before_host' ),
+			'join_before_host'          => filter_input( INPUT_POST, 'join_before_host' ),
 			'option_host_video'         => filter_input( INPUT_POST, 'option_host_video' ),
 			'option_participants_video' => filter_input( INPUT_POST, 'option_participants_video' ),
 			'option_mute_participants'  => filter_input( INPUT_POST, 'option_mute_participants' ),
-			'option_enforce_login'      => filter_input( INPUT_POST, 'option_enforce_login' ),
 			'option_auto_recording'     => filter_input( INPUT_POST, 'option_auto_recording' ),
 			'alternative_host_ids'      => filter_input( INPUT_POST, 'alternative_host_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY )
 		);
@@ -121,7 +120,6 @@ class Zoom_Video_Conferencing_Admin_Meetings {
 			'option_host_video'         => filter_input( INPUT_POST, 'option_host_video' ),
 			'option_participants_video' => filter_input( INPUT_POST, 'option_participants_video' ),
 			'option_mute_participants'  => filter_input( INPUT_POST, 'option_mute_participants' ),
-			'option_enforce_login'      => filter_input( INPUT_POST, 'option_enforce_login' ),
 			'option_auto_recording'     => filter_input( INPUT_POST, 'option_auto_recording' ),
 			'alternative_host_ids'      => filter_input( INPUT_POST, 'alternative_host_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY )
 		);
@@ -139,6 +137,63 @@ class Zoom_Video_Conferencing_Admin_Meetings {
 			 */
 			do_action( 'zvc_after_created_meeting', $meeting_created );
 		}
+	}
+
+	/**
+	 * Prepare POST DATA for API
+	 *
+	 * @param $postdata
+	 * @param bool $post WP_POST
+	 *
+	 * @return array
+	 */
+	public static function prepare_create( $postdata, $post = false ) {
+		$mtg_param = array(
+			'userId'                    => $postdata['userId'],
+			'meetingTopic'              => ! empty( $post ) ? esc_html( $post->post_title ) : esc_html( $postdata['topic'] ),
+			'start_date'                => $postdata['start_date'],
+			'timezone'                  => $postdata['timezone'],
+			'duration'                  => $postdata['duration'],
+			'password'                  => $postdata['password'],
+			'meeting_authentication'    => $postdata['meeting_authentication'],
+			'join_before_host'          => $postdata['join_before_host'],
+			'option_host_video'         => $postdata['option_host_video'],
+			'option_participants_video' => $postdata['option_participants_video'],
+			'option_mute_participants'  => $postdata['option_mute_participants'],
+			'option_auto_recording'     => $postdata['option_auto_recording'],
+			'alternative_host_ids'      => $postdata['alternative_host_ids']
+		);
+
+		return $mtg_param;
+	}
+
+	/**
+	 * Prepare POST DATA for API
+	 *
+	 * @param $meeting_id
+	 * @param $postdata
+	 * @param bool $post WP_POST
+	 *
+	 * @return array
+	 */
+	public static function prepare_update( $meeting_id, $postdata, $post = false ) {
+		$mtg_param = array(
+			'meeting_id'                => $meeting_id,
+			'topic'                     => ! empty( $post ) ? esc_html( $post->post_title ) : esc_html( $postdata['topic'] ),
+			'start_date'                => $postdata['start_date'],
+			'timezone'                  => $postdata['timezone'],
+			'duration'                  => $postdata['duration'],
+			'password'                  => $postdata['password'],
+			'meeting_authentication'    => $postdata['meeting_authentication'],
+			'join_before_host'          => $postdata['join_before_host'],
+			'option_host_video'         => $postdata['option_host_video'],
+			'option_participants_video' => $postdata['option_participants_video'],
+			'option_mute_participants'  => $postdata['option_mute_participants'],
+			'option_auto_recording'     => $postdata['option_auto_recording'],
+			'alternative_host_ids'      => $postdata['alternative_host_ids']
+		);
+
+		return $mtg_param;
 	}
 
 	static function get_message() {

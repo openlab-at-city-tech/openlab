@@ -34,11 +34,18 @@ function array_insert_after( array $array, $key, array $new ) {
   * @return array $actions
   */
 function comment_row_actions( $actions, $comment ) {
+	$user_id           = (int) $comment->user_id;
 	$comment_id        = (int) $comment->comment_ID;
 	$is_parent_private = (bool) get_comment_meta( $comment->comment_parent, 'ol_is_private', true );
 	$is_private        = (bool) get_comment_meta( $comment_id, 'ol_is_private', true );
 
+	// When parent comment is private, disable toggle action.
 	if ( $is_parent_private && $is_private ) {
+		return $actions;
+	}
+
+	// Admins can only make their comments public.
+	if ( $is_private && get_current_user_id() !== $user_id ) {
 		return $actions;
 	}
 

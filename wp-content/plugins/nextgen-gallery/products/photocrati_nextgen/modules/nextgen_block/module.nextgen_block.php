@@ -37,7 +37,7 @@ class M_NextGEN_Block extends C_Base_Module
 
     function _register_hooks()
     {
-        add_action( 'enqueue_block_editor_assets', array($this, 'nextgen_block_editor_assets') );
+        add_action('enqueue_block_editor_assets', [$this, 'nextgen_block_editor_assets']);
         C_Ngg_Post_Thumbnails::get_instance()->register_hooks();
     }
 
@@ -48,25 +48,36 @@ class M_NextGEN_Block extends C_Base_Module
         wp_enqueue_script(
             'nextgen-block-js', 
             $router->get_static_url(NEXTGEN_BLOCK . '#build/block.min.js'),
-            array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-compose'),
+            ['wp-blocks', 'wp-i18n', 'wp-element', 'wp-compose'],
             NGG_SCRIPT_VERSION,
             TRUE
+        );
+
+        wp_localize_script(
+            'nextgen-block-js',
+            'add_ngg_gallery_block_i18n',
+            [
+                'edit'   => __('Edit'),
+                'delete' => __('Delete'),
+                'create' => __('Add NextGEN Gallery', 'nggallery'),
+                'h3'     => __('NextGEN Gallery', 'nggallery')
+            ]
         );
 
         wp_enqueue_style(
             'nextgen-block-css', 
             $router->get_static_url(NEXTGEN_BLOCK . '#editor.css'),
-            array( 'wp-edit-blocks' ),
+            ['wp-edit-blocks'],
             NGG_SCRIPT_VERSION
         );
     }
 
     function get_type_list()
     {
-        return array(
+        return [
             'A_NextGen_Block_Ajax'  => 'adapter.nextgen_block_ajax.php',
             'C_Ngg_Post_Thumbnails' => 'post_thumbnails.php'
-        );
+        ];
     }
 }
 

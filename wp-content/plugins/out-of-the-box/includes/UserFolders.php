@@ -71,13 +71,25 @@ class UserFolders
     {
         $userfolder = get_user_option('out_of_the_box_linkedto');
         if (is_array($userfolder) && isset($userfolder['foldertext'])) {
-            $this->get_processor()->set_current_account($this->get_processor()->get_accounts()->get_account_by_id($userfolder['accountid']));
+            if (false === isset($userfolder['accountid'])) {
+                $linked_account = $this->get_processor()->get_accounts()->get_primary_account();
+            } else {
+                $linked_account = $this->get_processor()->get_accounts()->get_account_by_id($userfolder['accountid']);
+            }
+
+            $this->get_processor()->set_current_account($linked_account);
 
             return $userfolder['folderid'];
         }
         $defaultuserfolder = get_site_option('out_of_the_box_guestlinkedto');
         if (is_array($defaultuserfolder) && isset($defaultuserfolder['folderid'])) {
-            $this->get_processor()->set_current_account($this->get_processor()->get_accounts()->get_account_by_id($userfolder['accountid']));
+            if (false === isset($defaultuserfolder['accountid'])) {
+                $linked_account = $this->get_processor()->get_accounts()->get_primary_account();
+            } else {
+                $linked_account = $this->get_processor()->get_accounts()->get_account_by_id($defaultuserfolder['accountid']);
+            }
+
+            $this->get_processor()->set_current_account($linked_account);
 
             return $defaultuserfolder['folderid'];
         }
@@ -296,11 +308,11 @@ class UserFolders
         $current_user->user_login = md5($username);
         $current_user->display_name = $username;
         $current_user->ID = $username;
-        $current_user->user_role = __('Anonymous user', 'outofthebox');
+        $current_user->user_role = __('Anonymous user', 'wpcloudplugins');
 
         $user_folder_name = $this->get_user_name_template($current_user);
 
-        return apply_filters('outofthebox_private_folder_name_guests', __('Guests', 'outofthebox').' - '.$user_folder_name, $this->get_processor());
+        return apply_filters('outofthebox_private_folder_name_guests', __('Guests', 'wpcloudplugins').' - '.$user_folder_name, $this->get_processor());
     }
 
     public function get_guest_id()
@@ -308,7 +320,7 @@ class UserFolders
         $id = uniqid();
         if (!isset($_COOKIE['OftB-ID'])) {
             $expire = time() + 60 * 60 * 24 * 7;
-            @setcookie('OftB-ID', $id, $expire, COOKIEPATH, COOKIE_DOMAIN);
+            Helpers::set_cookie('OftB-ID', $id, $expire, COOKIEPATH, COOKIE_DOMAIN, false, false, 'strict');
         } else {
             $id = $_COOKIE['OftB-ID'];
         }

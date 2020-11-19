@@ -126,7 +126,7 @@ class Notification
                 $result = wp_mail($recipient, $subject, $htmlmessage, $headers);
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Could not send notification email on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('Could not send notification email on line %s: %s', __LINE__, $ex->getMessage()));
         }
 
         do_action('outofthebox_notification_sent', $this);
@@ -373,7 +373,7 @@ class Notification
         ];
 
         // Current user data
-        $this->placeholders['%user_name%'] = (is_user_logged_in()) ? wp_get_current_user()->display_name : __('An anonymous user', 'outofthebox');
+        $this->placeholders['%user_name%'] = (is_user_logged_in()) ? wp_get_current_user()->display_name : __('An anonymous user', 'wpcloudplugins');
         $this->placeholders['%user_email%'] = (is_user_logged_in()) ? wp_get_current_user()->user_email : '';
 
         // Location data

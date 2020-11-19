@@ -1,13 +1,13 @@
 === WordPress Gallery Plugin - NextGEN Gallery ===
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
-Requires at least: 4.0.0
-Stable tag: 3.3.17
-Tested up to: 5.5.0
-License: GPLv2
-Requires PHP: 5.4
+Requires at least: 5.2.0
+Stable tag: 3.3.20
+Tested up to: 5.5.1
+License: GPLv3
+Requires PHP: 5.6
 
-The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 28 million downloads.
+The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 30 million downloads.
 
 == Description ==
 
@@ -179,6 +179,16 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= V3.3.20 - 10.13.2020 =
+* NEW:     PHP 5.6 is the minimum supported PHP version
+* NEW:     WordPress 5.2 is the minimum support PHP version
+* Fixed:   Block disappearing in Block Editor
+* Fixed:   Gutenberg block and featured image features were broken on wordpress.com hosting
+* Note:    NextGEN Gallery will soon be licensed under GPLv3.
+
+= V3.3.17.1 - 09.03.2020 =
+* Fixed:   Gutenberg block and featured image features were broken on wordpress.com hosting
 
 = V3.3.17 - 08.18.2020 =
 * Fixed:   Override Thumbnail Settings not configurable

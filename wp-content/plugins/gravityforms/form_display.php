@@ -985,7 +985,7 @@ class GFFormDisplay {
                         <div class='gform_heading'>";
 				if ( $display_title ) {
 					$form_string .= "
-                            <h3 class='gform_title'>" . $form['title'] . '</h3>';
+                            <h3 class='gform_title'>" . esc_html( $form['title'] ) . '</h3>';
 				}
 				if ( $display_description ) {
 					$form_string .= "

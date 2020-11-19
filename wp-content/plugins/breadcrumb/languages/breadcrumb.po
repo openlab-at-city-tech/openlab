@@ -1,0 +1,594 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: breadcrumb\n"
+"POT-Creation-Date: 2020-02-05 11:28+0600\n"
+"PO-Revision-Date: 2020-02-05 11:28+0600\n"
+"Last-Translator: \n"
+"Language-Team: pickplugins\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: ../includes\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+"X-Poedit-SearchPath-2: .\n"
+
+#: class-settings-tabs.php:349 class-settings-tabs.php:430
+msgid "Upload"
+msgstr ""
+
+#: class-settings-tabs.php:350 class-settings-tabs.php:431
+msgid "Clear"
+msgstr ""
+
+#: class-settings-tabs.php:541 class-settings-tabs.php:797
+msgid "Add"
+msgstr ""
+
+#: class-settings.php:20
+msgid "Breadcrumb"
+msgstr ""
+
+#: functions-hooks.php:143 functions.php:617
+msgid "You are here"
+msgstr ""
+
+#: functions-hooks.php:156 functions.php:8 functions.php:19 functions.php:28
+#: functions.php:37 functions.php:324 functions.php:616
+msgid "Home"
+msgstr ""
+
+#: functions-settings.php:27
+msgid "General option"
+msgstr ""
+
+#: functions-settings.php:28
+msgid "Set some basic option to get start."
+msgstr ""
+
+#: functions-settings.php:35 functions-settings.php:800
+msgid "Breadcrumb front text"
+msgstr ""
+
+#: functions-settings.php:36
+msgid "Display custom text before breadcrumb."
+msgstr ""
+
+#: functions-settings.php:48 functions-settings.php:806
+msgid "Breadcrumb separator text"
+msgstr ""
+
+#: functions-settings.php:49
+msgid "You can display custom separator. ex: <code>&raquo;</code>"
+msgstr ""
+
+#: functions-settings.php:64
+msgid "Display last separator"
+msgstr ""
+
+#: functions-settings.php:65
+msgid "Display or hide last separator."
+msgstr ""
+
+#: functions-settings.php:70 functions-settings.php:136
+#: functions-settings.php:183
+msgid "No"
+msgstr ""
+
+#: functions-settings.php:71 functions-settings.php:137
+#: functions-settings.php:184
+msgid "Yes"
+msgstr ""
+
+#: functions-settings.php:85
+msgid "Breadcrumb link text limit by?"
+msgstr ""
+
+#: functions-settings.php:86
+msgid "You can limit link text by word or character"
+msgstr ""
+
+#: functions-settings.php:91
+msgid "Word"
+msgstr ""
+
+#: functions-settings.php:92
+msgid "Character"
+msgstr ""
+
+#: functions-settings.php:105
+msgid "Limit count"
+msgstr ""
+
+#: functions-settings.php:106
+msgid "Set custom limit value, number only."
+msgstr ""
+
+#: functions-settings.php:117 functions-settings.php:824
+msgid "Ending character"
+msgstr ""
+
+#: functions-settings.php:118
+msgid "Set custom Ending character, ex: ..."
+msgstr ""
+
+#: functions-settings.php:130
+msgid "Display \"Home\" on breadcrumb?"
+msgstr ""
+
+#: functions-settings.php:131
+msgid "You can hide or display Home on breadcrumb."
+msgstr ""
+
+#: functions-settings.php:151 functions-settings.php:836
+msgid "Custom home text"
+msgstr ""
+
+#: functions-settings.php:152
+msgid "You can set custom text for \"Home\""
+msgstr ""
+
+#: functions-settings.php:164
+msgid "Current URL hash"
+msgstr ""
+
+#: functions-settings.php:165
+msgid "If you want to keep # on current url, otherwise keep empty"
+msgstr ""
+
+#: functions-settings.php:177
+msgid "Hide WooCommerce breadcrumb"
+msgstr ""
+
+#: functions-settings.php:178
+msgid "Display or hide WooCommerce default breadcrumb"
+msgstr ""
+
+#: functions-settings.php:237
+msgid "Breadcrumb builder"
+msgstr ""
+
+#: functions-settings.php:238
+msgid "Build your own breadcrumb."
+msgstr ""
+
+#: functions-settings.php:304
+#, php-format
+msgid "%s Click to add tags."
+msgstr ""
+
+#: functions-settings.php:356
+msgid "Post types"
+msgstr ""
+
+#: functions-settings.php:400
+msgid "Choose style"
+msgstr ""
+
+#: functions-settings.php:401
+msgid "Customize the breadcrumb."
+msgstr ""
+
+#: functions-settings.php:410
+msgid "Breadcrumb Themes"
+msgstr ""
+
+#: functions-settings.php:411
+msgid "Choose breadcrumb theme"
+msgstr ""
+
+#: functions-settings.php:448
+msgid "Breadcrumb font size"
+msgstr ""
+
+#: functions-settings.php:449
+msgid "Set custom font size"
+msgstr ""
+
+#: functions-settings.php:460
+msgid "Breadcrumb container padding"
+msgstr ""
+
+#: functions-settings.php:461
+msgid "Put custom padding size for breadcrumb container."
+msgstr ""
+
+#: functions-settings.php:475
+msgid "Breadcrumb container margin"
+msgstr ""
+
+#: functions-settings.php:476
+msgid "Put custom margin size for breadcrumb container."
+msgstr ""
+
+#: functions-settings.php:488 functions-settings.php:849
+msgid "Breadcrumb link background color"
+msgstr ""
+
+#: functions-settings.php:489
+msgid "Choose custom background color for links"
+msgstr ""
+
+#: functions-settings.php:500 functions-settings.php:855
+msgid "Breadcrumb link color"
+msgstr ""
+
+#: functions-settings.php:501
+msgid "Choose custom link color"
+msgstr ""
+
+#: functions-settings.php:513 functions-settings.php:860
+msgid "Breadcrumb separator color"
+msgstr ""
+
+#: functions-settings.php:514
+msgid "Choose custom separator color"
+msgstr ""
+
+#: functions-settings.php:548
+msgid "Custom scripts"
+msgstr ""
+
+#: functions-settings.php:549
+msgid "Add your own scripts and style css."
+msgstr ""
+
+#: functions-settings.php:556
+msgid "Custom CSS"
+msgstr ""
+
+#: functions-settings.php:557
+msgid ""
+"Add your own CSS, do not use &lt;style>&lt;/style> tag. its recommend to use "
+"<code>!important</code> to override."
+msgstr ""
+
+#: functions-settings.php:569
+msgid "Custom JS"
+msgstr ""
+
+#: functions-settings.php:570
+msgid "Add your own JS, do not use &lt;script>&lt;/script> tag."
+msgstr ""
+
+#: functions-settings.php:603
+msgid "Get support"
+msgstr ""
+
+#: functions-settings.php:604
+msgid "Use following to get help and support from our expert team."
+msgstr ""
+
+#: functions-settings.php:613 functions-settings.php:619
+msgid "Copied"
+msgstr ""
+
+#: functions-settings.php:614
+msgid "You can use this shortcode under post content"
+msgstr ""
+
+#: functions-settings.php:620
+msgid "PHP Code, you can use under theme .php files."
+msgstr ""
+
+#: functions-settings.php:651
+msgid "Get shortcode"
+msgstr ""
+
+#: functions-settings.php:663 functions-settings.php:963
+msgid ""
+"Ask question for free on our forum and get quick reply from our expert team "
+"members."
+msgstr ""
+
+#: functions-settings.php:664 functions-settings.php:964
+msgid "Create support ticket"
+msgstr ""
+
+#: functions-settings.php:666 functions-settings.php:966
+msgid "Read our documentation before asking your question."
+msgstr ""
+
+#: functions-settings.php:667 functions-settings.php:967
+msgid "Documentation"
+msgstr ""
+
+#: functions-settings.php:669 functions-settings.php:969
+msgid "Watch video tutorials."
+msgstr ""
+
+#: functions-settings.php:670 functions-settings.php:970
+msgid "All tutorials"
+msgstr ""
+
+#: functions-settings.php:673 functions-settings.php:973
+msgid "Install & setup"
+msgstr ""
+
+#: functions-settings.php:674 functions-settings.php:974
+msgid "Limit link text"
+msgstr ""
+
+#: functions-settings.php:675 functions-settings.php:975
+msgid "Customize home text"
+msgstr ""
+
+#: functions-settings.php:676 functions-settings.php:976
+msgid "Install pro and setup"
+msgstr ""
+
+#: functions-settings.php:677 functions-settings.php:775
+#: functions-settings.php:977
+msgid "Hide on archives"
+msgstr ""
+
+#: functions-settings.php:678 functions-settings.php:780
+#: functions-settings.php:978
+msgid "Hide by post types"
+msgstr ""
+
+#: functions-settings.php:679 functions-settings.php:787
+#: functions-settings.php:979
+msgid "Hide by post ids"
+msgstr ""
+
+#: functions-settings.php:680 functions-settings.php:980
+msgid "Change style"
+msgstr ""
+
+#: functions-settings.php:681 functions-settings.php:981
+msgid "Build your own breadcrumb"
+msgstr ""
+
+#: functions-settings.php:682 functions-settings.php:982
+msgid "Customize breadcrumb items"
+msgstr ""
+
+#: functions-settings.php:695
+msgid "Ask question"
+msgstr ""
+
+#: functions-settings.php:708
+msgid ""
+"We wish your 2 minutes to write your feedback about plugin. give us 5 star."
+msgstr ""
+
+#: functions-settings.php:710
+msgid "Write a review"
+msgstr ""
+
+#: functions-settings.php:720 functions-settings.php:986
+msgid "Submit reviews"
+msgstr ""
+
+#: functions-settings.php:752
+msgid "Get Premium"
+msgstr ""
+
+#: functions-settings.php:753
+msgid ""
+"Thanks for using our plugin, if you looking for some advance feature please "
+"buy premium version."
+msgstr ""
+
+#: functions-settings.php:761
+msgid ""
+"If you love our plugin and want more feature please consider to buy pro "
+"version."
+msgstr ""
+
+#: functions-settings.php:762 functions-settings.php:873
+msgid "Buy premium"
+msgstr ""
+
+#: functions-settings.php:764
+msgid "See the differences"
+msgstr ""
+
+#: functions-settings.php:769 functions-settings.php:866
+msgid "Features"
+msgstr ""
+
+#: functions-settings.php:770 functions-settings.php:867
+msgid "Free"
+msgstr ""
+
+#: functions-settings.php:771 functions-settings.php:868
+msgid "Premium"
+msgstr ""
+
+#: functions-settings.php:793
+msgid "Extra ready 10 themes"
+msgstr ""
+
+#: functions-settings.php:812
+msgid "Display or hide last separator"
+msgstr ""
+
+#: functions-settings.php:818
+msgid "Breadcrumb link text limit"
+msgstr ""
+
+#: functions-settings.php:830
+msgid "Display \"Home\" on breadcrumb"
+msgstr ""
+
+#: functions-settings.php:844
+msgid "Breadcrumb text font size"
+msgstr ""
+
+#: functions-settings.php:871
+msgid "Buy now"
+msgstr ""
+
+#: functions-settings.php:887
+msgid "Get pro version"
+msgstr ""
+
+#: functions-settings.php:962
+msgid "Help & Support"
+msgstr ""
+
+#: functions-settings.php:988
+msgid "We wish your 2 minutes to write your feedback about plugin. give us"
+msgstr ""
+
+#: functions.php:7 functions.php:18 functions.php:27 functions.php:36
+#: functions.php:281
+msgid "Front text"
+msgstr ""
+
+#: functions.php:9 functions.php:20 functions.php:29 functions.php:38
+#: functions.php:365
+msgid "Post title"
+msgstr ""
+
+#: functions.php:10 functions.php:21 functions.php:30 functions.php:39
+#: functions.php:407
+msgid "Post author"
+msgstr ""
+
+#: functions.php:11 functions.php:449
+msgid "Post category"
+msgstr ""
+
+#: functions.php:12 functions.php:241
+msgid "Post tag"
+msgstr ""
+
+#: functions.php:13 functions.php:22 functions.php:31 functions.php:42
+#: functions.php:200
+msgid "Post date"
+msgstr ""
+
+#: functions.php:14 functions.php:23 functions.php:32 functions.php:43
+#: functions.php:160
+msgid "Post month"
+msgstr ""
+
+#: functions.php:15 functions.php:24 functions.php:33 functions.php:44
+#: functions.php:118
+msgid "Post year"
+msgstr ""
+
+#: functions.php:16 functions.php:25 functions.php:34 functions.php:45
+#: functions.php:76
+msgid "Post ID"
+msgstr ""
+
+#: functions.php:40 functions.php:493
+msgid "Product category"
+msgstr ""
+
+#: functions.php:41 functions.php:536
+msgid "Product tag"
+msgstr ""
+
+#: functions.php:46 functions.php:580
+msgid "Shop"
+msgstr ""
+
+#: functions.php:86 functions.php:128 functions.php:170 functions.php:210
+#: functions.php:251 functions.php:291 functions.php:334 functions.php:375
+#: functions.php:417 functions.php:459 functions.php:503 functions.php:546
+#: functions.php:590
+msgid "Prefix text"
+msgstr ""
+
+#: functions.php:87 functions.php:129 functions.php:171 functions.php:211
+#: functions.php:252 functions.php:292 functions.php:335 functions.php:376
+#: functions.php:418 functions.php:460 functions.php:504 functions.php:547
+#: functions.php:591
+msgid "Add prefix text."
+msgstr ""
+
+#: functions.php:662
+msgid "Blog"
+msgstr ""
+
+#: functions.php:739
+msgid "Post preview"
+msgstr ""
+
+#: functions.php:823
+msgid "Archives"
+msgstr ""
+
+#: functions.php:1130
+msgid "Tag"
+msgstr ""
+
+#: functions.php:1153
+msgid "Author"
+msgstr ""
+
+#: functions.php:1176
+msgid "Search"
+msgstr ""
+
+#: functions.php:1195
+msgid "Year"
+msgstr ""
+
+#: functions.php:1212
+msgid "Month"
+msgstr ""
+
+#: functions.php:1232
+msgid "Date"
+msgstr ""
+
+#: functions.php:1250
+msgid "404"
+msgstr ""
+
+#: menu/settings.php:14
+#, php-format
+msgid "%s Options"
+msgstr ""
+
+#: menu/settings.php:21
+#, php-format
+msgid "%s Builder"
+msgstr ""
+
+#: menu/settings.php:29
+#, php-format
+msgid "%s Style"
+msgstr ""
+
+#: menu/settings.php:36
+#, php-format
+msgid "%s Custom Scripts"
+msgstr ""
+
+#: menu/settings.php:43
+#, php-format
+msgid "%s Help & Support"
+msgstr ""
+
+#: menu/settings.php:52
+#, php-format
+msgid "%s Buy Pro"
+msgstr ""
+
+#: menu/settings.php:86
+#, php-format
+msgid "%s Settings"
+msgstr ""
+
+#: menu/settings.php:102
+msgid "Changes Saved."
+msgstr ""
+
+#: menu/settings.php:109
+msgid "Loading..."
+msgstr ""
+
+#: menu/settings.php:167
+msgid "Save Changes"
+msgstr ""

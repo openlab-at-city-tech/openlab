@@ -32,7 +32,7 @@ class Accounts
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function has_accounts()
     {
@@ -48,7 +48,7 @@ class Accounts
     }
 
     /**
-     * @return null|\TheLion\OutoftheBox\Account[]
+     * @return null|\TheLion\OutoftheBox\Account
      */
     public function get_primary_account()
     {
@@ -62,7 +62,7 @@ class Accounts
     /**
      * @param string $id
      *
-     * @return \TheLion\OutoftheBox\Account|null
+     * @return null|\TheLion\OutoftheBox\Account
      */
     public function get_account_by_id($id)
     {
@@ -77,7 +77,7 @@ class Accounts
      * @param string $id
      * @param mixed  $email
      *
-     * @return \TheLion\OutoftheBox\Account|null
+     * @return null|\TheLion\OutoftheBox\Account
      */
     public function get_account_by_email($email)
     {

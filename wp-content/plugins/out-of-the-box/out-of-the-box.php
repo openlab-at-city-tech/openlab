@@ -6,27 +6,27 @@ namespace TheLion\OutoftheBox;
   Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
   Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
   Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
-  Version: 1.16.10
+  Version: 1.17.12
   Author: WP Cloud Plugins
   Author URI: https://www.wpcloudplugins.com
-  Text Domain: outofthebox
+  Text Domain: wpcloudplugins
+  Domain Path: /languages
  */
 
 // SYSTEM SETTINGS
-define('OUTOFTHEBOX_VERSION', '1.16.10');
+define('OUTOFTHEBOX_VERSION', '1.17.12');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
 
-if ( ! defined( 'OUTOFTHEBOX_CACHEDIR' ) ) {
-	define('OUTOFTHEBOX_CACHEDIR', WP_CONTENT_DIR.'/out-of-the-box-cache/');
-}
-if ( ! defined( 'OUTOFTHEBOX_CACHEURL' ) ) {
-	define('OUTOFTHEBOX_CACHEURL', WP_CONTENT_URL.'/out-of-the-box-cache/');
-}
-
-
 define('OUTOFTHEBOX_SLUG', dirname(plugin_basename(__FILE__)).'/out-of-the-box.php');
 define('OUTOFTHEBOX_ADMIN_URL', admin_url('admin-ajax.php'));
+
+if (!defined('OUTOFTHEBOX_CACHE_SITE_FOLDERS')) {
+    define('OUTOFTHEBOX_CACHE_SITE_FOLDERS', false);
+}
+
+define('OUTOFTHEBOX_CACHEDIR', WP_CONTENT_DIR.'/out-of-the-box-cache/'.(OUTOFTHEBOX_CACHE_SITE_FOLDERS ? get_current_blog_id().'/' : ''));
+define('OUTOFTHEBOX_CACHEURL', content_url().'/out-of-the-box-cache/'.(OUTOFTHEBOX_CACHE_SITE_FOLDERS ? get_current_blog_id().'/' : ''));
 
 require_once 'includes/Autoload.php';
 
@@ -58,8 +58,6 @@ class Main
             return false;
         }
 
-        add_action('wp_head', [&$this, 'load_IE_styles']);
-
         $priority = add_filter('out-of-the-box_enqueue_priority', 10);
         add_action('wp_enqueue_scripts', [&$this, 'load_scripts'], $priority);
         add_action('wp_enqueue_scripts', [&$this, 'load_styles']);
@@ -70,9 +68,7 @@ class Main
         add_action('admin_head', [&$this, 'load_shortcode_buttons']);
         add_filter('mce_css', [&$this, 'enqueue_tinymce_css_frontend']);
 
-        add_action('plugins_loaded', [&$this, 'load_gravity_forms_addon'], 100);
-        add_action('plugins_loaded', [&$this, 'load_contact_form_addon'], 100);
-        add_filter('woocommerce_integrations', [&$this, 'load_woocommerce_addon'], 10);
+        add_action('plugins_loaded', [&$this, 'load_integrations'], 9);
 
         // Hook to send notification emails when authorization is lost
         add_action('outofthebox_lost_authorisation_notification', [&$this, 'send_lost_authorisation_notification'], 10, 1);
@@ -110,8 +106,11 @@ class Main
         add_action('wp_ajax_nopriv_outofthebox-move-entries', [&$this, 'start_process']);
         add_action('wp_ajax_outofthebox-move-entries', [&$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-add-folder', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-add-folder', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-copy-entry', [&$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-copy-entry', [&$this, 'start_process']);
+
+        add_action('wp_ajax_nopriv_outofthebox-create-entry', [&$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-create-entry', [&$this, 'start_process']);
 
         add_action('wp_ajax_nopriv_outofthebox-get-playlist', [&$this, 'start_process']);
         add_action('wp_ajax_outofthebox-get-playlist', [&$this, 'start_process']);
@@ -139,8 +138,10 @@ class Main
 
         add_action('wp_ajax_nopriv_outofthebox-preview', [&$this, 'start_process']);
         add_action('wp_ajax_outofthebox-preview', [&$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-previewshortcode', [&$this, 'preview_shortcode']);
 
         add_action('wp_ajax_outofthebox-reset-cache', [&$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-factory-reset', [&$this, 'start_process']);
         add_action('wp_ajax_outofthebox-reset-statistics', [&$this, 'start_process']);
         add_action('wp_ajax_outofthebox-revoke', [&$this, 'start_process']);
 
@@ -163,13 +164,14 @@ class Main
     public function init()
     {
         // Localize
+
         $i18n_dir = dirname(plugin_basename(__FILE__)).'/languages/';
-        load_plugin_textdomain('outofthebox', false, $i18n_dir);
+        load_plugin_textdomain('wpcloudplugins', false, $i18n_dir);
     }
 
     public function can_run_plugin()
     {
-        if ((version_compare(PHP_VERSION, '5.5.0') < 0) || (!function_exists('curl_reset'))) {
+        if ((version_compare(PHP_VERSION, '5.5.0') < 0) || (!function_exists('curl_reset')) || (!extension_loaded('mbstring'))) {
             return false;
         }
 
@@ -242,7 +244,7 @@ class Main
             'request_cache_max_age' => '',
             'always_load_scripts' => 'No',
             'nonce_validation' => 'Yes',
-            'shortlinks' => 'Dropbox',
+            'shortlinks' => 'None',
             'bitly_login' => '',
             'bitly_apikey' => '',
             'shortest_apikey' => '',
@@ -251,12 +253,14 @@ class Main
             'log_events' => 'Yes',
             'icon_set' => '',
             'use_team_folders' => 'Yes',
+            'use_app_folder' => 'No',
             'recaptcha_sitekey' => '',
             'recaptcha_secret' => '',
             'fontawesomev4_shim' => 'No',
             'event_summary' => 'No',
             'event_summary_period' => 'daily',
             'event_summary_recipients' => get_site_option('admin_email'),
+            'uninstall_reset' => 'Yes',
         ]);
 
         if (false === $this->settings) {
@@ -414,7 +418,7 @@ class Main
             $this->settings['colors'] = [
                 'style' => 'light',
                 'background' => '#f2f2f2',
-                'accent' => '#29ADE2',
+                'accent' => '#522058',
                 'black' => '#222',
                 'dark1' => '#666',
                 'dark2' => '#999',
@@ -540,7 +544,22 @@ class Main
         if (empty($this->settings['userfolder_noaccess'])) {
             $this->settings['userfolder_noaccess'] = __("<h2>No Access</h2>
 
-<p>Your account isn't (yet) configured to access this content. Please contact the administrator of the site if you would like to have access. The administrator can link your account to the right content.</p>", 'outofthebox');
+<p>Your account isn't (yet) configured to access this content. Please contact the administrator of the site if you would like to have access. The administrator can link your account to the right content.</p>", 'wpcloudplugins');
+            $updated = true;
+        }
+
+        if (!isset($this->settings['uninstall_reset'])) {
+            $this->settings['uninstall_reset'] = 'Yes';
+            $updated = true;
+        }
+
+        if (empty($this->settings['use_app_folder'])) {
+            $this->settings['use_app_folder'] = 'No';
+            $updated = true;
+        }
+
+        if ('Dropbox' === $this->settings['shortlinks']) {
+            $this->settings['shortlinks'] = 'None';
             $updated = true;
         }
 
@@ -550,12 +569,12 @@ class Main
 
         $version = get_option('out_of_the_box_version');
 
-        if (false !== $version) {
-            if (version_compare($version, '1.13') < 0) {
-                // Install Event Database
-                $this->get_events()->install_database();
-            }
+        if (version_compare($version, '1.13') < 0) {
+            // Install Event Database
+            $this->get_events()->install_database();
+        }
 
+        if (false !== $version) {
             if (version_compare($version, '1.13.11') < 0) {
                 // Remove old DB lists
                 delete_option('out_of_the_box_lists');
@@ -596,10 +615,9 @@ class Main
         if ($file == $plugin && !is_network_admin()) {
             return array_merge(
                 $links,
-                [sprintf('<a href="https://www.wpcloudplugins.com/updates" target="_blank">%s</a>', __('Download latest package', 'outofthebox'))],
-                [sprintf('<a href="options-general.php?page=%s">%s</a>', 'OutoftheBox_settings', __('Settings', 'outofthebox'))],
-                [sprintf('<a href="'.plugins_url('_documentation/index.html', __FILE__).'" target="_blank">%s</a>', __('Documentation', 'outofthebox'))],
-                [sprintf('<a href="https://florisdeleeuwnl.zendesk.com/hc/en-us" target="_blank">%s</a>', __('Support', 'outofthebox'))]
+                [sprintf('<a href="options-general.php?page=%s">%s</a>', 'OutoftheBox_settings', __('Settings', 'wpcloudplugins'))],
+                [sprintf('<a href="'.plugins_url('_documentation/index.html', __FILE__).'" target="_blank">%s</a>', __('Docs', 'wpcloudplugins'))],
+                [sprintf('<a href="https://florisdeleeuwnl.zendesk.com/hc/en-us" target="_blank">%s</a>', __('Support', 'wpcloudplugins'))]
             );
         }
 
@@ -619,17 +637,21 @@ class Main
             wp_register_script('google-recaptcha', $url, [], '3.0', true);
         }
 
-        wp_register_script('WPCloudPlugins.Polyfill', 'https://cdn.polyfill.io/v3/polyfill.min.js?features=es6,html5-elements,NodeList.prototype.forEach,Element.prototype.classList,CustomEvent,Object.entries,Object.assign,document.querySelector&flags=gated');
+        wp_register_script('WPCloudPlugins.Polyfill', 'https://cdn.polyfill.io/v3/polyfill.min.js?features=es6,html5-elements,NodeList.prototype.forEach,Element.prototype.classList,CustomEvent,Object.entries,Object.assign,document.querySelector,URL&flags=gated');
 
         // load in footer
-        wp_register_script('jQuery.iframe-transport', plugins_url('includes/jquery-file-upload/js/jquery.iframe-transport.js', __FILE__), ['jquery'], false, true);
-        wp_register_script('jQuery.fileupload-oftb', plugins_url('includes/jquery-file-upload/js/jquery.fileupload.js', __FILE__), ['jquery'], false, true);
-        wp_register_script('jQuery.fileupload-process', plugins_url('includes/jquery-file-upload/js/jquery.fileupload-process.js', __FILE__), ['jquery'], false, true);
 
-        wp_register_script('WPCloudplugin.Libraries', plugins_url('includes/js/library.js', __FILE__), ['WPCloudPlugins.Polyfill', 'jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('jQuery.iframe-transport', plugins_url('includes/jquery-file-upload/js/jquery.iframe-transport.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('jQuery.fileupload-oftb', plugins_url('includes/jquery-file-upload/js/jquery.fileupload.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('jQuery.fileupload-process', plugins_url('includes/jquery-file-upload/js/jquery.fileupload-process.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('OutoftheBox.UploadBox', plugins_url('includes/js/UploadBox.min.js', __FILE__), ['jQuery.iframe-transport', 'jQuery.fileupload-oftb', 'jQuery.fileupload-process', 'jquery', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
+
+        wp_register_script('WPCloudplugin.Libraries', plugins_url('includes/js/Library.js', __FILE__), ['WPCloudPlugins.Polyfill', 'jquery'], OUTOFTHEBOX_VERSION, true);
         wp_register_script('OutoftheBox', plugins_url('includes/js/Main.min.js', __FILE__), ['jquery', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
 
-        wp_register_script('OutoftheBox.tinymce', plugins_url('includes/js/Tinymce_popup.js', __FILE__), ['jquery-ui-accordion', 'jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.DocumentEmbedder', plugins_url('includes/js/DocumentEmbedder.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.DocumentLinker', plugins_url('includes/js/DocumentLinker.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.ShortcodeBuilder', plugins_url('includes/js/ShortcodeBuilder.js', __FILE__), ['jquery-ui-accordion', 'jquery'], OUTOFTHEBOX_VERSION, true);
 
         // Scripts for the Event Dashboard
         wp_register_script('OutoftheBox.Datatables', plugins_url('includes/datatables/datatables.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
@@ -645,7 +667,7 @@ class Main
             'cookie_path' => COOKIEPATH,
             'cookie_domain' => COOKIE_DOMAIN,
             'is_mobile' => wp_is_mobile(),
-            'recaptcha' => $this->settings['recaptcha_sitekey'],
+            'recaptcha' => is_admin() ? '' : $this->settings['recaptcha_sitekey'],
             'content_skin' => $this->settings['colors']['style'],
             'icons_set' => $this->settings['icon_set'],
             'lightbox_skin' => $this->settings['lightbox_skin'],
@@ -661,62 +683,74 @@ class Main
             'upload_nonce' => wp_create_nonce('outofthebox-upload-file'),
             'delete_nonce' => wp_create_nonce('outofthebox-delete-entries'),
             'rename_nonce' => wp_create_nonce('outofthebox-rename-entry'),
+            'copy_nonce' => wp_create_nonce('outofthebox-copy-entry'),
             'move_nonce' => wp_create_nonce('outofthebox-move-entries'),
             'log_nonce' => wp_create_nonce('outofthebox-log'),
-            'addfolder_nonce' => wp_create_nonce('outofthebox-add-folder'),
+            'createentry_nonce' => wp_create_nonce('outofthebox-create-entry'),
             'getplaylist_nonce' => wp_create_nonce('outofthebox-get-playlist'),
             'createzip_nonce' => wp_create_nonce('outofthebox-create-zip'),
             'createlink_nonce' => wp_create_nonce('outofthebox-create-link'),
             'recaptcha_nonce' => wp_create_nonce('outofthebox-check-recaptcha'),
-            'str_loading' => __('Hang on. Waiting for the files...', 'outofthebox'),
-            'str_processing' => __('Processing...', 'outofthebox'),
-            'str_success' => __('Success', 'outofthebox'),
-            'str_error' => __('Error', 'outofthebox'),
-            'str_inqueue' => __('Waiting', 'outofthebox'),
-            'str_uploading_no_limit' => __('Unlimited', 'outofthebox'),
-            'str_uploading_local' => __('Uploading to Server', 'outofthebox'),
-            'str_uploading_cloud' => __('Uploading to Cloud', 'outofthebox'),
-            'str_error_title' => __('Error', 'outofthebox'),
-            'str_close_title' => __('Close', 'outofthebox'),
-            'str_start_title' => __('Start', 'outofthebox'),
-            'str_cancel_title' => __('Cancel', 'outofthebox'),
-            'str_delete_title' => __('Delete', 'outofthebox'),
-            'str_move_title' => __('Move', 'outofthebox'),
-            'str_copy_title' => __('Copy', 'outofthebox'),
-            'str_zip_title' => __('Create zip file', 'outofthebox'),
-            'str_account_title' => __('Select account', 'outofthebox'),
-            'str_copy_to_clipboard_title' => __('Copy to clipboard', 'outofthebox'),
-            'str_delete' => __('Do you really want to delete:', 'outofthebox'),
-            'str_delete_multiple' => __('Do you really want to delete these files?', 'outofthebox'),
-            'str_rename_failed' => __("That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the filename?", 'outofthebox'),
-            'str_rename_title' => __('Rename', 'outofthebox'),
-            'str_rename' => __('Rename to:', 'outofthebox'),
-            'str_no_filelist' => __("Can't receive filelist", 'outofthebox'),
-            'str_addfolder_title' => __('Add folder', 'outofthebox'),
-            'str_addfolder' => __('New folder', 'outofthebox'),
-            'str_zip_nofiles' => __('No files found or selected', 'outofthebox'),
-            'str_zip_createzip' => __('Creating zip file', 'outofthebox'),
-            'str_share_link' => __('Share file', 'outofthebox'),
-            'str_create_shared_link' => __('Creating shared link...', 'outofthebox'),
-            'str_previous_title' => __('Previous', 'outofthebox'),
-            'str_next_title' => __('Next', 'outofthebox'),
-            'str_xhrError_title' => __('This content failed to load', 'outofthebox'),
-            'str_imgError_title' => __('This image failed to load', 'outofthebox'),
-            'str_startslideshow' => __('Start slideshow', 'outofthebox'),
-            'str_stopslideshow' => __('Stop slideshow', 'outofthebox'),
-            'str_nolink' => __('Not yet linked to a folder', 'outofthebox'),
-            'maxNumberOfFiles' => __('Maximum number of files exceeded', 'outofthebox'),
-            'acceptFileTypes' => __('File type not allowed', 'outofthebox'),
-            'maxFileSize' => __('File is too large', 'outofthebox'),
-            'minFileSize' => __('File is too small', 'outofthebox'),
-            'str_iframe_loggedin' => "<div class='empty_iframe'><h1>".__('Still Waiting?', 'outofthebox').'</h1><span>'.__("If the document doesn't open, you are probably trying to access a protected file which requires you to be logged in on Dropbox.", 'outofthebox')." <strong><a href='#' target='_blank' class='empty_iframe_link'>".__('Try to open the file in a new window.', 'outofthebox').'</a></strong></span></div>',
+            'str_loading' => __('Hang on. Waiting for the files...', 'wpcloudplugins'),
+            'str_processing' => __('Processing...', 'wpcloudplugins'),
+            'str_success' => __('Success', 'wpcloudplugins'),
+            'str_error' => __('Error', 'wpcloudplugins'),
+            'str_inqueue' => __('Waiting', 'wpcloudplugins'),
+            'str_uploading_start' => __('Start upload', 'wpcloudplugins'),
+            'str_uploading_no_limit' => __('Unlimited', 'wpcloudplugins'),
+            'str_uploading' => __('Uploading...', 'wpcloudplugins'),
+            'str_uploading_failed' => __('File not uploaded successfully', 'wpcloudplugins'),
+            'str_uploading_failed_msg' => __('The following file(s) are not uploaded succesfully:', 'wpcloudplugins'),
+            'str_uploading_failed_in_form' => __('The form cannot be submitted. Please remove all files that are not successfully attached.', 'wpcloudplugins'),
+            'str_uploading_cancelled' => __('Upload is cancelled', 'wpcloudplugins'),
+            'str_uploading_convert' => __('Converting', 'wpcloudplugins'),
+            'str_uploading_convert_failed' => __('Converting failed', 'wpcloudplugins'),
+            'str_uploading_required_data' => __('Please first fill the required fields', 'wpcloudplugins'),
+            'str_error_title' => __('Error', 'wpcloudplugins'),
+            'str_close_title' => __('Close', 'wpcloudplugins'),
+            'str_start_title' => __('Start', 'wpcloudplugins'),
+            'str_cancel_title' => __('Cancel', 'wpcloudplugins'),
+            'str_delete_title' => __('Delete', 'wpcloudplugins'),
+            'str_move_title' => __('Move', 'wpcloudplugins'),
+            'str_copy_title' => __('Copy', 'wpcloudplugins'),
+            'str_copy' => __('Name of the copy:', 'wpcloudplugins'),
+            'str_zip_title' => __('Create zip file', 'wpcloudplugins'),
+            'str_account_title' => __('Select account', 'wpcloudplugins'),
+            'str_copy_to_clipboard_title' => __('Copy to clipboard', 'wpcloudplugins'),
+            'str_delete' => __('Do you really want to delete:', 'wpcloudplugins'),
+            'str_delete_multiple' => __('Do you really want to delete these files?', 'wpcloudplugins'),
+            'str_rename_failed' => __("That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the filename?", 'wpcloudplugins'),
+            'str_rename_title' => __('Rename', 'wpcloudplugins'),
+            'str_rename' => __('Rename to:', 'wpcloudplugins'),
+            'str_no_filelist' => __("Can't receive filelist", 'wpcloudplugins'),
+            'str_addnew_title' => __('Create', 'wpcloudplugins'),
+            'str_addnew_name' => __('Enter name', 'wpcloudplugins'),
+            'str_addnew' => __('Add to folder', 'wpcloudplugins'),
+            'str_zip_nofiles' => __('No files found or selected', 'wpcloudplugins'),
+            'str_zip_createzip' => __('Creating zip file', 'wpcloudplugins'),
+            'str_share_link' => __('Share file', 'wpcloudplugins'),
+            'str_create_shared_link' => __('Creating shared link...', 'wpcloudplugins'),
+            'str_previous_title' => __('Previous', 'wpcloudplugins'),
+            'str_next_title' => __('Next', 'wpcloudplugins'),
+            'str_xhrError_title' => __('This content failed to load', 'wpcloudplugins'),
+            'str_imgError_title' => __('This image failed to load', 'wpcloudplugins'),
+            'str_startslideshow' => __('Start slideshow', 'wpcloudplugins'),
+            'str_stopslideshow' => __('Stop slideshow', 'wpcloudplugins'),
+            'str_nolink' => __('Not yet linked to a folder', 'wpcloudplugins'),
+            'str_files_limit' => __('Maximum number of files exceeded', 'wpcloudplugins'),
+            'str_filetype_not_allowed' => __('File type not allowed', 'wpcloudplugins'),
+            'str_item' => __('Item', 'wpcloudplugins'),
+            'str_items' => __('Items', 'wpcloudplugins'),
+            'str_max_file_size' => __('File is too large', 'wpcloudplugins'),
+            'str_min_file_size' => __('File is too small', 'wpcloudplugins'),
+            'str_iframe_loggedin' => "<div class='empty_iframe'><h1>".__('Still Waiting?', 'wpcloudplugins').'</h1><span>'.__("If the document doesn't open, you are probably trying to access a protected file which requires a login.", 'wpcloudplugins')." <strong><a href='#' target='_blank' class='empty_iframe_link'>".__('Try to open the file in a new window.', 'wpcloudplugins').'</a></strong></span></div>',
         ];
 
         $localize_dashboard = [
             'ajax_url' => OUTOFTHEBOX_ADMIN_URL,
             'admin_nonce' => wp_create_nonce('outofthebox-admin-action'),
-            'str_close_title' => __('Close', 'outofthebox'),
-            'str_details_title' => __('Details', 'outofthebox'),
+            'str_close_title' => __('Close', 'wpcloudplugins'),
+            'str_details_title' => __('Details', 'wpcloudplugins'),
             'content_skin' => $this->settings['colors']['style'],
         ];
 
@@ -741,6 +775,7 @@ class Main
             wp_enqueue_script('jquery-effects-fade');
             wp_enqueue_script('jquery-ui-droppable');
             wp_enqueue_script('jquery-ui-draggable');
+            wp_enqueue_script('OutoftheBox.UploadBox');
             wp_enqueue_script('OutoftheBox');
         }
     }
@@ -752,13 +787,12 @@ class Main
         $skin = $this->settings['lightbox_skin'];
         wp_register_style('ilightbox', plugins_url('includes/iLightBox/css/ilightbox.css', __FILE__), false);
         wp_register_style('ilightbox-skin-outofthebox', plugins_url('includes/iLightBox/'.$skin.'-skin/skin.css', __FILE__), false);
-        wp_register_style('qtip', plugins_url('includes/jquery-qTip/jquery.qtip.min.css', __FILE__), null, false);
 
         wp_register_style('Awesome-Font-5-css', plugins_url('includes/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
         wp_register_style('Awesome-Font-4-shim-css', plugins_url('includes/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
 
-        wp_register_style('OutoftheBox', plugins_url("css/main{$is_rtl_css}.css", __FILE__), [], OUTOFTHEBOX_VERSION);
-        wp_register_style('OutoftheBox.tinymce', plugins_url("css/tinymce{$is_rtl_css}.css", __FILE__), null, OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), [], OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox.ShortcodeBuilder', plugins_url("css/tinymce.min{$is_rtl_css}.css", __FILE__), null, OUTOFTHEBOX_VERSION);
 
         // Scripts for the Event Dashboard
         wp_register_style('OutoftheBox.Datatables.css', plugins_url('includes/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
@@ -766,7 +800,6 @@ class Main
         if ('Yes' === $this->settings['always_load_scripts']) {
             wp_enqueue_style('ilightbox');
             wp_enqueue_style('ilightbox-skin-outofthebox');
-            wp_enqueue_style('qtip');
 
             if (false === defined('WPCP_DISABLE_FONTAWESOME')) {
                 wp_enqueue_style('Awesome-Font-5-css');
@@ -782,45 +815,11 @@ class Main
         }
     }
 
-    public function load_IE_styles()
+    public function load_integrations()
     {
-        echo "<!--[if IE]>\n";
-        echo "<link rel='stylesheet' type='text/css' href='".plugins_url('css/skin-ie.css', __FILE__)."' />\n";
-        echo "<![endif]-->\n";
-    }
+        require_once 'includes/integrations/load.php';
 
-    public function load_gravity_forms_addon()
-    {
-        if (!class_exists('GFForms') || false === version_compare(\GFCommon::$version, '1.9', '>=')) {
-            return;
-        }
-
-        require_once 'includes/GravityForms.php';
-    }
-
-    public function load_contact_form_addon()
-    {
-        if (!defined('WPCF7_PLUGIN')) {
-            return;
-        }
-
-        if (!defined('WPCF7_VERSION') || false === version_compare(WPCF7_VERSION, '5.0', '>=')) {
-            return;
-        }
-
-        require_once 'includes/ContactForm7.php';
-        $CF7OutoftheBoxAddOn = new ContactFormAddon($this);
-    }
-
-    public function load_woocommerce_addon($integrations)
-    {
-        global $woocommerce;
-
-        if (is_object($woocommerce) && version_compare($woocommerce->version, '3.0', '>=')) {
-            $integrations[] = __NAMESPACE__.'\WooCommerce';
-        }
-
-        return $integrations;
+        new \TheLion\OutoftheBox\Integrations\Integrations($this);
     }
 
     public function start_process()
@@ -838,14 +837,16 @@ class Main
             case 'outofthebox-create-link':
             case 'outofthebox-embedded':
             case 'outofthebox-reset-cache':
+            case 'outofthebox-factory-reset':
             case 'outofthebox-reset-statistics':
             case 'outofthebox-revoke':
             case 'outofthebox-get-gallery':
             case 'outofthebox-upload-file':
             case 'outofthebox-delete-entries':
             case 'outofthebox-rename-entry':
+            case 'outofthebox-copy-entry':
             case 'outofthebox-move-entries':
-            case 'outofthebox-add-folder':
+            case 'outofthebox-create-entry':
             case 'outofthebox-get-playlist':
                 require_once ABSPATH.'wp-includes/pluggable.php';
                 $this->get_processor()->start_process();
@@ -898,7 +899,13 @@ class Main
             $css .= '#OutoftheBox .no_results{  background-image: url('.$this->settings['loaders']['no_results'].');}'."\n";
         }
 
-        $css .= 'iframe[src*="outofthebox"] {background: url('.OUTOFTHEBOX_ROOTPATH.'/css/images/iframeloader.gif);background-repeat: no-repeat;background-position: center center;}'."\n";
+        $css .= "
+            iframe[src*='outofthebox'] {
+                background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 512 512'%3E%3Cdefs/%3E%3Cdefs%3E%3ClinearGradient id='a' x1='48' x2='467.2' y1='259.7' y2='259.7' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%236d276b'/%3E%3Cstop offset='.3' stop-color='%236b2669'/%3E%3Cstop offset='.5' stop-color='%23632464'/%3E%3Cstop offset='.7' stop-color='%2355215a'/%3E%3Cstop offset='.7' stop-color='%23522058'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='365.3' x2='39.3' y1='41.5' y2='367.5' xlink:href='%23a'/%3E%3C/defs%3E%3Cg style='isolation:isolate'%3E%3Cpath fill='url(%23a)' d='M272 26a28 28 0 00-29 0L62 131a28 28 0 00-14 24v209a28 28 0 0014 25l181 105a28 28 0 0029 0l181-105a28 28 0 0014-25V155'/%3E%3Cpath fill='url(%23b)' d='M467 155a28 28 0 00-14-24L272 26a28 28 0 00-29 0L62 131a28 28 0 00-14 24v209a28 28 0 0014 25z'/%3E%3Cpath fill='%23fff' d='M115 230s5-36 40-55 59-5 59-5 19-18 35-22c0 0 10-5 10 4v19a6 6 0 01-3 6 66 66 0 00-30 26s-4 5-9 2c0 0-32-25-62 7 0 0-11 11-10 32 0 0 2 9-5 10s-34 8-33 40c0 0 3 33 39 33h81v-43h-25s-9 1-7-7a10 10 0 011-3l53-65s4-4 8-2a7 7 0 012 6v138s1 6-5 6h-96s-56 5-77-42c0 0-23-51 34-85zM270 150s-1-7 9-8c0 0 71-3 100 67 0 0 56 15 56 74 0 0 2 74-73 74h-83s-9 2-9-7v-16s-1-6 7-7h81s45 2 47-43c0 0 3-41-43-48 0 0-10 1-10-8s-14-40-50-53v60h26s9 0 7 9l-54 66s-9 9-11-3z'/%3E%3C/g%3E%3C/svg%3E\");
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: 128px;
+            }\n";
 
         $css .= $this->get_color_css();
 
@@ -927,11 +934,11 @@ class Main
     public function create_template($atts = [])
     {
         if (is_feed()) {
-            return __('Please browse to the page to see this content', 'outofthebox').'.';
+            return __('Please browse to the page to see this content', 'wpcloudplugins').'.';
         }
 
         if (false === $this->can_run_plugin()) {
-            return '<i>>>> '.__('ERROR: Contact the Administrator to see this content', 'outofthebox').' <<<</i>';
+            return '<i>>>> '.__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
         }
 
         return $this->get_processor()->create_from_shortcode($atts);
@@ -959,7 +966,30 @@ class Main
 
     public function get_popup()
     {
-        include OUTOFTHEBOX_ROOTDIR.'/templates/tinymce_popup.php';
+        switch ($_REQUEST['type']) {
+            case 'shortcodebuilder':
+                include OUTOFTHEBOX_ROOTDIR.'/templates/admin/shortcode_builder.php';
+
+                break;
+            case 'links':
+                include OUTOFTHEBOX_ROOTDIR.'/templates/admin/documents_linker.php';
+
+                break;
+            case 'embedded':
+                include OUTOFTHEBOX_ROOTDIR.'/templates/admin/documents_embedder.php';
+
+                break;
+        }
+
+        die();
+    }
+
+    public function preview_shortcode()
+    {
+        check_ajax_referer('wpcp-outofthebox-block');
+
+        include OUTOFTHEBOX_ROOTDIR.'/templates/admin/shortcode_previewer.php';
+
         die();
     }
 
@@ -967,7 +997,16 @@ class Main
     {
         $account = $this->get_accounts()->get_account_by_id($account_id);
 
-        $subject = get_bloginfo().' | '.__('ACTION REQUIRED: WP Cloud Plugin lost authorization to Dropbox account', 'outofthebox').':'.(!empty($account) ? $account->get_email() : '');
+        // If account isn't longer present in the account list, remove it from the CRON job
+        if (empty($account)) {
+            if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
+                wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account_id]);
+            }
+
+            return false;
+        }
+
+        $subject = get_bloginfo().' | '.sprintf(__('ACTION REQUIRED: WP Cloud Plugin lost authorization to %s account', 'wpcloudplugins'), 'Dropbox').':'.(!empty($account) ? $account->get_email() : '');
         $colors = $this->get_processor()->get_setting('colors');
 
         $template = apply_filters('outofthebox_set_lost_authorization_template', OUTOFTHEBOX_ROOTDIR.'/templates/notifications/lost_authorization.php', $this);
@@ -985,16 +1024,7 @@ class Main
                 $result = wp_mail($recipient, $subject, $htmlmessage, $headers);
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.__('Could not send email').': '.$ex->getMessage());
-        }
-
-        // If account isn't longer present in the account list, remove it from the CRON job
-        if (empty($account)) {
-            if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
-                wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account_id]);
-            }
-
-            return false;
+            error_log('[WP Cloud Plugin message]: '.__('Could not send email').': '.$ex->getMessage());
         }
     }
 
@@ -1010,26 +1040,26 @@ class Main
         } ?>
 
         <div class="enjoying-container lets-ask">
-          <div class="enjoying-text"><?php _e('Enjoying Out-of-the-Box?', 'outofthebox'); ?></div>
+          <div class="enjoying-text"><?php _e('Enjoying this plugin?', 'wpcloudplugins'); ?></div>
           <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-lets-ask-no"><?php _e('Not really', 'outofthebox'); ?></a>
-            <a class="enjoying-button default"  id="enjoying-button-lets-ask-yes"><?php _e('Yes!', 'outofthebox'); ?></a>
+            <a class="enjoying-button" id="enjoying-button-lets-ask-no"><?php _e('Not really', 'wpcloudplugins'); ?></a>
+            <a class="enjoying-button default"  id="enjoying-button-lets-ask-yes"><?php _e('Yes!', 'wpcloudplugins'); ?></a>
           </div>
         </div>
 
         <div class="enjoying-container go-for-it" style="display:none">
-          <div class="enjoying-text"><?php _e('Great! How about a review, then?', 'outofthebox'); ?></div>
+          <div class="enjoying-text"><?php _e('Great! How about a review, then?', 'wpcloudplugins'); ?></div>
           <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-go-for-it-no"><?php _e('No, thanks', 'outofthebox'); ?></a>
-            <a class="enjoying-button default" id="enjoying-button-go-for-it-yes" href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2Freviews%2F5529125" target="_blank"><?php _e('Ok, sure!', 'outofthebox'); ?></a>
+            <a class="enjoying-button" id="enjoying-button-go-for-it-no"><?php _e('No, thanks', 'wpcloudplugins'); ?></a>
+            <a class="enjoying-button default" id="enjoying-button-go-for-it-yes" href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2Freviews%2F5529125" target="_blank"><?php _e('Ok, sure!', 'wpcloudplugins'); ?></a>
           </div>
         </div>
 
         <div class="enjoying-container mwah" style="display:none">
-          <div class="enjoying-text"><?php _e('Would you mind giving us some feedback?', 'outofthebox'); ?></div>
+          <div class="enjoying-text"><?php _e('Would you mind giving us some feedback?', 'wpcloudplugins'); ?></div>
           <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-mwah-no"><?php _e('No, thanks', 'outofthebox'); ?></a>
-            <a class="enjoying-button default" id="enjoying-button-mwah-yes" href="https://docs.google.com/forms/d/e/1FAIpQLSct8a8d-_7iSgcvdqeFoSSV055M5NiUOgt598B95YZIaw7LhA/viewform?usp=pp_url&entry.83709281=Out-of-the-Box+(Dropbox)&entry.450972953&entry.1149244898" target="_blank"><?php _e('Ok, sure!', 'outofthebox'); ?></a>
+            <a class="enjoying-button" id="enjoying-button-mwah-no"><?php _e('No, thanks', 'wpcloudplugins'); ?></a>
+            <a class="enjoying-button default" id="enjoying-button-mwah-yes" href="https://docs.google.com/forms/d/e/1FAIpQLSct8a8d-_7iSgcvdqeFoSSV055M5NiUOgt598B95YZIaw7LhA/viewform?usp=pp_url&entry.83709281=Out-of-the-Box+(Dropbox)&entry.450972953&entry.1149244898" target="_blank"><?php _e('Ok, sure!', 'wpcloudplugins'); ?></a>
           </div>
         </div>
 
@@ -1157,6 +1187,34 @@ class Main
         }
     }
 
+    /**
+     * Reset plugin to factory settings.
+     */
+    public static function do_factory_reset()
+    {
+        // Remove Database settings
+        delete_option('out_of_the_box_settings');
+        delete_site_option('outofthebox_network_settings');
+        delete_site_option('out_of_the_box_guestlinkedto');
+
+        delete_site_option('outofthebox_purchaseid');
+        delete_option('out_of_the_box_activated');
+        delete_transient('outofthebox_activation_validated');
+        delete_site_transient('outofthebox_activation_validated');
+
+        delete_option('out_of_the_box_version');
+
+        // Remove Event Log
+        \TheLion\OutoftheBox\Events::uninstall();
+
+        // Remove Cache Files
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(OUTOFTHEBOX_CACHEDIR, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+            $path->isFile() ? @unlink($path->getPathname()) : @rmdir($path->getPathname());
+        }
+
+        @rmdir(OUTOFTHEBOX_CACHEDIR);
+    }
+
     // Add MCE buttons and script
 
     public function load_shortcode_buttons()
@@ -1181,14 +1239,12 @@ class Main
 
         // Add custom CSs for placeholders
         add_editor_style(OUTOFTHEBOX_ROOTPATH.'/css/tinymce_editor.css');
-
-        add_action('enqueue_block_editor_assets', [&$this, 'enqueue_tinymce_css_gutenberg']);
     }
 
     //This callback registers our plug-in
     public function register_tinymce_plugin($plugin_array)
     {
-        $plugin_array['outofthebox'] = OUTOFTHEBOX_ROOTPATH.'/includes/js/Tinymce.js';
+        $plugin_array['outofthebox'] = OUTOFTHEBOX_ROOTPATH.'/includes/js/ShortcodeBuilder_Tinymce.js';
 
         return $plugin_array;
     }
@@ -1209,11 +1265,6 @@ class Main
         }
 
         return $buttons;
-    }
-
-    public function enqueue_tinymce_css_gutenberg()
-    {
-        wp_enqueue_style('outofthebox-css-gutenberg', OUTOFTHEBOX_ROOTPATH.'/css/tinymce_editor.css');
     }
 
     public function enqueue_tinymce_css_frontend($mce_css)
@@ -1360,7 +1411,7 @@ function OutoftheBox_Activate()
             'request_cache_max_age' => '',
             'always_load_scripts' => 'No',
             'nonce_validation' => 'Yes',
-            'shortlinks' => 'Dropbox',
+            'shortlinks' => 'None',
             'bitly_login' => '',
             'bitly_apikey' => '',
             'shortest_apikey' => '',
@@ -1370,12 +1421,14 @@ function OutoftheBox_Activate()
             'icon_set' => '',
             'disable_fontawesome' => 'No',
             'use_team_folders' => 'Yes',
+            'use_app_folder', 'No',
             'recaptcha_sitekey' => '',
             'recaptcha_secret' => '',
             'fontawesomev4_shim' => 'No',
             'event_summary' => 'No',
             'event_summary_period' => 'daily',
             'event_summary_recipients' => get_site_option('admin_email'),
+            'uninstall_reset' => 'Yes',
         ]
     );
 
@@ -1444,9 +1497,11 @@ function OutoftheBox_Deactivate()
 
     global $OutoftheBox;
 
-    foreach ($OutoftheBox->get_accounts()->list_accounts() as $account_id => $account) {
-        if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
-            wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account_id]);
+    if (!empty($OutoftheBox)) {
+        foreach ($OutoftheBox->get_accounts()->list_accounts() as $account_id => $account) {
+            if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
+                wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account_id]);
+            }
         }
     }
 
@@ -1501,26 +1556,23 @@ function OutoftheBox_Network_Uninstall($network_wide)
  */
 function OutoftheBox_Uninstall()
 {
-    // Remove Database settings
-    delete_option('out_of_the_box_activated');
-    delete_site_option('out_of_the_box_guestlinkedto');
-    delete_option('out_of_the_box_version');
-    delete_transient('outofthebox_activation_validated');
-    delete_site_transient('outofthebox_activation_validated');
-    delete_site_option('outofthebox_purchaseid');
+    $settings = get_option('out_of_the_box_settings', []);
 
-    // Remove Event Log
-    Events::uninstall();
-
-    // Remove Cache Files
-    $cachefiles = @scandir(OUTOFTHEBOX_CACHEDIR);
-
-    if (false !== $cachefiles) {
-        $cachefiles = array_diff($cachefiles, ['..', '.', '.htaccess']);
-        foreach ($cachefiles as $cachefile) {
-            @unlink(OUTOFTHEBOX_CACHEDIR.$cachefile);
-        }
+    if (isset($settings['uninstall_reset']) && 'Yes' === $settings['uninstall_reset']) {
+        \TheLion\OutoftheBox\Main::do_factory_reset();
     }
 
-    @rmdir(OUTOFTHEBOX_CACHEDIR);
+    // Remove pending notifications
+    global $OutoftheBox;
+
+    if (!empty($OutoftheBox)) {
+        foreach ($OutoftheBox->get_accounts()->list_accounts() as $account_id => $account) {
+            if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account_id]))) {
+                wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account_id]);
+            }
+        }
+    }
+    if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification'))) {
+        wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification');
+    }
 }

@@ -1,0 +1,9 @@
+/* Improved contrast for nav controls */
+body .ngg-imagebrowser.default-view .ngg-imagebrowser-nav .counter {
+	color: #666;
+}
+
+body .ngg-imagebrowser.default-view .ngg-imagebrowser-nav .next,
+body .ngg-imagebrowser.default-view .ngg-imagebrowser-nav .back {
+	background: #666;
+}

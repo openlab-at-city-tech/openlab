@@ -1,14 +1,12 @@
-### 2.4.20.3
-- Fixed an issue where the honeypot field description can be assigned the same id attribute as other forms on the page.
-
-
-### 2.4.20.2
+### 2.4.21 | 2020-10-14
+- Added security enhancements.
 - Updated background updates to work more seamlessly with WordPress's automatic updates.
+- Fixed an issue with date formats when retrieving notes by date.
+- Fixed an issue where the honeypot field description can be assigned the same id attribute as other forms on the page.
 - Fixed an issue with WordPress 5.5 where the select all checkbox on the export entries page can stop functioning.
-
-
-### 2.4.20.1
 - API: Updated REST API for WordPress 5.5.
+- AF: Fixed a fatal error which occurs when the add-on is not active during background feed processing.
+- AF: Added the [gform_pre_delete_feed](https://docs.gravityforms.com/gform_pre_delete_feed) action hook.
 
 
 ### 2.4.20 | 2020-08-06

@@ -40,6 +40,10 @@ switch ( $template ) {
 		break;
 	case 'twentynineteen' :
 		echo '</main></section>';
+		break;
+	case 'busify-pro' :
+		echo '</div><!-- #primary -->';
+		break;
 	default :
 		echo '</main></div>';
 		break;
