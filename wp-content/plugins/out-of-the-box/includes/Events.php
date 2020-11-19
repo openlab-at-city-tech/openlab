@@ -85,7 +85,7 @@ class Events
         try {
             Event_DB_Model::insert($new_event);
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Cannot log Event on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('Cannot log Event on line %s: %s', __LINE__, $ex->getMessage()));
         }
     }
 
@@ -122,7 +122,7 @@ class Events
 
         if ($allow_nonce_verification && is_user_logged_in()) {
             if (false === check_ajax_referer('outofthebox-admin-action', false, false)) {
-                error_log('[Out-of-the-Box message]: '." Function get_stats() didn't receive a valid nonce");
+                error_log('[WP Cloud Plugin message]: '." Function get_stats() didn't receive a valid nonce");
                 die();
             }
         }
@@ -268,7 +268,8 @@ class Events
             }
         }
 
-        $sql = 'SELECT `type`, COUNT(`id`) as total FROM `'.Event_DB_Model::table()."` WHERE {$where} GROUP BY `type`";
+        $sql = 'SELECT `type`, COUNT(`id`) as total FROM `'.Event_DB_Model::table().'` WHERE '.$where.' GROUP BY `type`';
+
         $data = Event_DB_Model::get_custom_sql($sql, [], 'ARRAY_A');
 
         $totals = [];
@@ -467,7 +468,7 @@ class Events
             [
                 'db' => 'MAX(`user_id`)', 'dt' => 'user_display_name', 'field' => 'user_id', 'as' => 'user_id', 'formatter' => function ($value, $row) {
                     if (0 == $value) {
-                        return __('Visitors', 'outofthebox');
+                        return __('Visitors', 'wpcloudplugins');
                     }
 
                     $wp_user = get_userdata($value);
@@ -482,7 +483,7 @@ class Events
             [
                 'db' => 'MAX(`user_id`)', 'dt' => 'user_name', 'field' => 'user_id', 'as' => 'user_id', 'formatter' => function ($value, $row) {
                     if (0 == $value) {
-                        return __('Visitors', 'outofthebox');
+                        return __('Visitors', 'wpcloudplugins');
                     }
 
                     $wp_user = get_userdata($value);
@@ -565,7 +566,7 @@ class Events
             [
                 'db' => 'user_id', 'dt' => 'user', 'field' => 'user_id', 'formatter' => function ($value, $row) {
                     if (0 == $value) {
-                        return __('A visitor', 'outofthebox');
+                        return __('A visitor', 'wpcloudplugins');
                     }
 
                     $user = get_userdata($value);
@@ -712,7 +713,7 @@ class Events
     {
         switch ($type) {
             case 'outofthebox_previewed_entry':
-                $text = __('Previewed', 'outofthebox');
+                $text = __('Previewed', 'wpcloudplugins');
                 $icon = 'fa-eye';
                 $colors = [
                     'light' => '#9c27b050',
@@ -722,7 +723,7 @@ class Events
 
                 break;
             case 'outofthebox_downloaded_entry':
-                $text = __('Downloaded', 'outofthebox');
+                $text = __('Downloaded', 'wpcloudplugins');
                 $icon = 'fa-download';
                 $colors = [
                     'light' => '#673ab750',
@@ -732,7 +733,7 @@ class Events
 
                 break;
             case 'outofthebox_streamed_entry':
-                $text = __('Streamed', 'outofthebox');
+                $text = __('Streamed', 'wpcloudplugins');
                 $icon = 'fa-play-circle';
                 $colors = [
                     'light' => '#3f51b550',
@@ -742,7 +743,7 @@ class Events
 
                 break;
             case 'outofthebox_created_link_to_entry':
-                $text = __('Shared', 'outofthebox');
+                $text = __('Shared', 'wpcloudplugins');
                 $icon = 'fa-share-alt';
                 $colors = [
                     'light' => '#00bcd450',
@@ -752,7 +753,7 @@ class Events
 
                 break;
             case 'outofthebox_renamed_entry':
-                $text = __('Renamed', 'outofthebox');
+                $text = __('Renamed', 'wpcloudplugins');
                 $icon = 'fa-tag';
                 $colors = [
                     'light' => '#00968850',
@@ -762,7 +763,7 @@ class Events
 
                 break;
             case 'outofthebox_deleted_entry':
-                $text = __('Deleted', 'outofthebox');
+                $text = __('Deleted', 'wpcloudplugins');
                 $icon = 'fa-trash';
                 $colors = [
                     'light' => '#f4433650',
@@ -772,7 +773,7 @@ class Events
 
                 break;
             case 'outofthebox_created_entry':
-                $text = __('Created', 'outofthebox');
+                $text = __('Created', 'wpcloudplugins');
                 $icon = 'fa-plus-circle';
                 $colors = [
                     'light' => '#4caf5050',
@@ -782,7 +783,7 @@ class Events
 
                 break;
             case 'outofthebox_updated_metadata':
-                $text = __('Updated metadata', 'outofthebox');
+                $text = __('Updated metadata', 'wpcloudplugins');
                 $icon = 'fa-wrench';
                 $colors = [
                     'light' => '#ff572250',
@@ -792,7 +793,7 @@ class Events
 
                 break;
             case 'outofthebox_moved_entry':
-                $text = __('Moved', 'outofthebox');
+                $text = __('Moved', 'wpcloudplugins');
                 $icon = 'fa-arrows-alt-h';
                 $colors = [
                     'light' => '#ffeb3b50',
@@ -802,7 +803,7 @@ class Events
 
                 break;
             case 'outofthebox_uploaded_entry':
-                $text = __('Uploaded', 'outofthebox');
+                $text = __('Uploaded', 'wpcloudplugins');
                 $icon = 'fa-upload';
                 $colors = [
                     'light' => '#cddc3950',
@@ -812,7 +813,7 @@ class Events
 
                 break;
             case 'outofthebox_searched':
-                $text = __('Searched', 'outofthebox');
+                $text = __('Searched', 'wpcloudplugins');
                 $icon = 'fa-search';
                 $colors = [
                     'light' => '#ffc10750',
@@ -847,7 +848,7 @@ class Events
     {
         // Get the User
         if ('0' === $event_row['user_id']) {
-            $user = __('A visitor', 'outofthebox');
+            $user = __('A visitor', 'wpcloudplugins');
         } elseif ($wp_user = get_userdata($event_row['user_id'])) {
             $user = $wp_user->display_name;
             $user = "<a href='#{$event_row['user_id']}' class='open-user-details' data-user-id='{$event_row['user_id']}'>{$user}</a>";
@@ -856,7 +857,7 @@ class Events
         }
 
         // Is entry  a file or a folder
-        $file_or_folder = ('1' === $event_row['entry_is_dir']) ? __('folder', 'outofthebox') : __('file', 'outofthebox');
+        $file_or_folder = ('1' === $event_row['entry_is_dir']) ? __('folder','wpcloudplugins') : __('file', 'wpcloudplugins');
 
         $account_id = empty($event_row['account_id']) ? $this->get_processor()->get_accounts()->get_primary_account()->get_id() : $event_row['account_id'];
 
@@ -874,62 +875,62 @@ class Events
         // Create the description
         switch ($event_row['type']) {
             case 'outofthebox_previewed_entry':
-                $description = sprintf(__('%s previewed the %s %s', 'outofthebox'), $user, $file_or_folder, $entry_link);
+                $description = sprintf(__('%s previewed the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
             case 'outofthebox_downloaded_entry':
                 $exported = ($data && isset($data['exported'])) ? $data['exported'] : false;
                 $as_zip = ($data && isset($data['as_zip'])) ? $exported = 'ZIP' : false;
 
-                $description = sprintf(__('%s downloaded the %s %s', 'outofthebox'), $user, $file_or_folder, $entry_link);
+                $description = sprintf(__('%s downloaded the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 if (false !== $exported) {
-                    $description = sprintf(__('%s downloaded the %s %s as %s file', 'outofthebox'), $user, $file_or_folder, $entry_link, $exported);
+                    $description = sprintf(__('%s downloaded the %s %s as %s file', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $exported);
                 }
 
                 break;
             case 'outofthebox_streamed_entry':
-                $description = sprintf(__('%s streamed the %s %s', 'outofthebox'), $user, $file_or_folder, $entry_link);
+                $description = sprintf(__('%s streamed the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
             case 'outofthebox_created_link_to_entry':
-                $created_url = ($data && isset($data['url']) && is_string($data['url'])) ? "<a href='{$data['url']}' target='_blank'>".__('Shared link', 'outofthebox').'</a>' : '';
-                $description = sprintf(__('%s created a %s for the %s %s', 'outofthebox'), $user, $created_url, $file_or_folder, $entry_link);
+                $created_url = ($data && isset($data['url']) && is_string($data['url'])) ? "<a href='{$data['url']}' target='_blank'>".__('Shared link', 'wpcloudplugins').'</a>' : '';
+                $description = sprintf(__('%s created a %s for the %s %s', 'wpcloudplugins'), $user, $created_url, $file_or_folder, $entry_link);
 
                 break;
             case 'outofthebox_renamed_entry':
                 $previous_name = ($data && isset($data['oldname'])) ? $data['oldname'].' ' : '';
-                $description = sprintf(__('%s renamed the %s %s to %s', 'outofthebox'), $user, $file_or_folder, $previous_name, $entry_link);
+                $description = sprintf(__('%s renamed the %s %s to %s', 'wpcloudplugins'), $user, $file_or_folder, $previous_name, $entry_link);
 
                 break;
             case 'outofthebox_deleted_entry':
-                $description = sprintf(__('%s deleted the %s %s', 'outofthebox'), $user, $file_or_folder, $entry_link);
+                $description = sprintf(__('%s deleted the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
             case 'outofthebox_created_entry':
-                $description = sprintf(__('%s added the %s %s in %s', 'outofthebox'), $user, $file_or_folder, $entry_link, $parent_folder_link);
+                $description = sprintf(__('%s added the %s %s in %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
             case 'outofthebox_updated_metadata':
                 $metadata_field = ($data && isset($data['metadata_field'])) ? $data['metadata_field'] : '';
-                $description = sprintf(__('%s updated the %s of the %s %s', 'outofthebox'), $user, $metadata_field, $file_or_folder, $entry_link);
+                $description = sprintf(__('%s updated the %s of the %s %s', 'wpcloudplugins'), $user, $metadata_field, $file_or_folder, $entry_link);
 
                 break;
             case 'outofthebox_moved_entry':
-                $description = sprintf(__('%s moved the %s %s to %s', 'outofthebox'), $user, $file_or_folder, $entry_link, $parent_folder_link);
+                $description = sprintf(__('%s moved the %s %s to %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
             case 'outofthebox_uploaded_entry':
-                $description = sprintf(__('%s added the %s %s in %s', 'outofthebox'), $user, $file_or_folder, $entry_link, $parent_folder_link);
+                $description = sprintf(__('%s added the %s %s in %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
             case 'outofthebox_searched':
                 $search_query = ($data && isset($data['query'])) ? $data['query'] : '';
-                $description = sprintf(__('%s searched for "%s" in %s', 'outofthebox'), $user, $search_query, $entry_link);
+                $description = sprintf(__('%s searched for "%s" in %s', 'wpcloudplugins'), $user, $search_query, $entry_link);
 
                 break;
             default:
-                $description = sprintf(__('%s performed an action: %s', 'outofthebox'), $user, $event_row['type']);
+                $description = sprintf(__('%s performed an action: %s', 'wpcloudplugins'), $user, $event_row['type']);
 
                 break;
         }
@@ -1004,7 +1005,7 @@ class Events
                 'entry' => [
                     'entry_id' => $entry_id,
                     'entry_name' => $data[0]['entry_name'],
-                    'entry_description' => __('The file you are looking for cannot be found', 'outofthebox').'.'.__('The file is probably deleted from the cloud', 'outofthebox').'.',
+                    'entry_description' => __('The file you are looking for cannot be found','wpcloudplugins').'.'.__('The file is probably deleted from the cloud', 'wpcloudplugins').'.',
                     'entry_link' => false,
                     'entry_thumbnails' => Helpers::get_default_icon($data[0]['entry_mimetype'], $data[0]['entry_is_dir']),
                 ],
@@ -1083,7 +1084,7 @@ class Events
         }
 
         // Generate Email content from template
-        $subject = get_bloginfo().' | '.sprintf(__('Out-of-the-Box activity for %s', 'outofthebox'), date_i18n('l j F '));
+        $subject = get_bloginfo().' | '.sprintf(__('%s activity for %s', 'wpcloudplugins'), 'Out-of-the-Box', date_i18n('l j F '));
         $colors = $this->get_processor()->get_setting('colors');
         $template = apply_filters('outofthebox_events_set_summary_template', OUTOFTHEBOX_ROOTDIR.'/templates/notifications/event_summary.php', $this);
 
@@ -1100,7 +1101,7 @@ class Events
                 $result = wp_mail($recipient, $subject, $htmlmessage, $headers);
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.__('Could not send email').': '.$ex->getMessage());
+            error_log('[WP Cloud Plugin message]: '.__('Could not send email').': '.$ex->getMessage());
         }
     }
 

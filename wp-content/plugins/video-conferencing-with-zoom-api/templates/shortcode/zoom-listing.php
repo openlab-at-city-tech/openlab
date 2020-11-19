@@ -6,9 +6,14 @@
  *
  * @package    Video Conferencing with Zoom API/Templates
  * @version     3.2.2
+ * @updated     3.6.0
  */
 
-$meeting_details = get_post_meta( get_the_id(), '_meeting_fields', true );
+global $zoom;
+
+if ( ! vczapi_pro_version_active() && ( $zoom['api']->type === 8 || $zoom['api']->type === 3 ) || empty( $zoom ) || ! empty( $zoom['api']->code ) ) {
+	return;
+}
 ?>
 <div class="vczapi-list-zoom-meetings--item">
 	<?php if ( has_post_thumbnail() ) { ?>
@@ -20,15 +25,45 @@ $meeting_details = get_post_meta( get_the_id(), '_meeting_fields', true );
         <h3><?php the_title(); ?></h3>
         <div class="vczapi-list-zoom-meetings--item__details__meta">
             <div class="hosted-by meta">
-                <strong><?php _e( 'Hosted By:', 'video-conferencing-with-zoom-api' ); ?></strong> <span><?php echo get_the_author(); ?></span>
+                <strong><?php _e( 'Hosted By:', 'video-conferencing-with-zoom-api' ); ?></strong>
+                <span><?php echo apply_filters( 'vczapi_host_name', $zoom['host_name'] ); ?></span>
             </div>
-            <div class="start-date meta">
-                <strong><?php _e( 'Start', 'video-conferencing-with-zoom-api' ); ?>:</strong>
-                <span><?php echo date( 'F j, Y @ g:i a', strtotime( $meeting_details['start_date'] ) ); ?></span>
-            </div>
+			<?php
+			if ( vczapi_pro_version_active() && ! empty( $zoom['api']->type ) && vczapi_pro_check_type( $zoom['api']->type ) ) {
+				$type      = ! empty( $zoom['api']->type ) ? $zoom['api']->type : false;
+				$timezone  = ! empty( $zoom['api']->timezone ) ? $zoom['api']->timezone : false;
+				$occurence = ! empty( $zoom['api']->occurrences ) ? $zoom['api']->occurrences : false;
+				if ( ! empty( $occurence ) ) {
+					$start_time = Codemanas\ZoomPro\Helpers::get_latest_occurence_by_type( $type, $timezone, $occurence );
+					?>
+                    <div class="start-date meta">
+                        <strong><?php _e( 'Next Occurrence', 'video-conferencing-with-zoom-api' ); ?>:</strong>
+                        <span><?php echo vczapi_dateConverter( $start_time, $timezone, 'F j, Y @ g:i a' ); ?></span>
+                    </div>
+					<?php
+				} else {
+					?>
+                    <div class="start-date meta">
+                        <strong><?php _e( 'Start Time', 'video-conferencing-with-zoom-api' ); ?>:</strong>
+                        <span><?php echo vczapi_dateConverter( $zoom['start_date'], 'UTC', 'F j, Y @ g:i a' ); ?></span>
+                    </div>
+					<?php
+				}
+				?>
+                <div class="start-date meta">
+                    <strong><?php _e( 'Type', 'video-conferencing-with-zoom-api' ); ?>:</strong>
+                    <span><?php _e( 'Recurring', 'video-conferencing-with-zoom-api' ); ?></span>
+                </div>
+				<?php
+			} else {
+				?>
+                <div class="start-date meta">
+                    <strong><?php _e( 'Start', 'video-conferencing-with-zoom-api' ); ?>:</strong>
+                    <span><?php echo vczapi_dateConverter( $zoom['api']->start_time, $zoom['api']->timezone, 'F j, Y @ g:i a' ); ?></span>
+                </div>
+			<?php } ?>
             <div class="timezone meta">
-                <strong><?php _e( 'Timezone', 'video-conferencing-with-zoom-api' ); ?>:</strong>
-                <span><?php echo $meeting_details['timezone']; ?></span>
+                <strong><?php _e( 'Timezone', 'video-conferencing-with-zoom-api' ); ?>:</strong> <span><?php echo $zoom['api']->timezone; ?></span>
             </div>
         </div>
         <a href="<?php echo esc_url( get_the_permalink() ) ?>" class="btn"><?php _e( 'See More', 'video-conferencing-with-zoom-api' ); ?></a>

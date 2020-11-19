@@ -5,10 +5,10 @@
  *
  * E.g.
  *
- * add_filter('outofthebox_notification_set_template','change_notification_email', 10, 1);
+ * add_filter('outofthebox_notification_set_template','change_notification_email', 10, 2);
  *
- * public function change_notification_email($template_location, $notification){
- *   return WP_CONTENT_DIR .'/custom_notifications/default_notification.php'
+ * function change_notification_email($template_location, $notification){
+ *   return WP_CONTENT_DIR .'/custom_notifications/default_notification.php';
  * }
  */
 ?><!doctype html>

@@ -2,77 +2,32 @@
 
 namespace Kunnu\Dropbox;
 
-use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Request;
-use Kunnu\Dropbox\Models\File;
+use GuzzleHttp\Psr7\Stream;
+use Kunnu\Dropbox\Authentication\DropboxAuthHelper;
+use Kunnu\Dropbox\Authentication\OAuth2Client;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use Kunnu\Dropbox\Http\Clients\DropboxHttpClientFactory;
 use Kunnu\Dropbox\Models\Account;
-use Kunnu\Dropbox\Models\Thumbnail;
 use Kunnu\Dropbox\Models\AccountList;
-use Kunnu\Dropbox\Models\ModelFactory;
-use Kunnu\Dropbox\Models\FileMetadata;
-use Kunnu\Dropbox\Models\FileLinkMetadata;
-use Kunnu\Dropbox\Models\CopyReference;
-use Kunnu\Dropbox\Models\TemporaryLink;
 use Kunnu\Dropbox\Models\AsyncJob;
-use Kunnu\Dropbox\Models\Tag;
-use Psr\Http\Message\ResponseInterface;
+use Kunnu\Dropbox\Models\CopyReference;
+use Kunnu\Dropbox\Models\File;
+use Kunnu\Dropbox\Models\FileMetadata;
 use Kunnu\Dropbox\Models\FolderMetadata;
 use Kunnu\Dropbox\Models\ModelCollection;
-use Kunnu\Dropbox\Authentication\OAuth2Client;
-use Kunnu\Dropbox\Store\PersistentDataStoreFactory;
-use Kunnu\Dropbox\Authentication\DropboxAuthHelper;
-use Kunnu\Dropbox\Exceptions\DropboxClientException;
+use Kunnu\Dropbox\Models\ModelFactory;
+use Kunnu\Dropbox\Models\Tag;
+use Kunnu\Dropbox\Models\TemporaryLink;
+use Kunnu\Dropbox\Models\Thumbnail;
 use Kunnu\Dropbox\Security\RandomStringGeneratorFactory;
-use Kunnu\Dropbox\Http\Clients\DropboxHttpClientFactory;
-use Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface;
+use Kunnu\Dropbox\Store\PersistentDataStoreFactory;
 
 /**
- * Dropbox
+ * Dropbox.
  */
-class Dropbox {
-
-    /**
-     * The Dropbox App
-     *
-     * @var \Kunnu\Dropbox\DropboxApp
-     */
-    protected $app;
-
-    /**
-     * OAuth2 Access Token
-     *
-     * @var string
-     */
-    protected $accessToken;
-
-    /**
-     * Dropbox Client
-     *
-     * @var \Kunnu\Dropbox\DropboxClient
-     */
-    protected $client;
-
-    /**
-     * OAuth2 Client
-     *
-     * @var \Kunnu\Dropbox\Authentication\OAuth2Client
-     */
-    protected $oAuth2Client;
-
-    /**
-     * Random String Generator
-     *
-     * @var \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
-     */
-    protected $randomStringGenerator;
-
-    /**
-     * Persistent Data Store
-     *
-     * @var \Kunnu\Dropbox\Store\PersistentDataStoreInterface
-     */
-    protected $persistentDataStore;
-
+class Dropbox
+{
     /**
      * Uploading a file with the 'uploadFile' method, with the file's
      * size less than this value (~8 MB), the simple `upload` method will be
@@ -86,32 +41,75 @@ class Dropbox {
 
     /**
      * The Chunk Size the file will be
-     * split into and uploaded (~4 MB)
+     * split into and uploaded (~4 MB).
      *
      * @const int
      */
     const DEFAULT_CHUNK_SIZE = 4000000;
 
     /**
-     * Response header containing file metadata
+     * Response header containing file metadata.
      *
      * @const string
      */
     const METADATA_HEADER = 'dropbox-api-result';
 
     /**
-     * Create a new Dropbox instance
+     * The Dropbox App.
+     *
+     * @var \Kunnu\Dropbox\DropboxApp
+     */
+    protected $app;
+
+    /**
+     * OAuth2 Access Token.
+     *
+     * @var string
+     */
+    protected $accessToken;
+
+    /**
+     * Dropbox Client.
+     *
+     * @var \Kunnu\Dropbox\DropboxClient
+     */
+    protected $client;
+
+    /**
+     * OAuth2 Client.
+     *
+     * @var \Kunnu\Dropbox\Authentication\OAuth2Client
+     */
+    protected $oAuth2Client;
+
+    /**
+     * Random String Generator.
+     *
+     * @var \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
+     */
+    protected $randomStringGenerator;
+
+    /**
+     * Persistent Data Store.
+     *
+     * @var \Kunnu\Dropbox\Store\PersistentDataStoreInterface
+     */
+    protected $persistentDataStore;
+
+    /**
+     * Create a new Dropbox instance.
      *
      * @param \Kunnu\Dropbox\DropboxApp
      * @param array $config Configuration Array
      */
-    public function __construct(DropboxApp $app, array $config = []) {
+    public function __construct(DropboxApp $app, array $config = [])
+    {
         //Configuration
         $config = array_merge([
             'http_client_handler' => null,
             'random_string_generator' => null,
-            'persistent_data_store' => null
-                ], $config);
+            'persistent_data_store' => null,
+        ], $config);
 
         //Set the app
         $this->app = $app;
@@ -133,11 +131,12 @@ class Dropbox {
     }
 
     /**
-     * Get the Client
+     * Get the Client.
      *
      * @return \Kunnu\Dropbox\DropboxClient
      */
-    public function getClient() {
+    public function getClient()
+    {
         return $this->client;
     }
 
@@ -146,7 +145,8 @@ class Dropbox {
      *
      * @return string Access Token
      */
-    public function getAccessToken() {
+    public function getAccessToken()
+    {
         return $this->accessToken;
     }
 
@@ -155,19 +155,23 @@ class Dropbox {
      *
      * @return \Kunnu\Dropbox\DropboxApp Dropbox App
      */
-    public function getApp() {
+    public function getApp()
+    {
         return $this->app;
     }
 
     /**
-     * Get OAuth2Client
+     * Get OAuth2Client.
      *
      * @return \Kunnu\Dropbox\Authentication\OAuth2Client
      */
-    public function getOAuth2Client() {
+    public function getOAuth2Client()
+    {
         if (!$this->oAuth2Client instanceof OAuth2Client) {
             return new OAuth2Client(
-                    $this->getApp(), $this->getClient(), $this->getRandomStringGenerator()
+                $this->getApp(),
+                $this->getClient(),
+                $this->getRandomStringGenerator()
             );
         }
 
@@ -175,31 +179,36 @@ class Dropbox {
     }
 
     /**
-     * Get the Random String Generator
+     * Get the Random String Generator.
      *
      * @return \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
      */
-    public function getRandomStringGenerator() {
+    public function getRandomStringGenerator()
+    {
         return $this->randomStringGenerator;
     }
 
     /**
-     * Get Persistent Data Store
+     * Get Persistent Data Store.
      *
      * @return \Kunnu\Dropbox\Store\PersistentDataStoreInterface
      */
-    public function getPersistentDataStore() {
+    public function getPersistentDataStore()
+    {
         return $this->persistentDataStore;
     }
 
     /**
-     * Get Dropbox Auth Helper
+     * Get Dropbox Auth Helper.
      *
      * @return \Kunnu\Dropbox\Authentication\DropboxAuthHelper
      */
-    public function getAuthHelper() {
+    public function getAuthHelper()
+    {
         return new DropboxAuthHelper(
-                $this->getOAuth2Client(), $this->getRandomStringGenerator(), $this->getPersistentDataStore()
+            $this->getOAuth2Client(),
+            $this->getRandomStringGenerator(),
+            $this->getPersistentDataStore()
         );
     }
 
@@ -210,26 +219,28 @@ class Dropbox {
      *
      * @return \Kunnu\Dropbox\Dropbox Dropbox Client
      */
-    public function setAccessToken($accessToken) {
+    public function setAccessToken($accessToken)
+    {
         $this->accessToken = $accessToken;
 
         return $this;
     }
 
     /**
-     * Make Request to the API
+     * Make Request to the API.
      *
-     * @param  string $method       HTTP Request Method
-     * @param  string $endpoint     API Endpoint to send Request to
-     * @param  string $endpointType Endpoint type ['api'|'content']
-     * @param  array  $params       Request Query Params
-     * @param  string $accessToken Access Token to send with the Request
-     *
-     * @return \Kunnu\Dropbox\DropboxResponse
+     * @param string $method       HTTP Request Method
+     * @param string $endpoint     API Endpoint to send Request to
+     * @param string $endpointType Endpoint type ['api'|'content']
+     * @param array  $params       Request Query Params
+     * @param string $accessToken  Access Token to send with the Request
      *
      * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     *
+     * @return \Kunnu\Dropbox\DropboxResponse
      */
-    public function sendRequest($method, $endpoint, $endpointType = 'api', array $params = [], $accessToken = null) {
+    public function sendRequest($method, $endpoint, $endpointType = 'api', array $params = [], $accessToken = null)
+    {
         //Access Token
         $accessToken = $this->getAccessToken() ? $this->getAccessToken() : $accessToken;
 
@@ -242,39 +253,40 @@ class Dropbox {
     }
 
     /**
-     * Make a HTTP POST Request to the API endpoint type
+     * Make a HTTP POST Request to the API endpoint type.
      *
-     * @param  string $endpoint     API Endpoint to send Request to
-     * @param  array  $params       Request Query Params
-     * @param  string $accessToken Access Token to send with the Request
-     *
-     * @return \Kunnu\Dropbox\DropboxResponse
-     */
-    public function postToAPI($endpoint, array $params = [], $accessToken = null) {
-        return $this->sendRequest("POST", $endpoint, 'api', $params, $accessToken);
-    }
-
-    /**
-     * Make a HTTP POST Request to the Content endpoint type
-     *
-     * @param  string $endpoint     Content Endpoint to send Request to
-     * @param  array  $params       Request Query Params
-     * @param  string $accessToken Access Token to send with the Request
+     * @param string $endpoint    API Endpoint to send Request to
+     * @param array  $params      Request Query Params
+     * @param string $accessToken Access Token to send with the Request
      *
      * @return \Kunnu\Dropbox\DropboxResponse
      */
-    public function postToContent($endpoint, array $params = [], $accessToken = null) {
-        return $this->sendRequest("POST", $endpoint, 'content', $params, $accessToken);
+    public function postToAPI($endpoint, array $params = [], $accessToken = null)
+    {
+        return $this->sendRequest('POST', $endpoint, 'api', $params, $accessToken);
     }
 
     /**
-     * Make Model from DropboxResponse
+     * Make a HTTP POST Request to the Content endpoint type.
      *
-     * @param  DropboxResponse $response
+     * @param string $endpoint    Content Endpoint to send Request to
+     * @param array  $params      Request Query Params
+     * @param string $accessToken Access Token to send with the Request
+     *
+     * @return \Kunnu\Dropbox\DropboxResponse
+     */
+    public function postToContent($endpoint, array $params = [], $accessToken = null)
+    {
+        return $this->sendRequest('POST', $endpoint, 'content', $params, $accessToken);
+    }
+
+    /**
+     * Make Model from DropboxResponse.
      *
      * @return \Kunnu\Dropbox\Models\ModelInterface
      */
-    public function makeModelFromResponse(DropboxResponse $response) {
+    public function makeModelFromResponse(DropboxResponse $response)
+    {
         //Get the Decoded Body
         $body = $response->getDecodedBody();
 
@@ -283,15 +295,16 @@ class Dropbox {
     }
 
     /**
-     * Make DropboxFile Object
+     * Make DropboxFile Object.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param int $maxLength   Max Bytes to read from the file
-     * @param int $offset      Seek to specified offset before reading
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param int                $maxLength   Max Bytes to read from the file
+     * @param int                $offset      Seek to specified offset before reading
      *
      * @return \Kunnu\Dropbox\DropboxFile
      */
-    public function makeDropboxFile($dropboxFile, $maxLength = -1, $offset = -1) {
+    public function makeDropboxFile($dropboxFile, $maxLength = -1, $offset = -1)
+    {
         //Uploading file by file path
         if (!$dropboxFile instanceof DropboxFile) {
             //File is valid
@@ -312,19 +325,20 @@ class Dropbox {
     }
 
     /**
-     * Get the Metadata for a file or folder
+     * Get the Metadata for a file or folder.
      *
-     * @param  string $path   Path of the file or folder
-     * @param  array  $params Additional Params
+     * @param string $path   Path of the file or folder
+     * @param array  $params Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-get_metadata
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-get_metadata
      *
      * @return \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
      */
-    public function getMetadata($path, array $params = []) {
+    public function getMetadata($path, array $params = [])
+    {
         //Root folder is unsupported
-        if ($path === '/') {
-            throw new DropboxClientException("Metadata for the root folder is unsupported.");
+        if ('/' === $path) {
+            throw new DropboxClientException('Metadata for the root folder is unsupported.');
         }
 
         //Set the path
@@ -338,20 +352,21 @@ class Dropbox {
     }
 
     /**
-     * Get the contents of a Folder
+     * Get the contents of a Folder.
      *
-     * @param  string $path   Path to the folder. Defaults to root.
-     * @param  array  $params Additional Params
+     * @param string $path   Path to the folder. Defaults to root.
+     * @param array  $params Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder
      *
      * @return \Kunnu\Dropbox\Models\MetadataCollection
      */
-    public function listFolder($path = null, array $params = []) {
+    public function listFolder($path = null, array $params = [])
+    {
         //Specify the root folder as an
         //empty string rather than as "/"
-        if ($path === '/') {
-            $path = "";
+        if ('/' === $path) {
+            $path = '';
         }
 
         //Set the path
@@ -366,16 +381,17 @@ class Dropbox {
 
     /**
      * Paginate through all files and retrieve updates to the folder,
-     * using the cursor retrieved from listFolder or listFolderContinue
+     * using the cursor retrieved from listFolder or listFolderContinue.
      *
-     * @param  string $cursor The cursor returned by your
-     * last call to listFolder or listFolderContinue
+     * @param string $cursor The cursor returned by your
+     *                       last call to listFolder or listFolderContinue
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-continue
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-continue
      *
      * @return \Kunnu\Dropbox\Models\MetadataCollection
      */
-    public function listFolderContinue($cursor) {
+    public function listFolderContinue($cursor)
+    {
         $response = $this->postToAPI('/files/list_folder/continue', ['cursor' => $cursor]);
 
         //Make and Return the Model
@@ -385,18 +401,19 @@ class Dropbox {
     /**
      * Get a cursor for the folder's state.
      *
-     * @param  string $path   Path to the folder. Defaults to root.
-     * @param  array  $params Additional Params
+     * @param string $path   Path to the folder. Defaults to root.
+     * @param array  $params Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-get_latest_cursor
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-get_latest_cursor
      *
      * @return string The Cursor for the folder's state
      */
-    public function listFolderLatestCursor($path, array $params = []) {
+    public function listFolderLatestCursor($path, array $params = [])
+    {
         //Specify the root folder as an
         //empty string rather than as "/"
-        if ($path === '/') {
-            $path = "";
+        if ('/' === $path) {
+            $path = '';
         }
 
         //Set the path
@@ -411,7 +428,7 @@ class Dropbox {
 
         //No cursor returned
         if (!$cursor) {
-            throw new DropboxClientException("Could not retrieve cursor. Something went wrong.");
+            throw new DropboxClientException('Could not retrieve cursor. Something went wrong.');
         }
 
         //Return the cursor
@@ -419,16 +436,17 @@ class Dropbox {
     }
 
     /**
-     * Get Revisions of a File
+     * Get Revisions of a File.
      *
-     * @param  string $path   Path to the file
-     * @param  array  $params Additional Params
+     * @param string $path   Path to the file
+     * @param array  $params Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-list_revisions
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-list_revisions
      *
      * @return \Kunnu\Dropbox\Models\ModelCollection
      */
-    public function listRevisions($path, array $params = []) {
+    public function listRevisions($path, array $params = [])
+    {
         //Set the Path
         $params['path'] = $path;
 
@@ -453,21 +471,22 @@ class Dropbox {
     }
 
     /**
-     * Search a folder for files/folders
+     * Search a folder for files/folders.
      *
-     * @param  string $path   Path to search
-     * @param  string $query  Search Query
-     * @param  array  $params Additional Params
+     * @param string $path   Path to search
+     * @param string $query  Search Query
+     * @param array  $params Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-search
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-search
      *
      * @return \Kunnu\Dropbox\Models\SearchResults
      */
-    public function search($path, $query, array $params = []) {
+    public function search($path, $query, array $params = [])
+    {
         //Specify the root folder as an
         //empty string rather than as "/"
-        if ($path === '/') {
-            $path = "";
+        if ('/' === $path) {
+            $path = '';
         }
 
         //Set the path and query
@@ -482,19 +501,20 @@ class Dropbox {
     }
 
     /**
-     * Create a folder at the given path
+     * Create a folder at the given path.
      *
-     * @param  string   $path       Path to create
-     * @param  boolean  $autorename Auto Rename File
+     * @param string $path       Path to create
+     * @param bool   $autorename Auto Rename File
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-create_folder
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-create_folder
      *
      * @return \Kunnu\Dropbox\Models\FolderMetadata
      */
-    public function createFolder($path, $autorename = false) {
+    public function createFolder($path, $autorename = false)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Create Folder
@@ -508,18 +528,19 @@ class Dropbox {
     }
 
     /**
-     * Delete a file or folder at the given path
+     * Delete a file or folder at the given path.
      *
-     * @param  string $path Path to file/folder to delete
+     * @param string $path Path to file/folder to delete
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-delete
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-delete
      *
-     * @return \Kunnu\Dropbox\Models\DeletedMetadata|FileMetadata|FolderMetadata
+     * @return FileMetadata|FolderMetadata|\Kunnu\Dropbox\Models\DeletedMetadata
      */
-    public function delete($path) {
+    public function delete($path)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Delete
@@ -529,18 +550,19 @@ class Dropbox {
     }
 
     /**
-     * Delete a file or folder at the given path
+     * Delete a file or folder at the given path.
      *
-     * @param  array $entries Entries to be deleted
+     * @param array $entries Entries to be deleted
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-delete_batch
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-delete_batch
      *
-     * @return \Kunnu\Dropbox\Models\DeletedMetadata|FileMetadata|FolderMetadata
+     * @return FileMetadata|FolderMetadata|\Kunnu\Dropbox\Models\DeletedMetadata
      */
-    public function deleteBatch($entries) {
+    public function deleteBatch($entries)
+    {
         //Path cannot be null
         if (is_null($entries)) {
-            throw new DropboxClientException("Entries cannot be null.");
+            throw new DropboxClientException('Entries cannot be null.');
         }
 
         //Delete
@@ -551,19 +573,20 @@ class Dropbox {
     }
 
     /**
-     * Move a file or folder to a different location
+     * Move a file or folder to a different location.
      *
-     * @param  string $fromPath Path to be moved
-     * @param  string $toPath   Path to be moved to
+     * @param string $fromPath Path to be moved
+     * @param string $toPath   Path to be moved to
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-move
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-move
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|FileMetadata|DeletedMetadata
+     * @return DeletedMetadata|FileMetadata|\Kunnu\Dropbox\Models\FileMetadata
      */
-    public function move($fromPath, $toPath) {
+    public function move($fromPath, $toPath)
+    {
         //From and To paths cannot be null
         if (is_null($fromPath) || is_null($toPath)) {
-            throw new DropboxClientException("From and To paths cannot be null.");
+            throw new DropboxClientException('From and To paths cannot be null.');
         }
 
         //Response
@@ -574,17 +597,18 @@ class Dropbox {
     }
 
     /**
-     * Move multiple files or folders to different locations at once 
+     * Move multiple files or folders to different locations at once.
      *
-     * @param  array $entries Entries to be moved
+     * @param array $entries Entries to be moved
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-move_batch
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-move_batch
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|FileMetadata|DeletedMetadata
+     * @return DeletedMetadata|FileMetadata|\Kunnu\Dropbox\Models\FileMetadata
      */
-    public function moveBatch($entries) {
+    public function moveBatch($entries)
+    {
         if (is_null($entries)) {
-            throw new DropboxClientException("From and To paths cannot be null.");
+            throw new DropboxClientException('From and To paths cannot be null.');
         }
 
         //Response
@@ -593,14 +617,15 @@ class Dropbox {
         return $this->waitForAsyncRequest($response, '/files/move_batch/check_v2');
     }
 
-    public function waitForAsyncRequest($raw_response, $request_url, $async_job_id = null) {
+    public function waitForAsyncRequest($raw_response, $request_url, $async_job_id = null)
+    {
         $response = $this->makeModelFromResponse($raw_response);
 
         if (!($response instanceof AsyncJob) && !($response instanceof Tag)) {
             return $response;
         }
 
-        if ($response instanceof Tag && $response->getTag() !== 'in_progress') {
+        if ($response instanceof Tag && 'in_progress' !== $response->getTag()) {
             return $response;
         }
 
@@ -615,40 +640,46 @@ class Dropbox {
     }
 
     /**
-     * Copy a file or folder to a different location
+     * Copy a file or folder to a different location.
      *
-     * @param  string $fromPath Path to be copied
-     * @param  string $toPath   Path to be copied to
+     * @param string $fromPath Path to be copied
+     * @param string $toPath   Path to be copied to
+     * @param mixed  $param
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-copy
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-copy
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|FileMetadata|DeletedMetadata
+     * @return DeletedMetadata|FileMetadata|\Kunnu\Dropbox\Models\FileMetadata
      */
-    public function copy($fromPath, $toPath) {
+    public function copy($fromPath, $toPath, $param = [])
+    {
         //From and To paths cannot be null
         if (is_null($fromPath) || is_null($toPath)) {
-            throw new DropboxClientException("From and To paths cannot be null.");
+            throw new DropboxClientException('From and To paths cannot be null.');
         }
 
+        $param['from_path'] = $fromPath;
+        $param['to_path'] = $toPath;
+
         //Response
-        $response = $this->postToAPI('/files/copy', ['from_path' => $fromPath, 'to_path' => $toPath]);
+        $response = $this->postToAPI('/files/copy', $param);
 
         //Make and Return the Model
         return $this->makeModelFromResponse($response);
     }
 
     /**
-     * Copy a file or folder to a different location
+     * Copy a file or folder to a different location.
      *
-     * @param  array $entries Entries to be copied
+     * @param array $entries Entries to be copied
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-copy_batch
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-copy_batch
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|FileMetadata|DeletedMetadata
+     * @return DeletedMetadata|FileMetadata|\Kunnu\Dropbox\Models\FileMetadata
      */
-    public function copyBatch($entries) {
+    public function copyBatch($entries)
+    {
         if (is_null($entries)) {
-            throw new DropboxClientException("Entries cannot be null.");
+            throw new DropboxClientException('Entries cannot be null.');
         }
 
         //Response
@@ -659,19 +690,20 @@ class Dropbox {
     }
 
     /**
-     * Restore a file to the specific version
+     * Restore a file to the specific version.
      *
-     * @param  string $path Path to the file to restore
-     * @param  string $rev  Revision to store for the file
+     * @param string $path Path to the file to restore
+     * @param string $rev  Revision to store for the file
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-restore
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-restore
      *
-     * @return \Kunnu\Dropbox\Models\DeletedMetadata|FileMetadata|FolderMetadata
+     * @return FileMetadata|FolderMetadata|\Kunnu\Dropbox\Models\DeletedMetadata
      */
-    public function restore($path, $rev) {
+    public function restore($path, $rev)
+    {
         //Path and Revision cannot be null
         if (is_null($path) || is_null($rev)) {
-            throw new DropboxClientException("Path and Revision cannot be null.");
+            throw new DropboxClientException('Path and Revision cannot be null.');
         }
 
         //Response
@@ -685,18 +717,19 @@ class Dropbox {
     }
 
     /**
-     * Get Copy Reference
+     * Get Copy Reference.
      *
-     * @param  string $path Path to the file or folder to get a copy reference to
+     * @param string $path Path to the file or folder to get a copy reference to
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-copy_reference-get
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-copy_reference-get
      *
      * @return \Kunnu\Dropbox\Models\CopyReference
      */
-    public function getCopyReference($path) {
+    public function getCopyReference($path)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Get Copy Reference
@@ -708,19 +741,20 @@ class Dropbox {
     }
 
     /**
-     * Save Copy Reference
+     * Save Copy Reference.
      *
-     * @param  string $path          Path to the file or folder to get a copy reference to
-     * @param  string $copyReference Copy reference returned by getCopyReference
+     * @param string $path          Path to the file or folder to get a copy reference to
+     * @param string $copyReference Copy reference returned by getCopyReference
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-copy_reference-save
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-copy_reference-save
      *
      * @return \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
      */
-    public function saveCopyReference($path, $copyReference) {
+    public function saveCopyReference($path, $copyReference)
+    {
         //Path and Copy Reference cannot be null
         if (is_null($path) || is_null($copyReference)) {
-            throw new DropboxClientException("Path and Copy Reference cannot be null.");
+            throw new DropboxClientException('Path and Copy Reference cannot be null.');
         }
 
         //Save Copy Reference
@@ -729,7 +763,7 @@ class Dropbox {
 
         //Response doesn't have Metadata
         if (!isset($body['metadata']) || !is_array($body['metadata'])) {
-            throw new DropboxClientException("Invalid Response.");
+            throw new DropboxClientException('Invalid Response.');
         }
 
         //Make and return the Model
@@ -737,18 +771,19 @@ class Dropbox {
     }
 
     /**
-     * Get a temporary link to stream contents of a file
+     * Get a temporary link to stream contents of a file.
      *
-     * @param  string $path Path to the file you want a temporary link to
+     * @param string $path Path to the file you want a temporary link to
      *
      * https://www.dropbox.com/developers/documentation/http/documentation#files-get_temporary_link
      *
      * @return \Kunnu\Dropbox\Models\TemporaryLink
      */
-    public function getTemporaryLink($path) {
+    public function getTemporaryLink($path)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Get Temporary Link
@@ -759,19 +794,20 @@ class Dropbox {
     }
 
     /**
-     * Save a specified URL into a file in user's Dropbox
+     * Save a specified URL into a file in user's Dropbox.
      *
-     * @param  string $path Path where the URL will be saved
-     * @param  string $url  URL to be saved
+     * @param string $path Path where the URL will be saved
+     * @param string $url  URL to be saved
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-save_url
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-save_url
      *
      * @return string Async Job ID
      */
-    public function saveUrl($path, $url) {
+    public function saveUrl($path, $url)
+    {
         //Path and URL cannot be null
         if (is_null($path) || is_null($url)) {
-            throw new DropboxClientException("Path and URL cannot be null.");
+            throw new DropboxClientException('Path and URL cannot be null.');
         }
 
         //Save URL
@@ -779,7 +815,7 @@ class Dropbox {
         $body = $response->getDecodedBody();
 
         if (!isset($body['async_job_id'])) {
-            throw new DropboxClientException("Could not retrieve Async Job ID.");
+            throw new DropboxClientException('Could not retrieve Async Job ID.');
         }
 
         //Return the Asunc Job ID
@@ -787,19 +823,21 @@ class Dropbox {
     }
 
     /**
-     * Save a specified URL into a file in user's Dropbox
+     * Save a specified URL into a file in user's Dropbox.
      *
-     * @param  string $path Path where the URL will be saved
-     * @param  string $url  URL to be saved
+     * @param string $path       Path where the URL will be saved
+     * @param string $url        URL to be saved
+     * @param mixed  $asyncJobId
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-save_url-check_job_status
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-save_url-check_job_status
      *
-     * @return string|FileMetadata Status (failed|in_progress) or FileMetadata (if complete)
+     * @return FileMetadata|string Status (failed|in_progress) or FileMetadata (if complete)
      */
-    public function checkJobStatus($asyncJobId) {
+    public function checkJobStatus($asyncJobId)
+    {
         //Async Job ID cannot be null
         if (is_null($asyncJobId)) {
-            throw new DropboxClientException("Async Job ID cannot be null.");
+            throw new DropboxClientException('Async Job ID cannot be null.');
         }
 
         //Get Job Status
@@ -810,7 +848,7 @@ class Dropbox {
         $status = isset($body['.tag']) ? $body['.tag'] : '';
 
         //If status is complete
-        if ($status === 'complete') {
+        if ('complete' === $status) {
             return new FileMetadata($body);
         }
 
@@ -821,26 +859,28 @@ class Dropbox {
     /**
      * Get a one-time use temporary upload link to upload a file to a Dropbox location.
      *
-     * @param  string             $path        Path to upload the file to
-     * @param  array              $commit_info Additional Params
-     * @param  array              $duration    How long before this link expires, in seconds.
+     * @param string $path        Path to upload the file to
+     * @param array  $commit_info Additional Params
+     * @param array  $duration    how long before this link expires, in seconds
+     * @param mixed  $origin
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload
      *
      * @return \Kunnu\Dropbox\Models\TemporaryLink
      */
-    public function getTemporarilyUploadLink($path, array $commit_info = [], $origin, $duration = 14400) {
-        $params = array();
+    public function getTemporarilyUploadLink($path, array $commit_info = [], $origin, $duration = 14400)
+    {
+        $params = [];
         $params['commit_info'] = $commit_info;
         $params['commit_info']['path'] = $path;
         $params['duration'] = $duration;
 
         //Get temporarily Link
         //Make a DropboxRequest object
-        $request = new DropboxRequest("POST", '/files/get_temporary_upload_link', $this->getAccessToken(), ' api', $params);
+        $request = new DropboxRequest('POST', '/files/get_temporary_upload_link', $this->getAccessToken(), ' api', $params);
 
         // Set Origin Header
-        $request->setHeaders(array('Origin' => $origin));
+        $request->setHeaders(['Origin' => $origin]);
 
         //Send Request through the DropboxClient
         //Fetch and return the Response
@@ -853,17 +893,18 @@ class Dropbox {
     }
 
     /**
-     * Upload a File to Dropbox
+     * Upload a File to Dropbox.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  string             $path        Path to upload the file to
-     * @param  array              $params      Additional Params
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param string             $path        Path to upload the file to
+     * @param array              $params      Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload
      *
      * @return \Kunnu\Dropbox\Models\FileMetadata
      */
-    public function upload($dropboxFile, $path, array $params = []) {
+    public function upload($dropboxFile, $path, array $params = [])
+    {
         //Make Dropbox File
         $dropboxFile = $this->makeDropboxFile($dropboxFile);
 
@@ -878,17 +919,18 @@ class Dropbox {
     }
 
     /**
-     * Upload a File to Dropbox in a single request
+     * Upload a File to Dropbox in a single request.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  string             $path        Path to upload the file to
-     * @param  array              $params      Additional Params
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param string             $path        Path to upload the file to
+     * @param array              $params      Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload
      *
      * @return \Kunnu\Dropbox\Models\FileMetadata
      */
-    public function simpleUpload($dropboxFile, $path, array $params = []) {
+    public function simpleUpload($dropboxFile, $path, array $params = [])
+    {
         //Make Dropbox File
         $dropboxFile = $this->makeDropboxFile($dropboxFile);
 
@@ -905,17 +947,18 @@ class Dropbox {
     }
 
     /**
-     * Start an Upload Session
+     * Start an Upload Session.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  int                $chunkSize   Size of file chunk to upload
-     * @param  boolean            $close       Closes the session for "appendUploadSession"
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param int                $chunkSize   Size of file chunk to upload
+     * @param bool               $close       Closes the session for "appendUploadSession"
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-start
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-start
      *
      * @return string Unique identifier for the upload session
      */
-    public function startUploadSession($dropboxFile, $chunkSize = -1, $close = false) {
+    public function startUploadSession($dropboxFile, $chunkSize = -1, $close = false)
+    {
         //Make Dropbox File with the given chunk size
         $dropboxFile = $this->makeDropboxFile($dropboxFile, $chunkSize);
 
@@ -931,7 +974,7 @@ class Dropbox {
 
         //Cannot retrieve Session ID
         if (!isset($body['session_id'])) {
-            throw new DropboxClientException("Could not retrieve Session ID.");
+            throw new DropboxClientException('Could not retrieve Session ID.');
         }
 
         //Return the Session ID
@@ -939,26 +982,27 @@ class Dropbox {
     }
 
     /**
-     * Finish an upload session and save the uploaded data to the given file path
+     * Finish an upload session and save the uploaded data to the given file path.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  string $sessionId   Session ID returned by `startUploadSession`
-     * @param  int    $offset      The amount of data that has been uploaded so far
-     * @param  int    $remaining   The amount of data that is remaining
-     * @param  string $path        Path to save the file to, on Dropbox
-     * @param  array  $params      Additional Params
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param string             $sessionId   Session ID returned by `startUploadSession`
+     * @param int                $offset      The amount of data that has been uploaded so far
+     * @param int                $remaining   The amount of data that is remaining
+     * @param string             $path        Path to save the file to, on Dropbox
+     * @param array              $params      Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish
      *
      * @return \Kunnu\Dropbox\Models\FileMetadata
      */
-    public function finishUploadSession($dropboxFile, $sessionId, $offset, $remaining, $path, array $params = []) {
+    public function finishUploadSession($dropboxFile, $sessionId, $offset, $remaining, $path, array $params = [])
+    {
         //Make Dropbox File
         $dropboxFile = $this->makeDropboxFile($dropboxFile, $remaining, $offset);
 
         //Session ID, offset, remaining and path cannot be null
         if (is_null($sessionId) || is_null($path) || is_null($offset) || is_null($remaining)) {
-            throw new DropboxClientException("Session ID, offset, remaining and path cannot be null");
+            throw new DropboxClientException('Session ID, offset, remaining and path cannot be null');
         }
 
         $queryParams = [];
@@ -983,25 +1027,26 @@ class Dropbox {
     }
 
     /**
-     * Append more data to an Upload Session
+     * Append more data to an Upload Session.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  string             $sessionId   Session ID returned by `startUploadSession`
-     * @param  int                $offset      The amount of data that has been uploaded so far
-     * @param  int                $chunkSize   The amount of data to upload
-     * @param  boolean            $close       Closes the session for futher "appendUploadSession" calls
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param string             $sessionId   Session ID returned by `startUploadSession`
+     * @param int                $offset      The amount of data that has been uploaded so far
+     * @param int                $chunkSize   The amount of data to upload
+     * @param bool               $close       Closes the session for futher "appendUploadSession" calls
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-append_v2
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-append_v2
      *
      * @return string Unique identifier for the upload session
      */
-    public function appendUploadSession($dropboxFile, $sessionId, $offset, $chunkSize, $close = false) {
+    public function appendUploadSession($dropboxFile, $sessionId, $offset, $chunkSize, $close = false)
+    {
         //Make Dropbox File
         $dropboxFile = $this->makeDropboxFile($dropboxFile, $chunkSize, $offset);
 
         //Session ID, offset, chunkSize and path cannot be null
         if (is_null($sessionId) || is_null($offset) || is_null($chunkSize)) {
-            throw new DropboxClientException("Session ID, offset and chunk size cannot be null");
+            throw new DropboxClientException('Session ID, offset and chunk size cannot be null');
         }
 
         $params = [];
@@ -1028,21 +1073,22 @@ class Dropbox {
     }
 
     /**
-     * Upload file in sessions/chunks
+     * Upload file in sessions/chunks.
      *
-     * @param  string|DropboxFile $dropboxFile DropboxFile object or Path to file
-     * @param  string             $path        Path to save the file to, on Dropbox
-     * @param  int                $fileSize    The size of the file
-     * @param  int                $chunkSize   The amount of data to upload in each chunk
-     * @param  array              $params      Additional Params
+     * @param DropboxFile|string $dropboxFile DropboxFile object or Path to file
+     * @param string             $path        Path to save the file to, on Dropbox
+     * @param int                $fileSize    The size of the file
+     * @param int                $chunkSize   The amount of data to upload in each chunk
+     * @param array              $params      Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-start
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-append_v2
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-start
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-append_v2
      *
      * @return string Unique identifier for the upload session
      */
-    public function uploadChunked($dropboxFile, $path, $fileSize = null, $chunkSize = null, array $params = array()) {
+    public function uploadChunked($dropboxFile, $path, $fileSize = null, $chunkSize = null, array $params = [])
+    {
         //Make Dropbox File
         $dropboxFile = $this->makeDropboxFile($dropboxFile);
 
@@ -1086,13 +1132,13 @@ class Dropbox {
             $uploaded = $uploaded + $chunkSize;
             $remaining = $remaining - $chunkSize;
 
-            /* Update the progress */
-            $status = array(
+            // Update the progress
+            $status = [
                 'bytes_up_so_far' => $uploaded,
-                'total_bytes_down_expected' => $fileSize,
-                'percentage' => ( round(($uploaded / $fileSize) * 100) ),
-                'progress' => 'uploading'
-            );
+                'total_bytes_up_expected' => $fileSize,
+                'percentage' => (round(($uploaded / $fileSize) * 100)),
+                'progress' => 'uploading-to-cloud',
+            ];
 
             $hash = $_REQUEST['hash'];
             $current = \TheLion\OutoftheBox\Upload::get_upload_progress($hash);
@@ -1105,21 +1151,22 @@ class Dropbox {
     }
 
     /**
-     * Get a thumbnail for an image
+     * Get a thumbnail for an image.
      *
-     * @param  string $path   Path to the file you want a thumbnail to
-     * @param  string $size   Size for the thumbnail image ['w32h32','w64h64','w128h128','w256h256','w480h320','w640h480','w960h640','w1024h768','w2048h1536']
-     * @param  string $format Format for the thumbnail image ['jpeg'|'png']
-     * @param  string $mode How to resize and crop the image to achieve the desired size. ['strict', 'bestfit', 'fitone_bestfit]
+     * @param string $path   Path to the file you want a thumbnail to
+     * @param string $size   Size for the thumbnail image ['w32h32','w64h64','w128h128','w256h256','w480h320','w640h480','w960h640','w1024h768','w2048h1536']
+     * @param string $format Format for the thumbnail image ['jpeg'|'png']
+     * @param string $mode   How to resize and crop the image to achieve the desired size. ['strict', 'bestfit', 'fitone_bestfit]
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-get_thumbnail
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-get_thumbnail
      *
      * @return \Kunnu\Dropbox\Models\Thumbnail
      */
-    public function getThumbnail($path, $size = 'w256h256', $format = 'jpeg', $mode = 'strict') {
+    public function getThumbnail($path, $size = 'w256h256', $format = 'jpeg', $mode = 'strict')
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Invalid Format
@@ -1141,18 +1188,19 @@ class Dropbox {
     }
 
     /**
-     * Preview a File
+     * Preview a File.
      *
-     * @param  string $path   Path to the file you want to download
+     * @param string $path Path to the file you want to download
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-get_preview
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-get_preview
      *
      * @return \Kunnu\Dropbox\Models\File
      */
-    public function preview($path) {
+    public function preview($path)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Download File
@@ -1169,18 +1217,20 @@ class Dropbox {
     }
 
     /**
-     * Download a File
+     * Download a File.
      *
-     * @param  string $path   Path to the file you want to download
+     * @param string     $path   Path to the file you want to download
+     * @param null|mixed $export
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-download
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-download
      *
      * @return \Kunnu\Dropbox\Models\File
      */
-    public function download($path, $export = null) {
+    public function download($path, $export = null)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         if ($export) {
@@ -1201,10 +1251,11 @@ class Dropbox {
         return new File($metadata, $contents);
     }
 
-    public function stream($stream, $path, $export = null) {
+    public function stream($stream, $path, $export = null)
+    {
         //Path cannot be null
         if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
+            throw new DropboxClientException('Path cannot be null.');
         }
 
         //Make a DropboxRequest object
@@ -1217,12 +1268,12 @@ class Dropbox {
         //Send the Request to the Server through the HTTP Client
         //and fetch the raw response as DropboxRawResponse
 
-        $options = array('curl' => array(
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_RETURNTRANSFER => false,
-                CURLOPT_FILE => $stream
-        ));
+        $options = ['curl' => [
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_RETURNTRANSFER => false,
+            CURLOPT_FILE => $stream,
+        ]];
 
         $this->getClient()->getHttpClient()->send($url, $method, $requestBody, $headers, $options);
 
@@ -1232,13 +1283,140 @@ class Dropbox {
     }
 
     /**
-     * Get metadata from response headers
+     * List shared links of this user.
      *
-     * @param  DropboxResponse $response
+     * @param string $path   Path to the folder. Defaults to root.
+     * @param string $cursor the cursor returned by your last call to list_shared_links
+     * @param array  $params Additional Params
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#sharing-list_shared_links
+     *
+     * @return \Kunnu\Dropbox\Models\MetadataCollection
+     */
+    public function listSharedLinks($path = null, $cursor = null, array $params = ['direct_only' => true])
+    {
+        //Specify the root folder as an
+        //empty string rather than as "/"
+        if ('/' === $path) {
+            $path = '';
+        }
+
+        //Set the path
+        if (!empty($path)) {
+            $params['path'] = $path;
+        } elseif (!empty($cursor)) {
+            $params['cursor'] = $cursor;
+        }
+
+        //Get File Metadata
+        $response = $this->postToAPI('/sharing/list_shared_links', $params);
+
+        //Make and Return the Model
+        return $this->makeModelFromResponse($response);
+    }
+
+    /**
+     * Create a shared link with custom settings.
+     *
+     * @param string             $path     The path to be shared by the shared link
+     * @param SharedLinkSettings $settings the requested settings for the newly created shared link This field is optional
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#files-create_folder
+     *
+     * @return \Kunnu\Dropbox\Models\FileLinkMetadata|\Kunnu\Dropbox\Models\FolderLinkMetadata
+     */
+    public function createSharedLinkWithSettings($path, $settings = [])
+    {
+        //Path cannot be null
+        if (is_null($path)) {
+            throw new DropboxClientException('Path cannot be null.');
+        }
+
+        //Create Folder
+        $response = $this->postToAPI('/sharing/create_shared_link_with_settings', ['path' => $path, 'settings' => $settings]);
+
+        //Make and Return the Model
+        return $this->makeModelFromResponse($response);
+    }
+
+    /**
+     * Get Current Account.
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#users-get_current_account
+     *
+     * @return \Kunnu\Dropbox\Models\Account
+     */
+    public function getCurrentAccount()
+    {
+        //Get current account
+        $response = $this->postToAPI('/users/get_current_account', []);
+        $body = $response->getDecodedBody();
+
+        //Make and return the model
+        return new Account($body);
+    }
+
+    /**
+     * Get Account.
+     *
+     * @param string $account_id Account ID of the account to get details for
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#users-get_account
+     *
+     * @return \Kunnu\Dropbox\Models\Account
+     */
+    public function getAccount($account_id)
+    {
+        //Get account
+        $response = $this->postToAPI('/users/get_account', ['account_id' => $account_id]);
+        $body = $response->getDecodedBody();
+
+        //Make and return the model
+        return new Account($body);
+    }
+
+    /**
+     * Get Multiple Accounts in one call.
+     *
+     * @param string $account_id Account ID of the account to get details for
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#users-get_account_batch
+     *
+     * @return \Kunnu\Dropbox\Models\AccountList
+     */
+    public function getAccounts(array $account_ids = [])
+    {
+        //Get account
+        $response = $this->postToAPI('/users/get_account_batch', ['account_ids' => $account_ids]);
+        $body = $response->getDecodedBody();
+
+        //Make and return the model
+        return new AccountList($body);
+    }
+
+    /**
+     * Get Space Usage for the current user's account.
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#users-get_space_usage
      *
      * @return array
      */
-    protected function getMetadataFromResponseHeaders(DropboxResponse $response) {
+    public function getSpaceUsage()
+    {
+        //Get space usage
+        $response = $this->postToAPI('/users/get_space_usage', []);
+
+        return $response->getDecodedBody();
+        //Return the decoded body
+    }
+
+    /**
+     * Get metadata from response headers.
+     *
+     * @return array
+     */
+    protected function getMetadataFromResponseHeaders(DropboxResponse $response)
+    {
         //Response Headers
         $headers = $response->getHeaders();
 
@@ -1265,128 +1443,4 @@ class Dropbox {
         //Return the metadata
         return $metadata;
     }
-
-    /**
-     * List shared links of this user.
-     *
-     * @param  string $path     Path to the folder. Defaults to root.
-     * @param  string $cursor   The cursor returned by your last call to list_shared_links.
-     * @param  array  $params   Additional Params
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#sharing-list_shared_links
-     *
-     * @return \Kunnu\Dropbox\Models\MetadataCollection
-     */
-    public function listSharedLinks($path = null, $cursor = null, array $params = array("direct_only" => true)) {
-        //Specify the root folder as an
-        //empty string rather than as "/"
-        if ($path === '/') {
-            $path = "";
-        }
-
-        //Set the path
-        if (!empty($path)) {
-            $params['path'] = $path;
-        } else if (!empty($cursor)) {
-            $params['cursor'] = $cursor;
-        }
-
-        //Get File Metadata
-        $response = $this->postToAPI('/sharing/list_shared_links', $params);
-
-        //Make and Return the Model
-        return $this->makeModelFromResponse($response);
-    }
-
-    /**
-     * Create a shared link with custom settings
-     *
-     * @param  string   $path       The path to be shared by the shared link
-     * @param  SharedLinkSettings  $settings The requested settings for the newly created shared link This field is optional.
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#files-create_folder
-     *
-     * @return \Kunnu\Dropbox\Models\FileLinkMetadata|\Kunnu\Dropbox\Models\FolderLinkMetadata
-     */
-    public function createSharedLinkWithSettings($path, $settings = array()) {
-        //Path cannot be null
-        if (is_null($path)) {
-            throw new DropboxClientException("Path cannot be null.");
-        }
-
-        //Create Folder
-        $response = $this->postToAPI('/sharing/create_shared_link_with_settings', ['path' => $path, 'settings' => $settings]);
-
-        //Make and Return the Model
-        return $this->makeModelFromResponse($response);
-    }
-
-    /**
-     * Get Current Account
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#users-get_current_account
-     *
-     * @return \Kunnu\Dropbox\Models\Account
-     */
-    public function getCurrentAccount() {
-        //Get current account
-        $response = $this->postToAPI('/users/get_current_account', []);
-        $body = $response->getDecodedBody();
-
-        //Make and return the model
-        return new Account($body);
-    }
-
-    /**
-     * Get Account
-     *
-     * @param string $account_id Account ID of the account to get details for
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#users-get_account
-     *
-     * @return \Kunnu\Dropbox\Models\Account
-     */
-    public function getAccount($account_id) {
-        //Get account
-        $response = $this->postToAPI('/users/get_account', ['account_id' => $account_id]);
-        $body = $response->getDecodedBody();
-
-        //Make and return the model
-        return new Account($body);
-    }
-
-    /**
-     * Get Multiple Accounts in one call
-     *
-     * @param string $account_id Account ID of the account to get details for
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#users-get_account_batch
-     *
-     * @return \Kunnu\Dropbox\Models\AccountList
-     */
-    public function getAccounts(array $account_ids = []) {
-        //Get account
-        $response = $this->postToAPI('/users/get_account_batch', ['account_ids' => $account_ids]);
-        $body = $response->getDecodedBody();
-
-        //Make and return the model
-        return new AccountList($body);
-    }
-
-    /**
-     * Get Space Usage for the current user's account
-     *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#users-get_space_usage
-     *
-     * @return array
-     */
-    public function getSpaceUsage() {
-        //Get space usage
-        $response = $this->postToAPI('/users/get_space_usage', []);
-        $body = $response->getDecodedBody();
-
-        //Return the decoded body
-        return $body;
-    }
-
 }

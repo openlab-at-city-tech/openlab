@@ -45,7 +45,7 @@ class Zoom_Video_Conferencing_Recordings {
 			echo '<p>' . $recordings->message . '</p>';
 		} else {
 			//Get Template
-			require_once ZVC_PLUGIN_VIEWS_PATH . '/tpl-list-recordings.php';
+			require_once ZVC_PLUGIN_VIEWS_PATH . '/live/tpl-list-recordings.php';
 		}
 	}
 

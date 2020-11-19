@@ -188,7 +188,7 @@
                               <tr>
                                 <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                   <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:24px;font-weight:400;line-height:24px;text-align:left;color:#000000;">
-                                    <?php _e('Hi there!', 'outofthebox'); ?>
+                                    <?php _e('Hi there!','wpcloudplugins'); ?>
                                   </div>
                                 </td>
                               </tr>
@@ -200,7 +200,7 @@
                                       </strong> plugin on 
                                       <a href="<?php echo get_site_url(); ?>">
                                         <?php echo get_site_url(); ?>
-                                      </a> is not able to refresh access to the Dropbox <strong><?php echo !empty($account) ? '('.$account->get_email().')' : ''; ?></strong>. Please relink the plugin to your account by visiting the Admin Dashboard.
+                                      </a> is not able to refresh access to the Dropbox <strong><?php echo !empty($account) ? '('.$account->get_email().'- ID: '.$account->get_id().')' : ''; ?></strong>. Please relink the plugin to your account by visiting the Admin Dashboard.
                                     </p>
                                     </p>
                                     <p>In case you are not able to reauthorize the plugin, please check the status of the Dropbox API service via 
@@ -231,7 +231,7 @@
                                       <td align="center" bgcolor="#5e6ebf" role="presentation" style="border:none;border-radius:3px;cursor:auto;padding:10px 25px;background:<?php echo $colors['accent']; ?>;" valign="middle">
                                         <a href="<?php echo get_admin_url(null, 'admin.php?page=OutoftheBox_settings_dashboard'); ?>" style="background:<?php echo $colors['accent']; ?>;color:#ffffff;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:17px;font-weight:bold;line-height:120%;Margin:0;text-decoration:none;text-transform:none;" target="_blank">
                                           &#10144; 
-                                          <?php _e('Authorize the plugin!', 'outofthebox'); ?>
+                                          <?php _e('Authorize the plugin!','wpcloudplugins'); ?>
                                         </a>
                                       </td>
                                     </tr>

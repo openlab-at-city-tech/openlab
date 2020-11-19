@@ -70,7 +70,7 @@ class Client
                     }
                 }
             } catch (\Exception $ex) {
-                error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
                 return false;
             }
@@ -102,7 +102,7 @@ class Client
      * @param mixed  $recursive
      * @param mixed  $hierarchical
      *
-     * @return boolean|\TheLion\OutoftheBox\Entry
+     * @return bool|\TheLion\OutoftheBox\Entry
      */
     public function get_folder($requested_path = null, $check_if_allowed = true, $recursive = false, $hierarchical = true)
     {
@@ -129,7 +129,7 @@ class Client
                 $api_entries = array_merge($api_entries, $api_folders_contents->getItems()->toArray());
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
             die('-1');
         }
 
@@ -137,13 +137,15 @@ class Client
             foreach ($api_entries as $api_entry) {
                 $entry = new Entry($api_entry);
 
-                if ($check_if_allowed && $this->get_processor()->_is_entry_authorized($entry)) {
-                    $relative_path = $this->get_processor()->get_relative_path($entry->get_path());
-                    $entry->set_path($relative_path);
-                    $relative_path_display = $this->get_processor()->get_relative_path($entry->get_path_display());
-                    $entry->set_path_display($relative_path_display);
-                    $children[$entry->get_id()] = $entry;
+                if ($check_if_allowed && false === $this->get_processor()->_is_entry_authorized($entry)) {
+                    continue;
                 }
+
+                $relative_path = $this->get_processor()->get_relative_path($entry->get_path());
+                $entry->set_path($relative_path);
+                $relative_path_display = $this->get_processor()->get_relative_path($entry->get_path_display());
+                $entry->set_path_display($relative_path_display);
+                $children[$entry->get_id()] = $entry;
             }
         }
 
@@ -220,7 +222,7 @@ class Client
                 $api_entries = array_merge($api_entries, $api_search_result->getItems()->toArray());
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
             die('-1');
         }
 
@@ -275,7 +277,7 @@ class Client
 
             unset($api_folders_contents);
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
             return null;
         }
@@ -332,7 +334,7 @@ class Client
         if ('pdf' === $entry->get_extension()) {
             $shared_link = $this->get_shared_link($entry).'?raw=1';
             if (false === $this->get_processor()->get_user()->can_download() && $entry->get_size() < 25000000) {
-                $shared_link = 'https://docs.google.com/viewer?embedded=true&url='.rawurlencode($shared_link);
+                $shared_link = 'https://docs.google.com/viewer?embedded=true&url='.$shared_link;
             }
             header('Location: '.$shared_link);
             die();
@@ -340,7 +342,7 @@ class Client
 
         // Preview for PDF files
         // Preview for Excel files
-        if (in_array($entry->get_extension(), ['xls', 'xlsx', 'xlsm'])) {
+        if (in_array($entry->get_extension(), ['xls', 'xlsx', 'xlsm', 'gsheet', 'csv'])) {
             header('Content-Type: text/html');
         } else {
             header('Content-Disposition: inline; filename="'.$entry->get_basename().'.pdf"');
@@ -352,7 +354,7 @@ class Client
             $preview_file = $this->_client->preview($entry->get_path());
             echo $preview_file->getContents();
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
             die('-1');
         }
 
@@ -461,7 +463,7 @@ class Client
                 flush();
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
         }
 
         fclose($stream);
@@ -520,112 +522,6 @@ class Client
         }
 
         $this->download_entry();
-    }
-
-    public function download_entries_as_zip()
-    {
-        if (isset($_REQUEST['files'])) {
-            $requested_paths = $_REQUEST['files'];
-        } else {
-            $requested_paths = [$this->get_processor()->get_requested_complete_path()];
-        }
-
-        // Set Zip file name
-        $last_folder_path = $this->get_processor()->get_last_path();
-        $zip_filename = '_zip_'.$this->get_processor()->get_relative_path($last_folder_path).'_'.uniqid().'.zip';
-
-        $zip_filename = apply_filters('outofthebox_zip_filename', $zip_filename, $last_folder_path, $requested_paths);
-
-        // Load Zip Library
-        if (!function_exists('PHPZip\autoload')) {
-            require_once 'PHPZip/autoload.php';
-        } else {
-            die(-1);
-        }
-
-        // Create Zip file
-        $zip = new \PHPZip\Zip\Stream\ZipStream(\TheLion\OutoftheBox\Helpers::filter_filename($zip_filename));
-
-        if (ob_get_level() > 0) {
-            ob_end_clean(); // Stop WP from buffering
-        }
-
-        // Process all the files that need to be added to the zip file
-        $files_added_to_zip = [];
-        foreach ($requested_paths as $requested_path) {
-            if ($requested_path !== $this->get_processor()->get_requested_complete_path()) {
-                $requested_path = $this->get_processor()->get_requested_complete_path().'/'.rawurldecode($requested_path);
-            }
-
-            $entry = $this->get_entry($requested_path);
-
-            if (false === $entry) {
-                continue;
-            }
-
-            $entries_to_add = [];
-
-            if ($entry->is_dir()) {
-                $folder = $this->get_folder($entry->get_path(), true, true, false);
-
-                if (false === $folder->has_children()) {
-                    continue;
-                }
-                $entries_to_add = array_merge($entries_to_add, $folder->get_children());
-            } else {
-                $relative_path = $this->get_processor()->get_relative_path($entry->get_path());
-                $entry->set_path($relative_path);
-                $relative_path_display = $this->get_processor()->get_relative_path($entry->get_path_display());
-                $entry->set_path_display($relative_path_display);
-                $entries_to_add[] = $entry;
-            }
-
-            foreach ($entries_to_add as $entry_metadata) {
-                flush();
-                $zip = $this->_add_entry_to_zip($zip, $entry_metadata);
-                $files_added_to_zip[] = $entry;
-
-                do_action('outofthebox_log_event', 'outofthebox_downloaded_entry', $entry, ['as_zip' => true]);
-            }
-        }
-
-        // Close zip
-        $result = $zip->finalize();
-
-        // Send email if needed
-        if ('1' === $this->get_processor()->get_shortcode_option('notificationdownload')) {
-            $this->get_processor()->send_notification_email('download', $files_added_to_zip);
-        }
-    }
-
-    public function _add_entry_to_zip(\PHPZip\Zip\Stream\ZipStream $zip, Entry $entry)
-    {
-        $path = $entry->get_path_display();
-
-        if ($entry->is_dir()) {
-            $zip->addDirectory(ltrim($path, '/'));
-        } else {
-            // Download the File
-            // Update the time_limit as this can take a while
-            @set_time_limit(60);
-
-            $download_stream = fopen('php://temp/maxmemory:'.(5 * 1024 * 1024), 'r+');
-
-            try {
-                // @var $download_file \Kunnu\Dropbox\Models\File
-                $this->_client->stream($download_stream, $entry->get_id());
-                // Add file contents to zip
-                $zip->addLargeFile($download_stream, ltrim($path, '/'), $entry->get_last_edited(), $entry->get_description());
-
-                fclose($download_stream);
-            } catch (\Exception $ex) {
-                error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
-                fclose($download_stream);
-                // To Do Log
-            }
-        }
-
-        return $zip;
     }
 
     public function get_thumbnail(Entry $entry, $aslink = false, $width = null, $height = null, $crop = false)
@@ -719,7 +615,7 @@ class Client
 
             $cached_entry->add_temporarily_link($temporarily_link->getLink(), $expires);
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
             return false;
         }
@@ -782,12 +678,12 @@ class Client
                 $shared_link = $cached_entry->get_shared_link($visibility);
 
                 if (empty($shared_link)) {
-                    die(sprintf(__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the Dropbox sharing settings for this document.'), $visibility));
+                    die(sprintf(__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the sharing settings for this document in the cloud.'), $visibility));
                 }
 
                 do_action('outofthebox_log_event', 'outofthebox_updated_metadata', $entry, ['metadata_field' => 'Sharing Permissions']);
             } else {
-                error_log('[Out-of-the-Box message]: '.sprintf('Dropbox API Error on line %s: %s', __LINE__, $ex->getErrorSummary()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getErrorSummary()));
                 die($ex->getErrorSummary());
 
                 return false;
@@ -839,12 +735,15 @@ class Client
         try {
             switch ($this->get_processor()->get_setting('shortlinks')) {
                 case 'Bit.ly':
-                    require_once 'bitly/bitly.php';
 
-                    $this->bitly = new \Bitly($this->get_processor()->get_setting('bitly_login'), $this->get_processor()->get_setting('bitly_apikey'));
-                    $response = $this->bitly->shorten($url);
+                    $requestBody = json_encode(['long_url' => $url]);
+                    $headers = ['Authorization ' => 'Bearer '.$this->get_processor()->get_setting('bitly_apikey'), 'Content-Type' => 'application/json'];
+                    $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api-ssl.bitly.com/v4/shorten', 'POST', $requestBody, $headers);
 
-                    return $response['url'];
+                    $body = $rawResponse->getBody();
+                    $data = json_decode($body, true);
+
+                    return $data['link'];
                 case 'Shorte.st':
                     $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api.shorte'.'.st/s/'.$this->get_processor()->get_setting('shortest_apikey').'/'.$url, 'GET', '');
                     $body = $rawResponse->getBody();
@@ -864,7 +763,7 @@ class Client
                     break;
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
             return $url;
         }
@@ -898,9 +797,9 @@ class Client
 
             return $new_entry;
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Dropbox API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to add folder', 'outofthebox'));
+            return new \WP_Error('broke', __('Failed to add folder', 'wpcloudplugins'));
         }
 
         return false;
@@ -945,10 +844,78 @@ class Client
 
             return $new_entry;
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Dropbox API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to rename entry', 'outofthebox'));
+            return new \WP_Error('broke', __('Failed to rename entry', 'wpcloudplugins'));
         }
+    }
+
+    // Copy entry
+
+    public function copy_entry($target_entry = null, $target_parent = null, $new_name = null)
+    {
+        if (null === $target_entry) {
+            $target_entry = $this->get_entry($this->get_processor()->get_requested_complete_path());
+        }
+
+        if (false === $target_entry) {
+            $message = '[WP Cloud Plugin message]: '.sprintf('Failed to copy the file %s.', $target_entry->get_path());
+
+            error_log($message);
+
+            return new \WP_Error('broke', $message);
+        }
+
+        if (($target_entry->is_dir()) && (false === $this->get_processor()->get_user()->can_copy_folders())) {
+            $message = '[WP Cloud Plugin message]: '.sprintf('Failed to move %s as user is not allowed to move folders.', $target_entry->get_path());
+
+            error_log($message);
+
+            return new \WP_Error('broke', $message);
+        }
+
+        if (($target_entry->is_file()) && (false === $this->get_processor()->get_user()->can_copy_files())) {
+            $message = '[WP Cloud Plugin message]: '.sprintf('Failed to copy %s as user is not allowed to copy files.', $target_entry->get_path());
+
+            error_log($message);
+
+            return new \WP_Error('broke', $message);
+        }
+
+        if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
+            $message = '[WP Cloud Plugin message]: '.sprintf('Failed to copy the file %s.', $target_entry->get_path());
+
+            error_log($message);
+
+            return new \WP_Error('broke', $message);
+        }
+
+        $target_path = empty($target_parent) ? $target_entry->get_parent() : $target_parent;
+        $new_entry_path = \TheLion\OutoftheBox\Helpers::clean_folder_path($target_path.'/'.$new_name);
+        $params = ['autorename' => true];
+
+        try {
+            $api_entry = $this->_client->copy($target_entry->get_path(), $new_entry_path, $params);
+
+            $cached_request = new CacheRequest($this->get_processor());
+            $cached_request->clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+
+            $new_entry = new Entry($api_entry);
+            do_action('outofthebox_log_event', 'outofthebox__copied_entry', $new_entry, ['original' => $target_entry->get_name()]);
+        } catch (\Exception $ex) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+
+            if ('1' === $this->get_processor()->get_shortcode_option('debug')) {
+                return new \WP_Error('broke', $ex->getMessage());
+            }
+
+            return new \WP_Error('broke', __('Failed to copy entry', 'wpcloudplugins'));
+        }
+
+        // Clear Cached Requests
+        CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+
+        return true;
     }
 
     public function move_entries($entries = [], $target_entry_path, $copy = false)
@@ -959,7 +926,7 @@ class Client
         $target = $this->get_entry($target_entry_path);
 
         if (false === $target) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Failed to move as target folder %s is not found.', $target->get_path()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('Failed to move as target folder %s is not found.', $target_entry_path));
 
             return $entries_to_move;
         }
@@ -972,14 +939,14 @@ class Client
             }
 
             if (($entry->is_dir()) && (false === $this->get_processor()->get_user()->can_move_folders())) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Failed to move %s as user is not allowed to move folders.', $target->get_path()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Failed to move %s as user is not allowed to move folders.', $target->get_path()));
                 $entries_to_move[$entry->get_id()] = false;
 
                 continue;
             }
 
             if (($entry->is_file()) && (false === $this->get_processor()->get_user()->can_move_files())) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Failed to move %s as user is not allowed to remove files.', $target->get_path()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Failed to move %s as user is not allowed to remove files.', $target->get_path()));
                 $entries_to_move[$entry->get_id()] = false;
 
                 continue;
@@ -993,7 +960,7 @@ class Client
 
             // Check user permission
             if (!$entry->get_permission('canmove')) {
-                error_log('[Out-of-the-Box message]: '.sprintf('Failed to move %s as the sharing permissions on it prevent this.', $target->get_path()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('Failed to move %s as the sharing permissions on it prevent this.', $target->get_path()));
                 $entries_to_move[$entry->get_id()] = false;
 
                 continue;
@@ -1025,7 +992,7 @@ class Client
                 $entries_to_move[$entry->get_id()] = $entry;
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Dropbox API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
             return $entries_to_move;
         }
@@ -1040,8 +1007,8 @@ class Client
         $deleted_entries = [];
         $batch_request = [];
 
-        foreach ($entries_to_delete as $target_entry_path) {
-            $target_entry = $this->get_entry($target_entry_path);
+        foreach ($entries_to_delete as $target_entry_id) {
+            $target_entry = $this->get_entry($target_entry_id);
 
             if (false === $target_entry) {
                 continue;
@@ -1078,15 +1045,17 @@ class Client
                 do_action('outofthebox_log_event', 'outofthebox_deleted_entry', $deleted_entry, []);
             }
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Dropbox API Error on line %s: %s', __LINE__, $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to delete entry', 'outofthebox'));
+            return new \WP_Error('broke', __('Failed to delete entry', 'wpcloudplugins'));
         }
 
         if ('1' === $this->get_processor()->get_shortcode_option('notificationdeletion')) {
             // TO DO NOTIFICATION
             $this->get_processor()->send_notification_email('deletion', $deleted_entries);
         }
+
+        CacheRequest::clear_request_cache();
 
         return $deleted_entries;
     }

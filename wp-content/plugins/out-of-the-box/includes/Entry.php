@@ -636,7 +636,7 @@ class Entry extends EntryAbstract
         /* Can File be previewed via Dropbox?
          * https://www.dropbox.com/developers/core/docs#thumbnails
          */
-        $previewsupport = ['pdf', 'txt', 'ai', 'eps', 'odp', 'odt', 'doc', 'docx', 'docm', 'ppt', 'pps', 'ppsx', 'ppsm', 'pptx', 'pptm', 'xls', 'xlsx', 'xlsm', 'rtf', 'jpg', 'jpeg', 'gif', 'png', 'mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav', 'paper'];
+        $previewsupport = ['pdf', 'txt', 'ai', 'eps', 'odp', 'odt', 'doc', 'docx', 'docm', 'ppt', 'pps', 'ppsx', 'ppsm', 'pptx', 'pptm', 'xls', 'xlsx', 'xlsm', 'rtf', 'jpg', 'jpeg', 'gif', 'png', 'mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'ogg', 'oga', 'wav', 'paper', 'gdoc','gslides','gsheet'];
         $openwithdropbox = (in_array($this->get_extension(), $previewsupport));
         if ($openwithdropbox) {
             $this->set_can_preview_by_cloud(true);

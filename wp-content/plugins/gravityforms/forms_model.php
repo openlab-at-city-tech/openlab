@@ -5768,15 +5768,21 @@ class GFFormsModel {
 		}
 
 		if ( rgar( $search_criteria, 'start_date' ) ) {
-			$valid_timestamp =  gmdate( 'Y-m-d H:i:s', strtotime( $search_criteria['start_date'] ) );
-			$where[] = $wpdb->prepare( 'timestampdiff(SECOND, %s, date_created) >= 0', $valid_timestamp );
+			if ( ! is_numeric( $search_criteria['start_date'] ) || (int) $search_criteria['start_date'] != $search_criteria['start_date'] ) {
+				$search_criteria['start_date'] = strtotime( $search_criteria['start_date'] );
+			}
+			$valid_timestamp = gmdate( 'Y-m-d H:i:s', $search_criteria['start_date'] );
+			$where[]         = $wpdb->prepare( 'timestampdiff(SECOND, %s, date_created) >= 0', $valid_timestamp );
 		}
 
 		if ( rgar( $search_criteria, 'end_date' ) ) {
-			$valid_timestamp = gmdate( 'Y-m-d H:i:s', strtotime( $search_criteria['end_date'] ) );
+			if ( ! is_numeric( $search_criteria['end_date'] ) || (int) $search_criteria['end_date'] != $search_criteria['end_date'] ) {
+				$search_criteria['end_date'] = strtotime( $search_criteria['end_date'] );
+			}
+			$valid_timestamp = gmdate( 'Y-m-d H:i:s', $search_criteria['end_date'] );
 			// The user didn't specify and end time, so search until the end of the day.
 			if ( '00:00:00' == substr( $valid_timestamp, -8 ) ) {
-				$valid_timestamp = gmdate( 'Y-m-d', strtotime( $search_criteria['end_date'] ) ) . ' 23:59:59';
+				$valid_timestamp = gmdate( 'Y-m-d', $search_criteria['end_date'] ) . ' 23:59:59';
 			}
 			$where[] = $wpdb->prepare( 'timestampdiff(SECOND, %s, date_created) <= 0', $valid_timestamp );
 		}

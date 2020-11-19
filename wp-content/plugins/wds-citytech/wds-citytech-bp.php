@@ -703,6 +703,7 @@ add_filter(
 			return $editor;
 		}
 
+		$group_id = null;
 		if ( bp_is_group() ) {
 			$group_id = bp_get_current_group_id();
 		} elseif ( ! bp_is_root_blog() ) {

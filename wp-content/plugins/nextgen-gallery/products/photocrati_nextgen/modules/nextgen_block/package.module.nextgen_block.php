@@ -36,14 +36,12 @@ class C_Ngg_Post_Thumbnails
     }
     public function register_hooks()
     {
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_post_thumbnails'), 1);
-        add_action('rest_insert_post', array($this, 'set_or_remove_ngg_post_thumbnail'), PHP_INT_MAX - 1, 2);
-        add_action('rest_insert_page', array($this, 'set_or_remove_ngg_post_thumbnail'), PHP_INT_MAX - 1, 2);
-        /**
-         * Expose a field for posts/pages to set the ngg_post_thumbnail via REST API
-         */
-        register_meta('post', 'ngg_post_thumbnail', array('type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE));
-        register_meta('page', 'ngg_post_thumbnail', array('type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE));
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_post_thumbnails'], 1);
+        add_action('rest_insert_post', [$this, 'set_or_remove_ngg_post_thumbnail'], PHP_INT_MAX - 1, 2);
+        add_action('rest_insert_page', [$this, 'set_or_remove_ngg_post_thumbnail'], PHP_INT_MAX - 1, 2);
+        // Expose a field for posts/pages to set the ngg_post_thumbnail via REST API
+        register_meta('post', 'ngg_post_thumbnail', ['type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE]);
+        register_meta('page', 'ngg_post_thumbnail', ['type' => 'integer', 'single' => TRUE, 'show_in_rest' => TRUE]);
     }
     function register_adapters()
     {
@@ -79,12 +77,12 @@ class C_Ngg_Post_Thumbnails
     {
         add_thickbox();
         global $wp_scripts;
-        wp_enqueue_script('ngg-post-thumbnails', C_Router::get_instance()->get_static_url(NEXTGEN_BLOCK . '#build/post-thumbnail.min.js'), array('lodash', 'wp-element', 'wp-data', 'wp-components', 'wp-i18n', 'photocrati_ajax'), NGG_PLUGIN_VERSION);
-        wp_localize_script('ngg-post-thumbnails', 'ngg_featured_image', array('modal_url' => admin_url("/media-upload.php?post_id=%post_id%&type=image&tab=nextgen&from=block-editor&TB_iframe=true")));
+        wp_enqueue_script('ngg-post-thumbnails', C_Router::get_instance()->get_static_url(NEXTGEN_BLOCK . '#build/post-thumbnail.min.js'), ['lodash', 'wp-element', 'wp-data', 'wp-editor', 'wp-components', 'wp-i18n', 'photocrati_ajax'], NGG_PLUGIN_VERSION);
+        wp_localize_script('ngg-post-thumbnails', 'ngg_featured_image', ['modal_url' => admin_url("/media-upload.php?post_id=%post_id%&type=image&tab=nextgen&from=block-editor&TB_iframe=true")]);
         if (preg_match("/media-upload\\.php/", $_SERVER['REQUEST_URI']) && $_GET['tab'] == 'nextgen') {
             wp_add_inline_style('wp-admin', "#media-upload-header {display: none }");
             if (isset($_GET['from']) && $_GET['from'] == 'block-editor') {
-                add_action('admin_enqueue_scripts', array($this, 'media_upload_footer'));
+                add_action('admin_enqueue_scripts', [$this, 'media_upload_footer']);
             }
         }
     }

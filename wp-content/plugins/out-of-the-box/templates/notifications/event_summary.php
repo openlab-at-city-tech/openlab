@@ -188,7 +188,7 @@
                               <tr>
                                 <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                   <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:24px;font-weight:400;line-height:24px;text-align:left;color:#000000;">
-                                    <?php _e('Hi there!', 'outofthebox'); ?>
+                                    <?php _e('Hi there!','wpcloudplugins'); ?>
                                   </div>
                                 </td>
                               </tr>
@@ -196,7 +196,7 @@
                                 <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                   <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#000000;">
                                     <?php
-                                        echo sprintf(__('This is the latest summary of all the activites that are logged since %s', 'outofthebox'), '<em>'.date_i18n('l j F '.get_option('time_format'), date_format($since, 'U')).'</em>');
+                                        echo sprintf(__('This is the latest summary of all the activites that are logged since %s', 'wpcloudplugins'), '<em>'.date_i18n('l j F '.get_option('time_format'), date_format($since, 'U')).'</em>');
                                     ?>.
                                   </div>
                                 </td>
@@ -224,7 +224,7 @@
                                     <tr>
                                       <td style="width:20px;padding-right:10px;padding-top: 5px;padding-left: 5px;">
                                         <em>- 
-                                          <?php _e('No downloads found in this period', 'outofthebox'); ?> -
+                                          <?php _e('No downloads found in this period','wpcloudplugins'); ?> -
                                         </em>
                                       </td>
                                     </tr>
@@ -283,7 +283,7 @@
                                     <tr>
                                       <td style="width:20px;padding-right:10px;padding-top: 5px;padding-left: 5px;">
                                         <em>- 
-                                          <?php _e('No activities found in this period', 'outofthebox'); ?> -
+                                          <?php _e('No activities found in this period','wpcloudplugins'); ?> -
                                         </em>
                                       </td>
                                     </tr>
@@ -347,9 +347,9 @@
                                           <?php
                                             $total = $all_events['recordsFiltered'];
                                             if ($total - $max_events > 0) {
-                                                echo sprintf(__('View more activites (%s left)', 'outofthebox'), ($total - $max_events));
+                                                echo sprintf(__('View more activites (%s left)', 'wpcloudplugins'), ($total - $max_events));
                                             } else {
-                                                _e('View all activites', 'outofthebox');
+                                                _e('View all activites','wpcloudplugins');
                                             }
                                           ?>
                                         </a>

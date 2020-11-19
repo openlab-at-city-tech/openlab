@@ -25,19 +25,12 @@ add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
  *
  */
 function openlab_help_loop() {
-    global $paged, $post;
 
-    $post_id = get_the_ID();
-    $hp_query = new WP_Query(array(
-        'post_type' => 'help',
-        'p' => $post_id,
-    ));
+    while ( have_posts() ) : the_post();
 
-    while ($hp_query->have_posts()) : $hp_query->the_post();
-        ?>
-
-        <?php
-        $help_cats = get_the_terms($post_id, 'help_category');
+        $post      = get_post();
+        $post_id   = $post->ID;
+        $help_cats = get_the_terms( $post_id, 'help_category' );
 
         if (!empty($help_cats)) {
 

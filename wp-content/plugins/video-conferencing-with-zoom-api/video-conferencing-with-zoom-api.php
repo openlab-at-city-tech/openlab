@@ -6,8 +6,8 @@
  *
  * Plugin Name:       Video Conferencing with Zoom
  * Plugin URI:        https://wordpress.org/plugins/video-conferencing-with-zoom-api/
- * Description:       Video Conferencing with Zoom Meetings and Webinar plugin provides you with great functionality of managing Zoom meetings, Webinar scheduling options, and users directly from your WordPress dashboard.
- * Version:           3.5.0
+ * Description:       Video Conferencing with Zoom Meetings and Webinars plugin provides you with great functionality of managing Zoom meetings, Webinar scheduling options, and users directly from your WordPress dashboard.
+ * Version:           3.6.6
  * Author:            Deepen Bajracharya
  * Author URI:        http://www.deepenbajracharya.com.np
  * License:           GPL-2.0+
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'ZVC_PLUGIN_SLUG', 'video-conferencing-zoom' );
-define( 'ZVC_PLUGIN_VERSION', '3.5.0' );
+define( 'ZVC_PLUGIN_VERSION', '3.6.6' );
 define( 'ZVC_PLUGIN_AUTHOR', 'https://deepenbajracharya.com.np' );
 define( 'ZVC_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ZVC_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
@@ -37,10 +37,8 @@ define( 'ZVC_PLUGIN_IMAGES_PATH', ZVC_PLUGIN_DIR_URL . 'assets/images' );
 define( 'ZVC_PLUGIN_LANGUAGE_PATH', trailingslashit( basename( ZVC_PLUGIN_DIR_PATH ) ) . 'languages/' );
 
 // the main plugin class
-if ( ! class_exists( 'Video_Conferencing_With_Zoom' ) ) {
-	require_once ZVC_PLUGIN_INCLUDES_PATH . '/class-zvc-init.php';
-}
+require_once ZVC_PLUGIN_INCLUDES_PATH . '/Bootstrap.php';
 
-add_action( 'plugins_loaded', array( 'Video_Conferencing_With_Zoom', 'instance' ), 99 );
-register_activation_hook( __FILE__, array( 'Video_Conferencing_With_Zoom', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Video_Conferencing_With_Zoom', 'deactivate' ) );
+add_action( 'plugins_loaded', 'Codemanas\VczApi\Bootstrap::instance', 99 );
+register_activation_hook( __FILE__, 'Codemanas\VczApi\Bootstrap::activate' );
+register_deactivation_hook( __FILE__, 'Codemanas\VczApi\Bootstrap::deactivate' );

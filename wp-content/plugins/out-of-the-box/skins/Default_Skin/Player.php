@@ -31,7 +31,7 @@ class Default_Skin extends \TheLion\OutoftheBox\MediaplayerSkin
                 'mejs.fullscreen-on' => __('Go Fullscreen'),
                 'mejs.download-video' => __('Download Video'),
                 'mejs.download-file' => __('Download'),
-                'mejs.purchase' => __('Purchase', 'outofthebox'),
+                'mejs.purchase' => __('Purchase', 'wpcloudplugins'),
                 'mejs.fullscreen' => __('Fullscreen'),
                 'mejs.time-jump-forward' => [__('Jump forward 1 second'), __('Jump forward %1 seconds')],
                 'mejs.loop' => __('Toggle Loop'),
@@ -130,7 +130,9 @@ class Default_Skin extends \TheLion\OutoftheBox\MediaplayerSkin
 
     public function load_styles()
     {
-        wp_register_style('OutoftheBox.Default_Skin.Player.CSS', $this->get_url().'/css/style.css', false, OUTOFTHEBOX_VERSION);
+        $is_rtl_css = (is_rtl() ? '.rtl' : '');
+
+        wp_register_style('OutoftheBox.Default_Skin.Player.CSS', $this->get_url().'/css/style'.$is_rtl_css.'.css', false, OUTOFTHEBOX_VERSION);
         wp_enqueue_style('OutoftheBox.Default_Skin.Player.CSS');
     }
 }

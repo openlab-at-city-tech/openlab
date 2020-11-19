@@ -10,7 +10,7 @@
 
 global $zoom_recordings;
 ?>
-    <table id="zvc-recordings-list-table" class="zvc-recordings-list-table vczapi-user-meeting-list">
+    <table id="vczapi-recordings-list-table" class="vczapi-recordings-list-table vczapi-user-meeting-list">
         <thead>
         <tr>
             <th><?php _e( 'Meeting ID', 'video-conferencing-with-zoom-api' ); ?></th>
@@ -37,8 +37,10 @@ global $zoom_recordings;
 							if ( $files->file_type === "MP4" ) {
 								?>
                                 <a href="<?php echo $files->play_url; ?>" target="_blank"><?php _e( 'Play', 'video-conferencing-with-zoom-api' ); ?></a>
-                                <a href="<?php echo $files->download_url; ?>" target="_blank"><?php _e( 'Download', 'video-conferencing-with-zoom-api' ); ?></a>
-								<?php
+								<?php if ( $zoom_recordings->downloadable ) { ?>
+                                    <a href="<?php echo $files->download_url; ?>" target="_blank"><?php _e( 'Download', 'video-conferencing-with-zoom-api' ); ?></a>
+									<?php
+								}
 							}
 						}
 					} else {

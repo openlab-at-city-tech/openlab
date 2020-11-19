@@ -1,0 +1,184 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Advanced Sidebar Menu\n"
+"POT-Creation-Date: 2020-10-26 10:17-0600\n"
+"PO-Revision-Date: 2019-03-05 12:29-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: advanced-sidebar-menu.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: advanced-sidebar-menu.php:128
+msgid "widget documentation"
+msgstr ""
+
+#. translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>]
+#: src/Notice.php:54
+#, php-format
+msgctxt "{<a>}{</a>}"
+msgid ""
+"Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version "
+"%3$s+. Please update or deactivate the PRO version."
+msgstr ""
+
+#: src/Notice.php:88
+msgid "Advanced Sidebar Menu PRO"
+msgstr ""
+
+#: src/Notice.php:92
+msgid ""
+"Styling options including borders, bullets, colors, backgrounds, size, and "
+"font weight."
+msgstr ""
+
+#: src/Notice.php:93
+msgid "Accordion menus."
+msgstr ""
+
+#: src/Notice.php:94
+msgid "Support for custom navigation menus from Appearance -> Menus."
+msgstr ""
+
+#: src/Notice.php:98
+msgid "Select and display custom post types."
+msgstr ""
+
+#: src/Notice.php:102
+msgid "Select and display custom taxonomies."
+msgstr ""
+
+#: src/Notice.php:106
+msgid "Priority support with access to members only support area."
+msgstr ""
+
+#: src/Notice.php:112
+msgid "So much more..."
+msgstr ""
+
+#: src/Notice.php:121
+msgid "Upgrade"
+msgstr ""
+
+#: src/Notice.php:131 src/Notice.php:137
+msgid "Preview"
+msgstr ""
+
+#: src/Widget/Category.php:52
+msgid ""
+"Creates a menu of all the categories using the child/parent relationship"
+msgstr ""
+
+#: src/Widget/Category.php:58
+msgid "Advanced Sidebar Categories Menu"
+msgstr ""
+
+#: src/Widget/Category.php:99
+msgid "Display the highest level parent category"
+msgstr ""
+
+#: src/Widget/Category.php:105
+msgid "Display menu when there is only the parent category"
+msgstr ""
+
+#: src/Widget/Category.php:111
+msgid "Always display child categories"
+msgstr ""
+
+#: src/Widget/Category.php:117
+msgid "Levels of child categories to display"
+msgstr ""
+
+#: src/Widget/Category.php:159
+msgid "Display categories on single posts"
+msgstr ""
+
+#: src/Widget/Category.php:166
+msgid "Display each single post's category"
+msgstr ""
+
+#: src/Widget/Category.php:173
+msgid "In a new widget"
+msgstr ""
+
+#: src/Widget/Category.php:176
+msgid "In another list in the same widget"
+msgstr ""
+
+#: src/Widget/Category.php:202
+msgid "Categories to exclude (ids), comma separated"
+msgstr ""
+
+#: src/Widget/Category.php:235 src/Widget/Page.php:240
+msgid "Title"
+msgstr ""
+
+#: src/Widget/Page.php:48
+msgid "Creates a menu of all the pages using the child/parent relationship"
+msgstr ""
+
+#: src/Widget/Page.php:54
+msgid "Advanced Sidebar Pages Menu"
+msgstr ""
+
+#: src/Widget/Page.php:95
+msgid "Display highest level parent page"
+msgstr ""
+
+#: src/Widget/Page.php:103
+msgid "Display menu when there is only the parent page"
+msgstr ""
+
+#: src/Widget/Page.php:110
+msgid "Always display child pages"
+msgstr ""
+
+#: src/Widget/Page.php:123
+msgid "Maximum level of child pages to display"
+msgstr ""
+
+#: src/Widget/Page.php:129
+msgid " - All - "
+msgstr ""
+
+#: src/Widget/Page.php:167
+msgid "Order by"
+msgstr ""
+
+#: src/Widget/Page.php:208
+msgid "Pages to exclude (ids), comma separated"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Advanced Sidebar Menu"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://onpointplugins.com/advanced-sidebar-menu/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Creates dynamic menus based on parent/child relationship of your pages or "
+"categories."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "OnPoint Plugins"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://onpointplugins.com"
+msgstr ""

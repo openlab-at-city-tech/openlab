@@ -60,18 +60,23 @@ class Zoom_Video_Conferencing_Admin_Views {
 				'zoom_recordings'
 			) );
 
-			add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Addons', 'video-conferencing-with-zoom-api' ), __( 'Addons', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-addons', array(
+			add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Extensions', 'video-conferencing-with-zoom-api' ), __( 'Extensions', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-addons', array(
 				'Zoom_Video_Conferencing_Admin_Addons',
 				'render'
 			) );
 
-			//Only for developers. So this is hidden !
+			//Only for developers or PRO version. So this is hidden !
 			if ( defined( 'VIDEO_CONFERENCING_HOST_ASSIGN_PAGE' ) ) {
-				add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Assign Host ID', 'video-conferencing-with-zoom-api' ), __( 'Assign Host ID', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-host-id-assign', array(
+				add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Host to WP Users', 'video-conferencing-with-zoom-api' ), __( 'Host to WP Users', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-host-id-assign', array(
 					'Zoom_Video_Conferencing_Admin_Users',
 					'assign_host_id'
 				) );
 			}
+
+			add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Import', 'video-conferencing-with-zoom-api' ), __( 'Import', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-sync', array(
+				'Zoom_Video_Conferencing_Admin_Sync',
+				'render'
+			) );
 		}
 
 		add_submenu_page( 'edit.php?post_type=zoom-meetings', __( 'Settings', 'video-conferencing-with-zoom-api' ), __( 'Settings', 'video-conferencing-with-zoom-api' ), 'manage_options', 'zoom-video-conferencing-settings', array(
@@ -127,8 +132,12 @@ class Zoom_Video_Conferencing_Admin_Views {
 					$going_to_start                     = sanitize_text_field( filter_input( INPUT_POST, 'zoom_api_meeting_goingtostart_text' ) );
 					$ended_mtg                          = sanitize_text_field( filter_input( INPUT_POST, 'zoom_api_meeting_ended_text' ) );
 					$locale_format                      = sanitize_text_field( filter_input( INPUT_POST, 'zoom_api_date_time_format' ) );
+					$twentyfour_format                  = sanitize_text_field( filter_input( INPUT_POST, 'zoom_api_twenty_fourhour_format' ) );
+					$full_month_format                  = sanitize_text_field( filter_input( INPUT_POST, 'zoom_api_full_month_format' ) );
 					$embed_pwd_in_join_link             = sanitize_text_field( filter_input( INPUT_POST, 'embed_password_join_link' ) );
 					$hide_join_links_non_loggedin_users = sanitize_text_field( filter_input( INPUT_POST, 'hide_join_links_non_loggedin_users' ) );
+					$hide_email_jvb                     = sanitize_text_field( filter_input( INPUT_POST, 'meeting_show_email_field' ) );
+					$disable_join_via_browser           = sanitize_text_field( filter_input( INPUT_POST, 'meeting_disable_join_via_browser' ) );
 
 					update_option( 'zoom_api_key', $zoom_api_key );
 					update_option( 'zoom_api_secret', $zoom_api_secret );
@@ -139,8 +148,12 @@ class Zoom_Video_Conferencing_Admin_Views {
 					update_option( 'zoom_going_tostart_meeting_text', $going_to_start );
 					update_option( 'zoom_ended_meeting_text', $ended_mtg );
 					update_option( 'zoom_api_date_time_format', $locale_format );
+					update_option( 'zoom_api_full_month_format', $full_month_format );
+					update_option( 'zoom_api_twenty_fourhour_format', $twentyfour_format );
 					update_option( 'zoom_api_embed_pwd_join_link', $embed_pwd_in_join_link );
 					update_option( 'zoom_api_hide_shortcode_join_links', $hide_join_links_non_loggedin_users );
+					update_option( 'zoom_api_hide_in_jvb', $hide_email_jvb );
+					update_option( 'zoom_api_disable_jvb', $disable_join_via_browser );
 
 					//After user has been created delete this transient in order to fetch latest Data.
 					video_conferencing_zoom_api_delete_user_cache();
@@ -164,9 +177,13 @@ class Zoom_Video_Conferencing_Admin_Views {
 				$zoom_going_to_start         = get_option( 'zoom_going_tostart_meeting_text' );
 				$zoom_ended                  = get_option( 'zoom_ended_meeting_text' );
 				$locale_format               = get_option( 'zoom_api_date_time_format' );
+				$twentyfour_format           = get_option( 'zoom_api_twenty_fourhour_format' );
+				$full_month_format           = get_option( 'zoom_api_full_month_format' );
 				$embed_password_join_link    = get_option( 'zoom_api_embed_pwd_join_link' );
 				$embed_password_join_link    = get_option( 'zoom_api_embed_pwd_join_link' );
 				$hide_join_link_nloggedusers = get_option( 'zoom_api_hide_shortcode_join_links' );
+				$hide_email_jvb              = get_option( 'zoom_api_hide_in_jvb' );
+				$disable_jvb                 = get_option( 'zoom_api_disable_jvb' );
 
 				//Get Template
 				require_once ZVC_PLUGIN_VIEWS_PATH . '/tabs/api-settings.php';

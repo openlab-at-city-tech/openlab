@@ -206,9 +206,9 @@ class App
 
             delete_transient('outofthebox_'.$account->get_id().'_is_authorized');
         } catch (\Exception $ex) {
-            error_log('[Out-of-the-Box message]: '.sprintf('Cannot generate Access Token: %s', $ex->getMessage()));
+            error_log('[WP Cloud Plugin message]: '.sprintf('Cannot generate Access Token: %s', $ex->getMessage()));
 
-            return new \WP_Error('broke', __('error communicating with Dropbox API: ', 'outofthebox').$ex->getMessage());
+            return new \WP_Error('broke', __('Error communicating with API:', 'wpcloudplugins').$ex->getMessage());
         }
 
         return true;
@@ -216,7 +216,7 @@ class App
 
     public function revoke_token(Account $account)
     {
-        error_log('[Out-of-the-Box message]: '.'Lost authorization');
+        error_log('[WP Cloud Plugin message]: '.'Lost authorization');
 
         // Reset Private Folders Back-End if the account it is pointing to is deleted
         $private_folders_data = $this->get_processor()->get_setting('userfolder_backend_auto_root', []);
@@ -322,9 +322,9 @@ class App
     public function set_redirect_uri()
     {
         if ($this->can_do_own_auth() && $this->has_plugin_own_app()) {
-            $this->_redirect_uri = admin_url('admin.php?page=OutoftheBox_settings');
+            $this->_redirect_uri = admin_url('admin.php?page=OutoftheBox_settings&action=outofthebox_authorization');
             if (isset($_GET['network'])) {
-                $this->_redirect_uri = network_admin_url('admin.php?page=OutoftheBox_network_settings');
+                $this->_redirect_uri = network_admin_url('admin.php?page=OutoftheBox_network_settings&action=outofthebox_authorization');
             }
         }
     }

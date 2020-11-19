@@ -19,95 +19,8 @@ class LinkUsers
 
     public function render()
     {
-        ?>
-        <div class="outofthebox admin-settings">
+         include sprintf('%s/templates/admin/private_folders.php', OUTOFTHEBOX_ROOTDIR);
 
-          <div class="outofthebox-header">
-            <div class="outofthebox-logo"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/logo64x64.png" height="64" width="64"/></div>
-            <div class="outofthebox-title"><?php _e('Link Private Folders', 'outofthebox'); ?></div>
-          </div>
-
-          <div class="outofthebox-panel outofthebox-panel-full">
-            <div>
-              <form method="post">
-                <input type="hidden" name="page" value="oftb_list_table" />
-                <?php
-                $users_list = new \TheLion\OutoftheBox\User_List_Table();
-        $users_list->views();
-        $users_list->prepare_items();
-        $users_list->search_box('search', 'search_id');
-        $users_list->display(); ?>
-              </form>
-            </div>
-            <div id='oftb-embedded' style='clear:both;display:none'>
-              <?php
-              $processor = $this->_main->get_processor();
-
-        echo $processor->create_from_shortcode(
-            [
-                'singleaccount' => '0',
-                'mode' => 'files',
-                'showfiles' => '1',
-                'filesize' => '0',
-                'filedate' => '0',
-                'upload' => '0',
-                'delete' => '0',
-                'rename' => '0',
-                'addfolder' => '0',
-                'showbreadcrumb' => '1',
-                'showcolumnnames' => '0',
-                'showfiles' => '0',
-                'downloadrole' => 'none',
-                'candownloadzip' => '0',
-                'showsharelink' => '0',
-                'mcepopup' => 'linkto',
-                'search' => '0', ]
-        ); ?>
-            </div>
-          </div>
-        </div>
-        <script type="text/javascript">
-            jQuery(function ($) {
-              /* Add Link to event*/
-              $('.outofthebox .linkbutton').click(function () {
-                $('.outofthebox .thickbox_opener').removeClass("thickbox_opener");
-                $(this).parent().addClass("thickbox_opener");
-                tb_show("(Re) link to folder", '#TB_inline?height=450&amp;width=800&amp;inlineId=oftb-embedded');
-              });
-
-              $('.outofthebox .unlinkbutton').click(function () {
-                var curbutton = $(this),
-                        user_id = $(this).attr('data-user-id');
-
-                $.ajax({type: "POST",
-                  url: OutoftheBox_vars.ajax_url,
-                  data: {
-                    action: 'outofthebox-unlinkusertofolder',
-                    userid: user_id,
-                    _ajax_nonce: OutoftheBox_vars.createlink_nonce
-                  },
-                  beforeSend: function () {
-                    curbutton.parent().find('.oftb-spinner').show();
-                  },
-                  success: function (response) {
-                    if (response === '1') {
-
-                      curbutton.addClass('hidden');
-                      curbutton.prev().removeClass('hidden');
-                      curbutton.parent().parent().find('.column-private_folder').text('');
-                    } else {
-                      location.reload(true);
-                    }
-                  },
-                  complete: function (reponse) {
-                    $('.oftb-spinner').hide();
-                  },
-                  dataType: 'text'
-                });
-              });
-            });
-        </script>
-        <?php
     }
 
     /**
@@ -205,7 +118,7 @@ class User_List_Table extends \WP_List_Table
             'name' => __('Name'),
             'email' => __('Email'),
             'role' => __('Role'),
-            'private_folder' => __('Private Folder', 'outofthebox'),
+            'private_folder' => __('Private Folder', 'wpcloudplugins'),
             'buttons' => '',
         ];
     }
@@ -276,7 +189,7 @@ class User_List_Table extends \WP_List_Table
                         return '<code>'.$linked_account->get_email().'</code> <p>'.$linked_data['foldertext'].'</p>';
                     }
 
-                    return '<code>'.sprintf(__('Account with ID: %s not found', 'outofthebox'), $linked_data['accountid']).'.</code> <p>'.$linked_data['foldertext'].'</p>';
+                    return '<code>'.sprintf(__('Account with ID: %s not found', 'wpcloudplugins'), $linked_data['accountid']).'.</code> <p>'.$linked_data['foldertext'].'</p>';
                 }
 
                 return '';
@@ -285,8 +198,8 @@ class User_List_Table extends \WP_List_Table
 
                 $has_link = (!(empty($private_folder) || !is_array($private_folder) || !isset($private_folder['foldertext'])));
 
-                $buttons_html = '<a href="#" title="'.__('Create link with Private Folder', 'outofthebox').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="fas fa-link" aria-hidden="true"></i> <span class="linkedto">'.__('Link to Private Folder', 'outofthebox').'</span></a>';
-                $buttons_html .= '<a href="#" title="'.__('Break link with Private Folder', 'outofthebox').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="fas fa-chain-broken" aria-hidden="true"></i> <span class="linkedto">'.__('Unlink', 'outofthebox').'</span></a>';
+                $buttons_html = '<a href="#" title="'.__('Create link with Private Folder','wpcloudplugins').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="fas fa-link" aria-hidden="true"></i> <span class="linkedto">'.__('Link to Private Folder', 'wpcloudplugins').'</span></a>';
+                $buttons_html .= '<a href="#" title="'.__('Break link with Private Folder','wpcloudplugins').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="fas fa-unlink" aria-hidden="true"></i> <span class="linkedto">'.__('Unlink', 'wpcloudplugins').'</span></a>';
                 $buttons_html .= '<div class="oftb-spinner"></div>';
 
                 return $buttons_html;
@@ -379,8 +292,8 @@ class User_List_Table extends \WP_List_Table
         $data[] = [
             'id' => 'GUEST',
             'avatar' => '<img src="'.OUTOFTHEBOX_ROOTPATH.'/css/images/usericon.png" style="height:32px"/>',
-            'username' => __('Anonymous user', 'outofthebox'),
-            'name' => '...'.__('Default folder for Guests and non-linked Users', 'outofthebox'),
+            'username' => __('Anonymous user', 'wpcloudplugins'),
+            'name' => '...'.__('Default folder for Guests and non-linked Users', 'wpcloudplugins'),
             'email' => '',
             'role' => '',
             'private_folder' => $guestfolder,

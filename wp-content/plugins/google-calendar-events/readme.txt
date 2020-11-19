@@ -2,9 +2,9 @@
 Contributors: simplecalendar, sureswiftcapital, pderksen, nickyoung87, nekojira, rosshanney
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
-Requires PHP: 5.3+
-Tested up to: 5.5
-Stable tag: 3.1.32
+Requires PHP: 7.3
+Tested up to: 5.5.1
+Stable tag: 3.1.33
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,12 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.1.33 =
+* Fix: Trimmed overall size of the plugin to reduce errors from installation failing.
+* Dev: Updated minimum PHP requirement to 7.3
+* Dev: Updated all vendor packages to latest versions.
+* Dev: Tested up to WordPress 5.5.1
 
 = 3.1.32 =
 * Fix: Undefined index error when saving calendar.

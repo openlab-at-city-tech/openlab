@@ -1,6 +1,13 @@
 NextGEN Gallery
 by Imagely
 
+= V3.3.20 - 10.13.2020 =
+* NEW:     PHP 5.6 is the minimum supported PHP version
+* NEW:     WordPress 5.2 is the minimum support PHP version
+* Fixed:   Block disappearing in Block Editor
+* Fixed:   Gutenberg block and featured image features were broken on wordpress.com hosting
+* Note:    NextGEN Gallery will soon be licensed under GPLv3.
+
 = V3.3.17 - 08.18.2020 =
 * Fixed:   Override Thumbnail Settings not configurable
 * Fixed:   Broken gallery displays in WP 5.5 with Classic Editor

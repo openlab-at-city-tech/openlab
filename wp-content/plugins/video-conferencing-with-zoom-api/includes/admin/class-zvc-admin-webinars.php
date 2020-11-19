@@ -165,6 +165,46 @@ class Zoom_Video_Conferencing_Admin_Webinars {
 		}
 	}
 
+	/**
+	 * Prepare Webinar Data and return accordingly.
+	 *
+	 * @param $postData
+	 * @param bool $post WP_POST
+	 *
+	 * @return array
+	 */
+	public static function prepare_webinar( $postData, $post = false ) {
+		$start_time        = gmdate( "Y-m-d\TH:i:s", strtotime( $postData['start_date'] ) );
+		$alternative_hosts = $postData['alternative_host_ids'];
+		if ( ! empty( $alternative_hosts ) ) {
+			if ( count( $alternative_hosts ) > 1 ) {
+				$alternative_host_ids = implode( ",", $alternative_hosts );
+			} else {
+				$alternative_host_ids = $alternative_hosts[0];
+			}
+		}
+
+		$webinar_arrr = array(
+			'topic'      => ! empty( $post ) ? esc_html( $post->post_title ) : esc_html( $postData['topic'] ),
+			'agenda'     => ! empty( $post ) ? esc_html( $post->post_content ) : esc_html( $postData['agenda'] ),
+			'start_time' => $start_time,
+			'timezone'   => $postData['timezone'],
+			'password'   => $postData['password'],
+			'duration'   => absint( $postData['duration'] ),
+			'settings'   => array(
+				'host_video'             => ! empty( $postData['option_host_video'] ) ? true : false,
+				'panelists_video'        => ! empty( $postData['panelists_video'] ) ? true : false,
+				'practice_session'       => ! empty( $postData['practice_session'] ) ? true : false,
+				'hd_video'               => ! empty( $postData['hd_video'] ) ? true : false,
+				'allow_multiple_devices' => ! empty( $postData['allow_multiple_devices'] ) ? true : false,
+				'auto_recording'         => ! empty( $postData['auto_recording'] ) ? true : "none",
+				'alternative_hosts'      => ! empty( $alternative_host_ids ) ? $alternative_host_ids : ''
+			)
+		);
+
+		return $webinar_arrr;
+	}
+
 	static function get_message() {
 		return self::$message;
 	}

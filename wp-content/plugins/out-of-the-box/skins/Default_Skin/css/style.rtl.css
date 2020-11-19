@@ -1,0 +1,1758 @@
+/* Accessibility: hide screen reader texts (and prefer "top" for RTL languages).
+Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-how/ */
+
+
+/* This file contains: 
+  1: Default CSS for Mediaplayer.js
+  2: Speed button
+  3: Forward butotn
+  4: Skip back button
+  5: Context menu
+  6: Playlist & Skin customization
+*/
+
+
+/* 1: Main CSS for Mediaplayer.js */
+
+#OutoftheBox .wpcp__offscreen {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal;
+}
+
+#OutoftheBox .wpcp__container {
+  background: #000;
+  box-sizing: border-box;
+  font: 1.1em "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+  line-height: 1.6;
+  position: relative;
+  text-align: right;
+  text-indent: 0;
+  vertical-align: top;
+}
+
+#OutoftheBox .wpcp__container * {
+  box-sizing: border-box;
+}
+
+/* Hide native play button and control bar from iOS to favor plugin button */
+#OutoftheBox .wpcp__container video::-webkit-media-controls,
+#OutoftheBox .wpcp__container video::-webkit-media-controls-panel,
+#OutoftheBox .wpcp__container video::-webkit-media-controls-panel-container,
+#OutoftheBox .wpcp__container video::-webkit-media-controls-start-playback-button {
+  -webkit-appearance: none;
+  display: none !important;
+}
+
+#OutoftheBox .wpcp__fill-container,
+#OutoftheBox .wpcp__fill-container .wpcp__container {
+  height: 100%;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__fill-container {
+  background: transparent;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+#OutoftheBox .wpcp__container:focus {
+  outline: none;
+}
+
+#OutoftheBox .wpcp__iframe-overlay {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__embed,
+#OutoftheBox .wpcp__embed body {
+  background: #000;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__fullscreen {
+  overflow: hidden !important;
+}
+
+#OutoftheBox .wpcp__container-fullscreen {
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+#OutoftheBox .wpcp__container-fullscreen .wpcp__mediaelement,
+#OutoftheBox .wpcp__container-fullscreen video {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+
+/* Start: LAYERS */
+#OutoftheBox .wpcp__background {
+  right: 0;
+  position: absolute;
+  top: 0;
+}
+
+#OutoftheBox .wpcp__mediaelement {
+  height: 100%;
+  right: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+  line-height: 0;
+}
+
+#OutoftheBox .wpcp__poster {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  right: 0;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+:root #OutoftheBox .wpcp__poster-img {
+  display: none;
+}
+
+#OutoftheBox .wpcp__poster-img {
+  border: 0;
+  padding: 0;
+}
+
+#OutoftheBox .wpcp__overlay {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  right: 0;
+  position: absolute;
+  top: 0;
+}
+
+#OutoftheBox .wpcp__layer {
+  z-index: 1;
+}
+
+#OutoftheBox .wpcp__overlay-play {
+  cursor: pointer;
+}
+
+#OutoftheBox .wpcp__overlay-button {
+  background-position: 100% -39px;
+  height: 80px;
+  width: 80px;
+}
+
+#OutoftheBox .wpcp__overlay:hover>.wpcp__overlay-button {
+  background-position: -80px -39px;
+}
+
+#OutoftheBox .wpcp__overlay-loading {
+  height: 80px;
+  width: 80px;
+}
+
+#OutoftheBox .wpcp__overlay-loading-bg-img {
+  -webkit-animation: wpcp__loading-spinner 1s linear infinite;
+  animation: wpcp__loading-spinner 1s linear infinite;
+  display: block;
+  height: 80px;
+  width: 80px;
+  z-index: 1;
+}
+
+@-webkit-keyframes wpcp__loading-spinner {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes wpcp__loading-spinner {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
+
+/* End: LAYERS */
+
+/* Start: CONTROL BAR */
+#OutoftheBox .wpcp__controls {
+  bottom: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  right: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 10px;
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+}
+
+#OutoftheBox .wpcp__controls:not([style*='display: none']) {
+  background: rgba(255, 0, 0, 0.7);
+  background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.35));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.35));
+}
+
+#OutoftheBox .wpcp__button,
+#OutoftheBox .wpcp__time,
+#OutoftheBox .wpcp__time-rail {
+  font-size: 10px;
+  height: 40px;
+  line-height: 10px;
+  margin: 0;
+  width: 32px;
+}
+
+#OutoftheBox .wpcp__button>button {
+  border: 0;
+  cursor: pointer;
+  display: block;
+  font-size: 0;
+  height: 20px;
+  line-height: 0;
+  margin: 10px 6px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  text-decoration: none;
+  width: 20px;
+    min-width: auto;
+}
+
+/* :focus for accessibility */
+#OutoftheBox .wpcp__button>button:focus {
+  outline: dotted 1px #999;
+}
+
+#OutoftheBox .wpcp__container-keyboard-inactive a,
+#OutoftheBox .wpcp__container-keyboard-inactive a:focus,
+#OutoftheBox .wpcp__container-keyboard-inactive button,
+#OutoftheBox .wpcp__container-keyboard-inactive button:focus,
+#OutoftheBox .wpcp__container-keyboard-inactive [role=slider],
+#OutoftheBox .wpcp__container-keyboard-inactive [role=slider]:focus {
+  outline: 0;
+}
+
+/* End: CONTROL BAR */
+
+/* Start: Time (Current / Duration) */
+#OutoftheBox .wpcp__time {
+  box-sizing: content-box;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  height: 24px;
+  overflow: hidden;
+  padding: 16px 6px 0;
+  text-align: center;
+  width: auto;
+}
+
+/* End: Time (Current / Duration) */
+
+/* Start: Play/Pause/Stop */
+#OutoftheBox .wpcp__play>button {
+  background-position: 100% 0;
+}
+
+#OutoftheBox .wpcp__pause>button {
+  background-position: -20px 0;
+}
+
+#OutoftheBox .wpcp__replay>button {
+  background-position: -160px 0;
+}
+
+/* End: Play/Pause/Stop */
+
+/* Start: Progress Bar */
+#OutoftheBox .wpcp__time-rail {
+  direction: rtl;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  height: 40px;
+  margin: 0 10px;
+  padding-top: 10px;
+  position: relative;
+}
+
+#OutoftheBox .wpcp__time-total,
+#OutoftheBox .wpcp__time-buffering,
+#OutoftheBox .wpcp__time-loaded,
+#OutoftheBox .wpcp__time-current,
+#OutoftheBox .wpcp__time-float,
+#OutoftheBox .wpcp__time-hovered,
+#OutoftheBox .wpcp__time-float-current,
+#OutoftheBox .wpcp__time-float-corner,
+#OutoftheBox .wpcp__time-marker {
+  border-radius: 2px;
+  cursor: pointer;
+  display: block;
+  height: 10px;
+  position: absolute;
+}
+
+#OutoftheBox .wpcp__time-total {
+  background: rgba(255, 255, 255, 0.3);
+  margin: 5px 0 0;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__time-buffering {
+  -webkit-animation: buffering-stripes 2s linear infinite;
+  animation: buffering-stripes 2s linear infinite;
+  background: -webkit-linear-gradient(-135deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+  background-size: 15px 15px;
+  width: 100%;
+}
+
+@-webkit-keyframes buffering-stripes {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 30px 0;
+  }
+}
+
+@keyframes buffering-stripes {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 30px 0;
+  }
+}
+
+#OutoftheBox .wpcp__time-loaded {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#OutoftheBox .wpcp__time-current,
+#OutoftheBox .wpcp__time-handle-content {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+#OutoftheBox .wpcp__time-hovered {
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+#OutoftheBox .wpcp__time-hovered.negative {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#OutoftheBox .wpcp__time-current,
+#OutoftheBox .wpcp__time-buffering,
+#OutoftheBox .wpcp__time-loaded,
+#OutoftheBox .wpcp__time-hovered {
+  right: 0;
+  -webkit-transform: scaleX(0);
+  -ms-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transform-origin: 100% 0;
+  -ms-transform-origin: 100% 0;
+  transform-origin: 100% 0;
+  -webkit-transition: 0.15s ease-in all;
+  transition: 0.15s ease-in all;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__time-buffering {
+  -webkit-transform: scaleX(1);
+  -ms-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+#OutoftheBox .wpcp__time-hovered {
+  -webkit-transition: height 0.1s cubic-bezier(0.44, 0, 1, 1);
+  transition: height 0.1s cubic-bezier(0.44, 0, 1, 1);
+}
+
+#OutoftheBox .wpcp__time-hovered.no-hover {
+  -webkit-transform: scaleX(0) !important;
+  -ms-transform: scaleX(0) !important;
+  transform: scaleX(0) !important;
+}
+
+#OutoftheBox .wpcp__time-handle,
+#OutoftheBox .wpcp__time-handle-content {
+  border: 4px solid transparent;
+  cursor: pointer;
+  right: 0;
+  position: absolute;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+  z-index: 11;
+}
+
+#OutoftheBox .wpcp__time-handle-content {
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  height: 10px;
+  right: -7px;
+  top: -4px;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+  width: 10px;
+}
+
+#OutoftheBox .wpcp__time-rail:hover .wpcp__time-handle-content,
+#OutoftheBox .wpcp__time-rail .wpcp__time-handle-content:focus,
+#OutoftheBox .wpcp__time-rail .wpcp__time-handle-content:active {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+
+#OutoftheBox .wpcp__time-float {
+  background: #eee;
+  border: solid 1px #333;
+  bottom: 100%;
+  color: #111;
+  display: none;
+  height: 17px;
+  margin-bottom: 9px;
+  position: absolute;
+  text-align: center;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  width: 36px;
+}
+
+#OutoftheBox .wpcp__time-float-current {
+  display: block;
+  right: 0;
+  margin: 2px;
+  text-align: center;
+  width: 30px;
+}
+
+#OutoftheBox .wpcp__time-float-corner {
+  border: solid 5px #eee;
+  border-color: #eee transparent transparent;
+  border-radius: 0;
+  display: block;
+  height: 0;
+  right: 50%;
+  line-height: 0;
+  position: absolute;
+  top: 100%;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  width: 0;
+}
+
+#OutoftheBox .wpcp__long-video .wpcp__time-float {
+  margin-right: -23px;
+  width: 64px;
+}
+
+#OutoftheBox .wpcp__long-video .wpcp__time-float-current {
+  width: 60px;
+}
+
+#OutoftheBox .wpcp__broadcast {
+  color: #fff;
+  height: 10px;
+  position: absolute;
+  top: 15px;
+  width: 100%;
+}
+
+/* End: Progress Bar */
+
+
+/* Start: Fullscreen */
+#OutoftheBox .wpcp__fullscreen-button>button {
+  background-position: -80px 0;
+}
+
+#OutoftheBox .wpcp__unfullscreen>button {
+  background-position: -100px 0;
+}
+
+/* End: Fullscreen */
+
+/* Start: Mute/Volume */
+#OutoftheBox .wpcp__mute>button {
+  background-position: -60px 0;
+}
+
+#OutoftheBox .wpcp__unmute>button {
+  background-position: -40px 0;
+}
+
+#OutoftheBox .wpcp__volume-button {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__volume-button>.wpcp__volume-slider {
+  -webkit-backface-visibility: hidden;
+  background: rgba(50, 50, 50, 0.7);
+  border-radius: 0;
+  bottom: 100%;
+  display: none;
+  height: 115px;
+  right: 50%;
+  margin: 0;
+  position: absolute;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  width: 25px;
+  z-index: 1;
+}
+
+#OutoftheBox .wpcp__volume-button:hover {
+  border-radius: 0 0 4px 4px;
+}
+
+#OutoftheBox .wpcp__volume-total {
+  background: rgba(255, 255, 255, 0.5);
+  height: 100px;
+  right: 50%;
+  margin: 0;
+  position: absolute;
+  top: 8px;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  width: 2px;
+}
+
+#OutoftheBox .wpcp__volume-current {
+  background: rgba(255, 255, 255, 0.9);
+  right: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__volume-handle {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1px;
+  cursor: ns-resize;
+  height: 6px;
+  right: 50%;
+  position: absolute;
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  transform: translateX(50%);
+  width: 16px;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-slider {
+  display: block;
+  height: 36px;
+  position: relative;
+  vertical-align: middle;
+  width: 56px;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-total {
+  background: rgba(50, 50, 50, 0.8);
+  border-radius: 2px;
+  font-size: 1px;
+  height: 8px;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 16px;
+  width: 50px;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-current {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  font-size: 1px;
+  height: 100%;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-handle {
+  display: none;
+}
+
+/* End: Mute/Volume */
+
+/* Start: Track (Captions and Chapters) */
+#OutoftheBox .wpcp__captions-button,
+#OutoftheBox .wpcp__chapters-button {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__captions-button>button {
+  background-position: -140px 0;
+}
+
+#OutoftheBox .wpcp__chapters-button>button {
+  background-position: -180px 0;
+}
+
+#OutoftheBox .wpcp__captions-button>.wpcp__captions-selector,
+#OutoftheBox .wpcp__chapters-button>.wpcp__chapters-selector {
+  background: rgba(50, 50, 50, 0.7);
+  border: solid 1px transparent;
+  border-radius: 0;
+  bottom: 100%;
+  margin-left: -43px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  visibility: visible;
+  width: 86px;
+}
+
+#OutoftheBox .wpcp__chapters-button>.wpcp__chapters-selector {
+  margin-left: -55px;
+  width: 110px;
+}
+
+#OutoftheBox .wpcp__captions-selector-list,
+#OutoftheBox .wpcp__chapters-selector-list {
+  list-style-type: none !important;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+#OutoftheBox .wpcp__captions-selector-list-item,
+#OutoftheBox .wpcp__chapters-selector-list-item {
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  list-style-type: none !important;
+  margin: 0 0 6px;
+  overflow: hidden;
+  padding: 0;
+}
+
+#OutoftheBox .wpcp__captions-selector-list-item:hover,
+#OutoftheBox .wpcp__chapters-selector-list-item:hover {
+  background-color: rgb(200, 200, 200) !important;
+  background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#OutoftheBox .wpcp__captions-selector-input,
+#OutoftheBox .wpcp__chapters-selector-input {
+  clear: both;
+  float: right;
+  right: -1000px;
+  margin: 3px 5px 0 3px;
+  position: absolute;
+}
+
+#OutoftheBox .wpcp__captions-selector-label,
+#OutoftheBox .wpcp__chapters-selector-label {
+  cursor: pointer;
+  float: right;
+  font-size: 10px;
+  line-height: 15px;
+  padding: 4px 10px 0;
+  width: 100%;
+  text-indent: 0;
+}
+
+#OutoftheBox .wpcp__captions-selected,
+#OutoftheBox .wpcp__chapters-selected {
+  color: rgba(33, 248, 248, 1);
+}
+
+#OutoftheBox .wpcp__captions-translations {
+  font-size: 10px;
+  margin: 0 0 5px;
+}
+
+#OutoftheBox .wpcp__captions-layer {
+  bottom: 0;
+  color: #fff;
+  font-size: 16px;
+  right: 0;
+  line-height: 20px;
+  position: absolute;
+  text-align: center;
+}
+
+#OutoftheBox .wpcp__captions-layer a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+#OutoftheBox .wpcp__captions-layer[lang=ar] {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+#OutoftheBox .wpcp__captions-position {
+  bottom: 15px;
+  right: 0;
+  position: absolute;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__captions-position-hover {
+  bottom: 35px;
+}
+
+#OutoftheBox .wpcp__captions-text,
+#OutoftheBox .wpcp__captions-text * {
+  background: rgba(20, 20, 20, 0.5);
+  box-shadow: -5px 0 0 rgba(20, 20, 20, 0.5), 5px 0 0 rgba(20, 20, 20, 0.5);
+  padding: 0;
+  white-space: pre-wrap;
+}
+
+#OutoftheBox .wpcp__container.wpcp__hide-cues video::-webkit-media-text-track-container {
+  display: none;
+}
+
+/* End: Track (Captions and Chapters) */
+
+/* Start: Error */
+#OutoftheBox .wpcp__overlay-error {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__overlay-error>img {
+  right: 0;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+}
+
+#OutoftheBox .wpcp__cannotplay,
+#OutoftheBox .wpcp__cannotplay a {
+  color: #fff;
+  font-size: 0.8em;
+}
+
+#OutoftheBox .wpcp__cannotplay {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__cannotplay p,
+#OutoftheBox .wpcp__cannotplay a {
+  display: inline-block;
+  padding: 0 15px;
+  width: 100%;
+}
+
+/* End: Error */
+
+/* 2: Speedbutton */
+#OutoftheBox .wpcp__speed-button {
+  position: relative
+}
+
+#OutoftheBox .wpcp__speed-button>button {
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  line-height: normal;
+  margin: 11px 0 0;
+  width: 36px
+}
+
+#OutoftheBox .wpcp__speed-selector {
+  background: rgba(50, 50, 50, .7);
+  border: 1px solid transparent;
+  border-radius: 0;
+  height: auto;
+  right: -10px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: -100px;
+  width: 60px;
+  visibility: visible
+}
+
+#OutoftheBox .wpcp__speed-selector-list {
+  display: block;
+  list-style-type: none !important;
+  margin: 0;
+  overflow: hidden;
+  padding: 0
+}
+
+#OutoftheBox .wpcp__speed-selector-list-item {
+  color: #fff;
+  display: block;
+  list-style-type: none !important;
+  margin: 0 0 6px;
+  overflow: hidden;
+  padding: 0 10px
+}
+
+#OutoftheBox .wpcp__speed-selector-list-item:hover {
+  background-color: #c8c8c8 !important;
+  background-color: hsla(0, 0%, 100%, .4) !important
+}
+
+#OutoftheBox .wpcp__speed-selector-input {
+  clear: both;
+  float: right;
+  right: -1000px;
+  margin: 3px 5px 0 3px;
+  position: absolute
+}
+
+#OutoftheBox .wpcp__speed-selector-label {
+  color: #fff;
+  cursor: pointer;
+  float: right;
+  font-size: 11px;
+  line-height: 15px;
+  margin-right: 5px;
+  padding: 4px 0 0;
+  width: 60px
+}
+
+#OutoftheBox .wpcp__speed-selected {
+  color: #21f8f8
+}
+
+#OutoftheBox .wpcp__speed-selector {
+  visibility: hidden
+}
+
+#OutoftheBox .wpcp__speed-button:hover .wpcp__speed-selector {
+  visibility: visible
+}
+
+/* 3: Forward button */
+#OutoftheBox .wpcp__jump-forward-button>button {
+  color: #fff;
+  font-size: 8px;
+  line-height: normal;
+  top: 1px;
+}
+
+/* 4: Skip back button */
+#OutoftheBox .wpcp__skip-back-button>button {
+  color: #fff;
+  font-size: 8px;
+  line-height: normal;
+  top: 1px;
+}
+
+/* 5: Contextmenu */
+.wpcp__contextmenu {
+  background: #fff;
+  border-radius: 0px;
+  right: 0;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  width: 150px;
+  z-index: 10000;
+  font: 1.1em "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+  font-weight: bold;
+}
+
+.wpcp__contextmenu-separator {
+  background: #333;
+  font-size: 0;
+  height: 1px;
+  margin: 5px 6px
+}
+
+.wpcp__contextmenu-item {
+  color: #333;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 8px 6px
+}
+
+.wpcp__contextmenu-item:hover {
+  background: #2c7c91;
+  color: #fff
+}
+
+/* 6: Playlist CSS */
+#OutoftheBox .wpcp__main-container {
+  background-size: cover;
+  position: relative;
+  margin: 20px 0px;
+  min-height: 50px;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+
+
+/* Start: Loading/Error screens */
+#OutoftheBox .wpcp__main-container .loading {
+  background-color: transparent;
+  background-image: none;
+}
+
+#OutoftheBox .wpcp__main-container.wpcp__loading.wpcp__video {
+  background-image: url(../assets/placeholder_video.png);
+  height: 0;
+  padding-bottom: 75%;
+  /* 4:3 ratio old school tv */
+  padding-bottom: 56.25%;
+}
+
+#OutoftheBox .wpcp__main-container.wpcp__loading.wpcp__video.error {
+  background-image: url(../assets/placeholder_video_error.png);
+}
+
+#OutoftheBox .wpcp__main-container.wpcp__loading.wpcp__audio {
+  background-image: url(../assets/placeholder_audio.png);
+}
+
+#OutoftheBox .wpcp__main-container.wpcp__loading.wpcp__audio.error {
+  background-image: url(../assets/placeholder_audio_error.png);
+}
+
+#OutoftheBox .wpcp__main-container video,
+#OutoftheBox .wpcp__main-container audio {
+  opacity: 1;
+  transition: all .8s ease-in-out;
+}
+
+#OutoftheBox .wpcp__main-container.wpcp__loading video,
+#OutoftheBox .wpcp__main-container.wpcp__loading audio {
+  opacity: 0;
+}
+
+
+/* End: Loading/Error screens */
+
+#OutoftheBox .wpcp__container.wpcp__video {
+  overflow: hidden;
+}
+
+#OutoftheBox .wpcp__playlist-button {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__playlist-button>.wpcp__playlist-selector {
+  background: rgba(50, 50, 50, 0.7);
+  border: solid 1px transparent;
+  border-radius: 0;
+  bottom: 100%;
+  margin-left: -43px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  visibility: visible;
+  width: 86px;
+}
+
+#OutoftheBox .wpcp__container-fullscreen .wpcp__playlist-layer {
+  display: none;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list {
+  padding: 0;
+  margin: 0;
+  height: auto;
+  overflow-y: auto;
+  transition: all .8s ease-in-out;
+  opacity: 1;
+  max-height: 400px;
+  background: #fff;
+}
+
+
+/* Start: Playlist */
+
+#OutoftheBox .wpcp__playlist-selector-list-item {
+  padding: 3px 16px;
+  margin: 0;
+  display: block;
+  font-size: 14px;
+  cursor: pointer;
+  position: relative;
+  color: #222;
+  opacity: 0.9;
+}
+
+#OutoftheBox .wpcp__playlist-item-inner {
+  display: table-row;
+  overflow: hidden;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item:hover {
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item:focus {
+  outline: none;
+}
+
+#OutoftheBox .wpcp__playlist-selector-label {
+  cursor: pointer;
+  float: right;
+  font-size: 1.3em;
+  margin: 0;
+}
+
+#OutoftheBox .wpcp__playlist-selector-label>span {
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-color: #eb5802;
+  background-image: -webkit-linear-gradient(top, #eb5802, #f3ad39);
+  background-image: linear-gradient(to bottom, #eb5802, #f3ad39);
+  color: transparent;
+  font-size: 0.65em;
+  vertical-align: middle;
+}
+
+#OutoftheBox .wpcp__playlist-selected {
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__playlist-layer {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 3;
+  overflow: auto;
+  text-align: right;
+  line-height: 1;
+}
+
+#OutoftheBox .wpcp__playlist-layer.wpcp__playlist-inline {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  left: 20px;
+  max-height: calc(100% - 90px);
+  width: auto !important;
+  height: inherit !important;
+  opacity: 1;
+  transition: all .3s ease-in-out;
+}
+
+#OutoftheBox .wpcp__container.wpcp__active+.wpcp__playlist-layer.wpcp__playlist-inline {
+  opacity: 0;
+  visibility: hidden
+}
+
+
+#OutoftheBox .wpcp__container.wpcp__audio .wpcp__playlist-layer {
+  bottom: initial;
+  height: auto;
+  top: 40px;
+}
+
+#OutoftheBox .wpcp__playlist-hidden {
+  display: none;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+#OutoftheBox .wpcp__playlist-item-thumbnail {
+  min-width: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#OutoftheBox.audio .wpcp__playlist-item-thumbnail{
+  min-width: 64px;
+}
+
+#OutoftheBox .nothumbnails .wpcp__playlist-item-thumbnail {
+  display: none;
+}
+
+#OutoftheBox .wpcp__playlist-item-thumbnail>img {
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+  -ms-transform: translateX(50%);
+  margin-right: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  /*
+height: 75px;
+max-width: none;
+min-height: 75px;
+  */
+}
+
+#OutoftheBox .wpcp__playlist-item-content {
+  overflow: hidden;
+  padding: 8px 20px;
+  font-weight: bold;
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 18px;
+  word-break: break-word;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__playlist-item-content div,
+#OutoftheBox .wpcp__playlist-item-content span {
+  margin-left: 5px;
+}
+
+#OutoftheBox .wpcp__playlist-item-content i.fa-volume-up {
+  transition: all .8s ease-in-out;
+  opacity: 0;
+  margin-right: 5px;
+}
+
+#OutoftheBox .wpcp__container.wpcp__active .wpcp__playlist-selected i.fa-volume-up,
+#OutoftheBox .wpcp__container.wpcp__active+.wpcp__playlist-layer .wpcp__playlist-selected i.fa-volume-up {
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__playlist-item-description {
+  font-size: 90%;
+  opacity: .5;
+}
+
+#OutoftheBox .wpcp__playlist-item-description:empty {
+  display: none;
+}
+
+#OutoftheBox .wpcp__playlist-item-lastedited {
+  overflow: hidden;
+  padding: 8px 10px;
+  font-weight: bold;
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 15px;
+  font-size: 90%;
+  opacity: .5;
+}
+
+#OutoftheBox .nodate .wpcp__playlist-item-lastedited {
+  display: none;
+}
+
+#OutoftheBox .wpcp__playlist-item-lastedited span {
+  display: block;
+  width: 175px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 90%;
+}
+
+#OutoftheBox .wpcp__playlist-item-download,
+#OutoftheBox .wpcp__playlist-item-purchase {
+  text-decoration: none;
+  opacity: .33;
+  color: inherit;
+  width: 25px;
+  vertical-align: middle;
+  display: table-cell;
+  padding-right: 15px;
+}
+
+#OutoftheBox .wpcp__playlist-item-download:hover,
+#OutoftheBox .wpcp__playlist-item-purchase:hover {
+  opacity: .8;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item-folder {
+  padding: 0;
+  margin: 0;
+  height: auto;
+  overflow: hidden;
+  transition: all .8s ease-in-out;
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item-folder.wpcp__playlist-selector-list-item-folder-hidden {
+  opacity: 0;
+  height: 0px;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item.wpcp__playlist-selector-list-item-folder-header {
+  font-weight: bold !important;
+  text-transform: uppercase;
+  padding: 3px 0;
+  font-size: 95%;
+}
+
+#OutoftheBox .wpcp__playlist-selector-list-item-folder[data-folder='/'] {
+  border-top: 1px #D2D2D2 dashed;
+}
+
+#OutoftheBox .wpcp__playlist-selected .wpcp__playlist-item-download:hover,
+#OutoftheBox .wpcp__playlist-selected .wpcp__playlist-item-purchase:hover {
+  color: white;
+}
+
+#OutoftheBox .wpcp__playlist-current {
+  background: #000;
+  bottom: 34px;
+  height: auto !important;
+  right: 0;
+  position: absolute;
+  z-index: 3;
+}
+
+#OutoftheBox .wpcp__playlist-current p {
+  color: #fff;
+  font-size: 0.8em;
+  margin: 15px 10px;
+}
+
+#OutoftheBox .wpcp__playlist-current>img {
+  float: right;
+  margin: 5px 10px;
+  max-height: 35px;
+}
+
+#OutoftheBox .wpcp__playlist-current-title,
+#OutoftheBox .wpcp__playlist-current-description {
+  font-style: italic;
+}
+
+#OutoftheBox .wpcp__ads>a {
+  display: block;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+#OutoftheBox .wpcp__ads-skip-block {
+  background: #000;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: block;
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+  cursor: pointer;
+}
+
+#OutoftheBox .wpcp__audio .wpcp__ads-skip-block {
+  padding: 0;
+}
+
+#OutoftheBox .wpcp__ads-skip-button:hover {
+  text-decoration: underline;
+}
+
+
+/* Customization for Skin */
+
+#OutoftheBox .wpcp__mediaelement {
+  position: relative;
+}
+
+#OutoftheBox .wpcp__container-fullscreen .wpcp__mediaelement {
+  position: absolute;
+}
+
+#OutoftheBox .wpcp__overlay-loading .loading {
+  background-color: rgba(27, 27, 27, 0.5);
+}
+
+#OutoftheBox .wpcp__container.wpcp__video {
+  overflow: visible;
+}
+
+#OutoftheBox .wpcp__overlay-play {
+  background: rgba(0, 0, 0, 0.4);
+  transition: all .8s ease-in-out;
+}
+
+#OutoftheBox .wpcp__controls-left,
+#OutoftheBox .wpcp__controls-right {
+  position: absolute;
+  bottom: 0px;
+  top: 0px;
+}
+
+#OutoftheBox .wpcp__controls-left {
+  right: 5px;
+}
+
+#OutoftheBox .wpcp__controls-right {
+  left: 5px;
+}
+
+#OutoftheBox .wpcp__captions-layer {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+#OutoftheBox .wpcp__captions-position {
+  bottom: 25px !important;
+}
+
+#OutoftheBox .wpcp__captions-position-hover {
+  bottom: 45px !important;
+}
+
+#OutoftheBox .wpcp__captions-text,
+#OutoftheBox .wpcp__captions-text * {
+  font-size: 100% !important
+}
+
+#OutoftheBox .wpcp__container-fullscreen .wpcp__captions-text,
+#OutoftheBox .wpcp__container-fullscreen .wpcp__captions-text * {
+  font-size: 200% !important
+}
+
+#OutoftheBox .wpcp__volume-button>.wpcp__volume-slider {
+  background: rgba(50, 50, 50, .7);
+}
+
+#OutoftheBox .wpcp__volume-total {
+  width: 8px;
+  border-radius: 20px;
+}
+
+#OutoftheBox .wpcp__volume-current {
+  border-radius: 20px;
+}
+
+#OutoftheBox .wpcp__volume-handle {
+  background-color: white;
+  border-radius: 100%;
+  cursor: inherit;
+  height: 16px;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-total {
+  border-radius: 5px;
+  height: 5px;
+  top: 18px;
+}
+
+#OutoftheBox .wpcp__time {
+  padding: 16px 0px 1px;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+#OutoftheBox .wpcp__currenttime {
+  padding-right: 10px;
+}
+
+#OutoftheBox .wpcp__time-rail {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 100%;
+  margin: 0;
+  height: 5px;
+}
+
+#OutoftheBox .wpcp__time-total,
+#OutoftheBox .wpcp__time-current,
+#OutoftheBox .wpcp__time-buffering,
+#OutoftheBox .wpcp__time-loaded,
+#OutoftheBox .wpcp__time-hovered {
+  height: 5px;
+  border-radius: 0px;
+}
+
+#OutoftheBox .wpcp__time-total {
+  background: rgba(0, 0, 0, 0.1);
+  top: 0px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+#OutoftheBox .wpcp__time-buffering {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#OutoftheBox .wpcp__time-loaded {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#OutoftheBox .wpcp__time-handle {
+  background: white;
+  height: 6px;
+  width: 18px;
+  top: 0px;
+  border: 0;
+  right: -8px;
+  -webkit-transition: 0.15s ease-in all;
+  transition: 0.15s ease-in all;
+}
+
+#OutoftheBox .wpcp__time-handle-content {
+  width: 15px;
+  height: 6px;
+  top: 0px;
+  border: 0;
+  right: 0px;
+  border-radius: 0;
+}
+
+#OutoftheBox .wpcp__time-float {
+  width: 60px;
+  height: 35px;
+}
+
+#OutoftheBox .wpcp__time-float-current {
+  margin: 12px 9px;
+  font-size: 15px;
+  width: 30px;
+}
+
+#OutoftheBox .wpcp__ads {
+  z-index: 1000;
+}
+
+#OutoftheBox .wpcp__audio .wpcp__ads {
+  display: none !important;
+}
+
+#OutoftheBox .wpcp__ads-skip-message {
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  #OutoftheBox .plyr__time+.plyr__time {
+    display: none;
+  }
+
+  #OutoftheBox .wpcp__playlist-item-lastedited {
+    display: none;
+  }
+}
+
+@media (max-width: 320px) {
+
+  #OutoftheBox .wpcp__currenttime-container,
+  #OutoftheBox .wpcp__speed-button,
+  #OutoftheBox .wpcp__skip-back-button,
+  #OutoftheBox .wpcp__jump-forward-button,
+  #OutoftheBox .wpcp__loop-button {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  #OutoftheBox .wpcp__playlist-layer.wpcp__playlist-inline {
+    position: relative;
+    right: 0;
+    top: 0;
+    left: 0;
+  }
+
+  #OutoftheBox .wpcp__playlist-item-content {
+    font-weight: normal;
+    font-size: 90%;
+  }
+
+  #OutoftheBox .wpcp__playlist-selector-list-item {
+    padding-right: 3px;
+  }
+
+  #OutoftheBox .wpcp__playlist-item-lastedited,
+  #OutoftheBox .wpcp__playlist-item-download,
+  #OutoftheBox .wpcp__playlist-item-purchase {
+    display: none;
+  }
+
+  #OutoftheBox .wpcp__playlist-selector-list-item.wpcp__playlist-selected .wpcp__playlist-item-download,
+  #OutoftheBox wpcp__playlist-selector-list-item.wpcp__playlist-selected .wpcp__playlist-item-purchase {
+    display: table-cell;
+  }
+
+  #OutoftheBox .wpcp__playlist-item-thumbnail {
+    min-width: 60px;
+    max-width: 60px;
+  }
+
+  #OutoftheBox .wpcp__playlist-item-thumbnail img {
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
+
+/* Playlist Buttons */
+
+#OutoftheBox .wpcp__controls {
+  display: block;
+  height: 50px;
+}
+
+#OutoftheBox .wpcp__button,
+#OutoftheBox .wpcp__time,
+#OutoftheBox .wpcp__time-rail,
+#OutoftheBox .wpcp__horizontal-volume-slider {
+  display: inline-block;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-slider {
+  display: inline-block !important;
+}
+
+#OutoftheBox .wpcp__horizontal-volume-slider {
+  height: 40px;
+  vertical-align: initial;
+}
+
+#OutoftheBox .wpcp__overlay-button {
+  opacity: 0.8;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  border-radius: 100%;
+  background-repeat: no-repeat;
+  background-size: 40px;
+  background-position: 50% !important;
+}
+
+#OutoftheBox .wpcp__overlay-button:hover,
+#OutoftheBox .wpcp__overlay:hover>.wpcp__overlay-button {
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__time,
+#OutoftheBox .wpcp__button>button {
+  opacity: 0.8;
+  background-repeat: no-repeat;
+  background-position: 100%;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+#OutoftheBox .wpcp__button>button:hover {
+  opacity: 1;
+}
+
+#OutoftheBox .wpcp__container-fullscreen .wpcp__playlist-button,
+#OutoftheBox .wpcp__container-fullscreen .wpcp__shuffle-button,
+#OutoftheBox .wpcp__container-fullscreen .wpcp__loop-button {
+  display: none;
+}
+
+.rtl #OutoftheBox .wpcp__play>button,
+.rtl #OutoftheBox .wpcp__prev-button>button,
+.rtl #OutoftheBox .wpcp__next-button>button,
+.rtl #OutoftheBox .wpcp__skip-back-button>button,
+.rtl #OutoftheBox .wpcp__jump-forward-button>button {
+    transform: rotate(-180deg);
+}
+
+
+#OutoftheBox .wpcp__overlay-button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm115.7 272l-176 101c-15.8 8.8-35.7-2.5-35.7-21V152c0-18.4 19.8-29.8 35.7-21l176 107c16.4 9.2 16.4 32.9 0 42z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__overlay-button:hover {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M371.7 238l-176-107c-15.8-8.8-35.7 2.5-35.7 21v208c0 18.4 19.8 29.8 35.7 21l176-101c16.4-9.1 16.4-32.8 0-42zM504 256C504 119 393 8 256 8S8 119 8 256s111 248 248 248 248-111 248-248zm-448 0c0-110.5 89.5-200 200-200s200 89.5 200 200-89.5 200-200 200S56 366.5 56 256z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__play>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6zM48 453.5v-395c0-4.6 5.1-7.5 9.1-5.2l334.2 197.5c3.9 2.3 3.9 8 0 10.3L57.1 458.7c-4 2.3-9.1-.6-9.1-5.2z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__pause>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M192 79v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48zm-48 346V85c0-3.3-2.7-6-6-6H54c-3.3 0-6 2.7-6 6v340c0 3.3 2.7 6 6 6h84c3.3 0 6-2.7 6-6zM448 79v352c0 26.5-21.5 48-48 48h-96c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48zm-48 346V85c0-3.3-2.7-6-6-6h-84c-3.3 0-6 2.7-6 6v340c0 3.3 2.7 6 6 6h84c3.3 0 6-2.7 6-6z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__replay>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M500 8h-27.711c-6.739 0-12.157 5.548-11.997 12.286l2.347 98.568C418.075 51.834 341.788 7.73 255.207 8.001 118.82 8.428 7.787 120.009 8 256.396 8.214 393.181 119.165 504 256 504c63.926 0 122.202-24.187 166.178-63.908 5.113-4.618 5.354-12.561.482-17.433l-19.738-19.738c-4.498-4.498-11.753-4.785-16.501-.552C351.787 433.246 306.105 452 256 452c-108.322 0-196-87.662-196-196 0-108.322 87.662-196 196-196 79.545 0 147.941 47.282 178.675 115.302l-126.389-3.009c-6.737-.16-12.286 5.257-12.286 11.997V212c0 6.627 5.373 12 12 12h192c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__prev-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M76 480h24c6.6 0 12-5.4 12-12V285l219.5 187.6c20.6 17.2 52.5 2.8 52.5-24.6V64c0-27.4-31.9-41.8-52.5-24.6L112 228.1V44c0-6.6-5.4-12-12-12H76c-6.6 0-12 5.4-12 12v424c0 6.6 5.4 12 12 12zM336 98.5v315.1L149.3 256.5 336 98.5z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__next-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M372 32h-24c-6.6 0-12 5.4-12 12v183L116.5 39.4C95.9 22.3 64 36.6 64 64v384c0 27.4 31.9 41.8 52.5 24.6L336 283.9V468c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12V44c0-6.6-5.4-12-12-12zM112 413.5V98.4l186.7 157.1-186.7 158z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__skip-back-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M20 8h10c6.627 0 12 5.373 12 12v110.625C85.196 57.047 165.239 7.715 256.793 8.001 393.18 8.428 504.213 120.009 504 256.396 503.786 393.181 392.834 504 256 504c-63.926 0-122.202-24.187-166.178-63.908-5.113-4.618-5.354-12.561-.482-17.433l7.069-7.069c4.503-4.503 11.749-4.714 16.482-.454C150.782 449.238 200.935 470 256 470c117.744 0 214-95.331 214-214 0-117.744-95.331-214-214-214-82.862 0-154.737 47.077-190.289 116H180c6.627 0 12 5.373 12 12v10c0 6.627-5.373 12-12 12H20c-6.627 0-12-5.373-12-12V20c0-6.627 5.373-12 12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__jump-forward-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M492 8h-10c-6.627 0-12 5.373-12 12v110.625C426.804 57.047 346.761 7.715 255.207 8.001 118.82 8.428 7.787 120.009 8 256.396 8.214 393.181 119.166 504 256 504c63.926 0 122.202-24.187 166.178-63.908 5.113-4.618 5.354-12.561.482-17.433l-7.069-7.069c-4.503-4.503-11.749-4.714-16.482-.454C361.218 449.238 311.065 470 256 470c-117.744 0-214-95.331-214-214 0-117.744 95.331-214 214-214 82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__loop-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M512 256c0 83.813-68.187 152-152 152H136.535l55.762 54.545c4.775 4.67 4.817 12.341.094 17.064l-16.877 16.877c-4.686 4.686-12.284 4.686-16.971 0l-104-104c-4.686-4.686-4.686-12.284 0-16.971l104-104c4.686-4.686 12.284-4.686 16.971 0l16.877 16.877c4.723 4.723 4.681 12.393-.094 17.064L136.535 360H360c57.346 0 104-46.654 104-104 0-19.452-5.372-37.671-14.706-53.258a11.991 11.991 0 0 1 1.804-14.644l17.392-17.392c5.362-5.362 14.316-4.484 18.491 1.847C502.788 196.521 512 225.203 512 256zM62.706 309.258C53.372 293.671 48 275.452 48 256c0-57.346 46.654-104 104-104h223.465l-55.762 54.545c-4.775 4.67-4.817 12.341-.094 17.064l16.877 16.877c4.686 4.686 12.284 4.686 16.971 0l104-104c4.686-4.686 4.686-12.284 0-16.971l-104-104c-4.686-4.686-12.284-4.686-16.971 0l-16.877 16.877c-4.723 4.723-4.681 12.393.094 17.064L375.465 104H152C68.187 104 0 172.187 0 256c0 30.797 9.212 59.479 25.019 83.447 4.175 6.331 13.129 7.209 18.491 1.847l17.392-17.392a11.991 11.991 0 0 0 1.804-14.644z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__loop-button.wpcp__loop-on>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M512 256c0 88.224-71.775 160-160 160H170.067l34.512 32.419c9.875 9.276 10.119 24.883.539 34.464l-10.775 10.775c-9.373 9.372-24.568 9.372-33.941 0l-92.686-92.686c-9.373-9.373-9.373-24.568 0-33.941l92.686-92.686c9.373-9.373 24.568-9.373 33.941 0l10.775 10.775c9.581 9.581 9.337 25.187-.539 34.464L170.067 352H352c52.935 0 96-43.065 96-96 0-13.958-2.996-27.228-8.376-39.204-4.061-9.039-2.284-19.626 4.723-26.633l12.183-12.183c11.499-11.499 30.965-8.526 38.312 5.982C505.814 205.624 512 230.103 512 256zM72.376 295.204C66.996 283.228 64 269.958 64 256c0-52.935 43.065-96 96-96h181.933l-34.512 32.419c-9.875 9.276-10.119 24.883-.539 34.464l10.775 10.775c9.373 9.372 24.568 9.372 33.941 0l92.686-92.686c9.373-9.373 9.373-24.568 0-33.941l-92.686-92.686c-9.373-9.373-24.568-9.373-33.941 0L306.882 29.12c-9.581 9.581-9.337 25.187.539 34.464L341.933 96H160C71.775 96 0 167.776 0 256c0 25.897 6.186 50.376 17.157 72.039 7.347 14.508 26.813 17.481 38.312 5.982l12.183-12.183c7.008-7.008 8.786-17.595 4.724-26.634z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__shuffle-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M505 400l-79.2 72.9c-15.1 15.1-41.8 4.4-41.8-17v-40h-31c-3.3 0-6.5-1.4-8.8-3.9l-89.8-97.2 38.1-41.3 79.8 86.3H384v-48c0-21.4 26.7-32.1 41.8-17l79.2 71c9.3 9.6 9.3 24.8 0 34.2zM12 152h91.8l79.8 86.3 38.1-41.3-89.8-97.2c-2.3-2.5-5.5-3.9-8.8-3.9H12c-6.6 0-12 5.4-12 12v32c0 6.7 5.4 12.1 12 12.1zm493-41.9l-79.2-71C410.7 24 384 34.7 384 56v40h-31c-3.3 0-6.5 1.4-8.8 3.9L103.8 360H12c-6.6 0-12 5.4-12 12v32c0 6.6 5.4 12 12 12h111c3.3 0 6.5-1.4 8.8-3.9L372.2 152H384v48c0 21.4 26.7 32.1 41.8 17l79.2-73c9.3-9.4 9.3-24.6 0-33.9z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__shuffle-button.wpcp__shuffle-on>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M504.971 359.029c9.373 9.373 9.373 24.569 0 33.941l-80 79.984c-15.01 15.01-40.971 4.49-40.971-16.971V416h-58.785a12.004 12.004 0 0 1-8.773-3.812l-70.556-75.596 53.333-57.143L352 336h32v-39.981c0-21.438 25.943-31.998 40.971-16.971l80 79.981zM12 176h84l52.781 56.551 53.333-57.143-70.556-75.596A11.999 11.999 0 0 0 122.785 96H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12zm372 0v39.984c0 21.46 25.961 31.98 40.971 16.971l80-79.984c9.373-9.373 9.373-24.569 0-33.941l-80-79.981C409.943 24.021 384 34.582 384 56.019V96h-58.785a12.004 12.004 0 0 0-8.773 3.812L96 336H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h110.785c3.326 0 6.503-1.381 8.773-3.812L352 176h32z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__playlist-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M80 48H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416-136H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V88a16 16 0 0 0-16-16z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__mute>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 512'%3E%3Cpath fill='white' d='M394.23 100.85c-11.19-7.09-26.03-3.8-33.12 7.41s-3.78 26.03 7.41 33.12C408.27 166.6 432 209.44 432 256s-23.73 89.41-63.48 114.62c-11.19 7.09-14.5 21.92-7.41 33.12 6.51 10.28 21.12 15.03 33.12 7.41C447.94 377.09 480 319.09 480 256s-32.06-121.09-85.77-155.15zm-56 78.28c-11.58-6.33-26.19-2.16-32.61 9.45-6.39 11.61-2.16 26.2 9.45 32.61C327.98 228.28 336 241.63 336 256c0 14.37-8.02 27.72-20.92 34.81-11.61 6.41-15.84 21-9.45 32.61 6.43 11.66 21.05 15.8 32.61 9.45 28.23-15.55 45.77-45 45.77-76.87s-17.54-61.33-45.78-76.87zM231.81 64c-5.91 0-11.92 2.18-16.78 7.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c4.87 4.87 10.88 7.05 16.78 7.05 12.33 0 24.19-9.52 24.19-24.02V88.02C256 73.51 244.13 64 231.81 64zM208 366.05L145.94 304H48v-96h97.94L208 145.95v220.1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__unmute>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M231.81 64c-5.91 0-11.92 2.18-16.78 7.05L126.06 160H24c-13.26 0-24 10.74-24 24v144c0 13.25 10.74 24 24 24h102.06l88.97 88.95c4.87 4.87 10.88 7.05 16.78 7.05 12.33 0 24.19-9.52 24.19-24.02V88.02C256 73.51 244.13 64 231.81 64zM208 366.05l-48-47.99L145.94 304H48v-96h97.94L160 193.94l48-47.99v220.1zM465.94 256l41.37-41.37c6.25-6.25 6.25-16.38 0-22.63L496 180.69c-6.25-6.25-16.38-6.25-22.63 0L432 222.06l-41.37-41.37c-6.25-6.25-16.38-6.25-22.63 0L356.69 192c-6.25 6.25-6.25 16.38 0 22.63L398.06 256l-41.37 41.37c-6.25 6.25-6.25 16.38 0 22.63L368 331.32c6.25 6.25 16.38 6.25 22.63 0L432 289.94l41.37 41.37c6.25 6.25 16.38 6.25 22.63 0L507.31 320c6.25-6.25 6.25-16.38 0-22.63L465.94 256z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__fullscreen-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v24c0 6.6-5.4 12-12 12H48v100c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v24c0 6.6 5.4 12 12 12h100v100c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-24c-6.6 0-12 5.4-12 12v100H300c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-24c0-6.6-5.4-12-12-12H48V332c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__unfullscreen>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M436 192H312c-13.3 0-24-10.7-24-24V44c0-6.6 5.4-12 12-12h24c6.6 0 12 5.4 12 12v100h100c6.6 0 12 5.4 12 12v24c0 6.6-5.4 12-12 12zm-276-24V44c0-6.6-5.4-12-12-12h-24c-6.6 0-12 5.4-12 12v100H12c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24zm0 300V344c0-13.3-10.7-24-24-24H12c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12h100v100c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12zm176 0V368h100c6.6 0 12-5.4 12-12v-24c0-6.6-5.4-12-12-12H312c-13.3 0-24 10.7-24 24v124c0 6.6 5.4 12 12 12h24c6.6 0 12-5.4 12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__captions-button>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 336H54c-3.3 0-6-2.7-6-6V118c0-3.3 2.7-6 6-6h404c3.3 0 6 2.7 6 6v276c0 3.3-2.7 6-6 6zm-211.1-85.7c1.7 2.4 1.5 5.6-.5 7.7-53.6 56.8-172.8 32.1-172.8-67.9 0-97.3 121.7-119.5 172.5-70.1 2.1 2 2.5 3.2 1 5.7l-17.5 30.5c-1.9 3.1-6.2 4-9.1 1.7-40.8-32-94.6-14.9-94.6 31.2 0 48 51 70.5 92.2 32.6 2.8-2.5 7.1-2.1 9.2.9l19.6 27.7zm190.4 0c1.7 2.4 1.5 5.6-.5 7.7-53.6 56.9-172.8 32.1-172.8-67.9 0-97.3 121.7-119.5 172.5-70.1 2.1 2 2.5 3.2 1 5.7L420 220.2c-1.9 3.1-6.2 4-9.1 1.7-40.8-32-94.6-14.9-94.6 31.2 0 48 51 70.5 92.2 32.6 2.8-2.5 7.1-2.1 9.2.9l19.6 27.7z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__captions-button.wpcp__captions-enabled>button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM218.1 287.7c2.8-2.5 7.1-2.1 9.2.9l19.5 27.7c1.7 2.4 1.5 5.6-.5 7.7-53.6 56.8-172.8 32.1-172.8-67.9 0-97.3 121.7-119.5 172.5-70.1 2.1 2 2.5 3.2 1 5.7l-17.5 30.5c-1.9 3.1-6.2 4-9.1 1.7-40.8-32-94.6-14.9-94.6 31.2.1 48 51.1 70.5 92.3 32.6zm190.4 0c2.8-2.5 7.1-2.1 9.2.9l19.5 27.7c1.7 2.4 1.5 5.6-.5 7.7-53.5 56.9-172.7 32.1-172.7-67.9 0-97.3 121.7-119.5 172.5-70.1 2.1 2 2.5 3.2 1 5.7L420 222.2c-1.9 3.1-6.2 4-9.1 1.7-40.8-32-94.6-14.9-94.6 31.2 0 48 51 70.5 92.2 32.6z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__download-button>button {
+  background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='white' d='M348.5 264l-148 148.5c-4.7 4.7-12.3 4.7-17 0L35.5 264c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0l115.4 116V44c0-6.6 5.4-12 12-12h10c6.6 0 12 5.4 12 12v311.9L324.4 240c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.6 4.7 12.2 0 16.9zM384 468v-8c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v8c0 6.6 5.4 12 12 12h360c6.6 0 12-5.4 12-12z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+#OutoftheBox .wpcp__airplay-button>button {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.9 13.9'%3e%3cg id='airplay'%3e%3cpolygon fill='white' points='0 0 16.9 0 16.9 10.4 13.2 10.4 11.9 8.9 15.4 8.9 15.4 1.6 1.5 1.6 1.5 8.9 5 8.9 3.6 10.4 0 10.4 0 0'/%3e%3cpolygon fill='white' points='2.7 13.9 8.4 7 14.2 13.9 2.7 13.9'/%3e%3c/g%3e%3c/svg%3e");
+}
+
+#OutoftheBox .wpcp__chromecast-button>button {
+  --disconnected-color: #fff;
+  background: none;
+  display: inline-block;
+  fill: white;
+}
+
+#OutoftheBox .wpcp__chromecast-container {
+  background: #000;
+  color: #fff;
+  font-size: 10px;
+  right: 0;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+#OutoftheBox .wpcp__chromecast-layer>img {
+  right: 0;
+  position: absolute;
+  top: 0;
+  z-index: 0;
+}
+
+#OutoftheBox .wpcp__chromecast-icon {
+  background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16.3 13.4'%3E%3Cpath  fill='white' d='M80.4,13v2.2h2.2A2.22,2.22,0,0,0,80.4,13Zm0-2.9v1.5a3.69,3.69,0,0,1,3.7,3.68s0,0,0,0h1.5a5.29,5.29,0,0,0-5.2-5.2h0ZM93.7,4.9H83.4V6.1a9.59,9.59,0,0,1,6.2,6.2h4.1V4.9h0ZM80.4,7.1V8.6a6.7,6.7,0,0,1,6.7,6.7h1.4a8.15,8.15,0,0,0-8.1-8.2h0ZM95.1,1.9H81.8a1.54,1.54,0,0,0-1.5,1.5V5.6h1.5V3.4H95.1V13.7H89.9v1.5h5.2a1.54,1.54,0,0,0,1.5-1.5V3.4A1.54,1.54,0,0,0,95.1,1.9Z' transform='translate(-80.3 -1.9)'%3E%3C/path%3E%3C/svg%3E");
+  display: inline-block;
+  height: 14px;
+  margin-left: 5px;
+  width: 17px;
+}
+
+#OutoftheBox.light .wpcp__container.wpcp__audio .wpcp__time-total {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+#OutoftheBox.light .wpcp__container.wpcp__audio .wpcp__time-current,
+#OutoftheBox.light .wpcp__horizontal-volume-current {
+  background: rgba(255, 255, 255, 0.95)
+}
+
+#OutoftheBox.light .wpcp__playlist-layer::-webkit-scrollbar-track,
+#OutoftheBox.light .wpcp__playlist-selector-list::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+}
+
+#OutoftheBox.light .wpcp__playlist-layer::-webkit-scrollbar,
+#OutoftheBox.light .wpcp__playlist-selector-list::-webkit-scrollbar {
+  width: 8px;
+  background-color: #ffffff;
+}
+
+#OutoftheBox .wpcp__overlay-error {
+  height: 100%;
+  width: 100%;
+  background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z'%3E%3C/path%3E%3C/svg%3E");
+  background-size: 10%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#OutoftheBox .wpcp__overlay .wpcp__cannotplay {
+  display: none;
+}

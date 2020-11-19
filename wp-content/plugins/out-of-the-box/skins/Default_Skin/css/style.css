@@ -254,6 +254,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   position: absolute;
   text-decoration: none;
   width: 20px;
+    min-width: auto;
 }
 
 /* :focus for accessibility */
@@ -812,7 +813,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   background: rgba(50, 50, 50, .7);
   border: 1px solid transparent;
   border-radius: 0;
-  height: 150px;
+  height: auto;
   left: -10px;
   overflow: hidden;
   padding: 0;
@@ -1112,6 +1113,10 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+#OutoftheBox.audio .wpcp__playlist-item-thumbnail{
+  min-width: 64px;
 }
 
 #OutoftheBox .nothumbnails .wpcp__playlist-item-thumbnail {
@@ -1478,7 +1483,7 @@ min-height: 75px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 320px) {
 
   #OutoftheBox .wpcp__currenttime-container,
   #OutoftheBox .wpcp__speed-button,
@@ -1487,6 +1492,9 @@ min-height: 75px;
   #OutoftheBox .wpcp__loop-button {
     display: none !important;
   }
+}
+
+@media (max-width: 480px) {
 
   #OutoftheBox .wpcp__playlist-layer.wpcp__playlist-inline {
     position: relative;
@@ -1583,6 +1591,15 @@ min-height: 75px;
 #OutoftheBox .wpcp__container-fullscreen .wpcp__loop-button {
   display: none;
 }
+
+.rtl #OutoftheBox .wpcp__play>button,
+.rtl #OutoftheBox .wpcp__prev-button>button,
+.rtl #OutoftheBox .wpcp__next-button>button,
+.rtl #OutoftheBox .wpcp__skip-back-button>button,
+.rtl #OutoftheBox .wpcp__jump-forward-button>button {
+    transform: rotate(180deg);
+}
+
 
 #OutoftheBox .wpcp__overlay-button {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm115.7 272l-176 101c-15.8 8.8-35.7-2.5-35.7-21V152c0-18.4 19.8-29.8 35.7-21l176 107c16.4 9.2 16.4 32.9 0 42z'%3E%3C/path%3E%3C/svg%3E");

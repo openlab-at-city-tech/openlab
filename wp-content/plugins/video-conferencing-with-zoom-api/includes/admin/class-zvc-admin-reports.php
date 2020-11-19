@@ -35,7 +35,7 @@ class Zoom_Video_Conferencing_Reports {
 		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'zoom_daily_report';
 
 		//Get Template
-		require_once ZVC_PLUGIN_VIEWS_PATH . '/tpl-reports.php';
+		require_once ZVC_PLUGIN_VIEWS_PATH . '/live/tpl-reports.php';
 	}
 
 	/**

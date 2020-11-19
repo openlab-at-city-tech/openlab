@@ -181,6 +181,7 @@ class Cache
         $cached_node = new CacheNode(
             [
                 '_id' => $entry->get_id(),
+                '_account_id' => $this->get_processor()->get_current_account()->get_id(),
                 '_path' => $entry->get_path(),
                 '_rev' => $entry->get_rev(),
             ]
@@ -222,6 +223,14 @@ class Cache
     public function get_cache_location()
     {
         return $this->_cache_location;
+    }
+
+    /**
+     * @return \TheLion\OutoftheBox\Processor
+     */
+    public function get_processor()
+    {
+        return $this->processor;
     }
 
     protected function _read_local_cache($close = false)

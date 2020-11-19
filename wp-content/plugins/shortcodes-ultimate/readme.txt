@@ -6,7 +6,7 @@ Tags: shortcode, toggle, columns, button, slider
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 5.9.3
+Stable tag: 5.9.4
 
 A comprehensive collection of visual components for your site
 
@@ -33,7 +33,7 @@ A comprehensive collection of visual components for your site
 
 ### Links
 
-- [Available Shortcodes](https://getshortcodes.com/shortcodes/?utm_campaign=wporg&utm_source=readme&utm_medium=available-shortcodes)
+- [Available Shortcodes](https://getshortcodes.com/docs-category/shortcodes/?utm_campaign=wporg&utm_source=readme&utm_medium=available-shortcodes)
 - [Add-ons](https://getshortcodes.com/add-ons/?utm_campaign=wporg&utm_source=readme&utm_medium=add-ons)
 - [Documentation](https://getshortcodes.com/docs/?utm_campaign=wporg&utm_source=readme&utm_medium=docs)
 - [Support Forum](https://wordpress.org/support/plugin/shortcodes-ultimate)
@@ -146,17 +146,13 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.9.3
-
-**What's new**
-
-- New option `anchor_in_url` for `[su_tabs]` and `[su_spoiler]`. This option specifies whether an anchor will be added to page URL after clicking a tab or a spoiler.
-- New option `random` for `[su_image_carousel]` which allows to shuffle carousel images
+### 5.9.4
 
 **Fixes**
 
-- Fixed issue in `[su_image_carousel]` where images were hidden on some themes
-
+- Fixed PHP notice `A non-numeric value encountered` in `[su_dropcap]`
+- Fixed PHP notice `A non-numeric value encountered` in `[su_service]`
+- Updated in-plugin links
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

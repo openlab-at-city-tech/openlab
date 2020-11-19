@@ -22,6 +22,10 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 		//Call meeting state
 		add_action( 'wp_ajax_nopriv_state_change', array( $this, 'state_change' ) );
 		add_action( 'wp_ajax_state_change', array( $this, 'state_change' ) );
+
+		//AJAX call for fetching users
+		add_action( 'wp_ajax_get_assign_host_id', [ $this, 'assign_host_id' ] );
+		add_action( 'wp_ajax_vczapi_get_wp_users', [ $this, 'get_wp_usersByRole' ] );
 	}
 
 	/**
@@ -34,11 +38,16 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 	public function delete_meeting() {
 		check_ajax_referer( '_nonce_zvc_security', 'security' );
 
-		$meeting_id = $_POST['meeting_id'];
-		$host_id    = $_POST['host_id'];
-		if ( $meeting_id && $host_id ) {
-			zoom_conference()->deleteAMeeting( $meeting_id, $host_id );
-			wp_send_json( array( 'error' => 0, 'msg' => __( "Deleted meeting.", "video-conferencing-with-zoom-api" ) ) );
+		$meeting_id   = absint( filter_input( INPUT_POST, 'meeting_id' ) );
+		$meeting_type = filter_input( INPUT_POST, 'type' );
+		if ( $meeting_id ) {
+			if ( ! empty( $meeting_type ) && $meeting_type === "webinar" ) {
+				zoom_conference()->deleteAWebinar( $meeting_id );
+			} else {
+				zoom_conference()->deleteAMeeting( $meeting_id );
+			}
+
+			wp_send_json( array( 'error' => 0, 'msg' => __( "Deleted Meeting with ID", "video-conferencing-with-zoom-api" ) . ': ' . $meeting_id ) );
 		} else {
 			wp_send_json( array(
 				'error' => 1,
@@ -58,13 +67,17 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 	public function delete_bulk_meeting() {
 		check_ajax_referer( '_nonce_zvc_security', 'security' );
 
-		$deleted     = false;
-		$meeting_ids = $_POST['meetings_id'];
-		$host_id     = $_POST['host_id'];
-		if ( $meeting_ids && $host_id ) {
+		$deleted      = false;
+		$meeting_ids  = filter_input( INPUT_POST, 'meetings_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$meeting_type = filter_input( INPUT_POST, 'type' );
+		if ( ! empty( $meeting_ids ) ) {
 			$meeting_count = count( $meeting_ids );
 			foreach ( $meeting_ids as $meeting_id ) {
-				json_decode( zoom_conference()->deleteAMeeting( $meeting_id, $host_id ) );
+				if ( ! empty( $meeting_type ) && $meeting_type === "webinar" ) {
+					zoom_conference()->deleteAWebinar( $meeting_id );
+				} else {
+					zoom_conference()->deleteAMeeting( $meeting_id );
+				}
 				$deleted = true;
 			}
 
@@ -101,12 +114,8 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 
 		$test = json_decode( zoom_conference()->listUsers() );
 		if ( ! empty( $test ) ) {
-			if ( $test->code === 124 ) {
+			if ( ! empty( $test->code ) ) {
 				wp_send_json( $test->message );
-			}
-
-			if ( ! empty( $test->error ) ) {
-				wp_send_json( "Please check your API keys !" );
 			}
 
 			if ( http_response_code() === 200 ) {
@@ -231,6 +240,60 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 		} else {
 			wp_send_json_error( $success );
 		}
+
+		wp_die();
+	}
+
+	/**
+	 * Assign Host ID page
+	 */
+	public function assign_host_id() {
+		$users      = vczapi_getWpUsers_basedon_UserRoles();
+		$result     = array();
+		$zoom_users = video_conferencing_zoom_api_get_user_transients();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				$user_zoom_hostid = get_user_meta( $user->ID, 'user_zoom_hostid', true );
+				$host_id_field = '';
+				if ( ! empty( $zoom_users ) ) {
+					$host_id_field .= '<select name="zoom_host_id[' . $user->ID . ']" style="width:100%">';
+					$host_id_field .= '<option value="">' . __( 'Not a Host', 'video-conferencing-with-zoom-api' ) . '</option>';
+					foreach ( $zoom_users as $zoom_usr ) {
+						$selected_host_id = ! empty( $user_zoom_hostid ) && $user_zoom_hostid === $zoom_usr->id ? 'selected="selected"' : false;
+						$full_name        = ! empty( $zoom_usr->first_name ) ? $zoom_usr->first_name . ' ' . $zoom_usr->last_name : $zoom_usr->email;
+						$host_id_field    .= '<option value="' . $zoom_usr->id . '" ' . $selected_host_id . '>' . $full_name . '</option>';
+					}
+					$host_id_field .= '</select>';
+
+					$result[] = array(
+						'id'      => $user->ID,
+						'email'   => $user->user_email,
+						'name'    => empty( $user->first_name ) ? $user->display_name : $user->first_name . ' ' . $user->last_name,
+						'host_id' => $host_id_field
+					);
+				}
+			}
+
+			wp_send_json_success( $result );
+
+			wp_die();
+		}
+	}
+
+	public function get_wp_usersByRole() {
+		$search_string = filter_input( INPUT_GET, 'term' );
+		$users         = vczapi_getWpUsers_basedon_UserRoles( $search_string );
+		$results       = array();
+		if ( ! empty( $users ) ) {
+			foreach ( $users as $user ) {
+				$results[] = array(
+					'id'   => $user->ID,
+					'text' => $user->user_email
+				);
+			}
+		}
+
+		wp_send_json( array( 'results' => $results ) );
 
 		wp_die();
 	}
