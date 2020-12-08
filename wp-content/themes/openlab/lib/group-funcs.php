@@ -1243,24 +1243,48 @@ function openlab_show_site_posts_and_comments() {
                 }
 
                 $posts[] = $_post;
-            }
+			}
 
-            // Set up comments
-            $comment_args = array(
-                "status" => "approve",
-                "number" => "3",
-				'meta_query' => array(
+			$active_plugins = get_option( 'active_plugins', [] );
+			$has_grade_comments = in_array( 'openlab-grade-comments/openlab-grade-comments.php', $active_plugins, true );
+			$has_private_comments = in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true );
+
+			// Set up comments
+			$comment_args = [
+				'status'     => 'approve',
+				'number'     => 3,
+				'meta_query' => [
+					'relation' => 'AND'
+				],
+			];
+
+			if ( $has_grade_comments ) {
+				$comment_args['meta_query'][] = [
 					'relation' => 'OR',
-					array(
+					[
 						'key'   => 'olgc_is_private',
 						'value' => '0',
-					),
-					array(
+					],
+					[
 						'key' => 'olgc_is_private',
 						'compare' => 'NOT EXISTS',
-					),
-				)
-            );
+					],
+				];
+			}
+
+			if ( $has_private_comments ) {
+				$comment_args['meta_query'][] = [
+					'relation' => 'OR',
+					[
+						'key'   => 'ol_is_private',
+						'value' => '0',
+					],
+					[
+						'key' => 'ol_is_private',
+						'compare' => 'NOT EXISTS',
+					],
+				];
+			}
 
             $wp_comments = get_comments($comment_args);
 
@@ -1733,7 +1757,7 @@ function openlab_set_group_academic_units( $group_id, $units ) {
 /**
  * Save "Add to Portfolio" group settings.
  *
- * @param int $group
+ * @param object $group
  * @return void
  */
 function openlab_group_add_to_portfolio_save( $group ) {
