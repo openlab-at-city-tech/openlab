@@ -2571,6 +2571,26 @@ function openlab_forbidden_group_names( $names ) {
 }
 add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
 
+/**
+ * Grant 'read_private_anys' cap to Administrators.
+ *
+ * Allows Administrators to view private posts in archive contexts. See #2893.
+ */
+add_filter(
+	'map_meta_cap',
+	function( $caps, $cap, $user_id, $args ) {
+		if ( 'read_private_anys' !== $cap ) {
+			return $caps;
+		}
+
+		$caps = [ 'manage_options' ];
+
+		return $caps;
+	},
+	10,
+	4
+);
+
 function openlab_disallow_tinymce_comment_stylesheet( $settings ) {
 	if ( ! isset( $settings['tinymce'] ) || ! isset( $settings['tinymce']['content_css'] ) ) {
 		return $settings;
