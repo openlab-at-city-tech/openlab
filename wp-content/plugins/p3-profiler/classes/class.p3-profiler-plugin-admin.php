@@ -200,7 +200,7 @@ class P3_Profiler_Plugin_Admin {
 		$pages[] = home_url( '?s=' . $words[ mt_rand( 0, count( $words ) - 1 ) ] );
 
 		// Get 4 random tags
-		$func = create_function('', "return 'rand()';");
+		$func = function () { return 'rand()'; };
 		add_filter( 'get_terms_orderby', $func );
 		$terms = get_terms( 'post_tag', 'number=4' );
 		foreach ( (array) $terms as $term ) {

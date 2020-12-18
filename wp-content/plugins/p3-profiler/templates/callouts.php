@@ -435,7 +435,7 @@ $opts = get_option( 'p3-profiler_options' );
 		/**  OTHER                                                      **/
 		/*****************************************************************/
 		// Enable / disable buttons based on scan name input
-		$( "#p3-scan-name" ).live( "keyup", function() {
+		$( "#p3-scan-name" ).on( "keyup", function() {
 			if ( $( this ).val().match(/^[a-zA-Z0-9_\.-]+$/) ) {
 				$( "#p3-auto-scan-submit" ).button( "enable" )
 				$( "#p3-manual-scan-submit" ).button( "enable" );
@@ -446,7 +446,7 @@ $opts = get_option( 'p3-profiler_options' );
 		});
 		
 		// Enable / disable the IP text based on the "use current ip" checkbox
-		$( "#p3-use-current-ip").live( "click", p3_sync_advanced_settings );
+		$( "#p3-use-current-ip").on( "click", p3_sync_advanced_settings );
 		p3_sync_advanced_settings();
 
 		// Callouts
