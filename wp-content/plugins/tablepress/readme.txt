@@ -4,8 +4,8 @@ Donate link: https://tablepress.org/donate/
 Tags: table,spreadsheet,data,csv,excel,html,tables
 Requires at least: 5.3
 Requires PHP: 5.6.20
-Tested up to: 5.4
-Stable tag: 1.11
+Tested up to: 5.5
+Stable tag: 1.12
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,7 +54,7 @@ Manual installation works just as for other WordPress plugins:
 Many questions, regarding different features or styling, have been answered on the [FAQ page](https://tablepress.org/faq/) on the plugin website.
 
 = Support? =
-For support questions, bug reports, or feature requests, please use the [WordPress Support Forums](https://wordpress.org/support/plugin/tablepress). Please search through the forums first, and only [create a new topic](https://wordpress.org/support/plugin/tablepress#new-post) if you don't find an existing answer. Thank you!
+For support questions, bug reports, or feature requests, please use the [WordPress Support Forums](https://wordpress.org/support/plugin/tablepress/). Please search through the forums first, and only [create a new topic](https://wordpress.org/support/plugin/tablepress#new-post) if you don't find an existing answer. Thank you!
 
 = Requirements? =
 In short: WordPress 5.3 or higher, while the latest version of WordPress is always recommended.
@@ -62,7 +62,7 @@ In short: WordPress 5.3 or higher, while the latest version of WordPress is alwa
 = Languages and Localization? =
 TablePress uses the ["Translate WordPress" platform](https://translate.wordpress.org/). Please see the sidebar on the TablePress page in the [WordPress Plugin Directory](https://wordpress.org/plugins/tablepress/) for available translations.
 
-To make TablePress available in your language, go to the [TablePress translations page](https://translate.wordpress.org/projects/wp-plugins/tablepress/), log in with a free wordpress.org account and start translating.
+To make TablePress available in your language, go to the [TablePress translations page](https://translate.wordpress.org/projects/wp-plugins/tablepress), log in with a free wordpress.org account and start translating.
 
 = Migration from WP-Table Reloaded =
 Several years ago, TablePress has superseded the now discontinued WP-Table Reloaded plugin. If you are still using that, please see the [migration guide](https://tablepress.org/migration-from-wp-table-reloaded/) and switch to TablePress.
@@ -97,6 +97,14 @@ You may use it free of charge for any purpose.
 
 Recent changes are shown below. For earlier changes, please see the [changelog history](https://tablepress.org/info/#changelog).
 
+= Version 1.12 =
+* Full compatibility with WordPress 5.5.
+* Enhancement: Add placeholder variables with table and cell information for use in formulas.
+* Bugfix: Properly handle math formulas with numbers in their names in the math parser.
+* Bugfix: Restore proper highlighting of input fields with invalid values in the admin area.
+* Updated external libraries (DataTables, SimpleXLSX, Build tools).
+* Some internal changes for better stability, translations, and documentation.
+
 = Version 1.11 =
 * Full compatibility with WordPress 5.4.
 * Enhancement: Update list of allowed CSS features in "Custom CSS".
@@ -107,24 +115,10 @@ Recent changes are shown below. For earlier changes, please see the [changelog h
 * Updated external libraries (SimpleXLSX, CSSTidy, Build tools).
 * Some internal changes for better stability, translations, and documentation.
 
-= Version 1.10 =
-* Full compatibility with WordPress 5.3.
-* Enhancement: Allow importing with replacing/appending existing tables with ZIP archives of JSON files.
-* Enhancement: Greatly enhance the code quality by removing old code and using modern features of PHP.
-* Enhancement: Flush the caches of more caching plugins when the "Custom CSS" was modified.
-* Enhancement: Update list of allowed CSS features in "Custom CSS".
-* Enhancement: Add more math formulas to the formula parser.
-* Bugfix: Restore correct behavior when moving columns on the "Edit" screen.
-* Bugfix: Properly hide text that is intended for screen readers only.
-* Updated external libraries (DataTables, SimpleXLSX, CSSTidy, Build tools).
-* Some internal changes for better stability, security, translations, and documentation.
-* Removed the migration/import code for the discontinued WP-Table Reloaded plugin.
-* TablePress 1.10 requires WordPress 5.3!
-
 == Upgrade Notice ==
 
-= 1.11 =
+= 1.12 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.
 
-= 1.10 =
+= 1.11 =
 This update is a stability, maintenance, and compatibility release. Updating is recommended.
