@@ -349,7 +349,8 @@ class GP_Perk {
 
     public function get_requirements_notice_text() {
 
-	    if ( ! GravityPerks::is_gravity_page() && ! GravityPerks::is_plugins_page() ) {
+		$screen = get_current_screen();
+	    if ( ! GravityPerks::is_gravity_page() && ! GravityPerks::is_plugins_page() && $screen->id !== 'dashboard' ) {
 		    return null;
 	    }
 

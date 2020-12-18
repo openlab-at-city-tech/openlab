@@ -203,23 +203,23 @@ body.perk-iframe {
 
 /* Form Editor Styles */
 
-.gfield .half {
+.field_setting .half {
     float: left;
     width: 47.5%;
     margin-left: 5%;
 }
 
-.gfield .half:first-child {
+.field_setting .half:first-child {
     margin-left: 0;
 }
 
-.gfield .third {
+.field_setting .third {
     float: left;
     width: 30%;
     margin-left: 5%;
 }
 
-.gfield .third:first-child {
+.field_setting .third:first-child {
     margin-left: 0;
 }
 
@@ -247,7 +247,10 @@ body.perk-iframe {
 }
 
 .gp-child-settings {
-	border-left: 2px solid #eee; padding: 15px; margin-left: 5px; margin-top: 5px;
+	border-left: 2px solid #eee;
+	padding: 15px;
+	margin-left: 7px;
+	margin-top: 5px;
 }
 
 /* WP Pointer */
@@ -417,10 +420,23 @@ div.gwp-message + .manage-menus { }
 	border: 1px solid #eee;
 	float: left;
 	margin: 0 10px 20px;
-	width: 280px;
+	min-width: 280px;
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
+	width: calc( 25% - 30px );
+}
+
+@media only screen and (max-width: 1410px) {
+	.perk-listing {
+		width: calc( 33% - 20px );
+	}
+}
+
+@media only screen and (max-width: 1110px) {
+	.perk-listing {
+		width: calc( 50% - 20px );
+	}
 }
 
 .perk-listing .wrap {
@@ -550,6 +566,11 @@ div.gwp-message + .manage-menus { }
 	z-index: 2;
 	position: absolute;
 	opacity: 1;
+	/* styles below override new GF defaults */
+	text-decoration: none;
+	margin: 0;
+	border: 0;
+	cursor: help;
 }
 
 .perk-listing.perk-error .gp-unregistered::before {
@@ -581,4 +602,82 @@ div.gwp-message + .manage-menus { }
 .forms_page_gwp_perks .gwp_get_support-pointer .wp-pointer-arrow {
 	left: auto;
 	right: 27px;
+}
+
+.forms_page_gwp_perks .gf_tooltip.uninstall {
+	border: 0;
+	background-color: transparent;
+	margin: 0;
+	width: auto;
+	height: auto;
+	border-radius: 0;
+}
+
+.forms_page_gwp_perks .ui-tooltip.gp-unregistered.ui-widget-content.arrow-bottom:after {
+	left: 20px;
+	margin: 0;
+}
+
+.forms_page_gwp_perks .ui-tooltip.ui-widget-content { }
+
+
+
+
+.gp-selectwoo .select2-search--inline {
+	margin: 0;
+}
+
+
+.gp-selectwoo.select2-container .select2-search--inline .select2-search__field {
+	max-width: calc( 100% - 10px );
+	padding: 0;
+	margin: 0 0 5px;
+	min-height: 28px;
+}
+
+.gp-selectwoo .select2-search--inline .select2-search__field:focus {
+	border: 0 !important;
+}
+
+.gp-selectwoo.select2-container--default.select2-container--focus .select2-selection--multiple {
+	/* Mirror WordPress focus styles */
+	border-color: #007cba;
+	box-shadow: 0 0 0 1px #007cba;
+	outline: 2px solid transparent;
+}
+
+.gp-selectwoo.select2-selection {
+	font-size: 0;
+}
+
+.gp-selectwoo.select2-selection * {
+	font-size: 0.8rem;
+}
+
+.gp-selectwoo .select2-selection__rendered {
+	padding-top: 5px !important;
+}
+
+.gp-selectwoo .select2-selection__choice {
+	padding: 6px !important;
+	margin-top: 0 !important;
+	border: 0 !important;
+}
+
+.gp-selectwoo .select2-results__option {
+	margin-bottom: 0;
+}
+
+.gp-selectwoo .select2-results__option:focus {
+	outline: 0;
+	background-color: #ddd;
+}
+
+.gp-selectwoo .select2-results__option[data-selected='true'] {
+	padding-right: 30px;
+	background: url( 'data:image/svg+xml;utf8,<svg width="12" height="10" viewBox="0 0 12 10" xmlns="http://www.w3.org/2000/svg"><path d="M4 6.58579L10.2929 0.292893C10.6834 -0.0976311 11.3166 -0.0976311 11.7071 0.292893C12.0976 0.683418 12.0976 1.31658 11.7071 1.70711L4 9.41421L0.292893 5.70711C-0.0976311 5.31658 -0.0976311 4.68342 0.292893 4.29289C0.683418 3.90237 1.31658 3.90237 1.70711 4.29289L4 6.58579Z" fill="%23C3C5DB" /></svg>' ) no-repeat right 10px center;
+}
+
+.gp-selectwoo .select2-results__option.select2-results__option--highlighted[data-selected='true'] {
+	background: #5897fb url( 'data:image/svg+xml;utf8,<svg width="12" height="10" viewBox="0 0 12 10" xmlns="http://www.w3.org/2000/svg"><path d="M4 6.58579L10.2929 0.292893C10.6834 -0.0976311 11.3166 -0.0976311 11.7071 0.292893C12.0976 0.683418 12.0976 1.31658 11.7071 1.70711L4 9.41421L0.292893 5.70711C-0.0976311 5.31658 -0.0976311 4.68342 0.292893 4.29289C0.683418 3.90237 1.31658 3.90237 1.70711 4.29289L4 6.58579Z" fill="white" /></svg>' ) no-repeat right 10px center;
 }
