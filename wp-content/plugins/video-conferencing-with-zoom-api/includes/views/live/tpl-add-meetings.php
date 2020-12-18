@@ -145,6 +145,6 @@ $users = video_conferencing_zoom_api_get_user_transients();
             </tr>
             </tbody>
         </table>
-        <p class="submit"><input type="submit" name="create_meeting" class="button button-primary" value="Create Meeting"></p>
+        <p class="submit"><input type="submit" name="create_meeting" class="button button-primary" value="<?php _e( 'Create Meeting', 'video-conferencing-with-zoom-api' ); ?>"></p>
     </form>
 </div>

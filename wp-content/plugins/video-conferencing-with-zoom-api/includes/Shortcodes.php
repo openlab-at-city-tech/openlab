@@ -139,6 +139,7 @@ class Shortcodes {
 		} else {
 			$meeting = json_decode( zoom_conference()->getMeetingInfo( $meeting_id ) );
 		}
+		$meeting = apply_filters('vczapi_join_via_browser_shortcode_meetings',$meeting);
 
 		$zoom_states = get_option( 'zoom_api_meeting_options' );
 		if ( empty( $zoom_vanity_url ) ) {

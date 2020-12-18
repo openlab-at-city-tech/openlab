@@ -70,7 +70,10 @@ class Timezone {
 
 		ob_start(); //Init the output buffering
 		$template = vczapi_get_template( 'fragments/join-links.php', false );
-		include $template;
+		if ( ! empty( $template ) ) {
+			include $template;
+		}
+
 		$content = ob_get_clean(); //Get the buffer and erase it
 
 		return $content;

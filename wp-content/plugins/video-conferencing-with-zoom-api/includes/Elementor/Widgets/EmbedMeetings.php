@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Elementor widget for hello world.
  *
- * @since 3.4.0
+ * @since  3.4.0
  * @author CodeManas
  */
 class EmbedMeetings extends Widget_Base {
@@ -24,7 +24,7 @@ class EmbedMeetings extends Widget_Base {
 	 * Retrieve the widget name.
 	 *
 	 * @return string Widget name.
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access public
@@ -38,7 +38,7 @@ class EmbedMeetings extends Widget_Base {
 	 * Retrieve the widget title.
 	 *
 	 * @return string Widget title.
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access public
@@ -52,7 +52,7 @@ class EmbedMeetings extends Widget_Base {
 	 * Retrieve the widget icon.
 	 *
 	 * @return string Widget icon.
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access public
@@ -71,7 +71,7 @@ class EmbedMeetings extends Widget_Base {
 	 * When multiple categories passed, Elementor uses the first one.
 	 *
 	 * @return array Widget categories.
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access public
@@ -203,7 +203,7 @@ class EmbedMeetings extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access protected
@@ -220,7 +220,7 @@ class EmbedMeetings extends Widget_Base {
 		$passcode          = ! empty( $settings['passcode'] ) ? $settings['passcode'] : '';
 		$enable_webinar    = ! empty( $settings['enable_webinar'] ) ? $settings['enable_webinar'] : 'yes';
 		if ( ! empty( $meeting_id ) ) {
-			echo do_shortcode( '[zoom_join_via_browser meeting_id="' . esc_attr( $meeting_id ) . '" login_required="' . esc_attr( $login_required ) . '" help="' . esc_attr( $help_text ) . '" title="' . esc_attr( $title_text ) . '" height="' . esc_attr( $height ) . 'px" disable_countdown="' . esc_attr( $disable_countdown ) . '" ' . esc_attr( 'passcode="' . $passcode . '"' ) . ' webinar="' . esc_attr( $enable_webinar ) . '"]' );
+			echo do_shortcode( '[zoom_join_via_browser meeting_id="' . esc_attr( $meeting_id ) . '" login_required="' . esc_attr( $login_required ) . '" help="' . esc_attr( $help_text ) . '" title="' . esc_attr( $title_text ) . '" height="' . esc_attr( $height ) . 'px" disable_countdown="' . esc_attr( $disable_countdown ) . '" ' . 'passcode="' . esc_attr( $passcode ) . '"' . ' webinar="' . esc_attr( $enable_webinar ) . '"]' );
 		} else {
 			_e( 'No Meeting ID is defined.', 'video-conferencing-with-zoom-api' );
 		}
@@ -231,7 +231,7 @@ class EmbedMeetings extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
-	 * @since 3.4.0
+	 * @since  3.4.0
 	 * @author CodeManas
 	 *
 	 * @access protected

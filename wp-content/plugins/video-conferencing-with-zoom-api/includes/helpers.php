@@ -227,8 +227,8 @@ function vczapi_get_cache( $key ) {
  */
 function video_conferencing_zoom_api_get_user_transients() {
 	if ( isset( $_GET['page'] ) && $_GET['page'] === "zoom-video-conferencing-list-users" && isset( $_GET['pg'] ) ) {
-		$page          = $_GET['pg'];
-		$decoded_users = json_decode( zoom_conference()->listUsers( $page ) );
+		$page                             = $_GET['pg'];
+		$decoded_users                    = json_decode( zoom_conference()->listUsers( $page ) );
 		if ( ! empty( $decoded_users->code ) ) {
 			$users = false;
 		} else {
@@ -260,7 +260,7 @@ function vczapi_check_connection_error() {
     <div id="message" class="notice notice-warning is-dismissible">
         <p>
 			<?php
-			esc_html_e( 'Please check your internet connection. Zoom API is not able to connect with Zoom servers at the moment.', 'video-conferencing-with-zoom-api' )
+			esc_html_e( 'Please check your internet connection or API keys. Zoom API is not able to connect with Zoom servers at the moment.', 'video-conferencing-with-zoom-api' );
 			?>
         </p>
     </div>
@@ -432,7 +432,7 @@ function vczapi_get_template_part( $slug, $name = '' ) {
  * @param $post_id
  *
  * @return bool
- * @since 3.0.0
+ * @since  3.0.0
  *
  * @author Deepen
  */
@@ -452,11 +452,12 @@ function vczapi_check_author( $post_id ) {
  * @param        $start_time
  * @param        $tz
  * @param string $format
- * @param bool $defaults
+ * @param bool   $defaults
  *
  * @return DateTime|string
  * @author Deepen
  * @since  1.0.0
+ * @updated 3.6.7
  */
 function vczapi_dateConverter( $start_time, $tz, $format = 'F j, Y, g:i a ( T )', $defaults = true ) {
 	try {
@@ -464,6 +465,7 @@ function vczapi_dateConverter( $start_time, $tz, $format = 'F j, Y, g:i a ( T )'
 		$tz       = new DateTimeZone( $timezone );
 		$date     = new DateTime( $start_time );
 		$date->setTimezone( $tz );
+
 		if ( ! $format ) {
 			return $date;
 		}
@@ -481,6 +483,7 @@ function vczapi_dateConverter( $start_time, $tz, $format = 'F j, Y, g:i a ( T )'
 			$start_timestamp      = $date->getTimestamp() + $date->getOffset();
 			$time_indicator       = ! empty( $twentyfourhour_format ) ? '%R' : '%I:%M %p';
 			$full_month_indicator = ! empty( $full_month_format ) ? '%B' : '%b';
+
 			switch ( $date_format ) {
 				case 'L LT':
 				case 'l LT':
@@ -493,8 +496,13 @@ function vczapi_dateConverter( $start_time, $tz, $format = 'F j, Y, g:i a ( T )'
 					return strftime( $full_month_indicator . ' %e, %G ' . $time_indicator, $start_timestamp );
 					break;
 				case 'LLLL':
+					//return date_i18n('l, F j, Y, g:H A',$start_timestamp);
 					return strftime( '%A ' . $full_month_indicator . ' %e, %G ' . $time_indicator, $start_timestamp );
 					break;
+				case 'custom':
+					$date_format = get_option( 'zoom_api_custom_date_time_format' );
+
+					return date_i18n( $date_format, $start_timestamp );
 				default:
 					return $date->format( $format );
 					break;
@@ -565,7 +573,7 @@ if ( ! function_exists( 'vczapi_get_browser_agent_type' ) ) {
  * @param      $post_id
  * @param      $meeting_id
  * @param bool $password
- * @param $seperator
+ * @param      $seperator
  *
  * @return string
  */
@@ -594,7 +602,7 @@ function vczapi_get_browser_join_links( $post_id, $meeting_id, $password = false
  * @param      $meeting_id
  * @param bool $password
  * @param      $link_only
- * @param $seperator
+ * @param      $seperator
  *
  * @return string
  */
@@ -730,7 +738,7 @@ function vczapi_pro_check_type( $type ) {
 /**
  * Get Author details for the meeting
  *
- * @param $post_id
+ * @param      $post_id
  * @param bool $meeting_details
  * @param bool $wp_author
  *
@@ -800,6 +808,7 @@ function vczapi_getWpUsers_basedon_UserRoles( $search = false ) {
 
 /**
  * Say Global Join via Browser is disabled or Enabled.
+ *
  * @return bool
  */
 function vczapi_check_disable_joinViaBrowser() {
@@ -809,4 +818,54 @@ function vczapi_check_disable_joinViaBrowser() {
 	}
 
 	return false;
+}
+
+/**
+ * @param $format datetime format string https://www.php.net/manual/en/datetime.format.php
+ *
+ * @return string
+ */
+function vczapi_convertPHPToMomentFormat( $format ) {
+	$replacements = [
+		'd' => 'DD',
+		'D' => 'ddd',
+		'j' => 'D',
+		'l' => 'dddd',
+		'N' => 'E',
+		'S' => 'o',
+		'w' => 'e',
+		'z' => 'DDD',
+		'W' => 'W',
+		'F' => 'MMMM',
+		'm' => 'MM',
+		'M' => 'MMM',
+		'n' => 'M',
+		't' => '', // no equivalent
+		'L' => '', // no equivalent
+		'o' => 'YYYY',
+		'Y' => 'YYYY',
+		'y' => 'YY',
+		'a' => 'a',
+		'A' => 'A',
+		'B' => '', // no equivalent
+		'g' => 'h',
+		'G' => 'H',
+		'h' => 'hh',
+		'H' => 'HH',
+		'i' => 'mm',
+		's' => 'ss',
+		'u' => 'SSS',
+		'e' => 'zz', // deprecated since version 1.6.0 of moment.js
+		'I' => '', // no equivalent
+		'O' => '', // no equivalent
+		'P' => '', // no equivalent
+		'T' => '', // no equivalent
+		'Z' => '', // no equivalent
+		'c' => '', // no equivalent
+		'r' => '', // no equivalent
+		'U' => 'X',
+	];
+	$momentFormat = strtr( $format, $replacements );
+
+	return $momentFormat;
 }

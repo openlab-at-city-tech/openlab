@@ -11,7 +11,7 @@ global $vczapi;
 <form class="vczapi-filters" method="GET">
     <div class="vczapi-wrap vczapi-filters-wrapper">
         <div class="vczapi-col-3">
-            <span>Showing all <?php echo $vczapi['found_posts']; ?> results</span>
+            <span><?php _e( 'Showing all', 'video-conferencing-with-zoom-api' ); ?>&nbsp;<?php echo $vczapi['found_posts']; ?>&nbsp;<?php _e( 'results', 'video-conferencing-with-zoom-api' ); ?></span>
         </div>
 		<?php
 		if ( ! empty( $vczapi['terms'] ) ) {

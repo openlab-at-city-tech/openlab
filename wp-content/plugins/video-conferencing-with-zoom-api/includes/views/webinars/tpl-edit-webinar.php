@@ -108,10 +108,10 @@ $users = video_conferencing_zoom_api_get_user_transients();
                 <th scope="row"><label for="option_auto_recording"><?php _e( 'Auto Recording', 'video-conferencing-with-zoom-api' ); ?></label></th>
                 <td>
                     <select id="option_auto_recording" name="option_auto_recording">
-                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="none">No Recordings
+                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="none"><?php _e( 'No Recordings', 'video-conferencing-with-zoom-api' ); ?>
                         </option>
-                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="local">Local</option>
-                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="cloud">Cloud</option>
+                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="local"><?php _e( 'Local', 'video-conferencing-with-zoom-api' ); ?></option>
+                        <option <?php echo ! empty( $meeting_info->settings->auto_recording ) ? 'selected' : false; ?> value="cloud"><?php _e( 'Cloud', 'video-conferencing-with-zoom-api' ); ?></option>
                     </select>
                     <p class="description" id="option_auto_recording_description"><?php _e( 'Set what type of auto recording feature you want to add. Default is none.', 'video-conferencing-with-zoom-api' ); ?></p>
                 </td>
@@ -141,6 +141,6 @@ $users = video_conferencing_zoom_api_get_user_transients();
             </tr>
             </tbody>
         </table>
-        <p class="submit"><input type="submit" name="create_meeting" class="button button-primary" value="Create Webinar"></p>
+        <p class="submit"><input type="submit" name="create_meeting" class="button button-primary" value="<?php _e( 'Edit Webinar', 'video-conferencing-with-zoom-api' ); ?>"></p>
     </form>
 </div>

@@ -175,6 +175,6 @@ if ( ! empty( $meeting_info ) ) {
             </tr>
             </tbody>
         </table>
-        <p class="submit"><input type="submit" name="update_meeting" class="button button-primary" value="Update Meeting"></p>
+        <p class="submit"><input type="submit" name="update_meeting" class="button button-primary" value="<?php _e( 'Update Meeting', 'video-conferencing-with-zoom-api' ); ?>"></p>
     </form>
 </div>

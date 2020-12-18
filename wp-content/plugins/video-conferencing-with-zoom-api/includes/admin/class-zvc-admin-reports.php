@@ -64,7 +64,7 @@ class Zoom_Video_Conferencing_Reports {
 		if ( isset( $_POST['zoom_check_month_year'] ) ) {
 			$zoom_monthyear = $_POST['zoom_month_year'];
 			if ( $zoom_monthyear == null || $zoom_monthyear == "" ) {
-				$return_result = __( "Date field cannot be Empty !!", "zoom-video-conference" );
+				$return_result = __( "Date field cannot be Empty !!", "video-conferencing-with-zoom-api" );
 			} else {
 				$exploded_data = explode( ' ', $zoom_monthyear );
 				foreach ( $months as $key => $month ) {
@@ -93,7 +93,7 @@ class Zoom_Video_Conferencing_Reports {
 			$zoom_account_from = $_POST['zoom_account_from'];
 			$zoom_account_to   = $_POST['zoom_account_to'];
 			if ( $zoom_account_from == null || $zoom_account_to == null ) {
-				$return_result = __( "The fields cannot be Empty !!", "zoom-video-conference" );
+				$return_result = __( "The fields cannot be Empty !!", "video-conferencing-with-zoom-api" );
 			} else {
 				$result        = zoom_conference()->getAccountReport( $zoom_account_from, $zoom_account_to );
 				$return_result = json_decode( $result );
@@ -103,9 +103,3 @@ class Zoom_Video_Conferencing_Reports {
 		return $return_result;
 	}
 }
-
-function zvc_reports() {
-	return Zoom_Video_Conferencing_Reports::getInstance();
-}
-
-zvc_reports();

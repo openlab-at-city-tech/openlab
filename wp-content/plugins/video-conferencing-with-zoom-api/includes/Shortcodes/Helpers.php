@@ -10,6 +10,45 @@ namespace Codemanas\VczApi\Shortcodes;
 class Helpers {
 
 	/**
+	 * Set Cache Helper
+	 *
+	 * @param $post_id
+	 * @param $key
+	 * @param $value
+	 * @param bool $time_in_secods
+	 *
+	 * @return bool
+	 */
+	public static function set_post_cache( $post_id, $key, $value, $time_in_secods = false ) {
+		if ( ! $post_id ) {
+			return false;
+		}
+		update_post_meta( $post_id, $key, $value );
+		update_post_meta( $post_id, $key . '_expiry_time', time() + $time_in_secods );
+
+	}
+
+	/**
+	 * Get Cache Data
+	 *
+	 * @param $post_id
+	 * @param $key
+	 *
+	 * @return bool|mixed
+	 */
+	public static function get_post_cache( $post_id, $key ) {
+		$expiry = get_post_meta( $post_id, $key . '_expiry_time', true );
+		if ( ! empty( $expiry ) && $expiry > time() ) {
+			return get_post_meta( $post_id, $key, true );
+		} else {
+			update_post_meta( $post_id, $key, '' );
+			update_post_meta( $post_id, $key . '_expiry_time', '' );
+
+			return false;
+		}
+	}
+
+	/**
 	 * Pagination
 	 *
 	 * @param $query

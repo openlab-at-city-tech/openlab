@@ -5,13 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$zvc_reports = Zoom_Video_Conferencing_Reports::getInstance();
+
 video_conferencing_zoom_api_show_like_popup(); ?>
 <div class="wrap">
     <h1><?php _e( 'Reports', 'video-conferencing-with-zoom-api' ); ?></h1>
 
     <h2 class="nav-tab-wrapper">
-        <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-reports&tab=zoom_daily_report" class="nav-tab <?php echo $active_tab == 'zoom_daily_report' ? 'nav-tab-active' : ''; ?>"><?php _e( '1. Daily Report', 'video-conferencing-with-zoom-api' ); ?></a>
-        <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-reports&tab=zoom_acount_report" class="nav-tab <?php echo $active_tab == 'zoom_acount_report' ? 'nav-tab-active' : ''; ?>"><?php _e( '2. Account Report', 'video-conferencing-with-zoom-api' ); ?></a>
+        <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-reports&tab=zoom_daily_report" class="nav-tab <?php echo ! empty( $active_tab ) && $active_tab == 'zoom_daily_report' ? 'nav-tab-active' : ''; ?>"><?php _e( '1. Daily Report', 'video-conferencing-with-zoom-api' ); ?></a>
+        <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-reports&tab=zoom_acount_report" class="nav-tab <?php echo ! empty( $active_tab ) && $active_tab == 'zoom_acount_report' ? 'nav-tab-active' : ''; ?>"><?php _e( '2. Account Report', 'video-conferencing-with-zoom-api' ); ?></a>
     </h2>
 
     <div id="message" class="notice notice-warning">
@@ -27,7 +29,7 @@ video_conferencing_zoom_api_show_like_popup(); ?>
         </ol>
     </div>
 
-	<?php if ( $active_tab == 'zoom_daily_report' ): ?><?php $result = zvc_reports()->get_daily_report_html();
+	<?php if ( $active_tab == 'zoom_daily_report' ): ?><?php $result = $zvc_reports->get_daily_report_html();
 		if ( isset( $_POST['zoom_check_month_year'] ) ) {
 			if ( isset( $result->error ) ) {
 				?>
@@ -46,7 +48,7 @@ video_conferencing_zoom_api_show_like_popup(); ?>
         <div class="zoom_dateinput_field">
             <form action="?post_type=zoom-meetings&page=zoom-video-conferencing-reports" class="zvc_daily_reports_check_form" method="POST">
                 <label><?php _e( 'Enter the date to check:', 'video-conferencing-with-zoom-api' ); ?></label>
-                <input name="zoom_month_year" id="reports_date"/> <input type="submit" name="zoom_check_month_year" value="Check">
+                <input name="zoom_month_year" id="reports_date"/> <input type="submit" name="zoom_check_month_year" value="<?php _e( 'Check', 'video-conferencing-with-zoom-api' ); ?>">
             </form>
         </div>
         <table class="wp-list-table widefat fixed striped posts">
@@ -75,7 +77,7 @@ video_conferencing_zoom_api_show_like_popup(); ?>
 				}
 			} else { ?>
                 <tr>
-                    <td colspan="5"><?php _e( "Select a Date to Check..." ); ?></td>
+                    <td colspan="5"><?php _e( "Select a Date to Check", "video-conferencing-with-zoom-api" ); ?>...</td>
                 </tr>
 				<?php
 			}
@@ -83,7 +85,7 @@ video_conferencing_zoom_api_show_like_popup(); ?>
             </tbody>
         </table>
 	<?php elseif ( $active_tab == 'zoom_acount_report' ):
-		$result = zvc_reports()->get_account_report_html();
+		$result = $zvc_reports->get_account_report_html();
 		if ( isset( $_POST['zoom_check_account_info'] ) ) {
 			if ( empty( $_POST['zoom_account_from'] ) || empty( $_POST['zoom_account_to'] ) ) { ?>
                 <div id="message" class="notice notice-error">
