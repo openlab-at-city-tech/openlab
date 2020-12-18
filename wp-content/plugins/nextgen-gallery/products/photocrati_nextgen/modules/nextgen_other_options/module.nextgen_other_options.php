@@ -23,7 +23,7 @@ class M_NextGen_Other_Options extends C_Base_Module
 			'photocrati-nextgen_other_options',
 			'Other Options',
 			'NextGEN Gallery Others Options Page',
-			'3.3.7',
+			'3.3.21',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'

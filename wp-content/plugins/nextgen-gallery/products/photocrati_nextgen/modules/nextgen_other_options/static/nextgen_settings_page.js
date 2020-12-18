@@ -4,14 +4,14 @@ jQuery(function($){
     $('label.tooltip, span.tooltip').tooltip();
 
 	/**** LIGHTBOX EFFECT TAB ****/
-    $('#lightbox_library').change(function(){
+    $('#lightbox_library').on('change', function() {
         var value   = $(this).find(':selected').val();
         var id      = 'lightbox_library_'+value;
         $('.lightbox_library_settings').each(function(){
             if ($(this).attr('id') != id) $(this).fadeOut('fast');
         });
         $('#'+id).fadeIn();
-    }).change();
+    }).trigger('change');
 
 	/**** WATERMARK TAB ****/
 
@@ -19,16 +19,16 @@ jQuery(function($){
 	$('#watermark_customization').attr('rel', 'watermark_'+$('#watermark_source').val()+'_source');
 
 	// Configure the button to switch from watermark text to image
-	$('#watermark_source').change(function(){
+	$('#watermark_source').on('change', function() {
 		$('#'+$('#watermark_customization').attr('rel')).css('display', '').addClass('hidden');
 		if (!$('#'+$(this).val()).hasClass('hidden')) {
 			$('#'+$(this).val()).removeClass('hidden');
 		}
-		$('#watermark_customization').attr('rel', 'watermark_'+$('#watermark_source').val()+'_source').click();
+		$('#watermark_customization').attr('rel', 'watermark_'+$('#watermark_source').val()+'_source').trigger('click');
 	});
 
     // Don't show any Watermark fields unless Watermarks are enabled
-    $('#watermark_source').change(function(){
+    $('#watermark_source').on('change', function() {
         var value = $(this).val();
 
         $('.watermark_field').each(function(){
@@ -39,12 +39,12 @@ jQuery(function($){
                 $(this).fadeIn().removeClass('hidden');
             }
         });
-    }).change();
+    }).trigger('change');
 
 
     // sends the current settings to a special ajax endpoint which saves them, regenerates the url, and then reverts
     // to the old settings. this submits the form and forces a refresh of the image through the time parameter
-    $('#nextgen_settings_preview_refresh').click(function(event) {
+    $('#nextgen_settings_preview_refresh').on('click', function(event) {
         event.preventDefault();
 
         var form = $(this).parents('form:first');
@@ -68,11 +68,11 @@ jQuery(function($){
                 }
 
                 img.attr('src', src + '?' + new Date().getTime());
-                $(self).removeAttr('disabled').html(orig_html);
+                $(self).prop('disabled', false).html(orig_html);
                 $('body').css('cursor', 'default');
             },
             error: function(xob, err, code) {        
-                $(self).removeAttr('disabled').html(orig_html);
+                $(self).prop('disabled', false).html(orig_html);
                 $('body').css('cursor', 'default');
             }
         });
@@ -96,7 +96,7 @@ jQuery(function($){
 
 
 	// When the selected stylesheet changes, fetch it's contents
-	$('#activated_stylesheet').change(function(){
+	$('#activated_stylesheet').on('change', function() {
 		var selected = $(this).find(':selected');
 		var data = {
 			action:		'get_stylesheet_contents',
@@ -109,5 +109,5 @@ jQuery(function($){
 			if (res.writable) status.text(status.attr('writable_label')+' '+res.writepath);
 			else status.text(status.attr('readonly_label'));
 		});
-	}).change();
+	}).trigger('change');
 });

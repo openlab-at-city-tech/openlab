@@ -59,12 +59,11 @@ class C_Ajax_Controller extends C_MVC_Controller
         }
         return self::$_instances[$context];
     }
-    function validate_ajax_request($action = NULL, $token = false)
+    function validate_ajax_request($action = NULL, $token = FALSE)
     {
-        if ($token === TRUE) {
-            $token = isset($_REQUEST['nonce']) ? $_REQUEST['nonce'] : FALSE;
+        if ($token === TRUE && (!isset($_REQUEST['nonce']) || !M_Security::verify_nonce($_REQUEST['nonce'], $action))) {
+            return FALSE;
         }
-        // TODO: Remove !$action condition. Necessary for Proofing at the moment
-        return (!$action || M_Security::is_allowed($action)) && (!$token || M_Security::verify_nonce($token, $action));
+        return M_Security::is_allowed($action);
     }
 }

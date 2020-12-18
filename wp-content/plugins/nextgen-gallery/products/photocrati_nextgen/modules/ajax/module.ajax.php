@@ -17,7 +17,7 @@ class M_Ajax extends C_Base_Module
             'photocrati-ajax',
             'AJAX',
             'Provides AJAX functionality',
-            '3.3.11',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

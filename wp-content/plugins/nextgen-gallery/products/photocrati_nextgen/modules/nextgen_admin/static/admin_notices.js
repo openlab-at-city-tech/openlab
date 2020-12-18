@@ -1,5 +1,5 @@
 jQuery(function($){
-    $('.ngg_admin_notice .dismiss').click(function(e){
+    $('.ngg_admin_notice .dismiss').on('click',function(e){
         var $button = $(this);
         var code = $button.data('dismiss-code');
         if (!code) code = 1;

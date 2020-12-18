@@ -24,11 +24,6 @@ class nggAdminPanel{
 		add_action('admin_print_scripts', array($this, 'load_scripts') );
 		add_action('admin_print_styles', array($this, 'load_styles') );
 
-		// Try to detect plugins that embed their own jQuery and jQuery UI
-		// libraries and load them in NGG's admin pages
-		add_action('admin_enqueue_scripts', array($this, 'buffer_scripts'), 0);
-		add_action('admin_print_scripts', array($this, 'output_scripts'), PHP_INT_MAX);
-
         add_filter('current_screen', array($this, 'edit_current_screen'));
 
         add_action('ngg_admin_enqueue_scripts', array($this, 'enqueue_progress_bars'));
@@ -69,92 +64,6 @@ class nggAdminPanel{
 			do_action('ngg_page_event', $event);
 		}
 		ob_start();
-	}
-
-	/**
-	 * If a NGG page is being requested, we buffer any rendering of <script>
-	 * tags to detect conflicts and remove them if need be
-	 */
-	function buffer_scripts()
-	{
-		// Is this a NGG admin page?
-		if (isset($_REQUEST['page']) && strpos($_REQUEST['page'] ,'nggallery') !== FALSE) {
-			ob_start();
-		}
-	}
-
-	function output_scripts()
-	{
-		// Is this a NGG admin page?
-		if (isset($_REQUEST['page']) && strpos($_REQUEST['page'] ,'nggallery') !== FALSE) {
-			$plugin_folder		= NGGFOLDER;
-			$skipjs_count		= 0;
-			$html = ob_get_contents();
-			ob_end_clean();
-
-            if (!defined('NGG_JQUERY_CONFLICT_DETECTION')) {
-				define('NGG_JQUERY_CONFLICT_DETECTION', TRUE);
-			}
-
-			if (NGG_JQUERY_CONFLICT_DETECTION) {
-				// Detect custom jQuery script
-				if (preg_match_all("/<script.*wp-content.*jquery[-_\.](min\.)?js.*<\script>/", $html, $matches, PREG_SET_ORDER)) {
-					foreach ($matches as $match) {
-						$old_script = array_shift($match);
-						if (strpos($old_script, NGG_PLUGIN_DIR) === FALSE)
-							$html = str_replace($old_script, '', $html);
-					}
-				}
-
-				// Detect custom jQuery UI script and remove
-				if (preg_match_all("/<script.*wp-content.*jquery[-_\.]ui.*<\/script>/", $html, $matches, PREG_SET_ORDER)) {
-					$detected_jquery_ui = TRUE;
-					foreach ($matches as $match) {
-						$old_script = array_shift($match);
-						if (strpos($old_script, NGG_PLUGIN_DIR) === FALSE)
-							$html = str_replace($old_script, '', $html);
-					}
-				}
-
-				if (isset($_REQUEST['skipjs'])) {
-					foreach ($_REQUEST['skipjs'] as $js) {
-						$js = preg_quote($js);
-						if (preg_match_all("#<script.*{$js}.*</script>#", $html, $matches, PREG_SET_ORDER)) {
-							foreach ($matches as $match) {
-								$old_script = array_shift($match);
-								if (strpos($old_script, NGGFOLDER) === FALSE)
-									$html = str_replace($old_script, '', $html);
-							}
-						}
-					}
-					$skipjs_count = count($_REQUEST['skipjs']);
-				}
-
-
-				// Use WordPress built-in version of jQuery
-				$jquery_url = includes_url('js/jquery/jquery.js');
-				$html = implode('', array(
-					"<script type='text/javascript' src='{$jquery_url}'></script>\n",
-					"<script type='text/javascript'>
-					window.onerror = function(msg, url, line){
-						if (url.match(/\.js$|\.js\?/)) {
-							if (window.location.search.length > 0) {
-								if (window.location.search.indexOf(url) == -1)
-									window.location.search += '&skipjs[{$skipjs_count}]='+url;
-							}
-							else {
-								window.location.search = '?skipjs[{$skipjs_count}]='+url;
-							}
-						}
-						console.error(msg)
-						return true;
-					};</script>\n",
-					$html
-				));
-			}
-
-			echo $html;
-		}
 	}
 
 	// integrate the menu

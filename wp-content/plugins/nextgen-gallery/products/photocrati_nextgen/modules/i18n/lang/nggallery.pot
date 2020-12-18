@@ -1,8 +1,6 @@
 # Copyright (C) 2020 Imagely
 # NextGEN Gallery base (English) .po source
 # This file is distributed under the same license as the NextGEN Gallery plugin.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: NextGEN Gallery\n"
@@ -13,17 +11,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2014-02-20 19:45-0800\n"
-"PO-Revision-Date: 2020-06-29 12:57+08\n"
+"PO-Revision-Date: 2020-11-10 13:01+08\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: nggallery\n"
 
 #. Plugin Name of the plugin
-#: nggallery.php:950
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:538
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:540
 #: products/photocrati_nextgen/modules/attach_to_post/module.attach_to_post.php:379
+#: products/photocrati_nextgen/modules/nextgen_block/module.nextgen_block.php:63
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:73
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:74
 #: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:11
 msgid "NextGEN Gallery"
-msgstr ""
+msgid_plural "NextGen Galleries"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Plugin URI of the plugin
 msgid "https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/"
@@ -34,7 +36,6 @@ msgid "The most popular gallery plugin for WordPress and one of the most popular
 msgstr ""
 
 #. Author of the plugin
-#: nggallery.php:954
 msgid "Imagely"
 msgstr ""
 
@@ -42,25 +43,20 @@ msgstr ""
 msgid "https://www.imagely.com"
 msgstr ""
 
-#: nggallery.php:155
+#: nggallery.php:156
 msgid "We’ve detected you are running PHP versions 7.0.26 or 7.1.12. These versions of PHP have a bug that breaks NextGEN Gallery and causes server crashes in certain conditions. To protect your site, NextGEN Gallery will not load. We recommend asking your host to roll back to an earlier version of PHP. For details on the PHP bug, see: <a target=\"_blank\" href=\"https://bugs.php.net/bug.php?id=75573\">bugs.php.net/bug.php?id=75573</a>"
 msgstr ""
 
-#: nggallery.php:365
+#: nggallery.php:366
 msgid "NextGEN Gallery %s is incompatible with this version of NextGEN Pro. Please update NextGEN Pro to version %s or higher to restore NextGEN Pro functionality."
 msgstr ""
 
-#: nggallery.php:512
+#: nggallery.php:507
 msgid "Every %d seconds"
 msgstr ""
 
-#: nggallery.php:671
-#: non_pope/class.photocrati_installer.php:259
+#: nggallery.php:637
 msgid "Sorry, NextGEN Gallery works only with a role called administrator"
-msgstr ""
-
-#: nggallery.php:947
-msgid "Hey %s, "
 msgstr ""
 
 #: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:168
@@ -83,73 +79,73 @@ msgstr ""
 msgid "Invalid request"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:363
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:365
 msgid "Are you inserting a Gallery (default), an Album, or images based on Tags?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:364
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:366
 #: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:245
 msgid "(optional)"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:365
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:367
 msgid "Sets an SEO-friendly name to this gallery for URLs. Currently only in use by the Pro Lightbox"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:366
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:368
 msgid "Slug"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:367
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:369
 msgid "No entities to display for this source"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:368
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:370
 msgid "Exclude?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:369
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:371
 msgid "Select a Gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:370
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:372
 msgid "Select one or more galleries (click in box to see available galleries)."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:371
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:373
 msgid "Select one album (click in box to see available albums)."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:556
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:558
 msgid "Click to edit"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:582
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:584
 msgid "NextGEN Gallery - Attach To Post"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:597
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:599
 msgid "Insert Into Page"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:604
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:12
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:606
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:13
 msgid "Upload Images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:611
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:172
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:206
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:613
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:81
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:115
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:197
 msgid "Manage Galleries"
 msgid_plural "Manage Galleries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:618
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:173
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:208
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:483
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:620
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:82
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:117
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:474
 msgid "Manage Albums"
 msgid_plural "Albums"
 msgstr[0] ""
@@ -181,8 +177,8 @@ msgid "Edit"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/attach_to_post/module.attach_to_post.php:381
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:521
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:261
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:512
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:263
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:357
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:358
 #: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:223
@@ -193,36 +189,24 @@ msgstr ""
 msgid "Attach NextGEN Gallery to Post"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:25
-msgid "Want Mosaic, Masonry, Tiled and other layouts?"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:26
-msgid "Get NextGEN Pro"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:27
-msgid "Use ILOVENG for 30% off!"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:31
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:435
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:519
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:571
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:24
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:437
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:521
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:573
 msgid "Save Changes"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:31
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:24
 msgid "Insert Gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:34
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:27
 msgid "Need a quick tutorial?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:36
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:77
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:313
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:29
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:78
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:222
 msgid "Click to Close"
 msgstr ""
 
@@ -287,87 +271,344 @@ msgstr ""
 msgid "Fancybox"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:65
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:66
 msgid "Shutter"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:76
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:312
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:77
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:221
 msgid "L O A D I N G"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:84
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:85
 msgid "Shutter Reloaded"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:95
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:96
 msgid "Previous"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:96
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:49
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:97
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:59
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:29
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:33
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:29
 msgid "Next"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:97
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:124
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:98
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:125
 msgid "Close"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:98
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:99
 msgid "Full Size"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:99
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:100
 msgid "Fit to Screen"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:100
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:122
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/default-view.php:54
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:655
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:101
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:123
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/default-view.php:64
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:664
 msgid "Image"
 msgid_plural "Images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:101
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:123
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/default-view.php:54
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:55
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:102
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:124
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/default-view.php:66
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:67
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:31
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:35
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:31
 msgid "of"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:102
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:103
 msgid "Loading..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:109
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:110
 msgid "Thickbox"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:120
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:121
 msgid "Next &gt;"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:121
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:122
 msgid "&lt; Prev"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:125
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:126
 msgid "This feature requires inline frames. You have iframes disabled or your browser does not support them."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:135
+#: products/photocrati_nextgen/modules/lightbox/class.lightbox_library_manager.php:136
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:27
 #: products/photocrati_nextgen/modules/ngglegacy/admin/thumbnails-template.php:76
 msgid "Custom"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:19
+msgid "Pro Tiled"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:21
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:36
+msgid "Pro Mosaic"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:23
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:42
+msgid "Pro Masonry"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:44
+#: products/photocrati_nextgen/modules/marketing/adapter.other_options_form.php:19
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:219
+msgid "<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:48
+msgid "Use the Pro Tiled Gallery in NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:49
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:95
+msgid "With this stunning display type, you can present your images large with no trouble. Choose the maximum width of the gallery, or let it automate. It will adjust incredibly on all devices."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:53
+msgid "View the Pro Tiled Demo"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:60
+msgid "Use the Mosaic Gallery in NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:61
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:102
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:116
+msgid "With this stunning display type, you can present your images in a flexible grid. Choose the maximum height for your rows, and their margins, or use the default settings. It will adjust incredibly on all devices."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:65
+msgid "View the Mosaic Demo"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:72
+msgid "Use the Masonry Gallery in NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:73
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:109
+msgid "With this stunning display type, you can present your images in a flexible grid. Choose the maximum width for your images, and their padding, or use the default settings. It will adjust incredibly on all devices."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_settings_form.php:77
+msgid "View the Masonry Demo"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:22
+msgid "Ecommerce and Print Lab functionality"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:31
+msgid "proofing"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:47
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:95
+msgid "Requires NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:48
+msgid "Enable Proofing?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:49
+msgid "Enable Ecommerce?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:50
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:153
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:10
+msgid "Yes"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.display_type_settings_form.php:51
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:154
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:13
+msgid "No"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:30
+msgid "Pro Tile"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:55
+msgid "Pro Tiled Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:56
+msgid "the Pro Tiled Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:64
+msgid "Pro Masonry Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:65
+msgid "the Pro Masonry Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:73
+msgid "Pro Mosaic Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.igw_display_type_upsells.php:74
+msgid "the Pro Mosaic Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.lightbox_options_mvc.php:12
+msgid "Go big with the Pro Lightbox"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.lightbox_options_mvc.php:13
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:144
+msgid "The Pro Lightbox allows you to display images at full scale when opened. Your visitors will enjoy breathtaking views of your photos on any device. It's customizable, from colors to padding and more. Offer social sharing, deep linking, and individual image commenting. Turn your gallery lightbox view into a slideshow for your visitors. You can customize settings such as auto-playing and slideshow speed."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.lightbox_options_mvc.php:14
+msgid "<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.lightbox_options_mvc.php:17
+msgid "View the Pro Lightbox Demo"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.other_options_form.php:11
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:206
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:164
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:244
+msgid "Image Protection"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.other_options_form.php:17
+msgid "Protect your images"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.other_options_form.php:18
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:165
+msgid "Image protection disables the ability for visitors to right-click or drag to download your images in both the gallery display and Pro Lightbox views. It gives you complete freedom to display your work without worry. You can also choose to protect all images sitewide, even outside of NextGEN Gallery."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/adapter.other_options_form.php:22
+msgid "Learn more"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/class.block_base.php:24
+msgid "Upgrade Now"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/class.block_large.php:36
+#: products/photocrati_nextgen/modules/marketing/class.block_popup.php:31
+#: products/photocrati_nextgen/modules/marketing/templates/igw_promo.php:8
+msgid "Upgrade to NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:40
+msgid "NextGEN Basic users get a discount of 20% off regular price"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:41
+msgid "Bonus"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:42
+msgid "We're sorry, but %s is not available in the lite version of NextGEN Gallery. Please upgrade to NextGEN Pro to unlock these awesome features."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:99
+#: products/photocrati_nextgen/modules/marketing/templates/display_type_settings.php:12
+msgid "Want to sell your images online?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:199
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:45
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:225
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:226
+msgid "Ecommerce"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:200
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:231
+msgid "Automated Print Fulfillment"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:201
+msgid "Automated Tax Calculation"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:202
+msgid "Additional Gallery Displays"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:203
+msgid "Additional Album Displays"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:205
+msgid "Image Proofing"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:207
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:143
+msgid "Pro Lightbox"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:208
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:195
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:243
+msgid "Digital Downloads"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:209
+msgid "Dedicated customer support and so much more!"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:216
+msgid "Want to make your gallery workflow and presentation even better?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:217
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:257
+msgid "By upgrading to NextGEN Pro, you can get access to numerous other features, including:"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:229
+msgid "Want to do even more with your albums?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:254
+msgid "Want to do even more with your gallery display?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/module.marketing.php:256
+msgid "We know that you will truly love NextGEN Pro. It has 2,600+ five star ratings and is active on over 900,000 websites."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/templates/igw_promo.php:2
+msgid "Want More Layouts?"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/marketing/templates/igw_promo.php:12
+msgid "Get 20% Off Now!"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.import_folder_form.php:12
@@ -414,7 +655,6 @@ msgid "In Progress..."
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.import_media_library_form.php:33
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:221
 msgid "Upload complete. Great job!"
 msgstr ""
 
@@ -434,97 +674,98 @@ msgstr ""
 msgid "Import %d image(s)"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:31
-msgid "Please ask your hosting provider or system administrator to enable the PHP XML module which is required for image uploads"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:52
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:268
-msgid "No gallery name specified"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:69
-msgid "Failed to extract images from ZIP"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:84
-msgid "Automatic image resizing failed [%1$s]."
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:93
-msgid "Thumbnail generation failed."
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:96
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:286
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:305
-msgid "Image generation failed"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:106
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:223
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:250
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:315
-msgid "An unexpected error occured."
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:117
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:322
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:34
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:142
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:345
 msgid "No permissions to upload images. Try refreshing the page or ensuring that your user account has sufficient roles/privileges."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:174
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:47
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:86
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:291
+msgid "No gallery name specified"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:67
+msgid "Please ask your hosting provider or system administrator to enable the PHP XML module which is required for image uploads"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:103
+msgid "Failed to extract images from ZIP"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:115
+msgid "Automatic image resizing failed [%1$s]."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:121
+msgid "Thumbnail generation failed."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:124
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:309
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:328
+msgid "Image generation failed"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:133
+msgid "An unexpected error occurred: %s"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:197
 msgid "Directory does not exist."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:178
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:186
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:201
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:209
 msgid "No permissions to browse folders. Try refreshing the page or ensuring that your user account has sufficient roles/privileges."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:182
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:205
 msgid "No directory specified."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:218
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:230
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:241
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:253
 msgid "No permissions to import folders. Try refreshing the page or ensuring that your user account has sufficient roles/privileges."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:227
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:246
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:273
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:338
+msgid "An unexpected error occured."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:250
 msgid "No folder specified"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_controller.php:12
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:204
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:113
 msgid "Add Gallery / Images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:18
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:74
 msgid "No images were uploaded successfully."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:19
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:75
 msgid "1 image was uploaded successfully."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:20
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:76
 msgid "{count} images were uploaded successfully."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:21
-msgid "The following errors occured:"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:22
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:77
 msgid "Manage gallery > {name}"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/module.nextgen_addgallery_page.php:97
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/module.nextgen_addgallery_page.php:95
 msgid "XML is strongly encouraged for safely uploading images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/module.nextgen_addgallery_page.php:105
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/module.nextgen_addgallery_page.php:103
 msgid "Cannot write to %s: new galleries cannot be created"
 msgstr ""
 
@@ -549,12 +790,10 @@ msgid "Upload complete"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_media_library.php:2
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:2
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:164
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:165
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:183
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:388
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:651
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:12
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:92
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:297
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:660
 #: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:217
 #: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:226
 msgid "Gallery"
@@ -563,29 +802,33 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_media_library.php:4
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:4
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:18
 msgid "Create a new gallery"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_media_library.php:9
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:11
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:32
 msgid "Gallery title"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:15
-msgid "Your browser doesn't have Silverlight, HTML5, or HTML4 support."
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:37
+msgid "Create &amp; select"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:122
-msgid "Drag image and ZIP files here or click <strong>Add Files</strong>"
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:41
+msgid "Creating..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:124
-msgid "Drag image files here or click <strong>Add Files</strong>"
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:51
+msgid "Drag image and ZIP files here or %{browse}"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:244
-msgid "An unexpected error occured. This is most likely due to a server misconfiguration. Check your PHP error log or ask your hosting provider for assistance."
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:53
+msgid "Drag image files here or %{browse}"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:60
+msgid "You may select files up to %dMB"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_admin/class.admin_notification_manager.php:278
@@ -636,31 +879,59 @@ msgstr ""
 msgid "Average"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:148
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:91
+msgid "Thank you for using NextGEN Gallery!"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:92
+msgid "Get NextGEN Gallery updates, photography tips, business tips, tutorials, and resources straight to your mailbox."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:93
+msgid "Yes, Please!"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:94
+msgid "Thank you for subscribing!"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:95
+msgid "Email Address"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:96
+msgid "First Name"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.mailchimp_optin_notice.php:97
+msgid "Cannot connect to the registration server right now. Please try again later."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:152
 msgid "Good work. Keep making the web beautiful."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:177
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:170
 msgid "Saved successfully"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:25
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:37
 msgid "Thanks for installing NextGEN Gallery! Want help creating your first gallery?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:26
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:38
 msgid "Launch the Gallery Wizard"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:27
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:39
 msgid "If you close this message, you can also launch the Gallery Wizard at any time from the"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:28
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_first_run_notification_wizard.php:40
 msgid "NextGEN Overview page"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:210
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:217
 msgid "PHP 5.2 will be deprecated in a future version of NextGEN. Please upgrade your PHP installation to 5.3 or above."
 msgstr ""
 
@@ -672,72 +943,76 @@ msgstr ""
 msgid "Hello, this wizard will guide you through creating a NextGEN gallery and inserting it into a page. Click \"Next step\" to proceed."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:491
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:492
 msgid "Click on \"Pages\" to access your WordPress pages."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:495
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:497
 msgid "Click \"Add New\" to create a new page."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:501
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:532
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:512
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:615
 msgid "Type in a title for your page."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:506
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:531
 msgid "Now click the button to insert a block."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:512
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:551
 msgid "Type \"nextgen\" to search for the NextGEN block."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:518
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:571
 msgid "Click on the NextGEN block to add it."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:525
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:599
 msgid "Now click the \"Add Gallery\" button to open NextGEN's Insert Gallery Window."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:537
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:622
 msgid "Now click the \"Add Gallery\" button to open NextGEN's Insert Gallery Window (IGW)."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:543
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:633
 msgid "Now click the \"Upload Images\" tab to add a new gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:550
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:667
 msgid "Select a name for your gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:557
-msgid "Now click the \"Add Files\" button and select some images to add to the gallery."
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:691
+msgid "Now click the 'Create & Select' button to create your gallery and upload to it."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:563
-msgid "Now click the \"Start Upload\" button to begin the upload process."
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:715
+msgid "Now click the \"Browse\" button and select some images to add to the gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:570
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:739
+msgid "Now click the \"Upload files\" button to begin the upload process."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:766
 msgid "Congratulations! You just created your first gallery. Now let's insert it into the page. Click the \"Insert into Page\" tab."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:577
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:778
 msgid "Click on the \"NextGEN Basic Slideshow\" radio button to select the display type for the gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:583
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:801
 msgid "Now click inside the \"Galleries\" field and select your gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:589
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:822
 msgid "Now click on the \"Insert Gallery\" button to insert the gallery in your page."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:596
+#: products/photocrati_nextgen/modules/nextgen_admin/module.nextgen_admin.php:830
 msgid "Congratulations! You just created your first gallery. You can now click the \"Publish\" button on the right to publish your page."
 msgstr ""
 
@@ -746,15 +1021,7 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_admin/templates/form.php:8
-msgid "Want image protection, social sharing, or ecommerce for this display? "
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_admin/templates/form.php:8
-msgid "Upgrade to NextGEN Pro!"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_admin/templates/nextgen_admin_page.php:45
+#: products/photocrati_nextgen/modules/nextgen_admin/templates/nextgen_admin_page.php:72
 msgid "Save Options"
 msgstr ""
 
@@ -912,18 +1179,18 @@ msgstr ""
 msgid "NextGEN Basic Slideshow"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/module.nextgen_basic_imagebrowser.php:187
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/module.nextgen_basic_imagebrowser.php:158
 msgid "NextGEN Basic ImageBrowser"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:41
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:51
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:26
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:30
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:26
 msgid "Back"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:55
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:65
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:88
 #: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:220
 #: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:31
@@ -933,7 +1200,7 @@ msgid "Picture"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:43
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:131
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:134
 msgid "Thumbnail dimensions"
 msgstr ""
 
@@ -958,7 +1225,7 @@ msgid "Top"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:88
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:177
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:180
 msgid "Image quality"
 msgstr ""
 
@@ -1011,7 +1278,7 @@ msgid "NextGEN Basic TagCloud"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_basic_templates/adapter.nextgen_basic_template_form.php:48
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:259
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:262
 msgid "Default"
 msgstr ""
 
@@ -1021,6 +1288,10 @@ msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_basic_templates/adapter.nextgen_basic_template_form.php:55
 msgid "Use a legacy template when rendering (not recommended)."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_block/module.nextgen_block.php:62
+msgid "Add NextGEN Gallery"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_data/class.gallery.php:48
@@ -1085,7 +1356,7 @@ msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:472
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:31
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:128
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:154
 #: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:465
 msgid "Date/Time"
 msgstr ""
@@ -1112,7 +1383,7 @@ msgid "Shutter speed"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:477
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:781
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:778
 #: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:470
 #: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:4
 #: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:3
@@ -1121,7 +1392,7 @@ msgid "Title"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:478
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:653
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:662
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:412
 #: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:471
 msgid "Author"
@@ -1294,8 +1565,8 @@ msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_gallery_display/adapter.display_settings_controller.php:22
 #: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:352
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:432
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:417
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:439
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:419
 msgid "Gallery Settings"
 msgstr ""
 
@@ -1328,52 +1599,52 @@ msgstr ""
 msgid "Recent Images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:104
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:107
 msgid "Enable AJAX pagination"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:106
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:109
 msgid "Browse images without reloading the page."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:121
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:124
 msgid "Override thumbnail settings"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:123
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:126
 msgid "This does not affect existing thumbnails; overriding the thumbnail settings will create an additional set of thumbnails. To change the size of existing thumbnails please visit 'Manage Galleries' and choose 'Create new thumbnails' for all images in the gallery."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:143
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:146
 msgid "Thumbnail crop"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:167
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:170
 msgid "Override image settings"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:169
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:172
 msgid "Overriding the image settings will create an additional set of images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:187
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:190
 msgid "Image crop"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:196
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:199
 msgid "Image watermark"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:217
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:239
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:220
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:242
 msgid "Select View"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:257
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/mixin.display_type_form.php:260
 msgid "Legacy"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:431
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:438
 msgid "NextGEN Gallery & Album Settings"
 msgstr ""
 
@@ -1394,13 +1665,13 @@ msgid "Image Options"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:28
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:125
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:151
 msgid "Image ID"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:29
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:826
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:126
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:832
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:152
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:163
 msgid "Filename"
 msgstr ""
@@ -1410,12 +1681,12 @@ msgid "Alt/Title Text"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:43
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:129
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:155
 msgid "Ascending"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:44
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:130
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:156
 msgid "Descending"
 msgstr ""
 
@@ -1515,7 +1786,7 @@ msgstr ""
 msgid "Lightbox Effects"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.lightbox_manager_form.php:43
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.lightbox_manager_form.php:46
 msgid "What lightbox would you like to use?"
 msgstr ""
 
@@ -1523,78 +1794,105 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:26
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:33
 msgid "Add MediaRSS link?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:27
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:34
 msgid "When enabled, adds a MediaRSS link to your header. Third-party web services can use this to publish your galleries"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:31
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:39
 msgid "Display galleries in feeds"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:32
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:40
 msgid "NextGEN hides its gallery displays in feeds other than MediaRSS. This enables image galleries in feeds."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:35
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:44
 msgid "Clear image cache"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:36
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:45
 msgid ""
 "Completely clear the NextGEN cache of all image modifications?\n"
 "\n"
 "Choose [Cancel] to Stop, [OK] to proceed."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:41
-msgid "Permalink slug"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:48
-msgid "Maximum image count"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:50
-msgid "This is the maximum limit of images that NextGEN will restrict itself to querying"
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:51
+msgid "Update legacy page featured images"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:52
-msgid "Note: This limit will not apply to slideshow widgets or random galleries if/when those galleries specify their own image limits"
+msgid "Continue? This will copy all NextGen 1.x page featured images into the media library."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:61
-msgid "Random widget cache duration"
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:53
+msgid "WordPress 5.4 is incompatible with NextGen 1.x page featured images and they must be updated in a bulk process to correct them. This button will launch a background process (with a progress bar) that imports each NextGen image into the Media Library. This process can be resumed if you close the popup window or this browser window."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:63
-msgid "The duration of time (in minutes) that \"random\" widget galleries should be cached. A setting of zero will disable caching."
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:54
+msgid "Updating legacy page featured images"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:55
+msgid "No legacy page featured images were found."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:56
+msgid "Operation complete. Legacy featured images have been corrected."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:65
+msgid "Permalink slug"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:72
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:80
-msgid "Use alternative method of retrieving random image galleries"
+msgid "Maximum image count"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:74
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:82
+msgid "This is the maximum limit of images that NextGEN will restrict itself to querying"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:76
+msgid "Note: This limit will not apply to slideshow widgets or random galleries if/when those galleries specify their own image limits"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:85
+msgid "Random widget cache duration"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:87
+msgid "The duration of time (in minutes) that \"random\" widget galleries should be cached. A setting of zero will disable caching."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:96
+msgid "Use alternative method of retrieving random image galleries"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:98
 msgid "Some web hosts' database servers disable or disrupt queries using 'ORDER BY RAND()' which can cause galleries to lose their randomness. NextGen provides an alternative (but not completely random) method to determine what images are fed into 'random' galleries."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:88
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:104
 msgid "Do not enqueue FontAwesome"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:90
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:106
 msgid "Warning: your theme or another plugin must provide FontAwesome or your gallery displays may appear incorrectly"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.other_options_controller.php:30
 #: products/photocrati_nextgen/modules/nextgen_other_options/module.nextgen_other_options.php:76
 msgid "Other Options"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.other_options_misc_tab_ajax.php:12
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.other_options_misc_tab_ajax.php:29
+msgid "This request requires an authenticated administrator"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:12
@@ -1742,24 +2040,6 @@ msgstr ""
 msgid "Automatically watermark images during upload:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:153
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:10
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:61
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:65
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:69
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:105
-msgid "Yes"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:154
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:13
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:62
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:66
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:70
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:105
-msgid "No"
-msgstr ""
-
 #: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:155
 msgid "Please note: You can only activate the watermark under Manage Gallery. This action cannot be undone."
 msgstr ""
@@ -1784,31 +2064,23 @@ msgstr ""
 msgid "Refresh preview image"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:32
-msgid "Want a stunning, full screen, lightbox with customization options?"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:32
-msgid "Get the Pro Lightbox!"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:38
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:37
 msgid "What must the lightbox be applied to?"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:42
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:41
 msgid "Only apply to NextGEN images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:43
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:42
 msgid "Only apply to NextGEN and WordPress images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:44
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:43
 msgid "Try to apply to all images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:45
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:44
 msgid "Try to apply to all images that link to image files"
 msgstr ""
 
@@ -1820,47 +2092,174 @@ msgstr ""
 msgid "All stylesheets must contain a <a href='#' onclick='%s'>file header</a>"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:23
-msgid "Upgrade to Pro"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:21
+msgid "Extensions"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:35
-msgid "Create Stunning Galleries with NextGEN Pro"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:46
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:123
+msgid "Want to sell your images directly in your WordPress site? NextGEN Pro adds a true image ecommerce system to help you do just that. Accept PayPal, Stripe, and Checks with ease!"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:36
-msgid "Sell Photos + Adobe Lightroom"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:52
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:232
+msgid "Proofing"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:37
-msgid "Introducing the most powerful gallery system ever made for WordPress. Watch our 30 second video, or click below to learn more about NextGEN premium extensions and support."
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:53
+msgid "Want to add a photo proofing process in your WordPress photo galleries? NextGEN Pro adds photo proofing into WordPress to help with your client workflow. The proofing option makes it easy for you and your clients from start to finish."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:38
-msgid "You're awesome! You've already got NextGEN Plus. But why not go all the way? With NextGEN Pro, you can sell print and digital downloads, provide proofing galleries for clients, manage galleries directly from Adobe Lightroom, and more."
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:59
+msgid "Print Fulfillment"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:39
-msgid "Psst...watch the video ->"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:60
+msgid "Sell Photos on WordPress with Automated Print Fulfillment! NextGEN Pro is the only WordPress plugin with automatic print lab fulfillment. Ship prints direct to customers with industry-leading professional print labs with zero commissions off the top."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:40
-msgid "Get Premium Extensions"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:66
+msgid "Auto Tax Calculations"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:41
-msgid "Learn More"
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:67
+msgid "We have integrated NextGEN Pro with Taxjar to calculate accurate sales tax no matter where you and your clients are in the world."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:75
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:73
+msgid "Pricelists"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:74
+msgid "When selling images, the only way to do it is with pricelists. No more applying individual products t individual images. Do it the right way, and the easy way, by connecting pricelists to your galleries."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:80
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:228
+msgid "Coupons"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:81
+msgid "NextGEN Pro makes it easy to offer exclusive discounts to your clients."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:87
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:240
+msgid "Lightroom Plugin"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:88
+msgid "The Lightroom plugin for NextGEN Gallery allows you to automatically create and sync photo galleries from your Adobe Lightroom collections in WordPress."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:94
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:221
+msgid "Tiled Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:101
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:220
+msgid "Mosaic Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:108
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:219
+msgid "Masonry Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:115
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:218
+msgid "Filmstrip Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:122
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:222
+msgid "Film Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:129
+msgid "Blog Style Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:130
+msgid "An entire gallery in a single vertical column. that requires scrolling vertically for engagement."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:136
+msgid "Sidescroll Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:137
+msgid "An entire gallery in a single horizontal row, that requires scrolling sideways for engagement."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:150
+msgid "Social Sharing"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:151
+msgid "Your images automatically optimized for Open Graph and Twitter Cards and individually shareable from within the Pro Lightbox."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:157
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:245
+msgid "Image Commenting"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:158
+msgid "Deep engagement for your images through individual image commenting within the Pro Lightbox"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:171
+msgid "Deep Linking"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:172
+msgid "Link directly to any image on your site with deep linking. Available exclusively in the Pro Lightbox."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:178
+msgid "Frontend Search"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:179
+msgid "With this stunning display type, you can offer image searching capabilities with smart, powerful filtering based on the tags specified for images in your galleries."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:185
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:235
+msgid "Hover Captions"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:186
+msgid "Gain the ability to add hover capability to galleries. The hover feature includes social sharing, titles, and descriptions. Each can be controlled individually. The hover feature also includes multiple effects, like fade and slide up."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/adapter.nextgen_pro_upgrade_controller.php:196
+msgid "Offer digital downloads of your images for free, or with payment using the Ecommerce system. You have complete control over sizes and pricing for every image."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/templates/upgrade.php:17
+msgid "Unlock More Features"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/templates/upgrade.php:19
+msgid "Want even more features"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_pro_upgrade/templates/upgrade.php:22
+msgid "Upgrade your NextGEN Gallery account"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:77
 msgid "Related Images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:95
+#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:97
 msgid "View Slideshow"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:96
+#: products/photocrati_nextgen/modules/nextgen_settings/module.nextgen_settings.php:98
 msgid "View Thumbnails"
 msgstr ""
 
@@ -1994,29 +2393,29 @@ msgstr ""
 msgid "No album was specified to edit."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:171
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:202
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:80
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:111
 msgid "Overview"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:174
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:210
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:83
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:119
 msgid "Manage Tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:184
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:93
 msgid "Network settings"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:291
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:200
 msgid "You do not have the correct permission"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:292
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:201
 msgid "Unexpected Error"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:293
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:202
 msgid "A failure occurred"
 msgstr ""
 
@@ -2029,132 +2428,132 @@ msgstr ""
 msgid "Album deleted"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:443
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:514
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:433
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:505
 #: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:56
 msgid "Edit Album"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:492
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:602
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:483
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:593
 msgid "Select album"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:494
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:485
 msgid "No album selected"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:509
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:500
 #: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:181
 #: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:91
 msgid "Update"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:526
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:517
 msgid "Add new album"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:528
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:519
 msgid "Add"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:539
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:530
 msgid "Show / hide used galleries"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:539
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:530
 msgid "Show all"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:540
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:531
 msgid "Maximize the widget content"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:540
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:531
 msgid "Maximize"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:541
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:532
 msgid "Minimize the widget content"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:541
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:532
 msgid "Minimize"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:543
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:534
 msgid "After you create and select an album, you can drag and drop a gallery or another album into your new album below."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:554
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:545
 msgid "Album ID"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:567
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:558
 msgid "No album selected!"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:579
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:570
 msgid "Select gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:630
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:623
 msgid "Album name:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:636
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:629
 msgid "Album description:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:642
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:635
 msgid "Select a preview image:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:643
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:636
 #: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_preview_image_field.php:3
 msgid "No picture"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:655
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:648
 msgid "Page Link to"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:665
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:658
 #: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_link_to_page_field.php:3
 msgid "Not linked"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:674
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:667
 msgid "There are no pages to link to"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:684
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:456
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:516
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:585
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:607
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:651
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:695
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:742
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:677
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:465
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:525
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:594
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:611
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:655
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:699
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:746
 msgid "OK"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:686
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:460
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:520
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:589
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:610
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:654
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:698
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:745
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:679
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:469
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:529
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:598
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:614
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:658
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:702
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:749
 msgid "Cancel"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:780
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:777
 msgid "Name"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:782
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:779
 #: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:229
 msgid "Page"
 msgstr ""
@@ -2274,9 +2673,9 @@ msgstr[1] ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:675
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:119
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:263
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:302
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:490
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:265
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:304
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:492
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:664
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:742
 msgid "Create new thumbnails"
@@ -2297,14 +2696,14 @@ msgid "NextGEN Gallery : Tables could not created, please check your database se
 msgstr ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:107
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:270
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:272
 msgid "No images selected"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:115
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:264
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:298
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:491
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:266
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:300
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:493
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:645
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:726
 msgid "Resize images"
@@ -2318,15 +2717,15 @@ msgid ""
 msgstr ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:170
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:281
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:283
 msgid "Add new gallery"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:214
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:217
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:351
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:362
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:366
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:353
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:364
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:368
 msgid "Search Images"
 msgstr ""
 
@@ -2335,90 +2734,90 @@ msgstr ""
 msgid "Search Galleries"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:260
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:488
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:490
 msgid "Bulk actions"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:262
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:489
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:264
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:491
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:574
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:690
 msgid "Set watermark"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:265
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:494
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:267
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:496
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:579
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:710
 msgid "Import metadata"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:266
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:492
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:268
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:494
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:569
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:687
 msgid "Recover from backup"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:272
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:506
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:274
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:508
 msgid "Apply"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:366
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:373
 msgid "Deleted user"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:401
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:561
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:408
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:563
 msgid "No entries found"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:434
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:443
 msgid "New Gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:441
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:450
 msgid "Create a new , empty gallery below the folder"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:445
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:454
 msgid "Allowed characters for file and folder names are"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:495
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:673
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:504
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:677
 msgid "Resize Images to"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:508
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:686
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:517
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:690
 msgid "Width x height (in pixel). NextGEN Gallery will keep ratio size"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:559
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:717
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:568
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:721
 msgid "Width x height (in pixel)"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:568
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:725
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:577
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:729
 msgid "Set fix dimension"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:576
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:733
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:585
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:737
 msgid "Ignore the aspect ratio, no portrait thumbnails"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:652
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:827
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:661
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:833
 #: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:274
 msgid "Description"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:654
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:663
 msgid "Page ID"
 msgstr ""
 
@@ -2430,155 +2829,155 @@ msgstr ""
 msgid "Sorry, you have no access here"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:278
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:280
 msgid "Copy image to..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:282
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:284
 msgid "Move image to..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:286
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:288
 msgid "Add new tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:290
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:500
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:292
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:502
 msgid "Delete tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:294
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:296
 msgid "Overwrite"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:307
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:309
 msgid ""
 "You are about to start the bulk edit for %s images \n"
 " \n"
 " 'Cancel' to stop, 'OK' to proceed."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:341
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:343
 msgid "Search results for &#8220;%s&#8221;"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:392
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:394
 msgid "Gallery: "
 msgid_plural "Galleries: "
 msgstr[0] ""
 msgstr[1] ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:430
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:432
 msgid "Scan Folder for new images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:460
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:462
 msgid " 25"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:461
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:463
 msgid " 50"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:462
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:464
 msgid " 75"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:463
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:465
 msgid "100"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:464
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:466
 msgid "200"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:465
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:467
 msgid "All"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:484
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:486
 msgid "Images per page:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:493
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:495
 msgid "Delete images"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:495
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:497
 msgid "Rotate images clockwise"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:496
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:498
 msgid "Rotate images counter-clockwise"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:497
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:499
 msgid "Copy to..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:498
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:500
 msgid "Move to..."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:499
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:501
 msgid "Add tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:501
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:503
 msgid "Overwrite tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:513
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:515
 msgid "Sort gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:594
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:598
 msgid "Enter the tags"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:629
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:633
 msgid "Select the destination gallery:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:825
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:831
 #: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:158
 #: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:295
 msgid "Thumbnail"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:827
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:833
 msgid "Alt &amp; Title Text"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:828
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:834
 msgid "Tags (comma separated list)"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:40
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:48
 msgid "Sort order changed"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:105
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:121
 msgid "Sort Gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:115
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:136
 msgid "Update Sort Order"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:118
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:141
 msgid "Back to gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:123
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:149
 msgid "Presort"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:124
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:150
 msgid "Unsorted"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:127
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:153
 #: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:270
 msgid "Alt/Title text"
 msgstr ""
@@ -2712,16 +3111,16 @@ msgstr ""
 msgid "Tags changed"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:894
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:900
 #: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:42
 msgid "Updated successfully"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:934
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:940
 msgid "New gallery page ID"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:934
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:940
 msgid "created"
 msgstr ""
 
@@ -2758,199 +3157,164 @@ msgstr ""
 msgid "Save all changes"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:25
-msgid "Not set"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:28
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:32
-msgid "On"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:29
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:33
-msgid "Off"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:38
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:42
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:46
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:50
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:54
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:58
-msgid "N/A"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:57
-msgid " MByte"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:73
-msgid "Operating System"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:74
-msgid "Server"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:75
-msgid "Memory usage"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:76
-msgid "MYSQL Version"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:77
-msgid "SQL Mode"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:78
-msgid "PHP Version"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:79
-msgid "PHP Safe Mode"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:80
-msgid "PHP Allow URL fopen"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:81
-msgid "PHP Memory Limit"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:82
-msgid "PHP Max Upload Size"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:83
-msgid "PHP Max Post Size"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:84
-msgid "PCRE Backtracking Limit"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:85
-msgid "PHP Max Script Execute Time"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:86
-msgid "PHP Exif support"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:87
-msgid "PHP IPTC support"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:88
-msgid "PHP XML support"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:111
-msgid "No GD support"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:143
-msgid "%1$sMB Allowed"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:144
-msgid "%1$sMB (%2$s%%) Used"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:180
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:27
 msgid "Welcome to NextGEN Gallery"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:183
-msgid "Need help getting started? "
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:183
-msgid "Launch Gallery Wizard"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:187
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:37
 msgid "Welcome"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:221
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:38
+msgid "More Videos"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:46
+msgid "NextGEN Basic vs Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:48
+msgid "Imagely Themes"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:49
+msgid "Ambassadors"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:51
+msgid "Unlock More"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:75
 msgid "We have a growing list of video tutorials to get you started. Watch some below or head over to <a href=\"%s\" target=\"_blank\">NextGEN Gallery University on YouTube</a> to see all available vidoes."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:254
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:108
 msgid "Want more? Head over to <a href=\"%s\" target=\"_blank\">NextGEN Gallery University on YouTube</a>."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:115
 msgid "The most powerful gallery system ever built for WordPress. "
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:115
 msgid "Gorgeous new gallery displays, image protection, full screen lightbox, commenting and social sharing for individual images, proofing, ecommerce, digital downloads, and more."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:263
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:116
 msgid "Get NextGEN Pro Now"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:273
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:211
+msgid "Get the most out of NextGEN Gallery by upgrading to Pro and unlocking all the powerful features."
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:217
+msgid "Gallery Types"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:223
+msgid "Blogstyle Gallery"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:227
+msgid "Paid Digital Downloads"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:229
+msgid "Price Lists"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:230
+msgid "Automated Tax Calculations"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:234
+msgid "Interface"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:236
+msgid "Lazy Loading"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:237
+msgid "Infinite Scroll"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:239
+msgid "Image Upload / Processing"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:242
+msgid "Other"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:246
+msgid "Image Deeplinking"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:247
+msgid "Full-Screen Lightbox"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:248
+msgid "Image Social Sharing"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:249
+msgid "Lightbox Slideshow"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:258
+msgid "NextGEN Pro"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:261
+msgid "NextGEN Basic"
+msgstr ""
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:333
 msgid "Meet the new series of Genesis child themes by Imagely: gorgeous, responsive image-centric themes for photographers or anyone with visually rich websites."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:274
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:334
 msgid "CLICK TO LEARN MORE:"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:329
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:380
 msgid "Meet the Imagely Product Ambassadors"
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:330
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:381
 msgid "NextGEN Gallery and other Imagely products are used by some of the best photographers in the world. Meet some of the Imagely Ambassadors who are putting Imagely and NextGEN Gallery to work professionally."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:335
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:386
 msgid "Jeff and Erin are a luxury husband and wife photography team who deeply love each other and their photography clients. They shoot weddings and engagements all over the U.S. and beyond. With three photography businesses that serve different clientele, they have unique insights into business strategies and are passionate about improving the day to day lives of other photographers."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:340
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:391
 msgid "Tamara Lackey is a renowned professional photographer, speaker, and author. Her authentic lifestyle photography, from children’s portraits to celebrity portraits, is praised within her industry and published internationally. She is a Nikon USA Ambassador, the host of The reDefine Show web series, and the co-founder of the non-profit charitable organization, Beautiful Together, in support of children waiting for families."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:345
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:396
 msgid "Colby is a photographer, photo educator, and author specializing in landscape, travel and humanitarian photography. With an audience reaching millions, Colby partners on social influencer marketing campaigns with some of the biggest companies and destinations in the world, including Sony, Samsung, Toshiba, Iceland Naturally, Jordan Tourism Board, Australia.com, Visit California and more."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:353
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:404
 msgid "Jared is a professional wedding and lifestyle photographer. He also travels the world giving lectures and workshops on photography, lighting, and post-production efficiency and workflow. His interactive style, and attention to detail and craft make him an entertaining and demanding photography instructor."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:358
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:409
 msgid "Brian is a professional photographer, author, and educator. He fuses landscape & travel photography with experiential storytelling and practical instructing to help others grow creatively. He is also a Sony Artisan of Imagery, a Zeiss Lens Ambassador, a Formatt-Hitech Featured Photographer, and a member of G-Technology’s G-Team."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:363
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:414
 msgid "Christine famously coined the term WordPress. She is an author, speaker, business coach, and story strategist who specializes in helping creatives celebrate their story online through blogging and social media. When not offering actionable know-how to businesses, she can be found taking long road trips across North America in her Mini Cooper."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:371
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:422
 msgid "Named one of the Top 10 Wedding Photographers in the World by American Photo magazine, David is a celebrated photographer and educator. He is also a mountain man with a enviable lifestyle: from his base in rural Washington, he travels all over the world teaching workshops, while sharing lessons with 16,000 photographers in the Abstract Canvas Facebook group."
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:382
-msgid "When contacting support, consider copying and pasting this information in your support request. It helps us troubleshoot more quickly."
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:386
-msgid "Server Settings"
-msgstr ""
-
-#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:392
-msgid "Graphic Library"
 msgstr ""
 
 #: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:27
@@ -3217,7 +3581,7 @@ msgstr ""
 msgid "Choose the default style for the galleries."
 msgstr ""
 
-#: products/photocrati_nextgen/modules/ngglegacy/lib/core.php:214
+#: products/photocrati_nextgen/modules/ngglegacy/lib/core.php:208
 msgid "Note : Based on your server memory limit you should not upload larger images then <strong>%d x %d</strong> pixel"
 msgstr ""
 

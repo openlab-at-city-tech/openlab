@@ -157,9 +157,11 @@ function nggallery_manage_gallery_main()
                     of: window.parent
                 }
             });
-            $("#" + windowId + ' .dialog-cancel').click(function() {
+            $("#" + windowId + ' .dialog-cancel').on('click', function() {
                 $("#" + windowId).dialog("close");
             });
+
+            $('.ui-dialog-titlebar-close').text('X');
         }
 
         function showAddGallery() {
@@ -174,7 +176,7 @@ function nggallery_manage_gallery_main()
                     of: window.parent
                 }
             });
-            $("#addGallery .dialog-cancel").click(function() {
+            $("#addGallery .dialog-cancel").on('click', function() {
                 $("#addGallery").dialog("close");
             });
         }

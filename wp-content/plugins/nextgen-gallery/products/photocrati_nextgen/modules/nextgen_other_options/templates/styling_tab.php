@@ -1,3 +1,7 @@
+<blockquote class="deprecated">
+	<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+	<strong>Deprecated:</strong> For more information, please see our <a target='_blank' href='https://www.imagely.com/docs/styles-tab-deprecation'>documentation</a>
+</blockquote>
 <table class="full-width">
     <tr>
         <td class="column1">

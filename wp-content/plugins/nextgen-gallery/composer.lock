@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "053b848d6bbaa7c266ec767c260588a8",
+    "content-hash": "956135bbaec31c8fc7a076fffe733ce3",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -64,16 +64,16 @@
         },
         {
             "name": "imagely/pope-framework",
-            "version": "v0.16",
+            "version": "v0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/imagely/pope-framework.git",
-                "reference": "a14bdc1f5153664770df00d53577a9954f1e691c"
+                "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imagely/pope-framework/zipball/a14bdc1f5153664770df00d53577a9954f1e691c",
-                "reference": "a14bdc1f5153664770df00d53577a9954f1e691c",
+                "url": "https://api.github.com/repos/imagely/pope-framework/zipball/13da4d47779a91fbf07a68062e64974eb1427ef2",
+                "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -100,19 +100,81 @@
             ],
             "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
             "support": {
-                "source": "https://github.com/imagely/pope-framework/tree/v0.16",
+                "source": "https://github.com/imagely/pope-framework/tree/v0.17",
                 "issues": "https://github.com/imagely/pope-framework/issues"
             },
-            "time": "2020-06-11T20:23:55+00:00"
+            "time": "2020-10-22T19:43:52+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "nikic/php-parser",
+            "version": "v4.10.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "658f1be311a230e0907f5dfe0213742aff0596de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/658f1be311a230e0907f5dfe0213742aff0596de",
+                "reference": "658f1be311a230e0907f5dfe0213742aff0596de",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://repo.packagist.com/imagely/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.10.2"
+            },
+            "time": "2020-09-26T10:30:38+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

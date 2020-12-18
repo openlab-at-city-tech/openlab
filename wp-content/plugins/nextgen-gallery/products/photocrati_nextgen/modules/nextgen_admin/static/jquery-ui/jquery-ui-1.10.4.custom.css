@@ -190,7 +190,7 @@
     border-top: 0;
     overflow: auto;
     margin: 0 0 10px 0;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04)
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 .ui-autocomplete {
@@ -1258,7 +1258,6 @@ body .ui-tooltip {
     background: #000000 50% 50% repeat-x;
     opacity: .4;
     filter: Alpha(Opacity = 40);
-    filter: -\9;
 }
 
 /* necessary w/WP 3.8s new admin design */

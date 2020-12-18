@@ -17,7 +17,7 @@ class M_NextGen_Basic_ImageBrowser extends C_Base_Module
             NGG_BASIC_IMAGEBROWSER,
             'NextGEN Basic ImageBrowser',
             'Provides the NextGEN Basic ImageBrowser Display Type',
-            '3.3.2',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

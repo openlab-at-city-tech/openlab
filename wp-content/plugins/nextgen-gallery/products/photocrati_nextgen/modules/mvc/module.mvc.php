@@ -27,7 +27,7 @@ class M_MVC extends C_Base_Module
             'photocrati-mvc',
             'MVC Framework',
             'Provides an MVC architecture for the plugin to use',
-            '3.3.7',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery',
             'Imagely',
             'https://www.imagely.com'

@@ -130,8 +130,10 @@
     Base.prototype._bindClickEvents = function() {
       var el;
       el = this._getTipElement();
-      el.delegate('.tour-close', 'click', this.onClickClose);
-      return el.delegate('.tour-next', 'click', this.onClickNext);
+      // el.delegate('.tour-close', 'click', this.onClickClose);
+      el.on('click', '.tour-close', this.onClickClose);
+      // return el.delegate('.tour-next', 'click', this.onClickNext);
+      return el.on('click', '.tour-next', this.onClickNext);
     };
 
     Base.prototype._setTarget = function(target, step) {

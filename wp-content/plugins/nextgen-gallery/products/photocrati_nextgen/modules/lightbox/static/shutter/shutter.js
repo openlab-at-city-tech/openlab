@@ -306,7 +306,13 @@ shutterReloaded = {
 shutterOnload = function(){shutterReloaded.init('sh');};
 
 if (typeof shutterOnload == 'function') {
-	if ('undefined' != typeof jQuery) jQuery(document).ready(function(){shutterOnload();});
+	if ('undefined' != typeof jQuery) {
+		(function ($) {
+			$(function () {
+				shutterOnload();
+			});
+		})(jQuery);
+	}
 	else if( typeof window.onload != 'function' ) window.onload = shutterOnload;
 	else {oldonld = window.onload;window.onload = function(){if(oldonld){oldonld();};shutterOnload();}};
 }
