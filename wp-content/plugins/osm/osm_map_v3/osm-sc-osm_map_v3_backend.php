@@ -11,4 +11,7 @@ else if ($sc_args->getMap_event() == 'AddMarker'){
   $output .= 'MetaboxEventhandler.AddMarker('.$MapName.','.$post->ID.');';
   $output .= $MapName.'.addControl(osm_controls[7]);' . PHP_EOL;
 }
+else if ($sc_args->getMap_event() == 'FileSC'){
+  $output .= $MapName.'.addControl(osm_controls[7]);' . PHP_EOL;
+}
 ?>

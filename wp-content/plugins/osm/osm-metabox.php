@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ function osm_map_create() {
                    'geotag_nonce' => wp_create_nonce( 'osm_geotag_nonce'),
                    'marker_nonce' => wp_create_nonce( 'osm_marker_nonce'),
                    'plugin_url' => OSM_PLUGIN_URL,
-                   'map_name' => ''
+                   'map_name' => '',
+                   'map_attr' => 1
             ));
 
   $post_types = get_post_types();
@@ -63,17 +64,18 @@ function osm_map_create_shortcode_function( $post ) {
 
 		jQuery(this).addClass('current');
 		jQuery("#"+tab_id).addClass('current');
-
+/*
                 if(typeof map_ol3js_1 === "undefined"){
-                 map_ol3js_6.updateSize();
+                 map_ol3js_3.updateSize();
                 }
                 else {
                   map_ol3js_1.updateSize();
                  }
-		map_ol3js_2.updateSize();
-		map_ol3js_3.updateSize();
-		map_ol3js_4.updateSize();
-		map_ol3js_5.updateSize();
+*/                
+      AddMarker_map.updateSize();
+		FileSC_map.updateSize();	
+		TaggedSC_map.updateSize();
+		map_ol3js_1.updateSize();
                 
 	})
 
@@ -132,13 +134,18 @@ function osm_map_create_shortcode_function( $post ) {
       <b>2. <?php _e('map border','OSM') ?></b>:
       <select name="osm_add_marker_border" id="osm_add_marker_border">
       <?php include('osm-color-select.php'); ?>
+   
+   
       </select><br/><br/>
        <b>3. <?php _e('map controls','OSM') ?></b>:
         <input type="checkbox" name="osm_add_marker_fullscreen" id="osm_add_marker_fullscreen" value="fullscreen"> <?php _e('fullscreen button','OSM') ?>
         <input type="checkbox" name="osm_add_marker_scaleline" id="osm_add_marker_scaleline" value="scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="osm_add_marker_mouseposition" id="osm_add_marker_mouseposition" value="mouseposition"> <?php _e('mouse position','OSM') ?>
-        <input type="checkbox" name="osm_add_marker_bckgrnd_img" id="osm_add_marker_bckgrnd_img" value="osm_add_marker_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/>
-       <br/>
+        <input type="checkbox" name="osm_add_marker_bckgrnd_img" id="osm_add_marker_bckgrnd_img" value="osm_add_marker_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/> <br/>
+        <input type="checkbox" name="osm_add_marker_show_attribution" id="osm_add_marker_show_attribution" value="osm_add_marker_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span> <!-- <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a> --> <br/><br/>
+      
        <b>4. <?php _e('marker icon','OSM') ?></b>:
        <br/>
       <?php include('osm-marker-select.php'); ?>
@@ -147,18 +154,15 @@ function osm_map_create_shortcode_function( $post ) {
         <?php _e('Use &lt;b&gt;&lt;/b&gt; for bold, &lt;i&gt;&lt;/i&gt; for kursiv and&lt;br&gt; for new line.','OSM') ?><br/>
          <textarea id="osm_add_marker_text" name="marker_text" cols="35" rows="4"></textarea>
       <br/><br/>
-      <b>5. <?php $url = 'http://wp-osm-plugin.hanblog.net/';
-      $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
-      echo $link; ?></b>
+      <b>5. <?php _e('Adjust the map and click into the map to place the marker.','OSM') ?></b>
 
 	  <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
-	echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'75%','height'=>'450', 'map_event'=>'AddMarker')); ?>
+	echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'75%','height'=>'450', 'map_event'=>'AddMarker', 'map_div_name' => 'AddMarker_map')); ?>
 
-      <div id="Marker_Div"><br/></div><br/>
-        <a class="button" onClick="osm_savePostMarker();"> <?php _e('Save marker and generate shortcode','OSM')?> </a><br/><br/>      <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>
-
-
-
+      <div id="Marker_Div"><br/>
+      <!--  marker info is print here when clicking in the map -->
+      </div><br/>
+        <a class="button" onClick="osm_savePostMarker(); osm_generateAddMarkerSC();"> <?php _e('Save marker and generate shortcode','OSM')?> </a><br/><br/>      
 
  </div> <!-- id="tab_add_marker" -->
 
@@ -179,38 +183,54 @@ function osm_map_create_shortcode_function( $post ) {
         <input type="checkbox" name="file_scaleline" id="file_scaleline" value="file_scaleline"> <?php _e('scaleline','OSM') ?>
         <input type="checkbox" name="file_mouseposition" id="file_mouseposition" value="file_mouseposition"> <?php _e('mouse position','OSM') ?>
         <input type="checkbox" name="file_bckgrnd_img" id="file_bckgrnd_img" value="file_bckgrnd_img"> <?php _e('background image (GDPR)','OSM') ?> <br/><br/>
+        <input type="checkbox" name="osm_file_show_attribution" id="osm_file_show_attribution" value="osm_file_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span><!-- <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a>--><br/><br/>
 
     <b>4. <?php _e('Paste the local URL of file here: ','OSM') ?></b>
 	<p><?php _e('Do not save any of your personal data in the plugins/osm folder but in the upload folder!','OSM') ?></p>
 	<input type="text" class="osmFileName" name="osm_file_list_URL[0]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
-	<input type="text" class="osmFileTitle" name="osm_file_list_title[0]" placeholder="<?php _e('file title','OSM') ?>" />
-	<input type="color" class="osmFileColor"  name="osm_file_list_color[0]" />
+	<input type="text" class="osmFileTitle" name="osm_file_list_title[0]" placeholder="<?php _e('file title','OSM') ?>" />	
+   <select class="osmFileColor" name="osm_file_list_color[0]" id="osm_file_list_color[0]">
+     <?php include('osm-color-select.php'); ?>
+   </select>	
 	<br />
 	<input type="text" class="osmFileName" name="osm_file_list_URL[1]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
 	<input type="text" class="osmFileTitle" name="osm_file_list_title[1]" placeholder="<?php _e('file title','OSM') ?>" />
-	<input type="color" class="osmFileColor"  name="osm_file_list_color[1]" />
+	<select class="osmFileColor" name="osm_file_list_color[1]" id="osm_file_list_color[1]">
+     <?php include('osm-color-select.php'); ?>
+   </select>	
 	<br />
 	<input type="text" class="osmFileName" name="osm_file_list_URL[2]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
 	<input type="text" class="osmFileTitle" name="osm_file_list_title[2]" placeholder="<?php _e('file title','OSM') ?>" />
-	<input type="color" class="osmFileColor"  name="osm_file_list_color[2]" />
+	<select class="osmFileColor" name="osm_file_list_color[2]" id="osm_file_list_color[2]">
+     <?php include('osm-color-select.php'); ?>
+   </select>	
 	<br />
 	<input type="text" class="osmFileName" name="osm_file_list_URL[3]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
 	<input type="text" class="osmFileTitle" name="osm_file_list_title[3]" placeholder="<?php _e('file title','OSM') ?>" />
-	<input type="color" class="osmFileColor"  name="osm_file_list_color[3]" />
+	<select class="osmFileColor" name="osm_file_list_color[3]" id="osm_file_list_color[3]">
+     <?php include('osm-color-select.php'); ?>
+   </select>
 	<br />
 	<input type="text" class="osmFileName" name="osm_file_list_URL[4]" placeholder="<?php _e('../../../../wp-content/uploads/YOUR-FILE','OSM') ?>" />
 	<input type="text" class="osmFileTitle" name="osm_file_list_title[4]" placeholder="<?php _e('file title','OSM') ?>" />
-	<input type="color" class="osmFileColor"  name="osm_file_list_color[4]" />
+	<select class="osmFileColor" name="osm_file_list_color[4]" id="osm_file_list_color[4]">
+     <?php include('osm-color-select.php'); ?>
+   </select>
 	<br/> <br/>
 
-  <input type="checkbox" name="show_selection_box" value="show_selection_box"> <?php _e('Show track selection box under the map','OSM') ?><br/><br/>
+    <input type="checkbox" name="show_selection_box" id="show_selection_box" value="show_selection_box" onclick="osm_showFileSCmap()"> <?php _e('Show track selection box under the map (only for two or more tracks)','OSM') ?><br/><br/>
+                
+      
 
-     <b>5. <?php $url = 'http://wp-osm-plugin.hanblog.net/';
-      $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
-      echo $link;?></b><br/><br/>
+     <b>5. <?php _e('Only if you enabled selection box you have to adjust the map manually.','OSM') ?></b><br/><br/>
+      
+      <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
+      echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_div_vis'=>'none', 'map_div_name' => 'FileSC_map')); ?>
 
      <div id="File_Div"><br/></div><br/>
-     <a class="button" onClick="osm_generateFileSC();"> <?php _e('Generate shortcode for map with GPX/KML file','OSM')?> </a><br/><br/>      <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>
+     <a class="button" onClick="osm_generateFileSC();"> <?php _e('Generate shortcode for map with GPX/KML file','OSM')?> </a><br/>
 
      </div> <!-- id="tab_file_list" -->
 
@@ -224,18 +244,21 @@ function osm_map_create_shortcode_function( $post ) {
           <?php include('osm-maptype-select.php'); ?>
           </select>
         </li>
+        <input type="checkbox" name="osm_geotag_show_attribution" id="osm_geotag_show_attribution" value="osm_geotag_show_attribution"> <?php _e('Display attribution (credit) in the map. ','OSM') ?>
+        <span style="color:red"><?php _e('Warning: If you do not check this box, it may violate the license of data or map and have legal consequences!','OSM') ?></span> <!-- <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Why not enabled by default? Read <a target="_new" href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission">Plugins may not embed external links or credits ...</a>--><br/><br/>
     <li>
       <?php _e('marker icon','OSM') ?><br/>
       <?php include('osm-marker-tagged-select.php'); ?><br/><br/><br/>
     </li>
     <li>
-      <?php _e('marker style','OSM');echo " "; _e('cluster','OSM') ?><br/>
+      <?php _e('marker style','OSM')?><br/>
       <label class="metabox-label">
-        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" value="standard" checked="checked" />
+        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" onclick="osm_showTaggedSCmap()" value="standard" checked="checked" />
         <?php  echo '<img src="'.OSM_PLUGIN_URL.'/images/marker_standard_01.png" align="left" hspace="5" alt="mic_black_pinother_02.png">'; ?>
       </label>
       <label class="metabox-label">
-        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" value="cluster"/>
+        <input type="radio" name="tagged_marker_style" id="tagged_marker_style" onclick="osm_showTaggedSCmap()" value="cluster"/>
         <?php  echo '<img src="'.OSM_PLUGIN_URL.'/images/marker_cluster_01.png" align="left" hspace="5" alt="mic_red_pinother_02.png">'; ?>
       </label>
     </li>
@@ -253,19 +276,21 @@ function osm_map_create_shortcode_function( $post ) {
         wp_dropdown_categories(
         array('hide_empty' => 0, 'value_field'=>'name', 'name' => 'category_parent', 'orderby' => 'name', 'selected' => '0', 'hierarchical' => true, 'show_option_none' => __('None')));
         _e(' OR ','OSM') ;?>
-	<label for="TagFilter">Tag Tilter: </label>
+	<label for="TagFilter">Tag Filter: </label>
 	<input type="text" id="tag_filter" name="tag_filter">
+    </li>  
+    
+     <?php _e('Only if marker style is set to cluster you have to adjust the map manually.','OSM') ?></b><br/><br/>
+      
+      <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
+      echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom, 'width'=>'100%','height'=>'450', 'map_div_vis'=>'none', 'map_div_name' => 'TaggedSC_map')); ?>   
     </li>
-    <li>
-        <?php
-          $url = 'http://wp-osm-plugin.hanblog.net/';
-          $link = sprintf( __( 'Adjust the map and click into the map to generate the shortcode. Find more features  <a href="%s" target="_blank">here</a> !', 'OSM' ), esc_url( $url ) );
-            echo $link;
-            echo Osm::sc_OL3JS(array('map_center'=>$latlon,'zoom'=>$zoom,'width'=>'100%','height'=>'450','map_event'=>'TaggedPostsSC'));
-          ?>
-    </li>
+        <li>
+        <a class="button" onClick="osm_generateTaggedPostsSC()"> <?php _e('Generate shortcode','OSM')?> </a><br/><br/>      
+        <?php _e('Copy the shortcode and paste it to your post/page','OSM') ?><br/>  
+    </li>   
+    
   </ol>
-
      </div> <!-- id="tab_geotag" -->
 
     <div id="tab_set_geotag" class="osm-tab-content">
@@ -273,7 +298,7 @@ function osm_map_create_shortcode_function( $post ) {
         <b>1. <?php _e('post icon','OSM') ?></b>:
         <br/>
        <?php include('osm-marker-geotag-select.php'); ?>
-       <br/><br/><br/><br/><br/><br/><br/>
+       <br/><br/><br/>
        <b>2. <?php _e('Click into the map for geotag!','OSM') ?></b>:
 
 	   <?php $latlon = OSM_default_lat.','.OSM_default_lon; $zoom = OSM_default_zoom;
@@ -288,8 +313,8 @@ function osm_map_create_shortcode_function( $post ) {
      <b><font color="#FF0000"><?php echo 'We need help for translations!'; ?></b></font>
      <table border="0" >
        <tr><td><?php  echo '<p><img src="'.OSM_PLUGIN_URL.'/WP_OSM_Plugin_Logo.png" align="left" vspace="10" hspace="20" alt="Osm Logo"></p>'; ?> </td>
-       <td><b><?php _e('Coordination','OSM'); echo " & "; _e('Development','OSM') ?>:</b><a target="_new" href="http://mika.HanBlog.net"> MiKa</a><br/><br/>
-       <b><?php _e('Thanks for Translation to','OSM') ?>:</b><br/> Вячеслав Стренадко, <a target="_new" href="http://tounoki.org/">Tounoki</a>, Sykane, <a target="_new" href="http://www.pibinko.org">Andrea Giacomelli</a>, <a target="_new" href="http://www.cspace.ro">Sorin Pop</a><br/><br/><b>
+       <td><b><?php _e('Coordination','OSM'); echo " & "; _e('Development','OSM') ?>:</b><a target="_new" href="http://hyumika.com"> Michael Kang</a><br/><br/>
+       <b><?php _e('Thanks for Translation to','OSM') ?>:</b><br/> Вячеслав Стренадко, <a target="_new" href="http://tounoki.org/">Tounoki</a>, Sykane, <a target="_new" href="http://www.pibinko.org">Andrea Giacomelli</a>, <a target="_new" href="http://www.cspace.ro">Sorin Pop</a>, Olle Zettergren <br/><br/><b>
 
 
 <b><?php _e('Thanks for Icons to','OSM') ?>:</b><br/>
@@ -304,22 +329,20 @@ function osm_map_create_shortcode_function( $post ) {
 
      <b><?php _e('Some usefull sites for this plugin:','OSM') ?></b>
      <ol>
-       <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.HanBlog.net">osm-plugin page</a>.</li>
+       <li><?php _e('for advanced samples visit the ','OSM') ?><a target="_new" href="http://wp-osm-plugin.hyumika.com">osm-plugin page</a>.</li>
        <li><?php _e('for questions, bugs and other feedback visit the','OSM') ?> <a target="_new" href="http://wp-osm-plugin.hanblog.net/forums/">EN | DE forum</a></li>
        <li><?php _e('Follow us on twitter: ','OSM') ?><a target="_new" href="https://twitter.com/wp_osm_plugin">wp-osm-plugin</a>.</li>
       <li><?php _e('download the last version at WordPress.org ','OSM') ?><a target="_new" href="http://wordpress.org/extend/plugins/osm/">osm-plugin download</a>.</li>
     </ol>
-     <b><?php _e('Info about your site:','OSM') ?></b>
-     <ol>
-       <li><?php _e('WP OSM Plugin URL: ','OSM'); echo OSM_PLUGIN_URL ?></li>
-    </ol>
+     <b><?php _e('Some GPX samples:','OSM') ?></b><br>
 
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample01.gpx" ?><br>
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample02.gpx" ?><br>
+       <?php echo OSM_PLUGIN_URL; echo "examples/sample03.gpx" ?>
 
+ </div> <!-- id="tab_about" -->
 
-
-    </div> <!-- id="tab_about" -->
-
-</div>  <!-- class="tabs" --><br/><br/>
+</div>  <!-- class="tabs" -->
 <h3><span style="color:green"><?php _e('Copy the generated shortcode/customfield/argument: ','OSM') ?></span></h3>
 <div id="ShortCode_Div"><?php _e('If you click into the map this text is replaced','OSM') ?> </div> <br/>
 <?php

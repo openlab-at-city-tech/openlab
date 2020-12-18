@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: OSM
-Plugin URI: https://wp-osm-plugin.HanBlog.net
+Plugin URI: https://wp-osm-plugin.hyumika.com
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.HanBlog.net">OSM plugin page</a>.
-Version: 5.4.4
+Version: 5.6
 Author: MiKa
-Author URI: http://www.HanBlog.net
+Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
 */
 
-/*  (c) Copyright 2020  MiKa (www.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (www.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V5.4.4");
+define ("PLUGIN_VER", "V5.6");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -95,6 +95,8 @@ if (version_compare($wp_version,"3.0","<")){
 // get the configuratin by
 // default or costumer settings
 
+$OL3_LIBS_LOADED = 0;
+
 include ('osm-config.php');
 
 
@@ -126,10 +128,10 @@ if ( ! function_exists( 'osm_restrict_mime_types' ) ) {
 
 function saveGeotagAndPic(){
 
-  $latlon  = $_POST['lat'].','.$_POST['lon'];
-  $icon    = $_POST['icon'];
-  $post_id = $_POST['post_id'];
-  $nonce   = $_POST['geotag_nonce'];
+  $latlon  = sanitize_text_field( $_POST['lat']).','.sanitize_text_field( $_POST['lon']);
+  $icon    = sanitize_text_field( $_POST['icon']);
+  $post_id = sanitize_text_field( $_POST['post_id']);
+  $nonce   = sanitize_text_field( $_POST['geotag_nonce']);
 
 
   if (!wp_verify_nonce($nonce, 'osm_geotag_nonce')){
@@ -149,25 +151,13 @@ function saveGeotagAndPic(){
 }
 
 function savePostMarker(){
-  $MarkerId = $_POST['MarkerId'];
-  $MarkerLatLon  = $_POST['MarkerLat'].','.$_POST['MarkerLon'];
-  $MarkerIcon      = $_POST['MarkerIcon'];
-  $MarkerName   = $_POST['MarkerName'];
-  $MarkerText      = $_POST['MarkerText'];
-  $post_id = $_POST['post_id'];
-  $nonce   = $_POST['marker_nonce'];
-
-  $zoom    = $_POST['map_zoom'];
-  $BorderField = ' map_border="thin solid '.$_POST['map_border'].'" ';
-  $MarkerId = $MarkerId;
-  if ($_POST['map_type'] != ""){
-    $MapTypeField = 'type="'.$_POST['map_type'].'" ';
-  }
-  else {
-   $MapTypeField = "";
-  }
-  $ControlField = ' control="'.$_POST['map_controls'].'" ';
-  $BckgrndImageField = ' bckgrndimg="'.$_POST['bckgrnd_image'].'" ';
+  $MarkerId = sanitize_text_field( $_POST['MarkerId'] );
+  $MarkerLatLon  = sanitize_text_field( $_POST['MarkerLat'] ).','.sanitize_text_field( $_POST['MarkerLon'] );
+  $MarkerIcon      = sanitize_text_field( $_POST['MarkerIcon']);
+  $MarkerName   = sanitize_text_field( $_POST['MarkerName']);
+  $MarkerText      = sanitize_text_field( $_POST['MarkerText']);
+  $post_id = sanitize_text_field( $_POST['post_id']);
+  $nonce   = sanitize_text_field( $_POST['marker_nonce']); 
   
   if (!wp_verify_nonce($nonce, 'osm_marker_nonce')){
     echo "Error: Bad ajax request";
@@ -182,9 +172,6 @@ function savePostMarker(){
     add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Icon', $MarkerIcon, true );
     add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Text', $MarkerText, true );
 
-    $GenTxt = '<br>'.'[osm_map_v3 map_center= "'.$MarkerLatLon.'" zoom="'.$zoom.'" width="95%" height="450" '.$BorderField.'post_markers="'.$MarkerId.'" '.$MapTypeField . $ControlField .$BckgrndImageField.']';
-
-    echo $GenTxt;
   }
   wp_die();
 }
