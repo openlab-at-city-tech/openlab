@@ -90,7 +90,7 @@ class Folder_affiliate_program {
                     right: 0;
                     -webkit-border-radius: 5px;
                     -moz-border-radius: 5px;
-                    border-radius: 5px;: ;
+                    border-radius: 5px;
                 }
                 .<?php echo $this->plugin_slug ?>-affiliate-title {
                     padding: 0 0 10px 0;
