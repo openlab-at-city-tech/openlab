@@ -81,7 +81,7 @@ class Notice {
 
 		?>
 		<div class="advanced-sidebar-menu-column-box">
-			<h3 style="margin: 0 0 0 3px;">
+			<h3 style="margin: 8px 0 0 3px;">
 				<a
 					href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/"
 					style="text-decoration: none; color: inherit;">
@@ -126,19 +126,16 @@ class Notice {
 				class="advanced-sidebar-desktop-only">
 				<?php
 				if ( Widget_Page::NAME === $widget->id_base ) {
-					?>
-					<button class="button-secondary" style="width:100%; text-align: center; margin: 0 0 23px 0;">
-						<?php esc_html_e( 'Preview', 'advanced-sidebar-menu' ); ?>
-					</button>
-					<?php
+					$margin = '20px';
 				} else {
-					?>
-					<button class="button-secondary" style="width:100%; text-align: center; margin: 0 0 14px 0;">
-						<?php esc_html_e( 'Preview', 'advanced-sidebar-menu' ); ?>
-					</button>
-					<?php
+					$margin = '11px';
 				}
 				?>
+				<button
+					class="button-secondary"
+					style="width:100%; text-align: center; margin: 0 0 <?php echo esc_attr( $margin ); ?> 0;">
+					<?php esc_html_e( 'Preview', 'advanced-sidebar-menu' ); ?>
+				</button>
 			</div>
 		</div>
 		<?php
@@ -153,9 +150,9 @@ class Notice {
 	 * @param \WP_Widget $widget   - Widget class.
 	 */
 	public function preview( array $instance, \WP_Widget $widget ) {
-		$src = 'pages-widget-min.png';
+		$src = 'pages-widget-min.png?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
 		if ( Category::NAME === $widget->id_base ) {
-			$src = 'category-widget-min.png';
+			$src = 'category-widget-min.png?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
 		}
 		?>
 		<div
@@ -163,9 +160,10 @@ class Notice {
 			class="advanced-sidebar-desktop-only advanced-sidebar-menu-full-width advanced-sidebar-menu-preview-wrap">
 			<div class="dashicons dashicons-no-alt advanced-sidebar-menu-close-icon"></div>
 			<img
+				data-js="advanced-sidebar-menu/pro/preview/image"
 				class="advanced-sidebar-menu-preview-image"
-				src="<?php echo esc_url( ADVANCED_SIDEBAR_MENU_URL . 'resources/img/' . $src ); ?>"
-				srcset="<?php echo esc_url( ADVANCED_SIDEBAR_MENU_URL . 'resources/img/' . str_replace( '.png', '-1x.png', $src ) ); ?> 1x, <?php echo esc_url( ADVANCED_SIDEBAR_MENU_URL . 'resources/img/' . $src ); ?> 2x"
+				src="https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( $src ); ?>"
+				srcset="https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( str_replace( '-min.png', '-1x-min.png', $src ) ); ?> 1x, https://onpointplugins.com/plugins/assets/shared/<?php echo esc_attr( $src ); ?> 2x"
 				alt="PRO version widget options" />
 		</div>
 		<?php

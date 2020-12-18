@@ -330,7 +330,7 @@ class Category extends Menu_Abstract {
 
 		do {
 			$term = get_term( $term_id, $this->get_taxonomy() );
-			if ( ! is_wp_error( $term ) ) {
+			if ( is_a( $term, \WP_Term::class ) ) {
 				$term_id = $term->parent;
 				$cat_ancestors[] = $term_id;
 			} else {

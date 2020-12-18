@@ -83,6 +83,28 @@ class Category extends Widget_Abstract {
 
 
 	/**
+	 * Get the label for use taxonomy.
+	 *
+	 * For adjusting widget option labels.
+	 *
+	 * @param array $instance - Widget settings.
+	 * @param bool  $single   - Singular label or plural.
+	 *
+	 * @since 8.2.0
+	 *
+	 * @return mixed
+	 */
+	public function get_taxonomy_label( $instance, $single = true ) {
+		$taxonomy = get_taxonomy( apply_filters( 'advanced-sidebar-menu/widget/category/taxonomy-for-label', 'category', $this->control_options, $instance ) );
+		if ( empty( $taxonomy ) ) {
+			$taxonomy = get_taxonomy( 'category' ); // Sensible fallback.
+		}
+
+		return $single ? $taxonomy->labels->singular_name : $taxonomy->labels->name;
+	}
+
+
+	/**
 	 * Display options.
 	 *
 	 * @param array           $instance - Widget settings.
@@ -96,41 +118,58 @@ class Category extends Widget_Abstract {
 			<p>
 				<?php $widget->checkbox( self::INCLUDE_PARENT ); ?>
 				<label>
-					<?php esc_html_e( 'Display the highest level parent category', 'advanced-sidebar-menu' ); ?>
+					<?php
+					/* translators: Selected taxonomy single label */
+					printf( esc_html__( 'Display the highest level parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
+					?>
 				</label>
 			</p>
 			<p>
 				<?php $widget->checkbox( self::INCLUDE_CHILDLESS_PARENT ); ?>
 				<label>
-					<?php esc_html_e( 'Display menu when there is only the parent category', 'advanced-sidebar-menu' ); ?>
+					<?php
+					/* translators: Selected taxonomy single label */
+					printf( esc_html__( 'Display menu when there is only the parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
+					?>
 				</label>
 			</p>
 			<p>
 				<?php $widget->checkbox( self::DISPLAY_ALL, self::LEVELS ); ?>
 				<label>
-					<?php esc_html_e( 'Always display child categories', 'advanced-sidebar-menu' ); ?>
+					<?php
+					/* translators: Selected taxonomy plural label */
+					printf( esc_html__( 'Always display child %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) );
+					?>
 				</label>
 			</p>
 			<div <?php $widget->hide_element( self::DISPLAY_ALL, self::LEVELS ); ?>>
 				<p>
 					<label for="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>">
-						<?php esc_html_e( 'Levels of child categories to display', 'advanced-sidebar-menu' ); ?>:
-					</label>
-					<select
-						id="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>"
-						name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>">
 						<?php
-						for ( $i = 1; $i < 6; $i ++ ) {
-							?>
-							<option
-								value="<?php echo esc_attr( $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
-								<?php echo esc_html( $i ); ?>
-							</option>
-
-							<?php
-						}
+						ob_start();
 						?>
-					</select>
+						<select
+							id="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>"
+							name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>">
+							<option value="100">
+								<?php esc_html_e( '- All -', 'advanced-sidebar-menu' ); ?>
+							</option>
+							<?php
+							for ( $i = 1; $i < 6; $i ++ ) {
+								?>
+								<option
+									value="<?php echo esc_attr( $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
+									<?php echo esc_html( $i ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
+						<?php
+						/* translators: {select html input}, {Selected post type plural label} */
+						printf( esc_html__( 'Display %1$s levels of child %2$s', 'advanced-sidebar-menu' ), ob_get_clean(), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+					</label>
 				</p>
 			</div>
 
@@ -156,18 +195,26 @@ class Category extends Widget_Abstract {
 
 				<?php $widget->checkbox( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>
 				<label>
-					<?php esc_html_e( 'Display categories on single posts', 'advanced-sidebar-menu' ); ?>
+					<?php
+					/* translators: Selected taxonomy plural label */
+					printf( esc_html__( 'Display %s on single posts', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) );
+					?>
 				</label>
 			</p>
 
 			<div <?php $widget->hide_element( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>>
 				<p>
 					<label for="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>">
-						<?php esc_html_e( "Display each single post's category", 'advanced-sidebar-menu' ); ?>:
+						<?php
+						/* translators: Selected taxonomy single label */
+						printf( esc_html__( "Display each single post's %s", 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
+						?>
 					</label>
 					<select
 						id="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>"
-						name="<?php echo esc_attr( $widget->get_field_name( self::EACH_CATEGORY_DISPLAY ) ); ?>">
+						name="<?php echo esc_attr( $widget->get_field_name( self::EACH_CATEGORY_DISPLAY ) ); ?>"
+						class="advanced-sidebar-menu-block-field"
+					>
 						<option
 							value="widget" <?php selected( 'widget', $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>>
 							<?php esc_html_e( 'In a new widget', 'advanced-sidebar-menu' ); ?>
@@ -199,13 +246,16 @@ class Category extends Widget_Abstract {
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
 				<label for="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>">
-					<?php esc_html_e( 'Categories to exclude (ids), comma separated', 'advanced-sidebar-menu' ); ?>:
+					<?php
+					/* translators: Selected taxonomy plural label */
+					printf( esc_html__( '%s to exclude (ids, comma separated)', 'advanced-sidebar-menu' ), esc_html( $this->get_taxonomy_label( $instance, false ) ) );
+					?>
 				</label>
 				<input
 					id="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>"
 					name="<?php echo esc_attr( $widget->get_field_name( self::EXCLUDE ) ); ?>"
 					type="text"
-					class="widefat"
+					class="widefat advanced-sidebar-menu-block-field"
 					value="<?php echo esc_attr( $instance[ self::EXCLUDE ] ); ?>" />
 			</p>
 

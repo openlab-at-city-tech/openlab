@@ -4,9 +4,9 @@ Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, sidebar menu, hierarchy, category menu, pages menu
 Requires at least: 5.0.0
-Tested up to: 5.5.3
+Tested up to: 5.6.0
 Requires PHP: 5.6.0
-Stable tag: 8.1.0
+Stable tag: 8.2.0
 
 == Description ==
 
@@ -16,7 +16,7 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 
 <strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including priority support, the ability to customize the look and feel, custom link text, excluding of pages, category ordering, accordions, custom post types, custom taxonomies, and so much more!</strong>
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.1.0</a> is now available with support to exclude and change titles of navigation menu items using each page's settings!</blockquote>
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.2.0</a> is now available with improved style targeting including hover styles and border widths!</blockquote>
 
 <h3>Features</h3>
 * Page and Category widgets.
@@ -49,35 +49,34 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 * Levels of Categories to display when always display child categories is checked
 
 <h3>PRO Features</h3>
-* Priority support.
-* Ability to customize each page's link text.
-* Click and drag styling for page, category, and navigation menu widgets.
-* Styling options for links including color, background color, size, and font weight.
+* Ability to customize each page or navigation menu item link’s text.
+* Click-and-drag styling for page, category, and navigation menu widgets.
+* Styling options for links including color, background color, size, hover, and font weight.
 * Styling options for different levels of links.
 * Styling options for the current page or category.
 * Styling options for the parent of the current page or category.
-* Block styling options including borders and border colors.
-* Bullet style selection from 7 styles or select none to have no bullets.
-* Accordion menu support for pages, categories, and navigation menus. 
+* Blocked styling options including borders, border width, and border colors.
+* Option to choose from 7 bullet styles or no bullets.
+* Accordion menu support for pages, categories, and navigation menus.
 * Accordion icon style and color selection.
 * Accordion option to keep all sections closed until clicked.
-* Accordion option to include the highest level parent in accordion.
+* Accordion option to include highest level parent in accordion.
 * Ability to exclude a page from all menus using a simple checkbox.
 * Link ordering for the category widget.
-* Number of levels of pages to show when always displayed child pages is not checked.
-* Ability to select and display custom post types. 
+* Number of levels of pages to show when "always display child pages" is not checked.
+* Ability to select and display custom post types.
 * Ability to select and display custom taxonomies.
-* Optionally display the current page's parents, grandparents, and children only.
-* Optionally display child page siblings when on a child page. With our without grandchildren available. .
-* Ability to display the widgets everywhere the sidebar displays.
-* Ability to select the parent page/category when using the display widget everywhere option.
-* Ability to display assigned posts or custom post types under categories.
-* Ability to select which levels of categories assigned posts should display under. **NEW**
-* Ability to limit the number of posts or custom post types to display under categories. 
-* Support for custom navigation menus from Appearance -> Menus. 
-* Ability to display the current Navigation Menu's items parents, siblings and children only. 
-* Optionally display the top-level Navigation Menu's items when there are no child items or not viewing a menu item.
-* Access to members only support area.
+* Option to display only the current page's parents, grandparents, and children.
+* Option to display child page siblings when on a child page (with or without grandchildren available).
+* Ability to display the widgets everywhere the widget area is used (including homepage if applicable).
+* Ability to select the highest level parent page/category.
+* Ability to select which levels of categories assigned posts will display under.
+* Ability to display assigned posts or custom post types under categories or taxonomies.
+* Ability to limit the number of posts or custom post types to display under categories.
+* Support for custom navigation menus from Appearance -> Menus.
+* Ability to display the current navigation menu item's parents and children only.
+* Option to display the top-level navigation menu items when there are no child items or not viewing a menu item.
+* Priority support with access to members only support area.
 
 <h3>Currently ships with the following languages</h3>
 * English (US)
@@ -153,6 +152,16 @@ Yes. Based on whatever page, post, or category you are on, the menu will change 
 
 
 == Changelog ==
+= 8.2.0 =
+* Improve widget labels, descriptions and styles.
+* Support blocked styling borders on all levels.
+* Improve Beaver Builder and Elementor styles.
+* Improve info panel.
+
+= 8.1.1 =
+* Improve readme.
+* Tested to WordPress 5.6.0.
+
 = 8.1.0 =
 * Restructure widget info panels.
 * Introduced new `advanced-sidebar-menu/widget/page/before-columns` action.
@@ -236,6 +245,9 @@ Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-m
 
 
 == Upgrade Notice ==
+= 8.2.0 =
+Update to support PRO version 8.2.0
+
 = 8.0.0 =
 Major version update. Not fully backward compatible with version 7 filters or code. Please see migration guide if you are extending the plugin via code.
 

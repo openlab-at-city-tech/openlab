@@ -76,11 +76,22 @@ var advanced_sidebar_menu = {
 	 * button is clicked.
 	 *
 	 * Adds a class to the wrap which allows hiding the existing options
-	 * to prevent inconistant margin requirements.
+	 * to prevent inconsistent margin requirements.
 	 *
 	 * @since 8.1.0
 	 */
 	handlePreviews: function () {
+		/**
+		 * Failsafe in case the image cannot load from onpointplugins.com.
+		 * Better to not have a preview than an broken one.
+		 */
+		jQuery( '[data-js="advanced-sidebar-menu/pro/preview/image"]')
+			.on( 'error', function( ev ){
+				jQuery( ev.target ).parent().parent()
+					.find( '[data-js="advanced-sidebar-menu/pro/preview/trigger"]' ).remove();
+				jQuery( ev.target ).remove();
+			})
+
 		jQuery( '[data-js="advanced-sidebar-menu/pro/preview/trigger"]' ).on( 'click', function( ev ) {
 			ev.preventDefault();
 			var el = jQuery( '[data-js="' + jQuery( this ).data( 'target' ) + '"]' );
