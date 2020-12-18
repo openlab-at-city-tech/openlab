@@ -1,0 +1,131 @@
+.#{$prefix}-eportfolio-photography-slider{
+    position: relative;
+    a{
+        color: $color_white;
+        &:visited{
+            color: $color_white;
+        }
+        &:hover{
+            color: $color_primary;
+        }
+    }
+    .slick-arrow{
+        top: initial;
+        bottom: 60px;
+        height: 60px;
+        border-radius: 0;
+        width: 60px;
+        color: $color_white;
+        background: transparent;
+        @include border-left();
+        border-color: rgba($color_white,0.52);
+        @include transform(translateY(0));
+        &.slick-disabled{
+            z-index: 1;
+        }
+        &:hover{
+            color: $color_primary;
+        }
+    }
+    .slick-prev{
+        left: initial;
+        right: 60px;
+        @include media(sm){
+            right: 120px;
+        }
+        &:before{
+            content: '\f053';
+        }
+    }
+    .slick-next{
+        left: initial;
+        right: 0;
+        @include border-right();
+        @include media(sm){
+            right: 60px;
+        }
+        &:before{
+            content: '\f054';
+        }
+    }
+    .#{$prefix}-photography-post{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: flex-end;
+        color: $color_white;
+        padding-bottom: 60px;
+        height: 600px;
+        position: relative;
+        @include media(lg){
+            height: 100vh;
+        }
+        >a{
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            bottom: 60px;
+            right: 0;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            @include media(sm){
+                display: flex;
+                z-index: 2;
+            }
+            img{
+                display: none;
+            }
+           
+        }
+       
+        
+        .entry-title,
+        .#{$prefix}-categories{
+            width: calc(100% - 120px);
+            @include media(sm){
+                width: calc(100% - 150px);
+            }
+        }
+        .#{$prefix}-categories{
+            a{
+                font-size: 0.8rem;
+                color: $color_white;
+                &:visited{
+                    color: $color_white;
+                }
+                &:hover{
+                    color: $color_primary;
+                }
+            }
+        }
+    
+        .#{$prefix}-desc{
+            height: 60px;
+            overflow: hidden;
+            @include border-top();
+            @include border-bottom();
+            border-color: rgba($color_white,0.52);
+            padding: 0 30px 5px;
+            &.#{$prefix}-overlay-black{
+                &:before{
+                    background-color: rgba($color_black,0.3);
+                }
+            }
+            .entry-title{
+                margin: 0;
+                padding-top: 5px;
+                a{
+                    @include line-limit(1);
+                }
+            }
+          
+        }
+    }
+ 
+}
+.page-template-photography-template{
+    footer{
+        display: none;
+    }
+}

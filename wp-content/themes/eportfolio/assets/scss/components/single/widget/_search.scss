@@ -1,0 +1,39 @@
+.widget,
+.#{$prefix}-menubar-search{
+    .search-form{
+        @extend %clearfix;
+        label{
+            width: calc(100% - 90px);
+            float: left;
+            padding-right: 5px;
+            input{
+                width: 100%;
+                height: 45px;
+                border-radius: 0;
+                padding: 0 15px;
+                border-color: $color_blue_gray;
+    
+            }
+        }
+        .search-submit{
+            width: 90px;
+            height: 45px;
+            float: left;
+            font-size: 1rem;
+            border-radius: 0;
+            border: 0;
+            cursor: pointer;
+            font-weight: $font_semi_bold;
+            padding: 0;
+            background-color: $color_black;
+            color: $color_white;
+            @include transition();
+            &:hover{
+                background-color: $color_primary;
+                color: $color_black;
+            }
+        }
+    
+    }
+
+}

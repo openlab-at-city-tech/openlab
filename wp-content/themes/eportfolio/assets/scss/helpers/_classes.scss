@@ -1,0 +1,71 @@
+// grid
+.#{$prefix}-float-left{
+    float: left;
+}
+.#{$prefix}-float-right{
+    float: right;
+}
+
+.clearfix{
+    &:before,
+    &:after{
+        clear: both;
+        content:'';
+        display: block;
+
+    }
+}
+.#{$prefix}-d-flex{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.#{$prefix}-w-100{
+    width: 100%;
+}
+
+.#{$prefix}-text-center{
+    text-align: center;
+}
+.#{$prefix}-d-block{
+    display: block;
+}
+
+// image
+img{
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+}
+.data-bg,
+.bg-image{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    background-color: rgb(123,123,123);
+}
+
+// anchor tag
+a{
+    text-decoration: none;
+    color: $color_black;
+    @include transition();
+    &:visited{
+        color: $color_black;
+    }
+    &:hover{
+        color: $color_primary;
+    }
+}
+
+// hover Effect
+.#{$prefix}-image-hover{
+    @include transition();
+    @include backface();
+    &:hover{
+        @include transform(scale(1.1,1.1));
+    }
+}
+
+

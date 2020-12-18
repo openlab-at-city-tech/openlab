@@ -1,0 +1,56 @@
+.widget-area{
+    ul{
+        @extend %reset-ul;
+        @include border-bottom();
+        border-color: $color_blue_gray;
+        li{
+            @include border-top();
+            border-color: $color_blue_gray;
+            padding-top: 10px;
+            margin-bottom: 10px;
+            &:first-child{
+                border-top: 0;
+            }
+            a{
+                display: inline-block;
+            }
+           ul{
+                margin-top: 10px;
+                border-bottom: 0;
+                font-size: 0.9rem;
+                li{
+                    width: 100%;
+                    &:first-child{
+                        @include border-top();
+                        border-color: $color_blue_gray;
+                    }
+                    a{
+                        padding-left: 15px;
+                        display: inline-block;
+                    }
+                    ul{
+                        list-style: dots;
+                    }
+                    li{
+                        a{
+                            padding-left: 45px;
+                            display: inline-block;
+                        }
+                    }
+                }
+           }
+           
+        }
+    }
+    .menu{
+        font-weight: $font_bold;
+        ul{
+            font-weight: $font_semi_bold;
+            ul{
+                font-weight: $font_normal;
+            }
+
+        }
+    }
+ 
+}

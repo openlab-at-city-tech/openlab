@@ -1,0 +1,28 @@
+// html{
+//     font-size: $root_font_size;
+//     font-family: $root_font;
+//     font-weight: $font_normal;
+    
+// }
+body{
+    color: $color_black;
+    font-family: $root_font;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar{
+        width: 0;
+        height: 0;
+    }
+}
+p{
+    a{
+        color: $color_primary;
+        &:visited{
+            color: $color_primary;
+        }
+        &:hover{
+            color: $color_black;
+        }
+    }
+}

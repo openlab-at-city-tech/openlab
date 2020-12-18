@@ -1,0 +1,26 @@
+.#{$prefix}-full-width-post{
+    height: initial !important;
+    .#{$prefix}-gallery-post{
+        width: 100%;
+        top: initial !important;
+        left: initial !important;
+        position: initial !important;
+        @include media(xs){
+            display: flex;
+            flex-wrap: wrap;
+        }
+        &:nth-child(even){
+            .post-thumbnail{
+                @include media(xs){
+                    order: 2;
+                }
+            }
+            .#{$prefix}-desc{
+                    @include media(xs){
+                        order: 1;
+                    }
+            }
+        }
+    
+    }
+}

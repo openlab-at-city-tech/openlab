@@ -1,0 +1,21 @@
+.wpcf7-form{
+    input[type=text],
+    input[type=email],
+    textarea{
+        @include border();
+        border-color: $color_blue_gray;
+        width: 100%;
+        padding: 10px 15px;
+    }
+    textarea{
+        height: 100px;
+    }
+    input[type=submit]{
+        @extend %btn;
+        border-color: $color_black;
+        background-color: black;
+        color: $color_white;
+        font-weight: $font_semi_bold;
+        cursor: pointer;
+    }
+}

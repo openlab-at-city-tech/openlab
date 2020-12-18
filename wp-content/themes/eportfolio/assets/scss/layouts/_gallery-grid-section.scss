@@ -1,0 +1,24 @@
+.#{$prefix}-gallery-grid-section{
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    span{
+        display: inline-block;
+        background-color: $color_black;
+        color: $color_white;
+        padding: 5px 9px;
+        font-size: 1.2rem;
+        @include media(sm){
+            font-size: 1.4rem;
+        }
+        @include media(lg){
+            font-size: 1.8rem;
+        }
+        @include transition();
+        &.#{$prefix}-active{
+            background-color: $color_primary;
+            color: $color_white;
+        }
+    }
+}

@@ -1,0 +1,29 @@
+%comment-btn{
+  display: inline-block;
+  line-height: 1;
+  @include border(2px,solid);
+  border-color: $color_primary;
+  padding: 10px 30px;
+  font-size: 0.9rem;
+  font-weight: $font_semi_bold;
+  background-color: transparent;
+  color: $color_black;
+  &:visited{
+    color: $color_black;
+  }
+ 
+}
+
+@import 'comments-list';
+@import 'comments-response';
+@import 'form-input';
+.#{$prefix}-comments-section{
+  padding: 30px;
+  font-weight: $font_semi_bold;
+  margin-top: 30px;
+  background-color: $color_white;
+  .comments-title{
+    margin: 0;
+  }
+
+}

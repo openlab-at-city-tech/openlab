@@ -1,0 +1,77 @@
+.home{
+    .pagination{
+        padding-bottom: 30px;
+    }
+}
+.#{$prefix}-pagination-numeric{
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+.pagination,
+.page-links{
+    text-align: center;
+    .prev,
+    .next{
+        &.page-numbers{
+            display: inline-block;
+            background-color: $color_black;
+            color: $color_white;
+        }  
+    }
+    .page-numbers,
+    .post-page-numbers{
+        display: none;
+        @extend %btn;
+        @extend %btn-hover;
+        margin-top: 30px;
+        font-weight: $font_semi_bold;
+        @include border( 1.5px,solid );
+        @include media(sm){
+            display: inline-block;
+        }
+        &.current{
+            @extend %primary-bg;
+            @extend %primary-border;
+            color: $color_white;
+        }
+        
+    }
+    .#{$prefix}-caption{
+       border: 0;
+       padding: 10px 15px;
+       &:after{
+           content: none;
+       }
+       &:hover{
+           color: $color_black;
+       }
+    }
+}
+.posts-navigation{
+    text-align: center;
+    @include media(md){
+        padding-bottom: 30px;
+    }
+    .nav-links{
+        @extend %clearfix;
+        display: flex;
+        justify-content: center;
+    }
+    .nav-previous,
+    .nav-next{
+        float: none;
+        width: initial;
+        padding: 15px 30px 0;
+    }
+    a{
+        @extend %btn;
+        @extend %btn-hover;
+        font-weight: $font_semi_bold;
+        @include border( 1.5px,solid );
+    }
+    
+}
+
+.page-links{
+    margin: 0;
+}

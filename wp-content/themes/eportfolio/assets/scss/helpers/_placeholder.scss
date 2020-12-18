@@ -1,0 +1,40 @@
+%reset-ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+%clearfix{
+    &:before,
+    &:after{
+        clear: both;
+        content:'';
+        display: block;
+
+    }
+}
+%primary-bg{
+    background-color: $color_primary;
+}
+%primary-border{
+    border-color: $color_primary;
+}
+%primary-color{
+    color: $color_primary;
+}
+%perspective{
+    transform:  perspective(1px) translateZ(0);
+}
+%overlay{
+    position: relative;
+    z-index: 1;
+    &:before{
+        position: absolute;
+        display: block;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+}
+

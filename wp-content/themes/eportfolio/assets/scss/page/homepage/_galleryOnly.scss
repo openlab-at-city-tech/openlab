@@ -1,0 +1,14 @@
+.#{$prefix}-page-template-portfolio-only-gallery{
+    .#{$prefix}-portfolio-gallery-section{
+         padding: 0 7.5px 15px;
+        .#{$prefix}-gallery-post{
+             margin-top: 15px;
+        } 
+        .#{$prefix}-title-section{
+              padding: 15px 7.5px 0;
+              .#{$prefix}-section-title{
+                   margin: 0;
+              }
+         }
+    }
+}

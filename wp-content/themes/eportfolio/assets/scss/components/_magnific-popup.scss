@@ -1,0 +1,19 @@
+.mfp-content{
+    .mfp-bottom-bar{
+        top: inherit;
+        margin-top: 0;
+        bottom: 40px;
+        background: rgba($color_primary,0.7);
+        padding: 15px 15px 30px 15px;
+        .mfp-title{
+            color: $color_white;
+            padding-right: 0;
+        }
+        .mfp-counter{
+            top: inherit;
+            bottom: 15px;
+            right: 15px;
+            color: $color_white;
+        }
+    }
+}

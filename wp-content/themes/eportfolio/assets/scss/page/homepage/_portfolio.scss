@@ -1,0 +1,59 @@
+.#{$prefix}-page-template-portfolio-with-widget{
+    .#{$prefix}-page-content{
+         @include media(lg){
+              padding-left: 60%;
+         }
+    }
+    .#{$prefix}-portfolio-gallery-section{
+         padding: 0 15px 15px;
+         .#{$prefix}-title-section{
+              padding-top: 15px;
+              .#{$prefix}-section-title{
+                   margin: 0;
+              }
+         }
+    }
+    .#{$prefix}-portfolio-widget-section{
+         padding: 0 15px 15px;
+         background-color: rgba(231,239,242,1);
+         section{
+              padding-top: 15px;
+         }
+         .widget-title{
+              padding-top: 0;
+         }
+          
+         @include media(lg){
+              position: fixed;
+              max-width: 35%;
+              width: 35%;
+              left: 25%;
+              top: 0;
+              overflow-y: scroll;
+              height: 100%;
+              scrollbar-width: none;
+              -ms-overflow-style: none;
+              &::-webkit-scrollbar{
+                  width: 0;
+                  height: 0;
+              }
+         }
+         section{
+              margin-top: 30px;
+         }
+         .eportfolio_slider_post_widget{
+              margin-top: 0;
+         }
+         .#{$prefix}-blog-slider{
+              margin-left: -15px;
+              margin-right: -15px;
+         }
+         .#{$prefix}-social-widget-section{
+               margin-top: 15px;
+         }
+    }
+    .masonry-blocks{
+         padding-top: 15px;
+    }
+
+}
