@@ -141,9 +141,15 @@ function xprofile_filter_kses( $content, $data_obj = null, $field_id = null ) {
 			'ul'   => array(),
 			'ol'   => array(),
 			'li'   => array(),
-			'span' => array( 'style' => 1 ),
-			'p'    => array( 'style' => 1 ),
+			'span' => array(),
+			'p'    => array(),
 		);
+
+		// Allow style attributes on certain elements for capable users
+		if ( bp_current_user_can( 'unfiltered_html' ) ) {
+			$richtext_tags['span'] = array( 'style' => 1 );
+			$richtext_tags['p']    = array( 'style' => 1 );
+		}
 
 		$xprofile_allowedtags = array_merge( $allowedtags, $richtext_tags );
 	}
@@ -164,7 +170,7 @@ function xprofile_filter_kses( $content, $data_obj = null, $field_id = null ) {
 }
 
 /**
- * Filters profile field values for whitelisted HTML.
+ * Filters profile field values for allowed HTML.
  *
  * @since 5.0.0
  *
@@ -177,7 +183,7 @@ function xprofile_sanitize_data_value_before_display( $value, $type, $field_id )
 }
 
 /**
- * Filters profile field values for whitelisted HTML, when coming from xprofile_get_field_data().
+ * Filters profile field values for allowed HTML, when coming from xprofile_get_field_data().
  *
  * @since 5.0.0
  *
@@ -310,7 +316,7 @@ function xprofile_filter_format_field_value_by_type( $field_value, $field_type =
  * @return string
  */
 function xprofile_filter_format_field_value_by_field_id( $field_value, $field_id ) {
-	$field = xprofile_get_field( $field_id );
+	$field = xprofile_get_field( $field_id, null, false );
 	return xprofile_filter_format_field_value_by_type( $field_value, $field->type, $field_id );
 }
 
@@ -336,7 +342,7 @@ function xprofile_filter_pre_validate_value_by_field_type( $value, $field, $fiel
  * Escape field value for display.
  *
  * Most field values are simply run through esc_html(). Those that support rich text (by default, `textarea` only)
- * are sanitized using kses, which allows a whitelist of HTML tags.
+ * are sanitized using kses, which allows HTML tags from a controlled list.
  *
  * @since 2.4.0
  *

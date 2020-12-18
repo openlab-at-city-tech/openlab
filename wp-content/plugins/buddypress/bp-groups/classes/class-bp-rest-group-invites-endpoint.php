@@ -256,7 +256,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_invites_cannot_get_items',
 				__( 'Sorry, you are not allowed to fetch group invitations with those arguments.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -350,7 +350,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_invites_cannot_get_item',
 				__( 'Sorry, you are not allowed to fetch an invitation.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -481,7 +481,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_invite_cannot_create_item',
 				__( 'Sorry, you are not allowed to create the invitation as requested.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -587,7 +587,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_invite_cannot_update_item',
 				__( 'Sorry, you are not allowed to accept the invitation as requested.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -714,7 +714,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_invite_cannot_delete_item',
 				__( 'Sorry, you are not allowed to delete the invitation as requested.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -832,7 +832,6 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param int $invite_id The ID of the invitation you wish to fetch.
-	 *
 	 * @return BP_Invitation|bool $invite Invitation if found, false otherwise.
 	 */
 	public function fetch_single_invite( $invite_id = 0 ) {
@@ -853,7 +852,7 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 	 * @return array Endpoint arguments.
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-		$args = WP_REST_Controller::get_endpoint_args_for_item_schema( $method );
+		$args = parent::get_endpoint_args_for_item_schema( $method );
 		$key  = 'get_item';
 
 		if ( WP_REST_Server::CREATABLE === $method || WP_REST_Server::EDITABLE === $method ) {

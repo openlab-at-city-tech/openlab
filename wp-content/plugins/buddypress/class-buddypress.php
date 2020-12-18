@@ -303,7 +303,7 @@ class BuddyPress {
 
 		/** Versions **********************************************************/
 
-		$this->version    = '6.1.0';
+		$this->version    = '7.0.0';
 		$this->db_version = 12385;
 
 		/** Loading ***********************************************************/
@@ -510,10 +510,15 @@ class BuddyPress {
 			require( $this->plugin_dir . 'bp-core/deprecated/3.0.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/4.0.php' );
 			require( $this->plugin_dir . 'bp-core/deprecated/6.0.php' );
+			require( $this->plugin_dir . 'bp-core/deprecated/7.0.php' );
 		}
 
-		// Load wp-cli module if PHP 5.4+.
-		if ( defined( 'WP_CLI' ) && file_exists( $this->plugin_dir . 'cli/wp-cli-bp.php' ) && version_compare( phpversion(), '5.4.0', '>=' ) ) {
+		// Load wp-cli module if PHP 5.6+.
+		if (
+			defined( 'WP_CLI' )
+			&& ! class_exists( 'Buddypress\CLI\Command\BuddypressCommand' )
+			&& file_exists( $this->plugin_dir . 'cli/wp-cli-bp.php' )
+			&& version_compare( phpversion(), '5.6.0', '>=' ) ) {
 			require( $this->plugin_dir . 'cli/wp-cli-bp.php' );
 		}
 	}
@@ -577,12 +582,21 @@ class BuddyPress {
 			'BP_Theme_Compat'              => 'core',
 			'BP_User_Query'                => 'core',
 			'BP_Walker_Category_Checklist' => 'core',
+			/**
+			 * BP_Walker_Nav_Menu_Checklist class.
+			 *
+			 * As this class corresponding file is deprecated, it will trigger a deprecation notice if instantiated.
+			 * In a subsequent release, we'll remove it from our Classes Autoloader.
+			 *
+			 * @todo Remove the BP_Walker_Nav_Menu_Checklist from our Classes Autoloader.
+			 */
 			'BP_Walker_Nav_Menu_Checklist' => 'core',
 			'BP_Walker_Nav_Menu'           => 'core',
 			'BP_Invitation_Manager'        => 'core',
 			'BP_Invitation'                => 'core',
 			'BP_REST_Components_Endpoint'  => 'core',
 			'BP_REST_Attachments'          => 'core',
+			'BP_Admin_Types'               => 'core',
 
 			'BP_Core_Friends_Widget'   => 'friends',
 			'BP_REST_Friends_Endpoint' => 'friends',

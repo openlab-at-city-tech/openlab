@@ -50,10 +50,12 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 				'args'   => array(
 					'field_id' => array(
 						'description' => __( 'The ID of the field the data is from.', 'buddypress' ),
+						'required'    => true,
 						'type'        => 'integer',
 					),
 					'user_id'  => array(
 						'description' => __( 'The ID of user the field data is from.', 'buddypress' ),
+						'required'    => true,
 						'type'        => 'integer',
 					),
 				),
@@ -68,14 +70,11 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 					'args'                => array(
 						'value' => array(
-							'description' => __( 'The list of values for the field data.', 'buddypress' ),
+							'description' => __( 'The value(s) for the field data.', 'buddypress' ),
+							'required'    => true,
 							'type'        => 'array',
 							'items'       => array(
 								'type' => 'string',
-							),
-							'arg_options' => array(
-								'validate_callback' => 'rest_validate_request_arg',
-								'sanitize_callback' => 'rest_sanitize_request_arg',
 							),
 						),
 					),
@@ -215,7 +214,9 @@ class BP_REST_XProfile_Data_Endpoint extends WP_REST_Controller {
 		 * the submitted value was not an array.
 		 */
 		if ( ! $field->type_obj->supports_multiple_defaults ) {
-			$value = implode( ' ', $value );
+			$value = implode( ' ', (array) $value );
+		} else {
+			$value = preg_split( '/[,]+/', $value );
 		}
 
 		if ( ! xprofile_set_field_data( $field->id, $user->ID, $value ) ) {

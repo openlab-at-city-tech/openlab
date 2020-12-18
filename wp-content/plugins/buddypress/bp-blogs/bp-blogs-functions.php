@@ -549,13 +549,15 @@ add_action( 'update_option_comment_moderation', 'bp_blogs_update_option_comment_
  * @param int|string $new_value New value
  */
 function bp_blogs_update_option_site_icon( $old_value, $new_value ) {
+	$blog_id = get_current_blog_id();
+
 	if ( 0 === $new_value ) {
-		bp_blogs_update_blogmeta( get_current_blog_id(), 'site_icon_url_thumb', 0 );
-		bp_blogs_update_blogmeta( get_current_blog_id(), 'site_icon_url_full',  0 );
+		bp_blogs_update_blogmeta( $blog_id, 'site_icon_url_thumb', 0 );
+		bp_blogs_update_blogmeta( $blog_id, 'site_icon_url_full',  0 );
 	} else {
 		// Save site icon URL as blogmeta.
-		bp_blogs_update_blogmeta( get_current_blog_id(), 'site_icon_url_thumb', get_site_icon_url( bp_core_avatar_thumb_width() ) );
-		bp_blogs_update_blogmeta( get_current_blog_id(), 'site_icon_url_full',  get_site_icon_url( bp_core_avatar_full_width()  ) );
+		bp_blogs_update_blogmeta( $blog_id, 'site_icon_url_thumb', bp_blogs_get_site_icon_url( $blog_id, bp_core_avatar_thumb_width() ) );
+		bp_blogs_update_blogmeta( $blog_id, 'site_icon_url_full',  bp_blogs_get_site_icon_url( $blog_id, bp_core_avatar_full_width()  ) );
 	}
 }
 add_action( 'update_option_site_icon', 'bp_blogs_update_option_site_icon', 10, 2 );
@@ -575,7 +577,7 @@ function bp_blogs_delete_url_blogmeta( $site_id = 0 ) {
 	bp_blogs_delete_blogmeta( (int) $site_id, 'url' );
 }
 
-if ( function_exists( 'wp_switch_roles_and_user' ) ) {
+if ( bp_is_running_wp( '4.9.0' ) ) {
 	add_action( 'clean_site_cache', 'bp_blogs_delete_url_blogmeta' );
 } else {
 	add_action( 'refresh_blog_details', 'bp_blogs_delete_url_blogmeta' );
@@ -1476,3 +1478,139 @@ function bp_blogs_restore_data( $user_id = 0 ) {
 	}
 }
 add_action( 'bp_make_ham_user', 'bp_blogs_restore_data', 10, 1 );
+
+/**
+ * Checks whether blog creation is enabled.
+ *
+ * Returns true when blog creation is enabled for logged-in users only, or
+ * when it's enabled for new registrations.
+ *
+ * @since 1.0.0
+ * @since 7.0.0 The function has been moved into `bp-blogs/bp-blogs-functions.php`.
+ *
+ * @return bool True if blog registration is enabled.
+ */
+function bp_blog_signup_enabled() {
+	$bp            = buddypress();
+	$retval        = true;
+	$active_signup = 'all';
+
+	if ( isset( $bp->site_options['registration'] ) ) {
+		$active_signup = $bp->site_options['registration'];
+	}
+
+	/**
+	 * Filters whether or not blog creation is enabled.
+	 *
+	 * Return "all", "none", "blog" or "user".
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $active_signup Value of the registration site option creation status.
+	 */
+	$active_signup = apply_filters( 'wpmu_active_signup', $active_signup );
+
+	if ( 'none' === $active_signup || 'user' === $active_signup ) {
+		$retval = false;
+	}
+
+	return $retval;
+}
+
+/**
+ * Returns the Blog signup's submitted vars.
+ *
+ * @since 7.0.0
+ *
+ * @return array An associative array containing the Blog signup's submitted vars.
+ */
+function bp_blogs_get_signup_form_submitted_vars() {
+	$exprected_vars = array(
+		'blogname'    => '',
+		'blog_title'  => '',
+		'blog_public' => 0,
+	);
+
+	$submitted_vars = wp_parse_args( $_POST, $exprected_vars );
+
+	return array_map( 'wp_unslash', array_intersect_key( $submitted_vars, $exprected_vars ) );
+}
+
+/**
+ * Validate a blog creation submission.
+ *
+ * Essentially, a wrapper for {@link wpmu_validate_blog_signup()}.
+ *
+ * @since 1.0.0
+ * @since 7.0.0 Add the blog_name and blog_title parameters.
+ *              The function has been moved into `bp-blogs/bp-blogs-functions.php`.
+ *
+ * @return array Contains the new site data and error messages.
+ */
+function bp_blogs_validate_blog_form( $blog_name = '', $blog_title = '' ) {
+	$user = '';
+
+	if ( is_user_logged_in() ) {
+		$user = wp_get_current_user();
+	}
+
+	if ( ! $blog_name && ! $blog_title ) {
+		$submitted_vars = bp_blogs_get_signup_form_submitted_vars();
+
+		if ( array_filter( $submitted_vars ) ) {
+			$blog_name  = $submitted_vars['blogname'];
+			$blog_title = $submitted_vars['blog_title'];
+		}
+	}
+
+	return wpmu_validate_blog_signup( $blog_name, $blog_title, $user );
+}
+
+/**
+ * Gets the site icon URL even when BuddyPress is not network activated.
+ *
+ * @since 7.0.0
+ *
+ * @param integer $blog_id The ID of the blog to get the site icon URL for.
+ * @param integer $size    The size of the site icon.
+ * @return string          The site icon URL
+ */
+function bp_blogs_get_site_icon_url( $blog_id = 0, $size = 512 ) {
+	if ( is_multisite() && ! bp_is_network_activated() && ! bp_is_root_blog( $blog_id ) ) {
+		$switched_blog = false;
+		$url           = '';
+
+		if ( $blog_id && get_current_blog_id() !== (int) $blog_id ) {
+			switch_to_blog( $blog_id );
+			$switched_blog = true;
+		}
+
+		$site_icon_id = get_option( 'site_icon' );
+
+		if ( $site_icon_id ) {
+			$site_icon_data = wp_get_attachment_metadata( $site_icon_id );
+			$sizes          = wp_list_pluck( $site_icon_data['sizes'], 'width' );
+
+			sort( $sizes );
+			$closest = 'full';
+
+			foreach ( $sizes as $width ) {
+				$closest = array( $width, $width );
+
+				if ( (int) $size < (int) $width ) {
+					break;
+				}
+			}
+
+			$url = wp_get_attachment_image_url( $site_icon_id, $closest );
+		}
+
+		if ( $switched_blog ) {
+			restore_current_blog();
+		}
+
+		return $url;
+	}
+
+	return get_site_icon_url( $size, '', $blog_id );
+}
