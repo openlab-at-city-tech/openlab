@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/admin-ui.php');
+require_once(dirname(__FILE__) . '/magpiemocklink.class.php');
 
 class FeedWordPressDiagnosticsPage extends FeedWordPressAdminPage {
 	public function __construct() {
@@ -41,7 +42,7 @@ class FeedWordPressDiagnosticsPage extends FeedWordPressAdminPage {
 		$boxes_by_methods = array(
 			'info_box' => __('Diagnostic Information'),
 			'diagnostics_box' => __('Display Diagnostics'),
-			'updates_box' => __('Updates'),
+			'updates_box' => __('Diagnostic Messages'),
 			'tests_box' => __('Diagnostic Tests'),
 		);
 
@@ -135,6 +136,7 @@ class FeedWordPressDiagnosticsPage extends FeedWordPressAdminPage {
 		<th scope="row">Hosting Environment:</th>
 		<td><ul style="margin-top: 0; padding-top: 0;">
 		<li><em>WordPress:</em> version <?php print $wp_version; ?></li>
+		<li><em>SimplePie:</em> version <?php print SIMPLEPIE_VERSION; ?></li>
 		<?php if (function_exists('phpversion')) : ?>
 		<li><em>PHP:</em> version <?php print phpversion(); ?></li>
 		<?php endif; ?>
@@ -263,18 +265,21 @@ testing but absolutely inappropriate for a production server.</p>
 			'Update Diagnostics' => array(
 				'update_schedule:check' => 'whenever a FeedWordPress checks in on the update schedule',
 				'updated_feeds' => 'as each feed is checked for updates',
-				'updated_feeds:errors:persistent' => 'when attempts to update a feed have resulted in errors</label> <label>for at least <input type="number" min="1" max="360" step="1" name="diagnostics_persistent_error_hours" value="'.$hours.'" /> hours',
-				'updated_feeds:errors' => 'any time FeedWordPress encounters any errors while checking a feed for updates',
-				'updated_feeds:http' => "displaying the raw HTTP data passed to and from the feed being checked for updates",
 				'syndicated_posts' => 'as each syndicated post is added to the database',
 				'feed_items' => 'as each syndicated item is considered on the feed',
 				'memory_usage' => 'indicating how much memory was used',
+			),
+			'Feed Retrieval' => array(
+				'updated_feeds:errors:persistent' => 'when attempts to update a feed have resulted in errors</label> <label>for at least <input type="number" min="1" max="360" step="1" name="diagnostics_persistent_error_hours" value="'.$hours.'" /> hours',
+				'updated_feeds:errors' => 'any time FeedWordPress encounters any errors while checking a feed for updates',
+				'updated_feeds:http' => "displaying the raw HTTP data passed to and from the feed being checked for updates",
 			),
 			'Syndicated Post Details' => array(
 				'feed_items:freshness' => 'as FeedWordPress decides whether to treat an item as a new post, an update, or a duplicate of an existing post',
 				'feed_items:rejected' => 'when FeedWordPress rejects a post without syndicating it',
 				'syndicated_posts:categories' => 'as categories, tags, and other terms are added on the post',
 				'syndicated_posts:meta_data' => 'as syndication meta-data is added on the post',
+				'syndicated_posts:do_pings' => 'when FeedWordPress holds or releases the pings WordPress sends out when new posts are created',
 			),
 			'Advanced Diagnostics' => array(
 				'feed_items:freshness:reasons' => 'explaining the reason that a post was treated as an update to an existing post',
@@ -318,6 +323,15 @@ testing but absolutely inappropriate for a production server.</p>
 	} /* FeedWordPressDiagnosticsPage::updates_box () */
 
 	static function tests_box ($page, $box = NULL) {
+		$url = MyPHP::request('http_test_url');
+		$method = MyPHP::request('http_test_method');
+		$xpath = MyPHP::request('http_test_xpath');
+		
+		$aMethods = array(
+			'wp_remote_request',
+			'FeedWordPie_File',
+			'FeedWordPress::fetch',
+		);
 ?>
 <script type="text/javascript">
 function clone_http_test_args_keyvalue_prototype () {
@@ -334,11 +348,20 @@ function clone_http_test_args_keyvalue_prototype () {
 <table class="edit-form">
 	<tr>
 	<th scope="row">HTTP:</th>
-	<td><div><input type="url" name="http_test_url" value="" placeholder="http://www.example.com/" size="127" style="width: 80%; max-width: 80.0em;" />
+	<td><div><input type="url" name="http_test_url" value="<?php print esc_attr($url);?>" placeholder="http://www.example.com/" size="127" style="width: 80%; max-width: 80.0em;" />
 	<input type="submit" name="feedwordpress_diagnostics_do[http_test]" value="Test &raquo;" /></div>
 	<div><select name="http_test_method" size="1">
-		<option value="wp_remote_request">wp_remote_request</option>
-		<option value="FeedWordPress_File">FeedWordPress_File</option>
+	<?php foreach ($aMethods as $sMethod) :?>
+		<option value="<?php
+			print esc_attr($sMethod);
+		?>"<?php
+			if ($method==$sMethod) :
+				print ' selected="selected"';
+			endif;
+		?>><?php
+			print $sMethod;
+		?></option>
+	<?php endforeach; ?>
 	</select></div>
 	<table>
 	<tr>
@@ -358,7 +381,7 @@ function clone_http_test_args_keyvalue_prototype () {
 
 	<tr>
 	<th>XPath:</th>
-	<td><div><input type="text" name="http_test_xpath" value="" placeholder="xpath-like query" /></div>
+	<td><div><input type="text" name="http_test_xpath" value="<?php print esc_attr($xpath); ?>" placeholder="xpath-like query" /></div>
 	<div><p>Leave blank to test HTTP, fill in to test a query.</p></div>
 	</td>
 	</tr>
@@ -415,8 +438,37 @@ function clone_http_test_args_keyvalue_prototype () {
 			case 'wp_remote_request' :
 				$out = wp_remote_request($url, $args);
 				break;
-			case 'FeedWordPress_File' :
-				$out = new FeedWordPress_File($url);
+			case 'FeedWordPie_File' :
+				$out = new FeedWordPie_File($url);
+				break;
+			case 'FeedWordPress::fetch' :
+				$out = FeedWordPress::fetch($url);
+
+				if (isset($post['http_test_xpath'])) :
+					if (strlen($post['http_test_xpath']) > 0) :
+
+						$xpath = $post['http_test_xpath'];
+
+						if ( !is_wp_error($out) ) :
+							$expr = new FeedWordPressParsedPostMeta($xpath);
+
+							$feed = new MagpieMockLink( $out, $url );
+							$posts = $feed->live_posts();
+							
+							$post = new SyndicatedPost($posts[0], $feed);
+							$meta = $expr->do_substitutions($post);
+							
+							$out = array(
+							"post_title" => $post->entry->get_title(),
+							"post_link" => $post->permalink(),
+							"guid" => $post->guid(),
+							"expression" => $xpath,
+							"results" => $meta,
+							"pie" => $out,
+							);
+						endif;
+					endif;
+				endif;
 				break;
 			endswitch;
 			

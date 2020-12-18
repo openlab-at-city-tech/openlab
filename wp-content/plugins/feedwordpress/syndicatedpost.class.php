@@ -163,6 +163,9 @@ class SyndicatedPost {
 			endforeach;
 
 			foreach ($postMetaOut as $key => $values) :
+				if (is_null($values)) { // have chosen to replace value with empty string
+					$values = ['']; 
+				}
 				$this->post['meta'][$key] = array();
 				foreach ($values as $value) :
 					$this->post['meta'][$key][] = apply_filters("syndicated_post_meta_{$key}", $value, $this);
@@ -557,7 +560,7 @@ class SyndicatedPost {
 		endif;
 
 		if (!$unfiltered) :
-			apply_filters('syndicated_item_updated', $ts, $this);
+			$ts = apply_filters('syndicated_item_updated', $ts, $this);
 		endif;
 		return $ts;
 	} /* SyndicatedPost::updated() */
@@ -705,7 +708,7 @@ class SyndicatedPost {
 		$author = array ();
 
 		$aa = $this->entry->get_authors();
-		if (count($aa) > 0) :
+		if (is_countable($aa) and count($aa) > 0) :
 			$a = reset($aa);
 
 			$author = array(
@@ -903,7 +906,7 @@ class SyndicatedPost {
 		$content = $this->content();
 		$pattern = FeedWordPressHTML::tagWithAttributeRegex('a', 'rel', 'tag');
 		preg_match_all($pattern, $content, $refs, PREG_SET_ORDER);
-		if (count($refs) > 0) :
+		if (is_countable($refs) and count($refs) > 0) :
 			foreach ($refs as $ref) :
 				$tag = FeedWordPressHTML::tagWithAttributeMatch($ref);
 				$tags[] = $tag['content'];
@@ -1301,7 +1304,7 @@ class SyndicatedPost {
 					// Or the hash...
 					$hash = $this->update_hash();
 					$seen = $this->stored_hashes($old_post->ID);
-					if (count($seen) > 0) :
+					if (is_countable($seen) and count($seen) > 0) :
 						$updated = !in_array($hash, $seen); // Not seen yet?
 					else :
 						$updated = true; // Can't find syndication meta-data

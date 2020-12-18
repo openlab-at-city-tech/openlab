@@ -3,8 +3,8 @@ Contributors: C. Johnson
 Donate link: http://feedwordpress.radgeek.com/donate/
 Tags: syndication, aggregation, feed, atom, rss
 Requires at least: 4.5
-Tested up to: 5.3.2
-Stable tag: 2020.0118
+Tested up to: 5.5
+Stable tag: 2020.0818
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,26 @@ FeedWordPress has many options which can be accessed through the WordPress Dashb
   [FeedWordPress project homepage]: http://feedwordpress.radgeek.com/
 
 == Changelog ==
+
+= 2020.0818 =
+
+*	WORDPRESS 5.5 COMPATIBILITY FIXES, RESOLVES WARNING NOTICES OR WP-ADMIN LOCKOUT. WordPress 5.5 incorporated a newer release of SimplePie, version 1.5.5, which is pretty rad, but FeedWordPress classes that relied on SimplePie 1.3.1's method signatures would then produce PHP warning notices. That should be pretty innocuous, but depending on web server configurations, some users could get locked out of their own wp-admin interface by the display of error notices in the browser at inopportune times. In any case, I have 
+
+*	PHP 7.4 COMPATIBILITY FIX: Magic quotes were deprecated and then removed back in PHP 5.x, and in PHP 7.4 the vestigial `get_magic_quotes_gpc()` function has been deprecated. We don't need to worry about it anymore for versions of PHP still supported by WordPress. The reference to the function in the MyPHP utility class caused PHP warnings in more recent versions of PHP; so it has now been removed.
+
+*	DIVERS BUG FIXES AND PHP WARNING NOTICES RESOLVED, thanks to @oppiansteve's fixes and pull requests. (Thanks!)
+
+*	JQUERY COMPATIBILITY FIXES, RESOLVES MYSTERIOUS VANISHING FEED SELECTOR IN WP-ADMIN. An upgrade to WordPress's packaged jQuery caused the drop-down box for feed settings (in Syndication > Feeds & Updates, Syndication > Posts & Links, etc.) to vanish shortly after pageload. That was awkward, so I disabled the now-incompatible interface chrome that was causing it to vanish.
+
+= 2020.0118 =
+
+*	WORDPRESS COMPATIBILITY TESTING. It's been some time since a public release of FeedWordPress; so I have tested the plugin functionality with recent versions of WordPress and incorporated a number of PHP 7-compatibility related tweaks.
+
+*	FEED PARSING FAULT TOLERANCE. If FeedWordPress fails to parse a feed using normal XML functions, it will attempt to convert any named entities that may be causing a problem, and then try to parse again. Props to @inanimatt for utility functions that help make the code go.
+
+*	PAUSING UPDATES. In Syndication > Feeds & Updates, you can now instruct FeedWordPress to temporarily pause or resume updating feeds -- whatever update method you are using, you can put new updates on hold for a while so that you can fiddle with setings, run tests, or do whatever you need to do before allowing updates to resume.
+ 
+*	CODE MODERNIZATION, PHP 7.x COMPATIBILITY AND CLEANUP AND REORGANIZATION. I have been dusting out nooks and crannies in the code and hiving more functionality off into discrete modules. A number of FeedWordPress users have also offered pull requests to eliminate bothersome PHP notices and warnings related to PHP 7.x compatibility -- in particular removing uses of deprecated `each()` functions, and avoiding use of `count()` on null values -- which I have rolled into the main branch release. Props to @manzoorwanijk, @tristanleboss, @martinburchell and @oppiansteve
 
 = 2017.1020 =
 
