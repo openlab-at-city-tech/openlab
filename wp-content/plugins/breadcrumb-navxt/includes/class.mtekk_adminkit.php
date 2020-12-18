@@ -24,7 +24,7 @@ if(!class_exists('mtekk_adminKit_message'))
 }
 abstract class mtekk_adminKit
 {
-	const version = '2.1.0';
+	const version = '2.1.1';
 	protected $full_name;
 	protected $short_name;
 	protected $plugin_basename;
@@ -70,7 +70,7 @@ abstract class mtekk_adminKit
 	function add_cap()
 	{
 		$role = get_role('administrator');
-		if(!$role->has_cap($this->access_level))
+		if($role instanceof WP_Role && !$role->has_cap($this->access_level))
 		{
 			$role->add_cap($this->access_level);
 		}
