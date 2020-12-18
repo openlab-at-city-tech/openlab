@@ -1,15 +1,15 @@
 <?php
-header( "HTTP/1.1 200 OK" );
+header( 'HTTP/1.1 200 OK' );
 
 
-require_once( preg_replace( "/wp-content.*/", "wp-blog-header.php", __FILE__ ) );
-require_once( preg_replace( "/wp-content.*/", "/wp-admin/includes/admin.php", __FILE__ ) );
+require_once( preg_replace( '/wp-content.*/', 'wp-blog-header.php', __FILE__ ) );
+require_once( preg_replace( '/wp-content.*/', '/wp-admin/includes/admin.php', __FILE__ ) );
 
 //redirect to the login page if user is not authenticated
 auth_redirect();
 
-if ( ! GFCommon::current_user_can_any( array( "gravityforms_edit_forms", "gravityforms_create_form" ) ) ) {
-	die( __( "You don't have adequate permission to preview forms.", "gravityforms" ) );
+if ( ! GFCommon::current_user_can_any( array( 'gravityforms_edit_forms', 'gravityforms_create_form' ) ) ) {
+	die( __( "You don't have adequate permission to preview forms.", 'gravityforms' ) );
 }
 
 ?>
@@ -19,10 +19,10 @@ if ( ! GFCommon::current_user_can_any( array( "gravityforms_edit_forms", "gravit
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta http-equiv="Imagetoolbar" content="No"/>
-	<title><?php esc_html_e( "Form Preview", "gravityforms" ) ?></title>
-	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/reset.css' type='text/css'/>
-	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/preview.css' type='text/css'/>
-	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/forms.css' type='text/css'/>
+	<title><?php esc_html_e( 'Form Preview', 'gravityforms' ); ?></title>
+	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url(); ?>/css/reset.css' type='text/css'/>
+	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url(); ?>/css/preview.css' type='text/css'/>
+	<link rel='stylesheet' href='<?php echo GFCommon::get_base_url(); ?>/css/forms.css' type='text/css'/>
 	<style type="text/css">
 		body {
 			height: 100% !important;

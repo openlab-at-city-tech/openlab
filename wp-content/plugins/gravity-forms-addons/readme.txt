@@ -1,9 +1,10 @@
 === Gravity Forms Directory ===
-Tags: gravity forms, gravity form, forms, gravity, form, directory, business, business directory, directorypress, classifieds, cforms, formidable, gravityview
+Tags: gravity forms, gravity form, forms, gravity, form, directory, business directory, directorypress, classifieds, cforms, formidable, gravityview
 Requires at least: 4.0
-Tested up to: 4.9.4
-Stable tag: 4.1.3
-Contributors: katzwebdesign, katzwebservices
+Tested up to: 5.6
+Requires at least: 4.4
+Stable tag: 4.2
+Contributors: katzwebservices
 License: GPLv2 or later
 Donate link: https://gravityview.co/?utm_source=wordpress&utm_medium=readme&utm_campaign=donate
 
@@ -11,12 +12,12 @@ Add directory capabilities and other functionality to the great Gravity Forms pl
 
 == Description ==
 
-### This plugin requires [Gravity Forms](https://katz.si/gravityforms)
+### This plugin requires [Gravity Forms](https://www.gravityforms.com/?partner_id=1210629&irgwc=1&utm_medium=affiliate&utm_campaign=1210629&utm_source=Katz%20Web%20Services%2C%20Inc.)
 
 > #### [GravityView](https://gravityview.co/?utm_source=wordpress&utm_medium=readme&utm_campaign=readme) is the best way to display Gravity Forms entries
 >
 > We set out to make a better Directory plugin, and we did it: GravityView takes displaying your form entries to the next level. It is easier, more powerful and more customizable than the Directory plugin. You'll *love* GravityView.
-> 
+>
 > [Check out GravityView](https://gravityview.co/?utm_source=wordpress&utm_medium=readme&utm_campaign=readme) or [try a demo](http://demo.gravityview.co?utm_source=wordpress&utm_medium=readme&utm_campaign=readme) today!
 
 ### Turn Gravity Forms into a Directory plugin
@@ -236,6 +237,28 @@ Since 4.1, Smart Approval may return inaccurate entry counts. This will be fixed
 
 == Changelog ==
 
+= 4.2 on December 7, 2020 =
+
+**New:**
+
+- Compatible with WordPress 5.6
+- Compatible with Gravity Forms 2.5
+- Activation check to verify if Gravity Forms is active
+- Requires WordPress 4.4 or newer
+
+**Fixed:**
+
+- Directory Columns window now displays properly
+- Search by substring on directory view works
+- PHP warnings
+
+**Improvements:**
+
+- Security improvements
+- Restructured classes and templates
+- Removed redundant code
+- Refactored folder structure
+
 = 4.1.2 & 4.1.3 on April 2, 2018 =
 
 * Fixed: Check whether a function exists that was introduced in Gravity Forms 2.2
@@ -309,7 +332,7 @@ A big update to make Gravity Forms Directory compatible with Gravity Forms 2.3, 
 * Fixed: Conflict with the Directory tab in the Form Editor when using Gravity Forms 1.9+
 * Updated: Colorbox and Tablesorter scripts
 
-= 3.7 and 3.7.1 on December 17 = 
+= 3.7 and 3.7.1 on December 17 =
 * Fixed: Add `load_plugin_textdomain()` for translations
 * Fixed: Restored single entry links
 * Fixed: Displaying IP address, other default entry values
@@ -636,7 +659,7 @@ Note: This update has only been tested with WordPress 3.2 and Gravity Forms 1.5.
 * Fixed: Display of full Name, full Address, Checkbox, and Radio fields
 * Tested with WordPress 4.4
 
-= 3.7 and 3.7.1 on December 17 = 
+= 3.7 and 3.7.1 on December 17 =
 * Fixed: Add `load_plugin_textdomain()` for translations
 * Fixed: Restored single entry links
 * Fixed: Displaying IP address, other default entry values

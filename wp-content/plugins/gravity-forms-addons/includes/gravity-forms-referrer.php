@@ -1,13 +1,13 @@
 <?php
 if ( ! function_exists( 'gf_yst_get_query' ) ) {
 	function gf_yst_get_query( $query ) {
-		if ( strpos( $query, "google." ) ) {
+		if ( strpos( $query, 'google.' ) ) {
 			$pattern = '/^.*\/search.*[\?&]q=(.*)$/';
-		} else if ( strpos( $query, "bing.com" ) ) {
+		} else if ( strpos( $query, 'bing.com' ) ) {
 			$pattern = '/^.*q=(.*)$/';
-		} else if ( strpos( $query, "yahoo." ) ) {
+		} else if ( strpos( $query, 'yahoo.' ) ) {
 			$pattern = '/^.*[\?&]p=(.*)$/';
-		} else if ( strpos( $query, "ask." ) ) {
+		} else if ( strpos( $query, 'ask.' ) ) {
 			$pattern = '/^.*[\?&]q=(.*)$/';
 		} else {
 			return false;
@@ -40,13 +40,13 @@ if ( ! function_exists( 'gf_yst_referer_session' ) ) {
 
 		if ( ! isset( $_SERVER['HTTP_REFERER'] ) || ( strpos( $_SERVER['HTTP_REFERER'], $baseurl ) === false ) && ! ( in_array( $_SERVER['HTTP_REFERER'], $_SESSION['gf_yst_referer'] ) ) ) {
 			if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
-				$_SESSION['gf_yst_referer'][] = "Type-in or bookmark";
+				$_SESSION['gf_yst_referer'][] = 'Type-in or bookmark';
 			} else {
 				$_SESSION['gf_yst_referer'][] = $_SERVER['HTTP_REFERER'];
 			}
 		}
-		if ( end( $_SESSION['gf_yst_pages'] ) != "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] ) {
-			$_SESSION['gf_yst_pages'][] = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+		if ( end( $_SESSION['gf_yst_pages'] ) != 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] ) {
+			$_SESSION['gf_yst_pages'][] = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 		}
 
 		return;
@@ -96,4 +96,4 @@ add_filter( 'gform_pre_submission_filter', 'gf_yst_store_referrer' );
 
 // Update the session data
 add_action( 'init', 'gf_yst_referer_session', 99 );
-?>
+

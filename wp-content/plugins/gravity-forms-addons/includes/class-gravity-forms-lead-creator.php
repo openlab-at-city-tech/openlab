@@ -5,18 +5,14 @@
  */
 class KWS_GF_Change_Lead_Creator {
 
-	function __construct() {
+	public function __construct() {
 
 		// Does GF exist? Can the user edit entries?
 		if ( ! class_exists( 'GFCommon' ) ) {
 			return;
 		}
 
-		if ( ! function_exists( 'wp_get_current_user' ) ) {
-			return;
-		}
-
-		if ( ! GFCommon::current_user_can_any( "gravityforms_edit_entries" ) ) {
+		if ( ! GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
 			return;
 		}
 
@@ -28,9 +24,9 @@ class KWS_GF_Change_Lead_Creator {
 		// Now, no validation is required in the methods; let's hook in.
 		add_action( 'admin_init', array( &$this, 'set_screen_mode' ) );
 
-		add_action( "gform_entry_info", array( &$this, 'add_select' ), 10, 2 );
+		add_action( 'gform_entry_info', array( &$this, 'add_select' ), 10, 2 );
 
-		add_action( "gform_after_update_entry", array( &$this, 'update_entry_creator' ), 10, 2 );
+		add_action( 'gform_after_update_entry', array( &$this, 'update_entry_creator' ), 10, 2 );
 
 	}
 
@@ -39,9 +35,9 @@ class KWS_GF_Change_Lead_Creator {
 	 *
 	 * @return void
 	 */
-	function set_screen_mode() {
-		if ( ! empty( $_REQUEST["screen_mode"] ) && class_exists( 'GFCommon' ) && GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
-			$_POST["screen_mode"] = esc_attr( $_REQUEST["screen_mode"] );
+	public function set_screen_mode() {
+		if ( ! empty( $_REQUEST['screen_mode'] ) && class_exists( 'GFCommon' ) && GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
+			$_POST['screen_mode'] = esc_attr( $_REQUEST['screen_mode'] );
 		}
 	}
 
@@ -53,7 +49,7 @@ class KWS_GF_Change_Lead_Creator {
 	 *
 	 * @return void
 	 */
-	function update_entry_creator( $form, $leadid ) {
+	public function update_entry_creator( $form, $leadid ) {
 		global $current_user;
 
 		// Update the entry
@@ -68,7 +64,8 @@ class KWS_GF_Change_Lead_Creator {
 
 			$user_data = get_userdata( $current_user->ID );
 
-			$user_format = __( '%s (ID #%d)', 'gravity-view' );
+			// Translators: placeholder: User format.
+			$user_format = __( '%1$s (ID #%2$d)', 'gravity-view' );
 
 			$original_name = $created_by_name = esc_attr__( 'No User', 'gravity-view' );
 
@@ -82,7 +79,17 @@ class KWS_GF_Change_Lead_Creator {
 				$created_by_name      = sprintf( $user_format, $created_by_user_data->display_name, $created_by_user_data->ID );
 			}
 
-			RGFormsModel::add_note( $leadid, $current_user->ID, $user_data->display_name, sprintf( __( 'Changed lead creator from %s to %s', 'gravity-forms-addons' ), $original_name, $created_by_name ) );
+			RGFormsModel::add_note(
+				$leadid,
+				$current_user->ID,
+				$user_data->display_name,
+				sprintf(
+					// Translators: placeholder: Original name, created by name.
+					__( 'Changed lead creator from %1$s to %2$s', 'gravity-forms-addons' ),
+					$original_name,
+					$created_by_name
+				)
+			);
 		}
 
 	}
@@ -95,7 +102,7 @@ class KWS_GF_Change_Lead_Creator {
 	 *
 	 * @return void
 	 */
-	function add_select( $form_id, $lead ) {
+	public function add_select( $form_id, $lead ) {
 
 		if ( rgpost( 'screen_mode' ) !== 'edit' ) {
 			return;
@@ -121,10 +128,10 @@ class KWS_GF_Change_Lead_Creator {
 		}
 		$output .= '</select>';
 		$output .= '<input name="originally_created_by" value="' . $lead['created_by'] . '" type="hidden" />';
-		echo $output;
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
 }
 
-new KWS_GF_Change_Lead_Creator;
+new KWS_GF_Change_Lead_Creator();
