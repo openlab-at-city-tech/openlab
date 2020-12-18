@@ -28,6 +28,9 @@
             if( !   is_plugin_active( 'woocommerce/woocommerce.php' ))
                 return $ignore;
             
+            if ( ! function_exists ( 'wc_get_attribute_taxonomies' ) )
+                return $ignore;
+                
             //create a list of attribute taxonomies
             $attributes =   wc_get_attribute_taxonomies();
             $found_attributex_tax   =   array();
