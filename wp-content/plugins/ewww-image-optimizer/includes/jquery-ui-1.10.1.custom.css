@@ -431,6 +431,12 @@ button.ewww-handlediv {
 .js .postbox.closed .ewww-handlediv .toggle-indicator:before {
 	content: "\f140";
 }
+.ewww-bulk-error {
+	color: red;
+}
+.ewww-bulk-error a, .ewww-bulk-error a:visited {
+	color: red;
+}
 #ewww-bulk-controls {
 	border: solid 1px #e5e5e5;
 	background: #fff;
@@ -481,33 +487,36 @@ button.ewww-handlediv {
 .ewww-tab-nav { list-style: none; margin: 10px 0 0; padding-left: 5px; border-bottom: 1px solid #ccc; }
 /* optimization status section */
 #ewww-widgets {
-	max-width: 1170px;
+	max-width: 1000px;
 }
 #ewww-status .inside {
 	margin: 0;
 	padding: 0;
 }
-ul.ewww-blocks {
+.ewww-blocks {
 	display: flex;
-	list-style: none;
+	flex-direction: row;
 	margin: 0;
 	padding: 0;
 }
-ul.ewww-blocks li:first-child {
+#ewww-status h2.ewww-hndle {
+	border-bottom: 0;
+}
+.ewww-blocks div.ewww-status-detail {
+	border-left: 1px solid #e2e2e2;
+	margin: 0px;
+	padding: 2em;
+}
+.ewww-blocks div.ewww-status-detail:first-child {
 	border-left: 0;
 }
-.ewww-blocks li {
-	border-left: 1px solid #e2e2e2;
-	float: left;
-	margin: 0px;
-	padding: 0px;
-}
-.ewww-blocks li .ewww-status-detail {
-	display: block;
+.ewww-blocks div.ewww-status-detail {
+	border-top: 1px solid #e2e2e2;
+	/* display: block; */
 	text-align: center;
-	margin: 2em;
+	/* margin: 2em; */
 }
-.ewww-blocks li #ewww-notices {
+.ewww-blocks #ewww-notices {
 	text-align: left;
 }
 .ewww-guage {
@@ -528,20 +537,39 @@ ul.ewww-blocks li:first-child {
 .ewww-inactive {
 	stroke: #e6e6e6;
 }
+#ewww-compress, #ewww-savings, #easyio-savings {
+	flex: 1 1 120px;
+}
+#ewww-savings p {
+	margin: 0.5em 0;
+}
 #ewww-compress-guage .ewww-active {
-	stroke: #3eadc9;
 	stroke-linecap: round;
+}
+#ewww-compress-guage .ewww-red {
+	stroke: #dc3232;
+}
+#ewww-compress-guage .ewww-orange {
+	stroke: #ffb900;
+}
+#ewww-compress-guage .ewww-green {
+	stroke: #46b450;
 }
 #ewww-resize-guage .ewww-active {
 	stroke: #1d3c71;
 	stroke-linecap: round;
 }
 #ewww-savings-guage .ewww-active {
-	stroke: #f26b45;
+	stroke: #3eadc9;
+	stroke-linecap: round;
+}
+#easyio-savings-guage .ewww-active {
+	stroke: #3eadc9;
+	stroke: #1d3c71;
 	stroke-linecap: round;
 }
 #ewww-compress-guage .ewww-score {
-	color: #3eadc9;
+	color: #444;
 }
 #ewww-resize-guage .ewww-score {
 	color: #1d3c71;
@@ -559,7 +587,13 @@ ul.ewww-blocks li:first-child {
 }
 #ewww-savings-guage .ewww-score {
 	font-size: 1rem;
-	color: #f26b45;
+	color: #3eadc9;
+	white-space: nowrap;
+}
+#easyio-savings-guage .ewww-score {
+	font-size: 1rem;
+	color: #3eadc9;
+	color: #1d3c71;
 	white-space: nowrap;
 }
 .ewww-recommend {
@@ -602,7 +636,7 @@ h3 a.ewww-upgrade {
 	text-decoration: none;
 	color: #3eadc9;
 }
-.ewww-help-beacon-multi, .ewww-help-beacon-single {
+.ewww-help-beacon-multi, .ewww-help-beacon-single, .ewww-help-external {
 	margin: 3px;
 }
 /* iframe ewww.io */
@@ -610,31 +644,30 @@ h3 a.ewww-upgrade {
 	display: none;
 }
 /* mobile rules */
+@media screen and (max-width: 868px) {
+	.ewww-blocks {
+		flex-wrap: wrap;
+	}
+	.ewww-blocks div.ewww-status-detail {
+		padding: 1em 2em;
+	}
+	.ewww-status-detail p {
+		margin: 0.5em 0;
+	}
+	.ewww-blocks #ewww-notices {
+		width: 100%;
+		border-left: 0;
+	}
+	.ewww-overrides-nav {
+		display: none;
+	}
+}
+@media screen and (max-width: 568px) {
+	.ewww-blocks div.ewww-status-detail {
+		padding: 1em;
+	}
+}
 @media screen and (max-width: 782px) {
-	#wpbody-content #ewww-widgets {
-		float: right;
-		padding-top: 0px;
-	}
-	#ewww-widgets .postbox {
-		max-width: 215px;
-		min-width: 175px;
-	}
-	#ewww-widgets ul.ewww-blocks {
-		display: block;
-	}
-	.ewww-blocks li {
-		float: none;
-	}
-	.ewww-blocks li .ewww-status-detail {
-		margin: 1em;
-	}
-	#ewww-settings-form .form-table {
-		width: auto;
-		clear: none;
-	}
-	#ewww-settings-disable-resizes th, #ewww-settings-disable-resizes td {
-		display: table-cell;
-	}
 	.ewww-tab-nav {
 		border-style: none;
 	}
@@ -656,6 +689,8 @@ h3 a.ewww-upgrade {
 	}
 	#ewww-debug-info {
 		width: auto;
-		margin-right: 225px;
+	}
+	#ewww-settings-disable-resizes th, #ewww-settings-disable-resizes td {
+		display: table-cell;
 	}
 }

@@ -36,6 +36,18 @@ jQuery(document).ready(function($) {
 			$('.ewww-aux-table').show();
 			$('.ewww-search-count').text(ewww_response.search_result);
 			$('.current-page').text(ewww_response.pagination);
+			// from here
+			if ( ewww_response.search_total > 0 ) {
+				ewww_search_total = ewww_response.search_total;
+			}
+			if (ewww_response.search_count < 50) {
+				$('.next-page').hide();
+				$('.last-page').hide();
+			}
+			if (ewww_table_debug) {
+				$('.displaying-num').hide();
+			}
+			// to here
 			if (ewww_vars.image_count >= 50) {
 				$('.tablenav').show();
 				$('.next-page').show();
@@ -167,7 +179,7 @@ jQuery(document).ready(function($) {
 	$('.last-page').click(function() {
 		var ewww_search = $('.ewww-search-input').val();
 		ewww_pointer = ewww_total_pages - 1;
-		if (ewww_search) {
+		if (ewww_search || ewww_table_debug) {
 			ewww_pointer = ewww_search_total - 1;
 		}
 	        var ewww_table_data = {
@@ -253,6 +265,158 @@ jQuery(document).ready(function($) {
 		}
 		return false;
 	});
+	var ewww_total_converted = 0;
+	$('#ewww-clean-converted').submit(function() {
+		var ewww_converted_data = {
+			action: 'bulk_aux_images_count_converted',
+			ewww_wpnonce: ewww_vars._wpnonce,
+		};
+		$.post(ajaxurl, ewww_converted_data, function(response) {
+			try {
+				var ewww_response = $.parseJSON(response);
+			} catch (err) {
+				$('#ewww-clean-converted-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log( response );
+				return false;
+			}
+			ewww_total_converted = ewww_response.total_converted;
+			$('.ewww-tool-info').hide();
+			$('.ewww-tool-form').hide();
+			$('.ewww-tool-divider').hide();
+			$('#ewww-clean-converted-progressbar').progressbar({ max: ewww_total_converted });
+			$('#ewww-clean-converted-progress').html('<p> 0/' + ewww_total_converted + '</p>');
+			$('#ewww-clean-converted-progressbar').show();
+			$('#ewww-clean-converted-progress').show();
+			ewwwRemoveOriginals(0);
+		});
+		return false;
+	});
+	function ewwwRemoveOriginals(converted_offset){
+		var ewww_converted_data = {
+			action: 'bulk_aux_images_converted_clean',
+			ewww_wpnonce: ewww_vars._wpnonce,
+		};
+		$.post(ajaxurl, ewww_converted_data, function(response) {
+			try {
+				var ewww_response = JSON.parse(response);
+			} catch (err) {
+				$('#ewww-clean-converted-progressbar').hide();
+				$('#ewww-clean-converted-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log(err);
+				console.log(response);
+				return false;
+			}
+			if ( ewww_response.error ) {
+				$('#ewww-clean-converted-progressbar').hide();
+				$('#ewww-clean-converted-progress').html('<span style="color: red"><b>' + ewww_response.error + '</b></span>');
+				return false;
+			}
+			if(ewww_response.finished) {
+				$('#ewww-clean-converted-progress').html(ewww_vars.finished);
+				return false;
+			}
+			converted_offset += ewww_response.completed;
+			$('#ewww-clean-converted-progressbar').progressbar("option", "value", converted_offset);
+			$('#ewww-clean-converted-progress').html('<p>' + converted_offset + '/' + ewww_total_converted + '</p>');
+			ewwwRemoveOriginals(converted_offset);
+		});
+	}
+	var ewww_total_webp = 0;
+	var ewww_webp_attachments = false;
+	$('#ewww-clean-webp').submit(function() {
+		var ewww_webp_data = {
+			action: 'ewwwio_get_all_attachments',
+			ewww_wpnonce: ewww_vars._wpnonce,
+		};
+		$.post(ajaxurl, ewww_webp_data, function(response) {
+			try {
+				ewww_webp_attachments = JSON.parse(response);
+			} catch (err) {
+				$('#ewww-clean-webp-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log(err);
+				console.log(response);
+				return false;
+			}
+			ewww_total_webp = ewww_webp_attachments.length;
+			$('.ewww-tool-info').hide();
+			$('.ewww-tool-form').hide();
+			$('.ewww-tool-divider').hide();
+			$('#ewww-clean-webp-progressbar').progressbar({ max: ewww_total_webp });
+			$('#ewww-clean-webp-progress').html('<p>' + ewww_vars.stage1 + ' 0/' + ewww_total_webp + '</p>');
+			$('#ewww-clean-webp-progressbar').show();
+			$('#ewww-clean-webp-progress').show();
+			ewwwRemoveWebPByID();
+		});
+		return false;
+	});
+	function ewwwRemoveWebPByID(){
+		var attachment_id = ewww_webp_attachments.pop();
+		console.log('removing webp for attachment: ' + attachment_id);
+		var ewww_webp_data = {
+			action: 'bulk_aux_images_delete_webp',
+			ewww_wpnonce: ewww_vars._wpnonce,
+			attachment_id: attachment_id,
+		};
+		$.post(ajaxurl, ewww_webp_data, function(response) {
+			try {
+				var ewww_response = JSON.parse(response);
+			} catch (err) {
+				$('#ewww-clean-webp-progressbar').hide();
+				$('#ewww-clean-webp-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log(err);
+				console.log(response);
+				return false;
+			}
+			if ( ewww_response.error ) {
+				$('#ewww-clean-webp-progressbar').hide();
+				$('#ewww-clean-webp-progress').html('<span style="color: red"><b>' + ewww_response.error + '</b></span>');
+				return false;
+			}
+			if(!ewww_webp_attachments.length) {
+				ewww_total_webp = ewww_vars.image_count;
+				$('#ewww-clean-webp-progressbar').progressbar({ max: ewww_total_webp });
+				$('#ewww-clean-webp-progressbar').progressbar("option", "value", 0);
+				$('#ewww-clean-webp-progress').html('<p>' + ewww_vars.stage2 + ' 0/' + ewww_total_webp + '</p>');
+				ewwwRemoveWebP(0);
+				return false;
+			}
+			var completed = ewww_total_webp - ewww_webp_attachments.length;
+			$('#ewww-clean-webp-progressbar').progressbar("option", "value", completed);
+			$('#ewww-clean-webp-progress').html('<p>' + ewww_vars.stage1 + ' ' + completed + '/' + ewww_total_webp + '</p>');
+			ewwwRemoveWebPByID();
+		});
+	}
+	function ewwwRemoveWebP(webp_offset){
+		var ewww_webp_data = {
+			action: 'bulk_aux_images_webp_clean',
+			ewww_wpnonce: ewww_vars._wpnonce,
+			ewww_offset: webp_offset,
+		};
+		$.post(ajaxurl, ewww_webp_data, function(response) {
+			try {
+				var ewww_response = JSON.parse(response);
+			} catch (err) {
+				$('#ewww-clean-webp-progressbar').hide();
+				$('#ewww-clean-webp-progress').html('<span style="color: red"><b>' + ewww_vars.invalid_response + '</b></span>');
+				console.log(err);
+				console.log(response);
+				return false;
+			}
+			if ( ewww_response.error ) {
+				$('#ewww-clean-webp-progressbar').hide();
+				$('#ewww-clean-webp-progress').html('<span style="color: red"><b>' + ewww_response.error + '</b></span>');
+				return false;
+			}
+			if(ewww_response.finished) {
+				$('#ewww-clean-webp-progress').html(ewww_vars.finished);
+				return false;
+			}
+			webp_offset += ewww_response.completed;
+			$('#ewww-clean-webp-progressbar').progressbar("option", "value", webp_offset);
+			$('#ewww-clean-webp-progress').html('<p>' + ewww_vars.stage2 + ' ' + webp_offset + '/' + ewww_total_webp + '</p>');
+			ewwwRemoveWebP(webp_offset);
+		});
+	}
 	$('#ewww-clean-table').submit(function() {
 		ewww_total_pages = Math.ceil(ewww_vars.image_count / 500);
 		$('.ewww-tool-info').hide();

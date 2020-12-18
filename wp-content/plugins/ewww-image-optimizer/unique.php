@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Installation routine for PNGOUT.
 add_action( 'admin_action_ewww_image_optimizer_install_pngout', 'ewww_image_optimizer_install_pngout_wrapper' );
+// Installation routine for SVGCLEANER.
+add_action( 'admin_action_ewww_image_optimizer_install_svgcleaner', 'ewww_image_optimizer_install_svgcleaner_wrapper' );
 // AJAX action hook to dismiss the exec notice May be extended to other notices in the future.
 add_action( 'wp_ajax_ewww_dismiss_exec_notice', 'ewww_image_optimizer_dismiss_exec_notice' );
 // Removes the binaries when the plugin is deactivated.
@@ -49,7 +51,14 @@ function ewww_image_optimizer_exec_init() {
 	if ( EWWW_IMAGE_OPTIMIZER_CLOUD ) {
 		ewwwio_debug_message( 'cloud options enabled, shutting off binaries' );
 		ewww_image_optimizer_disable_tools();
-	} elseif ( defined( 'WPCOMSH_VERSION' ) || ! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) || defined( 'WPE_PLUGIN_VERSION' ) ) {
+	} elseif (
+		defined( 'WPCOMSH_VERSION' ) ||
+		! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) ||
+		defined( 'WPE_PLUGIN_VERSION' ) ||
+		defined( 'FLYWHEEL_CONFIG_DIR' ) ||
+		defined( 'KINSTAMU_VERSION' ) ||
+		defined( 'WPNET_INIT_PLUGIN_VERSION' )
+	) {
 		if (
 			! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) &&
 			( ! is_object( $exactdn ) || ! $exactdn->get_exactdn_domain() )
@@ -60,7 +69,7 @@ function ewww_image_optimizer_exec_init() {
 		if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_NOEXEC' ) ) {
 			define( 'EWWW_IMAGE_OPTIMIZER_NOEXEC', true );
 		}
-		ewwwio_debug_message( 'WPE/wp.com/pantheon site, disabling tools' );
+		ewwwio_debug_message( 'WPE/wp.com/pantheon/flywheel site, disabling tools' );
 		ewww_image_optimizer_disable_tools();
 		// Check if this is an unsupported OS (not Linux or Mac OSX or FreeBSD or Windows or SunOS).
 	} elseif ( 'Linux' !== PHP_OS && 'Darwin' !== PHP_OS && 'FreeBSD' !== PHP_OS && 'WINNT' !== PHP_OS && 'SunOS' !== PHP_OS ) {
@@ -113,6 +122,9 @@ function ewww_image_optimizer_set_defaults() {
 	add_option( 'ewww_image_optimizer_png_level', '10' );
 	add_option( 'ewww_image_optimizer_gif_level', '10' );
 	add_option( 'ewww_image_optimizer_pdf_level', '0' );
+	add_option( 'ewww_image_optimizer_svg_level', '0' );
+	add_option( 'ewww_image_optimizer_jpg_quality', '' );
+	add_option( 'ewww_image_optimizer_webp_quality', '' );
 	add_option( 'ewww_image_optimizer_exactdn', false );
 	add_option( 'ewww_image_optimizer_exactdn_plan_id', 0 );
 	add_option( 'exactdn_all_the_things', true );
@@ -121,6 +133,7 @@ function ewww_image_optimizer_set_defaults() {
 	add_option( 'ewww_image_optimizer_lazy_load', false );
 	add_option( 'ewww_image_optimizer_ll_exclude', '' );
 	add_option( 'ewww_image_optimizer_disable_pngout', true );
+	add_option( 'ewww_image_optimizer_disable_svgcleaner', true );
 	add_option( 'ewww_image_optimizer_optipng_level', 2 );
 	add_option( 'ewww_image_optimizer_pngout_level', 2 );
 	add_option( 'ewww_image_optimizer_webp_for_cdn', false );
@@ -134,7 +147,11 @@ function ewww_image_optimizer_set_defaults() {
 	add_site_option( 'ewww_image_optimizer_png_level', '10' );
 	add_site_option( 'ewww_image_optimizer_gif_level', '10' );
 	add_site_option( 'ewww_image_optimizer_pdf_level', '0' );
+	add_site_option( 'ewww_image_optimizer_svg_level', '0' );
+	add_site_option( 'ewww_image_optimizer_jpg_quality', '' );
+	add_site_option( 'ewww_image_optimizer_webp_quality', '' );
 	add_site_option( 'ewww_image_optimizer_disable_pngout', true );
+	add_site_option( 'ewww_image_optimizer_disable_svgcleaner', true );
 	add_site_option( 'ewww_image_optimizer_optipng_level', 2 );
 	add_site_option( 'ewww_image_optimizer_pngout_level', 2 );
 	add_site_option( 'exactdn_all_the_things', true );
@@ -160,14 +177,40 @@ function ewww_image_optimizer_notice_hosting_requires_api() {
 		$webhost = 'Pantheon';
 	} elseif ( defined( 'WPE_PLUGIN_VERSION' ) ) {
 		$webhost = 'WP Engine';
+	} elseif ( defined( 'FLYWHEEL_CONFIG_DIR' ) ) {
+		$webhost = 'Flywheel';
+	} elseif ( defined( 'KINSTAMU_VERSION' ) ) {
+		$webhost = 'Kinsta';
+	} elseif ( defined( 'WPNET_INIT_PLUGIN_VERSION' ) ) {
+		$webhost = 'WP NET';
 	} else {
 		return;
 	}
-	echo "<div id='ewww-image-optimizer-cloud-key-required' class='notice notice-warning'><p><strong>" .
+	if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_dismiss_exec_notice' ) ) {
+		return;
+	}
+	echo "<div id='ewww-image-optimizer-warning-exec' class='notice notice-warning is-dismissible'><p>" .
 		/* translators: %s: Name of a web host, like WordPress.com or Pantheon. */
-		sprintf( esc_html__( 'The EWWW Image Optimizer needs an API key or Easy IO subscription to optimize images on %s sites.', 'ewww-image-optimizer-cloud' ), esc_html( $webhost ) ) .
-		"</strong> <a href='https://ewww.io/plans/'>" . esc_html__( 'Start your trial.', 'ewww-image-optimizer-cloud' ) .
-		"</a> <a href='" . esc_url( $settings_url ) . "'>" . esc_html__( 'Then, activate it on the settings page.', 'ewww-image-optimizer-cloud' ) . '</a></p></div>';
+		sprintf( esc_html__( 'Normally, %s sites require cloud-based optimization, because server-based optimization is disallowed. However, we are trying something new, and offering free cloud-based JPG compression. Those who upgrade to our premium service receive much higher compression, PNG/GIF/PDF compression, WebP conversion, and image backups.', 'ewww-image-optimizer' ), esc_html( $webhost ) ) .
+		'<br><strong>' .
+		/* translators: %s: link to 'start your free trial' */
+		sprintf( esc_html__( 'Dismiss this notice to continue with free cloud-based JPG compression or %s.', 'ewww-image-optimizer' ), "<a href='https://ewww.io/plans/'>" . esc_html__( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>' );
+	ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
+	echo '</strong></p></div>';
+	?>
+<script>
+	jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {
+		var ewww_dismiss_exec_data = {
+			action: 'ewww_dismiss_exec_notice',
+		};
+		jQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {
+			if (response) {
+				console.log(response);
+			}
+		});
+	});
+</script>
+	<?php
 }
 
 /**
@@ -177,7 +220,9 @@ function ewww_image_optimizer_notice_os() {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 	echo "<div id='ewww-image-optimizer-warning-os' class='notice notice-error'><p><strong>" .
 		esc_html__( 'The free mode of EWWW Image Optimizer is only supported on Linux, FreeBSD, Mac OSX, Solaris, and Windows.', 'ewww-image-optimizer' ) .
-		'</strong></p></div>';
+		'</strong><br>' .
+		"<a href='https://ewww.io/plans/'>" . esc_html__( 'Visit our site to start your free trial with cloud-based optimization.', 'ewww-image-optimizer' ) . '</a>' .
+		'</p></div>';
 }
 
 /**
@@ -438,6 +483,7 @@ function ewww_image_optimizer_install_tools() {
  *     @type bool $pngout
  *     @type bool $pngquant
  *     @type bool $webp
+ *     @type bool $svgcleaner
  * }
  */
 function ewww_image_optimizer_skip_tools() {
@@ -446,11 +492,12 @@ function ewww_image_optimizer_skip_tools() {
 	$skip['optipng']  = false;
 	$skip['gifsicle'] = false;
 	// Except these which are off by default.
-	$skip['pngout']   = true;
-	$skip['pngquant'] = true;
-	$skip['webp']     = true;
+	$skip['pngout']     = true;
+	$skip['pngquant']   = true;
+	$skip['webp']       = true;
+	$skip['svgcleaner'] = true;
 	// If the user has disabled a tool, we aren't going to bother checking to see if it is there.
-	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) > 10 ) {
+	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) > 10 || ( defined( 'EWWW_IMAGE_OPTIMIZER_NOEXEC' ) && EWWW_IMAGE_OPTIMIZER_NOEXEC ) ) {
 		$skip['jpegtran'] = true;
 	}
 	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) || ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) > 10 ) ) {
@@ -467,6 +514,9 @@ function ewww_image_optimizer_skip_tools() {
 	}
 	if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp' ) && ! ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) > 10 && ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) > 10 ) ) {
 		$skip['webp'] = false;
+	}
+	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_svgcleaner' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_svg_level' ) && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
+		$skip['svgcleaner'] = false;
 	}
 	foreach ( $skip as $tool => $disabled ) {
 		if ( ! $disabled ) {
@@ -500,13 +550,16 @@ function ewww_image_optimizer_dismiss_exec_notice() {
 	ewwwio_ob_clean();
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 	// Verify that the user is properly authorized.
-	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', 'manage_options' ) ) ) {
+	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 		wp_die( esc_html__( 'Access denied.', 'ewww-image-optimizer' ) );
 	}
-	update_option( 'ewww_image_optimizer_jpg_level', 0 );
+	update_option( 'ewww_image_optimizer_jpg_level', 10 );
 	update_option( 'ewww_image_optimizer_png_level', 0 );
 	update_option( 'ewww_image_optimizer_gif_level', 0 );
 	update_option( 'ewww_image_optimizer_pdf_level', 0 );
+	update_option( 'ewww_image_optimizer_svg_level', 0 );
+	update_option( 'ewww_image_optimizer_dismiss_exec_notice', 1 );
+	update_site_option( 'ewww_image_optimizer_dismiss_exec_notice', 1 );
 	wp_die();
 }
 
@@ -519,42 +572,42 @@ function ewww_image_optimizer_notice_utils( $quiet = null ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 	// Check if exec is disabled.
 	if ( ewww_image_optimizer_exec_check() ) {
-		$no_compression = false;
-		if (
-			! ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) &&
-			! ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) &&
-			! ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' )
-		) {
-			$no_compression = true;
-		}
 		// Need to be a little particular with the quiet parameter.
-		if ( 'quiet' !== $quiet && ! $no_compression ) {
+		if ( 'quiet' !== $quiet && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_dismiss_exec_notice' ) ) {
 			$exactdn_dismiss = ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn' ) ? true : false;
 			ob_start();
-			$notice_class  = 'notice notice-error';
+			$notice_class  = 'notice notice-warning is-dismissible';
 			$notice_action = __( 'An API key or Easy IO subscription will allow you to offload the compression to our dedicated servers instead.', 'ewww-image-optimizer' );
+			/* translators: %s: link to 'start your free trial' */
+			$notice_action = sprintf( __( 'You may ask your system administrator to enable exec(), dismiss this notice to continue with free cloud-based compression or %s.', 'ewww-image-optimizer' ), "<a href='https://ewww.io/plans/'>" . __( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>' ) . '</p></div>';
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn' ) ) {
-				$notice_class  = 'notice notice-warning is-dismissible';
 				$notice_action = __( 'Sites that use Easy IO already have built-in image optimization and may dismiss this notice to disable local compression.', 'ewww-image-optimizer' );
 			}
 			// Display a warning if exec() is disabled, can't run local tools without it.
 			echo "<div id='ewww-image-optimizer-warning-exec' class='" . esc_attr( $notice_class ) . "'><p>" .
-				esc_html__( 'EWWW Image Optimizer requires exec() to perform local compression. Your system administrator has disabled the exec() function, ask them to enable it.', 'ewww-image-optimizer' ) . '<br>' .
-				esc_html( $notice_action ) .
-				'</p></div>';
-				echo
-					"<script>\n" .
-					"jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {\n" .
-						"\tvar ewww_dismiss_exec_data = {\n" .
-							"\t\taction: 'ewww_dismiss_exec_notice',\n" .
-						"\t};\n" .
-						"\tjQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {\n" .
-							"\t\tif (response) {\n" .
-								"\t\t\tconsole.log(response);\n" .
-							"\t\t}\n" .
-						"\t});\n" .
-					"});\n" .
-					"</script>\n";
+				esc_html__( ' Normally, sites where the exec() function is banned require cloud-based optimization, because free server-based optimization will not work. However, we are trying something new, and offering free cloud-based JPG compression. Those who upgrade to our premium service receive much higher compression, PNG/GIF/PDF compression, WebP conversion, and image backups.', 'ewww-image-optimizer' ) . '<br>' .
+				'<strong>' .
+				( ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn' ) || get_option( 'easyio_exactdn' ) ?
+				esc_html__( 'Sites that use Easy IO already have built-in image optimization and may dismiss this notice to disable local compression.', 'ewww-image-optimizer' )
+				:
+				/* translators: %s: link to 'start your free trial' */
+				sprintf( esc_html__( 'You may ask your system administrator to enable exec(), dismiss this notice to continue with free cloud-based compression or %s.', 'ewww-image-optimizer' ), "<a href='https://ewww.io/plans/'>" . esc_html__( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>' )
+			);
+			ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
+			echo '</strong></p></div>';
+			echo
+				"<script>\n" .
+				"jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {\n" .
+					"\tvar ewww_dismiss_exec_data = {\n" .
+						"\t\taction: 'ewww_dismiss_exec_notice',\n" .
+					"\t};\n" .
+					"\tjQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {\n" .
+						"\t\tif (response) {\n" .
+							"\t\t\tconsole.log(response);\n" .
+						"\t\t}\n" .
+					"\t});\n" .
+				"});\n" .
+				"</script>\n";
 			if (
 				ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn' ) &&
 				! ewww_image_optimizer_get_option( 'ewww_image_optimizer_local_mode' )
@@ -578,7 +631,7 @@ function ewww_image_optimizer_notice_utils( $quiet = null ) {
 
 	$skip = ewww_image_optimizer_skip_tools();
 	// Attempt to retrieve values for utility paths, and store them in the appropriate variables.
-	$required = ewww_image_optimizer_path_check( ! $skip['jpegtran'], ! $skip['optipng'], ! $skip['gifsicle'], ! $skip['pngout'], ! $skip['pngquant'], ! $skip['webp'] );
+	$required = ewww_image_optimizer_path_check( ! $skip['jpegtran'], ! $skip['optipng'], ! $skip['gifsicle'], ! $skip['pngout'], ! $skip['pngquant'], ! $skip['webp'], ! $skip['svgcleaner'] );
 	$missing  = array();
 	// Go through each of the required tools.
 	foreach ( $required as $key => $req ) {
@@ -644,6 +697,16 @@ function ewww_image_optimizer_notice_utils( $quiet = null ) {
 					define( 'EWWW_IMAGE_OPTIMIZER_' . $key, $req );
 				}
 				break;
+			case 'SVGCLEANER':
+				if ( ! $skip['svgcleaner'] && empty( $req ) ) {
+					$missing[] = 'svgcleaner';
+					$req       = false;
+				}
+				if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_' . $key ) ) {
+					ewwwio_debug_message( "defining EWWW_IMAGE_OPTIMIZER_$key" );
+					define( 'EWWW_IMAGE_OPTIMIZER_' . $key, $req );
+				}
+				break;
 		} // End switch().
 	} // End foreach().
 	// Expand the missing utilities list for use in the error message.
@@ -674,6 +737,16 @@ function ewww_image_optimizer_notice_utils( $quiet = null ) {
 				esc_html__( 'You are missing pngout. Install %1$s or %2$s.', 'ewww-image-optimizer' ),
 				"<a href='" . esc_url( $pngout_install_url ) . "'>" . esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
 				'<a href="https://docs.ewww.io/article/13-installing-pngout" data-beacon-article="5854531bc697912ffd6c1afa">' . esc_html__( 'manually', 'ewww-image-optimizer' ) . '</a>'
+			) .
+			'</p></div>';
+		} elseif ( 'svgcleaner' === $msg ) {
+			$svgcleaner_install_url = admin_url( 'admin.php?action=ewww_image_optimizer_install_svgcleaner' );
+			echo "<div id='ewww-image-optimizer-warning-opt-missing' class='notice notice-error'><p>" .
+			sprintf(
+				/* translators: 1: automatically (link) 2: manually (link) */
+				esc_html__( 'You are missing svgleaner. Install %1$s or %2$s.', 'ewww-image-optimizer' ),
+				"<a href='" . esc_url( $svgcleaner_install_url ) . "'>" . esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
+				'<a href="https://docs.ewww.io/article/95-installing-svgcleaner" data-beacon-article="5f7921c9cff47e001a58adbc">' . esc_html__( 'manually', 'ewww-image-optimizer' ) . '</a>'
 			) .
 			'</p></div>';
 		} else {
@@ -719,26 +792,29 @@ function ewww_image_optimizer_exec_check() {
  * @param bool $p True to check pngout.
  * @param bool $q True to check pngquant.
  * @param bool $w True to check cwebp.
- * @return array Path for each tool (indexes JPEGTRAN, OPTIPNG, GIFSICLE, PNGOUT, PNGQUANT, CWEBP),
+ * @param bool $s True to check svgcleaner.
+ * @return array Path for each tool (indexes JPEGTRAN, OPTIPNG, GIFSICLE, PNGOUT, PNGQUANT, CWEBP, SVGCLEANER),
  *               or false for disabled/missing tools.
  */
-function ewww_image_optimizer_path_check( $j = true, $o = true, $g = true, $p = true, $q = true, $w = true ) {
+function ewww_image_optimizer_path_check( $j = true, $o = true, $g = true, $p = true, $q = true, $w = true, $s = true ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
-	$jpegtran = false;
-	$optipng  = false;
-	$gifsicle = false;
-	$pngout   = false;
-	$pngquant = false;
-	$webp     = false;
+	$jpegtran   = false;
+	$optipng    = false;
+	$gifsicle   = false;
+	$pngout     = false;
+	$pngquant   = false;
+	$webp       = false;
+	$svgcleaner = false;
 	ewww_image_optimizer_define_noexec();
 	if ( EWWW_IMAGE_OPTIMIZER_NOEXEC ) {
 		return array(
-			'JPEGTRAN' => false,
-			'OPTIPNG'  => false,
-			'GIFSICLE' => false,
-			'PNGOUT'   => false,
-			'PNGQUANT' => false,
-			'CWEBP'    => false,
+			'JPEGTRAN'   => false,
+			'OPTIPNG'    => false,
+			'GIFSICLE'   => false,
+			'PNGOUT'     => false,
+			'PNGQUANT'   => false,
+			'CWEBP'      => false,
+			'SVGCLEANER' => false,
 		);
 	}
 	if ( 'WINNT' === PHP_OS ) {
@@ -794,6 +870,16 @@ function ewww_image_optimizer_path_check( $j = true, $o = true, $g = true, $p = 
 				define( 'EWWW_IMAGE_OPTIMIZER_CWEBP', $webp );
 			} else {
 				$webp = EWWW_IMAGE_OPTIMIZER_CWEBP;
+			}
+		}
+		if ( $s ) {
+			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_SVGCLEANER' ) ) {
+				$svgcleaner = ewww_image_optimizer_find_win_binary( 'svgcleaner', 's' );
+				ewwwio_debug_message( 'defining EWWW_IMAGE_OPTIMIZER_SVGCLEANER' );
+				define( 'EWWW_IMAGE_OPTIMIZER_SVGCLEANER', $svgcleaner );
+			} else {
+				ewwwio_debug_message( 'using existing EWWW_IMAGE_OPTIMIZER_SVGCLEANER' );
+				$svgcleaner = EWWW_IMAGE_OPTIMIZER_SVGCLEANER;
 			}
 		}
 	} else {
@@ -876,6 +962,16 @@ function ewww_image_optimizer_path_check( $j = true, $o = true, $g = true, $p = 
 				$webp = EWWW_IMAGE_OPTIMIZER_CWEBP;
 			}
 		}
+		if ( $s ) {
+			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_SVGCLEANER' ) ) {
+				$svgcleaner = ewww_image_optimizer_find_nix_binary( 'svgcleaner', 's' );
+				ewwwio_debug_message( 'defining EWWW_IMAGE_OPTIMIZER_SVGCLEANER' );
+				define( 'EWWW_IMAGE_OPTIMIZER_SVGCLEANER', $svgcleaner );
+			} else {
+				ewwwio_debug_message( 'using existing EWWW_IMAGE_OPTIMIZER_SVGCLEANER' );
+				$svgcleaner = EWWW_IMAGE_OPTIMIZER_SVGCLEANER;
+			}
+		}
 	} // End if().
 	if ( $jpegtran ) {
 		ewwwio_debug_message( "using: $jpegtran" );
@@ -895,14 +991,18 @@ function ewww_image_optimizer_path_check( $j = true, $o = true, $g = true, $p = 
 	if ( $webp ) {
 		ewwwio_debug_message( "using: $webp" );
 	}
+	if ( $svgcleaner ) {
+		ewwwio_debug_message( "using: $svgcleaner" );
+	}
 	ewwwio_memory( __FUNCTION__ );
 	return array(
-		'JPEGTRAN' => $jpegtran,
-		'OPTIPNG'  => $optipng,
-		'GIFSICLE' => $gifsicle,
-		'PNGOUT'   => $pngout,
-		'PNGQUANT' => $pngquant,
-		'CWEBP'    => $webp,
+		'JPEGTRAN'   => $jpegtran,
+		'OPTIPNG'    => $optipng,
+		'GIFSICLE'   => $gifsicle,
+		'PNGOUT'     => $pngout,
+		'PNGQUANT'   => $pngquant,
+		'CWEBP'      => $webp,
+		'SVGCLEANER' => $svgcleaner,
 	);
 }
 
@@ -1098,6 +1198,10 @@ function ewww_image_optimizer_md5check( $path ) {
 		'66568f3b31f8f22deef38aa6ba3d2be19516514e94b7d623cd2ce2a290ccdd69', // cwebp-sol   1.0.3, EWWW 5.1.0.
 		'e1041c5486fb4e57e31155c45d66117f8fc270e5a56a1049408a05f54bd52969', // cwebp.exe   1.0.3, EWWW 5.1.0.
 		// end cwebp.
+		'15d8b7d54b73059a9a63ab3d5ca8201cd30c2f6fc59fc068f7bd6c85e6a22420', // svgcleaner-linux 0.9.5.
+		'c88c1961374b3edc93a29376ccbd447a514c1cda335fe6a868c0dac6d77c79fa', // svgcleaner-mac 0.9.5.
+		'5f0b5d64e7975275cd8649f4b29bd0526ba06961aef92aa9812e26443e454fe0', // svgcleaner.exe 0.9.5.
+		// end svgcleaner.
 	);
 	foreach ( $valid_sums as $checksum ) {
 		if ( $checksum === $binary_sum ) {
@@ -1106,6 +1210,7 @@ function ewww_image_optimizer_md5check( $path ) {
 			return true;
 		}
 	}
+	ewwwio_debug_message( 'invalid checksum' );
 	ewwwio_memory( __FUNCTION__ );
 	return false;
 }
@@ -1164,6 +1269,11 @@ function ewww_image_optimizer_mimetype( $path, $case ) {
 			}
 			if ( '25504446' === substr( $magic, 0, 8 ) ) {
 				$type = 'application/pdf';
+				ewwwio_debug_message( "ewwwio type: $type" );
+				return $type;
+			}
+			if ( preg_match( '/<svg/', substr( $file_contents, 0, 4096 ) ) ) {
+				$type = 'image/svg+xml';
 				ewwwio_debug_message( "ewwwio type: $type" );
 				return $type;
 			}
@@ -1429,6 +1539,20 @@ function ewww_image_optimizer_tool_found( $path, $tool ) {
 				return esc_html__( 'unknown', 'ewww-image-optimizer' );
 			}
 			break;
+		case 's': // svgcleaner.
+			exec( "$path --version 2>&1", $svgcleaner_version );
+			if ( ewww_image_optimizer_iterable( $svgcleaner_version ) ) {
+				ewwwio_debug_message( "$path: {$svgcleaner_version[0]}" );
+			} else {
+				ewwwio_debug_message( "$path: invalid output" );
+				break;
+			}
+			if ( ! empty( $svgcleaner_version ) && strpos( $svgcleaner_version[0], 'svgcleaner' ) === 0 ) {
+				$svgcleaner_out = explode( ' ', $svgcleaner_version[0] );
+				ewwwio_debug_message( 'optimizer found' );
+				return $svgcleaner_out[1];
+			}
+			break;
 	} // End switch().
 	ewwwio_debug_message( 'tool not found' );
 	ewwwio_memory( __FUNCTION__ );
@@ -1569,6 +1693,7 @@ function ewww_image_optimizer_gifsicle_resize( $file, $dst_x, $dst_y, $src_x, $s
 		true,
 		false,
 		false,
+		false,
 		false
 	);
 	if ( empty( $tools['GIFSICLE'] ) ) {
@@ -1646,6 +1771,7 @@ function ewww_image_optimizer_jpegtran_autorotate( $file, $type, $orientation ) 
 	}
 	$tools = ewww_image_optimizer_path_check(
 		true,
+		false,
 		false,
 		false,
 		false,
@@ -1735,6 +1861,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 	if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
 		ewww_image_optimizer_cloud_init();
 	}
+	ewww_image_optimizer_define_noexec();
 	if ( apply_filters( 'ewww_image_optimizer_bypass', false, $file ) ) {
 		ewwwio_debug_message( "optimization bypassed: $file" );
 		// Tell the user optimization was skipped.
@@ -1796,7 +1923,6 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 	}
 	$nice = '';
 	if ( ! EWWW_IMAGE_OPTIMIZER_CLOUD ) {
-		ewww_image_optimizer_define_noexec();
 		if ( ! EWWW_IMAGE_OPTIMIZER_NOEXEC && PHP_OS !== 'WINNT' ) {
 			// Check to see if 'nice' exists.
 			$nice = ewww_image_optimizer_find_nix_binary( 'nice', 'n' );
@@ -1804,12 +1930,13 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 	}
 	$skip = ewww_image_optimizer_skip_tools();
 	if ( EWWW_IMAGE_OPTIMIZER_CLOUD ) {
-		$skip['jpegtran'] = true;
-		$skip['optipng']  = true;
-		$skip['gifsicle'] = true;
-		$skip['pngout']   = true;
-		$skip['pngquant'] = true;
-		$skip['webp']     = true;
+		$skip['jpegtran']   = true;
+		$skip['optipng']    = true;
+		$skip['gifsicle']   = true;
+		$skip['pngout']     = true;
+		$skip['pngquant']   = true;
+		$skip['webp']       = true;
+		$skip['svgcleaner'] = true;
 	}
 	if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_metadata_skip_full' ) && $fullsize ) {
 		$keep_metadata = true;
@@ -1903,6 +2030,10 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 				break;
 			}
+			if ( 10 === (int) $compression_level && EWWW_IMAGE_OPTIMIZER_NOEXEC ) {
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
+				break;
+			}
 			// If we get this far, we are using local (jpegtran) optimization, so do an autorotate on the image.
 			ewww_image_optimizer_autorotate( $file );
 			// Get the (possibly new) original image size.
@@ -1914,7 +2045,8 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					false,
 					! $skip['pngout'],
 					! $skip['pngquant'],
-					! $skip['webp']
+					! $skip['webp'],
+					false
 				);
 			} else {
 				$tools = ewww_image_optimizer_path_check(
@@ -1923,7 +2055,8 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					false,
 					false,
 					false,
-					! $skip['webp']
+					! $skip['webp'],
+					false
 				);
 			}
 			if ( ! empty( $ewww_webp_only ) ) {
@@ -2191,7 +2324,8 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					false,
 					! $skip['pngout'],
 					! $skip['pngquant'],
-					! $skip['webp']
+					! $skip['webp'],
+					false
 				);
 			} else {
 				$tools = ewww_image_optimizer_path_check(
@@ -2200,7 +2334,8 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					false,
 					! $skip['pngout'],
 					! $skip['pngquant'],
-					! $skip['webp']
+					! $skip['webp'],
+					false
 				);
 			}
 			// If png optimization is disabled.
@@ -2484,13 +2619,15 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					! $skip['gifsicle'],
 					! $skip['pngout'],
 					! $skip['pngquant'],
-					! $skip['webp']
+					! $skip['webp'],
+					false
 				);
 			} else {
 				$tools = ewww_image_optimizer_path_check(
 					false,
 					false,
 					! $skip['gifsicle'],
+					false,
 					false,
 					false,
 					false
@@ -2621,8 +2758,95 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
 			}
 			break;
+		case 'image/svg+xml':
+			if ( ! empty( $ewww_webp_only ) ) {
+				break;
+			}
+			$tools = ewww_image_optimizer_path_check(
+				false,
+				false,
+				false,
+				false,
+				false,
+				false,
+				! $skip['svgcleaner']
+			);
+			// If svgcleaner is disabled.
+			$compression_level = 0;
+			if ( ! $skip['svgcleaner'] && ! $tools['SVGCLEANER'] ) {
+				/* translators: %s: name of a tool like jpegtran */
+				$result = sprintf( __( '%s is missing', 'ewww-image-optimizer' ), '<em>svgcleaner</em>' );
+			} else {
+				// Otherwise, turn optimization ON.
+				$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_svg_level' );
+				if ( $compression_level ) {
+					$optimize = true;
+				}
+			}
+			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
+			if ( empty( $ewww_force ) ) {
+				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
+				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				if ( $smart_reopt ) {
+					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
+					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
+					if ( $compression_level && $compression_level < $ewww_image->level && $ewww_image->level > 0 ) {
+						ewwwio_debug_message( "smart re-opt triggering restoration for $file" );
+						ewww_image_optimizer_cloud_restore_single_image( $ewww_image->record );
+					}
+				} elseif ( $results_msg ) {
+					return array( $file, $results_msg, $converted, $original );
+				}
+			}
+			$ewww_image->level = $compression_level;
+			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && $compression_level > 0 ) {
+				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
+				break;
+			}
+			// If optimization is turned ON.
+			if ( $optimize ) {
+				$tempfile = $file . '.tmp.svg'; // temporary SVG output (must end with .svg)
+				// Run svgcleaner on the SVG.
+				$svgcleaner_options = array(
+					'--allow-bigger-file',
+					'--quiet',
+				);
+				if ( 1 === $compression_level ) {
+					array_push(
+						$svgcleaner_options,
+						'--paths-to-relative=no',
+						'--remove-unused-segments=no',
+						'--convert-segments=no',
+						'--merge-gradients=no',
+						'--trim-ids=no',
+						'--trim-colors=no',
+						'--simplify-transforms=no',
+						'--resolve-use=no'
+					);
+				}
+				exec( "$nice " . $tools['SVGCLEANER'] . ' ' . implode( ' ', $svgcleaner_options ) . ' ' . ewww_image_optimizer_escapeshellarg( $file ) . ' ' . ewww_image_optimizer_escapeshellarg( $tempfile ) );
+				// Retrieve the filesize of the temporary SVG.
+				$new_size = ewww_image_optimizer_filesize( $tempfile );
+				// If the new SVG is smaller.
+				if ( $new_size && $orig_size > $new_size && ewww_image_optimizer_mimetype( $tempfile, 'i' ) === $type ) {
+					// Replace the original with the optimized file.
+					rename( $tempfile, $file );
+					// Store the results of the optimization.
+					$result = "$orig_size vs. $new_size";
+					// If the optimization didn't produce a smaller SVG.
+				} else {
+					if ( ewwwio_is_file( $tempfile ) ) {
+						// Delete the optimized file.
+						ewwwio_delete_file( $tempfile );
+					}
+					// Store the results.
+					$result   = 'unchanged';
+					$new_size = $orig_size;
+				}
+			}
+			break;
 		default:
-			// If not a JPG, PNG, or GIF, tell the user we don't work with strangers.
+			// If not a JPG, PNG, GIF, or SVG tell the user we don't work with strangers.
 			return array( false, __( 'Unsupported file type', 'ewww-image-optimizer' ) . ": $type", $converted, $original );
 	} // End switch().
 	// Allow other plugins to run operations on the images after optimization.
@@ -2676,8 +2900,10 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 	} elseif ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp' ) ) {
 		return '';
 	} elseif ( ! ewwwio_is_file( $file ) ) {
+		ewwwio_debug_message( 'original file not found' );
 		return esc_html__( 'Could not find file.', 'ewww-image-optimizer' );
 	} elseif ( ! is_writable( $file ) ) {
+		ewwwio_debug_message( 'original file not writable' );
 		return esc_html__( 'File is not writable.', 'ewww-image-optimizer' );
 	} elseif ( ewwwio_is_file( $webpfile ) && empty( $ewww_force ) && ! $recreate ) {
 		ewwwio_debug_message( 'webp file exists, not forcing or recreating' );
@@ -2702,7 +2928,10 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 			// Copy all the metadata.
 			$copy_opt = 'all';
 		}
-		$quality = (int) apply_filters( 'jpeg_quality', 82, 'image/webp' );
+		$quality = (int) apply_filters( 'webp_quality', 75, 'image/webp' );
+		if ( $quality < 50 ) {
+			$quality = 75;
+		}
 		if ( defined( 'EWWW_IMAGE_OPTIMIZER_LOSSY_PNG2WEBP' ) && EWWW_IMAGE_OPTIMIZER_LOSSY_PNG2WEBP ) {
 			$lossless = "-q $quality";
 		} else {
@@ -2710,9 +2939,11 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 		}
 		switch ( $type ) {
 			case 'image/jpeg':
+				ewwwio_debug_message( "$nice " . $tool . " -q $quality -metadata $copy_opt -quiet " . ewww_image_optimizer_escapeshellarg( $file ) . ' -o ' . ewww_image_optimizer_escapeshellarg( $webpfile ) . ' 2>&1' );
 				exec( "$nice " . $tool . " -q $quality -metadata $copy_opt -quiet " . ewww_image_optimizer_escapeshellarg( $file ) . ' -o ' . ewww_image_optimizer_escapeshellarg( $webpfile ) . ' 2>&1', $cli_output );
 				break;
 			case 'image/png':
+				ewwwio_debug_message( "$nice " . $tool . " $lossless -metadata $copy_opt -quiet " . ewww_image_optimizer_escapeshellarg( $file ) . ' -o ' . ewww_image_optimizer_escapeshellarg( $webpfile ) . ' 2>&1' );
 				exec( "$nice " . $tool . " $lossless -metadata $copy_opt -quiet " . ewww_image_optimizer_escapeshellarg( $file ) . ' -o ' . ewww_image_optimizer_escapeshellarg( $webpfile ) . ' 2>&1', $cli_output );
 				break;
 		}
@@ -2741,8 +2972,7 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
  */
 function ewww_image_optimizer_install_pngout_wrapper() {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
-	$permissions = apply_filters( 'ewww_image_optimizer_admin_permissions', '' );
-	if ( false === current_user_can( $permissions ) ) {
+	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 		wp_die( esc_html__( 'You do not have permission to install image optimizer utilities.', 'ewww-image-optimizer' ) );
 	}
 	$sendback = ewww_image_optimizer_install_pngout();
@@ -2881,6 +3111,125 @@ function ewww_image_optimizer_install_pngout() {
 				'ewww_error'  => urlencode( $pngout_error ),
 			),
 			remove_query_arg( array( 'ewww_pngout', 'ewww_error' ), wp_get_referer() )
+		);
+	}
+	return $sendback;
+}
+
+/**
+ * Redirects back to previous page after SVGCLEANER installation.
+ */
+function ewww_image_optimizer_install_svgcleaner_wrapper() {
+	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
+		wp_die( esc_html__( 'You do not have permission to install image optimizer utilities.', 'ewww-image-optimizer' ) );
+	}
+	$sendback = ewww_image_optimizer_install_svgcleaner();
+	wp_safe_redirect( $sendback );
+	ewwwio_memory( __FUNCTION__ );
+	exit( 0 );
+}
+
+/**
+ * Installs svgcleaner from the official site.
+ *
+ * @return string The url from whence we came (settings page), with success or error parameters added.
+ */
+function ewww_image_optimizer_install_svgcleaner() {
+	if ( ! extension_loaded( 'zlib' ) || ! class_exists( 'PharData' ) ) {
+		$download_error = __( 'zlib or phar extension missing from PHP', 'ewww-image-optimizer' );
+	}
+	$os_chmod  = true;
+	$os_binary = 'svgcleaner';
+	$os_ext    = 'tar.gz';
+	if ( PHP_OS === 'Linux' ) {
+		$arch_type = 'x86_64';
+		if ( ewww_image_optimizer_function_exists( 'php_uname' ) ) {
+			$arch_type = php_uname( 'm' );
+		}
+		$os_string = 'linux_' . $arch_type;
+	} elseif ( PHP_OS === 'Darwin' ) {
+		$os_string = 'macos';
+		$os_ext    = 'zip';
+	} elseif ( PHP_OS === 'WINNT' ) {
+		$os_chmod  = false;
+		$os_string = 'win32';
+		$os_binary = 'svgcleaner.exe';
+		$os_ext    = 'zip';
+	}
+	$latest    = '0.9.5';
+	$tool_path = trailingslashit( EWWW_IMAGE_OPTIMIZER_TOOL_PATH );
+	if ( empty( $download_error ) ) {
+		$download_result = download_url( 'https://github.com/RazrFalcon/svgcleaner/releases/download/v' . $latest . '/svgcleaner_' . $os_string . '_' . $latest . '.' . $os_ext );
+		if ( is_wp_error( $download_result ) ) {
+			$download_error = $download_result->get_error_message();
+		} else {
+			if ( ! ewwwio_check_memory_available( filesize( $download_result ) + 1000 ) ) {
+				$download_error = __( 'insufficient memory available for installation', 'ewww-image-optimizer' );
+			} else {
+				$tmpname  = current( explode( '.', $download_result ) );
+				$tmpname .= '-' . uniqid() . '.' . $os_ext;
+				rename( $download_result, $tmpname );
+				$download_result = $tmpname;
+
+				if ( 'zip' === $os_ext ) {
+					WP_Filesystem();
+					$unzipped = unzip_file(
+						$download_result,
+						EWWW_IMAGE_OPTIMIZER_BINARY_PATH
+					);
+					if ( is_wp_error( $unzipped ) ) {
+						$download_error = $unzipped->get_error_message();
+					}
+				} else {
+					$pkg_gzipped     = new PharData( $download_result );
+					$pkg_tarball     = $pkg_gzipped->decompress();
+					$download_result = $pkg_tarball->getPath();
+					$pkg_tarball->extractTo(
+						EWWW_IMAGE_OPTIMIZER_BINARY_PATH,
+						'svgcleaner',
+						true
+					);
+				}
+				if ( ewwwio_is_file( EWWW_IMAGE_OPTIMIZER_BINARY_PATH . $os_binary ) ) {
+					if ( ! rename( EWWW_IMAGE_OPTIMIZER_BINARY_PATH . $os_binary, $tool_path . $os_binary ) ) {
+						if ( empty( $download_error ) ) {
+							$download_error = __( 'could not move svgcleaner', 'ewww-image-optimizer' );
+						}
+					}
+					if ( $os_chmod && ! chmod( $tool_path . $os_binary, 0755 ) ) {
+						if ( empty( $download_error ) ) {
+							$download_error = __( 'could not set permissions', 'ewww-image-optimizer' );
+						}
+					}
+					if ( PHP_OS === 'WINNT' ) {
+						$pkg_version = ewww_image_optimizer_tool_found( '"' . $tool_path . $os_binary . '"', 's' );
+					} else {
+						$pkg_version = ewww_image_optimizer_tool_found( ewww_image_optimizer_escapeshellarg( $tool_path ) . $os_binary, 's' );
+					}
+				} else {
+					$download_error = __( 'extraction of files failed', 'ewww-image-optimizer' );
+				}
+			}
+		}
+	}
+	if ( is_string( $download_result ) && is_writable( $download_result ) ) {
+		unlink( $download_result );
+	}
+	if ( ! empty( $pkg_version ) ) {
+		ewww_image_optimizer_set_option( 'ewww_image_optimizer_disable_svgcleaner', false );
+		if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_svg_level' ) ) {
+			ewww_image_optimizer_set_option( 'ewww_image_optimizer_svg_level', 10 );
+		}
+		$sendback = add_query_arg( 'ewww_svgcleaner', 'success', remove_query_arg( array( 'ewww_svgcleaner', 'ewww_error' ), wp_get_referer() ) );
+	}
+	if ( ! isset( $sendback ) ) {
+		$sendback = add_query_arg(
+			array(
+				'ewww_svgcleaner' => 'failed',
+				'ewww_error'      => urlencode( $download_error ),
+			),
+			remove_query_arg( array( 'ewww_svgcleaner', 'ewww_error' ), wp_get_referer() )
 		);
 	}
 	return $sendback;
