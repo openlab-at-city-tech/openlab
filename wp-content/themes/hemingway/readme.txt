@@ -2,7 +2,8 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 5.4.1
+Tested up to: 5.5
+Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +41,19 @@ Source: http://www.unsplash.com
 
 
 == Changelog ==
+
+Version 2.1.0 (2020-08-26)
+-------------------------
+- Removed the Dribbble and Flickr widgets, since both of the APIs these widgets relied on for data are being removed.
+- Updated the theme description to remove mentions of said widgets.
+- Fixed the attachment page showing neither the image nor the image dimensions (thanks, @mathiasblogs).
+- Added escaping of the header image URL.
+- Added "Requires PHP" theme meta to readme.txt.
+- Added "Requires PHP" and "Tested up to" theme meta to style.css.
+- Updated "Tested up to" to 5.5.
+- Added escaping of the `home_url()` in the footer.
+- Reworked CSS reset.
+- General CSS cleanup (not enough, never enough).
 
 Version 2.0.3 (2020-05-05)
 -------------------------

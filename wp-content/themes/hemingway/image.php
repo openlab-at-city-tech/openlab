@@ -6,7 +6,7 @@
 											        
 		<?php if ( have_posts() ) : 
 			
-			while( have_posts() ) : the_post(); ?>
+			while ( have_posts() ) : the_post(); ?>
 		
 				<div class="posts">
 			
@@ -14,11 +14,25 @@
 					
 						<div class="content-inner">
 											
-							<?php hemingway_the_featured_media( $post ); ?>
+							<figure class="featured-media">
+							
+								<?php 
+								$image_array = wp_get_attachment_image_src( $post->ID, 'full', false ); 
+
+								$image_url = $image_array[0];
+								$image_width = $image_array[1];
+								$image_height = $image_array[1];
+								?>
+							
+								<a href="<?php echo esc_url( $image_url ); ?>" rel="attachment">
+									<?php echo wp_get_attachment_image( $post->ID, 'post-image' ); ?>
+								</a>
+							
+							</figure><!-- .featured-media -->
 							
 							<div class="post-header">
 							
-								<h2 class="post-title"><?php echo basename( get_attached_file( $post->ID ) ); ?></h2>
+								<h1 class="post-title"><?php echo basename( get_attached_file( $post->ID ) ); ?></h1>
 								
 								<div class="post-meta">
 								
@@ -26,7 +40,7 @@
 									
 									<span class="date-sep"> / </span>
 								
-									<span><?php echo $image_array[1] // 1 is the width ?> <span style="text-transform:lowercase;">x</span> <?php echo $image_array[2] . ' px'; // 2 is the height ?></span>
+									<span><?php echo $image_width; ?> <span style="text-transform:lowercase;">x</span> <?php echo $image_width; ?> px</span>
 								
 								</div>
 							
