@@ -3,9 +3,9 @@ Contributors: tareq1988, nizamuddinbabu, wemail
 Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
-Tested up to: 5.4
-Stable tag: 10.33
-Requires PHP: 5.4
+Tested up to: 5.5
+Stable tag: 10.34
+Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,6 +71,10 @@ This token will automatically be replaced by dynamic subscription information an
 [Visit FAQ site](https://subscribe2.wordpress.com/support/faqs/)
 
 == Changelog ==
+
+= 10.34 (24th August, 2020) =
+
+ * Fix gutenberg script loading issue
 
 = 10.33 (4th June, 2020) =
 
