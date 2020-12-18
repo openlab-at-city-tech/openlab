@@ -8,7 +8,7 @@
     const { compose } = wp.compose;
 
     const sidebarName  = "advgb-editor-sidebar";
-    const sidebarTitle = __( 'Adv. Gutenberg Settings', 'advanced-gutenberg' );
+    const sidebarTitle = __( 'PublishPress Blocks Settings', 'advanced-gutenberg' );
     const sidebarIcon  = "layout";
     const VISUAL_GUIDE_SETTINGS = [
         { label: __( 'Inherit from global settings', 'advanced-gutenberg' ), value: '' },
@@ -66,7 +66,7 @@
             return (
                 <Fragment>
                     <div className="advgb-editor-sidebar-note">
-                        { __( 'These settings will override the Adv. Gutenberg global settings.', 'advanced-gutenberg' ) }
+                        { __( 'These settings will override the PublishPress Blocks global settings.', 'advanced-gutenberg' ) }
                     </div>
                     <PanelBody title={ __( 'Editor width', 'advanced-gutenberg' ) }>
                         <div className="advgb-editor-sidebar-note">
@@ -76,7 +76,7 @@
                             {EDITOR_WIDTH_SETTINGS.map((setting, index) => (
                                 <Button className="advgb-button"
                                         key={ index }
-                                        isDefault
+                                        isSecondary={ setting.value !== editorWidth }
                                         isPrimary={ setting.value === editorWidth }
                                         onClick={ () => this.onUpdateMeta( { advgb_blocks_editor_width: setting.value } ) }
                                 >
@@ -87,13 +87,13 @@
                     </PanelBody>
                     <PanelBody title={ __( 'Columns Visual Guide', 'advanced-gutenberg' ) } initialOpen={ false }>
                         <div className="advgb-editor-sidebar-note">
-                            { __( 'Border to materialize Adv. Gutenberg Column block', 'advanced-gutenberg' ) }
+                            { __( 'Border to materialize PublishPress Blocks Column block', 'advanced-gutenberg' ) }
                         </div>
                         <ButtonGroup className="advgb-button-group">
                             {VISUAL_GUIDE_SETTINGS.map((setting, index) => (
                                 <Button className="advgb-button"
                                         key={ index }
-                                        isDefault
+                                        isSecondary={ setting.value !== columnsVisualGuide }
                                         isPrimary={ setting.value === columnsVisualGuide }
                                         onClick={ () => this.onUpdateMeta( { advgb_blocks_columns_visual_guide: setting.value } ) }
                                 >

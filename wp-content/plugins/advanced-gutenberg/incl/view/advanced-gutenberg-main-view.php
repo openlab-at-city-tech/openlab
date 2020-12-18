@@ -29,7 +29,7 @@ $tabs_data = array(
         'icon' => 'code',
     ),
     array(
-        'id' => 'translation',
+        'id' => 'translations',
         'title' => __('Translation', 'advanced-gutenberg'),
         'icon' => 'text-format',
     ),
@@ -41,12 +41,6 @@ $tabs_data = array(
         <i class="dashicons dashicons-leftright ju-left-panel-toggle-icon"></i>
     </div>
     <div class="ju-left-panel">
-        <div class="ju-logo">
-            <a href="https://advancedgutenberg.com/" target="_blank">
-                <img src="<?php echo esc_url(plugins_url('assets/images/logo-white.png', dirname(dirname(__FILE__)))) ?>"
-                     alt="<?php esc_html_e('Advanced Gutenberg logo', 'advanced-gutenberg') ?>">
-            </a>
-        </div>
         <div class="ju-menu-search">
             <i class="mi mi-search ju-menu-search-icon"></i>
             <input type="text" class="ju-menu-search-input"
@@ -99,17 +93,45 @@ $tabs_data = array(
         } ?>
 
         <?php foreach ($tabs_data as $thisTab) : ?>
-            <?php if ($thisTab['id'] === 'translation') continue; // phpcs:ignore Generic.ControlStructures.InlineControlStructure.NotAllowed -- inline is ok ?>
             <div class="ju-content-wrapper" id="<?php echo esc_attr($thisTab['id']) ?>" style="display: none">
                 <?php $this->loadView($thisTab['id']) ?>
             </div>
         <?php endforeach; ?>
-
-        <div class="ju-content-wrapper" id="translation" style="display: none">
-            <div class="advgb-header" style="padding-top: 40px">
-                <h1 class="header-title"><?php esc_html_e('Translation', 'advanced-gutenberg') ?></h1>
+        
+        <footer>
+            <div class="ppma-rating">
+                <a href="https://wordpress.org/support/plugin/advanced-gutenberg/reviews/#new-post" target="_blank" rel="noopener noreferrer" class="ag-footer-link">If you like <strong>PublishPress Blocks</strong> please leave us a <span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span> rating. Thank you!</a>
             </div>
-            <?php echo \Joomunited\advgb\Jutranslation\Jutranslation::getInput(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped ?>
-        </div>
+            <hr>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="https://publishpress.com" target="_blank" rel="noopener noreferrer" title="About PublishPress Blocks" class="ag-footer-link">About</a>
+                    </li>
+                    <li>
+                        <a href="https://publishpress.com/knowledge-base/installation/" target="_blank" rel="noopener noreferrer" title="Documentation" class="ag-footer-link">Documentation</a>
+                    </li>
+                    <li>
+                        <a href="https://publishpress.com/contact" target="_blank" rel="noopener noreferrer" title="Contact the PublishPress team" class="ag-footer-link">Contact</a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/publishpresscom" target="_blank" rel="noopener noreferrer" class="ag-footer-link">
+                            <span class="dashicons dashicons-twitter"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://facebook.com/publishpress" target="_blank" rel="noopener noreferrer" class="ag-footer-link">
+                            <span class="dashicons dashicons-facebook"></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="ppma-pressshack-logo">
+                <a href="https://publishpress.com" target="_blank" rel="noopener noreferrer">
+                    <img src="<?php echo esc_url(plugins_url('assets/images/publishpress-logo.png', dirname(dirname(__FILE__)))) ?>"
+                     alt="<?php esc_html_e('PublishPress Blocks logo', 'advanced-gutenberg') ?>">
+                </a>
+            </div>
+        </footer>
     </div>
 </div>

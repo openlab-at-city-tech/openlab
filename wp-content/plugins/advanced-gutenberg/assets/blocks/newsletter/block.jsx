@@ -210,7 +210,7 @@
                             <div className="advgb-form-field">
                                 <input type="text" disabled={ true }
                                        className="advgb-form-input"
-                                       value={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
+                                       value={ emailLabel ? emailLabel : 'Email address' }
                                        style={ {
                                            backgroundColor: bgColor,
                                            color: textColor,
@@ -229,7 +229,7 @@
                                                 borderRadius: submitRadius,
                                             } }
                                     >
-                                        { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
+                                        { submitLabel ? submitLabel : 'Submit' }
                                     </button>
                                 </div>
                             </div>
@@ -266,7 +266,7 @@
                                 <div className="advgb-form-field advgb-form-field-full">
                                     <input type="text" disabled={ true }
                                            className="advgb-form-input"
-                                           value={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
+                                           value={ emailLabel ? emailLabel : 'Email address' }
                                            style={ {
                                                backgroundColor: bgColor,
                                                color: textColor,
@@ -286,7 +286,7 @@
                                                 borderRadius: submitRadius,
                                             } }
                                     >
-                                        { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
+                                        { submitLabel ? submitLabel : 'Submit' }
                                     </button>
                                 </div>
                             </Fragment>
@@ -400,7 +400,7 @@
                             <div className="advgb-form-field">
                                 <input type="email"
                                        className="advgb-form-input advgb-form-input-email"
-                                       placeholder={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
+                                       placeholder={ emailLabel ? emailLabel : 'Email address' }
                                        style={ {
                                            backgroundColor: bgColor,
                                            color: textColor,
@@ -421,7 +421,7 @@
                                                 borderRadius: submitRadius,
                                             } }
                                     >
-                                        { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
+                                        { submitLabel ? submitLabel : 'Submit' }
                                     </button>
                                 </div>
                             </div>
@@ -458,7 +458,7 @@
                                 <div className="advgb-form-field advgb-form-field-full">
                                     <input type="email"
                                            className="advgb-form-input advgb-form-input-email"
-                                           placeholder={ emailLabel ? emailLabel : __( 'Email address', 'advanced-gutenberg' ) }
+                                           placeholder={ emailLabel ? emailLabel : 'Email address' }
                                            style={ {
                                                backgroundColor: bgColor,
                                                color: textColor,
@@ -480,7 +480,7 @@
                                                 borderRadius: submitRadius,
                                             } }
                                     >
-                                        { submitLabel ? submitLabel : __( 'Submit', 'advanced-gutenberg' ) }
+                                        { submitLabel ? submitLabel : 'Submit' }
                                     </button>
                                 </div>
                             </Fragment>

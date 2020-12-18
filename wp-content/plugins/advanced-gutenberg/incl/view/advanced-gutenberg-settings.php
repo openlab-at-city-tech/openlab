@@ -15,8 +15,10 @@ wp_enqueue_script('advgb_codemirror_js');
 wp_enqueue_script('codemirror_hint');
 wp_enqueue_script('codemirror_mode_css');
 wp_enqueue_script('codemirror_hint_css');
-wp_enqueue_script('thickbox');
 wp_enqueue_script('advgb_settings_js');
+
+// ThickBox JS and CSS
+add_thickbox();
 
 $saved_settings    = get_option('advgb_settings');
 $blocks_list_saved = get_option('advgb_blocks_list');
@@ -192,7 +194,7 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                             >
                             <a target="_blank"
                                href="https://developers.google.com/maps/documentation/javascript/get-api-key"
-                               style="display: inline-block; margin: 15px; margin-left: 10px; color: #ff8726; line-height: 1;">
+                               style="display: inline-block; margin: 15px; margin-left: 10px; color: #655997; line-height: 1;">
                                 <?php esc_html_e('How to create a Google API Key', 'advanced-gutenberg') ?>
                             </a>
                         </span>
@@ -257,7 +259,7 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                         <label for="blocks_icon_color"
                                class="ju-setting-label advgb_qtip"
                                data-qtip="<?php esc_attr_e(
-                                   'Set color for blocks icons on admin, only apply to Advanced Gutenberg blocks',
+                                   'Set color for blocks icons on admin, only apply to PublishPress Blocks',
                                    'advanced-gutenberg'
                                ) ?>"
                         >
@@ -323,7 +325,7 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                         <label for="enable_columns_visual_guide"
                                class="advgb_qtip ju-setting-label"
                                data-qtip="<?php esc_attr_e(
-                                   'Enable border to materialize Adv. Gutenberg Column block',
+                                   'Enable border to materialize PublishPress Blocks Column block',
                                    'advanced-gutenberg'
                                ) ?>"
                         >
@@ -345,7 +347,7 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
 
             <div class="save-settings-block">
                 <button type="submit"
-                        class="ju-button orange-button waves-effect waves-light"
+                        class="button button-primary pp-primary-button"
                         id="save-settings"
                         name="save_settings"
                 >

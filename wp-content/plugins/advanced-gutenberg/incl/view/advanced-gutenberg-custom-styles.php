@@ -30,7 +30,7 @@ $custom_styles_saved = get_option('advgb_custom_styles', $this::$default_custom_
                     $content .= '<ul style="margin-left: 30px"><li class="advgb-customstyles-items-class">(' . esc_html($customStyles['name']) . ')</li></ul>';
                     $content .= '</li>';
                 }
-                $content .= '<li style="text-align: center; margin-top: 20px"><a class="advgb-customstyles-new ju-button"><i class="mi mi-add"></i>' . esc_html__('Add new class', 'advanced-gutenberg') . '</a></li>';
+                $content .= '<li style="text-align: center; margin-top: 20px"><a class="advgb-customstyles-new button pp-default-button"><span class="dashicons dashicons-plus"></span>' . esc_html__('Add new class', 'advanced-gutenberg') . '</a></li>';
 
                 echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped
                 ?>
@@ -83,7 +83,7 @@ $custom_styles_saved = get_option('advgb_custom_styles', $this::$default_custom_
             <form method="POST">
                 <?php wp_nonce_field('advgb_cstyles_nonce', 'advgb_cstyles_nonce_field'); ?>
                 <input type="hidden" name="save_custom_styles" value="1" />
-                <button class="ju-button orange-button waves-effect waves-light"
+                <button class="button button-primary pp-primary-button"
                         style="margin: 10px auto"
                         type="button"
                         id="save_custom_styles"

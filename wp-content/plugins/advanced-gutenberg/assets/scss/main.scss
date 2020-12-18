@@ -1,0 +1,125 @@
+@import "variables";
+@import "mixins";
+
+.inline-button-wrapper {
+    float: right;
+}
+
+#wpwrap {
+    background-color: #f3f6fa;
+}
+
+.advgb-header {
+    margin-bottom: 15px;
+    padding: 10px 0;
+}
+
+.advgb-header .header-title {
+    margin: 0;
+    margin-left: 10px;
+    display: inline-block;
+    padding: 10px 0;
+    text-transform: capitalize;
+}
+
+.qtip.advgb-qtip {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
+}
+
+.advgb_qtip:after {
+    content: "\e0cb";
+    font-family: 'Material Icons';
+    font-size: 15px;
+    vertical-align: middle;
+    margin-left: 5px;
+    color: inherit;
+}
+
+.ju-main-wrapper .ju-right-panel .ju-content-wrapper {
+    font-family: "Roboto", "Nunito Sans", sans-serif;
+}
+
+.ju-settings-option .ju-setting-label {
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+}
+
+/*Search input styles*/
+.advgb-search-wrapper {
+    margin: 25px auto;
+    padding: 10px;
+    border: 2px solid #e1e1e1;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+.advgb-search-wrapper.focused {
+    border: 2px solid $purple;
+}
+
+.advgb-search-wrapper .advgb-search-input {
+    display: inline-block;
+    width: calc(100% - 30px);
+    border: none;
+    box-shadow: none;
+    background-color: inherit;
+}
+
+.advgb-search-wrapper .advgb-search-input:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.advgb-search-wrapper > i {
+    font-size: 22px;
+    vertical-align: text-bottom;
+}
+
+.ju-button i {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    vertical-align: text-top;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.advgb-overlay-box {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.advgb-overlay-box:before,
+.advgb-overlay-box:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.advgb-overlay-box:before {
+    z-index: 98;
+    background-color: #eee;
+    opacity: 0.5;
+}
+
+.advgb-overlay-box:after {
+    z-index: 99;
+    background-image: url(../images/spinner.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/*Support RTL*/
+.rtl .advgb-header .header-title {
+    margin-right: 10px;
+}

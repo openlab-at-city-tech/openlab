@@ -1,9 +1,9 @@
-=== Advanced Gutenberg - Blocks, Permissions, Layouts, Forms and CSS Styles ===
-Contributors: JoomUnited, advancedgutenberg
+=== PublishPress Blocks – Advanced Gutenberg Blocks, Permissions, Layouts, Forms ===
+Contributors: publishpress, advancedgutenberg, JoomUnited
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
-Tested up to: 5.4.2
-Stable tag: 2.3.11
+Tested up to: 5.6
+Stable tag: 2.5.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,19 +14,21 @@ Supercharge WordPress Gutenberg editor plugin with 27+ new blocks. Create custom
 
 == Description ==
 
-Advanced Gutenberg adds the missing blocks and configuration you need to build professional websites. Take the control of the new Gutenberg editor with user edition profile configuration and 20+ new blocks and options.
+PublishPress Blocks adds the missing blocks and configuration you need to build professional websites. Take the control of the new Gutenberg editor with user edition profile configuration and 20+ new blocks and options.
+
+This plugin was previously called "Advanced Gutenberg".
 
 ## GUTENBERG ADVANCED BLOCK CONTROL
 
 - Create edition profiles and assign user or user group to the profile
 - Select each block activation per user profile
-- Default block configuration (Advanced Gutenberg blocks)
+- Default block configuration (PublishPress Blocks)
 - Custom CSS styles: apply on Gutenbergparagraph blocks
 - Define Gutenberg editor size and column materialization
 - Performance: only loaded when a block from the plugin is called
 
 
-## ADVANCED GUTENBERG BLOCKS
+## PUBLISHPRESS BLOCKS
 
 - Column manager with pre-defined layouts
 - Latest post slider and latest post slider
@@ -48,31 +50,29 @@ Advanced Gutenberg adds the missing blocks and configuration you need to build p
 - Advanced Image block: hover text, overlay, colors, link and more
 - Advanced Image block: load and display local and remote video
 - Advanced Video block: load and display local and remote video
-- Supercharge the separator tool with size, color, spaces
 - Social links block: custom icon and links to any social networks
 - Activate lightbox effect in Gutenberg image galleries
 - Display image information as lightbox caption in galleries
 - Gutenberg post summary based on content headers
 
 
-## ADVANCED GUTENBERG DEMO
+## PUBLISHPRESS BLOCKS DEMO
 
 [vimeo https://vimeo.com/264060718]
 
-<a href="https://advancedgutenberg.com/" title="WordPress Advanced Gutenberg" rel="friend">Read the plugin presentation on our website</a>
+<a href="https://publishpress.com/blocks/" title="WordPress PublishPress Blocks" rel="friend">Read the plugin presentation on our website</a>
 
 
 = Support =
 
 Before leaving a review >> Feel free to ask questions here in the support section, we reply to every question!
-We also have a forum on [advancedgutenberg.com](https://advancedgutenberg.com/) for feature requests.
+We also have [a support page](https://publishpress.com/publishpress-support/) for feature requests.
 
 == Installation ==
 
 = To install the plugin automatically: =
-* Require Gutenberg plugin to be installed first
 * Through WordPress admin, use the menu: Plugin > Add new
-* Search for Advanced Gutenberg
+* Search for PublishPress Blocks
 * Click on install then click activate link
 
 = To install the plugin manually: =
@@ -80,40 +80,37 @@ We also have a forum on [advancedgutenberg.com](https://advancedgutenberg.com/) 
 * Download and unzip the plugin advanced-gutenberg.zip
 * Upload the /advanced-gutenberg directory to /wp-content/plugins/
 * Activate the plugin through the 'Plugins' menu in WordPress
-* Use the left menus: Gutenberg > Profiles AND Settings > Advanced Gutenberg
+* Use the left menus: Gutenberg > Profiles AND Settings > PublishPress Blocks
 
 == Frequently Asked Questions ==
 
-= I don't see the new buttons or new tools in Advanced Gutenberg =
+= I don't see the new buttons or new tools in PublishPress Blocks =
 1. Make sure the plugin is activated :)
-2. All right, that could be because the new blocks are not activated to your account, please reach the menu Adv. Gutenberg > Profiles > Setup the blocks to activate
-3. Advanced Gutenberg is pretty well integrated with native Gutenberg, some blocks are new some other are original Gutenberg blocks but supercharged by new features
+2. All right, that could be because the new blocks are not activated to your account, please reach the menu PublishPress Blocks > Profiles > Setup the blocks to activate
+3. PublishPress Blocks is pretty well integrated with native Gutenberg, some blocks are new some other are original Gutenberg blocks but supercharged by new features
 4. You can define a custom color for the new blocks, by default it's a kind of purple color
 
 = Can I get support for the editor use? =
-We reply to every question about the editor on the forum here, just ask :) We also have an online documentation here: [https://advancedgutenberg.com/knowledge-base/](https://advancedgutenberg.com/knowledge-base/)
+We reply to every question about the editor on the forum here, just ask :) We also have [an online documentation here](https://publishpress.com/knowledge-base/installation/).
 
-= Does Advanced Gutenberg slowing down my website? =
+= Does PublishPress Blocks slowing down my website? =
 The plugin has almost NO impact on page load for your visitors, it's only loaded during the edition process.
 
-= What is the Gutenberg version required to run Advanced Gutenberg plugin properly? =
+= What is the Gutenberg version required to run PublishPress Blocks plugin properly? =
 The latest one, always! We're testing it with previous versions but the latest version of Gutenberg brings new features for developer and allow better content edition. 
 
-= Is Advanced Gutenberg free? =
+= Is PublishPress Blocks free? =
 Yes, totally free of charge.
 
-= Where can I see Advanced Gutenberg in my WordPress admin panel? =
-In different places: in Gutenberg itself by adding some options to existing blocks, by adding new blocks, as new menu named Adv. Gutenberg
+= Where can I see PublishPress Blocks in my WordPress admin panel? =
+In different places: in Gutenberg itself by adding some options to existing blocks, by adding new blocks, as new menu named PublishPress Blocks
 
 = Can I setup an edition profile per user? =
 Yes, this is possible, from the Gutenberg profile management, select some blocks, then you can give the profile to a single user or a user role
 
-= Can I translate Advanced Gutenberg plugin? =
-Yes, and that's really easy! JU Translation is a translation tool included in all our WordPress plugins: get, share and manage your extensions translations from a visual and easy to use interface! You'll find it in the Advanced Gutenberg settings menu
-
-= Does the Advanced Gutenberg custom styles works with the Gutenberg CSS block class? =
+= Does the PublishPress Blocks custom styles works with the Gutenberg CSS block class? =
 Both are loaded from a separated stylesheet file and offer 2 ways to style your blocks. The Gutenberg default CSS class apply a CSS class on a single block then you can create your CSS on an external file. 
-The Advanced Gutenberg Custom CSS can be created from the plugin configuration and applied from a dropdown list to any block.
+The PublishPress Blocks Custom CSS can be created from the plugin configuration and applied from a dropdown list to any block.
 
 == Screenshots ==
 
@@ -127,6 +124,53 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 1. Latest posts and WooCommerce products blocks
 
 == Changelog ==
+
+= 2.5.0 =
+ * Add: "PublishPress Blocks" as new plugin's name
+ * Add: New admin design
+ * Add: Support for javascript translations
+ * Add: More translation strings for Italian
+ * Add: More translation strings for Spanish (Spain)
+ * Fix: Strings that are saved as static content
+ 
+= 2.4.7 =
+ * Fix: Global columns visual guide
+ * Fix: Deprecated isDefault replaced with isSecondary
+ * Fix: Hidden text in selected button groups on content Gutenberg sidebar
+ * Fix: Custom class support for Advanced Icon and Info Box blocks
+ * Fix: Tooltips in configuration pages
+
+= 2.4.6 =
+ * Fix: Support for nested blocks in 5th level
+
+= 2.4.5 =
+ * Fix: Load Custom Styles in multisites
+ * Add: Optimize blocks style loading
+
+= 2.4.4 =
+ * Fix: Recent Posts block, broken Category setting
+ * Add: AdvQueryControls component
+
+= 2.4.3 =
+ * Fix: Load common CSS for nested blocks
+
+= 2.4.2 =
+ * Fix: Styles not loading in frontend for nested blocks in WordPress 5.5
+
+= 2.4.1 =
+ * Fix: Border width for Advanced Button Block
+ * Fix: Missing Thickbox CSS loading
+
+= 2.4.0 =
+ * Remove: JU Translation system
+ * Add: Native language files support
+ * Add: Support for language overrides created with version 2.3.11 and older
+ * Add: Support for more translations (Danish, German, Spanish, French, Italian, Japanese, Polish, Romanian and Chinese)
+ * Fix: "Enable" option for columns visual guide setting while editing
+ * Fix: Forward slash in tooltip in Map block
+ * Fix: Broken strong and em HTML tags in Tabs block headers
+ * Fix: Load reCaptcha in Login/register, Contact form and Newsletter blocks only when required in frontend
+ * Fix: Load Google Maps API in Map block only when required in frontend
 
 = 2.3.11 =
  * Fix: Improve default background position for new Advanced image block
@@ -453,7 +497,7 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
  * Add : New option to define Advanced Gutenberg blocks icon color
  * Add : New custom CSS style edition interface
  * Add : Add a search engine to filter blocks in profile block attribution
- * Add : Add a dedicated left menu for all the configuration named Adv. Gutenberg
+ * Add : Add a dedicated left menu for all the configuration named PublishPress Blocks
  * Fix : Compatibility with Gutenberg version 3.6.2
  * Fix : Compile all blocks styles to a single file for faster load
 
@@ -514,7 +558,7 @@ The Advanced Gutenberg Custom CSS can be created from the plugin configuration a
 
 == Upgrade Notice ==
 
-Update through the automatic WordPress updater, all Advanced Gutenberg content and configuration will remain in place.
+Update through the automatic WordPress updater, all PublishPress Blocks content and configuration will remain in place.
 
 
 == Requirements ==

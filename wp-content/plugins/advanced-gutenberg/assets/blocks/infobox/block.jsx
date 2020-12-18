@@ -1007,6 +1007,7 @@ import {IconListPopupHook} from "../0-adv-components/icon-class.jsx";
         save: ( { attributes } ) => {
             const {
                 blockIDX,
+                className,
                 title,
                 titleHtmlTag,
                 text,
@@ -1019,6 +1020,7 @@ import {IconListPopupHook} from "../0-adv-components/icon-class.jsx";
                 'wp-block-advgb-infobox',
                 'advgb-infobox-wrapper',
                 `has-text-align-${align}`,
+                className,
                 blockIDX
             ].filter( Boolean ).join( ' ' );
 

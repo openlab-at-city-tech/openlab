@@ -106,7 +106,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                     <img className="advgb-lores-form-logo"
                                          onClick={ open }
                                          src={ logoImg }
-                                         alt={ __( 'Site logo', 'advanced-gutenberg' ) }
+                                         alt={ 'Site logo' }
                                          style={ {
                                              width: logoWidth ? logoWidth + 'px' : undefined,
                                              cursor: 'pointer',
@@ -136,7 +136,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                     <img className="advgb-lores-form-logo"
                                          onClick={ open }
                                          src={ registerLogoImg }
-                                         alt={ __( 'Site logo', 'advanced-gutenberg' ) }
+                                         alt={ 'Site logo' }
                                          style={ {
                                              width: logoWidth ? logoWidth + 'px' : undefined,
                                              cursor: 'pointer',
@@ -224,7 +224,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                 <input type="text" disabled={ true }
                                        className="advgb-lores-input"
                                        style={ { color: inputColor } }
-                                       value={ loginLabel ? loginLabel : __( 'user@email.com', 'advanced-gutenberg' ) }
+                                       value={ loginLabel ? loginLabel : 'user@email.com' }
                                 />
                             </div>
                         </div>
@@ -396,7 +396,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                 <input type="text" disabled={ true }
                                        className="advgb-lores-input"
                                        style={ { color: inputColor } }
-                                       value={ usernameLabel ? usernameLabel : __( 'username', 'advanced-gutenberg' ) }
+                                       value={ usernameLabel ? usernameLabel : 'username' }
                                 />
                             </div>
                         </div>
@@ -432,7 +432,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                 <input type="text" disabled={ true }
                                        className="advgb-lores-input"
                                        style={ { color: inputColor } }
-                                       value={ emailLabel ? emailLabel : __( 'user@email.com', 'advanced-gutenberg' ) }
+                                       value={ emailLabel ? emailLabel : 'user@email.com' }
                                 />
                             </div>
                         </div>
@@ -820,64 +820,64 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         },
         welcomeText: {
             type: 'string',
-            default: __( 'Welcome back', 'advanced-gutenberg' ),
+            default: 'Welcome back',
         },
         loginLabel: {
             type: 'string',
         },
         loginText: {
             type: 'string',
-            default: __( 'Username or Email', 'advanced-gutenberg' ),
+            default: 'Username or Email',
         },
         passwordText: {
             type: 'string',
-            default: __( 'Password', 'advanced-gutenberg' )
+            default: 'Password',
         },
         usernameLabel: {
             type: 'string',
         },
         userText: {
             type: 'string',
-            default: __( 'Username', 'advanced-gutenberg' ),
+            default: 'Username',
         },
         emailLabel: {
             type: 'string',
         },
         emailText: {
             type: 'string',
-            default: __( 'Email', 'advanced-gutenberg' ),
+            default: 'Email',
         },
         rememberMeText: {
             type: 'string',
-            default: __( 'Remember me', 'advanced-gutenberg' ),
+            default: 'Remember me',
         },
         loginSubmitLabel: {
             type: 'string',
-            default: __( 'LOGIN', 'advanced-gutenberg' ),
+            default: 'LOGIN',
         },
         registerSubmitLabel: {
             type: 'string',
-            default: __( 'REGISTER', 'advanced-gutenberg' ),
+            default: 'REGISTER',
         },
         registerText: {
             type: 'string',
-            default: __( "Don't have an account?", 'advanced-gutenberg' ),
+            default: "Don't have an account?",
         },
         registerLinkText: {
             type: 'string',
-            default: __( 'Register now', 'advanced-gutenberg' ),
+            default: 'Register now',
         },
         registerWelcome: {
             type: 'string',
-            default: __( 'Register new account', 'advanced-gutenberg' ),
+            default: 'Register new account',
         },
         backToLoginText: {
             type: 'string',
-            default: __( 'Login', 'advanced-gutenberg' ),
+            default: 'Login',
         },
         lostPasswordText: {
             type: 'string',
-            default: __( 'Lost your password?', 'advanced-gutenberg' ),
+            default: 'Lost your password?',
         },
         headerBgColor: {
             type: 'string',
@@ -991,7 +991,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                     <span style={ {display: 'block',} }>
                         <img className="advgb-lores-form-logo"
                              src={ logoImg }
-                             alt={ __( 'Site logo', 'advanced-gutenberg' ) }
+                             alt={ 'Site logo' }
                              style={ {
                                  width: logoWidth ? logoWidth + 'px' : undefined,
                                  cursor: 'pointer',
@@ -1006,7 +1006,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                     <span style={ {display: 'block',} }>
                         <img className="advgb-lores-form-logo"
                              src={ registerLogoImg }
-                             alt={ __( 'Site logo', 'advanced-gutenberg' ) }
+                             alt={ 'Site logo' }
                              style={ {
                                  width: logoWidth ? logoWidth + 'px' : undefined,
                                  cursor: 'pointer',
@@ -1078,7 +1078,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                            className="advgb-lores-input"
                                            name="log"
                                            style={ { color: inputColor } }
-                                           placeholder={ loginLabel ? loginLabel : __( 'user@email.com', 'advanced-gutenberg' ) }
+                                           placeholder={ loginLabel ? loginLabel : 'user@email.com' }
                                     />
                                 </div>
                             </div>
@@ -1223,7 +1223,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                            className="advgb-lores-input"
                                            name="user_login"
                                            style={ { color: inputColor } }
-                                           placeholder={ usernameLabel ? usernameLabel : __( 'username', 'advanced-gutenberg' ) }
+                                           placeholder={ usernameLabel ? usernameLabel : 'username' }
                                     />
                                 </div>
                             </div>
@@ -1256,7 +1256,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                                            className="advgb-lores-input"
                                            name="user_email"
                                            style={ { color: inputColor } }
-                                           placeholder={ emailLabel ? emailLabel : __( 'user@email.com', 'advanced-gutenberg' ) }
+                                           placeholder={ emailLabel ? emailLabel : 'user@email.com' }
                                     />
                                 </div>
                             </div>

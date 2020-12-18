@@ -59,9 +59,10 @@ class Jufeedback
      *
      * @var string $mailto
      */
-    public static $mailto = 'help@advancedgutenberg.com';
+    public static $mailto = 'help@publishpress.com';
 
     /**
+     * @todo check if Jutranslation is actually being called here
      * Initialize Jutranslation
      *
      * @param string $main_plugin_file Main plugin file

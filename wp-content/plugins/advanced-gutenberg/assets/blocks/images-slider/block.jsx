@@ -308,7 +308,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={image.url}
                                              className="advgb-image-slider-img"
-                                             alt={__('Slider image', 'advanced-gutenberg')}
+                                             alt={'Slider image'}
                                              style={{
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,
@@ -565,7 +565,7 @@
                             <div className="advgb-image-slider-item" key={index}>
                                 <img src={image.url}
                                      className="advgb-image-slider-img"
-                                     alt={__('Slider image', 'advanced-gutenberg')}
+                                     alt={'Slider image'}
                                      style={{
                                          width: fullWidth ? '100%' : width,
                                          height: autoHeight ? 'auto' : height,
@@ -639,7 +639,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={image.url}
                                              className="advgb-image-slider-img"
-                                             alt={__('Slider image', 'advanced-gutenberg')}
+                                             alt={'Slider image'}
                                              style={{
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,
@@ -711,7 +711,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={image.url}
                                              className="advgb-image-slider-img"
-                                             alt={__('Slider image', 'advanced-gutenberg')}
+                                             alt={'Slider image'}
                                              style={{
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,
@@ -783,7 +783,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={image.url}
                                              className="advgb-image-slider-img"
-                                             alt={__('Slider image', 'advanced-gutenberg')}
+                                             alt={'Slider image'}
                                              style={{
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,

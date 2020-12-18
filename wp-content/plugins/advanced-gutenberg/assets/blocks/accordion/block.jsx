@@ -275,7 +275,7 @@
     const accordionAttrs = {
         header: {
             type: 'string',
-            default: __( 'Header text', 'advanced-gutenberg' ),
+            default: 'Header text',
         },
         headerBgColor: {
             type: 'string',

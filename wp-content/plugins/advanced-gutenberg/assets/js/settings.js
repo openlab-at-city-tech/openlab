@@ -11,17 +11,6 @@ jQuery(document).ready(function ($) {
         position: {
             my: 'top left',
             at: 'bottom bottom'
-        },
-        style: {
-            tip: {
-                corner: true
-            },
-            classes: 'advgb-qtip'
-        },
-        show: 'hover',
-        hide: {
-            fixed: true,
-            delay: 10
         }
     });
 

@@ -157,7 +157,7 @@
             setAttributes( {
                 tabHeaders: [
                     ...attributes.tabHeaders,
-                    __('Tab header', 'advanced-gutenberg')
+                    'Tab header'
                 ]
             } );
             this.props.resetOrder();

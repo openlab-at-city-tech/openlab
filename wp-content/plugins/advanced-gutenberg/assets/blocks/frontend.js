@@ -86,51 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./assets/blocks/count-up/frontend/count-up.frontend.jsx":
-/*!***************************************************************!*\
-  !*** ./assets/blocks/count-up/frontend/count-up.frontend.jsx ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _jquery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _counterup = __webpack_require__(/*! counterup2 */ "./node_modules/counterup2/dist/index.js");
-
-var _counterup2 = _interopRequireDefault(_counterup);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-__webpack_require__(/*! waypoints/lib/noframework.waypoints.js */ "./node_modules/waypoints/lib/noframework.waypoints.js");
-
-(0, _jquery2.default)(document).ready(function () {
-    var els = document.querySelectorAll('.advgb-counter-number');
-    if (els.length > 0) {
-        [].concat(_toConsumableArray(els)).forEach(function (el) {
-            new Waypoint({
-                element: el,
-                handler: function handler() {
-                    (0, _counterup2.default)(el, {
-                        duration: 1200,
-                        delay: 10
-                    });
-                    this.destroy();
-                },
-                offset: 'bottom-in-view'
-            });
-        });
-    }
-});
-
-/***/ }),
-
 /***/ "./node_modules/counterup2/dist/index.js":
 /*!***********************************************!*\
   !*** ./node_modules/counterup2/dist/index.js ***!
@@ -11794,14 +11749,59 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 
 /***/ }),
 
-/***/ 0:
-/*!*********************************************************************!*\
-  !*** multi ./assets/blocks/count-up/frontend/count-up.frontend.jsx ***!
-  \*********************************************************************/
+/***/ "./src/assets/blocks/count-up/frontend/count-up.frontend.jsx":
+/*!*******************************************************************!*\
+  !*** ./src/assets/blocks/count-up/frontend/count-up.frontend.jsx ***!
+  \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./assets/blocks/count-up/frontend/count-up.frontend.jsx */"./assets/blocks/count-up/frontend/count-up.frontend.jsx");
+"use strict";
+
+
+var _jquery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _counterup = __webpack_require__(/*! counterup2 */ "./node_modules/counterup2/dist/index.js");
+
+var _counterup2 = _interopRequireDefault(_counterup);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+__webpack_require__(/*! waypoints/lib/noframework.waypoints.js */ "./node_modules/waypoints/lib/noframework.waypoints.js");
+
+(0, _jquery2.default)(document).ready(function () {
+    var els = document.querySelectorAll('.advgb-counter-number');
+    if (els.length > 0) {
+        [].concat(_toConsumableArray(els)).forEach(function (el) {
+            new Waypoint({
+                element: el,
+                handler: function handler() {
+                    (0, _counterup2.default)(el, {
+                        duration: 1200,
+                        delay: 10
+                    });
+                    this.destroy();
+                },
+                offset: 'bottom-in-view'
+            });
+        });
+    }
+});
+
+/***/ }),
+
+/***/ 0:
+/*!*************************************************************************!*\
+  !*** multi ./src/assets/blocks/count-up/frontend/count-up.frontend.jsx ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./src/assets/blocks/count-up/frontend/count-up.frontend.jsx */"./src/assets/blocks/count-up/frontend/count-up.frontend.jsx");
 
 
 /***/ })
