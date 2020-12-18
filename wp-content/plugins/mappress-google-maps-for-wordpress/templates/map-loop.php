@@ -4,6 +4,10 @@
 	</div>
 <# } #>
 
+<# if (map.layout != 'inline') { #>
+<div class='mapp-list-toggle' data-mapp-action='list-toggle'></div>
+<# } #>
+
 <div class="mapp-items">
 	<# _.forEach(pois, function(poi, i) { #>
 		<# if (!poi.visible) { return; } #>
@@ -12,3 +16,7 @@
 		</div>
 	<# }); #>
 </div>
+<# if (map.layout || mappl10n.options.layout == 'left') { #>
+<div class="mapp-list-footer">
+</div>
+<# } #>

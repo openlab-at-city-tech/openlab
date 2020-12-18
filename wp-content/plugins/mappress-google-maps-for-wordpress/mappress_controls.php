@@ -270,7 +270,7 @@ class Mappress_Walker extends Walker {
 		// If 'indent' set, use spaces (for hierarchical lists like taxonomies)
 		$indent = (isset($args['indent']) && $args['indent']) ? str_repeat('&mdash;', $depth) : '';
 		$value = ($this->fields == 'names') ? $term->name : $term->slug;
-		$output[$term->slug] = $indent . $value;
+		$output[$term->slug] = $indent . $value . ' (' . $term->count . ')';
 	}
 }
 ?>

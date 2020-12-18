@@ -8,8 +8,9 @@ class Mappress_Options extends Mappress_Obj {
 		$autoupdate,
 		$apiKey,
 		$apiKeyServer,
-		$autodisplay = 'top',
+		$autodisplay,
 		$betas,
+		$clustering = false,
 		$country,
 		$css = true,
 		$defaultIcon,
@@ -26,7 +27,6 @@ class Mappress_Options extends Mappress_Obj {
 		$language,
 		$layout = 'left',
 		$license,
-        // TBD $mapOptions = array('mapTypeControl' => true, 'streetViewControl' => true, 'zoomControl' => true),
 		$mapbox,
 		$mapboxStyles = array(),
 		$mashupBody = 'poi',
@@ -34,6 +34,7 @@ class Mappress_Options extends Mappress_Obj {
 		$mashupKml,
 		$metaKeys = array(),
 		$metaSyncSave = true,
+		$mini = 400,
 		$poiList = false,
 		$poiZoom = 15,
 		$postTypes = array('post', 'page'),
@@ -47,7 +48,8 @@ class Mappress_Options extends Mappress_Obj {
 		$thumbs = true,
 		$thumbSize,
 		$thumbWidth = 64,
-		$thumbHeight = 64
+		$thumbHeight = 64,
+		$wpml = true
 		;
 
 	function __construct($options = '') {
@@ -84,13 +86,13 @@ class Mappress_Settings {
 		$this->add_section('demo', __('Sample Map', 'mappress-google-maps-for-wordpress'));
 
 		$this->add_section('basic', __('Basic Settings', 'mappress-google-maps-for-wordpress'));
-		$this->add_field('engine', __('Mapping Engine', 'mappress-google-maps-for-wordpress'), 'basic');
+		$this->add_field('engine', __('Mapping API', 'mappress-google-maps-for-wordpress'), 'basic');
 
-		if ($this->options->engine == 'leaflet') {
-			$this->add_field('mapbox', __('Mapbox access token', 'mappress-google-maps-for-wordpress'), 'basic');
-		} else {
+		if ($this->options->engine == 'google')
 			$this->add_field('apiKey', __('Google API key', 'mappress-google-maps-for-wordpress'), 'basic');
-		}
+
+		if ($this->options->engine == 'leaflet')
+			$this->add_field('mapbox', __('Mapbox access token', 'mappress-google-maps-for-wordpress'), 'basic');
 
 		// License: single blogs, or main blog on multisite
 		if (Mappress::$pro && (!is_multisite() || (is_super_admin() && is_main_site())) )
@@ -101,7 +103,7 @@ class Mappress_Settings {
 		$this->add_field('autodisplay', __('Automatic display', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('alignment', __('Map alignment', 'mappress-google-maps-for-wordpress'), 'maps');
 		$this->add_field('directions', __('Directions', 'mappress-google-maps-for-wordpress'), 'maps');
-        // TBD $this->add_field('mapOptions', __('Map options'), 'maps');
+		// TBD $this->add_field('mapOptions', __('Map options'), 'maps');
 
 		$this->add_section('pois', __('POI Settings', 'mappress-google-maps-for-wordpress'));
 		$this->add_field('poiZoom', __('Default zoom', 'mappress-google-maps-for-wordpress'), 'pois');
@@ -116,15 +118,17 @@ class Mappress_Settings {
 		}
 
 		$this->add_section('l10n', __('Localization', 'mappress-google-maps-for-wordpress'));
-		$this->add_field('language', __('Language', 'mappress-google-maps-for-wordpress'), 'l10n');
-		$this->add_field('country', __('Country', 'mappress-google-maps-for-wordpress'), 'l10n');
+		$this->add_field('language', __('Search language', 'mappress-google-maps-for-wordpress'), 'l10n');
+		$this->add_field('country', __('Search country', 'mappress-google-maps-for-wordpress'), 'l10n');
 		$this->add_field('directionsServer', __('Directions server', 'mappress-google-maps-for-wordpress'), 'l10n');
 
 		$this->add_section('misc', __('Miscellaneous', 'mappress-google-maps-for-wordpress'));
+		$this->add_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), 'misc');
+		$this->add_field('footer', __('Scripts', 'mappress-google-maps-for-wordpress'), 'misc');
+		$this->add_field('wpml', 'WPML', 'misc');
+
 		if ($this->options->engine != 'leaflet')
 			$this->add_field('deregister', __('Compatiblity', 'mappress-google-maps-for-wordpress'), 'misc');
-		$this->add_field('footer', __('Scripts', 'mappress-google-maps-for-wordpress'), 'misc');
-		$this->add_field('sizes', __('Map sizes', 'mappress-google-maps-for-wordpress'), 'misc');
 	}
 
 	function add_section($section, $title) {
@@ -148,12 +152,6 @@ class Mappress_Settings {
 		foreach(array('apiKey', 'apiKeyServer') as $key) {
 			if (isset($input[$key]))
 				$input[$key] = trim($input[$key]);
-		}
-
-		// Sizes - strip 'px' from value if user entered it
-		foreach( $input['sizes'] as &$size ) {
-            $size['width'] = str_ireplace('px', '', $size['width']);
-            $size['height'] = str_ireplace('px', '', $size['height']);
 		}
 
 		// If NO post types selected, set value to empty array
@@ -183,17 +181,15 @@ class Mappress_Settings {
 	}
 
 	function set_api_key($name) {
-		// Google API key; show as hidden field if using leaflet
-		$type = ($this->options->engine == 'leaflet') ? 'hidden' : 'text';
-		echo Mappress_Controls::input($name, $this->options->apiKey, array('type' => $type, 'size' => '50'));
-		echo Mappress_Controls::help('', '#toc-google-maps-api-keys');
+		echo Mappress_Controls::input($name, $this->options->apiKey, array('size' => '50'));
+		echo Mappress_Controls::help('', 'https://mappresspro.com/mappress-faq/#toc-google-maps-api-keys');
 	}
 
 	function set_autodisplay($name) {
 		$autos = array(
+			'' => __('None', 'mappress-google-maps-for-wordpress'),
 			'top' => __('Top of post', 'mappress-google-maps-for-wordpress'),
-			'bottom' => __('Bottom of post', 'mappress-google-maps-for-wordpress'),
-			'none' => __('None', 'mappress-google-maps-for-wordpress')
+			'bottom' => __('Bottom of post', 'mappress-google-maps-for-wordpress')
 		);
 		echo Mappress_Controls::radios($name, $autos, $this->options->autodisplay);
 	}
@@ -224,7 +220,7 @@ class Mappress_Settings {
 	function set_engine($name) {
 		$engines = array('leaflet' => __('Leaflet', 'mappress-google-maps-for-wordpress'), 'google' => __('Google', 'mappress-google-maps-for-wordpress'));
 		echo Mappress_Controls::radios($name, $engines, $this->options->engine);
-		echo Mappress_Controls::help(__('Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits.', 'mappress-google-maps-for-wordpress'), '#toc-picking-a-mapping-engine');
+		echo Mappress_Controls::help(__('Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits.', 'mappress-google-maps-for-wordpress'), '#toc-picking-a-mapping-api');
 	}
 
 	function set_footer($name) {
@@ -245,9 +241,9 @@ class Mappress_Settings {
 	function set_language($name) {
 		$url = ($this->options->engine == 'leaflet') ? 'https://en.wikipedia.org/wiki/ISO_639-1' : 'http://code.google.com/apis/maps/faq.html#languagesupport';
 		$lang_link = sprintf('<a style="vertical-align:text-bottom" target="_blank" href="%s">%s</a>', $url, __("(list)", 'mappress-google-maps-for-wordpress'));
-		$langs = array('' => '', 'ab' => 'Abkhazian', 'aa' => 'Afar', 'af' => 'Afrikaans', 'ak' => 'Akan', 'sq' => 'Albanian', 'am' => 'Amharic', 'ar' => 'Arabic', 'an' => 'Aragonese', 'hy' => 'Armenian', 'as' => 'Assamese', 'av' => 'Avaric', 'ae' => 'Avestan', 'ay' => 'Aymara', 'az' => 'Azerbaijani', 'bm' => 'Bambara', 'ba' => 'Bashkir', 'eu' => 'Basque', 'be' => 'Belarusian', 'bn' => 'Bengali', 'bh' => 'Bihari languages', 'bi' => 'Bislama', 'bs' => 'Bosnian', 'br' => 'Breton', 'bg' => 'Bulgarian', 'my' => 'Burmese', 'ca' => 'Catalan, Valencian', 'km' => 'Central Khmer', 'ch' => 'Chamorro', 'ce' => 'Chechen', 'ny' => 'Chichewa, Chewa, Nyanja', 'zh' => 'Chinese', 'cv' => 'Chuvash', 'kw' => 'Cornish', 'co' => 'Corsican', 'cr' => 'Cree', 'hr' => 'Croatian', 'cs' => 'Czech', 'da' => 'Danish', 'dv' => 'Divehi, Dhivehi, Maldivian', 'nl' => 'Dutch, Flemish', 'dz' => 'Dzongkha', 'en' => 'English', 'eo' => 'Esperanto', 'et' => 'Estonian', 'ee' => 'Ewe', 'fo' => 'Faroese', 'fj' => 'Fijian', 'fi' => 'Finnish', 'fr' => 'French', 'ff' => 'Fulah', 'gd' => 'Gaelic, Scottish Gaelic', 'gl' => 'Galician', 'lg' => 'Ganda', 'ka' => 'Georgian', 'de' => 'German', 'ki' => 'Gikuyu, Kikuyu', 'el' => 'Greek (Modern)', 'kl' => 'Greenlandic, Kalaallisut', 'gn' => 'Guarani', 'gu' => 'Gujarati', 'ht' => 'Haitian, Haitian Creole', 'ha' => 'Hausa', 'he' => 'Hebrew', 'hz' => 'Herero', 'hi' => 'Hindi', 'ho' => 'Hiri Motu', 'hu' => 'Hungarian', 'is' => 'Icelandic', 'io' => 'Ido', 'ig' => 'Igbo', 'id' => 'Indonesian', 'iu' => 'Inuktitut', 'ik' => 'Inupiaq', 'ga' => 'Irish', 'it' => 'Italian', 'ja' => 'Japanese', 'jv' => 'Javanese', 'kn' => 'Kannada', 'kr' => 'Kanuri', 'ks' => 'Kashmiri', 'kk' => 'Kazakh', 'rw' => 'Kinyarwanda', 'kv' => 'Komi', 'kg' => 'Kongo', 'ko' => 'Korean', 'kj' => 'Kwanyama, Kuanyama', 'ku' => 'Kurdish', 'ky' => 'Kyrgyz', 'lo' => 'Lao', 'la' => 'Latin', 'lv' => 'Latvian', 'lb' => 'Letzeburgesch, Luxembourgish', 'li' => 'Limburgish, Limburgan, Limburger', 'ln' => 'Lingala', 'lt' => 'Lithuanian', 'lu' => 'Luba-Katanga', 'mk' => 'Macedonian', 'mg' => 'Malagasy', 'ms' => 'Malay', 'ml' => 'Malayalam', 'mt' => 'Maltese', 'gv' => 'Manx', 'mi' => 'Maori', 'mr' => 'Marathi', 'mh' => 'Marshallese', 'ro' => 'Moldovan, Moldavian, Romanian', 'mn' => 'Mongolian', 'na' => 'Nauru', 'nv' => 'Navajo, Navaho', 'nd' => 'Northern Ndebele', 'ng' => 'Ndonga', 'ne' => 'Nepali', 'se' => 'Northern Sami', 'no' => 'Norwegian', 'nb' => 'Norwegian Bokmål', 'nn' => 'Norwegian Nynorsk', 'ii' => 'Nuosu, Sichuan Yi', 'oc' => 'Occitan (post 1500)', 'oj' => 'Ojibwa', 'or' => 'Oriya', 'om' => 'Oromo', 'os' => 'Ossetian, Ossetic', 'pi' => 'Pali', 'pa' => 'Panjabi, Punjabi', 'ps' => 'Pashto, Pushto', 'fa' => 'Persian', 'pl' => 'Polish', 'pt' => 'Portuguese', 'qu' => 'Quechua', 'rm' => 'Romansh', 'rn' => 'Rundi', 'ru' => 'Russian', 'sm' => 'Samoan', 'sg' => 'Sango', 'sa' => 'Sanskrit', 'sc' => 'Sardinian', 'sr' => 'Serbian', 'sn' => 'Shona', 'sd' => 'Sindhi', 'si' => 'Sinhala, Sinhalese', 'sk' => 'Slovak', 'sl' => 'Slovenian', 'so' => 'Somali', 'st' => 'Sotho, Southern', 'nr' => 'South Ndebele', 'es' => 'Spanish, Castilian', 'su' => 'Sundanese', 'sw' => 'Swahili', 'ss' => 'Swati', 'sv' => 'Swedish', 'tl' => 'Tagalog', 'ty' => 'Tahitian', 'tg' => 'Tajik', 'ta' => 'Tamil', 'tt' => 'Tatar', 'te' => 'Telugu', 'th' => 'Thai', 'bo' => 'Tibetan', 'ti' => 'Tigrinya', 'to' => 'Tonga (Tonga Islands)', 'ts' => 'Tsonga', 'tn' => 'Tswana', 'tr' => 'Turkish', 'tk' => 'Turkmen', 'tw' => 'Twi', 'ug' => 'Uighur, Uyghur', 'uk' => 'Ukrainian', 'ur' => 'Urdu', 'uz' => 'Uzbek', 've' => 'Venda', 'vi' => 'Vietnamese', 'vo' => 'Volap_k', 'wa' => 'Walloon', 'cy' => 'Welsh', 'fy' => 'Western Frisian', 'wo' => 'Wolof', 'xh' => 'Xhosa', 'yi' => 'Yiddish', 'yo' => 'Yoruba', 'za' => 'Zhuang, Chuang', 'zu' => 'Zulu');
+		$langs = array('' => __('Default', 'mappress-google-maps-for-wordpress'), 'ab' => 'Abkhazian', 'aa' => 'Afar', 'af' => 'Afrikaans', 'ak' => 'Akan', 'sq' => 'Albanian', 'am' => 'Amharic', 'ar' => 'Arabic', 'an' => 'Aragonese', 'hy' => 'Armenian', 'as' => 'Assamese', 'av' => 'Avaric', 'ae' => 'Avestan', 'ay' => 'Aymara', 'az' => 'Azerbaijani', 'bm' => 'Bambara', 'ba' => 'Bashkir', 'eu' => 'Basque', 'be' => 'Belarusian', 'bn' => 'Bengali', 'bh' => 'Bihari languages', 'bi' => 'Bislama', 'bs' => 'Bosnian', 'br' => 'Breton', 'bg' => 'Bulgarian', 'my' => 'Burmese', 'ca' => 'Catalan, Valencian', 'km' => 'Central Khmer', 'ch' => 'Chamorro', 'ce' => 'Chechen', 'ny' => 'Chichewa, Chewa, Nyanja', 'zh' => 'Chinese', 'cv' => 'Chuvash', 'kw' => 'Cornish', 'co' => 'Corsican', 'cr' => 'Cree', 'hr' => 'Croatian', 'cs' => 'Czech', 'da' => 'Danish', 'dv' => 'Divehi, Dhivehi, Maldivian', 'nl' => 'Dutch, Flemish', 'dz' => 'Dzongkha', 'en' => 'English', 'eo' => 'Esperanto', 'et' => 'Estonian', 'ee' => 'Ewe', 'fo' => 'Faroese', 'fj' => 'Fijian', 'fi' => 'Finnish', 'fr' => 'French', 'ff' => 'Fulah', 'gd' => 'Gaelic, Scottish Gaelic', 'gl' => 'Galician', 'lg' => 'Ganda', 'ka' => 'Georgian', 'de' => 'German', 'ki' => 'Gikuyu, Kikuyu', 'el' => 'Greek (Modern)', 'kl' => 'Greenlandic, Kalaallisut', 'gn' => 'Guarani', 'gu' => 'Gujarati', 'ht' => 'Haitian, Haitian Creole', 'ha' => 'Hausa', 'he' => 'Hebrew', 'hz' => 'Herero', 'hi' => 'Hindi', 'ho' => 'Hiri Motu', 'hu' => 'Hungarian', 'is' => 'Icelandic', 'io' => 'Ido', 'ig' => 'Igbo', 'id' => 'Indonesian', 'iu' => 'Inuktitut', 'ik' => 'Inupiaq', 'ga' => 'Irish', 'it' => 'Italian', 'ja' => 'Japanese', 'jv' => 'Javanese', 'kn' => 'Kannada', 'kr' => 'Kanuri', 'ks' => 'Kashmiri', 'kk' => 'Kazakh', 'rw' => 'Kinyarwanda', 'kv' => 'Komi', 'kg' => 'Kongo', 'ko' => 'Korean', 'kj' => 'Kwanyama, Kuanyama', 'ku' => 'Kurdish', 'ky' => 'Kyrgyz', 'lo' => 'Lao', 'la' => 'Latin', 'lv' => 'Latvian', 'lb' => 'Letzeburgesch, Luxembourgish', 'li' => 'Limburgish, Limburgan, Limburger', 'ln' => 'Lingala', 'lt' => 'Lithuanian', 'lu' => 'Luba-Katanga', 'mk' => 'Macedonian', 'mg' => 'Malagasy', 'ms' => 'Malay', 'ml' => 'Malayalam', 'mt' => 'Maltese', 'gv' => 'Manx', 'mi' => 'Maori', 'mr' => 'Marathi', 'mh' => 'Marshallese', 'ro' => 'Moldovan, Moldavian, Romanian', 'mn' => 'Mongolian', 'na' => 'Nauru', 'nv' => 'Navajo, Navaho', 'nd' => 'Northern Ndebele', 'ng' => 'Ndonga', 'ne' => 'Nepali', 'se' => 'Northern Sami', 'no' => 'Norwegian', 'nb' => 'Norwegian Bokmål', 'nn' => 'Norwegian Nynorsk', 'ii' => 'Nuosu, Sichuan Yi', 'oc' => 'Occitan (post 1500)', 'oj' => 'Ojibwa', 'or' => 'Oriya', 'om' => 'Oromo', 'os' => 'Ossetian, Ossetic', 'pi' => 'Pali', 'pa' => 'Panjabi, Punjabi', 'ps' => 'Pashto, Pushto', 'fa' => 'Persian', 'pl' => 'Polish', 'pt' => 'Portuguese', 'qu' => 'Quechua', 'rm' => 'Romansh', 'rn' => 'Rundi', 'ru' => 'Russian', 'sm' => 'Samoan', 'sg' => 'Sango', 'sa' => 'Sanskrit', 'sc' => 'Sardinian', 'sr' => 'Serbian', 'sn' => 'Shona', 'sd' => 'Sindhi', 'si' => 'Sinhala, Sinhalese', 'sk' => 'Slovak', 'sl' => 'Slovenian', 'so' => 'Somali', 'st' => 'Sotho, Southern', 'nr' => 'South Ndebele', 'es' => 'Spanish, Castilian', 'su' => 'Sundanese', 'sw' => 'Swahili', 'ss' => 'Swati', 'sv' => 'Swedish', 'tl' => 'Tagalog', 'ty' => 'Tahitian', 'tg' => 'Tajik', 'ta' => 'Tamil', 'tt' => 'Tatar', 'te' => 'Telugu', 'th' => 'Thai', 'bo' => 'Tibetan', 'ti' => 'Tigrinya', 'to' => 'Tonga (Tonga Islands)', 'ts' => 'Tsonga', 'tn' => 'Tswana', 'tr' => 'Turkish', 'tk' => 'Turkmen', 'tw' => 'Twi', 'ug' => 'Uighur, Uyghur', 'uk' => 'Ukrainian', 'ur' => 'Urdu', 'uz' => 'Uzbek', 've' => 'Venda', 'vi' => 'Vietnamese', 'vo' => 'Volap_k', 'wa' => 'Walloon', 'cy' => 'Welsh', 'fy' => 'Western Frisian', 'wo' => 'Wolof', 'xh' => 'Xhosa', 'yi' => 'Yiddish', 'yo' => 'Yoruba', 'za' => 'Zhuang, Chuang', 'zu' => 'Zulu');
 		echo Mappress_Controls::select($name, $langs, $this->options->language);
-		echo ' ' . __('Language for map controls', 'mappress-google-maps-for-wordpress') . ' ' . $lang_link;
+		echo ' ' . __('Language for searches and Google map controls', 'mappress-google-maps-for-wordpress') . ' ' . $lang_link;
 	}
 
 	function set_mapbox($name) {
@@ -255,26 +251,26 @@ class Mappress_Settings {
 		echo Mappress_Controls::help('', 'https://www.mapbox.com/help/define-access-token/');
 	}
 
-    function set_map_options($name) {
-        $labels = array(
-            'google' => array(
-                'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
-                'streetViewControl' => __("Street view control", 'mappress-google-maps-for-wordpress'),
-                'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
-            ),
-            'leaflet' => array(
-                'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
-                'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
-            )
-        );
+	function set_map_options($name) {
+		$labels = array(
+			'google' => array(
+				'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
+				'streetViewControl' => __("Street view control", 'mappress-google-maps-for-wordpress'),
+				'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
+			),
+			'leaflet' => array(
+				'mapTypeControl' => __('Map type control', 'mappress-google-maps-for-wordpress'),
+				'zoomControl' => __('Zoom control', 'mappress-google-maps-for-wordpress')
+			)
+		);
 
-        $mapOptions = $this->options->mapOptions;
+		$mapOptions = $this->options->mapOptions;
 
-        foreach($labels[$this->options->engine] as $option => $label) {
-            $value = (isset($mapOptions->$option)) ? $mapOptions->$option : false;
-            echo Mappress_Controls::checkmark($name . "[$option]", $value, $label);
-        }
-    }
+		foreach($labels[$this->options->engine] as $option => $label) {
+			$value = (isset($mapOptions->$option)) ? $mapOptions->$option : false;
+			echo Mappress_Controls::checkmark($name . "[$option]", $value, $label);
+		}
+	}
 
 	function set_poi_zoom($name) {
 		$zooms = array_combine(range(1, 17), range(1,17));
@@ -300,7 +296,7 @@ class Mappress_Settings {
 		echo "<table class='form-table'><tr><td>" . $map->display() . "</td></tr></table>";
 	}
 	function set_sizes($name) {
-		$headers = array(__('Width (px or %)', 'mappress-google-maps-for-wordpress'), __('Height (px)', 'mappress-google-maps-for-wordpress'), __('Default size', 'mappress-google-maps-for-wordpress'));
+		$headers = array(__('Width (px, %, vh, vw)', 'mappress-google-maps-for-wordpress'), __('Height (px, %, vh, vw)', 'mappress-google-maps-for-wordpress'), __('Default size', 'mappress-google-maps-for-wordpress'));
 		$rows = array();
 
 		foreach($this->options->sizes as $i => $size) {
@@ -312,6 +308,11 @@ class Mappress_Settings {
 			);
 		}
 		echo Mappress_Controls::table($headers, $rows);
+	}
+
+	function set_wpml($name) {
+		echo Mappress_Controls::checkmark($name, $this->options->wpml, __("Copy maps when overwriting a translation", 'mappress-google-maps-for-wordpress'));
+		echo Mappress_Controls::help(null, 'https://mappresspro.com/mappress-documentation#wpml');
 	}
 
 	function options_page() {
