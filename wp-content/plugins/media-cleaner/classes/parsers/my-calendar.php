@@ -46,7 +46,7 @@ function wpmc_scan_widgets_mycalendar() {
 	}
 
 	if ( !empty( $eventurls ) ) {
-		$wpmc->add_reference_url( $eventurls, 'MY CALENDAR (URL)' );
+		$wpmc->add_reference_url( $eventurls, 'CALENDAR (URL)' );
 	}
 }
 

@@ -25,6 +25,16 @@ function wpmc_scan_once_woocommerce() {
 
 function wpmc_scan_postmeta_woocommerce( $id ) {
 	global $wpdb, $wpmc;
+
+	// Downloadable files
+	$downloable_files = get_post_meta( $id, '_downloadable_files', true );
+	if ( !empty( $downloable_files ) ) {
+		foreach ( $downloable_files as $file ) {
+			$wpmc->add_reference_url( $wpmc->clean_url( $file['file'] ), 'WOOCOOMMERCE DL (URL)' );
+		}
+	} 
+
+	// Galleries
 	$galleries_images_wc = array();
 	$res = $wpdb->get_col( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $id
 		AND meta_key = '_product_image_gallery'" );

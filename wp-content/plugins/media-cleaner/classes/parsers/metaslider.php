@@ -17,7 +17,7 @@ function wpmc_scan_widgets_metaslider() {
 		die( $wpdb->last_error );
 	}
 	if ( count( $imageIds) > 0 ) {
-		$wpmc->add_reference_id( $imageIds, 'METASLIDER (ID)' );
+		$wpmc->add_reference_id( $imageIds, 'SLIDER (ID)' );
 	}
 }
 ?>

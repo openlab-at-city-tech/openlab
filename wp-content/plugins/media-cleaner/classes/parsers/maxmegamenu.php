@@ -30,7 +30,7 @@ function wpmc_scan_widgets_maxmegamenu() {
 	}
 
 	if ( !empty( $urls ) ) {
-		  $wpmc->add_reference_url( $urls, 'MAX MEGA MENU (URL)' );
+		  $wpmc->add_reference_url( $urls, 'MENU (URL)' );
 		}
 	}
 

@@ -48,16 +48,21 @@ SQL;
 			$this->core->reset_issues();
 
 		$method = $this->core->current_method;
-		$check_library = get_option(' wpmc_media_library', true );
-		$check_content = get_option( 'wpmc_content', true );
+
+		// Check content is a different option depending on the method
+		$check_content = false;
+		if ( $method === 'media' ) {
+			$check_content = get_option( 'wpmc_content', true );
+		}
+		else if ( $method === 'files' ) {
+			$check_content = get_option( 'wpmc_filesystem_content', false );
+		}
 
 		if ( $method == 'media' && !$check_content ) {
 			$message = __( "Skipped, as Content is not selected.", 'media-cleaner' );
 			return true;
 		}
-		// DEBUG: This condition was used in a previous version of the plugin
-		// but it looks like a mistake. The $check_library was removed.
-		// if ( $method == 'files' && $check_library && !$check_content ) {
+
 		if ( $method == 'files' && !$check_content ) {
 			$message = __( "Skipped, as Content is not selected.", 'media-cleaner' );
 			return true;
@@ -66,14 +71,12 @@ SQL;
 		// Initialize the parsers
 		do_action( 'wpmc_initialize_parsers' );
 
-		global $wpdb;
 		$posts = $this->get_posts_to_check( $limit, $limitsize );
 
-		// Only at the beginning
+		// Only at the beginning, check the Widgets and the Scan Once in the Parsers
 		if ( empty( $limit ) ) {
-			$this->core->log( "References from Content:" );
+			$this->core->log( "🏁 Extracting refs from content..." );
 			//if ( get_option( 'wpmc_widgets', false ) ) {
-
 				global $wp_registered_widgets;
 				$syswidgets = $wp_registered_widgets;
 				$active_widgets = get_option( 'sidebars_widgets' );
@@ -84,7 +87,6 @@ SQL;
 						}
 					}
 				}
-
 				do_action( 'wpmc_scan_widgets' );
 			//}
 			do_action( 'wpmc_scan_once' );
@@ -135,12 +137,11 @@ SQL;
 			return true;
 		}
 
-		global $wpdb;
 		$medias = $this->get_media_entries( $limit, $limitsize );
 
 		// Only at the beginning
 		if ( empty( $limit ) ) {
-			$this->core->log( "References from Media Library:" );
+			$this->core->log( "🏁 Extracting refs from Media Library..." );
 		}
 
 		$this->core->timeout_check_start( count( $medias ) );
@@ -159,7 +160,7 @@ SQL;
 		if ( $finished )
 			$this->core->log();
 		$elapsed = $this->core->timeout_get_elapsed();
-		$message = sprintf( __( "Extracted references from %d $medias in %s.", 'media-cleaner' ), count( $medias ), $elapsed );
+		$message = sprintf( __( "Extracted references from %d medias in %s.", 'media-cleaner' ), count( $medias ), $elapsed );
 		return $finished;
 	}
 
@@ -170,7 +171,7 @@ SQL;
 	// Get files in /uploads (if path is null, the root of /uploads is returned)
 	function get_files( $path = null ) {
 		$files = apply_filters( 'wpmc_list_uploaded_files', null, $path );
-		return $files;
+		return $files ? $files : array();
 	}
 
 	/**

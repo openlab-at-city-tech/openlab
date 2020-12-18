@@ -1,6 +1,6 @@
 <?php
 
-class MeowApps_WPMC_Parser {
+class MeowApps_WPMC_Parser_Common {
 
 	private $metakeys = array( '%gallery%', '%ids%' );
 
@@ -34,6 +34,10 @@ class MeowApps_WPMC_Parser {
 
 	function get_images_from_widget( $widget, &$ids, &$urls ) {
 		global $wpmc;
+		// TODO: We should test with widgets										
+		if ( !isset( $widget['callback'] ) || !isset( $widget['callback'][0] ) ) {
+			return;
+		}
 		$widget_class = $widget['callback'][0]->option_name;
 		$instance_id = $widget['params'][0]['number'];
 		$widget_data = get_option( $widget_class );
@@ -121,9 +125,9 @@ class MeowApps_WPMC_Parser {
 			}
 		}
 
-		$wpmc->add_reference_id( $posts_images_ids, 'CONTENT (ID)' );
-		$wpmc->add_reference_url( $posts_images_urls, 'CONTENT (URL)' );
-		$wpmc->add_reference_url( $galleries_images, 'GALLERY (URL)' );
+		$wpmc->add_reference_id( $posts_images_ids, "CONTENT #$id (ID)" );
+		$wpmc->add_reference_url( $posts_images_urls, "CONTENT #$id (URL)" );
+		$wpmc->add_reference_url( $galleries_images, "GALLERY #$id (URL)" );
 	}
 
 	public function scan_postmeta( $id ) {
@@ -169,3 +173,5 @@ SQL;
 		}
 	}
 }
+
+new MeowApps_WPMC_Parser_Common();
