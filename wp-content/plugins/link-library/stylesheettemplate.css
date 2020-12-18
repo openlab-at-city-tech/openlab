@@ -232,3 +232,22 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
 .level6 {
 	margin-left: 120px;
 }
+
+.nolinksfoundincat {
+  display:none;
+}
+
+@media only screen and (max-width: 600px) {
+  .lladdlink table td {
+    height: 60px;
+    display: block;
+  }
+
+  .lladdlink table {
+    margin-bottom: 20px
+  }
+
+  .lladdlink table th {
+    display: block;
+  }
+}

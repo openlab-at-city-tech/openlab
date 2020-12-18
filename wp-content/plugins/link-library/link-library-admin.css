@@ -1610,7 +1610,7 @@ input[type="text"].module-search + label:after {
 }
 
 .wrap h2 {
-	font-size: 24px;
+	font-size: 24px !important;
 	font-weight: 400;
 }
 

@@ -20,7 +20,7 @@ function link_library_ajax_image_generator ( $my_link_library_plugin_admin ) {
     $filepathtype = $_POST['filepathtype'];
     $linkid = intval($_POST['linkid']);
 
-    if ( 'robothumb' == $generaloptions['thumbnailgenerator'] || 'thumbshots' == $generaloptions['thumbnailgenerator'] ) {
+    if ( 'robothumb' == $generaloptions['thumbnailgenerator'] || 'thumbshots' == $generaloptions['thumbnailgenerator'] || 'google' == $generaloptions['thumbnailgenerator'] ) {
 	    echo $my_link_library_plugin_admin->ll_get_link_image($url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $generaloptions['thumbnailsize'], $generaloptions['thumbnailgenerator'] );
     } elseif ( 'pagepeeker' == $generaloptions['thumbnailgenerator'] ) {
 	    echo $my_link_library_plugin_admin->ll_get_link_image($url, $name, $mode, $linkid, $generaloptions['pagepeekerid'], $filepath, $filepathtype, $generaloptions['pagepeekersize'], $generaloptions['thumbnailgenerator'] );
