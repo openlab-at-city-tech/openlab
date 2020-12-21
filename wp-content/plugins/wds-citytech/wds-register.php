@@ -167,6 +167,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 
 	$exclude_groups = openlab_get_exclude_groups_for_account_type( $account_type );
 	$exclude_fields = array(
+		openlab_get_xprofile_field_id( 'Account Type' ),
 		openlab_get_xprofile_field_id( 'First Name' ),
 		openlab_get_xprofile_field_id( 'Last Name' ),
 		openlab_get_xprofile_field_id( 'Major Program of Study' ),

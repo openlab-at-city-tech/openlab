@@ -31,7 +31,7 @@ function cuny_home_login() {
 					?>
 					" alt="Avatar for <?php echo esc_attr( bp_core_get_user_displayname( bp_loggedin_user_id() ) ); ?>" />
 				</a>
-				
+
 				<span class="user-links">
 					<span class="my-profile">
 						<a href="<?php echo esc_url( bp_loggedin_user_domain() ); ?>">My Profile</a>
@@ -429,11 +429,15 @@ function openlab_registration_page() {
 
 	$ajaxurl = bp_core_ajax_url();
 
-	$first_name_field_id = openlab_get_xprofile_field_id( 'First Name' );
-	$last_name_field_id  = openlab_get_xprofile_field_id( 'Last Name' );
+	$first_name_field_id   = openlab_get_xprofile_field_id( 'First Name' );
+	$last_name_field_id    = openlab_get_xprofile_field_id( 'Last Name' );
+	$account_type_field_id = openlab_get_xprofile_field_id( 'Account Type' );
 
-	$first_name_submitted = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $first_name_field_id ] : '';
-	$last_name_submitted  = isset( $_POST[ 'field_' . $last_name_field_id ] ) ? $_POST[ 'field_' . $last_name_field_id ] : '';
+	$account_type_field = xprofile_get_field( $account_type_field_id );
+
+	$first_name_submitted   = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $first_name_field_id ] : '';
+	$last_name_submitted    = isset( $_POST[ 'field_' . $last_name_field_id ] ) ? $_POST[ 'field_' . $last_name_field_id ] : '';
+	$account_type_submitted = isset( $_POST[ 'field_' . $account_type_field_id ] ) ? $_POST[ 'field_' . $account_type_field_id ] : '';
 	?>
 
 	<div class="page" id="register-page">
@@ -493,11 +497,31 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
+								<label class="control-label" for="field_<?php echo intval( $account_type_field_id ); ?>">Account Type</label>
+								<div id="field_<?php echo esc_attr( $account_type_field_id ); ?>_error" class="error-container"></div>
+								<?php do_action( 'bp_field_' . $account_type_field_id . '_errors' ); ?>
+								<select
+									class="form-control"
+									type="text"
+									name="field_<?php echo esc_attr( $account_type_field_id ); ?>"
+									id="field_<?php echo esc_attr( $account_type_field_id ); ?>"
+									data-parsley-required
+									data-parsley-required-message="Account type is required."
+									data-parsley-errors-container="#field_<?php echo esc_attr( $account_type_field_id ); ?>_error"
+								/>
+									<option value="">----</option>
+									<?php foreach ( $account_type_field->get_children() as $account_type_child ) : ?>
+										<option value="<?php echo esc_attr( $account_type_child->name ); ?>" <?php selected( $account_type_selected, $account_type_child->name ); ?>><?php echo esc_html( $account_type_child->name ); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+
+							<div class="form-group">
 								<label class="control-label" for="signup_email">Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div></label>
 								<div id="signup_email_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_email_errors' ); ?>
 								<input
-									class="form-control"
+									class="form-control email-autocomplete"
 									type="text"
 									name="signup_email"
 									id="signup_email"
@@ -515,7 +539,7 @@ function openlab_registration_page() {
 								<label class="control-label" for="signup_email_confirm">Confirm Email Address (required)</label>
 								<div id="signup_email_confirm_error" class="error-container"></div>
 								<input
-									class="form-control"
+									class="form-control email-autocomplete"
 									type="text"
 									name="signup_email_confirm"
 									id="signup_email_confirm"

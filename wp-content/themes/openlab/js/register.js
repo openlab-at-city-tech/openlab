@@ -18,6 +18,7 @@
 
     jQuery(document).ready(function () {
         var $signup_form = $('#signup_form');
+        var $account_type_field = $('#field_' + OLReg.account_type_field);
 
         var registrationFormValidation = $signup_form.parsley({
             errorsWrapper: '<ul class="parsley-errors-list"></ul>'
@@ -51,7 +52,6 @@
             if (errorMsg.attr('role') !== 'alert') {
                 errorMsg.attr('role', 'alert');
             }
-
         }).on('field:success', function (formInstance) {
 
             this.$element.closest('.form-group')
@@ -114,6 +114,41 @@
         var asyncValidation = false;
         var asyncLoaded = false;
         formValidation($signup_form);
+
+				$('.email-autocomplete').each(function(){
+					var emailInput = $(this);
+					var inputHasAutocomplete = false;
+
+					emailInput.on('keyup',function(){
+						var dataListId = emailInput.attr( 'name' ) + '-datalist';
+
+						var atPosition = this.value.indexOf( '@' );
+						if ( -1 === atPosition && inputHasAutocomplete ) {
+							$( '#' + dataListId ).remove();
+							emailInput.removeAttr( 'list' );
+							inputHasAutocomplete = false;
+						} else if ( -1 !== atPosition && ! inputHasAutocomplete ) {
+							var beforeAt = this.value.substr( 0, atPosition )
+
+							var emailDomain = 'citytech.cuny.edu';
+							if ( 'Student' === $account_type_field.val() ) {
+								emailDomain = 'mail.citytech.cuny.edu';
+							}
+
+							var suggestions = [ beforeAt + '@' + emailDomain ];
+
+							var dataList = '<datalist id="' + dataListId + '">';
+							suggestions.forEach(function(suggestion){
+								dataList += '<option value="' + suggestion + '" />';
+							});
+							dataList += '</datalist>';
+
+							emailInput.after( dataList );
+							emailInput.attr( 'list', dataListId );
+							inputHasAutocomplete = true;
+						}
+					});
+				});
 
         $('#signup_email').on('blur', function (e) {
             var email = $(e.target).val().toLowerCase();
@@ -254,6 +289,7 @@
                  * fires. So we trigger it manually.
                  */
                 load_account_type_fields();
+								$typedrop.parsley().validate();
             }
         });
 
@@ -292,8 +328,6 @@
                     });
         });
 
-        var $account_type_field = $('#field_' + OLReg.account_type_field);
-
         // Ensure that the account type field is set properly from the post
         $account_type_field.val(OLReg.post_data.field_7);
         $account_type_field.children('option').each(function () {
@@ -303,9 +337,39 @@
         });
 
         $account_type_field.on('change', function () {
+						set_email_placeholder( this.value );
+						set_email_helper( this.value );
             load_account_type_fields();
         });
         load_account_type_fields();
+
+				function set_email_placeholder( accountType ) {
+					var placeholder = '';
+
+					if ( 'Student' === accountType ) {
+						placeholder = 'first.lastname@mail.citytech.cuny.edu';
+					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
+						placeholder = 'first.lastname@citytech.cuny.edu';
+					}
+
+					if ( placeholder.length > 0 ) {
+						//$('#signup_email').attr('placeholder', placeholder);
+					}
+				}
+
+				function set_email_helper( accountType ) {
+					var helper = 'Please use your City Tech email address to register';
+
+					if ( 'Student' === accountType ) {
+						helper = 'Use your City Tech email address, of the form first.lastname@mail.citytech.cuny.edu';
+					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
+						helper = 'Use your City Tech email address, of the form first.lastname@citytech.cuny.edu';
+					}
+
+					$('.email-requirements').fadeOut( function() {
+						$(this).html( helper ).fadeIn();
+					} );
+				}
 
         //load register account type
         function load_account_type_fields() {
