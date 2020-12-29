@@ -39,7 +39,7 @@ add_filter( 'bp_core_validate_user_signup', 'cac_check_signup_validation_code', 
  */
 function cac_ncs_signup_meta( $usermeta ) {
 	if ( isset( $_POST['signup_validation_code'] ) ) {
-		$data = CAC_NCS_Schema::get_code_data( $_POST['signup_validation_code'] );
+		$data = OpenLab\SignupCodes\Schema::get_code_data( $_POST['signup_validation_code'] );
 		$usermeta['cac_signup_code'] = $data;
 	}
 

@@ -2,18 +2,19 @@
 /**
  * Core data schema.
  */
+namespace OpenLab\SignupCodes;
 
 /**
  * Data schema class
  */
-class CAC_NCS_Schema {
+class Schema {
 	public const POST_TYPE = 'cac_ncs_code';
 
 	protected static $search_terms = null;
 
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_type' ), 99 );
-		add_action( 'admin_init', array( __CLASS__, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_meta' ) );
 
 		add_action( 'admin_print_scripts', array( __CLASS__, 'admin_scripts' ) );
@@ -50,36 +51,25 @@ class CAC_NCS_Schema {
 		add_meta_box( 'cac_ncs_groups', 'Add to Groups', array( __CLASS__, 'group_meta_box_render' ), static::POST_TYPE, 'normal' );
 	}
 
-	public static function code_meta_box_render() {
-		global $post;
-
-		$vcode = isset( $post->ID ) ? get_post_meta( $post->ID, 'cac_ncs_vcode', true ) : '';
-
-		echo '<input type="text" name="cac_ncs_vcode" value="' . esc_attr( $vcode ) . '" />';
+	public static function code_meta_box_render( $post ) {
+		static::view( 'code', [
+			'vcode' => get_post_meta( $post->ID, 'cac_ncs_vcode', true ),
+		] );
 	}
 
-	public static function group_meta_box_render() {
-		global $post;
+	public static function group_meta_box_render( $post ) {
+		$group_ids = get_post_meta( $post->ID, 'cac_ncs_groups', true );
+		$group_ids = empty( $group_ids ) ? [] : $group_ids;
 
-		$groups = isset( $post->ID ) ? get_post_meta( $post->ID, 'cac_ncs_groups', true ) : array();
+		$groups = array_map( 'groups_get_group', $group_ids );
+		$groups = array_filter( $groups, function( $group ) {
+			return ! empty( $group->name );
+		} );
 
-		if ( !$groups )
-			$groups = array();
-
-		echo '<input type="text" id="cac_ncs_groups" name="cac_ncs_groups" />';
-
-		echo '<ul class="cac-ncs-groups-results">';
-		foreach( $groups as $group_id ) {
-			$group_obj = new BP_Groups_Group( $group_id );
-
-			if ( empty( $group_obj->name ) )
-				continue;
-
-			echo '<li id="cac-nsc-add-to-group-' . $group_id . '">' . $group_obj->name . ' <span class="cac-nsc-remove-group"><a href="#">x</a></span></li>';
-		}
-		echo '</ul>';
-
-		echo '<input type="hidden" id="cac_nsc_group_ids" name="cac_ncs_group_ids" value="' . implode( ',', $groups ) . '" />';
+		static::view( 'groups', [
+			'group_ids' => $group_ids,
+			'groups'    => $groups,
+		] );
 	}
 
 	public static function save_meta( $post_id ) {
@@ -184,7 +174,7 @@ class CAC_NCS_Schema {
 		if ( $code ) {
 			$args = self::get_wp_query_args( $code );
 
-			$vcodes = new WP_Query( $args );
+			$vcodes = new \WP_Query( $args );
 
 			$validate = $vcodes->have_posts();
 		}
@@ -198,7 +188,7 @@ class CAC_NCS_Schema {
 		if ( $code ) {
 			$args = self::get_wp_query_args( $code );
 
-			$vcodes = new WP_Query( $args );
+			$vcodes = new \WP_Query( $args );
 
 			// Avoid the BS and just take the first one
 			$data = isset( $vcodes->posts[0] ) ? $vcodes->posts[0] : false;
@@ -209,5 +199,18 @@ class CAC_NCS_Schema {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Helper method for rendering views.
+	 *
+	 * @param string $name Name of the view.
+	 * @param array $args Arguments passed to the view.
+	 * @return void
+	 */
+	public static function view( $name, array $args = [] ) {
+		extract( $args, EXTR_SKIP );
+
+		include PLUGIN_DIR . '/views/'. $name . '.php';
 	}
 }

@@ -6,12 +6,17 @@ Version: 1.0
 Author: Boone Gorges
 */
 
-function cac_non_cuny_signup_loader() {
+namespace OpenLab\SignupCodes;
+
+const PLUGIN_DIR = __DIR__;
+const PLUGIN_FILE = __FILE__;
+
+function bootstrap() {
 	require_once __DIR__ . '/inc/schema.php';
 	require_once __DIR__ . '/inc/helpers.php';
 	require_once __DIR__ . '/inc/signup.php';
 	require_once __DIR__ . '/inc/ajax.php';
 
-	CAC_NCS_Schema::init();
+	Schema::init();
 }
-add_action( 'bp_include', 'cac_non_cuny_signup_loader' );
+add_action( 'bp_include', __NAMESPACE__ . '\\bootstrap' );
