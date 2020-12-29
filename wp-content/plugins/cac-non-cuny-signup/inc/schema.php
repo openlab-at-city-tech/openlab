@@ -15,7 +15,7 @@ class Schema {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_type' ), 99 );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
-		add_action( 'save_post', array( __CLASS__, 'save_meta' ) );
+		add_action( 'save_post', array( __CLASS__, 'save_meta' ), 10, 2 );
 
 		add_action( 'admin_print_scripts', array( __CLASS__, 'admin_scripts' ) );
 		add_action( 'admin_print_styles', array( __CLASS__, 'admin_styles' ) );
@@ -72,29 +72,27 @@ class Schema {
 		] );
 	}
 
-	public static function save_meta( $post_id ) {
-		global $post;
+	public static function save_meta( $post_id, $post ) {
+		$nonce = isset( $_POST['openlab_signup_codes_nonce'] ) ? $_POST['openlab_signup_codes_nonce'] : null;
+
+		if ( ! wp_verify_nonce( $nonce, 'openlab_signup_codes' ) ) {
+			return $post_id;
+		}
 
 		// WP's autosave javascript will wipe out our custom fields
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return $post_id;
 		}
 
+		if ( $post->post_type !== static::POST_TYPE ) {
+			return $post_id;
+		}
+
 		$vcode = isset( $_POST['cac_ncs_vcode'] ) ? $_POST['cac_ncs_vcode'] : '';
-		$groups = isset( $_POST['cac_ncs_group_ids'] ) ? explode( ',', $_POST['cac_ncs_group_ids'] ) : '';
+		$groups = isset( $_POST['cac_ncs_group_ids'] ) ? explode( ',', $_POST['cac_ncs_group_ids'] ) : null;
 
-		if ( isset( $_POST['post_type'] ) ) {
-			$post_type = $_POST['post_type'];
-		} else if ( isset( $post->post_type ) ) {
-			$post_type = $post->post_type;
-		} else {
-			$post_type = '';
-		}
-
-		if ( $post_type == static::POST_TYPE ) {
-			update_post_meta( $post_id, 'cac_ncs_vcode', $vcode );
-			update_post_meta( $post_id, 'cac_ncs_groups', explode( ',', $_POST['cac_ncs_group_ids'] ) );
-		}
+		update_post_meta( $post_id, 'cac_ncs_vcode', $vcode );
+		update_post_meta( $post_id, 'cac_ncs_groups', $groups );
 
 		return $post_id;
 	}

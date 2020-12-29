@@ -11,4 +11,5 @@
 	</ul>
 <?php endif; ?>
 
+<?php wp_nonce_field( 'openlab_signup_codes', 'openlab_signup_codes_nonce' ); ?>
 <input type="hidden" id="cac_nsc_group_ids" name="cac_ncs_group_ids" value="<?php echo implode( ',', $group_ids ); ?>" />
