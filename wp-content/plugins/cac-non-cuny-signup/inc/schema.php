@@ -21,6 +21,8 @@ class Schema {
 		add_action( 'admin_print_scripts', array( __CLASS__, 'admin_scripts' ) );
 		add_action( 'admin_print_styles', array( __CLASS__, 'admin_styles' ) );
 		add_action( 'wp_ajax_cac_ncs_groups_query', array( __CLASS__, 'cac_ncs_groups_query' ) );
+
+		add_action( 'pre_get_users', array( __CLASS__, 'filter_users' ) );
 	}
 
 	public static function register_post_type() {
@@ -50,6 +52,7 @@ class Schema {
 	public static function add_meta_boxes() {
 		add_meta_box( 'cac_ncs_vcode', 'Code', array( __CLASS__, 'code_meta_box_render' ), static::POST_TYPE, 'normal', 'high' );
 		add_meta_box( 'cac_ncs_groups', 'Add to Groups', array( __CLASS__, 'group_meta_box_render' ), static::POST_TYPE, 'normal' );
+		add_meta_box( 'cac_ncs_users', 'Users', array( __CLASS__, 'users_meta_box_render' ), static::POST_TYPE, 'side' );
 	}
 
 	public static function code_meta_box_render( $post ) {
@@ -70,6 +73,12 @@ class Schema {
 		static::view( 'groups', [
 			'group_ids' => $group_ids,
 			'groups'    => $groups,
+		] );
+	}
+
+	public static function users_meta_box_render( $post ) {
+		static::view( 'users', [
+			'url' => add_query_arg( 'ol_signup_code', $post->ID, self_admin_url( 'users.php' ) ),
 		] );
 	}
 
@@ -146,6 +155,28 @@ class Schema {
 		$new_sql = $sqla[0] . ' WHERE g.name LIKE "%' . static::$search_terms . '%" AND ' . $sqla[1];
 
 		return $new_sql;
+	}
+
+	/**
+	 * Filter dashboard Users page based on "Signup Code" id.
+	 *
+	 * @param \WP_User_Query $user_query
+	 * @return void
+	 */
+	public static function filter_users( $user_query ) {
+		global $pagenow;
+
+		if ( ! is_admin() && 'users.php' !== $pagenow ) {
+			return;
+		}
+
+		// This is post type ID, so we're expecting a integer.
+		$code = isset( $_GET['ol_signup_code'] ) ? absint( $_GET['ol_signup_code'] ) : 0;
+
+		if ( $code ) {
+			$user_query->set( 'meta_key', 'cac_signup_code' );
+			$user_query->set( 'meta_value', $code );
+		}
 	}
 
 	/**
