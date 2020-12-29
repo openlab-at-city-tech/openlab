@@ -2,6 +2,7 @@
 /**
  * Core data schema.
  */
+
 namespace OpenLab\SignupCodes;
 
 /**

@@ -3,10 +3,14 @@
  * BuddyPress signup integration.
  */
 
+namespace OpenLab\SignupCodes;
+
+use OpenLab\SignupCodes\Schema;
+
 /**
  * Checks non-CUNY validation codes
  */
-function cac_check_signup_validation_code( $result ) {
+function check_signup_validation_code( $result ) {
 
 	foreach( $result['errors']->errors as $error_key => $error ) {
 		if ( in_array( 'Sorry, that email address is not allowed!', $error ) ) {
@@ -30,27 +34,27 @@ function cac_check_signup_validation_code( $result ) {
 
 	return $result;
 }
-add_filter( 'bp_core_validate_user_signup', 'cac_check_signup_validation_code', 5 );
+add_filter( 'bp_core_validate_user_signup', __NAMESPACE__ . '\\check_signup_validation_code', 5 );
 
 /**
  * At user signup, grab the code details and stash in wp_signup usermeta
  *
  * This will then have to be loaded at activation time and recorded in wp_usermeta
  */
-function cac_ncs_signup_meta( $usermeta ) {
+function signup_meta( $usermeta ) {
 	if ( isset( $_POST['signup_validation_code'] ) ) {
-		$data = OpenLab\SignupCodes\Schema::get_code_data( $_POST['signup_validation_code'] );
+		$data = Schema::get_code_data( $_POST['signup_validation_code'] );
 		$usermeta['cac_signup_code'] = $data;
 	}
 
 	return $usermeta;
 }
-add_action( 'bp_signup_usermeta', 'cac_ncs_signup_meta' );
+add_action( 'bp_signup_usermeta', __NAMESPACE__ . '\\signup_meta' );
 
 /**
  * At user activation, grabs CAC signup code data and moves to usermeta
  */
-function cac_ncs_activation_meta( $user_id, $key, $user ) {
+function activation_meta( $user_id, $key, $user ) {
 
 	if ( isset( $user['meta']['cac_signup_code'] ) ) {
 		update_user_meta( $user_id, 'cac_signup_code_data', $user['meta']['cac_signup_code'] );
@@ -63,4 +67,4 @@ function cac_ncs_activation_meta( $user_id, $key, $user ) {
 		}
 	}
 }
-add_action( 'bp_core_activated_user', 'cac_ncs_activation_meta', 10, 3 );
+add_action( 'bp_core_activated_user', __NAMESPACE__ . '\\activation_meta', 10, 3 );

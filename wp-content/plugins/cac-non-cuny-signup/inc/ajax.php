@@ -3,6 +3,8 @@
  * AJAX methods.
  */
 
+namespace OpenLab\SignupCodes;
+
 /**
  * AJAX handler for registration email check
  *
@@ -15,7 +17,7 @@
  *   6: email exists
  *   7: a known undergraduate student address
  */
-function cac_ajax_email_check() {
+function ajax_email_check() {
 	$email = isset( $_POST['email'] ) ? $_POST['email'] : false;
 
 	$retval = '1';
@@ -23,7 +25,7 @@ function cac_ajax_email_check() {
 	if ( !$email ) {
 		$retval = '2'; // no email
 	} else {
-		if ( !is_email( $email ) ) {
+		if ( ! is_email( $email ) ) {
 			$retval = '3'; // Not an email address
 		} else if ( function_exists( 'is_email_address_unsafe' ) && is_email_address_unsafe( $email ) ) {
 			$retval = '4'; // Unsafe
@@ -36,8 +38,8 @@ function cac_ajax_email_check() {
 
 	die( $retval );
 }
-add_action( 'wp_ajax_cac_ajax_email_check', 'cac_ajax_email_check' );
-add_action( 'wp_ajax_nopriv_cac_ajax_email_check', 'cac_ajax_email_check' );
+add_action( 'wp_ajax_cac_ajax_email_check', __NAMESPACE__ . '\\ajax_email_check' );
+add_action( 'wp_ajax_nopriv_cac_ajax_email_check', __NAMESPACE__ . '\\ajax_email_check' );
 
 /**
  * AJAX handler for registration code check
@@ -46,7 +48,7 @@ add_action( 'wp_ajax_nopriv_cac_ajax_email_check', 'cac_ajax_email_check' );
  *   1: success
  *   0: failure
  */
-function cac_ajax_vcode_check() {
+function ajax_validate_code() {
 	$vcode = isset( $_POST['code'] ) ? $_POST['code'] : '';
 
 	$retval = cac_ncs_validate_code( $vcode ) ? '1' : '0';
@@ -54,5 +56,5 @@ function cac_ajax_vcode_check() {
 	echo $retval;
 	die();
 }
-add_action( 'wp_ajax_cac_ajax_vcode_check', 'cac_ajax_vcode_check' );
-add_action( 'wp_ajax_nopriv_cac_ajax_vcode_check', 'cac_ajax_vcode_check' );
+add_action( 'wp_ajax_cac_ajax_vcode_check', __NAMESPACE__ . '\\ajax_validate_code' );
+add_action( 'wp_ajax_nopriv_cac_ajax_vcode_check', __NAMESPACE__ . '\\ajax_validate_code' );
