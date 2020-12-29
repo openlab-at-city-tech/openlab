@@ -52,7 +52,8 @@ class Schema {
 	public static function add_meta_boxes() {
 		add_meta_box( 'cac_ncs_vcode', 'Code', array( __CLASS__, 'code_meta_box_render' ), static::POST_TYPE, 'normal', 'high' );
 		add_meta_box( 'cac_ncs_groups', 'Add to Groups', array( __CLASS__, 'group_meta_box_render' ), static::POST_TYPE, 'normal' );
-		add_meta_box( 'cac_ncs_users', 'Users', array( __CLASS__, 'users_meta_box_render' ), static::POST_TYPE, 'side' );
+		add_meta_box( 'cac_ncs_users', 'Users', array( __CLASS__, 'users_meta_box_render' ), static::POST_TYPE, 'side', 'low' );
+		add_meta_box( 'cac_ncs_account_type', 'Account Type', array( __CLASS__, 'account_type_meta_box_render' ), static::POST_TYPE, 'side' );
 	}
 
 	public static function code_meta_box_render( $post ) {
@@ -76,9 +77,32 @@ class Schema {
 		] );
 	}
 
+	/**
+	 * Renders metabox for filtering users by signup code.
+	 *
+	 * @param \WP_Post $post
+	 * @return void
+	 */
 	public static function users_meta_box_render( $post ) {
 		static::view( 'users', [
 			'url' => add_query_arg( 'ol_signup_code', $post->ID, self_admin_url( 'users.php' ) ),
+		] );
+	}
+
+	/**
+	 * Renders metabox to associate code with the account type.
+	 *
+	 * @param \WP_Post $post
+	 * @return void
+	 */
+	public static function account_type_meta_box_render( $post ) {
+		$type     = get_post_meta( $post->ID, 'olsc_account_type', true );
+		$field_id = xprofile_get_field_id_from_name( 'Account Type' );
+		$field    = new \BP_XProfile_Field( $field_id );
+
+		static::view( 'account-type', [
+			'account_type' => ! empty( $type ) ? $type : 'Non-City Tech',
+			'options'      => $field->get_children(),
 		] );
 	}
 
@@ -103,6 +127,17 @@ class Schema {
 
 		update_post_meta( $post_id, 'cac_ncs_vcode', $vcode );
 		update_post_meta( $post_id, 'cac_ncs_groups', $groups );
+
+		// Validate and save account type.
+		if ( ! empty( $_POST['olsc_account_type'] ) ) {
+			$field_id = xprofile_get_field_id_from_name( 'Account Type' );
+			$field    = new \BP_XProfile_Field( $field_id );
+			$options  = wp_list_pluck( $field->get_children(), 'name' );
+
+			if ( in_array( $_POST['olsc_account_type'], $options, true ) ) {
+				update_post_meta( $post_id, 'olsc_account_type', $_POST['olsc_account_type'] );
+			}
+		}
 
 		return $post_id;
 	}
