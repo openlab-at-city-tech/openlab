@@ -240,49 +240,62 @@ class Schema {
 	 */
 
 	public static function get_wp_query_args( $code = false ) {
-		$args = array(
-			'post_type'  => 'cac_ncs_code',
-			'meta_query' => array(
-				array(
-					'key' => 'cac_ncs_vcode',
-					'value' => $code,
+		return [
+			'post_type'              => 'cac_ncs_code',
+			'posts_per_page'         => 1,
+			'update_post_term_cache' => false,
+			'meta_query'             => [
+				[
+					'key'     => 'cac_ncs_vcode',
+					'value'   => $code,
 					'compare' => '='
-				)
-			)
-		);
-
-		return $args;
+				],
+			],
+		];
 	}
 
+	/**
+	 * Checks if code is valid.
+	 *
+	 * @param string $code Signup code.
+	 * @return bool
+	 */
 	public static function validate_code( $code = false ) {
-		$validate = false;
+		$data = static::get_code_data( $code );
 
-		if ( $code ) {
-			$args = self::get_wp_query_args( $code );
-
-			$vcodes = new \WP_Query( $args );
-
-			$validate = $vcodes->have_posts();
+		if ( ! $data ) {
+			return false;
 		}
 
-		return $validate;
+		if ( static::is_expired( $data ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
+	/**
+	 * Get code data.
+	 *
+	 * @param string $code Signup code.
+	 * @return \WP_Post|null
+	 */
 	public static function get_code_data( $code = false ) {
-		$data = false;
-
-		if ( $code ) {
-			$args = self::get_wp_query_args( $code );
-
-			$vcodes = new \WP_Query( $args );
-
-			// Avoid the BS and just take the first one
-			$data = isset( $vcodes->posts[0] ) ? $vcodes->posts[0] : false;
-
-			// Pull up the postmeta
-			$data->vcode = get_post_meta( $data->ID, 'cac_ncs_vcode', true );
-			$data->groups = get_post_meta( $data->ID, 'cac_ncs_groups', true );
+		if ( ! $code ) {
+			return null;
 		}
+
+		$query = new \WP_Query( self::get_wp_query_args( $code ) );
+		if ( ! $query->found_posts ) {
+			return null;
+		}
+
+		// Get the first entry.
+		$data = $query->posts[ 0 ];
+
+		// Setup metadata.
+		$data->vcode = get_post_meta( $data->ID, 'cac_ncs_vcode', true );
+		$data->groups = get_post_meta( $data->ID, 'cac_ncs_groups', true );
 
 		return $data;
 	}
