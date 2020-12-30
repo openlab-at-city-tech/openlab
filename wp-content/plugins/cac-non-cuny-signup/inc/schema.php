@@ -172,7 +172,7 @@ class Schema {
 
 		wp_register_script(
 			'olsc-autocomplete',
-			plugins_url( 'js/autocomplete.min.js', PLUGIN_FILE ),
+			plugins_url( 'assets/js/autocomplete.min.js', PLUGIN_FILE ),
 			[ 'jquery' ],
 			'1.4.11',
 			true
@@ -180,7 +180,7 @@ class Schema {
 
 		wp_enqueue_script(
 			'olsc-admin-js',
-			plugins_url( 'js/admin.js', PLUGIN_FILE ),
+			plugins_url( 'assets/js/admin.js', PLUGIN_FILE ),
 			[ 'olsc-autocomplete' ],
 			'2.0.0',
 			true
@@ -194,7 +194,7 @@ class Schema {
 			return;
 		}
 
-		wp_enqueue_style( 'olsc', plugins_url( 'css/admin.css', PLUGIN_FILE ) );
+		wp_enqueue_style( 'olsc', plugins_url( 'assets/css/admin.css', PLUGIN_FILE ) );
 	}
 
 	public static function cac_ncs_groups_query() {
