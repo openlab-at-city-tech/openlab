@@ -164,20 +164,37 @@ class Schema {
 	}
 
 	public static function admin_scripts() {
-		global $post;
+		global $current_screen;
 
-		if ( isset( $post->post_type ) && static::POST_TYPE == $post->post_type ) {
-			wp_enqueue_script( 'suggest' );
-			wp_enqueue_script( 'cac_ncs_js', WP_CONTENT_URL . '/plugins/cac-non-cuny-signup/js/admin.js', array( 'jquery', 'suggest' ) );
+		if ( $current_screen->post_type !== static::POST_TYPE ) {
+			return;
 		}
+
+		wp_register_script(
+			'olsc-autocomplete',
+			plugins_url( 'js/autocomplete.min.js', PLUGIN_FILE ),
+			[ 'jquery' ],
+			'1.4.11',
+			true
+		);
+
+		wp_enqueue_script(
+			'olsc-admin-js',
+			plugins_url( 'js/admin.js', PLUGIN_FILE ),
+			[ 'olsc-autocomplete' ],
+			'2.0.0',
+			true
+		);
 	}
 
 	public static function admin_styles() {
-		global $post;
+		global $current_screen;
 
-		if ( isset( $post->post_type ) && static::POST_TYPE == $post->post_type ) {
-			wp_enqueue_style( 'cac_ncs_css', WP_CONTENT_URL . '/plugins/cac-non-cuny-signup/css/admin.css' );
+		if ( $current_screen->post_type !== static::POST_TYPE ) {
+			return;
 		}
+
+		wp_enqueue_style( 'olsc', plugins_url( 'css/admin.css', PLUGIN_FILE ) );
 	}
 
 	public static function cac_ncs_groups_query() {
@@ -189,15 +206,17 @@ class Schema {
 		);
 
 		if ( $q ) {
-			stataic::$search_terms = $q;
+			static::$search_terms = $q;
 
 			// Shitty but necessary. 'search_terms' is too generous
 			add_filter( 'bp_groups_get_paged_groups_sql', array( __CLASS__, 'filter_group_sql' ) );
 			if ( bp_has_groups() ) {
 				while ( bp_groups() ) {
 					bp_the_group();
-					$retval['suggestions'][] = bp_get_group_name();
-					$retval['data'][]	 = bp_get_group_id();
+					$retval['suggestions'][] = [
+						'value' => bp_get_group_name(),
+						'data'  => bp_get_group_id(),
+					];
 				}
 			}
 		}
