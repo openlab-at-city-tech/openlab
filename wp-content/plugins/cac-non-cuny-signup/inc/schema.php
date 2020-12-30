@@ -16,6 +16,7 @@ class Schema {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_type' ), 99 );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
+		add_action( 'post_submitbox_misc_actions', array( __CLASS__, 'expiration_date_render' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_meta' ), 10, 2 );
 
 		add_action( 'admin_print_scripts', array( __CLASS__, 'admin_scripts' ) );
@@ -54,6 +55,15 @@ class Schema {
 		add_meta_box( 'cac_ncs_groups', 'Add to Groups', array( __CLASS__, 'group_meta_box_render' ), static::POST_TYPE, 'normal' );
 		add_meta_box( 'cac_ncs_users', 'Users', array( __CLASS__, 'users_meta_box_render' ), static::POST_TYPE, 'side', 'low' );
 		add_meta_box( 'cac_ncs_account_type', 'Account Type', array( __CLASS__, 'account_type_meta_box_render' ), static::POST_TYPE, 'side' );
+	}
+
+	public static function expiration_date_render( $post ) {
+		$timestamp = get_post_meta( $post->ID, 'olsc_expiration_date', true );
+		$date      = date_create( '@' . $timestamp );
+
+		static::view( 'expiration-date', [
+			'date' => $date ? $date->format( 'm-d-Y' ) : '',
+		] );
 	}
 
 	public static function code_meta_box_render( $post ) {
@@ -137,6 +147,17 @@ class Schema {
 			if ( in_array( $_POST['olsc_account_type'], $options, true ) ) {
 				update_post_meta( $post_id, 'olsc_account_type', $_POST['olsc_account_type'] );
 			}
+		}
+
+		// Expiration date.
+		if ( ! empty( $_POST['olsc_expiration_date'] ) ) {
+			$expires = \DateTime::createFromFormat( 'm-d-Y', $_POST['olsc_expiration_date'] );
+
+			if ( $expires ) {
+				update_post_meta( $post_id, 'olsc_expiration_date', $expires->getTimestamp() );
+			}
+		} else {
+			delete_post_meta( $post_id, 'olsc_expiration_date' );
 		}
 
 		return $post_id;
@@ -264,6 +285,24 @@ class Schema {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Checks if code has expired.
+	 *
+	 * @param \WP_Post $post Code post instance.
+	 * @return bool
+	 */
+	public static function is_expired( $post ) {
+		$current = time();
+		$expires = (int) get_post_meta( $post->ID, 'olsc_expiration_date', true );
+
+		// Code has no expiration date.
+		if ( empty( $expires ) ) {
+			return false;
+		}
+
+		return $expires < $current;
 	}
 
 	/**

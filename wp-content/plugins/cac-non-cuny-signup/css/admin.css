@@ -7,3 +7,21 @@
 input#cac_ncs_groups {
 	width: 90%;
 }
+
+.misc-expiration-date label:before {
+	content: "\f469";
+	color: #82878c;
+	position: relative;
+	top: -1px;
+	font: normal 20px/1 dashicons;
+	speak: none;
+	display: inline-block;
+	margin-left: -1px;
+	padding-right: 3px;
+	vertical-align: middle;
+	-webkit-font-smoothing: antialiased;
+}
+
+.misc-expiration-date input {
+	width: 110px;
+}
