@@ -7,7 +7,7 @@
  * Validates a code
  */
 function cac_ncs_validate_code( $code = false ) {
-	return OpenLab\SignupCodes\Schema::validate_code( $code );
+	return OpenLab\SignupCodes\Schema::is_code_valid( $code );
 }
 
 /**

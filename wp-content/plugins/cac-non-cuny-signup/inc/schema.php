@@ -255,32 +255,12 @@ class Schema {
 	}
 
 	/**
-	 * Checks if code is valid.
-	 *
-	 * @param string $code Signup code.
-	 * @return bool
-	 */
-	public static function validate_code( $code = false ) {
-		$data = static::get_code_data( $code );
-
-		if ( ! $data ) {
-			return false;
-		}
-
-		if ( static::is_expired( $data ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get code data.
 	 *
 	 * @param string $code Signup code.
 	 * @return \WP_Post|null
 	 */
-	public static function get_code_data( $code = false ) {
+	public static function get_code_data( $code = null ) {
 		if ( ! $code ) {
 			return null;
 		}
@@ -301,14 +281,34 @@ class Schema {
 	}
 
 	/**
-	 * Checks if code has expired.
+	 * Checks if code is valid.
 	 *
-	 * @param \WP_Post $post Code post instance.
+	 * @param string $code Signup code.
 	 * @return bool
 	 */
-	public static function is_expired( $post ) {
+	public static function is_code_valid( $code = null ) {
+		$data = static::get_code_data( $code );
+
+		if ( ! $data ) {
+			return false;
+		}
+
+		if ( static::is_code_expired( $data ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks if code has expired.
+	 *
+	 * @param \WP_Post $data Code post instance.
+	 * @return bool
+	 */
+	public static function is_code_expired( \WP_Post $data ) {
 		$current = time();
-		$expires = (int) get_post_meta( $post->ID, 'olsc_expiration_date', true );
+		$expires = (int) get_post_meta( $data->ID, 'olsc_expiration_date', true );
 
 		// Code has no expiration date.
 		if ( empty( $expires ) ) {
