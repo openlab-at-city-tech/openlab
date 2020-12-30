@@ -511,7 +511,7 @@ function openlab_registration_page() {
 								/>
 									<option value="">----</option>
 									<?php foreach ( $account_type_field->get_children() as $account_type_child ) : ?>
-										<option value="<?php echo esc_attr( $account_type_child->name ); ?>" <?php selected( $account_type_selected, $account_type_child->name ); ?>><?php echo esc_html( $account_type_child->name ); ?></option>
+										<option value="<?php echo esc_attr( $account_type_child->name ); ?>" <?php selected( $account_type_submitted, $account_type_child->name ); ?>><?php echo esc_html( $account_type_child->name ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							</div>
@@ -636,7 +636,7 @@ function openlab_registration_page() {
 
 				<?php do_action( 'bp_after_account_details_fields' ); ?>
 
-				<?php /*                 * *** Extra Profile Details ***** */ ?>
+				<?php /* Extra Profile Details */ ?>
 
 				<?php if ( bp_is_active( 'xprofile' ) ) : ?>
 
