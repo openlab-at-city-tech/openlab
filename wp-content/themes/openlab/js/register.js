@@ -354,7 +354,7 @@
 
 				function validateEmail( field ) {
 					var emailValue = field.value;
-					var invalidCharRegExp = /[^a-zA-Z0-9\-\.]/g
+					var invalidCharRegExp = /[^a-zA-Z0-9\-\.@]/g
 					field.value = emailValue.replace( invalidCharRegExp, '' );
 				}
 
