@@ -358,12 +358,10 @@
 				}
 
 				function set_email_helper( accountType ) {
-					var helper = 'Please use your City Tech email address to register';
+					var helper = 'Please use your City Tech email address to register.';
 
 					if ( 'Student' === accountType ) {
-						helper = 'Use your City Tech email address, of the form first.lastname@mail.citytech.cuny.edu';
-					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
-						helper = 'Use your City Tech email address, of the form first.lastname@citytech.cuny.edu';
+						helper = 'Please use your City Tech email address. Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
 					}
 
 					$('.email-requirements').fadeOut( function() {
