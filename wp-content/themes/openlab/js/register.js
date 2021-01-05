@@ -135,6 +135,14 @@
 								emailDomain = 'mail.citytech.cuny.edu';
 							}
 
+							// Show nothing if user has selected Student but account format doesn't match.
+							if ( 'Student' === $account_type_field.val() ) {
+								var studentRegExp = /^[a-z0-9]+\.[a-z0-9]+$/
+								if ( ! studentRegExp.exec( beforeAt ) ) {
+									return;
+								}
+							}
+
 							var suggestions = [ beforeAt + '@' + emailDomain ];
 
 							var dataList = '<datalist id="' + dataListId + '">';
