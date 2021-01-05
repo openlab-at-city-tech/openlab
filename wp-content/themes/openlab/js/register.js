@@ -120,6 +120,8 @@
 					var inputHasAutocomplete = false;
 
 					emailInput.on('keyup',function(){
+						validateEmail( this );
+
 						var dataListId = emailInput.attr( 'name' ) + '-datalist';
 
 						var atPosition = this.value.indexOf( '@' );
@@ -345,24 +347,15 @@
         });
 
         $account_type_field.on('change', function () {
-						set_email_placeholder( this.value );
 						set_email_helper( this.value );
             load_account_type_fields();
         });
         load_account_type_fields();
 
-				function set_email_placeholder( accountType ) {
-					var placeholder = '';
-
-					if ( 'Student' === accountType ) {
-						placeholder = 'first.lastname@mail.citytech.cuny.edu';
-					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
-						placeholder = 'first.lastname@citytech.cuny.edu';
-					}
-
-					if ( placeholder.length > 0 ) {
-						//$('#signup_email').attr('placeholder', placeholder);
-					}
+				function validateEmail( field ) {
+					var emailValue = field.value;
+					var invalidCharRegExp = /[^a-zA-Z0-9\-\.]/g
+					field.value = emailValue.replace( invalidCharRegExp, '' );
 				}
 
 				function set_email_helper( accountType ) {
