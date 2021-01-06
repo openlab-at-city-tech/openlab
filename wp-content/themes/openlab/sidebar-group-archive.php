@@ -41,14 +41,6 @@ if ( bp_is_members_directory() ) {
 
 				<div class="custom-select" id="schoolSelect">
 					<?php
-					$school_filter_type = 'course' === $group_type ? 'school' : 'school-office';
-					set_query_var( 'academic_unit_type', $school_filter_type );
-					get_template_part( 'parts/sidebar/filter-academic-unit' );
-					?>
-				</div>
-
-				<div class="custom-select" id="schoolSelect">
-					<?php
 					set_query_var( 'academic_unit_type', 'school' );
 					get_template_part( 'parts/sidebar/filter-academic-unit' );
 					?>
