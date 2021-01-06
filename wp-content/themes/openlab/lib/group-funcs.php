@@ -1130,7 +1130,7 @@ function openlab_current_directory_filters() {
 
     switch ($current_view) {
         case 'portfolio' :
-            $filters = array('school', 'department', 'usertype');
+            $filters = array('school', 'office', 'department', 'usertype');
             break;
 
         case 'course' :
@@ -1139,11 +1139,11 @@ function openlab_current_directory_filters() {
 
         case 'club' :
         case 'project' :
-            $filters = array('school', 'department', 'cat', 'semester');
+            $filters = array('school', 'office', 'department', 'cat', 'semester');
             break;
 
         case 'people' :
-            $filters = array('usertype', 'school', 'department');
+            $filters = array('usertype', 'school', 'office', 'department');
             break;
 
         default :
