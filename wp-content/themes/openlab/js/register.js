@@ -272,27 +272,41 @@
                 set_account_type_fields();
             }
 
+						function get_account_type_option_markup( value, text, typeSelected ) {
+							var markup = '<option value="' + value + '"';
+
+							if ( typeSelected === value ) {
+								markup += ' selected="selected"';
+							}
+
+							markup += '>' + text + '</option>';
+
+							return markup;
+						}
+
             function set_account_type_fields() {
                 var newtypes = '';
 
-								emailtype = getEnteredEmailType();
+								var emailtype = getEnteredEmailType();
+
+                var $typedrop = $('#field_7');
+								var typeSelected = $typedrop.children('option:selected').val();
 
                 if ('fs' == emailtype || 'empty' === emailtype ) {
-                    newtypes += '<option value="">----</option>';
-                    newtypes += '<option value="Faculty">Faculty</option>';
-                    newtypes += '<option value="Staff">Staff</option>';
+										newtypes += get_account_type_option_markup( '', '----', typeSelected );
+										newtypes += get_account_type_option_markup( 'Faculty', 'Faculty', typeSelected );
+										newtypes += get_account_type_option_markup( 'Staff', 'Staff', typeSelected );
                 }
 
                 if ('student' == emailtype || 'empty' === emailtype ) {
-                    newtypes += '<option value="Student">Student</option>';
-                    newtypes += '<option value="Alumni">Alumni</option>';
+										newtypes += get_account_type_option_markup( 'Student', 'Student', typeSelected );
+										newtypes += get_account_type_option_markup( 'Alumni', 'Alumni', typeSelected );
                 }
 
                 if ('nonct' == emailtype || 'empty' === emailtype ) {
-                    newtypes += '<option value="Non-City Tech">Non-City Tech</option>';
+										newtypes += get_account_type_option_markup( 'Non-City Tech', 'Non-City Tech', typeSelected );
                 }
 
-                var $typedrop = $('#field_7');
                 $typedrop.html(newtypes);
 
                 /*
