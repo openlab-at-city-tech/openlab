@@ -358,7 +358,18 @@
 				function validateEmail( field ) {
 					var emailValue = field.value;
 					var invalidCharRegExp = /[^a-zA-Z0-9\-\.@]/g
-					field.value = emailValue.replace( invalidCharRegExp, '' );
+					var newValue = emailValue.replace( invalidCharRegExp, '' );
+
+					if ( emailValue === newValue ) {
+						return;
+					}
+
+					field.value = newValue;
+
+					var $field = $( field );
+					if ( $field.parsley().isValid() ) {
+						$( '#' + field.id + '_error .parsley-errors-list li' ).remove();
+					}
 				}
 
 				function set_email_label( accountType ) {
