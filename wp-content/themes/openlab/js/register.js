@@ -347,6 +347,7 @@
         });
 
         $account_type_field.on('change', function () {
+						set_email_label( this.value );
 						set_email_helper( this.value );
             load_account_type_fields();
         });
@@ -358,11 +359,18 @@
 					field.value = emailValue.replace( invalidCharRegExp, '' );
 				}
 
+				function set_email_label( accountType ) {
+					var label = 'Non-City Tech' === accountType ? 'Email Address' : 'City Tech Email Address';
+					$( '#signup-email-label span' ).html( label );
+				}
+
 				function set_email_helper( accountType ) {
-					var helper = 'Please use your City Tech email address to register.';
+					var helper = '';
 
 					if ( 'Student' === accountType ) {
-						helper = 'Please use your City Tech email address. Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
+						helper = 'Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
+					} else if ( 'Faculty' === accountType ) {
+						helper = 'Example: jdoe@citytech.cuny.edu.';
 					}
 
 					$('.email-requirements').fadeOut( function() {
