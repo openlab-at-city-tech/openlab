@@ -43,11 +43,13 @@
             }
 
             var jsElem = errorMsg[0];
-            jsElem.style.clip = 'auto';
-            var alertText = document.createTextNode(" ");
-            jsElem.appendChild(alertText);
-            jsElem.style.display = 'none';
-            jsElem.style.display = 'inline';
+						if ( 'undefined' !== typeof jsElem ) {
+							jsElem.style.clip = 'auto';
+							var alertText = document.createTextNode(" ");
+							jsElem.appendChild(alertText);
+							jsElem.style.display = 'none';
+							jsElem.style.display = 'inline';
+						}
 
             if (errorMsg.attr('role') !== 'alert') {
                 errorMsg.attr('role', 'alert');
