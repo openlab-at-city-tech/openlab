@@ -517,7 +517,7 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" for="signup_email">Email Address (required) <div class="email-requirements">Please use your City Tech email address to register</div></label>
+								<label class="control-label" for="signup_email">Email Address (required) <div class="email-requirements">Please use your City Tech email address to register.</div></label>
 								<div id="signup_email_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_email_errors' ); ?>
 								<input

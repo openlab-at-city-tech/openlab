@@ -120,6 +120,8 @@
 					var inputHasAutocomplete = false;
 
 					emailInput.on('keyup',function(){
+						validateEmail( this );
+
 						var dataListId = emailInput.attr( 'name' ) + '-datalist';
 
 						var atPosition = this.value.indexOf( '@' );
@@ -133,6 +135,14 @@
 							var emailDomain = 'citytech.cuny.edu';
 							if ( 'Student' === $account_type_field.val() ) {
 								emailDomain = 'mail.citytech.cuny.edu';
+							}
+
+							// Show nothing if user has selected Student but account format doesn't match.
+							if ( 'Student' === $account_type_field.val() ) {
+								var studentRegExp = /^[a-z0-9]+\.[a-z0-9]+$/
+								if ( ! studentRegExp.exec( beforeAt ) ) {
+									return;
+								}
 							}
 
 							var suggestions = [ beforeAt + '@' + emailDomain ];
@@ -337,33 +347,22 @@
         });
 
         $account_type_field.on('change', function () {
-						set_email_placeholder( this.value );
 						set_email_helper( this.value );
             load_account_type_fields();
         });
         load_account_type_fields();
 
-				function set_email_placeholder( accountType ) {
-					var placeholder = '';
-
-					if ( 'Student' === accountType ) {
-						placeholder = 'first.lastname@mail.citytech.cuny.edu';
-					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
-						placeholder = 'first.lastname@citytech.cuny.edu';
-					}
-
-					if ( placeholder.length > 0 ) {
-						//$('#signup_email').attr('placeholder', placeholder);
-					}
+				function validateEmail( field ) {
+					var emailValue = field.value;
+					var invalidCharRegExp = /[^a-zA-Z0-9\-\.@]/g
+					field.value = emailValue.replace( invalidCharRegExp, '' );
 				}
 
 				function set_email_helper( accountType ) {
-					var helper = 'Please use your City Tech email address to register';
+					var helper = 'Please use your City Tech email address to register.';
 
 					if ( 'Student' === accountType ) {
-						helper = 'Use your City Tech email address, of the form first.lastname@mail.citytech.cuny.edu';
-					} else if ( 'Faculty' === accountType || 'Staff' === accountType ) {
-						helper = 'Use your City Tech email address, of the form first.lastname@citytech.cuny.edu';
+						helper = 'Please use your City Tech email address. Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
 					}
 
 					$('.email-requirements').fadeOut( function() {
