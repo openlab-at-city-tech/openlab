@@ -135,12 +135,12 @@
 							var beforeAt = this.value.substr( 0, atPosition )
 
 							var emailDomain = 'citytech.cuny.edu';
-							if ( 'Student' === $account_type_field.val() ) {
+							if ( 'Student' === $account_type_field.val() || 'Alumni' === $account_type_field.val() ) {
 								emailDomain = 'mail.citytech.cuny.edu';
 							}
 
 							// Show nothing if user has selected Student but account format doesn't match.
-							if ( 'Student' === $account_type_field.val() ) {
+							if ( 'Student' === $account_type_field.val() || 'Alumni' === $account_type_field.val() ) {
 								var studentRegExp = /^[a-z0-9]+\.[a-z0-9]+$/i
 								if ( ! studentRegExp.exec( beforeAt ) ) {
 									return;
