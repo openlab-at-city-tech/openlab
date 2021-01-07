@@ -124,6 +124,13 @@
 					emailInput.on('keyup',function(){
 						validateEmail( this );
 
+						var selectedAccountType = $account_type_field.val();
+
+						// Do nothing for Non-City Tech.
+						if ( 'Non-City Tech' === selectedAccountType ) {
+							return;
+						}
+
 						var dataListId = emailInput.attr( 'name' ) + '-datalist';
 
 						var atPosition = this.value.indexOf( '@' );
@@ -135,12 +142,12 @@
 							var beforeAt = this.value.substr( 0, atPosition )
 
 							var emailDomain = 'citytech.cuny.edu';
-							if ( 'Student' === $account_type_field.val() || 'Alumni' === $account_type_field.val() ) {
+							if ( 'Student' === selectedAccountType || 'Alumni' === selectedAccountType ) {
 								emailDomain = 'mail.citytech.cuny.edu';
 							}
 
 							// Show nothing if user has selected Student but account format doesn't match.
-							if ( 'Student' === $account_type_field.val() || 'Alumni' === $account_type_field.val() ) {
+							if ( 'Student' === selectedAccountType || 'Alumni' === selectedAccountType ) {
 								var studentRegExp = /^[a-z0-9]+\.[a-z0-9]+$/i
 								if ( ! studentRegExp.exec( beforeAt ) ) {
 									return;
