@@ -8233,6 +8233,9 @@ body #register-page .has-error .error {
 body #register-page .has-error .error .parsley-errors-list {
   padding: 15px;
 }
+body #register-page label .label-gloss {
+  font-weight: normal;
+}
 body .panel-body .bp-template-notice {
   margin-top: 0;
   margin-bottom: 17px;

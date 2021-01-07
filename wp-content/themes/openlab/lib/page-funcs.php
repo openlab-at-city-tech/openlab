@@ -465,7 +465,7 @@ function openlab_registration_page() {
 							<?php /* Basic Account Details */ ?>
 
 							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>">First Name (required, but not displayed on Public Profile)</label>
+								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>"><span class="label-text">First Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
 								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
 								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ); ?>
 								<input
@@ -481,7 +481,7 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>">Last Name (required, but not displayed on Public Profile)</label>
+								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>"><span class="label-text">Last Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
 								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container"></div>
 								<?php do_action( 'bp_field_' . $last_name_field_id . '_errors' ); ?>
 								<input
@@ -517,7 +517,7 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" id="signup-email-label" for="signup_email"><span class="label-text">City Tech Email Address</span> (required) <div class="email-requirements"></div></label>
+								<label class="control-label" id="signup-email-label" for="signup_email"><span class="label-text">City Tech Email Address</span> <span class="label-gloss">(required) <div class="email-requirements"></div></span></label>
 								<div id="signup_email_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_email_errors' ); ?>
 								<input
@@ -556,7 +556,7 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" for="signup_username"><?php esc_html_e( 'Username', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?> (lowercase & no special characters)</label>
+								<label class="control-label" for="signup_username"><span class="label-text">Username</span> <span class="label-gloss">(required) (lowercase & no special characters)</span></label>
 								<div id="signup_username_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_username_errors' ); ?>
 								<?php
@@ -589,7 +589,7 @@ function openlab_registration_page() {
 
 
 							<div data-parsley-children-should-match class="form-group">
-								<label class="control-label" for="signup_password"><?php esc_html_e( 'Choose a Password', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?></label>
+								<label class="control-label" for="signup_password"><span class="label-text">Choose a Password</span> <span class="label-gloss">(required)</span></label>
 								<div id="signup_password_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_password_errors' ); ?>
 								<div class="password-field">
@@ -611,7 +611,7 @@ function openlab_registration_page() {
 									<div id="password-strength-notice" class="password-strength-notice"></div>
 								</div>
 
-								<label class="control-label" for="signup_password_confirm"><?php esc_html_e( 'Confirm Password', 'buddypress' ); ?> <?php esc_html_e( '(required)', 'buddypress' ); ?></label>
+								<label class="control-label" for="signup_password_confirm"><span class="label-text">Confirm Password</span> <span class="label-gloss">(required)</span></label>
 								<div id="signup_password_confirm_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_password_confirm_errors' ); ?>
 								<input

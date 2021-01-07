@@ -361,7 +361,7 @@
 
 				function set_email_label( accountType ) {
 					var label = 'Non-City Tech' === accountType ? 'Email Address' : 'City Tech Email Address';
-					$( '#signup-email-label span' ).html( label );
+					$( '#signup-email-label .label-text' ).html( label );
 				}
 
 				function set_email_helper( accountType ) {

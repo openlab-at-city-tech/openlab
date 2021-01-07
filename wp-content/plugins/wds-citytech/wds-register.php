@@ -185,7 +185,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		if ( 'Staff' === $account_type || 'Faculty' === $account_type ) :
 			?>
 			<div class="editfield field_name alt form-group">
-				<label for="ol-offices">School / Office / Department (required)</label>
+				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required)</span></label>
 				<?php
 				$selector_args = [
 					'required' => true,
@@ -205,7 +205,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			?>
 			<div class="form-group editfield field_name alt">
 				<div class="error-container" id="academic-unit-selector-error"></div>
-				<label for="ol-offices">Major Program of Study (required)</label>
+				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required)</span></label>
 				<select
 				  name="departments-dropdown"
 				  class="form-control"
@@ -235,15 +235,15 @@ if ( bp_has_profile( $has_profile_args ) ) :
 			$return .= '<div class="editfield form-group">';
 			if ( 'textbox' == bp_get_the_profile_field_type() ) :
 				if ( bp_get_the_profile_field_name() == 'Name' ) {
-					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">Display Name';
+					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">Display Name</span>';
 				} else {
-					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				}
 				if ( bp_get_the_profile_field_is_required() ) {
 					if ( bp_get_the_profile_field_name() == 'First Name' || bp_get_the_profile_field_name() == 'Last Name' ) {
-						$return .= ' (required, but not displayed on Public Profile)';
+						$return .= ' <span class="label-gloss">(required, but not displayed on Public Profile)</span>';
 					} else {
-						$return .= ' (required)';
+						$return .= ' <span class="label-gloss">(required)</span>';
 					}
 				}
 				$return .= '</label>';
@@ -279,18 +279,18 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						/>';
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
-				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return .= '</label>';
 				$return .= '<textarea class="form-control" rows="5" cols="40" name="' . bp_get_the_profile_field_input_name() . '" id="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_edit_value();
 				$return .= '</textarea>';
 				endif;
 			if ( 'selectbox' == bp_get_the_profile_field_type() ) :
-				$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+				$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return .= '</label>';
 
@@ -319,9 +319,9 @@ if ( bp_has_profile( $has_profile_args ) ) :
 
 				endif;
 			if ( 'multiselectbox' == bp_get_the_profile_field_type() ) :
-				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '">' . bp_get_the_profile_field_name();
+				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return     .= '</label>';
 				$return     .= '<select class="form-control" name="' . bp_get_the_profile_field_input_name() . '" id="' . bp_get_the_profile_field_input_name() . '" multiple="multiple">';
@@ -330,9 +330,9 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				endif;
 			if ( 'radio' == bp_get_the_profile_field_type() ) :
 				$return .= '<div class="radio">';
-				$return .= '<span class="label">' . bp_get_the_profile_field_name();
+				$return .= '<span class="label"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return .= '</span>';
 				$return .= bp_get_the_profile_field_options();
@@ -343,9 +343,9 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				endif;
 			if ( 'checkbox' == bp_get_the_profile_field_type() ) :
 				$return .= '<div class="checkbox">';
-				$return .= '<span class="label">' . bp_get_the_profile_field_name();
+				$return .= '<span class="label"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return .= '</span>';
 				$return .= bp_get_the_profile_field_options();
@@ -353,9 +353,9 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				endif;
 			if ( 'datebox' == bp_get_the_profile_field_type() ) :
 				$return .= '<div class="datebox">';
-				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '_day">' . bp_get_the_profile_field_name();
+				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '_day"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				if ( bp_get_the_profile_field_is_required() ) :
-					$return .= ' (required)';
+					$return .= ' <span class="label-gloss">(required)</span>';
 				endif;
 				$return     .= '</label>';
 				$return     .= '<select name="' . bp_get_the_profile_field_input_name() . '_day" id="' . bp_get_the_profile_field_input_name() . '_day">';
