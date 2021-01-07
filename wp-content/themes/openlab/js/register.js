@@ -165,10 +165,11 @@
         $('#signup_email').on('blur', function (e) {
             var email = $(e.target).val().toLowerCase();
             if (!email.length) {
+                set_account_type_fields();
                 return;
             }
 
-            var emailtype = '';
+            var emailtype = getEnteredEmailType();
             var $emaillabel = $('#signup_email_error');
             var $validationdiv = $('#validation-code');
             var $emailconfirm = $('#signup_email_confirm');
@@ -274,23 +275,21 @@
             function set_account_type_fields() {
                 var newtypes = '';
 
-                if ('student' == emailtype) {
-                    newtypes += '<option value="Student">Student</option>';
-                    newtypes += '<option value="Alumni">Alumni</option>';
-                }
+								emailtype = getEnteredEmailType();
 
-                if ('fs' == emailtype) {
+                if ('fs' == emailtype || 'empty' === emailtype ) {
                     newtypes += '<option value="">----</option>';
                     newtypes += '<option value="Faculty">Faculty</option>';
                     newtypes += '<option value="Staff">Staff</option>';
                 }
 
-                if ('nonct' == emailtype) {
-                    newtypes += '<option value="Non-City Tech">Non-City Tech</option>';
+                if ('student' == emailtype || 'empty' === emailtype ) {
+                    newtypes += '<option value="Student">Student</option>';
+                    newtypes += '<option value="Alumni">Alumni</option>';
                 }
 
-                if ('' == emailtype) {
-                    newtypes += '<option value="">----</option>';
+                if ('nonct' == emailtype || 'empty' === emailtype ) {
+                    newtypes += '<option value="Non-City Tech">Non-City Tech</option>';
                 }
 
                 var $typedrop = $('#field_7');
@@ -364,7 +363,7 @@
 						return;
 					}
 
-					field.value = newValue;
+					field.value = emailValue.replace( invalidCharRegExp, '' );
 
 					var $field = $( field );
 					if ( $field.parsley().isValid() ) {
@@ -492,5 +491,23 @@
             });
         }
     });
+
+		function getEnteredEmailType() {
+			var email = $('#signup_email').val();
+			var emailtype;
+
+			if (0 <= email.indexOf('mail.citytech.cuny.edu')) {
+				emailtype = 'student';
+			} else if (0 <= email.indexOf('citytech.cuny.edu')) {
+				emailtype = 'fs';
+			} else if ( 0 === email.length ) {
+				emailtype = 'empty';
+			} else {
+				emailtype = 'nonct';
+			}
+
+			return emailtype;
+		}
+
 
 }(jQuery));
