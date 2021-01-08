@@ -20,22 +20,11 @@ function gutenberg_render_block_core_post_tags( $attributes, $content, $block ) 
 
 	$post_tags = get_the_tags( $block->context['postId'] );
 	if ( ! empty( $post_tags ) ) {
-		$classes = '';
-		if ( isset( $attributes['textAlign'] ) ) {
-			$classes .= 'has-text-align-' . $attributes['textAlign'];
-		}
-
-		$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classes ) );
-		$output             = sprintf( '<div %1$s>', $wrapper_attributes );
-
+		$output = '';
 		foreach ( $post_tags as $tag ) {
 			$output .= '<a href="' . get_tag_link( $tag->term_id ) . '">' . $tag->name . '</a>' . ' | ';
 		}
-
-		$output  = trim( $output, ' | ' );
-		$output .= '</div>';
-
-		return $output;
+		return trim( $output, ' | ' );
 	}
 }
 

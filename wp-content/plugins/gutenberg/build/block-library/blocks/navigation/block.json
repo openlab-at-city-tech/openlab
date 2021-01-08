@@ -1,9 +1,11 @@
 {
-	"apiVersion": 2,
 	"name": "core/navigation",
 	"category": "design",
 	"attributes": {
 		"orientation": {
+			"type": "string"
+		},
+		"className": {
 			"type": "string"
 		},
 		"textColor": {
@@ -23,6 +25,12 @@
 		},
 		"rgbBackgroundColor": {
 			"type": "string"
+		},
+		"fontSize": {
+			"type": "string"
+		},
+		"customFontSize": {
+			"type": "number"
 		},
 		"itemsJustification": {
 			"type": "string"
@@ -49,12 +57,6 @@
 		"anchor": true,
 		"html": false,
 		"inserter": true,
-		"fontSize": true,
-		"__experimentalFontStyle": true,
-		"__experimentalFontWeight": true,
-		"__experimentalTextTransform": true,
-		"color": true,
-		"__experimentalFontFamily": true,
-		"__experimentalTextDecoration": true
+		"lightBlockWrapper": true
 	}
 }

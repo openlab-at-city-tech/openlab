@@ -1,5 +1,4 @@
 {
-	"apiVersion": 2,
 	"name": "core/button",
 	"category": "design",
 	"parent": [
@@ -52,9 +51,6 @@
 		},
 		"gradient": {
 			"type": "string"
-		},
-		"width": {
-			"type": "number"
 		}
 	},
 	"supports": {
@@ -62,6 +58,6 @@
 		"align": true,
 		"alignWide": false,
 		"reusable": false,
-		"__experimentalSelector": ".wp-block-button > a"
+		"lightBlockWrapper": true
 	}
 }

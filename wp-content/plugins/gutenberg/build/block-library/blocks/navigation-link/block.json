@@ -1,19 +1,21 @@
 {
-	"apiVersion": 2,
 	"name": "core/navigation-link",
 	"category": "design",
-	"parent": [ "core/navigation" ],
+	"parent": [
+		"core/navigation"
+	],
 	"attributes": {
 		"label": {
 			"type": "string"
+		},
+		"nofollow": {
+			"type": "boolean",
+			"default": false
 		},
 		"type": {
 			"type": "string"
 		},
 		"description": {
-			"type": "string"
-		},
-		"rel": {
 			"type": "string"
 		},
 		"id": {
@@ -24,9 +26,6 @@
 			"default": false
 		},
 		"url": {
-			"type": "string"
-		},
-		"title": {
 			"type": "string"
 		}
 	},
@@ -41,6 +40,7 @@
 	],
 	"supports": {
 		"reusable": false,
-		"html": false
+		"html": false,
+		"lightBlockWrapper": true
 	}
 }

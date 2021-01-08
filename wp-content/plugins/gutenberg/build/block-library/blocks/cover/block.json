@@ -1,5 +1,4 @@
 {
-	"apiVersion": 2,
 	"name": "core/cover",
 	"category": "media",
 	"attributes": {
@@ -10,10 +9,6 @@
 			"type": "number"
 		},
 		"hasParallax": {
-			"type": "boolean",
-			"default": false
-		},
-		"isRepeated": {
 			"type": "boolean",
 			"default": false
 		},
@@ -54,8 +49,7 @@
 		"anchor": true,
 		"align": true,
 		"html": false,
-		"spacing": {
-			"padding": true
-		}
+		"lightBlockWrapper": true,
+		"__experimentalPadding": true
 	}
 }

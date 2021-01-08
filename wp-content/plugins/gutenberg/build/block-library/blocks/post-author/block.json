@@ -1,9 +1,8 @@
 {
-	"apiVersion": 2,
 	"name": "core/post-author",
 	"category": "design",
 	"attributes": {
-		"textAlign": {
+		"align": {
 			"type": "string"
 		},
 		"avatarSize": {
@@ -19,6 +18,18 @@
 		},
 		"byline": {
 			"type": "string"
+		},
+		"backgroundColor": {
+			"type": "string"
+		},
+		"textColor": {
+			"type": "string"
+		},
+		"customBackgroundColor": {
+			"type": "string"
+		},
+		"customTextColor": {
+			"type": "string"
 		}
 	},
 	"usesContext": [
@@ -27,11 +38,6 @@
 	],
 	"supports": {
 		"html": false,
-		"fontSize": true,
-		"color": {
-			"gradients": true,
-			"link": true
-		},
-		"lineHeight": true
+		"__experimentalFontSize": true
 	}
 }

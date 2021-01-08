@@ -41,8 +41,8 @@ function gutenberg_latest_comments_draft_or_post_title( $post = 0 ) {
  * @return string Returns the post content with latest comments added.
  */
 function gutenberg_render_block_core_latest_comments( $attributes = array() ) {
+	// This filter is documented in wp-includes/widgets/class-wp-widget-recent-comments.php.
 	$comments = get_comments(
-		// This filter is documented in wp-includes/widgets/class-wp-widget-recent-comments.php.
 		apply_filters(
 			'widget_comments_args',
 			array(
@@ -116,28 +116,34 @@ function gutenberg_render_block_core_latest_comments( $attributes = array() ) {
 		}
 	}
 
-	$classnames = array();
+	$class = 'wp-block-latest-comments';
+	if ( ! empty( $attributes['className'] ) ) {
+		$class .= ' ' . $attributes['className'];
+	}
+	if ( isset( $attributes['align'] ) ) {
+		$class .= " align{$attributes['align']}";
+	}
 	if ( $attributes['displayAvatar'] ) {
-		$classnames[] = 'has-avatars';
+		$class .= ' has-avatars';
 	}
 	if ( $attributes['displayDate'] ) {
-		$classnames[] = 'has-dates';
+		$class .= ' has-dates';
 	}
 	if ( $attributes['displayExcerpt'] ) {
-		$classnames[] = 'has-excerpts';
+		$class .= ' has-excerpts';
 	}
 	if ( empty( $comments ) ) {
-		$classnames[] = 'no-comments';
+		$class .= ' no-comments';
 	}
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => implode( ' ', $classnames ) ) );
+	$classnames = esc_attr( $class );
 
 	return ! empty( $comments ) ? sprintf(
-		'<ol %1$s>%2$s</ol>',
-		$wrapper_attributes,
+		'<ol class="%1$s">%2$s</ol>',
+		$classnames,
 		$list_items_markup
 	) : sprintf(
-		'<div %1$s>%2$s</div>',
-		$wrapper_attributes,
+		'<div class="%1$s">%2$s</div>',
+		$classnames,
 		__( 'No comments to show.' )
 	);
 }

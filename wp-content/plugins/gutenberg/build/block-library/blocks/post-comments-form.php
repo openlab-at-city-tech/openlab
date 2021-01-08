@@ -18,17 +18,11 @@ function gutenberg_render_block_core_post_comments_form( $attributes, $content, 
 		return '';
 	}
 
-	$classes = '';
-	if ( isset( $attributes['textAlign'] ) ) {
-		$classes .= 'has-text-align-' . $attributes['textAlign'];
-	}
-
 	ob_start();
 	comment_form( array(), $block->context['postId'] );
-	$form               = ob_get_clean();
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classes ) );
+	$form = ob_get_clean();
 
-	return sprintf( '<div %1$s>%2$s</div>', $wrapper_attributes, $form );
+	return $form;
 }
 
 /**

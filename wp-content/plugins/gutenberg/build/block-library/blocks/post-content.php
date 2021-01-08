@@ -18,10 +18,8 @@ function gutenberg_render_block_core_post_content( $attributes, $content, $block
 		return '';
 	}
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'entry-content' ) );
-
 	return (
-		'<div ' . $wrapper_attributes . '>' .
+		'<div class="entry-content">' .
 			apply_filters( 'the_content', str_replace( ']]>', ']]&gt;', get_the_content( null, false, $block->context['postId'] ) ) ) .
 		'</div>'
 	);
