@@ -19,10 +19,3 @@ function openlab_disable_widgets_on_non_root_blogs() {
 	unregister_widget( 'BP_Group_Documents_Popular_Widget' );
 }
 add_action('widgets_init', 'openlab_disable_widgets_on_non_root_blogs', 99);
-
-/**
- * Disable Block-Based Widgets screen.
- *
- * Introduced in Gutenberg 8.9.
- */
-add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
