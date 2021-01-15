@@ -1,0 +1,323 @@
+/*Custom*/
+.b2s-sched-btn {
+    margin-top: 0px;
+}
+.media {
+    width: 100%;
+}
+.form-inline {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-inline .form-group {
+    margin-left: 2px;
+}
+.media-head {
+    width: 100% !important;
+}
+@media(max-width: 549px) {
+    .b2s-post-btn {
+        width: 100%;
+    }
+    .form-inline button, .form-inline a { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width: 767px) {
+    .form-inline {
+        display: none;
+    }
+    .filterHide {
+        display: none;
+    }
+    .form-inline button ,.form-inline a { 
+        width: 49%;
+        margin-bottom: 10px;
+    }
+}
+
+.checkbox-item{
+    margin: 25px 5px 0 !important;
+}
+.checkbox-all-label{
+    padding-left:25px !important;  
+}
+.checkbox-all{
+    margin-top: 2px !important;
+}
+
+
+.checkbox-all-label-btn{
+    padding-left:25px !important;  
+    margin-left: -20px;
+    position: absolute;
+}
+.checkbox-all-btn{
+    color: #444 !important;
+}
+
+.datepicker table tr td.event {
+    background-color: #ffdb99;
+    border-color: #ffb733;
+    color: #000;
+}
+.datepicker table tr td.today {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    color: #000;
+    font-weight: 700;
+    font-size: 15px;
+}
+.datepicker table tr td.active {
+    background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;
+    color: #fff;
+}
+.datepicker-inline{
+    width: 100% !important;
+}
+.table-condensed{
+    width: 100%;
+}
+#b2s-sched-datepicker-area{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-top: 10px;
+}
+.datepicker-switch, .prev, .next{
+    background: #eee no-repeat;
+    border-radius: 0px !important;
+}
+.prev, .next{
+    font-size: 24px;
+}
+
+.b2s-calendar-legend-active{
+    color: #337ab7 ;
+    border-color: #2e6da4;
+    border-radius: 4px;
+}
+.b2s-calendar-legend-event{
+    color: #ffdb99;
+    border-color: #ffb733;
+    border-radius: 4px;
+}
+.b2s-loading-area{
+    width: 100% !important;
+}
+.checbox-item-empty{
+    padding: 15px;
+    float:left;
+}
+
+
+
+/**edit post **/
+.network-name{
+    font-weight: bold;
+}
+.network-profile{
+    margin-bottom: 5px;
+}
+.b2s-post-item-thumb {
+    width: 5%;
+    margin-right: 8px;
+}
+
+.b2s-post-item-thumb img {
+    border-radius: 50%;
+    width: 48px;
+}
+
+.b2s-post-item-details {
+    width: 93%;
+}
+
+.b2s-post-item-details, .b2s-post-item-thumb {
+    float: left;
+}
+.b2s-post-item-details h4 {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 3px 3px 3px 0px;
+}
+.b2s-post-item-network-deprecated {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 3px 3px 3px 0px;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+.fb-url-image, .xing-url-image, .linkedin-url-image, .tw-url-image, .b2s-image-border {
+    margin-right: 10px;
+    margin-bottom: 20px;
+    border: 1px dashed #bdbfc2;
+    box-shadow: none;
+    padding: 5px;
+}
+textarea.form-control {
+    height: auto;
+}
+.fb-textarea-input, .tw-textarea-input, .xing-textarea-input, .linkedin-textarea-input {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.125;
+    width: 100%;
+    border: medium none;
+    border-radius: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: helvetica,arial,sans-serif;
+}
+.b2s-post-item-details-item-message-input{
+    min-height: 100px;
+}
+.b2s-post-item-details-url-image{
+    cursor: pointer;
+}
+.b2s-user-network-settings-post-format-area label > input {
+    visibility: hidden;
+    position: absolute;
+}
+.b2s-settings-checked + img {
+    border: 3px solid #79b232 !important;
+}
+.b2s-image-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+    height: 200px;
+    line-height: 1.42857;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    margin-top: 15px;
+    overflow: hidden;
+    padding: 4px;
+    transition: border 0.2s ease-in-out 0s;
+    width: 185px;
+}
+.b2s-image-item-thumb {
+    height: 150px;
+}
+.b2s-image-change-all-network,.b2s-upload-image-free-version,.b2s-image-change-this-network{
+    margin-right: 5px !important;
+}
+.b2s-image-remove-btn {
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    font-weight: 700 !important;
+}
+.b2s-calendar-delete{
+    cursor: pointer;
+}
+.b2s-btn-label-premium{
+    color: #fff;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+.b2s-btn-label-premium:hover{
+    color: #fff;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+.b2s-post-item  .label-success{
+    display: none;
+}
+.og_title, .og_desc, .card_desc, .card_title, .b2s-post-item-details-item-title-input, .b2s-select, .b2s-select-area{
+    margin-bottom: 8px !important;
+}
+
+.b2s-post-item-info-area {
+    font-size: 11px !important;
+}
+
+.b2s-post-ship-item-full-text, .b2s-post-ship-item-message-delete, .b2s-post-ship-item-network-settings, .b2s-post-ship-item-post-format{
+    line-height: 1.5 !important;
+    padding: 0 1px 3px !important;
+}
+
+.b2s-load-info-meta-tag-modal{
+    margin-top: 8px !important;
+    display: block !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+.b2s-post-item-details-tag-add-div {
+    border: 0px !important;
+    box-shadow: 0px 0px 0px #000 !important;
+}
+
+.b2s-post-item-details-tag-input-elem {
+    margin: 2px 4px;
+    max-width: 145px !important;
+}
+.b2s-calendar-sched-post-btn{
+    font-size: 11px;
+    float: right;
+    padding: 2px 4px 0px 4px;   
+}
+
+
+.form-inline {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-inline .form-group  {
+    margin-left: 2px;
+}
+
+@media(max-width: 549px) {
+    .b2s-post-btn {
+        width: 100%;
+    }
+    .form-inline button, .form-inline a { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width: 767px) {
+    .form-inline {
+        display: none;
+    }
+    .filterHide {
+        display: none;
+    }
+    .form-inline button ,.form-inline a { 
+        width: 49%;
+        margin-bottom: 10px;
+    }
+}
+
+.b2sFavoriteStar {
+    font-size: 22px;
+    margin-top: 6px;
+    color: #ffb900;
+    cursor: pointer;
+}
+
+.b2sFavoriteStarLoading {
+    animation: 1.5s ease-in-out 0s normal none infinite running sk-pulseScaleOut;
+}
+
+.b2s-notice-counter {
+    background-color: lightblue;
+    padding: 2px;
+    border-radius: 50%;
+    width: 22px;
+    display: inline-block;
+}

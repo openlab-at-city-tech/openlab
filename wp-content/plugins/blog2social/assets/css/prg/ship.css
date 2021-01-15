@@ -1,0 +1,36 @@
+.prg-image-item{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+    height: 180px;
+    line-height: 1.42857;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    overflow: hidden;
+    padding: 4px;
+
+    transition: border 0.2s ease-in-out 0s;
+    width: 185px;
+}
+.img-thumbnail{
+    display: block !important;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 100%;
+}
+
+.prg-image-item-thumb{
+    height: 150px;
+}
+.prg-image-item-thumb label{
+    display: inline;
+}
+.prg-image-item-caption{
+    color: #333;
+
+}
+#prgLogoutBtn{
+    margin-top: 5px;
+}

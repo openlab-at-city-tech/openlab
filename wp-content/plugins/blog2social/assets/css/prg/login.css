@@ -1,0 +1,26 @@
+.login-form {
+    margin-top: 60px;
+}
+
+form {
+    padding: 10px;
+}
+form a img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 35px;
+}
+form input,
+form button {
+    font-size: 18px;
+    margin: 16px 0;
+}
+form > div {
+    text-align: center;
+}
+
+.form-info {
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 20px;
+}

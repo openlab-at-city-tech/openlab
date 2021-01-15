@@ -1,0 +1,124 @@
+@media (max-width: 768px)
+{
+    body .col-md-6{
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.b2s-faq-content ol {
+    list-style: none;
+    margin-left: 0px;
+}
+
+.b2s-faq-content a{
+    font-size: 16px !important;
+    line-height: 32px;
+}
+
+.b2s-border-left {
+    border-left: 1px solid lightgray;
+}
+
+.b2s-support-topic-img{
+    min-width: 3em;
+}
+
+.b2s-support-line{
+    margin-top: 0px!important;
+}
+
+.b2s-support-link-not-active {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: gray;
+    opacity: 0.5;
+}
+
+.b2s-margin-left-10 {
+    margin-left: 10px;
+}
+
+#b2s-support-check-system .glyphicon {
+    font-size: 15px;
+}
+
+#b2s-support-check-system hr {
+    margin-top: 0px !important;
+}
+
+.b2s-support-menu > li > a {
+    padding: 10px 15px !important;
+}
+
+.thumbnail-no-border{
+    border: 0px !important;
+}
+
+.b2s-sharing-debugger-result-area{
+    display: block;
+}
+
+.b2s-padding-top-8{
+    padding-top:8px;
+}
+
+.b2s-support-icon {
+    font-size: 60px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.b2s-community-container {
+    background-color: #f8f8f8;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+
+.b2s-gray-text {
+    font-size: 16px;
+    color: gray;
+}
+
+.b2s-bold{
+    font-weight: 600;
+}
+
+.b2s-sales-support-box {
+    width: 27%;
+    height: 52px;
+}
+
+.b2s-community-btn {
+    padding: 8px 65px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+
+.b2s-community-register-success {
+    margin-top: 50px;
+}
+
+.b2s-community-container {
+    padding-top: 5px;
+}
+
+.b2s-community-register-form .form-group {
+    margin-bottom: 5px;
+}
+
+.b2s-support-phone-number-text {
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+#b2s-community-terms {
+    margin-right: 5px;
+}
+
+#b2s-community-register {
+    color: #fff !important;
+}
