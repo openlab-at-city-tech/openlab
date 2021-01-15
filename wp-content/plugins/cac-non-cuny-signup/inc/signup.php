@@ -55,16 +55,23 @@ add_action( 'bp_signup_usermeta', __NAMESPACE__ . '\\signup_meta' );
  * At user activation, grabs CAC signup code data and moves to usermeta
  */
 function activation_meta( $user_id, $key, $user ) {
+	$data = isset( $user['meta']['cac_signup_code'] ) ? $user['meta']['cac_signup_code'] : null;
 
-	if ( isset( $user['meta']['cac_signup_code'] ) ) {
-		update_user_meta( $user_id, 'cac_signup_code_data', $user['meta']['cac_signup_code'] );
-		update_user_meta( $user_id, 'cac_signup_code', $user['meta']['cac_signup_code']->ID );
+	if ( ! $data ) {
+		return;
+	}
 
-		if ( isset( $user['meta']['cac_signup_code']->groups ) ) {
-			foreach ( (array) $user['meta']['cac_signup_code']->groups as $group_id ) {
-				groups_join_group( $group_id, $user_id );
-			}
+	update_user_meta( $user_id, 'cac_signup_code_data', $data );
+	update_user_meta( $user_id, 'cac_signup_code', $data->ID );
+
+	if ( isset( $data->groups ) ) {
+		foreach ( (array) $data->groups as $group_id ) {
+			groups_join_group( $group_id, $user_id );
 		}
+	}
+
+	if ( empty( $data->account_type ) ) {
+		xprofile_set_field_data( 'Account Type', $user_id, $data->account_type );
 	}
 }
 add_action( 'bp_core_activated_user', __NAMESPACE__ . '\\activation_meta', 10, 3 );

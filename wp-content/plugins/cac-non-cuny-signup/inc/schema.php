@@ -295,6 +295,7 @@ class Schema {
 		// Setup metadata.
 		$data->vcode = get_post_meta( $data->ID, 'cac_ncs_vcode', true );
 		$data->groups = get_post_meta( $data->ID, 'cac_ncs_groups', true );
+		$data->account_type = get_post_meta( $data->ID, 'olsc_account_type', true );
 
 		return $data;
 	}

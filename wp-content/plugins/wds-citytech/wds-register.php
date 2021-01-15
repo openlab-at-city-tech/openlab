@@ -88,45 +88,6 @@ function wds_email_error() {
 function wds_email_validate() {
 	global $bp;
 
-	// For development
-	if ( ! defined( 'OPENLAB_SKIP_EMAIL_CHECK' ) || ! OPENLAB_SKIP_EMAIL_CHECK ) {
-
-		$email       = $_POST['signup_email'];
-		$email_parts = explode( '@', $email );
-		$domain      = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ) : '';
-
-		$account_type = isset( $_POST['field_7'] ) ? stripslashes( $_POST['field_7'] ) : 'Student';
-
-		switch ( $account_type ) {
-			case 'Student':
-			case 'Alumni':
-				if ( 'mail.citytech.cuny.edu' !== $domain ) {
-					$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
-				}
-				break;
-
-			case 'Faculty':
-			case 'Staff':
-				if ( 'citytech.cuny.edu' !== $domain ) {
-					$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
-				}
-
-				break;
-
-			case 'Non-City Tech':
-				$code = '';
-				if ( isset( $_POST['signup_validation_code'] ) ) {
-					$code = stripslashes( $_POST['signup_validation_code'] );
-				}
-
-				if ( ! cac_ncs_validate_code( $code ) ) {
-					$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
-
-				}
-				break;
-		}
-	}
-
 	// Check that the email addresses match
 	if ( empty( $_POST['signup_email_confirm'] ) ) {
 		$bp->signup->errors['signup_email'] = 'Please confirm your email address.';
@@ -134,29 +95,55 @@ function wds_email_validate() {
 		$bp->signup->errors['signup_email'] = 'Email addresses do not match. Please double check and resubmit.';
 	}
 
-	// check if privacy policy is checked
-	/*
-	$bp_tos_agree = $_POST['signup_email'];
-	if($bp_tos_agree!="1"){
-		$bp->signup->errors['bp_tos_agree'] = 'Please aggree to the terms of service!';
+	// Maybe skip email checks for development.
+	if ( defined( 'OPENLAB_SKIP_EMAIL_CHECK' ) && OPENLAB_SKIP_EMAIL_CHECK ) {
+		return;
+	}
 
-	}*/
-	/*
-	if ( in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) ) {
-		echo 'No error!';
-		$error = 0;
-	}elseif ( in_array('mail', $domains) && in_array('citytech', $domains) && in_array('cuny', $domains) && in_array('edu', $domains) && $_POST['field_7']=="Student") {
-		echo 'No error!';
-		$error = 0;
+	// Check code sigups first.
+	if ( isset( $_POST['signup_validation_code'] ) ) {
+		$is_valid = cac_ncs_validate_code( $_POST['signup_validation_code'] );
 
-	}*/
+		if ( ! $is_valid ) {
+			$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
+		}
 
-	// if ( $error == 1) $bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
+		return;
+	}
+
+
+	$email        = $_POST['signup_email'];
+	$email_parts  = explode( '@', $email );
+	$domain       = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ): '';
+	$account_type = isset( $_POST['field_7'] ) ? stripslashes( $_POST['field_7'] ) : 'Student';
+
+	switch ( $account_type ) {
+		case 'Student':
+		case 'Alumni':
+			if ( 'mail.citytech.cuny.edu' !== $domain ) {
+				$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
+			}
+			break;
+
+		case 'Faculty':
+		case 'Staff':
+			if ( 'citytech.cuny.edu' !== $domain ) {
+				$bp->signup->errors['signup_email'] = 'You must register with an @citytech.cuny.edu e-mail address!';
+			}
+
+			break;
+
+		case 'Non-City Tech':
+			$code = isset( $_POST['signup_validation_code'] ) ? $_POST['signup_validation_code'] : null;
+			if ( ! cac_ncs_validate_code( $code ) ) {
+				$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
+
+			}
+			break;
+	}
 }
-//
-// to temporarily disable this email edit, just comment out the line below
-//
 add_action( 'bp_signup_validate', 'wds_email_validate' );
+
 function wds_get_register_fields( $account_type, $post_data = array() ) {
 	// Fake it until you make it
 	if ( ! empty( $post_data ) ) {
@@ -189,6 +176,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 				<?php
 				$selector_args = [
 					'required' => true,
+					'checked'   => false,
 				];
 				openlab_academic_unit_selector( $selector_args );
 				?>

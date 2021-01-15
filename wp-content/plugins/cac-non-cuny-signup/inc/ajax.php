@@ -5,6 +5,8 @@
 
 namespace OpenLab\SignupCodes;
 
+use OpenLab\SignupCodes\Schema;
+
 /**
  * AJAX handler for registration email check
  *
@@ -19,10 +21,11 @@ namespace OpenLab\SignupCodes;
  */
 function ajax_email_check() {
 	$email = isset( $_POST['email'] ) ? $_POST['email'] : false;
+	$code  = ! empty( $_POST['code'] ) ? $_POST['code'] : null;
 
 	$retval = '1';
 
-	if ( !$email ) {
+	if ( ! $email ) {
 		$retval = '2'; // no email
 	} else {
 		if ( ! is_email( $email ) ) {
@@ -36,7 +39,17 @@ function ajax_email_check() {
 		}
 	}
 
-	die( $retval );
+	$response = [
+		'emailCode'   => $retval,
+		'accountType' => null,
+	];
+
+	if ( $code ) {
+		$data = Schema::get_code_data( $code );
+		$response['accountType'] = $data ? $data->account_type : null;
+	}
+
+	wp_send_json( $response );
 }
 add_action( 'wp_ajax_cac_ajax_email_check', __NAMESPACE__ . '\\ajax_email_check' );
 add_action( 'wp_ajax_nopriv_cac_ajax_email_check', __NAMESPACE__ . '\\ajax_email_check' );
@@ -49,12 +62,17 @@ add_action( 'wp_ajax_nopriv_cac_ajax_email_check', __NAMESPACE__ . '\\ajax_email
  *   0: failure
  */
 function ajax_validate_code() {
-	$vcode = isset( $_POST['code'] ) ? $_POST['code'] : '';
+	$code     = isset( $_POST['code'] ) ? $_POST['code'] : null;
+	$data     = Schema::get_code_data( $code );
+	$is_valid = $data && ! Schema::is_code_expired( $data );
+	$type     = $data ? $data->account_type : null;
 
-	$retval = cac_ncs_validate_code( $vcode ) ? '1' : '0';
+	$response = [
+		'isValid'     => $is_valid,
+		'accountType' => $type,
+	];
 
-	echo $retval;
-	die();
+	wp_send_json( $response );
 }
 add_action( 'wp_ajax_cac_ajax_vcode_check', __NAMESPACE__ . '\\ajax_validate_code' );
 add_action( 'wp_ajax_nopriv_cac_ajax_vcode_check', __NAMESPACE__ . '\\ajax_validate_code' );
