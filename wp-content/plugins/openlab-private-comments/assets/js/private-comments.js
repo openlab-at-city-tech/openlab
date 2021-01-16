@@ -2,13 +2,11 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * When responding to a private comment, comment privacy should be enforced.
 	 */
-	$( '.comment-reply-link' ).on( 'click', function( event ) {
+	$( document ).on( 'touchstart click', '.comment-reply-link', function() {
 		var parent = $( this ).closest( '.comment' );
 		var privateCheckbox = $( '#ol-private-comment' );
 
-		console.log( event );
 		console.log( parent );
-		console.log( privateCheckbox );
 
 		if ( parent.length && parent.find( '.ol-private-comment-notice' ).length ) {
 			privateCheckbox.prop( 'checked', true );

@@ -13,7 +13,7 @@
 
 namespace OpenLab\PrivateComments;
 
-const VERSION = '1.0.0-logger';
+const VERSION = '1.0.0-tap';
 
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';
