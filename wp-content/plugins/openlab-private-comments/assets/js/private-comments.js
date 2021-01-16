@@ -6,8 +6,6 @@ jQuery( document ).ready( function( $ ) {
 		var parent = $( this ).closest( '.comment' );
 		var privateCheckbox = $( '#ol-private-comment' );
 
-		console.log( parent );
-
 		if ( parent.length && parent.find( '.ol-private-comment-notice' ).length ) {
 			privateCheckbox.prop( 'checked', true );
 			privateCheckbox.prop( 'disabled', true );
@@ -15,6 +13,16 @@ jQuery( document ).ready( function( $ ) {
 			privateCheckbox.prop( 'checked', false );
 			privateCheckbox.prop( 'disabled', false );
 		}
+	} );
+
+	/**
+	 * Remove private comment enforcement when the comment reply is canceled.
+	 */
+	$( document ).on( 'touchstart click', '#cancel-comment-reply-link', function() {
+		var privateCheckbox = $( '#ol-private-comment' );
+
+		privateCheckbox.prop( 'checked', false );
+		privateCheckbox.prop( 'disabled', false );
 	} );
 
 	/**
