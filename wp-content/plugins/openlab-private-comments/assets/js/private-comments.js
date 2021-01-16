@@ -2,9 +2,9 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * When responding to a private comment, comment privacy should be enforced.
 	 */
-	$( document ).on( 'click', '.comment-reply-link', function() {
+	$( '.comment-reply-link' ).on( 'click', function() {
 		var parent = $( this ).closest( '.comment' );
-		var privateCheckbox = parent.find( '#ol-private-comment' );
+		var privateCheckbox = $( '#ol-private-comment' );
 
 		if ( parent.length && parent.find( '.ol-private-comment-notice' ).length ) {
 			privateCheckbox.prop( 'checked', true );
@@ -18,7 +18,7 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * Toggle private comment visibility.
 	 */
-	$( document ).on( 'click', '.ol-private-comment-toggle', function( event ) {
+	$( '.ol-private-comment-toggle' ).on( 'click', function( event ) {
 		event.preventDefault();
 
 		$( this )
