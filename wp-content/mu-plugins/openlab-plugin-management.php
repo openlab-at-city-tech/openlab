@@ -22,6 +22,7 @@ function openlab_hide_plugins( $plugins ) {
 		'badgeos/badgeos.php',
 		'badgeos-badgestack-add-on/badgeos-badgestack.php',
 		'bbpress/bbpress.php',
+		'blog2social/blog2social.php',
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
