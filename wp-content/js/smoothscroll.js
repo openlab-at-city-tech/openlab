@@ -4347,7 +4347,7 @@ OpenLab.fixes = (function ($) {
 		}
 	);
 
-	$( window ).load(
+	$( window ).on( 'load',
 		function () {
 			OpenLab.fixes.onLoad();
 		}
