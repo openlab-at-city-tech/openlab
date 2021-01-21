@@ -44,6 +44,7 @@ function openlab_hide_plugins( $plugins ) {
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
+		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
 		'openlab-private-comments/openlab-private-comments.php',
 		'out-of-the-box/out-of-the-box.php',
