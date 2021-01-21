@@ -624,6 +624,9 @@ function openlab_get_xprofile_field_id( $field_name ) {
 
 		case 'Department':
 			return 19;
+
+		case 'Account Type' :
+			return 7;
 	}
 }
 

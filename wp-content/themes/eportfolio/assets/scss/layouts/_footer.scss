@@ -1,0 +1,15 @@
+.site-footer{
+    background-color: $color_black;
+    color: $color_white;
+    padding: 15px;
+    text-align: center;
+    a{
+        color: $color_white;
+        &:visited{
+            color: $color_white;
+        }
+        &:hover{
+            color: $color_primary;
+        }
+    }
+}

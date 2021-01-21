@@ -35,7 +35,7 @@ if ( $group_type === 'course' ) {
 			</div><!--entry-content-->
 		</div><!--hentry-->
 	</div>
-</div>content
+</div><!-- #content -->
 
 <?php
 get_footer();

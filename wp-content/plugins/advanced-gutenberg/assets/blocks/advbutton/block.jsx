@@ -132,7 +132,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                         background-color: ${bgColor} !important;
                         margin: ${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px;
                         padding: ${paddingTop}px ${paddingRight}px ${paddingBottom}px ${paddingLeft}px;
-                        border-width: ${borderWidth}px;
+                        border-width: ${borderWidth}px !important;
                         border-color: ${borderColor} !important;
                         border-radius: ${borderRadius}px !important;
                         border-style: ${borderStyle} ${borderStyle !== 'none' && '!important'};
@@ -371,7 +371,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         text: {
             source: 'children',
             selector: 'a',
-            default: __( 'PUSH THE BUTTON', 'advanced-gutenberg' ),
+            default: 'PUSH THE BUTTON',
         },
         bgColor: {
             type: 'string',

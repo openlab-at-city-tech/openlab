@@ -1,4 +1,4 @@
-# Copyright (C) 2018 GP Media Library
+# Copyright (C) 2020 GP Media Library
 # This file is distributed under the same license as the GP Media Library package.
 msgid ""
 msgstr ""
@@ -13,6 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../class-gp-media-library.php:328
+#: ../class-gp-media-library.php:414
 msgid "GP Media Library"
 msgstr ""

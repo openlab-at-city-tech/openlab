@@ -121,7 +121,7 @@ class BP_Signup {
 	 * Fetch signups based on parameters.
 	 *
 	 * @since 2.0.0
-	 * @since 6.0.0 Adds a whitelist of allowed orderby parameters.
+	 * @since 6.0.0 Added a list of allowed orderby parameters.
 	 *
 	 * @param array $args {
 	 *     The argument to retrieve desired signups.
@@ -160,7 +160,7 @@ class BP_Signup {
 			'bp_core_signups_get_args'
 		);
 
-		// Whitelist sanitization.
+		// Make sure the orderby clause is allowed.
 		if ( ! in_array( $r['orderby'], array( 'login', 'email', 'registered', 'activated' ), true ) ) {
 			$r['orderby'] = 'signup_id';
 		}
@@ -412,7 +412,7 @@ class BP_Signup {
 					if ( isset( $usermeta[ $key ] ) ) {
 						$visibility_level = $usermeta[ $key ];
 					} else {
-						$vfield           = xprofile_get_field( $field_id );
+						$vfield           = xprofile_get_field( $field_id, null, false );
 						$visibility_level = isset( $vfield->default_visibility ) ? $vfield->default_visibility : 'public';
 					}
 					xprofile_set_field_visibility_level( $field_id, $user_id, $visibility_level );

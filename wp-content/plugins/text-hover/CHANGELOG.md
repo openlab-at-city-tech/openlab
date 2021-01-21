@@ -1,6 +1,47 @@
 # Changelog
 
+## 4.0 _(2020-07-16)_
+
+### Highlights:
+
+This minor release adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, now allows hover strings to begin or end with punctuation, updates its plugin framework, adds a TODO.md file, updates a few URLs to be HTTPS, expands unit testing, and updates compatibility to be WP 4.9-5.4+.
+
+### Details:
+
+* New: Add new setting to allow control over when text hovers are handled early or late in text processing process
+* New: Add filter `c2c_text_hover_filter_priority` for filtering hook priority for text hover handler
+* New: Allow text to hover string to begin and/or end in punctuation.
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it
+* Change: Update plugin framework to 050
+    * 050:
+    * Allow a hash entry to literally have '0' as a value without being entirely omitted when saved
+    * Output donation markup using `printf()` rather than using string concatenation
+    * Update copyright date (2020)
+    * Note compatibility through WP 5.4+
+    * Drop compatibility with versions of WP older than 4.9
+* Change: Remove plugin setting page help text indicating order matters (it hasn't since v3.8)
+* Change: Note compatibility through WP 5.4+
+* Change: Drop compatibility with versions of WP older than 4.9
+* Change: Update links to coffee2code.com to be HTTPS
+* Unit tests:
+    * New: Add `get_filter_names()` as a helper method for getting the default and third-party filter names
+    * New: Add `unhook_default_filters()` as a helper method to unhook plugin's default filters hooked to `text_hover()`
+    * New: Add test case for hover text that includes HTML
+    * New: Add tests for `enqueue_scripts()`, `options_page_description()`
+    * New: Add test for setting name
+    * New: Add tests for setting defaults
+    * New: Add explicit tests to ensure falsey hover text values don't alter original text
+    * New: Add explicit tests to ensure text replacements don't occur within `abbr` tag contents or in any tag attributes
+    * Change: Store plugin instance in test object to simplify referencing it
+    * Change: Remove unnecessary unregistering of hooks in `tearDown()`
+    * Change: Add `$priority` argument to `test_hover_applies_to_default_filters()`
+    * Change: Remove duplicative `reset_options()` call
+    * Change: Rename unit test function so that it is treated as a unit test
+    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and delete commented-out code)
+* Change: Update screenshot
+
 ## 3.9.1 _(2020-01-12)_
+
 * Fix: Revert to apply to the `the_excerpt` filter, which was mistakenly changed to `get_the_excerpt`
 * Change: Update some inline documentation relating to third-party plugin hook support
 * Unit tests:
@@ -40,7 +81,7 @@ This minor release adds support for select third-party plugins (Advanced Custom 
 * Change: Split paragraph in README.md's "Support" section into two
 
 ## 3.8 _(2018-08-01)_
-* New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
+* New: Ensure longer, more precise strings match before shorter strings that might also match, regardless of order defined
 * New: Add support for finding text to hover that may span more than one line or whose internal spaces vary in number and type
 * Fix: Prevent hover text from being embedded within other hover text
 * Change: Switch for using deprecated 'acronym' tag to using 'abbr'

@@ -10,20 +10,20 @@ function ass_default_subscription_settings_form() {
 	?>
 	<h4><?php _e('Email Subscription Defaults', 'buddypress-group-email-subscription'); ?></h4>
 	<p><?php _e('When new users join this group, their default email notification settings will be:', 'buddypress-group-email-subscription'); ?></p>
-	<div class="radio">
-		<label><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
+	<div class="radio ass-email-subscriptions-options">
+		<label id="ass-email-type_no"><input type="radio" name="ass-default-subscription" value="no" <?php ass_default_subscription_settings( 'no' ) ?> />
 			<?php _e( 'No Email (users will read this group on the web - good for any group)', 'buddypress-group-email-subscription' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
+		<label id="ass-email-type_sum"><input type="radio" name="ass-default-subscription" value="sum" <?php ass_default_subscription_settings( 'sum' ) ?> />
 			<?php _e( 'Weekly Summary Email (the week\'s topics - good for large groups)', 'buddypress-group-email-subscription' ) ?></label>
-		<label><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
+		<label id="ass-email-type_dig"><input type="radio" name="ass-default-subscription" value="dig" <?php ass_default_subscription_settings( 'dig' ) ?> />
 			<?php _e( 'Daily Digest Email (all daily activity bundles in one email - good for medium-size groups)', 'buddypress-group-email-subscription' ) ?></label>
 
 		<?php if ( ass_get_forum_type() ) : ?>
-			<label><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
+			<label id="ass-email-type_sub"><input type="radio" name="ass-default-subscription" value="sub" <?php ass_default_subscription_settings( 'sub' ) ?> />
 			<?php _e( 'New Topics Email (new topics are sent as they arrive, but not replies - good for small groups)', 'buddypress-group-email-subscription' ) ?></label>
 		<?php endif; ?>
 
-		<label><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
+		<label id="ass-email-type_supersub"><input type="radio" name="ass-default-subscription" value="supersub" <?php ass_default_subscription_settings( 'supersub' ) ?> />
 			<?php _e( 'All Email (send emails about everything - recommended only for working groups)', 'buddypress-group-email-subscription' ) ?></label>
 	</div>
 	<hr />
@@ -90,7 +90,11 @@ function ass_manage_all_members_email_update() {
 			if ( !check_admin_referer( 'ass_change_all_email_sub' ) )
 				return false;
 
-			$result = BP_Groups_Member::get_all_for_group( bp_get_current_group_id(), 0, 0, 0 ); // set the last value to 1 to exclude admins
+			$result = groups_get_group_members( array(
+				'group_id' => bp_get_current_group_id(),
+				'per_page' => 0,
+				'exclude_admins_mods' => false
+			) );
 			$members = $result['members'];
 
 			foreach ( $members as $member ) {
@@ -163,7 +167,6 @@ function ass_admin_notice() {
 		$subject    = apply_filters( 'ass_admin_notice_subject', $subject, $_POST[ 'ass_admin_notice_subject' ], $group_name, $blogname );
 		$subject    = ass_clean_subject( $subject, false );
 		$notice     = apply_filters( 'ass_admin_notice_message', $_POST['ass_admin_notice'] );
-		$notice     = ass_clean_content( $notice );
 
 		$message    = sprintf( __(
 'This is a notice from the group \'%s\':
@@ -177,8 +180,10 @@ To view this group log in and follow the link below:
 ---------------------
 ', 'buddypress-group-email-subscription' ), $group_name,  $notice, $group_link );
 
-		$message .= __( 'Please note: admin notices are sent to everyone in the group and cannot be disabled.
-If you feel this service is being misused please speak to the website administrator.', 'buddypress-group-email-subscription' );
+		if ( bpges_force_immediate_admin_notice() ) {
+			$message .= __( 'Please note: admin notices are sent to everyone in the group and cannot be disabled.
+	If you feel this service is being misused please speak to the website administrator.', 'buddypress-group-email-subscription' );
+		}
 
 		$user_ids = BP_Groups_Member::get_group_member_ids( $group_id );
 

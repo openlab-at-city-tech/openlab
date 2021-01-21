@@ -44,7 +44,7 @@
         });
 
         // Import the folder
-        $('#import_button').click(function(e){
+        $('#import_button').on('click',function(e){
             e.preventDefault();
 
             // Show progress bar

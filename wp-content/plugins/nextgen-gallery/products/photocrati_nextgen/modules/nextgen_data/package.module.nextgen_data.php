@@ -601,63 +601,212 @@ class C_Dynamic_Thumbnails_Manager extends C_Component
         return self::$_instances[$context];
     }
 }
-class C_Exif_Writer_Wrapper
+require_once 'pel-0.9.9/autoload.php';
+use lsolesen\pel\PelDataWindow;
+use lsolesen\pel\PelJpeg;
+use lsolesen\pel\PelTiff;
+use lsolesen\pel\PelExif;
+use lsolesen\pel\PelIfd;
+use lsolesen\pel\PelTag;
+use lsolesen\pel\PelEntryShort;
+use lsolesen\pel\PelInvalidArgumentException;
+use lsolesen\pel\PelIfdException;
+use lsolesen\pel\PelInvalidDataException;
+use lsolesen\pel\PelJpegInvalidMarkerException;
+class C_Exif_Writer
 {
-    // Because our C_Exif_Writer class relies on PEL (a library which uses namespaces) we wrap
-    // its use through these methods which performs a PHP version check before loading the class file
-    /**
-     * @param $old_file
-     * @param $new_file
-     * @return bool|int
-     */
-    public static function copy_metadata($old_file, $new_file)
-    {
-        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return FALSE;
-        }
-        self::load_pel();
-        return @C_Exif_Writer::copy_metadata($old_file, $new_file);
-    }
     /**
      * @param $filename
      * @return array|null
      */
     public static function read_metadata($filename)
     {
-        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return array();
+        if (!self::is_jpeg_file($filename)) {
+            return NULL;
         }
-        self::load_pel();
-        return @C_Exif_Writer::read_metadata($filename);
+        try {
+            $data = new PelDataWindow(@file_get_contents($filename));
+            $exif = new PelExif();
+            if (PelJpeg::isValid($data)) {
+                $jpeg = $file = new PelJpeg();
+                $jpeg->load($data);
+                $exif = $jpeg->getExif();
+                if ($exif === NULL) {
+                    $exif = new PelExif();
+                    $jpeg->setExif($exif);
+                    $tiff = new PelTiff();
+                    $exif->setTiff($tiff);
+                } else {
+                    $tiff = $exif->getTiff();
+                }
+            } elseif (PelTiff::isValid($data)) {
+                $tiff = $file = new PellTiff();
+                $tiff->load($data);
+            } else {
+                return NULL;
+            }
+            $ifd0 = $tiff->getIfd();
+            if ($ifd0 === NULL) {
+                $ifd0 = new PelIfd(PelIfd::IFD0);
+                $tiff->setIfd($ifd0);
+            }
+            $tiff->setIfd($ifd0);
+            $exif->setTiff($tiff);
+            $retval = array('exif' => $exif, 'iptc' => NULL);
+            @getimagesize($filename, $iptc);
+            if (!empty($iptc['APP13'])) {
+                $retval['iptc'] = $iptc['APP13'];
+            }
+        } catch (PelIfdException $exception) {
+            return NULL;
+        } catch (PelInvalidArgumentException $exception) {
+            return NULL;
+        } catch (PelInvalidDataException $exception) {
+            return NULL;
+        } catch (PelJpegInvalidMarkerException $exception) {
+            return NULL;
+        } catch (Exception $exception) {
+            return NULL;
+        }
+        return $retval;
     }
     /**
+     * @param $origin_file
+     * @param $destination_file
+     * @return bool|int FALSE on failure or (int) number of bytes written
+     */
+    public static function copy_metadata($origin_file, $destination_file)
+    {
+        if (!self::is_jpeg_file($origin_file)) {
+            return FALSE;
+        }
+        // Read existing data from the source file
+        $metadata = self::read_metadata($origin_file);
+        if (!empty($metadata) && is_array($metadata)) {
+            return self::write_metadata($destination_file, $metadata);
+        } else {
+            return FALSE;
+        }
+    }
+    /**
+     * @param $filename
+     * @param $metadata
+     * @return bool|int FALSE on failure or (int) number of bytes written
+     */
+    public static function write_metadata($filename, $metadata)
+    {
+        if (!self::is_jpeg_file($filename) || !is_array($metadata)) {
+            return FALSE;
+        }
+        try {
+            // Copy EXIF data to the new image and write it
+            $new_image = new PelJpeg($filename);
+            $new_image->setExif($metadata['exif']);
+            $new_image->saveFile($filename);
+            // Copy IPTC / APP13 to the new image and write it
+            if ($metadata['iptc']) {
+                return self::write_IPTC($filename, $metadata['iptc']);
+            }
+        } catch (PelInvalidArgumentException $exception) {
+            return FALSE;
+        } catch (PelJpegInvalidMarkerException $exception) {
+            return FALSE;
+        }
+    }
+    /**
+     * @param string $filename
+     * @param array $data
+     * @return bool|int FALSE on failure or (int) number of bytes written
+     */
+    public static function write_IPTC($filename, $data)
+    {
+        if (!self::is_jpeg_file($filename)) {
+            return FALSE;
+        }
+        $length = strlen($data) + 2;
+        // Avoid invalid APP13 regions
+        if ($length > 0xffff) {
+            return FALSE;
+        }
+        // Wrap existing data in segment container we can embed new content in
+        $data = chr(0xff) . chr(0xed) . chr($length >> 8 & 0xff) . chr($length & 0xff) . $data;
+        $new_file_contents = @file_get_contents($filename);
+        if (!$new_file_contents || strlen($new_file_contents) <= 0) {
+            return FALSE;
+        }
+        $new_file_contents = substr($new_file_contents, 2);
+        // Create new image container wrapper
+        $new_iptc = chr(0xff) . chr(0xd8);
+        // Track whether content was modified
+        $new_fields_added = !$data;
+        // This can cause errors if incorrectly pointed at a non-JPEG file
+        try {
+            // Loop through each JPEG segment in search of region 13
+            while ((hexdec(substr($new_file_contents, 0, 2)) & 0xfff0) === 0xffe0) {
+                $segment_length = hexdec(substr($new_file_contents, 2, 2)) & 0xffff;
+                $segment_number = hexdec(substr($new_file_contents, 1, 1)) & 0xf;
+                // Not a segment we're interested in
+                if ($segment_length <= 2) {
+                    return FALSE;
+                }
+                $current_segment = substr($new_file_contents, 0, $segment_length + 2);
+                if (13 <= $segment_number && !$new_fields_added) {
+                    $new_iptc .= $data;
+                    $new_fields_added = TRUE;
+                    if (13 === $segment_number) {
+                        $current_segment = '';
+                    }
+                }
+                $new_iptc .= $current_segment;
+                $new_file_contents = substr($new_file_contents, $segment_length + 2);
+            }
+        } catch (Exception $exception) {
+            return FALSE;
+        }
+        if (!$new_fields_added) {
+            $new_iptc .= $data;
+        }
+        if ($file = @fopen($filename, 'wb')) {
+            return @fwrite($file, $new_iptc . $new_file_contents);
+        } else {
+            return FALSE;
+        }
+    }
+    /**
+     * Determines if the file extension is .jpg or .jpeg
+     *
+     * @param $filename
+     * @return bool
+     */
+    public static function is_jpeg_file($filename)
+    {
+        $extension = M_I18n::mb_pathinfo($filename, PATHINFO_EXTENSION);
+        return in_array(strtolower($extension), array('jpeg', 'jpg', 'jpeg_backup', 'jpg_backup')) ? TRUE : FALSE;
+    }
+    /**
+     * Sets the EXIF' Orientation field to 1 aka Default or "TopLeft"
+     *
+     * This method is necessary to prevent images rotated by NextGen to appear even further rotated.
      * @param array $exif
      * @return array
      */
     public static function reset_orientation($exif = array())
     {
-        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return array();
+        $tiff = $exif->getTiff();
+        if (empty($tiff)) {
+            return $exif;
         }
-        self::load_pel();
-        return @C_Exif_Writer::reset_orientation($exif);
-    }
-    /**
-     * @param $filename
-     * @param $metadata
-     * @return bool|int
-     */
-    public static function write_metadata($filename, $metadata)
-    {
-        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return FALSE;
+        $ifd0 = $tiff->getIfd();
+        if (empty($ifd0)) {
+            return $exif;
         }
-        self::load_pel();
-        return @C_Exif_Writer::write_metadata($filename, $metadata);
-    }
-    public static function load_pel()
-    {
-        require_once __DIR__ . DIRECTORY_SEPARATOR . 'pel-0.9.6' . DIRECTORY_SEPARATOR . 'class.exif_writer.php';
+        $orientation = $ifd0->getEntry(PelTag::ORIENTATION);
+        if (empty($orientation)) {
+            return $exif;
+        }
+        $orientation = new PelEntryShort(PelTag::ORIENTATION, 1);
+        $ifd0->addEntry($orientation);
+        return $exif;
     }
 }
 class Mixin_NextGen_Gallery_Validation
@@ -3723,14 +3872,26 @@ class Mixin_GalleryStorage_Base_Dynamic extends Mixin
                     $thumbnail->format = strtoupper($format_list[$clone_format]);
                 }
                 $thumbnail = apply_filters('ngg_before_save_thumbnail', $thumbnail);
-                $exif_iptc = @C_Exif_Writer_Wrapper::read_metadata($image_path);
+                $backup_path = $image_path . '_backup';
+                try {
+                    $exif_abspath = @file_exists($backup_path) ? $backup_path : $image_path;
+                    $exif_iptc = @C_Exif_Writer::read_metadata($exif_abspath);
+                } catch (PelException $ex) {
+                    error_log("Could not read image metadata {$exif_abspath}");
+                    error_log(print_r($ex, TRUE));
+                }
                 $thumbnail->save($destpath, $quality);
                 // We've just rotated the image however the EXIF metadata contains an Orientation tag. To prevent
                 // certain browsers from rotating our already-rotated image we reset the Orientation tag to the default.
                 if ($remove_orientation_exif && !empty($exif_iptc['exif'])) {
-                    $exif_iptc['exif'] = @C_Exif_Writer_Wrapper::reset_orientation($exif_iptc['exif']);
+                    $exif_iptc['exif'] = @C_Exif_Writer::reset_orientation($exif_iptc['exif']);
                 }
-                @C_Exif_Writer_Wrapper::write_metadata($destpath, $exif_iptc);
+                try {
+                    @C_Exif_Writer::write_metadata($destpath, $exif_iptc);
+                } catch (PelException $ex) {
+                    error_log("Could not write data to {$destpath}");
+                    error_log(print_r($ex, TRUE));
+                }
             }
         }
         return $thumbnail;
@@ -5245,10 +5406,23 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
         } else {
             $retval['gallery_id'] = $gallery_id;
         }
+        // Remove full sized image if backup is included
+        $files_to_import = [];
         foreach ($files as $file_abspath) {
-            $basename = pathinfo($file_abspath, PATHINFO_BASENAME);
-            if ($image_id = $this->import_image_file($gallery_id, $file_abspath, $basename, FALSE, FALSE, FALSE)) {
-                $retval['image_ids'][] = $image_id;
+            if (preg_match("#_backup\$#", $file_abspath)) {
+                $files_to_import[] = $file_abspath;
+                continue;
+            } elseif (in_array($file_abspath . "_backup", $files) || strpos("thumbs_", $file_abspath) !== FALSE) {
+                continue;
+            }
+            $files_to_import[] = $file_abspath;
+        }
+        foreach ($files_to_import as $file_abspath) {
+            $basename = preg_replace('#_backup$#', '', pathinfo($file_abspath, PATHINFO_BASENAME));
+            if ($this->is_image_file($file_abspath)) {
+                if ($image_id = $this->import_image_file($gallery_id, $file_abspath, $basename, FALSE, FALSE, FALSE)) {
+                    $retval['image_ids'][] = $image_id;
+                }
             }
         }
         // Add the gallery name to the result
@@ -5267,6 +5441,9 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
         $allowed_extensions = apply_filters('ngg_allowed_file_types', array('jpeg', 'jpg', 'png', 'gif'));
+        foreach ($allowed_extensions as $extension) {
+            $allowed_extensions[] = $extension . '_backup';
+        }
         return in_array($extension, $allowed_extensions);
     }
     function is_current_user_over_quota()
@@ -5356,7 +5533,7 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
         $filename = $filename ? $filename : uniqid('nextgen-gallery');
         $filename = preg_replace("#^/#", "", $filename);
         $filename = sanitize_file_name($filename);
-        if (preg_match("/\\-(png|jpg|gif|jpeg)\$/i", $filename, $match)) {
+        if (preg_match("/\\-(png|jpg|gif|jpeg|jpg_backup)\$/i", $filename, $match)) {
             $filename = str_replace($match[0], '.' . $match[1], $filename);
         }
         return $filename;
@@ -5382,7 +5559,7 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
             // Sanitize the filename for storing in the DB
             $filename = $this->sanitize_filename_for_db($filename);
             // Ensure that the filename is valid
-            if (!preg_match("/(png|jpeg|jpg|gif)\$/i", $filename)) {
+            if (!preg_match("/(png|jpeg|jpg|gif|_backup)\$/i", $filename)) {
                 throw new E_UploadException(__('Invalid image file. Acceptable formats: JPG, GIF, and PNG.', 'nggallery'));
             }
             // Compute the destination folder

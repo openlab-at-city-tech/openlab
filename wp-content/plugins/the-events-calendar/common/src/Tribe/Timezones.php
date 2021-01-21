@@ -15,7 +15,7 @@ class Tribe__Timezones {
 	 *
 	 * @var array
 	 */
-	protected static $timezones = array();
+	protected static $timezones = [];
 
 	public static function init() {
 		self::invalidate_caches();
@@ -27,8 +27,8 @@ class Tribe__Timezones {
 	 * Currently we are concerned only with the site timezone abbreviation.
 	 */
 	protected static function invalidate_caches() {
-		add_filter( 'pre_update_option_gmt_offset', array( __CLASS__, 'clear_site_timezone_abbr' ) );
-		add_filter( 'pre_update_option_timezone_string', array( __CLASS__, 'clear_site_timezone_abbr' ) );
+		add_filter( 'pre_update_option_gmt_offset', [ __CLASS__, 'clear_site_timezone_abbr' ] );
+		add_filter( 'pre_update_option_timezone_string', [ __CLASS__, 'clear_site_timezone_abbr' ] );
 	}
 
 	/**
@@ -408,7 +408,7 @@ class Tribe__Timezones {
 	 */
 	public static function timezone_from_utc_offset( $utc_offset_string ) {
 		// Test for strings looking like "UTC-2" or "UTC+5.25" etc
-		if ( ! preg_match( '/^UTC[\-\+]{1}[0-9\.]{1,4}$/', $utc_offset_string ) ) {
+		if ( ! preg_match( '/^UTC[+-][0-9.]{1,4}$/', $utc_offset_string ) ) {
 			return false;
 		}
 
@@ -462,11 +462,11 @@ class Tribe__Timezones {
 		}
 
 		// if the offset contains fractions like :15, :30 or :45 convert them
-		$supported_offsets = array(
+		$supported_offsets = [
 			'/:15$/' => '.25',
 			'/:30$/' => '.5',
 			'/:45$/' => '.75',
-		);
+		];
 		$offset = preg_replace( array_keys( $supported_offsets ), array_values( $supported_offsets ), $offset );
 
 		// Convert the offset to minutes for easier handling of fractional offsets
@@ -615,7 +615,7 @@ class Tribe__Timezones {
 			return $timezone_candidate->getName();
 		}
 
-		$timezone_string = preg_replace( '/(\\+||\\-)0$/', '', $timezone_candidate );
+		$timezone_string = preg_replace( '/[+-]0$/', '', $timezone_candidate );
 		$timezone_string = self::is_utc_offset( $timezone_string )
 			? self::generate_timezone_string_from_utc_offset( $timezone_string )
 			: $timezone_string;
@@ -623,4 +623,3 @@ class Tribe__Timezones {
 		return $timezone_string;
 	}
 }
-

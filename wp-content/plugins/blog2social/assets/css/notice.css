@@ -1,0 +1,46 @@
+.b2s-notice-premium{
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d4d4d4;
+    margin: 12px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.b2s-icon{
+    float: left;
+}
+.b2s-img{
+    max-height: 180px;
+}
+
+.b2s-text{
+    color: #000;
+    float: left;
+    font-size: 15px;
+    line-height: 22px;
+    max-width: 60%;
+    width: auto;
+}
+
+.b2s-text > span{
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.b2s-btn-premium {
+    background: #79B232 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #fff;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 26px;
+    margin: 18px 40px;
+    padding: 12px 29px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: uppercase;
+}

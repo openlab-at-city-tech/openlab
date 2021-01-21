@@ -1,0 +1,11 @@
+.widget{
+    .tagcloud{
+        a{
+            display: inline-block;
+            font-size: 1rem !important;
+            font-weight: $font_semi_bold;
+            margin: 5px 5px 0;
+            @include border-bottom(2px,solid);
+        }
+    }
+}

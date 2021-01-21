@@ -434,7 +434,7 @@
                                                    muted={muted}
                                             >
                                                 <source src={videoURL}/>
-                                                { __( 'Your browser does not support HTML5 video.', 'advanced-gutenberg' ) }
+                                                { 'Your browser does not support HTML5 video.' }
                                             </video>
                                         </Disabled>
                                     ))
@@ -688,7 +688,7 @@
                                        playsInline={playsinline}
                                 >
                                     <source src={videoURL}/>
-                                    { __( 'Your browser does not support HTML5 video.', 'advanced-gutenberg' ) }
+                                    { 'Your browser does not support HTML5 video.' }
                                 </video>
                             )
                             || !videoSourceType && <div style={ { width: videoWidth, height: videoHeight } } />}
@@ -767,7 +767,7 @@
                                                controls
                                         >
                                             <source src={videoURL}/>
-                                            { __( 'Your browser does not support HTML5 video.', 'advanced-gutenberg' ) }
+                                            { 'Your browser does not support HTML5 video.' }
                                         </video>
                                     )
                                     || !videoSourceType && <div style={ { width: videoWidth, height: videoHeight } } />}

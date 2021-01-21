@@ -141,3 +141,8 @@ td.align-to-top {
 	    padding: 5px 20px;
 	}
 }
+
+.deprecated {
+	color: darkorange;
+	font-size: smaller;
+}

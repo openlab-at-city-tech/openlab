@@ -1,0 +1,81 @@
+.media {
+    width: 100%;
+}
+.form-inline {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-inline .form-group {
+    margin-left: 2px;
+}
+.media-head {
+    width: 100% !important;
+}
+@media(max-width: 549px) {
+    .b2s-post-btn {
+        width: 100%;
+    }
+    .form-inline button, .form-inline a { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width: 767px) {
+    .form-inline {
+        display: none;
+    }
+    .filterHide {
+        display: none;
+    }
+    .form-inline button ,.form-inline a { 
+        width: 49%;
+        margin-bottom: 10px;
+    }
+}
+
+.checkbox-item{
+    margin: 25px 5px 0 !important;
+}
+.checkbox-all-label{
+    padding-left:25px !important;  
+}
+.checkbox-all{
+    margin-top: 2px !important;
+}
+
+
+.checkbox-all-label-btn{
+    padding-left:25px !important;  
+    margin-left: -20px;
+    position: absolute;
+}
+.checkbox-all-btn{
+    color: #444 !important;
+}
+
+.b2s-loading-area{
+    width: 100% !important;
+}
+
+.deleteDraftBtn {
+    margin-right: 10px;
+}
+
+.b2sFavoriteStar {
+    font-size: 22px;
+    margin-top: 6px;
+    color: #ffb900;
+    cursor: pointer;
+}
+
+.b2sFavoriteStarLoading {
+    animation: 1.5s ease-in-out 0s normal none infinite running sk-pulseScaleOut;
+}
+
+.b2s-notice-counter {
+    background-color: lightblue;
+    padding: 2px;
+    border-radius: 50%;
+    width: 22px;
+    display: inline-block;
+}

@@ -1,0 +1,78 @@
+@include keyframes( spin){
+    0% {
+        @include  transform( translate(-50%, -50%) rotate(45deg) translate3d(0, 0, 0) );
+    }
+    100% {
+        @include transform( translate(-50%, -50%) rotate(-45deg) translate3d(0, 0, 0) );
+    }
+}
+@include keyframes( lift1 ){
+    0%, 10%, 90% {
+        top: 40px;
+        left: 40px;
+    }
+    50% {
+        top: 0px;
+        left: 0px;
+        background-color: $color_white;
+    }
+    0%, 10% {
+      @include transform( rotate(0deg) );
+    }
+    90%, 100% {
+        @include transform( rotate(90deg) );
+    }
+}
+@include keyframes( lift2 ){
+    0%, 10%, 90% {
+        top: 40px;
+        right: 40px;
+    }
+    50% {
+        top: 0px;
+        right: 0px;
+        background-color:$color_white;
+    }
+    0%, 10% {
+        @include transform( rotate(0deg) );
+    }
+    90%, 100% {
+        @include transform( rotate(90deg) );
+    }
+}
+@include keyframes( lift3 ){
+    0%, 10%, 90% {
+        bottom: 40px;
+        right: 40px;
+    }
+    50% {
+        bottom: 0px;
+        right: 0px;
+        background-color: $color_white;
+    }
+    0%, 10% {
+       @include transform( rotate(0deg) );
+    }
+    90%, 100% {
+        @include transform( rotate(90deg) );
+    }
+}
+ 
+@include keyframes( lift4 ){
+    0%, 10%, 90% {
+      bottom: 40px;
+      left: 40px;
+    }
+    50% {
+      bottom: 0px;
+      left: 0px;
+      background-color: $color_white;
+    }
+    0%, 10% {
+        @include transform( rotate(0deg) );
+    }
+    90%, 100% {
+        @include transform( rotate(90deg) );
+    }
+}
+  

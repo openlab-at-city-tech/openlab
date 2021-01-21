@@ -197,18 +197,6 @@ class nggLoader
 
 		// look for imagerotator
 		define('NGGALLERY_IREXIST', !empty( $this->options['irURL'] ));
-
-		// get value for safe mode
-		if ( (gettype( ini_get('safe_mode') ) == 'string') ) {
-			// if sever did in in a other way
-			if ( ini_get('safe_mode') == 'off' ) define('SAFE_MODE', FALSE);
-			else define( 'SAFE_MODE', ini_get('safe_mode') );
-		} else
-		define( 'SAFE_MODE', ini_get('safe_mode') );
-
-		if ( version_compare($wp_version, '3.2.999', '>') )
-			define('IS_WP_3_3', TRUE);
-
 	}
 
 	function load_dependencies() {

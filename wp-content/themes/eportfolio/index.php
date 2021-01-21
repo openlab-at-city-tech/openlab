@@ -1,39 +1,84 @@
-<?php get_header() ?>
+<?php
+/**
+ * The main template file
+ *
+ * This is the most generic template file in a WordPress theme
+ * and one of the two required files for a theme (the other being style.css).
+ * It is used to display a page when nothing more specific matches a query.
+ * E.g., it puts together the home page when no home.php file exists.
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package ePortfolio
+ */
 
+get_header();
+?>
+<div id="content" class="twp-min-height">
+<?php
+	$eportfolio_blog_view_layout = '';
+	$eportfolio_blog_active_list_class = '';
+	$eportfolio_blog_active_grid_class = '';
+	if ((eportfolio_get_option('blog_layout_style')) == 'list-post-layout'){
+		$eportfolio_blog_view_layout = 'twp-full-width-post';
+		$eportfolio_blog_active_list_class = 'twp-active';
+	} else {
+		$eportfolio_blog_view_layout = 'twp-post-with-bg-image';
+		$eportfolio_blog_active_grid_class = 'twp-active';
+	}
+?>
 
-<?php if ( have_posts() ) : ?>
+	<?php if ((eportfolio_get_option('enable_blog_layout_switch')) == 1) { ?>
+		<div class="twp-gallery-grid-section">
+			<span id="list-view"  class="<?php echo esc_attr($eportfolio_blog_active_list_class); ?>">
+				<i class="fa fa-list"></i>
+			</span>
+			<span id="grid-view"  class="<?php echo esc_attr($eportfolio_blog_active_grid_class); ?>">
+				<i class="fa fa-th"></i>
+			</span>
+		</div>
+	<?php } ?>
 
-	<header class="page-header">
-		<h2 class="page-title"><?php 
-			if (is_search()) echo 'Search results for "'.$s.'"';
-			else echo single_cat_title( '', false );
-		?></h2>
+	<?php
+	if ( have_posts() ) :
 
+		if ( is_home() && ! is_front_page() ) :
+			?>
+			<header>
+				<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
+			</header>
+			<?php
+		endif; ?>
+		<?php if ((eportfolio_get_option('blog_layout_grid_column')) == '2-column') {
+			$eportfolio_masonry_block = "twp-masonary-gallery-no-space twp-2-col-masonary";
+		} else {
+			$eportfolio_masonry_block = "twp-masonary-gallery-no-space twp-3-col-masonary";
+		}?>
+
+		<div class="masonry-blocks <?php echo esc_attr($eportfolio_masonry_block); ?> <?php echo esc_attr($eportfolio_blog_view_layout); ?>" id="masonary-gallery">
 		<?php
-			$category_description = category_description();
-			if ( ! empty( $category_description ) )
-				echo apply_filters( 'category_archive_meta', '<div class="category-archive-meta">' . $category_description . '</div>' );
-		?>
-	</header>
+		/* Start the Loop */
+		while ( have_posts() ) :
+			the_post();
 
-	<?php while ( have_posts() ) : the_post(); ?>
+			/*
+				* Include the Post-Type-specific template for the content.
+				* If you want to override this in a child theme, then include a file
+				* called content-___.php (where ___ is the Post Type name) and that will be used instead.
+				*/
+			get_template_part( 'template-parts/content', get_post_type() );
 
-		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<a href="<?php the_permalink() ?>"><img src="<?php echo ahs_getimg($post->ID,array(150,150)) ?>" height="150" width="150" class="alignleft" /></a>
-			<div class="alignright">
-				<h3 class="entry-title"><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h3>
-				<div class="entry-content">
-					<?php the_excerpt(); ?>
-				</div><!-- .entry-content -->
-			</div>
-			<div class="clr"></div>
-		</article><!-- #post-<?php the_ID(); ?> -->
+		endwhile;
+		echo '</div>';
+		do_action( 'eportfolio_posts_navigation' );
+		
 
-	<?php endwhile; ?>
-	
-	<?php ahstheme_content_nav('below') ?>
+	else :
 
-<?php endif; ?>
-			
-			
-<?php get_footer() ?>
+		get_template_part( 'template-parts/content', 'none' );
+
+	endif;
+	?>
+</div>
+<?php
+get_footer();

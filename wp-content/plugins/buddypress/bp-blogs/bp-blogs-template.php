@@ -298,11 +298,14 @@ function bp_blog_avatar( $args = '' ) {
 	/**
 	 * Get a blog's avatar.
 	 *
-	 * At the moment, blog avatars are simply the user avatars of the blog
-	 * admin. Filter 'bp_get_blog_avatar_' . $blog_id to customize.
+	 * At the moment, unless the blog has a site icon, the blog's avatar defaults
+	 * to the /bp-core/images/mystery-blog.png image or the Blog's Admin user avatar
+	 * if the `admin_user_id` argument contains the Blog's Admin user ID.
 	 *
 	 * @since 2.4.0 Introduced `$title` argument.
 	 * @since 6.0.0 Introduced the `$blog_id`, `$admin_user_id` and `html` arguments.
+	 * @since 7.0.0 Introduced the Blog's default avatar {@see bp_blogs_default_avatar()}.
+	 *              Removed the `'bp_get_blog_avatar_' . $blog_id` filter (it was deprecated since 1.5).
 	 *
 	 * @see bp_core_fetch_avatar() For a description of arguments and
 	 *      return values.
@@ -333,40 +336,44 @@ function bp_blog_avatar( $args = '' ) {
 			return false;
 		}
 
-		// Set default values.
-		$author_displayname = '';
-		$admin_user_id      = 0;
-		$blog_id            = 0;
-
-		if ( ! $blogs_template && isset( $args['admin_user_id'] ) && $args['admin_user_id'] ) {
-			$admin_user_id      = (int) $args['admin_user_id'];
-			$author_displayname = bp_core_get_user_displayname( $admin_user_id );
-		} else {
-			$admin_user_id      = $blogs_template->blog->admin_user_id;
-			$author_displayname = bp_core_get_user_displayname( $blogs_template->blog->admin_user_id );
-		}
+		// Set default value for the `alt` attribute.
+		$alt_attribute = __( 'Site icon for the blog', 'buddypress' );
 
 		if ( ! $blogs_template && isset( $args['blog_id'] ) && $args['blog_id'] ) {
 			$blog_id = (int) $args['blog_id'];
 		} else {
 			$blog_id = bp_get_blog_id();
+
+			/* translators: %s is the blog name */
+			$alt_attribute = sprintf( __( 'Site icon for %s', 'buddypress' ), bp_get_blog_name() );
 		}
 
 		// Parse the arguments.
 		$r = bp_parse_args( $args, array(
-			'type'    => 'full',
-			'width'   => false,
-			'height'  => false,
-			'class'   => 'avatar',
-			'id'      => false,
-			'alt'     => sprintf(
-				/* translators: %s: the author display name */
-				__( 'Profile picture of site author %s', 'buddypress' ),
-				esc_attr( $author_displayname )
-			),
-			'no_grav' => false,
-			'html'    => true,
-		) );
+			'item_id'    => $blog_id,
+			'avatar_dir' => 'blog-avatars',
+			'object'     => 'blog',
+			'type'       => 'full',
+			'width'      => false,
+			'height'     => false,
+			'class'      => 'avatar',
+			'id'         => false,
+			'alt'        => $alt_attribute,
+			'no_grav'    => false,
+			'html'       => true,
+		), 'blog_avatar' );
+
+		/**
+		 * If the `admin_user_id` was provided, make the Blog avatar
+		 * defaults to the Blog's Admin user one.
+		 */
+		if ( isset( $r['admin_user_id'] ) && $r['admin_user_id'] ) {
+			$r['item_id']    = (int) $r['admin_user_id'];
+			$r['avatar_dir'] = 'avatars';
+			$r['object']     = 'user';
+		} elseif ( ! $r['no_grav'] ) {
+			$r['no_grav'] = true;
+		}
 
 		// Use site icon if available.
 		$avatar = '';
@@ -375,8 +382,6 @@ function bp_blog_avatar( $args = '' ) {
 
 			// Never attempted to fetch site icon before; do it now!
 			if ( '' === $site_icon ) {
-				switch_to_blog( $blog_id );
-
 				// Fetch the other size first.
 				if ( 'full' === $r['type'] ) {
 					$size      = bp_core_avatar_thumb_width();
@@ -386,7 +391,8 @@ function bp_blog_avatar( $args = '' ) {
 					$save_size = 'full';
 				}
 
-				$site_icon = get_site_icon_url( $size );
+				$site_icon = bp_blogs_get_site_icon_url( $blog_id, $size );
+
 				// Empty site icons get saved as integer 0.
 				if ( empty( $site_icon ) ) {
 					$site_icon = 0;
@@ -398,13 +404,11 @@ function bp_blog_avatar( $args = '' ) {
 				// Now, fetch the size we want.
 				if ( 0 !== $site_icon ) {
 					$size      = 'full' === $r['type'] ? bp_core_avatar_full_width() : bp_core_avatar_thumb_width();
-					$site_icon = get_site_icon_url( $size );
+					$site_icon = bp_blogs_get_site_icon_url( $blog_id, $size );
 				}
 
 				// Sync site icon to blogmeta.
 				bp_blogs_update_blogmeta( $blog_id, "site_icon_url_{$r['type']}", $site_icon );
-
-				restore_current_blog();
 			}
 
 			// We have a site icon.
@@ -420,12 +424,6 @@ function bp_blog_avatar( $args = '' ) {
 					$size = (int) $r['width'];
 				}
 
-				$alt_attribute = __( 'Site icon for the blog', 'buddypress' );
-				if ( $blogs_template ) {
-					/* translators: %s is the placeholder for the name of the blog */
-					$alt_attribute = sprintf( __( 'Site icon for %s', 'buddypress' ), bp_get_blog_name() );
-				}
-
 				$avatar = sprintf( '<img src="%1$s" class="%2$s" width="%3$s" height="%3$s" alt="%4$s" />',
 					esc_url( $site_icon ),
 					esc_attr( "{$r['class']} avatar-{$size}" ),
@@ -435,32 +433,10 @@ function bp_blog_avatar( $args = '' ) {
 			}
 		}
 
-		// Fallback to user ID avatar.
+		// Fallback to Default blog avatar.
 		if ( '' === $avatar ) {
-			$avatar = bp_core_fetch_avatar( array(
-				'item_id' => $admin_user_id,
-				// 'avatar_dir' => 'blog-avatars',
-				// 'object'     => 'blog',
-				'type'    => $r['type'],
-				'alt'     => $r['alt'],
-				'css_id'  => $r['id'],
-				'class'   => $r['class'],
-				'width'   => $r['width'],
-				'height'  => $r['height'],
-				'no_grav' => $r['no_grav'],
-				'html'    => $r['html'],
-			) );
+			$avatar = bp_core_fetch_avatar( $r );
 		}
-
-		/**
-		 * In future BuddyPress versions you will be able to set the avatar for a blog.
-		 * Right now you can use a filter with the ID of the blog to change it if you wish.
-		 * By default it will return the avatar for the primary blog admin.
-		 *
-		 * This filter is deprecated as of BuddyPress 1.5 and may be removed in a future version.
-		 * Use the 'bp_get_blog_avatar' filter instead.
-		 */
-		$avatar = apply_filters( 'bp_get_blog_avatar_' . $blog_id, $avatar );
 
 		/**
 		 * Filters a blog's avatar.
@@ -662,7 +638,7 @@ function bp_blog_last_active( $args = array() ) {
 		// Backwards compatibility for anyone forcing a 'true' active_format.
 		if ( true === $r['active_format'] ) {
 			/* translators: %s: human time diff of the last time the site was active. */
-			$r['active_format'] = _x( 'active %s', 'last time the site was active', 'buddypress' );
+			$r['active_format'] = _x( 'Active %s', 'last time the site was active', 'buddypress' );
 		}
 
 		// Blog has been posted to at least once.
@@ -1002,52 +978,23 @@ function bp_total_blog_count_for_user( $user_id = 0 ) {
 /** Blog Registration ********************************************************/
 
 /**
- * Checks whether blog creation is enabled.
- *
- * Returns true when blog creation is enabled for logged-in users only, or
- * when it's enabled for new registrations.
- *
- * @return bool True if blog registration is enabled.
- */
-function bp_blog_signup_enabled() {
-	$bp = buddypress();
-
-	$active_signup = isset( $bp->site_options['registration'] )
-		? $bp->site_options['registration']
-		: 'all';
-
-	/**
-	 * Filters whether or not blog creation is enabled.
-	 *
-	 * Return "all", "none", "blog" or "user".
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $active_signup Value of the registration site option creation status.
-	 */
-	$active_signup = apply_filters( 'wpmu_active_signup', $active_signup );
-
-	if ( 'none' == $active_signup || 'user' == $active_signup )
-		return false;
-
-	return true;
-}
-
-/**
  * Output the wrapper markup for the blog signup form.
+ *
+ * @since 1.0.0
  *
  * @param string          $blogname   Optional. The default blog name (path or domain).
  * @param string          $blog_title Optional. The default blog title.
  * @param string|WP_Error $errors     Optional. The WP_Error object returned by a previous
  *                                    submission attempt.
  */
-function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = '') {
-	global $current_user;
+function bp_show_blog_signup_form( $blogname = '', $blog_title = '', $errors = '' ) {
+	$blog_id = bp_blogs_validate_blog_signup();
 
-	if ( isset($_POST['submit']) ) {
-		bp_blogs_validate_blog_signup();
-	} else {
-		if ( ! is_wp_error($errors) ) {
+	// Display the signup form.
+	if ( false === $blog_id || is_wp_error( $blog_id ) ) {
+		if ( is_wp_error( $blog_id ) ) {
+			$errors = $blog_id;
+		} else {
 			$errors = new WP_Error();
 		}
 
@@ -1063,17 +1010,35 @@ function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = ''
 		 * }
 		 */
 		$filtered_results = apply_filters('signup_another_blog_init', array('blogname' => $blogname, 'blog_title' => $blog_title, 'errors' => $errors ));
-		$blogname = $filtered_results['blogname'];
-		$blog_title = $filtered_results['blog_title'];
-		$errors = $filtered_results['errors'];
+		$blogname         = $filtered_results['blogname'];
+		$blog_title       = $filtered_results['blog_title'];
+		$errors           = $filtered_results['errors'];
 
 		if ( $errors->get_error_code() ) {
-			echo "<p>" . __('There was a problem; please correct the form below and try again.', 'buddypress') . "</p>";
+			if ( in_array( $errors->get_error_code(), array( 'blogname', 'blog_title' ), true ) ) {
+				printf(
+					'<p class="error">%s</p>',
+					esc_html__( 'There was a problem; please correct the form below and try again.', 'buddypress' )
+				);
+			} else {
+				printf(
+					'<p class="error">%s</p>',
+					$errors->get_error_message()
+				);
+			}
 		}
-		?>
-		<p><?php printf(__("By filling out the form below, you can <strong>add a site to your account</strong>. There is no limit to the number of sites that you can have, so create to your heart's content, but blog responsibly!", 'buddypress'), $current_user->display_name) ?></p>
 
-		<p><?php _e("If you&#8217;re not going to use a great domain, leave it for a new user. Now have at it!", 'buddypress') ?></p>
+		printf(
+			'<p>%1$s <strong>%2$s</strong>. %3$s</p>',
+			esc_html__( 'By filling out the form below, you can', 'buddypress' ),
+			esc_html__( 'add a site to your account', 'buddypress' ),
+			esc_html__( 'There is no limit to the number of sites that you can have, so create to your heart’s content, but blog responsibly!', 'buddypress' )
+		);
+		?>
+
+		<p>
+			<?php esc_html_e( 'If you’re not going to use a great domain, leave it for a new user. Now have at it!', 'buddypress' ); ?>
+		</p>
 
 		<form class="standard-form" id="setupform" method="post" action="">
 
@@ -1087,19 +1052,40 @@ function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = ''
 			 */
 			do_action( 'signup_hidden_fields' ); ?>
 
-			<?php bp_blogs_signup_blog($blogname, $blog_title, $errors); ?>
+			<?php bp_blogs_signup_blog( $blogname, $blog_title, $errors ); ?>
 			<p>
-				<input id="submit" type="submit" name="submit" class="submit" value="<?php esc_attr_e('Create Site', 'buddypress') ?>" />
+				<input id="submit" type="submit" name="submit" class="submit" value="<?php esc_attr_e( 'Create Site', 'buddypress' ); ?>" />
 			</p>
 
 			<?php wp_nonce_field( 'bp_blog_signup_form' ) ?>
 		</form>
 		<?php
+
+		// Display the confirmation form.
+	} elseif ( is_numeric( $blog_id ) ) {
+		// Validate the site.
+		$site = get_site( $blog_id );
+
+		if ( isset( $site->id ) && $site->id ) {
+			$current_user = wp_get_current_user();
+
+			bp_blogs_confirm_blog_signup(
+				$site->domain,
+				$site->path,
+				$site->blogname,
+				$current_user->user_login,
+				$current_user->user_email,
+				'',
+				$site->id
+			);
+		}
 	}
 }
 
 /**
  * Output the input fields for the blog creation form.
+ *
+ * @since 1.0.0
  *
  * @param string          $blogname   Optional. The default blog name (path or domain).
  * @param string          $blog_title Optional. The default blog title.
@@ -1107,61 +1093,104 @@ function bp_show_blog_signup_form($blogname = '', $blog_title = '', $errors = ''
  *                                    submission attempt.
  */
 function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) {
-	global $current_site;
+	$current_site = get_current_site();
 
-	// Blog name.
-	if( !is_subdomain_install() )
-		echo '<label for="blogname">' . __('Site Name:', 'buddypress') . '</label>';
-	else
-		echo '<label for="blogname">' . __('Site Domain:', 'buddypress') . '</label>';
+	if ( ! $blogname && ! $blog_title ) {
+		$submitted_vars = bp_blogs_get_signup_form_submitted_vars();
 
-	if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
+		if ( array_filter( $submitted_vars ) ) {
+			$blogname   = $submitted_vars['blogname'];
+			$blog_title = $submitted_vars['blog_title'];
+		}
+	}
+	?>
 
-		<p class="error"><?php echo $errmsg ?></p>
-
-	<?php }
-
-	if ( !is_subdomain_install() )
-		echo '<span class="prefix_address">' . $current_site->domain . $current_site->path . '</span> <input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" /><br />';
-	else
-		echo '<input name="blogname" type="text" id="blogname" value="'.$blogname.'" maxlength="63" ' . bp_get_form_field_attributes( 'blogname' ) . '/> <span class="suffix_address">.' . bp_signup_get_subdomain_base() . '</span><br />';
-
-	if ( !is_user_logged_in() ) {
-		print '(<strong>' . __( 'Your address will be ' , 'buddypress');
-
-		if ( !is_subdomain_install() ) {
-			print $current_site->domain . $current_site->path . __( 'blogname' , 'buddypress');
+	<p>
+		<?php
+		// Blog name.
+		if ( ! is_subdomain_install() ) {
+			printf( '<label for="blogname">%s</label>', esc_html__( 'Site Name:', 'buddypress' ) );
 		} else {
-			print __( 'domain.' , 'buddypress') . $current_site->domain . $current_site->path;
+			printf( '<label for="blogname">%s</label>', esc_html__( 'Site Domain:', 'buddypress' ) );
 		}
 
-		echo '.</strong> ' . __( 'Must be at least 4 characters, letters and numbers only. It cannot be changed so choose carefully!)' , 'buddypress') . '</p>';
+		if ( ! is_subdomain_install() ) {
+			printf(
+				'<span class="prefix_address">%1$s</span> <input name="blogname" type="text" id="blogname" value="%2$s" maxlength="63" style="width: auto!important" /><br />',
+				esc_html( $current_site->domain . $current_site->path ),
+				esc_attr( $blogname )
+			);
+		} else {
+			printf(
+				'<input name="blogname" type="text" id="blogname" value="%1$s" maxlength="63" style="width: auto!important" %2$s/> <span class="suffix_address">.%3$s</span><br />',
+				esc_attr( $blogname ),
+				bp_get_form_field_attributes( 'blogname' ),
+				bp_signup_get_subdomain_base()
+			);
+		}
+		if ( is_wp_error( $errors ) && $errors->get_error_message( 'blogname' ) ) {
+			printf( '<div class="error">%s</div>', $errors->get_error_message( 'blogname' ) );
+		}
+		?>
+	</p>
+
+	<?php
+	if ( ! is_user_logged_in() ) {
+		$url = sprintf(
+			/* translators: %s is the site domain and path. */
+			__( 'domain.%s' , 'buddypress' ),
+			$current_site->domain . $current_site->path
+		);
+
+		if ( ! is_subdomain_install() ) {
+			$url = sprintf(
+				/* translators: %s is the site domain and path. */
+				__( '%sblogname' , 'buddypress'),
+				$current_site->domain . $current_site->path
+			);
+		}
+
+		printf(
+			'<p>(<strong>%1$s.</strong> %2$s)</p>',
+			sprintf(
+				/* translators: %s is the site url. */
+				esc_html__( 'Your address will be %s' , 'buddypress' ), $url
+			),
+			esc_html__( 'Must be at least 4 characters, letters and numbers only. It cannot be changed so choose carefully!' , 'buddypress' )
+		);
 	}
 
 	// Blog Title.
 	?>
+	<p>
+		<label for="blog_title"><?php esc_html_e('Site Title:', 'buddypress') ?></label>
+		<input name="blog_title" type="text" id="blog_title" value="<?php echo esc_html( $blog_title ); ?>" />
 
-	<label for="blog_title"><?php _e('Site Title:', 'buddypress') ?></label>
-
-	<?php if ( $errmsg = $errors->get_error_message('blog_title') ) { ?>
-
-		<p class="error"><?php echo $errmsg ?></p>
-
-	<?php }
-	echo '<input name="blog_title" type="text" id="blog_title" value="'.esc_html($blog_title, 1).'" /></p>';
-	?>
+		<?php
+		if ( is_wp_error( $errors ) && $errors->get_error_message( 'blog_title' ) ) {
+			printf( '<div class="error">%s</div>', $errors->get_error_message( 'blog_title' ) );
+		}
+		?>
+	</p>
 
 	<fieldset class="create-site">
-		<legend class="label"><?php _e('Privacy: I would like my site to appear in search engines, and in public listings around this network', 'buddypress') ?></legend>
 
-		<label class="checkbox" for="blog_public_on">
-			<input type="radio" id="blog_public_on" name="blog_public" value="1" <?php if( !isset( $_POST['blog_public'] ) || '1' == $_POST['blog_public'] ) { ?>checked="checked"<?php } ?> />
-			<strong><?php _e( 'Yes' , 'buddypress'); ?></strong>
-		</label>
-		<label class="checkbox" for="blog_public_off">
-			<input type="radio" id="blog_public_off" name="blog_public" value="0" <?php if( isset( $_POST['blog_public'] ) && '0' == $_POST['blog_public'] ) { ?>checked="checked"<?php } ?> />
-			<strong><?php _e( 'No' , 'buddypress'); ?></strong>
-		</label>
+		<legend class="label"><?php esc_html_e( 'Privacy: I would like my site to appear in search engines, and in public listings around this network', 'buddypress' ) ?></legend>
+
+		<p>
+			<label class="checkbox" for="blog_public_on">
+				<input type="radio" id="blog_public_on" name="blog_public" value="1" <?php checked( ! isset( $_POST['blog_public'] ) || 1 === (int) $_POST['blog_public'] ); ?> />
+				<strong><?php esc_html_e( 'Yes' , 'buddypress'); ?></strong>
+			</label>
+		</p>
+
+		<p>
+			<label class="checkbox" for="blog_public_off">
+				<input type="radio" id="blog_public_off" name="blog_public" value="0" <?php checked( isset( $_POST['blog_public'] ) && 0 === (int) $_POST['blog_public'] ); ?> />
+				<strong><?php esc_html_e( 'No' , 'buddypress'); ?></strong>
+			</label>
+		</p>
+
 	</fieldset>
 
 	<?php
@@ -1173,7 +1202,7 @@ function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) 
 	 *
 	 * @param WP_Error $errors WP_Error object if any present.
 	 */
-	do_action('signup_blogform', $errors);
+	do_action( 'signup_blogform', $errors );
 }
 
 /**
@@ -1181,32 +1210,38 @@ function bp_blogs_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) 
  *
  * Passes submitted values to {@link wpmu_create_blog()}.
  *
- * @return bool True on success, false on failure.
+ * @since 1.0.0
+ *
+ * @return bool|int|WP_Error False if not a form submission, the Blog ID on success, a WP_Error object on failure.
  */
 function bp_blogs_validate_blog_signup() {
-	global $wpdb, $current_user, $blogname, $blog_title, $errors, $domain, $path, $current_site;
-
-	if ( !check_admin_referer( 'bp_blog_signup_form' ) )
-		return false;
-
-	$current_user = wp_get_current_user();
-
-	if( !is_user_logged_in() )
-		die();
-
-	$result = bp_blogs_validate_blog_form();
-	extract($result);
-
-	if ( $errors->get_error_code() ) {
-		unset($_POST['submit']);
-		bp_show_blog_signup_form( $blogname, $blog_title, $errors );
+	if ( ! isset( $_POST['submit'] ) ) {
 		return false;
 	}
 
-	$public = (int) $_POST['blog_public'];
+	$current_site = get_current_site();
+	$current_user = wp_get_current_user();
+	$blog_name    = '';
+	$blog_title   = '';
+	$public       = 1;
 
-	// Depreciated.
-	$meta = apply_filters( 'signup_create_blog_meta', array( 'lang_id' => 1, 'public' => $public ) );
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['_wpnonce'] ), 'bp_blog_signup_form' ) || ! $current_user->ID ) {
+		return new WP_Error( 'bp_blogs_doing_it_wrong', __( 'Sorry, we cannot create the site. Please try again later.', 'buddypress' ) );
+	}
+
+	$submitted_vars = bp_blogs_get_signup_form_submitted_vars();
+
+	if ( array_filter( $submitted_vars ) ) {
+		$blog_name  = $submitted_vars['blogname'];
+		$blog_title = $submitted_vars['blog_title'];
+		$public     = (int) $submitted_vars['blog_public'];
+	}
+
+	$blog = bp_blogs_validate_blog_form( $blog_name, $blog_title );
+
+	if ( is_wp_error( $blog['errors'] ) && $blog['errors']->get_error_code() ) {
+		return $blog['errors'];
+	}
 
 	/**
 	 * Filters the default values for Blog meta.
@@ -1218,35 +1253,21 @@ function bp_blogs_validate_blog_signup() {
 	 *      string $public Default public status.
 	 * }
 	 */
-	$meta = apply_filters( 'add_signup_meta', $meta );
+	$meta = apply_filters( 'add_signup_meta', array( 'lang_id' => 1, 'public' => $public ) );
 
-	// If this is a subdomain install, set up the site inside the root domain.
-	if ( is_subdomain_install() )
-		$domain = $blogname . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
-
-	$blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
-	bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $current_user->user_login, $current_user->user_email, $meta, $blog_id );
-	return true;
-}
-
-/**
- * Validate a blog creation submission.
- *
- * Essentially, a wrapper for {@link wpmu_validate_blog_signup()}.
- *
- * @return array Contains the new site data and error messages.
- */
-function bp_blogs_validate_blog_form() {
-	$user = '';
-	if ( is_user_logged_in() )
-		$user = wp_get_current_user();
-
-	return wpmu_validate_blog_signup($_POST['blogname'], $_POST['blog_title'], $user);
+	return wpmu_create_blog(
+		$blog['domain'],
+		$blog['path'],
+		$blog['blog_title'],
+		$current_user->ID, $meta,
+		$current_site->id
+	);
 }
 
 /**
  * Display a message after successful blog registration.
  *
+ * @since 1.0.0
  * @since 2.6.0 Introduced `$blog_id` parameter.
  *
  * @param string       $domain     The new blog's domain.
@@ -1264,7 +1285,7 @@ function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, 
 	restore_current_blog();
 
 	?>
-	<p><?php _e( 'Congratulations! You have successfully registered a new site.', 'buddypress' ) ?></p>
+	<p class="success"><?php esc_html_e( 'Congratulations! You have successfully registered a new site.', 'buddypress' ) ?></p>
 	<p>
 		<?php printf(
 			'%s %s',
@@ -1289,7 +1310,7 @@ function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, 
 	 *
 	 * @since 1.0.0
 	 */
-	do_action('signup_finished');
+	do_action( 'signup_finished' );
 }
 
 /**

@@ -1,0 +1,53 @@
+body .thumbnail{
+    border: none;
+}
+
+
+.b2s-premium-h2{
+    margin-top: 0px !important;
+}
+
+.b2s-premium-go-to-text{
+    color: #79B232 !important;
+}
+
+.b2s-premium-line{
+    margin-bottom: 0px!important;
+}
+.b2s-premium-btn-group{
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.chosen-single {
+    box-shadow: none !important;
+    background: none !important;
+    border-radius: 3px !important;
+    height: 30px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+.chosen-single div {
+    padding-top: 2px !important;
+}
+
+#b2s_license_user_select_chosen {
+    width: 100% !important;
+}
+
+@media(min-width:991px){
+    #b2s-license-user-area {
+        padding-left: 0px;
+        padding-right: 5px;
+        padding-bottom: 5px;
+    }
+}
+@media(max-width:991px){
+    #b2s-license-user-area{
+        padding-bottom: 5px;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+}

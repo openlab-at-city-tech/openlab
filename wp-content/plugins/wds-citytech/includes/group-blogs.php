@@ -828,8 +828,8 @@ function openlab_group_member_role_settings( $group_type ) {
 
 	$show_panel = false;
 	$site_id    = null;
-	if ( bp_is_group_create() ) {
-		// Is this an asynchronous clone that includes site creation?
+
+	if ( bp_is_group_create() && groups_get_groupmeta( bp_get_new_group_id(), 'clone_source_group_id' ) ) {
 		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
 		$show_panel  = in_array( 'site', $clone_steps, true );
 	} else {

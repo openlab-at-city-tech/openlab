@@ -89,14 +89,14 @@ wp_add_inline_script(
                     <?php esc_html_e('Blocks list updated.', 'advanced-gutenberg') ?>
                 </span>
 
-                <a class="ju-button orange-button waves-effect waves-dark"
+                <a class="button pp-default-button"
                    href="<?php echo esc_attr(admin_url('admin.php?page=advgb_main&view=profile&id=new')) ?>"
                 >
                     <i class="dashicons dashicons-plus"></i>
                     <span><?php esc_html_e('New Profile', 'advanced-gutenberg') ?></span>
                 </a>
 
-                <button class="ju-button orange-button waves-effect waves-light save-profile-button"
+                <button class="button button-primary pp-primary-button save-profile-button"
                         type="submit"
                         name="advgb_profile_save"
                 >
@@ -324,7 +324,7 @@ wp_add_inline_script(
         </div>
 
         <!--Save button-->
-        <button class="ju-button orange-button waves-effect waves-light save-profile-button"
+        <button class="button button-primary pp-primary-button save-profile-button"
                 type="submit"
                 name="advgb_profile_save"
                 style="margin-left: 10px"

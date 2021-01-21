@@ -2571,6 +2571,26 @@ function openlab_forbidden_group_names( $names ) {
 }
 add_filter( 'groups_forbidden_names', 'openlab_forbidden_group_names' );
 
+/**
+ * Grant 'read_private_anys' cap to Administrators.
+ *
+ * Allows Administrators to view private posts in archive contexts. See #2893.
+ */
+add_filter(
+	'map_meta_cap',
+	function( $caps, $cap, $user_id, $args ) {
+		if ( 'read_private_anys' !== $cap ) {
+			return $caps;
+		}
+
+		$caps = [ 'manage_options' ];
+
+		return $caps;
+	},
+	10,
+	4
+);
+
 function openlab_disallow_tinymce_comment_stylesheet( $settings ) {
 	if ( ! isset( $settings['tinymce'] ) || ! isset( $settings['tinymce']['content_css'] ) ) {
 		return $settings;
@@ -3300,15 +3320,6 @@ add_action(
 		wp_enqueue_style( 'openlab-nextgen-gallery', plugins_url( 'wds-citytech/assets/css/nextgen-gallery.css' ), null, OL_VERSION );
 	}
 );
-
-if ( is_admin() ) {
-    function jba_disable_editor_fullscreen_by_default() {
-		$script = "jQuery( window ).load(function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } });";
-		wp_add_inline_script( 'wp-blocks', $script );
-	}
-
-	add_action( 'enqueue_block_editor_assets', 'jba_disable_editor_fullscreen_by_default' );
-}
 
 /**
  * Gravity Forms Quiz field width.

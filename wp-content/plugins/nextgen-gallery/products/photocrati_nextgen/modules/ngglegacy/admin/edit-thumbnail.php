@@ -182,14 +182,14 @@ if ($thumbnail_crop_frame != null)
 </div>
 
 <script type="text/javascript">
-//<![CDATA[
-	jQuery(document).ready(function(){
-		jQuery('#imageToEdit').Jcrop({
-			onChange: showPreview,
-			onSelect: showPreview,
-			<?php echo $default_crop_js_parameter; ?>
-			aspectRatio: <?php echo str_replace(',', '.', round($WidthHtmlPrev/$HeightHtmlPrev, 3)); ?>
-		});
-	});
-//]]>
+    (function($) {
+        $(function() {
+            jQuery('#imageToEdit').Jcrop({
+                onChange: showPreview,
+                onSelect: showPreview,
+                <?php echo $default_crop_js_parameter; ?>
+                aspectRatio: <?php echo str_replace(',', '.', round($WidthHtmlPrev / $HeightHtmlPrev, 3)); ?>
+            });
+        });
+    })(jQuery);
 </script>

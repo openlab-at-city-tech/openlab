@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2020-10-26 10:17-0600\n"
+"POT-Creation-Date: 2020-12-07 10:16-0700\n"
 "PO-Revision-Date: 2019-03-05 12:29-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: advanced-sidebar-menu.php\n"
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: src/Notice.php:131 src/Notice.php:137
+#: src/Notice.php:137
 msgid "Preview"
 msgstr ""
 
@@ -85,43 +85,64 @@ msgstr ""
 msgid "Advanced Sidebar Categories Menu"
 msgstr ""
 
-#: src/Widget/Category.php:99
-msgid "Display the highest level parent category"
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:123
+#, php-format
+msgid "Display the highest level parent %s"
 msgstr ""
 
-#: src/Widget/Category.php:105
-msgid "Display menu when there is only the parent category"
+#. translators: Selected taxonomy single label
+#. translators: Selected post type single label
+#: src/Widget/Category.php:132 src/Widget/Page.php:130
+#, php-format
+msgid "Display menu when there is only the parent %s"
 msgstr ""
 
-#: src/Widget/Category.php:111
-msgid "Always display child categories"
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:141 src/Widget/Page.php:140
+#, php-format
+msgid "Always display child %s"
 msgstr ""
 
-#: src/Widget/Category.php:117
-msgid "Levels of child categories to display"
+#: src/Widget/Category.php:155 src/Widget/Page.php:161
+msgid "- All -"
 msgstr ""
 
-#: src/Widget/Category.php:159
-msgid "Display categories on single posts"
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:170 src/Widget/Page.php:175
+#, php-format
+msgid "Display %1$s levels of child %2$s"
 msgstr ""
 
-#: src/Widget/Category.php:166
-msgid "Display each single post's category"
+#. translators: Selected taxonomy plural label
+#: src/Widget/Category.php:200
+#, php-format
+msgid "Display %s on single posts"
 msgstr ""
 
-#: src/Widget/Category.php:173
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:210
+#, php-format
+msgid "Display each single post's %s"
+msgstr ""
+
+#: src/Widget/Category.php:220
 msgid "In a new widget"
 msgstr ""
 
-#: src/Widget/Category.php:176
+#: src/Widget/Category.php:223
 msgid "In another list in the same widget"
 msgstr ""
 
-#: src/Widget/Category.php:202
-msgid "Categories to exclude (ids), comma separated"
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:251 src/Widget/Page.php:245
+#, php-format
+msgid "%s to exclude (ids, comma separated)"
 msgstr ""
 
-#: src/Widget/Category.php:235 src/Widget/Page.php:240
+#: src/Widget/Category.php:285 src/Widget/Page.php:278
 msgid "Title"
 msgstr ""
 
@@ -133,32 +154,14 @@ msgstr ""
 msgid "Advanced Sidebar Pages Menu"
 msgstr ""
 
-#: src/Widget/Page.php:95
-msgid "Display highest level parent page"
+#. translators: Selected post type single label
+#: src/Widget/Page.php:119
+#, php-format
+msgid "Display highest level parent %s"
 msgstr ""
 
-#: src/Widget/Page.php:103
-msgid "Display menu when there is only the parent page"
-msgstr ""
-
-#: src/Widget/Page.php:110
-msgid "Always display child pages"
-msgstr ""
-
-#: src/Widget/Page.php:123
-msgid "Maximum level of child pages to display"
-msgstr ""
-
-#: src/Widget/Page.php:129
-msgid " - All - "
-msgstr ""
-
-#: src/Widget/Page.php:167
+#: src/Widget/Page.php:202
 msgid "Order by"
-msgstr ""
-
-#: src/Widget/Page.php:208
-msgid "Pages to exclude (ids), comma separated"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

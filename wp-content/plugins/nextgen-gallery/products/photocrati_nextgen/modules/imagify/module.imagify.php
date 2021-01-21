@@ -27,7 +27,7 @@ class M_Imagify extends C_Base_Module
             'photocrati-imagify',
             'NextGEN Imagify Integration',
             'NextGen Gallery / Imagify Integration',
-            '3.1.8',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

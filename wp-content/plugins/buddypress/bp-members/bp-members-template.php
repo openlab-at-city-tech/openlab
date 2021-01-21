@@ -282,6 +282,7 @@ function bp_activate_slug() {
  * display a list of members.
  *
  * @since 1.2.0
+ * @since 7.0.0 Added `xprofile_query` parameter. Added `user_ids` parameter.
  *
  * @global object $members_template {@link BP_Members_Template}
  *
@@ -309,6 +310,8 @@ function bp_activate_slug() {
  *     @type array|int|string|bool $exclude             Exclude users from results by ID. Accepts an array, a single
  *                                                      integer, a comma-separated list of IDs, or false (to disable
  *                                                      this limiting). Default: false.
+ *     @type array|string|bool     $user_ids            An array or comma-separated list of IDs, or false (to
+ *                                                      disable this limiting). Default: false.
  *     @type int                   $user_id             If provided, results are limited to the friends of the specified
  *                                                      user. When on a user's Friends page, defaults to the ID of the
  *                                                      displayed user. Otherwise defaults to 0.
@@ -325,6 +328,8 @@ function bp_activate_slug() {
  *                                                      Default: false.
  *     @type mixed                 $meta_value          When used with meta_key, limits results by the a matching
  *                                                      usermeta value. Default: false.
+ *     @type array                 $xprofile_query      Filter results by xprofile data. Requires the xprofile
+ *                                                      component. See {@see BP_XProfile_Query} for details.
  *     @type bool                  $populate_extras     Whether to fetch optional data, such as friend counts.
  *                                                      Default: true.
  * }
@@ -368,6 +373,7 @@ function bp_has_members( $args = '' ) {
 
 		'include'             => false,    // Pass a user_id or a list (comma-separated or array) of user_ids to only show these users.
 		'exclude'             => false,    // Pass a user_id or a list (comma-separated or array) of user_ids to exclude these users.
+		'user_ids'            => false,
 
 		'user_id'             => $user_id, // Pass a user_id to only show friends of this user.
 		'member_type'         => $member_type,
@@ -378,6 +384,7 @@ function bp_has_members( $args = '' ) {
 		'meta_key'            => false,    // Only return users with this usermeta.
 		'meta_value'          => false,    // Only return users where the usermeta value matches. Requires meta_key.
 
+		'xprofile_query'      => false,
 		'populate_extras'     => true      // Fetch usermeta? Friend count, last active etc.
 	), 'has_members' );
 
@@ -396,23 +403,7 @@ function bp_has_members( $args = '' ) {
 	}
 
 	// Query for members and populate $members_template global.
-	$members_template = new BP_Core_Members_Template(
-		$r['type'],
-		$r['page'],
-		$r['per_page'],
-		$r['max'],
-		$r['user_id'],
-		$r['search_terms'],
-		$r['include'],
-		$r['populate_extras'],
-		$r['exclude'],
-		$r['meta_key'],
-		$r['meta_value'],
-		$r['page_arg'],
-		$r['member_type'],
-		$r['member_type__in'],
-		$r['member_type__not_in']
-	);
+	$members_template = new BP_Core_Members_Template( $r );
 
 	/**
 	 * Filters whether or not BuddyPress has members to iterate over.
@@ -964,7 +955,8 @@ function bp_member_last_active( $args = array() ) {
 
 		// Backwards compatibility for anyone forcing a 'true' active_format.
 		if ( true === $r['active_format'] ) {
-			$r['active_format'] = __( 'active %s', 'buddypress' );
+			/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
+			$r['active_format'] = __( 'Active %s', 'buddypress' );
 		}
 
 		// Member has logged in at least one time.
@@ -1695,10 +1687,12 @@ function bp_last_activity( $user_id = 0 ) {
 	 */
 	function bp_get_last_activity( $user_id = 0 ) {
 
-		if ( empty( $user_id ) )
+		if ( empty( $user_id ) ) {
 			$user_id = bp_displayed_user_id();
+		}
 
-		$last_activity = bp_core_get_last_activity( bp_get_user_last_activity( $user_id ), __('active %s', 'buddypress') );
+		/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
+		$last_activity = bp_core_get_last_activity( bp_get_user_last_activity( $user_id ), __( 'Active %s', 'buddypress') );
 
 		/**
 		 * Filters the 'active [x days ago]' string for a user.
@@ -2024,6 +2018,190 @@ function bp_current_member_type_message() {
 		 * @param string $message Message to filter.
 		 */
 		return apply_filters( 'bp_get_current_member_type_message', $message );
+	}
+
+/**
+ * Output member type directory link.
+ *
+ * @since 7.0.0
+ *
+ * @param string $member_type Unique member type identifier as used in bp_register_member_type().
+ */
+function bp_member_type_directory_link( $member_type = '' ) {
+	echo bp_get_member_type_directory_link( $member_type );
+}
+	/**
+	 * Return member type directory link.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param string $member_type Unique member type identifier as used in bp_register_member_type().
+	 * @return string
+	 */
+	function bp_get_member_type_directory_link( $member_type = '' ) {
+		if ( empty( $member_type ) ) {
+			return '';
+		}
+
+		$member_type_object = bp_get_member_type_object( $member_type );
+
+		if ( ! isset( $member_type_object->labels['name'] ) ) {
+			return '';
+		}
+
+		$member_type_text = $member_type_object->labels['name'];
+		if ( isset( $member_type_object->labels['singular_name'] ) && $member_type_object->labels['singular_name'] ) {
+			$member_type_text = $member_type_object->labels['singular_name'];
+		}
+
+		if ( empty( $member_type_object->has_directory ) ) {
+			return esc_html( $member_type_text );
+		}
+
+		return sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( bp_get_member_type_directory_permalink( $member_type ) ),
+			esc_html( $member_type_text )
+		);
+	}
+
+/**
+ * Output a comma-delimited list of member types.
+ *
+ * @since 7.0.0
+ * @see   bp_get_member_type_list() For additional information on default arguments.
+ *
+ * @param int   $user_id User ID.
+ * @param array $r       Optional. Member type list arguments. Default empty array.
+ */
+function bp_member_type_list( $user_id = 0, $r = array() ) {
+	echo bp_get_member_type_list( $user_id, $r );
+}
+	/**
+	 * Return a comma-delimited list of member types.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param int $user_id User ID. Defaults to displayed user ID if on a member page.
+	 * @param array|string $r {
+	 *     Array of parameters. All items are optional.
+	 *     @type string $parent_element     Element to wrap around the list. Defaults to 'p'.
+	 *     @type array  $parent_attr        Element attributes for parent element. Defaults to
+	 *                                      array( 'class' => 'bp-member-type-list' ).
+	 *     @type array  $label              Plural and singular labels to use before the list. Defaults to
+	 *                                      array( 'plural' => 'Member Types:', 'singular' => 'Member Type:' ).
+	 *     @type string $label_element      Element to wrap around the label. Defaults to 'strong'.
+	 *     @type array  $label_attr         Element attributes for label element. Defaults to array().
+	 *     @type bool   $show_all           Whether to show all registered group types. Defaults to 'false'. If
+	 *                                      'false', only shows member types with the 'show_in_list' parameter set to
+	 *                                      true. See bp_register_member_type() for more info.
+	 *     @type string $list_element       Element to wrap around the comma separated list of membet types. Defaults to ''.
+	 *     @type string $list_element_attr  Element attributes for list element. Defaults to array().
+	 * }
+	 * @return string
+	 */
+	function bp_get_member_type_list( $user_id = 0, $r = array() ) {
+		if ( empty( $user_id ) ) {
+			$user_id = bp_displayed_user_id();
+		}
+
+		$r = bp_parse_args(
+			$r,
+			array(
+				'parent_element'    => 'p',
+				'parent_attr'       => array(
+					'class' => 'bp-member-type-list',
+				),
+				'label'             => array(),
+				'label_element'     => 'strong',
+				'label_attr'        => array(),
+				'show_all'          => false,
+				'list_element'      => '',
+				'list_element_attr' => array(),
+			),
+			'member_type_list'
+		);
+
+		// Should the label be output?
+		$has_label = ! empty( $r['label'] );
+
+		$labels = wp_parse_args(
+			$r['label'],
+			array(
+				'plural'   => __( 'Member Types:', 'buddypress' ),
+				'singular' => __( 'Member Type:', 'buddypress' ),
+			)
+		);
+
+		$retval = '';
+		$types  = bp_get_member_type( $user_id, false );
+
+		if ( $types ) {
+			// Make sure we can show the type in the list.
+			if ( false === $r['show_all'] ) {
+				$types = array_intersect( bp_get_member_types( array( 'show_in_list' => true ) ), $types );
+				if ( empty( $types ) ) {
+					return $retval;
+				}
+			}
+
+			$before = $after = $label = '';
+			$count  = count( $types );
+
+			if ( 1 === $count ) {
+				$label_text = $labels['singular'];
+			} else {
+				$label_text = $labels['plural'];
+			}
+
+			// Render parent element.
+			if ( ! empty( $r['parent_element'] ) ) {
+				$parent_elem = new BP_Core_HTML_Element( array(
+					'element' => $r['parent_element'],
+					'attr'    => $r['parent_attr'],
+				) );
+
+				// Set before and after.
+				$before = $parent_elem->get( 'open_tag' );
+				$after  = $parent_elem->get( 'close_tag' );
+			}
+
+			// Render label element.
+			if ( ! empty( $r['label_element'] ) ) {
+				$label = new BP_Core_HTML_Element( array(
+					'element'    => $r['label_element'],
+					'attr'       => $r['label_attr'],
+					'inner_html' => esc_html( $label_text ),
+				) );
+				$label = $label->contents() . ' ';
+
+			// No element, just the label.
+			} elseif ( $has_label ) {
+				$label = esc_html( $label_text );
+			}
+
+			// The list of types.
+			$list = implode( ', ', array_map( 'bp_get_member_type_directory_link', $types ) );
+
+			// Render the list of types element.
+			if ( ! empty( $r['list_element'] ) ) {
+				$list_element = new BP_Core_HTML_Element( array(
+					'element'    => $r['list_element'],
+					'attr'       => $r['list_element_attr'],
+					'inner_html' => $list,
+				) );
+
+				$list = $list_element->contents();
+			}
+
+			// Comma-delimit each type into the group type directory link.
+			$label .= $list;
+
+			// Retval time!
+			$retval = $before . $label . $after;
+		}
+
+		return $retval;
 	}
 
 /** Signup Form ***************************************************************/
@@ -2425,7 +2603,7 @@ function bp_signup_avatar_dir_value() {
  */
 function bp_signup_requires_privacy_policy_acceptance() {
 	// Bail if we're running a version of WP that doesn't have the Privacy Policy feature.
-	if ( version_compare( $GLOBALS['wp_version'], '4.9.6', '<' ) ) {
+	if ( bp_is_running_wp( '4.9.6', '<' ) ) {
 		return false;
 	}
 

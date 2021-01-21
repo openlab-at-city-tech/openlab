@@ -1,0 +1,94 @@
+%comment-common-icon{
+    display: block;
+    position: absolute;
+    font-family: fontAwesome;
+    left: 0;
+    color: $color_black;
+    top: 0;
+}
+.#{$prefix}-comments-section{
+    .comment-list{
+        @extend %reset-ul;
+        >li{
+            padding-bottom: 30px;
+            @include border-bottom();
+            border-color: $color_blue_gray;
+        }
+
+        li{
+            padding-top: 30px;
+            .comment-reply-link{
+               @extend %comment-btn;
+               @extend %btn-hover; 
+            }
+            
+            .comment-meta{
+                a{
+                    @extend %primary-color;
+                    &:visited{
+                        @extend %primary-color;
+                    }
+                    &:hover{
+                        color: $color_gray;
+                    }
+                   
+                }
+                b{
+                    font-weight: $font_semi_bold;
+                }
+                .comment-author{
+                    img{
+                        margin-right: 15px;
+                    }
+                }
+                .comment-metadata{
+                    padding-top: 15px;
+                    a,span,time{
+                        display: inline-block;
+                        position: relative;
+                    }
+                    .edit-link,time{
+                        padding-left: 25px;
+                        padding-right: 20px;
+                        &:before{
+                            @extend %comment-common-icon;
+                        }
+                    }
+                    time{
+                        &:before{
+                            content: '\f073';
+                        }
+                    }
+                    .edit-link{
+                        &:before{
+                            content: '\f044';
+                        }
+                    }
+                }
+            }
+            .comment-content{
+                p{
+                    margin-top: 15px;
+                    margin-bottom: 15px;
+                    padding-left: 20px;
+                    position: relative;
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+                    &:before{
+                        @extend %comment-common-icon;
+                        content: '\f075';
+
+                    }
+                }
+            }
+            .reply{
+                padding-top: 15px;
+            }
+        }
+        .children{
+            padding: 0;
+            margin-left: 15px;
+        }
+    }
+} 

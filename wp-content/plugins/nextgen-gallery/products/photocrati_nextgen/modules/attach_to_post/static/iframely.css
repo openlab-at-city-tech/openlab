@@ -157,10 +157,6 @@ html#iframely {
 
 
 @media (max-width: 1140px) {
-    #iframely .plupload_buttons {
-        display: inline;
-        margin: 0 0 0 10px;
-    }
     #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
     #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
     #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
@@ -169,10 +165,6 @@ html#iframely {
 }
 
 @media (max-width: 940px) {
-    #iframely .plupload_buttons {
-        display: block;
-        margin: 10px 0 0 75px;
-    }
     #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
     #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
     #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
@@ -206,12 +198,6 @@ html#iframely {
     }
     #iframely #ngg_page_content .ngg_page_content_menu a:last-of-type {
         padding-bottom: 5px;
-    }
-    #iframely .plupload_buttons {
-        margin-left: 0;
-    }
-    #iframely #ngg_page_content .plupload_droptext {
-        line-height: 60px;
     }
     #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
     #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,

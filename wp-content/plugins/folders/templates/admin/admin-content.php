@@ -2,7 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <style>
-
     <?php
     $string = "";
     global $typenow;
@@ -14,29 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     $customize_folders = get_option('customize_folders');
     ?>
 </style>
-<div id="wcp-custom-style">
-    <style>
-        <?php
-            $string = "";
-            for($i=0;$i<=15;$i++) {
-            $string .= " .space > .route >";
-            $new_width = $width - (13+(20*$i));
-                echo "#custom-menu > {$string} .title { width: {$new_width}px !important; } ";
-                echo "#custom-menu > {$string} .dynamic-menu { left: ".($new_width-190)."px !important; } ";
-            }
-        ?>
-    </style>
-</div>
-<div id="style-css">
-
-</div>
 <style>
-    .ui-state-highlight {
-        background: transparent;
-        border: dashed 1px #0073AA;
-        width:150px;
-        height: 25px !important;
-    }
     <?php
     if(isset($customize_folders['new_folder_color']) && !empty($customize_folders['new_folder_color'])) {
         ?>
@@ -46,22 +23,37 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     .ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>;}
     <?php
 }
-if(isset($customize_folders['folder_bg_color']) && !empty($customize_folders['folder_bg_color'])) {
-    $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']);
-    ?>
-    .orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
-    body:not(.no-hover-css) .wcp-container .route .title:hover, .header-posts a:hover, .un-categorised-items.active-item, .un-categorised-items:hover {background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>);}
-    .wcp-drop-hover {
-        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
-    }
-    .ui-state-highlight { border-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?> !important;}
-    #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
-    <?php
-}
 if(isset($customize_folders['bulk_organize_button_color']) && !empty($customize_folders['bulk_organize_button_color'])) {
     ?>
     button.button.organize-button { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
     button.button.organize-button:hover { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
+    <?php
+}
+if(isset($customize_folders['folder_bg_color']) && !empty($customize_folders['folder_bg_color'])) {
+    $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']);
+    ?>
+    body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover { background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>) !important; color: #333333;}
+    body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+    #custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in > , body #custom-scroll-menu  *.drag-in > a:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+    .drag-bot > a {
+        border-bottom: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+    }
+    .drag-up > a {
+        border-top: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+    }
+    body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover {
+        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
+        color: #fff !important;
+    }
+    .orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item, .sticky-folders ul li a.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
+    body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-css) .header-posts a:hover, body:not(.no-hover-css) .un-categorised-items:hover, body:not(.no-hover-css) .sticky-folders ul li a:hover {background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>);}
+    .wcp-drop-hover {
+        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
+    }
+    #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
+    .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
+    .ui-state-highlight { border-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?> !important;}
+    .jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
     <?php
 }
 $font_family = "";
@@ -79,7 +71,7 @@ if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder
 }
 if(isset($customize_folders['folder_size']) && !empty($customize_folders['folder_size'])) {
     ?>
-    .wcp-container .route span.title-text, .header-posts a, .un-categorised-items a { font-size: <?php echo esc_attr($customize_folders['folder_size']) ?>px; }
+    .wcp-container .route span.title-text, .header-posts a, .un-categorised-items a, .sticky-title, .sticky-folders > ul > li > a { font-size: <?php echo esc_attr($customize_folders['folder_size']) ?>px; }
     <?php
 }
 ?>
@@ -141,26 +133,27 @@ if(!empty($post_type)) {
                         </div>
                         <div class="folder-separator"></div>
                         <div class="header-posts">
-                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><span class="wcp-icon folder-icon-insert_drive_file"></span> <?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
+                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
                         </div>
                         <div class="un-categorised-items <?php echo esc_attr($active) ?>">
                             <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, WCP_FOLDER) ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
                         </div>
-                    </div>
-
-                    <div class="sticky-folders <?php echo (!empty($sticky_string)?"active":"") ?>">
-                        <div class="sticky-title"><img src='<?php echo WCP_FOLDER_URL ?>assets/images/pin.png' /> Sticky Folders</div>
-                        <ul>
-                            <?php echo $sticky_string ?>
-                        </ul>
+                        <div class="folder-separator-2"></div>
                     </div>
                 </div>
                 <div id="custom-scroll-menu">
-                    <div id="custom-menu" class="wcp-custom-menu <?php echo ($status==1)?"active":"" ?>">
-                        <!--<div class="wcp-parent" id="title0"><i class="fa fa-folder-o"></i> All Folders</div>-->
-                        <ul class='space first-space' id='space_0'>
-                            <?php echo $terms_data; ?>
-                        </ul>
+                    <div class="ajax-preloader">
+                        <div class="cssload-container">
+                            <div class="cssload-tube-tunnel"></div>
+                        </div>
+                    </div>
+                    <div class="js-tree-data">
+                        <div id="js-tree-menu" class="<?php echo ($status==1)?"active":"" ?>">
+                            <!--<div class="wcp-parent" id="title0"><i class="fa fa-folder-o"></i> All Folders</div>-->
+                            <ul class='space first-space' id='space_0'>
+                                <?php echo $terms_data; ?>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

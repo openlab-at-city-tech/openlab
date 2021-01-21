@@ -1,0 +1,59 @@
+/*Custom*/
+.b2s-post-btn {
+    float: left;
+}
+.form-inline {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-inline .form-group  {
+    margin-left: 2px;
+}
+@media(max-width: 549px) {
+    .b2s-post-btn {
+        width: 100%;
+    }
+    .form-inline button, .form-inline a { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width: 767px) {
+    .form-inline {
+        display: none;
+    }
+    .filterHide {
+        display: none;
+    }
+    .form-inline button ,.form-inline a { 
+        width: 49%;
+        margin-bottom: 10px;
+    }
+}
+
+.b2s-loading-area{
+    width: 100% !important;
+}
+
+.loadDraftBtn {
+    margin-right: 5px;
+}
+
+.b2sFavoriteStar {
+    font-size: 22px;
+    margin-top: 6px;
+    color: #ffb900;
+    cursor: pointer;
+}
+
+.b2sFavoriteStarLoading {
+    animation: 1.5s ease-in-out 0s normal none infinite running sk-pulseScaleOut;
+}
+
+.b2s-notice-counter {
+    background-color: lightblue;
+    padding: 2px;
+    border-radius: 50%;
+    width: 22px;
+    display: inline-block;
+}

@@ -1,5 +1,7 @@
 <?php
 
+use Tribe__Date_Utils as Dates;
+
 /**
  *  Class that implements the export to iCal functionality
  *  both for list and single events
@@ -85,7 +87,14 @@ class Tribe__Events__iCal {
 	public function month_view_ical_link( $event_date = null ) {
 		$tec = Tribe__Events__Main::instance();
 
-		return add_query_arg( [ 'ical' => 1 ], $tec->getLink( 'month', $event_date ) );
+		// Default to current month if not set.
+		if ( empty( $event_date ) ) {
+			$event_date = Dates::build_date_object()->format( Dates::DBYEARMONTHTIMEFORMAT );
+		}
+
+		$url = $tec->getLink( 'month', $event_date );
+
+		return add_query_arg( [ 'ical' => 1 ], $url );
 	}
 
 	/**
@@ -578,7 +587,7 @@ class Tribe__Events__iCal {
 	 * Get the Body With all the events of the .ics file
 	 *
 	 * @since 4.9.4
-	 * @since TBD - Utilize get_ical_output_for_an_event() to get the iCal output.
+	 * @since5.1.6 - Utilize get_ical_output_for_an_event() to get the iCal output.
 	 *
 	 * @param array $posts
 	 *
@@ -601,7 +610,7 @@ class Tribe__Events__iCal {
 	/**
 	 * Get the iCal Output for the provided event object.
 	 *
-	 * @since TBD
+	 * @since5.1.6
 	 *
 	 * @param \WP_Post             $event_post The event post object.
 	 * @param \Tribe__Events__Main $tec        An instance of the main TEC Class.

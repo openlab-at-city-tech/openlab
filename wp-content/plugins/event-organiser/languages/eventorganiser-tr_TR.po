@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 21:36+0000\n"
+"POT-Creation-Date: 2020-09-13 20:35+0000\n"
 "PO-Revision-Date: 2017-04-16T22:55:14+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1287,22 +1287,22 @@ msgid ""
 "%s."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:554 includes/class-eo-ical-parser.php:579
+#: includes/class-eo-ical-parser.php:560 includes/class-eo-ical-parser.php:585
 #, php-format
 msgid "[Lines %1$d-%2$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:561 includes/class-eo-ical-parser.php:586
+#: includes/class-eo-ical-parser.php:567 includes/class-eo-ical-parser.php:592
 #, php-format
 msgid "[Line %1$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1044
+#: includes/class-eo-ical-parser.php:1066
 #, php-format
 msgid "Invalid date \"%s\". Date expected in YYYYMMDD format."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1082
+#: includes/class-eo-ical-parser.php:1104
 #, php-format
 msgid ""
 "Invalid datetime \"%s\". Date expected in YYYYMMDDTHHiissZ or "
@@ -1880,12 +1880,12 @@ msgstr ""
 "Sadece var olan mekanlar seçilebilir. Bir mekan eklemek için mekanlar "
 "sayfasına gidin."
 
-#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:564 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:590
 msgid "Overview"
 msgstr "Önizleme"
 
-#: includes/event-organiser-cpt.php:566
+#: includes/event-organiser-cpt.php:565
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1895,7 +1895,7 @@ msgstr ""
 "etkinliklerin tek bir satır halinde göründüğüne </strong> ve başlangıç ile "
 "bitiş tarihinin o etkinliğin ilk tekrarını işaret ettiğine dikkat edin."
 
-#: includes/event-organiser-cpt.php:574
+#: includes/event-organiser-cpt.php:572
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1903,7 +1903,7 @@ msgstr ""
 "Mekanlar listesindeki bir satır üzerine fareyi getirirseniz, o mekanı "
 "yönetecek aksiyon bağlantıları görünür. Aksiyonlar şunlardır:"
 
-#: includes/event-organiser-cpt.php:576
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1911,15 +1911,15 @@ msgstr ""
 "Düzenle, sizi o mekanın düzenleme sayfasına götürür. O ekrana mekan "
 "başlığını tıklayarak da ulaşabilirsiniz."
 
-#: includes/event-organiser-cpt.php:577
+#: includes/event-organiser-cpt.php:575
 msgid "Delete will permanently remove the venue"
 msgstr "Sil, mekanı kalıcı olarak siler"
 
-#: includes/event-organiser-cpt.php:578
+#: includes/event-organiser-cpt.php:576
 msgid "View will take you to the venue's page"
 msgstr "Görüntüle, sizi mekan sayfasına taşır"
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:591
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1929,7 +1929,7 @@ msgstr ""
 "özeti için üzerine tıklayabilirsiniz. Aynı zamanda, gerekli izinlere "
 "sahipseniz etkinliğin düzenleme sayfasında bir bağlantı görüntülenir."
 
-#: includes/event-organiser-cpt.php:589
+#: includes/event-organiser-cpt.php:592
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1940,11 +1940,11 @@ msgstr ""
 "da filtreleyebilirsiniz. 'Güne gidin' düğmesi sizi hızlıca belrili bir güne "
 "taşır."
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:596
 msgid "Add Event"
 msgstr "Etkinnlik Ekleyin"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:597
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1959,28 +1959,28 @@ msgstr ""
 "yayınlanabilir ya da taslak olarak kaydedilebilir. Her halde etkinlik "
 "yaratılmış olur ve ileride bu etkinlik sayfasında düzenleme yapabilirsiniz."
 
-#: includes/event-organiser-cpt.php:600
+#: includes/event-organiser-cpt.php:604
 msgid "For more information"
 msgstr "Daha fazla bilgi için"
 
-#: includes/event-organiser-cpt.php:601
+#: includes/event-organiser-cpt.php:605
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "ile ilgili <a %s> dökümana bakın</a>"
 
-#: includes/event-organiser-cpt.php:602
+#: includes/event-organiser-cpt.php:606
 msgid "Debugging Event Organiser"
 msgstr "Event Organiser'da Hata Ayıklama"
 
-#: includes/event-organiser-cpt.php:603
+#: includes/event-organiser-cpt.php:607
 msgid "Go Pro!"
 msgstr "Pro'ya Yükseltin!"
 
-#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
+#: includes/event-organiser-cpt.php:717 includes/event-organiser-cpt.php:740
 msgid "Color"
 msgstr "Renk"
 
-#: includes/event-organiser-cpt.php:719
+#: includes/event-organiser-cpt.php:723
 msgid "Assign the category a colour."
 msgstr "Bir kategori rengi tayin edin"
 

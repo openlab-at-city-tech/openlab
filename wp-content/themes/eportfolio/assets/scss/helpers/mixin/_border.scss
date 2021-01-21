@@ -1,0 +1,20 @@
+@mixin border-bottom($width:1px,$type:solid){
+    border-bottom-style: $type;
+    border-bottom-width: $width;
+}
+@mixin border-top($width:1px,$type:solid){
+    border-top-style: $type;
+    border-top-width: $width;
+}
+@mixin border-left($width:1px,$type:solid){
+    border-left-style: $type;
+    border-left-width: $width;
+}
+@mixin border-right($width:1px,$type:solid){
+    border-right-style: $type;
+    border-right-width: $width;
+}
+@mixin border($width:1px,$type:solid){
+    border-style: $type;
+    border-width: $width;
+}

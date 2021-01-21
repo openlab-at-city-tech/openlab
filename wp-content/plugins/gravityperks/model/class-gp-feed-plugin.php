@@ -45,6 +45,15 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 			add_action( 'init', array( $this, 'disable_init_when_requirements_unmet' ), 1 );
 		}
 
+		/**
+		 * Exporting happens prior to init, hence the need to add these hooks during pre_init.
+		 *
+		 * It is worth noting that theme's functions.php will not have fired at this point, so the conditional to
+		 * check if exporting feeds is enabled is in the individual callbacks below.
+		 */
+		add_filter( 'gform_export_form', array( $this, 'export_feeds' ) );
+		add_action( 'gform_forms_post_import', array( $this, 'import_feeds' ) );
+
 	}
 
 	/**
@@ -52,7 +61,8 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 	 */
 	public function disable_init_when_requirements_unmet() {
 		if ( ! $this->check_requirements() ) {
-			remove_action( 'init', array( $this, 'init' ) );
+			$priority = GravityPerks::is_gf_version_gte( '2.5-beta-2' ) ? 15 : 10;
+			remove_action( 'init', array( $this, 'init' ), $priority );
 		}
 	}
 
@@ -99,6 +109,72 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 			$this->log_error( $message );
 		} else {
 			$this->log_debug( $message );
+		}
+	}
+
+	/**
+	 * Filter whether or not feed exporting/importing is enabled for this Perk.
+	 *
+	 * @return boolean
+	 */
+	public function is_feed_exporting_enabled() {
+		return apply_filters( 'gravityperks_export_feeds_' . $this->_slug, true );
+	}
+
+	/**
+	 * Export feeds for the current Perk during form export.
+	 *
+	 * Note, this is not something Gravity Forms currently does by default.
+	 *
+	 * @param $form array
+	 *
+	 * @return array
+	 */
+	public function export_feeds( $form ) {
+		if ( ! $this->is_feed_exporting_enabled() ) {
+			return $form;
+		}
+
+		if ( ! isset( $form['feeds'] ) ) {
+			$form['feeds'] = array();
+		}
+
+		$feeds = $this->get_feeds( $form['id'] );
+
+		if ( $feeds ) {
+			$form['feeds'][ $this->_slug ] = $feeds;
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Import feeds during form import if they are present in the JSON.
+	 *
+	 * Note, this is not something Gravity Forms currently does by default.
+	 *
+	 * @param $forms array
+	 */
+	public function import_feeds( $forms ) {
+		if ( ! $this->is_feed_exporting_enabled() ) {
+			return $forms;
+		}
+
+		foreach ( $forms as $form ) {
+			if ( ! rgars( $form, 'feeds/' . $this->_slug ) ) {
+				continue;
+			}
+
+			foreach ( $form['feeds'][ $this->_slug ] as $feed ) {
+				$this->insert_feed( $form['id'], $feed['is_active'], $feed['meta'] );
+			}
+
+			// Remove feeds object if no other feeds are defined.
+			if ( empty( $form['feeds'] ) ) {
+				unset( $form['feeds'] );
+			}
+
+			GFAPI::update_form( $form );
 		}
 	}
 

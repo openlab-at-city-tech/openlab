@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                 </thead>
                 <tbody></tbody>
             </table>
-            <p class="submit"><input type="submit" name="saving_host_id" class="button button-primary" value="Save"></p>
+            <p class="submit"><input type="submit" name="saving_host_id" class="button button-primary" value="<?php _e( 'Save', 'video-conferencing-with-zoom-api' ); ?>"></p>
         </form>
     </div>
 </div>

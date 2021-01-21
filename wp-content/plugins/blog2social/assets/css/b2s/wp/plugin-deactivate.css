@@ -1,0 +1,145 @@
+.b2s-plugin-modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+    content: "";
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+}
+.b2s-plugin-modal-btn-close{
+    color: #000;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    opacity: 0.4;
+    text-shadow: 0 1px 0 #fff;
+    background: transparent none repeat scroll 0 0;
+    border: 0 none;
+    cursor: pointer;
+    padding: 0;
+}
+.b2s-plugin-modal-dialog{
+    background: #fefefe none repeat scroll 0 0;
+    border-radius: 5px;
+    width: auto;
+    top:10%;
+    max-width: 600px;
+    position: relative;
+}
+@media(max-width: 420px) {
+    .b2s-plugin-modal-dialog{
+        margin: 10px;
+
+    }
+}
+@media(min-width: 421px) {
+    .b2s-plugin-modal-dialog{
+        margin: 30px auto;
+    }
+}
+.b2s-plugin-modal-body {
+    padding: 0px 15px;
+}
+.b2s-plugin-modal-header {
+    padding: 10px 20px;
+}
+.b2s-plugin-modal-header {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px;
+}
+.b2s-plugin-modal-footer {
+    border-top: 1px solid #e5e5e5;
+    padding: 15px;
+}
+.b2s-plugin-modal-title {
+    line-height: 1.42857;
+    font-size: 20px;
+    margin: 0;
+}
+.b2s-plugin-modal-h4 {
+    line-height: 1.42857;
+    font-size: 20px;
+    margin: 0;
+}
+#b2s-meta-box-close {
+    display: none;
+}
+.b2s-btn-success, .b2s-label-success {
+    background-color: #79B232 !important;
+}
+.b2s-center-block {
+    display: block !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+.b2s-btn-success {
+    background-color: #79B232 !important;
+    border-color: #398439 !important;
+    color: #fff !important;
+}
+.b2s-btn-primary {
+    color: #fff !important;
+    background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;
+}
+.b2s-btn-none-underline{
+    text-decoration: none !important;
+}
+.b2s-btn {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.b2s-btn-margin-bottom-15{
+    margin-bottom: 1.5em;
+}
+.b2s-info-btn{
+    font-size: 12px;
+}
+.b2s-btn-sm{
+    padding: 4px 12px !important;
+}
+.b2s-btn-close-meta-box{
+    padding: 0px !important;
+    float:right;
+    position: relative !important;
+}
+.b2s-close-icon::before {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    color: #b4b9be;
+    content: "";
+    display: block;
+    font: 16px/20px dashicons;
+    height: 20px;
+    text-align: center;
+    width: 20px;
+}
+.b2s-close-icon{
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #b4b9be;
+    cursor: pointer;
+    margin: 0;
+    padding: 9px;
+    position: absolute;
+    right: 1px;
+    top: 0;
+}

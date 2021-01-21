@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.5.1
-Stable tag: 3.6.6
+Tested up to: 5.5.3
+Stable tag: 3.6.8
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -244,6 +244,18 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.8 =
+* New: Added an option to define a Not Earned Badge Icon for display on Badge Page
+* New: Added new shortcode to display badge evidence information on achievement earned email.
+* Fix: Fixed evidence shortcode output.
+* Fix: Fixed multiple badge award issue on editing same comments.
+* Fix: Fixed license key issue for badgeos-addons.
+
+= 3.6.7 =
+* New: Added User Ranks Widget
+* New: Added User Points Widget
+* Fix: Disables Credly Integration
 
 = 3.6.6 =
 * New: Award users for completing the number of years

@@ -1,0 +1,33 @@
+
+.comment-form{
+    textarea,input[type=text],input[type=email],input[type=url]{
+        width: 100%;
+        @include border();
+        border-color: $color_blue_gray;
+        padding: 10px 15px;
+    }
+    
+    
+    input[type=submit]{
+        @extend %comment-btn;
+        @include transition();
+        width: 100%;
+        text-align: center;
+        &:hover{
+            background-color: $color_primary;
+            color: $color_white;
+        }
+        @include media(sm){
+            margin-right: 10px;
+            width: initial;
+        }
+      
+    }
+    input[type=checkbox]{
+        position: relative;
+        top: 6px;
+    }
+    .comment-form-cookies-consent{
+        display: flex;
+    }
+}   

@@ -104,14 +104,25 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			if ( is_wp_error( $s3_region ) ) {
 				$s3_region = '';
 			}
-			$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
-			ewwwio_debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
+			if ( ! empty( $s3_bucket ) && ! is_wp_error( $s3_bucket ) && method_exists( $as3cf, 'get_provider' ) ) {
+				$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
+			} elseif ( ! empty( $s3_bucket ) && ! is_wp_error( $s3_bucket ) && method_exists( $as3cf, 'get_storage_provider' ) ) {
+				$s3_domain = $as3cf->get_storage_provider()->get_url_domain( $s3_bucket, $s3_region );
+			}
 			if ( ! empty( $s3_domain ) && $as3cf->get_setting( 'serve-from-s3' ) ) {
+				ewwwio_debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
 				$this->webp_paths[] = $s3_scheme . '://' . $s3_domain . '/';
-				$this->s3_active    = $s3_domain;
+				if ( $as3cf->get_setting( 'enable-delivery-domain' ) && $as3cf->get_setting( 'delivery-domain' ) ) {
+					$delivery_domain    = $as3cf->get_setting( 'delivery-domain' );
+					$this->webp_paths[] = $s3_scheme . '://' . $delivery_domain . '/';
+					$this->debug_message( "found WOM delivery domain of $delivery_domain" );
+				}
+				$this->s3_active = $s3_domain;
 				if ( $as3cf->get_setting( 'enable-object-prefix' ) ) {
 					$this->s3_object_prefix = $as3cf->get_setting( 'object-prefix' );
 					$this->debug_message( $as3cf->get_setting( 'object-prefix' ) );
+				} else {
+					$this->debug_message( 'no WOM prefix' );
 				}
 				if ( $as3cf->get_setting( 'object-versioning' ) ) {
 					$this->s3_object_version = true;
@@ -120,6 +131,9 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			}
 		}
 
+		if ( function_exists( 'swis' ) && swis()->settings->get_option( 'cdn_domain' ) ) {
+			$this->webp_paths[] = swis()->settings->get_option( 'cdn_domain' );
+		}
 		foreach ( $this->webp_paths as $webp_path ) {
 			$webp_domain = $this->parse_url( $webp_path, PHP_URL_HOST );
 			if ( $webp_domain ) {
@@ -198,11 +212,16 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			'usemap',
 			'vspace',
 			'width',
+			'data-animation',
 			'data-attachment-id',
+			'data-auto-height',
 			'data-caption',
 			'data-comments-opened',
+			'data-delay',
 			'data-event-trigger',
+			'data-flex_fx',
 			'data-height',
+			'data-hide-on-end',
 			'data-highlight-color',
 			'data-highlight-border-color',
 			'data-highlight-border-opacity',
@@ -211,18 +230,32 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			'data-image-meta',
 			'data-image-title',
 			'data-image-description',
+			'data-interval',
 			'data-large_image_width',
 			'data-large_image_height',
 			'data-lazy',
 			'data-lazy-type',
+			'data-mode',
+			'data-name',
 			'data-no-lazy',
 			'data-orig-size',
+			'data-partial',
+			'data-per-view',
 			'data-permalink',
 			'data-pin-description',
 			'data-pin-id',
 			'data-pin-media',
 			'data-pin-url',
+			'data-rel',
+			'data-ride',
+			'data-shadow',
+			'data-shadow-direction',
+			'data-slide',
+			'data-slide-to',
+			'data-target',
+			'data-vc-zoom',
 			'data-width',
+			'data-wrap',
 		);
 		foreach ( $attributes as $attribute ) {
 			$attr_value = $this->get_attribute( $image, $attribute );
@@ -367,6 +400,7 @@ class EIO_Alt_Webp extends EIO_Page_Parser {
 			is_embed() ||
 			is_feed() ||
 			is_preview() ||
+			is_customize_preview() ||
 			( defined( 'REST_REQUEST' ) && REST_REQUEST ) ||
 			preg_match( '/^<\?xml/', $buffer ) ||
 			strpos( $buffer, 'amp-boilerplate' ) ||

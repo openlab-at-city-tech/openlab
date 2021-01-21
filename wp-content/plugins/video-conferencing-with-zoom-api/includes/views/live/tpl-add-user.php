@@ -86,6 +86,6 @@
 			<?php } ?>
             </tbody>
         </table>
-        <p class="submit"><input type="submit" name="add_zoom_user" class="button button-primary" value="Create User"></p>
+        <p class="submit"><input type="submit" name="add_zoom_user" class="button button-primary" value="<?php _e( 'Create User', 'video-conferencing-with-zoom-api' ); ?>"></p>
     </form>
 </div>

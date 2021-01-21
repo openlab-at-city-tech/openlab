@@ -2,10 +2,10 @@
     font-family: 'Material Icons';
     font-style: normal;
     font-weight: 400;
-    src: url('../css/jufonts/MaterialIcons-Regular.eot'); /* For IE6-8 */
-    src: url('../css/jufonts/MaterialIcons-Regular.woff2') format('woff2'),
-    url('../css/jufonts/MaterialIcons-Regular.woff') format('woff'),
-    url('../css/jufonts/MaterialIcons-Regular.ttf') format('truetype');
+    src: url('jufonts/MaterialIcons-Regular.eot'); /* For IE6-8 */
+    src: url('jufonts/MaterialIcons-Regular.woff2') format('woff2'),
+    url('jufonts/MaterialIcons-Regular.woff') format('woff'),
+    url('jufonts/MaterialIcons-Regular.ttf') format('truetype');
 }
 .material-icons{
     font-family: 'Material Icons';
@@ -232,7 +232,7 @@ a, div {
     text-decoration: none;
     cursor: pointer;
     font-size: 14px;
-    border: 1px solid #ff8726;
+    border: 1px solid #655997;
     margin-left: 10px;
     font-weight: bold;
     padding: 0 10px;

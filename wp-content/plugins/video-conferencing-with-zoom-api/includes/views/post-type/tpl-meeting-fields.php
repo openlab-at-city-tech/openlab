@@ -30,75 +30,104 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php _e( 'If you need to show this meeting on another page or post please use this shortcode', 'video-conferencing-with-zoom-api' ); ?>
                 </p>
             </td>
-
         </tr>
 		<?php
 	}
 
-	$show_host = apply_filters( 'vczapi_admin_show_host_selection', true );
-	if ( $show_host ) {
-		if ( ! empty( $meeting_details ) && ! empty( $meeting_details->id ) && $post->post_status === 'publish' ) { ?>
-            <tr class="zoom-host-id-selection-admin">
-                <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
-                <td>
-					<?php
-					if ( ! empty( $meeting_details->host_id ) ) {
-						$user = json_decode( zoom_conference()->getUserInfo( $meeting_details->host_id ) );
-						if( !empty($user) ) {
-							if ( ! empty( $user->code ) ) {
-								echo $user->message;
-							} else {
-								echo '<input type="hidden" name="userId" value="' . $user->id . '">';
-								echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )';
-							}
-                        } else {
-							_e( 'Please check your internet connection or API connection.', 'video-conferencing-with-zoom-api' );
-                        }
+	if ( ! empty( $meeting_details ) && ! empty( $meeting_details->id ) && ( $post->post_status === 'publish' || $post->post_status === 'draft' || $post->post_status === 'pending' ) ) { ?>
+        <tr class="zoom-host-id-selection-admin">
+            <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
+            <td>
+				<?php
+				if ( ! empty( $meeting_details->host_id ) ) {
+					$user = json_decode( zoom_conference()->getUserInfo( $meeting_details->host_id ) );
+					if ( ! empty( $user ) ) {
+						if ( ! empty( $user->code ) ) {
+							echo $user->message;
+						} else {
+							echo '<input type="hidden" name="userId" value="' . $user->id . '">';
+							echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )';
+						}
 					} else {
-						printf( __( 'Did not find any hosts here ? Please %scheck here%s to verify your API keys are working correctly.', 'video-conferencing-with-zoom-api' ), '<a href="' . admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-settings' ) . '">', '</a>' );
-					} ?>
-                    <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
-                <td>
-                    <p><?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? __( 'Zoom Webinar', 'video-conferencing-with-zoom-api' ) : __( 'Zoom Meeting', 'video-conferencing-with-zoom-api' ); ?></p>
-                    <p class="description"><?php _e( 'You cannot update meeting type. This is not allowed to avoid any conflict issues.', 'video-conferencing-with-zoom-api' ); ?></p>
-                    <input type="hidden" name="meeting_type" value="<?php esc_attr_e( $meeting_fields['meeting_type'] ); ?>">
-                </td>
-            </tr>
+						_e( 'Please check your internet connection or API connection.', 'video-conferencing-with-zoom-api' );
+					}
+				} else {
+					printf( __( 'Did not find any hosts here ? Please %scheck here%s to verify your API keys are working correctly.', 'video-conferencing-with-zoom-api' ), '<a href="' . admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-settings' ) . '">', '</a>' );
+				} ?>
+                <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
+            <td>
+                <p><?php echo ! empty( $meeting_fields['meeting_type'] ) && $meeting_fields['meeting_type'] === 2 ? __( 'Zoom Webinar', 'video-conferencing-with-zoom-api' ) : __( 'Zoom Meeting', 'video-conferencing-with-zoom-api' ); ?></p>
+                <p class="description"><?php _e( 'You cannot update meeting type. This is not allowed to avoid any conflict issues.', 'video-conferencing-with-zoom-api' ); ?></p>
+                <input type="hidden" name="meeting_type" value="<?php esc_attr_e( $meeting_fields['meeting_type'] ); ?>">
+            </td>
+        </tr>
+		<?php
+	} else {
+		$host_id = get_user_meta( get_current_user_id(), 'user_zoom_hostid', true );
+		if ( ! empty( $host_id ) ) {
+			?>
+            <tr class="zoom-host-id-selection-admin">
+            <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
+            <td>
+				<?php
+				$user = json_decode( zoom_conference()->getUserInfo( $host_id ) );
+				if ( ! empty( $user ) ) {
+					if ( ! empty( $user->code ) ) {
+						echo $user->message;
+					} else {
+						echo '<input type="hidden" name="userId" value="' . $user->id . '">';
+						echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )';
+					}
+				} else {
+					_e( 'Please check your internet connection or API connection.', 'video-conferencing-with-zoom-api' );
+				}
+				?>
+                <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
+            </td>
 			<?php
 		} else {
 			?>
             <tr class="zoom-host-id-selection-admin">
                 <th scope="row"><label for="userId"><?php _e( 'Meeting Host *', 'video-conferencing-with-zoom-api' ); ?></label></th>
                 <td>
-					<?php if ( ! empty( $users ) ) { ?>
-                        <select name="userId" required class="zvc-hacking-select vczapi-admin-post-type-host-selector">
-                            <option value=""><?php _e( 'Select a Host', 'video-conferencing-with-zoom-api' ); ?></option>
-							<?php foreach ( $users as $user ) { ?>
-                                <option value="<?php echo $user->id; ?>" <?php ! empty( $meeting_fields['userId'] ) ? selected( esc_attr( $meeting_fields['userId'] ), $user->id ) : false; ?> ><?php echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )'; ?></option>
-							<?php } ?>
-                        </select>
+					<?php
+					if ( ! empty( $users ) ) {
+						$count = count( $users );
+						if ( $count == 1 ) {
+							?>
+                            <input type="hidden" name="userId" value="<?php echo $users[0]->id; ?>">
+                            <span><?php echo esc_html( $users[0]->first_name ) . ' ( ' . esc_html( $users[0]->email ) . ' )'; ?></span>
+						<?php } else { ?>
+                            <select name="userId" required class="zvc-hacking-select vczapi-admin-post-type-host-selector">
+                                <option value=""><?php _e( 'Select a Host', 'video-conferencing-with-zoom-api' ); ?></option>
+								<?php foreach ( $users as $user ) { ?>
+                                    <option value="<?php echo $user->id; ?>" <?php selected( $users[0]->id, $user->id ); ?> ><?php echo esc_html( $user->first_name ) . ' ( ' . esc_html( $user->email ) . ' )'; ?></option>
+								<?php } ?>
+                            </select>
+						<?php } ?>
+                        <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
 					<?php } else {
 						printf( __( 'Did not find any hosts here ? Please %scheck here%s to verify your API keys are working correctly.', 'video-conferencing-with-zoom-api' ), '<a href="' . admin_url( 'edit.php?post_type=zoom-meetings&page=zoom-video-conferencing-settings' ) . '">', '</a>' );
 					} ?>
-                    <p class="description" id="userId-description"><?php _e( 'This is host ID for the meeting (Required).', 'video-conferencing-with-zoom-api' ); ?></p>
                 </td>
             </tr>
-            <tr class="zoom-meeting-type-selection-admin">
-                <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
-                <td>
-                    <select id="vczapi-admin-meeting-ype" name="meeting_type" class="meeting-type-selection">
-                        <option value="1" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 1 ) : false; ?>>Meeting</option>
-                        <option value="2" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 2 ) : false; ?>>Webinar</option>
-                    </select>
-                    <p class="description" id="userId-description"><?php _e( 'Which type of meeting do you want to create. Note: Webinar requires Zoom Webinar Plan enabled in your account.', 'video-conferencing-with-zoom-api' ); ?>
-                        ?</p>
-                </td>
-            </tr>
-		<?php }
+		<?php } ?>
+        <tr class="zoom-meeting-type-selection-admin">
+            <th scope="row"><label for="meeting_type"><?php _e( 'Meeting Type', 'video-conferencing-with-zoom-api' ); ?></label></th>
+            <td>
+                <select id="vczapi-admin-meeting-ype" name="meeting_type" class="meeting-type-selection">
+                    <option value="1" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 1 ) : false; ?>>Meeting</option>
+                    <option value="2" <?php ! empty( $meeting_fields['meeting_type'] ) ? selected( esc_attr( absint( $meeting_fields['meeting_type'] ) ), 2 ) : false; ?>>Webinar</option>
+                </select>
+                <p class="description" id="userId-description"><?php _e( 'Which type of meeting do you want to create. Note: Webinar requires Zoom Webinar Plan enabled in your account.', 'video-conferencing-with-zoom-api' ); ?>
+                    ?</p>
+            </td>
+        </tr>
+		<?php
 	}
 	?>
     <tr>

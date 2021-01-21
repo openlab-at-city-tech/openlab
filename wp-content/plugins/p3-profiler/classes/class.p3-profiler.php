@@ -231,7 +231,9 @@ class P3_Profiler {
 				// If you're reading this, try setting eaccelerator.optimizer = 0 in a .user.ini or .htaccess file
 			} elseif (extension_loaded( 'Zend Optimizer+' ) ) {
 				@ini_set('zend_optimizerplus.optimization_level', 0);
-			}
+			} elseif (extension_loaded('Zend OPcache')) {				
+				@ini_set('opcache.enable', 0);
+			} 
 			// Tested with wincache
 			// Tested with ioncube
 			// Tested with zend guard loader
@@ -239,6 +241,10 @@ class P3_Profiler {
 
 		// Monitor all function-calls
 		declare( ticks = 1 );
+		if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+			require __DIR__ . '/class.streamwrapper.php';
+			FileStreamWrapper::init();
+		}
 		register_tick_function( array( $this, 'tick_handler' ) );
 	}
 

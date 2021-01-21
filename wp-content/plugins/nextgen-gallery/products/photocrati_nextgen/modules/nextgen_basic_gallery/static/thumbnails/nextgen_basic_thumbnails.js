@@ -1,7 +1,7 @@
 jQuery(function($) {
     var ngg_imagebrowser_init = function() {
         var imagebrowser_links = $('a.use_imagebrowser_effect');
-        imagebrowser_links.click(function(e) {
+        imagebrowser_links.on('click', function(e) {
             e.preventDefault();
             var success = true;
             var $this   = $(this);

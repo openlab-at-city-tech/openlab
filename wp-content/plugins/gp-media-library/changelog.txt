@@ -1,6 +1,84 @@
 
 # Changelog
 
+## 1.2.16
+
+	- Fixed an issue where GPML may generate PHP notices if no file is uploaded.
+	- Fixed an issue where the uploaded file's form ID may not be captured correctly.
+
+## 1.2.15
+
+	- Fixed an issue where image size names containing a dash were not recognized in merge tags.
+
+## 1.2.14
+
+	- Fixed potential PHP notice when GF Media Library is used on a form that's also using Live Merge Tags from GF Populate Anything.
+
+## 1.2.13
+
+	- Added GP_Media_Library::acf_update_field() and refactored to use this method where possible.
+
+## 1.2.12
+
+	- Added [gpml_supported_field_types](https://gravitywiz.com/documentation/gpml_supported_field_types) filter.
+
+## 1.2.11
+
+	- Updated how file IDs are retrieved from existing file URLs to use a core WordPress function as it is more comprehensive.
+
+## 1.2.10
+
+	- Fixed issue where files with customized file paths (via [gform_upload_path](https://docs.gravityforms.com/gform_upload_path/) filter) failed importation.
+
+## 1.2.9
+
+	- Added support for populating WooCommerce product gallery when creating a product via Gravity Forms.
+	- Added [gpml_auto_convert_custom_fields](https://gravitywiz.com/documentation/gpml_auto_convert_custom_fields/) filter to allow auto-converting any custom field.
+
+## 1.2.8
+
+	- Fixed fatal error that occurred when mapping a GPML-enabled file upload field to a custom field via the Advanced Post Creation add-on.
+
+## 1.2.7
+
+	- Added [gpml_delete_entry_files_from_media_library](https://gravitywiz.com/documentation/gpml_delete_entry_files_from_media_library/) filter to allow filtering whether files imported into the Media library should be deleted when their corresponding entry is deleted.
+
+## 1.2.6
+
+	- Fixed issue where files that failed import were deleted.
+
+## 1.2.5
+
+	- Updated error processing to allow single import failures. Previously import would fail for all images if any image failed.
+
+## 1.2.4
+
+	- Fixed issue where Media Library files were not correctly attached to Gravity Forms notifications.
+
+## 1.2.3
+
+	- Added additional logging when a file fails to upload.
+
+## 1.2.2
+
+	- Added logging support.
+
+## 1.3
+
+	- Fixed fatal error that occurred when field mapped in Advanced Post Creation feed no longer exists.
+
+## 1.2.1
+
+	- Fixed fatal error that occurred when field mapped in Advanced Post Creation feed no longer exists.
+
+## 1.2
+
+	- Added support for integrating the [Advanced Custom Fields](https://www.advancedcustomfields.com/) and [Advanced Post Creation](https://www.gravityforms.com/add-ons/advanced-post-creation/).
+
+## 1.1
+
+    - Added support for [Slim Image Cropper for Gravity Forms](https://gwiz.io/2XYLv5D).
+
 ## 1.0.14
 
 	- Updated minimum GF version to actual required version: 2.0.8

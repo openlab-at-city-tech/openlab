@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, admin order, categories sort, order category
 Requires at least: 2.8
-Tested up to: 5.5
-Stable tag: 1.5.7.3
+Tested up to: 5.6
+Stable tag: 1.5.7.4
 
 Order Categories and all custom taxonomies terms (hierarchically) and child terms using a Drag and Drop Sortable javascript capability. 
 
@@ -59,8 +59,11 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 == Change Log ==
 
+= 1.5.7.4 =
+ - Compatibility tag update for WordPress 5.6
+
 = 1.5.7.3 =
-  - Compatibility tag update for WordPress 5.5
+ - Compatibility tag update for WordPress 5.5
 
 = 1.5.7.2 =
   - Compatibility tag update for WordPress 5.4

@@ -70,6 +70,19 @@ function bp_db_version_raw() {
 		return !empty( $bp->db_version_raw ) ? $bp->db_version_raw : 0;
 	}
 
+/**
+ * Check whether the current version of WP exceeds a given version.
+ *
+ * @since 7.0.0
+ *
+ * @param string $version WP version, in "PHP-standardized" format.
+ * @param string $compare Optional. Comparison operator. Default '>='.
+ * @return bool
+ */
+function bp_is_running_wp( $version, $compare = '>=' ) {
+	return version_compare( $GLOBALS['wp_version'], $version, $compare );
+}
+
 /** Functions *****************************************************************/
 
 /**
@@ -515,7 +528,7 @@ function bp_core_get_directory_page_ids( $status = 'active' ) {
 			unset( $page_ids[ $component_name ] );
 		}
 
-		// 'register' and 'activate' do not have components, but should be whitelisted.
+		// 'register' and 'activate' do not have components, but are allowed as special cases.
 		if ( in_array( $component_name, array( 'register', 'activate' ), true ) ) {
 			continue;
 		}
@@ -1562,7 +1575,7 @@ add_action( 'wp_head', 'bp_core_record_activity' );
  * @since 1.0.0
  *
  * @param int|string $last_activity_date The date of last activity.
- * @param string     $string             A sprintf()-able statement of the form 'active %s'.
+ * @param string     $string             A sprintf()-able statement of the form 'Active %s'.
  * @return string $last_active A string of the form '3 years ago'.
  */
 function bp_core_get_last_activity( $last_activity_date = '', $string = '' ) {
@@ -1584,7 +1597,7 @@ function bp_core_get_last_activity( $last_activity_date = '', $string = '' ) {
 	 *
 	 * @param string $last_active        Last activity string based on time since date given.
 	 * @param string $last_activity_date The date of last activity.
-	 * @param string $string             A sprintf()-able statement of the form 'active %s'.
+	 * @param string $string             A sprintf()-able statement of the form 'Active %s'.
 	 */
 	return apply_filters( 'bp_core_get_last_activity', $last_active, $last_activity_date, $string );
 }
@@ -2580,7 +2593,7 @@ function bp_nav_menu_get_loggedin_pages() {
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_excerpt'   => $bp_item['slug'],
-			'post_type'      => 'page',
+			'post_type'      => 'bp_nav_menu_item',
 			'post_status'    => 'publish',
 			'comment_status' => 'closed',
 			'guid'           => $bp_item['link']
@@ -2655,7 +2668,7 @@ function bp_nav_menu_get_loggedout_pages() {
 			'post_author'    => 0,
 			'post_date'      => 0,
 			'post_excerpt'   => $bp_item['slug'],
-			'post_type'      => 'page',
+			'post_type'      => 'bp_nav_menu_item',
 			'post_status'    => 'publish',
 			'comment_status' => 'closed',
 			'guid'           => $bp_item['link']
@@ -2937,6 +2950,41 @@ function bp_get_email_post_type_supports() {
 /** Taxonomies *****************************************************************/
 
 /**
+ * Returns the BP Taxonomy common arguments.
+ *
+ * @since 7.0.0
+ *
+ * @return array The BP Taxonomy common arguments.
+ */
+function bp_get_taxonomy_common_args() {
+	return array(
+		'public'        => false,
+		'show_in_rest'  => false,
+		'query_var'     => false,
+		'rewrite'       => false,
+		'show_in_menu'  => false,
+		'show_tagcloud' => false,
+		'show_ui'       => bp_is_root_blog() && bp_current_user_can( 'bp_moderate' ),
+	);
+}
+
+/**
+ * Returns the BP Taxonomy common labels.
+ *
+ * @since 7.0.0
+ *
+ * @return array The BP Taxonomy common labels.
+ */
+function bp_get_taxonomy_common_labels() {
+	return array(
+		'bp_type_name'           => _x( 'Plural Name', 'BP Type name label', 'buddypress' ),
+		'bp_type_singular_name'  => _x( 'Singular name', 'BP Type singular name label', 'buddypress' ),
+		'bp_type_has_directory'  => _x( 'Has Directory View', 'BP Type has directory checkbox label', 'buddypress' ),
+		'bp_type_directory_slug' => _x( 'Custom type directory slug', 'BP Type slug label', 'buddypress' ),
+	);
+}
+
+/**
  * Output the name of the email type taxonomy.
  *
  * @since 2.5.0
@@ -2998,6 +3046,233 @@ function bp_get_email_tax_type_labels() {
 	) );
 }
 
+/**
+ * Return arguments used by the email type taxonomy.
+ *
+ * @since 7.0.0
+ *
+ * @return array
+ */
+function bp_get_email_tax_type_args() {
+
+	/**
+	 * Filters emails type taxonomy args.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param array $value Associative array (key => arg).
+	 */
+	return apply_filters(
+		'bp_register_email_tax_type',
+		array_merge(
+			array(
+				'description'   => _x( 'BuddyPress email types', 'email type taxonomy description', 'buddypress' ),
+				'labels'        => bp_get_email_tax_type_labels(),
+				'meta_box_cb'   => 'bp_email_tax_type_metabox',
+			),
+			bp_get_taxonomy_common_args()
+		)
+	);
+}
+
+/**
+ * Returns the default BuddyPress type metadata schema.
+ *
+ * @since 7.0.0
+ *
+ * @param  boolean $suppress_filters Whether to suppress filters. Default `false`.
+ * @param  string  $type_taxonomy    Optional. the Type's taxonomy name.
+ * @return array                     The default BuddyPress type metadata schema.
+ */
+function bp_get_type_metadata_schema( $suppress_filters = false, $type_taxonomy = '' ) {
+	$schema = array(
+		'bp_type_singular_name' => array(
+			'description'       => __( 'The name of this type in singular form. ', 'buddypress' ),
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+		),
+		'bp_type_name' => array(
+			'description'       => __( 'The name of this type in plural form.', 'buddypress' ),
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+		),
+		'bp_type_has_directory' => array(
+			'description'       => __( 'Make a list matching this type available on the directory.', 'buddypress' ),
+			'type'              => 'boolean',
+			'single'            => true,
+			'sanitize_callback' => 'absint',
+		),
+		'bp_type_directory_slug' => array(
+			'label'             => __( 'Type slug', 'buddypress' ),
+			'description'       => __( 'Enter if you want the type slug to be different from its ID.', 'buddypress' ),
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_title',
+		),
+	);
+
+	if ( true === $suppress_filters ) {
+		return $schema;
+	}
+
+	/**
+	 * Filter here to add new meta to the BuddyPress type metadata.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param array  $schema        Associative array (name => arguments).
+	 * @param string $type_taxonomy The Type's taxonomy name.
+	 */
+	return apply_filters( 'bp_get_type_metadata_schema', $schema, $type_taxonomy );
+}
+
+/**
+ * Registers a meta key for BuddyPress types.
+ *
+ * @since 7.0.0
+ *
+ * @param string $type_tax The BuddyPress type taxonomy.
+ * @param string $meta_key The meta key to register.
+ * @param array  $args     Data used to describe the meta key when registered. See
+ *                         {@see register_meta()} for a list of supported arguments.
+ * @return bool True if the meta key was successfully registered, false if not.
+ */
+function bp_register_type_meta( $type_tax, $meta_key, array $args ) {
+	$taxonomies = wp_list_pluck( bp_get_default_taxonomies(), 'component' );
+
+	if ( ! isset( $taxonomies[ $type_tax ] ) ) {
+		return false;
+	}
+
+	// register_term_meta() was introduced in WP 4.9.8.
+	if ( ! bp_is_running_wp( '4.9.8' ) ) {
+		$args['object_subtype'] = $type_tax;
+
+		return register_meta( 'term', $meta_key, $args );
+	}
+
+	return register_term_meta( $type_tax, $meta_key, $args );
+}
+
+/**
+ * Update a list of metadata for a given type ID and a given taxonomy.
+ *
+ * @since 7.0.0
+ *
+ * @param  integer $type_id    The database ID of the BP Type.
+ * @param  string  $taxonomy   The BP Type taxonomy.
+ * @param  array   $type_metas An associative array (meta_key=>meta_value).
+ * @return boolean             False on failure. True otherwise.
+ */
+function bp_update_type_metadata( $type_id = 0, $taxonomy = '', $type_metas = array() ) {
+	if ( ! $type_id || ! $taxonomy || ! is_array( $type_metas ) ) {
+		return false;
+	}
+
+	foreach ( $type_metas as $meta_key => $meta_value ) {
+		if ( ! registered_meta_key_exists( 'term', $meta_key, $taxonomy ) ) {
+			continue;
+		}
+
+		update_term_meta( $type_id, $meta_key, $meta_value );
+	}
+
+	return true;
+}
+
+/**
+ * Get types for a given BP Taxonomy.
+ *
+ * @since 7.0.0
+ *
+ * @param string $taxonomy The taxonomy to transform terms in types for.
+ * @param array  $types    Existing types to merge with the types found into the database.
+ *                         For instance this function is used internally to merge Group/Member
+ *                         types registered using code with the ones created by the administrator
+ *                         from the Group/Member types Administration screen. If not provided, only
+ *                         Types created by the administrator will be returned.
+ *                         Optional.
+ * @return array           The types of the given taxonomy.
+ */
+function bp_get_taxonomy_types( $taxonomy = '', $types = array() ) {
+	if ( ! $taxonomy ) {
+		return $types;
+	}
+
+	$db_types = wp_cache_get( $taxonomy, 'bp_object_terms' );
+
+	if ( ! $db_types ) {
+		$terms = bp_get_terms(
+			array(
+				'taxonomy' => $taxonomy,
+			)
+		);
+
+		if ( ! is_array( $terms ) || ! $terms ) {
+			return $types;
+		}
+
+		$type_metadata = array_keys( get_registered_meta_keys( 'term', $taxonomy ) );
+
+		foreach ( $terms as $term ) {
+			$type_name                      = $term->name;
+			$db_types[ $type_name ]         = new stdClass();
+			$db_types[ $type_name ]->db_id  = $term->term_id;
+			$db_types[ $type_name ]->labels = array();
+			$db_types[ $type_name ]->name   = $type_name;
+
+			if ( $type_metadata ) {
+				foreach ( $type_metadata as $meta_key ) {
+					$type_key = str_replace( 'bp_type_', '', $meta_key );
+					if ( in_array( $type_key, array( 'name', 'singular_name' ), true ) ) {
+						$db_types[ $type_name ]->labels[ $type_key ] = get_term_meta( $term->term_id, $meta_key, true );
+					} else {
+						$db_types[ $type_name ]->{$type_key} = get_term_meta( $term->term_id, $meta_key, true );
+					}
+				}
+
+				if ( ! empty( $db_types[ $type_name ]->has_directory ) && empty( $db_types[ $type_name ]->directory_slug ) ) {
+					$db_types[ $type_name ]->directory_slug = $term->slug;
+				}
+			}
+		}
+
+		wp_cache_set( $taxonomy, $db_types, 'bp_object_terms' );
+	}
+
+	if ( is_array( $db_types ) ) {
+		foreach ( $db_types as $db_type_name => $db_type ) {
+			// Override props of registered by code types if customized by the admun user.
+			if ( isset( $types[ $db_type_name ] ) && isset( $types[ $db_type_name ]->code ) && $types[ $db_type_name ]->code ) {
+				// Merge Labels.
+				if ( $db_type->labels ) {
+					foreach ( $db_type->labels as $key_label => $value_label ) {
+						if ( '' !== $value_label ) {
+							$types[ $db_type_name ]->labels[ $key_label ] = $value_label;
+						}
+					}
+				}
+
+				// Merge other properties.
+				foreach ( get_object_vars( $types[ $db_type_name ] ) as $key_prop => $value_prop ) {
+					if ( 'labels' === $key_prop || 'name' === $key_prop ) {
+						continue;
+					}
+
+					if ( isset( $db_type->{$key_prop} ) && '' !== $db_type->{$key_prop} ) {
+						$types[ $db_type_name  ]->{$key_prop} = $db_type->{$key_prop};
+					}
+				}
+
+				unset( $db_types[ $db_type_name ] );
+			}
+		}
+	}
+
+	return array_merge( $types, (array) $db_types );
+}
 
 /** Email *****************************************************************/
 
@@ -3280,7 +3555,7 @@ function bp_email_get_appearance_settings() {
 		)
 	);
 
-	if ( version_compare( $GLOBALS['wp_version'], '4.9.6', '>=' ) ) {
+	if ( bp_is_running_wp( '4.9.6' ) ) {
 		$privacy_policy_url = get_privacy_policy_url();
 		if ( $privacy_policy_url ) {
 			$footer_text[] = sprintf(
@@ -3400,7 +3675,15 @@ function bp_core_replace_tokens_in_text( $text, $tokens ) {
  * @return array
  */
 function bp_email_get_schema() {
-	return array(
+
+	/**
+	 * Filters the list of `bp_email_get_schema()` allowing anyone to add/remove emails.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param array $emails The array of emails schema.
+	 */
+	return (array) apply_filters( 'bp_email_get_schema', array(
 		'activity-comment' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '[{{{site.name}}}] {{poster.name}} replied to one of your updates', 'buddypress' ),
@@ -3532,7 +3815,7 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
-	);
+	) );
 }
 
 /**
@@ -3559,7 +3842,7 @@ function bp_email_get_type_schema( $field = 'description' ) {
 		'unsubscribe'	=> array(
 			'meta_key'	=> 'notification_activity_new_reply',
 			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
-			),
+		),
 	);
 
 	$activity_comment_author = array(
@@ -3567,7 +3850,7 @@ function bp_email_get_type_schema( $field = 'description' ) {
 		'unsubscribe'	=> array(
 			'meta_key'	=> 'notification_activity_new_reply',
 			'message'	=> __( 'You will no longer receive emails when someone replies to an update or comment you posted.', 'buddypress' ),
-			),
+		),
 	);
 
 	$activity_at_message = array(

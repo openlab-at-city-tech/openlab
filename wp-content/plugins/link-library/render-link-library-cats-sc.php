@@ -47,7 +47,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
     if ( isset($_GET['cat_id'] ) ) {
         $categoryid = intval( $_GET['cat_id'] );
     } elseif ( isset( $_GET['catname'] ) ) {
-        $categoryterm = get_term_by( 'name', urldecode( $_GET['catname'] ), 'link_category' );
+        $categoryterm = get_term_by( 'name', urldecode( $_GET['catname'] ), 'link_library_category' );
 	    $categoryid = $categoryterm->term_id;
     } elseif ( $showonecatonly ) {
 	    $categoryid = $defaultsinglecat_cpt;
@@ -66,10 +66,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
         if ( $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
             $nonce = wp_create_nonce( 'link_library_ajax_refresh' );
 
-            $output .= "<SCRIPT LANGUAGE=\"JavaScript\">\n";
+            $output .= "<script type=\"text/javascript\">\n";
             $output .= "var ajaxobject;\n";
 	        $output .= "if(typeof showLinkCat" . $settings . " !== 'function'){\n";
-	        $output .= "window.showLinkCat" . $settings . " = function ( _incomingID, _settingsID, _pagenumber ) {\n";
+	        $output .= "window.showLinkCat" . $settings . " = function ( _incomingID, _settingsID, _pagenumber, _searchll ) {\n";
             $output .= "if (typeof(ajaxobject) != \"undefined\") { ajaxobject.abort(); }\n";
 
             $output .= "\tjQuery('#contentLoading" . $settings . "').toggle();" .
@@ -81,6 +81,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 "            id : _incomingID, " .
                 "            settings : _settingsID, " .
                 "            ajaxupdate : true, " .
+                "            searchll : _searchll, " .
                 "            linkresultpage: _pagenumber }, " .
                 "    success: function( data ){ " .
                 "            jQuery('#linklist" . $settings. "').html( data ); " .
@@ -89,7 +90,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 	        $output .= "}\n";
             $output .= "}\n";
 
-            $output .= "</SCRIPT>\n\n";
+            $output .= "</script>\n\n";
         }
 
 	    $currentcatletter = '';
@@ -133,21 +134,13 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
             $link_categories_query_args['exclude'] = explode( ',', $excludecategorylist_cpt );
         }
 
-        /* if ( ( !empty( $categorysluglist ) || isset( $_GET['cat'] ) ) && empty( $singlelinkid ) && $level == 0 ) {
-        	if ( !empty( $categorysluglist ) ) {
-		        $link_categories_query_args['slug'] = explode( ',', $categorysluglist );
-	        } elseif ( isset( $_GET['cat'] ) ) {
-		        $link_categories_query_args['slug'] = $_GET['cat'];
-	        }
-        } */
-
-        if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) && $level == 0 ) {
+        /* if ( isset( $categoryname ) && !empty( $categoryname ) && 'HTMLGETPERM' == $showonecatmode && empty( $singlelinkid ) && $level == 0 ) {
             $link_categories_query_args['slug'] = $categoryname;
         }
 
         if ( ( !empty( $categorynamelist ) || isset( $_GET['catname'] ) ) && empty( $singlelinkid ) && $level == 0 ) {
             $link_categories_query_args['name'] = explode( ',', urldecode( $categorynamelist ) );
-        }
+        } */
 
         $validdirections = array( 'ASC', 'DESC' );
 
@@ -227,6 +220,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
             }
 
             $totallinkcount = 0;
+            $searchstring = '';
 
             foreach ( $link_categories as $catname ) {
 	            $linkcount = 0;
@@ -335,7 +329,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 	                if ( $showonecatonly ) {
 		                if ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) {
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
-				                $cattext = "<a href='#' onClick=\"showLinkCat" . $settings . "('" . $catname->term_id. "', '" . $settings . "', 1);return false;\" >";
+				                $cattext = "<a href='#' onClick=\"showLinkCat" . $settings . "('" . $catname->term_id. "', '" . $settings . "', 1, '" . $searchstring . "');return false;\" >";
 			                } elseif ( 'dropdown' == $flatlist || 'dropdowndirect' == $flatlist ) {
 				                $cattext = $catname->term_id;
 			                }
@@ -344,15 +338,12 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				                $cattext = "<a href='";
 			                }
 
-			                if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-				                $cattext .= $cattargetaddress . '&cat_id=';
-			                } elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-				                $cattext .= $cattargetaddress . '?cat_id=';
-			                } elseif ( empty( $cattargetaddress ) ) {
-				                $cattext .= '?cat_id=';
+			                $cattargetaddress = add_query_arg( 'cat_id', $catname->term_id, '');
+			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
+				                $cattargetaddress = add_query_arg( 'searchll', $_GET['searchll'], $cattargetaddress );
 			                }
 
-			                $cattext .= $catname->term_id;
+			                $cattext .= $cattargetaddress;
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -362,15 +353,12 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				                $cattext = "<a href='";
 			                }
 
-			                if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-				                $cattext .= $cattargetaddress . '&cat=';
-			                } elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-				                $cattext .= $cattargetaddress . '?cat=';
-			                } elseif ( empty( $cattargetaddress ) ) {
-				                $cattext .= '?cat=';
+			                $cattargetaddress = add_query_arg( 'catslug', $catname->slug, '');
+			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
+				                $cattargetaddress = add_query_arg( 'searchll', $_GET['searchll'], $cattargetaddress );
 			                }
 
-			                $cattext .= $catname->slug;
+			                $cattext .= $cattargetaddress;
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -379,14 +367,6 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext = "<a href='";
 			                }
-
-			                /* if ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) != false ) {
-								$cattext .= $cattargetaddress . '&catname=';
-							} elseif ( !empty( $cattargetaddress ) && strpos( $cattargetaddress, '?' ) == false ) {
-								$cattext .= $cattargetaddress . '?catname=';
-							} elseif ( empty( $cattargetaddress ) ) {
-								$cattext .= '?catname=';
-							} */
 
 			                if ( !empty( $_GET ) ) {
 				                $get_array = $_GET;
@@ -407,19 +387,28 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				                $cattext = "<a href='";
 			                }
 
-			                $cattext .= '/' . $rewritepage . '/' . $catname->slug;
+			                $cattargetaddress = '/' . $rewritepage . '/' . $catname->slug;
+			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
+				                $cattargetaddress = add_query_arg( 'searchll', $_GET['searchll'], $cattargetaddress );
+			                }
+
+			                $cattext .= $cattargetaddress;
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
 			                }
 		                }
 	                } else if ( $catanchor ) {
-		                if ( !$pagination ) {
+		                if ( !$pagination || ( !$pagination && $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) ) {
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext = '<a href="';
 			                }
 
-			                $cattext .= '#' . $catname->slug;
+			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
+				                $cattext .= '?searchll=' . $_GET['searchll'] . '&cat_id=' . $catname->term_id;
+			                } else {
+				                $cattext .= '#' . $catname->slug;
+			                }
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= '">';
@@ -517,7 +506,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 		            $output .= "</option>\n";
 	            }
 
-                if ( $cat_has_children ) {
+                if ( $cat_has_children && ( empty( $catlistchildcatdepthlimit ) || ( !empty( $catlistchildcatdepthlimit ) && intval( $catlistchildcatdepthlimit ) - 1 > $level ) ) ) {
 	                $output .= RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryoptions, $settings, $catname->term_id, $level + 1 );
                 }
 
@@ -577,7 +566,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
                 if ( $showonecatonly && ( 'AJAX' == $showonecatmode || empty( $showonecatmode ) ) ) {
                     $output .= 'catidvar = document.catselect.catdropdown.options[document.catselect.catdropdown.selectedIndex].value;';
-                    $output .= "showLinkCat" . $settings . "(catidvar, '" . $settings . "', 1);return false; }";
+                    $output .= "showLinkCat" . $settings . "(catidvar, '" . $settings . "', 1, '" . $searchstring  . "');return false; }";
                 } else {
                     $output .= "\t\tlocation=\n";
                     $output .= "document.catselect.catdropdown.options[document.catselect.catdropdown.selectedIndex].value }\n";

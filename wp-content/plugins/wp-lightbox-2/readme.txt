@@ -95,6 +95,9 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 
 == Changelog ==
 
+= 3.0.6.4 =
+* Fix: Library was broken, if a user had a select box on their website.
+
 = 3.0.6.3 = 
 * Code Rewrite
 * Added NodeJs and Babel for minifiying the script to reduce script size

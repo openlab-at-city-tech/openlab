@@ -1,0 +1,178 @@
+/*
+Theme Name: ePortfolio
+
+Adding support for languages written in a Right To Left (RTL) direction is easy -
+it's just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+
+https://codex.wordpress.org/Right-to-Left_Language_Support
+
+*/
+
+/*
+body {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+*/
+
+
+
+
+/******************Components***********************/
+			/* Categories */
+.rtl .twp-categories ul li a:after{
+	right: initial;
+	left: 0;
+}
+			/* post format */
+.rtl .twp-full-width-post .twp-gallery-post .post-thumbnail .twp-post-format-icon{
+	left: initial;
+	right: 0;
+}
+			/* Title */
+.rtl .twp-title-with-bar{
+	padding-right: 15px;
+	padding-left: initial;
+}
+.rtl .widget-title:after{
+	left: initial;
+	right: 0;
+}
+.rtl .twp-title-with-bar:before{
+	left: initial;
+	right: 0;
+}
+
+			/* Menu Icon */
+.rtl .twp-menu-icon span:before{
+	right: 0;
+	left: initial;
+}
+.rtl .twp-menu-icon span:after{
+	right: 10px;
+	left: initial;
+}
+
+
+/*********************Layouts********************/
+/***********************************************/
+			/* Header */
+			
+@media screen and (min-width: 1050px){
+	.rtl .twp-header{
+		right: 0;
+		left: initial;
+	}
+	.rtl .twp-page-content{
+		padding-left: initial;
+		padding-right: 25%;
+	}
+	
+
+}
+			/* Mobile Menu */
+			
+.rtl .twp-mobile-menu-section{
+	right: -100%;
+	left: initial;
+}
+.rtl .twp-mobile-menu-section.show{
+	left: initial;
+	right: 0;
+}
+.rtl .twp-mobile-menu-section .twp-mobile-close-icon{
+	text-align: left;
+}
+
+			/* Blog slider */
+.rtl .twp-blog-slider-section .twp-blog-slider .slick-dots{
+	right: 20px;
+	left: initial;;
+}
+.rtl .twp-blog-slider-section .twp-blog-slider .slick-dots:before,
+.rtl .twp-blog-slider-section .twp-blog-slider .slick-dots:after{
+	left: initial;
+	right: 5px;
+}
+.rtl .twp-blog-slider-section .twp-blog-slider .twp-blog-post .twp-image-section{
+	left: initial;
+	right: 0;
+}
+.rtl .twp-blog-slider-section .twp-blog-slider .twp-blog-post{
+	padding-left: 0;
+	padding-right: 50px;
+}
+@media screen and (min-width: 768px){
+	.rtl .twp-blog-slider-section .twp-blog-slider .twp-blog-post:before{
+		left: initial;
+		right: 0;
+	}
+	.rtl .twp-blog-slider-section .twp-blog-slider .twp-blog-post{
+		padding-left: 60px;
+		padding-right: 100px;
+	}
+	.rtl .twp-blog-slider-section .twp-blog-slider .slick-dots{
+		right: 45px;
+	}
+	
+}
+
+
+
+/*********************************************/
+/******************** Pages******************/
+			/* portfolio with widget */
+@media screen and (min-width: 1050px){
+	.rtl.twp-page-template-portfolio-with-widget .twp-portfolio-widget-section{
+		left: initial;
+		right: 25%;
+	}
+	.rtl.twp-page-template-portfolio-with-widget .twp-page-content{
+		padding-right: 60%;
+	}
+}
+			/* Photography */
+.rtl .twp-eportfolio-photography-slider .slick-prev{
+	left: 0;
+	right: initial;
+}
+.rtl .twp-eportfolio-photography-slider .slick-next{
+	left: 60px;
+	right: initial;
+}
+@media screen and (min-width: 768px){
+	.rtl .twp-eportfolio-photography-slider .slick-prev{
+		left: 60px;
+	}
+	.rtl .twp-eportfolio-photography-slider .slick-next{
+		left: 120px;
+	}
+	.rtl .twp-eportfolio-photography-slider .twp-photography-post > a{
+		right: initial;
+		left: 0;
+	}
+	
+}
+			/*Single Page */
+.rtl .twp-comments-section .comment-list li .comment-content p:before,
+.rtl .twp-comments-section .comment-list li .comment-meta .comment-metadata .edit-link:before,
+.rtl .twp-comments-section .comment-list li .comment-meta .comment-metadata time:before {
+	right: 0;
+	left: initial;
+}
+.rtl .twp-comments-section .comment-list li .comment-content p{
+	padding-left: initial;
+	padding-right: 20px;
+}
+
+.rtl .page-title span:after{
+	left: initial;
+	right: 0;
+}
+.rtl .post-navigation .nav-links .nav-previous:after{
+	content: '\f061';
+}
+.rtl .post-navigation .nav-links .nav-next:after{
+ 	content: '\f060';
+}

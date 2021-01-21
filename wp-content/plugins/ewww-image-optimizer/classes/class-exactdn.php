@@ -112,9 +112,14 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 			global $exactdn;
 			if ( is_object( $exactdn ) ) {
-				return 'you are doing it wrong';
+				$this->debug_message( 'you are doing it wrong' );
+				return;
 			}
 
+			// Bail out on customizer.
+			if ( is_customize_preview() ) {
+				return;
+			}
 			// Make sure we have an ExactDN domain to use.
 			if ( ! $this->setup() ) {
 				return;
@@ -124,7 +129,16 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$site_url = get_home_url();
 				$scheme   = 'http';
 				if ( strpos( $site_url, 'https://' ) !== false ) {
+					$this->debug_message( "$site_url contains https" );
 					$scheme = 'https';
+				} elseif ( strpos( $this->content_url, 'https://' ) !== false ) {
+					$this->debug_message( $this->content_url . ' contains https' );
+					$scheme = 'https';
+				} elseif ( isset( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) {
+					$this->debug_message( 'page requested over https' );
+					$scheme = 'https';
+				} else {
+					$this->debug_message( 'using plain http' );
 				}
 				$this->scheme = $scheme;
 			}
@@ -132,6 +146,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			$uri = add_query_arg( null, null );
 			$this->debug_message( "request uri is $uri" );
 
+			if ( '/robots.txt' === $uri || '/sitemap.xml' === $uri ) {
+				return;
+			}
 			/**
 			 * Allow pre-empting the parsers by page.
 			 *
@@ -164,6 +181,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 			// Overrides for admin-ajax images.
 			add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
+			add_filter( 'exactdn_admin_allow_image_srcset', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 			// Overrides for "pass through" images.
 			add_filter( 'exactdn_pre_args', array( $this, 'exactdn_remove_args' ), 10, 3 );
 			// Overrides for user exclusions.
@@ -207,12 +225,20 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			// Configure Autoptimize with our CDN domain.
 			add_filter( 'autoptimize_filter_cssjs_multidomain', array( $this, 'add_cdn_domain' ) );
 
+			if ( $this->is_as3cf_cname_active() ) {
+				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_as3cf_cname_active' );
+				return;
+			}
+
 			$upload_url_parts = $this->parse_url( $this->content_url() );
 			if ( empty( $upload_url_parts ) ) {
 				$this->debug_message( "could not break down URL: $this->site_url" );
 				return;
 			}
 			$this->upload_domain = $upload_url_parts['host'];
+			if ( ! $this->get_option( $this->prefix . 'exactdn_local_domain' ) ) {
+				$this->set_option( $this->prefix . 'exactdn_local_domain', $this->upload_domain );
+			}
 			$this->debug_message( "allowing images from here: $this->upload_domain" );
 			if (
 				( false !== strpos( $this->upload_domain, 'amazonaws.com' ) || false !== strpos( $this->upload_domain, 'storage.googleapis.com' ) ) &&
@@ -237,6 +263,13 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				foreach ( $wpml_domains as $wpml_domain ) {
 					$this->allowed_domains[] = $wpml_domain;
 				}
+			}
+			if (
+				$this->get_option( $this->prefix . 'exactdn_local_domain' ) !== $this->upload_domain &&
+				! $this->allow_image_domain( $this->get_option( $this->prefix . 'exactdn_local_domain' ) ) &&
+				is_admin()
+			) {
+				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_domain_mismatch' );
 			}
 			$this->allowed_domains[] = $this->exactdn_domain;
 			$this->allowed_domains   = apply_filters( 'exactdn_allowed_domains', $this->allowed_domains );
@@ -284,12 +317,12 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		function activate_site() {
 			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 
+			if ( $this->is_as3cf_cname_active() ) {
+				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_as3cf_cname_active' );
+				return false;
+			}
 			$site_url = $this->content_url();
 			$home_url = home_url();
-			$originip = '';
-			if ( ! empty( $_SERVER['SERVER_ADDR'] ) ) {
-				$originip = sanitize_text_field( wp_unslash( $_SERVER['SERVER_ADDR'] ) );
-			}
 
 			$url = 'http://optimize.exactlywww.com/exactdn/activate.php';
 			$ssl = wp_http_supports( array( 'ssl' ) );
@@ -304,7 +337,6 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					'body'    => array(
 						'site_url' => $site_url,
 						'home_url' => $home_url,
-						'originip' => $originip,
 					),
 				)
 			);
@@ -390,11 +422,17 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 
 			$this->check_verify_method();
-			$this->set_exactdn_option( 'checkin', time() + 3600 );
+			$this->set_exactdn_option( 'checkin', time() + DAY_IN_SECONDS );
 
 			// Set a default error.
 			global $exactdn_activate_error;
 			$exactdn_activate_error = 'zone not verified';
+			// Primary check sends the test URL to the API for full verification.
+			$api_url = 'http://optimize.exactlywww.com/exactdn/verify.php';
+			$ssl     = wp_http_supports( array( 'ssl' ) );
+			if ( $ssl ) {
+				$api_url = set_url_scheme( $api_url, 'https' );
+			}
 			if ( ! defined( 'EXACTDN_LOCAL_DOMAIN' ) && $this->get_exactdn_option( 'verify_method' ) > 0 ) {
 				// Test with an image file that should be available on the ExactDN zone.
 				$test_url     = plugins_url( '/images/test.png', constant( strtoupper( $this->prefix ) . 'PLUGIN_FILE' ) );
@@ -402,28 +440,42 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$test_url     = str_replace( $local_domain, $domain, $test_url );
 				$this->debug_message( "test url is $test_url" );
 				add_filter( 'http_headers_useragent', $this->prefix . 'cloud_useragent', PHP_INT_MAX );
-				$test_result = wp_remote_get( $test_url );
+				$test_result = wp_remote_post(
+					$api_url,
+					array(
+						'timeout' => 10,
+						'body'    => array(
+							'alias' => $domain,
+							'url'   => $test_url,
+						),
+					)
+				);
 				if ( is_wp_error( $test_result ) ) {
 					$error_message = $test_result->get_error_message();
-					$this->debug_message( "exactdn verification request failed: $error_message" );
+					$this->debug_message( "exactdn (1) verification request failed: $error_message" );
 					$exactdn_activate_error = $error_message;
 					add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_error' );
 					return false;
-				} elseif ( ! empty( $test_result['response']['code'] ) && ( 403 === (int) $test_result['response']['code'] || 404 === (int) $test_result['response']['code'] ) ) {
-					// If we get a 403 or 404, we should use secondary verification.
-					$this->debug_message( 'received response code: ' . $test_result['response']['code'] );
-					$this->set_exactdn_option( 'verify_method', -1, false );
-				} elseif ( ! empty( $test_result['body'] ) && strlen( $test_result['body'] ) > 300 ) {
-					if ( 200 === (int) $test_result['response']['code'] &&
-						( '89504e470d0a1a0a' === bin2hex( substr( $test_result['body'], 0, 8 ) ) || '52494646' === bin2hex( substr( $test_result['body'], 0, 4 ) ) ) ) {
+				} elseif ( ! empty( $test_result['body'] ) && false === strpos( $test_result['body'], 'error' ) ) {
+					$response = json_decode( $test_result['body'], true );
+					if ( ! empty( $response['success'] ) ) {
 						$this->debug_message( 'exactdn (real-world) verification succeeded' );
 						$this->set_exactdn_option( 'verified', 1, false );
-						$this->set_exactdn_option( 'verify_method', -1, false ); // After initial activation, use API directly.
+						$this->set_exactdn_option( 'verify_method', -1, false ); // After initial activation, use simpler API verification.
 						add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_success' );
 						return true;
 					}
-					$this->debug_message( 'mime check failed: ' . bin2hex( substr( $test_result['body'], 0, 3 ) ) );
-					$exactdn_activate_error = 'zone setup pending';
+				} elseif ( ! empty( $test_result['body'] ) ) {
+					$response      = json_decode( $test_result['body'], true );
+					$error_message = $response['error'];
+					$this->debug_message( "exactdn (1) verification request failed: $error_message" );
+					$exactdn_activate_error = $error_message;
+					if ( false !== strpos( $error_message, 'not found' ) ) {
+						delete_option( $this->prefix . 'exactdn_domain' );
+						delete_site_option( $this->prefix . 'exactdn_domain' );
+					}
+					add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_error' );
+					return false;
 				}
 				if ( ! empty( $test_result['response']['code'] ) && 200 !== (int) $test_result['response']['code'] ) {
 					$this->debug_message( 'received response code: ' . $test_result['response']['code'] );
@@ -433,14 +485,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 
 			// Secondary test against the API db.
-			$url = 'http://optimize.exactlywww.com/exactdn/verify.php';
-			$ssl = wp_http_supports( array( 'ssl' ) );
-			if ( $ssl ) {
-				$url = set_url_scheme( $url, 'https' );
-			}
 			add_filter( 'http_headers_useragent', $this->prefix . 'cloud_useragent', PHP_INT_MAX );
 			$result = wp_remote_post(
-				$url,
+				$api_url,
 				array(
 					'timeout' => 10,
 					'body'    => array(
@@ -454,7 +501,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$exactdn_activate_error = $error_message;
 				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_error' );
 				return false;
-			} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'error' ) === false ) {
+			} elseif ( ! empty( $result['body'] ) && false === strpos( $result['body'], 'error' ) ) {
 				$response = json_decode( $result['body'], true );
 				if ( ! empty( $response['success'] ) ) {
 					if ( 2 === (int) $response['success'] ) {
@@ -479,8 +526,15 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$error_message = $response['error'];
 				$this->debug_message( "exactdn verification request failed: $error_message" );
 				$exactdn_activate_error = $error_message;
+				if ( false !== strpos( $error_message, 'not found' ) ) {
+					delete_option( $this->prefix . 'exactdn_domain' );
+					delete_site_option( $this->prefix . 'exactdn_domain' );
+				}
 				add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_error' );
 				return false;
+			}
+			if ( ! empty( $result['response']['code'] ) && 200 !== (int) $result['response']['code'] ) {
+				$this->debug_message( 'received response code: ' . $result['response']['code'] );
 			}
 			add_action( 'admin_notices', $this->prefix . 'notice_exactdn_activation_error' );
 			return false;
@@ -629,6 +683,27 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				}
 			}
 			return update_option( $this->prefix . 'exactdn_' . $option_name, $option_value, $autoload );
+		}
+
+		/**
+		 * Check to see if a CNAME is configured in WP Offload Media.
+		 *
+		 * @return bool True if a CNAME is active, false otherwise.
+		 */
+		function is_as3cf_cname_active() {
+			// Find the WP Offload Media domain/path.
+			global $as3cf;
+			if ( class_exists( 'Amazon_S3_And_CloudFront' ) && is_object( $as3cf ) ) {
+				if ( 'storage' !== $as3cf->get_setting( 'delivery-provider' ) ) {
+					$this->debug_message( 'active delivery provider: ' . $as3cf->get_setting( 'delivery-provider' ) );
+					if ( $as3cf->get_setting( 'enable-delivery-domain' ) && $as3cf->get_setting( 'delivery-domain' ) ) {
+						$delivery_domain = $as3cf->get_setting( 'delivery-domain' );
+						$this->debug_message( "found WOM CNAME domain: $delivery_domain" );
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		/**
@@ -884,15 +959,16 @@ if ( ! class_exists( 'ExactDN' ) ) {
 						// Find the width and height attributes.
 						$width  = $this->get_img_width( $images['img_tag'][ $index ] );
 						$height = $this->get_img_height( $images['img_tag'][ $index ] );
-						// Falsify them if empty.
-						$width  = $width ? $width : false;
-						$height = $height ? $height : false;
 
 						// Can't pass both a relative width and height, so unset the dimensions in favor of not breaking the horizontal layout.
 						if ( false !== strpos( $width, '%' ) && false !== strpos( $height, '%' ) ) {
 							$width  = false;
 							$height = false;
 						}
+
+						// Falsify them if empty.
+						$width  = $width && is_numeric( $width ) ? $width : false;
+						$height = $height && is_numeric( $height ) ? $height : false;
 
 						// Detect WP registered image size from HTML class.
 						if ( preg_match( '#class=["|\']?[^"\']*size-([^"\'\s]+)[^"\']*["|\']?#i', $images['img_tag'][ $index ], $size ) ) {
@@ -1451,6 +1527,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( ! empty( $_POST['action'] ) && 'mabel-rpn-getnew-purchased-products' === $_POST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				return true;
 			}
+			if ( ! empty( $_REQUEST['action'] ) && 'alm_get_posts' === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+				return true;
+			}
 			return $allow;
 		}
 
@@ -1701,8 +1780,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 					);
 				} elseif ( is_array( $size ) ) {
 					// Pull width and height values from the provided array, if possible.
-					$width  = isset( $size[0] ) ? (int) $size[0] : false;
-					$height = isset( $size[1] ) ? (int) $size[1] : false;
+					$width  = isset( $size[0] ) && $size[0] < 9999 ? (int) $size[0] : false;
+					$height = isset( $size[1] ) && $size[1] < 9999 ? (int) $size[1] : false;
 
 					// Don't bother if necessary parameters aren't passed.
 					if ( ! $width || ! $height ) {
@@ -1907,8 +1986,8 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$constrained_size = wp_constrain_dimensions( $fullwidth, $fullheight, $reqwidth );
 				$expected_size    = array( $reqwidth, $reqheight );
 
-				$this->debug_message( $constrained_size[0] );
-				$this->debug_message( $constrained_size[1] );
+				$this->debug_message( 'constrained w: ' . $constrained_size[0] );
+				$this->debug_message( 'constrained h: ' . $constrained_size[1] );
 				if ( abs( $constrained_size[0] - $expected_size[0] ) <= 1 && abs( $constrained_size[1] - $expected_size[1] ) <= 1 ) {
 					$this->debug_message( 'soft cropping' );
 					$crop = 'soft';
@@ -2526,6 +2605,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( strpos( $image_url, 'easyio/lazy/placeholder' ) ) {
 				return array();
 			}
+			if ( strpos( $image_url, 'swis/lazy/placeholder' ) ) {
+				return array();
+			}
 			if ( strpos( $image_url, '/dummy.png' ) ) {
 				return array();
 			}
@@ -2731,6 +2813,11 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			if ( is_null( $scheme ) ) {
 				$scheme = $this->scheme;
 			}
+			if ( is_string( $scheme ) ) {
+				$this->debug_message( "starting scheme: $scheme" );
+			} else {
+				$this->debug_message( 'no starting scheme' );
+			}
 
 			/**
 			 * Disables ExactDN URL processing for local development.
@@ -2754,7 +2841,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 
 			$jpg_quality  = apply_filters( 'jpeg_quality', null, 'image_resize' );
-			$webp_quality = apply_filters( 'jpeg_quality', $jpg_quality, 'image/webp' );
+			$webp_quality = apply_filters( 'webp_quality', 75, 'image/webp' );
 
 			$more_args = array();
 			if ( false === strpos( $image_url, 'strip=all' ) && $this->get_option( $this->prefix . 'metadata_remove' ) ) {
@@ -2774,6 +2861,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 			}
 			if ( $this->plan_id > 1 && false === strpos( $image_url, 'quality=' ) && ! is_null( $jpg_quality ) && 82 !== (int) $jpg_quality ) {
 				$more_args['quality'] = $jpg_quality;
+			}
+			if ( $this->plan_id > 1 && false === strpos( $image_url, 'quality=' ) && 75 !== (int) $webp_quality && $webp_quality < $jpg_quality ) {
+				$more_args['quality'] = $webp_quality;
 			}
 			// Merge given args with the automatic (option-based) args, and also makes sure args is an array if it was previously a string.
 			$args = wp_parse_args( $args, $more_args );
@@ -2801,8 +2891,10 @@ if ( ! class_exists( 'ExactDN' ) ) {
 
 			if ( isset( $image_url_parts['scheme'] ) && 'https' === $image_url_parts['scheme'] ) {
 				if ( is_array( $args ) && false === strpos( $image_url, 'ssl=' ) ) {
+					$this->debug_message( 'adding ssl=1' );
 					$args['ssl'] = 1;
 				}
+				$this->debug_message( 'setting scheme to https' );
 				$scheme = 'https';
 			}
 
@@ -2875,6 +2967,11 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$args = wp_parse_args( $image_url_parts['query'], $args );
 			}
 
+			// Clear out args for some files (like videos) that might go through image_downsize.
+			if ( ! empty( $extension ) && in_array( $extension, array( 'mp4', 'm4p', 'm4v', 'mov', 'wvm', 'qt', 'webp', 'ogv', 'mpg', 'mpeg', 'mpv' ), true ) ) {
+				$args = array();
+			}
+
 			if ( $args ) {
 				if ( is_array( $args ) ) {
 					$exactdn_url = add_query_arg( $args, $exactdn_url );
@@ -2929,7 +3026,7 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		}
 
 		/**
-		 * Adds link to header which enables DNS prefetching for faster speed.
+		 * Adds link to header which enables DNS prefetching and preconnect for faster speed.
 		 *
 		 * @param array  $hints A list of hints for a particular relationship type.
 		 * @param string $relationship_type The type of hint being filtered: dns-prefetch, preconnect, etc.
@@ -2937,6 +3034,9 @@ if ( ! class_exists( 'ExactDN' ) ) {
 		 */
 		function dns_prefetch( $hints, $relationship_type ) {
 			if ( 'dns-prefetch' === $relationship_type && $this->exactdn_domain ) {
+				$hints[] = '//' . $this->exactdn_domain;
+			}
+			if ( 'preconnect' === $relationship_type && $this->exactdn_domain ) {
 				$hints[] = '//' . $this->exactdn_domain;
 			}
 			return $hints;
@@ -2955,6 +3055,41 @@ if ( ! class_exists( 'ExactDN' ) ) {
 				$domains[] = $this->exactdn_domain;
 			}
 			return $domains;
+		}
+
+		/**
+		 * Checks the configured alias for savings information.
+		 *
+		 * @return array The original size of all images that have been compressed by Easy IO along with how much was saved.
+		 */
+		function savings() {
+			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			$url = 'http://optimize.exactlywww.com/exactdn/savings.php';
+			$ssl = wp_http_supports( array( 'ssl' ) );
+			if ( $ssl ) {
+				$url = set_url_scheme( $url, 'https' );
+			}
+			add_filter( 'http_headers_useragent', $this->prefix . 'cloud_useragent', PHP_INT_MAX );
+			$result = wp_remote_post(
+				$url,
+				array(
+					'timeout' => 10,
+					'body'    => array(
+						'alias' => $this->exactdn_domain,
+					),
+				)
+			);
+			if ( is_wp_error( $result ) ) {
+				$error_message = $result->get_error_message();
+				$this->debug_message( "savings request failed: $error_message" );
+			} elseif ( ! empty( $result['body'] ) ) {
+				$this->debug_message( "savings data retrieved: {$result['body']}" );
+				$response = json_decode( $result['body'], true );
+				if ( is_array( $response ) && ! empty( $response['original'] ) && ! empty( $response['savings'] ) ) {
+					return $response;
+				}
+			}
+			return false;
 		}
 	}
 

@@ -1,7 +1,8 @@
 /*--------------------------------------------------------------
 Hello, this is the BuddyPress Nouveau stylesheet.
 
-@version 4.0.0
+@since 3.0.0
+@version 7.0.0
 
 ----------------------------------------------------------------
 >>> TABLE OF CONTENTS:
@@ -82,9 +83,9 @@ body #buddypress .bp-list .action {
 }
 
 @media screen and (min-width: 46.8em) {
-	body.buddypress .entry-header,
-	body.buddypress .site-content .entry-header,
-	body.buddypress .entry-content {
+	body.buddypress .entry-header:not(.alignwide):not(.alignfull),
+	body.buddypress .site-content .entry-header:not(.alignwide):not(.alignfull),
+	body.buddypress .entry-content:not(.alignwide):not(.alignfull) {
 		max-width: none;
 	}
 	body.buddypress .entry-header {
@@ -141,14 +142,14 @@ body.buddypress article.page > .entry-header {
 	padding: 0;
 }
 
-body.buddypress article.page > .entry-header .entry-title {
+body.buddypress article.page > .entry-header:not(.alignwide):not(.alignfull) .entry-title {
 	font-size: 28px;
 	font-weight: inherit;
 	color: #767676;
 }
 
 @media screen and (min-width: 46.8em) {
-	body.buddypress article.page > .entry-header .entry-title {
+	body.buddypress article.page > .entry-header:not(.alignwide):not(.alignfull) .entry-title {
 		font-size: 34px;
 	}
 }
@@ -1774,6 +1775,16 @@ form.ac-form .ac-reply-content input {
 * @section 3.2 - Blogs Loop
 *----------------------------------------------------------
 */
+.buddypress-wrap .blogs-list li .item-avatar img.avatar-150 {
+	max-width: 150px;
+	max-height: 150px;
+}
+
+.buddypress-wrap .blogs-list li .item-avatar img.avatar-50 {
+	max-width: 50px;
+	max-height: 50px;
+}
+
 @media screen and (min-width: 46.8em) {
 	.buddypress-wrap .blogs-list li .item-block {
 		float: none;
@@ -2291,7 +2302,15 @@ body.no-js .single-item-header .js-self-profile-button {
 *-----------------------------------------------------
 */
 .groups-header .bp-group-type-list {
+	font-size: 18px;
 	margin: 0;
+	color: #333;
+	display: flex;
+}
+
+.groups-header .bp-group-type-list strong {
+	padding-right: 1em;
+	white-space: nowrap;
 }
 
 .groups-header .bp-feedback {
@@ -2385,15 +2404,30 @@ body.no-js .single-item-header .js-self-profile-button {
 * User Accounts Specific Item Header
 *-----------------------------------------------------
 */
-.bp-user .users-header .user-nicename {
+body.buddypress.bp-user .buddypress-wrap .users-header h2.user-nicename {
+	margin-top: 0;
 	margin-bottom: 5px;
 }
 
-.bp-user .member-header-actions {
-	overflow: hidden;
+body.buddypress.bp-user .buddypress-wrap .users-header .bp-member-type-list {
+	padding-bottom: 0.5em;
+	font-size: 18px;
+	margin: 0;
+	color: #333;
+	display: flex;
 }
 
-.bp-user .member-header-actions * > * {
+body.buddypress.bp-user .buddypress-wrap .users-header .bp-member-type-list strong {
+	padding-right: 1em;
+	white-space: nowrap;
+}
+
+body.buddypress.bp-user .buddypress-wrap .member-header-actions {
+	overflow: hidden;
+	padding-left: 0;
+}
+
+body.buddypress.bp-user .buddypress-wrap .member-header-actions * > * {
 	display: block;
 }
 
@@ -3447,7 +3481,7 @@ body.buddypress.settings.data #buddypress.buddypress-wrap .item-body p a {
 .buddypress-wrap .standard-form [data-bp-search] input[type="text"],
 .buddypress-wrap .standard-form .groups-members-search input[type="search"],
 .buddypress-wrap .standard-form .groups-members-search input[type="text"] {
-	background: #fafafa;
+	background-color: #fafafa;
 	border: 1px solid #d6d6d6;
 	border-radius: 0;
 	font: inherit;
@@ -3518,7 +3552,7 @@ body.buddypress.settings.data #buddypress.buddypress-wrap .item-body p a {
 .buddypress-wrap .standard-form input:focus,
 .buddypress-wrap .standard-form textarea:focus,
 .buddypress-wrap .standard-form select:focus {
-	background: #fafafa;
+	background-color: #fafafa;
 	color: #555;
 	outline: 0;
 }
@@ -3757,9 +3791,9 @@ body.no-js .buddypress #messages-bulk-management #select-all-messages {
 .buddypress-wrap form#group-members-search input[type="search"],
 .buddypress-wrap form#group-members-search input[type="text"] {
 	float: left;
-	line-height: 1.5;
+	line-height: 2;
 	padding: 3px 10px;
-	width: 80%;
+	width: 78%;
 }
 
 .buddypress-wrap form.bp-dir-search-form button[type="submit"],
@@ -4105,6 +4139,7 @@ body.no-js .buddypress #messages-bulk-management #select-all-messages {
 .buddypress .buddypress-wrap input[type="button"].disabled,
 .buddypress .buddypress-wrap input[type="reset"].disabled,
 .buddypress .buddypress-wrap input[type="submit"][disabled="disabled"],
+.buddypress .buddypress-wrap input[type="submit"]:disabled,
 .buddypress .buddypress-wrap button.pending,
 .buddypress .buddypress-wrap button.disabled,
 .buddypress .buddypress-wrap div.pending a,
@@ -4569,6 +4604,24 @@ body.no-js .buddypress #messages-bulk-management #select-all-messages {
 	padding: 0.5em 1em;
 	right: 2%;
 	top: 30px;
+}
+
+body.create-blog #buddypress .error,
+body.create-blog #buddypress .success {
+	background: #fff;
+	color: #807f7f;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1);
+	color: #737373;
+	padding: 10px 15px;
+	background-color: #fff;
+}
+
+body.create-blog #buddypress .error {
+	border-left: 4px solid #d33;
+}
+
+body.create-blog #buddypress .success {
+	border-left: 4px solid #8a2;
 }
 
 .buddypress.widget .item-options {

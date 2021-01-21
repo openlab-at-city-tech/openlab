@@ -1,0 +1,13 @@
+.#{$prefix}-archive-section{
+    padding-left: 15px;
+    padding-right: 15px;
+    .page-header{
+        h1,p{
+          margin: 0;
+        }    
+    }
+    .masonry-blocks{
+        padding: 15px 0;
+      
+    }
+}

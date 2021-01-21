@@ -1,0 +1,15 @@
+.#{$prefix}-page-template-portfolio-only-widget{
+    .#{$prefix}-portfolio-widget-section{
+        padding: 0 15px 15px;
+        section{
+            padding-top: 15px;
+        }
+        .#{$prefix}-widget-slider{
+            .post-thumbnail{
+                @include media(lg){
+                    height: 600px;
+                }
+            }
+        }
+    }
+}

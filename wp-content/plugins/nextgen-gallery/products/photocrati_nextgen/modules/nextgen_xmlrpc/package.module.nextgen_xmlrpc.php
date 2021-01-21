@@ -684,6 +684,11 @@ class C_NextGen_API extends C_Component
                     $path_prefix = str_replace($ftp_path, $root_path, $full_path);
                 }
             }
+        } else {
+            include_once ABSPATH . "wp-admin/includes/class-wp-filesystem-direct.php";
+            if (!$wp_fs) {
+                $wp_fs = new WP_Filesystem_Direct($creds);
+            }
         }
         foreach ($task_list as &$task_item) {
             $task_id = isset($task_item['id']) ? $task_item['id'] : null;

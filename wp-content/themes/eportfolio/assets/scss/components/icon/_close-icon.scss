@@ -1,0 +1,52 @@
+$close-icon-sm-width: 20px;
+$close-icon-default-size: 30px;
+
+.#{$prefix}-close-icon{
+    width: $close-icon-default-size;
+    height: $close-icon-default-size;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    @include transition();
+    vertical-align: middle;
+    @include media(lg){
+        &:hover{
+            @include animation(rotate-center 0.3s linear both);
+        }
+    }
+    &.#{$prefix}-close-icon-sm{
+        width: $close-icon-sm-width;
+        span{
+            width: $close-icon-sm-width;
+        }
+    }
+    span{
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        z-index: 5;
+        top: 50%;
+        border-radius: 5px;
+        @extend %primary-bg;
+        transform :rotate(45deg);
+        &:last-child{
+            transform:rotate(135deg);
+        }
+      
+    }
+    
+    &.#{$prefix}-close-icon-white{
+        span{
+            background-color: $color_white;
+        }
+    }
+    &.#{$prefix}-rotate-90{
+        @include media(lg){
+            &:hover{
+                @include animation(rotate-partial 0.3s linear both);
+            }
+        }
+    }
+          
+}  

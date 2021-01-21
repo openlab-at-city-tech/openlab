@@ -56,11 +56,6 @@ class M_NextGen_Data extends C_Base_Module
         return function_exists("gd_info");
     }
 
-    public static function check_pel_min_php_requirement()
-    {
-        return version_compare(phpversion(), '5.3.0', '>');
-    }
-
     public function check_domdocument_requirement()
     {
         return class_exists('DOMDocument');
@@ -80,13 +75,6 @@ class M_NextGen_Data extends C_Base_Module
             'phpext',
             array($this, 'check_domdocument_requirement'),
             array('message' => __('XML is strongly encouraged for safely editing image data', 'nggallery'))
-        );
-
-        C_Admin_Requirements_Manager::get_instance()->add(
-            'nextgen_data_pel_min_php_version',
-            'phpver',
-            array($this, 'check_pel_min_php_requirement'),
-            array('message' => __('PHP 5.3 is required to write EXIF data to thumbnails and resized images', 'nggallery'))
         );
 
         C_Admin_Requirements_Manager::get_instance()->add(
@@ -161,7 +149,7 @@ class M_NextGen_Data extends C_Base_Module
 				require_once(NGG_PLUGIN_DIR."vendor/ezyang/htmlpurifier/library/HTMLPurifier.auto.php");
 			}
 			$config = HTMLPurifier_Config::createDefault();
-			$config->set('Cache', 'DefinitionImpl', NULL);
+			$config->set('Cache.DefinitionImpl', NULL);
 			$purifier = new HTMLPurifier($config);
 			return $purifier->purify($data);
 		}
@@ -183,7 +171,7 @@ class M_NextGen_Data extends C_Base_Module
             'A_Parse_Image_Metadata'            => 'adapter.parse_image_metadata.php',
             'C_Album'                           => 'class.album.php',
             'C_Album_Mapper'                    => 'class.album_mapper.php',
-            'C_Exif_Writer_Wrapper'             => 'class.exif_writer_wrapper.php',
+            'C_Exif_Writer'                     => 'class.exif_writer.php',
             'C_Gallery'                         => 'class.gallery.php',
             'C_Gallery_Mapper'                  => 'class.gallery_mapper.php',
             'C_Gallery_Storage'                 => 'class.gallery_storage.php',

@@ -1,0 +1,16 @@
+@include keyframes ( rotate-center ) {
+    0% {
+        @include transform(rotate(0));
+    }
+    100% {
+        @include transform(rotate(360deg));
+      }
+}
+@include keyframes ( rotate-partial ) {
+    0% {
+        @include transform(rotate(0));
+    }
+    100% {
+        @include transform(rotate(90deg));
+      }
+}

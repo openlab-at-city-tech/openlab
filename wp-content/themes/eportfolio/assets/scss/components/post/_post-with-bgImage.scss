@@ -1,0 +1,88 @@
+
+.#{$prefix}-post-with-bg-image{
+    .#{$prefix}-gallery-post{
+        position: relative;
+        overflow: hidden;
+        background-color: $color_gray;
+        &.#{$prefix}-only-title{
+            background-color: rgba(231,239,242,0.5);
+            height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            
+        }
+        &.#{$prefix}-overlay-image-hover{
+            &:before{
+                z-index: 1;
+            }
+        }
+        .post-thumbnail{
+            position: relative;
+            .#{$prefix}-post-format-icon{
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                z-index: 1;
+            }
+        }
+        
+        .#{$prefix}-desc{
+            padding: 5px 10px;
+            font-weight: $font_semi_bold;
+            background-color: rgba(231,239,242,1);
+            &.#{$prefix}-overlay-black{
+               background-color: transparent;
+               color: $color_white;
+               a{
+                   color: $color_white;
+                   &:visited{
+                       color: $color_white;
+                   }
+                   &:hover{
+                       color: $color_primary;
+                   }
+
+               }
+
+            }
+            @include media(sm){
+                position: absolute;
+                bottom: 30px;
+                width: calc(100% - 60px);
+                left: 30px;
+                @include transition();
+                z-index: 2;
+                background-color: $color_white;
+            }
+            @include media(lg){
+                left: 100%;
+            }
+        }
+        .entry-title{
+            margin: 0;
+            a{
+                @include line-limit(2);
+            }
+        }
+        &:hover{
+            .#{$prefix}-desc{
+                @include media(lg){
+                    left: 30px;
+                }
+            }
+            .post-thumbnail{
+                .#{$prefix}-post-format-icon{
+                    position: absolute;
+                    left: 50%;
+                    bottom: initial;
+                    top: 50%;
+                    @include transform(translate(-50%,-50%));
+                    border-radius: 100%;
+                    @include animation(scale-in-bottom-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both);
+                }
+            }
+        }
+    }
+    
+}

@@ -79,7 +79,12 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 
 			add_action( 'wp_head', array( $this, 'no_js_css' ) );
 
-			add_filter( $this->prefix . 'filter_page_output', array( $this, 'filter_page_output' ), 15 );
+			if ( method_exists( 'autoptimizeImages', 'imgopt_active' ) && autoptimizeImages::imgopt_active() ) {
+				add_filter( 'autoptimize_filter_html_before_minify', array( $this, 'filter_page_output' ) );
+			} else {
+				add_filter( $this->prefix . 'filter_page_output', array( $this, 'filter_page_output' ), 15 );
+			}
+
 			add_filter( 'vc_get_vc_grid_data_response', array( $this, 'filter_page_output' ) );
 
 			if ( class_exists( 'ExactDN' ) && $this->get_option( $this->prefix . 'exactdn' ) ) {
@@ -102,6 +107,11 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			} else {
 				$this->allow_piip = is_writable( $this->piip_folder ) && $this->gd_support();
 			}
+
+			if ( ! apply_filters( 'wp_lazy_loading_enabled', true, 'img', '' ) ) {
+				define( 'EWWWIO_DISABLE_NATIVE_LAZY', true );
+			}
+			add_filter( 'wp_lazy_loading_enabled', '__return_false' );
 
 			// Filter early, so that others at the default priority take precendence.
 			add_filter( 'eio_use_piip', array( $this, 'maybe_piip' ), 9 );
@@ -169,6 +179,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				is_embed() ||
 				is_feed() ||
 				is_preview() ||
+				is_customize_preview() ||
 				( defined( 'REST_REQUEST' ) && REST_REQUEST ) ||
 				wp_script_is( 'twentytwenty-twentytwenty', 'enqueued' ) ||
 				preg_match( '/^<\?xml/', $buffer ) ||
@@ -224,7 +235,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 					$this->debug_message( 'AMP page processing' );
 				}
 				if ( $this->is_amp() ) {
-					ewwwio_debug_message( 'AMP page processing (is_amp)' );
+					$this->debug_message( 'AMP page processing (is_amp)' );
 				}
 				return $buffer;
 			}
@@ -355,20 +366,6 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			$this->set_attribute( $image, 'data-src', $file, true );
 			$srcset = $this->get_attribute( $image, 'srcset' );
 
-			$disable_native_lazy = false;
-			// Ignore native lazy loading images.
-			$loading_attr = $this->get_attribute( $image, 'loading' );
-			if ( $loading_attr && in_array( trim( $loading_attr ), array( 'auto', 'eager', 'lazy' ), true ) ) {
-				$disable_native_lazy = true;
-			}
-			if (
-				( ! defined( 'EWWWIO_DISABLE_NATIVE_LAZY' ) || ! EWWWIO_DISABLE_NATIVE_LAZY ) &&
-				( ! defined( 'EASYIO_DISABLE_NATIVE_LAZY' ) || ! EASYIO_DISABLE_NATIVE_LAZY ) &&
-				! $disable_native_lazy
-			) {
-				$this->set_attribute( $image, 'loading', 'lazy' );
-			}
-
 			if (
 				! empty( $_POST['action'] ) && // phpcs:ignore WordPress.Security.NonceVerification
 				! empty( $_POST['vc_action'] ) && // phpcs:ignore WordPress.Security.NonceVerification
@@ -379,9 +376,31 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			) {
 				return $image;
 			}
+
+			// Check to see if they added img as an exclusion.
+			if ( in_array( 'img', $this->user_element_exclusions, true ) ) {
+				return $image;
+			}
+
 			$width_attr      = $this->get_attribute( $image, 'width' );
 			$height_attr     = $this->get_attribute( $image, 'height' );
 			$placeholder_src = $this->placeholder_src;
+
+			$disable_native_lazy = false;
+			// Ignore native lazy loading images.
+			$loading_attr = $this->get_attribute( $image, 'loading' );
+			if ( $loading_attr && in_array( trim( $loading_attr ), array( 'auto', 'eager', 'lazy' ), true ) ) {
+				$disable_native_lazy = true;
+			}
+			if (
+				is_numeric( $width_attr ) && is_numeric( $height_attr ) &&
+				( ! defined( 'EWWWIO_DISABLE_NATIVE_LAZY' ) || ! EWWWIO_DISABLE_NATIVE_LAZY ) &&
+				( ! defined( 'EASYIO_DISABLE_NATIVE_LAZY' ) || ! EASYIO_DISABLE_NATIVE_LAZY ) &&
+				! $disable_native_lazy
+			) {
+				$this->set_attribute( $image, 'loading', 'lazy' );
+			}
+
 			if ( false === strpos( $file, 'nggid' ) && ! preg_match( '#\.svg(\?|$)#', $file ) && $this->parsing_exactdn && strpos( $file, $this->exactdn_domain ) ) {
 				$this->debug_message( 'using lqip' );
 				list( $width, $height ) = $this->get_dimensions_from_filename( $file, true );
@@ -443,6 +462,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 					$this->set_attribute( $image, 'srcset', $placeholder_src, true );
 					$this->remove_attribute( $image, 'src' );
 				} else {
+					$placeholder_src = apply_filters( 'as3cf_get_asset', $placeholder_src );
 					$this->set_attribute( $image, 'src', $placeholder_src, true );
 					$this->remove_attribute( $image, 'srcset' );
 				}
@@ -532,6 +552,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 						if (
 							'a' === $exclusion ||
 							'div' === $exclusion ||
+							'img' === $exclusion ||
 							'li' === $exclusion ||
 							'picture' === $exclusion ||
 							'section' === $exclusion ||
@@ -603,6 +624,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 						'lazy-slider-img=',
 						'mgl-lazy',
 						'owl-lazy',
+						'preload-me',
 						'skip-lazy',
 						'timthumb.php?',
 						'wpcf7_captcha/',
@@ -823,7 +845,4 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			);
 		}
 	}
-
-	global $eio_lazy_load;
-	$eio_lazy_load = new EIO_Lazy_Load();
 }

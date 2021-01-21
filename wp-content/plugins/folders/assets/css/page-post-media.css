@@ -7,11 +7,9 @@
     background: #f1f1f1;
     direction: ltr;
 }
-
-.media-frame.hide-menu .media-frame-content, .media-frame.hide-menu .media-frame-router, .media-frame.hide-menu .media-frame-title, .media-frame.hide-menu .media-frame-toolbar {
+.folder-modal .media-frame .media-frame-content, .folder-modal .media-frame .media-frame-router, .folder-modal .media-frame .media-frame-title, .folder-modal .media-frame .media-frame-toolbar {
     left: 275px
 }
-
 .wcp-container {
     padding: 20px 20px 20px 16px
 }
@@ -56,7 +54,7 @@ span.create_new_folder {
     backdrop-filter: blur(16px);
     border-radius: 4px;
     text-align: center;
-    margin: 0 10px 0 0
+    margin: 0 15px 0 0
 }
 
 span.folder-loader-ajax {
@@ -408,20 +406,11 @@ span.total-count {
     outline: 0;
     box-shadow: none
 }
-
-.sticky-folders {
-    display: none;
-    padding: 0 0 5px;
-    margin: 0 0 5px;
-    border-bottom: solid 1px #ccc
-}
-
 .sticky-title {
     font-size: 16px;
     font-weight: 700;
     padding: 7px
 }
-
 div#custom-menu {
     padding: 10px;
     background: #fff;
@@ -524,36 +513,9 @@ div#custom-menu {
     text-align: left
 }
 
-.sticky-folders li a span.update-inline-record, .wcp-container .route span.update-inline-record {
-    position: relative;
-    left: auto;
-    top: 0;
-    float: right;
-    width: 0;
-    height: 30px;
-    font-size: 16px;
-    overflow: hidden;
-    transition: all .25s linear;
-    -webkit-transition: all .25s linear;
-    -moz-transition: all .25s linear;
-    line-height: 30px
-}
-
 #custom-menu [class*=" pfolder-"], #custom-menu [class^=pfolder-] {
     font-size: 12px
 }
-
-.sticky-folders li a span.star-icon, .wcp-container .route span.star-icon {
-    position: relative;
-    top: 2px;
-    left: auto;
-    float: right;
-    speak: none;
-    color: #ffc90e;
-    display: none;
-    font-size: 14px
-}
-
 .wcp-container .route .title .folder-sticky-icon, .wcp-container .route .title .move-folder-icon {
     float: right;
     position: relative;
@@ -565,15 +527,8 @@ div#custom-menu {
     display: none
 }
 
-.wcp-container .route .title .folder-sticky-icon, .wcp-container .route .title .move-folder-icon {
-    float: right;
-    position: relative;
-    top: 0;
-    left: auto;
-    width: 20px;
-    height: 30px;
-    line-height: 26px;
-    display: none
+.wcp-container .route.is-sticky > h3.title .folder-sticky-icon, .wcp-container .route.is-sticky > h3.title .move-folder-icon {
+    display: block;
 }
 
 .nav-icon {
@@ -657,7 +612,7 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 .dynamic-menu li {
     position: relative;
     width: 100%;
-    display: inline-block !important;
+    display: block !important;
     padding: 2px 0;
     margin: 0
 }
@@ -763,7 +718,7 @@ li.active-menu {
     font-size: 14px;
     padding: 0 0 0 15px;
     display: block;
-    width: 100% !important;
+    width: 100%;
     border-radius: 4px;
     border: 1px solid #484848;
     height: 34px;
@@ -1126,4 +1081,14 @@ html[dir=rtl] .media-frame.mode-select.hide-router .media-frame-title, html[dir=
 html[dir=rtl] .media-frame.hide-menu .media-frame-content, html[dir=rtl] .media-frame.hide-menu .media-frame-router, html[dir=rtl] .media-frame.hide-menu .media-frame-title, html[dir=rtl] .media-frame.hide-menu .media-frame-toolbar {
     left: 0;
     right: 275px;
+}
+html[dir=rtl] .media-frame .folder-modal .media-frame-content, html[dir=rtl] .folder-modal .media-frame .media-frame-router, html[dir=rtl] .folder-modal .media-frame .media-frame-title, html[dir=rtl] .folder-modal .media-frame .media-frame-toolbar {
+    left: 0;
+    right: 275px;
+}
+.sticky-folders > ul > li {
+    position: relative;
+}
+#vakata-dnd {
+    z-index: 10000000 !important;
 }

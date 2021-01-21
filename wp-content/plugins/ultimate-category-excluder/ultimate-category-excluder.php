@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Ultimate Category Excluder
-Version: 1.1
+Version: 1.2
 Plugin URI: http://infolific.com/technology/software-worth-using/ultimate-category-excluder/
 Description: Easily exclude categories from your front page, feeds, archives, and search results.
 Author: Marios Alexandrou
@@ -41,7 +41,10 @@ function ksuce_admin_menu() {
 }
 
 function ksuce_options_page() {
-	if( isset( $_POST[ 'ksuce' ] ) ) { $message = ksuce_process(); }
+	if( isset( $_POST[ 'ksuce' ] ) ) { 
+        check_admin_referer( 'uce_form' );
+        $message = ksuce_process(); 
+    }
 	$options = ksuce_get_options();
 	?>
 	<div class="wrap">
@@ -49,6 +52,7 @@ function ksuce_options_page() {
 		<?php if ( isset( $message ) ) { echo $message; } ?>
 		<p><?php _e( 'Use this page to select the categories you wish to exclude and where you would like to exclude them from.', 'UCE' ); ?></p>
 		<form action="options-general.php?page=ultimate-category-excluder.php" method="post">
+        <?php wp_nonce_field( 'uce_form' ); ?>
 		<table class="widefat">
 		<thead>
 			<tr>

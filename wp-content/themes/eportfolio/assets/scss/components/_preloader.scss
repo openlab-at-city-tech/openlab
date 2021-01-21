@@ -1,0 +1,48 @@
+
+.#{$prefix}-preloader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: $color_primary;
+   .status{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform( translate( -50%, -50%) rotate(45deg) translate3d(0,0,0));
+        width: 160px;
+        height: 160px;
+        @include animation( spin 1.2s infinite ease );
+   }
+   .#{$prefix}-square {
+        background-color: $color_blue_gray; 
+        position: absolute;
+        display: block;
+        width: 40px;
+        height: 40px;
+        &:nth-child(1){
+            top: 40px;
+            left: 40px;
+            @include animation( lift1 1.2s infinite ease );
+        }
+        &:nth-child(2){
+            top: 40px;
+            right: 40px;
+            @include animation( lift2 1.2s infinite ease ) ;
+        }
+        &:nth-child(3){
+            bottom: 40px;
+            right: 40px;
+            @include animation(  lift3 1.2s infinite ease );
+        }
+        &:nth-child(4){
+            bottom: 40px;
+            left: 40px;
+            @include animation( lift4 1.2s infinite ease );
+        }
+    }
+}
+
+ 

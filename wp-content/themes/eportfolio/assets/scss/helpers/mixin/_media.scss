@@ -1,0 +1,62 @@
+// Media breakpoints defined in settings
+$break-lg:             1050px !default;
+$break-md:             992px !default;
+$break-sm:             768px !default;
+$break-xs:             576px !default;
+$break-larger-screen:  1350px!default;
+$break-md-only:        991.99px !default;
+$break-sm-only:        768px !default;
+$break-xs-only:        575.99px !default;
+$break-big-screen:      1450px !default;
+// Media query mixin
+@mixin media($screen){
+
+    @if $screen == lg{
+        @media ( min-width: $break-lg ){
+            @content;
+        }
+    }@if $screen == lgonly{
+        @media ( max-width: $break-lg ){
+            @content;
+        }
+    }@else if$screen == md{
+        @media ( min-width: $break-md ){
+            @content;
+        }
+    }@else if$screen == mdonly{
+        @media ( max-width: $break-md-only ){
+            @content;
+        }
+    }@else if$screen == mdup{
+        @media ( min-width: $break-md-only ){
+            @content;
+        }
+    }@else if $screen == sm{
+        @media ( min-width: $break-sm ){
+            @content;
+        }
+    }@else if $screen == smonly{
+        @media ( max-width: $break-sm-only ){
+            @content;
+        }
+    }@else if $screen == xs{
+        @media ( min-width: $break-xs ){
+            @content;
+        }
+    }@else if $screen == xsonly{
+        @media ( max-width: $break-xs-only ){
+            @content;
+        }
+    }@else if $screen == largeScreen{
+        @media ( min-width: $break-larger-screen ){
+            @content;
+        }
+    }@else if $screen == bigScreen{
+        @media ( min-width: $break-big-screen ){
+            @content;
+        }
+    }
+
+} 
+
+

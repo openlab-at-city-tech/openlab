@@ -1,7 +1,12 @@
 if (window.frameElement) {
 	document.getElementsByTagName('html')[0].id = 'iframely';
 	jQuery(function($) {
-		$('#wpwrap').html($('#wpbody').html($('#wpbody-content').html($('#ngg_page_content'))));
+        var $content = $('#ngg_page_content');
+        $('#wpbody-content').html($content);
+        $('#wpbody').html($content);
+        $('#wpwrap').html($content);
+        // $('#wpwrap').html($('#wpbody').html($('#wpbody-content').html($('#ngg_page_content'))));
+        
 
 		// We need to ensure that any POST operation includes the "attach_to_post"
 		// parameter, to display subsequent clicks in iframely.

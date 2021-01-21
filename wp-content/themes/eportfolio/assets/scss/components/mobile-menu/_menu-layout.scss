@@ -1,0 +1,43 @@
+@import 'first-level';
+@import 'second-level';
+.#{$prefix}-mobile-menu-section{
+    .#{$prefix}-mobile-menu{
+        ul{
+           @extend %reset-ul;
+           @include transition();
+           li{
+              a{
+                 display: inline-block;
+                 padding: 15px 30px;
+                 position: relative;
+                 border: 0;
+                 @include transition();
+                 &:hover{
+                    color: $color_primary;
+                 }
+              }
+           }
+           
+        }
+        ul{
+           @extend %first-level;
+           @extend %second-level;
+           .down-arrow{
+              >a{
+                  position: relative; 
+                  &:after{
+                      display: block;
+                      position: absolute;
+                      right: -15px;
+                      top: 50%;
+                      transform: translateY(-50%);
+                      font-family: fontAwesome;
+                      content:'\f078';
+                  }
+                 
+              }
+          }
+        }
+     }
+
+}

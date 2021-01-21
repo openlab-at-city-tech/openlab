@@ -1,0 +1,30 @@
+@import 'calendar';
+@import 'list';
+@import 'tag';
+@import 'search';
+@import 'social-widget';
+.widget-area{
+    .widget-title{
+        margin: 0;
+        padding-top: 0;
+    }
+    figure,
+    .wp-caption{
+        margin: 0 auto;
+        padding-top: 15px;
+    }
+    .search-form{
+        padding-top: 15px;
+    }
+    select{
+        width: 100%;
+        padding: 10px;
+        font-family: inherit;
+        margin-top: 15px;
+    }
+    p{
+        img{
+            margin-top: 15px;
+        }
+    }
+}

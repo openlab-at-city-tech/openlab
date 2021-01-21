@@ -1,0 +1,22 @@
+.#{$prefix}-single-article{
+    table{
+        margin-top: 15px;
+        margin-bottom: 0;
+        td{
+            padding: 15px;
+            
+        }
+        &.is-style-regular{
+            @include border-bottom();
+            @include border-right();
+            border-color: $color_blue_gray;
+            border-spacing: 0;
+            td{
+                @include border-left();
+                @include border-top();
+                border-color: $color_blue_gray;
+            }
+        }
+       
+    }
+}

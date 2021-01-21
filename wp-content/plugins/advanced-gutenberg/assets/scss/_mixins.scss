@@ -1,0 +1,65 @@
+@mixin buttonAdmin() {
+    .pp-default-button {
+      border-color: $purple;
+      color: $purple;
+      border-width: 1px;
+
+      &:focus {
+        color: $purple-hover;
+        border-color: $purple-hover;
+        box-shadow: 0 0 0 1px $purple-hover;
+        -moz-box-shadow: 0 0 0 1px $purple-hover;
+        -webkit-box-shadow: 0 0 0 1px $purple-hover;
+      }
+
+      &:hover,
+      &:active {
+        color: $purple-hover;
+        border-color: $purple-hover;
+      }
+    }
+
+    .pp-primary-button {
+      background: $purple;
+      color: #fff;
+      border-color: $purple;
+      border-width: 1px;
+
+      &:focus {
+        background: $purple-hover;
+        color: #fff;
+        border-color: $purple-hover;
+        box-shadow: 0 0 0 1px #fff, 0 0 0 3px $purple-hover;
+      }
+
+      &:hover,
+      &:active {
+        background: $purple-hover;
+        color: #fff;
+        border-color: $purple-hover;
+      }
+    }
+
+    .pp-pro-button {
+      background: $purple;
+      color: $darker;
+      border-color: $purple;
+      border-width: 1px;
+
+      &:focus {
+        background: $purple-hover;
+        color: $darker;
+        border-color: $purple-hover;
+        box-shadow: 0 0 0 1px #fff, 0 0 0 3px $purple-hover;
+        -moz-box-shadow: 0 0 0 1px #fff, 0 0 0 3px $purple-hover;
+        -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 3px $purple-hover;
+      }
+
+      &:hover,
+      &:active {
+        background: $purple-hover;
+        color: $darker;
+        border-color: $purple-hover;
+      }
+    }
+}

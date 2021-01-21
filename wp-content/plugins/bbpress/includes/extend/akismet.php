@@ -79,11 +79,11 @@ class BBP_Akismet {
 	 *
 	 * @since 2.0.0 bbPress (r3277)
 	 *
-	 * @param string $post_data
+	 * @param array $post_data
 	 *
 	 * @return array Array of post data
 	 */
-	public function check_post( $post_data ) {
+	public function check_post( $post_data = array() ) {
 
 		// Define local variables
 		$user_data = array();
@@ -110,7 +110,7 @@ class BBP_Akismet {
 		$anonymous_data = bbp_filter_anonymous_post_data();
 
 		// Author is anonymous
-		if ( ! empty( $anonymous_data ) ) {
+		if ( ! bbp_has_errors() ) {
 			$user_data['name']    = $anonymous_data['bbp_anonymous_name'];
 			$user_data['email']   = $anonymous_data['bbp_anonymous_email'];
 			$user_data['website'] = $anonymous_data['bbp_anonymous_website'];
@@ -165,20 +165,28 @@ class BBP_Akismet {
 			'user_role'                      => $this->get_user_roles( $post_data['post_author'] ),
 		) );
 
+		// Set the result headers (from maybe_spam() above)
+		$post_data['bbp_akismet_result_headers'] = ! empty( $_post['bbp_akismet_result_headers'] )
+			? $_post['bbp_akismet_result_headers'] // raw
+			: esc_html__( 'No response', 'bbpress' );
+
 		// Set the result (from maybe_spam() above)
 		$post_data['bbp_akismet_result'] = ! empty( $_post['bbp_akismet_result'] )
 			? $_post['bbp_akismet_result'] // raw
 			: esc_html__( 'No response', 'bbpress' );
 
-		// Set the data-as-submitted value without the result (recursion avoidance)
-		unset( $_post['bbp_akismet_result'] );
+		// Avoid recurrsion by unsetting results
+		unset(
+			$_post['bbp_akismet_result_headers'],
+			$_post['bbp_akismet_result']
+		);
 		$post_data['bbp_post_as_submitted'] = $_post;
 
 		// Cleanup to avoid touching this variable again below
 		unset( $_post );
 
 		// Allow post_data to be manipulated
-		do_action_ref_array( 'bbp_akismet_check_post', $post_data );
+		$post_data = apply_filters( 'bbp_akismet_check_post', $post_data );
 
 		// Parse and log the last response
 		$this->last_post = $this->parse_response( $post_data );
@@ -300,7 +308,7 @@ class BBP_Akismet {
 			'comment_author_email' => $_post->post_author ? get_the_author_meta( 'email',        $_post->post_author ) : get_post_meta( $post_id, '_bbp_anonymous_email',   true ),
 			'comment_author_url'   => $_post->post_author ? bbp_get_user_profile_url(            $_post->post_author ) : get_post_meta( $post_id, '_bbp_anonymous_website', true ),
 			'comment_content'      => $_post_content,
-			'comment_date'         => $_post->post_date,
+			'comment_date_gmt'     => $_post->post_date_gmt,
 			'comment_ID'           => $post_id,
 			'comment_post_ID'      => $_post->post_parent,
 			'comment_type'         => $_post->post_type,
@@ -413,11 +421,16 @@ class BBP_Akismet {
 	 *
 	 * @return array Array of post data
 	 */
-	private function maybe_spam( $post_data, $check = 'check', $spam = 'spam' ) {
+	private function maybe_spam( $post_data = array(), $check = 'check', $spam = 'spam' ) {
 		global $akismet_api_host, $akismet_api_port;
 
 		// Define variables
 		$query_string = $path = $response = '';
+
+		// Make sure post data is an array
+		if ( ! is_array( $post_data ) ) {
+			$post_data = array();
+		}
 
 		// Populate post data
 		$post_data['blog']         = get_option( 'home' );
@@ -427,51 +440,61 @@ class BBP_Akismet {
 		$post_data['user_agent']   = bbp_current_author_ua();
 
 		// Loop through _POST args and rekey strings
-		foreach ( $_POST as $key => $value ) {
-			if ( is_string( $value ) ) {
-				$post_data['POST_' . $key] = $value;
+		if ( ! empty( $_POST ) && is_countable( $_POST ) ) {
+			foreach ( $_POST as $key => $value ) {
+				if ( is_string( $value ) ) {
+					$post_data['POST_' . $key] = $value;
+				}
 			}
 		}
-
-		// Keys to ignore
-		$ignore = array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW' );
 
 		// Loop through _SERVER args and remove allowed keys
-		foreach ( $_SERVER as $key => $value ) {
+		if ( ! empty( $_SERVER ) && is_countable( $_SERVER ) ) {
 
-			// Key should not be ignored
-			if ( ! in_array( $key, $ignore, true ) && is_string( $value ) ) {
-				$post_data[ $key ] = $value;
+			// Keys to ignore
+			$ignore = array( 'HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW' );
 
-			// Key should be ignored
-			} else {
-				$post_data[ $key ] = '';
+			foreach ( $_SERVER as $key => $value ) {
+
+				// Key should not be ignored
+				if ( ! in_array( $key, $ignore, true ) && is_string( $value ) ) {
+					$post_data[ $key ] = $value;
+
+				// Key should be ignored
+				} else {
+					$post_data[ $key ] = '';
+				}
 			}
 		}
 
-		// Ready...
-		foreach ( $post_data as $key => $data ) {
-			$query_string .= $key . '=' . urlencode( wp_unslash( $data ) ) . '&';
+		// Encode post data
+		if ( ! empty( $post_data ) && is_countable( $post_data ) ) {
+			foreach ( $post_data as $key => $data ) {
+				$query_string .= $key . '=' . urlencode( wp_unslash( $data ) ) . '&';
+			}
 		}
 
-		// Aim...
+		// Setup the API route
 		if ( 'check' === $check ) {
 			$path = '/1.1/comment-check';
 		} elseif ( 'submit' === $check ) {
 			$path = '/1.1/submit-' . $spam;
 		}
 
-		// Fire!
+		// Send data to Akismet
 		$response = ! apply_filters( 'bbp_bypass_check_for_spam', false, $post_data )
 			? $this->http_post( $query_string, $akismet_api_host, $path, $akismet_api_port )
 			: false;
 
-		// Check the high-speed cam
-		if ( ! empty( $response[1] ) ) {
-			$post_data['bbp_akismet_result'] = $response[1];
-		} else {
-			$post_data['bbp_akismet_result'] = esc_html__( 'No response', 'bbpress' );
-		}
+		// Set the result headers
+		$post_data['bbp_akismet_result_headers'] = ! empty( $response[0] )
+			? $response[0]
+			: esc_html__( 'No response', 'bbpress' );
+
+		// Set the result
+		$post_data['bbp_akismet_result'] = ! empty( $response[1] )
+			? $response[1]
+			: esc_html__( 'No response', 'bbpress' );
 
 		// Return the post data, with the results of the external Akismet request
 		return $post_data;
@@ -501,7 +524,7 @@ class BBP_Akismet {
 		}
 
 		// Set up Akismet last post data
-		if ( ! empty( $this->last_post ) ) {
+		if ( ! empty( $this->last_post['bbp_post_as_submitted'] ) ) {
 			$as_submitted = $this->last_post['bbp_post_as_submitted'];
 		}
 
@@ -513,46 +536,100 @@ class BBP_Akismet {
 			$userdata       = get_userdata( $_post->post_author );
 			$anonymous_data = bbp_filter_anonymous_post_data();
 
+			// Which name?
+			$name = ! empty( $anonymous_data['bbp_anonymous_name'] )
+				? $anonymous_data['bbp_anonymous_name']
+				: $userdata->display_name;
+
+			// Which email?
+			$email = ! empty( $anonymous_data['bbp_anonymous_email'] )
+				? $anonymous_data['bbp_anonymous_email']
+				: $userdata->user_email;
+
 			// More checks
-			if (	intval( $as_submitted['comment_post_ID'] )    === intval( $_post->post_parent )
-					&&      $as_submitted['comment_author']       === ( $anonymous_data ? $anonymous_data['bbp_anonymous_name']  : $userdata->display_name )
-					&&      $as_submitted['comment_author_email'] === ( $anonymous_data ? $anonymous_data['bbp_anonymous_email'] : $userdata->user_email   )
-				) {
+			if (
+
+				// Post matches
+				( intval( $as_submitted['comment_post_ID'] ) === intval( $_post->post_parent ) )
+
+				&&
+
+				// Name matches
+				( $as_submitted['comment_author'] === $name )
+
+				&&
+
+				// Email matches
+				( $as_submitted['comment_author_email'] === $email )
+			) {
 
 				// Normal result: true
-				if ( $this->last_post['bbp_akismet_result'] === 'true' ) {
+				if ( ! empty( $this->last_post['bbp_akismet_result'] ) && ( $this->last_post['bbp_akismet_result'] === 'true' ) ) {
 
 					// Leave a trail so other's know what we did
 					update_post_meta( $post_id, '_bbp_akismet_result', 'true' );
-					$this->update_post_history( $post_id, esc_html__( 'Akismet caught this post as spam', 'bbpress' ), 'check-spam' );
+					$this->update_post_history(
+						$post_id,
+						esc_html__( 'Akismet caught this post as spam', 'bbpress' ),
+						'check-spam'
+					);
 
 					// If post_status isn't the spam status, as expected, leave a note
 					if ( bbp_get_spam_status_id() !== $_post->post_status ) {
-						$this->update_post_history( $post_id, sprintf( esc_html__( 'Post status was changed to %s', 'bbpress' ), $_post->post_status ), 'status-changed-' . $_post->post_status );
+						$this->update_post_history(
+							$post_id,
+							sprintf(
+								esc_html__( 'Post status was changed to %s', 'bbpress' ),
+								$_post->post_status
+							),
+							'status-changed-' . $_post->post_status
+						);
 					}
 
 				// Normal result: false
-				} elseif ( $this->last_post['bbp_akismet_result'] === 'false' ) {
+				} elseif ( ! empty( $this->last_post['bbp_akismet_result'] ) && ( $this->last_post['bbp_akismet_result'] === 'false' ) ) {
 
 					// Leave a trail so other's know what we did
 					update_post_meta( $post_id, '_bbp_akismet_result', 'false' );
-					$this->update_post_history( $post_id, esc_html__( 'Akismet cleared this post as not spam', 'bbpress' ), 'check-ham' );
+					$this->update_post_history(
+						$post_id,
+						esc_html__( 'Akismet cleared this post as not spam', 'bbpress' ),
+						'check-ham'
+					);
 
 					// If post_status is the spam status, which isn't expected, leave a note
 					if ( bbp_get_spam_status_id() === $_post->post_status ) {
-						$this->update_post_history( $post_id, sprintf( esc_html__( 'Post status was changed to %s', 'bbpress' ), $_post->post_status ), 'status-changed-' . $_post->post_status );
+						$this->update_post_history(
+							$post_id,
+							sprintf(
+								esc_html__( 'Post status was changed to %s', 'bbpress' ),
+								$_post->post_status
+							),
+							'status-changed-' . $_post->post_status
+						);
 					}
 
 				// Abnormal result: error
 				} else {
 					// Leave a trail so other's know what we did
 					update_post_meta( $post_id, '_bbp_akismet_error', time() );
-					$this->update_post_history( $post_id, sprintf( esc_html__( 'Akismet was unable to check this post (response: %s), will automatically retry again later.', 'bbpress' ), $this->last_post['bbp_akismet_result'] ), 'check-error' );
+					$this->update_post_history(
+						$post_id,
+						sprintf(
+							esc_html__( 'Akismet was unable to check this post (response: %s), will automatically retry again later.', 'bbpress' ),
+							$this->last_post['bbp_akismet_result']
+						),
+						'check-error'
+					);
 				}
 
 				// Record the complete original data as submitted for checking
 				if ( isset( $this->last_post['bbp_post_as_submitted'] ) ) {
-					update_post_meta( $post_id, '_bbp_akismet_as_submitted', $this->last_post['bbp_post_as_submitted'] );
+					update_post_meta(
+						$post_id,
+						'_bbp_akismet_as_submitted',
+						$this->last_post['bbp_post_as_submitted']
+					);
 				}
 			}
 		}

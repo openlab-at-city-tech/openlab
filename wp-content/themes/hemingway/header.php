@@ -27,7 +27,7 @@
 
 				<?php $header_image_url = get_header_image() ? get_header_image() : get_template_directory_uri() . '/assets/images/header.jpg'; ?>
 		
-				<div class="header section" style="background-image: url( <?php echo  $header_image_url; ?> );">
+				<div class="header section" style="background-image: url( <?php echo esc_url( $header_image_url ); ?> );">
 							
 					<div class="header-inner section-inner">
 					

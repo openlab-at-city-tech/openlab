@@ -1,7 +1,7 @@
 <?php
 
 $the_unit_type      = get_query_var( 'academic_unit_type' );
-$allowed_unit_types = [ 'school', 'school-office', 'department' ];
+$allowed_unit_types = [ 'school', 'office', 'department' ];
 
 if ( ! in_array( $the_unit_type, $allowed_unit_types, true ) ) {
 	return;
@@ -23,10 +23,19 @@ switch ( get_query_var( 'academic_unit_type' ) ) {
 		}
 	break;
 
-	// This markup is built separately to account for optgroups.
-	case 'school-office' :
-		$url_param = 'school';
-		$label     = 'Select School/Office';
+	case 'office' :
+		$label     = 'Select Office';
+		$all_name  = 'All Offices';
+		$url_param = 'office';
+
+		$units_of_type = [];
+		foreach ( openlab_get_office_list() as $office_slug => $office_name ) {
+			$units_of_type[] = [
+				'name'   => $office_name,
+				'slug'   => $office_slug,
+				'parent' => '',
+			];
+		}
 	break;
 
 	case 'department' :
@@ -63,32 +72,12 @@ if ( 'school' === $url_param && 'all' !== $current_unit ) {
 	<label for="<?php echo esc_attr( $url_param ); ?>-select" class="sr-only"><?php echo esc_html( $label ); ?></label>
 	<select name="<?php echo esc_attr( $url_param ); ?>" class="last-select" id="<?php echo esc_attr( $url_param ); ?>-select" data-unittype="<?php echo esc_attr( $url_param ); ?>">
 
-		<?php if ( 'school-office' === $the_unit_type ) : ?>
+		<option class="academic-unit" value="" data-academic-unit-type="<?php echo esc_attr( $url_param ); ?>" data-parent="" <?php selected( '', $current_unit ) ?>><?php echo esc_html( $label ); ?></option>
+		<option class="academic-unit" value="all" data-parent="" data-academic-unit-type="<?php echo esc_attr( $url_param ); ?>" <?php selected( 'all', $current_unit ) ?>><?php echo esc_html( $all_name ); ?></option>
 
-			<option value="" <?php selected( '', $current_unit ); ?>>Select School / Office</option>
-			<optgroup label="All Schools">
-			<?php foreach ( openlab_get_school_list() as $school_key => $school_label ) : ?>
-				<option class="academic-unit academic-unit-nonempty" value="<?php echo esc_attr( $school_key ); ?>" <?php selected( $school_key, $current_unit ); ?>><?php echo esc_html( $school_label ); ?></option>
-			<?php endforeach; ?>
-			</optgroup>
-
-			<optgroup label="All Offices">
-			<?php foreach ( openlab_get_office_list() as $office_key => $office_label ) : ?>
-				<option class="academic-unit academic-unit-nonempty" value="<?php echo esc_attr( $office_key ); ?>" <?php selected( $office_key, $current_unit ); ?>><?php echo esc_html( $office_label ); ?></option>
-			<?php endforeach; ?>
-
-			</optgroup>
-
-		<?php else : ?>
-
-			<option class="academic-unit" value="" data-parent="" <?php selected( '', $current_unit ) ?>><?php echo esc_html( $label ); ?></option>
-			<option class="academic-unit" value="all" data-parent="" <?php selected( 'all', $current_unit ) ?>><?php echo esc_html( $all_name ); ?></option>
-
-			<?php foreach ( $units_of_type as $unit ) : ?>
-				<option class="academic-unit academic-unit-nonempty" data-parent="<?php echo esc_html( $unit['parent'] ); ?>" value='<?php echo esc_attr( $unit['slug'] ); ?>' <?php selected( $unit['slug'], $current_unit ) ?>><?php echo esc_html( $unit['name'] ); ?></option>
-			<?php endforeach; ?>
-
-		<?php endif; ?>
+		<?php foreach ( $units_of_type as $unit ) : ?>
+			<option class="academic-unit academic-unit-nonempty" data-academic-unit-type="<?php echo esc_attr( $url_param ); ?>" data-parent="<?php echo esc_html( $unit['parent'] ); ?>" value='<?php echo esc_attr( $unit['slug'] ); ?>' <?php selected( $unit['slug'], $current_unit ) ?>><?php echo esc_html( $unit['name'] ); ?></option>
+		<?php endforeach; ?>
 
 	</select>
 </div><!-- #academic-unit-type-select-<?php echo esc_html( $url_param ); ?> -->

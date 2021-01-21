@@ -64,6 +64,19 @@ function bpges_process_digest_for_user( $user_id, $type, $timestamp, $is_preview
 
 	$items = $query->get_results();
 
+	/**
+	 * Filters the items to be included in a digest for a user.
+	 *
+	 * @since 3.9.5
+	 *
+	 * @param array  $items      Items returned by BPGES_Queued_Item_Query::get_results().
+	 * @param int    $user_id    ID of the user.
+	 * @param string $type       Digest type. 'sum' or 'dig'.
+	 * @param string $timestamp  Timestamp for the current digest run.
+	 * @param bool   $is_preview Whether this is a preview.
+	 */
+	$items = apply_filters( 'bpges_user_digest_items', $items, $user_id, $type, $timestamp, $is_preview );
+
 	// Sort by group.
 	$sorted_by_group = array();
 	foreach ( $items as $item ) {
@@ -182,7 +195,7 @@ function bpges_generate_digest( $user_id, $type, $group_activity_ids, $is_previe
 		) );
 		$group_name = $group->name;
 		$group_slug = $group->slug;
-		$group_permalink = bp_get_group_permalink( $group );
+		$group_permalink = ass_get_login_redirect_url( bp_get_group_permalink( $group ) );
 
 		// Might be nice here to link to anchor tags in the message.
 		if ( 'dig' == $type ) {
@@ -518,7 +531,7 @@ function ass_digest_format_item( $item, $type ) {
 		$action_split = explode( ' in the group', ass_clean_subject_html( $item->action ) );
 	}
 
-	if ( $action_split[1] )
+	if ( isset( $action_split[1] ) )
 		$action = $action_split[0];
 	else
 		$action = $item->action;
@@ -534,7 +547,7 @@ function ass_digest_format_item( $item, $type ) {
 //	$timestamp = strtotime( $item->date_recorded );
 
 	/* Because BuddyPress core set gmt = true, timezone must be added */
-	$timestamp = strtotime( $item->date_recorded ) +date('Z');
+	$timestamp = get_date_from_gmt( $item->date_recorded, 'U' );
 
 	$time_posted = date( get_option( 'time_format' ), $timestamp );
 	$date_posted = date( get_option( 'date_format' ), $timestamp );
@@ -556,7 +569,7 @@ function ass_digest_format_item( $item, $type ) {
 		$view_link = $item->primary_link;
 	}
 
-	$item_message .= ' - <a class="digest-item-view-link" href="' . ass_get_login_redirect_url( $view_link ) .'">' . __( 'View', 'buddypress-group-email-subscription' ) . '</a>';
+	$item_message .= ' - <a ' . $ass_email_css['view_link'] . ' class="digest-item-view-link" href="' . ass_get_login_redirect_url( $view_link ) .'">' . __( 'View', 'buddypress-group-email-subscription' ) . '</a>';
 
 	$item_message .= "</div>\n\n";
 
@@ -930,6 +943,7 @@ function bpges_digest_css() {
 	$ass_email_css['item_action']  = 'style="color:#888;"';
 	$ass_email_css['item_date']    = 'style="font-size:85%; color:#bbb; margin-left:8px;"';
 	$ass_email_css['item_content'] = 'style="color:#333;"';
+	$ass_email_css['view_link']    = 'style="";';
 	$ass_email_css['item_weekly']  = 'style="color:#888; padding:4px 10px 0"'; // used in weekly in place of other item_ above
 	$ass_email_css['footer']       = 'class="ass-footer" style="margin:25px 0 0; padding-top:5px; border-top:1px #bbb solid;"';
 

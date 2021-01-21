@@ -1,0 +1,31 @@
+.#{$prefix}-author-meta{
+    display: flex;
+    align-items: center;
+    font-weight: $font_semi_bold;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    margin-right: -5px;
+    font-size: 0.8rem;
+    span,a{
+        display: inline-block;
+    }
+    .#{$prefix}-author-caption,
+    .#{$prefix}-post-date,
+    .#{$prefix}-comment{
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .#{$prefix}-author-image{
+        width: 35px;
+        margin-left: 5px;
+        margin-right: 5px;
+        vertical-align: middle;
+        img{
+            border-radius: 100%;
+        }
+    }
+    &.#{$prefix}-author-meta-primary{
+        @extend %primary-color;
+    }
+   
+}

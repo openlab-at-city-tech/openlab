@@ -1,0 +1,33 @@
+.#{$prefix}-list-post-list{
+    @extend %reset-ul;
+    .#{$prefix}-list-post{
+        margin-top: 15px;
+    }
+
+}
+.#{$prefix}-list-post{
+    .#{$prefix}-image-section{
+        flex: 0 0 100px;
+        max-width: 100px;
+        height: 70px;
+        position: relative;
+        overflow: hidden;
+        a{
+            height: 100%;
+            display: block;
+        }
+    }
+    .#{$prefix}-desc{
+        flex: 0 0 calc(100% - 100px);
+        max-width: calc(100% - 100px);
+        padding: 5px 10px;
+        
+        h5{
+            margin: 0;
+            a{
+                @include line-limit(2);
+            }
+        }
+    }
+ 
+}
