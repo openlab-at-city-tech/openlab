@@ -255,34 +255,31 @@ if ($nb_tags < $tag_count && $offset>0) {
 		</table>
 	</div> <!-- /.ngg_page_content_main -->
   	<script type="text/javascript">
-  	// <![CDATA[
-  		// Register onclick event
-  		function registerClick() {
-  			jQuery('#taglist ul li span').on("click", function(){
-				addTag(this.innerHTML, "renametag_old");
-				addTag(this.innerHTML, "deletetag_name");
-				addTag(this.innerHTML, "tagname_match");
-			});
-  		}
+        // Register initial event
+        (function($) {
+            $(function() {
+                $('#taglist ul li span').on("click", function () {
+                    addTag(this.innerHTML, "renametag_old");
+                    addTag(this.innerHTML, "deletetag_name");
+                    addTag(this.innerHTML, "tagname_match");
+                });
+            });
+        })(jQuery);
 
-		// Register initial event
- 		jQuery(document).ready(function() {
-			registerClick();
-		});
+        // Add tag into input
+        function addTag(tag, name_element) {
+            var input_element = document.getElementById(name_element);
 
-		// Add tag into input
-		function addTag( tag, name_element ) {
-			var input_element = document.getElementById( name_element );
+            if (input_element.value.length > 0 && !input_element.value.match(/,\s*$/)) {
+                input_element.value += ", ";
+            }
 
-			if ( input_element.value.length > 0 && !input_element.value.match(/,\s*$/) )
-				input_element.value += ", ";
+            var re = new RegExp(tag + ",");
+            if (!input_element.value.match(re)) {
+                input_element.value += tag + ", ";
+            }
 
-			var re = new RegExp(tag + ",");
-			if ( !input_element.value.match(re) )
-				input_element.value += tag + ", ";
-
-			return true;
-		}
-	// ]]>
-	</script>
+            return true;
+        }
+    </script>
 </div> <!-- /.wrap -->

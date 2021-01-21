@@ -111,7 +111,7 @@ class Lightbox {
     // JQuery Call
     start(imageLink) {
         document.querySelectorAll("select, embed, object").forEach(element => {
-            hide(element);
+            this.helper.hide(element);
         });
         var arrayPageSize = this.helper.getPageSize();
         var arrayPagePos = this.helper.getPageScroll();

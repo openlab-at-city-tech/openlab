@@ -1,16 +1,16 @@
 <?php
 /**
  * Plugin Name: Text Hover
- * Version:     3.9.1
- * Plugin URI:  http://coffee2code.com/wp-plugins/text-hover/
+ * Version:     4.0
+ * Plugin URI:  https://coffee2code.com/wp-plugins/text-hover/
  * Author:      Scott Reilly
- * Author URI:  http://coffee2code.com/
+ * Author URI:  https://coffee2code.com/
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: text-hover
  * Description: Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms mentioned in your blog.
  *
- * Compatible with WordPress 4.7+ through 5.3+.
+ * Compatible with WordPress 4.9+ through 5.4+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,19 +18,7 @@
  *
  * @package Text_Hover
  * @author  Scott Reilly
- * @version 3.9.1
- */
-
-/*
- * TODO:
- * - Shortcode and template tag to display listing of all supported text hovers (filterable)
- * - Switch to pure-CSS tooltips? See: https://medium.com/two-factor-authenticity/tiny-design-bite-transitioning-tooltip-text-with-pseudo-elements-hover-states-82fbe00e8c33
- * - Metabox to display listing of all supported text hovers
- * - Smarter input form for text hovers. Repeatable field with sub-fields name and hover text. (This will allow having multiline hover text).
- * - Ability for users to set the text color, background color, and border color of their tooltips.
- * - Settings page text area for testing sample text. Use AJAX to fetch parsed text from server for display. Applies same styles as it would on frontend.
- * - Add setting to specify additional filters to be handled by the plugin.
- * - Add support for `c2c_text_hover_filter_priority`, similar to what Text Replace does
+ * @version 4.0
  */
 
 /*
@@ -57,7 +45,7 @@ if ( ! class_exists( 'c2c_TextHover' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
+final class c2c_TextHover extends c2c_TextHover_Plugin_050 {
 
 	/**
 	 * Name of plugin's setting.
@@ -91,7 +79,7 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.9.1', 'text-hover', 'c2c', __FILE__, array() );
+		parent::__construct( '4.0', 'text-hover', 'c2c', __FILE__, array() );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -159,6 +147,13 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 				'label'            => __( 'Should better looking hover tooltips be shown?', 'text-hover' ),
 				'help'             => __( 'If unchecked, the default browser rendering of tooltips will be used.', 'text-hover' ),
 			),
+			'when' => array(
+				'input'            => 'select',
+				'default'          => 'early',
+				'options'          => array( 'early', 'late' ),
+				'label'            => __( 'When to process text?', 'text-replace' ),
+				'help'             => sprintf( __( "Text hover replacements can happen 'early' (before most other text processing for posts) or 'late' (after most other text processing for posts). By default the plugin handles text early, but depending on the replacements you've defined and the plugins you're using, you can eliminate certain conflicts by switching to 'late'. Finer-grained control can be achieved via the <code>%s</code> filter.", 'text-hover' ), 'c2c_text_hover_filter_priority' ),
+			),
 		);
 	}
 
@@ -166,6 +161,8 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 	 * Override the plugin framework's register_filters() to actually actions against filters.
 	 */
 	public function register_filters() {
+		$options = $this->get_options();
+
 		/**
 		 * Filters third party plugin/theme hooks that get processed for hover text.
 		 *
@@ -211,8 +208,24 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 		 *                       'widget_text'].
 		 */
 		$filters = (array) apply_filters( 'c2c_text_hover_filters', $filters );
+
+		$default_priority = ( 'late' === $options[ 'when'] ) ? 1000 : 3;
+
 		foreach ( $filters as $filter ) {
-			add_filter( $filter, array( $this, 'text_hover' ), 3 );
+			/**
+			 * Filters the priority for attaching the text hover handler to a
+			 * hook.
+			 *
+			 * @since 4.0
+			 *
+			 * @param int    $priority The priority for the 'c2c_text_hover'
+			 *                         filter. Default 3 if 'when' setting
+			 *                         value is 'early', else 1000.
+			 * @param string $filter   The filter name.
+			 */
+			$priority = (int) apply_filters( 'c2c_text_hover_filter_priority', $default_priority, $filter );
+
+			add_filter( $filter, array( $this, 'text_hover' ), $priority );
 		}
 
 		add_action( 'wp_enqueue_scripts',  array( $this, 'enqueue_scripts' ) );
@@ -257,7 +270,7 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 	 * @since 3.5
 	 */
 	public function admin_print_scripts() {
-		if ( $this->options_page == get_current_screen()->id ) {
+		if ( $this->options_page === get_current_screen()->id ) {
 			$this->enqueue_scripts();
 		}
 	}
@@ -439,7 +452,15 @@ final class c2c_TextHover extends c2c_TextHover_Plugin_049 {
 			/*
 			$regex = "(?!<.*?)([\s\'\"\.\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\(\[\{\)\>])($old_text)([\s\'\"\x98\x99\x9c\x9d\xCB\x9C\xE2\x84\xA2\xC5\x93\xEF\xBF\xBD\?\!\.\,\-\+\]\)\}\(\<])(?![^<>]*?>)";
 			*/
-			$regex = "\b($old_text)\b(?!([^<]+)?>)";
+
+			/* Could really just use this instead of next three lines of code. Though '<' and '>' are intentionally excluded here. */
+			//$regex_start_barrier = ctype_punct( $orig_old_text[0] )  ? '(?!\s)?' : '\b';
+			//$regex_end_barrier   = ctype_punct( $orig_old_text[-1] ) ? '(?!\s)?' : '\b';
+
+			$punctuation = array( '&', '#', '!', '?', '.', '-', '/', '\\', '%', '@', '$', '^', '*', '(', ')', '+', '=', '~', '`', '[', ']', '|', ':', ';', '"', "'" );
+			$regex_start_barrier = in_array( $orig_old_text[0], $punctuation )  ? '(?!\s)?' : '\b';
+			$regex_end_barrier   = in_array( $orig_old_text[-1], $punctuation ) ? '(?!\s)?' : '\b';
+			$regex = "$regex_start_barrier($old_text)$regex_end_barrier(?!([^<]+)?>)";
 
 			// If the text to be replaced has multibyte character(s), use
 			// mb_ereg_replace() if possible.

@@ -35,7 +35,7 @@ class Osm_OLJS3
         zIndex: 90
       });';
     }
-    if ($a_Type == "hot"){
+    else if ($a_Type == "hot"){
       $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.OSM({
@@ -47,7 +47,7 @@ class Osm_OLJS3
            });
           ';
     }
-    if ($a_Type == "opentopomap"){
+    else if ($a_Type == "opentopomap"){
       $TileLayer .= '
           var raster = new ol.layer.Tile({
             source: new ol.source.XYZ({
@@ -60,8 +60,6 @@ class Osm_OLJS3
           ';
     }
              
-
-
     else if ($a_Type == "stamen_toner"){
       $TileLayer .= '
       var raster = new ol.layer.Tile({
@@ -383,24 +381,23 @@ Server seams to be down
 				});'
 			;
 		}
-
 		if ($a_Type == 'gpx'){
 			$VectorLayer .= '
 				vectorM[\'' . $a_MapName . '\'][' . $a_Counter . '] = new ol.layer.Vector({
 					options: {title: "overlay' . $a_Counter . '"},
 					source: new ol.source.Vector({
 						url:"' . trim($a_FileName) . '",
+						
 						format: new ol.format.GPX({
 							extractStyles: false
-						}),
-                  zIndex: 92
+						})
 					}),
+					zIndex: 92,
 					style: function(feature, resolution) {return style' . $a_Counter . '[feature.getGeometry().getType()];}
 				 });'
 				;
 			}
 		}
-
 	return $VectorLayer;
 	}
 }

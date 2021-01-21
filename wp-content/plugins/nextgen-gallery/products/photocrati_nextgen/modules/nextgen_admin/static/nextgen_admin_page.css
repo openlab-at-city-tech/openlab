@@ -251,7 +251,7 @@ table.nextgen_settings_position {
 }
 
 #ngg_page_content button.wp-color-result {
-    height: 24px!important;
+    height: 100% !important;
     padding: 0 0 0 30px!important;
     border: 1px solid #ddd !important; 
 }

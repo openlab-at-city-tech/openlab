@@ -101,7 +101,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 					return;
 				}
 			}
-			list( $fullsize_count, $unoptimized_count, $resize_count, $unoptimized_resize_count ) = ewww_image_optimizer_count_optimized( 'flag' );
+			list( $fullsize_count, $resize_count ) = ewww_image_optimizer_count_optimized( 'flag' );
 			// Bail-out if there aren't any images to optimize.
 			if ( $fullsize_count < 1 ) {
 				echo '<p>' . esc_html__( 'You do not appear to have uploaded any images yet.', 'ewww-image-optimizer' ) . '</p>';
@@ -114,6 +114,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 				ewww_image_optimizer_cloud_verify();
 				echo '<a id="ewww-bulk-credits-available" target="_blank" class="page-title-action" style="float:right;" href="https://ewww.io/my-account/">' . esc_html__( 'Image credits available:', 'ewww-image-optimizer' ) . ' ' . esc_html( ewww_image_optimizer_cloud_quota() ) . '</a>';
 			}
+			echo '<div id="ewww-bulk-warning" class="ewww-bulk-info notice notice-warning"><p>' . esc_html__( 'Bulk Optimization will alter your original images and cannot be undone. Please be sure you have a backup of your images before proceeding.', 'ewww-image-optimizer' ) . '</p></div>';
 			// Retrieve the value of the 'bulk resume' option and set the button text for the form to use.
 			$resume = get_option( 'ewww_image_optimizer_bulk_flag_resume' );
 			if ( empty( $resume ) ) {
@@ -123,13 +124,13 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			}
 			$delay = ewww_image_optimizer_get_option( 'ewww_image_optimizer_delay' ) ? ewww_image_optimizer_get_option( 'ewww_image_optimizer_delay' ) : 0;
 			/* translators: 1-4: number(s) of images */
-			$selected_images_text = sprintf( __( '%1$d images have been selected (%2$d unoptimized), with %3$d resizes (%4$d unoptimized).', 'ewww-image-optimizer' ), $fullsize_count, $unoptimized_count, $resize_count, $unoptimized_resize_count );
+			$selected_images_text = sprintf( __( '%1$d images have been selected, with %2$d resized versions.', 'ewww-image-optimizer' ), $fullsize_count, $resize_count );
 			?>
 			<div id="ewww-bulk-loading"></div>
 			<div id="ewww-bulk-progressbar"></div>
 			<div id="ewww-bulk-counter"></div>
 			<form id="ewww-bulk-stop" style="display:none;" method="post" action="">
-			<br /><input type="submit" class="button-secondary action" value="<?php esc_attr_e( 'Stop Optimizing', 'ewww-image-optimizer' ); ?>" />
+				<br /><input type="submit" class="button-secondary action" value="<?php esc_attr_e( 'Stop Optimizing', 'ewww-image-optimizer' ); ?>" />
 			</form>
 			<div id="ewww-bulk-widgets" class="metabox-holder" style="display:none">
 				<div class="meta-box-sortables">
@@ -153,14 +154,19 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 					</div>
 				</div>
 			</div>
-			<form class="ewww-bulk-form">
-				<p><label for="ewww-force" style="font-weight: bold"><?php esc_html_e( 'Force re-optimize', 'ewww-image-optimizer' ); ?></label>&emsp;<input type="checkbox" id="ewww-force" name="ewww-force"></p>
-				<p><label for="ewww-delay" style="font-weight: bold"><?php esc_html_e( 'Choose how long to pause between images (in seconds, 0 = disabled)', 'ewww-image-optimizer' ); ?></label>&emsp;<input type="text" id="ewww-delay" name="ewww-delay" value="<?php echo (int) $delay; ?>"></p>
-				<div id="ewww-delay-slider" style="width:50%"></div>
+			<form id="ewww-bulk-controls" class="ewww-bulk-form">
+				<p><label for="ewww-force" style="font-weight: bold"><?php esc_html_e( 'Force re-optimize', 'ewww-image-optimizer' ); ?></label><?php ewwwio_help_link( 'https://docs.ewww.io/article/65-force-re-optimization', '5bb640a7042863158cc711cd' ); ?>
+					&emsp;<input type="checkbox" idp="ewww-force" name="ewww-force">
+					&nbsp;<?php esc_html_e( 'Previously optimized images will be skipped by default, check this box before scanning to override.', 'ewww-image-optimizer' ); ?>
+					&nbsp;<a href="tools.php?page=ewww-image-optimizer-tools"><?php esc_html_e( 'View optimization history.', 'ewww-image-optimizer' ); ?></a>
+				</p>
+				<p>
+					<label for="ewww-delay" style="font-weight: bold"><?php esc_html_e( 'Pause between images', 'ewww-image-optimizer' ); ?></label>&emsp;<input type="text" id="ewww-delay" name="ewww-delay" value="<?php echo (int) $delay; ?>"> <?php esc_html_e( 'in seconds, 0 = disabled', 'ewww-image-optimizer' ); ?>
+				</p>
+				<div id="ewww-delay-slider"></div>
 			</form>
 			<div id="ewww-bulk-forms" style="float:none;">
-			<p class="ewww-bulk-info"><?php echo esc_html( $selected_images_text ); ?><br />
-			<?php esc_html_e( 'Previously optimized images will be skipped by default.', 'ewww-image-optimizer' ); ?></p>
+			<p class="ewww-bulk-info"><?php echo esc_html( $selected_images_text ); ?></p>
 			<form id="ewww-bulk-start" class="ewww-bulk-form" method="post" action="">
 				<input type="submit" class="button-primary action" value="<?php echo esc_attr( $button_text ); ?>" />
 			</form>
@@ -168,11 +174,11 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			// If there was a previous operation, offer the option to reset the option in the db.
 			if ( ! empty( $resume ) ) :
 				?>
-			<p class="ewww-bulk-info"><?php esc_html_e( 'If you would like to start over again, press the Reset Status button to reset the bulk operation status.', 'ewww-image-optimizer' ); ?></p>
+			<p class="ewww-bulk-info" style="margin-top:3em;"><?php esc_html_e( 'Would you like clear the queue and start over?', 'ewww-image-optimizer' ); ?></p>
 			<form method="post" class="ewww-bulk-form" action="">
 				<?php wp_nonce_field( 'ewww-image-optimizer-bulk', 'ewww_wpnonce' ); ?>
 				<input type="hidden" name="ewww_reset" value="1">
-				<button id="bulk-reset" type="submit" class="button-secondary action"><?php esc_html_e( 'Reset Status', 'ewww-image-optimizer' ); ?></button>
+				<button id="bulk-reset" type="submit" class="button-secondary action"><?php esc_html_e( 'Clear Queue', 'ewww-image-optimizer' ); ?></button>
 			</form>
 				<?php
 			endif;
@@ -608,7 +614,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			$fres        = ewww_image_optimizer( $file_path, 3, false, false, true );
 			$ewww_status = get_transient( 'ewww_image_optimizer_cloud_status' );
 			if ( ! empty( $ewww_status ) && preg_match( '/exceeded/', $ewww_status ) ) {
-				$output['error'] = esc_html__( 'License Exceeded', 'ewww-image-optimizer' );
+				$output['error'] = '<a href="https://ewww.io/buy-credits/" target="_blank">' . esc_html__( 'License Exceeded', 'ewww-image-optimizer' ) . '</a>';
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}
@@ -637,7 +643,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			$elapsed = microtime( true ) - $started;
 			// And output it to the user.
 			/* Translators: %s: number of seconds, localized */
-			$output['results']  .= sprintf( esc_html( _n( 'Elapsed: %s second', 'Elapsed: %s seconds', $elapsed, 'ewww-image-optimizer' ) ) . '</p>', number_format_i18n( $elapsed ) );
+			$output['results']  .= sprintf( esc_html( _n( 'Elapsed: %s second', 'Elapsed: %s seconds', $elapsed, 'ewww-image-optimizer' ) ) . '</p>', number_format_i18n( $elapsed, 2 ) );
 			$output['completed'] = 1;
 			// Send the list back to the db.
 			update_option( 'ewww_image_optimizer_bulk_flag_attachments', $attachments, false );
@@ -773,7 +779,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 					}
 					break;
 				case 'image/png':
-					if ( ! EWWW_IMAGE_OPTIMIZER_PNGOUT && ! EWWW_IMAGE_OPTIMIZER_OPTIPNG && ! $skip['optipng'] && ! $skip['pngout'] ) {
+					if ( ( ! $skip['optipng'] && ! EWWW_IMAGE_OPTIMIZER_OPTIPNG ) || ( ! $skip['pngout'] && ! EWWW_IMAGE_OPTIMIZER_PNGOUT ) ) {
 						/* translators: %s: name of a tool like jpegtran */
 						echo '<div>' . sprintf( esc_html__( '%s is missing', 'ewww-image-optimizer' ), '<em>optipng/pngout</em>' ) . '</div></div>';
 						return;

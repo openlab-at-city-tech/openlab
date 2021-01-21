@@ -1420,7 +1420,7 @@
         },
         markerTitle: {
             type: 'string',
-            default: __( 'Eiffel Tower', 'advanced-gutenberg' ),
+            default: 'Eiffel Tower',
         },
         markerDesc: {
             type: 'string',

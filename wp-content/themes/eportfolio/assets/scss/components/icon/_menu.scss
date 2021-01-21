@@ -1,0 +1,74 @@
+.#{$prefix}-menu-icon{
+    cursor: pointer;
+    width: 60px;
+    span{
+        display: block;
+        position: relative;
+        height: 4px;
+        margin-top: 4px;
+        &:before,
+        &:after{
+            position: absolute;
+            content: '';
+            background-color: $color_black;
+            display: block;
+           
+        }
+        &:before{
+            height: 4px;
+            width: 4px;
+            left: 0;
+            top: 50%;
+            @include transform(translateY(-50%));
+            
+        }
+        &:first-child,
+        &:last-child,
+        &:nth-child(2),
+        &:nth-child(3){
+          @include transition(width,0.2s,ease);
+        }
+
+        &:first-child,
+        &:last-child{
+            width: 50px;
+        }
+        &:nth-child(2){
+            width: 35px;
+        }
+        &:nth-child(3){
+            width: 30px;
+        }
+        &:after{
+            height: 2px;
+            width: 100%;
+            left: 10px;
+        }
+    }
+    &.#{$prefix}-white-menu-icon{
+        span{
+            &:before,
+            &:after{
+                background-color: $color_white;
+            }
+        }
+    }
+    &:hover{
+        span{
+            &:first-child{
+                width: 40px;
+            }
+            &:nth-child(2){
+                width: 50px;
+            }
+            &:nth-child(3){
+                width: 45px;
+            }
+            &:last-child{
+                width: 40px;
+
+            }
+        }
+    }
+
+}

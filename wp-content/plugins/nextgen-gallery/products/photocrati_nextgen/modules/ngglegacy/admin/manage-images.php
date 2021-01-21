@@ -124,7 +124,7 @@ function nggallery_picturelist($controller)
                 }
             });
 
-            $("#" + windowId + ' .dialog-cancel').click(function() {
+            $("#" + windowId + ' .dialog-cancel').on('click', function() {
                 $("#" + windowId).dialog("close");
             });
         }
@@ -159,7 +159,7 @@ function nggallery_picturelist($controller)
             });
 
             // load a content via ajax
-            $('a.ngg-dialog').click(function() {
+            $('a.ngg-dialog').on('click', function() {
                 var dialogs = $('.ngg-overlay-dialog:visible');
                 if (dialogs.length > 0) {
                     return false;
@@ -208,6 +208,8 @@ function nggallery_picturelist($controller)
                             }
                         }).width(width - 30)
                           .height(height - 30);
+
+                        $('.ui-dialog-titlebar-close').text('X')
                     }
                 );
 
@@ -307,7 +309,7 @@ function nggallery_picturelist($controller)
             return confirm('<?php echo sprintf(esc_js(__("You are about to start the bulk edit for %s images \n \n 'Cancel' to stop, 'OK' to proceed.",'nggallery')), "' + numchecked + '") ; ?>');
         }
 
-        $(document).ready(function($) {
+        $(function() {
             if ($(this).data('ready')) {
                 return;
             }
@@ -605,7 +607,7 @@ function nggallery_picturelist($controller)
                         <input class="button-primary"
                                type="submit"
                                name="TB_EditTags"
-                               onClick="jQuery(this).attr('disabled', true); submit();"
+                               onClick="jQuery(this).attr('disabled', 'disabled'); submit();"
                                value="<?php _e("OK",'nggallery'); ?>"/>
                         <input class="button-primary dialog-cancel"
                                type="reset"
@@ -649,7 +651,7 @@ function nggallery_picturelist($controller)
                         <input type="submit"
                                class="button-primary"
                                name="TB_SelectGallery"
-                               onClick="jQuery(this).attr('disabled', true); submit();"
+                               onClick="jQuery(this).attr('disabled', 'disabled'); submit();"
                                value="<?php _e("OK",'nggallery'); ?>"/>
                         <input class="button-primary dialog-cancel"
                                type="reset"
@@ -693,7 +695,7 @@ function nggallery_picturelist($controller)
                         <input class="button-primary"
                                type="submit"
                                name="TB_ResizeImages"
-                               onClick="jQuery(this).attr('disabled', true); submit();"
+                               onClick="jQuery(this).attr('disabled', 'disabled'); submit();"
                                value="<?php _e('OK', 'nggallery'); ?>"/>
                         <input class="button-primary dialog-cancel"
                                type="reset"
@@ -740,7 +742,7 @@ function nggallery_picturelist($controller)
                         <input class="button-primary"
                                type="submit"
                                name="TB_NewThumbnail"
-                               onClick="jQuery(this).attr('disabled', true); submit();"
+                               onClick="jQuery(this).attr('disabled', 'disabled'); submit();"
                                value="<?php _e('OK', 'nggallery');?>"/>
                         <input class="button-primary dialog-cancel"
                                type="reset"
@@ -753,21 +755,23 @@ function nggallery_picturelist($controller)
     <!-- /#new_thumbnail -->
 
     <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            columns.init('nggallery-manage-images');
+        (function($) {
+            $(function() {
+                columns.init('nggallery-manage-images');
 
-            // Ensure that thumb preview images are always up-to-date
-            $('#ngg-listimages img.thumb').each(function() {
-                var $this       = $(this);
-                var src         = $this.attr('src');
-                var matchData   = src.match(/\?i=(\d+)$/);
-                if (matchData) {
-                    var i = parseInt(matchData[1]) + 1;
-                    src = src.replace(matchData[0], "?i=" + i.toString());
-                    $this.attr('src', src);
-                }
-            })
-        });
+                // Ensure that thumb preview images are always up-to-date
+                $('#ngg-listimages img.thumb').each(function () {
+                    var $this = $(this);
+                    var src = $this.attr('src');
+                    var matchData = src.match(/\?i=(\d+)$/);
+                    if (matchData) {
+                        var i = parseInt(matchData[1]) + 1;
+                        src = src.replace(matchData[0], "?i=" + i.toString());
+                        $this.attr('src', src);
+                    }
+                })
+            });
+        })(jQuery);
     </script>
     <?php
 }

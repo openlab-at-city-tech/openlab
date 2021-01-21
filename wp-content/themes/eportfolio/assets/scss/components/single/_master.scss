@@ -1,0 +1,15 @@
+@import 'content/master';
+@import 'widget/master'; 
+.gallery{
+    figure{
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+.widget{
+    .gallery{
+        figcaption{
+            display: none;
+        }
+    }
+}

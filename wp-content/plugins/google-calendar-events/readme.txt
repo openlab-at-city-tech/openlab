@@ -3,8 +3,8 @@ Contributors: simplecalendar, sureswiftcapital, pderksen, nickyoung87, nekojira,
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
 Requires PHP: 7.3
-Tested up to: 5.5.1
-Stable tag: 3.1.33
+Tested up to: 5.6
+Stable tag: 3.1.34
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,11 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.1.34 =
+* Dev: Tested up to WordPress 5.6
+* Fix: OR searches will now work as OR, not as AND
+* Fix: Revert Guzzle to < 7.x version to avoid conflicts (temporary)
 
 = 3.1.33 =
 * Fix: Trimmed overall size of the plugin to reduce errors from installation failing.

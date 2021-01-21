@@ -207,7 +207,7 @@ function bp_xprofile_create_field_type( $type ) {
  *     @type int    $field_id          Optional. Pass the ID of an existing field to edit that field.
  *     @type int    $field_group_id    ID of the associated field group.
  *     @type int    $parent_id         Optional. ID of the parent field.
- *     @type string $type              Field type. Checked against a field_types whitelist.
+ *     @type string $type              Field type. Checked against a list of allowed field_types.
  *     @type string $name              Name of the new field.
  *     @type string $description       Optional. Descriptive text for the field.
  *     @type bool   $is_required       Optional. Whether users must provide a value for the field. Default: false.
@@ -254,7 +254,7 @@ function xprofile_insert_field( $args = '' ) {
 
 	// Instantiate a new field object.
 	if ( ! empty( $r['field_id'] ) ) {
-		$field = xprofile_get_field( $r['field_id'] );
+		$field = xprofile_get_field( $r['field_id'], null, false );
 	} else {
 		$field = new BP_XProfile_Field;
 	}
@@ -452,9 +452,9 @@ function xprofile_set_field_data( $field, $user_id, $value, $is_required = false
 		return true;
 	}
 
-	// For certain fields, only certain parameters are acceptable, so add them to the whitelist.
+	// For certain fields, only certain parameters are acceptable, so add them to the list of allowed values.
 	if ( $field_type_obj->supports_options ) {
-		$field_type_obj->set_whitelist_values( wp_list_pluck( $field->get_children(), 'name' ) );
+		$field_type_obj->set_allowed_values( wp_list_pluck( $field->get_children(), 'name' ) );
 	}
 
 	// Check the value is in an accepted format for this form field.
@@ -487,7 +487,7 @@ function xprofile_set_field_visibility_level( $field_id = 0, $user_id = 0, $visi
 		return false;
 	}
 
-	// Check against a whitelist.
+	// Check against a list of registered visibility levels.
 	$allowed_values = bp_xprofile_get_visibility_levels();
 	if ( !array_key_exists( $visibility_level, $allowed_values ) ) {
 		return false;
@@ -525,7 +525,7 @@ function xprofile_get_field_visibility_level( $field_id = 0, $user_id = 0 ) {
 	$current_level  = isset( $current_levels[ $field_id ] ) ? $current_levels[ $field_id ] : '';
 
 	// Use the user's stored level, unless custom visibility is disabled.
-	$field = xprofile_get_field( $field_id );
+	$field = xprofile_get_field( $field_id, null, false );
 	if ( isset( $field->allow_custom_visibility ) && 'disabled' === $field->allow_custom_visibility ) {
 		$current_level = $field->default_visibility;
 	}
@@ -1099,7 +1099,7 @@ function bp_xprofile_is_richtext_enabled_for_field( $field_id = null ) {
 		$field_id = bp_get_the_profile_field_id();
 	}
 
-	$field = xprofile_get_field( $field_id );
+	$field = xprofile_get_field( $field_id, null, false );
 
 	$enabled = false;
 	if ( $field instanceof BP_XProfile_Field ) {

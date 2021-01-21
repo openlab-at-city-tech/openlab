@@ -1,13 +1,13 @@
-=== Media Cleaner ===
+=== Media Cleaner - Clean & Optimize Space ===
 Contributors: TigrouMeow
-Tags: clean, delete, file, files, images, image, media, library, upload, acf, gutenberg
+Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://commerce.coinbase.com/checkout/d047546a-77a8-41c8-9ea9-4a950f61832f
-Requires at least: 4.8
-Tested up to: 5.3
-Requires PHP: 7.0
-Stable tag: 5.6.3
+Requires at least: 5.0
+Tested up to: 5.5
+Requires PHP: 5.6
+Stable tag: 6.0.9
 
-Clean your WordPress from unused or broken media and files. It has its own trash system and recovery features. Please read the description.
+Clean your WordPress Website from unused or broken media entries and files.
 
 == Description ==
 
@@ -17,21 +17,21 @@ Media Cleaner cleans your Media Library from the media entries (and files) which
 
 For compatibility, Pro version and important information, please read this until the end. Last but not least, it is necessary to read the [tutorial](https://meowapps.com/media-cleaner-tutorial/). It is available on the official website, here: [Media Cleaner](https://meowapps.com/plugin/media-cleaner/). 
 
-=== VERY IMPORTANT ===
+=== IMPORTANT ===
 
-This tool is a knife. Do not use it if you don't have any backup, or if you don't understand what it does. This plugin does its best to help you. Learn how to use it and you will get awesome results. 
+This tool cuts like a knife. Do not use this plugin if you don't have a recent backup, or if you don't understand what it does. This plugin does its best to help you. Learn how to use it and you will get awesome results.
 
-=== DASHBOARD ===
+=== HOW IT WORKS ===
 
-The files detected as not used will be listed in a specific dashboard. It will be up to you to delete them. Then, they will be moved to a trash internal to the plugin. After more testing, you can retrieve those files from the trash, or you can delete them permanently.
+Any files detected as not used will be listed in a specific dashboard. It will be up to you to delete them. Then, they will be moved to the plugin’s internal trash on the plugin. After more testing, you can restore those files from the trash, or you can delete them permanently.
 
 === COMPATIBILITY ===
 
-It works with any kind of media entries, including their retina and/or WebP versions. It is tested on modern WordPress installs (Gutenberg included) as well as older ones, with various themes and by a community of thousands of users. It does support **WooCommerce**. As it requires meticulous a lot of work and testing, **the Pro version might be required if you are using complex plugins to handle the content of your website**. I am constantly increasing the compatibility.
+This plugin works with any kind of media entry, including retina and/or WebP versions. The plugin has been tested on modern WordPress installs (Gutenberg included) as well as many older versions. The plugin has also been tested on various themes along with a community of thousands of users. It does support **WooCommerce**. If you are using complex plugins to handle the content of your website, **the Pro version might be required**. I am constantly increasing compatibility with other plugins.
 
 === PRO VERSION ===
 
-The Pro version adds Filesystem Analysis, extra support for complex plugins, Live Site option and WP-CLI support. 
+The Pro version adds Filesystem Analysis, extra support for complex plugins, Live Site option and WP-CLI support.
 
 With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) scans your physical /uploads directory, and match it against the Media Library. It also has extra support for complex plugins, such as:
 
@@ -50,29 +50,81 @@ With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/me
 
 The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in edge-cases.
 
-Last but not least, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it ran automatically, if you like.
+Last but not least, [Media Cleaner Pro](https://meowapps.com/plugin/media-cleaner/) has support for WP-CLI. If you have direct access (SSH) to your server, you will be able to run the plugin at a much higher speed or have it run automatically, if you’d like.
 
-=== AGAIN, BE CAREFUL ===
+=== BE CAREFUL: PREPARE A BACKUP ===
 
-Better to be safe than sorry. This plugin deletes files! Therefore, backup is not only important, it is **necessary**. Don't use this plugin if you are not ready. I can't help you if you damaged your install.
+Better to be safe than sorry. This plugin deletes files! Therefore, backup is not only important, it is **required**. Do not use this plugin if you are not ready. I can't help you if you damage your media library permanently without a backup.
 
 === SPECIAL THANKS ===
 
-- Mike Meinz, an amazing developer from the US who made a thorough debugging of the whole process, load lot of corrections and optimizations, and added support for more plugins.
-- Satoshi Soma, an excellent Japanese developer who helped me when I needed it the most.
+- Mike Meinz, an amazing developer from the US who made a thorough debugging of the whole process, loaded a lot of corrections and optimizations and added support for more plugins.
+- Satoshi Soma, an excellent Japanese developer.
+- To all the users who helped me with reproducing issues and testing new plugins and page builders.
 
 == Installation ==
 
-1. Upload `media-file-cleaner-pro` to the `/wp-content/plugins/` directory
+1. Upload the plugin to WordPress.
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go in the Settings -> Media Cleaner and check the appropriate options
-3. Go in Media -> Media Cleaner
+3. Go to Meow Apps -> Cleaner in the sidebar and check the appropriate options.
+4. Go to Media -> Cleaner.
 
 == Screenshots ==
 
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.0.9 =
+* Fix: Improved support for WebP.
+* Add: Avoid overring the roles used by the plugin.
+* Fix: Support for WPML and WPML Media.
+* Fix: Support for Advanced Ads.
+
+= 6.0.8 =
+* Fix: Compatibility with Litespeed.
+* Update: Support for WP 4.8.
+
+= 6.0.7 =
+* Update: Avoid too many refreshes of the statistics and the options in the Dashboard.
+* Update: Better logs for the licenser.
+* Add: Support for Brizy 2.0.
+
+= 6.0.6 =
+* Update: Support for nonces.
+* Fix: Support for WooCommerce Downloads.
+* Fix: Some settings could not be changed when Filesystem was selected in Dashboard.
+* Add: Support for Justified Image Grid.
+* Add: Support for Custom Logo in themes.
+* Add: Support for Background Images in Avada (Fusion Builder).
+* Update: Added the sourcemaps for debugging purposes.
+
+= 6.0.4 =
+* Fix: Works even if the Permalinks are disabled.
+* Fix: Create the DB as soon as it is required.
+
+= 6.0.3 =
+* Fix: Avoid a notice with WP 5.5 (wp_make_content_images_responsive is deprecated).
+* Fix: Retrieve the correct path for the Rest API on every kind of install.
+
+= 6.0.2 =
+* Update: Better and fresh new UI. The way it works was simplified while keeping the same features and giving more room for new ones. This is the biggest update to Media Cleaner ever :)
+* Update: Create the DB for Cleaner automatically if needed.
+
+= 6.0.1 =
+* Update: Brings back errors management to the bulk actions (skip, skip all).
+* Update: Prompt before emptying the trash.
+
+= 6.0.0 =
+* Update: Better and fresh new UI. The way it works was simplified while keeping the same features and giving more room for new ones. This is the biggest update to Media Cleaner ever :)
+* Add: Support for a few more plugins and themes.
+
+= 5.6.4 =
+* Fix: Support for GeoDirectory.
+* Fix: Support for Modula Gallery.
+* Add: Better support for Fusion Builder (Avada).
+* Fix: Could not detect in the HTML absolute URLs starting with 'wp-content' directly.
+* Fix: Divi was not using the common file types.
 
 = 5.6.3 =
 * Fix: There was an issue with the "Ignore" feature which was not working in some cases.

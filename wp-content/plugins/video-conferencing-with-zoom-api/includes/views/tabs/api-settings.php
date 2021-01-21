@@ -116,7 +116,16 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <div style="padding-top:10px;">
                             <input type="radio" value="l LT" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'l LT', false ) : ''; ?> name="zoom_api_date_time_format" class="zoom_api_date_time_format"> 5/6/2020 03:00 PM
                         </div>
+                        <div style="padding-top:10px;">
+                            <input type="radio" value="custom" <?php echo ! empty( $locale_format ) ? checked( $locale_format, 'custom', false ) : ''; ?>name="zoom_api_date_time_format" class="zoom_api_date_time_format"> Custom
+                            <input type="text" class="regular-text" name="zoom_api_custom_date_time_format" placeholder="Y-m-d" value="<?php echo !empty($custom_date_time_format) ? $custom_date_time_format: ''; ?>">
+                        </div>
                         <p class="description"><?php _e( 'Change date time formats according to your choice. Please edit this properly. Failure to correctly put value will result in failure to show date in frontend.', 'video-conferencing-with-zoom-api' ); ?></p>
+                        <p class="description">
+                            <?php
+                           printf(__('Please see %s on how to format date','video-conferencing-with-zoom-api'),'<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow noopener">https://www.php.net/manual/en/datetime.format.php</a>');
+                            ?>
+                        </p>
                     </td>
                 </tr>
                 <tr>

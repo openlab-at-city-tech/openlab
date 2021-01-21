@@ -73,37 +73,39 @@ function nggallery_sortorder($galleryID = 0) {
 		$base_url = $clean_url;
     ?>
 	<script type="text/javascript">
-		jQuery(document).ready(function($) {
-			if ($(this).data('ready'))
-			    return;
+        (function($) {
+            $(function() {
+                if ($(this).data('ready'))
+                    return;
 
-			// Enable sorting
-			$(".jqui-sortable").sortable({
-                items: 'div.imageBox'
-			});
+                // Enable sorting
+                $(".jqui-sortable").sortable({
+                    items: 'div.imageBox'
+                });
 
-			$('#sortGallery').submit(function(e) {
-				var serial = "";
-				var $images = $('div.imageBox');
-				for (var i=0; i<$images.length; i++) {
-					var image_id = $images[i].id.split('-').pop();
-					if (serial.length > 0) {
-					    serial = serial + ',';
+                $('#sortGallery').on('submit',function (e) {
+                    var serial = "";
+                    var $images = $('div.imageBox');
+                    for (var i = 0; i < $images.length; i++) {
+                        var image_id = $images[i].id.split('-').pop();
+                        if (serial.length > 0) {
+                            serial = serial + ',';
+                        }
+                        serial = serial + image_id;
                     }
-					serial = serial + image_id;
-				}
-				$('input[name=sortorder]').val(serial);
-			});
+                    $('input[name=sortorder]').val(serial);
+                });
 
-			// Listen for events in other frames
-			if (window.Frame_Event_Publisher) {
-				Frame_Event_Publisher.listen_for('attach_to_post:manage_galleries attach_to_post:manage_images', function(){
-					window.location.href = window.location.href.toString();
-				});
-			}
+                // Listen for events in other frames
+                if (window.Frame_Event_Publisher) {
+                    Frame_Event_Publisher.listen_for('attach_to_post:manage_galleries attach_to_post:manage_images', function () {
+                        window.location.href = window.location.href.toString();
+                    });
+                }
 
-			$(this).data('ready', true);
-		});
+                $(this).data('ready', true);
+            });
+		})(jQuery);
 	</script>
 
 	<?php if ($action_status['message'] != '') { ?>

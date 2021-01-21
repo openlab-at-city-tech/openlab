@@ -365,7 +365,14 @@ class C_Admin_Notification_Manager
             // Does the handler want to render?
             $has_method = method_exists($handler, 'is_renderable');
             if ($has_method && $handler->is_renderable() || !$has_method) {
-                $show_dismiss_button = method_exists($handler, 'show_dismiss_button') ? $handler->show_dismiss_button() : (method_exists($handler, 'is_dismissable') ? $handler->is_dismissable() : FALSE);
+                $show_dismiss_button = false;
+                if (method_exists($handler, 'show_dismiss_button')) {
+                    $show_dismiss_button = $handler->show_dismiss_button();
+                } else {
+                    if (method_exists($handler, 'is_dismissable')) {
+                        $show_dismiss_button = $handler->is_dismissable();
+                    }
+                }
                 $template = method_exists($handler, 'get_mvc_template') ? $handler->get_mvc_template() : 'photocrati-nextgen_admin#admin_notice';
                 // The 'inline' class is necessary to prevent our notices from being moved in the DOM
                 // see https://core.trac.wordpress.org/ticket/34570 for reference
@@ -373,6 +380,9 @@ class C_Admin_Notification_Manager
                 $css_class .= method_exists($handler, 'get_css_class') ? $handler->get_css_class() : 'updated';
                 $view = new C_MVC_View($template, array('css_class' => $css_class, 'is_dismissable' => method_exists($handler, 'is_dismissable') ? $handler->is_dismissable() : FALSE, 'html' => method_exists($handler, 'render') ? $handler->render() : '', 'show_dismiss_button' => $show_dismiss_button, 'notice_name' => $name));
                 $retval = $view->render(TRUE);
+                if (method_exists($handler, 'enqueue_backend_resources')) {
+                    $handler->enqueue_backend_resources();
+                }
                 $this->_displayed_notice = TRUE;
             }
         }
@@ -914,6 +924,9 @@ class C_Mailchimp_OptIn_Notice
      */
     function is_renderable()
     {
+        if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'attach_to_post') !== FALSE) {
+            return FALSE;
+        }
         if (!C_NextGen_Admin_Page_Manager::is_requested()) {
             return FALSE;
         }
@@ -982,23 +995,21 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
 class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
 {
     /**
+     * @param string $privilege
+     * @return bool
+     *
      * Authorizes the request
      */
     function is_authorized_request($privilege = NULL)
     {
-        $retval = TRUE;
         if (!$privilege) {
             $privilege = $this->object->get_required_permission();
         }
+        if ($this->object->is_post_request() && (!isset($_REQUEST['nonce']) || !M_Security::verify_nonce($_REQUEST['nonce'], $privilege))) {
+            return FALSE;
+        }
         // Ensure that the user has permission to access this page
-        if (!M_Security::is_allowed($privilege)) {
-            $retval = FALSE;
-        }
-        // Ensure that nonce is valid
-        if ($this->object->is_post_request() && (isset($_REQUEST['nonce']) && !M_Security::verify_nonce($_REQUEST['nonce'], $privilege))) {
-            $retval = FALSE;
-        }
-        return $retval;
+        return M_Security::is_allowed($privilege);
     }
     /**
      * Returns the permission required to access this page
@@ -1425,25 +1436,36 @@ class C_Page_Manager
 }
 class C_NextGen_First_Run_Notification_Wizard
 {
-    protected static $wizard = NULL;
     protected static $_instance = NULL;
     /**
      * @return bool
      */
     public function is_renderable()
     {
-        return is_null(self::$wizard) ? FALSE : TRUE;
+        return TRUE;
     }
     /**
      * @return string
      */
     public function render()
     {
-        if (!self::$wizard) {
-            return '';
-        }
-        $wizard = self::$wizard;
-        return __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a data-ngg-wizard="' . $wizard->get_id() . '" class="ngg-wizard-invoker" href="' . esc_url(add_query_arg('ngg_wizard', $wizard->get_id())) . '">' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.';
+        $block = <<<EOT
+        <style>
+            div#ngg-wizard-video {
+                width: 710px;
+                max-width: 710px;
+            }
+        </style>
+        <div class="hidden" id="ngg-wizard-video" style="border: none">
+            <iframe width="640"
+                    height="480"
+                    src="https://www.youtube.com/embed/ZAYj6D5XXNk"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media;"
+                    allowfullscreen></iframe>
+        </div>
+EOT;
+        return __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a id="ngg-video-wizard-invoker" href="">' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
     }
     public function get_css_class()
     {
@@ -1455,7 +1477,12 @@ class C_NextGen_First_Run_Notification_Wizard
     }
     public function dismiss($code)
     {
-        return array('handled' => TRUE);
+        return ['handled' => TRUE];
+    }
+    public function enqueue_backend_resources()
+    {
+        wp_enqueue_script('nextgen_first_run_wizard', C_Router::get_instance()->get_static_url('photocrati-nextgen_admin#first_run_wizard.js'), ['jquery', 'jquery-modal'], NGG_SCRIPT_VERSION, TRUE);
+        wp_enqueue_style('jquery-modal');
     }
     /**
      * @return C_NextGen_First_Run_Notification_Wizard
@@ -1467,10 +1494,6 @@ class C_NextGen_First_Run_Notification_Wizard
             self::$_instance = new $klass();
         }
         return self::$_instance;
-    }
-    public static function set_wizard($wizard)
-    {
-        self::$wizard = $wizard;
     }
 }
 /**

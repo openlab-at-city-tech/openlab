@@ -1,0 +1,31 @@
+.#{$prefix}-single-article{
+    .entry-header{
+        padding-bottom: 15px;
+        @include border-bottom();
+        border-color: $color_blue_gray;
+        .#{$prefix}-categories{
+            li{
+                padding-top: 15px;
+            }
+    
+        }
+        .entry-title{
+            margin-top: 15px;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        .#{$prefix}-author-meta{
+            padding-top: 15px;
+            a{
+                color: $color_primary;
+                &:visited{
+                    color: $color_primary;
+                }
+                &:hover{
+                    color: $color_gray;
+                }
+            }
+        }
+    }
+    
+}

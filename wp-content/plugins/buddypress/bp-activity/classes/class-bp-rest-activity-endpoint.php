@@ -164,7 +164,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 			$args['since'] = $request['after'];
 		}
 
-		if ( isset( $request['user_id'] ) ) {
+		if ( ! empty( $request['user_id'] ) ) {
 			$args['filter']['user_id'] = $request['user_id'];
 		}
 
@@ -172,6 +172,10 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 		if ( ! empty( $args['group_id'] ) ) {
 			$args['filter']['object']     = 'groups';
 			$args['filter']['primary_id'] = $args['group_id'];
+
+			if ( empty( $request['component'] ) ) {
+				$request['component'] = 'groups';
+			}
 
 			$item_id = $args['group_id'];
 		}
@@ -184,7 +188,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 		}
 
 		if ( empty( $args['group_id'] ) && empty( $args['site_id'] ) ) {
-			if ( isset( $request['component'] ) ) {
+			if ( ! empty( $request['component'] ) ) {
 				$args['filter']['object'] = $request['component'];
 			}
 
@@ -363,7 +367,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 				'bp_rest_create_activity_empty_content',
 				__( 'Please, enter some content.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 400,
 				)
 			);
 		}
@@ -421,7 +425,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 			array(
 				'in'               => $activity_id,
 				'display_comments' => 'stream',
-				'show_hidden'      => $request['hidden'],
+				'show_hidden'      => true,
 			)
 		);
 
@@ -431,6 +435,9 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 		if ( is_wp_error( $fields_update ) ) {
 			return $fields_update;
 		}
+
+		// Update current user's last activity.
+		bp_update_user_last_activity();
 
 		$retval = array(
 			$this->prepare_response_for_collection(
@@ -475,8 +482,8 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 			);
 		}
 
-		$item_id   = $request['primary_item_id'];
-		$component = $request['component'];
+		$item_id   = $request->get_param( 'primary_item_id' );
+		$component = $request->get_param( 'component' );
 
 		if ( true === $retval && bp_is_active( 'groups' ) && buddypress()->groups->id === $component && ! is_null( $item_id ) ) {
 			if ( ! $this->show_hidden( $component, $item_id ) ) {
@@ -517,7 +524,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 				'bp_rest_update_activity_empty_content',
 				__( 'Please, enter some content.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 400,
 				)
 			);
 		}
@@ -601,7 +608,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 				'bp_rest_authorization_required',
 				__( 'Sorry, you are not allowed to update this activity.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -1239,7 +1246,7 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 	 * @return array Endpoint arguments.
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-		$args = WP_REST_Controller::get_endpoint_args_for_item_schema( $method );
+		$args = parent::get_endpoint_args_for_item_schema( $method );
 		$key  = 'get_item';
 
 		if ( WP_REST_Server::CREATABLE === $method || WP_REST_Server::EDITABLE === $method ) {
@@ -1546,9 +1553,12 @@ class BP_REST_Activity_Endpoint extends WP_REST_Controller {
 
 		$params['type'] = array(
 			'description'       => __( 'Limit result set to items with a specific activity type.', 'buddypress' ),
-			'type'              => 'string',
-			'enum'              => array_keys( bp_activity_get_types() ),
-			'sanitize_callback' => 'sanitize_key',
+			'type'              => 'array',
+			'items'             => array(
+				'enum' => array_keys( bp_activity_get_types() ),
+				'type' => 'string',
+			),
+			'sanitize_callback' => 'wp_parse_list',
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 

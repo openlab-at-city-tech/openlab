@@ -15,7 +15,7 @@ class M_Marketing extends C_Base_Module
             'photocrati-marketing',
             'Marketing',
             'Provides resources for encouraging users to upgrade to NextGen Plus/Pro',
-            '3.3.10',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -37,7 +37,7 @@ class M_Marketing extends C_Base_Module
     static function get_i18n()
     {
         $i18n = new stdClass;
-        $i18n->lite_coupon           = __('NextGEN Basic users get a discount of 30% off regular price', 'nggallery');
+        $i18n->lite_coupon           = __('NextGEN Basic users get a discount of 20% off regular price', 'nggallery');
         $i18n->bonus                 = __('Bonus', 'nggallery');
         $i18n->feature_not_available = __("We're sorry, but %s is not available in the lite version of NextGEN Gallery. Please upgrade to NextGEN Pro to unlock these awesome features.", 'nggallery');
 
@@ -216,7 +216,7 @@ class M_Marketing extends C_Base_Module
             'title'       => __('Want to make your gallery workflow and presentation even better?', 'nggallery'),
             'description' => __('By upgrading to NextGEN Pro, you can get access to numerous other features, including:', 'nggallery'),
             'links'       => self::get_big_hitters_links($medium),
-            'footer'      => __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 30% off regular price.', 'nggallery'),
+            'footer'      => __('<strong>Bonus:</strong> NextGEN Gallery users get a discount of 20% off regular price.', 'nggallery'),
             'campaign'    => 'clickheretoupgrade',
             'medium'      => $medium
         ];

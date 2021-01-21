@@ -1,0 +1,43 @@
+.#{$prefix}-widget-slider{
+    position: relative;
+    .slick-dots{
+        display: none !important;
+    }
+    .slick-arrow{
+        background-color: transparent;
+        border-radius: 0;
+    }
+    .slick-prev{
+        &:before{
+            content: '\f053';
+        }
+    }
+    .slick-next{
+        &:before{
+            content: '\f054';
+        }
+    }
+    .post-thumbnail{
+        height: 400px;
+    }
+    &.#{$prefix}-post-with-bg-image{
+        .#{$prefix}-gallery-post{
+            .#{$prefix}-desc{
+                left: 0;
+                width: 100%;
+                bottom: 0;
+               
+            }
+            ul,li{
+                border: 0;
+            }
+            li{
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+  
+    
+}
+ 

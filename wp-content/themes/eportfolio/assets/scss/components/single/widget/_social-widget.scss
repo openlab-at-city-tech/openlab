@@ -1,0 +1,13 @@
+.widget-area{
+    .#{$prefix}-social-widget{
+        border-bottom: 0;
+        background-color: $color_light_gray;
+        justify-content: center;
+        padding: 15px 15px 5px;
+        li{
+            border: 0; //overwrite
+            padding-top: 0;
+        }
+    }
+  
+}

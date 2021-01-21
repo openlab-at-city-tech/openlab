@@ -91,22 +91,6 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
 
     $wp_roles->add_cap('contributor', 'read_advgb_profile');
     $wp_roles->add_cap('contributor', 'read_private_advgb_profiles');
-
-    // Copy default custom styles if no custom styles file exist
-    WP_Filesystem();
-    global $wp_filesystem;
-    $custom_styles_dir = wp_upload_dir();
-    $custom_styles_dir = $custom_styles_dir['basedir'] . '/advgb/';
-    $css_default_file = plugin_dir_path(__FILE__). 'assets/css/customstyles/custom_styles.css';
-    $css_file = $custom_styles_dir . 'custom_styles.css';
-
-    if (!$wp_filesystem->exists($custom_styles_dir)) {
-        $wp_filesystem->mkdir($custom_styles_dir);
-    }
-
-    if (!$wp_filesystem->exists($css_file)) {
-        $wp_filesystem->copy($css_default_file, $css_file);
-    }
 });
 
 // Run the updates from here
@@ -145,4 +129,16 @@ if (version_compare($advgb_current_version, '2.0.6', 'lt')) {
 // Set version if needed
 if ($advgb_current_version !== ADVANCED_GUTENBERG_VERSION) {
     update_option('advgb_version', ADVANCED_GUTENBERG_VERSION);
+}
+
+// Delete custom_styles.css if exists (created in 2.4.4 and older)
+require_once ABSPATH . 'wp-admin/includes/file.php';
+
+WP_Filesystem();
+global $wp_filesystem;
+$custom_styles_dir  = wp_upload_dir();
+$custom_styles_file = $custom_styles_dir['basedir'] . '/advgb/custom_styles.css';
+
+if ($wp_filesystem->exists($custom_styles_file)) {
+    $wp_filesystem->delete($custom_styles_file);
 }

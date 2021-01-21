@@ -539,6 +539,11 @@ class A_Styles_Form extends Mixin
             $valid = TRUE;
             // the desired file, but users shouldn't use this to write files that don't end in .css anyway
             $file_info = pathinfo($settings['CSSfile']);
+            // Prevent something.php.css from being executed on poorly configured servers
+            if (preg_match('/\\.php(.*)$/i', $settings['CSSfile'], $matches)) {
+                $valid = FALSE;
+            }
+            // Ensure a .css extension
             if (strpos($file_info['extension'], 'css') === FALSE) {
                 $valid = FALSE;
             }

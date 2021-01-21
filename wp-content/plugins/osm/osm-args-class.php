@@ -53,6 +53,7 @@ class cOsm_arguments
     private $tagged_border_color = "[0, 0, 255, 0.5]";
     private $tagged_inner_color = "[0, 0, 255, 0.5]";
     private $map_event = 'no';
+    private $attribution = 'true';
     
    private function setMarkersize($a_marker_size){
       if ($a_marker_size == "no"){
@@ -216,10 +217,20 @@ public function setTaxonomy($a_tagged_filter_type){
   $this->tagged_filter_type = $a_tagged_filter_type;  
 }
 
+public function setMapAttr($a_attribution){
+  if ($a_attribution == "WARNING: Display attribution is not enabled. It may violate the license of data and map and have legal consequences!"){
+    $this->attribution = false;
+  }
+  else {
+    $this->attribution = true;
+  }
+}
+
+
   function __construct($a_width, $a_height, $a_map_center, $a_zoom, $a_map_api_key, $file_list, $file_color_list, $a_type, $jsname, $marker_latlon, $map_border, $a_map_event, 
     $marker_name, $a_marker_size, $control, $wms_address, $wms_param, $wms_attr_name,  $wms_type, $wms_attr_url, 
     $tagged_type, $a_tagged_filter_type, $tagged_filter, $mwz, $a_post_markers, $a_display_marker_name, $a_tagged_param, $a_tagged_color, 
-    $file_title, $file_link, $setup_zoom, $setup_layer, $setup_center, $setup_trigger, $setup_map_name, $file_select_box, $bckgrndimg
+    $file_title, $file_link, $setup_zoom, $setup_layer, $setup_center, $setup_trigger, $setup_map_name, $file_select_box, $bckgrndimg, $attribution
     ){
         
     $this->setLatLon($a_map_center) ;
@@ -230,11 +241,12 @@ public function setTaxonomy($a_tagged_filter_type){
     $this->setDisplayMarker($a_display_marker_name);
     $this->setTaggedParam($a_tagged_param);
     $this->setTaggedColor($a_tagged_color);
-	$this->setMapAPIkey($a_map_api_key);
-	$this->setMapType($a_type); // needs to be done after setMapAPIkey
-	$this->setMap_event($a_map_event);
-        $this->setTaxonomy($a_tagged_filter_type);
-        $this-> setMapZoom($a_zoom);
+    $this->setMapAPIkey($a_map_api_key);
+    $this->setMapType($a_type); // needs to be done after setMapAPIkey
+    $this->setMap_event($a_map_event);
+    $this->setTaxonomy($a_tagged_filter_type);
+    $this-> setMapZoom($a_zoom);
+    $this-> setMapAttr($attribution);
 }
 
 public function getPostMarkers(){
@@ -285,6 +297,10 @@ public function isAutocenter(){
   else {
     return false;
   }
+}
+
+public function isMapAttr(){
+  return $this->attribution;
 }
 
 public function getMapAPIkey(){

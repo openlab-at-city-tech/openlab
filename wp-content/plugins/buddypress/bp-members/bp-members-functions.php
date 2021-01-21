@@ -78,6 +78,7 @@ add_action( 'bp_setup_globals', 'bp_core_define_slugs', 11 );
  * bp_use_legacy_user_query value, returning true.
  *
  * @since 1.2.0
+ * @since 7.0.0 Added `xprofile_query` parameter. Added `user_ids` parameter.
  *
  * @param array|string $args {
  *     Array of arguments. All are optional. See {@link BP_User_Query} for
@@ -93,9 +94,12 @@ add_action( 'bp_setup_globals', 'bp_core_define_slugs', 11 );
  *                                             `$member_type` takes precedence over this parameter.
  *     @type array|string $member_type__not_in Array or comma-separated string of member types to be excluded.
  *     @type mixed        $include             Limit results by user IDs. Default: false.
+ *     @type mixed        $user_ids            IDs corresponding to the users. Default: false.
  *     @type int          $per_page            Results per page. Default: 20.
  *     @type int          $page                Page of results. Default: 1.
  *     @type bool         $populate_extras     Fetch optional extras. Default: true.
+ *     @type array        $xprofile_query      Filter results by xprofile data. Requires the xprofile
+ *                                             component. See {@see BP_XProfile_Query} for details.
  *     @type string|bool  $count_total         How to do total user count. Default: 'count_query'.
  * }
  * @return array
@@ -114,14 +118,30 @@ function bp_core_get_users( $args = '' ) {
 		'member_type__in'     => '',
 		'member_type__not_in' => '',
 		'include'             => false,        // Pass comma separated list of user_ids to limit to only these users.
+		'user_ids'            => false,
 		'per_page'            => 20,           // The number of results to return per page.
 		'page'                => 1,            // The page to return if limiting per page.
 		'populate_extras'     => true,         // Fetch the last active, where the user is a friend, total friend count, latest update.
+		'xprofile_query'      => false,
 		'count_total'         => 'count_query' // What kind of total user count to do, if any. 'count_query', 'sql_calc_found_rows', or false.
 	), 'core_get_users' );
 
-	// For legacy users. Use of BP_Core_User::get_users() is deprecated.
-	if ( apply_filters( 'bp_use_legacy_user_query', false, __FUNCTION__, $r ) ) {
+	/**
+	 * For legacy users. Use of BP_Core_User::get_users() is deprecated.
+	 *
+	 * Forcing this filter to true will use the legacy user query. As of
+	 * BuddyPress 7.0.0, mirroring of the 'last_activity' value to usermeta
+	 * is also disabled if true. See bp_update_user_last_activity().
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param bool   $retval   Defaults to false.
+	 * @param string $function Current function name.
+	 * @param array  $r        User query arguments.
+	 */
+	$use_legacy_query = apply_filters( 'bp_use_legacy_user_query', false, __FUNCTION__, $r );
+
+	if ( $use_legacy_query ) {
 		$retval = BP_Core_User::get_users(
 			$r['type'],
 			$r['per_page'],
@@ -1042,6 +1062,8 @@ function bp_is_user_inactive( $user_id = 0 ) {
  * Update a user's last activity.
  *
  * @since 1.9.0
+ * @since 7.0.0 Backward compatibility usermeta mirroring is only allowed if the
+ *              legacy user query is enabled.
  *
  * @param int    $user_id ID of the user being updated.
  * @param string $time    Time of last activity, in 'Y-m-d H:i:s' format.
@@ -1064,14 +1086,23 @@ function bp_update_user_last_activity( $user_id = 0, $time = '' ) {
 		$time = bp_core_current_time();
 	}
 
-	// As of BuddyPress 2.0, last_activity is no longer stored in usermeta.
-	// However, we mirror it there for backward compatibility. Do not use!
-	// Remove our warning and re-add.
-	remove_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10 );
-	remove_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10 );
-	bp_update_user_meta( $user_id, 'last_activity', $time );
-	add_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10, 4 );
-	add_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10, 4 );
+	/** This filter is documented in bp_core_get_users() */
+	$use_legacy_query = apply_filters( 'bp_use_legacy_user_query', false, __FUNCTION__, [ 'user_id' => $user_id ] );
+
+	/*
+	 * As of BuddyPress 2.0, last_activity is no longer stored in usermeta.
+	 * However, we mirror it there for backward compatibility. Do not use!
+	 *
+	 * As of BuddyPress 7.0, mirroring is only allowed if the legacy user
+	 * query is enabled.
+	 */
+	if ( $use_legacy_query ) {
+		remove_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10 );
+		remove_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10 );
+		bp_update_user_meta( $user_id, 'last_activity', $time );
+		add_filter( 'update_user_metadata', '_bp_update_user_meta_last_activity_warning', 10, 4 );
+		add_filter( 'get_user_metadata', '_bp_get_user_meta_last_activity_warning', 10, 4 );
+	}
 
 	return BP_Core_User::update_last_activity( $user_id, $time );
 }
@@ -1395,7 +1426,7 @@ function bp_core_boot_spammer( $user ) {
 	// The user exists; now do a check to see if the user is a spammer
 	// if the user is a spammer, stop them in their tracks!
 	if ( is_a( $user, 'WP_User' ) && ( ( is_multisite() && (int) $user->spam ) || 1 == $user->user_status ) ) {
-		return new WP_Error( 'invalid_username', __( '<strong>ERROR</strong>: Your account has been marked as a spammer.', 'buddypress' ) );
+		return new WP_Error( 'invalid_username', __( '<strong>Error</strong>: Your account has been marked as a spammer.', 'buddypress' ) );
 	}
 
 	// User is good to go!
@@ -1581,7 +1612,7 @@ add_filter( 'pre_update_site_option_illegal_names', 'bp_core_get_illegal_names',
  * Performs the following checks:
  *   - Is the email address well-formed?
  *   - Is the email address already used?
- *   - If there's an email domain blacklist, is the current domain on it?
+ *   - If there are disallowed email domains, is the current domain among them?
  *   - If there's an email domain whitelest, is the current domain on it?
  *
  * @since 1.6.2
@@ -1698,7 +1729,7 @@ function bp_core_validate_user_signup( $user_name, $user_email ) {
 			$errors->add( 'user_name', __( 'Please enter a username', 'buddypress' ) );
 		}
 
-		// User name can't be on the blacklist.
+		// User name can't be on the list of illegal names.
 		$illegal_names = get_site_option( 'illegal_names' );
 		if ( in_array( $user_name, (array) $illegal_names ) ) {
 			$errors->add( 'user_name', __( 'That username is not allowed', 'buddypress' ) );
@@ -1762,6 +1793,40 @@ function bp_core_validate_user_signup( $user_name, $user_email ) {
 	 * @param array $result Results of user validation including errors, if any.
 	 */
 	return apply_filters( 'bp_core_validate_user_signup', $result );
+}
+
+/**
+ * Validate a user password.
+ *
+ * @since 7.0.0
+ *
+ * @param string       $pass         The password.
+ * @param string       $confirm_pass The confirmed password.
+ * @param null|WP_User $userdata     Null or the userdata object when a member updates their password from front-end.
+ * @return WP_Error A WP error object possibly containing error messages.
+ */
+function bp_members_validate_user_password( $pass, $confirm_pass, $userdata = null ) {
+	$errors = new WP_Error();
+
+	if ( ! $pass || ! $confirm_pass ) {
+		$errors->add( 'missing_user_password', __( 'Please make sure you enter your password twice', 'buddypress' ) );
+	}
+
+	if ( $pass && $confirm_pass && $pass !== $confirm_pass ) {
+		$errors->add( 'mismatching_user_password', __( 'The passwords you entered do not match.', 'buddypress' ) );
+	}
+
+	/**
+	 * Filter here to add password validation errors.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param WP_Error     $errors       Password validation errors.
+	 * @param string       $pass         The password.
+	 * @param string       $confirm_pass The confirmed password.
+	 * @param null|WP_User $userdata     Null or the userdata object when a member updates their password from front-end.
+	 */
+	return apply_filters( 'bp_members_validate_user_password', $errors, $pass, $confirm_pass, $userdata );
 }
 
 /**
@@ -2066,7 +2131,7 @@ function bp_core_activate_signup( $key ) {
 				if ( isset( $user['meta'][ $key ] ) ) {
 					$visibility_level = $user['meta'][ $key ];
 				} else {
-					$vfield           = xprofile_get_field( $field_id );
+					$vfield           = xprofile_get_field( $field_id, null, false );
 					$visibility_level = isset( $vfield->default_visibility ) ? $vfield->default_visibility : 'public';
 				}
 				xprofile_set_field_visibility_level( $field_id, $user_id, $visibility_level );
@@ -2368,7 +2433,7 @@ function bp_core_signup_disable_inactive( $user = null, $username = '', $passwor
 	/* translators: %s: the activation url */
 	$resend_string .= sprintf( __( 'If you have not received an email yet, <a href="%s">click here to resend it</a>.', 'buddypress' ), esc_url( $resend_url ) );
 
-	return new WP_Error( 'bp_account_not_activated', __( '<strong>ERROR</strong>: Your account has not been activated. Check your email for the activation link.', 'buddypress' ) . $resend_string );
+	return new WP_Error( 'bp_account_not_activated', __( '<strong>Error</strong>: Your account has not been activated. Check your email for the activation link.', 'buddypress' ) . $resend_string );
 }
 add_filter( 'authenticate', 'bp_core_signup_disable_inactive', 30, 3 );
 
@@ -2399,7 +2464,7 @@ function bp_members_login_resend_activation_email() {
 
 	// Add feedback message.
 	if ( ! empty( $resend['errors'] ) ) {
-		$error = __( '<strong>ERROR</strong>: Your account has already been activated.', 'buddypress' );
+		$error = __( '<strong>Error</strong>: Your account has already been activated.', 'buddypress' );
 	} else {
 		$error = __( 'Activation email resent! Please check your inbox or spam folder.', 'buddypress' );
 	}
@@ -2544,7 +2609,7 @@ add_action( 'bp_init', 'bp_stop_live_spammer', 5 );
 function bp_live_spammer_login_error() {
 	global $error;
 
-	$error = __( '<strong>ERROR</strong>: Your account has been marked as a spammer.', 'buddypress' );
+	$error = __( '<strong>Error</strong>: Your account has been marked as a spammer.', 'buddypress' );
 
 	// Shake shake shake!
 	add_action( 'login_head', 'wp_shake_js', 12 );
@@ -2606,6 +2671,136 @@ function bp_member_type_tax_name() {
 	}
 
 /**
+ * Returns labels used by the member type taxonomy.
+ *
+ * @since 7.0.0
+ *
+ * @return array
+ */
+function bp_get_member_type_tax_labels() {
+
+	/**
+	 * Filters Member type taxonomy labels.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param array $value Associative array (name => label).
+	 */
+	return apply_filters(
+		'bp_get_member_type_tax_labels',
+		array(
+
+			// General labels
+			'name'                       => _x( 'Member Types', 'Member type taxonomy name', 'buddypress' ),
+			'singular_name'              => _x( 'Member Type', 'Member type taxonomy singular name', 'buddypress' ),
+			'search_items'               => _x( 'Search Member Types', 'Member type taxonomy search items label', 'buddypress' ),
+			'popular_items'              => _x( 'Popular Member Types', 'Member type taxonomy popular items label', 'buddypress' ),
+			'all_items'                  => _x( 'All Member Types', 'Member type taxonomy all items label', 'buddypress' ),
+			'parent_item'                => _x( 'Parent Member Type', 'Member type taxonomy parent item label', 'buddypress' ),
+			'parent_item_colon'          => _x( 'Parent Member Type:', 'Member type taxonomy parent item label', 'buddypress' ),
+			'edit_item'                  => _x( 'Edit Member Type', 'Member type taxonomy edit item label', 'buddypress' ),
+			'view_item'                  => _x( 'View Member Type', 'Member type taxonomy view item label', 'buddypress' ),
+			'update_item'                => _x( 'Update Member Type', 'Member type taxonomy update item label', 'buddypress' ),
+			'add_new_item'               => _x( 'Add New Member Type', 'Member type taxonomy add new item label', 'buddypress' ),
+			'new_item_name'              => _x( 'New Member Type Name', 'Member type taxonomy new item name label', 'buddypress' ),
+			'separate_items_with_commas' => _x( 'Separate member types with commas', 'Member type taxonomy separate items with commas label', 'buddypress' ),
+			'add_or_remove_items'        => _x( 'Add or remove member types', 'Member type taxonomy add or remove items label', 'buddypress' ),
+			'choose_from_most_used'      => _x( 'Choose from the most used meber types', 'Member type taxonomy choose from most used label', 'buddypress' ),
+			'not_found'                  => _x( 'No member types found.', 'Member type taxonomy not found label', 'buddypress' ),
+			'no_terms'                   => _x( 'No member types', 'Member type taxonomy no terms label', 'buddypress' ),
+			'items_list_navigation'      => _x( 'Member Types list navigation', 'Member type taxonomy items list navigation label', 'buddypress' ),
+			'items_list'                 => _x( 'Member Types list', 'Member type taxonomy items list label', 'buddypress' ),
+
+			/* translators: Tab heading when selecting from the most used terms. */
+			'most_used'                  => _x( 'Most Used', 'Member type taxonomy most used items label', 'buddypress' ),
+			'back_to_items'              => _x( '&larr; Back to Member Types', 'Member type taxonomy back to items label', 'buddypress' ),
+
+			// Specific to BuddyPress.
+			'bp_type_id_label'           => _x( 'Member Type ID', 'BP Member type ID label', 'buddypress' ),
+			'bp_type_id_description'     => _x( 'Enter a lower-case string without spaces or special characters (used internally to identify the member type).', 'BP Member type ID description', 'buddypress' ),
+			'bp_type_show_in_list'       => _x( 'Show on Member', 'BP Member type show in list', 'buddypress' ),
+		)
+	);
+}
+
+/**
+ * Returns arguments used by the Member type taxonomy.
+ *
+ * @since 7.0.0
+ *
+ * @return array
+ */
+function bp_get_member_type_tax_args() {
+
+	/**
+	 * Filters Member type taxonomy args.
+	 *
+	 * @since 7.0.0
+	 *
+	 * @param array $value Associative array (key => arg).
+	 */
+	return apply_filters(
+		'bp_get_member_type_tax_args',
+		array_merge(
+			array(
+				'description' => _x( 'BuddyPress Member Types', 'Member type taxonomy description', 'buddypress' ),
+				'labels'      => array_merge( bp_get_member_type_tax_labels(), bp_get_taxonomy_common_labels() ),
+			),
+			bp_get_taxonomy_common_args()
+		)
+	);
+}
+
+/**
+ * Extend generic Type metadata schema to match Member Type needs.
+ *
+ * @since 7.0.0
+ *
+ * @param array  $schema   The generic Type metadata schema.
+ * @param string $taxonomy The taxonomy name the schema applies to.
+ * @return array           The Member Type metadata schema.
+ */
+function bp_get_member_type_metadata_schema( $schema = array(), $taxonomy = '' ) {
+	if ( bp_get_member_type_tax_name() === $taxonomy ) {
+
+		// Directory.
+		if ( isset( $schema['bp_type_has_directory']['description'] ) ) {
+			$schema['bp_type_has_directory']['description'] = __( 'Make a list of members matching this type available on the members directory.', 'buddypress' );
+		}
+
+		// Slug.
+		if ( isset( $schema['bp_type_directory_slug']['description'] ) ) {
+			$schema['bp_type_directory_slug']['description'] = __( 'Enter if you want the type slug to be different from its ID.', 'buddypress' );
+		}
+
+		// List.
+		$schema['bp_type_show_in_list'] = array(
+			'description'       => __( 'Show where member types may be listed, like in the member header.', 'buddypress' ),
+			'type'              => 'boolean',
+			'single'            => true,
+			'sanitize_callback' => 'absint',
+		);
+	}
+
+	return $schema;
+}
+add_filter( 'bp_get_type_metadata_schema', 'bp_get_member_type_metadata_schema', 1, 2 );
+
+/**
+ * Registers the Member type metadata.
+ *
+ * @since 7.0.0
+ */
+function bp_register_member_type_metadata() {
+	$type_taxonomy = bp_get_member_type_tax_name();
+
+	foreach ( bp_get_type_metadata_schema( false, $type_taxonomy ) as $meta_key => $meta_args ) {
+		bp_register_type_meta( $type_taxonomy, $meta_key, $meta_args );
+	}
+}
+add_action( 'bp_register_type_metadata', 'bp_register_member_type_metadata' );
+
+/**
  * Register a member type.
  *
  * @since 2.2.0
@@ -2624,6 +2819,10 @@ function bp_member_type_tax_name() {
  *                                      Pass `true` to use the `$member_type` string as the type's slug.
  *                                      Pass a string to customize the slug. Pass `false` to disable.
  *                                      Default: true.
+ *     @type bool        $show_in_list  Whether this member type should be shown in lists rendered by
+ *                                      bp_member_type_list(). Default: false.
+ *     @type bool        $code          Whether this member type is registered using code. Default: true.
+ *     @type int         $db_id         The member type term ID. Default: 0.
  * }
  * @return object|WP_Error Member type object on success, WP_Error object on failure.
  */
@@ -2637,6 +2836,9 @@ function bp_register_member_type( $member_type, $args = array() ) {
 	$r = bp_parse_args( $args, array(
 		'labels'        => array(),
 		'has_directory' => true,
+		'show_in_list'  => false,
+		'code'          => true,
+		'db_id'         => 0,
 	), 'register_member_type' );
 
 	$member_type = sanitize_key( $member_type );
@@ -2683,6 +2885,9 @@ function bp_register_member_type( $member_type, $args = array() ) {
 		$r['directory_slug'] = '';
 		$r['has_directory']  = false;
 	}
+
+	// Show the list of member types on front-end (member header, for now).
+	$r['show_in_list'] = (bool) $r['show_in_list'];
 
 	$bp->members->types[ $member_type ] = $type = (object) $r;
 
@@ -2736,6 +2941,11 @@ function bp_get_member_type_object( $member_type ) {
 function bp_get_member_types( $args = array(), $output = 'names', $operator = 'and' ) {
 	$types = buddypress()->members->types;
 
+	// Merge with types available into the database.
+	if ( ! isset( $args['code'] ) || true !== $args['code'] ) {
+		$types = bp_get_taxonomy_types( bp_get_member_type_tax_name(), $types );
+	}
+
 	$types = wp_filter_object_list( $types, $args, $operator );
 
 	/**
@@ -2760,20 +2970,100 @@ function bp_get_member_types( $args = array(), $output = 'names', $operator = 'a
 }
 
 /**
+ * Only gets the member types registered by code.
+ *
+ * @since 7.0.0
+ *
+ * @return array The member types registered by code.
+ */
+function bp_get_member_types_registered_by_code() {
+	return bp_get_member_types(
+		array(
+			'code' => true,
+		),
+		'objects'
+	);
+}
+add_filter( bp_get_member_type_tax_name() . '_registered_by_code', 'bp_get_member_types_registered_by_code' );
+
+/**
+ * Generates missing metadata for a type registered by code.
+ *
+ * @since 7.0.0
+ *
+ * @return array The member type metadata.
+ */
+function bp_set_registered_by_code_member_type_metadata( $metadata = array(), $type = '' ) {
+	$member_type = bp_get_member_type_object( $type );
+
+	foreach ( get_object_vars( $member_type ) as $object_key => $object_value ) {
+		if ( 'labels' === $object_key ) {
+			foreach ( $object_value as $label_key => $label_value ) {
+				$metadata[ 'bp_type_' . $label_key ] = $label_value;
+			}
+		} elseif ( ! in_array( $object_key, array( 'name', 'code', 'db_id' ), true ) ) {
+			$metadata[ 'bp_type_' . $object_key ] = $object_value;
+		}
+	}
+
+	/**
+	 * Save metadata into database to avoid generating metadata
+	 * each time a type is listed into the Types Admin screen.
+	 */
+	if ( isset( $member_type->db_id ) && $member_type->db_id ) {
+		bp_update_type_metadata( $member_type->db_id, bp_get_member_type_tax_name(), $metadata );
+	}
+
+	return $metadata;
+}
+add_filter( bp_get_member_type_tax_name() . '_set_registered_by_code_metada', 'bp_set_registered_by_code_member_type_metadata', 10, 2 );
+
+/**
+ * Insert member types registered by code not yet saved into the database as WP Terms.
+ *
+ * @since 7.0.0
+ */
+function bp_insert_member_types_registered_by_code() {
+	$all_types     = bp_get_member_types( array(), 'objects' );
+	$unsaved_types = wp_filter_object_list( $all_types, array( 'db_id' => 0 ), 'and', 'name' );
+
+	if ( $unsaved_types ) {
+		foreach ( $unsaved_types as $type_name ) {
+			bp_insert_term(
+				$type_name,
+				bp_get_member_type_tax_name(),
+				array(
+					'slug' => $type_name,
+				)
+			);
+		}
+	}
+}
+add_action( bp_get_member_type_tax_name() . '_add_form', 'bp_insert_member_types_registered_by_code', 1 );
+
+/**
  * Set type for a member.
  *
  * @since 2.2.0
+ * @since 7.0.0 $member_type parameter also accepts an array of member type names.
  *
- * @param int    $user_id     ID of the user.
- * @param string $member_type Member type.
- * @param bool   $append      Optional. True to append this to existing types for user,
- *                            false to replace. Default: false.
+ * @param int          $user_id     ID of the user.
+ * @param string|array $member_type The member type name or an array of member type names.
+ * @param bool         $append      Optional. True to append this to existing types for user,
+ *                                  false to replace. Default: false.
  * @return false|array $retval See {@see bp_set_object_terms()}.
  */
 function bp_set_member_type( $user_id, $member_type, $append = false ) {
 	// Pass an empty $member_type to remove a user's type.
-	if ( ! empty( $member_type ) && ! bp_get_member_type_object( $member_type ) ) {
-		return false;
+	if ( ! empty( $member_type ) ) {
+		$member_types = (array) $member_type;
+		$valid_types  = array_filter( array_map( 'bp_get_member_type_object', $member_types ) );
+
+		if ( $valid_types ) {
+			$member_type = wp_list_pluck( $valid_types, 'name' );
+		} else {
+			return false;
+		}
 	}
 
 	$retval = bp_set_object_terms( $user_id, $member_type, bp_get_member_type_tax_name(), $append );
@@ -2787,9 +3077,9 @@ function bp_set_member_type( $user_id, $member_type, $append = false ) {
 		 *
 		 * @since 2.2.0
 		 *
-		 * @param int    $user_id     ID of the user whose member type has been updated.
-		 * @param string $member_type Member type.
-		 * @param bool   $append      Whether the type is being appended to existing types.
+		 * @param int          $user_id     ID of the user whose member type has been updated.
+		 * @param string|array $member_type The member type name or an array of member type names.
+		 * @param bool         $append      Whether the type is being appended to existing types.
 		 */
 		do_action( 'bp_set_member_type', $user_id, $member_type, $append );
 	}
@@ -2842,14 +3132,17 @@ function bp_remove_member_type( $user_id, $member_type ) {
  * Get type for a member.
  *
  * @since 2.2.0
+ * @since 7.0.0 Adds the `$use_db` parameter.
  *
  * @param int  $user_id ID of the user.
  * @param bool $single  Optional. Whether to return a single type string. If multiple types are found
  *                      for the user, the oldest one will be returned. Default: true.
+ * @param bool $use_db  Optional. Whether to request all member types or only the ones registered by code.
+ *                      Default: true.
  * @return string|array|bool On success, returns a single member type (if $single is true) or an array of member
  *                           types (if $single is false). Returns false on failure.
  */
-function bp_get_member_type( $user_id, $single = true ) {
+function bp_get_member_type( $user_id, $single = true, $use_db = true ) {
 	$types = wp_cache_get( $user_id, 'bp_member_member_type' );
 
 	if ( false === $types ) {
@@ -2869,6 +3162,12 @@ function bp_get_member_type( $user_id, $single = true ) {
 		}
 	}
 
+	if ( false === $use_db && $types ) {
+		$registred_by_code = bp_get_member_types_registered_by_code();
+		$ctype_names       = wp_list_pluck( $registred_by_code, 'name' );
+		$types             = array_intersect( $types, $ctype_names );
+	}
+
 	$type = false;
 	if ( ! empty( $types ) ) {
 		if ( $single ) {
@@ -2883,9 +3182,10 @@ function bp_get_member_type( $user_id, $single = true ) {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param string $type    Member type.
-	 * @param int    $user_id ID of the user.
-	 * @param bool   $single  Whether to return a single type string, or an array.
+	 * @param string|array|bool $type    a single member type (if $single is true) or an array of member types
+	 *                                   (if $single is false) or false on failure.
+	 * @param int               $user_id ID of the user.
+	 * @param bool              $single  Whether to return a single type string, or an array.
 	 */
 	return apply_filters( 'bp_get_member_type', $type, $user_id, $single );
 }

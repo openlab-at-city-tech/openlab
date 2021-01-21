@@ -2,15 +2,15 @@
 Contributors: anevo, jamarparris
 Donate link: https://www.paypal.me/aorinevo
 Tags: GradeBook, Course Management, Education, Grades
-Requires at least: 3.5
-Tested up to: 4.5.3
-Stable tag: 4.0.11
+Requires at least: 5.0.0
+Tested up to: 5.4.2
+Stable tag: 5.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-AN_GradeBook allows educators to create, maintain, and share grades quickly and efficiently. 
+AN_GradeBook allows educators to create, maintain, and share grades quickly and efficiently.
 
-== Description == 
+== Description ==
 
 Check out the [plugin website](http://www.angradebook.com).
 
@@ -24,7 +24,7 @@ Administrators are able to
 
 *Username*
 
-Students added through the plugin, who are not already in the database, will have the user_login set to the first initial of their first name concatenated with their last name and a string of digits; all characters must be entered in lowercase. 
+Students added through the plugin, who are not already in the database, will have the user_login set to the first initial of their first name concatenated with their last name and a string of digits; all characters must be entered in lowercase.
 
 *Password*
 
@@ -56,13 +56,18 @@ Students are able to:
 
 == Changelog ==
 
+Version 5.0.0:
+* feat: Add support for WordPress 5.x
+* docs: Add CONTRIBUTING.md
+* docs: Rename readme.md to README.md
+
 Version 4.0.11:
 
-* Bug fix: Uncomment line 7 in Database.php.  
+* Bug fix: Uncomment line 7 in Database.php.
 
 Version 4.0.10:
 
-* Bug fix: GradeBook not showing up for courses because the init js file fails to append #courses to the end of the url.  
+* Bug fix: GradeBook not showing up for courses because the init js file fails to append #courses to the end of the url.
 
 Version 4.0.9:
 
@@ -84,7 +89,7 @@ Version 4.0.6:
 Version 4.0.5:
 
 * Populate necessary models and collections before instantiating views.
-* Fixed settings bug.  
+* Fixed settings bug.
 * Removed unnecessary dependancies for certain views.
 * Added read.md for github.
 * Update plugin icon credits.
@@ -108,7 +113,7 @@ Version 4.0.3:
 Version 4.0.2:
 
 * Added sorting by user_login, first_name, and last_name.
-* Added support for legacy web servers.  Some web servers do not handle PUT requests as anticipated. 
+* Added support for legacy web servers.  Some web servers do not handle PUT requests as anticipated.
 * remove misc console.log statements.
 * Added D3js library.  We are moving towards removing dependencies on google charts used in rendering student and assignment statistics.
 
@@ -116,7 +121,7 @@ Version 4.0.1:
 
 * Plugin had two separate js files that handled the gradebook and settings separately.  The files are now combined into one file.
 * Style page title and fix margin to be consistent with wpcontent styles.
-* Fixed issue where student view of gradebook always used John for first name and Doe for last name.  
+* Fixed issue where student view of gradebook always used John for first name and Doe for last name.
 
 
 Version 4.0:
@@ -127,7 +132,7 @@ Version 4.0:
 * Fixed margin-right to prevent gradebook from stretching all the way to the right of the browser window.
 * When gradebook loads courses and students, a loading indicator is displayed.
 * Only administrators, users with wordpress role set to administrator, are allowed to add courses.  Instructors, with the gradebook role set to instructor, can edit, delete and add students. There is also a student role in gradebook which is automatically assigned to a user added to a gradebook.
-* Bug fix. Seems that the delete course bug wasn’t fixed in v3.5.7.  This occurs when a user deletes a selected gradebook.  Then the view doesn’t remove itself.  
+* Bug fix. Seems that the delete course bug wasn’t fixed in v3.5.7.  This occurs when a user deletes a selected gradebook.  Then the view doesn’t remove itself.
 * Added settings page, where WordPress admin users can select roles that are allowed to administer AN_GradeBook. Users with those roles will be able to create new gradebooks.
 * Reorganized files.  Main changes under the app directory.
 * Added a router.
@@ -145,7 +150,7 @@ Version 3.5.6:
 
 * Database upgrade: Users no longer in the database are removed from gradebooks. Deleting users through the Users tab, removes students from gradebooks.
 * Use RequireJS to manage file loading for almost the entire app.  A couple of js files have to be loaded through php.  In particular, the css files for bootstrap and jquery-ui, the require.js file, and the dependent file app.js.
-* Bug Fix: Adding a student that was already in the database, using their user_login, would add the student to the gradebook but the user_login cell would be empty.  If the page was refreshed, the user_login would display.  
+* Bug Fix: Adding a student that was already in the database, using their user_login, would add the student to the gradebook but the user_login cell would be empty.  If the page was refreshed, the user_login would display.
 
 
 Version 3.5.5:
@@ -176,7 +181,7 @@ Version 3.5:
 
 * The delete student modal was still rendered using old styling.  This was updated to the new styling.
 * Added dropdown tools menu for courses, similar to the one for students.  This allowed us to remove the edit and delete buttons from the top of the GradeBook page.
-* Fixed styling conflict both on the student view and instructor view with wordpress #adminmenuback.  
+* Fixed styling conflict both on the student view and instructor view with wordpress #adminmenuback.
 * Added background-color: white to tables.
 * New Feature: Export GradeBook to CSV.
 
@@ -191,7 +196,7 @@ Version 3.3:
 
 Version 3.2:
 
-* This update is mostly for the student view of grade-book.  
+* This update is mostly for the student view of grade-book.
 * Code maintenance: Split up Gradebook_student.js into models and views.
 
 Version 3.1:
@@ -205,8 +210,8 @@ Version 3.1:
 Version 3.0:
 
 * Fixed assignment header bug where sorting a column caused the header cell to be the only cell to change color on hover on the first mouse enter.
-* Feature: Added assignment ordering.  Newly added assignments are appended to the gradebook.  To move an assignment to the left or right, click on the assignment cell menu icon and choose from the shift options.  
+* Feature: Added assignment ordering.  Newly added assignments are appended to the gradebook.  To move an assignment to the left or right, click on the assignment cell menu icon and choose from the shift options.
 * Fixed assignment header display bug (Firefox).  Assignment headers would fail to display in Firefox.
 * Cleaned up views.  Views were rarely removed, which ate up memory.  Now all unnecessary views are removed.
-* Upgraded the database to handle ordering. 
+* Upgraded the database to handle ordering.
 * Other performance and code enhancements.

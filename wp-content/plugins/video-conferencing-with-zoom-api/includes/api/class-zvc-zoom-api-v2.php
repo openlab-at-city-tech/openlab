@@ -153,19 +153,19 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * User Function to List
 		 *
 		 * @param $page
-		 * @param $params
+		 * @param $args
 		 *
 		 * @return array
 		 */
-		public function listUsers( $page = 1, $params = array() ) {
-			$listUsersArray                = array();
-			$listUsersArray['page_size']   = 300;
-			$listUsersArray['page_number'] = absint( $page );
-			$listUsersArray                = apply_filters( 'vczapi_listUsers', $listUsersArray );
+		public function listUsers( $page = 1, $args = array() ) {
+			$defaults = array(
+				'page_size'   => 300,
+				'page_number' => absint( $page )
+			);
 
-			if ( ! empty( $params ) ) {
-				$listUsersArray = array_merge( $listUsersArray, $params );
-			}
+			// Parse incoming $args into an array and merge it with $defaults
+			$args           = wp_parse_args( $args, $defaults );
+			$listUsersArray = apply_filters( 'vczapi_listUsers', $args );
 
 			return $this->sendRequest( 'users', $listUsersArray, "GET" );
 		}
@@ -202,15 +202,20 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * Get Meetings
 		 *
 		 * @param $host_id
+		 * @param $args
 		 *
 		 * @return array
 		 */
-		public function listMeetings( $host_id ) {
-			$listMeetingsArray              = array();
-			$listMeetingsArray['page_size'] = 300;
-			$listMeetingsArray              = apply_filters( 'vczapi_listMeetings', $listMeetingsArray );
+		public function listMeetings( $host_id, $args = false ) {
+			$defaults = array(
+				'page_size' => 300,
+			);
 
-			return $this->sendRequest( 'users/' . $host_id . '/meetings', $listMeetingsArray, "GET" );
+			// Parse incoming $args into an array and merge it with $defaults
+			$args = wp_parse_args( $args, $defaults );
+			$args = apply_filters( 'vczapi_listMeetings', $args );
+
+			return $this->sendRequest( 'users/' . $host_id . '/meetings', $args, "GET" );
 		}
 
 		/**
@@ -309,15 +314,23 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * Get a Meeting Info
 		 *
 		 * @param  [INT] $id
-		 * @param  [STRING] $host_id
+		 * @param  $args
 		 *
 		 * @return array
 		 */
-		public function getMeetingInfo( $id ) {
-			$getMeetingInfoArray = array();
-			$getMeetingInfoArray = apply_filters( 'vczapi_getMeetingInfo', $getMeetingInfoArray );
+		public function getMeetingInfo( $id, $args = array() ) {
+			$getMeetingInfoArray = apply_filters( 'vczapi_getMeetingInfo', $args );
 
 			return $this->sendRequest( 'meetings/' . $id, $getMeetingInfoArray, "GET" );
+		}
+
+		/**
+		 * @param $meetingid
+		 *
+		 * @return array|bool|string|WP_Error
+		 */
+		public function getPastMeetingDetails( $meetingid ) {
+			return $this->sendRequest( 'past_meetings/' . $meetingid . '/instances', false, 'GET' );
 		}
 
 		/**
@@ -378,6 +391,16 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 			return $this->sendRequest( 'report/users', $getAccountReportArray, "GET" );
 		}
 
+		/**
+		 * Register Webinar Participants
+		 *
+		 * @param $webinar_id
+		 * @param $first_name
+		 * @param $last_name
+		 * @param $email
+		 *
+		 * @return array|bool|string|WP_Error
+		 */
 		public function registerWebinarParticipants( $webinar_id, $first_name, $last_name, $email ) {
 			$postData               = array();
 			$postData['first_name'] = $first_name;
@@ -391,14 +414,20 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * List webinars
 		 *
 		 * @param $userId
+		 * @param $args
 		 *
 		 * @return bool|mixed
 		 */
-		public function listWebinar( $userId ) {
-			$postData              = array();
-			$postData['page_size'] = 300;
+		public function listWebinar( $userId, $args = array() ) {
+			$defaults = array(
+				'page_size' => 300,
+			);
 
-			return $this->sendRequest( 'users/' . $userId . '/webinars', $postData, "GET" );
+			// Parse incoming $args into an array and merge it with $defaults
+			$args = wp_parse_args( $args, $defaults );
+			$args = apply_filters( 'vczapi_listWebinar', $args );
+
+			return $this->sendRequest( 'users/' . $userId . '/webinars', $args, "GET" );
 		}
 
 		/**
@@ -437,7 +466,7 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * @return array|bool|string|WP_Error
 		 */
 		public function getWebinarInfo( $id ) {
-			$getMeetingInfoArray = array();
+			$getMeetingInfoArray = apply_filters( 'vczapi_getWebinarInfo', array() );
 
 			return $this->sendRequest( 'webinars/' . $id, $getMeetingInfoArray, "GET" );
 		}
@@ -446,14 +475,20 @@ if ( ! class_exists( 'Zoom_Video_Conferencing_Api' ) ) {
 		 * List Webinar Participants
 		 *
 		 * @param $webinarId
+		 * @param $args
 		 *
 		 * @return bool|mixed
 		 */
-		public function listWebinarParticipants( $webinarId ) {
-			$postData              = array();
-			$postData['page_size'] = 300;
+		public function listWebinarParticipants( $webinarId, $args = array() ) {
+			$defaults = array(
+				'page_size' => 300,
+			);
 
-			return $this->sendRequest( 'webinars/' . $webinarId . '/registrants', $postData, "GET" );
+			// Parse incoming $args into an array and merge it with $defaults
+			$args = wp_parse_args( $args, $defaults );
+			$args = apply_filters( 'vczapi_listWebinarParticipants', $args );
+
+			return $this->sendRequest( 'webinars/' . $webinarId . '/registrants', $args, "GET" );
 		}
 
 		/**

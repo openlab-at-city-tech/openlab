@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  *              False otherwise.
  */
 function bp_support_blocks() {
-	return function_exists( 'register_block_type' ) && bp_rest_api_is_available();
+	return bp_is_running_wp( '5.0.0' ) && bp_rest_api_is_available();
 }
 
 /**
@@ -36,6 +36,7 @@ function bp_register_block_components() {
 			'wp-components',
 			'wp-i18n',
 			'wp-api-fetch',
+			'wp-url',
 		),
 		bp_get_version()
 	);

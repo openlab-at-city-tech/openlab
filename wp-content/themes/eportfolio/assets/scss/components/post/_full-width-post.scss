@@ -1,0 +1,85 @@
+.#{$prefix}-full-width-post{
+    .#{$prefix}-gallery-post{
+        &:before{
+            content: none;
+        }
+        &.#{$prefix}-only-title{
+            .#{$prefix}-desc{
+                flex: 0 0 100%;
+                max-width: 100%;
+                background-color: rgba($color_light_gray,0.4);
+                padding: 60px 15px;
+            }
+        }
+        .post-thumbnail,
+        .#{$prefix}-desc{
+            @include media(xs){
+                flex: 0 0 50%;
+                max-width: 50%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+                flex-direction: column;
+            }
+        }
+        .#{$prefix}-desc{
+            padding-top: 30px;
+            padding-bottom: 30px;
+            background-color: $color_light_gray;
+            padding: 15px;
+            .entry-title{
+                margin: 0;
+                font-size: 1.2rem;
+            }
+            .#{$prefix}-categories{
+                font-size: 1rem;
+                text-transform: uppercase;
+                li{
+                    padding-top: 5px;
+                }
+            }
+        }
+
+        .post-thumbnail{
+            display: block;
+            @extend %overlay;
+            @extend %perspective;
+            min-height: 400px;
+            &:before{
+                background-color: rgba($color_primary,0.6);
+                content: '';
+                @include animation( scale-out-bottom-left  0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both);
+            }
+          
+            .#{$prefix}-post-format-icon{
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                z-index: 1;
+                @include animation( scale-bottom-left  0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both);
+            }
+            img{
+                display: none;
+            }
+            &:hover{
+                &:before{
+                    @include animation(scale-in-bottom-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both);
+                }
+                .post-thumbnail{
+                    .#{$prefix}-post-format-icon{
+                        position: absolute;
+                        left: 50%;
+                        bottom: initial;
+                        top: 50%;
+                        @include transform(translate(-50%,-50%));
+                        border-radius: 100%;
+                        @include animation(scale-in-bottom-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both);
+                    }
+                }
+            }
+            
+        }
+    }
+}
+

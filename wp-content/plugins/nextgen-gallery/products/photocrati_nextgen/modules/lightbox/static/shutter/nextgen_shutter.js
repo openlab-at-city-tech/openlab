@@ -1,4 +1,5 @@
 jQuery(function($) {
+
     var callback = function() {
         var selector = nextgen_lightbox_filter_selector($, $([]));
         selector.addClass('shutterset');
@@ -9,7 +10,9 @@ jQuery(function($) {
         };
         shutterReloaded.init();
     };
-    $(this).bind('refreshed', callback);
+
+
+    $(document).on('refreshed', callback);
 
     var flag = 'shutter';
 

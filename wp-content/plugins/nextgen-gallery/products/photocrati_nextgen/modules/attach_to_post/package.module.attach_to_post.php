@@ -487,7 +487,7 @@ class Mixin_Attach_To_Post extends Mixin
             $display_types[] = $display_type;
         }
         usort($display_types, array($this->object, '_display_type_list_sort'));
-        wp_enqueue_script('ngg_display_tab', $this->get_static_url('photocrati-attach_to_post#display_tab.js'), array('jquery', 'backbone', 'photocrati_ajax'), NGG_SCRIPT_VERSION);
+        wp_enqueue_script('ngg_display_tab', $this->get_static_url('photocrati-attach_to_post#display_tab.js'), array('jquery', 'backbone', 'photocrati_ajax'), NGG_ATTACH_TO_POST_VERSION);
         $this->object->mark_script('ngg_display_tab');
         wp_localize_script('ngg_display_tab', 'igw_data', array('displayed_gallery_preview_url' => $settings->gallery_preview_url, 'displayed_gallery' => $this->object->_displayed_gallery->get_entity(), 'sources' => $sources->get_all(), 'gallery_primary_key' => $gallery_mapper->get_primary_key_column(), 'galleries' => $gallery_mapper->find_all(), 'albums' => $album_mapper->find_all(), 'tags' => $tags, 'display_types' => $display_types, 'nonce' => M_Security::create_nonce('nextgen_edit_displayed_gallery'), 'image_primary_key' => $image_mapper->get_primary_key_column(), 'display_type_priority_base' => NGG_DISPLAY_PRIORITY_BASE, 'display_type_priority_step' => NGG_DISPLAY_PRIORITY_STEP, 'shortcode_ref' => isset($_REQUEST['ref']) ? floatval($_REQUEST['ref']) : null, 'shortcode_defaults' => array('order_by' => $settings->galSort, 'order_direction' => $settings->galSortDir, 'returns' => 'included', 'maximum_entity_count' => $settings->maximum_entity_count), 'shortcode_attr_replacements' => array('source' => 'src', 'container_ids' => 'ids', 'display_type' => 'display'), 'i18n' => array('sources' => __('Are you inserting a Gallery (default), an Album, or images based on Tags?', 'nggallery'), 'optional' => __('(optional)', 'nggallery'), 'slug_tooltip' => __('Sets an SEO-friendly name to this gallery for URLs. Currently only in use by the Pro Lightbox', 'nggallery'), 'slug_label' => __('Slug', 'nggallery'), 'no_entities' => __('No entities to display for this source', 'nggallery'), 'exclude_question' => __('Exclude?', 'nggallery'), 'select_gallery' => __('Select a Gallery', 'nggallery'), 'galleries' => __('Select one or more galleries (click in box to see available galleries).', 'nggallery'), 'albums' => __('Select one album (click in box to see available albums).', 'nggallery'))));
     }
@@ -641,7 +641,7 @@ class Mixin_Attach_To_Post extends Mixin
         // 		'title'     =>  __('Manage Tags', 'nggallery')
         // 	);
         // }
-        return $retval;
+        return apply_filters('ngg_attach_to_post_main_tabs', $retval);
     }
     /**
      * Renders a NextGen Gallery page in an iframe, suited for the attach to post

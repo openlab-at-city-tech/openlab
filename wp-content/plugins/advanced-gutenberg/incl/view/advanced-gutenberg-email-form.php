@@ -138,7 +138,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
 
             <div class="save-settings-block">
                 <button type="submit"
-                        class="ju-button orange-button waves-effect waves-light"
+                        class="button button-primary pp-primary-button"
                         id="save_email_config"
                         name="save_email_config"
                 >
@@ -174,7 +174,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                 </li>
                 <li class="ju-settings-option full-width clearfix" style="background-color: transparent">
                     <div class="advgb-captcha-intro">
-                        <?php esc_html_e('Use the Google reCaptcha to avoid spam in Adv. Gutenberg forms. Get credentials for your domain by registering', 'advanced-gutenberg') ?>
+                        <?php esc_html_e('Use the Google reCaptcha to avoid spam in PublishPress Blocks forms. Get credentials for your domain by registering', 'advanced-gutenberg') ?>
                         <a href="https://www.google.com/recaptcha/intro/index.html" target="_blank">
                             <?php esc_html_e(' here', 'advanced-gutenberg') ?>
                         </a>
@@ -256,7 +256,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
 
             <div class="save-settings-block">
                 <button type="submit"
-                        class="ju-button orange-button waves-effect waves-light"
+                        class="button button-primary pp-primary-button"
                         id="save_recaptcha_config"
                         name="save_recaptcha_config"
                 >
@@ -277,12 +277,12 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                             <?php echo ' ('. esc_html($contacts_count) . ')'; ?>
                         </label>
                         <div class="advgb-export-actions">
-                            <button type="submit" class="ju-material-button advgb-export-download"
+                            <button type="submit" class="button pp-default-button advgb-export-download"
                                     name="block_data_export" value="contact_form.csv"
                             >
                                 <?php esc_html_e('CSV', 'advanced-gutenberg'); ?>
                             </button>
-                            <button type="submit" class="ju-material-button advgb-export-download"
+                            <button type="submit" class="button pp-default-button advgb-export-download"
                                     name="block_data_export" value="contact_form.json"
                             >
                                 <?php esc_html_e('JSON', 'advanced-gutenberg'); ?>
@@ -297,12 +297,12 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                             <?php echo ' ('. esc_html($newsletter_count) . ')'; ?>
                         </label>
                         <div class="advgb-export-actions">
-                            <button type="submit" class="ju-material-button advgb-export-download"
+                            <button type="submit" class="button pp-default-button advgb-export-download"
                                     name="block_data_export" value="newsletter.csv"
                             >
                                 <?php esc_html_e('CSV', 'advanced-gutenberg'); ?>
                             </button>
-                            <button type="submit" class="ju-material-button advgb-export-download"
+                            <button type="submit" class="button pp-default-button advgb-export-download"
                                     name="block_data_export" value="newsletter.json"
                             >
                                 <?php esc_html_e('JSON', 'advanced-gutenberg'); ?>

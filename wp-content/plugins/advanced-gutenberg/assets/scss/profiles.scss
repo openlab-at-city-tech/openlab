@@ -1,0 +1,81 @@
+@import "variables";
+@import "mixins";
+
+#profiles-list {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+}
+
+#delete-selected-profiles {
+    padding: 14px 15px;
+}
+
+#profiles-list th {
+    text-align: inherit;
+    padding: 10px;
+}
+
+#profiles-list th span {
+    color: $darker;
+}
+
+#profiles-list tbody td {
+    padding: 20px 10px;
+}
+
+#profiles-list .profile-header-title {
+    width: 70%;
+}
+
+#profiles-list .profile-header-author {
+    width: 15%;
+}
+
+#profiles-list .profile-header-date {
+    width: 15%;
+}
+
+.advgb-profile {
+    background-color: #fff;
+}
+
+.advgb-profile td {
+    border-bottom: 10px solid #f3f6fa;
+}
+
+.advgb-profile .profile-title .profile-delete {
+    visibility: hidden;
+    cursor: pointer;
+    font-size: 20px;
+    vertical-align: sub;
+    margin-left: 10px;
+    color: #ff0000;
+}
+
+.advgb-profile:hover .profile-delete {
+    visibility: visible;
+}
+
+#profiles-list .sorting-header {
+    cursor: pointer;
+}
+
+#profiles-list .sorting-header i {
+    vertical-align: bottom;
+}
+
+.sorting-header.desc i.dashicons:before {
+    content: "\f140";
+}
+
+.sorting-header.asc i.dashicons:before {
+    content: "\f142";
+}
+
+.advgb-profile .profile-title a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    vertical-align: middle;
+}

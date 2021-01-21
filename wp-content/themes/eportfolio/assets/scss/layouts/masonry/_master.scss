@@ -1,0 +1,7 @@
+@import 'gallery-with-space';
+@import 'gallery-with-no-space';
+.masonry-blocks{
+    @include media(xsonly){
+        height: initial !important;
+    }
+}

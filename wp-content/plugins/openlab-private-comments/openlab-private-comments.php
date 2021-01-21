@@ -5,7 +5,7 @@
  * Author: OpenLab
  * Author URI: http://openlab.citytech.cuny.edu
  * Plugin URI: http://openlab.citytech.cuny.edu
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPL-2.0-or-later
  * Text Domain: openlab-private-comments
  * Domain Path: /languages
@@ -13,7 +13,7 @@
 
 namespace OpenLab\PrivateComments;
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';

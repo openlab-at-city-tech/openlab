@@ -1,0 +1,130 @@
+@import 'footer';
+@import 'header';
+@import 'pagination';
+@import 'post';
+@import 'table';
+.#{$prefix}-single-article{
+    .post-thumbnail{
+        margin-top: 30px;
+        background-color: $color-white;
+        padding: 10px;
+        @include media(md){
+            height: 500px;
+            overflow: hidden;
+        }
+    }
+    p,h1,h2,h3,h4,h5,
+    pre{
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    hr{
+        margin-top: 15px;
+        margin-bottom: 0;
+        background-color: $color_blue_gray;
+    }
+    figure{
+        margin-bottom: 0;
+        margin-top: 15px;
+    }
+    .wp-block-gallery{
+        margin: 15px 0 0;
+    }
+    figure{
+        text-align: center;
+        figcaption{
+            background-color: $color_white;
+            color: $color_black;
+            padding: 15px;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        &.alignleft{
+            width: 100%;
+            text-align: initial;
+            margin-right: 0;
+        }
+        
+    }
+    .wp-block-cover{
+        margin: 30px 0 0;
+        p{
+            text-align: center;
+        }
+    }
+    ul{
+       margin: 10px 0 0;
+       li{
+           font-size: 0.9rem;
+       }
+    }
+    .wp-block-code{
+        background-color: $color_black;
+        color: $color_white;
+    }
+    pre{
+        &.wp-block-verse,
+        &.wp-block-preformatted{
+            font-size: 1rem;
+            font-family: inherit;
+            padding: 20px;
+            margin-bottom: 0;
+            margin-top: 15px;
+            white-space: pre-line;
+            text-align: justify;
+            border-radius: 5px;
+        }
+    }
+    blockquote{
+        &.wp-block-quote{
+            padding: 15px;
+            background-color: $color-white;
+            margin: 15px 0 0;
+            font-weight: $font_semi_bold;
+            p{
+                padding: 15px 30px;
+                position: relative;
+                &:before,
+                &:after{
+                    display: block;
+                    font-family: fontAwesome;
+                    position: absolute;
+                    font-size: 1rem;
+                    color: $color_primary;
+        
+                }
+                &:before{
+                    content: '\f10d';
+                    left: 0;
+                    top: 0;
+                }
+                &:after{
+                    content: '\f10e';
+                    right: 0;
+                    bottom: 0;
+                }
+            }
+        }
+        cite{
+            display: flex;
+            justify-content: flex-end;
+            color: $color_gray;
+        }
+       
+    }
+    .wp-block-button{
+        margin-top: 15px;
+        margin-bottom: 0;
+        a{
+            display: inline-block;
+            line-height: 1;
+            @include border();
+            padding: 10px 30px;
+            font-size: 0.9rem;
+            background-color: $color_black;
+            color: $color_white;
+            border-radius: 0;
+        }
+    }
+   
+}

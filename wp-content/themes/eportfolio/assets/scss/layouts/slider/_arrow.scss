@@ -1,0 +1,39 @@
+.slick-arrow{
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: 0;
+    z-index: 1;
+    font-size: 0;
+    cursor: pointer;
+    outline: 0;
+    border-radius: 100%;
+    @include transition();
+    background-color: $color_white;
+    &.slick-disabled{
+        z-index: -1;
+    }
+    &:before{
+        display: block;
+        font-family: fontAwesome;
+        font-size: 1rem;
+    }
+    &:hover{
+        color: $color_primary;
+    }
+}
+.slick-prev{
+    left: 10px;
+    &:before{
+        content: '\f060';
+    }
+}
+.slick-next{
+    right: 10px;
+    &:before{
+        content: '\f061';
+    }
+}

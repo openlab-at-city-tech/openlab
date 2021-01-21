@@ -36,8 +36,8 @@ if ( isset( $_GET['host_id'] ) ) {
                 <label for="bulk-action-selector-top" class="screen-reader-text"><?php _e( "Select bulk action", "video-conferencing-with-zoom-api" ); ?></label>
                 <select name="action" id="bulk-action-selector-top">
                     <option value="trash"><?php _e( "Move to Trash", "video-conferencing-with-zoom-api" ); ?></option>
-                </select> <input type="submit" id="bulk_delete_meeting_listings" data-type="meeting" class="button action" value="Apply">
-                <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-add-meeting&host_id=<?php echo $get_host_id; ?>" class="button action" title="Add new meeting">Add New Meeting</a>
+                </select> <input type="submit" id="bulk_delete_meeting_listings" data-type="meeting" class="button action" value="<?php _e( 'Apply', 'video-conferencing-with-zoom-api' ); ?>">
+                <a href="?post_type=zoom-meetings&page=zoom-video-conferencing-add-meeting&host_id=<?php echo $get_host_id; ?>" class="button action" title="Add new meeting"><?php _e( 'Add New Meeting', 'video-conferencing-with-zoom-api' ); ?></a>
             </div>
             <div class="alignright">
                 <select onchange="location = this.value;" class="zvc-hacking-select">

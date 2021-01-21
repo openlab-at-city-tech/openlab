@@ -463,7 +463,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 				'bp_rest_notification_invalid_id',
 				__( 'Invalid notification ID.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 404,
 				)
 			);
 		}
@@ -655,7 +655,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param array                       $links       The prepared links of the REST response.
+		 * @param array                         $links        The prepared links of the REST response.
 		 * @param BP_Notifications_Notification $notification Notification object.
 		 */
 		return apply_filters( 'bp_rest_notifications_prepare_links', $links, $notification );
@@ -690,7 +690,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return BP_Notifications_Notification|string A notification object.
+	 * @return BP_Notifications_Notification|string A notification object|Empty string.
 	 */
 	public function get_notification_object( $request ) {
 		$notification_id = is_numeric( $request ) ? $request : (int) $request['id'];
@@ -713,7 +713,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @return array Endpoint arguments.
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-		$args = WP_REST_Controller::get_endpoint_args_for_item_schema( $method );
+		$args = parent::get_endpoint_args_for_item_schema( $method );
 		$key  = 'get_item';
 
 		if ( WP_REST_Server::EDITABLE === $method ) {

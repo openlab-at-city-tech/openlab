@@ -103,7 +103,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 				
 				var self = this;
 				
-				el.click(function (e) {
+				el.on('click', function (e) {
 					// here we only trigger done() if anchor is page-local (i.e. JS button) because for normal anchors this step is only "done" when reaching the new page
 					if (!el.is('a,button.ngg_save_settings_button,input.ngg_save_gallery_changes') || (el.attr("href").startsWith("#") || el.attr("href").startsWith("javascript:") || el.hasClass("thickbox"))) {
 						self.done(el);
@@ -685,16 +685,13 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
 								break;
 							}
 							case 'event_bind':
-							case 'plupload_bind': {
+							case 'uppy_bind': {
 								var doBind = $ob.length > 0;
-							
-								if (condType == 'plupload_bind') {
-									if (typeof($ob.pluploadQueue) !== 'undefined')
-										$ob = $ob.pluploadQueue();
-									else
-										doBind = false;
+
+								if (condType === 'uppy_bind' && 'undefined' !== typeof window.ngg_uppy) {
+									$ob = window.ngg_uppy;
 								}
-								
+
 								if (doBind) {
 									this.condition_setup = true;
 									var tourStep = this;

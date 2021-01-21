@@ -11,8 +11,8 @@ window.addEventListener('load', function () {
             zoom = parseFloat(elm.dataset.zoom),
             defaultMarker = elm.dataset.default,
             icon = elm.dataset.icon,
-            title = elm.dataset.title,
-            desc = elm.dataset.desc,
+            title = elm.dataset.title.replace(/\\/g, ''),
+            desc = elm.dataset.desc.replace(/\\/g, ''),
             infoShown = elm.dataset.shown === 'true',
             info = '',
             mapStyle = decodeURIComponent(elm.dataset.style);

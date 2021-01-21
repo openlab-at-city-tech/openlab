@@ -2,7 +2,7 @@ jQuery( document ).ready( function( $ ) {
 	/**
 	 * When responding to a private comment, comment privacy should be enforced.
 	 */
-	$( '.comment-reply-link' ).on( 'click', function() {
+	$( document ).on( 'touchstart click', '.comment-reply-link', function() {
 		var parent = $( this ).closest( '.comment' );
 		var privateCheckbox = $( '#ol-private-comment' );
 
@@ -13,6 +13,16 @@ jQuery( document ).ready( function( $ ) {
 			privateCheckbox.prop( 'checked', false );
 			privateCheckbox.prop( 'disabled', false );
 		}
+	} );
+
+	/**
+	 * Remove private comment enforcement when the comment reply is canceled.
+	 */
+	$( document ).on( 'touchstart click', '#cancel-comment-reply-link', function() {
+		var privateCheckbox = $( '#ol-private-comment' );
+
+		privateCheckbox.prop( 'checked', false );
+		privateCheckbox.prop( 'disabled', false );
 	} );
 
 	/**

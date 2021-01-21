@@ -13,8 +13,8 @@ class S2_Block_Editor {
 		add_action( 'rest_api_init', array( $this, 'register_settings_endpoint' ) );
 
 		if ( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
-			add_action( 'admin_enqueue_scripts', array( &$this, 'gutenberg_i18n' ), 6 );
+			add_action( 'enqueue_block_editor_assets', array( &$this, 'gutenberg_block_editor_assets' ), 6 );
+			add_action( 'enqueue_block_editor_assets', array( &$this, 'gutenberg_i18n' ), 6 );
 		}
 	}
 
@@ -161,11 +161,6 @@ class S2_Block_Editor {
 	 * Enqueue Block Editor assets
 	 */
 	public function gutenberg_block_editor_assets() {
-		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ), true ) ) {
-			return;
-		}
-
 		wp_enqueue_script(
 			'subscribe2-shortcode',
 			S2URL . 'gutenberg/shortcode' . $this->script_debug . '.js',
@@ -194,11 +189,6 @@ class S2_Block_Editor {
 	 * Handle translation of Block Editor assets
 	 */
 	public function gutenberg_i18n() {
-		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php', 'page-new.php', 'page.php' ), true ) ) {
-			return;
-		}
-
 		$translations = get_translations_for_domain( 'subscribe2' );
 
 		$locale_data = array(

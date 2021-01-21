@@ -1,0 +1,28 @@
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+input#cac_ncs_groups {
+	width: 90%;
+}
+
+.misc-expiration-date label:before {
+	content: "\f469";
+	color: #82878c;
+	position: relative;
+	top: -1px;
+	font: normal 20px/1 dashicons;
+	speak: none;
+	display: inline-block;
+	margin-left: -1px;
+	padding-right: 3px;
+	vertical-align: middle;
+	-webkit-font-smoothing: antialiased;
+}
+
+.misc-expiration-date input {
+	width: 110px;
+}

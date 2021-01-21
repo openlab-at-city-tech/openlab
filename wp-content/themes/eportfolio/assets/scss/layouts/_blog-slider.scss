@@ -1,0 +1,101 @@
+.#{$prefix}-blog-slider-section{
+    .#{$prefix}-blog-slider{
+        position: relative;
+        .slick-dots{
+            position: absolute;
+            top: 50%;
+            width: 15px;
+            left: 20px;
+            @include transform(translateY(-50%));
+            z-index: 1;
+            @include media(sm){
+                left: 45px;
+            }
+           
+            &:before,
+            &:after{
+                content:'';
+                height: 40px;
+                width: 4px;
+                display: block;
+                background-color: $color_white;
+                position: relative;
+                left: 5px;
+            }
+        
+            li{
+                line-height: 1.3;
+                &:first-child{
+                    margin-top: 10px;
+                }
+                &:last-child{
+                    margin-bottom: 10px;
+                }
+                button{
+                    border-color: rgba($color_white,0.6);
+                }
+                &.slick-active{
+                    button{
+                        background-color: rgba($color_white,0.6);
+                    }
+                }
+            }
+        }
+        .slick-arrow{
+            display: none !important;
+        }
+        .#{$prefix}-blog-post{
+            position: relative;
+            padding: 50px 0 50px 50px;
+            @include media(sm){
+                padding: 60px 60px 60px 100px;
+            }
+            &:before{
+                @include media(sm){
+                    content: '';
+                    position: absolute;
+                    width: 200px;
+                    height: 100%;
+                    background-color: $color_primary;
+                    display: block;
+                    top: 0;
+                    left: 0;
+                    z-index: -1;
+                }
+            }
+            .#{$prefix}-image-section{
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                width: calc(100% - 100px);
+                @include media(sm){
+                    position: relative;
+                    width: initial;
+                }
+            }
+            .#{$prefix}-desc{
+                height: 300px;
+                overflow: hidden;
+                @include media(sm){
+                    height: initial;
+                }
+                .#{$prefix}-section-title{
+                    a{
+                        @include line-limit(2);
+                        @include media(lg){
+                            @include line-limit(initial);
+                        }
+                    }
+                }
+            }
+            p{
+                display: none;
+                @include media(lg){
+                    display :block;
+                }
+            }
+    
+        }
+    }
+}

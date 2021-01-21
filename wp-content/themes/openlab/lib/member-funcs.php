@@ -42,9 +42,20 @@ function openlab_list_members($view) {
         $user_school = urldecode( $school );
 
         // Sanitize
-        $schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
-        if ( ! isset( $schools_and_offices[ $user_school ] ) ) {
+		$schools = openlab_get_school_list();
+        if ( ! isset( $schools[ $user_school ] ) ) {
             $user_school = '';
+        }
+    }
+
+	$office = openlab_get_current_filter( 'office' );
+    if ( $office ) {
+        $user_office = urldecode( $office );
+
+        // Sanitize
+		$offices = openlab_get_office_list();
+        if ( ! isset( $offices[ $user_office ] ) ) {
+            $user_office = '';
         }
     }
 
@@ -118,11 +129,11 @@ function openlab_list_members($view) {
         }
     }
 
-    if ($user_school && !$include_noop) {
+    if ( $user_school && ! $include_noop ) {
         $user_school_matches = $wpdb->get_col( $wpdb->prepare(
             "SELECT user_id
             FROM {$wpdb->usermeta}
-            WHERE meta_key IN ( 'openlab_school', 'openlab_office' ) AND
+            WHERE meta_key = 'openlab_school' AND
             meta_value = %s",
             $user_school
         ) );
@@ -131,6 +142,22 @@ function openlab_list_members($view) {
             $include_noop = true;
         } else {
             $include_arrays[] = $user_school_matches;
+        }
+    }
+
+    if ( $user_office && ! $include_noop ) {
+        $user_office_matches = $wpdb->get_col( $wpdb->prepare(
+            "SELECT user_id
+            FROM {$wpdb->usermeta}
+            WHERE meta_key = 'openlab_office' AND
+            meta_value = %s",
+            $user_office
+        ) );
+
+        if (empty($user_office_matches)) {
+            $include_noop = true;
+        } else {
+            $include_arrays[] = $user_office_matches;
         }
     }
 

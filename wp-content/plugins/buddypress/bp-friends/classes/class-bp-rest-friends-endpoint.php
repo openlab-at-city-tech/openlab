@@ -131,7 +131,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'bp_rest_friends_get_items_user_failed',
 				__( 'There was a problem confirming if user is valid.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 404,
 				)
 			);
 		}
@@ -304,7 +304,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'bp_rest_friends_create_item_failed',
 				__( 'There was a problem confirming if user is valid.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 404,
 				)
 			);
 		}
@@ -328,7 +328,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'bp_rest_friends_create_item_failed',
 				__( 'You are not allowed to perform this action.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 403,
 				)
 			);
 		}
@@ -426,7 +426,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'bp_rest_friends_update_item_failed',
 				__( 'There was a problem confirming if user is valid.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 404,
 				)
 			);
 		}
@@ -521,7 +521,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 				'bp_rest_friends_delete_item_failed',
 				__( 'There was a problem confirming if user is valid.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => 404,
 				)
 			);
 		}
@@ -707,7 +707,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 	 * @return BP_Friends_Friendship
 	 */
 	public function get_friendship_object( $friendship_id ) {
-		return new BP_Friends_Friendship( $friendship_id );
+		return new BP_Friends_Friendship( (int) $friendship_id );
 	}
 
 	/**
@@ -719,7 +719,7 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 	 * @return array Endpoint arguments.
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-		$args    = WP_REST_Controller::get_endpoint_args_for_item_schema( $method );
+		$args    = parent::get_endpoint_args_for_item_schema( $method );
 		$context = 'view';
 
 		$args['id']['required']    = true;

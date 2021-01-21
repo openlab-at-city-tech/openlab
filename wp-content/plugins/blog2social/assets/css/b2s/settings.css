@@ -1,0 +1,152 @@
+/*Custom*/
+@media(max-width: 767px) {
+    .filterHide {
+        display: none;
+    }
+    .form-inline button { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+.error{
+    border: 1px solid #FF0000 !important;
+}
+
+.nav > li > a{
+    padding: 10px 15px !important;
+}
+
+.b2s-settings-line{
+    margin-top: 0px!important;
+}
+
+.b2s-display-inline{
+    display: inline !important;
+}
+
+.b2s-user-time-zone-label{
+    padding-right: 10px;
+}
+
+@media(min-width: 768px) {
+    .b2s-settings-time-zone-info{
+        padding-left: 130px;
+    }
+}
+
+.b2s-auto-post-publish-label, .b2s-auto-post-update-label{
+    font-style:italic;   
+}
+
+.b2s-post-type-list{
+    float: left;
+    margin-bottom: 5px;
+    width: 50%;
+}
+
+.b2s-post-type-select-btn{
+    padding: 0 0 1px !important;
+}
+
+.b2s-input-margin-bottom-5{
+    margin-bottom: 5px;
+}
+
+.font-gray{
+    color: #9B9B9B !important;
+}
+
+.b2s-post-item-network-image{
+    height: 16px;
+    width: 16px;
+}
+
+.b2s-network-auth-count {
+    font-size: 12px;
+    font-style: italic;
+    color: #777;
+    font-weight: normal;
+    line-height: 1;
+}
+.list-group-item{
+    border: 0px !important;
+}
+
+.b2s-img-network {
+    width: 36px !important;
+    margin-top: 8px !important;
+}
+
+.b2s-input-text-size-45{
+    width: 45px;
+}
+
+.chosen-container{
+    min-width: 50% !important;
+}
+
+.padding-bottom-3{
+    padding-bottom: 3px;
+}
+
+.b2s-text-sm{
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.b2s-bold{
+    font-weight: 600;
+}
+
+ul.chosen-choices {
+    background-image: none !important;
+    border-radius: 3px;
+    border: 1px solid #d7d7d7 !important;
+    box-shadow: none;
+}
+
+.b2s-auto-post-own-update-warning, .b2s-auto-post-own-general-warning{
+    border: 1px solid #aaa !important; 
+}
+
+.b2s-network-tos-auto-post-import-warning{
+    display: none;
+}
+.b2s-network-tos-auto-post-import-warning > .alert{
+    margin-bottom: 0px !important;
+}
+.b2s-shortener-image, .b2s-network-image{
+    height: 16px;
+    width: 16px;
+}
+.b2s-user-network-shortener-account-area{
+    vertical-align: middle;
+}
+
+.b2s-btn-link-txt{
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.b2s-user-network-shortener-connect {
+    margin-left: 5px;
+}
+
+#b2s-auto-post-profil-dropdown-twitter option:disabled {
+    color: #ff4f68;
+}
+
+.b2s-w-100 {
+    width: 100%;
+    padding: 0px;
+}
+
+.b2s-auto-post-header {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/*prevent themes to overwrite line-height, causing the words to shift to the top*/
+.toggle-off, .toggle-on {
+    line-height: 1.4 !important;
+}

@@ -1,3 +1,67 @@
+= 5.8.2 =
+* security: improper nonce verification for Nextgen bulk optimizer initialization (minor severity)
+* changed: Easy IO verification performed via API for better reliability
+* fixed: Easy IO missing https availability for admin-ajax.php requests when home_url is using plain http
+* fixed: Easy IO silently fails to rewrite URLs when using CNAME with WP Offload Media
+* fixed: wp_lazy_loading_enabled filter should have 3 parameters
+* fixed: Easy IO shows alert for domain change when a non-default WPML language is active
+* fixed: JS WebP does not auto-detect WP Offload Media CNAME
+
+= 5.8.1 =
+* fixed: Easy IO parser has typo in $webp_quality variable
+
+= 5.8.0 =
+* added: SVG optimization, huge thanks to @samsk for making this happen!
+* added: WebP quality setting, changed default to 75
+* fixed: Lazy Load and other front-end parsers breaks JSON-encoded img elements
+* fixed: Easy IO adds excess markup for images with height and/or width set to 'auto'
+* fixed: memory_limit check should be case-insensitive: g vs. G
+* fixed: PHP error during detection of Cache Enabler's WebP option
+* fixed: table upgrade routine error when primary key already exists
+* fixed: deleting files by always using realpath, props @ocean90
+* fixed: Easy IO skips images in AJAX Load More requests
+
+= 5.7.1 =
+* added: alert on domain change for Easy IO, like if you clone from a production environment to staging
+* changed: Easy IO domain and plan_id refresh automatically when visiting settings page
+* changed: better JS WebP and WPBakery Page Builder compatibility
+* changed: restore savings gauge for network settings page
+* fixed: resize detection visible for editors, should be admin-only
+* fixed: (force) re-optimize not working with parallel mode
+* fixed: upload error when WP cannot load image editor
+
+= 5.7.0 =
+* added: cleanup tool if you no longer need local WebP copies of images
+* added: resizing results displayed in bulk & single optimization report
+* changed: The browser-native portion of the Lazy Load feature obeys the wp_lazy_loading_enabled filter
+* fixed: plugin tables do not have PRIMARY indexes
+* fixed: Third-party plugins sometimes set erroneous WebP quality values
+* fixed: Show Re-optimized Images lists images in reverse order
+* fixed: cannot skip to last page of re-optimized images
+* fixed: Scheduled Optimizer skips files that need scaling/resizing if they have already been compressed
+* fixed: Lazy Load placeholders not rewritten for CDN usage by Autoptimize and WP Offload Media Assets Add-on
+
+= 5.6.2 =
+* fixed: fatal error for undefined add_query_var
+
+= 5.6.1 =
+* changed: prevent unintentional image re-optimization from plugins with a threshold of 5x, indicate intential regen with ewww_image_optimizer_allowed_reopt filter
+* changed: include lazy load and WebP in optimization score
+* fixed: query paramaters added to videos via image_downsize filter
+* fixed: WP-CLI command triggers async queueing
+* fixed: WPML check skips too many images during bulk scanner
+* fixed: WP-CLI command options for FlAGallery and NextGEN using outdated code
+* fixed: re-optimization tracker not tracking
+
+= 5.6.0 =
+* added: if exec() is disabled, free cloud-based JPG compression will be enabled
+* added: tool to remove originals for converted images
+* changed: improved handling of WPML replicas in media library list mode and bulk optimizer
+* fixed: JS WebP, picture WebP, and Easy IO errors with WP Offload Media 2.4
+* fixed: JS WebP cannot find local paths when WP_CONTENT_DIR is outside ABSPATH
+* fixed: Easy IO hard crops images when requested height/width is 9999
+* fixed: Lazy Load and WebP parsers running on customizer preview pane
+
 = 5.5.0 =
 * added: GIF to WebP conversion with API and Easy IO
 * changed: plugin removed from disallowed list on WP Engine!

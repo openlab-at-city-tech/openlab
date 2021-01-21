@@ -1,5 +1,4 @@
-jQuery(function($) {
-
+(function($) {
     $('.accordion').accordion({
         clearStyle: true,
         autoHeight: false,
@@ -7,5 +6,4 @@ jQuery(function($) {
     });
 
     $('label.tooltip, span.tooltip').tooltip();
-
-});
+})(jQuery);

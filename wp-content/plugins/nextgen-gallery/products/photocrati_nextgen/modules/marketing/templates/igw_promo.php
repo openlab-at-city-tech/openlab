@@ -9,6 +9,6 @@
         </a>
     </p>
     <p class='coupon'>
-        <?php esc_html_e("Get 30% Off Now!", 'nggallery') ?>
+        <?php esc_html_e("Get 20% Off Now!", 'nggallery') ?>
     </p>
 </div>

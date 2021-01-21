@@ -1,0 +1,16 @@
+.slick-dots{
+    @extend %reset-ul;
+    button{
+        height: 15px;
+        width: 15px;
+        padding: 0;
+        @include border(2px,solid);
+        border-color: $color_primary;
+        background-color: transparent;
+        color: transparent;
+        border-radius: 100%;
+        cursor: pointer;
+        outline: 0;
+        @include transition();
+    }
+}

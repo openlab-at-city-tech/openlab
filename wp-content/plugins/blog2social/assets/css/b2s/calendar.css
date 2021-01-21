@@ -1,0 +1,382 @@
+
+body .fc-state-default{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+}
+body .b2s-calendar-header{
+    display: flex;
+    padding-bottom: 2px;
+}
+body .b2s-calendar-body > img{
+    float: right;
+    height: 28px;
+    width: 28px;
+}
+body .b2s-calendar-header .fc-content{
+    padding-left: 2px;
+}
+body .b2s-calendar-body{
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 1px;
+    border-radius: 2px;
+    padding: 2px;
+}
+body .b2s-calendar-body::after{
+    content: "";
+    clear:both;
+    display: block;
+}
+body .fc-content{
+    display: block;
+    width: 100%;
+}
+body .fc-time{
+    display: block;
+    padding-right: 2px;
+    text-align: right;
+    float:right;
+}
+.network-name{
+    font-weight: bold;
+}
+.network-profile{
+    margin-bottom: 5px;
+}
+.b2s-post-item-thumb {
+    width: 5%;
+    margin-right: 8px;
+}
+
+.b2s-post-item-thumb img {
+    border-radius: 50%;
+    width: 48px;
+}
+
+.b2s-post-item-details {
+    width: 93%;
+}
+
+.b2s-post-item-details, .b2s-post-item-thumb {
+    float: left;
+}
+.b2s-post-item-details h4 {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 3px 3px 3px 0px;
+}
+
+.b2s-post-item-network-deprecated {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 3px 3px 3px 0px;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+.fb-url-image, .xing-url-image, .linkedin-url-image, .tw-url-image, .reddit-url-image, .b2s-image-border {
+    margin-right: 10px;
+    margin-bottom: 20px;
+    border: 1px dashed #bdbfc2;
+    box-shadow: none;
+    padding: 5px;
+}
+textarea.form-control {
+    height: auto;
+}
+.fb-textarea-input, .tw-textarea-input, .xing-textarea-input, .reddit-textarea-input, .linkedin-textarea-input, .b2s-post-item-details-item-message-input {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.125;
+    width: 100%;
+    border: medium none;
+    border-radius: 0;
+    margin-bottom: 10px;
+    font-family: helvetica,arial,sans-serif;
+}
+.b2s-post-item-details-item-message-input{
+    min-height: 100px;
+}
+.b2s-post-item-details-url-image{
+    cursor: pointer;
+}
+.b2s-user-network-settings-post-format-area label > input {
+    visibility: hidden;
+    position: absolute;
+}
+.b2s-settings-checked + img {
+    border: 3px solid #79b232 !important;
+}
+.b2s-image-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+    height: 200px;
+    line-height: 1.42857;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    margin-top: 15px;
+    overflow: hidden;
+    padding: 4px;
+    transition: border 0.2s ease-in-out 0s;
+    width: 185px;
+}
+.b2s-image-item-thumb {
+    height: 150px;
+}
+.b2s-image-change-all-network,.b2s-upload-image-free-version,.b2s-image-change-this-network, .b2s-image-change-meta-network{
+    margin-right: 5px !important;
+}
+.b2s-image-remove-btn {
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    font-weight: 700 !important;
+}
+.b2s-calendar-delete{
+    cursor: pointer;
+}
+.b2s-btn-label-premium{
+    color: #fff;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+.b2s-btn-label-premium:hover{
+    color: #fff;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+body .fc-day-grid-event .fc-content{
+    white-space: normal;
+}
+
+@media(max-width: 425px)
+{
+    .b2s-calendar-body{
+        display: none;
+    }
+}
+
+@media(max-width: 350px)
+{
+    body .fc-time{
+        font-size: 8px;
+    }
+}
+
+.b2s-loading-area {
+    width: 100% !important;
+}
+
+.og_title, .og_desc, .card_desc, .card_title, .b2s-post-item-details-item-title-input, .b2s-select, .b2s-select-area{
+    margin-bottom: 8px !important;
+}
+
+.b2s-post-item-info-area {
+    font-size: 11px !important;
+}
+
+.b2s-post-ship-item-full-text, .b2s-post-ship-item-message-delete, .b2s-post-ship-item-network-settings, .b2s-post-ship-item-post-format{
+    line-height: 1.5 !important;
+    padding: 0 1px 3px !important;
+}
+
+.b2s-load-info-meta-tag-modal{
+    margin-top: 8px !important;
+    display: block !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+.b2s-post-item-details-tag-add-div {
+    border: 0px !important;
+    box-shadow: 0px 0px 0px #000 !important;
+}
+
+.b2s-post-item-details-tag-input-elem {
+    margin: 2px 4px;
+    max-width: 145px !important;
+}
+.b2s-calendar-sched-post-btn{
+    font-size: 11px;
+    float: right;
+    padding: 2px 4px 0px 4px;   
+}
+
+
+.form-inline {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.form-inline .form-group  {
+    margin-left: 2px;
+}
+
+@media(max-width: 549px) {
+    .b2s-post-btn {
+        width: 100%;
+    }
+    .form-inline button, .form-inline a { 
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width: 767px) {
+    .form-inline {
+        display: none;
+    }
+    .filterHide {
+        display: none;
+    }
+    .form-inline button ,.form-inline a { 
+        width: 49%;
+        margin-bottom: 10px;
+    }
+}
+
+.b2s-calendar-filter{
+    margin-bottom: 0px !important;    
+}
+
+.b2s-calendar-filter-network-list > label {
+    padding-left: 8px;
+    padding-top: 35px;
+}
+.b2s-calendar-filter-network-list > label:first-child {
+    padding-left: 0px;   
+}
+
+.b2s-calendar-filter-network-legend-text{    
+    font-weight: 600;
+}
+.b2s-calendar-filter-network-list > label > input{ 
+    visibility: hidden;
+    position: absolute; 
+}
+.b2s-calendar-filter-network-list > label > input + span{ 
+    cursor:pointer;
+    border:12px solid #ddd;
+    background-color: #ddd;
+    color: #3d3f42;
+}
+.b2s-calendar-filter-network-list > label > input:checked + span{
+    border:12px solid #286090;
+    background-color: #286090;
+    color: #fff;
+}
+.b2s-calendar-filter-network-list> label > input + span > img{  
+    margin-bottom: 5px;
+}
+.b2s-calendar-filter-img{
+    width: 32px;
+}
+
+#b2s-btn-select-blog-post, #b2s-btn-select-content-curation{
+    margin-top:10px;
+}
+
+.img-width-150{
+    width: 150px;
+}
+
+.img-thumbnail{
+    display: block !important;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 100%;
+}
+
+.b2s-post-item-details-item-group-select {
+    max-width: 100% !important;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.b2s-post-item-details-item-message-area {
+    display: inline-block;
+    position: relative;
+    min-width: 100%;
+}
+
+.emoji-picker__content .active {
+    background-color: #fff;
+}
+
+.emoji-picker__content {
+    height: 21.5rem;
+}
+
+.emoji-picker__preview {
+    display: none;
+}
+
+.emoji-picker {
+    height: auto;
+    z-index: 1060;
+}
+
+.emoji-picker__tab.active {
+    color: #79b333;
+    border-bottom: 3px solid #79b333;
+}
+
+.fc-basicWeek-view .fc-day-header{
+    text-align: inherit !important;
+}
+
+.b2s-calendar-sched-new-post-btn{
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.fc-basicWeek-view .b2s-calendar-sched-new-post-btn{
+    float: right;
+}
+
+.fc-basicWeek-view .fc-day-header{
+    padding: 2px 4px;
+}
+
+.fc-month-view .b2s-calendar-sched-new-post-btn{
+    padding: 1px 4px;
+    position: absolute;
+}
+
+.b2sFavoriteStar {
+    display: none !important;
+}
+
+.b2s-image-add-this-network {
+    margin-right: 10px;
+}
+
+.b2s-margin-top-20 {
+    margin-top: 20px;
+}

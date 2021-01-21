@@ -1,6 +1,32 @@
 
 # Changelog
 
+## 2.2.1
+
+	- Fixed issue where request URL was not logged accurately.
+	- Updated affiliate URL.
+	- Added support for Gravity Forms 2.5. (#9)
+	- Added support for disabling animation when toggling settings.
+	- Added styles for Select2 with .gp-selectwoo selector.
+	- Added support for enabling import/export of feeds for a given Gravity Perk by using the gravityperks_export_feeds_PLUGIN-SLUG filter.
+	- Fixed styling of plugin row notices and disable auto-updater if license is not registered.
+
+## 2.2.2
+
+	- Fixed issue where minimum requirement admin notices were not displayed in WordPress dashboard. Gravity Forms 2.5 no longer shows notices on their settings pages.
+	- Fixed issue where double notices were displayed on plugin row.
+	- Fixed issue where perks' init was not correctly halted when min requirements were not met in Gravity Forms 2.5.
+
+## 2.2
+
+	- Added full support for Gravity Forms 2.5!
+	- Added gf-legacy-ui body class on admin pages to allow perks to target specific styles to versions of Gravity Forms prior to 2.5.
+	- Added support for a Perks tab for field settings in the GF 2.5 form editor.
+	- Added helper functions for determining if a given version of GF is active.
+	- Added default styling for GF 2.5's implementation of SelectWoo.
+	- Fixed tooltips on Manage Perks page to work with GF 2.5.
+	- Fixed issue where license setting did not have autocomplete disabled.
+
 ## 2.1.11
 
 	- Fixed issue where extraneous HTTP requests checking for announcements would be sent from the WordPress admin dashboard when used in conjunction with W3 Total Cache's Object Caching.

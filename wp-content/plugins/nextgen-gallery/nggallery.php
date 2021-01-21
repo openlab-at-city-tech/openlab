@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.3.20
+ * Version: 3.5.0
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -371,6 +371,45 @@ class C_NextGEN_Bootstrap
 		echo '</p></div>';
 	}
 
+	public function render_jquery_wp_55_warning()
+    {
+		$render  = false;
+		$account_msg = sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://www.imagely.com/account/');
+		if (preg_match("#photocrati#i", wp_get_theme()->get('Name'))) {
+			$account_msg = sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://members.photocrati.com/account/');
+		}
+		global $wp_version;
+
+        if (defined('NGG_PRO_PLUGIN_VERSION')  && version_compare(NGG_PRO_PLUGIN_VERSION,  '3.1')  < 0)
+        {
+			$render = TRUE;
+
+            $message = __("Your version of NextGEN Pro is known to have some issues with NextGEN Gallery 3.4 and later.", 'nggallery');
+        }
+
+        if (defined('NGG_PLUS_PLUGIN_VERSION') && version_compare(NGG_PLUS_PLUGIN_VERSION, '1.7') < 0)
+        {
+            $render = TRUE;
+            $message = __("Your version of NextGEN Plus is known to have some issues with NextGEN 3.4 and later. Please update NextGEN Plus to version 1.7 or higher to ensure your site works correctly.", 'nggallery');
+        }
+
+        if (!$render)
+            return;
+
+        print '<div class="updated error"><p>';
+		print $message;
+		print ' ';
+		print $account_msg;
+		
+		if ( version_compare( $wp_version, '5.5', '>=' )  && version_compare( $wp_version, '5.5.9', '<=') ) {
+			$note = __("NOTE: The autoupdater doesn't work on the version of WordPress you have installed.", 'ngallery');
+			print "<div style='font-weight: bold;'>";
+			print $note;
+			print "</div>";
+		}
+        print '</p></div>';
+    }
+
 
 	/**
 	 * Registers hooks for the WordPress framework necessary for instantiating
@@ -414,12 +453,13 @@ class C_NextGEN_Bootstrap
 		// NGG extension plugins should be loaded in a specific order
         add_action('shutdown', array(&$this, 'fix_loading_order'));
 
-		// Display a warning if an compatible version of NextGEN Pro is installed alongside this
-		// version of NextGEN Gallery
+		// Display a warning if an compatible version of NextGEN Pro is installed alongside this version of NextGEN Gallery
 		if ($this->is_pro_incompatible()) {
-			add_filter('http_request_args', array(&$this, 'fix_autoupdate_api_requests'), 10, 2);
-			add_action('all_admin_notices', array(&$this, 'render_incompatibility_warning'));
+			add_filter('http_request_args', array($this, 'fix_autoupdate_api_requests'), 10, 2);
+			add_action('all_admin_notices', array($this, 'render_incompatibility_warning'));
 		}
+
+		add_action('all_admin_notices', [$this, 'render_jquery_wp_55_warning']);
 
 		add_filter('ngg_load_frontend_logic', array($this, 'disable_frontend_logic'), -10, 2);
 
@@ -680,7 +720,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.3.20');
+		define('NGG_PLUGIN_VERSION', '3.5.0');
 
 		define(
 			'NGG_SCRIPT_VERSION',

@@ -1,0 +1,15 @@
+@mixin transition($content:all,$duration:0.3s,$type:linear){
+    transition: $content $duration $type;
+    -webkit-transition: $content $duration $type;
+    -moz-transition: $content $duration $type;
+}
+@mixin transform($transform){
+    transform: $transform;
+    -webkit-transform: $transform;
+    -moz-transform: $transform; 
+}
+@mixin transformOrigin($transformOrigin){
+    transform-origin: $transformOrigin;
+    -webkit-transform-origin: $transformOrigin;
+    -moz-transform-origin: $transformOrigin;
+}

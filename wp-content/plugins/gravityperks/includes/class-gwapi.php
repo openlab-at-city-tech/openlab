@@ -100,7 +100,8 @@ class GWAPI {
 			case 'GET':
 			default:
 				$request_args = self::get_request_args();
-				$response     = wp_remote_get( add_query_arg( $api_params, $request_url ), $request_args );
+				$request_url  = add_query_arg( $api_params, $request_url );
+				$response     = wp_remote_get( $request_url, $request_args );
 				break;
 		}
 

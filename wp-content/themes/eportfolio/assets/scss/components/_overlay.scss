@@ -1,0 +1,47 @@
+.#{$prefix}-body-overlay{
+    @include transition();
+    &.show{
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: rgba($color_black,0.7);
+        z-index: 1;
+    }
+
+}
+
+.#{$prefix}-overlay{
+    @extend %overlay;
+    @extend %perspective;
+    &:before{
+        content: '';
+        background-color: rgba($color_light_gray,0.6);
+    }
+   
+}
+
+.#{$prefix}-overlay-black{
+    @extend %overlay;
+    @extend %perspective;
+    &:before{
+        content: '';
+        background-color: rgba($color_black,0.6);
+    }
+  
+}  
+.#{$prefix}-overlay-image-hover{
+    @extend %overlay;
+    @extend %perspective;
+    &:before{
+        background-color: rgba($color_primary,0.6);
+        content: '';
+        @include animation( scale-out-bottom-left  0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both);
+    }
+    &:hover{
+        &:before{
+            @include animation(scale-in-bottom-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both);
+        }
+    }
+}

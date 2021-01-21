@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.HanBlog.Net)
+/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,18 +55,21 @@
     'setup_map_name' => 'undefined',
     'map_event' => 'no',
     'file_select_box' => 'no',
-    'bckgrndimg' => 'no'
+    'bckgrndimg' => 'no',
+    'attribution' => 'true',
+    'map_div_name' => 'default',
+	 'map_div_vis' => 'vis'
     ), $atts));
 
 
     $sc_args = new cOsm_arguments(
-    			$width,
-    			$height,
-    			$map_center,
-    			$zoom,
-                       $map_api_key,
-    			$file_list,
-    			$file_color_list,
+    		$width,
+    		$height,
+    		$map_center,
+    		$zoom,
+         $map_api_key,
+    		$file_list,
+    		$file_color_list,
 			$type,
 			$jsname,
 			$marker_latlon,
@@ -82,7 +85,7 @@
 			$wms_attr_url,
 			$tagged_type,
 			$tagged_filter,
-                       $tagged_filter_type,
+         $tagged_filter_type,
 			$mwz,$post_markers,
 			$display_marker_name,
 			$tagged_param,
@@ -95,9 +98,12 @@
 			$setup_trigger,
 			$setup_map_name,
 			$file_select_box,
-			$bckgrndimg
+			$bckgrndimg,
+			$attribution
 			);
 
+    global $OL3_LIBS_LOADED;
+    
     $dontShow = array('&#8243;','&#8220;');
 
     $lat = str_replace($dontShow, '', $sc_args->getMapCenterLat());
@@ -115,8 +121,7 @@
     $postmarkers = $sc_args->getPostMarkers();
     $api_key = $sc_args->getMapAPIkey();
 
-    static $OL3_LIBS_LOADED = 0;
-
+        
     if ($debug_trc == "true"){
       echo "WP version: ".get_bloginfo(version)."<br>";
       echo "OSM Plugin Version: ".PLUGIN_VER."<br>";
@@ -153,14 +158,26 @@
 		  $default_icon = new cOsm_icon($marker_name, $sc_args->getMarkerHeight(), $sc_args->getMarkerWidth(), $sc_args->getMarkerFocus());
 		}
 
-		$MapCounter += 1;
-      $MapName = 'map_ol3js_' . $MapCounter;
+
+      if ($map_div_name == "default"){
+        $MapCounter += 1;
+        $MapName = 'map_ol3js_' . $MapCounter;
+      }
+      else {
+        $MapName = $map_div_name;
+      }
 
 		// $setup_map_name is a class name - to control several maps at once map_name need not to be unique on one page
+		if (!($sc_args->isMapAttr())){
+		  Osm::traceText(HTML_COMMENT, 'WP OSM Plugin Warning: map attribution is disabled, make sure site follows copyright!');	              
+      }		
+		
+	   $vis_str = $map_div_vis;		
+		
 if ($bckgrndimg != 'no'){
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; overflow:hidden;border:' . $map_border . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -171,7 +188,7 @@ if ($bckgrndimg != 'no'){
 else{
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; overflow:hidden;border:' . $map_border . ';" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . ';" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -210,7 +227,9 @@ else{
 			$FileColorListArray = array();
 			$FileLinkArray = array();
 			$FileTitleArray = array();
-
+			$showSelectbox = false;
+			$NumOfGpxKmlFiles = 0;
+			
 			if ($file_color_list != 'NoColor') {
 				$FileColorListArray = explode(',', $file_color_list);
 			} else {
@@ -223,9 +242,14 @@ else{
 			}
 
 
+
+         if(($file_select_box != 'no') && ($file_title != 'no')){
+			    $showSelectbox = true;
+			  }
+
 			/** if title are set - my code will run - otherwise not
 			if ($file_title != 'no') {*/
-			if (($file_select_box != 'no') && ($file_title != 'no')){
+			if ($showSelectbox == true){
 				if ($hide_kml_sel_box == 'no' ){
 				$output .= '
 					<div id="osmLayerSelect">
@@ -645,11 +669,13 @@ else{
 			new ol.control.FullScreen()
 		  ]; '. PHP_EOL ;
 
-
-    if (($map_autocenter == true) && (($file_list != "NoFile"))) {
+    if (($map_autocenter == true) && (($file_list != "NoFile") || ($tagged_type != "no"))) {
 
     // maxZoom level for autocenter
+    
+
     $Fitzoom = "";    
+
     if (!($sc_args->isAutozoom())){
       $Fitzoom = ",maxZoom: ".$zoom;
     }
@@ -672,6 +698,12 @@ else{
 
 		  //eventhanlder for metabox 
 		  include('osm-sc-osm_map_v3_backend.php');
+		  
+		if (!($sc_args->isMapAttr())){
+                   $output .= $MapName.'.removeControl(attribution);' . PHP_EOL;                   
+      }
+		  
+		  
 
 		if ($sc_args->issetFullScreen()){
 

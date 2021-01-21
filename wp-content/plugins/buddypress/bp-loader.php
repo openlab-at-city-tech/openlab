@@ -15,7 +15,7 @@
  * Description: BuddyPress adds community features to WordPress. Member Profiles, Activity Streams, Direct Messaging, Notifications, and more!
  * Author:      The BuddyPress Community
  * Author URI:  https://buddypress.org/
- * Version:     6.1.0
+ * Version:     7.0.0
  * Text Domain: buddypress
  * Domain Path: /bp-languages/
  * License:     GPLv2 or later (license.txt)
@@ -30,7 +30,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Required PHP version.
-define( 'BP_REQUIRED_PHP_VERSION', '5.3.0' );
+define( 'BP_REQUIRED_PHP_VERSION', '5.6.0' );
 
 /**
  * The main function responsible for returning the one true BuddyPress Instance to functions everywhere.
@@ -58,7 +58,7 @@ function bp_php_requirements_notice() {
 
 	?>
 
-	<div id="message" class="error notice">
+	<div id="message" class="error notice is-dismissible">
 		<p><strong><?php esc_html_e( 'Your site does not support BuddyPress.', 'buddypress' ); ?></strong></p>
 		<?php /* translators: 1: current PHP version, 2: required PHP version */ ?>
 		<p><?php printf( esc_html__( 'Your site is currently running PHP version %1$s, while BuddyPress requires version %2$s or greater.', 'buddypress' ), esc_html( phpversion() ), esc_html( BP_REQUIRED_PHP_VERSION ) ); ?> <?php printf( __( 'See <a href="%s">the Codex guide</a> for more information.', 'buddypress' ), 'https://codex.buddypress.org/getting-started/buddypress-2-8-will-require-php-5-3/' ); ?></p>

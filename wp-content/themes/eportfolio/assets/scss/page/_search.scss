@@ -1,0 +1,16 @@
+.#{$prefix}-search-section{
+  padding: 0 15px 30px;
+  @include media(lg){
+      padding: 15px 15px 45px;
+  }
+    .page-header{
+        h1{
+          margin: 0;
+          padding-top: 30px;
+        }    
+    }
+    .#{$prefix}-full-width-post{
+        padding-top: 30px;
+    }
+
+}

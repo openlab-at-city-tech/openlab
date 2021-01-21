@@ -231,7 +231,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_membership_requests_cannot_get_items',
 				__( 'Sorry, you are not allowed to view membership requests.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -318,7 +318,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_membership_requests_cannot_get_item',
 				__( 'Sorry, you are not allowed to view a membership request.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -461,7 +461,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_membership_requests_cannot_create_item',
 				__( 'User may not extend requests on behalf of another user.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -567,7 +567,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_member_request_cannot_update_item',
 				__( 'User is not allowed to approve membership requests to this group.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -694,7 +694,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 				'bp_rest_group_membership_requests_cannot_delete_item',
 				__( 'User is not allowed to delete this membership request.', 'buddypress' ),
 				array(
-					'status' => 500,
+					'status' => rest_authorization_required_code(),
 				)
 			);
 		}
@@ -816,7 +816,7 @@ class BP_REST_Group_Membership_Request_Endpoint extends WP_REST_Controller {
 	 * @return array Endpoint arguments.
 	 */
 	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-		$args = WP_REST_Controller::get_endpoint_args_for_item_schema( $method );
+		$args = parent::get_endpoint_args_for_item_schema( $method );
 		$key  = 'get_item';
 
 		if ( WP_REST_Server::CREATABLE === $method ) {

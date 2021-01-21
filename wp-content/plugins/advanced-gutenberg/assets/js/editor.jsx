@@ -76,7 +76,7 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined'){
 
                 if (missing_block) {
                     if (console !== undefined && console.error !== undefined) {
-                        console.error('Reloading editor by Advanced Gutenberg plugin');
+                        console.error('Reloading editor by PublishPress Blocks plugin');
                     }
                     // Replace original allowed block settings by our modified list
                     let new_settings = advgb_blocks_vars.original_settings;

@@ -41,11 +41,19 @@ if ( bp_is_members_directory() ) {
 
 				<div class="custom-select" id="schoolSelect">
 					<?php
-					$school_filter_type = 'course' === $group_type ? 'school' : 'school-office';
-					set_query_var( 'academic_unit_type', $school_filter_type );
+					set_query_var( 'academic_unit_type', 'school' );
 					get_template_part( 'parts/sidebar/filter-academic-unit' );
 					?>
 				</div>
+
+				<?php if ( 'course' !== $group_type ) : ?>
+					<div class="custom-select" id="officeSelect">
+						<?php
+						set_query_var( 'academic_unit_type', 'office' );
+						get_template_part( 'parts/sidebar/filter-academic-unit' );
+						?>
+					</div>
+				<?php endif; ?>
 
 				<div class="custom-select" id="departmentSelect">
 					<?php

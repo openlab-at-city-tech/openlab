@@ -40,12 +40,17 @@ $meta_query = array(
 
 $school = openlab_get_current_filter( 'school' );
 if ( $school && 'all' !== strtolower( $school )) {
-	$all_offices = openlab_get_office_list();
-
-	$school_meta_key = isset( $all_offices[ $school ] ) ? 'openlab_office' : 'openlab_school';
 	$meta_query[] = array(
-		'key'   => $school_meta_key,
+		'key'   => 'openlab_school',
 		'value' => $school,
+	);
+}
+
+$office = openlab_get_current_filter( 'office' );
+if ( $office && 'all' !== strtolower( $office )) {
+	$meta_query[] = array(
+		'key'   => 'openlab_office',
+		'value' => $office,
 	);
 }
 

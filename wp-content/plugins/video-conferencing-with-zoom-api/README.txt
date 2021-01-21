@@ -3,8 +3,8 @@ Contributors: j__3rk, codemanas, digamberpradhan
 Tags: zoom video conference, video conference, zoom, zoom video conferencing, web conferencing, online meetings
 Donate link: https://deepenbajracharya.com.np/donate
 Requires at least: 4.9
-Tested up to: 5.5
-Stable tag: 3.6.6
+Tested up to: 5.6
+Stable tag: 3.6.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,6 +13,8 @@ Gives you the power to manage Zoom Meetings, Webinars, Recordings, Reports and c
 == Description ==
 
 Simple plugin which gives you the extensive functionality to manage Zoom Meetings, Webinars, Recordings, Users, Reports from your WordPress Dashboard. Now, with capability to add your own post as a meeting. Create posts as meetings directly from your WordPress dashboard to show in the frontend as a meeting page. Allow users to directly join via that page with click of a button.
+
+[View the plugin live demo from here.](https://demo.codemanas.com/code-manas-pro/zoom-meetings/demo-zoom-event/ "Checkout our live demo here.")
 
 **FEATURES:**
 
@@ -175,7 +177,44 @@ Join our facebook group which we have created in order to stay up to date with u
 
 == Changelog ==
 
-= 3.6.6 =
+= 3.6.17 =
+* Updated: Translations from WordPress language directly. Thanks to WordPress language community.
+* Updated: Show default host if selected user has explictly assigned host id in user meta.
+
+= 3.6.16 =
+* Added: Enable/Disable gutenberg support when editing a meeting post type.
+
+= 3.6.15 =
+* Addded: Action hook before single page render.
+
+= 3.6.14 December 1st, 2020 =
+* Fixed: Issue with join via browser showing signature invalid.
+
+= 3.6.13 November 26th, 2020 =
+* Fixed: Elementor Widget passcode escaping resulted in incorrect password output.
+* Added: Hooks, for PRO version to add - ical functionality in PRO version in meeting individual pages.
+* Fixed: FATAL error on include_template function being called when filename was not parsed in for join-links template.
+
+= 3.6.12 November 25th, 2020 =
+* Modified: Changed API calls for custom implementation methods.
+* Added: Recurring meeting sync support for PRO version.
+* Updated: WebSDK version 1.8.3
+
+= 3.6.11 November 10th, 2020 =
+* Added: For Devs, Filter for meetings for Join via Shortcode
+
+= 3.6.9/3.6.10 November 9th, 2020 =
+* Added: User cache delete on activation and deactivation
+* Fixed: [zoom_recordings_by_meeting] shortcode did not fetch all past recordings previously. This version fixes that.
+* Updated: Zoom WebSDk to version 1.8.1
+
+= 3.6.8 October 30th, 2020 =
+* Fixed: Join via web browser not working when Elementor Page Builder or most of the page builder is used to override Zoom Meetings archive page.
+
+= 3.6.7 October 28th, 2020 =
+* Added: Custom date type added in settings.
+
+= 3.6.6 October 23rd, 2020 =
 * Added: Global option to disable join via browser.
 
 = 3.6.5 October 13th, 2020 =

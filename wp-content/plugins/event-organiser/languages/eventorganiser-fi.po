@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 21:36+0000\n"
+"POT-Creation-Date: 2020-09-13 20:35+0000\n"
 "PO-Revision-Date: 2017-08-31T14:17:32+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1290,22 +1290,22 @@ msgid ""
 "%s."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:554 includes/class-eo-ical-parser.php:579
+#: includes/class-eo-ical-parser.php:560 includes/class-eo-ical-parser.php:585
 #, php-format
 msgid "[Lines %1$d-%2$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:561 includes/class-eo-ical-parser.php:586
+#: includes/class-eo-ical-parser.php:567 includes/class-eo-ical-parser.php:592
 #, php-format
 msgid "[Line %1$d]"
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1044
+#: includes/class-eo-ical-parser.php:1066
 #, php-format
 msgid "Invalid date \"%s\". Date expected in YYYYMMDD format."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:1082
+#: includes/class-eo-ical-parser.php:1104
 #, php-format
 msgid ""
 "Invalid datetime \"%s\". Date expected in YYYYMMDDTHHiissZ or "
@@ -1913,12 +1913,12 @@ msgstr ""
 "Vain olemassa olevia tapahtumapaikkoja voidaan valita. Lisätäksesi paikan, "
 "mene tapahtumapaikat sivulle."
 
-#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:564 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:590
 msgid "Overview"
 msgstr "Yleiskatsaus"
 
-#: includes/event-organiser-cpt.php:566
+#: includes/event-organiser-cpt.php:565
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1928,7 +1928,7 @@ msgstr ""
 "toistuvat tapahtumat näkyvät yhdellä rivillä </strong> taulukossa ja sekä "
 "alkamis- että päättymispäivä viittaa tapahtuman ensimmäiseen esiintymään."
 
-#: includes/event-organiser-cpt.php:574
+#: includes/event-organiser-cpt.php:572
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1937,7 +1937,7 @@ msgstr ""
 "toimintalinkkejä, joiden avulla voit hallita paikkaa. Voit tehdä seuraavat "
 "toimet:"
 
-#: includes/event-organiser-cpt.php:576
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
@@ -1945,15 +1945,15 @@ msgstr ""
 "Muokkaa vie tapahtumapaikan muokkausnäyttöön. Pääset samaan näkymään myös "
 "klikkaamalla paikan otsikkoa."
 
-#: includes/event-organiser-cpt.php:577
+#: includes/event-organiser-cpt.php:575
 msgid "Delete will permanently remove the venue"
 msgstr "Poistaminen poistaa tapahtumapaikan pysyvästi"
 
-#: includes/event-organiser-cpt.php:578
+#: includes/event-organiser-cpt.php:576
 msgid "View will take you to the venue's page"
 msgstr "Näkymä vie sinut tapahtumapaikan sivulle"
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:591
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -1963,7 +1963,7 @@ msgstr ""
 "yhteenvetoa tapahtumasta klikkaamalla sitä. Jos sinulla on tarvittavat "
 "oikeudet, linkki tapahtuman muokkaussivulle on myös näkyvissä."
 
-#: includes/event-organiser-cpt.php:589
+#: includes/event-organiser-cpt.php:592
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -1974,11 +1974,11 @@ msgstr ""
 "perusteella.'Valitse päivämäärä' painikkeen avulla voit nopeasti siirtyä "
 "tiettyyn päivämäärään."
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:596
 msgid "Add Event"
 msgstr "Lisää tapahtuma"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:597
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -1993,28 +1993,28 @@ msgstr ""
 "luonnoksena. Joka tapauksessa, tapahtuma on luotu ja siirryt automaattisesti "
 "tapahtuman muokkaussivulle."
 
-#: includes/event-organiser-cpt.php:600
+#: includes/event-organiser-cpt.php:604
 msgid "For more information"
 msgstr "Lisätietoa"
 
-#: includes/event-organiser-cpt.php:601
+#: includes/event-organiser-cpt.php:605
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Katso <a %s> ohjeistus</a>"
 
-#: includes/event-organiser-cpt.php:602
+#: includes/event-organiser-cpt.php:606
 msgid "Debugging Event Organiser"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:603
+#: includes/event-organiser-cpt.php:607
 msgid "Go Pro!"
 msgstr ""
 
-#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
+#: includes/event-organiser-cpt.php:717 includes/event-organiser-cpt.php:740
 msgid "Color"
 msgstr "Väri"
 
-#: includes/event-organiser-cpt.php:719
+#: includes/event-organiser-cpt.php:723
 msgid "Assign the category a colour."
 msgstr "Liitää värin kategoriaan."
 

@@ -130,22 +130,31 @@ gperk.getInput = function(field, inputId) {
     return false;
 }
 
-gperk.toggleSettings = function(id, toggleSettingsId, isChecked) {
+gperk.toggleSettings = function(id, toggleSettingsId, isChecked, animate ) {
             
     var elem = jQuery('#' + id);
     var settingsElem = jQuery('#' + toggleSettingsId);
+    var animate = typeof animate !== 'undefined' ? animate : true;
     
     // if "isChecked" is passed, check the checkbox
     if(!gperk.is(isChecked, 'undefined')) {
         elem.prop('checked', isChecked);
     } else {
-        var isChecked = elem.is(':checked');
+        isChecked = elem.is(':checked');
     }
-    
-    if(isChecked) {
-        settingsElem.gfSlide('down');
+
+    if ( isChecked ) {
+        if ( animate ) {
+            settingsElem.gfSlide( 'down' );
+        } else {
+            settingsElem.show();
+        }
     } else {
-        settingsElem.gfSlide('up');
+        if ( animate ) {
+            settingsElem.gfSlide( 'up' );
+        } else {
+            settingsElem.hide();
+        }
     }
     
     SetFieldProperty(id, isChecked);
@@ -207,3 +216,13 @@ jQuery.fn.gwpSlide = function(direction, isVisibleSelector) {
 
     return this;
 };
+
+jQuery( document ).ready( function ( $ ) {
+
+    $( '.panel-block-tabs' ).on( 'accordionactivate', function( event, ui ) {
+        if ( ui.newPanel.is( '#gravity-perks_tab' ) ) {
+            gform.doAction( 'gperks_field_settings_tab_loaded', event, GetSelectedField(), window.form, ui );
+        }
+    } );
+
+} );

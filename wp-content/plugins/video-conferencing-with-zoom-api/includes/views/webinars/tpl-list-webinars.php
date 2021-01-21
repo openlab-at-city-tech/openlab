@@ -25,7 +25,7 @@ $get_host_id = isset( $_GET['host_id'] ) ? $_GET['host_id'] : null;
             <select name="action" id="bulk-action-selector-top">
                 <option value="trash"><?php _e( "Move to Trash", "video-conferencing-with-zoom-api" ); ?></option>
             </select>
-            <input type="submit" id="bulk_delete_meeting_listings" data-type="webinar" class="button action" value="Apply">
+            <input type="submit" id="bulk_delete_meeting_listings" data-type="webinar" class="button action" value="<?php _e( "Apply", "video-conferencing-with-zoom-api" ); ?>">
             <a href="<?php echo add_query_arg( array(
 				'post_type' => 'zoom-meetings',
 				'new'       => 'zoom-video-conferencing-webinars-add'

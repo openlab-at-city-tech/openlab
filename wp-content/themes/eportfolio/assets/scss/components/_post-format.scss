@@ -1,0 +1,13 @@
+.#{$prefix}-post-format-icon{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    line-height: 40px;
+}
+.#{$prefix}-post-format-white{
+    .#{$prefix}-post-format-icon{
+        background-color: $color_white;
+        color: $color_primary;
+    }
+}

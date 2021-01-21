@@ -529,6 +529,7 @@ import {IconListPopupHook} from "../0-adv-components/icon-class.jsx";
         save: ( { attributes } ) => {
             const {
                 blockIDX,
+                className,
                 items,
                 numberItem
             } = attributes;
@@ -536,6 +537,7 @@ import {IconListPopupHook} from "../0-adv-components/icon-class.jsx";
             const blockWrapClass = [
                 'wp-block-advgb-icon',
                 'icon-wrapper',
+                className,
                 blockIDX
             ].filter( Boolean ).join( ' ' );
 

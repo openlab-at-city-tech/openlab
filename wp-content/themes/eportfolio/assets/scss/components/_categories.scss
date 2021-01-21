@@ -1,0 +1,55 @@
+.#{$prefix}-categories{
+    ul{
+        @extend %reset-ul;
+        margin-left: -15px;
+        margin-right: -15px;
+        li{
+            display: inline-block;
+            a{
+                display: inline-block;
+                font-weight: $font_semi_bold;
+                position: relative;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: $color_gray;
+                &:after{
+                    position: absolute;
+                    content:'/';
+                    display: inline-block;
+                    top: 0;
+                    right: 0;
+                }
+                &:visited{
+                    color: $color_gray;
+                }
+                &:hover{
+                    color: $color_primary;
+                }
+            }
+            &:last-child{
+                a{
+                    &:after{
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+    &.#{$prefix}-categories-with-line{
+        li{
+            @include border-bottom(2px,solid);
+            @extend %primary-border;
+            margin-left: 5px;
+            margin-right: 5px;
+            a{
+                padding: 0;
+                &:after{
+                    content: none;
+                }
+            }
+        }
+        ul{
+            margin: 0;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+.widget_calendar{
+    table{
+        border-spacing: 1px;
+        margin: 0;
+    }
+    thead{
+        background-color: rgba(231,239,242,1);
+        th{
+            padding: 10px;
+        }
+    }
+    tbody{
+        background-color: $color_light_gray;
+        td{
+            text-align: center;
+            padding: 10px;
+        }
+    }
+    caption,
+    tfoot{
+        font-weight: $font_semi_bold;
+    }
+    caption{
+        padding-bottom: 15px;
+    }
+    tfoot{
+        a{
+            display: inline-block;
+            padding-top: 15px;
+        }
+    }
+}

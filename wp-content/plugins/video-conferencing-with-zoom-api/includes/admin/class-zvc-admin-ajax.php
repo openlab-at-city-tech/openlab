@@ -167,7 +167,7 @@ class Zoom_Video_Conferencing_Admin_Ajax {
 	 * @author ZoomUS
 	 */
 	private function generate_signature( $api_key, $api_sercet, $meeting_number, $role ) {
-		$time = time() * 1000; //time in milliseconds (or close enough)
+		$time = time() * 1000 - 30000;//time in milliclearseconds (or close enough)
 		$data = base64_encode( $api_key . $meeting_number . $time . $role );
 		$hash = hash_hmac( 'sha256', $data, $api_sercet, true );
 		$_sig = $api_key . "." . $meeting_number . "." . $time . "." . $role . "." . base64_encode( $hash );

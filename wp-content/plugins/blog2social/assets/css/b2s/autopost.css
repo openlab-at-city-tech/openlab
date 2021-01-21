@@ -1,0 +1,89 @@
+/*Custom*/
+.error{
+    border: 1px solid #FF0000 !important;
+}
+
+.b2s-auto-post-publish-label, .b2s-auto-post-update-label{
+    font-style:italic;   
+}
+
+.b2s-post-type-list{
+    float: left;
+    margin-bottom: 5px;
+    width: 50%;
+}
+
+.b2s-post-type-select-btn{
+    padding: 0 0 1px !important;
+}
+
+.b2s-network-auth-count {
+    font-size: 12px;
+    font-style: italic;
+    color: #777;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.list-group-item{
+    border: 0px !important;
+}
+
+.b2s-img-network {
+    width: 36px !important;
+    margin-top: 8px !important;
+}
+
+.b2s-input-text-size-45{
+    width: 45px;
+}
+
+.chosen-container{
+    min-width: 50% !important;
+}
+
+.padding-bottom-3{
+    padding-bottom: 3px;
+}
+
+.b2s-bold{
+    font-weight: 600;
+}
+
+ul.chosen-choices {
+    background-image: none !important;
+    border-radius: 3px;
+    border: 1px solid #d7d7d7 !important;
+    box-shadow: none;
+}
+
+.b2s-auto-post-own-update-warning, .b2s-auto-post-own-general-warning{
+    border: 1px solid #aaa !important; 
+}
+
+.b2s-network-tos-auto-post-import-warning{
+    display: none;
+}
+
+.b2s-network-tos-auto-post-import-warning > .alert{
+    margin-bottom: 0px !important;
+}
+
+#b2s-auto-post-profil-dropdown-twitter option:disabled {
+    color: #ff4f68;
+}
+
+.b2s-w-100 {
+    width: 100%;
+    padding: 0px;
+}
+
+.b2s-auto-post-header {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/*prevent themes to overwrite line-height, causing the words to shift to the top*/
+.toggle-off, .toggle-on {
+    line-height: 1.2em !important;
+}

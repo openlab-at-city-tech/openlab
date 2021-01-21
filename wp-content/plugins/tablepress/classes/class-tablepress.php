@@ -26,7 +26,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const string
 	 */
-	const version = '1.11';
+	const version = '1.12';
 
 	/**
 	 * TablePress internal plugin version ("options scheme" version).
@@ -36,7 +36,7 @@ abstract class TablePress {
 	 * @since 1.0.0
 	 * @const int
 	 */
-	const db_version = 40;
+	const db_version = 41;
 
 	/**
 	 * TablePress "table scheme" (data format structure) version.
@@ -147,7 +147,7 @@ abstract class TablePress {
 
 		if ( is_admin() ) {
 			$controller = 'admin';
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( wp_doing_ajax() ) {
 				$controller .= '_ajax';
 			}
 		} else {

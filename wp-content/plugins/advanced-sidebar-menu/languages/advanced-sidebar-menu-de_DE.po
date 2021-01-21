@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2020-10-26 10:17-0600\n"
-"PO-Revision-Date: 2020-10-26 10:18-0600\n"
+"POT-Creation-Date: 2020-12-07 10:17-0700\n"
+"PO-Revision-Date: 2020-12-07 10:20-0700\n"
 "Last-Translator: Mat Lipe <support@onpointplugins.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: advanced-sidebar-menu.php\n"
@@ -79,7 +79,7 @@ msgstr "So viel mehr..."
 msgid "Upgrade"
 msgstr "Aktualisierung"
 
-#: src/Notice.php:131 src/Notice.php:137
+#: src/Notice.php:137
 msgid "Preview"
 msgstr "Vorschau"
 
@@ -94,43 +94,64 @@ msgstr ""
 msgid "Advanced Sidebar Categories Menu"
 msgstr "Advanced Sidebar Kategorien-Menü"
 
-#: src/Widget/Category.php:99
-msgid "Display the highest level parent category"
-msgstr "Anzeige der übergeordneten Kategorie der höchsten Ebene"
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:123
+#, php-format
+msgid "Display the highest level parent %s"
+msgstr "Anzeige der übergeordneten %s der höchsten Ebene"
 
-#: src/Widget/Category.php:105
-msgid "Display menu when there is only the parent category"
-msgstr "Menü \"Anzeige\" wird nur die übergeordnete Kategorie"
+#. translators: Selected taxonomy single label
+#. translators: Selected post type single label
+#: src/Widget/Category.php:132 src/Widget/Page.php:130
+#, php-format
+msgid "Display menu when there is only the parent %s"
+msgstr "Menü \"Anzeige\" wird nur die übergeordnete %s"
 
-#: src/Widget/Category.php:111
-msgid "Always display child categories"
-msgstr "Immer untergeordnete Kategorien anzeigen"
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:141 src/Widget/Page.php:140
+#, php-format
+msgid "Always display child %s"
+msgstr "Immer untergeordnete %s anzeigen"
 
-#: src/Widget/Category.php:117
-msgid "Levels of child categories to display"
-msgstr "Niveau der Kinderkategorien zu zeigen"
+#: src/Widget/Category.php:155 src/Widget/Page.php:161
+msgid "- All -"
+msgstr "- Alle -"
 
-#: src/Widget/Category.php:159
-msgid "Display categories on single posts"
-msgstr "Kategorien auf einzelne Beiträge anzeigen"
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:170 src/Widget/Page.php:175
+#, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr "Anzeigen %1$s Ebenen der %2$s"
 
-#: src/Widget/Category.php:166
-msgid "Display each single post's category"
-msgstr "Zeigen Sie die einzelnen Kategorien der einzelnen Posts an"
+#. translators: Selected taxonomy plural label
+#: src/Widget/Category.php:200
+#, php-format
+msgid "Display %s on single posts"
+msgstr "%s auf einzelne Beiträge anzeigen"
 
-#: src/Widget/Category.php:173
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:210
+#, php-format
+msgid "Display each single post's %s"
+msgstr "Anzeigen der %s jedes einzelnen Beitrags"
+
+#: src/Widget/Category.php:220
 msgid "In a new widget"
 msgstr "In einem neuen Widget"
 
-#: src/Widget/Category.php:176
+#: src/Widget/Category.php:223
 msgid "In another list in the same widget"
 msgstr "In einer anderen Liste im selben Widget"
 
-#: src/Widget/Category.php:202
-msgid "Categories to exclude (ids), comma separated"
-msgstr "Kategorien ausschließen (Ids), durch Kommata getrennt"
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:251 src/Widget/Page.php:245
+#, php-format
+msgid "%s to exclude (ids, comma separated)"
+msgstr "Auszuschließende %s (IDs), durch Kommas getrennt"
 
-#: src/Widget/Category.php:235 src/Widget/Page.php:240
+#: src/Widget/Category.php:285 src/Widget/Page.php:278
 msgid "Title"
 msgstr "Titel"
 
@@ -144,33 +165,15 @@ msgstr ""
 msgid "Advanced Sidebar Pages Menu"
 msgstr "Advanced Sidebar Seitenmenü"
 
-#: src/Widget/Page.php:95
-msgid "Display highest level parent page"
-msgstr "Zeigt die oberste Seite der obersten Ebene an"
+#. translators: Selected post type single label
+#: src/Widget/Page.php:119
+#, php-format
+msgid "Display highest level parent %s"
+msgstr "Anzeige der übergeordneten %s der höchsten Ebene"
 
-#: src/Widget/Page.php:103
-msgid "Display menu when there is only the parent page"
-msgstr "Menü \"Anzeige\" wird nur die übergeordnete Seite"
-
-#: src/Widget/Page.php:110
-msgid "Always display child pages"
-msgstr "Immer untergeordnete Seiten anzeigen"
-
-#: src/Widget/Page.php:123
-msgid "Maximum level of child pages to display"
-msgstr "Maximale Höhe der zu zeigestellenden Kinderseiten"
-
-#: src/Widget/Page.php:129
-msgid " - All - "
-msgstr " Alle "
-
-#: src/Widget/Page.php:167
+#: src/Widget/Page.php:202
 msgid "Order by"
 msgstr "Sortieren nach"
-
-#: src/Widget/Page.php:208
-msgid "Pages to exclude (ids), comma separated"
-msgstr "Auszuschließende Seiten (IDs), durch Kommas getrennt"
 
 #. Plugin Name of the plugin/theme
 msgid "Advanced Sidebar Menu"
@@ -195,6 +198,32 @@ msgstr "OnPoint Plugins"
 #. Author URI of the plugin/theme
 msgid "https://onpointplugins.com"
 msgstr "https://onpointplugins.com"
+
+#, php-format
+#~ msgid "Levels of child %s to display"
+#~ msgstr "Niveau der Kinder %s zu zeigen"
+
+#, php-format
+#~ msgid "Maximum level of child %s to display"
+#~ msgstr "Maximale Höhe der zu zeigestellenden %s Kinder"
+
+#~ msgid "Display highest level parent page"
+#~ msgstr "Zeigt die oberste Seite der obersten Ebene an"
+
+#~ msgid "Display menu when there is only the parent page"
+#~ msgstr "Menü \"Anzeige\" wird nur die übergeordnete Seite"
+
+#~ msgid "Always display child pages"
+#~ msgstr "Immer untergeordnete Seiten anzeigen"
+
+#~ msgid "Display menu when there is only the parent category"
+#~ msgstr "Menü \"Anzeige\" wird nur die übergeordnete Kategorie"
+
+#~ msgid "Always display child categories"
+#~ msgstr "Immer untergeordnete Kategorien anzeigen"
+
+#~ msgid "Categories to exclude (ids), comma separated"
+#~ msgstr "Kategorien ausschließen (Ids), durch Kommata getrennt"
 
 #, php-format
 #~ msgctxt "{<a>}{</a>}"

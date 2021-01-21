@@ -1,4 +1,4 @@
-/*  Copyright (C) 2019  Matthias Greiling (https://westrad.de)
+/*  Copyright (C) 2020  Matthias Greiling (https://westrad.de)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@ function activateLayers(_map, _layers, _startUp) {
 	/** _layers comma separated values? layers is an array - even with one layer */
 	layers = [];
 	comma = ',';
+	
+	
 	if (typeof _layers.includes === "function" && !_startUp) {
 		if (_layers.includes(comma)) {
 			layers = _layers.split(',');
@@ -147,6 +149,7 @@ function switchLayerOn(_e) {
 	_e.children('i').addClass('fa-eye'); 
 	_e.children('span.layerColor').removeClass('layerColorHidden'); 
 	
+	
 	/** window and vectorM are both global */
 	window[_e.data('map')].addLayer(window.vectorM[_e.data('map')][_e.data('layer')]);
 	
@@ -164,6 +167,7 @@ jQuery(document).ready(function() {
 	 * @fires prompt with link to page and map and choosen layers, center and zoom
 	 * link contains GET-Parameters in an array with map_name as an index  
 	 */	
+
 	jQuery('.generatedLink').click(function() {
 		if (jQuery(this).data('map_name') == '') {
 			jQuery(this).data('map_name', jQuery(this).data('map'));
@@ -229,7 +233,9 @@ jQuery(document).ready(function() {
 		
 		/** switch on layer(s) in given order on specific map */
 		if (jQuery(this).data('layer') != 'none') {
-			activateLayers(controlledMap, jQuery(this).data('layer'), 0) ;
+		                LayerStr = jQuery(this).data('layer');
+			activateLayers(controlledMap, LayerStr , 0) ;
+			
 		}	
 	});
 
@@ -300,20 +306,25 @@ jQuery(document).ready(function() {
 	}
 	
 			
-	/** set layers of GET given map */		
+	/** set layers of GET given map */
+		
 	if (getGET('mapLayers[' + getGET('map') + ']') != 'undefined') {
 	
 		/** show no layers at all - intentionally */
 		if (getGET('mapLayers[' + getGET('map') + ']') != 'none') {
 
-			activateLayers(controlledMap, getGET('mapLayers[' + getGET('map') + ']'), 0);
+                        	LayerStr = getGET('mapLayers[' + getGET('map') + ']');
+			activateLayers(controlledMap, LayerStr , 0);
+			
 		}
 	}  else {
 		
 		/** no map control is given via GET - make first layer visible - if there is any to choose from */
 		jQuery('.map').each(function() {
 			if (jQuery('.layerOf' + jQuery(this).data('map')).length > 0) {
-				activateLayers(jQuery(this).data('map'), '0', 1);
+			        mapStr = jQuery(this).data('map');
+				activateLayers(mapStr, '0', 1);
+				
 			}
 		});	
 	}	

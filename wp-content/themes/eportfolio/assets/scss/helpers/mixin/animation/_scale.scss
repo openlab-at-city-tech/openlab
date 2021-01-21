@@ -1,0 +1,60 @@
+
+@include keyframes ( scale-in-bottom-left ){
+    0% {
+        @include transform(scale(0));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+    100% {
+        @include transform(scale(1));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+}
+@include keyframes ( scale-out-bottom-left ){
+    0% {
+        @include transform(scale(1));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+    100% {
+        @include transform(scale(0));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+}
+@include keyframes ( scale-bottom-left ){
+    0% {
+        @include transform(scale(0));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+    100% {
+        @include transform(scale(1));
+        @include transformOrigin(0% 100%);
+        opacity: 1;
+    }
+}
+@include keyframes ( scale-in-hor-left) {
+    0%{
+        @include transform( scaleX(0));
+        @include transformOrigin( 0 0);
+        opacity: 1;
+    }
+    100%{
+        @include transform( scaleX(1));
+        @include transformOrigin( 0 0);
+        opacity: 1;
+    }
+}
+@include keyframes ( scale-out-hor-left) {
+    0%{
+        @include transform( scaleX(1));
+        @include transformOrigin( 0 0);
+    }
+    100%{
+        @include transform( scaleX(0));
+        @include transformOrigin( 0 0);
+    }
+}
+

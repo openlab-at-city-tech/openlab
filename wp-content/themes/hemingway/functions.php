@@ -65,12 +65,6 @@ if ( ! function_exists( 'hemingway_setup' ) ) {
 // Include the Customizer class.
 require get_template_directory() . '/inc/classes/class-hemingway-customize.php';
 
-// Include the Dribbble widget.
-require_once( get_template_directory() . '/inc/widgets/dribbble-widget.php' );
-
-// Include the Flickr widget.
-require_once( get_template_directory() . '/inc/widgets/flickr-widget.php' );
-
 
 /* ---------------------------------------------------------------------------------------------
    ENQUEUE SCRIPTS

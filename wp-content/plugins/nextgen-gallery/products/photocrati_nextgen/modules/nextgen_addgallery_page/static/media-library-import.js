@@ -162,14 +162,14 @@
                 // Show/hide MediaLibrary import buttons if a gallery is selected
                 ngg_importml.selectors.gallery_select.on('change', function() {
                     if (parseInt(this.value) == 0) {
-                        ngg_importml.selectors.gallery_name.fadeIn().focus();
+                        ngg_importml.selectors.gallery_name.fadeIn().trigger('focus');
                         if (ngg_importml.selectors.gallery_name.val().length == 0) {
                             ngg_importml.selectors.ml_btn_import.fadeOut();
                             ngg_importml.selectors.ml_btn_select.fadeOut();
                         }
                     } else {
                         ngg_importml.selectors.gallery_name.fadeOut(400, function() {
-                            ngg_importml.selectors.gallery_select.focus();
+                            ngg_importml.selectors.gallery_select.trigger('focus');
                             ngg_importml.selectors.ml_btn_select.fadeIn();
                             if (ngg_importml.import_ids.length > 0) {
                                 ngg_importml.selectors.ml_btn_import.fadeIn();
@@ -195,10 +195,12 @@
         }
     };
 
-    $(document).ready(function() {
-        window.ngg_importml = ngg_importml;
-        ngg_importml.initialize();
-        window.Frame_Event_Publisher.broadcast();
-    });
+    (function($) {
+        $(function() {
+            window.ngg_importml = ngg_importml;
+            ngg_importml.initialize();
+            window.Frame_Event_Publisher.broadcast();
+        });
+    })(jQuery);
 
 })(jQuery);

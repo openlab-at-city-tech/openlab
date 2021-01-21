@@ -892,7 +892,7 @@ class BP_Groups_Component extends BP_Component {
 				) );
 
 				if ( empty( $bp->bp_options_avatar ) ) {
-					$bp->bp_options_avatar = '<img src="' . esc_url( bp_core_avatar_default_thumb() ) . '" alt="' . esc_attr__( 'No Group Profile Photo', 'buddypress' ) . '" class="avatar" />';
+					$bp->bp_options_avatar = '<img loading="lazy" src="' . esc_url( bp_core_avatar_default_thumb() ) . '" alt="' . esc_attr__( 'No Group Profile Photo', 'buddypress' ) . '" class="avatar" />';
 				}
 			}
 		}
@@ -924,12 +924,12 @@ class BP_Groups_Component extends BP_Component {
 	 * Set up taxonomies.
 	 *
 	 * @since 2.6.0
+	 * @since 7.0.0 The Group Type taxonomy is registered using the `bp_groups_register_group_type_taxonomy()` function.
 	 */
 	public function register_taxonomies() {
-		// Group Type.
-		register_taxonomy( 'bp_group_type', 'bp_group', array(
-			'public' => false,
-		) );
+
+		// Just let BP Component fire 'bp_groups_register_taxonomies'.
+		return parent::register_taxonomies();
 	}
 
 	/**
@@ -1009,6 +1009,57 @@ class BP_Groups_Component extends BP_Component {
 							'default' => true,
 						),
 					),
+				),
+				'bp/groups' => array(
+					'name'               => 'bp/groups',
+					'editor_script'      => 'bp-groups-block',
+					'editor_script_url'  => plugins_url( 'js/blocks/groups.js', dirname( __FILE__ ) ),
+					'editor_script_deps' => array(
+						'wp-blocks',
+						'wp-element',
+						'wp-components',
+						'wp-i18n',
+						'wp-compose',
+						'wp-data',
+						'wp-api-fetch',
+						'wp-url',
+						'wp-block-editor',
+						'bp-block-components',
+						'lodash',
+					),
+					'style'              => 'bp-groups-block',
+					'style_url'          => plugins_url( 'css/blocks/groups.css', dirname( __FILE__ ) ),
+					'attributes'         => array(
+						'itemIDs'          => array(
+							'type'  => 'array',
+							'items' => array(
+								'type' => 'integer',
+							),
+						),
+						'avatarSize'       => array(
+							'type'    => 'string',
+							'default' => 'full',
+						),
+						'displayGroupName' => array(
+							'type'    => 'boolean',
+							'default' => true,
+						),
+						'extraInfo'        => array(
+							'type'    => 'string',
+							'default' => 'none',
+							'enum'    => array( 'description', 'popular', 'active', 'none' ),
+						),
+						'layoutPreference' => array(
+							'type'    => 'string',
+							'default' => 'list',
+							'enum'    => array( 'list', 'grid' ),
+						),
+						'columns'          => array(
+							'type'    => 'number',
+							'default' => 2,
+						),
+					),
+					'render_callback'    => 'bp_groups_render_groups_block',
 				),
 			)
 		);

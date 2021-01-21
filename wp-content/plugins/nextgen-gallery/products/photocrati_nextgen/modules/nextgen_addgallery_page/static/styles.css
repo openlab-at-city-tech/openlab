@@ -3,20 +3,18 @@
 }
 
 #gallery_selection {
-    background-color: #fff;
-    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 20px 20px 25px !important;
+    background: #f7f7f7;
+    flex-wrap: wrap;
 }
 
 #gallery_selection label {
     font-weight: 600;
     position: relative;
     top: -1px;
-}
-
-#gallery_selection .plupload_buttons a {
-    margin-right: 6px;
-    text-align: center;
-    font-size: 11px;
 }
 
 #gallery_name {
@@ -30,24 +28,6 @@
 
 #upload_images_content {
     padding: 0px;
-}
-
-#upload_images_content .plupload_container {
-    padding: 0px;
-}
-
-.plupload_header {
-    display: none;
-}
-
-.plupload_buttons {
-    display: inline;
-    margin-left: 20px;
-}
-
-.plupload_droptext {
-    font-size: 16px;
-    color: silver;
 }
 
 /* Gritter customizations */
@@ -87,7 +67,6 @@
     height: auto;
     background: none;
     display: block !important;
-    top: 10px;
     right: 10px;
 }
 
@@ -107,56 +86,6 @@
     width: 75%;
 }
 
-#ngg_page_content .plupload_container {
-    padding: 0 !important;
-    border: 1px solid rgba(159, 187, 26, 0.13) !important;
-}
-
-#ngg_page_content .plupload_wrapper {
-    font-family: Lato, sans-serif;
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: .5px;
-}
-
-#ngg_page_content .plupload_filelist_header, 
-#ngg_page_content .plupload_filelist_footer,
-#ngg_page_content .plupload_file_status span {
-    background: #f7f7f7 !important;
-    color: #999 !important;
-}
-
-#ngg_page_content .plupload_filelist_header {
-    border-bottom: 1px solid #f7f7f7 !important;
-    display: none;
-}
-
-#ngg_page_content .plupload_filelist_footer {
-    border-top: 1px solid #f7f7f7 !important;
-}
-
-#ngg_page_content .plupload_scroll .plupload_filelist {
-    background: #fff !important;
-    height: auto;
-    overflow-y: hidden;
-}
-
-#ngg_page_content .plupload_filelist li {
-    border: none;
-    background: #fff;
-    margin: 0;
-    padding: 20px;
-}
-
-#ngg_page_content .plupload_filelist li:nth-of-type(2n) {
-    background: white;
-}
-
-#ngg_page_content #gallery_selection {
-    padding: 20px 20px 25px !important;
-    background: #f7f7f7;
-}
-
 #ngg_page_content #gallery_id,
 #ngg_page_content #gallery_name {
     min-width: 200px !important;
@@ -167,15 +96,133 @@
     vertical-align: middle;
 }
 
-#ngg_page_content #gallery_name::placeholder {
-    color: black !important;
-}
-
 #ngg_page_content input#import_gallery_title {
     width: 250px;
     font-size: 13px;
     color: #aaa;
 }
+
+#ngg_page_content #gallery_create {
+    background: black;
+    margin-left: 2px;
+}
+
+.toast-close {
+    opacity: 1 !important;
+    color: white;
+    margin-left: 10px;
+}
+
+/* This button will appear at lower resolutions despite the hidden class */
+#ngg_page_content #gallery_create.hidden {
+    display: none !important;
+}
+
+#ngg_page_content #gallery_create:hover {
+    cursor: pointer;
+}
+
+/* Uppy specific styling and tweaks */
+#ngg_page_content button.uppy-StatusBar-actionBtn,
+#ngg_page_content button.uppy-DashboardContent-back,
+#ngg_page_content button.uppy-DashboardContent-addMore,
+#ngg_page_content button.uppy-Dashboard-browse {
+    background: black;
+}
+
+#ngg_page_content button.uppy-DashboardContent-addMore svg {
+    height: 22px;
+    width: 18px;
+    margin-top: 7px;
+    margin-right: 0;
+}
+
+#ngg_page_content .uppy-size--md span.uppy-DashboardContent-addMoreCaption {
+    margin-left: 8px;
+}
+
+#ngg_page_content span.uppy-DashboardContent-addMoreCaption {
+    float: right;
+}
+
+#ngg_page_content .uppy-Dashboard-Item-progressIndicator:hover {
+    background: none !important;
+}
+
+#ngg_page_content .uppy-StatusBar-actions button {
+    padding-right: 0;
+}
+
+#ngg_page_content button.uppy-StatusBar-actionBtn--retry {
+    margin-right: 6px;
+    padding-left: 27px !important;
+}
+
+#ngg_page_content .uppy-StatusBar-actionBtn--retry svg {
+    top: 12px;
+}
+
+#ngg_page_content button.uppy-StatusBar-actionCircleBtn:hover {
+    background: none !important;
+}
+
+#ngg_page_content button.uppy-StatusBar-actionCircleBtn {
+    padding: 0 !important;
+}
+
+#ngg_page_content button.uppy-StatusBar-actionCircleBtn svg {
+    vertical-align: middle;
+}
+
+#ngg_page_content button.uppy-DashboardContent-addMore svg,
+#ngg_page_content button.uppy-StatusBar-actions svg {
+    line-height: initial;
+}
+
+#ngg_page_content button.uppy-Dashboard-Item-action--remove {
+    background: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin: 0;
+}
+
+#ngg_page_content button.uppy-Dashboard-Item-action--remove svg {
+    color: #1f1f1f !important;
+}
+
+#ngg_page_content div.uppy-Dashboard-AddFiles-title {
+    max-width: 600px;
+}
+
+#ngg-create-gallery-default-text {
+}
+
+#ngg-create-gallery-waiting-text {
+}
+
+@media screen and (max-width: 1200px) {
+    #gallery_selection {
+        justify-content: center;
+    }
+    #ngg_page_content #gallery_name {
+        flex-grow: 1;
+    }
+    #gallery_create {
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 782px) {
+    #ngg_page_content div.uppy-DashboardContent-title {
+    }
+    #ngg_page_content button.uppy-DashboardContent-addMore,
+    #ngg_page_content button.uppy-DashboardContent-back {
+        width: auto !important;
+        margin: 0;
+    }
+}
+
+/* Media Queries */
 
 @media (max-width: 1380px) {
     .gallery_page_ngg_addgallery #ngg_page_content .ngg_page_content_menu,
@@ -185,10 +232,6 @@
 }
 
 @media (max-width: 1140px) {
-    .plupload_buttons {
-        display: block;
-        margin: 10px 0 0 75px;
-    }
     .gallery_page_ngg_addgallery #ngg_page_content button,
     .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
     .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
@@ -210,9 +253,6 @@
     }
     .gallery_page_ngg_addgallery #ngg_page_content input[type=checkbox] {
         width: 16px !important;
-    }
-    .plupload_buttons {
-        margin-left: 0;
     }
     .gallery_page_ngg_addgallery #ngg_page_content button,
     .gallery_page_ngg_addgallery #ngg_page_content .button-primary,

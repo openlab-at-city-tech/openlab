@@ -173,7 +173,13 @@ function setUpMammoth() {
         // Therefore, we check for CKEditor first
         if (window.CKEDITOR && CKEDITOR.instances[elementId]) {
             CKEDITOR.instances[elementId].insertHtml(text);
-        } else if (window.wp && wp.blocks) {
+        } else if (document.body.classList.contains("block-editor-page")) {
+            // Inspecting the class list is the suggested way of detecting whether
+            // Gutenberg is active, from the GitHub issue:
+            //     https://github.com/WordPress/gutenberg/issues/12200
+            // This code previously checked if wp.blocks was defined, but this
+            // seems to be unreliable when some plugins are installed, such as
+            // Yoast.
             var block = wp.blocks.createBlock("core/freeform", {content: text});
             wp.data.dispatch("core/editor").insertBlocks(block);
         } else if (window.tinyMCE && tinyMCE.get(elementId) && !tinyMCE.get(elementId).isHidden()) {
@@ -12941,7 +12947,8 @@ function Run(children, properties) {
         isStrikethrough: properties.isStrikethrough,
         isSmallCaps: properties.isSmallCaps,
         verticalAlignment: properties.verticalAlignment || verticalAlignment.baseline,
-        font: properties.font || null
+        font: properties.font || null,
+        fontSize: properties.fontSize || null
     };
 }
 
@@ -13149,7 +13156,7 @@ function BodyReader(options) {
         }
         return emptyResult();
     }
-    
+
     function readParagraphIndent(element) {
         return {
             start: element.attributes["w:start"] || element.attributes["w:left"],
@@ -13158,24 +13165,38 @@ function BodyReader(options) {
             hanging: element.attributes["w:hanging"]
         };
     }
-    
+
     function readRunProperties(element) {
         return readRunStyle(element).map(function(style) {
+            var fontSizeString = element.firstOrEmpty("w:sz").attributes["w:val"];
+            // w:sz gives the font size in half points, so halve the value to get the size in points
+            var fontSize = /^[0-9]+$/.test(fontSizeString) ? parseInt(fontSizeString, 10) / 2 : null;
+
             return {
                 type: "runProperties",
                 styleId: style.styleId,
                 styleName: style.name,
                 verticalAlignment: element.firstOrEmpty("w:vertAlign").attributes["w:val"],
                 font: element.firstOrEmpty("w:rFonts").attributes["w:ascii"],
+                fontSize: fontSize,
                 isBold: readBooleanElement(element.first("w:b")),
-                isUnderline: readBooleanElement(element.first("w:u")),
+                isUnderline: readUnderline(element.first("w:u")),
                 isItalic: readBooleanElement(element.first("w:i")),
                 isStrikethrough: readBooleanElement(element.first("w:strike")),
                 isSmallCaps: readBooleanElement(element.first("w:smallCaps"))
             };
         });
     }
-    
+
+    function readUnderline(element) {
+        if (element) {
+            var value = element.attributes["w:val"];
+            return value !== "false" && value !== "0" && value !== "none";
+        } else {
+            return false;
+        }
+    }
+
     function readBooleanElement(element) {
         if (element) {
             var value = element.attributes["w:val"];
@@ -13184,19 +13205,19 @@ function BodyReader(options) {
             return false;
         }
     }
-    
+
     function readParagraphStyle(element) {
         return readStyle(element, "w:pStyle", "Paragraph", styles.findParagraphStyleById);
     }
-    
+
     function readRunStyle(element) {
         return readStyle(element, "w:rStyle", "Run", styles.findCharacterStyleById);
     }
-    
+
     function readTableStyle(element) {
         return readStyle(element, "w:tblStyle", "Table", styles.findTableStyleById);
     }
-    
+
     function readStyle(element, styleTagName, styleType, findStyleById) {
         var messages = [];
         var styleElement = element.first(styleTagName);
@@ -13215,9 +13236,9 @@ function BodyReader(options) {
         }
         return elementResultWithMessages({styleId: styleId, name: name}, messages);
     }
-    
+
     var unknownComplexField = {type: "unknown"};
-    
+
     function readFldChar(element) {
         var type = element.attributes["w:fldCharType"];
         if (type === "begin") {
@@ -13233,7 +13254,7 @@ function BodyReader(options) {
         }
         return emptyResult();
     }
-    
+
     function currentHyperlinkHref() {
         var topHyperlink = _.last(complexFieldStack.filter(function(complexField) {
             return complexField.type === "hyperlink";
@@ -13249,12 +13270,12 @@ function BodyReader(options) {
             return null;
         }
     }
-    
+
     function readInstrText(element) {
         currentInstrText.push(element.text());
         return emptyResult();
     }
-    
+
     function noteReferenceReader(noteType) {
         return function(element) {
             var noteId = element.attributes["w:id"];
@@ -13264,17 +13285,17 @@ function BodyReader(options) {
             }));
         };
     }
-    
+
     function readCommentReference(element) {
         return elementResult(documents.commentReference({
             commentId: element.attributes["w:id"]
         }));
     }
-    
+
     function readChildElements(element) {
         return readXmlElements(element.children);
     }
-    
+
     var xmlElementReaders = {
         "w:p": function(element) {
             return readXmlElements(element.children)
@@ -13325,19 +13346,22 @@ function BodyReader(options) {
         "w:noBreakHyphen": function() {
             return elementResult(new documents.Text("\u2011"));
         },
+        "w:softHyphen": function(element) {
+            return elementResult(new documents.Text("\u00AD"));
+        },
         "w:hyperlink": function(element) {
             var relationshipId = element.attributes["r:id"];
             var anchor = element.attributes["w:anchor"];
             return readXmlElements(element.children).map(function(children) {
                 function create(options) {
                     var targetFrame = element.attributes["w:tgtFrame"] || null;
-                    
+
                     return new documents.Hyperlink(
                         children,
                         _.extend({targetFrame: targetFrame}, options)
                     );
                 }
-                
+
                 if (relationshipId) {
                     var href = relationships.findTargetByRelationshipId(relationshipId);
                     if (anchor) {
@@ -13377,11 +13401,11 @@ function BodyReader(options) {
                 return elementResult(new documents.BookmarkStart({name: name}));
             }
         },
-        
+
         "mc:AlternateContent": function(element) {
             return readChildElements(element.first("mc:Fallback"));
         },
-        
+
         "w:sdt": function(element) {
             return readXmlElements(element.firstOrEmpty("w:sdtContent").children);
         },
@@ -13403,13 +13427,13 @@ function BodyReader(options) {
         "v:group": readChildElements,
         "v:rect": readChildElements
     };
-    
+
     return {
         readXmlElement: readXmlElement,
         readXmlElements: readXmlElements
     };
 
-    
+
     function readTable(element) {
         var propertiesResult = readTableProperties(element.firstOrEmpty("w:tblPr"));
         return readXmlElements(element.children)
@@ -13420,7 +13444,7 @@ function BodyReader(options) {
                 });
             });
     }
-    
+
     function readTableProperties(element) {
         return readTableStyle(element).map(function(style) {
             return {
@@ -13429,7 +13453,7 @@ function BodyReader(options) {
             };
         });
     }
-    
+
     function readTableRow(element) {
         var properties = element.firstOrEmpty("w:trPr");
         var isHeader = !!properties.first("w:tblHeader");
@@ -13437,20 +13461,20 @@ function BodyReader(options) {
             return documents.TableRow(children, {isHeader: isHeader});
         });
     }
-    
+
     function readTableCell(element) {
         return readXmlElements(element.children).map(function(children) {
             var properties = element.firstOrEmpty("w:tcPr");
-            
+
             var gridSpan = properties.firstOrEmpty("w:gridSpan").attributes["w:val"];
             var colSpan = gridSpan ? parseInt(gridSpan, 10) : 1;
-            
+
             var cell = documents.TableCell(children, {colSpan: colSpan});
             cell._vMerge = readVMerge(properties);
             return cell;
         });
     }
-    
+
     function readVMerge(properties) {
         var element = properties.first("w:vMerge");
         if (element) {
@@ -13460,7 +13484,7 @@ function BodyReader(options) {
             return null;
         }
     }
-    
+
     function calculateRowSpans(rows) {
         var unexpectedNonRows = _.any(rows, function(row) {
             return row.type !== documents.types.tableRow;
@@ -13480,9 +13504,9 @@ function BodyReader(options) {
                 "unexpected non-cell element in table row, cell merging may be incorrect"
             )]);
         }
-        
+
         var columns = {};
-        
+
         rows.forEach(function(row) {
             var cellIndex = 0;
             row.children.forEach(function(cell) {
@@ -13495,7 +13519,7 @@ function BodyReader(options) {
                 cellIndex += cell.colSpan;
             });
         });
-        
+
         rows.forEach(function(row) {
             row.children = row.children.filter(function(cell) {
                 return !cell._vMerge;
@@ -13504,7 +13528,7 @@ function BodyReader(options) {
                 delete cell._vMerge;
             });
         });
-        
+
         return elementResult(rows);
     }
 
@@ -13515,20 +13539,20 @@ function BodyReader(options) {
             .getElementsByTagName("pic:pic")
             .getElementsByTagName("pic:blipFill")
             .getElementsByTagName("a:blip");
-        
+
         return combineResults(blips.map(readBlip.bind(null, element)));
     }
-    
+
     function readBlip(element, blip) {
         var properties = element.first("wp:docPr").attributes;
         var altText = isBlank(properties.descr) ? properties.title : properties.descr;
         return readImage(findBlipImageFile(blip), altText);
     }
-    
+
     function isBlank(value) {
         return value == null || /^\s*$/.test(value);
     }
-    
+
     function findBlipImageFile(blip) {
         var embedRelationshipId = blip.attributes["r:embed"];
         var linkRelationshipId = blip.attributes["r:link"];
@@ -13542,10 +13566,10 @@ function BodyReader(options) {
             };
         }
     }
-    
+
     function readImageData(element) {
         var relationshipId = element.attributes['r:id'];
-        
+
         if (relationshipId) {
             return readImage(
                 findEmbeddedImageFile(relationshipId),
@@ -13554,7 +13578,7 @@ function BodyReader(options) {
             return emptyResultWithMessages([warning("A v:imagedata element without a relationship ID was ignored")]);
         }
     }
-    
+
     function findEmbeddedImageFile(relationshipId) {
         var path = uris.uriToZipEntryName("word", relationships.findTargetByRelationshipId(relationshipId));
         return {
@@ -13562,10 +13586,10 @@ function BodyReader(options) {
             read: docxFile.read.bind(docxFile, path)
         };
     }
-    
+
     function readImage(imageFile, altText) {
         var contentType = contentTypes.findContentType(imageFile.path);
-        
+
         var image = documents.Image({
             readImage: imageFile.read,
             altText: altText,
@@ -13575,7 +13599,7 @@ function BodyReader(options) {
             [] : warning("Image of type " + contentType + " is unlikely to display in web browsers");
         return elementResultWithMessages(image, warnings);
     }
-    
+
     function undefinedStyleWarning(type, styleId) {
         return warning(
             type + " style with ID " + styleId + " was referenced but not defined in the document");
@@ -13592,7 +13616,7 @@ function readNumberingProperties(element, numbering) {
         return numbering.findLevel(numId, level);
     }
 }
-    
+
 var supportedImageTypes = {
     "image/png": true,
     "image/gif": true,

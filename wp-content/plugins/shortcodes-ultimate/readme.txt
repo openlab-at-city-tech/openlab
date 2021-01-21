@@ -6,7 +6,7 @@ Tags: shortcode, toggle, columns, button, slider
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 5.9.4
+Stable tag: 5.9.6
 
 A comprehensive collection of visual components for your site
 
@@ -146,13 +146,11 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.9.4
+### 5.9.6
 
-**Fixes**
-
-- Fixed PHP notice `A non-numeric value encountered` in `[su_dropcap]`
-- Fixed PHP notice `A non-numeric value encountered` in `[su_service]`
-- Updated in-plugin links
+Added compatiblity with WordPress 5.6
+Minor improvements
+Fixed readme.txt information
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

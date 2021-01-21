@@ -465,9 +465,37 @@ OpenLab.utility = (function ($) {
 		updateAcademicUnitFilters: function() {
 			var selectedSlugs  = [];
 			var $selectedUnits = $( '.academic-unit:selected' );
+
+			// Determine first whether both Schools and Offices are selected. If so, drop one before creating selectedUnits.
+			var excludeUnitType = '';
+			$selectedUnits.each(
+				function( k, v ) {
+					if ( excludeUnitType !== '' ) {
+						return;
+					}
+
+					if ( v.value.length > 0 && 'all' !== v.value ) {
+						switch ( v.dataset.academicUnitType ) {
+							case 'school' :
+								excludeUnitType = 'office';
+								break;
+
+							case 'office' :
+								excludeUnitType = 'school';
+								break;
+						}
+					}
+				}
+			);
+
 			$selectedUnits.each(
 				function( k, v ) {
 					if ( v.value.length > 0 ) {
+
+						if ( excludeUnitType === v.dataset.academicUnitType ) {
+							return;
+						}
+
 						if ( 'all' === v.value ) {
 							$( v ).siblings( '.academic-unit-nonempty' ).each(
 								function( k, v ) {
@@ -523,6 +551,11 @@ OpenLab.utility = (function ($) {
 
 				var auSelect2Args = Object.assign( {}, select2args, { theme: 'default openlab-academic-units-select2-container' } );
 				$academicUnitSelectors.select2( auSelect2Args );
+			}
+
+			// If there is an excluded unit type, disable that dropdown.
+			if ( excludeUnitType !== '' ) {
+				$('#' + excludeUnitType + '-select').attr('disabled', 'disabled');
 			}
 		},
 		sliderTagManagerTracking: function () {

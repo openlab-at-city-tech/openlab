@@ -1,0 +1,41 @@
+.#{$prefix}-masonary-gallery-no-space{
+    @extend %clearfix;
+    &.twp-3-col-masonary,
+    &.twp-2-col-masonary{
+        &.#{$prefix}-post-with-bg-image{
+            .#{$prefix}-gallery-post{
+                float: left;
+                width: calc(100% -15px);
+                margin: 15px 7.5px 0;
+                @include border-left(1.5px,solid);
+                @include border-bottom(1.5px,solid);
+                border-color: $color_white;
+                @include media(xs){
+                    width: calc(50% - 15px);
+                }
+                @include media(sm){
+                    margin: 0;  
+                    width: 50%;
+                }
+            }
+        }
+    }
+    &.twp-3-col-masonary{
+        &.#{$prefix}-post-with-bg-image{
+            .#{$prefix}-gallery-post{
+                @include media(lg){
+                    width: 33.33%;
+                }
+            }
+        }
+    }
+    &.twp-2-col-masonary{
+        &.#{$prefix}-post-with-bg-image{
+            .#{$prefix}-gallery-post{
+                @include media(lg){
+                    width: 50%;
+                }
+            }
+        }
+    }
+}

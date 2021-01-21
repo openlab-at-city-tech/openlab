@@ -1,0 +1,38 @@
+.#{$prefix}-single-article{
+    .entry-footer{
+        font-size: 16px;
+        font-weight: $font_semi_bold;
+        @include border-top();
+        border-color: $color_blue_gray;
+        padding-top: 15px;
+        margin-top: 15px;
+        .tags-links{
+            display: inline-block;
+            a{
+                display: inline-block;
+                @include border-bottom(2px,solid);
+                @extend %primary-border;
+                margin-left: 5px;
+                margin-right: 5px;
+                color: $color_gray;
+                font-size: 0.9rem;
+                &:visited{
+                    color: $color_gray;
+                }
+                &:hover{
+                    color: $color_primary;
+                }
+            }
+
+        }
+        .edit-link{
+            display: inline-block;
+            @extend %primary-color;
+           a{
+               display: inline-block;
+               padding: 0 10px;
+               @extend %primary-color;
+           }
+        }
+    }
+}

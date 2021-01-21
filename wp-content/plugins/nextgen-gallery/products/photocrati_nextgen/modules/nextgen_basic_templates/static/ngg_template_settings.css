@@ -17,3 +17,8 @@
 .ngg_settings_template_wrapper .ui-helper-hidden-accessible {
     display: none;
 }
+
+.deprecated {
+    color: darkorange;
+    font-size: smaller;
+}

@@ -56,7 +56,7 @@ body {
 }
 
 #attach_to_post_tabs {
-	border: 0px;
+	border: 0;
 	background: none;
 	height: 100%;
     overflow: hidden;
@@ -65,7 +65,6 @@ body {
     visibility: visible;
 }
 
-#attach_to_post_tabs
 #attach_to_post_tabs.ui-tabs-hide {
 	display: block !important;
 	visibility: hidden;
@@ -101,7 +100,7 @@ h3#choose_display {
 }
 
 #attach_to_post_tabs .ui-widget-header {
-	border: 0px;
+	border: 0;
 	border-bottom: 1px solid #dfdfdf;
 	background: none;
 }
@@ -110,8 +109,8 @@ iframe {
 	width: 100%;
 	min-height: 100%;
 	border: none;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 	background: transparent;
 }
 
@@ -170,7 +169,6 @@ table {
     line-height: 60px;
     margin-bottom: 0;
     position: fixed;
-    padding: 10px 25px 30px 10px;
     text-transform: uppercase;
     width: 220px;
     padding: 0;
@@ -197,7 +195,6 @@ table {
 	display: block;
 	height: auto;
 	margin: 0;
-	padding: 0;
 	width: 100%;
 	border-radius: 0;
     box-sizing: border-box;
@@ -211,24 +208,8 @@ table {
     outline: none;
 }
 
-/* The next couple of rules are all a workaround to disable the "Insert Into Page" tab just for iOS */
-/* TODO: consolidate when plupload is upgraded */
-#attach_to_post_tabs ul.ui-tabs-nav li:nth-of-type(1) {
-    list-style: none;
-    /*border-top: 1px solid #344a59;*/
-}
-#attach_to_post_tabs:not(.ngg_atp_ios_detected) ul.ui-tabs-nav li:nth-of-type(2) {
-    list-style: none;
-}
-
-#attach_to_post_tabs:not(.ngg_atp_ios_detected) ul.ui-tabs-nav li:nth-of-type(1) a {
-    display: list-item;
-}
-#attach_to_post_tabs ul.ui-tabs-nav li:nth-of-type(2) a {
-    display: list-item;
-}
-
 #attach_to_post_tabs .ui-tabs-nav li a {
+    display: list-item;
     color: #555;
     float: right;
     font-size: 13px;
@@ -288,7 +269,6 @@ table {
     border: none;
     color: black;
     display: inline;
-    font-size: 14px;
     font-weight: 300;
     text-decoration: none;
     line-height: 25px;
@@ -394,7 +374,6 @@ table {
     font-weight: 600;
     cursor: pointer;
     font-family: Lato, sans-serif;
-    letter-spacing: .5px;
     background: black;
     color: #fff;
     text-transform: uppercase;
@@ -608,7 +587,7 @@ h3#preview_tab {
 #preview_tab_content ul {
 	list-style-type: none;
 	display: block;
-	padding: 0px;
+	padding: 0;
 	position: relative;
 	margin-top: 20px;
 }
@@ -641,7 +620,7 @@ h3#preview_tab {
 }
 
 #preview_tab_content .image_container img {
-	border: 0px;
+	border: 0;
 }
 
 #preview_tab_content #entity_list  li{
@@ -670,7 +649,7 @@ h3#preview_tab {
 	font-size: 0.8em;
 	position: absolute;
 	bottom: 0.2em;
-	left: 0px;
+	left: 0;
 	width: 100%;
 	padding: 5px 0;
 }
@@ -691,7 +670,7 @@ h3#preview_tab {
 }
 #preview_tab_content .header_row .separator {
 	display: inline-block;
-	margin: 0px 5px;
+	margin: 0 5px;
 }
 
 #preview_tab_content .header_row .selected {

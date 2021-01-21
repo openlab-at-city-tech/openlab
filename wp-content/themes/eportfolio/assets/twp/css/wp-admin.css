@@ -1,0 +1,248 @@
+.widget-content .image-preview-wrap img {
+    max-width: 100%;
+    margin: 20px auto 0;
+}
+
+#setting-error-twp.update-nag{
+    clear: both;
+    display: block;
+}
+
+
+/*--------------------------------------------------------------
+# Meta
+--------------------------------------------------------------*/
+#eportfolio-theme-settings .inside {
+    margin: 0 auto;
+    padding: 0;
+}
+
+#eportfolio-theme-settings .handlediv {
+    position: relative;
+    z-index: 1;
+}
+
+#eportfolio-theme-settings h2.hndle {
+    background-color: #f3f5f6;
+    border-width: 1px 1px 0 1px;
+    border-style: solid;
+    border-color: #e2e4e7;
+}
+
+#eportfolio-theme-settings .eportfolio-meta-panels .eportfolio-opt-wrap{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+
+.eportfolio-tab-main {
+    background-color: #fbfbfb;
+    position: relative;
+}
+
+.eportfolio-tab-main .eportfolio-metabox-tab {
+    display: block;
+    position: relative;
+    z-index: 10;
+    float: left;
+    width: 225px;
+}
+
+.eportfolio-metabox-tab ul {
+    clear: left;
+    margin: 0;
+    list-style-type: none;
+}
+
+.eportfolio-metabox-tab ul li {
+    margin-bottom: 0;
+}
+
+.eportfolio-metabox-tab ul li a {
+    font-size: 13px;
+    position: relative;
+    display: block;
+    font-weight: 600;
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid rgba(136, 134, 134, 0.12);
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+
+.eportfolio-metabox-tab ul li a:hover,
+.eportfolio-metabox-tab ul li a:focus {
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+.eportfolio-metabox-tab ul li a:hover,
+.eportfolio-metabox-tab ul li a:focus {
+    color: #fff;
+    background: #3473e4;
+}
+
+.eportfolio-metabox-tab ul li a.twp-tab-active {
+    color: #fff;
+    background: #3062ff;
+}
+
+.eportfolio-metabox-tab ul li a.twp-tab-active:after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border: solid transparent;
+    border-right-color: #fff;
+    border-width: 10px;
+    margin-top: -10px;
+}
+
+.eportfolio-tab-main .eportfolio-tab-content {
+    background-color: #fff;
+    position: relative;
+    margin-left: 225px;
+    border-left: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+}
+
+.eportfolio-tab-content .twp-content-wrap {
+    display: none;
+}
+
+.eportfolio-tab-content .twp-content-wrap.eportfolio-tab-content-active {
+    display: block;
+}
+
+.eportfolio-tab-content .twp-meta-title {
+    border-bottom: 1px solid #e8e8e8;
+    font-weight: 300;
+    padding: 20px;
+    margin: 0 auto;
+    font-size: 32px;
+}
+
+.eportfolio-meta-panels .eportfolio-opt-wrap {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.eportfolio-meta-panels .eportfolio-opt-wrap:hover,
+.eportfolio-meta-panels .eportfolio-opt-wrap:focus {
+    background-color: #f9f9f9;
+}
+
+.eportfolio-opt-wrap {
+    display: table;
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    margin: 10px auto;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.eportfolio-opt-wrap-alt label {
+    width: 220px;
+}
+
+.eportfolio-opt-wrap-alt label,
+.eportfolio-opt-wrap textarea,
+.eportfolio-opt-wrap select,
+.eportfolio-opt-wrap input[type="text"] {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.eportfolio-opt-wrap textarea,
+.eportfolio-opt-wrap select,
+.eportfolio-opt-wrap input[type="text"] {
+    border-color: #E2E6EC;
+    width: 400px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.eportfolio-opt-wrap input[type="text"],
+.eportfolio-opt-wrap select {
+    height: 45px;
+    line-height: 45px;
+}
+
+.eportfolio-opt-wrap textarea {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.eportfolio-checkbox-wrap {
+    background-color: #fff;
+    display: block;
+    margin: 10px 0;
+    position: relative;
+}
+
+.eportfolio-checkbox-wrap label {
+    padding: 12px 0 12px 40px;
+    width: 100%;
+    display: block;
+    text-align: left;
+    color: #3C454C;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 200ms ease-in;
+    overflow: hidden;
+}
+
+.eportfolio-checkbox-wrap label:after {
+    width: 22px;
+    height: 22px;
+    content: '';
+    border: 2px solid #D1D7DC;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+    background-repeat: no-repeat;
+    background-position: 2px 3px;
+    border-radius: 50%;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: all 200ms ease-in;
+}
+
+.eportfolio-checkbox-wrap input:checked ~ label {
+    color: #000;
+}
+
+.eportfolio-checkbox-wrap input:checked ~ label:after {
+    background-color: #54E0C7;
+    border-color: #54E0C7;
+}
+
+.eportfolio-checkbox-wrap input {
+    width: 22px;
+    height: 22px;
+    order: 1;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin: 0;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+    visibility: hidden;
+}

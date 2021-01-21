@@ -81,7 +81,7 @@ function bp_settings_sanitize_notification_settings( $settings = array() ) {
 }
 
 /**
- * Build a dynamic whitelist of notification keys, based on what's hooked to 'bp_notification_settings'.
+ * Build a dynamic list of allowed notification keys, based on what's hooked to 'bp_notification_settings'.
  *
  * @since 2.3.5
  *
@@ -91,7 +91,7 @@ function bp_settings_get_registered_notification_keys() {
 
 	ob_start();
 	/**
-	 * Fires at the start of the notification keys whitelisting.
+	 * Fires at the start of the building of the notification keys allowed list.
 	 *
 	 * @since 1.0.0
 	 */
@@ -101,12 +101,12 @@ function bp_settings_get_registered_notification_keys() {
 	$matched = preg_match_all( '/<input[^>]+name="notifications\[([^\]]+)\]/', $screen, $matches );
 
 	if ( $matched && isset( $matches[1] ) ) {
-		$key_whitelist = $matches[1];
+		$allowed_key_list = $matches[1];
 	} else {
-		$key_whitelist = array();
+		$allowed_key_list = array();
 	}
 
-	return $key_whitelist;
+	return $allowed_key_list;
 }
 
 /**
@@ -249,7 +249,7 @@ function bp_settings_get_personal_data_request( $user_id = 0 ) {
 
 	if ( ! empty( $query->post ) ) {
 		// WP 5.4 changed the user request function name to wp_get_user_request()
-		$user_request = function_exists( 'wp_get_user_request' ) ? 'wp_get_user_request' : 'wp_get_user_request_data';
+		$user_request = bp_is_running_wp( '4.9.6' ) ? 'wp_get_user_request' : 'wp_get_user_request_data';
 		return $user_request( $query->post->ID );
 	} else {
 		return false;

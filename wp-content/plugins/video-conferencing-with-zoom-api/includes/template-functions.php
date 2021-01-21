@@ -400,6 +400,8 @@ if ( ! function_exists( 'video_conference_zoom_shortcode_table' ) ) {
 				<?php
 			}
 
+			do_action( 'vczoom_meeting_shortcode_additional_fields', $zoom_meetings );
+
 			if ( ! empty( $hide_join_link_nloggedusers ) ) {
 				if ( is_user_logged_in() ) {
 					$show_join_links = true;

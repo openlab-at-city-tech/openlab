@@ -1,0 +1,834 @@
+@import "variables";
+@import "mixins";
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab:hover:before, .ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.active:not(.expanded):before, .ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .ju-submenu-tabs div.link-tab:hover:before, .ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .ju-submenu-tabs div.link-tab.active:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+.ju-notice-success, .ju-notice-error {
+    padding: 10px;
+    margin: 20px 20px 20px 0;
+    background-color: #fff;
+    border-left: 5px solid #000;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.clearfix:after, .clearfix:before {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.no-display {
+    display: none;
+}
+
+.hidden-item {
+    visibility: hidden;
+}
+
+.toplevel_page_advgb_main {
+    
+    ul#adminmenu a.wp-has-current-submenu:after, 
+    ul#adminmenu > li.current > a.current:after {
+        border-right-color: $purple-hover;
+    }
+    
+    #adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head, 
+    #adminmenu .wp-menu-arrow, 
+    #adminmenu .wp-menu-arrow div, 
+    #adminmenu li.current a.menu-top, 
+    #adminmenu li.wp-has-current-submenu a.wp-has-current-submenu, 
+    .folded #adminmenu li.current.menu-top, 
+    .folded #adminmenu li.wp-has-current-submenu {
+        background: $purple;
+    }
+}
+
+.tabs {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    white-space: nowrap;
+    width: 100%;
+    background-color: #fff;
+}
+
+.tabs .tab {
+    flex-grow: 1;
+    display: block;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    float: left;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    letter-spacing: 0.8px;
+    min-width: 80px;
+    background-color: #2196f3;
+}
+
+.tabs .tab a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #2196f3;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-transition: color 0.3s ease;
+    -moz-transition: color 0.3s ease;
+    -ms-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.tabs .tab.disabled a {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.tabs .indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    will-change: left, right;
+    background-color: $purple;
+}
+
+.ju-button {
+    background-color: transparent;
+    color: #000;
+    padding: 10px 15px;
+    min-width: 180px;
+    border: 1px solid #9fabba;
+    text-transform: uppercase;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: 2px;
+    transition: all ease 0.5s;
+    vertical-align: middle;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+}
+
+.ju-button:focus {
+    outline: none;
+}
+
+.ju-button:hover {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.ju-button.orange-button {
+    background-color: $purple;
+    color: #fff;
+    border-color: $purple;
+}
+
+.ju-button.orange-outline-button {
+    background-color: #fff;
+    color: $purple;
+    border-color: #fff;
+}
+
+// Button style
+#wpbody .ju-main-wrapper {
+ 
+    @include buttonAdmin();
+}
+
+.ju-rect-button {
+    background-color: #fff;
+    border: 1px solid $purple;
+    color: $purple;
+    cursor: pointer;
+    padding: 10px 15px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.ju-material-button {
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: $purple;
+    color: #fff;
+}
+
+.ju-material-button:hover {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+input.ju-input {
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    height: auto;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+input.ju-input:focus {
+    border-color: $purple;
+    box-shadow: none;
+    outline: none;
+}
+
+input.ju-input.minicolors {
+    padding-left: 55px;
+}
+
+input.ju-input.minicolors + .minicolors-swatch {
+    height: 48px;
+    width: 48px;
+    top: 2px;
+    left: 2px;
+    border: none;
+}
+
+input.ju-input.minicolors + .minicolors-swatch .minicolors-swatch-color {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+input.ju-input.minicolors .minicolors-grid .minicolors-picker {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+input.ju-input.minicolors .minicolors-grid .minicolors-picker > div {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+select.ju-select {
+    padding: 0 15px;
+    height: 50px;
+    vertical-align: middle;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+select.ju-select:focus {
+    border: 1px solid $purple;
+    box-shadow: none;
+    outline: none;
+}
+
+input.ju-checkbox:checked {
+    background-color: #49bf88;
+    border: 1px solid #49bf88;
+}
+
+input.ju-checkbox:checked:before {
+    color: #fff;
+}
+
+input.ju-radiobox {
+    border-color: #7d8a9a;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+input.ju-radiobox:checked {
+    border-color: #49bf88;
+}
+
+input.ju-radiobox:checked:before {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+    background-color: #49bf88;
+}
+
+input.ju-radiobox:focus {
+    border-color: #49bf88;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.ju-notice-success {
+    border-left-color: #46b450;
+}
+
+.ju-notice-error {
+    border-left-color: #cc0000;
+}
+
+.ju-notice-close {
+    float: right;
+    color: #aaa;
+}
+
+.ju-notice-close:hover {
+    color: #c00;
+    cursor: pointer;
+}
+
+.ju-switch-button {
+    float: right;
+    margin-left: 10px;
+    margin-right: 30px;
+}
+
+.ju-switch-button .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    margin: 10px;
+}
+
+.ju-switch-button .switch input {
+    display: none;
+}
+
+.ju-switch-button .switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+}
+
+.ju-switch-button .switch .slider:before {
+    position: absolute;
+    content: '';
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #fff;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.ju-switch-button .switch input:checked + .slider {
+    background-color: #5dca70;
+}
+
+.ju-switch-button .switch input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -moz-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    -o-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+.settings-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex: auto;
+}
+
+.ju-settings-option {
+    width: 48%;
+    margin-bottom: 20px;
+    margin-right: 2%;
+    background-color: #fff;
+    -webkit-box-shadow: 0 10px 30px 0 rgba(160, 166, 190, 0.08);
+    -moz-box-shadow: 0 10px 30px 0 rgba(160, 166, 190, 0.08);
+    box-shadow: 0 10px 30px 0 rgba(160, 166, 190, 0.08);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.ju-settings-option.settings-separator {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.ju-settings-option.full-width, .ju-settings-option.settings-separator {
+    width: 98%;
+}
+
+.ju-settings-option.settings-separator .settings-separator-title {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.ju-setting-label {
+    float: left;
+    display: inline-block;
+    min-width: 150px;
+    max-width: calc(100% - 150px);
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    margin: 0;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+.ju-main-wrapper {
+    margin-left: -20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.ju-main-wrapper * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ju-main-wrapper img {
+    max-width: 100%;
+}
+
+.ju-main-wrapper .ju-left-panel {
+    width: 300px;
+    height: 100%;
+    padding: 20px 0;
+    background-image: linear-gradient(to bottom, $purple, $purple-hover);
+    position: fixed;
+    overflow: auto;
+    z-index: 15;
+    -webkit-box-shadow: 10px 20px 20px 0 rgba(186, 192, 213, 0.1);
+    -moz-box-shadow: 10px 20px 20px 0 rgba(186, 192, 213, 0.1);
+    box-shadow: 10px 20px 20px 0 rgba(186, 192, 213, 0.1);
+}
+
+.ju-main-wrapper .ju-left-panel .ju-menu-search {
+    margin: 0 10px 20px;
+    padding: 0 5px 10px;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.ju-main-wrapper .ju-left-panel .ju-menu-search .ju-menu-search-icon {
+    font-size: 20px;
+    color: #fff;
+    vertical-align: text-bottom;
+}
+
+.ju-main-wrapper .ju-left-panel .ju-menu-search .ju-menu-search-input {
+    background: transparent;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 18px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.ju-main-wrapper .ju-left-panel .ju-menu-search .ju-menu-search-input::placeholder {
+    color: #fff;
+    opacity: 0.5;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs {
+    display: block;
+    background-color: transparent;
+    height: auto;
+    margin: 20px 0;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab {
+    float: none;
+    width: auto;
+    height: auto;
+    text-align: left;
+    position: relative;
+    line-height: normal;
+    background-color: transparent;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab {
+    padding: 20px;
+    opacity: 0.7;
+    background-color: transparent;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab:focus {
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab:after {
+    font-family: 'Material Icons';
+    font-size: 24px;
+    vertical-align: text-bottom;
+    position: absolute;
+    right: 15px;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.with-submenus:not(.expanded):after {
+    content: '\e313';
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.active {
+    opacity: 1;
+    background-color: $purple-hover;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.active.with-submenus.expanded:after {
+    content: '\e316';
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.active.with-submenus.expanded + .ju-submenu-tabs {
+    max-height: 500px;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab a.link-tab.active:not(.expanded) {
+    background-color: transparent;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .ju-submenu-tabs {
+    display: block;
+    max-height: 0;
+    background-color: $purple-hover;
+    -webkit-transition: max-height cubic-bezier(0.3, 1.1, 0.3, 1.1) 1s;
+    -moz-transition: max-height cubic-bezier(0.3, 1.1, 0.3, 1.1) 1s;
+    -ms-transition: max-height cubic-bezier(0.3, 1.1, 0.3, 1.1) 1s;
+    -o-transition: max-height cubic-bezier(0.3, 1.1, 0.3, 1.1) 1s;
+    transition: max-height cubic-bezier(0.3, 1.1, 0.3, 1.1) 1s;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .ju-submenu-tabs div.link-tab {
+    padding: 20px;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 32px;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .ju-submenu-tabs div.link-tab.active {
+    opacity: 1;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .menu-tab-icon {
+    font-size: 22px;
+    vertical-align: sub;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab .tab-title {
+    font-size: 16px;
+    margin-left: 5px;
+    display: inline-block;
+    max-width: 75%;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    vertical-align: text-bottom;
+}
+
+.ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs .indicator {
+    display: none;
+}
+
+.ju-main-wrapper .ju-right-panel {
+    width: calc(100% - 300px);
+    padding: 0 20px;
+    font-size: 14px;
+    margin-left: 300px;
+    background-color: #f3f6fa;
+    
+    // PublishPress Footer
+    footer {
+        text-align: center;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+        padding-top: 30px;
+        
+        .ppma-rating {
+            font-size: 12px;
+            margin-bottom: 10px;
+            margin-top: 30px;
+            
+            a, 
+            a:visited, 
+            a:active,
+            a:hover {
+                text-decoration: none;
+            }
+        }
+        
+        * {
+            color: #777;
+        }
+        
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #fafafa;
+        }
+        
+        > nav {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            
+            ul {
+                list-style: none;
+
+                > li {
+                    display: inline-block;
+
+                    &:not(:first-child) {
+                        margin-left: 15px;
+                    }
+
+                    > a {
+                        font-weight: bold;
+                        text-decoration: none;
+
+                        &:hover,
+                        &:focus,
+                        &:active {
+                            color: $purple;
+                        }
+
+                        span.dashicons {
+
+                            &:hover,
+                            &:focus,
+                            &:active {
+                                color: $purple;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .dashicons.dashicons-star-filled {
+            line-height: 18px;
+            font-size: 12px;
+            width: 12px;
+            height: 12px;
+            color: #FFB300 !important;
+            -webkit-transition: color 200ms ease-in-out;
+            -moz-transition: color 200ms ease-in-out;
+            -o-transition: color 200ms ease-in-out;
+            transition: color 200ms ease-in-out;
+        }
+        
+        .ppma-pressshack-logo img {
+            width: 170px;
+        }
+    }
+}
+
+.ju-main-wrapper .ju-right-panel:before {
+    content: '';
+    display: block;
+    clear: both;
+    padding: 1px 0 0 0;
+}
+
+.ju-main-wrapper .ju-right-panel .ju-top-tabs-wrapper {
+    background-color: #fff;
+    margin: auto -20px;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs {
+    width: fit-content !important;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab {
+    text-transform: capitalize;
+    min-width: 200px;
+    background-color: #fff;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab a.link-tab {
+    color: $purple;
+    background-color: #fff;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab a.link-tab.active:before {
+    content: '\f147';
+    font-family: 'dashicons';
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab a.link-tab:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs .indicator {
+    background-color: $purple;
+    z-index: 10;
+}
+
+.ju-main-wrapper .ju-left-panel-toggle {
+    display: none;
+    position: fixed;
+    top: 120px;
+    left: 35px;
+    cursor: pointer;
+    background-color: #fff;
+    width: auto;
+    height: auto;
+    padding: 25px 5px;
+    border: 1px solid #ddd;
+    opacity: 0.5;
+    z-index: 15;
+    -webkit-border-radius: 0 25px 25px 0;
+    -moz-border-radius: 0 25px 25px 0;
+    border-radius: 0 25px 25px 0;
+}
+
+.ju-main-wrapper .ju-left-panel-toggle:hover, .ju-main-wrapper .ju-left-panel-toggle:focus {
+    opacity: 1;
+}
+
+.ju-main-wrapper .ju-left-panel-toggle .ju-left-panel-toggle-icon {
+    color: $purple;
+}
+
+.search-result {
+    outline: 1px solid $purple;
+    -webkit-box-shadow: 1px 1px 12px #ccc;
+    -moz-box-shadow: 1px 1px 12px #ccc;
+    box-shadow: 1px 1px 12px #ccc;
+}
+
+.rtl .ju-main-wrapper {
+    margin-left: 0;
+    margin-right: -20px;
+}
+
+.rtl .ju-main-wrapper .ju-left-panel .tabs.ju-menu-tabs li.tab {
+    text-align: inherit;
+}
+
+.rtl .ju-main-wrapper .ju-right-panel {
+    margin-left: 0;
+    margin-right: 300px;
+}
+
+.rtl .ju-main-wrapper .ju-left-panel-toggle {
+    left: unset;
+    right: 35px;
+    -webkit-border-radius: 25px 0 0 25px;
+    -moz-border-radius: 25px 0 0 25px;
+    border-radius: 25px 0 0 25px;
+}
+
+.rtl .ju-setting-label {
+    float: right;
+}
+
+.rtl .ju-switch-button {
+    float: left;
+}
+
+@media screen and (max-width: 960px) {
+    .ju-main-wrapper .ju-left-panel {
+        display: none;
+    }
+
+    .ju-main-wrapper .ju-right-panel {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs {
+        width: 100% !important;
+        flex-wrap: wrap;
+    }
+
+    .ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab {
+        flex: 0 0 100%;
+    }
+
+    .ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab a.link-tab.active {
+        background-color: $purple;
+        color: #fff;
+    }
+
+    .ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs li.tab a.link-tab.active:before {
+        display: none;
+    }
+
+    .ju-main-wrapper .ju-right-panel .tabs.ju-top-tabs .indicator {
+        display: none;
+    }
+
+    .ju-main-wrapper .ju-left-panel-toggle {
+        display: block;
+    }
+
+    .rtl .ju-main-wrapper .ju-right-panel {
+        margin-right: 0;
+    }
+}
+
+@media screen and (max-width: 782px) {
+    .ju-main-wrapper .ju-left-panel-toggle {
+        left: 0;
+    }
+
+    .ju-settings-option {
+        width: 98%;
+    }
+
+    .rtl .ju-main-wrapper .ju-left-panel-toggle {
+        right: 0;
+    }
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,6 +1,346 @@
-/*
-Javascript plotting library for jQuery ~ v0.8 beta ~ Copyright (c) 2007-2011 IOLA and Ole Laursen
-http://code.google.com/p/flot/issues/detail?id=643
-Licensed under the MIT License ~ https://raw.github.com/flot/flot/master/LICENSE.txt
+/* Flot plugin for adding the ability to pan and zoom the plot.
+
+Copyright (c) 2007-2014 IOLA and Ole Laursen.
+Licensed under the MIT license.
+
+The default behaviour is double click and scrollwheel up/down to zoom in, drag
+to pan. The plugin defines plot.zoom({ center }), plot.zoomOut() and
+plot.pan( offset ) so you easily can add custom controls. It also fires
+"plotpan" and "plotzoom" events, useful for synchronizing plots.
+
+The plugin supports these options:
+
+	zoom: {
+		interactive: false
+		trigger: "dblclick" // or "click" for single click
+		amount: 1.5         // 2 = 200% (zoom in), 0.5 = 50% (zoom out)
+	}
+
+	pan: {
+		interactive: false
+		cursor: "move"      // CSS mouse cursor value used when dragging, e.g. "pointer"
+		frameRate: 20
+	}
+
+	xaxis, yaxis, x2axis, y2axis: {
+		zoomRange: null  // or [ number, number ] (min range, max range) or false
+		panRange: null   // or [ number, number ] (min, max) or false
+	}
+
+"interactive" enables the built-in drag/click behaviour. If you enable
+interactive for pan, then you'll have a basic plot that supports moving
+around; the same for zoom.
+
+"amount" specifies the default amount to zoom in (so 1.5 = 150%) relative to
+the current viewport.
+
+"cursor" is a standard CSS mouse cursor string used for visual feedback to the
+user when dragging.
+
+"frameRate" specifies the maximum number of times per second the plot will
+update itself while the user is panning around on it (set to null to disable
+intermediate pans, the plot will then not update until the mouse button is
+released).
+
+"zoomRange" is the interval in which zooming can happen, e.g. with zoomRange:
+[1, 100] the zoom will never scale the axis so that the difference between min
+and max is smaller than 1 or larger than 100. You can set either end to null
+to ignore, e.g. [1, null]. If you set zoomRange to false, zooming on that axis
+will be disabled.
+
+"panRange" confines the panning to stay within a range, e.g. with panRange:
+[-10, 20] panning stops at -10 in one end and at 20 in the other. Either can
+be null, e.g. [-10, null]. If you set panRange to false, panning on that axis
+will be disabled.
+
+Example API usage:
+
+	plot = $.plot(...);
+
+	// zoom default amount in on the pixel ( 10, 20 )
+	plot.zoom({ center: { left: 10, top: 20 } });
+
+	// zoom out again
+	plot.zoomOut({ center: { left: 10, top: 20 } });
+
+	// zoom 200% in on the pixel (10, 20)
+	plot.zoom({ amount: 2, center: { left: 10, top: 20 } });
+
+	// pan 100 pixels to the left and 20 down
+	plot.pan({ left: -100, top: 20 })
+
+Here, "center" specifies where the center of the zooming should happen. Note
+that this is defined in pixel space, not the space of the data points (you can
+use the p2c helpers on the axes in Flot to help you convert between these).
+
+"amount" is the amount to zoom the viewport relative to the current range, so
+1 is 100% (i.e. no change), 1.5 is 150% (zoom in), 0.7 is 70% (zoom out). You
+can set the default in the options.
+
 */
-(function(a){a.fn.drag=function(b,c,d){var e=typeof b=="string"?b:"",g=a.isFunction(b)?b:a.isFunction(c)?c:null;if(e.indexOf("drag")!==0)e="drag"+e;d=(b==g?c:d)||{};return g?this.bind(e,d,g):this.trigger(e)};var b=a.event,c=b.special,d=c.drag={defaults:{which:1,distance:0,not:":input",handle:null,relative:false,drop:true,click:false},datakey:"dragdata",livekey:"livedrag",add:function(c){var e=a.data(this,d.datakey),g=c.data||{};e.related+=1;if(!e.live&&c.selector){e.live=true;b.add(this,"draginit."+d.livekey,d.delegate)}a.each(d.defaults,function(a){if(g[a]!==undefined)e[a]=g[a]})},remove:function(){a.data(this,d.datakey).related-=1},setup:function(){if(!a.data(this,d.datakey)){var c=a.extend({related:0},d.defaults);a.data(this,d.datakey,c);b.add(this,"mousedown",d.init,c);this.attachEvent&&this.attachEvent("ondragstart",d.dontstart)}},teardown:function(){if(!a.data(this,d.datakey).related){a.removeData(this,d.datakey);b.remove(this,"mousedown",d.init);b.remove(this,"draginit",d.delegate);d.textselect(true);this.detachEvent&&this.detachEvent("ondragstart",d.dontstart)}},init:function(e){var g=e.data,j;if(!(g.which>0&&e.which!=g.which))if(!a(e.target).is(g.not))if(!(g.handle&&!a(e.target).closest(g.handle,e.currentTarget).length)){g.propagates=1;g.interactions=[d.interaction(this,g)];g.target=e.target;g.pageX=e.pageX;g.pageY=e.pageY;g.dragging=null;j=d.hijack(e,"draginit",g);if(g.propagates){if((j=d.flatten(j))&&j.length){g.interactions=[];a.each(j,function(){g.interactions.push(d.interaction(this,g))})}g.propagates=g.interactions.length;g.drop!==false&&c.drop&&c.drop.handler(e,g);d.textselect(false);b.add(document,"mousemove mouseup",d.handler,g);return false}}},interaction:function(b,c){return{drag:b,callback:new d.callback,droppable:[],offset:a(b)[c.relative?"position":"offset"]()||{top:0,left:0}}},handler:function(a){var e=a.data;switch(a.type){case!e.dragging&&"mousemove":if(Math.pow(a.pageX-e.pageX,2)+Math.pow(a.pageY-e.pageY,2)<Math.pow(e.distance,2))break;a.target=e.target;d.hijack(a,"dragstart",e);if(e.propagates)e.dragging=true;case"mousemove":if(e.dragging){d.hijack(a,"drag",e);if(e.propagates){e.drop!==false&&c.drop&&c.drop.handler(a,e);break}a.type="mouseup"};case"mouseup":b.remove(document,"mousemove mouseup",d.handler);if(e.dragging){e.drop!==false&&c.drop&&c.drop.handler(a,e);d.hijack(a,"dragend",e)}d.textselect(true);if(e.click===false&&e.dragging){jQuery.event.triggered=true;setTimeout(function(){jQuery.event.triggered=false},20);e.dragging=false}break}},delegate:function(c){var e=[],g,h=a.data(this,"events")||{};a.each(h.live||[],function(h,j){if(j.preType.indexOf("drag")===0)if(g=a(c.target).closest(j.selector,c.currentTarget)[0]){b.add(g,j.origType+"."+d.livekey,j.origHandler,j.data);a.inArray(g,e)<0&&e.push(g)}});if(!e.length)return false;return a(e).bind("dragend."+d.livekey,function(){b.remove(this,"."+d.livekey)})},hijack:function(c,e,g,h,j){if(g){var k={event:c.originalEvent,type:c.type},l=e.indexOf("drop")?"drag":"drop",m,n=h||0,o,p;h=!isNaN(h)?h:g.interactions.length;c.type=e;c.originalEvent=null;g.results=[];do if(o=g.interactions[n])if(!(e!=="dragend"&&o.cancelled)){p=d.properties(c,g,o);o.results=[];a(j||o[l]||g.droppable).each(function(h,j){m=(p.target=j)?b.handle.call(j,c,p):null;if(m===false){if(l=="drag"){o.cancelled=true;g.propagates-=1}if(e=="drop")o[l][h]=null}else if(e=="dropinit")o.droppable.push(d.element(m)||j);if(e=="dragstart")o.proxy=a(d.element(m)||o.drag)[0];o.results.push(m);delete c.result;if(e!=="dropinit")return m});g.results[n]=d.flatten(o.results);if(e=="dropinit")o.droppable=d.flatten(o.droppable);e=="dragstart"&&!o.cancelled&&p.update()}while(++n<h);c.type=k.type;c.originalEvent=k.event;return d.flatten(g.results)}},properties:function(a,b,c){var e=c.callback;e.drag=c.drag;e.proxy=c.proxy||c.drag;e.startX=b.pageX;e.startY=b.pageY;e.deltaX=a.pageX-b.pageX;e.deltaY=a.pageY-b.pageY;e.originalX=c.offset.left;e.originalY=c.offset.top;e.offsetX=a.pageX-(b.pageX-e.originalX);e.offsetY=a.pageY-(b.pageY-e.originalY);e.drop=d.flatten((c.drop||[]).slice());e.available=d.flatten((c.droppable||[]).slice());return e},element:function(a){if(a&&(a.jquery||a.nodeType==1))return a},flatten:function(b){return a.map(b,function(b){return b&&b.jquery?a.makeArray(b):b&&b.length?d.flatten(b):b})},textselect:function(b){a(document)[b?"unbind":"bind"]("selectstart",d.dontstart).attr("unselectable",b?"off":"on").css("MozUserSelect",b?"":"none")},dontstart:function(){return false},callback:function(){}};d.callback.prototype={update:function(){c.drop&&this.available.length&&a.each(this.available,function(a){c.drop.locate(this,a)})}};c.draginit=c.dragstart=c.dragend=d})(jQuery);(function(a){function b(b){var c=b||window.event,d=[].slice.call(arguments,1),e=0,f=!0,g=0,h=0;return b=a.event.fix(c),b.type="mousewheel",c.wheelDelta&&(e=c.wheelDelta/120),c.detail&&(e=-c.detail/3),h=e,c.axis!==undefined&&c.axis===c.HORIZONTAL_AXIS&&(h=0,g=-1*e),c.wheelDeltaY!==undefined&&(h=c.wheelDeltaY/120),c.wheelDeltaX!==undefined&&(g=-1*c.wheelDeltaX/120),d.unshift(b,e,g,h),(a.event.dispatch||a.event.handle).apply(this,d)}var c=["DOMMouseScroll","mousewheel"];if(a.event.fixHooks)for(var d=c.length;d;)a.event.fixHooks[c[--d]]=a.event.mouseHooks;a.event.special.mousewheel={setup:function(){if(this.addEventListener)for(var a=c.length;a;)this.addEventListener(c[--a],b,!1);else this.onmousewheel=b},teardown:function(){if(this.removeEventListener)for(var a=c.length;a;)this.removeEventListener(c[--a],b,!1);else this.onmousewheel=null}},a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})})(jQuery);(function(a){function c(b){function m(a,b){b.unbind(a.getOptions().zoom.trigger,c);b.unbind("mousewheel",d);b.unbind("dragstart",i);b.unbind("drag",j);b.unbind("dragend",k);if(h)clearTimeout(h)}function l(a,b){var e=a.getOptions();if(e.zoom.interactive){b[e.zoom.trigger](c);b.mousewheel(d)}if(e.pan.interactive){b.bind("dragstart",{distance:10},i);b.bind("drag",j);b.bind("dragend",k)}}function k(a){if(h){clearTimeout(h);h=null}b.getPlaceholder().css("cursor",e);b.pan({left:f-a.pageX,top:g-a.pageY})}function j(a){var c=b.getOptions().pan.frameRate;if(h||!c)return;h=setTimeout(function(){b.pan({left:f-a.pageX,top:g-a.pageY});f=a.pageX;g=a.pageY;h=null},1/c*1e3)}function i(a){if(a.which!=1)return false;var c=b.getPlaceholder().css("cursor");if(c)e=c;b.getPlaceholder().css("cursor",b.getOptions().pan.cursor);f=a.pageX;g=a.pageY}function d(a,b){c(a,b<0);return false}function c(a,c){var d=b.offset();d.left=a.pageX-d.left;d.top=a.pageY-d.top;if(c)b.zoomOut({center:d});else b.zoom({center:d})}var e="default",f=0,g=0,h=null;b.zoomOut=function(a){if(!a)a={};if(!a.amount)a.amount=b.getOptions().zoom.amount;a.amount=1/a.amount;b.zoom(a)};b.zoom=function(c){if(!c)c={};var d=c.center,e=c.amount||b.getOptions().zoom.amount,f=b.width(),g=b.height();if(!d)d={left:f/2,top:g/2};var h=d.left/f,i=d.top/g,j={x:{min:d.left-h*f/e,max:d.left+(1-h)*f/e},y:{min:d.top-i*g/e,max:d.top+(1-i)*g/e}};a.each(b.getAxes(),function(a,b){var c=b.options,d=j[b.direction].min,e=j[b.direction].max,f=c.zoomRange;if(f===false)return;d=b.c2p(d);e=b.c2p(e);if(d>e){var g=d;d=e;e=g}var h=e-d;if(f&&(f[0]!=null&&h<f[0]||f[1]!=null&&h>f[1]))return;c.min=d;c.max=e});b.setupGrid();b.draw();if(!c.preventEvent)b.getPlaceholder().trigger("plotzoom",[b])};b.pan=function(c){var d={x:+c.left,y:+c.top};if(isNaN(d.x))d.x=0;if(isNaN(d.y))d.y=0;a.each(b.getAxes(),function(a,b){var c=b.options,e,f,g=d[b.direction];e=b.c2p(b.p2c(b.min)+g),f=b.c2p(b.p2c(b.max)+g);var h=c.panRange;if(h===false)return;if(h){if(h[0]!=null&&h[0]>e){g=h[0]-e;e+=g;f+=g}if(h[1]!=null&&h[1]<f){g=h[1]-f;e+=g;f+=g}}c.min=e;c.max=f});b.setupGrid();b.draw();if(!c.preventEvent)b.getPlaceholder().trigger("plotpan",[b])};b.hooks.bindEvents.push(l);b.hooks.shutdown.push(m)}var b={xaxis:{zoomRange:null,panRange:null},zoom:{interactive:false,trigger:"dblclick",amount:1.5},pan:{interactive:false,cursor:"move",frameRate:20}};a.plot.plugins.push({init:c,options:b,name:"navigate",version:"1.3"})})(jQuery)
+
+// First two dependencies, jquery.event.drag.js and
+// jquery.mousewheel.js, we put them inline here to save people the
+// effort of downloading them.
+
+/*
+jquery.event.drag.js ~ v1.5 ~ Copyright (c) 2008, Three Dub Media (http://threedubmedia.com)
+Licensed under the MIT License ~ http://threedubmedia.googlecode.com/files/MIT-LICENSE.txt
+*/
+(function(a){function e(h){var k,j=this,l=h.data||{};if(l.elem)j=h.dragTarget=l.elem,h.dragProxy=d.proxy||j,h.cursorOffsetX=l.pageX-l.left,h.cursorOffsetY=l.pageY-l.top,h.offsetX=h.pageX-h.cursorOffsetX,h.offsetY=h.pageY-h.cursorOffsetY;else if(d.dragging||l.which>0&&h.which!=l.which||a(h.target).is(l.not))return;switch(h.type){case"mousedown":return a.extend(l,a(j).offset(),{elem:j,target:h.target,pageX:h.pageX,pageY:h.pageY}),b.add(document,"mousemove mouseup",e,l),i(j,!1),d.dragging=null,!1;case!d.dragging&&"mousemove":if(g(h.pageX-l.pageX)+g(h.pageY-l.pageY)<l.distance)break;h.target=l.target,k=f(h,"dragstart",j),k!==!1&&(d.dragging=j,d.proxy=h.dragProxy=a(k||j)[0]);case"mousemove":if(d.dragging){if(k=f(h,"drag",j),c.drop&&(c.drop.allowed=k!==!1,c.drop.handler(h)),k!==!1)break;h.type="mouseup"}case"mouseup":b.remove(document,"mousemove mouseup",e),d.dragging&&(c.drop&&c.drop.handler(h),f(h,"dragend",j)),i(j,!0),d.dragging=d.proxy=l.elem=!1}return!0}function f(b,c,d){b.type=c;var e=a.event.dispatch.call(d,b);return e===!1?!1:e||b.result}function g(a){return Math.pow(a,2)}function h(){return d.dragging===!1}function i(a,b){a&&(a.unselectable=b?"off":"on",a.onselectstart=function(){return b},a.style&&(a.style.MozUserSelect=b?"":"none"))}a.fn.drag=function(a,b,c){return b&&this.bind("dragstart",a),c&&this.bind("dragend",c),a?this.bind("drag",b?b:a):this.trigger("drag")};var b=a.event,c=b.special,d=c.drag={not:":input",distance:0,which:1,dragging:!1,setup:function(c){c=a.extend({distance:d.distance,which:d.which,not:d.not},c||{}),c.distance=g(c.distance),b.add(this,"mousedown",e,c),this.attachEvent&&this.attachEvent("ondragstart",h)},teardown:function(){b.remove(this,"mousedown",e),this===d.dragging&&(d.dragging=d.proxy=!1),i(this,!0),this.detachEvent&&this.detachEvent("ondragstart",h)}};c.dragstart=c.dragend={setup:function(){},teardown:function(){}}})(jQuery);
+
+/* jquery.mousewheel.min.js
+ * Copyright (c) 2011 Brandon Aaron (http://brandonaaron.net)
+ * Licensed under the MIT License (LICENSE.txt).
+ * Thanks to: http://adomas.org/javascript-mouse-wheel/ for some pointers.
+ * Thanks to: Mathias Bank(http://www.mathias-bank.de) for a scope bug fix.
+ * Thanks to: Seamus Leahy for adding deltaX and deltaY
+ *
+ * Version: 3.0.6
+ *
+ * Requires: 1.2.2+
+ */
+(function(d){function e(a){var b=a||window.event,c=[].slice.call(arguments,1),f=0,e=0,g=0,a=d.event.fix(b);a.type="mousewheel";b.wheelDelta&&(f=b.wheelDelta/120);b.detail&&(f=-b.detail/3);g=f;void 0!==b.axis&&b.axis===b.HORIZONTAL_AXIS&&(g=0,e=-1*f);void 0!==b.wheelDeltaY&&(g=b.wheelDeltaY/120);void 0!==b.wheelDeltaX&&(e=-1*b.wheelDeltaX/120);c.unshift(a,f,e,g);return(d.event.dispatch||d.event.handle).apply(this,c)}var c=["DOMMouseScroll","mousewheel"];if(d.event.fixHooks)for(var h=c.length;h;)d.event.fixHooks[c[--h]]=d.event.mouseHooks;d.event.special.mousewheel={setup:function(){if(this.addEventListener)for(var a=c.length;a;)this.addEventListener(c[--a],e,!1);else this.onmousewheel=e},teardown:function(){if(this.removeEventListener)for(var a=c.length;a;)this.removeEventListener(c[--a],e,!1);else this.onmousewheel=null}};d.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})})(jQuery);
+
+
+
+
+(function ($) {
+    var options = {
+        xaxis: {
+            zoomRange: null, // or [number, number] (min range, max range)
+            panRange: null // or [number, number] (min, max)
+        },
+        zoom: {
+            interactive: false,
+            trigger: "dblclick", // or "click" for single click
+            amount: 1.5 // how much to zoom relative to current position, 2 = 200% (zoom in), 0.5 = 50% (zoom out)
+        },
+        pan: {
+            interactive: false,
+            cursor: "move",
+            frameRate: 20
+        }
+    };
+
+    function init(plot) {
+        function onZoomClick(e, zoomOut) {
+            var c = plot.offset();
+            c.left = e.pageX - c.left;
+            c.top = e.pageY - c.top;
+            if (zoomOut)
+                plot.zoomOut({ center: c });
+            else
+                plot.zoom({ center: c });
+        }
+
+        function onMouseWheel(e, delta) {
+            e.preventDefault();
+            onZoomClick(e, delta < 0);
+            return false;
+        }
+        
+        var prevCursor = 'default', prevPageX = 0, prevPageY = 0,
+            panTimeout = null;
+
+        function onDragStart(e) {
+            if (e.which != 1)  // only accept left-click
+                return false;
+            var c = plot.getPlaceholder().css('cursor');
+            if (c)
+                prevCursor = c;
+            plot.getPlaceholder().css('cursor', plot.getOptions().pan.cursor);
+            prevPageX = e.pageX;
+            prevPageY = e.pageY;
+        }
+        
+        function onDrag(e) {
+            var frameRate = plot.getOptions().pan.frameRate;
+            if (panTimeout || !frameRate)
+                return;
+
+            panTimeout = setTimeout(function () {
+                plot.pan({ left: prevPageX - e.pageX,
+                           top: prevPageY - e.pageY });
+                prevPageX = e.pageX;
+                prevPageY = e.pageY;
+                                                    
+                panTimeout = null;
+            }, 1 / frameRate * 1000);
+        }
+
+        function onDragEnd(e) {
+            if (panTimeout) {
+                clearTimeout(panTimeout);
+                panTimeout = null;
+            }
+                    
+            plot.getPlaceholder().css('cursor', prevCursor);
+            plot.pan({ left: prevPageX - e.pageX,
+                       top: prevPageY - e.pageY });
+        }
+        
+        function bindEvents(plot, eventHolder) {
+            var o = plot.getOptions();
+            if (o.zoom.interactive) {
+                eventHolder[o.zoom.trigger](onZoomClick);
+                eventHolder.mousewheel(onMouseWheel);
+            }
+
+            if (o.pan.interactive) {
+                eventHolder.bind("dragstart", { distance: 10 }, onDragStart);
+                eventHolder.bind("drag", onDrag);
+                eventHolder.bind("dragend", onDragEnd);
+            }
+        }
+
+        plot.zoomOut = function (args) {
+            if (!args)
+                args = {};
+            
+            if (!args.amount)
+                args.amount = plot.getOptions().zoom.amount;
+
+            args.amount = 1 / args.amount;
+            plot.zoom(args);
+        };
+        
+        plot.zoom = function (args) {
+            if (!args)
+                args = {};
+            
+            var c = args.center,
+                amount = args.amount || plot.getOptions().zoom.amount,
+                w = plot.width(), h = plot.height();
+
+            if (!c)
+                c = { left: w / 2, top: h / 2 };
+                
+            var xf = c.left / w,
+                yf = c.top / h,
+                minmax = {
+                    x: {
+                        min: c.left - xf * w / amount,
+                        max: c.left + (1 - xf) * w / amount
+                    },
+                    y: {
+                        min: c.top - yf * h / amount,
+                        max: c.top + (1 - yf) * h / amount
+                    }
+                };
+
+            $.each(plot.getAxes(), function(_, axis) {
+                var opts = axis.options,
+                    min = minmax[axis.direction].min,
+                    max = minmax[axis.direction].max,
+                    zr = opts.zoomRange,
+                    pr = opts.panRange;
+
+                if (zr === false) // no zooming on this axis
+                    return;
+                    
+                min = axis.c2p(min);
+                max = axis.c2p(max);
+                if (min > max) {
+                    // make sure min < max
+                    var tmp = min;
+                    min = max;
+                    max = tmp;
+                }
+
+                //Check that we are in panRange
+                if (pr) {
+                    if (pr[0] != null && min < pr[0]) {
+                        min = pr[0];
+                    }
+                    if (pr[1] != null && max > pr[1]) {
+                        max = pr[1];
+                    }
+                }
+
+                var range = max - min;
+                if (zr &&
+                    ((zr[0] != null && range < zr[0] && amount >1) ||
+                     (zr[1] != null && range > zr[1] && amount <1)))
+                    return;
+            
+                opts.min = min;
+                opts.max = max;
+            });
+            
+            plot.setupGrid();
+            plot.draw();
+            
+            if (!args.preventEvent)
+                plot.getPlaceholder().trigger("plotzoom", [ plot, args ]);
+        };
+
+        plot.pan = function (args) {
+            var delta = {
+                x: +args.left,
+                y: +args.top
+            };
+
+            if (isNaN(delta.x))
+                delta.x = 0;
+            if (isNaN(delta.y))
+                delta.y = 0;
+
+            $.each(plot.getAxes(), function (_, axis) {
+                var opts = axis.options,
+                    min, max, d = delta[axis.direction];
+
+                min = axis.c2p(axis.p2c(axis.min) + d),
+                max = axis.c2p(axis.p2c(axis.max) + d);
+
+                var pr = opts.panRange;
+                if (pr === false) // no panning on this axis
+                    return;
+                
+                if (pr) {
+                    // check whether we hit the wall
+                    if (pr[0] != null && pr[0] > min) {
+                        d = pr[0] - min;
+                        min += d;
+                        max += d;
+                    }
+                    
+                    if (pr[1] != null && pr[1] < max) {
+                        d = pr[1] - max;
+                        min += d;
+                        max += d;
+                    }
+                }
+                
+                opts.min = min;
+                opts.max = max;
+            });
+            
+            plot.setupGrid();
+            plot.draw();
+            
+            if (!args.preventEvent)
+                plot.getPlaceholder().trigger("plotpan", [ plot, args ]);
+        };
+
+        function shutdown(plot, eventHolder) {
+            eventHolder.unbind(plot.getOptions().zoom.trigger, onZoomClick);
+            eventHolder.unbind("mousewheel", onMouseWheel);
+            eventHolder.unbind("dragstart", onDragStart);
+            eventHolder.unbind("drag", onDrag);
+            eventHolder.unbind("dragend", onDragEnd);
+            if (panTimeout)
+                clearTimeout(panTimeout);
+        }
+        
+        plot.hooks.bindEvents.push(bindEvents);
+        plot.hooks.shutdown.push(shutdown);
+    }
+    
+    $.plot.plugins.push({
+        init: init,
+        options: options,
+        name: 'navigate',
+        version: '1.3'
+    });
+})(jQuery);

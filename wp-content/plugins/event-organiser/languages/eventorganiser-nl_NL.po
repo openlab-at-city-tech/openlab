@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 21:36+0000\n"
+"POT-Creation-Date: 2020-09-13 20:35+0000\n"
 "PO-Revision-Date: 2017-11-03T23:42:56+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1331,22 +1331,22 @@ msgid ""
 "%s."
 msgstr ""
 
-#: includes/class-eo-ical-parser.php:554 includes/class-eo-ical-parser.php:579
+#: includes/class-eo-ical-parser.php:560 includes/class-eo-ical-parser.php:585
 #, php-format
 msgid "[Lines %1$d-%2$d]"
 msgstr "[Regelnummers %1$d-%2$d]"
 
-#: includes/class-eo-ical-parser.php:561 includes/class-eo-ical-parser.php:586
+#: includes/class-eo-ical-parser.php:567 includes/class-eo-ical-parser.php:592
 #, php-format
 msgid "[Line %1$d]"
 msgstr "[Regelnummer %1$d]"
 
-#: includes/class-eo-ical-parser.php:1044
+#: includes/class-eo-ical-parser.php:1066
 #, php-format
 msgid "Invalid date \"%s\". Date expected in YYYYMMDD format."
 msgstr "Ongeldige datum \"%s\". Datum formaat YYYYMMDD wordt verwacht."
 
-#: includes/class-eo-ical-parser.php:1082
+#: includes/class-eo-ical-parser.php:1104
 #, php-format
 msgid ""
 "Invalid datetime \"%s\". Date expected in YYYYMMDDTHHiissZ or "
@@ -1952,12 +1952,12 @@ msgstr ""
 "Staat de locatie er nog niet tussen. Maak dan een nieuwe locatie aan vai de "
 "Locatie pagina."
 
-#: includes/event-organiser-cpt.php:565 includes/event-organiser-cpt.php:573
-#: includes/event-organiser-cpt.php:587
+#: includes/event-organiser-cpt.php:564 includes/event-organiser-cpt.php:581
+#: includes/event-organiser-cpt.php:590
 msgid "Overview"
 msgstr "Overzicht"
 
-#: includes/event-organiser-cpt.php:566
+#: includes/event-organiser-cpt.php:565
 msgid ""
 "This is the list of all saved events. Note that <strong> recurring events "
 "appear as a single row </strong> in the table and the start and end date "
@@ -1968,7 +1968,7 @@ msgstr ""
 "einddatum van de eerste gebeurtenis. Klik op het evenement om het "
 "terugkeerpatroon te bekijken."
 
-#: includes/event-organiser-cpt.php:574
+#: includes/event-organiser-cpt.php:572
 msgid ""
 "Hovering over a row in the venues list will display action links that allow "
 "you to manage that venue. You can perform the following actions:"
@@ -1976,22 +1976,22 @@ msgstr ""
 "Bij bewegen van de muis over de lijst met locaties verschijnen er actie-"
 "links om de locatie te bewerken. De volgende acties zijn mogelijk:"
 
-#: includes/event-organiser-cpt.php:576
+#: includes/event-organiser-cpt.php:574
 msgid ""
 "Edit takes you to the editing screen for that venue. You can also reach that "
 "screen by clicking on the venue title."
 msgstr ""
 "Door te klikken op de titel of op bewerken komt u in het bewerkingsscherm."
 
-#: includes/event-organiser-cpt.php:577
+#: includes/event-organiser-cpt.php:575
 msgid "Delete will permanently remove the venue"
 msgstr "Door te klikken op verwijderen wordt de locatie permanent verwijderd."
 
-#: includes/event-organiser-cpt.php:578
+#: includes/event-organiser-cpt.php:576
 msgid "View will take you to the venue's page"
 msgstr "Door te klikken op bekijken komt u op de locatie-pagina."
 
-#: includes/event-organiser-cpt.php:588
+#: includes/event-organiser-cpt.php:591
 msgid ""
 "This page shows all (occurrances of) events. You can view the summary of an "
 "event by clicking on it. If you have the necessary permissions, a link to "
@@ -2000,7 +2000,7 @@ msgstr ""
 "Deze pagina toont alle evenementen met hun terugkeerpatronen. Bekijk de "
 "samenvatting van een evenement door er op te klikken. "
 
-#: includes/event-organiser-cpt.php:589
+#: includes/event-organiser-cpt.php:592
 msgid ""
 "By clicking the relevant tab, you can view events in Month, Week or Day "
 "mode. You can also filter the events by events by category and venue. The "
@@ -2011,11 +2011,11 @@ msgstr ""
 "categorie en op locatie. Met de 'ga naar datum'-knop kunt u snel naar een "
 "bepaalde datum gaan."
 
-#: includes/event-organiser-cpt.php:593
+#: includes/event-organiser-cpt.php:596
 msgid "Add Event"
 msgstr "Evenement toevoegen"
 
-#: includes/event-organiser-cpt.php:594
+#: includes/event-organiser-cpt.php:597
 msgid ""
 "You can create an event on this Calendar, by clicking on day or dragging "
 "over multiple days (in Month view) or multiple times (in Week and Day view). "
@@ -2029,28 +2029,28 @@ msgstr ""
 "toevoegen. Het evenement kan direct worden gepubliceerd of worden bewaard "
 "als concept. "
 
-#: includes/event-organiser-cpt.php:600
+#: includes/event-organiser-cpt.php:604
 msgid "For more information"
 msgstr "Voor meer informatie"
 
-#: includes/event-organiser-cpt.php:601
+#: includes/event-organiser-cpt.php:605
 #, php-format
 msgid "See the <a %s> documentation</a>"
 msgstr "Bekijk de <a %s> documentatie</a>"
 
-#: includes/event-organiser-cpt.php:602
+#: includes/event-organiser-cpt.php:606
 msgid "Debugging Event Organiser"
 msgstr "Event Organiser debuggen"
 
-#: includes/event-organiser-cpt.php:603
+#: includes/event-organiser-cpt.php:607
 msgid "Go Pro!"
 msgstr "Ga voor Pro!"
 
-#: includes/event-organiser-cpt.php:713 includes/event-organiser-cpt.php:736
+#: includes/event-organiser-cpt.php:717 includes/event-organiser-cpt.php:740
 msgid "Color"
 msgstr "Kleur"
 
-#: includes/event-organiser-cpt.php:719
+#: includes/event-organiser-cpt.php:723
 msgid "Assign the category a colour."
 msgstr "Kies een kleur voor de categorie."
 

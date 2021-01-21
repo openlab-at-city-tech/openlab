@@ -79,6 +79,15 @@ class GWPerksPage {
                     sortPerks();
                 });
 
+				$( '.gp-unregistered.gf_tooltip' )
+					.tooltip( 'option', {
+						position: {
+							my: 'left bottom',
+							at: 'center-26 top-10'
+						},
+						tooltipClass: 'arrow-bottom gp-unregistered'
+					} );
+
             });
 
             function toggleTabs(elem, tab) {
@@ -114,16 +123,6 @@ class GWPerksPage {
             function showLicenseSplash() {
                 jQuery('#install .perk-listings').animate({'opacity': '0.3'}, 500, function(){
                     jQuery('#need-license-splash').fadeIn();
-                });
-            }
-
-            function dismissLicenseSplash() {
-                jQuery.post( ajaxurl, {
-                    pointer: 'need_license_splash',
-                    action: 'dismiss-wp-pointer'
-                });
-                jQuery('#need-license-splash').fadeOut(function(){
-                    jQuery('#install .perk-listings').animate({'opacity': '1.0'}, 500);
                 });
             }
 
@@ -419,9 +418,8 @@ class GWPerksPage {
 
             if( is_callable( array( $perk, 'uninstall' ) ) ) {
                 $actions['uninstall'] = sprintf(
-                    '<a href="%s" class="uninstall delete gf_tooltip" title="%s" data-confirm-message="%s">%s</a>',
+                    '<a href="%s" class="uninstall delete" data-confirm-message="%s">%s</a>',
                         $perk->get_link_for( 'uninstall' ),
-                        __( '<h6>Uninstall Perk</h6> <em>Uninstalling</em> a perk you will <strong>completely remove its data and all files</strong>. This option is available for some perks which create custom tables or store a significant amount of data in the form meta.', 'gravityperks' ),
                         __( 'Are you sure you want to delete this perk and all of its data?', 'gravityperks' ),
                         __( 'Uninstall', 'gravityperks' )
                 );
@@ -452,7 +450,7 @@ class GWPerksPage {
 	    $tooltip = '';
 
 	    if( $is_unregistered ) {
-		    $tooltip .= __( '<b>This perk is unregistered.</b> You will not receive updates for it.', 'gravityperks' );
+		    $tooltip .= __( '<b>This perk is unregistered.</b><br>You will not receive updates for it.', 'gravityperks' );
 	    }
 
 	    if( $is_active && ! $is_supported ) {
@@ -469,10 +467,7 @@ class GWPerksPage {
             <div class="wrap">
 
 	            <?php if( ! empty( $tooltip ) ): ?>
-		            <a class="gp-unregistered tooltip gf_tooltip"
-		               tooltip="<?php echo esc_attr( $tooltip ); ?>"
-		               title="<?php echo esc_attr( $tooltip ); ?>"
-		               href="javascript:void(0);"></a>
+		            <span class="gp-unregistered tooltip gf_tooltip" title="<?php echo esc_attr( $tooltip ); ?>"></span>
 	            <?php endif; ?>
 
                 <h3>
@@ -677,7 +672,7 @@ class GWPerksPage {
                 <form id="gwp_license" method="post" action="<?php echo remove_query_arg( array( 'gwp_deactivate_license' ) ); ?>">
 	                <?php wp_nonce_field('update', 'gwp_license'); ?>
 
-                    <input type="text" name="gwp_license_key" id="gwp_license_key"
+                    <input type="text" name="gwp_license_key" id="gwp_license_key" autocomplete="off"
                            placeholder="Enter your Gravity Perks license..."/>
 
 	                <?php if( GWPerks::has_valid_license() ): ?>

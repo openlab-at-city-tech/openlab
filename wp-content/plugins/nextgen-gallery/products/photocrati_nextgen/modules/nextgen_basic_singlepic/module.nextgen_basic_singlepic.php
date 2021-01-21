@@ -24,7 +24,7 @@ class M_NextGen_Basic_Singlepic extends C_Base_Module
             NGG_BASIC_SINGLEPIC,
             'NextGen Basic Singlepic',
             'Provides a singlepic gallery for NextGEN Gallery',
-            '3.1.8',
+            '3.3.21',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'

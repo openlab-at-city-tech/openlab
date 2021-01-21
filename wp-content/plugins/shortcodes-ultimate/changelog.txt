@@ -1,3 +1,19 @@
+### 5.9.5
+
+Added compatiblity with WordPress 5.6
+Minor improvements
+Fixed readme.txt information
+
+
+### 5.9.4
+
+**Fixes**
+
+- Fixed PHP notice `A non-numeric value encountered` in `[su_dropcap]`
+- Fixed PHP notice `A non-numeric value encountered` in `[su_service]`
+- Updated in-plugin links
+
+
 ### 5.9.3
 
 **What's new**

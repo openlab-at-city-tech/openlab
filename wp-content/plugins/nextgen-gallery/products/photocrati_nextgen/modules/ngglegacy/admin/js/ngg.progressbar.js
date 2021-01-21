@@ -171,9 +171,9 @@
                 const form = $('.nggform');
                 form.prepend("<input type=\"hidden\" name=\"ajax_callback\" value=\""+value+"\">");
                 if (delay)
-                    form.delay(4000).submit();
+                    form.delay(4000).trigger('submit');
                 else
-                    form.submit();
+                    form.trigger('submit')
             }
         }
     };

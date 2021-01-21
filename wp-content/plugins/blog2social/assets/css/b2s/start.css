@@ -1,0 +1,145 @@
+.b2s-dashboard-h4{
+    font-weight: 700;
+    font-size: 24px !important;
+}
+.b2s-dashboard-h5{
+    font-size: 24px;  
+    margin-left: 22px;
+    color: #72777c !important;
+}
+.b2s-dashboard-h6{
+    font-size: 18px;  
+}
+
+.form-inline{
+    margin-bottom: 0px !important;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    vertical-align: middle;
+    width: auto !important;
+    min-width: 250px;
+}
+
+.b2s-mail-update-title{
+    font-weight: 600;
+    font-size: 16px;
+}
+.label {
+    font-size: 90% !important;
+}
+
+/* Widgets */
+.b2s-widget-calendar{
+    margin-top: 10px;
+}
+
+/* Content-Widget */
+.b2s-widget-block-image-content{
+    display: flex;
+    font-size: 22px;
+    line-height: 1.2;
+}
+.b2s-widget-block-image-content > img{
+    margin-right: 10px;
+    min-width: 200px;
+}
+body .form-inline{
+    display: block;
+}
+.b2s-dashboard-multi-widget-inner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 200px;
+}
+.b2s-dashboard-multi-widget-inner .glyphicon-chevron-left{
+    flex: 0 0 15px;
+    font-size: 30px;
+    cursor:pointer
+}
+.b2s-dashboard-multi-widget-inner .glyphicon-chevron-right {
+    flex: 0 0 15px;
+    font-size: 30px;
+    cursor:pointer
+}
+
+.fc-showall-button{
+    color: #fff !important;
+    background-color: #337ab7 !important;
+    border-color: #204d74 !important;
+    text-decoration: none !important;
+}
+
+
+@media(max-width: 530px)
+{
+    .b2s-widget-block-image-content{
+        display: block;
+    }
+    .b2s-widget-block-image-content > img{
+        margin: 5px auto;
+        display: block;
+        height: auto;
+    }
+    .b2s-widget-block-image-content > div > .btn-primary{
+        display: block;
+    }
+
+}
+
+/* Newsletter-Widget*/
+@media(max-width: 768px)
+{
+    #b2snewsletter.form-inline input{
+        width: 100% !important;
+        margin-bottom: 15px;
+    }
+    #b2snewsletter.form-inline a{
+        width: auto;
+    }
+}
+
+ul.b2s-sort-result-item-area{
+    margin-bottom: 0;
+}
+
+.b2sDetailsSchedPostBtn{
+    display: none !important;
+}
+
+/* Aktivität */
+#b2s-activity-date-picker{
+    width: 85px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.b2s-activity-search-content{
+    padding-top: 15px;
+    padding-left:10px;
+    font-weight: 600;
+}
+
+.b2sSortForm.form-inline{
+    margin-bottom: 0px !important;
+}
+
+.fc-day-grid-event{
+    cursor: pointer;   
+}
+
+.fc-left > h2 {
+    margin-left: 20px !important;
+    color: #72777c !important;
+}
+body .fc-state-default{
+    color: #000;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+#b2s-mail-update-input, .b2s-mail-btn {
+    z-index: 0 !important;
+}

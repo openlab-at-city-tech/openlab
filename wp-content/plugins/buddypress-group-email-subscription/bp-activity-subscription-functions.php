@@ -206,6 +206,12 @@ function ass_group_notification_activity( BP_Activity_Activity $activity ) {
 			$add_to_digest_queue = true;
 		}
 
+		// Check whether user preferences should be overridden for admin notices.
+		if ( 'bpges_notice' === $activity->type && bpges_force_immediate_admin_notice( $user_id, $activity, $group_id ) ) {
+			$send_immediately    = true;
+			$add_to_digest_queue = false;
+		}
+
 		/**
 		 * Filters whether a given user should receive immediate notification of the current activity.
 		 *
@@ -300,7 +306,7 @@ function ass_generate_notification( $args = array() ) {
 	$blogname    = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
 	$subject     = apply_filters( 'bp_ass_activity_notification_subject', $r['action'] . ' ' . $blogname, $r['action'], $blogname );
 	$the_content = apply_filters( 'bp_ass_activity_notification_content', $r['content'], $activity_obj, $r['action'], $group );
-	$the_content = ass_clean_content( $the_content );
+	$the_content = ass_clean_content( $the_content, $activity_obj );
 
 	// If message has no content (as in the case of group joins, etc), we'll use a different
 	// $message template
@@ -330,7 +336,17 @@ To view or reply, log in and go to:
 	if ( 0 === strpos( $activity_obj->type, 'bbp_' ) || 'new_groupblog_post' === $activity_obj->type ) {
 		// Not in global cache? Query for post content.
 		if ( empty( $GLOBALS['bp']->ges_content ) ) {
+			$switched = false;
+			if ( 'new_groupblog_post' === $activity_obj->type && function_exists( 'get_groupblog_blog_id' ) ) {
+				$switched = true;
+				switch_to_blog( get_groupblog_blog_id( $group->id ) );
+			}
+
 			$the_content = get_post_field( 'post_content', $activity_obj->secondary_item_id, 'raw' );
+
+			if ( true === $switched ) {
+				restore_current_blog();
+			}
 		} else {
 			$the_content = $GLOBALS['bp']->ges_content;
 			unset( $GLOBALS['bp']->ges_content );
@@ -594,7 +610,7 @@ function bpges_generate_notification( BPGES_Queued_Item $queued_item ) {
 	$blogname    = '[' . get_blog_option( BP_ROOT_BLOG, 'blogname' ) . ']';
 	$subject     = apply_filters( 'bp_ass_activity_notification_subject', $action . ' ' . $blogname, $action, $blogname );
 	$the_content = apply_filters( 'bp_ass_activity_notification_content', $activity->content, $activity, $action, $group );
-	$the_content = ass_clean_content( $the_content );
+	$the_content = ass_clean_content( $the_content, $activity );
 
 	/*
 	 * If it's an activity item, switch the activity permalink to the group homepage
@@ -634,7 +650,17 @@ To view or reply, log in and go to:
 	if ( 0 === strpos( $activity->type, 'bbp_' ) || 'new_groupblog_post' === $activity->type ) {
 		// Not in global cache? Query for post content.
 		if ( empty( $GLOBALS['bp']->ges_content ) ) {
+			$switched = false;
+			if ( 'new_groupblog_post' === $activity->type && function_exists( 'get_groupblog_blog_id' ) ) {
+				$switched = true;
+				switch_to_blog( get_groupblog_blog_id( $group_id ) );
+			}
+
 			$the_content = get_post_field( 'post_content', $activity->secondary_item_id, 'raw' );
+
+			if ( true === $switched ) {
+				restore_current_blog();
+			}
 		} else {
 			$the_content = $GLOBALS['bp']->ges_content;
 			unset( $GLOBALS['bp']->ges_content );
@@ -824,6 +850,17 @@ function ass_send_email( $email_type, $to, $args ) {
 		 * @param string $email_type The GES email type.
 		 */
 		do_action( 'bp_ges_before_bp_send_email', $email_type );
+
+		/**
+		 * Filters the email type that GES uses to send a BuddyPress email.
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param string $email_type Current BP email post type.
+		 * @param array  $args       See bp_send_email()'s third argument for full documentation.
+		 * @param string $to		 Email recipient.
+		 */
+		$email_type = apply_filters( 'ass_send_email_email_type', $email_type, $args, $to );
 
 		/**
 		 * Filter the arguments before GES sends a BuddyPress email.
@@ -1327,6 +1364,9 @@ function ass_default_block_group_activity_types( $retval, $type, $activity ) {
 		// @todo in the future, it might be nice for admins to optionally get this message
 		case 'joined_group' :
 
+		// BP handles these notifications on its own.
+		case 'group_details_updated' :
+
 		case 'created_group' :
 			return false;
 
@@ -1593,12 +1633,11 @@ function ass_subscribe_translate( $status ){
 
 // Handles AJAX request to subscribe/unsubscribe from group
 function ass_group_ajax_callback() {
-	global $bp;
-	//check_ajax_referer( "ass_group_subscribe" );
-
 	$action = $_POST['a'];
 	$user_id = bp_loggedin_user_id();
 	$group_id = $_POST['group_id'];
+
+	check_ajax_referer( "bpges-sub-{$group_id}" );
 
 	ass_group_subscription( $action, $user_id, $group_id );
 
@@ -1821,11 +1860,18 @@ function ass_get_group_admins_mods( $group_id ) {
  *   - convert HTML entities
  *
  * @uses apply_filters() Filter 'ass_clean_content' to modify our cleaning routine
- * @param string $content The email content
+ * @param string               $content  The email content
+ * @param BP_Activity_Activity $activity The activity object.
  * @return string $clean_content The email content, cleaned up for plaintext email
  */
-function ass_clean_content( $content ) {
-	return apply_filters( 'ass_clean_content', $content );
+function ass_clean_content( $content, $activity = null ) {
+	/**
+	 * Filter for "cleaning" BPGES email content.
+	 *
+	 * @param string               $content  Email content.
+	 * @param BP_Activity_Activity $activity Activity object.
+	 */
+	return apply_filters( 'ass_clean_content', $content, $activity );
 }
 
 // By default, we run content through these filters, which can be individually removed
@@ -2270,10 +2316,9 @@ function ass_get_forum_type() {
 
 		$type = 'bbpress';
 
-	// check for BP's bundled forums
+	// check for BP's bundled legacy forums.
 	} else {
-		// BP's bundled forums aren't installed correctly, so stop!
-		if ( ! bp_is_active( 'forums' ) || ! bp_forums_is_installed_correctly() ) {
+		if ( ! bp_is_active( 'forums' ) ) {
 			return false;
 		}
 
@@ -2314,6 +2359,36 @@ function ass_add_gd_bbpress_attachments_to_email_content( $content, $activity ) 
 	return $content . $attachment_message;
 }
 add_filter( 'bp_ass_activity_notification_content', 'ass_add_gd_bbpress_attachments_to_email_content', 100, 2 );
+
+/**
+ * Determines whether admin notices should be forced to 'immediate', overriding user preferences.
+ *
+ * If false, user notification preferences for the group will be respected.
+ *
+ * @since 4.0.0
+ *
+ * @param int                  $user_id  Optional. ID of the user.
+ * @param BP_Activity_Activity $activity Optional .Activity item.
+ * @param int                  $group_id Optional. ID of the group.
+ * @return bool
+ */
+function bpges_force_immediate_admin_notice( $user_id = null, $activity = null, $group_id = null ) {
+	$force = false;
+
+	/**
+	 * Filters whether admin notices should be forced to 'immediate', overriding user preferences.
+	 *
+	 * Please consider the implications of overriding user notification preferences before changing this toggle.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param bool                 $force    Whether to force 'immediate' email for the admin notice.
+	 * @param int                  $user_id  ID of the user.
+	 * @param BP_Activity_Activity $activity Activity item.
+	 * @param int                  $group_id ID of the group.
+	 */
+	return apply_filters( 'bpges_force_immediate_admin_notice', $force, $user_id, $activity, $group_id );
+}
 
 /**
  * Determine whether user should receive a notification of their own posts

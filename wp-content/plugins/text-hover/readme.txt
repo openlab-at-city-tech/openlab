@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: text, post content, abbreviations, terms, acronyms, hover, help, tooltips, coffee2code
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 4.7
-Tested up to: 5.3
-Stable tag: 3.9.1
+Requires at least: 4.9
+Tested up to: 5.4
+Stable tag: 4.0
 
 Add hover text to regular text in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms mentioned in posts/pages.
 
@@ -30,7 +30,7 @@ Additional features of the plugin controlled both via settings and filters:
 
 **Note:** This is not the same as my [Text Replace](https://wordpress.org/plugins/text-replace) plugin, which defines terms or phrases that you want replaced by replacement text when displayed on your site. Text Hover instead adds the hover text as additional information for when visitors hover over the term, which is otherwise displayed in the post as you typed it.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](https://wordpress.org/plugins/text-hover/) | [GitHub](https://github.com/coffee2code/text-hover/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/text-hover/) | [Plugin Directory Page](https://wordpress.org/plugins/text-hover/) | [GitHub](https://github.com/coffee2code/text-hover/) | [Author Homepage](https://coffee2code.com)
 
 
 == Installation ==
@@ -153,6 +153,30 @@ function my_c2c_text_hover_third_party_filters( $filters ) {
 add_filter( 'c2c_text_hover_third_party_filters', 'my_c2c_text_hover_third_party_filters' );
 `
 
+**c2c_text_hover_filter_priority (filter)**
+
+The 'c2c_text_hover_filter_priority' hook allows you to override the default priority for the 'c2c_text_hover' filter.
+
+Arguments:
+
+* $priority (int): The priority for the 'c2c_text_hover' filter. The default value is 2.
+* $filter (string): The filter name.
+
+Example:
+
+`
+/**
+ * Change the default priority of the 'c2c_text_hover' filter to run after most other plugins.
+ *
+ * @param int $priority The priority for the 'c2c_text_hover' filter.
+ * @return int
+ */
+function my_change_priority_for_c2c_text_hover( $priority, $filter ) {
+	return 1000;
+}
+add_filter( 'c2c_text_hover_filter_priority', 'my_change_priority_for_c2c_text_hover', 10, 2 );
+`
+
 **c2c_text_hover (filter)**
 
 The 'c2c_text_hover' hook allows you to customize or override the setting defining all of the text hover terms and their hover texts.
@@ -237,6 +261,46 @@ add_filter( 'c2c_text_hover_use_pretty_tooltips', '__return_false' );`
 
 == Changelog ==
 
+= 4.0 (2020-07-16) =
+
+Highlights:
+
+* This minor release adds a new setting that can allow the plugin to run later to avoid potential conflicts with other plugins, now allows hover strings to begin or end with punctuation, updates its plugin framework, adds a TODO.md file, updates a few URLs to be HTTPS, expands unit testing, and updates compatibility to be WP 4.9-5.4+.
+
+Details:
+
+* New: Add new setting to allow control over when text hovers are handled early or late in text processing process
+* New: Add filter `c2c_text_hover_filter_priority` for filtering hook priority for text hover handler
+* New: Allow text to hover string to begin and/or end in punctuation.
+* New: Add TODO.md and move existing TODO list from top of main plugin file into it
+* Change: Update plugin framework to 050
+    * 050:
+    * Allow a hash entry to literally have '0' as a value without being entirely omitted when saved
+    * Output donation markup using `printf()` rather than using string concatenation
+    * Update copyright date (2020)
+    * Note compatibility through WP 5.4+
+    * Drop compatibility with versions of WP older than 4.9
+* Change: Remove plugin setting page help text indicating order matters (it hasn't since v3.8)
+* Change: Note compatibility through WP 5.4+
+* Change: Drop compatibility with versions of WP older than 4.9
+* Change: Update links to coffee2code.com to be HTTPS
+* Unit tests:
+    * New: Add `get_filter_names()` as a helper method for getting the default and third-party filter names
+    * New: Add `unhook_default_filters()` as a helper method to unhook plugin's default filters hooked to `text_hover()`
+    * New: Add test case for hover text that includes HTML
+    * New: Add tests for `enqueue_scripts()`, `options_page_description()`
+    * New: Add test for setting name
+    * New: Add tests for setting defaults
+    * New: Add explicit tests to ensure falsey hover text values don't alter original text
+    * New: Add explicit tests to ensure text replacements don't occur within `abbr` tag contents or in any tag attributes
+    * Change: Store plugin instance in test object to simplify referencing it
+    * Change: Remove unnecessary unregistering of hooks in `tearDown()`
+    * Change: Add `$priority` argument to `test_hover_applies_to_default_filters()`
+    * Change: Remove duplicative `reset_options()` call
+    * Change: Rename unit test function so that it is treated as a unit test
+    * Change: Use HTTPS for link to WP SVN repository in bin script for configuring unit tests (and delete commented-out code)
+* Change: Update screenshot
+
 = 3.9.1 (2020-01-12) =
 * Fix: Revert to apply to the `the_excerpt` filter, which was mistakenly changed to `get_the_excerpt`
 * Change: Update some inline documentation relating to third-party plugin hook support
@@ -275,53 +339,13 @@ Details:
 * Change: Update License URI to be HTTPS
 * Change: Split paragraph in README.md's "Support" section into two
 
-= 3.8 (2018-08-01) =
-* New: Ensure longer, more precise link strings match before shorter strings that might also match, regardless of order defined
-* New: Add support for finding text to hover that may span more than one line or whose internal spaces vary in number and type
-* Fix: Prevent hover text from being embedded within other hover text
-* Change: Switch for using deprecated 'acronym' tag to using 'abbr'
-* Change: Display fancy hover text as white text on a dark gray background
-* Change: Cast return values of hooks to expected data types
-* Change: Add version number when enqueuing CSS files
-* Change: Update plugin framework to 048
-    * 048:
-    * When resetting options, delete the option rather than setting it with default values
-    * Prevent double "Settings reset" admin notice upon settings reset
-    * 047:
-    * Don't save default setting values to database on install
-    * Change "Cheatin', huh?" error messages to "Something went wrong.", consistent with WP core
-    * Note compatibility through WP 4.9+
-    * Drop compatibility with version of WP older than 4.7
-    * 046:
-    * Fix `reset_options()` to reference instance variable `$options`
-    * Note compatibility through WP 4.7+
-    * Update copyright date (2017)
-    * 045:
-    * Ensure `reset_options()` resets values saved in the database
-* New: Add README.md
-* New: Add GitHub link to readme
-* Change: Store setting name in constant
-* Unit tests:
-    * Change: Improve test initialization
-    * Change: Improve tests for settings handling
-    * Change: Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
-    * Change: Enable more error output for unit tests
-    * New: Add more tests
-    * New: Add header comments to bootstrap
-* Change: Note compatibility through WP 4.9+
-* Change: Drop compatibility with version of WP older than 4.7.
-* Change: Tweak plugin description
-* Change: Minor code reformatting
-* Change: Add example of better looking tooltip alongside basic tooltip example
-* Change: Rename readme.txt section from 'Filters' to 'Hooks'
-* Change: Modify formatting of hook name in readme to prevent being uppercased when shown in the Plugin Directory
-* Change: Update installation instruction to prefer built-in installer over .zip file
-* Change: Update copyright date (2018)
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/text-hover/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 4.0 =
+Minor release: added setting to allow plugin to run later to avoid potential conflicts with other plugins, allowed hover strings to begin/end in punctuation, updated plugin framework, added TODO.md, updated some URLs to be HTTPS, expanded unit testing, and updated compatibility to be WP 4.9-5.4+.
 
 = 3.9.1 =
 Minor bugfix release: restored hooking of WP's `the_excerpt` filter instead of `get_the_excerpt`, corrected some inline documentation, and made minor improvements to unit tests.
