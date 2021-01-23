@@ -1246,7 +1246,7 @@ function openlab_show_site_posts_and_comments() {
 			}
 
 			$active_plugins = get_option( 'active_plugins', [] );
-			$has_grade_comments = in_array( 'openlab-grade-comments/openlab-grade-comments.php', $active_plugins, true );
+			$has_grade_comments = in_array( 'wp-grade-comments/wp-grade-comments.php', $active_plugins, true );
 			$has_private_comments = in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true );
 
 			// Set up comments
