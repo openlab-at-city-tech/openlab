@@ -242,6 +242,10 @@ function openlab_jetpack_module_management( $modules ) {
 		unset( $modules['notes'] );
 	}
 
+	if ( isset( $modules['protect'] ) ) {
+		unset( $modules['protect'] );
+	}
+
 	return $modules;
 }
 
