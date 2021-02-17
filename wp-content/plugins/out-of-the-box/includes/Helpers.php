@@ -576,6 +576,40 @@ class Helpers
         }
     }
 
+    public static function encrypt($data)
+    {
+        // Fallback for servers without openssl support
+        if (false === function_exists('openssl_encrypt') || false === in_array('aes-256-cbc', openssl_get_cipher_methods())) {
+            return base64_encode($data);
+        }
+
+        $method = 'aes-256-cbc';
+        $iv_length = openssl_cipher_iv_length($method);
+        $iv = openssl_random_pseudo_bytes($iv_length);
+
+        $first_encrypted = openssl_encrypt($data, $method, OUTOFTHEBOX_AUTH_KEY, OPENSSL_RAW_DATA, $iv);
+
+        return base64_encode($iv.$first_encrypted);
+    }
+
+    public static function decrypt($input)
+    {
+        $mix = base64_decode($input);
+
+        // Fallback for servers without openssl support
+        if (false === function_exists('openssl_encrypt') || false === in_array('aes-256-cbc', openssl_get_cipher_methods())) {
+            return $mix;
+        }
+
+        $method = 'aes-256-cbc';
+        $iv_length = openssl_cipher_iv_length($method);
+
+        $iv = substr($mix, 0, $iv_length);
+        $first_encrypted = substr($mix, $iv_length);
+
+        return  openssl_decrypt($first_encrypted, $method, OUTOFTHEBOX_AUTH_KEY, OPENSSL_RAW_DATA, $iv);
+    }
+
     public static function get_mimetype($extension = '')
     {
         if (empty($extension)) {

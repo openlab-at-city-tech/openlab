@@ -84,7 +84,8 @@ class Processor
     {
         if (!isset($_REQUEST['action'])) {
             error_log('[WP Cloud Plugin message]: '." Function start_process() requires an 'action' request");
-            die();
+
+            exit();
         }
 
         if (isset($_REQUEST['account_id'])) {
@@ -93,7 +94,8 @@ class Processor
                 $this->set_current_account($requested_account);
             } else {
                 error_log(sprintf('[WP Cloud Plugin message]: '." Function start_process() cannot use the requested account (ID: %s) as it isn't linked with the plugin", $_REQUEST['account_id']));
-                die();
+
+                exit();
             }
         }
 
@@ -104,7 +106,7 @@ class Processor
         if ((true === $authorized) && ('outofthebox-revoke' === $_REQUEST['action'])) {
             if (Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
                 if (null === $this->get_current_account()) {
-                    die(-1);
+                    exit(-1);
                 }
 
                 if ('true' === $_REQUEST['force']) {
@@ -114,44 +116,48 @@ class Processor
                 }
             }
 
-            die(1);
+            exit(1);
         }
 
         if ('outofthebox-factory-reset' === $_REQUEST['action']) {
             if (Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
                 $this->get_main()->do_factory_reset();
             }
-            die(1);
+
+            exit(1);
         }
 
         if ('outofthebox-reset-cache' === $_REQUEST['action']) {
             if (Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
                 $this->reset_complete_cache();
             }
-            die(1);
+
+            exit(1);
         }
 
         if ('outofthebox-reset-statistics' === $_REQUEST['action']) {
             if (Helpers::check_user_role($this->settings['permissions_edit_settings'])) {
                 Events::truncate_database();
             }
-            die(1);
+
+            exit(1);
         }
 
         if (is_wp_error($authorized)) {
             error_log('[WP Cloud Plugin message]: '." Function start_process() isn't authorized");
 
             if ('1' === $this->options['debug']) {
-                die($authorized->get_error_message());
+                exit($authorized->get_error_message());
             }
-            die();
+
+            exit();
         }
 
         if ((!isset($_REQUEST['listtoken']))) {
             error_log('[WP Cloud Plugin message]: '." Function start_process() requires a 'listtoken' request");
             error_log(var_export($_REQUEST, true));
 
-            die(1);
+            exit(1);
         }
 
         $this->listtoken = $_REQUEST['listtoken'];
@@ -160,7 +166,16 @@ class Processor
         if (false === $this->options) {
             $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
             error_log('[WP Cloud Plugin message]: '.' Function start_process('.$_REQUEST['action'].") hasn't received a valid listtoken (".$this->listtoken.") on: {$url} \n");
-            die();
+
+            exit();
+        }
+
+        if (false === $this->get_user()->can_view()) {
+            $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+            $request = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            error_log('[WP Cloud Plugin message]: '." Function start_process() discovered that an user didn't have the permission to view the plugin on {$url} requested via {$request}");
+
+            exit();
         }
 
         if (null === $this->get_current_account() || false === $this->get_current_account()->get_authorization()->has_access_token()) {
@@ -184,12 +199,6 @@ class Processor
 
         $this->_rootFolder = html_entity_decode($this->_rootFolder);
         $this->_rootFolder = str_replace('//', '/', $this->_rootFolder);
-
-        if (false === $this->get_user()->can_view()) {
-            error_log('[WP Cloud Plugin message]: '." Function start_process() discovered that an user didn't have the permission to view the plugin");
-
-            die();
-        }
 
         if (isset($_REQUEST['lastpath'])) {
             $this->_lastPath = stripslashes(rawurldecode($_REQUEST['lastpath']));
@@ -217,7 +226,8 @@ class Processor
                 $cached_request = new CacheRequest($this);
                 if ($cached_request->is_cached()) {
                     echo $cached_request->get_cached_response();
-                    die();
+
+                    exit();
                 }
             }
         }
@@ -235,23 +245,26 @@ class Processor
                 }
 
                 break;
+
             case 'outofthebox-preview':
                 $preview = $this->get_client()->preview_entry();
 
                 break;
+
             case 'outofthebox-download':
                 if (false === $this->get_user()->can_download()) {
-                    die();
+                    exit();
                 }
 
                 $file = $this->get_client()->download_entry();
-                die();
+
+                exit();
 
                 break;
-            case 'outofthebox-create-zip':
 
+            case 'outofthebox-create-zip':
                 if (false === $this->get_user()->can_download()) {
-                    die();
+                    exit();
                 }
 
                 $request_id = $_REQUEST['request_id'];
@@ -262,6 +275,7 @@ class Processor
                         $zip->do_zip();
 
                         break;
+
                     case 'get-progress':
                         Zip::get_status($request_id);
 
@@ -269,6 +283,7 @@ class Processor
                 }
 
                 break;
+
             case 'outofthebox-create-link':
             case 'outofthebox-embedded':
                 $link = [];
@@ -283,14 +298,17 @@ class Processor
                     $link = $this->get_client()->get_shared_link_for_output();
                 }
                 echo json_encode($link);
-                die();
+
+                exit();
 
                 break;
+
             case 'outofthebox-get-gallery':
                 if (is_wp_error($authorized)) {
                     // No valid token is set
                     echo json_encode(['lastpath' => $this->_lastPath, 'folder' => '', 'html' => '']);
-                    die();
+
+                    exit();
                 }
 
                 $gallery = new Gallery($this);
@@ -301,54 +319,63 @@ class Processor
                     $imagelist = $gallery->get_images_list(); // Read folder
                 }
 
-                die();
+                exit();
 
                 break;
+
             case 'outofthebox-upload-file':
                 $user_can_upload = $this->get_user()->can_upload();
 
                 if (is_wp_error($authorized) || false === $user_can_upload) {
-                    die();
+                    exit();
                 }
 
                 $upload_processor = new Upload($this);
+
                 switch ($_REQUEST['type']) {
                     case 'upload-preprocess':
                         $status = $upload_processor->upload_pre_process();
 
                         break;
+
                     case 'do-upload':
                         $upload = $upload_processor->do_upload();
 
                         break;
+
                     case 'get-status':
                         $status = $upload_processor->get_upload_status();
 
                         break;
+
                     case 'get-direct-url':
                         $status = $upload_processor->do_upload_direct();
 
                         break;
+
                     case 'upload-convert':
                         $status = $upload_processor->upload_convert();
 
                         break;
+
                     case 'upload-postprocess':
                         $status = $upload_processor->upload_post_process();
 
                         break;
                 }
 
-                die();
+                exit();
 
                 break;
+
             case 'outofthebox-delete-entries':
 //Check if user is allowed to delete entry
                 $user_can_delete = $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders();
 
                 if (is_wp_error($authorized) || false === $user_can_delete || !isset($_REQUEST['entries'])) {
                     echo json_encode(['result' => '-1', 'msg' => __('Failed to delete entry', 'wpcloudplugins')]);
-                    die();
+
+                    exit();
                 }
 
                 $entries_to_delete = $_REQUEST['entries'];
@@ -357,20 +384,24 @@ class Processor
                 foreach ($entries as $entry) {
                     if (false === $entry) {
                         echo json_encode(['result' => '-1', 'msg' => __('Not all entries could be deleted', 'wpcloudplugins')]);
-                        die();
+
+                        exit();
                     }
                 }
                 echo json_encode(['result' => '1', 'msg' => __('Entry was deleted', 'wpcloudplugins')]);
-                die();
+
+                exit();
 
                 break;
+
             case 'outofthebox-rename-entry':
                 // Check if user is allowed to rename entry
                 $user_can_rename = $this->get_user()->can_rename_files() || $this->get_user()->can_rename_folders();
 
                 if (is_wp_error($authorized) || false === $user_can_rename) {
                     echo json_encode(['result' => '-1', 'msg' => __('Failed to rename entry', 'wpcloudplugins')]);
-                    die();
+
+                    exit();
                 }
 
                 // Strip unsafe characters
@@ -385,16 +416,18 @@ class Processor
                     echo json_encode(['result' => '1', 'msg' => __('Entry was renamed', 'wpcloudplugins')]);
                 }
 
-                die();
+                exit();
 
                 break;
+
             case 'outofthebox-copy-entry':
                 //Check if user is allowed to rename entry
                 $user_can_copy = $this->get_user()->can_copy_files() || $this->get_user()->can_copy_folders();
 
                 if (false === $user_can_copy) {
                     echo json_encode(['result' => '-1', 'msg' => __('Failed to copy entry', 'wpcloudplugins')]);
-                    die();
+
+                    exit();
                 }
 
                 //Strip unsafe characters
@@ -409,17 +442,18 @@ class Processor
                     echo json_encode(['result' => '1', 'msg' => __('Entry was copied', 'wpcloudplugins')]);
                 }
 
-                die();
+                exit();
 
                 break;
-            case 'outofthebox-move-entries':
 
+            case 'outofthebox-move-entries':
                 // Check if user is allowed to move entry
                 $user_can_move = $this->get_user()->can_move();
 
                 if (false === $user_can_move) {
                     echo json_encode(['result' => '-1', 'msg' => __('Failed to move', 'wpcloudplugins')]);
-                    die();
+
+                    exit();
                 }
 
                 $entries_to_move = $_REQUEST['entries'];
@@ -435,16 +469,17 @@ class Processor
                 foreach ($entries as $entry) {
                     if (is_wp_error($entry) || empty($entry)) {
                         echo json_encode(['result' => '-1', 'msg' => __('Not all entries could be moved', 'wpcloudplugins')]);
-                        die();
+
+                        exit();
                     }
                 }
                 echo json_encode(['result' => '1', 'msg' => __('Successfully moved to new location', 'wpcloudplugins')]);
 
-                die();
+                exit();
 
                 break;
-            case 'outofthebox-create-entry':
 
+            case 'outofthebox-create-entry':
 //Strip unsafe characters
                 $_name = rawurldecode($_REQUEST['name']);
                 $new_name = Helpers::filter_filename($_name, false);
@@ -455,7 +490,8 @@ class Processor
 
                 if (false === $user_can_create_entry) {
                     echo json_encode(['result' => '-1', 'msg' => __('Failed to add entry', 'wpcloudplugins')]);
-                    die();
+
+                    exit();
                 }
 
                 $file = $this->get_client()->add_folder($new_name);
@@ -467,25 +503,33 @@ class Processor
                 } else {
                     echo json_encode(['result' => '1', 'msg' => $new_name.' '.__('was added', 'wpcloudplugins'), 'lastpath' => rawurlencode($this->_lastPath)]);
                 }
-                die();
+
+                exit();
 
                 break;
+
             case 'outofthebox-get-playlist':
                 if (is_wp_error($authorized)) {
-                    die();
+                    exit();
                 }
 
                 $mediaplayer = new Mediaplayer($this);
                 $playlist = $mediaplayer->get_media_list();
 
                 break;
+
             case 'outofthebox-stream':
                 $file = $this->get_client()->stream_entry();
 
                 break;
+
+            case 'outofthebox-event-log':
+                return;
+
             default:
                 error_log('[WP Cloud Plugin message]: '.sprintf('No valid AJAX request: %s', $_REQUEST['action']));
-                die();
+
+                exit();
         }
     }
 
@@ -848,6 +892,7 @@ class Processor
                 } else {
                     echo "<div id='OutoftheBox' class='{$colors['style']}'>";
                     $this->load_scripts('general');
+
                     include sprintf('%s/templates/frontend/noaccess.php', OUTOFTHEBOX_ROOTDIR);
                     echo '</div>';
 
@@ -870,7 +915,6 @@ class Processor
 
         switch ($this->options['mode']) {
             case 'files':
-
                 $this->load_scripts('files');
 
                 echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." jsdisabled' data-list='files' data-token='{$this->listtoken}'  data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-popout='".$this->options['canpopout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}' data-type='{$this->options['mcepopup']}'>";
@@ -894,15 +938,15 @@ class Processor
                 echo '</div>';
 
                 break;
-            case 'upload':
 
+            case 'upload':
                 echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox upload jsdisabled'  data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."'>";
                 $this->render_uploadform();
                 echo '</div>';
 
                 break;
-            case 'gallery':
 
+            case 'gallery':
                 $this->load_scripts('files');
 
                 $nextimages = '';
@@ -911,18 +955,22 @@ class Processor
                 }
 
                 echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox gridgallery jsdisabled' data-list='gallery' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."'  data-targetheight='".$this->options['targetheight']."' data-deeplink='".((!empty($_REQUEST['image'])) ? $_REQUEST['image'] : '')."' data-slideshow='".$this->options['slideshow']."' data-pausetime='".$this->options['pausetime']."' {$nextimages} data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
+
                 include sprintf('%s/templates/frontend/gallery.php', OUTOFTHEBOX_ROOTDIR);
                 $this->render_uploadform();
                 echo '</div>';
 
                 break;
+
             case 'search':
                 echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." searchlist jsdisabled' data-list='search' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
                 $this->load_scripts('files');
+
                 include sprintf('%s/templates/frontend/search.php', OUTOFTHEBOX_ROOTDIR);
                 echo '</div>';
 
                 break;
+
             case 'video':
             case 'audio':
                 $mediaplayer = $this->load_mediaplayer($this->options['mediaskin']);
@@ -973,13 +1021,15 @@ class Processor
         $max_number_of_uploads = $this->options['maxnumberofuploads'];
 
         $this->load_scripts('upload');
+
         include sprintf('%s/templates/frontend/upload_box.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     public function create_thumbnail()
     {
         $this->get_client()->build_thumbnail();
-        die();
+
+        exit();
     }
 
     public function get_last_path()
@@ -1099,10 +1149,12 @@ class Processor
                             $sort_field = 'path_display';
 
                             break;
+
                         case 'size':
                             $sort_field = 'size';
 
                             break;
+
                         case 'modified':
                             $sort_field = 'last_edited';
 
@@ -1114,6 +1166,7 @@ class Processor
                             $sort_order = SORT_ASC;
 
                             break;
+
                         case 'desc':
                             $sort_order = SORT_DESC;
 
@@ -1135,11 +1188,7 @@ class Processor
             }
 
             // Sort by dir desc and then by name asc
-            if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-                array_multisort($sort['is_dir'], SORT_DESC, SORT_REGULAR, $sort['sort'], $sort_order, SORT_NATURAL, $foldercontents, SORT_ASC);
-            } else {
-                array_multisort($sort['is_dir'], SORT_DESC, $sort['sort'], $sort_order, $foldercontents);
-            }
+            array_multisort($sort['is_dir'], SORT_DESC, SORT_REGULAR, $sort['sort'], $sort_order, SORT_NATURAL, $foldercontents, SORT_ASC);
         }
 
         $foldercontents = apply_filters('outofthebox_sort_filelist', $foldercontents, $sort_field, $sort_order, $this);
@@ -1278,6 +1327,33 @@ class Processor
         }
 
         return true;
+    }
+
+    public function is_filtering_entries()
+    {
+        if ('0' === $this->get_shortcode_option('show_files')) {
+            return true;
+        }
+
+        if ('0' === $this->get_shortcode_option('show_folders')) {
+            return true;
+        }
+
+        $extensions = $this->get_shortcode_option('ext');
+        if ('*' !== $extensions[0]) {
+            return true;
+        }
+
+        $hide_entries = $this->get_shortcode_option('exclude');
+        if ('*' !== $hide_entries[0]) {
+            return true;
+        }
+        $include_entries = $this->get_shortcode_option('include');
+        if ('*' !== $include_entries[0]) {
+            return true;
+        }
+
+        return false;
     }
 
     // Check if $extensions array has $entry
@@ -1615,6 +1691,7 @@ class Processor
                 add_action('admin_footer', [$this->get_main(), 'load_custom_css'], 100);
 
                 break;
+
             case 'files':
                 if ($this->get_user()->can_move()) {
                     wp_enqueue_script('jquery-ui-droppable');
@@ -1628,9 +1705,10 @@ class Processor
                 wp_enqueue_script('google-recaptcha');
 
                 break;
-            case 'mediaplayer':
 
+            case 'mediaplayer':
                 break;
+
             case 'upload':
                 //wp_enqueue_style('OutoftheBox-fileupload-jquery-ui');
                 wp_enqueue_script('jquery-ui-droppable');
@@ -1698,6 +1776,7 @@ class Processor
 
         if ($allow_nonce_verification && isset($_REQUEST['action']) && (false === $hook) && is_user_logged_in()) {
             $is_authorized = false;
+
             switch ($_REQUEST['action']) {
                 case 'outofthebox-get-filelist':
                 case 'outofthebox-get-gallery':
@@ -1709,13 +1788,16 @@ class Processor
                 case 'outofthebox-create-entry':
                 case 'outofthebox-create-zip':
                 case 'outofthebox-delete-entries':
+                case 'outofthebox-event-log':
                     $is_authorized = check_ajax_referer($_REQUEST['action'], false, false);
 
                     break;
+
                 case 'outofthebox-create-link':
                     $is_authorized = check_ajax_referer('outofthebox-create-link', false, false);
 
                     break;
+
                 case 'outofthebox-embedded':
                 case 'outofthebox-download':
                 case 'outofthebox-stream':
@@ -1725,33 +1807,40 @@ class Processor
                     $is_authorized = true;
 
                     break;
+
                 case 'outofthebox-reset-cache':
                 case 'outofthebox-factory-reset':
                 case 'outofthebox-reset-statistics':
                     $is_authorized = check_ajax_referer('outofthebox-admin-action', false, false);
 
                     break;
+
                 case 'outofthebox-revoke':
                     $is_authorized = (false !== check_ajax_referer('outofthebox-admin-action', false, false));
 
                     break;
+
                 case 'edit': // Required for integration one Page/Post pages
                     $is_authorized = true;
 
                     break;
+
                 case 'editpost': // Required for Yoast SEO Link Watcher trying to build the shortcode
                 case 'elementor':
                 case 'elementor_ajax':
                 case 'wpseo_filter_shortcodes':
                     return false;
+
                 default:
                     error_log('[WP Cloud Plugin message]: '." Function _is_action_authorized() didn't receive a valid action: ".$_REQUEST['action']);
-                    die();
+
+                    exit();
             }
 
             if (false === $is_authorized) {
                 error_log('[WP Cloud Plugin message]: '." Function _is_action_authorized() didn't receive a valid nonce");
-                die();
+
+                exit();
             }
         }
 

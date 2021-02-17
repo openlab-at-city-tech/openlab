@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Tests\Support;
+namespace Tightenco\Collect\Tests\Support;
 
 use stdClass;
 use ArrayAccess;
@@ -8,10 +8,9 @@ use Mockery as m;
 use ReflectionClass;
 use JsonSerializable;
 use PHPUnit\Framework\TestCase;
-use Illuminate\Support\Collection;
-use PHPUnit_Framework_Error_Notice;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Arrayable;
+use Tightenco\Collect\Support\Collection;
+use Tightenco\Collect\Contracts\Support\Jsonable;
+use Tightenco\Collect\Contracts\Support\Arrayable;
 
 class SupportCollectionTest extends TestCase
 {
@@ -44,6 +43,19 @@ class SupportCollectionTest extends TestCase
         $data = new Collection;
         $result = $data->first(null, 'default');
         $this->assertEquals('default', $result);
+    }
+
+    public function testFirstWhere()
+    {
+        $data = new Collection([
+            ['material' => 'paper', 'type' => 'book'],
+            ['material' => 'rubber', 'type' => 'gasket'],
+        ]);
+
+        $this->assertEquals('book', $data->firstWhere('material', 'paper')['type']);
+        $this->assertEquals('gasket', $data->firstWhere('material', 'rubber')['type']);
+        $this->assertNull($data->firstWhere('material', 'nonexistant'));
+        $this->assertNull($data->firstWhere('nonexistant', 'key'));
     }
 
     public function testLastReturnsLastItemInCollection()
@@ -99,7 +111,7 @@ class SupportCollectionTest extends TestCase
 
     public function testEmptyCollectionIsEmpty()
     {
-        $c = new Collection();
+        $c = new Collection;
 
         $this->assertTrue($c->isEmpty());
     }
@@ -124,10 +136,10 @@ class SupportCollectionTest extends TestCase
         $this->assertSame([false], $collection->all());
 
         $collection = new Collection(null);
-        $this->assertSame([], $collection->all());
+        $this->assertEmpty($collection->all());
 
         $collection = new Collection;
-        $this->assertSame([], $collection->all());
+        $this->assertEmpty($collection->all());
     }
 
     public function testGetArrayableItems()
@@ -161,9 +173,9 @@ class SupportCollectionTest extends TestCase
 
     public function testToArrayCallsToArrayOnEachItemInCollection()
     {
-        $item1 = m::mock('Illuminate\Contracts\Support\Arrayable');
+        $item1 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
         $item1->shouldReceive('toArray')->once()->andReturn('foo.array');
-        $item2 = m::mock('Illuminate\Contracts\Support\Arrayable');
+        $item2 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
         $item2->shouldReceive('toArray')->once()->andReturn('bar.array');
         $c = new Collection([$item1, $item2]);
         $results = $c->toArray();
@@ -175,7 +187,7 @@ class SupportCollectionTest extends TestCase
     {
         $item1 = m::mock('JsonSerializable');
         $item1->shouldReceive('jsonSerialize')->once()->andReturn('foo.json');
-        $item2 = m::mock('Illuminate\Contracts\Support\Arrayable');
+        $item2 = m::mock('Tightenco\Collect\Contracts\Support\Arrayable');
         $item2->shouldReceive('toArray')->once()->andReturn('bar.array');
         $c = new Collection([$item1, $item2]);
         $results = $c->jsonSerialize();
@@ -228,15 +240,6 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals('bar', $c->offsetGet(1));
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
-    public function testArrayAccessOffsetGetOnNonExist()
-    {
-        $c = new Collection(['foo', 'bar']);
-        $c->offsetGet(1000);
-    }
-
     public function testArrayAccessOffsetSet()
     {
         $c = new Collection(['foo', 'foo']);
@@ -248,15 +251,12 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals('qux', $c[2]);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
     public function testArrayAccessOffsetUnset()
     {
         $c = new Collection(['foo', 'bar']);
 
         $c->offsetUnset(1);
-        $c[1];
+        $this->assertFalse(isset($c[1]));
     }
 
     public function testForgetSingleKey()
@@ -320,6 +320,50 @@ class SupportCollectionTest extends TestCase
         })->all());
     }
 
+    public function testHigherOrderKeyBy()
+    {
+        $c = new Collection([
+            ['id' => 'id1', 'name' => 'first'],
+            ['id' => 'id2', 'name' => 'second'],
+        ]);
+
+        $this->assertEquals(['id1' => 'first', 'id2' => 'second'], $c->keyBy->id->map->name->all());
+    }
+
+    public function testHigherOrderUnique()
+    {
+        $c = new Collection([
+            ['id' => '1', 'name' => 'first'],
+            ['id' => '1', 'name' => 'second'],
+        ]);
+
+        $this->assertCount(1, $c->unique->id);
+    }
+
+    public function testHigherOrderFilter()
+    {
+        $c = new Collection([
+            new class {
+                public $name = 'Alex';
+
+                public function active()
+                {
+                    return true;
+                }
+            },
+            new class {
+                public $name = 'John';
+
+                public function active()
+                {
+                    return false;
+                }
+            },
+        ]);
+
+        $this->assertCount(1, $c->filter->active());
+    }
+
     public function testWhere()
     {
         $c = new Collection([['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]]);
@@ -373,6 +417,61 @@ class SupportCollectionTest extends TestCase
             [['v' => 4]],
             $c->where('v', '>', 3)->values()->all()
         );
+
+        $object = (object) ['foo' => 'bar'];
+
+        $this->assertEquals(
+            [],
+            $c->where('v', $object)->values()->all()
+        );
+
+        $this->assertEquals(
+            [['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]],
+            $c->where('v', '<>', $object)->values()->all()
+        );
+
+        $this->assertEquals(
+            [['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]],
+            $c->where('v', '!=', $object)->values()->all()
+        );
+
+        $this->assertEquals(
+            [['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]],
+            $c->where('v', '!==', $object)->values()->all()
+        );
+
+        $this->assertEquals(
+            [],
+            $c->where('v', '>', $object)->values()->all()
+        );
+
+        $c = new Collection([['v' => 1], ['v' => $object]]);
+        $this->assertEquals(
+            [['v' => $object]],
+            $c->where('v', $object)->values()->all()
+        );
+
+        $this->assertEquals(
+            [['v' => 1], ['v' => $object]],
+            $c->where('v', '<>', null)->values()->all()
+        );
+
+        $this->assertEquals(
+            [],
+            $c->where('v', '<', null)->values()->all()
+        );
+
+        $c = new Collection([['v' => 1], ['v' => new \Tightenco\Collect\Support\HtmlString('hello')]]);
+        $this->assertEquals(
+            [['v' => new \Tightenco\Collect\Support\HtmlString('hello')]],
+            $c->where('v', 'hello')->values()->all()
+        );
+
+        $c = new Collection([['v' => 1], ['v' => 'hello']]);
+        $this->assertEquals(
+            [['v' => 'hello']],
+            $c->where('v', new \Tightenco\Collect\Support\HtmlString('hello'))->values()->all()
+        );
     }
 
     public function testWhereStrict()
@@ -395,6 +494,18 @@ class SupportCollectionTest extends TestCase
     {
         $c = new Collection([['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]]);
         $this->assertEquals([['v' => 1], ['v' => 3]], $c->whereInStrict('v', [1, 3])->values()->all());
+    }
+
+    public function testWhereNotIn()
+    {
+        $c = new Collection([['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]]);
+        $this->assertEquals([['v' => 2], ['v' => 4]], $c->whereNotIn('v', [1, 3])->values()->all());
+    }
+
+    public function testWhereNotInStrict()
+    {
+        $c = new Collection([['v' => 1], ['v' => 2], ['v' => 3], ['v' => '3'], ['v' => 4]]);
+        $this->assertEquals([['v' => 2], ['v' => '3'], ['v' => 4]], $c->whereNotInStrict('v', [1, 3])->values()->all());
     }
 
     public function testValues()
@@ -520,6 +631,13 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals(['first_word' => 'Hello'], $c1->diffKeys($c2)->all());
     }
 
+    public function testDiffAssoc()
+    {
+        $c1 = new Collection(['id' => 1, 'first_word' => 'Hello', 'not_affected' => 'value']);
+        $c2 = new Collection(['id' => 123, 'foo_bar' => 'Hello', 'not_affected' => 'value']);
+        $this->assertEquals(['id' => 1, 'first_word' => 'Hello'], $c1->diffAssoc($c2)->all());
+    }
+
     public function testEach()
     {
         $c = new Collection($original = [1, 2, 'foo' => 'bar', 'bam' => 'baz']);
@@ -540,6 +658,38 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals([1, 2, 'foo' => 'bar'], $result);
     }
 
+    public function testEachSpread()
+    {
+        $c = new Collection([[1, 'a'], [2, 'b']]);
+
+        $result = [];
+        $c->eachSpread(function ($number, $character) use (&$result) {
+            $result[] = [$number, $character];
+        });
+        $this->assertEquals($c->all(), $result);
+
+        $result = [];
+        $c->eachSpread(function ($number, $character) use (&$result) {
+            $result[] = [$number, $character];
+
+            return false;
+        });
+        $this->assertEquals([[1, 'a']], $result);
+
+        $result = [];
+        $c->eachSpread(function ($number, $character, $key) use (&$result) {
+            $result[] = [$number, $character, $key];
+        });
+        $this->assertEquals([[1, 'a', 0], [2, 'b', 1]], $result);
+
+        $c = new Collection([new Collection([1, 'a']), new Collection([2, 'b'])]);
+        $result = [];
+        $c->eachSpread(function ($number, $character, $key) use (&$result) {
+            $result[] = [$number, $character, $key];
+        });
+        $this->assertEquals([[1, 'a', 0], [2, 'b', 1]], $result);
+    }
+
     public function testIntersectNull()
     {
         $c = new Collection(['id' => 1, 'first_word' => 'Hello']);
@@ -550,6 +700,18 @@ class SupportCollectionTest extends TestCase
     {
         $c = new Collection(['id' => 1, 'first_word' => 'Hello']);
         $this->assertEquals(['first_word' => 'Hello'], $c->intersect(new Collection(['first_world' => 'Hello', 'last_word' => 'World']))->all());
+    }
+
+    public function testIntersectByKeysNull()
+    {
+        $c = new Collection(['name' => 'Mateus', 'age' => 18]);
+        $this->assertEquals([], $c->intersectByKeys(null)->all());
+    }
+
+    public function testIntersectByKeys()
+    {
+        $c = new Collection(['name' => 'Mateus', 'age' => 18]);
+        $this->assertEquals(['name' => 'Mateus'], $c->intersectByKeys(new Collection(['name' => 'Mateus', 'surname' => 'Guimaraes']))->all());
     }
 
     public function testUnique()
@@ -624,14 +786,43 @@ class SupportCollectionTest extends TestCase
 
     public function testCollapse()
     {
-        $data = new Collection([[$object1 = new StdClass], [$object2 = new StdClass]]);
+        $data = new Collection([[$object1 = new stdClass], [$object2 = new stdClass]]);
         $this->assertEquals([$object1, $object2], $data->collapse()->all());
     }
 
-    public function testCollapseWithNestedCollactions()
+    public function testCollapseWithNestedCollections()
     {
         $data = new Collection([new Collection([1, 2, 3]), new Collection([4, 5, 6])]);
         $this->assertEquals([1, 2, 3, 4, 5, 6], $data->collapse()->all());
+    }
+
+    public function testCrossJoin()
+    {
+        // Cross join with an array
+        $this->assertEquals(
+            [[1, 'a'], [1, 'b'], [2, 'a'], [2, 'b']],
+            (new Collection([1, 2]))->crossJoin(['a', 'b'])->all()
+        );
+
+        // Cross join with a collection
+        $this->assertEquals(
+            [[1, 'a'], [1, 'b'], [2, 'a'], [2, 'b']],
+            (new Collection([1, 2]))->crossJoin(new Collection(['a', 'b']))->all()
+        );
+
+        // Cross join with 2 collections
+        $this->assertEquals(
+            [
+                [1, 'a', 'I'], [1, 'a', 'II'],
+                [1, 'b', 'I'], [1, 'b', 'II'],
+                [2, 'a', 'I'], [2, 'a', 'II'],
+                [2, 'b', 'I'], [2, 'b', 'II'],
+            ],
+            (new Collection([1, 2]))->crossJoin(
+                new Collection(['a', 'b']),
+                new Collection(['I', 'II'])
+            )->all()
+        );
     }
 
     public function testSort()
@@ -679,7 +870,12 @@ class SupportCollectionTest extends TestCase
     public function testSortByString()
     {
         $data = new Collection([['name' => 'taylor'], ['name' => 'dayle']]);
-        $data = $data->sortBy('name');
+        $data = $data->sortBy('name', SORT_STRING);
+
+        $this->assertEquals([['name' => 'dayle'], ['name' => 'taylor']], array_values($data->all()));
+
+        $data = new Collection([['name' => 'taylor'], ['name' => 'dayle']]);
+        $data = $data->sortBy('name', SORT_STRING);
 
         $this->assertEquals([['name' => 'dayle'], ['name' => 'taylor']], array_values($data->all()));
     }
@@ -792,6 +988,12 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->except('last')->all());
     }
 
+    public function testExceptSelf()
+    {
+        $data = new Collection(['first' => 'Taylor', 'last' => 'Otwell']);
+        $this->assertEquals(['first' => 'Taylor', 'last' => 'Otwell'], $data->except($data)->all());
+    }
+
     public function testPluckWithArrayAndObjectValues()
     {
         $data = new Collection([(object) ['name' => 'taylor', 'email' => 'foo'], ['name' => 'dayle', 'email' => 'bar']]);
@@ -808,6 +1010,15 @@ class SupportCollectionTest extends TestCase
 
         $this->assertEquals(['taylor' => 'foo', 'dayle' => 'bar'], $data->pluck('email', 'name')->all());
         $this->assertEquals(['foo', 'bar'], $data->pluck('email')->all());
+    }
+
+    public function testHas()
+    {
+        $data = new Collection(['id' => 1, 'first' => 'Hello', 'second' => 'World']);
+        $this->assertTrue($data->has('first'));
+        $this->assertFalse($data->has('third'));
+        $this->assertTrue($data->has(['first', 'second']));
+        $this->assertFalse($data->has(['third', 'first']));
     }
 
     public function testImplode()
@@ -828,34 +1039,64 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals(['taylor', 'dayle'], $data->all());
     }
 
-    public function testRandom()
+    public function testPut()
     {
-        $data = new Collection([1, 2, 3, 4, 5, 6]);
-
-        $random = $data->random(1);
-        $this->assertInstanceOf(Collection::class, $random);
-        $this->assertCount(1, $random);
-
-        $random = $data->random(3);
-        $this->assertInstanceOf(Collection::class, $random);
-        $this->assertCount(3, $random);
+        $data = new Collection(['name' => 'taylor', 'email' => 'foo']);
+        $data = $data->put('name', 'dayle');
+        $this->assertEquals(['name' => 'dayle', 'email' => 'foo'], $data->all());
     }
 
-    public function testRandomWithoutArgument()
+    public function testPutWithNoKey()
+    {
+        $data = new Collection(['taylor', 'shawn']);
+        $data = $data->put(null, 'dayle');
+        $this->assertEquals(['taylor', 'shawn', 'dayle'], $data->all());
+    }
+
+    public function testRandom()
     {
         $data = new Collection([1, 2, 3, 4, 5, 6]);
 
         $random = $data->random();
         $this->assertInternalType('integer', $random);
         $this->assertContains($random, $data->all());
+
+        $random = $data->random(0);
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(0, $random);
+
+        $random = $data->random(1);
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(1, $random);
+
+        $random = $data->random(2);
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(2, $random);
+
+        $random = $data->random('0');
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(0, $random);
+
+        $random = $data->random('1');
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(1, $random);
+
+        $random = $data->random('2');
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(2, $random);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testRandomThrowsAnErrorWhenRequestingMoreItemsThanAreAvailable()
+    public function testRandomOnEmptyCollection()
     {
-        (new Collection)->random();
+        $data = new Collection();
+
+        $random = $data->random(0);
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(0, $random);
+
+        $random = $data->random('0');
+        $this->assertInstanceOf(Collection::class, $random);
+        $this->assertCount(0, $random);
     }
 
     public function testTakeLast()
@@ -924,9 +1165,90 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals(['foo' => 'bar'], $collection->all());
     }
 
+    public function testWrapWithScalar()
+    {
+        $collection = Collection::wrap('foo');
+        $this->assertEquals(['foo'], $collection->all());
+    }
+
+    public function testWrapWithArray()
+    {
+        $collection = Collection::wrap(['foo']);
+        $this->assertEquals(['foo'], $collection->all());
+    }
+
+    public function testWrapWithArrayable()
+    {
+        $collection = Collection::wrap($o = new TestArrayableObject);
+        $this->assertEquals([$o], $collection->all());
+    }
+
+    public function testWrapWithJsonable()
+    {
+        $collection = Collection::wrap($o = new TestJsonableObject);
+        $this->assertEquals([$o], $collection->all());
+    }
+
+    public function testWrapWithJsonSerialize()
+    {
+        $collection = Collection::wrap($o = new TestJsonSerializeObject);
+        $this->assertEquals([$o], $collection->all());
+    }
+
+    public function testWrapWithCollectionClass()
+    {
+        $collection = Collection::wrap(Collection::make(['foo']));
+        $this->assertEquals(['foo'], $collection->all());
+    }
+
+    public function testWrapWithCollectionSubclass()
+    {
+        $collection = TestCollectionSubclass::wrap(Collection::make(['foo']));
+        $this->assertEquals(['foo'], $collection->all());
+        $this->assertInstanceOf(TestCollectionSubclass::class, $collection);
+    }
+
+    public function testUnwrapCollection()
+    {
+        $collection = new Collection(['foo']);
+        $this->assertEquals(['foo'], Collection::unwrap($collection));
+    }
+
+    public function testUnwrapCollectionWithArray()
+    {
+        $this->assertEquals(['foo'], Collection::unwrap(['foo']));
+    }
+
+    public function testUnwrapCollectionWithScalar()
+    {
+        $this->assertEquals('foo', Collection::unwrap('foo'));
+    }
+
+    public function testTimesMethod()
+    {
+        $two = Collection::times(2, function ($number) {
+            return 'slug-'.$number;
+        });
+
+        $zero = Collection::times(0, function ($number) {
+            return 'slug-'.$number;
+        });
+
+        $negative = Collection::times(-4, function ($number) {
+            return 'slug-'.$number;
+        });
+
+        $range = Collection::times(5);
+
+        $this->assertEquals(['slug-1', 'slug-2'], $two->all());
+        $this->assertTrue($zero->isEmpty());
+        $this->assertTrue($negative->isEmpty());
+        $this->assertEquals(range(1, 5), $range->all());
+    }
+
     public function testConstructMakeFromObject()
     {
-        $object = new stdClass();
+        $object = new stdClass;
         $object->foo = 'bar';
         $collection = Collection::make($object);
         $this->assertEquals(['foo' => 'bar'], $collection->all());
@@ -943,7 +1265,7 @@ class SupportCollectionTest extends TestCase
         $collection = new Collection(null);
         $this->assertEquals([], $collection->all());
 
-        $collection = new Collection();
+        $collection = new Collection;
         $this->assertEquals([], $collection->all());
     }
 
@@ -962,7 +1284,7 @@ class SupportCollectionTest extends TestCase
 
     public function testConstructMethodFromObject()
     {
-        $object = new stdClass();
+        $object = new stdClass;
         $object->foo = 'bar';
         $collection = new Collection($object);
         $this->assertEquals(['foo' => 'bar'], $collection->all());
@@ -1006,6 +1328,27 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
     }
 
+    public function testMapSpread()
+    {
+        $c = new Collection([[1, 'a'], [2, 'b']]);
+
+        $result = $c->mapSpread(function ($number, $character) use (&$result) {
+            return "{$number}-{$character}";
+        });
+        $this->assertEquals(['1-a', '2-b'], $result->all());
+
+        $result = $c->mapSpread(function ($number, $character, $key) use (&$result) {
+            return "{$number}-{$character}-{$key}";
+        });
+        $this->assertEquals(['1-a-0', '2-b-1'], $result->all());
+
+        $c = new Collection([new Collection([1, 'a']), new Collection([2, 'b'])]);
+        $result = $c->mapSpread(function ($number, $character, $key) use (&$result) {
+            return "{$number}-{$character}-{$key}";
+        });
+        $this->assertEquals(['1-a-0', '2-b-1'], $result->all());
+    }
+
     public function testFlatMap()
     {
         $data = new Collection([
@@ -1016,6 +1359,64 @@ class SupportCollectionTest extends TestCase
             return $person['hobbies'];
         });
         $this->assertEquals(['programming', 'basketball', 'music', 'powerlifting'], $data->all());
+    }
+
+    public function testMapToDictionary()
+    {
+        $data = new Collection([
+            ['id' => 1, 'name' => 'A'],
+            ['id' => 2, 'name' => 'B'],
+            ['id' => 3, 'name' => 'C'],
+            ['id' => 4, 'name' => 'B'],
+        ]);
+
+        $groups = $data->mapToDictionary(function ($item, $key) {
+            return [$item['name'] => $item['id']];
+        });
+
+        $this->assertInstanceOf(Collection::class, $groups);
+        $this->assertEquals(['A' => [1], 'B' => [2, 4], 'C' => [3]], $groups->toArray());
+        $this->assertInternalType('array', $groups['A']);
+    }
+
+    public function testMapToDictionaryWithNumericKeys()
+    {
+        $data = new Collection([1, 2, 3, 2, 1]);
+
+        $groups = $data->mapToDictionary(function ($item, $key) {
+            return [$item => $key];
+        });
+
+        $this->assertEquals([1 => [0, 4], 2 => [1, 3], 3 => [2]], $groups->toArray());
+    }
+
+    public function testMapToGroups()
+    {
+        $data = new Collection([
+            ['id' => 1, 'name' => 'A'],
+            ['id' => 2, 'name' => 'B'],
+            ['id' => 3, 'name' => 'C'],
+            ['id' => 4, 'name' => 'B'],
+        ]);
+
+        $groups = $data->mapToGroups(function ($item, $key) {
+            return [$item['name'] => $item['id']];
+        });
+
+        $this->assertInstanceOf(Collection::class, $groups);
+        $this->assertEquals(['A' => [1], 'B' => [2, 4], 'C' => [3]], $groups->toArray());
+        $this->assertInstanceOf(Collection::class, $groups['A']);
+    }
+
+    public function testMapToGroupsWithNumericKeys()
+    {
+        $data = new Collection([1, 2, 3, 2, 1]);
+
+        $groups = $data->mapToGroups(function ($item, $key) {
+            return [$item => $key];
+        });
+
+        $this->assertEquals([1 => [0, 4], 2 => [1, 3], 3 => [2]], $groups->toArray());
     }
 
     public function testMapWithKeys()
@@ -1087,6 +1488,18 @@ class SupportCollectionTest extends TestCase
             [3, 5, 4],
             $data->keys()->all()
         );
+    }
+
+    public function testMapInto()
+    {
+        $data = new Collection([
+            'first', 'second',
+        ]);
+
+        $data = $data->mapInto(TestCollectionMapIntoObject::class);
+
+        $this->assertEquals('first', $data[0]->value);
+        $this->assertEquals('second', $data[1]->value);
     }
 
     public function testNth()
@@ -1225,6 +1638,48 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals($expected_result, $result->toArray());
     }
 
+    public function testGroupByMultiLevelAndClosurePreservingKeys()
+    {
+        $data = new Collection([
+            10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+            20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+            30 => ['user' => 3, 'skilllevel' => 2, 'roles' => ['Role_1']],
+            40 => ['user' => 4, 'skilllevel' => 2, 'roles' => ['Role_2']],
+        ]);
+
+        $result = $data->groupBy([
+            'skilllevel',
+            function ($item) {
+                return $item['roles'];
+            },
+        ], true);
+
+        $expected_result = [
+            1 => [
+                'Role_1' => [
+                    10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+                    20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+                ],
+                'Role_3' => [
+                    10 => ['user' => 1, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_3']],
+                ],
+                'Role_2' => [
+                    20 => ['user' => 2, 'skilllevel' => 1, 'roles' => ['Role_1', 'Role_2']],
+                ],
+            ],
+            2 => [
+                'Role_1' => [
+                    30 => ['user' => 3, 'skilllevel' => 2, 'roles' => ['Role_1']],
+                ],
+                'Role_2' => [
+                    40 => ['user' => 4, 'skilllevel' => 2, 'roles' => ['Role_2']],
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expected_result, $result->toArray());
+    }
+
     public function testKeyByAttribute()
     {
         $data = new Collection([['rating' => 1, 'name' => '1'], ['rating' => 2, 'name' => '2'], ['rating' => 3, 'name' => '3']]);
@@ -1281,6 +1736,14 @@ class SupportCollectionTest extends TestCase
 
         $this->assertTrue($c->contains->a);
         $this->assertFalse($c->contains->b);
+
+        $c = new Collection([
+            null, 1, 2,
+        ]);
+
+        $this->assertTrue($c->contains(function ($value) {
+            return is_null($value);
+        }));
     }
 
     public function testContainsStrict()
@@ -1342,7 +1805,7 @@ class SupportCollectionTest extends TestCase
 
     public function testGettingSumFromEmptyCollection()
     {
-        $c = new Collection();
+        $c = new Collection;
         $this->assertEquals(0, $c->sum('foo'));
     }
 
@@ -1441,6 +1904,7 @@ class SupportCollectionTest extends TestCase
     public function testPaginate()
     {
         $c = new Collection(['one', 'two', 'three', 'four']);
+        $this->assertEquals(['one', 'two'], $c->forPage(0, 2)->all());
         $this->assertEquals(['one', 'two'], $c->forPage(1, 2)->all());
         $this->assertEquals([2 => 'three', 3 => 'four'], $c->forPage(2, 2)->all());
         $this->assertEquals([], $c->forPage(3, 2)->all());
@@ -1483,6 +1947,17 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals([3, 6, null], $c[2]->all());
     }
 
+    public function testPadPadsArrayWithValue()
+    {
+        $c = new Collection([1, 2, 3]);
+        $c = $c->pad(4, 0);
+        $this->assertEquals([1, 2, 3, 0], $c->all());
+
+        $c = new Collection([1, 2, 3, 4, 5]);
+        $c = $c->pad(4, 0);
+        $this->assertEquals([1, 2, 3, 4, 5], $c->all());
+    }
+
     public function testGettingMaxItemsFromCollection()
     {
         $c = new Collection([(object) ['foo' => 10], (object) ['foo' => 20]]);
@@ -1497,7 +1972,7 @@ class SupportCollectionTest extends TestCase
         $c = new Collection([1, 2, 3, 4, 5]);
         $this->assertEquals(5, $c->max());
 
-        $c = new Collection();
+        $c = new Collection;
         $this->assertNull($c->max());
     }
 
@@ -1521,7 +1996,7 @@ class SupportCollectionTest extends TestCase
         $c = new Collection([0, 1, 2, 3, 4]);
         $this->assertEquals(0, $c->min());
 
-        $c = new Collection();
+        $c = new Collection;
         $this->assertNull($c->min());
     }
 
@@ -1532,9 +2007,11 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals($data->all(), $data->only(null)->all());
         $this->assertEquals(['first' => 'Taylor'], $data->only(['first', 'missing'])->all());
         $this->assertEquals(['first' => 'Taylor'], $data->only('first', 'missing')->all());
+        $this->assertEquals(['first' => 'Taylor'], $data->only(collect(['first', 'missing']))->all());
 
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only(['first', 'email'])->all());
         $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only('first', 'email')->all());
+        $this->assertEquals(['first' => 'Taylor', 'email' => 'taylorotwell@gmail.com'], $data->only(collect(['first', 'email']))->all());
     }
 
     public function testGettingAvgItemsFromCollection()
@@ -1544,23 +2021,25 @@ class SupportCollectionTest extends TestCase
             return $item->foo;
         }));
         $this->assertEquals(15, $c->avg('foo'));
+        $this->assertEquals(15, $c->avg->foo);
 
         $c = new Collection([['foo' => 10], ['foo' => 20]]);
         $this->assertEquals(15, $c->avg('foo'));
+        $this->assertEquals(15, $c->avg->foo);
 
         $c = new Collection([1, 2, 3, 4, 5]);
         $this->assertEquals(3, $c->avg());
 
-        $c = new Collection();
+        $c = new Collection;
         $this->assertNull($c->avg());
     }
 
     public function testJsonSerialize()
     {
         $c = new Collection([
-            new TestArrayableObject(),
-            new TestJsonableObject(),
-            new TestJsonSerializeObject(),
+            new TestArrayableObject,
+            new TestJsonableObject,
+            new TestJsonSerializeObject,
             'baz',
         ]);
 
@@ -1601,6 +2080,58 @@ class SupportCollectionTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testConcatWithArray()
+    {
+        $expected = [
+            0 => 4,
+            1 => 5,
+            2 => 6,
+            3 => 'a',
+            4 => 'b',
+            5 => 'c',
+            6 => 'Jonny',
+            7 => 'from',
+            8 => 'Laroe',
+            9 => 'Jonny',
+            10 => 'from',
+            11 => 'Laroe',
+        ];
+
+        $collection = new Collection([4, 5, 6]);
+        $collection = $collection->concat(['a', 'b', 'c']);
+        $collection = $collection->concat(['who' => 'Jonny', 'preposition' => 'from', 'where' => 'Laroe']);
+        $actual = $collection->concat(['who' => 'Jonny', 'preposition' => 'from', 'where' => 'Laroe'])->toArray();
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testConcatWithCollection()
+    {
+        $expected = [
+            0 => 4,
+            1 => 5,
+            2 => 6,
+            3 => 'a',
+            4 => 'b',
+            5 => 'c',
+            6 => 'Jonny',
+            7 => 'from',
+            8 => 'Laroe',
+            9 => 'Jonny',
+            10 => 'from',
+            11 => 'Laroe',
+        ];
+
+        $firstCollection = new Collection([4, 5, 6]);
+        $secondCollection = new Collection(['a', 'b', 'c']);
+        $thirdCollection = new Collection(['who' => 'Jonny', 'preposition' => 'from', 'where' => 'Laroe']);
+        $firstCollection = $firstCollection->concat($secondCollection);
+        $firstCollection = $firstCollection->concat($thirdCollection);
+        $actual = $firstCollection->concat($thirdCollection)->toArray();
+
+        $this->assertSame($expected, $actual);
+    }
+
     public function testReduce()
     {
         $data = new Collection([1, 2, 3]);
@@ -1610,7 +2141,7 @@ class SupportCollectionTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testRandomThrowsAnExceptionUsingAmountBiggerThanCollectionSize()
     {
@@ -1666,13 +2197,13 @@ class SupportCollectionTest extends TestCase
 
     public function testMedianOnEmptyCollectionReturnsNull()
     {
-        $collection = new Collection();
+        $collection = new Collection;
         $this->assertNull($collection->median());
     }
 
     public function testModeOnNullCollection()
     {
-        $collection = new Collection();
+        $collection = new Collection;
         $this->assertNull($collection->mode());
     }
 
@@ -1785,7 +2316,7 @@ class SupportCollectionTest extends TestCase
 
     public function testSplitEmptyCollection()
     {
-        $collection = new Collection();
+        $collection = new Collection;
 
         $this->assertEquals(
             [],
@@ -1835,6 +2366,19 @@ class SupportCollectionTest extends TestCase
         $this->assertEquals([6, 7, 8, 9, 10], $secondPartition->values()->toArray());
     }
 
+    public function testPartitionCallbackWithKey()
+    {
+        $collection = new Collection(['zero', 'one', 'two', 'three']);
+
+        list($even, $odd) = $collection->partition(function ($item, $index) {
+            return $index % 2 === 0;
+        });
+
+        $this->assertEquals(['zero', 'two'], $even->values()->toArray());
+
+        $this->assertEquals(['one', 'three'], $odd->values()->toArray());
+    }
+
     public function testPartitionByKey()
     {
         $courses = new Collection([
@@ -1863,7 +2407,7 @@ class SupportCollectionTest extends TestCase
 
     public function testPartitionEmptyCollection()
     {
-        $collection = new Collection();
+        $collection = new Collection;
 
         $this->assertCount(2, $collection->partition(function () {
             return true;
@@ -1881,6 +2425,89 @@ class SupportCollectionTest extends TestCase
         $this->assertSame(['a' => ['free' => true], 'c' => ['free' => true]], $free->toArray());
 
         $this->assertSame(['b' => ['free' => false]], $premium->toArray());
+    }
+
+    public function testTap()
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $fromTap = [];
+        $collection = $collection->tap(function ($collection) use (&$fromTap) {
+            $fromTap = $collection->slice(0, 1)->toArray();
+        });
+
+        $this->assertSame([1], $fromTap);
+        $this->assertSame([1, 2, 3], $collection->toArray());
+    }
+
+    public function testWhen()
+    {
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->when('adam', function ($collection, $newName) {
+            return $collection->push($newName);
+        });
+
+        $this->assertSame(['michael', 'tom', 'adam'], $collection->toArray());
+
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->when(false, function ($collection) {
+            return $collection->push('adam');
+        });
+
+        $this->assertSame(['michael', 'tom'], $collection->toArray());
+    }
+
+    public function testWhenDefault()
+    {
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->when(false, function ($collection) {
+            return $collection->push('adam');
+        }, function ($collection) {
+            return $collection->push('taylor');
+        });
+
+        $this->assertSame(['michael', 'tom', 'taylor'], $collection->toArray());
+    }
+
+    public function testUnless()
+    {
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->unless(false, function ($collection) {
+            return $collection->push('caleb');
+        });
+
+        $this->assertSame(['michael', 'tom', 'caleb'], $collection->toArray());
+
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->unless(true, function ($collection) {
+            return $collection->push('caleb');
+        });
+
+        $this->assertSame(['michael', 'tom'], $collection->toArray());
+    }
+
+    public function testUnlessDefault()
+    {
+        $collection = new Collection(['michael', 'tom']);
+
+        $collection->unless(true, function ($collection) {
+            return $collection->push('caleb');
+        }, function ($collection) {
+            return $collection->push('taylor');
+        });
+
+        $this->assertSame(['michael', 'tom', 'taylor'], $collection->toArray());
+    }
+
+    public function testGetWithNullReturnsNull()
+    {
+        $collection = new Collection([1, 2, 3]);
+        $this->assertNull($collection->get(null));
     }
 }
 
@@ -1982,4 +2609,19 @@ class TestJsonSerializeObject implements JsonSerializable
     {
         return ['foo' => 'bar'];
     }
+}
+
+class TestCollectionMapIntoObject
+{
+    public $value;
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+}
+
+class TestCollectionSubclass extends Collection
+{
+    //
 }

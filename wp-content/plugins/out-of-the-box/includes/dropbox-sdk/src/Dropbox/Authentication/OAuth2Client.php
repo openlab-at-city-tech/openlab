@@ -1,4 +1,5 @@
 <?php
+
 namespace Kunnu\Dropbox\Authentication;
 
 use Kunnu\Dropbox\DropboxApp;
@@ -8,40 +9,37 @@ use Kunnu\Dropbox\Security\RandomStringGeneratorInterface;
 
 class OAuth2Client
 {
-
     /**
-     * The Base URL
+     * The Base URL.
      *
      * @const string
      */
-    const BASE_URL = "https://dropbox.com";
+    const BASE_URL = 'https://dropbox.com';
 
     /**
-     * Auth Token URL
+     * Auth Token URL.
      *
      * @const string
      */
-    const AUTH_TOKEN_URL = "https://api.dropboxapi.com/oauth2/token";
+    const AUTH_TOKEN_URL = 'https://api.dropboxapi.com/oauth2/token';
 
     /**
-     * The Dropbox App
+     * The Dropbox App.
      *
      * @var \Kunnu\Dropbox\DropboxApp
      */
     protected $app;
 
     /**
-     * The Dropbox Client
+     * The Dropbox Client.
      *
      * @var \Kunnu\Dropbox\DropboxClient
      */
     protected $client;
 
     /**
-     * Create a new DropboxApp instance
+     * Create a new DropboxApp instance.
      *
-     * @param \Kunnu\Dropbox\DropboxApp $app
-     * @param \Kunnu\Dropbox\DropboxClient $client
      * @param \Kunnu\Dropbox\Security\RandomStringGeneratorInterface $randStrGenerator
      */
     public function __construct(DropboxApp $app, DropboxClient $client, RandomStringGeneratorInterface $randStrGenerator = null)
@@ -52,21 +50,7 @@ class OAuth2Client
     }
 
     /**
-     * Build URL
-     *
-     * @param  string $endpoint
-     * @param  array  $params   Query Params
-     *
-     * @return string
-     */
-    protected function buildUrl($endpoint = '', array $params = [])
-    {
-        $queryParams = http_build_query($params);
-        return static::BASE_URL . $endpoint . '?' . $queryParams;
-    }
-
-    /**
-     * Get the Dropbox App
+     * Get the Dropbox App.
      *
      * @return \Kunnu\Dropbox\DropboxApp
      */
@@ -76,7 +60,7 @@ class OAuth2Client
     }
 
     /**
-     * Get the Dropbox Client
+     * Get the Dropbox Client.
      *
      * @return \Kunnu\Dropbox\DropboxClient
      */
@@ -86,7 +70,7 @@ class OAuth2Client
     }
 
     /**
-     * Get the OAuth2 Authorization URL
+     * Get the OAuth2 Authorization URL.
      *
      * @param string $redirectUri Callback URL to redirect user after authorization.
      *                            If null is passed, redirect_uri will be omitted
@@ -95,7 +79,7 @@ class OAuth2Client
      * @param string $state       CSRF Token
      * @param array  $params      Additional Params
      *
-     * @link https://www.dropbox.com/developers/documentation/http/documentation#oauth2-authorize
+     * @see https://www.dropbox.com/developers/documentation/http/documentation#oauth2-authorize
      *
      * @return string
      */
@@ -106,9 +90,10 @@ class OAuth2Client
             'client_id' => $this->getApp()->getClientId(),
             'response_type' => 'code',
             'state' => $state,
-            ], $params);
+            'token_access_type' => 'offline',
+        ], $params);
 
-        if(!is_null($redirectUri)) {
+        if (!is_null($redirectUri)) {
             $params['redirect_uri'] = $redirectUri;
         }
 
@@ -116,38 +101,36 @@ class OAuth2Client
     }
 
     /**
-     * Get Access Token
+     * Get Access Token.
      *
-     * @param  string $code        Authorization Code
-     * @param  string $redirectUri Redirect URI used while getAuthorizationUrl
-     * @param  string $grant_type  Grant Type ['authorization_code']
+     * @param string $code        Authorization Code
+     * @param string $redirectUri Redirect URI used while getAuthorizationUrl
+     * @param string $grant_type  Grant Type ['authorization_code']
      *
      * @return array
      */
     public function getAccessToken($code, $redirectUri = null, $grant_type = 'authorization_code')
     {
-        //Access Token (Should most probably be null)
-        $accessToken = $this->getApp()->getAccessToken();
-
         //Request Params
         $params = [
-        'code' => $code,
-        'grant_type' => $grant_type,
-        'client_id' => $this->getApp()->getClientId(),
-        'client_secret' => $this->getApp()->getClientSecret(),
-        'redirect_uri' => $redirectUri
+            'code' => $code,
+            'grant_type' => $grant_type,
+            'client_id' => $this->getApp()->getClientId(),
+            'client_secret' => $this->getApp()->getClientSecret(),
+            'redirect_uri' => $redirectUri,
         ];
 
         $params = http_build_query($params);
 
         $apiUrl = static::AUTH_TOKEN_URL;
-        $uri = $apiUrl . "?" . $params;
+        $uri = $apiUrl.'?'.$params;
 
         //Send Request through the DropboxClient
         //Fetch the Response (DropboxRawResponse)
         $response = $this->getClient()
-        ->getHttpClient()
-        ->send($uri, "POST", null);
+            ->getHttpClient()
+            ->send($uri, 'POST', null)
+        ;
 
         //Fetch Response Body
         $body = $response->getBody();
@@ -158,9 +141,77 @@ class OAuth2Client
     }
 
     /**
-     * Disables the access token
+     * Refresh token.
      *
-     * @return void
+     * @param string $code        Authorization Code
+     * @param string $redirectUri Redirect URI used while getAuthorizationUrl
+     * @param string $grant_type  Grant Type ['authorization_code']
+     *
+     * @return array
+     */
+    public function refreshToken()
+    {
+        //Access Token (Should most probably be null)
+        $accessToken = $this->getApp()->getAccessToken();
+
+        //Request Params
+        $params = [
+            'refresh_token' => $accessToken->getRefreshToken(),
+            'grant_type' => 'refresh_token',
+            'client_id' => $this->getApp()->getClientId(),
+            'client_secret' => $this->getApp()->getClientSecret(),
+        ];
+
+        $params = http_build_query($params);
+
+        $apiUrl = static::AUTH_TOKEN_URL;
+        $uri = $apiUrl.'?'.$params;
+
+        //Send Request through the DropboxClient
+        //Fetch the Response (DropboxRawResponse)
+        $response = $this->getClient()
+            ->getHttpClient()
+            ->send($uri, 'POST', null)
+        ;
+
+        //Fetch Response Body
+        $body = $response->getBody();
+
+        //Decode the Response body to associative array
+        //and return
+        $token = json_decode((string) $body, true);
+
+        $accessToken->setToken($token['access_token']);
+        $accessToken->setExpiresIn($token['expires_in']);
+        $accessToken->setCreated(time());
+
+        if (!empty($token['refresh_token'])) {
+            $accessToken->setRefreshToken($token['refresh_token']);
+        }
+
+        return $accessToken;
+    }
+
+    /**
+     * Returns if the access_token is expired.
+     *
+     * @return bool returns True if the access_token is expired
+     */
+    public function isAccessTokenExpired()
+    {
+        $accessToken = $this->getApp()->getAccessToken();
+
+        if ($accessToken->getExpiresIn() < 0) {
+            return false;
+        }
+
+        // If the token is set to expire in the next 120 seconds.
+        return ($accessToken->getCreated()
+        + ($accessToken->getExpiresIn() - 120)) < time();
+    }
+
+    /**
+     * Disables the access token.
      */
     public function revokeAccessToken()
     {
@@ -168,7 +219,7 @@ class OAuth2Client
         $accessToken = $this->getApp()->getAccessToken();
 
         //Request
-        $request = new DropboxRequest("POST", "/auth/token/revoke", $accessToken);
+        $request = new DropboxRequest('POST', '/auth/token/revoke', $accessToken->getToken());
         // Do not validate the response
         // since the /token/revoke endpoint
         // doesn't return anything in the response.
@@ -177,5 +228,20 @@ class OAuth2Client
 
         //Revoke Access Token
         $response = $this->getClient()->sendRequest($request);
+    }
+
+    /**
+     * Build URL.
+     *
+     * @param string $endpoint
+     * @param array  $params   Query Params
+     *
+     * @return string
+     */
+    protected function buildUrl($endpoint = '', array $params = [])
+    {
+        $queryParams = http_build_query($params);
+
+        return static::BASE_URL.$endpoint.'?'.$queryParams;
     }
 }

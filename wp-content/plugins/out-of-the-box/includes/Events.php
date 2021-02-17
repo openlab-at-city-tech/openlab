@@ -23,6 +23,10 @@ class Events
     {
         add_action('wp_ajax_nopriv_outofthebox-event-stats', [&$this, 'get_stats']);
         add_action('wp_ajax_outofthebox-event-stats', [&$this, 'get_stats']);
+
+        add_action('wp_ajax_nopriv_outofthebox-event-log', [&$this, 'log_ajax_event']);
+        add_action('wp_ajax_outofthebox-event-log', [&$this, 'log_ajax_event']);
+
         add_action('outofthebox_log_event', [&$this, 'log_event'], 10, 3);
 
         add_action('outofthebox_send_event_summary', [&$this, 'send_event_summary']);
@@ -90,31 +94,47 @@ class Events
     }
 
     /**
+     * Log JS events via AJAX call.
+     */
+    public function log_ajax_event()
+    {
+        if (!isset($_REQUEST['type'])) {
+            exit();
+        }
+
+        $this->get_processor()->start_process();
+
+        if ('log_preview_event' === $_REQUEST['type'] && isset($_REQUEST['id'])) {
+            // JS Preview Log Event
+            $cached_entry = $this->get_processor()->get_client()->get_entry($_REQUEST['id'], false);
+            $this->log_event('outofthebox_previewed_entry', $cached_entry);
+
+            exit();
+        }
+
+        if ('log_failed_upload_event' === $_REQUEST['type']) {
+            // JS Failed Upload Event
+
+            $id = (empty($_REQUEST['id']) ? false : $_REQUEST['id']);
+            $cached_entry = $this->get_processor()->get_client()->get_entry($id, false);
+
+            $this->log_event('outofthebox_uploaded_failed', $cached_entry, $_REQUEST['data']);
+
+            exit();
+        }
+    }
+
+    /**
      * Event processor for Dashboard.
      */
     public function get_stats()
     {
-        if (!isset($_REQUEST['type'])) {
-            die();
-        }
-
-        if ('log_preview_event' === $_REQUEST['type'] && isset($_REQUEST['id']) && check_ajax_referer('outofthebox-log')) {
-            if (isset($_REQUEST['account_id'])) {
-                $requested_account = $this->get_processor()->get_accounts()->get_account_by_id($_REQUEST['account_id']);
-                if (null !== $requested_account) {
-                    $this->get_processor()->set_current_account($requested_account);
-                } else {
-                    die();
-                }
-            }
-
-            $cached_entry = $this->get_processor()->get_client()->get_entry($_REQUEST['id'], false);
-            $this->log_event('outofthebox_previewed_entry', $cached_entry);
-            die();
-        }
-
         if (!Helpers::check_user_role($this->get_main()->settings['permissions_see_dashboard'])) {
-            die();
+            exit();
+        }
+
+        if (!isset($_REQUEST['type'])) {
+            exit();
         }
 
         $nonce_verification = ('Yes' === $this->get_processor()->get_setting('nonce_validation'));
@@ -123,7 +143,8 @@ class Events
         if ($allow_nonce_verification && is_user_logged_in()) {
             if (false === check_ajax_referer('outofthebox-admin-action', false, false)) {
                 error_log('[WP Cloud Plugin message]: '." Function get_stats() didn't receive a valid nonce");
-                die();
+
+                exit();
             }
         }
 
@@ -144,25 +165,30 @@ class Events
                 $data = $this->get_totals();
 
                 break;
+
             case 'activities':
                 $data = $this->get_activities($period);
 
                 break;
+
             case 'topdownloads':
                 $data = $this->get_top_downloads($period);
 
                 break;
+
             case 'topusers':
                 $data = $this->get_top_users($period);
 
                 break;
+
             case 'full-log':
                 $data = $this->get_full_log([], $period);
 
                 break;
+
             case 'get-detail':
                 if (!isset($_REQUEST['detail']) || !isset($_REQUEST['id'])) {
-                    die();
+                    exit();
                 }
 
                 switch ($_REQUEST['detail']) {
@@ -170,6 +196,7 @@ class Events
                         $this->render_user_detail($_REQUEST['id']);
 
                         break;
+
                     case 'entry':
                         $this->render_entry_detail($_REQUEST['id'], $_REQUEST['account_id']);
 
@@ -177,6 +204,7 @@ class Events
                 }
 
                 break;
+
             case 'get-download':
                 if (isset($_REQUEST['id'])) {
                     $this->start_download_by_id($_REQUEST['id'], $_REQUEST['account_id']);
@@ -191,7 +219,7 @@ class Events
             echo json_encode($data);
         }
 
-        die();
+        exit();
     }
 
     public function export_to_csv($dataset, $type)
@@ -236,7 +264,7 @@ class Events
         $cached_entry = $this->get_processor()->get_client()->get_entry($entry_id, false);
 
         if (false === $cached_entry) {
-            die();
+            exit();
         }
 
         $this->get_processor()->get_client()->download_entry($cached_entry);
@@ -256,11 +284,13 @@ class Events
         // Get Totals for user
         if (isset($_REQUEST['detail'], $_REQUEST['id'])) {
             global $wpdb;
+
             switch ($_REQUEST['detail']) {
                 case 'user':
                     $where = $wpdb->prepare('`user_id` = %s', [$_REQUEST['id']]);
 
                     break;
+
                 case 'entry':
                     $where = $wpdb->prepare('`entry_id` = %s', [$_REQUEST['id']]);
 
@@ -676,6 +706,7 @@ class Events
                     $where .= $wpdb->prepare($sql, [$id]);
 
                     break;
+
                 case 'entry':
                     $sql = ' AND (`entry_id` = %s OR `entry_path` = %s) ';
                     $where .= $wpdb->prepare($sql, [$id, $id]);
@@ -722,6 +753,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_downloaded_entry':
                 $text = __('Downloaded', 'wpcloudplugins');
                 $icon = 'fa-download';
@@ -732,6 +764,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_streamed_entry':
                 $text = __('Streamed', 'wpcloudplugins');
                 $icon = 'fa-play-circle';
@@ -742,6 +775,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_created_link_to_entry':
                 $text = __('Shared', 'wpcloudplugins');
                 $icon = 'fa-share-alt';
@@ -752,6 +786,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_renamed_entry':
                 $text = __('Renamed', 'wpcloudplugins');
                 $icon = 'fa-tag';
@@ -762,6 +797,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_deleted_entry':
                 $text = __('Deleted', 'wpcloudplugins');
                 $icon = 'fa-trash';
@@ -772,6 +808,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_created_entry':
                 $text = __('Created', 'wpcloudplugins');
                 $icon = 'fa-plus-circle';
@@ -782,6 +819,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_updated_metadata':
                 $text = __('Updated metadata', 'wpcloudplugins');
                 $icon = 'fa-wrench';
@@ -792,6 +830,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_moved_entry':
                 $text = __('Moved', 'wpcloudplugins');
                 $icon = 'fa-arrows-alt-h';
@@ -802,6 +841,7 @@ class Events
                 ];
 
                 break;
+
             case 'outofthebox_uploaded_entry':
                 $text = __('Uploaded', 'wpcloudplugins');
                 $icon = 'fa-upload';
@@ -812,6 +852,18 @@ class Events
                 ];
 
                 break;
+
+            case 'outofthebox_uploaded_failed':
+                $text = __('Upload failed', 'wpcloudplugins');
+                $icon = 'fa-exclamation-circle';
+                $colors = [
+                    'light' => '#f4433650',
+                    'normal' => '#f44336',
+                    'dark' => '#d32f2f',
+                ];
+
+                break;
+
             case 'outofthebox_searched':
                 $text = __('Searched', 'wpcloudplugins');
                 $icon = 'fa-search';
@@ -822,6 +874,7 @@ class Events
                 ];
 
                 break;
+
             default:
                 $text = $type;
                 $icon = 'fa-star';
@@ -857,7 +910,7 @@ class Events
         }
 
         // Is entry  a file or a folder
-        $file_or_folder = ('1' === $event_row['entry_is_dir']) ? __('folder','wpcloudplugins') : __('file', 'wpcloudplugins');
+        $file_or_folder = ('1' === $event_row['entry_is_dir']) ? __('folder', 'wpcloudplugins') : __('file', 'wpcloudplugins');
 
         $account_id = empty($event_row['account_id']) ? $this->get_processor()->get_accounts()->get_primary_account()->get_id() : $event_row['account_id'];
 
@@ -878,6 +931,7 @@ class Events
                 $description = sprintf(__('%s previewed the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
+
             case 'outofthebox_downloaded_entry':
                 $exported = ($data && isset($data['exported'])) ? $data['exported'] : false;
                 $as_zip = ($data && isset($data['as_zip'])) ? $exported = 'ZIP' : false;
@@ -889,46 +943,67 @@ class Events
                 }
 
                 break;
+
             case 'outofthebox_streamed_entry':
                 $description = sprintf(__('%s streamed the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
+
             case 'outofthebox_created_link_to_entry':
                 $created_url = ($data && isset($data['url']) && is_string($data['url'])) ? "<a href='{$data['url']}' target='_blank'>".__('Shared link', 'wpcloudplugins').'</a>' : '';
                 $description = sprintf(__('%s created a %s for the %s %s', 'wpcloudplugins'), $user, $created_url, $file_or_folder, $entry_link);
 
                 break;
+
             case 'outofthebox_renamed_entry':
                 $previous_name = ($data && isset($data['oldname'])) ? $data['oldname'].' ' : '';
                 $description = sprintf(__('%s renamed the %s %s to %s', 'wpcloudplugins'), $user, $file_or_folder, $previous_name, $entry_link);
 
                 break;
+
             case 'outofthebox_deleted_entry':
                 $description = sprintf(__('%s deleted the %s %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link);
 
                 break;
+
             case 'outofthebox_created_entry':
                 $description = sprintf(__('%s added the %s %s in %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
+
             case 'outofthebox_updated_metadata':
                 $metadata_field = ($data && isset($data['metadata_field'])) ? $data['metadata_field'] : '';
                 $description = sprintf(__('%s updated the %s of the %s %s', 'wpcloudplugins'), $user, $metadata_field, $file_or_folder, $entry_link);
 
                 break;
+
             case 'outofthebox_moved_entry':
                 $description = sprintf(__('%s moved the %s %s to %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
+
             case 'outofthebox_uploaded_entry':
                 $description = sprintf(__('%s added the %s %s in %s', 'wpcloudplugins'), $user, $file_or_folder, $entry_link, $parent_folder_link);
 
                 break;
+
+            case 'outofthebox_uploaded_failed':
+                $name = ($data && isset($data['name'])) ? $data['name'] : 'unknown';
+                $size = ($data && isset($data['size'])) ? $data['size'] : '-';
+
+                $entry_id_encoded = urlencode($event_row['entry_id']);
+                $entry_link = "<a href='#{$entry_id_encoded}' title='{$event_row['parent_path']}/{$event_row['entry_name']}' class='open-entry-details' data-entry-id='{$entry_id_encoded}' data-account-id='{$account_id}'>{$event_row['parent_path']}/{$event_row['entry_name']}</a>";
+
+                $description = sprintf(__('%s tried to upload %s (%s) to %s', 'wpcloudplugins'), $user, '<a>'.$name.'</a>', Helpers::bytes_to_size_1024($size), $entry_link);
+
+                break;
+
             case 'outofthebox_searched':
                 $search_query = ($data && isset($data['query'])) ? $data['query'] : '';
                 $description = sprintf(__('%s searched for "%s" in %s', 'wpcloudplugins'), $user, $search_query, $entry_link);
 
                 break;
+
             default:
                 $description = sprintf(__('%s performed an action: %s', 'wpcloudplugins'), $user, $event_row['type']);
 
@@ -974,7 +1049,8 @@ class Events
         ];
 
         echo json_encode($return);
-        die();
+
+        exit();
     }
 
     /**
@@ -1005,7 +1081,7 @@ class Events
                 'entry' => [
                     'entry_id' => $entry_id,
                     'entry_name' => $data[0]['entry_name'],
-                    'entry_description' => __('The file you are looking for cannot be found','wpcloudplugins').'.'.__('The file is probably deleted from the cloud', 'wpcloudplugins').'.',
+                    'entry_description' => __('The file you are looking for cannot be found', 'wpcloudplugins').'.'.__('The file is probably deleted from the cloud', 'wpcloudplugins').'.',
                     'entry_link' => false,
                     'entry_thumbnails' => Helpers::get_default_icon($data[0]['entry_mimetype'], $data[0]['entry_is_dir']),
                 ],
@@ -1013,7 +1089,7 @@ class Events
 
             echo json_encode($return);
 
-            die();
+            exit();
         }
 
         $entry = $cached_entry;
@@ -1033,7 +1109,7 @@ class Events
 
         echo json_encode($return);
 
-        die();
+        exit();
     }
 
     public function send_event_summary()
@@ -1089,6 +1165,7 @@ class Events
         $template = apply_filters('outofthebox_events_set_summary_template', OUTOFTHEBOX_ROOTDIR.'/templates/notifications/event_summary.php', $this);
 
         ob_start();
+
         include_once $template;
         $htmlmessage = Helpers::compress_html(ob_get_clean());
 

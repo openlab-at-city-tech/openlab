@@ -94,7 +94,7 @@ class ContactForm
                   <th scope="row"><label for="<?php echo esc_attr($args['content'].'-shortcode'); ?>"><?php echo esc_html(__('Shortcode', 'wpcloudplugins')); ?></label></th>
                   <td>
                     <input type="hidden" name="shortcode" class="outofthebox-shortcode-value large-text option" id="<?php echo esc_attr($args['content'].'-shortcode'); ?>" />
-                    <code id="outofthebox-shortcode-decoded-value" style="margin-bottom:15px;display:none;width: 400px;word-wrap: break-word;"></code>
+                    <textarea id="outofthebox-shortcode-decoded-value"  rows="6" style="margin-bottom:15px;display:none;width: 400px;word-wrap: break-word;"></textarea>
                     <input type="button" class="button button-primary OutoftheBox-CF-shortcodegenerator " value="<?php echo esc_attr(__('Build your shortcode here', 'wpcloudplugins')); ?>" />
                     <iframe id="outofthebox-shortcode-iframe" src="about:blank" data-src='<?php echo OUTOFTHEBOX_ADMIN_URL; ?>?action=outofthebox-getpopup&type=shortcodebuilder&asuploadbox=1&callback=wpcp_oftb_cf7_add_content' width='100%' height='500' tabindex='-1' frameborder='0' style="display:none"></iframe>
                     <p class="out-of-the-box-upload-folder description">You can use the available input fields in your form to name the upload folder based on user input. To do so, just add the <code>outofthebox_private_folder_name</code> to the Class attribute of your input field (i.e. <code>[text* your-name class:outofthebox_private_folder_name]</code>).</p>
@@ -173,30 +173,7 @@ class ContactForm
 
     public function render_uploaded_files_list($data, $ashtml = true)
     {
-        $uploadedfiles = json_decode($data);
-
-        if ((null !== $uploadedfiles) && (count((array) $uploadedfiles) > 0)) {
-            $first_entry = current($uploadedfiles);
-            $folder_location = ($ashtml && isset($first_entry->folderurl)) ? '<a href="'.urldecode($first_entry->folderurl).'">Dropbox</a>' : 'Dropbox';
-
-            // Fill our custom field with the details of our upload session
-            $html = sprintf(__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $uploadedfiles), $folder_location);
-            $html .= ($ashtml) ? '<ul>' : "\r\n";
-
-            foreach ($uploadedfiles as $fileid => $file) {
-                $html .= ($ashtml) ? '<li><a href="'.$file->link.'">' : '';
-                $html .= $file->path;
-                $html .= ($ashtml) ? '</a>' : '';
-                $html .= ' ('.$file->size.')';
-                $html .= ($ashtml) ? '</li>' : "\r\n";
-            }
-
-            $html .= ($ashtml) ? '</ul>' : '';
-        } else {
-            return $data;
-        }
-
-        return $html;
+        return apply_filters('outofthebox_render_formfield_data', $data, $ashtml, $this);
     }
 
     /**
@@ -217,7 +194,11 @@ class ContactForm
             return $private_folder_name;
         }
 
-        return trim(str_replace(['|', '/'], ' ', sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()])));
+        $raw_name = sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()]);
+        $name = str_replace(['|', '/'], ' ', $raw_name);
+        $filtered_name = \TheLion\OutoftheBox\Helpers::filter_filename(stripslashes($name), false);
+
+        return trim($filtered_name);
     }
 
     /**

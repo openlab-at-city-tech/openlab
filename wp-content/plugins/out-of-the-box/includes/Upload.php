@@ -45,7 +45,7 @@ class Upload
     {
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             // TO DO LOG + FAIL ERROR
-            die(-1);
+            exit(-1);
         }
 
         $shortcode_max_file_size = $this->get_processor()->get_shortcode_option('maxfilesize');
@@ -115,7 +115,8 @@ class Upload
                         $file->error = __('You have reached your usage limit of', 'wpcloudplugins').' '.Helpers::bytes_to_size_1024($max_allowed_bytes);
                         self::set_upload_progress($hash, $return);
                         echo json_encode($return);
-                        die();
+
+                        exit();
                     }
                 }
 
@@ -176,7 +177,8 @@ class Upload
 
         // Create response
         echo json_encode($return);
-        die();
+
+        exit();
     }
 
     public function do_upload_to_dropbox($temp_file_path, $new_file_path, $params = [])
@@ -187,18 +189,20 @@ class Upload
     public function do_upload_direct()
     {
         if ((!isset($_REQUEST['filename'])) || (!isset($_REQUEST['file_size'])) || (!isset($_REQUEST['mimetype']))) {
-            die();
+            exit();
         }
 
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             echo json_encode(['result' => 0]);
-            die();
+
+            exit();
         }
 
         $name = Helpers::filter_filename(stripslashes(rawurldecode($_REQUEST['filename'])), false);
         $size = $_REQUEST['file_size'];
         $path = $_REQUEST['file_path'];
         $mimetype = $_REQUEST['mimetype'];
+        $description = sanitize_textarea_field(wp_unslash($_REQUEST['file_description']));
 
         if (!empty($path)) {
             $name = $path.$name;
@@ -212,7 +216,8 @@ class Upload
             if ($disk_usage_after_upload > $max_allowed_bytes) {
                 error_log('[WP Cloud Plugin message]: '.__('You have reached your usage limit of', 'outofthedrove').' '.Helpers::bytes_to_size_1024($max_allowed_bytes));
                 echo json_encode(['result' => 0]);
-                die();
+
+                exit();
             }
         }
 
@@ -245,7 +250,7 @@ class Upload
             echo json_encode(['result' => 0]);
         }
 
-        die();
+        exit();
     }
 
     public static function get_upload_progress($file_hash)
@@ -284,7 +289,8 @@ class Upload
         }
 
         echo json_encode($result);
-        die();
+
+        exit();
     }
 
     public function upload_convert()
@@ -296,7 +302,8 @@ class Upload
     {
         if ((!isset($_REQUEST['files'])) || 0 === count($_REQUEST['files'])) {
             echo json_encode(['result' => 0]);
-            die();
+
+            exit();
         }
 
         $uploaded_files = $_REQUEST['files'];
@@ -343,13 +350,14 @@ class Upload
             $file['name'] = $entry->get_name();
             $file['type'] = $entry->get_mimetype();
             $file['completepath'] = $entry->get_path_display();
+            $file['description'] = $entry->get_description();
             $file['account_id'] = $this->get_processor()->get_current_account()->get_id();
             $file['fileid'] = $entry->get_id();
             $file['filesize'] = \TheLion\OutoftheBox\Helpers::bytes_to_size_1024($entry->get_size());
             $file['link'] = $link;
-            $file['folderurl'] = urlencode('https://www.dropbox.com/home/'.rawurlencode(rtrim($entry->get_parent(), '/')));
+            $file['folderurl'] = urlencode('https://www.dropbox.com/home'.rtrim($entry->get_parent(), '/'));
 
-            $files[$file['fileid']] = $file;
+            $files[$file['fileid']] = apply_filters('outofthebox_upload_entry_information', $file, $entry, $this->_processor);
         }
 
         do_action('outofthebox_upload_post_process', $_uploaded_entries, $this->_processor);

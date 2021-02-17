@@ -23,6 +23,7 @@ class User
     private $_can_copy_files = false;
     private $_can_copy_folders = false;
     private $_can_share = false;
+    private $_can_edit_description = false;
     private $_can_deeplink = false;
 
     public function __construct(Processor $_processor = null)
@@ -60,7 +61,7 @@ class User
         }
 
         $this->_can_share = ('1' === $this->get_processor()->get_shortcode_option('show_sharelink')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('share_role'));
-
+        $this->_can_edit_description = false;
         $this->_can_deeplink = ('1' === $this->get_processor()->get_shortcode_option('deeplink')) && Helpers::check_user_role($this->get_processor()->get_shortcode_option('deeplink_role'));
     }
 
@@ -152,6 +153,11 @@ class User
     public function can_deeplink()
     {
         return $this->_can_deeplink;
+    }
+
+    public function can_edit_description()
+    {
+        return $this->_can_edit_description;
     }
 
     /**

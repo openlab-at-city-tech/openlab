@@ -72,6 +72,9 @@ class App
         $this->_processor = $processor;
         require_once OUTOFTHEBOX_ROOTDIR.'/includes/dropbox-sdk/vendor/autoload.php';
 
+        // Call back for refresh token function in SDK client
+        add_action('out-of-the-box-refresh-token', [&$this, 'refresh_token'], 10, 1);
+
         $own_key = $this->get_processor()->get_setting('dropbox_app_key');
         $own_secret = $this->get_processor()->get_setting('dropbox_app_secret');
 
@@ -136,14 +139,6 @@ class App
             echo '<script type="text/javascript">window.opener.parent.location.href = "'.$redirect.'"; window.close();</script>';
             die();
         }
-        if (isset($_GET['_token'])) {
-            $new_access_token = $_GET['_token'];
-            $access_token = $this->set_access_token($new_access_token);
-
-            // Echo To Popup
-            echo '<script type="text/javascript">window.opener.parent.location.href = "'.$redirect.'"; window.close();</script>';
-            die();
-        }
 
         return false;
     }
@@ -180,6 +175,87 @@ class App
         return $this->get_client($account);
     }
 
+    public function refresh_token(Account $account = null)
+    {
+        $authorization = $account->get_authorization();
+        $access_token = $authorization->get_access_token();
+
+        if (!flock($authorization->get_token_file_handle(), LOCK_EX | LOCK_NB)) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('Wait till another process has renewed the Authorization Token'));
+
+            /*
+             * If the file cannot be unlocked and the last time
+             * it was modified was 1 minute, assume that
+             * the previous process died and unlock the file manually
+             */
+            $requires_unlock = ((filemtime($authorization->get_token_location()) + 60) < (time()));
+
+            // Temporarily workaround when flock is disabled. Can cause problems when plugin is used in multiple processes
+            if (false !== strpos(ini_get('disable_functions'), 'flock')) {
+                $requires_unlock = false;
+            }
+
+            if ($requires_unlock) {
+                $authorization->unlock_token_file();
+            }
+
+            if (flock($authorization->get_token_file_handle(), LOCK_SH)) {
+                clearstatcache();
+                rewind($authorization->get_token_file_handle());
+                $access_token = fread($authorization->get_token_file_handle(), filesize($authorization->get_token_location()));
+                error_log('[WP Cloud Plugin message]: '.sprintf('New Authorization Token has been received by another process.'));
+                $this->_client->setAccessToken(unserialize($access_token));
+                $authorization->unlock_token_file();
+
+                return $this->_client;
+            }
+        }
+
+        //error_log('[WP Cloud Plugin message]: ' . sprintf('Start renewing the Authorization Token'));
+
+        // Stop if we need to get a new AccessToken but somehow ended up without a refreshtoken
+        $refresh_token = $access_token->getRefreshToken();
+
+        if (empty($refresh_token)) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('No Refresh Token found during the renewing of the current token. We will stop the authorization completely.'));
+            $authorization->set_is_valid(false);
+            $authorization->unlock_token_file();
+            $this->revoke_token($account);
+
+            return false;
+        }
+
+        // Refresh token
+        try {
+            $new_accesstoken = $this->_client->getAuthHelper()->refreshToken();
+
+            // Store the new token
+            $authorization->set_access_token($new_accesstoken);
+            $authorization->unlock_token_file();
+            $this->get_client()->setAccessToken($new_accesstoken);
+
+            //error_log('[WP Cloud Plugin message]: ' . sprintf('Received new Authorization Token'));
+
+            if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()]))) {
+                wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()]);
+            }
+        } catch (\Exception $ex) {
+            $authorization->set_is_valid(false);
+            $authorization->unlock_token_file();
+            error_log('[WP Cloud Plugin message]: '.sprintf('Cannot refresh Authorization Token'));
+
+            if (!wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()])) {
+                wp_schedule_event(time(), 'daily', 'outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()]);
+            }
+
+            $this->get_processor()->reset_complete_cache();
+
+            throw $ex;
+        }
+
+        return $this->_client;
+    }
+
     public function create_access_token()
     {
         try {
@@ -188,14 +264,14 @@ class App
 
             //Fetch the AccessToken
             $accessToken = $this->get_client()->getAuthHelper()->getAccessToken($code, $state, $this->get_redirect_uri());
-            $this->_client->setAccessToken($accessToken->getToken());
+            $this->_client->setAccessToken($accessToken);
 
             $account_data = $this->get_client()->getCurrentAccount();
             $root_info = $account_data->getRootInfo();
             $root_namespace_id = $root_info['root_namespace_id'];
 
             $account = new Account($account_data->getAccountId(), $account_data->getDisplayName(), $account_data->getEmail(), $root_namespace_id, $account_data->getAccountType(), $account_data->getProfilePhotoUrl());
-            $account->get_authorization()->set_access_token($accessToken->getToken());
+            $account->get_authorization()->set_access_token($accessToken);
             $account->get_authorization()->unlock_token_file();
 
             if ($account_data->emailIsVerified()) {

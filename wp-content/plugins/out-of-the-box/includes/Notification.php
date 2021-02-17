@@ -114,12 +114,16 @@ class Notification
         $message = $this->get_message();
 
         ob_start();
+
         include_once $template;
         $htmlmessage = Helpers::compress_html(ob_get_clean());
 
         // Send mail
         try {
-            $headers = ['Content-Type: text/html; charset=UTF-8'];
+            $headers = [
+                'Content-Type: text/html; charset=UTF-8',
+            ];
+
             $recipients = array_unique($this->get_recipients());
 
             foreach ($recipients as $recipient) {
@@ -269,15 +273,18 @@ class Notification
                 }
 
                 break;
+
             case 'upload':
                 $template_key = 'upload_template_subject';
 
                 break;
+
             case 'deletion':
             case 'deletion_multiple':
                 $template_key = 'delete_template_subject';
 
                 break;
+
             default:
                 $template_key = '';
         }
@@ -298,15 +305,18 @@ class Notification
                 $message_key = 'download_template';
 
                 break;
+
             case 'upload':
                 $message_key = 'upload_template';
 
                 break;
+
             case 'deletion':
             case 'deletion_multiple':
                 $message_key = 'delete_template';
 
                 break;
+
             default:
                 $message_key = '';
         }
@@ -350,6 +360,22 @@ class Notification
             }
         }
 
+        // Add addresses of WP User Roles
+        $all_roles = $this->_get_user_roles();
+        $listed_roles = [];
+
+        foreach ($all_roles as $wp_role_id => $wp_role_name) {
+            $user_role_key = array_search('%'.$wp_role_id.'%', $recipients_template_arr);
+
+            if (false !== $user_role_key) {
+                unset($recipients_template_arr[$user_role_key]);
+                $listed_roles[] = $wp_role_id;
+            }
+        }
+
+        $recipients_template_arr = array_merge($recipients_template_arr, $this->_get_emails_for_user_roles($listed_roles));
+
+        // Make sure that all addresses are only listed once
         $recipients_template_arr = array_unique($recipients_template_arr);
         $recipients = apply_filters('outofthebox_notification_set_recipients', $recipients_template_arr, $this);
 
@@ -369,12 +395,14 @@ class Notification
             '%folder_name%' => basename($this->get_folder()),
             '%folder_relative_path%' => $this->get_processor()->get_relative_path($this->get_folder(), $this->get_processor()->get_root_folder()),
             '%folder_absolute_path%' => $this->get_folder(),
-            '%folder_url' => 'https://www.dropbox.com/home/'.utf8_encode($this->get_folder()),
+            '%folder_url%' => 'https://www.dropbox.com/home/'.utf8_encode($this->get_folder()),
         ];
 
         // Current user data
         $this->placeholders['%user_name%'] = (is_user_logged_in()) ? wp_get_current_user()->display_name : __('An anonymous user', 'wpcloudplugins');
         $this->placeholders['%user_email%'] = (is_user_logged_in()) ? wp_get_current_user()->user_email : '';
+        $this->placeholders['%user_first_name%'] = (is_user_logged_in()) ? wp_get_current_user()->first_name : '';
+        $this->placeholders['%user_last_name%'] = (is_user_logged_in()) ? wp_get_current_user()->last_name : '';
 
         // Location data
         $location_data_required = $this->_is_placeholder_needed('%location%');
@@ -385,17 +413,25 @@ class Notification
         // File list
         $filelist = '';
         foreach ($this->entries as $entry) {
-            $url = ($this->get_client()->has_shared_link($entry)) ? $this->get_client()->get_shared_link($entry).'?dl=0' : OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($entry->get_id()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
+            $file_cloud_shared_url = '';
+            $shared_link_required = $this->_is_placeholder_needed('%file_cloud_shared_url%');
+            if ($shared_link_required) {
+                $file_cloud_shared_url = $this->get_client()->get_shared_link($entry).'?dl=0';
+            }
+
+            $file_download_url = ($this->get_client()->has_shared_link($entry)) ? $this->get_client()->get_shared_link($entry).'?dl=0' : OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($entry->get_id()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
 
             $fileline = strtr($this->_update_depricated_placeholders($this->entry_list), [
                 '%file_name%' => $entry->get_name(),
                 '%file_size%' => Helpers::bytes_to_size_1024($entry->get_size()),
-                '%file_url%' => $url,
+                '%file_cloud_preview_url%' => 'https://www.dropbox.com/home/'.$entry->get_path_display(),
+                '%file_cloud_shared_url%' => $file_cloud_shared_url,
+                '%file_download_url%' => $file_download_url,
                 '%file_relative_path%' => $this->get_processor()->get_relative_path($entry->get_path_display(), $this->get_processor()->get_root_folder()),
                 '%file_absolute_path%' => $entry->get_path_display(),
                 '%folder_relative_path%' => $this->get_processor()->get_relative_path($this->get_folder(), $this->get_processor()->get_root_folder()),
                 '%folder_absolute_path%' => $this->get_folder(),
-                '%folder_url' => 'https://www.dropbox.com/home/'.utf8_encode($this->get_folder()),
+                '%folder_url%' => 'https://www.dropbox.com/home/'.utf8_encode($this->get_folder()),
                 '%file_icon%' => $entry->get_default_icon(),
             ]);
             $filelist .= $fileline;
@@ -409,8 +445,14 @@ class Notification
         $this->placeholders['%file_relative_path%'] = $this->get_processor()->get_relative_path($entry->get_path_display(), $this->get_processor()->get_root_folder());
         $this->placeholders['%file_absolute_path%'] = $entry->get_path_display();
         $this->placeholders['%file_icon%'] = $entry->get_default_icon();
-        $url = ($this->get_client()->has_shared_link($entry)) ? $this->get_client()->get_shared_link($entry).'?dl=0' : OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($entry->get_id()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
-        $this->placeholders['%file_url%'] = $url;
+
+        $shared_link_required = $this->_is_placeholder_needed('%file_cloud_shared_url%');
+        if ($shared_link_required) {
+            $this->placeholders['%file_cloud_shared_url%'] = $this->get_client()->get_shared_link($entry).'?dl=0';
+        }
+
+        $this->placeholders['%file_cloud_preview_url%'] = 'https://www.dropbox.com/home/'.$entry->get_path_display();
+        $this->placeholders['%file_download_url%'] = $file_download_url;
 
         // Set page url
         $current_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
@@ -451,6 +493,7 @@ class Notification
         $template = str_replace('%folder%', '%folder_name%', $template);
         $template = str_replace('%folderpath%', '%folder_path%', $template);
         $template = str_replace('%folder_path%', '%folder_relative_path%', $template);
+        $template = str_replace('%file_url%', '%file_download_url%', $template);
 
         return str_replace('%currenturl%', '%current_url%', $template);
     }
@@ -497,5 +540,38 @@ class Notification
             $recipients[$key] = strtr($this->_update_depricated_placeholders($recipient), $this->placeholders);
         }
         $this->recipients = $recipients;
+    }
+
+    private function _get_user_roles()
+    {
+        // Get User Roles
+        global $wp_roles;
+        if (!isset($wp_roles)) {
+            $wp_roles = new \WP_Roles();
+        }
+
+        return $wp_roles->get_names();
+    }
+
+    private function _get_emails_for_user_roles($user_roles)
+    {
+        $emails = [];
+
+        if (empty($user_roles)) {
+            return $emails;
+        }
+
+        $args = [
+            'role__in' => $user_roles,
+            'fields' => ['user_email'],
+        ];
+
+        $users = get_users($args);
+
+        foreach ($users as $wp_user) {
+            $emails[$wp_user->user_email] = $wp_user->user_email;
+        }
+
+        return $emails;
     }
 }

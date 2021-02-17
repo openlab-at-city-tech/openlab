@@ -54,7 +54,7 @@ class Admin
         // Notices
         add_action('admin_notices', [&$this, 'get_admin_notice_not_authorized']);
         add_action('admin_notices', [&$this, 'get_admin_notice_not_activated']);
-        add_action('admin_notices', [&$this, 'get_admin_notice_php_7']);
+        add_action('admin_notices', [&$this, 'get_admin_notice_php_requirement']);
 
         add_filter('admin_footer_text', [$this, 'admin_footer_text'], 1);
 
@@ -114,7 +114,7 @@ class Admin
         if ($hook == $this->networksettingspage || $hook == $this->settingspage) {
             wp_enqueue_script('jquery-form');
             wp_enqueue_script('OutoftheBox.ShortcodeBuilder');
-            wp_enqueue_script('wp-color-picker-alpha', plugins_url('/wp-color-picker-alpha/wp-color-picker-alpha.min.js', __FILE__), ['wp-color-picker'], '1.0.0', true);
+            wp_enqueue_script('wp-color-picker-alpha', plugins_url('/wp-color-picker-alpha/wp-color-picker-alpha.min.js', __FILE__), ['wp-color-picker'], '3.0.0', true);
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('jquery-ui-accordion');
             wp_enqueue_media();
@@ -283,7 +283,7 @@ class Admin
         }
 
         // Update Cron Job settings
-        if ($new_settings['event_summary_period'] !== $old_settings['event_summary_period']) {
+        if ($new_settings['event_summary'] !== $old_settings['event_summary'] || $new_settings['event_summary_period'] !== $old_settings['event_summary_period']) {
             $summary_cron_job = wp_next_scheduled('outofthebox_send_event_summary');
             if (false !== $summary_cron_job) {
                 wp_unschedule_event($summary_cron_job, 'outofthebox_send_event_summary');
@@ -339,6 +339,7 @@ class Admin
                 network_admin_url('admin.php')
             )
         );
+
         exit;
     }
 
@@ -574,9 +575,9 @@ class Admin
     {
         $box_text = __('WP Cloud Plugins uses a cache to improve performance', 'wpcloudplugins').'. '.__('If the plugin somehow is causing issues, try to reset the cache first', 'wpcloudplugins').'.<br/>';
 
-        $box_button = "<div id='resetDropbox_button' type='button' class='simple-button blue'/>".__('Reset Cache', 'wpcloudplugins')."&nbsp;<div class='oftb-spinner'></div></div>";
+        $box_button = "<div id='resetDropbox_button' type='button' class='simple-button blue'/>".__('Purge Cache', 'wpcloudplugins')."&nbsp;<div class='oftb-spinner'></div></div>";
 
-        return "<div id='message'><p>{$box_text}</p><p>{$box_button}</p> </div>";
+        return "<div id='message'><div class='outofthebox-option-description'>{$box_text}</div><p>{$box_button}</p></div>";
     }
 
     public function get_plugin_reset_plugin_box()
@@ -585,13 +586,13 @@ class Admin
 
         $box_button = "<div id='resetSettings_button' type='button' class='simple-button blue'/>".__('Reset Plugin', 'wpcloudplugins')."&nbsp;<div class='oftb-spinner'></div></div>";
 
-        return "<div id='message'><p>{$box_text}</p><p>{$box_button}</p> </div>";
+        return "<div id='message'><div class='outofthebox-option-description'>{$box_text}</div><p>{$box_button}</p></div>";
     }
 
     public function get_admin_notice()
     {
-        if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('You need at least PHP %s if you want to use this plugin', 'wpcloudplugins'), '5.5').'. '.
+        if (version_compare(PHP_VERSION, '7.0') < 0) {
+            echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.sprintf(__('You need at least PHP %s if you want to use this plugin', 'wpcloudplugins'), '7.0').'. '.
                 __('You are using:', 'wpcloudplugins').' <u>'.phpversion().'</u></p></div>';
         } elseif (!function_exists('curl_reset')) {
             echo '<div id="message" class="error"><p><strong>Out-of-the-Box - Error: </strong>'.__("You don't have the cURL PHP extension installed (couldn't find function \"curl_reset\"), please enable or install this extension", 'wpcloudplugins').'. '.
@@ -650,21 +651,23 @@ class Admin
         }
     }
 
-    public function get_admin_notice_php_7()
+    public function get_admin_notice_php_requirement()
     {
-        global $pagenow;
+        // FOR FUTURE USE
+        
+        // global $pagenow;
 
-        if (version_compare(PHP_VERSION, '7') > 0) {
-            return;
-        }
+        // if (version_compare(PHP_VERSION, '7') > 0) {
+        //     return;
+        // }
 
-        if ('index.php' == $pagenow || 'plugins.php' == $pagenow) {
-            if (current_user_can('manage_options') || current_user_can('edit_theme_options')) {
-                $location = 'https://wordpress.org/support/update-php/';
-                echo '<div id="message" class="error"><p><strong>Out-of-the-Box: </strong>'.__('The next major update will not longer be compatible with the PHP version your server is running', 'wpcloudplugins').'. '.__('You are using:', 'wpcloudplugins').' <u>'.phpversion().'</u>. '.__('Please upgrade your PHP version to at least PHP 7.0', 'wpcloudplugins').'.</p><p> '.
-                "<a href='{$location}' target='_blank'  class='button-primary'>".__('Learn move about updating PHP', 'wpcloudplugins').'</a></p></div>';
-            }
-        }
+        // if ('index.php' == $pagenow || 'plugins.php' == $pagenow) {
+        //     if (current_user_can('manage_options') || current_user_can('edit_theme_options')) {
+        //         $location = 'https://wordpress.org/support/update-php/';
+        //         echo '<div id="message" class="error"><p><strong>Out-of-the-Box: </strong>'.__('The next major update will not longer be compatible with the PHP version your server is running', 'wpcloudplugins').'. '.__('You are using:', 'wpcloudplugins').' <u>'.phpversion().'</u>. '.__('Please upgrade your PHP version to at least PHP 7.0', 'wpcloudplugins').'.</p><p> '.
+        //         "<a href='{$location}' target='_blank'  class='button-primary'>".__('Learn move about updating PHP', 'wpcloudplugins').'</a></p></div>';
+        //     }
+        // }
     }
 
     public function check_for_updates()
@@ -724,11 +727,13 @@ class Admin
             'flock' => (false === strpos(ini_get('disable_functions'), 'flock')),
             'zip_archive' => class_exists('ZipArchive'),
             'secure_connection' => is_ssl(),
+            'openssl_encrypt' => (function_exists('openssl_encrypt') && in_array('aes-256-cbc', openssl_get_cipher_methods())),
             'hide_errors' => !(defined('WP_DEBUG') && defined('WP_DEBUG_DISPLAY') && WP_DEBUG && WP_DEBUG_DISPLAY) || 0 === intval(ini_get('display_errors')),
             'gravity_forms' => class_exists('GFForms'),
             'formidableforms' => class_exists('FrmAppHelper'),
             'gravity_pdf' => class_exists('GFPDF_Core'),
             'gravity_wpdatatables' => class_exists('WPDataTable'),
+            'elementor' => defined('ELEMENTOR_VERSION'),
             'wpforms' => defined('WPFORMS_VERSION'),
             'contact_form_7' => defined('WPCF7_PLUGIN'),
             'woocommerce' => class_exists('WC_Integration'),

@@ -2,21 +2,22 @@
 
 namespace Kunnu\Dropbox\Models;
 
-class ModelFactory {
-
+class ModelFactory
+{
     /**
-     * Make a Model Factory
+     * Make a Model Factory.
      *
-     * @param  array  $data Model Data
+     * @param array $data Model Data
      *
      * @return \Kunnu\Dropbox\Models\ModelInterface
      */
-    public static function make(array $data = array()) {
-        if (isset($data['.tag']) && isset($data['id'])) {
+    public static function make(array $data = [])
+    {
+        if (isset($data['.tag'], $data['id'])) {
             $tag = $data['.tag'];
 
             //File
-            if ($tag === 'file') {
+            if ('file' === $tag) {
                 if (isset($data['url'])) {
                     return new FileLinkMetadata($data);
                 }
@@ -25,16 +26,17 @@ class ModelFactory {
             }
 
             //Folder
-            if ($tag === 'folder') {
+            if ('folder' === $tag) {
                 if (isset($data['url'])) {
                     return new FolderLinkMetadata($data);
                 }
+
                 return new FolderMetadata($data);
             }
         }
 
         //Temporary Link
-        if (isset($data['metadata']) && isset($data['link'])) {
+        if (isset($data['metadata'], $data['link'])) {
             return new TemporaryLink($data);
         }
 
@@ -68,22 +70,28 @@ class ModelFactory {
         //}
         //
         //Simple BatchV2 Result response
-        if (isset($data['.tag']) && $data['.tag'] === 'success') {
-
+        if (isset($data['.tag']) && 'success' === $data['.tag']) {
             if (isset($data['success'])) {
                 return self::make($data['success']);
-            } elseif (isset($data['metadata'])) {
+            }
+            if (isset($data['metadata'])) {
                 return self::make($data['metadata']);
             }
         }
         //
         //Simple Tag response
-        if (isset($data['.tag']) && count($data) === 1) {
+        if (isset($data['.tag']) && 1 === count($data)) {
             return new Tag($data);
+        }
+
+        //Simple SearchV2 Result response
+        if (isset($data['.tag']) && 'metadata' === $data['.tag']) {
+            if (isset($data['metadata'])) {
+                return self::make($data['metadata']);
+            }
         }
 
         //Base Model
         return new BaseModel($data);
     }
-
 }

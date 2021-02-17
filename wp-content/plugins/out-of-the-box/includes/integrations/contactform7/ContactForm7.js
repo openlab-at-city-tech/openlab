@@ -3,10 +3,16 @@ jQuery(document).ready(function ($) {
 
   $("body").on("change", ".outofthebox-shortcode-value", function () {
     var decoded_shortcode = decodeURIComponent(escape(window.atob($(this).val())));
-    $('#outofthebox-shortcode-decoded-value').text(decoded_shortcode).css('display', 'block');
+    $('#outofthebox-shortcode-decoded-value').val(decoded_shortcode).css('display', 'block');
   });
 
-  var default_value = '[outofthebox class="cf7_upload_box" mode="upload" upload="1" uploadrole="all" upload_auto_start="0" viewrole="all" userfolders="auto" viewuserfoldersrole="none"';
+  $("body").on("keyup", "#outofthebox-shortcode-decoded-value", function () {
+    var encoded_data = window.btoa(unescape(encodeURIComponent($(this).val())));
+    $(".outofthebox-shortcode-value", "body").val(encoded_data)
+    $('.outofthebox-shortcode-value').trigger('change');
+  });
+
+  var default_value = '[outofthebox class="cf7_upload_box" mode="upload" upload="1" uploadrole="all" upload_auto_start="0" viewrole="all" userfolders="auto" viewuserfoldersrole="none"]';
   var encoded_data = window.btoa(unescape(encodeURIComponent(default_value)));
   $(".outofthebox-shortcode-value", "body").val(encoded_data).trigger('change');
 
@@ -16,7 +22,7 @@ jQuery(document).ready(function ($) {
       var encoded_data = window.btoa(unescape(encodeURIComponent(data)));
 
       $('.outofthebox-shortcode-value').val(encoded_data);
-      jQuery('.outofthebox-shortcode-value').trigger('change');
+      $('.outofthebox-shortcode-value').trigger('change');
 
       if (data.indexOf('userfolders="auto"') > -1) {
         $('.out-of-the-box-upload-folder').fadeIn();
@@ -50,13 +56,13 @@ jQuery(document).ready(function ($) {
 
     $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
-    var shortcode = $('#outofthebox-shortcode-decoded-value', 'body').text()
+    var shortcode = $('#outofthebox-shortcode-decoded-value', 'body').val()
     var shortcode_attr = shortcode.replace('</p>', '').replace('<p>', '').replace('[outofthebox ', '').replace('"]', '');
     var query = encodeURIComponent(shortcode_attr).split('%3D%22').join('=').split('%22%20').join('&');
 
     $iframe.attr('src', $iframe_template.attr('data-src') + '&' + query);
 
-    $iframe.load(function () {
+    $iframe.on('load', function () {
       $('.outofthebox-modal-body').fadeIn();
       $('.outofthebox-modal-footer').fadeIn();
       $('.modal-content .loading:first').fadeOut();

@@ -66,7 +66,7 @@ class Gallery
             $parent_folder_entry->set_path_display($location);
             $parent_folder_entry->set_is_dir(true);
             $parent_folder_entry->set_parent_folder(true);
-            $parent_folder_entry->set_icon($this->get_processor()->get_setting('icon_set').'128x128/folder-grey.png');
+            $parent_folder_entry->set_icon($this->get_processor()->get_setting('icon_set').'128x128/prev.png');
         }
 
         if ('-1' !== $this->get_processor()->get_shortcode_option('max_files') && $this->_folder->has_children()) {
@@ -108,7 +108,7 @@ class Gallery
             $imageslist_html .= '</div>';
         } else {
             if (true === $this->_search) {
-                $imageslist_html .= '<div class="no_results">'.__('No files or folders found', 'wpcloudplugins').'</div>';
+                $imageslist_html .= '<div class="no_results">'.__('This folder is empty', 'wpcloudplugins').'</div>';
             }
         }
 
@@ -315,7 +315,7 @@ class Gallery
         $return .= "<a href='".$url."' title='".htmlspecialchars($item->get_name(), ENT_COMPAT | ENT_HTML401 | ENT_QUOTES)."' {$target} class='{$class}' data-type='image' data-caption='{$caption}' {$thumbnail} rel='ilightbox[".$this->get_processor()->get_listtoken()."]'><span class='image-rollover'></span>";
 
         $return .= "<div class='preloading'></div>";
-        $return .= "<img referrerPolicy='no-referrer' class='preloading {$hidden_class}' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' width='{$width}' height='{$height}' style='width:{$width}px !important;height:{$height}px !important; '/>";
+        $return .= "<img referrerPolicy='no-referrer' class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' width='{$width}' height='{$height}' style='width:{$width}px !important;height:{$height}px !important; '/>";
 
         $text = '';
         if ('1' === $this->get_processor()->get_shortcode_option('show_filenames')) {

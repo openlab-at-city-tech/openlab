@@ -1,36 +1,35 @@
 <?php
+
 namespace Kunnu\Dropbox\Models;
 
 class SearchResults extends MetadataCollection
 {
     /**
-     * Collection Items Key
+     * Collection Items Key.
      *
      * @const string
      */
     const COLLECTION_ITEMS_KEY = 'matches';
 
     /**
-     * Collection Cursor Key
+     * Collection Cursor Key.
      *
      * @const string
      */
-    const COLLECTION_CURSOR_KEY = 'start';
+    const COLLECTION_CURSOR_KEY = 'cursor';
 
     /**
-     * Collection has-more-items Key
+     * Collection has-more-items Key.
      *
      * @const string
      */
-    const COLLECTION_HAS_MORE_ITEMS_KEY = 'more';
+    const COLLECTION_HAS_MORE_ITEMS_KEY = 'has_more';
 
     /**
      * Process items and cast them
-     * to their respective Models
+     * to their respective Models.
      *
      * @param array $items Unprocessed Items
-     *
-     * @return void
      */
     protected function processItems(array $items)
     {

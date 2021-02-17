@@ -168,6 +168,7 @@
             typeof self.finished_uploads[file.hash] === 'undefined' &&
             typeof self.pending_uploads[file.hash] === 'undefined'
           ) {
+            self.pending_uploads[file.hash] = file;
             file.upload_event();
           }
         })
@@ -203,6 +204,7 @@
         // Add own properties to the file object for identification
         file.hash = (file.path + file.name + file.size + ("lastModified" in file ? file.lastModified : '')).hashCode();
         file.listtoken = self.options.listtoken;
+        file.description = (typeof file.description !== 'undefined') ? file.description : '';
 
         /* Files larger than 300MB cannot be uploaded directly to Dropbox :( */
         file.directupload = self.options.support_xhr && (file.size < 314572800);
@@ -235,22 +237,25 @@
         self.queue_length++;
 
         if (file.error) {
-          self.queue[file.hash].status.type = 'upload-failed';
-        }
+          self._log('FILE NOT VALID');
+          self.element.find('.fileupload-requirements-button').click();
+          self.queue[file.hash].status.type = 'validation-failed';
+          self.queue[file.hash].upload_event = null;
+        } else {
+          /* Set upload trigger */
+          self.queue[file.hash].upload_event = function () {
+            data.process().done(function () {
+              data.submit();
+            });
+          }
 
-        /* Set upload trigger */
-        self.queue[file.hash].upload_event = function () {
-          data.process().done(function () {
-            data.submit();
-          });
+          self.element.trigger('outofthebox-add-upload', [file, data, self]);
+
+          self._log('FILE ADDED');
         }
 
         // Update Element in Queue
         self.updateFileInQueueTable(file);
-
-        self.element.trigger('outofthebox-add-upload', [file, data, self]);
-
-        self._log('FILE ADDED');
       });
 
       /* Start the upload when auto upload is enabled */
@@ -350,6 +355,9 @@
 
       /* Update UI elements */
       self.element.addClass('-is-uploading');
+      if (self.in_form) {
+        self.form_upload_button.val(self.options.str_uploading).html(self.options.str_uploading).prop("disabled", true).addClass("-wpcp-submit-active");
+      }
 
       /* File upload uses single fileuploads */
       var file = data.files[0];
@@ -410,6 +418,7 @@
             type: 'do-upload',
             hash: file.hash,
             file_path: file.path,
+            file_description: file.description,
             lastpath: self.options.main.element.attr('data-path'),
             listtoken: self.options.listtoken,
             _ajax_nonce: self.options.upload_nonce
@@ -487,6 +496,7 @@
             filename: file.name,
             file_size: file.size,
             file_path: file.path,
+            file_description: file.description,
             mimetype: file.type,
             orgin: (!window.location.origin) ? window.location.protocol + "//" +
               window.location.hostname +
@@ -513,7 +523,7 @@
 
       /* Check if upload was successful */
       var is_uploaded = true;
-      if (self.options.support_xhr && (typeof data.result === 'undefined' || data.result === null)) {
+      if (self.options.support_xhr && (typeof data.result === 'undefined' || data.result === null || data.result === "")) {
         is_uploaded = false;
       }
 
@@ -597,6 +607,14 @@
 
       self.updateFileInQueueTable(file);
 
+      if (file.error !== false) {
+        self.options.main._logEvent('log_failed_upload_event', self.options.main.element.attr('data-id'), {
+          'name': file.name,
+          'size': file.size,
+          'error': file.error
+        });
+      }
+
       self.queue[file.hash].upload_event = null;
       delete self.pending_uploads[file.hash];
 
@@ -608,6 +626,14 @@
     /* Post Process to send email notifications and trigger PHP other hooks */
     _postProcess: function () {
       var self = this;
+
+      if (Object.keys(self.finished_uploads).length === 0) {
+        self._log('NO POST PROCESS (NO FILES UPLOADED)');
+        return new Promise(function (resolve, reject) {
+          resolve(true);
+        });
+      }
+
 
       self._log('POST PROCESS STARTED');
 
@@ -642,6 +668,7 @@
         self.files_storage[fileid] = {
           "hash": fileid,
           "name": file.name,
+          "description": file.description,
           "type": file.type,
           "path": file.completepath,
           "size": file.filesize,
@@ -656,6 +683,11 @@
 
       /* Update UI elements */
       self.element.removeClass('-is-uploading');
+      self.element.find('.-upload-finished').addClass('-upload-postprocess-finished');
+
+      if (self.in_form) {
+        self.form_upload_button.val(self.form_submit_button.val()).html(self.form_submit_button.html()).prop("disabled", false).removeClass("-wpcp-submit-active");
+      }
       self._refreshView();
 
       /* Refresh File Browser if attached */
@@ -673,12 +705,12 @@
 
       /* Check for Errors (only required when part of a form)*/
       if (self.in_form) {
-        $.each(data.files, function (index, file) {
+        $.each(self.queue, function (index, file) {
           if (file.error !== false) {
             finish_upload = false;
             self._scrollToFile(file)
 
-            self._log('QUEUE CONTAINS ERRORS', data.files);
+            self._log('QUEUE CONTAINS ERRORS', self.queue);
             self._abort(data);
 
             self._dialogFailedUploads([file]);
@@ -769,7 +801,7 @@
 
       // Get global progress based on weighted value
       $.each(self.queue, function (hash, file) {
-        if (file.status.type === 'upload-finished' || file.status.type === 'upload-failed') {
+        if (file.status.type === 'validation-failed' || file.status.type === 'upload-finished' || file.status.type === 'upload-failed') {
           return;
         }
 
@@ -778,7 +810,7 @@
       })
 
       $.each(self.queue, function (hash, file) {
-        if (file.status.type === 'upload-finished' || file.status.type === 'upload-failed') {
+        if (file.status.type === 'validation-failed' || file.status.type === 'upload-finished' || file.status.type === 'upload-failed') {
           return;
         }
 
@@ -871,6 +903,20 @@
     },
 
     /**
+     * Add a failed upload again to the queue
+     */
+    _redo: function (file) {
+      var self = this;
+
+      self._log('REDO FILE UPLOAD', file);
+
+      self.element.fileupload('add', {
+        files: [file]
+      });
+
+    },
+
+    /**
      * Reset Upload Box
      */
     _clear: function () {
@@ -885,6 +931,8 @@
       self.queue = {};
       self.queue_length = 0;
       self.queue_size = 0;
+
+      self.element.find('input[name="fileupload-filelist_' + self.options.listtoken + '"]').val();
 
       if (self.in_form) {
         self.form_element.find('.fileupload-filelist').val('');
@@ -943,13 +991,16 @@
       var row = self.queue[file.hash].element;
 
       // Update progress
-      row.removeClass('-upload-waiting -upload-starting -uploading-to-cloud -uploading-to-server -upload-converting');
+      row.removeClass('-upload-waiting -upload-starting -uploading-to-cloud -uploading-to-server -upload-converting -upload-failed');
       row.addClass('-' + self.queue[file.hash].status.type);
 
       self._log(self.queue[file.hash], self.queue[file.hash].status.progress);
       if (self.queue[file.hash].status.type === 'uploading-to-cloud' || self.queue[file.hash].status.type === 'uploading-to-server') {
         self.queue[file.hash].status.progressbar.set(self.queue[file.hash].status.progress)
       }
+
+      // Add description if present
+      row.find('.fileupload-table-text-subtitle').text(self.options.main._helperFormatBytes(file.size, 1) + ((file.description) ? ' - ' + file.description : ''));
 
       // Add Error information if present
       if (file.error !== false) {
@@ -1100,6 +1151,17 @@
         self._stop(file);
       })
 
+      /* Redo button */
+      $(self.element).on('click', '.upload-redo', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var hash = $(this).closest('.fileupload-table-row').attr('data-id');
+        var file = self.queue[hash];
+
+        self._redo(file);
+      })
+
       /* Requirements  */
       if (self.options.has_requirements === false) {
         self.element.find('.fileupload-requirements-button').remove();
@@ -1109,6 +1171,7 @@
         $requirments_button.next().removeClass('tippy-content-holder');
 
         tippy($requirments_button.get(0), {
+          trigger: 'click mouseenter focus',
           content: $requirments_button.next().get(0),
           allowHTML: true,
           moveTransition: 'transform 0.2s ease-out',
@@ -1133,22 +1196,31 @@
 
       /* Global Progress information */
       // Not implemented yet due to inaccurate predictions  
-      // var global_progress = self.element.find('.fileupload-progress').countdown({
+      // var global_progress = self.element.find('.fileupload-progress').wpcp_countdown({
       //   date: new Date()
       // });
       // self.element.on('progress-update', function (event, value) {
 
-      //   global_progress.countdown("destroy");
+      //   global_progress.wpcp_countdown("destroy");
       //   var expected_time = new Date();
       //   expected_time = new Date(expected_time.getTime() + value * 1000);
 
-      //   global_progress = self.element.find('.fileupload-progress').countdown({
+      //   global_progress = self.element.find('.fileupload-progress').wpcp_countdown({
       //     date: expected_time
       //   });
       // })
 
       /* Drag/Drop  */
       self._initDragDrop();
+
+      /* Add Description button */
+      $(self.element).on('click', 'button.upload-add-description', function (e) {
+
+        var hash = $(this).closest('.fileupload-table-row').attr('data-id');
+        var file = self.queue[hash];
+
+        self._dialogAddDescription(file);
+      });
 
       /* Additional Form functions */
       if (self.in_form) {
@@ -1225,6 +1297,10 @@
       /* Actions for Formidable Forms events */
       jQuery(document).on('frmFormComplete frmFormErrors', function (event, object, response) {
         self.form_element.removeClass("-is-submitting");
+      });
+
+      jQuery(document).on('frmFormComplete', function (event, object, response) {
+        self._clear();
       });
 
       jQuery(document).on('frmPageChanged', function (event, object, response) {
@@ -1350,12 +1426,9 @@
       //self.form_upload_button.val(self.form_submit_button.val()).removeClass("-wpcp-submit-active").prop("disabled", false);
       self.form_upload_button.prop("disabled", false).removeClass("-wpcp-submit-active");
       if (self.element.find('.-upload-waiting').length > 0) {
-        self.form_upload_button.val(self.options.str_uploading).html(self.options.str_uploading).prop("disabled", true).addClass("-wpcp-submit-active");
         self.element.trigger('outofthebox-upload-start');
         return false
       }
-
-      self.form_upload_button.val(self.form_submit_button.val()).html(self.form_submit_button.html()).addClass('-wpcp-submit-done');
 
       /* Don't fire when there are still uploads processing on the page or the form is already submitted. */
       if (
@@ -1365,6 +1438,8 @@
       ) {
         return false;
       }
+
+      self.form_upload_button.val(self.form_submit_button.val()).html(self.form_submit_button.html()).addClass('-wpcp-submit-done');
 
       /* Trigger the next button in sequence */
       if (self.form_upload_button.next('.wpcp-upload-submit').length > 0) {
@@ -1402,7 +1477,6 @@
         this.parent.append(this.input)
       })
     },
-
 
     /**
      * If the Upload Box is part of a Form, render the rows of already uploaded content
@@ -1452,7 +1526,7 @@
       var self = this;
 
       // All the input fields that are used for custom folder names
-      var inputs = self.form_element.find('input.outofthebox_private_folder_name, select.outofthebox_private_folder_name, .outofthebox_private_folder_name input:last');
+      var inputs = self.form_element.find('input.outofthebox_private_folder_name, select.outofthebox_private_folder_name, .outofthebox_private_folder_name input:last-of-type');
 
       if (inputs.length === 0) {
         return;
@@ -1496,7 +1570,7 @@
     _initDragDrop: function () {
       var self = this;
 
-      $(document).bind('dragover', function (e) {
+      $(document).on('dragover', function (e) {
         var dropZone = self.options.dropzone,
           timeout = self.dropZoneTimeout;
         if (!timeout) {
@@ -1524,7 +1598,7 @@
         }, 100);
       });
 
-      $(document).bind('drop dragover', function (e) {
+      $(document).on('drop dragover', function (e) {
         e.preventDefault();
       });
     },
@@ -1596,6 +1670,57 @@
       }
     },
 
+    _dialogAddDescription: function (file) {
+
+      var self = this;
+
+      /* Close any open modal windows */
+      $('#outofthebox-modal-action').remove();
+
+      /* Build the Description Dialog */
+      var modalbuttons = '';
+      modalbuttons += '<button class="button outofthebox-modal-cancel-btn secondary" data-action="cancel" type="button" onclick="modal_action.close();" title="' + this.options.main.options.str_cancel_title + '" >' + this.options.main.options.str_cancel_title + '</button>';
+      modalbuttons += '<button class="button outofthebox-modal-confirm-btn" data-action="adddescription" type="button" title="' + this.options.main.options.str_save_title + '" >' + this.options.main.options.str_save_title + '</button>';
+      var modalheader = $('<a tabindex="0" class="close-button" title="' + this.options.main.options.str_close_title + '" onclick="modal_action.close();"><i class="fas fa-times fa-lg" aria-hidden="true"></i></a></div>');
+      var modalbody = $('<div class="outofthebox-modal-body" tabindex="0" ><textarea id="outofthebox-modal-description-input" name="outofthebox-modal-description-input" style="width:100%" rows="8" placeholder="' + file.name + ' | ' + this.options.main.options.str_add_description + '"></textarea></div>');
+      var modalfooter = $('<div class="outofthebox-modal-footer"><div class="outofthebox-modal-buttons">' + modalbuttons + '</div></div>');
+      var modaldialog = $('<div id="outofthebox-modal-action" class="OutoftheBox outofthebox-modal ' + this.options.main.options.content_skin + '"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
+
+      $('body').append(modaldialog);
+      $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
+
+      /* Fill Textarea */
+      $('#outofthebox-modal-description-input').val(file.description.replace(/<br\s?\/?>/g, "\r"));
+
+      /* Set the button actions */
+      $('#outofthebox-modal-action #outofthebox-modal-description-input').off('keyup');
+      $('#outofthebox-modal-action #outofthebox-modal-description-input').on("keyup", function (event) {
+        if (event.which == 13 || event.keyCode == 13) {
+          $('#outofthebox-modal-action .outofthebox-modal-description-btn').trigger('click');
+        }
+      });
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').off('click');
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
+        file.description = $('#outofthebox-modal-description-input').val();
+        self.queue[file.hash] = file;
+        self.updateFileInQueueTable(file)
+        modal_action.close();
+      });
+
+      /* Open the dialog */
+      var modal_action = new RModal(document.getElementById('outofthebox-modal-action'), {
+        bodyClass: 'rmodal-open',
+        dialogOpenClass: 'animated slideInDown',
+        dialogCloseClass: 'animated slideOutUp',
+        escapeClose: true
+      });
+      document.addEventListener('keydown', function (ev) {
+        modal_action.keydown(ev);
+      }, false);
+      modal_action.open();
+      window.modal_action = modal_action;
+      return false;
+    },
 
     _dialogFailedUploads: function (files, mouseevent) {
 
@@ -1628,7 +1753,7 @@
       $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
       /* Set the button actions */
-      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').unbind('click');
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').off('click');
       $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
         modal_action.close();
       });
@@ -1667,7 +1792,7 @@
       $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
       /* Set the button actions */
-      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').unbind('click');
+      $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').off('click');
       $('#outofthebox-modal-action .outofthebox-modal-confirm-btn').click(function () {
         modal_action.close();
       });
