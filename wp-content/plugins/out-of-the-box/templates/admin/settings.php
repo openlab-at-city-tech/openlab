@@ -33,7 +33,7 @@ function create_color_boxes_table($colors, $settings)
 
         $table_html .= '<tr>';
         $table_html .= "<td>{$color['label']}</td>";
-        $table_html .= "<td><input value='{$value}' data-default-color='{$color['default']}'  name='out_of_the_box_settings[colors][{$color_id}]' id='colors-{$color_id}' type='text'  class='outofthebox-color-picker' data-alpha='true' ></td>";
+        $table_html .= "<td><input value='{$value}' data-default-color='{$color['default']}'  name='out_of_the_box_settings[colors][{$color_id}]' id='colors-{$color_id}' type='text'  class='outofthebox-color-picker' data-alpha-enabled='true' ></td>";
         $table_html .= '</tr>';
     }
 
@@ -58,7 +58,7 @@ function create_upload_button_for_custom_images($option)
     $button_html .= '</div>';
 
     $button_html .= '<input id="'.esc_attr($option['id']).'" class="upload outofthebox-option-input-large" type="text" name="'.esc_attr($option['name']).'" value="'.esc_attr($field_value).'" autocomplete="off" />';
-    $button_html .= '<input id="upload_image_button" class="upload_button simple-button blue" type="button" value="'.__('Select Image', 'wpcloudplugins').'" title="'.__('Upload or select a file from the media library', 'wpcloudplugins').'" />';
+    $button_html .= '<input class="upload_button simple-button blue" type="button" value="'.__('Select Image', 'wpcloudplugins').'" title="'.__('Upload or select a file from the media library', 'wpcloudplugins').'" />';
 
     if ($field_value !== $option['default']) {
         $button_html .= '<input id="default_image_button" class="default_image_button simple-button" type="button" value="'.__('Default', 'wpcloudplugins').'" title="'.__('Fallback to the default value', 'wpcloudplugins').'"  data-default="'.$option['default'].'"/>';
@@ -72,15 +72,13 @@ function create_upload_button_for_custom_images($option)
 
 <div class="outofthebox admin-settings">
   <form id="outofthebox-options" method="post" action="options.php">
-    <?php wp_nonce_field('update-options'); ?>
     <?php settings_fields('out_of_the_box_settings'); ?>
-    <input type="hidden" name="action" value="update">
 
     <div class="wrap">
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
         <div class="outofthebox-form-buttons"> <div id="save_settings" class="simple-button default save_settings" name="save_settings"><?php _e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='oftb-spinner'></div></div></div>
-        <div class="outofthebox-title">Out-of-the-Box <?php _e('Settings', 'wpcloudplugins'); ?></div>
+        <div class="outofthebox-title"><?php _e('Settings', 'wpcloudplugins'); ?></div>
       </div>
 
 
@@ -435,7 +433,7 @@ function create_upload_button_for_custom_images($option)
               <div class="outofthebox-option-description"><?php _e('Try to remove Private Folders after they are deleted', 'wpcloudplugins'); ?>.</div>
 
               <div class="outofthebox-option-title"><?php _e('Name Template', 'wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php _e('Template name for automatically created Private Folders. You can use <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>', 'wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-description"><?php echo __('Template name for automatically created Private Folders.', 'wpcloudplugins').' '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), '').'<code>%user_login%</code>, <code>%user_firstname%</code>, <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>'; ?>.</div>
               <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[userfolder_name]" id="userfolder_name" value="<?php echo esc_attr($this->settings['userfolder_name']); ?>">
 
                           </div>
@@ -688,42 +686,6 @@ function create_upload_button_for_custom_images($option)
             <option value="proxy" <?php echo 'proxy' === $this->settings['download_method'] ? "selected='selected'" : ''; ?>><?php _e('Use your Server as proxy (slow)', 'wpcloudplugins'); ?></option>
           </select>   
 
-          <div class="outofthebox-option-title"><?php _e('Shortlinks API', 'wpcloudplugins'); ?></div>
-          <div class="outofthebox-option-description"><?php _e('Select which Url Shortener Service you want to use', 'wpcloudplugins'); ?>.</div>
-          <select type="text" name="out_of_the_box_settings[shortlinks]" id="shortlinks">
-            <option value="None"  <?php echo 'None' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>None</option>
-            <option value="Shorte.st"  <?php echo 'Shorte.st' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Shorte.st</option>
-            <option value="Rebrandly"  <?php echo 'Rebrandly' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Rebrandly</option>
-            <option value="Bit.ly"  <?php echo 'Bit.ly' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Bit.ly</option>
-          </select>   
-
-          <div class="outofthebox-suboptions option shortest" <?php echo 'Shorte.st' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
-            <div class="outofthebox-option-description"><?php _e('Sign up for Shorte.st', 'wpcloudplugins'); ?> and <a href="https://shorte<?php echo '.st/tools/api'; ?>" target="_blank">grab your API token</a></div>
-
-            <div class="outofthebox-option-title"><?php _e('API token', 'wpcloudplugins'); ?></div>
-            <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[shortest_apikey]" id="shortest_apikey" value="<?php echo esc_attr($this->settings['shortest_apikey']); ?>">
-          </div>
-
-          <div class="outofthebox-suboptions option bitly" <?php echo 'Bit.ly' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
-            <div class="outofthebox-option-description"><a href="https://bitly.com/a/sign_up" target="_blank"><?php _e('Sign up for Bitly', 'wpcloudplugins'); ?></a> and <a href="http://bitly.com/a/your_api_key" target="_blank">generate an API key</a></div>
-
-            <div class="outofthebox-option-title">Bitly Login</div>
-            <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_login]" id="bitly_login" value="<?php echo esc_attr($this->settings['bitly_login']); ?>">
-
-            <div class="outofthebox-option-title">Bitly API key</div>
-            <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_apikey]" id="bitly_apikey" value="<?php echo esc_attr($this->settings['bitly_apikey']); ?>">
-          </div> 
-
-          <div class="outofthebox-suboptions option rebrandly" <?php echo 'Rebrandly' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
-            <div class="outofthebox-option-description"><a href="https://app.rebrandly.com/" target="_blank"><?php _e('Sign up for Rebrandly', 'wpcloudplugins'); ?></a> and <a href="https://app.rebrandly.com/account/api-keys" target="_blank">grab your API token</a></div>
-
-            <div class="outofthebox-option-title">Rebrandly API key</div>
-            <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_apikey]" id="rebrandly_apikey" value="<?php echo esc_attr($this->settings['rebrandly_apikey']); ?>">
-
-            <div class="outofthebox-option-title">Rebrandly Domain (optional)</div>
-            <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_domain]" id="rebrandly_domain" value="<?php echo esc_attr($this->settings['rebrandly_domain']); ?>">
-          </div> 
-
           <div class="outofthebox-option-title"><?php _e('Delete settings on Uninstall', 'wpcloudplugins'); ?>
             <div class="outofthebox-onoffswitch">
               <input type='hidden' value='No' name='out_of_the_box_settings[uninstall_reset]'/>
@@ -742,6 +704,65 @@ function create_upload_button_for_custom_images($option)
         <!-- Integrations Tab -->
         <div id="settings_integrations"  class="outofthebox-tab-panel">
           <div class="outofthebox-tab-panel-header"><?php _e('Integrations', 'wpcloudplugins'); ?></div>
+
+          <div class="outofthebox-accordion">
+            <div class="outofthebox-accordion-title outofthebox-option-title">Social Sharing Buttons</div>
+            <div>
+              <div class="outofthebox-option-description"><?php _e('Select which sharing buttons should be accessible via the sharing dialogs of the plugin.', 'wpcloudplugins'); ?></div>
+
+              <div class="shareon shareon-settings">
+                <?php foreach ($this->settings['share_buttons'] as $button => $value) {
+              $title = ucfirst($button);
+              echo "<button type='button' class='shareon-setting-button {$button} shareon-{$value} ' title='{$title}'></button>";
+              echo "<input type='hidden' value='{$value}' name='out_of_the_box_settings[share_buttons][{$button}]'/>";
+          }
+                ?>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="outofthebox-accordion">
+            <div class="outofthebox-accordion-title outofthebox-option-title"><?php _e('Shortlinks API', 'wpcloudplugins'); ?></div>
+
+            <div>
+              <div class="outofthebox-option-description"><?php _e('Select which Url Shortener Service you want to use', 'wpcloudplugins'); ?>.</div>
+              <select type="text" name="out_of_the_box_settings[shortlinks]" id="shortlinks">
+                <option value="None"  <?php echo 'None' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>None</option>
+                <option value="Shorte.st"  <?php echo 'Shorte.st' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Shorte.st</option>
+                <option value="Rebrandly"  <?php echo 'Rebrandly' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Rebrandly</option>
+                <option value="Bit.ly"  <?php echo 'Bit.ly' === $this->settings['shortlinks'] ? "selected='selected'" : ''; ?>>Bit.ly</option>
+              </select>   
+
+              <div class="outofthebox-suboptions option shortest" <?php echo 'Shorte.st' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
+                <div class="outofthebox-option-description"><?php _e('Sign up for Shorte.st', 'wpcloudplugins'); ?> and <a href="https://shorte<?php echo '.st/tools/api'; ?>" target="_blank">grab your API token</a></div>
+
+                <div class="outofthebox-option-title"><?php _e('API token', 'wpcloudplugins'); ?></div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[shortest_apikey]" id="shortest_apikey" value="<?php echo esc_attr($this->settings['shortest_apikey']); ?>">
+              </div>
+
+              <div class="outofthebox-suboptions option bitly" <?php echo 'Bit.ly' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
+                <div class="outofthebox-option-description"><a href="https://bitly.com/a/sign_up" target="_blank"><?php _e('Sign up for Bitly', 'wpcloudplugins'); ?></a> and <a href="http://bitly.com/a/your_api_key" target="_blank">generate an API key</a></div>
+
+                <div class="outofthebox-option-title">Bitly Login</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_login]" id="bitly_login" value="<?php echo esc_attr($this->settings['bitly_login']); ?>">
+
+                <div class="outofthebox-option-title">Bitly API key</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[bitly_apikey]" id="bitly_apikey" value="<?php echo esc_attr($this->settings['bitly_apikey']); ?>">
+              </div> 
+
+              <div class="outofthebox-suboptions option rebrandly" <?php echo 'Rebrandly' !== $this->settings['shortlinks'] ? "style='display:none;'" : ''; ?>>
+                <div class="outofthebox-option-description"><a href="https://app.rebrandly.com/" target="_blank"><?php _e('Sign up for Rebrandly', 'wpcloudplugins'); ?></a> and <a href="https://app.rebrandly.com/account/api-keys" target="_blank">grab your API token</a></div>
+
+                <div class="outofthebox-option-title">Rebrandly API key</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_apikey]" id="rebrandly_apikey" value="<?php echo esc_attr($this->settings['rebrandly_apikey']); ?>">
+
+                <div class="outofthebox-option-title">Rebrandly Domain (optional)</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[rebrandly_domain]" id="rebrandly_domain" value="<?php echo esc_attr($this->settings['rebrandly_domain']); ?>">
+              </div>
+            </div>
+          </div> 
 
           <div class="outofthebox-accordion">
 
@@ -821,7 +842,7 @@ function create_upload_button_for_custom_images($option)
 
               <br/>
 
-              <div class="outofthebox-option-description"><?php _e('Available placeholders', 'wpcloudplugins'); ?>: 
+              <div class="outofthebox-option-description"><?php echo sprintf(__('Available placeholders: %s', 'wpcloudplugins'), ''); ?>
                 <code>%site_name%</code>, 
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
@@ -832,7 +853,9 @@ function create_upload_button_for_custom_images($option)
                 <code>%file_icon%</code>, 
                 <code>%file_relative_path%</code>, 
                 <code>%file_absolute_path%</code>, 
-                <code>%file_url%</code>, 
+                <code>%file_cloud_preview_url%</code>, 
+                <code>%file_cloud_shared_url%</code>, 
+                <code>%file_download_url%</code>,
                 <code>%folder_name%</code>,
                 <code>%folder_relative_path%</code>,
                 <code>%folder_absolute_path%</code>,
@@ -863,7 +886,7 @@ function create_upload_button_for_custom_images($option)
 
               <br/>
 
-              <div class="outofthebox-option-description"><?php _e('Available placeholders', 'wpcloudplugins'); ?>: 
+              <div class="outofthebox-option-description"><?php echo sprintf(__('Available placeholders: %s', 'wpcloudplugins'), ''); ?>
                 <code>%site_name%</code>, 
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
@@ -874,7 +897,10 @@ function create_upload_button_for_custom_images($option)
                 <code>%file_icon%</code>, 
                 <code>%file_relative_path%</code>, 
                 <code>%file_absolute_path%</code>, 
-                <code>%file_url%</code>, 
+
+                <code>%file_cloud_preview_url%</code>, 
+                <code>%file_cloud_shared_url%</code>, 
+                <code>%file_download_url%</code>,
                 <code>%folder_name%</code>,
                 <code>%folder_relative_path%</code>,
                 <code>%folder_absolute_path%</code>,
@@ -907,7 +933,7 @@ function create_upload_button_for_custom_images($option)
 
               <br/>
 
-              <div class="outofthebox-option-description"><?php _e('Available placeholders', 'wpcloudplugins'); ?>: 
+              <div class="outofthebox-option-description"><?php echo sprintf(__('Available placeholders: %s', 'wpcloudplugins'), ''); ?>
                 <code>%site_name%</code>, 
                 <code>%number_of_files%</code>, 
                 <code>%user_name%</code>, 
@@ -918,7 +944,9 @@ function create_upload_button_for_custom_images($option)
                 <code>%file_icon%</code>, 
                 <code>%file_relative_path%</code>, 
                 <code>%file_absolute_path%</code>, 
-                <code>%file_url%</code>, 
+                <code>%file_cloud_preview_url%</code>, 
+                <code>%file_cloud_shared_url%</code>, 
+                <code>%file_download_url%</code>,
                 <code>%folder_name%</code>,
                 <code>%folder_relative_path%</code>,
                 <code>%folder_absolute_path%</code>,
@@ -947,11 +975,13 @@ function create_upload_button_for_custom_images($option)
 
               <br/>
 
-              <div class="outofthebox-option-description"><?php _e('Available placeholders', 'wpcloudplugins'); ?>: 
+              <div class="outofthebox-option-description"><?php echo sprintf(__('Available placeholders: %s', 'wpcloudplugins'), ''); ?>
                 <code>%file_name%</code>, 
                 <code>%file_size%</code>, 
                 <code>%file_icon%</code>, 
-                <code>%file_url%</code>, 
+                <code>%file_cloud_preview_url%</code>, 
+                <code>%file_cloud_shared_url%</code>, 
+                <code>%file_download_url%</code>,
                 <code>%file_relative_path%</code>, 
                 <code>%file_absolute_path%</code>, 
                 <code>%folder_relative_path%</code>,
@@ -1039,7 +1069,7 @@ function create_upload_button_for_custom_images($option)
 
               <div class="outofthebox-option-title"><?php _e('Interval', 'wpcloudplugins'); ?></div>
               <div class="outofthebox-option-description"><?php _e('Please select the interval the summary needs to be send', 'wpcloudplugins'); ?>.</div>
-              <select type="text" name="out_of_the_box_settings[event_summary_period]" id="shortlinks">
+              <select type="text" name="out_of_the_box_settings[event_summary_period]" id="event_summary_period">
                 <option value="daily"  <?php echo 'daily' === $this->settings['event_summary_period'] ? "selected='selected'" : ''; ?>><?php _e('Every day', 'wpcloudplugins'); ?></option>
                 <option value="weekly"  <?php echo 'weekly' === $this->settings['event_summary_period'] ? "selected='selected'" : ''; ?>><?php _e('Weekly', 'wpcloudplugins'); ?></option>
                 <option value="monthly"  <?php echo 'monthly' === $this->settings['event_summary_period'] ? "selected='selected'" : ''; ?>><?php _e('Monthly', 'wpcloudplugins'); ?></option>
@@ -1047,7 +1077,7 @@ function create_upload_button_for_custom_images($option)
 
               <div class="outofthebox-option-title"><?php _e('Recipients', 'wpcloudplugins'); ?></div>
               <div class="outofthebox-option-description"><?php _e('Send the summary to the following email address(es)', 'wpcloudplugins'); ?>:</div>
-              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[event_summary_recipients]" id="lostauthorization_notification" value="<?php echo esc_attr($this->settings['event_summary_recipients']); ?>" placeholder="<?php echo get_option('admin_email'); ?>">  
+              <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[event_summary_recipients]" id="event_summary_recipients" value="<?php echo esc_attr($this->settings['event_summary_recipients']); ?>" placeholder="<?php echo get_option('admin_email'); ?>">  
             </div>
           </div>
 
@@ -1073,7 +1103,7 @@ function create_upload_button_for_custom_images($option)
         <div id="settings_tools"  class="outofthebox-tab-panel">
           <div class="outofthebox-tab-panel-header"><?php _e('Tools', 'wpcloudplugins'); ?></div>
 
-          <div class="outofthebox-option-title"><?php _e('Reset Cache', 'wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php _e('Cache', 'wpcloudplugins'); ?></div>
           <?php echo $this->get_plugin_reset_cache_box(); ?>
 
           <div class="outofthebox-option-title"><?php _e('Reset to Factory Settings', 'wpcloudplugins'); ?></div>
@@ -1195,6 +1225,20 @@ function create_upload_button_for_custom_images($option)
 
         });
 
+        $('.shareon-setting-button').click(function (e) {
+          e.stopImmediatePropagation();
+
+          var current_value = $(this).next().val();
+
+          if (current_value === 'disabled'){
+            $(this).removeClass('shareon-disabled').addClass('shareon-enabled');
+            $(this).next().val('enabled');
+          } else {
+            $(this).removeClass('shareon-enabled').addClass('shareon-disabled');
+            $(this).next().val('disabled');          
+          }
+        });
+        
         $('#add_dropbox_button, .refresh_dropbox_button').click(function () {
           var $button = $(this);
           $button.addClass('disabled');

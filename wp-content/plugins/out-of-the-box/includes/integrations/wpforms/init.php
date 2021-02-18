@@ -71,31 +71,9 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
             $value = $field['value'];
         }
 
-        $data = json_decode($value);
-        $ashtml = (in_array($type, ['entry-table', 'email-html']));
+        $ashtml = (in_array($type, ['entry-single', 'entry-table', 'email-html', 'smart-tag']));
 
-        if ((null !== $data) && (count((array) $data) > 0)) {
-            $first_entry = current($data);
-            $folder_location = ($ashtml && isset($first_entry->folderurl)) ? '<a href="'.urldecode($first_entry->folderurl).'">Dropbox</a>' : 'Dropbox';
-
-            // Fill our custom field with the details of our upload session
-            $html = sprintf(__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $data), $folder_location);
-            $html .= ($ashtml) ? '<ul>' : "\r\n";
-
-            foreach ($data as $fileid => $file) {
-                $html .= ($ashtml) ? '<li><a href="'.urldecode($file->link).'">' : '';
-                $html .= basename($file->path);
-                $html .= ($ashtml) ? '</a>' : '';
-                $html .= ' ('.$file->size.')';
-                $html .= ($ashtml) ? '</li>' : "\r\n";
-            }
-
-            $html .= ($ashtml) ? '</ul>' : '';
-        } else {
-            return $data;
-        }
-
-        return $html;
+        return apply_filters('outofthebox_render_formfield_data', $value, $ashtml, $this);
     }
 
     public function export_value($export_data, $request_data)
@@ -120,6 +98,29 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
     // **** **** ADMIN **** **** //
     ///////////////////////////////
 
+    /**
+     * Format field value which is stored.
+     *
+     * @param int   $field_id     Field ID.
+     * @param mixed $field_submit Field value that was submitted.
+     * @param array $form_data    Form data and settings.
+     */
+    public function format($field_id, $field_submit, $form_data)
+    {
+        if ($this->type !== $form_data['fields'][$field_id]['type']) {
+            return;
+        }
+
+        $name = !empty($form_data['fields'][$field_id]['label']) ? sanitize_text_field($form_data['fields'][$field_id]['label']) : '';
+
+        wpforms()->process->fields[$field_id] = [
+            'name' => $name,
+            'value' => $field_submit,
+            'id' => absint($field_id),
+            'type' => $this->type,
+        ];
+    }
+
     // Enqueue Out-of-the-Box scripts
     public function enqueues()
     {
@@ -131,8 +132,10 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
 
         add_thickbox();
 
-        wp_enqueue_script('WPCP-OFTB-WPForms', plugins_url('WPForms.js', __FILE__), ['jquery'], false, true);
-        wp_enqueue_style('WPCP-OFTB-WPForms', plugins_url('WPForms.css', __FILE__));
+
+        wp_enqueue_script('WPCP-'.$this->type.'-WPForms', plugins_url('WPForms.js', __FILE__), ['jquery'], false, true);
+        wp_enqueue_style('WPCP-'.$this->type.'-WPForms', plugins_url('WPForms.css', __FILE__));
+
     }
 
     // Field options panel inside the builder
@@ -291,7 +294,11 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
             return $private_folder_name;
         }
 
-        return trim(str_replace(['|', '/'], ' ', sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()])));
+        $raw_name = sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()]);
+        $name = str_replace(['|', '/'], ' ', $raw_name);
+        $filtered_name = \TheLion\OutoftheBox\Helpers::filter_filename(stripslashes($name), false);
+
+        return trim($filtered_name);
     }
 
     /**

@@ -1,7 +1,7 @@
 <div class="list-container" style="width:<?php echo $this->options['maxwidth']; ?>;max-width:<?php echo $this->options['maxwidth']; ?>;">
   <?php
-  if ('1' === $this->options['show_breadcrumb'] || '1' === $this->options['search'] || '1' === $this->options['show_refreshbutton'] ||
-          $this->get_user()->can_add_folders() || $this->get_user()->can_download_zip() || $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders() || $this->get_user()->can_move_folders() || $this->get_user()->can_move_files()) {
+  if ('1' === $this->options['show_breadcrumb'] || '1' === $this->options['search'] || '1' === $this->options['show_refreshbutton']
+          || $this->get_user()->can_add_folders() || $this->get_user()->can_download_zip() || $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders() || $this->get_user()->can_move_folders() || $this->get_user()->can_move_files()) {
       ?>
       <div class="nav-header"><?php if ('1' === $this->options['show_breadcrumb']) { ?>
             <a class="nav-home" title="<?php _e('Back to our first folder', 'wpcloudplugins'); ?>">
@@ -56,14 +56,7 @@
             </a>
             <div class="tippy-content-holder" data-token="<?php echo $this->listtoken; ?>">
               <ul data-id="<?php echo $this->listtoken; ?>">
-                <li style="display: none"><a class="nav-layout nav-layout-grid" title="<?php _e('Thumbnails view', 'wpcloudplugins'); ?>">
-                    <i class="fas fa-th-large "></i><?php _e('Thumbnails view', 'wpcloudplugins'); ?>
-                  </a>
-                </li>
-                <li><a class="nav-layout nav-layout-list" title="<?php _e('List view', 'wpcloudplugins'); ?>">
-                    <i class="fas fa-th-list "></i><?php _e('List view', 'wpcloudplugins'); ?>
-                  </a>
-                </li>   
+ 
                 <?php
                 if ($this->get_user()->can_add_folders()) {
                     ?>
@@ -87,9 +80,16 @@
                     <?php
                 }
 
+                if ($this->get_user()->can_move_folders() || $this->get_user()->can_move_files() || $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders() || $this->get_user()->can_download_zip()) {
+                    ?>
+                    <li><a class='select-all' title='" <?php _e('Select all', 'wpcloudplugins'); ?>"'><i class='fas fa-check-square'></i><?php _e('Select all', 'wpcloudplugins'); ?></a></li>
+                    <li style="display:none"><a class='deselect-all' title='" <?php _e('Deselect all', 'wpcloudplugins'); ?>"'><i class='fas fa-square'></i><?php _e('Deselect all', 'wpcloudplugins'); ?></a></li>
+                    <?php
+                }
+
                 if ($this->get_user()->can_download_zip()) {
                     ?>
-                    <li><a class="all-files-to-zip" download><i class='fas fa-archive '></i><?php _e('Download all', 'wpcloudplugins'); ?> (.zip)</a></li>
+                    <li><a class="all-files-to-zip" download><i class='fas fa-archive '></i><?php _e('Download folder', 'wpcloudplugins'); ?> (.zip)</a></li>
                     <li><a class="selected-files-to-zip" download><i class='fas fa-archive '></i><?php _e('Download selected', 'wpcloudplugins'); ?> (.zip)</a></li>
                     <?php
                 }
@@ -117,6 +117,16 @@
                     <?php
                 }
                 ?>
+
+                <li style="display: none"><a class="nav-layout nav-layout-grid" title="<?php _e('Thumbnails view', 'wpcloudplugins'); ?>">
+                    <i class="fas fa-th-large "></i><?php _e('Thumbnails view', 'wpcloudplugins'); ?>
+                  </a>
+                </li>
+                <li><a class="nav-layout nav-layout-list" title="<?php _e('List view', 'wpcloudplugins'); ?>">
+                    <i class="fas fa-th-list "></i><?php _e('List view', 'wpcloudplugins'); ?>
+                  </a>
+                </li>  
+                
                 <li class='gear-menu-no-options' style="display: none"><a><i class='fas fa-info-circle '></i><?php _e('No options...', 'wpcloudplugins'); ?></a></li>
               </ul>
             </div><?php
@@ -154,11 +164,13 @@
       switch ($loaders['style']) {
           case 'custom':
               break;
+
           case 'beat':
               ?>
               <div class='loader-beat'></div>
               <?php
               break;
+
           case 'spinner':
               ?>
               <svg class="loader-spinner" viewBox="25 25 50 50">

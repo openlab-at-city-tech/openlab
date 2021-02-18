@@ -46,7 +46,14 @@ add_filter(
 
 		$data['problem_id'] = sanitize_text_field( wp_unslash( $_POST['problemPath'] ) );
 
+		$text = str_replace(
+			[ 'href="/webwork2_files', 'src="/webwork2_files' ],
+			[ 'href="https://app.rederly.com/webwork2_files', 'src="https://app.rederly.com/webwork2_files' ],
+			$text
+		);
+
 		$data['problem_text'] = $text;
+
 		return $data;
 	}
 );

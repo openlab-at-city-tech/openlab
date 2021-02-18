@@ -1,71 +1,85 @@
-//////////////////////////////////////////////////////////////
-///  phpThumb() by James Heinrich <info@silisoftware.com>   //
-//        available at http://phpthumb.sourceforge.net     ///
-//////////////////////////////////////////////////////////////
-///                                                         //
-//       This code is released under the GNU GPL:           //
-//         http://www.gnu.org/copyleft/gpl.html             //
-//                                                          //
-//    +-----------------------------------------------+     //
-//    | phpThumb() is free to use according to the    |     //
-//    | terms of the GPL. Donations also gratefully   |     //
-//    | GPL FAQ: http://gnu.org/licenses/gpl-faq.html |     //
-//    |                                               |     //
-//    | Donations are gratefully accepted from happy  |     //
-//    | users :)  See http://phpthumb.sourceforge.net |     //
-//    |                                               |     //
-//    | If you like phpThumb(), please consider       |     //
-//    | writing a review at HotScripts.com:           |     //
-//    | http://www.hotscripts.com/Detailed/25654.html |     //
-//    |                                               |     //
-//    | If you do use this code somewhere, send me    |     //
-//    | an email and tell me how/where you used it.   |     //
-//    +-----------------------------------------------+     //
-//                                                         ///
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//   phpThumb() by James Heinrich <info@silisoftware.com>       //
+//        available at http://phpthumb.sourceforge.net          //
+//             and/or https://github.com/JamesHeinrich/phpThumb //
+//////////////////////////////////////////////////////////////////
+///                                                             //
+//       This code is released under the GNU GPL:               //
+//         http://www.gnu.org/copyleft/gpl.html                 //
+//                                                              //
+// phpThumb() is free to use according to the terms of the GPL. //
+// GPL FAQ: http://gnu.org/licenses/gpl-faq.html                //
+//                                                              //
+// Donations are gratefully accepted from happy users :)        //
+// See http://phpthumb.sourceforge.net                          //
+//                                                             ///
+//////////////////////////////////////////////////////////////////
 
 ============
 Description:
 ============
 
-phpThumb() uses the GD library to create thumbnails from
-images (GIF, PNG or JPEG) on the fly. The output size is
-configurable (can be larger or smaller than the source),
-and the source may be the entire image or only a portion
-of the original image. True color and resampling is used
-if GD v2.0+ is available, otherwise low-color and simple
-resizing is used. Source image can be a physical file on
-the server or can be retrieved from a database. GIFs are
-supported on all versions of GD even if GD does not have
-native GIF support thanks to the GIFutil class by Fabien
-Ezber. AntiHotlinking feature prevents other people from
-using your server to resize their thumbnails, or link to
-your  images  from  another  server.  The  cache feature
-reduces server load.
+phpThumb() uses the GD library to create thumbnails from images (GIF, PNG
+or JPEG) on the fly. The output size is configurable (can be larger or
+smaller than the source), and the source may be the entire image or only a
+portion of the original image. True color and resampling is used if
+GD v2.0+ is available, otherwise low-color and simple resizing is used.
+Source image can be a physical file on the server or can be retrieved from
+a database. GIFs are supported on all versions of GD even if GD does not
+have native GIF support thanks to the GIFutil class by Fabien Ezber.
+
+AntiHotlinking feature prevents other people from using your server to
+resize their thumbnails, or link to your images from another server. The
+cache feature reduces server load.
 
 
 ========
 Support:
 ========
-
 First, read this file.
 Then read phpthumb.faq.txt
 Then run /demo/phpThumb.demo.check.php
-If you still think it's a bug, or can't figure it out,
-please go to http://support.silisoftware.com
+If you still think it's a bug, or can't figure it out, please go to
+http://support.silisoftware.com
+
+
+=============
+Installation:
+=============
+
+1) Download from either official site:
+  * https://github.com/JamesHeinrich/phpThumb (current development version)
+  * http://phpthumb.sourceforge.net (occasional releases + documentation)
+2) unzip to a location of your choice on your server, putting it in its
+  own subdirectory (e.g. /phpThumb/ is useful but not required)
+3) rename phpThumb.config.php.default -> phpThumb.config.php
+4) edit phpThumb.config.php as needed to suit your server configuration.
+  * the only setting you must set is 'high_security_password'
+  * most other values are auto-detected, but your particular server config
+    may necessitate setting other values such as 'document_root' or
+    'imagemagick_path'
+  * see also "Configuration" section below
+5) Check your server configuration by opening
+   /phpThumb/demo/phpThumb.demo.check.php in your browser. Settings that are
+   highlighted green are good; yellow/orange/red may need to be adjusted.
 
 
 ======
 Usage:
 ======
 
-Call phpThumb() just like you would a normal image.
-Examples:
- <IMG SRC="phpThumb.php?src=/image.jpg&w=100">
- <IMG SRC="phpThumb.php?src=http://example.com/foo.jpg">
-See the "demo" link on http://phpthumb.sourceforge.net
-for more usage examples). Parameters that can be passed
-are listed below under "URL Parameters".
+Call phpThumb() just like you would a normal image (i.e. as the SRC attribute
+of an IMG tag):
+   <img src="phpThumb.php?src=/image.jpg&w=100&hash=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+To generate the hash value you must include the phpThumb.config.php file and use the
+phpThumbURL function to generate the URL including the hash value:
+  echo '<img src="'.htmlspecialchars(phpThumbURL('src=/images/pic.jpg&w=50', '/path/to/phpThumb.php')).'">';
+The hash is calculated with the 'high_security_password' config value, so you
+must generate a complex password value for that setting in phpThumb.config.php
+(once, when installing phpThumb).
+
+See the "demo" link on http://phpthumb.sourceforge.net for more usage examples.
+Parameters that can be passed are listed below under "URL Parameters".
 
 NOTE: It's recommended you use the local image filename
 wherever possible (rather than http://) because performance
@@ -105,84 +119,74 @@ For example:
 <image> must be the last item. Dimensions must be the second-
 last item. As many key/value pairs for parameters can be
 passed before those last two items, with each pair joined by
-equals ("=") and seperated by semicolon (";")
+equals ("=") and separated by semicolon (";")
 
 
 ==============================================
 Calling as an object (not using phpThumb.php):
 ==============================================
 
-NOTE: most people don't need to and should not do this.
-If you just want to display resized images, please just
-use phpThumb.php, not the object mode. To render output
-to one (or more) files instead of the browser, you should
-skip phpThumb.php and instantiate your own object. Please
-take a look at /demo/phpThumb.demo.object.php for details.
+NOTE: most people don't need to and should not do this. If you just want to
+display resized images, please just use phpThumb.php, not the object mode.
+To render output to one (or more) files instead of the browser, you should
+skip phpThumb.php and instantiate your own object. Please take a look at
+/demo/phpThumb.demo.object.php for details.
 
-Note: phpThumb.php is where the caching code is located, if
-  you instantiate your own phpThumb() object that code is
-  bypassed and it's up to you to handle the reading and
-  writing of cached files.
+Note: phpThumb.php is where the caching code is located, if you instantiate
+  your own phpThumb() object that code is bypassed and it's up to you to
+  handle the reading and writing of cached files.
 
 
 ==============
 Configuration:
 ==============
 
-There are some configuration options you may (but are
-not required to) change. Most configuration options can
-be set when you call phpThumb() - see list below), but
-default configuration options (such as cache directory)
-are in phpThumb.config.php - this is the only file you
-should ever modify.
+There are some configuration options you may (but are not required to) change.
+Most configuration options can be set when you call phpThumb() - see list below),
+but default configuration options (such as cache directory) are in
+phpThumb.config.php - this is the only file you should ever modify.
 
 
 IMPORTANT:
-The configuration file is distributed as
-phpThumb.config.php.default to prevent accidental
-overwriting of old configuration settings. Please
-migrate your old settings to the new file (if upgrading),
-or delete your old config and rename the default to
-phpThumb.config.php
+The configuration file is distributed as phpThumb.config.php.default to prevent
+accidental overwriting of old configuration settings. Please migrate your old
+settings to the new file (if upgrading), or delete your old config and rename
+the default to phpThumb.config.php since newer releases may include settings not
+present in your older configuration file.
 
-
-The amount of memory required for phpThumb depends on
-several factors: the dimensions of the source image,
-the dimensions of the output image, whether unsharp
-masking is applied, whether watermarks are applied, etc.
-The auto-detection of memory limits works as a general
-"safe" value. You may be able to exceed the auto value
-by a small or large amount, depending on whether you
-apply watermarks and/or sharpening, and the output size
-of your thumbnails. I do not currently have a reliable
-formula for calculating such things, but I will attempt
-to craft one for future versions of phpThumb(). Until
-then, set "max_source_pixels" in phpThumb.config.php to a
-value that works well for you (or leave it alone if the
-defaults give you no problems).
 
 The configuration options you should maybe modify are:
-* cache_directory - thumbnailing is slow and processor-
-    intensive. Enabling caching will dramatically speed
-    up future thumbnail serving
-* max_source_pixels - This should be auto-detected, but
-    if auto-detection fails and you get an invalid image
-    from large source images, set this to about 20% of
-    your available PHP memory limit.
-* imagemagick_path - If the source image is larger than
-    max_source_pixels allows, but ImageMagick is available
-    phpThumb() will use it to generate the thumbnail.
+* high_security_password - required to generate the secure hashed URLs for
+  phpThumb using phpThumbURL() in phpThumb.config.php
+  Password must be sufficiently complex (typically means at least 20 mixed
+  alpha/numeric/punctuation characters). You can generate a good password
+  at http://www.silisoftware.com/tools/password-random.php
+* cache_directory - thumbnailing is slow and processor-intensive. Enabling
+  caching will dramatically speed up future thumbnail serving
+* imagemagick_path - Most image-processing functions can be processed faster
+  if ImageMagick is available on the server.
+* max_source_pixels - This should be auto-detected, but if auto-detection
+  fails and you get an invalid image from large source images, set this to
+  about 20% of your available PHP memory limit.
+  The amount of memory required for phpThumb depends on several factors:
+  * the dimensions of the source image
+  * the dimensions of the output image
+  * whether unsharp masking is applied
+  * whether watermarks are applied, etc.
+  The auto-detection of memory limits works as a general "safe" value. You
+  may be able to exceed the auto value by a small or large amount, depending
+  on whether you apply watermarks and/or sharpening, and the output size of
+  your thumbnails. If ImageMagick is available then the amount of available
+  PHP memory is usually not an issue.
 
 
-///////////////////////////////////////////////////////////
-Note: High-Security mode is recommended enabled if possible.
-  Set $PHPTHUMB_CONFIG['high_security_enabled'] in
-  phpThumb.config.php to enable it. Each call to phpThumb
-  needs to be made through the function supplied at the
-  bottom of phpThumb.config.php which create the hash:
-    require_once('phpThumb.config.php');
-    echo '<img src="'.phpThumbURL('src=pic.jpg&w=50').'">';
-///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+Note: High-Security mode is VERY STRONGLY recommended enabled in all cases.
+Each call to phpThumb.php needs to be made through the function supplied
+at the bottom of phpThumb.config.php which create the hash:
+ require_once('phpThumb.config.php');
+ echo '<img src="'.phpThumbURL('src=pic.jpg&w=50', '/path/to/phpThumb.php').'">';
+///////////////////////////////////////////////////////////////////////////
 
 
 ===========
@@ -220,17 +224,23 @@ Parameters:
        or set to "T", "B", "L", "R", "TL", "TR", "BL", "BR"
        to gravitate towards top/left/bottom/right directions
        (requies ImageMagick for values other than "C" or "1")
+ ica = ImageCropAuto, requires (PHP 5 >= 5.5.0, PHP 7)
+       https://www.php.net/manual/en/function.imagecropauto.php
+       value can be 0-4 (IMG_CROP_DEFAULT, IMG_CROP_TRANSPARENT,
+       IMG_CROP_BLACK, IMG_CROP_WHITE, IMG_CROP_SIDES) or can be
+       "5|<threshold>|<bgcolor>" where <threshold> is between 0
+       and 1, and <bgcolor> is the hex background color
   bg = background hex color (default = FFFFFF)
   bc = border hex color (default = 000000)
 fltr = filter system. Call as an array as follows:
        - "brit" (Brightness) [ex: &fltr[]=brit|<value>]
          where <value> is the amount +/- to adjust brightness
          (range -255 to 255)
-         Availble in PHP5 with bundled GD only.
+         Available in PHP5 with bundled GD only.
        - "cont" (Constrast) [ex: &fltr[]=cont|<value>]
          where <value> is the amount +/- to adjust contrast
          (range -255 to 255)
-         Availble in PHP5 with bundled GD only.
+         Available in PHP5 with bundled GD only.
        - "gam" (Gamma Correction) [ex: &fltr[]=gam|<value>]
          where <value> can be a number 0.01 to 10 (default 1.0)
          Must be >0 (zero gives no effect). There is no max,
@@ -274,13 +284,13 @@ fltr = filter system. Call as an array as follows:
        - "blur" (Blur) [ex: &fltr[]=blur|<radius>]
          where (0 < <radius> < 25) (default = 1)
        - "gblr" (Gaussian Blur) [ex: &fltr[]=gblr]
-         Availble in PHP5 with bundled GD only.
+         Available in PHP5 with bundled GD only.
        - "sblr" (Selective Blur) [ex: &fltr[]=gblr]
-         Availble in PHP5 with bundled GD only.
+         Available in PHP5 with bundled GD only.
        - "smth" (Smooth) [ex: &fltr[]=smth|<value>]
          where <value> is the weighting value for the matrix
          (range -10 to 10, default 6)
-         Availble in PHP5 with bundled GD only.
+         Available in PHP5 with bundled GD only.
        - "lvl" (Levels)
          [ex: &fltr[]=lvl|<channel>|<method>|<threshold>
          where <channel> can be one of 'r', 'g', 'b', 'a' (for
@@ -315,7 +325,7 @@ fltr = filter system. Call as an array as follows:
          Where <b> is the color band(s) to display, from back
          to front (one or more of "rgba*" for Red Green Blue
          Alpha and Grayscale respectively);
-         <c> is a semicolon-seperated list of hex colors to
+         <c> is a semicolon-separated list of hex colors to
          use for each graph band (defaults to FF0000, 00FF00,
          0000FF, 999999, FFFFFF respectively);
          <w> and <h> are the width and height of the overlaid
@@ -361,7 +371,7 @@ fltr = filter system. Call as an array as follows:
              watermark image will be scaled to fit inside
          <r> is rotation angle of overlaid watermark
        - "wmt" (WaterMarkText)
-         [ex: &fltr[]=wmt|<t>|<s>|<a>|<c>|<f>|<o>|<m>|<n>|<b>|<O>|<x>]
+         [ex: &fltr[]=wmt|<t>|<s>|<a>|<c>|<f>|<o>|<m>|<n>|<b>|<O>|<x>|<h>]
          where:
          <t> is the text to use as a watermark;
              URLencoded Unicode HTMLentities must be used for
@@ -403,6 +413,8 @@ fltr = filter system. Call as an array as follows:
              extended (either 'x' or 'y' (or both, but both
              will obscure entire image))
              Note: works with TTF fonts only, not built-in
+         <h> is the scale multiplier for line height/spacing
+             default is 1.0
        - "flip" [ex: &fltr[]=flip|x   or   &fltr[]=flip|y]
          flip image on X or Y axis
        - "ric" [ex: &fltr[]=ric|<x>|<y>]
@@ -411,10 +423,12 @@ fltr = filter system. Call as an array as follows:
          of the curve and <y> is the vertical radius
        - "elip" [ex: &fltr[]=elip]
          similar to rounded corners but more extreme
-       - "mask" [ex: &fltr[]=mask|filename.png]
+       - "mask" [ex: &fltr[]=mask|filename.png|<i>]
          greyscale values of mask are applied as the alpha
          channel to the main image. White is opaque, black
-         is transparent.
+         is transparent, unless the <i> (invert) parameter is
+         set to 1 in which case black is opaque and white is
+         transparent
        - "bvl" (BeVeL) [ex: &fltr[]=bvl|<w>|<c1>|<c2>]
          where <w> is the bevel width, <c1> is the hex color
          for the top and left shading, <c2> is the hex color
@@ -459,7 +473,7 @@ fltr = filter system. Call as an array as follows:
          to stretch (if 1) or resize proportionately (0, default)
          <x> and <y> will be interpreted as percentage of current
          output image size if values are (0 < X < 1)
-         NOTE: do NOT use this filter unless absolutely neccesary.
+         NOTE: do NOT use this filter unless absolutely necessary.
          It is only provided for cases where other filters need to
          have absolute positioning based on source image and the
          resultant image should be resized after other filters are
@@ -476,13 +490,13 @@ fltr = filter system. Call as an array as follows:
          the two thresholds will be partially transparent.
 md5s = MD5 hash of the source image -- if this parameter is
        passed with the hash of the source image then the
-       source image is not checked for existance or
+       source image is not checked for existence or
        modification and the cached file is used (if
        available). If 'md5s' is passed an empty string then
        phpThumb.php dies and outputs the correct MD5 hash
        value.  This parameter is the single-file equivalent
        of 'cache_source_filemtime_ignore_*' configuration
-       paramters
+       parameters
  xto = EXIF Thumbnail Only - set to only extract EXIF
        thumbnail and not do any additional processing
   ra = Rotate by Angle: angle of rotation in degrees

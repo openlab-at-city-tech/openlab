@@ -47,7 +47,7 @@ function prepend_title( $content ) {
  * @return array attributes
  */
 function add_anchor( $attributes ) {
-	$attributes['id'] = sanitize_title_with_dashes( get_the_title() );
+	$attributes['id'] = sanitize_title_with_dashes( get_the_title(), '', 'save' );
 
 	return $attributes;
 }
@@ -116,3 +116,15 @@ function override_default_options( array $defaults = [] ) {
 	return array_merge( $defaults, $override );
 }
 add_filter( 'ez_toc_get_default_options', __NAMESPACE__ . '\\override_default_options' );
+
+/**
+ * Sanitizes Easy TOC generatesd IDs.
+ * Sometimes they aren't valid for JS use.
+ *
+ * @param string $id The heading ID.
+ * @return string    Sanitized ID.
+ */
+function sanitize_heading_ids( $id ) {
+	return sanitize_title_with_dashes( $id, '', 'save' );
+}
+add_filter( 'ez_toc_url_anchor_target', __NAMESPACE__ . '\\sanitize_heading_ids' );

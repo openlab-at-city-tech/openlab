@@ -10,7 +10,7 @@ $settings = (array) get_option('out_of_the_box_settings');
 if (
   !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_shortcodes']))
 ) {
-    die();
+    exit();
 }
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'default';
@@ -885,7 +885,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
                 <label class="outofthebox-onoffswitch-label" for="OutoftheBox_upload_auto_start"></label>
               </div>
             </div>
-            <div class="outofthebox-option-description"><?php _e('Adds an Add Folder button to the upload form if the browser supports it', 'wpcloudplugins'); ?>. </div>
+            <div class="outofthebox-option-description"><?php _e('Start the upload directly once it is selected on the users device', 'wpcloudplugins'); ?>. </div>
 
             <div class="outofthebox-option-title"><?php _e('Overwrite existing files', 'wpcloudplugins'); ?>
               <div class="outofthebox-onoffswitch">
@@ -960,7 +960,10 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
           </div>
 
           <div class="outofthebox-option-title"><?php _e('Recipients', 'wpcloudplugins'); ?></div>
-          <div class="outofthebox-option-description"><?php _e('On which email address would you like to receive the notification? You can use <code>%admin_email%</code> and <code>%user_email%</code> (user that executes the action) and <code>%linked_user_email%</code> (Private Folders owners)', 'wpcloudplugins'); ?>.</div>
+          <?php
+          $placeholders = '<code>%admin_email%</code>, <code>%user_email%</code> (user that executes the action),  <code>%linked_user_email%</code> (Private Folders owners), and role based placeholders like: <code>%editor%</code>, <code>%custom_wp_role%</code>';
+          ?>
+          <div class="outofthebox-option-description"><?php echo __('On which email address would you like to receive the notification?', 'wpcloudplugins').' '.__('Add multiple email addresses by separating them with a comma (<code>,</code>)', 'wpcloudplugins').'. '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), $placeholders); ?>.</div>
           <input type="text" name="OutoftheBox_notification_email" id="OutoftheBox_notification_email" class="outofthebox-option-input-large" placeholder="<?php echo get_option('admin_email'); ?>" value="<?php echo (isset($_REQUEST['notificationemail'])) ? $_REQUEST['notificationemail'] : ''; ?>" />
 
           <div class="oftb-warning">
@@ -1062,7 +1065,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
 
           <div class="outofthebox-accordion">
 
-            <div class="option forfilebrowser foruploadbox forupload forgallery foraudio forvideo forsearch outofthebox-permissions-box">
+            <div class="option forfilebrowser foruploadbox forgallery foraudio forvideo forsearch outofthebox-permissions-box">
               <div class="outofthebox-accordion-title outofthebox-option-title"><?php _e('Who can see the plugin?', 'wpcloudplugins'); ?></div>
               <div>
                 <?php
@@ -1080,7 +1083,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
               </div>
             </div>
 
-            <div class="option forfilebrowser forupload forgallery foraudio forvideo forsearch outofthebox-permissions-box">
+            <div class="option forfilebrowser forgallery foraudio forvideo forsearch outofthebox-permissions-box">
               <div class="outofthebox-accordion-title outofthebox-option-title"><?php _e('Who can download?', 'wpcloudplugins'); ?></div>
               <div>
                 <?php
@@ -1089,7 +1092,7 @@ $mode = (isset($_REQUEST['mode'])) ? $_REQUEST['mode'] : 'files';
               </div>
             </div>
 
-            <div class="option outofthebox-permissions-box forfilebrowser forgallery forupload upload-options">
+            <div class="option outofthebox-permissions-box forfilebrowser forgallery foruploadbox upload-options">
               <div class="outofthebox-accordion-title outofthebox-option-title"><?php _e('Who can upload?', 'wpcloudplugins'); ?></div>
               <div>
                 <?php

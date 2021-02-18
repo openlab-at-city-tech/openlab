@@ -68,7 +68,6 @@ function openlab_hide_plugins( $plugins ) {
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
-		'video-conferencing-with-zoom-api/video-conferencing-with-zoom-api.php',
 		'webwork/webwork.php',
 		'wp-accessibility/wp-accessibility',
 		'wp-ajax-edit-comments/wp-ajax-edit-comments.php',
@@ -240,6 +239,10 @@ function openlab_jetpack_module_management( $modules ) {
 	//remove Jetpack notes
 	if ( isset( $modules['notes'] ) ) {
 		unset( $modules['notes'] );
+	}
+
+	if ( isset( $modules['protect'] ) ) {
+		unset( $modules['protect'] );
 	}
 
 	return $modules;

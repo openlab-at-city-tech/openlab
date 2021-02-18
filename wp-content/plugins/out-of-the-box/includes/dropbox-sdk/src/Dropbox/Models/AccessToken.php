@@ -1,54 +1,67 @@
 <?php
+
 namespace Kunnu\Dropbox\Models;
 
 class AccessToken extends BaseModel
 {
     /**
-     * Access Token
+     * Access Token.
      *
      * @var string
      */
     protected $token;
 
     /**
-     * Token Type
+     * Token Type.
      *
      * @var string
      */
     protected $tokenType;
 
     /**
-     * Bearer
-     *
-     * @var string
-     */
-    protected $bearer;
-
-    /**
-     * User ID
+     * User ID.
      *
      * @var string
      */
     protected $uid;
 
     /**
-     * Account ID
+     * Account ID.
      *
      * @var string
      */
     protected $accountId;
 
     /**
-     * Team ID
+     * Scope.
      *
      * @var string
      */
-    protected $teamId;
+    protected $scope;
 
     /**
-     * Create a new AccessToken instance
+     * Refresh Token.
      *
-     * @param array $data
+     * @var string
+     */
+    protected $refreshToken;
+
+    /**
+     * Expires.
+     *
+     * @var string
+     */
+    protected $expiresIn;
+
+    /**
+     * Created.
+     *
+     * @var string
+     */
+    protected $created;
+
+    /**
+     * Create a new AccessToken instance.
      */
     public function __construct(array $data)
     {
@@ -56,14 +69,25 @@ class AccessToken extends BaseModel
 
         $this->token = $this->getDataProperty('access_token');
         $this->tokenType = $this->getDataProperty('tokenType');
-        $this->bearer = $this->getDataProperty('bearer');
         $this->uid = $this->getDataProperty('uid');
         $this->accountId = $this->getDataProperty('accountId');
-        $this->teamId = $this->getDataProperty('teamId');
+        $this->scope = $this->getDataProperty('scope');
+        $this->refreshToken = $this->getDataProperty('refresh_token');
+        $this->expiresIn = $this->getDataProperty('expires_in');
+        $this->created = $this->getDataProperty('created');
+
+        if (empty($this->refreshToken)) {
+            // Long lived Tokens don't have a refresh token and don't expire
+            $this->expiresIn = -1;
+        }
+
+        if (empty($this->created)) {
+            $this->created = time();
+        }
     }
 
     /**
-     * Get Access Token
+     * Get Access Token.
      *
      * @return string
      */
@@ -73,7 +97,7 @@ class AccessToken extends BaseModel
     }
 
     /**
-     * Get Token Type
+     * Get Token Type.
      *
      * @return string
      */
@@ -83,17 +107,7 @@ class AccessToken extends BaseModel
     }
 
     /**
-     * Get Bearer
-     *
-     * @return string
-     */
-    public function getBearer()
-    {
-        return $this->bearer;
-    }
-
-    /**
-     * Get User ID
+     * Get User ID.
      *
      * @return string
      */
@@ -103,7 +117,7 @@ class AccessToken extends BaseModel
     }
 
     /**
-     * Get Account ID
+     * Get Account ID.
      *
      * @return string
      */
@@ -113,12 +127,98 @@ class AccessToken extends BaseModel
     }
 
     /**
-     * Get Team ID
+     * Get created.
      *
      * @return string
      */
-    public function getTeamId()
+    public function getCreated()
     {
-        return $this->teamId;
+        return $this->created;
+    }
+
+    /**
+     * Get expires.
+     *
+     * @return string
+     */
+    public function getExpiresIn()
+    {
+        return $this->expiresIn;
+    }
+
+    /**
+     * Get refresh Token.
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * Get scope.
+     *
+     * @return string
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set expires.
+     *
+     * @param string $expiresIn expires
+     *
+     * @return self
+     */
+    public function setExpiresIn(string $expiresIn)
+    {
+        $this->expiresIn = $expiresIn;
+
+        return $this;
+    }
+
+    /**
+     * Set access Token.
+     *
+     * @param string $token access Token
+     *
+     * @return self
+     */
+    public function setToken(string $token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Set created.
+     *
+     * @param string $created created
+     *
+     * @return self
+     */
+    public function setCreated(string $created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Set refresh Token.
+     *
+     * @param string $refreshToken refresh Token
+     *
+     * @return self
+     */
+    public function setRefreshToken(string $refreshToken)
+    {
+        $this->refreshToken = $refreshToken;
+
+        return $this;
     }
 }

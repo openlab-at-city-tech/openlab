@@ -9,6 +9,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   4: Skip back button
   5: Context menu
   6: Playlist & Skin customization
+  7: Floating Video
 */
 
 
@@ -254,7 +255,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   position: absolute;
   text-decoration: none;
   width: 20px;
-    min-width: auto;
+  min-width: auto;
 }
 
 /* :focus for accessibility */
@@ -1115,7 +1116,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   overflow: hidden;
 }
 
-#OutoftheBox.audio .wpcp__playlist-item-thumbnail{
+#OutoftheBox.audio .wpcp__playlist-item-thumbnail {
   min-width: 64px;
 }
 
@@ -1597,7 +1598,7 @@ min-height: 75px;
 .rtl #OutoftheBox .wpcp__next-button>button,
 .rtl #OutoftheBox .wpcp__skip-back-button>button,
 .rtl #OutoftheBox .wpcp__jump-forward-button>button {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 
@@ -1755,4 +1756,41 @@ min-height: 75px;
 
 #OutoftheBox .wpcp__overlay .wpcp__cannotplay {
   display: none;
+}
+
+#OutoftheBox .wpcp__container {
+  transition: width .2s ease-in-out, height .2s ease-in-out, transform .38s ease-in-out;
+}
+
+/* 7: Floating Video */
+.wpcp__floating-container {
+  transition: opacity .2s ease-in-out;
+  visibility: visible;
+  opacity: 1;
+}
+
+.wpcp__floating-container:empty {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.wpcp__floating-container {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 999999999999;
+  margin: 0;
+}
+
+.wpcp__floating-container,
+.wpcp__floating-container .wpcp__container {
+  max-width: 280px;
+  max-height: 158px;
+  width: 280px;
+  height: 158px;
+}
+
+.wpcp__floating-container video {
+  max-width: 280px !important;
+  max-height: 158px !important;
 }

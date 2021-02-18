@@ -66,11 +66,3 @@ class Legacy_jPlayer extends \TheLion\OutoftheBox\MediaplayerSkin
         return 'initial';
     }
 }
-
-// Backwards compatability for < WP 5.0
-if (false === function_exists('determine_locale')) {
-    function determine_locale()
-    {
-        return get_locale();
-    }
-}

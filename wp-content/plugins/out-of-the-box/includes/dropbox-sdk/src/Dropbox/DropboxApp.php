@@ -1,36 +1,36 @@
 <?php
+
 namespace Kunnu\Dropbox;
 
 class DropboxApp
 {
-
     /**
-     * The Client ID of the App
+     * The Client ID of the App.
      *
-     * @link https://www.dropbox.com/developers/apps
+     * @see https://www.dropbox.com/developers/apps
      *
      * @var string
      */
     protected $clientId;
 
     /**
-     * The Client Secret of the App
+     * The Client Secret of the App.
      *
-     * @link https://www.dropbox.com/developers/apps
+     * @see https://www.dropbox.com/developers/apps
      *
      * @var string
      */
     protected $clientSecret;
 
     /**
-     * The Access Token
+     * The Access Token.
      *
      * @var string
      */
     protected $accessToken;
 
     /**
-     * Create a new Dropbox instance
+     * Create a new Dropbox instance.
      *
      * @param string $clientId     Application Client ID
      * @param string $clientSecret Application Client Secret
@@ -44,7 +44,7 @@ class DropboxApp
     }
 
     /**
-     * Get the App Client ID
+     * Get the App Client ID.
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class DropboxApp
     }
 
     /**
-     * Get the App Client Secret
+     * Get the App Client Secret.
      *
      * @return string
      */
@@ -64,12 +64,24 @@ class DropboxApp
     }
 
     /**
-     * Get the Access Token
+     * Get the Access Token.
      *
-     * @return string
+     * @return \Kunnu\Dropbox\Models\AccessToken|string
      */
     public function getAccessToken()
     {
         return $this->accessToken;
+    }
+
+    /**
+     * Update the Access Token.
+     *
+     * @param null|\Kunnu\Dropbox\Models\AccessToken $access_token
+     *
+     * @return string
+     */
+    public function setAccessToken($access_token)
+    {
+        $this->accessToken = $access_token;
     }
 }
