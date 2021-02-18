@@ -104,7 +104,7 @@ var oftb_playlists = {};
           self.find(".jp-playlist").slideDown("slow");
         }
 
-        self.find(".jp-playlist-item-dl").unbind('click');
+        self.find(".jp-playlist-item-dl").off('click');
         self.find(".jp-playlist-item-dl").click(function (e) {
           e.stopPropagation();
           var href = $(this).attr('href') + '&dl=1',
@@ -190,7 +190,7 @@ var oftb_playlists = {};
           self.find(".jp-playlist").slideDown("slow");
         }
 
-        self.find(".jp-playlist-item-dl").unbind('click');
+        self.find(".jp-playlist-item-dl").off('click');
         self.find(".jp-playlist-item-dl").click(function (e) {
           e.stopPropagation();
           var href = $(this).attr('href') + '&dl=1',

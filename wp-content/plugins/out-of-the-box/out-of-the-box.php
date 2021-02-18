@@ -3,18 +3,20 @@
 namespace TheLion\OutoftheBox;
 
 /*
-  Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
-  Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
-  Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
-  Version: 1.17.12
-  Author: WP Cloud Plugins
-  Author URI: https://www.wpcloudplugins.com
-  Text Domain: wpcloudplugins
-  Domain Path: /languages
+ * Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
+ * Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
+ * Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
+ * Version: 1.18.1
+ * Author: WP Cloud Plugins
+ * Author URI: https://www.wpcloudplugins.com
+ * Text Domain: wpcloudplugins
+ * Domain Path: /languages
+ * Requires at least: 5.0
+ * Requires PHP: 7.0
  */
 
 // SYSTEM SETTINGS
-define('OUTOFTHEBOX_VERSION', '1.17.12');
+define('OUTOFTHEBOX_VERSION', '1.18.1');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
 
@@ -45,8 +47,8 @@ class Main
 
         add_action('init', [&$this, 'init']);
 
-        if (is_admin() && (!defined('DOING_AJAX') ||
-                (isset($_REQUEST['action']) && ('update-plugin' === $_REQUEST['action'])))) {
+        if (is_admin() && (!defined('DOING_AJAX')
+                || (isset($_REQUEST['action']) && ('update-plugin' === $_REQUEST['action'])))) {
             $admin = new \TheLion\OutoftheBox\Admin($this);
         }
 
@@ -171,7 +173,7 @@ class Main
 
     public function can_run_plugin()
     {
-        if ((version_compare(PHP_VERSION, '5.5.0') < 0) || (!function_exists('curl_reset')) || (!extension_loaded('mbstring'))) {
+        if ((version_compare(PHP_VERSION, '7.0') < 0) || (!function_exists('curl_reset')) || (!extension_loaded('mbstring'))) {
             return false;
         }
 
@@ -244,6 +246,7 @@ class Main
             'request_cache_max_age' => '',
             'always_load_scripts' => 'No',
             'nonce_validation' => 'Yes',
+            'share_buttons' => [],
             'shortlinks' => 'None',
             'bitly_login' => '',
             'bitly_apikey' => '',
@@ -346,7 +349,7 @@ class Main
     <img alt="" height="16" src="%file_icon%" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="16">
   </td>
   <td style="line-height:25px;padding-left:5px;">
-    <a href="%fileurl%" target="_blank">%file_name%</a>
+    <a href="%file_cloud_preview_url%" target="_blank">%file_name%</a>
     <br/>
     <div style="font-size:12px;line-height:18px;color:#a6a6a6;outline:none;text-decoration:none;">%folder_absolute_path%</div>
   </td>
@@ -563,6 +566,42 @@ class Main
             $updated = true;
         }
 
+        if (isset($this->settings['auth_key']) && false === get_site_option('wpcp-outofthebox-auth_key')) {
+            add_site_option('wpcp-outofthebox-auth_key', $this->settings['auth_key']);
+            unset($this->settings['auth_key']);
+            $updated = true;
+        }
+
+        if (empty($this->settings['share_buttons'])) {
+            $this->settings['share_buttons'] = [
+                'clipboard' => 'enabled',
+                'email' => 'enabled',
+                'facebook' => 'enabled',
+                'linkedin' => 'enabled',
+                'mastodon' => 'disabled',
+                'messenger' => 'enabled',
+                'odnoklassniki' => 'disabled',
+                'pinterest' => 'enabled',
+                'pocket' => 'disabled',
+                'reddit' => 'disabled',
+                'telegram' => 'enabled',
+                'twitter' => 'enabled',
+                'viber' => 'disabled',
+                'vkontakte' => 'disabled',
+                'whatsapp' => 'enabled',
+            ];
+            $updated = true;
+        }
+
+        $auth_key = get_site_option('wpcp-outofthebox-auth_key');
+        if (false === $auth_key) {
+            require_once ABSPATH.'wp-includes/pluggable.php';
+            $auth_key = wp_generate_password(32);
+            add_site_option('wpcp-outofthebox-auth_key', $auth_key);
+        }
+
+        define('OUTOFTHEBOX_AUTH_KEY', $auth_key);
+
         if ($updated) {
             update_option('out_of_the_box_settings', $this->settings);
         }
@@ -677,6 +716,7 @@ class Main
             'post_max_size' => $post_max_size_bytes,
             'google_analytics' => (('Yes' === $this->settings['google_analytics']) ? 1 : 0),
             'log_events' => (('Yes' === $this->settings['log_events']) ? 1 : 0),
+            'share_buttons' => array_keys(array_filter($this->settings['share_buttons'], function ($value) {return 'enabled' === $value; })),
             'refresh_nonce' => wp_create_nonce('outofthebox-get-filelist'),
             'gallery_nonce' => wp_create_nonce('outofthebox-get-gallery'),
             'getplaylist_nonce' => wp_create_nonce('outofthebox-get-playlist'),
@@ -685,7 +725,7 @@ class Main
             'rename_nonce' => wp_create_nonce('outofthebox-rename-entry'),
             'copy_nonce' => wp_create_nonce('outofthebox-copy-entry'),
             'move_nonce' => wp_create_nonce('outofthebox-move-entries'),
-            'log_nonce' => wp_create_nonce('outofthebox-log'),
+            'log_nonce' => wp_create_nonce('outofthebox-event-log'),
             'createentry_nonce' => wp_create_nonce('outofthebox-create-entry'),
             'getplaylist_nonce' => wp_create_nonce('outofthebox-get-playlist'),
             'createzip_nonce' => wp_create_nonce('outofthebox-create-zip'),
@@ -722,6 +762,7 @@ class Main
             'str_rename_failed' => __("That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the filename?", 'wpcloudplugins'),
             'str_rename_title' => __('Rename', 'wpcloudplugins'),
             'str_rename' => __('Rename to:', 'wpcloudplugins'),
+            'str_add_description' => __('Add a description...', 'wpcloudplugins'),
             'str_no_filelist' => __("Can't receive filelist", 'wpcloudplugins'),
             'str_addnew_title' => __('Create', 'wpcloudplugins'),
             'str_addnew_name' => __('Enter name', 'wpcloudplugins'),
@@ -729,6 +770,7 @@ class Main
             'str_zip_nofiles' => __('No files found or selected', 'wpcloudplugins'),
             'str_zip_createzip' => __('Creating zip file', 'wpcloudplugins'),
             'str_share_link' => __('Share file', 'wpcloudplugins'),
+            'str_shareon' => __('Share on', 'wpcloudplugins'),
             'str_create_shared_link' => __('Creating shared link...', 'wpcloudplugins'),
             'str_previous_title' => __('Previous', 'wpcloudplugins'),
             'str_next_title' => __('Next', 'wpcloudplugins'),
@@ -859,7 +901,8 @@ class Main
     {
         if (!isset($_REQUEST['action']) || !isset($_REQUEST['response'])) {
             echo json_encode(['verified' => false]);
-            die();
+
+            exit();
         }
 
         check_ajax_referer($_REQUEST['action']);
@@ -879,7 +922,7 @@ class Main
             echo json_encode(['verified' => true, 'msg' => $resp->getErrorCodes()]);
         }
 
-        die();
+        exit();
     }
 
     public function load_custom_css()
@@ -951,7 +994,7 @@ class Main
             if (empty($account)) {
                 $primary_account = $this->get_accounts()->get_primary_account();
                 if (false === $primary_account) {
-                    die('-1');
+                    exit('-1');
                 }
                 $account_id = $primary_account->get_id();
             }
@@ -971,17 +1014,19 @@ class Main
                 include OUTOFTHEBOX_ROOTDIR.'/templates/admin/shortcode_builder.php';
 
                 break;
+
             case 'links':
                 include OUTOFTHEBOX_ROOTDIR.'/templates/admin/documents_linker.php';
 
                 break;
+
             case 'embedded':
                 include OUTOFTHEBOX_ROOTDIR.'/templates/admin/documents_embedder.php';
 
                 break;
         }
 
-        die();
+        exit();
     }
 
     public function preview_shortcode()
@@ -990,7 +1035,7 @@ class Main
 
         include OUTOFTHEBOX_ROOTDIR.'/templates/admin/shortcode_previewer.php';
 
-        die();
+        exit();
     }
 
     public function send_lost_authorisation_notification($account_id = null)
@@ -1012,6 +1057,7 @@ class Main
         $template = apply_filters('outofthebox_set_lost_authorization_template', OUTOFTHEBOX_ROOTDIR.'/templates/notifications/lost_authorization.php', $this);
 
         ob_start();
+
         include_once $template;
         $htmlmessage = Helpers::compress_html(ob_get_clean());
 
@@ -1221,9 +1267,9 @@ class Main
     {
         // Abort early if the user will never see TinyMCE
         if (
-                !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_shortcodes'])) &&
-                !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_links'])) &&
-                !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_embedded']))
+                !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_shortcodes']))
+                && !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_links']))
+                && !(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_embedded']))
         ) {
             return;
         }
@@ -1411,6 +1457,7 @@ function OutoftheBox_Activate()
             'request_cache_max_age' => '',
             'always_load_scripts' => 'No',
             'nonce_validation' => 'Yes',
+            'share_buttons' => [],
             'shortlinks' => 'None',
             'bitly_login' => '',
             'bitly_apikey' => '',

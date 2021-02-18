@@ -17,6 +17,12 @@ class Integrations
     public function __construct(\TheLion\OutoftheBox\Main $main)
     {
         $this->_main = $main;
+
+        // Add Global Form Helpers
+        require_once 'FormHelpers.php';
+        new FormHelpers();
+
+        // Load integrations
         $this->load_contactform7();
         $this->load_elementor();
         $this->load_gravityforms();
@@ -44,6 +50,7 @@ class Integrations
         if (!did_action('elementor/loaded')) {
             return false;
         }
+
         require_once 'elementor/init.php';
     }
 

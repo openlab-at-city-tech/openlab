@@ -497,7 +497,7 @@ function openlab_registration_page() {
 							</div>
 
 							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $account_type_field_id ); ?>">Account Type</label>
+								<label class="control-label" for="field_<?php echo intval( $account_type_field_id ); ?>">Account Type <span class="label-gloss">(required)</span></label>
 								<div id="field_<?php echo esc_attr( $account_type_field_id ); ?>_error" class="error-container"></div>
 								<?php do_action( 'bp_field_' . $account_type_field_id . '_errors' ); ?>
 								<select

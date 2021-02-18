@@ -48,12 +48,13 @@ jQuery(document).ready(function ($) {
       dropdown: {
         enabled: 0,
         highlightFirst: true,
-        maxItems: 20
+        maxItems: 20,
+        position: "text"
       },
       whitelist: whitelist,
       templates: {
-        tag: function (v, tagData) {
-          return "<tag title='" + tagData.text + "' contenteditable='false' spellcheck='false' class='tagify__tag'><x class='tagify__tag__removeBtn'></x><div><img onerror='this.style.visibility=\"hidden\"' src='" + tagData.img + "'><span class='tagify__tag-type'>" + tagData.type + "</span><span class='tagify__tag-text'>" + (typeof tagData.text !== 'undefined' ? tagData.text : v) + "</span></div></tag>"
+        tag: function (tagData) {
+          return "<tag title='" + tagData.text + "' contenteditable='false' spellcheck='false' tabIndex='-1'  class=" + this.settings.classNames.tag + (tagData.class ? tagData.class : "") + "><x class='tagify__tag__removeBtn'></x><div><img onerror='this.style.visibility=\"hidden\"' src='" + tagData.img + "'><span class='tagify__tag-type'>" + tagData.type + "</span><span class='tagify__tag-text'>" + (typeof tagData.text !== 'undefined' ? tagData.text : tagData.value) + "</span></div></tag>"
 
         },
         dropdownItem: function (tagData) {
@@ -126,7 +127,7 @@ jQuery(document).ready(function ($) {
         break;
     }
 
-    $("#OutoftheBox_breadcrumb, #OutoftheBox_mediapurchase, #OutoftheBox_search, #OutoftheBox_showfiles, #OutoftheBox_slideshow, #OutoftheBox_upload, #OutoftheBox_upload_convert, #OutoftheBox_rename, #OutoftheBox_move, #OutoftheBox_copy, #OutoftheBox_editdescription, #OutoftheBox_delete, #OutoftheBox_createdocument, #OutoftheBox_addfolder").trigger('change');
+    $("#OutoftheBox_breadcrumb, #OutoftheBox_mediapurchase, #OutoftheBox_search, #OutoftheBox_showfiles, #OutoftheBox_slideshow, #OutoftheBox_upload, #OutoftheBox_upload_convert, #OutoftheBox_rename, #OutoftheBox_move, #OutoftheBox_copy, #OutoftheBox_editdescription, #OutoftheBox_delete, #OutoftheBox_createdocument, #OutoftheBox_addfolder, #OutoftheBox_showsharelink, #OutoftheBox_deeplink").trigger('change');
     $('input[name=OutoftheBox_file_layout]:radio:checked').trigger('change').prop('checked', true);
     $('#OutoftheBox_linkedfolders').trigger('change');
   });
@@ -201,12 +202,6 @@ jQuery(document).ready(function ($) {
   $('.outofthebox .list-container').on('click', '.entry_media_shortcode', function (event) {
     event.stopPropagation();
     insertShortcodeAsMedia($(this).closest('.entry'));
-  });
-
-  $(".OutoftheBox img.preloading").unveil(200, $(".OutoftheBox .ajax-filelist"), function () {
-    $(this).load(function () {
-      $(this).removeClass('preloading');
-    });
   });
 
   /* Initialise from shortcode */
@@ -829,7 +824,7 @@ jQuery(document).ready(function ($) {
     $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
     /* Set the button actions */
-    $('#outofthebox-modal-action .outofthebox-modal-copy-btn').unbind('click');
+    $('#outofthebox-modal-action .outofthebox-modal-copy-btn').off('click');
     $('#outofthebox-modal-action .outofthebox-modal-copy-btn').click(function () {
 
       var $temp = $("<input>");

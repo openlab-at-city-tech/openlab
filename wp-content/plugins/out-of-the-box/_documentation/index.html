@@ -147,7 +147,7 @@
 
                     <ul class='sub'>
                       <li><a href="#shortcode-builder-options-general">General</a></li>
-                      <li><a href="#shortcode-builder-options-folders">Folders</a></li>
+                      <li><a href="#shortcode-builder-options-folders">Content</a></li>
                       <li><a href="#shortcode-builder-options-layout">Layout</a></li>
                       <li><a href="#shortcode-builder-options-sorting">Sorting</a></li>
                       <li><a href="#shortcode-builder-options-advanced">Advanced</a></li>
@@ -194,7 +194,7 @@
                     </ul>
 
                   </li>
-                  <li><a href="#releasenotes">Release Notes (version 1.17.12)</a></li>
+                  <li><a href="#releasenotes">Release Notes (version 1.18.1)</a></li>
 
                 </ul>
               </div>
@@ -210,8 +210,8 @@
                     <h3>Requirements</h3>
                     <legend></legend>
                     <ul>
-                      <li>WordPress 4.8+</li>
-                      <li>At least PHP 5.5 with cURL extension</li>
+                      <li>WordPress 5.0+</li>
+                      <li>At least PHP 7.0 with cURL extension</li>
                     </ul>
 
                     <div class="alert alert-info">
@@ -220,8 +220,7 @@
                           <i class="material-icons">info_outline</i>
                         </div>
                         If you are not sure which PHP version your website is running or if the cURL extension is
-                        enabled, install the <b><a href="https://wordpress.org/plugins/wordpress-php-info/"
-                            target="_blank">WordPress phpinfo()</a></b> plugin.
+                        enabled, check the Site Health Tool (Wordpress-> Tools -> Site Health -> Info)
                         <br />
                       </div>
                     </div>
@@ -231,7 +230,8 @@
                         <div class="alert-icon">
                           <i class="material-icons">lightbulb_outline</i>
                         </div>
-                        Running PHP 7.x will increase the loading performance of the plugin and your site in general.
+                        Running the latest PHP version will increase the loading performance of the plugin and your site
+                        in general.
                         Check your web host configuration panel if it is possible to upgrade your php version!
                         <br />
                       </div>
@@ -1052,8 +1052,18 @@
                           <td>File path starting at the root folder of your account</td>
                         </tr>
                         <tr>
-                          <th><code>%file_url%</code></th>
-                          <td>A preview link to the file</td>
+                          <th><code>%file_cloud_preview_url%</code></th>
+                          <td>A preview link to the file in the cloud. User needs to have access to the file on the
+                            Cloud</td>
+                        </tr>
+                        <tr>
+                          <th><code>%file_cloud_shared_url%</code></th>
+                          <td>A shared link to the file in the cloud, accessible by anyone with the link</td>
+                        </tr>
+                        <tr>
+                          <th><code>%file_download_url%</code></th>
+                          <td>A direct download link to the file. The file is only accessible by users which have the
+                            'Download Permission' for the shortcode</td>
                         </tr>
                         <tr>
                           <th><code>%folder_name%</code></th>
@@ -1331,10 +1341,10 @@ public function change_event_summary_email($template_location, $notification){
                   </div>
 
                   <div class="tim-row" id="shortcode-builder-options-folders">
-                    <h3>Folders</h3>
+                    <h3>Content</h3>
                     <legend></legend>
 
-                    <p>Use the <b>Folders tab</b> to select which folder should be used a 'root' folder for this
+                    <p>Use the <b>Content tab</b> to select which folder should be used a 'root' folder for this
                       shortcode. On this tab you can also enable the <b>Private Folder</b> feature which will give users
                       their own folder. You can find this setting in the 'Smart Client Area' section.</p>
 
@@ -1654,7 +1664,9 @@ public function change_event_summary_email($template_location, $notification){
                               <li><code>%admin_email%</code> => Administration email address as set on the WordPress
                                 General Settings page;</li>
                               <li><code>%user_email%</code> => Email of the user that executes the action;</li>
-                              <li><code>%linked_user_email%</code>=> Email addresses of users that can access the
+                              <li><code>%administrator%</code>, <code>%editor%</code>,
+                                <code>%subscriber%</code>, etc... => All Email addresses of specific User Roles</li>
+                              <li><code>%linked_user_email%</code> => Email addresses of users that can access the
                                 modified files via their Private Folders.</li>
                             </ul>
 
@@ -1879,7 +1891,7 @@ public function change_event_summary_email($template_location, $notification){
                                   <i class="material-icons">info_outline</i>
                                 </div>
                                 When you want to prefill newly created Private Folders, enable the Template Folder
-                                setting (Shortcode Builder -> Folders -> Smare Client Area).
+                                setting (Shortcode Builder -> Content -> Smart Client Area).
                               </div>
                             </div>
 
@@ -2396,6 +2408,119 @@ public function change_event_summary_email($template_location, $notification){
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>1.18.1</td>
+                        <td>2 February 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Search Box module not opening folders</li>
+                            <li>Fix: Changes to the Summary Email setting not saved</li>
+                            <li>Fix: Product Documents WooCommerce integrations not starting downloads in case Account
+                              ID is missing</li>
+                            <li>Added: When scrolling down a page while using the Video Player will add the video
+                              floating in the corner</li>
+                            <li>Added: <code>outofthebox_upload_entry_information hook</code> to modify upload entry
+                              information
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.18</td>
+                        <td>14 January 2021</td>
+                        <td>
+                          <ul>
+                            <li><span class="label label-danger">IMPORTANT</span> <strong>Updated requirements:
+                                WordPress 5.0+ & PHP 7.0+.</strong><br /><br /></li>
+                            <li>Added: Select All button in action menu of File browser and Gallery.</li>
+                            <li>Fix: Lazy Loading bug for thumbnails in Lightbox.</li>
+                            <li>Fix: Add New Folder button not working inside File Browser view.</li>
+                            <li>Fix: Folder upload was not possible for WooCommerce orders with Products using the
+                              Upload integration.</li>
+                            <li>Fix: Upload button shown in WooCommerce Orders list even when the Upload Box isn't
+                              visible for the current order status.</li>
+                            <li>Fix: Failing upload can crash Formidable Forms entry submission.</li>
+                            <li>Fix: WP Forms not storing links to uploaded files correctly</li>
+                            <li>Improved: Added scroll Zoom on images in Lightbox.</li>
+                            <li>Improved: Failed upload are now logged if 'Log Events' is enabled.</li>
+                            <li>Updated: Panzoom library to version 4.3.2.</li>
+                            <li>Updated: Tippy library to version 6.2.7.</li>
+                            <li>Updated: Tagify library to version 3.22.0.</li>
+                            <li>Updated: DataTables library to version 1.10.23.</li>
+                            <li>Updated: WPColorPicker library to version 3.0.0.</li>
+                            <li>Updated: ReCaptcha library to version 1.2.4.</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.16</td>
+                        <td>17 December 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Token encryption/decription issue on sites running a Multi Sites configuration</li>
+                            <li>Fix: Bug in Upload Box could result in duplicate files</li>
+                            <li>Fix: ZIP download requests fail due to incorrect authorization headers</li>
+                            <li>Improved: Lazy loading of images in Media Player playlists</li>
+                            <li>Improved: Added new File URL placeholders for email notification templates. Now includes
+                              <code>%file_download_url%</code>, <code>%file_cloud_shared_url%</code>,
+                              <code>%file_cloud_preview_url%</code> and
+                              <code>%file_cloud_shortlived_download_url%</code> if supported</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.15</td>
+                        <td>7 December 2020</td>
+                        <td>
+                          <ul>
+                            <li><span class="label label-danger">Vulnerability</span> Authorization tokens can be
+                              publicly accesible on NGINX servers and requires the attacker to know both the Account
+                              email and
+                              Account ID. Apache servers are not affected.
+                              This version implements token encryption to patch this. A re-authorization might be needed
+                              in some cases.
+                            </li>
+                            <li>Fix: Form submit buttons can disappear when triggered while plugin is still uploading
+                              files
+                            </li>
+                            <li>Fix: Bug could create 'Guest' Private Folders when a logged in user was for some reason
+                              logged out in the background</li>
+                            <li>Fix: Plugin not initiating properly when ReCaptcha script is loaded async/defer</li>
+                            <li>Improved: Migrating to Scoped App and short lived Access Tokens</li>
+                            <li>Improved: Made a number of PHP8 compatilibility improvements.</li>
+                            <li>Updated: PHPthumb version 1.7.15</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.14</td>
+                        <td>13 November 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Javascript Compatibility issue when used in combination with specific Themes</li>
+                            <li>Improved: Can now add User Roles as notification recipients using placeholders like
+                              %administrator%, %subscriber%, %editor%, %custom_wp_role%.
+                            </li>
+                            <li>Improved: Various javascript changes for compatibility with WordPress 5.6 and jQuery
+                              3.x.</li>
+                            <li>Improved: Marked as compatible with WordPress 5.6.</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.17.13</td>
+                        <td>2 November 2020</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Search API calls migrated to /2/files/search_v2 endpoint</li>
+                            <li>Fix: Folder location set by form input fields not correctly filtered. Could for instance
+                              create subfolders when folder name contained a '</li>
+                            <li>Fix: Preview button via File Menu doesn't open the LightBox correctly on some devices
+                            </li>
+                            <li>Improved: Small layout changes in File Browser</li>
+                          </ul>
+                        </td>
+                      </tr>
                       <tr>
                         <td>1.17.12</td>
                         <td>17 October 2020</td>
@@ -2926,384 +3051,6 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Improved: Only loading CSS for the plugin skin when required</li>
                             <li>Updated: Font Awesome to version 5.10.1</li>
                             <li>Updated: Language translation files</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.17.1</td>
-                        <td>8 August 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Elementor Page Builder could crash when loading plugin shortcode</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.17</td>
-                        <td>2 August 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: File Browser not scrollable in Back-End</li>
-                            <li>Improved: Responsive breadcrumb navigation using full path</li>
-                            <li>Improved: Media Player playlist now supports folder structures</li>
-                            <li>Updated: Font Awesome to version 5.10.0</li>
-                            <li>Updated: Plugin Update Checker to version 4.7</li>
-                            <li>Updated: Blueimp File Uploader</li>
-                            <li>Updated: ReCaptcha library to version 1.2.2</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.16</td>
-                        <td>26 June 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug preventing you to embed single files when an URL shortener Service is used</li>
-                            <li>Improved: Enabled ZIP download for File Browser in WooCommerce Order detail page for
-                              products with Upload Box active</li>
-                            <li>Updated: Font Awesome to version 5.9.0</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.15.1</td>
-                        <td>10 May 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Not able to manually link Users to Private Folders</li>
-                            <li>Added: Copy to Clipboard in Social Share popup</li>
-                            <li>Improved: Reducing cURL errors by adding CA Certificates</li>
-                          </ul>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>1.13.15</td>
-                        <td>8 May 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in Report export only exported the rows visible in the viewport. The new export
-                              is a complete CSV file</li>
-                            <li>Fix: Folder upload didn't create the folder that was selected but only the subfolders
-                              inside it</li>
-                            <li>Fix: Dropbox has limited the maximum size of direct uploads to 300MB. The plugin will
-                              now set the maximum upload size considering all the limits</li>
-                            <li>Fix: Some PHP versions have trouble displaying the initial dataset for the Activities
-                              Graph in Report Dashboard</li>
-                            <li>Fix: Bug in the visual Notifications Template Editor not properly saving changes</li>
-                            <li>Added: Individual Admin accounts for global plugin permissions (e.g. who can change the
-                              plugin settings & see the Back-End File browser) </li>
-                            <li>Added: new %linked_user_email% placeholder for email notifications, sending
-                              notifications to all users that have access to the updated file in their manually linked
-                              Private Folder</li>
-                            <li>Added: Duration of media files present in the File Browser when this data is available
-                            </li>
-                            <li>Added: New WooCommerce setting allow you to disable the Upload Form when the order has a
-                              specific status (e.g. Completed)</li>
-                            <li>Improved: Changed the user name in Report Section to display name and added user ID as
-                              column</li>
-                            <li>Improved: Folder Thumbnails in Gallery will now also look in all the lower sub folders
-                            </li>
-                            <li>Improved: Some small layout changes</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.14</td>
-                        <td>28 March 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Lightbox thumbnails distorted in Safari</li>
-                            <li>Fix: Bug preventing to click on submit button when Upload box is located inside a form
-                              tag</li>
-                            <li>Fix: Folders in Gallery cannot be moved when user has permission to do so</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.13</td>
-                        <td>19 March 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in URI shortener service preventing to create shortened URIs</li>
-                            <li>Fix: Uploading empty files not accepted by the Dropbox API</li>
-                            <li>Fix: Few PHP 7.x compatibility issues</li>
-                            <li>Fix: Bug in Video Player skin didn't always remove pause screen</li>
-                            <li>Added: Upload support for folders keeping the folder structure intact</li>
-                            <li>Added: ReCaptcha V3 Support</li>
-                            <li>Added: Direct Link to upload folder in Contact Form 7 and Gravity Form entries &
-                              notifications</li>
-                            <li>Updated: FontAwesome Library to 5.7.2</li>
-                            <li>Updated: Auto Updater library to version 4.5.1</li>
-                            <li>Updated: Blueimp File Uploader Class</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.12</td>
-                        <td>12 February 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Download links in upload notification were not always working in combination with
-                              Private Folders</li>
-                            <li>Fix: Bug preventing adding/renaming of files and folders with French accents</li>
-                            <li>Added: Support for Team Folders (enable this via the main plugin settings page > tab
-                              Advanced)</li>
-                            <li>Added: New setting to disable loading of FontAwesome Library in case there is a conflict
-                              with this library (e.g. with the WOffice theme)</li>
-                            <li>Added: Button in Report Dashboard to clear all statistics</li>
-                            <li>Improved: Only load Contact Form 7 Javascript file when required</li>
-                            <li>Improved: Loading performance with multiple Media Players on the same page</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.11</td>
-                        <td>19 January 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Shuffle sorting order not working properly</li>
-                            <li>Fix: Bug in error handling mechanism</li>
-                            <li>Fix: Plugin was trying to create thumbnails for audio files</li>
-                            <li>Added: Minimum upload size setting in the Shortcode Builder.</li>
-                            <li>Added: WooCommerce Order notes will be added when new files are uploaded to the order
-                            </li>
-                            <li>Added: New %wc_order_quantity% and %wc_product_quantity% placeholders for Private
-                              Folders name template when files are uploaded to order</li>
-                            <li>Added: Added Support for WooCommerce Product Documents</li>
-                            <li>Added: Thumbnails support for all common formats in the LightBox Preview</li>
-                            <li>Added: Option to select download method</li>
-                            <li>Improved: Changed how the plugin handles rejected API requests</li>
-                            <li>Improved: Caching of shortcodes is now more stable on sites with high traffic</li>
-                            <li>Improved: Update of the Multi Sites settings page allowing you to set a single Dropbox
-                              account when plugin is network activated</li>
-                            <li>Updated: Font Awesome to version 5.6.3</li>
-                            <li>Updated: Plugin Update Checker to version 4.5</li>
-                            <li>Updated: Chart.js library to version 2.7.3</li>
-                            <li>Updated: DataTables library to version 1.10.18</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.10</td>
-                        <td>26 November 2018</td>
-                        <td>
-                          <ul>
-                            <li>Added: Support for direct upload to Dropbox</li>
-                            <li>Added: Thumbnail support for videos in Media Player</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.9</td>
-                        <td>20 November 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in the Contact Form 7 validation</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.8</td>
-                        <td>7 November 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in Gravity Forms integration preventing IE/Edge/FF users to properly submit
-                              form</li>
-                            <li>Added: Setting to select custom icon Set</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.7</td>
-                        <td>31 Oktober 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug creating multiple menu's in the Dashboard for non-Administrator users</li>
-                            <li>Fix: Not all required code was properly enqueued when using the 'Load Javascripts on all
-                              pages' setting</li>
-                            <li>Fix: As of WooCommerce 3.4.7 the Downloadable Product URL now requires to have a valid
-                              file extension</li>
-                            <li>Added: New notification setting which allows you to prevent emails being send to the
-                              user that executes the download/upload/delete action</li>
-                            <li>Improvement: Updated Google Analytics Event/Tracker code</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.6</td>
-                        <td>25 September 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Delete action of upload queue trigger new file selection as well</li>
-                            <li>Fix: FileBrowser/Gallery Checkbox was checked when previewing file</li>
-                            <li>Added: Gutenberg Support via Classic Block</li>
-                            <li>Improvement: Added visual feedback when downloading files as ZIP</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.5</td>
-                        <td>18 September 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Conflict getMimeType() function with other plugins</li>
-                            <li>Fix: Event Report for search events showing wrong path </li>
-                            <li>Fix: Uploads are now processed individualy instead of simultaneously</li>
-                            <li>Fix: Shortcode Builder not creating shortcodes when Private Folders feature is set to
-                              'Manual'</li>
-                            <li>Fix: Disabling Google Popout button didn't work properly</li>
-                            <li>Updated: Datatables library to version 1.10.18</li>
-                            <li>Updated: Font Awesome 5.3.1</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.4</td>
-                        <td>17 July 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Email tag in Contact Form 7 notification not rendered when Upload Field is required
-                            </li>
-                            <li>Fix: Adding new file to WooCommerce Product initated download</li>
-                            <li>Improved: Browser handling when user tries to leave page while uploading files</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.3</td>
-                        <td>5 July 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Plugin not always returning UTF8 valid characters breaking JSON encoding</li>
-                            <li>Fix: Not able to use filenames with special characters</li>
-                            <li>Fix: CSS issue when using the Media Player with Full screen</li>
-                            <li>Fix: ZIP option visible in Shortcode Builder when server isn't able to generate ZIP
-                              files</li>
-                            <li>Fix: Gravity Form entries not properly showing the list of uploaded files</li>
-                            <li>Added: Direct embedding of single media files via the Shortcode Builder</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.2</td>
-                        <td>23 June 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Full Event Report table is now using the default WordPress DB connection</li>
-                            <li>Fix: Uploadform doesn't initate uploads in some situations</li>
-                            <li>Added: Option to enable/disable Event Logs (Statistics -> Log Events)</li>
-                            <li>Added: French Translation</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13.1</td>
-                        <td>19 June 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug when using the shortcode_set_options hook</li>
-                            <li>Fix: Resetting Cache while cache folder isn't yet created/available</li>
-                            <li>Fix: Events Dashboard Layout</li>
-                            <li>Fix: Upload bug when multiple Upload Boxes are present on the same page</li>
-                            <li>Updated: Translation files</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.13</td>
-                        <td>6 June 2018</td>
-                        <td>
-                          <ul>
-                            <li>Added: Contact Form 7 integration</li>
-                            <li>Added: New Report Dashboard to track user actions</li>
-                            <li>Fix: Several minor bugs</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12.3</td>
-                        <td>4 June 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Preventing conflict with other Blueimp File UploaderHandler classes</li>
-                            <li>Fix: Problems caused with multiple Media Player instances on the same page</li>
-                            <li>Fix: Bug preventing you to swipe images in Lightbox</li>
-                            <li>Fix: In some occassions the Video Player presented an expired download link</li>
-                            <li>Fix: Thumbnails not working on some IIS7 servers</li>
-                            <li>Fix: Bug not working search button events when another qtip library is present</li>
-                            <li>Added: Follow URL shortcuts instead of downloading them</li>
-                            <li>Added: New Shortlink services</li>
-                            <li>Added: New 'Who can Share' permissions in Shortcode Builder</li>
-                            <li>Updated: Awesome Font 5 library</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12.2.2</td>
-                        <td>23 April 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Plugin not submitting Gravity Form when custom submit button is used</li>
-                            <li>Fix: Shortcode Builder creating shortcodes while no start folder is selected</li>
-                            <li>Fix: Media Player not showing playlist properly with multiple instances on the same page
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12.2.1</td>
-                        <td>12 April 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Conflict with Awesomefont v5.0 svg loaders causing the popups to show up in the
-                              wrong place</li>
-                            <li>Fix: Bug sending multiple notification emails when authorization has been lost</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12.2</td>
-                        <td>11 April 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in the List/Grid view switch</li>
-                            <li>Fix: Bug preventing to insert/embed files in the TinyMCE Editor</li>
-                            <li>Fix: Bug hiding all checkboxes after unchecking the 'Check All' checkbox</li>
-                            <li>Fix: Bug hiding the 'no access' container to show up</li>
-                            <li>Fix: Bug preventing you to insert new downloadable files in WooCommerce Product</li>
-                            <li>Improved: Modal Dialogs on mobile browsers</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12.1</td>
-                        <td>10 April 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug preventing upload of multiple documents in Gravity Form when upload is required
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.12</td>
-                        <td>9 April 2018</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Conflict with cache plugins occassionaly causes the plugin to crash</li>
-                            <li>Fix: Bug preventing generating Gallery thumbnails for specific rowheight settings</li>
-                            <li>Fix: Validation bug in the Gravity Forms integration</li>
-                            <li>Added: Shortcode Builder is now accessible via the Admin Menu as well</li>
-                            <li>Added: Shortcode setting to show/hide Upload Folder button</li>
-                            <li>Added: Shortcode setting to crop images in Gallery mode</li>
-                            <li>Added: Setting to disable nonce validation (causes issues in combination with some User
-                              Management plugins)</li>
-                            <li>Improved: Complete revision of the main javascript file</li>
-                            <li>Improved: Uploaded files will now be visible again in Upload Box after a Gravity Form
-                              submission fails</li>
-                            <li>Improved: Increased loading performance by using LocalStorage</li>
-                            <li>Updated: Awesome Fonts to version 5.0</li>
                           </ul>
                         </td>
                       </tr>

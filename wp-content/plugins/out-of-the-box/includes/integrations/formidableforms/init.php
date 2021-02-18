@@ -61,7 +61,7 @@ class FormidableForms
     public function add_field($fields)
     {
         $fields[$this->field_type] = [
-            'name' => __('Dropbox Upload'),
+            'name' => 'Dropbox Upload',
             'icon' => 'frm_icon_font frm_upload_icon',
         ];
 
@@ -128,7 +128,17 @@ class FormidableForms
         }
 
         $field_id = $field['id'];
-        $prefill = (isset($_REQUEST['item_meta'][$field_id]) ? stripslashes($_REQUEST['item_meta'][$field_id]) : '');
+        $prefill = '';
+        if (!empty($_REQUEST['frm_action']) && 'create' === $_REQUEST['frm_action']) {
+            // Clear all uploaded values
+            foreach ($_REQUEST as $key => $value) {
+                if (false !== strpos($key, 'fileupload-filelist_')) {
+                    $_REQUEST[$key] = '';
+                }
+            }
+        } else {
+            $prefill = (isset($_REQUEST['item_meta'][$field_id]) ? stripslashes($_REQUEST['item_meta'][$field_id]) : '');
+        }
 
         echo do_shortcode($field['shortcode']);
 
@@ -160,7 +170,7 @@ class FormidableForms
 
         $uploaded_files = json_decode($posted_value);
 
-        if (empty($uploaded_files)) {
+        if (empty($uploaded_files) || (0 === count((array) $uploaded_files))) {
             $errors['field'.$posted_field->id] = $posted_field->field_options['blank'];
         }
 
@@ -205,30 +215,7 @@ class FormidableForms
 
     public function render_value_as_text($json_data, $ashtml = true)
     {
-        $data = json_decode($json_data);
-
-        if ((null === $data) || (0 === count((array) $data))) {
-            return $data;
-        }
-
-        $first_entry = current($data);
-        $folder_location = ($ashtml && isset($first_entry->folderurl)) ? '<a href="'.urldecode($first_entry->folderurl).'">Dropbox</a>' : 'Dropbox';
-
-        // Fill our custom field with the details of our upload session
-        $html = sprintf(__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $data), $folder_location);
-        $html .= ($ashtml) ? '<ul>' : "\r\n";
-
-        foreach ($data as $fileid => $file) {
-            $html .= ($ashtml) ? '<li><a href="'.urldecode($first_entry->folderurl).'/'.$file->name.'">' : '';
-            $html .= basename($file->path);
-            $html .= ($ashtml) ? '</a>' : '';
-            $html .= ' ('.$file->size.')';
-            $html .= ($ashtml) ? '</li>' : "\r\n";
-        }
-
-        $html .= ($ashtml) ? '</ul>' : '';
-
-        return $html;
+        return apply_filters('outofthebox_render_formfield_data', $json_data, $ashtml, $this);
     }
 
     public function save_value($values)
@@ -244,7 +231,11 @@ class FormidableForms
                 continue;
             }
 
-            $values['item_meta'][$field_id] = $this->field_type.'-'.$value;
+            if ('{}' === $value) {
+                unset($values['item_meta'][$field_id]);
+            } else {
+                $values['item_meta'][$field_id] = $this->field_type.'-'.$value;
+            }
         }
 
         return $values;
@@ -306,7 +297,7 @@ class FormidableForms
 
         add_thickbox();
 
-        wp_enqueue_script('WPCP-UYD-FormidableForms', plugins_url('FormidableForms.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_enqueue_script('WPCP-'.$this->field_type.'-FormidableForms', plugins_url('FormidableForms.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
     }
 
     public function enqueue_for_ajax($fields, $form)
@@ -342,7 +333,11 @@ class FormidableForms
             return $private_folder_name;
         }
 
-        return trim(str_replace(['|', '/'], ' ', sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()])));
+        $raw_name = sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()]);
+        $name = str_replace(['|', '/'], ' ', $raw_name);
+        $filtered_name = \TheLion\OutoftheBox\Helpers::filter_filename(stripslashes($name), false);
+
+        return trim($filtered_name);
     }
 
     /**

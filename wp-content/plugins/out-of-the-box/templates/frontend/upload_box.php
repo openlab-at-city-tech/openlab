@@ -36,8 +36,8 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
   <div class="fileupload-header">
     <div class="fileupload-header-title">
       <div class="fileupload-empty">
-        <div class="fileupload-header-text-title upload-add-file"><?php _e('Add your files', 'wpcloudplugins'); ?></div>
-        <?php if ('1' === $this->options['upload_folder']) { ?>
+        <div class="fileupload-header-text-title upload-add-file"><?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? __('Add your files', 'wpcloudplugins') : __('Add your file', 'wpcloudplugins'); ?></div>
+        <?php if ('1' === $this->options['upload_folder'] && ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads'])) { ?>
         <div class="fileupload-header-text-subtitle upload-add-folder"><a
             title="<?php _e('Or select a folder', 'wpcloudplugins'); ?>"><?php _e('Or select a folder', 'wpcloudplugins'); ?></a>
         </div>
@@ -86,10 +86,10 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
           <ul>
             <li class="upload-add-file">
               <a title="<?php _e('Files', 'wpcloudplugins'); ?>">
-                <i class="fas fa-file-medical"></i> <?php _e('Files', 'wpcloudplugins'); ?>
+                <i class="fas fa-file-medical"></i> <?php echo ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads']) ? __('Files', 'wpcloudplugins') : __('File', 'wpcloudplugins'); ?>
               </a>
             </li>
-            <?php if ('1' === $this->options['upload_folder']) { ?>
+            <?php if ('1' === $this->options['upload_folder'] && ($this->options['maxnumberofuploads'] > 1 || '-1' === $this->options['maxnumberofuploads'])) { ?>
             <li class="upload-add-folder">
               <a title="<?php _e('Folders', 'wpcloudplugins'); ?>">
                 <i class="fas fa-folder"></i> <?php _e('Folders', 'wpcloudplugins'); ?>
@@ -119,12 +119,16 @@ if ('1' === $this->options['upload_auto_start'] || false !== strpos($this->optio
             </div>
           </td>
 
-          <td class="fileupload-table-cell fileupload-table-cell-action" role="cell" style="flex: 0 0 80px;">
-            <button aria-label="Remove" class="upload-remove"><i class="fas fa-times"></i></button>
-            <button aria-label="Stop" class="upload-stop"><i class="fas fa-stop-circle"></i></button>
+          <td class="fileupload-table-cell fileupload-table-cell-action" role="cell" style="flex: 1 0 auto;">
+            <?php if ($this->get_user()->can_edit_description()) {?>
+              <button type="button" title="<?php _e('Add description', 'wpcloudplugins'); ?>" class="upload-add-description"><i class="fas fa-pen"></i> <?php _e('Description', 'wpcloudplugins'); ?></button>
+            <?php } ?>
+              <button type="button" title="<?php _e('Try to upload the file again', 'wpcloudplugins'); ?>" class="upload-redo"><i class="fas fa-redo"></i></button>
           </td>
 
-          <td class="fileupload-table-cell fileupload-table-cell-result" role="cell" style="flex: 0 0 80px;">
+          <td class="fileupload-table-cell fileupload-table-cell-result" role="cell" style="flex: 0 0 64px;">
+            <i title="<?php _e('Remove from queue', 'wpcloudplugins'); ?>" aria-label="<?php _e('Remove from queue', 'wpcloudplugins'); ?>" class="upload-remove fas fa-times"></i>
+            <i title="<?php _e('Abort upload', 'wpcloudplugins'); ?>" aria-label="<?php _e('Abort upload', 'wpcloudplugins'); ?>" class="upload-stop fas fa-stop-circle"></i>
             <i class="upload-waiting fas fa-pause"></i>
             <i class="upload-success fas fa-check"></i>
             <i class="upload-fail fas fa-exclamation"></i>

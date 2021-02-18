@@ -62,9 +62,9 @@ class Filebrowser
         // Add 'back to Previous folder' if needed
 
         if (
-                (false === $this->_search) &&
-                ('' !== $this->_folder->get_path()) &&
-                (strtolower($this->_folder->get_path()) !== strtolower($this->get_processor()->get_root_folder()))
+                (false === $this->_search)
+                && ('' !== $this->_folder->get_path())
+                && (strtolower($this->_folder->get_path()) !== strtolower($this->get_processor()->get_root_folder()))
         ) {
             $foldername = basename($this->_folder->get_path());
             $location = str_replace('\\', '/', (dirname($this->get_processor()->get_requested_path())));
@@ -76,7 +76,7 @@ class Filebrowser
             $parent_folder_entry->set_path_display($location);
             $parent_folder_entry->set_is_dir(true);
             $parent_folder_entry->set_parent_folder(true);
-            $parent_folder_entry->set_icon(OUTOFTHEBOX_ROOTPATH.'/css/icons/32x32/folder-grey.png');
+            $parent_folder_entry->set_icon(OUTOFTHEBOX_ROOTPATH.'/css/icons/32x32/prev.png');
 
             $filelist_html .= $this->renderDir($parent_folder_entry);
         }
@@ -162,9 +162,9 @@ class Filebrowser
 
         $raw_path = '';
         if (
-                (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_shortcodes'))) ||
-                (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_links'))) ||
-                (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_embedded')))
+                (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_shortcodes')))
+                || (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_links')))
+                || (\TheLion\OutoftheBox\Helpers::check_user_role($this->get_processor()->get_setting('permissions_add_embedded')))
         ) {
             $raw_path = (null !== $this->_folder->get_path()) ? $this->_folder->get_path() : '';
         }
@@ -188,7 +188,8 @@ class Filebrowser
         $cached_request->add_cached_response($response);
 
         echo $response;
-        die();
+
+        exit();
     }
 
     public function renderNoResults()
@@ -203,8 +204,8 @@ class Filebrowser
 
         $html .= "<div class='entry-info'>";
         $html .= "<div class='entry-info-name'>";
-        $html .= "<a class='entry_link' title='".__('No files or folders found', 'wpcloudplugins')."'><div class='entry-name-view'>";
-        $html .= '<span>'.__('No files or folders found', 'wpcloudplugins').'</span>';
+        $html .= "<a class='entry_link' title='".__('This folder is empty', 'wpcloudplugins')."'><div class='entry-name-view'>";
+        $html .= '<span>'.__('This folder is empty', 'wpcloudplugins').'</span>';
         $html .= '</div></a>';
         $html .= "</div>\n";
 
@@ -280,7 +281,7 @@ class Filebrowser
         $return .= "<div class='entry_thumbnail'><div class='entry_thumbnail-view-bottom'><div class='entry_thumbnail-view-center'>\n";
 
         $return .= "<div class='preloading'></div>";
-        $return .= "<img class='preloading hidden' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' data-src-backup='".$item->get_icon_retina()."'/>";
+        $return .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' data-src-backup='".$item->get_icon_retina()."'/>";
         $return .= "</div></div></div>\n";
 
         if ($duration = $item->get_media('duration')) {
@@ -370,9 +371,9 @@ class Filebrowser
         $usercanpreview = $this->get_processor()->get_user()->can_preview() && '1' !== $this->get_processor()->get_shortcode_option('forcedownload');
 
         if (
-                $item->is_dir() ||
-                false === $item->get_can_preview_by_cloud() ||
-                false === $this->get_processor()->get_user()->can_view()
+                $item->is_dir()
+                || false === $item->get_can_preview_by_cloud()
+                || false === $this->get_processor()->get_user()->can_view()
         ) {
             $usercanpreview = false;
         }
@@ -415,6 +416,7 @@ class Filebrowser
                         $lightbox .= ' data-options="thumbnail: \''.$this->get_processor()->get_client()->get_thumbnail($item, true, 256, 256).'\'"';
 
                         break;
+
                     case 'inline':
                         $id = 'ilightbox_'.$this->get_processor()->get_listtoken().'_'.md5($item->get_id());
                         $html5_element = (false === strpos($item->get_mimetype(), 'video')) ? 'audio' : 'video';
@@ -428,6 +430,7 @@ class Filebrowser
                         $url = '#'.$id;
 
                         break;
+
                     case 'iframe':
                         $icon_128 = ($item->has_own_thumbnail() ? $this->get_processor()->get_client()->get_thumbnail($item, true, 256, 256) : $item->get_icon_large());
                         $lightbox .= ' data-options="mousewheel: false, width: \'85%\', height: \'80%\', thumbnail: \''.$icon_128.'\'"';
@@ -513,10 +516,10 @@ class Filebrowser
         $usercanpreview = $this->get_processor()->get_user()->can_preview();
 
         if (
-                $item->is_dir() ||
-                false === $item->get_can_preview_by_cloud() ||
-                'zip' === $item->get_extension() ||
-                false === $this->get_processor()->get_user()->can_view()
+                $item->is_dir()
+                || false === $item->get_can_preview_by_cloud()
+                || 'zip' === $item->get_extension()
+                || false === $this->get_processor()->get_user()->can_view()
         ) {
             $usercanpreview = false;
         }
@@ -598,10 +601,10 @@ class Filebrowser
         $return = '';
 
         if (
-            false === $this->get_processor()->get_user()->can_add_folders() ||
-            false === $this->_folder->get_permission('canadd') ||
-            true === $this->_search ||
-            '1' === $this->get_processor()->get_shortcode_option('show_breadcrumb')
+            false === $this->get_processor()->get_user()->can_add_folders()
+            || false === $this->_folder->get_permission('canadd')
+            || true === $this->_search
+            || '1' === $this->get_processor()->get_shortcode_option('show_breadcrumb')
             ) {
             return $return;
         }

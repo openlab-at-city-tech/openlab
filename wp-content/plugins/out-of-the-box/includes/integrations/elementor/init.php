@@ -14,7 +14,7 @@ class Elementor
 {
     const VERSION = \OUTOFTHEBOX_VERSION;
     const MINIMUM_ELEMENTOR_VERSION = '2.9.0';
-    const MINIMUM_PHP_VERSION = '5.6';
+    const MINIMUM_PHP_VERSION = '7.0';
 
     private static $_instance = null;
 

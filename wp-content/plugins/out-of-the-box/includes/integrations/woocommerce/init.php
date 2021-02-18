@@ -58,7 +58,7 @@ class WooCommerce extends \WC_Integration
         $this->id = 'outofthebox-woocommerce';
         $this->method_title = 'WooCommerce Dropbox';
         $this->method_description = __('Easily add downloadable products right from the cloud.', 'wpcloudplugins').' '
-                .sprintf(__('To be able to use this integration, you only need to link your %s Account to the plugin on the %s.', 'wpcloudplugins'), 'Dropbox','<a href="'.admin_url('admin.php?page=OutoftheBox_settings').'">Out-of-the-Box settings page</a>');
+                .sprintf(__('To be able to use this integration, you only need to link your %s Account to the plugin on the %s.', 'wpcloudplugins'), 'Dropbox', '<a href="'.admin_url('admin.php?page=OutoftheBox_settings').'">Out-of-the-Box settings page</a>');
 
         // Load the settings.
         $this->init_form_fields();
@@ -207,7 +207,7 @@ class WooCommerce_Downloads
 
         // register translations
         $translation_array = [
-            'choose_from' => sprintf(__('Choose from %s', 'wpcloudplugins'),'Dropbox'),
+            'choose_from' => sprintf(__('Choose from %s', 'wpcloudplugins'), 'Dropbox'),
             'download_url' => '?action=outofthebox-wc-direct-download&id=',
             'file_browser_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-getwoocommercepopup',
             'wcpd_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-wcpd-direct-download&id=',
@@ -285,6 +285,8 @@ class WooCommerce_Downloads
         }
 
         $entry_id = urldecode($_REQUEST['id']);
+        $account_id = isset($_REQUEST['account_id']) ? $_REQUEST['account_id'] : null;
+
         $product_id = $_REQUEST['pid'];
         $documents_collection = new \WC_Product_Documents_Collection($product_id);
 
@@ -296,6 +298,23 @@ class WooCommerce_Downloads
                     continue;
                 }
 
+                // Fallback for old urls without account info
+                if (empty($account_id)) {
+                    $primary_account = $this->get_woocommerce()->get_processor()->get_accounts()->get_primary_account();
+                    if (null === $primary_account) {
+                        return false;
+                    }
+                    $account_id = $primary_account->get_id();
+                }
+
+                $account = $this->get_woocommerce()->get_processor()->get_accounts()->get_account_by_id($account_id);
+
+                if (null === $account) {
+                    return false;
+                }
+
+                $this->get_woocommerce()->get_processor()->set_current_account($account);
+
                 if (false !== strpos($file_location, 'id='.$entry_id)) {
                     $entry_path = urldecode(base64_decode($entry_id));
                     $cached_entry = $this->get_woocommerce()->get_processor()->get_client()->get_entry($entry_path, false);
@@ -303,6 +322,7 @@ class WooCommerce_Downloads
 
                     // Redirect to the file
                     header('Location: '.$downloadlink);
+
                     exit;
                 }
             }
@@ -398,6 +418,7 @@ class WooCommerce_Downloads
 
         // Redirect to the file
         header('Location: '.$downloadlink);
+
         exit;
     }
 
@@ -708,7 +729,7 @@ class WooCommerce_Uploads
                 'label' => __('Title Upload Box', 'wpcloudplugins'),
                 'placeholder' => $default_box_title,
                 'desc_tip' => false,
-                'description' => '<br><br>'.__('Enter the title for the upload box','wpcloudplugins').'. '.__('You can use the placeholders <code>%wc_order_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_name%</code>, <code>%jjjj-mm-dd%</code>', 'wpcloudplugins'),
+                'description' => '<br><br>'.__('Enter the title for the upload box', 'wpcloudplugins').'. '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_name%</code>, <code>%jjjj-mm-dd%</code>'),
                 'value' => empty($box_title) ? $default_box_title : $box_title,
             ]
         );
@@ -743,7 +764,7 @@ class WooCommerce_Uploads
             [
                 'id' => 'outofthebox_upload_box_folder_template',
                 'label' => __('Upload Folder Name', 'wpcloudplugins'),
-                'description' => '<br><br>'.__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode','wpcloudplugins').'. '.__('You can use the placeholders <code>%wc_order_id%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>', 'wpcloudplugins'),
+                'description' => '<br><br>'.__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>'),
                 'desc_tip' => false,
                 'placeholder' => $default_folder_template,
                 'value' => empty($folder_template) ? $default_folder_template : $folder_template,
@@ -946,7 +967,7 @@ class WooCommerce_Uploads
         foreach ($order->get_items() as $order_item) {
             $originial_product = $this->get_product($order_item);
 
-            if (false === $this->requires_product_uploads($originial_product)) {
+            if (false === $this->requires_product_uploads($originial_product, $order)) {
                 continue;
             }
 
@@ -1018,7 +1039,7 @@ class WooCommerce_Uploads
         foreach ($order->get_items() as $order_item) {
             $originial_product = $this->get_product($order_item);
 
-            if (false === $this->requires_product_uploads($originial_product)) {
+            if (false === $this->requires_product_uploads($originial_product, $order)) {
                 continue;
             }
 
@@ -1060,7 +1081,7 @@ class WooCommerce_Uploads
      *
      * @param \WC_Order $order
      *
-     * @return boolean
+     * @return bool
      */
     public function requires_order_uploads($order)
     {
@@ -1070,7 +1091,7 @@ class WooCommerce_Uploads
 
         foreach ($order->get_items() as $order_item) {
             $product = $this->get_product($order_item);
-            $requires_upload = $this->requires_product_uploads($product);
+            $requires_upload = $this->requires_product_uploads($product, $order);
 
             if ($requires_upload) {
                 return true;
@@ -1084,10 +1105,11 @@ class WooCommerce_Uploads
      * Checks if the product uses this upload functionality.
      *
      * @param \WC_Product $product
+     * @param null|mixed  $order
      *
-     * @return boolean
+     * @return bool
      */
-    public function requires_product_uploads($product = null)
+    public function requires_product_uploads($product = null, $order = null)
     {
         if (empty($product) || !($product instanceof \WC_Product)) {
             return false;
@@ -1100,7 +1122,15 @@ class WooCommerce_Uploads
         $_uploadable = get_post_meta($product->get_id(), '_uploadable', true);
         $_outofthebox_upload_box = get_post_meta($product->get_id(), 'outofthebox_upload_box', true);
 
-        if ('yes' === $_uploadable && 'yes' === $_outofthebox_upload_box) {
+        $upload_active_on = get_post_meta($product->get_id(), 'outofthebox_upload_box_active_on_status', true);
+        if (empty($upload_active_on)) {
+            $upload_active_on = ['wc-pending', 'wc-processing'];
+        }
+        $upload_active = in_array('wc-'.$order->get_status(), $upload_active_on);
+
+        $show_upload_box = apply_filters('outofthebox_woocommerce_show_upload_field', $upload_active, $order, $product, $this);
+
+        if ('yes' === $_uploadable && 'yes' === $_outofthebox_upload_box && $show_upload_box) {
             return true;
         }
 
@@ -1131,7 +1161,7 @@ class WooCommerce_Uploads
      *
      * @param $product
      *
-     * @return boolean
+     * @return bool
      */
     public function is_product_variation($product)
     {

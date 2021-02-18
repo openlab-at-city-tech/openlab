@@ -89,7 +89,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
                   fieldSettings["outofthebox"] = ".label_setting, .description_setting, .admin_label_setting, .error_message_setting, .css_class_setting, .visibility_setting, .rules_setting, .label_placement_setting, .outofthebox_setting, .conditional_logic_field_setting, .conditional_logic_page_setting, .conditional_logic_nextbutton_setting"; //this will show all the fields of the Paragraph Text field minus a couple that I didn't want to appear.
 
                   /* binding to the load field settings event to initialize */
-                  $(document).bind("gform_load_field_settings", function (event, field, form) {
+                  $(document).on("gform_load_field_settings", function (event, field, form) {
                     if (field["OutoftheBoxShortcode"] !== undefined && field["OutoftheBoxShortcode"] !== '') {
                       jQuery("#field_outofthebox").val(field["OutoftheBoxShortcode"]);
                     } else {
@@ -262,30 +262,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
 
     public function renderUploadedFiles($data, $ashtml = true)
     {
-        $uploadedfiles = json_decode($data);
-
-        if ((null !== $uploadedfiles) && (count((array) $uploadedfiles) > 0)) {
-            $first_entry = current($uploadedfiles);
-            $folder_location = ($ashtml && isset($first_entry->folderurl)) ? '<a href="'.urldecode($first_entry->folderurl).'">Dropbox</a>' : 'Dropbox';
-
-            // Fill our custom field with the details of our upload session
-            $html = sprintf(__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $uploadedfiles), $folder_location);
-            $html .= ($ashtml) ? '<ul>' : "\r\n";
-
-            foreach ($uploadedfiles as $fileid => $file) {
-                $html .= ($ashtml) ? '<li><a href="'.$file->link.'">' : '';
-                $html .= $file->path;
-                $html .= ($ashtml) ? '</a>' : '';
-                $html .= ' ('.$file->size.')';
-                $html .= ($ashtml) ? '</li>' : "\r\n";
-            }
-
-            $html .= ($ashtml) ? '</ul>' : '';
-        } else {
-            return $data;
-        }
-
-        return $html;
+        return apply_filters('outofthebox_render_formfield_data', $data, $ashtml, $this);
     }
 
     /**
@@ -306,7 +283,11 @@ class GFOutoftheBoxAddOn extends GFAddOn
             return $private_folder_name;
         }
 
-        return trim(str_replace(['|', '/'], ' ', sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()])));
+        $raw_name = sanitize_text_field($_COOKIE['WPCP-FORM-NAME-'.$processor->get_listtoken()]);
+        $name = str_replace(['|', '/'], ' ', $raw_name);
+        $filtered_name = \TheLion\OutoftheBox\Helpers::filter_filename(stripslashes($name), false);
+
+        return trim($filtered_name);
     }
 
     /**

@@ -7,33 +7,31 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
 
 <div class="outofthebox admin-settings">
   <form id="outofthebox-options" method="post" action="<?php echo network_admin_url('edit.php?action='.$this->plugin_network_options_key); ?>">
-    <?php wp_nonce_field('update-options'); ?>
     <?php settings_fields('out_of_the_box_settings'); ?>
-    <input type="hidden" name="action" value="update">
     <input type="hidden" name="out_of_the_box_settings[dropbox_root_namespace_id]" id="dropbox_root_namespace_id" value="<?php echo @esc_attr($this->settings['dropbox_root_namespace_id']); ?>" >
     <input type="hidden" name="out_of_the_box_settings[dropbox_account_type]" id="dropbox_account_type" value="<?php echo @esc_attr($this->settings['dropbox_account_type']); ?>" >
 
     <div class="wrap">
       <div class="outofthebox-header">
                 <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
-        <div class="outofthebox-form-buttons" style="<?php echo (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG)) ? 'display:none;' : ''; ?>"> <div id="save_settings" class="simple-button default save_settings" name="save_settings"><?php _e('Save Settings','wpcloudplugins'); ?>&nbsp;<div class='oftb-spinner'></div></div></div>
-        <div class="outofthebox-title">Out-of-the-Box <?php _e('Settings','wpcloudplugins'); ?></div>
+        <div class="outofthebox-form-buttons" style="<?php echo (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG)) ? 'display:none;' : ''; ?>"> <div id="save_settings" class="simple-button default save_settings" name="save_settings"><?php _e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='oftb-spinner'></div></div></div>
+        <div class="outofthebox-title"><?php _e('Settings', 'wpcloudplugins'); ?></div>
       </div>
 
 
       <div id="" class="outofthebox-panel outofthebox-panel-left">      
-                        <div class="outofthebox-nav-header"><?php _e('Settings','wpcloudplugins'); ?> <a href="<?php echo admin_url('update-core.php'); ?>">(Ver: <?php echo OUTOFTHEBOX_VERSION; ?>)</a></div>
+                        <div class="outofthebox-nav-header"><?php _e('Settings', 'wpcloudplugins'); ?> <a href="<?php echo admin_url('update-core.php'); ?>">(Ver: <?php echo OUTOFTHEBOX_VERSION; ?>)</a></div>
 
         <ul class="outofthebox-nav-tabs">
-          <li id="settings_general_tab" data-tab="settings_general" class="current"><a ><?php _e('General','wpcloudplugins'); ?></a></li>
+          <li id="settings_general_tab" data-tab="settings_general" class="current"><a ><?php _e('General', 'wpcloudplugins'); ?></a></li>
           <?php if ($network_wide_authorization) { ?>
-              <li id="settings_advanced_tab" data-tab="settings_advanced" ><a ><?php _e('Advanced','wpcloudplugins'); ?></a></li>
+              <li id="settings_advanced_tab" data-tab="settings_advanced" ><a ><?php _e('Advanced', 'wpcloudplugins'); ?></a></li>
           <?php } ?>
-          <li id="settings_system_tab" data-tab="settings_system" ><a><?php _e('System information','wpcloudplugins'); ?></a></li>
-          <li id="settings_help_tab" data-tab="settings_help" ><a><?php _e('Support','wpcloudplugins'); ?></a></li>
+          <li id="settings_system_tab" data-tab="settings_system" ><a><?php _e('System information', 'wpcloudplugins'); ?></a></li>
+          <li id="settings_help_tab" data-tab="settings_help" ><a><?php _e('Support', 'wpcloudplugins'); ?></a></li>
         </ul>
 
-        <div class="outofthebox-nav-header" style="margin-top: 50px;"><?php _e('Other Cloud Plugins','wpcloudplugins'); ?></div>
+        <div class="outofthebox-nav-header" style="margin-top: 50px;"><?php _e('Other Cloud Plugins', 'wpcloudplugins'); ?></div>
         <ul class="outofthebox-nav-tabs">
           <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/L6yXj" target="_blank" style="color:#522058;">Google Drive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
           <li id="settings_help_tab" data-tab="settings_help"><a href="https://1.envato.market/yDbyv" target="_blank" style="color:#522058;">OneDrive <i class="fas fa-external-link-square-alt" aria-hidden="true"></i></a></li>
@@ -52,15 +50,15 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
         <!-- General Tab -->
         <div id="settings_general" class="outofthebox-tab-panel current">
 
-          <div class="outofthebox-tab-panel-header"><?php _e('General','wpcloudplugins'); ?></div>
+          <div class="outofthebox-tab-panel-header"><?php _e('General', 'wpcloudplugins'); ?></div>
 
-          <div class="outofthebox-option-title"><?php _e('Plugin License','wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php _e('Plugin License', 'wpcloudplugins'); ?></div>
           <?php
           echo $this->get_plugin_activated_box();
           ?>
 
           <?php if (is_plugin_active_for_network(OUTOFTHEBOX_SLUG)) { ?>
-              <div class="outofthebox-option-title"><?php _e('Network Wide Authorization','wpcloudplugins'); ?>
+              <div class="outofthebox-option-title"><?php _e('Network Wide Authorization', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[network_wide]'/>
                   <input type="checkbox" name="out_of_the_box_settings[network_wide]" id="network_wide" class="outofthebox-onoffswitch-checkbox" <?php echo (empty($network_wide_authorization)) ? '' : 'checked="checked"'; ?> data-div-toggle="network_wide"/>
@@ -72,7 +70,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
               <?php
               if ($network_wide_authorization) {
                   ?>
-                  <div class="outofthebox-option-title"><?php _e('Accounts','wpcloudplugins'); ?></div>
+                  <div class="outofthebox-option-title"><?php _e('Accounts', 'wpcloudplugins'); ?></div>
                   <div class="outofthebox-accounts-list">
                     <?php
                     $app = $this->get_app(); ?>
@@ -81,12 +79,12 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
                       <div class='account-info-container'>
                         <div class='account-info'>
                           <div class='account-actions'>
-                            <div id='add_dropbox_button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php _e('Add account','wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php _e('Add account','wpcloudplugins'); ?></div>
+                            <div id='add_dropbox_button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php _e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php _e('Add account', 'wpcloudplugins'); ?></div>
                           </div>
                           <div class="account-info-name">
-                            <?php _e('Add account','wpcloudplugins'); ?>
+                            <?php _e('Add account', 'wpcloudplugins'); ?>
                           </div>
-                          <span class="account-info-space"><?php _e('Link a new account to the plugin','wpcloudplugins'); ?></span>
+                          <span class="account-info-space"><?php _e('Link a new account to the plugin', 'wpcloudplugins'); ?></span>
                         </div>
                       </div>
                     </div>
@@ -113,13 +111,13 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
             <input type="hidden" name="out_of_the_box_settings[dropbox_app_token]" id="dropbox_app_token" value="<?php echo @esc_attr($this->settings['dropbox_app_token']); ?>" >
 
             <div id="settings_advanced"  class="outofthebox-tab-panel">
-              <div class="outofthebox-tab-panel-header"><?php _e('Advanced','wpcloudplugins'); ?></div>
+              <div class="outofthebox-tab-panel-header"><?php _e('Advanced', 'wpcloudplugins'); ?></div>
 
-              <div class="outofthebox-option-title"><?php _e('"Lost Authorization" notification','wpcloudplugins'); ?></div>
-              <div class="outofthebox-option-description"><?php _e('If the plugin somehow loses its authorization, a notification email will be send to the following email address','wpcloudplugins'); ?>:</div>
+              <div class="outofthebox-option-title"><?php _e('"Lost Authorization" notification', 'wpcloudplugins'); ?></div>
+              <div class="outofthebox-option-description"><?php _e('If the plugin somehow loses its authorization, a notification email will be send to the following email address', 'wpcloudplugins'); ?>:</div>
               <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[lostauthorization_notification]" id="lostauthorization_notification" value="<?php echo esc_attr($this->settings['lostauthorization_notification']); ?>">
 
-              <div class="outofthebox-option-title"><?php _e('Own App','wpcloudplugins'); ?>
+              <div class="outofthebox-option-title"><?php _e('Own App', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[dropbox_app_own]'/>
                   <input type="checkbox" name="out_of_the_box_settings[dropbox_app_own]" id="dropbox_app_own" class="outofthebox-onoffswitch-checkbox" <?php echo (empty($this->settings['dropbox_app_key']) || empty($this->settings['dropbox_app_secret'])) ? '' : 'checked="checked"'; ?> data-div-toggle="own-app"/>
@@ -137,35 +135,35 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
                 </div>
 
                 <div class="outofthebox-option-title">Dropbox App Key</div>
-                <div class="outofthebox-option-description"><?php _e('<strong>Only</strong> if you want to use your own App, insert your App Key here','wpcloudplugins'); ?>.</div>
-                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_key]" id="dropbox_app_key" value="<?php echo esc_attr($this->settings['dropbox_app_key']); ?>" placeholder="<--- <?php _e('Leave empty for easy setup','wpcloudplugins'); ?> --->" >
+                <div class="outofthebox-option-description"><?php _e('<strong>Only</strong> if you want to use your own App, insert your App Key here', 'wpcloudplugins'); ?>.</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_key]" id="dropbox_app_key" value="<?php echo esc_attr($this->settings['dropbox_app_key']); ?>" placeholder="<--- <?php _e('Leave empty for easy setup', 'wpcloudplugins'); ?> --->" >
 
                 <div class="outofthebox-option-title">Dropbox App Secret</div>
-                <div class="outofthebox-option-description"><?php _e('If you want to use your own App, insert your App Secret here','wpcloudplugins'); ?>.</div>
-                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_secret]" id="dropbox_app_secret" value="<?php echo esc_attr($this->settings['dropbox_app_secret']); ?>" placeholder="<--- <?php _e('Leave empty for easy setup','wpcloudplugins'); ?> --->" >   
+                <div class="outofthebox-option-description"><?php _e('If you want to use your own App, insert your App Secret here', 'wpcloudplugins'); ?>.</div>
+                <input class="outofthebox-option-input-large" type="text" name="out_of_the_box_settings[dropbox_app_secret]" id="dropbox_app_secret" value="<?php echo esc_attr($this->settings['dropbox_app_secret']); ?>" placeholder="<--- <?php _e('Leave empty for easy setup', 'wpcloudplugins'); ?> --->" >   
 
                 <div>
                   <div class="outofthebox-option-title">OAuth 2.0 Redirect URI</div>
-                  <div class="outofthebox-option-description"><?php _e('Set the redirect URI in your application to the following','wpcloudplugins'); ?>:</div>
+                  <div class="outofthebox-option-description"><?php _e('Set the redirect URI in your application to the following', 'wpcloudplugins'); ?>:</div>
                   <code style="user-select:initial">
                     <?php
                     if ($this->get_app()->has_plugin_own_app()) {
                         echo $this->get_app()->get_redirect_uri();
                     } else {
-                        _e('Enter Client Key and Secret, save settings and reload the page to see the Redirect URI you will need','wpcloudplugins');
+                        _e('Enter Client Key and Secret, save settings and reload the page to see the Redirect URI you will need', 'wpcloudplugins');
                     }
                     ?>
                   </code>
                 </div>
 
-                <div class="outofthebox-option-title"><?php _e('Use App Folder','wpcloudplugins'); ?>
+                <div class="outofthebox-option-title"><?php _e('Use App Folder', 'wpcloudplugins'); ?>
                   <div class="outofthebox-onoffswitch">
                     <input type='hidden' value='No' name='out_of_the_box_settings[use_app_folder]'/>
                     <input type="checkbox" name="out_of_the_box_settings[use_app_folder]" id="use_app_folder" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['use_app_folder']) ? 'checked="checked"' : ''; ?>/>
                     <label class="outofthebox-onoffswitch-label" for="use_app_folder"></label>
                   </div>
                 </div>
-                <div class="outofthebox-option-description"><?php _e('Is your App configured to only access the App specific folder','wpcloudplugins'); ?>?</div>
+                <div class="outofthebox-option-description"><?php _e('Is your App configured to only access the App specific folder', 'wpcloudplugins'); ?>?</div>
 
               </div>
 
@@ -173,17 +171,17 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
               //if (!empty($account_type) && $account_type === 'business') {
               ?>
 
-              <div class="outofthebox-option-title"><?php _e('Business Accounts','wpcloudplugins'); ?> | <?php _e('Dropbox Team Folders','wpcloudplugins'); ?>
+              <div class="outofthebox-option-title"><?php _e('Business Accounts', 'wpcloudplugins'); ?> | <?php _e('Dropbox Team Folders', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[use_team_folders]'/>
                   <input type="checkbox" name="out_of_the_box_settings[use_team_folders]" id="use_team_folders" class="outofthebox-onoffswitch-checkbox" <?php echo ('Yes' === $this->settings['use_team_folders']) ? 'checked="checked"' : ''; ?>/>
                   <label class="outofthebox-onoffswitch-label" for="use_team_folders"></label>
                 </div>
               </div>
-              <div class="outofthebox-option-description"><?php _e('Allows you to access your Dropbox Team Folders','wpcloudplugins'); ?>.</div>
+              <div class="outofthebox-option-description"><?php _e('Allows you to access your Dropbox Team Folders', 'wpcloudplugins'); ?>.</div>
 
               <div class="oftb-warning">
-                <i><strong>NOTICE</strong>: <?php _e('Please check your existing Shortcodes and Manually linked Private Folders when changing this setting. Your root folder will not longer be your Personal Folder when Team Folders are enabled','wpcloudplugins'); ?>.</i>
+                <i><strong>NOTICE</strong>: <?php _e('Please check your existing Shortcodes and Manually linked Private Folders when changing this setting. Your root folder will not longer be your Personal Folder when Team Folders are enabled', 'wpcloudplugins'); ?>.</i>
               </div>
 
               <?php
@@ -196,22 +194,22 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
 
         <!-- System info Tab -->
         <div id="settings_system"  class="outofthebox-tab-panel">
-          <div class="outofthebox-tab-panel-header"><?php _e('System information','wpcloudplugins'); ?></div>
+          <div class="outofthebox-tab-panel-header"><?php _e('System information', 'wpcloudplugins'); ?></div>
           <?php echo $this->get_system_information(); ?>
         </div>
         <!-- End System info -->
 
         <!-- Help Tab -->
         <div id="settings_help"  class="outofthebox-tab-panel">
-          <div class="outofthebox-tab-panel-header"><?php _e('Support','wpcloudplugins'); ?></div>
+          <div class="outofthebox-tab-panel-header"><?php _e('Support', 'wpcloudplugins'); ?></div>
 
-          <div class="outofthebox-option-title"><?php _e('Support & Documentation','wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php _e('Support & Documentation', 'wpcloudplugins'); ?></div>
           <div id="message">
-            <p><?php _e('Check the documentation of the plugin in case you encounter any problems or are looking for support.','wpcloudplugins'); ?></p>
-            <div id='documentation_button' type='button' class='simple-button blue'><?php _e('Open Documentation','wpcloudplugins'); ?></div>
+            <p><?php _e('Check the documentation of the plugin in case you encounter any problems or are looking for support.', 'wpcloudplugins'); ?></p>
+            <div id='documentation_button' type='button' class='simple-button blue'><?php _e('Open Documentation', 'wpcloudplugins'); ?></div>
           </div>
           <br/>
-          <div class="outofthebox-option-title"><?php _e('Reset Cache','wpcloudplugins'); ?></div>
+          <div class="outofthebox-option-title"><?php _e('Cache', 'wpcloudplugins'); ?></div>
           <?php echo $this->get_plugin_reset_cache_box(); ?>
 
         </div>  
@@ -312,7 +310,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
         });
 
         $('#documentation_button').click(function () {
-          popup = window.open('<?php echo OUTOFTHEBOX_ROOTPATH . '/_documentation/index.html'; ?>', "_blank");
+          popup = window.open('<?php echo OUTOFTHEBOX_ROOTPATH.'/_documentation/index.html'; ?>', "_blank");
         });
 
         $('#network_wide').click(function () {

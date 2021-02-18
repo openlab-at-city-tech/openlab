@@ -24,10 +24,6 @@ a, body.ol-webwork a {
 	color: #0044af;
 }
 
-a:hover, body.ol-webwork a:hover {
-	color: #000;
-}
-
 .header-cover {
 	overflow: hidden;
 }
@@ -97,21 +93,6 @@ body .mobile-menu a {
 	color: #fff;
 }
 
-body .footer.section.large-padding {
-  padding: 65px 0 50px; /*change*/
-}
-body .footer .widget-title {
-  color: #EEE;
-  letter-spacing: 1px;
-  font-weight: 500; /*change*/
-  font-family: 'Open Sans', sans-serif; /*new*/
-}
-body .footer,
-body .widget-content,
-body .widget-title {
-  font-size: 1.04rem; /*change*/
-}
-
 /* Banner */
 body .section.bg-dark-light {
   background: #fff; /*change*/
@@ -143,10 +124,32 @@ body.ol-webwork .credits a {
 	color: #fff;
 }
 
-
 .credits-inner {
 	border-color: #636363;
 	border-width: 1px;
+}
+
+ul.question-list {
+	margin-left: 0;
+}
+
+a:hover, body.ol-webwork a:hover {
+	color: #000;
+}
+
+body .footer.section.large-padding {
+  padding: 65px 0 50px; /*change*/
+}
+body .footer .widget-title {
+  color: #EEE;
+  letter-spacing: 1px;
+  font-weight: 500; /*change*/
+  font-family: 'Open Sans', sans-serif; /*new*/
+}
+body .footer,
+body .widget-content,
+body .widget-title {
+  font-size: 1.04rem; /*change*/
 }
 
 .tothetop i {

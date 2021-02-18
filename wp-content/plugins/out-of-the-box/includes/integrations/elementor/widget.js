@@ -41,7 +41,7 @@
 
         $('#outofthebox-modal-action .modal-content').append(modalheader, modalbody, modalfooter);
 
-        $iframe.load(function () {
+         $iframe.on('load', function () {
             $('.outofthebox-modal-body').fadeIn();
             $('.outofthebox-modal-footer').fadeIn();
             $('.modal-content .loading:first').fadeOut();

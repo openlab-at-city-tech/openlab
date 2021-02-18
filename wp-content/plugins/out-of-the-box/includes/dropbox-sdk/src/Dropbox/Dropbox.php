@@ -143,7 +143,7 @@ class Dropbox
     /**
      * Get the Access Token.
      *
-     * @return string Access Token
+     * @return \Kunnu\Dropbox\Models\AccessToken|string Access Token
      */
     public function getAccessToken()
     {
@@ -215,13 +215,14 @@ class Dropbox
     /**
      * Set the Access Token.
      *
-     * @param string $accessToken Access Token
+     * @param \Kunnu\Dropbox\Models\AccessToken $accessToken Access Token
      *
      * @return \Kunnu\Dropbox\Dropbox Dropbox Client
      */
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
+        $this->getApp()->setAccessToken($accessToken);
 
         return $this;
     }
@@ -242,7 +243,16 @@ class Dropbox
     public function sendRequest($method, $endpoint, $endpointType = 'api', array $params = [], $accessToken = null)
     {
         //Access Token
-        $accessToken = $this->getAccessToken() ? $this->getAccessToken() : $accessToken;
+        $accessToken = $this->getAccessToken() ? $this->getAccessToken()->getToken() : $accessToken;
+
+        // Check if the token is set to expire in the next 120 seconds
+        // (or has already expired).
+        if ($this->getOAuth2Client()->isAccessTokenExpired()) {
+            // Call Update function of plugin itself
+            global $OutoftheBox;
+            do_action('out-of-the-box-refresh-token', $OutoftheBox->get_processor()->get_current_account());
+            $accessToken = $this->getAccessToken()->getToken();
+        }
 
         //Make a DropboxRequest object
         $request = new DropboxRequest($method, $endpoint, $accessToken, $endpointType, $params);
@@ -481,7 +491,7 @@ class Dropbox
      *
      * @return \Kunnu\Dropbox\Models\SearchResults
      */
-    public function search($path, $query, array $params = [])
+    public function search($path, $query, array $options = [])
     {
         //Specify the root folder as an
         //empty string rather than as "/"
@@ -490,11 +500,30 @@ class Dropbox
         }
 
         //Set the path and query
-        $params['path'] = $path;
         $params['query'] = $query;
+        $params['options'] = $options;
+        $params['options']['path'] = $path;
 
         //Fetch Search Results
-        $response = $this->postToAPI('/files/search', $params);
+        $response = $this->postToAPI('/files/search_v2', $params);
+
+        //Make and Return the Model
+        return $this->makeModelFromResponse($response);
+    }
+
+    /**
+     * Fetches the next page of search results returned from /search_v2.
+     *
+     * @param string $cursor The cursor returned by your last call to search
+     *
+     * @see https://www.dropbox.com/developers/documentation/http/documentation?oref=e#files-search-continue:2
+     *
+     * @return \Kunnu\Dropbox\Models\SearchResults
+     */
+    public function search_continue($cursor)
+    {
+        //Fetch Search Results
+        $response = $this->postToAPI('/files/search/continue_v2', ['cursor' => $cursor]);
 
         //Make and Return the Model
         return $this->makeModelFromResponse($response);
@@ -868,7 +897,7 @@ class Dropbox
      *
      * @return \Kunnu\Dropbox\Models\TemporaryLink
      */
-    public function getTemporarilyUploadLink($path, array $commit_info = [], $origin, $duration = 14400)
+    public function getTemporarilyUploadLink($path, array $commit_info = [], $origin = '', $duration = 14400)
     {
         $params = [];
         $params['commit_info'] = $commit_info;
@@ -877,7 +906,7 @@ class Dropbox
 
         //Get temporarily Link
         //Make a DropboxRequest object
-        $request = new DropboxRequest('POST', '/files/get_temporary_upload_link', $this->getAccessToken(), ' api', $params);
+        $request = new DropboxRequest('POST', '/files/get_temporary_upload_link', $this->getAccessToken()->getToken(), ' api', $params);
 
         // Set Origin Header
         $request->setHeaders(['Origin' => $origin]);
@@ -1259,7 +1288,7 @@ class Dropbox
         }
 
         //Make a DropboxRequest object
-        $request = new DropboxRequest('POST', '/files/download', $this->getAccessToken(), 'content', ['path' => $path]);
+        $request = new DropboxRequest('POST', '/files/download', $this->getAccessToken()->getToken(), 'content', ['path' => $path]);
         $method = $request->getMethod();
 
         //Prepare Request

@@ -34,6 +34,9 @@ class Authorization
 
     public function __construct(Account $_account)
     {
+        // Required for loading the Access Token class
+        require_once OUTOFTHEBOX_ROOTDIR.'/includes/dropbox-sdk/vendor/autoload.php';
+
         $this->_account_id = $_account->get_id();
         $this->_token_name = Helpers::filter_filename($_account->get_email().'_'.str_replace(':', '', $_account->get_id()), false).'.access_token';
     }
@@ -66,7 +69,8 @@ class Authorization
             return null;
         }
 
-        return $token;
+        // Update function to encrypt tokens
+        return $this->update_from_single_token($token);
     }
 
     public function set_access_token($_access_token)
@@ -79,7 +83,10 @@ class Authorization
         ftruncate($this->get_token_file_handle(), 0);
         rewind($this->get_token_file_handle());
 
-        return fwrite($this->get_token_file_handle(), $_access_token);
+        $access_token = Helpers::encrypt(serialize($_access_token));
+        fwrite($this->get_token_file_handle(), $access_token);
+
+        return $access_token;
     }
 
     public function is_valid()
@@ -189,5 +196,33 @@ class Authorization
     public function remove_token()
     {
         @unlink($this->get_token_location());
+    }
+
+    public function update_from_single_token($token)
+    {
+        $decrypted_token = Helpers::decrypt($token);
+        $token_object = unserialize($decrypted_token);
+
+        // Return if token is already encrypted and converted
+        if (false !== $decrypted_token) {
+            return $token_object;
+        }
+
+        // If token is not yet encrypted
+        if (false !== $token_object) {
+            return $this->set_access_token($token_object);
+        }
+
+        // Else convert & encrypt outdated token
+        $data = [
+            'access_token' => $token,
+        ];
+
+        $token_object = new \Kunnu\Dropbox\Models\AccessToken($data);
+
+        //Store the new token format
+        $this->set_access_token($token_object);
+
+        return $token_object;
     }
 }

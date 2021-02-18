@@ -77,7 +77,7 @@ class Client
         }
 
         if ($check_if_allowed && !$this->get_processor()->_is_entry_authorized($entry)) {
-            die('-1');
+            exit('-1');
         }
 
         return $entry;
@@ -130,7 +130,8 @@ class Client
             }
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
-            die('-1');
+
+            exit('-1');
         }
 
         if (count($api_entries) > 0) {
@@ -207,23 +208,24 @@ class Client
 
         // Set Search settings
         $folder_to_search_in = ('parent' === $this->get_processor()->get_shortcode_option('searchfrom')) ? $requested_path : $this->get_processor()->get_root_folder();
-        $search_for = ('1' === $this->get_processor()->get_shortcode_option('search_contents')) ? 'filename_and_content' : 'filename';
+        $filename_only = ('1' === $this->get_processor()->get_shortcode_option('search_contents')) ? false : true;
 
         do_action('outofthebox_log_event', 'outofthebox_searched', $folder_to_search_in, ['query' => $search_query]);
 
         // Get Results
         try {
-            $api_search_result = $this->_client->search($folder_to_search_in, $search_query, ['mode' => $search_for, 'max_results' => 1000]);
+            $api_search_result = $this->_client->search($folder_to_search_in, $search_query, ['filename_only' => $filename_only, 'file_status' => 'active', 'max_results' => 1000]);
             $api_entries = $api_search_result->getItems()->toArray();
 
             while ($api_search_result->hasMoreItems()) {
                 $cursor = $api_search_result->getCursor();
-                $api_search_result = $this->_client->search($folder_to_search_in, $search_query, ['mode' => $search_for, 'start' => $cursor, 'max_results' => 1000]);
+                $api_search_result = $this->_client->search_continue($cursor);
                 $api_entries = array_merge($api_entries, $api_search_result->getItems()->toArray());
             }
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
-            die('-1');
+
+            exit('-1');
         }
 
         // Sort contents
@@ -299,15 +301,15 @@ class Client
         $entry = $this->get_entry();
 
         if (false === $entry) {
-            die('-1');
+            exit('-1');
         }
 
         if (false === $entry->get_can_preview_by_cloud()) {
-            die('-1');
+            exit('-1');
         }
 
         if (false === $this->get_processor()->get_user()->can_preview()) {
-            die('-1');
+            exit('-1');
         }
 
         do_action('outofthebox_log_event', 'outofthebox_previewed_entry', $entry);
@@ -320,14 +322,16 @@ class Client
                 $temporarily_link = $this->get_temporarily_link($entry);
             }
             header('Location: '.$temporarily_link);
-            die();
+
+            exit();
         }
 
         // Preview for Image files
         if (in_array($entry->get_extension(), ['txt', 'jpg', 'jpeg', 'gif', 'png'])) {
             $shared_link = $this->get_shared_link($entry);
             header('Location: '.$shared_link.'?raw=1');
-            die();
+
+            exit();
         }
 
         // Preview for PDF files, read only via Google Viewer when needed
@@ -337,7 +341,8 @@ class Client
                 $shared_link = 'https://docs.google.com/viewer?embedded=true&url='.$shared_link;
             }
             header('Location: '.$shared_link);
-            die();
+
+            exit();
         }
 
         // Preview for PDF files
@@ -355,10 +360,11 @@ class Client
             echo $preview_file->getContents();
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
-            die('-1');
+
+            exit('-1');
         }
 
-        die();
+        exit();
     }
 
     public function download_entry($entry = null)
@@ -369,7 +375,7 @@ class Client
         }
 
         if (false === $entry) {
-            die(-1);
+            exit(-1);
         }
 
         // TO DO Download notifications
@@ -383,7 +389,8 @@ class Client
         if (false !== $stored_url && filter_var($stored_url, FILTER_VALIDATE_URL)) {
             do_action('outofthebox_download', $entry, $stored_url);
             header('Location: '.$stored_url);
-            die();
+
+            exit();
         }
 
         // Render file via browser
@@ -398,7 +405,8 @@ class Client
 
             do_action('outofthebox_download', $entry, null);
             do_action('outofthebox_log_event', 'outofthebox_downloaded_entry', $entry);
-            die();
+
+            exit();
         }
         if ('url' === $entry->get_extension()) {
             $download_file = $this->_client->download($entry->get_id());
@@ -419,12 +427,12 @@ class Client
 
         if ('redirect' === $this->get_processor()->get_setting('download_method') && !isset($_REQUEST['proxy'])) {
             header('Location: '.$temporarily_link);
-            set_transient('outofthebox_'.(($stream) ? 'stream' : 'download').'_'.$entry->get_id().'_'.$entry->get_extension(), $temporarily_link, MINUTE_IN_SECONDS * 10);
+            set_transient('outofthebox_'.(($stream) ? 'stream' : 'download').'_'.$entry->get_id().'_'.$entry->get_extension(), $temporarily_link, MINUTE_IN_SECONDS * 5);
         } else {
             $this->download_via_proxy($entry, $temporarily_link);
         }
 
-        die();
+        exit();
     }
 
     public function export_entry(Entry $entry, $export_as = 'default')
@@ -468,7 +476,7 @@ class Client
 
         fclose($stream);
 
-        die();
+        exit();
     }
 
     public function download_via_proxy(Entry $entry, $url, $inline = false)
@@ -495,7 +503,7 @@ class Client
         curl_exec($ch);
         curl_close($ch);
 
-        die();
+        exit();
     }
 
     public function stream_entry()
@@ -504,21 +512,22 @@ class Client
         $entry = $this->get_entry();
 
         if (false === $entry) {
-            die(-1);
+            exit(-1);
         }
 
         $extension = $entry->get_extension();
         $allowedextensions = ['mp4', 'm4v', 'ogg', 'ogv', 'webmv', 'mp3', 'm4a', 'oga', 'wav', 'webm', 'vtt'];
 
         if (empty($extension) || !in_array($extension, $allowedextensions)) {
-            die();
+            exit();
         }
 
         // Download Captions directly
         if ('vtt' === $extension) {
             $temporarily_link = $this->get_temporarily_link($entry);
             $this->download_via_proxy($entry, $temporarily_link);
-            die();
+
+            exit();
         }
 
         $this->download_entry();
@@ -538,7 +547,7 @@ class Client
         }
         header('Location: '.$thumbnail_url);
 
-        die();
+        exit();
     }
 
     public function build_thumbnail()
@@ -547,7 +556,7 @@ class Client
         preg_match_all('/(.+)_w(\d+)h(\d+)_c(\d)_([a-z]+)/', $src, $attr, PREG_SET_ORDER);
 
         if (1 !== count($attr) || 6 !== count($attr[0])) {
-            die();
+            exit();
         }
 
         $entry_id = $attr[0][1];
@@ -559,12 +568,13 @@ class Client
         $entry = $this->get_entry($entry_id, false);
 
         if (false === $entry) {
-            die(-1);
+            exit(-1);
         }
 
         if (false === $entry->has_own_thumbnail()) {
             header('Location: '.$entry->get_icon_large());
-            die();
+
+            exit();
         }
 
         $thumbnail = new Thumbnail($this->get_processor(), $entry, $width, $height, $crop, $format);
@@ -574,13 +584,14 @@ class Client
 
             if (false === $thumbnail_created) {
                 header('Location: '.$entry->get_icon_large());
-                die();
+
+                exit();
             }
         }
 
         header('Location: '.$thumbnail->get_url());
 
-        die();
+        exit();
     }
 
     public function has_temporarily_link(Entry $entry)
@@ -678,13 +689,14 @@ class Client
                 $shared_link = $cached_entry->get_shared_link($visibility);
 
                 if (empty($shared_link)) {
-                    die(sprintf(__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the sharing settings for this document in the cloud.'), $visibility));
+                    exit(sprintf(__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the sharing settings for this document in the cloud.'), $visibility));
                 }
 
                 do_action('outofthebox_log_event', 'outofthebox_updated_metadata', $entry, ['metadata_field' => 'Sharing Permissions']);
             } else {
                 error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getErrorSummary()));
-                die($ex->getErrorSummary());
+
+                exit($ex->getErrorSummary());
 
                 return false;
             }
@@ -714,7 +726,7 @@ class Client
         $entry = $this->get_entry($entry_path);
 
         if (false === $entry) {
-            die(-1);
+            exit(-1);
         }
 
         $shared_link = $this->get_shared_link($entry).'?dl=1';
@@ -735,7 +747,6 @@ class Client
         try {
             switch ($this->get_processor()->get_setting('shortlinks')) {
                 case 'Bit.ly':
-
                     $requestBody = json_encode(['long_url' => $url]);
                     $headers = ['Authorization ' => 'Bearer '.$this->get_processor()->get_setting('bitly_apikey'), 'Content-Type' => 'application/json'];
                     $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api-ssl.bitly.com/v4/shorten', 'POST', $requestBody, $headers);
@@ -744,12 +755,14 @@ class Client
                     $data = json_decode($body, true);
 
                     return $data['link'];
+
                 case 'Shorte.st':
                     $rawResponse = $this->get_library()->getClient()->getHttpClient()->send('https://api.shorte'.'.st/s/'.$this->get_processor()->get_setting('shortest_apikey').'/'.$url, 'GET', '');
                     $body = $rawResponse->getBody();
                     $data = json_decode($body, true);
 
                     return $data['shortenedUrl'];
+
                 case 'Rebrandly':
                     $requestBody = json_encode(['title' => $entry->get_name(), 'destination' => $url, 'domain' => $this->get_processor()->get_setting('rebrandly_domain')]);
                     $headers = ['apikey' => $this->get_processor()->get_setting('rebrandly_apikey'), 'Content-Type' => 'application/json'];
@@ -758,6 +771,7 @@ class Client
                     $data = json_decode($body, true);
 
                     return '//'.$data['shortUrl'];
+
                 case 'None':
                 default:
                     break;
@@ -775,7 +789,7 @@ class Client
     {
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             // TO DO LOG + FAIL ERROR
-            die(-1);
+            exit(-1);
         }
 
         if (null === $target_folder_path) {
@@ -816,18 +830,18 @@ class Client
         if (
                 $target_entry->is_file() && false === $this->get_processor()->get_user()->can_rename_files()) {
             // TO DO LOG + FAIL ERROR
-            die(-1);
+            exit(-1);
         }
 
         if (
                 $target_entry->is_dir() && false === $this->get_processor()->get_user()->can_rename_folders()) {
             // TO DO LOG + FAIL ERROR
-            die(-1);
+            exit(-1);
         }
 
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             // TO DO LOG + FAIL ERROR
-            die(-1);
+            exit(-1);
         }
 
         // Set new entry path
@@ -918,7 +932,7 @@ class Client
         return true;
     }
 
-    public function move_entries($entries = [], $target_entry_path, $copy = false)
+    public function move_entries($entries, $target_entry_path, $copy = false)
     {
         $entries_to_move = [];
         $batch_request = [];

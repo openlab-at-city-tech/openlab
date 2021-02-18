@@ -155,17 +155,15 @@ if (!function_exists('wpcp_help_tip')) {
       <td class="help"><?php echo wpcp_help_tip(esc_html__('The version of PHP installed on your hosting server.', 'wpcloudplugins')); ?></td>
       <td>
         <?php
-        if (version_compare($environment['php_version'], '7.0', '>=')) {
+        if (version_compare($environment['php_version'], '7.2', '>=')) {
             echo '<mark class="yes">'.esc_html($environment['php_version']).'</mark>';
         } else {
             $update_link = ' <a href="https://wordpress.org/support/update-php/" target="_blank">'.esc_html__('How to update your PHP version', 'wpcloudplugins').'</a>';
             $class = 'error';
 
-            if (version_compare($environment['php_version'], '5.6', '<')) {
-                $notice = '<span class="dashicons dashicons-warning"></span> '.__('WP Cloud Plugins will run under this version of PHP, however, it has reached end of life. We recommend using PHP version 7.2 or above for greater performance and security.', 'wpcloudplugins').$update_link;
-            } elseif (version_compare($environment['php_version'], '7.2', '<')) {
+            if (version_compare($environment['php_version'], '7.2', '<')) {
                 $notice = '<span class="dashicons dashicons-warning"></span> '.__('We recommend using PHP version 7.2 or above for greater performance and security.', 'wpcloudplugins').$update_link;
-                $class = 'recommendation';
+                $class = 'error';
             }
 
             echo '<mark class="'.esc_attr($class).'">'.esc_html($environment['php_version']).' - '.wp_kses_post($notice).'</mark>';
@@ -334,6 +332,17 @@ if (!function_exists('wpcp_help_tip')) {
       </td>
     </tr>
     <tr>
+      <td><?php esc_html_e('OpenSSL support', 'wpcloudplugins'); ?>:</td>
+      <td class="help"><?php echo wpcp_help_tip(esc_html__('Can the plugin use OpenSSL for secure connections and encryption?', 'wpcloudplugins')); ?></td>
+      <td>
+        <?php if ($environment['openssl_encrypt']) { ?>
+            <mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
+        <?php } else { ?>
+            <mark class="error"><span class="dashicons dashicons-warning"></span></mark>
+        <?php } ?>
+      </td>
+    </tr>    
+    <tr>
       <td><?php esc_html_e('Hide errors from visitors', 'wpcloudplugins'); ?></td>
       <td class="help"><?php echo wpcp_help_tip(esc_html__('Error messages can contain sensitive information about your store environment. These should be hidden from untrusted visitors.', 'wpcloudplugins')); ?></td>
       <td>
@@ -381,6 +390,19 @@ if (!function_exists('wpcp_help_tip')) {
         ?>
       </td>
     </tr>
+    <tr>
+      <td>Elementor</td>
+      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Elementor.', 'wpcloudplugins')); ?></td>
+      <td>
+        <?php
+        if (!$environment['elementor']) {
+            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.esc_html__('Not active', 'wpcloudplugins').'</mark>';
+        } else {
+            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span> '.ELEMENTOR_VERSION.'</mark>';
+        }
+        ?>
+      </td>
+    </tr>     
     <tr>
       <td>Formidable Forms</td>
       <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Formidable Forms.', 'wpcloudplugins')); ?></td>
