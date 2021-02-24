@@ -14,6 +14,7 @@
 namespace OpenLab\PrivateComments;
 
 const VERSION = '1.0.1';
+const PLUGIN_FILE = __FILE__;
 
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';
@@ -26,6 +27,19 @@ function load_textdomain() {
 	load_plugin_textdomain( 'openlab-private-comments' );
 }
 add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
+
+/**
+ * The plugin activation action.
+ *
+ * @return void
+ */
+function activate() {
+	// Set up admin notice flag.
+	if ( ! get_option( 'olpc_notice_dismissed' ) ) {
+		update_option( 'olpc_notice_dismissed', '0' );
+	}
+}
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 /**
  * Register our assets.
