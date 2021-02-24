@@ -1876,3 +1876,61 @@ add_action(
 	10,
 	3
 );
+
+/**
+ * Hide private comments even after the plugin is deactivated.
+ *
+ * @param WP_Comment_Query $query
+ * @return void
+ */
+function openlab_private_comments_fallback( WP_Comment_Query $query ) {
+	// Bail if request if from the main site.
+	if ( isset( $query->query_vars['main_site'] ) && $query->query_vars['main_site'] ) {
+		return;
+	}
+
+	// Make private comments visible for admins in the dashboard.
+	if ( is_admin() && current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$meta_query     = [];
+	$active_plugins = (array) get_option( 'active_plugins', [] );
+
+	if ( ! in_array( 'wp-grade-comments/wp-grade-comments.php', $active_plugins, true ) ) {
+		$meta_query[] = [
+			'relation' => 'OR',
+			[
+				'key'   => 'olgc_is_private',
+				'value' => '0',
+			],
+			[
+				'key' => 'olgc_is_private',
+				'compare' => 'NOT EXISTS',
+			],
+		];
+	}
+
+	if ( ! in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true ) ) {
+		$meta_query[] = [
+			'relation' => 'OR',
+			[
+				'key'   => 'ol_is_private',
+				'value' => '0',
+			],
+			[
+				'key' => 'ol_is_private',
+				'compare' => 'NOT EXISTS',
+			],
+		];
+	}
+
+	if ( count( $meta_query ) > 1 ) {
+		$meta_query['relation'] = 'AND';
+	}
+
+	if ( ! empty( $meta_query ) ) {
+		$query->meta_query = new WP_Meta_Query( $meta_query );
+	}
+}
+add_action( 'pre_get_comments', 'openlab_private_comments_fallback' );

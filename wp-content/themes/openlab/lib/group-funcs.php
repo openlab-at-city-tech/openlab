@@ -1245,48 +1245,42 @@ function openlab_show_site_posts_and_comments() {
                 $posts[] = $_post;
 			}
 
-			$active_plugins = get_option( 'active_plugins', [] );
-			$has_grade_comments = in_array( 'wp-grade-comments/wp-grade-comments.php', $active_plugins, true );
-			$has_private_comments = in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true );
-
 			// Set up comments
 			$comment_args = [
 				'status'     => 'approve',
 				'number'     => 3,
 				'meta_query' => [
-					'relation' => 'AND'
+					'relation' => 'AND',
+					[
+						'relation' => 'OR',
+						[
+							'key'   => 'olgc_is_private',
+							'value' => '0',
+						],
+						[
+							'key' => 'olgc_is_private',
+							'compare' => 'NOT EXISTS',
+						],
+					],
+					[
+						'relation' => 'OR',
+						[
+							'key'   => 'ol_is_private',
+							'value' => '0',
+						],
+						[
+							'key' => 'ol_is_private',
+							'compare' => 'NOT EXISTS',
+						],
+					],
 				],
 			];
 
-			if ( $has_grade_comments ) {
-				$comment_args['meta_query'][] = [
-					'relation' => 'OR',
-					[
-						'key'   => 'olgc_is_private',
-						'value' => '0',
-					],
-					[
-						'key' => 'olgc_is_private',
-						'compare' => 'NOT EXISTS',
-					],
-				];
-			}
+			// This isn't official argument just a custom flag.
+			// Used by `openlab_private_comments_fallback()`.
+			$comment_args['main_site'] = true;
 
-			if ( $has_private_comments ) {
-				$comment_args['meta_query'][] = [
-					'relation' => 'OR',
-					[
-						'key'   => 'ol_is_private',
-						'value' => '0',
-					],
-					[
-						'key' => 'ol_is_private',
-						'compare' => 'NOT EXISTS',
-					],
-				];
-			}
-
-            $wp_comments = get_comments($comment_args);
+			$wp_comments = get_comments( $comment_args );
 
             foreach ($wp_comments as $wp_comment) {
                 // Skip the crummy "Hello World" comment
