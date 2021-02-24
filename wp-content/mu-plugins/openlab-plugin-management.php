@@ -47,7 +47,7 @@ function openlab_hide_plugins( $plugins ) {
 		'kb-gradebook/kb-gradebook.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
-		// 'openlab-private-comments/openlab-private-comments.php',
+		'openlab-private-comments/openlab-private-comments.php',
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
