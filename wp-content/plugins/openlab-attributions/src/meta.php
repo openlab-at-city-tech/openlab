@@ -32,7 +32,9 @@ function can_save_attributions( $post ) {
  * @return array $item
  */
 function sanitize_attributions( $item ) {
-	$fields = [
+	$sanitized = [];
+	$fields    = [
+		'id'            => 'sanitize_text_field',
 		'title'         => 'sanitize_text_field',
 		'titleUrl'      => 'esc_url_raw',
 		'authorName'    => 'sanitize_text_field',
@@ -43,17 +45,26 @@ function sanitize_attributions( $item ) {
 		'projectUrl'    => 'esc_url_raw',
 		'datePublished' => 'sanitize_text_field',
 		'derivative'    => 'esc_url_raw',
+		'content'       => function( $value ) {
+			return wp_kses( $value, [ 'a' => [ 'href' => [] ] ] );
+		},
 	];
 
 	foreach ( $fields as $name => $sanitize_callback ) {
-		if ( empty( $item[ $name ] ) ) {
+		// Skip unknown fields.
+		if ( ! isset( $item[ $name ] ) ) {
 			continue;
 		}
 
-		$item[ $name ] = $sanitize_callback( $item[ $name ] );
+		if ( empty( $item[ $name ] ) ) {
+			$sanitized[ $name ] = '';
+			continue;
+		}
+
+		$sanitized[ $name ] = $sanitize_callback( $item[ $name ] );
 	}
 
-	return $item;
+	return $sanitized;
 }
 
 /**

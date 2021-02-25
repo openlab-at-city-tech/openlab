@@ -1,8 +1,9 @@
 /**
  * WordPress dependencies
  */
-import { Component, RawHTML } from '@wordpress/element';
-import { Button, Modal } from '@wordpress/components';
+import { Component } from '@wordpress/element';
+import { Button, Modal, Notice } from '@wordpress/components';
+import { RichText } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -22,7 +23,11 @@ class AttributionModal extends Component {
 		this.handleChange = this.handleChange.bind( this );
 		this.handleSubmit = this.handleSubmit.bind( this );
 
-		this.state = props.item;
+		this.state = {
+			editedContent: false,
+			content: '',
+			...props.item,
+		};
 	}
 
 	handleChange( event ) {
@@ -58,7 +63,11 @@ class AttributionModal extends Component {
 
 		const { onClose, modalType } = this.props;
 
-		const title = ( modalType === 'add' ) ? 'Add Attribution' : 'Update Attribution';
+		const title =
+			modalType === 'add' ? 'Add Attribution' : 'Update Attribution';
+
+		const isEdited = this.state.editedContent || this.state.content;
+		const preview = formatAttribution( { ...this.state }, licenses );
 
 		return (
 			<Modal
@@ -68,7 +77,7 @@ class AttributionModal extends Component {
 				onRequestClose={ onClose }
 				className="component-attributions-modal"
 			>
-				<form onSubmit={ this.handleSubmit } >
+				<form onSubmit={ this.handleSubmit }>
 					<div className="form-row">
 						<div className="col">
 							<TextControl
@@ -87,7 +96,7 @@ class AttributionModal extends Component {
 								className="inline"
 								value={ this.state.titleUrl }
 								onChange={ this.handleChange }
-								placeholder="URL of the item title"
+								placeholder="URL of the item"
 							/>
 						</div>
 						<div className="col">
@@ -120,12 +129,12 @@ class AttributionModal extends Component {
 								className="inline"
 								value={ this.state.authorUrl }
 								onChange={ this.handleChange }
-								placeholder="URL of the author page"
+								placeholder="URL of the author"
 							/>
 						</div>
 						<div className="col">
 							<TextControl
-								label="Derivative Work"
+								label="Adapted From"
 								id="derivative"
 								name="derivative"
 								value={ this.state.derivative }
@@ -193,14 +202,49 @@ class AttributionModal extends Component {
 						</div>
 					</div>
 
-					<span className="attribution-preview__title">Attribution Preview</span>
-					<div className="attribution-preview__body">
-						<RawHTML>{ formatAttribution( { ...this.state }, licenses ) }</RawHTML>
-					</div>
+					<span className="attribution-preview__title">
+						Attribution Preview
+					</span>
+					<RichText
+						className="attribution-preview__body"
+						tagName="div"
+						value={ isEdited ? this.state.content : preview }
+						allowedFormats={ [] }
+						onChange={ ( content ) => {
+							this.setState( { editedContent: true, content } );
+						} }
+					/>
+					{ isEdited && (
+						<Notice
+							className="attribution-preview__notice"
+							status="warning"
+							isDismissible={ false }
+						>
+							You have edited this text. You can no longer make
+							changes using the fields above. All additional
+							changes must be made manually.
+							<Button
+								isLink
+								onClick={ () =>
+									this.setState( {
+										editedContent: false,
+										content: '',
+									} )
+								}
+							>
+								Discard changes and revert to suggested
+								attribution.
+							</Button>
+						</Notice>
+					) }
 					<PluginAttribution />
 					<div className="component-modal__footer">
-						<Button isDestructive isLink onClick={ onClose }>Cancel</Button>
-						<Button isLarge isPrimary type="submit">{ title }</Button>
+						<Button isDestructive isLink onClick={ onClose }>
+							Cancel
+						</Button>
+						<Button isPrimary type="submit">
+							{ title }
+						</Button>
 					</div>
 				</form>
 			</Modal>

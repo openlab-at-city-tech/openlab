@@ -44,12 +44,12 @@ tinymce.create( 'tinymce.plugins.Attributions', {
 			cmd: 'add-attribution',
 			icon: 'attribution',
 			onPostRender: () => {
-				const icon = document.getElementsByClassName( 'mce-i-attribution' );
-				icon[ 0 ].innerHTML = tinyIcon;
+				const icon = document.querySelector( '.mce-i-attribution' );
+				icon.innerHTML = tinyIcon;
 			},
 		} );
 
-		editor.addCommand( 'add-attribution', function() {
+		editor.addCommand( 'add-attribution', function () {
 			const value = editor.selection.getContent( { format: 'html' } );
 
 			dispatch( 'openlab/modal' ).open( {

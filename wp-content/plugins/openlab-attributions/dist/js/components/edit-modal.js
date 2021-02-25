@@ -10,9 +10,7 @@ import { withSelect, withDispatch } from '@wordpress/data';
 import Modal from './modal';
 
 const EditModal = ( props ) => {
-	return (
-		<Modal { ...props } />
-	);
+	return <Modal { ...props } />;
 };
 
 export default compose( [

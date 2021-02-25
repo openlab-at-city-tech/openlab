@@ -9,7 +9,7 @@ use function OpenLab\Attributions\Helpers\get_the_attribution;
 		<?php printf(
 			'<li id="ref-%1$s">%2$s <a href="#anchor-%1$s">&#8593;</a></li>',
 			$attribution['id'],
-			get_the_attribution( $attribution )
+			empty( $attribution['content'] ) ? get_the_attribution( $attribution ) : $attribution['content']
 		); ?>
 		<?php endforeach; ?>
 	</ol>

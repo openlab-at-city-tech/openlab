@@ -17,7 +17,10 @@ const popperOptions = {
 		addZIndex: {
 			enabled: true,
 			order: 810,
-			fn: ( data ) => ( { ...data, styles: { ...data.styles, zIndex: 100001 } } ),
+			fn: ( data ) => ( {
+				...data,
+				styles: { ...data.styles, zIndex: 100001 },
+			} ),
 		},
 	},
 };

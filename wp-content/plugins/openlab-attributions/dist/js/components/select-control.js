@@ -16,7 +16,9 @@ function SelectControl( {
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
 		<div className="form-group">
-			<label htmlFor={ id }>{ label } <Help text={ help } /></label>
+			<label htmlFor={ id }>
+				{ label } <Help text={ help } />
+			</label>
 			<select
 				id={ id }
 				name={ name }
@@ -24,15 +26,17 @@ function SelectControl( {
 				value={ value }
 				onChange={ onChange }
 			>
-				<option key="0" value="">Choose...</option>
-				{ options.map( ( option, index ) =>
+				<option key="0" value="">
+					Choose...
+				</option>
+				{ options.map( ( option, index ) => (
 					<option
 						key={ `${ option.label }-${ option.value }-${ index }` }
 						value={ option.value }
 					>
 						{ option.label }
 					</option>
-				) }
+				) ) }
 			</select>
 		</div>
 	);

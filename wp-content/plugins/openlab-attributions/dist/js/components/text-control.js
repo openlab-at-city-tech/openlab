@@ -19,12 +19,15 @@ function TextControl( {
 	type = 'text',
 	...props
 } ) {
-	const isInline = ( className === 'inline' );
+	const isInline = className === 'inline';
 
 	return (
 		<div className={ classnames( 'form-group', className ) }>
-			<label htmlFor={ id }>{ label } { ! isInline && ( <Help text={ help } /> ) }</label>
-			<input className="form-control"
+			<label htmlFor={ id }>
+				{ label } { ! isInline && <Help text={ help } /> }
+			</label>
+			<input
+				className="form-control"
 				type={ type }
 				id={ id }
 				name={ name }

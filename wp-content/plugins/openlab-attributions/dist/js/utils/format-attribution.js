@@ -6,6 +6,7 @@ import validateLicense from './validate-license';
 
 /**
  * Format attribution license.
+ *
  * @param {Object} license License object.
  * @param {string} value  Current license.
  *

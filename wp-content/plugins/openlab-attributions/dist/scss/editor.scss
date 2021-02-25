@@ -118,6 +118,15 @@
 		min-height: 18px;
 	}
 
+	.attribution-preview__notice {
+		margin: 0;
+
+		.components-button {
+			display: block;
+			margin-top: 4px;
+		}
+	}
+
 	.attribution-plugin {
 		background-color: #e2e4e7;
 		padding: 6px 8px;
