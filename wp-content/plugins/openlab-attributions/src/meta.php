@@ -34,18 +34,22 @@ function can_save_attributions( $post ) {
 function sanitize_attributions( $item ) {
 	$sanitized = [];
 	$fields    = [
-		'id'            => 'sanitize_text_field',
-		'title'         => 'sanitize_text_field',
-		'titleUrl'      => 'esc_url_raw',
-		'authorName'    => 'sanitize_text_field',
-		'authorUrl'     => 'esc_url_raw',
-		'publisher'     => 'sanitize_text_field',
-		'publisherUrl'  => 'esc_url_raw',
-		'project'       => 'sanitize_text_field',
-		'projectUrl'    => 'esc_url_raw',
-		'datePublished' => 'sanitize_text_field',
-		'derivative'    => 'esc_url_raw',
-		'content'       => function( $value ) {
+		'id'             => false,
+		'title'          => 'sanitize_text_field',
+		'titleUrl'       => 'esc_url_raw',
+		'authorName'     => 'sanitize_text_field',
+		'authorUrl'      => 'esc_url_raw',
+		'publisher'      => 'sanitize_text_field',
+		'publisherUrl'   => 'esc_url_raw',
+		'project'        => 'sanitize_text_field',
+		'projectUrl'     => 'esc_url_raw',
+		'datePublished'  => 'sanitize_text_field',
+		'derivative'     => 'esc_url_raw',
+		'adaptedTitle'   => 'sanitize_text_field',
+		'adaptedAuthor'  => 'sanitize_text_field',
+		'adaptedLicense' => false,
+		'license'        => false,
+		'content'        => function( $value ) {
 			return wp_kses( $value, [ 'a' => [ 'href' => [] ] ] );
 		},
 	];
@@ -58,6 +62,12 @@ function sanitize_attributions( $item ) {
 
 		if ( empty( $item[ $name ] ) ) {
 			$sanitized[ $name ] = '';
+			continue;
+		}
+
+		// No need to revalidate ID and the license.
+		if ( ! $sanitize_callback ) {
+			$sanitized[ $name ] = $item[ $name ];
 			continue;
 		}
 

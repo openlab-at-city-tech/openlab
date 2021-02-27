@@ -1,7 +1,12 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * Internal dependencies
  */
-import { default as Help } from './icon-button-help';
+import Help from './help';
 
 function SelectControl( {
 	label,
@@ -11,13 +16,17 @@ function SelectControl( {
 	name,
 	onChange,
 	options = [],
+	required = false,
+	isInline = false,
 } ) {
+	const isRequired = required && ! value;
+
 	// Disable reason: onBlur resets the value.
 	/* eslint-disable jsx-a11y/no-onchange */
 	return (
-		<div className="form-group">
+		<div className={ classnames( 'form-group', { inline: isInline } ) }>
 			<label htmlFor={ id }>
-				{ label } <Help text={ help } />
+				{ label } { ! isInline && <Help text={ help } /> }
 			</label>
 			<select
 				id={ id }
@@ -25,6 +34,7 @@ function SelectControl( {
 				className="form-control"
 				value={ value }
 				onChange={ onChange }
+				required={ isRequired }
 			>
 				<option key="0" value="">
 					Choose...
@@ -38,6 +48,11 @@ function SelectControl( {
 					</option>
 				) ) }
 			</select>
+			{ isRequired && (
+				<p id={ id + '__help' } className="form-control__help">
+					{ `Please add ${ label }.` }
+				</p>
+			) }
 		</div>
 	);
 }

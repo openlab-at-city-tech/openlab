@@ -126,6 +126,43 @@ function format_license( $value ) {
 }
 
 /**
+ * Format "Adapted From" data into a string.
+ *
+ * @param array $item Attribution data.
+ * @return string     Formatted "Adapted From" string.
+ */
+function format_adapted_from( $item ) {
+	$is_legacy = empty( $item['adaptedTitle'] ) &&
+				empty( $item['adaptedAuthor'] ) &&
+				empty( $item['adaptedLicense'] ) &&
+				! empty( $item['derivative'] );
+
+	if ( $is_legacy ) {
+		return sprintf(
+			'A derivative from the <a href="%s">original work</a>',
+			$item['derivative']
+		);
+	}
+
+	$license = get_the_license( $item['adaptedLicense'] );
+
+	if ( empty( $item['adaptedAuthor'] ) ) {
+		return sprintf(
+			'Adapted from %1$s, licensed under %2$s.',
+			format( $item['adaptedTitle'], $item['derivative'] ),
+			format( $license['label'], $license['url'] )
+		);
+	}
+
+	return sprintf(
+		'Adapted from %1$s by %2$s, licensed under %3$s.',
+		format( $item['adaptedTitle'], $item['derivative'] ),
+		format( $item['adaptedAuthor'], null ),
+		format( $license['label'], $license['url'] )
+	);
+}
+
+/**
  * Generate attribution markup from the data.
  *
  * Template:
@@ -165,10 +202,11 @@ function get_the_attribution( $item ) {
 
 	$attribution = implode( '. ', $parts );
 
-	if ( ! empty( $item['derivative'] ) ) {
+	if ( ! empty( $item['adaptedTitle'] ) || ! empty( $item['derivative'] ) ) {
 		$attribution .= sprintf(
-			' / A derivative from the <a href="%s">original work</a>.',
-			$item['derivative']
+			'%1$s%2$s',
+			empty( $parts ) ? '' : ' / ',
+			format_adapted_from( $item )
 		);
 	}
 

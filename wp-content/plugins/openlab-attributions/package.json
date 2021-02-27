@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "openlab-attributions",
-  "description": "OpenLab text and images attribution plugin.",
+  "description": "Add formatted attributions to post content.",
   "version": "1.0.0",
   "author": "George Mamadashvili",
   "license": "GPL-2.0+",

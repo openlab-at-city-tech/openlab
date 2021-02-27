@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tippy';
 /**
  * WordPress dependencies
  */
-import { Button, Dashicon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 
 /**
  * Override `z-index`.
@@ -25,18 +25,16 @@ const popperOptions = {
 	},
 };
 
-const IconButtonHelp = ( { text = '' } ) => (
-	<Tooltip
+export default function Help( { text = '' } ) {
+	return (
+		<Tooltip
 		html={ text }
 		arrow={ true }
 		position="right"
 		trigger="mouseenter"
 		popperOptions={ popperOptions }
-	>
-		<Button className="component-help-button">
-			<Dashicon icon="editor-help" />
-		</Button>
-	</Tooltip>
-);
-
-export default IconButtonHelp;
+		>
+			<Button icon="editor-help" className="component-help-button" />
+		</Tooltip>
+	);
+};

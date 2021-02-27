@@ -1,17 +1,18 @@
+const licenses = window.attrLicenses || [];
+
 /**
  * Validate selected license against pre-defined ones.
  *
- * @param {Array} options List of licenses.
  * @param {string} value  Selected license.
  *
  * @return {Object} License object.
  */
-const validateLicense = ( options, value ) => {
-	const license = options
+function validateLicense( value ) {
+	const license = licenses
 		.filter( ( option ) => option.value === value )
 		.pop();
 
 	return license;
-};
+}
 
 export default validateLicense;
