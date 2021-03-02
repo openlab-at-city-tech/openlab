@@ -49,17 +49,34 @@ class MC4WP_MailChimp_Subscriber {
 	public $tags = array();
 
 	/**
+	 * @var array The marketing permissions for the subscriber.
+	 */
+	public $marketing_permissions = array();
+
+	/**
 	 * Retrieves member data as an array, without null values.
 	 *
 	 * @return array
 	 */
 	public function to_array() {
-		$array = get_object_vars( $this );
+		$all = get_object_vars( $this );
+		$array = array();
 
-		// filter out null values
-		$null_values = array_filter( $array, 'is_null' );
-		$values      = array_diff_key( $array, $null_values );
+		foreach ( $all as $key => $value ) {
+			// skip null values
+			if ( $value === null ) {
+				continue;
+			}
 
-		return $values;
+			// skip empty marketing_permissions property
+			if ( $key === 'marketing_permissions' && empty( $value ) ) {
+				continue;
+			}
+
+			// otherwise, add to final array
+			$array[ $key ] = $value;
+		}
+
+		return $array;
 	}
 }

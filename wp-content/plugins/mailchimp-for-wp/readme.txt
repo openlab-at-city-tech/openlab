@@ -3,8 +3,8 @@ Contributors: Ibericode, DvanKooten, hchouhan, lapzor
 Donate link: https://www.mc4wp.com/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=donate-link
 Tags: mailchimp, mc4wp, email, marketing, newsletter, subscribe, widget, mc4wp, contact form 7, woocommerce, buddypress, ibericode, mailchimp form
 Requires at least: 4.6
-Tested up to: 5.5
-Stable tag: 4.8.1
+Tested up to: 5.6
+Stable tag: 4.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.3
@@ -195,6 +195,19 @@ The plugin provides various filter & action hooks that allow you to modify or ex
 6. Dive into detailed sign-up statistics (premium feature).
 
 == Changelog ==
+
+
+#### 4.8.3 - Jan 21, 2021
+
+- Fix fatal error on older PHP versions when submitting form without any subscriber tags set in the form settings.
+- Minor performance improvement in bootstrap method of the plugin.
+
+
+#### 4.8.2 - Jan 20, 2021
+
+- Allow short-circuiting `mc4wp_subscriber_data` filter by returning `null` or `false`.
+- Use a subdirectory for the default debug log file location, so that it's easier to protect using htaccess.
+- Improved reliability for fetching lists from mailchimp when lists have high stats.member_count property.
 
 
 #### 4.8.1 - Aug 25, 2020
