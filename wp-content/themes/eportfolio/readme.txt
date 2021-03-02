@@ -5,7 +5,7 @@ Contributors: ThemeInWP
 Requires at least: 4.5
 Tested up to: 5.3
 Requires PHP: 5.5
-Stable tag: 1.1.1
+Stable tag: 1.1.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,12 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+
+= 1.1.3 - Jan 22 2021 =
+* Fixed widget issue on responsive device.
+
+= 1.1.2 - December 31 2020 =
+* Optimize CSS and some code.
 
 = 1.1.1 - November 19 2020 =
 * Fixed keyboard navigation issue issue.
