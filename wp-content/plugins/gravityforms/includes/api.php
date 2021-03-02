@@ -1764,17 +1764,22 @@ class GFAPI {
 	 * @access public
 	 * @global $wpdb
 	 *
-	 * @param mixed  $feed_ids   The ID of the Feed or an array of Feed IDs.
-	 * @param int    $form_id    The ID of the Form to which the Feeds belong.
-	 * @param string $addon_slug The slug of the add-on to which the Feeds belong.
-	 * @param bool   $is_active  If the feed is active.
+	 * @param mixed       $feed_ids   The ID of the Feed or an array of Feed IDs.
+	 * @param null|int    $form_id    The ID of the Form to which the Feeds belong.
+	 * @param null|string $addon_slug The slug of the add-on to which the Feeds belong.
+	 * @param bool        $is_active  If the feed is active.
 	 *
 	 * @return array|WP_Error Either an array of Feed objects or a WP_Error instance.
 	 */
 	public static function get_feeds( $feed_ids = null, $form_id = null, $addon_slug = null, $is_active = true ) {
 		global $wpdb;
 
-		$table       = $wpdb->prefix . 'gf_addon_feed';
+		$table = $wpdb->prefix . 'gf_addon_feed';
+
+		if ( ! GFCommon::table_exists( $table ) ) {
+			return self::get_missing_table_wp_error( $table );
+		}
+
 		$where_arr   = array();
 		$where_arr[] = $wpdb->prepare( 'is_active=%d', $is_active );
 		if ( false === empty( $form_id ) ) {
@@ -1828,6 +1833,10 @@ class GFAPI {
 		}
 
 		$table = $wpdb->prefix . 'gf_addon_feed';
+
+		if ( ! GFCommon::table_exists( $table ) ) {
+			return self::get_missing_table_wp_error( $table );
+		}
 
 		$sql = $wpdb->prepare( "DELETE FROM {$table} WHERE id=%d", $feed_id );
 
@@ -1902,7 +1911,12 @@ class GFAPI {
 			return new WP_Error( 'submissions_blocked', __( 'Submissions are currently blocked due to an upgrade in progress', 'gravityforms' ) );
 		}
 
-		$table          = $wpdb->prefix . 'gf_addon_feed';
+		$table = $wpdb->prefix . 'gf_addon_feed';
+
+		if ( ! GFCommon::table_exists( $table ) ) {
+			return self::get_missing_table_wp_error( $table );
+		}
+
 		$feed_meta_json = json_encode( $feed_meta );
 		$sql            = $wpdb->prepare( "INSERT INTO {$table} (form_id, meta, addon_slug) VALUES (%d, %s, %s)", $form_id, $feed_meta_json, $addon_slug );
 
@@ -1913,6 +1927,19 @@ class GFAPI {
 		}
 
 		return $wpdb->insert_id;
+	}
+
+	/**
+	 * Returns the missing_table WP_Error.
+	 *
+	 * @since 2.4.22
+	 *
+	 * @param string $table The name of the table which does not exist.
+	 *
+	 * @return WP_Error
+	 */
+	private static function get_missing_table_wp_error( $table ) {
+		return new WP_Error( 'missing_table', sprintf( __( 'The %s table does not exist.', 'gravityforms' ), $table ) );
 	}
 
 	// NOTIFICATIONS ----------------------------------------------

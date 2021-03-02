@@ -1,15 +1,15 @@
-# Copyright (C) 2020 Gravity Forms
+# Copyright (C) 2021 Gravity Forms
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms 2.4.21\n"
+"Project-Id-Version: Gravity Forms 2.4.22.7\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-10-14T10:45:43+00:00\n"
+"POT-Creation-Date: 2021-02-26T16:18:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: gravityforms\n"
@@ -60,7 +60,7 @@ msgstr ""
 #: form_detail.php:1736
 #: form_detail.php:2793
 #: form_detail.php:2794
-#: includes/addon/class-gf-payment-addon.php:3009
+#: includes/addon/class-gf-payment-addon.php:3010
 #: includes/fields/class-gf-field-date.php:13
 #: js.php:652
 #: js.php:1247
@@ -103,7 +103,7 @@ msgstr ""
 #: common.php:643
 #: form_list.php:94
 #: gravityforms.php:3914
-#: includes/addon/class-gf-addon.php:2865
+#: includes/addon/class-gf-addon.php:2914
 #: js.php:1247
 #: tooltips.php:36
 #: js/blocks.js:235
@@ -157,7 +157,7 @@ msgid "Pricing form fields"
 msgstr ""
 
 #: common.php:685
-#: common.php:4173
+#: common.php:4229
 #: form_detail.php:1462
 #: form_detail.php:1463
 #: includes/fields/class-gf-field-radio.php:189
@@ -258,7 +258,7 @@ msgstr ""
 #: common.php:1487
 #: entry_detail.php:1193
 #: gravityforms.php:2185
-#: includes/addon/class-gf-payment-addon.php:2794
+#: includes/addon/class-gf-payment-addon.php:2795
 #: includes/fields/class-gf-field-total.php:24
 #: js.php:756
 msgid "Total"
@@ -311,21 +311,20 @@ msgstr ""
 msgid "Gravity Forms requires WordPress %s or greater. You must upgrade WordPress in order to use Gravity Forms"
 msgstr ""
 
-#: common.php:2959
+#: common.php:2966
 msgid "%s ago"
 msgstr ""
 
-#: common.php:2961
-#: common.php:2964
+#: common.php:2979
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: common.php:3463
+#: common.php:3504
 msgid "Pricing fields are not editable"
 msgstr ""
 
-#: common.php:4787
-#: common.php:5340
+#: common.php:4843
+#: common.php:5396
 #: form_list.php:200
 #: form_list.php:639
 #: form_settings.php:1123
@@ -338,7 +337,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: common.php:4788
+#: common.php:4844
 #: form_list.php:195
 #: form_list.php:639
 #: form_settings.php:1119
@@ -351,25 +350,25 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
-#: common.php:4789
-#: common.php:4820
+#: common.php:4845
+#: common.php:4876
 #: form_detail.php:1513
 #: includes/class-personal-data.php:428
 #: select_columns.php:267
 msgid "Save"
 msgstr ""
 
-#: common.php:4790
+#: common.php:4846
 #: entry_detail.php:1466
 #: form_detail.php:2444
 #: gravityforms.php:3922
-#: includes/webapi/webapi.php:411
-#: includes/webapi/webapi.php:458
-#: includes/webapi/webapi.php:537
+#: includes/webapi/webapi.php:416
+#: includes/webapi/webapi.php:463
+#: includes/webapi/webapi.php:542
 msgid "Update"
 msgstr ""
 
-#: common.php:4791
+#: common.php:4847
 #: form_display.php:281
 #: form_display.php:1092
 #: form_display.php:3249
@@ -377,401 +376,401 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: common.php:4792
+#: common.php:4848
 msgid "Select a format"
 msgstr ""
 
-#: common.php:4793
+#: common.php:4849
 msgid "5 of %d items shown. Edit field to view all"
 msgstr ""
 
-#: common.php:4794
+#: common.php:4850
 msgid "Enter a value"
 msgstr ""
 
-#: common.php:4795
+#: common.php:4851
 msgid "Untitled Form"
 msgstr ""
 
-#: common.php:4796
+#: common.php:4852
 msgid "We would love to hear from you! Please fill out this form and we will get in touch with you shortly."
 msgstr ""
 
-#: common.php:4797
-#: common.php:4828
+#: common.php:4853
+#: common.php:4884
 #: forms_model.php:6647
 msgid "Thanks for contacting us! We will get in touch with you shortly."
 msgstr ""
 
-#: common.php:4798
+#: common.php:4854
 #: form_display.php:1320
 #: form_list.php:364
 msgid "Submit"
 msgstr ""
 
-#: common.php:4799
+#: common.php:4855
 #: notification.php:466
 msgid "Loading..."
 msgstr ""
 
-#: common.php:4800
+#: common.php:4856
 msgid "this field if"
 msgstr ""
 
-#: common.php:4801
+#: common.php:4857
 msgid "this section if"
 msgstr ""
 
-#: common.php:4802
+#: common.php:4858
 msgid "this page"
 msgstr ""
 
-#: common.php:4803
+#: common.php:4859
 msgid "this form button if"
 msgstr ""
 
-#: common.php:4804
+#: common.php:4860
 #: js.php:256
 msgid "Show"
 msgstr ""
 
-#: common.php:4805
+#: common.php:4861
 msgid "Hide"
 msgstr ""
 
-#: common.php:4806
+#: common.php:4862
 msgctxt "Conditional Logic"
 msgid "All"
 msgstr ""
 
-#: common.php:4807
+#: common.php:4863
 msgctxt "Conditional Logic"
 msgid "Any"
 msgstr ""
 
-#: common.php:4808
+#: common.php:4864
 msgid "of the following match:"
 msgstr ""
 
-#: common.php:4809
-#: includes/addon/class-gf-addon.php:4165
+#: common.php:4865
+#: includes/addon/class-gf-addon.php:4214
 #: notification.php:347
 #: notification.php:949
 msgid "is"
 msgstr ""
 
-#: common.php:4810
-#: includes/addon/class-gf-addon.php:4169
+#: common.php:4866
+#: includes/addon/class-gf-addon.php:4218
 #: notification.php:348
 #: notification.php:950
 msgid "is not"
 msgstr ""
 
-#: common.php:4811
-#: includes/addon/class-gf-addon.php:4173
+#: common.php:4867
+#: includes/addon/class-gf-addon.php:4222
 #: notification.php:349
 #: notification.php:951
 msgid "greater than"
 msgstr ""
 
-#: common.php:4812
-#: includes/addon/class-gf-addon.php:4177
+#: common.php:4868
+#: includes/addon/class-gf-addon.php:4226
 #: notification.php:350
 #: notification.php:952
 msgid "less than"
 msgstr ""
 
-#: common.php:4813
-#: includes/addon/class-gf-addon.php:4181
+#: common.php:4869
+#: includes/addon/class-gf-addon.php:4230
 #: notification.php:351
 #: notification.php:953
 msgid "contains"
 msgstr ""
 
-#: common.php:4814
-#: includes/addon/class-gf-addon.php:4185
+#: common.php:4870
+#: includes/addon/class-gf-addon.php:4234
 #: notification.php:352
 #: notification.php:954
 msgid "starts with"
 msgstr ""
 
-#: common.php:4815
-#: includes/addon/class-gf-addon.php:4189
+#: common.php:4871
+#: includes/addon/class-gf-addon.php:4238
 #: notification.php:353
 #: notification.php:955
 msgid "ends with"
 msgstr ""
 
-#: common.php:4816
+#: common.php:4872
 msgid "Empty (no choices selected)"
 msgstr ""
 
-#: common.php:4818
+#: common.php:4874
 msgid "Use this confirmation if"
 msgstr ""
 
-#: common.php:4819
+#: common.php:4875
 msgid "Send this notification if"
 msgstr ""
 
-#: common.php:4821
+#: common.php:4877
 msgid "Saving..."
 msgstr ""
 
-#: common.php:4822
+#: common.php:4878
 msgid "Are you sure you wish to cancel these changes?"
 msgstr ""
 
-#: common.php:4823
+#: common.php:4879
 #: form_settings.php:1858
 msgid "There was an issue saving this confirmation."
 msgstr ""
 
-#: common.php:4824
+#: common.php:4880
 msgid "Are you sure you wish to delete this confirmation?"
 msgstr ""
 
-#: common.php:4825
+#: common.php:4881
 #: form_settings.php:1891
 msgid "There was an issue deleting this confirmation."
 msgstr ""
 
-#: common.php:4826
+#: common.php:4882
 msgid "There are unsaved changes to the current confirmation. Would you like to discard these changes?"
 msgstr ""
 
-#: common.php:4827
+#: common.php:4883
 msgid "Untitled Confirmation"
 msgstr ""
 
-#: common.php:4829
+#: common.php:4885
 msgid "Please select a page."
 msgstr ""
 
-#: common.php:4830
+#: common.php:4886
 msgid "Please enter a URL."
 msgstr ""
 
-#: common.php:4831
+#: common.php:4887
 msgid "Please enter a confirmation name."
 msgstr ""
 
-#: common.php:4832
+#: common.php:4888
 msgid "Warning! Deleting this field will also delete all entry data associated with it. 'Cancel' to stop. 'OK' to delete."
 msgstr ""
 
-#: common.php:4834
+#: common.php:4890
 msgid "Warning! This form contains conditional logic dependent upon this field. Deleting this field will deactivate those conditional logic rules and also delete all entry data associated with the field. 'OK' to delete, 'Cancel' to abort."
 msgstr ""
 
-#: common.php:4835
+#: common.php:4891
 msgid "This form contains conditional logic dependent upon this choice. Are you sure you want to delete this choice? 'OK' to delete, 'Cancel' to abort."
 msgstr ""
 
-#: common.php:4836
+#: common.php:4892
 msgid "This form contains conditional logic dependent upon this choice. Are you sure you want to modify this choice? 'OK' to delete, 'Cancel' to abort."
 msgstr ""
 
-#: common.php:4837
+#: common.php:4893
 msgid "This form contains conditional logic dependent upon this field. Are you sure you want to mark this field as Admin Only? 'OK' to confirm, 'Cancel' to abort."
 msgstr ""
 
-#: common.php:4839
+#: common.php:4895
 msgid "Merge Tags"
 msgstr ""
 
-#: common.php:4839
+#: common.php:4895
 msgid "Merge tags allow you to dynamically populate submitted field values in your form content wherever this merge tag icon is present."
 msgstr ""
 
-#: common.php:4848
+#: common.php:4904
 msgid "Add a condition"
 msgstr ""
 
-#: common.php:4849
+#: common.php:4905
 msgid "Remove a condition"
 msgstr ""
 
-#: common.php:4850
+#: common.php:4906
 msgid "Include results if {0} match:"
 msgstr ""
 
-#: common.php:4852
+#: common.php:4908
 msgid "Custom Choices"
 msgstr ""
 
-#: common.php:4853
+#: common.php:4909
 msgid "Predefined Choices"
 msgstr ""
 
-#: common.php:4867
+#: common.php:4923
 msgid "Mr."
 msgstr ""
 
-#: common.php:4868
+#: common.php:4924
 msgid "Mrs."
 msgstr ""
 
-#: common.php:4869
+#: common.php:4925
 msgid "Miss"
 msgstr ""
 
-#: common.php:4870
+#: common.php:4926
 msgid "Ms."
 msgstr ""
 
-#: common.php:4871
+#: common.php:4927
 msgid "Dr."
 msgstr ""
 
-#: common.php:4872
+#: common.php:4928
 msgid "Prof."
 msgstr ""
 
-#: common.php:4873
+#: common.php:4929
 msgid "Rev."
 msgstr ""
 
-#: common.php:5162
+#: common.php:5218
 msgid "Any form field"
 msgstr ""
 
-#: common.php:5269
-#: includes/addon/class-gf-addon.php:2861
+#: common.php:5325
+#: includes/addon/class-gf-addon.php:2910
 msgid "Entry ID"
 msgstr ""
 
-#: common.php:5273
+#: common.php:5329
 #: export.php:1012
 #: forms_model.php:6308
-#: includes/addon/class-gf-addon.php:2862
+#: includes/addon/class-gf-addon.php:2911
 #: select_columns.php:185
 msgid "Entry Date"
 msgstr ""
 
-#: common.php:5275
-#: common.php:5308
+#: common.php:5331
+#: common.php:5364
 #: includes/fields/class-gf-field-date.php:688
 msgid "yyyy-mm-dd"
 msgstr ""
 
-#: common.php:5279
+#: common.php:5335
 msgid "Starred"
 msgstr ""
 
-#: common.php:5293
+#: common.php:5349
 #: includes/class-personal-data.php:622
 #: tooltips.php:176
 msgid "IP Address"
 msgstr ""
 
-#: common.php:5297
+#: common.php:5353
 msgid "Source URL"
 msgstr ""
 
-#: common.php:5301
+#: common.php:5357
 #: export.php:1017
 #: forms_model.php:6314
 #: select_columns.php:188
 msgid "Payment Status"
 msgstr ""
 
-#: common.php:5306
+#: common.php:5362
 #: export.php:1016
 #: forms_model.php:6320
 #: select_columns.php:191
 msgid "Payment Date"
 msgstr ""
 
-#: common.php:5312
+#: common.php:5368
 #: export.php:1015
 #: forms_model.php:6323
-#: includes/addon/class-gf-payment-addon.php:2483
-#: includes/addon/class-gf-payment-addon.php:2488
+#: includes/addon/class-gf-payment-addon.php:2484
+#: includes/addon/class-gf-payment-addon.php:2489
 #: select_columns.php:190
 msgid "Payment Amount"
 msgstr ""
 
-#: common.php:5316
+#: common.php:5372
 msgid "Transaction ID"
 msgstr ""
 
-#: common.php:5320
+#: common.php:5376
 #: entry_detail.php:1390
 #: forms_model.php:6326
-#: includes/webapi/includes/class-gf-api-keys-table.php:21
-#: includes/webapi/webapi.php:361
+#: includes/webapi/includes/class-gf-api-keys-table.php:28
+#: includes/webapi/webapi.php:370
 #: select_columns.php:192
 msgid "User"
 msgstr ""
 
-#: common.php:5336
+#: common.php:5392
 msgid "Authorized"
 msgstr ""
 
-#: common.php:5337
+#: common.php:5393
 msgid "Paid"
 msgstr ""
 
-#: common.php:5338
+#: common.php:5394
 msgid "Processing"
 msgstr ""
 
-#: common.php:5339
+#: common.php:5395
 msgid "Failed"
 msgstr ""
 
-#: common.php:5341
-#: common.php:5490
+#: common.php:5397
+#: common.php:5546
 msgid "Cancelled"
 msgstr ""
 
-#: common.php:5342
+#: common.php:5398
 #: includes/locking/class-gf-locking.php:206
 msgid "Pending"
 msgstr ""
 
-#: common.php:5343
+#: common.php:5399
 msgid "Refunded"
 msgstr ""
 
-#: common.php:5344
+#: common.php:5400
 msgid "Voided"
 msgstr ""
 
-#: common.php:5480
+#: common.php:5536
 msgid "This type of file is not allowed. Must be one of the following: "
 msgstr ""
 
-#: common.php:5481
+#: common.php:5537
 msgid "Delete this file"
 msgstr ""
 
-#: common.php:5482
+#: common.php:5538
 msgid "in progress"
 msgstr ""
 
-#: common.php:5483
+#: common.php:5539
 msgid "File exceeds size limit"
 msgstr ""
 
-#: common.php:5484
+#: common.php:5540
 msgid "This type of file is not allowed."
 msgstr ""
 
-#: common.php:5485
+#: common.php:5541
 msgid "Maximum number of files reached"
 msgstr ""
 
-#: common.php:5486
+#: common.php:5542
 msgid "There was a problem while saving the file on the server"
 msgstr ""
 
-#: common.php:5487
+#: common.php:5543
 msgid "Please wait for the uploading to complete"
 msgstr ""
 
-#: common.php:5488
+#: common.php:5544
 #: entry_detail.php:1479
 #: form_detail.php:1504
 #: form_detail.php:1514
@@ -779,24 +778,24 @@ msgstr ""
 #: includes/addon/class-gf-results.php:325
 #: includes/locking/class-gf-locking.php:201
 #: includes/templates/edit-shortcode-form.tpl.php:22
-#: includes/webapi/webapi.php:412
+#: includes/webapi/webapi.php:417
 #: select_columns.php:268
 msgid "Cancel"
 msgstr ""
 
-#: common.php:5489
+#: common.php:5545
 msgid "Cancel this upload"
 msgstr ""
 
-#: common.php:6088
+#: common.php:6144
 msgid "Visible"
 msgstr ""
 
-#: common.php:6090
+#: common.php:6146
 msgid "Default option. The field is visible when viewing the form."
 msgstr ""
 
-#: common.php:6093
+#: common.php:6149
 #: form_detail.php:556
 #: form_detail.php:634
 #: form_detail.php:752
@@ -806,24 +805,24 @@ msgstr ""
 msgid "Hidden"
 msgstr ""
 
-#: common.php:6095
+#: common.php:6151
 msgid "The field is hidden when viewing the form. Useful when you require the functionality of this field but do not want the user to be able to see this field."
 msgstr ""
 
-#: common.php:6098
+#: common.php:6154
 msgid "Administrative"
 msgstr ""
 
-#: common.php:6100
+#: common.php:6156
 msgid "The field is only visible when administering submitted entries. The field is not visible or functional when viewing the form."
 msgstr ""
 
-#: common.php:6131
+#: common.php:6187
 #: form_detail.php:2325
 msgid "Visibility"
 msgstr ""
 
-#: common.php:6131
+#: common.php:6187
 msgid "Select the visibility for this field."
 msgstr ""
 
@@ -1108,7 +1107,7 @@ msgstr ""
 #: entry_detail.php:1384
 #: export.php:1021
 #: forms_model.php:6305
-#: includes/addon/class-gf-addon.php:2863
+#: includes/addon/class-gf-addon.php:2912
 #: select_columns.php:186
 msgid "User IP"
 msgstr ""
@@ -1163,7 +1162,7 @@ msgstr ""
 #: gravityforms.php:4338
 #: gravityforms.php:4653
 #: includes/addon/class-gf-feed-addon.php:1451
-#: includes/webapi/includes/class-gf-api-keys-table.php:61
+#: includes/webapi/includes/class-gf-api-keys-table.php:68
 #: notification.php:2019
 msgid "Edit"
 msgstr ""
@@ -1310,8 +1309,8 @@ msgstr ""
 #: entry_list.php:1130
 #: entry_list.php:1161
 #: entry_list.php:1193
-#: includes/addon/class-gf-payment-addon.php:3285
 #: includes/addon/class-gf-payment-addon.php:3286
+#: includes/addon/class-gf-payment-addon.php:3287
 msgid "View"
 msgstr ""
 
@@ -1607,8 +1606,8 @@ msgstr ""
 
 #: export.php:599
 #: form_settings.php:1507
-#: includes/addon/class-gf-payment-addon.php:2527
-#: includes/addon/class-gf-payment-addon.php:2529
+#: includes/addon/class-gf-payment-addon.php:2528
+#: includes/addon/class-gf-payment-addon.php:2530
 #: notification.php:1227
 #: tooltips.php:114
 #: tooltips.php:131
@@ -1644,7 +1643,7 @@ msgstr ""
 
 #: export.php:1013
 #: forms_model.php:6311
-#: includes/addon/class-gf-addon.php:2864
+#: includes/addon/class-gf-addon.php:2913
 #: select_columns.php:187
 msgid "Source Url"
 msgstr ""
@@ -1692,9 +1691,9 @@ msgstr ""
 #: includes/api.php:1479
 #: includes/api.php:1534
 #: includes/api.php:1640
-#: includes/api.php:1827
-#: includes/api.php:1859
-#: includes/api.php:1902
+#: includes/api.php:1832
+#: includes/api.php:1868
+#: includes/api.php:1911
 msgid "Submissions are currently blocked due to an upgrade in progress"
 msgstr ""
 
@@ -2049,8 +2048,8 @@ msgstr ""
 #: includes/fields/class-gf-field-post-image.php:84
 #: includes/fields/class-gf-field-post-image.php:135
 #: includes/system-status/class-gf-update.php:50
-#: includes/webapi/includes/class-gf-api-keys-table.php:19
-#: includes/webapi/webapi.php:355
+#: includes/webapi/includes/class-gf-api-keys-table.php:27
+#: includes/webapi/webapi.php:364
 #: js.php:819
 msgid "Description"
 msgstr ""
@@ -2197,7 +2196,7 @@ msgid "Website"
 msgstr ""
 
 #: form_detail.php:759
-#: includes/addon/class-gf-payment-addon.php:2712
+#: includes/addon/class-gf-payment-addon.php:2713
 #: includes/fields/class-gf-field-email.php:13
 #: js.php:628
 msgid "Email"
@@ -2397,8 +2396,8 @@ msgid "Address Fields"
 msgstr ""
 
 #: form_detail.php:1165
-#: includes/addon/class-gf-addon.php:3229
-#: includes/addon/class-gf-payment-addon.php:2716
+#: includes/addon/class-gf-addon.php:3278
+#: includes/addon/class-gf-payment-addon.php:2717
 #: includes/fields/class-gf-field-address.php:128
 #: includes/fields/class-gf-field-address.php:406
 msgid "State"
@@ -2552,7 +2551,7 @@ msgstr ""
 
 #: form_detail.php:1441
 #: form_detail.php:2140
-#: includes/addon/class-gf-addon.php:2354
+#: includes/addon/class-gf-addon.php:2403
 msgid "Value"
 msgstr ""
 
@@ -2994,7 +2993,7 @@ msgid "April"
 msgstr ""
 
 #: form_detail.php:1465
-#: includes/addon/class-gf-payment-addon.php:3155
+#: includes/addon/class-gf-payment-addon.php:3156
 msgid "May"
 msgstr ""
 
@@ -3968,7 +3967,7 @@ msgid "This field is for validation purposes and should be left unchanged."
 msgstr ""
 
 #: form_display.php:1837
-#: includes/addon/class-gf-addon.php:3918
+#: includes/addon/class-gf-addon.php:3967
 #: includes/fields/class-gf-field-calculation.php:32
 #: includes/fields/class-gf-field-consent.php:245
 #: includes/fields/class-gf-field-hiddenproduct.php:28
@@ -4359,7 +4358,7 @@ msgstr[1] ""
 #: form_settings.php:171
 #: form_settings.php:975
 #: form_settings.php:1712
-#: includes/addon/class-gf-addon.php:1262
+#: includes/addon/class-gf-addon.php:1311
 #: includes/class-gf-osdxp.php:245
 #: includes/class-gf-osdxp.php:246
 #: js/blocks.js:226
@@ -4784,9 +4783,9 @@ msgstr ""
 #: gravityforms.php:1902
 #: gravityforms.php:4353
 #: gravityforms.php:4675
-#: includes/addon/class-gf-addon.php:4607
-#: includes/addon/class-gf-addon.php:4830
-#: includes/addon/class-gf-addon.php:4996
+#: includes/addon/class-gf-addon.php:4656
+#: includes/addon/class-gf-addon.php:4879
+#: includes/addon/class-gf-addon.php:5045
 #: includes/class-gf-osdxp.php:27
 #: includes/system-status/class-gf-update.php:73
 #: settings.php:776
@@ -4897,12 +4896,12 @@ msgid "Dismiss"
 msgstr ""
 
 #: gravityforms.php:2536
-#: gravityforms.php:4880
+#: gravityforms.php:4860
 msgid "Enable auto-updates"
 msgstr ""
 
 #: gravityforms.php:2537
-#: gravityforms.php:4876
+#: gravityforms.php:4856
 msgid "Disable auto-updates"
 msgstr ""
 
@@ -4978,98 +4977,98 @@ msgstr ""
 msgid "All Forms"
 msgstr ""
 
-#: gravityforms.php:4858
+#: gravityforms.php:4837
 msgid "Auto-updates unavailable."
 msgstr ""
 
-#: gravityforms.php:4914
+#: gravityforms.php:4894
 msgid "Please register your copy of Gravity Forms to enable automatic updates."
 msgstr ""
 
-#: gravityforms.php:4944
+#: gravityforms.php:4924
 msgid "Permissions error."
 msgstr ""
 
-#: gravityforms.php:4949
+#: gravityforms.php:4929
 msgid "Error processing request.  Please refresh and try again."
 msgstr ""
 
-#: gravityforms.php:5011
+#: gravityforms.php:4991
 #: includes/locking/class-gf-locking.php:209
 msgid "Error"
 msgstr ""
 
-#: gravityforms.php:5148
+#: gravityforms.php:5128
 #: widget.php:130
 #: js/blocks.js:188
 msgid "Select a Form"
 msgstr ""
 
-#: gravityforms.php:5155
+#: gravityforms.php:5144
 msgid "Select a form below to add it to your post or page."
 msgstr ""
 
-#: gravityforms.php:5156
+#: gravityforms.php:5145
 msgid "Select a form from the list to add it to your post or page."
 msgstr ""
 
-#: gravityforms.php:5160
+#: gravityforms.php:5149
 msgid "Can't find your form? Make sure it is active."
 msgstr ""
 
-#: gravityforms.php:5164
+#: gravityforms.php:5153
 #: widget.php:146
 msgid "Display form title"
 msgstr ""
 
-#: gravityforms.php:5169
+#: gravityforms.php:5158
 msgid "Whether or not to display the form title."
 msgstr ""
 
-#: gravityforms.php:5172
+#: gravityforms.php:5161
 #: widget.php:148
 msgid "Display form description"
 msgstr ""
 
-#: gravityforms.php:5177
+#: gravityforms.php:5166
 msgid "Whether or not to display the form description."
 msgstr ""
 
-#: gravityforms.php:5180
+#: gravityforms.php:5169
 #: widget.php:155
 msgid "Enable Ajax"
 msgstr ""
 
-#: gravityforms.php:5184
+#: gravityforms.php:5173
 msgid "Specify whether or not to use Ajax to submit the form."
 msgstr ""
 
-#: gravityforms.php:5190
+#: gravityforms.php:5179
 msgid "Specify the starting tab index for the fields of this form."
 msgstr ""
 
-#: gravityforms.php:5205
+#: gravityforms.php:5194
 msgid "Select an action"
 msgstr ""
 
-#: gravityforms.php:5217
+#: gravityforms.php:5206
 msgid "Select an action for this shortcode. Actions are added by some add-ons."
 msgstr ""
 
-#: gravityforms.php:5304
+#: gravityforms.php:5293
 msgid "Gravity Forms logging is currently enabled. Log files can contain sensitive information so ensure that logging is only enabled for as long as is required for troubleshooting. %sClick here to disable logging.%s"
 msgstr ""
 
-#: gravityforms.php:5308
+#: gravityforms.php:5297
 msgid "If you're currently receiving support, do not disable logging until the issue is resolved."
 msgstr ""
 
-#: gravityforms.php:5409
+#: gravityforms.php:5398
 msgid "Forms per page"
 msgstr ""
 
 #. translators: 1: The table name 2: the URL with further details
-#: gravityforms.php:5694
+#: gravityforms.php:5683
 msgid "An outdated add-on or custom code is attempting to access the %1$s table which is not valid in this version of Gravity Forms. Update your add-ons and custom code to prevent loss of form data. Further details: %2$s"
 msgstr ""
 
@@ -5157,320 +5156,319 @@ msgstr ""
 msgid "gform_noconflict_styles"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:450
+#: includes/addon/class-gf-addon.php:499
 msgid "Required Gravity Forms Add-On is missing: %s."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:458
+#: includes/addon/class-gf-addon.php:507
 msgid "Required Gravity Forms Add-On \"%s\" does not meet minimum version requirement: %s."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:478
+#: includes/addon/class-gf-addon.php:527
 msgid "Required WordPress plugin is missing: %s."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:488
+#: includes/addon/class-gf-addon.php:537
 msgid "Current PHP version (%s) does not meet minimum PHP version requirement (%s)."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:505
+#: includes/addon/class-gf-addon.php:554
 msgid "Required PHP extension missing: %s"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:512
+#: includes/addon/class-gf-addon.php:561
 msgid "Required PHP extension \"%s\" does not meet minimum version requirement: %s."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:527
+#: includes/addon/class-gf-addon.php:576
 msgid "Required PHP function missing: %s"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:540
+#: includes/addon/class-gf-addon.php:589
 msgid "Current WordPress version (%s) does not meet minimum WordPress version requirement (%s)."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:579
+#: includes/addon/class-gf-addon.php:628
 msgid "%s is not able to run because your WordPress environment has not met the minimum requirements."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:580
+#: includes/addon/class-gf-addon.php:629
 msgid "Please resolve the following issues to use %s:"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1208
+#: includes/addon/class-gf-addon.php:1257
 msgid "GF Add-Ons"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1265
-#: includes/addon/class-gf-addon.php:5008
+#: includes/addon/class-gf-addon.php:1314
+#: includes/addon/class-gf-addon.php:5057
 #: settings.php:795
 msgid "Uninstall"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1268
+#: includes/addon/class-gf-addon.php:1317
 msgid "Add-On Page"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1271
+#: includes/addon/class-gf-addon.php:1320
 msgid "Add-On Settings"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1276
+#: includes/addon/class-gf-addon.php:1325
 msgid "Results Page"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1295
+#: includes/addon/class-gf-addon.php:1344
 msgid "Gravity Forms Add-Ons"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1527
+#: includes/addon/class-gf-addon.php:1576
 msgid "Field type '%s' has not been implemented"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1724
+#: includes/addon/class-gf-addon.php:1773
 msgid "%s settings updated."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:1730
+#: includes/addon/class-gf-addon.php:1779
 msgid "There was an error while saving your settings."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2197
+#: includes/addon/class-gf-addon.php:2246
 msgid "Add Custom"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2339
+#: includes/addon/class-gf-addon.php:2388
 msgid "Custom Key"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2350
+#: includes/addon/class-gf-addon.php:2399
 msgid "Custom Value"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2353
-#: includes/webapi/includes/class-gf-api-keys-table.php:20
+#: includes/addon/class-gf-addon.php:2402
 msgid "Key"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2650
+#: includes/addon/class-gf-addon.php:2699
 msgid "Please add a %s field to your form."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2743
+#: includes/addon/class-gf-addon.php:2792
 msgid "Add Custom Key"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2753
+#: includes/addon/class-gf-addon.php:2802
 msgid "Add Custom Value"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2774
+#: includes/addon/class-gf-addon.php:2823
 msgid "Reset"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2796
+#: includes/addon/class-gf-addon.php:2845
 msgid "Form Field"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2814
+#: includes/addon/class-gf-addon.php:2863
 #: js.php:258
 msgid "Field"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2846
-#: includes/addon/class-gf-addon.php:3163
+#: includes/addon/class-gf-addon.php:2895
+#: includes/addon/class-gf-addon.php:3212
 #: includes/class-personal-data.php:234
 #: notification.php:847
 msgid "Select a Field"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2853
-#: includes/addon/class-gf-addon.php:3170
+#: includes/addon/class-gf-addon.php:2902
+#: includes/addon/class-gf-addon.php:3219
 msgid "Select a %s Field"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2902
-#: includes/addon/class-gf-addon.php:2909
-#: includes/addon/class-gf-addon.php:2929
-#: includes/addon/class-gf-addon.php:3322
-#: includes/addon/class-gf-addon.php:3329
-#: includes/addon/class-gf-addon.php:3349
+#: includes/addon/class-gf-addon.php:2951
+#: includes/addon/class-gf-addon.php:2958
+#: includes/addon/class-gf-addon.php:2978
+#: includes/addon/class-gf-addon.php:3371
+#: includes/addon/class-gf-addon.php:3378
+#: includes/addon/class-gf-addon.php:3398
 msgid "Full"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:2916
-#: includes/addon/class-gf-addon.php:3336
+#: includes/addon/class-gf-addon.php:2965
+#: includes/addon/class-gf-addon.php:3385
 msgid "Selected"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3224
+#: includes/addon/class-gf-addon.php:3273
 msgid "First Name"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3224
+#: includes/addon/class-gf-addon.php:3273
 msgid "Name (First)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3225
+#: includes/addon/class-gf-addon.php:3274
 msgid "Last Name"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3225
+#: includes/addon/class-gf-addon.php:3274
 msgid "Name (Last)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3226
-#: includes/addon/class-gf-payment-addon.php:2713
+#: includes/addon/class-gf-addon.php:3275
+#: includes/addon/class-gf-payment-addon.php:2714
 #: includes/fields/class-gf-field-address.php:36
 #: js.php:604
 msgid "Address"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3226
+#: includes/addon/class-gf-addon.php:3275
 msgid "Address (Street Address)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3227
-#: includes/addon/class-gf-payment-addon.php:2714
+#: includes/addon/class-gf-addon.php:3276
+#: includes/addon/class-gf-payment-addon.php:2715
 msgid "Address 2"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3227
+#: includes/addon/class-gf-addon.php:3276
 msgid "Address (Address Line 2)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3228
-#: includes/addon/class-gf-payment-addon.php:2715
+#: includes/addon/class-gf-addon.php:3277
+#: includes/addon/class-gf-payment-addon.php:2716
 #: includes/fields/class-gf-field-address.php:157
 #: js.php:606
 msgid "City"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3228
+#: includes/addon/class-gf-addon.php:3277
 msgid "Address (City)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3229
+#: includes/addon/class-gf-addon.php:3278
 msgid "Address (State / Province)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3230
-#: includes/addon/class-gf-payment-addon.php:2717
+#: includes/addon/class-gf-addon.php:3279
+#: includes/addon/class-gf-payment-addon.php:2718
 msgid "Zip"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3230
+#: includes/addon/class-gf-addon.php:3279
 msgid "Address (Zip / Postal Code)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3231
-#: includes/addon/class-gf-payment-addon.php:2718
+#: includes/addon/class-gf-addon.php:3280
+#: includes/addon/class-gf-payment-addon.php:2719
 #: includes/fields/class-gf-field-address.php:161
 #: js.php:607
 msgid "Country"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3231
+#: includes/addon/class-gf-addon.php:3280
 msgid "Address (Country)"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3417
+#: includes/addon/class-gf-addon.php:3466
 #: includes/class-personal-data.php:206
 #: includes/logging/logging.php:339
 msgid "Enable"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3484
+#: includes/addon/class-gf-addon.php:3533
 msgid "Update Settings"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3680
-#: includes/addon/class-gf-addon.php:3699
+#: includes/addon/class-gf-addon.php:3729
+#: includes/addon/class-gf-addon.php:3748
 msgid "The text you have entered is not valid. For security reasons, some characters are not allowed. "
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3683
-#: includes/addon/class-gf-addon.php:3702
+#: includes/addon/class-gf-addon.php:3732
+#: includes/addon/class-gf-addon.php:3751
 msgid "Fix it"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3724
-#: includes/addon/class-gf-addon.php:3765
-#: includes/addon/class-gf-addon.php:3781
-#: includes/addon/class-gf-addon.php:3797
-#: includes/addon/class-gf-addon.php:3847
+#: includes/addon/class-gf-addon.php:3773
+#: includes/addon/class-gf-addon.php:3814
+#: includes/addon/class-gf-addon.php:3830
+#: includes/addon/class-gf-addon.php:3846
+#: includes/addon/class-gf-addon.php:3896
 #: includes/addon/class-gf-feed-addon.php:1625
 msgid "Invalid value"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:3955
+#: includes/addon/class-gf-addon.php:4004
 #: settings.php:371
 msgid "Validation Error"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4399
+#: includes/addon/class-gf-addon.php:4448
 #: includes/addon/class-gf-feed-addon.php:1260
 msgid "You don't have sufficient permissions to update the form settings."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4733
-#: includes/addon/class-gf-addon.php:4739
+#: includes/addon/class-gf-addon.php:4782
+#: includes/addon/class-gf-addon.php:4788
 msgid "You don't have adequate permission to view this page"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4849
+#: includes/addon/class-gf-addon.php:4898
 msgid "This add-on needs to be updated. Please contact the developer."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4861
-#: includes/addon/class-gf-addon.php:5026
-#: includes/addon/class-gf-addon.php:5145
+#: includes/addon/class-gf-addon.php:4910
+#: includes/addon/class-gf-addon.php:5075
+#: includes/addon/class-gf-addon.php:5194
 msgid "%s has been successfully uninstalled. It can be re-activated from the %splugins page%s."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4888
-#: includes/addon/class-gf-addon.php:5174
+#: includes/addon/class-gf-addon.php:4937
+#: includes/addon/class-gf-addon.php:5223
 #: includes/addon/class-gf-feed-addon.php:1486
 msgid "%s Settings"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:4952
-#: includes/addon/class-gf-addon.php:5243
+#: includes/addon/class-gf-addon.php:5001
+#: includes/addon/class-gf-addon.php:5292
 msgid "You don't have sufficient permissions to update the settings."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5037
-#: includes/addon/class-gf-addon.php:5051
+#: includes/addon/class-gf-addon.php:5086
+#: includes/addon/class-gf-addon.php:5100
 msgid "Uninstall %s"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5043
-#: includes/addon/class-gf-addon.php:5316
+#: includes/addon/class-gf-addon.php:5092
+#: includes/addon/class-gf-addon.php:5365
 #: settings.php:226
 msgid "Warning"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5314
+#: includes/addon/class-gf-addon.php:5363
 msgid "Uninstall %s Add-On"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5320
+#: includes/addon/class-gf-addon.php:5369
 msgid "Uninstall  Add-On"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5331
+#: includes/addon/class-gf-addon.php:5380
 msgid "%sThis operation deletes ALL %s settings%s. If you continue, you will NOT be able to retrieve these settings."
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5335
+#: includes/addon/class-gf-addon.php:5384
 msgid "Warning! ALL %s settings will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop"
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5362
+#: includes/addon/class-gf-addon.php:5411
 msgid "You don't have adequate permission to uninstall this add-on: "
 msgstr ""
 
-#: includes/addon/class-gf-addon.php:5459
+#: includes/addon/class-gf-addon.php:5508
 #: includes/addon/class-gf-auto-upgrade.php:66
 msgid "Gravity Forms %s is required. Activate it now or %spurchase it today!%s"
 msgstr ""
@@ -5513,7 +5511,7 @@ msgid "Copy %d"
 msgstr ""
 
 #: includes/addon/class-gf-feed-addon.php:1055
-#: includes/addon/class-gf-payment-addon.php:3736
+#: includes/addon/class-gf-payment-addon.php:3737
 msgid "Access denied."
 msgstr ""
 
@@ -5676,8 +5674,8 @@ msgid "Unsupported transaction type"
 msgstr ""
 
 #: includes/addon/class-gf-payment-addon.php:2352
-#: includes/addon/class-gf-payment-addon.php:2683
-#: includes/addon/class-gf-payment-addon.php:2691
+#: includes/addon/class-gf-payment-addon.php:2684
+#: includes/addon/class-gf-payment-addon.php:2692
 msgid "Form Total"
 msgstr ""
 
@@ -5731,150 +5729,150 @@ msgstr ""
 msgid "Setup Fee"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2467
+#: includes/addon/class-gf-payment-addon.php:2468
 msgid "Trial"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2470
+#: includes/addon/class-gf-payment-addon.php:2471
 msgid "Trial Period"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2470
+#: includes/addon/class-gf-payment-addon.php:2471
 msgid "Enable a trial period.  The user's recurring payment will not begin until after this trial period."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2475
+#: includes/addon/class-gf-payment-addon.php:2476
 msgid "Products &amp; Services Settings"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2488
+#: includes/addon/class-gf-payment-addon.php:2489
 msgid "Select which field determines the payment amount, or select 'Form Total' to use the total of all pricing fields as the payment amount."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2493
+#: includes/addon/class-gf-payment-addon.php:2494
 msgid "Other Settings"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2508
-#: includes/addon/class-gf-payment-addon.php:2511
+#: includes/addon/class-gf-payment-addon.php:2509
+#: includes/addon/class-gf-payment-addon.php:2512
 msgid "Billing Information"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2511
+#: includes/addon/class-gf-payment-addon.php:2512
 msgid "Map your Form Fields to the available listed fields."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2519
+#: includes/addon/class-gf-payment-addon.php:2520
 msgid "Options"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2529
+#: includes/addon/class-gf-payment-addon.php:2530
 msgid "When conditions are enabled, form submissions will only be sent to the payment gateway when the conditions are met. When disabled, all form submissions will be sent to the payment gateway."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2589
-#: includes/addon/class-gf-payment-addon.php:2634
-#: includes/webapi/webapi.php:478
+#: includes/addon/class-gf-payment-addon.php:2590
+#: includes/addon/class-gf-payment-addon.php:2635
+#: includes/webapi/webapi.php:483
 #: includes/wizard/steps/class-gf-installation-wizard-step-background-updates.php:110
 msgid "Enabled"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2648
+#: includes/addon/class-gf-payment-addon.php:2649
 msgid "Enter an amount"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2700
+#: includes/addon/class-gf-payment-addon.php:2701
 msgid "Sample Option"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2736
+#: includes/addon/class-gf-payment-addon.php:2737
 msgid "day(s)"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2737
+#: includes/addon/class-gf-payment-addon.php:2738
 msgid "week(s)"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2738
+#: includes/addon/class-gf-payment-addon.php:2739
 msgid "month(s)"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2739
+#: includes/addon/class-gf-payment-addon.php:2740
 msgid "year(s)"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2748
+#: includes/addon/class-gf-payment-addon.php:2749
 msgid "Select a product field"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2764
+#: includes/addon/class-gf-payment-addon.php:2765
 msgctxt "toolbar label"
 msgid "Sales"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2765
+#: includes/addon/class-gf-payment-addon.php:2766
 msgctxt "metabox title"
 msgid "Filter"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2791
+#: includes/addon/class-gf-payment-addon.php:2792
 msgid "Today"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2792
+#: includes/addon/class-gf-payment-addon.php:2793
 msgid "Yesterday"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2793
+#: includes/addon/class-gf-payment-addon.php:2794
 msgid "Last 30 Days"
-msgstr ""
-
-#: includes/addon/class-gf-payment-addon.php:2800
-#: includes/addon/class-gf-payment-addon.php:2807
-#: includes/addon/class-gf-payment-addon.php:2815
-#: includes/addon/class-gf-payment-addon.php:2822
-msgid "subscriptions"
 msgstr ""
 
 #: includes/addon/class-gf-payment-addon.php:2801
 #: includes/addon/class-gf-payment-addon.php:2808
 #: includes/addon/class-gf-payment-addon.php:2816
 #: includes/addon/class-gf-payment-addon.php:2823
+msgid "subscriptions"
+msgstr ""
+
+#: includes/addon/class-gf-payment-addon.php:2802
+#: includes/addon/class-gf-payment-addon.php:2809
+#: includes/addon/class-gf-payment-addon.php:2817
+#: includes/addon/class-gf-payment-addon.php:2824
 msgid "orders"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2831
+#: includes/addon/class-gf-payment-addon.php:2832
 msgid "There aren't any transactions that match your criteria."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2943
-#: includes/addon/class-gf-payment-addon.php:2952
+#: includes/addon/class-gf-payment-addon.php:2944
+#: includes/addon/class-gf-payment-addon.php:2953
 msgid "Revenue"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2948
+#: includes/addon/class-gf-payment-addon.php:2949
 msgid "Orders"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2949
+#: includes/addon/class-gf-payment-addon.php:2950
 msgid "Subscriptions"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2950
+#: includes/addon/class-gf-payment-addon.php:2951
 msgid "Recurring Payments"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2951
+#: includes/addon/class-gf-payment-addon.php:2952
 msgid "Refunds"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2973
 #: includes/addon/class-gf-payment-addon.php:2974
+#: includes/addon/class-gf-payment-addon.php:2975
 msgid "Week"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:2990
 #: includes/addon/class-gf-payment-addon.php:2991
+#: includes/addon/class-gf-payment-addon.php:2992
 #: includes/fields/class-gf-field-creditcard.php:284
 #: includes/fields/class-gf-field-date.php:586
 #: js.php:884
@@ -5882,135 +5880,135 @@ msgstr ""
 msgid "Month"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3007
-#: includes/addon/class-gf-payment-addon.php:3010
+#: includes/addon/class-gf-payment-addon.php:3008
+#: includes/addon/class-gf-payment-addon.php:3011
 #: includes/fields/class-gf-field-date.php:594
 #: js.php:886
 #: js.php:887
 msgid "Day"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3151
+#: includes/addon/class-gf-payment-addon.php:3152
 msgid "Jan"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3152
+#: includes/addon/class-gf-payment-addon.php:3153
 msgid "Feb"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3153
+#: includes/addon/class-gf-payment-addon.php:3154
 msgid "Mar"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3154
+#: includes/addon/class-gf-payment-addon.php:3155
 msgid "Apr"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3156
+#: includes/addon/class-gf-payment-addon.php:3157
 msgid "Jun"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3157
+#: includes/addon/class-gf-payment-addon.php:3158
 msgid "Jul"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3158
+#: includes/addon/class-gf-payment-addon.php:3159
 msgid "Aug"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3159
+#: includes/addon/class-gf-payment-addon.php:3160
 msgid "Sep"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3160
+#: includes/addon/class-gf-payment-addon.php:3161
 msgid "Oct"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3161
+#: includes/addon/class-gf-payment-addon.php:3162
 msgid "Nov"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3162
+#: includes/addon/class-gf-payment-addon.php:3163
 msgid "Dec"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3278
+#: includes/addon/class-gf-payment-addon.php:3279
 msgid "Daily"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3279
+#: includes/addon/class-gf-payment-addon.php:3280
 msgid "Weekly"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3280
+#: includes/addon/class-gf-payment-addon.php:3281
 msgid "Monthly"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3286
+#: includes/addon/class-gf-payment-addon.php:3287
 msgid "Select how you would like the sales data to be displayed."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3296
+#: includes/addon/class-gf-payment-addon.php:3297
 msgctxt "regarding a payment method"
 msgid "Any"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3307
+#: includes/addon/class-gf-payment-addon.php:3308
 msgid "Payment Method"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3425
+#: includes/addon/class-gf-payment-addon.php:3426
 msgid "Warning! This subscription will be canceled. This cannot be undone. 'OK' to cancel subscription, 'Cancel' to stop"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3427
+#: includes/addon/class-gf-payment-addon.php:3428
 msgid "Canceled"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3428
+#: includes/addon/class-gf-payment-addon.php:3429
 msgid "The subscription could not be canceled. Please try again later."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3694
+#: includes/addon/class-gf-payment-addon.php:3695
 msgid "Cancel Subscription"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3825
+#: includes/addon/class-gf-payment-addon.php:3826
 msgid "sale"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3826
+#: includes/addon/class-gf-payment-addon.php:3827
 msgid "sales"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3840
+#: includes/addon/class-gf-payment-addon.php:3841
 msgid "There hasn't been any sales in the specified date range."
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3863
+#: includes/addon/class-gf-payment-addon.php:3864
 msgid "1 item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/addon/class-gf-payment-addon.php:3880
+#: includes/addon/class-gf-payment-addon.php:3881
 msgid "Go to the first page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3887
+#: includes/addon/class-gf-payment-addon.php:3888
 msgid "Go to the previous page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3897
+#: includes/addon/class-gf-payment-addon.php:3898
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3902
+#: includes/addon/class-gf-payment-addon.php:3903
 msgid "Go to the next page"
 msgstr ""
 
-#: includes/addon/class-gf-payment-addon.php:3911
+#: includes/addon/class-gf-payment-addon.php:3912
 msgid "Go to the last page"
 msgstr ""
 
@@ -6167,12 +6165,13 @@ msgstr ""
 
 #: includes/api.php:222
 #: includes/webapi/v2/includes/controllers/class-controller-form-feeds.php:205
-#: includes/webapi/webapi.php:1168
+#: includes/webapi/webapi.php:1173
 msgid "Missing form id"
 msgstr ""
 
 #: includes/api.php:238
 #: includes/webapi/v2/includes/class-results-cache.php:477
+#: includes/webapi/v2/includes/controllers/class-controller-form-field-filters.php:46
 #: includes/webapi/v2/includes/controllers/class-controller-forms.php:136
 msgid "Form not found"
 msgstr ""
@@ -6305,24 +6304,28 @@ msgstr ""
 msgid "There was an error while processing the form:"
 msgstr ""
 
-#: includes/api.php:1802
+#: includes/api.php:1807
 msgid "Feed not found"
 msgstr ""
 
-#: includes/api.php:1836
+#: includes/api.php:1845
 msgid "There was an error while deleting feed id %s"
 msgstr ""
 
-#: includes/api.php:1840
+#: includes/api.php:1849
 msgid "Feed id %s not found"
 msgstr ""
 
-#: includes/api.php:1879
+#: includes/api.php:1888
 msgid "There was an error while updating feed id %s"
 msgstr ""
 
-#: includes/api.php:1912
+#: includes/api.php:1926
 msgid "There was an error while inserting a feed"
+msgstr ""
+
+#: includes/api.php:1942
+msgid "The %s table does not exist."
 msgstr ""
 
 #: includes/class-gf-osdxp.php:73
@@ -9132,72 +9135,72 @@ msgstr ""
 msgid "Upload unsuccessful"
 msgstr ""
 
-#: includes/webapi/includes/class-gf-api-keys-table.php:22
+#: includes/webapi/includes/class-gf-api-keys-table.php:29
 msgid "Permissions"
 msgstr ""
 
-#: includes/webapi/includes/class-gf-api-keys-table.php:23
-#: includes/webapi/webapi.php:406
+#: includes/webapi/includes/class-gf-api-keys-table.php:30
+#: includes/webapi/webapi.php:411
 msgid "Last Access"
 msgstr ""
 
-#: includes/webapi/includes/class-gf-api-keys-table.php:73
-#: includes/webapi/webapi.php:399
+#: includes/webapi/includes/class-gf-api-keys-table.php:80
+#: includes/webapi/webapi.php:408
 msgid "Never Accessed"
 msgstr ""
 
-#: includes/webapi/includes/class-gf-api-keys-table.php:87
+#: includes/webapi/includes/class-gf-api-keys-table.php:94
 msgid "You don't have any API keys. Let's go %1$screate one%2$s!"
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:257
+#: includes/webapi/v2/class-gf-rest-authentication.php:351
 msgid "Consumer secret is invalid."
 msgstr ""
 
 #. translators: %s: amount of errors
-#: includes/webapi/v2/class-gf-rest-authentication.php:377
+#: includes/webapi/v2/class-gf-rest-authentication.php:471
 msgid "Missing OAuth parameter %s"
 msgid_plural "Missing OAuth parameters %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:423
+#: includes/webapi/v2/class-gf-rest-authentication.php:517
 msgid "Consumer key is invalid."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:471
+#: includes/webapi/v2/class-gf-rest-authentication.php:565
 msgid "Invalid signature - failed to sort parameters."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:480
+#: includes/webapi/v2/class-gf-rest-authentication.php:574
 msgid "Invalid signature - signature method is invalid."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:490
+#: includes/webapi/v2/class-gf-rest-authentication.php:584
 msgid "Invalid signature - provided signature does not match."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:572
+#: includes/webapi/v2/class-gf-rest-authentication.php:666
 msgid "Invalid timestamp."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:582
+#: includes/webapi/v2/class-gf-rest-authentication.php:676
 msgid "Invalid nonce - nonce has already been used."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:648
+#: includes/webapi/v2/class-gf-rest-authentication.php:746
 msgid "The API key provided does not have read permissions."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:656
+#: includes/webapi/v2/class-gf-rest-authentication.php:754
 msgid "The API key provided does not have write permissions."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:663
+#: includes/webapi/v2/class-gf-rest-authentication.php:761
 msgid "Unknown request method."
 msgstr ""
 
-#: includes/webapi/v2/class-gf-rest-authentication.php:699
+#: includes/webapi/v2/class-gf-rest-authentication.php:801
 msgid "Gravity Forms API. Use a consumer key in the username field and a consumer secret in the password field."
 msgstr ""
 
@@ -9228,17 +9231,17 @@ msgid "Form not found."
 msgstr ""
 
 #: includes/webapi/v2/includes/controllers/class-controller-entry-properties.php:54
-#: includes/webapi/webapi.php:1389
+#: includes/webapi/webapi.php:1394
 msgid "No property values were found in the request body"
 msgstr ""
 
 #: includes/webapi/v2/includes/controllers/class-controller-entry-properties.php:57
-#: includes/webapi/webapi.php:1391
+#: includes/webapi/webapi.php:1396
 msgid "Property values should be sent as an array"
 msgstr ""
 
 #: includes/webapi/v2/includes/controllers/class-controller-entry-properties.php:74
-#: includes/webapi/webapi.php:1324
+#: includes/webapi/webapi.php:1329
 msgid "Entry updated successfully"
 msgstr ""
 
@@ -9390,157 +9393,153 @@ msgid "Make sure you have copied the consumer key and secret above. They will no
 msgstr ""
 
 #: includes/webapi/webapi.php:336
-#: includes/webapi/webapi.php:412
+#: includes/webapi/webapi.php:417
 msgid "Back to API Settings"
 msgstr ""
 
-#: includes/webapi/webapi.php:348
+#: includes/webapi/webapi.php:357
 msgid "API Key successfully updated"
 msgstr ""
 
-#: includes/webapi/webapi.php:378
+#: includes/webapi/webapi.php:387
 msgid "Permission"
 msgstr ""
 
-#: includes/webapi/webapi.php:383
+#: includes/webapi/webapi.php:392
 msgid "Read"
 msgstr ""
 
-#: includes/webapi/webapi.php:385
+#: includes/webapi/webapi.php:394
 msgid "Read/Write"
 msgstr ""
 
-#: includes/webapi/webapi.php:402
-msgid "Key (ending in)"
-msgstr ""
-
-#: includes/webapi/webapi.php:411
+#: includes/webapi/webapi.php:416
 msgid "Add Key"
 msgstr ""
 
-#: includes/webapi/webapi.php:426
+#: includes/webapi/webapi.php:431
 msgid "Gravity Forms API Settings"
 msgstr ""
 
-#: includes/webapi/webapi.php:448
-#: includes/webapi/webapi.php:469
+#: includes/webapi/webapi.php:453
+#: includes/webapi/webapi.php:474
 msgid "The Gravity Forms API allows developers to interact with this install via a JSON REST API."
 msgstr ""
 
-#: includes/webapi/webapi.php:452
+#: includes/webapi/webapi.php:457
 msgid "Requirements check"
 msgstr ""
 
-#: includes/webapi/webapi.php:473
+#: includes/webapi/webapi.php:478
 msgid "Enable access to the API"
 msgstr ""
 
-#: includes/webapi/webapi.php:484
+#: includes/webapi/webapi.php:489
 msgid "Authentication ( API version 2 )"
 msgstr ""
 
-#: includes/webapi/webapi.php:486
+#: includes/webapi/webapi.php:491
 msgid "Create an API Key below to use the REST API version 2. Alternatively, you can use cookie authentication which is supported for logged in users. %sVisit our documentation pages%s for more information."
 msgstr ""
 
-#: includes/webapi/webapi.php:491
+#: includes/webapi/webapi.php:496
 msgid "API Keys"
 msgstr ""
 
-#: includes/webapi/webapi.php:497
+#: includes/webapi/webapi.php:502
 msgid "Authentication ( API version 1 )"
 msgstr ""
 
-#: includes/webapi/webapi.php:499
+#: includes/webapi/webapi.php:504
 msgid "Configure your API Key below to use the REST API version 1. Alternatively, you can use cookie authentication which is supported for logged in users. %sVisit our documentation pages%s for more information."
 msgstr ""
 
-#: includes/webapi/webapi.php:504
+#: includes/webapi/webapi.php:509
 msgid "Public API Key"
 msgstr ""
 
-#: includes/webapi/webapi.php:512
+#: includes/webapi/webapi.php:517
 msgid "Private API Key"
 msgstr ""
 
-#: includes/webapi/webapi.php:520
+#: includes/webapi/webapi.php:525
 msgid "QR Code"
 msgstr ""
 
-#: includes/webapi/webapi.php:526
+#: includes/webapi/webapi.php:531
 msgid "Impersonate account"
 msgstr ""
 
-#: includes/webapi/webapi.php:593
+#: includes/webapi/webapi.php:598
 msgid "Permalinks are not in the correct format."
 msgstr ""
 
-#: includes/webapi/webapi.php:598
+#: includes/webapi/webapi.php:603
 msgid "Change the %sWordPress Permalink Settings%s from default to any of the other options to get started."
 msgstr ""
 
-#: includes/webapi/webapi.php:607
+#: includes/webapi/webapi.php:612
 msgid "Show/hide QR Code"
 msgstr ""
 
-#: includes/webapi/webapi.php:1106
+#: includes/webapi/webapi.php:1111
 msgid "Feeds deleted successfully: %d"
 msgstr ""
 
-#: includes/webapi/webapi.php:1145
+#: includes/webapi/webapi.php:1150
 msgid "Feeds updated: %d"
 msgstr ""
 
-#: includes/webapi/webapi.php:1262
+#: includes/webapi/webapi.php:1267
 msgid "Forms deleted successfully: %d"
 msgstr ""
 
-#: includes/webapi/webapi.php:1324
+#: includes/webapi/webapi.php:1329
 msgid "Entries updated successfully"
 msgstr ""
 
-#: includes/webapi/webapi.php:1353
-#: includes/webapi/webapi.php:1384
+#: includes/webapi/webapi.php:1358
+#: includes/webapi/webapi.php:1389
 msgid "Success"
 msgstr ""
 
-#: includes/webapi/webapi.php:1445
+#: includes/webapi/webapi.php:1450
 msgid "Forms updated successfully"
 msgstr ""
 
-#: includes/webapi/webapi.php:1445
+#: includes/webapi/webapi.php:1450
 msgid "Form updated successfully"
 msgstr ""
 
-#: includes/webapi/webapi.php:1482
+#: includes/webapi/webapi.php:1487
 msgid "Entries deleted successfully: %d"
 msgstr ""
 
-#: includes/webapi/webapi.php:2168
+#: includes/webapi/webapi.php:2173
 msgid "Not authorized"
 msgstr ""
 
-#: includes/webapi/webapi.php:2173
+#: includes/webapi/webapi.php:2178
 msgid "Permission denied"
 msgstr ""
 
-#: includes/webapi/webapi.php:2178
+#: includes/webapi/webapi.php:2183
 msgid "Forbidden"
 msgstr ""
 
-#: includes/webapi/webapi.php:2183
+#: includes/webapi/webapi.php:2188
 msgid "Bad request"
 msgstr ""
 
-#: includes/webapi/webapi.php:2188
+#: includes/webapi/webapi.php:2193
 msgid "Not found"
 msgstr ""
 
-#: includes/webapi/webapi.php:2193
+#: includes/webapi/webapi.php:2198
 msgid "Not implemented"
 msgstr ""
 
-#: includes/webapi/webapi.php:2198
+#: includes/webapi/webapi.php:2203
 msgid "Internal Error"
 msgstr ""
 

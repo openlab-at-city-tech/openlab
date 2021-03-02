@@ -340,6 +340,15 @@ if ( class_exists( 'GFForms' ) ) {
 			<?php
 		}
 
+		/**
+		 * Displays the edit page for the key description, user, and permission settings.
+		 *
+		 * @since 2.4
+		 * @since 2.4.22 Removed the "Key (ending in)" row.
+		 *
+		 * @param int  $key_id      The ID of the key being edited.
+		 * @param bool $has_updated Indicates if the key details were updated.
+		 */
 		public function display_api_key_edit( $key_id, $has_updated = false ) {
 
 			$key = $key_id == 0 ? false : $this->get_api_key( $key_id );
@@ -398,10 +407,6 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( $key_id != 0 ) {
 					$last_access = rgobj( $key, 'last_access' ) == '' ? __('Never Accessed', 'gravityforms') : GFCommon::format_date( rgobj( $key, 'last_access' ), true, '', true )
 					?>
-					<tr>
-						<th><?php esc_html_e( 'Key (ending in)', 'gravityforms' )?></th>
-						<td>...<?php echo substr( rgobj( $key, 'consumer_key' ), -7 ); ?></td>
-					</tr>
 					<tr>
 						<th style="padding-top:18px;"><?php esc_html_e( 'Last Access', 'gravityforms' )?></th>
 						<td style="padding-top:18px;"><?php echo esc_html( $last_access ) ?></td>

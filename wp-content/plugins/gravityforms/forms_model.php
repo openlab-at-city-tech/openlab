@@ -7536,6 +7536,22 @@ class GFFormsModel {
 
 		$match_count = 0;
 		foreach ( $logic['rules'] as $rule ) {
+			try {
+				/**
+				 * Filter the conditional logic rule before it is evaluated.
+				 *
+				 * @param array $rule         The conditional logic rule about to be evaluated.
+				 * @param array $form         The current form meta.
+				 * @param array $logic        All details required to evaluate an objects conditional logic.
+				 * @param array $field_values The default field values for this form.
+				 * @param array $entry        The current entry object (if available).
+				 *
+				 * @since 2.4.22
+				 */
+				$rule = apply_filters( 'gform_rule_pre_evaluation', $rule, $form, $logic, $field_values, $entry );
+			} catch ( Error $e ) {
+				GFCommon::log_error( __METHOD__ . '(): Error from function hooked to gform_rule_pre_evaluation. ' . $e->getMessage() );
+			}
 			$source_field   = RGFormsModel::get_field( $form, $rule['fieldId'] );
 			$field_value    = empty( $entry ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $entry, $source_field );
 			$is_value_match = self::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
