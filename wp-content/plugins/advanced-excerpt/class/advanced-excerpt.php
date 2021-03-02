@@ -240,7 +240,7 @@ class Advanced_Excerpt {
 	function filter( $content ) {
 
 		extract( wp_parse_args( $this->options, $this->default_options ), EXTR_SKIP );
-
+		
 		if ( true === apply_filters( 'advanced_excerpt_skip_excerpt_filtering', false ) ) {
 			return $content;
         }
