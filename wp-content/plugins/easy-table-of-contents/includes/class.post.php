@@ -258,7 +258,7 @@ class ezTOC_Post {
 
 		//if ( ! class_exists( 'TagFilter' ) ) {
 		//
-		//	require_once( EZ_TOC_PATH . 'includes/vendor/ultimate-web-scraper/tag_filter.php' );
+		//	require_once( EZ_TOC_PATH . '/includes/vendor/ultimate-web-scraper/tag_filter.php' );
 		//}
 
 		$split = preg_split( '/<!--nextpage-->/msuU', $this->post->post_content );
@@ -344,7 +344,7 @@ class ezTOC_Post {
 
 		if ( ! class_exists( 'TagFilter' ) ) {
 
-			require_once( EZ_TOC_PATH . 'includes/vendor/ultimate-web-scraper/tag_filter.php' );
+			require_once( EZ_TOC_PATH . '/includes/vendor/ultimate-web-scraper/tag_filter.php' );
 		}
 
 		$tagFilterOptions = TagFilter::GetHTMLOptions();
@@ -658,6 +658,16 @@ class ezTOC_Post {
 
 					$heading = explode( '|', $headings[ $k ] );
 
+					/**
+					 * @link https://wordpress.org/support/topic/undefined-offset-1-home-blog-public-wp-content-plugins-easy-table-of-contents/
+					 */
+					if ( ! is_array( $heading) ||
+					     ! array_key_exists( 0, $heading ) ||
+					     ! array_key_exists( 1, $heading )
+					) {
+						continue;
+					}
+
 					if ( 0 < strlen( $heading[0] ) && 0 < strlen( $heading[1] ) ) {
 
 						$alternates[ $heading[0] ] = $heading[1];
@@ -797,17 +807,57 @@ class ezTOC_Post {
 
 			// remove non alphanumeric chars
 			//$return = preg_replace( '/[^a-zA-Z0-9 \-_]*/', '', $return );
-			$return = preg_replace( '/[\x00-\x1F\x7F\-_]*/u', '', $return );
+			$return = preg_replace( '/[\x00-\x1F\x7F]*/u', '', $return );
+
+			// Reserved Characters.
+			// * ' ( ) ; : @ & = + $ , / ? # [ ]
+			$return = str_replace(
+				array( '*', '\'', '(', ')', ';', '@', '&', '=', '+', '$', ',', '/', '?', '#', '[', ']' ),
+				'',
+				$return
+			);
+
+			// Unsafe Characters.
+			// % { } | \ ^ ~ [ ] `
+			$return = str_replace(
+				array( '%', '{', '}', '|', '\\', '^', '~', '[', ']', '`' ),
+				'',
+				$return
+			);
+
+			// Special Characters.
+			// $ - _ . + ! * ' ( ) ,
+			$return = str_replace(
+				array( '$', '.', '+', '!', '*', '\'', '(', ')', ',' ),
+				'',
+				$return
+			);
+
+			// Dashes
+			// Special Characters.
+			// - (minus) - (dash) – (en dash) — (em dash)
+			$return = str_replace(
+				array( '-', '-', '–', '—' ),
+				'-',
+				$return
+			);
+
+			// Curley quotes.
+			// ‘ (curly single open quote) ’ (curly single close quote) “ (curly double open quote) ” (curly double close quote)
+			$return = str_replace(
+				array( '‘', '’', '“', '”' ),
+				'',
+				$return
+			);
 
 			// AMP/Caching plugins seems to break URL with the following characters, so lets replace them.
 			$return = str_replace( array( ':' ), '_', $return );
-			$return = str_replace( array( '.' ), ' ', $return );
-
-			// Do not allow these characters because some JS libraries just are dumb.
-			$return = str_replace( array( '#', '?' ), '', $return );
 
 			// Convert space characters to an `_` (underscore).
 			$return = preg_replace( '/\s+/', '_', $return );
+
+			// Replace multiple `-` (hyphen) with a single `-` (hyphen).
+			$return = preg_replace( '/-+/', '-', $return );
 
 			// Replace multiple `_` (underscore) with a single `_` (underscore).
 			$return = preg_replace( '/_+/', '_', $return );
@@ -849,7 +899,7 @@ class ezTOC_Post {
 			if ( ezTOC_Option::get( 'hyphenate' ) ) {
 
 				$return = str_replace( '_', '-', $return );
-				$return = str_replace( '--', '-', $return );
+				$return = preg_replace( '/-+/', '-', $return );
 			}
 		}
 
@@ -1150,7 +1200,7 @@ class ezTOC_Post {
 
 				if ( ezTOC_Option::get( 'visibility' ) ) {
 
-					$html .= '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
+					$html .= '<a class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" style="display: none;"><i class="ez-toc-glyphicon ez-toc-icon-toggle"></i></a>';
 				}
 
 				$html .= '</span>';
@@ -1346,10 +1396,10 @@ class ezTOC_Post {
 
 		} elseif ( 1 === $page ) {
 
-			return $this->permalink . '#' . $id;
+			return trailingslashit( $this->permalink ) . '#' . $id;
 
 		}
 
-		return $this->permalink . $page . '/#' . $id;
+		return trailingslashit( $this->permalink ) . $page . '/#' . $id;
 	}
 }

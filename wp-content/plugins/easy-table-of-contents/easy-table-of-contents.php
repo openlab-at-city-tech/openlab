@@ -3,13 +3,13 @@
  * Plugin Name: Easy Table of Contents
  * Plugin URI: http://connections-pro.com/
  * Description: Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
- * Version: 2.0.11
+ * Version: 2.0.16
  * Author: Steven A. Zahm
  * Author URI: http://connections-pro.com/
  * Text Domain: easy-table-of-contents
  * Domain Path: /languages
  *
- * Copyright 2020  Steven A. Zahm  ( email : helpdesk@connections-pro.com )
+ * Copyright 2021  Steven A. Zahm  ( email : helpdesk@connections-pro.com )
  *
  * Easy Table of Contents is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -26,9 +26,10 @@
  * @package  Easy Table of Contents
  * @category Plugin
  * @author   Steven A. Zahm
- * @version  2.0.11
+ * @version  2.0.16
  */
 
+use Easy_Plugins\Table_Of_Contents\Debug;
 use function Easy_Plugins\Table_Of_Contents\String\mb_find_replace;
 
 // Exit if accessed directly
@@ -47,7 +48,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @since 1.0
 		 * @var string
 		 */
-		const VERSION = '2.0.11';
+		const VERSION = '2.0.16';
 
 		/**
 		 * Stores the instance of this class.
@@ -83,9 +84,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 */
 		public static function instance() {
 
-			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof ezTOC ) ) {
+			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof self ) ) {
 
-				self::$instance = new ezTOC();
+				self::$instance = new self;
 
 				self::defineConstants();
 				self::includes();
@@ -108,7 +109,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			define( 'EZ_TOC_DIR_NAME', plugin_basename( dirname( __FILE__ ) ) );
 			define( 'EZ_TOC_BASE_NAME', plugin_basename( __FILE__ ) );
-			define( 'EZ_TOC_PATH', plugin_dir_path( __FILE__ ) );
+			define( 'EZ_TOC_PATH', dirname( __FILE__ ) );
 			define( 'EZ_TOC_URL', plugin_dir_url( __FILE__ ) );
 		}
 
@@ -121,20 +122,21 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 */
 		private static function includes() {
 
-			require_once( EZ_TOC_PATH . 'includes/class.options.php' );
+			require_once( EZ_TOC_PATH . '/includes/class.options.php' );
 
 			if ( is_admin() ) {
 
 				// This must be included after `class.options.php` because it depends on it methods.
-				require_once( EZ_TOC_PATH . 'includes/class.admin.php' );
+				require_once( EZ_TOC_PATH . '/includes/class.admin.php' );
 			}
 
-			require_once( EZ_TOC_PATH . 'includes/class.post.php' );
-			require_once( EZ_TOC_PATH . 'includes/class.widget-toc.php' );
-			require_once( EZ_TOC_PATH . 'includes/inc.functions.php' );
-			require_once( EZ_TOC_PATH . 'includes/inc.string-functions.php' );
+			require_once( EZ_TOC_PATH . '/includes/class.post.php' );
+			require_once( EZ_TOC_PATH . '/includes/class.widget-toc.php' );
+			require_once( EZ_TOC_PATH . '/includes/Debug.php' );
+			require_once( EZ_TOC_PATH . '/includes/inc.functions.php' );
+			require_once( EZ_TOC_PATH . '/includes/inc.string-functions.php' );
 
-			require_once( EZ_TOC_PATH . 'includes/inc.plugin-compatibility.php' );
+			require_once( EZ_TOC_PATH . '/includes/inc.plugin-compatibility.php' );
 		}
 
 		/**
@@ -229,9 +231,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			wp_register_script(
 				'ez-toc-js',
-				EZ_TOC_URL . "assets/js/front$min.js",
+				EZ_TOC_URL . "assets/js/front{$min}.js",
 				array( 'jquery-smooth-scroll', 'js-cookie', 'jquery-sticky-kit' ),
-				ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "assets/js/front$min.js" ),
+				ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/front{$min}.js" ),
 				true
 			);
 
@@ -376,6 +378,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			//global $wp_current_filter;
 
 			if ( empty( $post ) || ! $post instanceof WP_Post ) {
+
+				Debug::log( 'not_instance_of_post', 'Not an instance if `WP_Post`.', $post );
 				return false;
 			}
 
@@ -388,17 +392,26 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			if ( has_shortcode( $post->post_content, apply_filters( 'ez_toc_shortcode', 'toc' ) ) ||
 			     has_shortcode( $post->post_content, 'ez-toc' ) ) {
+
+				Debug::log( 'has_ez_toc_shortcode', 'Has instance of shortcode.', true );
 				return true;
 			}
 
 			if ( is_front_page() && ! ezTOC_Option::get( 'include_homepage' ) ) {
+
+				Debug::log( 'is_front_page', 'Is frontpage, TOC is not enabled.', false );
 				return false;
 			}
 
 			$type = get_post_type( $post->ID );
 
+			Debug::log( 'current_post_type', 'Post type is.', $type );
+
 			$enabled = in_array( $type, ezTOC_Option::get( 'enabled_post_types', array() ), true );
 			$insert  = in_array( $type, ezTOC_Option::get( 'auto_insert_post_types', array() ), true );
+
+			Debug::log( 'is_supported_post_type', 'Is supported post type?', $enabled );
+			Debug::log( 'is_auto_insert_post_type', 'Is auto insert for post types?', $insert );
 
 			if ( $insert || $enabled ) {
 
@@ -409,33 +422,45 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					 */
 					if ( false !== strpos( ezTOC_Option::get( 'restrict_path' ), $_SERVER['REQUEST_URI'] ) ) {
 
+						Debug::log( 'is_restricted_path', 'In restricted path, post not eligible.', ezTOC_Option::get( 'restrict_path' ) );
 						return false;
 
 					} else {
 
+						Debug::log( 'is_not_restricted_path', 'Not in restricted path, post is eligible.', ezTOC_Option::get( 'restrict_path' ) );
 						return true;
 					}
 
 				} else {
 
-					if ( $insert && 1 == get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
+					if ( $insert && 1 === (int) get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
 
+						Debug::log( 'is_auto_insert_disable_post_meta', 'Auto insert enabled and disable TOC is enabled in post meta.', false );
 						return false;
 
-					} elseif ( $insert && 0 == get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
+					} elseif ( $insert && 0 === (int) get_post_meta( $post->ID, '_ez-toc-disabled', true ) ) {
 
+						Debug::log( 'is_auto_insert_enabled_post_meta', 'Auto insert enabled and disable TOC is not enabled in post meta.', true );
 						return true;
 
-					} elseif ( $enabled && 1 == get_post_meta( $post->ID, '_ez-toc-insert', true ) ) {
+					} elseif ( $enabled && 1 === (int) get_post_meta( $post->ID, '_ez-toc-insert', true ) ) {
 
+						Debug::log( 'is_supported_post_type_disable_insert_post_meta', 'Supported post type and insert TOC is enabled in post meta.', true );
+						return true;
+
+					} elseif ( $enabled && $insert ) {
+
+						Debug::log( 'supported_post_type_and_auto_insert', 'Supported post type and auto insert TOC is enabled.', true );
 						return true;
 					}
 
+					Debug::log( 'not_auto_insert_or_not_supported_post_type', 'Not supported post type or insert TOC is disabled.', false );
 					return false;
 				}
 
 			} else {
 
+				Debug::log( 'not_auto_insert_and_not_supported post_type', 'Not supported post type and do not auto insert TOC.', false );
 				return false;
 			}
 		}
@@ -491,9 +516,13 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			if ( $run ) {
 
-				if ( is_null( $post = self::get( get_the_ID() ) ) ) {
+				$post = self::get( get_the_ID() );
 
-					return $content;
+				if ( ! $post instanceof ezTOC_Post ) {
+
+					Debug::log( 'not_instance_of_post', 'Not an instance if `WP_Post`.', get_the_ID() );
+
+					return Debug::log()->appendTo( $content );
 				}
 
 				$html = $post->getTOC();
@@ -546,9 +575,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * This will add the inline table of contents page anchors to the post content. It will also insert the
 		 * table of contents inline with the post content as defined by the user defined preference.
 		 *
-		 * @access private
-		 * @since  1.0
-		 * @static
+		 * @since 1.0
 		 *
 		 * @param string $content
 		 *
@@ -556,53 +583,89 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 */
 		public static function the_content( $content ) {
 
-			if ( ! self::maybeApplyTheContentFilter() ) {
+			$maybeApplyFilter = self::maybeApplyTheContentFilter();
 
-				return $content;
+			Debug::log( 'the_content_filter', 'The `the_content` filter applied.', $maybeApplyFilter );
+
+			if ( ! $maybeApplyFilter ) {
+
+				return Debug::log()->appendTo( $content );
 			}
 
-			// bail if post not eligible and widget is not active
-			$is_eligible = self::is_eligible( get_post() );
+			// Bail if post not eligible and widget is not active.
+			$isEligible = self::is_eligible( get_post() );
 
-			if ( ! $is_eligible && ! is_active_widget( false, false, 'ezw_tco' ) ) {
+			Debug::log( 'post_eligible', 'Post eligible.', $isEligible );
 
-				return $content;
+			if ( ! $isEligible && ! is_active_widget( false, false, 'ezw_tco' ) ) {
+
+				return Debug::log()->appendTo( $content );
 			}
 
-			if ( is_null( $post = self::get( get_the_ID() ) ) ) {
+			$post = self::get( get_the_ID() );
 
-				return $content;
+			if ( ! $post instanceof ezTOC_Post ) {
+
+				Debug::log( 'not_instance_of_post', 'Not an instance if `WP_Post`.', get_the_ID() );
+
+				return Debug::log()->appendTo( $content );
 			}
 
-			// bail if no headings found
+			// Bail if no headings found.
 			if ( ! $post->hasTOCItems() ) {
 
-				return $content;
+				return Debug::log()->appendTo( $content );
 			}
 
 			$find    = $post->getHeadings();
 			$replace = $post->getHeadingsWithAnchors();
-			$html    = $post->getTOC();
+			$toc     = $post->getTOC();
 
-			// if shortcode used or post not eligible, return content with anchored headings
-			if ( strpos( $content, 'ez-toc-container' ) || ! $is_eligible ) {
+			$headings = implode( PHP_EOL, $find );
+			$anchors  = implode( PHP_EOL, $replace );
+
+			$headingRows = count( $find ) + 1;
+			$anchorRows  = count( $replace ) + 1;
+
+			$style = "background-image: linear-gradient(#F1F1F1 50%, #F9F9F9 50%); background-size: 100% 4em; border: 1px solid #CCC; font-family: monospace; font-size: 1em; line-height: 2em; margin: 0 auto; overflow: auto; padding: 0 8px 4px; white-space: nowrap; width: 100%;";
+
+			Debug::log(
+				'found_post_headings',
+				'Found headings:',
+				"<textarea rows='{$headingRows}' style='{$style}' wrap='soft'>{$headings}</textarea>"
+			);
+
+			Debug::log(
+				'replace_post_headings',
+				'Replace found headings with:',
+				"<textarea rows='{$anchorRows}' style='{$style}' wrap='soft'>{$anchors}</textarea>"
+			);
+
+			// If shortcode used or post not eligible, return content with anchored headings.
+			if ( strpos( $content, 'ez-toc-container' ) || ! $isEligible ) {
+
+				Debug::log( 'shortcode_found', 'Shortcode found, add links to content.', true );
 
 				return mb_find_replace( $find, $replace, $content );
 			}
 
+			$position = ezTOC_Option::get( 'position' );
+
+			Debug::log( 'toc_insert_position', 'Insert TOC at position', $position );
+
 			// else also add toc to content
-			switch ( ezTOC_Option::get( 'position' ) ) {
+			switch ( $position ) {
 
 				case 'top':
-					$content = $html . mb_find_replace( $find, $replace, $content );
+					$content = $toc . mb_find_replace( $find, $replace, $content );
 					break;
 
 				case 'bottom':
-					$content = mb_find_replace( $find, $replace, $content ) . $html;
+					$content = mb_find_replace( $find, $replace, $content ) . $toc;
 					break;
 
 				case 'after':
-					$replace[0] = $replace[0] . $html;
+					$replace[0] = $replace[0] . $toc;
 					$content    = mb_find_replace( $find, $replace, $content );
 					break;
 
@@ -610,6 +673,13 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				default:
 					//$replace[0] = $html . $replace[0];
 					$content    = mb_find_replace( $find, $replace, $content );
+
+					/**
+					 * @link https://wordpress.org/support/topic/php-notice-undefined-offset-8/
+					 */
+					if ( ! array_key_exists( 0, $replace ) ) {
+						break;
+					}
 
 					$pattern = '`<h[1-6]{1}[^>]*' . preg_quote( $replace[0], '`' ) . '`msuU';
 					$result  = preg_match( $pattern, $content, $matches );
@@ -620,10 +690,14 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					 */
 					if ( 1 === $result ) {
 
+						Debug::log( 'toc_insert_position_found', 'Insert TOC before first eligible heading.', $result );
+
 						$start   = strpos( $content, $matches[0] );
-						$content = substr_replace( $content, $html, $start, 0 );
+						$content = substr_replace( $content, $toc, $start, 0 );
 
 					} else {
+
+						Debug::log( 'toc_insert_position_not_found', 'Insert TOC before first eligible heading not found.', $result );
 
 						// Somehow, there are scenarios where the processing get this far and
 						// the TOC is being added to pages where it should not. Disable for now.
@@ -631,10 +705,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					}
 			}
 
-			return $content;
+			return Debug::log()->appendTo( $content );
 		}
 
-	} // end class
+	}
 
 	/**
 	 * The main function responsible for returning the Easy Table of Contents instance to functions everywhere.
