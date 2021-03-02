@@ -4,7 +4,7 @@
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, BlockControls, PanelColorSettings, InnerBlocks } = wpBlockEditor;
-    const { PanelBody, RangeControl, SelectControl, ToggleControl, Tooltip, Toolbar } = wpComponents;
+    const { PanelBody, RangeControl, SelectControl, ToggleControl, Tooltip, ToolbarGroup } = wpComponents;
     const { times } = lodash;
     const { dispatch, select } = wp.data;
 
@@ -329,7 +329,7 @@
                         :
                     <div className="advgb-columns-select-wrapper">
                         <div className="advgb-columns-select-title">
-                            { __( 'Pickup a columns layout', 'advanced-gutenberg' ) }
+                            { __( 'Choose a columns layout', 'advanced-gutenberg' ) }
                         </div>
                         <div className="advgb-columns-select-layout">
                             {COLUMNS_LAYOUTS.map( (layout, index) => {
@@ -419,7 +419,7 @@
                     :
                 <Fragment>
                     <BlockControls>
-                        <Toolbar controls={ VERT_ALIGNMENT_CONTROLS } />
+                        <ToolbarGroup controls={ VERT_ALIGNMENT_CONTROLS } />
                     </BlockControls>
                     <InspectorControls>
                         <PanelBody title={ __( 'Columns Settings', 'advanced-gutenberg' ) }>

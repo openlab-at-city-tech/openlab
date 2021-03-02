@@ -305,7 +305,7 @@
         },
         borderWidth: {
             type: 'number',
-            default: 0,
+            default: 1,
         },
         borderColor: {
             type: 'string',
@@ -393,6 +393,71 @@
                 </div>
             );
         },
+        deprecated: [
+            {
+                attributes: {
+                    ...accordionAttrs,
+                    borderWidth: {
+                        type: 'number',
+                        default: 0,
+                    },
+                },
+                save: function ( { attributes } ) {
+                    const {
+                        header,
+                        headerBgColor,
+                        headerTextColor,
+                        headerIcon,
+                        headerIconColor,
+                        bodyBgColor,
+                        bodyTextColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor,
+                        borderRadius,
+                        marginBottom,
+                        collapsedAll,
+                    } = attributes;
+
+                    return (
+                        <div className="advgb-accordion-block" style={ { marginBottom } } data-collapsed={ collapsedAll ? collapsedAll : undefined }>
+                            <div className="advgb-accordion-header"
+                                 style={ {
+                                     backgroundColor: headerBgColor,
+                                     color: headerTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: borderWidth + 'px',
+                                     borderColor: borderColor,
+                                     borderRadius: borderRadius + 'px',
+                                 } }
+                            >
+                                <span className="advgb-accordion-header-icon">
+                                    <svg fill={ headerIconColor } xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        { HEADER_ICONS[headerIcon] }
+                                    </svg>
+                                </span>
+                                <h4 className="advgb-accordion-header-title">{ header }</h4>
+                            </div>
+                            <div className="advgb-accordion-body"
+                                 style={ {
+                                     backgroundColor: bodyBgColor,
+                                     color: bodyTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: borderWidth + 'px',
+                                     borderColor: borderColor,
+                                     borderRadius: borderRadius + 'px',
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                },
+                supports: {
+                    inserter: false,
+                },
+            }
+        ],
         transforms: {
             to: [
                 {

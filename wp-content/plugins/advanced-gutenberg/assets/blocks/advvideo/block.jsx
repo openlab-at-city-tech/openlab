@@ -12,10 +12,11 @@
         TextControl,
         SelectControl,
         Button,
-        IconButton,
         Dashicon,
         Spinner,
         Toolbar,
+        ToolbarGroup,
+        ToolbarButton,
         Disabled
     } = wpComponents;
 
@@ -241,13 +242,13 @@
                     <Fragment>
                         { ( (!!poster && openInLightbox) || ( !openInLightbox && videoSourceType === 'local' ) ) &&
                         <BlockControls>
-                            <Toolbar>
+                            <ToolbarGroup>
                                 <MediaUpload
                                     allowedTypes={ ["image"] }
                                     value={ posterID }
                                     onSelect={ (image) => setAttributes( { poster: image.url, posterID: image.id } ) }
                                     render={ ( { open } ) => (
-                                        <IconButton
+                                        <ToolbarButton
                                             className="components-toolbar__control"
                                             label={ __( 'Change image preview', 'advanced-gutenberg' ) }
                                             icon="edit"
@@ -255,13 +256,13 @@
                                         />
                                     ) }
                                 />
-                                <IconButton
+                                <ToolbarButton
                                     className="components-toolbar__control"
                                     label={ __( 'Remove image preview', 'advanced-gutenberg' ) }
                                     icon="no"
                                     onClick={ () => setAttributes( { poster: undefined, posterID: undefined } ) }
                                 />
-                            </Toolbar>
+                            </ToolbarGroup>
                         </BlockControls>
                         }
                         <InspectorControls>
@@ -615,6 +616,9 @@
             attributes: {
                 isPreview: true
             },
+        },
+        supports: {
+            anchor: true
         },
         edit: AdvVideo,
         save: function ( { attributes } ) {

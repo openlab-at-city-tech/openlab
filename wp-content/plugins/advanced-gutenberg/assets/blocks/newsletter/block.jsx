@@ -372,6 +372,9 @@
                 isPreview: true
             },
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvNewsletter,
         save: function ( { attributes } ) {
             const {
