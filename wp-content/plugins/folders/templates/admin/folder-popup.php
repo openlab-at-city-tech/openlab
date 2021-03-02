@@ -38,6 +38,31 @@
 
                 }
             });
+            if(jQuery("#import-third-party-plugin-data").length) {
+                jQuery("#import-third-party-plugin-data").show();
+            }
+        });
+
+        jQuery("#import-third-party-plugin-data").hide();
+
+        jQuery(document).on("click", "#cancel-plugin-import", function(){
+            jQuery.ajax({
+                type: 'POST',
+                url: ajaxurl,
+                data: {
+                    action: 'wcp_update_folders_import_status',
+                    nonce: '<?php echo wp_create_nonce("folders_import_3rd_party_data") ?>'
+                },
+                beforeSend: function (xhr) {
+
+                },
+                success: function (res) {
+
+                },
+                error: function (xhr, status, error) {
+
+                }
+            });
         });
 
         jQuery(document).on("click", ".folder-popup-box", function(e){

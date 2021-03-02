@@ -163,3 +163,57 @@ li.jstree-node .jstree-hovered .star-icon, li.jstree-node .jstree-hovered .stick
 .folder-menu-content .cssload-container {
     margin: 100px 0 0 0;
 }
+.dynamic-menu ul > li > a >span.dashicons {
+    font-size: 18px;
+    text-align: left;
+}
+.close-popup-button {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+}
+.close-popup-button a {
+    display: block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    color: #333;
+    padding: 2px;
+    box-sizing: border-box;
+}
+.close-popup-button a span {
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    transition: all .2s linear;
+}
+.close-popup-button a span:after, .close-popup-button a span:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 2px;
+    background-color: #333;
+    display: block;
+    border-radius: 2px;
+    transform: rotate(
+            45deg
+    );
+    top: 7px;
+    left: 2px;
+}
+.close-popup-button a span:after {
+    transform: rotate(
+            -45deg
+    );
+}
+.close-popup-button a:hover span {
+    transform: rotate(
+            180deg
+    );
+}
+.popup-form-data {
+    position: relative;
+}

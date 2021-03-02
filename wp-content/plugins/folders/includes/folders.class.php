@@ -14,8 +14,12 @@ class WCP_Folders
 
     private static $postIds;
 
+    private static $folderSettings = false;
+
     public function __construct()
     {
+
+
         spl_autoload_register(array($this, 'autoload'));
         add_action('init', array($this, 'create_folder_terms'), 15);
         add_action('admin_init', array($this, 'folders_register_settings'));
@@ -31,6 +35,8 @@ class WCP_Folders
 //            $polylang_options['media_support'] = 0;
 //            update_option("polylang", $polylang_options);
 //        }
+
+        $old_status = get_option("wcp_folder_version_267");
 
         add_action('parse_tax_query', array($this, 'taxonomy_archive_exclude_children'));
         add_action('admin_footer', array($this, 'admin_footer_for_media'));
@@ -69,6 +75,10 @@ class WCP_Folders
         add_action('wp_ajax_save_folder_last_status', array($this, 'save_folder_last_status'));
         /* Update width Data */
         add_action('wp_ajax_wcp_folders_by_order', array($this, 'wcp_folders_by_order'));
+        /* Update width Data */
+        add_action('wp_ajax_wcp_remove_all_folders_data', array($this, 'remove_all_folders_data'));
+        /* Update folders Status */
+        add_action('wp_ajax_wcp_update_folders_uninstall_status', array($this, 'update_folders_uninstall_status'));
         self::$folders = 10;
 
         /* Send message on plugin deactivate */
@@ -135,11 +145,126 @@ class WCP_Folders
         /* load language files */
         add_action( 'plugins_loaded', array( $this, 'folders_text' ) );
 
-        add_action("wp_ajax_folder_update_popup_status", array($this, 'update_popup_status'));
+        add_action("wp_ajax_folder_update_popup_status", array($this, 'folder_update_popup_status'));
+
+        add_action("wp_ajax_wcp_update_folders_import_status", array($this, 'update_folders_import_status'));
 
         add_filter('get_terms', array( $this, 'get_terms_filter_without_trash'), 10, 3);
 
         add_filter('mla_media_modal_query_final_terms', array( $this, 'media_modal_query_final_terms'), 10, 3);
+    }
+
+    public static function check_for_setting($key, $setting, $default = "") {
+        if(self::$folderSettings === false) {
+            $options = get_option("premio_folder_options");
+            if($options === false || !is_array($options)) {
+	            $options = array();
+            }
+	        self::$folderSettings = $options;
+        }
+        if($setting == "folders_settings") {
+            if(isset(self::$folderSettings[ $setting ]) && is_array(self::$folderSettings[ $setting ])) {
+                return in_array($key, self::$folderSettings[ $setting ]);
+            }
+        } else {
+	        if ( isset( self::$folderSettings[ $setting ][ $key ] ) ) {
+		        return self::$folderSettings[ $setting ][ $key ];
+	        }
+        }
+	    return false;
+    }
+
+    public function update_folders_uninstall_status() {
+        $response = array();
+        $response['status'] = 0;
+        $response['error'] = 0;
+        $response['data'] = array();
+        $response['message'] = "";
+        $postData = filter_input_array(INPUT_POST);
+        $errorCounter = 0;
+
+        if (!isset($postData['nonce']) || empty($postData['nonce'])) {
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
+            $errorCounter++;
+        } else {
+            $nonce = self::sanitize_options($postData['nonce']);
+            if(!wp_verify_nonce($nonce, 'wcp_folders_uninstall_status')) {
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
+                $errorCounter++;
+            }
+        }
+        if ($errorCounter == 0) {
+            $status = isset($postData['status'])?$postData['status']:"";
+            $status = ($status == "on")?"on":"off";
+            $customize_folders = get_option('customize_folders');
+            $customize_folders['remove_folders_when_removed'] = $status;
+            update_option("customize_folders", $customize_folders);
+            $response['status'] = 1;
+        }
+        echo json_encode($response); die;
+    }
+
+    public function remove_all_folders_data() {
+        $response = array();
+        $response['status'] = 0;
+        $response['error'] = 0;
+        $response['data'] = array();
+        $response['message'] = "";
+        $postData = filter_input_array(INPUT_POST);
+        $errorCounter = 0;
+
+        if (!isset($postData['nonce']) || empty($postData['nonce'])) {
+            $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
+            $errorCounter++;
+        } else {
+            $type = self::sanitize_options($postData['type']);
+            $nonce = self::sanitize_options($postData['nonce']);
+            if(!wp_verify_nonce($nonce, 'remove_folders_data')) {
+                $response['message'] = esc_attr__("Your request is not valid", WCP_FOLDER);
+                $errorCounter++;
+            }
+        }
+        if ($errorCounter == 0) {
+            self::$folders = 0;
+            self::remove_folder_by_taxonomy("media_folder");
+            self::remove_folder_by_taxonomy("folder");
+            self::remove_folder_by_taxonomy("post_folder");
+            $post_types = get_post_types( array( ), 'objects' );
+            $post_array = array("page", "post", "attachment");
+            foreach ( $post_types as $post_type ) {
+                if(!in_array($post_type->name, $post_array)){
+                    self::remove_folder_by_taxonomy($post_type->name . '_folder');
+                }
+            }
+            delete_option('default_folders');
+            $response['status'] = 1;
+            $response['data'] = array(
+                'items' => self::$folders
+            );
+        }
+        echo json_encode($response); die;
+    }
+
+    public static function remove_folder_by_taxonomy($taxonomy) {
+        global $wpdb;
+        $folders = $wpdb->get_results(
+            "SELECT * FROM " . $wpdb->term_taxonomy . "
+					LEFT JOIN  " . $wpdb->terms . "
+					ON  " . $wpdb->term_taxonomy . ".term_id =  " . $wpdb->terms . ".term_id
+					WHERE " . $wpdb->term_taxonomy . ".taxonomy = '" . $taxonomy . "'
+					ORDER BY parent ASC"
+        );
+        $folders = array_values( $folders );
+        foreach ( $folders as $folder ) {
+            $term_id = intval( $folder->term_id );
+            if ( $term_id ) {
+                $wpdb->delete( $wpdb->prefix . 'term_relationships', ['term_taxonomy_id' => $term_id] );
+                $wpdb->delete( $wpdb->prefix . 'term_taxonomy', ['term_id' => $term_id] );
+                $wpdb->delete( $wpdb->prefix . 'terms', ['term_id' => $term_id] );
+                $wpdb->delete( $wpdb->prefix . 'termmeta', ['term_id' => $term_id] );
+                self::$folders++;
+            }
+        }
     }
 
     public static function hexToRgb($hex, $alpha = false) {
@@ -217,6 +342,11 @@ class WCP_Folders
             $tree_data = WCP_Tree::get_full_tree_data($folder_type, $order_by, $order);
 
             $response['data'] = $tree_data['string'];
+            $taxonomies = array();
+            if($postData['type'] == "attachment") {
+                $taxonomies = self::get_terms_hierarchical($folder_type);
+            }
+            $response['terms'] = $taxonomies;
         }
         echo json_encode($response); die;
     }
@@ -353,6 +483,23 @@ class WCP_Folders
         $post_status = filter_input(INPUT_GET, 'post_status', FILTER_SANITIZE_STRING);
         $last_status = get_option("last_folder_status_for".$typenow);
         if(empty($post_status) && !$isAjax && (in_array($typenow, $options) || !empty($last_status)) && (isset($current_screen->base) && ($current_screen->base == "edit" || ($current_screen->base == "upload")))) {
+
+            $requests = filter_input_array(INPUT_GET);
+            $requests = empty($requests)||!is_array($requests)?array():$requests;
+
+            if ($typenow == "attachment") {
+                if(count($requests) > 0) {
+                    return;
+                }
+            } else if ($typenow == "post") {
+                if(count($requests) > 0) {
+                    return;
+                }
+            } else {
+                if(count($requests) > 1) {
+                    return;
+                }
+            }
 
             if(!empty($last_status)) {
                 $status = 1;
@@ -906,34 +1053,33 @@ class WCP_Folders
             global $typenow;
             $is_active = 1;
             $folders = -1;
-            if (!self::check_has_valid_key()) {
-                $is_active = 0;
-                $folders = self::ttl_fldrs();
-            }
 
+	        $hasStars = self::check_for_setting("has_stars", "general");
+	        $hasChild = self::check_for_setting("has_child", "general");
+	        $hasChild = empty($hasChild)?0:1;
+	        $hasStars = empty($hasStars)?0:1;
             /* Free/Pro URL Change */
             wp_enqueue_script( 'folders-media', WCP_FOLDER_URL.'assets/js/media.js', array( 'media-editor', 'media-views' ), WCP_FOLDER_VERSION, true );
             wp_localize_script( 'folders-media', 'folders_media_options', array(
                 'terms'     => self::get_terms_hierarchical('media_folder'),
                 'taxonomy'  => get_taxonomy('media_folder'),
                 'ajax_url'  => admin_url("admin-ajax.php"),
-                'activate_url'  => admin_url("admin.php?page=wcp_folders_register"),
+                'activate_url'  => $this->getFoldersUpgradeURL(),
                 'nonce'     => wp_create_nonce('wcp_folder_nonce_attachment'),
                 'is_key_active' => $is_active,
-                'folders' => $folders,
+                'hasStars' => $hasStars,
+                'hasChildren' => $hasChild
             ));
             /* Free/Pro URL Change */
             wp_enqueue_style( 'folders-media', WCP_FOLDER_URL . 'assets/css/media.css' , array(), WCP_FOLDER_VERSION);
-        } else if(is_admin() && !self::is_active_for_screen()) {
+        } else if(is_admin() && !self::is_active_for_screen() && self::is_for_this_post_type('attachment')) {
+            /* Free/Pro URL Change */
+            global $typenow;
             global $current_screen;
-            if(isset($current_screen->base) && $current_screen->base == "post") {
-                /* Free/Pro URL Change */
+//            echo "<pre>"; print_r($current_screen); die;
+            if(!isset($current_screen->base) || $current_screen->base != "plugins") {
                 $is_active = 1;
                 $folders = -1;
-                if (!self::check_has_valid_key()) {
-                    $is_active = 0;
-                    $folders = self::ttl_fldrs();
-                }
 
                 /* Free/Pro URL Change */
 
@@ -965,18 +1111,25 @@ class WCP_Folders
                     );
                 }
 
-                wp_enqueue_script('folders-tree', WCP_FOLDER_URL . 'assets/js/jstree.min.js', array(), WCP_FOLDER_VERSION, true);
+	            $hasStars = self::check_for_setting("has_stars", "general");
+	            $hasChild = self::check_for_setting("has_child", "general");
+	            $hasChild = empty($hasChild)?0:1;
+	            $hasStars = empty($hasStars)?0:1;
+
+                wp_enqueue_script('folders-tree', WCP_FOLDER_URL . 'assets/js/jstree.min.js', array(), WCP_FOLDER_VERSION);
+	            wp_enqueue_script('wcp-folders-mcustomscrollbar', WCP_FOLDER_URL . 'assets/js/jquery.mcustomscrollbar.min.js', array(), WCP_FOLDER_VERSION);
                 wp_enqueue_script('folders-media', WCP_FOLDER_URL . 'assets/js/page-post-media.min.js', array('media-editor', 'media-views', 'jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION, true);
+	            wp_enqueue_script('wcp-jquery-touch', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jquery.ui.touch-punch.min.js', array('jquery'), WCP_FOLDER_VERSION);
                 wp_localize_script('folders-media', 'folders_media_options', array(
                     'terms' => $taxonomies,
                     'taxonomy' => get_taxonomy('media_folder'),
                     'ajax_url' => admin_url("admin-ajax.php"),
                     'media_page_url' => admin_url("upload.php"),
-                    'activate_url' => admin_url("admin.php?page=wcp_folders_register"),
+                    'activate_url' => $this->getFoldersUpgradeURL(),
                     'nonce' => wp_create_nonce('wcp_folder_nonce_attachment'),
                     'is_key_active' => $is_active,
                     'folders' => $folders,
-                    'upgrade_url' => admin_url('admin.php?page=wcp_folders_upgrade'),
+                    'upgrade_url' => $this->getFoldersUpgradeURL(),
                     'post_type' => 'attachment',
                     'page_url' => $admin_url,
                     'current_url' => "",
@@ -989,45 +1142,53 @@ class WCP_Folders
                     'selected_taxonomy' => $selected_taxonomy,
                     'show_in_page' => $show_in_page,
                     'svg_file' => WCP_FOLDER_URL . 'assets/images/pin.png',
-                    'folder_settings' => $folder_settings
+                    'folder_settings' => $folder_settings,
+                    'hasStars' => $hasStars,
+                    'hasChildren' => $hasChild
                 ));
                 /* Free/Pro URL Change */
                 wp_enqueue_style('folders-jstree', WCP_FOLDER_URL . 'assets/css/jstree.min.css', array(), WCP_FOLDER_VERSION);
+	            wp_enqueue_style('wcp-folders-mcustomscrollbar', WCP_FOLDER_URL . 'assets/css/jquery.mcustomscrollbar.min.css', array(),WCP_FOLDER_VERSION);
                 wp_enqueue_style('folder-folders', WCP_FOLDER_URL . 'assets/css/folders.min.css', array(), WCP_FOLDER_VERSION);
                 wp_enqueue_style('folders-media', WCP_FOLDER_URL . 'assets/css/page-post-media.min.css', array(), WCP_FOLDER_VERSION);
                 wp_enqueue_style('folder-icon', WCP_FOLDER_URL . 'assets/css/folder-icon.css', array(), WCP_FOLDER_VERSION);
                 $width = 275;
-                $width = $width - 40;
                 $string = "";
                 $css_text = "";
                 $customize_folders = get_option('customize_folders');
-                if (isset($customize_folders['new_folder_color']) && !empty($customize_folders['new_folder_color'])) {
-                    $css_text .= ".media-frame a.add-new-folder { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; border-color: " . esc_attr($customize_folders['new_folder_color']) . "}";
-                    $css_text .= ".wcp-hide-show-buttons .toggle-buttons { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; }";
-                    $css_text .= ".folders-toggle-button span { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; }";
-                    $css_text .= ".ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {border-color: " . esc_attr($customize_folders['new_folder_color']) . " !important}";
+                if (!isset($customize_folders['new_folder_color']) || empty($customize_folders['new_folder_color'])) {
+	                $customize_folders['new_folder_color'] = "#FA166B";
                 }
-                if (isset($customize_folders['folder_bg_color']) && !empty($customize_folders['folder_bg_color'])) {
-                    $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']);
-                    $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover { background: rgba(".$rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08) !important; color: #333333;}";
-                    $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: ".$customize_folders['folder_bg_color']." !important; color: #ffffff !important; }";
-                    $css_text .= "#custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in >, body #custom-scroll-menu  *.drag-in > a:hover { background: ".$customize_folders['folder_bg_color']." !important; color: #ffffff !important; }";
-                    $css_text .= ".drag-bot > a { border-bottom: solid 2px ".$customize_folders['folder_bg_color']."}";
-                    $css_text .= ".drag-up > a { border-top: solid 2px ".$customize_folders['folder_bg_color']."}";
-                    $css_text .= "body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover {background: ".$customize_folders['folder_bg_color']." !important; color: #fff !important;}";
-                    $css_text .= ".orange-bg > span, .jstree-clicked, .header-posts a.active-item, .un-categorised-items.active-item, .sticky-folders ul li a.active-item { background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important; color: #ffffff !important; }";
-                    $css_text .= "body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-css) .header-posts a:hover, body:not(.no-hover-css) .un-categorised-items:hover, body:not(.no-hover-css) .sticky-folders ul li a:hover { background: rgba(".esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08")."); color: #333333;}";
-                    //$css_text .= "body:not(.no-hover-css) .wcp-container .route .title:hover, .header-posts a:hover, .un-categorised-items.active-item, .un-categorised-items:hover, .sticky-folders ul li a:hover {background: rgba(" . esc_attr($rgbColor['r'] . "," . $rgbColor['g'] . "," . $rgbColor['b'] . ", 0.08") . "); color:#444444;}";
-                    $css_text .= ".wcp-drop-hover {background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important; color: #ffffff; }";
-                    $css_text .= "#custom-menu .route .nav-icon .wcp-icon {color: " . esc_attr($customize_folders['folder_bg_color']) . " !important;}";
-                    $css_text .= ".mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important;}";
-                    $css_text .= "body:not(.no-hover-css) .jstree-hovered {background: rgba(" . esc_attr($rgbColor['r'] . "," . $rgbColor['g'] . "," . $rgbColor['b'] . ", 0.08") . "}";
-                    $css_text .= ".jstree-default .jstree-clicked {" . esc_attr($customize_folders['folder_bg_color']) . "}";
+                $css_text .= ".media-frame a.add-new-folder { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; border-color: " . esc_attr($customize_folders['new_folder_color']) . "}";
+                $css_text .= ".wcp-hide-show-buttons .toggle-buttons { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; }";
+                $css_text .= ".folders-toggle-button span { background-color: " . esc_attr($customize_folders['new_folder_color']) . "; }";
+                $css_text .= ".ui-resizable-handle.ui-resizable-e:before, .ui-resizable-handle.ui-resizable-w:before {border-color: " . esc_attr($customize_folders['new_folder_color']) . " !important}";
+
+                if (!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
+	                $customize_folders['folder_bg_color'] = "#FA166B";
                 }
-                if (isset($customize_folders['bulk_organize_button_color']) && !empty($customize_folders['bulk_organize_button_color'])) {
-                    $css_text .= "button.button.organize-button { background-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; border-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; }";
-                    $css_text .= "button.button.organize-button:hover { background-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; border-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; }";
+                $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']);
+                $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover { background: rgba(".$rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08) !important; color: #333333;}";
+                $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: ".$customize_folders['folder_bg_color']." !important; color: #ffffff !important; }";
+                $css_text .= "#custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in >, body #custom-scroll-menu  *.drag-in > a:hover { background: ".$customize_folders['folder_bg_color']." !important; color: #ffffff !important; }";
+                $css_text .= ".drag-bot > a { border-bottom: solid 2px ".$customize_folders['folder_bg_color']."}";
+                $css_text .= ".drag-up > a { border-top: solid 2px ".$customize_folders['folder_bg_color']."}";
+                $css_text .= "body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover {background: ".$customize_folders['folder_bg_color']." !important; color: #fff !important;}";
+                $css_text .= ".orange-bg > span, .jstree-clicked, .header-posts a.active-item, .un-categorised-items.active-item, .sticky-folders ul li a.active-item { background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important; color: #ffffff !important; }";
+                $css_text .= "body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-css) .header-posts a:hover, body:not(.no-hover-css) .un-categorised-items:hover, body:not(.no-hover-css) .sticky-folders ul li a:hover { background: rgba(".esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08")."); color: #333333;}";
+                //$css_text .= "body:not(.no-hover-css) .wcp-container .route .title:hover, .header-posts a:hover, .un-categorised-items.active-item, .un-categorised-items:hover, .sticky-folders ul li a:hover {background: rgba(" . esc_attr($rgbColor['r'] . "," . $rgbColor['g'] . "," . $rgbColor['b'] . ", 0.08") . "); color:#444444;}";
+                $css_text .= ".wcp-drop-hover {background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important; color: #ffffff; }";
+                $css_text .= "#custom-menu .route .nav-icon .wcp-icon {color: " . esc_attr($customize_folders['folder_bg_color']) . " !important;}";
+                $css_text .= ".mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {background-color: " . esc_attr($customize_folders['folder_bg_color']) . " !important;}";
+                $css_text .= "body:not(.no-hover-css) .jstree-hovered {background: rgba(" . esc_attr($rgbColor['r'] . "," . $rgbColor['g'] . "," . $rgbColor['b'] . ", 0.08") . "}";
+                $css_text .= ".jstree-default .jstree-clicked {" . esc_attr($customize_folders['folder_bg_color']) . "}";
+
+                if (!isset($customize_folders['bulk_organize_button_color']) || empty($customize_folders['bulk_organize_button_color'])) {
+	                $customize_folders['bulk_organize_button_color'] = "#FA166B";
                 }
+                $css_text .= "button.button.organize-button { background-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; border-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; }";
+                $css_text .= "button.button.organize-button:hover { background-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; border-color: " . esc_attr($customize_folders['bulk_organize_button_color']) . "; }";
+
                 $font_family = "";
                 if (isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
                     $folder_fonts = self::get_font_list();
@@ -1811,6 +1972,9 @@ class WCP_Folders
                 'parent' => $parent_id
             ));
 
+            if($parent_id != "#" || !empty($parent_id)) {
+	            update_term_meta($parent_id, "is_active", 1);
+            }
             $response['status'] = 1;
             $folder_type = self::get_custom_post_type($type);
             /* Free/Pro Class name change */
@@ -1992,10 +2156,6 @@ class WCP_Folders
             $is_active = 1;
             $folders = -1;
             $response['status'] = 1;
-            if (!self::check_has_valid_key()) {
-                $is_active = 0;
-                $folders = self::ttl_fldrs();
-            }
             $response['folders'] = $folders;
             $response['is_key_active'] = $is_active;
         } else {
@@ -2041,10 +2201,6 @@ class WCP_Folders
             $response['status'] = 1;
             $is_active = 1;
             $folders = -1;
-            if (!self::check_has_valid_key()) {
-                $is_active = 0;
-                $folders = self::ttl_fldrs();
-            }
             $response['folders'] = $folders;
             $response['term_id'] = $term_id;
             $response['is_key_active'] = $is_active;
@@ -2162,6 +2318,7 @@ class WCP_Folders
         $response['login'] = 1;
         $response['data'] = array();
         $response['message'] = "";
+        $response['message2'] = "";
         $postData = $_REQUEST;
         $errorCounter = 0;
         if (!current_user_can("manage_categories")) {
@@ -2193,50 +2350,76 @@ class WCP_Folders
             $term_name = self::sanitize_options($postData['name']);
             $term = term_exists($term_name, $folder_type, $parent);
             if (!(0 !== $term && null !== $term)) {
-                $slug = self::create_slug_from_string($postData['name']) . "-" . time();
-                $result = wp_insert_term(
-                    urldecode($postData['name']), // the term
-                    $folder_type, // the taxonomy
-                    array(
-                        'parent' => $parent,
-                        'slug' => $slug
-                    )
-                );
-                if (!empty($result)) {
-                    $response['id'] = $result['term_id'];
-                    $response['status'] = 1;
-                    $term = get_term($result['term_id'], $folder_type);
-                    $order = isset($postData['order']) ? $postData['order'] : 0;
-                    $order = self::sanitize_options($order);
-                    update_term_meta($result['term_id'], "wcp_custom_order", $order);
-                    if ($parent != 0) {
-                        update_term_meta($parent, "is_active", 1);
+                $folders = $postData['name'];
+                $folders = explode(",", $folders);
+                $foldersArray = array();
+                $order = isset($postData['order']) ? $postData['order'] : 0;
+                $order = self::sanitize_options($order);
+
+                $is_active = 1;
+                $total_folders = -1;
+
+                if(!$is_active) {
+                    if (($total_folders + count($folders)) > 10) {
+                        $response['status'] = -1;
+                        echo json_encode($response);
+                        wp_die();
                     }
+                }
+                foreach ($folders as $key => $folder) {
+                    $folder = trim($folder);
+                    $slug = self::create_slug_from_string($folder) . "-" . time();
 
-                    $class = "";
+                    $result = wp_insert_term(
+                        urldecode($folder), // the term
+                        $folder_type, // the taxonomy
+                        array(
+                            'parent' => $parent,
+                            'slug' => $slug
+                        )
+                    );
+                    if (!empty($result)) {
+                        $total_folders++;
+                        $response['id'] = $result['term_id'];
+                        $response['status'] = 1;
+                        $term = get_term($result['term_id'], $folder_type);
+                        $order = $order + $key;
+                        $term_nonce = wp_create_nonce('wcp_folder_term_' . $term->term_id);
 
-                    if(isset($postData['is_duplicate']) && $postData['is_duplicate'] == true) {
-                        if(isset($postData['duplicate_from']) && !empty($postData['duplicate_from'])) {
-                            $term_id = $postData['duplicate_from'];
+                        $folder_item = array();
+                        $folder_item['parent_id'] = $parent;
+                        $folder_item['slug'] = $term->slug;
+                        $folder_item['nonce'] = $term_nonce;
+                        $folder_item['term_id'] = $result['term_id'];
+                        $folder_item['title'] = $folder;
+                        $folder_item['parent_id'] = empty($postData['parent_id']) ? "0" : $postData['parent_id'];
+                        $folder_item['is_sticky'] = 0;
+                        $folder_item['is_high'] = 0;
 
-                            $term_data = get_term($term_id, $folder_type);
-                            if(!empty($term_data)) {
-                                $is_sticky = get_term_meta($term_id, "is_folder_sticky", true);
+                        update_term_meta($result['term_id'], "wcp_custom_order", $order);
+                        if ($parent != 0) {
+                            update_term_meta($parent, "is_active", 1);
+                        }
 
-                                if($is_sticky == 1) {
-                                    $class .= " is-sticky";
-                                    add_term_meta($term->term_id, "is_folder_sticky", 1);
-                                }
+                        if (isset($postData['is_duplicate']) && $postData['is_duplicate'] == true) {
+                            if (isset($postData['duplicate_from']) && !empty($postData['duplicate_from'])) {
+                                $term_id = $postData['duplicate_from'];
 
-                                $status = get_term_meta($term_id, "is_highlighted", true);
-                                if($status == 1) {
-                                    add_term_meta($term->term_id, "is_highlighted", 1);
-                                    $class .= " is-high";
-                                }
+                                $term_data = get_term($term_id, $folder_type);
+                                if (!empty($term_data)) {
+                                    $is_sticky = get_term_meta($term_id, "is_folder_sticky", true);
 
-                                $count = ($term_data->count != 0)?"<span class='total-count'>{$term_data->count}</span>":"";
+                                    if ($is_sticky == 1) {
+                                        add_term_meta($term->term_id, "is_folder_sticky", 1);
+                                        $folder_item['is_sticky'] = 1;
+                                    }
 
-//                                if(!empty($term_data->count)) {
+                                    $status = get_term_meta($term_id, "is_highlighted", true);
+                                    if ($status == 1) {
+                                        add_term_meta($term->term_id, "is_highlighted", 1);
+                                        $folder_item['is_high'] = 1;
+                                    }
+
                                     $postArray = get_posts(
                                         array(
                                             'posts_per_page' => -1,
@@ -2250,34 +2433,25 @@ class WCP_Folders
                                             )
                                         )
                                     );
-                                    if(!empty($postArray)) {
-                                        foreach($postArray as $p) {
+                                    if (!empty($postArray)) {
+                                        foreach ($postArray as $p) {
                                             wp_set_post_terms($p->ID, $term->term_id, $folder_type, true);
                                         }
                                     }
-//                                }
+                                }
                             }
                         }
+                        $foldersArray[] = $folder_item;
                     }
-                    $term_nonce = wp_create_nonce('wcp_folder_term_'.$term->term_id);
-                    /* Free/Pro URL Change */
-                    $response['parent_id'] = $parent;
-                    $response['slug'] = $term->slug;
-                    $response['nonce'] = $term_nonce;
-                    $response['term_id'] = $result['term_id'];
-                    $response['title'] = urldecode($postData['name']);
-                    $response['parent_id'] = empty($postData['parent_id'])?"#":$postData['parent_id'];
 
-                    $is_active = 1;
-                    $folders = -1;
-                    if (!self::check_has_valid_key()) {
-                        $is_active = 0;
-                        $folders = self::ttl_fldrs();
+                    if (!empty($foldersArray)) {
+                        $response['is_key_active'] = $is_active;
+                        $response['folders'] = $total_folders;
+                        $response['parent_id'] = empty($parent) ? "#" : $parent;
+
+                        $response['status'] = 1;
+                        $response['data'] = $foldersArray;
                     }
-                    $response['is_key_active'] = $is_active;
-                    $response['folders'] = $folders;
-                } else {
-                    $response['message'] = esc_attr__("Error during server request", WCP_FOLDER);
                 }
             } else {
                 $response['error'] = 1;
@@ -2304,10 +2478,6 @@ class WCP_Folders
 
         $postData = filter_input_array(INPUT_POST);
 
-
-//        if ((isset($postData['action']) && $postData['action'] == 'inline-save') && (isset($postData['post_type']) && self::is_for_this_post_type($postData['post_type']))) {
-//            return true;
-//        }
         global $current_screen;
 
         if (self::is_for_this_post_type($typenow) && ('edit' == $current_screen->base || 'upload' == $current_screen->base)) {
@@ -2339,10 +2509,6 @@ class WCP_Folders
 
             $is_active = 1;
             $folders = -1;
-            if (!self::check_has_valid_key()) {
-                $is_active = 0;
-                $folders = self::ttl_fldrs();
-            }
             $response['folders'] = $folders;
             $response['is_key_active'] = $is_active;
         }
@@ -2481,7 +2647,8 @@ class WCP_Folders
                     'show_in_menu' => false,
                     'show_in_rest' => true,
                     'show_admin_column' => true,
-                    'update_count_callback' => '_update_generic_term_count',
+                    'update_count_callback' => '_update_post_term_count',
+//                    'update_count_callback' => '_update_generic_term_count',
                     'query_var' => true,
                     'rewrite' => false,
                     'capabilities' => array(
@@ -2534,7 +2701,7 @@ class WCP_Folders
                     update_option("default_folders", $posts);
                 }
 
-                if (isset($_POST['folders_settings1'])) {
+                if (isset($_POST['customize_folders'])) {
                     $posts = array();
                     if (isset($_POST['customize_folders']) && is_array($_POST['customize_folders'])) {
                         foreach ($_POST['customize_folders'] as $key => $val) {
@@ -2543,30 +2710,46 @@ class WCP_Folders
                     }
                     update_option("customize_folders", $posts);
                 }
+
+	            $setting_page = $this->getFolderSettingsURL();
+	            if(!empty($setting_page)) {
+		            $page = isset($_POST['tab_page'])?$_POST['tab_page']:"";
+		            $type = filter_input(INPUT_GET, 'setting_page', FILTER_SANITIZE_STRING);
+		            $type = empty($type)?"":"&setting_page=".$type;
+		            $setting_page = $setting_page.$type;
+		            if(!empty($page)) {
+			            $setting_page .= "&setting_page=".$page;
+		            }
+		            wp_redirect($setting_page."&note=1");
+		            exit;
+	            } else if(isset($_POST['folder_page']) && !empty($_POST['folder_page'])) {
+		            wp_redirect($_POST['folder_page']);
+		            exit;
+	            }
             }
         }
 
-        $old_version = get_option("folder_old_plugin_status");
-        if($old_version !== false && $old_version == 1) {
-            $tlfs = get_option("folder_old_plugin_folder_status");
-            if($tlfs === false) {
-                $total = self::ttl_fldrs();
-                if($total <= 10) {
-                    $total = 10;
-                };
-                update_option("folder_old_plugin_folder_status", $total);
-                self::$folders = $total;
-            } else {
-                self::$folders = $tlfs;
-            }
-        }
-
-        $tlfs = get_option("folder_old_plugin_folder_status");
-        if($tlfs === false) {
-            self::$folders = 10;
-        } else {
-            self::$folders = $tlfs;
-        }
+//        $old_version = get_option("folder_old_plugin_status");
+//        if($old_version !== false && $old_version == 1) {
+//            $tlfs = get_option("folder_old_plugin_folder_status");
+//            if($tlfs === false) {
+//                $total = self::ttl_fldrs();
+//                if($total <= 10) {
+//                    $total = 10;
+//                };
+//                update_option("folder_old_plugin_folder_status", $total);
+//                self::$folders = $total;
+//            } else {
+//                self::$folders = $tlfs;
+//            }
+//        }
+//
+//        $tlfs = get_option("folder_old_plugin_folder_status");
+//        if($tlfs === false) {
+//            self::$folders = 10;
+//        } else {
+//            self::$folders = $tlfs;
+//        }
     }
 
     function searchForId($id, $menu)
@@ -2655,24 +2838,30 @@ class WCP_Folders
     {
         if (self::is_active_for_screen()) {
             wp_enqueue_style('wcp-folders-fa', plugin_dir_url(dirname(__FILE__)) . 'assets/css/folder-icon.css', array(), WCP_FOLDER_VERSION);
-            wp_enqueue_style('wcp-folders-admin', plugin_dir_url(dirname(__FILE__)) . 'assets/css/design.min.css', array(), WCP_FOLDER_VERSION);
+            wp_enqueue_style('wcp-folders-admin', plugin_dir_url(dirname(__FILE__)) . 'assets/css/design.css', array(), WCP_FOLDER_VERSION);
             wp_enqueue_style('wcp-folders-jstree', plugin_dir_url(dirname(__FILE__)) . 'assets/css/jstree.min.css', array(), WCP_FOLDER_VERSION);
+	        wp_enqueue_style('wcp-folders-mcustomscrollbar', WCP_FOLDER_URL . 'assets/css/jquery.mcustomscrollbar.min.css', array(),WCP_FOLDER_VERSION);
             wp_enqueue_style('wcp-folders-css', plugin_dir_url(dirname(__FILE__)) . 'assets/css/folders.min.css', array(), WCP_FOLDER_VERSION);
         }
         wp_register_style('wcp-css-handle', false);
         wp_enqueue_style('wcp-css-handle');
         $css = "
-				.wcp-folder-upgrade-button {color: #FF5983; font-weight: bold;}
+				.wcp-folder-upgrade-button {color: #FF5983; font-weight: bold; display: inline-block;border: solid 1px #FF5983;border-radius: 4px;padding: 0 5px;}
 			";
         if (self::is_active_for_screen()) {
             global $typenow;
             $width = get_option("wcp_dynamic_width_for_" . $typenow);
             $width = esc_attr($width);
+            $width = intval($width);
+            $width = empty($width)||!is_numeric($width)?280:$width;
+            if($width > 1200) {
+                $width = 280;
+            }
+            $width = intval($width);
             $display_status = "wcp_dynamic_display_status_" . $typenow;
             $display_status = get_option($display_status);
             if($display_status != "hide") {
                 if (!empty($width) && is_numeric($width)) {
-                    $css .= ".wcp-content{width:{$width}px}";
                     if (function_exists('is_rtl') && is_rtl()) {
                         $css .= "html[dir='rtl']  body.wp-admin #wpcontent {padding-right:" . ($width + 20) . "px}";
                         $css .= "html[dir='rtl'] body.wp-admin #wpcontent {padding-left:0px}";
@@ -2689,8 +2878,15 @@ class WCP_Folders
                 }
             }
             if (!empty($width) && is_numeric($width)) {
+                if($width > 1200) {
+                    $width = 280;
+                }
+                $width = intval($width);
                 $css .= ".wcp-content {width: {$width}px}";
             }
+            global $typenow;
+            $post_type = self::get_custom_post_type($typenow);
+            $css .= "body:not(.woocommerce-page) .wp-list-table th#taxonomy-{$post_type} { width: 130px !important; } @media screen and (max-width: 1180px) { body:not(.woocommerce-page) .wp-list-table th#taxonomy-{$post_type} { width: 90px !important; }} @media screen and (max-width: 960px) { body:not(.woocommerce-page) .wp-list-table th#taxonomy-{$post_type} { width: auto !important; }}";
         }
         wp_add_inline_style('wcp-css-handle', $css);
 
@@ -2728,9 +2924,9 @@ class WCP_Folders
         $optionValue = get_option($optionName);
         $class = (!empty($optionValue) && $optionValue == "hide")?"":"active";
         $customize_folders = get_option('customize_folders');
-        $show_in_page = !isset($customize_folders['show_in_page'])||empty($customize_folders['show_in_page'])?"show":$customize_folders['show_in_page'];
+        $show_in_page = isset($customize_folders['show_in_page'])?$customize_folders['show_in_page']:"hide";
         if(empty($show_in_page)) {
-            $show_in_page = "show";
+            $show_in_page = "hide";
         }
         if($show_in_page == "show") {
             echo '<div class="tree-structure-content ' . $class . '"><div class="tree-structure" id="list-folder-' . $termId . '" data-id="' . $termId . '">';
@@ -2772,8 +2968,9 @@ class WCP_Folders
             global $typenow;
             /* Free/Pro Version change */
             wp_enqueue_script('wcp-folders-jstree', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jstree.min.js', array('jquery'), WCP_FOLDER_VERSION);
-            wp_enqueue_script('wcp-folders-custom', plugin_dir_url(dirname(__FILE__)) . 'assets/js/folders.min.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION);
-
+	        wp_enqueue_script('wcp-folders-mcustomscrollbar', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jquery.mcustomscrollbar.min.js', array(), WCP_FOLDER_VERSION);
+            wp_enqueue_script('wcp-folders-custom', plugin_dir_url(dirname(__FILE__)) . 'assets/js/folders.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable', 'backbone'), WCP_FOLDER_VERSION);
+	        wp_enqueue_script('wcp-jquery-touch', plugin_dir_url(dirname(__FILE__)) . 'assets/js/jquery.ui.touch-punch.min.js', array('jquery'), WCP_FOLDER_VERSION);
 
             $post_type = self::get_custom_post_type($typenow);
 
@@ -2795,12 +2992,8 @@ class WCP_Folders
 
             $is_active = 1;
             $folders = -1;
-            if (!self::check_has_valid_key()) {
-                $is_active = 0;
-                $folders = self::ttl_fldrs();
-            }
             /* For free: upgrade URL, for Pro: Register Key URL */
-            $register_url = admin_url("admin.php?page=wcp_folders_upgrade");
+            $register_url = $this->getFoldersUpgradeURL();
 
             $is_rtl = 0;
             if ( function_exists( 'is_rtl' ) && is_rtl() ) {
@@ -2809,7 +3002,11 @@ class WCP_Folders
 
             $can_manage_folder = current_user_can("manage_categories")?1:0;
             $width = get_option("wcp_dynamic_width_for_" . $typenow);
-            $width = empty($width)||!is_numeric($width)?310:$width;
+            $width = intval($width);
+            $width = empty($width)||!is_numeric($width)?280:$width;
+            if($width > 1200) {
+                $width = 280;
+            }
             $post_type = self::get_custom_post_type($typenow);
             $taxonomy_status = 0;
             $selected_taxonomy = "";
@@ -2823,13 +3020,14 @@ class WCP_Folders
                     $selected_taxonomy = $term->term_id;
                 } else {
                     $selected_taxonomy = "";
+                    $selected_taxonomy = "";
                 }
             }
             $customize_folders = get_option('customize_folders');
-            $show_in_page = !isset($customize_folders['show_in_page'])||empty($customize_folders['show_in_page'])?"show":$customize_folders['show_in_page'];
-            if(empty($show_in_page)) {
-                $show_in_page = "show";
-            }
+	        $show_in_page = isset($customize_folders['show_in_page'])?$customize_folders['show_in_page']:"hide";
+	        if(empty($show_in_page)) {
+		        $show_in_page = "hide";
+	        }
             $taxonomies = self::get_terms_hierarchical($post_type);
 
             $folder_settings = array();
@@ -2848,9 +3046,14 @@ class WCP_Folders
             }
 
             $response['terms'] = $taxonomies;
+            $currentPage = (isset($_GET['paged']) && !empty($_GET['paged']) && is_numeric($_GET['paged']) && $_GET['paged'] > 0)?$_GET['paged']:1;
+	        $hasStars = self::check_for_setting("has_stars", "general");
+	        $hasChild = self::check_for_setting("has_child", "general");
+	        $hasChild = empty($hasChild)?0:1;
+	        $hasStars = empty($hasStars)?0:1;
             wp_localize_script('wcp-folders-custom', 'wcp_settings', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'upgrade_url' => admin_url('admin.php?page=wcp_folders_upgrade'),
+                'upgrade_url' => $this->getFoldersUpgradeURL(),
                 'post_type' => $typenow,
                 'page_url' => $admin_url,
                 'current_url' => $current_url,
@@ -2867,7 +3070,10 @@ class WCP_Folders
                 'show_in_page' => $show_in_page,
                 'svg_file' => WCP_FOLDER_URL.'assets/images/pin.png',
                 'taxonomies' => $taxonomies,
-                'folder_settings' => $folder_settings
+                'folder_settings' => $folder_settings,
+                'hasStars' => $hasStars,
+                'hasChildren' => $hasChild,
+                'currentPage' => $currentPage
             ));
         } else {
             self::is_add_update_screen();
@@ -2878,20 +3084,23 @@ class WCP_Folders
                 wp_enqueue_style( 'folders-media', WCP_FOLDER_URL . 'assets/css/new-media.css' );
                 $is_active = 1;
                 $folders = -1;
-                if (!self::check_has_valid_key()) {
-                    $is_active = 0;
-                    $folders = self::ttl_fldrs();
-                }
+
+	            $hasStars = self::check_for_setting("has_stars", "general");
+	            $hasChild = self::check_for_setting("has_child", "general");
+	            $hasChild = empty($hasChild)?0:1;
+	            $hasStars = empty($hasStars)?0:1;
 
                 wp_enqueue_script('wcp-folders-add-new-media', plugin_dir_url(dirname(__FILE__)) . 'assets/js/new-media.js', array('jquery'), WCP_FOLDER_VERSION);
                 wp_localize_script( 'wcp-folders-add-new-media', 'folders_media_options', array(
                     'terms'     => self::get_terms_hierarchical('media_folder'),
                     'taxonomy'  => get_taxonomy('media_folder'),
                     'ajax_url'  => admin_url("admin-ajax.php"),
-                    'activate_url'  => admin_url("admin.php?page=wcp_folders_upgrade"),
+                    'activate_url'  => $this->getFoldersUpgradeURL(),
                     'nonce'     => wp_create_nonce('wcp_folder_nonce_attachment'),
                     'is_key_active' => $is_active,
                     'folders' => $folders,
+                    'hasStars' => $hasStars,
+                    'hasChildren' => $hasChild
                 ));
             }
         }
@@ -2903,7 +3112,7 @@ class WCP_Folders
         $links['need_help'] = '<a target="_blank" href="https://premio.io/help/folders/?utm_source=pluginspage" >'.__( 'Need help?', WCP_FOLDER).'</a>';
 
         /* PRO link for only for FREE*/
-        $links['pro'] = '<a class="wcp-folder-upgrade-button" href="'.admin_url("admin.php?page=wcp_folders_upgrade").'" >'.__( 'Upgrade', WCP_FOLDER).'</a>';
+        $links['pro'] = '<a class="wcp-folder-upgrade-button" href="'.$this->getFoldersUpgradeURL().'" >'.__( 'Upgrade', WCP_FOLDER).'</a>';
         return $links;
     }
 
@@ -2949,6 +3158,11 @@ class WCP_Folders
 
     public static function activate()
     {
+	    premio_folders_plugin_check_for_setting();
+        $folder_setting = get_option("folders_settings");
+        if($folder_setting === false) {
+            add_option("wcp_folder_version_267", 1);
+        }
         update_option("folders_show_in_menu", "off");
         $option = get_option("folder_redirect_status");
         if($option === false) {
@@ -2957,10 +3171,32 @@ class WCP_Folders
         update_option("folder_redirect_status", 1);
     }
 
-    public static function get_ttl_fldrs()
-    {
-        return self::ttl_fldrs();
-    }
+	public static function deactivate() {
+		$customize_folders = get_option('customize_folders');
+		$DS = DIRECTORY_SEPARATOR;
+		$dirName = ABSPATH . "wp-content{$DS}plugins{$DS}folders-pro{$DS}";
+		$is_pro = get_option("folders_pro_is_in_process");
+		if(!is_dir($dirName) && $is_pro === false && isset($customize_folders['remove_folders_when_removed']) && $customize_folders['remove_folders_when_removed'] == "on") {
+			self::$folders = 0;
+			self::remove_folder_by_taxonomy("media_folder");
+			self::remove_folder_by_taxonomy("folder");
+			self::remove_folder_by_taxonomy("post_folder");
+			$post_types = get_post_types(array(), 'objects');
+			$post_array = array("page", "post", "attachment");
+			foreach ($post_types as $post_type) {
+				if (!in_array($post_type->name, $post_array)) {
+					self::remove_folder_by_taxonomy($post_type->name . '_folder');
+				}
+			}
+			delete_option('customize_folders');
+			delete_option('default_folders');
+			delete_option('folders_show_in_menu');
+			delete_option('folder_redirect_status');
+			delete_option('folders_settings');
+			delete_option('premio_folder_options');
+			delete_option('folders_settings_updated');
+		}
+	}
 
     function folders_register_settings()
     {
@@ -2976,6 +3212,32 @@ class WCP_Folders
             wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
             exit;
         }
+    }
+
+    function getFoldersUpgradeURL() {
+        $customize_folders = get_option("customize_folders");
+        if(isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+            return admin_url("options-general.php?page=wcp_folders_settings&setting_page=upgrade-to-pro");
+        } else {
+            return admin_url("admin.php?page=folders-upgrade-to-pro");
+        }
+    }
+
+    function getFolderSettingsURL() {
+        $customize_folders = get_option("customize_folders");
+        if(isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+            return admin_url("options-general.php?page=wcp_folders_settings");
+        } else {
+            return admin_url("admin.php?page=wcp_folders_settings");
+        }
+    }
+
+    function isFoldersInSettings() {
+        $customize_folders = get_option("customize_folders");
+        if (isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+            return true;
+        }
+        return false;
     }
 
     function wcp_manage_columns_head($defaults, $d = "")
@@ -3043,51 +3305,60 @@ class WCP_Folders
         }
     }
 
-    public function admin_menu()
-    {
-        // Add menu item for settings page
-        $page_title = esc_attr__('Folders', WCP_FOLDER);
-        $menu_title = esc_attr__('Folders Settings', WCP_FOLDER);
-        $capability = 'manage_options';
-        $menu_slug = 'wcp_folders_settings';
-        $callback = array($this, "wcp_folders_settings");
-        $icon_url = 'dashicons-category';
-        $position = 99;
+    public function admin_menu() {
+        $customize_folders = get_option("customize_folders");
+        if (isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+            add_options_page(
+                esc_html__('Folders Settings', WCP_FOLDER),
+                esc_html__('Folders Settings', WCP_FOLDER),
+                'manage_options',
+                'wcp_folders_settings',
+                array($this, 'wcp_folders_settings')
+            );
+        } else {
+            $menu_slug = 'wcp_folders_settings';
 
-        add_menu_page($page_title, $menu_title, $capability, $menu_slug, $callback, $icon_url, $position);
+            // Add menu item for settings page
+            $page_title = esc_attr__('Folders', WCP_FOLDER);
+            $menu_title = esc_attr__('Folders Settings', WCP_FOLDER);
+            $capability = 'manage_options';
+            $callback = array($this, "wcp_folders_settings");
+            $icon_url = 'dashicons-category';
+            $position = 99;
+            add_menu_page($page_title, $menu_title, $capability, $menu_slug, $callback, $icon_url, $position);
 
-
-        $getData = filter_input_array(INPUT_GET);
-        if(isset($getData['hide_folder_recommended_plugin']) && isset($getData['nonce'])) {
-            if(current_user_can('manage_options')) {
-                $nonce = $getData['nonce'];
-                if(wp_verify_nonce($nonce, "folder_recommended_plugin")) {
-                    update_option('hide_folder_recommended_plugin',"1");
+            $getData = filter_input_array(INPUT_GET);
+            if(isset($getData['hide_folder_recommended_plugin']) && isset($getData['nonce'])) {
+                if(current_user_can('manage_options')) {
+                    $nonce = $getData['nonce'];
+                    if(wp_verify_nonce($nonce, "folder_recommended_plugin")) {
+                        update_option('hide_folder_recommended_plugin',"1");
+                    }
                 }
             }
-        }
 
-        $recommended_plugin = get_option("hide_folder_recommended_plugin");
-        if($recommended_plugin === false) {
+            $recommended_plugin = get_option("hide_folder_recommended_plugin");
+            if($recommended_plugin === false) {
+                add_submenu_page(
+                    $menu_slug,
+                    esc_html__('Recommended Plugins', WCP_FOLDER),
+                    esc_html__('Recommended Plugins', WCP_FOLDER),
+                    'manage_options',
+                    'recommended-folder-plugins',
+                    array($this, 'recommended_plugins')
+                );
+            }
+
+            /* Do not Change Free/Pro Change for menu */
             add_submenu_page(
                 $menu_slug,
-                esc_html__('Recommended Plugins', WCP_FOLDER),
-                esc_html__('Recommended Plugins', WCP_FOLDER),
+                esc_attr__('Upgrade to Pro', WCP_FOLDER),
+                esc_attr__('Upgrade to Pro', WCP_FOLDER),
                 'manage_options',
-                'recommended-folder-plugins',
-                array($this, 'recommended_plugins')
+                'folders-upgrade-to-pro',
+                array($this, 'wcp_folders_upgrade_or_register')
             );
         }
-
-        /* Do not Change Free/Pro Change for menu */
-        add_submenu_page(
-            $menu_slug,
-            esc_html__('Upgrade to Pro', WCP_FOLDER),
-            esc_html__('Upgrade to Pro', WCP_FOLDER),
-            'manage_options',
-            'wcp_folders_upgrade',
-            array($this, 'wcp_folders_upgrade_or_register')
-        );
 
         self::check_and_set_post_type();
 
@@ -3130,6 +3401,15 @@ class WCP_Folders
                 }
             }
             $fonts = self::get_font_list();
+
+            $plugins = new WCP_Folder_Plugins();
+            $plugin_info = $plugins->get_plugin_information();
+            $is_plugin_exists = $plugins->is_exists;
+            $settingURL = $this->getFolderSettingsURL();
+            $setting_page = isset($_GET['setting_page'])?$_GET['setting_page']:"folder-settings";
+            $setting_page = in_array($setting_page, array("folder-settings", "customize-folders", "folders-import", "upgrade-to-pro"))?$setting_page:"folder-settings";
+            $isInSettings = $this->isFoldersInSettings();
+
             include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
 
             $option = get_option("folder_intro_box");
@@ -4085,9 +4365,17 @@ class WCP_Folders
     }
 
     /* Free and Pro major changes */
-    public function update_popup_status() {
+    public function folder_update_popup_status() {
         if(!empty($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], 'folder_update_popup_status')) {
             update_option("folder_intro_box", "hide");
+        }
+        echo esc_attr("1");
+        die;
+    }
+
+    public function update_folders_import_status() {
+        if(!empty($_REQUEST['nonce']) && wp_verify_nonce($_REQUEST['nonce'], 'folders_import_3rd_party_data')) {
+            update_option("folder_redirect_status", "3");
         }
         echo esc_attr("1");
         die;
