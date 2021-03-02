@@ -11,6 +11,7 @@ class B2S_Support_Check_System {
         $this->systemData['HEARTBEAT'] = array("system" => $heartbeat_status, "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_HEARTBEAT, "type" => "active", "name" => "Wordpress Heartbeat", "link" => B2S_Tools::getSupportLink("system_requirements"));
         $this->systemData['PHPVERSION'] = array("system" => $this->getPhpVersion(), "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_PHPVERSION, "type" => "version", "name" => "PHP Version", "link" => B2S_Tools::getSupportLink("system_requirements"));
         $this->systemData['PHPCURL'] = array("system" => $this->getPhpCurl(), "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_PHPCURL, "type" => "active", "name" => "PHP Curl", "link" => B2S_Tools::getSupportLink("system_requirements"));
+        $this->systemData['PHPMBSTRING'] = array("system" => $this->getPhpMbstring(), "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_PHPMBSTRING, "type" => "active", "name" => "PHP mbstring", "link" => B2S_Tools::getSupportLink("system_requirements"));
         $this->systemData['PHPDOM'] = array("system" => $this->getPhpDom(), "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_PHPDOM, "type" => "active", "name" => "PHP Dom", "link" => B2S_Tools::getSupportLink("system_requirements"));
         $this->systemData['MYSQLVERSION'] = array("system" => $this->getMysqlVersion(), "req" => B2S_PLUGIN_SYSTEMREQUIREMENT_MYSQLVERSION, "type" => "version", "name" => "MySql Version", "link" => B2S_Tools::getSupportLink("system_requirements"));
 //        Since V6.2.0 - disabled check database rights  - is checked in install prozess
@@ -153,6 +154,10 @@ class B2S_Support_Check_System {
     
     private function getPhpCurl() {
         return function_exists('curl_version');
+    }
+    
+    private function getPhpMbstring() {
+        return function_exists('mb_strlen');
     }
 
     private function getPhpDom() {

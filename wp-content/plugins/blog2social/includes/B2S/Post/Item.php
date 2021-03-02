@@ -78,13 +78,26 @@ class B2S_Post_Item {
             $addSearchAuthorId = $wpdb->prepare(' AND posts.`post_author` = %d', $this->searchAuthorId);
         }
         if ($this->searchPostCat > 0) {
+            $catIn = '(' . $this->searchPostCat;
+            if(function_exists('get_categories')) {
+                $args = array('child_of' => $this->searchPostCat);
+                $subCategories = get_categories($args);
+                if(is_array($subCategories) && !empty($subCategories)) {
+                    foreach ($subCategories as $subCat) {
+                        if((int) $subCat->term_taxonomy_id > 0) {
+                            $catIn .= ',' . $subCat->term_taxonomy_id;
+                        }
+                    }
+                }
+            }
+            $catIn .= ')';
             if ($this->type == 'all') {
                 $leftJoin = "LEFT JOIN $wpdb->term_relationships ON posts.`ID` = $wpdb->term_relationships.`object_id`";
             } else {
                 $leftJoin = "LEFT JOIN $wpdb->term_relationships ON posts.`ID` = $wpdb->term_relationships.`object_id`";
             }
             $leftJoin2 = "LEFT JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.`term_taxonomy_id` = $wpdb->term_relationships.`term_taxonomy_id`";
-            $leftJoinWhere = "AND  ($wpdb->term_taxonomy.`term_id` = " . $this->searchPostCat . " OR $wpdb->term_taxonomy.`parent` = " . $this->searchPostCat . ")";
+            $leftJoinWhere = "AND  ($wpdb->term_taxonomy.`term_id` IN " . $catIn . " )";
         }
 
         if (!empty($this->searchPostStatus)) {

@@ -224,7 +224,7 @@ class Ajax_Get {
                     'instantSharing' => (isset($_POST['instantSharing']) ? (int) $_POST['instantSharing'] : 0),
                     'network_display_name' => sanitize_text_field($_POST['networkDisplayName']),
                     'networkType' => (int) $_POST['networkType']);
-                $selSchedDate = (isset($_POST['selSchedDate']) && !empty($_POST['selSchedDate'])) ? (preg_match("#^[0-9\-.\]]+$#", trim($_POST['selSchedDate'])) ? trim($_POST['selSchedDate']) : "") : "";   //routing from calendar
+                $selSchedDate = (isset($_POST['selSchedDate']) && !empty($_POST['selSchedDate'])) ? (preg_match("#^[0-9\-.\]:\s]+$#", trim($_POST['selSchedDate'])) ? trim($_POST['selSchedDate']) : "") : "";   //routing from calendar
                 $b2sPostType = (isset($_POST['b2sPostType']) && $_POST['b2sPostType'] == 'ex') ? 'ex' : "";    //Content Curation
 
                 $b2sDraftData = array();

@@ -29,6 +29,7 @@ class B2S_Calendar_Item {
     private $relay_delay_min = null;
     private $publish_link = null;
     private $status = null;
+    private $multi_images = null;
 
     public function __construct(\StdClass $data = null) {
         if (isset($data)) {
@@ -65,6 +66,9 @@ class B2S_Calendar_Item {
             }
             if (isset($data->publish_error_code)) {
                 $this->setStatus($data->publish_error_code);
+            }
+            if (isset($data->sched_data)) {
+                $this->setMultiImages($data->sched_data);
             }
         }
     }
@@ -507,6 +511,25 @@ class B2S_Calendar_Item {
     public function getStaus() {
         return $this->status;
     }
+    
+    public function setMultiImages($sched_data = "") {
+        $multi_images = array();
+        if (!empty($sched_data)) {
+            $data = unserialize($sched_data);
+            if(isset($data['multi_images'])) {
+                $json_data = json_decode($data['multi_images'], true);
+                if($json_data != false && !empty($json_data) && is_array($json_data)) {
+                    $multi_images = $json_data;
+                }
+            }
+        }
+        $this->multi_images = $multi_images;
+        return $this;
+    }
+    
+    public function getMultiImages() {
+        return $this->multi_images;
+    }
 
     private function getColor() {
         $colors = ["#983b3b", "#79B232", "#983b7d", "#3b3b98", "#3b8e98", "#65983b", "#6b3b98", "#93983b", "#987d3b", "#985c3b"];
@@ -581,6 +604,7 @@ class B2S_Calendar_Item {
             'network_display_name' => $this->getNetworkDisplayName(),
             'networkType' => $this->getNetworkType(),
             'image_url' => $this->getImageUrl(),
+            'multi_images' => $this->getMultiImages(),
             'relay_primary_post_id' => $this->getRelayPrimaryPostId(),
             'post_for_relay' => $this->getPostForRelay(),
             'post_for_approve' => $this->getPostForApprove(),

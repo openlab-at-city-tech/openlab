@@ -143,19 +143,19 @@ class B2S_Api_Network_Pinterest {
             $this->cookie = $result['cookies'];
             return array('error' => 0, 'identData' => serialize($this->cookie));
         } elseif (is_array($response) && isset($response['resource_response']['error'])) {
-            return array('error' => 1, 'error_pos' => 6, 'error_data' => serialize($response['resource_response']['error']));
+            return array('error' => 1, 'error_pos' => 6, 'error_data' => serialize($response['resource_response']['error']), 'error_code' => 'login');
         } elseif (stripos($content, 'CSRF') !== false) {
             $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
-            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'CSRF verification failed ' . serialize($error_data));
+            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'CSRF verification failed ' . serialize($error_data), 'error_code' => 'invalid');
         } elseif (stripos($content, 'suspicious activity') !== false) {
-            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest blocked logins from this IP because of suspicious activity');
+            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest blocked logins from this IP because of suspicious activity', 'error_code' => 'http_request_failed');
         } elseif (stripos($content, 'bot!') !== false) {
-            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest has your ip in the list of potentially suspicious networks and blocked it');
+            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest has your ip in the list of potentially suspicious networks and blocked it', 'error_code' => 'http_request_failed');
         } else {
             $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
-            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest login failed - unknown error ' . serialize($error_data));
+            return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest login failed - unknown error ' . serialize($error_data), 'error_code' => 'access');
         }
-        return array('error' => 1, 'error_pos' => 7, 'error_data' => 'Pinterest login failed - unknown error');
+        return array('error' => 1, 'error_pos' => 7, 'error_data' => 'Pinterest login failed - unknown error', 'error_code' => 'access');
     }
 
     public function cutFromTo($string, $from, $to) {
