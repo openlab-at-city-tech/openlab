@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shortcodes Ultimate
  * Plugin URI: https://getshortcodes.com/
- * Version: 5.9.6
+ * Version: 5.9.7
  * Author: Vladimir Anokhin
  * Author URI: https://getshortcodes.com/
  * Description: A comprehensive collection of visual components for WordPress
@@ -16,7 +16,7 @@
  * Define plugin constants.
  */
 define( 'SU_PLUGIN_FILE', __FILE__ );
-define( 'SU_PLUGIN_VERSION', '5.9.6' );
+define( 'SU_PLUGIN_VERSION', '5.9.7' );
 
 /**
  * Load dependencies.
