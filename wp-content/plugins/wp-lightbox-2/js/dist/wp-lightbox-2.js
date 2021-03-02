@@ -113,12 +113,13 @@ class Display {
                 lightboxImage.src = this.config.imageArray[this.config.activeImage][0];
             }
             this.doScale();  // once image is preloaded, resize image container
-            this.preloadNeighborImages();
+            this.preloadNeighborImages();    
         };
         this.config.imgPreloader.src = this.config.imageArray[this.config.activeImage][0];
     };
 
     doScale() {
+        this.updateDetails(); //Kevin: moved updateDetails() here, seems to work fine.    
         const overlay = document.getElementById('overlay');
         if (!overlay || !this.config.imgPreloader) {
             return;
@@ -126,12 +127,12 @@ class Display {
         var newWidth = this.config.imgPreloader.width;
         var newHeight = this.config.imgPreloader.height;
         var arrayPageSize = this.helper.getPageSize();
-        var noScrollWidth = (arrayPageSize[2] < arrayPageSize[0]) ? arrayPageSize[0] : arrayPageSize[2]; //if viewport is smaller than page, use page width.
+        var noScrollWidth = (arrayPageSize.pageWindowWidth < arrayPageSize.pageDocumentWidth) ? arrayPageSize.pageDocumentWidth : arrayPageSize.pageWindowWidth; //if viewport is smaller than page, use page width.
         overlay.style.width = noScrollWidth + 'px';
-        overlay.style.height = arrayPageSize[1] + 'px';
+        overlay.style.height = arrayPageSize.pageDocumentHeight + 'px';
         const imageDataContainer = document.getElementById('imageDataContainer');
-        var maxHeight = (arrayPageSize[3]) - (imageDataContainer.style.height + (2 * this.config.borderSize));
-        var maxWidth = (arrayPageSize[2]) - (2 * this.config.borderSize);
+        var maxHeight = (arrayPageSize.viewportHeight) - (imageDataContainer.offsetHeight + (2 * this.config.borderSize));
+        var maxWidth = (arrayPageSize.pageWindowWidth) - (2 * this.config.borderSize);
         if (this.config.fitToScreen) {
             var displayHeight = maxHeight - this.config.marginSize;
             var displayWidth = maxWidth - this.config.marginSize;
@@ -149,9 +150,9 @@ class Display {
             newHeight = Math.round(newHeight * ratio);
         }
         var arrayPageScroll = this.helper.getPageScroll();
-        var centerY = arrayPageScroll[1] + (maxHeight * 0.5);
+        var centerY = arrayPageScroll.yScroll + (maxHeight * 0.5);
         var newTop = centerY - newHeight * 0.5;
-        var newLeft = arrayPageScroll[0];
+        var newLeft = arrayPageScroll.xScroll;
         const lightbox = document.getElementById('lightboxImage');
         lightbox.style.width = newWidth;
         lightbox.style.height = newHeight;
@@ -172,8 +173,6 @@ class Display {
         this.config.xScale = (widthNew / this.config.widthCurrent) * 100;
         this.config.yScale = (heightNew / this.config.heightCurrent) * 100;
         this.helper.setLightBoxPos(lightboxTop, lightboxLeft);
-        this.updateDetails(); //toyNN: moved updateDetails() here, seems to work fine.    
-
         
         $('#imageDataContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear');
         $('#outerImageContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear', _ => {
@@ -389,13 +388,13 @@ class Helper {
         }
         var viewportHeight = document.documentElement.clientHeight - this.config.adminBarHeight;
         var pageWindowWidth = document.documentElement.clientWidth;
-        const pageSize = [
-            pageDocumentWidth,
-            pageDocumentHeight,
-            pageWindowWidth,
-            viewportHeight,
-            document.documentElement.scrollHeight
-        ];
+        const pageSize = {
+            pageDocumentWidth: pageDocumentWidth,
+            pageDocumentHeight: pageDocumentHeight,
+            pageWindowWidth: pageWindowWidth,
+            viewportHeight: viewportHeight,
+            documentScrollHeight: document.documentElement.scrollHeight
+        };
         return pageSize;
     };
     isIE8() {
@@ -430,7 +429,7 @@ class Helper {
                 yScroll += this.config.adminBarHeight;
             }
         }
-        return [xScroll, yScroll];
+        return {xScroll, yScroll};
     };
     setLightBoxPos(newTop, newLeft) {
         if (this.config.resizeSpeed > 0) {
@@ -562,12 +561,12 @@ class Lightbox {
         var arrayPagePos = this.helper.getPageScroll();
         var newTop = 0;
         const overlay = document.getElementById("overlay");
-        $("#overlay").hide().css({ width: arrayPageSize[0] + 'px', height: arrayPageSize[1] + 'px', opacity: this.config.overlayOpacity }).fadeIn(400);
-        if (this.config.isIE8 && arrayPageSize[1] == 4096) {
-            if (arrayPagePos[1] >= 1000) {
-                newTop = arrayPagePos[1] - 1000;
-                if ((arrayPageSize[4] - (arrayPagePos[1] + 3096)) < 0) {
-                    newTop -= (arrayPagePos[1] + 3096) - arrayPageSize[4];
+        $("#overlay").hide().css({ width: arrayPageSize.pageDocumentWidth + 'px', height: arrayPageSize.pageDocumentHeight + 'px', opacity: this.config.overlayOpacity }).fadeIn(400);
+        if (this.config.isIE8 && arrayPageSize.pageDocumentHeight == 4096) {
+            if (arrayPagePos.yScroll >= 1000) {
+                newTop = arrayPagePos.yScroll - 1000;
+                if ((arrayPageSize.documentScrollHeight - (arrayPagePos.yScroll + 3096)) < 0) {
+                    newTop -= (arrayPagePos.yScroll + 3096) - arrayPageSize.documentScrollHeight;
                 }
                 overlay.style.top = newTop + 'px';
             }

@@ -117,12 +117,12 @@ class Lightbox {
         var arrayPagePos = this.helper.getPageScroll();
         var newTop = 0;
         const overlay = document.getElementById("overlay");
-        $("#overlay").hide().css({ width: arrayPageSize[0] + 'px', height: arrayPageSize[1] + 'px', opacity: this.config.overlayOpacity }).fadeIn(400);
-        if (this.config.isIE8 && arrayPageSize[1] == 4096) {
-            if (arrayPagePos[1] >= 1000) {
-                newTop = arrayPagePos[1] - 1000;
-                if ((arrayPageSize[4] - (arrayPagePos[1] + 3096)) < 0) {
-                    newTop -= (arrayPagePos[1] + 3096) - arrayPageSize[4];
+        $("#overlay").hide().css({ width: arrayPageSize.pageDocumentWidth + 'px', height: arrayPageSize.pageDocumentHeight + 'px', opacity: this.config.overlayOpacity }).fadeIn(400);
+        if (this.config.isIE8 && arrayPageSize.pageDocumentHeight == 4096) {
+            if (arrayPagePos.yScroll >= 1000) {
+                newTop = arrayPagePos.yScroll - 1000;
+                if ((arrayPageSize.documentScrollHeight - (arrayPagePos.yScroll + 3096)) < 0) {
+                    newTop -= (arrayPagePos.yScroll + 3096) - arrayPageSize.documentScrollHeight;
                 }
                 overlay.style.top = newTop + 'px';
             }
