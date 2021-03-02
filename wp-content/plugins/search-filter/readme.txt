@@ -1,10 +1,10 @@
 === Search & Filter ===
-Contributors: DesignsAndCode
+Contributors: DesignsAndCode, codeamp
 Donate link:
 Tags: category, filter, taxonomy, search, wordpress, post type, post date
 Requires at least: 3.5
-Tested up to: 5.3
-Stable tag: 1.2.12
+Tested up to: 5.6
+Stable tag: 1.2.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ The documentation has been updated to include examples almost all configurable o
 4. Example of Search & Filter using a post type filter
 
 == Changelog ==
+
+= 1.2.13 =
+* Fix - a PHP warning when using Beaver Builder
 
 = 1.2.12 =
 * Fixed - some PHP warnings when using radio, checkbox and multiselects
