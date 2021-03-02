@@ -3,7 +3,7 @@
 	Plugin Name: ARI Fancy Lightbox
 	Plugin URI: http://wp-quiz.ari-soft.com/plugins/wordpress-fancy-lightbox.html
 	Description: Full-featured lightbox plugin for WordPress.
-	Version: 1.3.7
+	Version: 1.3.8
 	Author: ARI Soft
 	Author URI: http://www.ari-soft.com
 	Text Domain: ari-fancy-lightbox
