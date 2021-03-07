@@ -7,15 +7,15 @@
   "license": "GPL-2.0+",
   "main": "dist/js/block-editor.js",
   "scripts": {
+    "build": "mix --production",
     "dev": "mix",
-    "watch": "mix watch",
+    "start": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "prod": "mix --production",
     "lint": "npm run lint:styles && npm run lint:scripts",
     "lint:styles": "cross-env stylelint './dist/scss/**/*.scss' --syntax scss",
     "lint:scripts": "cross-env eslint './dist/js/**/*.js'",
-    "lint:scripts:fix": "cross-env eslint './dist/js/**/*.js' --fix"
+    "format:scripts": "cross-env eslint './dist/js/**/*.js' --fix"
   },
   "dependencies": {
     "classnames": "^2.2.6",

@@ -74,7 +74,7 @@ function formatAdaptedFrom( {
 
 	if ( isLegacy ) {
 		return sprintf(
-			'A derivative from the <a href="%s">original work</a>',
+			'Adapted from the <a href="%s">original work</a>',
 			derivative
 		);
 	}

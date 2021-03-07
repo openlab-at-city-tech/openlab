@@ -28,13 +28,13 @@ const popperOptions = {
 export default function Help( { text = '' } ) {
 	return (
 		<Tooltip
-		html={ text }
-		arrow={ true }
-		position="right"
-		trigger="mouseenter"
-		popperOptions={ popperOptions }
+			html={ text }
+			arrow={ true }
+			position="right"
+			trigger="mouseenter"
+			popperOptions={ popperOptions }
 		>
 			<Button icon="editor-help" className="component-help-button" />
 		</Tooltip>
 	);
-};
+}

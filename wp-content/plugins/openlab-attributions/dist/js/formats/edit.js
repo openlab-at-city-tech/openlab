@@ -6,8 +6,8 @@ const nanoid = require( 'nanoid' );
 /**
  * WordPress dependencies
  */
-import { compose, withState } from '@wordpress/compose';
-import { dispatch, withSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
+import { dispatch, useSelect } from '@wordpress/data';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { isCollapsed, insertObject } from '@wordpress/rich-text';
 
@@ -37,14 +37,23 @@ const addMarker = ( value, data ) => {
 	return newValue;
 };
 
-function Edit( { item, value, isActive, isOpen, setState, onChange } ) {
+export default function Edit( { isActive, value, onChange } ) {
+	const [ isOpen, setIsOpen ] = useState( false );
+
+	const { item } = useSelect(
+		( select ) => ( {
+			item: select( 'openlab/modal' ).get(),
+		} ),
+		[]
+	);
+
 	return (
 		<>
 			<RichTextToolbarButton
 				icon={ icon }
 				name="text-color"
 				title="Add Attribution"
-				onClick={ () => setState( { isOpen: true } ) }
+				onClick={ () => setIsOpen( true ) }
 				isActive={ isActive }
 			/>
 			{ isOpen && (
@@ -53,19 +62,10 @@ function Edit( { item, value, isActive, isOpen, setState, onChange } ) {
 					modalType="add"
 					title="Add Attribution"
 					item={ item }
-					onClose={ () => setState( { isOpen: false } ) }
+					onClose={ () => setIsOpen( false ) }
 					addItem={ ( data ) => onChange( addMarker( value, data ) ) }
 				/>
 			) }
 		</>
 	);
 }
-
-export default compose( [
-	withState( { isOpen: false } ),
-	withSelect( ( select ) => {
-		const { item } = select( 'openlab/modal' ).get();
-
-		return { item };
-	} ),
-] )( Edit );

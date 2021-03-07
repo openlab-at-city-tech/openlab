@@ -103,14 +103,14 @@
 
 	.component-modal__footer {
 		box-sizing: border-box;
-		border-top: 1px solid #e2e4e7;
+		border-bottom: 1px solid #e2e4e7;
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-end;
 		background: #fff;
 		align-items: center;
 		height: 56px;
-		margin: 0 -24px -24px;
+		margin: 0 -24px 12px;
 		padding: 0 24px;
 
 		.is-link {
@@ -145,8 +145,6 @@
 	.attribution-plugin {
 		background-color: #e2e4e7;
 		padding: 6px 8px;
-		margin-top: 3em;
-		margin-bottom: 1em;
 	}
 }
 

@@ -139,7 +139,7 @@ function format_adapted_from( $item ) {
 
 	if ( $is_legacy ) {
 		return sprintf(
-			'A derivative from the <a href="%s">original work</a>',
+			'Adapted from the <a href="%s">original work</a>',
 			$item['derivative']
 		);
 	}

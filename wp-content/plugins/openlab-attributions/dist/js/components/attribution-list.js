@@ -39,7 +39,9 @@ export default function AttributionList() {
 									className="components-toolbar__control"
 									icon="edit"
 									label="Edit"
-									onClick={ () => open( { item, modalType: 'update' } ) }
+									onClick={ () =>
+										open( { item, modalType: 'update' } )
+									}
 								/>
 								<Button
 									className="components-toolbar__control"
