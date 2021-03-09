@@ -391,7 +391,9 @@ function cuny_home_square( $type ) {
 
 	$html = ob_get_clean();
 
-	set_transient( 'openlab_home_square_' . $type, $html, 5 * 60 );
+	if ( $html ) {
+		set_transient( 'openlab_home_square_' . $type, $html, 5 * 60 );
+	}
 
 	echo $html; // WPCS: XSS ok
 
