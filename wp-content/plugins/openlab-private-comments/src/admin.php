@@ -6,7 +6,6 @@
 namespace OpenLab\PrivateComments\Admin;
 
 use const OpenLab\PrivateComments\VERSION;
-use const OpenLab\PrivateComments\PLUGIN_FILE;
 
 /**
  * Insert a value or key/value pair after a specific key in an array. If key doesn't exist, value is appended
@@ -117,88 +116,3 @@ function handle_ajax_request() {
 	] );
 }
 add_action( 'wp_ajax_openlab_private_comments', __NAMESPACE__ . '\\handle_ajax_request' );
-
-/**
- * Show activation admin notice.
- *
- * @return void
- */
-function admin_notice() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	if ( ! apply_filters( 'olpc_display_notices', true ) ) {
-		return;
-	}
-
-	// Notice was dissmised.
-	if ( get_option( 'olpc_notice_dismissed' ) ) {
-		return;
-	}
-
-	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce       = wp_create_nonce( 'olpc_notice_dismiss' );
-	$dismiss_url = add_query_arg( 'olpc-notice-dismiss', '1', $dismiss_url );
-	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
-
-	?>
-	<style type="text/css">
-		.olpc-notice-message p {
-			display: flex;
-		}
-		.olpc-notice-message-dismiss {
-			align-self: center;
-			margin-left: 8px;
-		}
-	</style>
-	<div class="notice notice-warning fade olpc-notice-message">
-		<p><span><?php esc_html_e( 'Please note: If you deactivate the OpenLab Private Comments plugin, any private comments made while the plugin was activated will become visible to anyone who can view your site.', 'openlab-private-comments' ); ?></span>
-		<a class="olpc-notice-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'openlab-private-comments' ); ?></a>
-		</p>
-	</div>
-	<?php
-}
-add_action( 'admin_notices', __NAMESPACE__ . '\\admin_notice' );
-
-/**
- * Catch notice dismissal.
- *
- * @return void
- */
-function catch_notice_dismissal() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	if ( empty( $_GET['olpc-notice-dismiss'] ) ) {
-		return;
-	}
-
-	check_admin_referer( 'olpc_notice_dismiss' );
-
-	update_option( 'olpc_notice_dismissed', 1 );
-}
-add_action( 'admin_init', __NAMESPACE__ . '\\catch_notice_dismissal' );
-
-/**
- * Display confirmation modal on the plugin deactivation.
- *
- * @param string $plugin_file Path to the plugin file relative to the plugins directory.
- * @return void
- */
-function deactivation_notice( $plugin_file ) {
-	if ( 'openlab-private-comments/openlab-private-comments.php' !== $plugin_file ) {
-		return;
-	}
-
-	if ( ! apply_filters( 'olpc_display_notices', true ) ) {
-		return;
-	}
-
-	wp_enqueue_script( 'olpc-deactivation', plugins_url( 'assets/js/deactivation.js', PLUGIN_FILE ), [], VERSION, true );
-	wp_localize_script( 'olpc-deactivation', 'OLPCDeactivate', [
-		'message' => esc_html__( 'Please note: If you deactivate the OpenLab Private Comments plugin, any private comments made while the plugin was activated will become visible to anyone who can view your site.', 'openlab-private-comments' ),
-	] );
-}
-add_action( 'after_plugin_row', __NAMESPACE__ . '\\deactivation_notice' );

@@ -1685,12 +1685,6 @@ class OpenLab_GroupBlog_Template_Picker {
 
 }
 
-// Disable admin notices for wp-grade-comments.
-add_filter( 'olgc_display_notices', '__return_false' );
-
-// Disable admin notices for openlab-private-comments.
-add_filter( 'olpc_display_notices', '__return_false' );
-
 /**
  * Map "instructor" status to group administrator for wp-grade-comments.
  */
@@ -1699,6 +1693,9 @@ function openlab_olgc_is_instructor() {
 	return groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
+
+// Disable admin notices for wp-grade-comments.
+add_filter( 'olgc_display_notices', '__return_false' );
 
 /**
  * Catch wp-grade-comments notice dismissals.
