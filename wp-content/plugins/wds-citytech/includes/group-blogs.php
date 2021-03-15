@@ -1694,8 +1694,60 @@ function openlab_olgc_is_instructor() {
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 
-// Disable admin notices for wp-grade-comments.
-add_filter( 'olgc_display_notices', '__return_false' );
+/**
+ * Set up admin notice when wp-grade-comments is activated.
+ */
+function openlab_olgc_activation() {
+	if ( ! get_option( 'olgc_notice_dismissed' ) ) {
+		update_option( 'olgc_notice_dismissed', '0' );
+	}
+}
+add_action( 'activate_wp-grade-comments/wp-grade-comments.php', 'openlab_olgc_activation' );
+
+/**
+ * Show wp-grade-comments activation admin notice.
+ */
+function openlab_olgc_notice() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( ! is_plugin_active( 'wp-grade-comments/wp-grade-comments.php' ) ) {
+		return;
+	}
+
+	// Allow dismissal.
+	if ( get_option( 'olgc_notice_dismissed' ) ) {
+		return;
+	}
+
+	// Groan
+	$dismiss_url = $_SERVER['REQUEST_URI'];
+	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
+	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
+	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
+
+	?>
+	<style type="text/css">
+		.olgc-notice-message {
+			position: relative;
+		}
+		.olgc-notice-message > p > span {
+			width: 80%;
+		}
+		.olgc-notice-message-dismiss {
+			position: absolute;
+			right: 15px;
+		}
+	</style>
+	<div class="updated fade olgc-notice-message">
+		<p><span>Please note: The WP Grade Comments plugin allows all Site Administrators to add, view, and edit private comments and grades.</span>
+		<a class="olgc-notice-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'openlab_olgc_notice' );
 
 /**
  * Catch wp-grade-comments notice dismissals.
