@@ -116,7 +116,7 @@ class MC4WP_Admin {
 		// redirect back to where we came from (to prevent double submit)
 		if ( isset( $_POST['_redirect_to'] ) ) {
 			$redirect_url = $_POST['_redirect_to'];
-		} else if ( isset( $_GET['_redirect_to'] ) ) {
+		} elseif ( isset( $_GET['_redirect_to'] ) ) {
 			$redirect_url = $_GET['_redirect_to'];
 		} else {
 			$redirect_url = remove_query_arg( '_mc4wp_action' );
@@ -247,8 +247,7 @@ class MC4WP_Admin {
 
 		// if API key changed, empty Mailchimp cache
 		if ( $settings['api_key'] !== $current['api_key'] ) {
-			$mailchimp = new MC4WP_MailChimp();
-			$mailchimp->refresh_lists();
+			delete_transient( 'mc4wp_mailchimp_lists' );
 		}
 
 		/**
@@ -280,23 +279,22 @@ class MC4WP_Admin {
 		$mailchimp = new MC4WP_MailChimp();
 
 		// css
-		wp_register_style( 'mc4wp-admin', MC4WP_PLUGIN_URL . 'assets/css/admin-styles' . $suffix . '.css', array(), MC4WP_VERSION );
+		wp_register_style( 'mc4wp-admin', mc4wp_plugin_url( 'assets/css/admin-styles' . $suffix . '.css' ), array(), MC4WP_VERSION );
 		wp_enqueue_style( 'mc4wp-admin' );
 
 		// js
-		wp_register_script( 'es5-shim', MC4WP_PLUGIN_URL . 'assets/js/third-party/es5-shim.min.js', array(), MC4WP_VERSION );
-		$wp_scripts->add_data( 'es5-shim', 'conditional', 'lt IE 9' );
-
-		wp_register_script( 'mc4wp-admin', MC4WP_PLUGIN_URL . 'assets/js/admin' . $suffix . '.js', array( 'es5-shim' ), MC4WP_VERSION, true );
+		wp_register_script( 'mc4wp-admin', mc4wp_plugin_url( 'assets/js/admin' . $suffix . '.js' ), array(), MC4WP_VERSION, true );
 		wp_enqueue_script( 'mc4wp-admin' );
+		$connected = ! empty( $opts['api_key'] );
+		$mailchimp_lists = $connected ? $mailchimp->get_lists() : array();
 		wp_localize_script(
 			'mc4wp-admin',
 			'mc4wp_vars',
 			array(
 				'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 				'mailchimp' => array(
-					'api_connected' => ! empty( $opts['api_key'] ),
-					'lists'         => $mailchimp->get_lists(),
+					'api_connected' => $connected,
+					'lists'         => $mailchimp_lists,
 				),
 				'countries' => MC4WP_Tools::get_countries(),
 				'i18n'      => array(

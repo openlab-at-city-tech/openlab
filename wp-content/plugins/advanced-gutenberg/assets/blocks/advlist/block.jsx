@@ -4,7 +4,7 @@
     const {Component, Fragment} = wpElement;
     const {registerBlockType, createBlock} = wpBlocks;
     const {InspectorControls, RichText, ColorPalette, BlockControls} = wpBlockEditor;
-    const {BaseControl, RangeControl, PanelBody, IconButton, Dashicon, Toolbar} = wpComponents;
+    const {BaseControl, RangeControl, PanelBody, Dashicon, ToolbarGroup, ToolbarButton} = wpComponents;
 
     var parse = require('html-react-parser');
 
@@ -108,14 +108,13 @@
                     :
                     <Fragment>
                         <BlockControls>
-                            <Toolbar>
-                                <IconButton
+                            <ToolbarGroup>
+                                <ToolbarButton
                                     label={__('Refresh this list when it conflict with other lists styles', 'advanced-gutenberg')}
                                     icon="update"
-                                    className="components-toolbar__control"
                                     onClick={() => setAttributes({id: 'advgblist-' + blockID})}
                                 />
-                            </Toolbar>
+                            </ToolbarGroup>
                         </BlockControls>
                         <InspectorControls>
                             <PanelBody title={__('Text Settings', 'advanced-gutenberg')} initialOpen={false}>
@@ -203,7 +202,6 @@
                             tagName="ul"
                             onChange={(value) => setAttributes({values: value})}
                             value={values}
-                            wrapperClassName="advgb-list-item"
                             className={listClassName}
                             placeholder={__('Write advanced list…', 'advanced-gutenberg')}
                             onMerge={mergeBlocks}
@@ -363,6 +361,9 @@
                     ...valuesToMerge,
                 ],
             };
+        },
+        supports: {
+            anchor: true,
         },
         edit: AdvList,
         save: function ({attributes}) {

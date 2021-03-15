@@ -14,7 +14,7 @@ class B2S_Heartbeat {
     public function init($response, $data) {
 
         if (isset($data['b2s_heartbeat']) && $data['b2s_heartbeat'] == 'b2s_listener') {
-            if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_auto_posting') {
+            if (isset($data['b2s_heartbeat_action']) && ($data['b2s_heartbeat_action'] == 'b2s_auto_posting' ||  $data['b2s_heartbeat_action'] == 'b2s_repost') ) {
                 $this->postSchedToServer();
             } if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_delete_sched_post') {
                 $this->deleteUserSchedPost();
@@ -51,7 +51,7 @@ class B2S_Heartbeat {
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_network_details AS network on post.network_details_id = network.id "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS schedDetails on post.sched_details_id = schedDetails.id "
                 . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on post.blog_user_id = user.blog_user_id "
-                . "WHERE sched_date !='0000-00-00 00:00:00' AND sched_date_utc !='0000-00-00 00:00:00' AND post.hook_action= %d AND post.hide=%d AND post.post_for_approve= %d ";
+                . "WHERE sched_date !='0000-00-00 00:00:00' AND sched_date_utc !='0000-00-00 00:00:00' AND post.hook_action= %d AND post.hide=%d AND post.post_for_approve= %d LIMIT 100";
         $postData = $wpdb->get_results($wpdb->prepare($sql, 1, 0, 0), ARRAY_A);
 
         foreach ($postData as $k => $value) {

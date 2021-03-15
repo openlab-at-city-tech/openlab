@@ -6,7 +6,7 @@ import AdvQueryControls from './query-controls.jsx';
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, BlockControls } = wpBlockEditor;
-    const { PanelBody, RangeControl, ToggleControl, TextControl, QueryControls, Spinner, Toolbar, Placeholder, IconButton } = wpComponents;
+    const { PanelBody, RangeControl, ToggleControl, TextControl, QueryControls, Spinner, ToolbarGroup, ToolbarButton, Placeholder } = wpComponents;
     const { withSelect } = wpData;
     const { pickBy, isUndefined } = lodash;
     const { decodeEntities } = wpHtmlEntities;
@@ -305,14 +305,14 @@ import AdvQueryControls from './query-controls.jsx';
                 <Fragment>
                     { inspectorControls }
                     <BlockControls>
-                        <Toolbar controls={ postViewControls } />
-                        <Toolbar>
-                            <IconButton
-                                label={ __( 'Refresh', 'advanced-gutenberg' ) }
+                        <ToolbarGroup controls={ postViewControls } />
+                        <ToolbarGroup>
+                            <ToolbarButton
                                 icon="update"
+                                label={ __( 'Refresh', 'advanced-gutenberg' ) }
                                 onClick={ () => setAttributes( { myToken: Math.floor(Math.random() * Math.floor(999)) } ) }
                             />
-                        </Toolbar>
+                        </ToolbarGroup>
                     </BlockControls>
                     <div className={ blockClassName }>
                         {this.state.updating && <div className="advgb-recent-posts-loading" />}

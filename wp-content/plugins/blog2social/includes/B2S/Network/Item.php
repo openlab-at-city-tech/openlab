@@ -152,6 +152,8 @@ class B2S_Network_Item {
             } else {
                 if($networkId == 24 && B2S_PLUGIN_USER_VERSION < 1) {
                     $html .= '<a href="#" class="btn btn-primary btn-sm b2s-network-auth-btn b2s-btn-disabled b2sBusinessFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("BUSINESS", "blog2social") . '</a>';
+                } else if($networkId == 12) {
+                    $html .= '<button class="btn btn-primary btn-sm b2s-network-auth-btn b2s-network-add-instagram-info-btn" data-b2s-auth-url="'.$b2sAuthUrl.'">+ ' . $name . '</button>';
                 } else {
                     $html .= ($networkId != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $networkId == 18)) ? '<a href="#" onclick="wop(\'' . $b2sAuthUrl . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-primary btn-sm b2s-network-auth-btn">+ ' . esc_html($name) . '</a>' : '<a href="#" class="btn btn-primary btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a>';
                 }
@@ -781,6 +783,9 @@ class B2S_Network_Item {
         $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Character limit', 'blog2social') . ' (CONTENT, EXCERPT)</span> <a href="#" class="b2s-info-btn del-padding-left b2sInfoCharacterLimitBtn">' . esc_html__('Info', 'Blog2Social') . '</a>';
         $content .= '</div>';
         $content .= '</div>';
+        if(!function_exists('mb_strlen')) {
+            $content .= '<div class="alert alert-warning">'.esc_html__('Missing PHP "mbstring" extension to use the character limit function. Please activate server-side the PHP "mbstring" extension in your "php.ini" file.', 'blog2social').'</div>';
+        }
         if(!$multi_kind) {
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12">';

@@ -16,6 +16,7 @@
 }
 .advanced-excerpt #read-more {
   margin-top: 7px;
+  width: 100%;
 }
 .advanced-excerpt .monospaced {
   font-family: Consolas,Monaco,monospace;

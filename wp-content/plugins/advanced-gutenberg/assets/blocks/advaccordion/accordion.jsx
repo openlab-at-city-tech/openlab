@@ -232,6 +232,7 @@
                                 className="advgb-accordion-header-title"
                                 placeholder={ __( 'Enter header…', 'advanced-gutenberg' ) }
                                 style={ { color: 'inherit' } }
+                                allowedFormats={ [ 'core/bold', 'core/italic', 'core/image', 'core/strikethrough' ] }
                             />
                         </div>
                         <div className="advgb-accordion-body"
@@ -304,7 +305,7 @@
             },
             borderWidth: {
                 type: 'number',
-                default: 0,
+                default: 1,
             },
             borderColor: {
                 type: 'string',
@@ -329,6 +330,9 @@
                 type: 'string',
                 default: ''
             }
+        },
+        supports: {
+            anchor: true,
         },
         edit: compose([
             withDispatch( ( dispatch, { clientId }, { select } ) => {
@@ -376,7 +380,7 @@
                              backgroundColor: headerBgColor,
                              color: headerTextColor,
                              borderStyle: borderStyle,
-                             borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                             borderWidth: borderWidth + 'px',
                              borderColor: borderColor,
                              borderRadius: !!borderRadius ? borderRadius + 'px' : undefined,
                          } }
@@ -393,7 +397,7 @@
                              backgroundColor: bodyBgColor,
                              color: bodyTextColor,
                              borderStyle: borderStyle + ' !important',
-                             borderWidth: !!borderWidth ? borderWidth + 'px !important' : undefined,
+                             borderWidth: borderWidth + 'px !important',
                              borderColor: borderColor + ' !important',
                              borderTop: 'none !important',
                              borderRadius: !!borderRadius ? borderRadius + 'px !important' : undefined,
@@ -405,6 +409,121 @@
             );
         },
         deprecated: [
+            {
+                attributes: {
+                    header: {
+                        type: 'string',
+                        default: 'Header text',
+                    },
+                    headerBgColor: {
+                        type: 'string',
+                        default: '#000',
+                    },
+                    headerTextColor: {
+                        type: 'string',
+                        default: '#eee',
+                    },
+                    headerIcon: {
+                        type: 'string',
+                        default: 'unfold',
+                    },
+                    headerIconColor: {
+                        type: 'string',
+                        default: '#fff',
+                    },
+                    bodyBgColor: {
+                        type: 'string',
+                    },
+                    bodyTextColor: {
+                        type: 'string',
+                    },
+                    borderStyle: {
+                        type: 'string',
+                        default: 'solid',
+                    },
+                    borderWidth: {
+                        type: 'number',
+                        default: 0,
+                    },
+                    borderColor: {
+                        type: 'string',
+                    },
+                    borderRadius: {
+                        type: 'number',
+                        default: 2,
+                    },
+                    marginBottom: {
+                        type: 'number',
+                        default: 15,
+                    },
+                    collapsedAll: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    changed: {
+                        type: 'boolean',
+                        default: false,
+                    },
+                    rootBlockId: {
+                        type: 'string',
+                        default: ''
+                    }
+                },
+                save: function ( { attributes } ) {
+                    const {
+                        header,
+                        headerBgColor,
+                        headerTextColor,
+                        headerIcon,
+                        headerIconColor,
+                        bodyBgColor,
+                        bodyTextColor,
+                        borderStyle,
+                        borderWidth,
+                        borderColor,
+                        borderRadius,
+                        marginBottom,
+                    } = attributes;
+
+                    return (
+                        <div className="advgb-accordion-item" style={ { marginBottom } }>
+                            <div className="advgb-accordion-header"
+                                 style={ {
+                                     backgroundColor: headerBgColor,
+                                     color: headerTextColor,
+                                     borderStyle: borderStyle,
+                                     borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                                     borderColor: borderColor,
+                                     borderRadius: !!borderRadius ? borderRadius + 'px' : undefined,
+                                 } }
+                            >
+                                <span className="advgb-accordion-header-icon">
+                                    <svg fill={ headerIconColor } xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        { HEADER_ICONS[headerIcon] }
+                                    </svg>
+                                </span>
+                                <h4 className="advgb-accordion-header-title" style={ { color: 'inherit' } }>{ header }</h4>
+                            </div>
+                            <div className="advgb-accordion-body"
+                                 style={ {
+                                     backgroundColor: bodyBgColor,
+                                     color: bodyTextColor,
+                                     borderStyle: borderStyle + ' !important',
+                                     borderWidth: !!borderWidth ? borderWidth + 'px !important' : undefined,
+                                     borderColor: borderColor + ' !important',
+                                     borderTop: 'none !important',
+                                     borderRadius: !!borderRadius ? borderRadius + 'px !important' : undefined,
+                                 } }
+                            >
+                                <InnerBlocks.Content />
+                            </div>
+                        </div>
+                    );
+                },
+                supports: {
+                    anchor: true,
+                },
+            },
             {
                 attributes: {
                     header: {

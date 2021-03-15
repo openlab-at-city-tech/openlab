@@ -1,59 +1,60 @@
 /**
  * WordPress dependencies
  */
-import { compose } from '@wordpress/compose';
-import { withSelect, withDispatch } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { RawHTML } from '@wordpress/element';
-import { IconButton, Toolbar } from '@wordpress/components';
+import { Button, ToolbarGroup } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import ServerData from './server-data';
-import formatAttribution from '../utils/format-attribution';
+import { formatAttribution } from '../utils/format';
 
-const licenses = Object.values( window.attrLicenses );
+export default function AttributionList() {
+	const { items } = useSelect(
+		( select ) => ( {
+			items: select( 'openlab/attributions' ).get(),
+		} ),
+		[]
+	);
 
-const AttributionList = ( props ) => {
-	const { items, edit, remove } = props;
+	const { open } = useDispatch( 'openlab/modal' );
+	const { remove } = useDispatch( 'openlab/attributions' );
 
 	return (
 		<div className="component-attributions-list">
 			<ol>
-				{ items.map( ( item, index ) =>
+				{ items.map( ( item, index ) => (
 					<li key={ item.id }>
 						{ /* Needed for alignment. */ }
 						<div>
-							<RawHTML>{ formatAttribution( { ...item }, licenses ) }</RawHTML>
-							<Toolbar>
-								<IconButton icon="edit" label="Edit" onClick={ () => edit( item ) } />
-								<IconButton icon="trash" label="Delete" onClick={ () => remove( item.id ) } />
-							</Toolbar>
+							<RawHTML>
+								{ item.content
+									? item.content
+									: formatAttribution( { ...item } ) }
+							</RawHTML>
+							<ToolbarGroup>
+								<Button
+									className="components-toolbar__control"
+									icon="edit"
+									label="Edit"
+									onClick={ () =>
+										open( { item, modalType: 'update' } )
+									}
+								/>
+								<Button
+									className="components-toolbar__control"
+									icon="trash"
+									label="Delete"
+									onClick={ () => remove( item.id ) }
+								/>
+							</ToolbarGroup>
 							<ServerData item={ item } index={ index } />
 						</div>
 					</li>
-				) }
+				) ) }
 			</ol>
 		</div>
 	);
-};
-
-export default compose( [
-	withSelect( ( select ) => {
-		const { get } = select( 'openlab/attributions' );
-
-		return {
-			items: get(),
-		};
-	} ),
-	withDispatch( ( dispatch ) => {
-		return {
-			edit( item ) {
-				dispatch( 'openlab/modal' ).open( { item, modalType: 'update' } );
-			},
-			remove( id ) {
-				dispatch( 'openlab/attributions' ).remove( id );
-			},
-		};
-	} ),
-] )( AttributionList );
+}

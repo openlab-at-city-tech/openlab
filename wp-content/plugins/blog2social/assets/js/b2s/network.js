@@ -15,6 +15,35 @@ jQuery(window).on("load", function () {
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {
         jQuery('.b2s-network-auth-count-current[data-network-id="' + jQuery(this).attr("data-network-id") + '"').text(jQuery(this).children('li').length - 1);
     });
+    
+    if (window.location.href.match('b2s-add-network-6') != null) {
+        var authId = 0;
+        var mandantId = -1;
+        var authIdMatch = window.location.href.match(/authId=([0-9]+)/);
+        if(authIdMatch != null && authIdMatch[1] && authIdMatch[1] > 0) {
+            authId = authIdMatch[1];
+        }
+        var mandantIdMatch = window.location.href.match(/mandantId=([0-9]+)/);
+        if(mandantIdMatch != null && mandantIdMatch[1] && mandantIdMatch[1] >= 0) {
+            mandantId = mandantIdMatch[1];
+        }
+        if(authId > 0) {
+            jQuery('.b2s-network-auth-update-btn[data-auth-method="client"][data-network-auth-id="'+authId+'"]').trigger('click');
+        } else {
+            jQuery('.btn-primary.b2s-network-auth-btn[data-auth-method="client"]').trigger('click');
+        }
+        if(mandantId > -1) {
+            jQuery('#b2s-auth-network-6-mandant-id').val(mandantId);
+        }
+        jQuery('.b2s-auth-network-6-extension-info-area').show();
+        jQuery('.b2s-auth-network-6-extension-continue-btn').show();
+        jQuery('.b2s-auth-network-6-login-area').hide();
+        jQuery('.b2s-auth-network-6-login-btn').hide();
+        jQuery('.b2s-auth-network-6-confirm-btn').hide();
+        jQuery('.b2s-auth-network-6-info').hide();
+        var messageData = {action: 'BWEC', type: 'BWECT'};
+        window.postMessage(messageData, '*');
+    }
 });
 
 function init() {
@@ -1247,7 +1276,6 @@ jQuery(document).on('click', '.b2s-auth-network-6-login-btn', function () {
         },
         success: function (data) {
             jQuery('.b2s-loading-area').hide();
-            jQuery('.b2s-auth-network-6-login-area').show();
             if (data.result == true) {
                 jQuery('#b2s-auth-network-6-board').html(data.boards);
                 jQuery('#b2s-auth-network-6-ident-data').val(data.identData);
@@ -1255,16 +1283,23 @@ jQuery(document).on('click', '.b2s-auth-network-6-login-btn', function () {
                 jQuery('.b2s-auth-network-6-confirm-btn').show();
                 jQuery('.b2s-auth-network-6-info[data-info="success"]').show();
             } else {
-                jQuery('.b2s-auth-network-6-login-btn').show();
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                } else if(data.error == 'invalid' || data.error == 'login' || data.error == 'access' || data.error == 'http_request_failed' || data.error == 'error_code_403') {
+                    jQuery('.b2s-auth-network-6-extension-info-area').show();
+                    jQuery('.b2s-auth-network-6-extension-continue-btn').show();
+                    var messageData = {action: 'BWEC', type: 'BWECT'};
+                    window.postMessage(messageData, '*');
+                    return false;
                 }
                 if (typeof data.error != 'undefined' && data.error != '') {
                     jQuery('.b2s-auth-network-6-info[data-info="' + data.error + '"]').show();
-                    return false;
+                } else {
+                    jQuery('.b2s-auth-network-6-info[data-info="login"]').show();
                 }
-                jQuery('.b2s-auth-network-6-info[data-info="login"]').show();
+                jQuery('.b2s-auth-network-6-login-btn').show();
             }
+            jQuery('.b2s-auth-network-6-login-area').show();
         }
     });
 });
@@ -1353,12 +1388,20 @@ jQuery(document).on('click', '.b2s-network-auth-update-btn[data-auth-method="cli
 //reset
 jQuery('#b2sAuthNetwork6Modal').on('hidden.bs.modal', function () {
     jQuery('.b2s-loading-area').hide();
+    jQuery('.b2s-auth-network-6-extension-info-area').hide();
+    jQuery('.b2s-auth-network-6-extension-success-area').hide();
+    jQuery('.b2s-auth-network-6-extension-start-area').hide();
+    jQuery('.b2s-auth-network-6-confirm-extension-btn').hide();
+    jQuery('.b2s-auth-network-6-extension-auth-btn').hide();
     jQuery('.b2s-auth-network-6-login-area').show();
     jQuery('#b2s-auth-network-6-auth-id').val('');
     jQuery('#b2s-auth-network-6-board').html('');
     jQuery('#b2s-auth-network-6-ident-data').val('');
     jQuery('.b2s-auth-network-6-info').hide();
     jQuery('.b2s-auth-network-6-confirm-btn').hide();
+    jQuery('.b2s-auth-network-6-extension-auth-btn').hide();
+    jQuery('.b2s-auth-network-6-confirm-extension-btn').hide();
+    jQuery('.b2s-auth-network-6-extension-continue-btn').hide();
     jQuery('.b2s-auth-network-6-login-btn').show();
     jQuery('.b2s-auth-network-6-board-area').hide();
     jQuery('#b2s-auth-network-6-username').val('');
@@ -1643,6 +1686,17 @@ jQuery(document).on('click', '.b2s-network-add-group-info-btn', function() {
     return false;
 });
 
+jQuery(document).on('click', '.b2s-network-add-instagram-info-btn', function() {
+    jQuery('#b2sNetworkAddInstagramInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddInstagramInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=profile', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
 function generateExamplePost(template, content_range, exerpt_range) {
     if(jQuery('#b2s_use_post').val() == 'true') {
         var content = '';
@@ -1681,3 +1735,133 @@ function generateExamplePost(template, content_range, exerpt_range) {
     }
     return template;
 }
+
+jQuery(document).on('click', '.b2s-auth-network-6-extension-auth-btn', function () {
+    jQuery('.b2s-auth-network-6-extension-start-area').hide();
+    jQuery('.b2s-auth-network-6-extension-auth-btn').hide();
+    jQuery('.b2s-loading-area').show();
+    var messageData = {action: 'BWESP', type: 'BWECT', data: [
+          'pinterest.com' , 
+          'pinterest.de', 
+          'accounts.pinterest.com',  
+          'www.pinterest.com', 
+          'www.pinterest.de', 
+          '.www.pinterest.com' , 
+          '.www.pinterest.de', 
+          'gr.pinterest.com', 'in.pinterest.com', 'www.pinterest.ie', 'www.pinterest.it', 'www.pinterest.ch', 'cz.pinterest.com', 'id.pinterest.com', 'www.pinterest.es', 'www.pinterest.ca', 'www.pinterest.co.uk', 'www.pinterest.ru', 'nl.pinterest.com', 'br.pinterest.com', 'no.pinterest.com', 'tr.pinterest.com', 'www.pinterest.com.au', 'www.pinterest.at', 'pl.pinterest.com', 'www.pinterest.fr', 'ro.pinterest.com', 'www.pinterest.de', 'www.pinterest.dk', 'www.pinterest.nz', 'fi.pinterest.com', 'hu.pinterest.com', 'www.pinterest.jp', 'www.pinterest.pt', 'ar.pinterest.com', 'www.pinterest.co.kr', 'www.pinterest.se', 'www.pinterest.com.mx', 'sk.pinterest.com', 'www.pinterest.cl', 'co.pinterest.com', 'za.pinterest.com', 'www.pinterest.ph']};
+    window.postMessage(messageData, '*');
+    return false;
+});
+
+window.addEventListener("message", function(event) {
+    if(typeof event.data == "string") {
+        var result = JSON.parse(event.data);
+        if(result.type == 'BWECR' && result.version >= '1.5.5' && result.inkognito == false && result.enabled == true) {
+            jQuery('.b2s-auth-network-6-extension-info-area').hide();
+            jQuery('.b2s-auth-network-6-extension-continue-btn').hide();
+            jQuery('.b2s-auth-network-6-extension-start-area').show();
+            jQuery('.b2s-auth-network-6-extension-auth-btn').show();
+        }
+        if(result.type == 'BWEPR') {
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_network_check_user_data',
+                    'networkUserData': result.data,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery('#b2sAuthNetwork6Modal').modal('show');
+                    jQuery('.b2s-loading-area').hide();
+                    if (data.result == true) {
+                        jQuery('.b2s-auth-network-6-extension-success-area').show();
+                        jQuery('#b2s-auth-network-6-board-extension').html(data.boards);
+                        jQuery('#b2s-auth-network-6-username-extension').val(data.username);
+                        jQuery('#b2s-auth-network-6-ident-data').val(data.identData);
+                        jQuery('.b2s-auth-network-6-extension-success-area').show();
+                        jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+                        jQuery('.b2s-auth-network-6-extension-start-area').hide();
+                    } else {
+                        jQuery('.b2s-auth-network-6-extension-info-area').show();
+                        jQuery('.b2s-auth-network-6-extension-continue-btn').show();
+                        if (data.error == 'nonce') {
+                            jQuery('.b2s-nonce-check-fail').show();
+                        }
+                        jQuery('.b2s-auth-network-6-extension-error').show();
+                    }
+                }
+            });
+            return false;
+        }
+    }
+});
+
+jQuery(document).on('click', '.b2s-auth-network-6-confirm-extension-btn', function () {
+    jQuery('.b2s-loading-area').show();
+    jQuery('.b2s-auth-network-6-extension-success-area').hide();
+    jQuery('.b2s-auth-network-6-confirm-extension-btn').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_auth_network_confirm',
+            'username': jQuery('#b2s-auth-network-6-username-extension').val(),
+            'boardId': jQuery('#b2s-auth-network-6-board-extension').val(),
+            'identData': jQuery('#b2s-auth-network-6-ident-data').val(),
+            'mandantId': jQuery('#b2s-auth-network-6-mandant-id').val(),
+            'networkAuthId': jQuery('#b2s-auth-network-6-auth-id').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function (jqXHR) {
+            jQuery('.b2s-loading-area').hide();
+            jQuery('.b2s-auth-network-6-extension-success-area').show();
+            jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+            jQuery('.b2s-auth-network-6-extension-error').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-loading-area').hide();
+            jQuery('.b2s-auth-network-6-extension-success-area').show();
+            jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+            if (data.result == true) {
+                jQuery('#b2sAuthNetwork6Modal').modal('hide');
+                loginSuccess(data.networkId, data.networkType, data.displayName, data.networkAuthId, data.mandandId);
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-auth-network-6-extension-error').show();
+            }
+        }
+    });
+});
+
+jQuery(document).on('click', '.b2s-auth-network-6-extension-download-link', function() {
+    jQuery('.b2s-auth-network-6-extension-continue-btn').attr('disabled', false);
+});
+
+jQuery(document).on('click', '.b2s-auth-network-6-extension-continue-btn', function() {
+    var add = '';
+    if(jQuery('#b2s-auth-network-6-auth-id').val() != "") {
+        add += '&authId='+jQuery('#b2s-auth-network-6-auth-id').val();
+    }
+    if(jQuery('#b2s-auth-network-6-mandant-id').val() != "") {
+        add += '&mandantId='+jQuery('#b2s-auth-network-6-mandant-id').val();
+    }
+    var url = window.location.href;
+    if(url.match(/\#/)) {
+        var urlSplit = url.split('#');
+        url = urlSplit[0];
+    }
+    window.location.href = url + '#b2s-add-network-6' + add;
+    location.reload();
+});

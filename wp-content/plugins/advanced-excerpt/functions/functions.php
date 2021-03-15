@@ -77,3 +77,20 @@ function the_advanced_excerpt( $args = '', $get = false ) {
 	// Reset the options back to their original state
 	$advanced_excerpt->load_options();
 }
+
+function the_advanced_excerpt_lang( $atts, $content = '' ) {
+
+	$settings = shortcode_atts( array(
+		'lang' => 'en_us',
+	), $atts );
+
+	$settings['lang'] = strtolower( $settings['lang'] );
+	$locale = strtolower( get_locale() );
+
+	if ( $locale == $settings['lang'] ) {
+		return $content;
+	}
+
+	return;
+
+} add_shortcode( 'advanced_excerpt_text', 'the_advanced_excerpt_lang' );

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit40b60bb1fb3c9f8d7fbe38b982cb2ac5
+class ComposerStaticInit855bf574869f9221186f94087fb3b7d3
 {
     public static $files = array (
         'fca581ae5268210490253d58378748c5' => __DIR__ . '/../..' . '/includes/functions.php',
@@ -15,6 +15,7 @@ class ComposerStaticInit40b60bb1fb3c9f8d7fbe38b982cb2ac5
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'MC4WP_API' => __DIR__ . '/../..' . '/includes/api/class-api.php',
         'MC4WP_API_Connection_Exception' => __DIR__ . '/../..' . '/includes/api/class-connection-exception.php',
         'MC4WP_API_Exception' => __DIR__ . '/../..' . '/includes/api/class-exception.php',
@@ -87,7 +88,7 @@ class ComposerStaticInit40b60bb1fb3c9f8d7fbe38b982cb2ac5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit40b60bb1fb3c9f8d7fbe38b982cb2ac5::$classMap;
+            $loader->classMap = ComposerStaticInit855bf574869f9221186f94087fb3b7d3::$classMap;
 
         }, null, ClassLoader::class);
     }

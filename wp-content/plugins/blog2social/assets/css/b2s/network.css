@@ -865,3 +865,7 @@ ul.b2s-network-item-auth-list li:last-child{
     padding-bottom: 10px;
     border-left: 3px solid lightblue;
 }
+
+.b2s-auth-network-6-extension-download-area {
+    text-align: center;
+}

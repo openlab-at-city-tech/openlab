@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.2.17
+
+	- Added properly registered entry meta for Media Library attachment IDs. (#5)
+
 ## 1.2.16
 
 	- Fixed an issue where GPML may generate PHP notices if no file is uploaded.

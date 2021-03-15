@@ -231,6 +231,7 @@ abstract class GFAddOn {
 	 * Override this function to add initialization code (i.e. hooks) for the admin site (WP dashboard)
 	 */
 	public function init_admin() {
+		$this->maybe_cache_gravityapi_oauth_response();
 
 		// enqueues admin scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 0 );
@@ -324,6 +325,54 @@ abstract class GFAddOn {
 		add_filter( 'gform_print_styles', array( $this, 'enqueue_print_styles' ), 10, 2 );
 		add_action( 'gform_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 2 );
 
+	}
+
+	/**
+	 * Check for a response from the Gravity API and temporarily cache the value to a transient.
+	 *
+	 * This method cannot be extended because it's intended for use only by first-party Gravity Forms add-ons.
+	 *
+	 * @since 2.4.23
+	 */
+	private function maybe_cache_gravityapi_oauth_response() {
+		GFForms::include_gravity_api();
+
+		$referer     = isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) ) : array();
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : array();
+
+		if (
+			( rgar( $referer, 'host' ) !== rgar( wp_parse_url( GRAVITY_API_URL ), 'host' ) )
+			|| empty( $request_uri )
+		) {
+			return;
+		}
+
+		// Set up post data.
+		$data = array_filter(
+			array(
+				'auth_payload' => sanitize_text_field( rgpost( 'auth_payload' ) ),
+				'state'        => sanitize_text_field( rgpost( 'state' ) ),
+			)
+		);
+
+		// Get the query string to check which add-on is being authenticated.
+		parse_str(
+			rgar( $request_uri, 'query' ),
+			$query
+		);
+
+		$addon = rgar( $query, 'subview' );
+
+		if (
+			// Couldn't determine the add-on, no request was cached, or the response doesn't contain what we expect.
+			! $addon
+			|| ! get_transient( "gravityapi_request_{$addon}" )
+			|| count( $data ) !== 2
+		) {
+			return;
+		}
+
+		set_transient( "gravityapi_response_{$addon}", $data, 10 * MINUTE_IN_SECONDS );
 	}
 
 	/**
@@ -826,7 +875,7 @@ abstract class GFAddOn {
 				}
 				if ( isset( $script['callback'] ) && is_callable( $script['callback'] ) ) {
 					$args = compact( 'form', 'is_ajax' );
-					call_user_func_array( $script['callback'], $args );
+					call_user_func_array( $script['callback'], array_values( $args ) );
 				}
 			}
 		}

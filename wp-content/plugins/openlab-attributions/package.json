@@ -1,21 +1,21 @@
 {
   "private": true,
   "name": "openlab-attributions",
-  "description": "OpenLab text and images attribution plugin.",
+  "description": "Add formatted attributions to post content.",
   "version": "1.0.0",
   "author": "George Mamadashvili",
   "license": "GPL-2.0+",
   "main": "dist/js/block-editor.js",
   "scripts": {
-    "build": "npm run prod",
-    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch:sync": "cross-env sync=1 NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "build": "mix --production",
+    "dev": "mix",
+    "start": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
     "lint": "npm run lint:styles && npm run lint:scripts",
     "lint:styles": "cross-env stylelint './dist/scss/**/*.scss' --syntax scss",
     "lint:scripts": "cross-env eslint './dist/js/**/*.js'",
-    "lint:scripts:fix": "cross-env eslint './dist/js/**/*.js' --fix"
+    "format:scripts": "cross-env eslint './dist/js/**/*.js' --fix"
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -23,21 +23,16 @@
     "react-tippy": "^1.2.3"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.0.0",
-    "@wordpress/dependency-extraction-webpack-plugin": "^2.6.0",
-    "@wordpress/eslint-plugin": "^2.3.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "browser-sync": "^2.26.7",
-    "browser-sync-webpack-plugin": "2.0.1",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.15.2",
-    "laravel-mix": "^4.0.15",
-    "postcss-preset-env": "^6.6.0",
-    "resolve-url-loader": "3.1.0",
-    "sass": "^1.17.3",
-    "sass-loader": "^7.1.0",
-    "stylelint": "^9.10.1",
-    "stylelint-config-wordpress": "^13.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "@babel/preset-react": "^7.12.13",
+    "@wordpress/babel-preset-default": "^5.0.1",
+    "@wordpress/dependency-extraction-webpack-plugin": "^3.0.1",
+    "@wordpress/eslint-plugin": "^8.0.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.20.0",
+    "laravel-mix": "^6.0.11",
+    "postcss": "^8.2.6",
+    "resolve-url-loader": "^3.1.2",
+    "sass": "^1.32.8",
+    "sass-loader": "^8.0.2"
   }
 }

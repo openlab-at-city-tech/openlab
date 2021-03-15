@@ -442,7 +442,7 @@ class B2S_Util {
                 return trim($text);
             }
 
-            $stops = array('.', ':', '?', '!');
+            $stops = array('.', ':', '?', '!', '#');
             $min = $count;
             $cleanTruncateWord = true;
             $max = ($max !== false) ? ($max - $min) : ($min - 1);
@@ -471,6 +471,9 @@ class B2S_Util {
                     }
                     $sub = implode($stopAt, $subArray);
                     $add = false;
+                }
+                if($stopAt == '#') {
+                    $sub = mb_substr($sub, 0, -1);
                 }
             }
 

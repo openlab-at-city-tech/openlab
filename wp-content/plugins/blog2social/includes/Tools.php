@@ -286,6 +286,9 @@ class B2S_Tools {
         if($type == 'template_faq'){
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=4&id=152&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=4&id=150&artlang=de';
         }
+        if($type == 'instagram_auth_faq'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=19&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=22&artlang=de';
+        }
     }
 
     public static function getAffiliateId() {

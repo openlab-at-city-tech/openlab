@@ -1,3 +1,47 @@
+### 2.4.22.7
+- Fixed an issue that made multi-page forms with AJAX enabled use the wrong tabindex.
+
+### 2.4.22.6
+- Added a new JavaScript function "gformIsRecaptchaPending" to help resolve submission errors raised by some payment add-ons when a form includes an invisible Recaptcha.
+
+### 2.4.22.5
+- Added the [gform_shortcode_builder_forms](https://docs.gravityforms.com/gform_shortcode_builder_forms/) and [gform_block_form_forms](https://docs.gravityforms.com/gform_block_form_forms/) filters enabling the forms available for embedding to be overridden.
+
+### 2.4.22.4
+- Fixed an issue where the form editor block was generating notices in the JavaScript console.
+- Fixed an issue with sorting forms in PHP 8.
+- Fixed issue with auto-updates and PHP 8.
+- AF: Added a new method that allows add-ons to fix authentication issues.
+- API: Made the $args argument optional in `GF_Results_Cache::calculate()`;
+
+### 2.4.22.3
+- Updated the [gform_file_upload_markup](https://docs.gravityforms.com/gform_file_upload_markup/) JS filter to include response as the sixth parameter.
+- Fixed an issue where dates/times on the system report and entries list page can output nothing but "at" when the date/time formats on the WordPress general settings page are empty.
+
+### 2.4.22.2
+- Fixed checkbox and radio style issues for Twenty Twenty-One Theme.
+- Updated how file type checks work to avoid false positives.
+- Fixed issue with SQL statements containing "lead" in MySQL 8+
+- Fixed fatal error in PHP 8 on Gravity Forms pages.
+
+### 2.4.22.1
+- Fixed issue with jQuery 3.0 breaking multiselect conditional logic.
+
+### 2.4.22 | 2020-12-22
+- Added security enhancements.
+- Added the [gform_rule_pre_evaluation](https://docs.gravityforms.com/gform_rule_pre_evaluation/) JS and PHP filters enabling conditional logic rules to be overridden just before they are evaluated. Credit: Gravity Wiz.
+- Updated minimum WordPress version (for support) on the System Status page to 5.5.
+- Fixed an issue with the Email Field class names in the form editor.
+- Fixed an issue where a currency formatted number field can save the wrong calculation result to the entry if the rounding setting was previously configured.
+- API: Added the /forms/{$form_id}/field-filters endpoint to REST API v2. Credit: Gravity Flow.
+- API: Fixed an issue where a database error can occur when using the GFAPI methods for managing feeds when a feed add-on has not been installed to create the required table.
+- API: Removed the truncated hashed key from the v2 API Keys list table and edit page.
+- API: Updated an authentication error logging statement for REST API v2.
+- API: Updated REST API v2 to support authentication using WordPress 5.6 application passwords.
+- AF: Removed animation from input toggles on Feed Settings page.
+- AF: Removed Setup Fee setting when trial is enabled for Payment Add-Ons.
+
+
 ### 2.4.21 | 2020-10-14
 - Added security enhancements.
 - Updated background updates to work more seamlessly with WordPress's automatic updates.

@@ -5,7 +5,7 @@ Plugin URI: freshlabs.de
 Description: Integrates the <a href="http://simile.mit.edu/timeline/">SIMILE Timeline</a> with WordPress and provides an option interface for the various timeline settings. With this plugin you can display posts from a specific category in the Timeline Widget. Simply include the <strong>[similetimeline]</strong> shortcode in your page or post and specify the category on the <a href="options-general.php?page=timeline.php">admin page</a>.
 Author: freshlabs
 Author URI: freshlabs.de
-Version: 0.5.1
+Version: 0.5.2
 /*
 	SIMILE Timeline for WordPress
     Copyright 2006-2019 freshlabs
@@ -36,7 +36,7 @@ include('inc/WPSimileTimelineHotzone.class.php'); // class for timeline hotzone
 include('inc/WPSimileTimelineDecorator.class.php'); // class for timeline decorator
 
 @define('STL_TIMELINE_PLUGIN_DATESTRING', '20140920');
-@define('STL_TIMELINE_PLUGIN_VERSION', '0.5.1');
+@define('STL_TIMELINE_PLUGIN_VERSION', '0.5.2');
 @define('STL_TIMELINE_FOLDER', WP_PLUGIN_URL.'/wp-simile-timeline');
 @define('STL_TIMELINE_DATA_FOLDER', STL_TIMELINE_FOLDER.'/data');
 @define('STL_TIMELINE_IMAGE_FOLDER', STL_TIMELINE_FOLDER.'/src/img');

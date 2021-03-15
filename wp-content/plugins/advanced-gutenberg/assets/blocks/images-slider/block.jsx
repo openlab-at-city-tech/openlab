@@ -4,7 +4,7 @@
     const {Component, Fragment} = wpElement;
     const {registerBlockType} = wpBlocks;
     const {InspectorControls, PanelColorSettings, MediaUpload} = wpBlockEditor;
-    const {PanelBody, RangeControl, ToggleControl, SelectControl, TextControl, TextareaControl, IconButton, Button, Placeholder, Tooltip} = wpComponents;
+    const {PanelBody, RangeControl, ToggleControl, SelectControl, TextControl, TextareaControl, Button, Placeholder, Tooltip} = wpComponents;
     const $ = jQuery;
 
     const imageSliderBlockIcon = (
@@ -424,7 +424,7 @@
                                                     </Tooltip>
                                                 )}
                                                 <Tooltip text={__('Remove image', 'advanced-gutenberg')}>
-                                                    <IconButton
+                                                    <Button
                                                         className="advgb-image-slider-image-list-item-remove"
                                                         icon="no"
                                                         onClick={() => {
@@ -444,7 +444,7 @@
                                                     images: [...images, ...imgs.map((img) => lodash.pick(img, 'id', 'url'))],
                                                 })}
                                                 render={({open}) => (
-                                                    <IconButton
+                                                    <Button
                                                         label={__('Add image', 'advanced-gutenberg')}
                                                         icon="plus"
                                                         onClick={open}
@@ -535,6 +535,9 @@
             attributes: {
                 isPreview: true
             },
+        },
+        supports: {
+            anchor: true
         },
         edit: AdvImageSlider,
         save: function ({attributes}) {

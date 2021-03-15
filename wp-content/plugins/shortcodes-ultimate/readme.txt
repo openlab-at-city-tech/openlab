@@ -6,7 +6,7 @@ Tags: shortcode, toggle, columns, button, slider
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 5.9.6
+Stable tag: 5.9.7
 
 A comprehensive collection of visual components for your site
 
@@ -146,11 +146,14 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.9.6
+### 5.9.7
 
-Added compatiblity with WordPress 5.6
-Minor improvements
-Fixed readme.txt information
+**What's new**
+
+- PHP8 support
+- New filter `su/shortcode/posts/wp_query_args` that can be used to modify `[su_posts]` query
+- New filter `su/shortcode/posts/allowed_template_locations` that can be used to add custom template paths in the `[su_posts]` shortcode
+- Improved handling of nested dynamic elements within Tabs
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)

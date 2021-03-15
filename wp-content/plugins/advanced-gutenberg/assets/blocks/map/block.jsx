@@ -1463,6 +1463,9 @@
                 isPreview: true
             },
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvMap,
         save: function ( { attributes } ) {
             const {

@@ -5,7 +5,13 @@
         padding-left: 5px;
         padding-right: 5px;
     }
+    &.gallery-columns-1{
+        img{
+            display: inline-block;
+        }
+    }
 }
+
 .widget{
     .gallery{
         figcaption{

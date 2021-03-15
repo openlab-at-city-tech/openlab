@@ -439,6 +439,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         },
         supports: {
             align: true,
+            anchor: true
         },
         styles: [
             { name: 'default', label: __( 'Default', 'advanced-gutenberg' ), isDefault: true },

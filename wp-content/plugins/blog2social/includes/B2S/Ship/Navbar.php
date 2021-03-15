@@ -49,8 +49,12 @@ class B2S_Ship_Navbar {
         $b2sAuthUrl = $this->authUrl . '&portal_id=' . $data->networkId . '&transfer=' . (in_array($data->networkId, $this->oAuthPortal) ? 'oauth' : 'form' ) . '&mandant_id=' . $data->mandantId . '&version=3&affiliate_id='.B2S_Tools::getAffiliateId();
         
         $chooseData = isset($this->networkTypeData[$data->networkType]) ?  $this->networkTypeData[$data->networkType] : 'profile';
-        
-        $onclick = ($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? ' onclick="wop(\'' . $b2sAuthUrl . '&choose='.$chooseData.'&update=' . $data->networkAuthId . '\', \'Blog2Social Network\'); return false;"' : '';
+     
+        if($data->networkId == 6) {
+            $onclick = ($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? ' onclick="updateNetworkAuth6('.$data->networkAuthId.'); return false;"' : '';
+        } else {
+            $onclick = ($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? ' onclick="wop(\'' . $b2sAuthUrl . '&choose='.$chooseData.'&update=' . $data->networkAuthId . '\', \'Blog2Social Network\'); return false;"' : '';
+        }
 
         $mandantIds = array();
         if(empty($draftData)){

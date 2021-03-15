@@ -505,6 +505,9 @@
                 isPreview: true
             },
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvCountUp,
         save: AdvCountUpSave,
     } );

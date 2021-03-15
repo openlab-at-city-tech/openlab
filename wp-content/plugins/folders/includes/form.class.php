@@ -9,6 +9,20 @@ class WCP_Forms {
         ob_start();
         ?>
 
+	    <?php
+	    $customize_folders = get_option("customize_folders");
+	    if(isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+		    $upgradeURL = admin_url("options-general.php?page=wcp_folders_settings&setting_page=upgrade-to-pro");
+	    } else {
+		    $upgradeURL = admin_url("admin.php?page=folders-upgrade-to-pro");
+	    }
+
+	    $is_old = false;
+	    $old_status = get_option("wcp_folder_version_267");
+	    if($old_status === false) {
+		    //$is_old = true;
+	    }
+	    ?>
         <div class="wcp-custom-form">
             <div class="form-title">
                 <div class="plugin-title">
@@ -47,12 +61,17 @@ class WCP_Forms {
                                     <a data-folder-tooltip="Sort Folders" href="javascript:;" id="sort-order-list" class="sort-folder-order folder-tooltip">
                                         <span class="icon pfolder-arrow-sort"></span>
                                     </a>
-                                    <div class="folder-sort-menu">
+                                    <div class="folder-sort-menu <?php echo ($is_old)?"":"is-pro" ?>">
                                         <ul>
-                                            <li><a data-sort="a-z" href="#">A → Z</a></li>
-                                            <li><a data-sort="z-a" href="#">Z → A</a></li>
-                                            <li><a data-sort="n-o" href="#">Newest → Oldest</a></li>
-                                            <li><a data-sort="o-n" href="#">Oldest → Newest</a></li>
+                                            <li><a data-sort="a-z" href="#"><?php esc_html_e("A → Z", WCP_FOLDER ) ?></a></li>
+                                            <li><a data-sort="z-a" href="#"><?php esc_html_e("Z → A", WCP_FOLDER ) ?></a></li>
+                                            <?php if($is_old) { ?>
+                                                <li><a data-sort="n-o" href="#"><?php esc_html_e("Sort by newest", WCP_FOLDER ) ?></a></li>
+                                                <li><a data-sort="o-n" href="#"><?php esc_html_e("Sort by oldest", WCP_FOLDER ) ?></a></li>
+                                            <?php } else { ?>
+                                                <li><a data-sort="n-o" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by newest", WCP_FOLDER ) ?> <span><?php esc_html_e("(Pro)", WCP_FOLDER ) ?></span></a></li>
+                                                <li><a data-sort="o-n" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by oldest", WCP_FOLDER ) ?> <span><?php esc_html_e("(Pro)", WCP_FOLDER ) ?></span></a></li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </li>
@@ -61,17 +80,7 @@ class WCP_Forms {
                     </li>
                 </ul>
                 <div class="upgrade-message">
-                    <?php
-                    $tlfs = get_option("folder_old_plugin_folder_status");
-                    if($tlfs == false || $tlfs < 10) {
-                        $tlfs = 10;
-                    }
-                    $total = WCP_Folders::get_ttl_fldrs();
-                    if($total > $tlfs) {
-                        $tlfs = $total;
-                    }
-                    ?>
-                    <span class="upgrade-message">You have used <span class='pink' id='current-folder'><?php echo esc_attr($total) ?></span>/<span id='ttl-fldr'><?php echo esc_attr($tlfs) ?></span> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
+                    <span class="upgrade-message"><a class="pink" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Unlock all Pro features", WCP_FOLDER) ?> <span class="dashicons dashicons-arrow-right-alt"></span></a></span>
                 </div>
             </div>
             <div class="form-loader">

@@ -36,7 +36,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none repeat scroll 0 0 #3399ff;
     color: #ffffff;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     padding: 10px;'
             ),
@@ -48,7 +48,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none repeat scroll 0 0 #8cc14c;
     color: #ffffff;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     padding: 10px;'
             ),
@@ -60,7 +60,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none repeat scroll 0 0 #faa732;
     color: #ffffff;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     padding: 10px;'
             ),
@@ -72,7 +72,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none repeat scroll 0 0 #da4d31;
     color: #ffffff;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     padding: 10px;'
             ),
@@ -84,7 +84,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none repeat scroll 0 0 #53555c;
     color: #ffffff;
     text-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     padding: 10px;'
             ),
@@ -118,7 +118,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 'css' => 'background: none;
     border-left: 5px solid #f1f1f1;
     color: #8B8E97;
-    font-size: 14px;
+    font-size: 16px;
     font-style: italic;
     line-height: 22px;
     padding-left: 15px;
@@ -177,6 +177,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 add_filter('mce_external_plugins', array($this, 'addTinyMceExternal'));
                 add_filter('mce_buttons_2', array($this, 'addTinyMceButtons'));
                 add_filter('block_categories', array($this, 'addAdvBlocksCategory'));
+                add_filter('admin_body_class', array($this, 'setAdvgEditorBodyClassses'));
 
                 // Ajax
                 add_action('wp_ajax_advgb_update_blocks_list', array($this, 'updateBlocksList'));
@@ -1431,19 +1432,13 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 if (isset($saved_settings['editor_width']) && $saved_settings['editor_width']) {
                     wp_add_inline_style(
                         'dashicons',
-                        '#editor div.block-editor-writing-flow {max-width: ' . $saved_settings['editor_width'] . '%;margin: 0 auto}#editor .wp-block {max-width: inherit}'
+                        '#editor div.block-editor-writing-flow {max-width: ' . $saved_settings['editor_width'] . '%;margin: 0 auto} #editor .wp-block:not([data-type="advgb/images-slider"]):not([data-type="advgb/testimonial"]) {max-width: inherit}'
                     );
-                }
-
-                if (!isset($saved_settings['enable_columns_visual_guide'])
-                    || (isset($saved_settings['enable_columns_visual_guide']) && $saved_settings['enable_columns_visual_guide'])
-                ) {
-                    if($saved_settings['enable_columns_visual_guide'] == '1') {
-                        wp_add_inline_style(
-                            'dashicons',
-                            '.advgb-columns>.block-editor-inner-blocks>.block-editor-block-list__layout>.wp-block:not(.is-selected)>.advgb-column{border:1px dashed #ddd;}'
-                        );
-                    }
+                } else {
+                    wp_add_inline_style(
+                        'dashicons',
+                        '#editor div.block-editor-writing-flow {margin: 0 auto} #editor .wp-block:not([data-type="advgb/images-slider"]):not([data-type="advgb/testimonial"]) {max-width: inherit}'
+                    );
                 }
             }
         }
@@ -1482,8 +1477,8 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 plugins_url('assets/css/fonts/material-icons-custom.min.css', dirname(__FILE__))
             );
             wp_register_style(
-                'advgb_bulma_styles',
-                plugins_url('assets/css/bulma.min.css', dirname(__FILE__))
+                'advgb_columns_styles',
+                plugins_url('assets/css/columns.min.css', dirname(__FILE__))
             );
 
             wp_register_script(
@@ -1579,6 +1574,90 @@ if(!class_exists('AdvancedGutenbergMain')) {
                     'type'          => 'string',
                 )
             );
+        }
+
+        /**
+         * Convert Editor Width value into a string
+         *
+         * @param int $value Editor width number
+         *
+         * @return string
+         */
+        public function getAdvgbEditorWidth( $value ) {
+
+            $result = '';
+
+            switch($value) {
+                default:
+                    $result = 'default';
+                    break;
+                case '75':
+                    $result = 'large';
+                    break;
+                case '95':
+                    $result = 'full';
+                    break;
+            }
+
+            return $result;
+        }
+
+        /**
+         * Set body classes for Editor width and Columns visual guide
+         *
+         * @param string $classes CSS class from body
+         */
+        public function setAdvgEditorBodyClassses( $classes ) {
+
+            if ('post' == get_current_screen()->base) {
+                $saved_settings     = get_option('advgb_settings');
+                global $post;
+                $editorWidth        = get_post_meta($post->ID, 'advgb_blocks_editor_width', true);
+                $editorColsVG       = get_post_meta($post->ID, 'advgb_blocks_columns_visual_guide', true);
+                $editorWidthGlobal  = (
+                        isset($saved_settings['editor_width'])
+                        && !empty($saved_settings['editor_width'])
+                    )
+                    ? $this->getAdvgbEditorWidth( $saved_settings['editor_width'] )
+                    : 'default';
+                $editorColsVGGlobal = (
+                        isset($saved_settings['enable_columns_visual_guide'])
+                        && ($saved_settings['enable_columns_visual_guide'] == 0)
+                    )
+                    ? 'disable'
+                    : 'enable';
+
+                // Editor width
+                if(isset($editorWidth) && !empty($editorWidth)) {
+                    // Editor width - Post meta
+                    $classes .= ' advgb-editor-width-' . $editorWidth . ' ';
+                } else {
+                    // Editor width - Global configuration
+                    $classes .= ' advgb-editor-width-' . $editorWidthGlobal . ' ';
+                }
+
+                // Columns visual guide
+                if(isset($editorColsVG) && !empty($editorColsVG)) {
+                    // Columns visual guide - Post meta
+                    $classes .= ' advgb-editor-col-guide-' . $editorColsVG . ' ';
+                }  else {
+                    // Columns visual guide - Global configuration
+                    $classes .= ' advgb-editor-col-guide-' . $editorColsVGGlobal . ' ';
+                }
+
+                // Global settings as javascript variables
+                wp_localize_script(
+                    'advgb_blocks',
+                    'advg_settings',
+                    [
+                        'editor_width_global'                   => $editorWidthGlobal,
+                        'enable_columns_visual_guide_global'    => $editorColsVGGlobal,
+                    ]
+                );
+
+                return $classes;
+            }
+            return $classes;
         }
 
         /**
@@ -1740,9 +1819,6 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
                 echo '<style type="text/css">' . $content . '</style>';
 
-            } else {
-                // @TODO remove in later versions
-                echo '<script>console.log(\'advgb-tracking-issue-141\');</script>';
             }
         }
 
@@ -1765,9 +1841,6 @@ if(!class_exists('AdvancedGutenbergMain')) {
 
                 echo '<style type="text/css">' . $content . '</style>';
 
-            } else {
-                // @TODO remove in later versions
-                echo '<script>console.log(\'advgb-tracking-issue-141\');</script>';
             }
         }
 
@@ -4569,7 +4642,7 @@ if(!class_exists('AdvancedGutenbergMain')) {
             }
 
             if (strpos($content, 'advgb-columns') !== false) {
-                wp_enqueue_style('advgb_bulma_styles');
+                wp_enqueue_style('advgb_columns_styles');
             }
 
             if (strpos($content, 'advgb-lores-form-wrapper') !== false) {
@@ -4996,11 +5069,11 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $padding        = isset($blockAttrs['padding']) ? intval($blockAttrs['padding']) : 2;
             $line_height    = isset($blockAttrs['lineHeight']) ? intval($blockAttrs['lineHeight']) : 18;
 
-            $style_html  = '.'. $block_class . ' li{';
+            $style_html  = '.wp-block-advgb-list ul.' . $block_class . ' > li{';
             $style_html .= 'font-size:'.$font_size.'px;margin-left:'.($icon_size + $padding).'px';
             $style_html .= '}';
             if (!isset($blockAttrs['icon']) || (isset($blockAttrs['icon']) && !!$blockAttrs['icon'])) {
-                $style_html .= '.'. $block_class . ' li:before{';
+                $style_html .= '.wp-block-advgb-list ul.' . $block_class . ' > li:before{';
                 $style_html .= 'font-size:'.$icon_size.'px;';
                 $style_html .= 'color:'.$icon_color.';';
                 $style_html .= 'line-height:'.$line_height.'px;';
@@ -5106,16 +5179,6 @@ if(!class_exists('AdvancedGutenbergMain')) {
             $style_html .= isset($blockAttrs['paddingRight']) ? 'padding-right:'.$blockAttrs['paddingRight'].$paddingUnit.';' : '';
             $style_html .= isset($blockAttrs['paddingBottom']) ? 'padding-bottom:'.$blockAttrs['paddingBottom'].$paddingUnit.';' : '';
             $style_html .= isset($blockAttrs['paddingLeft']) ? 'padding-left:'.$blockAttrs['paddingLeft'].$paddingUnit.';' : '';
-            $style_html .= '}';
-
-            $style_html .= '#'. $colID . ' > .advgb-columns-container > .advgb-columns-row {';
-            $style_html .= isset($blockAttrs['gutter']) && $blockAttrs['gutter'] !== '0' ? 'margin-left: -'.$blockAttrs['gutter'] / 2 .'px;' : '';
-            $style_html .= isset($blockAttrs['gutter']) && $blockAttrs['gutter'] !== '0' ? 'margin-right: -'.$blockAttrs['gutter'] / 2 .'px;' : '';
-            $style_html .= '}';
-
-            $style_html .= '#'. $colID . ' > .advgb-columns-container > .advgb-columns-row > .advgb-column {';
-            $style_html .= isset($blockAttrs['gutter']) && $blockAttrs['gutter'] !== '0' ? 'padding-left: '.$blockAttrs['gutter'] / 2 .'px;' : '';
-            $style_html .= isset($blockAttrs['gutter']) && $blockAttrs['gutter'] !== '0' ? 'padding-right: '.$blockAttrs['gutter'] / 2 .'px;' : '';
             $style_html .= '}';
 
             if ($blockName === 'advgb/column') {

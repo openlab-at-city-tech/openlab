@@ -617,152 +617,7 @@ jQuery(document).on('click', '.b2s-post-item-details-release-area-sched-for-all'
     return false;
 });
 jQuery(document).on("click", ".b2s-user-network-settings-post-format", function () {
-    jQuery('.b2s-settings-user-success').hide();
-    jQuery('.b2s-settings-user-error').hide();
-    jQuery('.b2s-server-connection-fail').hide();
-    var networkId = jQuery(this).attr("data-network-id");
-    var networkType = jQuery(this).attr("data-network-type");
-    var postFormat = jQuery(this).val();
-    var networkAuthId = jQuery(this).attr("data-network-auth-id");
-    var postFormatType = jQuery(this).attr("data-post-format-type");
-    var postType = jQuery(this).attr("data-post-wp-type");
-    jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').val(postFormat);
-    //PostFormat
-    if (jQuery('.b2s-post-ship-item-post-format-text[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').length > 0) {
-        var postFormatText = JSON.parse(jQuery('.b2sNetworkSettingsPostFormatText').val());
-        if (jQuery('#user_version').val() >= 2) {
-            jQuery('.b2s-post-ship-item-post-format-text[data-network-auth-id="' + networkAuthId + '"]').html(postFormatText[postFormatType][postFormat]);
-            jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val(postFormat);
-        } else {
-            jQuery('.b2s-post-ship-item-post-format-text[data-network-id="' + networkId + '"]').html(postFormatText[postFormatType][postFormat]);
-            jQuery('.b2s-post-item-details-post-format[data-network-id="' + networkId + '"]').val(postFormat);
-        }
-        if (jQuery('.b2s-network-select-btn[data-network-auth-id="' + networkAuthId + '"]').attr('data-meta-type') == 'og' && postType != "ex") {
-            if (currentOGImage == '' && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val() != '') {
-                currentOGImage = jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val();
-                if (postFormat == "0") {
-                    jQuery('.b2s-network-select-btn[data-meta-type="og"]').each(function () {
-                        jQuery('.b2s-post-item-details-url-image[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').attr('src', currentOGImage);
-                        jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val(currentOGImage);
-                        jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').show();
-                        if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1) {
-                            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').hide();
-                        }
-                    });
-                }
-            }
-            if (postFormat == "0" && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val() != currentOGImage) {
-                jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val(currentOGImage);
-                jQuery('.b2s-post-item-details-url-image[data-network-auth-id="' + networkAuthId + '"]').attr('src', currentOGImage);
-                jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').show();
-                if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() == 1) {
-                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
-                }
-            }
-        }
-    }
-    var textLimit = jQuery('.b2s-post-item-details-item-message-input[data-network-count="-1"][data-network-auth-id="' + networkAuthId + '"]').attr('data-network-text-limit');
-    if (textLimit != "0") {
-        networkLimitAll(networkAuthId, networkId, textLimit);
-    } else {
-        networkCount(networkAuthId);
-    }
-
-    //Edit Meta Tags
-    var isMetaChecked = false;
-    var ogMetaNetworks = jQuery('#ogMetaNetworks').val().split(";");
-    if (typeof networkId != 'undefined' && jQuery.inArray(networkId.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
-        isMetaChecked = true;
-    }
-    if (networkId == "2" && jQuery('#isCardMetaChecked').val() == "1") {
-        isMetaChecked = true;
-    }
-    if (isMetaChecked && postFormat == '0' && jQuery('#user_version').val() > 0) { //If linkpost
-        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", false);
-        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", false);
-        var dataMetaType = jQuery('.b2s-network-select-btn[data-network-auth-id="' + networkAuthId + '"]').attr("data-meta-type");
-        if (dataMetaType == "og") {
-            jQuery('#b2sChangeOgMeta').val("1");
-        } else {
-            jQuery('#b2sChangeCardMeta').val("1");
-        }
-
-        //Copy from further item meta tags by same network
-        jQuery('.b2s-post-item-details-post-format[data-network-id=' + networkId + ']').each(function () {
-            if (jQuery(this).val() == "0" && jQuery('.b2s-post-ship-item-post-format[data-network-auth-id=' + jQuery(this).attr('data-network-auth-id') + ']').is(":visible") && jQuery(this).attr('data-network-auth-id') != networkAuthId) { //other Linkpost by same network
-                jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
-                jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
-                jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
-                if (jQuery('.b2s-image-remove-btn[data-network-count="-1"][data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]:visible').length == 1) {
-                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').show();
-                } else {
-                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').hide();
-                }
-
-                return true;
-            }
-        });
-
-        //Set & Check Link
-        if (typeof jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]') !== undefined) {
-            //Facebook + Twitter && Linkpost
-            if (networkId == 1 || networkId == 2 && postFormat == 0) {
-                if (jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + networkAuthId + '"]').val() == "") {
-                    jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('#b2sDefault_url').val());
-                }
-            }
-            jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').show();
-            if (jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').hasClass('disabled')) {
-                jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').removeClass('disabled');
-            }
-        }
-
-    } else {
-        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
-        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
-        jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').hide();
-    }
-
-    //Content Curation V5.0.0
-    if (postType == "ex") {
-        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
-        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
-        jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + networkAuthId + '"]').attr("style", "display:none !important");
-        if (postFormat == '0') {
-            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"]').hide();
-            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').hide();
-            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').show();
-            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').show();
-            jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').trigger("click");
-        } else {
-            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"]').show();
-            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').show();
-            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').hide();
-            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').hide();
-        }
-        if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() == 1) {
-            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
-            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
-        }
-    }
-    jQuery('.b2s-user-network-settings-post-format[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').removeClass('b2s-settings-checked');
-    jQuery(this).addClass('b2s-settings-checked');
-    jQuery('#b2s-post-ship-item-post-format-modal').modal('hide');
-    checkGifAnimation(networkAuthId, networkId);
-    
-    //Multi Image
-    if(postFormat == 1 && ((networkId == 1 && (networkType == 1 || networkType == 2)) || (networkId == 2)) && jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() != 1) {
-        jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="-1"]').show();
-    } else {
-        jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="-1"]').hide();
-    }
-    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="0"]').show();
-    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="1"]').show();
-    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="2"]').show();
-    
-    if(postFormat == 0 && networkId == 1) {
-        jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="'+networkAuthId+'"]').addClass('required_network_url');
-    }
+    changePostFormat(jQuery(this).attr("data-network-id"), jQuery(this).attr("data-network-type"), jQuery(this).val(), jQuery(this).attr("data-network-auth-id"), jQuery(this).attr("data-post-format-type"), jQuery(this).attr("data-post-wp-type"), true);
     return false;
 });
 jQuery(document).on("click", ".b2s-post-ship-item-full-text", function () {
@@ -905,10 +760,16 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                             } else {
                                 jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').trigger("click");
                             }
+                            if(networkId == "2") {
+                                jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').show();
+                            }
                         } else {
                             jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
                             jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
                             jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').hide();
+                            if(networkId == "2") {
+                                jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').hide();
+                            }
                         }
 
                     } else {
@@ -1160,10 +1021,16 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                                 }
 
                                             }
+                                            if(networkId == "2") {
+                                                jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').show();
+                                            }
                                         } else {
                                             jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + data.networkAuthId + '"]').prop("readonly", true);
                                             jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + data.networkAuthId + '"]').prop("readonly", true);
                                             jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + data.networkAuthId + '"]').hide();
+                                            if(networkId == "2") {
+                                                jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').hide();
+                                            }
                                         }
 
                                     } else {
@@ -1217,8 +1084,10 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
 
                                         //CC Imagepost V6.0.0
                                         if (jQuery('#b2sExPostFormat').val() == 0 || jQuery('#b2sExPostFormat').val() == 1) {
-                                            jQuery('.b2s-post-ship-item-post-format[data-network-auth-id="' + data.networkAuthId + '"]').trigger('click');
-                                            jQuery('.b2s-user-network-settings-post-format[value="' + jQuery('#b2sExPostFormat').val() + '"][data-network-auth-id="' + data.networkAuthId + '"]').trigger('click');
+                                            if (jQuery('#user_version').val() >= 1) {
+                                                openPostFormat(data.networkId, data.networkType, data.networkAuthId, 'ex', false);                                            
+                                                changePostFormat(data.networkId, data.networkType, jQuery('#b2sExPostFormat').val(), data.networkAuthId, 'post', 'ex', false);
+                                            }
                                         }
                                     }
 
@@ -1498,29 +1367,7 @@ jQuery(document).on('click', '.b2s-submit-btn-scroll', function () {
     jQuery('.b2s-submit-btn').trigger('click');
 });
 jQuery(document).on('click', '.b2s-post-ship-item-post-format', function () {
-    if (jQuery('#user_version').val() >= 1) {
-        jQuery('.b2s-user-network-settings-post-format-area').hide();
-        jQuery('.b2s-user-network-settings-post-format-area[data-network-type="' + jQuery(this).attr('data-network-type') + '"][data-network-id="' + jQuery(this).attr('data-network-id') + '"]').show();
-        jQuery('#b2s-post-ship-item-post-format-network-title').html(jQuery('.b2s-user-network-settings-post-format-area[data-network-id="' + jQuery(this).attr('data-network-id') + '"]').attr('data-network-title'));
-        if (jQuery('#user_version').val() >= 2) {
-            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + jQuery(this).attr('data-network-type') + '"][data-network-id="' + jQuery(this).attr('data-network-id') + '"]').removeClass('b2s-settings-checked');
-            var currentPostFormat = jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val();
-            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + jQuery(this).attr('data-network-type') + '"][data-network-id="' + jQuery(this).attr('data-network-id') + '"][data-post-format="' + currentPostFormat + '"]').addClass('b2s-settings-checked');
-            jQuery('#b2s-post-ship-item-post-format-network-display-name').html(jQuery('.b2s-post-item-details-network-display-name[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').text().toUpperCase());
-        }
-        jQuery('.b2s-post-format-settings-info').hide();
-        jQuery('.b2s-post-format-settings-info[data-network-id="' + jQuery(this).attr('data-network-id') + '"]').show();
-        jQuery('#b2s-post-ship-item-post-format-modal').modal('show');
-        jQuery('.b2s-user-network-settings-post-format').attr('data-network-auth-id', jQuery(this).attr('data-network-auth-id'));
-        jQuery('.b2s-user-network-settings-post-format').attr('data-post-wp-type', jQuery(this).attr('data-post-wp-type'));
-        if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == "1" && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() != currentOGImage && jQuery('.b2s-network-select-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').attr('data-meta-type') == 'og') {
-            jQuery('.b2s-select-link-chang-image').show();
-        } else {
-            jQuery('.b2s-select-link-chang-image').hide();
-        }
-    } else {
-        jQuery('#b2sInfoFormatModal').modal('show');
-    }
+    openPostFormat(jQuery(this).attr('data-network-id'), jQuery(this).attr('data-network-type'), jQuery(this).attr('data-network-auth-id'), jQuery(this).attr('data-post-wp-type'), true);
     return false;
 });
 jQuery(document).on('click', '.b2s-btn-trigger-post-ship-item-post-format', function () {
@@ -1641,6 +1488,13 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select'
         }
     }
     releaseChoose(jQuery(this).val(), jQuery(this).attr('data-network-auth-id'), dataNetworkCount);
+    jQuery('.b2s-post-item-details-item-message-input[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').focus();
+    var textLimit = jQuery('.b2s-post-item-details-item-message-input[data-network-count="-1"][data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').attr('data-network-text-limit');
+    if (textLimit != "0") {
+        networkLimitAll(jQuery(this).attr('data-network-auth-id'), jQuery(this).attr('data-network-id'), textLimit);
+    } else {
+        networkCount(jQuery(this).attr('data-network-auth-id'));
+    }
 });
 jQuery(document).on('click', '#b2s-network-sched-post-info-ignore', function () {
     jQuery('#b2sSchedPostInfoIgnore').val("1");
@@ -1726,7 +1580,14 @@ jQuery(document).on('click', '.b2s-post-item-details-release-input-add', functio
         //since 4.9.0 custom content
         jQuery('.b2s-post-item-details-release-customize-sched-area-details-row[data-network-auth-id="' + networkAuthId + '"][data-network-count="' + netCountNext + '"]').hide();
     }
-
+    
+    jQuery('.b2s-post-item-details-item-message-input[data-network-auth-id="' + networkAuthId + '"][data-network-count="' + netCountNext + '"]').focus();
+    var textLimit = jQuery('.b2s-post-item-details-item-message-input[data-network-count="-1"][data-network-auth-id="' + networkAuthId + '"]').attr('data-network-text-limit');
+    if (textLimit != "0") {
+        networkLimitAll(networkAuthId, networkId, textLimit);
+    } else {
+        networkCount(networkAuthId);
+    }
     return false;
 });
 jQuery(document).on('click', '.b2s-post-item-details-release-input-hide', function () {
@@ -3699,7 +3560,6 @@ jQuery(document).on('click', '.b2s-auth-network-6-login-btn', function () {
         },
         success: function (data) {
             jQuery('.b2s-loading-area').hide();
-            jQuery('.b2s-auth-network-6-login-area').show();
             if (data.result == true) {
                 jQuery('#b2s-auth-network-6-board').html(data.boards);
                 jQuery('#b2s-auth-network-6-ident-data').val(data.identData);
@@ -3707,16 +3567,23 @@ jQuery(document).on('click', '.b2s-auth-network-6-login-btn', function () {
                 jQuery('.b2s-auth-network-6-confirm-btn').show();
                 jQuery('.b2s-auth-network-6-info[data-info="success"]').show();
             } else {
-                jQuery('.b2s-auth-network-6-login-btn').show();
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                } else if(data.error == 'invalid' || data.error == 'login' || data.error == 'access' || data.error == 'http_request_failed' || data.error == 'error_code_403') {
+                    jQuery('.b2s-auth-network-6-extension-info-area').show();
+                    jQuery('.b2s-auth-network-6-go-to-network-btn').show();
+                    var messageData = {action: 'BWEC', type: 'BWECT'};
+                    window.postMessage(messageData, '*');
+                    return false;
                 }
                 if (typeof data.error != 'undefined' && data.error != '') {
                     jQuery('.b2s-auth-network-6-info[data-info="' + data.error + '"]').show();
-                    return false;
+                } else {
+                    jQuery('.b2s-auth-network-6-info[data-info="login"]').show();
                 }
-                jQuery('.b2s-auth-network-6-info[data-info="login"]').show();
+                jQuery('.b2s-auth-network-6-login-btn').show();
             }
+            jQuery('.b2s-auth-network-6-login-area').show();
         }
     });
 });
@@ -3737,7 +3604,7 @@ jQuery(document).on('click', '.b2s-auth-network-6-confirm-btn', function () {
             'password': jQuery('#b2s-auth-network-6-password').val(),
             'boardId': jQuery('#b2s-auth-network-6-board').val(),
             'identData': jQuery('#b2s-auth-network-6-ident-data').val(),
-            'mandantId': jQuery('.b2s-network-details-mandant-select').val(),
+            'mandantId': jQuery('#b2s-auth-network-6-mandant-id').val(),
             'networkAuthId': jQuery('#b2s-auth-network-6-auth-id').val(),
             'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
         },
@@ -4011,3 +3878,371 @@ jQuery(document).on('click', '.b2s-select-multi-image-modal-open', function() {
     jQuery('.b2s-post-item-details-url-image-multi[data-network-auth-id="'+authId+'"][data-image-count="'+imageCount+'"][data-network-count="'+countId+'"]').trigger('click');
     return false;
 });
+
+jQuery(document).on('click', '.b2s-auth-network-6-extension-auth-btn', function () {
+    jQuery('.b2s-auth-network-6-extension-info-area').hide();
+    jQuery('.b2s-auth-network-6-extension-start-area').hide();
+    jQuery('.b2s-auth-network-6-extension-auth-btn').hide();
+    jQuery('.b2s-auth-network-6-go-to-network-btn').hide();
+    jQuery('.b2s-loading-area').show();
+    var messageData = {action: 'BWESP', type: 'BWECT', data: [
+          'pinterest.com' , 
+          'pinterest.de', 
+          'accounts.pinterest.com',  
+          'www.pinterest.com', 
+          'www.pinterest.de', 
+          '.www.pinterest.com' , 
+          '.www.pinterest.de', 
+          'gr.pinterest.com', 'in.pinterest.com', 'www.pinterest.ie', 'www.pinterest.it', 'www.pinterest.ch', 'cz.pinterest.com', 'id.pinterest.com', 'www.pinterest.es', 'www.pinterest.ca', 'www.pinterest.co.uk', 'www.pinterest.ru', 'nl.pinterest.com', 'br.pinterest.com', 'no.pinterest.com', 'tr.pinterest.com', 'www.pinterest.com.au', 'www.pinterest.at', 'pl.pinterest.com', 'www.pinterest.fr', 'ro.pinterest.com', 'www.pinterest.de', 'www.pinterest.dk', 'www.pinterest.nz', 'fi.pinterest.com', 'hu.pinterest.com', 'www.pinterest.jp', 'www.pinterest.pt', 'ar.pinterest.com', 'www.pinterest.co.kr', 'www.pinterest.se', 'www.pinterest.com.mx', 'sk.pinterest.com', 'www.pinterest.cl', 'co.pinterest.com', 'za.pinterest.com', 'www.pinterest.ph']};
+    window.postMessage(messageData, '*');
+    return false;
+});
+
+window.addEventListener("message", function(event) {
+    if(typeof event.data == "string") {
+        var result = JSON.parse(event.data);
+        if(result.type == 'BWECR' && result.version >= '1.5.5' && result.inkognito == false && result.enabled == true) {
+            jQuery('.b2s-auth-network-6-extension-info-area').hide();
+            jQuery('.b2s-auth-network-6-extension-continue-btn').hide();
+            jQuery('.b2s-auth-network-6-go-to-network-btn').hide();
+            jQuery('.b2s-auth-network-6-extension-start-area').show();
+            jQuery('.b2s-auth-network-6-extension-auth-btn').show();
+        }
+        if(result.type == 'BWEPR') {
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_network_check_user_data',
+                    'networkUserData': result.data,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery('#b2sAuthNetwork6Modal').modal('show');
+                    jQuery('.b2s-loading-area').hide();
+                    if (data.result == true) {
+                        jQuery('.b2s-auth-network-6-extension-success-area').show();
+                        jQuery('#b2s-auth-network-6-board-extension').html(data.boards);
+                        jQuery('#b2s-auth-network-6-username-extension').val(data.username);
+                        jQuery('#b2s-auth-network-6-ident-data').val(data.identData);
+                        jQuery('.b2s-auth-network-6-extension-success-area').show();
+                        jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+                        jQuery('.b2s-auth-network-6-extension-start-area').hide();
+                    } else {
+                        jQuery('.b2s-auth-network-6-extension-info-area').show();
+                        jQuery('.b2s-auth-network-6-extension-continue-btn').show();
+                        if (data.error == 'nonce') {
+                            jQuery('.b2s-nonce-check-fail').show();
+                        }
+                        jQuery('.b2s-auth-network-6-extension-error').show();
+                    }
+                }
+            });
+            return false;
+        }
+    }
+});
+
+jQuery(document).on('click', '.b2s-auth-network-6-confirm-extension-btn', function () {
+    jQuery('.b2s-loading-area').show();
+    jQuery('.b2s-auth-network-6-extension-success-area').hide();
+    jQuery('.b2s-auth-network-6-confirm-extension-btn').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_auth_network_confirm',
+            'username': jQuery('#b2s-auth-network-6-username-extension').val(),
+            'boardId': jQuery('#b2s-auth-network-6-board-extension').val(),
+            'identData': jQuery('#b2s-auth-network-6-ident-data').val(),
+            'mandantId': jQuery('#b2s-auth-network-6-mandant-id').val(),
+            'networkAuthId': jQuery('#b2s-auth-network-6-auth-id').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function (jqXHR) {
+            jQuery('.b2s-loading-area').hide();
+            jQuery('.b2s-auth-network-6-extension-success-area').show();
+            jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+            jQuery('.b2s-auth-network-6-extension-error').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-loading-area').hide();
+            jQuery('.b2s-auth-network-6-extension-success-area').show();
+            jQuery('.b2s-auth-network-6-confirm-extension-btn').show();
+            if (data.result == true) {
+                jQuery('#b2sAuthNetwork6Modal').modal('hide');
+                loginSuccess(data.networkId, data.networkType, data.displayName, data.networkAuthId, data.mandandId);
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-auth-network-6-extension-error').show();
+            }
+        }
+    });
+});
+
+
+function updateNetworkAuth6 (networkId) {
+    jQuery('#b2s-auth-network-6-auth-id').val(networkId);
+    jQuery('#b2s-auth-network-6-mandant-id').val(jQuery('.b2s-network-details-mandant-select').val());
+    jQuery('#b2sAuthNetwork6Modal').modal('show');
+};
+//reset
+jQuery('#b2sAuthNetwork6Modal').on('hidden.bs.modal', function () {
+    jQuery('.b2s-loading-area').hide();
+    jQuery('.b2s-auth-network-6-extension-info-area').hide();
+    jQuery('.b2s-auth-network-6-extension-success-area').hide();
+    jQuery('.b2s-auth-network-6-extension-start-area').hide();
+    jQuery('.b2s-auth-network-6-confirm-extension-btn').hide();
+    jQuery('.b2s-auth-network-6-go-to-network-btn').hide();
+    jQuery('.b2s-auth-network-6-extension-auth-btn').hide();
+    jQuery('.b2s-auth-network-6-login-area').show();
+    jQuery('#b2s-auth-network-6-auth-id').val('');
+    jQuery('#b2s-auth-network-6-board').html('');
+    jQuery('#b2s-auth-network-6-ident-data').val('');
+    jQuery('.b2s-auth-network-6-info').hide();
+    jQuery('.b2s-auth-network-6-confirm-btn').hide();
+    jQuery('.b2s-auth-network-6-login-btn').show();
+    jQuery('.b2s-auth-network-6-board-area').hide();
+    jQuery('#b2s-auth-network-6-username').val('');
+    jQuery('#b2s-auth-network-6-password').val('');
+});
+
+jQuery(document).on('click', '.b2s-auth-network-6-go-to-network-btn', function() {
+    var add = '';
+    if(jQuery('#b2s-auth-network-6-auth-id').val() != "") {
+        add += '&authId='+jQuery('#b2s-auth-network-6-auth-id').val();
+    }
+    if(jQuery('#b2s-auth-network-6-mandant-id').val() != "") {
+        add += '&mandantId='+jQuery('#b2s-auth-network-6-mandant-id').val();
+    }
+    window.location.href = window.location.href.split('?')[0] + '?page=blog2social-network#b2s-add-network-6' + add;
+});
+
+jQuery(document).on('click', '.b2s-network-add-page-info-btn', function() {
+    jQuery('#b2sNetworkAddPageInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddPageInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=page', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-network-add-group-info-btn', function() {
+    jQuery('#b2sNetworkAddGroupInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddGroupInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=group', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-network-add-instagram-info-btn', function() {
+    jQuery('#b2sNetworkAddInstagramInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddInstagramInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=profile', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+function openPostFormat(networkId, networkType, networkAuthId, wpType, showModal) {
+    if (jQuery('#user_version').val() >= 1) {
+        jQuery('.b2s-user-network-settings-post-format-area').hide();
+        jQuery('.b2s-user-network-settings-post-format-area[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').show();
+        jQuery('#b2s-post-ship-item-post-format-network-title').html(jQuery('.b2s-user-network-settings-post-format-area[data-network-id="' + networkId + '"]').attr('data-network-title'));
+        if (jQuery('#user_version').val() >= 2) {
+            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').removeClass('b2s-settings-checked');
+            var currentPostFormat = jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val();
+            jQuery('.b2s-user-network-settings-post-format[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"][data-post-format="' + currentPostFormat + '"]').addClass('b2s-settings-checked');
+            jQuery('#b2s-post-ship-item-post-format-network-display-name').html(jQuery('.b2s-post-item-details-network-display-name[data-network-auth-id="' + networkAuthId + '"]').text().toUpperCase());
+        }
+        jQuery('.b2s-post-format-settings-info').hide();
+        jQuery('.b2s-post-format-settings-info[data-network-id="' + networkId + '"]').show();
+        if(showModal) {
+            jQuery('#b2s-post-ship-item-post-format-modal').modal('show');
+        }
+        jQuery('.b2s-user-network-settings-post-format').attr('data-network-auth-id', networkAuthId);
+        jQuery('.b2s-user-network-settings-post-format').attr('data-post-wp-type', wpType);
+        if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val() == "1" && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val() != currentOGImage && jQuery('.b2s-network-select-btn[data-network-auth-id="' + networkAuthId + '"]').attr('data-meta-type') == 'og') {
+            jQuery('.b2s-select-link-chang-image').show();
+        } else {
+            jQuery('.b2s-select-link-chang-image').hide();
+        }
+    } else {
+        if(showModal) {
+            jQuery('#b2sInfoFormatModal').modal('show');
+        }
+    }
+    return false;
+}
+
+function changePostFormat(networkId, networkType, postFormat, networkAuthId, postFormatType, postType, closeModal) {
+    jQuery('.b2s-settings-user-success').hide();
+    jQuery('.b2s-settings-user-error').hide();
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').val(postFormat);
+    //PostFormat
+    if (jQuery('.b2s-post-ship-item-post-format-text[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').length > 0) {
+        var postFormatText = JSON.parse(jQuery('.b2sNetworkSettingsPostFormatText').val());
+        if (jQuery('#user_version').val() >= 2) {
+            jQuery('.b2s-post-ship-item-post-format-text[data-network-auth-id="' + networkAuthId + '"]').html(postFormatText[postFormatType][postFormat]);
+            jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val(postFormat);
+        } else {
+            jQuery('.b2s-post-ship-item-post-format-text[data-network-id="' + networkId + '"]').html(postFormatText[postFormatType][postFormat]);
+            jQuery('.b2s-post-item-details-post-format[data-network-id="' + networkId + '"]').val(postFormat);
+        }
+        if (jQuery('.b2s-network-select-btn[data-network-auth-id="' + networkAuthId + '"]').attr('data-meta-type') == 'og' && postType != "ex") {
+            if (currentOGImage == '' && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val() != '') {
+                currentOGImage = jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val();
+                if (postFormat == "0") {
+                    jQuery('.b2s-network-select-btn[data-meta-type="og"]').each(function () {
+                        jQuery('.b2s-post-item-details-url-image[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').attr('src', currentOGImage);
+                        jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val(currentOGImage);
+                        jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').show();
+                        if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val() == 1) {
+                            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').hide();
+                        }
+                    });
+                }
+            }
+            if (postFormat == "0" && jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val() != currentOGImage) {
+                jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val(currentOGImage);
+                jQuery('.b2s-post-item-details-url-image[data-network-auth-id="' + networkAuthId + '"]').attr('src', currentOGImage);
+                jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').show();
+                if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() == 1) {
+                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
+                }
+            }
+        }
+    }
+    var textLimit = jQuery('.b2s-post-item-details-item-message-input[data-network-count="-1"][data-network-auth-id="' + networkAuthId + '"]').attr('data-network-text-limit');
+    if (textLimit != "0") {
+        networkLimitAll(networkAuthId, networkId, textLimit);
+    } else {
+        networkCount(networkAuthId);
+    }
+
+    //Edit Meta Tags
+    var isMetaChecked = false;
+    var ogMetaNetworks = jQuery('#ogMetaNetworks').val().split(";");
+    if (typeof networkId != 'undefined' && jQuery.inArray(networkId.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
+        isMetaChecked = true;
+    }
+    if (networkId == "2" && jQuery('#isCardMetaChecked').val() == "1") {
+        isMetaChecked = true;
+    }
+    if (isMetaChecked && postFormat == '0' && jQuery('#user_version').val() > 0) { //If linkpost
+        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", false);
+        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", false);
+        var dataMetaType = jQuery('.b2s-network-select-btn[data-network-auth-id="' + networkAuthId + '"]').attr("data-meta-type");
+        if (dataMetaType == "og") {
+            jQuery('#b2sChangeOgMeta').val("1");
+        } else {
+            jQuery('#b2sChangeCardMeta').val("1");
+        }
+
+        //Copy from further item meta tags by same network
+        jQuery('.b2s-post-item-details-post-format[data-network-id=' + networkId + ']').each(function () {
+            if (jQuery(this).val() == "0" && jQuery('.b2s-post-ship-item-post-format[data-network-auth-id=' + jQuery(this).attr('data-network-auth-id') + ']').is(":visible") && jQuery(this).attr('data-network-auth-id') != networkAuthId) { //other Linkpost by same network
+                jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
+                jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
+                jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('.b2s-image-url-hidden-field[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').val());
+                if (jQuery('.b2s-image-remove-btn[data-network-count="-1"][data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]:visible').length == 1) {
+                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').show();
+                } else {
+                    jQuery('.b2s-image-remove-btn[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"][data-network-count="-1"]').hide();
+                }
+
+                return true;
+            }
+        });
+
+        //Set & Check Link
+        if (typeof jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]') !== undefined) {
+            //Facebook + Twitter && Linkpost
+            if (networkId == 1 || networkId == 2 && postFormat == 0) {
+                if (jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + networkAuthId + '"]').val() == "") {
+                    jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + networkAuthId + '"]').val(jQuery('#b2sDefault_url').val());
+                }
+            }
+            jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').show();
+            if (jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').hasClass('disabled')) {
+                jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').removeClass('disabled');
+            }
+        }
+
+    } else {
+        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
+        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
+        jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').hide();
+    }
+
+    //Content Curation V5.0.0
+    if (postType == "ex") {
+        jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
+        jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').prop("readonly", true);
+        jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + networkAuthId + '"]').attr("style", "display:none !important");
+        if (postFormat == '0') {
+            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"]').hide();
+            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').hide();
+            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').show();
+            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').show();
+            jQuery('.b2s-post-item-details-preview-url-reload[data-network-auth-id="' + networkAuthId + '"]').trigger("click");
+        } else {
+            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"]').show();
+            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"]').show();
+            jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + networkAuthId + '"]').hide();
+            jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + networkAuthId + '"]').hide();
+        }
+        if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() == 1) {
+            jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
+            jQuery('.b2s-image-remove-btn[data-network-auth-id="' + networkAuthId + '"][data-network-count="-1"]').hide();
+        }
+    }
+    jQuery('.b2s-user-network-settings-post-format[data-network-type="' + networkType + '"][data-network-id="' + networkId + '"]').removeClass('b2s-settings-checked');
+    jQuery('.b2s-user-network-settings-post-format[data-network-auth-id="' + networkAuthId + '"][data-post-format="' + postFormat + '"]').addClass('b2s-settings-checked');
+    if(closeModal) {
+        jQuery('#b2s-post-ship-item-post-format-modal').modal('hide');
+    }
+    checkGifAnimation(networkAuthId, networkId);
+
+    //Multi Image
+    if(postFormat == 1 && ((networkId == 1 && (networkType == 1 || networkType == 2)) || (networkId == 2)) && jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() != 1) {
+        jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="-1"]').show();
+    } else {
+        jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="-1"]').hide();
+    }
+    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="0"]').show();
+    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="1"]').show();
+    jQuery('.b2s-multi-image-area[data-network-auth-id="'+networkAuthId+'"][data-network-count="2"]').show();
+
+    if(postFormat == 0 && networkId == 1) {
+        jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="'+networkAuthId+'"]').addClass('required_network_url');
+    }
+    
+    if(networkId == 2) {
+        if(postFormat == 0) {
+            jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').show();
+        } else {
+            jQuery('.b2s-alert-twitter-card[data-network-auth-id="'+networkAuthId+'"]').hide();
+        }
+    }
+    return false;
+}

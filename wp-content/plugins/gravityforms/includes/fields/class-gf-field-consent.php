@@ -363,7 +363,7 @@ class GF_Field_Consent extends GF_Field {
 
 			if ( ! rgblank( $consent ) ) {
 				$return  = $this->checked_indicator_markup;
-				$return .= ' ' . $text;
+				$return .= ' ' . wp_kses_post( $text );
 
 				// checking revisions.
 				$description = $this->get_field_description_from_revision( $revision_id );

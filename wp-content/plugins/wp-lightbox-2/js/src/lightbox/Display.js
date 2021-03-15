@@ -44,12 +44,13 @@ class Display {
                 lightboxImage.src = this.config.imageArray[this.config.activeImage][0];
             }
             this.doScale();  // once image is preloaded, resize image container
-            this.preloadNeighborImages();
+            this.preloadNeighborImages();    
         };
         this.config.imgPreloader.src = this.config.imageArray[this.config.activeImage][0];
     };
 
     doScale() {
+        this.updateDetails(); //Kevin: moved updateDetails() here, seems to work fine.    
         const overlay = document.getElementById('overlay');
         if (!overlay || !this.config.imgPreloader) {
             return;
@@ -57,12 +58,12 @@ class Display {
         var newWidth = this.config.imgPreloader.width;
         var newHeight = this.config.imgPreloader.height;
         var arrayPageSize = this.helper.getPageSize();
-        var noScrollWidth = (arrayPageSize[2] < arrayPageSize[0]) ? arrayPageSize[0] : arrayPageSize[2]; //if viewport is smaller than page, use page width.
+        var noScrollWidth = (arrayPageSize.pageWindowWidth < arrayPageSize.pageDocumentWidth) ? arrayPageSize.pageDocumentWidth : arrayPageSize.pageWindowWidth; //if viewport is smaller than page, use page width.
         overlay.style.width = noScrollWidth + 'px';
-        overlay.style.height = arrayPageSize[1] + 'px';
+        overlay.style.height = arrayPageSize.pageDocumentHeight + 'px';
         const imageDataContainer = document.getElementById('imageDataContainer');
-        var maxHeight = (arrayPageSize[3]) - (imageDataContainer.style.height + (2 * this.config.borderSize));
-        var maxWidth = (arrayPageSize[2]) - (2 * this.config.borderSize);
+        var maxHeight = (arrayPageSize.viewportHeight) - (imageDataContainer.offsetHeight + (2 * this.config.borderSize));
+        var maxWidth = (arrayPageSize.pageWindowWidth) - (2 * this.config.borderSize);
         if (this.config.fitToScreen) {
             var displayHeight = maxHeight - this.config.marginSize;
             var displayWidth = maxWidth - this.config.marginSize;
@@ -80,9 +81,9 @@ class Display {
             newHeight = Math.round(newHeight * ratio);
         }
         var arrayPageScroll = this.helper.getPageScroll();
-        var centerY = arrayPageScroll[1] + (maxHeight * 0.5);
+        var centerY = arrayPageScroll.yScroll + (maxHeight * 0.5);
         var newTop = centerY - newHeight * 0.5;
-        var newLeft = arrayPageScroll[0];
+        var newLeft = arrayPageScroll.xScroll;
         const lightbox = document.getElementById('lightboxImage');
         lightbox.style.width = newWidth;
         lightbox.style.height = newHeight;
@@ -103,8 +104,6 @@ class Display {
         this.config.xScale = (widthNew / this.config.widthCurrent) * 100;
         this.config.yScale = (heightNew / this.config.heightCurrent) * 100;
         this.helper.setLightBoxPos(lightboxTop, lightboxLeft);
-        this.updateDetails(); //toyNN: moved updateDetails() here, seems to work fine.    
-
         
         $('#imageDataContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear');
         $('#outerImageContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear', _ => {

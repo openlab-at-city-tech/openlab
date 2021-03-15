@@ -13,7 +13,9 @@ function reducer( state, action ) {
 			return state.concat( [ action.item ] );
 
 		case 'UPDATE_ATTRIBUTION':
-			return state.map( ( item ) => item.id === action.item.id ? action.item : item );
+			return state.map( ( item ) =>
+				item.id === action.item.id ? action.item : item
+			);
 
 		case 'REMOVE_ATTRIBUTION':
 			return state.filter( ( item ) => item.id !== action.id );

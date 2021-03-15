@@ -1,0 +1,78 @@
+@import "mixins";
+
+.wp-block-advgb-columns {
+    
+    &.advgb-columns-wrapper {
+        
+        .advgb-columns-container {
+            
+            .advgb-columns {
+                display: flex;
+                margin: 0 auto;
+                
+                .advgb-column {
+                   flex-basis: 0;
+                }
+                
+                // Spacing between columns
+                &.gutter-10 > .advgb-column:not(:first-child) {
+                    margin-left: 10px;
+                }
+
+                &.gutter-20 > .advgb-column:not(:first-child) {
+                    margin-left: 20px;
+                }
+
+                &.gutter-30 > .advgb-column:not(:first-child) {
+                    margin-left: 30px;
+                }
+
+                &.gutter-40 > .advgb-column:not(:first-child) {
+                    margin-left: 40px;
+                }
+
+                &.gutter-50 > .advgb-column:not(:first-child) {
+                    margin-left: 50px;
+                }
+
+                &.gutter-70 > .advgb-column:not(:first-child) {
+                    margin-left: 70px;
+                }
+
+                &.gutter-90 > .advgb-column:not(:first-child) {
+                    margin-left: 90px;
+                }
+
+                // Columns
+                &.advgb-columns-1,
+                &.advgb-columns-2,
+                &.advgb-columns-3,
+                &.advgb-columns-4,
+                &.advgb-columns-5,
+                &.advgb-columns-6 {
+
+                    > .advgb-column {
+                        flex-grow: 1;
+                    }
+                }
+
+                // Desktop
+                @media (min-width: 1024px) {
+                    @include colums-width-variants();
+                }
+
+                // Tablet
+                @media (min-width: 768px) and (max-width: 1023px) {
+
+                    @include colums-width-variants('tbl-');
+                }
+
+                // Mobile
+                @media (max-width: 767px) {
+
+                    @include colums-width-variants('mbl-');
+                }
+            }
+        }
+    }
+}

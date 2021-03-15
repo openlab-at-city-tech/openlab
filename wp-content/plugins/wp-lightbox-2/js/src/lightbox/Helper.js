@@ -22,13 +22,13 @@ class Helper {
         }
         var viewportHeight = document.documentElement.clientHeight - this.config.adminBarHeight;
         var pageWindowWidth = document.documentElement.clientWidth;
-        const pageSize = [
-            pageDocumentWidth,
-            pageDocumentHeight,
-            pageWindowWidth,
-            viewportHeight,
-            document.documentElement.scrollHeight
-        ];
+        const pageSize = {
+            pageDocumentWidth: pageDocumentWidth,
+            pageDocumentHeight: pageDocumentHeight,
+            pageWindowWidth: pageWindowWidth,
+            viewportHeight: viewportHeight,
+            documentScrollHeight: document.documentElement.scrollHeight
+        };
         return pageSize;
     };
     isIE8() {
@@ -63,7 +63,7 @@ class Helper {
                 yScroll += this.config.adminBarHeight;
             }
         }
-        return [xScroll, yScroll];
+        return {xScroll, yScroll};
     };
     setLightBoxPos(newTop, newLeft) {
         if (this.config.resizeSpeed > 0) {

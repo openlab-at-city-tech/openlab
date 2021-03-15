@@ -68,4 +68,14 @@ a{
     }
 }
 
+// btn
+.#{$prefix}-border-btn{
+    @extend %btn;
+    &.#{$prefix}-border-btn-white{
+        border-color: $color_white;
+        @extend %btn-hover;
+    }
+   
+}
+
 

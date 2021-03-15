@@ -13,12 +13,19 @@ class GF_API_Keys_Table extends WP_List_Table {
 		return array( 'widefat', 'striped', 'feeds',  'api_key_table' );
 	}
 
+	/**
+	 * Returns an array of columns to be included in the list table.
+	 *
+	 * @since 2.4
+	 * @since 2.4.22 Removed the key column.
+	 *
+	 * @return array
+	 */
 	function get_columns() {
 
 		return array(
-			'description'  => esc_html__( 'Description', 'gravityforms' ),
-			'key'      => esc_html__( 'Key', 'gravityforms' ),
-			'user'         => esc_html__( 'User', 'gravityforms' ),
+			'description' => esc_html__( 'Description', 'gravityforms' ),
+			'user'        => esc_html__( 'User', 'gravityforms' ),
 			'permissions' => esc_html__( 'Permissions', 'gravityforms' ),
 			'last_access' => esc_html__( 'Last Access', 'gravityforms' ),
 		);

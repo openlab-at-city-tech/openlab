@@ -2,7 +2,7 @@
 /**
  * @version 1.2
  */
-if( ! class_exists( 'GP_Bootstrap' ) ) {
+if ( ! class_exists( 'GP_Bootstrap' ) ) {
 
 	class GP_Bootstrap {
 
@@ -25,14 +25,14 @@ if( ! class_exists( 'GP_Bootstrap' ) ) {
 
 		public function display_dependency_warning_after_plugin_row( $plugin_file, $plugin_data ) {
 
-			if( class_exists( 'GWPerk' ) ) {
+			if ( class_exists( 'GWPerk' ) ) {
 				return;
 			}
 
-			$is_activated = ! is_network_admin() && is_plugin_active( plugin_basename( $plugin_file ) );
+			$is_activated         = ! is_network_admin() && is_plugin_active( plugin_basename( $plugin_file ) );
 			$is_network_activated = is_network_admin() && is_plugin_active_for_network( plugin_basename( $plugin_file ) );
 
-			if( $is_activated || $is_network_activated ): ?>
+			if ( $is_activated || $is_network_activated ) : ?>
 
 				<style type="text/css" scoped>
 					<?php printf( '#%1$s td, #%1$s th', sanitize_title( $plugin_data['Name'] ) ); ?>,
@@ -47,7 +47,8 @@ if( ! class_exists( 'GP_Bootstrap' ) ) {
 					</td>
 				</tr>
 
-			<?php endif;
+				<?php
+			endif;
 
 		}
 

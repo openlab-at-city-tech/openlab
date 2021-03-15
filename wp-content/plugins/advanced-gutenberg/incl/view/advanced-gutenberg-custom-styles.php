@@ -96,14 +96,19 @@ $custom_styles_saved = get_option('advgb_custom_styles', $this::$default_custom_
 
         <div id="advgb-customstyles-preview">
             <p class="preview-title"><?php esc_html_e('Preview', 'advanced-gutenberg'); ?></p>
-            <p class="previous-block" style="margin-bottom: 20px; margin-top: 10px;">
-                <?php esc_html_e('Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph Previous Paragraph', 'advanced-gutenberg') ?>
+            <p class="previous-block" style="margin-bottom: 20px; margin-top: 10px; font-size: 16px; line-height: 24px;">
+                <strong>
+                    <?php esc_html_e('Previous Paragraph.', 'advanced-gutenberg'); ?>
+                </strong>
+                <?php echo ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'; ?>
             </p>
-            <div class="advgb-customstyles-target"><?php esc_html_e('Example of text', 'advanced-gutenberg') ?></div>
-            <p class="follow-block">
-                <?php esc_html_e('Following Paragraph Following Paragraph  Following Paragraph Following Paragraph Following Paragraph Following Paragraph Following Paragraph Following Paragraph', 'advanced-gutenberg') ?>
+            <div class="advgb-customstyles-target"><?php esc_html_e('Example text with this style', 'advanced-gutenberg') ?></div>
+            <p class="follow-block" style="margin-bottom: 10px; margin-top: 20px; font-size: 16px; line-height: 24px;">
+                <strong>
+                    <?php esc_html_e('Following Paragraph.', 'advanced-gutenberg'); ?>
+                </strong>
+                <?php echo ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae condimentum augue. Nullam semper augue quis posuere lacinia. Praesent non lectus nunc.'; ?>
             </p>
         </div>
     </div>
 </div>
-

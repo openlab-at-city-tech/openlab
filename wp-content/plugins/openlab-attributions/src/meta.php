@@ -32,28 +32,49 @@ function can_save_attributions( $post ) {
  * @return array $item
  */
 function sanitize_attributions( $item ) {
-	$fields = [
-		'title'         => 'sanitize_text_field',
-		'titleUrl'      => 'esc_url_raw',
-		'authorName'    => 'sanitize_text_field',
-		'authorUrl'     => 'esc_url_raw',
-		'publisher'     => 'sanitize_text_field',
-		'publisherUrl'  => 'esc_url_raw',
-		'project'       => 'sanitize_text_field',
-		'projectUrl'    => 'esc_url_raw',
-		'datePublished' => 'sanitize_text_field',
-		'derivative'    => 'esc_url_raw',
+	$sanitized = [];
+	$fields    = [
+		'id'             => false,
+		'title'          => 'sanitize_text_field',
+		'titleUrl'       => 'esc_url_raw',
+		'authorName'     => 'sanitize_text_field',
+		'authorUrl'      => 'esc_url_raw',
+		'publisher'      => 'sanitize_text_field',
+		'publisherUrl'   => 'esc_url_raw',
+		'project'        => 'sanitize_text_field',
+		'projectUrl'     => 'esc_url_raw',
+		'datePublished'  => 'sanitize_text_field',
+		'derivative'     => 'esc_url_raw',
+		'adaptedTitle'   => 'sanitize_text_field',
+		'adaptedAuthor'  => 'sanitize_text_field',
+		'adaptedLicense' => false,
+		'license'        => false,
+		'content'        => function( $value ) {
+			return wp_kses( $value, [ 'a' => [ 'href' => [] ] ] );
+		},
 	];
 
 	foreach ( $fields as $name => $sanitize_callback ) {
-		if ( empty( $item[ $name ] ) ) {
+		// Skip unknown fields.
+		if ( ! isset( $item[ $name ] ) ) {
 			continue;
 		}
 
-		$item[ $name ] = $sanitize_callback( $item[ $name ] );
+		if ( empty( $item[ $name ] ) ) {
+			$sanitized[ $name ] = '';
+			continue;
+		}
+
+		// No need to revalidate ID and the license.
+		if ( ! $sanitize_callback ) {
+			$sanitized[ $name ] = $item[ $name ];
+			continue;
+		}
+
+		$sanitized[ $name ] = $sanitize_callback( $item[ $name ] );
 	}
 
-	return $item;
+	return $sanitized;
 }
 
 /**

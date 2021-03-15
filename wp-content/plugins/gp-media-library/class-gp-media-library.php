@@ -33,23 +33,19 @@ class GP_Media_Library extends GWPerk {
 
 		add_filter( 'gform_tooltips', array( $this, 'add_tooltips' ) );
 		add_filter( 'gform_logging_supported', array( $this, 'add_logging_support' ) );
+		add_filter( 'gform_entry_meta', array( $this, 'register_entry_meta' ), 10, 2 );
+		add_filter( 'gform_entries_field_value', array( $this, 'format_entry_meta_for_display' ), 10, 4 );
 
 		// functionality
-		add_action( 'gform_entry_post_save', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
+		add_filter( 'gform_entry_post_save', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
 		add_action( 'gform_after_update_entry', array( $this, 'maybe_upload_to_media_library_after_update' ), 10, 2 );
 		add_action( 'wp_ajax_rg_delete_file', array( $this, 'hijack_delete_file' ), 9 );
 		add_action( 'gform_delete_lead', array( $this, 'maybe_delete_from_media_library' ) );
 
 		add_action( 'gform_after_create_post', array( $this, 'acf_integration' ), 10, 3 );
 		add_action( 'gform_advancedpostcreation_post_after_creation', array( $this, 'apc_acf_integration' ), 10, 4 );
-		add_action( 'gform_advancedpostcreation_post_after_creation', array(
-			$this,
-			'apc_custom_field_integration'
-		), 10, 4 );
-		add_action( 'gravityview/fields/fileupload/link_content', array(
-			$this,
-			'gravityview_file_upload_content'
-		), 10, 2 );
+		add_action( 'gform_advancedpostcreation_post_after_creation', array( $this, 'apc_custom_field_integration' ), 10, 4 );
+		add_action( 'gravityview/fields/fileupload/link_content', array( $this, 'gravityview_file_upload_content' ), 10, 2 );
 
 		add_filter( 'gform_admin_pre_render', array( $this, 'add_image_merge_tags' ) );
 		add_action( 'gform_pre_replace_merge_tags', array( $this, 'replace_image_merge_tags' ), 5, 7 );
@@ -120,6 +116,34 @@ class GP_Media_Library extends GWPerk {
 		return $tooltips;
 	}
 
+	public function register_entry_meta( $entry_meta, $form_id ) {
+
+		$form = GFAPI::get_form( $form_id );
+		/**
+		 * @var GF_Field $field
+		 */
+		foreach ( $form['fields'] as $field ) {
+			if ( $this->is_applicable_field( $field ) ) {
+				$label = _n( 'Media Library ID', 'Media Library IDs', $field->multipleFiles ? 2 : 1, 'gp-media-library' );
+				$label = sprintf( '%s (%s)', $label, $field->get_field_label( false, '' ) );
+				$entry_meta[ $this->get_file_ids_meta_key( $field->id ) ] = array(
+					'label'             => esc_html( $label ),
+					'is_default_column' => false,
+					'is_numeric'        => false,
+				);
+			}
+		}
+
+		return $entry_meta;
+	}
+
+	public function format_entry_meta_for_display( $value, $form_id, $field_id, $entry ) {
+		if ( strpos( $field_id, 'gpml_ids_' ) !== false && is_array( $entry[ $field_id ] ) ) {
+			$value = implode( ', ', $entry[ $field_id ] );
+		}
+		return $value;
+	}
+
 
 	## FUNCTIONALITY ##
 
@@ -179,9 +203,8 @@ class GP_Media_Library extends GWPerk {
 
 			$this->log( sprintf( 'New entry value: %s', print_r( $new_value, true ) ) );
 
-			$entry[ $field->id ] = $new_value;
-
-			$this->update_file_ids( $entry['id'], $field->id, $ids );
+			$entry[ $field->id ]                                 = $new_value;
+			$entry[ $this->get_file_ids_meta_key( $field->id ) ] = $ids;
 
 		}
 
@@ -855,7 +878,7 @@ class GP_Media_Library extends GWPerk {
 
 	public function get_file_ids( $entry_id, $field_id, $file_index = false ) {
 
-		$ids = gform_get_meta( $entry_id, sprintf( 'gpml_ids_%d', $field_id ) );
+		$ids = gform_get_meta( $entry_id, $this->get_file_ids_meta_key( $field_id ) );
 
 		if ( $file_index !== false && is_array( $ids ) ) {
 			$ids = rgar( $ids, $file_index );
@@ -865,7 +888,7 @@ class GP_Media_Library extends GWPerk {
 	}
 
 	public function update_file_ids( $entry_id, $field_id, $file_ids ) {
-		gform_update_meta( $entry_id, sprintf( 'gpml_ids_%d', $field_id ), $file_ids );
+		gform_update_meta( $entry_id, $this->get_file_ids_meta_key( $field_id ), $file_ids );
 	}
 
 	public function delete_file_id( $entry_id, $field_id, $file_id ) {
@@ -883,7 +906,7 @@ class GP_Media_Library extends GWPerk {
 		// check if any of the existing file IDs have a matching attachment URL.
 		$file_ids = (array) $this->get_file_ids( $entry_id, $field_id );
 		foreach ( $file_ids as $file_id ) {
-			if ( wp_get_attachment_url( $file_id ) == $url ) {
+			if ( wp_get_attachment_url( $file_id ) === $url ) {
 				return $file_id;
 			}
 		}
@@ -891,8 +914,12 @@ class GP_Media_Library extends GWPerk {
 		return false;
 	}
 
+	public function get_file_ids_meta_key( $field_id ) {
+		return sprintf( 'gpml_ids_%d', $field_id );
+	}
+
 	public function is_wcpa_submission() {
-		return rgpost( 'wc_gforms_form_id' ) == true;
+		return (bool) rgpost( 'wc_gforms_form_id' ) === true;
 	}
 
 	public function add_logging_support( $plugins ) {

@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Shortcodes Ultimate
+# Copyright (C) 2021 Shortcodes Ultimate
 # This file is distributed under the same license as the Shortcodes Ultimate package.
 msgid ""
 msgstr ""
@@ -335,14 +335,6 @@ msgstr ""
 #. translators: %1$s of %2$s represents image counter in lightbox, will be replaced with "1 of 5"
 #: inc/core/assets.php:124
 msgid "%1$s of %2$s"
-msgstr ""
-
-#: inc/core/assets.php:125
-msgid "Failed to load content."
-msgstr ""
-
-#: inc/core/assets.php:125
-msgid "Open link"
 msgstr ""
 
 #: inc/core/generator-views.php:53

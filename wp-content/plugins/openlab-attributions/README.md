@@ -1,3 +1,3 @@
 # OpenLab Attributions
 
-Content attribution feature for Classic and Block editor.
+Add formatted attributions to post content. Works for both Classic and Block editor.

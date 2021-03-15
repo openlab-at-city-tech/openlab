@@ -122,7 +122,12 @@ class Su_Assets {
 					'next'    => __( 'Next (Right arrow key)', 'shortcodes-ultimate' ),
 					// translators: %1$s of %2$s represents image counter in lightbox, will be replaced with "1 of 5"
 					'counter' => sprintf( __( '%1$s of %2$s', 'shortcodes-ultimate' ), '%curr%', '%total%' ),
-					'error'   => sprintf( '%1$s. <a href="%url%" target="_blank"><u>%2$</u></a>', __( 'Failed to load content.', 'shortcodes-ultimate' ), __( 'Open link', 'shortcodes-ultimate' ) ),
+					'error'   => sprintf(
+						// translators: %1$s and %2$s will be replace <a> and </a> tags
+						__( 'Failed to load content. %1$sOpen link%2$s' ),
+						'<a href="%url%" target="_blank"><u>',
+						'</u></a>'
+					),
 				),
 			)
 		);

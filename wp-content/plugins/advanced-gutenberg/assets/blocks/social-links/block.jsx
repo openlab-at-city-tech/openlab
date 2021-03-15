@@ -4,7 +4,7 @@
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, BlockControls, MediaUpload, AlignmentToolbar, PanelColorSettings } = wpBlockEditor;
-    const { RangeControl, BaseControl, PanelBody, TextControl, IconButton, Button, Toolbar, Tooltip } = wpComponents;
+    const { RangeControl, BaseControl, PanelBody, TextControl, ToolbarButton, Button, ToolbarGroup, Tooltip } = wpComponents;
 
     const socialBlockIconContent = (
         <g fill="currentColor">
@@ -174,14 +174,14 @@
                     :
                 <Fragment>
                     <BlockControls>
-                        <Toolbar>
-                            <IconButton
+                        <ToolbarGroup>
+                            <ToolbarButton
                                 className="components-toolbar__control"
                                 icon="plus"
                                 label={ __( 'Add item', 'advanced-gutenberg' ) }
                                 onClick={ () => setAttributes( { items: [ ...items, { icon: '', iconID: '', link: '#' } ] } ) }
                             />
-                            <IconButton
+                            <ToolbarButton
                                 className="components-toolbar__control"
                                 icon="no"
                                 label={ __( 'Remove selected item', 'advanced-gutenberg' ) }
@@ -198,7 +198,7 @@
                                     }
                                 } }
                             />
-                        </Toolbar>
+                        </ToolbarGroup>
                         <AlignmentToolbar value={ align } onChange={ ( value ) => setAttributes( { align: value === undefined ? 'center' : value } ) } />
                     </BlockControls>
                     <InspectorControls>
@@ -397,6 +397,9 @@
             attributes: {
                 isPreview: true
             },
+        },
+        supports: {
+            anchor: true
         },
         edit: AdvSocialBlock,
         save: function ( { attributes } ) {

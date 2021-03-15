@@ -5,7 +5,7 @@ Plugin URI: http://www.designsandcode.com/447/wordpress-search-filter-plugin-for
 Description: Search and Filtering system for Pages, Posts, Categories, Tags and Taxonomies
 Author: Designs & Code
 Author URI: http://www.designsandcode.com/
-Version: 1.2.12
+Version: 1.2.13
 Text Domain: searchandfilter
 License: GPLv2
 */
@@ -14,7 +14,7 @@ License: GPLv2
 * Set up Plugin Globals
 */
 if (!defined('SEARCHANDFILTER_VERSION_NUM'))
-    define('SEARCHANDFILTER_VERSION_NUM', '1.2.12');
+    define('SEARCHANDFILTER_VERSION_NUM', '1.2.13');
 
 if (!defined('SEARCHANDFILTER_THEME_DIR'))
     define('SEARCHANDFILTER_THEME_DIR', ABSPATH . 'wp-content/themes/' . get_template());
@@ -571,38 +571,37 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 			
 			$this->defaults[SF_FPRE.'post_tag'] = $tags;
 
-			
-			//loop through all the query vars
-			foreach($wp_query->query as $key=>$val)
-			{
-				if(!in_array(SF_FPRE.$key, $this->frmqreserved))
-				{//make sure the get is not a reserved get as they have already been handled above
+			if ( isset( $wp_query->query ) && is_array( $wp_query->query ) ) {
+				//loop through all the query vars
+				foreach($wp_query->query as $key=>$val) {
+					if(!in_array(SF_FPRE.$key, $this->frmqreserved))
+					{//make sure the get is not a reserved get as they have already been handled above
 
-					//now check it is a desired key
-					if(in_array($key, $this->taxonomylist))
-					{
-						$taxslug = ($val);
-						//$tax_params = explode("+",esc_attr($taxslug));
-						
-						$tax_params = (preg_split("/[,\+ ]/", esc_attr($taxslug))); //explode with 2 delims
-						
-						$taxs = array();
-						
-						foreach($tax_params as $tax_param)
+						//now check it is a desired key
+						if(in_array($key, $this->taxonomylist))
 						{
-							$tax = get_term_by("slug",$tax_param, $key);
-
-							if(isset($tax->term_id))
+							$taxslug = ($val);
+							//$tax_params = explode("+",esc_attr($taxslug));
+							
+							$tax_params = (preg_split("/[,\+ ]/", esc_attr($taxslug))); //explode with 2 delims
+							
+							$taxs = array();
+							
+							foreach($tax_params as $tax_param)
 							{
-								$taxs[] = $tax->term_id;
-							}
-						}
+								$tax = get_term_by("slug",$tax_param, $key);
 
-						$this->defaults[SF_FPRE.$key] = $taxs;
+								if(isset($tax->term_id))
+								{
+									$taxs[] = $tax->term_id;
+								}
+							}
+
+							$this->defaults[SF_FPRE.$key] = $taxs;
+						}
 					}
 				}
 			}
-
 			$post_date = array("","");
 			if(isset($wp_query->query['post_date']))
 			{

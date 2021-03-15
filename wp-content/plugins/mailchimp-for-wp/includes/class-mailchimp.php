@@ -94,7 +94,10 @@ class MC4WP_MailChimp {
 			if ( $existing_member_data ) {
 				$data                      = $api->update_list_member( $list_id, $email_address, $args );
 				$data->was_already_on_list = $existing_member_data->status === 'subscribed';
-				$this->list_add_tags_to_subscriber( $list_id, $data, $args['tags'] );
+
+				if ( isset( $args['tags'] ) && is_array( $args['tags'] ) ) {
+					$this->list_add_tags_to_subscriber( $list_id, $data, $args['tags'] );
+				}
 			} else {
 				$data                      = $api->add_new_list_member( $list_id, $args );
 				$data->was_already_on_list = false;
@@ -337,25 +340,50 @@ class MC4WP_MailChimp {
 	}
 
 	private function fetch_lists() {
-		/**
-		 * Filters the amount of Mailchimp lists to fetch.
-		 *
-		 * If you increase this, it might be necessary to increase your PHP configuration to allow for a higher max_execution_time.
-		 *
-		 * @param int
-		 */
-		$limit = apply_filters( 'mc4wp_mailchimp_list_limit', 200 );
+		$client = $this->get_api()->get_client();
+		$lists_data = array();
+		$offset = 0;
+		$count = 10;
 
-		try {
-			$lists_data = $this->get_api()->get_lists(
-				array(
-					'count'  => $limit,
-					'fields' => 'lists.id,lists.name,lists.stats,lists.web_id',
-				)
-			);
-		} catch ( MC4WP_API_Exception $e ) {
-			return array();
-		}
+		// increase time limits
+		@set_time_limit( 180 );
+		add_filter(
+			'mc4wp_http_request_args',
+			function( $args ) {
+				$args['timeout'] = 30;
+				return $args;
+			}
+		);
+
+		// collect all lists in separate HTTP requests (batches of 5)
+		do {
+			try {
+				$data       = $client->get(
+					'/lists',
+					array(
+					'count'  => $count,
+					'offset' => $offset,
+					'fields' => 'total_items,lists.id,lists.name,lists.web_id,lists.stats.member_count,lists.marketing_permissions',
+					)
+				);
+				$lists_data = array_merge( $lists_data, $data->lists );
+				$offset += $count;
+			} catch ( MC4WP_API_Connection_Exception $e ) {
+				// ignore timeout errors as this is likely due to mailchimp being slow to calculate the lists.stats.member_count property
+				// keep going so we can at least pull-in all other lists
+				$offset += $count;
+
+				// failsafe against infinite loop
+				if ( $offset > 300 ) {
+					break;
+				}
+
+				continue;
+			} catch ( MC4WP_API_Exception $e ) {
+				// break on other errors, like "API key missing"etc.
+				break;
+			}
+		} while ( $data->total_items > $offset );
 
 		// key by list ID
 		$lists = array();

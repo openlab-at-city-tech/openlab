@@ -85,11 +85,7 @@ window.onload = function () {
                 blockHTML += ' style="color:'+ block.iconColor +'"';
             }
             blockHTML += '>';
-            if (block.icon.indexOf('<svg') > -1) {
-                blockHTML +=    block.icon;
-            } else {
-                blockHTML +=    '<i class="dashicons dashicons-'+ block.icon +'"></i>';
-            }
+            blockHTML +=  block.icon;
             var checked = '';
             if (typeof advgb_blocks_vars.blocks.inactive_blocks === 'object' && advgb_blocks_vars.blocks.inactive_blocks !== null) {
                 checked = advgb_blocks_vars.blocks.inactive_blocks.indexOf(block.name)===-1?'checked="checked"':'';

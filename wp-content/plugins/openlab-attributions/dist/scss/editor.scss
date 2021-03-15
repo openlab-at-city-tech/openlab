@@ -44,7 +44,8 @@
 	.form-group {
 		display: flex;
 		flex: 0 0 auto;
-		flex-flow: column wrap;
+		flex-direction: column;
+		flex-wrap: wrap;
 		margin-bottom: 1rem;
 
 		label {
@@ -55,8 +56,9 @@
 		}
 	}
 
-	.form-group.inline {
-		flex-flow: row;
+	.inline {
+		flex-direction: row;
+		flex-wrap: nowrap;
 		align-items: center;
 
 		label {
@@ -75,6 +77,11 @@
 		font-size: 1rem;
 		font-weight: 400;
 		line-height: 1.5;
+
+		&:required {
+			border-color: #cc1818;
+			box-shadow: 0 0 0 1px #cc1818;
+		}
 	}
 
 	textarea.form-control {
@@ -85,17 +92,25 @@
 		color: #0073aa;
 		padding: 0 0 0 5px;
 	}
+	
+	.form-control__help {
+		color: #cc1818;
+		font-size: 12px;
+		font-weight: normal;
+		margin-top: 4px;
+		margin-bottom: 0;
+	}
 
 	.component-modal__footer {
 		box-sizing: border-box;
-		border-top: 1px solid #e2e4e7;
+		border-bottom: 1px solid #e2e4e7;
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-end;
 		background: #fff;
 		align-items: center;
 		height: 56px;
-		margin: 0 -24px -24px;
+		margin: 0 -24px 12px;
 		padding: 0 24px;
 
 		.is-link {
@@ -118,11 +133,18 @@
 		min-height: 18px;
 	}
 
+	.attribution-preview__notice {
+		margin: 0;
+
+		.components-button {
+			display: block;
+			margin-top: 4px;
+		}
+	}
+
 	.attribution-plugin {
 		background-color: #e2e4e7;
 		padding: 6px 8px;
-		margin-top: 3em;
-		margin-bottom: 1em;
 	}
 }
 
@@ -136,5 +158,25 @@
 
 	.components-toolbar {
 		border: none;
+	}
+}
+
+.adapted-from {
+	.inline {
+		flex-wrap: wrap;
+
+		label {
+			margin-right: auto;
+		}
+
+		input,
+		select {
+			width: 250px;
+		}
+	}
+
+	.form-control__help {
+		flex-basis: 100%;
+		text-align: right;
 	}
 }

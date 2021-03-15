@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.5.3
-Stable tag: 3.6.8
+Tested up to: 5.6
+Stable tag: 3.6.9
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -161,9 +161,8 @@ There is NO WARRANTY for this software, express or implied, including the implie
 1. Upload 'badgeos' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the BadgeOS menu to add Badges/ranks and set up new Achievement/Point/Rank types.
-4. Enter Credly credentials for the badge Issuer in the Credly Integration settings to enable the free Credly Badge Builder and badge sharing. (First get a [free account](https://credly.com/#!/create-account "Create a free Credly account") at Credly.com if you do not have one.)
-5. Use the BadgeOS Shortcode button available from any content editor in our site to turn any page or post into a part of your achievement or engagement system. For example, add lists of badges or other achievements, submission lists, a single badge and much more. Visit the Help/Support section of the BadgeOS menu for more information on available shortcodes.
-6. See video tutorials about BadgeOS at: [http://badgeos.org/support/tutorials/](http://badgeos.org/support/tutorials/ "BadgeOS Tutorials")
+4. Use the BadgeOS Shortcode button available from any content editor in our site to turn any page or post into a part of your achievement or engagement system. For example, add lists of badges or other achievements, submission lists, a single badge and much more. Visit the Help/Support section of the BadgeOS menu for more information on available shortcodes.
+5. See video tutorials about BadgeOS at: [http://badgeos.org/support/tutorials/](http://badgeos.org/support/tutorials/ "BadgeOS Tutorials")
 
 
 == Frequently Asked Questions ==
@@ -244,6 +243,14 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.9 =
+Fix: Fixed single site license activation issue on multiple sites.
+New: Added bulk achievement emails support for bulk rewarding achievements.
+Fix: Fixed select box css issue related to tools page bulk achievement.
+Fix: Database installation script will only run when there are new database updates or user is activating the badgeos.
+Fix: Added minified badgeos css and js files with support of SCRIPT_DEBUG constant for debugging.
+Fix: Removed Credly code from the system.
 
 = 3.6.8 =
 * New: Added an option to define a Not Earned Badge Icon for display on Badge Page
