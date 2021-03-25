@@ -1937,3 +1937,43 @@ function openlab_private_comments_fallback( WP_Comment_Query $query ) {
 	}
 }
 add_action( 'pre_get_comments', 'openlab_private_comments_fallback' );
+
+// If one of the plugins is active. The `openlab_private_comments_fallback` will apply to count.
+if (
+	! has_filter( 'get_comments_number', 'olgc_get_comments_number' ) &&
+	! has_filter( 'get_comments_number', 'OpenLab\\PrivateComments\\filter_comment_count' )
+) {
+	add_filter( 'get_comments_number', 'openlab_comment_count_fallback', 20, 2 );
+}
+
+/**
+ * Filter comment count after plugins are deactivated.
+ *
+ * @param int $count   Comment count.
+ * @param int $post_id ID of the post.
+ * @return int $count  Adjusted comment count.
+ */
+function openlab_comment_count_fallback( $count, $post_id = 0 ) {
+	// No need for fallback when we don't have post or comments.
+	if ( empty( $post_id ) || empty( $count ) ) {
+		return $count;
+	}
+
+	// Check plugin artifacts.
+	$grade_comments   = get_option( 'olgc_notice_dismissed' );
+	$private_comments = get_option( 'olpc_notice_dismissed' );
+
+	$filter_count = ( $grade_comments !== false || $private_comments !== false );
+	if ( ! $filter_count ) {
+		return $count;
+	}
+
+	// Query if filtered via `openlab_private_comments_fallback` function.
+	$query = new \WP_Comment_Query();
+	$new_count = $query->query( [
+		'post_id' => $post_id,
+		'count'   => true,
+	] );
+
+	return $new_count;
+}
