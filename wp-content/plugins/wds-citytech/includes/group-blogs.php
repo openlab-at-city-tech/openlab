@@ -1970,10 +1970,10 @@ function openlab_comment_count_fallback( $count, $post_id = 0 ) {
 
 	// Query if filtered via `openlab_private_comments_fallback` function.
 	$query = new \WP_Comment_Query();
-	$new_count = $query->query( [
+	$comments = $query->query( [
 		'post_id' => $post_id,
-		'count'   => true,
+		'fields'  => 'ids',
 	] );
 
-	return $new_count;
+	return count( $comments );
 }

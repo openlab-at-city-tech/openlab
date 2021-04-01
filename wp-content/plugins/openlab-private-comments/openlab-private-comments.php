@@ -320,17 +320,18 @@ add_filter( 'comment_feed_where', __NAMESPACE__ . '\\filter_comments_from_feed' 
  * @return int $count
  */
 function filter_comment_count( $count, $post_id = 0 ) {
-	if ( empty( $post_id ) ) {
+	// No need for fallback when we don't have post or comments.
+	if ( empty( $post_id ) || empty( $count ) ) {
 		return $count;
 	}
 
 	$query = new \WP_Comment_Query();
-	$new_count = $query->query( [
+	$comments = $query->query( [
 		'post_id' => $post_id,
-		'count'   => true,
+		'fields'  => 'ids',
 	] );
 
-	return $new_count;
+	return count( $comments );
 }
 add_filter( 'get_comments_number', __NAMESPACE__ . '\\filter_comment_count', 10, 2 );
 
