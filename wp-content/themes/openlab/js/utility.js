@@ -990,4 +990,16 @@ OpenLab.utility = (function ($) {
 
 	}
 
+	$( '#openlab-sort-my-groups' ).on( 'change', function( event ) {
+		var url = new URL( window.location.href );
+		var params = new window.URLSearchParams( window.location.search );
+
+		// Create new sort param and update URL object.
+		params.set( 'sort', event.target.value );
+		url.search = params;
+
+		// Reload page with new sort param.
+		window.location = url.toString();
+	} );
+
 })( jQuery );
