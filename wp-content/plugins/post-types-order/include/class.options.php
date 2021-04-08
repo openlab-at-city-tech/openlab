@@ -87,10 +87,10 @@
                                                                                             'status'  
                                                                                             );
                                                             
-                                                            if(in_array($post_type_name, $ignore_post_types))
+                                                            if( in_array($post_type_name, $ignore_post_types) )
                                                                 continue;
                                                             
-                                                            if(is_post_type_hierarchical($post_type_name))
+                                                            if( is_post_type_hierarchical($post_type_name) )
                                                                 continue;
                                                                 
                                                             $post_type_data = get_post_type_object( $post_type_name );
