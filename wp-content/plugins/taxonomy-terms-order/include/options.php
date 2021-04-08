@@ -52,7 +52,7 @@ function to_plugin_options()
                                                     <option value="0" <?php if ($options['autosort'] == "0") echo 'selected="selected"'?>><?php _e('OFF', 'taxonomy-terms-order') ?></option>
                                                     <option value="1" <?php if ($options['autosort'] == "1") echo 'selected="selected"'?>><?php _e('ON', 'taxonomy-terms-order') ?></option>
                                                 </select>
-                                                <label for="autosort"> *(<?php _e( "global setting", 'taxonomy-terms-order' ) ?>) <?php _e( "Additional description and details at ", 'taxonomy-terms-order' ) ?><a target="_blank" href="http://www.nsp-code.com/taxonomy-terms-order-and-auto-sort-admin-sort-description-an-usage/"><?php _e( "Auto Sort Description", 'taxonomy-terms-order' ) ?></a></label>
+                                                <label for="autosort"> *(<?php _e( "global setting", 'taxonomy-terms-order' ) ?>) <?php _e( "Additional description and details at ", 'taxonomy-terms-order' ) ?><a target="_blank" href="https://www.nsp-code.com/taxonomy-terms-order-and-auto-sort-admin-sort-description-an-usage/"><?php _e( "Auto Sort Description", 'taxonomy-terms-order' ) ?></a></label>
                                             </td>
                                         </tr>
                                         
@@ -63,7 +63,7 @@ function to_plugin_options()
                                                     <option value="0" <?php if ($options['adminsort'] == "0") echo 'selected="selected"'?>><?php _e('OFF', 'taxonomy-terms-order') ?></option>
                                                     <option value="1" <?php if ($options['adminsort'] == "1") echo 'selected="selected"'?>><?php _e('ON', 'taxonomy-terms-order') ?></option>
                                                 </select>
-                                                <label for="adminsort"><?php _e("This will change the order of terms within the admin interface", 'taxonomy-terms-order') ?>. <?php _e( "Additional description and details at ", 'taxonomy-terms-order' ) ?><a target="_blank" href="http://www.nsp-code.com/taxonomy-terms-order-and-auto-sort-admin-sort-description-an-usage/"><?php _e( "Auto Sort Description", 'taxonomy-terms-order' ) ?></a></label>
+                                                <label for="adminsort"><?php _e("This will change the order of terms within the admin interface", 'taxonomy-terms-order') ?>. <?php _e( "Additional description and details at ", 'taxonomy-terms-order' ) ?><a target="_blank" href="https://www.nsp-code.com/taxonomy-terms-order-and-auto-sort-admin-sort-description-an-usage/"><?php _e( "Auto Sort Description", 'taxonomy-terms-order' ) ?></a></label>
                                             </td>
                                         </tr>
                                         
