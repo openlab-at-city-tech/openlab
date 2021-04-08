@@ -1,3 +1,10 @@
+%first-level{
+    >li{
+        >a{
+            font-size: 1.2rem;           
+        }
+    }
+}
 %second-level{
     >li{
         ul{

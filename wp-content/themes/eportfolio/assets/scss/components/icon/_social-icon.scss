@@ -13,7 +13,8 @@ $social_icon: (
     tumblr: (content: "\f173",color:#3e5a70),
     whatsapp: (content: "\f232",color: #00e676),
     reddit : (content: "\f1a1",color: #ff4500),
-    vk: (content: "\f189",color: #4a76a8)
+    vk: (content: "\f189",color: #4a76a8),
+    telegram: (content: "\f2c6",color: #0088CC),
 );
 
 ul{
@@ -37,6 +38,11 @@ ul{
                     font-size: 20px;
                     @include transition();
                 }
+                &[href*="t.me"] {
+                    &:before {
+                        content: '\f2c6';
+                    }
+                }
                
                 @each $social,$icon in $social_icon{
                     &[href*="#{$social}"] {
@@ -44,11 +50,16 @@ ul{
                             content: map-get($icon, content);
                         }
                     }
-                    &:hover{
+                    &:hover,
+                    &:focus-within{
                         &[href*="#{$social}"] {
-            
                             &:before {
-                                transform: scale(1.2);
+                                @include transform(scale(1.2));
+                            }
+                        }
+                        &[href*="t.me"] {
+                            &:before {
+                                @include transform(scale(1.2));
                             }
                         }
                     }
@@ -96,6 +107,14 @@ ul{
                     font-size: 20px;
                     @include transition();
                 }
+                &[href*="t.me"] {
+                    color: $color_white;
+                    border-color: #0088CC;
+                    background-color:  #0088CC;
+                    &:before {
+                        content: '\f2c6';
+                    }
+                }
         
                 @each $social,$icon in $social_icon{
                     &[href*="#{$social}"] {
@@ -110,13 +129,22 @@ ul{
                         &[href*="#{$social}"] {
                             color: $color_white;
                             background-color:  map-get($icon,color);
-                        }   
+                        }  
+                        &[href*="t.me"] {
+                            color: $color_white;
+                            background-color:  #0088CC;
+                        } 
                     }
-                    &:hover{
+                    &:hover,
+                    &:focus-within{
                         &[href*="#{$social}"] {
                             color: map-get($icon,color);
                             background-color: $color_white;
                         }
+                        &[href*="t.me"] {
+                            color: #0088CC;
+                            background-color:  $color_white;
+                        } 
                     }
                 }
                

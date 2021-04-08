@@ -132,9 +132,14 @@ if( ! function_exists( 'eportfolio_recommended_plugins' ) ) :
           'required' => false,
         ),
         array(
-          'name'     => esc_html__( 'One Click Demo Import', 'eportfolio' ),
-          'slug'     => 'one-click-demo-import',
-          'required' => false,
+          'name'      => esc_html__('Demo Import Kit','eportfolio'),
+          'slug'      => 'demo-import-kit',
+          'required'  => false,
+        ),
+        array(
+          'name'      => esc_html__('Themeinwp Import Companion','eportfolio'),
+          'slug'      => 'themeinwp-import-companion',
+          'required'  => false,
         ),
       );
       $eportfolio_plugins_config = array(
