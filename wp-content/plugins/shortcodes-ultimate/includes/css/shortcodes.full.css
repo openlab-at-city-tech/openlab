@@ -2319,7 +2319,8 @@ img {
 .su-spoiler.su-spoiler-closed > .su-spoiler-content {
   height: 0;
   margin: 0;
-  padding: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   overflow: hidden;
   border: none;
   opacity: 0;
@@ -2594,7 +2595,8 @@ img {
 
 .su-tabs-pane:not(.su-tabs-pane-open) {
   overflow: hidden !important;
-  padding: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   min-height: 0 !important;
   height: 0 !important;
   border: none !important;

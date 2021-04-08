@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
-Requires at least: 4.6
-Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 5.9.7
+Requires at least: 4.6
+Tested up to: 5.7
+Stable tag: 5.9.8
 
 A comprehensive collection of visual components for your site
 
@@ -146,14 +146,13 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.9.7
+### 5.9.8
 
 **What's new**
 
-- PHP8 support
-- New filter `su/shortcode/posts/wp_query_args` that can be used to modify `[su_posts]` query
-- New filter `su/shortcode/posts/allowed_template_locations` that can be used to add custom template paths in the `[su_posts]` shortcode
 - Improved handling of nested dynamic elements within Tabs
+- Improved handling of nested dynamic elements within Spoiler
+- Tested compatibility with WordPress 5.7
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)
