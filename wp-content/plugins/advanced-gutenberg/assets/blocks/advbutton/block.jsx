@@ -5,8 +5,8 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
     const { __ } = wpI18n;
     const { Component, Fragment } = wpElement;
     const { registerBlockType, createBlock } = wpBlocks;
-    const { InspectorControls, BlockControls, BlockAlignmentToolbar, RichText, PanelColorSettings, URLInput } = wpBlockEditor;
-    const { BaseControl, RangeControl, PanelBody, ToggleControl, SelectControl, ToolbarButton, ToolbarGroup } = wpComponents;
+    const { InspectorControls, RichText, PanelColorSettings, URLInput } = wpBlockEditor;
+    const { BaseControl, RangeControl, PanelBody, ToggleControl, SelectControl } = wpComponents;
 
     // Preview style images
     let previewImageData = '';
@@ -112,17 +112,6 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                     <img alt={__('Advanced Button', 'advanced-gutenberg')} width='100%' src={previewImageData}/>
                     :
                     <Fragment>
-                    <BlockControls>
-                        <BlockAlignmentToolbar value={ align } onChange={ ( align ) => setAttributes( { align: align } ) } />
-                        <ToolbarGroup>
-                            <ToolbarButton
-                                label={ __( 'Refresh this button when it conflict with other buttons styles', 'advanced-gutenberg' ) }
-                                icon="update"
-                                className="components-toolbar__control"
-                                onClick={ () => setAttributes( { id: 'advgbbutton-' + blockID } ) }
-                            />
-                        </ToolbarGroup>
-                    </BlockControls>
                     <span className={`${className} align${align}`}
                           style={ { display: 'inline-block' } }
                     >
@@ -131,7 +120,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
                             placeholder={ __( 'Add text…', 'advanced-gutenberg' ) }
                             value={ text }
                             onChange={ ( value ) => setAttributes( { text: value } ) }
-                            allowedFormats={ [ 'bold', 'italic', 'strikethrough' ] }
+                            allowedFormats={ [ 'core/bold', 'core/italic', 'core/strikethrough' ] }
                             isSelected={ isSelected }
                             className={ `wp-block-advgb-button_link ${id}` }
                             keepPlaceholderOnFocus
@@ -539,6 +528,7 @@ import {AdvColorControl} from "../0-adv-components/components.jsx";
         ],
         supports: {
             anchor: true,
+            align: ['right', 'left', 'center', 'full'],
         },
         edit: AdvButton,
         save: function ( { attributes } ) {

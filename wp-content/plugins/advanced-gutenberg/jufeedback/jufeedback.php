@@ -600,7 +600,9 @@ class Jufeedback
     {
         wp_enqueue_script(
             'ju-review',
-            plugin_dir_url(self::$main_plugin_file) . 'jufeedback/assets/js/jureview.min.js'
+            plugin_dir_url(self::$main_plugin_file) . 'jufeedback/assets/js/jureview.min.js',
+            array(),
+            ADVANCED_GUTENBERG_VERSION
         );
         wp_localize_script('ju-review', 'ju_review', array(
             'token' => wp_create_nonce('ju-review'),
@@ -614,7 +616,7 @@ class Jufeedback
         ) . '</p>
 	          <p class="submit">
 	             <a href="' . esc_html('https://wordpress.org/support/plugin/' . self::$plugin_slug . '/reviews/?filter=5#new-post') . '" target="_blank" class="button-primary jureview-already-review">' . esc_html__('Sure I’d love to', self::$text_domain) . '</a>
-	             <button class="button-secondary jureview-hide-review">' . esc_html__('No hide notification', self::$text_domain) . '</button>
+	             <button class="button-secondary jureview-hide-review">' . esc_html__('No, hide notification', self::$text_domain) . '</button>
 	          </p>
 	          </div>';
         //phpcs:enable

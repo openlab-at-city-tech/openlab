@@ -308,7 +308,7 @@
                                     <div className="advgb-image-slider-item" key={index}>
                                         <img src={image.url}
                                              className="advgb-image-slider-img"
-                                             alt={'Slider image'}
+                                             alt={image.title}
                                              style={{
                                                  width: fullWidth ? '100%' : width,
                                                  height: autoHeight ? 'auto' : height,
@@ -568,7 +568,7 @@
                             <div className="advgb-image-slider-item" key={index}>
                                 <img src={image.url}
                                      className="advgb-image-slider-img"
-                                     alt={'Slider image'}
+                                     alt={image.title}
                                      style={{
                                          width: fullWidth ? '100%' : width,
                                          height: autoHeight ? 'auto' : height,

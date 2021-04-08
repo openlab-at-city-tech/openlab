@@ -1307,7 +1307,7 @@
                                     />
                                 </PanelBody>
                                 <PanelBody title={__('Text Alignment', 'advanced-gutenberg')} initialOpen={false}>
-                                    <BaseControl label={__('Horizontal Align', 'advanced-gutenberg')}>
+                                    <BaseControl help={__('Horizontal Align', 'advanced-gutenberg')}>
                                         <ToolbarGroup
                                             controls={HORZ_ALIGNMENT_CONTROLS.map((control) => {
                                                 const isActive = (this.getCellStyles('textAlign') === control.align);
@@ -1320,7 +1320,7 @@
                                             })}
                                         />
                                     </BaseControl>
-                                    <BaseControl label={__('Vertical Align', 'advanced-gutenberg')}>
+                                    <BaseControl help={__('Vertical Align', 'advanced-gutenberg')}>
                                         <ToolbarGroup
                                             controls={VERT_ALIGNMENT_CONTROLS.map((control) => {
                                                 const isActive = (this.getCellStyles('verticalAlign') === control.align);
