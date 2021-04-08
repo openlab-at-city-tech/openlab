@@ -399,7 +399,42 @@
                 setDragAndDropElements();
             }
         });
+
+        $(document).on("click", ".undo-button", function(){
+            $("#do-undo").removeClass("active");
+            if(wcp_settings.useFolderUndo == "yes") {
+                $.ajax({
+                    url: wcp_settings.ajax_url,
+                    type: 'post',
+                    data: {
+                        post_type: wcp_settings.post_type,
+                        nonce: wcp_settings.nonce,
+                        action: 'wcp_undo_folder_changes'
+                    },
+                    success: function(res){
+                        $("#undo-done").addClass("active");
+                        setTimeout(function(){
+                            $("#undo-done").removeClass("active");
+                        }, 2500);
+                        resetMediaAndPosts();
+                    }
+                })
+            }
+        });
+
+        $(document).on("click", ".close-undo-box", function(e){
+            e.preventDefault();
+            $("#do-undo").removeClass("active");
+        });
     });
+    function checkForUndoFunctionality() {
+        if(wcp_settings.useFolderUndo == "yes") {
+            $("#do-undo").addClass("active");
+            setTimeout(function(){
+                $("#do-undo").removeClass("active");
+            }, parseInt(wcp_settings.defaultTimeout));
+        }
+    }
 
     function setDragAndDropElements() {
         $(".wcp-move-file:not(.ui-draggable)").draggable({
@@ -466,6 +501,7 @@
                             success: function (res) {
                                 res = $.parseJSON(res);
                                 if(res.status == "1") {
+                                    checkForUndoFunctionality();
                                     resetMediaAndPosts();
                                 } else {
                                     $(".folder-popup-form").hide();
@@ -493,6 +529,7 @@
                             res = $.parseJSON(res);
                             if(res.status == "1") {
                                 // window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                             } else {
                                 $(".folder-popup-form").hide();
@@ -518,6 +555,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                         }
                     });
@@ -546,6 +584,7 @@
                             method: 'post',
                             success: function (res) {
                                 //window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                             }
                         });
@@ -564,6 +603,7 @@
                         method: 'post',
                         success: function (res) {
                             //window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                         }
                     });
@@ -582,6 +622,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                         }
                     });
@@ -634,6 +675,7 @@
                             method: 'post',
                             success: function (res) {
                                 // window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                                 ajaxAnimation();
                             }
@@ -654,6 +696,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
                         }
@@ -673,6 +716,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
                         }
@@ -703,6 +747,7 @@
                             success: function (res) {
                                 res = $.parseJSON(res);
                                 if(res.status == "1") {
+                                    checkForUndoFunctionality();
                                     resetMediaAndPosts();
                                     ajaxAnimation();
                                 } else {
@@ -731,6 +776,7 @@
                             res = $.parseJSON(res);
                             if(res.status == "1") {
                                 // window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                                 ajaxAnimation();
                             } else {
@@ -757,6 +803,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
                         }
