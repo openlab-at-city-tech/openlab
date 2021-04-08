@@ -150,14 +150,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                     var inputVal = $.trim($(this).val()).toLowerCase();
                     if (inputVal == "delete") {
                         $("#remove-folders-data-button").prop("disabled", false);
-                        $(".delete-confirmation-message").html("<?php esc_html_e('This will delete all existing folders & settings', WCP_FOLDER); ?>");
+                        $(".delete-confirmation-message").html("<?php esc_html_e('This will delete all existing folders & settings', 'folders'); ?>");
                     } else {
                         $("#remove-folders-data-button").prop("disabled", true);
                         if (inputVal != "") {
                             var textLen = inputVal.length;
                             var curStr = ("delete").substring(0, textLen);
                             if (curStr != inputVal) {
-                                $(".delete-confirmation-message").html("<?php esc_html_e('Please type DELETE and click on the "Delete" button to confirm', WCP_FOLDER); ?>");
+                                $(".delete-confirmation-message").html("<?php esc_html_e('Please type DELETE and click on the "Delete" button to confirm', 'folders'); ?>");
                             } else {
                                 $(".delete-confirmation-message").html("");
                             }
@@ -237,6 +237,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             $(document).on("change", ".checkbox-color", function(){
                 setCSSProperties();
             });
+            $(document).on("click", "#use_folder_undo", function(){
+                if($(this).is(":checked")) {
+                    $(".timeout-settings").addClass("active");
+                } else {
+                    $(".timeout-settings").removeClass("active");
+                }
+            });
+            $('.enable-replace-media').hover(
+                function(){
+                    //$(this).addClass('hover')
+                },
+                function(){
+                    $(this).removeClass('show')
+                }
+            )
+            $('.enable-replace-media .html-tooltip').hover(
+                function(){
+                    $(this).closest(".enable-replace-media").addClass('show')
+                },
+                function(){
+                    //$(this).removeClass('show')
+                }
+            )
         });
 
         function setFoldersRemoveStatus(status) {
@@ -414,7 +437,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 </div>
 <div class="wrap">
-    <h1><?php esc_html_e( 'Folders Settings', WCP_FOLDER ); ?></h1>
+    <h1><?php esc_html_e( 'Folders Settings', 'folders'); ?></h1>
     <?php
     settings_fields('folders_settings');
     settings_fields('default_folders');
@@ -443,11 +466,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
         <div class="folders-tabs">
             <div class="folder-tab-menu">
                 <ul>
-                    <li><a class="<?php echo esc_attr(($setting_page=="folder-settings")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folder-settings") ?>"><?php esc_html_e( 'Folders Settings', WCP_FOLDER ); ?></a></li>
-                    <li><a class="<?php echo esc_attr(($setting_page=="customize-folders")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=customize-folders") ?>"><?php esc_html_e( 'Customize Folders', WCP_FOLDER ); ?></a></li>
-                    <li><a class="<?php echo esc_attr(($setting_page=="folders-import")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folders-import") ?>"><?php esc_html_e( 'Tools', WCP_FOLDER ); ?></a></li>
+                    <li><a class="<?php echo esc_attr(($setting_page=="folder-settings")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folder-settings") ?>"><?php esc_html_e( 'Folders Settings', 'folders'); ?></a></li>
+                    <li><a class="<?php echo esc_attr(($setting_page=="customize-folders")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=customize-folders") ?>"><?php esc_html_e( 'Customize Folders', 'folders'); ?></a></li>
+                    <li><a class="<?php echo esc_attr(($setting_page=="folders-import")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=folders-import") ?>"><?php esc_html_e( 'Tools', 'folders'); ?></a></li>
                     <?php if($isInSettings) { ?>
-                        <li><a class="<?php echo esc_attr(($setting_page=="upgrade-to-pro")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=upgrade-to-pro") ?>"><?php esc_html_e( 'Upgrade to Pro', WCP_FOLDER ); ?></a></li>
+                        <li><a class="<?php echo esc_attr(($setting_page=="upgrade-to-pro")?"active":"") ?>" href="<?php echo esc_url($settingURL."&setting_page=upgrade-to-pro") ?>"><?php esc_html_e( 'Upgrade to Pro', 'folders'); ?></a></li>
                     <?php } ?>
                 </ul>
             </div>
@@ -477,10 +500,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                     </label>
                                                 </td>
                                                 <td class="" width="260px">
-                                                    <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use Folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?></label>
+                                                    <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use Folders with: ', 'folders')." ".esc_html_e($post_type->label); ?></label>
                                                 </td>
                                                 <td class="default-folder">
-                                                    <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', WCP_FOLDER ) ?></label>
+                                                    <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', 'folders'); ?></label>
                                                 </td>
                                                 <td>
                                                     <select class="hide-show-option <?php echo esc_attr($is_checked) ?>" id="folders_for_<?php echo esc_attr($post_type->name); ?>" name="default_folders[<?php echo esc_attr($post_type->name); ?>]" ?>
@@ -512,14 +535,40 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                             <span></span>
                                                         </label>
                                                         <label for="" class="send-user-to-pro">
-                                                            <?php esc_html_e( 'Use Folders with: ', WCP_FOLDER )." ".esc_html_e($post_type->label); ?>
-                                                            <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+                                                            <?php esc_html_e( 'Use Folders with: ', 'folders')." ".esc_html_e($post_type->label); ?>
+                                                            <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                         </label>
                                                     </a>
                                                 </td>
                                             </tr>
                                         <?php }
                                     endforeach; ?>
+	                                <?php
+	                                $show_in_page = !isset($customize_folders['use_folder_undo'])?"yes":$customize_folders['use_folder_undo'];
+	                                ?>
+                                    <tr>
+                                        <td class="no-padding">
+                                            <input type="hidden" name="customize_folders[use_folder_undo]" value="no">
+                                            <label for="use_folder_undo" class="custom-checkbox">
+                                                <input id="use_folder_undo" class="sr-only" <?php checked($show_in_page, "yes") ?> type="checkbox" name="customize_folders[use_folder_undo]" value="yes">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td colspan="3">
+                                            <label for="use_folder_undo" ><?php esc_html_e( 'Use folders with Undo action after performing tasks', 'folders'); ?> <span class="recommanded">Recommended</span></label>
+                                        </td>
+                                    </tr>
+	                                <?php
+	                                $default_timeout = !isset($customize_folders['default_timeout'])?"5":$customize_folders['default_timeout'];
+	                                ?>
+                                    <tr class="timeout-settings <?php echo ($show_in_page == "yes")?"active":"" ?>">
+                                        <td style="padding: 10px 0;" colspan="4">
+                                            <label for="default_timeout" ><?php esc_html_e( 'Default timeout', 'folders'); ?></label>
+                                            <div class="seconds-box">
+                                                <input type="number" class="seconds-input" name="customize_folders[default_timeout]" value="<?php echo esc_attr($default_timeout) ?>" />
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <?php
                                     $show_in_page = !isset($customize_folders['folders_enable_replace_media'])?"yes":$customize_folders['folders_enable_replace_media'];
                                     ?>
@@ -531,8 +580,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                 <span></span>
                                             </label>
                                         </td>
-                                        <td colspan="3">
-                                            <label for="folders_enable_replace_media" ><?php esc_html_e( 'Enable Replace Media', WCP_FOLDER ); ?> <span class="folder-tooltip" data-title="<?php esc_html_e("The Replace Media feature will allow you to replace your media files throughout your website with the click of a button,  which means the file will be replaced for all your posts, pages, etc ", "folders") ?>"><span class="dashicons dashicons-editor-help"></span></span></label>
+                                        <td colspan="3" class="enable-replace-media">
+                                            <label for="folders_enable_replace_media" ><?php esc_html_e( 'Enable Replace Media', 'folders'); ?>
+                                                <span class="html-tooltip no-position top">
+                                                    <span class="dashicons dashicons-editor-help"></span>
+                                                    <span class="tooltip-text top" style="">
+                                                        <?php esc_html_e("The Replace Media feature will allow you to replace your media files throughout your website with the click of a button,  which means the file will be replaced for all your posts, pages, etc", "folders") ?>
+                                                        <span class="new"><?php printf(esc_html__("%sPro version ✨%s includes updating all previous links of the file in the database, changing dates &  more", "folders"), "<a href='".esc_url($this->getFoldersUpgradeURL())."' target='_blank'>", "</a>") ?></span>
+                                                    </span>
+                                                </span>
+                                                <span class="recommanded">Recommended</span>
+                                            </label>
                                         </td>
                                     </tr>
                                     <?php
@@ -547,7 +605,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             </label>
                                         </td>
                                         <td colspan="3">
-                                            <label for="show_folder_in_settings" ><?php esc_html_e( 'Place the Folders settings page nested under "Settings"', WCP_FOLDER ); ?></label>
+                                            <label for="show_folder_in_settings" ><?php esc_html_e( 'Place the Folders settings page nested under "Settings"', 'folders'); ?></label>
                                         </td>
                                     </tr>
 	                                <?php $val = get_option("folders_show_in_menu"); ?>
@@ -560,7 +618,46 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             </label>
                                         </td>
                                         <td colspan="3">
-                                            <label for="folders_show_in_menu" ><?php esc_html_e( 'Show the folders also in WordPress menu', WCP_FOLDER ); ?></label>
+                                            <label for="folders_show_in_menu" ><?php esc_html_e( 'Show the folders also in WordPress menu', 'folders'); ?></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+			                                <?php $dynamic_folders = "off"; ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[dynamic_folders]" id="dynamic_folders" value="on" <?php checked($dynamic_folders, "on") ?>>
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+					                                <?php esc_html_e("Dynamic Folders", "folders"); ?>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                    <span class="html-tooltip dynamic ">
+                                                        <span class="dashicons dashicons-editor-help"></span>
+                                                        <span class="tooltip-text top" style="">
+                                                            <?php esc_html_e("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more", "folders") ?>
+                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/dynamic-folders.gif") ?>">
+                                                        </span>
+                                                    </span>
+                                                    <span class="recommanded">Recommended</span>
+                                                </label>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 15px 10px 15px 0px" colspan="4">
+			                                <?php $replace_media_title = "off"; ?>
+                                            <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                                <label for="" class="custom-checkbox send-user-to-pro">
+                                                    <input disabled type="checkbox" class="sr-only" name="customize_folders[replace_media_title]" id="replace_media_title" value="on" <?php checked($replace_media_title, "on") ?>>
+                                                    <span></span>
+                                                </label>
+                                                <label for="" class="send-user-to-pro">
+					                                <?php esc_html_e("Auto Rename file based on title", "folders"); ?>
+                                                    <span class="folder-tooltip" data-title="<?php esc_html_e("Replace the actual file name of media files with the title from the WordPress editor.", "folders") ?>"><span class="dashicons dashicons-editor-help"></span></span></label>
+                                                <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
+                                                </label>
+                                            </a>
                                         </td>
                                     </tr>
                                     <!-- Do not make changes here, Only for Free -->
@@ -578,14 +675,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                 </label>
                                                 <label for="" class="send-user-to-pro">
 			                                        <?php esc_html_e("Show media details on hover", "folders"); ?>
-                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                     <span class="html-tooltip bottom">
-                                                    <span class="dashicons dashicons-editor-help"></span>
-                                                    <span class="tooltip-text top" style="">
-                                                        Show useful metadata including title, size, type, date, dimension & more on hover.
-                                                        <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
+                                                        <span class="dashicons dashicons-editor-help"></span>
+                                                        <span class="tooltip-text top" style="">
+                                                            <?php esc_html_e("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders"); ?>
+                                                            <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folders-media.gif") ?>">
+                                                        </span>
                                                     </span>
-                                                </span>
+                                                    <span class="recommanded">Recommended</span>
                                                 </label>
                                             </a>
                                         </td>
@@ -648,7 +746,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             </select>
                                         </div>
                                         <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <button type="button"><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+                                            <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                         </a>
                                     </div>
                                 </div>
@@ -688,7 +786,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td width="255px" class="no-padding">
                                         <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <label for="new_folder_color" ><b>"New Folder"</b> button color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button></label>
+                                            <label for="new_folder_color" ><b>"New Folder"</b> button color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button></label>
                                         </a>
                                     </td>
                                     <td>
@@ -711,7 +809,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <?php } ?>
                                             <li>
                                                 <a class="upgrade-box-link d-block" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area">Custom</span></span>
+                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area"><?php echo esc_html_e("Custom", "folders") ?></span></span>
                                                     <span class="upgrade-link"><?php echo esc_html_e("Upgrade to Pro", "folders") ?></span>
                                                 </a>
                                             </li>
@@ -728,7 +826,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td class="no-padding">
                                         <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <label for="bulk_organize_button_color" ><b>"Bulk Organize"</b> button color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button></label>
+                                            <label for="bulk_organize_button_color" ><b>"Bulk Organize"</b> button color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button></label>
                                         </a>
                                     </td>
                                     <td>
@@ -751,7 +849,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <?php } ?>
                                             <li>
                                                 <a class="upgrade-box-link d-block" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area">Custom</span></span>
+                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area"><?php echo esc_html_e("Custom", "folders") ?></span></span>
                                                     <span class="upgrade-link"><?php echo esc_html_e("Upgrade to Pro", "folders") ?></span>
                                                 </a>
                                             </li>
@@ -765,7 +863,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td class="no-padding">
                                         <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <label for="media_replace_button" ><b>"Replace File"</b> media library button <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button></label>
+                                            <label for="media_replace_button" ><b>"Replace File"</b> media library button <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button></label>
                                         </a>
                                     </td>
                                     <td>
@@ -788,7 +886,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <?php } ?>
                                             <li>
                                                 <a class="upgrade-box-link d-block" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area">Custom</span></span>
+                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area"><?php echo esc_html_e("Custom", "folders") ?></span></span>
                                                     <span class="upgrade-link"><?php echo esc_html_e("Upgrade to Pro", "folders") ?></span>
                                                 </a>
                                             </li>
@@ -802,7 +900,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td class="no-padding">
                                         <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <label for="dropdown_color" >Dropdown color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button></label>
+                                            <label for="dropdown_color" ><?php echo esc_html_e("Dropdown color", "folders") ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button></label>
                                         </a>
                                     </td>
                                     <td>
@@ -825,7 +923,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <?php } ?>
                                             <li>
                                                 <a class="upgrade-box-link d-block" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area">Custom</span></span>
+                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area"><?php echo esc_html_e("Custom", "folders") ?></span></span>
                                                     <span class="upgrade-link"><?php echo esc_html_e("Upgrade to Pro", "folders") ?></span>
                                                 </a>
                                             </li>
@@ -839,7 +937,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                 <tr>
                                     <td class="no-padding">
                                         <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                            <label for="folder_bg_color" >Folders background color <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button></label>
+                                            <label for="folder_bg_color" ><?php echo esc_html_e("Folders background color", "folders") ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button></label>
                                         </a>
                                     </td>
                                     <td>
@@ -862,7 +960,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                             <?php } ?>
                                             <li>
                                                 <a class="upgrade-box-link d-block" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area">Custom</span></span>
+                                                    <span class="color-box"><span class="gradient"></span> <span class="color-box-area"><?php echo esc_html_e("Custom", "folders") ?></span></span>
                                                     <span class="upgrade-link"><?php echo esc_html_e("Upgrade to Pro", "folders") ?></span>
                                                 </a>
                                             </li>
@@ -878,10 +976,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                     <td class="no-padding">
                                         <label for="folder_font" >
 	                                        <?php if($setting_font !== false && $setting_font != "" && !in_array($setting_font, array("Arial","Tahoma","Verdana","Helvetica","Times New Roman","Trebuchet MS","Georgia"))) {
-		                                        esc_html_e("Folders font", WCP_FOLDER);
+		                                        esc_html_e("Folders font", 'folders');
 	                                        } else { ?>
                                                 <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-			                                        <?php esc_html_e( 'Folders font', WCP_FOLDER ) ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+			                                        <?php esc_html_e( 'Folders font', 'folders'); ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                 </a>
 	                                        <?php } ?>
                                         </label>
@@ -917,10 +1015,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                         <label for="folder_size" >
                                             <?php if($folder_size === false || intval($folder_size) === 16) { ?>
                                                 <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-		                                            <?php esc_html_e( 'Folders size', WCP_FOLDER ) ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+		                                            <?php esc_html_e( 'Folders size', 'folders'); ?> <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                 </a>
                                             <?php } else { ?>
-                                                <?php esc_html_e("Folders size", WCP_FOLDER); ?>
+                                                <?php esc_html_e("Folders size", 'folders'); ?>
                                             <?php } ?>
                                         </label>
                                     </td>
@@ -969,7 +1067,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                 </label>
                                                 <label for="" class="send-user-to-pro">
 			                                        <?php esc_html_e("Show Folders in upper position", "folders"); ?>
-                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", WCP_FOLDER) ?></button>
+                                                    <button type="button" class="upgrade-link" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                 </label>
                                             </a>
                                         <?php } else { ?>
@@ -977,7 +1075,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                 <input id="show_folders" class="sr-only" <?php checked($show_in_page, "show") ?> type="checkbox" name="customize_folders[show_in_page]" value="show">
                                                 <span></span>
                                             </div>
-                                            <label for="show_folders">Show Folders in upper position</label>
+                                            <label for="show_folders"><?php esc_html_e("Show Folders in upper position", 'folders'); ?></label>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -986,16 +1084,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         <div class="accordion-right">
                             <div class="preview-text">
                                 Preview
-                                <div class="preview-text-info">See the full functionality on your media library, posts, pages, and custom posts</div>
+                                <div class="preview-text-info"><?php esc_html_e("See the full functionality on your media library, posts, pages, and custom posts", 'folders'); ?></div>
                             </div>
                             <div class="preview-inner-box">
                                 <div class="preview-box">
                                     <div class="wcp-custom-form">
                                         <div class="form-title">
-                                            Folders
+	                                        <?php esc_html_e("Folders", 'folders'); ?>
                                             <a href="javascript:;" class="add-new-folder" id="add-new-folder">
                                                 <span class="create_new_folder"><i class="pfolder-add-folder"></i></span>
-                                                <span>New Folder</span>
+                                                <span><?php esc_html_e("New Folder", 'folders'); ?></span>
                                             </a>
                                             <div class="clear"></div>
                                         </div>
@@ -1008,10 +1106,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit-folder"><span class="path2"></span></span> <span class="text">Rename</span> </a>
+                                                    <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit-folder"><span class="path2"></span></span> <span class="text"><?php esc_html_e("Rename", 'folders'); ?></span> </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text">Delete</span> </a>
+                                                    <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", 'folders'); ?></span> </a>
                                                 </li>
                                                 <li class="last">
                                                     <a href="javascript:;" id="expand-collapse-list" data-tooltip="Expand"><span class="icon pfolder-arrow-down"></span></a>
@@ -1024,26 +1122,26 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                                     </div>
                                     <div class="shadow-box">
                                         <div class="header-posts">
-                                            <a href="javascript:;" class="all-posts active-item-link">All Files <span class="total-count">215</span></a>
+                                            <a href="javascript:;" class="all-posts active-item-link"><?php esc_html_e("All Files", 'folders'); ?> <span class="total-count">215</span></a>
                                         </div>
                                         <div class="un-categorised-items  ui-droppable">
-                                            <a href="javascript:;" class="un-categorized-posts">Unassigned Files <span class="total-count total-empty">191</span> </a>
+                                            <a href="javascript:;" class="un-categorized-posts"><?php esc_html_e("Unassigned Files", 'folders'); ?> <span class="total-count total-empty">191</span> </a>
                                         </div>
                                         <div class="separator"></div>
                                         <ul class="folder-list">
-                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 1</span><span class="total-count">20</span><span class="clear"></span></a></li>
-                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 2</span><span class="total-count">13</span><span class="clear"></span></a></li>
-                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span>Folder 3</span><span class="total-count">5</span><span class="clear"></span></a></li>
+                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 1", 'folders'); ?></span><span class="total-count">20</span><span class="clear"></span></a></li>
+                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 2", 'folders'); ?></span><span class="total-count">13</span><span class="clear"></span></a></li>
+                                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 3", 'folders'); ?></span><span class="total-count">5</span><span class="clear"></span></a></li>
                                         </ul>
                                         <div class="separator"></div>
                                         <div class="media-buttons">
                                             <select class="media-select">
-                                                <option>All Files</option>
-                                                <option>Folder 1</option>
-                                                <option>Folder 2</option>
-                                                <option>Folder 3</option>
+                                                <option><?php esc_html_e("All Files", 'folders'); ?></option>
+                                                <option><?php esc_html_e("Folder 1", 'folders'); ?></option>
+                                                <option><?php esc_html_e("Folder 2", 'folders'); ?></option>
+                                                <option><?php esc_html_e("Folder 3", 'folders'); ?></option>
                                             </select>
-                                            <button type="button" class="button organize-button">Bulk Organize</button>
+                                            <button type="button" class="button organize-button"><?php esc_html_e("Bulk Organize", 'folders'); ?></button>
                                             <div style="clear: both;"></div>
                                         </div>
                                     </div>
@@ -1110,74 +1208,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         </table>
                     </div>
                 </div>
-                <div class="tab-content <?php echo esc_attr(($setting_page=="license-key")?"active":"") ?>">
-                    <?php if($setting_page=="license-key") { ?>
-                        <?php
-                        $type = filter_input(INPUT_GET, 'm', FILTER_SANITIZE_STRING);
-                        if(isset($type) && !empty($type)) {
-                            switch ($type) {
-                                case "error": ?>
-                                    <div class='folder-error-message'><?php esc_attr_e("Your license key is not valid",WCP_FOLDER ) ?></div>
-                                    <?php break;
-                                case "valid": ?>
-                                    <div class='folder-success-message'><?php esc_attr_e("Your license key is activated successfully",WCP_FOLDER ) ?></div>
-                                    <?php break;
-                                case "unactivated": ?>
-                                    <div class='folder-success-message'><?php esc_attr_e("Your license key is deactivated successfully",WCP_FOLDER ) ?></div>
-                                    <?php break;
-                                case "expired": ?>
-                                    <div class='folder-error-message'><?php esc_attr_e("Your license has been expired",WCP_FOLDER ) ?></div>
-                                    <?php break;
-                                case "no_activations": ?>
-                                    <div class='folder-error-message'><?php esc_attr_e("Your license was activated for another domain, please visit your ",WCP_FOLDER ) ?><a target="_blank" href="https://go.premio.io"><?php esc_attr_e("Premio account",WCP_FOLDER ) ?></a></div>
-                                    <?php break;
-                            }
-                        }
-                        ?>
-                        <div class="key-table">
-                            <div class="license-key-footer">
-                                <?php
-                                $licenseKey = get_option("wcp_folder_license_key");
-                                $licenseData = array();
-                                $active_status = 0;
-                                delete_transient("folder_license_key_data");
-                                if(!empty($licenseKey)) {
-                                    $licenseData = $this->get_license_key_data($licenseKey);
-                                    if(!empty($licenseData)) {
-                                        if($licenseData['license'] == "valid") {
-                                            $active_status = 1;
-                                        } else if($licenseData['license'] == "expired") {
-                                            $active_status = 2;
-                                        }
-                                    } else {
-                                        $licenseKey = "";
-                                    }
-                                }
-                                if(!$active_status) {
-                                    esc_attr_e("To receive updates, please enter your valid license key.", WCP_FOLDER );
-                                } else if ($active_status == 1 && $licenseData['expires'] == "lifetime") {
-                                    esc_attr_e("You have a lifetime license", WCP_FOLDER);
-                                } else if($active_status == 1 ){
-                                    esc_attr_e("Your license will expire on ".date("d M, Y",strtotime($licenseData['expires'])));
-                                } else if($active_status == 2 ){
-                                    $url = WCP_PRO_FOLDER_API_URL.'/checkout/?edd_license_key='.$licenseKey."&download_id=".WCP_PRO_FOLDER_PR0DUCT_ID; ?>
-                                    <span class='error-message'><?php esc_attr_e("Your license has been expired on ", WCP_FOLDER).esc_attr(date("d M, Y",strtotime($licenseData['expires']))) ?></span><a target="_blank" href="<?php echo esc_url($url) ?>" class="button button-primary" ><?php esc_attr_e("Renew Now", WCP_FOLDER ) ?></a> <?php
-                                }
-                                ?>
-                            </div>
-                            <form action="" id="license_key_form">
-                                <div class="input-field">
-                                    <label for="license_key"><?php esc_attr_e("License Key", WCP_FOLDER ) ?></label>
-                                    <input class="license-key" id="license_key" name="license_key" value="<?php echo esc_attr($licenseKey) ?>">
-                                </div>
-                                <div class="submit">
-                                    <?php if($active_status != 0) { ?>
-                                        <a href="javascript:;" class="button secondary-button" id="deactivate_key"><?php esc_attr_e("Deactivate Key", WCP_FOLDER ) ?></a>
-                                    <?php } ?>
-                                    <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_attr_e("Activate Key", WCP_FOLDER ) ?>">
-                                </div>
-                            </form>
-                        </div>
+                <div class="tab-content <?php echo esc_attr(($setting_page=="upgrade-to-pro")?"active":"") ?>">
+                    <?php if($setting_page=="upgrade-to-pro") { ?>
+                        <style>#wpwrap { background: #f0f0f1 !important; }</style>
+                        <?php include_once "upgrade-table.php"; ?>
                     <?php } ?>
                 </div>
             </div>
@@ -1200,8 +1234,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <div class="import-folder-title"></div>
             <div class="import-folder-note">Are you sure you'd like to import $x folders from $plugin?</div>
             <div class="folder-form-buttons">
-                <button type="submit" class="form-submit-btn" id="import-folder-button"><?php esc_html_e("Import", WCP_FOLDER); ?></button>
-                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", WCP_FOLDER); ?></a>
+                <button type="submit" class="form-submit-btn" id="import-folder-button"><?php esc_html_e("Import", 'folders'); ?></button>
+                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
             </div>
         </div>
     </div>
@@ -1214,7 +1248,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <div class="close-popup-button">
                 <a class="" href="javascript:;"><span></span></a>
             </div>
-            <div class="import-plugin-title"><?php esc_html_e("Import data", WCP_FOLDER); ?></div>
+            <div class="import-plugin-title"><?php esc_html_e("Import data", 'folders'); ?></div>
             <div class="plugin-import-table">
                 <div class="import-folder-table">
                     <table>
@@ -1237,7 +1271,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             </div>
             <div class="folder-form-buttons">
                 <div class=""></div>
-                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Close", WCP_FOLDER); ?></a>
+                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Close", 'folders'); ?></a>
             </div>
         </div>
     </div>
@@ -1250,11 +1284,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <div class="close-popup-button">
                 <a class="" href="javascript:;"><span></span></a>
             </div>
-            <div class="remove-folder-title">Are you sure?</div>
-            <div class="remove-folder-note">You're about to delete $plugin's folders. Are you sure you'd like to proceed?</div>
+            <div class="remove-folder-title"><?php esc_html_e("Are you sure?", 'folders'); ?></div>
+            <div class="remove-folder-note"></div>
             <div class="folder-form-buttons">
-                <button type="submit" class="form-submit-btn delete-folder-plugin" id="remove-folder-button"><?php esc_html_e("Delete plugin data", WCP_FOLDER); ?></button>
-                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", WCP_FOLDER); ?></a>
+                <button type="submit" class="form-submit-btn delete-folder-plugin" id="remove-folder-button"><?php esc_html_e("Delete plugin data", 'folders'); ?></button>
+                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
             </div>
         </div>
     </div>
@@ -1266,11 +1300,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
             <div class="close-popup-button close-remove-folders">
                 <a class="" href="javascript:;"><span></span></a>
             </div>
-            <div class="remove-folder-title"><?php esc_html_e("Are you sure?", WCP_FOLDER); ?></div>
-            <div class="remove-folder-note"><?php echo sprintf(esc_html__("Folders will remove all created folders once you remove the plugin. We recommend you %s if you plan to use Folders in future.", WCP_FOLDER), "<b>".esc_html__("not to use this feature", WCP_FOLDER)."</b>"); ?></div>
+            <div class="remove-folder-title"><?php esc_html_e("Are you sure?", 'folders'); ?></div>
+            <div class="remove-folder-note"><?php printf(esc_html__("Folders will remove all created folders once you remove the plugin. We recommend you %snot to use this feature%s if you plan to use Folders in future.", 'folders'), "<b>", "</b>"); ?></div>
             <div class="folder-form-buttons">
-                <a href="javascript:;" class="form-cancel-btn cancel-folders"><?php esc_html_e("Cancel", WCP_FOLDER); ?></a>
-                <button type="submit" class="form-cancel-btn delete-button"><?php esc_html_e("I want to delete anyway", WCP_FOLDER); ?></button>
+                <a href="javascript:;" class="form-cancel-btn cancel-folders"><?php esc_html_e("Cancel", 'folders'); ?></a>
+                <button type="submit" class="form-cancel-btn delete-button"><?php esc_html_e("I want to delete anyway", 'folders'); ?></button>
             </div>
         </div>
     </div>
@@ -1285,17 +1319,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                 </div>
                 <div class="remove-folder-title"></div>
                 <div class="remove-folder-note text-left">
-                    <b><?php esc_html_e("Type DELETE to confirm", WCP_FOLDER); ?></b>
+                    <b><?php esc_html_e("Type DELETE to confirm", 'folders'); ?></b>
                     <div class="input-box">
                         <input autocomplete="off" type="text" id="delete-input" name="delete" >
                     </div>
-                    <div class="delete-confirmation-message"><?php esc_html_e('', WCP_FOLDER); ?></div>
+                    <div class="delete-confirmation-message"><?php esc_html_e('', 'folders'); ?></div>
                 </div>
                 <div class="folder-form-buttons">
                     <input type="hidden" name="nonce" id="remove-folder-nonce" value="<?php echo wp_create_nonce("remove_folders_data") ?>">
                     <input type="hidden" name="action" value="remove_all_folders_data">
-                    <button disabled type="submit" class="form-submit-btn delete-button" id="remove-folders-data-button"><?php esc_html_e("Delete", WCP_FOLDER); ?></button>
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", WCP_FOLDER); ?></a>
+                    <button disabled type="submit" class="form-submit-btn delete-button" id="remove-folders-data-button"><?php esc_html_e("Delete", 'folders'); ?></button>
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
                 </div>
             </form>
         </div>
@@ -1311,8 +1345,8 @@ if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugi
                 <div class="close-popup-button">
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
-                <div class="import-plugin-title"><?php esc_html_e("Import data", WCP_FOLDER); ?></div>
-                <div class="import-plugin-note"><?php esc_html_e("We've detected that you use another folders plugin. Would you like the Folders plugin to import your current folders? Keep in mind you can always do it in Folders Settings -> Import", WCP_FOLDER) ?></div>
+                <div class="import-plugin-title"><?php esc_html_e("Import data", 'folders'); ?></div>
+                <div class="import-plugin-note"><?php esc_html_e("We've detected that you use another folders plugin. Would you like the Folders plugin to import your current folders? Keep in mind you can always do it in Folders Settings -> Import", 'folders'); ?></div>
                 <div class="plugin-import-table">
                     <div class="import-folder-table">
                         <table>
@@ -1334,7 +1368,7 @@ if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugi
                 </div>
                 <div class="folder-form-buttons">
                     <div class=""></div>
-                    <a href="javascript:;" id="cancel-plugin-import" class="form-cancel-btn"><?php esc_html_e("Close", WCP_FOLDER); ?></a>
+                    <a href="javascript:;" id="cancel-plugin-import" class="form-cancel-btn"><?php esc_html_e("Close", 'folders'); ?></a>
                 </div>
             </div>
         </div>
@@ -1351,14 +1385,14 @@ if(($option == "show" || get_option("folder_redirect_status") == 2) && $is_plugi
                 <a class="" href="javascript:;"><span></span></a>
             </div>
             <div class="add-update-folder-title" id="folder-limitation-message">
-                You've reached the 10 folder limitation!
+	            <?php esc_html_e("You've reached the 10 folder limitation!", 'folders'); ?>
             </div>
             <div class="folder-form-message">
-                Unlock unlimited amount of folders by upgrading to one of our pro plans.
+	            <?php esc_html_e("Unlock unlimited amount of folders by upgrading to one of our pro plans.", 'folders'); ?>
             </div>
             <div class="folder-form-buttons">
-                <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn">See Pro Plans</a>
+                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
+                <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("See Pro Plans", 'folders'); ?></a>
             </div>
         </div>
     </div>

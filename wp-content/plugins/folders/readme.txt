@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 5.6
-Stable tag: 2.6.8
+Tested up to: 5.7
+Stable tag: 2.6.9
 Plugin URI: https://premio.io/downloads/folders/
 
 Folders is a WordPress plugin that will help you quickly create unlimited folders and organize and manage your Media Library files, Pages & Posts in folders
@@ -47,6 +47,7 @@ It’s rather simple really – once you install the plugin, you can begin using
 * New! Media replace - replace media files with other files uploaded by you
 * New! Import folders from other plugins - import folders from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder
 * You can also move media library files, pages, posts, or any custom post to folders without using our drag and drop feature. Whenever you select any element or select some elements in bulk, you can move it to a folder using our dropdown menu
+* NEW! - Undo action - undo your last action in Folders with the click of a button
 * Select specific folders when you add media to your pages, posts or any other post type
 * Drag and drop folders, change order, and hierarchy
 * Search folder names
@@ -68,10 +69,13 @@ It’s rather simple really – once you install the plugin, you can begin using
 = FOLDERS PLUGIN PRO FEATURES 🚀 =
 * <a href="https://premio.io/downloads/folders?utm_source=wporg" target="_blank" title="Folders pro plans"><strong>Upgrade to pro</strong></a> to get unlimited sub-folders :)
 * Create folders for each post type - use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)
+* NEW! 🎉 Dynamic Folders - automatically filter posts, pages, custom posts, media library files based on author, date, file types & more
 * Download any media library folder as ZIP: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally.
 * Sticky folders - you can pin your folders to the upper part of the folders navigation area. Use the sticky folders feature to make your most important folders accessible at all times.
 * Add stars to important directories
 * Lock folders - locked folders stay pinned, and cannot be dragged or deleted
+* NEW! Auto Rename file based on title - replace the actual file name of media files with the title from the WordPress editor
+* NEW! Advanced Media Replacements - replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO
 * Duplicate folders - duplicate an existing folder with all its content
 * Sort your folders based on creation date
 * Upload directly to a media library folder - you can easily upload images or any other kind of files to a specific folder
@@ -188,6 +192,9 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.6.9 =
+Undo your last action and fixed some bugs and plugin conflicts
 
 = 2.6.8 =
 Unlimited folders are now available in the free version 🎉

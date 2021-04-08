@@ -6,7 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     $string = "";
     global $typenow;
     $width = get_option("wcp_dynamic_width_for_" . $typenow);
-    if($width == null || empty($width)) {
+    $width = intval($width);
+    if($width == null || empty($width) || $width > 1200) {
         $width = 280;
     }
     $width = $width - 40;
@@ -53,7 +54,7 @@ button.button.organize-button:hover { background-color: <?php echo esc_attr($cus
     .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
     .ui-state-highlight { border-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?> !important;}
     .jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
-    <?php
+<?php
 $font_family = "";
 if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
     $font_family = $customize_folders['folder_font'];
@@ -131,10 +132,10 @@ if(!empty($post_type)) {
                         </div>
                         <div class="folder-separator"></div>
                         <div class="header-posts">
-                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, WCP_FOLDER ) ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
+                            <a href="javascript:;" class="all-posts <?php echo esc_attr($active_all_class) ?>"><?php esc_attr_e("All ".$title, 'folders'); ?> <span class="total-count"><?php echo $ttpsts ?></span></a>
                         </div>
                         <div class="un-categorised-items <?php echo esc_attr($active) ?>">
-                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, WCP_FOLDER) ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
+                            <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, 'folders'); ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
                         </div>
                         <div class="folder-separator-2"></div>
                     </div>
@@ -167,32 +168,32 @@ if(!empty($post_type)) {
                 </div>
                 <form action="" method="post" id="save-folder-form">
                     <div id="add-update-folder-title" class="add-update-folder-title">
-                        Add a new folder
+                        <?php esc_html_e("Add a new folder", "folders") ?>
                     </div>
                     <div class="add-folder-note">
-                        Enter your folder's name (or create more than one folder by separating the name with a comma)
+                        <?php esc_html_e("Enter your folder's name (or create more than one folder by separating the name with a comma)", "folders") ?>
                     </div>
                     <div class="folder-form-input">
                         <div class="folder-group">
                             <input id="add-update-folder-name" autocomplete="off" required="required">
                             <span class="highlight"></span><span class="folder-bar"></span>
-                            <label for="add-update-folder-name">Folder name</label>
+                            <label for="add-update-folder-name"><?php esc_html_e("Folder name", "folders") ?></label>
                         </div>
                     </div>
                     <div class="folder-form-errors">
-                        <span class="dashicons dashicons-info"></span> Please enter folder name
+                        <span class="dashicons dashicons-info"></span> <?php esc_html_e("Please enter folder name", "folders") ?>
                     </div>
                     <div class="folder-form-buttons hide-it pro-message" id="pro-notice">
-                        <span class="pro-tip">
-                            Pro tip
-                        </span>
+                            <span class="pro-tip">
+                                <?php esc_html_e("Pro tip", "folders") ?>
+                            </span>
                         <div class="pro-notice">
-                            <a class="inline-button" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>">Upgrade to Pro</a> to create subfolders (with 20+ amaizing features) & premium support 🎉
+			                <?php printf( esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                         </div>
                     </div>
                     <div class="folder-form-buttons">
-                        <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                        <button type="submit" class="form-submit-btn" id="save-folder-data" style="width: 160px">Submit</button>
+                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <button type="submit" class="form-submit-btn" id="save-folder-data" style="width: 160px"><?php esc_html_e("Submit", "folders") ?></button>
                     </div>
                 </form>
             </div>
@@ -207,21 +208,21 @@ if(!empty($post_type)) {
                 </div>
                 <form action="" method="post" id="update-folder-form">
                     <div id="update-folder-title" class="add-update-folder-title">
-                        Rename folder
+                        <?php esc_html_e("Rename folder", "folders") ?>
                     </div>
                     <div class="folder-form-input">
                         <div class="folder-group">
                             <input id="update-folder-item-name" autocomplete="off" required="required">
                             <span class="highlight"></span><span class="folder-bar"></span>
-                            <label for="update-folder-item-name">Folder name</label>
+                            <label for="update-folder-item-name"><?php esc_html_e("Folder name", "folders") ?></label>
                         </div>
                     </div>
                     <div class="folder-form-errors">
-                        <span class="dashicons dashicons-info"></span> Please enter folder name
+                        <span class="dashicons dashicons-info"></span> <?php esc_html_e("Please enter folder name", "folders") ?>
                     </div>
                     <div class="folder-form-buttons">
-                        <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                        <button type="submit" class="form-submit-btn" id="update-folder-data" style="width: 160px">Submit</button>
+                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <button type="submit" class="form-submit-btn" id="update-folder-data" style="width: 160px"><?php esc_html_e("Submit", "folders") ?></button>
                     </div>
                 </form>
             </div>
@@ -235,14 +236,14 @@ if(!empty($post_type)) {
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="add-update-folder-title" id="remove-folder-message">
-                    Are you sure you want to delete the selected folder?
+                    <?php esc_html_e("Are you sure you want to delete the selected folder?", "folders") ?>
                 </div>
                 <div class="folder-form-message" id="remove-folder-notice">
-                    Items in the folder will not be deleted.
+                    <?php esc_html_e("Items in the folder will not be deleted.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn">No, Keep it</a>
-                    <a href="javascript:;" class="form-submit-btn" id="remove-folder-item">Yes, Delete it!</a>
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("No, Keep it", "folders") ?></a>
+                    <a href="javascript:;" class="form-submit-btn" id="remove-folder-item"><?php esc_html_e("Yes, Delete it!", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -258,11 +259,11 @@ if(!empty($post_type)) {
 
                 </div>
                 <div class="folder-form-message">
-                    Unlock unlimited amount of folders by upgrading to one of our pro plans.
+                    <?php esc_html_e("Unlock unlimited amount of folders by activating license key.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn">See Pro Plans</a>
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Activate License Key", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -278,7 +279,7 @@ if(!empty($post_type)) {
 
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn">Close</a>
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Close", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -291,42 +292,41 @@ if(!empty($post_type)) {
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
-                    Sub-folders is a pro feature
+                    <?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
                 </div>
                 <div class="folder-form-message" style="padding: 25px 10px;" >
-                    Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade now to create, access and organize your files with sub-folders.
+                    <?php esc_html_e("Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade to Pro to create, access and organize your files with sub-folders.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn">Upgrade Now</a>
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Activate License Key", "folders") ?></a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="folder-popup-form" id="add-sub-folder-popup">
-
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
-                    Add a new folder
+                    <?php esc_html_e("Add a new folder", "folders") ?>
                 </div>
                 <div class="folder-form-input">
                     <div class="folder-group">
                         <input id="update-folder-item-name" autocomplete="off" required="required" readonly>
                         <span class="highlight"></span><span class="folder-bar"></span>
-                        <label for="update-folder-item-name">Folder name</label>
+                        <label for="update-folder-item-name"><?php esc_html_e("Folder name", "folders") ?></label>
                     </div>
                 </div>
                 <div class="folder-form-buttons">
                     <span class="pro-tip">
-                        Pro tip
+                        <?php esc_html_e("Pro tip", "folders") ?>
                     </span>
                     <div class="pro-notice">
-                        <a class="inline-button" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>">Upgrade to Pro</a> to create subfolders (with 20+ amaizing features) & premium support 🎉
+                        <?php printf( esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                     </div>
                 </div>
             </div>
@@ -334,26 +334,42 @@ if(!empty($post_type)) {
     </div>
 
     <div class="folder-popup-form" id="bulk-move-folder">
-    <form action="" method="post" id="bulk-folder-form">
-        <div class="popup-form-content">
-            <div class="popup-form-data">
-                <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
-                </div>
-                <div class="popup-folder-title">
-                    Select Folder
-                </div>
-                <div class="select-box">
-                    <select id="bulk-select">
-                        <option value="">Select Folder</option>
-                    </select>
-                </div>
-                <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn">Cancel</a>
-                    <button type="submit" class="form-submit-btn" id="move-to-folder" style="width: 200px">Move to Folder</button>
+        <form action="" method="post" id="bulk-folder-form">
+            <div class="popup-form-content">
+                <div class="popup-form-data">
+                    <div class="close-popup-button">
+                        <a class="" href="javascript:;"><span></span></a>
+                    </div>
+                    <div class="popup-folder-title">
+                        <?php esc_html_e("Select Folder", "folders") ?>
+                    </div>
+                    <div class="select-box">
+                        <select id="bulk-select">
+                            <option value=""><?php esc_html_e("Select Folder", "folders") ?></option>
+                        </select>
+                    </div>
+                    <div class="folder-form-buttons">
+                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <button type="submit" class="form-submit-btn" id="move-to-folder" style="width: 200px"><?php esc_html_e("Move to Folder", "folders") ?></button>
+                    </div>
                 </div>
             </div>
+        </form>
+    </div>
+
+    <div class="folders-undo-notification" id="do-undo">
+        <div class="folders-undo-body">
+            <a href="javascript:;" class="close-undo-box"><span></span></a>
+            <div class="folders-undo-header"><?php esc_html_e("Action performed successfully", "folders") ?></div>
+            <div class="folders-undo-body"><?php printf(esc_html__("Your action has been successfully completed. Click the %sUndo%s button to reverse the action", "folders"), "<b>", "</b>"); ?></div>
+            <div class="folders-undo-footer"><button class="undo-button" type="button"><?php esc_html_e("Undo", "folders") ?></button></div>
         </div>
-    </form>
-</div>
+    </div>
+
+    <div class="folders-undo-notification" id="undo-done">
+        <div class="folders-undo-body" style="padding: 0">
+            <a href="javascript:;" class="close-undo-box"><span></span></a>
+            <div class="folders-undo-header" style="color: #014737; padding: 0"><?php esc_html_e("Action reversed successfully", "folders") ?></div>
+        </div>
+    </div>
 </div>

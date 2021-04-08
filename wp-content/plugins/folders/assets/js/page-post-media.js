@@ -1035,7 +1035,44 @@
         });
 
         setDragAndDropElements();
+
+        $(document).on("click", ".undo-button", function(){
+            $("#do-undo").removeClass("active");
+            if(folders_media_options.useFolderUndo == "yes") {
+                $.ajax({
+                    url: folders_media_options.ajax_url,
+                    type: 'post',
+                    data: {
+                        post_type: folders_media_options.post_type,
+                        nonce: folders_media_options.nonce,
+                        action: 'wcp_undo_folder_changes'
+                    },
+                    success: function(res){
+                        $("#undo-done").addClass("active");
+                        setTimeout(function(){
+                            $("#undo-done").removeClass("active");
+                        }, 2500);
+                        resetMediaAndPosts();
+                    }
+                })
+            }
+        });
+
+        $(document).on("click", ".close-undo-box", function(e){
+            e.preventDefault();
+            $("#do-undo").removeClass("active");
+        });
     });
+
+
+    function checkForUndoFunctionality() {
+        if(folders_media_options.useFolderUndo == "yes") {
+            $("#do-undo").addClass("active");
+            setTimeout(function(){
+                $("#do-undo").removeClass("active");
+            }, parseInt(folders_media_options.defaultTimeout));
+        }
+    }
 
     function setDragAndDropElements() {
         $(".jstree-anchor:not(.ui-droppable)").droppable({
@@ -1060,6 +1097,7 @@
                             success: function (res) {
                                 res = $.parseJSON(res);
                                 if(res.status == "1") {
+                                    checkForUndoFunctionality();
                                     resetMediaAndPosts();
                                 } else {
                                     $(".folder-popup-form").hide();
@@ -1087,6 +1125,7 @@
                             res = $.parseJSON(res);
                             if(res.status == "1") {
                                 // window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                             } else {
                                 $(".folder-popup-form").hide();
@@ -1111,6 +1150,7 @@
                         data: "post_ids=" + chkStr + "&type=" + folders_media_options.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID + "&nonce="+nonce+"&status="+folders_media_options.taxonomy_status+"&taxonomy="+activeRecordID,
                         method: 'post',
                         success: function (res) {
+                            checkForUndoFunctionality();
                             // window.location.reload();
                             resetMediaAndPosts();
                             ajaxAnimation();
@@ -1165,6 +1205,7 @@
                             method: 'post',
                             success: function (res) {
                                 //window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                             }
                         });
@@ -1183,6 +1224,7 @@
                         method: 'post',
                         success: function (res) {
                             //window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                         }
                     });
@@ -1201,6 +1243,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                         }
                     });
@@ -1230,6 +1273,7 @@
                             method: 'post',
                             success: function (res) {
                                 // window.location.reload();
+                                checkForUndoFunctionality();
                                 resetMediaAndPosts();
                                 ajaxAnimation();
                             }
@@ -1250,6 +1294,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
                         }
@@ -1269,6 +1314,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            checkForUndoFunctionality();
                             resetMediaAndPosts();
                             ajaxAnimation();
                         }

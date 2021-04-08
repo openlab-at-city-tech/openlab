@@ -41,7 +41,84 @@ class folders_replace_media {
 	    } else {
 		    $this->upgradeLink = admin_url("admin.php?page=folders-upgrade-to-pro");
 	    }
+
+	    /* to replace file name */
+	    add_action('add_meta_boxes', function () {
+		    add_meta_box('folders-replace-file-name', esc_html__('Change file name', 'folders'), array($this, 'change_file_name_box'), 'attachment', 'side', 'core');
+	    });
+
+	    add_filter('attachment_fields_to_edit', array($this, 'attachment_replace_name_with_title'), 10, 2);
+
+	    add_action('admin_head', array($this,  'premio_replace_file_CSS'));
+
+	    add_action('wp_enqueue_media', array($this, 'replace_media_file_script'));
     }
+
+	public function change_file_name_box($post) { ?>
+		<p class="upgrade-bottom">
+			<label for="change_file_name"><input disabled type="checkbox" id="change_file_name" name="premio_change_file_name" value="yes"> <?php esc_html_e("Change file name according to title", "folders") ?></label>
+		</p>
+		<div class="upgrade-box">
+            <a href="<?php echo esc_url($this->upgradeLink) ?>" target="_blank"><?php esc_html_e("Upgrade to Pro", "folders"); ?></a>
+		</div>
+		<?php
+	}
+
+	public function replace_media_file_script() {
+		wp_enqueue_script('folders-replace-media', WCP_FOLDER_URL . 'assets/js/replace-file-name.js', array('jquery'), WCP_FOLDER_VERSION, true);
+		wp_localize_script('folders-replace-media', 'replace_media_options', array(
+			'ajax_url' => admin_url("admin-ajax.php"),
+		));
+	}
+
+	public function premio_replace_file_CSS() {
+		echo '<style>
+        .compat-field-replace_file_name th.label {display: none;}
+        .compat-field-replace_file_name td.field {width: 100%; border-top: solid 1px #c0c0c0; padding:10px 0 0 0;margin: 0;float: none;}
+        .compat-field-replace_file_name td.field label {width: 100%; display: block;padding:0 0 10px 0;}
+        .compat-field-replace_file_name td.field label input[type="checkbox"] {margin: 0 4px 0 2px;}
+        .compat-field-replace_file_name td.field a.update-name-with-title {display: none;}
+        .compat-field-replace_file_name td.field a.update-name-with-title.show {display: inline-block;}
+        
+        .compat-field-folders th.label {width: 100%; text-align: left; padding: 0 0 10px 0; margin: 0; border-top: solid 1px #c0c0c0;float: none;}
+        .compat-field-folders th.label .alignleft {float: none; text-align: left; font-weight: bold;}
+        .compat-field-folders th.label br {display: none;}
+        .compat-field-folders td.field {width: 100%; padding: 0; margin: 0;float: none;}
+        .folders-undo-notification{position:fixed;right:-500px;bottom:25px;width:280px;background:#fff;padding:15px;-webkit-box-shadow:0 3px 6px -4px rgb(0 0 0 / 12%),0 6px 16px 0 rgb(0 0 0 / 8%),0 9px 28px 8px rgb(0 0 0 / 5%);box-shadow:0 3px 6px -4px rgb(0 0 0 / 12%),0 6px 16px 0 rgb(0 0 0 / 8%),0 9px 28px 8px rgb(0 0 0 / 5%);transition:all .25s linear;z-index:250010}.folders-undo-notification.active{right:25px}.folders-undo-header{font-weight:500;font-size:14px;padding:0 0 3px 0}.folders-undo-body{font-size:13px;padding:0 0 5px 0}.folders-undo-footer{text-align:right;padding:5px 0 0 0}.folders-undo-footer .undo-button{background:#1da1f4;border:none;color:#fff;padding:3px 10px;font-size:12px;border-radius:2px;cursor:pointer}.folders-undo-body{position:relative}.close-undo-box{position:absolute;right:-10px;top:0;width:16px;height:16px;transition:all .25s linear}.close-undo-box:hover{transform:rotate(180deg)}.close-undo-box span{display:block;position:relative;width:16px;height:16px;transition:all .2s linear}.close-undo-box span:after,.close-undo-box span:before{content:"";position:absolute;width:12px;height:2px;background-color:#333;display:block;border-radius:2px;transform:rotate(45deg);top:7px;left:2px}.close-undo-box span:after{transform:rotate(-45deg)}
+        .folders-undo-notification.no .folders-undo-header { color: #dd0000; }
+        .folders-undo-notification.yes .folders-undo-header { color: #014737; }
+        .update-name-with-title .spinner {display: none; visibility: visible; margin-right: 0;}
+        .update-name-with-title.in-progress .spinner {display: inline-block;}
+        
+        #folders-replace-file-name .inside {position: relative;padding:0;margin:0}
+        #folders-replace-file-name .inside p {padding: 1em; margin: 0;}
+        #folders-replace-file-name .upgrade-box {position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1;display: none;}
+        #folders-replace-file-name:hover .upgrade-box { display: block; }
+        #folders-replace-file-name:hover p {filter: blur(1.2px);}
+        #folders-replace-file-name:hover .upgrade-box a {display: inline-block; position: absolute; left: 0; right: 0; width: 100px; margin: 0 auto; top: 50%; padding: 5px 10px; text-decoration: none; background: #fa166b; color: #fff; border-radius: 4px; text-align: center; margin-top: -14px;}
+      </style>';
+	}
+
+	public function attachment_replace_name_with_title($form_fields, $post)
+	{
+		$screen = null;
+		if (function_exists('get_current_screen'))
+		{
+			$screen = get_current_screen();
+
+			if(! is_null($screen) && $screen->id == 'attachment') // hide on edit attachment screen.
+				return $form_fields;
+		}
+
+		$form_fields["replace_file_name"] = array(
+			"label" => esc_html__("Replace media", "folders"),
+			"input" => "html",
+			"html" => "<label for='attachment_title_{$post->ID}' data-post='{$post->ID}' data-nonce='".wp_create_nonce('change_attachment_title_'.$post->ID)."'><input id='attachment_title_{$post->ID}' type='checkbox' class='folder-replace-checkbox' value='{$post->ID}'>".esc_html__("Update file name with title")."</label><a href='".$this->upgradeLink."' target='_blank' style='background: {$this->button_color}; border-color: {$this->button_color}; color:#ffffff' type='button' class='button update-name-with-title' >".esc_html__("Upgrade to Pro", "folders")."</a>",
+			"helps" => ""
+		);
+
+		return $form_fields;
+	}
 
     public function folders_admin_css_and_js($page) {
 	    if($page == "media_page_folders-replace-media" || $page == "admin_page_folders-replace-media") {
