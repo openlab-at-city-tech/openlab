@@ -591,7 +591,9 @@ if(!class_exists('AdvancedGutenbergMain')) {
                 false
             );
 
-            return $featured_img[0];
+            if($featured_img) {
+                return $featured_img[0];
+            }
         }
 
         /**

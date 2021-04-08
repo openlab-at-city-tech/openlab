@@ -1,5 +1,3 @@
-import AdvQueryControls from './query-controls.jsx';
-
 (function ( wpI18n, wpBlocks, wpElement, wpBlockEditor, wpComponents, wpData, lodash, wpHtmlEntities, wpDate ) {
     wpBlockEditor = wp.blockEditor || wp.editor;
     const { __ } = wpI18n;
@@ -30,10 +28,16 @@ import AdvQueryControls from './query-controls.jsx';
     class RecentPostsEdit extends Component {
         constructor() {
             super( ...arguments );
+
             this.state = {
                 categoriesList: [],
+                catIdVsName: [],
                 updating: false,
             }
+
+            this.selectCategories = this.selectCategories.bind(this);
+            this.getCategoryForBkwrdCompat = this.getCategoryForBkwrdCompat.bind(this);
+
         }
 
         componentWillMount() {
@@ -63,7 +67,23 @@ import AdvQueryControls from './query-controls.jsx';
 
             wp.apiFetch( {
                 path: wp.url.addQueryArgs( 'wp/v2/categories', categoriesListQuery ),
-            } ).then( ( categoriesList ) => this.setState( { categoriesList: categoriesList } ) )
+            } ).then( ( list ) => {
+                let suggestions = [];
+                let catIdVsName = [];
+                list.forEach(cat => {
+                    suggestions[ cat.name ] = cat;
+                    catIdVsName[ cat.id ] = cat.name;
+                });
+                this.setState( { categoriesList: suggestions, catIdVsName: catIdVsName } );
+
+                // for backward compatibility, extract the (single select) category and set it as the (mutli select) categories
+                // and make the (single select) category empty
+                const categories = attributes.category && attributes.category !== undefined && attributes.category.length > 0 ? [ this.getCategoryForBkwrdCompat( attributes.category ) ] : attributes.categories;
+                setAttributes({
+                      categories: categories,
+                      category: ''
+                });
+            } )
         }
 
         componentWillUpdate( nextProps ) {
@@ -113,40 +133,6 @@ import AdvQueryControls from './query-controls.jsx';
             }
         }
 
-        static extractContent(html, length) {
-            const span= document.createElement('span');
-            span.innerHTML= html;
-
-            // Remove script tag
-            const scripts = span.getElementsByTagName('script');
-            let j = scripts.length;
-            while (j--) {
-                scripts[j].parentNode.removeChild(scripts[j]);
-            }
-
-            // Remove style tag
-            const styles = span.getElementsByTagName('style');
-            let k = styles.length;
-            while (k--) {
-                styles[k].parentNode.removeChild(styles[k]);
-            }
-
-            const children= span.querySelectorAll('*');
-            for(let i = 0 ; i < children.length ; i++) {
-                if(children[i].textContent)
-                    children[i].textContent += ' ';
-                else
-                    children[i].innerText += ' ';
-            }
-
-            let text = [span.textContent || span.innerText].toString().replace(/\s\s+/g,' ');
-            text = text.slice(0, length).trim();
-
-            if (text.length) text += '…' ;
-
-            return text;
-        };
-
         render() {
             const { categoriesList } = this.state;
             const { attributes, setAttributes, recentPosts } = this.props;
@@ -154,7 +140,6 @@ import AdvQueryControls from './query-controls.jsx';
                 postView,
                 order,
                 orderBy,
-                category,
                 numberOfPosts,
                 columns,
                 displayFeaturedImage,
@@ -166,19 +151,23 @@ import AdvQueryControls from './query-controls.jsx';
                 displayReadMore,
                 readMoreLbl,
                 isPreview,
+                categories,
             } = attributes;
 
             const inspectorControls = (
                 <InspectorControls>
                     <PanelBody title={ __( 'Block Settings', 'advanced-gutenberg' ) }>
-                        <AdvQueryControls
+                        <QueryControls
                             { ...{ order, orderBy } }
-                            categoriesList={ categoriesList }
-                            selectedCategoryId={ category }
+                            categorySuggestions={ categoriesList }
+                            selectedCategories={ categories }
                             numberOfItems={ numberOfPosts }
                             onOrderChange={ ( value ) => setAttributes( { order: value } ) }
                             onOrderByChange={ ( value ) => setAttributes( { orderBy: value } ) }
-                            onCategoryChange={ ( value ) => setAttributes( { category: value !== '' ? value : undefined } ) }
+                            onCategoryChange={ ( value ) => {
+                                                this.selectCategories(value);
+                                            }
+                            }
                             onNumberOfItemsChange={ (value) => setAttributes( { numberOfPosts: value } ) }
                         />
                         {postView === 'grid' &&
@@ -366,6 +355,68 @@ import AdvQueryControls from './query-controls.jsx';
                 </Fragment>
             )
         }
+
+        static extractContent(html, length) {
+            const span= document.createElement('span');
+            span.innerHTML= html;
+
+            // Remove script tag
+            const scripts = span.getElementsByTagName('script');
+            let j = scripts.length;
+            while (j--) {
+                scripts[j].parentNode.removeChild(scripts[j]);
+            }
+
+            // Remove style tag
+            const styles = span.getElementsByTagName('style');
+            let k = styles.length;
+            while (k--) {
+                styles[k].parentNode.removeChild(styles[k]);
+            }
+
+            const children= span.querySelectorAll('*');
+            for(let i = 0 ; i < children.length ; i++) {
+                if(children[i].textContent)
+                    children[i].textContent += ' ';
+                else
+                    children[i].innerText += ' ';
+            }
+
+            let text = [span.textContent || span.innerText].toString().replace(/\s\s+/g,' ');
+            text = text.slice(0, length).trim();
+
+            if (text.length) text += '…' ;
+
+            return text;
+        };
+
+        selectCategories(tokens) {
+            const { categoriesList } = this.state;
+
+            var hasNoSuggestion = tokens.some(function (token) {
+                return typeof token === 'string' && !categoriesList[token];
+            });
+
+            if (hasNoSuggestion) {
+                return;
+            }
+
+            var categories = tokens.map(function (token) {
+                return typeof token === 'string' ? categoriesList[token] : token;
+            })
+
+            this.props.setAttributes({
+                categories: categories,
+            });
+        }
+
+        getCategoryForBkwrdCompat(id) {
+            const { catIdVsName } = this.state;
+            return {
+                id: id,
+                name: catIdVsName[id]
+            };
+        }
     }
 
     registerBlockType( 'advgb/recent-posts', {
@@ -387,10 +438,12 @@ import AdvQueryControls from './query-controls.jsx';
         },
         edit: withSelect( ( select, props ) => {
             const { getEntityRecords } = select( 'core' );
-            const { category, order, orderBy, numberOfPosts, myToken } = props.attributes;
+            const { categories, category, order, orderBy, numberOfPosts, myToken } = props.attributes;
+
+            const ids = categories && categories.length > 0 ? categories.map( ( cat ) => cat.id ) : [];
 
             const recentPostsQuery = pickBy( {
-                categories: category,
+                categories: ids,
                 order,
                 orderby: orderBy,
                 per_page: numberOfPosts,
