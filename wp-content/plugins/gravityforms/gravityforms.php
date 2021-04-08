@@ -3,7 +3,9 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.22.7
+Version: 2.4.23.4
+Requires at least: 4.0
+Requires PHP: 5.6
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -113,7 +115,7 @@ define( 'RG_CURRENT_VIEW', GFForms::get( 'view' ) );
  *
  * @var string GF_MIN_WP_VERSION Minimum version number.
  */
-define( 'GF_MIN_WP_VERSION', '3.7' );
+define( 'GF_MIN_WP_VERSION', '4.0' );
 
 /**
  * Checks if the current WordPress version is supported.
@@ -133,7 +135,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  *
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '5.5' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '5.6' );
 
 
 if ( ! defined( 'GRAVITY_MANAGER_URL' ) ) {
@@ -171,7 +173,7 @@ add_action( 'admin_init', array( 'GFForms', 'process_exterior_pages' ) );
 add_action( 'wp_ajax_update_auto_update_setting', array( 'GFForms', 'update_auto_update_setting' ) );
 add_filter( 'upgrader_pre_install', array( 'GFForms', 'validate_upgrade' ), 10, 2 );
 add_filter( 'tiny_mce_before_init', array( 'GFForms', 'modify_tiny_mce_4' ), 20 );
-add_filter( 'user_has_cap', array( 'RGForms', 'user_has_cap' ), 10, 3 );
+add_filter( 'user_has_cap', array( 'RGForms', 'user_has_cap' ), 10, 4 );
 add_filter( 'query', array( 'GFForms', 'filter_query' ) );
 add_filter( 'plugin_auto_update_setting_html', array( 'GFForms', 'auto_update_message' ), 10, 3 );
 add_filter( 'plugin_auto_update_debug_string', array( 'GFForms', 'auto_update_debug_message' ), 10, 4 );
@@ -210,7 +212,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.22.7';
+	public static $version = '2.4.23.4';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -1166,25 +1168,31 @@ class GFForms {
 	 * @since  Unknown
 	 * @access public
 	 *
-	 * @param array $all_caps All capabilities.
-	 * @param array $cap      Required capability.  Stored in the [0] key.
-	 * @param array $args     Not used.
+	 * @param array   $all_caps All capabilities.
+	 * @param array   $cap      Required capability.  Stored in the [0] key.
+	 * @param array   $args     Not used.
+	 * @param WP_User $user     The relevant user.
 	 *
 	 * @return array $all_caps All capabilities.
 	 */
-	public static function user_has_cap( $all_caps, $cap, $args ) {
+	public static function user_has_cap( $all_caps, $cap, $args, $user = null ) {
 		$gf_caps    = GFCommon::all_caps();
 		$capability = rgar( $cap, 0 );
 		if ( $capability != 'gform_full_access' ) {
 			return $all_caps;
 		}
 
+		// Default to current user when $user parameter is not passed.
+		if ( false === $user instanceof WP_User ) {
+			$user = wp_get_current_user();
+		}
+
 		if ( ! self::has_members_plugin() ) {
 			//give full access to administrators if the members plugin is not installed
-			if ( current_user_can( 'administrator' ) || ( is_multisite() && is_super_admin() ) ) {
+			if ( user_can( $user, 'administrator' ) || ( is_multisite() && is_super_admin( $user->ID ) ) ) {
 				$all_caps['gform_full_access'] = true;
 			}
-		} elseif ( current_user_can( 'administrator' ) || ( is_multisite() && is_super_admin() ) ) {
+		} elseif ( user_can( $user, 'administrator' ) || ( is_multisite() && is_super_admin( $user->ID ) ) ) {
 
 			//checking if user has any GF permission.
 			$has_gf_cap = false;

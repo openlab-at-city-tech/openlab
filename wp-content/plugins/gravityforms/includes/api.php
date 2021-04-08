@@ -1767,7 +1767,7 @@ class GFAPI {
 	 * @param mixed       $feed_ids   The ID of the Feed or an array of Feed IDs.
 	 * @param null|int    $form_id    The ID of the Form to which the Feeds belong.
 	 * @param null|string $addon_slug The slug of the add-on to which the Feeds belong.
-	 * @param bool        $is_active  If the feed is active.
+	 * @param bool|null   $is_active  Indicates if only active or inactive feeds should be returned. Use null to return both.
 	 *
 	 * @return array|WP_Error Either an array of Feed objects or a WP_Error instance.
 	 */
@@ -1780,8 +1780,10 @@ class GFAPI {
 			return self::get_missing_table_wp_error( $table );
 		}
 
-		$where_arr   = array();
-		$where_arr[] = $wpdb->prepare( 'is_active=%d', $is_active );
+		$where_arr = array();
+		if ( null !== $is_active ) {
+			$where_arr[] = $wpdb->prepare( 'is_active=%d', $is_active );
+		}
 		if ( false === empty( $form_id ) ) {
 			$where_arr[] = $wpdb->prepare( 'form_id=%d', $form_id );
 		}
@@ -1790,17 +1792,19 @@ class GFAPI {
 		}
 		if ( false === empty( $feed_ids ) ) {
 			if ( ! is_array( $feed_ids ) ) {
-				$feed_ids = array( $feed_ids );
+				$where_arr[] = $wpdb->prepare( 'id=%d', $feed_ids );
+			} else {
+				$in_str_arr  = array_fill( 0, count( $feed_ids ), '%d' );
+				$in_str      = join( ',', $in_str_arr );
+				$where_arr[] = $wpdb->prepare( "id IN ($in_str)", $feed_ids );
 			}
-			$in_str_arr  = array_fill( 0, count( $feed_ids ), '%d' );
-			$in_str      = join( ',', $in_str_arr );
-			$where_arr[] = $wpdb->prepare( "id IN ($in_str)", $feed_ids );
 		}
 
+		$sql = "SELECT * FROM {$table}";
 
-		$where = join( ' AND ', $where_arr );
-
-		$sql = "SELECT id, form_id, addon_slug, meta FROM {$table} WHERE $where";
+		if ( ! empty( $where_arr ) ) {
+			$sql .= ' WHERE ' . join( ' AND ', $where_arr );
+		}
 
 		$results = $wpdb->get_results( $sql, ARRAY_A );
 		if ( empty( $results ) ) {
@@ -1812,6 +1816,24 @@ class GFAPI {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Returns a specific feed.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @param int $feed_id The ID of the feed to retrieve.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function get_feed( $feed_id ) {
+		$feeds = self::get_feeds( $feed_id, null, null, null );
+		if ( is_wp_error( $feeds ) ) {
+			return $feeds;
+		}
+
+		return $feeds[0];
 	}
 
 	/**
@@ -1927,6 +1949,21 @@ class GFAPI {
 		}
 
 		return $wpdb->insert_id;
+	}
+
+	/**
+	 * Updates the specified feed with the given property value.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @param int    $feed_id        The ID of the feed being updated.
+	 * @param string $property_name  The name of the property (column) being updated.
+	 * @param mixed  $property_value The new value of the specified property.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function update_feed_property( $feed_id, $property_name, $property_value ) {
+		return GFFormsModel::update_feed_property( $feed_id, $property_name, $property_value );
 	}
 
 	/**
@@ -2096,28 +2133,17 @@ class GFAPI {
 	/**
 	 * Checks whether a form ID exists.
 	 *
-	 * @since  1.8
+	 * @since 1.8
+	 * @since 2.4.24 Updated to use GFFormsModel::id_exists_in_table().
 	 */
 	public static function form_id_exists( $form_id ) {
-		global $wpdb;
-		$form_table_name = GFFormsModel::get_form_table_name();
-		$form_id         = intval( $form_id );
-		$result          = $wpdb->get_var(
-			$wpdb->prepare(
-				" SELECT count(id) FROM {$form_table_name}
-                  WHERE id=%d", $form_id
-			)
-		);
-
-		$result = intval( $result );
-
-		return $result > 0;
+		return GFFormsModel::id_exists_in_table( $form_id, GFFormsModel::get_form_table_name() );
 	}
 
 	/**
 	 * Checks if an entry exists for the supplied ID.
 	 *
-	 * @since 2.4.5.8
+	 * @since 2.4.6
 	 *
 	 * @param int $entry_id The ID to be checked.
 	 *
@@ -2125,6 +2151,19 @@ class GFAPI {
 	 */
 	public static function entry_exists( $entry_id ) {
 		return GFFormsModel::entry_exists( $entry_id );
+	}
+
+	/**
+	 * Checks if a feed exists for the supplied ID.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @param int $feed_id The ID to be checked.
+	 *
+	 * @return bool
+	 */
+	public static function feed_exists( $feed_id ) {
+		return GFFormsModel::id_exists_in_table( $feed_id, GFFormsModel::get_addon_feed_table_name() );
 	}
 
 	/**
