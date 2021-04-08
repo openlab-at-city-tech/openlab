@@ -3,9 +3,9 @@
 Contributors: ThemeInWP
 
 Requires at least: 4.5
-Tested up to: 5.3
+Tested up to: 5.7
 Requires PHP: 5.5
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,10 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+
+= 1.1.4 - Mar 25 2021 =
+* Added Demo import Kit.
+* Added telegram on social menu icon set.
 
 = 1.1.3 - Jan 22 2021 =
 * Fixed widget issue on responsive device.

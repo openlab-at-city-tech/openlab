@@ -1,5 +1,4 @@
-@import 'first-level';
-@import 'second-level';
+
 .#{$prefix}-mobile-menu-section{
     .#{$prefix}-mobile-menu{
         ul{
@@ -14,6 +13,9 @@
                  @include transition();
                  &:hover{
                     color: $color_primary;
+                 }
+                 .#{$prefix}-menu-description{
+                    margin: 0 5px;
                  }
               }
            }
