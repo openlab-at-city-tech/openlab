@@ -3,9 +3,9 @@ Contributors: shazahm1@hotmail.com
 Donate link: https://connections-pro.com/
 Tags: table of contents, toc
 Requires at least: 5.3
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6.20
-Stable tag: 2.0.16
+Stable tag: 2.0.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,10 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.17 03/26/2021 =
+* TWEAK: Add additional check to prevent `Uncaught Error: Call to undefined function is_woocommerce()`.
+* TWEAK: Ensure an instance of `ezTOC_Post ` is returned before accessing methods/properties.
 
 = 2.0.16 02/01/2021 =
 * TWEAK: Remove special characters such as fancy quotes, en and, em dashes when generating in-page anchor IDs.
@@ -457,4 +461,7 @@ Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
 Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
 
 = 2.0.16 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.17 =
 Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
