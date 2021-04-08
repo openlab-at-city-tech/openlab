@@ -47,6 +47,30 @@ if ( class_exists( 'GFForms' ) ) {
 		protected $_capabilities_settings_page = 'gravityforms_api_settings';
 		protected $_capabilities_uninstall = 'gravityforms_webapi_uninstall';
 
+		/**
+		 * Contains an instance of this class, if available.
+		 *
+		 * @since 2.4.24
+		 *
+		 * @var null|GFWebAPI $_instance If available, contains an instance of this class.
+		 */
+		private static $_instance = null;
+
+		/**
+		 * Returns the current instance of this class.
+		 *
+		 * @since 2.4.24
+		 *
+		 * @return null|GFWebAPI
+		 */
+		public static function get_instance() {
+			if ( null === self::$_instance ) {
+				self::$_instance = new self;
+			}
+
+			return self::$_instance;
+		}
+
 		public function __construct() {
 			global $_gaddon_posted_settings;
 
@@ -72,18 +96,34 @@ if ( class_exists( 'GFForms' ) ) {
 			parent::__construct();
 		}
 
-		/***
+		/**
+		 * Triggers the db upgrade following an install, version update, or when forced from the system status page.
+		 *
+		 * @since 2.4.24
+		 *
+		 * @param string $db_version          Current Gravity Forms database version.
+		 * @param string $previous_db_version Previous Gravity Forms database version.
+		 * @param bool   $force_upgrade       True if this is a request to force an upgrade. False if this is a standard upgrade (due to version change).
+		 */
+		public function post_gravityforms_upgrade( $db_version, $previous_db_version, $force_upgrade ) {
+			$this->maybe_upgrade_schema( $force_upgrade );
+		}
+
+		/**
 		 * Updates REST API related schema when GF version changes
 		 *
-		 * @since 2.4-beta-1
+		 * @since 2.4
+		 * @since 2.4.24 Added the $force_upgrade param.
+		 *
+		 * @param bool $force_upgrade True if this is a request to force an upgrade. False if this is a standard upgrade (due to version change).
 		 */
-		public function maybe_upgrade_schema() {
+		public function maybe_upgrade_schema( $force_upgrade = false ) {
 
 			global $wpdb;
 
-			if ( $this->requires_schema_upgrade() ) {
+			if ( $force_upgrade || $this->requires_schema_upgrade() ) {
 
-				$collate = $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
+				$collate    = $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
 				$table_name = GFFormsModel::get_rest_api_keys_table_name();
 
 				$table = "CREATE TABLE {$table_name} (
@@ -438,10 +478,61 @@ if ( class_exists( 'GFForms' ) ) {
 
 			$account_choices = array();
 			foreach ( $accounts as $account ) {
-				$account_choices[] = array( 'label' => $account->user_login, 'value' => $account->ID );
+				if ( ! $this->user_can_access_api( $account ) ) {
+					continue;
+				}
+
+				$account_choices[] = array(
+					'label' => $account->user_login,
+					'value' => $account->ID,
+				);
 			}
 
 			return $account_choices;
+		}
+
+		/**
+		 * Checks if a user has one or more capabilities to access Gravity Forms REST API endpoints.
+		 *
+		 * @since 2.4.24
+		 *
+		 * @param WP_User $user WP User object.
+		 *
+		 * @return bool
+		 */
+		private function user_can_access_api( $user ) {
+
+			/**
+			 * Filters the available capabilities used to check if a user can be added to a REST API key.
+			 *
+			 * A user only needs one capability to access the API.
+			 *
+			 * @since 2.4.24
+			 *
+			 * @param array $capabilities Array of capabilities.
+			 */
+			$capabilities = (array) apply_filters(
+				'gform_webapi_key_user_capabilities',
+				array(
+					'gform_full_access',
+					'gravityforms_create_form',
+					'gravityforms_edit_forms',
+					'gravityforms_delete_forms',
+					'gravityforms_view_entries',
+					'gravityforms_edit_entries',
+					'gravityforms_delete_entries',
+					'gravityforms_view_entry_notes',
+					'gravityforms_edit_entry_notes',
+				)
+			);
+
+			foreach ( $capabilities as $capability ) {
+				if ( $user->has_cap( $capability ) ) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public function plugin_settings_fields() {
@@ -619,7 +710,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 		/**
 		 * Removes the REST API from the logging page.
-		 * 
+		 *
 		 * @since 2.4.11
 		 *
 		 * @param array $plugins The plugins which support logging.
@@ -2360,15 +2451,21 @@ if ( class_exists( 'GFForms' ) ) {
 		 * Generate a rand hash.
 		 *
 		 * @since  2.4-beta-1
+		 * @since  2.5 add a fallback generation method in case openssl_random_pseudo_bytes() returns empty.
 		 *
 		 * @return string
 		 */
 		public function rand_hash() {
+			$hash = '';
 			if ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
-				return bin2hex( openssl_random_pseudo_bytes( 20 ) );
-			} else {
-				return sha1( wp_rand() );
+				$hash = bin2hex( openssl_random_pseudo_bytes( 20 ) );
 			}
+
+			if ( empty( $hash ) ) {
+				$hash = sha1( wp_rand() );
+			}
+
+			return $hash;
 		}
 
 		/**
@@ -2385,5 +2482,5 @@ if ( class_exists( 'GFForms' ) ) {
 
 	}
 
-	new GFWebAPI();
+	GFWebAPI::get_instance();
 }

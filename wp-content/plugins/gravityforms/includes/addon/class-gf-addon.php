@@ -241,11 +241,6 @@ abstract class GFAddOn {
 			add_action( 'after_plugin_row_' . $this->get_path(), array( $this, 'plugin_row' ), 10, 2 );
 		}
 
-		// STOP HERE IF GRAVITY FORMS IS NOT SUPPORTED
-		if ( isset( $this->_min_gravityforms_version ) && ! $this->is_gravityforms_supported( $this->_min_gravityforms_version ) ) {
-			return;
-		}
-
 		// STOP HERE IF CANNOT PASS MINIMUM REQUIREMENTS CHECK.
 		$meets_requirements = $this->meets_minimum_requirements();
 		if ( ! $meets_requirements['meets_requirements'] ) {
@@ -438,8 +433,25 @@ abstract class GFAddOn {
 		// Get minimum requirements.
 		$requirements = $this->minimum_requirements();
 
-		// Prepare response.
+		// Initialize response.
 		$meets_requirements = array( 'meets_requirements' => true, 'errors' => array() );
+
+		// Set an error if the minimum version of Gravity Forms is defined and the requirement is not met.
+		if ( ! empty( $this->_min_gravityforms_version ) && ! $this->is_gravityforms_supported( $this->_min_gravityforms_version ) ) {
+			$meets_requirements = array(
+				'meets_requirements' => false,
+				'errors'             => array(
+					esc_html__(
+						sprintf(
+							'%s requires Gravity Forms %s or newer. Please upgrade your installation of Gravity Forms or disable this add-on to remove this message.',
+							$this->_title,
+							$this->_min_gravityforms_version
+						),
+						'gravityforms'
+					),
+				),
+			);
+		}
 
 		// If no minimum requirements are defined, return.
 		if ( empty( $requirements ) ) {

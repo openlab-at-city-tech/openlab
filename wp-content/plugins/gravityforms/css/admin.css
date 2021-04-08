@@ -46,6 +46,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
     margin-bottom: 24px;
 }
 
+.api-update-notice {
+	background-color: #fff;
+	border-left: 4px solid #ffba00;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	display: inline-block;
+	font-size: 14px;
+	line-height: 19px;
+	margin: 10px 20px 0 2px;
+	padding: 11px 15px;
+	text-align: left;
+}
+
 .gf_help_content,
 .gf_help_content p {
 	line-height: 1.6;

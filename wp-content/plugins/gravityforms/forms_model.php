@@ -366,6 +366,19 @@ class GFFormsModel {
 		return $wpdb->prefix . 'gf_rest_api_keys';
 	}
 
+	/**
+	 * Returns the name of the table where add-on feeds are stored, including the site's database prefix.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @return string
+	 */
+	public static function get_addon_feed_table_name() {
+		global $wpdb;
+
+		return $wpdb->prefix . 'gf_addon_feed';
+	}
+
 
 	/**
 	 * Gets all forms.
@@ -5571,7 +5584,7 @@ class GFFormsModel {
 		global $wpdb;
 
 		$addon_tables = array(
-			$wpdb->prefix . 'gf_addon_feed',
+			self::get_addon_feed_table_name(),
 			$wpdb->prefix . 'gf_addon_payment_callback',
 			$wpdb->prefix . 'gf_addon_payment_transaction',
 		);
@@ -6919,7 +6932,7 @@ class GFFormsModel {
 			GFFormsModel::get_lead_details_long_table_name(),
 			GFFormsModel::get_lead_meta_table_name(),
 			GFFormsModel::get_incomplete_submissions_table_name(),
-			"{$wpdb->prefix}gf_addon_feed",
+			self::get_addon_feed_table_name(),
 			"{$wpdb->prefix}gf_addon_payment_transaction",
 			"{$wpdb->prefix}gf_addon_payment_callback",
 
@@ -7632,25 +7645,98 @@ class GFFormsModel {
 	/**
 	 * Checks if an entry exists for the supplied ID.
 	 *
-	 * @since 2.4.5.8
+	 * @since 2.4.6
+	 * @since 2.4.24 Updated to use GFFormsModel::id_exists_in_table().
 	 *
 	 * @param int $entry_id The ID to be checked.
 	 *
 	 * @return bool
 	 */
 	public static function entry_exists( $entry_id ) {
-		$entry_id = intval( $entry_id );
-		if ( $entry_id <= 0 ) {
+		return self::id_exists_in_table( $entry_id, GFFormsModel::get_entry_table_name() );
+	}
+
+	/**
+	 * Checks if an id exists in the specified table.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @param int    $id    The ID to be checked.
+	 * @param string $table The table name, including the site's database prefix.
+	 *
+	 * @return bool
+	 */
+	public static function id_exists_in_table( $id, $table ) {
+		$id = intval( $id );
+		if ( $id <= 0 ) {
 			return false;
 		}
 
 		global $wpdb;
-		$entry_table_name = GFFormsModel::get_entry_table_name();
-
-		$sql    = $wpdb->prepare( "SELECT count(id) FROM {$entry_table_name} WHERE id = %d", $entry_id );
+		$sql    = $wpdb->prepare( "SELECT count(id) FROM {$table} WHERE id = %d", $id );
 		$result = intval( $wpdb->get_var( $sql ) );
 
 		return $result > 0;
+	}
+
+	/**
+	 * Returns an array of column names used by the gf_addon_feed table.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @return string[]
+	 */
+	public static function get_addon_feed_db_columns() {
+		return array( 'id', 'form_id', 'is_active', 'feed_order', 'meta', 'addon_slug', 'event_type' );
+	}
+
+	/**
+	 * Updates the specified feed with the given property value.
+	 *
+	 * @since 2.4.24
+	 *
+	 * @param int    $feed_id        The ID of the feed being updated.
+	 * @param string $property_name  The name of the property (column) being updated.
+	 * @param mixed  $property_value The new value of the specified property.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function update_feed_property( $feed_id, $property_name, $property_value ) {
+		if ( $property_name === 'id' ) {
+			return new WP_Error( 'invalid_property', __( 'Updating the id property is not supported', 'gravityforms' ) );
+		}
+
+		if ( ! in_array( $property_name, self::get_addon_feed_db_columns() ) ) {
+			return new WP_Error( 'invalid_property', sprintf( __( '%s is not a valid feed property', 'gravityforms' ), $property_name ) );
+		}
+
+		if ( gf_upgrade()->get_submissions_block() ) {
+			return new WP_Error( 'submissions_blocked', __( 'Submissions are currently blocked due to an upgrade in progress', 'gravityforms' ) );
+		}
+
+		if ( $property_name === 'meta' ) {
+			if ( is_array( $property_value ) ) {
+				$property_value = json_encode( $property_value );
+			}
+
+			if ( empty( $property_value ) || ! is_string( $property_value ) || $property_value[0] !== '{' ) {
+				return new WP_Error( 'invalid_meta', __( 'Feed meta should be an associative array or JSON', 'gravityforms' ) );
+			}
+		}
+
+		global $wpdb;
+		$table  = self::get_addon_feed_table_name();
+		$result = $wpdb->update( $table, array( $property_name => $property_value ), array( 'id' => $feed_id ) );
+
+		if ( $result === false ) {
+			return new WP_Error( 'error_updating', sprintf( __( 'There was an error while updating feed id %s', 'gravityforms' ), $feed_id ) );
+		}
+
+		if ( $result === 0 && ! self::id_exists_in_table( $feed_id, $table ) ) {
+			return new WP_Error( 'not_found', sprintf( __( 'Feed id %s not found', 'gravityforms' ), $feed_id ) );
+		}
+
+		return (bool) $result;
 	}
 
 }
