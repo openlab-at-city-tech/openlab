@@ -703,7 +703,7 @@ function wds_bp_group_meta() {
 						</div>
 
 						<?php if ( bp_is_group_create() && $group_type !== 'portfolio' ) : ?>
-							<div id="wds-website-clone" class="form-field form-required">
+							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
 								<div id="noo_clone_options">
 									<div class="row">
 										<div class="radio disabled-opt col-sm-6">
@@ -726,7 +726,7 @@ function wds_bp_group_meta() {
 							</div>
 						<?php endif ?>
 
-						<div id="wds-website" class="form-field form-required">
+						<div id="wds-website" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
 
 							<div id="noo_new_options">
 								<div id="noo_new_options-div" class="row">
@@ -766,7 +766,7 @@ function wds_bp_group_meta() {
 						?>
 
 						<?php if ( ! empty( $user_blogs ) ) : ?>
-							<div id="wds-website-existing" class="form-field form-required">
+							<div id="wds-website-existing" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
 
 								<div id="noo_old_options">
 									<div class="row">
@@ -789,7 +789,7 @@ function wds_bp_group_meta() {
 							</div>
 						<?php endif ?>
 
-						<div id="wds-website-external" class="form-field form-required">
+						<div id="wds-website-external" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
 
 							<div id="noo_external_options">
 								<div class="form-group row">
