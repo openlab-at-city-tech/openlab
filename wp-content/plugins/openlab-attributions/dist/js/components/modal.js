@@ -1,9 +1,10 @@
+import ContentEditable from 'react-contenteditable';
+
 /**
  * WordPress dependencies
  */
 import { Component } from '@wordpress/element';
 import { Button, Modal, Notice } from '@wordpress/components';
-import { RichText } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -252,13 +253,15 @@ class AttributionModal extends Component {
 					<span className="attribution-preview__title">
 						Attribution Preview
 					</span>
-					<RichText
+					<ContentEditable
 						className="attribution-preview__body"
 						tagName="div"
-						value={ isEdited ? this.state.content : preview }
-						allowedFormats={ [] }
-						onChange={ ( content ) => {
-							this.setState( { editedContent: true, content } );
+						html={ isEdited ? this.state.content : preview }
+						onChange={ ( event ) => {
+							this.setState( {
+								editedContent: true,
+								content: event.target.value,
+							} );
 						} }
 					/>
 					{ isEdited && (
