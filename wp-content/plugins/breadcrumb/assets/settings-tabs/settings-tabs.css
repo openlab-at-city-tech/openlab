@@ -89,7 +89,14 @@
     float: right;
 }
 
-
+.tab-nav i {
+    font-size: 16px;
+    width: 25px;
+    color: #b7b7b7;
+}
+.tab-nav.active i {
+    color: #333;
+}
 .settings-tabs .tab-content{
     margin-left: 220px;
     padding: 0px 0;
@@ -191,12 +198,11 @@
 
 
 .settings-tabs .setting-field{
-    margin-bottom: 15px;
     border-bottom: 1px solid #eee;
-    padding: 0 15px 15px 15px;
+    padding: 15px;
 }
 .settings-tabs .setting-field:last-child{
-    border-bottom: 1px solid #eee0;
+
 }
 
 
@@ -213,22 +219,57 @@
 .settings-tabs .setting-field .description{
     word-break: break-word;
 }
+
 .settings-tabs .setting-field .setting-field{
     padding: 0 15px 15px 0px;
 }
 .settings-tabs .setting-field .setting-field .field-lable{
 
     float: none;
-    font-size: 14px;
-    word-break: break-word;
 }
 
 .settings-tabs .setting-field .setting-field .field-input{
     margin-left: 0px;
 }
+
+
+.settings-tabs .expandable .setting-field{
+    padding: 10px 0;
+    margin: 10px 0;
+}
+.settings-tabs .expandable .setting-field .field-lable{
+    float: left;
+}
+
+.settings-tabs .expandable .setting-field .field-input{
+    margin-left: 270px;
+}
+
+.settings-tabs .expandable .setting-field .setting-field .field-lable{
+    float: none;
+}
+
+.settings-tabs .expandable .setting-field .setting-field .field-input{
+    margin-left: 0px;
+}
+
+.settings-tabs .field-error {
+    background: #ff3f3f1a;
+}
+
+.settings-tabs .field-error .error-details{
+    color: #c11f1f;
+}
+
 /*field-repeatable-wrapper*/
 
-
+.settings-tabs .field-media-wrapper .media-upload, .field-media-wrapper .clear {
+    display: inline-block;
+    background: #ddd;
+    padding: 2px 10px;
+    border-radius: 3px;
+    border: 1px solid #999;
+}
 .ppof-settings .repeatable .item-wrap{
     margin-bottom: 5px;
     padding-bottom: 0px;
@@ -242,8 +283,46 @@
 
 }
 
+.field-repeatable-wrapper .sort{
+    background: rgba(87, 99, 117, 0.48) none repeat scroll 0 0;
+    color: rgb(255, 255, 255);
+    cursor: n-resize;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.field-repeatable-wrapper .remove{
+    background: rgb(228, 65, 8) none repeat scroll 0 0;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+.field-repeatable-wrapper .title-text{
+    cursor: pointer;
+}
+
+.field-repeatable-wrapper .add-repeat-field{
+    background: rgba(87, 99, 117, 0.48) none repeat scroll 0 0;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 5px 15px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
 
 
+.settings-tabs .field-media-wrapper .media-upload, .field-media-wrapper .clear {
+    display: inline-block;
+    background: #ddd;
+    padding: 2px 10px;
+    border-radius: 3px;
+    border: 1px solid #999;
+}
 
 
 /*input*/
@@ -268,6 +347,7 @@
         width: auto;
         float: none;
         font-size: 14px;
+        margin-bottom: 10px;
     }
     .settings-tabs .setting-field .field-input{
         margin-left: 0px;
@@ -308,44 +388,19 @@
 /*expandable*/
 
 
-.settings-tabs .expandable{}
+
 .settings-tabs .expandable .item {
-
     margin: 1px 0;
-
 }
-
-
-.settings-tabs .expandable .header label{
-
-}
-
-
 
 .settings-tabs .expandable .header {
     background: #eee none repeat scroll 0 0;
-
-}
-
-
-.settings-tabs .expandable {
-
 }
 
 .settings-tabs .expandable .options {
-    background: #bde6fc;
     display: none;
     padding: 10px;
 }
-
-
-
-.settings-tabs .expandable .options {
-    background:#f1f1f1;
-    display: none;
-    padding: 10px;
-}
-
 
 .settings-tabs .expandable .item.ui-sortable-helper {
     border: 1px dashed rgb(153, 153, 153);
@@ -355,14 +410,30 @@
 
 .settings-tabs .expandable .header {
     padding: 10px 15px;
+    position: relative;
 
 }
 
-.settings-tabs .expandable .active .options {
+.settings-tabs .expandable .header .handle-start {
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translate(0, -50%) rotate(180deg);
 
+}
+
+.settings-tabs .expandable .header .handle-end {
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translate(0, -50%) rotate(180deg);
+
+}
+
+.settings-tabs .expandable  .options.active {
     display: block;
-
 }
+
 
 .settings-tabs .item .expand .fa-expand {
     display: inline-block;
@@ -396,10 +467,21 @@
     background: rgb(228, 65, 8) none repeat scroll 0 0;
     color: rgb(255, 255, 255);
     cursor: pointer;
-    margin-right: 10px;
-    padding: 2px 7px;
+    margin-right: 5px;
+    padding: 5px 10px;
     border-radius: 3px;
 }
+
+.settings-tabs .expandable .sort  {
+    background: rgba(87, 99, 117, 0.48) none repeat scroll 0 0;
+    color: rgb(255, 255, 255);
+    cursor: n-resize;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+
 
 
 .settings-tabs .pro-feature{
@@ -443,6 +525,9 @@
 }
 
 @media only screen and ( min-width: 0px ) and ( max-width: 767px ){
+
+
+
 
     .settings-tabs .tab-navs{
         float: none;
@@ -488,6 +573,14 @@
     input[type=checkbox], input[type=radio] {
         margin: 6px 7px 0 0;
     }
+
+
+
+
+
+
+
+
 
 }
 

@@ -201,12 +201,12 @@ function breadcrumb_main_custom_scripts(){
     ?>
     <style type="text/css">
         <?php
-        echo $breadcrumb_custom_css;
+        echo esc_html($breadcrumb_custom_css);
         ?>
     </style>
     <script>
         <?php
-        echo $breadcrumb_custom_js;
+        echo esc_js($breadcrumb_custom_js);
         ?>
     </script>
     <?php

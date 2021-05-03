@@ -10,6 +10,9 @@ jQuery(document).ready(function($){
         collapsible: true,
     });
 
+    $( ".settings-tabs [colorPicker]").wpColorPicker();
+
+
     $( ".settings-tabs .accordion[sortable='true']").sortable({
         axis: "y",
         handle: "h3",
@@ -27,6 +30,7 @@ jQuery(document).ready(function($){
 
     $(".settings-tabs .sortable" ).sortable({ handle: ".sort" });
 
+
 	$(document).on('click','.settings-tabs .tab-nav',function(){
 
 		$(this).parent().parent().children('.tab-navs').children('.tab-nav').removeClass('active');
@@ -34,7 +38,7 @@ jQuery(document).ready(function($){
         $(this).addClass('active');
 
         id = $(this).attr('data-id');
-        $('input[name="tab"]').val(id);
+        $('input[name="tab"], input.current_tab').val(id);
 
 
 		//console.log('Hello click');
@@ -52,29 +56,16 @@ jQuery(document).ready(function($){
 
 
 
-    // $(document).on('click','.settings-tabs .media-upload',function(){
-    //
-    //     dataId = $(this).attr('data-id');
-    //
-    //
-    //
-    //     var send_attachment_bkp = wp.media.editor.send.attachment;
-    //
-    //     wp.media.editor.send.attachment = function(props, attachment) {
-    //         $("#media_preview_"+dataId).attr("src", attachment.url);
-    //         $("#media_input_"+dataId).val(attachment.id);
-    //         wp.media.editor.send.attachment = send_attachment_bkp;
-    //     }
-    //     wp.media.editor.open($(this));
-    //     return false;
-    // });
-    //
-    // $("#media_clear_<?php echo $id; ?>").click(function() {
-    //     $("#media_input_<?php echo $id; ?>").val("");
-    //     $("#media_preview_<?php echo $id; ?>").attr("src","");
-    // })
+    $(document).on('click','.settings-tabs .field-media-wrapper .clear ',function(e){
 
+        $(this).parent().children().children('.media-preview').attr('src', '');
+        $(this).parent().children().children('.media-title').html('');
+        $(this).parent().children('.media-input-value').val('');
 
+        placeholder = $(this).attr('placeholder');
+        $(this).parent().children().children('.media-preview').attr('src', placeholder);
+
+    })
 
     $(document).on('click','.settings-tabs .field-media-wrapper .media-upload',function(e){
         var side_uploader;
@@ -99,13 +90,16 @@ jQuery(document).ready(function($){
             attachment = side_uploader.state().get('selection').first().toJSON();
 
             attachmentId = attachment.id;
+
             src_url = attachment.url;
+            src_filename = attachment.filename;
+
             //console.log(attachment);
 
             $(this_).prev().val(attachmentId);
 
             $(this_).parent().children('.media-preview-wrap').children('img').attr('src',src_url);
-
+            $(this_).parent().children().children('.media-title').html(src_filename);
         });
 
         //Open the uploader dialog
@@ -153,6 +147,13 @@ jQuery(document).ready(function($){
     })
 
 
+    $(document).on('click','.settings-tabs .field-media-url-wrapper .clear',function(e){
+        $(this).parent().children('.media-preview-wrap').children('img').attr('src','');
+        $(this).parent().children('input').val('');
+
+
+    })
+
 
     jQuery(document).on('click', '.settings-tabs .input-text-multi-wrapper .add-item',function(){
 
@@ -182,11 +183,8 @@ jQuery(document).ready(function($){
         jQuery(this).parent().children('.field-list').append(html);
 
 
-       // $(".sortable" ).sortable({ handle: ".sort" });
-
 
     })
-
 
 
     jQuery(document).on("click", ".settings-tabs .field-repeatable-wrapper .collapsible .header .title-text", function() {
@@ -194,28 +192,91 @@ jQuery(document).ready(function($){
             jQuery(this).parent().parent().removeClass("active");
         }else{
             jQuery(this).parent().parent().addClass("active");
+            textarea_to_editor();
         }
     })
 
+    jQuery(document).on("click", ".settings-tabs .field-repeatable-wrapper .add-repeat-field", function() {
+        now = jQuery.now();
+        add_html = $(this).attr('add_html');
 
+        repeatable_html = add_html.replace(/TIMEINDEX/g, now);
 
-    jQuery(document).on("click", ".settings-tabs .field-repeatable-wrapper .clone", function() {
+        $(this).parent().children('.repeatable-field-list').append(repeatable_html);
 
+        textarea_to_editor();
 
 
     })
 
 
+    function textarea_to_editor(){
+
+        //textarea = $('.textarea-editor');
+
+        var textarea = document.getElementsByClassName("textarea-editor");
+
+        for (i = 0; i < textarea.length; i++) {
+
+            el_id = textarea[i].id;
+            el_attr = textarea[i].getAttribute('editor_enabled');
+
+            //editor_enabled = $(this).attr('editor_enabled');
+
+
+            //console.log(typeof wp.editor);
+
+            if(el_attr == 'no' && typeof wp.editor != 'undefined'){
+                wp.editor.initialize( el_id, {
+                    mediaButtons: true,
+                    tinymce: {
+                        wpautop: true,
+                        toolbar1: 'bold italic underline strikethrough | bullist numlist | blockquote hr wp_more | alignleft aligncenter alignright | link unlink | fullscreen |  wp_adv',
+                        toolbar2: 'formatselect alignjustify forecolor | pastetext removeformat charmap table | outdent indent | undo redo | wp_help',
+
+                    },
+                    quicktags:    true,
+                } );
+
+                textarea[i].setAttribute('editor_enabled','yes')
+                //$(this).attr('editor_enabled','yes');
+            }
 
 
 
+        }
+
+    }
+
+    $(document).on('click','.settings-tabs .textarea-editor',function(){
+
+        id = $(this).attr('id');
+        editor_enabled = $(this).attr('editor_enabled');
 
 
+        //console.log(typeof wp.editor);
 
+        if(editor_enabled == 'no' && typeof wp.editor != 'undefined'){
+            wp.editor.initialize( id, {
+                mediaButtons: true,
+                tinymce: {
+                    wpautop: true,
+                    toolbar1: 'bold italic underline strikethrough | bullist numlist | blockquote hr wp_more | alignleft aligncenter alignright | link unlink | fullscreen | wp_adv',
+                    toolbar2: 'formatselect alignjustify forecolor | pastetext removeformat charmap table | outdent indent | undo redo | wp_help'
+                },
+                quicktags:    true,
+            } );
 
+            $(this).attr('editor_enabled','yes');
+        }
 
+    })
 
+    jQuery(document).on("click", ".settings-tabs .select-reset", function() {
 
+        $(this).prev('select').val('');
+
+    })
 
 
 
@@ -223,22 +284,33 @@ jQuery(document).ready(function($){
 
 
     $(document).on('click', '.settings-tabs .expandable .expand', function(){
-        if($(this).parent().parent().hasClass('active'))
-        {
-            $(this).parent().parent().removeClass('active');
-        }
-        else
-        {
-            $(this).parent().parent().addClass('active');
+        if($(this).parent().parent().children('.options').hasClass('active')){
+            //$(this).parent().parent().removeClass('active');
+            $(this).parent().parent().children('.options').removeClass('active');
+        }else {
+            //$(this).parent().parent().addClass('active');
+            $(this).parent().parent().children('.options').addClass('active');
         }
 
 
     })
 
+    // radio-img
+
+    $(document).on("click", ".radio-img label", function () {
+        if($(this).hasClass('disabled')){
+            return;
+        }
+
+        $(this).parent().children("label").removeClass("active");
+        $(this).addClass("active");
+
+    })
+
+    $(function() {
+        $('.lazy').Lazy();
+    });
 
 
-
-
- 		
 
 });

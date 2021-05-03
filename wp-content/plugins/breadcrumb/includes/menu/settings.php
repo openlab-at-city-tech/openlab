@@ -1,7 +1,7 @@
 <?php
 if ( ! defined('ABSPATH')) exit; // if direct access 
 
-$current_tab = isset($_POST['tab']) ? $_POST['tab'] : 'options';
+$current_tab = isset($_POST['tab']) ? sanitize_text_field($_POST['tab']) : 'options';
 
 
 
@@ -75,7 +75,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
 <div class="wrap">
 
 	<div id="icon-tools" class="icon32"><br></div><?php echo "<h2>".sprintf(__('%s Settings'), breadcrumb_plugin_name )."</h2>";?>
-		<form  method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+		<form  method="post" action="<?php echo str_replace( '%7E', '~', esc_url_raw($_SERVER['REQUEST_URI'])); ?>">
 	        <input type="hidden" name="breadcrumb_hidden" value="Y">
             <input type="hidden" name="tab" value="<?php echo $current_tab; ?>">
 
