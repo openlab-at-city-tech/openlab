@@ -339,7 +339,7 @@ class core_pdf_embedder {
         <input type="radio" name='<?php echo $this->get_options_name(); ?>[pdfemb_toolbarfixed]' id='pdfemb_toolbarfixed_on' class='radio' value="on" <?php echo $options['pdfemb_toolbarfixed'] == 'on' ? 'checked' : ''; ?> />
         <label for="pdfemb_toolbarfixed_on" class="radio"><?php esc_html_e('Toolbar always visible', 'pdf-embedder'); ?></label>
         </span>
-        <br/>
+        <br/><br/>
         <label for="pdfemb_toolbarfixed" class="textinput"><?php esc_html_e('Display Credit', 'pdf-embedder'); ?></label>
         <span>
         <input type='checkbox' name='<?php echo $this->get_options_name(); ?>[poweredby]' id='poweredby' class='checkbox' <?php echo $options['poweredby'] == 'on' ? 'checked' : ''; ?>  />
