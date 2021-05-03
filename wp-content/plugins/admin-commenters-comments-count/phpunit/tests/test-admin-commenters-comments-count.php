@@ -140,7 +140,7 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 
 
 	public function test_plugin_version() {
-		$this->assertEquals( '1.9.4', c2c_AdminCommentersCommentsCount::version() );
+		$this->assertEquals( '1.9.6', c2c_AdminCommentersCommentsCount::version() );
 	}
 
 	public function test_class_is_available() {
@@ -165,6 +165,22 @@ class Admin_Commenters_Comments_Count_Test extends WP_UnitTestCase {
 		if ( $priority ) {
 			$this->assertEquals( $priority, $prio );
 		}
+	}
+
+	/**
+	 * @expectedException Error
+	 */
+	public function test_unable_to_instantiation_object_from_class() {
+		new c2c_AdminCommentersCommentsCount;
+	}
+
+	/**
+	 * @expectedException Error
+	 */
+	public function test_unable_to_unserialize_an_instance_of_the_class() {
+		$data = 'O:32:"c2c_AdminCommentersCommentsCount":0:{}';
+
+		unserialize( $data );
 	}
 
 	public function test_get_comment_author_link_unaffected_on_frontend() {
