@@ -301,3 +301,17 @@ function openlab_remove_filters_for_anonymous_class( $hook_name = '', $class_nam
 
 	return false;
 }
+
+/**
+ * Load JS for out-of-the-box accessibility fixes.
+ */
+add_action(
+	'init',
+	function() {
+		if ( ! defined( 'OUTOFTHEBOX_VERSION' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-out-of-the-box-a11y', content_url( 'mu-plugins/js/openlab-out-of-the-box.js' ), [ 'jquery' ] );
+	}
+);
