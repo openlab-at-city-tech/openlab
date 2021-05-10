@@ -10,7 +10,7 @@ class Client
     private $_app;
 
     /**
-     * @var \Kunnu\Dropbox\Dropbox
+     * @var \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     private $_client;
 
@@ -63,7 +63,7 @@ class Client
                     $media_info = $api_entry->getMediaInfo();
                     $cached_entry = $this->get_cache()->add_to_cache($entry);
 
-                    if ($media_info instanceof \Kunnu\Dropbox\Models\MediaInfo) {
+                    if ($media_info instanceof \TheLion\OutoftheBox\API\Dropbox\Models\MediaInfo) {
                         $cached_entry->add_media_info($media_info);
                         $this->_processor->get_cache()->set_updated();
                         $this->_processor->get_cache()->update_cache();
@@ -199,6 +199,42 @@ class Client
         return $folder_entry;
     }
 
+    /**
+     * Get (and create) sub folder by path.
+     *
+     * @param string $parent_folder_path
+     * @param string $subfolder_path
+     * @param bool   $create_if_not_exists
+     *
+     * @return bool|\TheLion\OutoftheBox\Entry
+     */
+    public function get_sub_folder_by_path($parent_folder_path, $subfolder_path, $create_if_not_exists = false)
+    {
+        $full_path = helpers::clean_folder_path($parent_folder_path.'/'.$subfolder_path);
+
+        try {
+            $api_entry = $this->get_library()->getMetadata($full_path);
+
+            return new Entry($api_entry);
+        } catch (\Exception $ex) {
+            if (false === $create_if_not_exists) {
+                return false;
+            }
+            // Folder doesn't exists, so continue
+        }
+
+        try {
+            $api_entry_new = $this->get_library()->createFolder($full_path);
+        } catch (\Exception $ex) {
+            return false;
+        }
+
+        $sub_folder = new Entry($api_entry_new);
+        do_action('outofthebox_log_event', 'outofthebox_created_entry', $sub_folder);
+
+        return $sub_folder;
+    }
+
     public function search($search_query)
     {
         $found_entries = [];
@@ -287,7 +323,7 @@ class Client
         $total_size = 0;
 
         foreach ($api_entries as $api_entry) {
-            $total_size += ($api_entry instanceof \Kunnu\Dropbox\Models\FolderMetadata) ? 0 : $api_entry->size;
+            $total_size += ($api_entry instanceof \TheLion\OutoftheBox\API\Dropbox\Models\FolderMetadata) ? 0 : $api_entry->size;
         }
 
         unset($api_entries);
@@ -677,7 +713,7 @@ class Client
             $shared_link = $cached_entry->add_shared_link($shared_link_info);
 
             do_action('outofthebox_log_event', 'outofthebox_updated_metadata', $entry, ['metadata_field' => 'Sharing Permissions']);
-        } catch (\Kunnu\Dropbox\Exceptions\DropboxClientException $ex) {
+        } catch (\TheLion\OutoftheBox\API\Dropbox\Exceptions\DropboxClientException $ex) {
             if ('shared_link_already_exists' === $ex->getError() || (false !== strpos($ex->getErrorSummary(), 'shared_link_already_exists'))) {
                 // Get existing shared link
                 $shared_links = $this->_client->listSharedLinks($entry->get_path());
@@ -689,7 +725,7 @@ class Client
                 $shared_link = $cached_entry->get_shared_link($visibility);
 
                 if (empty($shared_link)) {
-                    exit(sprintf(__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the sharing settings for this document in the cloud.'), $visibility));
+                    exit(sprintf(esc_html__('The sharing permissions on this file is preventing you from accessing a %s shared link. Please contact the administrator to change the sharing settings for this document in the cloud.'), $visibility));
                 }
 
                 do_action('outofthebox_log_event', 'outofthebox_updated_metadata', $entry, ['metadata_field' => 'Sharing Permissions']);
@@ -813,7 +849,7 @@ class Client
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to add folder', 'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__('Failed to add folder', 'wpcloudplugins'));
         }
 
         return false;
@@ -860,7 +896,7 @@ class Client
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to rename entry', 'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__('Failed to rename entry', 'wpcloudplugins'));
         }
     }
 
@@ -923,7 +959,7 @@ class Client
                 return new \WP_Error('broke', $ex->getMessage());
             }
 
-            return new \WP_Error('broke', __('Failed to copy entry', 'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__('Failed to copy entry', 'wpcloudplugins'));
         }
 
         // Clear Cached Requests
@@ -1061,7 +1097,7 @@ class Client
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Failed to delete entry', 'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__('Failed to delete entry', 'wpcloudplugins'));
         }
 
         if ('1' === $this->get_processor()->get_shortcode_option('notificationdeletion')) {
@@ -1098,7 +1134,7 @@ class Client
     }
 
     /**
-     * @return \Kunnu\Dropbox\Dropbox
+     * @return \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     public function get_library()
     {

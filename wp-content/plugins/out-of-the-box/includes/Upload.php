@@ -15,7 +15,7 @@ class Upload
     private $_processor;
 
     /**
-     * @var WPC_UploadHandler
+     * @var WPCP_UploadHandler
      */
     private $upload_handler;
 
@@ -23,11 +23,6 @@ class Upload
     {
         $this->_client = $_processor->get_client();
         $this->_processor = $_processor;
-
-        // Upload File to server
-        if (!class_exists('WPC_UploadHandler')) {
-            require 'jquery-file-upload/server/UploadHandler.php';
-        }
     }
 
     public function upload_pre_process()
@@ -43,6 +38,10 @@ class Upload
 
     public function do_upload()
     {
+        // Upload File to server
+        if (!class_exists('WPCP_UploadHandler')) {
+            require OUTOFTHEBOX_ROOTDIR.'/jquery-file-upload/server/UploadHandler.php';
+        }
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             // TO DO LOG + FAIL ERROR
             exit(-1);
@@ -67,22 +66,22 @@ class Upload
         ];
 
         $error_messages = [
-            1 => __('The uploaded file exceeds the upload_max_filesize directive in php.ini', 'wpcloudplugins'),
-            2 => __('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'wpcloudplugins'),
-            3 => __('The uploaded file was only partially uploaded', 'wpcloudplugins'),
-            4 => __('No file was uploaded', 'wpcloudplugins'),
-            6 => __('Missing a temporary folder', 'wpcloudplugins'),
-            7 => __('Failed to write file to disk', 'wpcloudplugins'),
-            8 => __('A PHP extension stopped the file upload', 'wpcloudplugins'),
-            'post_max_size' => __('The uploaded file exceeds the post_max_size directive in php.ini', 'wpcloudplugins'),
-            'max_file_size' => __('File is too big', 'wpcloudplugins'),
-            'min_file_size' => __('File is too small', 'wpcloudplugins'),
-            'accept_file_types' => __('Filetype not allowed', 'wpcloudplugins'),
-            'max_number_of_files' => __('Maximum number of files exceeded', 'wpcloudplugins'),
-            'max_width' => __('Image exceeds maximum width', 'wpcloudplugins'),
-            'min_width' => __('Image requires a minimum width', 'wpcloudplugins'),
-            'max_height' => __('Image exceeds maximum height', 'wpcloudplugins'),
-            'min_height' => __('Image requires a minimum height', 'wpcloudplugins'),
+            1 => esc_html__('The uploaded file exceeds the upload_max_filesize directive in php.ini', 'wpcloudplugins'),
+            2 => esc_html__('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'wpcloudplugins'),
+            3 => esc_html__('The uploaded file was only partially uploaded', 'wpcloudplugins'),
+            4 => esc_html__('No file was uploaded', 'wpcloudplugins'),
+            6 => esc_html__('Missing a temporary folder', 'wpcloudplugins'),
+            7 => esc_html__('Failed to write file to disk', 'wpcloudplugins'),
+            8 => esc_html__('A PHP extension stopped the file upload', 'wpcloudplugins'),
+            'post_max_size' => esc_html__('The uploaded file exceeds the post_max_size directive in php.ini', 'wpcloudplugins'),
+            'max_file_size' => esc_html__('File is too big', 'wpcloudplugins'),
+            'min_file_size' => esc_html__('File is too small', 'wpcloudplugins'),
+            'accept_file_types' => esc_html__('Filetype not allowed', 'wpcloudplugins'),
+            'max_number_of_files' => esc_html__('Maximum number of files exceeded', 'wpcloudplugins'),
+            'max_width' => esc_html__('Image exceeds maximum width', 'wpcloudplugins'),
+            'min_width' => esc_html__('Image requires a minimum width', 'wpcloudplugins'),
+            'max_height' => esc_html__('Image exceeds maximum height', 'wpcloudplugins'),
+            'min_height' => esc_html__('Image requires a minimum height', 'wpcloudplugins'),
         ];
 
         $hash = $_REQUEST['hash'];
@@ -90,7 +89,7 @@ class Upload
 
         delete_transient('outofthebox_upload_'.substr($hash, 0, 40));
 
-        $this->upload_handler = new \WPC_UploadHandler($options, false, $error_messages);
+        $this->upload_handler = new \WPCP_UploadHandler($options, false, $error_messages);
         $response = $this->upload_handler->post(false);
 
         // Upload files to Dropbox
@@ -112,7 +111,7 @@ class Upload
                     $max_allowed_bytes = Helpers::return_bytes($max_user_folder_size);
                     if ($disk_usage_after_upload > $max_allowed_bytes) {
                         $return['status']['progress'] = 'upload-failed';
-                        $file->error = __('You have reached your usage limit of', 'wpcloudplugins').' '.Helpers::bytes_to_size_1024($max_allowed_bytes);
+                        $file->error = esc_html__('You have reached your usage limit of', 'wpcloudplugins').' '.Helpers::bytes_to_size_1024($max_allowed_bytes);
                         self::set_upload_progress($hash, $return);
                         echo json_encode($return);
 
@@ -158,7 +157,7 @@ class Upload
                     $file->link = false; // Currently no Direct link available
                 } catch (\Exception $ex) {
                     error_log($ex->getMessage());
-                    $file->error = __('Not uploaded to the cloud', 'wpcloudplugins').$ex->getMessage();
+                    $file->error = esc_html__('Not uploaded to the cloud', 'wpcloudplugins').$ex->getMessage();
                 }
 
                 $return['status']['progress'] = 'upload-finished';
@@ -168,7 +167,7 @@ class Upload
             } else {
                 error_log($file->error);
                 $return['status']['progress'] = 'upload-failed';
-                $file->error = __('Uploading failed', 'wpcloudplugins');
+                $file->error = esc_html__('Uploading failed', 'wpcloudplugins');
             }
         }
 
@@ -214,7 +213,7 @@ class Upload
             $disk_usage_after_upload = $this->get_client()->get_folder_size() + $size;
             $max_allowed_bytes = Helpers::return_bytes($max_user_folder_size);
             if ($disk_usage_after_upload > $max_allowed_bytes) {
-                error_log('[WP Cloud Plugin message]: '.__('You have reached your usage limit of', 'outofthedrove').' '.Helpers::bytes_to_size_1024($max_allowed_bytes));
+                error_log('[WP Cloud Plugin message]: '.esc_html__('You have reached your usage limit of', 'outofthedrove').' '.Helpers::bytes_to_size_1024($max_allowed_bytes));
                 echo json_encode(['result' => 0]);
 
                 exit();
@@ -308,6 +307,7 @@ class Upload
 
         $uploaded_files = $_REQUEST['files'];
         $_uploaded_entries = [];
+        $_email_entries = [];
 
         foreach ($uploaded_files as $file_id) {
             $base64_id = base64_decode($file_id, true);
@@ -325,16 +325,21 @@ class Upload
             }
 
             // Upload Hook
-            do_action('outofthebox_upload', $entry);
-            $_uploaded_entries[] = $entry;
+            if (false === get_transient('outofthebox_upload_'.$file_id)) {
+                do_action('outofthebox_upload', $entry);
+                do_action('outofthebox_log_event', 'outofthebox_uploaded_entry', $entry);
 
-            do_action('outofthebox_log_event', 'outofthebox_uploaded_entry', $entry);
+                $_email_entries[] = $entry;
+            }
+
+            $_uploaded_entries[] = $entry;
         }
 
         // Send email if needed
-        if (count($_uploaded_entries) > 0) {
+
+        if (count($_email_entries) > 0) {
             if ('1' === $this->get_processor()->get_shortcode_option('notificationupload')) {
-                $this->get_processor()->send_notification_email('upload', $_uploaded_entries);
+                $this->get_processor()->send_notification_email('upload', $_email_entries);
             }
         }
 
@@ -358,6 +363,8 @@ class Upload
             $file['folderurl'] = urlencode('https://www.dropbox.com/home'.rtrim($entry->get_parent(), '/'));
 
             $files[$file['fileid']] = apply_filters('outofthebox_upload_entry_information', $file, $entry, $this->_processor);
+
+            set_transient('outofthebox_upload_'.$entry->get_id(), true, HOUR_IN_SECONDS);
         }
 
         do_action('outofthebox_upload_post_process', $_uploaded_entries, $this->_processor);

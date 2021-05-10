@@ -6,7 +6,7 @@ namespace TheLion\OutoftheBox;
  * Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
  * Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
  * Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
- * Version: 1.18.1
+ * Version: 1.19.0.1
  * Author: WP Cloud Plugins
  * Author URI: https://www.wpcloudplugins.com
  * Text Domain: wpcloudplugins
@@ -16,7 +16,7 @@ namespace TheLion\OutoftheBox;
  */
 
 // SYSTEM SETTINGS
-define('OUTOFTHEBOX_VERSION', '1.18.1');
+define('OUTOFTHEBOX_VERSION', '1.19.0.1');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
 
@@ -210,8 +210,10 @@ class Main
             'lightbox_skin' => 'metro-black',
             'lightbox_path' => 'horizontal',
             'lightbox_rightclick' => 'No',
-            'lightbox_showcaption' => 'click',
+            'lightbox_showcaption' => 'always',
+            'lightbox_showheader' => 'always',
             'mediaplayer_skin' => 'Default_Skin',
+            'mediaplayer_load_native_mediaelement' => 'No',
             'mediaplayer_ads_tagurl' => '',
             'mediaplayer_ads_skipable' => 'Yes',
             'mediaplayer_ads_skipable_after' => '5',
@@ -450,7 +452,11 @@ class Main
         }
 
         if (empty($this->settings['lightbox_showcaption'])) {
-            $this->settings['lightbox_showcaption'] = 'click';
+            $this->settings['lightbox_showcaption'] = 'always';
+            $updated = true;
+        }
+        if (empty($this->settings['lightbox_showheader'])) {
+            $this->settings['lightbox_showheader'] = 'always';
             $updated = true;
         }
 
@@ -525,6 +531,11 @@ class Main
             $updated = true;
         }
 
+        if (empty($this->settings['mediaplayer_load_native_mediaelement'])) {
+            $this->settings['mediaplayer_load_native_mediaelement'] = 'No';
+            $updated = true;
+        }
+
         if (!isset($this->settings['mediaplayer_ads_tagurl'])) {
             $this->settings['mediaplayer_ads_tagurl'] = '';
             $this->settings['mediaplayer_ads_skipable'] = 'Yes';
@@ -545,9 +556,9 @@ class Main
         }
 
         if (empty($this->settings['userfolder_noaccess'])) {
-            $this->settings['userfolder_noaccess'] = __("<h2>No Access</h2>
+            $this->settings['userfolder_noaccess'] = "<h2>No Access</h2>
 
-<p>Your account isn't (yet) configured to access this content. Please contact the administrator of the site if you would like to have access. The administrator can link your account to the right content.</p>", 'wpcloudplugins');
+<p>Your account isn't (yet) configured to access this content. Please contact the administrator of the site if you would like to have access. The administrator can link your account to the right content.</p>";
             $updated = true;
         }
 
@@ -642,6 +653,9 @@ class Main
             // Clear Cache
             $this->get_processor()->reset_complete_cache();
 
+            // Clear WordPress Cache
+            Helpers::purge_cache_others();
+
             update_option('out_of_the_box_version', OUTOFTHEBOX_VERSION);
         }
     }
@@ -654,9 +668,9 @@ class Main
         if ($file == $plugin && !is_network_admin()) {
             return array_merge(
                 $links,
-                [sprintf('<a href="options-general.php?page=%s">%s</a>', 'OutoftheBox_settings', __('Settings', 'wpcloudplugins'))],
-                [sprintf('<a href="'.plugins_url('_documentation/index.html', __FILE__).'" target="_blank">%s</a>', __('Docs', 'wpcloudplugins'))],
-                [sprintf('<a href="https://florisdeleeuwnl.zendesk.com/hc/en-us" target="_blank">%s</a>', __('Support', 'wpcloudplugins'))]
+                [sprintf('<a href="options-general.php?page=%s">%s</a>', 'OutoftheBox_settings', esc_html__('Settings', 'wpcloudplugins'))],
+                [sprintf('<a href="'.plugins_url('_documentation/index.html', __FILE__).'" target="_blank">%s</a>', esc_html__('Docs', 'wpcloudplugins'))],
+                [sprintf('<a href="https://florisdeleeuwnl.zendesk.com/hc/en-us" target="_blank">%s</a>', esc_html__('Support', 'wpcloudplugins'))]
             );
         }
 
@@ -680,21 +694,23 @@ class Main
 
         // load in footer
 
-        wp_register_script('jQuery.iframe-transport', plugins_url('includes/jquery-file-upload/js/jquery.iframe-transport.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
-        wp_register_script('jQuery.fileupload-oftb', plugins_url('includes/jquery-file-upload/js/jquery.fileupload.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
-        wp_register_script('jQuery.fileupload-process', plugins_url('includes/jquery-file-upload/js/jquery.fileupload-process.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('jQuery.iframe-transport', plugins_url('vendors/jquery-file-upload/js/jquery.iframe-transport.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('jQuery.fileupload-oftb', plugins_url('vendors/jquery-file-upload/js/jquery.fileupload.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
+        wp_register_script('jQuery.fileupload-process', plugins_url('vendors/jquery-file-upload/js/jquery.fileupload-process.js', __FILE__), ['jquery', 'jquery-ui-widget'], false, true);
         wp_register_script('OutoftheBox.UploadBox', plugins_url('includes/js/UploadBox.min.js', __FILE__), ['jQuery.iframe-transport', 'jQuery.fileupload-oftb', 'jQuery.fileupload-process', 'jquery', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
 
-        wp_register_script('WPCloudplugin.Libraries', plugins_url('includes/js/Library.js', __FILE__), ['WPCloudPlugins.Polyfill', 'jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('WPCloudplugin.Libraries', plugins_url('vendors/library.min.js', __FILE__), ['WPCloudPlugins.Polyfill', 'jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('Tagify', plugins_url('vendors/tagify/tagify.min.js', __FILE__), ['WPCloudPlugins.Polyfill'], OUTOFTHEBOX_VERSION, true);
         wp_register_script('OutoftheBox', plugins_url('includes/js/Main.min.js', __FILE__), ['jquery', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
 
-        wp_register_script('OutoftheBox.DocumentEmbedder', plugins_url('includes/js/DocumentEmbedder.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
-        wp_register_script('OutoftheBox.DocumentLinker', plugins_url('includes/js/DocumentLinker.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
-        wp_register_script('OutoftheBox.ShortcodeBuilder', plugins_url('includes/js/ShortcodeBuilder.js', __FILE__), ['jquery-ui-accordion', 'jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.DocumentEmbedder', plugins_url('includes/js/DocumentEmbedder.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.DocumentLinker', plugins_url('includes/js/DocumentLinker.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.ShortcodeBuilder', plugins_url('includes/js/ShortcodeBuilder.min.js', __FILE__), ['Tagify', 'jquery-ui-accordion', 'jquery'], OUTOFTHEBOX_VERSION, true);
 
-        // Scripts for the Event Dashboard
-        wp_register_script('OutoftheBox.Datatables', plugins_url('includes/datatables/datatables.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
-        wp_register_script('OutoftheBox.ChartJs', plugins_url('includes/chartjs/Chart.bundle.min.js', __FILE__), ['jquery', 'jquery-ui-datepicker'], OUTOFTHEBOX_VERSION, true);
+        // Scripts for the Admin Dashboard
+        wp_register_script('OutoftheBox.Admin', plugins_url('includes/js/Admin.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.Datatables', plugins_url('vendors/datatables/datatables.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.ChartJs', plugins_url('vendors/chartjs/Chart.bundle.min.js', __FILE__), ['jquery', 'jquery-ui-datepicker'], OUTOFTHEBOX_VERSION, true);
         wp_register_script('OutoftheBox.Dashboard', plugins_url('includes/js/Dashboard.min.js', __FILE__), ['OutoftheBox.Datatables', 'OutoftheBox.ChartJs', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
 
         $post_max_size_bytes = min(\TheLion\OutoftheBox\Helpers::return_bytes(ini_get('post_max_size')), \TheLion\OutoftheBox\Helpers::return_bytes(ini_get('upload_max_filesize')));
@@ -712,6 +728,7 @@ class Main
             'lightbox_skin' => $this->settings['lightbox_skin'],
             'lightbox_path' => $this->settings['lightbox_path'],
             'lightbox_rightclick' => $this->settings['lightbox_rightclick'],
+            'lightbox_showheader' => $this->settings['lightbox_showheader'],
             'lightbox_showcaption' => $this->settings['lightbox_showcaption'],
             'post_max_size' => $post_max_size_bytes,
             'google_analytics' => (('Yes' === $this->settings['google_analytics']) ? 1 : 0),
@@ -731,73 +748,85 @@ class Main
             'createzip_nonce' => wp_create_nonce('outofthebox-create-zip'),
             'createlink_nonce' => wp_create_nonce('outofthebox-create-link'),
             'recaptcha_nonce' => wp_create_nonce('outofthebox-check-recaptcha'),
-            'str_loading' => __('Hang on. Waiting for the files...', 'wpcloudplugins'),
-            'str_processing' => __('Processing...', 'wpcloudplugins'),
-            'str_success' => __('Success', 'wpcloudplugins'),
-            'str_error' => __('Error', 'wpcloudplugins'),
-            'str_inqueue' => __('Waiting', 'wpcloudplugins'),
-            'str_uploading_start' => __('Start upload', 'wpcloudplugins'),
-            'str_uploading_no_limit' => __('Unlimited', 'wpcloudplugins'),
-            'str_uploading' => __('Uploading...', 'wpcloudplugins'),
-            'str_uploading_failed' => __('File not uploaded successfully', 'wpcloudplugins'),
-            'str_uploading_failed_msg' => __('The following file(s) are not uploaded succesfully:', 'wpcloudplugins'),
-            'str_uploading_failed_in_form' => __('The form cannot be submitted. Please remove all files that are not successfully attached.', 'wpcloudplugins'),
-            'str_uploading_cancelled' => __('Upload is cancelled', 'wpcloudplugins'),
-            'str_uploading_convert' => __('Converting', 'wpcloudplugins'),
-            'str_uploading_convert_failed' => __('Converting failed', 'wpcloudplugins'),
-            'str_uploading_required_data' => __('Please first fill the required fields', 'wpcloudplugins'),
-            'str_error_title' => __('Error', 'wpcloudplugins'),
-            'str_close_title' => __('Close', 'wpcloudplugins'),
-            'str_start_title' => __('Start', 'wpcloudplugins'),
-            'str_cancel_title' => __('Cancel', 'wpcloudplugins'),
-            'str_delete_title' => __('Delete', 'wpcloudplugins'),
-            'str_move_title' => __('Move', 'wpcloudplugins'),
-            'str_copy_title' => __('Copy', 'wpcloudplugins'),
-            'str_copy' => __('Name of the copy:', 'wpcloudplugins'),
-            'str_zip_title' => __('Create zip file', 'wpcloudplugins'),
-            'str_account_title' => __('Select account', 'wpcloudplugins'),
-            'str_copy_to_clipboard_title' => __('Copy to clipboard', 'wpcloudplugins'),
-            'str_delete' => __('Do you really want to delete:', 'wpcloudplugins'),
-            'str_delete_multiple' => __('Do you really want to delete these files?', 'wpcloudplugins'),
-            'str_rename_failed' => __("That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the filename?", 'wpcloudplugins'),
-            'str_rename_title' => __('Rename', 'wpcloudplugins'),
-            'str_rename' => __('Rename to:', 'wpcloudplugins'),
-            'str_add_description' => __('Add a description...', 'wpcloudplugins'),
-            'str_no_filelist' => __("Can't receive filelist", 'wpcloudplugins'),
-            'str_addnew_title' => __('Create', 'wpcloudplugins'),
-            'str_addnew_name' => __('Enter name', 'wpcloudplugins'),
-            'str_addnew' => __('Add to folder', 'wpcloudplugins'),
-            'str_zip_nofiles' => __('No files found or selected', 'wpcloudplugins'),
-            'str_zip_createzip' => __('Creating zip file', 'wpcloudplugins'),
-            'str_share_link' => __('Share file', 'wpcloudplugins'),
-            'str_shareon' => __('Share on', 'wpcloudplugins'),
-            'str_create_shared_link' => __('Creating shared link...', 'wpcloudplugins'),
-            'str_previous_title' => __('Previous', 'wpcloudplugins'),
-            'str_next_title' => __('Next', 'wpcloudplugins'),
-            'str_xhrError_title' => __('This content failed to load', 'wpcloudplugins'),
-            'str_imgError_title' => __('This image failed to load', 'wpcloudplugins'),
-            'str_startslideshow' => __('Start slideshow', 'wpcloudplugins'),
-            'str_stopslideshow' => __('Stop slideshow', 'wpcloudplugins'),
-            'str_nolink' => __('Not yet linked to a folder', 'wpcloudplugins'),
-            'str_files_limit' => __('Maximum number of files exceeded', 'wpcloudplugins'),
-            'str_filetype_not_allowed' => __('File type not allowed', 'wpcloudplugins'),
-            'str_item' => __('Item', 'wpcloudplugins'),
-            'str_items' => __('Items', 'wpcloudplugins'),
-            'str_max_file_size' => __('File is too large', 'wpcloudplugins'),
-            'str_min_file_size' => __('File is too small', 'wpcloudplugins'),
-            'str_iframe_loggedin' => "<div class='empty_iframe'><h1>".__('Still Waiting?', 'wpcloudplugins').'</h1><span>'.__("If the document doesn't open, you are probably trying to access a protected file which requires a login.", 'wpcloudplugins')." <strong><a href='#' target='_blank' class='empty_iframe_link'>".__('Try to open the file in a new window.', 'wpcloudplugins').'</a></strong></span></div>',
+            'str_loading' => esc_html__('Hang on. Waiting for the files...', 'wpcloudplugins'),
+            'str_processing' => esc_html__('Processing...', 'wpcloudplugins'),
+            'str_success' => esc_html__('Success', 'wpcloudplugins'),
+            'str_error' => esc_html__('Error', 'wpcloudplugins'),
+            'str_inqueue' => esc_html__('Waiting', 'wpcloudplugins'),
+            'str_uploading_start' => esc_html__('Start upload', 'wpcloudplugins'),
+            'str_uploading_no_limit' => esc_html__('Unlimited', 'wpcloudplugins'),
+            'str_uploading' => esc_html__('Uploading...', 'wpcloudplugins'),
+            'str_uploading_failed' => esc_html__('File not uploaded successfully', 'wpcloudplugins'),
+            'str_uploading_failed_msg' => esc_html__('The following file(s) are not uploaded succesfully:', 'wpcloudplugins'),
+            'str_uploading_failed_in_form' => esc_html__('The form cannot be submitted. Please remove all files that are not successfully attached.', 'wpcloudplugins'),
+            'str_uploading_cancelled' => esc_html__('Upload is cancelled', 'wpcloudplugins'),
+            'str_uploading_convert' => esc_html__('Converting', 'wpcloudplugins'),
+            'str_uploading_convert_failed' => esc_html__('Converting failed', 'wpcloudplugins'),
+            'str_uploading_required_data' => esc_html__('Please first fill the required fields', 'wpcloudplugins'),
+            'str_error_title' => esc_html__('Error', 'wpcloudplugins'),
+            'str_close_title' => esc_html__('Close', 'wpcloudplugins'),
+            'str_start_title' => esc_html__('Start', 'wpcloudplugins'),
+            'str_cancel_title' => esc_html__('Cancel', 'wpcloudplugins'),
+            'str_delete_title' => esc_html__('Delete', 'wpcloudplugins'),
+            'str_move_title' => esc_html__('Move', 'wpcloudplugins'),
+            'str_copy_title' => esc_html__('Copy', 'wpcloudplugins'),
+            'str_copy' => esc_html__('Name of the copy:', 'wpcloudplugins'),
+            'str_zip_title' => esc_html__('Create zip file', 'wpcloudplugins'),
+            'str_account_title' => esc_html__('Select account', 'wpcloudplugins'),
+            'str_copy_to_clipboard_title' => esc_html__('Copy to clipboard', 'wpcloudplugins'),
+            'str_delete' => esc_html__('Do you really want to delete:', 'wpcloudplugins'),
+            'str_delete_multiple' => esc_html__('Do you really want to delete these files?', 'wpcloudplugins'),
+            'str_rename_failed' => esc_html__("That doesn't work. Are there any illegal characters (<>:\"/\\|?*) in the filename?", 'wpcloudplugins'),
+            'str_rename_title' => esc_html__('Rename', 'wpcloudplugins'),
+            'str_rename' => esc_html__('Rename to:', 'wpcloudplugins'),
+            'str_add_description' => esc_html__('Add a description...', 'wpcloudplugins'),
+            'str_no_filelist' => esc_html__("Can't receive filelist", 'wpcloudplugins'),
+            'str_addnew_title' => esc_html__('Create', 'wpcloudplugins'),
+            'str_addnew_name' => esc_html__('Enter name', 'wpcloudplugins'),
+            'str_addnew' => esc_html__('Add to folder', 'wpcloudplugins'),
+            'str_zip_nofiles' => esc_html__('No files found or selected', 'wpcloudplugins'),
+            'str_zip_createzip' => esc_html__('Creating zip file', 'wpcloudplugins'),
+            'str_share_link' => esc_html__('Share file', 'wpcloudplugins'),
+            'str_shareon' => esc_html__('Share on', 'wpcloudplugins'),
+            'str_create_shared_link' => esc_html__('Creating shared link...', 'wpcloudplugins'),
+            'str_previous_title' => esc_html__('Previous', 'wpcloudplugins'),
+            'str_next_title' => esc_html__('Next', 'wpcloudplugins'),
+            'str_xhrError_title' => esc_html__('This content failed to load', 'wpcloudplugins'),
+            'str_imgError_title' => esc_html__('This image failed to load', 'wpcloudplugins'),
+            'str_startslideshow' => esc_html__('Start slideshow', 'wpcloudplugins'),
+            'str_stopslideshow' => esc_html__('Stop slideshow', 'wpcloudplugins'),
+            'str_nolink' => esc_html__('Not yet linked to a folder', 'wpcloudplugins'),
+            'str_files_limit' => esc_html__('Maximum number of files exceeded', 'wpcloudplugins'),
+            'str_filetype_not_allowed' => esc_html__('File type not allowed', 'wpcloudplugins'),
+            'str_item' => esc_html__('Item', 'wpcloudplugins'),
+            'str_items' => esc_html__('Items', 'wpcloudplugins'),
+            'str_max_file_size' => esc_html__('File is too large', 'wpcloudplugins'),
+            'str_min_file_size' => esc_html__('File is too small', 'wpcloudplugins'),
+            'str_iframe_loggedin' => "<div class='empty_iframe'><h1>".esc_html__('Still Waiting?', 'wpcloudplugins').'</h1><span>'.esc_html__("If the document doesn't open, you are probably trying to access a protected file which requires a login.", 'wpcloudplugins')." <strong><a href='#' target='_blank' class='empty_iframe_link'>".esc_html__('Try to open the file in a new window.', 'wpcloudplugins').'</a></strong></span></div>',
         ];
 
         $localize_dashboard = [
             'ajax_url' => OUTOFTHEBOX_ADMIN_URL,
             'admin_nonce' => wp_create_nonce('outofthebox-admin-action'),
-            'str_close_title' => __('Close', 'wpcloudplugins'),
-            'str_details_title' => __('Details', 'wpcloudplugins'),
+            'str_close_title' => esc_html__('Close', 'wpcloudplugins'),
+            'str_details_title' => esc_html__('Details', 'wpcloudplugins'),
             'content_skin' => $this->settings['colors']['style'],
+        ];
+
+        $page = isset($_GET['page']) ? '?page='.$_GET['page'] : '';
+        $location = get_admin_url(null, 'admin.php'.$page);
+
+        $localize_admin = [
+            'ajax_url' => OUTOFTHEBOX_ADMIN_URL,
+            'update_url' => admin_url('update-core.php'),
+            'documentation_url' => OUTOFTHEBOX_ROOTPATH.'/_documentation/index.html',
+            'activate_url' => 'https://www.wpcloudplugins.com/updates/activate.php?init=1&client_url='.strtr(base64_encode($location), ' + /=', '-_~').'&plugin_id=5529125',
+            'admin_nonce' => wp_create_nonce('outofthebox-admin-action'),
         ];
 
         wp_localize_script('OutoftheBox', 'OutoftheBox_vars', $localize);
         wp_localize_script('OutoftheBox.Dashboard', 'OutoftheBox_Dashboard_vars', $localize_dashboard);
+        wp_localize_script('OutoftheBox.Admin', 'OutoftheBox_Admin_vars', $localize_admin);
 
         if ('Yes' === $this->settings['always_load_scripts']) {
             $mediaplayer = $this->get_processor()->load_mediaplayer($this->settings['mediaplayer_skin']);
@@ -827,17 +856,20 @@ class Main
         $is_rtl_css = (is_rtl() ? '-rtl' : '');
 
         $skin = $this->settings['lightbox_skin'];
-        wp_register_style('ilightbox', plugins_url('includes/iLightBox/css/ilightbox.css', __FILE__), false);
-        wp_register_style('ilightbox-skin-outofthebox', plugins_url('includes/iLightBox/'.$skin.'-skin/skin.css', __FILE__), false);
+        wp_register_style('ilightbox', plugins_url('vendors/iLightBox/css/ilightbox.css', __FILE__), false);
+        wp_register_style('ilightbox-skin-outofthebox', plugins_url('vendors/iLightBox/'.$skin.'-skin/skin.css', __FILE__), false);
 
-        wp_register_style('Awesome-Font-5-css', plugins_url('includes/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
-        wp_register_style('Awesome-Font-4-shim-css', plugins_url('includes/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
+        wp_register_style('Awesome-Font-5-css', plugins_url('vendors/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
+        wp_register_style('Awesome-Font-4-shim-css', plugins_url('vendors/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
 
-        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), [], OUTOFTHEBOX_VERSION);
+        $custom_css = new CSS($this->settings);
+        $custom_css->register_style();
+
+        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), ['OutoftheBox.CustomCSS'], OUTOFTHEBOX_VERSION);
         wp_register_style('OutoftheBox.ShortcodeBuilder', plugins_url("css/tinymce.min{$is_rtl_css}.css", __FILE__), null, OUTOFTHEBOX_VERSION);
 
-        // Scripts for the Event Dashboard
-        wp_register_style('OutoftheBox.Datatables.css', plugins_url('includes/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
+        // Scripts for the Admin Dashboard
+        wp_register_style('OutoftheBox.Datatables.css', plugins_url('vendors/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
 
         if ('Yes' === $this->settings['always_load_scripts']) {
             wp_enqueue_style('ilightbox');
@@ -851,9 +883,6 @@ class Main
             }
 
             wp_enqueue_style('OutoftheBox');
-
-            add_action('wp_footer', [&$this, 'load_custom_css'], 100);
-            add_action('admin_footer', [&$this, 'load_custom_css'], 100);
         }
     }
 
@@ -907,7 +936,8 @@ class Main
 
         check_ajax_referer($_REQUEST['action']);
 
-        require_once 'includes/reCAPTCHA/autoload.php';
+        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/reCAPTCHA/autoload.php';
+
         $secret = $this->settings['recaptcha_secret'];
         $recaptcha = new \ReCaptcha\ReCaptcha($secret);
 
@@ -919,69 +949,20 @@ class Main
         if ($resp->isSuccess()) {
             echo json_encode(['verified' => true]);
         } else {
-            echo json_encode(['verified' => true, 'msg' => $resp->getErrorCodes()]);
+            echo json_encode(['verified' => false, 'msg' => $resp->getErrorCodes()]);
         }
 
         exit();
     }
 
-    public function load_custom_css()
-    {
-        $css_html = '<!-- Custom OutoftheBox CSS Styles -->'."\n";
-        $css_html .= '<style type="text/css" media="screen">'."\n";
-        $css = '';
-
-        if (!empty($this->settings['custom_css'])) {
-            $css .= $this->settings['custom_css']."\n";
-        }
-
-        if ('custom' === $this->settings['loaders']['style']) {
-            $css .= '#OutoftheBox .loading{  background-image: url('.$this->settings['loaders']['loading'].');}'."\n";
-            $css .= '#OutoftheBox .loading.upload{    background-image: url('.$this->settings['loaders']['upload'].');}'."\n";
-            $css .= '#OutoftheBox .loading.error{  background-image: url('.$this->settings['loaders']['error'].');}'."\n";
-            $css .= '#OutoftheBox .no_results{  background-image: url('.$this->settings['loaders']['no_results'].');}'."\n";
-        }
-
-        $css .= "
-            iframe[src*='outofthebox'] {
-                background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 512 512'%3E%3Cdefs/%3E%3Cdefs%3E%3ClinearGradient id='a' x1='48' x2='467.2' y1='259.7' y2='259.7' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%236d276b'/%3E%3Cstop offset='.3' stop-color='%236b2669'/%3E%3Cstop offset='.5' stop-color='%23632464'/%3E%3Cstop offset='.7' stop-color='%2355215a'/%3E%3Cstop offset='.7' stop-color='%23522058'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='365.3' x2='39.3' y1='41.5' y2='367.5' xlink:href='%23a'/%3E%3C/defs%3E%3Cg style='isolation:isolate'%3E%3Cpath fill='url(%23a)' d='M272 26a28 28 0 00-29 0L62 131a28 28 0 00-14 24v209a28 28 0 0014 25l181 105a28 28 0 0029 0l181-105a28 28 0 0014-25V155'/%3E%3Cpath fill='url(%23b)' d='M467 155a28 28 0 00-14-24L272 26a28 28 0 00-29 0L62 131a28 28 0 00-14 24v209a28 28 0 0014 25z'/%3E%3Cpath fill='%23fff' d='M115 230s5-36 40-55 59-5 59-5 19-18 35-22c0 0 10-5 10 4v19a6 6 0 01-3 6 66 66 0 00-30 26s-4 5-9 2c0 0-32-25-62 7 0 0-11 11-10 32 0 0 2 9-5 10s-34 8-33 40c0 0 3 33 39 33h81v-43h-25s-9 1-7-7a10 10 0 011-3l53-65s4-4 8-2a7 7 0 012 6v138s1 6-5 6h-96s-56 5-77-42c0 0-23-51 34-85zM270 150s-1-7 9-8c0 0 71-3 100 67 0 0 56 15 56 74 0 0 2 74-73 74h-83s-9 2-9-7v-16s-1-6 7-7h81s45 2 47-43c0 0 3-41-43-48 0 0-10 1-10-8s-14-40-50-53v60h26s9 0 7 9l-54 66s-9 9-11-3z'/%3E%3C/g%3E%3C/svg%3E\");
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-size: 128px;
-            }\n";
-
-        $css .= $this->get_color_css();
-
-        $css_html .= \TheLion\OutoftheBox\Helpers::compress_css($css);
-        $css_html .= '</style>'."\n";
-
-        echo $css_html;
-    }
-
-    public function get_color_css()
-    {
-        $css = file_get_contents(OUTOFTHEBOX_ROOTDIR.'/css/skin.'.$this->settings['colors']['style'].'.min.css');
-
-        return preg_replace_callback('/%(.*)%/iU', [&$this, 'fill_placeholder_styles'], $css);
-    }
-
-    public function fill_placeholder_styles($matches)
-    {
-        if (isset($this->settings['colors'][$matches[1]])) {
-            return $this->settings['colors'][$matches[1]];
-        }
-
-        return 'initial';
-    }
-
     public function create_template($atts = [])
     {
         if (is_feed()) {
-            return __('Please browse to the page to see this content', 'wpcloudplugins').'.';
+            return esc_html__('Please browse to the page to see this content', 'wpcloudplugins').'.';
         }
 
         if (false === $this->can_run_plugin()) {
-            return '<i>>>> '.__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+            return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
         }
 
         return $this->get_processor()->create_from_shortcode($atts);
@@ -1051,7 +1032,7 @@ class Main
             return false;
         }
 
-        $subject = get_bloginfo().' | '.sprintf(__('ACTION REQUIRED: WP Cloud Plugin lost authorization to %s account', 'wpcloudplugins'), 'Dropbox').':'.(!empty($account) ? $account->get_email() : '');
+        $subject = get_bloginfo().' | '.sprintf(esc_html__('ACTION REQUIRED: WP Cloud Plugin lost authorization to %s account', 'wpcloudplugins'), 'Dropbox').':'.(!empty($account) ? $account->get_email() : '');
         $colors = $this->get_processor()->get_setting('colors');
 
         $template = apply_filters('outofthebox_set_lost_authorization_template', OUTOFTHEBOX_ROOTDIR.'/templates/notifications/lost_authorization.php', $this);
@@ -1070,7 +1051,7 @@ class Main
                 $result = wp_mail($recipient, $subject, $htmlmessage, $headers);
             }
         } catch (\Exception $ex) {
-            error_log('[WP Cloud Plugin message]: '.__('Could not send email').': '.$ex->getMessage());
+            error_log('[WP Cloud Plugin message]: '.esc_html__('Could not send email').': '.$ex->getMessage());
         }
     }
 
@@ -1083,75 +1064,9 @@ class Main
         $counter = get_option('out_of_the_box_shortcode_opened', 0);
         if ($counter < 10) {
             return;
-        } ?>
+        }
 
-        <div class="enjoying-container lets-ask">
-          <div class="enjoying-text"><?php _e('Enjoying this plugin?', 'wpcloudplugins'); ?></div>
-          <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-lets-ask-no"><?php _e('Not really', 'wpcloudplugins'); ?></a>
-            <a class="enjoying-button default"  id="enjoying-button-lets-ask-yes"><?php _e('Yes!', 'wpcloudplugins'); ?></a>
-          </div>
-        </div>
-
-        <div class="enjoying-container go-for-it" style="display:none">
-          <div class="enjoying-text"><?php _e('Great! How about a review, then?', 'wpcloudplugins'); ?></div>
-          <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-go-for-it-no"><?php _e('No, thanks', 'wpcloudplugins'); ?></a>
-            <a class="enjoying-button default" id="enjoying-button-go-for-it-yes" href="https://1.envato.market/c/1260925/275988/4415?u=https%3A%2F%2Fcodecanyon.net%2Fitem%2Foutofthebox-dropbox-plugin-for-wordpress-%2Freviews%2F5529125" target="_blank"><?php _e('Ok, sure!', 'wpcloudplugins'); ?></a>
-          </div>
-        </div>
-
-        <div class="enjoying-container mwah" style="display:none">
-          <div class="enjoying-text"><?php _e('Would you mind giving us some feedback?', 'wpcloudplugins'); ?></div>
-          <div class="enjoying-buttons">
-            <a class="enjoying-button" id="enjoying-button-mwah-no"><?php _e('No, thanks', 'wpcloudplugins'); ?></a>
-            <a class="enjoying-button default" id="enjoying-button-mwah-yes" href="https://docs.google.com/forms/d/e/1FAIpQLSct8a8d-_7iSgcvdqeFoSSV055M5NiUOgt598B95YZIaw7LhA/viewform?usp=pp_url&entry.83709281=Out-of-the-Box+(Dropbox)&entry.450972953&entry.1149244898" target="_blank"><?php _e('Ok, sure!', 'wpcloudplugins'); ?></a>
-          </div>
-        </div>
-
-        <script type="text/javascript">
-            jQuery(document).ready(function ($) {
-              $('#enjoying-button-lets-ask-no').click(function () {
-                $('.enjoying-container.lets-ask').fadeOut('fast', function () {
-                  $('.enjoying-container.mwah').fadeIn();
-                })
-              });
-
-              $('#enjoying-button-lets-ask-yes').click(function () {
-                $('.enjoying-container.lets-ask').fadeOut('fast', function () {
-                  $('.enjoying-container.go-for-it').fadeIn();
-                })
-              });
-
-              $('#enjoying-button-mwah-no, #enjoying-button-go-for-it-no').click(function () {
-                $('.enjoying-container').fadeOut('fast', function () {
-                  $(this).remove();
-                });
-              });
-
-              $('#enjoying-button-go-for-it-yes').click(function () {
-                $('.enjoying-container').fadeOut('fast', function () {
-                  $(this).remove();
-                });
-              });
-
-              $('#enjoying-button-mwah-yes').click(function () {
-                $('.enjoying-container').fadeOut('fast', function () {
-                  $(this).remove();
-                });
-              });
-
-              $('#enjoying-button-mwah-no, #enjoying-button-go-for-it-no, #enjoying-button-go-for-it-yes, #enjoying-button-mwah-yes').click(function () {
-                $.ajax({type: "POST",
-                  url: '<?php echo OUTOFTHEBOX_ADMIN_URL; ?>',
-                  data: {
-                    action: 'outofthebox-rating-asked',
-                  }
-                });
-              });
-            })
-        </script>
-        <?php
+        include_once OUTOFTHEBOX_ROOTDIR.'/templates/admin/ask_review.php';
     }
 
     public function rating_asked()
@@ -1433,6 +1348,7 @@ function OutoftheBox_Activate()
             'lightbox_skin' => 'metro-black',
             'lightbox_path' => 'horizontal',
             'mediaplayer_skin' => 'Default_Skin',
+            'mediaplayer_load_native_mediaelement' => 'No',
             'mediaplayer_ads_tagurl' => '',
             'mediaplayer_ads_skipable' => 'Yes',
             'mediaplayer_ads_skipable_after' => '5',

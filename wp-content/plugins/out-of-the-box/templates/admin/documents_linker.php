@@ -14,7 +14,7 @@ if (
 // Add own styles and script and remove default ones
 $this->load_scripts();
 $this->load_styles();
-$this->load_custom_css();
+
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -45,7 +45,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php _e('Insert Direct links','wpcloudplugins'); ?></title>
+  <title><?php esc_html_e('Insert Direct links','wpcloudplugins'); ?></title>
   <?php wp_print_scripts(); ?>
   <?php wp_print_styles(); ?>
 </head>
@@ -58,15 +58,15 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
       <div class="outofthebox-header">
         <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
         <div class="outofthebox-form-buttons">
-          <div id="do_link" class="simple-button default" name="insert"><?php _e('Insert Links','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right" aria-hidden="true"></i></div>
+          <div id="do_link" class="simple-button default" name="insert"><?php esc_html_e('Insert Links','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right" aria-hidden="true"></i></div>
         </div>
 
-        <div class="outofthebox-title"><?php _e('Insert Direct links','wpcloudplugins'); ?></div>
+        <div class="outofthebox-title"><?php esc_html_e('Insert Direct links','wpcloudplugins'); ?></div>
 
       </div>
 
       <div class="outofthebox-panel outofthebox-panel-full">
-        <p><?php _e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
+        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
         <?php
 
         $atts = [

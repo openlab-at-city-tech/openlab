@@ -115,8 +115,6 @@ class Gutenberg
             'wpcp/outofthebox-block',
             [
                 'attributes' => $attributes,
-                // Enqueue blocks.style.build.css on both frontend & backend.
-                //'style' => 'wpcp-outofthebox-block-style-css',
                 // Enqueue blocks.build.js in the editor only.
                 'editor_script' => 'wpcp-outofthebox-block-js',
                 // Enqueue blocks.editor.build.css in the editor only.
@@ -138,7 +136,7 @@ class Gutenberg
         $shortcode = !empty($attr['shortcode']) ? $attr['shortcode'] : false;
 
         if (empty($shortcode)) {
-            return __('Please create your shortcode first', 'wpcloudplugins');
+            return esc_html__('Please create your shortcode first', 'wpcloudplugins');
         }
 
         \ob_start();

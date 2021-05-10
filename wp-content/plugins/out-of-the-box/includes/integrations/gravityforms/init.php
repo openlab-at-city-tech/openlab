@@ -84,7 +84,9 @@ class GFOutoftheBoxAddOn extends GFAddOn
     {
         ?>
             <script type='text/javascript'>
-                jQuery(document).ready(function ($) {
+                (function ($) {
+                'use strict';
+                                    
                   /* Which settings field should be visible for our custom field*/
                   fieldSettings["outofthebox"] = ".label_setting, .description_setting, .admin_label_setting, .error_message_setting, .css_class_setting, .visibility_setting, .rules_setting, .label_placement_setting, .outofthebox_setting, .conditional_logic_field_setting, .conditional_logic_page_setting, .conditional_logic_nextbutton_setting"; //this will show all the fields of the Paragraph Text field minus a couple that I didn't want to appear.
 
@@ -100,7 +102,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
                   });
 
                   /* Shortcode Generator Popup */
-                  $('.OutoftheBox-GF-shortcodegenerator').click(function () {
+                  $('.OutoftheBox-GF-shortcodegenerator').on('click',function (e) {
                     var shortcode = jQuery("#field_outofthebox").val();
                     shortcode = shortcode.replace('[outofthebox ', '').replace('"]', '');
                     var query = encodeURIComponent(shortcode).split('%3D%22').join('=').split('%22%20').join('&');
@@ -116,10 +118,10 @@ class GFOutoftheBoxAddOn extends GFAddOn
                             tb_remove();
                         }
                     }
-                });
+                })(jQuery);
 
                 function SetDefaultValues_outofthebox(field) {
-                  field.label = '<?php _e('Upload your Files', 'wpcloudplugins'); ?>';
+                  field.label = '<?php esc_html_e('Attach your documents', 'wpcloudplugins'); ?>';
                 }
             </script>
             <?php
@@ -147,7 +149,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
             ?>
                 <li class="outofthebox_setting field_setting">
                   <label for="field_outofthebox">Out-of-the-Box Shortcode <?php echo gform_tooltip('form_field_outofthebox'); ?></label>
-                  <a href="#" class='button-primary OutoftheBox-GF-shortcodegenerator '><?php _e('Build your shortcode', 'wpcloudplugins'); ?></a>
+                  <a href="#" class='button-primary OutoftheBox-GF-shortcodegenerator '><?php esc_html_e('Build your shortcode', 'wpcloudplugins'); ?></a>
                   <textarea id="field_outofthebox" class="fieldwidth-3 fieldheight-2" onchange="SetFieldProperty('OutoftheBoxShortcode', this.value)"></textarea>
                   <br/><small>Missing a Out-of-the-Box Gravity Form feature? Please let me <a href="https://florisdeleeuwnl.zendesk.com/hc/en-us/requests/new" target="_blank">know</a>!</small>
                 </li>
@@ -158,7 +160,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
     public function outofthebox_title($title, $field_type)
     {
         if ('outofthebox' === $field_type) {
-            return 'Out-of-the-Box '.__('Upload', 'wpcloudplugins');
+            return 'Out-of-the-Box '.esc_html__('Upload', 'wpcloudplugins');
         }
 
         return $title;
@@ -166,7 +168,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
 
     public function add_outofthebox_tooltips($tooltips)
     {
-        $tooltips['form_field_outofthebox'] = '<h6>Out-of-the-Box Shortcode</h6>'.__('Build your shortcode here', 'wpcloudplugins');
+        $tooltips['form_field_outofthebox'] = '<h6>Out-of-the-Box Shortcode</h6>'.esc_html__('Build your shortcode here', 'wpcloudplugins');
 
         return $tooltips;
     }
@@ -187,7 +189,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
 
         if (empty($uploadedfiles)) {
             $result['is_valid'] = false;
-            $result['message'] = __('This field is required. Please upload your files.', 'gravityforms');
+            $result['message'] = esc_html__('This field is required. Please upload your files.', 'gravityforms');
         } else {
             $result['is_valid'] = true;
             $result['message'] = '';
@@ -304,7 +306,7 @@ class GFOutoftheBoxAddOn extends GFAddOn
             return $private_folder_name_guest;
         }
 
-        return str_replace(__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
+        return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
     }
 }
 

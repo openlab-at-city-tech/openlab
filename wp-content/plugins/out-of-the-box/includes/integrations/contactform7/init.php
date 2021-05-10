@@ -69,33 +69,33 @@ class ContactForm
         $args = wp_parse_args($args, []);
         $type = 'outofthebox';
 
-        $description = __('Generate a form-tag for this upload field.', 'wpcloudplugins'); ?>
+        $description = esc_html__('Generate a form-tag for this upload field.', 'wpcloudplugins'); ?>
         <div class="control-box">
           <fieldset>
             <legend><?php echo sprintf(esc_html($description)); ?></legend>
             <table class="form-table">
               <tbody>
                 <tr>
-                  <th scope="row"><?php echo esc_html(__('Field type', 'contact-form-7')); ?></th>
+                  <th scope="row"><?php echo esc_html(esc_html__('Field type', 'contact-form-7')); ?></th>
                   <td>
                     <fieldset>
-                      <legend class="screen-reader-text"><?php echo esc_html(__('Field type', 'contact-form-7')); ?></legend>
-                      <label><input type="checkbox" name="required" /> <?php echo esc_html(__('Required field', 'contact-form-7')); ?></label>
+                      <legend class="screen-reader-text"><?php echo esc_html(esc_html__('Field type', 'contact-form-7')); ?></legend>
+                      <label><input type="checkbox" name="required" /> <?php echo esc_html(esc_html__('Required field', 'contact-form-7')); ?></label>
                     </fieldset>
                   </td>
                 </tr>
 
                 <tr>
-                  <th scope="row"><label for="<?php echo esc_attr($args['content'].'-name'); ?>"><?php echo esc_html(__('Name', 'contact-form-7')); ?></label></th>
+                  <th scope="row"><label for="<?php echo esc_attr($args['content'].'-name'); ?>"><?php echo esc_html(esc_html__('Name', 'contact-form-7')); ?></label></th>
                   <td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr($args['content'].'-name'); ?>" /></td>
                 </tr>
 
                 <tr>
-                  <th scope="row"><label for="<?php echo esc_attr($args['content'].'-shortcode'); ?>"><?php echo esc_html(__('Shortcode', 'wpcloudplugins')); ?></label></th>
+                  <th scope="row"><label for="<?php echo esc_attr($args['content'].'-shortcode'); ?>"><?php echo esc_html(esc_html__('Shortcode', 'wpcloudplugins')); ?></label></th>
                   <td>
                     <input type="hidden" name="shortcode" class="outofthebox-shortcode-value large-text option" id="<?php echo esc_attr($args['content'].'-shortcode'); ?>" />
                     <textarea id="outofthebox-shortcode-decoded-value"  rows="6" style="margin-bottom:15px;display:none;width: 400px;word-wrap: break-word;"></textarea>
-                    <input type="button" class="button button-primary OutoftheBox-CF-shortcodegenerator " value="<?php echo esc_attr(__('Build your shortcode here', 'wpcloudplugins')); ?>" />
+                    <input type="button" class="button button-primary OutoftheBox-CF-shortcodegenerator " value="<?php echo esc_attr(esc_html__('Build your shortcode here', 'wpcloudplugins')); ?>" />
                     <iframe id="outofthebox-shortcode-iframe" src="about:blank" data-src='<?php echo OUTOFTHEBOX_ADMIN_URL; ?>?action=outofthebox-getpopup&type=shortcodebuilder&asuploadbox=1&callback=wpcp_oftb_cf7_add_content' width='100%' height='500' tabindex='-1' frameborder='0' style="display:none"></iframe>
                     <p class="out-of-the-box-upload-folder description">You can use the available input fields in your form to name the upload folder based on user input. To do so, just add the <code>outofthebox_private_folder_name</code> to the Class attribute of your input field (i.e. <code>[text* your-name class:outofthebox_private_folder_name]</code>).</p>
                   </td>
@@ -110,7 +110,7 @@ class ContactForm
           <input type="text" name="<?php echo $type; ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
 
           <div class="submitbox">
-            <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr(__('Insert Tag', 'contact-form-7')); ?>" />
+            <input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr(esc_html__('Insert Tag', 'contact-form-7')); ?>" />
           </div>
 
           <br class="clear" />
@@ -215,7 +215,7 @@ class ContactForm
             return $private_folder_name_guest;
         }
 
-        return str_replace(__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
+        return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
     }
 
     /**

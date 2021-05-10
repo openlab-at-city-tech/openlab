@@ -12,9 +12,6 @@ class Legacy_jPlayer extends \TheLion\OutoftheBox\MediaplayerSkin
         parent::__construct($processor);
 
         $this->url = plugins_url('', __FILE__);
-
-        add_action('wp_footer', [&$this, 'load_custom_css'], 100);
-        add_action('admin_footer', [&$this, 'load_custom_css'], 100);
     }
 
     public function load_scripts()
@@ -36,33 +33,5 @@ class Legacy_jPlayer extends \TheLion\OutoftheBox\MediaplayerSkin
     {
         wp_register_style('OutoftheBox.Legacy_jPlayer.Player.CSS', $this->get_url().'/css/style.css', false, OUTOFTHEBOX_VERSION);
         wp_enqueue_style('OutoftheBox.Legacy_jPlayer.Player.CSS');
-    }
-
-    public function load_custom_css()
-    {
-        $css_html = '<!-- Custom OutoftheBox Legacy Player CSS Styles -->'."\n";
-        $css_html .= '<style type="text/css" media="screen">'."\n";
-        $css = '';
-
-        $colors = $this->get_processor()->get_setting('colors');
-
-        $css = file_get_contents(__DIR__.'/css/skin.'.$colors['style'].'.min.css');
-        $css = preg_replace_callback('/%(.*)%/iU', [&$this, 'fill_placeholder_styles'], $css);
-
-        $css_html .= \TheLion\OutoftheBox\Helpers::compress_css($css);
-        $css_html .= '</style>'."\n";
-
-        echo $css_html;
-    }
-
-    public function fill_placeholder_styles($matches)
-    {
-        $colors = $this->get_processor()->get_setting('colors');
-
-        if (isset($colors[$matches[1]])) {
-            return $colors[$matches[1]];
-        }
-
-        return 'initial';
     }
 }

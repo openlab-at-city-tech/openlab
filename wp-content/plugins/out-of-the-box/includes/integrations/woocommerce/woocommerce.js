@@ -1,5 +1,5 @@
 jQuery(function ($) {
-  var wc_outofthebox = {
+  var outofthebox_wc = {
     // hold a reference to the last selected Dropbox button
     lastSelectedButton: false,
 
@@ -9,13 +9,13 @@ jQuery(function ($) {
       this.addButtonEventHandler();
       // add buttons when variable product added
       $('#variable_product_options').on('woocommerce_variations_added', function () {
-        wc_outofthebox.addButtons();
-        wc_outofthebox.addButtonEventHandler();
+        outofthebox_wc.addButtons();
+        outofthebox_wc.addButtonEventHandler();
       });
       // add buttons when variable products loaded
       $('#woocommerce-product-data').on('woocommerce_variations_loaded', function () {
-        wc_outofthebox.addButtons();
-        wc_outofthebox.addButtonEventHandler();
+        outofthebox_wc.addButtons();
+        outofthebox_wc.addButtonEventHandler();
       });
 
       return this;
@@ -68,7 +68,7 @@ jQuery(function ($) {
         e.preventDefault();
 
         // save a reference to clicked button
-        wc_outofthebox.lastSelectedButton = $(this);
+        outofthebox_wc.lastSelectedButton = $(this);
 
       });
     },
@@ -79,7 +79,8 @@ jQuery(function ($) {
 
       // Create Base64 Object
       var Base64 = {
-        _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", encode: function (e) {
+        _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+        encode: function (e) {
           var t = "";
           var n, r, i, s, o, u, a;
           var f = 0;
@@ -100,7 +101,8 @@ jQuery(function ($) {
             t = t + this._keyStr.charAt(s) + this._keyStr.charAt(o) + this._keyStr.charAt(u) + this._keyStr.charAt(a)
           }
           return t
-        }, decode: function (e) {
+        },
+        decode: function (e) {
           var t = "";
           var n, r, i;
           var s, o, u, a;
@@ -124,7 +126,8 @@ jQuery(function ($) {
           }
           t = Base64._utf8_decode(t);
           return t
-        }, _utf8_encode: function (e) {
+        },
+        _utf8_encode: function (e) {
           e = e.replace(/rn/g, "n");
           var t = "";
           for (var n = 0; n < e.length; n++) {
@@ -141,10 +144,11 @@ jQuery(function ($) {
             }
           }
           return t
-        }, _utf8_decode: function (e) {
+        },
+        _utf8_decode: function (e) {
           var t = "";
           var n = 0;
-          var r = c1 = c2 = 0;
+          var r, c1, c2; r = c1 = c2 = 0;
           while (n < e.length) {
             r = e.charCodeAt(n);
             if (r < 128) {
@@ -166,10 +170,10 @@ jQuery(function ($) {
       }
 
 
-      if ($(wc_outofthebox.lastSelectedButton).closest('.downloadable_files').length > 0) {
+      if ($(outofthebox_wc.lastSelectedButton).closest('.downloadable_files').length > 0) {
 
-        var table = $(wc_outofthebox.lastSelectedButton).closest('.downloadable_files').find('tbody');
-        var template = $(wc_outofthebox.lastSelectedButton).parent().find('.button.insert:first').data("row");
+        var table = $(outofthebox_wc.lastSelectedButton).closest('.downloadable_files').find('tbody');
+        var template = $(outofthebox_wc.lastSelectedButton).parent().find('.button.insert:first').data("row");
         var fileRow = $(template);
 
         fileRow.find('.file_name > input:first').val(name).change();
@@ -182,10 +186,10 @@ jQuery(function ($) {
       }
 
       /* START Support for WooCommerce Product Documents */
-      if ($(wc_outofthebox.lastSelectedButton).closest('.wc-product-document').length > 0) {
+      if ($(outofthebox_wc.lastSelectedButton).closest('.wc-product-document').length > 0) {
 
 
-        var row = $(wc_outofthebox.lastSelectedButton).closest('.wc-product-document');
+        var row = $(outofthebox_wc.lastSelectedButton).closest('.wc-product-document');
 
         row.find('.wc-product-document-label input:first').val(name).change();
         row.find('.wc-product-document-file-location input:first').val(outofthebox_woocommerce_translation.wcpd_url + encodeURIComponent(Base64.encode(id)) + '&account_id=' + account_id);
@@ -195,13 +199,43 @@ jQuery(function ($) {
     }
 
   };
-  window.wc_outofthebox = wc_outofthebox.init();
+  window.outofthebox_wc = outofthebox_wc.init();
 
   /* Callback function to add shortcode to WC field */
-  if (typeof window.wpcp_oftb_wc_add_content === 'undefined') {
-    window.wpcp_oftb_wc_add_content = function (data) {
+  if (typeof window.wpcp_outofthebox_wc_add_content === 'undefined') {
+    window.wpcp_outofthebox_wc_add_content = function (data) {
       $('#outofthebox_upload_box_shortcode').val(data);
       tb_remove();
     }
   }
+
+  $('input#_uploadable').on('change', function () {
+    var is_uploadable = $('input#_uploadable:checked').size();
+    $('.show_if_uploadable').hide();
+    $('.hide_if_uploadable').hide();
+    if (is_uploadable) {
+      $('.hide_if_uploadable').hide();
+    }
+    if (is_uploadable) {
+      $('.show_if_uploadable').show();
+    }
+  });
+  $('input#_uploadable').trigger('change');
+
+  $('input#outofthebox_upload_box').on('change', function () {
+    var outofthebox_upload_box = $('input#outofthebox_upload_box:checked').size();
+    $('.show_if_outofthebox_upload_box').hide();
+    if (outofthebox_upload_box) {
+      $('.show_if_outofthebox_upload_box').show();
+    }
+  });
+  $('input#outofthebox_upload_box').trigger('change');
+
+  /* Shortcode Generator Popup */
+  $('.OutoftheBox-shortcodegenerator').on('click',function (e) {
+    var shortcode = $("#outofthebox_upload_box_shortcode").val();
+    shortcode = shortcode.replace('[outofthebox ', '').replace('"]', '');
+    var query = encodeURIComponent(shortcode).split('%3D%22').join('=').split('%22%20').join('&');
+    tb_show("Build Shortcode for Form", ajaxurl + '?action=outofthebox-getpopup&' + query + '&type=shortcodebuilder&for=woocommerce&asuploadbox=1&callback=wpcp_outofthebox_wc_add_content&TB_iframe=true&height=600&width=800');
+  });
 });

@@ -126,9 +126,13 @@ class Helpers
             return false;
         }
 
-        //if (current_user_can( 'setup_network' )) {
-        //return true;
-        //}
+        /* If administrators are locked out, uncomment the following lines
+         * See FAQ article: https://florisdeleeuwnl.zendesk.com/hc/en-us/articles/360010544560
+        */
+
+        // if (current_user_can('setup_network')) {
+        //     return true;
+        // }
 
         if (null === $user) {
             $user = wp_get_current_user();
@@ -156,7 +160,7 @@ class Helpers
     public static function get_user_name()
     {
         if (!is_user_logged_in()) {
-            return __('Anonymous user', 'wpcloudplugins');
+            return esc_html__('Anonymous user', 'wpcloudplugins');
         }
 
         $current_user = wp_get_current_user();
@@ -224,9 +228,9 @@ class Helpers
         $wp_roles_names = $wp_roles->get_names();
 
         // Add custom roles
-        $wp_roles_names['guest'] = __('Anonymous user', 'wpcloudplugins');
-        $wp_roles_names['all'] = __('Everyone', 'wpcloudplugins');
-        $wp_roles_names['none'] = __('None', 'wpcloudplugins');
+        $wp_roles_names['guest'] = esc_html__('Anonymous user', 'wpcloudplugins');
+        $wp_roles_names['all'] = esc_html__('Everyone', 'wpcloudplugins');
+        $wp_roles_names['none'] = esc_html__('None', 'wpcloudplugins');
 
         foreach ($wp_roles_names as $wp_role_id => $wp_role_name) {
             $list[] = [
@@ -335,8 +339,11 @@ class Helpers
 
         switch ($unit) {
             case 'M': case 'm': return (int) $size_str * 1048576;
+
             case 'K': case 'k': return (int) $size_str * 1024;
+
             case 'G': case 'g': return (int) $size_str * 1073741824;
+
             default: return $size_str;
         }
     }
@@ -446,20 +453,20 @@ class Helpers
             $icon = 'video-x-generic';
         } elseif (false !== strpos($mimetype, 'pdf')) {
             $icon = 'application-pdf';
-        } elseif (false !== strpos($mimetype, 'zip') ||
-                false !== strpos($mimetype, 'archive') ||
-                false !== strpos($mimetype, 'tar') ||
-                false !== strpos($mimetype, 'compressed')
+        } elseif (false !== strpos($mimetype, 'zip')
+                || false !== strpos($mimetype, 'archive')
+                || false !== strpos($mimetype, 'tar')
+                || false !== strpos($mimetype, 'compressed')
         ) {
             $icon = 'application-zip';
         } elseif (false !== strpos($mimetype, 'html')) {
             $icon = 'text-xml';
-        } elseif (false !== strpos($mimetype, 'application/exe') ||
-                false !== strpos($mimetype, 'application/x-msdownload') ||
-                false !== strpos($mimetype, 'application/x-exe') ||
-                false !== strpos($mimetype, 'application/x-winexe') ||
-                false !== strpos($mimetype, 'application/msdos-windows') ||
-                false !== strpos($mimetype, 'application/x-executable')
+        } elseif (false !== strpos($mimetype, 'application/exe')
+                || false !== strpos($mimetype, 'application/x-msdownload')
+                || false !== strpos($mimetype, 'application/x-exe')
+                || false !== strpos($mimetype, 'application/x-winexe')
+                || false !== strpos($mimetype, 'application/msdos-windows')
+                || false !== strpos($mimetype, 'application/x-executable')
         ) {
             $icon = 'application-x-executable';
         } elseif (false !== strpos($mimetype, 'text')) {
@@ -560,6 +567,15 @@ class Helpers
         return true;
     }
 
+    public static function is_deprecated($type, $name)
+    {
+        error_log("[WP Cloud Plugin message]: {$type} {$name} is deprecated.");
+
+        ob_start();
+        debug_print_backtrace();
+        error_log(ob_get_clean());
+    }
+
     public static function set_cookie($name, $value, $expire, $path, $domain, $secure, $httponly, $samesite = 'None')
     {
         if (PHP_VERSION_ID < 70300) {
@@ -607,7 +623,7 @@ class Helpers
         $iv = substr($mix, 0, $iv_length);
         $first_encrypted = substr($mix, $iv_length);
 
-        return  openssl_decrypt($first_encrypted, $method, OUTOFTHEBOX_AUTH_KEY, OPENSSL_RAW_DATA, $iv);
+        return openssl_decrypt($first_encrypted, $method, OUTOFTHEBOX_AUTH_KEY, OPENSSL_RAW_DATA, $iv);
     }
 
     public static function get_mimetype($extension = '')
@@ -1628,5 +1644,136 @@ class Helpers
         }
 
         return 'application/octet-stream';
+    }
+
+    /**
+     * Purge all caches on the WordPress site
+     * Mainly used when updating the plugin to prevent issue with
+     * oudated javascript libraries or shortcode data.
+     */
+    public static function purge_cache_others()
+    {
+        try {
+            // Purge all W3 Total Cache
+            if (function_exists('w3tc_flush_all')) {
+                \w3tc_flush_all();
+            }
+
+            // Purge WP Super Cache
+            if (function_exists('wp_cache_clear_cache')) {
+                \wp_cache_clear_cache();
+            }
+
+            // Purge WP Rocket
+            if (function_exists('rocket_clean_domain')) {
+                \rocket_clean_domain();
+            }
+
+            // Purge Cachify
+            if (function_exists('cachify_flush_cache')) {
+                \cachify_flush_cache();
+            }
+
+            // Purge Comet Cache
+            if (class_exists('comet_cache')) {
+                \comet_cache::clear();
+            }
+
+            // Purge Zen Cache
+            if (class_exists('zencache')) {
+                \zencache::clear();
+            }
+
+            // Purge LiteSpeed Cache
+            if (class_exists('LiteSpeed_Cache_Tags')) {
+                \LiteSpeed_Cache_Tags::add_purge_tag('*');
+            }
+
+            // Purge Hyper Cache
+            if (class_exists('HyperCache')) {
+                do_action('autoptimize_action_cachepurged');
+            }
+
+            // purge cache enabler
+            if (has_action('ce_clear_cache')) {
+                do_action('ce_clear_cache');
+            }
+
+            // purge wpfc
+            if (function_exists('wpfc_clear_all_cache')) {
+                \wpfc_clear_all_cache(true);
+            }
+
+            // add breeze cache purge support
+            if (class_exists('Breeze_PurgeCache')) {
+                \Breeze_PurgeCache::breeze_cache_flush();
+            }
+
+            // swift
+            if (class_exists('Swift_Performance_Cache')) {
+                \Swift_Performance_Cache::clear_all_cache();
+            }
+
+            // Hummingbird
+            if (has_action('wphb_clear_page_cache')) {
+                do_action('wphb_clear_page_cache');
+            }
+
+            // WP-Optimize
+            if (has_action('wpo_cache_flush')) {
+                do_action('wpo_cache_flush');
+            }
+
+            // hosting companies
+
+            // Purge SG Optimizer (Siteground)
+            if (function_exists('sg_cachepress_purge_cache')) {
+                \sg_cachepress_purge_cache();
+            }
+
+            // Purge Godaddy Managed WordPress Hosting (Varnish + APC)
+            if (class_exists('WPaaS\Plugin') && method_exists('WPass\Plugin', 'vip')) {
+                \fvm_godaddy_request('BAN');
+            }
+
+            // Purge WP Engine
+            if (class_exists('WpeCommon')) {
+                if (method_exists('WpeCommon', 'purge_memcached')) {
+                    \WpeCommon::purge_memcached();
+                }
+                if (method_exists('WpeCommon', 'purge_varnish_cache')) {
+                    \WpeCommon::purge_varnish_cache();
+                }
+            }
+
+            // Purge Kinsta
+            global $kinsta_cache;
+            if (isset($kinsta_cache) && class_exists('\\Kinsta\\CDN_Enabler')) {
+                if (!empty($kinsta_cache->kinsta_cache_purge)) {
+                    $kinsta_cache->kinsta_cache_purge->purge_complete_caches();
+                }
+            }
+
+            // Purge Pagely
+            if (class_exists('PagelyCachePurge')) {
+                $purge_pagely = new \PagelyCachePurge();
+                $purge_pagely->purgeAll();
+            }
+
+            // Purge Pantheon Advanced Page Cache plugin
+            if (function_exists('pantheon_wp_clear_edge_all')) {
+                \pantheon_wp_clear_edge_all();
+            }
+
+            // wordpress default cache
+            if (function_exists('wp_cache_flush')) {
+                \wp_cache_flush();
+            }
+        } catch (\Exception $ex) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('Cannot clear cache on line %s: %s', __LINE__, $ex->getMessage()));
+        }
+
+
+        return;
     }
 }

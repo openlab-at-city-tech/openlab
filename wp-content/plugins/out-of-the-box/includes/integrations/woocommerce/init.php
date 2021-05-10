@@ -57,8 +57,8 @@ class WooCommerce extends \WC_Integration
 
         $this->id = 'outofthebox-woocommerce';
         $this->method_title = 'WooCommerce Dropbox';
-        $this->method_description = __('Easily add downloadable products right from the cloud.', 'wpcloudplugins').' '
-                .sprintf(__('To be able to use this integration, you only need to link your %s Account to the plugin on the %s.', 'wpcloudplugins'), 'Dropbox', '<a href="'.admin_url('admin.php?page=OutoftheBox_settings').'">Out-of-the-Box settings page</a>');
+        $this->method_description = esc_html__('Easily add downloadable products right from the cloud.', 'wpcloudplugins').' '
+                .sprintf(esc_html__('To be able to use this integration, you only need to link your %s Account to the plugin on the %s.', 'wpcloudplugins'), 'Dropbox', '<a href="'.admin_url('admin.php?page=OutoftheBox_settings').'">Out-of-the-Box settings page</a>');
 
         // Load the settings.
         $this->init_form_fields();
@@ -67,7 +67,7 @@ class WooCommerce extends \WC_Integration
 
     public function rename_private_folder_for_guests($private_folder_name)
     {
-        return str_replace(__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name);
+        return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name);
     }
 
     public function update_shortcode($options, $processor, $raw_shortcode)
@@ -207,7 +207,7 @@ class WooCommerce_Downloads
 
         // register translations
         $translation_array = [
-            'choose_from' => sprintf(__('Choose from %s', 'wpcloudplugins'), 'Dropbox'),
+            'choose_from' => sprintf(esc_html__('Choose from %s', 'wpcloudplugins'), 'Dropbox'),
             'download_url' => '?action=outofthebox-wc-direct-download&id=',
             'file_browser_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-getwoocommercepopup',
             'wcpd_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-wcpd-direct-download&id=',
@@ -328,7 +328,7 @@ class WooCommerce_Downloads
             }
         }
 
-        self::download_error(__('File not found', 'woocommerce'));
+        self::download_error(esc_html__('File not found', 'woocommerce'));
     }
 
     public function wc_product_documents_open_link_in_new_window($target, $product, $section, $document)
@@ -377,7 +377,7 @@ class WooCommerce_Downloads
         $entry = $this->get_entry_for_download_by_url($file_path);
 
         if (empty($entry)) {
-            self::download_error(__('File not found', 'woocommerce'));
+            self::download_error(esc_html__('File not found', 'woocommerce'));
         }
 
         $downloadlink = $this->get_redirect_url_for_entry($entry);
@@ -411,7 +411,7 @@ class WooCommerce_Downloads
         $entry = $this->get_entry_for_download_by_url($file_path);
 
         if (empty($entry)) {
-            self::download_error(__('File not found', 'woocommerce'));
+            self::download_error(esc_html__('File not found', 'woocommerce'));
         }
 
         $downloadlink = $this->get_redirect_url_for_entry($entry);
@@ -546,7 +546,7 @@ class WooCommerce_Uploads
         $this->_woocommerce = $_woocommerce;
 
         // Add Tabs & Content to Product Edit Page
-        add_action('admin_head', [&$this, 'add_product_data_tab_scripts_and_style']);
+        add_action('admin_enqueue_scripts', [$this, 'add_scripts']);
         add_filter('product_type_options', [&$this, 'add_uploadable_product_option']);
         add_filter('woocommerce_product_data_tabs', [&$this, 'add_product_data_tab']);
         add_action('woocommerce_product_data_panels', [&$this, 'add_product_data_tab_content']);
@@ -600,7 +600,7 @@ class WooCommerce_Uploads
         }
 
         // Build the Order note
-        $order_note = sprintf(__('%d file(s) uploaded for product', 'wpcloudplugins'), count((array) $uploaded_entries)).' <strong>'.$product->get_title().'</strong>:';
+        $order_note = sprintf(esc_html__('%d file(s) uploaded for product', 'wpcloudplugins'), count((array) $uploaded_entries)).' <strong>'.$product->get_title().'</strong>:';
         $order_note .= '<br/><br/><ul>';
 
         foreach ($uploaded_entries as $entry) {
@@ -638,7 +638,7 @@ class WooCommerce_Uploads
             return false;
         }
 
-        add_meta_box('woocommerce-outofthebox-box-order-detail', __('Uploaded Files', 'wpcloudplugins'), [&$this, 'render_meta_box'], 'shop_order', 'advanced', 'high');
+        add_meta_box('woocommerce-outofthebox-box-order-detail', esc_html__('Uploaded Files', 'wpcloudplugins'), [&$this, 'render_meta_box'], 'shop_order', 'advanced', 'high');
     }
 
     /**
@@ -656,7 +656,7 @@ class WooCommerce_Uploads
         }
 
         $order_url = '#uploads';
-        $thank_you_text .= ' '.sprintf(__('You can now %sstart uploading your documents%s', 'wpcloudplugins'), '<a href="'.$order_url.'">', '</a>').'.';
+        $thank_you_text .= ' '.sprintf(esc_html__('You can now %sstart uploading your documents%s', 'wpcloudplugins'), '<a href="'.$order_url.'">', '</a>').'.';
 
         return $thank_you_text;
     }
@@ -673,8 +673,8 @@ class WooCommerce_Uploads
         $product_type_options['uploadable'] = [
             'id' => '_uploadable',
             'wrapper_class' => 'show_if_simple show_if_variable',
-            'label' => __('Uploads', 'wpcloudplugins'),
-            'description' => __('Allows your customers to upload files when ordering this product.', 'wpcloudplugins'),
+            'label' => esc_html__('Uploads', 'wpcloudplugins'),
+            'description' => esc_html__('Allows your customers to upload files when ordering this product.', 'wpcloudplugins'),
             'default' => 'no',
         ];
 
@@ -691,7 +691,7 @@ class WooCommerce_Uploads
     public function add_product_data_tab($product_data_tabs)
     {
         $product_data_tabs['cloud-uploads-dropbox'] = [
-            'label' => sprintf(__('Upload to %s', 'wpcloudplugins'), 'Dropbox'),
+            'label' => sprintf(esc_html__('Upload to %s', 'wpcloudplugins'), 'Dropbox'),
             'target' => 'cloud_uploads_data_dropbox',
             'class' => ['show_if_uploadable'],
         ];
@@ -714,11 +714,11 @@ class WooCommerce_Uploads
             woocommerce_wp_checkbox(
             [
                 'id' => 'outofthebox_upload_box',
-                'label' => sprintf(__('Upload to %s', 'wpcloudplugins'), 'Dropbox'),
+                'label' => sprintf(esc_html__('Upload to %s', 'wpcloudplugins'), 'Dropbox'),
             ]
         ); ?>
             <div class="show_if_outofthebox_upload_box">
-              <h4><?php echo 'Dropbox '.__('Upload Box Settings', 'wpcloudplugins'); ?></h4>
+              <h4><?php echo 'Dropbox '.esc_html__('Upload Box Settings', 'wpcloudplugins'); ?></h4>
               <?php
               $default_box_title = 'Uploads';
         $box_title = get_post_meta($post->ID, 'outofthebox_upload_box_title', true);
@@ -726,10 +726,10 @@ class WooCommerce_Uploads
         woocommerce_wp_text_input(
             [
                 'id' => 'outofthebox_upload_box_title',
-                'label' => __('Title Upload Box', 'wpcloudplugins'),
+                'label' => esc_html__('Title Upload Box', 'wpcloudplugins'),
                 'placeholder' => $default_box_title,
-                'desc_tip' => false,
-                'description' => '<br><br>'.__('Enter the title for the upload box', 'wpcloudplugins').'. '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_name%</code>, <code>%jjjj-mm-dd%</code>'),
+                'desc_tip' => true,
+                'description' => ''.esc_html__('Enter the title for the upload box', 'wpcloudplugins').'. '.sprintf(esc_html__('See %s for available placeholders', 'wpcloudplugins'), '<strong><u>'.esc_html__('Upload Folder Name', 'wpcloudplugins').'</u></strong>'),
                 'value' => empty($box_title) ? $default_box_title : $box_title,
             ]
         );
@@ -740,18 +740,18 @@ class WooCommerce_Uploads
         woocommerce_wp_textarea_input(
             [
                 'id' => 'outofthebox_upload_box_description',
-                'label' => __('Description Upload Box', 'wpcloudplugins'),
+                'label' => esc_html__('Description Upload Box', 'wpcloudplugins'),
                 'placeholder' => $default_box_description,
-                'desc_tip' => false,
-                'description' => '<br><br>'.__('Enter a short description of what the customer needs to upload', 'wpcloudplugins').'.',
+                'desc_tip' => true,
+                'description' => esc_html__('Enter a short description of what the customer needs to upload', 'wpcloudplugins').'. '.sprintf(esc_html__('See %s for available placeholders', 'wpcloudplugins'), '<strong><u>'.esc_html__('Upload Folder Name', 'wpcloudplugins').'</u></strong>').'. '.esc_html__('Shortcodes are supported', 'wpcloudplugins').'.',
                 'value' => empty($box_description) ? $default_box_description : $box_description,
             ]
         ); ?>
 
               <p class="form-field outofthebox_upload_folder ">
                 <label for="outofthebox_upload_folder">Upload Box</label>
-                <a href="#TB_inline?height=450&amp;width=800&amp;inlineId=oftb-embedded" class="button insert-outofthebox OutoftheBox-shortcodegenerator" style="float:none"><?php echo __('Build your Upload Box', 'wpcloudplugins'); ?></a>
-                <a href="#" class="" style="float:none" onclick="jQuery('#outofthebox_upload_box_shortcode').fadeToggle()"><?php echo __('Edit Shortcode Manually', 'wpcloudplugins'); ?></a>
+                <a href="#TB_inline?height=450&amp;width=800&amp;inlineId=oftb-embedded" class="button insert-outofthebox OutoftheBox-shortcodegenerator" style="float:none"><?php echo esc_html__('Build your Upload Box', 'wpcloudplugins'); ?></a>
+                <a href="#" class="" style="float:none" onclick="jQuery('#outofthebox_upload_box_shortcode').fadeToggle()"><?php echo esc_html__('Edit Shortcode Manually', 'wpcloudplugins'); ?></a>
                 <br/><br/>
                 <textarea class="long" style="display:none" name="outofthebox_upload_box_shortcode" id="outofthebox_upload_box_shortcode" placeholder="<?php echo $default_shortcode; ?>"  rows="3" cols="20"><?php echo (empty($shortcode)) ? $default_shortcode : $shortcode; ?></textarea>
               </p>
@@ -763,8 +763,8 @@ class WooCommerce_Uploads
         woocommerce_wp_text_input(
             [
                 'id' => 'outofthebox_upload_box_folder_template',
-                'label' => __('Upload Folder Name', 'wpcloudplugins'),
-                'description' => '<br><br>'.__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>'),
+                'label' => esc_html__('Upload Folder Name', 'wpcloudplugins'),
+                'description' => '<br><br>'.esc_html__('Unique folder name where the uploads should be stored. Make sure that Private Folder feature is enabled in the shortcode', 'wpcloudplugins').'. '.sprintf(esc_html__('Available placeholders: %s', 'wpcloudplugins'), '<code>%wc_order_id%</code>, <code>%wc_order_date_created%</code>, <code>%wc_order_quantity%</code>, <code>%wc_product_id%</code>, <code>%wc_product_id%</code>, <code>%wc_product_sku%</code>, <code>%wc_product_quantity%</code>, <code>%wc_product_name%</code>, <code>%user_login%</code>, <code>%user_email%</code>, <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>, <code>%jjjj-mm-dd%</code>'),
                 'desc_tip' => false,
                 'placeholder' => $default_folder_template,
                 'value' => empty($folder_template) ? $default_folder_template : $folder_template,
@@ -779,7 +779,7 @@ class WooCommerce_Uploads
         $this->woocommerce_wp_multi_checkbox([
             'id' => 'outofthebox_upload_box_active_on_status',
             'name' => 'outofthebox_upload_box_active_on_status[]',
-            'label' => __(''
+            'label' => esc_html__(''
                     .'Show when Order is', 'woocommerce'),
             'options' => wc_get_order_statuses(),
             'value' => $outofthebox_upload_box_active_on_status,
@@ -832,54 +832,28 @@ class WooCommerce_Uploads
     /**
      * Add the scripts and styles required for the new Data Tab.
      */
-    public function add_product_data_tab_scripts_and_style()
+    public function add_scripts()
     {
-        ?>
-        <style>
-          #woocommerce-product-data ul.wc-tabs li.cloud-uploads-dropbox_options a:before { font-family: Dashicons; content: '\f176'; }
-          .show_if_outofthebox_upload_box{
-            background: #fff;
-            border: 1px solid #e5e5e5;
-            margin: 5px 15px 10px;
-            padding: 1px 12px;
-            position: relative;
-            overflow: hidden;
-          }
-        </style>
-        <script>
-            jQuery(document).ready(function ($) {
-              $('input#_uploadable').change(function () {
-                var is_uploadable = $('input#_uploadable:checked').size();
-                $('.show_if_uploadable').hide();
-                $('.hide_if_uploadable').hide();
-                if (is_uploadable) {
-                  $('.hide_if_uploadable').hide();
-                }
-                if (is_uploadable) {
-                  $('.show_if_uploadable').show();
-                }
-              });
-              $('input#_uploadable').trigger('change');
+        $current_screen = get_current_screen();
 
-              $('input#outofthebox_upload_box').change(function () {
-                var outofthebox_upload_box = $('input#outofthebox_upload_box:checked').size();
-                $('.show_if_outofthebox_upload_box').hide();
-                if (outofthebox_upload_box) {
-                  $('.show_if_outofthebox_upload_box').show();
-                }
-              });
-              $('input#outofthebox_upload_box').trigger('change');
+        if (!in_array($current_screen->id, ['product', 'shop_order'])) {
+            return;
+        }
+        wp_register_style('outofthebox-woocommerce', plugins_url('woocommerce.css', __FILE__), OUTOFTHEBOX_VERSION);
+        wp_register_script('outofthebox-woocommerce', plugins_url('woocommerce.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION);
 
-              /* Shortcode Generator Popup */
-              $('.OutoftheBox-shortcodegenerator').click(function () {
-                var shortcode = $("#outofthebox_upload_box_shortcode").val();
-                shortcode = shortcode.replace('[outofthebox ', '').replace('"]', '');
-                var query = encodeURIComponent(shortcode).split('%3D%22').join('=').split('%22%20').join('&');
-                tb_show("Build Shortcode for Form", ajaxurl + '?action=outofthebox-getpopup&' + query + '&type=shortcodebuilder&for=woocommerce&asuploadbox=1&callback=wpcp_oftb_wc_add_content&TB_iframe=true&height=600&width=800');
-              });
-            });
-        </script>
-        <?php
+        wp_enqueue_style('outofthebox-woocommerce');
+        wp_enqueue_script('outofthebox-woocommerce');
+
+        // register translations
+        $translation_array = [
+            'choose_from' => sprintf(esc_html__('Choose from %s', 'wpcloudplugins'), 'Dropbox'),
+            'download_url' => '?action=outofthebox-wc-direct-download&id=',
+            'file_browser_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-getwoocommercepopup',
+            'wcpd_url' => OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-wcpd-direct-download&id=',
+        ];
+
+        wp_localize_script('outofthebox-woocommerce', 'outofthebox_woocommerce_translation', $translation_array);
     }
 
     /**
@@ -938,7 +912,7 @@ class WooCommerce_Uploads
         if ($this->requires_order_uploads($order)) {
             $actions['upload'] = [
                 'url' => $order->get_view_order_url().'#uploads',
-                'name' => __('Upload files', 'wpcloudplugins'),
+                'name' => esc_html__('Upload files', 'wpcloudplugins'),
             ];
         }
 
@@ -1007,23 +981,24 @@ class WooCommerce_Uploads
             if ($show_box) {
                 echo '<div class="woocommerce-order-upload-box">';
 
-                do_action('outofthebox_woocommerce_before_render_upload_field', [$order, $originial_product, $this]);
+                do_action('outofthebox_woocommerce_before_render_upload_field', $order, $originial_product, $this);
 
                 echo '<h2 id="uploads">'.$this->set_placeholders($box_title, $order, $originial_product).'</h2>';
 
                 if (!empty($box_description)) {
-                    echo '<p>'.$box_description.'</p>';
+                    echo '<p>'.$this->set_placeholders($box_description, $order, $originial_product).'</p>';
                 }
+
                 // Don't show the upload box when there isn't select a root folder
                 // IN THE DROPBOX VERSION DIR CAN BE EMPTY IN CASE THE ROOT FOLDER IS BEING USED
                 //if (empty($shortcode_params['dir']) && $shortcode_params['userfolder'] !== 'manual') {
-                //    echo sprintf(__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '', '') . '.';
+                //    echo sprintf(esc_html__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '', '') . '.';
                 //    continue;
                 //}
 
                 echo $this->get_woocommerce()->get_processor()->create_from_shortcode($shortcode_params);
 
-                do_action('outofthebox_woocommerce_before_render_upload_field', [$order, $originial_product, $this]);
+                do_action('outofthebox_woocommerce_after_render_upload_field', $order, $originial_product, $this);
                 echo '</div>';
             }
         }
@@ -1067,7 +1042,7 @@ class WooCommerce_Uploads
             // Don't show the upload box when there isn't select a root folder
             if (empty($shortcode_params['dir']) && 'manual' !== $shortcode_params['userfolder']) {
                 $product_url = admin_url('post.php?post='.$originial_product->get_id().'&action=edit');
-                echo sprintf(__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '<a href="'.$product_url.'">', '</a>').'.';
+                echo sprintf(esc_html__('Please %sconfigure%s the upload location for this product', 'wpcloudplugins'), '<a href="'.$product_url.'">', '</a>').'.';
 
                 continue;
             }
@@ -1127,6 +1102,13 @@ class WooCommerce_Uploads
             $upload_active_on = ['wc-pending', 'wc-processing'];
         }
         $upload_active = in_array('wc-'.$order->get_status(), $upload_active_on);
+
+        if (\is_admin()) {
+            $current_screen = \get_current_screen();
+            if (in_array($current_screen->post_type, ['shop_order'])) {
+                $upload_active = true;
+            }
+        }
 
         $show_upload_box = apply_filters('outofthebox_woocommerce_show_upload_field', $upload_active, $order, $product, $this);
 
@@ -1191,7 +1173,7 @@ class WooCommerce_Uploads
             $user->user_lastname = $order->get_billing_last_name();
             $user->user_email = $order->get_billing_email();
             $user->ID = $user_id;
-            $user->user_role = __('Anonymous user', 'wpcloudplugins');
+            $user->user_role = esc_html__('Anonymous user', 'wpcloudplugins');
         }
 
         $product_quantity = 0;
@@ -1204,6 +1186,7 @@ class WooCommerce_Uploads
         $output = strtr($template, [
             '%wc_order_id%' => $order->get_order_number(),
             '%wc_order_quantity%' => $order->get_item_count(),
+            '%wc_order_date_created%' => $order->get_date_created()->format('Y-m-d'),
             '%wc_product_id%' => $product->get_id(),
             '%wc_product_sku%' => $product->get_sku(),
             '%wc_product_name%' => $product->get_name(),

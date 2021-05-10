@@ -9,9 +9,14 @@ if (!defined('ABSPATH')) {
 
 class GravityPDF
 {
+    public function __construct()
+    {
+        $this->init();
+    }
+
     public function init()
     {
-        if (false === class_exists('GFPDF_Core')) {
+        if (false === get_option('gfpdf_current_version') && false === class_exists('GFPDF_Core')) {
             return;
         }
 
@@ -36,10 +41,10 @@ class GravityPDF
             'desc' => 'Save the created PDF to Dropbox',
             'type' => 'radio',
             'options' => [
-                'Yes' => __('Yes'),
-                'No' => __('No'),
+                'Yes' => esc_html__('Yes'),
+                'No' => esc_html__('No'),
             ],
-            'std' => __('No'),
+            'std' => esc_html__('No'),
         ];
 
         global $OutoftheBox;
@@ -92,7 +97,8 @@ class GravityPDF
             $processor->set_current_account($requested_account);
         } else {
             error_log(sprintf("[WP Cloud Plugin message]: Dropbox account (ID: %s) as it isn't linked with the plugin", $account_id));
-            die();
+
+            exit();
         }
 
         $client = $processor->get_app();

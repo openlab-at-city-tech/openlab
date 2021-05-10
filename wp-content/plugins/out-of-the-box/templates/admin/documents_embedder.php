@@ -13,7 +13,7 @@ if (!(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions
 // Add own styles and script and remove default ones
 $this->load_scripts();
 $this->load_styles();
-$this->load_custom_css();
+
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -45,7 +45,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php echo __('Embed Files', 'wpcloudplugins'); ?></title>
+  <title><?php echo esc_html__('Embed Files', 'wpcloudplugins'); ?></title>
   <?php wp_print_scripts(); ?>
   <?php wp_print_styles(); ?>
 </head>
@@ -60,14 +60,14 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
         <div class="outofthebox-form-buttons">
           <div id="do_embed" class="simple-button default">
-            <?php _e('Embed Files','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right"
+            <?php esc_html_e('Embed Files','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right"
               aria-hidden="true"></i></div>
         </div>
 
-        <div class="outofthebox-title"><?php echo __('Embed Files', 'wpcloudplugins'); ?></div>
+        <div class="outofthebox-title"><?php echo esc_html__('Embed Files', 'wpcloudplugins'); ?></div>
       </div>
       <div class="outofthebox-panel outofthebox-panel-full">
-        <p><?php _e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
+        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
         <?php
 
       // Add File Browser

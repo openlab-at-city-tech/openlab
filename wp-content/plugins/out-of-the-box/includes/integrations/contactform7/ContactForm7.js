@@ -82,4 +82,4 @@ jQuery(document).ready(function ($) {
     window.modal_action = modal_action;
 
   });
-});
+})
