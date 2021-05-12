@@ -99,6 +99,8 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 
 			<?php openlab_group_privacy_settings( $group_type ); ?>
 
+			<?php openlab_group_privacy_membership_settings( $group_type ); ?>
+
 			<?php if ( 'portfolio' !== $group_type ) : ?>
 				<?php openlab_group_member_role_settings( $group_type ); ?>
 				<?php openlab_group_sharing_settings_markup( $group_type ); ?>

@@ -7512,6 +7512,18 @@ input[type="submit"] {
     width: 95%;
   }
 }
+.panel-privacy-membership-settings.hidden-group {
+  display: none;
+}
+.panel-privacy-membership-settings.public-group .privacy-membership-settings-private {
+  display: none;
+}
+.panel-privacy-membership-settings.private-group .privacy-membership-settings-public {
+  display: none;
+}
+.panel-privacy-membership-settings .panel-body label {
+  font-weight: normal;
+}
 .radio label,
 .radio-inline label {
   font-weight: 700;
@@ -9475,9 +9487,9 @@ body form .checkbox-list-container {
   }
 }
 .my-group-archive-sort {
-	display: flex;
-	justify-content: flex-end;
-	margin-right: 7.5px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 7.5px;
 }
 .group-list {
   margin-top: 50px;

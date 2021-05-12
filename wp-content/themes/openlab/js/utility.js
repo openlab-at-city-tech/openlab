@@ -787,6 +787,20 @@ OpenLab.utility = (function ($) {
 					}
 				);
 
+			$('input[name="group-status"]').on(
+				'change',
+				function( e ) {
+					var statusClasses = [ 'public-group', 'private-group', 'hidden-group' ];
+					var newStatusClass = e.target.value + '-group';
+
+					if ( -1 === statusClasses.indexOf( newStatusClass ) ) {
+						return;
+					}
+
+					$( '.panel-privacy-membership-settings' ).removeClass( statusClasses.join( ' ' ) ).addClass( newStatusClass );
+				}
+			);
+
 		}
 	);//end document.ready
 
