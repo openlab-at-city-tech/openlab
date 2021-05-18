@@ -973,22 +973,24 @@ function openlab_group_creators_save( $group ) {
 		return;
 	}
 
-	// Delete existing and replace.
-	groups_delete_groupmeta( $group_id, 'group_creator' );
-	foreach ( $_POST['group-creators'] as $index => $group_creator ) {
-		if ( '_nullcreator' === $index ) {
-			continue;
-		}
+	$creators_to_save = array_filter(
+		$_POST['group-creators'],
+		function( $creator, $index ) {
+			if ( '_nullcreator' === $index ) {
+				return false;
+			}
 
-		// Discard empty entries.
-		if ( empty( $group_creator['type'] ) ) {
-			continue;
-		}
+			// Discard empty entries.
+			if ( empty( $creator['type'] ) ) {
+				return false;
+			}
 
-		// @todo validate and URL, etc
+			return true;
+		},
+		ARRAY_FILTER_USE_BOTH
+	);
 
-		groups_add_groupmeta( $group_id, 'group_creator', $group_creator );
-	}
+	openlab_save_group_creators( $group_id, $creators_to_save );
 
 	if ( isset( $_POST['creators-additional-text'] ) ) {
 		$additional_text = wp_kses( $_POST['creators-additional-text'], openlab_creators_additional_text_allowed_tags() );
@@ -997,6 +999,21 @@ function openlab_group_creators_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_creators_save' );
+
+/**
+ * Saves a group's Creators.
+ *
+ * @param int   $group_id
+ * @param array $creators
+ */
+function openlab_save_group_creators( $group_id, $creators ) {
+	// Delete existing and replace.
+	groups_delete_groupmeta( $group_id, 'group_creator' );
+
+	foreach ( $creators as $creator ) {
+		groups_add_groupmeta( $group_id, 'group_creator', $creator );
+	}
+}
 
 /**
  * Gets a list of allowed HTML tags for 'Additional Text'.
@@ -1068,3 +1085,28 @@ function openlab_group_creator_autocomplete_cb() {
 	die();
 }
 add_action( 'wp_ajax_openlab_group_creator_autocomplete', 'openlab_group_creator_autocomplete_cb' );
+
+/**
+ * Saves the default group Creators on creation.
+ *
+ * @param int $group_id
+ */
+function openlab_save_group_creators_on_creation( $group_id ) {
+	$creators = array_map(
+		function( $contact_id ) {
+			$username = bp_core_get_username( $contact_id );
+			if ( ! $username ) {
+				return null;
+			}
+
+			return [
+				'type'         => 'member',
+				'member-login' => $username,
+			];
+		},
+		openlab_get_all_group_contact_ids( $group_id )
+	);
+
+	openlab_save_group_creators( $group_id, array_filter( $creators ) );
+}
+add_action( 'groups_created_group', 'openlab_save_group_creators_on_creation' );
