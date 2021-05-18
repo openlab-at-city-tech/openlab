@@ -787,14 +787,13 @@ function openlab_group_creators_metabox() {
 
 	// Ensure numeric indexes at runtime - not stored in DB.
 	$c_index  = 1;
-	$creators = array_map(
-		function( $creator ) use ( $c_index ) {
-			$creator['entry_id'] = 'creator' . $c_index;
-			$c_index++;
-			return $creator;
-		},
-		openlab_get_group_creators( $group_id )
-	);
+	$creators = [];
+	foreach ( openlab_get_group_creators( $group_id ) as $creator ) {
+		$creator['entry_id'] = 'creator' . $c_index;
+		$c_index++;
+		$creators[] = $creator;
+	}
+
 	$additional_text = openlab_get_group_creators_additional_text( $group_id );
 
 	wp_enqueue_script( 'openlab-creators', plugins_url() . '/wds-citytech/assets/js/creators.js', array( 'jquery-ui-autocomplete' ) );

@@ -424,7 +424,69 @@ function cuny_group_single() {
 		}
 	);
 
-	$credits_markup = openlab_format_group_clone_history_data_list( $clone_history );
+	// Non-clones show Acknowledgements only if Creators differ from Contacts.
+	$show_acknowledgements = false;
+	if ( ! $clone_history ) {
+		$credits_markup = '';
+
+		$has_non_member_creator  = false;
+		$has_non_contact_creator = false;
+
+		$group_creators = openlab_get_group_creators( $group_id );
+		foreach ( $group_creators as $group_creator ) {
+			if ( 'member' === $group_creator['type'] ) {
+				$user = get_user_by( 'slug', $group_creator['member-login'] );
+
+				if ( ! $user || ! in_array( $user->ID, $all_group_contacts, true ) ) {
+					$has_non_contact_creator = true;
+					break;
+				}
+			} elseif ( 'non-member' === $group_creator['type'] ) {
+				$has_non_member_creator = true;
+				break;
+			}
+		}
+
+		if ( $has_non_member_creator || $has_non_contact_creator ) {
+			$creator_items = array_map(
+				function( $creator ) {
+					switch ( $creator['type'] ) {
+						case 'member' :
+							$user = get_user_by( 'slug', $creator['member-login'] );
+
+							if ( ! $user ) {
+								return null;
+							}
+
+							return sprintf(
+								'<a href="%s">%s</a>',
+								esc_attr( bp_core_get_user_domain( $user->ID ) ),
+								esc_html( bp_core_get_user_displayname( $user->ID ) )
+							);
+						break;
+
+						case 'non-member' :
+							return esc_html( $creator['non-member-name'] );
+						break;
+					}
+				},
+				$group_creators
+			);
+
+			$creator_items = array_filter( $creator_items );
+
+			if ( $creator_items ) {
+				$credits_markup        = implode( ', ', $creator_items );
+				$credits_intro_text    = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
+				$show_acknowledgements = true;
+			}
+		}
+
+	} else {
+		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
+		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
+		$show_acknowledgements = true;
+	}
 
     ?>
 
@@ -530,10 +592,10 @@ function cuny_group_single() {
 								</div>
 							<?php endif; ?>
 
-                            <?php if ( $clone_history ) : ?>
+                            <?php if ( $show_acknowledgements ) : ?>
                                 <div class="table-row row">
                                     <div class="col-xs-24 status-message clone-acknowledgements">
-										<p>Acknowledgements: This <?php echo esc_html( $group_type ); ?> is based on the following <?php echo esc_html( $group_type ); ?>(s):</p>
+										<p><?php echo esc_html( $credits_intro_text ); ?></p>
                                         <ul class="group-credits">
                                             <?php echo $credits_markup; ?>
                                         </ul>
@@ -649,10 +711,10 @@ function cuny_group_single() {
 								</div>
 							<?php endif; ?>
 
-							<?php if ( $clone_history ) : ?>
+							<?php if ( $show_acknowledgements ) : ?>
 								<div class="table-row row">
 									<div class="col-xs-24 status-message clone-acknowledgements">
-										<p>Acknowledgements: This <?php echo esc_html( $group_type ); ?> is based on the following <?php echo esc_html( $group_type ); ?>(s):</p>
+										<p><?php echo esc_html( $credits_intro_text ); ?></p>
 										<ul class="group-credits">
 											<?php echo $credits_markup; ?>
 										</ul>
