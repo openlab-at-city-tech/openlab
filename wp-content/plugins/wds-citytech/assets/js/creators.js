@@ -202,13 +202,11 @@
 
 			case 'non-member' :
 				var nonMemberName = $entryEl.find( '.non-member-name' ).val();
-				var nonMemberUrl = $entryEl.find( '.non-member-url' ).val();
 
 				$previewEl.append( '<span class="fa fa-globe"></span>' );
 
-				var $nonMemberLinkEl = $( '<a></a>' );
+				var $nonMemberLinkEl = $( '<span></span>' );
 				$nonMemberLinkEl.text( nonMemberName );
-				$nonMemberLinkEl.attr( 'href', nonMemberUrl );
 				$previewEl.append( $nonMemberLinkEl );
 				break;
 		}

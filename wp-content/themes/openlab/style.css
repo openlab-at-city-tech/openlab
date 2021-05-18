@@ -8076,8 +8076,7 @@ body ul.group-creator-edit-list > li:nth-of-type(even) {
 body .group-creator-form-entry {
   display: flex;
 }
-body .group-creator-form-entry.creator-type-member .creator-fields-non-member-name,
-body .group-creator-form-entry.creator-type-member .creator-fields-non-member-url {
+body .group-creator-form-entry.creator-type-member .creator-fields-non-member-name {
   display: none;
 }
 body .group-creator-form-entry.creator-type-non-member .creator-fields-member-login {

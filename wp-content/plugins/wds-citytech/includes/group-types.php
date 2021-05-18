@@ -894,7 +894,6 @@ function openlab_creator_form_entry( $settings ) {
 			'type'            => '',
 			'member-login'    => '',
 			'non-member-name' => '',
-			'non-member-url'  => '',
 		],
 		$settings
 	);
@@ -943,11 +942,6 @@ function openlab_creator_form_entry( $settings ) {
 		<div class="creator-form-fields creator-fields-non-member-name">
 			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-name]">Non-Member Name</label>
 			<input type="text" class="non-member-name" id="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-name" class="non-member-name" name="group-creators[<?php echo esc_attr( $r['entry_id'] ); ?>][non-member-name]" value="<?php echo esc_attr( $r['non-member-name'] ); ?>" placeholder="Creator's name" />
-		</div>
-
-		<div class="creator-form-fields creator-fields-non-member-url">
-			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-url]">Non-Member URL</label>
-			<input type="text" class="non-member-url" id="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-url" class="non-member-url" name="group-creators[<?php echo esc_attr( $r['entry_id'] ); ?>][non-member-url]" value="<?php echo esc_attr( $r['non-member-url'] ); ?>" placeholder="Creator's URL (optional)" pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?" />
 		</div>
 	</div>
 	<?php
