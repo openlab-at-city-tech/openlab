@@ -1025,6 +1025,7 @@ function openlab_creators_additional_text_allowed_tags() {
 		],
 		'em'     => [],
 		'strong' => [],
+		'p'      => [],
 	];
 }
 

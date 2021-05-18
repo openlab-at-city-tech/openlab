@@ -424,13 +424,18 @@ function cuny_group_single() {
 		}
 	);
 
-	// Non-clones show Acknowledgements only if Creators differ from Contacts.
+	/*
+	 * Non-clones show Acknowledgements only if Creators differ from Contacts,
+	 * or if there is Additional Text to show.
+	 */
 	$show_acknowledgements = false;
 	if ( ! $clone_history ) {
 		$credits_markup = '';
 
 		$has_non_member_creator  = false;
 		$has_non_contact_creator = false;
+
+		$additional_text = openlab_get_group_creators_additional_text( $group_id );
 
 		$group_creators = openlab_get_group_creators( $group_id );
 		foreach ( $group_creators as $group_creator ) {
@@ -476,10 +481,22 @@ function cuny_group_single() {
 			$creator_items = array_filter( $creator_items );
 
 			if ( $creator_items ) {
-				$credits_markup        = implode( ', ', $creator_items );
-				$credits_intro_text    = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
 				$show_acknowledgements = true;
+
+				$credits_intro_text = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
+				$credits_markup     = implode( ', ', $creator_items );
+
+				if ( $additional_text ) {
+					$post_credits_markup .= '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+				}
 			}
+		} elseif ( $additional_text ) {
+			// Don't show Creators, but do show Additional Text, if available.
+			$show_acknowledgements = true;
+			$credits_intro_text    = sprintf(
+				'Acknowledgements: %s',
+				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
+			);
 		}
 
 	} else {
@@ -596,9 +613,16 @@ function cuny_group_single() {
                                 <div class="table-row row">
                                     <div class="col-xs-24 status-message clone-acknowledgements">
 										<p><?php echo esc_html( $credits_intro_text ); ?></p>
-                                        <ul class="group-credits">
-                                            <?php echo $credits_markup; ?>
-                                        </ul>
+
+										<?php if ( $credits_markup ) : ?>
+											<ul class="group-credits">
+												<?php echo $credits_markup; ?>
+											</ul>
+										<?php endif; ?>
+
+										<?php if ( ! empty( $post_credits_markup ) ) : ?>
+											<?php echo $post_credits_markup; ?>
+										<?php endif; ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -715,9 +739,16 @@ function cuny_group_single() {
 								<div class="table-row row">
 									<div class="col-xs-24 status-message clone-acknowledgements">
 										<p><?php echo esc_html( $credits_intro_text ); ?></p>
-										<ul class="group-credits">
-											<?php echo $credits_markup; ?>
-										</ul>
+
+										<?php if ( $credits_markup ) : ?>
+											<ul class="group-credits">
+												<?php echo $credits_markup; ?>
+											</ul>
+										<?php endif; ?>
+
+										<?php if ( ! empty( $post_credits_markup ) ) : ?>
+											<?php echo $post_credits_markup; ?>
+										<?php endif; ?>
 									</div>
 								</div>
 							<?php endif; ?>
