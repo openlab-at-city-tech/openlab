@@ -127,12 +127,8 @@ jQuery( document ).ready(
 		}
 
 		function showHideAll() {
-			showHide( 'wds-website' );
-			showHide( 'wds-website-existing' );
-			showHide( 'wds-website-external' );
 			showHide( 'wds-website-tooltips' );
-			showHide( 'wds-website-clone' );
-				showHide( 'check-note-wrapper' );
+			showHide( 'check-note-wrapper' );
 		}
 
 		function do_external_site_query(e) {
@@ -213,6 +209,10 @@ jQuery( document ).ready(
 				if ( ! $( setuptoggle ).is( ':checked' ) ) {
 					$( setuptoggle ).trigger( 'click' );
 				}
+
+				// Hide 'Create a new site' and 'Use an existing site'
+				$( '#wds-website' ).hide();
+				$( '#wds-website-existing' ).hide();
 			} else {
 				// Check "Create a course" near the top
 				$( '#create-or-clone-create' ).attr( 'checked', true );
@@ -221,6 +221,10 @@ jQuery( document ).ready(
 				$group_to_clone.addClass( 'disabled-opt' );
 				$group_to_clone.attr( 'disabled', true );
 				$( '#ol-clone-description' ).addClass( 'disabled-opt' );
+
+				// Show 'Create a new site' and 'Use an existing site'
+				$( '#wds-website' ).show();
+				$( '#wds-website-existing' ).show();
 
 				group_id_to_clone = 0;
 			}
