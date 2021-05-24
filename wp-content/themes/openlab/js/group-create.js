@@ -27,7 +27,8 @@ jQuery( document ).ready(
 		new_group_type = $( '#new-group-type' ).val(),
 		$body          = $( 'body' ),
 		$gc_submit     = $( '#group-creation-create' ),
-		$required_fields;
+		$required_fields,
+    $setuptoggle   = $( 'input[name="wds_website_check"]' );
 
 		if ( $body.hasClass( 'group-admin' ) ) {
 			form_type = 'admin';
@@ -40,6 +41,20 @@ jQuery( document ).ready(
 		$form = $( form );
 
 		$required_fields = $form.find( 'input:required' );
+
+		function maybeShowSiteFields() {
+			if ( ! $setuptoggle.length ) {
+				return;
+			}
+
+			var showSiteFields = $setuptoggle.is( ':checked' );
+
+			if ( showSiteFields ) {
+				$( '#site-options' ).show();
+			} else {
+				$( '#site-options' ).hide();
+			}
+		}
 
 		function new_old_switch( noo ) {
 			var radioid = '#new_or_old_' + noo;
@@ -206,8 +221,8 @@ jQuery( document ).ready(
 				}
 
 				// Ensure that the "Set up a site" section is visible
-				if ( ! $( setuptoggle ).is( ':checked' ) ) {
-					$( setuptoggle ).trigger( 'click' );
+				if ( ! $setuptoggle.is( ':checked' ) ) {
+					$setuptoggle.trigger( 'click' );
 				}
 
 				// Hide 'Create a new site' and 'Use an existing site'
@@ -316,8 +331,8 @@ jQuery( document ).ready(
 						// Associated site
 						if ( r.site_id ) {
 							// Check 'Set up a site'
-							if ( ! setuptoggle.is( ':checked' ) ) {
-								setuptoggle.trigger( 'click' );
+							if ( ! $setuptoggle.is( ':checked' ) ) {
+								$setuptoggle.trigger( 'click' );
 							}
 
 							// Un-grey the website clone options
@@ -407,14 +422,18 @@ jQuery( document ).ready(
 		);
 
 		/* "Set up a site" toggle */
-		var setuptoggle = $( 'input[name="wds_website_check"]' );
-		$( setuptoggle ).on( 'click', function(){ showHideAll(); } );
-		if ( $( setuptoggle ).is( ':checked' ) ) {
+		$setuptoggle.on( 'click', function(){
+			showHideAll();
+			maybeShowSiteFields();
+		} );
+
+		if ( $setuptoggle.is( ':checked' ) ) {
 			showHideAll();
 		};
+		maybeShowSiteFields();
 
-		if ( 'course' === group_type && ! $( setuptoggle ).is( ':checked' ) ) {
-			$( setuptoggle ).trigger( 'click' );
+		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
+			$setuptoggle.trigger( 'click' );
 		}
 
 		// Set up Invite Anyone autocomplete
@@ -470,7 +489,7 @@ jQuery( document ).ready(
 			}
 
 			// If "Set up a site" is not checked, there's no validation to do
-			if ( $( setuptoggle ).length && ! $( setuptoggle ).is( ':checked' ) ) {
+			if ( $setuptoggle.length && ! $setuptoggle.is( ':checked' ) ) {
 				return true;
 			}
 

@@ -668,148 +668,149 @@ function wds_bp_group_meta() {
 							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
-						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
-							<div>
+						<div id="site-options">
+							<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
+								<div>
 
-							<?php
-							switch ( $group_type ) {
-								case 'course':
-									?>
-									<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
-
-									<ul class="ol-tooltip">
-										<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-										<li class="hyphenate">smithadv1100sp2012</li>
-									</ul>
-
-									<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
-									<?php
-									break;
-
-								case 'project':
-									?>
-									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
-									<?php
-									break;
-
-								case 'club':
-									?>
-									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
-									<?php
-									break;
-							}
-							?>
-							</div>
-						</div>
-
-						<?php if ( bp_is_group_create() && $group_type !== 'portfolio' ) : ?>
-							<div id="wds-website-clone" class="form-field form-required">
-								<div id="noo_clone_options">
-									<div class="row">
-										<div class="radio disabled-opt col-sm-6">
-											<label>
-												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-												Name your cloned site:</label>
-										</div>
-										<div class="col-sm-5 site-label">
-											<?php global $current_site; ?>
-											<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
-										</div>
-										<div class="col-sm-13">
-											<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
-										</div>
-										<input name="blog-id-to-clone" value="" type="hidden" />
-									</div>
-									<p id="cloned-site-url"></p>
-								</div>
-
-							</div>
-						<?php endif ?>
-
-						<div id="wds-website" class="form-field form-required">
-
-							<div id="noo_new_options">
-								<div id="noo_new_options-div" class="row">
-									<div class="radio col-sm-6">
-										<label>
-											<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
-											Create a new site:</label>
-									</div>
-
-									<div class="col-sm-5 site-label">
-										<?php
-										$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
-										echo esc_html( $current_site->domain . $current_site->path );
+								<?php
+								switch ( $group_type ) {
+									case 'course':
 										?>
-									</div>
+										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
-									<div class="col-sm-13">
-										<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
-									</div>
+										<ul class="ol-tooltip">
+											<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+											<li class="hyphenate">smithadv1100sp2012</li>
+										</ul>
+
+										<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+										<?php
+										break;
+
+									case 'project':
+										?>
+										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
+										<?php
+										break;
+
+									case 'club':
+										?>
+										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+										<?php
+										break;
+								}
+								?>
 								</div>
-
 							</div>
-						</div>
 
-						<?php /* Existing blogs - only display if some are available */ ?>
-						<?php
-						// Exclude blogs already used as groupblogs
-						global $wpdb, $bp;
-						$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
+							<?php if ( bp_is_group_create() && $group_type !== 'portfolio' ) : ?>
+								<div id="wds-website-clone" class="form-field form-required">
+									<div id="noo_clone_options">
+										<div class="row">
+											<div class="radio disabled-opt col-sm-6">
+												<label>
+													<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
+													Name your cloned site:</label>
+											</div>
+											<div class="col-sm-5 site-label">
+												<?php global $current_site; ?>
+												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
+											</div>
+											<div class="col-sm-13">
+												<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
+											</div>
+											<input name="blog-id-to-clone" value="" type="hidden" />
+										</div>
+										<p id="cloned-site-url"></p>
+									</div>
 
-						foreach ( $user_blogs as $ubid => $ub ) {
-							if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
-								unset( $user_blogs[ $ubid ] );
-							}
-						}
-						$user_blogs = array_values( $user_blogs );
-						?>
+								</div>
+							<?php endif ?>
 
-						<?php if ( ! empty( $user_blogs ) ) : ?>
-							<div id="wds-website-existing" class="form-field form-required">
+							<div id="wds-website" class="form-field form-required">
 
-								<div id="noo_old_options">
-									<div class="row">
+								<div id="noo_new_options">
+									<div id="noo_new_options-div" class="row">
 										<div class="radio col-sm-6">
 											<label>
-												<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-												Use an existing site:</label>
+												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
+												Create a new site:</label>
+										</div>
+
+										<div class="col-sm-5 site-label">
+											<?php
+											$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+											echo esc_html( $current_site->domain . $current_site->path );
+											?>
+										</div>
+
+										<div class="col-sm-13">
+											<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<?php /* Existing blogs - only display if some are available */ ?>
+							<?php
+							// Exclude blogs already used as groupblogs
+							global $wpdb, $bp;
+							$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
+
+							foreach ( $user_blogs as $ubid => $ub ) {
+								if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
+									unset( $user_blogs[ $ubid ] );
+								}
+							}
+							$user_blogs = array_values( $user_blogs );
+							?>
+
+							<?php if ( ! empty( $user_blogs ) ) : ?>
+								<div id="wds-website-existing" class="form-field form-required">
+
+									<div id="noo_old_options">
+										<div class="row">
+											<div class="radio col-sm-6">
+												<label>
+													<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
+													Use an existing site:</label>
+											</div>
+											<div class="col-sm-18">
+												<label class="sr-only" for="groupblog-blogid">Choose a site</label>
+												<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
+													<option value="0">- Choose a site -</option>
+													<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
+														<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
+													<?php endforeach ?>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php endif ?>
+
+							<div id="wds-website-external" class="form-field form-required">
+
+								<div id="noo_external_options">
+									<div class="form-group row">
+										<div class="radio col-sm-6">
+											<label>
+												<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
+												Use an external site:
+											</label>
 										</div>
 										<div class="col-sm-18">
-											<label class="sr-only" for="groupblog-blogid">Choose a site</label>
-											<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
-												<option value="0">- Choose a site -</option>
-												<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
-													<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
-												<?php endforeach ?>
-											</select>
+											<label class="sr-only" for="external-site-url">Input external site URL</label>
+											<input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
+											<a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
 										</div>
 									</div>
 								</div>
 							</div>
-						<?php endif ?>
-
-						<div id="wds-website-external" class="form-field form-required">
-
-							<div id="noo_external_options">
-								<div class="form-group row">
-									<div class="radio col-sm-6">
-										<label>
-											<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
-											Use an external site:
-										</label>
-									</div>
-									<div class="col-sm-18">
-										<label class="sr-only" for="external-site-url">Input external site URL</label>
-										<input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
-										<a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
-									</div>
-								</div>
-							</div>
+							<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
 						</div>
-						<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
-					</div>
-
+					</div><!-- #site-options -->
 				<?php endif; ?>
 			</div>
 		</div>
