@@ -330,6 +330,8 @@ jQuery( document ).ready(
 
 						// Associated site
 						if ( r.site_id ) {
+							$( '#panel-site-details' ).hide();
+
 							// Check 'Set up a site'
 							if ( ! $setuptoggle.is( ':checked' ) ) {
 								$setuptoggle.trigger( 'click' );
@@ -348,7 +350,9 @@ jQuery( document ).ready(
 							$( '#cloned-site-url' ).html( 'Your original address was: ' + r.site_url );
 							$( '#blog-id-to-clone' ).val( r.site_id );
 						} else {
-							// Grey out the website clone options
+							// Show the Site Details section.
+							$( '#panel-site-details' ).show();
+
 							$( '#wds-website-clone .radio' ).addClass( 'disabled-opt' );
 							$( '#wds-website-clone input[name="new_or_old"]' ).attr( 'disabled','disabled' );
 

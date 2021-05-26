@@ -604,7 +604,7 @@ function wds_bp_group_meta() {
 
 		<?php $group_site_url = openlab_get_group_site_url( $the_group_id ); ?>
 
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="panel-site-details">
 			<div class="panel-heading">Site Details</div>
 			<div class="panel-body">
 
