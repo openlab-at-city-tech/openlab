@@ -330,8 +330,6 @@ jQuery( document ).ready(
 
 						// Associated site
 						if ( r.site_id ) {
-							$( '#panel-site-details' ).hide();
-
 							// Check 'Set up a site'
 							if ( ! $setuptoggle.is( ':checked' ) ) {
 								$setuptoggle.trigger( 'click' );
@@ -350,9 +348,6 @@ jQuery( document ).ready(
 							$( '#cloned-site-url' ).html( 'Your original address was: ' + r.site_url );
 							$( '#blog-id-to-clone' ).val( r.site_id );
 						} else {
-							// Show the Site Details section.
-							$( '#panel-site-details' ).show();
-
 							$( '#wds-website-clone .radio' ).addClass( 'disabled-opt' );
 							$( '#wds-website-clone input[name="new_or_old"]' ).attr( 'disabled','disabled' );
 
@@ -390,6 +385,13 @@ jQuery( document ).ready(
 			$create_or_clone  = $( 'input[name="create-or-clone"]' );
 			create_or_clone   = $create_or_clone.val();
 			group_id_to_clone = $.urlParam( 'clone' );
+
+			if ( 'create' === create_or_clone ) {
+				// Show the Site Details section.
+				$( '#panel-site-details' ).show();
+			} else {
+				$( '#panel-site-details' ).hide();
+			}
 
 			if ( group_id_to_clone ) {
 				// Clone ID passed to URL
