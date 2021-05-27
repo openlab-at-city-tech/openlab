@@ -379,19 +379,20 @@ jQuery( document ).ready(
 		/* Clone setup */
 		var group_type = $.urlParam( 'type' );
 
+		var $create_or_clone = $( 'input[name="create-or-clone"]' );
+		var create_or_clone   = $create_or_clone.val();
+
+		if ( 'create' === create_or_clone ) {
+			// Show the Site Details section.
+			$( '#panel-site-details' ).show();
+		} else {
+			$( '#panel-site-details' ).hide();
+		}
+
 		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
-			var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
+			var group_id_to_clone, new_create_or_clone;
 
-			$create_or_clone  = $( 'input[name="create-or-clone"]' );
-			create_or_clone   = $create_or_clone.val();
 			group_id_to_clone = $.urlParam( 'clone' );
-
-			if ( 'create' === create_or_clone ) {
-				// Show the Site Details section.
-				$( '#panel-site-details' ).show();
-			} else {
-				$( '#panel-site-details' ).hide();
-			}
 
 			if ( group_id_to_clone ) {
 				// Clone ID passed to URL
@@ -406,16 +407,23 @@ jQuery( document ).ready(
 				function() {
 					new_create_or_clone = 'create' == $( this ).val() ? 'off' : 'on';
 					toggle_clone_options( new_create_or_clone );
-
-					if ( 'create' === create_or_clone ) {
-						// Show the Site Details section.
-						$( '#panel-site-details' ).show();
-					} else {
-						$( '#panel-site-details' ).hide();
-					}
 				}
 			);
 		}
+
+		$create_or_clone.on(
+			'change',
+			function() {
+				new_create_or_clone = 'create' == $( this ).val() ? 'off' : 'on';
+
+				if ( 'create' === new_create_or_clone ) {
+					// Show the Site Details section.
+					$( '#panel-site-details' ).show();
+				} else {
+					$( '#panel-site-details' ).hide();
+				}
+			}
+		);
 
 		// Switching between groups to clone
 		$( '#group-to-clone' ).on(
