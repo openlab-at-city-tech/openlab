@@ -229,6 +229,9 @@ jQuery( document ).ready(
 				$( '#wds-website' ).hide();
 				$( '#wds-website-existing' ).hide();
 			} else {
+				// Show the Site Details section.
+				$( '#panel-site-details' ).show();
+
 				// Check "Create a course" near the top
 				$( '#create-or-clone-create' ).attr( 'checked', true );
 
@@ -330,6 +333,9 @@ jQuery( document ).ready(
 
 						// Associated site
 						if ( r.site_id ) {
+							// Show the Site Details section.
+							$( '#panel-site-details' ).show();
+
 							// Check 'Set up a site'
 							if ( ! $setuptoggle.is( ':checked' ) ) {
 								$setuptoggle.trigger( 'click' );
@@ -348,6 +354,11 @@ jQuery( document ).ready(
 							$( '#cloned-site-url' ).html( 'Your original address was: ' + r.site_url );
 							$( '#blog-id-to-clone' ).val( r.site_id );
 						} else {
+							// Hide the Site Details section if cloning a group without a site.
+							if ( group_id ) {
+								$( '#panel-site-details' ).hide();
+							}
+
 							$( '#wds-website-clone .radio' ).addClass( 'disabled-opt' );
 							$( '#wds-website-clone input[name="new_or_old"]' ).attr( 'disabled','disabled' );
 
@@ -382,13 +393,6 @@ jQuery( document ).ready(
 		var $create_or_clone = $( 'input[name="create-or-clone"]' );
 		var create_or_clone   = $create_or_clone.val();
 
-		if ( 'create' === create_or_clone ) {
-			// Show the Site Details section.
-			$( '#panel-site-details' ).show();
-		} else {
-			$( '#panel-site-details' ).hide();
-		}
-
 		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
 			var group_id_to_clone, new_create_or_clone;
 
@@ -410,20 +414,6 @@ jQuery( document ).ready(
 				}
 			);
 		}
-
-		$create_or_clone.on(
-			'change',
-			function() {
-				new_create_or_clone = 'create' == $( this ).val() ? 'off' : 'on';
-
-				if ( 'create' === new_create_or_clone ) {
-					// Show the Site Details section.
-					$( '#panel-site-details' ).show();
-				} else {
-					$( '#panel-site-details' ).hide();
-				}
-			}
-		);
 
 		// Switching between groups to clone
 		$( '#group-to-clone' ).on(
