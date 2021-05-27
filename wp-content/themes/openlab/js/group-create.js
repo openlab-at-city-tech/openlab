@@ -406,6 +406,13 @@ jQuery( document ).ready(
 				function() {
 					new_create_or_clone = 'create' == $( this ).val() ? 'off' : 'on';
 					toggle_clone_options( new_create_or_clone );
+
+					if ( 'create' === create_or_clone ) {
+						// Show the Site Details section.
+						$( '#panel-site-details' ).show();
+					} else {
+						$( '#panel-site-details' ).hide();
+					}
 				}
 			);
 		}
