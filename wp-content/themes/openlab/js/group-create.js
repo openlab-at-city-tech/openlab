@@ -504,6 +504,11 @@ jQuery( document ).ready(
 				return true;
 			}
 
+			// Ignore the 'Set up a site' toggle if the section of the form is hidden.
+			if ( $( '#panel-site-details' ).is( ':hidden' ) ) {
+				return true;
+			}
+
 			var new_or_old = $( 'input[name=new_or_old]:checked' ).val();
 			var domain, $domain_field;
 
