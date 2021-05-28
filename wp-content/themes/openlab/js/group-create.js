@@ -357,6 +357,7 @@ jQuery( document ).ready(
 							// Hide the Site Details section if cloning a group without a site.
 							if ( group_id ) {
 								$( '#panel-site-details' ).hide();
+								$setuptoggle.prop( 'checked', false );
 							}
 
 							$( '#wds-website-clone .radio' ).addClass( 'disabled-opt' );
@@ -501,11 +502,6 @@ jQuery( document ).ready(
 
 			// If "Set up a site" is not checked, there's no validation to do
 			if ( $setuptoggle.length && ! $setuptoggle.is( ':checked' ) ) {
-				return true;
-			}
-
-			// Ignore the 'Set up a site' toggle if the section of the form is hidden.
-			if ( $( '#panel-site-details' ).is( ':hidden' ) ) {
 				return true;
 			}
 
