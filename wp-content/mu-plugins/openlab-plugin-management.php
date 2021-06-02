@@ -79,6 +79,7 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-swfobject/wp-swfobject.php',
 		'wpbadgedisplay/wpbadgedisplay.php',
 		'wpbadger/wpbadger.php',
+		'wp-to-twitter/wp-to-twitter.php',
 	);
 
 	if ( ! is_super_admin() ) {
