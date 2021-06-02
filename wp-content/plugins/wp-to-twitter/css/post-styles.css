@@ -1,0 +1,339 @@
+#wp2t .jtw {
+    position: relative;
+    padding-bottom: 1.4em;
+}
+
+#wp2t .jtw textarea {
+    font-size: 1.2em;
+	width: 100%;
+}
+
+#wp2t .counter {
+    position: absolute;
+    right: 4%;
+    bottom: 2px;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #666;
+}
+
+#wpt_custom_retweets .jtw2 label {
+	display: inline-block;
+	width: 4em;
+}
+
+#wpt_custom_retweets {
+	padding: .5em;
+	border: 1px solid #eee; 
+}
+
+#wpt_selected_image img {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+}
+
+
+.wp-to-twitter .panel-toggle {
+	margin-bottom: 0;
+}
+
+#wpt_custom_retweets fieldset {
+	margin: 1em 0;
+	border-bottom: 1px solid #ccc;
+}
+
+#wp2t .warning {
+    color: #700;
+}
+
+#wp2t .exceeded {
+    color: #e00;
+}
+
+#wp2t code span {
+    border-bottom: 1px dashed !important;
+    cursor: pointer;
+}
+
+#wp2t .jtw {
+    margin-right: 33%;
+    width: 66.666666%;
+}
+
+#wp2t p.disabled {
+    font-weight: 400;
+	font-style: italic;
+    background: #ffd;
+    padding: 4px 12px;
+    font-size: 1.1em;
+	margin: .5em -12px -12px;
+}
+
+#wp2t .wpt-options .disabled {
+    color: #888;
+    border: 1px solid #ddd;
+    background: #eee;
+    border-bottom: none;
+    padding: 2px;
+    border-radius: 4px 4px 0 0;
+}
+
+#side-sortables #wp2t .jtw {
+    margin: 0;
+    width: 100%;
+}
+
+#side-sortables #wp2t .jtw textarea {
+    height: 120px;
+}
+
+#wp2t .wpt_auth_users {
+    margin: 0;
+    padding: 0;
+}
+
+#wp2t .wpt_auth_users select {
+	width: calc( 100% - 24px );
+	max-height: 21em;
+}
+
+.panel-toggle a {
+	display: block;
+	padding: 2px;
+	background: rgba( 240,240,240, .9 );
+	border: 1px solid rgba( 240,240,240, .9 );
+	text-decoration: none;
+}
+
+.panel-toggle a:hover, .panel-toggle a:focus {
+	border: 1px solid rgba( 220,220,220, 1 );
+}
+
+.wp-to-twitter .dashicons {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.wp-to-twitter .dashicons-clock,
+.wp-to-twitter .dashicons-upload {
+	font-size: 20px;
+	line-height: 1.4;
+}
+
+.wpt-options {
+	column-count: 3;
+}
+
+.free .wpt-options {
+	column-count: 2;
+}
+
+#side-sortables .wpt-options {
+	column-count: 1;
+}
+
+.wpt-debug-details {
+	display: none;
+	white-space: pre-wrap;
+}
+
+#wp2t-debug .wpt-debug-log button {
+	text-align: left;
+	white-space: normal;
+	height: auto;
+	width: 100%;
+}
+
+.wptab {
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #ddd;
+    background: #fdfdfd;
+    padding: 10px;
+    margin: 0 2px;
+    -moz-column-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    column-break-inside: avoid;
+}
+
+.wptab {
+    min-height: 22em;
+}
+
+.free .wptab {
+    min-height: 11em;
+}
+
+#wp2t .tabs {
+    display: none;
+}
+
+#side-sortables #wp2t .tabs {
+    display: block;
+}
+
+#side-sortables .wptab {
+    min-height: 16em;
+    padding: 5px;
+    margin: 2px 0;
+}
+
+#side-sortables .free .wptab {
+    min-height: 9em;
+}
+
+#notes p {
+    font-size: 1.3em;
+    line-height: 1.5;
+}
+
+#side-sortables .free #notes p {
+    font-size: 1em;
+}
+
+.wpt-player-card-settings {
+	padding: .5em;
+	margin: -.5em -.5em 0;
+	background: rgba( 0,0,0,.05 );
+}
+.wpt-player-card-settings input {
+	width: 100%;
+}
+.wpt-player-card-settings select {
+	width: calc(100% - 34px);
+}
+
+button.time div {
+    vertical-align: text-bottom;
+}
+
+.wpt-support {
+    clear: both;
+}
+
+.wpt-options .tabs {
+    margin: 0;
+    position: relative;
+    top: 3px;
+}
+
+.wpt-options .tabs li {
+    display: inline;
+    margin: 0 auto;
+    line-height: 1;
+}
+
+.wpt-options .tabs a {
+    display: inline-block;
+    padding: 4px 6px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ccc;
+    background: #f3f3f3;
+}
+
+.wpt-options .tabs a.active {
+    border-bottom: 1px solid #fefefe;
+    background: #fefefe;
+	text-decoration: none;
+	color: #444;
+	font-weight: 700;
+}
+
+.wpt_log, #wpt_set_tweet_time {
+	padding: .5em;
+}
+
+#wpt_set_tweet_time {
+	background: #f6f6f6;
+	color: #333;
+}
+
+.tweet-buttons {
+	display: grid;
+	grid-template-columns: 48% 34% 18%;
+	column-gap: 2px;
+	padding: .75em 12px;
+	margin: -6px -14px 0;
+	background: #f3f3f3;
+}
+
+.wpt-wrap {
+	display: grid;
+	grid-template-columns: 1fr 44px;
+}
+
+.wpt-wrap input {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.wpt-wrap button {
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.wp-to-twitter .wpt-template {
+	margin: 0;
+	padding: .5em;
+	background: rgba( 0, 0, 0, .05 );
+}
+
+.toggle-btn-group {
+	margin: .5em auto .5em !important;
+	width: auto;
+}
+
+.wptab .toggle-btn-group {
+	margin: .25em -5px .25em;
+}
+
+.toggle-btn-group:after {
+    content: "";
+    display: table;
+    clear: both;	
+}
+
+.toggle-btn-group label {
+    padding: .25em 0;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f3f3f3;
+	display: inline-block;
+	width: 50%;
+    text-decoration: underline;	
+	color: #6e6e6e;
+}
+
+.toggle-btn-group label:first-of-type {
+    border-radius: 0;
+}
+
+.toggle-btn-group input[type="radio"]:checked + label {
+    background-color: #0073aa;
+	outline: 1px solid #00a0d2;
+	text-decoration: none;
+    cursor: text;
+	font-weight: 700;
+	color: #fff;
+}
+
+.toggle-btn-group input[type="radio"]:checked + label:before {
+	font-family: dashicons;
+	content: "\f147";
+	color: #fff;
+	margin-right: 2px;
+	vertical-align: bottom;
+}
+
+.toggle-btn-group label:hover,
+.toggle-btn-group label:focus {
+    background-color: #ddd;
+    outline: #aaa 1px solid;
+}
+
+.toggle-btn-group input {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    overflow: hidden;
+}

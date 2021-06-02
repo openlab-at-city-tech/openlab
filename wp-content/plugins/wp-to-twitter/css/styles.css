@@ -1,0 +1,335 @@
+#wp-to-twitter .jd-settings {
+	clear: both;
+}
+
+#wp-to-twitter form .error p {
+	background: none;
+	border: none;
+}
+
+#wp-to-twitter legend, #wpt_settings_page legend {
+	padding: 6px 1%;
+	background: #f3f4f5;
+	width: 98%;
+	color: #000;
+	margin-top: 4px;
+}
+
+#wp-to-twitter .resources {
+	text-align: center;
+}
+
+#wp-to-twitter .resources form {
+	margin: 0;
+}
+
+.settings {
+	margin: 25px 0;
+	background: #fff;
+	padding: 10px;
+	border: 1px solid #000;
+}
+
+.wpt-oauth-settings ul {
+	list-style: disc;
+	margin-left: 2em;
+	margin-top: .5em;
+}
+
+#wp-to-twitter .inside em {
+	color: #d33;
+}
+
+#wp-to-twitter .button-side {
+	position: absolute;
+	top: 0;
+	right: 10px;
+}
+
+#wp-to-twitter .tokens label {
+	display: block;
+}
+
+#wp-to-twitter .wpt-terms p {
+	text-align: right;
+	border-bottom: 1px solid #ccc;
+	background: #f3f4f5;
+	padding: 4px;
+	margin: -30px 0 0;
+}
+
+#wp-to-twitter .wpt-terms ul {
+	column-count: 3;
+	column-gap: 20px;
+	-moz-column-count: 3;
+	-moz-column-gap: 20px;
+	-webkit-column-count: 3;
+	-webkit-column-gap: 20px;
+	margin: 0 0 20px;
+	padding: 6px 2%;
+	width: 96%;
+}
+
+#wp-to-twitter .wpt-terms li {
+	list-style-type: none;
+	margin: 3px 0;
+	padding: 0;
+}
+
+#wp-to-twitter .inside .clear {
+	display: block;
+	clear: both;
+}
+
+#wp-to-twitter .inside .comments {
+	clear: both;
+}
+
+#wp-to-twitter .postbox {
+	margin: 10px 10px 0 0;
+}
+
+#wp-to-twitter .meta-box-sortables {
+	min-height: 0;
+}
+
+#wp-to-twitter .wpt-template, #wp-to-twitter .support-request {
+	width: 100%;
+}
+
+.wpt_image {
+	padding-left: 20px;
+	background: url(../images/image.png) left 50% no-repeat;
+	display: block;
+}
+
+#wp-to-twitter input {
+	max-width: 100%;
+}
+
+#wp2t #wpt_custom_tweet {
+	width: 100%;
+}
+
+label[for="wpt_license_key"] {
+	font-size: 1.3em;
+}
+
+#wp-to-twitter .wpt-upgrade {
+	background: #c24822;
+	color: #fff;
+	text-shadow: 1px 1px 0 #000;
+}
+
+.wp-tweets-pro .widefat input[type=text] {
+	width: 100%;
+}
+
+#wpt_settings_page .tabs {
+	margin: .5em 0 0;
+	padding: 0 4px;
+	position: relative;
+	top: 1px;
+	font-size: 1.1em;
+}
+
+#wpt_settings_page .tabs li {
+	display: inline;
+	margin: 0 auto;
+	line-height: 1;
+}
+
+#wpt_settings_page .tabs a {
+	display: inline-block;
+	padding: 6px 10px;
+	border-radius: 4px 4px 0 0;
+	border: 1px solid #ccc;
+	background: #f3f3f3;
+}
+
+#wpt_settings_page .tabs a.active {
+	border-bottom: 1px solid #fefefe;
+	background: #fefefe;
+	text-decoration: none;
+	color: #333;
+	font-weight: 700;
+}
+
+#wpt_settings_page .wptab {
+	background: #fff;
+	margin-bottom: 10px;
+	min-height: 200px;
+	border-top: 1px solid #ccc;
+}
+
+#wpt_settings_page .inside.purchase ul {
+	list-style-type: disc;
+	margin-left: 2em;
+}
+
+#wp-to-twitter .postbox > h2,
+#wpt_settings_page .postbox > h2 {
+	font-size: 14px;
+	padding: 8px 12px;
+	margin: 0;
+	line-height: 1.4;
+}
+
+#wp-to-twitter  .wpt-pro-tab {
+	background: #213e7f;
+	color: #fff;
+}
+
+#wp-to-twitter .wpt-pro-tab:hover, #wp-to-twitter .wpt-pro-tab:focus {
+	background: #fff;
+	color: #213e7f;
+}
+
+.wpt-permissions .wptab {
+	padding: 10px;
+	min-height: 160px !important;
+}
+
+#wpt_settings_page .wpt-permissions .wptab legend  {
+	background: none;
+	padding: 0;
+}
+
+.inside.purchase {
+	max-width: 45em;
+	font-size: 1.1em;
+	margin: 0 auto;
+}
+
+.inside.purchase h3 {
+	font-size: 1.8em;
+	margin: 1.33em 0 0;
+}
+
+.wpt-terms li {
+	padding: 2px !important;
+	border-radius: 3px;
+}
+
+.tweet {
+	background: #070 url(../images/Ok.png) 99% 50% no-repeat;
+	color: #fff;
+}
+
+.notweet {
+	background: #9d1309 url(../images/Error.png) 99% 50% no-repeat;
+	color: #fff;
+}
+
+.donations * {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.jcd-wide {
+	width: 75%;
+}
+
+.jcd-narrow {
+	width: 20%;
+}
+
+label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepend_rt3'] {
+	display: block;
+}
+
+.wpt-truncate {
+	display: inline-block;
+	padding: 4px;
+}
+
+.wpt-button {
+	text-align: center;
+	margin: 1em 0 !important;
+}
+
+.nav-tab-wrapper {
+	padding-left: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.nav-tab-wrapper .nav-tab {
+	font-weight: 700;
+	font-size: 1.1em;
+}
+
+.wpt-button .cta a {
+	padding: 1em;
+	font-size: 1.2em;
+	background: #c24822;
+	color: #fff;
+	text-decoration: none;
+	display: inline-block;
+}
+
+#wpt_settings_page iframe {
+	margin:10px auto!important;
+}
+
+.wpt-button .cta a:hover, .wpt-button .cta a:focus {
+	text-decoration: underline;
+	background: #233c7f;
+}
+
+.jcd-narrow .free .postbox, .jcd-narrow .free .postbox a, .jcd-narrow .free .postbox h3 {
+	background: #233c7f;
+	color: #fff;
+}
+
+.jcd-narrow .free .postbox .cta a {
+	font-size: 1.4em;
+}
+
+.jcd-narrow .postbox a:hover, .jcd-narrow .postbox a:focus {
+	text-decoration: none; 
+}
+
+.jcd-narrow .free .postbox h3 {
+	background: #007eb3;
+	color: #fff;
+	text-shadow: 0 0 1px #000;
+	font-size: 1.1em;
+}
+
+.wpt-support-me p {
+	font-size: 1.6em;
+	font-weight: 600;
+	background: #007eb3;
+	text-shadow: 1px 1px rgb( 35, 60, 127 );
+	padding: 1em;
+	text-align: center;
+	margin: 0 0 1em;
+}
+
+.wpt-support-me p, .wpt-support-me a {
+	color: #fff;
+}
+
+.wpt-support-me a:hover, .wpt-support-me a:focus {
+	text-decoration: none;
+}
+
+.toplevel_page_wp-tweets-pro #fs_connect .fs-terms a {
+	color: #555; 
+}
+
+@media (max-width: 782px) {
+	.jcd-narrow {
+		width: 100%;
+	}
+
+	.jcd-wide {
+		width: 100%;
+	}
+	
+	#wp-to-twitter .wpt-terms p {
+		margin: 0;
+	}
+	
+	
+}
