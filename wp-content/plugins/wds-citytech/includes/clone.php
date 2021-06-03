@@ -148,15 +148,29 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 			)
 		);
 
-		$group_admin_ids = openlab_get_all_group_contact_ids( $source_id );
+		$group_creators = openlab_get_group_creators( $source_id );
 
 		$admins = [];
-		foreach ( $group_admin_ids as $group_admin_id ) {
-			$admins[] = [
-				'id'   => $group_admin_id,
-				'name' => bp_core_get_user_displayname( $group_admin_id ),
-				'url'  => bp_core_get_user_domain( $group_admin_id ),
-			];
+		foreach ( $group_creators as $group_creator ) {
+			switch ( $group_creator['type'] ) {
+				case 'member' :
+					$user = get_user_by( 'slug', $group_creator['member-login'] );
+
+					if ( $user ) {
+						$admins[] = [
+							'name' => bp_core_get_user_displayname( $user->ID ),
+							'url'  => bp_core_get_user_domain( $user->ID ),
+						];
+					}
+				break;
+
+				case 'non-member' :
+					$admins[] = [
+						'name' => $group_creator['non-member-name'],
+						'url'  => '',
+					];
+				break;
+			}
 		};
 
 		$source_data = array(
@@ -199,7 +213,15 @@ function openlab_format_group_clone_history_data_list( $history ) {
 		function( $clone_group ) {
 			$admin_names = array_map(
 				function( $admin ) {
-					return $admin['name'];
+					if ( ! empty( $admin['url'] ) ) {
+						return sprintf(
+							'<a href="%s">%s</a>',
+							esc_attr( $admin['url'] ),
+							esc_html( $admin['name'] )
+						);
+					} else {
+						return $admin['name'];
+					}
 				},
 				$clone_group['group_admins']
 			);
