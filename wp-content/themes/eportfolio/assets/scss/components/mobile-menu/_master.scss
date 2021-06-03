@@ -1,6 +1,6 @@
-
-
-@import 'menu-layout';
+@import 'config';
+@import 'menu-description';
+@import 'menu';
 .#{$prefix}-mobile-menu-section{
    position: fixed;
    height: 100%;

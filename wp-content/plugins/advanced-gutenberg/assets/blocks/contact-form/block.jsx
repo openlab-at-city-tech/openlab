@@ -329,6 +329,9 @@
                 isPreview: true
             },
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvContactForm,
         save: function ( { attributes } ) {
             const {

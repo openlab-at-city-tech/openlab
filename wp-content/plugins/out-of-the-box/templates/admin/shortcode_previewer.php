@@ -13,7 +13,7 @@ if (
 
 $this->load_scripts();
 $this->load_styles();
-$this->load_custom_css();
+
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -45,7 +45,7 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><?php _e('Shortcode Previewer','wpcloudplugins'); ?></title>
+  <title><?php esc_html_e('Shortcode Previewer','wpcloudplugins'); ?></title>
      <?php wp_print_scripts(); ?>
     <?php wp_print_styles(); ?>
 </head>

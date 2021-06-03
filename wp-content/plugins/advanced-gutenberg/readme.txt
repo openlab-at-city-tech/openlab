@@ -1,72 +1,99 @@
-=== PublishPress Blocks – Advanced Gutenberg Blocks, Permissions, Layouts, Forms ===
-Contributors: publishpress, advancedgutenberg, JoomUnited
+=== PublishPress Blocks – Advanced Gutenberg Blocks, Permissions, CSS and Layouts ===
+Contributors: publishpress, stevejburge, htmgarcia, advancedgutenberg, JoomUnited
 Tags: gutenberg, gutenberg blocks, advanced gutenberg, editor, blocks
 Requires at least: 5.0
-Tested up to: 5.6
-Stable tag: 2.5.0
+Tested up to: 5.7
+Stable tag: 2.5.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-
-
-Supercharge WordPress Gutenberg editor plugin with 27+ new blocks. Create custom Gutenberg block profiles by user or user roles
+Gutenberg is good, and with PublishPress Blocks, it’s great! The blocks include accordions, galleries, sliders, tabs, maps and more.
 
 == Description ==
 
-PublishPress Blocks adds the missing blocks and configuration you need to build professional websites. Take the control of the new Gutenberg editor with user edition profile configuration and 20+ new blocks and options.
+Gutenberg is good, and with [PublishPress Blocks](https://publishpress.com/blocks/), it’s great! PublishPress Blocks has everything you need to build professional websites with WordPress. The blocks include layout options, sliders, buttons, icons, image galleries, maps, tabs, testimonials, accordions, and much more.
 
-This plugin was previously called "Advanced Gutenberg".
+- [See the block demos](https://demo.publishpress.com/).
+- [Browse the documentation and videos](https://publishpress.com/knowledge-base/installation/).
 
-## GUTENBERG ADVANCED BLOCK CONTROL
+## 4 Powerful features in PublishPress Blocks
 
-- Create edition profiles and assign user or user group to the profile
-- Select each block activation per user profile
-- Default block configuration (PublishPress Blocks)
-- Custom CSS styles: apply on Gutenbergparagraph blocks
-- Define Gutenberg editor size and column materialization
-- Performance: only loaded when a block from the plugin is called
+1. **Over 20 extra blocks**: The new blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
+2. **Permissions for blocks**: You can control who can use each block, including default WordPress blocks.
+3. **Custom CSS for blocks**: You can add your own custom, reusable CSS styles for your blocks. 
+4. **Block layout options**: Choose from dozens of layouts. Each one is customizable for desktop, tablet and mobile devices.
+
+## Feature #1. Extra Blocks
+
+PublishPress Blocks has everything you need to build professional websites with WordPress. Here's an introduction to the blocks available with the PublishPress Blocks plugin:
+
+- **Accordion block**: [demo](https://demo.publishpress.com/advanced-accordion/).
+- **Button block**: [demo](https://demo.publishpress.com/advanced-button/).
+- **Icon block**: [demo](https://demo.publishpress.com/advanced-icon/).
+- **Image block**: [demo](https://demo.publishpress.com/advanced-image/).
+- **List block**: [demo](https://demo.publishpress.com/advanced-list/).
+- **Table block**: [demo](https://demo.publishpress.com/advanced-table/).
+- **Tabs block**: [demo](https://demo.publishpress.com/advanced-tabs/).
+- **Video block**: [demo](https://demo.publishpress.com/advanced-video/).
+- **Columns Manager block**: [demo](https://demo.publishpress.com/columns-manager/).
+- **Contact Form block**: [demo](https://demo.publishpress.com/contact-form/).
+- **Count Up block**: [demo](https://demo.publishpress.com/count-up/).
+- **Gallery block**: [demo](https://demo.publishpress.com/gallery/).
+- **Images Slider block**: [demo](https://demo.publishpress.com/images-slider/).
+- **Info Box block**: [demo](https://demo.publishpress.com/info-box/).
+- **Login / Register Form block**: [demo](https://demo.publishpress.com/login-register-form/).
+- **Google Maps block**: [demo](https://demo.publishpress.com/map/).
+- **Newsletter block**: [demo](https://demo.publishpress.com/newsletter/).
+- **Recent Posts block**: [demo](https://demo.publishpress.com/recent-posts/).
+- **Search bar block**: [demo](https://demo.publishpress.com/search-bar/).
+- **Social Links block**: [demo](https://demo.publishpress.com/social-links/).
+- **Summary block**: [demo](https://demo.publishpress.com/summary).
+- **Testimonial block**: [demo](https://demo.publishpress.com/testimonial/).
+- **WooCommerce block**: [demo](https://demo.publishpress.com/woo-products/).
+
+## Feature #2. Permissions for Blocks
+
+PublishPress Blocks allows you to enable or disable blocks for some users. For example, you can disable the “Classic” block if you don’t want users to rely on the old WordPress editor.
+
+Using the PublishPress Blocks plugin, you can create editor profiles for different users and user roles. You can select which blocks in the Blocks list will be available to each profile.
+
+[Click here to see how to control permissions for blocks](https://publishpress.com/knowledge-base/editor-profiles/)
+
+## Feature #3. Custom CSS Styles for Blocks
+
+You create custom, reusable CSS styles and making them available to end users. Name the style, and let the content editors use it when they need it. This is a very useful feature that empowers your users to add pre-defined CSS styles to any block.
+
+[Click here to see how to create custom styles for blocks](https://publishpress.com/knowledge-base/custom-css/).
+
+## Feature #4. Block Layout Options
+
+PublishPress Blocks allows you to create flexible and beautiful layouts. You get 24 layout options with different options for desktop, tablet and mobile devices. You can create these layouts with Columns Manager block. This Columns Manager block is based on the default Columns block in Gutenberg. This new version of the block has many extra features including extra layout options, padding, margins and much more.
+
+[Click here to see more about the block layout options](https://publishpress.com/knowledge-base/columns-manager-block)
+
+= Join PublishPress and get the Pro plugins =
+
+The Pro versions of the PublishPress plugins are well worth your investment. The Pro versions have extra features and faster support. [Click here to join PublishPress](https://publishpress.com/pricing/).
+
+Join PublishPress and you'll get access to these 6 Pro plugins:
+
+* [PublishPress Authors Pro](https://publishpress.com/authors) allows you to add multiple authors and guest authors to WordPress posts.
+* [PublishPress Capabilities Pro](https://publishpress.com/capabilities) is the plugin to manage your WordPress user roles, permissions, and capabilities.
+* [PublishPress Checklists Pro](https://publishpress.com/checklists) enables you to define tasks that must be completed before content is published.
+* [PublishPress Permissions Pro](https://publishpress.com/permissions)  is the plugin for advanced WordPress permissions.
+* [PublishPress Pro](https://publishpress.com/publishpress) is the plugin for managing and scheduling WordPress content.
+* [PublishPress Revisions Pro](https://publishpress.com/revisions) allows you to update your published pages with teamwork and precision.
+
+Together, these plugins are a suite of powerful publishing tools for WordPress. If you need to create a professional workflow in WordPress, with moderation, revisions, permissions and more... then you should try PublishPress.
 
 
-## PUBLISHPRESS BLOCKS
 
-- Column manager with pre-defined layouts
-- Latest post slider and latest post slider
-- Latest WooCommerce product slider and latest product slider
-- Advanced Button block: create button with tons of styles
-- Contact form block: get user messages and export messages
-- Advanced List block: create list with list icon, icon color
-- Map block: load a Google map position with zoom, icon, tooltip, color...
-- Advanced Table block: create tables with style like color, border
-- Accordion block: display content in a fully configurable accordion
-- Tabs block: display content in a fully tabbed UX
-- Testimonial block: define avatar, title, text, colors, slider
-- Icon and Icon block layout blocks
-- Contact Form block: get email and export contact form data
-- Email Opt-In block: get email and export data
-- WordPress login block
-- WordPress register block
-- Counter block: display numbers in a dynamic, fun and engaging way
-- Advanced Image block: hover text, overlay, colors, link and more
-- Advanced Image block: load and display local and remote video
-- Advanced Video block: load and display local and remote video
-- Social links block: custom icon and links to any social networks
-- Activate lightbox effect in Gutenberg image galleries
-- Display image information as lightbox caption in galleries
-- Gutenberg post summary based on content headers
-
-
-## PUBLISHPRESS BLOCKS DEMO
-
-[vimeo https://vimeo.com/264060718]
-
-<a href="https://publishpress.com/blocks/" title="WordPress PublishPress Blocks" rel="friend">Read the plugin presentation on our website</a>
 
 
 = Support =
 
-Before leaving a review >> Feel free to ask questions here in the support section, we reply to every question!
-We also have [a support page](https://publishpress.com/publishpress-support/) for feature requests.
+Before leaving a review >> Feel free to ask questions here in the support section, we reply to every question! We also have [a support page](https://publishpress.com/publishpress-support/) for feature requests.
 
 == Installation ==
 
@@ -97,7 +124,7 @@ We reply to every question about the editor on the forum here, just ask :) We al
 The plugin has almost NO impact on page load for your visitors, it's only loaded during the edition process.
 
 = What is the Gutenberg version required to run PublishPress Blocks plugin properly? =
-The latest one, always! We're testing it with previous versions but the latest version of Gutenberg brings new features for developer and allow better content edition. 
+The latest one, always! We're testing it with previous versions but the latest version of Gutenberg brings new features for developer and allow better content edition.
 
 = Is PublishPress Blocks free? =
 Yes, totally free of charge.
@@ -109,7 +136,7 @@ In different places: in Gutenberg itself by adding some options to existing bloc
 Yes, this is possible, from the Gutenberg profile management, select some blocks, then you can give the profile to a single user or a user role
 
 = Does the PublishPress Blocks custom styles works with the Gutenberg CSS block class? =
-Both are loaded from a separated stylesheet file and offer 2 ways to style your blocks. The Gutenberg default CSS class apply a CSS class on a single block then you can create your CSS on an external file. 
+Both are loaded from a separated stylesheet file and offer 2 ways to style your blocks. The Gutenberg default CSS class apply a CSS class on a single block then you can create your CSS on an external file.
 The PublishPress Blocks Custom CSS can be created from the plugin configuration and applied from a dropdown list to any block.
 
 == Screenshots ==
@@ -122,8 +149,90 @@ The PublishPress Blocks Custom CSS can be created from the plugin configuration 
 1. Advanced table manager: manage tables in Gutenberg with several styling options
 1. Google Maps Gutenberg Block
 1. Latest posts and WooCommerce products blocks
+1. Columns Manager block with flexible column sizes for desktop, tablet and mobile
+1. Images Slider block with customizable text
+1. Customizable Login/Register Form block
+1. Recent Posts block with a lot of features, including views, support for multiple categories and tags
+1. Search Bar block is a great alternative to default search form
+1. Social Links block
+1. Testimonial block support columns and slider views
+1. Advanced Buttons block
 
 == Changelog ==
+
+= 2.5.7 =
+ * Add: Separate pages for Settings and Default block settings
+ * Add: Multiple category support to Recent Posts block
+ * Fix: Alt attribute for img tag in Images Slider block
+ * Fix: Hide notification when asking for a review
+ * Fix: Double border-top in editor for body in Advanced Accordion block
+ * Fix: Notice when no featured image exists while editing/creating posts
+ * Fix: Collapsed Order RTL in mobile for Columns Manager block
+ * Fix: Full width alignment for Advanced Button block
+ * Fix: Allowed formats support for Advanced Button block
+ * Fix: UI text alignment in cell settings for Advanced Table block
+ * Fix: Slick Theme CSS for WordPress 5.7
+ * Remove: Obsolete Translations page
+ * Remove: AdvQueryControls component
+ * Remove: Wide width alignment option for Advanced Button block
+ * Remove: Refresh option for Advanced Button block
+
+= 2.5.6 =
+ * Fix: Bug in deprecation for Advanced Accordion block from v2.5.5
+ * Remove: Full path in compiled JavaScript
+
+= 2.5.5 =
+ * Add: Bigger font-size for custom styles in new plugin installations
+ * Add: Newest version of Material Icons
+ * Fix: Center alignment for Advanced Table block
+ * Fix: Testimonial block breaking editor
+ * Fix: Preview images styles for Advanced Button block
+ * Fix: Advanced Image duplication id
+ * Fix: Display symbol inline with number in Count Up block in editor
+ * Fix: Deprecated code for Advanced Accordion block
+ * Fix: Border width 0px for Advanced Accordion block
+ * Fix: A language string for Columns Manager block
+ * Fix: Columns Visual Guide and Editor Width notices while editing a post/page
+ * Fix: Editor width change for individual pages/posts when "original" is set in Global configuration
+ * Fix: Dashicons display in Profile edit
+ * Remove: Unnecessary allowed formats for Advanced Accordion header
+ * Remove: Format options for Advanced Image block
+
+= 2.5.4 =
+ * Fix: Deprecated code for Advanced Button block
+ * Fix: Deprecated code for Advanced Accordion block
+ * Fix: Deprecated code for Advanced Image block
+ * Fix: Deprecated code for Advanced List block
+ * Fix: Deprecated code for Advanced Table block
+ * Fix: Deprecated code for Advanced Video block
+ * Fix: Deprecated code for Columns Manager block
+ * Fix: Deprecated code for Images Slider block
+ * Fix: Deprecated code for Login / Register block
+ * Fix: Deprecated code for Recent Posts block
+ * Fix: Deprecated code for Social Links block
+ * Fix: Deprecated code for Summary block
+ * Fix: Deprecated code for Woo Products block
+
+= 2.5.3 =
+ * Fix: Advanced Button and Advanced Icon duplication id
+ * Fix: Deprecated prop for Advanced Button block
+ * Fix: Editor width and Columns visual guide settings in WordPress 5.6
+ * Add: Darker border color for Columns visual guide
+
+= 2.5.2 =
+ * Fix: Summary block style and better CSS handling for margin-left
+ * Fix: Ajax call to update the block list in db
+ * Fix: Deprecated core/editor to core/block-editor Namespace
+ * Fix: Introduced bug in 2.5.1 for gallery lightbox target
+ * Add: Better gallery lightbox target support
+
+= 2.5.1 =
+ * Add: Anchor support for all the blocks, except: Adv. Icons, Columns Manager, Info Box, Recent Posts and Testimonial
+ * Fix: Fix gallery lightbox target to open a bigger version of the image (hughworm)
+ * Add: Better CSS selector for Advanced List block
+ * Fix: Space between columns pushing content off in Columns Manager blocks
+ * Remove: Old CSS approach for Columns Manager columns and layouts
+ * Fix: Advanced Button center alignment in editor
 
 = 2.5.0 =
  * Add: "PublishPress Blocks" as new plugin's name
@@ -132,7 +241,7 @@ The PublishPress Blocks Custom CSS can be created from the plugin configuration 
  * Add: More translation strings for Italian
  * Add: More translation strings for Spanish (Spain)
  * Fix: Strings that are saved as static content
- 
+
 = 2.4.7 =
  * Fix: Global columns visual guide
  * Fix: Deprecated isDefault replaced with isSecondary

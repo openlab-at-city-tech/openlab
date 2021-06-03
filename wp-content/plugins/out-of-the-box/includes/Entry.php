@@ -5,7 +5,7 @@ namespace TheLion\OutoftheBox;
 class Entry extends EntryAbstract
 {
     /**
-     * @param \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata $api_entry
+     * @param \TheLion\OutoftheBox\API\Dropbox\Models\FileMetadata|\TheLion\OutoftheBox\API\Dropbox\Models\FolderMetadata $api_entry
      */
     public function convert_api_entry($api_entry)
     {
@@ -14,7 +14,7 @@ class Entry extends EntryAbstract
         $this->set_rev($api_entry->rev);
         $this->set_name($api_entry->name);
 
-        if ($api_entry instanceof \Kunnu\Dropbox\Models\FolderMetadata) {
+        if ($api_entry instanceof \TheLion\OutoftheBox\API\Dropbox\Models\FolderMetadata) {
             $this->set_is_dir(true);
         }
 
@@ -71,6 +71,11 @@ class Entry extends EntryAbstract
         ];
 
         $this->set_permissions($permissions);
+
+        // Set Access
+        if ($this->is_dir()) {
+            $this->set_has_access(empty($sharing_info) ? true : !$sharing_info->hasAccess());
+        }
 
         // Icon
         $default_icon = $this->get_default_icon();

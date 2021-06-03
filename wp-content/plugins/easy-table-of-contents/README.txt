@@ -1,13 +1,13 @@
 === Easy Table of Contents ===
 Contributors: shazahm1@hotmail.com
-Donate link: http://connections-pro.com/
+Donate link: https://connections-pro.com/
 Tags: table of contents, toc
-Requires at least: 5.2
-Tested up to: 5.4
+Requires at least: 5.3
+Tested up to: 5.7
 Requires PHP: 5.6.20
-Stable tag: 2.0.11
+Stable tag: 2.0.17
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
 
@@ -88,6 +88,38 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.17 03/26/2021 =
+* TWEAK: Add additional check to prevent `Uncaught Error: Call to undefined function is_woocommerce()`.
+* TWEAK: Ensure an instance of `ezTOC_Post ` is returned before accessing methods/properties.
+
+= 2.0.16 02/01/2021 =
+* TWEAK: Remove special characters such as fancy quotes, en and, em dashes when generating in-page anchor IDs.
+
+= 2.0.15 01/27/2021 =
+* TWEAK: Remove additional reserved characters when generating in-page anchor IDs.
+
+= 2.0.14 01/26/2021 =
+* TWEAK: Refactor debug log as a Singleton.
+* TWEAK: Add additional logging to aid in debugging.
+* BUG: Correct logic for PHP where empty string no longer evaluates as integer `0`.
+
+= 2.0.13 01/25/2021 =
+* TWEAK: Restrict debug logging to when `WP_DEBUG` is enabled *and* current user capability of `manage_options`.
+* TWEAK: Add logging to aid in support.
+* DEV: phpDoc update.
+
+= 2.0.12 01/22/2021 =
+* TWEAK: Allow `_` and `-` in anchors.
+* TWEAK: Minor CSS tweaks that prevent theme from breaking the layout.
+* TWEAK: Minor tweak to class initialization.
+* TWEAK: Do not display the view toggle if JavaScript is broken on the site.
+* TWEAK: Add the ability to enable displaying of displaying debug information on the page.
+* BUG: Check for array and keys before accessing values.
+* BUG: Check for array key be fore access.
+* BUG: Remove reserved characters when generating in-page anchor IDs.
+* DEV: Remove unnecessary vendor library files.
+* DEV: Deal with phpStorm showing a warning about path not found when including files.
 
 = 2.0.11 05/01/2020 =
 * COMPATIBILITY: Add support for the Uncode theme.
@@ -415,3 +447,21 @@ Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
 
 = 2.0.11 =
 Requires WordPress >= 5.0 and PHP version >= 5.6.20 (>= 7.1 is recommended).
+
+= 2.0.12 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.13 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.14 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.15 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.16 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).
+
+= 2.0.17 =
+Requires WordPress >= 5.3 and PHP version >= 5.6.20 (>= 7.4 is recommended).

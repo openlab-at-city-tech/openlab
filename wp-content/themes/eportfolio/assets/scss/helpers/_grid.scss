@@ -11,7 +11,13 @@
     display: flex;
     flex-wrap: wrap;
 }
-
+.admin-bar{
+    .#{$prefix}-header{
+        @include media(lg){
+            top: 30px;
+        }
+    }
+}
 .#{$prefix}-header{
     flex: 0 0 100%;
     max-width: 100%;

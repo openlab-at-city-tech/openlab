@@ -38,13 +38,9 @@
 
                             <?= $item->getEditHtml(); ?>
                             <div class="pull-right">
-                                                    <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-user">
-                            Meine Zeit-Einstellungen laden </a>
-
-                                                            <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-default">
-                                Lade beste Zeiten </a>
-                                <a href="#" class="btn btn-link btn-xs hidden-sm b2s-load-settings-sched-time-default-info b2sInfoSchedTimesModalBtn">Info</a>
-                                </div>
+                                <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-user"><?php esc_html_e('Load My Times Settings', 'blog2social') ?></a>
+                                <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-default"><?php esc_html_e('Load Best Times', 'blog2social') ?></a>
+                            </div>
                             <div class="clearfix"></div>
                             <div class="panel panel-group">
                                 <div class="b2s-post-item-details-release-area-details">

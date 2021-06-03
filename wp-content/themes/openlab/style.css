@@ -9474,6 +9474,11 @@ body form .checkbox-list-container {
     margin-top: 24px;
   }
 }
+.my-group-archive-sort {
+	display: flex;
+	justify-content: flex-end;
+	margin-right: 7.5px;
+}
 .group-list {
   margin-top: 50px;
 }

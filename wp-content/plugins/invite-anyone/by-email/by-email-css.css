@@ -43,6 +43,10 @@
   margin-bottom:5px;
 }
 
+#invite-anyone-steps .cs_import {
+	cursor: pointer;
+}
+
 #invite-anyone-email-fields {
 	width: 380px;
 }
@@ -244,6 +248,7 @@ ul#invite-anyone-clear-links {
 
 ul#invite-anyone-clear-links li {
   float:left;
+  list-style-type: none;
 }
 
 ul#invite-anyone-clear-links li a {

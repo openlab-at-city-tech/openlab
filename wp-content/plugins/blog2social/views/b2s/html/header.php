@@ -62,7 +62,7 @@ if (!B2S_System::isblockedArea('B2S_USER_POLICY', B2S_PLUGIN_ADMIN)) {
 </div>
 <div class="panel panel-group b2s-nonce-check-fail" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The link you followed has expired. Please refresh your page.', 'blog2social'); ?>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('WordPress session timeout: For security reasons, WordPress will let your session expire automatically if your site has been inactive for a while. Please reload this page to go on with your current action.', 'blog2social'); ?>
     </div>
 </div>
 

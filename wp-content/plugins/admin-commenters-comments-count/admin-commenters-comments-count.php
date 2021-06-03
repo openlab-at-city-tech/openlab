@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Admin Commenters Comments Count
- * Version:     1.9.4
+ * Version:     1.9.6
  * Plugin URI:  https://coffee2code.com/wp-plugins/admin-commenters-comments-count/
  * Author:      Scott Reilly
  * Author URI:  https://coffee2code.com/
@@ -10,7 +10,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Displays a count of each commenter's total number of comments (linked to those comments) next to their name on any admin page.
  *
- * Compatible with WordPress 4.6 through 5.5+.
+ * Compatible with WordPress 4.6 through 5.7+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -18,11 +18,11 @@
  *
  * @package Admin_Commenters_Comments_Count
  * @author  Scott Reilly
- * @version 1.9.4
+ * @version 1.9.6
  */
 
 /*
-	Copyright (c) 2009-2020 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2009-2021 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -84,8 +84,12 @@ class c2c_AdminCommentersCommentsCount {
 	 * Prevent unserializing an instance.
 	 *
 	 * @since 1.8
+	 * @since 1.8.3 Changed method visibility from private to public and throw exception if invoked.
 	 */
-	private function __wakeup() {}
+	public function __wakeup() {
+		/* translators: %s: Name of plugin class. */
+		throw new Error( sprintf( __( '%s cannot be unserialized.', 'admin-commenters-comments-count' ), __CLASS__ ) );
+	}
 
 	/**
 	 * Returns version of the plugin.
@@ -93,7 +97,7 @@ class c2c_AdminCommentersCommentsCount {
 	 * @since 1.1.4
 	 */
 	public static function version() {
-		return '1.9.4';
+		return '1.9.6';
 	}
 
 	/**

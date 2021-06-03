@@ -9,10 +9,24 @@ class WCP_Forms {
         ob_start();
         ?>
 
+	    <?php
+	    $customize_folders = get_option("customize_folders");
+	    if(isset($customize_folders['show_folder_in_settings']) && $customize_folders['show_folder_in_settings'] == "yes") {
+		    $upgradeURL = admin_url("options-general.php?page=wcp_folders_settings&setting_page=upgrade-to-pro");
+	    } else {
+		    $upgradeURL = admin_url("admin.php?page=folders-upgrade-to-pro");
+	    }
+
+	    $is_old = false;
+	    $old_status = get_option("wcp_folder_version_267");
+	    if($old_status === false) {
+		    //$is_old = true;
+	    }
+	    ?>
         <div class="wcp-custom-form">
             <div class="form-title">
                 <div class="plugin-title">
-                    <?php esc_html_e("Folders", WCP_FOLDER ) ?>
+                    <?php esc_html_e("Folders", 'folders'); ?>
                     <span class="folder-loader-ajax">
                         <svg id="successAnimation" fill="#F51366" class="animated" xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70">
                             <path id="successAnimationResult" fill="#D8D8D8" d="M35,60 C21.1928813,60 10,48.8071187 10,35 C10,21.1928813 21.1928813,10 35,10 C48.8071187,10 60,21.1928813 60,35 C60,48.8071187 48.8071187,60 35,60 Z M23.6332378,33.2260427 L22.3667622,34.7739573 L34.1433655,44.40936 L47.776114,27.6305926 L46.223886,26.3694074 L33.8566345,41.59064 L23.6332378,33.2260427 Z"></path>
@@ -23,7 +37,7 @@ class WCP_Forms {
                 </div>
                 <div class="plugin-button">
                     <a href="javascript:;" class="add-new-folder" id="add-new-folder">
-                        <span class="create_new_folder"><i class="pfolder-add-folder"></i></span> <span><?php esc_html_e("New Folder", WCP_FOLDER ) ?></span>
+                        <span class="create_new_folder"><i class="pfolder-add-folder"></i></span> <span><?php esc_html_e("New Folder", 'folders'); ?></span>
                     </a>
                 </div>
                 <div class="clear"></div>
@@ -34,10 +48,10 @@ class WCP_Forms {
                         <input type="checkbox" id="folder-hide-show-checkbox">
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php esc_html_e("Rename", WCP_FOLDER ) ?></span> </a>
+                        <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php esc_html_e("Rename", 'folders'); ?></span> </a>
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", WCP_FOLDER ) ?></span> </a>
+                        <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", 'folders'); ?></span> </a>
                     </li>
                     <li>
                         <div class="form-options">
@@ -47,12 +61,17 @@ class WCP_Forms {
                                     <a data-folder-tooltip="Sort Folders" href="javascript:;" id="sort-order-list" class="sort-folder-order folder-tooltip">
                                         <span class="icon pfolder-arrow-sort"></span>
                                     </a>
-                                    <div class="folder-sort-menu">
+                                    <div class="folder-sort-menu <?php echo ($is_old)?"":"is-pro" ?>">
                                         <ul>
-                                            <li><a data-sort="a-z" href="#">A → Z</a></li>
-                                            <li><a data-sort="z-a" href="#">Z → A</a></li>
-                                            <li><a data-sort="n-o" href="#">Newest → Oldest</a></li>
-                                            <li><a data-sort="o-n" href="#">Oldest → Newest</a></li>
+                                            <li><a data-sort="a-z" href="#"><?php esc_html_e("A → Z", 'folders'); ?></a></li>
+                                            <li><a data-sort="z-a" href="#"><?php esc_html_e("Z → A", 'folders'); ?></a></li>
+                                            <?php if($is_old) { ?>
+                                                <li><a data-sort="n-o" href="#"><?php esc_html_e("Sort by newest", 'folders'); ?></a></li>
+                                                <li><a data-sort="o-n" href="#"><?php esc_html_e("Sort by oldest", 'folders'); ?></a></li>
+                                            <?php } else { ?>
+                                                <li><a data-sort="n-o" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by newest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
+                                                <li><a data-sort="o-n" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by oldest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </li>
@@ -61,17 +80,7 @@ class WCP_Forms {
                     </li>
                 </ul>
                 <div class="upgrade-message">
-                    <?php
-                    $tlfs = get_option("folder_old_plugin_folder_status");
-                    if($tlfs == false || $tlfs < 10) {
-                        $tlfs = 10;
-                    }
-                    $total = WCP_Folders::get_ttl_fldrs();
-                    if($total > $tlfs) {
-                        $tlfs = $total;
-                    }
-                    ?>
-                    <span class="upgrade-message">You have used <span class='pink' id='current-folder'><?php echo esc_attr($total) ?></span>/<span id='ttl-fldr'><?php echo esc_attr($tlfs) ?></span> Folders. <a class="pink" href="<?php echo esc_url(admin_url("admin.php?page=wcp_folders_upgrade")) ?>"><?php esc_html_e("Upgrade", WCP_FOLDER) ?></a></span>
+                    <span class="upgrade-message"><a class="pink" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Unlock all Pro features", 'folders'); ?> <span class="dashicons dashicons-arrow-right-alt"></span></a></span>
                 </div>
             </div>
             <div class="form-loader">

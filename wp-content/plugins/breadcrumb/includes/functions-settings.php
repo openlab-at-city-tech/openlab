@@ -1069,7 +1069,7 @@ add_action('breadcrumb_settings_save', 'breadcrumb_settings_save');
 if(!function_exists('breadcrumb_settings_save')) {
     function breadcrumb_settings_save(){
 
-        $breadcrumb_options = isset($_POST['breadcrumb_options']) ? stripslashes_deep($_POST['breadcrumb_options']) : array();
+        $breadcrumb_options = isset($_POST['breadcrumb_options']) ? breadcrumb_recursive_sanitize_arr($_POST['breadcrumb_options']) : array();
         update_option('breadcrumb_options', $breadcrumb_options);
 
         $breadcrumb_text = sanitize_text_field($_POST['breadcrumb_text']);
@@ -1124,18 +1124,11 @@ if(!function_exists('breadcrumb_settings_save')) {
         $breadcrumb_hide_wc_breadcrumb = sanitize_text_field($_POST['breadcrumb_hide_wc_breadcrumb']);
         update_option('breadcrumb_hide_wc_breadcrumb', $breadcrumb_hide_wc_breadcrumb);
 
-//        $breadcrumb_display_auto_post_types = stripslashes_deep($_POST['breadcrumb_display_auto_post_types']);
-//        update_option('breadcrumb_display_auto_post_types', $breadcrumb_display_auto_post_types);
-//
-//        $breadcrumb_display_auto_post_title_positions = stripslashes_deep($_POST['breadcrumb_display_auto_post_title_positions']);
-//        update_option('breadcrumb_display_auto_post_title_positions', $breadcrumb_display_auto_post_title_positions);
 
-
-
-        $breadcrumb_custom_css = stripslashes_deep($_POST['breadcrumb_custom_css']);
+        $breadcrumb_custom_css = wp_filter_nohtml_kses($_POST['breadcrumb_custom_css']);
         update_option('breadcrumb_custom_css', $breadcrumb_custom_css);
 
-        $breadcrumb_custom_js = stripslashes_deep($_POST['breadcrumb_custom_js']);
+        $breadcrumb_custom_js = wp_filter_nohtml_kses($_POST['breadcrumb_custom_js']);
         update_option('breadcrumb_custom_js', $breadcrumb_custom_js);
 
 

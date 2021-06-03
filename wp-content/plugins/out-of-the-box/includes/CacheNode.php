@@ -101,7 +101,7 @@ class CacheNode implements \Serializable
     }
 
     /**
-     * @param \Kunnu\Dropbox\Models\FileLinkMetaData|\Kunnu\Dropbox\Models\FolderLinkMetaData $shared_link_info
+     * @param \TheLion\OutoftheBox\API\Dropbox\Models\FileLinkMetaData|\TheLion\OutoftheBox\API\Dropbox\Models\FolderLinkMetaData $shared_link_info
      */
     public function add_shared_link($shared_link_info)
     {
@@ -128,12 +128,12 @@ class CacheNode implements \Serializable
     }
 
     /**
-     * @param \Kunnu\Dropbox\Models\MediaInfo $media_info
+     * @param \TheLion\OutoftheBox\API\Dropbox\Models\MediaInfo $media_info
      */
     public function add_media_info($media_info)
     {
         $media_data = $media_info->getMediaMetadata();
-        if (!($media_data instanceof \Kunnu\Dropbox\Models\MediaMetadata)) {
+        if (!($media_data instanceof \TheLion\OutoftheBox\API\Dropbox\Models\MediaMetadata)) {
             return $this->_media_info;
         }
 
@@ -148,7 +148,7 @@ class CacheNode implements \Serializable
             $this->_media_info['time'] = $time_taken->getTimestamp();
         }
 
-        if ($media_data instanceof \Kunnu\Dropbox\Models\VideoMetadata) {
+        if ($media_data instanceof \TheLion\OutoftheBox\API\Dropbox\Models\VideoMetadata) {
             $this->_media_info['duration'] = $media_data->getDuration();
         }
 

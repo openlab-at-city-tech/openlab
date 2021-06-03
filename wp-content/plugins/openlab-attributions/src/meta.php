@@ -11,9 +11,10 @@ const NONCE = 'attribution-nonce';
 /**
  * Current action can save the attributions.
  *
+ * @param string $post_type
  * @return bool
  */
-function can_save_attributions( $post ) {
+function can_save_attributions( $post_type ) {
 	return (
 		isset( $_POST[ NONCE ] )
 		// Check nonce.
@@ -21,7 +22,7 @@ function can_save_attributions( $post ) {
 		// Check if autosave.
 		&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 		// Check post type
-		&& in_array( $post->post_type, get_supported_post_types(), true )
+		&& in_array( $post_type, get_supported_post_types(), true )
 	);
 }
 
@@ -32,28 +33,49 @@ function can_save_attributions( $post ) {
  * @return array $item
  */
 function sanitize_attributions( $item ) {
-	$fields = [
-		'title'         => 'sanitize_text_field',
-		'titleUrl'      => 'esc_url_raw',
-		'authorName'    => 'sanitize_text_field',
-		'authorUrl'     => 'esc_url_raw',
-		'publisher'     => 'sanitize_text_field',
-		'publisherUrl'  => 'esc_url_raw',
-		'project'       => 'sanitize_text_field',
-		'projectUrl'    => 'esc_url_raw',
-		'datePublished' => 'sanitize_text_field',
-		'derivative'    => 'esc_url_raw',
+	$sanitized = [];
+	$fields    = [
+		'id'             => false,
+		'title'          => 'sanitize_text_field',
+		'titleUrl'       => 'esc_url_raw',
+		'authorName'     => 'sanitize_text_field',
+		'authorUrl'      => 'esc_url_raw',
+		'publisher'      => 'sanitize_text_field',
+		'publisherUrl'   => 'esc_url_raw',
+		'project'        => 'sanitize_text_field',
+		'projectUrl'     => 'esc_url_raw',
+		'datePublished'  => 'sanitize_text_field',
+		'derivative'     => 'esc_url_raw',
+		'adaptedTitle'   => 'sanitize_text_field',
+		'adaptedAuthor'  => 'sanitize_text_field',
+		'adaptedLicense' => false,
+		'license'        => false,
+		'content'        => function( $value ) {
+			return wp_kses( $value, [ 'a' => [ 'href' => [] ] ] );
+		},
 	];
 
 	foreach ( $fields as $name => $sanitize_callback ) {
-		if ( empty( $item[ $name ] ) ) {
+		// Skip unknown fields.
+		if ( ! isset( $item[ $name ] ) ) {
 			continue;
 		}
 
-		$item[ $name ] = $sanitize_callback( $item[ $name ] );
+		if ( empty( $item[ $name ] ) ) {
+			$sanitized[ $name ] = '';
+			continue;
+		}
+
+		// No need to revalidate ID and the license.
+		if ( ! $sanitize_callback ) {
+			$sanitized[ $name ] = $item[ $name ];
+			continue;
+		}
+
+		$sanitized[ $name ] = $sanitize_callback( $item[ $name ] );
 	}
 
-	return $item;
+	return $sanitized;
 }
 
 /**
@@ -74,12 +96,67 @@ function register_metabox() {
 add_action( 'add_meta_boxes', __NAMESPACE__ . '\\register_metabox' );
 
 /**
+ * Remove unused markers from the content before saving.
+ *
+ * @param array $post_data An array of slashed, sanitized, and processed post data.
+ * @return array
+ */
+function remove_markers( $post_data ) {
+	if ( ! can_save_attributions( $post_data['post_type'] ) ) {
+		return $post_data;
+	}
+
+	$marker_ids = get_attribution_marker_ids( $post_data['post_content'] );
+	if ( empty( $marker_ids ) ) {
+		return $post_data;
+	}
+
+	$search     = [];
+	$attr_ids   = empty( $_POST['attributions'] ) ? [] : wp_list_pluck( $_POST['attributions'], 'id' );
+	$remove_ids = array_diff( $marker_ids, $attr_ids );
+
+	// Bail if we don't have markers to remove.
+	if ( empty( $remove_ids ) ) {
+		return $post_data;
+	}
+
+	// Build array of old markers to remove.
+	foreach ( $remove_ids as $id ) {
+		$search[] = sprintf(
+			// $post_data array is slashed.
+			'<a id=\"anchor-%1$s\" class=\"attribution-anchor\" href=\"#ref-%1$s\"></a>',
+			$id
+		);
+
+		// Attribute order isn't consistent; try to account for the most common ones.
+		$search[] = sprintf(
+			'<a id=\"anchor-%1$s\" href=\"#ref-%1$s\" class=\"attribution-anchor\"></a>',
+			$id
+		);
+
+		$search[] = sprintf(
+			'<a href=\"#ref-%1$s\" id=\"anchor-%1$s\" class=\"attribution-anchor\"></a>',
+			$id
+		);
+	}
+
+	if ( empty( $search ) ) {
+		return $post_data;
+	}
+
+	$post_data['post_content'] = str_replace( $search, '', $post_data['post_content'] );
+
+	return $post_data;
+}
+add_filter( 'wp_insert_post_data', __NAMESPACE__ . '\\remove_markers' );
+
+/**
  * Save content attributions.
  *
  * @return void
  */
 function save_attributions( $post_id, $post ) {
-	if ( ! can_save_attributions( $post ) ) {
+	if ( ! can_save_attributions( $post->post_type ) ) {
 		return;
 	}
 

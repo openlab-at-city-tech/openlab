@@ -1838,6 +1838,27 @@ function renderRecaptcha() {
 
 }
 
+/**
+ * Helper function to determine whether a recaptcha is pending.
+ *
+ * @since 2.4.23
+ *
+ * @param {Object} form jQuery form object.
+ * @returns {boolean}
+ */
+function gformIsRecaptchaPending( form ) {
+	var recaptcha = form.find( '.ginput_recaptcha' ),
+		recaptchaResponse;
+
+	if ( !recaptcha.length || recaptcha.data( 'size' ) !== 'invisible' ) {
+		return false;
+	}
+
+	recaptchaResponse = recaptcha.find( '.g-recaptcha-response' );
+
+	return !( recaptchaResponse.length && recaptchaResponse.val() );
+}
+
 //----------------------------------------
 //----- SINGLE FILE UPLOAD FUNCTIONS -----
 //----------------------------------------
@@ -2121,7 +2142,20 @@ function gformValidateFileSize( field, max_file_size ) {
                 + "' /> "
                 + html;
 
-            html = gform.applyFilters( 'gform_file_upload_markup', html, file, up, strings, imagesUrl );
+	        /**
+	         * Allows the markup for the file to be overridden.
+	         *
+	         * @since 1.9
+	         * @since 2.4.23 Added the response param.
+	         *
+	         * @param {string} html      The HTML for the file name and delete button.
+	         * @param {object} file      The file upload properties. See: https://www.plupload.com/docs/v2/File.
+	         * @param {object} up        The uploader properties. See: https://www.plupload.com/docs/v2/Uploader.
+	         * @param {object} strings   Localized strings relating to file uploads.
+	         * @param {string} imagesURL The base URL to the Gravity Forms images directory.
+	         * @param {object} response  The response from GFAsyncUpload.
+	         */
+	        html = gform.applyFilters( 'gform_file_upload_markup', html, file, up, strings, imagesUrl, response );
 
             $( '#' + file.id ).html( html );
 

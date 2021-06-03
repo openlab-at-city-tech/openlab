@@ -162,7 +162,7 @@ if (!function_exists('wpcp_help_tip')) {
             $class = 'error';
 
             if (version_compare($environment['php_version'], '7.2', '<')) {
-                $notice = '<span class="dashicons dashicons-warning"></span> '.__('We recommend using PHP version 7.2 or above for greater performance and security.', 'wpcloudplugins').$update_link;
+                $notice = '<span class="dashicons dashicons-warning"></span> '.esc_html__('We recommend using PHP version 7.2 or above for greater performance and security.', 'wpcloudplugins').$update_link;
                 $class = 'error';
             }
 
@@ -403,6 +403,20 @@ if (!function_exists('wpcp_help_tip')) {
         ?>
       </td>
     </tr>     
+    <tr>
+      <td>Fluent Forms</td>
+      <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Fluent Forms.', 'wpcloudplugins')); ?></td>
+
+      <td>
+        <?php
+        if (!$environment['fluentforms']) {
+            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.esc_html__('Not active', 'wpcloudplugins').'</mark>';
+        } else {
+            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span> '.FLUENTFORM_VERSION.'</mark>';
+        }
+        ?>
+      </td>
+    </tr>      
     <tr>
       <td>Formidable Forms</td>
       <td class="help"><?php echo wpcp_help_tip(esc_html__('You can use the plugin in Formidable Forms.', 'wpcloudplugins')); ?></td>

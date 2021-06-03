@@ -5710,7 +5710,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         borderWidth: {
             type: 'number',
-            default: 0
+            default: 1
         },
         borderColor: {
             type: 'string'
@@ -5810,6 +5810,80 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 )
             );
         },
+        deprecated: [{
+            attributes: _extends({}, accordionAttrs, {
+                borderWidth: {
+                    type: 'number',
+                    default: 0
+                }
+            }),
+            save: function save(_ref2) {
+                var attributes = _ref2.attributes;
+                var header = attributes.header,
+                    headerBgColor = attributes.headerBgColor,
+                    headerTextColor = attributes.headerTextColor,
+                    headerIcon = attributes.headerIcon,
+                    headerIconColor = attributes.headerIconColor,
+                    bodyBgColor = attributes.bodyBgColor,
+                    bodyTextColor = attributes.bodyTextColor,
+                    borderStyle = attributes.borderStyle,
+                    borderWidth = attributes.borderWidth,
+                    borderColor = attributes.borderColor,
+                    borderRadius = attributes.borderRadius,
+                    marginBottom = attributes.marginBottom,
+                    collapsedAll = attributes.collapsedAll;
+
+
+                return React.createElement(
+                    "div",
+                    { className: "advgb-accordion-block", style: { marginBottom: marginBottom }, "data-collapsed": collapsedAll ? collapsedAll : undefined },
+                    React.createElement(
+                        "div",
+                        { className: "advgb-accordion-header",
+                            style: {
+                                backgroundColor: headerBgColor,
+                                color: headerTextColor,
+                                borderStyle: borderStyle,
+                                borderWidth: borderWidth + 'px',
+                                borderColor: borderColor,
+                                borderRadius: borderRadius + 'px'
+                            }
+                        },
+                        React.createElement(
+                            "span",
+                            { className: "advgb-accordion-header-icon" },
+                            React.createElement(
+                                "svg",
+                                { fill: headerIconColor, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24" },
+                                HEADER_ICONS[headerIcon]
+                            )
+                        ),
+                        React.createElement(
+                            "h4",
+                            { className: "advgb-accordion-header-title" },
+                            header
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "advgb-accordion-body",
+                            style: {
+                                backgroundColor: bodyBgColor,
+                                color: bodyTextColor,
+                                borderStyle: borderStyle,
+                                borderWidth: borderWidth + 'px',
+                                borderColor: borderColor,
+                                borderRadius: borderRadius + 'px'
+                            }
+                        },
+                        React.createElement(InnerBlocks.Content, null)
+                    )
+                );
+            },
+            supports: {
+                inserter: false
+            }
+        }],
         transforms: {
             to: [{
                 type: 'block',
@@ -6149,7 +6223,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 },
                                 className: "advgb-accordion-header-title",
                                 placeholder: __('Enter header…', 'advanced-gutenberg'),
-                                style: { color: 'inherit' }
+                                style: { color: 'inherit' },
+                                allowedFormats: ['core/bold', 'core/italic', 'core/image', 'core/strikethrough']
                             })
                         ),
                         React.createElement(
@@ -6226,7 +6301,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             },
             borderWidth: {
                 type: 'number',
-                default: 0
+                default: 1
             },
             borderColor: {
                 type: 'string'
@@ -6251,6 +6326,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 type: 'string',
                 default: ''
             }
+        },
+        supports: {
+            anchor: true
         },
         edit: compose([withDispatch(function (dispatch, _ref2, _ref3) {
             var clientId = _ref2.clientId;
@@ -6300,7 +6378,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             backgroundColor: headerBgColor,
                             color: headerTextColor,
                             borderStyle: borderStyle,
-                            borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                            borderWidth: borderWidth + 'px',
                             borderColor: borderColor,
                             borderRadius: !!borderRadius ? borderRadius + 'px' : undefined
                         }
@@ -6327,7 +6405,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             backgroundColor: bodyBgColor,
                             color: bodyTextColor,
                             borderStyle: borderStyle + ' !important',
-                            borderWidth: !!borderWidth ? borderWidth + 'px !important' : undefined,
+                            borderWidth: borderWidth + 'px !important',
                             borderColor: borderColor + ' !important',
                             borderTop: 'none !important',
                             borderRadius: !!borderRadius ? borderRadius + 'px !important' : undefined
@@ -6449,6 +6527,132 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             style: {
                                 backgroundColor: bodyBgColor,
                                 color: bodyTextColor,
+                                borderStyle: borderStyle + ' !important',
+                                borderWidth: !!borderWidth ? borderWidth + 'px !important' : undefined,
+                                borderColor: borderColor + ' !important',
+                                borderTop: 'none !important',
+                                borderRadius: !!borderRadius ? borderRadius + 'px !important' : undefined
+                            }
+                        },
+                        React.createElement(InnerBlocks.Content, null)
+                    )
+                );
+            },
+            supports: {
+                anchor: true
+            }
+        }, {
+            attributes: {
+                header: {
+                    type: 'string',
+                    default: 'Header text'
+                },
+                headerBgColor: {
+                    type: 'string',
+                    default: '#000'
+                },
+                headerTextColor: {
+                    type: 'string',
+                    default: '#eee'
+                },
+                headerIcon: {
+                    type: 'string',
+                    default: 'unfold'
+                },
+                headerIconColor: {
+                    type: 'string',
+                    default: '#fff'
+                },
+                bodyBgColor: {
+                    type: 'string'
+                },
+                bodyTextColor: {
+                    type: 'string'
+                },
+                borderStyle: {
+                    type: 'string',
+                    default: 'solid'
+                },
+                borderWidth: {
+                    type: 'number',
+                    default: 0
+                },
+                borderColor: {
+                    type: 'string'
+                },
+                borderRadius: {
+                    type: 'number',
+                    default: 2
+                },
+                marginBottom: {
+                    type: 'number',
+                    default: 15
+                },
+                collapsedAll: {
+                    type: 'boolean',
+                    default: false
+                },
+                changed: {
+                    type: 'boolean',
+                    default: false
+                },
+                rootBlockId: {
+                    type: 'string',
+                    default: ''
+                }
+            },
+            save: function save(_ref6) {
+                var attributes = _ref6.attributes;
+                var header = attributes.header,
+                    headerBgColor = attributes.headerBgColor,
+                    headerTextColor = attributes.headerTextColor,
+                    headerIcon = attributes.headerIcon,
+                    headerIconColor = attributes.headerIconColor,
+                    bodyBgColor = attributes.bodyBgColor,
+                    bodyTextColor = attributes.bodyTextColor,
+                    borderStyle = attributes.borderStyle,
+                    borderWidth = attributes.borderWidth,
+                    borderColor = attributes.borderColor,
+                    borderRadius = attributes.borderRadius,
+                    marginBottom = attributes.marginBottom;
+
+
+                return React.createElement(
+                    "div",
+                    { className: "advgb-accordion-item", style: { marginBottom: marginBottom } },
+                    React.createElement(
+                        "div",
+                        { className: "advgb-accordion-header",
+                            style: {
+                                backgroundColor: headerBgColor,
+                                color: headerTextColor,
+                                borderStyle: borderStyle,
+                                borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
+                                borderColor: borderColor,
+                                borderRadius: !!borderRadius ? borderRadius + 'px' : undefined
+                            }
+                        },
+                        React.createElement(
+                            "span",
+                            { className: "advgb-accordion-header-icon" },
+                            React.createElement(
+                                "svg",
+                                { fill: headerIconColor, xmlns: "http://www.w3.org/2000/svg", width: "24", height: "24", viewBox: "0 0 24 24" },
+                                HEADER_ICONS[headerIcon]
+                            )
+                        ),
+                        React.createElement(
+                            "h4",
+                            { className: "advgb-accordion-header-title", style: { color: 'inherit' } },
+                            header
+                        )
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "advgb-accordion-body",
+                            style: {
+                                backgroundColor: bodyBgColor,
+                                color: bodyTextColor,
                                 borderStyle: borderStyle,
                                 borderWidth: !!borderWidth ? borderWidth + 'px' : undefined,
                                 borderColor: borderColor,
@@ -6503,8 +6707,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         BaseControl = wpComponents.BaseControl,
         SelectControl = wpComponents.SelectControl,
         ToggleControl = wpComponents.ToggleControl,
-        Toolbar = wpComponents.Toolbar,
-        IconButton = wpComponents.IconButton;
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton;
     var _wp$data = wp.data,
         withDispatch = _wp$data.withDispatch,
         select = _wp$data.select,
@@ -6698,13 +6902,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 icon: "update",
                                 onClick: function onClick() {
                                     return _this2.resyncAccordions();
-                                }
+                                },
+                                label: __('Refresh', 'advanced-gutenberg')
                             })
                         )
                     ),
@@ -6898,7 +7103,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         borderWidth: {
             type: 'number',
-            default: 0
+            default: 1
         },
         borderColor: {
             type: 'string'
@@ -6980,13 +7185,31 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         },
         deprecated: [{
             attributes: _extends({}, blockAttrs, {
+                borderWidth: {
+                    type: 'number',
+                    default: 0
+                }
+            }),
+            save: function save(_ref10) {
+                var attributes = _ref10.attributes;
+                var collapsedAll = attributes.collapsedAll;
+
+
+                return React.createElement(
+                    "div",
+                    { className: "advgb-accordion-wrapper", "data-collapsed": collapsedAll ? collapsedAll : undefined },
+                    React.createElement(InnerBlocks.Content, null)
+                );
+            }
+        }, {
+            attributes: _extends({}, blockAttrs, {
                 rootBlockId: {
                     type: 'string',
                     default: ''
                 }
             }),
-            save: function save(_ref10) {
-                var attributes = _ref10.attributes;
+            save: function save(_ref11) {
+                var attributes = _ref11.attributes;
                 var collapsedAll = attributes.collapsedAll;
 
 
@@ -7035,8 +7258,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         createBlock = wpBlocks.createBlock;
     var _wpBlockEditor = wpBlockEditor,
         InspectorControls = _wpBlockEditor.InspectorControls,
-        BlockControls = _wpBlockEditor.BlockControls,
-        BlockAlignmentToolbar = _wpBlockEditor.BlockAlignmentToolbar,
         RichText = _wpBlockEditor.RichText,
         PanelColorSettings = _wpBlockEditor.PanelColorSettings,
         URLInput = _wpBlockEditor.URLInput;
@@ -7044,12 +7265,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         RangeControl = wpComponents.RangeControl,
         PanelBody = wpComponents.PanelBody,
         ToggleControl = wpComponents.ToggleControl,
-        SelectControl = wpComponents.SelectControl,
-        IconButton = wpComponents.IconButton,
-        Toolbar = wpComponents.Toolbar;
+        SelectControl = wpComponents.SelectControl;
 
+    // Preview style images
 
-    var previewImageData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAABoCAYAAADYQu11AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAEMFJREFUeNrsnQlsFNcZx2d2vLZZ29hgfIRgQBgKJXZrp6sCroPAECAREaRGrRASqUqC3aJGcYCQSI0UFdGWNm2UywqiOVqkcCQYUNsk1ChO5cYNV0wJdmJcgx0bJw7FB7693t2+b7PjvH1+M7szO3t/f+kxu2aP2Tff733HezMjCCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFQqFQKFRESYzUHY+Li4vo/UdFvJzj4+MIusFA8/ZVjKaBCxX+YPvwN9fzcBwAxDCGW1TYT1Fhi7CjggW508s27KAXwwxuNZBFqimBjpCjggE7Dba3x2EBvRimgPPgVmoCAo8KoSf31ia9LxTAi2EAuRrUJvZxUVFRfEVFRc6sWbPmWCyWTLPZPE2SpGRRFM0c+FEo/0h3Oh2kjdnt9v6RkZFbAwMDXc3NzZ/v3bu3s62tzU4B7VB4zAU/2LCLYQi4idqaCMymo0ePLpw7d641JSVleWJi4gYC9RQ0QVQo5XA4vhwaGnqnp6en7tKlSxcefvjhNgpyB+dxSIEXQwy4wIA9Afhzzz2XuXr16rXTp0//KXmfFU0LFc6Of3R0tPqLL75487XXXvvgwIEDfRTkDg78QYddDCHkLNwSbI8dO5a7ZMmSp4jn3uT+OwoVSaH+SH9//59feOGF37/44ovdbrDtCtAHDXgxyJCzXlySPfgrr7xy53333fcMAbyUPDejyaAiXLbe3t4D5eXlv62pqRmigLcrAB9Q2MUgQ057ctmLS5cvX96SmZm5n+TeKWgfqCjL5buIff9s7dq1teTpuALsjkDDbgow5DzAJXeLI2H6whs3btRkZWVVIuSoaJTJZMoqKCioam1tfbOioiLLHa1Ci6NYMFFRrkhNOYe/R3dDLih58bq6upJ58+a9TgCfhuaAiolY3mb79KOPPnps06ZNHzPefVzgTMsZ6dnFAEEuqITqcQ0NDdtnzJjxa8zFUTEYyn/V1NS0e8WKFe+6AZcbt1BnFOymIEHuAry4uHjK1atX9xDIf4eQo2I0lM9ctGjRS8Szb6bCeDMvhDcyjBeDADm0uMWLFyecPHlyV2pq6pMCrl5DxbicTufgtWvXnioqKjrKeHY5nJdDecEIz2406PT02US4npCQYK6vry9LT0//jYBz4yiUHMb3NzY2/mLVqlVyGG+jYPeoxhPQnf58lxQgb+5RXa+trb135syZL7nXo6NQKABFFBOI8yvKyMh498yZM7e9hPwwMIQWdA7kE3l5VVXVXXl5eQfJjqbjoUWhJgGclJ+ff++FCxeOtLW1ydX3iQifiQD0f49RgxMnN5fKysqmWq3WZyRJmoOHFIVSdJRzDx48+Cvh67l1eX6dTn9FJjUOfo6uELLDH81NTU170tLSnsRDiUJ518WLF39y//33n3bn6nK+Ps7k67oKc0Z4dO58+XvvvWdNTU0tx8OHQvmmwsLC5wsKCiwcr867slLwQGeuDuOx8m3hwoXbRVFMw8OHQvmcr6dWVlb+iIqK6SWyIhXCa/5syc8d41bZq6qqvpubm7tPMLCqj0LFgqZNm7ZsZGTkrXPnzg0Kypek0lyY0+3RGW/uEbrffffdu8k2Hg8bCqUxDxbFpK1bt25U8+jBDt15J61I+/fvn5mYmLgKDxkKpU85OTmPrlmzZioFut/huy7QOd58YiqgtLS0goxKiXi4UCj9ufru3btLBOWpNs3e3d+qu0fYbrFYJNLQm6NQfio3N/fHkiSZ1CDX4tVNBgA+4dGPHz++BBfHoFD+Kykp6Qe7du2aJfAvThHUHH1S6D5//vwfCnhmGgplhMSSkpJCFY+uKXzXPCGnkJ+7tlOmTPlepPUmiUBg9PTptTabDU4vFMbGxlSnN3ifOTg4KNjtdtXPnzp1qsfz0dFRVwMlJCS4mj+SP8/Iz1LJM4XExESXvdAhJvQf9AP0obd+VOvP/v5+12epif2dsKJsaGgoYmwzOzu7gGz+xsAOTfOid71ntU8K3dPT0yVyQBdEYOHD51xHfp3FYnEZORgNz9h4nwl/8wY6+x4YWPTsp9pAZfRn8X47GfAVBxJRFCfg99aPar89JSVFuH37tmHHNhyVnJz8LfI7JTKoKXl0J/w+X5bEmnRCPgn6nTt33kEOoiVW4iowZNYDx7ri4+OF1NRUTdECvDYtLc3ltbVGljCgRLmNzdm2bVs2J3oWtIbu/s6jT7SCgoJ5sWbYYJwQnqK+hpx4IJfH1mxI5D0waGqFHUA3m6P3Egfkt82yWq2zBfWpNZ863LDQneQTi6OlgyH/4xkjGDM01sBHRkYCvk8Qng0PD3PDU9aDQjjMy33lEM/Iz5Lfp1TngL6B10LaAq+DBnCy/Qj9C+F4X1+f19ybCW9d7/HnXO1w9iUkJc4UvN9J2FjQOfnOxJeSAz0/WnpXKf+E4hF4HrofgpUDwj7x9gugYeGE/VT6DUZ/luxZWU8OYA8MDHjUJeTHMHgA6DA40O+TC3i8QUgtGpAHiGgU6aPpCvm5zJ9Po6K/8+gTj8mBuyMWQlTW6KPUk/gsXhQAHhmiIrXiIwwgMBPBCkDXGv5DyA+FvShNiZIVcvKAr4zjfhksxo92owYDZI3am7eLdvEKbxCu+zIAAuzsFJ2cImkVDBB63hcBA6nZ37Ddnxx9kncX9VRhwlS8aq5sgODBaM+lJcyM0oIRF3RfBbCzg4UvRTn4DrYQCqkA1AOiKcpyc+UX5EaBLoewY9EMOuf3usLTWA/dWSghXNdSTONFRL7UPeT30bBHY75O7MvuFWIf5tK1hu6iQp4OX3Qr1ow8khdjGJnOsPl5sAQLbVgD17LSMRJEIp5hpSg60Dk6VySE7YglA5enlKLJqPSIBTvYGRxvKawRS3zDRSRF6ed1e6BDdyc1ktCXuBG6uroasrKyoqJzefPosreAPJ325GBQEL7Haq4OoTrdH9BHALuvnp2Xj2u5yil8D0zjQchOC6rw0VAovXXr1k0VFn3uL8M8+rVr11qjxXjleWa2QQEI1ldDAYn1IFpDXFa8opa3tfHhIJ6RaVktyHut1ssZw7FhB1q91fswG0R7W1tbuwTPa8fpyo2MAN315W+//fbnenciEr0YG8Z7A9TbUk1evh8JoPPOYAN42T5R8ua8OXg9nhhAN/J+4mHSt+0nTpwwJCU26QRbYEeZ6urqQdLRMZGnezNiCOXZajwYtNK0EW/NvHw6ZyQMeixgcvVbbZoM/o93UhBETXoLetE2CzI4ONh89uzZQY5H1+zZ9Xp0J8+rk4P0aTR0MHhfpQbFN9YL8YyL5+nAsOkTMcDY4Tn8nQ3tg7F+3kCD5IIMZ7JBrgy/F34fNLkP4f/Y3wz96M/vllfkRYtIfn6V51RVOFSOGLXmY1SIOWmEITt2Njk5eU2kdzBb2NETvsoLOmhjhse+zNGDwUYS6ODVAXbeDAT0gS85uwypv9NzsC8w7RYNS2IbGxsvC9StmDjRdNA8Or0Djp07d75JRuVBIYYEhsWDUq4G6xG8L5jz0Ubl6jzP7qsnhiKnUakKHA+2YBppstlsX+3bt++KzBYFvEOPV/enGDfJo9fW1g6S0fRcrEAOxg0GqgQlFJW0nEIJr4PXR+q0EPQH7L+Wohi8p7e31/B6BAw6kZyvt7W1He7o6BhjnanePD1OJ+AC8+UTI05zc/NbhYWFKyOlQ8EYtBimvJba1+udgQGDIUNeL+f5dDgvV5mhqV2DTcv+6zVwIz4Lfi8MfvI557DlzUrI05W+fL6e/ZJTATqdiKSqfHV19fs8vgSdU2zaz4L55jbJ8lUvXLdIdrcEkoMmNDU1vUMMe5GAQqE0q7u7+3ReXl4FGRAhtBtjGoxWdneDWygHJnSnRkUnz6sPDw/bW1tbD+HhQqH06cyZM38hkDsYbx5cj055dfo2yXHuBkuR4nNycix1dXV/J6HbAjxsKJTv6unpqbFarY8ODAyMuj047dVtlDd3uD26T59rVDHOY+Rpb28fbWlpeV3Qcf1pFCqG5XjjjTf+QCAfp3jyAJv26FpqDrruXw6FEPe90enIwOOuLfX19dc3bNjwbZKrz8Pjh0J5V1dX14ktW7ZUufNwutnpvFwGXUuhVNK7U1QllYXctSU77cjPz7+xYMGCe8lrp+BhRKGUBddzKC0tLSfcjFJQs6G6h1fXArpRJ7WwYYarbd++vf6zzz571v0chULxAHI67ZWVldsuX748SPHDenKH3rBd9sa6FRcXR3tz+a6PZqrFJycnx3/44Ye/zM7OfggPKQo1WSTN3btu3bqjbrhtwuQC3Djr1bWCLvmzg5yzuCZdyG5sbEwkI9XHGzduXEkGhhl4WFGob9Td3V2zbNmyZ5lwnZef6/bmfoPOFOXYa71P/K29vX28s7OzeuXKlUvNZnMmHl4USoAVk/+65557HhsaGrJR4ToLOpub61r5KPm7s26vzrvWu4dnb2hoGOnr6/tncXHxMuLZM/Awo2JZhIV/r1+//jHiBEcoyHnVdhp0wdeVcIaDzvHqisBfunRpuKur6/2SkpJVkiSl4eFGxaJ6eno+IDl5RUtLy7AGyDVX2g0FXcGrK8J+5cqV4U8++eSvy5cvz0hKSlok+FkQRKEiRQTSoevXr7++Y8eOZwkDgwqA03m5X5V2Hoh+izrZhT7hha3EyyfAxGVnZyeeOnXq57Nnz36IDBRJaAaoaBaB9H/nz5//4yOPPPLuzZs3xxiwbVRublMA3RkWoLthpz04by28mdnGHT58eMXSpUt3WCyWfDQHVDSqt7e39uTJk5V79uy5InjOk48zgLMFOIcRkBsWunvJ19lbu3rk8cePH2/r7Oysyc/Ph3OH5+AqOlS0yGazdTU2Nr5cVlb2/KFDhzoEzwUwNgZ2dgWcw4iQPSAenfHs7GIaE+XZ2eby+lu3bs16/PHHyzMzM9dhsQ4VwYDf7OjoOPXAAw9UkjDdJniuGvUlL/e7yh4s0AVh8uIZiRPKs7C7XvPggw/OePrpp8szMjJWxMfH34mmg4oAOYeHh/9LAP/H+vXr/0TCdTYEH1cA3a4QrgtGhOwBBV0FdrpAJ7EenYYdtmaz2fTqq68WW63WjSkpKd8h0M9Ee0KFDdlOp310dPRzAvV/Tp8+feyJJ55gL+bInv/Bwm6nXhMwyAMKOgO7IFBntnGAZ0GngZebuHr16tTNmzfflZeX9/309PQCAn4m+Y6pULUXRdGMpocKDM9Om91uHyDg9RKwvyS6eP78+bNHjhxpIVv6Bgu8q8LwILcLymelGQ55wEHnwC4ywEtM/s5CPgl2Qfmm8Dgfjwo49Jwte4VWB+OplZojWJAHDQ4O7Ox8u4kDuK+wC5wtChUIwNUgl4G1K4TtDhXADS28hQx0CnjuOngGZBZuJdBNnMEDhQqWN3d4CdkdHOjZmzAE1IuHDHQfvDsPehZykw+gI/SoQHlzXmO9NA9spZsvOINxvfmQAEHdv00NeB78Iid8x9AdFWyPrgS72jYkgIeF5+N4d15YLwrKhTgEHRWq0F0Ndm+3OXYG+64xYQEGA7zAgVgNcAzZUaEEXVCBOuSAhyUYCiG9oAC2khdH2FGBzNPVYOfCDf+E+r5vYQ0FVaXn7S8CjgoX4IVw8dwRCbqX8B4BR4UL8AGdA48p0HV4fxTKULgj6bbLKBQKhUKhUCgUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoVITr/wIMAH6+b9Z51AT3AAAAAElFTkSuQmCC';
+    var previewImageData = '';
+    var previewImageDataDefault = 'data:image/png;base64,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';
+    var previewImageDataOutlined = 'data:image/png;base64,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';
+    var previewImageDataSquaredOutline = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAABoCAYAAADYQu11AAAE1ElEQVR4nO3d4VHrOhCG4T13bgO0EErYlHAoIZSQlEBKgBJICaSEnBJQCaSFlHDPiLuZ8YhVbDkOTLLvM8OfYBJs9FnSWjYCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAmH5Nudeq+h/tCJhOSmmSjP7D3wS4ff9eaA8nHSkAAU06OqZHBwIg6EAABB0IgKADARB0IACCDgRA0IEACDoQAEEHAiDoQAAEHQiAoAMBEHQgAIIOBEDQgQAIOhAAQQcCIOhAAAQdCICgAwEQdCCASz0F9toMfeLmQUReRGSfUtrWNlLVnYj8Ll5+SCn9OfEzTyLyXLy8Tim92PdnIvJx5nH9k1J6UNVXEVme+V59+5P3X+1zZsW387FLIrJJKR2GfFjxPwP29vn7YhvvR/Mx637+2v6GoRD0NnfHMKpqbqiPZWOLzgL+bCGvWdjXs6pu7IQ2KPAmB/dNRObRj/dQDN3Hyw15p6p317oDU1PVHPBdT8hLucf/sBNEC1XVt2s6Pj+JoFfkf4XT/bLeIxVbzyYYAt8Emw48jdyXOztptpwgsoVNedCDoftAKaWkqmvrsboW3zHnsynCl/+AU5m7f87FT7zXSkRWznt5c/eTc3H7uWXlhJdPjNtjnaHz+y6ceoRY2O8bh/F5+J/3tzwJo4MevUGlwYceutvUxQttLrTNuyEXO2HZa3MrqnXV3qvPzk4gqCDo52vpfW7R0jnZ7W3UUGU9sLfNckTd486Kc6gg6A0qBaOTw9oAFs4uDprK2AjJO37ee5bKE6yOHA2EQNAHUtXc+F6LrfcRr8kWvAJadY2Bwwv6kKLcixP2pzMKgjeNYlxFsUDDkxvzqrFwdFMq8+J94zHximhD5tv5M3LB8b14/dlOHhTnOujRx9naNDP6/PxH2Tx/7fwOb9GLpCWCPs5xVdcH1d6fZRX8cqowcy6DhkbQK8oFM7Zopuw9QjeoyvLfWWPV3JuPNy0rTik9OkP1Y3Eu/BJlIehtar2HFeq6vMbV1/i971/D1MCbCw+pmh95VzLGzK8fK8W51tV2N4mgt/Ma4ZfryM42fQ1uqgb/3bwK+6DKt12u9Pa7pWr/yUYX3nX58HN1IegX410yWtbm87ZeuzwRHK5kWefG6Ulntpy2yo6Ft83gW1cd20pxLjyC3q6357WAlmHPPcu7rQv/lOeydseXt9DjKq7PWyi9cOUT23t500kOuL1W3icudsI4N6je9Co8rqMP1FnTXQa9dkPF2rnGm9/jta+3s6H/5uI7NZGU0sbuPCtvbFG7nXToirWHiS5ZruyzuSJiCHrFgAUzYj2Qu6bb7nZbVYanp+wnbPDfJq9tV9XDyJVpB3uIx1RTlYMV53bM0f/H0H283Cjnp54wk3s6W7019BLP1ntE0rVIKa1tf1sCm4/Rfd+tsCPUbpoJiR693brvmXFd1oDvbW4+c3q843PobuKeatvf+dTPjBvpWJwLf7PLlwcZnKMz3J30fYGAPrNkC7XOxtAdCICgAwEQdCAAgg4EQNCBAAg6EABBBwIg6EAABB0IgKADARB0IACCDgRA0IEACDoQAEEHAiDoQAAEHQjgUo+SGvJgRQDfhB4dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgPBH5CxnLf2zPqO7iAAAAAElFTkSuQmCC';
+    var previewImageDataSquared = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAABoCAYAAADYQu11AAAFXklEQVR4nO3c6ytsURzG8XUOUUSIXCNEFK/M//8XjFcUEUWuESKKyOmZ0z5nz7L22WuNfWjm9/3UlMbc9p71rPtsBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJt+VHnU9Xr9nXIEVKdWq1WS0Z98J0DnI+iAAQQdMICgAwYQdMAAgg4YQNABAwg6YABBBwwg6IABBB0wgKADBhB0wACCDhhA0AEDCDpgAEEHDCDogAEEHTCAoAMGEHTAAIIOGEDQAQO6+ZKd29jYiHrc29ubu7y8dM/Pz+7m5qbwccvLy25gYKDpvv39fXd/f1/4nMnJSTc1NdV039nZmTs/P2/83dvb69bW1qI+Z5GHhwe3t7fn5ubm3Ojo6Kdeq+x4BgcHXX9/f+N9enp6mv53d3fnnp6e3NXVlXt9fY16v/x39PLy0jgOfQ9l1tfXm94/f04tIegJurq6/oRxfHzcHR4eRhU2SxTw6elp19fXV3jUQ0NDjZvO5fX1tTs9PY0OvCi4CwsLbmdnx/rpjkbXvUUqyGq5u7upKzMzMzNuaWnpnyH3qcVXT0UVRAq9x+Li4lcdWtujlBbY3Nxs+oe6obOzs02FWC3L2NiYya6g7zPDAfWUVEHs7u66x8fH6OepV6AhD+e/HEGPpAKoLqYKZJ4K21cUNA0R/MrHFYzds7F4kaOjo8bNFwpr2VhcVNmFQq5xuMbj+fOjzzsyMvJhPkJ0bre3t5O68Xodfb6UCsIiuu4JQgXeetddx68xuU9jb42h/UpQFZbuU+utSbU8teyh1yqjCkIVCIoR9E9KaX06kVpzBTRPAQ71GPLUAoceo55BauWp99fkHIoR9AShCSN1ky3T0MV3cXERdUbUQwqdv+Hh4dLnaqkzT3MnmgxEGEGPpHGlxrB5arliC3WnCs2w397eRh9tKOgxs/baz+CHXUuempzDR0zGFSjbRKNJJnU9LXfdQ+NiVX4p5yQ0iRYz3tZ7aKJwZWWl6X4m58Jo0VuQ7eyyPj7/bgqzdrr5NF63PknqI+gtyHZ1aXsls73fSzP4qnjztL/BXwa1jmqvQGjN2t+PrgKl3XFbW1vf/nm/Q2j7r86JWtPY3o42IvlStxUfHBy41dXVprF9Njmn1/L32ltEi56gqPXQRF1eqKCWdSX9JSrXJkt3GsL4YmbNM/6Pf4pes4x+dxCanEvZjtvJCHqiUCEMrSP7ygpcVQX+q/kVn0xMTER9Ci1Xho47ZdY+o8r1+Pj4w/2hCtQigv4fhHbQaSNI0XheQwK/IlDr1A4zx/qpqd+SqpfjL0X6dC5Cj9GOulZ7MvrpcGhyDgQ9WUzLq4D668NqWTSO1E6yjLrzGkeG9n1rnbgdKJT6DYBPFZuO11/XVsB1n/bn+2NnVRih10oRGl6Bybho2Z5uP+gKdKjlVYH113gVdv0CTrd/UddfLWW70GdVj8T/YYvu0y1UkYVoXbyKeQntb9D7Mgn3F0EvEHPVGbVARXu6FX6NGctC7cuuntJua/Q6DzofmgBLpedpMq2qoYrOnV5PS2yM0X8j6C1Sd73sCjNq6fR/jUVjWhd1OU9OTtr2qjX67JqfKLvCTF4rV5iJkVW08/Pzlb5uuyLoiTTZU3bNuDwVfK2za2yu8anf4mXXoeuUbZs6Dt2qvmZcK/Qd6ZzHDh062Y8qj61er79bP6FAlWq1WiUZZdYdMICgAwYQdMAAgg4YQNABAwg6YABBBwwg6IABBB0wgKADBhB0wACCDhhA0AEDCDpgAEEHDCDogAEEHTCAoAMGEHQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDWOed+AS3cOPlbAUbbAAAAAElFTkSuQmCC';
 
     var AdvButton = function (_Component) {
         _inherits(AdvButton, _Component);
@@ -7093,10 +7317,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     setAttributes = _props2.setAttributes,
                     clientId = _props2.clientId;
 
-
-                if (!attributes.id) {
-                    setAttributes({ id: 'advgbbtn-' + clientId });
-                }
+                setAttributes({ id: 'advgbbtn-' + clientId });
             }
         }, {
             key: 'render',
@@ -7142,7 +7363,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
                 var isStyleSquared = className.indexOf('-squared') > -1;
-                var isStyleOutlined = className.indexOf('-outline') > -1;
+                var isStyleOutlined = className.indexOf('-outlined') > -1;
+                var isStyleSquaredOutline = className.indexOf('-squared-outline') > -1;
                 var hoverColorSettings = [{
                     label: __('Background Color', 'advanced-gutenberg'),
                     value: hoverBgColor,
@@ -7163,32 +7385,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     }
                 }];
 
-                if (isStyleOutlined) {
+                if (isStyleSquaredOutline) {
                     hoverColorSettings.shift();
+                    previewImageData = previewImageDataSquaredOutline;
+                } else if (isStyleOutlined) {
+                    hoverColorSettings.shift();
+                    previewImageData = previewImageDataOutlined;
+                } else if (isStyleSquared) {
+                    previewImageData = previewImageDataSquared;
+                } else {
+                    previewImageData = previewImageDataDefault;
                 }
 
                 return isPreview ? React.createElement('img', { alt: __('Advanced Button', 'advanced-gutenberg'), width: '100%', src: previewImageData }) : React.createElement(
                     Fragment,
                     null,
-                    React.createElement(
-                        BlockControls,
-                        null,
-                        React.createElement(BlockAlignmentToolbar, { value: align, onChange: function onChange(align) {
-                                return setAttributes({ align: align });
-                            } }),
-                        React.createElement(
-                            Toolbar,
-                            null,
-                            React.createElement(IconButton, {
-                                label: __('Refresh this button when it conflict with other buttons styles', 'advanced-gutenberg'),
-                                icon: 'update',
-                                className: 'components-toolbar__control',
-                                onClick: function onClick() {
-                                    return setAttributes({ id: 'advgbbutton-' + blockID });
-                                }
-                            })
-                        )
-                    ),
                     React.createElement(
                         'span',
                         { className: className + ' align' + align,
@@ -7201,7 +7412,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             onChange: function onChange(value) {
                                 return setAttributes({ text: value });
                             },
-                            formattingControls: ['bold', 'italic', 'strikethrough'],
+                            allowedFormats: ['core/bold', 'core/italic', 'core/strikethrough'],
                             isSelected: isSelected,
                             className: 'wp-block-advgb-button_link ' + id,
                             keepPlaceholderOnFocus: true
@@ -7640,6 +7851,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }]
         },
         styles: [{ name: 'default', label: __('Default', 'advanced-gutenberg'), isDefault: true }, { name: 'outlined', label: __('Outlined', 'advanced-gutenberg') }, { name: 'squared', label: __('Squared', 'advanced-gutenberg') }, { name: 'squared-outline', label: __('Squared Outline', 'advanced-gutenberg') }],
+        supports: {
+            anchor: true,
+            align: ['right', 'left', 'center', 'full']
+        },
         edit: AdvButton,
         save: function save(_ref) {
             var attributes = _ref.attributes;
@@ -7877,9 +8092,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var blockIDX = attributes.blockIDX;
 
 
-                if (!blockIDX) {
-                    setAttributes({ blockIDX: "advgb-icon-" + clientId });
-                }
+                setAttributes({ blockIDX: "advgb-icon-" + clientId });
             }
         }, {
             key: "componentDidUpdate",
@@ -8642,9 +8855,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         ToggleControl = wpComponents.ToggleControl,
         SelectControl = wpComponents.SelectControl,
         TextControl = wpComponents.TextControl,
-        IconButton = wpComponents.IconButton,
         Button = wpComponents.Button,
-        Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton,
         FocalPointPicker = wpComponents.FocalPointPicker;
 
 
@@ -8699,9 +8912,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var blockIDX = attributes.blockIDX;
 
 
-                if (!blockIDX) {
-                    setAttributes({ blockIDX: 'advgb-img-' + clientId });
-                }
+                setAttributes({ blockIDX: 'advgb-img-' + clientId });
             }
         }, {
             key: 'render',
@@ -8743,7 +8954,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
                             React.createElement(MediaUpload, {
                                 allowedTypes: ['image'],
@@ -8753,16 +8964,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 },
                                 render: function render(_ref) {
                                     var open = _ref.open;
-                                    return React.createElement(IconButton, {
-                                        className: 'components-toolbar__control',
+                                    return React.createElement(ToolbarButton, {
                                         label: __('Change image', 'advanced-gutenberg'),
                                         icon: 'edit',
                                         onClick: open
                                     });
                                 }
                             }),
-                            React.createElement(IconButton, {
-                                className: 'components-toolbar__control',
+                            React.createElement(ToolbarButton, {
                                 label: __('Remove image', 'advanced-gutenberg'),
                                 icon: 'no',
                                 onClick: function onClick() {
@@ -8956,7 +9165,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             unstableOnSplit: function unstableOnSplit() {
                                 return null;
                             },
-                            placeholder: __('Enter title…', 'advanced-gutenberg')
+                            placeholder: __('Enter title…', 'advanced-gutenberg'),
+                            allowedFormats: []
                         }),
                         React.createElement(RichText, {
                             tagName: 'p',
@@ -8973,7 +9183,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             unstableOnSplit: function unstableOnSplit() {
                                 return null;
                             },
-                            placeholder: __('Enter subtitle…', 'advanced-gutenberg')
+                            placeholder: __('Enter subtitle…', 'advanced-gutenberg'),
+                            allowedFormats: []
                         }),
                         React.createElement(
                             'style',
@@ -9093,7 +9304,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }
         },
         supports: {
-            align: true
+            align: true,
+            anchor: true
         },
         edit: AdvImage,
         save: function save(_ref3) {
@@ -9310,9 +9522,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
     var BaseControl = wpComponents.BaseControl,
         RangeControl = wpComponents.RangeControl,
         PanelBody = wpComponents.PanelBody,
-        IconButton = wpComponents.IconButton,
         Dashicon = wpComponents.Dashicon,
-        Toolbar = wpComponents.Toolbar;
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton;
 
 
     var parse = __webpack_require__(/*! html-react-parser */ "./node_modules/html-react-parser/index.js");
@@ -9410,12 +9622,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 label: __('Refresh this list when it conflict with other lists styles', 'advanced-gutenberg'),
                                 icon: 'update',
-                                className: 'components-toolbar__control',
                                 onClick: function onClick() {
                                     return setAttributes({ id: 'advgblist-' + blockID });
                                 }
@@ -9534,7 +9745,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             return setAttributes({ values: value });
                         },
                         value: values,
-                        wrapperClassName: 'advgb-list-item',
                         className: listClassName,
                         placeholder: __('Write advanced list…', 'advanced-gutenberg'),
                         onMerge: mergeBlocks,
@@ -9692,6 +9902,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             });
         },
 
+        supports: {
+            anchor: true
+        },
         edit: AdvList,
         save: function save(_ref3) {
             var attributes = _ref3.attributes;
@@ -9760,9 +9973,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         SelectControl = wpComponents.SelectControl,
         ToggleControl = wpComponents.ToggleControl,
         TextControl = wpComponents.TextControl,
-        IconButton = wpComponents.IconButton,
         Button = wpComponents.Button,
-        Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton,
         DropdownMenu = wpComponents.DropdownMenu,
         Tooltip = wpComponents.Tooltip;
     var _lodash = lodash,
@@ -11064,7 +11277,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
                             React.createElement(DropdownMenu, {
                                 hasArrowIndicator: true,
@@ -11072,7 +11285,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 label: __('Edit Table', 'advanced-gutenberg'),
                                 controls: TABLE_CONTROLS
                             }),
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 icon: "update",
                                 label: __('Refresh table (Use this after using undo or redo)', 'advanced-gutenberg'),
                                 onClick: function onClick() {
@@ -11240,8 +11453,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 { title: __('Text Alignment', 'advanced-gutenberg'), initialOpen: false },
                                 React.createElement(
                                     BaseControl,
-                                    { label: __('Horizontal Align', 'advanced-gutenberg') },
-                                    React.createElement(Toolbar, {
+                                    { help: __('Horizontal Align', 'advanced-gutenberg') },
+                                    React.createElement(ToolbarGroup, {
                                         controls: HORZ_ALIGNMENT_CONTROLS.map(function (control) {
                                             var isActive = _this4.getCellStyles('textAlign') === control.align;
 
@@ -11256,8 +11469,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 ),
                                 React.createElement(
                                     BaseControl,
-                                    { label: __('Vertical Align', 'advanced-gutenberg') },
-                                    React.createElement(Toolbar, {
+                                    { help: __('Vertical Align', 'advanced-gutenberg') },
+                                    React.createElement(ToolbarGroup, {
                                         controls: VERT_ALIGNMENT_CONTROLS.map(function (control) {
                                             var isActive = _this4.getCellStyles('verticalAlign') === control.align;
 
@@ -11466,7 +11679,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }
         },
         supports: {
-            align: true
+            align: true,
+            anchor: true
         },
         styles: [{ name: 'default', label: __('Default', 'advanced-gutenberg'), isDefault: true }, { name: 'stripes', label: __('Stripes', 'advanced-gutenberg') }],
         edit: AdvTable,
@@ -12436,6 +12650,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: compose(withDispatch(function (dispatch, _ref10, _ref11) {
             var clientId = _ref10.clientId;
             var select = _ref11.select;
@@ -12982,10 +13199,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         TextControl = wpComponents.TextControl,
         SelectControl = wpComponents.SelectControl,
         Button = wpComponents.Button,
-        IconButton = wpComponents.IconButton,
         Dashicon = wpComponents.Dashicon,
         Spinner = wpComponents.Spinner,
         Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton,
         Disabled = wpComponents.Disabled;
 
 
@@ -13213,7 +13431,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
                             React.createElement(MediaUpload, {
                                 allowedTypes: ["image"],
@@ -13223,7 +13441,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 },
                                 render: function render(_ref) {
                                     var open = _ref.open;
-                                    return React.createElement(IconButton, {
+                                    return React.createElement(ToolbarButton, {
                                         className: "components-toolbar__control",
                                         label: __('Change image preview', 'advanced-gutenberg'),
                                         icon: "edit",
@@ -13231,7 +13449,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     });
                                 }
                             }),
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 className: "components-toolbar__control",
                                 label: __('Remove image preview', 'advanced-gutenberg'),
                                 icon: "no",
@@ -13648,6 +13866,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvVideo,
         save: function save(_ref4) {
             var attributes = _ref4.attributes;
@@ -13855,7 +14076,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         SelectControl = wpComponents.SelectControl,
         ToggleControl = wpComponents.ToggleControl,
         Tooltip = wpComponents.Tooltip,
-        Toolbar = wpComponents.Toolbar;
+        ToolbarGroup = wpComponents.ToolbarGroup;
     var _lodash = lodash,
         times = _lodash.times;
     var _wp$data = wp.data,
@@ -14028,7 +14249,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         React.createElement(
                             'div',
                             { className: 'advgb-columns-select-title' },
-                            __('Pickup a columns layout', 'advanced-gutenberg')
+                            __('Choose a columns layout', 'advanced-gutenberg')
                         ),
                         React.createElement(
                             'div',
@@ -14125,7 +14346,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     React.createElement(
                         BlockControls,
                         null,
-                        React.createElement(Toolbar, { controls: VERT_ALIGNMENT_CONTROLS })
+                        React.createElement(ToolbarGroup, { controls: VERT_ALIGNMENT_CONTROLS })
                     ),
                     React.createElement(
                         InspectorControls,
@@ -15862,6 +16083,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvContactForm,
         save: function save(_ref) {
             var attributes = _ref.attributes;
@@ -16751,6 +16975,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvCountUp,
         save: AdvCountUpSave
     });
@@ -16920,16 +17147,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
         bodyClass.remove('advgb-editor-width-default', 'advgb-editor-width-large', 'advgb-editor-width-full', 'advgb-editor-col-guide-enable', 'advgb-editor-col-guide-disable');
 
+        // Editor width
         if (!!advgb_blocks_editor_width) {
             bodyClass.add('advgb-editor-width-' + advgb_blocks_editor_width);
+        } else {
+            // Global
+            bodyClass.add('advgb-editor-width-' + advg_settings.editor_width_global);
         }
 
+        // Columns visual guide
         if (!!advgb_blocks_columns_visual_guide) {
             bodyClass.add('advgb-editor-col-guide-' + advgb_blocks_columns_visual_guide);
+        } else {
+            // Global
+            bodyClass.add('advgb-editor-col-guide-' + advg_settings.enable_columns_visual_guide_global);
         }
     };
 
-    window.document.addEventListener("DOMContentLoaded", updateBodyClass);
+    // Line below stopped working - https://github.com/WordPress/gutenberg/issues/28032#issuecomment-759723289
+    // window.document.addEventListener("DOMContentLoaded", updateBodyClass);
 
     var AdvSidebar = function (_Component) {
         _inherits(AdvSidebar, _Component);
@@ -17120,7 +17356,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         SelectControl = wpComponents.SelectControl,
         TextControl = wpComponents.TextControl,
         TextareaControl = wpComponents.TextareaControl,
-        IconButton = wpComponents.IconButton,
         Button = wpComponents.Button,
         Placeholder = wpComponents.Placeholder,
         Tooltip = wpComponents.Tooltip;
@@ -17474,7 +17709,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     { className: "advgb-image-slider-item", key: index },
                                     React.createElement("img", { src: image.url,
                                         className: "advgb-image-slider-img",
-                                        alt: 'Slider image',
+                                        alt: image.title,
                                         style: {
                                             width: fullWidth ? '100%' : width,
                                             height: autoHeight ? 'auto' : height
@@ -17620,7 +17855,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         React.createElement(
                                             Tooltip,
                                             { text: __('Remove image', 'advanced-gutenberg') },
-                                            React.createElement(IconButton, {
+                                            React.createElement(Button, {
                                                 className: "advgb-image-slider-image-list-item-remove",
                                                 icon: "no",
                                                 onClick: function onClick() {
@@ -17649,7 +17884,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                         },
                                         render: function render(_ref2) {
                                             var open = _ref2.open;
-                                            return React.createElement(IconButton, {
+                                            return React.createElement(Button, {
                                                 label: __('Add image', 'advanced-gutenberg'),
                                                 icon: "plus",
                                                 onClick: open
@@ -17742,6 +17977,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvImageSlider,
         save: function save(_ref3) {
             var attributes = _ref3.attributes;
@@ -17773,7 +18011,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                             { className: "advgb-image-slider-item", key: index },
                             React.createElement("img", { src: image.url,
                                 className: "advgb-image-slider-img",
-                                alt: 'Slider image',
+                                alt: image.title,
                                 style: {
                                     width: fullWidth ? '100%' : width,
                                     height: autoHeight ? 'auto' : height
@@ -19467,8 +19705,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         SelectControl = wpComponents.SelectControl,
         ToggleControl = wpComponents.ToggleControl,
         Tooltip = wpComponents.Tooltip,
-        Toolbar = wpComponents.Toolbar,
-        IconButton = wpComponents.IconButton,
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton,
         Placeholder = wpComponents.Placeholder;
 
 
@@ -20134,9 +20372,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
-                            null,
-                            React.createElement(IconButton, {
+                            ToolbarGroup,
+                            { label: __('Options', 'advanced-gutenberg') },
+                            React.createElement(ToolbarButton, {
                                 icon: "image-flip-horizontal",
                                 label: __('Switch View', 'advanced-gutenberg'),
                                 onClick: function onClick() {
@@ -20686,6 +20924,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             attributes: {
                 isPreview: true
             }
+        },
+        supports: {
+            anchor: true
         },
         edit: LoginFormEdit,
         save: function save(_ref3) {
@@ -22373,6 +22614,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvMap,
         save: function save(_ref2) {
             var attributes = _ref2.attributes;
@@ -22953,6 +23197,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvNewsletter,
         save: function save(_ref) {
             var attributes = _ref.attributes;
@@ -23107,12 +23354,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _queryControls = __webpack_require__(/*! ./query-controls.jsx */ "./src/assets/blocks/recent-posts/query-controls.jsx");
-
-var _queryControls2 = _interopRequireDefault(_queryControls);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -23134,9 +23375,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         TextControl = wpComponents.TextControl,
         QueryControls = wpComponents.QueryControls,
         Spinner = wpComponents.Spinner,
-        Toolbar = wpComponents.Toolbar,
-        Placeholder = wpComponents.Placeholder,
-        IconButton = wpComponents.IconButton;
+        ToolbarGroup = wpComponents.ToolbarGroup,
+        ToolbarButton = wpComponents.ToolbarButton,
+        Placeholder = wpComponents.Placeholder;
     var withSelect = wpData.withSelect;
     var pickBy = lodash.pickBy,
         isUndefined = lodash.isUndefined;
@@ -23170,8 +23411,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
             _this.state = {
                 categoriesList: [],
+                catIdVsName: [],
                 updating: false
             };
+
+            _this.selectCategories = _this.selectCategories.bind(_this);
+            _this.getCategoryForBkwrdCompat = _this.getCategoryForBkwrdCompat.bind(_this);
+
             return _this;
         }
 
@@ -23209,8 +23455,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
                 wp.apiFetch({
                     path: wp.url.addQueryArgs('wp/v2/categories', categoriesListQuery)
-                }).then(function (categoriesList) {
-                    return _this2.setState({ categoriesList: categoriesList });
+                }).then(function (list) {
+                    var suggestions = [];
+                    var catIdVsName = [];
+                    list.forEach(function (cat) {
+                        suggestions[cat.name] = cat;
+                        catIdVsName[cat.id] = cat.name;
+                    });
+                    _this2.setState({ categoriesList: suggestions, catIdVsName: catIdVsName });
+
+                    // for backward compatibility, extract the (single select) category and set it as the (mutli select) categories
+                    // and make the (single select) category empty
+                    var categories = attributes.category && attributes.category !== undefined && attributes.category.length > 0 ? [_this2.getCategoryForBkwrdCompat(attributes.category)] : attributes.categories;
+                    setAttributes({
+                        categories: categories,
+                        category: ''
+                    });
                 });
             }
         }, {
@@ -23269,6 +23529,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }, {
             key: "render",
             value: function render() {
+                var _this3 = this;
+
                 var categoriesList = this.state.categoriesList;
                 var _props4 = this.props,
                     attributes = _props4.attributes,
@@ -23277,7 +23539,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 var postView = attributes.postView,
                     order = attributes.order,
                     orderBy = attributes.orderBy,
-                    category = attributes.category,
                     numberOfPosts = attributes.numberOfPosts,
                     columns = attributes.columns,
                     displayFeaturedImage = attributes.displayFeaturedImage,
@@ -23288,7 +23549,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     postTextExcerptLength = attributes.postTextExcerptLength,
                     displayReadMore = attributes.displayReadMore,
                     readMoreLbl = attributes.readMoreLbl,
-                    isPreview = attributes.isPreview;
+                    isPreview = attributes.isPreview,
+                    categories = attributes.categories;
 
 
                 var inspectorControls = React.createElement(
@@ -23297,9 +23559,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     React.createElement(
                         PanelBody,
                         { title: __('Block Settings', 'advanced-gutenberg') },
-                        React.createElement(_queryControls2.default, _extends({ order: order, orderBy: orderBy }, {
-                            categoriesList: categoriesList,
-                            selectedCategoryId: category,
+                        React.createElement(QueryControls, _extends({ order: order, orderBy: orderBy }, {
+                            categorySuggestions: categoriesList,
+                            selectedCategories: categories,
                             numberOfItems: numberOfPosts,
                             onOrderChange: function onOrderChange(value) {
                                 return setAttributes({ order: value });
@@ -23308,7 +23570,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 return setAttributes({ orderBy: value });
                             },
                             onCategoryChange: function onCategoryChange(value) {
-                                return setAttributes({ category: value !== '' ? value : undefined });
+                                _this3.selectCategories(value);
                             },
                             onNumberOfItemsChange: function onNumberOfItemsChange(value) {
                                 return setAttributes({ numberOfPosts: value });
@@ -23438,13 +23700,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     React.createElement(
                         BlockControls,
                         null,
-                        React.createElement(Toolbar, { controls: postViewControls }),
+                        React.createElement(ToolbarGroup, { controls: postViewControls }),
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
-                            React.createElement(IconButton, {
-                                label: __('Refresh', 'advanced-gutenberg'),
+                            React.createElement(ToolbarButton, {
                                 icon: "update",
+                                label: __('Refresh', 'advanced-gutenberg'),
                                 onClick: function onClick() {
                                     return setAttributes({ myToken: Math.floor(Math.random() * Math.floor(999)) });
                                 }
@@ -23524,6 +23786,38 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     )
                 );
             }
+        }, {
+            key: "selectCategories",
+            value: function selectCategories(tokens) {
+                var categoriesList = this.state.categoriesList;
+
+
+                var hasNoSuggestion = tokens.some(function (token) {
+                    return typeof token === 'string' && !categoriesList[token];
+                });
+
+                if (hasNoSuggestion) {
+                    return;
+                }
+
+                var categories = tokens.map(function (token) {
+                    return typeof token === 'string' ? categoriesList[token] : token;
+                });
+
+                this.props.setAttributes({
+                    categories: categories
+                });
+            }
+        }, {
+            key: "getCategoryForBkwrdCompat",
+            value: function getCategoryForBkwrdCompat(id) {
+                var catIdVsName = this.state.catIdVsName;
+
+                return {
+                    id: id,
+                    name: catIdVsName[id]
+                };
+            }
         }], [{
             key: "extractContent",
             value: function extractContent(html, length) {
@@ -23583,6 +23877,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 getEntityRecords = _select.getEntityRecords;
 
             var _props$attributes = props.attributes,
+                categories = _props$attributes.categories,
                 category = _props$attributes.category,
                 order = _props$attributes.order,
                 orderBy = _props$attributes.orderBy,
@@ -23590,8 +23885,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 myToken = _props$attributes.myToken;
 
 
+            var ids = categories && categories.length > 0 ? categories.map(function (cat) {
+                return cat.id;
+            }) : [];
+
             var recentPostsQuery = pickBy({
-                categories: category,
+                categories: ids,
                 order: order,
                 orderby: orderBy,
                 per_page: numberOfPosts,
@@ -23610,199 +23909,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         }
     });
 })(wp.i18n, wp.blocks, wp.element, wp.blockEditor, wp.components, wp.data, lodash, wp.htmlEntities, wp.date);
-
-/***/ }),
-
-/***/ "./src/assets/blocks/recent-posts/query-controls.jsx":
-/*!***********************************************************!*\
-  !*** ./src/assets/blocks/recent-posts/query-controls.jsx ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-var __ = wp.i18n.__;
-var _wp$element = wp.element,
-    Component = _wp$element.Component,
-    Fragment = _wp$element.Fragment;
-var _wp$components = wp.components,
-    TreeSelect = _wp$components.TreeSelect,
-    SelectControl = _wp$components.SelectControl,
-    FormTokenField = _wp$components.FormTokenField,
-    RangeControl = _wp$components.RangeControl;
-var _lodash = lodash,
-    pickBy = _lodash.pickBy,
-    isUndefined = _lodash.isUndefined;
-var _lodash2 = lodash,
-    groupBy = _lodash2.groupBy;
-
-/**
- * Returns terms in a tree form.
- *
- * @param {Array} flatTerms  Array of terms in flat format.
- *
- * @return {Array} Array of terms in tree format.
- */
-
-function buildTermsTree(flatTerms) {
-    var flatTermsWithParentAndChildren = flatTerms.map(function (term) {
-        return _extends({
-            children: [],
-            parent: null
-        }, term);
-    });
-
-    var termsByParent = groupBy(flatTermsWithParentAndChildren, 'parent');
-    if (termsByParent.null && termsByParent.null.length) {
-        return flatTermsWithParentAndChildren;
-    }
-    var fillWithChildren = function fillWithChildren(terms) {
-        return terms.map(function (term) {
-            var children = termsByParent[term.id];
-            return _extends({}, term, {
-                children: children && children.length ? fillWithChildren(children) : []
-            });
-        });
-    };
-
-    return fillWithChildren(termsByParent['0'] || []);
-}
-
-function AuthorSelect(_ref) {
-    var label = _ref.label,
-        noOptionLabel = _ref.noOptionLabel,
-        authorList = _ref.authorList,
-        selectedAuthorId = _ref.selectedAuthorId,
-        onChange = _ref.onChange;
-
-    var termsTree = buildTermsTree(authorList);
-    return React.createElement(TreeSelect, _extends({ label: label, noOptionLabel: noOptionLabel, onChange: onChange }, {
-        tree: termsTree,
-        selectedId: selectedAuthorId
-    }));
-}
-
-function CategorySelect(_ref2) {
-    var label = _ref2.label,
-        noOptionLabel = _ref2.noOptionLabel,
-        categoriesList = _ref2.categoriesList,
-        selectedCategoryId = _ref2.selectedCategoryId,
-        onChange = _ref2.onChange,
-        props = _objectWithoutProperties(_ref2, ['label', 'noOptionLabel', 'categoriesList', 'selectedCategoryId', 'onChange']);
-
-    var termsTree = buildTermsTree(categoriesList);
-    return React.createElement(TreeSelect, _extends({ label: label, noOptionLabel: noOptionLabel, onChange: onChange }, {
-        tree: termsTree,
-        selectedId: selectedCategoryId
-    }, props));
-}
-
-var DEFAULT_MIN_ITEMS = 1;
-var DEFAULT_MAX_ITEMS = 100;
-var MAX_CATEGORIES_SUGGESTIONS = 20;
-
-function AdvQueryControls(_ref3) {
-    var authorList = _ref3.authorList,
-        selectedAuthorId = _ref3.selectedAuthorId,
-        categoriesList = _ref3.categoriesList,
-        selectedCategoryId = _ref3.selectedCategoryId,
-        categorySuggestions = _ref3.categorySuggestions,
-        selectedCategories = _ref3.selectedCategories,
-        numberOfItems = _ref3.numberOfItems,
-        order = _ref3.order,
-        orderBy = _ref3.orderBy,
-        _ref3$maxItems = _ref3.maxItems,
-        maxItems = _ref3$maxItems === undefined ? DEFAULT_MAX_ITEMS : _ref3$maxItems,
-        _ref3$minItems = _ref3.minItems,
-        minItems = _ref3$minItems === undefined ? DEFAULT_MIN_ITEMS : _ref3$minItems,
-        onCategoryChange = _ref3.onCategoryChange,
-        onAuthorChange = _ref3.onAuthorChange,
-        onNumberOfItemsChange = _ref3.onNumberOfItemsChange,
-        onOrderChange = _ref3.onOrderChange,
-        onOrderByChange = _ref3.onOrderByChange;
-
-    return [onOrderChange && onOrderByChange && React.createElement(SelectControl, {
-        key: 'query-controls-order-select',
-        label: __('Order by'),
-        value: orderBy + '/' + order,
-        options: [{
-            label: __('Newest to oldest'),
-            value: 'date/desc'
-        }, {
-            label: __('Oldest to newest'),
-            value: 'date/asc'
-        }, {
-            /* translators: label for ordering posts by title in ascending order */
-            label: __('A → Z'),
-            value: 'title/asc'
-        }, {
-            /* translators: label for ordering posts by title in descending order */
-            label: __('Z → A'),
-            value: 'title/desc'
-        }],
-        onChange: function onChange(value) {
-            var _value$split = value.split('/'),
-                _value$split2 = _slicedToArray(_value$split, 2),
-                newOrderBy = _value$split2[0],
-                newOrder = _value$split2[1];
-
-            if (newOrder !== order) {
-                onOrderChange(newOrder);
-            }
-            if (newOrderBy !== orderBy) {
-                onOrderByChange(newOrderBy);
-            }
-        }
-    }), categoriesList && onCategoryChange && React.createElement(CategorySelect, {
-        key: 'query-controls-category-select',
-        categoriesList: categoriesList,
-        label: __('Category'),
-        noOptionLabel: __('All'),
-        selectedCategoryId: selectedCategoryId,
-        onChange: onCategoryChange
-    }), categorySuggestions && onCategoryChange && React.createElement(FormTokenField, {
-        key: 'query-controls-categories-select',
-        label: __('Categories'),
-        value: selectedCategories && selectedCategories.map(function (item) {
-            return {
-                id: item.id,
-                value: item.name || item.value
-            };
-        }),
-        suggestions: Object.keys(categorySuggestions),
-        onChange: onCategoryChange,
-        maxSuggestions: MAX_CATEGORIES_SUGGESTIONS
-    }), onAuthorChange && React.createElement(AuthorSelect, {
-        key: 'query-controls-author-select',
-        authorList: authorList,
-        label: __('Author'),
-        noOptionLabel: __('All'),
-        selectedAuthorId: selectedAuthorId,
-        onChange: onAuthorChange
-    }), onNumberOfItemsChange && React.createElement(RangeControl, {
-        key: 'query-controls-range-control',
-        label: __('Number of items'),
-        value: numberOfItems,
-        onChange: onNumberOfItemsChange,
-        min: minItems,
-        max: maxItems,
-        required: true
-    })];
-}
-
-exports.default = AdvQueryControls;
 
 /***/ }),
 
@@ -24373,7 +24479,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }
         },
         supports: {
-            align: true
+            align: true,
+            anchor: true
         },
         styles: [{ name: 'default', label: __('Default', 'advanced-gutenberg'), isDefault: true }, { name: 'classic', label: __('Classic', 'advanced-gutenberg') }],
         edit: SearchBarEdit,
@@ -24502,9 +24609,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         BaseControl = wpComponents.BaseControl,
         PanelBody = wpComponents.PanelBody,
         TextControl = wpComponents.TextControl,
-        IconButton = wpComponents.IconButton,
+        ToolbarButton = wpComponents.ToolbarButton,
         Button = wpComponents.Button,
-        Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
         Tooltip = wpComponents.Tooltip;
 
 
@@ -24739,9 +24846,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         BlockControls,
                         null,
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 className: "components-toolbar__control",
                                 icon: "plus",
                                 label: __('Add item', 'advanced-gutenberg'),
@@ -24749,7 +24856,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                     return setAttributes({ items: [].concat(_toConsumableArray(items), [{ icon: '', iconID: '', link: '#' }]) });
                                 }
                             }),
-                            React.createElement(IconButton, {
+                            React.createElement(ToolbarButton, {
                                 className: "components-toolbar__control",
                                 icon: "no",
                                 label: __('Remove selected item', 'advanced-gutenberg'),
@@ -25005,6 +25112,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvSocialBlock,
         save: function save(_ref2) {
             var attributes = _ref2.attributes;
@@ -25149,10 +25259,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         InspectorAdvancedControls = _wpBlockEditor.InspectorAdvancedControls,
         PanelColorSettings = _wpBlockEditor.PanelColorSettings,
         BlockAlignmentToolbar = _wpBlockEditor.BlockAlignmentToolbar;
-    var IconButton = wpComponents.IconButton,
+    var ToolbarButton = wpComponents.ToolbarButton,
         Placeholder = wpComponents.Placeholder,
         Button = wpComponents.Button,
-        Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
         ToggleControl = wpComponents.ToggleControl,
         TextControl = wpComponents.TextControl,
         PanelBody = wpComponents.PanelBody;
@@ -25187,7 +25297,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             var summaryBlock = createBlock('advgb/summary');
 
             $('#editor').find('.table-of-contents').click(function () {
-                var allBlocks = select('core/editor').getBlocks();
+                var allBlocks = select('core/block-editor').getBlocks();
                 var summaryBlockExist = !!allBlocks.filter(function (block) {
                     return block.name === 'advgb/summary';
                 }).length;
@@ -25290,7 +25400,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             value: function updateSummary() {
                 var headingDatas = [];
                 var headingBlocks = [];
-                var allBlocks = select('core/editor').getBlocks();
+                var allBlocks = select('core/block-editor').getBlocks();
                 var filteredBlocks = allBlocks.filter(function (block) {
                     return block.name === 'core/heading' || block.name === 'core/columns';
                 });
@@ -25371,7 +25481,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
                 // Having heading blocks
                 if (headings.length > 0) {
-                    var _dispatch2 = dispatch('core/editor'),
+                    var _dispatch2 = dispatch('core/block-editor'),
                         selectBlock = _dispatch2.selectBlock;
 
                     summaryContent = React.createElement(
@@ -25409,9 +25519,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                 return setAttributes({ align: align });
                             } }),
                         React.createElement(
-                            Toolbar,
+                            ToolbarGroup,
                             null,
-                            React.createElement(IconButton, { className: 'components-icon-button components-toolbar__control',
+                            React.createElement(ToolbarButton, { className: 'components-icon-button components-toolbar__control',
                                 icon: 'update',
                                 label: __('Update Summary', 'advanced-gutenberg'),
                                 onClick: this.updateSummary
@@ -25532,7 +25642,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
             }
         },
         supports: {
-            multiple: false
+            multiple: false,
+            anchor: true
         },
         edit: SummaryBlock,
         save: function save(_ref) {
@@ -25560,8 +25671,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     return React.createElement(
                         "li",
                         { className: 'toc-level-' + heading.level,
-                            key: "summary-save-" + index,
-                            style: { marginLeft: heading.level * 20 }
+                            key: "summary-save-" + index
                         },
                         React.createElement(
                             "a",
@@ -25659,6 +25769,33 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 }
 
                 return summary;
+            }
+        }, {
+            attributes: blockAttrs,
+            save: function save(_ref3) {
+                var attributes = _ref3.attributes;
+
+
+                var summary = React.createElement(
+                    "ul",
+                    { className: "advgb-toc align" + align, style: blockStyle },
+                    headings.map(function (heading, index) {
+                        return React.createElement(
+                            "li",
+                            { className: 'toc-level-' + heading.level,
+                                key: "summary-save-" + index,
+                                style: { marginLeft: heading.level * 20 }
+                            },
+                            React.createElement(
+                                "a",
+                                { href: '#' + heading.anchor,
+                                    style: { color: anchorColor }
+                                },
+                                heading.content
+                            )
+                        );
+                    })
+                );
             }
         }]
     });
@@ -27379,7 +27516,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
         CheckboxControl = wpComponents.CheckboxControl,
         SelectControl = wpComponents.SelectControl,
         Spinner = wpComponents.Spinner,
-        Toolbar = wpComponents.Toolbar,
+        ToolbarGroup = wpComponents.ToolbarGroup,
         Placeholder = wpComponents.Placeholder,
         Button = wpComponents.Button;
     var addQueryArgs = wp.url.addQueryArgs;
@@ -27544,7 +27681,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                         });
                     }).then(function () {
                         if (viewType === 'slider') {
-                            $("#block-" + self.props.clientId + " .advgb-products-block.slider-view .advgb-products-wrapper:not(.slick-initialized)").slick({
+                            jQuery("#block-" + self.props.clientId + " .advgb-products-block.slider-view .advgb-products-wrapper:not(.slick-initialized)").slick({
                                 dots: true,
                                 adaptiveHeight: true
                             });
@@ -27621,7 +27758,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                     React.createElement(
                         BlockControls,
                         null,
-                        React.createElement(Toolbar, { controls: viewControls })
+                        React.createElement(ToolbarGroup, { controls: viewControls })
                     ),
                     React.createElement(
                         InspectorControls,
@@ -27833,6 +27970,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                 isPreview: true
             }
         },
+        supports: {
+            anchor: true
+        },
         edit: AdvProductsEdit,
         save: function save(_ref) {
             var attributes = _ref.attributes;
@@ -27949,8 +28089,11 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
                     }
                 }
 
+                //console.log('missing_block: ' + missing_block);
+
                 if (missing_block) {
                     if (console !== undefined && console.error !== undefined) {
+                        //console.log('console: ' + console);
                         console.error('Reloading editor by PublishPress Blocks plugin');
                     }
                     // Replace original allowed block settings by our modified list
@@ -27965,7 +28108,7 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
 
                     try {
                         // Use this ajax query to update the block list in db
-                        $.ajax({
+                        jQuery.ajax({
                             url: advgb_blocks_vars.ajaxurl,
                             method: 'POST',
                             data: {
@@ -27979,7 +28122,7 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
                             }
                         });
                     } catch (e) {
-                        // console.log(e);
+                        //console.log(e);
                     }
                 }
             });
@@ -27990,46 +28133,45 @@ if (typeof wp !== 'undefined' && typeof wp.domReady !== 'undefined') {
 /***/ }),
 
 /***/ 0:
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/customstyles/custom-styles.jsx ./src/assets/blocks/editor-sidebar/sidebar.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/recent-posts/query-controls.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ./src/assets/js/editor.jsx ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./src/assets/blocks/0-adv-components/components.jsx ./src/assets/blocks/0-adv-components/icon-class.jsx ./src/assets/blocks/accordion/block.jsx ./src/assets/blocks/advaccordion/accordion.jsx ./src/assets/blocks/advaccordion/block.jsx ./src/assets/blocks/advbutton/block.jsx ./src/assets/blocks/advicon/block.jsx ./src/assets/blocks/advimage/block.jsx ./src/assets/blocks/advlist/block.jsx ./src/assets/blocks/advtable/block.jsx ./src/assets/blocks/advtabs/block.jsx ./src/assets/blocks/advtabs/tab.jsx ./src/assets/blocks/advvideo/block.jsx ./src/assets/blocks/columns/block.jsx ./src/assets/blocks/columns/column.jsx ./src/assets/blocks/contact-form/block.jsx ./src/assets/blocks/container/block.jsx ./src/assets/blocks/count-up/block.jsx ./src/assets/blocks/customstyles/custom-styles.jsx ./src/assets/blocks/editor-sidebar/sidebar.jsx ./src/assets/blocks/images-slider/block.jsx ./src/assets/blocks/infobox/block.jsx ./src/assets/blocks/login-form/block.jsx ./src/assets/blocks/map/block.jsx ./src/assets/blocks/newsletter/block.jsx ./src/assets/blocks/recent-posts/block.jsx ./src/assets/blocks/search-bar/block.jsx ./src/assets/blocks/social-links/block.jsx ./src/assets/blocks/summary/block.jsx ./src/assets/blocks/tabs/block.jsx ./src/assets/blocks/testimonial/block.jsx ./src/assets/blocks/woo-products/block.jsx ./src/assets/js/editor.jsx ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/0-adv-components/components.jsx */"./src/assets/blocks/0-adv-components/components.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/0-adv-components/icon-class.jsx */"./src/assets/blocks/0-adv-components/icon-class.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/accordion/block.jsx */"./src/assets/blocks/accordion/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advaccordion/accordion.jsx */"./src/assets/blocks/advaccordion/accordion.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advaccordion/block.jsx */"./src/assets/blocks/advaccordion/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advbutton/block.jsx */"./src/assets/blocks/advbutton/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advicon/block.jsx */"./src/assets/blocks/advicon/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advimage/block.jsx */"./src/assets/blocks/advimage/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advlist/block.jsx */"./src/assets/blocks/advlist/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advtable/block.jsx */"./src/assets/blocks/advtable/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advtabs/block.jsx */"./src/assets/blocks/advtabs/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advtabs/tab.jsx */"./src/assets/blocks/advtabs/tab.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/advvideo/block.jsx */"./src/assets/blocks/advvideo/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/columns/block.jsx */"./src/assets/blocks/columns/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/columns/column.jsx */"./src/assets/blocks/columns/column.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/contact-form/block.jsx */"./src/assets/blocks/contact-form/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/container/block.jsx */"./src/assets/blocks/container/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/count-up/block.jsx */"./src/assets/blocks/count-up/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/customstyles/custom-styles.jsx */"./src/assets/blocks/customstyles/custom-styles.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/editor-sidebar/sidebar.jsx */"./src/assets/blocks/editor-sidebar/sidebar.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/images-slider/block.jsx */"./src/assets/blocks/images-slider/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/infobox/block.jsx */"./src/assets/blocks/infobox/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/login-form/block.jsx */"./src/assets/blocks/login-form/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/map/block.jsx */"./src/assets/blocks/map/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/newsletter/block.jsx */"./src/assets/blocks/newsletter/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/recent-posts/block.jsx */"./src/assets/blocks/recent-posts/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/recent-posts/query-controls.jsx */"./src/assets/blocks/recent-posts/query-controls.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/search-bar/block.jsx */"./src/assets/blocks/search-bar/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/social-links/block.jsx */"./src/assets/blocks/social-links/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/summary/block.jsx */"./src/assets/blocks/summary/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/tabs/block.jsx */"./src/assets/blocks/tabs/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/testimonial/block.jsx */"./src/assets/blocks/testimonial/block.jsx");
-__webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/blocks/woo-products/block.jsx */"./src/assets/blocks/woo-products/block.jsx");
-module.exports = __webpack_require__(/*! /Users/valentingarcia/Github/Advanced-Gutenberg-Plugin/src/assets/js/editor.jsx */"./src/assets/js/editor.jsx");
+__webpack_require__(/*! ./src/assets/blocks/0-adv-components/components.jsx */"./src/assets/blocks/0-adv-components/components.jsx");
+__webpack_require__(/*! ./src/assets/blocks/0-adv-components/icon-class.jsx */"./src/assets/blocks/0-adv-components/icon-class.jsx");
+__webpack_require__(/*! ./src/assets/blocks/accordion/block.jsx */"./src/assets/blocks/accordion/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advaccordion/accordion.jsx */"./src/assets/blocks/advaccordion/accordion.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advaccordion/block.jsx */"./src/assets/blocks/advaccordion/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advbutton/block.jsx */"./src/assets/blocks/advbutton/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advicon/block.jsx */"./src/assets/blocks/advicon/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advimage/block.jsx */"./src/assets/blocks/advimage/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advlist/block.jsx */"./src/assets/blocks/advlist/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advtable/block.jsx */"./src/assets/blocks/advtable/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advtabs/block.jsx */"./src/assets/blocks/advtabs/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advtabs/tab.jsx */"./src/assets/blocks/advtabs/tab.jsx");
+__webpack_require__(/*! ./src/assets/blocks/advvideo/block.jsx */"./src/assets/blocks/advvideo/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/columns/block.jsx */"./src/assets/blocks/columns/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/columns/column.jsx */"./src/assets/blocks/columns/column.jsx");
+__webpack_require__(/*! ./src/assets/blocks/contact-form/block.jsx */"./src/assets/blocks/contact-form/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/container/block.jsx */"./src/assets/blocks/container/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/count-up/block.jsx */"./src/assets/blocks/count-up/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/customstyles/custom-styles.jsx */"./src/assets/blocks/customstyles/custom-styles.jsx");
+__webpack_require__(/*! ./src/assets/blocks/editor-sidebar/sidebar.jsx */"./src/assets/blocks/editor-sidebar/sidebar.jsx");
+__webpack_require__(/*! ./src/assets/blocks/images-slider/block.jsx */"./src/assets/blocks/images-slider/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/infobox/block.jsx */"./src/assets/blocks/infobox/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/login-form/block.jsx */"./src/assets/blocks/login-form/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/map/block.jsx */"./src/assets/blocks/map/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/newsletter/block.jsx */"./src/assets/blocks/newsletter/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/recent-posts/block.jsx */"./src/assets/blocks/recent-posts/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/search-bar/block.jsx */"./src/assets/blocks/search-bar/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/social-links/block.jsx */"./src/assets/blocks/social-links/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/summary/block.jsx */"./src/assets/blocks/summary/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/tabs/block.jsx */"./src/assets/blocks/tabs/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/testimonial/block.jsx */"./src/assets/blocks/testimonial/block.jsx");
+__webpack_require__(/*! ./src/assets/blocks/woo-products/block.jsx */"./src/assets/blocks/woo-products/block.jsx");
+module.exports = __webpack_require__(/*! ./src/assets/js/editor.jsx */"./src/assets/js/editor.jsx");
 
 
 /***/ })

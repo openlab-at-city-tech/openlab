@@ -7,7 +7,6 @@
         padding: 10px 15px;
     }
     
-    
     input[type=submit]{
         @extend %comment-btn;
         @include transition();

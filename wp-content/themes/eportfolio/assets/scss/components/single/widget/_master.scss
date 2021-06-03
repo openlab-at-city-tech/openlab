@@ -4,6 +4,9 @@
 @import 'search';
 @import 'social-widget';
 .widget-area{
+    .#{$prefix}-social-widget-section{
+        margin-top: 15px;
+    }
     .widget-title{
         margin: 0;
         padding-top: 0;

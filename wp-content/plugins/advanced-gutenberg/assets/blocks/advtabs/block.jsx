@@ -543,6 +543,9 @@
                 isPreview: true
             },
         },
+        supports: {
+            anchor: true
+        },
         edit: compose(
             withDispatch( (dispatch, { clientId }, { select }) => {
                 const {

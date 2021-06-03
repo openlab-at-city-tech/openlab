@@ -61,7 +61,7 @@ class UserFolders
         $result = $this->create_user_folder($this->get_auto_linked_folder_name_for_user(), $this->get_processor()->get_shortcode(), 5000000);
 
         if (false === $result) {
-            die();
+            exit();
         }
 
         return $result->get_path();
@@ -93,7 +93,8 @@ class UserFolders
 
             return $defaultuserfolder['folderid'];
         }
-        die(-1);
+
+        exit(-1);
     }
 
     public function manually_link_folder($user_id, $linkedto)
@@ -105,7 +106,7 @@ class UserFolders
         }
 
         if (false !== $result) {
-            die('1');
+            exit('1');
         }
     }
 
@@ -118,7 +119,7 @@ class UserFolders
         }
 
         if (false !== $result) {
-            die('1');
+            exit('1');
         }
     }
 
@@ -152,6 +153,9 @@ class UserFolders
         } catch (\Exception $ex) {
             return false;
         }
+
+        // Increase our unique ID counter
+        $this->update_unique_id();
 
         $user_folder = new Entry($api_entry_new);
         do_action('outofthebox_log_event', 'outofthebox_created_entry', $user_folder);
@@ -295,6 +299,8 @@ class UserFolders
             '%ID%' => isset($user_data->ID) ? $user_data->ID : '',
             '%user_role%' => isset($user_data->roles) ? implode(',', $user_data->roles) : '',
             '%jjjj-mm-dd%' => date('Y-m-d'),
+            '%hh:mm%' => date('Hi'),
+            '%uniqueID%' => get_option('out_of_the_box_uniqueID', 0) + 1,
         ]);
 
         return apply_filters('outofthebox_private_folder_name', $user_folder_name, $this->get_processor());
@@ -308,11 +314,11 @@ class UserFolders
         $current_user->user_login = md5($username);
         $current_user->display_name = $username;
         $current_user->ID = $username;
-        $current_user->user_role = __('Anonymous user', 'wpcloudplugins');
+        $current_user->user_role = esc_html__('Anonymous user', 'wpcloudplugins');
 
         $user_folder_name = $this->get_user_name_template($current_user);
 
-        return apply_filters('outofthebox_private_folder_name_guests', __('Guests', 'wpcloudplugins').' - '.$user_folder_name, $this->get_processor());
+        return apply_filters('outofthebox_private_folder_name_guests', esc_html__('Guests', 'wpcloudplugins').' - '.$user_folder_name, $this->get_processor());
     }
 
     public function get_guest_id()
@@ -326,6 +332,11 @@ class UserFolders
         }
 
         return $id;
+    }
+
+    public function update_unique_id()
+    {
+        update_option('out_of_the_box_uniqueID', get_option('out_of_the_box_uniqueID', 0) + 1);
     }
 
     /**

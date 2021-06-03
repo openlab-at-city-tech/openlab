@@ -5,7 +5,7 @@ Tags: auto post, auto publish, social media scheduling, social media calendar, s
 Donate link: https://paypal.me/adenion
 Requires at least: 4.7.0
 Tested up to: 5.6
-Stable tag: 6.6.2
+Stable tag: 6.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -221,6 +221,10 @@ To get started with the basics of Blog2Social and maybe find some useful tips an
 7. Keep track of your shared posts and scheduling plan with the Social Media Calendar.
 
 == Changelog ==
+= 6.6.4 = 
+Usability Optimization
+= 6.6.3 = 
+Usability Optimization
 = 6.6.2 = 
 Usability Optimization
 = 6.6.1 = 
@@ -313,6 +317,10 @@ Usability Optimization
 Content Curation with links, WooCommerce compatibility, gutenberg editor compatibility
 
 == Upgrade Notice ==
+= 6.6.4 = 
+Usability Optimization
+= 6.6.3 = 
+Usability Optimization
 = 6.6.2 = 
 Usability Optimization
 = 6.6.1 = 

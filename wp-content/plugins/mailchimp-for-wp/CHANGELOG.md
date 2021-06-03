@@ -1,6 +1,19 @@
 Changelog
 =========
 
+#### 4.8.3 - Jan 21, 2021
+
+- Fix fatal error on older PHP versions when submitting form without any subscriber tags set in the form settings.
+- Minor performance improvement in bootstrap method of the plugin.
+
+
+#### 4.8.2 - Jan 20, 2021
+
+- Allow short-circuiting `mc4wp_subscriber_data` filter by returning `null` or `false`.
+- Use a subdirectory for the default debug log file location, so that it's easier to protect using htaccess.
+- Improved reliability for fetching lists from mailchimp when lists have high stats.member_count property.
+
+
 #### 4.8.1 - Aug 25, 2020
 
 - Fix notice by explicitly setting `permission_callback` on registered REST route.

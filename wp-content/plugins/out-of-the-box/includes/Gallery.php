@@ -61,7 +61,7 @@ class Gallery
 
             $parent_folder_entry = new Entry();
             $parent_folder_entry->set_id('Previous Folder');
-            $parent_folder_entry->set_name(__('Previous folder', 'wpcloudplugins'));
+            $parent_folder_entry->set_name(esc_html__('Previous folder', 'wpcloudplugins'));
             $parent_folder_entry->set_path($location);
             $parent_folder_entry->set_path_display($location);
             $parent_folder_entry->set_is_dir(true);
@@ -108,7 +108,7 @@ class Gallery
             $imageslist_html .= '</div>';
         } else {
             if (true === $this->_search) {
-                $imageslist_html .= '<div class="no_results">'.__('This folder is empty', 'wpcloudplugins').'</div>';
+                $imageslist_html .= '<div class="no_results">'.esc_html__('This folder is empty', 'wpcloudplugins').'</div>';
             }
         }
 
@@ -134,7 +134,7 @@ class Gallery
             }
         }
         if (true === $this->_search) {
-            $file_path .= "<li><a href='javascript:void(0)' class='folder'>".sprintf(__('Results for %s', 'wpcloudplugins'), "'".$_REQUEST['query']."'").'</a></li>';
+            $file_path .= "<li><a href='javascript:void(0)' class='folder'>".sprintf(esc_html__('Results for %s', 'wpcloudplugins'), "'".$_REQUEST['query']."'").'</a></li>';
         }
 
         $file_path .= '</ol>';
@@ -158,7 +158,7 @@ class Gallery
 
         echo $response;
 
-        die();
+        exit();
     }
 
     public function getThumbnailsForDir(Entry $item, $thumbnails = [], $totalthumbs = 3)
@@ -199,11 +199,14 @@ class Gallery
         $target_height = $this->get_processor()->get_shortcode_option('targetheight');
         $target_width = round($target_height * (4 / 3));
 
+        $has_access = $item->has_access();
+        $accessible = ($has_access) ? '' : ' not-accesible ';
+
         if ($item->is_parent_folder()) {
             $return .= "<div class='image-container image-folder' data-id='".$item->get_id()."' data-url='".rawurlencode($item->get_path_display())."' data-name='".$item->get_basename()."'>";
         } else {
             $classmoveable = ($this->get_processor()->get_user()->can_move()) ? 'moveable' : '';
-            $return .= "<div class='image-container image-folder entry {$classmoveable}' data-url='".rawurlencode($item->get_path_display())."' data-name='".$item->get_basename()."'>";
+            $return .= "<div class='image-container image-folder entry {$classmoveable} {$accessible}' data-url='".rawurlencode($item->get_path_display())."' data-name='".$item->get_basename()."'>";
         }
         $return .= "<a title='".$item->get_name()."'>";
         $return .= "<div class='preloading'></div>";
@@ -227,7 +230,7 @@ class Gallery
 
         $return .= '</a>';
 
-        if (!$item->is_parent_folder()) {
+        if (!$item->is_parent_folder() && $has_access) {
             $return .= "<div class='entry-info'>";
             $return .= $this->renderDescription($item);
             $return .= $this->renderButtons($item);
@@ -310,9 +313,10 @@ class Gallery
             $url = $this->get_processor()->get_client()->get_thumbnail($item, true, 1024, 768);
         }
 
-        $caption = '<span data-id="'.$item->get_id().'"></span>';
+        $description = htmlentities($item->get_description(), ENT_QUOTES | ENT_HTML401);
+        $data_description = ((!empty($item->description)) ? "data-caption='{$description}'" : '');
 
-        $return .= "<a href='".$url."' title='".htmlspecialchars($item->get_name(), ENT_COMPAT | ENT_HTML401 | ENT_QUOTES)."' {$target} class='{$class}' data-type='image' data-caption='{$caption}' {$thumbnail} rel='ilightbox[".$this->get_processor()->get_listtoken()."]'><span class='image-rollover'></span>";
+        $return .= "<a href='".$url."' title='".htmlspecialchars($item->get_name(), ENT_COMPAT | ENT_HTML401 | ENT_QUOTES)."' {$target} class='{$class}' data-type='image' data-entry-id='{$item->get_id()}' {$thumbnail} rel='ilightbox[".$this->get_processor()->get_listtoken()."]' {$data_description}><span class='image-rollover'></span>";
 
         $return .= "<div class='preloading'></div>";
         $return .= "<img referrerPolicy='no-referrer' class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' width='{$width}' height='{$height}' style='width:{$width}px !important;height:{$height}px !important; '/>";
@@ -332,8 +336,7 @@ class Gallery
 
         $return .= "<div class='entry-info'>";
         $return .= "<div class='entry-info-name'>";
-        $caption_description = ((!empty($item->description)) ? $item->get_description() : $item->get_name());
-        $caption = apply_filters('outofthebox_gallery_lightbox_caption', $caption_description, $item, $this);
+        $caption = apply_filters('outofthebox_gallery_lightbox_caption', $item->get_basename(), $item, $this);
         $return .= '<span>'.$caption.'</span></div>';
         $return .= $this->renderButtons($item);
         $return .= "</div>\n";
@@ -391,17 +394,17 @@ class Gallery
         $html = '';
 
         if ($this->get_processor()->get_user()->can_share()) {
-            $html .= "<div class='entry-info-button entry_action_shortlink' title='".__('Direct link', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-share-alt'></i>\n";
+            $html .= "<div class='entry-info-button entry_action_shortlink' title='".esc_html__('Direct link', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-share-alt'></i>\n";
             $html .= '</div>';
         }
 
         if ($this->get_processor()->get_user()->can_deeplink()) {
-            $html .= "<div class='entry-info-button entry_action_deeplink' title='".__('Share', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-link'></i>\n";
+            $html .= "<div class='entry-info-button entry_action_deeplink' title='".esc_html__('Share', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-link'></i>\n";
             $html .= '</div>';
         }
 
         if ($this->get_processor()->get_user()->can_download() && $item->is_file()) {
-            $html .= "<div class='entry-info-button entry_action_download' title='".__('Download', 'wpcloudplugins')."' tabindex='0'><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' download='".$item->get_name()."' class='entry_action_download' title='".__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down'></i></a>\n";
+            $html .= "<div class='entry-info-button entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."' tabindex='0'><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' download='".$item->get_name()."' class='entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down'></i></a>\n";
             $html .= '</div>';
         }
 
@@ -422,30 +425,30 @@ class Gallery
 
         // Download
         if (($item->is_file()) && ($this->get_processor()->get_user()->can_download())) {
-            $html .= "<li><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' data-filename='".$filename."' class='entry_action_download' title='".__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".__('Download', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' data-filename='".$filename."' class='entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
         }
 
         if (($this->get_processor()->get_user()->can_download()) && $item->is_dir() && '1' === $this->get_processor()->get_shortcode_option('can_download_zip')) {
-            $html .= "<li><a class='entry_action_download' download='".$item->get_name()."' data-filename='".$filename."' title='".__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".__('Download', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_download' download='".$item->get_name()."' data-filename='".$filename."' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
         }
 
         // Move
         if ($usercanmove) {
-            $html .= "<li><a class='entry_action_move' title='".__('Move to', 'wpcloudplugins')."'><i class='fas fa-folder-open '></i>&nbsp;".__('Move to', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_move' title='".esc_html__('Move to', 'wpcloudplugins')."'><i class='fas fa-folder-open '></i>&nbsp;".esc_html__('Move to', 'wpcloudplugins').'</a></li>';
         }
 
         // Delete
         if ($usercandelete) {
-            $html .= "<li><a class='entry_action_delete' title='".__('Delete', 'wpcloudplugins')."'><i class='fas fa-trash '></i>&nbsp;".__('Delete', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_delete' title='".esc_html__('Delete', 'wpcloudplugins')."'><i class='fas fa-trash '></i>&nbsp;".esc_html__('Delete', 'wpcloudplugins').'</a></li>';
         }
 
         // Rename
         if ($usercanrename) {
-            $html .= "<li><a class='entry_action_rename' title='".__('Rename', 'wpcloudplugins')."'><i class='fas fa-tag '></i>&nbsp;".__('Rename', 'wpcloudplugins').'</a></li>';
+            $html .= "<li><a class='entry_action_rename' title='".esc_html__('Rename', 'wpcloudplugins')."'><i class='fas fa-tag '></i>&nbsp;".esc_html__('Rename', 'wpcloudplugins').'</a></li>';
         }
 
         if ('' !== $html) {
-            return "<div class='entry-info-button entry-action-menu-button' title='".__('More actions', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-ellipsis-v'></i><div id='menu-".$item->get_id()."' class='entry-action-menu-button-content tippy-content-holder'><ul data-id='".$item->get_id()."' data-name='".$item->get_basename()."'>".$html."</ul></div></div>\n";
+            return "<div class='entry-info-button entry-action-menu-button' title='".esc_html__('More actions', 'wpcloudplugins')."' tabindex='0'><i class='fas fa-ellipsis-v'></i><div id='menu-".$item->get_id()."' class='entry-action-menu-button-content tippy-content-holder'><ul data-id='".$item->get_id()."' data-name='".$item->get_basename()."'>".$html."</ul></div></div>\n";
         }
 
         return $html;
@@ -456,17 +459,17 @@ class Gallery
         $html = '';
 
         if (
-            false === $this->get_processor()->get_user()->can_add_folders() ||
-            false === $this->_folder->get_permission('canadd') ||
-            true === $this->_search ||
-            '1' === $this->get_processor()->get_shortcode_option('show_breadcrumb')
+            false === $this->get_processor()->get_user()->can_add_folders()
+            || false === $this->_folder->get_permission('canadd')
+            || true === $this->_search
+            || '1' === $this->get_processor()->get_shortcode_option('show_breadcrumb')
             ) {
             return $html;
         }
 
         $height = $this->get_processor()->get_shortcode_option('targetheight');
         $html .= "<div class='image-container image-folder image-add-folder grey newfolder'>";
-        $html .= "<a title='".__('Add folder', 'wpcloudplugins')."'><div class='folder-text'>".__('Add folder', 'wpcloudplugins').'</div>';
+        $html .= "<a title='".esc_html__('Add folder', 'wpcloudplugins')."'><div class='folder-text'>".esc_html__('Add folder', 'wpcloudplugins').'</div>';
         $html .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".plugins_url('css/images/folder.png', dirname(__FILE__))."' width='{$height}' height='{$height}' style='width:".$height.'px;height:'.$height."px;'/>";
         $html .= '</a>';
         $html .= "</div>\n";

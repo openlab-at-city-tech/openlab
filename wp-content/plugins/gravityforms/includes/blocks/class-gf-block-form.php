@@ -244,7 +244,14 @@ class GF_Block_Form extends GF_Block {
 			);
 		}
 
-		return $forms;
+		/**
+		 * Modify the list of available forms displayed in the Form block.
+		 *
+		 * @since 2.4.23
+		 *
+		 * @param array $forms A collection of active forms on site.
+		 */
+		return apply_filters( 'gform_block_form_forms', $forms );
 
 	}
 

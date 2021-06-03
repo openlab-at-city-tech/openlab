@@ -181,7 +181,7 @@ class Processor
         if (null === $this->get_current_account() || false === $this->get_current_account()->get_authorization()->has_access_token()) {
             error_log('[WP Cloud Plugin message]: '." Function _is_action_authorized() discovered that the plugin doesn't have an access token");
 
-            return new \WP_Error('broke', '<strong>'.sprintf(__('%s needs your help!', 'wpcloudplugins'), 'Out-of-the-Box').'</strong> '.__('Authorize the plugin!', 'wpcloudplugins'));
+            return new \WP_Error('broke', '<strong>'.sprintf(esc_html__('%s needs your help!', 'wpcloudplugins'), 'Out-of-the-Box').'</strong> '.esc_html__('Authorize the plugin!', 'wpcloudplugins'));
         }
 
         $this->get_client();
@@ -195,6 +195,21 @@ class Processor
             $this->_rootFolder = str_replace('/%user_folder%', '', $this->options['root']);
         } else {
             $this->_rootFolder = $this->options['root'];
+        }
+
+        // Open Sub Folder if needed
+        if (!empty($this->options['subfolder']) && '/' !== $this->options['subfolder']) {
+            if ('manual' === $this->options['user_upload_folders'] || ('auto' === $this->options['user_upload_folders'] && !Helpers::check_user_role($this->options['view_user_folders_role']))) {
+                $sub_folder_path = apply_filters('outofthebox_set_subfolder_path', $this->options['subfolder'], $this->options, $this);
+                $subfolder = $this->get_client()->get_sub_folder_by_path($this->_rootFolder, $sub_folder_path, true);
+
+                if (is_wp_error($subfolder) || false === $subfolder) {
+                    error_log('[WP Cloud Plugin message]: '.'Cannot find or create the subfolder');
+
+                    exit('-1');
+                }
+                $this->_rootFolder = $subfolder->get_path();
+            }
         }
 
         $this->_rootFolder = html_entity_decode($this->_rootFolder);
@@ -373,7 +388,7 @@ class Processor
                 $user_can_delete = $this->get_user()->can_delete_files() || $this->get_user()->can_delete_folders();
 
                 if (is_wp_error($authorized) || false === $user_can_delete || !isset($_REQUEST['entries'])) {
-                    echo json_encode(['result' => '-1', 'msg' => __('Failed to delete entry', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '-1', 'msg' => esc_html__('Failed to delete entry', 'wpcloudplugins')]);
 
                     exit();
                 }
@@ -383,12 +398,12 @@ class Processor
 
                 foreach ($entries as $entry) {
                     if (false === $entry) {
-                        echo json_encode(['result' => '-1', 'msg' => __('Not all entries could be deleted', 'wpcloudplugins')]);
+                        echo json_encode(['result' => '-1', 'msg' => esc_html__('Not all entries could be deleted', 'wpcloudplugins')]);
 
                         exit();
                     }
                 }
-                echo json_encode(['result' => '1', 'msg' => __('Entry was deleted', 'wpcloudplugins')]);
+                echo json_encode(['result' => '1', 'msg' => esc_html__('Entry was deleted', 'wpcloudplugins')]);
 
                 exit();
 
@@ -399,7 +414,7 @@ class Processor
                 $user_can_rename = $this->get_user()->can_rename_files() || $this->get_user()->can_rename_folders();
 
                 if (is_wp_error($authorized) || false === $user_can_rename) {
-                    echo json_encode(['result' => '-1', 'msg' => __('Failed to rename entry', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '-1', 'msg' => esc_html__('Failed to rename entry', 'wpcloudplugins')]);
 
                     exit();
                 }
@@ -413,7 +428,7 @@ class Processor
                 if (is_wp_error($file)) {
                     echo json_encode(['result' => '-1', 'msg' => $file->get_error_message()]);
                 } else {
-                    echo json_encode(['result' => '1', 'msg' => __('Entry was renamed', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '1', 'msg' => esc_html__('Entry was renamed', 'wpcloudplugins')]);
                 }
 
                 exit();
@@ -425,7 +440,7 @@ class Processor
                 $user_can_copy = $this->get_user()->can_copy_files() || $this->get_user()->can_copy_folders();
 
                 if (false === $user_can_copy) {
-                    echo json_encode(['result' => '-1', 'msg' => __('Failed to copy entry', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '-1', 'msg' => esc_html__('Failed to copy entry', 'wpcloudplugins')]);
 
                     exit();
                 }
@@ -439,7 +454,7 @@ class Processor
                 if (is_wp_error($file)) {
                     echo json_encode(['result' => '-1', 'msg' => $file->get_error_message()]);
                 } else {
-                    echo json_encode(['result' => '1', 'msg' => __('Entry was copied', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '1', 'msg' => esc_html__('Entry was copied', 'wpcloudplugins')]);
                 }
 
                 exit();
@@ -451,7 +466,7 @@ class Processor
                 $user_can_move = $this->get_user()->can_move();
 
                 if (false === $user_can_move) {
-                    echo json_encode(['result' => '-1', 'msg' => __('Failed to move', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '-1', 'msg' => esc_html__('Failed to move', 'wpcloudplugins')]);
 
                     exit();
                 }
@@ -468,12 +483,12 @@ class Processor
 
                 foreach ($entries as $entry) {
                     if (is_wp_error($entry) || empty($entry)) {
-                        echo json_encode(['result' => '-1', 'msg' => __('Not all entries could be moved', 'wpcloudplugins')]);
+                        echo json_encode(['result' => '-1', 'msg' => esc_html__('Not all entries could be moved', 'wpcloudplugins')]);
 
                         exit();
                     }
                 }
-                echo json_encode(['result' => '1', 'msg' => __('Successfully moved to new location', 'wpcloudplugins')]);
+                echo json_encode(['result' => '1', 'msg' => esc_html__('Successfully moved to new location', 'wpcloudplugins')]);
 
                 exit();
 
@@ -489,7 +504,7 @@ class Processor
                 $user_can_create_entry = $this->get_user()->can_add_folders();
 
                 if (false === $user_can_create_entry) {
-                    echo json_encode(['result' => '-1', 'msg' => __('Failed to add entry', 'wpcloudplugins')]);
+                    echo json_encode(['result' => '-1', 'msg' => esc_html__('Failed to add entry', 'wpcloudplugins')]);
 
                     exit();
                 }
@@ -501,7 +516,7 @@ class Processor
                 if (is_wp_error($file)) {
                     echo json_encode(['result' => '-1', 'msg' => $file->get_error_message()]);
                 } else {
-                    echo json_encode(['result' => '1', 'msg' => $new_name.' '.__('was added', 'wpcloudplugins'), 'lastpath' => rawurlencode($this->_lastPath)]);
+                    echo json_encode(['result' => '1', 'msg' => $new_name.' '.esc_html__('was added', 'wpcloudplugins'), 'lastpath' => rawurlencode($this->_lastPath)]);
                 }
 
                 exit();
@@ -543,6 +558,7 @@ class Processor
             'account' => false,
             'startaccount' => false,
             'dir' => '/',
+            'subfolder' => false,
             'class' => '',
             'startpath' => false,
             'mode' => 'files',
@@ -568,7 +584,7 @@ class Processor
             'lightboxnavigation' => '1',
             'showsharelink' => '0',
             'showrefreshbutton' => '1',
-            'roottext' => __('Start', 'wpcloudplugins'),
+            'roottext' => esc_html__('Start', 'wpcloudplugins'),
             'search' => '1',
             'searchfrom' => 'parent',
             'searchterm' => '',
@@ -642,11 +658,10 @@ class Processor
             'demo' => '0',
         ];
 
-        //Create a unique identifier
-        $this->listtoken = md5(serialize($defaults).serialize($atts));
-
-        //Read shortcode
-        extract(shortcode_atts($defaults, $atts));
+        //Read shortcode & Create a unique identifier
+        $shortcode = shortcode_atts($defaults, $atts, 'outofthebox');
+        $this->listtoken = md5(serialize($defaults).serialize($shortcode));
+        extract($shortcode);
 
         $cached_shortcode = $this->get_shortcodes()->get_shortcode_by_id($this->listtoken);
 
@@ -683,7 +698,7 @@ class Processor
             if (null === $account_class) {
                 error_log('[WP Cloud Plugin message]: shortcode cannot be rendered as the requested account is not linked with the plugin');
 
-                return '<i>>>> '.__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+                return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
             }
 
             $this->set_current_account($account_class);
@@ -697,6 +712,10 @@ class Processor
             $dir = ('' == $dir) ? '/' : $dir;
             if ('/' !== substr($dir, 0, 1)) {
                 $dir = '/'.$dir;
+            }
+
+            if (false !== $subfolder) {
+                $subfolder = Helpers::clean_folder_path('/'.rtrim($subfolder, '/'));
             }
 
             // Explode roles
@@ -725,6 +744,7 @@ class Processor
                 'startaccount' => $startaccount,
                 'class' => $class,
                 'root' => htmlspecialchars_decode($dir),
+                'subfolder' => $subfolder,
                 'startpath' => $startpath,
                 'mode' => $mode,
                 'user_upload_folders' => $userfolders,
@@ -856,7 +876,7 @@ class Processor
         }
 
         if (null === $this->get_current_account() || false === $this->get_current_account()->get_authorization()->has_access_token()) {
-            return '<i>>>> '.__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+            return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
         }
 
         ob_start();
@@ -910,17 +930,17 @@ class Processor
         do_action('outofthebox_before_shortcode', $this);
 
         echo "<div id='OutoftheBox' class='{$colors['style']} {$this->options['class']} {$shortcode_class} {$this->options['mode']}' style='display:none'>";
-        echo "<noscript><div class='OutoftheBox-nojsmessage'>".__('To view this content, you need to have JavaScript enabled in your browser', 'wpcloudplugins').'.<br/>';
-        echo "<a href='http://www.enable-javascript.com/' target='_blank'>".__('To do so, please follow these instructions', 'wpcloudplugins').'</a>.</div></noscript>';
+        echo "<noscript><div class='OutoftheBox-nojsmessage'>".esc_html__('To view this content, you need to have JavaScript enabled in your browser', 'wpcloudplugins').'.<br/>';
+        echo "<a href='http://www.enable-javascript.com/' target='_blank'>".esc_html__('To do so, please follow these instructions', 'wpcloudplugins').'</a>.</div></noscript>';
 
         switch ($this->options['mode']) {
             case 'files':
                 $this->load_scripts('files');
 
-                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." jsdisabled' data-list='files' data-token='{$this->listtoken}'  data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-popout='".$this->options['canpopout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}' data-type='{$this->options['mcepopup']}'>";
+                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." jsdisabled' data-list='files' data-token='{$this->listtoken}'  data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-popout='".$this->options['canpopout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}' data-action='{$this->options['mcepopup']}'>";
 
                 if ('linkto' === $this->get_shortcode_option('mcepopup') || 'linktobackendglobal' === $this->get_shortcode_option('mcepopup')) {
-                    $button_text = __('Use the Root Folder of your Account', 'wpcloudplugins');
+                    $button_text = esc_html__('Use the Root Folder of your Account', 'wpcloudplugins');
                     echo '<div data-url="'.urlencode('/').'" data-name="/">';
                     echo '<div class="entry_linkto entry_linkto_root">';
                     echo '<span><input class="button-secondary" type="submit" title="'.$button_text.'" value="'.$button_text.'"></span>';
@@ -929,7 +949,7 @@ class Processor
                 }
 
                 if ('shortcode' === $this->options['mcepopup']) {
-                    echo "<div class='selected-folder'><strong>".__('Selected folder', 'wpcloudplugins').": </strong><span class='current-folder-raw'></span></div>";
+                    echo "<div class='selected-folder'><strong>".esc_html__('Selected folder', 'wpcloudplugins').": </strong><span class='current-folder-raw'></span></div>";
                 }
 
                 include sprintf('%s/templates/frontend/file_browser.php', OUTOFTHEBOX_ROOTDIR);
@@ -982,7 +1002,10 @@ class Processor
 
                 break;
         }
+
+        // Render module when it becomes available (e.g. when loading dynamically via AJAX)
         echo "<script type='text/javascript'>if (typeof(jQuery) !== 'undefined' && typeof(jQuery.cp) !== 'undefined' && typeof(jQuery.cp.OutoftheBox) === 'function') { jQuery('#OutoftheBox-{$this->listtoken}').OutoftheBox(OutoftheBox_vars); };</script>";
+
         echo '</div>';
 
         do_action('outofthebox_after_shortcode', $this);
@@ -1548,11 +1571,13 @@ class Processor
     public function set_current_account(Account $account)
     {
         $this->_current_account = $account;
+        unset($this->_cache);
     }
 
     public function clear_current_account()
     {
         $this->_current_account = null;
+        unset($this->_cache);
     }
 
     /**
@@ -1637,6 +1662,14 @@ class Processor
                 continue;
             }
 
+            if ('css' === $path->getExtension()) {
+                continue;
+            }
+
+            if ('log' === $path->getExtension()) {
+                continue;
+            }
+
             if (false !== strpos($path->getPathname(), 'thumbnails')) {
                 continue;
             }
@@ -1686,9 +1719,6 @@ class Processor
 
                 wp_enqueue_style('OutoftheBox');
                 wp_enqueue_script('OutoftheBox');
-
-                add_action('wp_footer', [$this->get_main(), 'load_custom_css'], 100);
-                add_action('admin_footer', [$this->get_main(), 'load_custom_css'], 100);
 
                 break;
 

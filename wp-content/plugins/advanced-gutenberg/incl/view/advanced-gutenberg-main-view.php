@@ -15,7 +15,12 @@ $tabs_data = array(
     ),
     array(
         'id' => 'settings',
-        'title' => __('Configuration', 'advanced-gutenberg'),
+        'title' => __('Settings', 'advanced-gutenberg'),
+        'icon' => 'build',
+    ),
+    array(
+        'id' => 'block-settings',
+        'title' => __('Default Block Settings', 'advanced-gutenberg'),
         'icon' => 'settings',
     ),
     array(
@@ -27,11 +32,6 @@ $tabs_data = array(
         'id' => 'custom-styles',
         'title' => __('Custom Styles', 'advanced-gutenberg'),
         'icon' => 'code',
-    ),
-    array(
-        'id' => 'translations',
-        'title' => __('Translation', 'advanced-gutenberg'),
-        'icon' => 'text-format',
     ),
 );
 ?>
@@ -97,7 +97,7 @@ $tabs_data = array(
                 <?php $this->loadView($thisTab['id']) ?>
             </div>
         <?php endforeach; ?>
-        
+
         <footer>
             <div class="ppma-rating">
                 <a href="https://wordpress.org/support/plugin/advanced-gutenberg/reviews/#new-post" target="_blank" rel="noopener noreferrer" class="ag-footer-link">If you like <strong>PublishPress Blocks</strong> please leave us a <span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span> rating. Thank you!</a>

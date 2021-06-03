@@ -128,6 +128,10 @@ class Mediaplayer
                         }
                     }
 
+
+                    $last_edited = $child->get_last_edited();
+                    $localtime = get_date_from_gmt(date('Y-m-d H:i:s', strtotime($last_edited)));
+
                     $files[$path] = [
                         'title' => $basename,
                         'name' => $basename,
@@ -138,8 +142,8 @@ class Mediaplayer
                         'poster' => $poster,
                         'thumb' => $thumbnailsmall,
                         'size' => $child->get_size(),
-                        'last_edited' => $child->get_last_edited(),
-                        'last_edited_str' => $child->get_last_edited_str(),
+                        'last_edited_date_str' => !empty($last_edited) ? date_i18n(get_option('date_format'), strtotime($localtime)) : '',
+                        'last_edited_time_str' => !empty($last_edited) ? date_i18n(get_option('time_format'), strtotime($localtime)) : '',
                         'download' => (('1' === $this->get_processor()->get_shortcode_option('linktomedia')) && $this->get_processor()->get_user()->can_download()) ? str_replace('outofthebox-stream', 'outofthebox-download', $source_url) : false,
                         'source' => $source_url,
                         'captions' => isset($captions[$basename]) ? $captions[$basename] : [],

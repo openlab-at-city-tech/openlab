@@ -126,14 +126,14 @@ html[dir=rtl] body.folded .wcp-content {
     right: 36px
 }
 body.wp-admin #wpcontent {
-    padding-left: 335px;
+    padding-left: 305px;
     transition: all .15s linear;
     -webkit-transition: all .15s linear;
     -moz-transition: all .15s linear
 }
 html[dir=rtl] body.wp-admin #wpcontent {
     padding-left: 0;
-    padding-right: 320px
+    padding-right: 305px
 }
 .wcp-container {
     padding: 20px 20px 20px 16px
@@ -481,16 +481,20 @@ span.total-count {
     color: #ffffff !important;
 }
 .dynamic-menu {
-    position: absolute;
+    position: fixed;
     left: auto;
     right: 5px;
     background: #fff;
     width: 170px;
     padding: 0;
-    z-index: 101;
+    z-index: 1000001;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25)
+}
+.dynamic-menu ul {
+    margin: 0;
+    padding: 0;
 }
 .sticky-folders .dynamic-menu {
     left: auto;
@@ -521,6 +525,12 @@ span.total-count {
     width: 20px !important;
     height: 20px !important;
     line-height: 14px;
+    text-align: center;
+}
+
+.dynamic-menu ul > li > a >span.dashicons {
+    font-size: 18px;
+    text-align: left;
 }
 #custom-menu .dynamic-menu ul > li > a .sticky-pin {
     line-height: 20px;
@@ -537,7 +547,7 @@ span.total-count {
     vertical-align: baseline;
     display: inline
 }
-.dynamic-menu li.new-folder {
+.dynamic-menu li.new-folder, .dynamic-menu li.new-folder-pro {
     border-bottom: solid 1px #d8d8d8
 }
 .dynamic-menu a:hover, .dynamic-menu a.active {
@@ -615,14 +625,11 @@ span.total-count {
 li.active-menu {
     z-index: 2 !important
 }
-.wp-list-table th {
-    width: auto !important
+body.woocommerce-page th#taxonomy-product_folder {
+    width: 10% !important;
 }
 .wp-list-table th.column-title {
-    width: 35% !important;
-}
-.fixed .column-author, .fixed .column-date, .fixed .column-format, .fixed .column-links, .fixed .column-parent, .fixed .column-posts {
-    width: 10% !important;
+     width: 22% !important;
 }
 .wp-list-table #wcp_move {
     width: 20px !important
@@ -895,6 +902,13 @@ span.upgrade-message a.pink, span.upgrade-message span.pink {
     text-decoration: none;
     font-weight: 700
 }
+span.upgrade-message a.pink span.dashicons, span.upgrade-message span.pink span.dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+    vertical-align: middle;
+}
 .media-toolbar.sticky-media {
     position: fixed;
     top: 32px;
@@ -1107,7 +1121,7 @@ span.media-info-message.active {
     border-radius: 4px;
     color: #484848;
 }
-.folder-form-buttons a, .folder-form-buttons button {
+.folder-form-buttons a:not(.inline-button), .folder-form-buttons button {
     display: inline-flex;
     padding: 0;
     text-decoration: none;
@@ -1122,6 +1136,15 @@ span.media-info-message.active {
     cursor: pointer;
     flex: 1;
     justify-content: center;
+}
+.folder-form-buttons a.inline-button {
+    display: inline-block;
+    color: #f51366;
+    text-decoration: none;
+    font-weight: 500;
+}
+.folder-form-buttons a.inline-button:hover, .folder-form-buttons a.inline-button:focus {
+    color: #f51366;
 }
 .folder-form-buttons a span, .folder-form-buttons button span {
     -webkit-animation: fa-spin .75s infinite linear;
@@ -1229,8 +1252,8 @@ span.media-info-message.active {
     display: block;
     position: relative;
     max-width: 100%;
-    margin: 0 0 .4em;
-    padding: 0;
+    margin: 0;
+    padding: 0 0 15px 0;
     color: #595959;
     text-align: center;
     text-transform: none;
@@ -1239,10 +1262,21 @@ span.media-info-message.active {
     font-size: 22px;
     line-height: 26px;
 }
+.add-update-folder-title:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 70px;
+    height: 2px;
+    background: #3085d6;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
 .folder-form-message {
     font-size: 15px;
     line-height: 18px;
-    color: #484848;
+    color: #4A5568;
     padding: 25px 70px;
 }
 .folder-form-errors {
@@ -1592,6 +1626,17 @@ span.folder-count:empty {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     display: none;
 }
+.folder-sort-menu.is-pro {
+    width: 140px;
+}
+.folder-sort-menu a.pro-feature {
+    color: #848484;
+}
+.folder-sort-menu a.pro-feature span {
+    display: inline-block;
+    color: #ff5983;
+    font-weight: 500;
+}
 .folder-order.active .folder-sort-menu {
     display: block;
 }
@@ -1627,12 +1672,17 @@ span.folder-count:empty {
 .folder-form-buttons {
     display: flex;
 }
+.folder-form-buttons.pro-message {
+    padding: 0 0 20px 0;
+}
 .folder-group {
     position: relative;
-    margin: 45px auto 15px;
+    margin: 25px auto 25px;
     padding: 0 2px;
 }
-
+.add-folder-note {
+    padding: 20px 0 0;
+}
 .folder-grouptextarea {
     resize: none;
 }
@@ -1701,6 +1751,12 @@ span.folder-count:empty {
     -webkit-transition: 300ms ease all;
     transition: 300ms ease all;
     left: 0%;
+}
+a#remove-folder-item {
+    border: solid 1px #860000;
+    background-color: #d40000;
+    outline: none;
+    box-shadow: none;
 }
 #custom-menu [class^="pfolder-"], #custom-menu [class*=" pfolder-"], .sticky-folders i {
     font-size: 12px;
@@ -1781,6 +1837,25 @@ span.create_new_folder {
 }
 #custom-menu .route.has-sub-tree.has-search > .nav-icon  > .pfolder-arrow-down {
     transform: rotate(0);
+}
+body:not(.woocommerce-page) .wp-list-table th {
+    width: auto;
+}
+.popup-form-content .select-box {
+    padding: 30px 0;
+}
+.popup-form-content .select-box select {
+    width: 100%;
+    max-width: inherit;
+}
+span.pro-tip {
+    display: block;
+    width: 80px;
+    background: #7e3af2;
+    padding: 7px;
+    height: 20px;
+    color: #fff;
+    border-radius: 4px;
 }
 @media screen and (max-width: 960px) {
     .wcp-content {

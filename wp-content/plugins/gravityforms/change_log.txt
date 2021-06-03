@@ -1,3 +1,77 @@
+### 2.4.23.4
+- Updated the captcha field so that it does not show autocomplete options.
+- Updated the system report to include the REST API base URL and to indicate if REST API v2 is enabled.
+- Updated the wording on the import forms page to clarify the expected file format for importing forms.
+- Fixed an issue where filters were not applied consistently to repeater field entries.  Credit: Paul V. Biron/Sparrow Hawk Computing.
+- AF: Updated the meets_minimum_requirements method to include an error if the installed version of Gravity Forms is older than an add-on requires.
+- API: Added GFAPI::get_feed() for getting a specific feed.
+- API: Updated the REST API v2 /feeds/[feed id] endpoint to support the PATCH method for updating the specified feed.
+- API: Fixed an issue with GFAPI::get_feeds() where the requested feed is not returned when inactive.
+- API: Fixed an issue with GFAPI::get_feeds() where the returned feeds do not include the feed_order property.
+- API: Fixed an issue where the REST API v2 PUT /feeds/[feed id] endpoint only updated the feed meta.
+
+
+### 2.4.23.3
+- Updated the plugin header to include the "Requires at least" and "Requires PHP" properties.
+- Updated the minimum WordPress version (for support) on the System Status page to 5.6.
+- Fixed PHP 8 issues where optional parameters were listed before required ones.
+- API: Fixed an issue where the JWT Authentication for WP REST API plugin blocked requests to REST API v2 with a 403 error.
+
+
+### 2.4.23.2
+- Fixed the text on the edit entry screen for post title so that it is translatable.
+- Fixed an issue where making a checkbox field the primary key on the entries list page threw a PHP notice.
+- Fixed an issue where sometimes users are granted `gform_full_access` permission when they shouldn't be.
+- API: Added GFAPI::update_feed_property() to update the specified feed with the given property value.
+- API: Added GFAPI::feed_exists() to check if a feed exists with the supplied ID.
+- API: Added the PUT /feeds/[feed id]/properties endpoint to REST API v2 to update one or more properties of the specified feed.
+- API: Added the [gform_webapi_key_user_capabilities](https://docs.gravityforms.com/gform_webapi_key_user_capabilities/) filter to override which capabilities are used to determine if a user is included in the User drop down menu on the REST API settings page.
+- API: Fixed an issue where users without the appropriate permissions appeared in the User drop down menu when creating a new REST API Key.
+
+
+### 2.4.23.1
+- Fixed an issue where re-running the database upgrade from the System Status page doesn't create the missing gf_rest_api_keys table.
+- Fixed deprecation notice in Gravity Forms Gutenberg block.
+- Fixed an issue with API V2 key generation where it was possible for the keys to generate with just a prefix and no hash.
+- API: Updated the `rand_hash()` method with a fallback to generate a hash even if `openssl_random_pseudo_bytes()` returns empty.
+
+
+### 2.4.23 | 2021-03-03
+- Added the [gform_shortcode_builder_forms](https://docs.gravityforms.com/gform_shortcode_builder_forms/) and [gform_block_form_forms](https://docs.gravityforms.com/gform_block_form_forms/) filters enabling the forms available for embedding to be overridden.
+- Updated the REST API settings page to require the settings to be updated before adding new API keys.
+- Updated the submission process to allow some payment add-ons to fix errors raised when a form includes an invisible Recaptcha.
+- Fixed an issue with jQuery 3.0 breaking multiselect conditional logic.
+- Fixed an issue with the file upload field where validation fails for certain file types.
+- Fixed an issue where the form editor block generates notices in the JavaScript console.
+- Fixed an issue that makes multi-page forms with AJAX enabled use the wrong tabindex.
+- Fixed an issue with sorting forms in PHP 8.
+- Fixed an issue with auto-updates and PHP 8.
+- Fixed an issue with the sales page when using MySQL 8+.
+- Fixed a fatal error in PHP 8 on some Gravity Forms pages.
+- Fixed checkbox and radio style issues for Twenty Twenty-One Theme.
+- Fixed an issue where dates/times on the system report and entries list page can output nothing but "at" when the date/time formats on the WordPress general settings page are empty.
+- AF: Fixed an issue where an uninformative error is displayed if the add-on feed table does not exist.
+- AF: Added a new method that allows add-ons to fix authentication issues.
+- API: Updated the `GF_Results_Cache::calculate()` method to make the $args argument optional.
+- API: Updated the [gform_file_upload_markup](https://docs.gravityforms.com/gform_file_upload_markup/) JS filter to include response as the sixth parameter.
+- API: Added a new JavaScript function "gformIsRecaptchaPending" to help resolve submission errors raised by some payment add-ons when a form includes an invisible Recaptcha.
+
+
+### 2.4.22 | 2020-12-22
+- Added security enhancements.
+- Added the [gform_rule_pre_evaluation](https://docs.gravityforms.com/gform_rule_pre_evaluation/) JS and PHP filters enabling conditional logic rules to be overridden just before they are evaluated. Credit: Gravity Wiz.
+- Updated minimum WordPress version (for support) on the System Status page to 5.5.
+- Fixed an issue with the Email Field class names in the form editor.
+- Fixed an issue where a currency formatted number field can save the wrong calculation result to the entry if the rounding setting was previously configured.
+- API: Added the /forms/{$form_id}/field-filters endpoint to REST API v2. Credit: Gravity Flow.
+- API: Fixed an issue where a database error can occur when using the GFAPI methods for managing feeds when a feed add-on has not been installed to create the required table.
+- API: Removed the truncated hashed key from the v2 API Keys list table and edit page.
+- API: Updated an authentication error logging statement for REST API v2.
+- API: Updated REST API v2 to support authentication using WordPress 5.6 application passwords.
+- AF: Removed animation from input toggles on Feed Settings page.
+- AF: Removed Setup Fee setting when trial is enabled for Payment Add-Ons.
+
+
 ### 2.4.21 | 2020-10-14
 - Added security enhancements.
 - Updated background updates to work more seamlessly with WordPress's automatic updates.

@@ -21,7 +21,7 @@ $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
 $isPremium = (B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__("SMART", "blog2social") . '</span>' : '';
-$selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d", (strtotime($_GET['schedDate'] . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600)) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? date("Y-m-d", strtotime(B2S_Util::getUTCForDate($_GET['schedDateTime'], $userTimeZoneOffset * (-1)))) : '' );    //routing from calendar or curated content
+$selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d", (strtotime($_GET['schedDate'] . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600)) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate($_GET['schedDateTime'], $userTimeZoneOffset * (-1)))) : '' );    //routing from calendar or curated content
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 $isDraft = false;
 if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) && (int) $_GET['postId'] > 0) {
@@ -499,7 +499,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
 
 
 
-                            <div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                            <div id="b2s-post-ship-item-post-format-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -568,6 +568,35 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                             <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAuthNetwork6Modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title"><?php esc_html_e('Connect with Pinterest', 'blog2social') ?></h4>
                                         </div>
+                                        <div class="modal-body b2s-auth-network-6-extension-info-area" style="display: none">
+                                            <div class="row width-100">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger b2s-auth-network-6-extension-error" data-info="default"><?php esc_html_e('The login failed. To connect your Pinterest account to Blog2Social, please sign in to Pinterest using the Blog2Social browser extension.', 'blog2social'); ?></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body b2s-auth-network-6-extension-start-area" style="display: none">
+                                            <div class="row width-100">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger b2s-auth-network-6-extension-error" data-info="default"><?php esc_html_e('The login failed. To connect your Pinterest account to Blog2Social, please sign in to Pinterest using the Blog2Social browser extension.', 'blog2social'); ?></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body b2s-auth-network-6-extension-success-area width-100" style="display: none">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-danger b2s-auth-network-6-extension-error" data-info="default" style="display:none;"><?php esc_html_e('An error occurred! Please try again.', 'blog2social'); ?></div>
+                                                    <div class="alert alert-success b2s-auth-network-6-info-extension" data-info="success"><?php esc_html_e('Login up successful. Please confirm that Blog2Social is allowed to publish on your profile.', 'blog2social'); ?></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-3 b2s-login-form-label"><?php esc_html_e('Select Pinboard', 'blog2social'); ?></label>
+                                                <div class="col-md-9">
+                                                    <select id="b2s-auth-network-6-board-extension" class="form-control valid" aria-invalid="false"></select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row b2s-loading-area width-100" style="display: none">
                                             <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
                                             <div class="clearfix"></div>
@@ -608,8 +637,8 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                                     <select class="form-control" id="b2s-auth-network-6-location">
                                                         <?php
                                                         $pinterestCountryList = B2S_Tools::getCountryListByNetwork(6);
-                                                        foreach ($pinterestCountryList as $key => $name){
-                                                            echo '<option value="'.$key.'"'.(($key == '') ? ' selected="selected"' : '').'>'.$name['name'].'</option>';
+                                                        foreach ($pinterestCountryList as $key => $name) {
+                                                            echo '<option value="' . $key . '"' . (($key == '') ? ' selected="selected"' : '') . '>' . $name['name'] . '</option>';
                                                         }
                                                         ?>
                                                     </select>
@@ -627,9 +656,70 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                         <div class="modal-footer b2s-edit-template-footer">
                                             <button class="btn btn-success b2s-auth-network-6-login-btn" type="button"><?php esc_html_e('authorize', 'blog2social'); ?></button>
                                             <button class="btn btn-success b2s-auth-network-6-confirm-btn" type="button" style="display: none;"><?php esc_html_e('confirm', 'blog2social'); ?></button>
+                                            <button class="btn btn-success b2s-auth-network-6-extension-auth-btn" type="button" style="display: none;"><?php esc_html_e('Sign in to Pinterest', 'blog2social'); ?></button>
+                                            <button class="btn btn-success b2s-auth-network-6-confirm-extension-btn" type="button" style="display: none;"><?php esc_html_e('confirm', 'blog2social'); ?></button>
+                                            <button class="btn btn-success b2s-auth-network-6-go-to-network-btn" type="button" style="display: none;"><?php esc_html_e('authorize', 'blog2social'); ?></button>
                                             <input type="hidden" id="b2s-auth-network-6-ident-data">
+                                            <input type="hidden" id="b2s-auth-network-6-username-extension">
                                             <input type="hidden" id="b2s-auth-network-6-auth-id">
                                             <input type="hidden" id="b2s-auth-network-6-mandant-id">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal fade" id="b2sNetworkAddInstagramInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddInstagramInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddInstagramInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Add Profile', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <?php echo sprintf(__('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))); ?>
+                                                    <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal fade" id="b2sNetworkAddPageInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddPageInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddPageInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Add Page', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <?php echo sprintf(__('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))); ?>
+                                                    <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sNetworkAddGroupInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddGroupInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddGroupInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Add Group', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <?php echo sprintf(__('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))); ?>
+                                                    <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -388,6 +388,8 @@ function su_shortcode_posts( $atts = null, $content = null ) {
 	// Save original posts
 	global $posts;
 	$original_posts = $posts;
+	// Filter args
+	$args = apply_filters( 'su/shortcode/posts/wp_query_args', $args, $atts );
 	// Query posts
 	$posts = new WP_Query( $args );
 	// Load the template
@@ -415,13 +417,16 @@ function su_shortcode_posts_locate_template( $template ) {
 	$template = su_set_file_extension( $template, 'php' );
 	$template = ltrim( $template, '\\/' );
 
-	$locations = array(
-		get_stylesheet_directory(),
-		get_template_directory(),
-		path_join(
-			su_get_plugin_path(),
-			'includes/partials/shortcodes/posts'
-		),
+	$locations = apply_filters(
+		'su/shortcode/posts/allowed_template_locations',
+		array(
+			get_stylesheet_directory(),
+			get_template_directory(),
+			path_join(
+				su_get_plugin_path(),
+				'includes/partials/shortcodes/posts'
+			),
+		)
 	);
 
 	foreach ( $locations as $base ) {

@@ -1116,7 +1116,7 @@ final class GF_Entry_List_Table extends WP_List_Table {
 
 		$field_id = (string) str_replace( 'field_id-', '', $column_name );
 
-		$value = $entry[ $field_id ];
+		$value = rgar( $entry, $field_id );
 
 		$detail_url = $this->get_detail_url( $entry );
 		?>

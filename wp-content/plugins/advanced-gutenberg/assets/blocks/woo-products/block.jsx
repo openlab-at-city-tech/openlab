@@ -4,7 +4,7 @@
     const { Component, Fragment } = wpElement;
     const { registerBlockType } = wpBlocks;
     const { InspectorControls, BlockControls } = wpBlockEditor;
-    const { RangeControl, PanelBody, CheckboxControl, SelectControl, Spinner, Toolbar, Placeholder, Button } = wpComponents;
+    const { RangeControl, PanelBody, CheckboxControl, SelectControl, Spinner, ToolbarGroup, Placeholder, Button } = wpComponents;
     const { addQueryArgs } = wp.url;
 
     let fetchingQueue = null;
@@ -158,7 +158,7 @@
                     } )
                 } ).then( () => {
                     if (viewType === 'slider') {
-                        $(`#block-${self.props.clientId} .advgb-products-block.slider-view .advgb-products-wrapper:not(.slick-initialized)`).slick( {
+                        jQuery(`#block-${self.props.clientId} .advgb-products-block.slider-view .advgb-products-wrapper:not(.slick-initialized)`).slick( {
                             dots: true,
                             adaptiveHeight: true,
                         } );
@@ -226,7 +226,7 @@
                     :
                 <Fragment>
                     <BlockControls>
-                        <Toolbar controls={ viewControls } />
+                        <ToolbarGroup controls={ viewControls } />
                     </BlockControls>
                     <InspectorControls>
                         <PanelBody title={ __( 'Products Settings', 'advanced-gutenberg' ) }>
@@ -407,6 +407,9 @@
             attributes: {
                 isPreview: true
             },
+        },
+        supports: {
+            anchor: true
         },
         edit: AdvProductsEdit,
         save: function ( { attributes } ) {

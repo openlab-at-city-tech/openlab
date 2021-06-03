@@ -1,4 +1,3 @@
-// Import required packages.
 const mix = require( 'laravel-mix' );
 const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 
@@ -27,64 +26,27 @@ mix.setPublicPath( 'build' );
 mix.sourceMaps();
 
 /*
- * Versioning and cache busting. Append a unique hash for production assets. If
- * you only want versioned assets in production, do a conditional check for
- * `mix.inProduction()`.
- *
- * @link https://laravel.com/docs/5.6/mix#versioning-and-cache-busting
- */
-mix.version();
-
-/*
  * Compile JavaScript.
- *
- * @link https://laravel.com/docs/5.6/mix#working-with-scripts
  */
-mix.react( `${devPath}/js/classic-editor.js`, 'js' )
-	.react( `${devPath}/js/block-editor.js`, 'js' );
+mix.js( `${devPath}/js/classic-editor.js`, 'js' ).react();
+mix.js( `${devPath}/js/block-editor.js`, 'js' ).react();;
 
 /**
  * Copy files.
- *
- * @link https://laravel.com/docs/5.8/mix#copying-files-and-directories
  */
 mix.copy( `${devPath}/js/plugin.js`, 'build/js' );
 
-/*
- * Compile CSS. Mix supports Sass, Less, Stylus, and plain CSS, and has functions
- * for each of them.
- *
- * @link https://laravel.com/docs/5.6/mix#working-with-stylesheets
- * @link https://laravel.com/docs/5.6/mix#sass
- * @link https://github.com/sass/node-sass#options
- */
-
-// Sass configuration.
-var sassConfig = {
-	outputStyle : 'expanded',
-	indentType  : 'tab',
-	indentWidth : 1
-};
-
 // Compile SASS/CSS.
-mix.sass( `${devPath}/scss/editor.scss`, 'css', sassConfig )
+mix.sass( `${devPath}/scss/editor.scss`, 'css' )
 	.sass( `${devPath}/scss/style.scss`, 'css' );
 
 /*
  * Add custom Webpack configuration.
- *
- * Laravel Mix doesn't currently minimize images while using its `.copy()`
- * function, so we're using the `CopyWebpackPlugin` for processing and copying
- * images into the publicribution folder.
- *
- * @link https://laravel.com/docs/5.6/mix#custom-webpack-configuration
- * @link https://webpack.js.org/configuration/
  */
 mix.webpackConfig( {
-	stats        : 'minimal',
-	devtool      : mix.inProduction() ? false : 'source-map',
-	performance  : { hints  : false },
-	watchOptions : { ignored: /node_modeuls/, },
+	// stats        : 'minimal',
+	// devtool      : mix.inProduction() ? false : 'source-map',
+	// performance  : { hints  : false },
 	plugins      : [
 		new DependencyExtractionWebpackPlugin(),
 	]

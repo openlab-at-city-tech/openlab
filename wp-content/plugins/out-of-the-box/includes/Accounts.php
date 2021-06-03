@@ -131,7 +131,6 @@ class Accounts
      */
     public function upgrade_from_single()
     {
-        //require_once("wp-load.php");
         require_once ABSPATH.'wp-includes/pluggable.php';
 
         // Update Events database, add account_id column
@@ -159,9 +158,14 @@ class Accounts
             $token_name = "{$blog_id}.access_token";
         }
 
+        $new_accesstoken = new \TheLion\OutoftheBox\API\Dropbox\Models\AccessToken([]);
+        $new_accesstoken->setToken($access_token);
+        $new_accesstoken->setExpiresIn(-1);
+        $new_accesstoken->setCreated(time());
+
         // Create account with temporarily data
         $account = new Account($blog_id, '', $blog_id);
-        $account->get_authorization()->set_access_token($access_token);
+        $account->get_authorization()->set_access_token($new_accesstoken);
         $this->get_processor()->set_current_account($account);
 
         // Load Client for this account

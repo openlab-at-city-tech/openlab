@@ -28,7 +28,7 @@ class FormHelpers
         $folder_location = ($ashtml && isset($first_entry->folderurl)) ? '<a href="'.urldecode($first_entry->folderurl).'">'.$folder_name.'</a>' : $folder_name;
 
         // Fill our custom field with the details of our upload session
-        $formated_value = sprintf(__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $uploaded_files), $folder_location);
+        $formated_value = sprintf(esc_html__('%d file(s) uploaded to %s:', 'wpcloudplugins'), count((array) $uploaded_files), $folder_location);
 
         if (!$ashtml) {
             // Render TEXT only
@@ -44,13 +44,13 @@ class FormHelpers
         ob_start();
         $current = 0;
 
-        echo $formated_value; ?><table cellpadding="0" cellspacing="0" width="100%" border="0" style="cellspacing:0;line-height:22px;table-layout:auto;width:100%;">
+        echo $formated_value; ?><table cellpadding="0" cellspacing="0" width="100%" border="0" style="cellspacing:0;line-height:22px;border:none;table-layout:auto;width:100%;">
             <?php foreach ($uploaded_files as $fileid => $file) {            ?>
                 <tr style="<?php echo ($current % 2) ? 'background: #fafafa;' : ''; ?> height: 26px;">
-                    <td style="width:20px;padding-right:10px;padding-left: 5px;">
-                        <img alt="" height="16" src="<?php echo \TheLion\OutoftheBox\Helpers::get_default_icon($file->type, false); ?>" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="16">
+                    <td style="width:20px;padding-right:10px;padding-left:5px;border:none;">
+                        <img alt="" height="16" src="<?php echo \TheLion\OutoftheBox\Helpers::get_default_icon($file->type, false); ?>" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:16px;max-width:16px;" width="16">
                     </td>
-                    <td style="padding-right:10px;">
+                    <td style="padding-right:10px;border:none;">
                         <a href="<?php echo urldecode($file->link); ?>" target="_blank"><?php echo basename($file->path).' ('.$file->size.')'; ?></a>
                         <?php echo (isset($file->description) && empty(!$file->description)) ? '<br/><div style="font-weight:normal; max-height: 200px; overflow-y: auto;word-break: break-word;">'.nl2br($file->description).'</div>' : ''; ?>
                     </td>

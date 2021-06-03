@@ -2,8 +2,8 @@
 
 namespace TheLion\OutoftheBox;
 
-use Kunnu\Dropbox\Dropbox;
-use Kunnu\Dropbox\DropboxApp;
+use TheLion\OutoftheBox\API\Dropbox\Dropbox;
+use TheLion\OutoftheBox\API\Dropbox\DropboxApp;
 
 class App
 {
@@ -43,12 +43,12 @@ class App
     private $_identifier;
 
     /**
-     * @var \Kunnu\Dropbox\Dropbox
+     * @var \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     private $_client;
 
     /**
-     * @var \Kunnu\Dropbox\DropboxApp
+     * @var \TheLion\OutoftheBox\API\Dropbox\DropboxApp
      */
     private $_client_app;
 
@@ -70,7 +70,8 @@ class App
     public function __construct(Processor $processor)
     {
         $this->_processor = $processor;
-        require_once OUTOFTHEBOX_ROOTDIR.'/includes/dropbox-sdk/vendor/autoload.php';
+
+        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
 
         // Call back for refresh token function in SDK client
         add_action('out-of-the-box-refresh-token', [&$this, 'refresh_token'], 10, 1);
@@ -79,8 +80,8 @@ class App
         $own_secret = $this->get_processor()->get_setting('dropbox_app_secret');
 
         if (
-                (!empty($own_key)) &&
-                (!empty($own_secret))
+                (!empty($own_key))
+                && (!empty($own_secret))
         ) {
             $this->_app_key = $this->get_processor()->get_setting('dropbox_app_key');
             $this->_app_secret = $this->get_processor()->get_setting('dropbox_app_secret');
@@ -89,22 +90,10 @@ class App
 
         // Set right redirect URL
         $this->set_redirect_uri();
-
-        // Process codes/tokens if needed
-        $this->process_authorization();
     }
 
     public function process_authorization()
     {
-        // CHECK IF THIS PLUGIN IS DOING THE AUTHORIZATION
-        if (!isset($_REQUEST['action'])) {
-            return false;
-        }
-
-        if ('outofthebox_authorization' !== $_REQUEST['action']) {
-            return false;
-        }
-
         if (!empty($_REQUEST['state'])) {
             $state = (strtr($_REQUEST['state'], '-_~', '+/='));
 
@@ -135,9 +124,10 @@ class App
 
         if (isset($_GET['code'])) {
             $access_token = $this->create_access_token();
-            // Echo To Popup
+            // Close oAuth popup and refresh admin page. Only possible with inline javascript.. Only possible with inline javascript.
             echo '<script type="text/javascript">window.opener.parent.location.href = "'.$redirect.'"; window.close();</script>';
-            die();
+
+            exit();
         }
 
         return false;
@@ -284,7 +274,7 @@ class App
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('Cannot generate Access Token: %s', $ex->getMessage()));
 
-            return new \WP_Error('broke', __('Error communicating with API:', 'wpcloudplugins').$ex->getMessage());
+            return new \WP_Error('broke', esc_html__('Error communicating with API:', 'wpcloudplugins').$ex->getMessage());
         }
 
         return true;
@@ -349,12 +339,12 @@ class App
     /**
      * @param null|mixed $account
      *
-     * @return \Kunnu\Dropbox\Dropbox
+     * @return \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     public function get_client($account = null)
     {
         if (empty($this->_client)) {
-            $this->_client = new Dropbox($this->get_client_app($account), ['persistent_data_store' => new \Kunnu\Dropbox\Store\DatabasePersistentDataStore()]);
+            $this->_client = new Dropbox($this->get_client_app($account), ['persistent_data_store' => new \TheLion\OutoftheBox\API\Dropbox\Store\DatabasePersistentDataStore()]);
         }
 
         if (!empty($account)) {
@@ -367,7 +357,7 @@ class App
     /**
      * @param null|mixed $account
      *
-     * @return \Kunnu\Dropbox\DropboxApp
+     * @return \TheLion\OutoftheBox\API\Dropbox\DropboxApp
      */
     public function get_client_app($account = null)
     {

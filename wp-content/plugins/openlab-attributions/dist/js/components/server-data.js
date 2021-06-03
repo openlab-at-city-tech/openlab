@@ -3,14 +3,14 @@ function ServerData( { item, index } ) {
 
 	return (
 		<>
-			{ inputs.map( ( [ name, value ] ) =>
+			{ inputs.map( ( [ name, value ] ) => (
 				<input
 					type="hidden"
 					name={ `attributions[${ index }][${ name }]` }
 					value={ value }
 					key={ name }
 				/>
-			) }
+			) ) }
 		</>
 	);
 }

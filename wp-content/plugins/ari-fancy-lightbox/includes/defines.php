@@ -1,5 +1,5 @@
 <?php
-define( 'ARIFANCYLIGHTBOX_VERSION', '1.3.7' );
+define( 'ARIFANCYLIGHTBOX_VERSION', '1.3.8' );
 define( 'ARIFANCYLIGHTBOX_SLUG', 'ari-fancy-lightbox' );
 define( 'ARIFANCYLIGHTBOX_ASSETS_URL', ARIFANCYLIGHTBOX_URL . 'assets/' );
 define( 'ARIFANCYLIGHTBOX_VERSION_OPTION', 'ari_fancy_lightbox' );

@@ -97,6 +97,12 @@
 									<?php _e( "Remove link if the whole post content shown", 'advanced-excerpt' ); ?>
 									</label><br />
 								</li>
+								<li>
+									<label for="link-on-custom-excerpt">
+									<input name="link_on_custom_excerpt" type="checkbox" id="link-on-custom-excerpt" value="on" <?php echo ( 1 == $link_on_custom_excerpt ) ? 'checked="checked"' : ''; ?> />
+									<?php _e( "Add the link even if a custom excerpt is shown.", 'advanced-excerpt' ); ?>
+									</label><br />
+								</li>
 							</ul>
 
 						</td>

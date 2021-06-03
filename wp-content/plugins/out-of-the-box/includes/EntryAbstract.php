@@ -42,6 +42,7 @@ abstract class EntryAbstract
     public $additional_data = [];
     // Parent folder, only used for displaying the Previous Folder entry
     public $pf = false;
+    public $has_access = true;
 
     public function __construct($api_entry = null)
     {
@@ -468,5 +469,27 @@ abstract class EntryAbstract
     public function get_default_icon()
     {
         return Helpers::get_default_icon($this->get_mimetype(), $this->is_dir());
+    }
+
+    /**
+     * Get the value of has_access.
+     */
+    public function has_access()
+    {
+        return $this->has_access;
+    }
+
+    /**
+     * Set the value of has_access.
+     *
+     * @param bool $has_access
+     *
+     * @return self
+     */
+    public function set_has_access($has_access = true)
+    {
+        $this->has_access = $has_access;
+
+        return $this;
     }
 }

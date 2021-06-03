@@ -231,6 +231,7 @@ abstract class GFAddOn {
 	 * Override this function to add initialization code (i.e. hooks) for the admin site (WP dashboard)
 	 */
 	public function init_admin() {
+		$this->maybe_cache_gravityapi_oauth_response();
 
 		// enqueues admin scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 0 );
@@ -238,11 +239,6 @@ abstract class GFAddOn {
 		// message enforcing min version of Gravity Forms
 		if ( isset( $this->_min_gravityforms_version ) && RG_CURRENT_PAGE == 'plugins.php' ) {
 			add_action( 'after_plugin_row_' . $this->get_path(), array( $this, 'plugin_row' ), 10, 2 );
-		}
-
-		// STOP HERE IF GRAVITY FORMS IS NOT SUPPORTED
-		if ( isset( $this->_min_gravityforms_version ) && ! $this->is_gravityforms_supported( $this->_min_gravityforms_version ) ) {
-			return;
 		}
 
 		// STOP HERE IF CANNOT PASS MINIMUM REQUIREMENTS CHECK.
@@ -327,6 +323,54 @@ abstract class GFAddOn {
 	}
 
 	/**
+	 * Check for a response from the Gravity API and temporarily cache the value to a transient.
+	 *
+	 * This method cannot be extended because it's intended for use only by first-party Gravity Forms add-ons.
+	 *
+	 * @since 2.4.23
+	 */
+	private function maybe_cache_gravityapi_oauth_response() {
+		GFForms::include_gravity_api();
+
+		$referer     = isset( $_SERVER['HTTP_REFERER'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) ) : array();
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : array();
+
+		if (
+			( rgar( $referer, 'host' ) !== rgar( wp_parse_url( GRAVITY_API_URL ), 'host' ) )
+			|| empty( $request_uri )
+		) {
+			return;
+		}
+
+		// Set up post data.
+		$data = array_filter(
+			array(
+				'auth_payload' => sanitize_text_field( rgpost( 'auth_payload' ) ),
+				'state'        => sanitize_text_field( rgpost( 'state' ) ),
+			)
+		);
+
+		// Get the query string to check which add-on is being authenticated.
+		parse_str(
+			rgar( $request_uri, 'query' ),
+			$query
+		);
+
+		$addon = rgar( $query, 'subview' );
+
+		if (
+			// Couldn't determine the add-on, no request was cached, or the response doesn't contain what we expect.
+			! $addon
+			|| ! get_transient( "gravityapi_request_{$addon}" )
+			|| count( $data ) !== 2
+		) {
+			return;
+		}
+
+		set_transient( "gravityapi_response_{$addon}", $data, 10 * MINUTE_IN_SECONDS );
+	}
+
+	/**
 	 * Override this function to add AJAX hooks or to add initialization code when an AJAX request is being performed
 	 */
 	public function init_ajax() {
@@ -389,8 +433,25 @@ abstract class GFAddOn {
 		// Get minimum requirements.
 		$requirements = $this->minimum_requirements();
 
-		// Prepare response.
+		// Initialize response.
 		$meets_requirements = array( 'meets_requirements' => true, 'errors' => array() );
+
+		// Set an error if the minimum version of Gravity Forms is defined and the requirement is not met.
+		if ( ! empty( $this->_min_gravityforms_version ) && ! $this->is_gravityforms_supported( $this->_min_gravityforms_version ) ) {
+			$meets_requirements = array(
+				'meets_requirements' => false,
+				'errors'             => array(
+					esc_html__(
+						sprintf(
+							'%s requires Gravity Forms %s or newer. Please upgrade your installation of Gravity Forms or disable this add-on to remove this message.',
+							$this->_title,
+							$this->_min_gravityforms_version
+						),
+						'gravityforms'
+					),
+				),
+			);
+		}
 
 		// If no minimum requirements are defined, return.
 		if ( empty( $requirements ) ) {
@@ -826,7 +887,7 @@ abstract class GFAddOn {
 				}
 				if ( isset( $script['callback'] ) && is_callable( $script['callback'] ) ) {
 					$args = compact( 'form', 'is_ajax' );
-					call_user_func_array( $script['callback'], $args );
+					call_user_func_array( $script['callback'], array_values( $args ) );
 				}
 			}
 		}

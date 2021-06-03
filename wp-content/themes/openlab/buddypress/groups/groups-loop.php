@@ -3,10 +3,11 @@
  * Groups loop.
  */
 
+$group_sort = openlab_get_current_filter( 'sort' );
 $group_args = array(
 	'search_terms' => urldecode( openlab_get_current_filter( 'search' ) ),
 	'per_page'     => 12,
-	'type'         => openlab_get_current_filter( 'sort' ),
+	'type'         => $group_sort,
 );
 
 $filters = array();
@@ -165,6 +166,17 @@ if ( $descendant_of ) {
 </div>
 
 	<div id="group-list" class="item-list group-list row">
+		<?php if ( openlab_is_my_groups_directory() ) : ?>
+			<div class="my-group-archive-sort form-inline">
+				<label for="openlab-sort-my-groups" class="sr-only">Select sort order</label>
+				<select id="openlab-sort-my-groups" class="form-control">
+					<option value="alphabetical" <?php selected( $group_sort, 'alphabetical' ); ?>>Alphabetical</option>
+					<option value="newest" <?php selected( $group_sort, 'newest' ); ?>>Newest</option>
+					<option value="active" <?php selected( $group_sort, 'active' ); ?>>Last Active</option>
+				</select>
+			</div>
+		<?php endif; ?>
+
 		<?php
 		while ( bp_groups() ) : bp_the_group();
 			$group_id        = bp_get_group_id();

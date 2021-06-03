@@ -686,7 +686,11 @@ class GF_Field_Repeater extends GF_Field {
 
 						// Don't add new item if max indexes is 0 and value is empty.
 						if ( $field->isRequired || $max_indexes[ $field->id ] > 0 || ( $max_indexes[ $field->id ] === 0 && $value !== '' ) ) {
-							$items[ $i ][ $input_id ] = $value;
+							$items[ $i ][ $input_id ] = gf_apply_filters( array(
+								'gform_get_input_value',
+								$field['formId'],
+								$field->id
+							), $value, $entry, $field, '' );
 						}
 
 						if ( isset( $entry[ $key ] ) ) {
@@ -700,7 +704,11 @@ class GF_Field_Repeater extends GF_Field {
 					$value = isset( $entry[ $key ] ) ? $entry[ $key ] : '';
 
 					if ( $field->isRequired || $max_indexes[ $field->id ] > 0 || ( $max_indexes[ $field->id ] === 0 && $value !== '' ) ) {
-						$items[ $i ][ $field->id ] = $value;
+							$items[ $i ][ $field->id ] = gf_apply_filters( array(
+								'gform_get_input_value',
+								$field['formId'],
+								$field->id
+							), $value, $entry, $field, '' );
 					}
 
 					if ( isset( $entry[ $key ] ) ) {

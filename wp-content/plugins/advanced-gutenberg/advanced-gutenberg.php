@@ -3,8 +3,8 @@
  * Plugin Name: PublishPress Blocks
  * Plugin URI: https://publishpress.com/blocks/
  * Description: Enhanced tools for Gutenberg editor
- * Version: 2.5.0
- * Tested up to: 5.6
+ * Version: 2.5.7
+ * Tested up to: 5.7
  * Author: PublishPress
  * Author URI: https://publishpress.com/
  * License: GPL2
@@ -17,7 +17,7 @@
  *
  * @copyright 2014-2020  Joomunited
  * @copyright 2020       Advanced Gutenberg. help@advancedgutenberg.com
- * @copyright 2020       PublishPress. help@publishpress.com
+ * @copyright 2020-2021  PublishPress. help@publishpress.com
  *
  *  Original development of this plugin was kindly funded by Joomunited
  *
@@ -76,7 +76,7 @@ if (version_compare(PHP_VERSION, '5.6.20', '<')) {
 }
 
 if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-    define('ADVANCED_GUTENBERG_VERSION', '2.5.0');
+    define('ADVANCED_GUTENBERG_VERSION', '2.5.7');
 }
 
 if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
@@ -117,10 +117,10 @@ if (! function_exists('advg_language_domain_init')) {
                 plugin_dir_path(__FILE__) . 'languages/' . 'advanced-gutenberg' . '-' . get_locale() . '.mo'
             );
         }
-        
+
         wp_set_script_translations(
-            'editor', 
-            'advanced-gutenberg', 
+            'editor',
+            'advanced-gutenberg',
             plugin_dir_path( __FILE__ ) . 'languages'
         );
     }

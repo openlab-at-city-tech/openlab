@@ -6,6 +6,7 @@
     border-right: solid 1px #ddd;
     background: #f1f1f1;
     direction: ltr;
+    top: 0;
 }
 .folder-modal .media-frame .media-frame-content, .folder-modal .media-frame .media-frame-router, .folder-modal .media-frame .media-frame-title, .folder-modal .media-frame .media-frame-toolbar {
     left: 275px
@@ -266,9 +267,10 @@ svg#successAnimation {
     color: #a4c0d2
 }
 
-.wcp-hide-show-buttons {
+.media-frame .wcp-hide-show-buttons {
     display: none
 }
+
 
 .folder-order {
     position: relative
@@ -310,7 +312,21 @@ svg#successAnimation {
     text-decoration: none;
     font-size: 14px
 }
-
+.folder-sort-menu.is-pro {
+    width: 140px;
+}
+.folder-sort-menu a.pro-feature {
+    color: #848484;
+}
+.folder-sort-menu a.pro-feature span {
+    display: inline-block;
+    color: #ff5983;
+    font-weight: 500;
+}
+.folder-sort-menu li a:hover, .folder-sort-menu li a.active {
+    background: #efefef;
+    color: #000;
+}
 span.upgrade-message {
     padding: 0;
     background: #fff;
@@ -598,15 +614,19 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 }
 
 .dynamic-menu {
-    position: absolute;
+    position: fixed;
     left: 50px;
     background: #fff;
     width: 170px;
     padding: 0;
-    z-index: 101;
+    z-index: 1000001;
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25);
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25)
+}
+.dynamic-menu ul {
+    margin: 0;
+    padding: 0;
 }
 
 .dynamic-menu li {
@@ -628,7 +648,8 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
     display: block;
     padding: 5px 10px;
     line-height: 18px;
-    white-space: nowrap
+    white-space: nowrap;
+    color: #333;
 }
 
 .dynamic-menu ul > li > a > span, .dynamic-menu ul > li > a > span span {
@@ -639,7 +660,8 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
     top: auto !important;
     width: 20px !important;
     height: 20px !important;
-    line-height: 14px
+    line-height: 14px;
+    text-align: center;
 }
 
 #custom-menu .dynamic-menu ul > li > a .sticky-pin {
@@ -648,6 +670,11 @@ body:not(.no-hover-css) .wcp-container .route .title:hover .ui-icon .pfolder-fol
 
 #custom-menu .dynamic-menu ul > li > a .sticky-pin i {
     font-size: 16px !important
+}
+
+.dynamic-menu ul > li > a > span.dashicons {
+    font-size: 18px;
+    text-align: left;
 }
 
 li.active-menu {
@@ -696,15 +723,26 @@ li.active-menu {
     display: block;
     position: relative;
     max-width: 100%;
-    margin: 0 0 .4em;
-    padding: 0;
+    margin: 0;
+    padding: 0 0 15px 0;
     color: #595959;
     text-align: center;
     text-transform: none;
     word-wrap: break-word;
-    font-weight: 700;
+    font-weight: bold;
     font-size: 22px;
-    line-height: 26px
+    line-height: 26px;
+}
+.add-update-folder-title:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 70px;
+    height: 2px;
+    background: #3085d6;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 }
 
 .folder-group {
@@ -761,8 +799,11 @@ li.active-menu {
 .folder-form-buttons {
     display: flex
 }
+.folder-form-buttons.pro-message {
+    padding: 0 0 20px 0;
+}
 
-.folder-form-buttons a, .folder-form-buttons button {
+.folder-form-buttons a:not(.inline-button), .folder-form-buttons button {
     display: inline-flex;
     padding: 0;
     text-decoration: none;
@@ -778,7 +819,6 @@ li.active-menu {
     flex: 1;
     justify-content: center;
     outline: 0;
-    color: #fff
 }
 
 .folder-form-buttons .form-cancel-btn, .folder-form-buttons a.form-cancel-btn:hover {
@@ -787,6 +827,20 @@ li.active-menu {
     outline: 0
 }
 
+.folder-form-buttons a.inline-button {
+    display: inline-block;
+    color: #f51366;
+    text-decoration: none;
+    font-weight: 500;
+}
+.folder-form-buttons a.inline-button:hover, .folder-form-buttons a.inline-button:focus {
+    color: #f51366;
+}
+.folder-form-buttons a span, .folder-form-buttons button span {
+    -webkit-animation: fa-spin .75s infinite linear;
+    animation: fa-spin .75s infinite linear;
+    padding: 7px;
+}
 .form-submit-btn, .form-submit-btn:hover {
     background-color: #3085d6;
     color: #fff !important;
@@ -809,7 +863,7 @@ li.active-menu {
 }
 
 .folder-form-message {
-    margin: 25px auto;
+    padding: 25px 70px;
     font-size: 15px;
     line-height: 18px;
     color: #484848;
@@ -1021,7 +1075,47 @@ li.active-menu {
 #custom-menu.show-folder-checkbox h3.title > .ui-icon > i, #custom-menu.show-folder-checkbox h3.title > .ui-icon > img {
     display: none !important
 }
-
+.mCSB_scrollTools a + .mCSB_draggerContainer {
+    margin: 10px 0 !important
+}
+.mCS_no_scrollbar .mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden {
+    overflow: visible;
+}
+.mCS-3d-dark.mCSB_scrollTools .mCSB_draggerRail, .mCS-3d.mCSB_scrollTools .mCSB_draggerRail {
+    width: 2px !important;
+    background-color: transparent !important;
+    box-shadow: none !important
+}
+.mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    width: 2px !important;
+    background-color: #fa166b !important;
+    margin: 0 0 0 4px !important;
+    padding: 0 !important;
+}
+.mCSB_scrollTools {
+    width: 10px !important;
+}
+.mCSB_inside>.mCSB_container {
+    margin-right: 0 !important;
+}
+#custom-menu .route.has-sub-tree.has-search > .nav-icon  > .pfolder-arrow-down {
+    transform: rotate(0);
+}
+.dynamic-menu.bottom-fix {
+    bottom: 0;
+}
+.sticky-folders {
+    display: none;
+    padding: 0;
+    margin: 10px 0 5px;
+    border-top: solid 1px #E9E5E5;
+}
+.sticky-folders.active {
+    display: block;
+}
+.plugin-title {
+    display: inline-block;
+}
 .plugin-button {
     float: right;
 }
@@ -1071,24 +1165,101 @@ body *.media-frame.hide-menu .media-frame-menu {
 }
 
 html[dir=rtl] .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-content, html[dir=rtl] .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-router, html[dir=rtl] .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-title, html[dir=rtl] .folder-modal .media-frame:not(.hide-menu):not(.hide-router) .media-frame-toolbar {
-    left: 0;
-    right: 275px;
+    left: 0 !important;
+    right: 275px !important;
 }
 html[dir=rtl] .media-frame.mode-select.hide-router .media-frame-title, html[dir=rtl] .media-frame.mode-select.hide-router .media-frame-router, html[dir=rtl] .media-frame.mode-select.hide-router .media-frame-content, html[dir=rtl] .media-frame.mode-select.hide-router .media-frame-toolbar {
-    left: 0;
-    right: 275px;
+    left: 0 !important;
+    right: 275px !important;
 }
 html[dir=rtl] .media-frame.hide-menu .media-frame-content, html[dir=rtl] .media-frame.hide-menu .media-frame-router, html[dir=rtl] .media-frame.hide-menu .media-frame-title, html[dir=rtl] .media-frame.hide-menu .media-frame-toolbar {
-    left: 0;
-    right: 275px;
+    left: 0 !important;
+    right: 275px !important;
 }
 html[dir=rtl] .media-frame .folder-modal .media-frame-content, html[dir=rtl] .folder-modal .media-frame .media-frame-router, html[dir=rtl] .folder-modal .media-frame .media-frame-title, html[dir=rtl] .folder-modal .media-frame .media-frame-toolbar {
-    left: 0;
-    right: 275px;
+    left: 0 !important;
+    right: 275px !important;
 }
 .sticky-folders > ul > li {
-    position: relative;
+    position: relative !important;
 }
 #vakata-dnd {
     z-index: 10000000 !important;
+}
+.add-folder-note {
+    font-size: 13px;
+    padding: 20px 0 0;
+}
+
+.close-popup-button {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+}
+.close-popup-button a {
+    display: block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    color: #333;
+    padding: 2px;
+    box-sizing: border-box;
+}
+.close-popup-button a span {
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    transition: all .2s linear;
+}
+.close-popup-button a span:after, .close-popup-button a span:before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 2px;
+    background-color: #333;
+    display: block;
+    border-radius: 2px;
+    transform: rotate(
+            45deg
+    );
+    top: 7px;
+    left: 2px;
+}
+.close-popup-button a span:after {
+    transform: rotate(
+            -45deg
+    );
+}
+.close-popup-button a:hover span {
+    transform: rotate(
+            180deg
+    );
+}
+.popup-form-data {
+    position: relative;
+}
+a#remove-folder-item {
+    border: solid 1px #860000;
+    background-color: #d40000;
+    outline: none;
+    box-shadow: none;
+}
+.pro-notice {
+    text-align: center;
+    padding: 0 0 0 5px;
+}
+.folder-form-buttons a.inline-button {
+    display: inline-block;
+}
+span.pro-tip {
+    display: block;
+    width: 80px;
+    background: #7e3af2;
+    padding: 7px;
+    height: 20px;
+    color: #fff;
+    border-radius: 4px;
 }

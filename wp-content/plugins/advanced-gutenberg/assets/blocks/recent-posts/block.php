@@ -62,13 +62,22 @@ HTML;
  */
 function advgbRenderBlockRecentPosts($attributes)
 {
+	$categories = empty($attributes['categories'])?0:$attributes['categories'];
+	if ( ! empty( $categories ) ) {
+		$categories = array_column( $categories, 'id' );
+	}
+	if(isset($attributes['category']) && !empty($attributes['category'])){
+		$categories = $attributes['category'];
+	}
+
+
     $recent_posts = wp_get_recent_posts(
         array(
             'numberposts' => empty($attributes['numberOfPosts'])?8:$attributes['numberOfPosts'],
             'post_status' => 'publish',
             'order' => empty($attributes['order'])?'desc':$attributes['order'],
             'orderby' => empty($attributes['orderBy'])?'date':$attributes['orderBy'],
-            'category' => empty($attributes['category'])?0:$attributes['category'],
+            'category' => $categories,
             'suppress_filters' => false,
         ),
         OBJECT
@@ -221,6 +230,12 @@ function advgbRegisterBlockRecentPosts()
             ),
             'category' => array(
                 'type' => 'string',
+            ),
+            'categories' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'object'
+                )
             ),
             'numberOfPosts' => array(
                 'type' => 'number',

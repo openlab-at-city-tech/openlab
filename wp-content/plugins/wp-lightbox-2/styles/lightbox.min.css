@@ -107,7 +107,7 @@ margin-left: 10px;
 #imageData #imageDetails{ width: 70%; float: left; text-align: left; }	
 #imageData #caption{ font-weight: bold;	}
 #imageData #numberDisplay{ display: block; clear: left; padding-bottom: 1.0em;	}
-#imageData #bottomNavClose{ float: right;  padding-bottom: 0.7em;	}
+#imageData #bottomNavClose{ width: 66px;  float: right;  padding-bottom: 0.7em;	}
 #imageData #helpDisplay {clear: left; float: left; display: block; }
 
 #overlay{
