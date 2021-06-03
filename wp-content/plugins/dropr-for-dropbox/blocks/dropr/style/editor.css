@@ -1,0 +1,19 @@
+.wp-dropr-block-content-wrapper .ead-document {
+    padding: 16px 5px;
+}
+
+.wp-dropr-block-content-wrapper p.embed_download {
+	margin: 14px 0px 0px;
+}
+
+/* Featured Image panel */
+.wp-dropr-block-featured-img-wrapper {
+    margin-top: 20px;
+}
+
+/* Magnific popup fixes in block editor */
+.mfp-bg,
+.mfp-wrap,
+.mfp-content {
+    z-index: 9999;
+}
