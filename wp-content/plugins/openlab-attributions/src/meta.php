@@ -127,6 +127,17 @@ function remove_markers( $post_data ) {
 			'<a id=\"anchor-%1$s\" class=\"attribution-anchor\" href=\"#ref-%1$s\"></a>',
 			$id
 		);
+
+		// Attribute order isn't consistent; try to account for the most common ones.
+		$search[] = sprintf(
+			'<a id=\"anchor-%1$s\" href=\"#ref-%1$s\" class=\"attribution-anchor\"></a>',
+			$id
+		);
+
+		$search[] = sprintf(
+			'<a href=\"#ref-%1$s\" id=\"anchor-%1$s\" class=\"attribution-anchor\"></a>',
+			$id
+		);
 	}
 
 	if ( empty( $search ) ) {
