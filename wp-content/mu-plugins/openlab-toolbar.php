@@ -716,7 +716,7 @@ HTML;
 				'id'    => 'invites',
 				'title' => '<span class="toolbar-item-icon fa fa-user" aria-hidden="true"></span><span class="sr-only">Invitations and Friend Requests</span>' . $total_count,
 				'meta'  => array(
-					'class' => 'hidden-xs',
+					'class' => 'hidden-xs icon-group-1',
 				),
 			)
 		);
@@ -877,7 +877,7 @@ HTML;
 				'id'    => 'messages',
 				'title' => '<span class="toolbar-item-icon fa fa-envelope" aria-hidden="true"></span><span class="sr-only">Messages</span>' . $total_count,
 				'meta'  => array(
-					'class'    => 'hidden-xs',
+					'class'    => 'hidden-xs icon-group-1',
 					'tabindex' => 0,
 				),
 			)
@@ -970,7 +970,7 @@ HTML;
 				'id'    => 'activity',
 				'title' => '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">Activity</span>',
 				'meta'  => array(
-					'class'    => 'hidden-xs icon-button-group-1',
+					'class'    => 'hidden-xs icon-group-1',
 					'tabindex' => 0,
 				),
 			)

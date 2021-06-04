@@ -18,7 +18,7 @@ class Frontend {
 
 		add_action( 'openlab_group_directory_after_group_title', [ __CLASS__, 'add_icon_to_group_title' ] );
 
-		add_action( 'admin_bar_menu', [ __CLASS__, 'add_toolbar_item' ], 27 );
+		add_action( 'admin_bar_menu', [ __CLASS__, 'add_toolbar_item' ], 28 );
 
 		self::register_assets();
 	}
@@ -157,7 +157,7 @@ class Frontend {
 				'id'    => 'openlab-favorites',
 				'title' => '<span class="toolbar-item-icon fa fa-bookmark" aria-hidden="true"></span><span class="sr-only">Favorites</span>',
 				'meta'  => [
-					'class' => 'openlab-favorites-admin-bar-menu icon-button-group-1 admin-bar-menu hidden-xs',
+					'class' => 'openlab-favorites-admin-bar-menu admin-bar-menu hidden-xs icon-group-1',
 				],
 			]
 		);
