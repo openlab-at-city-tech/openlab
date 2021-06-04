@@ -24,6 +24,29 @@ if (!$dud = bp_displayed_user_domain()) {
 
 </div>
 
+<?php if ( openlab_is_my_profile() && class_exists( '\OpenLab\Favorites\App' ) ) : ?>
+
+	<?php
+	$user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
+		[
+			'user_id' => bp_loggedin_user_id(),
+		]
+	);
+	?>
+
+	<?php if ( $user_favorites ) : ?>
+		<h2 class="sidebar-header">My Favorites</h2>
+
+		<div class="sidebar-block sidebar-block-my-favorites">
+			<ul class="sidebar-sublinks inline-element-list">
+				<?php foreach ( $user_favorites as $user_favorite ) : ?>
+					<li><a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>"><?php echo esc_html( $user_favorite->get_group_name() ); ?></a></li>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	<?php endif; ?>
+<?php endif; ?>
+
 <?php /* End portfolio links */ ?>
 
 <?php /* Recent Account Activity / Recent Friend Activity */ ?>
