@@ -18,7 +18,7 @@ class Frontend {
 
 		add_action( 'openlab_group_directory_after_group_title', [ __CLASS__, 'add_icon_to_group_title' ] );
 
-		add_action( 'admin_bar_menu', [ __CLASS__, 'add_toolbar_item' ], 35 );
+		add_action( 'admin_bar_menu', [ __CLASS__, 'add_toolbar_item' ], 25 );
 
 		self::register_assets();
 	}
