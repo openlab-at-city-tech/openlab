@@ -970,7 +970,7 @@ HTML;
 				'id'    => 'activity',
 				'title' => '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">Activity</span>',
 				'meta'  => array(
-					'class'    => 'hidden-xs',
+					'class'    => 'hidden-xs icon-button-group-1',
 					'tabindex' => 0,
 				),
 			)
