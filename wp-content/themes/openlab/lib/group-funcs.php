@@ -179,7 +179,6 @@ function openlab_group_privacy_membership_settings() {
  * @param BP_Groups_Group $group
  */
 function openlab_group_privacy_membership_save( $group ) {
-	_b( $_POST );
     if ( empty( $_POST['openlab-privacy-membership-nonce'] ) ) {
         return;
     }
