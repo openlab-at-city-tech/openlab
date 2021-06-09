@@ -42,7 +42,7 @@ if (!$dud = bp_displayed_user_domain()) {
 				<?php foreach ( $user_favorites as $user_favorite ) : ?>
 					<li><a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>"><?php echo esc_html( $user_favorite->get_group_name() ); ?></a></li>
 				<?php endforeach; ?>
-			</div>
+			</ul>
 		</div>
 	<?php endif; ?>
 <?php endif; ?>
