@@ -43,13 +43,13 @@ jQuery( document ).ready(
 		$required_fields = $form.find( 'input:required' );
 
 		function maybeShowSiteFields() {
-			if ( ! $setuptoggle.length ) {
+			if ( ! $setuptoggle.length && 'portfolio' !== new_group_type ) {
 				return;
 			}
 
 			var showSiteFields = $setuptoggle.is( ':checked' );
 
-			if ( showSiteFields ) {
+			if ( showSiteFields || 'portfolio' === new_group_type ) {
 				$( '#site-options' ).show();
 			} else {
 				$( '#site-options' ).hide();
@@ -392,7 +392,11 @@ jQuery( document ).ready(
 		var group_type = $.urlParam( 'type' );
 
 		var $create_or_clone = $( 'input[name="create-or-clone"]' );
-		var create_or_clone   = $create_or_clone.val();
+
+		var create_or_clone = 'create';
+		if ( $create_or_clone.length > 0 ) {
+			create_or_clone = $create_or_clone.val();
+		}
 
 		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
 			var group_id_to_clone, new_create_or_clone;
