@@ -3336,3 +3336,18 @@ add_action(
 		<?php
 	}
 );
+
+/**
+ * Should Google Analytics be loaded?
+ */
+function openlab_load_google_analytics() {
+	$disallow = [
+		2179, // openlab.citytech.cuny.edu/library/ #2940
+	];
+
+	if ( in_array( get_current_blog_id(), $disallow, true ) ) {
+		return false;
+	}
+
+	return true;
+}
