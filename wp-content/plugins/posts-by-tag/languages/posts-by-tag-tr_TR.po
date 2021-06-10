@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts By Tag 0.2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-by-tag\n"
+"POT-Creation-Date: 2009-07-27 13:11+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sudar <sudar@sudarmuthu.com>\n"
+"Language-Team: Yakup Gövler <yakupgovler@hotmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Turkish\n"
+"X-Poedit-Country: TURKEY\n"
+
+#: posts-by-tag.php:72
+msgid "Widget that shows posts from a set of tags"
+msgstr "Bileşen, belirlediğiniz etiketlerdeki yazıları gösterir"
+
+#. #-#-#-#-#  posts-by-tag.pot (Posts By Tag 0.1)  #-#-#-#-#
+#. Plugin Name of an extension
+#: posts-by-tag.php:78
+msgid "Posts By Tag"
+msgstr "Etiketin Yazıları"
+
+#: posts-by-tag.php:121
+msgid "Posted by: "
+msgstr "Yazar:"
+
+#: posts-by-tag.php:163
+msgid "Title:"
+msgstr "Başlık:"
+
+#: posts-by-tag.php:169
+msgid "Tags:"
+msgstr "Etiketler:"
+
+#: posts-by-tag.php:172
+msgid "Seperate multiple tags by comma"
+msgstr "Birden fazla etiketi virgül ile ayırın"
+
+#: posts-by-tag.php:177
+msgid "Number of posts to show:"
+msgstr "Gösterilecek yazı sayısı:"
+
+#: posts-by-tag.php:184
+msgid "Show Post thumbnails"
+msgstr "Yazıların önizlemelerini göster"
+
+#: posts-by-tag.php:190
+msgid "Show post excerpt"
+msgstr "Yazıların özetini göster"
+
+#. Plugin URI of an extension
+msgid "http://sudarmuthu.com/wordpress/posts-by-tag"
+msgstr ""
+
+#. Description of an extension
+msgid "Provide sidebar widgets that cna be used to display posts from a set of tags in the sidebar."
+msgstr "Yan menüde belirlediğiniz etiketlerdeki yazıları göstermede kullanabileceğiniz bileşenler sağlar."
+
+#. Author of an extension
+msgid "Sudar"
+msgstr ""
+
+#. Author URI of an extension
+msgid "http://sudarmuthu.com/"
+msgstr ""
+

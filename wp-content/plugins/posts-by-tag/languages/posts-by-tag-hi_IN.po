@@ -1,0 +1,139 @@
+# Copyright (C) 2010 Posts By Tag
+# This file is distributed under the same license as the Posts By Tag package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts By Tag 2.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-by-tag\n"
+"POT-Creation-Date: 2011-11-20 11:01:03+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-06-14 11:17+0530\n"
+"Last-Translator: shivangi <shivangi@outshinesolutions.com>\n"
+"Language-Team: Outshine Solutions <ash.pr@outshinesolutions.com>\n"
+"X-Poedit-Language: Hindi\n"
+"X-Poedit-Country: INDIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: posts-by-tag.php:113
+msgid "Posts By Tag Page Fields"
+msgstr "टैग पृष्ठ फ़ील्ड द्वारा पोस्ट"
+
+#: posts-by-tag.php:139
+msgid "Widget Title"
+msgstr "विजेट शीर्षक"
+
+#: posts-by-tag.php:140
+msgid "Widget Tags"
+msgstr "विजेट टैग"
+
+#: posts-by-tag.php:252
+msgid "Widget that shows posts from a set of tags"
+msgstr "विजेट है कि टैग के एक सेट से पोस्ट से पता चलता है"
+
+#. #-#-#-#-#  posts-by-tag.pot (Posts By Tag 2.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: posts-by-tag.php:258
+msgid "Posts By Tag"
+msgstr "टैग द्वारा पोस्ट"
+
+#: posts-by-tag.php:392
+msgid "Title:"
+msgstr "शीर्षक:"
+
+#: posts-by-tag.php:398
+msgid "Tags:"
+msgstr "टैग:"
+
+#: posts-by-tag.php:401
+msgid "Separate multiple tags by comma"
+msgstr "अल्पविराम द्वारा अलग एकाधिक टैग"
+
+#: posts-by-tag.php:407
+msgid "Exclude these tags"
+msgstr "इन टैग को बाहर करें"
+
+#: posts-by-tag.php:413
+msgid "Get tags from current Post"
+msgstr "वर्तमान पोस्ट से टैग प्राप्त करें"
+
+#: posts-by-tag.php:419
+msgid "Get tags and title from custom fields in current Page"
+msgstr "वर्तमान पेज में कस्टम फ़ील्ड्स से टैग और शीर्षक"
+
+#: posts-by-tag.php:424
+msgid "Number of posts to show:"
+msgstr "पदों की संख्या को दिखाने के लिए:"
+
+#: posts-by-tag.php:431
+msgid "Show post thumbnails"
+msgstr "पोस्ट थंबनेल दिखाएँ"
+
+#: posts-by-tag.php:437
+msgid "Show author name"
+msgstr "लेखक का नाम"
+
+#: posts-by-tag.php:443
+msgid "Show post date"
+msgstr "पोस्ट दिनांक"
+
+#: posts-by-tag.php:449
+msgid "Show post excerpt"
+msgstr "पोस्ट अंश"
+
+#: posts-by-tag.php:455
+msgid "Show post content"
+msgstr "पोस्ट सामग्री दिखाएँ"
+
+#: posts-by-tag.php:459
+msgid "Sort by: "
+msgstr "द्वारा क्रमबद्ध करें:"
+
+#: posts-by-tag.php:462
+msgid "Date"
+msgstr "तारीख"
+
+#: posts-by-tag.php:466
+msgid "Title"
+msgstr "शीर्षक"
+
+#: posts-by-tag.php:471
+msgid "Order by: "
+msgstr "द्वारा क्रम:"
+
+#: posts-by-tag.php:474
+msgid "Ascending"
+msgstr "आरोही"
+
+#: posts-by-tag.php:478
+msgid "Descending"
+msgstr "अवरोही"
+
+#: posts-by-tag.php:485
+msgid "Show Tag links"
+msgstr "टैग लिंक"
+
+#: posts-by-tag.php:596
+msgid "Posted by: "
+msgstr "द्वारा प्रकाशित किया गया था:"
+
+#: posts-by-tag.php:601
+msgid "Posted on: "
+msgstr "प्रकाशित किया गया था:"
+
+#. Plugin URI of the plugin/theme
+msgid "http://sudarmuthu.com/wordpress/posts-by-tag"
+msgstr "http://sudarmuthu.com/wordpress/posts-by-tag"
+
+#. Description of the plugin/theme
+msgid "Provide sidebar widgets that can be used to display posts from a set of tags in the sidebar."
+msgstr "साइडबार विगेट्स कि साइडबार में टैग के एक सेट से प्रविष्टियाँ प्रदर्शित करने के लिए इस्तेमाल किया जा सकता है प्रदान करते हैं."
+
+#. Author of the plugin/theme
+msgid "Sudar"
+msgstr "Sudar"
+
+#. Author URI of the plugin/theme
+msgid "http://sudarmuthu.com/"
+msgstr "http://sudarmuthu.com/"
+
