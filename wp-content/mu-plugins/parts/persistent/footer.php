@@ -67,6 +67,7 @@
 
     <script type="text/javascript">
 
+		<?php if ( openlab_load_google_analytics() ) : ?>
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-24214531-1']);
         _gaq.push(['_setDomainName', 'openlab.citytech.cuny.edu']);
@@ -80,6 +81,7 @@
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(ga, s);
         })();
+		<?php endif; ?>
 
         jQuery(document).ready(function ($) {
             getCurrentScroll();
