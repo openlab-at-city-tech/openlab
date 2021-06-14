@@ -826,7 +826,7 @@ OpenLab.utility = (function ($) {
 		}
 	);
 
-	$( window ).load(
+	$( window ).on( 'load',
 		function () {
 
 			$( 'html' ).removeClass( 'page-loading' );

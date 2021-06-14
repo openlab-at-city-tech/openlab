@@ -5,100 +5,100 @@
 /****This plugin is being customized, as it is no longer supported****/
 
 ;(function($){$.fn.camera = function(opts, callback) {
-	
+
 	var defaults = {
 		alignment			: 'center', //topLeft, topCenter, topRight, centerLeft, center, centerRight, bottomLeft, bottomCenter, bottomRight
-		
+
 		autoAdvance			: true,	//true, false
-		
+
 		mobileAutoAdvance	: true, //true, false. Auto-advancing for mobile devices
-		
+
 		barDirection		: 'leftToRight',	//'leftToRight', 'rightToLeft', 'topToBottom', 'bottomToTop'
-		
+
 		barPosition			: 'bottom',	//'bottom', 'left', 'top', 'right'
-		
+
 		cols				: 6,
-		
+
 		easing				: 'easeInOutExpo',	//for the complete list http://jqueryui.com/demos/effect/easing.html
-		
+
 		mobileEasing		: '',	//leave empty if you want to display the same easing on mobile devices and on desktop etc.
-		
+
 		fx					: 'random',	//'random','simpleFade', 'curtainTopLeft', 'curtainTopRight', 'curtainBottomLeft', 'curtainBottomRight', 'curtainSliceLeft', 'curtainSliceRight', 'blindCurtainTopLeft', 'blindCurtainTopRight', 'blindCurtainBottomLeft', 'blindCurtainBottomRight', 'blindCurtainSliceBottom', 'blindCurtainSliceTop', 'stampede', 'mosaic', 'mosaicReverse', 'mosaicRandom', 'mosaicSpiral', 'mosaicSpiralReverse', 'topLeftBottomRight', 'bottomRightTopLeft', 'bottomLeftTopRight', 'bottomLeftTopRight'
 										//you can also use more than one effect, just separate them with commas: 'simpleFade, scrollRight, scrollBottom'
 
 		mobileFx			: '',	//leave empty if you want to display the same effect on mobile devices and on desktop etc.
 
 		gridDifference		: 250,	//to make the grid blocks slower than the slices, this value must be smaller than transPeriod
-		
+
 		height				: '50%',	//here you can type pixels (for instance '300px'), a percentage (relative to the width of the slideshow, for instance '50%') or 'auto'
-		
+
 		imagePath			: 'images/',	//he path to the image folder (it serves for the blank.gif, when you want to display videos)
-		
+
 		hover				: true,	//true, false. Puase on state hover. Not available for mobile devices
-				
+
 		loader				: 'pie',	//pie, bar, none (even if you choose "pie", old browsers like IE8- can't display it... they will display always a loading bar)
-		
-		loaderColor			: '#eeeeee', 
-		
-		loaderBgColor		: '#222222', 
-		
+
+		loaderColor			: '#eeeeee',
+
+		loaderBgColor		: '#222222',
+
 		loaderOpacity		: .8,	//0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1
-		
+
 		loaderPadding		: 2,	//how many empty pixels you want to display between the loader and its background
-		
+
 		loaderStroke		: 7,	//the thickness both of the pie loader and of the bar loader. Remember: for the pie, the loader thickness must be less than a half of the pie diameter
-				
+
 		minHeight			: '200px',	//you can also leave it blank
-		
+
 		navigation			: true,	//true or false, to display or not the navigation buttons
-		
+
 		navigationHover		: true,	//if true the navigation button (prev, next and play/stop buttons) will be visible on hover state only, if false they will be visible always
-		
+
 		mobileNavHover		: true,	//same as above, but only for mobile devices
-		
-		opacityOnGrid		: false,	//true, false. Decide to apply a fade effect to blocks and slices: if your slideshow is fullscreen or simply big, I recommend to set it false to have a smoother effect 
-		
+
+		opacityOnGrid		: false,	//true, false. Decide to apply a fade effect to blocks and slices: if your slideshow is fullscreen or simply big, I recommend to set it false to have a smoother effect
+
 		overlayer			: true,	//a layer on the images to prevent the users grab them simply by clicking the right button of their mouse (.camera_overlayer)
-		
+
 		pagination			: true,
-		
+
 		playPause			: true,	//true or false, to display or not the play/pause buttons
-		
+
 		pauseOnClick		: true,	//true, false. It stops the slideshow when you click the sliders.
-		
+
 		pieDiameter			: 38,
-		
+
 		piePosition			: 'rightTop',	//'rightTop', 'leftTop', 'leftBottom', 'rightBottom'
-		
+
 		portrait			: false, //true, false. Select true if you don't want that your images are cropped
-		
+
 		rows				: 4,
-		
+
 		slicedCols			: 12,	//if 0 the same value of cols
-		
+
 		slicedRows			: 8,	//if 0 the same value of rows
-		
+
 		slideOn				: 'random',	//next, prev, random: decide if the transition effect will be applied to the current (prev) or the next slide
-		
+
 		thumbnails			: false,
-		
+
 		time				: 7000,	//milliseconds between the end of the sliding effect and the start of the nex one
-		
+
 		transPeriod			: 1500,	//lenght of the sliding effect in milliseconds
-		
+
 ////////callbacks
 
 		onEndTransition		: function() {  },	//this callback is invoked when the transition effect ends
 
 		onLoaded			: function() {  },	//this callback is invoked when the image on a slide has completely loaded
-		
+
 		onStartLoading		: function() {  },	//this callback is invoked when the image on a slide start loading
-		
+
 		onStartTransition	: function() {  }	//this callback is invoked when the transition effect starts
 
     };
-	
-	
+
+
 	function isMobile() {
 		if( navigator.userAgent.match(/Android/i) ||
 			navigator.userAgent.match(/webOS/i) ||
@@ -116,18 +116,18 @@
 	});
 
 	var opts = $.extend({}, defaults, opts);
-	
+
 	var wrap = $(this).addClass('camera_wrap');
-	
+
 	wrap.wrapInner(
         '<div class="camera_src" />'
 		).wrapInner(
 	    '<div class="camera_fakehover" />'
 		);
-		
+
 	var fakeHover = $('.camera_fakehover',wrap);
 	var fakeHoverSelector = ('.camera_fakehover',wrap);
-	
+
 	fakeHover.append(
 		'<div class="camera_target"></div>'
 		);
@@ -139,15 +139,15 @@
 		fakeHover.append(
         '<div class="camera_target_content"></div>'
 		);
-		
+
 	var loader;
-	
+
 	if(opts.loader=='pie' && !$.support.borderRadius){
 		loader = 'bar';
 	} else {
 		loader = opts.loader;
 	}
-	
+
 	if(loader == 'pie'){
 		fakeHover.append(
 			'<div class="camera_pie"></div>'
@@ -161,13 +161,13 @@
 			'<div class="camera_bar" style="display:none"></div>'
 			)
 	}
-	
+
 	if(opts.playPause==true){
 		fakeHover.append(
         '<div class="camera_commands"></div>'
 		)
 	}
-		
+
 	if(opts.navigation==true){
 		fakeHover.append(
 			'<div class="camera_prev"><span></span></div>'
@@ -175,13 +175,13 @@
 			'<div class="camera_next"><span></span></div>'
 			);
 	}
-		
+
 	if(opts.thumbnails==true){
 		wrap.append(
 			'<div class="camera_thumbs_cont" />'
 			);
 	}
-	
+
 	if(opts.thumbnails==true && opts.pagination!=true){
 		$('.camera_thumbs_cont',wrap).wrap(
 			'<div />'
@@ -193,22 +193,22 @@
 				'<div class="camera_command_wrap" />'
 			);
 	}
-		
+
 	if(opts.pagination==true){
 		wrap.append(
 			'<div class="camera_pag"></div>'
 			);
 	}
-		
+
 	wrap.append(
 		'<div class="camera_loader"></div>'
 		);
-		
+
 	$('.camera_caption',wrap).each(function(){
 		$(this).wrapInner('<div />');
 	});
-		
-                
+
+
 	var pieID = 'pie_'+wrap.index(),
 		elem = $('.camera_src',wrap),
 		target = $('.camera_target',wrap),
@@ -219,18 +219,18 @@
 		nextNav = $('.camera_next',wrap),
 		commands = $('.camera_commands',wrap),
 		pagination = $('.camera_pag',wrap),
-		thumbs = $('.camera_thumbs_cont',wrap);	
+		thumbs = $('.camera_thumbs_cont',wrap);
 
-	
+
 	var w,
 		h;
 
 
 	var allImg = new Array();
-	$('> div', elem).each( function() { 
+	$('> div', elem).each( function() {
 		allImg.push($(this).attr('data-src'));
 	});
-	
+
 	var allLinks = new Array();
 	$('> div', elem).each( function() {
 		if($(this).attr('data-link')){
@@ -239,7 +239,7 @@
 			allLinks.push('');
 		}
 	});
-	
+
 	var allTargets = new Array();
 	$('> div', elem).each( function() {
 		if($(this).attr('data-target')){
@@ -248,7 +248,7 @@
 			allTargets.push('');
 		}
 	});
-	
+
 	var allPor = new Array();
 	$('> div', elem).each( function() {
 		if($(this).attr('data-portrait')){
@@ -257,34 +257,34 @@
 			allPor.push('');
 		}
 	});
-	
+
 	var allAlign= new Array();
-	$('> div', elem).each( function() { 
+	$('> div', elem).each( function() {
 		if($(this).attr('data-alignment')){
 			allAlign.push($(this).attr('data-alignment'));
 		} else {
 			allAlign.push('');
 		}
 	});
-        
+
         var allAlts= new Array();
-	$('> div', elem).each( function() { 
+	$('> div', elem).each( function() {
 		if($(this).attr('data-alt')){
 			allAlts.push($(this).attr('data-alt'));
 		} else {
 			allAlts.push('');
 		}
 	});
-		
+
 	var allThumbs = new Array();
-	$('> div', elem).each( function() { 
+	$('> div', elem).each( function() {
 		if($(this).attr('data-thumb')){
 			allThumbs.push($(this).attr('data-thumb'));
 		} else {
 			allThumbs.push('');
 		}
 	});
-	
+
 	var amountSlide = allImg.length;
 
 	$(content).append('<div class="cameraContents" />');
@@ -310,12 +310,12 @@
 			cont = wrap.find('.cameraContent').eq(ind);
 		$(this).appendTo(cont);
 	});
-	
+
 	target.append('<div class="cameraCont" />');
 	var cameraCont = $('.cameraCont',wrap);
-	
 
-	
+
+
 	var loop;
 	for (loop=0;loop<amountSlide;loop++)
 	{
@@ -323,8 +323,8 @@
 		var div = $('> div:eq('+loop+')',elem);
 		target.find('.cameraSlide_'+loop).clone(div);
 	}
-	
-	
+
+
 	function thumbnailVisible() {
 		var wTh = $(thumbs).width();
 		$('li', thumbs).removeClass('camera_visThumb');
@@ -351,25 +351,25 @@
 				}
 		});
 	}
-	
-	$(window).bind('load resize pageshow',function(){
+
+	$(window).on('load resize pageshow',function(){
 		thumbnailPos();
 		thumbnailVisible();
 	});
 
 
 	cameraCont.append('<div class="cameraSlide cameraSlide_'+loop+'" />');
-	
-	
+
+
 	var started;
-	
+
 	wrap.show();
 	var w = target.width();
 	var h = target.height();
-	
+
 	var setPause;
-		
-	$(window).bind('resize pageshow',function(){
+
+	$(window).on('resize pageshow',function(){
 		if(started == true) {
 			resizeImage();
 		}
@@ -404,8 +404,8 @@
 			},1500);
 		}
 	});
-	
-	function resizeImage(){	
+
+	function resizeImage(){
 		var res;
 		function resizeImageWork(){
 			w = wrap.width();
@@ -433,15 +433,15 @@
 					mLeft,
 					alignment = t.attr('data-alignment'),
 					portrait =  t.attr('data-portrait');
-					
+
 					if(typeof alignment === 'undefined' || alignment === false || alignment === ''){
 						alignment = opts.alignment;
 					}
-					
+
 					if(typeof portrait === 'undefined' || portrait === false || portrait === ''){
 						portrait = opts.portrait;
 					}
-										
+
 					if(portrait==false||portrait=='false'){
 						if((wT/hT)<(w/h)) {
 							var r = w / wT;
@@ -621,11 +621,11 @@
 		} else {
 			resizeImageWork();
 		}
-		
+
 		started = true;
 	}
-	
-	
+
+
 	var u,
 		setT;
 
@@ -637,13 +637,13 @@
 
 	var videoHover,
 		videoPresent;
-		
+
 	if(isMobile() && opts.mobileAutoAdvance!=''){
 		autoAdv = opts.mobileAutoAdvance;
 	} else {
 		autoAdv = opts.autoAdvance;
 	}
-	
+
 	if(autoAdv==false){
 		elem.addClass('paused');
 	}
@@ -655,14 +655,14 @@
 	}
 
 	if(elem.length!=0){
-			
+
 		var selector = $('.cameraSlide',target);
 		selector.wrapInner('<div class="camerarelative" />');
-		
+
 		var navSlide;
-			
+
 		var barDirection = opts.barDirection;
-	
+
 		var camera_thumbs_wrap = wrap;
 
 
@@ -697,7 +697,7 @@
 					t.after($(imgFake).attr({'class':'imgFake','width':w,'height':h}));
 					var clone = t.clone();
 					t.remove();
-					$(imgFake).bind('click',function(){
+					$(imgFake).on('click',function(){
 						if($(this).css('position')=='absolute') {
 							$(this).remove();
 							if(cloneSrc.indexOf('vimeo') != -1 || cloneSrc.indexOf('youtube') != -1) {
@@ -722,13 +722,13 @@
 					});
 				});
 		}
-		
+
 		imgFake();
-		
-		
+
+
 		if(opts.hover==true){
 			if(!isMobile()){
-				fakeHover.hover(function(){
+				fakeHover.on( 'hover', function(){
 					elem.addClass('hovered');
 				},function(){
 					elem.removeClass('hovered');
@@ -752,7 +752,7 @@
 					$(commands,wrap).delay(500).animate({opacity:0},200);
 				});
 			} else {
-				fakeHover.hover(function(){
+				fakeHover.on( 'hover', function(){
 					$(prevNav,wrap).animate({opacity:1},200);
 					$(nextNav,wrap).animate({opacity:1},200);
 					$(commands,wrap).animate({opacity:1},200);
@@ -763,8 +763,8 @@
 				});
 			}
 		}
-		
-	
+
+
 		camera_thumbs_wrap.on('click','.camera_stop',function(){
 			autoAdv = false;
 			elem.addClass('paused');
@@ -780,7 +780,7 @@
 				}
 			}
 		});
-	
+
 		camera_thumbs_wrap.on('click','.camera_play',function(){
 			autoAdv = true;
 			elem.removeClass('paused');
@@ -796,9 +796,9 @@
 				}
 			}
 		});
-	
+
 		if(opts.pauseOnClick==true){
-			$('.camera_target_content',fakeHover).mouseup(function(){
+			$('.camera_target_content',fakeHover).on('mouseup',function(){
 				autoAdv = false;
 				elem.addClass('paused');
 				$('.camera_stop',camera_thumbs_wrap).hide()
@@ -806,13 +806,13 @@
 				$('#'+pieID).hide();
 			});
 		}
-		$('.cameraContent, .imgFake',fakeHover).hover(function(){
+		$('.cameraContent, .imgFake',fakeHover).on( 'hover', function(){
 			videoHover = true;
 		},function(){
 			videoHover = false;
 		});
-		
-		$('.cameraContent, .imgFake',fakeHover).bind('click',function(){
+
+		$('.cameraContent, .imgFake',fakeHover).on('click',function(){
 			if(videoPresent == true && videoHover == true) {
 				autoAdv = false;
 				$('.camera_caption',fakeHover).hide();
@@ -822,11 +822,11 @@
 				$('#'+pieID).hide();
 			}
 		});
-		
-		
+
+
 	}
-	
-	
+
+
 		function shuffle(arr) {
 			for(
 			  var j, x, i = arr.length; i;
@@ -835,11 +835,11 @@
 			);
 			return arr;
 		}
-	
+
 		function isInteger(s) {
 			return Math.ceil(s) == Math.floor(s);
-		}	
-	
+		}
+
 		if (loader != 'pie') {
 			barContainer.append('<span class="camera_bar_cont" />');
 			$('.camera_bar_cont',barContainer)
@@ -901,26 +901,26 @@
 			canvas.setAttribute("style", "position:absolute; z-index:1002; "+piePosition);
 			var rad;
 			var radNew;
-	
+
 			if (canvas && canvas.getContext) {
 				var ctx = canvas.getContext("2d");
 				ctx.rotate(Math.PI*(3/2));
 				ctx.translate(-opts.pieDiameter,0);
 			}
-		
+
 		}
 		if(loader=='none' || autoAdv==false) {
 			$('#'+pieID).hide();
 			$('.camera_canvas_wrap',camera_thumbs_wrap).hide();
 		}
-		
+
 		if($(pagination).length) {
 			$(pagination).append('<ul class="camera_pag_ul" />');
 			var li;
 			for (li = 0; li < amountSlide; li++){
 				$('.camera_pag_ul',wrap).append('<li class="pag_nav_'+li+'" style="position:relative; z-index:1002"><span><span>'+li+'</span></span></li>');
 			}
-			$('.camera_pag_ul li',wrap).hover(function(){
+			$('.camera_pag_ul li',wrap).on( 'hover', function(){
 				$(this).addClass('camera_hover');
 				if($('.camera_thumb',this).length){
 					var wTh = $('.camera_thumb',this).outerWidth(),
@@ -939,9 +939,9 @@
 				});
 			});
 		}
-			
-	
-	
+
+
+
 		if($(thumbs).length) {
 			var thumbUrl;
 			if(!$(pagination).length) {
@@ -974,7 +974,7 @@
 			wrap.css({marginBottom:$(pagination).outerHeight()});
 		}
 
-	
+
 		var firstPos = true;
 
 		function thumbnailPos() {
@@ -992,9 +992,9 @@
 					} else {
 						ulLeft = offDiv-offUl;
 					}
-					
-					
-					
+
+
+
 				if(firstPos == true) {
 					$('ul', thumbs).width($('ul > li', thumbs).length * $('ul > li', thumbs).outerWidth());
 					if($(thumbs).length && !$(pagination).lenght) {
@@ -1009,7 +1009,7 @@
 					/*...*/
 				}
 				firstPos = false;
-				
+
 					var left = $('li.cameracurrent', thumbs).length ? pos.left : '',
 						right = $('li.cameracurrent', thumbs).length ? pos.left+($('li.cameracurrent', thumbs).outerWidth()) : '';
 					if(left<$('li.cameracurrent', thumbs).outerWidth()) {
@@ -1027,7 +1027,7 @@
 						$('ul', thumbs).css({'margin-left':'auto', 'margin-right':'auto'});
 						setTimeout(thumbnailVisible,100);
 					}
-					
+
 			}
 		}
 
@@ -1040,10 +1040,10 @@
 				$('.camera_stop',camera_thumbs_wrap).hide();
 				$('.camera_play',camera_thumbs_wrap).show();
 			}
-			
+
 		}
-			
-			
+
+
 		function canvasLoader() {
 			rad = 0;
 			var barWidth = $('.camera_bar_cont',camera_thumbs_wrap).width(),
@@ -1065,40 +1065,40 @@
 						break;
 				}
 			} else {
-				ctx.clearRect(0,0,opts.pieDiameter,opts.pieDiameter); 
+				ctx.clearRect(0,0,opts.pieDiameter,opts.pieDiameter);
 			}
 		}
-		
-		
+
+
 		canvasLoader();
-		
-		
+
+
 		$('.moveFromLeft, .moveFromRight, .moveFromTop, .moveFromBottom, .fadeIn, .fadeFromLeft, .fadeFromRight, .fadeFromTop, .fadeFromBottom',fakeHover).each(function(){
 			$(this).css('visibility','hidden');
 		});
-		
+
 		opts.onStartLoading.call(this);
-		
+
 		nextSlide();
-		
-	
+
+
 	/*************************** FUNCTION nextSlide() ***************************/
-	
-	function nextSlide(navSlide){ 
+
+	function nextSlide(navSlide){
 		elem.addClass('camerasliding');
-		
+
 		videoPresent = false;
 		var vis = parseFloat($('div.cameraSlide.cameracurrent',target).index());
 
-		if(navSlide>0){ 
+		if(navSlide>0){
 			var slideI = navSlide-1;
-		} else if (vis == amountSlide-1) { 
+		} else if (vis == amountSlide-1) {
 			var slideI = 0;
 		} else {
 			var slideI = vis+1;
 		}
-		
-				
+
+
 		var slide = $('.cameraSlide:eq('+slideI+')',target);
 		var slideNext = $('.cameraSlide:eq('+(slideI+1)+')',target).addClass('cameranext');
 		if( vis != slideI+1 ) {
@@ -1106,11 +1106,11 @@
 		}
 		$('.cameraContent',fakeHover).fadeOut(600);
 		$('.camera_caption',fakeHover).show();
-		
+
 		$('.camerarelative',slide).append($('> div ',elem).eq(slideI).find('> div.camera_effected'));
 
 		$('.camera_target_content .cameraContent:eq('+slideI+')',wrap).append($('> div ',elem).eq(slideI).find('> div'));
-		
+
 		if(!$('.imgLoaded',slide).length){
 			var imgUrl = allImg[slideI];
 			var imgLoaded = new Image();
@@ -1170,17 +1170,17 @@
 				marginLeft = 0,
 				marginTop = 0,
 				opacityOnGrid = 0;
-				
+
 				if(opts.opacityOnGrid==true){
 					opacityOnGrid = 0;
 				} else {
 					opacityOnGrid = 1;
 				}
- 
-			
-			
+
+
+
 			var dataFx = $(' > div',elem).eq(slideI).attr('data-fx');
-				
+
 			if(isMobile()&&opts.mobileFx!=''&&opts.mobileFx!='default'){
 				fx = opts.mobileFx;
 			} else {
@@ -1190,7 +1190,7 @@
 					fx = opts.fx;
 				}
 			}
-			
+
 			if(fx=='random') {
 				fx = shuffle(randomFx);
 				fx = fx[0];
@@ -1203,7 +1203,7 @@
 					fx = fx[0];
 				}
 			}
-			
+
 			dataEasing = $(' > div',elem).eq(slideI).attr('data-easing');
 			mobileEasing = $(' > div',elem).eq(slideI).attr('data-mobileEasing');
 
@@ -1220,7 +1220,7 @@
 					easing = opts.easing;
 				}
 			}
-	
+
 			dataSlideOn = $(' > div',elem).eq(slideI).attr('data-slideOn');
 			if(typeof dataSlideOn !== 'undefined' && dataSlideOn!== false){
 				slideOn = dataSlideOn;
@@ -1233,21 +1233,21 @@
 					slideOn = opts.slideOn;
 				}
 			}
-				
+
 			var dataTime = $(' > div',elem).eq(slideI).attr('data-time');
 			if(typeof dataTime !== 'undefined' && dataTime!== false && dataTime!== ''){
 				time = parseFloat(dataTime);
 			} else {
 				time = opts.time;
 			}
-				
+
 			var dataTransPeriod = $(' > div',elem).eq(slideI).attr('data-transPeriod');
 			if(typeof dataTransPeriod !== 'undefined' && dataTransPeriod!== false && dataTransPeriod!== ''){
 				transPeriod = parseFloat(dataTransPeriod);
 			} else {
 				transPeriod = opts.transPeriod;
 			}
-				
+
 			if(!$(elem).hasClass('camerastarted')){
 				fx = 'simpleFade';
 				slideOn = 'next';
@@ -1255,7 +1255,7 @@
 				transPeriod = 400;
 				$(elem).addClass('camerastarted')
 			}
-	
+
 			switch(fx){
 				case 'simpleFade':
 					cols = 1;
@@ -1413,14 +1413,14 @@
 					rows = 1;
 						break;
 			}
-			
+
 			var cycle = 0;
 			var blocks = rows*cols;
 			var leftScrap = w-(Math.floor(w/cols)*cols);
 			var topScrap = h-(Math.floor(h/rows)*rows);
 			var addLeft;
 			var addTop;
-			var tAppW = 0;	
+			var tAppW = 0;
 			var tAppH = 0;
 			var arr = new Array();
 			var delay = new Array();
@@ -1471,9 +1471,9 @@
 				}
 				cycle++;
 			}
-			
 
-			
+
+
 			switch(fx){
 				case 'curtainTopLeft':
 						break;
@@ -1536,7 +1536,7 @@
 								order[n++] = y * cols + x;
 							}
 						}
-						
+
 						arr = order;
 
 						break;
@@ -1562,7 +1562,7 @@
 						}
 
 						arr = order;
-						
+
 						break;
 				case 'topLeftBottomRight':
 					for (var y = 0; y < rows; y++)
@@ -1593,9 +1593,9 @@
 						delay = order;
 						break;
 			}
-			
-			
-						
+
+
+
 			$.each(arr, function(index, value) {
 
 				if(value%cols<leftScrap){
@@ -1611,7 +1611,7 @@
 				} else {
 					addTop = 0;
 				}
-							
+
 				switch(fx){
 					case 'simpleFade':
 						height = h;
@@ -1642,18 +1642,18 @@
 						height = 0,
 						width = Math.floor((w/cols)+addLeft+1);
 						if(value%2==0){
-							marginTop = Math.floor((h/rows)+addTop+1)+'px';					
+							marginTop = Math.floor((h/rows)+addTop+1)+'px';
 						} else {
-							marginTop = '-'+Math.floor((h/rows)+addTop+1)+'px';					
+							marginTop = '-'+Math.floor((h/rows)+addTop+1)+'px';
 						}
 							break;
 					case 'curtainSliceRight':
 						height = 0,
 						width = Math.floor((w/cols)+addLeft+1);
 						if(value%2==0){
-							marginTop = Math.floor((h/rows)+addTop+1)+'px';					
+							marginTop = Math.floor((h/rows)+addTop+1)+'px';
 						} else {
-							marginTop = '-'+Math.floor((h/rows)+addTop+1)+'px';					
+							marginTop = '-'+Math.floor((h/rows)+addTop+1)+'px';
 						}
 							break;
 					case 'blindCurtainTopLeft':
@@ -1696,114 +1696,114 @@
 							break;
 					case 'stampede':
 						height = 0;
-						width = 0;					
-						marginLeft = (w*0.2)*(((index)%cols)-(cols-(Math.floor(cols/2))))+'px';					
-						marginTop = (h*0.2)*((Math.floor(index/cols)+1)-(rows-(Math.floor(rows/2))))+'px';	
+						width = 0;
+						marginLeft = (w*0.2)*(((index)%cols)-(cols-(Math.floor(cols/2))))+'px';
+						marginTop = (h*0.2)*((Math.floor(index/cols)+1)-(rows-(Math.floor(rows/2))))+'px';
 							break;
 					case 'mosaic':
 						height = 0;
-						width = 0;					
+						width = 0;
 							break;
 					case 'mosaicReverse':
 						height = 0;
-						width = 0;					
-						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';					
-						marginTop = Math.floor((h/rows)+addTop+1)+'px';					
+						width = 0;
+						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';
+						marginTop = Math.floor((h/rows)+addTop+1)+'px';
 							break;
 					case 'mosaicRandom':
 						height = 0;
-						width = 0;					
-						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';					
-						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';					
+						width = 0;
+						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';
+						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';
 							break;
 					case 'mosaicSpiral':
 						height = 0;
 						width = 0;
-						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';					
-						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';					
+						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';
+						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';
 							break;
 					case 'mosaicSpiralReverse':
 						height = 0;
 						width = 0;
-						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';					
-						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';					
+						marginLeft = Math.floor((w/cols)+addLeft+1)*0.5+'px';
+						marginTop = Math.floor((h/rows)+addTop+1)*0.5+'px';
 							break;
 					case 'topLeftBottomRight':
 						height = 0;
-						width = 0;					
+						width = 0;
 							break;
 					case 'bottomRightTopLeft':
 						height = 0;
-						width = 0;					
-						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';					
-						marginTop = Math.floor((h/rows)+addTop+1)+'px';					
+						width = 0;
+						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';
+						marginTop = Math.floor((h/rows)+addTop+1)+'px';
 							break;
 					case 'bottomLeftTopRight':
 						height = 0;
-						width = 0;					
-						marginLeft = 0;					
-						marginTop = Math.floor((h/rows)+addTop+1)+'px';					
+						width = 0;
+						marginLeft = 0;
+						marginTop = Math.floor((h/rows)+addTop+1)+'px';
 							break;
 					case 'topRightBottomLeft':
 						height = 0;
-						width = 0;					
-						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';					
-						marginTop = 0;					
+						width = 0;
+						marginLeft = Math.floor((w/cols)+addLeft+1)+'px';
+						marginTop = 0;
 							break;
 					case 'scrollRight':
 						height = h;
 						width = w;
-						marginLeft = -w;					
+						marginLeft = -w;
 							break;
 					case 'scrollLeft':
 						height = h;
 						width = w;
-						marginLeft = w;					
+						marginLeft = w;
 							break;
 					case 'scrollTop':
 						height = h;
 						width = w;
-						marginTop = h;					
+						marginTop = h;
 							break;
 					case 'scrollBottom':
 						height = h;
 						width = w;
-						marginTop = -h;					
+						marginTop = -h;
 							break;
 					case 'scrollHorz':
 						height = h;
 						width = w;
 						if(vis==0 && slideI==amountSlide-1) {
-							marginLeft = -w;	
+							marginLeft = -w;
 						} else if(vis<slideI  || (vis==amountSlide-1 && slideI==0)) {
-							marginLeft = w;	
+							marginLeft = w;
 						} else {
-							marginLeft = -w;	
+							marginLeft = -w;
 						}
 							break;
 					}
-					
-			
+
+
 				var tApp = $('.cameraappended:eq('+value+')',target);
-								
+
 				if(typeof u !== 'undefined'){
 					clearInterval(u);
 					clearTimeout(setT);
 					setT = setTimeout(canvasLoader,transPeriod+difference);
 				}
-				
-				
+
+
 				if($(pagination).length){
 					$('.camera_pag li',wrap).removeClass('cameracurrent');
 					$('.camera_pag li',wrap).eq(slideI).addClass('cameracurrent');
 				}
-						
+
 				if($(thumbs).length){
 					$('li', thumbs).removeClass('cameracurrent');
 					$('li', thumbs).eq(slideI).addClass('cameracurrent');
 					$('li', thumbs).not('.cameracurrent').find('img').animate({opacity:.5},0);
 					$('li.cameracurrent img', thumbs).animate({opacity:1},0);
-					$('li', thumbs).hover(function(){
+					$('li', thumbs).on( 'hover', function(){
 						$('img',this).stop(true,false).animate({opacity:1},150);
 					},function(){
 						if(!$(this).hasClass('cameracurrent')){
@@ -1811,10 +1811,10 @@
 						}
 					});
 				}
-								
-						
+
+
 				var easedTime = parseFloat(transPeriod)+parseFloat(difference);
-				
+
 				function cameraeased() {
 
 					$(this).addClass('cameraeased');
@@ -1822,30 +1822,30 @@
 						$(thumbs).css({visibility:'visible'});
 					}
 					if($('.cameraeased',target).length==blocks){
-						
+
 						thumbnailPos();
-						
+
 						$('.moveFromLeft, .moveFromRight, .moveFromTop, .moveFromBottom, .fadeIn, .fadeFromLeft, .fadeFromRight, .fadeFromTop, .fadeFromBottom',fakeHover).each(function(){
 							$(this).css('visibility','hidden');
 						});
-		
+
 						selector.eq(slideI).show().css('z-index','999').removeClass('cameranext').addClass('cameracurrent');
 						selector.eq(vis).css('z-index','1').removeClass('cameracurrent');
 						$('.cameraContent',fakeHover).eq(slideI).addClass('cameracurrent');
 						if (vis >= 0) {
 							$('.cameraContent',fakeHover).eq(vis).removeClass('cameracurrent');
 						}
-						
+
 						opts.onEndTransition.call(this);
-						
+
 						if($('> div', elem).eq(slideI).attr('data-video')!='hide' && $('.cameraContent.cameracurrent .imgFake',fakeHover).length ){
 							$('.cameraContent.cameracurrent .imgFake',fakeHover).click();
 						}
 
-						
+
 						var lMoveIn = selector.eq(slideI).find('.fadeIn').length;
 						var lMoveInContent = $('.cameraContent',fakeHover).eq(slideI).find('.moveFromLeft, .moveFromRight, .moveFromTop, .moveFromBottom, .fadeIn, .fadeFromLeft, .fadeFromRight, .fadeFromTop, .fadeFromBottom').length;
-						
+
 						if (lMoveIn!=0){
 							$('.cameraSlide.cameracurrent .fadeIn',fakeHover).each(function(){
 								if($(this).attr('data-easing')!=''){
@@ -1884,7 +1884,7 @@
 
 						$('.cameraContent.cameracurrent',fakeHover).show();
 						if (lMoveInContent!=0){
-							
+
 							$('.cameraContent.cameracurrent .moveFromLeft, .cameraContent.cameracurrent .moveFromRight, .cameraContent.cameracurrent .moveFromTop, .cameraContent.cameracurrent .moveFromBottom, .cameraContent.cameracurrent .fadeIn, .cameraContent.cameracurrent .fadeFromLeft, .cameraContent.cameracurrent .fadeFromRight, .cameraContent.cameracurrent .fadeFromTop, .cameraContent.cameracurrent .fadeFromBottom',fakeHover).each(function(){
 								if($(this).attr('data-easing')!=''){
 									var easeMove = $(this).attr('data-easing');
@@ -1934,9 +1934,9 @@
 							});
 						}
 
-						
+
 						$('.cameraappended',target).remove();
-						elem.removeClass('camerasliding');	
+						elem.removeClass('camerasliding');
 							selector.eq(vis).hide();
 							var barWidth = $('.camera_bar_cont',camera_thumbs_wrap).width(),
 								barHeight = $('.camera_bar_cont',camera_thumbs_wrap).height(),
@@ -1983,7 +1983,7 @@
 												$('#'+pieID).animate({'bottom':barHeight-(barHeight*rad)},(time*radSum),'linear');
 												break;
 										}
-										
+
 									} else {
 										radNew = rad;
 										ctx.clearRect(0,0,opts.pieDiameter,opts.pieDiameter);
@@ -2001,7 +2001,7 @@
 										ctx.strokeStyle = opts.loaderColor;
 										ctx.stroke();
 										ctx.closePath();
-												
+
 										if(rad<=1.002 && !elem.hasClass('stopped') && !elem.hasClass('paused') && !elem.hasClass('hovered')){
 											rad = (rad+radSum);
 										} else if (rad<=1 && (elem.hasClass('stopped') || elem.hasClass('paused') || elem.hasClass('hovered'))){
@@ -2026,7 +2026,7 @@
 				}
 
 
-				
+
 				if(fx=='scrollLeft' || fx=='scrollRight' || fx=='scrollTop' || fx=='scrollBottom' || fx=='scrollHorz'){
 					opts.onStartTransition.call(this);
 					easedTime = 0;
@@ -2093,16 +2093,16 @@
 
 
 			});
-				
-				
-				
-	 
+
+
+
+
 		}
 	}
 
 
 				if($(prevNav).length){
-					$(prevNav).click(function(){
+					$(prevNav).on( 'click', function(){
 						if(!elem.hasClass('camerasliding')){
 							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index());
 							clearInterval(u);
@@ -2118,11 +2118,11 @@
 						}
 					});
 				}
-			
+
 				if($(nextNav).length){
-					$(nextNav).click(function(){
+					$(nextNav).on( 'click', function(){
 						if(!elem.hasClass('camerasliding')){
-							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index()); 
+							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index());
 							clearInterval(u);
 							imgFake();
 							$('#'+pieID+', .camera_canvas_wrap',camera_thumbs_wrap).animate({opacity:0},0);
@@ -2139,9 +2139,9 @@
 
 
 				if(isMobile()){
-					fakeHover.bind('swipeleft',function(event){
+					fakeHover.on('swipeleft',function(event){
 						if(!elem.hasClass('camerasliding')){
-							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index()); 
+							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index());
 							clearInterval(u);
 							imgFake();
 							$('#'+pieID+', .camera_canvas_wrap',camera_thumbs_wrap).animate({opacity:0},0);
@@ -2154,7 +2154,7 @@
 						   opts.onStartLoading.call(this);
 						}
 					});
-					fakeHover.bind('swiperight',function(event){
+					fakeHover.on('swiperight',function(event){
 						if(!elem.hasClass('camerasliding')){
 							var idNum = parseFloat($('.cameraSlide.cameracurrent',target).index());
 							clearInterval(u);
@@ -2172,7 +2172,7 @@
 				}
 
 				if($(pagination).length){
-					$('.camera_pag li',wrap).click(function(){
+					$('.camera_pag li',wrap).on( 'click', function(){
 						if(!elem.hasClass('camerasliding')){
 							var idNum = parseFloat($(this).index());
 							var curNum = parseFloat($('.cameraSlide.cameracurrent',target).index());
@@ -2190,7 +2190,7 @@
 
 				if($(thumbs).length) {
 
-					$('.pix_thumb img',thumbs).click(function(){
+					$('.pix_thumb img',thumbs).on('click', function(){
 						if(!elem.hasClass('camerasliding')){
 							var idNum = parseFloat($(this).parents('li').index());
 							var curNum = parseFloat($('.cameracurrent',target).index());
@@ -2208,12 +2208,12 @@
 						}
 					});
 
-					$('.camera_thumbs_cont .camera_prevThumbs',camera_thumbs_wrap).hover(function(){
+					$('.camera_thumbs_cont .camera_prevThumbs',camera_thumbs_wrap).on( 'hover', function(){
 						$(this).stop(true,false).animate({opacity:1},250);
 					},function(){
 						$(this).stop(true,false).animate({opacity:.7},250);
 					});
-					$('.camera_prevThumbs',camera_thumbs_wrap).click(function(){
+					$('.camera_prevThumbs',camera_thumbs_wrap).on( 'click', function(){
 						var sum = 0,
 							wTh = $(thumbs).outerWidth(),
 							offUl = $('ul', thumbs).offset().left,
@@ -2230,12 +2230,12 @@
 							}
 					});
 
-					$('.camera_thumbs_cont .camera_nextThumbs',camera_thumbs_wrap).hover(function(){
+					$('.camera_thumbs_cont .camera_nextThumbs',camera_thumbs_wrap).on( 'hover', function(){
 						$(this).stop(true,false).animate({opacity:1},250);
 					},function(){
 						$(this).stop(true,false).animate({opacity:.7},250);
 					});
-					$('.camera_nextThumbs',camera_thumbs_wrap).click(function(){
+					$('.camera_nextThumbs',camera_thumbs_wrap).on( 'click', function(){
 						var sum = 0,
 							wTh = $(thumbs).outerWidth(),
 							ulW = $('ul', thumbs).outerWidth(),
@@ -2254,9 +2254,9 @@
 					});
 
 				}
-		
-		
-	
+
+
+
 }
 
 })(jQuery);
