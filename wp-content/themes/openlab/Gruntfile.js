@@ -10,7 +10,7 @@ module.exports = function (grunt) {
                 src: ['js/bootstrap.min.js',
                     'node_modules/jcarousellite/jcarousellite.js',
                     'js/easyaccordion.js',
-                    'js/jquery.easing.1.3.js',
+                    'js/jquery.easing.1.4.1.js',
                     'js/jquery.mobile.customized.min.js',
                     'js/camera.mod.js',
                     'js/detect-zoom.js'],
