@@ -807,14 +807,13 @@ function openlab_group_creators_metabox() {
 			<legend class="panel-heading">Creator(s)</legend>
 
 			<div class="panel-body">
-
-				<p>If <?php echo esc_html( $group_type_label ); ?> Creators differ from faculty they will be listed in an Acknowledgements section on the <?php echo esc_html( $group_type_label ); ?> Profile. If this <?php echo esc_html( $group_type_label ); ?> is cloned by someone other than a <?php echo esc_html( $group_type_label ); ?> Creator, Creators will be listed in the acknowledgements on the cloned <?php echo esc_html( $group_type_label ); ?> Profile.</p>
+				<p>Creators will be listed in the acknowledgements on the <?php echo esc_html( $group_type_label ); ?> Profile. For more information, see <a href="https://openlab.citytech.cuny.edu/blog/help/editing-a-course-project-or-club-profile/" target="_blank">Editing a Course, Project, or Club Profile</a> in Help.</p>
 
 				<div class="group-creators-section">
 					<fieldset>
 						<legend><?php echo esc_html( $group_type_label ); ?> Creator(s)</legend>
 
-						<p>The people listed below are the Course Creators. You can add additional creators by typing their name in the box below and selecting it from the dropdown list.</p>
+						<p>The people listed below will be acknowledged as the <?php echo esc_html( $group_type_label ); ?> Creators. You can add additional creators by typing their name in the box below and selecting it from the dropdown list.</p>
 
 						<ul id="group-creator-edit-list" class="group-creator-edit-list">
 							<?php foreach ( $creators as $creator ) : ?>
@@ -825,7 +824,7 @@ function openlab_group_creators_metabox() {
 						</ul>
 
 						<div class="group-creator-edit-list-add-new">
-							Add a creator: <button id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name and URL of a non-member</button>
+							Add a creator: <button id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
 						</div>
 
 						<div id="group-creator-empty-row" class="group-creator-empty-row">
@@ -837,7 +836,7 @@ function openlab_group_creators_metabox() {
 				<div class="group-creators-section">
 					<label for="creators-additional-text">Additional Text</label>
 
-					<p>Below you can add additional information that will appear in an Acknowledgements section on the <?php echo esc_html( $group_type_label ); ?> Profile. It will not appear on clones of this <?php echo esc_html( $group_type_label ); ?>.</p>
+					<p>Below you can add additional information that will appear in the Acknowledgements section on the <?php echo esc_html( $group_type_label ); ?> Profile. It will not appear on clones of this <?php echo esc_html( $group_type_label ); ?>.</p>
 
 					<?php
 
