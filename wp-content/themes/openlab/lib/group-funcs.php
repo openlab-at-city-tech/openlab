@@ -566,11 +566,21 @@ function cuny_group_single() {
 	}
 
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id, $exclude_creator );
+    $clone_history = openlab_get_group_clone_history_data( $group_id );
 	$clone_history = array_filter(
 		$clone_history,
 		function( $item ) {
 			return ! empty( $item['group_creator_id'] );
+		}
+	);
+
+	// Remove items that exactly match the credits of the current group.
+	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
+
+	$clone_history = array_filter(
+		$clone_history,
+		function( $item ) use ( $this_item_clone_data ) {
+			return $item['group_admins'] !== $this_item_clone_data['group_admins'];
 		}
 	);
 

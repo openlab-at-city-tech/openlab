@@ -138,53 +138,7 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 
 	$source_datas = array();
 	foreach ( $source_ids as $source_id ) {
-		$source_group = groups_get_group( $source_id );
-
-		$course_code = groups_get_groupmeta( $source_id, 'wds_course_code' );
-		$group_type  = openlab_get_group_type_label(
-			array(
-				'group_id' => $group_id,
-				'case'     => 'upper',
-			)
-		);
-
-		$group_creators = openlab_get_group_creators( $source_id );
-
-		$admins = [];
-		foreach ( $group_creators as $group_creator ) {
-			switch ( $group_creator['type'] ) {
-				case 'member' :
-					$user = get_user_by( 'slug', $group_creator['member-login'] );
-
-					if ( $user ) {
-						$admins[] = [
-							'name' => bp_core_get_user_displayname( $user->ID ),
-							'url'  => bp_core_get_user_domain( $user->ID ),
-						];
-					}
-				break;
-
-				case 'non-member' :
-					$admins[] = [
-						'name' => $group_creator['non-member-name'],
-						'url'  => '',
-					];
-				break;
-			}
-		};
-
-		$source_data = array(
-			'group_id'           => $source_id,
-			'group_url'          => bp_get_group_permalink( $source_group ),
-			'group_name'         => $course_code ? $course_code : $group_type,
-			'group_admins'       => $admins,
-			'group_creator_id'   => $source_group->creator_id,
-			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
-			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
-		);
-
-
-		$source_datas[] = $source_data;
+		$source_datas[] = openlab_get_group_data_for_clone_history( $source_id );
 	}
 
 	// Trim exclude_creator groups.
@@ -201,6 +155,61 @@ function openlab_get_group_clone_history_data( $group_id, $exclude_creator = nul
 	}
 
 	return $source_datas;
+}
+
+/**
+ * Gets the formatted data for a group, for use in clone history.
+ *
+ * @param int $source_id
+ * @return array
+ */
+function openlab_get_group_data_for_clone_history( $source_id ) {
+	$source_group = groups_get_group( $source_id );
+
+	$course_code = groups_get_groupmeta( $source_id, 'wds_course_code' );
+	$group_type  = openlab_get_group_type_label(
+		array(
+			'group_id' => $source_id,
+			'case'     => 'upper',
+		)
+	);
+
+	$group_creators = openlab_get_group_creators( $source_id );
+
+	$admins = [];
+	foreach ( $group_creators as $group_creator ) {
+		switch ( $group_creator['type'] ) {
+			case 'member' :
+				$user = get_user_by( 'slug', $group_creator['member-login'] );
+
+				if ( $user ) {
+					$admins[] = [
+						'name' => bp_core_get_user_displayname( $user->ID ),
+						'url'  => bp_core_get_user_domain( $user->ID ),
+					];
+				}
+			break;
+
+			case 'non-member' :
+				$admins[] = [
+					'name' => $group_creator['non-member-name'],
+					'url'  => '',
+				];
+			break;
+		}
+	};
+
+	$source_data = array(
+		'group_id'           => $source_id,
+		'group_url'          => bp_get_group_permalink( $source_group ),
+		'group_name'         => $course_code ? $course_code : $group_type,
+		'group_admins'       => $admins,
+		'group_creator_id'   => $source_group->creator_id,
+		'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
+		'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
+	);
+
+	return $source_data;
 }
 
 /**
