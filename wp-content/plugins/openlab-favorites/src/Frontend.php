@@ -20,7 +20,7 @@ class Frontend {
 
 		add_action( 'admin_bar_menu', [ __CLASS__, 'add_toolbar_item' ], 28 );
 
-		self::register_assets();
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'register_assets' ] );
 	}
 
 	/**
