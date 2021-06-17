@@ -161,7 +161,7 @@ function openlab_group_privacy_membership_settings() {
 			</div>
 
 			<div class="privacy-membership-settings-private">
-				<p>By default, any OpenLab member can request membership to a private <?php echo esc_html( $group_type_label ); ?>. Uncheck the box below to remove the 'Request Membership' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, <?php echo esc_html( $group_type_label ); ?> membership will be by invitation only.</p>
+				<p>By default, any OpenLab member can request membership in a private <?php echo esc_html( $group_type_label ); ?>. Uncheck the box below to remove the 'Request Membership' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, <?php echo esc_html( $group_type_label ); ?> membership will be by invitation only.</p>
 
 				<p><input type="checkbox" id="allow-joining-private" name="allow-joining-private" value="1" <?php checked( $allow_joining_private ); ?> /> <label for="allow-joining-private">Allow any OpenLab member to request membership to this private <?php echo esc_html( $group_type_label ); ?></label></p>
 			</div>
