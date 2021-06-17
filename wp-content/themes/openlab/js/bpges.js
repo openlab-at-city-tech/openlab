@@ -30,7 +30,7 @@
 	};
 
 	enable_radio_buttons = function() {
-		$statuses.removeAttr('disabled');
+		$statuses.prop('disabled', false);
 	};
         go_status = function(status, type){
             
