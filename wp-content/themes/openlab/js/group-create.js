@@ -69,14 +69,14 @@ jQuery( document ).ready(
 						$( thisid ).find( 'input' ).each(
 							function(index,element){
 												$( element ).removeClass( 'disabled-opt' );
-												$( element ).removeProp( 'disabled' ).removeClass( 'disabled' );
+												$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
 							}
 						);
 						$( thisid ).find( 'select' ).each(
 							function(index,element){
 								if ($( element ).attr( 'type' ) !== 'radio') {
 									$( element ).removeClass( 'disabled-opt' );
-									$( element ).removeProp( 'disabled' ).removeClass( 'disabled' );
+									$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
 								}
 							}
 						);
@@ -128,7 +128,7 @@ jQuery( document ).ready(
 		}
 
 		function enable_gc_form() {
-			$gc_submit.removeAttr( 'disabled' );
+			$gc_submit.prop( 'disabled', false );
 			$gc_submit.fadeTo( 500, 1.0 );
 		}
 
@@ -343,7 +343,7 @@ jQuery( document ).ready(
 
 							// Un-grey the website clone options
 							$( '#wds-website-clone .radio' ).removeClass( 'disabled-opt' );
-							$( '#wds-website-clone input[name="new_or_old"]' ).removeAttr( 'disabled' );
+							$( '#wds-website-clone input[name="new_or_old"]' ).prop( 'disabled', true );
 
 							// Auto-select the "Name your cloned site" option,
 							// and trigger setup JS
