@@ -584,33 +584,35 @@ function cuny_group_single() {
 		}
 	);
 
+	$has_non_member_creator  = false;
+	$has_non_contact_creator = false;
+
+	$group_creators = openlab_get_group_creators( $group_id );
+	foreach ( $group_creators as $group_creator ) {
+		if ( 'member' === $group_creator['type'] ) {
+			$user = get_user_by( 'slug', $group_creator['member-login'] );
+
+			if ( ! $user || ! in_array( $user->ID, $all_group_contacts, true ) ) {
+				$has_non_contact_creator = true;
+				break;
+			}
+		} elseif ( 'non-member' === $group_creator['type'] ) {
+			$has_non_member_creator = true;
+			break;
+		}
+	}
+
+	$credits_chunks = [];
+
 	/*
 	 * Non-clones show Acknowledgements only if Creators differ from Contacts,
 	 * or if there is Additional Text to show.
 	 */
 	$show_acknowledgements = false;
-	if ( ! $clone_history ) {
+	if ( ! $clone_history || $has_non_member_creator || $has_non_contact_creator ) {
 		$credits_markup = '';
 
-		$has_non_member_creator  = false;
-		$has_non_contact_creator = false;
-
 		$additional_text = openlab_get_group_creators_additional_text( $group_id );
-
-		$group_creators = openlab_get_group_creators( $group_id );
-		foreach ( $group_creators as $group_creator ) {
-			if ( 'member' === $group_creator['type'] ) {
-				$user = get_user_by( 'slug', $group_creator['member-login'] );
-
-				if ( ! $user || ! in_array( $user->ID, $all_group_contacts, true ) ) {
-					$has_non_contact_creator = true;
-					break;
-				}
-			} elseif ( 'non-member' === $group_creator['type'] ) {
-				$has_non_member_creator = true;
-				break;
-			}
-		}
 
 		if ( $has_non_member_creator || $has_non_contact_creator ) {
 			$creator_items = array_map(
@@ -646,9 +648,26 @@ function cuny_group_single() {
 				$credits_intro_text = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
 				$credits_markup     = implode( ', ', $creator_items );
 
-				if ( $additional_text ) {
-					$post_credits_markup .= '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
-				}
+				$credits_chunks[] = [
+					'intro' => $credits_intro_text,
+					'items' => $credits_markup,
+				];
+			}
+
+			if ( $clone_history ) {
+				$clone_intro_text = sprintf(
+					'It is based on the following %s(s)',
+					esc_html( $group_type )
+				);
+
+				$credits_chunks[] = [
+					'intro' => $clone_intro_text,
+					'items' => openlab_format_group_clone_history_data_list( $clone_history ),
+				];
+			}
+
+			if ( $additional_text ) {
+				$post_credits_markup .= '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 			}
 		} elseif ( $additional_text ) {
 			// Don't show Creators, but do show Additional Text, if available.
@@ -657,11 +676,22 @@ function cuny_group_single() {
 				'Acknowledgements: %s',
 				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
 			);
+
+			$credits_chunks[] = [
+				'intro' => $credits_intro_text,
+				'items' => '',
+			];
 		}
 
 	} else {
 		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
 		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
+
+		$credits_chunks[] = [
+			'intro' => $credits_intro_text,
+			'items' => $credits_markup,
+		];
+
 		$show_acknowledgements = true;
 	}
 
@@ -772,13 +802,17 @@ function cuny_group_single() {
                             <?php if ( $show_acknowledgements ) : ?>
                                 <div class="table-row row">
                                     <div class="col-xs-24 status-message clone-acknowledgements">
-										<p><?php echo esc_html( $credits_intro_text ); ?></p>
+										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
+											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
+												<p><?php echo esc_html( $credits_chunk['intro'] ); ?></p>
+											<?php endif; ?>
 
-										<?php if ( $credits_markup ) : ?>
-											<ul class="group-credits">
-												<?php echo $credits_markup; ?>
-											</ul>
-										<?php endif; ?>
+											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
+												<ul class="group-credits">
+													<?php echo $credits_chunk['items']; ?>
+												</ul>
+											<?php endif; ?>
+										<?php endforeach; ?>
 
 										<?php if ( ! empty( $post_credits_markup ) ) : ?>
 											<?php echo $post_credits_markup; ?>
