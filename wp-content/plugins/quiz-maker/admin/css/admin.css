@@ -1,0 +1,155 @@
+.ays_menu_badge{
+    color: #fff;
+    display: inline-block;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    background: #ca4a1f;
+    margin-left: 5px;
+    border-radius: 20px;
+    padding: 2px 5px;
+}
+#adminmenu a.toplevel_page_quiz-maker.wp-menu-open div.wp-menu-image img {
+    -webkit-animation-name: heartBeat;
+    animation-name: heartBeat;
+    -webkit-animation-duration: 1.3s;
+    animation-duration: 1.3s;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+#adminmenu a.toplevel_page_quiz-maker div.wp-menu-name {    
+    transition: .3s ease-in-out;
+}
+#adminmenu a.toplevel_page_quiz-maker div.wp-menu-image img {
+    width: 32px;
+    padding: 1px 0 0;
+    transition: .3s ease-in-out;
+}
+
+ul.ays-wp-notice-answers{
+    list-style-type: none;
+}
+
+#adminmenu li.toplevel_page_quiz-maker ul.wp-submenu.wp-submenu-wrap li a {
+    transition: .3s ease-in-out;
+}
+#adminmenu li.toplevel_page_quiz-maker ul.wp-submenu.wp-submenu-wrap li a[href*="feature"] {
+    color: #f50057;
+}
+.ays_quiz_deactivation_button{
+    background: transparent;
+    border: none;
+    color: #fff;
+}
+@-webkit-keyframes heartBeat {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  14% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+
+  28% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  42% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+
+  70% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes heartBeat {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  14% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+
+  28% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  42% {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+
+  70% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+/*
+ * Dashboard widget
+ */
+#dashboard-widgets #quiz-maker .inside {
+    margin: 0;
+    padding: 0;
+}
+
+.ays_quiz_maker_dashboard_widget {
+    display: flex;
+/*    flex-wrap: wrap;*/
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.ays_dashboard_widget_item {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.ays_dashboard_widget_item:not(:last-child) {
+    border-right: 1px solid #ccc;
+}
+.ays_dashboard_widget_item a {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+}
+.ays_dashboard_widget_item img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    line-height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.ays_dashboard_widget_item span {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 30px;
+    display: inline-block;
+}
+.ays_dashboard_widget_item span:first-of-type {
+    margin-right: 5px;
+}
+
+.ays_fa_power_off_quiz::before {
+  font-size: 40px;
+}
+.ays_fa_power_off_quiz {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    color: #e85011;
+}
