@@ -570,7 +570,7 @@ function cuny_group_single() {
 	$clone_history = array_filter(
 		$clone_history,
 		function( $item ) {
-			return ! empty( $item['group_creator_id'] );
+			return ! empty( $item['group_creator_id'] ) && ! empty( $item['group_admins'] );
 		}
 	);
 
