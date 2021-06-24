@@ -929,23 +929,27 @@ function cuny_group_single() {
 								</div>
 							<?php endif; ?>
 
-							<?php if ( $show_acknowledgements ) : ?>
-								<div class="table-row row">
-									<div class="col-xs-24 status-message clone-acknowledgements">
-										<p><?php echo esc_html( $credits_intro_text ); ?></p>
+                            <?php if ( $show_acknowledgements ) : ?>
+                                <div class="table-row row">
+                                    <div class="col-xs-24 status-message clone-acknowledgements">
+										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
+											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
+												<p><?php echo $credits_chunk['intro']; ?></p>
+											<?php endif; ?>
 
-										<?php if ( $credits_markup ) : ?>
-											<ul class="group-credits">
-												<?php echo $credits_markup; ?>
-											</ul>
-										<?php endif; ?>
+											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
+												<ul class="group-credits">
+													<?php echo $credits_chunk['items']; ?>
+												</ul>
+											<?php endif; ?>
+										<?php endforeach; ?>
 
 										<?php if ( ! empty( $post_credits_markup ) ) : ?>
 											<?php echo $post_credits_markup; ?>
 										<?php endif; ?>
-									</div>
-								</div>
-							<?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
 
                         </div>
                     </div>
