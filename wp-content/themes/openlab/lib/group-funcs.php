@@ -804,7 +804,7 @@ function cuny_group_single() {
                                     <div class="col-xs-24 status-message clone-acknowledgements">
 										<?php foreach ( $credits_chunks as $credits_chunk ) : ?>
 											<?php if ( ! empty( $credits_chunk['intro'] ) ) : ?>
-												<p><?php echo esc_html( $credits_chunk['intro'] ); ?></p>
+												<p><?php echo $credits_chunk['intro']; ?></p>
 											<?php endif; ?>
 
 											<?php if ( ! empty( $credits_chunk['items'] ) ) : ?>
