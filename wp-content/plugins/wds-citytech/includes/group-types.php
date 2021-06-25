@@ -1102,4 +1102,4 @@ function openlab_save_group_creators_on_creation( $group_id ) {
 
 	openlab_save_group_creators( $group_id, array_filter( $creators ) );
 }
-add_action( 'groups_created_group', 'openlab_save_group_creators_on_creation' );
+add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
