@@ -1,19 +1,19 @@
-=== CM Tooltip Glossary ===
+=== CM Tooltip Glossary  - Better SEO and UEX for your WP site ===
 Name: CM Tooltip Glossary
 Contributors: CreativeMindsSolutions
 Donate link: http://tooltip.cminds.com/
 Tags: glossary,tooltip,lexicon, dictionary, knowledgebase
 Requires at least: 3.9
-Tested up to: 5.4.2
-Stable tag: 3.7.2
+Tested up to: 5.7.2
+Stable tag: 3.9.17
 
-Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
+New 2021 Version! Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
 
 == Description ==
 
-[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Video](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)  | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
+[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)  | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
 
-**Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.**
+**Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms. New 2021 Version!**
 
 CM Glossary Tooltip is a WordPress plugin that enables you to check posts or pages for defined glossary terms, by adding links to a glossary term page that contains the definition of the term used.
 
@@ -222,7 +222,3 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 == Changelog ==
 
 > [View Release Notes in Tooltip Glossary Plugin Site](http://tooltip.cminds.com/cm-tooltip-free-edition-release-notes/)
-
-= 3.7.2 =
-* Checked compability with PHP 7.4 and WordPress 5.4.2
-* Added compability with Guttenberg
