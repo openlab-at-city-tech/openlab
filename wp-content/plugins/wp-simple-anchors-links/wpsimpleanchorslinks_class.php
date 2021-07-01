@@ -129,12 +129,12 @@ class WP_Simple_Anchors_Links {
 		if( defined('WPSIMPLEANCHORSLINKS_DISABLED_DASHBOARD_WIDGET') ){
 			return;
 		}
-		
+
 		//echo '<ul class="ul-disc">';
 		//	echo '<li>Facts - [<a href="http://www.kilukrumedia.com" target="_blank">' . __('More infos', 'wp_simple-anchors-links') . '</a>] (' . __('Free', 'wp_simple-anchors-links') . ')</li>';
 		//echo '</ul>';
 		//
-		
+
 		echo '
 		<div class="dashboard_widget_block">
 			<p><i class="wpsal_icon-mug"></i> Beer == New Awesome Features on all our plugins.<br />Thanks so much for your support.</p>
@@ -152,7 +152,7 @@ class WP_Simple_Anchors_Links {
 		if( defined('WPSIMPLEANCHORSLINKS_DISABLED_DASHBOARD_WIDGET') ){
 			return;
 		}
-		
+
 		wp_add_dashboard_widget('wp_dashboard_widget', '<i class="wpsal_icon-heart"></i> WP Simple Anchors Links?', array(&$this, 'dashboard_widget_function') );
 	}
 
@@ -352,40 +352,40 @@ class WP_Simple_Anchors_Links {
 
 	}
 
-	
+
 	/**
 	* ADD Filetime into file if KM_FILEMTIME_REWRITE constant exist
-	* 
+	*
 	* @param mixed $default
 	* @return mixed
 	*/
 	public function get_filetime_forfile( $default = '' ){
-		
+
 		if( !defined('KM_FILEMTIME_REWRITE') || !defined('WPSIMPLEANCHORSLINKS_VERSION_FILETIME') ){
 			return $default;
 		}
-		
+
 		return '-' . WPSIMPLEANCHORSLINKS_VERSION_FILETIME;
-		
+
 	}
-	
+
 
 	/**
 	* Return null value if KM_FILEMTIME_REWRITE constant exist
-	* 
+	*
 	* @param mixed $default
 	*/
 	public function get_version_number( $default ){
-		
+
 		if( !defined('KM_FILEMTIME_REWRITE') ){
 			return $default;
 		}
-		
+
 		return null;
-		
+
 	}
 
-	
+
 	/**
 	 * Set log file datas
 	 */
