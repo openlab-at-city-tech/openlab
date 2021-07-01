@@ -45,6 +45,7 @@ function get_badgeos_points_deduct_activity_triggers() {
 	$GLOBALS['badgeos']->deduct_points_activity_triggers = apply_filters( 'badgeos_deduct_points_activity_triggers',
 		array(
 			'badgeos_wp_login'     			=> __( 'Log in to Website', 'badgeos' ),
+            'badgeos_wp_not_login'          => __( 'Not Login for X days', 'badgeos' ),
 			'badgeos_new_comment'  			=> __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
@@ -534,7 +535,7 @@ function points_get_user_trigger_count( $point_step_id, $user_id, $trigger, $sit
  * @param  array $args        The triggered args
  * @return integer          The updated trigger count
  */
-function badgeos_points_update_user_trigger_count( $point_step_id = 0, $point_parent_id = 0, $user_id, $trigger, $site_id = 0, $type='Award', $args = array() ) {
+function badgeos_points_update_user_trigger_count( $point_step_id = 0 , $point_parent_id = 0, $user_id = '', $trigger = '', $site_id = 0, $type='Award', $args = array() ) {
 
 	/**
      * Set to current site id
