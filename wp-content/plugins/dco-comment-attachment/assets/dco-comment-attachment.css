@@ -1,3 +1,23 @@
 .dco-image-attachment {
 	line-height: 0;
 }
+
+.dco-attachment-gallery {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -5px -5px 6px;
+}
+
+.dco-attachment-gallery .dco-attachment.dco-image-attachment {
+	margin: 5px;
+}
+
+.comment-form-attachment span:not(.required) {
+	display: block;
+}
+
+/* Fix of possible conflicts with theme styles. */
+.dco-image-attachment img {
+	width: auto !important;
+	height: auto !important;
+}
