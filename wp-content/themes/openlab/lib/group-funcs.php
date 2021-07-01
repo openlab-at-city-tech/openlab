@@ -605,7 +605,7 @@ function cuny_group_single() {
 	}
 
 	$contact_creator_mismatch = false;
-	if ( $has_non_member_creator ) {
+	if ( ! $has_non_member_creator ) {
 		$creator_ids = array_map(
 			function( $creator ) {
 				$user = get_user_by( 'slug', $creator['member-login'] );
