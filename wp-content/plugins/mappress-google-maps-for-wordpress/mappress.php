@@ -4,7 +4,7 @@ Plugin Name: MapPress Maps for WordPress
 Plugin URI: https://www.mappresspro.com/mappress
 Author URI: https://www.mappresspro.com/chris-contact
 Description: MapPress makes it easy to add Google and Leaflet Maps to WordPress
-Version: 2.57.3
+Version: 2.64.2
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Matthias Stasiak for his wonderful icons (http://code.google.com/p/google-maps-icons/)
@@ -17,7 +17,6 @@ Thanks to all the translators and to Matthias Stasiak for his wonderful icons (h
 */
 
 require_once dirname( __FILE__ ) . '/mappress_obj.php';
-require_once dirname( __FILE__ ) . '/mappress_controls.php';
 require_once dirname( __FILE__ ) . '/mappress_poi.php';
 require_once dirname( __FILE__ ) . '/mappress_map.php';
 require_once dirname( __FILE__ ) . '/mappress_settings.php';
@@ -29,7 +28,6 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 	include_once dirname( __FILE__ ) . '/pro/mappress_geocoder.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_icons.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_meta.php';
-	include_once dirname( __FILE__ ) . '/pro/mappress_pro_settings.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_query.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_updater.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_widget.php';
@@ -37,18 +35,18 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.57.3';
+	const VERSION = '2.64.2';
 
 	static
 		$baseurl,
 		$basename,
 		$basedir,
 		$debug,
+		$iframe,
 		$loaded,
 		$options,
 		$notices,
 		$pages,
-		$pointers,
 		$pro,
 		$updater,
 		$version
@@ -87,9 +85,6 @@ class Mappress {
 		add_action('wp_enqueue_scripts', array(__CLASS__, 'wp_enqueue_scripts'));
 		add_action('admin_enqueue_scripts', array(__CLASS__, 'admin_enqueue_scripts'));
 
-		// Review
-		add_action('current_screen', array(__CLASS__, 'current_screen'));
-
 		// Plugin action links
 		add_filter("plugin_action_links_" . self::$basename, array(__CLASS__, 'plugin_action_links'), 10, 2);
 
@@ -113,8 +108,76 @@ class Mappress {
 		// Add block category
 		add_filter( 'block_categories', array(__CLASS__, 'block_categories'), 10, 2 );
 
+		// AO
 		add_filter('autoptimize_filter_js_exclude', array(__CLASS__, 'autoptimize_filter_js_exclude'), 10, 2);
 		add_filter('autoptimize_filter_css_exclude', array(__CLASS__, 'autoptimize_filter_css_exclude'), 10, 2);
+		add_filter( 'autoptimize_filter_css_minify_excluded', array(__CLASS__, 'autoptimize_filter_css_minify_excluded'));
+		add_filter( 'autoptimize_filter_js_minify_excluded', array(__CLASS__, 'autoptimize_filter_js_minify_excluded'));
+		add_filter( 'autoptimize_js_include_inline', array(__CLASS__, 'autoptimize_js_include_inline'));
+
+		add_filter('mime_types', array(__CLASS__, 'mime_types'));
+		add_action('deactivate_' . self::$basename, array(__CLASS__, 'deactivate'));
+
+		// Welcome
+		add_action('activate_' . self::$basename, array(__CLASS__, 'activate'), 10, 2);
+		add_action('admin_init', array(__CLASS__, 'admin_init'), 10, 2);
+
+		if (self::$iframe)
+			add_action('wp_ajax_mapp_iframe', array(__CLASS__, 'ajax_iframe'));
+
+	}
+
+	static function activate($network_wide = false) {
+		set_transient('_mappress_activation_redirect', true, 30);
+	}
+
+	static function admin_init() {
+		if (get_transient('_mappress_activation_redirect')) {
+			delete_transient('_mappress_activation_redirect');
+			if (is_network_admin() || isset( $_GET['activate-multi']))
+				return;
+			else
+				wp_safe_redirect(add_query_arg(array('page' => 'mappress_support'), admin_url('admin.php')));
+		}
+	}
+
+	static function ajax_iframe() {
+		check_ajax_referer('mappress', 'nonce');
+		if (!current_user_can('edit_posts'))
+			return;
+
+		ob_start();
+
+		Mappress::$options->footer = true;
+		Mappress::scripts_register();
+		Mappress::styles_enqueue('backend');
+		Mappress::scripts_enqueue('backend');
+
+		// Iframe needs to include some standard CSS
+		wp_enqueue_style('forms');
+		wp_enqueue_style('common');
+
+		?>
+		<!doctype html>
+		<html class='mapp-iframe-html' <?php language_attributes(); ?>>
+		<head>
+			<title>MapPress</title>
+			<?php
+				Mappress::wp_head();
+				wp_print_styles();
+			?>
+		</head>
+		<body>
+			<div id='mapp-iframe-react'></div>
+			<?php wp_print_footer_scripts(); ?>
+			<?php Mappress_Template::print_footer_templates(); ?>
+		</body>
+		</html>
+		<?php
+		$output = trim(ob_get_clean());
+		header( "Content-Type: text/html" );
+		$response = $output;
+		die ($response);
 	}
 
 	// Scripts & styles for admin
@@ -126,50 +189,40 @@ class Mappress {
 		if (empty($hook))
 			return;
 
-		// Network admin has no pages
-		if (empty(self::$pages))
+		else if (empty(self::$pages))				// Network admin has no pages
 			return;
 
-		$is_editing = in_array($hook, array('post.php', 'post-new.php'));
-		$is_settings = in_array($hook, self::$pages);
-		$is_customizer = $hook == 'customize.php';
+		$page = null;
+		if (in_array($hook, array('post.php', 'post-new.php')))
+			$page = 'editor';
+		else if ($hook == self::$pages[0])
+			$page = 'settings';
+		else if ($hook == self::$pages[2])
+			$page = 'library';
+		else if ($hook == self::$pages[3])
+			$page = 'support';
+		else if (in_array($hook, array('customize.php', 'appearance_page_gutenberg-widgets')))
+			$page = 'customizer';
+		else if (in_array($hook, array('plugins.php')))
+			$page = 'plugins';
 
-		if ($is_editing || $is_settings || $is_customizer) {
-			self::scripts_enqueue('backend');
-
-			// Settings - Gutenberg CSS for library + code editor
-			if ($is_settings) {
-				wp_enqueue_style( 'wp-edit-blocks' );
-				if (function_exists('wp_enqueue_code_editor'))
-					wp_enqueue_code_editor(array( 'type' => 'php' ));
+		if ($page) {
+			if ($page == 'settings') {
+				self::scripts_enqueue('settings');
+				self::styles_enqueue('settings');
+			} else {
+				self::scripts_enqueue('backend');
+				self::styles_enqueue('backend');
 			}
-
-			// Leaflet CSS
-			if (self::$options->engine == 'leaflet')
-				wp_enqueue_style('mappress-leaflet', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', null, '1.7.1');
-			if (self::$options->clustering) {
-				wp_enqueue_style('mappress-leaflet-markercluster-default', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.Default.css", null, '1.4.1');
-				wp_enqueue_style('mappress-leaflet-markercluster', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.css", null, '1.4.1');
-			}
-
-			// Mappress CSS
-			wp_enqueue_style('mappress', self::$baseurl . '/css/mappress.css', null, self::$version);
-			wp_enqueue_style('mappress-admin', self::$baseurl . '/css/mappress_admin.css', null, self::$version);
-		}
-
-		// Temporary, for mce pointer
-		if ($is_editing) {
-			wp_enqueue_style( 'wp-pointer' );
-			wp_enqueue_script( 'wp-pointer' );
 		}
 	}
 
 	static function admin_menu() {
 		// Settings
-		$settings = (self::$pro) ? new Mappress_Pro_Settings() : new Mappress_Settings();
-		self::$pages[] = add_menu_page('MapPress', 'MapPress', 'manage_options', 'mappress', array(&$settings, 'options_page'), 'dashicons-location');
-		self::$pages[] = add_submenu_page('mappress', __('Settings', 'mappress-google-maps-for-wordpress'), __('Settings', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress', array(&$settings, 'options_page'));
+		self::$pages[] = add_menu_page('MapPress', 'MapPress', 'manage_options', 'mappress', array('Mappress_Settings', 'options_page'), 'dashicons-location');
+		self::$pages[] = add_submenu_page('mappress', __('Settings', 'mappress-google-maps-for-wordpress'), __('Settings', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress', array('Mappress_Settings', 'options_page'));
 		self::$pages[] = add_submenu_page('mappress', __('Map Library', 'mappress-google-maps-for-wordpress'), __('Map Library', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_maps', array(__CLASS__, 'map_library'));
+		self::$pages[] = add_submenu_page('mappress', __('Support', 'mappress-google-maps-for-wordpress'), __('Support', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_support', array('Mappress_Settings', 'support_page'));
 	}
 
 	static function admin_notices() {
@@ -190,6 +243,7 @@ class Mappress {
 		// Dismissibles
 		if (is_super_admin()) {
 			$content =  "<div class='notice notice-%s is-dismissible' data-mapp-dismiss='%s'><p>%s</p></div>";
+
 			$dismissed = array_filter( explode( ',', (string) get_user_meta( get_current_user_id(), 'mappress_dismissed', true ) ) );
 			$notices = (self::$notices) ? array_diff_key(self::$notices, array_flip($dismissed)) : array();
 
@@ -206,15 +260,26 @@ class Mappress {
 		}
 	}
 
+	static function admin_notices_dismiss($key, $dismiss) {
+		if (!$key)
+			return;
+
+		$dismissed = array_filter( explode( ',', (string) get_user_meta( get_current_user_id(), 'mappress_dismissed', true ) ) );
+
+		if ($dismiss)
+			$dismissed[] = $key;
+		else
+			unset($dismissed[$key]);
+
+		update_user_meta( get_current_user_id(), 'mappress_dismissed', implode( ',', $dismissed ));
+	}
+
 	static function ajax_dismiss() {
 		$key = isset($_POST['key']) ? $_POST['key'] : null;
 
 		if (!$key || sanitize_key( $key) != $key)
 			wp_die( 0 );
-
-		$dismissed = array_filter( explode( ',', (string) get_user_meta( get_current_user_id(), 'mappress_dismissed', true ) ) );
-		$dismissed[] = $key;
-		update_user_meta( get_current_user_id(), 'mappress_dismissed', implode( ',', $dismissed ));
+		self::admin_notices_dismiss($key, true);
 		self::ajax_response('OK');
 	}
 
@@ -232,19 +297,29 @@ class Mappress {
 		die ($response);
 	}
 
-	static function autoptimize_filter_css_exclude($exlude_css, $content) {
+	static function autoptimize_filter_css_exclude($exclude_css, $content) {
 		if ($exclude_css)
 			$exclude_css .= ',';
 		$exclude_css .= "mappress.css,mappress_admin.css,leaflet.css,MarkerCluster.Default.css,Leaflet.markercluster/MarkerCluster.css";
 		return $exclude_css;
 	}
 
+	// Exclude JS from AO
 	static function autoptimize_filter_js_exclude($exclude_js, $content) {
 		if ($exclude_js)
 			$exclude_js .= ',';
 		$exclude_js .= "underscore.js,underscore.min,js,index_mappress.js,index_mappress_admin.js";
 		return $exclude_js;
 	}
+
+	// Without this AO will still minify excluded CSS, causing display problems
+	static function autoptimize_filter_css_minify_excluded($excluded) { return false; }
+
+	// Without this AO will still minify excluded JS, causing JS errors
+	static function autoptimize_filter_js_minify_excluded($excluded) { return false; }
+
+	// Without this AO will remove the wp_head() output, causing JS errors
+	static function autoptimize_js_include_inline($include_inline) { return false; }
 
 	// GT assets are still loaded when using classic editor, but this script doesn't run
 	static function block_categories( $categories, $post ) {
@@ -262,33 +337,23 @@ class Mappress {
 		);
 	}
 
-	static function current_screen($screen) {
-		if ($screen && self::$pages && $screen->id == self::$pages[0] && !self::$pro) {
-			$first_time = get_option('mappress_review');
-			if (!$first_time) {
-				update_option('mappress_review', time());
-				return;
-			}
+	static function deactivate() {
+		$reason = (isset($_REQUEST['mapp_reason'])) ? $_REQUEST['mapp_reason'] : null;
+		$reason_text = (isset($_REQUEST['mapp_reason_text'])) ? $_REQUEST['mapp_reason_text'] : null;
 
-			if (time() <= $first_time + (60 * 60 * 24 * 10))
-				return;
+		if (!$reason || $reason == 'private' || $reason == 'temporary')
+			return;
 
-			$ids = Mappress_Map::get_list(null, 'ids');
-			if (count($ids) < 3)
-				return;
-
-			$review_link = sprintf("<a class='button button-primary mapp-dismiss' href='https://wordpress.org/support/view/plugin-reviews/mappress-google-maps-for-wordpress?filter=5' target='_blank'>%s</a>", __('OK, you deserve it!', 'mappress-google-maps-for-wordpress'));
-			$no_link = sprintf("<a class='button mapp-dismiss' href='#'>%s</a>", __('Nope, maybe later', 'mappress-google-maps-for-wordpress'));
-			$help_link = sprintf("<a class='mapp-dismiss' href='https://mappresspro.com/chris-contact' target='_blank'>%s</a>", __('I neeed some help', 'mappress-google-maps-for-wordpress'));
-			$body = "<div class='mapp-review'>";
-			$body .= "<h3>" . __("Please Help Spread the Word", 'mappress-google-maps-for-wordpress') . "</h3>";
-			$body .= "<p>" . __("If you're enjoying MapPress, would you mind taking a moment to write a brief review?  It would mean the world to me!", 'mappress-google-maps-for-wordpress') . "</p>";
-			$body .= "<p>" . __("If you have any issues or suggestions, please let me know.  I'll be happy to help!", 'mappress-google-maps-for-wordpress') . "</p>";
-			$body .= "<p>" . "~ Chris Richardson" . "</p>";
-			$body .= "<div class='mapp-review-options'>" . $review_link . $no_link . $help_link . "</div>";
-			$body .= "</div>";
-			self::$notices['review'] = array('review', $body);
-		}
+		// Call API (static functions can't use api_call())
+		$args = array(
+			'api_action' => 'feedback',
+			'network_url' => (is_multisite()) ? trim(network_home_url()) : trim(home_url()),
+			'plugin' => 'mappress',
+			'reason' => $reason,
+			'reason_text' => $reason_text,
+			'url' => trim(home_url()),
+		);
+		$response = wp_remote_post('https://mappresspro.com', array('timeout' => 15, 'sslverify' => false, 'body' => (array) $args));
 	}
 
 	static function debugging() {
@@ -397,17 +462,6 @@ class Mappress {
 		return $mashup->display();
 	}
 
-	static function get_support_links() {
-		$html = "<div class='mapp-support'>";
-		$html .= __('Version', 'mappress-google-maps-for-wordpress') . ' ';
-		$html .= self::$version;
-		$html .= " | <a target='_blank' href='https://mappresspro.com/mappress/mappress-documentation'>" . __('Help', 'mappress-google-maps-for-wordpress') . "</a>";
-		if (!self::$pro)
-			$html .= "<a class='button button-primary' href='https://mappresspro.com/mappress' target='_blank'>" . __('Upgrade to MapPress Pro', 'mappress-google-maps-for-wordpress') . "</a>";
-		$html .= "</div>";
-		echo $html;
-	}
-
 	static function heartbeat_settings( $settings ) {
 		$settings['minimalInterval'] = 600;
 		return $settings;
@@ -421,25 +475,27 @@ class Mappress {
 	*/
 	static function init() {
 		Mappress_Map::register();
+		Mappress_Settings::register();
 		Mappress_Template::register();
 		Mappress_WPML::register();
 
 		if (self::$pro) {
 			Mappress_Icons::register();
 			Mappress_Meta::register();
-			Mappress_Pro_Settings::register();
 			Mappress_Query::register();
 			Mappress_Widget::register();
 			Mappress_Widget_Map::register();
 		}
 
 		self::scripts_register();
+		self::styles_register();
 
 		// Register Gutenberg block types and load GT scripts
 		if (function_exists('register_block_type')) {
 			register_block_type('mappress/map', array(
 				'render_callback' => array(__CLASS__, 'shortcode_map'),
-				'editor_script' => array('mappress_admin')
+				'editor_script' => array('mappress_admin'),
+
 			));
 			if (self::$pro) {
 				register_block_type('mappress/mashup', array(
@@ -468,6 +524,21 @@ class Mappress {
 			Mappress::$options->save();
 		}
 
+		// Check for license expired
+		if (self::$pro && self::$options->license) {
+			$last_check = get_option('mappress_license_check');
+			if (!$last_check || time() > $last_check + (60 * 60 * 24 * 7)) {
+				$status = Mappress::$updater->get_status();
+				if ($status != 'active') {
+					self::admin_notices_dismiss('license_expired', false);
+					$renew_link = sprintf("<a target='_blank' href='http://mappresspro.com/account'>%s</a>", __('renew your license', 'mappress-google-maps-for-wordpress'));
+					self::$notices['expiredlicense'] = array('warning', sprintf(__('Your MapPress license has expired.  Please %s to get the latest updates and prevent errors.', 'mappress-google-maps-for-wordpress'), $renew_link));
+				}
+				update_option('mappress_license_check', time());
+				return;
+			}
+		}
+
 		// Missing license
 		if (self::$pro && !trim(self::$options->license) && (!is_multisite() || (is_super_admin() && is_main_site())))
 			self::$notices['nolicense'] = array('warning', __('Please enter your MapPress license key to enable plugin updates', 'mappress-google-maps-for-wordpress'));
@@ -477,19 +548,39 @@ class Mappress {
 			self::$notices['255_min_version'] = array('error', __('MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor.', 'mappress-google-maps-for-wordpress'));
 
 		// New features
-		if ($current_version && $current_version < '2.55' and self::VERSION >= '2.55')
-			self::$notices['255_whats_new'] = array('info', sprintf(__('MapPress has many new features!  Please take a moment to learn %s.', 'mappress-google-maps-for-wordpress'), '<a target="_blank" href="https://mappresspro.com/whats-new">' . __("what's new", 'mappress-google-maps-for-wordpress') . '</a>'));
+		if ($current_version && $current_version < '2.55' && self::VERSION >= '2.55')
+			self::$notices['255_whats_new'] = array('info', sprintf(__('MapPress has many new features!  %s.', 'mappress-google-maps-for-wordpress'), '<a target="_blank" href="https://mappresspro.com/whats-new">' . __("Learn more", 'mappress-google-maps-for-wordpress') . '</a>'));
 
-		// New MCE editor
-		if ($current_version && $current_version < '2.57') {
-			$dismissed = array_filter( explode( ',', (string) get_user_meta( get_current_user_id(), 'mappress_dismissed', true ) ) );
-			if (!in_array('257_new_editor', $dismissed)) {
-				$header = sprintf("<h3>%s</h3>", __("The MapPress map editor has moved!", 'mappress-google-maps-for-wordpress'));
-				$content = sprintf("<p>%s</p>", __('Use this button to open the new popup editor where you can easily create, edit and insert maps.', 'mappress-google-maps-for-wordpress'));
-				self::$pointers['257_new_editor'] = $header . $content;
+		// New popup templates
+		if ($current_version && $current_version < '2.60' && self::VERSION >= '2.60')
+			self::$notices['260_whats_new'] = array('warning', sprintf(__('MapPress popup templates have changed!  Please update custom templates to the new format. %s.', 'mappress-google-maps-for-wordpress'), '<a target="_blank" href="https://mappresspro.com/whats-new">' . __("Learn more", 'mappress-google-maps-for-wordpress') . '</a>'));
+
+		if ($current_version && $current_version < '2.63' && self::VERSION >= '2.63') {
+			// New list templates
+			self::$notices['263_whats_new'] = array('warning', sprintf(__('MapPress templates and filters have changed.  Please update custom templates and filters. %s.', 'mappress-google-maps-for-wordpress'), '<a target="_blank" href="https://mappresspro.com/whats-new">' . __("Learn more", 'mappress-google-maps-for-wordpress') . '</a>'));
+
+			// Convert filters to array
+			if (self::$options->filter) {
+				self::$options->filters = array(array('key' => self::$options->filter));
+				self::$options->save();
+			}
+
+			// Convert styles to indexed arrays
+			if (self::$options->styles && is_array(self::$options->styles)) {
+				self::$options->stylesGoogle = array();
+				self::$options->stylesMapbox = array();
+				foreach(self::$options->styles as $name => $json)
+					self::$options->stylesGoogle[] = array('id' => $name, 'name' => $name, 'url' => null, 'json' => $json, 'imageUrl' => self::$baseurl . '/images/roadmap.png');
+				foreach(self::$options->mapboxStyles as $name => $url) {
+					$parts = explode('?', strtolower($url));
+					$short_url = str_ireplace(array('.html', 'https://api.mapbox.com/styles/v1/', 'mapbox://styles/'), '', $parts[0]);
+					$parts = explode('/', $short_url);
+					if (count($parts) == 2)
+						self::$options->stylesMapbox[] = array('url' => $url, 'provider' => 'mapbox', 'user' => $parts[0], 'id' => $name, 'mapboxid' => $parts[1], 'name' => $name);
+				}
+				self::$options->save();
 			}
 		}
-
 		update_option('mappress_version', self::VERSION);
 	}
 
@@ -528,7 +619,7 @@ class Mappress {
 	}
 
 	static function l10n() {
-		global $post;
+		global $post, $is_IE;
 
 		$l10n = array(
 			'delete_prompt' => __('Are you sure you want to delete?', 'mappress-google-maps-for-wordpress'),
@@ -536,7 +627,7 @@ class Mappress {
 			'kml_error' => __('Error reading KML file', 'mappress-google-maps-for-wordpress'),
 			'layer' => __('URL for KML file', 'mappress-google-maps-for-wordpress'),
 			'loading' => "<span class='mapp-spinner'></span>" . __('Loading', 'mappress-google-maps-for-wordpress'),
-			'need_classic' => __('Please select a classic editor block to insert into.', 'mappress-google-maps-for-wordpress'),
+			'need_classic' => __('Please select an editor to insert into.', 'mappress-google-maps-for-wordpress'),
 			'no_geolocate' => __('Unable to get your location', 'mappress-google-maps-for-wordpress'),
 			'no_results' => __('No results', 'mappress-google-maps-for-wordpress'),
 			'save' => __('Save changes?', 'mappress-google-maps-for-wordpress'),
@@ -547,76 +638,57 @@ class Mappress {
 		$l10n['options'] = array(
 			'admin' => current_user_can('administrator'),
 			'ajaxurl' => admin_url('admin-ajax.php'),
+			'apikey' => self::get_api_keys()->browser,
 			'baseurl' => self::$baseurl,
 			'debug' => self::$debug,
 			'editurl' => admin_url('post.php'),
 			'iconsUrl' => (self::$pro) ? Mappress_Icons::$icons_url : null,
+			'isIE' => $is_IE,
 			'language' => self::get_language(),
 			'mapbox' => self::get_api_keys()->mapbox,
 			'nonce' => wp_create_nonce('mappress'),
-			'pointers' => self::$pointers,
 			'postid' => ($post) ? $post->ID : null,	// Note: GT => numeric, classic => string
 			'pro' => self::$pro,
 			'ssl' => self::is_ssl(),                // SSL is needed for 'your location' in directions
 			'standardIcons' => (self::$pro) ? Mappress_Icons::$standard_icons : null,
 			'standardIconsUrl' => (self::$pro) ? Mappress_Icons::$standard_icons_url : null,
-			'userIcons' => (self::$pro) ? Mappress_Icons::get_user_icons() : null
+			'userStyles' => (self::$options->engine == 'leaflet') ? self::$options->stylesMapbox : self::$options->stylesGoogle,
+			'userIcons' => (self::$pro) ? Mappress_Icons::get_user_icons() : null,
+			'version' => self::$version
 		);
 
-		// Leaflet layers for mapbox / OSM
-		if (self::$options->engine == 'leaflet') {
-			// Providers
-			$providers = array(
-				'mapbox' => array(
-					'accessToken' => self::get_api_keys()->mapbox,
-					'attribution' => "<a href='https://www.mapbox.com/about/maps/' target='_blank'>&copy; Mapbox &copy; OpenStreetMap</a> <a class='mapbox-improve-map' href='https://www.mapbox.com/map-feedback/' target='_blank'>" . __('Improve this map', 'mappress-google-maps-for-wordpress') . "</a>",
-					'fresh' => true,	// Fresh = true in order to provide updated studio styles
-					'url' => "https://api.mapbox.com/styles/v1/{user}/{id}/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}&fresh={fresh}",
-					'zoomOffset' => 0
-				),
-				'osm' => array(
-					'attribution' => 'Map data (c)<a href="https://openstreetmap.org">OpenStreetMap</a>',
-					'url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-				)
-			);
-			$l10n['options']['providers'] = $providers;
-
-			// Baselayers
-			$baselayers = array();
-			if (self::get_api_keys()->mapbox) {
-				$baselayers = array(
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'streets-v10', 'name' => 'streets', 'label' => __('Streets', 'mappress-google-maps-for-wordpress')),
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'outdoors-v10', 'name' => 'outdoors', 'label' => __('Outdoors', 'mappress-google-maps-for-wordpress')),
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'light-v9', 'name' => 'light', 'label' => __('Light', 'mappress-google-maps-for-wordpress')),
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'dark-v9', 'name' => 'dark', 'label' => __('Dark', 'mappress-google-maps-for-wordpress')),
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'satellite-v9', 'name' => 'satellite', 'label' => __('Satellite', 'mappress-google-maps-for-wordpress')),
-					array('provider' => 'mapbox', 'user' => 'mapbox', 'id' => 'satellite-streets-v10', 'name' => 'satellite-streets', 'label' => __('Satellite Streets', 'mappress-google-maps-for-wordpress'))
+		// Default styles
+		if (Mappress::$options->engine == 'leaflet') {
+			if (Mappress::get_api_keys()->mapbox) {
+				$styles = array(
+					array('id' => 'streets', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'streets-v11', 'name' => __('Streets', 'mappress-google-maps-for-wordpress')),
+					array('id' => 'outdoors', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'outdoors-v11', 'name' => __('Outdoors', 'mappress-google-maps-for-wordpress')),
+					array('id' => 'light', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'light-v10', 'name' => __('Light', 'mappress-google-maps-for-wordpress')),
+					array('id' => 'dark', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'dark-v10', 'name' => __('Dark', 'mappress-google-maps-for-wordpress')),
+					array('id' => 'satellite', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'satellite-v9', 'name' => __('Satellite', 'mappress-google-maps-for-wordpress')),
+					array('id' => 'satellite-streets', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'satellite-streets-v11', 'name' => __('Satellite Streets', 'mappress-google-maps-for-wordpress'))
 				);
-
-				// Mapbox studio styles - extract user/id from url
-				foreach(self::$options->mapboxStyles as $name => $url) {
-					$url = str_ireplace('.html', '', $url);
-					$url = str_ireplace('https://api.mapbox.com/styles/v1/', '', $url);		// Old studio format
-					$url = str_ireplace('mapbox://styles/', '', $url);						// New studio format
-					$parts = explode('/', $url);
-					if (count($parts) == 2)
-						$baselayers[] = array('provider' => 'mapbox', 'user' => $parts[0], 'id' => $parts[1], 'name' => $name, 'label' => $name);
-				}
 			} else {
-				$baselayers = array(
-					array('provider' => 'osm', 'id' => 'osm', 'name' => 'osm', 'label' => __('Streets', 'mappress-google-maps-for-wordpress'))
+				$styles = array(
+					array('id' => 'osm', 'type' => 'standard', 'provider' => 'osm', 'name' => __('Streets', 'mappress-google-maps-for-wordpress'))
 				);
 			}
-			$l10n['options']['baseLayers'] = $baselayers;
 		} else {
-			// Google wizard styles
-			$l10n['options']['styles'] = array();
-			foreach(self::$options->styles as $id => &$style)
-				$l10n['options']['styles'][$id] = json_decode($style);
+			// Google styles
+			$styles = array(
+				array( 'id' => 'roadmap', 'type' => 'standard', 'name' => __('Roadmap', 'mappress-google-maps-for-wordpress'), 'imageUrl' => Mappress::$baseurl . '/images/roadmap.png'),
+				array( 'id' => 'terrain', 'type' => 'standard', 'name' => __('Terrain', 'mappress-google-maps-for-wordpress'), 'imageUrl' => Mappress::$baseurl . '/images/terrain.png'),
+				array( 'id' => 'satellite', 'type' => 'standard', 'name' => __('Satellite', 'mappress-google-maps-for-wordpress'), 'imageUrl' => Mappress::$baseurl . '/images/satellite.png'),
+				array( 'id' => 'hybrid', 'type' => 'standard', 'name' => __('Hybrid', 'mappress-google-maps-for-wordpress'), 'imageUrl' => Mappress::$baseurl . '/images/hybrid.png'),
+			);
 		}
+		$l10n['options']['standardStyles'] = $styles;
 
 		// Global settings
-		$options = array('alignment', 'clustering', 'country', 'defaultIcon', 'directions', 'directionsServer', 'engine', 'filter', 'geocoder', 'iconScale', 'initialOpenInfo', 'iwType', 'layout', 'mashupClick', 'mini', 'poiList', 'poiZoom', 'radius', 'search', 'size', 'sizes', 'style');
+		$options = array('alignment', 'clustering', 'country', 'defaultIcon', 'directions', 'directionsServer',
+		'engine', 'filters', 'geocoder', 'highlight', 'highlightIcon', 'iconScale', 'initialOpenInfo', 'layout',
+		'mashupClick', 'mini', 'poiList', 'poiZoom', 'radius', 'search', 'size', 'sizes', 'style', 'thumbs', 'thumbsList', 'thumbsPopup', 'tooltips');
+
 		foreach($options as $option) {
 			if (isset(self::$options->$option)) {
 				$l10n['options'][$option] = self::$options->$option;
@@ -630,6 +702,46 @@ class Mappress {
 		self::scripts_enqueue('backend');
 		echo '<div id="mapp-library" class="mapp-library"></div>';
 		wp_editor('', 'mapp-library-tinymce');
+	}
+
+	/**
+	* Add KML/KMZ as valid mime types
+	*
+	* @param mixed $mimes
+	*/
+	static function mime_types($mimes) {
+		// Additional entries must match WP, which use finfo_file(), e.g. KML => text/xml
+		$mimes['kml'] = 'text/xml';			// Real type: 'application/vnd.google-earth.kml+xml';
+		$mimes['kmz'] = 'application/zip';	// Real type: 'application/vnd.google-earth.kmz';
+		return $mimes;
+	}
+
+	static function scripts_enqueue($type = 'frontend') {
+		if (self::$loaded)
+			return;
+		else
+			self::$loaded = true;
+
+		wp_enqueue_script('mappress');
+
+		// L10N - can't be done at register because $post global isn't set
+		wp_localize_script('mappress', 'mappl10n', self::l10n());
+
+		if ($type == 'backend' || $type == 'settings')
+			wp_enqueue_script('mappress_admin');
+
+		if ($type == 'settings') {
+			if (function_exists('wp_enqueue_code_editor'))
+				wp_enqueue_code_editor(array( 'type' => 'php' ));
+		}
+
+		// Templates
+		$templates = array('map', 'map-directions', 'map-filters', 'map-item', 'map-loop', 'map-popup', 'mashup-popup', 'mashup-loop', 'mashup-item');
+		if ($type == 'backend')
+			$templates = array_merge($templates, array('editor', 'mce'));
+
+		foreach($templates as $template_name)
+			Mappress_Template::enqueue_template($template_name, self::is_footer());
 	}
 
 	static function scripts_register() {
@@ -650,11 +762,10 @@ class Mappress {
 		$apiversion = ($dev) ? 'v=beta' : 'v=3';
 		$apikey = "&key=" . self::get_api_keys()->browser;
 		$libs = '&libraries=places,drawing';
-		// TBD $mapids = '&map_ids=';
 		wp_register_script("mappress-google", "https://maps.googleapis.com/maps/api/js?{$apiversion}{$language}{$libs}{$apikey}", null, null, $footer);
 
 		// Clustering ( https://github.com/googlemaps/js-markerclustererplus | https://github.com/Leaflet/Leaflet.markercluster )
-		wp_register_script('mappress-markerclustererplus', "https://unpkg.com/@googlemaps/markerclustererplus@1.0.3/dist/index.min.js", null, '1.0.3', $footer);
+		wp_register_script('mappress-markerclustererplus', "https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js", null, '1.2.0', $footer);
 		wp_register_script('mappress-leaflet-markercluster', $lib . "/Leaflet.markercluster/leaflet.markercluster.js", null, '1.4.1', $footer);
 
 		// Dependencies
@@ -667,7 +778,7 @@ class Mappress {
 			$deps[] = (self::$options->engine == 'leaflet') ? 'mappress-leaflet-markercluster' : 'mappress-markerclustererplus';
 
 		wp_register_script('mappress', $js . "/index_mappress.js", $deps, self::$version, $footer);
-		wp_register_script('mappress_admin', $js . "/index_mappress_admin.js", array('mappress', 'jquery-ui-position', 'jquery-ui-sortable', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-editor', 'wp-element', 'wp-i18n'), self::$version, $footer);
+		wp_register_script('mappress_admin', $js . "/index_mappress_admin.js", array('mappress', 'jquery-ui-position', 'jquery-ui-sortable', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-element', 'wp-url', 'wp-core-data', 'wp-i18n'), self::$version, $footer);
 
 		// I18N
 		if (function_exists('wp_set_script_translations')) {
@@ -676,30 +787,11 @@ class Mappress {
 		}
 	}
 
-	static function scripts_enqueue($type = 'frontend') {
-		if (self::$loaded)
-			return;
-		else
-			self::$loaded = true;
-
-		wp_enqueue_script('mappress');
-		wp_localize_script('mappress', 'mappl10n', self::l10n());
-
-		if ($type == 'backend')
-			wp_enqueue_script('mappress_admin');
-
-		// Templates
-		$templates = array('map', 'map-directions', 'map-filters', 'map-item', 'map-loop', 'map-popup', 'mashup-popup', 'mashup-loop', 'mashup-item');
-		if ($type == 'backend')
-			$templates = array_merge($templates, array('mce', 'editor', 'mce', 'widgets'));
-
-		foreach($templates as $template_name)
-			Mappress_Template::enqueue_template($template_name, self::is_footer());
-	}
-
 	static function plugin_action_links($links, $file) {
 		$settings_link = "<a href='" . admin_url("admin.php?page=mappress") . "'>" . __('Settings', 'mappress-google-maps-for-wordpress') . "</a>";
-		array_unshift( $links, $settings_link );
+		$whatsnew_link = "<a href='https://mappresspro.com/whats-new/' target='_blank'>" . __("What's new", 'mappress-google-maps-for-wordpress') . "</a>";
+		array_unshift( $links, $whatsnew_link );
+		array_unshift( $links, $settings_link);
 		return $links;
 	}
 
@@ -839,6 +931,43 @@ class Mappress {
 		return $data;
 	}
 
+	static function styles_enqueue($type = 'frontend') {
+		wp_enqueue_style('mappress-leaflet');
+		wp_enqueue_style('mappress-leaflet-markercluster-default');
+		wp_enqueue_style('mappress-leaflet-markercluster');
+		wp_enqueue_style('mappress');
+
+		if ($type == 'frontend')
+			wp_enqueue_style('mappress-custom');
+		else if ($type == 'backend' || $type == 'settings')
+			wp_enqueue_style('mappress-admin');
+	}
+
+	static function styles_register() {
+		// Leaflet CSS
+		if (self::$options->engine == 'leaflet') {
+			wp_register_style('mappress-leaflet', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', null, '1.7.1');
+			if (self::$options->clustering) {
+				wp_register_style('mappress-leaflet-markercluster-default', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.Default.css", null, '1.4.1');
+				wp_register_style('mappress-leaflet-markercluster', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.css", null, '1.4.1');
+			}
+		}
+
+		// Mappress CSS from plugin directory
+		wp_register_style('mappress', self::$baseurl . '/css/mappress.css', null, self::$version);
+
+		// Mappress CSS from theme directory
+		if ( @file_exists( get_stylesheet_directory() . '/mappress.css' ) )
+			$file = get_stylesheet_directory_uri() . '/mappress.css';
+		elseif ( @file_exists( get_template_directory() . '/mappress.css' ) )
+			$file = get_template_directory_uri() . '/mappress.css';
+		if (isset($file))
+			wp_register_style('mappress-custom', $file, array('mappress'), self::$version);
+
+		// Admin CSS
+		wp_register_style('mappress-admin', self::$baseurl . '/css/mappress_admin.css', array('wp-edit-blocks'), self::$version);
+	}
+
 	/**
 	* Automatic map display.
 	* If set, the [mappress] shortcode will be prepended/appended to the post body, once for each map
@@ -901,28 +1030,9 @@ class Mappress {
 	* CSS is loaded from: child theme, theme, or plugin directory
 	*/
 	static function wp_enqueue_scripts() {
-		// Leaflet CSS
-		if (self::$options->engine == 'leaflet') {
-			wp_enqueue_style('mappress-leaflet', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css', null, '1.7.1');
-			if (self::$options->clustering) {
-				wp_enqueue_style('mappress-leaflet-markercluster-default', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.Default.css", null, '1.4.1');
-				wp_enqueue_style('mappress-leaflet-markercluster', self::$baseurl . "/lib/Leaflet.markercluster/MarkerCluster.css", null, '1.4.1');
-			}
-		}
+		self::styles_enqueue('frontend');
 
-		// Mappress CSS from plugin directory
-		wp_enqueue_style('mappress', self::$baseurl . '/css/mappress.css', null, self::$version);
-
-		// Mappress CSS from theme directory
-		if ( @file_exists( get_stylesheet_directory() . '/mappress.css' ) )
-			$file = get_stylesheet_directory_uri() . '/mappress.css';
-		elseif ( @file_exists( get_template_directory() . '/mappress.css' ) )
-			$file = get_template_directory_uri() . '/mappress.css';
-
-		if (isset($file))
-			wp_enqueue_style('mappress-custom', $file, array('mappress'), self::$version);
-
-		// Load scripts in header
+		// Load scripts in header if needed
 		if (!self::is_footer())
 			self::scripts_enqueue();
 	}

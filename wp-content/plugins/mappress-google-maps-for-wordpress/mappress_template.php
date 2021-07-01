@@ -22,7 +22,6 @@ class Mappress_Template extends Mappress_Obj {
 		add_action('wp_ajax_mapp_tpl_delete', array(__CLASS__, 'ajax_delete'));
 		add_filter('mappress_poi_props', array(__CLASS__, 'filter_poi_props'), 0, 3);
 
-
 		// Print queued templates
 		// wp_footer used instead of wp_footer_scripts because NGG reverses calling order of the two hooks
 		add_action('wp_print_scripts', array(__CLASS__, 'print_templates'), -1);
@@ -83,10 +82,10 @@ class Mappress_Template extends Mappress_Obj {
 			'content' => ($html) ? $html : $standard,
 			'path' => $filepath,
 			'standard' => $standard,
-			'exists' => ($html) ? true : false
+			'exists' => ($html) ? true : false,
 		));
 
-		Mappress::ajax_response('OK', $template);
+		Mappress::ajax_response('OK', array('template' => $template, 'tokens' => self::$tokens));
 	}
 
 	static function ajax_save() {
@@ -110,7 +109,7 @@ class Mappress_Template extends Mappress_Obj {
 	static function locate_template($template_name) {
 		$template_name .= ".php";
 		$template_file = locate_template($template_name, false);
-		if (!Mappress::$pro || is_admin() || empty($template_file))
+		if (!Mappress::$pro || empty($template_file))
 			$template_file = Mappress::$basedir . "/templates/$template_name";
 
 		// Template exists, return it
@@ -189,13 +188,27 @@ class Mappress_Template extends Mappress_Obj {
 
 	static function print_template($template_name) {
 		// Read collections of templates or individual templates
-		if (in_array($template_name, array('editor', 'map', 'mce', 'widgets')))
+		if (in_array($template_name, array('editor', 'map')))
 			require(self::locate_template($template_name));
 		else {
 			$template = self::get_template($template_name);
 			if ($template)
 				printf("<script type='text/html' id='mapp-tmpl-$template_name'>%s</script>", $template);
 		}
+	}
+
+
+	static function print_js_templates() {
+		$results = array();
+		foreach(self::$queue as $template_name => $footer) {
+			// Ignore static editor templates
+			if (in_array($template_name, array('editor', 'map')))
+				continue;
+			$template = self::get_template($template_name);
+			// JS doesn't like dashes in property names
+			$results[str_replace('-', '_', $template_name)] = $template;
+		}
+		return "var mappress_templates = " . json_encode($results) . ';';
 	}
 }
 ?>
