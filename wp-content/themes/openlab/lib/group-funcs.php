@@ -594,22 +594,22 @@ function cuny_group_single() {
 		}
 	);
 
-	$has_non_member_creator  = false;
-	$has_non_contact_creator = false;
+	$has_non_member_creator   = false;
 
 	$group_creators = openlab_get_group_creators( $group_id );
 	foreach ( $group_creators as $group_creator ) {
-		if ( 'member' === $group_creator['type'] ) {
-			$user = get_user_by( 'slug', $group_creator['member-login'] );
+		$has_non_member_creator = true;
+		break;
+	}
 
-			if ( ! $user || ! in_array( $user->ID, $all_group_contacts, true ) ) {
-				$has_non_contact_creator = true;
-				break;
-			}
-		} elseif ( 'non-member' === $group_creator['type'] ) {
-			$has_non_member_creator = true;
-			break;
-		}
+	$contact_creator_mismatch = false;
+	if ( $has_non_member_creator ) {
+		$creator_ids = array_values( $group_creators );
+
+		sort( $creator_ids );
+		sort( $all_group_contacts );
+
+		$contact_creator_mismatch = $creator_ids !== $all_group_contacts;
 	}
 
 	$credits_chunks = [];
@@ -619,12 +619,12 @@ function cuny_group_single() {
 	 * or if there is Additional Text to show.
 	 */
 	$show_acknowledgements = false;
-	if ( ! $clone_history || $has_non_member_creator || $has_non_contact_creator ) {
+	if ( ! $clone_history || $has_non_member_creator || $contact_creator_mismatch ) {
 		$credits_markup = '';
 
 		$additional_text = openlab_get_group_creators_additional_text( $group_id );
 
-		if ( $has_non_member_creator || $has_non_contact_creator ) {
+		if ( $has_non_member_creator || $contact_creator_mismatch ) {
 			$creator_items = array_map(
 				function( $creator ) {
 					switch ( $creator['type'] ) {
