@@ -872,3 +872,7 @@ input[type="number"]{
 .b2s-auth-network-6-extension-download-area {
     text-align: center;
 }
+
+.b2s-bold {
+    font-weight: 600;
+}

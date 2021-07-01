@@ -161,9 +161,9 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                                 <div class="b2s-network-details-header b2s-margin-top-8">
 
                                                     <a href="#" class="btn btn-primary btn-sm b2s-network-setting-save b2s-loading-area-save-profile-change">
-                                                        <?php esc_html_e('Save network collection', 'blog2social') ?>
+                                                        <?php esc_html_e('Save network selection', 'blog2social') ?>
                                                     </a>
-                                                    <a href="#" class="btn btn-primary btn-sm hidden-sm b2s-network-setting-save b2s-network-setting-save-btn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
+                                                    <a href="#" class="btn btn-link btn-sm hidden-sm b2s-network-setting-save b2s-network-setting-save-btn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -333,14 +333,16 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-network-setting-save">&times;</button>
-                                            <h4 class="modal-title"><?php esc_html_e('Save Network Settings', 'blog2social') ?></h4>
+                                            <h4 class="modal-title"><?php esc_html_e('Save network selection', 'blog2social') ?></h4>
                                         </div>
                                         <div class="modal-body">
-                                            <?php esc_html_e('You can save your current network settings as "Standard" network settings for any future sharing activities or as a "Profile" to choose from (Premium).', 'blog2social') ?>
+                                            <?php esc_html_e('You can save your current network selection. This network selection will be loaded automatically next time you open the social media post editor via "Site & Blog Content" ->"Share on Social Media" or "Social Media Posts" ->"Customize & Schedule".', 'blog2social') ?>
                                             <br><br>
-                                            <?php esc_html_e('Your Standard selection will show as activated upon pressing the "share on social media" button on the right hand side bar. You can change these settings any time per click, or choose another network profile (Premium).', 'blog2social') ?>
+                                            <?php esc_html_e('Your saved networks will be activated for your schedule (green checkmark) in the right side navigation. You can  select or deselect social network accounts at any time by clicking on them or connect new social networks on the "+ Add more" icon on top of the navigation bar.', 'blog2social') ?>
                                             <br><br>
-                                            <?php esc_html_e('You can also pre-define various different sets of networks, for specific social media accounts, target groups, contents or sharing purposes. For example you can define a specific set of networks for sharing your posts images only or for re-sharing your evergreen content on a recurring basis. On the preview-page you may edit your selected or pre-selected networks anytime by simply clicking on the respective network account to select or remove an account from the current sharing scheme.', 'blog2social') ?>
+                                            <?php esc_html_e('This allows you to adjust your network selection at any time and save it by clicking on "Save network selection".', 'blog2social') ?>
+                                            <br><br>
+                                            <span class="b2s-bold"><?php esc_html_e('Note: ', 'blog2social') ?></span><?php echo sprintf(__('To define and save more network selections for your posting purposes, you can use the option "Multiple Network collections" (Premium feature) to define <a href="%s" target="_blank">multiple network collections in the social networks section</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_mandant_collection'))); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -679,6 +681,25 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <?php echo sprintf(__('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))); ?>
+                                                    <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal fade" id="b2sNetworkAddInstagramBusinessInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddInstagramBusinessInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddInstagramBusinessInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Connect Instagram Business Account', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <?php echo sprintf(__('Please note: Your Instagram Business Account will be connected with Blog2Social via Facebook. Therefore, please make sure that your Instagram Business Account is linked to a Facebook page and enter the corresponding login data. You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))); ?>
                                                     <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                                                 </div>
                                             </div>

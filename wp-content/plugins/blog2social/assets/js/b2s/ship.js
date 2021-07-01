@@ -2594,6 +2594,7 @@ function initSceditor(networkAuthId) {
             tmp.innerHTML = jQuery(this).val();
             jQuery(this).parents('.b2s-post-item-details').find('.b2s-post-item-countChar').html(tmp.innerText.length);
         });
+        jQuery('.b2s-post-item-details-item-message-input-allow-html[data-network-auth-id="' + networkAuthId + '"]').parents('.b2s-post-item-details').find('.b2s-post-item-countChar').html(jQuery('.b2s-post-item-details-item-message-input-allow-html[data-network-auth-id="' + networkAuthId + '"]').sceditor('instance').getBody().text().length);
     }
 
 
@@ -3079,7 +3080,7 @@ function removeTag(networkAuthId) {
 }
 
 function networkLimitAll(networkAuthId, networkId, limit) {
-
+    
     var networkCountId = -1; //default;
     if (jQuery(':focus').length > 0) {
         var attr = jQuery(':focus').attr('data-network-count');
@@ -3108,7 +3109,7 @@ function networkLimitAll(networkAuthId, networkId, limit) {
     var newText = text;
     if (networkId == "2") { //twitter
         if (url.length != "0") {
-            limit = limit - 24;
+            limit = limit - 26;
         }
     }
     if (networkId == "3") { //linkedin
@@ -3145,7 +3146,7 @@ function networkLimitAll(networkAuthId, networkId, limit) {
 }
 
 function networkCount(networkAuthId) {
-
+    
     var networkCountId = -1; //default;
     if (jQuery(':focus').length > 0) {
         var attr = jQuery(':focus').attr('data-network-count');
@@ -3167,8 +3168,10 @@ function networkCount(networkAuthId) {
             jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").val(url);
         }
     }
-    var textLength = text.length;
-    jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(textLength);
+    if(typeof text !== 'undefined' && jQuery('.b2s-post-item-details-item-message-input-allow-html[data-network-auth-id="' + networkAuthId + '"]').length == 0) {
+        var textLength = text.length;
+        jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(textLength);
+    }
 }
 
 
@@ -4057,6 +4060,17 @@ jQuery(document).on('click', '.b2s-network-add-instagram-info-btn', function() {
     jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
         jQuery('#b2sNetworkAddInstagramInfoModal').modal('hide');
         wop(b2sAuthUrl + '&choose=profile', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-network-add-instagram-business-info-btn', function() {
+    jQuery('#b2sNetworkAddInstagramBusinessInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddInstagramBusinessInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=page', 'Blog2Social Network');
         return false;
     });
     return false;

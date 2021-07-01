@@ -10,7 +10,7 @@ class B2S_Ship_Item {
     private $isCommentPage = array(1);
     private $isCommentGroup = array(1);
     private $allowTag = array(4, 9, 11, 16);
-    private $limitTag = array(); //networkId => Limit
+    private $limitTag = array(11 => 5); //networkId => Limit
     private $allowHtml = array(4, 11, 14);
     private $showTitleProfile = array(4, 6, 9, 11, 14, 16, 21, 15);
     private $showTitlePage = array(8, 19 => array(1)); //Xing Business Page
@@ -28,7 +28,7 @@ class B2S_Ship_Item {
     private $showGroups = array(8, 15, 19);
     private $changeDisplayName = array(8);
     private $setShortTextProfile = array(1 => 239, 2 => 255, 3 => 239, 6 => 300, 8 => 239, 10 => 442, 12 => 240, 9 => 200, 16 => 250, 17 => 442, 18 => 800, 19 => 239, 20 => 300, 21 => 500);
-    private $setShortTextProfileLimit = array(1 => 400, 2 => 256, 3 => 400, 6 => 400, 8 => 400, 10 => 500, 12 => 400, 9 => 200, 18 => 1000, 19 => 1000, 20 => 400, 21 => 600);
+    private $setShortTextProfileLimit = array(1 => 400, 2 => 254, 3 => 400, 6 => 400, 8 => 400, 10 => 500, 12 => 400, 9 => 200, 18 => 1000, 19 => 1000, 20 => 400, 21 => 600);
     private $setShortTextPage = array(1 => 239, 3 => 239, 8 => 400, 10 => 442, 17 => 442, 19 => 239);
     private $setShortTextPageLimit = array(1 => 400, 3 => 400, 8 => 400, 10 => 500, 19 => array(0 => 400, 1 => 2000)); // XING Company Page, Business Page
     private $limitCharacterTitlePage = array(15 => array(0 => 300), 19 => array(1 => 150)); //XING Business Page selected over networkKind
@@ -38,7 +38,7 @@ class B2S_Ship_Item {
     private $limitHashTagCharacter = array(21 => 36);
     private $limitCharacterProfile = array(1 => 500, 2 => 280, 3 => 1300, 6 => 495, 8 => 420, 9 => 250, 12 => 2000, 18 => 1500, 19 => 1000, 20 => 500, 21 => 65535);
     private $showImageAreaProfile = array(6, 7, 10, 12, 16, 18, 20, 21, 24);
-    private $showImageAreaPage = array(10);
+    private $showImageAreaPage = array(10, 12);
     private $showImageAreaGroup = array(8, 10);
     private $showMarketplace = array(19);
     private $limitCharacterPage = array(3 => 1300, 8 => 1200, 19 => array(0 => 400, 1 => 2000, 4 => 1000)); // XING Company Page, Business Page
@@ -328,7 +328,7 @@ class B2S_Ship_Item {
         }
         $content .= '<h4 class="pull-left b2s-post-item-details-network-display-name" data-network-auth-id="' . esc_attr($data->networkAuthId) . '">' . esc_html(stripslashes($network_display_name)) . '</h4>';
         $content .= '<div class="clearfix"></div>';
-        $content .= '<p class="pull-left">' . esc_html(($data->networkId == 19 && $data->networkType == 1 && isset($networkKindName[$data->networkKind]) ? $networkKindName[$data->networkKind] : (($data->networkId == 4) ? esc_html__('Blog', 'blog2social') : $networkTypeName[$data->networkType]) .  ' | ' . $networkName[$data->networkId]));
+        $content .= '<p class="pull-left">' . esc_html(($data->networkId == 19 && $data->networkType == 1 && isset($networkKindName[$data->networkKind]) ? $networkKindName[$data->networkKind] : (($data->networkId == 4) ? esc_html__('Blog', 'blog2social') : (($data->networkId == 12) ? (($data->networkType == 0) ? esc_html__('Personal', 'blog2social') : esc_html__('Business', 'blog2social')) : $networkTypeName[$data->networkType])) .  ' | ' . $networkName[$data->networkId]));
         $content .= '<div class="b2s-post-item-details-message-result" data-network-auth-id="' . $data->networkAuthId . '" style="display:none;"></div>';
         $content .= '<span class="hidden-xs b2s-post-item-details-message-info" data-network-auth-id="' . esc_attr($data->networkAuthId) . '">' . $messageInfo . '</span></span>';
 
@@ -379,11 +379,11 @@ class B2S_Ship_Item {
         $content .= (in_array($data->networkId, $this->showMarketplace) && $data->networkType == 2) ? $this->getMarketplaceAreaHtml($data->networkAuthId, $data->networkId, $data->networkType, $data->networkKind) : '';
         $content .= ((in_array($data->networkId, $this->showTitleProfile) && $data->networkType == 0) || (((in_array($data->networkId, $this->showTitlePage) && isset($this->showTitlePage[$data->networkId]) && !is_array($this->showTitlePage[$data->networkId]) ) || (isset($this->showTitlePage[$data->networkId]) && is_array($this->showTitlePage[$data->networkId]) && in_array($data->networkKind, $this->showTitlePage[$data->networkId]))) && $data->networkType == 1) || (in_array($data->networkId, $this->showTitleGroup) && $data->networkType == 2)) ? $this->getTitleHtml($data->networkId, $data->networkAuthId, $data->networkKind, $data->networkType, $this->postData->post_title) : '';
         $content .= $this->getCustomEditArea($data->networkId, $data->networkAuthId, $data->networkType, $message, $isRequiredTextarea, $textareaOnKeyUp, $limit, $limitValue, isset($data->image_url) ? $data->image_url : null, isset($data->multi_images) ? $data->multi_images : array());
-        $content .= (in_array($data->networkId, $this->allowTag) && $data->networkType == 0) ? $this->getTagsHtml($data->networkId, $data->networkAuthId) : '';
+        $content .= (in_array($data->networkId, $this->allowTag) && ($data->networkType == 0 || $data->networkId == 11)) ? $this->getTagsHtml($data->networkId, $data->networkAuthId) : '';
 
         //Calendar
         if (!(isset($this->viewMode) && $this->viewMode == 'modal')) {
-            $content .= '<br>';
+            $content .= '<div class="clearfix"></div>';
             $content .= '<div class="b2s-calendar-filter-area col-xs-2 pull-right del-padding-right hide" data-network-auth-id="' . esc_attr($data->networkAuthId) . '">';
             $content .= '<select class="b2s-calendar-filter-network-sel form-control" name="b2s-calendar-filter-network-sel" data-last-sel="' . esc_attr($data->networkId) . '" data-network-auth-id="' . esc_attr($data->networkAuthId) . '"><option value="all">show all</option><option selected value="' . esc_attr($data->networkId) . '">' . esc_html($networkName[$data->networkId]) . '</option></select>';
             $content .= '</div>';
@@ -947,9 +947,9 @@ class B2S_Ship_Item {
 
             $url .= (!$hideInfo) ? '<div class="b2s-post-item-details-url-title hidden-xs">Link ' . $isRequiredText . '</div>' : '';
 
-            if ($networkId == 12 && isset($this->post_template[$networkId][$networkType]['addLink']) && $this->post_template[$networkId][$networkType]['addLink'] == false) {
+            if (($networkId == 12 || $networkId == 24) && isset($this->post_template[$networkId][$networkType]['addLink']) && $this->post_template[$networkId][$networkType]['addLink'] == false) {
                 $urlValue = '';
-            } else if ($networkId == 1 && isset($this->post_template[$networkId][$networkType]['format']) && (int) $this->post_template[$networkId][$networkType]['format'] == 1 && isset($this->post_template[$networkId][$networkType]['addLink']) && $this->post_template[$networkId][$networkType]['addLink'] == false) {
+            } else if (($networkId == 1 || $networkId == 2) && isset($this->post_template[$networkId][$networkType]['format']) && (int) $this->post_template[$networkId][$networkType]['format'] == 1 && isset($this->post_template[$networkId][$networkType]['addLink']) && $this->post_template[$networkId][$networkType]['addLink'] == false) {
                 $urlValue = '';
                 $isRequiredClass = '';
             } else {
@@ -1368,7 +1368,7 @@ class B2S_Ship_Item {
             $excerpt_max = (isset($post_template['short_text']['excerpt_range_max'])) ? $post_template['short_text']['excerpt_range_max'] : 0;
             $limit = (isset($post_template['short_text']['limit'])) ? $post_template['short_text']['limit'] : 0;
         }
-
+        
         $message = $post_template['content'];
 
         //B2S CC
@@ -1386,7 +1386,7 @@ class B2S_Ship_Item {
             //B2S Customize    
         } else {
             if (isset($this->postData->post_content) && !empty($this->postData->post_content)) {
-                $preContent = B2S_Util::getExcerpt(B2S_Util::prepareContent($this->postId, $this->postData->post_content, $this->postUrl, false, (in_array($data->networkId, $this->allowNoEmoji) ? false : true), $this->userLang), (int) $content_min, (int) $content_max);
+                $preContent = B2S_Util::getExcerpt(B2S_Util::prepareContent($this->postId, $this->postData->post_content, $this->postUrl, (in_array($data->networkId, $this->allowHtml) ? '<p><h1><h2><br><i><b><a><img>' : false), (in_array($data->networkId, $this->allowNoEmoji) ? false : true), $this->userLang), (int) $content_min, (int) $content_max);
                 $message = preg_replace("/\{CONTENT\}/", addcslashes($preContent, "\\$"), $message);
             } else {
                 $message = preg_replace("/\{CONTENT\}/", "", $message);
@@ -1429,7 +1429,7 @@ class B2S_Ship_Item {
 
         if (isset($limit) && (int) $limit > 0) {
             if(!empty($this->postUrl) && $data->networkId == 2) {
-                $limit = 256;
+                $limit = 254;
             }
             $message = B2S_Util::getExcerpt($message, 0, $limit);
         }

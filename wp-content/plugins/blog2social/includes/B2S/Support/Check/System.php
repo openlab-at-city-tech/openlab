@@ -99,7 +99,7 @@ class B2S_Support_Check_System {
         $url = $this->getBlogUrl();
         $options = $this->getUserOptions();
         $version = $this->getUserVersion();
-        $blogData = array('blogPath' => $path, 'blogUrl' => $url, 'userToken' => B2S_PLUGIN_TOKEN, 'options' => $options, 'WP_MEMORY_LIMIT' => WP_MEMORY_LIMIT, "max_execution_time" => ini_get('max_execution_time'), 'version' => $version);
+        $blogData = array('blogUrl' => $url, 'blogUserId' => B2S_PLUGIN_BLOG_USER_ID, 'options' => $options, 'WP_MEMORY_LIMIT' => WP_MEMORY_LIMIT, "max_execution_time" => ini_get('max_execution_time'), 'version' => $version);
         return array("systemData" => $this->systemData, "blogData" => $blogData, "pluginData" => $this->pluginData);
     }
 

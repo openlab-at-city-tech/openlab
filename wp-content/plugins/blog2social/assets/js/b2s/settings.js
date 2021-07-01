@@ -447,9 +447,6 @@ function loginSuccessShortener(providerId, displayName) {
 jQuery(document).on('click', '.b2sInfoTimeZoneModalBtn', function () {
     jQuery('#b2sInfoTimeZoneModal').modal('show');
 });
-jQuery(document).on('click', '.b2sInfoUrlShortenerModalBtn', function () {
-    jQuery('#b2sInfoUrlShortenerModal').modal('show');
-});
 jQuery(document).on('click', '.b2sInfoAllowShortcodeModalBtn', function () {
     jQuery('#b2sInfoAllowShortcodeModal').modal('show');
 });

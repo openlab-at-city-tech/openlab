@@ -317,20 +317,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoUrlShortenerModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoUrlShortenerModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoUrlShortenerModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('URL Shortening', 'blog2social') ?></h4>
-                </div>
-                <div class="modal-body">
-                    <?php esc_html_e('You can use Bit.ly, Rebrandly or Sniply links to shorten the URL of your links and to track the performance of your links in your social media networks.  Activate one of the URL-Shorteners you like to use and link it to your account. Your social media posts will then be shared with your links of Bit.ly, Rebrandly or Sniply and you can monitor the success of your posts in these accounts. Please note: Reddit, Pinterest and Medium do not allow Bit.ly shortlinks. Blog2Social will apply the regular URL for these networks. ', 'blog2social') ?>
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="b2sInfoContentTwitterModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoContentTwitterModal" aria-hidden="true" data-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content">
