@@ -325,3 +325,19 @@ function su_join_paths() {
 	return $path;
 
 }
+
+/**
+ * Helper function that adds CSS units to the supplied numeric value
+ * @param  mixed  $value The original value (String or Integer)
+ * @param  string $units CSS units to add
+ * @return string        Value with CSS units
+ */
+function su_maybe_add_css_units( $value = '', $units = '' ) {
+
+	if ( is_numeric( $value ) ) {
+		$value .= $units;
+	}
+
+	return $value;
+
+}

@@ -9,93 +9,96 @@ su_add_shortcode(
 		'type'     => 'wrap',
 		'group'    => 'other',
 		'atts'     => array(
-			'style'    => array(
-				'type'    => 'select',
-				'values'  => array(
-					'light'     => __( 'Basic: Light', 'shortcodes-ultimate' ),
-					'dark'      => __( 'Basic: Dark', 'shortcodes-ultimate' ),
-					'yellow'    => __( 'Basic: Yellow', 'shortcodes-ultimate' ),
-					'green'     => __( 'Basic: Green', 'shortcodes-ultimate' ),
-					'red'       => __( 'Basic: Red', 'shortcodes-ultimate' ),
-					'blue'      => __( 'Basic: Blue', 'shortcodes-ultimate' ),
-					'youtube'   => __( 'Youtube', 'shortcodes-ultimate' ),
-					'tipsy'     => __( 'Tipsy', 'shortcodes-ultimate' ),
-					'bootstrap' => __( 'Bootstrap', 'shortcodes-ultimate' ),
-					'jtools'    => __( 'jTools', 'shortcodes-ultimate' ),
-					'tipped'    => __( 'Tipped', 'shortcodes-ultimate' ),
-					'cluetip'   => __( 'Cluetip', 'shortcodes-ultimate' ),
-				),
-				'default' => 'yellow',
-				'name'    => __( 'Style', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Tooltip window style', 'shortcodes-ultimate' ),
+			'title'      => array(
+				'default' => '',
+				'name'    => __( 'Tooltip title', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Title of the tooltip. Use empty value to hide the title', 'shortcodes-ultimate' ),
 			),
-			'position' => array(
+			'content'    => array(
+				'default' => __( 'Tooltip content', 'shortcodes-ultimate' ),
+				'name'    => __( 'Tooltip content', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Content of the tooltip', 'shortcodes-ultimate' ),
+			),
+			'position'   => array(
 				'type'    => 'select',
 				'values'  => array(
-					'north' => __( 'Top', 'shortcodes-ultimate' ),
-					'south' => __( 'Bottom', 'shortcodes-ultimate' ),
-					'west'  => __( 'Left', 'shortcodes-ultimate' ),
-					'east'  => __( 'Right', 'shortcodes-ultimate' ),
+					'top'    => __( 'Top', 'shortcodes-ultimate' ),
+					'bottom' => __( 'Bottom', 'shortcodes-ultimate' ),
+					'left'   => __( 'Left', 'shortcodes-ultimate' ),
+					'right'  => __( 'Right', 'shortcodes-ultimate' ),
 				),
 				'default' => 'top',
 				'name'    => __( 'Position', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Tooltip position', 'shortcodes-ultimate' ),
 			),
-			'shadow'   => array(
-				'type'    => 'bool',
-				'default' => 'no',
-				'name'    => __( 'Shadow', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Add shadow to tooltip. This option is only works with basic styes, e.g. blue, green etc.', 'shortcodes-ultimate' ),
+			'background' => array(
+				'type'    => 'color',
+				'default' => '#222222',
+				'name'    => __( 'Background color', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Tooltip background color', 'shortcodes-ultimate' ),
 			),
-			'rounded'  => array(
-				'type'    => 'bool',
-				'default' => 'no',
-				'name'    => __( 'Rounded corners', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Use rounded for tooltip. This option is only works with basic styes, e.g. blue, green etc.', 'shortcodes-ultimate' ),
+			'color'      => array(
+				'type'    => 'color',
+				'default' => '#FFFFFF',
+				'name'    => __( 'Text color', 'shortcodes-ultimate' ),
+				'desc'    => __( 'Tooltip text color', 'shortcodes-ultimate' ),
 			),
-			'size'     => array(
-				'type'    => 'select',
-				'values'  => array(
-					'default' => __( 'Default', 'shortcodes-ultimate' ),
-					'1'       => 1,
-					'2'       => 2,
-					'3'       => 3,
-					'4'       => 4,
-					'5'       => 5,
-					'6'       => 6,
-				),
-				'default' => 'default',
+			'font_size'  => array(
+				'type'    => 'slider',
+				'min'     => 10,
+				'max'     => 24,
+				'step'    => 1,
+				'default' => 16,
 				'name'    => __( 'Font size', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Tooltip font size', 'shortcodes-ultimate' ),
+				'desc'    => __( 'The font size of the tooltip content', 'shortcodes-ultimate' ),
 			),
-			'title'    => array(
-				'default' => '',
-				'name'    => __( 'Tooltip title', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Enter title for tooltip window. Leave this field empty to hide the title', 'shortcodes-ultimate' ),
-			),
-			'content'  => array(
-				'default' => __( 'Tooltip text', 'shortcodes-ultimate' ),
-				'name'    => __( 'Tooltip content', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Enter tooltip content here', 'shortcodes-ultimate' ),
-			),
-			'behavior' => array(
+			'text_align' => array(
 				'type'    => 'select',
 				'values'  => array(
-					'hover'  => __( 'Show and hide on mouse hover', 'shortcodes-ultimate' ),
-					'click'  => __( 'Show and hide by mouse click', 'shortcodes-ultimate' ),
+					'left'   => __( 'Left', 'shortcodes-ultimate' ),
+					'center' => __( 'Center', 'shortcodes-ultimate' ),
+					'right'  => __( 'Right', 'shortcodes-ultimate' ),
+				),
+				'default' => 'left',
+				'name'    => __( 'Text align', 'shortcodes-ultimate' ),
+				'desc'    => __( 'The alignment of the tooltip content', 'shortcodes-ultimate' ),
+			),
+			'max_width'  => array(
+				'type'    => 'slider',
+				'min'     => 10,
+				'max'     => 1000,
+				'step'    => 10,
+				'default' => 300,
+				'name'    => __( 'Max width', 'shortcodes-ultimate' ),
+				'desc'    => __( 'The maximum width of the tooltip, in pixels', 'shortcodes-ultimate' ),
+			),
+			'radius'     => array(
+				'type'    => 'slider',
+				'min'     => 0,
+				'max'     => 20,
+				'step'    => 1,
+				'default' => 5,
+				'name'    => __( 'Tooltip border radius', 'shortcodes-ultimate' ),
+				'desc'    => __( 'The radius of the tooltip corners, in pixels. Use 0 to make corners square', 'shortcodes-ultimate' ),
+			),
+			'shadow'     => array(
+				'type'    => 'bool',
+				'default' => 'no',
+				'name'    => __( 'Tooltip shadow', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option enables tooltip shadow', 'shortcodes-ultimate' ),
+			),
+			'behavior'   => array(
+				'type'    => 'select',
+				'values'  => array(
+					'hover'  => __( 'Show and hide on mouse over', 'shortcodes-ultimate' ),
+					'click'  => __( 'Show and hide on mouse click', 'shortcodes-ultimate' ),
 					'always' => __( 'Always visible', 'shortcodes-ultimate' ),
 				),
 				'default' => 'hover',
 				'name'    => __( 'Behavior', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Select tooltip behavior', 'shortcodes-ultimate' ),
+				'desc'    => __( 'This option determines how the tooltip will be opened', 'shortcodes-ultimate' ),
 			),
-			'close'    => array(
-				'type'    => 'bool',
-				'default' => 'no',
-				'name'    => __( 'Close button', 'shortcodes-ultimate' ),
-				'desc'    => __( 'Show close button', 'shortcodes-ultimate' ),
-			),
-			'class'    => array(
+			'class'      => array(
 				'type'    => 'extra_css_class',
 				'name'    => __( 'Extra CSS class', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate' ),
@@ -110,54 +113,122 @@ su_add_shortcode(
 
 function su_shortcode_tooltip( $atts = null, $content = null ) {
 
-	$atts = shortcode_atts(
-		array(
-			'style'    => 'yellow',
-			'position' => 'north',
-			'shadow'   => 'no',
-			'rounded'  => 'no',
-			'size'     => 'default',
-			'title'    => '',
-			'content'  => __( 'Tooltip text', 'shortcodes-ultimate' ),
-			'behavior' => 'hover',
-			'close'    => 'no',
-			'class'    => '',
-		),
+	$atts = su_parse_shortcode_atts(
+		'tooltip',
 		$atts,
-		'tooltip'
+		array(
+			'style'         => 'none',
+			'size'          => 'none',
+			'rounded'       => 'none',
+			'outline'       => 'yes',
+			'tabindex'      => 'yes',
+			'reference_tag' => 'span',
+			'line_height'   => '1.25',
+			'hide_delay'    => '0',
+		)
 	);
 
-	// Prepare style
-	$atts['style'] = in_array( $atts['style'], array( 'light', 'dark', 'green', 'red', 'blue', 'youtube', 'tipsy', 'bootstrap', 'jtools', 'tipped', 'cluetip' ) )
-		? $atts['style']
-		: 'plain';
+	if ( 'none' !== $atts['style'] ) {
 
-	// Position
-	$atts['position'] = str_replace( array( 'top', 'right', 'bottom', 'left' ), array( 'north', 'east', 'south', 'west' ), $atts['position'] );
-	$position         = array(
-		'my' => str_replace( array( 'north', 'east', 'south', 'west' ), array( 'bottom center', 'center left', 'top center', 'center right' ), $atts['position'] ),
-		'at' => str_replace( array( 'north', 'east', 'south', 'west' ), array( 'top center', 'center right', 'bottom center', 'center left' ), $atts['position'] ),
+		$bc_styles = array(
+			'light'     => array( '#FFFFFF', '#454545' ),
+			'dark'      => array( '#505050', '#F3F3F3' ),
+			'yellow'    => array( '#FFFFA3', '#555555' ),
+			'green'     => array( '#CAED9E', '#3F6219' ),
+			'red'       => array( '#F78B83', '#912323' ),
+			'blue'      => array( '#E5F6FE', '#5E99BD' ),
+			'youtube'   => array( '#252626', '#FFFFFF' ),
+			'tipsy'     => array( '#111111', '#FFFFFF' ),
+			'bootstrap' => array( '#FFFFFF', '#333333' ),
+			'jtools'    => array( '#252626', '#F5F5F5' ),
+			'tipped'    => array( '#FFFFFF', '#454545' ),
+			'cluetip'   => array( '#D9D9C2', '#111111' ),
+		);
+
+		if ( array_key_exists( $atts['style'], $bc_styles ) ) {
+
+			$atts['background'] = $bc_styles[ $atts['style'] ][0];
+			$atts['color']      = $bc_styles[ $atts['style'] ][1];
+
+		}
+
+	}
+
+	if ( 'none' !== $atts['size'] ) {
+
+		$bc_sizes = array(
+			'default' => '14',
+			'1'       => '13',
+			'2'       => '14',
+			'3'       => '16',
+			'4'       => '18',
+			'5'       => '19',
+			'6'       => '21',
+		);
+
+		if ( array_key_exists( $atts['size'], $bc_sizes ) ) {
+			$atts['font_size'] = $bc_sizes[ $atts['size'] ];
+		}
+
+	}
+
+	if ( 'no' === $atts['rounded'] ) {
+		$atts['radius'] = 0;
+	}
+
+	$atts['position'] = sanitize_key( $atts['position'] );
+	$atts['position'] = str_replace(
+		array( 'north', 'east', 'south', 'west' ),
+		array( 'top', 'right', 'bottom', 'left' ),
+		$atts['position']
 	);
 
-	// Prepare classes
-	$classes   = array( 'su-qtip qtip-' . $atts['style'] );
-	$classes[] = 'su-qtip-size-' . $atts['size'];
-
-	if ( $atts['shadow'] === 'yes' ) {
-		$classes[] = 'qtip-shadow';
+	foreach ( array( 'max_width', 'font_size', 'radius' ) as $attr ) {
+		$atts[ $attr ] = su_maybe_add_css_units( $atts[ $attr ], 'px' );
 	}
 
-	if ( $atts['rounded'] === 'yes' ) {
-		$classes[] = 'qtip-rounded';
+	foreach ( array( 'text_align', 'shadow', 'outline', 'reference_tag' ) as $attr ) {
+		$atts[ $attr ] = sanitize_key( $atts[ $attr ] );
 	}
 
-	// Query assets
-	su_query_asset( 'css', 'qtip' );
+	$atts['tabindex'] = 'yes' === $atts['tabindex'] ? ' tabindex="0"' : '';
+
+	$js_settings = array(
+		'position'  => sanitize_key( $atts['position'] ),
+		'behavior'  => sanitize_key( $atts['behavior'] ),
+		'hideDelay' => intval( $atts['hide_delay'] ),
+	);
+
 	su_query_asset( 'css', 'su-shortcodes' );
-	su_query_asset( 'js', 'jquery' );
-	su_query_asset( 'js', 'qtip' );
+	su_query_asset( 'js', 'popper' );
 	su_query_asset( 'js', 'su-shortcodes' );
 
-	return '<span class="su-tooltip' . su_get_css_class( $atts ) . '" data-close="' . $atts['close'] . '" data-behavior="' . $atts['behavior'] . '" data-my="' . $position['my'] . '" data-at="' . $position['at'] . '" data-classes="' . implode( ' ', $classes ) . '" data-title="' . $atts['title'] . '" title="' . esc_attr( $atts['content'] ) . '">' . do_shortcode( $content ) . '</span>';
+	$template = '<{{REFERENCE_TAG}} id="{{ID}}_button" class="su-tooltip-button su-tooltip-button-outline-{{OUTLINE}}{{CSS_CLASS}}" aria-describedby="{{ID}}" data-settings=\'{{JSON}}\'{{TABINDEX}}>{{BUTTON}}</{{REFERENCE_TAG}}><span style="display:none" id="{{ID}}" class="su-tooltip{{CSS_CLASS}}" role="tooltip"><span class="su-tooltip-inner su-tooltip-shadow-{{SHADOW}}" style="background:{{BACKGROUND}};color:{{COLOR}};font-size:{{FONT_SIZE}};border-radius:{{RADIUS}};text-align:{{ALIGN}};max-width:{{MAX_WIDTH}};line-height:{{LINE_HEIGHT}}"><span class="su-tooltip-title">{{TITLE}}</span><span class="su-tooltip-content su-u-trim">{{CONTENT}}</span></span><span id="{{ID}}_arrow" class="su-tooltip-arrow" style="background:{{BACKGROUND}}" data-popper-arrow></span></span>';
+
+	$template_data = array(
+		'{{ID}}'            => uniqid( 'su_tooltip_' ),
+		'{{CSS_CLASS}}'     => su_get_css_class( $atts ),
+		'{{JSON}}'          => wp_json_encode( $js_settings ),
+		'{{BUTTON}}'        => do_shortcode( $content ),
+		'{{TITLE}}'         => su_do_attribute( $atts['title'] ),
+		'{{CONTENT}}'       => su_do_attribute( $atts['content'] ),
+		'{{SHADOW}}'        => $atts['shadow'],
+		'{{RADIUS}}'        => $atts['radius'],
+		'{{BACKGROUND}}'    => $atts['background'],
+		'{{COLOR}}'         => $atts['color'],
+		'{{FONT_SIZE}}'     => $atts['font_size'],
+		'{{MAX_WIDTH}}'     => $atts['max_width'],
+		'{{ALIGN}}'         => $atts['text_align'],
+		'{{OUTLINE}}'       => $atts['outline'],
+		'{{REFERENCE_TAG}}' => $atts['reference_tag'],
+		'{{TABINDEX}}'      => $atts['tabindex'],
+		'{{LINE_HEIGHT}}'   => $atts['line_height'],
+	);
+
+	return str_replace(
+		array_keys( $template_data ),
+		array_values( $template_data ),
+		$template
+	);
 
 }
