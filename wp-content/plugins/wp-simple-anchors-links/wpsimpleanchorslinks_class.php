@@ -344,12 +344,16 @@ class WP_Simple_Anchors_Links {
 
 		add_action(
 			'admin_notices',
-			create_function(
-				'',
-				'global $wpsimpleanchorslinks; if( is_array($wpsimpleanchorslinks->admin_notices_infos) && count($wpsimpleanchorslinks->admin_notices_infos) > 0 ){foreach($wpsimpleanchorslinks->admin_notices_infos as $notice){ echo $notice; } $wpsimpleanchorslinks->admin_notices_infos = array(); };'
-			)
+			function() {
+				global $wpsimpleanchorslinks;
+				if( is_array($wpsimpleanchorslinks->admin_notices_infos) && count($wpsimpleanchorslinks->admin_notices_infos) > 0 ) {
+					foreach( $wpsimpleanchorslinks->admin_notices_infos as $notice ) {
+						echo $notice;
+					}
+					$wpsimpleanchorslinks->admin_notices_infos = array();
+				}
+			}
 		);
-
 	}
 
 
