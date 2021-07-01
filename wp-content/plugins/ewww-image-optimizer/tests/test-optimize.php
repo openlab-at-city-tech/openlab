@@ -183,7 +183,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		$results = $this->optimize_jpg();
 		update_option( 'ewww_image_optimizer_webp', '' );
 		update_site_option( 'ewww_image_optimizer_webp', '' );
-		$this->assertEquals( 1348837, filesize( $results[0] ) );
+		$this->assertEquals( 1348499, filesize( $results[0] ) );
 		unlink( $results[0] );
 		$this->assertEquals( 200048, filesize( $results[0] . '.webp' ) );
 		if ( ewwwio_is_file( $results[0] . '.webp' ) ) {
@@ -205,7 +205,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		update_option( 'ewww_image_optimizer_webp', '' );
 		update_site_option( 'ewww_image_optimizer_webp', '' );
 		// size post opt.
-		$this->assertEquals( 1368385, filesize( $results[0] ) );
+		$this->assertEquals( 1368047, filesize( $results[0] ) );
 		// orientation pre-rotation.
 		$this->assertEquals( ewww_image_optimizer_get_orientation( self::$test_jpg, 'image/jpeg' ), 8 );
 		// orientation post-rotation should always be 1, no matter the image.
@@ -235,9 +235,9 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		update_option( 'ewww_image_optimizer_cloud_key', '' );
 		update_site_option( 'ewww_image_optimizer_webp', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
-		$this->assertEquals( 1335586, filesize( $results[0] ) );
+		$this->assertEquals( 1339854, filesize( $results[0] ) );
 		unlink( $results[0] );
-		$this->assertEquals( 171174, filesize( $results[0] . '.webp' ) );
+		$this->assertEquals( 187866, filesize( $results[0] . '.webp' ) );
 		if ( ewwwio_is_file( $results[0] . '.webp' ) ) {
 			unlink( $results[0] . '.webp' );
 		}
@@ -261,12 +261,12 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		update_site_option( 'ewww_image_optimizer_webp', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
 		// size post opt.
-		$this->assertEquals( 1355138, filesize( $results[0] ) );
+		$this->assertEquals( 1359406, filesize( $results[0] ) );
 		// orientation pre-rotation.
 		$this->assertEquals( ewww_image_optimizer_get_orientation( $results[0], 'image/jpeg' ), 1 );
 		unlink( $results[0] );
 		// size of webp with meta.
-		$this->assertEquals( 190760, filesize( $results[0] . '.webp' ) );
+		$this->assertEquals( 207452, filesize( $results[0] . '.webp' ) );
 		if ( ewwwio_is_file( $results[0] . '.webp' ) ) {
 			unlink( $results[0] . '.webp' );
 		}
@@ -285,7 +285,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		$results = $this->optimize_jpg();
 		update_option( 'ewww_image_optimizer_cloud_key', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
-		$this->assertEquals( 344192, filesize( $results[0] ) );
+		$this->assertEquals( 348295, filesize( $results[0] ) );
 		unlink( $results[0] );
 	}
 
@@ -302,7 +302,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		$results = $this->optimize_jpg();
 		update_option( 'ewww_image_optimizer_cloud_key', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
-		$this->assertEquals( 307434, filesize( $results[0] ) );
+		$this->assertEquals( 310924, filesize( $results[0] ) );
 		unlink( $results[0] );
 	}
 
@@ -380,7 +380,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		update_site_option( 'ewww_image_optimizer_optipng_level', 2 );
 		update_site_option( 'ewww_image_optimizer_metadata_remove', true );
 		$results = $this->optimize_png();
-		$this->assertEquals( 38639, filesize( $results[0] ) );
+		$this->assertEquals( 38517, filesize( $results[0] ) );
 		unlink( $results[0] );
 	}
 
@@ -397,7 +397,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		$results = $this->optimize_png();
 		update_option( 'ewww_image_optimizer_cloud_key', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
-		$this->assertEquals( 178258, filesize( $results[0] ) );
+		$this->assertEquals( 176857, filesize( $results[0] ) );
 		unlink( $results[0] );
 	}
 
@@ -414,7 +414,7 @@ class EWWWIO_Optimize_Tests extends WP_UnitTestCase {
 		$results = $this->optimize_png();
 		update_option( 'ewww_image_optimizer_cloud_key', '' );
 		update_site_option( 'ewww_image_optimizer_cloud_key', '' );
-		$this->assertLessThanOrEqual( 38442, filesize( $results[0] ) );
+		$this->assertLessThanOrEqual( 39000, filesize( $results[0] ) );
 		unlink( $results[0] );
 	}
 

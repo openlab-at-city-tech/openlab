@@ -78,7 +78,7 @@ function constrainSrc(url,objectWidth,objectHeight,objectType){
 			}
 			if('bg-cover'===objectType || 'img-crop'===objectType){
 				console.log('for ' + objectType);
-				return url + '?resize=' + objectWidth + ',' + objectHeight;
+				return url + '&resize=' + objectWidth + ',' + objectHeight;
 			}
 			if(objectHeight>objectWidth){
 				console.log('fallback height>width, using h param');
@@ -109,7 +109,16 @@ function constrainSrc(url,objectWidth,objectHeight,objectType){
 	return url;
 }
 document.addEventListener('lazybeforesizes', function(e){
-	console.log(e);
+	var src = e.target.getAttribute('data-src');
+	console.log('auto-sizing ' + src + ' to: ' + e.detail.width);
+	if (e.target._lazysizesWidth === undefined) {
+		return;
+	}
+	console.log('previous width was ' + e.target._lazysizesWidth);
+	if (e.detail.width < e.target._lazysizesWidth) {
+		console.log('no way! ' + e.detail.width + ' is smaller than ' + e.target._lazysizesWidth);
+		e.detail.width = e.target._lazysizesWidth;
+	}
 });
 document.addEventListener('lazybeforeunveil', function(e){
         var target = e.target;
@@ -117,16 +126,25 @@ document.addEventListener('lazybeforeunveil', function(e){
 	console.log(target);
 	var wrongSize = false;
 	var srcset = target.getAttribute('data-srcset');
-        if ( target.naturalWidth) {
+        if (target.naturalWidth && ! srcset) {
 		console.log('we have an image with no srcset');
         	if ((target.naturalWidth > 1) && (target.naturalHeight > 1)) {
                 	// For each image with a natural width which isn't
                 	// a 1x1 image, check its size.
 			var dPR = (window.devicePixelRatio || 1);
-                	var wrongWidth = (target.clientWidth && (target.clientWidth * 1.25 < target.naturalWidth));
-                	var wrongHeight = (target.clientHeight && (target.clientHeight * 1.25 < target.naturalHeight));
-			console.log(Math.round(target.clientWidth * dPR) + "x" + Math.round(target.clientHeight * dPR) + ", natural is " +
-				target.naturalWidth + "x" + target.naturalHeight + "!");
+			var physicalWidth = target.naturalWidth;
+			var physicalHeight = target.naturalHeight;
+			var realWidth = target.getAttribute('data-eio-rwidth');
+			var realHeight = target.getAttribute('data-eio-rheight');
+			if (realWidth && realWidth > physicalWidth) {
+				console.log( 'using ' + realWidth + 'w instead of ' + physicalWidth + 'w and ' + realHeight + 'h instead of ' + physicalHeight + 'h from data-eio-r*')
+				physicalWidth = realWidth;
+				physicalHeight = realHeight;
+			}
+                	var wrongWidth = (target.clientWidth && (target.clientWidth * 1.25 < physicalWidth));
+                	var wrongHeight = (target.clientHeight && (target.clientHeight * 1.25 < physicalHeight));
+			console.log('displayed at ' + Math.round(target.clientWidth * dPR) + 'w x ' + Math.round(target.clientHeight * dPR) + 'h, natural/physical is ' +
+				physicalWidth + 'w x ' + physicalHeight + 'h!');
 			console.log('the data-src: ' + target.getAttribute('data-src') );
                 	if (wrongWidth || wrongHeight) {
 				var targetWidth = Math.round(target.offsetWidth * dPR);
@@ -140,8 +158,8 @@ document.addEventListener('lazybeforeunveil', function(e){
 				}
 				if (!shouldAutoScale(target)||!shouldAutoScale(target.parentNode)){
 					var newSrc = false;
-				} else if ( window.lazySizes.hC(target,'et_pb_jt_filterable_grid_item_image')) {
-					console.log('et filterable grid, using crop');
+				} else if ( window.lazySizes.hC(target,'et_pb_jt_filterable_grid_item_image') || window.lazySizes.hC(target,'ss-foreground-image') || window.lazySizes.hC(target,'img-crop') ) {
+					console.log('img that needs a hard crop');
 					var newSrc = constrainSrc(src,targetWidth,targetHeight,'img-crop');
 				} else {
 					console.log('plain old img, constraining');

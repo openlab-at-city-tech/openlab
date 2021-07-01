@@ -26,7 +26,7 @@ require_once( EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewwwio-backgroun
 /**
  * Processes media uploads in background/async mode.
  *
- * Uses a dual-queue system to track uploads to be optimized, handling them one at a time.
+ * Uses a db queue system to track uploads to be optimized, handling them one at a time.
  *
  * @see EWWWIO_Background_Process
  */
@@ -623,7 +623,7 @@ class EWWWIO_Async_Key_Verification extends WP_Async_Request {
 		session_write_close();
 		ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		check_ajax_referer( $this->identifier, 'nonce' );
-		ewww_image_optimizer_cloud_verify( false );
+		ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ), false );
 	}
 }
 global $ewwwio_async_key_verification;

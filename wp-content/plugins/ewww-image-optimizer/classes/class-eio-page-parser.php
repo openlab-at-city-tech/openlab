@@ -28,6 +28,7 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			'jpeg',
 			'jpe',
 			'png',
+			'svg',
 		);
 
 		/**
@@ -163,7 +164,7 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 			if ( ! ctype_alpha( $tag_name ) ) {
 				return array();
 			}
-			if ( preg_match_all( '#<' . $tag_name . '\s[^>]+?>#is', $content, $elements ) ) {
+			if ( preg_match_all( '#<' . $tag_name . '\s[^\\\\>]+?>#is', $content, $elements ) ) {
 				return $elements[0];
 			}
 			return array();
@@ -221,25 +222,54 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		}
 
 		/**
+		 * Get dimensions of a file from the URL.
+		 *
+		 * @param string $url The URL of the image.
+		 * @return array The width and height, in pixels.
+		 */
+		function get_image_dimensions_by_url( $url ) {
+			$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+			$this->debug_message( "getting dimensions for $url" );
+
+			list( $width, $height ) = $this->get_dimensions_from_filename( $url );
+			if ( empty( $width ) || empty( $height ) ) {
+				// Couldn't get it from the URL directly, see if we can get the actual filename.
+				$file = false;
+				if ( $this->allowed_urls && $this->allowed_domains ) {
+					$file = $this->cdn_to_local( $url );
+				}
+				if ( ! $file ) {
+					$file = $this->url_to_path_exists( $url );
+				}
+				if ( $file && $this->is_file( $file ) ) {
+					list( $width, $height ) = wp_getimagesize( $file );
+				}
+			}
+			$width  = $width && is_numeric( $width ) ? (int) $width : false;
+			$height = $height && is_numeric( $height ) ? (int) $height : false;
+
+			return array( $width, $height );
+		}
+
+		/**
 		 * Get the width from an image element.
 		 *
 		 * @param string $img The full image element.
 		 * @return string The width found or an empty string.
 		 */
-		public function get_img_width( $img ) {
-			$width = $this->get_attribute( $img, 'width' );
-			// Then check for an inline max-width directive.
+		public function get_img_style_width( $img ) {
+			// Check for an inline max-width directive.
 			$style = $this->get_attribute( $img, 'style' );
 			if ( $style && preg_match( '#max-width:\s?(\d+)px#', $style, $max_width_string ) ) {
-				if ( $max_width_string[1] && ( ! $width || $max_width_string[1] < $width ) ) {
-					$width = $max_width_string[1];
+				if ( $max_width_string[1] && is_numeric( $max_width_string ) ) {
+					return (int) $max_width_string[1];
 				}
 			} elseif ( $style && preg_match( '#width:\s?(\d+)px#', $style, $width_string ) ) {
-				if ( $width_string[1] && ( ! $width || $width_string[1] < $width ) ) {
-					$width = $width_string[1];
+				if ( $width_string[1] && is_numeric( $width_string[1] ) ) {
+					return (int) $width_string[1];
 				}
 			}
-			return $width;
+			return false;
 		}
 
 		/**
@@ -248,20 +278,19 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		 * @param string $img The full image element.
 		 * @return string The height found or an empty string.
 		 */
-		public function get_img_height( $img ) {
-			$height = $this->get_attribute( $img, 'height' );
+		public function get_img_style_height( $img ) {
 			// Then check for an inline max-height directive.
 			$style = $this->get_attribute( $img, 'style' );
 			if ( $style && preg_match( '#max-height:\s?(\d+)px#', $style, $max_height_string ) ) {
-				if ( $max_height_string[1] && ( ! $height || $max_height_string[1] < $height ) ) {
-					$height = $max_height_string[1];
+				if ( $max_height_string[1] && is_numeric( $max_height_string[1] ) ) {
+					return (int) $max_height_string[1];
 				}
 			} elseif ( $style && preg_match( '#height:\s?(\d+)px#', $style, $height_string ) ) {
-				if ( $height_string[1] && ( ! $height || $height_string[1] < $height ) ) {
-					$height = $height_string[1];
+				if ( $height_string[1] && is_numeric( $height_string[1] ) ) {
+					return (int) $height_string[1];
 				}
 			}
-			return $height;
+			return false;
 		}
 
 		/**
@@ -327,7 +356,7 @@ if ( ! class_exists( 'EIO_Page_Parser' ) ) {
 		 */
 		function set_attribute( &$element, $name, $value, $replace = false ) {
 			if ( 'class' === $name ) {
-				$element = preg_replace( "#\s$name\s+[^=]#", ' ', $element );
+				$element = preg_replace( "#\s$name\s+([^=])#", ' $1', $element );
 			}
 			$element = preg_replace( "#\s$name=\"\"#", ' ', $element );
 			$value   = trim( $value );

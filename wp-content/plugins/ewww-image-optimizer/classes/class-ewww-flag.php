@@ -111,7 +111,7 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			<div class="wrap"><h1>GRAND FlAGallery <?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
 			<?php
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-				ewww_image_optimizer_cloud_verify();
+				ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) );
 				echo '<a id="ewww-bulk-credits-available" target="_blank" class="page-title-action" style="float:right;" href="https://ewww.io/my-account/">' . esc_html__( 'Image credits available:', 'ewww-image-optimizer' ) . ' ' . esc_html( ewww_image_optimizer_cloud_quota() ) . '</a>';
 			}
 			echo '<div id="ewww-bulk-warning" class="ewww-bulk-info notice notice-warning"><p>' . esc_html__( 'Bulk Optimization will alter your original images and cannot be undone. Please be sure you have a backup of your images before proceeding.', 'ewww-image-optimizer' ) . '</p></div>';
@@ -611,10 +611,14 @@ if ( ! class_exists( 'EWWW_Flag' ) ) {
 			$ewww_image         = new EWWW_Image( $id, 'flag', $file_path );
 			$ewww_image->resize = 'full';
 			// Optimize the full-size version.
-			$fres        = ewww_image_optimizer( $file_path, 3, false, false, true );
-			$ewww_status = get_transient( 'ewww_image_optimizer_cloud_status' );
-			if ( ! empty( $ewww_status ) && preg_match( '/exceeded/', $ewww_status ) ) {
+			$fres = ewww_image_optimizer( $file_path, 3, false, false, true );
+			if ( 'exceeded' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
 				$output['error'] = '<a href="https://ewww.io/buy-credits/" target="_blank">' . esc_html__( 'License Exceeded', 'ewww-image-optimizer' ) . '</a>';
+				ewwwio_ob_clean();
+				wp_die( wp_json_encode( $output ) );
+			}
+			if ( 'exceeded quota' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
+				$output['error'] = '<a href="https://docs.ewww.io/article/101-soft-quotas-on-unlimited-plans" target="_blank">' . esc_html__( 'Soft quota reached, contact us for more', 'ewww-image-optimizer' ) . '</a>';
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}

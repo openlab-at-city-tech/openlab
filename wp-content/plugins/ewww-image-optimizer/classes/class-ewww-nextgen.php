@@ -286,12 +286,22 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 			$image   = $storage->object->_image_mapper->find( $id );
 			$image   = $this->ewww_added_new_image( $image, $storage );
 			$success = $this->ewww_manage_image_custom_column( '', $image );
-			if ( get_transient( 'ewww_image_optimizer_cloud_status' ) === 'exceeded' || ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_exceeded' ) > time() ) {
+			if ( 'exceeded' === get_transient( 'ewww_image_optimizer_cloud_status' ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_exceeded' ) > time() ) {
 				ewwwio_ob_clean();
 				wp_die(
 					wp_json_encode(
 						array(
 							'error' => '<a href="https://ewww.io/buy-credits/" target="_blank">' . esc_html__( 'License exceeded', 'ewww-image-optimizer' ) . '</a>',
+						)
+					)
+				);
+			}
+			if ( 'exceeded quota' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
+				ewwwio_ob_clean();
+				wp_die(
+					wp_json_encode(
+						array(
+							'error' => '<a href="https://docs.ewww.io/article/101-soft-quotas-on-unlimited-plans" target="_blank">' . esc_html__( 'Soft quota reached, contact us for more', 'ewww-image-optimizer' ) . '</a>',
 						)
 					)
 				);
@@ -642,7 +652,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				<h1><?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
 				<?php
 				if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-					ewww_image_optimizer_cloud_verify();
+					ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) );
 					echo '<a id="ewww-bulk-credits-available" target="_blank" class="page-title-action" style="float:right;" href="https://ewww.io/my-account/">' . esc_html__( 'Image credits available:', 'ewww-image-optimizer' ) . ' ' . esc_html( ewww_image_optimizer_cloud_quota() ) . '</a>';
 				}
 				echo '<div id="ewww-bulk-warning" class="ewww-bulk-info notice notice-warning"><p>' . esc_html__( 'Bulk Optimization will alter your original images and cannot be undone. Please be sure you have a backup of your images before proceeding.', 'ewww-image-optimizer' ) . '</p></div>';
@@ -692,7 +702,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 					&nbsp;<a href="tools.php?page=ewww-image-optimizer-tools"><?php esc_html_e( 'View optimization history.', 'ewww-image-optimizer' ); ?></a>
 				</p>
 				<p>
-					<label for="ewww-delay" style="font-weight: bold"><?php esc_html_e( 'Pause between images', 'ewww-image-optimizer' ); ?></label>&emsp;<input type="text" id="ewww-delay" name="ewww-delay" value="<?php echo (int) $delay; ?>"> <?php esc_html_e( 'in seconds, 0 = disabled', 'ewww-image-optimmizer' ); ?>
+					<label for="ewww-delay" style="font-weight: bold"><?php esc_html_e( 'Pause between images', 'ewww-image-optimizer' ); ?></label>&emsp;<input type="text" id="ewww-delay" name="ewww-delay" value="<?php echo (int) $delay; ?>"> <?php esc_html_e( 'in seconds, 0 = disabled', 'ewww-image-optimizer' ); ?>
 				</p>
 				<div id="ewww-delay-slider"></div>
 			</form>
