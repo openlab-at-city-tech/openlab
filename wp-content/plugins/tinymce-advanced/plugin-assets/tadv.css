@@ -1,8 +1,6 @@
 /**
-* This file is part of the TinyMCE Advanced WordPress plugin and is released under the same license.
- * For more information please see tinymce-advanced.php.
- *
- * Copyright (c) 2007-2019 Andrew Ozz. All rights reserved.
+ * Styles for the settings screen.
+ * @package advanced-editor-tools
  */
 
 body.settings_page_tinymce-advanced {
@@ -10,7 +8,7 @@ body.settings_page_tinymce-advanced {
 	color: #000;
 }
 
-.tinymce-advanced h4 {
+.advanced-editor-tools h4 {
 	font-size: 1.1em;
 }
 
@@ -54,12 +52,12 @@ body.settings_page_tinymce-advanced {
 	display: none;
 }
 
-.wrap.tinymce-advanced {
+.wrap.advanced-editor-tools {
 	max-width: 760px;
 	margin: 16px 24px 0 16px;
 }
 
-.rtl .wrap.tinymce-advanced {
+.rtl .wrap.advanced-editor-tools {
 	margin: 16px 16px 0 24px;
 }
 
@@ -383,11 +381,11 @@ form#tadvadmin {
 	font-weight: 600;
 }
 
-.tinymce-advanced label {
+.advanced-editor-tools label {
 	vertical-align: baseline;
 }
 
-.tinymce-advanced input[type="checkbox"] {
+.advanced-editor-tools input[type="checkbox"] {
 	vertical-align: text-bottom;
 }
 
@@ -464,7 +462,7 @@ ul.container,
 	height: 20px;
 	line-height: 20px;
 	text-align: center;
-	vertical-align: text-top;
+	vertical-align: middle;
 	margin: 0;
 	padding: 0;
 	color: #555;
