@@ -23,35 +23,67 @@ abstract class GP_Plugin extends GFAddOn {
 
 	public static function includes() { }
 
+	/**
+	 * @var array Array to track Perks that are initializing. This is a key piece in preventing recursion caused by
+	 *   GFAddOn::meets_minimum_requirements() when Add-ons are required by Perks. Without this, get_instance() will
+	 *   recurse as we call GP_Plugin::check_requirements() in __construct().
+	 *
+	 * @see GFAddOn::meets_minimum_requirements()
+	 * @see GP_Plugin::check_requirements()
+	 * @see GP_Plugin::__construct
+	 */
+	static $initializing_perks = array();
+
 	public function __construct( $perk = null ) {
 
-		if( ! $this->perk ) {
+		if ( ! $this->perk ) {
 			$this->perk = $perk ? $perk : new GP_Perk( $this->_path, $this );
 		}
 
-		parent::__construct();
+		if ( isset( self::$initializing_perks[ $this->_slug ] ) ) {
+			return $this;
+		}
 
-	}
+		/* Set flag to prevent potential recursion from GP_Plugin::check_requirements(). */
+		self::$initializing_perks[ $this->_slug ] = true;
 
-	public function pre_init() {
+		/**
+		 * While GP_Plugin::check_requirements() runs a risk of recursion, we check it here so we can prevent pre_init()
+		 * from running on Perks that have not met all requirements.
+		 */
+		if ( $this->check_requirements() ) {
+			parent::__construct();
+		} else {
+			if ( ! has_filter( 'init', array( $this, 'disable_init' ) ) ) {
+				add_action( 'init', array( $this, 'disable_init' ), 1 );
+			}
 
-		parent::pre_init();
-
-		// Since pre_init() is called from the __construct() and checking for add-on-specific requirements will call the
-		// constructor again, we can't check for requirements in pre_init(). Recursion is coming for us all.
-		if ( ! has_filter( 'init', array( $this, 'disable_init_when_requirements_unmet' ) ) ) {
-			add_action( 'init', array( $this, 'disable_init_when_requirements_unmet' ), 1 );
+			/**
+			 * GFAddOn::failed_requirements_init() is called in GFAddOn::init_admin() which is bypassed thanks to our
+			 * requirements checker.
+			 *
+			 * That said, it's still useful to call failed_requirements_init() when running GF 2.5 or higher as
+			 * regular WP notifications are suppressed on Gravity Forms pages.
+			 *
+			 * @see GFAddOn::init_admin()
+			 * @see GFAddOn::failed_requirements_init()
+			 */
+			if (
+				method_exists( $this, 'failed_requirements_init' )
+				&& version_compare( GFForms::$version, '2.5-beta-1', '>=' )
+			) {
+				$this->failed_requirements_init();
+			}
 		}
 
 	}
 
 	/**
-	 * Prevent plugin from initializing if requirements are not met.
+	 * Prevent plugin from initializing. Use in tandem with GP_Plugin::check_requirements().
 	 */
-	public function disable_init_when_requirements_unmet() {
-		if ( ! $this->check_requirements() ) {
-			remove_action( 'init', array( $this, 'init' ) );
-		}
+	public function disable_init() {
+		remove_action( 'init', array( $this, 'init' ), 10 ); /* GF <=2.4 */
+		remove_action( 'init', array( $this, 'init' ), 15 );
 	}
 
 	public function init() {
@@ -72,7 +104,7 @@ abstract class GP_Plugin extends GFAddOn {
 
 		$requirements = $this->minimum_requirements();
 
-		if ($min_gf_version = rgars($requirements, 'gravityforms/version')) {
+		if ( $min_gf_version = rgars( $requirements, 'gravityforms/version' ) ) {
 			$this->_min_gravityforms_version = $min_gf_version;
 		}
 
@@ -93,7 +125,7 @@ abstract class GP_Plugin extends GFAddOn {
 	}
 
 	public function log( $message, $is_error = false ) {
-		if( $is_error ) {
+		if ( $is_error ) {
 			$this->log_error( $message );
 		} else {
 			$this->log_debug( $message );

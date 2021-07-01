@@ -219,10 +219,49 @@ jQuery.fn.gwpSlide = function(direction, isVisibleSelector) {
 
 jQuery( document ).ready( function ( $ ) {
 
+	// Setup initialization action when Gravity Perks field settings are opened in GF 2.5.
     $( '.panel-block-tabs' ).on( 'accordionactivate', function( event, ui ) {
         if ( ui.newPanel.is( '#gravity-perks_tab' ) ) {
             gform.doAction( 'gperks_field_settings_tab_loaded', event, GetSelectedField(), window.form, ui );
         }
+    } );
+
+	/**
+	 * Hide custom field settings tab if no settings are displayed for the selected field type
+	 */
+	jQuery(document).bind( 'gform_load_field_settings', function( event, field ) {
+		gperk.togglePerksTab()
+	});
+
+	/**
+	 * GF uses this same technique to initialize tooltips last. We'll follow suit so we only update the tooltip
+	 * options once GF has initialized them.
+	 */
+    setTimeout( function() {
+
+	    $( '.gp-tooltip' ).each( function() {
+
+	    	var options = $( this ).data( 'gp-tooltip-options' );
+
+	    	if ( ! options && $( this ).hasClass( 'gp-tooltip-right' ) ) {
+	    		options = {
+				    classes: {
+					    'ui-tooltip': 'gp-tooltip-right'
+				    },
+				    position: {
+					    my: 'right bottom',
+					    at: 'right+10 top-11',
+					    collision: 'none'
+				    },
+			    };
+		    }
+
+	    	if ( options ) {
+			    $( this ).tooltip( 'option', options );
+		    }
+
+	    } );
+
     } );
 
 } );
