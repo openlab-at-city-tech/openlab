@@ -61,7 +61,7 @@ class MC4WP_Forms_Admin {
 			return;
 		}
 
-		wp_register_script( 'mc4wp-forms-admin', mc4wp_plugin_url( 'assets/js/forms-admin' . $suffix . '.js' ), array( 'mc4wp-admin' ), MC4WP_VERSION, true );
+		wp_register_script( 'mc4wp-forms-admin', mc4wp_plugin_url( 'assets/js/forms-admin.js' ), array( 'mc4wp-admin' ), MC4WP_VERSION, true );
 		wp_enqueue_script( 'mc4wp-forms-admin' );
 		wp_localize_script(
 			'mc4wp-forms-admin',
@@ -135,10 +135,8 @@ class MC4WP_Forms_Admin {
 	 * Act on the "add form" form
 	 */
 	public function process_add_form() {
-		check_admin_referer( 'add_form', '_mc4wp_nonce' );
-
 		$form_data    = $_POST['mc4wp_form'];
-		$form_content = include MC4WP_PLUGIN_DIR . 'config/default-form-content.php';
+		$form_content = include MC4WP_PLUGIN_DIR . '/config/default-form-content.php';
 
 		// Fix for MultiSite stripping KSES for roles other than administrator
 		remove_all_filters( 'content_save_pre' );
@@ -264,8 +262,6 @@ class MC4WP_Forms_Admin {
 	 * Saves a form
 	 */
 	public function process_save_form() {
-		check_admin_referer( 'edit_form', '_mc4wp_nonce' );
-
 		// save global settings (if submitted)
 		if ( isset( $_POST['mc4wp'] ) && is_array( $_POST['mc4wp'] ) ) {
 			$options = get_option( 'mc4wp', array() );
