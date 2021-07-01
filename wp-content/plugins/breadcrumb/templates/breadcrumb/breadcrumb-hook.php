@@ -52,9 +52,18 @@ function breadcrumb_main_item_loop($item){
     $link = isset($item['link']) ? $item['link'] : '';
     $link = apply_filters('breadcrumb_link_url', $link);
 
+    //echo '<pre>'.var_export(($title_original), true).'</pre>';
+    //echo '<pre>'.var_export(($title), true).'</pre>';
+
+
     if(!empty($title)){
         ?>
-        <li ><a title="<?php echo $title_original; ?>" href="<?php echo $link; ?>"><span><?php echo $title; ?></span></a><span class="separator"><?php echo $breadcrumb_separator; ?></span></li>
+        <li >
+            <a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url_raw($link); ?>">
+                <span><?php echo $title; ?></span>
+            </a>
+            <span class="separator"><?php echo $breadcrumb_separator; ?></span>
+        </li>
         <?php
     }
 

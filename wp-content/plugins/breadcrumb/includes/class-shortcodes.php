@@ -49,6 +49,7 @@ class class_breadcrumb_shortcodes  {
             ?>
         </div>
         <?php
+        //wp_enqueue_style( 'font-awesome-5' );
 
 
         return ob_get_clean();
