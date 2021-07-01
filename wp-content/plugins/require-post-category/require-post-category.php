@@ -3,7 +3,7 @@
 Plugin Name: Require Post Category
 Plugin URI: https://wordpress.org/plugins/require-post-category/
 Description: Require users to choose a post category before updating or publishing a post.
-Version: 2.0.3
+Version: 2.1
 Author: Josh Hartman
 Author URI: https://www.warpconduit.net
 License: GPL2
