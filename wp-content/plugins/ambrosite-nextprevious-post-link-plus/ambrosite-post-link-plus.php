@@ -127,12 +127,12 @@ function get_adjacent_post_plus($r, $previous = true ) {
 						$taxonomies[] = 'post_format';
 					$ex_cats_posts = get_objects_in_term( $excluded_categories, $taxonomies );
 					if ( !empty($ex_cats_posts) )
-						$ex_cats_sql = "AND p.ID NOT IN (" . implode($ex_cats_posts, ',') . ")";
+						$ex_cats_sql = "AND p.ID NOT IN (" . implode(',', $ex_cats_posts) . ")";
 				} else {
 					if ( !empty($term_array) && !in_array($ex_cats_method, array('diff', 'differential')) )
 						$excluded_categories = array_diff($excluded_categories, $term_array);
 					if ( !empty($excluded_categories) )
-						$ex_cats_sql = "AND tt.term_id NOT IN (" . implode($excluded_categories, ',') . ')';
+						$ex_cats_sql = "AND tt.term_id NOT IN (" . implode(',', $excluded_categories) . ')';
 				}
 			}
 
