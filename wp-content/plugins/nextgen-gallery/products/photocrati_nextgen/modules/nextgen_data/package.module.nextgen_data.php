@@ -699,6 +699,16 @@ class C_Exif_Writer
             return FALSE;
         }
         try {
+            // Prevent the orientation tag from ever being anything other than normal horizontal
+            /** @var PelExif $exif */
+            $exif = $metadata['exif'];
+            $tiff = $exif->getTiff();
+            $ifd0 = $tiff->getIfd();
+            $orientation = new PelEntryShort(PelTag::ORIENTATION, 1);
+            $ifd0->addEntry($orientation);
+            $tiff->setIfd($ifd0);
+            $exif->setTiff($tiff);
+            $metadata['exif'] = $exif;
             // Copy EXIF data to the new image and write it
             $new_image = new PelJpeg($filename);
             $new_image->setExif($metadata['exif']);
@@ -709,7 +719,9 @@ class C_Exif_Writer
             }
         } catch (PelInvalidArgumentException $exception) {
             return FALSE;
-        } catch (PelJpegInvalidMarkerException $exception) {
+        } catch (PelInvalidDataException $exception) {
+            error_log("Could not write data to {$filename}");
+            error_log(print_r($exception, TRUE));
             return FALSE;
         }
     }
@@ -782,31 +794,6 @@ class C_Exif_Writer
     {
         $extension = M_I18n::mb_pathinfo($filename, PATHINFO_EXTENSION);
         return in_array(strtolower($extension), array('jpeg', 'jpg', 'jpeg_backup', 'jpg_backup')) ? TRUE : FALSE;
-    }
-    /**
-     * Sets the EXIF' Orientation field to 1 aka Default or "TopLeft"
-     *
-     * This method is necessary to prevent images rotated by NextGen to appear even further rotated.
-     * @param array $exif
-     * @return array
-     */
-    public static function reset_orientation($exif = array())
-    {
-        $tiff = $exif->getTiff();
-        if (empty($tiff)) {
-            return $exif;
-        }
-        $ifd0 = $tiff->getIfd();
-        if (empty($ifd0)) {
-            return $exif;
-        }
-        $orientation = $ifd0->getEntry(PelTag::ORIENTATION);
-        if (empty($orientation)) {
-            return $exif;
-        }
-        $orientation = new PelEntryShort(PelTag::ORIENTATION, 1);
-        $ifd0->addEntry($orientation);
-        return $exif;
     }
 }
 class Mixin_NextGen_Gallery_Validation
@@ -1044,8 +1031,11 @@ class Mixin_Gallery_Mapper extends Mixin
         }
         $retval = $this->call_parent('_save_entity', $entity);
         if ($retval) {
-            wp_mkdir_p($storage->get_gallery_abspath($entity));
-            do_action('ngg_created_new_gallery', $entity->{$entity->id_field});
+            $path = $storage->get_gallery_abspath($entity);
+            if (!file_exists($path)) {
+                wp_mkdir_p($path);
+                do_action('ngg_created_new_gallery', $entity->{$entity->id_field});
+            }
             C_Photocrati_Transient_Manager::flush('displayed_gallery_rendering');
         }
         return $retval;
@@ -3259,12 +3249,12 @@ class C_NggLegacy_Thumbnail
     function rotateImageAngle($angle = 90)
     {
         if (function_exists('imagerotate')) {
-            $this->workingImage = imagerotate($this->oldImage, 360 - $angle, 0);
-            // imagerotate() rotates CCW
             $this->currentDimensions['width'] = imagesx($this->workingImage);
             $this->currentDimensions['height'] = imagesy($this->workingImage);
             $this->oldImage = $this->workingImage;
-            $this->newImage = $this->workingImage;
+            // imagerotate() rotates CCW ;
+            // See for help: https://evertpot.com/115/
+            $this->newImage = imagerotate($this->oldImage, 360 - $angle, 0);
             return true;
         }
         $this->workingImage = imagecreatetruecolor($this->currentDimensions['height'], $this->currentDimensions['width']);
@@ -3872,26 +3862,12 @@ class Mixin_GalleryStorage_Base_Dynamic extends Mixin
                     $thumbnail->format = strtoupper($format_list[$clone_format]);
                 }
                 $thumbnail = apply_filters('ngg_before_save_thumbnail', $thumbnail);
+                // Always retrieve metadata from the backup when possible
                 $backup_path = $image_path . '_backup';
-                try {
-                    $exif_abspath = @file_exists($backup_path) ? $backup_path : $image_path;
-                    $exif_iptc = @C_Exif_Writer::read_metadata($exif_abspath);
-                } catch (PelException $ex) {
-                    error_log("Could not read image metadata {$exif_abspath}");
-                    error_log(print_r($ex, TRUE));
-                }
+                $exif_abspath = @file_exists($backup_path) ? $backup_path : $image_path;
+                $exif_iptc = @C_Exif_Writer::read_metadata($exif_abspath);
                 $thumbnail->save($destpath, $quality);
-                // We've just rotated the image however the EXIF metadata contains an Orientation tag. To prevent
-                // certain browsers from rotating our already-rotated image we reset the Orientation tag to the default.
-                if ($remove_orientation_exif && !empty($exif_iptc['exif'])) {
-                    $exif_iptc['exif'] = @C_Exif_Writer::reset_orientation($exif_iptc['exif']);
-                }
-                try {
-                    @C_Exif_Writer::write_metadata($destpath, $exif_iptc);
-                } catch (PelException $ex) {
-                    error_log("Could not write data to {$destpath}");
-                    error_log(print_r($ex, TRUE));
-                }
+                @C_Exif_Writer::write_metadata($destpath, $exif_iptc);
             }
         }
         return $thumbnail;

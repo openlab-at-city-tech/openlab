@@ -4,6 +4,7 @@
  * @var string $cache_confirmation
  * @var string $cache_label
  * @var string $disable_fontawesome_field
+ * @var string $disable_ngg_tags_page_field
  * @var string $galleries_in_feeds
  * @var string $galleries_in_feeds_help
  * @var string $galleries_in_feeds_label
@@ -114,4 +115,6 @@
     <?php print $alternate_random_method_field; ?>
 
     <?php print $disable_fontawesome_field; ?>
+
+    <?php print $disable_ngg_tags_page_field; ?>
 </table>

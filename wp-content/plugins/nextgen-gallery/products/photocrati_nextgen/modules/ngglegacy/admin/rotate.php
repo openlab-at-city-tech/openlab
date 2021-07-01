@@ -73,7 +73,7 @@ $preview_image = $storage->get_image_url($id, 'full');
 <table align="center">
 	<tr>
 		<td valign="middle" align="center" id="ngg-overlay-dialog-main">
-			<img src="<?php echo nextgen_esc_url( $preview_image ); ?>"
+			<img src="<?php echo nextgen_esc_url( $preview_image ) . '?' . time() . rand(1,100); ?>"
                  alt=""
                  id="imageToEdit"
                  style="max-width: 450px;

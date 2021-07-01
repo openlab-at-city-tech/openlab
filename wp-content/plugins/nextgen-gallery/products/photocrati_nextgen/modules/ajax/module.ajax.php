@@ -90,6 +90,18 @@ class M_Ajax extends C_Base_Module
         wp_localize_script('photocrati_ajax', 'photocrati_ajax', $vars);
     }
 
+    /**
+     * Pass PHP object or array to JS, preserving numeric and boolean value
+     * @param string $handle 
+     * @param string $name 
+     * @param object|array $data 
+     */
+    static function pass_data_to_js($handle, $var_name, $data)
+    {
+        $var_name = esc_js($var_name);
+        return wp_add_inline_script($handle, "let {$var_name} = ".json_encode($data, JSON_NUMERIC_CHECK));
+    }
+
     function get_type_list()
     {
         return array(

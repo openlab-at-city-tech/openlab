@@ -1,165 +1,111 @@
-[
-    {
-        "name": "ezyang/htmlpurifier",
-        "version": "v4.13.0",
-        "version_normalized": "4.13.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ezyang/htmlpurifier.git",
-            "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
-            "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "php": ">=5.2"
-        },
-        "require-dev": {
-            "simpletest/simpletest": "dev-master#72de02a7b80c6bb8864ef9bf66d41d2f58f826bd"
-        },
-        "time": "2020-06-29T00:56:53+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "HTMLPurifier": "library/"
+{
+    "packages": [
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.13.0",
+            "version_normalized": "4.13.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75"
             },
-            "files": [
-                "library/HTMLPurifier.composer.php"
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
+                "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "dev-master#72de02a7b80c6bb8864ef9bf66d41d2f58f826bd"
+            },
+            "time": "2020-06-29T00:56:53+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ],
+                "exclude-from-classmap": [
+                    "/library/HTMLPurifier/Language/"
+                ]
+            },
+            "notification-url": "https://repo.packagist.com/imagely/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
             ],
-            "exclude-from-classmap": [
-                "/library/HTMLPurifier/Language/"
-            ]
-        },
-        "notification-url": "https://repo.packagist.com/imagely/downloads/",
-        "license": [
-            "LGPL-2.1-or-later"
-        ],
-        "authors": [
-            {
-                "name": "Edward Z. Yang",
-                "email": "admin@htmlpurifier.org",
-                "homepage": "http://ezyang.com"
-            }
-        ],
-        "description": "Standards compliant HTML filter written in PHP",
-        "homepage": "http://htmlpurifier.org/",
-        "keywords": [
-            "html"
-        ]
-    },
-    {
-        "name": "imagely/pope-framework",
-        "version": "v0.16",
-        "version_normalized": "0.16.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/imagely/pope-framework.git",
-            "reference": "a14bdc1f5153664770df00d53577a9954f1e691c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/imagely/pope-framework/zipball/a14bdc1f5153664770df00d53577a9954f1e691c",
-            "reference": "a14bdc1f5153664770df00d53577a9954f1e691c",
-            "shasum": "",
-            "mirrors": [
+            "authors": [
                 {
-                    "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/%reference%.%type%",
-                    "preferred": true
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
                 }
-            ]
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "install-path": "../ezyang/htmlpurifier"
         },
-        "time": "2020-06-11T20:23:55+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "./lib/autoload.php"
-            ]
-        },
-        "notification-url": "https://repo.packagist.com/imagely/downloads/",
-        "license": [
-            "GPL-2.0-only"
-        ],
-        "authors": [
-            {
-                "name": "Imagely",
-                "email": "support@imagely.com"
-            }
-        ],
-        "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
-        "support": {
-            "source": "https://github.com/imagely/pope-framework/tree/v0.16",
-            "issues": "https://github.com/imagely/pope-framework/issues"
+        {
+            "name": "imagely/pope-framework",
+            "version": "v0.17",
+            "version_normalized": "0.17.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imagely/pope-framework.git",
+                "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imagely/pope-framework/zipball/13da4d47779a91fbf07a68062e64974eb1427ef2",
+                "reference": "13da4d47779a91fbf07a68062e64974eb1427ef2",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/r%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "time": "2020-10-22T19:43:52+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "./lib/autoload.php"
+                ]
+            },
+            "notification-url": "https://repo.packagist.com/imagely/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Imagely",
+                    "email": "support@imagely.com"
+                }
+            ],
+            "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
+            "support": {
+                "source": "https://github.com/imagely/pope-framework/tree/v0.17",
+                "issues": "https://github.com/imagely/pope-framework/issues"
+            },
+            "install-path": "../imagely/pope-framework"
         }
-    },
-    {
-        "name": "nikic/php-parser",
-        "version": "v4.5.0",
-        "version_normalized": "4.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nikic/PHP-Parser.git",
-            "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/53c2753d756f5adb586dca79c2ec0e2654dd9463",
-            "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463",
-            "shasum": "",
-            "mirrors": [
-                {
-                    "url": "https://repo.packagist.com/imagely/dists/%package%/%version%/%reference%.%type%",
-                    "preferred": true
-                }
-            ]
-        },
-        "require": {
-            "ext-tokenizer": "*",
-            "php": ">=7.0"
-        },
-        "require-dev": {
-            "ircmaxell/php-yacc": "0.0.5",
-            "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0"
-        },
-        "time": "2020-06-03T07:24:19+00:00",
-        "bin": [
-            "bin/php-parse"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "4.3-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "PhpParser\\": "lib/PhpParser"
-            }
-        },
-        "notification-url": "https://repo.packagist.com/imagely/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Nikita Popov"
-            }
-        ],
-        "description": "A PHP parser written in PHP",
-        "keywords": [
-            "parser",
-            "php"
-        ]
-    }
-]
+    ],
+    "dev": false,
+    "dev-package-names": []
+}

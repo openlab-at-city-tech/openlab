@@ -165,6 +165,7 @@ class A_WordPress_Routing_App extends Mixin
         if (!apply_filters('ngg_wprouting_add_post_permalink', TRUE)) {
             return $generated_url;
         }
+        global $multipage, $page;
         $base_url = $this->object->get_router()->get_base_url('home');
         $settings = C_NextGen_Settings::get_instance();
         if (strlen($generated_url) < 2) {
@@ -186,6 +187,11 @@ class A_WordPress_Routing_App extends Mixin
         $original_url = trailingslashit($original_url);
         $post_permalink = trailingslashit($post_permalink);
         $generated_url = trailingslashit($generated_url);
+        // Ensure that /page/2/ links to /page/2/nggallery/page/4 rather than /nggallery/page/4/ when our paginated
+        // galleries are displayed on posts paginated through the page break block
+        if ($multipage && $page >= 2) {
+            $post_permalink = $post_permalink . $page;
+        }
         // We need to determine if the generated url and the post permalink TRULY differ. If they
         // differ, then we'll return post_permalink + nggallery parameters appended. Otherwise, we'll
         // just return the generated url

@@ -44,7 +44,7 @@ class C_Ajax_Controller extends C_MVC_Controller
             ob_end_clean();
         }
         // Return the JSON to the browser
-        echo json_encode($retval);
+        wp_send_json($retval);
     }
     /**
      * Returns an instance of this class

@@ -501,6 +501,7 @@ function nggallery_picturelist($controller)
                                     <option value="add_tags"><?php _e("Add tags",'nggallery'); ?></option>
                                     <option value="delete_tags"><?php _e("Delete tags",'nggallery'); ?></option>
                                     <option value="overwrite_tags"><?php _e("Overwrite tags",'nggallery'); ?></option>
+                                    <option value="strip_orientation_tag"><?php _e("Remove EXIF Orientation",'nggallery'); ?></option>
                                 </select>
                                 <input class="button-primary"
                                        type="submit"

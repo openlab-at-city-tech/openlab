@@ -151,7 +151,8 @@ class M_NextGen_Data extends C_Base_Module
 			$config = HTMLPurifier_Config::createDefault();
 			$config->set('Cache.DefinitionImpl', NULL);
 			$purifier = new HTMLPurifier($config);
-			return $purifier->purify($data);
+			$default_return = $purifier->purify($data);
+			return apply_filters('ngg_html_sanitization', $default_return, $data);
 		}
 		else  {
 			// wp_strip_all_tags() is misleading in a way - it only removes <script> and <style>

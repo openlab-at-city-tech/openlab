@@ -329,7 +329,7 @@ class C_Admin_Notification_Manager
         if ($this->has_displayed_notice()) {
             $router = C_Router::get_instance();
             wp_enqueue_script('ngg_admin_notices', $router->get_static_url('photocrati-nextgen_admin#admin_notices.js'), array(), NGG_SCRIPT_VERSION, TRUE);
-            wp_localize_script('ngg_admin_notices', 'ngg_dismiss_url', $this->_dismiss_url);
+            wp_localize_script('ngg_admin_notices', 'ngg_dismiss_url', [$this->_dismiss_url]);
         }
     }
     function serve_ajax_request()
@@ -767,7 +767,7 @@ class Mixin_Form_Manager extends Mixin
         if (isset($this->object->_forms[$type])) {
             foreach ($form_names as $form) {
                 if ($index = array_search($form, $this->object->_forms[$type])) {
-                    unsset($this->object->_forms[$type][$index]);
+                    unset($this->object->_forms[$type][$index]);
                 }
             }
             $retval = $this->object->get_form_count($type);
@@ -1114,12 +1114,12 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
      */
     function get_forms()
     {
-        $forms = array();
         $form_manager = C_Form_Manager::get_instance();
-        foreach ($form_manager->get_forms($this->object->get_form_type()) as $form) {
-            $forms[] = $this->object->get_registry()->get_utility('I_Form', $form);
-        }
-        return $forms;
+        return array_map(function ($form) {
+            $form = $this->object->get_registry()->get_utility('I_Form', $form);
+            $form->page = $this;
+            return $form;
+        }, $form_manager->get_forms($this->object->get_form_type()));
     }
     /**
      * Gets the action to be executed

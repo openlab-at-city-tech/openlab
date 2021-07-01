@@ -89,9 +89,9 @@ if (!class_exists('C_Photocrati_Installer'))
 		static function uninstall($product, $hard=FALSE)
 		{
 			$handler = self::get_handler_instance($product);
-			if (method_exists($handler, 'uninstall')) return $handler->uninstall($hard);
+			if ($handler && method_exists($handler, 'uninstall')) return $handler->uninstall($hard);
 
-			if ($hard) {
+			if ($handler && $hard) {
 				C_NextGen_Settings::get_instance()->destroy();
                 C_NextGen_Global_Settings::get_instance()->destroy();
 			}
@@ -128,16 +128,16 @@ if (!class_exists('C_Photocrati_Installer'))
             // Somehow some installations are missing several default settings
             // Because imgWidth is essential to know we do a 'soft' reset here
             // by filling in any missing options from the default settings
+			$settings_installer = new C_NextGen_Settings_Installer();
+			if (!$global_settings->gallerypath) {
+				$global_settings->reset();
+                $settings_installer->install_global_settings();
+                $global_settings->save();
+			}
             if (!$local_settings->imgWidth) {
-                $settings_installer = new C_NextGen_Settings_Installer();
-
                 $local_settings->reset();
                 $settings_installer->install_local_settings();
                 $local_settings->save();
-
-                $global_settings->reset();
-                $settings_installer->install_global_settings();
-                $global_settings->save();
             }
 
             // This is a specific hack/work-around/fix and can probably be removed sometime after 2.0.20's release

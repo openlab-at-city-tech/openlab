@@ -6,6 +6,8 @@
 **/
 
 define('NGG_ADD_GALLERY_SLUG', 'ngg_addgallery');
+if (!defined('NGG_UPLOAD_LIMIT')) define('NGG_UPLOAD_LIMIT', 6);
+if (!defined('NGG_UPLOAD_TIMEOUT')) define('NGG_UPLOAD_TIMEOUT', 40);
 
 class M_NextGen_AddGallery_Page extends C_Base_Module
 {
@@ -22,7 +24,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module
             'photocrati-nextgen_addgallery_page',
             'NextGEN Add Gallery Page',
             'Provides admin page for adding a gallery and uploading images',
-            '3.3.21',
+            '3.5.0.4',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -121,7 +123,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module
                 'uppy',
                 $router->get_static_url($add_gallery_page_id . '#uppy/uppy.min.js'),
                 [],
-                '1.21.1'
+                '1.27.0'
             );
             wp_register_style(
                 'uppy',

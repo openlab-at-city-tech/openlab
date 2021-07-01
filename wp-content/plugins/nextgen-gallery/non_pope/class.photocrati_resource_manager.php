@@ -23,8 +23,9 @@ class C_Photocrati_Resource_Manager
 	{
 		// Validate the request
 		$this->validate_request();
-		add_action('init', array(&$this, 'start_buffer'), -1);
-		add_action('wp_footer', array(&$this, 'print_marker'), -1);
+
+		add_action('init', [$this, 'start_buffer'], -1);
+		add_action('wp_footer', [$this, 'print_marker'], -1);
 	}
 
 	/**
@@ -33,8 +34,12 @@ class C_Photocrati_Resource_Manager
 	 */
 	function print_marker()
 	{
+        if (self::is_disabled())
+            return;
+
 		// is_feed() is important to not break Wordpress feeds and the WooCommerce api
-		if ($this->valid_request && !is_feed()) print $this->marker;
+		if ($this->valid_request && !is_feed())
+		    print $this->marker;
 	}
 
 	/**
@@ -44,6 +49,39 @@ class C_Photocrati_Resource_Manager
 	{
 		$this->valid_request = $this->is_valid_request();
 	}
+
+    /**
+     * Pro, Plus, and Starter versions below these were not ready to function without the resource manager
+     *
+     * @return bool
+     */
+	public static function addons_version_check()
+    {
+        if (defined('NGG_PRO_PLUGIN_VERSION') && version_compare(NGG_PRO_PLUGIN_VERSION, '3.3', '<'))
+            return FALSE;
+        if (defined('NGG_STARTER_PLUGIN_VERSION') && version_compare(NGG_STARTER_PLUGIN_VERSION, '1.1', '<'))
+            return FALSE;
+        if (defined('NGG_PLUS_PLUGIN_VERSION') && version_compare(NGG_PLUS_PLUGIN_VERSION, '1.8', '<'))
+            return FALSE;
+
+        return TRUE;
+    }
+
+    /**
+     * @return bool
+     */
+	public static function is_disabled()
+    {
+        // This is admittedly an ugly hack, but much easier than reworking the entire nextgen_admin modules
+        if (!empty($_GET['page']) && $_GET['page'] === 'ngg_addgallery' && isset($_GET['attach_to_post']))
+            return FALSE;
+
+        // Provide users a method of forcing this on should it be necessary
+        if (defined('NGG_ENABLE_RESOURCE_MANAGER') && NGG_ENABLE_RESOURCE_MANAGER)
+            return FALSE;
+
+        return self::addons_version_check();
+    }
 
 	function is_valid_request()
 	{
@@ -82,28 +120,20 @@ class C_Photocrati_Resource_Manager
 	 */
 	function start_buffer()
 	{
-	    // This is admittedly an ugly hack, but much easier than reworking the entire nextgen_admin modules
-        if (!empty($_GET['page']) && $_GET['page'] === 'ngg_addgallery' && isset($_GET['attach_to_post']))
-            $force = TRUE;
-        else
-            $force = FALSE;
+        if (self::is_disabled())
+            return;
 
-		if (defined('NGG_DISABLE_RESOURCE_MANAGER') && NGG_DISABLE_RESOURCE_MANAGER && !$force)
-			return;
+		if (apply_filters('run_ngg_resource_manager', $this->valid_request))
+		{
+			ob_start([$this, 'output_buffer_handler']);
+			ob_start([$this, 'get_buffer']);
 
-		if (apply_filters('run_ngg_resource_manager', $this->valid_request)) {
-			ob_start(array(&$this, 'output_buffer_handler'));
-			ob_start(array(&$this, 'get_buffer'));
-
-			add_action('wp_print_footer_scripts', array(&$this, 'get_resources'), 1);
-			add_action('admin_print_footer_scripts', array(&$this, 'get_resources'), 1);
-			add_action('shutdown', array(&$this, 'shutdown'));
+			add_action('wp_print_footer_scripts', [$this, 'get_resources'], 1);
+			add_action('admin_print_footer_scripts', [$this, 'get_resources'], 1);
+			add_action('shutdown', [$this, 'shutdown']);
 		}
 	}
 
-	/**
-	 *
-	 **/
 	function get_resources()
 	{
 		ob_start();

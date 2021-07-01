@@ -68,17 +68,58 @@ class Mixin_Widget extends Mixin
 }
 class C_Widget_Gallery extends WP_Widget
 {
+    protected static $displayed_gallery_ids = array();
     function __construct()
     {
-        $widget_ops = array('classname' => 'ngg_images', 'description' => __('Add recent or random images from the galleries', 'nggallery'));
+        $widget_ops = ['classname' => 'ngg_images', 'description' => __('Add recent or random images from the galleries', 'nggallery')];
         parent::__construct('ngg-images', __('NextGEN Widget', 'nggallery'), $widget_ops);
+        // Determine what widgets will exist in the future, create their displayed galleries, enqueue their resources,
+        // and cache the resulting displayed gallery for later rendering to avoid the ID changing due to misc attributes
+        // in $args being different now and at render time ($args is sidebar information that is not relevant)
+        add_action('wp_enqueue_scripts', function () {
+            global $wp_registered_sidebars;
+            $sidebars = wp_get_sidebars_widgets();
+            $options = $this->get_settings();
+            foreach ($sidebars as $sidebar_name => $sidebar) {
+                if ($sidebar_name === 'wp_inactive_widgets' || !$sidebar) {
+                    continue;
+                }
+                foreach ($sidebar as $widget) {
+                    if (strpos($widget, 'ngg-images-', 0) !== 0) {
+                        continue;
+                    }
+                    $id = str_replace('ngg-images-', '', $widget);
+                    if (isset($options[$id])) {
+                        $sidebar_data = $wp_registered_sidebars[$sidebar_name];
+                        $sidebar_data['widget_id'] = $widget;
+                        // These are normally replaced at display time but we're building our cache before then
+                        $sidebar_data['before_widget'] = str_replace('%1$s', $widget, $sidebar_data['before_widget']);
+                        $sidebar_data['before_widget'] = str_replace('%2$s', 'ngg_images', $sidebar_data['before_widget']);
+                        $sidebar_data['widget_name'] = __('NextGEN Widget', 'nggallery');
+                        $displayed_gallery = $this->get_displayed_gallery($sidebar_data, $options[$id]);
+                        self::$displayed_gallery_ids[$widget] = $displayed_gallery;
+                        $controller = C_Display_Type_Controller::get_instance(NGG_BASIC_THUMBNAILS);
+                        M_Gallery_Display::enqueue_frontend_resources_for_displayed_gallery($displayed_gallery, $controller);
+                    }
+                }
+            }
+            // Now enqueue the basic styling for the display itself
+            $router = C_Router::get_instance();
+            wp_enqueue_style('nextgen_widgets_style', $router->get_static_url('photocrati-widget#widgets.css'), [], NGG_SCRIPT_VERSION);
+            wp_enqueue_style('nextgen_basic_thumbnails_style', $router->get_static_url('photocrati-nextgen_basic_gallery#thumbnails/nextgen_basic_thumbnails.css'), [], NGG_SCRIPT_VERSION);
+        }, 11);
+        // It is important that this run at priority 11 or higher so that M_Gallery_Display->enqueue_frontend_resources() has run first
+    }
+    function get_defaults()
+    {
+        return ['exclude' => 'all', 'height' => '75', 'items' => '4', 'list' => '', 'show' => 'thumbnail', 'title' => 'Gallery', 'type' => 'recent', 'webslice' => TRUE, 'width' => '100'];
     }
     function form($instance)
     {
         // used for rendering utilities
         $parent = C_Widget::get_instance();
         // defaults
-        $instance = wp_parse_args((array) $instance, array('exclude' => 'all', 'height' => '75', 'items' => '4', 'list' => '', 'show' => 'thumbnail', 'title' => 'Gallery', 'type' => 'recent', 'webslice' => TRUE, 'width' => '100'));
+        $instance = wp_parse_args((array) $instance, $this->get_defaults());
         return $parent->render_partial('photocrati-widget#form_gallery', array('self' => $this, 'instance' => $instance, 'title' => esc_attr($instance['title']), 'items' => intval($instance['items']), 'height' => esc_attr($instance['height']), 'width' => esc_attr($instance['width'])));
     }
     function update($new_instance, $old_instance)
@@ -119,12 +160,14 @@ class C_Widget_Gallery extends WP_Widget
         $instance['webslice'] = (bool) $new_instance['webslice'];
         return $instance;
     }
-    function widget($args, $instance)
+    /**
+     * @param array $args
+     * @param array $instance
+     * @return C_Displayed_Gallery
+     */
+    public function get_displayed_gallery($args, $instance)
     {
         $settings = C_NextGen_Settings::get_instance();
-        $router = C_Router::get_instance();
-        wp_enqueue_style('nextgen_widgets_style', $router->get_static_url('photocrati-widget#widgets.css'), array(), NGG_SCRIPT_VERSION);
-        wp_enqueue_style('nextgen_basic_thumbnails_style', $router->get_static_url('photocrati-nextgen_basic_gallery#thumbnails/nextgen_basic_thumbnails.css'), array(), NGG_SCRIPT_VERSION);
         // these are handled by extract() but I want to silence my IDE warnings that these vars don't exist
         $before_widget = NULL;
         $before_title = NULL;
@@ -191,7 +234,23 @@ class C_Widget_Gallery extends WP_Widget
             $params['source'] = 'images';
             unset($params['container_ids']);
         }
-        print $renderer->display_images($params);
+        $final_displayed_gallery = $renderer->params_to_displayed_gallery($params);
+        if (is_null($final_displayed_gallery->id())) {
+            $final_displayed_gallery->id(md5(json_encode($final_displayed_gallery->get_entity())));
+        }
+        return $final_displayed_gallery;
+    }
+    function widget($args, $instance)
+    {
+        // This displayed gallery is created dynamically at runtime
+        if (empty(self::$displayed_gallery_ids[$args['widget_id']])) {
+            $displayed_gallery = $this->get_displayed_gallery($args, $instance);
+            self::$displayed_gallery_ids[$displayed_gallery->id()] = $displayed_gallery;
+        } else {
+            // The displayed gallery was created during the action wp_enqueue_resources and was cached to avoid ID conflicts
+            $displayed_gallery = self::$displayed_gallery_ids[$args['widget_id']];
+        }
+        print C_Displayed_Gallery_Renderer::get_instance()->display_images($displayed_gallery);
     }
 }
 class C_Widget_MediaRSS extends WP_Widget
@@ -253,10 +312,81 @@ class C_Widget_MediaRSS extends WP_Widget
 }
 class C_Widget_Slideshow extends WP_Widget
 {
+    protected static $displayed_gallery_ids = array();
     function __construct()
     {
-        $widget_ops = array('classname' => 'widget_slideshow', 'description' => __('Show a NextGEN Gallery Slideshow', 'nggallery'));
+        $widget_ops = ['classname' => 'widget_slideshow', 'description' => __('Show a NextGEN Gallery Slideshow', 'nggallery')];
         parent::__construct('slideshow', __('NextGEN Slideshow', 'nggallery'), $widget_ops);
+        // Determine what widgets will exist in the future, create their displayed galleries, enqueue their resources,
+        // and cache the resulting displayed gallery for later rendering to avoid the ID changing due to misc attributes
+        // in $args being different now and at render time ($args is sidebar information that is not relevant)
+        add_action('wp_enqueue_scripts', function () {
+            global $wp_registered_sidebars;
+            $sidebars = wp_get_sidebars_widgets();
+            $options = $this->get_settings();
+            foreach ($sidebars as $sidebar_name => $sidebar) {
+                if ($sidebar_name === 'wp_inactive_widgets' || !$sidebar) {
+                    continue;
+                }
+                foreach ($sidebar as $widget) {
+                    if (strpos($widget, 'slideshow-', 0) !== 0) {
+                        continue;
+                    }
+                    $id = str_replace('slideshow-', '', $widget);
+                    if (isset($options[$id])) {
+                        $sidebar_data = $wp_registered_sidebars[$sidebar_name];
+                        $sidebar_data['widget_id'] = $widget;
+                        // These are normally replaced at display time but we're building our cache before then
+                        $sidebar_data['before_widget'] = str_replace('%1$s', $widget, $sidebar_data['before_widget']);
+                        $sidebar_data['before_widget'] = str_replace('%2$s', 'widget_slideshow', $sidebar_data['before_widget']);
+                        $sidebar_data['widget_name'] = __('NextGEN Slideshow', 'nggallery');
+                        $displayed_gallery = $this->get_displayed_gallery($sidebar_data, $options[$id]);
+                        self::$displayed_gallery_ids[$widget] = $displayed_gallery;
+                        $controller = C_Display_Type_Controller::get_instance(NGG_BASIC_SLIDESHOW);
+                        M_Gallery_Display::enqueue_frontend_resources_for_displayed_gallery($displayed_gallery, $controller);
+                    }
+                }
+            }
+            $router = C_Router::get_instance();
+            wp_enqueue_style('nextgen_widgets_style', $router->get_static_url('photocrati-widget#widgets.css'), array(), NGG_SCRIPT_VERSION);
+            wp_enqueue_style('nextgen_basic_slideshow_style', $router->get_static_url('photocrati-nextgen_basic_gallery#slideshow/ngg_basic_slideshow.css'), array(), NGG_SCRIPT_VERSION);
+        }, 11);
+    }
+    /**
+     * @param array $args
+     * @param array $instance
+     * @return C_Displayed_Gallery
+     */
+    public function get_displayed_gallery($args, $instance)
+    {
+        if (empty($instance['limit'])) {
+            $instance['limit'] = 10;
+        }
+        $params = array(
+            'container_ids' => $instance['galleryid'],
+            'display_type' => 'photocrati-nextgen_basic_slideshow',
+            'gallery_width' => $instance['width'],
+            'gallery_height' => $instance['height'],
+            'source' => 'galleries',
+            'slug' => 'widget-' . $args['widget_id'],
+            'entity_types' => array('image'),
+            'show_thumbnail_link' => FALSE,
+            'show_slideshow_link' => FALSE,
+            'use_imagebrowser_effect' => FALSE,
+            // just to be safe
+            'ngg_triggers_display' => 'never',
+        );
+        if (0 === $instance['galleryid']) {
+            $params['source'] = 'random_images';
+            $params['maximum_entity_count'] = $instance['limit'];
+            unset($params['container_ids']);
+        }
+        $renderer = C_Displayed_Gallery_Renderer::get_instance();
+        $displayed_gallery = $renderer->params_to_displayed_gallery($params);
+        if (is_null($displayed_gallery->id())) {
+            $displayed_gallery->id(md5(json_encode($displayed_gallery->get_entity())));
+        }
+        return $displayed_gallery;
     }
     function form($instance)
     {
@@ -290,9 +420,6 @@ class C_Widget_Slideshow extends WP_Widget
     }
     function widget($args, $instance)
     {
-        $router = C_Router::get_instance();
-        wp_enqueue_style('nextgen_widgets_style', $router->get_static_url('photocrati-widget#widgets.css'), array(), NGG_SCRIPT_VERSION);
-        wp_enqueue_style('nextgen_basic_slideshow_style', $router->get_static_url('photocrati-nextgen_basic_gallery#slideshow/ngg_basic_slideshow.css'), array(), NGG_SCRIPT_VERSION);
         // these are handled by extract() but I want to silence my IDE warnings that these vars don't exist
         $before_widget = NULL;
         $before_title = NULL;
@@ -302,37 +429,22 @@ class C_Widget_Slideshow extends WP_Widget
         extract($args);
         $parent = C_Component_Registry::get_instance()->get_utility('I_Widget');
         $title = apply_filters('widget_title', empty($instance['title']) ? __('Slideshow', 'nggallery') : $instance['title'], $instance, $this->id_base);
-        if (empty($instance['limit'])) {
-            $instance['limit'] = 10;
-        }
-        $out = $this->render_slideshow($instance['galleryid'], $instance['width'], $instance['height'], $instance['limit'], $args);
+        $out = $this->render_slideshow($args, $instance);
         $parent->render_partial('photocrati-widget#display_slideshow', array('self' => $this, 'instance' => $instance, 'title' => $title, 'out' => $out, 'before_widget' => $before_widget, 'before_title' => $before_title, 'after_widget' => $after_widget, 'after_title' => $after_title, 'widget_id' => $widget_id));
     }
-    function render_slideshow($galleryID, $irWidth = '', $irHeight = '', $limit = 10, $args)
+    function render_slideshow($args, $instance)
     {
-        $registry = C_Component_Registry::get_instance();
-        $renderer = C_Displayed_Gallery_Renderer::get_instance();
-        $params = array(
-            'container_ids' => $galleryID,
-            'display_type' => 'photocrati-nextgen_basic_slideshow',
-            'gallery_width' => $irWidth,
-            'gallery_height' => $irHeight,
-            'source' => 'galleries',
-            'slug' => 'widget-' . $args['widget_id'],
-            'entity_types' => array('image'),
-            'show_thumbnail_link' => FALSE,
-            'show_slideshow_link' => FALSE,
-            'use_imagebrowser_effect' => FALSE,
-            // just to be safe
-            'ngg_triggers_display' => 'never',
-        );
-        if (0 === $galleryID) {
-            $params['source'] = 'random_images';
-            $params['maximum_entity_count'] = $limit;
-            unset($params['container_ids']);
+        // This displayed gallery is created dynamically at runtime
+        if (empty(self::$displayed_gallery_ids[$args['widget_id']])) {
+            $displayed_gallery = $this->get_displayed_gallery($args, $instance);
+            self::$displayed_gallery_ids[$displayed_gallery->id()] = $displayed_gallery;
+        } else {
+            // The displayed gallery was created during the action wp_enqueue_resources and was cached to avoid ID conflicts
+            $displayed_gallery = self::$displayed_gallery_ids[$args['widget_id']];
         }
-        $retval = $renderer->display_images($params, NULL);
-        $retval = apply_filters('ngg_show_slideshow_widget_content', $retval, $galleryID, $irWidth, $irHeight);
+        $renderer = C_Displayed_Gallery_Renderer::get_instance();
+        $retval = $renderer->display_images($displayed_gallery);
+        $retval = apply_filters('ngg_show_slideshow_widget_content', $retval, $instance['galleryid'], $instance['width'], $instance['height']);
         return $retval;
     }
 }

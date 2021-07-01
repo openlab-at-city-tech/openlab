@@ -48,9 +48,6 @@ class nggLoader
 
 		// Check for the header / footer
 		add_action( 'init', array(&$this, 'test_head_footer_init' ) );
-
-		// Show NextGEN version in header
-		add_action('wp_head', array('nggGallery', 'nextgen_version') );
 	}
 
 	function start_plugin() {

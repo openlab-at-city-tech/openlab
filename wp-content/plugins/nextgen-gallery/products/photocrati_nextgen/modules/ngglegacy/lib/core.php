@@ -230,15 +230,4 @@ class nggGallery {
 
 		return true;
 	}
-
-    /**
-     * Show NextGEN Version in header
-     * @since 1.9.0
-     *
-     * @return void
-     */
-    static function nextgen_version() {
-        global $ngg;
-        echo apply_filters('show_nextgen_version', '<!-- <meta name="NextGEN" version="'. $ngg->version . '" /> -->' . "\n");
-    }
 }
