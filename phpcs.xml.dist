@@ -36,6 +36,11 @@
 	<rule ref="PHPCompatibilityWP"/>
 	<config name="testVersion" value="7.4-"/>
 
+        <!-- Has some PHP files that contain only HTML markup -->
+        <rule ref="Internal.NoCodeFound">
+          <exclude-pattern>*/plugins/download-media-library/index.php</exclude-pattern>
+	</rule>
+
 	<!--
 	<rule ref="WordPress.WP.DeprecatedClasses">
 		<properties>
