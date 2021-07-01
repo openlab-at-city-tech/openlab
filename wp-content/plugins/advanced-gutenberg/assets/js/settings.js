@@ -515,6 +515,7 @@ jQuery(document).ready(function ($) {
 
 function initBlockConfigButton() {
     var $ = jQuery;
+    var { __, _x, _n, _nx } = wp.i18n;
     // Open the block config modal
     $('.blocks-config-list .block-config-item .block-config-button').unbind('click').click(function () {
         var blockName = $(this).data('block');
@@ -522,6 +523,6 @@ function initBlockConfigButton() {
         var blockLabel = $(this).closest('.block-config-item').find('.block-title').text().trim();
         window.blockLabel = blockLabel;
 
-        tb_show('Edit block ' + blockLabel + ' default config', 'admin.php?page=' + blockName + '&noheader=1&width=550&height=600&TB_iframe=1');
+        tb_show(__('Edit block', 'advanced-gutenberg') + ' ' + blockLabel + ' ' + __('default config', 'advanced-gutenberg'), 'admin.php?page=' + blockName + '&noheader=1&width=550&height=600&TB_iframe=1');
     })
 }

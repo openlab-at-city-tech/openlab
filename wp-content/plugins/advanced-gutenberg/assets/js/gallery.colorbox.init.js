@@ -1,6 +1,15 @@
 jQuery(document).ready(function ($) {
     var galGroup = 1;
     var galImage = null;
+    var galClassName = '';
+
+    // Caption overlay image
+    if (parseInt(advgb.imageCaption) === 2) {
+        galClassName = 'advgb_lightbox advgb_caption_overlay';
+    } else {
+        galClassName = 'advgb_lightbox';
+    }
+
     $('.wp-block-gallery').each(function () {
         // Add lightbox for images
         $(this).find('.blocks-gallery-item').colorbox({
@@ -15,7 +24,7 @@ jQuery(document).ready(function ($) {
             maxWidth: '90%',
             maxHeight: '85%',
             fixed: true,
-            className: 'advgb_lightbox',
+            className: galClassName,
             rel: 'gallery' + galGroup,
             photo: true,
             href: function () {

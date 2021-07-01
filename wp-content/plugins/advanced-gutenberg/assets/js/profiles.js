@@ -62,7 +62,7 @@
 
         // Click delete single profile
         $('.profile-delete').unbind('click').click(function () {
-            var willDelete = confirm('Are you sure to delete this profile? This action cannot be undone.');
+            var willDelete = confirm('Are you sure you want to delete this profile? This action cannot be undone.');
             var profileID = $(this).data('profile-id');
 
             if (willDelete) deleteProfiles([profileID]);
@@ -82,7 +82,7 @@
                 profileIDs.push($(this).val());
             });
 
-            var willDelete = confirm('Are you sure to delete these profiles? This action cannot be undone.');
+            var willDelete = confirm('Are you sure you want to delete these profiles? This action cannot be undone.');
             if (willDelete) deleteProfiles(profileIDs);
         });
 

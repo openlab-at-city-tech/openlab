@@ -39,12 +39,28 @@ $excluded_blocks_config = array(
     'advgb/accordion',
     'advgb/tabs',
     'advgb/tab',
+    'advgb/recent-posts',
+    'advgb/login-form',
+    'advgb/search-bar',
 );
+
+// Pro
+if(defined('ADVANCED_GUTENBERG_PRO')) {
+    if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_default_block_settings' ) ) {
+        $excludedProBlocks = PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_default_block_settings('excluded_blocks');
+        foreach ($excludedProBlocks as $excludedProBlock) {
+            array_push(
+                $excluded_blocks_config,
+                $excludedProBlock
+            );
+        }
+    }
+}
 ?>
 
 <div id="advgb-block-settings-container">
     <div class="advgb-header" style="padding-top: 40px">
-        <h1 class="header-title"><?php esc_html_e('Default Block Settings', 'advanced-gutenberg') ?></h1>
+        <h1 class="header-title"><?php esc_html_e('Block Settings', 'advanced-gutenberg') ?></h1>
     </div>
     <div class="clearfix">
         <div class="advgb-search-wrapper">
@@ -63,11 +79,11 @@ $excluded_blocks_config = array(
                 if (isset($block['iconColor'])) :
                     $iconColor = 'style=color:' . $block['iconColor'];
                 endif; ?>
-            <li class="block-config-item ju-settings-option" title="<?php echo esc_attr($block['title']); ?>">
+            <li class="block-config-item ju-settings-option" title="<?php echo esc_attr( __($block['title'], 'advanced-gutenberg') ); ?>">
                 <span class="block-icon" <?php echo esc_attr($iconColor) ?>>
                     <?php echo html_entity_decode(html_entity_decode(stripslashes($block['icon']))); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped ?>
                 </span>
-                <span class="block-title"><?php echo esc_html($block['title']); ?></span>
+                <span class="block-title"><?php echo esc_html( __($block['title'], 'advanced-gutenberg') ); ?></span>
                 <i class="mi mi-settings block-config-button"
                    title="<?php esc_html_e('Edit', 'advanced-gutenberg') ?>"
                    data-block="<?php echo esc_attr($block['name']); ?>"
@@ -78,7 +94,7 @@ $excluded_blocks_config = array(
 
         <?php if (count($advgb_blocks) === 0) : ?>
             <div class="blocks-not-loaded" style="text-align: center">
-                <p><?php esc_html_e('We are updating blocks list...', 'advanced-gutenberg'); ?></p>
+                <p><?php esc_html_e('No blocks available. Please edit a Profile (e.g. save changes without modifying anything). Then come back to Block Settings to see the blocks list.', 'advanced-gutenberg'); ?></p>
             </div>
         <?php endif; ?>
     </div>

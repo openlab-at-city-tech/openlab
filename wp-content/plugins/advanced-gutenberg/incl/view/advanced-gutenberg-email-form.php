@@ -126,7 +126,7 @@ $recaptcha_theme      = isset($recaptcha_config['recaptcha_theme']) ? $recaptcha
                             <small>(<?php esc_html_e('separate by comma', 'advanced-gutenberg') ?>)</small>
                         </label>
                         <div>
-                            <input type="email"
+                            <input type="text"
                                    name="contact_form_email_receiver"
                                    id="contact_form_email_receiver"
                                    class="ju-input full-width"

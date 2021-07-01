@@ -20,7 +20,7 @@ wp_enqueue_script('advgb_settings_js');
 $saved_settings    = get_option('advgb_settings');
 
 $gallery_lightbox_checked         = $saved_settings['gallery_lightbox'] ? 'checked' : '';
-$gallery_lightbox_caption_checked = $saved_settings['gallery_lightbox_caption'] ? 'checked' : '';
+$gallery_lightbox_caption         = isset($saved_settings['gallery_lightbox_caption']) ? $saved_settings['gallery_lightbox_caption'] : '1';
 $disable_wpautop_checked          = !empty($saved_settings['disable_wpautop']) ? 'checked' : '';
 $google_api_key_saved             = isset($saved_settings['google_api_key']) ? $saved_settings['google_api_key'] : '';
 $enable_blocks_spacing            = isset($saved_settings['enable_blocks_spacing']) && $saved_settings['enable_blocks_spacing'] ? 'checked' : '';
@@ -85,16 +85,17 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                         >
                             <?php esc_html_e('Image caption', 'advanced-gutenberg') ?>
                         </label>
-                        <div class="ju-switch-button">
-                            <label class="switch">
-                                <input type="checkbox" name="gallery_lightbox_caption"
-                                       id="gallery_lightbox_caption"
-                                       value="1"
-                                    <?php echo esc_attr($gallery_lightbox_caption_checked) ?>
-                                />
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                        <select class="ju-select" name="gallery_lightbox_caption" id="gallery_lightbox_caption">
+                            <option value="0"<?php echo ($gallery_lightbox_caption === '0' or $gallery_lightbox_caption === 0) ? ' selected' : '' ?>>
+                                <?php esc_html_e('Disabled', 'advanced-gutenberg'); ?>
+                            </option>
+                            <option value="1"<?php echo ($gallery_lightbox_caption === '1' or $gallery_lightbox_caption === 1) ? ' selected' : '' ?>>
+                                <?php esc_html_e('Bottom', 'advanced-gutenberg'); ?>
+                            </option>
+                            <option value="2"<?php echo $gallery_lightbox_caption === '2' ? ' selected' : '' ?>>
+                                <?php esc_html_e('Overlay', 'advanced-gutenberg'); ?>
+                            </option>
+                        </select>
                     </div>
                 </li>
                 <li class="ju-settings-option clearfix">
@@ -247,7 +248,7 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                         <label for="editor_width"
                                class="ju-setting-label advgb_qtip"
                                data-qtip="<?php esc_attr_e(
-                                   'Set the default post thumbnail to use in Recent Posts blocks.',
+                                   'Set the default post thumbnail to use in Content Display blocks.',
                                    'advanced-gutenberg'
                                ) ?>"
                         >

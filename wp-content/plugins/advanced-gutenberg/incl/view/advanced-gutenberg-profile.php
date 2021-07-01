@@ -66,7 +66,7 @@ wp_add_inline_script(
                 </li>
                 <li class="tab">
                     <a href="#users-tab" class="link-tab">
-                        <?php esc_html_e('Profile Attribution', 'advanced-gutenberg') ?>
+                        <?php esc_html_e('Assigned Users', 'advanced-gutenberg') ?>
                     </a>
                 </li>
             </ul>
@@ -106,7 +106,6 @@ wp_add_inline_script(
         </div>
 
         <div class="profile-title">
-            <h4><?php esc_html_e('Profile title', 'advanced-gutenberg') ?></h4>
             <div class="advgb-search-wrapper">
                 <input type="text" class="profile-title-input advgb-search-input"
                        name="advgb_profile_title"
@@ -132,18 +131,46 @@ wp_add_inline_script(
 
         <!--Users access tab-->
         <div id="users-tab" class="tab-content">
-            <div class="users-block-title clearfix">
+
+            <h3><?php _e('Active this profile for this roles(s)', 'advanced-gutenberg') ?>:</h3>
+            <div class="advgb-groups-block"style="margin: 0 -5px">
+                <ul class="advgb-groups-list">
+                    <?php
+                    global $wp_roles;
+                    $roles_list = $wp_roles->get_names();
+                    foreach ($roles_list as $roles => $role_name) :?>
+                        <li class="clearfix ju-settings-option">
+                            <label for="<?php echo esc_attr($roles) ?>" class="ju-setting-label"
+                                   style="vertical-align: middle;"><?php echo esc_html($role_name) ?></label>
+                            <div class="ju-switch-button">
+                                <label class="switch">
+                                    <input type="checkbox" class="extra-btn"
+                                           name="advgb-roles[]"
+                                           id="<?php echo esc_attr($roles) ?>"
+                                           value="<?php echo esc_attr($roles) ?>"
+                                            <?php if (in_array($roles, $roles_access_saved)) :
+                                                    echo 'checked';
+                                            endif; ?>
+                                    />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+            <div class="users-block-title clearfix" style="margin: 20px 0 0">
                 <h3><?php esc_html_e('Active this profile for this user(s)', 'advanced-gutenberg') ?>:</h3>
                 <div class="advgb-users-search-box">
                     <input type="button"
                            name="advgb-clear-btn"
                            id="advgb-clear-btn"
-                           class="ju-rect-button"
+                           class="button pp-default-button"
                            value="<?php esc_attr_e('Clear', 'advanced-gutenberg') ?>"/>
                     <select name="advgb-roles-filter" id="advgb-roles-filter">
                         <option value=""><?php esc_html_e('Use role filter', 'advanced-gutenberg') ?></option>
                         <?php
-                        global $wp_roles;
                         $roles_list = $wp_roles->get_names();
                         foreach ($roles_list as $roles => $role_name) {
                             echo '<option value="' . esc_attr($roles) . '">' . esc_html($role_name) . '</option>';
@@ -295,39 +322,12 @@ wp_add_inline_script(
                 </p>
             </div> <!--end Users blocks-->
 
-            <h3 style="margin: 45px 0 25px"><?php esc_html_e('Active this profile for this group(s)', 'advanced-gutenberg') ?>:</h3>
-            <div class="advgb-groups-block">
-                <ul class="advgb-groups-list clearfix">
-                    <?php
-                    $roles_list = $wp_roles->get_names();
-                    foreach ($roles_list as $roles => $role_name) :?>
-                        <li class="clearfix ju-settings-option">
-                            <label for="<?php echo esc_attr($roles) ?>" class="ju-setting-label"
-                                   style="vertical-align: middle;"><?php echo esc_html($role_name) ?></label>
-                            <div class="ju-switch-button">
-                                <label class="switch">
-                                    <input type="checkbox" class="extra-btn"
-                                           name="advgb-roles[]"
-                                           id="<?php echo esc_attr($roles) ?>"
-                                           value="<?php echo esc_attr($roles) ?>"
-                                            <?php if (in_array($roles, $roles_access_saved)) :
-                                                    echo 'checked';
-                                            endif; ?>
-                                    />
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
         </div>
 
         <!--Save button-->
         <button class="button button-primary pp-primary-button save-profile-button"
                 type="submit"
                 name="advgb_profile_save"
-                style="margin-left: 10px"
         >
             <span><?php esc_html_e('Save', 'advanced-gutenberg') ?></span>
         </button>
