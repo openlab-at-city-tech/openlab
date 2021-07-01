@@ -21,7 +21,7 @@ if (strpos($_SERVER['REQUEST_URI'], 'media-upload.php') && strpos($_SERVER['REQU
 
 function _zooeffect_selfURL()
 {
-	$s = empty ( $_SERVER ["HTTPS"] ) ? '' : ($_SERVER ["HTTPS"] == "on") ? "s" : "";
+	$s = empty ( $_SERVER ["HTTPS"] ) ? '' : ( ($_SERVER ["HTTPS"] == "on") ? "s" : "" );
 
 	$protocol =  strtolower ( $_SERVER ["SERVER_PROTOCOL"] );
 	$protocol =  substr($protocol, 0, strpos($protocol, "/"));
@@ -220,7 +220,12 @@ add_action('wp_dashboard_setup', '_zooeffect_dashboard');
 add_action('admin_menu', '_zooeffect_mt_add_pages');
 
 // register zooeffectWidget widget
-add_action('widgets_init', create_function('', 'return register_widget("zooeffectWidget");'));
+add_action(
+	'widgets_init',
+	function() {
+		return register_widget( 'zooeffectWidget' );
+	}
+);
 
 
 /////////////////////////////////
@@ -480,7 +485,7 @@ if (!class_exists('zooeffectWidget')) {
 	 */
 	class zooeffectWidget extends WP_Widget {
 			/** constructor */
-			function zooeffectWidget() {
+			function __construct() {
 					parent::WP_Widget(false, $name = 'ZooEffect Gallery Widget');
 			}
 
