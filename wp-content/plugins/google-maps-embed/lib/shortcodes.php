@@ -10,7 +10,7 @@
 class cets_EmbedGmaps_shortcodes {
 		
 	// register the new shortcodes
-	function cets_EmbedGmaps_shortcodes() {
+	function __construct() {
 	
 		add_shortcode( 'cetsEmbedGmap', array(&$this, 'show_Gmap') );
 			
