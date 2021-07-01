@@ -42,24 +42,37 @@ class WCP_Forms {
                 </div>
                 <div class="clear"></div>
             </div>
-            <div class="form-options">
+            <div class="form-options form-options2">
                 <ul>
-                    <li class="last folder-checkbox">
+                    <!--<li class="last folder-checkbox">
                         <input type="checkbox" id="folder-hide-show-checkbox">
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php esc_html_e("Rename", 'folders'); ?></span> </a>
+                        <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php /*esc_html_e("Rename", 'folders'); */?></span> </a>
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", 'folders'); ?></span> </a>
-                    </li>
+                        <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php /*esc_html_e("Delete", 'folders'); */?></span> </a>
+                    </li>-->
+	                <?php if($is_old) { ?>
+                        <li>
+                            <a href="javascript:;" class="expand-collapse folder-tooltip" id="expand-collapse-list" data-folder-tooltip="<?php esc_html_e("Expand", 'folders'); ?>">
+                                <span class="icon pfolder-arrow-down"></span><!-- <span class="text"><?php /*esc_html_e("Expand", 'folders'); */?></span>-->
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="folder-inline-tooltip expand-collapse">
+                            <a class="paste-folder-action disabled" target="_blank" href="<?php echo esc_url($upgradeURL) ?>" >
+                                <span class="inline-tooltip"><?php esc_html_e("Expand is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                <span class="icon pfolder-arrow-down"></span><!-- <span class="text"><?php /*esc_html_e("Expand", 'folders'); */?></span>-->
+                            </a>
+                        </li>
+                    <?php } ?>
                     <li>
                         <div class="form-options">
                             <ul>
-                                <li><a href="javascript:;" class="expand-collapse folder-tooltip" id="expand-collapse-list"><span class="icon pfolder-arrow-down"></span></a></li>
                                 <li class="last folder-order">
                                     <a data-folder-tooltip="Sort Folders" href="javascript:;" id="sort-order-list" class="sort-folder-order folder-tooltip">
-                                        <span class="icon pfolder-arrow-sort"></span>
+                                        <span class="icon pfolder-arrow-sort"></span><!-- <span class="text"><?php /*esc_html_e("Sort", 'folders'); */?></span>-->
                                     </a>
                                     <div class="folder-sort-menu <?php echo ($is_old)?"":"is-pro" ?>">
                                         <ul>

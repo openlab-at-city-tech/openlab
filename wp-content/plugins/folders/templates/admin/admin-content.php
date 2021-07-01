@@ -16,8 +16,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 </style>
 <style>
 <?php
+$font_family = "";
+if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
+    $font_family = $customize_folders['folder_font'];
+    $folder_fonts = self::get_font_list();
+    if(isset($folder_fonts[$font_family])) {
+        if($font_family == "System Stack") {
+            $font_family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif";
+        }
+        ?>
+.wcp-container, .folder-popup-form, .dynamic-menu { font-family: <?php echo esc_attr($font_family) ?>; }
+<?php
+}
+if($font_family == "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif") {
+$font_family = "System Stack";
+}
+if($folder_fonts[$font_family] == "Default") {
+$font_family = "";
+}
+}
 if(!isset($customize_folders['new_folder_color']) || empty($customize_folders['new_folder_color'])) {
-    $customize_folders['new_folder_color'] = "#f51366";
+$customize_folders['new_folder_color'] = "#f51366";
 }
 ?>
 .add-new-folder { background-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?>; border-color: <?php echo esc_attr($customize_folders['new_folder_color']) ?> }
@@ -31,46 +50,47 @@ button.button.organize-button { background-color: <?php echo esc_attr($customize
 button.button.organize-button:hover { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
 <?php if(!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
     $customize_folders['folder_bg_color'] = "#f51366";
-} $rgbColor = self::hexToRgb($customize_folders['folder_bg_color']); ?>
-    body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover { background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>) !important; color: #333333;}
-    body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
-    #custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in > , body #custom-scroll-menu  *.drag-in > a:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
-    .drag-bot > a {
-        border-bottom: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
-    }
-    .drag-up > a {
-        border-top: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
-    }
-    body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover {
-        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
-        color: #fff !important;
-    }
-    .orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item, .sticky-folders ul li a.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
-    body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-css) .header-posts a:hover, body:not(.no-hover-css) .un-categorised-items:hover, body:not(.no-hover-css) .sticky-folders ul li a:hover {background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>);}
-    .wcp-drop-hover {
-        background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
-    }
-    #custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
-    .mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
-    .ui-state-highlight { border-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?> !important;}
-    .jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
-<?php
-$font_family = "";
-if(isset($customize_folders['folder_font']) && !empty($customize_folders['folder_font'])) {
-    $font_family = $customize_folders['folder_font'];
-    $folder_fonts = self::get_font_list();
-    if(isset($folder_fonts[$font_family])) {
-    ?>
-    .wcp-container, .folder-popup-form { font-family: "<?php echo esc_attr($font_family) ?>"; }
-    <?php
-    }
-    if($folder_fonts[$font_family] == "Default") {
-        $font_family = "";
-    }
 }
+$rgbColor = self::hexToRgb($customize_folders['folder_bg_color']); ?>
+body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover, .dynamic-menu a.active, .dynamic-menu a:hover, .folder-setting-menu li a:hover { background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>) !important; color: #333333;}
+body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+#custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in > a:hover { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff !important; }
+.drag-bot > a {
+    border-bottom: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+}
+.drag-up > a {
+    border-top: solid 2px <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+}
+#custom-scroll-menu .jstree-hovered:not(.jstree-clicked) .pfolder-folder-close {
+    color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+}
+.folders-action-menu > ul > li > a:not(.disabled):hover, .folders-action-menu > ul > li > label:not(.disabled):hover {
+    color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?>;
+}
+.dynamic-menu a.active span i, .dynamic-menu a:hover span i, .dynamic-menu a.active span.dashicons, .dynamic-menu a:hover span.dashicons { color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> }
+body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover {
+    background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
+    color: #fff !important;
+}
+body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered .pfolder-folder-close, body:not(.no-hover-css) #custom-scroll-menu *.drag-in > a.jstree-hovered:hover .pfolder-folder-close {
+    color: #fff !important;
+}
+.orange-bg > span ,.wcp-container .route.active-item > h3.title, .header-posts a.active-item, .un-categorised-items.active-item, .sticky-folders ul li a.active-item { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
+body:not(.no-hover-css) .wcp-container .route .title:hover, body:not(.no-hover-css) .header-posts a:hover, body:not(.no-hover-css) .un-categorised-items:hover, body:not(.no-hover-css) .sticky-folders ul li a:hover {background: rgba(<?php echo esc_attr($rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08") ?>);}
+.wcp-drop-hover {
+    background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;
+}
+#custom-menu .route .nav-icon .wcp-icon {color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important;}
+.mCS-3d.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar { background: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; }
+.jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: <?php echo esc_attr($customize_folders['folder_bg_color']) ?> !important; color: #ffffff; }
+<?php
+
 if(isset($customize_folders['folder_size']) && !empty($customize_folders['folder_size'])) {
+    if($customize_folders['folder_size'] == "custom") {
+        $customize_folders['folder_size'] = ! isset( $customize_folders['folder_custom_font_size'] ) || empty( $customize_folders['folder_custom_font_size'] ) ? "16" : $customize_folders['folder_custom_font_size'];
+    }
     ?>
-    .wcp-container .route span.title-text, .header-posts a, .un-categorised-items a, .sticky-title, .sticky-folders > ul > li > a { font-size: <?php echo esc_attr($customize_folders['folder_size']) ?>px; }
+    .wcp-container .route span.title-text, .header-posts a, .un-categorised-items a, .sticky-title, .sticky-folders > ul > li > a, .jstree-default .jstree-anchor { font-size: <?php echo esc_attr($customize_folders['folder_size']) ?>px; }
     <?php
 }
 ?>
@@ -92,6 +112,12 @@ if($typenow == "page") {
     $title = "Posts";
 } else if($typenow == "attachment") {
     $title = "Files";
+} else {
+    $post_type = $typenow;
+    $post_types = get_post_types( array( "name" => $post_type), 'objects' );
+    if(!empty($post_types) && is_array($post_types) && isset($post_types[$post_type]) && isset($post_types[$post_type]->label)) {
+        $title = $post_types[$post_type]->label;
+    }
 }
 $display_status = "wcp_dynamic_display_status_" . $typenow;
 $display_status = get_option($display_status);
@@ -136,6 +162,44 @@ if(!empty($post_type)) {
                         </div>
                         <div class="un-categorised-items <?php echo esc_attr($active) ?>">
                             <a href="javascript:;" class="un-categorized-posts"><?php esc_attr_e("Unassigned ".$title, 'folders'); ?> <span class="total-count total-empty"><?php echo $ttemp ?></span> </a>
+                        </div>
+                        <div class="folder-separator-2"></div>
+                        <div class="folders-action-menu">
+                            <ul>
+                                <li style="flex: 0 0 22px;"><a href="javascript:;" class="no-bg"><input type="checkbox" id="menu-checkbox" ></a></li>
+                                <li class="folder-inline-tooltip">
+                                    <a class="full-width upload-media-action disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>">
+                                        <span class="inline-tooltip"><?php esc_html_e("Uploading folder is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                        <span class="dashicons dashicons-cloud-upload"></span>
+                                    </a>
+                                </li>
+                                <li class="folder-inline-tooltip cut-folder-action">
+                                    <a class="full cut-folder-action disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                        <span class="inline-tooltip"><?php esc_html_e("Cut is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                        <span class="pfolder-cut"></span>
+                                    </a>
+                                </li>
+                                <li class="folder-inline-tooltip cut-folder-action">
+                                    <a class="full copy-folder-action disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                        <span class="inline-tooltip"><?php esc_html_e("Copy is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                        <span class="pfolder-copy"></span>
+                                    </a>
+                                </li>
+                                <li class="folder-inline-tooltip cut-folder-action">
+                                    <a class="paste-folder-action disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                        <span class="inline-tooltip"><?php esc_html_e("Paste is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                        <span class="pfolder-paste"></span>
+                                    </a>
+                                </li>
+                                <li class="folder-inline-tooltip">
+                                    <a class="lock-unlock-all-folders open-folders disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
+                                        <span class="inline-tooltip"><?php esc_html_e("Lock/Unlock is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
+                                        <span class="dashicons dashicons-lock"></span>
+                                    </a>
+                                </li>
+                                <!--<li><a class="folder-tooltip undo-folder-action disabled" href="javascript:;" data-folder-tooltip="<?php /*esc_html_e("Undo Changes", "folders"); */?>"><span class="pfolder-undo"></span></a></li>-->
+                                <li><a class="folder-tooltip delete-folder-action disabled" href="javascript:;" data-folder-tooltip="<?php esc_html_e("Delete", "folders"); ?>"><span class="pfolder-remove"></span></a></li>
+                            </ul>
                         </div>
                         <div class="folder-separator-2"></div>
                     </div>
@@ -299,7 +363,55 @@ if(!empty($post_type)) {
                 </div>
                 <div class="folder-form-buttons">
                     <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
-                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Activate License Key", "folders") ?></a>
+                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="folder-popup-form" id="sub-drag-folder-popup">
+        <div class="popup-form-content">
+            <div class="popup-form-data">
+                <div class="close-popup-button">
+                    <a class="" href="javascript:;"><span></span></a>
+                </div>
+                <div class="add-update-folder-title">
+					<?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
+                </div>
+                <div class="folder-form-message" style="padding: 25px 0 15px;" >
+					<?php esc_html_e("Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade to Pro to create, access and organize your files with sub-folders.", "folders") ?>
+                </div>
+                <div class="folder-form-message" style="padding: 0 10px 25px;" >
+					<?php esc_html_e("You can still create unlimited folders in the free version.", "folders") ?>
+                </div>
+                <div class="checkbox-content">
+                    <?php $check_status = get_option("premio_hide_child_popup"); ?>
+                    <label for="do_not_show_again"><input type="checkbox" id="do_not_show_again" <?php checked($check_status, 1) ?>> <?php esc_html_e("Don't show this popup again", "folders") ?></label>
+                </div>
+                <div class="folder-form-buttons">
+                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="folder-popup-form" id="confirm-your-change">
+        <div class="popup-form-content">
+            <div class="popup-form-data">
+                <div class="close-popup-button">
+                    <a class="" href="javascript:;"><span></span></a>
+                </div>
+                <div class="add-update-folder-title">
+					<?php esc_html_e("Confirm your change", "folders") ?>
+                </div>
+                <div class="folder-form-message" style="padding: 25px 10px;" >
+                    Hey, it looks like you want to move the file to "Unassigned Files." Do you want to move the file from the current folder only or from all the folders where the file exists?
+                </div>
+                <div class="folder-form-buttons">
+                    <input type="hidden" id="unassigned_folders" />
+                    <a href="javascript:;" class="form-cancel-btn remove-from-all-folders" id="remove-from-all-folders"><?php esc_html_e("From all folders", "folders") ?></a>
+                    <a href="javascript:;" class="form-submit-btn remove-from-current-folder" id="remove-from-current-folder"><?php esc_html_e("Just from this folder", "folders") ?></a>
                 </div>
             </div>
         </div>

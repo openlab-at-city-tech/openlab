@@ -8,6 +8,25 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
         <div class="container">
             <div class="pricing-table">
                 <div class="price-title">Unlock All Features</div>
+                <div class="pricing-table-header">
+                    <div class="pricing-table-body">
+                        <div class="pricing-table-content first active" data-option="1_year">
+                            <div class="year-col">1 Year</div>
+                            <div class="update-col">Updates &amp; Support</div>
+                            <div class="pricing-discount-col"></div>
+                        </div>
+                        <div class="pricing-table-content second" data-option="2_year">
+                            <div class="year-col">2 Years</div>
+                            <div class="update-col">Updates &amp; Support</div>
+                            <div class="pricing-discount-col"><span>32% off &#128526;</span></div>
+                        </div>
+                        <div class="pricing-table-content third" data-option="lifetime">
+                            <div class="year-col">Lifetime</div>
+                            <div class="update-col">Updates &amp; Support</div>
+                            <div class="pricing-discount-col"><span>63% off &#129395;</span></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="price-tables">
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
@@ -46,13 +65,16 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                                 </span>
                                             </a>
                                         </li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Default folder while uploading media<span class="has-tooltip">*</span><span class="tooltip__content">Upload files to a default folder if no other folder is selected while uploading</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sticky folders & folder bookmarking<span class="has-tooltip">*</span><span class="tooltip__content">Pin selected folders on top of the navigation for easier access</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Duplicate an existing folder with all its content</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Lock/Unlock folders<span class="has-tooltip">*</span><span class="tooltip__content">Locked folders stay pinned, and cannot be dragged or deleted</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
                                     </ul>
@@ -106,13 +128,16 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                                 </span>
                                             </a>
                                         </li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Default folder while uploading media<span class="has-tooltip">*</span><span class="tooltip__content">Upload files to a default folder if no other folder is selected while uploading</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sticky folders & folder bookmarking<span class="has-tooltip">*</span><span class="tooltip__content">Pin selected folders on top of the navigation for easier access</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Duplicate an existing folder with all its content</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Lock/Unlock folders<span class="has-tooltip">*</span><span class="tooltip__content">Locked folders stay pinned, and cannot be dragged or deleted</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
                                     </ul>
@@ -173,13 +198,16 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
                                                     </span>
                                                 </span>
                                             </a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Upload folders with all its content<span class="has-tooltip">*</span><span class="tooltip__content">Upload a folder (all its content within the folder) directly</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sort folders based on the date<span class="has-tooltip">*</span><span class="tooltip__content">Sort folders based on the creation date of the folders</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Replace media for all file types and update file names from WordPress titles<span class="has-tooltip">*</span><span class="tooltip__content">Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Advanced Media Replacements<span class="has-tooltip">*</span><span class="tooltip__content">Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">User access restriction<span class="has-tooltip">*</span><span class="tooltip__content">Restrict users within their own folders only (restrict Dynamic Folder access as well)</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Default folder while uploading media<span class="has-tooltip">*</span><span class="tooltip__content">Upload files to a default folder if no other folder is selected while uploading</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Sticky folders & folder bookmarking<span class="has-tooltip">*</span><span class="tooltip__content">Pin selected folders on top of the navigation for easier access</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Duplicate folders<span class="has-tooltip">*</span><span class="tooltip__content">Duplicate an existing folder with all its content</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Lock/Unlock folders<span class="has-tooltip">*</span><span class="tooltip__content">Locked folders stay pinned, and cannot be dragged or deleted</span></a></li>
+                                        <li><a href="javascript:;" class="cus-tooltip">Move files to trash before permanently removing<span class="has-tooltip">*</span><span class="tooltip__content">Before deleting files permanently, move them to trash to reduce accidental deletion</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Customize folder styles with fonts, custom colors & more<span class="has-tooltip">*</span><span class="tooltip__content">Customize folders with your preferred colors, font size, font family & more</span></a></li>
                                         <li><a href="javascript:;" class="cus-tooltip">Download folders as ZIP<span class="has-tooltip">*</span><span class="tooltip__content">Download all contents of a folder as a ZIP</span></a></li>
                                     </ul>
@@ -284,6 +312,18 @@ $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=687&edd_opt
             }
         };
         $(document).ready(function () {
+            $(document).on("click", ".pricing-table-content", function(){
+                if(!$(this).hasClass("active")) {
+                    $(".pricing-table-content").removeClass("active");
+                    $(this).addClass("active");
+                    var datFor = $(this).data("option");
+                    $(".multiple-options").each(function(){
+                        $(this).find("option").prop("selected", false);
+                        $(this).find("option[data-option='"+datFor+"']").prop("selected", true);
+                        $(this).trigger("change");
+                    })
+                }
+            });
             if ($(".multiple-options").length) {
                 $(".multiple-options").select2({
                     minimumResultsForSearch: -1
