@@ -45,6 +45,7 @@ class GF_Block_Form extends GF_Block {
 		'tabindex'    => array( 'type' => 'string' ),
 		'fieldValues' => array( 'type' => 'string' ),
 		'formPreview' => array( 'type' => 'boolean' ),
+		'imgPreview'  => array( 'type' => 'boolean' ),
 	);
 
 	/**
@@ -105,7 +106,9 @@ class GF_Block_Form extends GF_Block {
 			$script['handle'],
 			'gform_block_form',
 			array(
-				'forms' => $this->get_forms(),
+				'adminURL' => admin_url( 'admin.php' ),
+				'forms'    => $this->get_forms(),
+				'preview'  => GFCommon::get_base_url() . '/images/gf_block_preview.svg',
 			)
 		);
 
@@ -129,7 +132,20 @@ class GF_Block_Form extends GF_Block {
 
 		// Add Gravity Forms styling if CSS is enabled.
 		if ( '1' !== get_option( 'rg_gforms_disable_css', false ) ) {
-			$deps = array_merge( $deps, array( 'gforms_formsmain_css', 'gforms_ready_class_css', 'gforms_browsers_css' ) );
+			$deps = array_merge( $deps, array( 'gform_basic', 'gforms_formsmain_css', 'gforms_ready_class_css', 'gforms_browsers_css', 'gform_theme' ) );
+
+			/**
+			 * Allows users to disable the main theme.css file from being loaded on the Front End.
+			 *
+			 * @since 2.5-beta-3
+			 *
+			 * @param boolean Whether to disable the theme css.
+			 */
+			$disable_theme_css = apply_filters( 'gform_disable_form_theme_css', false );
+
+			if ( ! $disable_theme_css ) {
+				$deps[] = 'gform_theme';
+			}
 		}
 
 		return array(
@@ -233,7 +249,7 @@ class GF_Block_Form extends GF_Block {
 		}
 
 		// Get form objects.
-		$form_objects = GFAPI::get_forms();
+		$form_objects = GFAPI::get_forms( true, false, 'title', 'ASC' );
 
 		// Loop through forms, add conditional logic check.
 		foreach ( $form_objects as $form ) {
