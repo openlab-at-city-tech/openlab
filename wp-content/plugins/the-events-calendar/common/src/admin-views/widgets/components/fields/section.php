@@ -1,17 +1,16 @@
 <?php
 /**
- * Admin View: Widget Section Component.
+ * Admin View: Widget Component Section field.
  *
  * This component is different in that it calls other components!
  *
- * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/admin-views/widgets/components/section.php
+ * Administration Views cannot be overwritten by default from your theme.
  *
  * See more documentation about our views templating system.
  *
- * @link    http://m.tri.be/1aiy
+ * @link    http://evnt.is/1aiy
  *
- * @version 5.3.0
+ * @version 4.12.18
  *
  * @var string              $label       Title for the section. (optional)
  * @var string              $description Description for the section. (optional)
@@ -33,23 +32,9 @@ $section_classes = array_merge( [ 'tribe-widget-form-control', 'tribe-widget-for
 	?>
 >
 	<?php if ( ! empty( $label ) ) : ?>
-		<?php // Note: the actual widget title/handle is an <h3>. ?>
+		<?php // Note: the actual widget title/handle is an <h2>. ?>
 		<h4 class="tribe-widget-form-control__section-title"><?php echo esc_html( $label ); ?></h4>
 	<?php endif; ?>
 
-	<?php
-	foreach ( $children as $child_id => $child ) {
-		$this->template( "widgets/components/{$child['type']}", $child );
-
-		/**
-		 * Allows other plugins to hook in as needed to inject things that aren't necessarily an input.
-		 *
-		 * @since 5.3.0
-		 *
-		 * @param array<array,mixed> $child The child "field" info.
-		 * @var Widget_Abstract $widget_obj An instance of the widget abstract.
-		 */
-		do_action( "tribe_events_views_v2_widget_admin_form_{$child['type']}_input", $child, $widget_obj );
-	}
-	?>
+	<?php $this->template( "widgets/components/fields", [ 'fields' => $children ] );  ?>
 </div>

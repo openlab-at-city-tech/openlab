@@ -96,6 +96,7 @@ class Tribe__Events__Venue extends Tribe__Events__Linked_Posts__Base {
 		$this->post_type_args['rewrite']['slug']   = $rewrite->prepare_slug( $this->singular_venue_label, self::POSTTYPE, false );
 		$this->post_type_args['show_in_nav_menus'] = class_exists( 'Tribe__Events__Pro__Main' ) ? true : false;
 		$this->post_type_args['public']            = class_exists( 'Tribe__Events__Pro__Main' ) ? true : false;
+		$this->post_type_args['show_in_rest']      = class_exists( 'Tribe__Events__Pro__Main' ) && current_user_can( 'manage_options' );
 
 		/**
 		 * Provides an opportunity to modify the labels used for the venue post type.
@@ -120,6 +121,14 @@ class Tribe__Events__Venue extends Tribe__Events__Linked_Posts__Base {
 			'item_reverted_to_draft'   => sprintf( esc_html__( '%s reverted to draft.', 'the-events-calendar' ), $this->singular_venue_label ),
 			'item_scheduled'           => sprintf( esc_html__( '%s scheduled.', 'the-events-calendar' ), $this->singular_venue_label ),
 			'item_updated'             => sprintf( esc_html__( '%s updated.', 'the-events-calendar' ), $this->singular_venue_label ),
+			'item_link'                => sprintf(
+				// Translators: %s: Venue singular.
+				esc_html__( '%s Link', 'the-events-calendar' ), $this->singular_venue_label
+			),
+			'item_link_description'    => sprintf(
+				// Translators: %s: Venue singular.
+				esc_html__( 'A link to a particular %s.', 'the-events-calendar' ), $this->singular_venue_label
+			),
 		] );
 
 		$this->register_post_type();
@@ -315,7 +324,7 @@ class Tribe__Events__Venue extends Tribe__Events__Linked_Posts__Base {
 		 */
 		do_action( 'tribe_events_venue_save', $venue_id, $data, $venue );
 
-		// TODO: We should probably do away with 'StateProvince' and stick to 'State' and 'Province'.
+		// @todo [BTRIA-609]: We should probably do away with 'StateProvince' and stick to 'State' and 'Province'.
 		if ( ! isset( $data['StateProvince'] ) || $data['StateProvince'] == '' ) {
 			if (
 				isset( $data['State'] ) && $data['State'] != ''

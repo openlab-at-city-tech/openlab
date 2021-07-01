@@ -7,7 +7,7 @@
  *
  * See more documentation about our views templating system.
  *
- * @link http://m.tri.be/1aiy
+ * @link http://evnt.is/1aiy
  *
  * @since 5.1.1
  *
@@ -24,7 +24,6 @@ if ( empty( $event->featured ) ) {
 ?>
 <em
 	class="tribe-events-calendar-month__calendar-event-datetime-featured-icon"
-	aria-label="<?php esc_attr_e( 'Featured', 'the-events-calendar' ); ?>"
 	title="<?php esc_attr_e( 'Featured', 'the-events-calendar' ); ?>"
 >
 	<?php $this->template( 'components/icons/featured', [ 'classes' => [ 'tribe-events-calendar-month__calendar-event-datetime-featured-icon-svg' ] ] ); ?>

@@ -1,15 +1,14 @@
 <?php
 /**
- * Admin View: Widget Radio Component
+ * Admin View: Widget Component Radio field
  *
- * Override this template in your own theme by creating a file at:
- * [your-theme]/tribe/admin-views/widgets/components/radio.php
+ * Administration Views cannot be overwritten by default from your theme.
  *
  * See more documentation about our views templating system.
  *
- * @link    http://m.tri.be/1aiy
+ * @link    http://evnt.is/1aiy
  *
- * @version 5.3.0
+ * @version 4.12.18
  *
  * @var string $label        Label for the radio group.
  * @var string $value        Value for the radio group.

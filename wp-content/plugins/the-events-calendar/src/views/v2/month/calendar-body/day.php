@@ -7,7 +7,7 @@
  *
  * See more documentation about our views templating system.
  *
- * @link http://m.tri.be/1aiy
+ * @link http://evnt.is/1aiy
  *
  * @version 5.3.0
  *
@@ -24,7 +24,7 @@
  *                                  page limit, including the multi-day ones.
  *          @type int $more_events The number of events not showing in the day.
  *          @type array $events The non multi-day events on this day. The format of each event is the one returned by
- *                    the `tribe_get_event` function.
+ *                    the `tribe_get_event` function. Does not include the below events.
  *          @type array $featured_events The featured events on this day. The format of each event is the one returned
  *                    by the `tribe_get_event` function.
  *          @type array $multiday_events The stack of multi-day events on this day. The stack is a mix of event post
@@ -74,10 +74,8 @@ $num_events_label = sprintf(
 >
 
 	<button
-		<?php if ( ! empty( $day['found_events'] ) ) : ?>
-			aria-expanded="<?php echo esc_attr( $expanded ); ?>"
-			aria-controls="<?php echo esc_attr( $mobile_day_id ); ?>"
-		<?php endif; ?>
+		aria-expanded="<?php echo esc_attr( $expanded ); ?>"
+		aria-controls="<?php echo esc_attr( $mobile_day_id ); ?>"
 		<?php tribe_classes( $day_button_classes ); ?>
 		data-js="tribe-events-calendar-month-day-cell-mobile"
 		tabindex="-1"
@@ -100,10 +98,15 @@ $num_events_label = sprintf(
 			?>
 			<em
 				class="tribe-events-calendar-month__mobile-events-icon tribe-events-calendar-month__mobile-events-icon--featured"
-				aria-label="<?php echo esc_attr( $has_featured_events_label ); ?>"
 				title="<?php echo esc_attr( $has_featured_events_label ); ?>"
 			>
-				<?php $this->template( 'components/icons/featured', [ 'classes' => [ 'tribe-events-calendar-month__mobile-events-icon-svg' ] ] ); ?>
+				<?php $this->template(
+					'components/icons/featured',
+					[
+						'classes'    => [ 'tribe-events-calendar-month__mobile-events-icon-svg' ],
+						'icon_title' => esc_html( $has_featured_events_label )
+					]
+				); ?>
 			</em>
 		<?php elseif ( ! empty( $day['found_events'] ) ) : ?>
 			<?php
@@ -112,10 +115,8 @@ $num_events_label = sprintf(
 			?>
 			<em
 				class="tribe-events-calendar-month__mobile-events-icon tribe-events-calendar-month__mobile-events-icon--event"
-				aria-label="<?php echo esc_attr( $has_events_label ); ?>"
 				title="<?php echo esc_attr( $has_events_label ); ?>"
-			>
-			</em>
+			></em>
 		<?php endif ?>
 	</button>
 
@@ -152,7 +153,7 @@ $num_events_label = sprintf(
 				'is_start_of_week' => $day['is_start_of_week'],
 			] ); ?>
 
-			<?php $this->template( 'month/calendar-body/day/calendar-events', [ 'day_events' => $day['events'] ] ); ?>
+			<?php $this->template( 'month/calendar-body/day/calendar-events', [ 'day_events' => $day['events'], ] ); ?>
 		</div>
 
 		<?php $this->template( 'month/calendar-body/day/more-events', [ 'more_events' => $day['more_events'], 'more_url' => $day['day_url'] ] ); ?>

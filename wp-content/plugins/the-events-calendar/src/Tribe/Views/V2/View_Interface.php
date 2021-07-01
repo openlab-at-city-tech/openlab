@@ -229,4 +229,27 @@ interface View_Interface  extends View_Url_Provider_Interface, Repository_User_I
 	 * @return string The URL to fetch the View for a date.
 	 */
 	public function url_for_query_args( $date = null, $query_args = null );
+
+	/**
+	 * Returns the Event post IDs the View would render in its template, but
+	 * filtered and formatted for iCalendar export.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @param int $per_page The number of events per page to return.
+	 *
+	 * @return array<int> A filtered list of Event post IDs; note the order of the
+	 *                    result is NOT relevant as much as that the order that's been
+	 *                    used to fetch the Events.
+	 */
+	public function get_ical_ids( $per_page );
+
+	/**
+	 * Disable the url management inside of the current view.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @return View_Interface A reference to the View-like that is being directed.
+	 */
+	public function disable_url_management();
 }
