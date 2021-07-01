@@ -583,6 +583,8 @@ function openlab_prevent_bbp_recounts( $r ) {
 add_filter( 'bbp_after_update_forum_parse_args', 'openlab_prevent_bbp_recounts' );
 
 function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id ) {
+	$db = debug_backtrace(); // phpcs:disable WordPress.PHP.DevelopmentFunctions
+
 	$group_root = (int) bbp_get_group_forums_root_id();
 	if ( ! $group_root ) {
 		return $id;
@@ -593,7 +595,6 @@ function openlab_prevent_bbpress_from_recalculating_group_root_reply_count( $id 
 		return $id;
 	}
 
-	$db     = debug_backtrace(); // phpcs:disable WordPress.PHP.DevelopmentFunctions
 	$caller = '';
 	foreach ( $db as $key => $step ) {
 		if ( ! empty( $step['function'] ) && 'bbp_get_forum_id' === $step['function'] ) {
@@ -636,6 +637,8 @@ add_filter( 'bbp_get_single_forum_description', 'openlab_remove_bbpress_empty_fo
  * Removes single forum title from group forum page.
  */
 function openlab_remove_bbpress_forum_title( $title ) {
+	$dbs = debug_backtrace(); // phpcs:disable WordPress.PHP.DevelopmentFunctions
+
 	if ( ! bp_is_group() || ! bp_is_current_action( 'forum' ) ) {
 		return $title;
 	}
@@ -645,7 +648,7 @@ function openlab_remove_bbpress_forum_title( $title ) {
 	$is_single_forum_template = false;
 	$is_forum_nav             = false;
 
-	foreach ( debug_backtrace() as $db ) { // phpcs:disable WordPress.PHP.DevelopmentFunctions
+	foreach ( $dbs as $db ) {
 		if ( ! empty( $db['class'] ) && 'BBP_Forums_Group_Extension' === $db['class'] && ! empty( $db['function'] ) && 'display_forums' === $db['function'] ) {
 			$is_display_forums = true;
 		}
