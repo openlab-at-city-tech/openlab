@@ -70,11 +70,12 @@ class Text_Hover_Test extends WP_UnitTestCase {
 
 
 	public static function get_default_filters() {
-		return array(
-			array( 'the_content' ),
-			array( 'the_excerpt' ),
-			array( 'widget_text' ),
-		);
+		$filters = [];
+		foreach ( self::get_core_filters() as $filter ) {
+			$filters[] = [ $filter ];
+		}
+
+		return $filters;
 	}
 
 	public static function get_comment_filters() {
@@ -85,14 +86,12 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public static function get_third_party_filters() {
-		return array(
-			array( 'acf/format_value/type=text' ),
-			array( 'acf/format_value/type=textarea' ),
-			array( 'acf/format_value/type=url' ),
-			array( 'acf_the_content' ),
-			array( 'elementor/frontend/the_content' ),
-			array( 'elementor/widget/render_content' ),
-		);
+		$filters = [];
+		foreach ( self::get_3rd_party_filters() as $filter ) {
+			$filters[] = [ $filter ];
+		}
+
+		return $filters;
 	}
 
 	public static function get_text_to_hover() {
@@ -105,6 +104,8 @@ class Text_Hover_Test extends WP_UnitTestCase {
 			array( ',' ),
 			array( '!' ),
 			array( '?' ),
+			array( ';' ),
+			array( ':' ),
 		);
 	}
 
@@ -114,6 +115,8 @@ class Text_Hover_Test extends WP_UnitTestCase {
 			array( array( '(', ')' ) ),
 			array( array( ')', '(' ) ),
 			array( array( '{', '}' ) ),
+			array( array( ']', '[' ) ),
+			array( array( '[', ']' ) ),
 			array( array( '<strong>', '</strong>' ) ),
 		);
 	}
@@ -124,6 +127,22 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	// HELPER FUNCTIONS
 	//
 	//
+
+
+	protected static function get_core_filters() {
+		return array( 'the_content', 'the_excerpt', 'widget_text' );
+	}
+
+	protected static function get_3rd_party_filters() {
+		return array(
+			'acf/format_value/type=text',
+			'acf/format_value/type=textarea',
+			'acf/format_value/type=url',
+			'acf_the_content',
+			'elementor/frontend/the_content',
+			'elementor/widget/render_content',
+		);
+	}
 
 	protected function text_hovers( $term = '' ) {
 		$text_to_hover = self::$text_to_hover;
@@ -216,15 +235,15 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_TextHover_Plugin_050' ) );
+		$this->assertTrue( class_exists( 'c2c_Plugin_064' ) );
 	}
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '050', $this->obj->c2c_plugin_version() );
+		$this->assertEquals( '064', $this->obj->c2c_plugin_version() );
 	}
 
 	public function test_version() {
-		$this->assertEquals( '4.0', $this->obj->version() );
+		$this->assertEquals( '4.1', $this->obj->version() );
 	}
 
 	public function test_instance_object_is_returned() {
@@ -287,6 +306,13 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$options = $this->obj->get_options();
 
 		$this->assertEquals( 'early', $options['when'] );
+	}
+
+	public function test_default_value_of_more_filters() {
+		$this->obj->reset_options();
+		$options = $this->obj->get_options();
+
+		$this->assertEmpty( $options['more_filters'] );
 	}
 
 	/*
@@ -605,6 +631,19 @@ class Text_Hover_Test extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $this->text_hover( 'bbPress' ) );
 	}
 
+	public function test_hovers_filter_added_via_more_filters() {
+		$filter = 'custom_filter';
+		$this->assertEquals( 'WP', apply_filters( $filter, 'WP' ) );
+
+		$expected = "<abbr class='c2c-text-hover' title='WordPress'>WP</abbr>";
+
+		$this->set_option( array( 'more_filters' => array( $filter ) ) );
+		$this->obj->register_filters();
+
+		$this->assertEquals( 3, has_filter( $filter, array( $this->obj, 'text_hover' ) ) );
+		$this->assertEquals( $expected, apply_filters( $filter, 'WP' ) );
+	}
+
 	public function test_hover_does_not_apply_to_comments_by_default() {
 		$this->assertEquals( 'coffee2code', apply_filters( 'get_comment_text', 'coffee2code' ) );
 		$this->assertEquals( 'coffee2code', apply_filters( 'get_comment_excerpt', 'coffee2code' ) );
@@ -785,6 +824,41 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	}
 
 	/*
+	 * get_default_filters()
+	 */
+
+	public function test_get_default_filters_default() {
+		$this->assertEquals( self::get_core_filters(), $this->obj->get_default_filters() );
+	}
+
+	public function test_get_default_filters_empty_string() {
+		$this->assertEquals( self::get_core_filters(), $this->obj->get_default_filters( '' ) );
+	}
+
+	public function test_get_default_filters_core() {
+		$this->assertEquals( self::get_core_filters(), $this->obj->get_default_filters( 'core' ) );
+	}
+
+	public function test_get_default_filters_invalid() {
+		$this->assertEmpty( $this->obj->get_default_filters( 'invalid' ) );
+	}
+
+	public function test_get_default_filters_third_party() {
+		$filters = self::get_3rd_party_filters();
+
+		$this->assertEquals( $filters, $this->obj->get_default_filters( 'third_party' ) );
+	}
+
+	public function test_get_default_filters_both() {
+		$filters = self::get_3rd_party_filters();
+
+		$this->assertEquals(
+			array_merge( $this->get_core_filters(), $filters ),
+			$this->obj->get_default_filters( 'both' )
+		);
+	}
+
+	/*
 	 * options_page_description()
 	 */
 
@@ -792,7 +866,7 @@ class Text_Hover_Test extends WP_UnitTestCase {
 	public function test_options_page_description() {
 		$expected = '<h1>Text Hover Settings</h1>' . "\n";
 		$expected .= '<p class="see-help">See the "Help" link to the top-right of the page for more help.</p>' . "\n";
-		$expected .= '<p>Text Hover is a plugin that allows you to add hover text for text in posts. Very handy to create hover explanations of people mentioned in your blog, and/or definitions of unique abbreviations and terms you use.</p>';
+		$expected .= '<p>Text Hover is a plugin that allows you to add hover text (aka tooltips) to content in posts. Handy for providing explanations of names, terms, phrases, abbreviations, and acronyms.</p>';
 
 		$this->expectOutputRegex( '~' . preg_quote( $expected ) . '~', $this->obj->options_page_description() );
 	}
