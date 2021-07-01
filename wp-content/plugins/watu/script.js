@@ -264,6 +264,13 @@ Watu.success = function(r){
 	 }	 
 
 	jQuery('#watu_quiz').html(r);
+	
+	// parse mathjax	
+	if (typeof MathJax != 'undefined') {   		
+		if(typeof MathJax.Hub != 'undefined') MathJax.Hub.Queue(["Typeset",MathJax.Hub,"watupro_quiz"]);
+		MathJax.typeset();
+	}
+	
 	jQuery('#watu_quiz').show();
 	jQuery('#watu-loading-result').hide();
 }
