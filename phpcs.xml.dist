@@ -24,6 +24,8 @@
 	<exclude-pattern>*/plugins/achievements</exclude-pattern>
 	<exclude-pattern>*/plugins/shardb/db.php</exclude-pattern>
 	<exclude-pattern>*/plugins/wp-pro-quiz</exclude-pattern>
+	<exclude-pattern>*/plugins/nextgen-gallery/products/photocrati_nextgen/modules/nextgen_admin/package.module.nextgen_admin.php</exclude-pattern>
+	<exclude-pattern>*/plugins/nextgen-gallery/vendor/nikic/php-parser</exclude-pattern>
 
 	<!-- Include the WordPress-Extra standard. -->
 	<!--
