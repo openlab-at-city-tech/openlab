@@ -25,9 +25,9 @@
 
 class WPSimileTimelineToolbox {
 
-    function WPSimileTimelineToolbox() {
+    function __construct() {
     }
-    
+
     /** -----------------------------------------------------------------------------
 	 * WPSimileTimelineToolbox::filterHtml
 	 * Hybrid html filtering for XML-output

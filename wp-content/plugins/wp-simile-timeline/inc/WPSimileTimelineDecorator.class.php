@@ -37,8 +37,8 @@ class WPSimileTimelineDecorator{
 	var $opacity;
 
 	var $table_name = "stl_timeline_decorators";
-	
-	function WPSimileTimelineDecorator(){
+
+	function __construct(){
 		// empty constructor
 	}
 	

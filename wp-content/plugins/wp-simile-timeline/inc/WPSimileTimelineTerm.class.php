@@ -24,10 +24,10 @@
 	===========================================================================
 */
 class WPSimileTimelineTerm{
-	
-	
-	function WPSimileTimelineTerm(){
-		
+
+
+	function __construct(){
+
     }
     
     function getTableName(){
