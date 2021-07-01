@@ -598,13 +598,21 @@ function cuny_group_single() {
 
 	$group_creators = openlab_get_group_creators( $group_id );
 	foreach ( $group_creators as $group_creator ) {
-		$has_non_member_creator = true;
-		break;
+		if ( 'non-member' == $group_creator['type'] ) {
+			$has_non_member_creator = true;
+			break;
+		}
 	}
 
 	$contact_creator_mismatch = false;
 	if ( $has_non_member_creator ) {
-		$creator_ids = array_values( $group_creators );
+		$creator_ids = array_map(
+			function( $creator ) {
+				$user = get_user_by( 'slug', $creator['member-login'] );
+				return $user->ID;
+			},
+			$group_creators
+		);
 
 		sort( $creator_ids );
 		sort( $all_group_contacts );
