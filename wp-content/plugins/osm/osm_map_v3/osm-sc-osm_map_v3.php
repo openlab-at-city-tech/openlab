@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2021  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@
     'bckgrndimg' => 'no',
     'attribution' => 'true',
     'map_div_name' => 'default',
-	 'map_div_vis' => 'vis'
+    'map_div_vis' => 'block'
     ), $atts));
 
 
@@ -67,40 +67,40 @@
     		$height,
     		$map_center,
     		$zoom,
-         $map_api_key,
+                $map_api_key,
     		$file_list,
     		$file_color_list,
-			$type,
-			$jsname,
-			$marker_latlon,
-			$map_border,
-			$map_event,
-			$marker_name,
-			$marker_size,
-			$control,
-			$wms_address,
-			$wms_param,
-			$wms_attr_name,
-			$wms_type,
-			$wms_attr_url,
-			$tagged_type,
-			$tagged_filter,
-         $tagged_filter_type,
-			$mwz,$post_markers,
-			$display_marker_name,
-			$tagged_param,
-			$tagged_color,
-			$file_title,
-			$file_link,
-			$setup_zoom,
-			$setup_layer,
-			$setup_center,
-			$setup_trigger,
-			$setup_map_name,
-			$file_select_box,
-			$bckgrndimg,
-			$attribution
-			);
+		$type,
+		$jsname,
+		$marker_latlon,
+		$map_border,
+		$map_event,
+		$marker_name,
+		$marker_size,
+		$control,
+		$wms_address,
+		$wms_param,
+		$wms_attr_name,
+		$wms_type,
+		$wms_attr_url,
+		$tagged_type,
+		$tagged_filter,
+                $tagged_filter_type,
+		$mwz,$post_markers,
+		$display_marker_name,
+		$tagged_param,
+		$tagged_color,
+		$file_title,
+		$file_link,
+		$setup_zoom,
+		$setup_layer,
+		$setup_center,
+		$setup_trigger,
+		$setup_map_name,
+		$file_select_box,
+		$bckgrndimg,
+		$attribution
+		);
 
     global $OL3_LIBS_LOADED;
     
@@ -177,7 +177,7 @@
 if ($bckgrndimg != 'no'){
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; max-width:100%; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -188,7 +188,7 @@ if ($bckgrndimg != 'no'){
 else{
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . ';" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; max-width:100%; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . ';" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -280,8 +280,8 @@ else{
 
 				/** if setup_map_name is set, set setup_map_name otherwise map */
 				if ($setup_map_name != 'undefined') {
-					 $map_link_name  = $setup_map_name;
-                echo "ERROR";
+				  $map_link_name  = $setup_map_name;
+                                  echo "ERROR";
 				} else {
 					$map_link_name  = $MapName;
 				}
@@ -419,9 +419,13 @@ else{
 				}
 				//$output .= 'osm_addPopupClickhandler('. $MapName .',  "'. $MapName .'"); ';
 			  }
-			} // $file_list != "NoFile"
-			
-		  if (($tagged_type != "no") && ($tagged_param == "cluster")){
+			} // $file_list != "NoFile" 
+		  
+                     $custom_post_types = array_values(get_post_types());
+                     $post_marked = in_array($tagged_type, $custom_post_types);
+                     if (($post_marked) && ($tagged_param == "cluster")) {	  
+		  
+		  
 			$tagged_icon = new cOsm_icon($default_icon->getIconName());
 
 			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
@@ -509,8 +513,10 @@ else{
 			$output .= $MapName.'.addLayer(vectorMarkerLayer);';
 		   }
 
-
-		if (($tagged_type != "no") && ($tagged_param != "cluster")){
+	
+		  elseif (($post_marked) && ($tagged_param != "cluster")) {
+		
+		
 			$tagged_icon = new cOsm_icon($default_icon->getIconName());
 
 			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
@@ -562,7 +568,7 @@ else{
 
 		   $temp_popup = '';
 
-		   if (strtolower($marker_latlon) == 'osm_geotag'){
+		   if ((strtolower($marker_latlon) == 'osm_geotag') || (strtolower($tagged_type) == 'actual')){
 			  global $post;
 			  $CustomFieldName = get_option('osm_custom_field','OSM_geo_data');
 			  $Data = get_post_meta($post->ID, $CustomFieldName, true);
