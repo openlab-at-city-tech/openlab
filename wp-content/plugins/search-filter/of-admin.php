@@ -15,7 +15,21 @@
 		$menu_slug = 'searchandfilter-settings';
 		$function = 'searchandfilter_settings';
 		$icon_url = SEARCHANDFILTER_PLUGIN_URL.'/admin/icon.png';
-		add_menu_page($page_title, $menu_title, $capability, $menu_slug, $function, $icon_url);
+		$icon =  'data:image/svg+xml;base64,' . base64_encode( '<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 20 20"
+	 >
+	   <path
+		  style="fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.31579"
+		  d="M 9.9999995,0.9473685 C 2,5.4736845 2,5.4736845 2,5.4736845 2,14.526315 2,14.526315 2,14.526315 9.9999995,19.052631 9.9999995,19.052631 9.9999995,19.052631 18,14.526315 18,14.526315 18,14.526315 18,5.4736845 18,5.4736845 18,5.4736845 Z m 0,15.0526305 c -3.3684207,0 -5.9999989,-2.631578 -5.9999989,-5.9999995 0,-3.368421 2.6315782,-6 5.9999989,-6 3.3684205,0 6.0000005,2.631579 6.0000005,6 0,3.3684215 -2.63158,5.9999995 -6.0000005,5.9999995 z"
+		  id="path17" />
+	   <path
+		  style="fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.350878"
+		  d="m 13.62573,10.052631 c 0,1.988305 -1.637426,3.62573 -3.6257305,3.62573 -1.9883036,0 -3.6257309,-1.637425 -3.6257309,-3.62573 0,-1.988304 1.6374273,-3.625731 3.6257309,-3.625731 1.9883045,0 3.6257305,1.637427 3.6257305,3.625731 z"
+		  id="path19" />
+	 </svg>' );
+
+		add_menu_page($page_title, $menu_title, $capability, $menu_slug, $function, $icon);
 
 		// Add submenu page with same slug as parent to ensure no duplicates
 		$sub_menu_title = 'Settings';
@@ -34,24 +48,30 @@
 		if (!current_user_can('manage_options')) {
 			wp_die('You do not have sufficient permissions to access this page.');
 		}
-		echo '
-			<script type="text/javascript">
-			/*jQuery(function() {
-			  jQuery(\'pre code\').each(function(i, e) {hljs.highlightBlock(e)});
-			});*/
-			</script>
-		';
+		?>
+		<div class="notice">
+			<h3><?php echo esc_html__( 'Big changes are coming - Search & Filter 3.0 is around the corner. ', 'search-filter' ); ?></h3>
+			<p><?php echo esc_html__( 'Hi! Sorry for the intrusion...', 'search-filter' ); ?></p>
+			<p><?php echo sprintf( esc_html__( 'But we need to tell you, %s.', 'search-filter' ), '<strong>' . esc_html__( 'a new version is coming with some big changes', 'textdomain' ) ) . '</strong>' ?></p>
+			<p><?php echo esc_html__( 'We\'ve been hard at work over the past few years working on the pro edition of Search & Filter, and now the time has come to share some of the features we\'ve built (with some of the lessons learned).', 'search-filter' ); ?></p>
+			<p><?php echo sprintf( esc_html__( 'This means %s, and %s.', 'search-filter' ), '<strong>' . esc_html( 'significant changes to how you build search forms', 'search-filter' ) . '</strong>', '<strong>' . esc_html( 'more features, filters, flexibility and integration options', 'search-filter' ) . '</strong>' ); ?></p>
+			<p><?php echo esc_html__( 'This is all part of a huge undertaking, bringing more features to Search & Filter free and pro, while also bringing a new interface and architecture to both editions.', 'search-filter' ); ?></p>
+			<p><a href="https://searchandfilter.com/search-filter-3-0-free/" target="_blank"><?php echo esc_html__( 'Read the full blog post here.', 'search-filter' ); ?></a></p>
+			<p><?php echo esc_html__( 'PS - we\'re looking for beta testers.', 'search-filter' ); ?></p>
+			
+		</div>
+		<?php
 		echo '<div class="wrap"><div id="icon-plugins" class="icon32"></div>';
 		echo '<h2>Search &amp; Filter</h2>';
 		echo "<h3>About</h3>";
 		echo '<div class="of-caption">
-				Search &amp; Filter is a simple search and filtering plugin for Wordpress brought to you by <a href="http://www.designsandcode.com" target="_blank">Designs &amp; Code</a>.<br /><br />
-				It is essentially an advancement of the WordPress search box, adding taxonomy and post type filters to really refine your searches.<br /><br />
+				Search &amp; Filter is a simple search and filtering plugin for Wordpress brought to you by <a href="https://codeamp.com" target="_blank">Code Amp</a> (formerly known as Designs &amp; Code).<br /><br />
+				It is an advancement of the WordPress search box, adding taxonomy and post type filters to really refine your searches.<br /><br />
 				You can search by Category, Tag, Custom Taxonomy, Post Type or any combination of these easily - you can even remove the search box and simply use it as a filtering system for your posts and pages.  Taxonomies and Post Types can be displayed as dropdown selects, checkboxes, radio buttons or multiselects.
 			</div>';
 		echo "<h3>Documentation</h3>";
 		echo '<div class="of-caption">
-				Advanced documentation and examples has now moved - find it on our <a href="http://docs.designsandcode.com/search-filter/" target="_blank">Search &amp; Filter Plugin Documentation</a>.<br /><br />
+				Advanced documentation and examples has now moved - find it on our <a href="https://free.searchandfilter.com/" target="_blank">Search &amp; Filter Plugin Documentation</a>.<br /><br />
 				Please find below limited documentation to get you started.
 			</div>';
 
@@ -70,7 +90,7 @@
 		
 		
 		echo "<h3>Arguments</h3>";
-		echo '<div class="of-caption">Examples for most of the arguments below can be found over on the <a href="http://docs.designsandcode.com/search-filter/#examples" target="_blank">Search &amp; Filter Plugin Documentation</a>.</div>';
+		echo '<div class="of-caption">Examples for most of the arguments below can be found over on the <a href="https://free.searchandfilter.com/#examples" target="_blank">Search &amp; Filter Plugin Documentation</a>.</div>';
 		//display table
 		$ofVarListTable = new OF_Variable_List_Table();
 		$ofVarListTable->prepare_items();
@@ -95,7 +115,7 @@
 				Search &amp; Filter uses standard inputs and selects, form elements are contained in an unordered list - styling should be easy.  <a href="'.SEARCHANDFILTER_PLUGIN_URL . '/style.css'.'" target="_blank">Please see CSS file for base styles used.</a>
 			</div>';
 			
-		echo "<h3>Search &amp; Filter Prefers Clean URLs!</h3>";
+		echo "<h3>Search &amp; Filter URLs</h3>";
 		echo '<div class="of-caption">
 				If any fields are submitted that have blank values they do not get added to the URL, for example, if the search box is empty when submitting, you will not find a `?s=` in the URL.<br /><br />
 				
@@ -107,18 +127,15 @@
 				Becomes:<br />
 				<pre><code class="of-url">www.yourdomain.com/category/uncategorized/?s=searchterm&amp;tag=shoes&amp;customtaxonomy=customvalue</code></pre><br />
 				
-				The built in Wordpress rewrites wouldn\'t normally handle this.
-				
-				
 			</div>';
 		
 		echo "<h3>Links</h3>";
 		echo '<div class="of-caption">
 				<ul>
-					<li><a href="http://www.designsandcode.com/447/wordpress-search-filter-plugin-for-taxonomies/" target="_blank">Plugin Support Page &amp; Discussion</a></li>
-					<li><a href="http://docs.designsandcode.com/search-filter/" target="_blank">Plugin Documentation</a></li>
+					<li><a href="https://free.searchandfilter.com/" target="_blank">Plugin Documentation</a></li>
 					<li><a href="http://wordpress.org/plugins/search-filter" target="_blank">Plugin on WordPress.org</a></li>
-					<li><a href="https://github.com/rmorse/wp-search-filter" target="_blank">Plugin on Github</a></li>
+					<li><a href="https://github.com/rmorse/search-filter" target="_blank">Plugin on Github</a></li>
+					<li><a href="https://twitter.com/code_amp" target="_blank">Follow us on Twitter for updates and news</a></li>
 				</ul>
 			</div>';
 		
@@ -148,17 +165,69 @@
 		{
 			$this_plugin = SEARCHANDFILTER_BASENAME;
 		}
-		//var_dump($this_plugin);
+
 		if ($file == $this_plugin)
 		{
 			// The "page" query string value must be equal to the slug
 			// of the Settings admin page we defined earlier, which in
 			// this case equals "myplugin-settings".
-			$settings_link = '<a href="' . get_admin_url() . 'admin.php?page=searchandfilter-settings">Settings</a>';
+			$settings_link = esc_url( '<a href="' . get_admin_url() . 'admin.php?page=searchandfilter-settings">Settings</a>' );
 			array_unshift($links, $settings_link);
 		}
 
 		return $links;
 	}
 
-?>
+
+	function searchandfilter_plugin_admin_notice() {
+
+		global $current_user;
+	
+		$user_id = $current_user->ID;
+		
+		if ( ! get_user_meta( $user_id, 'search_filter_v3_coming_soon_ignore' ) ) {
+			
+			?>
+			<div class="notice notice-warning is-dismissible search-filter-notice-v3-coming-soon">
+				<p>
+					<strong>
+						<?php echo esc_html__( 'Search & Filter 3.0 is almost here - make sure you\'re ready for the update', 'search-filter' ); ?>
+						- <a href="<?php echo esc_url( admin_url( 'admin.php?page=searchandfilter-settings' ) ); ?>"><?php echo esc_html__( 'continue reading...', 'search-filter' ); ?></a>
+					</strong>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
+	add_action( 'admin_notices', 'searchandfilter_plugin_admin_notice' );
+
+	add_action( 'wp_ajax_dismiss_search_filter_v3_coming_soon', 'search_filter_dismiss_notice_search_filter_v3' );
+
+	function search_filter_dismiss_notice_search_filter_v3() {
+		update_user_meta( get_current_user_id(), 'search_filter_v3_coming_soon_ignore', 1 );
+	}
+
+
+	add_action( 'admin_print_footer_scripts', 'search_filter_admin_notice_script' );
+
+	function search_filter_admin_notice_script() {
+		?>
+			<script>
+				// shorthand no-conflict safe document-ready function
+				jQuery(function($) {
+					// Hook into the "notice-my-class" class we added to the notice, so
+					// Only listen to YOUR notices being dismissed
+					$( document ).on( 'click', '.search-filter-notice-v3-coming-soon .notice-dismiss', function () {
+						$.ajax( ajaxurl,
+						{
+							type: 'GET',
+							data: {
+								action: 'dismiss_search_filter_v3_coming_soon'
+							}
+						} );
+					} );
+				});
+			</script>
+		<?php
+	 }
