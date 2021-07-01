@@ -21,6 +21,8 @@
 	<exclude-pattern>*.js</exclude-pattern>
 	<exclude-pattern>*.css</exclude-pattern>
 
+	<exclude-pattern>*/plugins/shardb/db.php</exclude-pattern>
+
 	<!-- Include the WordPress-Extra standard. -->
 	<!--
 	<rule ref="WordPress-Extra">
