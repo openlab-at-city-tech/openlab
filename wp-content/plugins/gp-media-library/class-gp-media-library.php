@@ -181,16 +181,16 @@ class GP_Media_Library extends GWPerk {
 				continue;
 			}
 
-			for ( $i = count( $ids ) - 1; $i >= 0; $i -- ) {
-				if ( is_wp_error( $ids[ $i ] ) ) {
-					/* @var WP_Error $id */
-					$data        = $ids[ $i ]->get_error_data( 'upload_error' );
+			foreach ( $ids as $id_index => $sideloaded_file ) {
+				if ( is_wp_error( $sideloaded_file ) ) {
+					/* @var WP_Error $sideloaded_file */
+					$data        = $sideloaded_file->get_error_data( 'upload_error' );
 					$new_value[] = $data['url'];
 					// Don't want to save errors in our IDs list.
-					unset( $ids[ $i ] );
+					unset( $ids[ $id_index ] );
 					$this->log( sprintf( 'Error importing file; restoring original file URL: %s', print_r( $data['url'], true ) ) );
 				} else {
-					$new_value[] = wp_get_attachment_url( $ids[ $i ] );
+					$new_value[] = wp_get_attachment_url( $sideloaded_file );
 				}
 			}
 
