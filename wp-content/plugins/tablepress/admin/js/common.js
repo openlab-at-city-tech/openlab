@@ -12,7 +12,7 @@
 // Ensure the global `tp` object exists.
 window.tp = window.tp || {};
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	'use strict';
 
@@ -56,7 +56,7 @@ jQuery( document ).ready( function( $ ) {
 	 * @since 1.0.0
 	 */
 	$( '#tablepress-page' ).on( 'click', '.table-shortcode', function() {
-		$(this).focus().select();
+		$(this).trigger( 'focus' ).trigger( 'select' );
 	} );
 
 } );

@@ -9,7 +9,7 @@
 
 /* global validateForm */
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	'use strict';
 
@@ -45,7 +45,7 @@ jQuery( document ).ready( function( $ ) {
 
 			$field
 				.one( 'change', function() { $(this).closest( '.form-invalid' ).removeClass( 'form-invalid' ); } )
-				.focus().select()
+				.trigger( 'focus' ).trigger( 'select' )
 				.closest( '.form-field' ).addClass( 'form-invalid' );
 			valid_form = false;
 		} );

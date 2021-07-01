@@ -9,7 +9,7 @@
 
 /* global wp, tablepress_codemirror_settings */
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	'use strict';
 
@@ -56,6 +56,6 @@ jQuery( document ).ready( function( $ ) {
 		var use_custom_css = $(this).prop( 'checked' );
 		CM_custom_css.codemirror.setOption( 'readOnly', ! use_custom_css );
 		$( '#tablepress-page' ).find( '.CodeMirror' ).toggleClass( 'disabled', ! use_custom_css );
-	} ).change();
+	} ).trigger( 'change' );
 
 } );
