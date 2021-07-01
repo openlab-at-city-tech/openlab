@@ -270,7 +270,7 @@ class List_Pages {
 			return '';
 		}
 
-		$content = sprintf( '<ul class="grandchild-sidebar-menu level-%s children">', $level );
+		$content = sprintf( '<ul class="grandchild-sidebar-menu level-%s children" data-level="%s">', $level, $level + 2 );
 
 		$inside = '';
 		foreach ( $pages as $page ) {

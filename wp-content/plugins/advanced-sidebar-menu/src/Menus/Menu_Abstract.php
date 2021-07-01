@@ -269,7 +269,9 @@ abstract class Menu_Abstract {
 	 * @return static
 	 */
 	public static function factory( array $widget_instance, array $widget_args ) {
+		/* @phpstan-ignore-next-line */
 		$menu = new static( $widget_instance, $widget_args );
+		/* @phpstan-ignore-next-line */
 		static::$current = $menu;
 
 		return $menu;
