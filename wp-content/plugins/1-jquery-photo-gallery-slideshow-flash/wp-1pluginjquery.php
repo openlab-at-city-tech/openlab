@@ -48,7 +48,7 @@ function _zooeffect_WpMedia_init() // constructor
 	{
 		add_action('admin_head_media_upload_type_zooeffect', 'media_admin_css');
 	}
-      
+
 	// check auth enabled
 	//if(!function_exists('curl_init') && !ini_get('allow_url_fopen')) {}
 }
@@ -67,7 +67,7 @@ function media_zooeffect_process() {
     <?php
 }
 function zooeffect_menu_handle() {
-    
+
     return wp_iframe( 'media_zooeffect_process');
 }
 
@@ -84,7 +84,7 @@ function _zooeffect_addMediaButton($admin = true)
 	$media_zooeffect_iframe_src = apply_filters('media_zooeffect_iframe_src', "$media_upload_iframe_src&amp;type=zooeffect&amp;tab=zooeffect");
 	$media_zooeffect_title = __('Add ZooEffect photo', 'wp-media-zooeffect');
 if($bloginfo = substr(get_bloginfo('version'), 0, 3)>=3.5):
-	echo "<a onClick=\"zooEffect_launch_popup()\" class=\"insert-media \" data-editor=\"content\" title=\"Add Media\"><img src=\""._zooeffect_pluginURI()."/1plugin-icon.gif\" alt=\"$media_zooeffect_title\" /></a>"; 
+	echo "<a onClick=\"zooEffect_launch_popup()\" class=\"insert-media \" data-editor=\"content\" title=\"Add Media\"><img src=\""._zooeffect_pluginURI()."/1plugin-icon.gif\" alt=\"$media_zooeffect_title\" /></a>";
 else: echo "<a class=\"thickbox\" href=\"{$media_zooeffect_iframe_src}&amp;TB_iframe=true&amp;height=500&amp;width=640\" title=\"$media_zooeffect_title\"><img src=\""._zooeffect_pluginURI()."/1plugin-icon.gif\" alt=\"$media_zooeffect_title\" /></a>";endif;
 }
 
@@ -208,12 +208,12 @@ function _zooeffect_plugin_rss($content)
 add_filter('the_content', '_zooeffect_plugin');
 add_filter('the_content_rss', '_zooeffect_plugin_rss');
 add_filter('the_excerpt_rss', '_zooeffect_plugin_rss');
-add_filter('comment_text', '_zooeffect_plugin'); 
+add_filter('comment_text', '_zooeffect_plugin');
 
 add_action ( 'bp_get_activity_content_body', '_zooeffect_plugin' );
 add_action ( 'bp_get_the_topic_post_content', '_zooeffect_plugin' );
 
-add_action('wp_dashboard_setup', '_zooeffect_dashboard'); 
+add_action('wp_dashboard_setup', '_zooeffect_dashboard');
 
 // Hook for adding admin menus
 // http://codex.wordpress.org/Adding_Administration_Menus
@@ -246,7 +246,7 @@ function _zooeffect_mt_add_pages() {
 
 	// Add a new submenu under Options:
 	// http://codex.wordpress.org/Roles_and_Capabilities
-	
+
 	add_options_page('ZooEffect Options', '<b>ZooEffect Options</b> (1PluginjQuery)', 'install_plugins', 'zooeffectoptions', '_zooeffect_mt_options_page');
 
 	$pluginjquery_permission_level = get_site_option('1pluginjquery_permission_level');
@@ -276,7 +276,7 @@ function _zooeffect_mt_options_page() {
 //	if( is_site_admin() == false ) {
 //		wp_die( __('You do not have permission to access this page.') );
 //	}
-	
+
 	/*
 	if (strpos($_SERVER['QUERY_STRING'], 'hide_note=welcome_notice'))
 	{
@@ -284,7 +284,7 @@ function _zooeffect_mt_options_page() {
 		echo '<script type="text/javascript">jQuery(function() {jQuery("#message").hide();});</script>';
 	}
 	*/
-	
+
 	$pluginjquery_userid = get_site_option('1pluginjquery_userid');
 	$pluginjquery_permission_level = get_site_option('1pluginjquery_permission_level');
 	$pluginjquery_excerpt = get_site_option('1pluginjquery_excerpt');
@@ -298,7 +298,7 @@ function _zooeffect_mt_options_page() {
 				$pluginjquery_userid = $_POST['1pluginjquery_userid'];
 				update_site_option('1pluginjquery_userid', $pluginjquery_userid);
 			}
-			
+
 			if (isset($_POST['1pluginjquery_permission_level']))
 			{
 				$pluginjquery_permission_level = $_POST['1pluginjquery_permission_level'];
@@ -309,11 +309,11 @@ function _zooeffect_mt_options_page() {
 		if (isset($_POST['embedRel']))
 		{
 			$pluginjquery_excerpt = $_POST['embedRel'];
-			update_site_option('1pluginjquery_excerpt', $pluginjquery_excerpt);			
+			update_site_option('1pluginjquery_excerpt', $pluginjquery_excerpt);
 		}
-		
+
 		echo "<div id=\"updatemessage\" class=\"updated fade\"><p>ZooEffect settings updated.</p></div>\n";
-		echo "<script type=\"text/javascript\">setTimeout(function(){jQuery('#updatemessage').hide('slow');}, 3000);</script>";	
+		echo "<script type=\"text/javascript\">setTimeout(function(){jQuery('#updatemessage').hide('slow');}, 3000);</script>";
 	}
 
 	$disp_excerpt2 = $pluginjquery_excerpt == 'clean' ? 'checked="checked"' : '';
@@ -410,9 +410,9 @@ if (_zooeffect_isAdmin())
 										</td>
 									</tr>
 
-									
-									
-									
+
+
+
 
 									<tr style="width:100%;">
 										<th valign="top" scrope="row" colspan=2>
@@ -436,8 +436,8 @@ if (_zooeffect_isAdmin())
 		</div>
 	</div>
 <?php
-    
-    
+
+
 }
 /*
 // _zooeffect_mt_manage_page() displays the page content for the Test Manage submenu
@@ -481,11 +481,11 @@ if (!class_exists('zooeffectWidget')) {
 	class zooeffectWidget extends WP_Widget {
 			/** constructor */
 			function zooeffectWidget() {
-					parent::WP_Widget(false, $name = 'ZooEffect Gallery Widget');	
+					parent::WP_Widget(false, $name = 'ZooEffect Gallery Widget');
 			}
 
 			/** @see WP_Widget::widget */
-			function widget($args, $instance) {		
+			function widget($args, $instance) {
 					extract( $args );
 
 					if (strpos($instance['galleryid'], '1pjq'))
@@ -499,12 +499,12 @@ if (!class_exists('zooeffectWidget')) {
 			}
 
 			/** @see WP_Widget::update */
-			function update($new_instance, $old_instance) {				
+			function update($new_instance, $old_instance) {
 					return $new_instance;
 			}
 
 			/** @see WP_Widget::form */
-			function form($instance) {				
+			function form($instance) {
 					$galleryid = esc_attr($instance['galleryid']);
 					?>
 	<p>
@@ -512,7 +512,7 @@ if (!class_exists('zooeffectWidget')) {
 			<?php echo $this->get_field_id('galleryid'); ?>"><?php _e('Gallery ID:'); ?> <a target="_blank" href="http://www.zooeffect.com/">what?</a> <input class="widefat" id=""<?php echo $this->get_field_id('galleryid'); ?>" name="<?php echo $this->get_field_name('galleryid'); ?>" type="text" value="<?php echo $galleryid; ?>" />
 		</label>
 	</p>
-	<?php 
+	<?php
 			}
 
 	} // class zooeffectWidget
@@ -543,14 +543,14 @@ function _zooeffect_improved_trim_excerpt($text)
 		$text = strip_tags($text, '<'.'p'.'>');
 		$excerpt_length = 80;
 		$words = explode(' ', $text, $excerpt_length + 1);
-		if (count($words)> $excerpt_length) 
+		if (count($words)> $excerpt_length)
 		{
 			array_pop($words);
 			array_push($words, '[...]');
 			$text = implode(' ', $words);
 		}
 	}
-			
+
 	return $text;
 }
 
@@ -562,7 +562,7 @@ if ($pluginjquery_excerpt_rt == 'full' || $pluginjquery_excerpt_rt == 'clean')
 	add_filter('get_the_excerpt', '_zooeffect_improved_trim_excerpt');
 }
 
-function _zooeffect_activation_notice() { 
+function _zooeffect_activation_notice() {
 	?>
 			<div id="message" class="updated fade">
 				<p style="line-height: 150%">
@@ -572,8 +572,8 @@ function _zooeffect_activation_notice() {
 					On every post page (above the text box) you'll find this  <img src="<?php echo _zooeffect_pluginURI() ?>/1plugin-icon.gif"  />  icon, click on it to start or use sidebar Widgets (Appearance menu).
 				</p>
 				<p>
-		
-				<input type="button" class="button" value="ZooEffect Options Page" 
+
+				<input type="button" class="button" value="ZooEffect Options Page"
 					onclick="document.location.href = 'options-general.php?page=zooeffectoptions';" />
 				<input type="button" id="zoo_welcome_hide" class="button" value="Hide this message" />
 
@@ -581,21 +581,21 @@ function _zooeffect_activation_notice() {
 				</p>
 
 			</div>
-			
+
 			<script type="text/javascript">
 				function zoo_hide_welcome_message() {
 
-		            jQuery.post(ajaxurl, { action: 'zoo_hide_welcome' }, 
+		            jQuery.post(ajaxurl, { action: 'zoo_hide_welcome' },
 				            function(response) {
-		            			jQuery('#message').fadeOut();			            
+		            			jQuery('#message').fadeOut();
 		            		}
 		            );
-		            
+
 		            return false;
 				}
-				
+
 				jQuery(function () {
-					jQuery('#zoo_welcome_hide').click(zoo_hide_welcome_message);	
+					jQuery('#zoo_welcome_hide').click(zoo_hide_welcome_message);
 				});
 			</script>
 
@@ -655,7 +655,7 @@ function zooEffect_mediaDefault_script()
 
 		</script>
 	<?php
-} 
+}
 
 
 ?>
