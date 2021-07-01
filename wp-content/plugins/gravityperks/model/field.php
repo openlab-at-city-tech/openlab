@@ -1,7 +1,7 @@
 <?php
 
 class GWField {
-    
+
     /**
     * Parse the default arguments and initialize the required Gravity Forms hooks.
     *
@@ -47,13 +47,13 @@ class GWField {
         add_action('gform_editor_js', array( $this, 'field_default_values_js'));
         add_action('gform_editor_js', array( $this, 'editor_js'));
         add_filter('gform_field_css_class', array( $this, 'field_class'), 10, 3);
-        
+
         add_filter( 'gform_field_input', array( $this, 'filter_input_html' ), 10, 5 );
         add_filter( 'gform_field_content', array( $this, 'filter_field_html' ), 10, 5 );
 
         add_filter( 'gform_entry_field_value', array( $this, 'get_this_field_value_entry_detail' ), 10, 4 );
         add_filter( 'gform_entries_field_value', array( $this, 'get_this_field_value_entry_list' ), 10, 4 );
-            
+
         add_action('gform_enqueue_scripts', array( $this, 'filter_enqueue_field_scripts'), 10, 2);
 
         add_action( 'gform_field_standard_settings',   array( $this, 'dynamic_setting_actions' ), 10, 2 );
@@ -61,37 +61,37 @@ class GWField {
         add_action( 'gform_field_advanced_settings',   array( $this, 'dynamic_setting_actions' ), 10, 2 );
 
     }
-    
+
     public function get_this_field_value_entry_detail( $value, $field, $entry, $form ) {
-        
+
         if( $this->is_this_field_type( $field ) ) {
             $value = $this->get_value_entry_detail( $value, $field, $entry, $form );
         }
-            
+
         return $value;
     }
-    
+
     public function get_value_entry_detail( $value, $field, $entry, $form ) {
         return $value;
     }
-    
+
     public function get_this_field_value_entry_list( $value, $form_id, $field_id, $entry ) {
-        
+
         $form = GFAPI::get_form( $form_id );
         $field = GFFormsmodel::get_field( $form, $field_id );
-        
+
         if( $this->is_this_field_type( $field ) )
             $value = $this->get_value_entry_list( $value, $form_id, $field_id, $entry );
-            
+
         return $value;
     }
-    
+
     public function get_value_entry_list( $value, $form_id, $field_id, $entry ) {
         return $value;
     }
-    
-    
-    
+
+
+
 
     function filter_enqueue_field_scripts($form, $ajax) {
 
@@ -119,10 +119,10 @@ class GWField {
     }
 
     function filter_input_html( $input, $field, $value, $lead_id, $form_id) {
-        
+
         if( ! $this->is_this_field_type( $field ) )
             return $input;
-            
+
         // form editor
         if( $this->is_form_editor() ) {
             $input = $this->input_html_form_editor( $field, $value, $lead_id, $form_id );
@@ -139,52 +139,52 @@ class GWField {
         else {
             $input = $this->input_html_frontend( $field, $value, $lead_id, $form_id );
         }
-            
+
         return $input;
     }
 
     function input_html( $field, $value, $lead_id, $form_id ) {
         die( 'Method GWField::input_html() must be over-ridden in a sub-class.' );
     }
-    
+
     function input_html_form_editor( $field, $value, $lead_id, $form_id ) {
         return $this->input_html( $field, $value, $lead_id, $form_id );
     }
-    
+
     function input_html_entry_detail( $field, $value, $lead_id, $form_id ) {
         return $this->input_html( $field, $value, $lead_id, $form_id );
     }
-    
+
     function input_html_entry_detail_edit( $field, $value, $lead_id, $form_id ) {
         return $this->input_html( $field, $value, $lead_id, $form_id );
     }
-    
+
     function input_html_frontend( $field, $value, $lead_id, $form_id ) {
         return $this->input_html( $field, $value, $lead_id, $form_id );
     }
-    
+
     function filter_field_html( $content, $field, $value, $entry_id, $form_id ) {
-        
+
         if( ! $this->is_this_field_type( $field ) )
             return $content;
-            
+
         return $this->field_html( $content, $field, $value, $entry_id, $form_id );
     }
-    
+
     function field_html( $content, $field, $value, $entry_id, $form_id ) {
         return $content;
     }
-    
+
     function filter_field_value() {
-        
+
     }
-    
+
     function field_value() {
-        
+
     }
-    
-    
-    
+
+
+
     function editor_js() { }
 
 
@@ -304,11 +304,11 @@ class GWField {
 
         return $settings;
     }
-    
-    
-    
+
+
+
     // # VIEWS
-    
+
     function is_form_editor() {
         return ( IS_ADMIN && gwget('page') == 'gf_edit_forms' && !gwget('view') ) || ( defined('DOING_AJAX') && DOING_AJAX && gwpost('action') == 'rg_add_field' );
     }
@@ -316,13 +316,13 @@ class GWField {
     function is_entry_detail() {
         return IS_ADMIN && gwget('page') == 'gf_entries' && gwget('view') == 'entry';
     }
-    
+
     function is_entry_detail_edit() {
         return IS_ADMIN && gwget('page') == 'gf_entries' && gwget('view') == 'entry' && rgpost( 'screen_mode' );
     }
-    
-    
-    
+
+
+
     /**
     * Check if the passed field is the same type as this GWField object.
     *
@@ -331,7 +331,7 @@ class GWField {
     function is_this_field_type( $field ) {
         return gwar( $field, 'type' ) == $this->type;
     }
-    
+
     function has_this_field_type( $form ) {
 		foreach( $form['fields'] as $field ) {
 			if( $this->is_this_field_type( $field ) )
@@ -377,11 +377,11 @@ class GWField {
 
         return $action ? $action == $_REQUEST['action'] : true;
     }
-    
+
     protected final function method_is_overridden( $method_name, $base_class = 'GFField' ) {
         $reflector = new ReflectionMethod( $this, $method_name );
         $name = $reflector->getDeclaringClass()->getName();
         return $name !== $base_class;
     }
-    
+
 }
