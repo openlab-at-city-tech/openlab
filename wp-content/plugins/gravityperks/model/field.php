@@ -217,7 +217,7 @@ class GWField {
         if($this->field_settings) { ?>
 
             <script type="text/javascript">
-                fieldSettings['<?php echo $this->type; ?>'] = '<?php echo implode(', ', array_map(create_function('$a', 'return ".$a";'), $this->field_settings))?>';
+                fieldSettings['<?php echo $this->type; ?>'] = '<?php echo implode(', ', array_map(function( $a ) { return $a; }, $this->field_settings))?>';
             </script>
 
         <?php }
