@@ -342,8 +342,8 @@ class ZipMerge {
      * @param array 	  $data Method parameters passed as an array.
      */
     private function _notifyListeners($method = null, array $data = array()) {
+		$trace = debug_backtrace();
         if (is_null($method)) {
-            $trace = debug_backtrace();
             $trace = $trace[1];
             $method = 'on' . ucwords($trace['function']);
         }

@@ -448,6 +448,7 @@ class phpthumb_functions {
 			foreach ($disable_functions_global as $key => $value) {
 				$DisabledFunctions[trim($value)] = 'global';
 			}
+			// phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
 			if (@ini_get('safe_mode')) {
 				$DisabledFunctions['shell_exec']     = 'local';
 				$DisabledFunctions['set_time_limit'] = 'local';
@@ -986,7 +987,7 @@ if (!function_exists('gd_info')) {
 						if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
 							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw==')); // very simple 1px GIF file base64-encoded as string
 							fclose($fp_tempfile);
-							@chmod($tempfilename, $this->getParameter('config_file_create_mask'));
+//							@chmod($tempfilename, $this->getParameter('config_file_create_mask'));
 
 							// if we can convert the GIF file to a GD image then GIF create support must be enabled, otherwise it's not
 							$gd_info['GIF Read Support'] = (bool) @imagecreatefromgif($tempfilename);

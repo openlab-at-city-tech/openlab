@@ -46,7 +46,9 @@ class McryptRandomStringGenerator implements RandomStringGeneratorInterface
         //Create Binary String
         
         if ((version_compare(PHP_VERSION, '7.0.0') < 0)) {
+			// phpcs:disable PHPCompatibility
             $binaryString = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+			// phpcs:enable PHPCompatibility
         } else {
             $binaryString = random_bytes($length);
         }

@@ -204,6 +204,7 @@ class ZipUtils {
         static $has_mb_overload = null;
         if ($has_mb_overload ===  null) {
             $has_mbstring = extension_loaded('mbstring');
+			// phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
             $has_mb_shadow = (int) ini_get('mbstring.func_overload');
             $has_mb_overload = $has_mbstring && ($has_mb_shadow & 2);
         }

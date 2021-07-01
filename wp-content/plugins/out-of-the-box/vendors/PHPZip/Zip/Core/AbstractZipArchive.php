@@ -968,8 +968,8 @@ abstract class AbstractZipArchive {
 	 * @param array 	  $data Method parameters passed as an array.
 	 */
 	private function _notifyListeners($method = null, array $data = array()) {
+		$backtrace = debug_backtrace();
 		if (is_null($method)) {
-			$backtrace = debug_backtrace();
             if (sizeof($backtrace) > 0) {
                 $trace = $backtrace[1];
     			$method = 'on' . ucwords($trace['function']);
