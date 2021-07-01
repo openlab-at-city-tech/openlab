@@ -850,13 +850,13 @@ class S2_Admin extends S2_Core {
 	/**
 	 * Create and display a dropdown list of pages
 	 */
-	public function pages_dropdown( $s2page ) {
+	public function pages_dropdown( $s2page, $name = 's2page' ) {
 		$pages = get_pages();
 		if ( empty( $pages ) ) {
 			return;
 		}
 
-		$option  = '<select name="s2page">' . "\r\n";
+		$option  = '<select name="' . $name . '">' . "\r\n";
 		$option .= '<option value="0">' . __( 'Select a page', 'subscribe2' ) . '</option>' . "\r\n";
 		foreach ( $pages as $page ) {
 			$option .= '<option value="' . $page->ID . '"';

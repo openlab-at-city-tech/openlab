@@ -108,6 +108,9 @@ class S2_Core {
 				if ( false === is_email( $recipient ) || empty( $recipient ) ) {
 					continue;
 				}
+                // Parse unsubscribe shortcode
+                $mailtext = $this->parse_unsubscribe_link( $mailtext, $recipient );
+
 				// Use the mail queue provided we are not sending a preview
 				if ( function_exists( 'wpmq_mail' ) && ! isset( $this->preview_email ) ) {
 					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
@@ -231,6 +234,21 @@ class S2_Core {
 
 		return $headers;
 	}
+
+    /**
+     * Parse unsubscribe link
+     *
+     * @param $content
+     * @param $recipient
+     * @return string|string[]
+     */
+	public function parse_unsubscribe_link( $content, $recipient ) {
+	    $page_url = get_page_link( $this->subscribe2_options['s2_unsub_page'] );
+	    $query = parse_url( $page_url, PHP_URL_QUERY );
+	    $page_url .= ( ( $query ? '&' : '?' ) . 's2_unsub=' . base64_encode( $recipient ) );
+
+        return str_replace('{UNSUBLINK}', $page_url, $content );
+    }
 
 	/**
 	 * Function to set HTML Email in wp_mail()

@@ -56,6 +56,10 @@ if ( ! isset( $mysubscribe2->subscribe2_options['s2page'] ) ) {
 	$mysubscribe2->subscribe2_options['s2page'] = 0;
 } // option for default WordPress page for Subscribe2 to use
 
+if ( ! isset( $mysubscribe2->subscribe2_options['s2_unsub_page'] ) ) {
+	$mysubscribe2->subscribe2_options['s2_unsub_page'] = 0;
+} // option for default Subscribe2 unsubscribe page
+
 if ( ! isset( $mysubscribe2->subscribe2_options['stylesheet'] ) ) {
 	$mysubscribe2->subscribe2_options['stylesheet'] = 'yes';
 } // option to include link to theme stylesheet from HTML notifications
