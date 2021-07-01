@@ -352,6 +352,11 @@ function xprofile_filter_pre_validate_value_by_field_type( $value, $field, $fiel
  * @return string
  */
 function bp_xprofile_escape_field_data( $value, $field_type, $field_id ) {
+	// Sanitization for these types is directly done into their `display_filter()` method.
+	if ( 'wp-biography' === $field_type || 'wp-textbox' === $field_type ) {
+		return $value;
+	}
+
 	if ( bp_xprofile_is_richtext_enabled_for_field( $field_id ) ) {
 		// The xprofile_filter_kses() expects a BP_XProfile_ProfileData object.
 		$data_obj = null;
@@ -686,3 +691,79 @@ function bp_xprofile_register_personal_data_exporter( $exporters ) {
 
 	return $exporters;
 }
+
+/**
+ * Used to edit the field input name inside the xProfile Admin Screen
+ *
+ * @see bp_xprofile_admin_get_signup_field()
+ *
+ * @since 8.0.0
+ *
+ * @param string $field_selector The text to use as the input name/id attribute.
+ * @return string                The text to use as the input name/id attribute.
+ */
+function bp_get_the_profile_signup_field_input_name( $field_selector = '' ) {
+	global $field;
+
+	if ( isset( $field->id ) && $field->id ) {
+		$field_selector = sprintf( 'signup_field_%d', $field->id );
+	}
+
+	return $field_selector;
+}
+
+/**
+ * Provides Signup fields argument back compatibility for template overrides.
+ *
+ * @since 8.0.0
+ * @access private
+ *
+ * @param array $args The xProfile loop's signup arguments.
+ * @return array The xProfile loop's signup arguments.
+ */
+function _bp_xprofile_signup_do_backcompat( $args = array() ) {
+	$expected_args = bp_xprofile_signup_args();
+	$needed_args   = array_intersect_key( $args, $expected_args );
+
+	if ( 1 === $args['profile_group_id'] || array_diff_key( $expected_args, $needed_args ) ) {
+		_doing_it_wrong( 'bp_has_profile()', __( 'The argument of this function into your custom `members/register.php` template should be bp_xprofile_signup_args()', 'buddypress' ), '8.0.0' );
+		$args = $expected_args;
+	}
+
+	return $args;
+}
+
+/**
+ * Checks whether back compatibility is needed about xProfile loop's signup arguments.
+ *
+ * @since 8.0.0
+ * @access private
+ *
+ * @param string $template      The located path for registration template.
+ * @param string $template_name The needed template name.
+ */
+function _bp_xprofile_signup_check_backcompat( $template = '', $template_name = '' ) {
+	if ( 'members/register.php' !== $template_name ) {
+		return;
+	}
+
+	if ( 0 !== strpos( $template, buddypress()->theme_compat->theme->dir ) ) {
+		add_filter( 'bp_after_has_profile_parse_args', '_bp_xprofile_signup_do_backcompat', 100 );
+	}
+}
+
+/**
+ * Starts Signup fields back compatibility process only on the signup's page.
+ *
+ * @since 8.0.0
+ * @access private
+ */
+function _bp_xprofile_signup_start_backcompat() {
+	$signup_fields = (array) bp_xprofile_get_signup_field_ids();
+	if ( ! $signup_fields ) {
+		return;
+	}
+
+	add_action( 'bp_locate_template', '_bp_xprofile_signup_check_backcompat', 10, 2 );
+}
+add_action( 'bp_core_screen_signup', '_bp_xprofile_signup_start_backcompat' );

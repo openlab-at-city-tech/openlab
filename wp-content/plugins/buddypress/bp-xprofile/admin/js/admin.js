@@ -15,8 +15,8 @@ function add_option(forWhat) {
 		newOption    = document.createElement( 'input' ),
 		label        = document.createElement( 'label' ),
 		isDefault    = document.createElement( 'input' ),
-		txt1         = document.createTextNode( 'Default Value' ),
-		toDeleteText = document.createTextNode( 'Delete' ),
+		txt1         = document.createTextNode( XProfileAdmin.text.defaultValue ),
+		toDeleteText = document.createTextNode( XProfileAdmin.text.deleteLabel ),
 		toDeleteWrap = document.createElement( 'div' ),
 		toDelete     = document.createElement( 'a' );
 
@@ -95,6 +95,28 @@ function show_options( forWhat ) {
 		jQuery( '#do-autolink' ).val( do_autolink );
 	}
 
+	// Show/hides metaboxes according to selected field type supports.
+	jQuery( '#field-type-visibiliy-metabox, #field-type-required-metabox, #field-type-autolink-metabox, #field-type-member-types, #field-signup-position-metabox' ).show();
+	if ( -1 !== XProfileAdmin.hide_required_metabox.indexOf( forWhat ) ) {
+		jQuery( '#field-type-required-metabox' ).hide();
+	}
+
+	if ( -1 !== XProfileAdmin.hide_signup_position_metabox.indexOf( forWhat ) ) {
+		jQuery( '#field-signup-position-metabox' ).hide();
+	}
+
+	if ( -1 !== XProfileAdmin.hide_allow_custom_visibility_metabox.indexOf( forWhat ) ) {
+		jQuery( '#field-type-visibiliy-metabox' ).hide();
+	}
+
+	if ( -1 !== XProfileAdmin.hide_do_autolink_metabox.indexOf( forWhat ) ) {
+		jQuery( '#field-type-autolink-metabox' ).hide();
+	}
+
+	if ( -1 !== XProfileAdmin.hide_member_types_metabox.indexOf( forWhat ) ) {
+		jQuery( '#field-type-member-types' ).hide();
+	}
+
 	jQuery( document ).trigger( 'bp-xprofile-show-options', forWhat );
 }
 
@@ -171,27 +193,28 @@ function titleHint( id ) {
 		titleprompt.addClass('screen-reader-text');
 	}
 
-	titleprompt.click(function(){
+	titleprompt.on( 'click', function(){
 		jQuery(this).addClass('screen-reader-text');
-		title.focus();
+		title.trigger( 'focus' );
 	});
 
-	title.blur(function(){
+	title.on( 'blur', function(){
 		if ( '' === this.value ) {
 			titleprompt.removeClass('screen-reader-text');
 		}
-	}).focus(function(){
+	}).on( 'focus', function(){
 		titleprompt.addClass('screen-reader-text');
-	}).keydown(function(e){
+	}).on( 'keydown', function(e){
 		titleprompt.addClass('screen-reader-text');
-		jQuery(this).unbind(e);
+		jQuery(this).off( e );
 	});
 }
 
-jQuery( document ).ready( function() {
+jQuery( function() {
+	var isMovingToSignups = false;
 
 	// Set focus in Field Title, if we're on the right page.
-	jQuery( '#bp-xprofile-add-field #title' ).focus();
+	jQuery( '#bp-xprofile-add-field #title' ).trigger( 'focus' );
 
 	// Set up the notice that shows when no member types are selected for a field.
 	toggle_no_member_type_notice();
@@ -214,13 +237,13 @@ jQuery( document ).ready( function() {
 	} );
 
 	// Set up the sort order change actions.
-	jQuery( '[id^="sort_order_"]' ).change(function() {
+	jQuery( '[id^="sort_order_"]' ).on( 'change', function() {
 		if ( jQuery( this ).val() !== 'custom' ) {
 			destroySortableFieldOptions();
 		} else {
 			enableSortableFieldOptions( jQuery('#fieldtype :selected').val() );
 		}
-	});
+	} );
 
 	// Show object if JS is enabled.
 	jQuery( 'ul#field-group-tabs' ).show();
@@ -230,7 +253,7 @@ jQuery( document ).ready( function() {
 		cursor: 'move',
 		axis: 'x',
 		opacity: 1,
-		items: 'li',
+		items: 'li:not(.not-sortable)',
 		tolerance: 'intersect',
 
 		update: function() {
@@ -252,6 +275,10 @@ jQuery( document ).ready( function() {
 		tolerance: 'pointer',
 
 		update: function() {
+			if ( isMovingToSignups ) {
+				return false;
+			}
+
 			jQuery.post( ajaxurl, {
 				action: 'xprofile_reorder_fields',
 				'cookie': encodeURIComponent(document.cookie),
@@ -276,7 +303,7 @@ jQuery( document ).ready( function() {
 	var $date_format = jQuery( 'input[name="date_format"]' );
 	var $date_format_custom_value = jQuery( '#date-format-custom-value' );
 	var $date_format_sample = jQuery( '#date-format-custom-sample' );
-	$date_format.click( function( e ) {
+	$date_format.on( 'click', function( e ) {
 		switch ( e.target.value ) {
 			case 'elapsed' :
 				$date_format_custom_value.val( '' );
@@ -295,13 +322,13 @@ jQuery( document ).ready( function() {
 
 	// Clicking into the custom date format field should select the Custom radio button.
 	var $date_format_custom = jQuery( '#date-format-custom' );
-	$date_format_custom_value.focus( function() {
+	$date_format_custom_value.on( 'focus', function() {
 		$date_format_custom.prop( 'checked', 'checked' );
 	} );
 
 	// Validate custom date field.
 	var $date_format_spinner = jQuery( '#date-format-custom-spinner' );
-	$date_format_custom_value.change( function( e ) {
+	$date_format_custom_value.on( 'change', function( e ) {
 		$date_format_spinner.addClass( 'is-active' );
 		jQuery.post( ajaxurl, {
 			action: 'date_format',
@@ -330,41 +357,119 @@ jQuery( document ).ready( function() {
 			// When field is dropped on tab.
 			drop: function( ev, ui ) {
 				var $item = jQuery(this), // The tab
-					$list = jQuery( $item.find( 'a' ).attr( 'href' ) ).find( '.connectedSortable' ); // The tab body
+					$list = jQuery( $item.find( 'a' ).attr( 'href' ) ).find( '.connectedSortable' ), // The tab body
+					dropInGroup = function( fieldId ) {
+						var fieldOrder, postData = {
+							action: 'xprofile_reorder_fields',
+							'cookie': encodeURIComponent(document.cookie),
+							'_wpnonce_reorder_fields': jQuery( 'input#_wpnonce_reorder_fields' ).val()
+						};
+
+						// Select new tab as current.
+						$tabs.tabs( 'option', 'active', $tab_items.index( $item ) );
+
+						// Refresh $list variable.
+						$list = jQuery( $item.find( 'a' ).attr( 'href' ) ).find( '.connectedSortable' );
+						jQuery($list).find( 'p.nofields' ).hide( 'slow' );
+
+						jQuery.extend( postData, {
+							'field_group_id': jQuery( $list ).attr( 'id' ),
+							'group_tab': jQuery( $item ).prop( 'id' )
+						} );
+
+						// Set serialized data
+						fieldOrder = jQuery( $list ).sortable( 'serialize' );
+
+						if ( fieldId ) {
+							var serializedField = fieldId.replace( 'draggable_field_', 'draggable_signup_field[]=' );
+							if ( fieldOrder ) {
+								fieldOrder += '&' + serializedField;
+							} else {
+								fieldOrder = serializedField;
+							}
+
+							jQuery.extend( postData, {
+								'new_signup_field_id': serializedField
+							} );
+						} else {
+							// Show new placement.
+							jQuery( this ).appendTo( $list ).show( 'slow' ).animate( { opacity: '1' }, 500 );
+
+							// Refresh $list variable.
+							$list = jQuery( $item.find( 'a' ).attr( 'href' ) ).find( '.connectedSortable' );
+
+							// Reset serialized data.
+							fieldOrder = jQuery( $list ).sortable( 'serialize' );
+
+							jQuery.extend( postData, {
+								'field_group_id': jQuery( $list ).attr( 'id' )
+							} );
+						}
+
+						jQuery.extend( postData, {
+							'field_order': fieldOrder
+						} );
+
+						// Ajax update field locations and orders.
+						jQuery.post( ajaxurl, postData, function( response ) {
+							if ( response.data && response.data.signup_field ) {
+								jQuery( $list ).append( response.data.signup_field );
+
+								if ( response.data.field_id ) {
+									jQuery( '#draggable_field_' + response.data.field_id + ' legend' ).append(
+										jQuery( '<span></span>' ).addClass( 'bp-signup-field-label' ).html( XProfileAdmin.signup_info )
+									);
+								}
+							}
+						}, 'json' ).always( function() {
+							isMovingToSignups = false;
+						} );
+					};
 
 				// Remove helper class.
 				jQuery($item).removeClass( 'drop-candidate' );
 
-				// Hide field, change selected tab, and show new placement.
-				ui.draggable.hide( 'slow', function() {
+				if ( 'signup-group' === jQuery( $item ).prop( 'id' ) ) {
+					// Simply add the field to signup ones.
+					dropInGroup( ui.draggable.prop( 'id' ) );
 
-					// Select new tab as current.
-					$tabs.tabs( 'option', 'active', $tab_items.index( $item ) );
-
-					// Show new placement.
-					jQuery(this).appendTo($list).show( 'slow' ).animate( {opacity: '1'}, 500 );
-
-					// Refresh $list variable.
-					$list = jQuery( $item.find( 'a' ).attr( 'href' ) ).find( '.connectedSortable' );
-					jQuery($list).find( 'p.nofields' ).hide( 'slow' );
-
-					// Ajax update field locations and orders.
-					jQuery.post( ajaxurl, {
-						action: 'xprofile_reorder_fields',
-						'cookie': encodeURIComponent(document.cookie),
-						'_wpnonce_reorder_fields': jQuery( 'input#_wpnonce_reorder_fields' ).val(),
-						'field_order': jQuery( $list ).sortable( 'serialize' ),
-						'field_group_id': jQuery( $list ).attr( 'id' )
-					},
-					function() {} );
-				});
+				} else if ( ! ui.draggable.prop( 'id' ).match( /draggable_signup_field_([0-9]+)/ ) ) {
+					// Hide field, change selected tab, and show new placement.
+					ui.draggable.hide( 'slow', dropInGroup );
+				}
 			},
 			over: function() {
+				isMovingToSignups = true;
 				jQuery(this).addClass( 'drop-candidate' );
 			},
 			out: function() {
 				jQuery(this).removeClass( 'drop-candidate' );
+				isMovingToSignups = false;
 			}
 		});
 	}
+
+	jQuery( '#signup-fields' ).on( 'click', '.removal', function( e ) {
+		e.preventDefault();
+
+		var fieldId = jQuery( e.target ).attr( 'href' ).replace( '#remove_field-', '' ),
+		    container = jQuery( e.target ).closest( '#draggable_signup_field_' + fieldId );
+
+		if ( ! fieldId ) {
+			return false;
+		}
+
+		// Ajax update field locations and orders.
+		jQuery.post( ajaxurl, {
+			action: 'xprofile_remove_signup_field',
+			'cookie': encodeURIComponent(document.cookie),
+			'_wpnonce_reorder_fields': jQuery( 'input#_wpnonce_reorder_fields' ).val(),
+			'signup_field_id': fieldId
+		}, function( response ) {
+			if ( response.success ) {
+				jQuery( container ).remove();
+				jQuery( '#draggable_field_' + fieldId + ' .bp-signup-field-label' ).remove();
+			}
+		}, 'json' );
+	} );
 });

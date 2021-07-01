@@ -166,20 +166,20 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
-		$retval      = true;
+		$retval      = new WP_Error(
+			'bp_rest_group_invalid_id',
+			__( 'Invalid group ID.', 'buddypress' ),
+			array(
+				'status' => 404,
+			)
+		);
 		$this->group = $this->groups_endpoint->get_group_object( $request );
 
-		if ( ! $this->group ) {
-			$retval = new WP_Error(
-				'bp_rest_group_invalid_id',
-				__( 'Invalid group ID.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
+		if ( false !== $this->group ) {
+			$retval = true;
 		}
 
 		/**
@@ -187,7 +187,7 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_attachments_group_avatar_get_item_permissions_check', $retval, $request );
@@ -251,32 +251,31 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function create_item_permissions_check( $request ) {
 		$retval = $this->get_item_permissions_check( $request );
 
-		if ( true === $retval && ( bp_disable_group_avatar_uploads() || false === buddypress()->avatar->show_avatars ) ) {
-			$retval = new WP_Error(
-				'bp_rest_attachments_group_avatar_disabled',
-				__( 'Sorry, group avatar upload is disabled.', 'buddypress' ),
-				array(
-					'status' => 500,
-				)
-			);
-		}
-
-		if ( true === $retval
-			&& ! groups_is_user_admin( bp_loggedin_user_id(), $this->group->id )
-			&& ! current_user_can( 'bp_moderate' )
-		) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+		if ( ! is_wp_error( $retval ) ) {
+			if ( bp_disable_group_avatar_uploads() || false === buddypress()->avatar->show_avatars ) {
+				$retval = new WP_Error(
+					'bp_rest_attachments_group_avatar_disabled',
+					__( 'Sorry, group avatar upload is disabled.', 'buddypress' ),
+					array(
+						'status' => 500,
+					)
+				);
+			} elseif ( groups_is_user_admin( bp_loggedin_user_id(), $this->group->id ) || current_user_can( 'bp_moderate' ) ) {
+				$retval = true;
+			} else {
+				$retval = new WP_Error(
+					'bp_rest_authorization_required',
+					__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			}
 		}
 
 		/**
@@ -284,7 +283,7 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_attachments_group_avatar_create_item_permissions_check', $retval, $request );
@@ -373,7 +372,7 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
 		$retval = $this->create_item_permissions_check( $request );
@@ -383,7 +382,7 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_attachments_group_avatar_delete_item_permissions_check', $retval, $request );
@@ -429,32 +428,36 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_attachments_group_avatar',
-			'type'       => 'object',
-			'properties' => array(
-				'full'  => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Full size of the image file.', 'buddypress' ),
-					'type'        => 'string',
-					'readonly'    => true,
+		if ( is_null( $this->schema ) ) {
+			$this->schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_attachments_group_avatar',
+				'type'       => 'object',
+				'properties' => array(
+					'full'  => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Full size of the image file.', 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'uri',
+						'readonly'    => true,
+					),
+					'thumb' => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Thumb size of the image file.', 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'uri',
+						'readonly'    => true,
+					),
 				),
-				'thumb' => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Thumb size of the image file.', 'buddypress' ),
-					'type'        => 'string',
-					'readonly'    => true,
-				),
-			),
-		);
+			);
+		}
 
 		/**
-		 * Filters the group avatar schema.
+		 * Filters the attachments group avatar schema.
 		 *
-		 * @param string $schema The endpoint schema.
+		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_attachments_group_avatar_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_attachments_group_avatar_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**

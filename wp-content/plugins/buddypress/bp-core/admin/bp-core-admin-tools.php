@@ -22,13 +22,14 @@ function bp_core_admin_tools() {
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'BuddyPress Tools', 'buddypress' ) ?></h1>
 		<hr class="wp-header-end">
 
+		<h2 class="nav-tab-wrapper"><?php bp_core_admin_tabs( __( 'Repair', 'buddypress' ), 'tools' ); ?></h2>
+
 		<p><?php esc_html_e( 'BuddyPress keeps track of various relationships between members, groups, and activity items.', 'buddypress' ); ?></p>
 		<p><?php esc_html_e( 'Occasionally these relationships become out of sync, most often after an import, update, or migration.', 'buddypress' ); ?></p>
 		<p><?php esc_html_e( 'Use the tools below to manually recalculate these relationships.', 'buddypress' ); ?>
 		</p>
-		<p class="attention"><?php esc_html_e( 'Some of these tools create substantial database overhead. Avoid running more than one repair job at a time.', 'buddypress' ); ?></p>
 
-		<h2><?php esc_html_e( 'Activate checkboxe(s) to select the operation(s) to perform', 'buddypress' ); ?></h2>
+		<h2><?php esc_html_e( 'Select the operation to perform', 'buddypress' ); ?></h2>
 
 		<form class="settings" method="post" action="">
 
@@ -38,7 +39,7 @@ function bp_core_admin_tools() {
 				<?php foreach ( bp_admin_repair_list() as $item ) : ?>
 					<p>
 						<label for="<?php echo esc_attr( str_replace( '_', '-', $item[0] ) ); ?>">
-							<input type="checkbox" class="checkbox" name="<?php echo esc_attr( $item[0] ) . '" id="' . esc_attr( str_replace( '_', '-', $item[0] ) ); ?>" value="1" /> <?php echo esc_html( $item[1] ); ?>
+							<input type="radio" class="radio" name="bp-tools-run[]" id="<?php echo esc_attr( str_replace( '_', '-', $item[0] ) ); ?>" value="<?php echo esc_attr( $item[0] ); ?>" /> <?php echo esc_html( $item[1] ); ?>
 						</label>
 					</p>
 				<?php endforeach; ?>
@@ -79,7 +80,7 @@ function bp_admin_repair_handler() {
 	$messages = array();
 
 	foreach ( (array) bp_admin_repair_list() as $item ) {
-		if ( isset( $item[2] ) && isset( $_POST[$item[0]] ) && 1 === absint( $_POST[$item[0]] ) && is_callable( $item[2] ) ) {
+		if ( isset( $item[2] ) && isset( $_POST['bp-tools-run'] ) && in_array( $item[0], (array) $_POST['bp-tools-run'], true ) && is_callable( $item[2] ) ) {
 			$messages[] = call_user_func( $item[2] );
 		}
 	}
@@ -144,7 +145,7 @@ function bp_admin_repair_list() {
 			'bp_admin_repair_blog_records',
 		);
 
-		if ( bp_is_active( 'blogs', 'site-icon' ) ) {
+		if ( is_multisite() && bp_is_active( 'blogs', 'site-icon' ) ) {
 			$repair_list[91] = array(
 				'bp-blog-site-icons',
 				__( 'Repair site tracking site icons/blog avatars synchronization.', 'buddypress' ),
@@ -331,6 +332,10 @@ function bp_admin_repair_blog_site_icons() {
 
 	/* translators: %s: the result of the action performed by the repair tool */
 	$statement = __( 'Repairing site icons/blog avatars synchronization&hellip; %s', 'buddypress' );
+
+	if ( ! is_multisite() ) {
+		return array( 0, sprintf( $statement, __( 'Failed!', 'buddypress' ) ) );
+ 	}
 
 	// Run function if blogs component is active.
 	if ( bp_is_active( 'blogs', 'site-icon' ) ) {
@@ -537,18 +542,48 @@ function bp_core_admin_available_tools_intro() {
 	$page = bp_core_do_network_admin() ? 'admin.php' : 'tools.php' ;
 	$url  = add_query_arg( $query_arg, bp_get_admin_url( $page ) );
 	?>
-	<div class="card tool-box">
+	<div class="card tool-box bp-tools">
 		<h2><?php esc_html_e( 'BuddyPress Tools', 'buddypress' ) ?></h2>
-		<p>
-			<?php esc_html_e( 'BuddyPress keeps track of various relationships between users, groups, and activity items. Occasionally these relationships become out of sync, most often after an import, update, or migration.', 'buddypress' ); ?>
-			<?php
-			printf(
-				/* translators: %s: the link to the BuddyPress repair tools */
-				esc_html_x( 'Use the %s to repair these relationships.', 'buddypress tools intro', 'buddypress' ),
-				'<a href="' . esc_url( $url ) . '">' . esc_html__( 'BuddyPress Tools', 'buddypress' ) . '</a>'
-			);
-			?>
-		</p>
+
+		<dl>
+			<dt><?php esc_html_e( 'Repair Tools', 'buddypress' ) ?></dt>
+			<dd>
+				<?php esc_html_e( 'BuddyPress keeps track of various relationships between users, groups, and activity items. Occasionally these relationships become out of sync, most often after an import, update, or migration.', 'buddypress' ); ?>
+				<?php
+				printf(
+					/* translators: %s: the link to the BuddyPress repair tools */
+					esc_html_x( 'Use the %s to repair these relationships.', 'buddypress tools intro', 'buddypress' ),
+					'<a href="' . esc_url( $url ) . '">' . esc_html__( 'BuddyPress Repair Tools', 'buddypress' ) . '</a>'
+				);
+				?>
+			</dd>
+
+			<dt><?php esc_html_e( 'Manage Invitations', 'buddypress' ) ?></dt>
+			<dd>
+				<?php esc_html_e( 'When enabled, BuddyPress allows your users to invite nonmembers to join your site.', 'buddypress' ); ?>
+				<?php
+				$url = add_query_arg( 'page', 'bp-members-invitations', bp_get_admin_url( $page ) );
+				printf(
+					/* translators: %s: the link to the BuddyPress Invitations management tool screen */
+					esc_html_x( 'Visit %s to manage your site&rsquo;s invitations.', 'buddypress invitations tool intro', 'buddypress' ),
+					'<a href="' . esc_url( $url ) . '">' . esc_html__( 'Invitations', 'buddypress' ) . '</a>'
+				);
+				?>
+			</dd>
+
+			<dt><?php esc_html_e( 'Manage Opt-outs', 'buddypress' ) ?></dt>
+			<dd>
+				<?php esc_html_e( 'BuddyPress stores opt-out requests from people who are not members of this site, but have been contacted via communication from this site, and wish to opt-out from future communication.', 'buddypress' ); ?>
+				<?php
+				$url = add_query_arg( 'page', 'bp-optouts', bp_get_admin_url( $page ) );
+				printf(
+					/* translators: %s: the link to the BuddyPress Nonmember Opt-outs management tool screen */
+					esc_html_x( 'Visit %s to manage your site&rsquo;s opt-out requests.', 'buddypress opt-outs intro', 'buddypress' ),
+					'<a href="' . esc_url( $url ) . '">' . esc_html__( 'Nonmember Opt-outs', 'buddypress' ) . '</a>'
+				);
+				?>
+			</dd>
+		</dl>
 	</div>
 	<?php
 }

@@ -1,12 +1,12 @@
-/* global wp, bp, BP_Nouveau, JSON */
+/* global wp, BP_Nouveau, JSON */
 /* jshint devel: true */
 /* jshint browser: true */
 /* @since 3.0.0 */
-/* @version 7.0.0 */
+/* @version 8.0.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
-( function( exports, $ ) {
+( function( bp, $ ) {
 
 	// Bail if not set.
 	if ( typeof BP_Nouveau === 'undefined' ) {
@@ -661,16 +661,13 @@ window.bp = window.bp || {};
 				return false;
 			}
 
-			// Find the required wpnonce string.
-			// if  button element set we'll have our nonce set on a data attr
-			// Check the value & if exists split the string to obtain the nonce string
-			// if no value, i.e false, null then the href attr is used.
-			if ( nonceUrl ) {
-				nonce = nonceUrl.split('?_wpnonce=');
-				nonce = nonce[1];
-			} else {
-				nonce = self.getLinkParams( target.prop( 'href' ), '_wpnonce' );
+			// If the nonceUrl is not set, use the `href` attribute.
+			if ( ! nonceUrl ) {
+				nonceUrl = target.prop( 'href' );
 			}
+
+			// Set the nonce.
+			nonce = self.getLinkParams( nonceUrl, '_wpnonce' );
 
 			// Unfortunately unlike groups
 			// Friends actions does not match the wpnonce
@@ -824,4 +821,4 @@ window.bp = window.bp || {};
 	// Launch BP Nouveau.
 	bp.Nouveau.start();
 
-} )( bp, jQuery );
+} )( window.bp, jQuery );

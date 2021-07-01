@@ -140,6 +140,14 @@ class BP_XProfile_Field {
 	public $do_autolink;
 
 	/**
+	 * The signup position of the field into the signups form.
+	 *
+	 * @since 8.0.0
+	 * @var int
+	 */
+	public $signup_position;
+
+	/**
 	 * Field type option.
 	 *
 	 * @since 2.0.0
@@ -182,6 +190,15 @@ class BP_XProfile_Field {
 			$this->type_obj            = bp_xprofile_create_field_type( 'textbox' );
 			$this->type_obj->field_obj = $this;
 		}
+
+		/**
+		 * Fires when the xProfile field object has been constructed.
+		 *
+		 * @since 8.0.0
+		 *
+		 * @param BP_XProfile_Field $this The xProfile field object.
+		 */
+		do_action( 'bp_xprofile_field', $this );
 	}
 
 	/**
@@ -806,10 +823,19 @@ class BP_XProfile_Field {
 	 */
 	public function get_default_visibility() {
 		if ( ! isset( $this->default_visibility ) ) {
-			$this->default_visibility = bp_xprofile_get_meta( $this->id, 'field', 'default_visibility' );
+			$this->default_visibility = 'public';
+			$this->visibility         = '';
 
-			if ( ! $this->default_visibility ) {
-				$this->default_visibility = 'public';
+			if ( isset( $this->type_obj->visibility ) && $this->type_obj->visibility ) {
+				$this->visibility = $this->type_obj->visibility;
+			}
+
+			if ( $this->field_type_supports( 'allow_custom_visibility' ) ) {
+				$this->visibility = bp_xprofile_get_meta( $this->id, 'field', 'default_visibility' );
+			}
+
+			if ( $this->visibility ) {
+				$this->default_visibility = $this->visibility;
 			}
 		}
 
@@ -839,6 +865,22 @@ class BP_XProfile_Field {
 		}
 
 		return $this->allow_custom_visibility;
+	}
+
+	/**
+	 * Get the field's signup position.
+	 *
+	 * @since 8.0.0
+	 *
+	 * @return int the field's signup position.
+	 *             0 if the field has not been added to the signup form.
+	 */
+	public function get_signup_position() {
+		if ( ! isset( $this->signup_position ) ) {
+			$this->signup_position = (int) bp_xprofile_get_meta( $this->id, 'field', 'signup_position' );
+		}
+
+		return $this->signup_position;
 	}
 
 	/**
@@ -1259,6 +1301,9 @@ class BP_XProfile_Field {
 							// Output the required metabox.
 							$this->required_metabox();
 
+							// Output signup position metabox.
+							$this->signup_position_metabox();
+
 							// Output the Member Types metabox.
 							$this->member_type_metabox();
 
@@ -1315,6 +1360,53 @@ class BP_XProfile_Field {
 		</div>
 
 	<?php
+	}
+
+	/**
+	 * Gets field type supports.
+	 *
+	 * @since 8.0.0
+	 *
+	 * @return bool[] Supported features.
+	 */
+	public function get_field_type_supports() {
+		$supports = array(
+			'switch_fieldtype'        => true,
+			'required'                => true,
+			'do_autolink'             => true,
+			'allow_custom_visibility' => true,
+			'member_types'            => true,
+			'signup_position'         => true,
+		);
+
+		if ( isset( $this->type_obj ) && $this->type_obj ) {
+			$field_type = $this->type_obj;
+
+			if ( isset( $field_type::$supported_features ) ) {
+				$supports = array_merge( $supports, $field_type::$supported_features );
+			}
+		}
+
+		return $supports;
+	}
+
+	/**
+	 * Checks whether the field type supports the requested feature.
+	 *
+	 * @since 8.0.0
+	 *
+	 * @param string $support The name of the feature.
+	 * @return boolean True if the field type supports the feature. False otherwise.
+	 */
+	public function field_type_supports( $support = '' ) {
+		$retval   = true;
+		$features = $this->get_field_type_supports();
+
+		if ( isset( $features[ $support ] ) ) {
+			$retval = $features[ $support ];
+		}
+
+		return $retval;
 	}
 
 	/**
@@ -1438,11 +1530,13 @@ class BP_XProfile_Field {
 	 * Private method used to output field Member Type metabox.
 	 *
 	 * @since 2.4.0
+	 *
+	 * @return void If default field or if the field does not support the feature.
 	 */
 	private function member_type_metabox() {
 
 		// The primary field is for all, so bail.
-		if ( 1 === (int) $this->id ) {
+		if ( true === $this->is_default_field() || ! $this->field_type_supports( 'member_types' ) ) {
 			return;
 		}
 
@@ -1455,7 +1549,7 @@ class BP_XProfile_Field {
 
 		?>
 
-		<div id="member-types-div" class="postbox">
+		<div id="field-type-member-types" class="postbox">
 			<h2><?php _e( 'Member Types', 'buddypress' ); ?></h2>
 			<div class="inside">
 				<p class="description"><?php _e( 'This field should be available to:', 'buddypress' ); ?></p>
@@ -1492,16 +1586,16 @@ class BP_XProfile_Field {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return void If default field id 1.
+	 * @return void If default field or if the field does not support the feature.
 	 */
 	private function visibility_metabox() {
 
-		// Default field cannot have custom visibility.
-		if ( true === $this->is_default_field() ) {
+		// Default field and field types not supporting the feature cannot have custom visibility.
+		if ( true === $this->is_default_field() || ! $this->field_type_supports( 'allow_custom_visibility' ) ) {
 			return;
 		} ?>
 
-		<div class="postbox">
+		<div class="postbox" id="field-type-visibiliy-metabox">
 			<h2><label for="default-visibility"><?php esc_html_e( 'Visibility', 'buddypress' ); ?></label></h2>
 			<div class="inside">
 				<div>
@@ -1541,16 +1635,16 @@ class BP_XProfile_Field {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return void If default field.
+	 * @return void If default field or if the field does not support the feature.
 	 */
 	private function required_metabox() {
 
-		// Default field is always required.
-		if ( true === $this->is_default_field() ) {
+		// Default field and field types not supporting the feature cannot be required.
+		if ( true === $this->is_default_field() || ! $this->field_type_supports( 'required' ) ) {
 			return;
 		} ?>
 
-		<div class="postbox">
+		<div class="postbox" id="field-type-required-metabox">
 			<h2><label for="required"><?php esc_html_e( 'Requirement', 'buddypress' ); ?></label></h2>
 			<div class="inside">
 				<select name="required" id="required">
@@ -1568,12 +1662,16 @@ class BP_XProfile_Field {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @return void If default field id 1.
+	 * @return void If the field does not support the feature.
 	 */
 	private function autolink_metabox() {
-		?>
 
-		<div class="postbox">
+		// Field types not supporting the feature cannot use autolink.
+		if ( ! $this->field_type_supports( 'do_autolink' ) ) {
+			return;
+		} ?>
+
+		<div class="postbox" id="field-type-autolink-metabox">
 			<h2><?php esc_html_e( 'Autolink', 'buddypress' ); ?></h2>
 			<div class="inside">
 				<p class="description"><?php esc_html_e( 'On user profiles, link this field to a search of the Members directory, using the field value as a search term.', 'buddypress' ); ?></p>
@@ -1606,16 +1704,23 @@ class BP_XProfile_Field {
 		// Default field cannot change type.
 		if ( true === $this->is_default_field() ) {
 			return;
-		} ?>
+		}
+		?>
 
 		<div class="postbox">
 			<h2><label for="fieldtype"><?php esc_html_e( 'Type', 'buddypress'); ?></label></h2>
 			<div class="inside" aria-live="polite" aria-atomic="true" aria-relevant="all">
-				<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)">
+				<?php if ( ! $this->field_type_supports( 'switch_fieldtype' ) ) : ?>
+					<input type="text" disabled="true" value="<?php echo esc_attr( $this->type_obj->name ); ?>">
+					<input type="hidden" name="fieldtype" id="fieldtype" value="<?php echo esc_attr( $this->type ); ?>">
 
-					<?php bp_xprofile_admin_form_field_types( $this->type ); ?>
+				<?php else : ?>
+					<select name="fieldtype" id="fieldtype" onchange="show_options(this.value)">
 
-				</select>
+						<?php bp_xprofile_admin_form_field_types( $this->type ); ?>
+
+					</select>
+				<?php endif; ?>
 
 				<?php
 
@@ -1631,6 +1736,46 @@ class BP_XProfile_Field {
 	}
 
 	/**
+	 * Output the metabox for setting the field's position into the signup form.
+	 *
+	 * @since 8.0.0
+	 *
+	 * @return void If default field or if the field does not support the feature.
+	 */
+	private function signup_position_metabox() {
+		// Field types not supporting the feature cannot be added to signups form.
+		if ( ! $this->field_type_supports( 'signup_position' ) || true === $this->is_default_field() ) {
+			return;
+		}
+
+		$next_signup_position = 1;
+		$signup_position      = $this->get_signup_position();
+
+		if ( 0 === $signup_position ) {
+			$signup_fields_order = bp_xprofile_get_signup_field_ids();
+			$next_signup_position = count( $signup_fields_order ) + 1;
+		} else {
+			$next_signup_position = $signup_position;
+		}
+		?>
+
+		<div class="postbox" id="field-signup-position-metabox">
+			<h2><label for="default-visibility"><?php esc_html_e( 'Signups', 'buddypress' ); ?></label></h2>
+			<div class="inside">
+				<div>
+					<ul>
+						<li>
+							<input type="checkbox" id="has-signup-position" name="signup-position" value="<?php echo esc_attr( $next_signup_position ); ?>" <?php checked( $signup_position, $next_signup_position ); ?> />
+							<label for="has-signup-position"><?php esc_html_e( 'Use the field into the registration form.', 'buddypress' ); ?></label>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Output hidden fields used by default field.
 	 *
 	 * @since 2.3.0
@@ -1642,15 +1787,78 @@ class BP_XProfile_Field {
 		// Nonce.
 		wp_nonce_field( 'bp_xprofile_admin_field', 'bp_xprofile_admin_field' );
 
-		// Field 1 is the fullname field, which cannot have custom visibility.
-		if ( false === $this->is_default_field() ) {
+		// Init default field hidden inputs.
+		$default_field_hidden_inputs = array();
+		$hidden_fields = array(
+			'required' => array(
+				'name'  => 'required',
+				'id'    => 'required',
+				'value' => '0',
+			),
+			'default_visibility' => array(
+				'name'  => 'default-visibility',
+				'id'    => 'default-visibility',
+				'value' => $this->get_default_visibility(),
+			),
+			'allow_custom_visibility' => array(
+				'name'  => 'allow-custom-visibility',
+				'id'    => 'allow-custom-visibility',
+				'value' => 'disabled',
+			),
+			'do_autolink' => array(
+				'name'  => 'do_autolink',
+				'id'    => 'do-autolink',
+				'value' => '',
+			),
+		);
+
+		// Field 1 is the fullname field, which is required.
+		if ( true === $this->is_default_field() ) {
+			$default_field_required          = $hidden_fields['required'];
+			$default_field_required['value'] = '1';
+
+			$default_field_hidden_inputs = array(
+				$default_field_required,
+				array(
+					'name'  => 'fieldtype',
+					'id'    => 'fieldtype',
+					'value' => 'textbox',
+				),
+				array(
+					'name'  => 'signup-position',
+					'id'    => 'has-signup-position',
+					'value' => $this->get_signup_position(),
+				),
+			);
+		}
+
+		$supports = $this->get_field_type_supports();
+		if ( $supports ) {
+			foreach ( $supports as $feature => $support ) {
+				if ( true === $support || in_array( $feature, array( 'switch_fieldtype', 'member_types' ), true ) ) {
+					continue;
+				}
+
+				$default_field_hidden_inputs[] = $hidden_fields[ $feature ];
+
+				if ( 'allow_custom_visibility' === $feature ) {
+					$default_field_hidden_inputs[] = $hidden_fields['default_visibility'];
+				}
+			}
+		}
+
+		if ( ! $default_field_hidden_inputs ) {
 			return;
-		} ?>
+		}
 
-		<input type="hidden" name="required"  id="required"  value="1"       />
-		<input type="hidden" name="fieldtype" id="fieldtype" value="textbox" />
-
-		<?php
+		foreach ( $default_field_hidden_inputs as $default_field_hidden_input ) {
+			printf(
+				'<input type="hidden" name="%1$s" id="%2$s" value="%3$s"/>',
+				esc_attr( $default_field_hidden_input['name'] ),
+				esc_attr( $default_field_hidden_input['id'] ),
+				esc_attr( $default_field_hidden_input['value'] )
+			);
+		}
 	}
 
 	/**

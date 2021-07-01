@@ -134,6 +134,10 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 			$args['member_type'] = '';
 		}
 
+		if ( is_null( $args['search_terms'] ) ) {
+			$args['search_terms'] = false;
+		}
+
 		/**
 		 * Filter the query arguments for the request.
 		 *
@@ -178,7 +182,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool
+	 * @return true
 	 */
 	public function get_items_permissions_check( $request ) {
 
@@ -187,7 +191,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool            $retval  Returned value.
+		 * @param true            $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_members_get_items_permissions_check', true, $request );
@@ -227,11 +231,18 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
-		$retval = true;
-		$user   = bp_rest_get_user( $request['id'] );
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		$user = bp_rest_get_user( $request['id'] );
 
 		if ( ! $user instanceof WP_User ) {
 			$retval = new WP_Error(
@@ -241,18 +252,20 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 					'status' => 404,
 				)
 			);
-		}
-
-		if ( true === $retval && get_current_user_id() === $user->ID ) {
+		} elseif ( 'edit' === $request['context'] ) {
+			if ( get_current_user_id() === $user->ID || bp_current_user_can( 'list_users' ) ) {
+				$retval = true;
+			} else {
+				$retval = new WP_Error(
+					'bp_rest_authorization_required',
+					__( 'Sorry, you are not allowed to view members with the edit context.', 'buddypress' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			}
+		} else {
 			$retval = true;
-		} elseif ( true === $retval && 'edit' === $request['context'] && ! current_user_can( 'list_users' ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to view members with the edit context.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
 		}
 
 		/**
@@ -260,7 +273,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_members_get_item_permissions_check', $retval, $request );
@@ -272,27 +285,17 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function create_item_permissions_check( $request ) {
-		$retval = true;
-
-		if ( ! ( is_user_logged_in() && current_user_can( 'bp_moderate' ) ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to view members.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
-		}
+		$retval = parent::create_item_permissions_check( $request );
 
 		/**
 		 * Filter or override the members `create_item` permissions check.
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_members_create_item_permissions_check', $retval, $request );
@@ -304,11 +307,20 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function update_item_permissions_check( $request ) {
-		$retval = true;
-		$user   = bp_rest_get_user( $request['id'] );
+		$error  = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+		$retval = $error;
+
+		$user             = bp_rest_get_user( $request['id'] );
+		$member_type_edit = isset( $request['member_type'] );
 
 		if ( ! $user instanceof WP_User ) {
 			$retval = new WP_Error(
@@ -318,21 +330,30 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 					'status' => 404,
 				)
 			);
-		}
+		} else {
+			$action = 'delete';
 
-		$action = 'delete';
-		if ( 'DELETE' !== $request->get_method() ) {
-			$action = 'update';
-		}
+			if ( 'DELETE' !== $request->get_method() ) {
+				$action = 'update';
+			}
 
-		if ( true === $retval && ! $this->can_manage_member( $user, $action ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to view members.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+			if ( get_current_user_id() === $user->ID ) {
+				if ( $member_type_edit && ! bp_current_user_can( 'bp_moderate' ) ) {
+					$retval = $error;
+				} else {
+					$retval = parent::update_item_permissions_check( $request );
+				}
+			} elseif ( ! $this->can_manage_member( $user, $action ) ) {
+				$retval = new WP_Error(
+					'bp_rest_authorization_required',
+					__( 'Sorry, you are not allowed to view members.', 'buddypress' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			} else {
+				$retval = true;
+			}
 		}
 
 		/**
@@ -340,7 +361,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_members_update_item_permissions_check', $retval, $request );
@@ -352,7 +373,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
 		$retval = $this->update_item_permissions_check( $request );
@@ -362,7 +383,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_members_delete_item_permissions_check', $retval, $request );
@@ -535,11 +556,8 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 			$data['mention_name'] = bp_activity_get_user_mentionname( $user->ID );
 		}
 
-		// Get item schema.
-		$schema = $this->get_item_schema();
-
 		// Avatars.
-		if ( ! empty( $schema['properties']['avatar_urls'] ) ) {
+		if ( true === buddypress()->avatar->show_avatars ) {
 			$data['avatar_urls'] = array(
 				'full'  => bp_core_fetch_avatar(
 					array(
@@ -636,14 +654,16 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 				)
 			);
 
-			foreach ( $groups as $group ) {
-				$data['groups'][ $group->id ] = array(
+			foreach ( $groups as $group_order => $group ) {
+				$data['groups'][ $group_order ] = array(
 					'name' => $group->name,
+					'id'   => $group->id,
 				);
 
 				foreach ( $group->fields as $item ) {
-					$data['groups'][ $group->id ]['fields'][ $item->id ] = array(
+					$data['groups'][ $group_order ]['fields'][ $item->field_order ] = array(
 						'name'  => $item->name,
+						'id'    => $item->id,
 						'value' => array(
 							'raw'          => $item->data->value,
 							'unserialized' => $fields_endpoint->get_profile_field_unserialized_value( $item->data->value ),
@@ -675,7 +695,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 			$capability = 'edit_user';
 		}
 
-		return ( current_user_can( 'bp_moderate' ) || current_user_can( $capability, $user->ID ) );
+		return current_user_can( $capability, $user->ID );
 	}
 
 	/**
@@ -777,191 +797,195 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_members',
-			'type'       => 'object',
-			'properties' => array(
-				'id'                 => array(
-					'description' => __( 'A unique numeric ID for the Member.', 'buddypress' ),
-					'type'        => 'integer',
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'name'               => array(
-					'description' => __( 'Display name for the member.', 'buddypress' ),
-					'type'        => 'string',
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
+		if ( is_null( $this->schema ) ) {
+			$schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_members',
+				'type'       => 'object',
+				'properties' => array(
+					'id'                 => array(
+						'description' => __( 'A unique numeric ID for the Member.', 'buddypress' ),
+						'type'        => 'integer',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
 					),
-				),
-				'mention_name'       => array(
-					'description' => __( 'The name used for that user in @-mentions.', 'buddypress' ),
-					'type'        => 'string',
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
+					'name'               => array(
+						'description' => __( 'Display name for the member.', 'buddypress' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+						),
 					),
-					'readonly'    => true,
-				),
-				'link'               => array(
-					'description' => __( 'Profile URL of the member.', 'buddypress' ),
-					'type'        => 'string',
-					'format'      => 'uri',
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'user_login'         => array(
-					'description' => __( 'An alphanumeric identifier for the Member.', 'buddypress' ),
-					'type'        => 'string',
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'required'    => true,
-					'arg_options' => array(
-						'sanitize_callback' => array( $this, 'check_username' ),
+					'mention_name'       => array(
+						'description' => __( 'The name used for that user in @-mentions.', 'buddypress' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+						'readonly'    => true,
 					),
-				),
-				'member_types'       => array(
-					'description' => __( 'Member types associated with the member.', 'buddypress' ),
-					'enum'        => bp_get_member_types(),
-					'type'        => 'array',
-					'items'       => array(
-						'type' => 'string',
+					'link'               => array(
+						'description' => __( 'Profile URL of the member.', 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'uri',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
 					),
-					'context'     => array( 'embed', 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'registered_date'    => array(
-					'description' => __( 'Registration date for the member.', 'buddypress' ),
-					'type'        => 'string',
-					'format'      => 'date-time',
-					'context'     => array( 'edit' ),
-					'readonly'    => true,
-				),
-				'password'           => array(
-					'description' => __( 'Password for the member (never included).', 'buddypress' ),
-					'type'        => 'string',
-					'context'     => array(), // Password is never displayed.
-					'required'    => true,
-					'arg_options' => array(
-						'sanitize_callback' => array( $this, 'check_user_password' ),
+					'user_login'         => array(
+						'description' => __( 'An alphanumeric identifier for the Member.', 'buddypress' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'required'    => true,
+						'arg_options' => array(
+							'sanitize_callback' => array( $this, 'check_username' ),
+						),
 					),
-				),
-				'roles'              => array(
-					'description' => __( 'Roles assigned to the member.', 'buddypress' ),
-					'type'        => 'array',
-					'context'     => array( 'edit' ),
-					'items'       => array(
-						'type' => 'string',
-					),
-				),
-				'capabilities'       => array(
-					'description' => __( 'All capabilities assigned to the user.', 'buddypress' ),
-					'type'        => 'object',
-					'context'     => array( 'edit' ),
-					'readonly'    => true,
-				),
-				'extra_capabilities' => array(
-					'description' => __( 'Any extra capabilities assigned to the user.', 'buddypress' ),
-					'type'        => 'object',
-					'context'     => array( 'edit' ),
-					'readonly'    => true,
-				),
-				'xprofile'             => array(
-					'description' => __( 'Member XProfile groups and its fields.', 'buddypress' ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'friendship_status'    => array(
-					'description' => __( 'Friendship relation with, current, logged in user.', 'buddypress' ),
-					'type'        => 'bool',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'friendship_status_slug' => array(
-					'description' => __( 'Slug of the friendship status with current logged in user.', 'buddypress' ),
-					'enum'        => array( 'is_friend', 'not_friends', 'pending', 'awaiting_response' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'last_activity'          => array(
-					'description' => __( 'Last date the member was active on the site.', 'buddypress' ),
-					'type'        => 'object',
-					'properties'  => array(
-						'timediff' => array(
+					'member_types'       => array(
+						'description' => __( 'Member types associated with the member.', 'buddypress' ),
+						'enum'        => bp_get_member_types(),
+						'type'        => 'array',
+						'items'       => array(
 							'type' => 'string',
 						),
-						'date'     => array(
-							'type'   => 'string',
-							'format' => 'date-time',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
+					),
+					'registered_date'    => array(
+						'description' => __( 'Registration date for the member.', 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'date-time',
+						'context'     => array( 'edit' ),
+						'readonly'    => true,
+					),
+					'password'           => array(
+						'description' => __( 'Password for the member (never included).', 'buddypress' ),
+						'type'        => 'string',
+						'context'     => array(), // Password is never displayed.
+						'required'    => true,
+						'arg_options' => array(
+							'sanitize_callback' => array( $this, 'check_user_password' ),
 						),
 					),
-					'format'      => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'roles'              => array(
+						'description' => __( 'Roles assigned to the member.', 'buddypress' ),
+						'type'        => 'array',
+						'context'     => array( 'edit' ),
+						'items'       => array(
+							'type' => 'string',
+						),
+					),
+					'capabilities'       => array(
+						'description' => __( 'All capabilities assigned to the user.', 'buddypress' ),
+						'type'        => 'object',
+						'context'     => array( 'edit' ),
+						'readonly'    => true,
+					),
+					'extra_capabilities' => array(
+						'description' => __( 'Any extra capabilities assigned to the user.', 'buddypress' ),
+						'type'        => 'object',
+						'context'     => array( 'edit' ),
+						'readonly'    => true,
+					),
+					'xprofile'             => array(
+						'description' => __( 'Member XProfile groups and its fields.', 'buddypress' ),
+						'type'        => 'array',
+						'context'     => array( 'view', 'edit' ),
+						'readonly'    => true,
+					),
+					'friendship_status'    => array(
+						'description' => __( 'Friendship relation with, current, logged in user.', 'buddypress' ),
+						'type'        => 'bool',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
+					),
+					'friendship_status_slug' => array(
+						'description' => __( 'Slug of the friendship status with current logged in user.', 'buddypress' ),
+						'enum'        => array( 'is_friend', 'not_friends', 'pending', 'awaiting_response' ),
+						'type'        => 'string',
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'readonly'    => true,
+					),
+					'last_activity'          => array(
+						'description' => __( 'Last date the member was active on the site.', 'buddypress' ),
+						'type'        => 'object',
+						'properties'  => array(
+							'timediff' => array(
+								'type' => 'string',
+							),
+							'date'     => array(
+								'type'   => 'string',
+								'format' => 'date-time',
+							),
+						),
+						'format'      => 'date-time',
+						'context'     => array( 'view', 'edit' ),
+						'readonly'    => true,
+					),
+					'latest_update'          => array(
+						'description' => __( 'The content of the latest activity posted by the member.', 'buddypress' ),
+						'type'        => 'object',
+						'properties'  => array(
+							'id'       => array(
+								'context'     => array( 'view', 'edit' ),
+								'description' => __( 'A unique numeric ID for the activity.', 'buddypress' ),
+								'readonly'    => true,
+								'type'        => 'integer',
+							),
+							'raw'      => array(
+								'description' => __( 'Content for the activity, as it exists in the database.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+							),
+							'rendered' => array(
+								'description' => __( 'HTML content for the activity, transformed for display.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => true,
+							),
+						),
+						'readonly'    => true,
+					),
+					'total_friend_count'     => array(
+						'context'     => array( 'view', 'edit', 'embed' ),
+						'description' => __( 'Total number of friends for the member.', 'buddypress' ),
+						'type'        => 'integer',
+						'readonly'    => true,
+					),
 				),
-				'latest_update'          => array(
-					'description' => __( 'The content of the latest activity posted by the member.', 'buddypress' ),
+			);
+
+			if ( true === buddypress()->avatar->show_avatars ) {
+				$avatar_properties = array();
+
+				$avatar_properties['full'] = array(
+					/* translators: 1: Full avatar width in pixels. 2: Full avatar height in pixels */
+					'description' => sprintf( __( 'Avatar URL with full image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_full_width() ), number_format_i18n( bp_core_avatar_full_height() ) ),
+					'type'        => 'string',
+					'format'      => 'uri',
+					'context'     => array( 'view', 'edit' ),
+				);
+
+				$avatar_properties['thumb'] = array(
+					/* translators: 1: Thumb avatar width in pixels. 2: Thumb avatar height in pixels */
+					'description' => sprintf( __( 'Avatar URL with thumb image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_thumb_width() ), number_format_i18n( bp_core_avatar_thumb_height() ) ),
+					'type'        => 'string',
+					'format'      => 'uri',
+					'context'     => array( 'view', 'edit' ),
+				);
+
+				$schema['properties']['avatar_urls'] = array(
+					'description' => __( 'Avatar URLs for the member.', 'buddypress' ),
 					'type'        => 'object',
-					'properties'  => array(
-						'id'       => array(
-							'context'     => array( 'view', 'edit' ),
-							'description' => __( 'A unique numeric ID for the activity.', 'buddypress' ),
-							'readonly'    => true,
-							'type'        => 'integer',
-						),
-						'raw'      => array(
-							'description' => __( 'Content for the activity, as it exists in the database.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'rendered' => array(
-							'description' => __( 'HTML content for the activity, transformed for display.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
-						),
-					),
-					'readonly'    => true,
-				),
-				'total_friend_count'     => array(
 					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Total number of friends for the member.', 'buddypress' ),
-					'type'        => 'integer',
 					'readonly'    => true,
-				),
-			),
-		);
+					'properties'  => $avatar_properties,
+				);
+			}
 
-		// Avatars.
-		if ( true === buddypress()->avatar->show_avatars ) {
-			$avatar_properties = array();
-
-			$avatar_properties['full'] = array(
-				/* translators: 1: Full avatar width in pixels. 2: Full avatar height in pixels */
-				'description' => sprintf( __( 'Avatar URL with full image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_full_width() ), number_format_i18n( bp_core_avatar_full_height() ) ),
-				'type'        => 'string',
-				'format'      => 'uri',
-				'context'     => array( 'embed', 'view', 'edit' ),
-			);
-
-			$avatar_properties['thumb'] = array(
-				/* translators: 1: Thumb avatar width in pixels. 2: Thumb avatar height in pixels */
-				'description' => sprintf( __( 'Avatar URL with thumb image size (%1$d x %2$d pixels).', 'buddypress' ), number_format_i18n( bp_core_avatar_thumb_width() ), number_format_i18n( bp_core_avatar_thumb_height() ) ),
-				'type'        => 'string',
-				'format'      => 'uri',
-				'context'     => array( 'embed', 'view', 'edit' ),
-			);
-
-			$schema['properties']['avatar_urls'] = array(
-				'description' => __( 'Avatar URLs for the member.', 'buddypress' ),
-				'type'        => 'object',
-				'context'     => array( 'embed', 'view', 'edit' ),
-				'readonly'    => true,
-				'properties'  => $avatar_properties,
-			);
+			// Cache current schema here.
+			$this->schema = $schema;
 		}
 
 		/**
@@ -969,7 +993,7 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		 *
 		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_members_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_members_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**

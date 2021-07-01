@@ -1,10 +1,10 @@
 /* jshint browser: true */
-/* global bp, BP_Nouveau */
+/* global BP_Nouveau */
 /* @since 3.0.0 */
-/* @version 7.0.0 */
+/* @version 8.0.0 */
 window.bp = window.bp || {};
 
-( function( exports, $ ) {
+( function( bp, $ ) {
 
 	// Bail if not set
 	if ( typeof BP_Nouveau === 'undefined' ) {
@@ -64,6 +64,7 @@ window.bp = window.bp || {};
 
 			// Inject Activities
 			$( '#buddypress [data-bp-list="activity"]' ).on( 'click', 'li.load-newest, li.load-more', this.injectActivities.bind( this ) );
+			$( '#buddypress [data-bp-list]' ).on( 'bp_ajax_request', this.updateRssLink );
 
 			// Hightlight new activities & clean up the stream
 			$( '#buddypress' ).on( 'bp_ajax_request', '[data-bp-list="activity"]', this.scopeLoaded.bind( this ) );
@@ -74,7 +75,7 @@ window.bp = window.bp || {};
 
 			// Activity actions
 			$( '#buddypress [data-bp-list="activity"]' ).on( 'click', '.activity-item', bp.Nouveau, this.activityActions );
-			$( document ).keydown( this.commentFormAction );
+			$( document ).on( 'keydown', this.commentFormAction );
 		},
 
 		/**
@@ -700,7 +701,7 @@ window.bp = window.bp || {};
 					easing:'swing'
 				} );
 
-				$( '#ac-form-' + activity_id + ' textarea' ).focus();
+				$( '#ac-form-' + activity_id + ' textarea' ).trigger( 'focus' );
 			}
 
 			// Removing the form
@@ -824,7 +825,7 @@ window.bp = window.bp || {};
 				return event;
 			}
 
-			keyCode = ( event.keyCode) ? event.keyCode : event.which;
+			keyCode = ( event.keyCode ) ? event.keyCode : event.which;
 
 			if ( 27 === keyCode && false === event.ctrlKey  ) {
 				if ( element.tagName === 'TEXTAREA' ) {
@@ -833,10 +834,18 @@ window.bp = window.bp || {};
 			} else if ( event.ctrlKey && 13 === keyCode && $( element ).val() ) {
 				$( element ).closest( 'form' ).find( '[type=submit]' ).first().trigger( 'click' );
 			}
+		},
+
+		updateRssLink: function( event, data ) {
+			var rssLink = data.response.feed_url || '';
+
+			if ( rssLink && $( 'body:not(.bp-user) #activity-rss-feed' ).length ) {
+				$( '#activity-rss-feed' ).find( 'a' ).first().prop( 'href', rssLink );
+			}
 		}
 	};
 
 	// Launch BP Nouveau Activity
 	bp.Nouveau.Activity.start();
 
-} )( bp, jQuery );
+} )( window.bp, jQuery );

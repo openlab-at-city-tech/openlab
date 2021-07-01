@@ -3,7 +3,7 @@
  * Groups functions
  *
  * @since 3.0.0
- * @version 6.3.0
+ * @version 7.2.1
  */
 
 // Exit if accessed directly.
@@ -424,7 +424,7 @@ function bp_nouveau_prepare_group_for_js( $item ) {
  * @since 3.0.0
  */
 function bp_nouveau_groups_invites_restriction_nav() {
-	$slug        = bp_get_settings_slug();
+	$slug        = bp_nouveau_get_component_slug( 'settings' );
 	$user_domain = bp_loggedin_user_domain();
 
 	if ( bp_displayed_user_domain() ) {
@@ -454,7 +454,7 @@ function bp_nouveau_groups_invites_restriction_nav() {
  */
 function bp_nouveau_groups_invites_restriction_admin_nav( $wp_admin_nav ) {
 	// Setup the logged in user variables.
-	$settings_link = trailingslashit( bp_loggedin_user_domain() . bp_get_settings_slug() );
+	$settings_link = trailingslashit( bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'settings' ) );
 
 	// Add the "Group Invites" subnav item.
 	$wp_admin_nav[] = array(
@@ -495,7 +495,7 @@ function bp_nouveau_groups_screen_invites_restriction() {
 			bp_core_add_message( __( 'You are not allowed to perform this action.', 'buddypress' ), 'error' );
 		}
 
-		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() ) . 'invites/' );
+		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'settings' ) ) . 'invites/' );
 	}
 
 	/**
@@ -507,6 +507,40 @@ function bp_nouveau_groups_screen_invites_restriction() {
 	 */
 	bp_core_load_template( apply_filters( 'bp_nouveau_groups_screen_invites_restriction', 'members/single/settings/group-invites' ) );
 }
+
+/**
+ * Makes sure the BP REST API groups/invites endpoint respects invite restrictions.
+ *
+ * @since 7.2.1
+ *
+ * @param bool|WP_Error   $retval  Whether the request can continue.
+ * @param WP_REST_Request $request The request sent to the API.
+ * @return bool|WP_Error
+ */
+function bp_nouveau_restrict_rest_group_invite_to_friends( $retval, $request ) {
+	if ( true === $retval && bp_is_active( 'friends' ) ) {
+		$group_id   = $request->get_param( 'group_id' );
+		$user_id    = $request->get_param( 'user_id' );
+		$inviter_id = $request->get_param( 'inviter_id' );
+
+		if ( ! $inviter_id ) {
+			$inviter_id = bp_loggedin_user_id();
+		}
+
+		if ( bp_nouveau_groups_get_group_invites_setting( $user_id ) && 'is_friend' !== BP_Friends_Friendship::check_is_friend( $inviter_id, $user_id ) ) {
+			$retval = new WP_Error(
+				'bp_rest_group_invite_cannot_create_item',
+				__( 'Sorry, you are not allowed to create the invitation as requested.', 'buddypress' ),
+				array(
+					'status' => rest_authorization_required_code(),
+				)
+			);
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'bp_rest_group_invites_create_item_permissions_check', 'bp_nouveau_restrict_rest_group_invite_to_friends', 10, 2 );
 
 /**
  * @since 3.0.0
@@ -534,7 +568,7 @@ function bp_nouveau_get_groups_directory_nav_items() {
 				'component' => 'groups',
 				'slug'      => 'personal', // slug is used because BP_Core_Nav requires it, but it's the scope
 				'li_class'  => array(),
-				'link'      => bp_loggedin_user_domain() . bp_get_groups_slug() . '/my-groups/',
+				'link'      => bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'groups' ) . '/my-groups/',
 				'text'      => __( 'My Groups', 'buddypress' ),
 				'count'     => $my_groups_count,
 				'position'  => 15,
@@ -1236,3 +1270,25 @@ function bp_nouveau_groups_notification_filters() {
 		bp_nouveau_notifications_register_filter( $notification );
 	}
 }
+
+/**
+ * Makes sure the Nouveau specific behavior about Group invites visibility is applied to the REST API.
+ *
+ * @since 7.2.1
+ *
+ * @param true|WP_Error   $retval  Whether the current user can list invites.
+ * @param WP_REST_Request $request The request sent to the API.
+ * @return true|WP_Error Whether the current user can list invites.
+ */
+function bp_nouveau_rest_group_invites_get_items_permissions_check( $retval, $request ) {
+	if ( is_wp_error( $retval ) ) {
+		$group_id = (int) $request['group_id'];
+
+		if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			$retval = true;
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'bp_rest_group_invites_get_items_permissions_check', 'bp_nouveau_rest_group_invites_get_items_permissions_check', 10, 2 );

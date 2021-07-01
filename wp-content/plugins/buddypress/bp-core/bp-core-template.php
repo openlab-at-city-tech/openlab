@@ -2248,6 +2248,17 @@ function bp_is_settings_component() {
 }
 
 /**
+ * Check whether the current page is an Invitations screen.
+ *
+ * @since 8.0.0
+ *
+ * @return bool True if the current page is an Invitations screen.
+ */
+function bp_is_members_invitations_screen() {
+	return (bool) bp_is_current_component( bp_get_members_invitations_slug() );
+}
+
+/**
  * Is the current component an active core component?
  *
  * Use this function when you need to check if the current component is an
@@ -2645,6 +2656,45 @@ function bp_is_user_settings_account_delete() {
  */
 function bp_is_user_settings_profile() {
 	return (bool) ( bp_is_user_settings() && bp_is_current_action( 'profile' ) );
+}
+
+/**
+ * Is the current page a user's community invitations page?
+ *
+ * Eg http://example.com/members/cassie/invitations/ (or a subpage thereof).
+ *
+ * @since 8.0.0
+ *
+ * @return bool True if the current page is a user's community invitations page.
+ */
+function bp_is_user_members_invitations() {
+	return (bool) ( bp_is_user() && bp_is_members_invitations_screen() );
+}
+
+/**
+ * Is the current page a user's List Invites page?
+ *
+ * Eg http://example.com/members/cassie/invitations/list-invites/.
+ *
+ * @since 8.0.0
+ *
+ * @return bool True if the current page is a user's List Invites page.
+ */
+function bp_is_user_members_invitations_list() {
+	return (bool) ( bp_is_user_members_invitations() && bp_is_current_action( 'list-invites' ) );
+}
+
+/**
+ * Is the current page a user's Send Invites page?
+ *
+ * Eg http://example.com/members/cassie/invitations/send-invites/.
+ *
+ * @since 8.0.0
+ *
+ * @return bool True if the current page is a user's Send Invites page.
+ */
+function bp_is_user_members_invitations_send_screen() {
+	return (bool) ( bp_is_user_members_invitations() && bp_is_current_action( 'send-invites' ) );
 }
 
 /** Groups ********************************************************************/
@@ -3750,30 +3800,59 @@ function bp_email_the_salutation( $settings = array() ) {
 	 * Gets the Recipient Salutation.
 	 *
 	 * @since 2.5.0
+	 * @since 8.0.0 Checks current BP Email type schema to eventually use the unnamed salutation.
 	 *
 	 * @param array $settings Email Settings.
 	 * @return string The Recipient Salutation.
 	 */
 	function bp_email_get_salutation( $settings = array() ) {
-		$token = '{{recipient.name}}';
+		$email_type = bp_email_get_type();
+		$salutation  = '';
 
-		/**
-		 * Filters The Recipient Salutation inside the Email Template.
-		 *
-		 * @since 2.5.0
-		 *
-		 * @param string $value    The Recipient Salutation.
-		 * @param array  $settings Email Settings.
-		 * @param string $token    The Recipient token.
-		 */
-		return apply_filters(
-			'bp_email_get_salutation',
-			sprintf(
-				/* translators: %s: the email token for the recipient name */
-				_x( 'Hi %s,', 'recipient salutation', 'buddypress' ),
+		if ( $email_type ) {
+			$types_schema = bp_email_get_type_schema( 'named_salutation' );
+
+			if ( isset( $types_schema[ $email_type ] ) && false === $types_schema[ $email_type ] ) {
+				/**
+				 * Filters The Recipient Unnamed Salutation inside the Email Template.
+				 *
+				 * @since 8.0.0
+				 *
+				 * @param string $value    The Recipient Salutation.
+				 * @param array  $settings Email Settings.
+				 */
+				$salutation = apply_filters(
+					'bp_email_get_unnamed_salutation',
+					_x( 'Hi,', 'Unnamed recipient salutation', 'buddypress' ),
+					$settings
+				);
+			}
+		}
+
+		// Named salutations are default.
+		if ( ! $salutation ) {
+			$token = '{{recipient.name}}';
+
+			/**
+			 * Filters The Recipient Named Salutation inside the Email Template.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string $value    The Recipient Salutation.
+			 * @param array  $settings Email Settings.
+			 * @param string $token    The Recipient token.
+			 */
+			$salutation = apply_filters(
+				'bp_email_get_salutation',
+				sprintf(
+					/* translators: %s: the email token for the recipient name */
+					_x( 'Hi %s,', 'Named recipient salutation', 'buddypress' ),
+					$token
+				),
+				$settings,
 				$token
-			),
-			$settings,
-			$token
-		);
+			);
+		}
+
+		return $salutation;
 	}

@@ -1,10 +1,11 @@
-/* global wp, bp, BP_Nouveau, _, Backbone, tinymce, tinyMCE */
+/* global wp, BP_Nouveau, _, Backbone, tinymce, tinyMCE */
 /* jshint devel: true */
-/* @version 3.1.0 */
+/* @since 3.0.0 */
+/* @version 8.0.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
-( function( exports, $ ) {
+( function( bp, $ ) {
 
 	// Bail if not set.
 	if ( typeof BP_Nouveau === 'undefined' ) {
@@ -51,9 +52,14 @@ window.bp = window.bp || {};
 
 			// Then listen to nav click and load the appropriate view.
 			$( '#subnav a' ).on( 'click', function( event ) {
-				event.preventDefault();
+				var view_id = $( event.target ).prop( 'id' ),
+				    supportedView = [ 'inbox', 'starred', 'sentbox', 'compose' ];
 
-				var view_id = $( event.target ).prop( 'id' );
+				if ( -1 === _.indexOf( supportedView, view_id ) || 'unsupported' === self.box ) {
+					return event;
+				}
+
+				event.preventDefault();
 
 				// Remove the editor to be sure it will be added dynamically later.
 				self.removeTinyMCE();
@@ -106,7 +112,7 @@ window.bp = window.bp || {};
 				return;
 			} else {
 				// Mentions isn't available, so bail.
-				if ( _.isEmpty( exports.mentions ) ) {
+				if ( _.isEmpty( bp.mentions ) ) {
 					return;
 				}
 
@@ -602,11 +608,11 @@ window.bp = window.bp || {};
 							errors.push( 'send_to' );
 						} else {
 							usernames = usernames.map( function( username ) {
-								username = $.trim( username );
+								username = username.trim();
 								return username;
 							} );
 
-							if ( ! usernames || ! $.isArray( usernames ) ) {
+							if ( ! usernames || ! _.isArray( usernames ) ) {
 								errors.push( 'send_to' );
 							}
 
@@ -1382,12 +1388,13 @@ window.bp = window.bp || {};
 
 	bp.Nouveau.Messages.Router = Backbone.Router.extend( {
 		routes: {
-			'compose/' : 'composeMessage',
-			'view/:id/': 'viewMessage',
-			'sentbox/' : 'sentboxView',
-			'starred/' : 'starredView',
-			'inbox/'   : 'inboxView',
-			''        : 'inboxView'
+			'compose/'    : 'composeMessage',
+			'view/:id/'   : 'viewMessage',
+			'sentbox/'    : 'sentboxView',
+			'starred/'    : 'starredView',
+			'inbox/'      : 'inboxView',
+			''            : 'inboxView',
+			'*unSupported': 'unSupported'
 		},
 
 		composeMessage: function() {
@@ -1420,6 +1427,10 @@ window.bp = window.bp || {};
 			bp.Nouveau.Messages.threadsView();
 		},
 
+		unSupported: function() {
+			bp.Nouveau.Messages.box = 'unsupported';
+		},
+
 		inboxView: function() {
 			bp.Nouveau.Messages.box = 'inbox';
 			bp.Nouveau.Messages.threadsView();
@@ -1429,4 +1440,4 @@ window.bp = window.bp || {};
 	// Launch BP Nouveau Groups.
 	bp.Nouveau.Messages.start();
 
-} )( bp, jQuery );
+} )( window.bp, jQuery );

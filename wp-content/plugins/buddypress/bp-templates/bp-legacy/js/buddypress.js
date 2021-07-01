@@ -1,5 +1,6 @@
 /* jshint undef: false, unused:false */
-/* @version 3.0.0 */
+/* @version 1.7.0 */
+/* @version 8.0.0 */
 // AJAX Functions
 var jq = jQuery;
 
@@ -12,7 +13,7 @@ var activity_last_recorded  = 0;
 
 var directoryPreferences = {};
 
-jq(document).ready( function() {
+jq( function() {
 	var activity_oldestpage = 1;
 
 	/**** Page Load Actions *******************************************************/
@@ -41,7 +42,7 @@ jq(document).ready( function() {
 			easing:'swing'
 		} );
 
-		$whats_new.val('').focus().val( $member_nicename );
+		$whats_new.val('').trigger( 'focus' ).val( $member_nicename );
 	} else {
 		jq('#whats-new-options').hide();
 	}
@@ -49,7 +50,7 @@ jq(document).ready( function() {
 	/**** Activity Posting ********************************************************/
 
 	/* Textarea focus */
-	$whats_new.focus( function(){
+	$whats_new.on( 'focus', function() {
 		jq( '#whats-new-options' ).slideDown();
 
 		jq( this ).animate({
@@ -80,7 +81,7 @@ jq(document).ready( function() {
 				jq( '#activity-filter-select select' ).trigger( 'change' );
 			}
 		}
-	});
+	} );
 
 	/* For the "What's New" form, do the following on focusout. */
 	jq( '#whats-new-form' ).on( 'focusout', function( e ) {
@@ -124,7 +125,7 @@ jq(document).ready( function() {
 					inputs[ input.name ] = input.value;
 				} else {
 					// Checkboxes/dropdown list can have multiple selected value
-					if ( ! jq.isArray( inputs[ input.name ] ) ) {
+					if ( ! Array.isArray( inputs[ input.name ] ) ) {
 						inputs[ input.name ] = new Array( inputs[ input.name ], input.value );
 					} else {
 						inputs[ input.name ].push( input.value );
@@ -133,9 +134,9 @@ jq(document).ready( function() {
 			}
 		} );
 
-		form.find( '*' ).each( function() {
-			if ( jq.nodeName( this, 'textarea' ) || jq.nodeName( this, 'input' ) ) {
-				jq(this).prop( 'disabled', true );
+		form.find( '*' ).each( function( i, elem ) {
+			if ( elem.nodeName.toLowerCase() === 'textarea' || elem.nodeName.toLowerCase() ==='input' ) {
+				jq( elem ).prop( 'disabled', true );
 			}
 		} );
 
@@ -184,11 +185,11 @@ jq(document).ready( function() {
 		}, inputs );
 
 		jq.post( ajaxurl, post_data, function( response ) {
-			form.find( '*' ).each( function() {
-				if ( jq.nodeName( this, 'textarea' ) || jq.nodeName( this, 'input' ) ) {
-					jq(this).prop( 'disabled', false );
+			form.find( '*' ).each( function( i, elem ) {
+				if ( elem.nodeName.toLowerCase() === 'textarea' || elem.nodeName.toLowerCase() ==='input' ) {
+					jq( elem ).prop( 'disabled', false );
 				}
-			});
+			} );
 
 			/* Check for errors and append if found. */
 			if ( response[0] + response[1] === '-1' ) {
@@ -275,7 +276,7 @@ jq(document).ready( function() {
 	});
 
 	/* Activity filter select */
-	jq('#activity-filter-select select').change( function() {
+	jq( '#activity-filter-select select' ).on( 'change', function() {
 		var selected_tab = jq( 'div.activity-type-tabs li.selected' ),
 			filter = jq(this).val(),
 			scope;
@@ -289,7 +290,7 @@ jq(document).ready( function() {
 		bp_activity_request(scope, filter);
 
 		return false;
-	});
+	} );
 
 	/* Stream event delegation */
 	jq('div.activity').on( 'click', function(event) {
@@ -582,7 +583,7 @@ jq(document).ready( function() {
 				offset:-100,
 				easing:'swing'
 			} );
-			jq('#ac-form-' + ids[2] + ' textarea').focus();
+			jq('#ac-form-' + ids[2] + ' textarea').trigger( 'focus' );
 
 			return false;
 		}
@@ -800,7 +801,7 @@ jq(document).ready( function() {
 	});
 
 	/* Escape Key Press for cancelling comment forms */
-	jq(document).keydown( function(e) {
+	jq(document).on( 'keydown', function(e) {
 		e = e || window.event;
 		if (e.target) {
 			element = e.target;
@@ -898,7 +899,7 @@ jq(document).ready( function() {
 	});
 
 	/* When the filter select box is changed re-query */
-	jq('li.filter select').change( function() {
+	jq( 'li.filter select' ).on( 'change', function() {
 		var el,
 			css_id, object, scope, filter, search_terms, template,
 			$gm_search;
@@ -944,7 +945,7 @@ jq(document).ready( function() {
 		bp_filter_request( object, filter, scope, 'div.' + object, search_terms, 1, extras, null, template );
 
 		return false;
-	});
+	} );
 
 	/* All pagination links run through this function */
 	jq('#buddypress').on( 'click', function(event) {
@@ -1124,7 +1125,7 @@ jq(document).ready( function() {
 			'friend_id': friend_id,
 			'group_id': jq('#group_id').val()
 		},
-		function(response)
+		function()
 		{
 			if ( invites_new_template ) {
 				// With new-style templates, we refresh the
@@ -1164,7 +1165,7 @@ jq(document).ready( function() {
 			.show().removeClass( 'field-visibility-settings-hide' );
 	} );
 
-	jq('#profile-edit-form input:not(:submit), #profile-edit-form textarea, #profile-edit-form select, #signup_form input:not(:submit), #signup_form textarea, #signup_form select').change( function() {
+	jq( '#profile-edit-form input:not(:submit), #profile-edit-form textarea, #profile-edit-form select, #signup_form input:not(:submit), #signup_form textarea, #signup_form select' ).on( 'change', function() {
 		var shouldconfirm = true;
 
 		jq('#profile-edit-form input:submit, #signup_form input:submit').on( 'click', function() {
@@ -1176,7 +1177,7 @@ jq(document).ready( function() {
 				return BP_DTheme.unsaved_changes;
 			}
 		};
-	});
+	} );
 
 	/** Friendship Requests **************************************/
 
@@ -1382,7 +1383,7 @@ jq(document).ready( function() {
 		}
 
 		// toggle "Blog Details" block whenever checkbox is checked
-		blog_checked.change(function() {
+		blog_checked.on( 'change', function() {
 			jq('#blog-details').toggle();
 		});
 	}
@@ -1419,7 +1420,7 @@ jq(document).ready( function() {
 	});
 
 	/* AJAX send reply functionality */
-	jq('#send_reply_button').click(
+	jq( '#send_reply_button' ).on( 'click',
 		function() {
 			var order = jq('#messages_order').val() || 'ASC',
 				offset  = jq('#message-recipients').offset(),
@@ -1491,17 +1492,17 @@ jq(document).ready( function() {
 	});
 
 	/* Selecting/Deselecting all messages */
-	jq('#select-all-messages').click(function(event) {
-		if( this.checked ) {
-			jq('.message-check').each(function() {
+	jq( '#select-all-messages' ).on( 'click', function() {
+		if ( this.checked ) {
+			jq( '.message-check' ).each( function() {
 				this.checked = true;
-			});
+			} );
 		} else {
-			jq('.message-check').each(function() {
+			jq( '.message-check' ).each( function() {
 				this.checked = false;
-			});
+			} );
 		}
-	});
+	} );
 
 	/* Make sure a 'Bulk Action' is selected before submitting the messages bulk action form */
 	jq('#messages-bulk-manage').attr('disabled', 'disabled');
@@ -1590,17 +1591,17 @@ jq(document).ready( function() {
 	/** Notifications **********************************************/
 
 	/* Selecting/Deselecting all notifications */
-	jq('#select-all-notifications').click(function(event) {
-		if( this.checked ) {
-			jq('.notification-check').each(function() {
+	jq( '#select-all-notifications' ).on( 'click', function() {
+		if ( this.checked ) {
+			jq( '.notification-check' ).each( function() {
 				this.checked = true;
-			});
+			} );
 		} else {
-			jq('.notification-check').each(function() {
+			jq( '.notification-check' ).each( function() {
 				this.checked = false;
-			});
+			} );
 		}
-	});
+	} );
 
 	/* Make sure a 'Bulk Action' is selected before submitting the form */
 	jq('#notification-bulk-manage').attr('disabled', 'disabled');
@@ -1608,6 +1609,29 @@ jq(document).ready( function() {
 	/* Remove the disabled attribute from the form submit button when bulk action has a value */
 	jq('#notification-select').on('change', function(){
 		jq('#notification-bulk-manage').attr('disabled', jq(this).val().length <= 0);
+	});
+
+	/** Members Invitations *****************************************/
+
+	/* Selecting/Deselecting all invitations */
+	jq( '#select-all-invitations' ).on( 'click', function() {
+		if ( this.checked ) {
+			jq( '.invitation-check' ).each( function() {
+				this.checked = true;
+			} );
+		} else {
+			jq( '.invitation-check' ).each( function() {
+				this.checked = false;
+			} );
+		}
+	} );
+
+	/* Make sure a 'Bulk Action' is selected before submitting the form */
+	jq('#invitation-bulk-manage').attr('disabled', 'disabled');
+
+	/* Remove the disabled attribute from the form submit button when bulk action has a value */
+	jq('#invitation-select').on('change', function(){
+		jq('#invitation-bulk-manage').attr('disabled', jq(this).val().length <= 0);
 	});
 
 	/* Close site wide notices in the sidebar */
@@ -1634,11 +1658,11 @@ jq(document).ready( function() {
 	});
 
 	/* Toolbar & wp_list_pages JavaScript IE6 hover class */
-	jq('#wp-admin-bar ul.main-nav li, #nav li').mouseover( function() {
+	jq('#wp-admin-bar ul.main-nav li, #nav li').on( 'mouseover', function() {
 		jq(this).addClass('sfhover');
 	});
 
-	jq('#wp-admin-bar ul.main-nav li, #nav li').mouseout( function() {
+	jq('#wp-admin-bar ul.main-nav li, #nav li').on( 'mouseout', function() {
 		jq(this).removeClass('sfhover');
 	});
 

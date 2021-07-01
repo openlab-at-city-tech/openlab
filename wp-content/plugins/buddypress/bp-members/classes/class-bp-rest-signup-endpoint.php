@@ -179,10 +179,22 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
-		$retval = true;
+		$error  = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+		$retval = $error;
+
+		$capability = 'edit_users';
+		if ( is_multisite() ) {
+			$capability = 'manage_network_users';
+		}
 
 		if ( ! is_user_logged_in() ) {
 			$retval = new WP_Error(
@@ -192,16 +204,10 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 					'status' => rest_authorization_required_code(),
 				)
 			);
-		}
-
-		if ( true === $retval && ! bp_current_user_can( 'bp_moderate' ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+		} elseif ( bp_current_user_can( $capability ) ) {
+			$retval = true;
+		} else {
+			$retval = $error;
 		}
 
 		/**
@@ -209,7 +215,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_signup_get_items_permissions_check', $retval, $request );
@@ -255,40 +261,23 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
-		$retval = true;
-		$signup = $this->get_signup_object( $request['id'] );
+		$retval = $this->get_items_permissions_check( $request );
 
-		if ( ! is_user_logged_in() ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you need to be logged in to perform this action.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
-		}
+		if ( ! is_wp_error( $retval ) ) {
+			$signup = $this->get_signup_object( $request['id'] );
 
-		if ( true === $retval && empty( $signup ) ) {
-			$retval = new WP_Error(
-				'bp_rest_invalid_id',
-				__( 'Invalid signup id.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
-		}
-
-		if ( true === $retval && ! bp_current_user_can( 'bp_moderate' ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+			if ( empty( $signup ) ) {
+				$retval = new WP_Error(
+					'bp_rest_invalid_id',
+					__( 'Invalid signup id.', 'buddypress' ),
+					array(
+						'status' => 404,
+					)
+				);
+			}
 		}
 
 		/**
@@ -296,7 +285,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_signup_get_item_permissions_check', $retval, $request );
@@ -340,13 +329,13 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		$site_name  = '';
 
 		if ( is_multisite() ) {
-			$user_login = preg_replace( '/\s+/', '', sanitize_user( $user_login, true ) );
-			$user_email = sanitize_email( $user_email );
+			$user_login    = preg_replace( '/\s+/', '', sanitize_user( $user_login, true ) );
+			$user_email    = sanitize_email( $user_email );
 			$wp_key_suffix = $user_email;
 
 			if ( $this->is_blog_signup_allowed() ) {
 				$site_title = $request->get_param( 'site_title' );
-				$site_name = $request->get_param( 'site_name' );
+				$site_name  = $request->get_param( 'site_name' );
 
 				if ( $site_title && $site_name ) {
 					// Validate the blog signup.
@@ -506,21 +495,19 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true
 	 */
 	public function create_item_permissions_check( $request ) {
-		// The purpose of a signup is to allow a new user to register to the site.
-		$retval = true;
 
 		/**
 		 * Filter the signup `create_item` permissions check.
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true   $value Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
-		return apply_filters( 'bp_rest_signup_create_item_permissions_check', $retval, $request );
+		return apply_filters( 'bp_rest_signup_create_item_permissions_check', true, $request );
 	}
 
 	/**
@@ -578,7 +565,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
 		$retval = $this->get_item_permissions_check( $request );
@@ -588,7 +575,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_signup_delete_item_permissions_check', $retval, $request );
@@ -650,24 +637,23 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function activate_item_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_invalid_activation_key',
+			__( 'Invalid activation key.', 'buddypress' ),
+			array(
+				'status' => 404,
+			)
+		);
+
 		// Get the activation key.
 		$activation_key = $request->get_param( 'activation_key' );
 
-		// Get the signup thanks to the activation key.
-		$signup = $this->get_signup_object( $activation_key );
-
-		if ( empty( $signup ) ) {
-			$retval = new WP_Error(
-				'bp_rest_invalid_activation_key',
-				__( 'Invalid activation key.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
+		// Check the activation key is valid.
+		if ( $this->get_signup_object( $activation_key ) ) {
+			$retval = true;
 		}
 
 		/**
@@ -675,7 +661,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 6.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_signup_activate_item_permissions_check', $retval, $request );
@@ -878,111 +864,116 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_signup',
-			'type'       => 'object',
-			'properties' => array(
-				'id'             => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'A unique numeric ID for the signup.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'integer',
-				),
-				'user_login'     => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The username of the user the signup is for.', 'buddypress' ),
-					'required'    => true,
-					'type'        => 'string',
-				),
-				'user_email'     => array(
-					'context'     => array( 'edit' ),
-					'description' => __( 'The email for the user the signup is for.', 'buddypress' ),
-					'type'        => 'string',
-					'required'    => true,
-				),
-				'activation_key' => array(
-					'context'     => array( 'edit' ),
-					'description' => __( 'Activation key of the signup.', 'buddypress' ),
-					'type'        => 'string',
-					'readonly'    => true,
-				),
-				'registered'     => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The registered date for the user, in the site\'s timezone.', 'buddypress' ),
-					'type'        => 'string',
-					'readonly'    => true,
-					'format'      => 'date-time',
-				),
-				'date_sent'      => array(
-					'context'     => array( 'edit' ),
-					'description' => __( 'The date the activation email was sent to the user, in the site\'s timezone.', 'buddypress' ),
-					'type'        => 'string',
-					'readonly'    => true,
-					'format'      => 'date-time',
-				),
-				'count_sent'     => array(
-					'description' => __( 'The number of times the activation email was sent to the user.', 'buddypress' ),
-					'type'        => 'integer',
-					'context'     => array( 'edit' ),
-					'readonly'    => true,
-				),
-				'meta'           => array(
-					'context'     => array( 'edit' ),
-					'description' => __( 'The signup meta information', 'buddypress' ),
-					'type'        => 'object',
-					'properties'  => array(
-						'password' => array(
-							'description' => __( 'Password for the new user (never included).', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array(), // Password is never displayed.
+		if ( is_null( $this->schema ) ) {
+			$schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_signup',
+				'type'       => 'object',
+				'properties' => array(
+					'id'             => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'A unique numeric ID for the signup.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'integer',
+					),
+					'user_login'     => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The username of the user the signup is for.', 'buddypress' ),
+						'required'    => true,
+						'type'        => 'string',
+					),
+					'user_email'     => array(
+						'context'     => array( 'edit' ),
+						'description' => __( 'The email for the user the signup is for.', 'buddypress' ),
+						'type'        => 'string',
+						'required'    => true,
+					),
+					'activation_key' => array(
+						'context'     => array( 'edit' ),
+						'description' => __( 'Activation key of the signup.', 'buddypress' ),
+						'type'        => 'string',
+						'readonly'    => true,
+					),
+					'registered'     => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The registered date for the user, in the site\'s timezone.', 'buddypress' ),
+						'type'        => 'string',
+						'readonly'    => true,
+						'format'      => 'date-time',
+					),
+					'date_sent'      => array(
+						'context'     => array( 'edit' ),
+						'description' => __( 'The date the activation email was sent to the user, in the site\'s timezone.', 'buddypress' ),
+						'type'        => 'string',
+						'readonly'    => true,
+						'format'      => 'date-time',
+					),
+					'count_sent'     => array(
+						'description' => __( 'The number of times the activation email was sent to the user.', 'buddypress' ),
+						'type'        => 'integer',
+						'context'     => array( 'edit' ),
+						'readonly'    => true,
+					),
+					'meta'           => array(
+						'context'     => array( 'edit' ),
+						'description' => __( 'The signup meta information', 'buddypress' ),
+						'type'        => 'object',
+						'properties'  => array(
+							'password' => array(
+								'description' => __( 'Password for the new user (never included).', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array(), // Password is never displayed.
+							),
 						),
 					),
 				),
-			),
-		);
-
-		if ( bp_is_active( 'xprofile' ) ) {
-			$schema['properties']['user_name'] = array(
-				'context'     => array( 'view', 'edit' ),
-				'description' => __( 'The new user\'s full name.', 'buddypress' ),
-				'type'        => 'string',
-				'required'    => true,
-				'arg_options' => array(
-					'sanitize_callback' => 'sanitize_text_field',
-				),
-			);
-		}
-
-		if ( is_multisite() && $this->is_blog_signup_allowed() ) {
-			$schema['properties']['site_name'] = array(
-				'context'     => array( 'edit' ),
-				'description' => __( 'Unique site name (slug) of the new user\'s child site.', 'buddypress' ),
-				'type'        => 'string',
-				'default'     => '',
 			);
 
-			$schema['properties']['site_title'] = array(
-				'context'     => array( 'edit' ),
-				'description' => __( 'Title of the new user\'s child site.', 'buddypress' ),
-				'type'        => 'string',
-				'default'     => '',
-			);
+			if ( bp_is_active( 'xprofile' ) ) {
+				$schema['properties']['user_name'] = array(
+					'context'     => array( 'view', 'edit' ),
+					'description' => __( 'The new user\'s full name.', 'buddypress' ),
+					'type'        => 'string',
+					'required'    => true,
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+				);
+			}
 
-			$schema['properties']['site_public'] = array(
-				'context'     => array( 'edit' ),
-				'description' => __( 'Search engine visibility of the new user\'s  site.', 'buddypress' ),
-				'type'        => 'boolean',
-				'default'     => true,
-			);
+			if ( is_multisite() && $this->is_blog_signup_allowed() ) {
+				$schema['properties']['site_name'] = array(
+					'context'     => array( 'edit' ),
+					'description' => __( 'Unique site name (slug) of the new user\'s child site.', 'buddypress' ),
+					'type'        => 'string',
+					'default'     => '',
+				);
 
-			$schema['properties']['site_language'] = array(
-				'context'     => array( 'edit' ),
-				'description' => __( 'Language to use for the new user\'s  site.', 'buddypress' ),
-				'type'        => 'string',
-				'default'     => get_locale(),
-				'enum'        => array_merge( array( get_locale() ), $this->get_available_languages() ),
-			);
+				$schema['properties']['site_title'] = array(
+					'context'     => array( 'edit' ),
+					'description' => __( 'Title of the new user\'s child site.', 'buddypress' ),
+					'type'        => 'string',
+					'default'     => '',
+				);
+
+				$schema['properties']['site_public'] = array(
+					'context'     => array( 'edit' ),
+					'description' => __( 'Search engine visibility of the new user\'s  site.', 'buddypress' ),
+					'type'        => 'boolean',
+					'default'     => true,
+				);
+
+				$schema['properties']['site_language'] = array(
+					'context'     => array( 'edit' ),
+					'description' => __( 'Language to use for the new user\'s  site.', 'buddypress' ),
+					'type'        => 'string',
+					'default'     => get_locale(),
+					'enum'        => array_merge( array( get_locale() ), $this->get_available_languages() ),
+				);
+			}
+
+			// Cache current schema here.
+			$this->schema = $schema;
 		}
 
 		/**
@@ -990,7 +981,7 @@ class BP_REST_Signup_Endpoint extends WP_REST_Controller {
 		 *
 		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_signup_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_signup_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**

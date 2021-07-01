@@ -273,6 +273,11 @@ function bp_version_updater() {
 		if ( $raw_db_version < 12385 ) {
 			bp_update_to_5_0();
 		}
+
+		// Version 8.0.0.
+		if ( $raw_db_version < 12850 ) {
+			bp_update_to_8_0();
+		}
 	}
 
 	/* All done! *************************************************************/
@@ -548,6 +553,24 @@ function bp_update_to_2_7() {
 }
 
 /**
+ * Retuns needed the fullname field ID for an update task.
+ *
+ * @since 8.0.0
+ *
+ * @return int The fullname field ID.
+ */
+function bp_get_fullname_field_id_for_update() {
+	/**
+	 * The xProfile component is active by default on new installs, even if it
+	 * might be inactive during this update, we need to set the custom visibility
+	 * for the default field, in case the Administrator decides to reactivate it.
+	 */
+	global $wpdb;
+	$bp_prefix = bp_core_get_table_prefix();
+	return (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp_prefix}bp_xprofile_fields WHERE name = %s", addslashes( bp_get_option( 'bp-xprofile-fullname-field-name' ) ) ) );
+}
+
+/**
  * 5.0.0 update routine.
  *
  * - Make sure the custom visibility is disabled for the default profile field.
@@ -564,7 +587,7 @@ function bp_update_to_5_0() {
 	 */
 	global $wpdb;
 	$bp_prefix = bp_core_get_table_prefix();
-	$field_id  = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$bp_prefix}bp_xprofile_fields WHERE name = %s", addslashes( bp_get_option( 'bp-xprofile-fullname-field-name' ) ) ) );
+	$field_id  = bp_get_fullname_field_id_for_update();
 
 	$wpdb->insert(
 		$bp_prefix . 'bp_xprofile_meta',
@@ -587,6 +610,98 @@ function bp_update_to_5_0() {
 	if ( bp_is_active( 'groups' ) ) {
 		bp_groups_migrate_invitations();
 	}
+}
+
+/**
+ * 8.0.0 update routine.
+ *
+ * - Edit the `new_avatar` activity type's component to `members`.
+ * - Upgrade Primary xProfile Group's fields to signup fields.
+ *
+ * @since 8.0.0
+ */
+function bp_update_to_8_0() {
+	global $wpdb;
+	$bp_prefix = bp_core_get_table_prefix();
+
+	// Install welcome email to email list.
+	add_filter( 'bp_email_get_schema', 'bp_core_get_8_0_upgrade_email_schema' );
+
+	bp_core_install_emails();
+
+	remove_filter( 'bp_email_get_schema', 'bp_core_get_8_0_upgrade_email_schema' );
+
+	// Update the `new_avatar` activity type's component to `members`.
+	$wpdb->update(
+		$bp_prefix . 'bp_activity',
+		array(
+			'component' => 'members',
+		),
+		array(
+			'type' => 'new_avatar',
+		),
+		array(
+			'%s',
+		),
+		array(
+			'%s',
+		)
+	);
+
+	// Check if we need to create default signup fields.
+	$field_id            = bp_get_fullname_field_id_for_update();
+	$has_signup_position = (bool) $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$bp_prefix}bp_xprofile_meta WHERE meta_key = 'signup_position' AND object_type = 'field' AND object_id = %d", $field_id ) );
+	if ( bp_get_signup_allowed() && ! $has_signup_position ) {
+		// Get the Primary Group's fields.
+		$signup_fields = $wpdb->get_col( "SELECT id FROM {$bp_prefix}bp_xprofile_fields WHERE group_id = 1 ORDER BY field_order ASC" );
+
+		// Migrate potential signup fields.
+		if ( $signup_fields ) {
+			$signup_position = 0;
+			foreach ( $signup_fields as $signup_field_id ) {
+				$signup_position += 1;
+
+				$wpdb->insert(
+					$bp_prefix . 'bp_xprofile_meta',
+					array(
+						'object_id'   => $signup_field_id,
+						'object_type' => 'field',
+						'meta_key'    => 'signup_position',
+						'meta_value'  => $signup_position,
+					),
+					array(
+						'%d',
+						'%s',
+						'%s',
+						'%d',
+					)
+				);
+			}
+		}
+	}
+
+	bp_core_install_nonmember_opt_outs();
+}
+
+/**
+ * Select only the emails that need to be installed with version 8.0.
+ *
+ * @since 8.0.0
+ *
+ * @param array $emails The array of emails schema.
+ */
+function bp_core_get_8_0_upgrade_email_schema( $emails ) {
+	$new_emails = array();
+
+	if ( isset( $emails['core-user-activation'] ) ) {
+		$new_emails['core-user-activation'] = $emails['core-user-activation'];
+	}
+
+	if ( isset( $emails['bp-members-invitation'] ) ) {
+		$new_emails['bp-members-invitation'] = $emails['bp-members-invitation'];
+	}
+
+	return $new_emails;
 }
 
 /**
