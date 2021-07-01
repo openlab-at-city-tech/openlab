@@ -53,4 +53,4 @@ class cets_EmbedGmaps_shortcodes {
 }
 
 // let's use it
-$cets_EmbedGmapsShortcodes = new cets_EmbedGmaps_Shortcodes;	
+$cets_EmbedGmapsShortcodes = new cets_EmbedGmaps_Shortcodes;
