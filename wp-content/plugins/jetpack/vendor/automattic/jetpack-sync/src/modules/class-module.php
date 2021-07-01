@@ -7,6 +7,7 @@
 
 namespace Automattic\Jetpack\Sync\Modules;
 
+use Automattic\Jetpack\Sync\Functions;
 use Automattic\Jetpack\Sync\Listener;
 use Automattic\Jetpack\Sync\Replicastore;
 use Automattic\Jetpack\Sync\Sender;
@@ -179,10 +180,29 @@ abstract class Module {
 	 * @access protected
 	 *
 	 * @param mixed $values Values to calculate checksum for.
+	 * @param bool  $sort If $values should have ksort called on it.
 	 * @return int The checksum.
 	 */
-	protected function get_check_sum( $values ) {
-		return crc32( wp_json_encode( jetpack_json_wrap( $values ) ) );
+	protected function get_check_sum( $values, $sort = true ) {
+		// Associative array order changes the generated checksum value.
+		if ( $sort && is_array( $values ) ) {
+			$this->recursive_ksort( $values );
+		}
+		return crc32( wp_json_encode( Functions::json_wrap( $values ) ) );
+	}
+
+	/**
+	 * Recursively call ksort on an Array
+	 *
+	 * @param array $values Array.
+	 */
+	private function recursive_ksort( &$values ) {
+		ksort( $values );
+		foreach ( $values as &$value ) {
+			if ( is_array( $value ) ) {
+				$this->recursive_ksort( $value );
+			}
+		}
 	}
 
 	/**
@@ -273,6 +293,7 @@ abstract class Module {
 	 * @return array|object|null
 	 */
 	public function get_next_chunk( $config, $status, $chunk_size ) {
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		global $wpdb;
 		return $wpdb->get_col(
 			<<<SQL
@@ -284,6 +305,7 @@ ORDER BY {$this->id_field()}
 DESC LIMIT {$chunk_size}
 SQL
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -325,6 +347,7 @@ SQL
 			$result = $this->send_action( 'jetpack_full_sync_' . $this->name(), array( $objects, $status['last_sent'] ) );
 
 			if ( is_wp_error( $result ) || $wpdb->last_error ) {
+				$status['error'] = true;
 				return $status;
 			}
 			// The $ids are ordered in descending order.
@@ -338,7 +361,6 @@ SQL
 
 		return $status;
 	}
-
 
 	/**
 	 * Immediately sends a single item without firing or enqueuing it

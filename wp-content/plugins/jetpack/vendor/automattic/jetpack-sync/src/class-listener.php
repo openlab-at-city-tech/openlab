@@ -349,7 +349,7 @@ class Listener {
 
 		// since we've added some items, let's try to load the sender so we can send them as quickly as possible.
 		if ( ! Actions::$sender ) {
-			add_filter( 'jetpack_sync_sender_should_load', __NAMESPACE__ . '\Actions::should_initialize_sender_enqueue' );
+			add_filter( 'jetpack_sync_sender_should_load', __NAMESPACE__ . '\Actions::should_initialize_sender_enqueue', 10, 1 );
 			if ( did_action( 'init' ) ) {
 				Actions::add_sender_shutdown();
 			}
@@ -417,8 +417,15 @@ class Listener {
 		);
 
 		if ( $this->should_send_user_data_with_actor( $current_filter ) ) {
-			require_once JETPACK__PLUGIN_DIR . 'modules/protect/shared-functions.php';
-			$actor['ip']         = jetpack_protect_get_ip();
+			$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '';
+			if ( defined( 'JETPACK__PLUGIN_DIR' ) ) {
+				if ( ! function_exists( 'jetpack_protect_get_ip' ) ) {
+					require_once JETPACK__PLUGIN_DIR . 'modules/protect/shared-functions.php';
+				}
+				$ip = jetpack_protect_get_ip();
+			}
+
+			$actor['ip']         = $ip;
 			$actor['user_agent'] = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
 		}
 

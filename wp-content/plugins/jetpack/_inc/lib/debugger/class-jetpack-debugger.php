@@ -2,11 +2,11 @@
 /**
  * Jetpack Debugger functionality allowing for self-service diagnostic information via the legacy jetpack debugger.
  *
- * @package jetpack
+ * @package automattic/jetpack
  */
 
-use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Redirect;
+use Automattic\Jetpack\Status;
 
 /**
  * Class Jetpack_Debugger
@@ -40,7 +40,7 @@ class Jetpack_Debugger {
 		}
 
 		if ( isset( $_GET['disconnect'] ) && $_GET['disconnect'] ) {
-			if ( Jetpack::is_active() ) {
+			if ( Jetpack::is_connection_ready() ) {
 				Jetpack::disconnect();
 				wp_safe_redirect( Jetpack::admin_url() );
 				exit;
@@ -72,11 +72,14 @@ class Jetpack_Debugger {
 					} else {
 						$failures = $cxntests->list_fails();
 						foreach ( $failures as $fail ) {
+							$action_link  = $fail['action'];
+							$action_label = $fail['action_label'];
+							$action       = ( $action_link ) ? '<a href="' . $action_link . '">' . $action_label . '</a>' : $action_label;
 							echo '<div class="jetpack-test-error">';
-							echo '<p><a class="jetpack-test-heading" href="#">' . esc_html( $fail['message'] );
+							echo '<p><a class="jetpack-test-heading" href="#">' . esc_html( $fail['short_description'] );
 							echo '<span class="noticon noticon-collapse"></span></a></p>';
 							echo '<p class="jetpack-test-details">' . wp_kses(
-								$fail['resolution'],
+								$action,
 								array(
 									'a' => array(
 										'href'   => array(),
@@ -149,7 +152,7 @@ class Jetpack_Debugger {
 							<li>- <?php esc_html_e( 'If you get a 404 message, contact your web host. Their security may block XMLRPC.', 'jetpack' ); ?></li>
 						</ul>
 					</li>
-					<?php if ( current_user_can( 'jetpack_disconnect' ) && Jetpack::is_active() ) : ?>
+					<?php if ( current_user_can( 'jetpack_disconnect' ) && Jetpack::is_connection_ready() ) : ?>
 						<li>
 							<strong><em><?php esc_html_e( 'A connection problem with WordPress.com.', 'jetpack' ); ?></em></strong>
 							<?php
@@ -199,7 +202,7 @@ class Jetpack_Debugger {
 				?>
 						</p>
 				<hr />
-				<?php if ( Jetpack::is_active() ) : ?>
+				<?php if ( Jetpack::is_connection_ready() ) : ?>
 					<div id="connected-user-details">
 						<h3><?php esc_html_e( 'More details about your Jetpack settings', 'jetpack' ); ?></h3>
 						<p>
@@ -222,7 +225,7 @@ class Jetpack_Debugger {
 						printf(
 							wp_kses(
 								/* translators: Link to a Jetpack support page. */
-								__( 'Would you like to use Jetpack on your local development site? You can do so thanks to <a href="%s">Jetpack\'s development mode</a>.', 'jetpack' ),
+								__( 'Would you like to use Jetpack on your local development site? You can do so thanks to <a href="%s">Jetpack\'s offline mode</a>.', 'jetpack' ),
 								array( 'a' => array( 'href' => array() ) )
 							),
 							esc_url( Redirect::get_url( 'jetpack-support-development-mode' ) )
@@ -234,7 +237,7 @@ class Jetpack_Debugger {
 				<?php
 				if (
 					current_user_can( 'jetpack_manage_modules' )
-					&& ( ( new Status() )->is_development_mode() || Jetpack::is_active() )
+					&& ( ( new Status() )->is_offline_mode() || Jetpack::is_connection_ready() )
 				) {
 					printf(
 						wp_kses(
@@ -313,10 +316,10 @@ class Jetpack_Debugger {
 			}
 
 			.formbox input[type="text"], .formbox input[type="email"], .formbox input[type="url"], .formbox textarea, #debug_info_div {
-				border: 1px solid #e5e5e5;
+				border: 1px solid #dcdcde;
 				border-radius: 11px;
 				box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
-				color: #666;
+				color: #646970;
 				font-size: 14px;
 				padding: 10px;
 				width: 97%;
@@ -336,7 +339,7 @@ class Jetpack_Debugger {
 				height: auto !important;
 				margin: 0 0 2em 10px !important;
 				padding: 8px 16px !important;
-				background-color: #ddd;
+				background-color: #dcdcde;
 				border: 1px solid rgba(0,0,0,0.05);
 				border-top-color: rgba(255,255,255,0.1);
 				border-bottom-color: rgba(0,0,0,0.15);

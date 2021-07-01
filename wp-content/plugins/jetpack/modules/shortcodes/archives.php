@@ -5,7 +5,7 @@
  * @author bubel & nickmomrik
  * [archives limit=10]
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 add_shortcode( 'archives', 'archives_shortcode' );
@@ -42,7 +42,7 @@ function archives_shortcode( $atts ) {
 		$attr['format'] = 'html';
 	}
 
-	$limit = intval( $attr['limit'] );
+	$limit = (int) $attr['limit'];
 	// A Limit of 0 makes no sense so revert back to the default.
 	if ( empty( $limit ) ) {
 		$limit = '';

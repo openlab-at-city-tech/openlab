@@ -4,11 +4,12 @@
  *
  * @since 8.5.0
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 namespace Automattic\Jetpack\Extensions\Instagram_Gallery;
 
+use Automattic\Jetpack\Blocks;
 use Jetpack;
 use Jetpack_Gutenberg;
 use Jetpack_Instagram_Gallery_Helper;
@@ -22,8 +23,8 @@ const BLOCK_NAME   = 'jetpack/' . FEATURE_NAME;
  * registration if we need to.
  */
 function register_block() {
-	if ( ( defined( 'IS_WPCOM' ) && IS_WPCOM ) || Jetpack::is_active() ) {
-		jetpack_register_block(
+	if ( ( defined( 'IS_WPCOM' ) && IS_WPCOM ) || Jetpack::is_connection_ready() ) {
+		Blocks::jetpack_register_block(
 			BLOCK_NAME,
 			array( 'render_callback' => __NAMESPACE__ . '\render_block' )
 		);
@@ -39,7 +40,7 @@ add_action( 'init', __NAMESPACE__ . '\register_block' );
  *
  * @return string
  */
-function render_block( $attributes, $content ) {
+function render_block( $attributes, $content ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	if ( ! array_key_exists( 'accessToken', $attributes ) ) {
 		return '';
 	}
@@ -50,7 +51,7 @@ function render_block( $attributes, $content ) {
 	$is_stacked_on_mobile = get_instagram_gallery_attribute( 'isStackedOnMobile', $attributes );
 	$spacing              = get_instagram_gallery_attribute( 'spacing', $attributes );
 
-	$grid_classes = Jetpack_Gutenberg::block_classes(
+	$grid_classes = Blocks::classes(
 		FEATURE_NAME,
 		$attributes,
 		array(
@@ -60,8 +61,10 @@ function render_block( $attributes, $content ) {
 		)
 	);
 
-	$grid_style  = 'grid-gap: ' . $spacing . 'px;';
-	$photo_style = 'padding: ' . $spacing . 'px;';
+	$grid_style = sprintf(
+		'grid-gap: %1$spx; --latest-instagram-posts-spacing: %1$spx;',
+		$spacing
+	);
 
 	if ( ! class_exists( 'Jetpack_Instagram_Gallery_Helper' ) ) {
 		\jetpack_require_lib( 'class-jetpack-instagram-gallery-helper' );
@@ -69,13 +72,20 @@ function render_block( $attributes, $content ) {
 	$gallery = Jetpack_Instagram_Gallery_Helper::get_instagram_gallery( $access_token, $count );
 
 	if ( is_wp_error( $gallery ) || ! property_exists( $gallery, 'images' ) || 'ERROR' === $gallery->images ) {
-		if ( current_user_can( 'edit_post', get_the_ID() ) ) {
-			$message = esc_html__( 'An error occurred in the Latest Instagram Posts block. Please try again later.', 'jetpack' )
-				. '<br />'
-				. esc_html__( '(Only administrators and the post author will see this message.)', 'jetpack' );
-			return Jetpack_Gutenberg::notice( $message, 'error', Jetpack_Gutenberg::block_classes( FEATURE_NAME, $attributes ) );
+		if ( ! current_user_can( 'edit_post', get_the_ID() ) ) {
+			return '';
 		}
-		return '';
+
+		$connection_unavailable = is_wp_error( $gallery ) && 'instagram_connection_unavailable' === $gallery->get_error_code();
+
+		$error_message = $connection_unavailable
+			? $gallery->get_error_message()
+			: esc_html__( 'An error occurred in the Latest Instagram Posts block. Please try again later.', 'jetpack' );
+
+		$message = $error_message
+			. '<br />'
+			. esc_html__( '(Only administrators and the post author will see this message.)', 'jetpack' );
+		return Jetpack_Gutenberg::notice( $message, 'error', Blocks::classes( FEATURE_NAME, $attributes ) );
 	}
 
 	if ( empty( $gallery->images ) ) {
@@ -88,14 +98,19 @@ function render_block( $attributes, $content ) {
 
 	ob_start();
 	?>
-
+	<?php if ( Blocks::is_amp_request() ) : ?>
+		<style>
+			.wp-block-jetpack-instagram-gallery__grid .wp-block-jetpack-instagram-gallery__grid-post amp-img img {
+				object-fit: cover;
+			}
+		</style>
+	<?php endif; ?>
 	<div class="<?php echo esc_attr( $grid_classes ); ?>" style="<?php echo esc_attr( $grid_style ); ?>">
 		<?php foreach ( $images as $image ) : ?>
 			<a
 				class="wp-block-jetpack-instagram-gallery__grid-post"
 				href="<?php echo esc_url( $image->link ); ?>"
 				rel="noopener noreferrer"
-				style="<?php echo esc_attr( $photo_style ); ?>"
 				target="_blank"
 			>
 				<img
