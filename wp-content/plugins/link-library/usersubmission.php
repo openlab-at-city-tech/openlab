@@ -43,6 +43,22 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	$captureddata['ll_customcaptchaanswer'] = ( isset( $_POST['ll_customcaptchaanswer'] ) ? $_POST['ll_customcaptchaanswer'] : '' );
 	$captureddata['link_category']          = ( isset( $_POST['link_category'] ) ? $_POST['link_category'] : '' );
 	$captureddata['link_tags']              = ( isset( $_POST['link_tags'] ) ? $_POST['link_tags'] : '' );
+	$captureddata['ll_linkreference']		= ( isset( $_POST['ll_linkreference'] ) ? $_POST['ll_linkreference'] : '' );
+	$captureddata['ll_customurl1']			= ( isset( $_POST['ll_customurl1'] ) ? $_POST['ll_customurl1'] : '' );
+	$captureddata['ll_customurl2']			= ( isset( $_POST['ll_customurl2'] ) ? $_POST['ll_customurl2'] : '' );
+	$captureddata['ll_customurl3']			= ( isset( $_POST['ll_customurl3'] ) ? $_POST['ll_customurl3'] : '' );
+	$captureddata['ll_customurl4']			= ( isset( $_POST['ll_customurl4'] ) ? $_POST['ll_customurl4'] : '' );
+	$captureddata['ll_customurl5']			= ( isset( $_POST['ll_customurl5'] ) ? $_POST['ll_customurl5'] : '' );
+	$captureddata['ll_customtext1']			= ( isset( $_POST['ll_customtext1'] ) ? $_POST['ll_customtext1'] : '' );
+	$captureddata['ll_customtext2']			= ( isset( $_POST['ll_customtext2'] ) ? $_POST['ll_customtext2'] : '' );
+	$captureddata['ll_customtext3']			= ( isset( $_POST['ll_customtext3'] ) ? $_POST['ll_customtext3'] : '' );
+	$captureddata['ll_customtext4']			= ( isset( $_POST['ll_customtext4'] ) ? $_POST['ll_customtext4'] : '' );
+	$captureddata['ll_customtext5']			= ( isset( $_POST['ll_customtext5'] ) ? $_POST['ll_customtext5'] : '' );
+	$captureddata['ll_customlist1']			= ( isset( $_POST['ll_customlist1'] ) ? $_POST['ll_customlist1'] : '' );
+	$captureddata['ll_customlist2']			= ( isset( $_POST['ll_customlist2'] ) ? $_POST['ll_customlist2'] : '' );
+	$captureddata['ll_customlist3']			= ( isset( $_POST['ll_customlist3'] ) ? $_POST['ll_customlist3'] : '' );
+	$captureddata['ll_customlist4']			= ( isset( $_POST['ll_customlist4'] ) ? $_POST['ll_customlist4'] : '' );
+	$captureddata['ll_customlist5']			= ( isset( $_POST['ll_customlist5'] ) ? $_POST['ll_customlist5'] : '' );	
 
 	$uploads = wp_upload_dir();
 
@@ -448,9 +464,27 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 						update_post_meta( $new_link_ID, 'link_notes', sanitize_text_field( $captureddata['link_notes'] ) );
 						update_post_meta( $new_link_ID, 'link_rss', esc_url( stripslashes( $captureddata['link_rss'] ) ) );
-						update_post_meta( $new_link_ID, 'link_second_url', $captureddata['ll_secondwebaddr'] );
+						update_post_meta( $new_link_ID, 'link_second_url', esc_url( $captureddata['ll_secondwebaddr'] ) );
 						update_post_meta( $new_link_ID, 'link_telephone', $captureddata['ll_telephone'] );
 						update_post_meta( $new_link_ID, 'link_email', $captureddata['ll_email'] );
+
+						update_post_meta( $new_link_ID, 'link_custom_url_1', esc_url( $captureddata['ll_customurl1'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_url_2', esc_url( $captureddata['ll_customurl2'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_url_3', esc_url( $captureddata['ll_customurl3'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_url_4', esc_url( $captureddata['ll_customurl4'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_url_5', esc_url( $captureddata['ll_customurl5'] ) );	
+						
+						update_post_meta( $new_link_ID, 'link_custom_text_1', sanitize_text_field( $captureddata['ll_customtext1'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_2', sanitize_text_field( $captureddata['ll_customtext2'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_3', sanitize_text_field( $captureddata['ll_customtext3'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_4', sanitize_text_field( $captureddata['ll_customtext4'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_5', sanitize_text_field( $captureddata['ll_customtext5'] ) );	
+
+						update_post_meta( $new_link_ID, 'link_custom_list_1', sanitize_text_field( $captureddata['ll_customlist1'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_2', sanitize_text_field( $captureddata['ll_customlist2'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_3', sanitize_text_field( $captureddata['ll_customlist3'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_4', sanitize_text_field( $captureddata['ll_customlist4'] ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_5', sanitize_text_field( $captureddata['ll_customlist5'] ) );	
 
 						update_post_meta( $new_link_ID, 'link_visits', 0 );
 						update_post_meta( $new_link_ID, 'link_rating', 0 );
@@ -460,6 +494,12 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						update_post_meta( $new_link_ID, 'link_submitter', ( isset( $username ) ? $username : null ) );
 						update_post_meta( $new_link_ID, 'link_submitter_name', $captureddata['ll_submittername'] );
 						update_post_meta( $new_link_ID, 'link_submitter_email', $captureddata['ll_submitteremail'] );
+						
+						update_post_meta( $new_link_ID, 'submitter_comment', $captureddata['ll_submittercomment'] );
+						update_post_meta( $new_link_ID, 'link_reference', $captureddata['ll_linkreference'] );
+
+						update_post_meta( $new_link_ID, 'link_submitter_comment', $submittercomment );
+
 						update_post_meta( $new_link_ID, 'link_textfield', sanitize_text_field( $captureddata['link_textfield'] ) );
 
 						update_post_meta( $new_link_ID, 'link_no_follow', false );
@@ -564,7 +604,36 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						$emailmessage .= __( 'Link Submitter', 'link-library' ) . ": " . $username . "<br /><br />";
 						$emailmessage .= __( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
 						$emailmessage .= __( 'Link Submitter E-mail', 'link-library' ) . ": " . $captureddata['ll_submitteremail'] . "<br /><br />";
+						
 						$emailmessage .= __( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
+
+						$emailmessage .= __( 'Referenced Link', 'link-library' ) . ": ";
+
+						if ( !empty( $captureddata['ll_linkreference'] ) ) {
+							$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $captureddata['ll_linkreference'] ), 'numberposts' => 1 ) );
+
+							if ( !empty( $referenced_link ) ) {
+								 $emailmessage .= $referenced_link[0]->post_title . "<br /><br />";
+							}							
+						}						
+
+						for ( $customurlfieldnumber = 1; $customurlfieldnumber < 6; $customurlfieldnumber++ ) {
+							if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
+								$emailmessage .= $genoptions['customurl' . $customurlfieldnumber . 'label'] . ': ' . esc_url( $captureddata['ll_customurl' . $customurlfieldnumber] ) . '<br /><br />';
+							}
+						}	
+						
+						for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
+							if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
+								$emailmessage .= $genoptions['customtext' . $customtextfieldnumber . 'label'] . ': ' . sanitize_text_field( $captureddata['ll_customtext' . $customtextfieldnumber] ) . '<br /><br />';
+							}
+						}
+
+						for ( $customlistfieldnumber = 1; $customlistfieldnumber < 6; $customlistfieldnumber++ ) {
+							if ( $genoptions['customlist' . $customlistfieldnumber . 'active'] ) {
+								$emailmessage .= $genoptions['customlist' . $customlistfieldnumber . 'label'] . ': ' . sanitize_text_field( $captureddata['ll_customlist' . $customlistfieldnumber] ) . '<br /><br />';
+							}
+						}	
 
 						if ( $options['showuserlinks'] == false ) {
 							$emailmessage .= '<a href="' . esc_url( add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-moderate' ), admin_url( 'edit.php' ) ) ) . '">Moderate new links</a>';
@@ -572,7 +641,9 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$emailmessage .= '<a href="' . esc_url( add_query_arg( 'post_type', 'link_library_links', admin_url( 'edit.php' ) ) ) . '">View links</a>';
 						}
 
-						$emailmessage .= "<br /><br />" . __( 'Message generated by', 'link-library' ) . " <a href='https://ylefebvre.home.blog/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+						if ( !$genoptions['suppressemailfooter'] ) {
+							$emailmessage .= "<br /><br />" . __('Message generated by', 'link-library') . " <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+						}
 
 						if ( !empty( $genoptions['moderationnotificationtitle'] ) ) {
 							$emailtitle = stripslashes( $genoptions['moderationnotificationtitle'] );
@@ -655,6 +726,41 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 						if ( 'show' == $options['showlinksubmittercomment'] || 'required' == $options['showlinksubmittercomment'] ) {
 							$submitteremailmessage .= __( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
+						}
+
+						if ( 'show' == $options['showlinkreferencelist'] || 'required' == $options['showlinkreferencelist'] ) {
+							$submitteremailmessage .= __( 'Referenced Link', 'link-library' ) . ": ";
+							if ( !empty( $captureddata['ll_linkreference'] ) ) {
+								$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $captureddata['ll_linkreference'] ), 'numberposts' => 1 ) );
+	
+								if ( !empty( $referenced_link ) ) {
+									$submitteremailmessage .= $referenced_link[0]->post_title . "<br /><br />";
+								}							
+							}
+						}
+						
+						for ( $customurlfieldnumber = 1; $customurlfieldnumber < 6; $customurlfieldnumber++ ) {
+							if ( 'show' == $options['showcustomurl' . $customurlfieldnumber] || 'required' == $options['showcustomurl' . $customurlfieldnumber] ) {
+								if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
+									$emailmessage .= $genoptions['customurl' . $customurlfieldnumber . 'label'] . ': ' . esc_url( $captureddata['ll_customurl' . $customurlfieldnumber] ) . '<br /><br />';
+								}
+							}
+						}
+
+						for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
+							if ( 'show' == $options['showcustomtext' . $customtextfieldnumber] || 'required' == $options['showcustomtext' . $customtextfieldnumber] ) {
+								if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
+									$emailmessage .= $genoptions['customtext' . $customtextfieldnumber . 'label'] . ': ' . sanitize_text_field( $captureddata['ll_customtext' . $customtextfieldnumber] ) . '<br /><br />';
+								}
+							}
+						}
+
+						for ( $customlistfieldnumber = 1; $customlistfieldnumber < 6; $customlistfieldnumber++ ) {
+							if ( 'show' == $options['showcustomlist' . $customlistfieldnumber] || 'required' == $options['showcustomlist' . $customlistfieldnumber] ) {
+								if ( $genoptions['customlist' . $customlistfieldnumber . 'active'] ) {
+									$emailmessage .= $genoptions['customlist' . $customlistfieldnumber . 'label'] . ': ' . sanitize_text_field( $captureddata['ll_customlist' . $customlistfieldnumber] ) . '<br /><br />';
+								}
+							}
 						}
 
 						wp_mail( $captureddata['ll_submitteremail'], $submitteremailtitle, $submitteremailmessage, $submitteremailheaders );

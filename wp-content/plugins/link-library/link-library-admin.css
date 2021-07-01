@@ -2375,3 +2375,7 @@ input[type="text"].module-search + label:after {
 
 }
 
+.CodeMirror {
+	border: 1px solid #ddd !important;
+	margin-bottom: 16px;
+}
