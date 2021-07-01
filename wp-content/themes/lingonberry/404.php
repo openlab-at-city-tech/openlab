@@ -1,33 +1,29 @@
 <?php get_header(); ?>
 
-<div class="content section-inner">
+<main id="site-content" class="content section-inner">
 
-	<div class="posts">
-
-		<div class="post">
-		
-			<div class="content-inner">
-	                
-				<div class="post-header">
-				        
-		        	<h2 class="post-title"><?php _e( 'Error 404', 'lingonberry' ); ?></h2>
-		        	
-		        </div>
-			                                                	            
-		        <div class="post-content">
-		        	            
-		            <p><?php _e( "It seems like you have tried to open a page that doesn't exist. It could have been deleted, moved, or it never existed at all. You are welcome to search for what you are looking for with the form below.", 'lingonberry' ); ?></p>
-		            
-		            <?php get_search_form(); ?>
-		            
-		        </div><!-- .post-content -->
-	        
-	        </div><!-- .content-inner -->
-	            	                        	
-		</div><!-- .post -->
+	<article class="post singular-container">
 	
-	</div><!-- .posts -->
+		<div class="content-inner">
+				
+			<header class="post-header">
+					
+				<h1 class="post-title"><?php _e( 'Error 404', 'lingonberry' ); ?></h1>
+				
+			</header>
+																		
+			<div class="post-content">
+							
+				<p><?php _e( "It seems like you have tried to open a page that doesn't exist. It could have been deleted, moved, or it never existed at all. You are welcome to search for what you are looking for with the form below.", 'lingonberry' ); ?></p>
+				
+				<?php get_search_form(); ?>
+				
+			</div><!-- .post-content -->
+		
+		</div><!-- .content-inner -->
+											
+	</article><!-- .post -->
 
-</div><!-- .content -->
+</main><!-- #site-content -->
 
 <?php get_footer(); ?>
