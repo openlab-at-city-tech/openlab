@@ -84,6 +84,22 @@ class Meow_WPMC_Support {
 			array_push( $unsupported, 'Advanced Ads' );
     }
 
+    if ( function_exists( 'smart_slider_3_plugins_loaded' ) ) {
+			array_push( $unsupported, 'Smart Slider' );
+    }
+
+    if ( class_exists( 'w2dc_plugin' ) ) {
+			array_push( $unsupported, 'WebDirectory' );
+    }
+
+    if ( class_exists( 'ElfsightSliderPlugin' ) ) {
+      array_push( $unsupported, 'Elfsight Slider' );
+    }
+
+		if ( class_exists( '\Nimble\CZR_Fmk_Base' ) ) {
+      array_push( $unsupported, 'Nimble Builder' );
+    }
+
     return $unsupported;
   }
 }

@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://commerce.coinbase.com/checkout/d047546a-77a8-41c8-9ea9-4a950f61832f
 Requires at least: 5.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 6.0.9
+Stable tag: 6.1.8
 
 Clean your WordPress Website from unused or broken media entries and files.
 
@@ -46,7 +46,7 @@ With the Filesystem Analysis, [Media Cleaner Pro](https://meowapps.com/plugin/me
 - Oxygen Builder
 - Slider Revolution
 - Avia Framework
-- And more (Theme X, ZipList Recipe, WP Residence, WCFM MarketPlace, UberMenu...)
+- And more (Theme X, YooTheme, WP Residence, WCFM MarketPlace, UberMenu, Justified Image Grid, ZipList Recipe, SmartSlider...)
 
 The Live Site option will analyze the online version of your website, which might enhance the accuracy of the Cleaner in edge-cases.
 
@@ -74,6 +74,41 @@ Better to be safe than sorry. This plugin deletes files! Therefore, backup is no
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.1.8 (2021/06/14) =
+* Add: Support SVG.
+* Add: Support for Elfsight Slider.
+* Add: Support for Nimble Builder.
+
+= 6.1.7 (2021/04/16) =
+* Add: Support for Siteground cache.
+* Add: Support for Audio block.
+* Add: Support for WebDirectory.
+* Add: Avoid WordPress to automatically empty its trash.
+* Fix: Alternative for those who don't have the MB module.
+
+= 6.1.6 (2021/02/23) =
+* Add: Support for Smart Slider.
+
+= 6.1.5 (2021/02/13) =
+* Add: Support for video tags (also used by the Gutenberg block).
+* Fix: WebP should be checked even though the content is not being checked.
+* Fix: Avoid scan to stop if a warning is sent by the server when using Live Scan.
+
+= 6.1.3 (2021/01/13) =
+* Add: Title of the Media Entry in the Cleaner Dashboard.
+* Add: Link to Image directly from Dashboard for a quick check.
+* Fix: Scan without content check was still checking for webp or retina parent files.
+
+= 6.1.2 =
+* Fix: Fixed an issue with WPML (and potentially, Polylang as well).
+* Fix: Updated to Common Admin 3.3.
+
+= 6.1.1 =
+* Fix: UI is even more dynamic.
+
+= 6.1.0 =
+* Fix: WP CLI wasn't working with the new role system.
 
 = 6.0.9 =
 * Fix: Improved support for WebP.
