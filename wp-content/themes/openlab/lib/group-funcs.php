@@ -567,9 +567,13 @@ function cuny_group_single() {
 
 	// Remove items that have been deleted, or have incomplete values.
     $clone_history = openlab_get_group_clone_history_data( $group_id );
+
+	// Remove items that exactly match the credits of the current group.
+	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
+
 	$clone_history = array_filter(
 		$clone_history,
-		function( $item ) {
+		function( $item ) use ( $this_item_clone_data ) {
 			$admins_a = $item['group_admins'];
 			$admins_b = $this_item_clone_data['group_admins'];
 
@@ -581,16 +585,6 @@ function cuny_group_single() {
 			usort( $admins_b, $sort_cb );
 
 			return $admins_a !== $admins_b;
-		}
-	);
-
-	// Remove items that exactly match the credits of the current group.
-	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
-
-	$clone_history = array_filter(
-		$clone_history,
-		function( $item ) use ( $this_item_clone_data ) {
-			return $item['group_admins'] !== $this_item_clone_data['group_admins'];
 		}
 	);
 
