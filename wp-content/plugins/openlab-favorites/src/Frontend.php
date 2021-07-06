@@ -31,12 +31,20 @@ class Frontend {
 			return;
 		}
 
-		wp_enqueue_style( 'openlab-favorites' );
-		wp_enqueue_script( 'openlab-favorites' );
-
 		$user_id  = bp_loggedin_user_id();
 		$group_id = bp_get_current_group_id();
 		$group    = groups_get_group( $group_id );
+
+		if ( ! groups_is_user_member( $user_id, $group_id ) ) {
+			return;
+		}
+
+		if ( 'public' !== $group->status ) {
+			return;
+		}
+
+		wp_enqueue_style( 'openlab-favorites' );
+		wp_enqueue_script( 'openlab-favorites' );
 
 		if ( user_has_favorited_group( $user_id, $group_id ) ) {
 			$url = add_query_arg(
