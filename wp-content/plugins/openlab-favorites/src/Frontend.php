@@ -13,7 +13,7 @@ use OpenLab\Favorites\ROOT_FILE;
 
 class Frontend {
 	public static function init() {
-		add_action( 'bp_group_header_actions', [ __CLASS__, 'add_button' ], 30 );
+		add_action( 'bp_group_header_actions', [ __CLASS__, 'add_button' ], 150 );
 		add_action( 'bp_actions', [ __CLASS__, 'catch_action_request' ] );
 
 		add_action( 'openlab_group_directory_after_group_title', [ __CLASS__, 'add_icon_to_group_title' ] );
