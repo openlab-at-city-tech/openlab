@@ -15,7 +15,7 @@ class App {
 		Frontend::init();
 	}
 
-	protected function set_up_cli_commands() {
+	protected static function set_up_cli_commands() {
 		\WP_CLI::add_command( 'ol-favorites database', '\OpenLab\Favorites\CLI\Command\DatabaseCommand' );
 	}
 }
