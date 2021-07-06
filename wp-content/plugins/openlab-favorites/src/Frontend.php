@@ -35,11 +35,8 @@ class Frontend {
 		$group_id = bp_get_current_group_id();
 		$group    = groups_get_group( $group_id );
 
-		if ( ! groups_is_user_member( $user_id, $group_id ) ) {
-			return;
-		}
-
-		if ( 'public' !== $group->status ) {
+		// Only show button on a non-public group if the user is a member of the group.
+		if ( 'public' !== $group->status && ! groups_is_user_member( $user_id, $group_id ) ) {
 			return;
 		}
 
