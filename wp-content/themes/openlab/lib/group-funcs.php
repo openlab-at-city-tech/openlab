@@ -679,7 +679,7 @@ function cuny_group_single() {
 			}
 
 			if ( $additional_text ) {
-				$post_credits_markup .= '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+				$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 			}
 		} elseif ( $additional_text ) {
 			// Don't show Creators, but do show Additional Text, if available.
