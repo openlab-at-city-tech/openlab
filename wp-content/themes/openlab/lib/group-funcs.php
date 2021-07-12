@@ -680,7 +680,19 @@ function cuny_group_single() {
 
 			if ( $additional_text ) {
 				$show_acknowledgements = true;
-				$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+				if ( $credits_chunks ) {
+					$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+				} else {
+					$credits_intro_text    = sprintf(
+						'Acknowledgements: %s',
+						wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
+					);
+
+					$credits_chunks[] = [
+						'intro' => $credits_intro_text,
+						'items' => '',
+					];
+				}
 			}
 		} elseif ( $additional_text ) {
 			// Don't show Creators, but do show Additional Text, if available.
