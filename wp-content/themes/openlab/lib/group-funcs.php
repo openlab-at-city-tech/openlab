@@ -616,6 +616,8 @@ function cuny_group_single() {
 
 	$credits_chunks = [];
 
+	$additional_text = openlab_get_group_creators_additional_text( $group_id );
+
 	/*
 	 * Non-clones show Acknowledgements only if Creators differ from Contacts,
 	 * or if there is Additional Text to show.
@@ -623,8 +625,6 @@ function cuny_group_single() {
 	$show_acknowledgements = false;
 	if ( ! $clone_history || $has_non_member_creator || $contact_creator_mismatch ) {
 		$credits_markup = '';
-
-		$additional_text = openlab_get_group_creators_additional_text( $group_id );
 
 		if ( $has_non_member_creator || $contact_creator_mismatch ) {
 			$creator_items = array_map(
@@ -679,7 +679,8 @@ function cuny_group_single() {
 			}
 
 			if ( $additional_text ) {
-				$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+				$show_acknowledgements = true;
+				$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 			}
 		} elseif ( $additional_text ) {
 			// Don't show Creators, but do show Additional Text, if available.
