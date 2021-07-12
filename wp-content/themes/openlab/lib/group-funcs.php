@@ -677,37 +677,7 @@ function cuny_group_single() {
 					'items' => openlab_format_group_clone_history_data_list( $clone_history ),
 				];
 			}
-
-			if ( $additional_text ) {
-				$show_acknowledgements = true;
-				if ( $credits_chunks ) {
-					$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
-				} else {
-					$credits_intro_text    = sprintf(
-						'Acknowledgements: %s',
-						wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
-					);
-
-					$credits_chunks[] = [
-						'intro' => $credits_intro_text,
-						'items' => '',
-					];
-				}
-			}
-		} elseif ( $additional_text ) {
-			// Don't show Creators, but do show Additional Text, if available.
-			$show_acknowledgements = true;
-			$credits_intro_text    = sprintf(
-				'Acknowledgements: %s',
-				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
-			);
-
-			$credits_chunks[] = [
-				'intro' => $credits_intro_text,
-				'items' => '',
-			];
 		}
-
 	} else {
 		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
 		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
@@ -718,6 +688,23 @@ function cuny_group_single() {
 		];
 
 		$show_acknowledgements = true;
+	}
+
+	if ( $additional_text ) {
+		$show_acknowledgements = true;
+		if ( $credits_chunks ) {
+			$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+		} else {
+			$credits_intro_text    = sprintf(
+				'Acknowledgements: %s',
+				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
+			);
+
+			$credits_chunks[] = [
+				'intro' => $credits_intro_text,
+				'items' => '',
+			];
+		}
 	}
 
     ?>
