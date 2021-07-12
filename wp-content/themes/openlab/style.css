@@ -10705,6 +10705,11 @@ body.single-event #content .eo-event-venue-map {
   float: none;
   width: 100%;
 }
+.ui-autocomplete .ui-state-active,
+.ui-autocomplete .ui-state-hover {
+  background: #49cabe;
+  color: #333333;
+}
 #ui-datepicker-div {
   width: 18.2em;
 }
