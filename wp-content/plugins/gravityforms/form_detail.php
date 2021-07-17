@@ -223,11 +223,20 @@ class GFFormDetail {
 			</div>
 		</div>
 
+		<?php
+			$no_conflict_mode   = get_option( 'gform_enable_noconflict' );
+			$no_conflict_class  = $no_conflict_mode ? ' form_editor_no_conflict' : '';
+			$no_fields_class    = empty( $form['fields'] ) ? ' form_editor_fields_no_fields' : '';
+			$form_editor_class = sprintf( 'form_editor_fields_container gform-show-if-not-ie%s%s', $no_fields_class, $no_conflict_class );
+		?>
+
 		<div
 			id="form_editor_fields_container"
-			class="form_editor_fields_container gform-show-if-not-ie<?php echo empty( $form['fields'] ) ? ' form_editor_fields_no_fields' : ''; ?>"
+			class="<?php esc_attr_e( $form_editor_class ); ?>"
+			<?php if ( ! $no_conflict_mode ) { ?>
 			<?php echo ! empty( $form['fields'] ) ? 'data-simplebar' : ''; ?>
 			<?php echo ! empty( $form['fields'] ) && is_rtl() ? 'data-simplebar-direction="rtl"' : ''; ?>
+			<?php } ?>
 		>
 		<?php
 		$has_pages  = GFCommon::has_pages( $form );

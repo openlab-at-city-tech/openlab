@@ -138,13 +138,18 @@ function gf_is_match( formId, rule ) {
 		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, fieldId ) );
 	}
 
-	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1,
-		isMatch     = isCheckable ? gf_is_match_checkable( $inputs, rule, formId, fieldId ) : gf_is_match_default( $inputs.eq( 0 ), rule, formId, fieldId );
+	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1;
+	var isMatch     = isCheckable ? gf_is_match_checkable( $inputs, rule, formId, fieldId ) : gf_is_match_default( $inputs.eq( 0 ), rule, formId, fieldId );
 
 	return gform.applyFilters( 'gform_is_value_match', isMatch, formId, rule );
 }
 
 function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
+
+	// Rule is checking if the checkable is/isn't blank. Return a specific check for that use-case.
+	if ( rule.value === '' ) {
+		return rule.operator === 'is' ? gf_is_checkable_empty( $inputs ) : ! gf_is_checkable_empty( $inputs );
+	}
 
 	var isMatch = false;
 
@@ -177,6 +182,26 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 	} );
 
 	return isMatch;
+}
+
+/**
+ * Check if a collection of checkable inputs has any checked,
+ * or if they are all unchecked.
+ *
+ * @param {jQuery} $inputs A collection of inputs to check.
+ *
+ * @returns {boolean}
+ */
+function gf_is_checkable_empty( $inputs ) {
+	var isEmpty = true;
+
+	$inputs.each( function() {
+		if ( jQuery( this ).is( ':checked' ) ) {
+			isEmpty = false;
+		}
+	} );
+
+	return isEmpty;
 }
 
 function gf_is_match_default( $input, rule, formId, fieldId ) {

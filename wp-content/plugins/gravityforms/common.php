@@ -3,6 +3,8 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+use \Gravity_Forms\Gravity_Forms\Messages\Dismissable_Messages;
+
 /**
  * Class GFCommon
  *
@@ -5343,19 +5345,9 @@ Content-Type: text/html;
 	 * @since 2.0
 	 */
 	public static function add_dismissible_message( $text, $key, $type = 'warning', $capabilities = false, $sticky = false, $page = null ) {
-		$message['type']         = $type;
-		$message['text']         = $text;
-		$message['key']          = sanitize_key( $key );
-		$message['capabilities'] = $capabilities;
-		$message['page']         = $page;
+		$dismissable = new Dismissable_Messages();
 
-		if ( $sticky ) {
-			$sticky_messages         = get_option( 'gform_sticky_admin_messages', array() );
-			$sticky_messages[ $key ] = $message;
-			update_option( 'gform_sticky_admin_messages', $sticky_messages );
-		} else {
-			self::$dismissible_messages[] = $message;
-		}
+		$dismissable->add( $text, $key, $type, $capabilities, $sticky, $page );
 	}
 
 	/**
@@ -5366,15 +5358,9 @@ Content-Type: text/html;
 	 * @since 2.0.2.3
 	 */
 	public static function remove_dismissible_message( $key ) {
-		$key = sanitize_key( $key );
-		$sticky_messages = get_option( 'gform_sticky_admin_messages', array() );
-		foreach ( $sticky_messages as $sticky_key => $sticky_message ) {
-			if ( $key == sanitize_key( $sticky_message['key'] ) ) {
-				unset( $sticky_messages[ $sticky_key ] );
-				update_option( 'gform_sticky_admin_messages', $sticky_messages );
-				break;
-			}
-		}
+		$dismissable = new Dismissable_Messages();
+
+		$dismissable->remove( $key );
 	}
 
 	public static function display_admin_message( $errors = false, $messages = false ) {
@@ -5427,82 +5413,9 @@ Content-Type: text/html;
 	 * @since 2.0
 	 */
 	public static function display_dismissible_message( $messages = false, $page = null ) {
+		$dismissable = new Dismissable_Messages();
 
-		if ( ! $messages ) {
-			$messages        = self::$dismissible_messages;
-			$sticky_messages = get_option( 'gform_sticky_admin_messages', array() );
-			$messages        = array_merge( $messages, $sticky_messages );
-			$messages        = array_values( $messages );
-		}
-
-		if ( empty( $page ) ) {
-			$page = GFForms::get_page();
-		}
-
-		if ( ! empty( $messages ) ) {
-			$need_script = false;
-			foreach ( $messages as $message ) {
-				if ( isset( $sticky_messages[ $message['key'] ] ) && isset( $message['page'] ) && $message['page'] && $page !== $message['page'] ) {
-					continue;
-				}
-
-				if ( empty( $message['page'] ) && $page == 'site-wide' ) {
-					// Prevent double display on GF pages
-					continue;
-				}
-
-				if ( empty( $message['key'] ) || self::is_message_dismissed( $message['key'] ) ) {
-					continue;
-				}
-
-				if ( isset( $message['capabilities'] ) && $message['capabilities'] && ! GFCommon::current_user_can_any( $message['capabilities'] ) ) {
-					continue;
-				}
-
-				$class = in_array( $message['type'], array(
-					'warning',
-					'error',
-					'updated',
-					'success',
-				) ) ? $message['type'] : 'error';
-
-				$need_script = true;
-				?>
-				<div class="notice below-h1 notice-<?php echo $class; ?> is-dismissible gf-notice"
-				     data-gf_dismissible_key="<?php echo $message['key'] ?>"
-				     data-gf_dismissible_nonce="<?php echo wp_create_nonce( 'gf_dismissible_nonce' ) ?>">
-					<p>
-						<?php echo $message['text']; ?>
-					</p>
-				</div>
-				<?php
-			}
-			if ( $need_script ) {
-				?>
-				<script>
-					jQuery( document ).ready( function( $ ) {
-						$( document ).on( 'click', '.notice-dismiss', function() {
-							var $div = $( this ).closest( 'div.notice' );
-							if ( $div.length > 0 ) {
-								var messageKey = $div.data( 'gf_dismissible_key' );
-								var nonce = $div.data( 'gf_dismissible_nonce' );
-								if ( messageKey ) {
-									jQuery.ajax({
-										url: ajaxurl,
-										data: {
-											action: 'gf_dismiss_message',
-											message_key: messageKey,
-											nonce: nonce,
-										},
-									} );
-								}
-							}
-						} );
-					} );
-				</script>
-				<?php
-			}
-		}
+		$dismissable->display( $messages, $page );
 	}
 
 	/**
@@ -5511,33 +5424,35 @@ Content-Type: text/html;
 	 * @param $key
 	 */
 	public static function dismiss_message( $key ) {
-		$db_key = self::get_dismissed_message_db_key( $key );
-		update_user_meta( get_current_user_id(), $db_key, true, true );
+		$dismissable = new Dismissable_Messages();
+
+		$dismissable->dismiss( $key );
 	}
 
 	/**
 	 * Has the dismissible message been dismissed by the current user?
+	 *
+	 * @deprecated since 2.5.7
 	 *
 	 * @param $key
 	 *
 	 * @return bool
 	 */
 	public static function is_message_dismissed( $key ) {
-		$db_key = self::get_dismissed_message_db_key( $key );
-
-		return (bool) get_user_meta( get_current_user_id(), $db_key, true );
+		_deprecated_function( __FUNCTION__, '2.5.7', 'Dismissable_Messages::is_dismissed()' );
 	}
 
 	/**
 	 * Returns the database key for the message.
+	 *
+	 * @deprecated since 2.5.7
 	 *
 	 * @param $key
 	 *
 	 * @return string
 	 */
 	public static function get_dismissed_message_db_key( $key ) {
-		$key = sanitize_key( $key );
-		return 'gf_dimissed_' . substr( md5( $key ), 0, 40 );
+		_deprecated_function( __FUNCTION__, '2.5.7', 'Dismissable_Messages::get_db_key()' );
 	}
 
 	private static function requires_gf_vars() {
@@ -5687,7 +5602,7 @@ Content-Type: text/html;
 
 		foreach( $sidebars as $sidebar => $widgets ) {
 
-			if ( $sidebar != $sidebar_index ) {
+			if ( $sidebar != $sidebar_index || ! is_array( $widgets ) ) {
 				continue;
 			}
 
@@ -7265,6 +7180,20 @@ Content-Type: text/html;
 		return strpos( strtolower( $ver ), 'mariadb' ) ? 'MariaDB' : 'MySQL';
 
 	}
+
+	/**
+	 * Determines if the given form has an array based fields property.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @param array $form The form to be checked.
+	 *
+	 * @return bool
+	 */
+	public static function form_has_fields( $form ) {
+		return ! empty( $form['fields'] ) && is_array( $form['fields'] );
+	}
+
 }
 
 class GFCategoryWalker extends Walker {

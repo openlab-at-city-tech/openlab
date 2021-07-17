@@ -1716,7 +1716,7 @@ function isSet( $var ) {
  */
 jQuery( document ).ready( function() {
 
-    var $formTitle = jQuery( '.gform-form-toolbar__form-title span' );
+    var $formTitle = jQuery( '.gform-form-toolbar__form-title span:not(.gform-dropdown__trigger-text):not(.gform-dropdown__control-text):not(.gform-visually-hidden)' );
 
     // If form title is not present, exit.
     if ( ! $formTitle ) {
@@ -1825,15 +1825,19 @@ gform.components.dropdown = function( options ) {
     this.triggers = [];
     this.state = {
         open: false,
+        unloading: false,
     };
     this.options = {
         closeOnSelect: true,
         container : document,
+        detectTitleLength: false,
         onItemSelect: function() {},
         reveal: 'click',
         selector : '',
         showSpinner: false,
         swapLabel: true,
+        titleLengthThresholdMedium: 23,
+        titleLengthThresholdLong: 32,
     };
 
     this.options = gform.tools.mergeObjects( this.options, gform.tools.defaultFor( options, {} ) );
@@ -1842,10 +1846,11 @@ gform.components.dropdown = function( options ) {
         gform.console.error( 'Gform dropdown couldn\'t find [data-js="' + this.options.selector + '"] to instantiate on.');
         return;
     }
+    this.titleEl = gform.tools.getNodes( 'gform-dropdown-control-text', false, this.el )[ 0 ];
 
+    this.storeTriggers();
     this.bindEvents();
     this.setupUI();
-    this.storeTriggers();
 
     this.hideSpinner = function() {
         this.el.classList.remove( 'gform-dropdown--show-spinner' );
@@ -1903,14 +1908,14 @@ gform.components.dropdown.prototype.closeDropdown = function() {
 };
 
 gform.components.dropdown.prototype.handleMouseenter = function() {
-    if ( this.options.reveal !== 'hover' || this.state.open ) {
+    if ( this.options.reveal !== 'hover' || this.state.open || this.state.unloading ) {
         return;
     }
     this.openDropdown();
 };
 
 gform.components.dropdown.prototype.handleMouseleave = function( e ) {
-    if ( this.options.reveal !== 'hover' ) {
+    if ( this.options.reveal !== 'hover' || this.state.unloading ) {
         return;
     }
     this.closeDropdown();
@@ -1945,6 +1950,17 @@ gform.components.dropdown.prototype.setupUI = function() {
     if ( this.options.reveal === 'hover' ) {
         this.el.classList.add( 'gform-dropdown--hover' );
     }
+    if ( this.options.detectTitleLength ) {
+        // add a class to the container of the dropdown if displayed title is long.
+        // class doesnt do anything by default, you have to wire css if you want to do some handling for long titles
+        // dropdown is just always full width of its container
+        var title = this.titleEl ? this.titleEl.innerText : '';
+        if ( title.length > this.options.titleLengthThresholdMedium && title.length <= this.options.titleLengthThresholdLong ) {
+            this.el.parentNode.classList.add( 'gform-dropdown--medium-title' );
+        } else if ( title.length > this.options.titleLengthThresholdLong ) {
+            this.el.parentNode.classList.add( 'gform-dropdown--long-title' );
+        }
+    }
 };
 
 gform.components.dropdown.prototype.storeTriggers = function() {
@@ -1954,6 +1970,12 @@ gform.components.dropdown.prototype.storeTriggers = function() {
 };
 
 gform.components.dropdown.prototype.bindEvents = function() {
+    gform.tools.delegate(
+        '[data-js="' + this.options.selector + '"]',
+        'click',
+        '[data-js="gform-dropdown-trigger"], [data-js="gform-dropdown-trigger"] > span',
+        this.handleChange.bind( this )
+    );
     gform.tools.delegate(
         '[data-js="' + this.options.selector + '"]',
         'click',
@@ -1984,6 +2006,11 @@ gform.components.dropdown.prototype.bindEvents = function() {
         }
         this.handleControl();
     }.bind( this ) );
+
+    // store unloading state to make sure item stays closed during this event
+    addEventListener( 'beforeunload', function() {
+        this.state.unloading = true;
+    }.bind( this ));
 };
 
 //------------------------------------------------
@@ -2065,6 +2092,9 @@ gform.simplebar = {
      * @param {HTMLElement} element
      */
     initializeInstance: function( element ) {
+        if ( element.hasAttribute( 'data-simplebar-instance' ) ) {
+            return;
+        }
         var uid = gform.tools.uniqueId( 'simplebar' );
         var delayAttr = element.getAttribute( 'data-simplebar-delay' );
         var delay = delayAttr ? parseInt( delayAttr, 10 ) : 0;

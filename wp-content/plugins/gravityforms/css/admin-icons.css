@@ -116,6 +116,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 /* -----------------------------------------------------------------------------
  *
+ * Mixins: Elements
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
  * Mixins: Icons
  *
  * ----------------------------------------------------------------------------- */
@@ -141,10 +147,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 @font-face {
 	font-family: 'gform-icons-admin';
 	src:
-		url('../fonts/gform-icons-admin.woff2?jlmk0d') format('woff2'),
-		url('../fonts/gform-icons-admin.ttf?jlmk0d') format('truetype'),
-		url('../fonts/gform-icons-admin.woff?jlmk0d') format('woff'),
-		url('../fonts/gform-icons-admin.svg?jlmk0d#gform-icons-admin') format('svg');
+		url('../fonts/gform-icons-admin.woff2?b17zy6') format('woff2'),
+		url('../fonts/gform-icons-admin.ttf?b17zy6') format('truetype'),
+		url('../fonts/gform-icons-admin.woff?b17zy6') format('woff'),
+		url('../fonts/gform-icons-admin.svg?b17zy6#gform-icons-admin') format('svg');
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;
@@ -166,52 +172,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.gform-icon--chained-selects:before {
-	content: "\e91a";
-}
-
-.gform-icon--credit-card:before {
-	content: "\e978";
-}
-
-.gform-icon--design:before {
-	content: "\e979";
-}
-
-.gform-icon--name-2:before {
-	content: "\e97a";
-}
-
-.gform-icon--notifications-active:before {
-	content: "\e97b";
-}
-
-.gform-icon--password:before {
-	content: "\e97c";
-}
-
-.gform-icon--user:before {
-	content: "\e97d";
-}
-
-.gform-icon--format-quote:before {
-	content: "\e900";
-}
-
-.gform-icon--quantity:before {
-	content: "\e901";
-}
-
 .gform-icon--accessibility:before {
 	content: "\e902";
-}
-
-.gform-icon--tools:before {
-	content: "\e97f";
-}
-
-.gform-icon--renew:before {
-	content: "\e980";
 }
 
 .gform-icon--active-campaign:before {
@@ -224,6 +186,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-icon--agile-crm:before {
 	content: "\e905";
+}
+
+.gform-icon--akismet:before {
+	content: "\e98b";
 }
 
 .gform-icon--analytics:before {
@@ -254,6 +220,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e90c";
 }
 
+.gform-icon--campaign:before {
+	content: "\e984";
+}
+
 .gform-icon--campaign-monitor:before {
 	content: "\e90d";
 }
@@ -266,16 +236,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e90f";
 }
 
-.gform-icon--check-box:before {
-	content: "\e910";
-}
-
-.gform-icon--confirmations:before {
-	content: "\e987";
+.gform-icon--chained-selects:before {
+	content: "\e91a";
 }
 
 .gform-icon--check:before {
 	content: "\e983";
+}
+
+.gform-icon--check-box:before {
+	content: "\e910";
 }
 
 .gform-icon--chevron:before {
@@ -286,8 +256,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e989";
 }
 
+.gform-icon--circle-check:before {
+	content: "\e98d";
+}
+
+.gform-icon--circle-close:before {
+	content: "\e98e";
+}
+
 .gform-icon--circle-delete:before {
 	content: "\e98a";
+}
+
+.gform-icon--circle-star:before {
+	content: "\e98c";
 }
 
 .gform-icon--clever-reach:before {
@@ -298,16 +280,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e913";
 }
 
-.gform-icon--settings:before {
-	content: "\e986";
-}
-
 .gform-icon--color-pallet:before {
 	content: "\e914";
 }
 
-.gform-icon--campaign:before {
-	content: "\e984";
+.gform-icon--confirmations:before {
+	content: "\e987";
 }
 
 .gform-icon--consent:before {
@@ -330,12 +308,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e919";
 }
 
-.gform-icon--search1:before {
-	content: "\e988";
-}
-
-.gform-icon--question-mark:before {
-	content: "\e97e";
+.gform-icon--credit-card:before {
+	content: "\e978";
 }
 
 .gform-icon--date:before {
@@ -346,20 +320,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e91c";
 }
 
-.gform-icon--trash:before {
-	content: "\e985";
+.gform-icon--design:before {
+	content: "\e979";
 }
 
 .gform-icon--dollar:before {
 	content: "\e91d";
 }
 
-.gform-icon--drag-indicator:before {
-	content: "\e91e";
-}
-
 .gform-icon--drag:before {
 	content: "\e91f";
+}
+
+.gform-icon--drag-indicator:before {
+	content: "\e91e";
 }
 
 .gform-icon--dropbox:before {
@@ -410,6 +384,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e92b";
 }
 
+.gform-icon--format-quote:before {
+	content: "\e900";
+}
+
 .gform-icon--format-quote1:before {
 	content: "\e92c";
 }
@@ -458,12 +436,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e937";
 }
 
-.gform-icon--info-outline:before {
-	content: "\e938";
-}
-
 .gform-icon--info:before {
 	content: "\e939";
+}
+
+.gform-icon--info-outline:before {
+	content: "\e938";
 }
 
 .gform-icon--jetsloth:before {
@@ -526,16 +504,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e947";
 }
 
-.gform-icon--numbers-alt:before {
-	content: "\e948";
+.gform-icon--name-2:before {
+	content: "\e97a";
+}
+
+.gform-icon--notifications-active:before {
+	content: "\e97b";
 }
 
 .gform-icon--numbers:before {
 	content: "\e949";
 }
 
-.gform-icon--st-circle:before {
-	content: "\e94a";
+.gform-icon--numbers-alt:before {
+	content: "\e948";
 }
 
 .gform-icon--page:before {
@@ -544,6 +526,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-icon--paragraph-text:before {
 	content: "\e94c";
+}
+
+.gform-icon--password:before {
+	content: "\e97c";
 }
 
 .gform-icon--password1:before {
@@ -562,10 +548,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e950";
 }
 
-.gform-icon--st-plus:before {
-	content: "\e951";
-}
-
 .gform-icon--plus-regular:before {
 	content: "\e982";
 }
@@ -574,24 +556,24 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e952";
 }
 
-.gform-icon--polls:before {
-	content: "\e953";
+.gform-icon--poll:before {
+	content: "\e955";
 }
 
 .gform-icon--poll-alt:before {
 	content: "\e954";
 }
 
-.gform-icon--poll:before {
-	content: "\e955";
-}
-
-.gform-icon--post-image:before {
-	content: "\e956";
+.gform-icon--polls:before {
+	content: "\e953";
 }
 
 .gform-icon--post-custom-field:before {
 	content: "\e957";
+}
+
+.gform-icon--post-image:before {
+	content: "\e956";
 }
 
 .gform-icon--postmark:before {
@@ -602,8 +584,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e959";
 }
 
+.gform-icon--quantity:before {
+	content: "\e901";
+}
+
 .gform-icon--question:before {
 	content: "\e95a";
+}
+
+.gform-icon--question-mark:before {
+	content: "\e97e";
 }
 
 .gform-icon--quiz:before {
@@ -618,8 +608,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e95d";
 }
 
+.gform-icon--renew:before {
+	content: "\e980";
+}
+
 .gform-icon--search:before {
 	content: "\e95e";
+}
+
+.gform-icon--search1:before {
+	content: "\e988";
 }
 
 .gform-icon--section:before {
@@ -628,6 +626,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-icon--sendgrid:before {
 	content: "\e960";
+}
+
+.gform-icon--settings:before {
+	content: "\e986";
 }
 
 .gform-icon--shipping:before {
@@ -648,6 +650,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-icon--square:before {
 	content: "\e965";
+}
+
+.gform-icon--st-circle:before {
+	content: "\e94a";
+}
+
+.gform-icon--st-plus:before {
+	content: "\e951";
 }
 
 .gform-icon--stripe:before {
@@ -674,8 +684,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e96b";
 }
 
+.gform-icon--tools:before {
+	content: "\e97f";
+}
+
 .gform-icon--total:before {
 	content: "\e96c";
+}
+
+.gform-icon--trash:before {
+	content: "\e985";
 }
 
 .gform-icon--trello:before {
@@ -690,6 +708,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e96f";
 }
 
+.gform-icon--user:before {
+	content: "\e97d";
+}
+
 .gform-icon--verified:before {
 	content: "\e970";
 }
@@ -702,12 +724,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	content: "\e972";
 }
 
-.gform-icon--warning-amber:before {
-	content: "\e973";
-}
-
 .gform-icon--warning:before {
 	content: "\e974";
+}
+
+.gform-icon--warning-amber:before {
+	content: "\e973";
 }
 
 .gform-icon--webhooks:before {

@@ -302,6 +302,7 @@ Class GFNotification {
 						'required'            => true,
 						'args'                => array( 'input_types' => array( 'email' ) ),
 						'no_choices'          => esc_html__( 'Your form does not have an email field. Add an email field to your form and try again.', 'gravityforms' ),
+						'fields_callback'     => array( self::class, 'append_filtered_notification_email_fields' ),
 						'dependency'          => array(
 							'live'   => true,
 							'fields' => array(
@@ -311,7 +312,7 @@ Class GFNotification {
 								),
 							),
 						),
-						'validation_callback' => function( $field, $value ) {
+						'validation_callback' => function ( $field, $value ) {
 
 							// Get filter parameters.
 							$to_type  = GFNotification::get_settings_renderer()->get_value( 'toType' );
@@ -494,6 +495,21 @@ Class GFNotification {
 
 		return $fields;
 
+	}
+
+	/**
+	 * Pass the field choices for the select field through the gform_email_fields_notification_admin filter to allow
+	 * third-parties to add or remove arbitrary fields.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @param array $fields The form fields to be used as choices.
+	 * @param array $form   The form belonging to the notification being configured.
+	 *
+	 * @return array
+	 */
+	public static function append_filtered_notification_email_fields( $fields, $form ) {
+		return gf_apply_filters( array( 'gform_email_fields_notification_admin', $form['id'] ), $fields, $form );
 	}
 
 	/**

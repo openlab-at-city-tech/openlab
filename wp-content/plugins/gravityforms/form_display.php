@@ -742,7 +742,7 @@ class GFFormDisplay {
 		$form_args = apply_filters( 'gform_form_args', compact( 'form_id', 'display_title', 'display_description', 'force_display', 'field_values', 'ajax', 'tabindex' ) );
 
 		if ( empty( $form_args['form_id'] ) ) {
-			return self::get_form_not_found_html( $form_id );
+			return self::get_form_not_found_html( $form_id, $ajax );
 		}
 
 		extract( $form_args );
@@ -752,14 +752,14 @@ class GFFormDisplay {
 			$form_title = $form_id;
 			$form_id    = GFFormsModel::get_form_id( $form_title );
 			if ( $form_id === 0 ) {
-				return self::get_form_not_found_html( $form_title );
+				return self::get_form_not_found_html( $form_title, $ajax );
 			}
 		}
 
 		$form = GFAPI::get_form( $form_id );
 
 		if ( ! $form ) {
-			return self::get_form_not_found_html( $form_id );
+			return self::get_form_not_found_html( $form_id, $ajax );
 		}
 
 		$action = remove_query_arg( 'gf_token' );
@@ -881,7 +881,7 @@ class GFFormDisplay {
 		$form = gf_apply_filters( array( 'gform_pre_render', $form_id ), $form, $ajax, $field_values );
 
 		if ( empty( $form ) ) {
-			return self::get_form_not_found_html( $form_id );
+			return self::get_form_not_found_html( $form_id, $ajax );
 		}
 
 		$has_pages = self::has_pages( $form );
@@ -2639,7 +2639,7 @@ class GFFormDisplay {
 	}
 
 	/**
-	 * If form has page conditional logic.
+	 * Determines if the form has page conditional logic.
 	 *
 	 * @since 2.5
 	 *
@@ -2648,8 +2648,12 @@ class GFFormDisplay {
 	 * @return bool
 	 */
 	public static function has_page_conditional_logic( $form ) {
+		if ( ! GFCommon::form_has_fields( $form ) ) {
+			return false;
+		}
+
 		foreach ( $form['fields'] as $field ) {
-			if ( $field->type === 'page' && ! empty( $field->conditionalLogic ) ) {
+			if ( $field->type === 'page' && ! empty( $field->conditionalLogic ) && is_array( $field->conditionalLogic ) ) {
 				return true;
 			}
 		}
@@ -4310,13 +4314,15 @@ class GFFormDisplay {
 	/**
 	 * Returns the HTML to be be output when the requested form is not found.
 	 *
+	 * @since 2.5.7 Added the $ajax argument.
 	 * @since 2.4.18
 	 *
 	 * @param int|string $form_id The ID or Title of the form requested for display.
+	 * @param bool       $ajax    Whether to return the html as part of the ajax postback html or on its own.
 	 *
 	 * @return string
 	 */
-	public static function get_form_not_found_html( $form_id ) {
+	public static function get_form_not_found_html( $form_id, $ajax = false ) {
 		$form_not_found_message = '<p class="gform_not_found">' . esc_html__( 'Oops! We could not locate your form.', 'gravityforms' ) . '</p>';
 
 		/**
@@ -4327,7 +4333,9 @@ class GFFormDisplay {
 		 * @param string     $form_not_found_message The default form not found message.
 		 * @param int|string $form_id                The ID or Title of the form requested for display.
 		 */
-		return apply_filters( 'gform_form_not_found_message', $form_not_found_message, $form_id );
+		$form_not_found_message = apply_filters( 'gform_form_not_found_message', $form_not_found_message, $form_id );
+
+		return $ajax ? self::get_ajax_postback_html( $form_not_found_message ) : $form_not_found_message;
 	}
 
 	/**
@@ -4448,7 +4456,7 @@ class GFFormDisplay {
 			'gf_left_third'     => 'gfield--width-third',
 			'gf_middle_third'   => 'gfield--width-third',
 			'gf_right_third'    => 'gfield--width-third',
-			'gf_first_quarter'   => 'gfield--width-quarter',
+			'gf_first_quarter'  => 'gfield--width-quarter',
 			'gf_second_quarter' => 'gfield--width-quarter',
 			'gf_third_quarter'  => 'gfield--width-quarter',
 			'gf_fourth_quarter' => 'gfield--width-quarter',

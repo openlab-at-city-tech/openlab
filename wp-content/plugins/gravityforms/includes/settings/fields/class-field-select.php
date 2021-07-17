@@ -193,14 +193,6 @@ class Field_Select extends Select {
 	 */
 	public function get_form_fields_as_choices( $form ) {
 
-		// Initialize choices array.
-		$choices = array();
-
-		// If form object does not have fields, return.
-		if ( ! rgar( $form, 'fields' ) || ! is_array( $form['fields'] ) ) {
-			return $choices;
-		}
-
 		// Parse arguments, add defaults.
 		$args = wp_parse_args(
 			$this->args,
@@ -211,36 +203,16 @@ class Field_Select extends Select {
 			)
 		);
 
+		// Initialize choices array.
+		$choices = array();
+		$fields  = $this->get_form_fields_to_process( $form, $args );
+
 		/**
 		 * Loop through form fields, add as choices.
 		 *
 		 * @var \GF_Field $field
 		 */
-		foreach ( $form['fields'] as $field ) {
-
-			// If field is not in the whitelisted field types, skip.
-			if ( ! empty( $args['field_types'] ) && is_array( $args['field_types'] ) && ! in_array( $field->type, $args['field_types'] ) ) {
-				continue;
-			}
-
-			// Determine if field is a matching input type.
-			$input_type         = GFFormsModel::get_input_type( $field );
-			$allowed_input_type = empty( $args['input_types'] ) || ( is_array( $args['input_types'] ) && in_array( $input_type, $args['input_types'] ) );
-
-			// Apply callback to input type check.
-			if ( is_callable( $args['callback'] ) ) {
-				$allowed_input_type = call_user_func( $args['callback'], $allowed_input_type, $field, $form );
-			}
-
-			// If field's input type is not allowed, skip.
-			if ( ! $allowed_input_type ) {
-				continue;
-			}
-
-			// Test for field property value.
-			if ( rgar( $args, 'property' ) && ( ! isset( $field->{$args['property']} ) || $field->{$args['property']} != rgar( $args, 'property_value' ) ) ) {
-				continue;
-			}
+		foreach ( $fields as $field ) {
 
 			// Get inputs for field.
 			$inputs = $field->get_entry_inputs();
@@ -285,8 +257,7 @@ class Field_Select extends Select {
 					);
 
 				}
-
-			} else if ( ! $field->displayOnly || $input_type === 'password' ) {
+			} elseif ( ! $field->displayOnly || $input_type === 'password' ) {
 
 				$choices[] = array(
 					'value' => $field->id,
@@ -294,11 +265,66 @@ class Field_Select extends Select {
 				);
 
 			}
-
 		}
 
 		return $choices;
 
+	}
+
+	/**
+	 * Get the allowed form fields to process as choice values.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @param array $form The form currently being configured.
+	 * @param array $args A selection of field configuration arguments.
+	 *
+	 * @return array|false|mixed
+	 */
+	private function get_form_fields_to_process( $form, $args ) {
+		$fields      = array();
+		$form_fields = array();
+
+		if ( GFCommon::form_has_fields( $form ) ) {
+			$form_fields = $form['fields'];
+		}
+
+		foreach ( $form_fields as $field ) {
+			// If field is not in the whitelisted field types, skip.
+			if ( ! empty( $args['field_types'] ) && is_array( $args['field_types'] ) && ! in_array( $field->type, $args['field_types'] ) ) {
+				continue;
+			}
+
+			// Determine if field is a matching input type.
+			$input_type         = GFFormsModel::get_input_type( $field );
+			$allowed_input_type = empty( $args['input_types'] ) || ( is_array( $args['input_types'] ) && in_array( $input_type, $args['input_types'] ) );
+
+			// Apply callback to input type check.
+			if ( is_callable( $args['callback'] ) ) {
+				$allowed_input_type = call_user_func( $args['callback'], $allowed_input_type, $field, $form );
+			}
+
+			// If field's input type is not allowed, skip.
+			if ( ! $allowed_input_type ) {
+				continue;
+			}
+
+			// Test for field property value.
+			if ( rgar( $args, 'property' ) && ( ! isset( $field->{$args['property']} ) || $field->{$args['property']} != rgar( $args, 'property_value' ) ) ) {
+				continue;
+			}
+
+			$fields[] = $field;
+		}
+
+		// If the field as a valid fields_callback, pass $fields through it to allow modifications.
+		$fields_callback = rgobj( $this, 'fields_callback' );
+
+		if ( is_callable( $fields_callback ) ) {
+			$fields = call_user_func_array( $fields_callback, array( $fields, $this->settings->get_current_form() ) );
+		}
+
+		return $fields;
 	}
 
 }

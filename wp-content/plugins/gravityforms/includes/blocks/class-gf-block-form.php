@@ -32,6 +32,14 @@ class GF_Block_Form extends GF_Block {
 	public $script_handle = 'gform_editor_block_form';
 
 	/**
+	 * Handle of primary block style.
+	 *
+	 * @since 2.5.6
+	 * @var   string
+	 */
+	public $style_handle = 'gform_editor_block_form';
+
+	/**
 	 * Block attributes.
 	 *
 	 * @since 2.4.10
@@ -150,7 +158,7 @@ class GF_Block_Form extends GF_Block {
 
 		return array(
 			array(
-				'handle'  => 'gform_editor_block_form',
+				'handle'  => $this->style_handle,
 				'src'     => GFCommon::get_base_url() . '/css/blocks.min.css',
 				'deps'    => $deps,
 				'version' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( GFCommon::get_base_path() . '/css/blocks.min.css' ) : GFForms::$version,

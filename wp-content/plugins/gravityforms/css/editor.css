@@ -116,6 +116,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 /* -----------------------------------------------------------------------------
  *
+ * Mixins: Elements
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
  * Mixins: Icons
  *
  * ----------------------------------------------------------------------------- */
@@ -2345,6 +2351,14 @@ html[dir="rtl"] .right ul#gf_merge_tag_list {
 
 .gform-admin .gform-c-hunter {
 		color: #276a52;
+	}
+
+.gform-admin .gform-c-orange {
+		color: #f15a2b;
+	}
+
+.gform-admin .gform-c-blue-ribbon {
+		color: #175cff;
 	}
 
 /* spacing */

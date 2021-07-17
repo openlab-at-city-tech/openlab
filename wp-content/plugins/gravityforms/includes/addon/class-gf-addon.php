@@ -6155,33 +6155,31 @@ abstract class GFAddOn {
 	/**
 	 * Displays all installed addons with their uninstall buttons.
 	 *
-	 * @since  2.5
-	 * @param array $installed_addons array of installed addons to display.
+	 * Add-ons which override this method will display a button with a link instead. The add-on's overridden output
+	 * will be displayed on the settings page for that add-on.
 	 *
+	 * @see GFAddOn::uninstall_addon()
+	 *
+	 * @since  2.5
+	 *
+	 * @param array $uninstallable_addons Array of GFAddOn objects.
 	 */
-	public static function addons_for_uninstall( $installed_addons ) {
+	public static function addons_for_uninstall( $uninstallable_addons ) {
 		?>
 		<div class="gform-addons-uninstall-panel">
 			<?php
-			foreach ( $installed_addons as $addon ) {
+			/* @var GFAddOn $addon An add-on instance. */
+			foreach ( $uninstallable_addons as $addon ) {
+				ob_start();
+				$addon->render_uninstall();
+				$panel_markup = ob_get_clean();
 
-				$addon = call_user_func( array( $addon, 'get_instance' ) );
-
-				// If the render_uninstall method has been overridden, show the settings button instead.
-				if ( ! $addon->method_is_overridden( 'render_uninstall' ) ) {
-					$addon->render_uninstall();
-				} else {
-					ob_start();
-					$addon->render_uninstall();
-					$output = ob_get_contents();
-					ob_end_clean();
-					// If the render uninstall button was overridden to show nothing, default to the render_uninstall function.
-					if ( $output == '' ) {
-						$addon->render_uninstall();
-					} else {
-						$addon->render_settings_button();
-					}
+				if ( $addon->method_is_overridden( 'render_uninstall' ) && ! empty( $panel_markup ) ) {
+					$addon->render_settings_button();
+					continue;
 				}
+
+				echo $panel_markup; // @codingStandardsIgnoreLine - markup prepared in render_install.
 			}
 			?>
 		</div>

@@ -495,10 +495,15 @@ class GFEntryDetail {
 					jQuery('#upload_' + fieldId).show('slow');
 				}
 
-				var $input = jQuery( 'input[name="input_' + fieldId + '"]' ),
-					files  = jQuery.parseJSON( $input.val() );
+				var $input = jQuery( 'input[name="input_' + fieldId + '"]' );
+				var rawFiles  = JSON.parse( $input.val() );
+				var files = rawFiles.filter( function( url ) { return url !== null; } );
 
-				delete files[ fileIndex ];
+				// remove file from array
+				if ( fileIndex > -1 ) {
+					files.splice( fileIndex, 1 );
+				}
+
 				$input.val( jQuery.toJSON( files ) );
 
 			}

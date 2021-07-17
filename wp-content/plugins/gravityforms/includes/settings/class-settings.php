@@ -782,6 +782,11 @@ class Settings {
 
 		}
 
+		// Add card layout class.
+		if ( self::has_card_layout( $section ) ) {
+			$class[] = 'gform-settings-panel--card';
+		}
+
 		// If dependency is not met for section, do not render if no live dependency.
 		// Otherwise, set section to hidden.
 		if ( ! $this->is_dependency_met( rgar( $section, 'dependency' ) ) && ! rgars( $section, 'dependency/live' ) ) {
@@ -1382,6 +1387,28 @@ class Settings {
 
 	}
 
+	/**
+	 * Determine whether a section gets a card layout.
+	 *
+	 * If a section has one field, and the field type is card, it gets the card layout.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @param array $section Settings section
+	 *
+	 * @return bool
+	 */
+	public function has_card_layout( $section ) {
+		if ( ! rgar( $section, 'fields' ) || 1 !== count( $section['fields'] ) ) {
+			return false;
+		}
+
+		if ( 'card' !== $section['fields'][0]['type'] ) {
+			return false;
+		}
+
+		return true;
+	}
 
 
 

@@ -210,7 +210,7 @@ class Generic_Map extends Base {
 			'valueField'      => $value_field,
 			'limit'           => $this->limit,
 			'invalidChoices'  => $this->invalid_choices,
-			'mergeTagSupport' => $this->merge_tags,
+			'mergeTagSupport' => property_exists( $this, 'merge_tags' ) ? $this->merge_tags : false,
 		);
 
 		// Prepare markup.

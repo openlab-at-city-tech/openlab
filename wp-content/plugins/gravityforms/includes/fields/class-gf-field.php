@@ -1578,14 +1578,40 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 
 	/**
+	 * Whether this field has been submitted,
+	 * is on the current page of a multi-page form,
+	 * or is required and should be validated.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @return bool
+	 */
+	public function should_be_validated() {
+		if ( empty( rgpost( 'is_submit_' . $this->formId ) ) ) {
+			return false;
+		}
+
+		if ( GFFormDisplay::get_source_page( $this->formId ) != $this->pageNumber ) {
+			return false;
+		}
+
+		if ( ! $this->isRequired ) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/**
 	 * Generates an array that contains aria-describedby attribute for each input.
 	 *
 	 * Depending on each input's validation state, aria-describedby takes the value of the validation message container ID, the description only or nothing.
 	 *
 	 * @since 2.5
 	 *
-	 * @param array $required_inputs_ids IDs of required field inputs.
-	 * @param array|string $values       Inputs values.
+	 * @param array        $required_inputs_ids IDs of required field inputs.
+	 * @param array|string $values              Inputs values.
 	 *
 	 * @return array
 	 */
@@ -1601,8 +1627,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$describedby_attributes[ $input_id ] = '';
 		}
 
-		// If form is not submitted or field not required, describedby should be empty.
-		if ( empty( $_POST[ 'is_submit_' . $this->formId ] ) || ! $this->isRequired ) {
+		if ( ! $this::should_be_validated() ) {
 			return $describedby_attributes;
 		}
 
@@ -1651,8 +1676,8 @@ class GF_Field extends stdClass implements ArrayAccess {
 	 *
 	 * @since 2.5
 	 *
-	 * @param array $required_inputs_ids IDs of required field inputs.
-	 * @param array|string $values       Inputs values.
+	 * @param array        $required_inputs_ids IDs of required field inputs.
+	 * @param array|string $values              Inputs values.
 	 *
 	 * @return array
 	 */
@@ -1667,8 +1692,8 @@ class GF_Field extends stdClass implements ArrayAccess {
 			$input_id = str_replace( $this->id . '.', '', $input['id'] );
 			$invalid_attributes[ $input_id ] = '';
 		}
-		// If form is not submitted or field not required, invalid attribute should not exist.
-		if ( empty( $_POST[ 'is_submit_' . $this->formId ] ) || ! $this->isRequired ) {
+
+		if ( ! $this::should_be_validated() ) {
 			return $invalid_attributes;
 		}
 

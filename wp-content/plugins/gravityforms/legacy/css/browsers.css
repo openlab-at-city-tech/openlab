@@ -27,9 +27,11 @@ to no.
 
 /* Safari specific styles */
 
+.gform_legacy_markup_wrapper.gf_browser_safari ul li:before,
+.gform_legacy_markup_wrapper.gf_browser_safari ul li:after,
 .entry .gform_legacy_markup_wrapper.gf_browser_safari ul li:before,
 .entry .gform_legacy_markup_wrapper.gf_browser_safari ul li:after {
-    content: "";
+    content: none;
 }
 
 .gform_legacy_markup_wrapper.gf_browser_safari .gform_body ul.gform_fields li.gfield .ginput_container #recaptcha_widget_div #recaptcha_area {

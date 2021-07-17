@@ -156,10 +156,7 @@ function getOptionsFromSelect( field, value ) {
 		selected: '' === value ? 'selected="selected"' : '',
 	};
 
-	if ( GetInputType( field ) === 'multiselect' ) {
-		options.push( emptyChoiceConfig );
-	}
-
+	options.push( emptyChoiceConfig );
 
 	for ( var i = 0; i < field.choices.length; i++ ) {
 		var choice = field.choices[ i ];
@@ -742,14 +739,12 @@ GFConditionalLogic.prototype.gatherElements = function() {
  */
 GFConditionalLogic.prototype.getDefaultRule = function() {
 	var fieldId = GetFirstRuleField();
-	var field = GetFieldById( fieldId );
-
-	var value = field && field.choices && field.choices.length ? field.choices[0].value : '';
+	var field   = GetFieldById( fieldId );
 
 	return {
-		fieldId: GetFirstRuleField(),
+		fieldId: fieldId,
 		operator: 'is',
-		value: value,
+		value: '',
 	};
 };
 

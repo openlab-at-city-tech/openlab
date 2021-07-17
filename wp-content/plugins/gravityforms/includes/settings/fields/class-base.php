@@ -473,6 +473,27 @@ class Base implements ArrayAccess {
 
 	}
 
+	/**
+	 * Determines if any of the available field choices have a tag.
+	 *
+	 * @since 2.5.6.4
+	 *
+	 * @param array $choices
+	 *
+	 * @return bool
+	 */
+	public static function has_tag( $choices = array() ) {
+
+		foreach ( $choices as $choice ) {
+			if ( rgar( $choice, 'tag' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
 
 
 

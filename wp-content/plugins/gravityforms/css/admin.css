@@ -116,6 +116,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 /* -----------------------------------------------------------------------------
  *
+ * Mixins: Elements
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
  * Mixins: Icons
  *
  * ----------------------------------------------------------------------------- */
@@ -301,6 +307,14 @@ a .gform-icon {
 
 .gform-admin .gform-c-hunter {
 		color: #276a52;
+	}
+
+.gform-admin .gform-c-orange {
+		color: #f15a2b;
+	}
+
+.gform-admin .gform-c-blue-ribbon {
+		color: #175cff;
 	}
 
 /* spacing */
@@ -1442,6 +1456,11 @@ html[dir="rtl"] .conditional_logic_flyout {
 				display: inline;
 			}
 
+.conditional_logic_wrapper .conditional_logic_accordion.active .conditional_logic_accordion__status_indicator .gform-status-indicator-status {
+					bottom: -0.0625rem;
+					position: relative;
+				}
+
 .conditional_logic_wrapper .conditional_logic_accordion__label {
 		font-weight: 500;
 		padding: 0 0 0 1rem;
@@ -1915,6 +1934,7 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 	}
 
 .gform-admin .gform-dropdown__trigger {
+
 		background: transparent;
 		border: 0;
 		border-left: 0.1875rem solid transparent;
@@ -1922,12 +1942,9 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 		cursor: pointer;
 		font-size: 0.8125rem;
 		outline: none;
-		overflow: hidden;
 		padding: 0.6875rem 1rem 0.6875rem 0.875rem;
 		text-align: left;
-		text-overflow: ellipsis;
 		transition: all 0.15s ease;
-		white-space: nowrap;
 		width: 100%;
 	}
 
@@ -1935,6 +1952,14 @@ html[dir="rtl"] .conditional_logic_flyout_container .conditional_logic_flyout .a
 			background: #f6f9fc;
 			border-left-color: #3e7da6;
 		}
+
+.gform-admin .gform-dropdown__trigger-text {
+		-webkit-box-orient: vertical;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 
 .gform-admin .gform-dropdown--show-spinner .gform-dropdown__chevron {
 			display: none;
@@ -3553,9 +3578,9 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 			visibility: visible;
 		}
 
-.gform-form-toolbar__menu .gform-form-toolbar__submenu ul {
+.gform-form-toolbar__menu .gform-form-toolbar__submenu > div {
 			background: #fff;
-			border: 1px solid #c3c5db;
+			border: 0.0625rem solid #d5d7e9;
 			border-radius: 3px;
 			box-shadow: 0 10px 15px rgba(58, 61, 90, 0.1), 0 4px 6px rgba(58, 61, 90, 0.05);
 			box-sizing: border-box;
@@ -3628,9 +3653,30 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	width: 13.75rem;
 }
 
+@media (min-width: 900px) {
+
+.gform-form-toolbar__form-title.gform-dropdown--medium-title {
+			width: 18.75rem
+	}
+		}
+
+@media (min-width: 990px) {
+
+.gform-form-toolbar__form-title.gform-dropdown--long-title {
+			width: 25rem
+	}
+		}
+
 .gform-form-toolbar__form-title.gform-form-toolbar__form-title--form-editor {
 		padding: 0 0.9375rem;
 	}
+
+@media (min-width: 900px) {
+
+.gform-form-toolbar__form-title.gform-form-toolbar__form-title--form-editor.gform-dropdown--long-title {
+				width: 25rem
+		}
+			}
 
 html[dir="rtl"] .gform-form-toolbar__form-title {
 	padding: 0 0 0 0.9375rem;
@@ -3645,23 +3691,23 @@ html[dir="rtl"] .gform-form-toolbar__form-title.gform-form-toolbar__form-title--
 	margin-left: auto;
 }
 
-.row-actions .gform-form-toolbar__icon {
-		display: none;
-	}
-
 .row-actions .gform-form-toolbar__submenu {
-		background: #fff;
-		border: 1px solid #c3c5db;
-		border-radius: 3px;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1);
-		box-sizing: border-box;
 		display: none;
-		max-height: calc(100vh - 35rem);
-		min-height: 6.25rem;
-		overflow: auto;
 		position: absolute;
 		z-index: 5;
 	}
+
+.row-actions .gform-form-toolbar__submenu > div {
+			background: #fff;
+			border: 0.0625rem solid #d5d7e9;
+			border-radius: 3px;
+			box-shadow: 0 10px 15px rgba(58, 61, 90, 0.1), 0 4px 6px rgba(58, 61, 90, 0.05);
+			box-sizing: border-box;
+			max-height: calc(100vh - 35rem);
+			min-height: 6.25rem;
+			min-width: 14.688rem;
+			overflow-y: auto;
+		}
 
 .row-actions .gform-form-toolbar__submenu li {
 			margin: 0;
@@ -3672,6 +3718,7 @@ html[dir="rtl"] .gform-form-toolbar__form-title.gform-form-toolbar__form-title--
 	background: transparent;
 	border: 0;
 	border-left: 0.1875rem solid transparent;
+	box-shadow: none;
 	color: #242748;
 	cursor: pointer;
 	display: flex;
@@ -5067,6 +5114,7 @@ div.resource_list li::before {
 .forms_page_gf_help div.gforms_help h2 {
 	color: #242748;
 	font-size: 2.375rem;
+	font-weight: 600;
 	margin-bottom: 2.3125rem;
 }
 
@@ -9233,6 +9281,23 @@ div .gfield_repeater_cell {
 	margin-right: 300px;
 	width: auto;
 }
+
+.ginput_preview_control {
+	bottom: -0.25rem;
+	display: inline-block;
+	font-size: 1.25rem;
+	outline: none;
+	position: relative;
+	text-decoration: none;
+}
+
+.ginput_preview_control.gform-icon--circle-arrow-down {
+		color: #22a753;
+	}
+
+.ginput_preview_control.gform-icon--circle-delete {
+		color: #dd301d;
+	}
 
 /* Vendor */
 

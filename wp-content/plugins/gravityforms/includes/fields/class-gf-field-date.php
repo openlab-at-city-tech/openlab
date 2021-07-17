@@ -1080,6 +1080,63 @@ class GF_Field_Date extends GF_Field {
 
 		return $filter_settings;
 	}
+
+	/**
+	 * Upgrades inputs, if needed.
+	 *
+	 * @since  2.5.7
+	 * @access public
+	 * @see    GF_Field::post_convert_field()
+	 *
+	 * @uses GF_Field::post_convert_field()
+	 * @uses GF_Field_Date::maybe_upgrade_inputs()
+	 *
+	 * @return void
+	 */
+	public function post_convert_field() {
+		parent::post_convert_field();
+		$this->maybe_update_inputs();
+	}
+
+	/**
+	 * The datefield and datedropdown date field input types can wind up
+	 * in a state where the field's inputs are not set.
+	 * This performs a check for the existence of the necessary inputs
+	 * and updates the field to have them if they do not.
+	 *
+	 * @since 2.5.7
+	 */
+	public function maybe_update_inputs() {
+		$inputs = $this->inputs;
+
+		if ( ! $this->is_value_submission_array() ) {
+			return;
+		}
+
+		if ( ! empty( $inputs ) && is_array( $inputs ) ) {
+			return;
+		}
+
+		$inputs = array(
+			array(
+				'id' => "{$this->id}.1",
+				'label' => esc_html__( 'Month', 'gravityforms' ),
+				'name' => ''
+			),
+			array(
+				'id' => "{$this->id}.2",
+				'label' => esc_html__( 'Day', 'gravityforms' ),
+				'name' => ''
+			),
+			array(
+				'id' => "{$this->id}.3",
+				'label' => esc_html__( 'Year', 'gravityforms' ),
+				'name' => ''
+			)
+		);
+
+		$this->inputs = $inputs;
+	}
 }
 
 GF_Fields::register( new GF_Field_Date() );

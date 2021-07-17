@@ -192,7 +192,15 @@ class Textarea extends Base {
 	 * @return string
 	 */
 	private function get_sanitized_value( $value ) {
-		return ( $this->use_editor || $this->allow_html ) ? GFCommon::maybe_wp_kses( $value ) : sanitize_textarea_field( $value );
+		add_filter( 'safe_style_css', array( $this, 'disable_style_attr_parsing' ), 10, 1 );
+		$sanitized = ( $this->use_editor || $this->allow_html ) ? GFCommon::maybe_wp_kses( $value ) : sanitize_textarea_field( $value );
+		remove_filter( 'safe_style_css', array( $this, 'disable_style_attr_parsing' ), 10 );
+
+		return $sanitized;
+	}
+
+	public function disable_style_attr_parsing( $allowed ) {
+		return array();
 	}
 
 	/**

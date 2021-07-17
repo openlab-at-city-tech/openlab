@@ -1,3 +1,22 @@
+### 2.5.7 | 2021-07-07
+- Fixed an issue that sometimes causes notice level warnings on widget enabled pages.
+- Fixed an issue that causes the file upload field to have empty rows remain after a file is deleted during editing the entry.
+- Fixed an issue where a notice appears on the feed details page.
+- Fixed an issue for multi-page forms where all fields regardless of current page incorrectly validate on each page submittal.
+- Fixed an issue that causes the form switcher to not load on the entry list screen when no conflict mode is enabled.
+- Fixed an issue that causes initial values in Conditional Logic not to be saved when the form is updated.
+- Fixed a layout/display issue for legacy forms in Safari when using the .gf_list_inline ready class for checkbox or radio fields.
+- Fixed a PHP warning which can occur when determining if the form has page conditional logic.
+- Fixed a PHP notice (error in PHP8) and display issue for the date field type when using the datefield or datedropdown input types when the field inputs are missing from the form object.
+- Fixed an issue for AJAX forms on submission where if the form cannot be found the submission stalls.
+- Fixed an issue that causes the Gravity Forms block to not load in WordPress 5.8.
+- Updated sticky notifications to allow them to be translatable when the user changes their language.
+- Updated the form switcher to size dynamically to better handle forms with long titles.
+- Updated block settings icons in various themes and contexts.
+- AF: Fixed an issue that can potentially cause the add-on uninstallation screen to throw a fatal error if the add-on class does not define a `get_instance` method.
+- API: Added the card field type in the settings API.
+- API: Fixed an issue which causes valid markup to throw an error when saving a textarea settings field.
+
 ### 2.5.6 | 2021-06-22
 - Fixed an issue where dynamically populated choices for choice-based fields cannot be used in conditional logic.
 - Fixed an issue with the gf_list_inline ready class for radio and checkbox fields where the labels are wrapping.
