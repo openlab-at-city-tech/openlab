@@ -1103,3 +1103,185 @@ function openlab_save_group_creators_on_creation( $group_id ) {
 	openlab_save_group_creators( $group_id, array_filter( $creators ) );
 }
 add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
+
+/**
+ * Gets the Credits data to be used in the Acknowledgements section.
+ */
+function openlab_get_credits( $group_id ) {
+	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+	if ( count( $all_group_contacts ) <= 1 ) {
+		$exclude_creator = $all_group_contacts[0];
+	} else {
+		$exclude_creator = null;
+	}
+
+	// Remove items that have been deleted, or have incomplete values.
+    $clone_history = openlab_get_group_clone_history_data( $group_id );
+
+	// Remove items that exactly match the credits of the current group.
+	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
+
+	$clone_history = array_filter(
+		$clone_history,
+		function( $item ) use ( $this_item_clone_data ) {
+			$admins_a = $item['group_admins'];
+			$admins_b = $this_item_clone_data['group_admins'];
+
+			$sort_cb = function( $a, $b ) {
+				return $a > $b ? 1 : -1;
+			};
+
+			usort( $admins_a, $sort_cb );
+			usort( $admins_b, $sort_cb );
+
+			return $admins_a !== $admins_b;
+		}
+	);
+
+	$has_non_member_creator   = false;
+
+	$group_creators = openlab_get_group_creators( $group_id );
+	foreach ( $group_creators as $group_creator ) {
+		if ( 'non-member' == $group_creator['type'] ) {
+			$has_non_member_creator = true;
+			break;
+		}
+	}
+
+	$contact_creator_mismatch = false;
+	if ( ! $has_non_member_creator ) {
+		$creator_ids = array_map(
+			function( $creator ) {
+				$user = get_user_by( 'slug', $creator['member-login'] );
+				return $user->ID;
+			},
+			$group_creators
+		);
+
+		sort( $creator_ids );
+		sort( $all_group_contacts );
+
+		$contact_creator_mismatch = $creator_ids !== $all_group_contacts;
+	}
+	$credits_chunks = [];
+
+	$additional_text = openlab_get_group_creators_additional_text( $group_id );
+
+	/*
+	 * Non-clones show Acknowledgements only if Creators differ from Contacts,
+	 * or if there is Additional Text to show.
+	 */
+	$show_acknowledgements = false;
+	if ( ! $clone_history || $has_non_member_creator || $contact_creator_mismatch ) {
+		$credits_markup = '';
+
+		if ( $has_non_member_creator || $contact_creator_mismatch ) {
+			$creator_items = array_map(
+				function( $creator ) {
+					switch ( $creator['type'] ) {
+						case 'member' :
+							$user = get_user_by( 'slug', $creator['member-login'] );
+
+							if ( ! $user ) {
+								return null;
+							}
+
+							return sprintf(
+								'<a href="%s">%s</a>',
+								esc_attr( bp_core_get_user_domain( $user->ID ) ),
+								esc_html( bp_core_get_user_displayname( $user->ID ) )
+							);
+						break;
+
+						case 'non-member' :
+							return esc_html( $creator['non-member-name'] );
+						break;
+					}
+				},
+				$group_creators
+			);
+
+			$creator_items = array_filter( $creator_items );
+
+			if ( $creator_items ) {
+				$show_acknowledgements = true;
+
+				$credits_intro_text = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
+				$credits_markup     = implode( ', ', $creator_items );
+
+				$credits_chunks[] = [
+					'intro' => $credits_intro_text,
+					'items' => $credits_markup,
+				];
+			}
+
+			if ( $clone_history ) {
+				$clone_intro_text = sprintf(
+					'It is based on the following %s(s)',
+					esc_html( $group_type )
+				);
+
+				$credits_chunks[] = [
+					'intro' => $clone_intro_text,
+					'items' => openlab_format_group_clone_history_data_list( $clone_history ),
+				];
+			}
+		}
+	} else {
+		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
+		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
+
+		$credits_chunks[] = [
+			'intro' => $credits_intro_text,
+			'items' => $credits_markup,
+		];
+
+		$show_acknowledgements = true;
+	}
+
+	if ( $additional_text ) {
+		$show_acknowledgements = true;
+		if ( $credits_chunks ) {
+			$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+		} else {
+			$credits_intro_text    = sprintf(
+				'Acknowledgements: %s',
+				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
+			);
+
+			$credits_chunks[] = [
+				'intro' => $credits_intro_text,
+				'items' => '',
+			];
+		}
+	}
+
+	$retval = [
+		'show_acknowledgements' => $show_acknowledgements,
+		'credits_chunks'        => $credits_chunks,
+		'credits_intro_text'    => $credits_intro_text,
+	];
+
+	return $retval;
+}
+
+/**
+ * Filters the openlab-import-export readme to add Acknowledgements text.
+ */
+function openlab_add_acknowledgements_to_import_export_readme( $text ) {
+	$new_text = esc_html__( 'Acknowledgements', 'openlab-import-export' );
+
+	$source_site_name        = 'SOURCE SITE NAME';
+	$source_site_url         = 'SOURCE SITE URL';
+	$source_site_admin_names = 'SOURCE SITE ADMIN NAMES';
+
+	$text .= sprintf(
+		esc_html__( 'This site is based on [%s] (%s) by %s.
+
+Please be sure to display this information somewhere on your site.', 'openlab-import-export' ),
+		esc_html( $source_site_name ),
+		esc_html( $source_site_url ),
+		esc_html( $source_site_admin_names )
+	);
+}
+add_filter( 'openlab_import_export_acknowledgements_readme_text', 'openlab_add_acknowledgements_to_import_export_readme' );
