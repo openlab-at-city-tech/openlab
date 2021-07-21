@@ -1110,7 +1110,7 @@ add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
 function openlab_get_credits( $group_id ) {
 	$post_credits_markup = '';
 
-    $group_type = openlab_get_group_type( $group_id );
+	$group_type = openlab_get_group_type( $group_id );
 
 	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
 	if ( count( $all_group_contacts ) <= 1 ) {
@@ -1120,7 +1120,7 @@ function openlab_get_credits( $group_id ) {
 	}
 
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id );
+	$clone_history = openlab_get_group_clone_history_data( $group_id );
 
 	// Remove items that exactly match the credits of the current group.
 	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
