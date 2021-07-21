@@ -1263,7 +1263,7 @@ function openlab_get_credits( $group_id ) {
 	$retval = [
 		'show_acknowledgements' => $show_acknowledgements,
 		'credits_chunks'        => $credits_chunks,
-		'credits_intro_text'    => $credits_intro_text,
+		'post_credits_markup'   => $post_credits_markup,
 	];
 
 	return $retval;
