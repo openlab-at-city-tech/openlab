@@ -562,7 +562,7 @@ function cuny_group_single() {
 
 	$show_acknowledgements = $credits['show_acknowledgements'];
 	$credits_chunks        = $credits['credits_chunks'];
-	$credits_intro_text    = $credits['credits_intro_text'];
+	$post_credits_markup   = $credits['post_credits_markup'];
 
     ?>
 

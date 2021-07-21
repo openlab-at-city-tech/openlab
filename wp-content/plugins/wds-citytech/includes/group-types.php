@@ -1108,6 +1108,8 @@ add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
  * Gets the Credits data to be used in the Acknowledgements section.
  */
 function openlab_get_credits( $group_id ) {
+	$post_credits_markup = '';
+
 	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
 	if ( count( $all_group_contacts ) <= 1 ) {
 		$exclude_creator = $all_group_contacts[0];
@@ -1242,7 +1244,7 @@ function openlab_get_credits( $group_id ) {
 	if ( $additional_text ) {
 		$show_acknowledgements = true;
 		if ( $credits_chunks ) {
-			$post_credits_markup   = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
+			$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 		} else {
 			$credits_intro_text    = sprintf(
 				'Acknowledgements: %s',
