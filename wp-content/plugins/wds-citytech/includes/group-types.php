@@ -1110,6 +1110,8 @@ add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
 function openlab_get_credits( $group_id ) {
 	$post_credits_markup = '';
 
+    $group_type = openlab_get_group_type( $group_id );
+
 	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
 	if ( count( $all_group_contacts ) <= 1 ) {
 		$exclude_creator = $all_group_contacts[0];
