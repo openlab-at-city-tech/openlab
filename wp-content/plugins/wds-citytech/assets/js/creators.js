@@ -98,7 +98,7 @@
 			}
 		);
 
-		$entryEl.find( '.non-member-name, .non-member-url' ).on(
+		$entryEl.find( '.non-member-name' ).on(
 			'blur',
 			function( e ) {
 				setTimeout(
@@ -109,6 +109,18 @@
 					},
 					100
 				);
+			}
+		);
+
+		// When pressing Enter in a non-member name field, trigger 'blur' to go to Preview mode.
+		$entryEl.find( '.non-member-name' ).on(
+			'keypress',
+			function( e ) {
+				var code = (e.keyCode ? e.keyCode : e.which);
+				if ( code === 13 ) {
+					$( e.target ).blur();
+					return false;
+				}
 			}
 		);
 	}
