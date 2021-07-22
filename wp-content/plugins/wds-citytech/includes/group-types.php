@@ -824,7 +824,7 @@ function openlab_group_creators_metabox() {
 						</ul>
 
 						<div class="group-creator-edit-list-add-new">
-							Add a creator: <button id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
+							Add a creator: <button type="button" id="group-creator-add-new-member"><?php echo $member_icon; ?> Select an OpenLab member</button> <button type="button" id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> Enter the name of a non-member</button>
 						</div>
 
 						<div id="group-creator-empty-row" class="group-creator-empty-row">
@@ -910,13 +910,13 @@ function openlab_creator_form_entry( $settings ) {
 
 	<div class="group-creator-form-entry">
 		<div class="entry-actions">
-			<button class="delete-entry">
+			<button type="button" class="delete-entry">
 				<span class="fa fa-minus-circle"></span>
 				<span class="sr-only">Delete Entry</span>
 			</button>
 
 			<button class="edit-entry">
-				<span class="fa fa-pencil"></span>
+				<span type="button" class="fa fa-pencil"></span>
 				<span class="sr-only">Edit Entry</span>
 			</button>
 		</div>
