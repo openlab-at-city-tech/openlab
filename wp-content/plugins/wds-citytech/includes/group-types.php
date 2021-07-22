@@ -1131,6 +1131,11 @@ function openlab_get_credits( $group_id ) {
 			$admins_a = $item['group_admins'];
 			$admins_b = $this_item_clone_data['group_admins'];
 
+			// Exclude groups with no Creators.
+			if ( empty( $admins_a ) ) {
+				return false;
+			}
+
 			$sort_cb = function( $a, $b ) {
 				return $a > $b ? 1 : -1;
 			};
