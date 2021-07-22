@@ -1268,24 +1268,3 @@ function openlab_get_credits( $group_id ) {
 
 	return $retval;
 }
-
-/**
- * Filters the openlab-import-export readme to add Acknowledgements text.
- */
-function openlab_add_acknowledgements_to_import_export_readme( $text ) {
-	$new_text = esc_html__( 'Acknowledgements', 'openlab-import-export' );
-
-	$source_site_name        = 'SOURCE SITE NAME';
-	$source_site_url         = 'SOURCE SITE URL';
-	$source_site_admin_names = 'SOURCE SITE ADMIN NAMES';
-
-	$text .= sprintf(
-		esc_html__( 'This site is based on [%s] (%s) by %s.
-
-Please be sure to display this information somewhere on your site.', 'openlab-import-export' ),
-		esc_html( $source_site_name ),
-		esc_html( $source_site_url ),
-		esc_html( $source_site_admin_names )
-	);
-}
-add_filter( 'openlab_import_export_acknowledgements_readme_text', 'openlab_add_acknowledgements_to_import_export_readme' );
