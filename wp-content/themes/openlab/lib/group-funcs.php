@@ -1447,6 +1447,12 @@ function openlab_show_site_posts_and_comments() {
                 if ($wp_comment->comment_ID == "1") {
                     continue;
                 }
+
+				// Filter out comments that have empty content.
+				if ( empty( trim( $wp_comment->comment_content ) ) ) {
+					continue;
+				}
+
                 $post_id = $wp_comment->comment_post_ID;
 
                 $comments[] = array(
