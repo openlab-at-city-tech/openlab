@@ -428,7 +428,6 @@ function openlab_group_status_message( $group = null ) {
 			break;
 
 		case -2:
-		case -3:
 			if ( 'public' === $group->status ) {
 				if ( $public_group_has_disabled_joining ) {
 					$message = 'This ' . $group_label . ' Profile is OPEN but membership is by invitation. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
@@ -440,6 +439,23 @@ function openlab_group_status_message( $group = null ) {
 					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				} else {
 					$message = 'This ' . $group_label . ' is PRIVATE. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
+				}
+			}
+
+			break;
+
+		case -3:
+			if ( 'public' === $group->status ) {
+				if ( $public_group_has_disabled_joining ) {
+					$message = 'This ' . $group_label . ' Profile is OPEN but membership is by invitation. You must be an administrator to view the ' . $group_label . ' Site.';
+				} else {
+					$message = 'This ' . $group_label . ' Profile is OPEN, but you must be an administrator to view the ' . $group_label . ' Site.';
+				}
+			} else {
+				if ( $private_group_has_disabled_requests ) {
+					$message = 'This ' . $group_label . ' is PRIVATE and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
+				} else {
+					$message = 'This ' . $group_label . ' is PRIVATE. You must be an administrator to view the ' . $group_label . ' Site.';
 				}
 			}
 
