@@ -8,7 +8,7 @@ class Schema {
 
 		$prefix = $wpdb->get_blog_prefix( get_main_site_id() );
 
-		return "{$wpdb->prefix}openlab_favorites";
+		return "{$prefix}openlab_favorites";
 	}
 
 	public static function install_table() {
