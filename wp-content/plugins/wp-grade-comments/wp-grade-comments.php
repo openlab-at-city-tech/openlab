@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.3.2
+Version: 1.4.1
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -26,6 +26,19 @@ function olgc_load_plugin_textdomain() {
 	load_plugin_textdomain( 'wp-grade-comments' );
 }
 add_action( 'init', 'olgc_load_plugin_textdomain' );
+
+/**
+ * The plugin activation action.
+ *
+ * @return void
+ */
+function olgc_activate() {
+	// Set up admin notice flag.
+	if ( ! get_option( 'olgc_notice_dismissed' ) ) {
+		update_option( 'olgc_notice_dismissed', '0' );
+	}
+}
+register_activation_hook( __FILE__, 'olgc_activate' );
 
 /**
  * Markup for the checkboxes on the Leave a Comment section.
@@ -299,6 +312,16 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 		if ( $user_id ) {
 			$comment_post = get_post( $private_comment->comment_post_ID );
 			if ( $user_id == $comment_post->post_author ) {
+				continue;
+			}
+		}
+
+		// Comment authors should see private replies.
+		if ( ! empty( $private_comment->comment_parent ) ) {
+			$parent_id      = (int) $private_comment->comment_parent;
+			$parent_comment = get_comment( $parent_id );
+
+			if ( $user_id == $parent_comment->user_id ) {
 				continue;
 			}
 		}
