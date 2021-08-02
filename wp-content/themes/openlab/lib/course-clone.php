@@ -445,47 +445,49 @@ class Openlab_Clone_Course_Group {
 
 			$item_term = wp_insert_term( $group->id, $bp_docs_query->associated_item_tax_name, $item_term_args );
 
-			while ( $dq->have_posts() ) {
-				$dq->the_post();
+			if ( ! is_wp_error( $item_term ) ) {
+				while ( $dq->have_posts() ) {
+					$dq->the_post();
 
-				global $post;
+					global $post;
 
-				// Skip non-admin posts
-				if ( in_array( $post->post_author, $source_group_admins ) ) {
+					// Skip non-admin posts
+					if ( in_array( $post->post_author, $source_group_admins ) ) {
 
-					// Docs has no good way of mass producing posts
-					// We will insert the post via WP and manually
-					// add the metadata
-					$post_a = (array) $post;
-					unset( $post_a['ID'] );
+						// Docs has no good way of mass producing posts
+						// We will insert the post via WP and manually
+						// add the metadata
+						$post_a = (array) $post;
+						unset( $post_a['ID'] );
 
-					if ( $this->change_content_attribution() ) {
-						$post_a['post_author'] = bp_loggedin_user_id();
+						if ( $this->change_content_attribution() ) {
+							$post_a['post_author'] = bp_loggedin_user_id();
+						}
+
+						$new_doc_id = wp_insert_post( $post_a );
+
+						// Associated group
+						wp_set_post_terms( $new_doc_id, $item_term['term_id'], $bp_docs_query->associated_item_tax_name );
+
+						// Set last editor
+						$last_editor = get_post_meta( $post->ID, 'bp_docs_last_editor', true );
+						update_post_meta( $new_doc_id, 'bp_docs_last_editor', $last_editor );
+
+						// Migrate settings. @todo Access validation? in case new group has more restrictive settings than previous
+						$settings = get_post_meta( $post->ID, 'bp_docs_settings', true );
+						update_post_meta( $new_doc_id, 'bp_docs_settings', $settings );
+
+						// Set revision count to 1 - we're not bringing revisions with us
+						update_post_meta( $new_doc_id, 'bp_docs_revision_count', 1 );
+
+						// Update activity stream
+						$temp_query             = new stdClass();
+						$temp_query->doc_id     = $new_doc_id;
+						$temp_query->is_new_doc = true;
+						$temp_query->item_type  = 'group';
+						$temp_query->item_id    = $this->group_id;
+						BP_Docs_BP_Integration::post_activity( $temp_query );
 					}
-
-					$new_doc_id = wp_insert_post( $post_a );
-
-					// Associated group
-					wp_set_post_terms( $new_doc_id, $item_term['term_id'], $bp_docs_query->associated_item_tax_name );
-
-					// Set last editor
-					$last_editor = get_post_meta( $post->ID, 'bp_docs_last_editor', true );
-					update_post_meta( $new_doc_id, 'bp_docs_last_editor', $last_editor );
-
-					// Migrate settings. @todo Access validation? in case new group has more restrictive settings than previous
-					$settings = get_post_meta( $post->ID, 'bp_docs_settings', true );
-					update_post_meta( $new_doc_id, 'bp_docs_settings', $settings );
-
-					// Set revision count to 1 - we're not bringing revisions with us
-					update_post_meta( $new_doc_id, 'bp_docs_revision_count', 1 );
-
-					// Update activity stream
-					$temp_query             = new stdClass();
-					$temp_query->doc_id     = $new_doc_id;
-					$temp_query->is_new_doc = true;
-					$temp_query->item_type  = 'group';
-					$temp_query->item_id    = $this->group_id;
-					BP_Docs_BP_Integration::post_activity( $temp_query );
 				}
 			}
 		}
