@@ -577,7 +577,11 @@ class Openlab_Clone_Course_Group {
 		$used_cats = [];
 
 		$parent_term_info = wp_insert_term( 'g' . $this->group_id, 'group-documents-category' );
-		$parent_term_id   = $parent_term_info['term_id'];
+		if ( is_wp_error( $parent_term_info ) ) {
+			return;
+		}
+
+		$parent_term_id = $parent_term_info['term_id'];
 
 		foreach ( $source_files as $source_file ) {
 			if ( ! in_array( $source_file['user_id'], $source_group_admins ) ) {
