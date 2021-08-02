@@ -1265,12 +1265,14 @@ function openlab_cleanup_clone_async_processes() {
 		return;
 	}
 
+	$group_id = bp_get_current_group_id();
+
 	$clone_steps = groups_get_groupmeta( $group_id, 'clone_steps', true );
 	if ( ! $clone_steps ) {
 		return;
 	}
 
 	$async = openlab_clone_async_process();
-	$async->data( [ 'group_id' => bp_get_current_group_id() ] )->dispatch();
+	$async->data( [ 'group_id' => $group_id ] )->dispatch();
 }
 add_action( 'bp_actions', 'openlab_cleanup_clone_async_processes' );
