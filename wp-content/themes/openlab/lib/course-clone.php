@@ -1252,3 +1252,25 @@ class Openlab_Clone_Course_Site {
 		return true;
 	}
 }
+
+/**
+ * Cleanup routine for clones that didn't fully finish.
+ */
+function openlab_cleanup_clone_async_processes() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$clone_steps = groups_get_groupmeta( $group_id, 'clone_steps', true );
+	if ( ! $clone_steps ) {
+		return;
+	}
+
+	$async = openlab_clone_async_process();
+	$async->data( [ 'group_id' => bp_get_current_group_id() ] )->dispatch();
+}
+add_action( 'bp_actions', 'openlab_cleanup_clone_async_processes' );
