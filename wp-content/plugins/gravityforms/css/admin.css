@@ -539,95 +539,234 @@ table#gf_personal_data_field_settings td {
 		}
 
 /*
-* Alert styles.
-*
-* Used in admin.css.
-*
-* These appear to be old alert styles that we no longer use.
-*/
+ * Styles for alerts component
+ *
+ * Used in admin.css.
+ */
 
-div.delete-alert {
-	margin-bottom: 30px;
-	padding: 20px 0 20px 20px;
-}
+/*
+ * Base styles, shared by all alerts
+ */
 
-div.gf_delete_notice {
-	margin-bottom: 10px;
-}
-
-div.gforms_help_alert, div.gforms_red_alert, div.gforms_green_alert {
+.gform-alert {
+	align-items: baseline;
 	background-color: #fff;
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-	display: inline-block;
-	font-family: "lucida sans", "lucida grande", "lucida", sans-serif;
-	font-size: 12px;
-	line-height: 1.6;
-	margin: 12px 24px -6px;
-	padding: 11px 15px;
+	border: 1px solid #d5d7e9;
+	border-radius: 3px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.11), 0 0 4px rgba(18, 25, 97, 0.0405344);
+	color: #242748;
+	display: flex;
+	flex-wrap: nowrap;
+	font-weight: 500;
+	margin: 0 0 1rem;
+	padding: 17px 20px 18px;
 	position: relative;
-	text-align: left;
 }
 
-/* yellow alert style */
+.field_setting .gform-alert, .gform-alert + .field_setting {
+		margin-top: 1rem;
+	}
 
-div.gforms_help_alert {
-	border-left: 4px solid #ffba00;
+/* Style variant: Inline */
+
+.gform-alert--inline {
+	padding: 10px 12px 11px;
 }
 
-html[dir="rtl"] div.gforms_help_alert {
-	border-left: none !important;
-	border-right: 4px solid #ffba00;
+/* Style variant: Notice */
+
+.gform-alert--notice {
+	border-color: #175cff;
+	color: #175cff;
 }
 
-div.gforms_help_alert i.fa {
-	color: #d4662c;
+/* Style variant: Error */
+
+.gform-alert--error {
+	border-color: #dd301d;
+	color: #dd301d;
 }
 
-/* red alert style */
+/* Style variant: Success */
 
-div.gforms_red_alert {
-	border-left: 4px solid #dd3d36;
+.gform-alert--success {
+	border-color: #22a753;
+	color: #22a753;
 }
 
-html[dir="rtl"] div.gforms_red_alert {
-	border-left: none !important;
-	border-right: 4px solid #dd3d36;
+/* Style variant: Accessibility */
+
+.gform-alert--accessibility {
+	border-color: #ffbe03;
 }
 
-div.gforms_red_alert i.fa {
-	color: #dd3d36;
+/*
+ * Alert: Icon
+ */
+
+.gform-alert__icon {
+	color: #242748;
+	font-size: 1.5rem;
+	height: 16px;
+	margin-right: 10px;
+	position: relative;
+	top: 4px;
+	width: 16px;
 }
 
-/* green alert style */
+.gform-alert__icon::before {
+		height: 0;
+		left: 50%;
+		line-height: 0;
+		position: absolute;
+		top: 50%;
+		transform: translate3d(-50%, -50%, 0);
+	}
 
-div.gforms_green_alert {
-	border-left: 4px solid #7ad03a;
+/* Style variant: Notice */
+
+.gform-alert--notice .gform-alert__icon {
+		color: #175cff;
+	}
+
+/* Style variant: Error */
+
+.gform-alert--error .gform-alert__icon {
+		color: #dd301d;
+	}
+
+/* Style variant: Success */
+
+.gform-alert--success .gform-alert__icon {
+		color: #22a753;
+	}
+
+html[dir="rtl"] .gform-alert__icon {
+		margin-left: 10px;
+		margin-right: 0;
+	}
+
+/*
+ * Alert: Message
+ */
+
+.gform-alert__message-wrap {
+	align-items: baseline;
+	grid-column-gap: 15px;
+	-moz-column-gap: 15px;
+	     column-gap: 15px;
+	display: flex;
+	flex-wrap: wrap;
+	grid-row-gap: 10px;
+	row-gap: 10px;
+	width: 100%;
 }
 
-html[dir="rtl"] div.gforms_green_alert {
-	border-left: none !important;
-	border-right: 4px solid #7ad03a;
+/* Style variant: Inline */
+
+.gform-alert--inline .gform-alert__message-wrap {
+		grid-column-gap: 10px;
+		-moz-column-gap: 10px;
+		     column-gap: 10px;
+	}
+
+/* Message Text */
+
+.gform-alert__message {
+	color: #242748;
+	flex: 1 1 auto;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 1.5;
+	margin: 0;
 }
 
-div.gforms_green_alert i.fa {
-	color: #7ad03a;
+.gform-alert__message a, .gform-alert__message a:hover {
+		color: inherit;
+	}
+
+/* Style variant: Inline */
+
+.gform-alert--inline .gform-alert__message {
+		font-size: 0.75rem;
+	}
+
+/* Message CTA */
+
+.gform-alert__cta {
+	margin-top: 1px;
 }
 
-div.delete-alert input.button {
-	background: #9e0b0f;
-	border: 1px solid #9e0b0f;
-	box-shadow: inset 0 2px 5px -3px rgba(173, 12, 17, 0.5);
-	color: #fff;
-	text-shadow: none !important;
+/*
+ * Alert: Dismiss Action
+ */
+
+.gform-alert__dismiss {
+	background: none;
+	border: none;
+	cursor: pointer;
+	height: 20px;
+	margin-bottom: -5px;
+	margin-left: 12px;
+	min-width: 20px;
+	padding: 0;
+	position: relative;
+	text-align: center;
+	top: -4px;
+	width: 20px;
 }
 
-div.delete-alert input.button:hover, div.delete-alert input.button:active {
-	background: #dd3d36;
-	border: 1px solid #dd3d36;
-	box-shadow: inset 0 2px 5px -3px rgba(173, 12, 17, 0.5);
-	color: #fff;
-	text-shadow: none !important;
-}
+.gform-alert__dismiss::before, .gform-alert__dismiss::after {
+		border: 1px solid transparent;
+		border-radius: 50%;
+		content: "";
+		left: 50%;
+		position: absolute;
+		top: calc(50% - 1px);
+		transform: translate3d(-50%, -50%, 0);
+		transition: border-color 200ms ease-in-out;
+	}
+
+.gform-alert__dismiss::before {
+		height: 23px;
+		width: 23px;
+		z-index: 1;
+	}
+
+.gform-alert__dismiss::after {
+		border-width: 2px;
+		height: 25px;
+		width: 25px;
+	}
+
+.gform-alert__dismiss:hover .gform-icon, .gform-alert__dismiss:focus .gform-icon {
+			color: #5b5e80;
+		}
+
+.gform-alert__dismiss:focus::before {
+			border-color: #3985b7;
+		}
+
+.gform-alert__dismiss:focus::after {
+			border-color: #bed8ed;
+		}
+
+.gform-alert__dismiss .gform-icon {
+		color: #9092b2;
+		font-size: 2.1rem;
+		height: 0;
+		left: 50%;
+		line-height: 0;
+		position: absolute;
+		top: 50%;
+		transform: translate3d(-50%, -50%, 0);
+		transition: color 200ms ease-in-out;
+	}
+
+html[dir="rtl"] .gform-alert__dismiss {
+		margin-left: 0;
+		margin-right: 12px;
+	}
 
 /*
 * Styles for buttons admin wide. Use the gform-button classes at button of this file.
@@ -1281,7 +1420,7 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 				width: auto;
 			}
 
-.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown {
+.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown_cl {
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -1290,12 +1429,12 @@ html[dir="rtl"] .gform-admin .gform-choice .gform-choice__selected-label::before
 
 @media (min-width: 1390px) {
 
-.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown {
+.conditional_logic_flyout__body.panel-block-tabs__body--settings .conditional_logic_flyout__rule select:first-child, .conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown_cl {
 					width: 40%
 			}
 				}
 
-.conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown {
+.conditional_logic_flyout__body.panel-block-tabs__body--settings .gfield_rule_value_dropdown_cl {
 				margin-right: 0;
 			}
 
@@ -2025,52 +2164,6 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 			border-right-color: #3e7da6;
 		}
 
-.gform-editor-notices__notice {
-	align-items: center;
-	border: 1px solid #ecedf8;
-	border-radius: 3px;
-	box-shadow: 0 24px 24px rgba(18, 25, 97, 0.03), 0 2px 2px rgba(18, 25, 97, 0.03), 0 4px 4px rgba(18, 25, 97, 0.03), 0 8px 8px rgba(18, 25, 97, 0.03), 0 16px 16px rgba(18, 25, 97, 0.03);
-	display: flex;
-	flex-direction: row;
-	padding: 0.75rem;
-
-}
-
-.gform-editor-notices__notice .gform-editor-notice__icon {
-		align-items: center;
-		border: 1px solid #d5d7e9;
-		border-radius: 3px;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-		display: flex;
-		height: 2.75rem;
-		justify-content: center;
-		width: 2.75rem;
-	}
-
-.gform-editor-notices__notice .gform-editor-notice__icon i {
-			font-size: 1.5rem;
-		}
-
-.gform-editor-notices__notice .gform-editor-notice__message {
-		flex-grow: 1;
-		margin: 0 0.75rem;
-	}
-
-.gform-editor-notices__notice .gform-editor-notice__dismiss {
-		background: none;
-		border: none;
-		cursor: pointer;
-	}
-
-.gform-editor-notices__notice .gform-editor-notice__dismiss i {
-			color: #9092b2;
-			font-size: 2rem;
-		}
-
-.gform-editor-notices__notice .gform-editor-notice__dismiss i:hover {
-				color: var(--c-text-default);
-			}
-
 .gform-settings-panel__content select:not([multiple]), .gform-settings-panel__content .select2-container .select2-selection__rendered {
 
 	background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%239092B2%22%2F%3E%3C%2Fsvg%3E) no-repeat right 0.6rem top 55%;
@@ -2108,8 +2201,30 @@ html[dir="rtl"] .gform-admin .gform-dropdown__trigger:hover, html[dir="rtl"] .gf
 }
 
 .gform-settings-field__conditional-logic select:not([multiple]), .gform-settings-field__conditional-logic .select2-container .select2-selection__rendered {
+	max-width: 200px;
 	width: auto;
 }
+
+@media (min-width: 960px) {
+
+.gform-settings-field__conditional-logic select:not([multiple]), .gform-settings-field__conditional-logic .select2-container .select2-selection__rendered {
+		max-width: 150px
+}
+	}
+
+@media (min-width: 1260px) {
+
+.gform-settings-field__conditional-logic select:not([multiple]), .gform-settings-field__conditional-logic .select2-container .select2-selection__rendered {
+		max-width: 400px
+}
+	}
+
+@media (min-width: 1390px) {
+
+.gform-settings-field__conditional-logic select:not([multiple]), .gform-settings-field__conditional-logic .select2-container .select2-selection__rendered {
+		max-width: 460px
+}
+	}
 
 .gform-settings-panel__content .select2-container .select2-selection[aria-expanded="true"] .select2-selection__rendered {
 		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNiAzLjQxNEwxLjcwNyA3LjcwN0ExIDEgMCAwMS4yOTMgNi4yOTNMNiAuNTg2bDUuNzA3IDUuNzA3YTEgMSAwIDAxLTEuNDE0IDEuNDE0TDYgMy40MTR6IiBmaWxsPSIjQzNDNURCIi8+PC9zdmc+);
@@ -2378,90 +2493,11 @@ html[dir="rtl"] .gform-settings-field__select-enhanced-container .select2-result
 .field_setting.error input {
 	border: 1px solid #dd301d;
 	color: #dd301d;
-
 }
 
 .field_setting.error input:focus {
 		padding: 0 0.75rem;
 	}
-
-.gform-accessibility-warning {
-	align-items: center;
-	border: 1.5px solid #ffbe03;
-	border-radius: 3px;
-	display: flex;
-	line-height: 1em;
-	margin-bottom: 0.875rem;
-	padding: 0.875rem;
-}
-
-.gform-accessibility-warning.field_setting {
-		margin-top: 0.875rem;
-	}
-
-.gform-accessibility-warning .gform-icon {
-		font-size: 1.5rem;
-		margin-right: 0.375rem;
-	}
-
-div.field_setting.field_error {
-	align-items: center;
-	background-color: #feefef;
-	border: 1.5px solid #dd301d;
-	border-radius: 3px;
-	color: #dd301d;
-	display: flex;
-	line-height: 1em;
-	margin: 1rem 0;
-	padding: 0.875rem;
-	position: relative;
-}
-
-.field_setting.field_error p {
-	color: #dd301d;
-	margin: 1rem 0;
-}
-
-.field_setting.field_error svg {
-	margin-right: 0.375rem;
-	min-width: 1.5rem;
-}
-
-.gform-accessibility-warning a, .gform-accessibility-warning a:hover, .field_setting.field_error a, .field_setting.field_error a:hover {
-	color: #191e23;
-}
-
-.gfield-warning {
-	border: 1px solid #175cff;
-	border-radius: 3px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.11), 0 0 4px rgba(18, 25, 97, 0.0405344);
-	margin: 1rem 0;
-	padding: 1rem 1rem 1rem 3.125rem;
-	position: relative;
-}
-
-.gfield-warning::before {
-		color: #175cff;
-		content: "\e931";
-		font-family: "gform-icons-admin" !important;
-		font-size: 1.25rem;
-		left: 1.312rem;
-		position: absolute;
-		top: 1.312rem;
-	}
-
-.gfield-warning p {
-		margin: 0;
-	}
-
-html[dir="rtl"] .gfield-warning {
-		padding: 1rem 3.125rem 1rem 1rem;
-	}
-
-html[dir="rtl"] .gfield-warning::before {
-			left: auto;
-			right: 1.312rem;
-		}
 
 /*
 * Input component plus a bunch of legacy css.
@@ -2773,26 +2809,11 @@ html[dir="rtl"] .panel-block-tabs__body--settings input[type="radio"]:not(.field
 			margin-right: initial;
 		}
 
-/*
- * todo: This should not be polluting admin
- */
-
-textarea:focus, input:focus, select:focus {
-	border: 2px solid #bed8ed;
-	box-shadow: 0 0.125rem 0.0625rem rgba(28, 31, 63, 0.0634624);
-}
-
 /** Override WP core styles */
 
 .gfield input[type="checkbox"], .gfield input[type="radio"] {
 	height: 1rem;
 	width: 1rem;
-}
-
-select:focus {
-	border: 2px solid #bed8ed;
-	box-shadow: 0 0 0 1px #3e7da6;
-	color: #3e7da6;
 }
 
 /* Merge Tags */
@@ -3846,6 +3867,97 @@ html[dir="rtl"] .gf_tooltip {
 	}
 
 /* Deprecated, migrate these files */
+
+/*
+* Alert styles.
+*
+* Used in admin.css.
+*
+* These appear to be old alert styles that we no longer use.
+*/
+
+div.delete-alert {
+	margin-bottom: 30px;
+	padding: 20px 0 20px 20px;
+}
+
+div.gf_delete_notice {
+	margin-bottom: 10px;
+}
+
+div.gforms_help_alert, div.gforms_red_alert, div.gforms_green_alert {
+	background-color: #fff;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	display: inline-block;
+	font-family: "lucida sans", "lucida grande", "lucida", sans-serif;
+	font-size: 12px;
+	line-height: 1.6;
+	margin: 12px 24px -6px;
+	padding: 11px 15px;
+	position: relative;
+	text-align: left;
+}
+
+/* yellow alert style */
+
+div.gforms_help_alert {
+	border-left: 4px solid #ffba00;
+}
+
+html[dir="rtl"] div.gforms_help_alert {
+	border-left: none !important;
+	border-right: 4px solid #ffba00;
+}
+
+div.gforms_help_alert i.fa {
+	color: #d4662c;
+}
+
+/* red alert style */
+
+div.gforms_red_alert {
+	border-left: 4px solid #dd3d36;
+}
+
+html[dir="rtl"] div.gforms_red_alert {
+	border-left: none !important;
+	border-right: 4px solid #dd3d36;
+}
+
+div.gforms_red_alert i.fa {
+	color: #dd3d36;
+}
+
+/* green alert style */
+
+div.gforms_green_alert {
+	border-left: 4px solid #7ad03a;
+}
+
+html[dir="rtl"] div.gforms_green_alert {
+	border-left: none !important;
+	border-right: 4px solid #7ad03a;
+}
+
+div.gforms_green_alert i.fa {
+	color: #7ad03a;
+}
+
+div.delete-alert input.button {
+	background: #9e0b0f;
+	border: 1px solid #9e0b0f;
+	box-shadow: inset 0 2px 5px -3px rgba(173, 12, 17, 0.5);
+	color: #fff;
+	text-shadow: none !important;
+}
+
+div.delete-alert input.button:hover, div.delete-alert input.button:active {
+	background: #dd3d36;
+	border: 1px solid #dd3d36;
+	box-shadow: inset 0 2px 5px -3px rgba(173, 12, 17, 0.5);
+	color: #fff;
+	text-shadow: none !important;
+}
 
 /* stylelint-disable */
 
@@ -6183,15 +6295,6 @@ div#bulk_custom_edit {
 
 table.form-table td .updated_base {
 	font-size: 13px;
-}
-
-#gform_no_product_field_message {
-	background-color: #ffebe8;
-	border-color: #c00;
-	border-style: solid;
-	border-width: 1px;
-	margin: 10px 15px 10px 0;
-	padding: 0.6em 0.6rem;
 }
 
 .error_base {

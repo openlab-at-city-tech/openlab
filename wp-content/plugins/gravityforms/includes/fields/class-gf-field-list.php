@@ -294,7 +294,31 @@ class GF_Field_List extends GF_Field {
 		$list = '';
 		if ( ! self::$_style_block_printed ){
 			// This style block needs to be inline so that the list field continues to work even if the option to turn off CSS output is activated.
-			$list .= '<style type="text/css">
+			$list_entry_edit = GFForms::get_page() === 'entry_detail_edit' ? '
+				body .ginput_container_list table.gfield_list {
+					border-spacing: 10px 0 !important;
+				    margin-left: -10px !important;
+				    margin-right: -10px !important;
+				    width: auto !important;
+				}
+
+				body .ginput_container_list table.gfield_list tbody tr {
+					display: table-row !important;
+				}
+
+				body .ginput_container_list table.gfield_list tbody td.gfield_list_cell {
+					vertical-align: top !important;
+				}
+
+				body .ginput_container_list table.gfield_list tbody td.gfield_list_cell > *:not([type="checkbox"]):not([type="radio"]) {
+					width: 100% !important;
+				}
+				
+				body .ginput_container_list table.gfield_list tbody tr td.gfield_list_icons {
+					display: table-cell !important;
+				}
+			' : '';
+			$list .= '<style type="text/css">'. $list_entry_edit .'
 
 						body .ginput_container_list table.gfield_list tbody tr td.gfield_list_icons {
 							vertical-align: middle !important;

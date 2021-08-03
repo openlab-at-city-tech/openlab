@@ -221,7 +221,7 @@ class Field_Select extends Select {
 			if ( is_array( $inputs ) ) {
 
 				// Add full value for certain fields.
-				switch ( $input_type ) {
+				switch ( $field->get_input_type() ) {
 
 					case 'address':
 					case 'name':
@@ -257,7 +257,7 @@ class Field_Select extends Select {
 					);
 
 				}
-			} elseif ( ! $field->displayOnly || $input_type === 'password' ) {
+			} elseif ( ! $field->displayOnly || $field->get_input_type() === 'password' ) {
 
 				$choices[] = array(
 					'value' => $field->id,

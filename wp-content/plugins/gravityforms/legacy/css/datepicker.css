@@ -216,3 +216,12 @@ table.ui-datepicker-calendar {
 body div#ui-datepicker-div[style] {
 	z-index: 9999 !important;
 }
+
+.gform-legacy-datepicker.ui-datepicker .ui-datepicker-header .ui-datepicker-month,
+.gform-legacy-datepicker.ui-datepicker .ui-datepicker-header .ui-datepicker-year {
+	border-width: 1px;
+	line-height: 1;
+	padding-bottom: 3px;
+	padding-left: 3px;
+	padding-top: 3px;
+}

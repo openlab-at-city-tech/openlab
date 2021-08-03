@@ -122,11 +122,39 @@ class Generic_Map extends Base {
 			$this->key_field['choices'] = rgar( $this->key_field, 'choices', array() );
 		}
 
-		// Define value field choices.
-		if ( ! rgar( $this->value_field, 'choices' ) || rgar( $this->value_field, 'choices' ) === 'form_fields' ) {
-			$this->value_field['choices'] = $this->get_value_choices();
-		} else if ( rgar( $props, 'value_choices' ) ) {
-			$this->value_field['choices'] = $props['value_choices'] === 'form_fields' ? $this->get_value_choices() : $props['value_choices'];
+		$passed_choices = rgar( $this->value_field, 'choices' );
+
+		if ( ! $passed_choices ) {
+			$passed_choices = rgar( $props, 'value_choices' );
+		}
+
+		if ( ! $passed_choices ) {
+			$passed_choices = 'form_fields';
+		}
+
+		$this->value_field['choices']            = array();
+		$this->value_field['choices']['default'] = $this->get_value_choices();
+
+		// Assign the correct value field choices per key field choice.
+		foreach ( $this->key_field['choices'] as $choice ) {
+
+			// Choice doesn't have a name index; this likely means the choice is non-standard; bail and use default choices.
+			if ( ! rgar( $choice, 'name' ) ) {
+				continue;
+			}
+
+			$name = $choice['name'];
+
+			// Specific choices were passed in from somewhere higher in the stack. Use those and continue.
+			if ( $passed_choices !== 'form_fields' ) {
+				$this->value_field['choices'][ $name ] = $passed_choices;
+				continue;
+			}
+
+			$required_types = rgar( $choice, 'required_types', array() );
+			$excluded_tyes  = rgar( $choice, 'excluded_types', array() );
+
+			$this->value_field['choices'][ $name ] = $this->get_value_choices( $required_types, $excluded_tyes );
 		}
 
 		// Translate base strings.
@@ -177,6 +205,9 @@ class Generic_Map extends Base {
 
 	/**
 	 * Render field.
+	 * This contains the hidden input used to manage the state of the field and is also updated via react.
+	 * This also contains the initializeFieldMap method which inits the react for the field and passes along
+	 * the various props to then be used in the react app.
 	 *
 	 * @since 2.5
 	 *
@@ -389,11 +420,21 @@ class Generic_Map extends Base {
 				switch ( $input_type ) {
 
 					case 'address':
+
+						$form_field_choices[] = array(
+							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full Address', 'gravityforms' ) . ')' ),
+							'value' => $field->id,
+							'type' => 'address'
+						);
+
+						break;
+
 					case 'name':
 
 						$form_field_choices[] = array(
-							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityforms' ) . ')' ),
+							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full Name', 'gravityforms' ) . ')' ),
 							'value' => $field->id,
+							'type' => 'name'
 						);
 
 						break;
@@ -403,6 +444,7 @@ class Generic_Map extends Base {
 						$form_field_choices[] = array(
 							'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Selected', 'gravityforms' ) . ')' ),
 							'value' => $field->id,
+							'type' => 'checkbox'
 						);
 
 						break;
@@ -414,6 +456,7 @@ class Generic_Map extends Base {
 					$form_field_choices[] = array(
 						'label' => strip_tags( GFCommon::get_label( $field, $input['id'] ) ),
 						'value' => $input['id'],
+						'type'  => $field['type'],
 					);
 				}
 
@@ -424,6 +467,7 @@ class Generic_Map extends Base {
 				$form_field_choices[] = array(
 					'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityforms' ) . ')' ),
 					'value' => $field->id,
+					'type'  => 'list',
 				);
 
 				// Add choice for each column.
@@ -432,6 +476,7 @@ class Generic_Map extends Base {
 					$form_field_choices[] = array(
 						'label' => strip_tags( GFCommon::get_label( $field ) . ' (' . esc_html( rgar( $column, 'text' ) ) . ')' ),
 						'value' => $field->id . '.' . $col_index,
+						'type'  => 'list',
 					);
 					$col_index++;
 				}
@@ -441,6 +486,7 @@ class Generic_Map extends Base {
 				$form_field_choices[] = array(
 					'label' => strip_tags( GFCommon::get_label( $field ) ),
 					'value' => $field->id,
+					'type'  => $field['type'],
 				);
 
 			}
@@ -454,6 +500,7 @@ class Generic_Map extends Base {
 				$choices[] = array(
 					'label' => esc_html__( 'Select a Field', 'gravityforms' ),
 					'value' => '',
+					'type'  => $field['type'],
 				);
 
 			} else {
@@ -464,6 +511,7 @@ class Generic_Map extends Base {
 						GF_Fields::get( $required_types[0] ) ? ucfirst( GF_Fields::get( $required_types[0] )->get_form_editor_field_title() ) : ''
 					),
 					'value' => '',
+					'type'  => $field['type'],
 				);
 
 			}
@@ -554,7 +602,6 @@ class Generic_Map extends Base {
 		 * @param null|array|string $exclude_field_types Null or the field type(s) to be excluded from the drop down.
 		 */
 		$choices = apply_filters( 'gform_field_map_choices', $choices, $form_id, $input_type, $excluded_types );
-
 		return array_values( $choices );
 
 	}
@@ -579,6 +626,10 @@ class Generic_Map extends Base {
 
 		// If no choices are required, exit.
 		if ( empty( $required_choices ) ) {
+			return;
+		}
+
+		if ( ! is_array( $value ) ) {
 			return;
 		}
 

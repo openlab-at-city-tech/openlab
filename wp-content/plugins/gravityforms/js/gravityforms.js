@@ -567,6 +567,76 @@ gform.tools = {
 					return n1;
 			}
 		});
+	},
+
+	/**
+	 * @function gform.tools.getCookie
+	 * @description Gets a specific cookie.
+	 *
+	 * @since 2.5.8
+	 *
+	 * @param name The cookie to get
+	 * @returns {boolean|string}
+	 */
+
+	getCookie: function( name ) {
+		var cookieArr = document.cookie.split( ";" );
+
+		for(var i = 0; i < cookieArr.length; i++) {
+			var cookiePair = cookieArr[i].split( "=" );
+
+			if( name == cookiePair[0].trim() ) {
+				return decodeURIComponent( cookiePair[1] );
+			}
+		}
+
+		return null;
+	},
+
+	/**
+	 * @function gform.tools.setCookie
+	 * @description Creates and sets a cookie.
+	 *
+	 * @since 2.5.8
+	 *
+	 * @param name The cookie name
+	 * @param value The cookie value
+	 * @param daysToExpire The number of days until cookie should expire. If not set,
+	 * will expire at the end of the user sessions.
+	 * @param updateExistingValue Whether or not to update the existing cookie value to include the new value.
+	 * Can be helpful for keeping cookie count lower for the browser.
+	 */
+
+	setCookie: function( name, value, daysToExpire, updateExistingValue ) {
+		var expirationDate = '';
+		var cookieValue = value;
+
+		if ( daysToExpire ) {
+			var date = new Date();
+			date.setTime( date.getTime() + ( daysToExpire * 24 * 60 * 60 * 1000 ) );
+			expirationDate = ' expires=' + date.toUTCString();
+		}
+
+		if ( updateExistingValue ) {
+			var currentValue = gform.tools.getCookie( name );
+			cookieValue = currentValue !== '' && currentValue !== null ? currentValue + ',' + value : value;
+		}
+
+		// Set cookie
+		document.cookie = encodeURIComponent( name ) + '=' + encodeURIComponent( cookieValue ) + ';' + expirationDate;
+	},
+
+	/**
+	 * @function gform.tools.removeCookie
+	 * @description Removes a cookie.
+	 *
+	 * @since 2.5.8
+	 *
+	 * @param name The cookie name to check
+	 */
+
+	removeCookie: function( name ) {
+		gform.tools.setCookie( name, '', -1 );
 	}
 };
 

@@ -37,6 +37,7 @@
 				i18n.months.november,
 				i18n.months.december,
 			],
+			firstDay: i18n.firstDay,
 		};
 	}
 
@@ -72,6 +73,7 @@
 			dateFormat: 'mm/dd/yy',
 			dayNamesMin: i18n.dayNamesMin,
 			monthNamesShort: i18n.monthNamesShort,
+			firstDay: i18n.firstDay,
 			changeMonth: true,
 			changeYear: true,
 			isRTL: isRTL,

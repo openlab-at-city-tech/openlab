@@ -838,7 +838,7 @@ div.addon-logo.dashicons {
 			padding-right: 1rem;
 		}
 
-.gform-settings-panel__content input[type="email"], .gform-settings-panel__content input[type="number"], .gform-settings-panel__content input[type="password"], .gform-settings-panel__content input[type="text"], .gform-settings-panel__content input[type="search"], .gform-settings-panel__content input[type="url"], .gform-settings-panel__content select, .gform-settings-panel__content .select2-container .select2-selection__rendered, .gform-settings-panel__content textarea {
+.gform-settings-panel__content input[type="email"], .gform-settings-panel__content input[type="number"], .gform-settings-panel__content input[type="password"], .gform-settings-panel__content input[type="text"], .gform-settings-panel__content input[type="search"], .gform-settings-panel__content input[type="url"], .gform-settings-panel__content input[type="tel"], .gform-settings-panel__content select, .gform-settings-panel__content .select2-container .select2-selection__rendered, .gform-settings-panel__content textarea {
 		background-color: #fff;
 		border: 1px solid #9092b2;
 		border-radius: 3px;
@@ -850,12 +850,12 @@ div.addon-logo.dashicons {
 		transition: box-shadow 0.15s ease, background-color 0.15s ease;
 	}
 
-.gform-settings-panel__content input[type="email"], .gform-settings-panel__content input[type="number"], .gform-settings-panel__content input[type="password"], .gform-settings-panel__content input[type="text"], .gform-settings-panel__content input[type="search"], .gform-settings-panel__content input[type="url"], .gform-settings-panel__content select, .gform-settings-panel__content textarea {
+.gform-settings-panel__content input[type="email"], .gform-settings-panel__content input[type="number"], .gform-settings-panel__content input[type="password"], .gform-settings-panel__content input[type="text"], .gform-settings-panel__content input[type="search"], .gform-settings-panel__content input[type="url"], .gform-settings-panel__content input[type="tel"], .gform-settings-panel__content select, .gform-settings-panel__content textarea {
 		max-width: 100%;
 		width: 100%;
 	}
 
-.gform-settings-panel__content input[type="email"][disabled], .gform-settings-panel__content input[type="email"][readonly], .gform-settings-panel__content input[type="number"][disabled], .gform-settings-panel__content input[type="number"][readonly], .gform-settings-panel__content input[type="password"][disabled], .gform-settings-panel__content input[type="password"][readonly], .gform-settings-panel__content input[type="text"][disabled], .gform-settings-panel__content input[type="text"][readonly], .gform-settings-panel__content input[type="search"][disabled], .gform-settings-panel__content input[type="search"][readonly], .gform-settings-panel__content input[type="url"][disabled], .gform-settings-panel__content input[type="url"][readonly], .gform-settings-panel__content select[disabled], .gform-settings-panel__content select[readonly], .gform-settings-panel__content textarea[disabled], .gform-settings-panel__content textarea[readonly] {
+.gform-settings-panel__content input[type="email"][disabled], .gform-settings-panel__content input[type="email"][readonly], .gform-settings-panel__content input[type="number"][disabled], .gform-settings-panel__content input[type="number"][readonly], .gform-settings-panel__content input[type="password"][disabled], .gform-settings-panel__content input[type="password"][readonly], .gform-settings-panel__content input[type="text"][disabled], .gform-settings-panel__content input[type="text"][readonly], .gform-settings-panel__content input[type="search"][disabled], .gform-settings-panel__content input[type="search"][readonly], .gform-settings-panel__content input[type="url"][disabled], .gform-settings-panel__content input[type="url"][readonly], .gform-settings-panel__content input[type="tel"][disabled], .gform-settings-panel__content input[type="tel"][readonly], .gform-settings-panel__content select[disabled], .gform-settings-panel__content select[readonly], .gform-settings-panel__content textarea[disabled], .gform-settings-panel__content textarea[readonly] {
 			background: #f4f5fb;
 			border: 1px solid transparent;
 			cursor: not-allowed;
@@ -863,7 +863,7 @@ div.addon-logo.dashicons {
 			pointer-events: none;
 		}
 
-.gform-settings-panel__content input[type="email"][disabled], .gform-settings-panel__content input[type="number"][disabled], .gform-settings-panel__content input[type="password"][disabled], .gform-settings-panel__content input[type="text"][disabled], .gform-settings-panel__content input[type="search"][disabled], .gform-settings-panel__content input[type="url"][disabled], .gform-settings-panel__content select[disabled], .gform-settings-panel__content textarea[disabled] {
+.gform-settings-panel__content input[type="email"][disabled], .gform-settings-panel__content input[type="number"][disabled], .gform-settings-panel__content input[type="password"][disabled], .gform-settings-panel__content input[type="text"][disabled], .gform-settings-panel__content input[type="search"][disabled], .gform-settings-panel__content input[type="url"][disabled], .gform-settings-panel__content input[type="tel"][disabled], .gform-settings-panel__content select[disabled], .gform-settings-panel__content textarea[disabled] {
 			color: #9092b2;
 		}
 
@@ -906,7 +906,7 @@ div.addon-logo.dashicons {
 
 }
 
-.gform-settings-panel__content input[type="email"]:focus, .gform-settings-panel__content input[type="number"]:focus, .gform-settings-panel__content input[type="password"]:focus, .gform-settings-panel__content input[type="text"]:focus, .gform-settings-panel__content input[type="url"]:focus, .gform-settings-panel__content select:focus, .gform-settings-panel__content .select2-container *:focus .select2-selection__rendered, .gform-settings-panel__content textarea:focus {
+.gform-settings-panel__content input[type="email"]:focus, .gform-settings-panel__content input[type="number"]:focus, .gform-settings-panel__content input[type="password"]:focus, .gform-settings-panel__content input[type="text"]:focus, .gform-settings-panel__content input[type="url"]:focus, .gform-settings-panel__content input[type="tel"]:focus, .gform-settings-panel__content select:focus, .gform-settings-panel__content .select2-container *:focus .select2-selection__rendered, .gform-settings-panel__content textarea:focus {
 
 	border: 1px solid #3985b7;
 

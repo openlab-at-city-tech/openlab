@@ -1352,6 +1352,7 @@ to no.
 .gform_wrapper .gf_simple_horizontal {
         width: calc(100% - 16px);
         margin: 0 auto;
+
     }
 
 .gform_wrapper .gf_simple_horizontal .gform_body, .gform_wrapper .gf_simple_horizontal .gform_footer.top_label {
@@ -1415,10 +1416,6 @@ to no.
             position: absolute;
             top: 0;
             left: -9000px;
-        }
-
-.gform_wrapper .gf_simple_horizontal .gfield_error {
-            margin-bottom: 0;
         }
 
 .gform_wrapper body:not(rtl) .gform_wrapper form.gf_simple_horizontal div.gform_footer.top_label {
@@ -2025,6 +2022,80 @@ html[dir=rtl] .gform_wrapper.gravity-theme .ginput_container_creditcard .ginput_
 		}
 
 	}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container {
+
+		width: 100%;
+	}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container thead tr {
+				display: flex;
+				flex-wrap: nowrap;
+			}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container thead tr th, .gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container thead tr td {
+					flex-grow: 1;
+					white-space: normal;
+					width: 0;
+					word-break: break-word;
+				}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container thead tr td:last-child {
+					flex-grow: unset;
+					width: 48px;
+				}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody th, .gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody td {
+				flex-grow: 1;
+				white-space: normal;
+				width: 0;
+				word-break: break-word;
+			}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody td:last-child {
+				flex-grow: unset;
+				width: 48px;
+			}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+			}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr .gfield_list_cell {
+					flex-grow: 1;
+				}
+
+.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr .gfield_list_cell input {
+						width: 95%;
+					}
+
+@media screen and (max-width: 640px) {
+
+			.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container th {
+				display: none;
+			}
+
+				.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr {
+					flex-flow: column;
+				}
+
+					.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr td::before {
+						content: attr(data-label);
+						font-size: 14.992px;
+
+					}
+
+					.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr td {
+						flex-grow: unset;
+						width: auto;
+					}
+
+					.gform_wrapper.gform_legacy_markup table.gfield_list.gfield_list_container tbody tr .gfield_list_icons {
+						height: 35px;
+					}
+}
 
 html[dir=rtl] .gform_wrapper.gravity-theme .gfield_header_item + .gfield_header_item:not(:last-child), html[dir=rtl] .gform_wrapper.gravity-theme .gfield_list_group_item + .gfield_list_group_item {
 		margin-left: 0;

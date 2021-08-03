@@ -1,3 +1,36 @@
+### 2.5.8 | 2021-07-28
+- Fixed an issue for inputs where Gravity Form styles are overriding and breaking WordPress admin styles for certain inputs, textareas, and selects.
+- Fixed an issue of incorrect styles for the tel input type when in the entry edit view.
+- Fixed an issue that causes invalid markup in Field Descriptions to break the Form Editor.
+- Fixed an in which javascript can be injected on pages which don't support it and cause console errors.
+- Fixed an issue that affected the performance of the forms and entries list pages.
+- Fixed an issue with the display of the datepicker field in 2021 theme.
+- Fixed an issue that causes rich text fields not render correctly in some cases in the WordPress admin.
+- Fixed an issue that causes some languages to not display correctly in the tab ui of the form editor.
+- Fixed an issue which causes datepickers in the form preview window to not respect the week starts on setting in WordPress.
+- Fixed an issue that causes long labels for form fields to cause the conditional logic rules in settings area to exceed the width of their column.
+- Fixed an issue where the personal data cron does not trash or delete entries for inactive forms.
+- Fixed an issue which causes Next Button Conditional Logic rules to break in some situations.
+- Fixed an issue where the columns of the list field are not aligned with the inputs when the legacy setting is on.
+- Fixed an issue which causes databases with an "int_" prefix to break upgrade routines.
+- Fixed an issue with form settings field map field where the first field with required input types with only one option present is not saving the value, resulting in an error for required fields.
+- Fixed an issue where the required indicator can be displayed for the consent field in the form editor when the field is not required.
+- Fixed an issue in form editor field settings where field errors and notices are not reset and updated correctly as you edit different fields.
+- Fixed a bug which causes some systems to throw a fatal error when updating to 2.5.7.x.
+- Fixed a bug which causes forms with text-only fields to break the Form Editor which was introduced in 2.5.7.2
+- Fixed a bug which causes AJAX forms to inject Hooks JS markup and break the redirect script.
+- Fixed a bug which causes programmatically-created forms to throw PHP warnings if specific values are ommitted.
+- Fixed a bug in the settings field map field that prevents it from honoring input type arguments.
+- Fixed a PHP error in the field select field.
+- Fixed a layout bug for the list field in the form entry editing view when a form has legacy mode enabled.
+- Updated conditional logic for submit button to hide it visually when it is disabled.
+- Updated form editor and form settings alerts to reflect the new alerts styling.
+- Updated front end scripts to allow for filtering of their tags in WordPress 5.7 and up.
+- Updated the file upload field in order to support mapping its values to User Meta.
+- Updated error messages for File Uploads to be translatable.
+- API: Added a new alert component; currently only used in the admin.
+- API: Added new function GFCommon::get_inline_script_tag() which allows filtering of our theme inline scripts in WordPress 5.7 and up with the 'wp_inline_script_attributes' filter.
+
 ### 2.5.7 | 2021-07-07
 - Fixed an issue that sometimes causes notice level warnings on widget enabled pages.
 - Fixed an issue that causes the file upload field to have empty rows remain after a file is deleted during editing the entry.

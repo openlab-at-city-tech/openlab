@@ -324,26 +324,28 @@ class GFFormDetail {
 			?>
 
 			<aside class="sidebar ui-tabs" role="region" >
-				<ul class="sidebar__nav ui-tabs-nav">
+				<div class="sidebar__nav-wrapper">
 					<div class="search-button">
 						<input type="text" class="search-button__input" placeholder="<?php echo esc_attr__( 'Search for a field', 'gravityforms' ); ?>">
 						<span class="clear-button"></span>
 					</div>
-					<li class="sidebar__nav__item ui-state-default ui-state-active ui-corner-top"><a href="#add_fields"><?php esc_html_e( 'Add Fields', 'gravityforms' ); ?></a></li>
-					<li class="sidebar__nav__item ui-state-default ui-corner-top" id="settings_tab_item"><a href="#field_settings_container"><?php esc_html_e( 'Field Settings', 'gravityforms' ); ?></a></li>
+					<ul class="sidebar__nav ui-tabs-nav">
+						<li class="sidebar__nav__item ui-state-default ui-state-active ui-corner-top"><a href="#add_fields"><span class="sidebar__nav__item-text"><span class="sidebar__nav__item-text-inner"><?php esc_html_e( 'Add Fields', 'gravityforms' ); ?></span></span></a></li>
+						<li class="sidebar__nav__item ui-state-default ui-corner-top" id="settings_tab_item"><a href="#field_settings_container"><span class="sidebar__nav__item-text"><span class="sidebar__nav__item-text-inner"><?php esc_html_e( 'Field Settings', 'gravityforms' ); ?></span></span></a></li>
 
-					<?php
-					foreach ( $setting_panels as $panel ) {
-						if ( empty( $panel['id'] ) )
-							continue;
-							$panel_title       = empty( $panel['title'] ) ? esc_html__( 'Custom settings', 'gravityforms' ) : $panel['title'];
-							$panel_nav_classes = ! empty( $panel['nav_classes'] ) ? $panel['nav_classes'] : array();
+						<?php
+						foreach ( $setting_panels as $panel ) {
+							if ( empty( $panel['id'] ) )
+								continue;
+								$panel_title       = empty( $panel['title'] ) ? esc_html__( 'Custom settings', 'gravityforms' ) : $panel['title'];
+								$panel_nav_classes = ! empty( $panel['nav_classes'] ) ? $panel['nav_classes'] : array();
+							?>
+								<li class="sidebar__nav__item <?php echo is_array( $panel_nav_classes ) ? implode(' ', $panel_nav_classes) : $panel_nav_classes; ?>" ><a href="#<?php echo $panel['id']; ?>"><span class="sidebar__nav__item-text"><span class="sidebar__nav__item-text-inner"><?php echo $panel_title; ?></span></span></a></li>
+								<?php
+						}
 						?>
-							<li class="sidebar__nav__item <?php echo is_array( $panel_nav_classes ) ? implode(' ', $panel_nav_classes) : $panel_nav_classes; ?>" ><a href="#<?php echo $panel['id']; ?>"><?php echo $panel_title; ?></a></li>
-							<?php
-					}
-					?>
-				</ul>
+					</ul>
+				</div>
 				<div class="sidebar__panel" id="add_fields">
 					<div id="floatMenu" style="display: none !important;"></div>
 					<!-- begin add button boxes -->
@@ -3202,23 +3204,30 @@ case 'invalid_json' :
 	public static function editor_notices( $form ) {
 		if ( GFFormDetail::need_deprecated_class_message( $form ) ) {
 			?>
-			<div class="gform-editor-notices">
-				<div class="gform-editor-notices__notice gform-editor-notices__notice--info gform-editor-notices__notice--ready-classes">
-					<span class="gform-editor-notice__icon"><i class="gform-icon gform-icon--campaign"></i></span>
-					<p class="gform-editor-notice__message" tabindex="0">
-						<?php echo esc_html_e( 'This form uses deprecated Ready Classes.  Adding columns is easier than ever with the new Drag and Drop Layout Editor.', 'gravityforms' ); ?>
-					</p>
-					<a
-						class="gform-button gform-button--white gform-button--size-xs"
-						href="https://docs.gravityforms.com/working-with-columns/"
-						target="_blank"
-						title="<?php esc_attr_e( 'Working with Columns in the Form Editor in Gravity Forms 2.5', 'gravityforms' ); ?>"
+				<div class="gform-alert" data-js="gform-alert" data-gform-alert-cookie="gform-alert-editor-deprecated-classes">
+					<span class="gform-alert__icon gform-icon gform-icon--campaign" aria-hidden="true"></span>
+					<div class="gform-alert__message-wrap">
+						<p class="gform-alert__message" tabindex="0">
+							<?php echo esc_html_e( 'This form uses deprecated Ready Classes. Adding columns is easier than ever with the new Drag and Drop Layout Editor.', 'gravityforms' ); ?>
+						</p>
+						<a
+							class="gform-alert__cta gform-button gform-button--white gform-button--size-xs"
+							href="https://docs.gravityforms.com/working-with-columns/"
+							target="_blank"
+							title="<?php esc_attr_e( 'Working with Columns in the Form Editor in Gravity Forms 2.5', 'gravityforms' ); ?>"
+						>
+							<?php esc_html_e( 'Learn More', 'gravityforms' ); ?>
+						</a>
+					</div>
+					<button
+						class="gform-alert__dismiss"
+						aria-label="<?php esc_html_e( 'Dismiss notification', 'gravityforms' ); ?>"
+						title="<?php esc_html_e( 'Dismiss notification', 'gravityforms' ); ?>"
+						data-js="gform-alert-dismiss-trigger"
 					>
-						<?php esc_html_e( 'Learn More', 'gravityforms' ); ?>
-					</a>
-					<button class="gform-editor-notice__dismiss"><i class="gform-icon gform-icon--delete"></i></button>
+						<span class="gform-icon gform-icon--delete"></span>
+					</button>
 				</div>
-			</div>
 			<?php
 		}
 	}
@@ -3236,10 +3245,10 @@ case 'invalid_json' :
 		}
 
 		// If user has dismissed the notice, don't show it.
-		if ( rgar( $_COOKIE, 'gformHideReadyClassMessage' ) ) {
-			$forms = explode( ',', $_COOKIE['gformHideReadyClassMessage'] );
+		if ( rgar( $_COOKIE, 'gform-alert-editor-deprecated-classes' ) ) {
+			$forms = explode( ',', $_COOKIE['gform-alert-editor-deprecated-classes'] );
 			if ( in_array( $form['id'], $forms ) ) {
-				return;
+				return false;
 			}
 		}
 

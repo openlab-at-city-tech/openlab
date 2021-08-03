@@ -147,10 +147,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 @font-face {
 	font-family: 'gform-icons-admin';
 	src:
-		url('../fonts/gform-icons-admin.woff2?b17zy6') format('woff2'),
-		url('../fonts/gform-icons-admin.ttf?b17zy6') format('truetype'),
-		url('../fonts/gform-icons-admin.woff?b17zy6') format('woff'),
-		url('../fonts/gform-icons-admin.svg?b17zy6#gform-icons-admin') format('svg');
+		url('../fonts/gform-icons-admin.woff2?xsrbp1') format('woff2'),
+		url('../fonts/gform-icons-admin.ttf?xsrbp1') format('truetype'),
+		url('../fonts/gform-icons-admin.woff?xsrbp1') format('woff'),
+		url('../fonts/gform-icons-admin.svg?xsrbp1#gform-icons-admin') format('svg');
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;
@@ -257,15 +257,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gform-icon--circle-check:before {
-	content: "\e98d";
+	content: "\e931";
 }
 
 .gform-icon--circle-close:before {
-	content: "\e98e";
+	content: "\e938";
 }
 
 .gform-icon--circle-delete:before {
 	content: "\e98a";
+}
+
+.gform-icon--circle-notice:before {
+	content: "\e98e";
 }
 
 .gform-icon--circle-star:before {
@@ -409,7 +413,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gform-icon--help:before {
-	content: "\e931";
+	content: "\e939";
 }
 
 .gform-icon--helpscout:before {
@@ -437,11 +441,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gform-icon--info:before {
-	content: "\e939";
+	content: "\e98d";
 }
 
 .gform-icon--info-outline:before {
-	content: "\e938";
+	content: "\e988";
 }
 
 .gform-icon--jetsloth:before {
@@ -614,10 +618,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-icon--search:before {
 	content: "\e95e";
-}
-
-.gform-icon--search1:before {
-	content: "\e988";
 }
 
 .gform-icon--section:before {

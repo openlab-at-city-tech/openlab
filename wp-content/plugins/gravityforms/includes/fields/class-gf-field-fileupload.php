@@ -415,6 +415,14 @@ class GF_Field_FileUpload extends GF_Field {
 				$uploaded_temp_files = GFFormsModel::$uploaded_files[ $form_id ][ $input_name ];
 				$uploaded_files      = array();
 				foreach ( $uploaded_temp_files as $i => $file_info ) {
+
+					// File was previously uploaded to form; do not process temp.
+					if ( ! isset( $file_info['temp_filename'] ) ) {
+						$uploaded_path        = GFFormsModel::get_file_upload_path( $form_id, $file_info['uploaded_filename'], false );
+						$uploaded_files[ $i ] = $uploaded_path['url'];
+						continue;
+					}
+
 					$temp_filepath = GFFormsModel::get_upload_path( $form_id ) . '/tmp/' . wp_basename( $file_info['temp_filename'] );
 					if ( $file_info && file_exists( $temp_filepath ) ) {
 						$uploaded_files[ $i ] = $this->move_temp_file( $form_id, $file_info );
@@ -436,9 +444,38 @@ class GF_Field_FileUpload extends GF_Field {
 			$_gf_uploaded_files[ $input_name ] = $value;
 		}
 
+		if ( ! GFCommon::is_json( $value ) ) {
+			$value = $this->get_parsed_list_of_files( $value, $form_id, $input_name );
+		}
+
 		$value_safe = $this->sanitize_entry_value( $value, $form_id );
 
 		return $value_safe;
+	}
+
+	/**
+	 * Given the comma-delimited string of file paths, get the JSON array representing
+	 * any which still exist (i.e., haven't been deleted using the UI).
+	 *
+	 * @since 2.5.8
+	 *
+	 * @param string $value      A comma-delimited list of file paths.
+	 * @param int    $form_id    The form ID for this entry.
+	 * @param string $input_name The input name holding the current list of files.
+	 *
+	 * @return false|string
+	 */
+	public function get_parsed_list_of_files( $value, $form_id, $input_name ) {
+		$parts    = explode( ',', $value );
+		$uploaded = rgars( GFFormsModel::$uploaded_files, $form_id . '/' . $input_name, array() );
+		$uploaded = wp_list_pluck( $uploaded, 'uploaded_filename' );
+		$parts    = array_filter( $parts, function ( $part ) use ( $uploaded ) {
+			$basename = wp_basename( trim( $part ) );
+
+			return in_array( $basename, $uploaded, true );
+		} );
+
+		return wp_json_encode( $parts );
 	}
 
 	public function get_single_file_value( $form_id, $input_name ) {

@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.5.7
+Version: 2.5.8
 Requires at least: 4.0
 Requires PHP: 5.6
 Author: Gravity Forms
@@ -30,6 +30,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
 use Gravity_Forms\Gravity_Forms\TranslationsPress_Updater;
+use Gravity_Forms\Gravity_Forms\Libraries\Dom_Parser;
 
 //------------------------------------------------------------------------------------------------------------------
 //---------- Gravity Forms License Key -----------------------------------------------------------------------------
@@ -146,6 +147,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'includes/assets/class-gf-script-ass
 require_once( plugin_dir_path( __FILE__ ) . 'includes/assets/class-gf-style-asset.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/includes/trait-redirects-on-save.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'includes/class-translationspress-updater.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'includes/messages/class-dismissable-messages.php' );
 
 // Load Logging if Logging Add-On is not active.
 if ( ! GFCommon::is_logging_plugin_active() ) {
@@ -209,7 +211,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.5.7';
+	public static $version = '2.5.8';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -235,8 +237,6 @@ class GFForms {
 		// Load in Settings Framework.
 		require_once( GFCommon::get_base_path() . '/settings.php' );
 		require_once( GFCommon::get_base_path() . '/includes/settings/class-settings.php' );
-		require_once( GFCommon::get_base_path() . '/includes/messages/class-dismissable-messages.php' );
-
 
 		/**
 		 * Fires when Gravity Forms has loaded.
@@ -2668,15 +2668,13 @@ class GFForms {
 				return $form_string;
 			}
 
-			ob_start();
-			GFCommon::output_hooks_javascript();
-			$scripts = ob_get_clean();
+			$scripts = GFCommon::get_hooks_javascript_code();
 
-			if ( ! empty( $scripts ) ) {
-				return $scripts . $form_string;
+			if ( empty( $scripts ) ) {
+				return $form_string;
 			}
 
-			return $form_string;
+			return '<script type="text/javascript">' . $scripts . '</script>' . $form_string;
 		}, $prio );
 	}
 
@@ -6424,124 +6422,10 @@ class GFForms {
 	 * @return string
 	 */
 	public static function ensure_hook_js_output( $content ) {
-		if ( ! self::should_inject_hooks_js( $content ) ) {
-			return $content;
-		}
+		require_once GFCommon::get_base_path() . '/includes/libraries/class-dom-parser.php';
+		$parser = new Dom_Parser( $content );
 
-		require_once GFCommon::get_base_path() . '/form_display.php';
-
-		$has_printed = GFFormDisplay::$hooks_js_printed;
-
-		/**
-		 * Allow plugins to force the hook vars to output no matter what. Useful for certain edge-cases.
-		 *
-		 * @since  2.5.3
-		 *
-		 * @param bool $force_output Whether to force the script output.
-		 *
-		 * @return bool
-		 */
-		$force_output = apply_filters( 'gform_force_hooks_js_output', true );
-
-		if ( ! $force_output && ! $has_printed ) {
-			return $content;
-		}
-
-		$hooks_javascript = GFCommon::get_hooks_javascript_code();
-
-		$content = str_replace( $hooks_javascript, '', $content );
-
-		$string  = '<script type="text/javascript">' . $hooks_javascript . '</script>';
-		$content = preg_replace('/(<[\s]*head(?!e)[^>]*>)/', '$0 ' . $string, $content, 1 );
-
-		return $content;
-	}
-
-	/**
-	 * There are some contexts in which we do not want to inject our Hooks JS. This determines
-	 * whether we are in one of those contexts.
-	 *
-	 * @since 2.5.5
-	 *
-	 * @param string $content The buffer content.
-	 *
-	 * @return bool
-	 */
-	public static function should_inject_hooks_js( $content ) {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return false;
-		}
-
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			return false;
-		}
-
-		if ( empty( $content ) ) {
-		    return false;
-		}
-
-		// If doc is XML, bail.
-		try {
-			$xdom = new DOMDocument();
-			@$xdom->loadXML( $content );
-
-			if ( ! is_null( $xdom->documentElement ) && $xdom->documentElement->tagName !== 'html' ) {
-				return false;
-			}
-		} catch ( \Exception $e ) {
-			return self::should_inject_hooks_js_regex( $content );
-		}
-
-		// Load DOMDocument to process elements as objects.
-		try {
-			$dom = new DOMDocument();
-			@$dom->loadHTML( $content );
-		} catch( \Exception $e ) {
-			return self::should_inject_hooks_js_regex( $content );
-		}
-
-		$html = $dom->getElementsByTagName( 'html' );
-		$head = $dom->getElementsByTagName( 'head' );
-
-		// No HTML tag or head tag - we shouldn't mess with this so we bail.
-		if ( empty( $head->length ) || empty( $html->length ) ) {
-			return false;
-		}
-
-		// Markup is AMP - bail.
-		if ( $html[0]->hasAttribute( 'amp' ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Use a couple regular expressions to parse the HTML and determine if we should inject our JS. Less-reliable
-	 * than the DOMDocument method, but useful for odd markup or a server which doesn't have the DOM extension.
-	 *
-	 * @since 2.5.5
-	 *
-	 * @param string $content The buffer content.
-	 *
-	 * @return bool
-	 */
-	public static function should_inject_hooks_js_regex( $content ) {
-		preg_match('/(<[\s]*head(?!e)[^>]*>)/', $content, $hmatches );
-
-		if ( empty( $hmatches ) ) {
-			return false;
-		}
-
-		// Bail if this markup is AMP'd
-		preg_match('/^<!DOCTYPE html>[\r\n]*<[\s]*html[\s]+[^>]*amp[=\s>]+/i', trim( $content ), $amatches );
-
-		if ( ! empty( $amatches ) ) {
-			return false;
-		}
-
-		return true;
-
+		return $parser->get_injected_html();
 	}
 }
 

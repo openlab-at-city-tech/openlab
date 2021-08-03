@@ -398,16 +398,17 @@ if ( ! class_exists( 'GFForms' ) ) {
 		if ( form.markupVersion && form.markupVersion == 1 ) {
 			return;
 		}
-		jQuery( '.gfield-warning--depecrated' ).remove();
-		var deprecatedClasses = [ 'gf_left_half',
-								'gf_right_half',
-								'gf_left_third',
-								'gf_middle_third',
-								'gf_right_third',
-								'gf_first_quarter',
-								'gf_second_quarter',
-								'gf_third_quarter',
-								'gf_fourth_quarter'
+
+		var deprecatedClasses = [
+			'gf_left_half',
+			'gf_right_half',
+			'gf_left_third',
+			'gf_middle_third',
+			'gf_right_third',
+			'gf_first_quarter',
+			'gf_second_quarter',
+			'gf_third_quarter',
+			'gf_fourth_quarter'
 		];
 
 		var classes = field.cssClass.split(/\s+/);
@@ -420,15 +421,27 @@ if ( ! class_exists( 'GFForms' ) ) {
 			return;
 		}
 
-		var message =
-			"<div class='gfield-warning--depecrated gfield-warning' role='alert'><p>" +
-			deprecatedClass + <?php echo json_encode( esc_html__( ' is no longer necessary.', 'gravityforms' ) ); ?> +
-				"&nbsp;<a href='https://docs.gravityforms.com/working-with-columns/' target='_blank' title='" +
-			<?php echo json_encode( esc_attr__( 'Working with Columns in the Form Editor in Gravity Forms 2.5', 'gravityforms' ) ); ?> +
-				"'>" +
-			<?php echo json_encode( esc_html__( 'Learn more.', 'gravityforms' ) ); ?> +
-				"</a></p></div>";
-		jQuery( '#field_css_class' ).after( message ).attr( 'aria-describedby', 'gfield-warning--depecrated' );
+		var message = '<div id="gfield-warning-deprecated" class="gform-alert gform-alert--notice gform-alert--inline" role="alert">';
+			message += '<span class="gform-alert__icon gform-icon gform-icon--circle-notice" aria-hidden="true"></span>';
+			message += '<div class="gform-alert__message-wrap">';
+			message += '<p class="gform-alert__message">' + deprecatedClass + ' ' + <?php echo json_encode( esc_html__( 'is no longer necessary.', 'gravityforms' ) ); ?> + ' <a href="https://docs.gravityforms.com/working-with-columns/" target="_blank" title="' + <?php echo json_encode( esc_attr__( 'Working with Columns in the Form Editor in Gravity Forms 2.5', 'gravityforms' ) ); ?> + '">' + <?php echo json_encode( esc_html__( 'Learn more', 'gravityforms' ) ); ?> + '</a></p>';
+			message += '</div>';
+			message += '</div>';
+
+		jQuery( '#field_css_class' ).after( message ).attr( 'aria-describedby', 'gfield-warning-deprecated' );
+	}
+
+	/**
+	 * Reset the deprecated ready classes notice for the field setting.
+	 *
+	 * @since 2.5.8
+	 */
+	function resetDeprecatedReadyClassNotice() {
+		if ( ! jQuery( '#gfield-warning-deprecated' ).length ) {
+			return;
+		}
+
+		jQuery( '#gfield-warning-deprecated' ).remove();
 	}
 
 
@@ -447,7 +460,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 		jQuery("#gform_no_product_field_message").remove();
 		if (productFields.length < 1) {
-			jQuery("#product_field").hide().after("<div id='gform_no_product_field_message'>" + <?php echo json_encode( esc_html__( 'This field is not associated with a product. Please add a Product Field to the form.', 'gravityforms' ) ); ?> + "</div>");
+			jQuery("#product_field").hide().after('<div id="gform_no_product_field_message" class="gform-alert gform-alert--error gform-alert--inline"><span class="gform-alert__icon gform-icon gform-icon--circle-close" aria-hidden="true"></span><div class="gform-alert__message-wrap"><p class="gform-alert__message">' + <?php echo json_encode( esc_html__( 'This field is not associated with a product. Please add a Product Field to the form.', 'gravityforms' ) ); ?> + '</p></div></div>');
 		}
 		else {
 			var product_field = jQuery("#product_field");
@@ -1494,14 +1507,14 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 		if ( message === undefined ) {
 			if ( predefinedMessages.hasOwnProperty( fieldSetting ) ) {
-				message = predefinedMessages[ fieldSetting ];
-				message += ' <a href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
-				message += <?php echo json_encode( esc_html__( 'Learn more.', 'gravityforms' ) ); ?>;
+				message = '<p class="gform-alert__message">' + predefinedMessages[ fieldSetting ] + '</p>';
+				message += '<a class="gform-alert__cta gform-button gform-button--white gform-button--size-xs" href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
+				message += <?php echo json_encode( esc_html__( 'Learn more', 'gravityforms' ) ); ?>;
 				message += '</a>';
 			} else {
-				message = '<a href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
+				message = '<p class="gform-alert__message"><a href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
 				message += <?php echo json_encode( esc_html__( 'This field has accessibility issues.', 'gravityforms' ) ); ?>;
-				message += '</a>';
+				message += '</a></p>';
 			}
 		}
 
@@ -1511,8 +1524,10 @@ if ( ! class_exists( 'GFForms' ) ) {
 			fieldSetting = 'label_setting';
 		}
 
-		var warningDiv = '<div class="gform-accessibility-warning field_setting">' +
-			'<span class="gform-icon gform-icon--accessibility"></span><p>' + message + '</p></div>';
+		var warningDiv = '<div class="gform-alert gform-alert--accessibility gform-alert--inline">';
+			warningDiv += '<span class="gform-alert__icon gform-icon gform-icon--accessibility" aria-hidden="true"></span>';
+			warningDiv += '<div class="gform-alert__message-wrap">' + message + '</div>';
+			warningDiv += '</div>';
 
 		var fieldSetting = jQuery( '.' + fieldSetting );
 		if ( position === 'above' ) {
@@ -1542,9 +1557,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 		var message = '';
 
 		if ( predefinedMessages.hasOwnProperty( fieldSetting ) ) {
-			message += predefinedMessages[ fieldSetting ];
-			message += ' <a href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
-			message += <?php echo json_encode( esc_html__( 'Learn more.', 'gravityforms' ) ); ?>;
+			message += '<p class="gform-alert__message">' + predefinedMessages[ fieldSetting ] + '</p>';
+			message += '<a class="gform-alert__cta gform-button gform-button--white gform-button--size-xs" href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';
+			message += <?php echo json_encode( esc_html__( 'Learn more', 'gravityforms' ) ); ?>;
 			message += '</a>';
 		} else {
 			message += '<a href="https://docs.gravityforms.com/field-accessibility-warning" target="_blank">';

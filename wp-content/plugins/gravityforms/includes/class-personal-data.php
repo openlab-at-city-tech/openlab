@@ -750,7 +750,7 @@ class GF_Personal_Data {
 	public static function get_forms() {
 
 		if ( is_null( self::$_forms ) ) {
-			$form_ids = GFFormsModel::get_form_ids();
+			$form_ids = GFFormsModel::get_form_ids( null );
 
 			if ( empty( $form_ids ) ) {
 				return array(

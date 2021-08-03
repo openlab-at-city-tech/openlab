@@ -622,11 +622,6 @@ abstract class GFFeedAddOn extends GFAddOn {
 	public function get_feeds( $form_id = null ) {
 		global $wpdb;
 
-		if ( ! $this->addon_feed_table_exists() ) {
-			$this->show_table_not_exists_error( $wpdb->prefix . 'gf_addon_feed' );
-			return array();
-		}
-
 		$form_filter = is_numeric( $form_id ) ? $wpdb->prepare( 'AND form_id=%d', absint( $form_id ) ) : '';
 
 		$sql = $wpdb->prepare(
@@ -1076,7 +1071,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 		}
 
 		$error   = $this->get_table_not_exists_error( $table );
-		$classes = $this->is_gravityforms_supported( '2.5-beta' ) ? 'gf-notice notice-error' : 'notice notice-error';
+		$classes = $this->is_gravityforms_supported( '2.5-beta' ) ? 'notice notice-error gf-notice' : 'notice notice-error';
 
 		$notice = sprintf(
 			'<div class="%s"><p>%s</p></div>',
@@ -1386,6 +1381,13 @@ abstract class GFFeedAddOn extends GFAddOn {
 	}
 
 	public function feed_list_page( $form = null ) {
+		global $wpdb;
+
+		if ( ! $this->addon_feed_table_exists() ) {
+			$this->show_table_not_exists_error( $wpdb->prefix . 'gf_addon_feed' );
+			return;
+		}
+
 		$action = $this->get_bulk_action();
 		if ( $action ) {
 			check_admin_referer( 'feed_list', 'feed_list' );

@@ -1492,15 +1492,58 @@ html[dir="rtl"] .editor-sidebar {
 	width: 370px;
 }
 
-.sidebar .sidebar__nav {
+.sidebar .sidebar__nav-wrapper {
 	background-color: inherit;
 	border-bottom: 1px solid #ecedf8 !important;
-	height: 129px;
+	height: 8.0625rem;
 	padding: 0;
 	position: fixed;
-	width: 370px;
+	width: 16.875rem;
 	z-index: 1000;
 }
+
+@media (min-width: 960px) {
+
+.sidebar .sidebar__nav-wrapper {
+		width: 23.125rem
+}
+	}
+
+.sidebar .sidebar__nav-wrapper .search-button {
+		box-sizing: border-box;
+		padding: 1rem;
+		position: relative;
+		width: 100%;
+	}
+
+.sidebar .sidebar__nav-wrapper .sidebar__nav {
+		border-bottom: 0 !important;
+		display: flex;
+		width: 100%;
+	}
+
+.sidebar .sidebar__nav-wrapper .sidebar__nav li.sidebar__nav__item {
+			flex-grow: 1;
+			height: 3rem;
+		}
+
+.sidebar .sidebar__nav-wrapper .sidebar__nav li.sidebar__nav__item .sidebar__nav__item-text {
+				align-items: center;
+				box-sizing: border-box;
+				display: flex;
+				height: 2.8125rem;
+				justify-content: center;
+				line-height: 0.875rem;
+				width: 100%;
+			}
+
+.sidebar .sidebar__nav-wrapper .sidebar__nav li.sidebar__nav__item .sidebar__nav__item-text-inner {
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 
 .sidebar .sidebar-instructions {
 	padding: 21px 23px 21px 57px;
@@ -1535,7 +1578,11 @@ html[dir="rtl"] .editor-sidebar {
 	border: none;
 	border-radius: 0;
 	margin: 0;
-	min-width: 107px;
+	min-width: 6.6875rem;
+}
+
+.sidebar__nav__item-text {
+	padding: 0 0.625rem;
 }
 
 .sidebar .sidebar__nav li.sidebar__nav__item.ui-state-default a, #gform-form-toolbar_links li a {
@@ -1623,11 +1670,6 @@ html[dir="rtl"] .editor-sidebar {
 	font-style: normal;
 	position: absolute;
 	right: 1rem;
-}
-
-.search-button {
-	padding: 1rem;
-	position: relative;
 }
 
 .search-button span {

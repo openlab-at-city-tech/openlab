@@ -82,6 +82,8 @@ class GF_Field_SingleProduct extends GF_Field {
 			$price = 0;
 		}
 
+		$price = GFCommon::to_money( $price );
+
 		$has_quantity = sizeof( GFCommon::get_product_fields_by_type( $form, array( 'quantity' ), $this->id ) ) > 0;
 		if ( $has_quantity ) {
 			$this->disableQuantity = true;
@@ -130,7 +132,7 @@ class GF_Field_SingleProduct extends GF_Field {
 					<input type='hidden' name='input_{$id}.1' value='{$product_name}' class='gform_hidden' />
 					$wrapper_open
 						<label for='ginput_price_{$form_id}_{$this->id}_2' class='ginput_product_price_label'>" . gf_apply_filters( array( 'gform_product_price', $form_id, $this->id ), esc_html__( 'Price', 'gravityforms' ), $form_id ) . ":</label>
-						<input readonly name='input_{$id}.2' class='ginput_product_price' id='ginput_base_price_{$form_id}_{$this->id}' value='" . esc_attr( $price ) . "' />
+						<input type='text' readonly name='input_{$id}.2' class='ginput_product_price' id='ginput_base_price_{$form_id}_{$this->id}' value='" . esc_attr( $price ) . "' />
 					$wrapper_close
 					{$quantity_field}
 				</div>";
@@ -139,7 +141,7 @@ class GF_Field_SingleProduct extends GF_Field {
 					<input type='hidden' name='input_{$id}.1' value='{$product_name}' class='gform_hidden' />
 					$wrapper_open
 						<span class='ginput_product_price_label'>" . gf_apply_filters( array( 'gform_product_price', $form_id, $this->id ), esc_html__( 'Price', 'gravityforms' ), $form_id ) . ":</span>
-						<input readonly class='ginput_product_price gform-text-input-reset' name='input_{$id}.2' id='ginput_base_price_{$form_id}_{$this->id}' class='gform_hidden' value='" . esc_attr( $price ) . "'/>
+						<input type='text' readonly class='ginput_product_price gform-text-input-reset' name='input_{$id}.2' id='ginput_base_price_{$form_id}_{$this->id}' class='gform_hidden' value='" . esc_attr( $price ) . "'/>
 					$wrapper_close
 					{$quantity_field}
 				</div>";

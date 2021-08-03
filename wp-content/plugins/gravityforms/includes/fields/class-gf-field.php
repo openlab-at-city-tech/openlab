@@ -336,6 +336,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$admin_hidden_markup = ( $this->visibility == 'hidden' ) ? $this->get_hidden_admin_markup() : '';
 
 		$description = $this->get_description( $this->description, 'gfield_description' );
+
 		if ( $this->is_description_above( $form ) ) {
 			$clear         = $is_admin ? "<div class='gf_clear'></div>" : '';
 			$field_content = sprintf( "%s%s<$label_tag class='%s' $for_attribute >%s%s</$label_tag>%s{FIELD}%s$clear", $admin_buttons, $admin_hidden_markup, esc_attr( $this->get_field_label_class() ), $field_label, $required_div, $description, $validation_message );
@@ -1512,6 +1513,11 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$is_entry_detail = $this->is_entry_detail();
 		$is_admin        = $is_form_editor || $is_entry_detail;
 		$id              = "gfield_description_{$this->formId}_{$this->id}";
+
+		// Strip description tags when on edit page to avoid invalid markup breaking the editor.
+		if ( $this->is_form_editor() ) {
+			$description = strip_tags( $description );
+		}
 
 		return $is_admin || ! empty( $description ) ? "<div class='$css_class' id='$id'>" . $description . '</div>' : '';
 	}

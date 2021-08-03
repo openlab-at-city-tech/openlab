@@ -149,7 +149,10 @@ function CreateConditionalLogic(objectType, obj){
 
     var descPieces = {};
     if( objectType == "form_button" ) {
-        descPieces.a11yWarning = "<div class='gform-accessibility-warning'><span class='gform-icon gform-icon--accessibility'></span>" + gf_vars.conditional_logic_a11y + "</div>";
+        descPieces.a11yWarning = "<div class='gform-alert gform-alert--accessibility'>";
+        descPieces.a11yWarning += "<span class='gform-alert__icon gform-icon gform-icon--accessibility' aria-hidden='true'></span>";
+        descPieces.a11yWarning += "<div class='gform-alert__message-wrap'><p class='gform-alert__message'>" + gf_vars.conditional_logic_a11y + "</p></div>";
+        descPieces.a11yWarning += "</div>";
     }
     descPieces.actionType = "<select id='" + objectType + "_action_type' onchange='SetConditionalProperty(\"" + objectType + "\", \"actionType\", jQuery(this).val());'><option value='show' " + showSelected + ">" + showText + "</option><option value='hide' " + hideSelected + ">" + hideText + "</option></select>";
     descPieces.objectDescription = objText;
@@ -2012,6 +2015,133 @@ gform.components.dropdown.prototype.bindEvents = function() {
         this.state.unloading = true;
     }.bind( this ));
 };
+
+/**
+ * Alert Component
+ *
+ * Inits any gform specific Alert component instances either on init via data-attribute, by method
+ * call, or by custom event. Stores instances with reference dom id for later manipulation if needed.
+ *
+ * You have 3 ways to trigger an init on your Alert component element:
+ *
+ * 1) Place an attribute of data-js="gform-alert" on the el, data-js="gform-alert-dismiss-trigger" on
+ * the dismiss button (plus data-gform-alert-cookie="cookieName" on the el if you want a 24 hour cookie based
+ * dismissal vs. only a display none dismissal).
+ * 2) Calling gform.components.alert.initializeInstance( HTMLElement ), probably in gform.initializeOnLoaded.
+ * 3) Injecting your element into the dom and then calling gform.tools.trigger( 'gform_init_alerts' ) making
+ * sure to add the various data attributes as outlined in the component documentation and in #1 above to the
+ * injected HTML'S container.
+ *
+ * You will find your instances on the object gform.components.alert.instances. Each instance has an id which
+ * relates to the dom node it was initialized on and its attribute of data-gform-alert-instance. We provide a
+ * getInstance method. Say you want to get an instance only knowing your element you initialized it on:
+ *
+ * var myInstance = gform.components.alert.getInstance( HTMLElement );
+ *
+ * @since 2.5.8
+ */
+
+gform.components.alert = {
+    /**
+     * Initialized instances are stored here with an array of objects.
+     */
+    instances: [],
+
+    /**
+     * @function gform.components.alert.getInstance
+     * @description Get an Alert instance by element it was rendered on.
+     *
+     * @since 2.5.8
+     *
+     * @param {HTMLElement} element The element you initialize Alert on.
+     *
+     * @returns {*}
+     */
+    getInstance: function( element ) {
+        return gform.components.alert.instances.filter( function( instance ) {
+            return instance.id === element.getAttribute( 'data-gform-alert-instance' ); }
+        )[ 0 ];
+    },
+
+    /**
+     * @function gform.components.alert.initializeInstance
+     * @description Initialize a Alert instance and store on our instances object.
+     *
+     * @since 2.5.8
+     *
+     * @param {HTMLElement} element
+     */
+    initializeInstance: function( element ) {
+        if ( element.hasAttribute( 'data-gform-alert-instance' ) ) {
+            return;
+        }
+
+        var uid = gform.tools.uniqueId( 'gform-alert' );
+        var cookie = element.hasAttribute( 'data-gform-alert-cookie' ) ? element.getAttribute( 'data-gform-alert-cookie' ) : '';
+
+        element.setAttribute( 'data-gform-alert-instance', uid );
+        element.classList.add( 'gform-initialized' );
+
+        gform.components.alert.instances.push( {
+            id: uid,
+            cookie: cookie
+        } );
+    },
+
+    /**
+     * @function gform.components.alert.initializeInstances
+     * @description Initialize any uninitialized Alert instances in the DOM.
+     *
+     * @since 2.5.8
+     *
+     * @param {HTMLElement} element
+     */
+    initializeInstances: function() {
+        gform.tools
+            .getNodes( '[data-js="gform-alert"]:not(.gform-initialized)', true, document, true )
+            .forEach( gform.components.alert.initializeInstance );
+    },
+
+    /**
+     * @function gform.components.alert.dismissAlert
+     * @description Implements hiding of an alert and sets up cookie if it has been configured via
+     * the data-gform-alert-cookie attribute on the parent el.
+     *
+     * @since 2.5.8
+     */
+    dismissAlert: function( e ) {
+        var parentEl = gform.tools.getClosest( e.target, '[data-js="gform-alert"]' );
+        var instance = gform.components.alert.getInstance( parentEl );
+        parentEl.style.display = 'none';
+        if ( instance.cookie ) {
+            gform.tools.setCookie( instance.cookie, form.id, 1, true );
+        }
+    },
+
+    /**
+     * @function gform.components.alert.bindEvents
+     * @description Bind event listeners for this namespace.
+     *
+     * @since 2.5.8
+     */
+    bindEvents: function() {
+        document.addEventListener( 'gform_init_alerts', gform.components.alert.initializeInstances );
+        gform.tools.delegate( 'body', 'click', '[data-js="gform-alert-dismiss-trigger"]', gform.components.alert.dismissAlert );
+    },
+
+    /**
+     * @function gform.components.alert.init
+     * @description Initialize this module.
+     *
+     * @since 2.5.8
+     */
+    init: function() {
+        gform.components.alert.bindEvents();
+        gform.components.alert.initializeInstances();
+    }
+};
+
+gform.initializeOnLoaded( gform.components.alert.init );
 
 //------------------------------------------------
 //---------- SIMPLEBAR ---------------------------
