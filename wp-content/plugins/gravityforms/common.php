@@ -5352,6 +5352,11 @@ Content-Type: text/html;
 	 * @since 2.0
 	 */
 	public static function add_dismissible_message( $text, $key, $type = 'warning', $capabilities = false, $sticky = false, $page = null ) {
+		if ( ! class_exists( '\Gravity_Forms\Gravity_Forms\Messages\Dismissable_Messages' ) ) {
+			_b( 'GF Dismissable_Messages class not found' );
+			_b( wp_debug_backtrace_summary() );
+		}
+
 		$dismissable = new Dismissable_Messages();
 
 		$dismissable->add( $text, $key, $type, $capabilities, $sticky, $page );
