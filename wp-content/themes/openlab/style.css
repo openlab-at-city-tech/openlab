@@ -9579,6 +9579,9 @@ body form .checkbox-list-container {
   justify-content: flex-end;
   margin-right: 7.5px;
 }
+.my-groups-grid .group-list {
+  margin-top: 28px;
+}
 .group-list {
   margin-top: 50px;
 }
