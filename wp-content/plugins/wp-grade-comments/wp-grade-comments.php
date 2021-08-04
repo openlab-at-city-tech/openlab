@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Grade Comments
-Version: 1.4.1
+Version: 1.4.2
 Description: Grades and private comments for WordPress blog posts. Built for the City Tech OpenLab.
 Author: Boone Gorges
 Author URI: http://boone.gorg.es
@@ -271,9 +271,14 @@ add_filter( 'comment_feed_where', 'olgc_filter_comments_from_feed' );
  * @return array Array of comment IDs.
  */
 function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
+	$olpc = is_plugin_active( 'openlab-private-comments/openlab-private-comments.php' );
+
 	// Get a list of private comments
 	remove_action( 'pre_get_comments', 'olgc_remove_private_comments' );
-	remove_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+
+	if ( $olpc ) {
+		remove_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+	}
 
 	$comment_args = array(
 		'meta_query' => array(
@@ -297,7 +302,10 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
 	$private_comments = get_comments( $comment_args );
 
 	add_action( 'pre_get_comments', 'olgc_remove_private_comments' );
-	add_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+
+	if ( $olpc ) {
+		add_action( 'pre_get_comments', 'OpenLab\PrivateComments\remove_private_comments' );
+	}
 
 	/**
 	 * Filter out the comments that the user should in fact have access to:

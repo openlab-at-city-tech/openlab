@@ -3,7 +3,7 @@ Contributors: boonebgorges
 Tags: comments, grade, course, privacy
 Requires at least: 4.4
 Tested up to: 5.8
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,9 @@ This plugin was developed for the [https://openlab.citytech.cuny.edu](City Tech 
 3. Grades are visible on Dashboard > Posts.
 
 == Changelog ==
+
+= 1.4.2 =
+* Improved compatibility with the OpenLab Private Comments package of Commons In A Box.
 
 = 1.4.1 =
 * Hide comments from public feeds/streams when there's only a grade and no content.
