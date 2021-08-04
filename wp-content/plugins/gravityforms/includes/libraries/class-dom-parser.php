@@ -91,6 +91,12 @@ class Dom_Parser {
 	 */
 	public function get_injected_html() {
 		require_once \GFCommon::get_base_path() . '/form_display.php';
+		if ( ! class_exists( 'GFFormDisplay' ) ) {
+			_b( 'get_injected_html' );
+			_b( get_current_blog_id() );
+			_b( $_SERVER );
+			_b( wp_debug_backtrace_summary() );
+		}
 
 		$has_printed = \GFFormDisplay::$hooks_js_printed;
 
