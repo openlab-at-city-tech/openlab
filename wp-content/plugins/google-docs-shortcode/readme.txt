@@ -5,7 +5,7 @@ Requires at least: 3.0
 Tested up to: 4.4.x
 Stable tag: 0.4
 
-Easily embed a Google Doc into your blog posts
+Embed a Google Drive item (document, spreadsheet, presentation, form) into your blog posts with the provided "Google Drive" block or with the "gdoc" shortcode.
 
 == Description ==
 
