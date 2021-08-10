@@ -6,7 +6,7 @@ namespace TheLion\OutoftheBox;
  * Plugin Name: WP Cloud Plugin Out-of-the-Box (Dropbox)
  * Plugin URI: https://www.wpcloudplugins.com/plugins/out-of-the-box-wordpress-plugin-for-dropbox/
  * Description: Say hello to the most popular WordPress Dropbox plugin! Start using the Cloud even more efficiently by integrating it on your website.
- * Version: 1.19.0.1
+ * Version: 1.19.10
  * Author: WP Cloud Plugins
  * Author URI: https://www.wpcloudplugins.com
  * Text Domain: wpcloudplugins
@@ -16,7 +16,7 @@ namespace TheLion\OutoftheBox;
  */
 
 // SYSTEM SETTINGS
-define('OUTOFTHEBOX_VERSION', '1.19.0.1');
+define('OUTOFTHEBOX_VERSION', '1.19.10');
 define('OUTOFTHEBOX_ROOTPATH', plugins_url('', __FILE__));
 define('OUTOFTHEBOX_ROOTDIR', __DIR__);
 
@@ -32,6 +32,8 @@ define('OUTOFTHEBOX_CACHEURL', content_url().'/out-of-the-box-cache/'.(OUTOFTHEB
 
 require_once 'includes/Autoload.php';
 
+require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
+
 class Main
 {
     public $settings = false;
@@ -45,7 +47,7 @@ class Main
     {
         $this->load_default_values();
 
-        add_action('init', [&$this, 'init']);
+        add_action('init', [$this, 'init']);
 
         if (is_admin() && (!defined('DOING_AJAX')
                 || (isset($_REQUEST['action']) && ('update-plugin' === $_REQUEST['action'])))) {
@@ -53,7 +55,7 @@ class Main
         }
 
         // Shortcodes
-        add_shortcode('outofthebox', [&$this, 'create_template']);
+        add_shortcode('outofthebox', [$this, 'create_template']);
 
         // After the Shortcode hook to make sure that the raw shortcode will not become visible when plugin isn't meeting the requirements
         if (false === $this->can_run_plugin()) {
@@ -61,100 +63,109 @@ class Main
         }
 
         $priority = add_filter('out-of-the-box_enqueue_priority', 10);
-        add_action('wp_enqueue_scripts', [&$this, 'load_scripts'], $priority);
-        add_action('wp_enqueue_scripts', [&$this, 'load_styles']);
+        add_action('wp_enqueue_scripts', [$this, 'load_scripts'], $priority);
+        add_action('wp_enqueue_scripts', [$this, 'load_styles']);
 
         // add TinyMCE button
         // Depends on the theme were to load....
-        add_action('init', [&$this, 'load_shortcode_buttons']);
-        add_action('admin_head', [&$this, 'load_shortcode_buttons']);
-        add_filter('mce_css', [&$this, 'enqueue_tinymce_css_frontend']);
+        add_action('init', [$this, 'load_shortcode_buttons']);
+        add_action('admin_head', [$this, 'load_shortcode_buttons']);
+        add_filter('mce_css', [$this, 'enqueue_tinymce_css_frontend']);
 
-        add_action('plugins_loaded', [&$this, 'load_integrations'], 9);
+        add_action('plugins_loaded', [$this, 'load_integrations'], 9);
 
         // Hook to send notification emails when authorization is lost
-        add_action('outofthebox_lost_authorisation_notification', [&$this, 'send_lost_authorisation_notification'], 10, 1);
+        add_action('outofthebox_lost_authorisation_notification', [$this, 'send_lost_authorisation_notification'], 10, 1);
 
         // Add user folder if needed
         if (isset($this->settings['userfolder_oncreation']) && 'Yes' === $this->settings['userfolder_oncreation']) {
-            add_action('user_register', [&$this, 'user_folder_create']);
+            add_action('user_register', [$this, 'user_folder_create']);
         }
         if (isset($this->settings['userfolder_update']) && 'Yes' === $this->settings['userfolder_update']) {
-            add_action('profile_update', [&$this, 'user_folder_update'], 100, 2);
+            add_action('profile_update', [$this, 'user_folder_update'], 100, 2);
         }
         if (isset($this->settings['userfolder_remove']) && 'Yes' === $this->settings['userfolder_remove']) {
-            add_action('delete_user', [&$this, 'user_folder_delete']);
+            add_action('delete_user', [$this, 'user_folder_delete']);
         }
 
         // Ajax calls
-        add_action('wp_ajax_nopriv_outofthebox-get-filelist', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-get-filelist', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-get-filelist', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-get-filelist', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-search', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-search', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-search', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-search', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-get-gallery', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-get-gallery', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-get-gallery', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-get-gallery', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-upload-file', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-upload-file', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-upload-file', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-upload-file', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-delete-entries', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-delete-entries', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-delete-entries', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-delete-entries', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-rename-entry', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-rename-entry', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-rename-entry', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-rename-entry', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-move-entries', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-move-entries', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-move-entries', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-move-entries', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-copy-entry', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-copy-entry', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-copy-entry', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-copy-entry', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-create-entry', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-create-entry', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-create-entry', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-create-entry', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-get-playlist', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-get-playlist', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-get-playlist', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-get-playlist', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-create-zip', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-create-zip', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-create-zip', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-create-zip', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-thumbnail', [&$this, 'create_thumbnail']);
-        add_action('wp_ajax_outofthebox-thumbnail', [&$this, 'create_thumbnail']);
+        add_action('wp_ajax_nopriv_outofthebox-thumbnail', [$this, 'create_thumbnail']);
+        add_action('wp_ajax_outofthebox-thumbnail', [$this, 'create_thumbnail']);
 
-        add_action('wp_ajax_nopriv_outofthebox-check-recaptcha', [&$this, 'check_recaptcha']);
-        add_action('wp_ajax_outofthebox-check-recaptcha', [&$this, 'check_recaptcha']);
+        add_action('wp_ajax_nopriv_outofthebox-check-recaptcha', [$this, 'check_recaptcha']);
+        add_action('wp_ajax_outofthebox-check-recaptcha', [$this, 'check_recaptcha']);
 
-        add_action('wp_ajax_nopriv_outofthebox-create-link', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-create-link', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-create-link', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-create-link', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-embedded', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-embedded', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-embedded', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-embedded', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-download', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-download', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-shorten-url', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-shorten-url', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-stream', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-stream', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-download', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-download', [$this, 'start_process']);
 
-        add_action('wp_ajax_nopriv_outofthebox-preview', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-preview', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-previewshortcode', [&$this, 'preview_shortcode']);
+        add_action('wp_ajax_nopriv_outofthebox-stream', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-stream', [$this, 'start_process']);
 
-        add_action('wp_ajax_outofthebox-reset-cache', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-factory-reset', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-reset-statistics', [&$this, 'start_process']);
-        add_action('wp_ajax_outofthebox-revoke', [&$this, 'start_process']);
+        add_action('wp_ajax_nopriv_outofthebox-preview', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-preview', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-previewshortcode', [$this, 'preview_shortcode']);
 
-        add_action('wp_ajax_outofthebox-getpopup', [&$this, 'get_popup']);
+        add_action('wp_ajax_nopriv_outofthebox-getads', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-getads', [$this, 'start_process']);
 
-        add_action('wp_ajax_outofthebox-linkusertofolder', [&$this, 'user_folder_link']);
-        add_action('wp_ajax_outofthebox-unlinkusertofolder', [&$this, 'user_folder_unlink']);
-        add_action('wp_ajax_outofthebox-rating-asked', [&$this, 'rating_asked']);
+        add_action('wp_ajax_outofthebox-reset-cache', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-factory-reset', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-reset-statistics', [$this, 'start_process']);
+        add_action('wp_ajax_outofthebox-revoke', [$this, 'start_process']);
+
+        add_action('wp_ajax_outofthebox-getpopup', [$this, 'get_popup']);
+
+        add_action('wp_ajax_nopriv_outofthebox-embed-entry', [$this, 'embed_entry']);
+        add_action('wp_ajax_outofthebox-embed-entry', [$this, 'embed_entry']);
+
+        add_action('wp_ajax_outofthebox-linkusertofolder', [$this, 'user_folder_link']);
+        add_action('wp_ajax_outofthebox-unlinkusertofolder', [$this, 'user_folder_unlink']);
+        add_action('wp_ajax_outofthebox-rating-asked', [$this, 'rating_asked']);
 
         // add settings link on plugin page
-        add_filter('plugin_row_meta', [&$this, 'add_settings_link'], 99, 2);
+        add_filter('plugin_row_meta', [$this, 'add_settings_link'], 99, 2);
 
         if (isset($this->settings['log_events']) && 'Yes' === $this->settings['log_events']) {
             $this->_events = new \TheLion\OutoftheBox\Events($this);
@@ -255,6 +266,7 @@ class Main
             'shortest_apikey' => '',
             'rebrandly_apikey' => '',
             'rebrandly_domain' => '',
+            'rebrandly_workspace' => '',
             'log_events' => 'Yes',
             'icon_set' => '',
             'use_team_folders' => 'Yes',
@@ -446,6 +458,11 @@ class Main
             $updated = true;
         }
 
+        if (empty($this->settings['loaders']['iframe'])) {
+            $this->settings['loaders']['iframe'] = OUTOFTHEBOX_ROOTPATH.'/css/images/wpcp-loader.svg';
+            $updated = true;
+        }
+
         if (empty($this->settings['lightbox_rightclick'])) {
             $this->settings['lightbox_rightclick'] = 'No';
             $updated = true;
@@ -470,10 +487,19 @@ class Main
             $updated = true;
         }
 
-        if (!isset($this->settings['shortest_apikey'])) {
+        if (empty($this->settings['shortlinks'])) {
+            $this->settings['shortlinks'] = 'None';
+            $this->settings['bitly_login'] = '';
+            $this->settings['bitly_apikey'] = '';
             $this->settings['shortest_apikey'] = '';
             $this->settings['rebrandly_apikey'] = '';
             $this->settings['rebrandly_domain'] = '';
+            $this->settings['rebrandly_workspace'] = '';
+            $updated = true;
+        }
+
+        if (!isset($this->settings['rebrandly_workspace'])) {
+            $this->settings['rebrandly_workspace'] = '';
             $updated = true;
         }
 
@@ -710,7 +736,7 @@ class Main
         // Scripts for the Admin Dashboard
         wp_register_script('OutoftheBox.Admin', plugins_url('includes/js/Admin.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
         wp_register_script('OutoftheBox.Datatables', plugins_url('vendors/datatables/datatables.min.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
-        wp_register_script('OutoftheBox.ChartJs', plugins_url('vendors/chartjs/Chart.bundle.min.js', __FILE__), ['jquery', 'jquery-ui-datepicker'], OUTOFTHEBOX_VERSION, true);
+        wp_register_script('OutoftheBox.ChartJs', plugins_url('vendors/chartjs/chartjs.min.js', __FILE__), ['jquery', 'jquery-ui-datepicker'], OUTOFTHEBOX_VERSION, true);
         wp_register_script('OutoftheBox.Dashboard', plugins_url('includes/js/Dashboard.min.js', __FILE__), ['OutoftheBox.Datatables', 'OutoftheBox.ChartJs', 'jquery-ui-widget', 'WPCloudplugin.Libraries'], OUTOFTHEBOX_VERSION, true);
 
         $post_max_size_bytes = min(\TheLion\OutoftheBox\Helpers::return_bytes(ini_get('post_max_size')), \TheLion\OutoftheBox\Helpers::return_bytes(ini_get('upload_max_filesize')));
@@ -723,6 +749,7 @@ class Main
             'cookie_domain' => COOKIE_DOMAIN,
             'is_mobile' => wp_is_mobile(),
             'recaptcha' => is_admin() ? '' : $this->settings['recaptcha_sitekey'],
+            'shortlinks' => 'None' === $this->settings['shortlinks'] ? false : $this->settings['shortlinks'],
             'content_skin' => $this->settings['colors']['style'],
             'icons_set' => $this->settings['icon_set'],
             'lightbox_skin' => $this->settings['lightbox_skin'],
@@ -745,6 +772,7 @@ class Main
             'log_nonce' => wp_create_nonce('outofthebox-event-log'),
             'createentry_nonce' => wp_create_nonce('outofthebox-create-entry'),
             'getplaylist_nonce' => wp_create_nonce('outofthebox-get-playlist'),
+            'shortenurl_nonce' => wp_create_nonce('outofthebox-shorten-url'),
             'createzip_nonce' => wp_create_nonce('outofthebox-create-zip'),
             'createlink_nonce' => wp_create_nonce('outofthebox-create-link'),
             'recaptcha_nonce' => wp_create_nonce('outofthebox-check-recaptcha'),
@@ -780,7 +808,10 @@ class Main
             'str_rename_title' => esc_html__('Rename', 'wpcloudplugins'),
             'str_rename' => esc_html__('Rename to:', 'wpcloudplugins'),
             'str_add_description' => esc_html__('Add a description...', 'wpcloudplugins'),
-            'str_no_filelist' => esc_html__("Can't receive filelist", 'wpcloudplugins'),
+            'str_module_error_title' => esc_html__('Configuration problem', 'wpcloudplugins'),
+            'str_missing_location' => esc_html__('This module is currently linked to a cloud account and/or folder which is no longer accessible by the plugin. To resolve this, please relink the module again to the correct folder.', 'wpcloudplugins'),
+            'str_no_filelist' => esc_html__('Oops! The content cannot be loaded at this moment. Please try again...', 'wpcloudplugins'),
+            'str_recaptcha_failed' => esc_html__("Oops! We couldn't verify that you're not a robot :(. Please try refreshing the page.", 'wpcloudplugins'),
             'str_addnew_title' => esc_html__('Create', 'wpcloudplugins'),
             'str_addnew_name' => esc_html__('Enter name', 'wpcloudplugins'),
             'str_addnew' => esc_html__('Add to folder', 'wpcloudplugins'),
@@ -859,30 +890,30 @@ class Main
         wp_register_style('ilightbox', plugins_url('vendors/iLightBox/css/ilightbox.css', __FILE__), false);
         wp_register_style('ilightbox-skin-outofthebox', plugins_url('vendors/iLightBox/'.$skin.'-skin/skin.css', __FILE__), false);
 
-        wp_register_style('Awesome-Font-5-css', plugins_url('vendors/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
-        wp_register_style('Awesome-Font-4-shim-css', plugins_url('vendors/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
+        wp_register_style('Awesome-Font-5', plugins_url('vendors/font-awesome/css/all.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
+        wp_register_style('Awesome-Font-4-shim', plugins_url('vendors/font-awesome/css/v4-shims.min.css', __FILE__), false, OUTOFTHEBOX_VERSION);
 
         $custom_css = new CSS($this->settings);
         $custom_css->register_style();
 
-        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), ['OutoftheBox.CustomCSS'], OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox', plugins_url("css/main.min{$is_rtl_css}.css", __FILE__), [], OUTOFTHEBOX_VERSION);
         wp_register_style('OutoftheBox.ShortcodeBuilder', plugins_url("css/tinymce.min{$is_rtl_css}.css", __FILE__), null, OUTOFTHEBOX_VERSION);
 
         // Scripts for the Admin Dashboard
-        wp_register_style('OutoftheBox.Datatables.css', plugins_url('vendors/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
+        wp_register_style('OutoftheBox.Datatables', plugins_url('vendors/datatables/datatables.min.css', __FILE__), null, OUTOFTHEBOX_VERSION);
 
         if ('Yes' === $this->settings['always_load_scripts']) {
             wp_enqueue_style('ilightbox');
             wp_enqueue_style('ilightbox-skin-outofthebox');
 
             if (false === defined('WPCP_DISABLE_FONTAWESOME')) {
-                wp_enqueue_style('Awesome-Font-5-css');
+                wp_enqueue_style('Awesome-Font-5');
                 if ('Yes' === $this->settings['fontawesomev4_shim']) {
-                    wp_enqueue_style('Awesome-Font-4-shim-css');
+                    wp_enqueue_style('Awesome-Font-4-shim');
                 }
             }
 
-            wp_enqueue_style('OutoftheBox');
+            wp_enqueue_style('OutoftheBox.CustomStyle');
         }
     }
 
@@ -919,6 +950,8 @@ class Main
             case 'outofthebox-move-entries':
             case 'outofthebox-create-entry':
             case 'outofthebox-get-playlist':
+            case 'outofthebox-shorten-url':
+            case 'outofthebox-getads':
                 require_once ABSPATH.'wp-includes/pluggable.php';
                 $this->get_processor()->start_process();
 
@@ -962,7 +995,7 @@ class Main
         }
 
         if (false === $this->can_run_plugin()) {
-            return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+            return '&#9888; <strong>'.esc_html__('This content is not available at this moment unfortunately. Contact the administrators of this site so they can check the plugin involved.', 'wpcloudplugins').'</strong>';
         }
 
         return $this->get_processor()->create_from_shortcode($atts);
@@ -1015,6 +1048,33 @@ class Main
         check_ajax_referer('wpcp-outofthebox-block');
 
         include OUTOFTHEBOX_ROOTDIR.'/templates/admin/shortcode_previewer.php';
+
+        exit();
+    }
+
+    public function embed_entry()
+    {
+        $entryid = isset($_REQUEST['OutoftheBoxpath']) ? $_REQUEST['OutoftheBoxpath'] : null;
+
+        if (empty($entryid)) {
+            exit('-1');
+        }
+
+        if (!isset($_REQUEST['account_id'])) {
+            // Fallback for old embed urls without account info
+            if (empty($account)) {
+                $primary_account = $this->get_accounts()->get_primary_account();
+                if (false === $primary_account) {
+                    exit('-1');
+                }
+                $account_id = $primary_account->get_id();
+            }
+        } else {
+            $account_id = $_REQUEST['account_id'];
+        }
+
+        $this->get_processor()->set_current_account($this->get_accounts()->get_account_by_id($account_id));
+        $this->get_processor()->embed_entry($entryid);
 
         exit();
     }
@@ -1157,6 +1217,7 @@ class Main
         delete_option('out_of_the_box_settings');
         delete_site_option('outofthebox_network_settings');
         delete_site_option('out_of_the_box_guestlinkedto');
+        delete_option('out_of_the_box_uniqueID');
 
         delete_site_option('outofthebox_purchaseid');
         delete_option('out_of_the_box_activated');
@@ -1193,10 +1254,10 @@ class Main
             return;
         }
         // Add a callback to regiser our tinymce plugin
-        add_filter('mce_external_plugins', [&$this, 'register_tinymce_plugin'], 999);
+        add_filter('mce_external_plugins', [$this, 'register_tinymce_plugin'], 999);
 
         // Add a callback to add our button to the TinyMCE toolbar
-        add_filter('mce_buttons', [&$this, 'register_tinymce_plugin_buttons'], 999);
+        add_filter('mce_buttons', [$this, 'register_tinymce_plugin_buttons'], 999);
 
         // Add custom CSs for placeholders
         add_editor_style(OUTOFTHEBOX_ROOTPATH.'/css/tinymce_editor.css');
@@ -1290,8 +1351,9 @@ class Main
 }
 
 // Installation and uninstallation hooks
-register_activation_hook(__FILE__, __NAMESPACE__.'\OutoftheBox_Network_Activate');
-register_deactivation_hook(__FILE__, __NAMESPACE__.'\OutoftheBox_Network_Deactivate');
+register_activation_hook(__FILE__, __NAMESPACE__.'\outofthebox_network_activate');
+register_deactivation_hook(__FILE__, __NAMESPACE__.'\outofthebox_network_deactivate');
+register_uninstall_hook(__FILE__, __NAMESPACE__.'\outofthebox_network_uninstall');
 
 $OutoftheBox = new \TheLion\OutoftheBox\Main();
 
@@ -1300,7 +1362,7 @@ $OutoftheBox = new \TheLion\OutoftheBox\Main();
  *
  * @param mixed $network_wide
  */
-function OutoftheBox_Network_Activate($network_wide)
+function outofthebox_network_activate($network_wide)
 {
     if (is_multisite() && $network_wide) { // See if being activated on the entire network or one blog
         global $wpdb;
@@ -1315,7 +1377,7 @@ function OutoftheBox_Network_Activate($network_wide)
         $blog_ids = $wpdb->get_col($wpdb->prepare($sql, $wpdb->blogs));
         foreach ($blog_ids as $blog_id) {
             switch_to_blog($blog_id);
-            OutoftheBox_Activate(); // The normal activation function
+            outofthebox_activate(); // The normal activation function
             $activated[] = $blog_id;
         }
 
@@ -1325,14 +1387,14 @@ function OutoftheBox_Network_Activate($network_wide)
         // Store the array for a later function
         update_site_option('out_of_the_box_activated', $activated);
     } else { // Running on a single blog
-        OutoftheBox_Activate(); // The normal activation function
+        outofthebox_activate(); // The normal activation function
     }
 }
 
 /**
  * Activate the plugin.
  */
-function OutoftheBox_Activate()
+function outofthebox_activate()
 {
     add_option(
         'out_of_the_box_settings',
@@ -1380,6 +1442,7 @@ function OutoftheBox_Activate()
             'shortest_apikey' => '',
             'rebrandly_apikey' => '',
             'rebrandly_domain' => '',
+            'rebrandly_workspace' => '',
             'log_events' => 'Yes',
             'icon_set' => '',
             'disable_fontawesome' => 'No',
@@ -1408,7 +1471,7 @@ function OutoftheBox_Activate()
  *
  * @param mixed $network_wide
  */
-function OutoftheBox_Network_Deactivate($network_wide)
+function outofthebox_network_deactivate($network_wide)
 {
     if (is_multisite() && $network_wide) { // See if being activated on the entire network or one blog
         global $wpdb;
@@ -1429,7 +1492,7 @@ function OutoftheBox_Network_Deactivate($network_wide)
         foreach ($blog_ids as $blog_id) {
             if (!in_array($blog_id, $activated)) { // Plugin is not activated on that blog
                 switch_to_blog($blog_id);
-                OutoftheBox_Deactivate();
+                outofthebox_deactivate();
             }
         }
 
@@ -1439,14 +1502,14 @@ function OutoftheBox_Network_Deactivate($network_wide)
         // Store the array for a later function
         update_site_option('out_of_the_box_activated', $activated);
     } else { // Running on a single blog
-        OutoftheBox_Deactivate();
+        outofthebox_deactivate();
     }
 }
 
 /**
  * Deactivate the plugin.
  */
-function OutoftheBox_Deactivate()
+function outofthebox_deactivate()
 {
     foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(OUTOFTHEBOX_CACHEDIR, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
         if ('.htaccess' === $path->getFilename()) {
@@ -1478,7 +1541,7 @@ function OutoftheBox_Deactivate()
  *
  * @param mixed $network_wide
  */
-function OutoftheBox_Network_Uninstall($network_wide)
+function outofthebox_network_uninstall($network_wide)
 {
     if (is_multisite() && $network_wide) { // See if being activated on the entire network or one blog
         global $wpdb;
@@ -1499,7 +1562,7 @@ function OutoftheBox_Network_Uninstall($network_wide)
         foreach ($blog_ids as $blog_id) {
             if (!in_array($blog_id, $activated)) { // Plugin is not activated on that blog
                 switch_to_blog($blog_id);
-                OutoftheBox_Uninstall();
+                outofthebox_uninstall();
             }
         }
 
@@ -1510,14 +1573,14 @@ function OutoftheBox_Network_Uninstall($network_wide)
         update_site_option('out_of_the_box_activated', $activated);
         delete_site_option('outofthebox_network_settings');
     } else { // Running on a single blog
-        OutoftheBox_Uninstall();
+        outofthebox_uninstall();
     }
 }
 
 /**
  * Deactivate the plugin.
  */
-function OutoftheBox_Uninstall()
+function outofthebox_uninstall()
 {
     $settings = get_option('out_of_the_box_settings', []);
 

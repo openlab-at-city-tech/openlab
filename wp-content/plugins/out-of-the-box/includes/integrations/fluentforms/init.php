@@ -35,8 +35,8 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
         add_filter('fluentform_validate_input_item_'.$this->key, [$this, 'validateInput'], 10, 5);
 
         // Custom Private Folder names
-        add_filter('outofthebox_private_folder_name', [&$this, 'new_private_folder_name'], 10, 2);
-        add_filter('outofthebox_private_folder_name_guests', [&$this, 'rename_private_folder_names_for_guests'], 10, 2);
+        add_filter('outofthebox_private_folder_name', [$this, 'new_private_folder_name'], 10, 2);
+        add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_names_for_guests'], 10, 2);
     }
 
     public function getComponent()
@@ -91,10 +91,10 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
         return [
             'wpcp_shortcode' => [
                 'template' => 'inputTextarea',
-                'label' => esc_html__('Build your shortcode here', 'wpcloudplugins'),
-                'help_text' => esc_html__('Configure the shortcode via the Shortcode Builder or edit it manually.', 'wpcloudplugins'),
+                'label' => 'Shortcode',
+                'help_text' => esc_html__('Grab the shortcode via the Shortcode Builder and copy+paste in this field.', 'wpcloudplugins'),
                 'css_class' => 'wpcp-shortcode',
-                'inline_help_text' => '<br/><button type="button" class="el-button el-button--primary el-button--medium outofthebox open-shortcode-builder">'.esc_html__('Build your shortcode', 'wpcloudplugins').'</button>',
+                'inline_help_text' => '<br/><div>'.esc_html__('Create the module configuration via the Shortcode Builder and copy+paste the raw shortcode in this field.', 'wpcloudplugins').'</div><br/><button type="button" class="el-button el-button--primary el-button--medium outofthebox open-shortcode-builder">'.esc_html__('Build your shortcode', 'wpcloudplugins').'</button>',
                 'rows' => 8,
             ],
         ];
@@ -204,18 +204,17 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
 
     public function enqueueEditorAssets()
     {
-        if (false === Helper::isFluentAdminPage() || 'editor' != $_GET['route']) {
+        if (false === Helper::isFluentAdminPage() || (isset($_GET['route']) && 'editor' != $_GET['route'])) {
             return;
         }
 
         global $OutoftheBox;
 
         $OutoftheBox->load_styles();
-        
 
         add_thickbox();
 
-        wp_enqueue_style('OutoftheBox');
+        wp_enqueue_style('OutoftheBox.CustomStyle');
 
         wp_enqueue_script('WPCP-'.$this->field_type.'-FluentForms', plugins_url('FluentForms.js', __FILE__), ['jquery'], OUTOFTHEBOX_VERSION, true);
     }
@@ -223,7 +222,7 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
     /**
      * Function to change the Private Folder Name.
      *
-     * @param string                          $private_folder_name
+     * @param string                         $private_folder_name
      * @param \TheLion\OutoftheBox\Processor $processor
      *
      * @return string
@@ -248,7 +247,7 @@ class FluentForms_Field extends \FluentForm\App\Services\FormBuilder\BaseFieldMa
     /**
      * Function to change the Private Folder Name for Guest users.
      *
-     * @param string                          $private_folder_name_guest
+     * @param string                         $private_folder_name_guest
      * @param \TheLion\OutoftheBox\Processor $processor
      *
      * @return string

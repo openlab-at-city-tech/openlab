@@ -195,7 +195,7 @@
                     </ul>
 
                   </li>
-                  <li><a href="#releasenotes">Release Notes (version 1.19)</a></li>
+                  <li><a href="#releasenotes">Release Notes (version 1.19.10)</a></li>
 
                 </ul>
               </div>
@@ -795,9 +795,11 @@
                         <tr>
                           <th>Name Template</th>
                           <td>Template used when a Private Folder for an user is created. This template can contain
-                            several placeholders like <code>%user_login%</code>, <code>%user_email%</code>,
-                            <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>,
-                            <code>%jjjj-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>. If you want to be
+                            several placeholders like <code>%user_login%</code>, <code>%user_firstname%</code>,
+                            <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
+                            <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
+                            <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>. If
+                            you want to be
                             able to send notifications to the owner of this
                             folder the template should contain <code>%user_email%</code>.</td>
                         </tr>
@@ -1408,11 +1410,38 @@ public function change_event_summary_email($template_location, $notification){
                             should handle this for you.</td>
                         </tr>
                         <tr>
+                          <th>Name Template</th>
+                          <td>Template used when a Private Folder for an user is created.
+
+                            <br /><br> This template supports the placeholders <code>%user_login%</code>,
+                            <code>%user_firstname%</code>,
+                            <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
+                            <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
+                            <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>. If
+                            you want to be able to send notifications to the owner of this
+                            folder the template should contain <code>%user_email%</code>. Leave empty to use the value
+                            that is set globally.
+
+                            <br /><br /> <strong>Example:</strong> Set it to<code>%user_login%</code> if you
+                            want the module to display the folder <code>/{Start
+                              Folder}/{%user_login%}</code>. Each user will get their own folder named with the user
+                            login.
+                          </td>
+                        </tr>
+                        <tr>
                           <th>Open Subfolder</th>
                           <td>Set the subfolder name or path of the sub folder inside a Private Folder which should
                             be set a start folder for the module. The subfolder will be automatically created if it does
-                            not yet exist.<br /><br /> <strong>Example:</strong> Set it to<code>/Documents</code> if you
-                            want the module to display the folder <code>/Users/{Private Folder}/Documents</code> </td>
+                            not yet exist.<br /><br />
+                            This template supports the placeholders <code>%user_login%</code>,
+                            <code>%user_firstname%</code>,
+                            <code>%user_lastname%</code>, <code>%user_email%</code>, <code>%display_name%</code>,
+                            <code>%ID%</code>, <code>%user_role%</code>, <code>%yyyy-mm-dd%</code>,
+                            <code>%hh:mm%</code>, <code>%uniqueID%</code>, <code>%directory_separator% (/)</code>
+                            <br /><br /> <strong>Example:</strong> Set it to<code>/Documents/%yyyy-mm-dd%</code> if
+                            you want the module to display the sub folder <code>{Start
+                              Folder}/{Name Template}/Documents/{%yyyy-mm-dd%}</code>
+                            ></td>
                         </tr>
                         <tr>
                           <th>Template Folder</th>
@@ -1808,7 +1837,7 @@ public function change_event_summary_email($template_location, $notification){
                               <li><b>Go</b> to the Page Editor and <b>open</b> the Out-of-the-Box Shortcode Builder</li>
                               <li><b>Go</b> to Folders panel and <b>enable the Use Private Folders setting</b> in the
                                 Smart Client Area section</li>
-                              <li>In the same section set the Mode to <b>I will link the users manually</b></li>
+                              <li>In the same section set the Mode to <b>Manual: I will link the users manually</b></li>
                               <li>Configure any other settings you need and <b>press</b> the <b>"Insert Shortcode"</b>
                                 button</li>
                               <li>Done!</li>
@@ -1859,7 +1888,8 @@ public function change_event_summary_email($template_location, $notification){
                               <li><b>Go</b> to the Page Editor and <b>open</b> the Out-of-the-Box Shortcode Builder</li>
                               <li><b>Go</b> to Folders panel and <b>enable</b> the Use Private Folders setting in the
                                 Smart Client Area section</li>
-                              <li>In the same section set the Mode to <b>Let the plugin automatically manage the Private
+                              <li>In the same section set the Mode to <b>Auto: Let the plugin automatically manage the
+                                  Private
                                   Folders for me</b></li>
                               <li>Configure any other settings you need and press the <b>"Insert Shortcode"</b> button
                               </li>
@@ -2463,11 +2493,160 @@ public function change_event_summary_email($template_location, $notification){
                     </thead>
                     <tbody>
                       <tr>
+                        <td>1.19.10</td>
+                        <td>19 July 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: API updates not always clearing cache data</li>
+                            <li>Fix: Enqueue scripts and styles in Gravity Form integration in a different way</li>
+                            <li>Fix: Scroll event on mobile devices could open the lightbox unexpectedly </li>
+                            <li>Improved: Added embed support for files with previews supported by Dropbox API</li>
+                            <li>Improved: Faster ZIP download for complete, unfiltered, folders.</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.9</td>
+                        <td>1 July 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Right-to-left layout incorrectly applied to Media Player module
+                              (subfolder now working without private folders)</li>
+                            <li>Fix: Clicking on a file in the File Browser could trigger the preview/download action
+                              twice</li>
+                            <li>Fix: Gallery background not using color as set in the Color Palette</li>
+                            <li>Improved: Removed outdated or depricated PHP / CSS code</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.8</td>
+                        <td>8 June 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: <code>%account_email%</code> placeholder for recipient for the email
+                              notifications. This
+                              placeholder will contain the email address of the linked Cloud Account</li>
+                            <li>Fix: Direct Links to folders were pointing to the root folder of the module</li>
+                            <li>Fix: CORS issue with VAST XML urls</li>
+                            <li>Fix: The set subfolder location in the shortcode configuration for manually linked
+                              Private Folders not working when using the standalone Upload Box module</li>
+                            <li>Improved: Shortcode Builder will check if modules are still linked to accessible content
+                            </li>
+                            <li>Updated: Chart.js library version to 3.3.2</li>
+                            <li>Updated: Datatables library version to 1.10.25</li>
+                            <li>Updated: Tagify library version to 4.2.0</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.7</td>
+                        <td>22 May 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: Option to select own branding image showing when iFrames are loaded</li>
+                            <li>Added: Support for Dropbox .web shortcuts</li>
+                            <li>Fix: Click event not firing when only external preview is available</li>
+                            <li>Fix: Some actions were still available even when reCaptcha failed validation</li>
+                            <li>Improved: added support for Private Folders for the WooCommerce File/Folder download
+                              selector</li>
+                            <li>Improved: Added explanation for (personal) data usage when linking your cloud accounts
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.6</td>
+                        <td>29 April 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: WooCommerce download integration selector not opening when using Gutenberg as page
+                              editor for your products</li>
+                            <li>Updated: Gravity Forms integration now support GF version >2.5 which contains a new form
+                              editor</li>
+                            <li>Improved: Increased Front-End performance by reducing the number of JS events for plugin
+                              elements</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.5</td>
+                        <td>22 April 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Media Player 'Last modified' sorting order not working</li>
+                            <li>Fix: Media Player playlist not opening folder structure when first file in playlist is
+                              inside a subfolder.</li>
+                            <li>Updated: Chartjs Library to version 3.1.0</li>
+                            <li>Updated: Font Awesome to version 5.15.3</li>
+                            <li>Updated: PHPThumb library to version 1.7.16</li>
+                            <li>Updated: Replaced PHPZip library with ZipStream library</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.4</td>
+                        <td>13 April 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: New setting to disable thumbnails in File Browser when hovering over items in
+                              List view</li>
+                            <li>Fix: Form integrations not storing the metadata of uploaded files in form submissions
+                            </li>
+                            <li>Fix: User Folders not created when registered via Admin dashboard</li>
+                            <li>Fix: Prevent double click action when using disabled inline preview</li>
+                            <li>Fix: Prevent Drag & Drop handlings on Upload Boxes that are blocked</li>
+                            <li>Improved: Direct links will now also be shortened when using the Shortener API</li>
+                            <li>Improved: Remove error message on when search is aborted or a new search is executed
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.3</td>
+                        <td>30 March 2021</td>
+                        <td>
+                          <ul>
+                            <li>Improved: Private Folders Name Template can now also be controlled per shortcode/module
+                            </li>
+                            <li>Improved: Private Folders Name Template & WooCommerce Upload Folders now supports
+                              directories (e.g. <code>/%user_login/%yyyy-mm-dd%/</code>)</li>
+                            <li>Improved: Subfolder setting now supports dynamic placeholders</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.2</td>
+                        <td>28 March 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: Integration for Fluent Forms</li>
+                            <li>Fix: <code>%uniqueID%</code> placeholder now only updated on rendering module</li>
+                            <li>Fix: Clear search when switching between accounts</li>
+                            <li>Improved: Conditional Logic support for form integrations is now skipping 'required'
+                              validation if field is hidden by logic</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.19.1</td>
+                        <td>25 March 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: Removed folder upload action for devices that don't support this</li>
+                            <li>Fix: Layout issue in Media Player playlist</li>
+                            <li>Fix: iFrame in Lightbox now always keeps a width of 100%</li>
+                            <li>Fix: New Dropbox namespace caused issues for loading specific classes</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
                         <td>1.19</td>
                         <td>20 March 2021</td>
                         <td>
                           <ul>
-                            <li>Added: %wc_order_date_created% placeholder for WooCommerce Upload integration</li>
+                            <li>Added: <code>%wc_order_date_created%</code> placeholder for WooCommerce Upload
+                              integration</li>
                             <li>Fix: Upload events for earlier uploaded files can be fired multiple times when uploading
                               additional files via the same Upload module.</li>
                             <li>Fix: Conflicts with MediaElement.js video players can in some case be resolved by
@@ -2501,7 +2680,8 @@ public function change_event_summary_email($template_location, $notification){
                           <ul>
                             <li>Added: New 'Open Subfolder' setting which can be used to set a specific sub folder in a
                               Private Folder as top folder.</li>
-                            <li>Added: New %uniqueID and %hh:mm% placeholders for Private Folder name template</li>
+                            <li>Added: New <code>%uniqueID</code> and <code>%hh:mm%</code> placeholders for Private
+                              Folder name template</li>
                             <li>Fix: Resolved compatability issues with overwritting window.onload functions</li>
                             <li>Improved: Keep selected File Browser 'View' in memory</li>
                             <li>Improved: Added placeholders for initial File Browser and Gallery loading</li>
@@ -2859,337 +3039,6 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Improved: Add/Edit descriptions dialogs</li>
                             <li>Improved: Added better support for sites using RTL </li>
                             <li>Improved: Various other layout updates</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.10</td>
-                        <td>1 May 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in Media Player removing files with same filenames</li>
-                            <li>Fix: Loop function in Media Player not working in combination with
-                              Playlist</li>
-                            <li>Improved: Keep Video Captions selected when switching between
-                              videos in playlist</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.9</td>
-                        <td>23 April 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: cURL error "easy handle already used in multi handle" in latest version of the
-                              cURL
-                              library</li>
-                            <li>Fix: Only create Private Folders for newly registered users which have access to the
-                              plugin shortcodes</li>
-                            <li>Fix: Contact Form 7 button not always disabled initially when Upload Box is a required
-                              field</li>
-                            <li>Fix: Full Text search option not accessible in Shortcode Builder when selecting Search
-                              mode</li>
-                            <li>Added: outofthebox_woocommerce_upload_box_title hook to control Upload Box Title in
-                              WooCommerce products</li>
-                            <li>Improved: New setting which stores the text displayed when an user without manually
-                              linked Private Folder visits a
-                              shortcode with this feature enabled.</li>
-                            <li>Updated: Font Awesome library to version 5.13.0</li>
-                            <li>Updated: Plugin Update Checker to version 4.9</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.8</td>
-                        <td>1 April 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Automatically linked Private Folders in 'Direct Links' and 'Embed' popup not
-                              always
-                              pointing to the correct folder in situations with multiple accounts</li>
-                            <li>Fix: Permissions not working properly for WP users without display Name/nickname set
-                            </li>
-                            <li>Fix: Can't send delete notifications to %linked_users% when the Private folder itself
-                              is
-                              deleted</li>
-                            <li>Fix: UTF-8 export of CSV files in Report section</li>
-                            <li>Fix: Bug in plugin could keep sending 'Lost authorization' emails for accounts that
-                              are
-                              alreadyremoved from the account list</li>
-                            <li>Added: Deeplink functionality which allow users to generate direct links folders/files
-                              in the Shortcode. Only users with access to the shortcode and content will be able to
-                              open
-                              the link</li>
-                            <li>Updated: Font Awesome to version 5.12.1</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.7</td>
-                        <td>3 March 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Sorting order Playlist Media Player</li>
-                            <li>Fix: When enabled, download buttons in Playlist were not working correctly</li>
-                            <li>Fix: WooCommerce Upload integration now using metadata of the variable product itself
-                              instead of its parent product</li>
-                            <li>Fix: Default shortcode in new Gravity Form field was not working</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.6</td>
-                        <td>14 February 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Email Summary not rendering all logged events</li>
-                            <li>Fix: Removed delete_expired_transients() function as minimum WP version is still 4.8
-                              which doesn't contain this function yet.</li>
-                            <li>Added: Return of the Legacy/no longer supported Media Player (jPlayer) which can be
-                              used
-                              when having problems with the currrent mediaplayer</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.5</td>
-                        <td>21 January 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Thumbnails outside viewport not loading properly when moving into view in a
-                              scrollable container</li>
-                            <li>Fix: WooCommerce Upload Box are showing again when using it in combination with
-                              Product
-                              Variations</li>
-                            <li>Updated: Font Awesome library to 5.12.0</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.4</td>
-                        <td>7 January 2020</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in WooCommerce integration when showing (older) orders with products that are
-                              not longer available in the shop</li>
-                            <li>Fix: Gravity Form submit button can remain hidden when using multiple upload forms on
-                              the same page</li>
-                            <li>Improved: Media Player Playlist no longer hidden when it contains only a single item
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.3</td>
-                        <td>31 December 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Dropbox API no longer providing image/video dimensions when loading folder</li>
-                            <li>Fix: Incorrect layout Gravity Form submit button when Upload Box field is used</li>
-                            <li>Fix: Bug in UTF8 file names when downloading products via WooCommerce Digital Products
-                              with 'Force Download' setting</li>
-                            <li>Fix: Bug in WooCommerce integration when using products extending the WP_Products
-                              class
-                            </li>
-                            <li>Fix: Dropbox Team folders not appearing properly when using Dropbox Business accounts
-                            </li>
-                            <li>Improved: Add support for Front-End MCE Editor</li>
-                            <li>Improved: Added support for large thumbnails as images preview instead of the raw file
-                              itself</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.2</td>
-                        <td>9 December 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Lightbox not working on iPadOS 13.x + Safari 13.x</li>
-                            <li>Fix: Preview events not logged when using multiple accounts</li>
-                            <li>Fix: Gravity PDF integration not uploading files when using multiple accounts</li>
-                            <li>Fix: Bug in permissions/roles where the name is a number</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16.1</td>
-                        <td>28 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug with authorization tokens when moving plugin location</li>
-                            <li>Fix: Bug prevening WooCommerce orders to show up when downloadable files are not
-                              longer
-                              accessible(e.g. when they are deleted from the cloud)</li>
-                            <li>Fix: Prevent version updates to run on initial install</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.16</td>
-                        <td>26 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Lightbox not responsive for images with large dimensions (> 5000 x 5000)</li>
-                            <li>Added: Can now link multiple Dropbox accounts to the plugin at the same time</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.15.2</td>
-                        <td>22 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Media Player could crash when using WordPress 4.9 or lower</li>
-                            <li>Fix: Bug WooCommerce integration when loading 'Thank You' page while no order data is
-                              present</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.15.1</td>
-                        <td>13 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Error when logging events for files without extension</li>
-                            <li>Improved: Generating zip downloads will not longer use memory</li>
-                            <li>Improved: Extended Documentation</li>
-                            <li>Improved: Minor layout changes</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.15</td>
-                        <td>9 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in Media Player preventing to stream captions</li>
-                            <li>Fix: In French translation distorting main plugin options page</li>
-                            <li>Added: Email summary for all activities in a certain period. You can enable this via
-                              'Statistics' -> 'Summary Email' on the main plugin options page</li>
-                            <li>Added: New permissions selector allowing you to select both WP Roles and WP Users</li>
-                            <li>Added: Support for Chromecast and Airplay in Media Player</li>
-                            <li>Added: Support for Dropbox Paper</li>
-                            <li>Improved: New notifications with more filters to modify it. The filter
-                              'outofthebox_notification' is deprecated and replaced with different
-                              'outofthebox_notification_...' hooks</li>
-                            <li>Improved: The %linked_user_email% placeholder in Notification Recipients can now be
-                              used
-                              in all shortcodes.</li>
-                            <li>Improved: System information tab rebuild.</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.6</td>
-                        <td>1 November 2019</td>
-                        <td>
-                          <ul>
-                            <li>Added: New setting to enable/disable navigation in Lightbox</li>
-                            <li>Added: Support for %linked_user_email% email notification placeholder for
-                              automatically
-                              linked Private Folders</li>
-                            <li>Improved: Move action now has folder selection dialog to send files directly to
-                              destination</li>
-                            <li>Improved: Changed Layout of Folders in Gallery mode</li>
-                            <li>Updated: MediaElement library to version 4.2.14</li>
-                            <li>Updated: Plugin Update Checker to version 4.8.1</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.5</td>
-                        <td>30 October 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug changed layout of submit button on Contact Form 7 forms containing plugin
-                            </li>
-                            <li>Fix: Gravity Forms submission when Upload Box on last page</li>
-                            <li>Added: New setting to enable/disable navigation in Lightbox</li>
-                            <li>Added: Support for wpDataTables with Gravity Form submissions containing plugin
-                              uploads
-                            </li>
-                            <li>Updated: Font Awesome Library to version 5.11.2</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.4</td>
-                        <td>4 October 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug preventing to update/delete WP Users when using Private Folders feature while
-                              plugin isn't longer linked with Cloud Account</li>
-                            <li>Fix: WooCommerce Upload box in Back-End Order not starting upload</li>
-                            <li>Fix: Upload Box integration in Gravity Forms not working properly on multipages forms
-                            </li>
-                            <li>Fix: Bug when using multiple Upload Boxes on same Contact Form 7 form</li>
-                            <li>Fix: Shortcode Builder buttons not visible in Elementor Text Widget</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.3.1</td>
-                        <td>25 September 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Bug in WooCommerce Upload integration preventing to create order specific folders
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.3</td>
-                        <td>19 September 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Plugin stopped can stop working when cache files couldn't longer be updated (WP
-                              Engine). </li>
-                            <li>Fix: Removed empty < a> anchors from breadcrumbs</li>
-                            <li>Fix: Playlist layout on mobile devices</li>
-                            <li>Improved: Changed layout Shortcode Builder</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.2</td>
-                        <td>9 September 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Incorrect file upload limit shown</li>
-                            <li>Fix: In case of a Multisite setup, email notifications will now be send to the site
-                              administrator instead of the global administrator</li>
-                            <li>Fix: Media Player playlist could overflow container</li>
-                            <li>Added: New outofthebox_woocommerce_set_placeholders hook to set custom folder name
-                              placeholders for WooCommerce Private Folders</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14.1</td>
-                        <td>28 August 2019</td>
-                        <td>
-                          <ul>
-                            <li>Fix: Mediaplayer throwing javacript error when no media files are present in folder
-                            </li>
-                            <li>Fix: Download button not accessible in Mediaplayer without playlist</li>
-                          </ul>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>1.14</td>
-                        <td>22 August 2019</td>
-                        <td>
-                          <ul>
-                            <li>Added: Mediaeelement.js as default player for media files. Supports Captions via VTT
-                              files, IMA/VAST Video Advertising, speed control and more</li>
-                            <li>Added: Download menu item for folders</li>
-                            <li>Fix: Bug showing header container when no header elements are present</li>
-                            <li>Fix: Added lazy loading for small thumbnails when showing files in the File Browser
-                              list-view</li>
-                            <li>Improved: Better compatibility when theme is using Font Awesome (v4) icons</li>
-                            <li>Improved: Only loading CSS for the plugin skin when required</li>
-                            <li>Updated: Font Awesome to version 5.10.1</li>
-                            <li>Updated: Language translation files</li>
                           </ul>
                         </td>
                       </tr>

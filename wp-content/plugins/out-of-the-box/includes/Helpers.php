@@ -103,8 +103,8 @@ class Helpers
      * Checks if a particular user has a role.
      * Returns true if a match was found.
      *
-     * @param array    $roles_to_check Roles array.
-     * @param /WP_User $user           WP_User object.
+     * @param array    $roles_to_check roles array
+     * @param /WP_User $user           WP_User object
      *
      * @return bool
      */
@@ -246,8 +246,13 @@ class Helpers
         // Get Users
         $users = get_users(['fields' => ['user_login', 'display_name', 'id']]);
         $user_count = count($users);
+        $i = 1;
 
         foreach ($users as $wp_user) {
+            if ($i > 5000) {
+                // Don't show individual users for very large sites
+                break;
+            }
             $list[] = [
                 'value' => (string) $wp_user->id,
                 'id' => (string) $wp_user->id,
@@ -256,6 +261,7 @@ class Helpers
                 'searchBy' => $wp_user->user_login,
                 'img' => ($user_count < 1000) ? get_avatar_url($wp_user->id, ['size' => '32']) : OUTOFTHEBOX_ROOTPATH.'/css/images/usericon.png',
             ];
+            ++$i;
         }
 
         // Sort the list by name ASC. First Roles, than Users
@@ -265,7 +271,7 @@ class Helpers
             $sort['sort'][$k] = $v['text'];
         }
 
-        @array_multisort($sort['is_role'], SORT_DESC, SORT_REGULAR, $sort['sort'], SORT_ASC, SORT_NATURAL, $list, SORT_ASC, SORT_NATURAL);
+        @array_multisort($sort['is_role'], SORT_DESC, SORT_REGULAR, $sort['sort'], SORT_ASC, SORT_NATURAL, $list, SORT_ASC);
 
         return $list;
     }
@@ -431,6 +437,95 @@ class Helpers
         return preg_replace($search, $replace, $minify);
     }
 
+    public static function apply_placeholders($value, $context = null, $extra = [])
+    {
+        // Add User Placeholders for Guest users
+        if (!isset($extra['user_data'])) {
+            if (is_user_logged_in()) {
+                $extra['user_data'] = wp_get_current_user();
+            } else {
+                $id = uniqid();
+                if (!isset($_COOKIE['OftB-ID'])) {
+                    $expire = time() + 60 * 60 * 24 * 7;
+                    Helpers::set_cookie('OftB-ID', $id, $expire, COOKIEPATH, COOKIE_DOMAIN, false, false, 'strict');
+                } else {
+                    $id = $_COOKIE['OftB-ID'];
+                }
+
+                $extra['user_data'] = new \stdClass();
+                $extra['user_data']->user_login = md5($id);
+                $extra['user_data']->display_name = esc_html__('Guests', 'wpcloudplugins').' - '.$id;
+                $extra['user_data']->ID = $id;
+                $extra['user_data']->user_role = esc_html__('Anonymous user', 'wpcloudplugins');
+            }
+        }
+
+        // User Placeholders
+        if (isset($extra['user_data'])) {
+            $user_data = $extra['user_data'];
+            $value = strtr($value, [
+                '%user_login%' => isset($user_data->user_login) ? $user_data->user_login : '',
+                '%user_email%' => isset($user_data->user_email) ? $user_data->user_email : '',
+                '%user_firstname%' => isset($user_data->user_firstname) ? $user_data->user_firstname : '',
+                '%user_lastname%' => isset($user_data->user_lastname) ? $user_data->user_lastname : '',
+                '%display_name%' => isset($user_data->display_name) ? $user_data->display_name : '',
+                '%ID%' => isset($user_data->ID) ? $user_data->ID : '',
+                '%user_role%' => isset($user_data->roles) ? implode(',', $user_data->roles) : '',
+            ]);
+        }
+
+        // Extra Placeholders
+        $value = strtr($value, [
+            '%yyyy-mm-dd%' => date('Y-m-d'),
+            '%jjjj-mm-dd%' => date('Y-m-d'), // Backward compatibility
+            '%hh:mm%' => date('Hi'),
+            '%ip%' => self::get_user_ip(),
+            '%directory_separator%' => '/',
+            '%uniqueID%' => get_option('out_of_the_box_uniqueID', 0),
+        ]);
+
+        // Location Placeholder
+        if (false !== strpos($value, '%location%')) {
+            // Geo location only if required
+            $value = strtr($value, [
+                '%location%' => self::get_user_location(),
+            ]);
+        }
+
+        // WooCommerce Products Placeholders
+        if (isset($extra['wc_product'])) {
+            $value = strtr($value, [
+                '%wc_product_id%' => $extra['wc_product']->get_id(),
+                '%wc_product_sku%' => $extra['wc_product']->get_sku(),
+                '%wc_product_name%' => $extra['wc_product']->get_name(),
+            ]);
+
+            if (isset($extra['wc_order'])) {
+                $product_quantity = 0;
+                foreach ($extra['wc_order']->get_items() as $item_id => $item_product) {
+                    if ($item_product->get_product_id() == $extra['wc_product']->get_id()) {
+                        $product_quantity = $extra['wc_order']->get_item_count($item_product->get_type());
+                    }
+                }
+
+                $value = strtr($value, [
+                    '%wc_product_quantity%' => $product_quantity,
+                ]);
+            }
+        }
+
+        // WooCommerce Order Placeholders
+        if (isset($extra['wc_order'])) {
+            $value = strtr($value, [
+                '%wc_order_id%' => $extra['wc_order']->get_order_number(),
+                '%wc_order_quantity%' => $extra['wc_order']->get_item_count(),
+                '%wc_order_date_created%' => $extra['wc_order']->get_date_created()->format('Y-m-d'),
+            ]);
+        }
+
+        return apply_filters('outofthebox_apply_placeholders', $value, $context, $extra);
+    }
+
     public static function get_default_icon($mimetype, $is_dir = false)
     {
         $icon = 'unknown';
@@ -445,6 +540,18 @@ class Helpers
             $icon = 'application-vnd.ms-powerpoint';
         } elseif (false !== strpos($mimetype, 'access') || false !== strpos($mimetype, 'mdb')) {
             $icon = 'application-vnd.ms-access';
+        } elseif (
+            false !== strpos($mimetype, 'photoshop')
+            || 'application/psd' === $mimetype
+            || 'image/psd' === $mimetype
+            ) {
+            $icon = 'application-x-photoshop';
+        } elseif (
+            false !== strpos($mimetype, 'illustrator')
+            || false !== strpos($mimetype, 'postscript')
+            || false !== strpos($mimetype, 'svg')
+            ) {
+            $icon = 'vector';
         } elseif (false !== strpos($mimetype, 'image')) {
             $icon = 'image-x-generic';
         } elseif (false !== strpos($mimetype, 'audio')) {
@@ -459,7 +566,10 @@ class Helpers
                 || false !== strpos($mimetype, 'compressed')
         ) {
             $icon = 'application-zip';
-        } elseif (false !== strpos($mimetype, 'html')) {
+        } elseif (false !== strpos($mimetype, 'html')
+            || false !== strpos($mimetype, 'application/x-httpd-php')
+            || false !== strpos($mimetype, 'application/javascript')
+            ) {
             $icon = 'text-xml';
         } elseif (false !== strpos($mimetype, 'application/exe')
                 || false !== strpos($mimetype, 'application/x-msdownload')
@@ -469,6 +579,10 @@ class Helpers
                 || false !== strpos($mimetype, 'application/x-executable')
         ) {
             $icon = 'application-x-executable';
+        } elseif (false !== strpos($mimetype, 'url')
+        || false !== strpos($mimetype, 'shortcut')
+        ) {
+            $icon = 'shortcut';
         } elseif (false !== strpos($mimetype, 'text')) {
             $icon = 'text-x-generic';
         }
@@ -1230,6 +1344,7 @@ class Helpers
             'pgm' => 'image/x-portable-graymap',
             'pgn' => 'application/x-chess-pgn',
             'pgp' => 'application/pgp-encrypted',
+            'php' => 'application/x-httpd-php',
             'pic' => 'image/x-pict',
             'pkg' => 'application/octet-stream',
             'pki' => 'application/pkixcmp',
@@ -1461,6 +1576,7 @@ class Helpers
             'umj' => 'application/vnd.umajin',
             'unityweb' => 'application/vnd.unity',
             'uoml' => 'application/vnd.uoml+xml',
+            'url' => 'text/url',
             'uri' => 'text/uri-list',
             'uris' => 'text/uri-list',
             'urls' => 'text/uri-list',
@@ -1525,6 +1641,7 @@ class Helpers
             'wcm' => 'application/vnd.ms-works',
             'wdb' => 'application/vnd.ms-works',
             'wdp' => 'image/vnd.ms-photo',
+            'web' => 'text/url',
             'weba' => 'audio/webm',
             'webapp' => 'application/x-web-app-manifest+json',
             'webm' => 'video/webm',
@@ -1772,8 +1889,5 @@ class Helpers
         } catch (\Exception $ex) {
             error_log('[WP Cloud Plugin message]: '.sprintf('Cannot clear cache on line %s: %s', __LINE__, $ex->getMessage()));
         }
-
-
-        return;
     }
 }

@@ -27,6 +27,7 @@ class Integrations
         $this->load_elementor();
         $this->load_gravityforms();
         $this->load_formidableforms();
+        $this->load_fluentforms();
         $this->load_gravitypdf();
         $this->load_gutenberg();
         $this->load_woocommcerce();
@@ -59,7 +60,17 @@ class Integrations
             return false;
         }
 
-        require_once 'gravityforms/init.php';
+        if (class_exists('GFCommon')) {
+            if (version_compare(\GFCommon::$version, '2', '<')) {
+                return false;
+            }
+
+            if (version_compare(\GFCommon::$version, '2.5', '<')) {
+                require_once 'gravityformslegacy/init.php';
+            } else {
+                require_once 'gravityforms/init.php';
+            }
+        }
     }
 
     public function load_formidableforms()

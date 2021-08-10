@@ -585,9 +585,9 @@ class Dropbox
      *
      * @see https://www.dropbox.com/developers/documentation/http/documentation#files-delete_batch
      *
-     * @return FileMetadata|FolderMetadata|\TheLion\OutoftheBox\API\Dropbox\Models\DeletedMetadata
+     * @return \TheLion\OutoftheBox\API\Dropbox\Models\ModelCollection
      */
-    public function deleteBatch($entries)
+    public function deleteBatch($entries, $async =true)
     {
         //Path cannot be null
         if (is_null($entries)) {
@@ -598,6 +598,10 @@ class Dropbox
         $response = $this->postToAPI('/files/delete_batch', ['entries' => $entries]);
 
         //Make and Return the Model
+        if ($async === false){
+            return $this->makeModelFromResponse($response);
+        }
+
         return $this->waitForAsyncRequest($response, '/files/delete_batch/check');
     }
 
@@ -632,9 +636,9 @@ class Dropbox
      *
      * @see https://www.dropbox.com/developers/documentation/http/documentation#files-move_batch
      *
-     * @return DeletedMetadata|FileMetadata|\TheLion\OutoftheBox\API\Dropbox\Models\FileMetadata
+     * @return \TheLion\OutoftheBox\API\Dropbox\Models\ModelCollection
      */
-    public function moveBatch($entries)
+    public function moveBatch($entries, $async =true)
     {
         if (is_null($entries)) {
             throw new DropboxClientException('From and To paths cannot be null.');
@@ -643,6 +647,10 @@ class Dropbox
         //Response
         $response = $this->postToAPI('/files/move_batch_v2', ['entries' => $entries]);
 
+        if ($async === false){
+            return $this->makeModelFromResponse($response);
+        }
+        
         return $this->waitForAsyncRequest($response, '/files/move_batch/check_v2');
     }
 
@@ -703,7 +711,7 @@ class Dropbox
      *
      * @see https://www.dropbox.com/developers/documentation/http/documentation#files-copy_batch
      *
-     * @return DeletedMetadata|FileMetadata|\TheLion\OutoftheBox\API\Dropbox\Models\FileMetadata
+     * @return \TheLion\OutoftheBox\API\Dropbox\Models\ModelCollection
      */
     public function copyBatch($entries)
     {

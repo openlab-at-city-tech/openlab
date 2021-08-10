@@ -74,7 +74,7 @@ class App
         require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
 
         // Call back for refresh token function in SDK client
-        add_action('out-of-the-box-refresh-token', [&$this, 'refresh_token'], 10, 1);
+        add_action('out-of-the-box-refresh-token', [$this, 'refresh_token'], 10, 1);
 
         $own_key = $this->get_processor()->get_setting('dropbox_app_key');
         $own_secret = $this->get_processor()->get_setting('dropbox_app_secret');
@@ -192,16 +192,16 @@ class App
             if (flock($authorization->get_token_file_handle(), LOCK_SH)) {
                 clearstatcache();
                 rewind($authorization->get_token_file_handle());
-                $access_token = fread($authorization->get_token_file_handle(), filesize($authorization->get_token_location()));
+                $token = fread($authorization->get_token_file_handle(), filesize($authorization->get_token_location()));
+                $decrypted_token = Helpers::decrypt($token);
+                $token_object = unserialize($decrypted_token);
                 error_log('[WP Cloud Plugin message]: '.sprintf('New Authorization Token has been received by another process.'));
-                $this->_client->setAccessToken(unserialize($access_token));
+                $this->_client->setAccessToken($token_object);
                 $authorization->unlock_token_file();
 
                 return $this->_client;
             }
         }
-
-        //error_log('[WP Cloud Plugin message]: ' . sprintf('Start renewing the Authorization Token'));
 
         // Stop if we need to get a new AccessToken but somehow ended up without a refreshtoken
         $refresh_token = $access_token->getRefreshToken();
@@ -223,8 +223,6 @@ class App
             $authorization->set_access_token($new_accesstoken);
             $authorization->unlock_token_file();
             $this->get_client()->setAccessToken($new_accesstoken);
-
-            //error_log('[WP Cloud Plugin message]: ' . sprintf('Received new Authorization Token'));
 
             if (false !== ($timestamp = wp_next_scheduled('outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()]))) {
                 wp_unschedule_event($timestamp, 'outofthebox_lost_authorisation_notification', ['account_id' => $account->get_id()]);

@@ -1,12 +1,18 @@
 <?php
-GFForms::include_addon_framework();
 
-class GFOutoftheBoxAddOn extends GFAddOn
+namespace TheLion\OutoftheBox\Integrations;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+class GF_WPCP_AddOn extends \GFAddOn
 {
-    protected $_version = '1.0';
-    protected $_min_gravityforms_version = '1.9';
-    protected $_slug = 'outoftheboxaddon';
-    protected $_path = 'out-of-the-box/includes/integrations/init.php';
+    protected $_version = '2.0';
+    protected $_min_gravityforms_version = '2.5';
+    protected $_slug = 'wpcp-outofthebox';
+    protected $_path = 'out-of-the-box/includes/integrations/gravityforms/init.php';
     protected $_full_path = __FILE__;
     protected $_title = 'Gravity Forms Out-of-the-Box Add-On';
     protected $_short_title = 'Out-of-the-Box Add-On';
@@ -15,256 +21,109 @@ class GFOutoftheBoxAddOn extends GFAddOn
     {
         parent::init();
 
-        if (isset($this->_min_gravityforms_version) && !$this->is_gravityforms_supported($this->_min_gravityforms_version)) {
+        if (!$this->is_gravityforms_supported($this->_min_gravityforms_version)) {
             return;
         }
 
-        // Add a Out-of-the-Box button to the advanced to the field editor
-        add_filter('gform_add_field_buttons', [$this, 'outofthebox_field']);
-        add_filter('admin_enqueue_scripts', [$this, 'outofthebox_extra_scripts']);
-
-        // Now we execute some javascript technicalitites for the field to load correctly
-        add_action('gform_editor_js', [$this, 'gform_editor_js']);
-        add_filter('gform_field_input', [$this, 'outofthebox_input'], 10, 5);
+        // Add default value for field
+        add_action('gform_editor_js_set_default_values', [$this, 'field_defaults']);
 
         // Add a custom setting to the field
-        add_action('gform_field_standard_settings', [$this, 'outofthebox_settings'], 10, 2);
-
-        // Adds title to the custom field
-        add_filter('gform_field_type_title', [$this, 'outofthebox_title'], 10, 2);
+        add_action('gform_field_standard_settings', [$this, 'custom_field_settings'], 10, 2);
 
         // Filter to add the tooltip for the field
-        add_filter('gform_tooltips', [$this, 'add_outofthebox_tooltips']);
-
-        // Save some data for this field
-        add_filter('gform_field_validation', [$this, 'outofthebox_validation'], 10, 4);
-
-        // Display values in a proper way
-        add_filter('gform_entry_field_value', [$this, 'outofthebox_entry_field_value'], 10, 4);
-        add_filter('gform_entries_field_value', [$this, 'outofthebox_entries_field_value'], 10, 4);
-        add_filter('gform_merge_tag_filter', [$this, 'outofthebox_merge_tag_filter'], 10, 5);
+        add_filter('gform_tooltips', [$this, 'add_tooltip']);
 
         // Add support for wpDataTables <> Gravity Form integration
         if (class_exists('WPDataTable')) {
             add_action('wpdatatables_before_get_table_metadata', [$this, 'render_wpdatatables_field'], 10, 1);
         }
+
         // Custom Private Folder names
-        add_filter('outofthebox_private_folder_name', [&$this, 'new_private_folder_name'], 10, 2);
-        add_filter('outofthebox_private_folder_name_guests', [&$this, 'rename_private_folder_names_for_guests'], 10, 2);
+        add_filter('outofthebox_private_folder_name', [$this, 'new_private_folder_name'], 10, 2);
+        add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_names_for_guests'], 10, 2);
+
+        \GF_Fields::register(new GF_WPCP_Field());
     }
 
-    public function outofthebox_extra_scripts()
+    public function scripts()
     {
-        if (GFForms::is_gravity_page()) {
+        if (\GFForms::is_gravity_page()) {
+            global $OutoftheBox;
+
+            $OutoftheBox->load_scripts();
+            $OutoftheBox->load_styles();
+
             add_thickbox();
         }
 
-        wp_enqueue_style('WPCP-GravityForms', plugins_url('style.css', __FILE__));
+        $scripts = [
+            [
+                'handle' => $this->_slug.'-gravityforms',
+                'src' => plugins_url('script.js', __FILE__),
+                'version' => OUTOFTHEBOX_VERSION,
+                'deps' => ['jquery'],
+                'in_footer' => true,
+                'enqueue' => [
+                    [
+                        'admin_page' => ['form_editor', 'entry_edit'],
+                    ],
+                ],
+            ],
+        ];
+
+        return array_merge(parent::scripts(), $scripts);
     }
 
-    public function outofthebox_field($field_groups)
+    public function styles()
     {
-        foreach ($field_groups as &$group) {
-            if ('advanced_fields' == $group['name']) {
-                $group['fields'][] = [
-                    'class' => 'button',
-                    'value' => 'Out-of-the-Box',
-                    'date-type' => 'outofthebox',
-                    'onclick' => "StartAddField('outofthebox');",
-                ];
+        wp_enqueue_style('OutoftheBox.CustomStyle');
 
-                break;
-            }
-        }
+        $styles = [
+            [
+                'handle' => $this->_slug.'-gravityforms',
+                'src' => plugins_url('style.css', __FILE__),
+                'version' => OUTOFTHEBOX_VERSION,
+                'deps' => ['OutoftheBox'],
+                'enqueue' => [
+                    [
+                        'admin_page' => ['form_editor', 'entry_edit'],
+                    ],
+                ],
+            ],
+        ];
 
-        return $field_groups;
+        return array_merge(parent::styles(), $styles);
     }
 
-    public function gform_editor_js()
-    {
-        ?>
-            <script type='text/javascript'>
-                (function ($) {
-                'use strict';
-                                    
-                  /* Which settings field should be visible for our custom field*/
-                  fieldSettings["outofthebox"] = ".label_setting, .description_setting, .admin_label_setting, .error_message_setting, .css_class_setting, .visibility_setting, .rules_setting, .label_placement_setting, .outofthebox_setting, .conditional_logic_field_setting, .conditional_logic_page_setting, .conditional_logic_nextbutton_setting"; //this will show all the fields of the Paragraph Text field minus a couple that I didn't want to appear.
-
-                  /* binding to the load field settings event to initialize */
-                  $(document).on("gform_load_field_settings", function (event, field, form) {
-                    if (field["OutoftheBoxShortcode"] !== undefined && field["OutoftheBoxShortcode"] !== '') {
-                      jQuery("#field_outofthebox").val(field["OutoftheBoxShortcode"]);
-                    } else {
-                      /* Default value */
-                      var defaultvalue = '[outofthebox class="gf_upload_box" mode="upload" upload="1" uploadrole="all" upload_auto_start="0" userfolders="auto" viewuserfoldersrole="none"]';
-                      jQuery("#field_outofthebox").val(defaultvalue);
-                    }
-                  });
-
-                  /* Shortcode Generator Popup */
-                  $('.OutoftheBox-GF-shortcodegenerator').on('click',function (e) {
-                    var shortcode = jQuery("#field_outofthebox").val();
-                    shortcode = shortcode.replace('[outofthebox ', '').replace('"]', '');
-                    var query = encodeURIComponent(shortcode).split('%3D%22').join('=').split('%22%20').join('&');
-                    tb_show("Build Shortcode for Form", ajaxurl + '?action=outofthebox-getpopup&' + query + '&type=shortcodebuilder&asuploadbox=1&callback=wpcp_oftb_gf_add_content&TB_iframe=true&height=600&width=800');
-                  });
-
-                    /* Callback function to add shortcode to GF field */
-                    if (typeof window.wpcp_oftb_gf_add_content === 'undefined') {
-                        window.wpcp_oftb_gf_add_content = function (data) {
-                            $('#field_outofthebox').val(data);
-                            SetFieldProperty('OutoftheBoxShortcode', data);
-
-                            tb_remove();
-                        }
-                    }
-                })(jQuery);
-
-                function SetDefaultValues_outofthebox(field) {
-                  field.label = '<?php esc_html_e('Attach your documents', 'wpcloudplugins'); ?>';
-                }
-            </script>
-            <?php
-    }
-
-    public function outofthebox_input($input, $field, $value, $lead_id, $form_id)
-    {
-        if ('outofthebox' == $field->type) {
-            if (!$this->is_form_editor()) {
-                $return = do_shortcode($field->OutoftheBoxShortcode);
-                $return .= "<input type='hidden' name='input_".$field->id."' id='input_".$form_id.'_'.$field->id."'  class='fileupload-filelist fileupload-input-filelist' value='".(isset($_REQUEST['input_'.$field->id]) ? stripslashes($_REQUEST['input_'.$field->id]) : '')."'>";
-
-                return $return;
-            }
-
-            return '<div class="wpcp-wpforms-placeholder"></div>';
-        }
-
-        return $input;
-    }
-
-    public function outofthebox_settings($position, $form_id)
+    public function custom_field_settings($position, $form_id)
     {
         if (1430 == $position) {
             ?>
-                <li class="outofthebox_setting field_setting">
-                  <label for="field_outofthebox">Out-of-the-Box Shortcode <?php echo gform_tooltip('form_field_outofthebox'); ?></label>
-                  <a href="#" class='button-primary OutoftheBox-GF-shortcodegenerator '><?php esc_html_e('Build your shortcode', 'wpcloudplugins'); ?></a>
-                  <textarea id="field_outofthebox" class="fieldwidth-3 fieldheight-2" onchange="SetFieldProperty('OutoftheBoxShortcode', this.value)"></textarea>
-                  <br/><small>Missing a Out-of-the-Box Gravity Form feature? Please let me <a href="https://florisdeleeuwnl.zendesk.com/hc/en-us/requests/new" target="_blank">know</a>!</small>
-                </li>
-                <?php
+            <li class="outofthebox_setting field_setting">
+              <label for="field_wpcp_outofthebox">Shortcode <?php echo gform_tooltip('form_field_'.$this->_slug); ?></label>
+              <textarea id="field_wpcp_outofthebox" class="large fieldwidth-3 fieldheight-2" onchange="SetFieldProperty('OutoftheBoxShortcode', this.value)"></textarea>
+              </br>
+              <button class='button gform-button primary wpcp-shortcodegenerator outofthebox'><?php esc_html_e('Build your shortcode', 'wpcloudplugins'); ?></button>
+            </li>
+            <?php
         }
     }
 
-    public function outofthebox_title($title, $field_type)
+    public function add_tooltip($tooltips)
     {
-        if ('outofthebox' === $field_type) {
-            return 'Out-of-the-Box '.esc_html__('Upload', 'wpcloudplugins');
-        }
-
-        return $title;
-    }
-
-    public function add_outofthebox_tooltips($tooltips)
-    {
-        $tooltips['form_field_outofthebox'] = '<h6>Out-of-the-Box Shortcode</h6>'.esc_html__('Build your shortcode here', 'wpcloudplugins');
+        $tooltips['form_field_'.$this->_slug] = '<h6>Shortcode</h6>'.esc_html__('Create the module configuration via the Shortcode Builder or copy+paste the raw shortcode in this field', 'wpcloudplugins');
 
         return $tooltips;
     }
 
-    public function outofthebox_validation($result, $value, $form, $field)
+    public function field_defaults()
     {
-        if ('outofthebox' !== $field->type) {
-            return $result;
-        }
-
-        if (false === $field->isRequired) {
-            return $result;
-        }
-
-        // Get information uploaded files from hidden input
-        $filesinput = rgpost('input_'.$field->id);
-        $uploadedfiles = json_decode($filesinput);
-
-        if (empty($uploadedfiles)) {
-            $result['is_valid'] = false;
-            $result['message'] = esc_html__('This field is required. Please upload your files.', 'gravityforms');
-        } else {
-            $result['is_valid'] = true;
-            $result['message'] = '';
-        }
-
-        return $result;
-    }
-
-    public function outofthebox_entry_field_value($value, $field, $lead, $form)
-    {
-        if ('outofthebox' !== $field->type) {
-            return $value;
-        }
-
-        return $this->renderUploadedFiles(html_entity_decode($value));
-    }
-
-    public function render_wpdatatables_field($tableId)
-    {
-        add_filter('gform_get_input_value', [$this, 'outofthebox_get_input_value'], 10, 4);
-    }
-
-    public function outofthebox_get_input_value($value, $entry, $field, $input_id)
-    {
-        if ('outofthebox' !== $field->type) {
-            return $value;
-        }
-
-        return $this->renderUploadedFiles(html_entity_decode($value));
-    }
-
-    public function outofthebox_entries_field_value($value, $form_id, $field_id, $entry)
-    {
-        $form = GFFormsModel::get_form_meta($form_id);
-
-        if (is_array($form['fields'])) {
-            foreach ($form['fields'] as $field) {
-                if ('outofthebox' === $field->type && $field_id == $field->id) {
-                    if (!empty($value)) {
-                        return $this->renderUploadedFiles(html_entity_decode($value));
-                    }
-                }
-            }
-        }
-
-        return $value;
-    }
-
-    public function outofthebox_set_export_values($value, $form_id, $field_id, $lead)
-    {
-        $form = GFFormsModel::get_form_meta($form_id);
-
-        if (is_array($form['fields'])) {
-            foreach ($form['fields'] as $field) {
-                if ('outofthebox' === $field->type && $field_id == $field->id) {
-                    return $this->renderUploadedFiles(html_entity_decode($value), false);
-                }
-            }
-        }
-
-        return $value;
-    }
-
-    public function outofthebox_merge_tag_filter($value, $merge_tag, $modifier, $field, $rawvalue)
-    {
-        if ('outofthebox' == $field->type) {
-            return $this->renderUploadedFiles(html_entity_decode($value));
-        }
-
-        return $value;
-    }
-
-    public function renderUploadedFiles($data, $ashtml = true)
-    {
-        return apply_filters('outofthebox_render_formfield_data', $data, $ashtml, $this);
+        ?>
+    case 'outofthebox':
+        field.label = <?php echo json_encode(esc_html__('Attach your documents', 'wpcloudplugins')); ?>;
+        break;
+    <?php
     }
 
     /**
@@ -308,8 +167,214 @@ class GFOutoftheBoxAddOn extends GFAddOn
 
         return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
     }
+
+    public function render_wpdatatables_field($tableId)
+    {
+        add_filter('gform_get_input_value', [$this, 'wpdatatables_get_input_value'], 10, 4);
+    }
+
+    public function wpdatatables_get_input_value($value, $entry, $field, $input_id)
+    {
+        if ('outofthebox' !== $field->type) {
+            return $value;
+        }
+
+        return apply_filters('outofthebox_render_formfield_data', html_entity_decode($value), true, $this);
+    }
 }
 
-$GFOutoftheBoxAddOn = new GFOutoftheBoxAddOn();
-// This filter isn't fired if inside class
-add_filter('gform_export_field_value', [$GFOutoftheBoxAddOn, 'outofthebox_set_export_values'], 10, 4);
+class GF_WPCP_Field extends \GF_Field
+{
+    public $type = 'outofthebox';
+    public $defaultValue = '[outofthebox class="gf_upload_box" mode="upload" upload="1" uploadrole="all" upload_auto_start="0" userfolders="auto" viewuserfoldersrole="none"]';
+
+    public function get_form_editor_field_title()
+    {
+        return 'Dropbox';
+    }
+
+    public function add_button($field_groups)
+    {
+        $field_groups = $this->maybe_add_field_group($field_groups);
+
+        return parent::add_button($field_groups);
+    }
+
+    public function maybe_add_field_group($field_groups)
+    {
+        foreach ($field_groups as $field_group) {
+            if ('wpcp_group' == $field_group['name']) {
+                return $field_groups;
+            }
+        }
+
+        $field_groups[] = [
+            'name' => 'wpcp_group',
+            'label' => 'WP Cloud Plugins Fields',
+            'fields' => [],
+        ];
+
+        return $field_groups;
+    }
+
+    public function get_form_editor_button()
+    {
+        return [
+            'group' => 'wpcp_group',
+            'text' => $this->get_form_editor_field_title(),
+        ];
+    }
+
+    public function get_form_editor_field_icon()
+    {
+        return 'gform-icon--upload';
+    }
+
+    public function get_form_editor_field_description()
+    {
+        return esc_attr__('Let users attach files to this form. The files will be stored in the cloud', 'wpcloudplugins');
+    }
+
+    public function get_form_editor_field_settings()
+    {
+        return [
+            'conditional_logic_field_setting',
+            'error_message_setting',
+            'label_setting',
+            'label_placement_setting',
+            'admin_label_setting',
+            'rules_setting',
+            'visibility_setting',
+            'duplicate_setting',
+            'description_setting',
+            'css_class_setting',
+            'outofthebox_setting',
+        ];
+    }
+
+    public function get_value_default()
+    {
+        return $this->is_form_editor() ? $this->defaultValue : \GFCommon::replace_variables_prepopulate($this->defaultValue);
+    }
+
+    public function is_conditional_logic_supported()
+    {
+        return false;
+    }
+
+    public function get_field_input($form, $value = '', $entry = null)
+    {
+        $form_id = $form['id'];
+        $is_entry_detail = $this->is_entry_detail();
+        $id = (int) $this->id;
+
+        if ($is_entry_detail) {
+            $input = "<input type='hidden' id='input_{$id}' name='input_{$id}' value='{$value}' />";
+
+            return $input.'<br/>'.esc_html__('This field is not editable', 'wpcloudplugins');
+        }
+
+        if ($this->is_form_editor()) {
+            return $this->get_placeholder();
+        }
+
+        $input = do_shortcode($this->OutoftheBoxShortcode);
+        $input .= "<input type='hidden' name='input_".$id."' id='input_".$form_id.'_'.$id."'  class='fileupload-filelist fileupload-input-filelist' value='".(isset($_REQUEST['input_'.$id]) ? stripslashes($_REQUEST['input_'.$id]) : '')."'>";
+
+        return $input;
+    }
+
+    public function get_placeholder()
+    {
+        if (!empty($this->OutoftheBoxShortcode)) {
+            return do_shortcode($this->OutoftheBoxShortcode);
+        }
+
+        ob_start(); ?>
+            <div id="OutoftheBox" class="light upload">
+                <div class="OutoftheBox upload"style="width: 100%;">
+                    <div class="fileupload-box -is-formfield -is-required -has-files" style="width:100%;max-width:100%;"">
+                    <!-- FORM ELEMENTS -->
+                    <div class="fileupload-form" >
+                    <!-- END FORM ELEMENTS -->
+
+                    <!-- UPLOAD BOX HEADER -->
+                    <div class="fileupload-header">
+                        <div class="fileupload-header-title">
+                            <div class="fileupload-empty">
+                                <div class="fileupload-header-text-title upload-add-file"><?php esc_html_e('Add your file', 'wpcloudplugins'); ?></div>
+                                    <div class="fileupload-header-text-subtitle upload-add-folder"><a><?php esc_html_e('Or select a folder', 'wpcloudplugins'); ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END UPLOAD BOX HEADER -->
+
+                    </div>
+                </div>
+            </div>
+            <?php
+        return ob_get_clean();
+    }
+
+    public function validate($value, $form)
+    {
+        if (false === $this->isRequired) {
+            return;
+        }
+
+        // Get information uploaded files from hidden input
+        $attached_files = json_decode($value);
+
+        if (empty($attached_files)) {
+            $this->failed_validation = true;
+
+            if (!empty($this->errorMessage)) {
+                $this->validation_message = $this->errorMessage;
+            } else {
+                $this->validation_message = esc_html__('This field is required. Please upload your files.', 'gravityforms');
+            }
+        }
+    }
+
+    public function get_value_merge_tag($value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br)
+    {
+        return $this->renderUploadedFiles(html_entity_decode($value), ('html' === $format));
+    }
+
+    public function get_value_entry_detail($value, $currency = '', $use_text = false, $format = 'html', $media = 'screen')
+    {
+        return $this->renderUploadedFiles(html_entity_decode($value), ('html' === $format));
+    }
+
+    public function get_value_entry_list($value, $entry, $field_id, $columns, $form)
+    {
+        if (!empty($value)) {
+            return $this->renderUploadedFiles(html_entity_decode($value));
+        }
+    }
+
+    public function get_value_export($entry, $input_id = '', $use_text = false, $is_csv = false)
+    {
+        $value = rgar($entry, $input_id);
+
+        return $this->renderUploadedFiles(html_entity_decode($value), false);
+    }
+
+    public function renderUploadedFiles($data, $ashtml = true)
+    {
+        return apply_filters('outofthebox_render_formfield_data', $data, $ashtml, $this);
+    }
+
+    public function get_field_container_tag($form)
+    {
+        if (\GFCommon::is_legacy_markup_enabled($form)) {
+            return parent::get_field_container_tag($form);
+        }
+
+        return 'fieldset';
+    }
+}
+
+\GFForms::include_addon_framework();
+$GF_WPCP_AddOn = new GF_WPCP_AddOn();

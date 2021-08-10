@@ -22,17 +22,17 @@ class ContactForm
 
         $this->_main = $_main;
 
-        add_action('wpcf7_init', [&$this, 'add_shortcode_handler']);
-        add_action('wpcf7_admin_init', [&$this, 'add_tag_generator'], 60);
+        add_action('wpcf7_init', [$this, 'add_shortcode_handler']);
+        add_action('wpcf7_admin_init', [$this, 'add_tag_generator'], 60);
 
-        add_action('admin_enqueue_scripts', [&$this, 'add_admin_scripts']);
-        add_action('wpcf7_admin_footer', [&$this, 'load_admin_scripts']);
+        add_action('admin_enqueue_scripts', [$this, 'add_admin_scripts']);
+        add_action('wpcf7_admin_footer', [$this, 'load_admin_scripts']);
 
-        add_filter('wpcf7_mail_tag_replaced_outofthebox*', [&$this, 'set_email_tag'], 999, 4);
-        add_filter('wpcf7_mail_tag_replaced_outofthebox', [&$this, 'set_email_tag'], 999, 4);
+        add_filter('wpcf7_mail_tag_replaced_outofthebox*', [$this, 'set_email_tag'], 999, 4);
+        add_filter('wpcf7_mail_tag_replaced_outofthebox', [$this, 'set_email_tag'], 999, 4);
 
-        add_filter('outofthebox_private_folder_name', [&$this, 'new_private_folder_name'], 10, 2);
-        add_filter('outofthebox_private_folder_name_guests', [&$this, 'rename_private_folder_names_for_guests'], 10, 2);
+        add_filter('outofthebox_private_folder_name', [$this, 'new_private_folder_name'], 10, 2);
+        add_filter('outofthebox_private_folder_name_guests', [$this, 'rename_private_folder_names_for_guests'], 10, 2);
     }
 
     public function add_admin_scripts($hook_suffix)
@@ -46,7 +46,7 @@ class ContactForm
 
         wp_enqueue_script('WPCloudplugin.Libraries');
         wp_enqueue_script('OutoftheBox.ShortcodeBuilder');
-        wp_enqueue_style('Awesome-Font-5-css');
+        wp_enqueue_style('Awesome-Font-5');
         wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
     }
 
@@ -144,7 +144,7 @@ class ContactForm
 
         $required = ('*' == substr($tag->type, -1));
         if ($required) {
-            add_filter('outofthebox_shortcode_set_options', [&$this, 'set_required_shortcode'], 10, 3);
+            add_filter('outofthebox_shortcode_set_options', [$this, 'set_required_shortcode'], 10, 3);
         }
 
         // Shortcode

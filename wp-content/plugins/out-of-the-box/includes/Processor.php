@@ -61,7 +61,7 @@ class Processor
     public function __construct(Main $_main)
     {
         $this->_main = $_main;
-        register_shutdown_function([&$this, 'do_shutdown']);
+        register_shutdown_function([$this, 'do_shutdown']);
 
         $this->settings = get_option('out_of_the_box_settings');
         if ($this->is_network_authorized()) {
@@ -77,7 +77,7 @@ class Processor
             define('FORCE_REFRESH', true);
         }
 
-        add_filter('outofthebox-set-root-namespace-id', [&$this, 'get_root_namespace_id'], 10, 1);
+        add_filter('outofthebox-set-root-namespace-id', [$this, 'get_root_namespace_id'], 10, 1);
     }
 
     public function start_process()
@@ -143,21 +143,13 @@ class Processor
             exit(1);
         }
 
-        if (is_wp_error($authorized)) {
-            error_log('[WP Cloud Plugin message]: '." Function start_process() isn't authorized");
-
-            if ('1' === $this->options['debug']) {
-                exit($authorized->get_error_message());
-            }
-
-            exit();
-        }
-
         if ((!isset($_REQUEST['listtoken']))) {
-            error_log('[WP Cloud Plugin message]: '." Function start_process() requires a 'listtoken' request");
+            $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '"url unknown"';
+            $request = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            error_log('[WP Cloud Plugin message]: '." Function start_process() requires a 'listtoken' on {$url} requested via {$request}");
             error_log(var_export($_REQUEST, true));
 
-            exit(1);
+            exit();
         }
 
         $this->listtoken = $_REQUEST['listtoken'];
@@ -199,17 +191,15 @@ class Processor
 
         // Open Sub Folder if needed
         if (!empty($this->options['subfolder']) && '/' !== $this->options['subfolder']) {
-            if ('manual' === $this->options['user_upload_folders'] || ('auto' === $this->options['user_upload_folders'] && !Helpers::check_user_role($this->options['view_user_folders_role']))) {
-                $sub_folder_path = apply_filters('outofthebox_set_subfolder_path', $this->options['subfolder'], $this->options, $this);
-                $subfolder = $this->get_client()->get_sub_folder_by_path($this->_rootFolder, $sub_folder_path, true);
+            $sub_folder_path = apply_filters('outofthebox_set_subfolder_path', Helpers::apply_placeholders($this->options['subfolder'], $this), $this->options, $this);
+            $subfolder = $this->get_client()->get_sub_folder_by_path($this->_rootFolder, $sub_folder_path, true);
 
-                if (is_wp_error($subfolder) || false === $subfolder) {
-                    error_log('[WP Cloud Plugin message]: '.'Cannot find or create the subfolder');
+            if (is_wp_error($subfolder) || false === $subfolder) {
+                error_log('[WP Cloud Plugin message]: '.'Cannot find or create the subfolder');
 
-                    exit('-1');
-                }
-                $this->_rootFolder = $subfolder->get_path();
+                exit('-1');
             }
+            $this->_rootFolder = $subfolder->get_path();
         }
 
         $this->_rootFolder = html_entity_decode($this->_rootFolder);
@@ -538,8 +528,36 @@ class Processor
 
                 break;
 
+            case 'outofthebox-shorten-url':
+                if (false === $this->get_user()->can_deeplink()) {
+                    exit();
+                }
+
+                $node = $this->get_client()->get_entry();
+                $url = esc_url_raw($_REQUEST['url']);
+
+                $shortened_url = $this->get_client()->shorten_url($node, $url);
+
+                $data = [
+                    'id' => $node->get_id(),
+                    'name' => $node->get_name(),
+                    'url' => $shortened_url,
+                ];
+
+                echo json_encode($data);
+
+                exit();
+
             case 'outofthebox-event-log':
                 return;
+
+            case 'outofthebox-getads':
+                $ads_url = ('' !== $this->get_shortcode_option('ads_tag_url') ? htmlspecialchars_decode($this->get_shortcode_option('ads_tag_url')) : $this->get_setting('mediaplayer_ads_tagurl'));
+                $response = wp_remote_get($ads_url);
+                header('Content-Type: text/xml; charset=UTF-8');
+                echo wp_remote_retrieve_body($response);
+
+                exit();
 
             default:
                 error_log('[WP Cloud Plugin message]: '.sprintf('No valid AJAX request: %s', $_REQUEST['action']));
@@ -573,6 +591,7 @@ class Processor
             'maxfiles' => '-1',
             'filesize' => '1',
             'filedate' => '1',
+            'hoverthumbs' => '1',
             'filelayout' => 'list',
             'showext' => '1',
             'showroot' => '0',
@@ -696,15 +715,15 @@ class Processor
 
             $account_class = $this->get_accounts()->get_account_by_id($account);
             if (null === $account_class) {
-                error_log('[WP Cloud Plugin message]: shortcode cannot be rendered as the requested account is not linked with the plugin');
+                error_log('[WP Cloud Plugin message]: Module cannot be rendered as the requested account is not linked with the plugin');
 
-                return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+                return '&#9888; <strong>'.esc_html__('Module cannot be rendered as the requested content is not (longer) accessible. Contact the administrator to get access.', 'wpcloudplugins').'</strong>';
             }
 
             $this->set_current_account($account_class);
 
-            //Force $candownloadzip = 0 if we can't use ZipArchive
-            if (!class_exists('ZipArchive')) {
+            //Force $candownloadzip = 0 if we can't use ZIP library
+            if ((version_compare(phpversion(), '7.1.0', '<'))) {
                 $candownloadzip = '0';
             }
 
@@ -772,6 +791,7 @@ class Processor
                 'filelayout' => $filelayout,
                 'show_filesize' => $filesize,
                 'show_filedate' => $filedate,
+                'hover_thumbs' => $hoverthumbs,
                 'show_ext' => $showext,
                 'show_root' => $showroot,
                 'sort_field' => $sortfield,
@@ -796,7 +816,7 @@ class Processor
                 'preview_role' => $previewrole,
                 'download_role' => $downloadrole,
                 'share_role' => $sharerole,
-                'previewinline' => $previewinline,
+                'previewinline' => ('1' === $forcedownload) ? '0' : $previewinline,
                 'forcedownload' => $forcedownload,
                 'maximages' => $maximages,
                 'notificationupload' => $notificationupload,
@@ -876,7 +896,7 @@ class Processor
         }
 
         if (null === $this->get_current_account() || false === $this->get_current_account()->get_authorization()->has_access_token()) {
-            return '<i>>>> '.esc_html__('ERROR: Contact the Administrator to see this content', 'wpcloudplugins').' <<<</i>';
+            return '&#9888; <strong>'.esc_html__('Module cannot be rendered as the requested content is not (longer) accessible. Contact the administrator to get access.', 'wpcloudplugins').'</strong>';
         }
 
         ob_start();
@@ -896,19 +916,23 @@ class Processor
             return;
         }
 
+        // Update Unique ID
+        update_option('out_of_the_box_uniqueID', get_option('out_of_the_box_uniqueID', 0) + 1);
+
         // Render the  template
-        $rootfolder = ''; //(($this->options['user_upload_folders'] !== '0') && !\TheLion\OutoftheBox\Helpers::check_user_role($this->options['view_user_folders_role'])) ? '' : $this->options['root'];
+        $rootfolder = '';
+        $dataaccountid = (false !== $this->options['startaccount']) ? $this->options['startaccount'] : $this->options['account'];
 
         $colors = $this->get_setting('colors');
 
         if ('manual' === $this->options['user_upload_folders']) {
             $userfolder = get_user_option('out_of_the_box_linkedto');
             if (is_array($userfolder) && isset($userfolder['foldertext'])) {
-                $rootfolder = $userfolder['folderid'];
+                $dataaccountid = $userfolder['accountid'];
             } else {
                 $defaultuserfolder = get_site_option('out_of_the_box_guestlinkedto');
                 if (is_array($defaultuserfolder) && isset($defaultuserfolder['folderid'])) {
-                    $rootfolder = $defaultuserfolder['folderid'];
+                    $dataaccountid = $userfolder['accountid'];
                 } else {
                     echo "<div id='OutoftheBox' class='{$colors['style']}'>";
                     $this->load_scripts('general');
@@ -919,11 +943,13 @@ class Processor
                     return;
                 }
             }
+
+            $linked_account = $this->get_accounts()->get_account_by_id($dataaccountid);
+            $this->set_current_account($linked_account);
         }
 
         $dataorgid = $rootfolder;
         $rootfolder = (false !== $this->options['startpath']) ? $this->options['startpath'] : $rootfolder;
-        $dataaccountid = (false !== $this->options['startaccount']) ? $this->options['startaccount'] : $this->options['account'];
 
         $shortcode_class = ('shortcode' === $this->options['mcepopup']) ? 'initiate' : '';
 
@@ -937,7 +963,7 @@ class Processor
             case 'files':
                 $this->load_scripts('files');
 
-                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." jsdisabled' data-list='files' data-token='{$this->listtoken}'  data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-popout='".$this->options['canpopout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}' data-action='{$this->options['mcepopup']}'>";
+                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files jsdisabled' data-list='files' data-token='{$this->listtoken}'  data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-popout='".$this->options['canpopout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}' data-action='{$this->options['mcepopup']}'>";
 
                 if ('linkto' === $this->get_shortcode_option('mcepopup') || 'linktobackendglobal' === $this->get_shortcode_option('mcepopup')) {
                     $button_text = esc_html__('Use the Root Folder of your Account', 'wpcloudplugins');
@@ -974,7 +1000,7 @@ class Processor
                     $nextimages = "data-loadimages='".$this->options['maximages']."'";
                 }
 
-                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox gridgallery jsdisabled' data-list='gallery' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."'  data-targetheight='".$this->options['targetheight']."' data-deeplink='".((!empty($_REQUEST['image'])) ? $_REQUEST['image'] : '')."' data-slideshow='".$this->options['slideshow']."' data-pausetime='".$this->options['pausetime']."' {$nextimages} data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
+                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox wpcp-gallery jsdisabled' data-list='gallery' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."'  data-targetheight='".$this->options['targetheight']."' data-deeplink='".((!empty($_REQUEST['image'])) ? $_REQUEST['image'] : '')."' data-slideshow='".$this->options['slideshow']."' data-pausetime='".$this->options['pausetime']."' {$nextimages} data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
 
                 include sprintf('%s/templates/frontend/gallery.php', OUTOFTHEBOX_ROOTDIR);
                 $this->render_uploadform();
@@ -983,7 +1009,7 @@ class Processor
                 break;
 
             case 'search':
-                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files oftb-".$this->options['filelayout']." searchlist jsdisabled' data-list='search' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
+                echo "<div id='OutoftheBox-{$this->listtoken}' class='OutoftheBox files searchlist jsdisabled' data-list='search' data-token='{$this->listtoken}' data-account-id='{$dataaccountid}' data-path='".rawurlencode($rootfolder)."' data-org-id='".$dataorgid."' data-org-path='".rawurlencode($this->_lastPath)."' data-source='".md5($this->options['account'].$this->options['root'].$this->options['mode'])."' data-sort='".$this->options['sort_field'].':'.$this->options['sort_order']."' data-deeplink='".((!empty($_REQUEST['file'])) ? $_REQUEST['file'] : '')."' data-layout='".$this->options['filelayout']."' data-lightboxnav='".$this->options['lightbox_navigation']."' data-query='{$this->options['searchterm']}'>";
                 $this->load_scripts('files');
 
                 include sprintf('%s/templates/frontend/search.php', OUTOFTHEBOX_ROOTDIR);
@@ -1379,6 +1405,34 @@ class Processor
         return false;
     }
 
+    public function embed_entry($entryid)
+    {
+        $entry = $this->get_client()->get_entry($entryid, false);
+
+        if (false === $entry || false === $entry->get_can_preview_by_cloud()) {
+            return false;
+        }
+
+        if (in_array($entry->get_extension(), ['xls', 'xlsx', 'xlsm', 'gsheet', 'csv'])) {
+            header('Content-Type: text/html');
+        } else {
+            header('Content-Disposition: inline; filename="'.$entry->get_basename().'.pdf"');
+            header('Content-Description: "'.$entry->get_basename().'"');
+            header('Content-Type: application/pdf');
+        }
+
+        try {
+            $preview_file = $this->get_client()->get_library()->preview($entry->get_path());
+            echo $preview_file->getContents();
+        } catch (\Exception $ex) {
+            error_log('[WP Cloud Plugin message]: '.sprintf('API Error on line %s: %s', __LINE__, $ex->getMessage()));
+
+            exit('-1');
+        }
+
+        return true;
+    }
+
     // Check if $extensions array has $entry
 
     public function _is_extension_authorized($entry, $extensions, $prefix = '.')
@@ -1711,14 +1765,15 @@ class Processor
         switch ($template) {
             case 'general':
                 if (false === defined('WPCP_DISABLE_FONTAWESOME')) {
-                    wp_enqueue_style('Awesome-Font-5-css');
+                    wp_enqueue_style('Awesome-Font-5');
                     if ('Yes' === $this->get_setting('fontawesomev4_shim')) {
-                        wp_enqueue_style('Awesome-Font-4-shim-css');
+                        wp_enqueue_style('Awesome-Font-4-shim');
                     }
                 }
 
-                wp_enqueue_style('OutoftheBox');
+                wp_enqueue_style('OutoftheBox.CustomStyle');
                 wp_enqueue_script('OutoftheBox');
+                wp_enqueue_script('google-recaptcha');
 
                 break;
 
@@ -1732,7 +1787,6 @@ class Processor
                 wp_enqueue_script('jquery-effects-fade');
                 wp_enqueue_style('ilightbox');
                 wp_enqueue_style('ilightbox-skin-outofthebox');
-                wp_enqueue_script('google-recaptcha');
 
                 break;
 
@@ -1740,7 +1794,6 @@ class Processor
                 break;
 
             case 'upload':
-                //wp_enqueue_style('OutoftheBox-fileupload-jquery-ui');
                 wp_enqueue_script('jquery-ui-droppable');
                 wp_enqueue_script('jquery-ui-button');
                 wp_enqueue_script('jquery-ui-progressbar');
@@ -1749,10 +1802,6 @@ class Processor
                 wp_enqueue_script('jQuery.fileupload-process');
                 wp_enqueue_script('OutoftheBox.UploadBox');
 
-                wp_enqueue_script('google-recaptcha');
-
-                Helpers::append_dependency('OutoftheBox', 'OutoftheBox.UploadBox');
-                Helpers::append_dependency('OutoftheBox', 'OutoftheBox.UploadBox');
                 Helpers::append_dependency('OutoftheBox', 'OutoftheBox.UploadBox');
 
                 break;
@@ -1819,6 +1868,7 @@ class Processor
                 case 'outofthebox-create-zip':
                 case 'outofthebox-delete-entries':
                 case 'outofthebox-event-log':
+                case 'outofthebox-shorten-url':
                     $is_authorized = check_ajax_referer($_REQUEST['action'], false, false);
 
                     break;
@@ -1834,6 +1884,7 @@ class Processor
                 case 'outofthebox-getpopup':
                 case 'outofthebox-thumbnail':
                 case 'outofthebox-preview':
+                case 'outofthebox-getads':
                     $is_authorized = true;
 
                     break;

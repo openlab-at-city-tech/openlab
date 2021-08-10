@@ -18,7 +18,7 @@ $controls = implode(',', $this->get_processor()->get_shortcode_option('mediabutt
 $autoplay = $this->get_processor()->get_shortcode_option('autoplay');
 
 $ads_active = '1' === $this->get_processor()->get_shortcode_option('ads');
-$ads_tag_url = ('' !== $this->get_processor()->get_shortcode_option('ads_tag_url') ? htmlspecialchars_decode($this->get_processor()->get_shortcode_option('ads_tag_url')) : $this->get_processor()->get_setting('mediaplayer_ads_tagurl'));
+$ads_tag_url = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-getads&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
 $ads_can_skip = '1' === $this->get_processor()->get_shortcode_option('ads_skipable');
 
 $shortcode_ads_skip_after_seconds = $this->get_processor()->get_shortcode_option('ads_skipable_after');

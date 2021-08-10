@@ -14,20 +14,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 // check for magic quotes in PHP < 7.4.0 (when these functions became deprecated)
-// phpcs:disable PHPCompatibility.IniDirectives
 if (version_compare(PHP_VERSION, '7.4.0', '<')) {
 	ini_set('magic_quotes_runtime', '0');
 	if (ini_get('magic_quotes_runtime')) {
 		die('"magic_quotes_runtime" is set in php.ini, cannot run phpThumb with this enabled');
 	}
 }
-// phpcs:enable PHPCompatibility.IniDirectives
-
 // Set a default timezone if web server has not done already in php.ini
 if (!ini_get('date.timezone') && function_exists('date_default_timezone_set')) { // PHP >= 5.1.0
     date_default_timezone_set('UTC');
 }
 $starttime = array_sum(explode(' ', microtime())); // could be called as microtime(true) for PHP 5.0.0+
+
+// this script relies on the superglobal arrays, fake it here for old PHP versions
+if (PHP_VERSION < '4.1.0') {
+	$_SERVER = $HTTP_SERVER_VARS;
+	$_GET    = $HTTP_GET_VARS;
+}
 
 function SendSaveAsFileHeaderIfNeeded($getimagesize=false) {
 	if (headers_sent()) {
@@ -222,8 +225,7 @@ if (isset($_GET['phpThumbDebug']) && ($_GET['phpThumbDebug'] == '0')) {
 // check for magic quotes in PHP < 7.4.0 (when these functions became deprecated)
 if (version_compare(PHP_VERSION, '7.4.0', '<')) {
 	// returned the fixed string if the evil "magic_quotes_gpc" setting is on
-	// phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
-	if (function_exists( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc()) {
+	if (get_magic_quotes_gpc()) {
 		// deprecated: 'err', 'file', 'goto',
 		$RequestVarsToStripSlashes = array('src', 'wmf', 'down');
 		foreach ($RequestVarsToStripSlashes as $key) {
@@ -340,7 +342,6 @@ if ($phpThumb->config_mysql_query) {
 		if ($found_missing_function) {
 			$phpThumb->ErrorImage('SQL function unavailable: '.$found_missing_function);
 		} else {
-			// phpcs:disable PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
 			if ($cid = @mysql_connect($phpThumb->config_mysql_hostname, $phpThumb->config_mysql_username, $phpThumb->config_mysql_password)) {
 				if (@mysql_select_db($phpThumb->config_mysql_database, $cid)) {
 					if ($result = @mysql_query($phpThumb->config_mysql_query, $cid)) {
@@ -364,7 +365,6 @@ if ($phpThumb->config_mysql_query) {
 					mysql_close($cid);
 					$phpThumb->ErrorImage('cannot select MySQL database: "'.mysql_error($cid).'"');
 				}
-			// phpcs:enable PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved
 			} else {
 				$phpThumb->ErrorImage('cannot connect to MySQL server');
 			}
@@ -532,7 +532,7 @@ while ($CanPassThroughDirectly && $phpThumb->src) {
 		if ($phpThumb->config_disable_onlycreateable_passthru || (function_exists($theImageCreateFunction) && ($dummyImage = @$theImageCreateFunction($SourceFilename)))) {
 
 			// great
-			if (@is_resource($dummyImage)) {
+			if (@is_resource($dummyImage) || (@is_object($dummyImage) && $dummyImage instanceOf \GdImage)) {
 				unset($dummyImage);
 			}
 

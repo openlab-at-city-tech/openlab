@@ -302,7 +302,7 @@ class User_List_Table extends \WP_List_Table
             'buttons' => '',
         ];
 
-        //$users = get_users();
+        
 
         foreach ($users as $user) {
             // Gravatar

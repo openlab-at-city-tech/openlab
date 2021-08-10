@@ -1,20 +1,12 @@
 'use strict';
 
-if (document.querySelector('.OutoftheBox')) {
-  document.querySelectorAll('.OutoftheBox').forEach(function (container) {
-    container.addEventListener('init_media_player', function (event) {
-      window.init_legacy_out_of_the_box_media_player(event.target.getAttribute('data-token'));
-    });
-  });
-}
-
 var oftb_playlists = {};
 
 
 (function ($) {
   'use strict';
 
-  window.init_legacy_out_of_the_box_media_player = function (listtoken) {
+  window.init_out_of_the_box_media_player = function (listtoken) {
     var container = document.querySelector('.media[data-token="' + listtoken + '"]');
     var extensions = container.querySelector('.jp_container').getAttribute('data-extensions');
     var mode = $(container).hasClass('audio') ? 'audio' : 'video';
@@ -111,7 +103,7 @@ var oftb_playlists = {};
             dataname = self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
             " - " + self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-artist").html();
 
-          sendGooglePageView('Download', dataname);
+          sendAnalyticsOFTB('Download', dataname);
 
           // Delay a few milliseconds for Tracking event
           setTimeout(function () {
@@ -135,7 +127,7 @@ var oftb_playlists = {};
 
         var dataname = self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
           " - " + self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-artist").html();
-        sendGooglePageView('Play Music', dataname);
+        sendAnalyticsOFTB('Play Music', dataname);
       }
     });
 
@@ -197,7 +189,7 @@ var oftb_playlists = {};
             dataname = self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
             " - " + self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-artist").html();
 
-          sendGooglePageView('Download', dataname);
+          sendAnalyticsOFTB('Download', dataname);
 
           // Delay a few milliseconds for Tracking event
           setTimeout(function () {
@@ -251,7 +243,7 @@ var oftb_playlists = {};
 
         var dataname = $jPlayer.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
           " - " + $jPlayer.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-artist").html();
-        sendGooglePageView('Play Video', dataname);
+        sendAnalyticsOFTB('Play Video', dataname);
 
       }
 

@@ -268,20 +268,6 @@ if (!function_exists('wpcp_help_tip')) {
         ?>
       </td>
     </tr>
-    <tr>
-      <td>ZipArchive:</td>
-      <td class="help"><?php echo wpcp_help_tip(esc_html__('This extension (ZipArchive) is used when creating zip files while downloading multiple files at once.', 'wpcloudplugins')); ?></td>
-      <td>
-        <?php
-        if ($environment['zip_archive']) {
-            echo '<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>';
-        } else {
-            // Translators: %s: classname and link.
-            echo '<mark class="no"><span class="dashicons dashicons-no-alt"></span> '.sprintf(esc_html__('Your server does not support the %s function - this is required for creating zip files.', 'wpcloudplugins'), '<a href="https://www.php.net/manual/en/zip.setup.php">ZipArchive</a>').'</mark>';
-        }
-        ?>
-      </td>
-    </tr>
     <?php
     $rows = apply_filters('outofthebox_system_status_environment_rows', []);
     foreach ($rows as $row) {

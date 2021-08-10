@@ -32,8 +32,8 @@ function OutoftheBox_remove_all_styles()
     global $wp_styles;
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-    wp_enqueue_style('OutoftheBox');
-    wp_enqueue_style('Awesome-Font-5-css');
+    wp_enqueue_style('OutoftheBox.CustomStyle');
+    wp_enqueue_style('Awesome-Font-5');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
