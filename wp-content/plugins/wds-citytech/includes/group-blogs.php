@@ -604,7 +604,7 @@ function wds_bp_group_meta() {
 
 		<?php $group_site_url = openlab_get_group_site_url( $the_group_id ); ?>
 
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="panel-site-details">
 			<div class="panel-heading">Site Details</div>
 			<div class="panel-body">
 
@@ -668,148 +668,149 @@ function wds_bp_group_meta() {
 							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
-						<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
-							<div>
+						<div id="site-options">
+							<div id="wds-website-tooltips" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
+								<div>
 
-							<?php
-							switch ( $group_type ) {
-								case 'course':
-									?>
-									<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
-
-									<ul class="ol-tooltip">
-										<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-										<li class="hyphenate">smithadv1100sp2012</li>
-									</ul>
-
-									<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
-									<?php
-									break;
-
-								case 'project':
-									?>
-									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
-									<?php
-									break;
-
-								case 'club':
-									?>
-									<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
-									<?php
-									break;
-							}
-							?>
-							</div>
-						</div>
-
-						<?php if ( bp_is_group_create() && $group_type !== 'portfolio' ) : ?>
-							<div id="wds-website-clone" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
-								<div id="noo_clone_options">
-									<div class="row">
-										<div class="radio disabled-opt col-sm-6">
-											<label>
-												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
-												Name your cloned site:</label>
-										</div>
-										<div class="col-sm-5 site-label">
-											<?php global $current_site; ?>
-											<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
-										</div>
-										<div class="col-sm-13">
-											<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
-										</div>
-										<input name="blog-id-to-clone" value="" type="hidden" />
-									</div>
-									<p id="cloned-site-url"></p>
-								</div>
-
-							</div>
-						<?php endif ?>
-
-						<div id="wds-website" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
-
-							<div id="noo_new_options">
-								<div id="noo_new_options-div" class="row">
-									<div class="radio col-sm-6">
-										<label>
-											<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
-											Create a new site:</label>
-									</div>
-
-									<div class="col-sm-5 site-label">
-										<?php
-										$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
-										echo esc_html( $current_site->domain . $current_site->path );
+								<?php
+								switch ( $group_type ) {
+									case 'course':
 										?>
-									</div>
+										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
 
-									<div class="col-sm-13">
-										<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
-									</div>
+										<ul class="ol-tooltip">
+											<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+											<li class="hyphenate">smithadv1100sp2012</li>
+										</ul>
+
+										<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+										<?php
+										break;
+
+									case 'project':
+										?>
+										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
+										<?php
+										break;
+
+									case 'club':
+										?>
+										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+										<?php
+										break;
+								}
+								?>
 								</div>
-
 							</div>
-						</div>
 
-						<?php /* Existing blogs - only display if some are available */ ?>
-						<?php
-						// Exclude blogs already used as groupblogs
-						global $wpdb, $bp;
-						$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
+							<?php if ( bp_is_group_create() && $group_type !== 'portfolio' ) : ?>
+								<div id="wds-website-clone" class="form-field form-required">
+									<div id="noo_clone_options">
+										<div class="row">
+											<div class="radio disabled-opt col-sm-6">
+												<label>
+													<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_clone" value="clone" disabled/>
+													Name your cloned site:</label>
+											</div>
+											<div class="col-sm-5 site-label">
+												<?php global $current_site; ?>
+												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
+											</div>
+											<div class="col-sm-13">
+												<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
+											</div>
+											<input name="blog-id-to-clone" value="" type="hidden" />
+										</div>
+										<p id="cloned-site-url"></p>
+									</div>
 
-						foreach ( $user_blogs as $ubid => $ub ) {
-							if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
-								unset( $user_blogs[ $ubid ] );
-							}
-						}
-						$user_blogs = array_values( $user_blogs );
-						?>
+								</div>
+							<?php endif ?>
 
-						<?php if ( ! empty( $user_blogs ) ) : ?>
-							<div id="wds-website-existing" class="form-field form-required" style="display:<?php echo esc_html( $show_website ); ?>">
+							<div id="wds-website" class="form-field form-required">
 
-								<div id="noo_old_options">
-									<div class="row">
+								<div id="noo_new_options">
+									<div id="noo_new_options-div" class="row">
 										<div class="radio col-sm-6">
 											<label>
-												<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
-												Use an existing site:</label>
+												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
+												Create a new site:</label>
+										</div>
+
+										<div class="col-sm-5 site-label">
+											<?php
+											$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
+											echo esc_html( $current_site->domain . $current_site->path );
+											?>
+										</div>
+
+										<div class="col-sm-13">
+											<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<?php /* Existing blogs - only display if some are available */ ?>
+							<?php
+							// Exclude blogs already used as groupblogs
+							global $wpdb, $bp;
+							$current_groupblogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" ); // WPCS: unprepared SQL ok.
+
+							foreach ( $user_blogs as $ubid => $ub ) {
+								if ( in_array( $ub->userblog_id, $current_groupblogs ) ) {
+									unset( $user_blogs[ $ubid ] );
+								}
+							}
+							$user_blogs = array_values( $user_blogs );
+							?>
+
+							<?php if ( ! empty( $user_blogs ) ) : ?>
+								<div id="wds-website-existing" class="form-field form-required">
+
+									<div id="noo_old_options">
+										<div class="row">
+											<div class="radio col-sm-6">
+												<label>
+													<input type="radio" class="noo_radio" id="new_or_old_old" name="new_or_old" value="old" />
+													Use an existing site:</label>
+											</div>
+											<div class="col-sm-18">
+												<label class="sr-only" for="groupblog-blogid">Choose a site</label>
+												<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
+													<option value="0">- Choose a site -</option>
+													<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
+														<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
+													<?php endforeach ?>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php endif ?>
+
+							<div id="wds-website-external" class="form-field form-required">
+
+								<div id="noo_external_options">
+									<div class="form-group row">
+										<div class="radio col-sm-6">
+											<label>
+												<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
+												Use an external site:
+											</label>
 										</div>
 										<div class="col-sm-18">
-											<label class="sr-only" for="groupblog-blogid">Choose a site</label>
-											<select class="form-control" name="groupblog-blogid" id="groupblog-blogid">
-												<option value="0">- Choose a site -</option>
-												<?php foreach ( (array) $user_blogs as $user_blog ) : ?>
-													<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
-												<?php endforeach ?>
-											</select>
+											<label class="sr-only" for="external-site-url">Input external site URL</label>
+											<input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
+											<a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
 										</div>
 									</div>
 								</div>
 							</div>
-						<?php endif ?>
-
-						<div id="wds-website-external" class="form-field form-required" style="display:<?php echo esc_attr( $show_website ); ?>">
-
-							<div id="noo_external_options">
-								<div class="form-group row">
-									<div class="radio col-sm-6">
-										<label>
-											<input type="radio" class="noo_radio" id="new_or_old_external" name="new_or_old" value="external" />
-											Use an external site:
-										</label>
-									</div>
-									<div class="col-sm-18">
-										<label class="sr-only" for="external-site-url">Input external site URL</label>
-										<input class="form-control pull-left" type="text" name="external-site-url" id="external-site-url" placeholder="http://" />
-										<a class="btn btn-primary no-deco top-align pull-right" id="find-feeds" href="#" display="none">Check<span class="sr-only"> external site for Post and Comment feeds</span></a>
-									</div>
-								</div>
-							</div>
+							<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
 						</div>
-						<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
-					</div>
-
+					</div><!-- #site-options -->
 				<?php endif; ?>
 			</div>
 		</div>
@@ -1685,6 +1686,12 @@ class OpenLab_GroupBlog_Template_Picker {
 
 }
 
+// Disable admin notices for wp-grade-comments.
+add_filter( 'olgc_display_notices', '__return_false' );
+
+// Disable admin notices for openlab-private-comments.
+add_filter( 'olpc_display_notices', '__return_false' );
+
 /**
  * Map "instructor" status to group administrator for wp-grade-comments.
  */
@@ -1693,61 +1700,6 @@ function openlab_olgc_is_instructor() {
 	return groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
-
-/**
- * Set up admin notice when wp-grade-comments is activated.
- */
-function openlab_olgc_activation() {
-	if ( ! get_option( 'olgc_notice_dismissed' ) ) {
-		update_option( 'olgc_notice_dismissed', '0' );
-	}
-}
-add_action( 'activate_wp-grade-comments/wp-grade-comments.php', 'openlab_olgc_activation' );
-
-/**
- * Show wp-grade-comments activation admin notice.
- */
-function openlab_olgc_notice() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	if ( ! is_plugin_active( 'wp-grade-comments/wp-grade-comments.php' ) ) {
-		return;
-	}
-
-	// Allow dismissal.
-	if ( get_option( 'olgc_notice_dismissed' ) ) {
-		return;
-	}
-
-	// Groan
-	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
-	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
-	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
-
-	?>
-	<style type="text/css">
-		.olgc-notice-message {
-			position: relative;
-		}
-		.olgc-notice-message > p > span {
-			width: 80%;
-		}
-		.olgc-notice-message-dismiss {
-			position: absolute;
-			right: 15px;
-		}
-	</style>
-	<div class="updated fade olgc-notice-message">
-		<p><span>Please note: The WP Grade Comments plugin allows all Site Administrators to add, view, and edit private comments and grades.</span>
-		<a class="olgc-notice-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
-		</p>
-	</div>
-	<?php
-}
-add_action( 'admin_notices', 'openlab_olgc_notice' );
 
 /**
  * Catch wp-grade-comments notice dismissals.
@@ -1928,3 +1880,101 @@ add_action(
 	10,
 	3
 );
+
+/**
+ * Hide private comments even after the plugin is deactivated.
+ *
+ * @param WP_Comment_Query $query
+ * @return void
+ */
+function openlab_private_comments_fallback( WP_Comment_Query $query ) {
+	// Bail if request if from the main site.
+	if ( isset( $query->query_vars['main_site'] ) && $query->query_vars['main_site'] ) {
+		return;
+	}
+
+	// Make private comments visible for admins in the dashboard.
+	if ( is_admin() && current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$meta_query     = [];
+	$active_plugins = (array) get_option( 'active_plugins', [] );
+
+	if ( ! in_array( 'wp-grade-comments/wp-grade-comments.php', $active_plugins, true ) ) {
+		$meta_query[] = [
+			'relation' => 'OR',
+			[
+				'key'   => 'olgc_is_private',
+				'value' => '0',
+			],
+			[
+				'key' => 'olgc_is_private',
+				'compare' => 'NOT EXISTS',
+			],
+		];
+	}
+
+	if ( ! in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true ) ) {
+		$meta_query[] = [
+			'relation' => 'OR',
+			[
+				'key'   => 'ol_is_private',
+				'value' => '0',
+			],
+			[
+				'key' => 'ol_is_private',
+				'compare' => 'NOT EXISTS',
+			],
+		];
+	}
+
+	if ( count( $meta_query ) > 1 ) {
+		$meta_query['relation'] = 'AND';
+	}
+
+	if ( ! empty( $meta_query ) ) {
+		$query->meta_query = new WP_Meta_Query( $meta_query );
+	}
+}
+add_action( 'pre_get_comments', 'openlab_private_comments_fallback' );
+
+// If one of the plugins is active. The `openlab_private_comments_fallback` will apply to count.
+if (
+	! has_filter( 'get_comments_number', 'olgc_get_comments_number' ) &&
+	! has_filter( 'get_comments_number', 'OpenLab\\PrivateComments\\filter_comment_count' )
+) {
+	add_filter( 'get_comments_number', 'openlab_comment_count_fallback', 20, 2 );
+}
+
+/**
+ * Filter comment count after plugins are deactivated.
+ *
+ * @param int $count   Comment count.
+ * @param int $post_id ID of the post.
+ * @return int $count  Adjusted comment count.
+ */
+function openlab_comment_count_fallback( $count, $post_id = 0 ) {
+	// No need for fallback when we don't have post or comments.
+	if ( empty( $post_id ) || empty( $count ) ) {
+		return $count;
+	}
+
+	// Check plugin artifacts.
+	$grade_comments   = get_option( 'olgc_notice_dismissed' );
+	$private_comments = get_option( 'olpc_notice_dismissed' );
+
+	$filter_count = ( $grade_comments !== false || $private_comments !== false );
+	if ( ! $filter_count ) {
+		return $count;
+	}
+
+	// Query if filtered via `openlab_private_comments_fallback` function.
+	$query = new \WP_Comment_Query();
+	$comments = $query->query( [
+		'post_id' => $post_id,
+		'fields'  => 'ids',
+	] );
+
+	return count( $comments );
+}

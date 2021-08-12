@@ -7,6 +7,11 @@ The following list comprises ideas, suggestions, and known issues, all of which 
 * When a comment gets approved/unapproved via comment action links, update commenter's count accordingly
   * Update comment count and pending comment count (just fetch an updated bubble -- most accurate, or update the bubble directly -- least surprising to user, especially if the counts would jump due to updates made since page render)
   * Also update author comment bubbles found elsewhere on the page
+  * JS: Hook when post row gets updated/changed as a result of click of unapprove/approve link. (hook 'click', then wait for change to row, then trigger updater)
+    Updater: Did comment state change? If so, determine new comment bubble. (quickest would be to request the markup via API)
+      Update bubble for current row. Then find other rows for person with same email address
+      `document.querySelectorAll('.column-author a[href="mailto:${email}"]').closest('td').querySelector('.column-response');`
+      and replace the comment bubble for each with what was returned by API
 * Allow admin to manually group commenters with different email addresses
   * Allows for grouping a person who may be using multiple email addresses, or maybe admin prefers to group people per organization
   * The reported counts would be for the group and not the individual

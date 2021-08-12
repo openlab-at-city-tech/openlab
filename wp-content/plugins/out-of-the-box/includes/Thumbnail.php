@@ -10,7 +10,7 @@ class Thumbnail
     private $_app;
 
     /**
-     * @var \Kunnu\Dropbox\Dropbox
+     * @var \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     private $_client;
 
@@ -333,10 +333,10 @@ class Thumbnail
     {
         if (!class_exists('\TheLion\OutoftheBox\phpthumb')) {
             try {
-                require_once 'phpThumb/phpthumb.class.php';
+                require_once OUTOFTHEBOX_ROOTDIR.'/vendors/phpThumb/phpthumb.class.php';
             } catch (\Exception $ex) {
                 // TO DO LOG
-                die("Can't load PHPTHUMB Library");
+                exit("Can't load PHPTHUMB Library");
             }
         }
 
@@ -362,7 +362,7 @@ class Thumbnail
     }
 
     /**
-     * @return \Kunnu\Dropbox\Dropbox
+     * @return \TheLion\OutoftheBox\API\Dropbox\Dropbox
      */
     private function _get_client()
     {

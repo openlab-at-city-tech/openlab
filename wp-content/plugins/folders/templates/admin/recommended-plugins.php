@@ -144,8 +144,8 @@ if ( $data && ! is_wp_error( $data ) ) {
 ?>
 <div class="wrap mystickyelement-wrap recommended-plugins">
     <h2>
-        <?php _e('Try out our recommended plugins', WCP_FOLDER); ?>
-        <a class="hide-recommended-btn" href="#" class=""><?php _e('Hide From Menu', WCP_FOLDER);?></a>
+        <?php _e('Try out our recommended plugins', 'folders'); ?>
+        <a class="hide-recommended-btn" href="#" class=""><?php _e('Hide From Menu', 'folders');?></a>
     </h2>
 </div>
 <div class="wrap recommended-plugins">

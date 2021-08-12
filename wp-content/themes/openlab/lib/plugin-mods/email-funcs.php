@@ -168,6 +168,10 @@ function openlab_ass_add_notice_to_notifications_page() {
 		</div>
 <?php
 }
-
-remove_action ( 'bp_notification_settings', 'ass_add_notice_to_notifications_page', 9000 );
-add_action( 'bp_notification_settings', 'openlab_ass_add_notice_to_notifications_page', 9000 );
+add_action(
+	'bp_screens',
+	function() {
+		remove_action( 'bp_notification_settings', 'ass_add_notice_to_notifications_page', 9000 );
+		add_action( 'bp_notification_settings', 'openlab_ass_add_notice_to_notifications_page', 9000 );
+	}
+);

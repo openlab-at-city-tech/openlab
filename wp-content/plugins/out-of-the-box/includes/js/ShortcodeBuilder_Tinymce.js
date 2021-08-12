@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
   var oftb_toolbarActive = false;
 
@@ -73,8 +75,8 @@
 
       ed.on('mouseup', function (event) {
         var image,
-                node = event.target,
-                dom = ed.dom;
+          node = event.target,
+          dom = ed.dom;
 
         // Don't trigger on right-click
         if (event.button && event.button > 1) {
@@ -110,7 +112,7 @@
         // Key presses will replace the image so we need to remove the toolbar
         if (oftb_toolbarActive) {
           if (event.ctrlKey || event.metaKey || event.altKey ||
-                  (keyCode < 48 && keyCode > 90) || keyCode > 186) {
+            (keyCode < 48 && keyCode > 90) || keyCode > 186) {
             return;
           }
 
@@ -140,8 +142,7 @@
       function getAttr(s, n) {
         n = new RegExp(n + '=\"([^\"]+)\"', 'g').exec(s);
         return n ? n[1] : '';
-      }
-      ;
+      };
 
       return co.replace(/(?:<p[^>]*>)*(<img[^>]+>)(?:<\/p>)*/g, function (a, im) {
         var cls = getAttr(im, 'class');
@@ -167,7 +168,7 @@
 
   function addOftBToolbar(node, editor) {
     var toolbarHtml, toolbar,
-            dom = editor.dom;
+      dom = editor.dom;
 
     removeOftBToolbar(editor);
 
@@ -179,7 +180,7 @@
     dom.setAttrib(node, 'data-wp-oftbselect', 1);
 
     toolbarHtml = '<div class="dashicons dashicons-edit edit" data-mce-bogus="1"></div>' +
-            '<div class="dashicons dashicons-no-alt remove" data-mce-bogus="1"></div>';
+      '<div class="dashicons dashicons-no-alt remove" data-mce-bogus="1"></div>';
 
     toolbar = dom.create('div', {
       'id': 'wp-oftb-toolbar',
@@ -217,7 +218,9 @@
   }
 
   /* Create Base64 Object */
-  var Base64 = {_keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", encode: function (e) {
+  var Base64 = {
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+    encode: function (e) {
       var t = "";
       var n, r, i, s, o, u, a;
       var f = 0;
@@ -238,7 +241,8 @@
         t = t + this._keyStr.charAt(s) + this._keyStr.charAt(o) + this._keyStr.charAt(u) + this._keyStr.charAt(a)
       }
       return t
-    }, decode: function (e) {
+    },
+    decode: function (e) {
       var t = "";
       var n, r, i;
       var s, o, u, a;
@@ -262,7 +266,8 @@
       }
       t = Base64._utf8_decode(t);
       return t
-    }, _utf8_encode: function (e) {
+    },
+    _utf8_encode: function (e) {
       e = e.replace(/\r\n/g, "\n");
       var t = "";
       for (var n = 0; n < e.length; n++) {
@@ -279,10 +284,11 @@
         }
       }
       return t
-    }, _utf8_decode: function (e) {
+    },
+    _utf8_decode: function (e) {
       var t = "";
       var n = 0;
-      var r = c1 = c2 = 0;
+      var r, c1, c2; r = c1 = c2 = 0;
       while (n < e.length) {
         r = e.charCodeAt(n);
         if (r < 128) {
@@ -300,6 +306,7 @@
         }
       }
       return t
-    }}
+    }
+  }
 
 })();

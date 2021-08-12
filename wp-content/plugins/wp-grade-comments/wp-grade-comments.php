@@ -307,23 +307,23 @@ function olgc_get_inaccessible_comments( $user_id, $post_id = 0 ) {
  *
  * @since 1.0.0
  *
- * @param int $count   Comment counte.
+ * @param int $count   Comment count.
  * @param int $post_id ID of the post.
  * @return int
  */
 function olgc_get_comments_number( $count, $post_id = 0 ) {
-	if ( empty( $post_id ) ) {
+	// No need for fallback when we don't have post or comments.
+	if ( empty( $post_id ) || empty( $count ) ) {
 		return $count;
 	}
 
 	$cquery = new WP_Comment_Query();
 	$comments_for_post = $cquery->query( array(
 		'post_id' => $post_id,
-		'count' => true,
+		'fields'  => 'ids',
 	) );
-	$count = $comments_for_post;
 
-	return $count;
+	return count( $comments_for_post );
 }
 add_filter( 'get_comments_number', 'olgc_get_comments_number', 10, 2 );
 

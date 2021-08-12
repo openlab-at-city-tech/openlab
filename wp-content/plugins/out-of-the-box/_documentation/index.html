@@ -174,6 +174,7 @@
 
                     <ul class='sub'>
                       <li><a href="#woocommerce">WooCommerce</a></li>
+                      <li><a href="#fluentforms">Fluent Forms</a></li>
                       <li><a href="#wpforms">WPForms</a></li>
                       <li><a href="#formidableforms">Formidable Forms</a></li>
                       <li><a href="#contact-form">Contact Form 7</a></li>
@@ -194,7 +195,7 @@
                     </ul>
 
                   </li>
-                  <li><a href="#releasenotes">Release Notes (version 1.18.1)</a></li>
+                  <li><a href="#releasenotes">Release Notes (version 1.19)</a></li>
 
                 </ul>
               </div>
@@ -796,7 +797,8 @@
                           <td>Template used when a Private Folder for an user is created. This template can contain
                             several placeholders like <code>%user_login%</code>, <code>%user_email%</code>,
                             <code>%display_name%</code>, <code>%ID%</code>, <code>%user_role%</code>,
-                            <code>%jjjj-mm-dd%</code>. If you want to be able to send notifications to the owner of this
+                            <code>%jjjj-mm-dd%</code>, <code>%hh:mm%</code>, <code>%uniqueID%</code>. If you want to be
+                            able to send notifications to the owner of this
                             folder the template should contain <code>%user_email%</code>.</td>
                         </tr>
                       </tbody>
@@ -1404,6 +1406,13 @@ public function change_event_summary_email($template_location, $notification){
                           <th>Mode</th>
                           <td>Select if you want to link your users manually to their Private Folder or if the plugin
                             should handle this for you.</td>
+                        </tr>
+                        <tr>
+                          <th>Open Subfolder</th>
+                          <td>Set the subfolder name or path of the sub folder inside a Private Folder which should
+                            be set a start folder for the module. The subfolder will be automatically created if it does
+                            not yet exist.<br /><br /> <strong>Example:</strong> Set it to<code>/Documents</code> if you
+                            want the module to display the folder <code>/Users/{Private Folder}/Documents</code> </td>
                         </tr>
                         <tr>
                           <th>Template Folder</th>
@@ -2052,6 +2061,45 @@ public function change_event_summary_email($template_location, $notification){
                     </a>
                   </div>
 
+                  <div class="tim-row" id="fluentforms">
+                    <h3>Fluent Forms Integration</h3>
+                    <legend></legend>
+
+                    <p>Do you want more flexibility than the Upload Form that is included? The plugin seamlessly
+                      integrates into the Fluent Forms plugin allowing you the create the perfect form! To add
+                      the plugin in your form, follow these instructions:</p>
+
+                    <ol>
+                      <li><b>Create</b> a new Form (<b>[Fluent Forms] -> [Add New]</b>) or <b>open</b> an existing
+                        one</li>
+                      <li><b>Drag</b> the plugins form element to your form</li>
+                      <li><b>Open</b> the details of the newly added form element</li>
+                      <li><b>Click</b> on the <b>"Open Shortcode Builder"</b> button</li>
+                      <li>In the Shortcode Builder that opens, <b>create</b> the shortcode that you need</li>
+                      <li><b>Press "Insert Shortcode"</b> to update the shortcode</li>
+                      <li><b>Save</b> the Form</li>
+                      <li>Done!</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                      <div class="container-fluid">
+                        <div class="alert-icon">
+                          <i class="material-icons">info_outline</i>
+                        </div>
+                        You can use the available input fields in your form to name the upload folder based on
+                        user input. To do so, just add the CSS class <code>useyourdrive_private_folder_name</code> to
+                        your input field(s) Container Class.
+                        <br />
+                      </div>
+                    </div>
+
+                    <br /><br />
+                    <a href="assets/img/instructions/fluentforms.png" data-title="Fluent Forms Integration"
+                      data-toggle="lightbox">
+                      <img src="assets/img/instructions/fluentforms.png" class="img-responsive img-raised">
+                    </a>
+                  </div>
+
                   <div class="tim-row" id="wpforms">
                     <h3>WPforms Integration</h3>
                     <legend></legend>
@@ -2193,7 +2241,8 @@ public function change_event_summary_email($template_location, $notification){
                       your Gravity Form, follow these instructions:</p>
 
                     <ol>
-                      <li><b>Create</b> a new Gravity Form (<b>[Forms] -> [New Form]</b>) or <b>open</b> an existing one
+                      <li><b>Create</b> a new Gravity Form (<b>[Forms] -> [New Form]</b>) or <b>open</b> an existing
+                        one
                       </li>
                       <li><b>Open</b> the Advanced Fields tab</li>
                       <li><b>Drag</b> the Out-of-the-Box form element to your form</li>
@@ -2244,7 +2293,8 @@ public function change_event_summary_email($template_location, $notification){
                         sub-navigation. Finally, click the Add New button to create a PDF.</li>
                       <li>Edit the created PDF template, and go to the Advanced Tab</li>
                       <li>Set the [DROPBOX] Export PDF to "Yes"</li>
-                      <li>In the [DROPBOX] Folder Path, set the path of the folder where you want to store the generated
+                      <li>In the [DROPBOX] Folder Path, set the path of the folder where you want to store the
+                        generated
                         PDF forms.</li>
                       <li><b>Press "Update PDF"</b> to save the settings</li>
                       <li>Done!</li>
@@ -2304,12 +2354,15 @@ public function change_event_summary_email($template_location, $notification){
 
                     <h3>Policy</h3>
                     <p>The purpose of the Help Center is to provide you with the right answers at the right time. Our
-                      support is provided only for direct product buyers. While applying at our Help Center you will be
+                      support is provided only for direct product buyers. While applying at our Help Center you will
+                      be
                       asked to provide valid purchase code of our products.
                       Our Help Center is the only official support handling mechanism for this plugin. Questions sent
                       using other channels may be ignored without notice.
-                      According to Envato rules, support mechanism is not mandatory for marketplace authors - we provide
-                      support because of good will and want to offer our customers best service possible. We keep rights
+                      According to Envato rules, support mechanism is not mandatory for marketplace authors - we
+                      provide
+                      support because of good will and want to offer our customers best service possible. We keep
+                      rights
                       not to provide support due to abuse or any other reasons that are against this policy.</p>
                     <br />
                     <h4>What You Can Expect From Our Support?</h4>
@@ -2372,7 +2425,8 @@ public function change_event_summary_email($template_location, $notification){
                           target="_blank">purchase code</a> for non-presale questions</li>
                       <li>A link to the page where you are having trouble</li>
                       <li>A temporarily(!) WP admin login when you encounter bugs or need help to integrate the plugin
-                        in your website. <b>Double</b> check the login credentials before submitting! <b>Seriously.</b>
+                        in your website. <b>Double</b> check the login credentials before submitting!
+                        <b>Seriously.</b>
                       </li>
                       <li>A clear description of the problem and how to reproduce it</li>
                       <li>Screenshot of the problem</li>
@@ -2408,6 +2462,65 @@ public function change_event_summary_email($template_location, $notification){
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>1.19</td>
+                        <td>20 March 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: %wc_order_date_created% placeholder for WooCommerce Upload integration</li>
+                            <li>Fix: Upload events for earlier uploaded files can be fired multiple times when uploading
+                              additional files via the same Upload module.</li>
+                            <li>Fix: Conflicts with MediaElement.js video players can in some case be resolved by
+                              activating the
+                              'Layout -> Media Player -> Load native MediaElement.js library' setting.</li>
+                            <li>Improved: Added latest uploads and top user uploads to report dashboard</li>
+                            <li>Improved: Make shortcode filter available via shortcode_atts_{$shortcode}
+                              (https://developer.wordpress.org/reference/hooks/shortcode_atts_shortcode/)</li>
+                            <li>Improved: Keep Upload Boxes of WooCommerce products always visible on the Order Edit
+                              pages</li>
+                            <li>Improved: Added support for placeholders and shortcodes in
+                              Upload Description box
+                            </li>
+                            <li>Improved: More efficient support for dynamically loaded content via AJAX</li>
+                            <li>Improved: Removed old code, inline javascript and CSS</li>
+                            <li>Updated: Tagify library to version 3.23.1</li>
+                            <li>Updated: Tippy library to version 6.3.1</li>
+                            <li>Updated: Clipboard.js library to version 2.0.8</li>
+                            <li>Updated: ie11CustomProperties.js library to version 4.1.0</li>
+                            <li>Updated: Plugin Update Checker library to version 4.11</li>
+                            <li>Updated: Chart.js library version to 2.9.4</li>
+                            <li>Updated: DataTables to version 1.10.24</li>
+                            <li>Updated: Blueimp jQuery File Upload to version v10.31.0</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.18.3</td>
+                        <td>5 March 2021</td>
+                        <td>
+                          <ul>
+                            <li>Added: New 'Open Subfolder' setting which can be used to set a specific sub folder in a
+                              Private Folder as top folder.</li>
+                            <li>Added: New %uniqueID and %hh:mm% placeholders for Private Folder name template</li>
+                            <li>Fix: Resolved compatability issues with overwritting window.onload functions</li>
+                            <li>Improved: Keep selected File Browser 'View' in memory</li>
+                            <li>Improved: Added placeholders for initial File Browser and Gallery loading</li>
+                            <li>Improved: Slight modifications to the Lightbox</li>
+                            <li>Improved: UI Improvement for not-accesible folders</li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.18.2</td>
+                        <td>18 February 2021</td>
+                        <td>
+                          <ul>
+                            <li>Fix: GravityPDF integration not loading anymore</li>
+                            <li>Fix: Resolved conflict with the Plyr.io library</li>
+                            <li>Fix: not sending Account ID on Upload Post Process</li>
+                          </ul>
+                        </td>
+                      </tr>
                       <tr>
                         <td>1.18.1</td>
                         <td>2 February 2021</td>
@@ -2457,11 +2570,13 @@ public function change_event_summary_email($template_location, $notification){
                         <td>17 December 2020</td>
                         <td>
                           <ul>
-                            <li>Fix: Token encryption/decription issue on sites running a Multi Sites configuration</li>
+                            <li>Fix: Token encryption/decription issue on sites running a Multi Sites configuration
+                            </li>
                             <li>Fix: Bug in Upload Box could result in duplicate files</li>
                             <li>Fix: ZIP download requests fail due to incorrect authorization headers</li>
                             <li>Improved: Lazy loading of images in Media Player playlists</li>
-                            <li>Improved: Added new File URL placeholders for email notification templates. Now includes
+                            <li>Improved: Added new File URL placeholders for email notification templates. Now
+                              includes
                               <code>%file_download_url%</code>, <code>%file_cloud_shared_url%</code>,
                               <code>%file_cloud_preview_url%</code> and
                               <code>%file_cloud_shortlived_download_url%</code> if supported</li>
@@ -2477,13 +2592,15 @@ public function change_event_summary_email($template_location, $notification){
                               publicly accesible on NGINX servers and requires the attacker to know both the Account
                               email and
                               Account ID. Apache servers are not affected.
-                              This version implements token encryption to patch this. A re-authorization might be needed
+                              This version implements token encryption to patch this. A re-authorization might be
+                              needed
                               in some cases.
                             </li>
                             <li>Fix: Form submit buttons can disappear when triggered while plugin is still uploading
                               files
                             </li>
-                            <li>Fix: Bug could create 'Guest' Private Folders when a logged in user was for some reason
+                            <li>Fix: Bug could create 'Guest' Private Folders when a logged in user was for some
+                              reason
                               logged out in the background</li>
                             <li>Fix: Plugin not initiating properly when ReCaptcha script is loaded async/defer</li>
                             <li>Improved: Migrating to Scoped App and short lived Access Tokens</li>
@@ -2513,7 +2630,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>
                           <ul>
                             <li>Fix: Search API calls migrated to /2/files/search_v2 endpoint</li>
-                            <li>Fix: Folder location set by form input fields not correctly filtered. Could for instance
+                            <li>Fix: Folder location set by form input fields not correctly filtered. Could for
+                              instance
                               create subfolders when folder name contained a '</li>
                             <li>Fix: Preview button via File Menu doesn't open the LightBox correctly on some devices
                             </li>
@@ -2540,7 +2658,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>
                           <ul>
                             <li>Fix: Upload Box could create folders when file name contained special characters</li>
-                            <li>Fix: Upload Form integrations was submitting Forms even if a file in the queue failed to
+                            <li>Fix: Upload Form integrations was submitting Forms even if a file in the queue failed
+                              to
                               upload.</li>
                             <li>Fix: Conflict in WPForms Builder when having multiple WP Cloud Plugins running</li>
                             <li>Updated: Font Awesome library to version 5.15.1</li>
@@ -2555,7 +2674,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Added: 'Max number of files' option for Media Player shortcode</li>
                             <li>Fix: Previous folder button not working when inside Shortcut Folder</li>
                             <li>Fix: Click event to open lightbox not fired correctly on mobile devices</li>
-                            <li>Fix: Gutenberg & Elementor block incorrectly displaying error message when user doesn't
+                            <li>Fix: Gutenberg & Elementor block incorrectly displaying error message when user
+                              doesn't
                               have permissions to display the plugin</li>
                             <li>Fix: Speed Selector was removed from the Media Player when loading a next file in the
                               playlist</li>
@@ -2604,7 +2724,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Fix: Incorrect API settings/requests for custom Dropbox Apps using App Folder
                               permissions. Please check if the 'OAuth 2.0
                               Redirect URI' value on the Advanced tab matches the value in your Dropbox App
-                              configuration if you encounter problems authorizing your Dropbox account with your own App
+                              configuration if you encounter problems authorizing your Dropbox account with your own
+                              App
                             </li>
                             <li>Updated: MediaElement.js to version 4.2.16</li>
                           </ul>
@@ -2632,7 +2753,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>24 July 2020</td>
                         <td>
                           <ul>
-                            <li>Fix: Direct links preventing File Browsers/Galleries to initiate properly when multiple
+                            <li>Fix: Direct links preventing File Browsers/Galleries to initiate properly when
+                              multiple
                               instance are placed on the same page.
                             <li>Fix: Uninstall can cause problems</li>
                             <li>Fix: Not rendering Lightbox information for last file in list</li>
@@ -2664,7 +2786,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Fix: Bug in Lightbox causing problems in IE 11</li>
                             <li>Fix: Uploads not storing file information due to missing File IDs. Causing problems in
                               Form integrations and Upload notifications</li>
-                            <li>Fix: Modal conflict with themes using Bootstrap preventing you to scroll the page after
+                            <li>Fix: Modal conflict with themes using Bootstrap preventing you to scroll the page
+                              after
                               closing the modal</li>
                           </ul>
                         </td>
@@ -2691,7 +2814,8 @@ public function change_event_summary_email($template_location, $notification){
                             </li>
                             <li>Fix: Bug preventing you to delete files and folders via action menu</li>
                             <li>Fix: Bug preventing a file selection in Embed or Add link Popup</li>
-                            <li>Fix: Plugin shortcode not visible when added in a Classic Block in the Gutenberg Editor
+                            <li>Fix: Plugin shortcode not visible when added in a Classic Block in the Gutenberg
+                              Editor
                             </li>
                           </ul>
                         </td>
@@ -2728,7 +2852,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Added: Support for seting Private Folder names via Gravity Form fields</li>
                             <li>Improved: Uninstalling the plugin will now remove all its setting and data unless this
                               has been disabled on the Advanced tab</li>
-                            <li>Improved: Scroll to top button not longer hidding bottom documents in File Browser</li>
+                            <li>Improved: Scroll to top button not longer hidding bottom documents in File Browser
+                            </li>
                             <li>Improved: Layout of File Browser, Gallery and Upload Box</li>
                             <li>Improved: Replaced outdated javascript tooltip library </li>
                             <li>Improved: Add/Edit descriptions dialogs</li>
@@ -2755,7 +2880,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>23 April 2020</td>
                         <td>
                           <ul>
-                            <li>Fix: cURL error "easy handle already used in multi handle" in latest version of the cURL
+                            <li>Fix: cURL error "easy handle already used in multi handle" in latest version of the
+                              cURL
                               library</li>
                             <li>Fix: Only create Private Folders for newly registered users which have access to the
                               plugin shortcodes</li>
@@ -2778,17 +2904,21 @@ public function change_event_summary_email($template_location, $notification){
                         <td>1 April 2020</td>
                         <td>
                           <ul>
-                            <li>Fix: Automatically linked Private Folders in 'Direct Links' and 'Embed' popup not always
+                            <li>Fix: Automatically linked Private Folders in 'Direct Links' and 'Embed' popup not
+                              always
                               pointing to the correct folder in situations with multiple accounts</li>
                             <li>Fix: Permissions not working properly for WP users without display Name/nickname set
                             </li>
-                            <li>Fix: Can't send delete notifications to %linked_users% when the Private folder itself is
+                            <li>Fix: Can't send delete notifications to %linked_users% when the Private folder itself
+                              is
                               deleted</li>
                             <li>Fix: UTF-8 export of CSV files in Report section</li>
-                            <li>Fix: Bug in plugin could keep sending 'Lost authorization' emails for accounts that are
+                            <li>Fix: Bug in plugin could keep sending 'Lost authorization' emails for accounts that
+                              are
                               alreadyremoved from the account list</li>
                             <li>Added: Deeplink functionality which allow users to generate direct links folders/files
-                              in the Shortcode. Only users with access to the shortcode and content will be able to open
+                              in the Shortcode. Only users with access to the shortcode and content will be able to
+                              open
                               the link</li>
                             <li>Updated: Font Awesome to version 5.12.1</li>
                           </ul>
@@ -2815,7 +2945,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Fix: Email Summary not rendering all logged events</li>
                             <li>Fix: Removed delete_expired_transients() function as minimum WP version is still 4.8
                               which doesn't contain this function yet.</li>
-                            <li>Added: Return of the Legacy/no longer supported Media Player (jPlayer) which can be used
+                            <li>Added: Return of the Legacy/no longer supported Media Player (jPlayer) which can be
+                              used
                               when having problems with the currrent mediaplayer</li>
                           </ul>
                         </td>
@@ -2827,7 +2958,8 @@ public function change_event_summary_email($template_location, $notification){
                           <ul>
                             <li>Fix: Thumbnails outside viewport not loading properly when moving into view in a
                               scrollable container</li>
-                            <li>Fix: WooCommerce Upload Box are showing again when using it in combination with Product
+                            <li>Fix: WooCommerce Upload Box are showing again when using it in combination with
+                              Product
                               Variations</li>
                             <li>Updated: Font Awesome library to 5.12.0</li>
                           </ul>
@@ -2856,7 +2988,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Fix: Incorrect layout Gravity Form submit button when Upload Box field is used</li>
                             <li>Fix: Bug in UTF8 file names when downloading products via WooCommerce Digital Products
                               with 'Force Download' setting</li>
-                            <li>Fix: Bug in WooCommerce integration when using products extending the WP_Products class
+                            <li>Fix: Bug in WooCommerce integration when using products extending the WP_Products
+                              class
                             </li>
                             <li>Fix: Dropbox Team folders not appearing properly when using Dropbox Business accounts
                             </li>
@@ -2884,7 +3017,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>
                           <ul>
                             <li>Fix: Bug with authorization tokens when moving plugin location</li>
-                            <li>Fix: Bug prevening WooCommerce orders to show up when downloadable files are not longer
+                            <li>Fix: Bug prevening WooCommerce orders to show up when downloadable files are not
+                              longer
                               accessible(e.g. when they are deleted from the cloud)</li>
                             <li>Fix: Prevent version updates to run on initial install</li>
                           </ul>
@@ -2938,7 +3072,8 @@ public function change_event_summary_email($template_location, $notification){
                             <li>Improved: New notifications with more filters to modify it. The filter
                               'outofthebox_notification' is deprecated and replaced with different
                               'outofthebox_notification_...' hooks</li>
-                            <li>Improved: The %linked_user_email% placeholder in Notification Recipients can now be used
+                            <li>Improved: The %linked_user_email% placeholder in Notification Recipients can now be
+                              used
                               in all shortcodes.</li>
                             <li>Improved: System information tab rebuild.</li>
                           </ul>
@@ -2950,7 +3085,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>
                           <ul>
                             <li>Added: New setting to enable/disable navigation in Lightbox</li>
-                            <li>Added: Support for %linked_user_email% email notification placeholder for automatically
+                            <li>Added: Support for %linked_user_email% email notification placeholder for
+                              automatically
                               linked Private Folders</li>
                             <li>Improved: Move action now has folder selection dialog to send files directly to
                               destination</li>
@@ -2965,10 +3101,12 @@ public function change_event_summary_email($template_location, $notification){
                         <td>30 October 2019</td>
                         <td>
                           <ul>
-                            <li>Fix: Bug changed layout of submit button on Contact Form 7 forms containing plugin</li>
+                            <li>Fix: Bug changed layout of submit button on Contact Form 7 forms containing plugin
+                            </li>
                             <li>Fix: Gravity Forms submission when Upload Box on last page</li>
                             <li>Added: New setting to enable/disable navigation in Lightbox</li>
-                            <li>Added: Support for wpDataTables with Gravity Form submissions containing plugin uploads
+                            <li>Added: Support for wpDataTables with Gravity Form submissions containing plugin
+                              uploads
                             </li>
                             <li>Updated: Font Awesome Library to version 5.11.2</li>
                           </ul>
@@ -3031,7 +3169,8 @@ public function change_event_summary_email($template_location, $notification){
                         <td>28 August 2019</td>
                         <td>
                           <ul>
-                            <li>Fix: Mediaplayer throwing javacript error when no media files are present in folder</li>
+                            <li>Fix: Mediaplayer throwing javacript error when no media files are present in folder
+                            </li>
                             <li>Fix: Download button not accessible in Mediaplayer without playlist</li>
                           </ul>
                         </td>

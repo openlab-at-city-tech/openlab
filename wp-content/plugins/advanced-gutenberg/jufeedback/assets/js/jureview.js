@@ -6,7 +6,6 @@ jQuery(document).ready(function($){
     $('.jureview-hide-review').click(function(e){
         var slug = ($(e.target).parents('.jureview-notice').attr('data-slug'));
         hide_review(slug);
-
     });
 
     $('.jureview-already-review').on('click', function (e) {
@@ -26,10 +25,12 @@ jQuery(document).ready(function($){
             data: {
                 action: 'jureview_ajax_hide_review_' + slug,
                 ajaxnonce: ju_review.token
-            },
-            success: function () {
-                $('.jureview-notice[data-slug="' + slug + '"]').hide('fade');
             }
         });
+        /* While the ajax method works according
+         * to database checkup and console > network,
+         * the error callback get triggered.
+         * That's why the line below was moved outside ajax() */
+        $('.jureview-notice').hide('fade');
     }
 });

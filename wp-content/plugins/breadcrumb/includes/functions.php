@@ -1904,3 +1904,20 @@ function breadcrumb_remove_wc_breadcrumbs() {
 
 
 }
+
+
+
+
+function breadcrumb_recursive_sanitize_arr($array) {
+
+    foreach ( $array as $key => &$value ) {
+        if ( is_array( $value ) ) {
+            $value = breadcrumb_recursive_sanitize_arr($value);
+        }
+        else {
+            $value = sanitize_text_field( $value );
+        }
+    }
+
+    return $array;
+}

@@ -47,7 +47,6 @@ function openlab_hide_plugins( $plugins ) {
 		'kb-gradebook/kb-gradebook.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
-		'openlab-private-comments/openlab-private-comments.php',
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
@@ -80,6 +79,7 @@ function openlab_hide_plugins( $plugins ) {
 		'wp-swfobject/wp-swfobject.php',
 		'wpbadgedisplay/wpbadgedisplay.php',
 		'wpbadger/wpbadger.php',
+		'wp-to-twitter/wp-to-twitter.php',
 	);
 
 	if ( ! is_super_admin() ) {
@@ -302,3 +302,17 @@ function openlab_remove_filters_for_anonymous_class( $hook_name = '', $class_nam
 
 	return false;
 }
+
+/**
+ * Load JS for out-of-the-box accessibility fixes.
+ */
+add_action(
+	'init',
+	function() {
+		if ( ! defined( 'OUTOFTHEBOX_VERSION' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-out-of-the-box-a11y', content_url( 'mu-plugins/js/openlab-out-of-the-box.js' ), [ 'jquery' ] );
+	}
+);

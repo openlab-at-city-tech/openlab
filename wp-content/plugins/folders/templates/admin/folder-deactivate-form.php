@@ -305,21 +305,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
         <div class="folder-serveypanel">
             <form action="#" method="post" id="folder-deactivate-form">
                 <div class="folder-popup-header">
-                    <h2><?php esc_html_e('Quick feedback about Folders', WCP_FOLDER); ?> 🙏</h2>
+                    <h2><?php esc_html_e('Quick feedback about Folders', 'folders'); ?> 🙏</h2>
                 </div>
                 <div class="folder-popup-body">
-                    <h3><?php esc_html_e('Your feedback will help us improve the product, please tell us why did you decide to deactivate Folders :)', WCP_FOLDER); ?></h3>
+                    <h3><?php esc_html_e('Your feedback will help us improve the product, please tell us why did you decide to deactivate Folders :)', 'folders'); ?></h3>
                     <div class="form-control">
-                        <input type="email" value="<?php echo get_option( 'admin_email' ) ?>" placeholder="<?php echo _e("Email address", WCP_FOLDER) ?>" id="folder-deactivate-email_id">
+                        <input type="email" value="<?php echo get_option( 'admin_email' ) ?>" placeholder="<?php echo _e("Email address", 'folders'); ?>" id="folder-deactivate-email_id">
                     </div>
                     <div class="form-control">
                         <label></label>
-                        <textarea placeholder="<?php esc_html_e("Your comment", WCP_FOLDER) ?>" id="folder-comment"></textarea>
+                        <textarea placeholder="<?php esc_html_e("Your comment", 'folders'); ?>" id="folder-comment"></textarea>
                     </div>
-                    <?php esc_html_e("Having any problem with the Folders plugins?", WCP_FOLDER) ?><a class='folder-deactivate-button' href='javascript:;'><?php esc_html_e("Click here", WCP_FOLDER) ?></a><?php esc_html_e(" to contact our support now", WCP_FOLDER) ?>
+                    <?php esc_html_e("Having any problem with the Folders plugins?", 'folders'); ?><a class='folder-deactivate-button' href='javascript:;'><?php esc_html_e("Click here", 'folders'); ?></a><?php esc_html_e(" to contact our support now", 'folders'); ?>
                 </div>
                 <div class="folder-popup-footer">
-                    <label class="folder-anonymous"><input type="checkbox"/><?php esc_html_e('Anonymous feedback', WCP_FOLDER); ?>
+                    <label class="folder-anonymous"><input type="checkbox"/><?php esc_html_e('Anonymous feedback', 'folders'); ?>
                     </label>
                     <input type="button" class="button button-secondary button-skip folder-popup-skip-feedback" value="Skip &amp; Deactivate">
 
@@ -328,7 +328,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
                         <img src="<?php echo esc_url(admin_url('/images/spinner.gif')); ?>" alt="">
                     </span>
                         <input type="submit" class="button button-secondary button-deactivate folder-popup-allow-deactivate" value="Submit &amp; Deactivate" disabled="disabled">
-                        <a href="#" class="button button-primary folder-popup-button-close"><?php esc_attr_e('Cancel', WCP_FOLDER); ?></a>
+                        <a href="#" class="button button-primary folder-popup-button-close"><?php esc_attr_e('Cancel', 'folders'); ?></a>
                     </div>
                 </div>
             </form>

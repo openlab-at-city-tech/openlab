@@ -20,6 +20,7 @@ class Advanced_Excerpt {
 		'link_new_tab' => 0,
 		'link_screen_reader' => 0,
 		'link_exclude_length' => 0,
+		'link_on_custom_excerpt' => 0,
 		'allowed_tags' => array(),
 		'the_excerpt' => 1,
 		'the_content' => 1,
@@ -256,7 +257,10 @@ class Advanced_Excerpt {
 
 		// Avoid custom excerpts
 		if ( !empty( $content ) && !$no_custom ) {
-			return $content;
+			if ( $link_on_custom_excerpt ) {
+				return $this->text_add_more( $content, '', ( $add_link ) ? $read_more : false, ( $link_new_tab ) ? true : false, ( $link_screen_reader ) ? true : false );
+			}	
+			return $content; 
 		}
 
 		// prevent recursion on 'the_content' hook
@@ -423,7 +427,7 @@ class Advanced_Excerpt {
 		$_POST = stripslashes_deep( $_POST );
 		$this->options['length'] = (int) $_POST['length'];
 
-		$checkbox_options = array( 'no_custom', 'no_shortcode', 'add_link', 'link_new_tab', 'link_screen_reader', 'link_exclude_length', 'the_excerpt', 'the_content', 'the_content_no_break', 'link_excerpt' );
+		$checkbox_options = array( 'no_custom', 'no_shortcode', 'add_link', 'link_new_tab', 'link_screen_reader', 'link_exclude_length', 'link_on_custom_excerpt', 'the_excerpt', 'the_content', 'the_content_no_break', 'link_excerpt' );
 
 		foreach ( $checkbox_options as $checkbox_option ) {
 			$this->options[$checkbox_option] = ( isset( $_POST[$checkbox_option] ) ) ? 1 : 0;

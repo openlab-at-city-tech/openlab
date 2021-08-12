@@ -71,7 +71,7 @@ class FormidableForms
     public function add_field_defaults($field_data)
     {
         if ($this->field_type == $field_data['type']) {
-            $field_data['name'] = 'Attach your documents';
+            $field_data['name'] = esc_html__('Attach your documents', 'wpcloudplugins');
 
             $defaults = [
                 'shortcode' => $this->default_value,
@@ -98,9 +98,9 @@ class FormidableForms
         <tr>
             <td><h2>Shortcode</h2></td>
             <td>
-            <label for="shortcode_" class="howto"><?php _e('Build your shortcode', 'wpcloudplugins'); ?></label>
+            <label for="shortcode_" class="howto"><?php esc_html_e('Build your shortcode', 'wpcloudplugins'); ?></label>
             <textarea id="shortcode_<?php echo esc_attr($field['id']); ?>" name="field_options[shortcode_<?php echo esc_attr($field['id']); ?>]" class="frm_long_input"><?php echo esc_attr($field['shortcode']); ?></textarea>
-            <a href="#" class='button-primary outofthebox open-shortcode-builder'><?php _e('Build your shortcode', 'wpcloudplugins'); ?></a>
+            <a href="#" class='button-primary outofthebox open-shortcode-builder'><?php esc_html_e('Build your shortcode', 'wpcloudplugins'); ?></a>
             </td>
         </tr>
         <?php
@@ -293,7 +293,7 @@ class FormidableForms
 
         $OutoftheBox->load_scripts();
         $OutoftheBox->load_styles();
-        $OutoftheBox->load_custom_css();
+        
 
         add_thickbox();
 
@@ -354,7 +354,7 @@ class FormidableForms
             return $private_folder_name_guest;
         }
 
-        return str_replace(__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
+        return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
     }
 }
 

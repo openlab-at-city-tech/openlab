@@ -275,3 +275,14 @@ function eportfolio_post_nav_background() {
 }
 add_action( 'wp_enqueue_scripts', 'eportfolio_post_nav_background' );
 
+
+add_filter( 'walker_nav_menu_start_el', 'eportfolio_add_description', 10, 2 );
+function eportfolio_add_description( $item_output, $item ) {
+    $description = $item->post_content;
+    if (('' !== $description) && (' ' !== $description) ) {
+        return preg_replace( '/(<a.*)</', '$1' . '<span class="twp-menu-description">' . $description . '</span><', $item_output) ;
+    }
+    else {
+        return $item_output;
+    };
+}

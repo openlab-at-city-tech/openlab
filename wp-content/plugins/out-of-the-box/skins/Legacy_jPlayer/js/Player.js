@@ -105,7 +105,7 @@ var oftb_playlists = {};
         }
 
         self.find(".jp-playlist-item-dl").off('click');
-        self.find(".jp-playlist-item-dl").click(function (e) {
+        self.find(".jp-playlist-item-dl").on('click', function (e) {
           e.stopPropagation();
           var href = $(this).attr('href') + '&dl=1',
             dataname = self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
@@ -191,7 +191,7 @@ var oftb_playlists = {};
         }
 
         self.find(".jp-playlist-item-dl").off('click');
-        self.find(".jp-playlist-item-dl").click(function (e) {
+        self.find(".jp-playlist-item-dl").on('click', function (e) {
           e.stopPropagation();
           var href = $(this).attr('href') + '&dl=1',
             dataname = self.find(".jp-playlist-item.jp-playlist-current  .jp-playlist-item-song-title").html() +
@@ -282,21 +282,21 @@ var oftb_playlists = {};
     });
 
     var guivisable = false;
-    self.mousemove(function () {
-      if (!guivisable) {
-        self.trigger('mouseenter');
-      }
-    });
-    self.hover(
-      function () {
+    self.on({
+      mouseenter: function () {
         self.find('.jp-gui').show();
         guivisable = true;
       },
-      function () {
+      mouseleave: function () {
         self.find('.jp-gui').hide();
         guivisable = false;
-      });
-
+      },
+      mousemove: function () {
+        if (!guivisable) {
+          self.trigger('mouseenter');
+        }
+      }
+    })
   }
 
   function updateLayout(self, width, height) {

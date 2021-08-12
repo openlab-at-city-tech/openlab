@@ -14,6 +14,7 @@
 namespace OpenLab\PrivateComments;
 
 const VERSION = '1.0.1';
+const PLUGIN_FILE = __FILE__;
 
 if ( is_admin() ) {
 	require __DIR__ . '/src/admin.php';
@@ -26,6 +27,19 @@ function load_textdomain() {
 	load_plugin_textdomain( 'openlab-private-comments' );
 }
 add_action( 'init', __NAMESPACE__ . '\\load_textdomain' );
+
+/**
+ * The plugin activation action.
+ *
+ * @return void
+ */
+function activate() {
+	// Set up admin notice flag.
+	if ( ! get_option( 'olpc_notice_dismissed' ) ) {
+		update_option( 'olpc_notice_dismissed', '0' );
+	}
+}
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 /**
  * Register our assets.
@@ -306,17 +320,18 @@ add_filter( 'comment_feed_where', __NAMESPACE__ . '\\filter_comments_from_feed' 
  * @return int $count
  */
 function filter_comment_count( $count, $post_id = 0 ) {
-	if ( empty( $post_id ) ) {
+	// No need for fallback when we don't have post or comments.
+	if ( empty( $post_id ) || empty( $count ) ) {
 		return $count;
 	}
 
 	$query = new \WP_Comment_Query();
-	$new_count = $query->query( [
+	$comments = $query->query( [
 		'post_id' => $post_id,
-		'count'   => true,
+		'fields'  => 'ids',
 	] );
 
-	return $new_count;
+	return count( $comments );
 }
 add_filter( 'get_comments_number', __NAMESPACE__ . '\\filter_comment_count', 10, 2 );
 

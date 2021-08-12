@@ -27,7 +27,8 @@ jQuery( document ).ready(
 		new_group_type = $( '#new-group-type' ).val(),
 		$body          = $( 'body' ),
 		$gc_submit     = $( '#group-creation-create' ),
-		$required_fields;
+		$required_fields,
+    $setuptoggle   = $( 'input[name="wds_website_check"]' );
 
 		if ( $body.hasClass( 'group-admin' ) ) {
 			form_type = 'admin';
@@ -40,6 +41,20 @@ jQuery( document ).ready(
 		$form = $( form );
 
 		$required_fields = $form.find( 'input:required' );
+
+		function maybeShowSiteFields() {
+			if ( ! $setuptoggle.length ) {
+				return;
+			}
+
+			var showSiteFields = $setuptoggle.is( ':checked' );
+
+			if ( showSiteFields ) {
+				$( '#site-options' ).show();
+			} else {
+				$( '#site-options' ).hide();
+			}
+		}
 
 		function new_old_switch( noo ) {
 			var radioid = '#new_or_old_' + noo;
@@ -127,12 +142,8 @@ jQuery( document ).ready(
 		}
 
 		function showHideAll() {
-			showHide( 'wds-website' );
-			showHide( 'wds-website-existing' );
-			showHide( 'wds-website-external' );
 			showHide( 'wds-website-tooltips' );
-			showHide( 'wds-website-clone' );
-				showHide( 'check-note-wrapper' );
+			showHide( 'check-note-wrapper' );
 		}
 
 		function do_external_site_query(e) {
@@ -210,10 +221,17 @@ jQuery( document ).ready(
 				}
 
 				// Ensure that the "Set up a site" section is visible
-				if ( ! $( setuptoggle ).is( ':checked' ) ) {
-					$( setuptoggle ).trigger( 'click' );
+				if ( ! $setuptoggle.is( ':checked' ) ) {
+					$setuptoggle.trigger( 'click' );
 				}
+
+				// Hide 'Create a new site' and 'Use an existing site'
+				$( '#wds-website' ).hide();
+				$( '#wds-website-existing' ).hide();
 			} else {
+				// Show the Site Details section.
+				$( '#panel-site-details' ).show();
+
 				// Check "Create a course" near the top
 				$( '#create-or-clone-create' ).attr( 'checked', true );
 
@@ -221,6 +239,10 @@ jQuery( document ).ready(
 				$group_to_clone.addClass( 'disabled-opt' );
 				$group_to_clone.attr( 'disabled', true );
 				$( '#ol-clone-description' ).addClass( 'disabled-opt' );
+
+				// Show 'Create a new site' and 'Use an existing site'
+				$( '#wds-website' ).show();
+				$( '#wds-website-existing' ).show();
 
 				group_id_to_clone = 0;
 			}
@@ -311,9 +333,12 @@ jQuery( document ).ready(
 
 						// Associated site
 						if ( r.site_id ) {
+							// Show the Site Details section.
+							$( '#panel-site-details' ).show();
+
 							// Check 'Set up a site'
-							if ( ! setuptoggle.is( ':checked' ) ) {
-								setuptoggle.trigger( 'click' );
+							if ( ! $setuptoggle.is( ':checked' ) ) {
+								$setuptoggle.trigger( 'click' );
 							}
 
 							// Un-grey the website clone options
@@ -329,7 +354,12 @@ jQuery( document ).ready(
 							$( '#cloned-site-url' ).html( 'Your original address was: ' + r.site_url );
 							$( '#blog-id-to-clone' ).val( r.site_id );
 						} else {
-							// Grey out the website clone options
+							// Hide the Site Details section if cloning a group without a site.
+							if ( group_id ) {
+								$( '#panel-site-details' ).hide();
+								$setuptoggle.prop( 'checked', false );
+							}
+
 							$( '#wds-website-clone .radio' ).addClass( 'disabled-opt' );
 							$( '#wds-website-clone input[name="new_or_old"]' ).attr( 'disabled','disabled' );
 
@@ -361,11 +391,12 @@ jQuery( document ).ready(
 		/* Clone setup */
 		var group_type = $.urlParam( 'type' );
 
-		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
-			var $create_or_clone, create_or_clone, group_id_to_clone, new_create_or_clone;
+		var $create_or_clone = $( 'input[name="create-or-clone"]' );
+		var create_or_clone   = $create_or_clone.val();
 
-			$create_or_clone  = $( 'input[name="create-or-clone"]' );
-			create_or_clone   = $create_or_clone.val();
+		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
+			var group_id_to_clone, new_create_or_clone;
+
 			group_id_to_clone = $.urlParam( 'clone' );
 
 			if ( group_id_to_clone ) {
@@ -403,14 +434,18 @@ jQuery( document ).ready(
 		);
 
 		/* "Set up a site" toggle */
-		var setuptoggle = $( 'input[name="wds_website_check"]' );
-		$( setuptoggle ).on( 'click', function(){ showHideAll(); } );
-		if ( $( setuptoggle ).is( ':checked' ) ) {
+		$setuptoggle.on( 'click', function(){
+			showHideAll();
+			maybeShowSiteFields();
+		} );
+
+		if ( $setuptoggle.is( ':checked' ) ) {
 			showHideAll();
 		};
+		maybeShowSiteFields();
 
-		if ( 'course' === group_type && ! $( setuptoggle ).is( ':checked' ) ) {
-			$( setuptoggle ).trigger( 'click' );
+		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
+			$setuptoggle.trigger( 'click' );
 		}
 
 		// Set up Invite Anyone autocomplete
@@ -466,7 +501,7 @@ jQuery( document ).ready(
 			}
 
 			// If "Set up a site" is not checked, there's no validation to do
-			if ( $( setuptoggle ).length && ! $( setuptoggle ).is( ':checked' ) ) {
+			if ( $setuptoggle.length && ! $setuptoggle.is( ':checked' ) ) {
 				return true;
 			}
 

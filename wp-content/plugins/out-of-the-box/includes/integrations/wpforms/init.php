@@ -128,7 +128,7 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
 
         $OutoftheBox->load_scripts();
         $OutoftheBox->load_styles();
-        $OutoftheBox->load_custom_css();
+        
 
         add_thickbox();
 
@@ -315,7 +315,7 @@ class WPForms_Field_Upload_Box extends \WPForms_Field
             return $private_folder_name_guest;
         }
 
-        return str_replace(__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
+        return str_replace(esc_html__('Guests', 'wpcloudplugins').' - ', '', $private_folder_name_guest);
     }
 }
 

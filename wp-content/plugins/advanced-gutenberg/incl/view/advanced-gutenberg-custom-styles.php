@@ -2,18 +2,17 @@
 defined('ABSPATH') || die;
 
 $custom_styles_saved = get_option('advgb_custom_styles', $this::$default_custom_styles);
-?>
 
-<div class="advgb-header" style="padding-top: 40px">
-    <h1 class="header-title"><?php esc_html_e('Custom styles', 'advanced-gutenberg'); ?></h1>
-</div>
-
-<?php if (isset($_GET['save_styles'])) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action ?>
+if (isset($_GET['save_styles'])) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action ?>
     <div class="ju-notice-msg ju-notice-success">
         <?php esc_html_e('Your styles have been saved', 'advanced-gutenberg'); ?>
         <i class="dashicons dashicons-dismiss ju-notice-close"></i>
     </div>
 <?php endif; ?>
+
+<div class="advgb-header" style="padding-top: 40px">
+    <h1 class="header-title"><?php esc_html_e('Custom styles', 'advanced-gutenberg'); ?></h1>
+</div>
 
 <div id="customstyles-tab" class="tab-content clearfix">
     <div class="col-sm-3" id="advgb-customstyles-list">

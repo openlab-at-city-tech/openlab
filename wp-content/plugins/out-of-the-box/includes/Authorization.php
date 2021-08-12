@@ -2,6 +2,8 @@
 
 namespace TheLion\OutoftheBox;
 
+require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
+
 class Authorization
 {
     /**
@@ -35,7 +37,7 @@ class Authorization
     public function __construct(Account $_account)
     {
         // Required for loading the Access Token class
-        require_once OUTOFTHEBOX_ROOTDIR.'/includes/dropbox-sdk/vendor/autoload.php';
+        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/dropbox-sdk/vendor/autoload.php';
 
         $this->_account_id = $_account->get_id();
         $this->_token_name = Helpers::filter_filename($_account->get_email().'_'.str_replace(':', '', $_account->get_id()), false).'.access_token';
@@ -70,7 +72,10 @@ class Authorization
         }
 
         // Update function to encrypt tokens
-        return $this->update_from_single_token($token);
+        $updated_token = $this->update_from_single_token($token);
+
+        // Update token to new Class
+        return $this->update_from_old_class($updated_token);
     }
 
     public function set_access_token($_access_token)
@@ -169,14 +174,16 @@ class Authorization
 
                 if (!is_writable($this->get_token_location())) {
                     error_log('[WP Cloud Plugin message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
-                    die(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
+
+                    exit(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
                 }
             }
 
             $this->_token_file_handle = fopen($this->get_token_location(), 'c+');
             if (!is_resource($this->_token_file_handle)) {
                 error_log('[WP Cloud Plugin message]: '.sprintf('Token file (%s) is not writable', $this->get_token_location()));
-                die(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
+
+                exit(sprintf('Cache file (%s) is not writable', $this->get_token_location()));
             }
         }
 
@@ -218,11 +225,57 @@ class Authorization
             'access_token' => $token,
         ];
 
-        $token_object = new \Kunnu\Dropbox\Models\AccessToken($data);
+        $token_object = new \TheLion\OutoftheBox\API\Dropbox\Models\AccessToken($data);
 
         //Store the new token format
         $this->set_access_token($token_object);
 
         return $token_object;
+    }
+
+    public function update_from_old_class($token_object)
+    {
+        if (false === is_a($token_object, '\TheLion\OutoftheBox\API\Dropbox\Models\AccessToken')) {
+            $received_data = (array) $this->fix_object($token_object);
+
+            $received_data['access_token'] = isset($received_data['token']) ? $received_data['token'] : '';
+            $received_data['refresh_token'] = isset($received_data['refreshToken']) ? $received_data['refreshToken'] : '';
+            $received_data['expires_in'] = isset($received_data['expiresIn']) ? $received_data['expiresIn'] : '';
+
+            $token_object = new \TheLion\OutoftheBox\API\Dropbox\Models\AccessToken($received_data);
+
+            //Store the new token format
+            $this->set_access_token($token_object);
+        }
+
+        return $token_object;
+    }
+
+    /**
+     * Takes an __PHP_Incomplete_Class and casts it to a stdClass object.
+     * All properties will be made public in this step.
+     *
+     * @param object $object __PHP_Incomplete_Class
+     *
+     * @return object
+     */
+    public function fix_object($object)
+    {
+        // 1. Serialize the object to a string.
+        $dump = serialize($object);
+
+        // 2. Change class-type to 'stdClass'.
+        $dump = preg_replace('/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $dump);
+
+        // 3. Make private and protected properties public.
+        $dump = preg_replace_callback('/:\d+:"\0.*?\0([^"]+)"/', [&$this, 'calc_key_length'], $dump);
+
+        // 4. Unserialize the modified object again.
+        return unserialize($dump);
+    }
+
+    public function calc_key_length($matches)
+    {
+        return ':'.strlen($matches[1]).':"'.$matches[1].'"';
     }
 }

@@ -64,7 +64,7 @@ class Zip
     {
         $this->initialize();
         $this->current_action = 'indexing';
-        $this->current_action_str = __('Selecting files...', 'wpcloudplugins');
+        $this->current_action_str = esc_html__('Selecting files...', 'wpcloudplugins');
 
         $this->index();
         $this->create();
@@ -75,31 +75,31 @@ class Zip
         $this->add_entries();
 
         $this->current_action = 'finalizing';
-        $this->current_action_str = __('Almost ready', 'wpcloudplugins');
+        $this->current_action_str = esc_html__('Almost ready', 'wpcloudplugins');
         $this->set_progress();
         $this->finalize();
 
         $this->current_action = 'finished';
-        $this->current_action_str = __('Finished', 'wpcloudplugins');
+        $this->current_action_str = esc_html__('Finished', 'wpcloudplugins');
         $this->set_progress();
 
-        die();
+        exit();
     }
 
     public function initialize()
     {
-        require_once 'PHPZip/autoload.php';
+        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/PHPZip/autoload.php';
 
         // Check if file/folder is cached and still valid
         $folder = $cachedfolder = $this->get_client()->get_folder();
 
         if (false === $cachedfolder) {
-            return new \WP_Error('broke', __("Requested directory isn't allowed",'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__("Requested directory isn't allowed", 'wpcloudplugins'));
         }
 
         // Check if entry is allowed
         if (!$this->get_processor()->_is_entry_authorized($folder)) {
-            return new \WP_Error('broke', __("Requested directory isn't allowed",'wpcloudplugins'));
+            return new \WP_Error('broke', esc_html__("Requested directory isn't allowed", 'wpcloudplugins'));
         }
 
         // Set Zip file name
@@ -151,7 +151,7 @@ class Zip
                 $this->bytes_total += $entry->get_size();
             }
 
-            $this->current_action_str = __('Selecting files...', 'wpcloudplugins').' ('.count($this->entries).')';
+            $this->current_action_str = esc_html__('Selecting files...', 'wpcloudplugins').' ('.count($this->entries).')';
             $this->set_progress();
         }
     }
@@ -171,7 +171,7 @@ class Zip
                 do_action('outofthebox_log_event', 'outofthebox_downloaded_entry', $entry, ['as_zip' => true]);
 
                 $this->bytes_so_far += $entry->get_size();
-                $this->current_action_str = __('Downloading...', 'wpcloudplugins').'<br/>('.Helpers::bytes_to_size_1024($this->bytes_so_far).' / '.Helpers::bytes_to_size_1024($this->bytes_total).')';
+                $this->current_action_str = esc_html__('Downloading...', 'wpcloudplugins').'<br/>('.Helpers::bytes_to_size_1024($this->bytes_so_far).' / '.Helpers::bytes_to_size_1024($this->bytes_total).')';
                 $this->set_progress();
             }
         }
@@ -193,7 +193,7 @@ class Zip
             $download_stream = fopen('php://temp/maxmemory:'.(5 * 1024 * 1024), 'r+');
 
             try {
-                // @var $download_file \Kunnu\Dropbox\Models\File
+                // @var $download_file \TheLion\OutoftheBox\API\Dropbox\Models\File
                 $this->get_client()->get_library()->stream($download_stream, $entry->get_id());
                 // Add file contents to zip
                 $this->_zip_handler->addLargeFile($download_stream, ltrim($path, '/'), $entry->get_last_edited(), $entry->get_description());
@@ -205,7 +205,8 @@ class Zip
 
                 $this->current_action = 'failed';
                 $this->set_progress();
-                die();
+
+                exit();
             }
         }
     }
@@ -271,7 +272,8 @@ class Zip
         }
 
         echo json_encode($result);
-        die();
+
+        exit();
     }
 
     /**

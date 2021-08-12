@@ -1132,11 +1132,6 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
   max-width: 100%;
   max-height: 100%;
   display: block;
-  /*
-height: 75px;
-max-width: none;
-min-height: 75px;
-  */
 }
 
 #OutoftheBox .wpcp__playlist-item-content {
@@ -1190,7 +1185,7 @@ min-height: 75px;
   display: none;
 }
 
-#OutoftheBox .wpcp__playlist-item-lastedited span {
+#OutoftheBox .wpcp__playlist-item-lastedited div {
   display: block;
   width: 175px;
   text-overflow: ellipsis;

@@ -2,21 +2,22 @@
 /**
  * Plugin Name: Shortcodes Ultimate
  * Plugin URI: https://getshortcodes.com/
- * Version: 5.9.7
+ * Version: 5.9.8
  * Author: Vladimir Anokhin
  * Author URI: https://getshortcodes.com/
  * Description: A comprehensive collection of visual components for WordPress
  * Text Domain: shortcodes-ultimate
  * License: GPLv3
+ * Requires PHP: 5.3
  * Requires at least: 4.6
- * Requires PHP: 5.4
+ * Tested up to: 5.7
  */
 
 /**
  * Define plugin constants.
  */
 define( 'SU_PLUGIN_FILE', __FILE__ );
-define( 'SU_PLUGIN_VERSION', '5.9.7' );
+define( 'SU_PLUGIN_VERSION', '5.9.8' );
 
 /**
  * Load dependencies.

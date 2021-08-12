@@ -1,19 +1,19 @@
 @import "mixins";
 
 .wp-block-advgb-columns {
-    
+
     &.advgb-columns-wrapper {
-        
+
         .advgb-columns-container {
-            
+
             .advgb-columns {
                 display: flex;
                 margin: 0 auto;
-                
+
                 .advgb-column {
                    flex-basis: 0;
                 }
-                
+
                 // Spacing between columns
                 &.gutter-10 > .advgb-column:not(:first-child) {
                     margin-left: 10px;
@@ -71,6 +71,12 @@
                 @media (max-width: 767px) {
 
                     @include colums-width-variants('mbl-');
+
+                    // Collapsed Order RTL
+                    &.order-rtl {
+                       flex-wrap: wrap-reverse;
+                       -moz-flex-wrap: wrap-reverse;
+                    }
                 }
             }
         }

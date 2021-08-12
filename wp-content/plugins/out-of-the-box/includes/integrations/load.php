@@ -26,7 +26,6 @@ class Integrations
         $this->load_contactform7();
         $this->load_elementor();
         $this->load_gravityforms();
-        $this->load_ninjaforms();
         $this->load_formidableforms();
         $this->load_gravitypdf();
         $this->load_gutenberg();
@@ -63,19 +62,6 @@ class Integrations
         require_once 'gravityforms/init.php';
     }
 
-    public function load_ninjaforms()
-    {
-        if (!function_exists('Ninja_Forms')) {
-            return false;
-        }
-
-        if (version_compare(get_option('ninja_forms_version', '0.0.0'), '3', '<') || get_option('ninja_forms_load_deprecated', false)) {
-            return false;
-        }
-
-        //require_once 'ninjaforms/init.php';
-    }
-
     public function load_formidableforms()
     {
         if (!class_exists('FrmHooksController')) {
@@ -83,6 +69,15 @@ class Integrations
         }
 
         require_once 'formidableforms/init.php';
+    }
+
+    public function load_fluentforms()
+    {
+        if (!defined('FLUENTFORM')) {
+            return false;
+        }
+
+        require_once 'fluentforms/init.php';
     }
 
     public function load_gravitypdf()

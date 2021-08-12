@@ -2,7 +2,7 @@
 
   <div class="outofthebox-header">
             <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
-    <div class="outofthebox-title"><?php _e('File Browser', 'wpcloudplugins'); ?></div>
+    <div class="outofthebox-title"><?php esc_html_e('File Browser', 'wpcloudplugins'); ?></div>
   </div>
 
   <div class="outofthebox-panel outofthebox-panel-full">

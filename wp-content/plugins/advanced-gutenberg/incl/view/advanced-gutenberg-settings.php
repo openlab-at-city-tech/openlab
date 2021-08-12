@@ -17,46 +17,7 @@ wp_enqueue_script('codemirror_mode_css');
 wp_enqueue_script('codemirror_hint_css');
 wp_enqueue_script('advgb_settings_js');
 
-// ThickBox JS and CSS
-add_thickbox();
-
 $saved_settings    = get_option('advgb_settings');
-$blocks_list_saved = get_option('advgb_blocks_list');
-$advgb_blocks      = array();
-
-if (gettype($blocks_list_saved) === 'array') {
-    foreach ($blocks_list_saved as $block) {
-        if (strpos($block['name'], 'advgb/') === false) {
-            continue;
-        } else {
-            $block['icon'] = htmlentities($block['icon']);
-            array_push($advgb_blocks, $block);
-        }
-    }
-}
-
-/**
- * Sort array
- *
- * @param string $key Array key to sort
- *
- * @return Closure
- */
-function sortBy($key)
-{
-    return function ($a, $b) use ($key) {
-        return strnatcmp($a[$key], $b[$key]);
-    };
-}
-
-usort($advgb_blocks, sortBy('title'));
-$excluded_blocks_config = array(
-    'advgb/container',
-    'advgb/accordion-item',
-    'advgb/accordion',
-    'advgb/tabs',
-    'advgb/tab',
-);
 
 $gallery_lightbox_checked         = $saved_settings['gallery_lightbox'] ? 'checked' : '';
 $gallery_lightbox_caption_checked = $saved_settings['gallery_lightbox_caption'] ? 'checked' : '';
@@ -75,20 +36,6 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
 ?>
 
 <div id="advgb-settings-container">
-    <div class="ju-top-tabs-wrapper">
-        <ul class="tabs ju-top-tabs">
-            <li class="tab">
-                <a href="#config-tab" class="link-tab">
-                    <?php esc_html_e('Configuration', 'advanced-gutenberg') ?>
-                </a>
-            </li>
-            <li class="tab">
-                <a href="#block-config-tab" class="link-tab">
-                    <?php esc_html_e('Default blocks config', 'advanced-gutenberg') ?>
-                </a>
-            </li>
-        </ul>
-    </div>
 
     <?php if (isset($_GET['save_settings'])) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action ?>
         <div class="ju-notice-msg ju-notice-success">
@@ -97,9 +44,10 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
         </div>
     <?php endif; ?>
 
-    <h1 class="advgb-settings-header"><?php esc_html_e('Configuration', 'advanced-gutenberg') ?></h1>
-
-    <div id="config-tab" class="tab-content clearfix" style="display: none;">
+    <div class="advgb-header" style="padding-top: 40px">
+        <h1 class="header-title"><?php esc_html_e('Settings', 'advanced-gutenberg') ?></h1>
+    </div>
+    <div class="clearfix">
         <form method="post">
             <?php wp_nonce_field('advgb_settings_nonce', 'advgb_settings_nonce_field') ?>
             <ul class="settings-list clearfix">
@@ -355,42 +303,5 @@ if (!isset($saved_settings['enable_columns_visual_guide'])) {
                 </button>
             </div>
         </form>
-    </div>
-
-    <div id="block-config-tab" class="tab-content clearfix">
-        <div class="advgb-search-wrapper">
-            <input type="text"
-                   class="advgb-search-input blocks-config-search"
-                   placeholder="<?php esc_html_e('Search blocks', 'advanced-gutenberg') ?>"
-            >
-            <i class="mi mi-search"></i>
-        </div>
-        <ul class="blocks-config-list clearfix">
-            <?php foreach ($advgb_blocks as $block) : ?>
-                <?php $iconColor = '';
-                if (in_array($block['name'], $excluded_blocks_config)) {
-                    continue;
-                }
-                if (isset($block['iconColor'])) :
-                    $iconColor = 'style=color:' . $block['iconColor'];
-                endif; ?>
-            <li class="block-config-item ju-settings-option" title="<?php echo esc_attr($block['title']); ?>">
-                <span class="block-icon" <?php echo esc_attr($iconColor) ?>>
-                    <?php echo html_entity_decode(html_entity_decode(stripslashes($block['icon']))); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped ?>
-                </span>
-                <span class="block-title"><?php echo esc_html($block['title']); ?></span>
-                <i class="mi mi-settings block-config-button"
-                   title="<?php esc_html_e('Edit', 'advanced-gutenberg') ?>"
-                   data-block="<?php echo esc_attr($block['name']); ?>"
-                ></i>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <?php if (count($advgb_blocks) === 0) : ?>
-            <div class="blocks-not-loaded" style="text-align: center">
-                <p><?php esc_html_e('We are updating blocks list...', 'advanced-gutenberg'); ?></p>
-            </div>
-        <?php endif; ?>
     </div>
 </div>

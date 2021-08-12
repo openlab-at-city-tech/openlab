@@ -3219,7 +3219,9 @@ Content-Type: text/html;
 	 *
 	 * @return mixed
 	 */
-	public static function get_radio_choices( $field, $value = '', $disabled_text ) {
+	public static function get_radio_choices( $field, $value, $disabled_text ) {
+		$value = ( is_string( $value ) ) ? $value : '';
+
 		_deprecated_function( 'get_radio_choices', '1.9', 'GF_Field_Checkbox::get_radio_choices' );
 
 		return $field->get_radio_choices( $value, $disabled_text );
@@ -3478,7 +3480,8 @@ Content-Type: text/html;
 			$post_id   = rgar( $lead, 'post_id' );
 			$post_link = '';
 			if ( is_numeric( $post_id ) && self::is_post_field( $field ) ) {
-				$post_link = "<div>You can <a href='post.php?action=edit&post=$post_id'>edit this post</a> from the post page.</div>";
+				// Translators: link to the "Edit Post" page for this post.
+				$post_link = '<div>' . sprintf( __( 'You can <a href="%s">edit this post</a> from the post page.', 'gravityforms' ), 'post.php?action=edit&post=' . $post_id ) . '</div>';
 			}
 		}
 

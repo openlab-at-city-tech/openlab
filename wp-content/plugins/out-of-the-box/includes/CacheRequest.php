@@ -259,8 +259,6 @@ class CacheRequest
             @file_put_contents($file, '');
 
             if (!is_writable($file)) {
-                // TODO log error
-                //die(sprintf('Cache file (%s) is not writable', $file));
                 return null;
             }
         }

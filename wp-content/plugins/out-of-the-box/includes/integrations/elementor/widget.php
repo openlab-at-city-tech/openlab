@@ -47,7 +47,7 @@ class Widget extends \Elementor\Widget_Base
         }
 
         global $OutoftheBox;
-        $OutoftheBox->load_custom_css();
+        
 
         return ['Awesome-Font-5-css', 'OutoftheBox.ShortcodeBuilder', 'OutoftheBox'];
     }
@@ -87,7 +87,7 @@ class Widget extends \Elementor\Widget_Base
         $this->start_controls_section(
             'content_section',
             [
-                'label' => __('Shortcode', 'wpcloudplugins'),
+                'label' => esc_html__('Shortcode', 'wpcloudplugins'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
@@ -95,9 +95,9 @@ class Widget extends \Elementor\Widget_Base
         $this->add_control(
             'shortcode',
             [
-                'label' => __('Raw shortcode', 'wpcloudplugins'),
+                'label' => esc_html__('Raw shortcode', 'wpcloudplugins'),
                 'type' => \Elementor\Controls_Manager::TEXTAREA,
-                'description' => __('Edit this shortcode via the Shortcode Builder or manually via the raw code', 'wpcloudplugins'),
+                'description' => esc_html__('Edit this shortcode via the Shortcode Builder or manually via the raw code', 'wpcloudplugins'),
                 'default' => '[outofthebox mode="files"]',
                 'rows' => 7,
             ]
@@ -108,7 +108,7 @@ class Widget extends \Elementor\Widget_Base
             [
                 'type' => \Elementor\Controls_Manager::BUTTON,
                 'show_label' => false,
-                'text' => __('Edit via Shortcode Builder', 'wpcloudplugins'),
+                'text' => esc_html__('Edit via Shortcode Builder', 'wpcloudplugins'),
                 'event' => 'wpcp:editor:edit_outofthebox_shortcode',
             ]
         );
@@ -128,7 +128,7 @@ class Widget extends \Elementor\Widget_Base
     protected function get_render_html($shortcode)
     {
         if (empty($shortcode)) {
-            return __('Please create your shortcode first', 'wpcloudplugins');
+            return esc_html__('Please create your shortcode first', 'wpcloudplugins');
         }
 
         \ob_start();

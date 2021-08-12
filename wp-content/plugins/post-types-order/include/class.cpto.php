@@ -269,8 +269,8 @@
                         return;
                         
                     //not for hierarhical
-                    if ( is_post_type_hierarchical( $screen->post_type ) )
-                        return; 
+                    //if ( is_post_type_hierarchical( $screen->post_type ) )
+                        //return; 
                     
                     //if is taxonomy term filter return
                     if(is_category()    ||  is_tax())

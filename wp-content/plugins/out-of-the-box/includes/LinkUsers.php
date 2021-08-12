@@ -19,8 +19,9 @@ class LinkUsers
 
     public function render()
     {
-         include sprintf('%s/templates/admin/private_folders.php', OUTOFTHEBOX_ROOTDIR);
+        wp_enqueue_script('OutoftheBox.PrivateFolders', OUTOFTHEBOX_ROOTPATH.'/includes/js/LinkUsers.min.js', ['OutoftheBox'], OUTOFTHEBOX_VERSION, true);
 
+        include sprintf('%s/templates/admin/private_folders.php', OUTOFTHEBOX_ROOTDIR);
     }
 
     /**
@@ -44,8 +45,6 @@ class User_List_Table extends \WP_List_Table
 {
     /**
      * Prepare the items for the table to process.
-     *
-     * @return Void
      */
     public function prepare_items()
     {
@@ -107,18 +106,18 @@ class User_List_Table extends \WP_List_Table
     /**
      * Override the parent columns method. Defines the columns to use in your listing table.
      *
-     * @return Array
+     * @return array
      */
     public function get_columns()
     {
         return [
             'id' => 'ID',
             'avatar' => '',
-            'username' => __('Username'),
-            'name' => __('Name'),
-            'email' => __('Email'),
-            'role' => __('Role'),
-            'private_folder' => __('Private Folder', 'wpcloudplugins'),
+            'username' => esc_html__('Username'),
+            'name' => esc_html__('Name'),
+            'email' => esc_html__('Email'),
+            'role' => esc_html__('Role'),
+            'private_folder' => esc_html__('Private Folder', 'wpcloudplugins'),
             'buttons' => '',
         ];
     }
@@ -126,7 +125,7 @@ class User_List_Table extends \WP_List_Table
     /**
      * Define which columns are hidden.
      *
-     * @return Array
+     * @return array
      */
     public function get_hidden_columns()
     {
@@ -136,7 +135,7 @@ class User_List_Table extends \WP_List_Table
     /**
      * Define the sortable columns.
      *
-     * @return Array
+     * @return array
      */
     public function get_sortable_columns()
     {
@@ -155,7 +154,7 @@ class User_List_Table extends \WP_List_Table
      * @param array  $item        Data
      * @param string $column_name - Current column name
      *
-     * @return Mixed
+     * @return mixed
      */
     public function column_default($item, $column_name)
     {
@@ -168,13 +167,14 @@ class User_List_Table extends \WP_List_Table
             case 'role':
             case 'name':
                 return $item[$column_name];
-            case 'username':
 
+            case 'username':
                 if ('GUEST' === $item['id']) {
                     return '<strong>'.$item[$column_name].'</strong>';
                 }
 
                 return '<strong><a href="'.get_edit_user_link($item['id']).'" title="'.$item[$column_name].'">'.$item[$column_name].'</a></strong>';
+
             case 'private_folder':
                 $linked_data = $item[$column_name];
 
@@ -189,20 +189,22 @@ class User_List_Table extends \WP_List_Table
                         return '<code>'.$linked_account->get_email().'</code> <p>'.$linked_data['foldertext'].'</p>';
                     }
 
-                    return '<code>'.sprintf(__('Account with ID: %s not found', 'wpcloudplugins'), $linked_data['accountid']).'.</code> <p>'.$linked_data['foldertext'].'</p>';
+                    return '<code>'.sprintf(esc_html__('Account with ID: %s not found', 'wpcloudplugins'), $linked_data['accountid']).'.</code> <p>'.$linked_data['foldertext'].'</p>';
                 }
 
                 return '';
+
             case 'buttons':
                 $private_folder = $item['private_folder'];
 
                 $has_link = (!(empty($private_folder) || !is_array($private_folder) || !isset($private_folder['foldertext'])));
 
-                $buttons_html = '<a href="#" title="'.__('Create link with Private Folder','wpcloudplugins').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="fas fa-link" aria-hidden="true"></i> <span class="linkedto">'.__('Link to Private Folder', 'wpcloudplugins').'</span></a>';
-                $buttons_html .= '<a href="#" title="'.__('Break link with Private Folder','wpcloudplugins').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="fas fa-unlink" aria-hidden="true"></i> <span class="linkedto">'.__('Unlink', 'wpcloudplugins').'</span></a>';
-                $buttons_html .= '<div class="oftb-spinner"></div>';
+                $buttons_html = '<a href="#" title="'.esc_html__('Create link with Private Folder', 'wpcloudplugins').'" class="linkbutton '.(($has_link) ? 'hidden' : '').'" data-user-id="'.$item['id'].'"><i class="fas fa-link" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Link to Private Folder', 'wpcloudplugins').'</span></a>';
+                $buttons_html .= '<a href="#" title="'.esc_html__('Break link with Private Folder', 'wpcloudplugins').'" class="unlinkbutton '.(($has_link) ? '' : 'hidden').'" data-user-id="'.$item['id'].'"><i class="fas fa-unlink" aria-hidden="true"></i> <span class="linkedto">'.esc_html__('Unlink', 'wpcloudplugins').'</span></a>';
+                $buttons_html .= '<div class="wpcp-spinner"></div>';
 
                 return $buttons_html;
+
             default:
                 return print_r($item, true);
         }
@@ -213,7 +215,7 @@ class User_List_Table extends \WP_List_Table
      */
     public function no_items()
     {
-        _e('No users found.');
+        esc_html_e('No users found.');
     }
 
     protected function get_views()
@@ -250,7 +252,7 @@ class User_List_Table extends \WP_List_Table
             if ('none' === $role) {
                 $current_link_attributes = ' class="current" aria-current="page"';
             }
-            $name = __('No role');
+            $name = esc_html__('No role');
             // translators: User role name with count
             $name = sprintf('%1$s <span class="count">(%2$s)</span>', $name, number_format_i18n($avail_roles['none']));
             $role_links['none'] = "<a href='".esc_url(add_query_arg('role', 'none', $url))."'{$current_link_attributes}>{$name}</a>";
@@ -280,7 +282,7 @@ class User_List_Table extends \WP_List_Table
      *
      * @param mixed $users
      *
-     * @return Array
+     * @return array
      */
     private function table_data($users)
     {
@@ -292,8 +294,8 @@ class User_List_Table extends \WP_List_Table
         $data[] = [
             'id' => 'GUEST',
             'avatar' => '<img src="'.OUTOFTHEBOX_ROOTPATH.'/css/images/usericon.png" style="height:32px"/>',
-            'username' => __('Anonymous user', 'wpcloudplugins'),
-            'name' => '...'.__('Default folder for Guests and non-linked Users', 'wpcloudplugins'),
+            'username' => esc_html__('Anonymous user', 'wpcloudplugins'),
+            'name' => '...'.esc_html__('Default folder for Guests and non-linked Users', 'wpcloudplugins'),
             'email' => '',
             'role' => '',
             'private_folder' => $guestfolder,

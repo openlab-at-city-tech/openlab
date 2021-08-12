@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.9.6 _(2021-05-01)_
+* Fix: Change `__wakeup()` method visibility from `private` to `public` to avoid warnings under PHP8
+* Fix: Throw an error when attempting to unserialize an instance of the class to actually prevent it from happening
+
+## 1.9.5 _(2021-04-22)_
+* Change: Note compatibility through WP 5.7+
+* Change: Update copyright date (2021)
+* New: Add a few more possible TODO items
+
 ## 1.9.4 _(2020-09-13)_
 * Change: Convert to use of strict equality checks
 * Change: Restructure unit test file structure

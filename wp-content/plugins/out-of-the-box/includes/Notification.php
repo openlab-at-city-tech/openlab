@@ -133,6 +133,8 @@ class Notification
             error_log('[WP Cloud Plugin message]: '.sprintf('Could not send notification email on line %s: %s', __LINE__, $ex->getMessage()));
         }
 
+        do_action('outofthebox_log_event', 'outofthebox_sent_notification', $this->folder, ['notification_type' => $this->type, 'subject' => $subject, 'recipients' => $recipients]);
+
         do_action('outofthebox_notification_sent', $this);
     }
 
@@ -399,7 +401,7 @@ class Notification
         ];
 
         // Current user data
-        $this->placeholders['%user_name%'] = (is_user_logged_in()) ? wp_get_current_user()->display_name : __('An anonymous user', 'wpcloudplugins');
+        $this->placeholders['%user_name%'] = (is_user_logged_in()) ? wp_get_current_user()->display_name : esc_html__('An anonymous user', 'wpcloudplugins');
         $this->placeholders['%user_email%'] = (is_user_logged_in()) ? wp_get_current_user()->user_email : '';
         $this->placeholders['%user_first_name%'] = (is_user_logged_in()) ? wp_get_current_user()->first_name : '';
         $this->placeholders['%user_last_name%'] = (is_user_logged_in()) ? wp_get_current_user()->last_name : '';

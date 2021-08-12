@@ -112,10 +112,15 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * WordPress dependencies
  */
-const { PanelBody, Placeholder, SelectControl, ServerSideRender, TextControl, TextareaControl, ToggleControl } = wp.components;
+const { PanelBody, Placeholder, SelectControl, TextControl, TextareaControl, ToggleControl } = wp.components;
 const { InspectorControls } = wp.hasOwnProperty('blockEditor') ? wp.blockEditor : wp.editor;
 const { Component, Fragment } = wp.element;
 const { __ } = wp.i18n;
+
+const { ServerSideRender } = wp.components;
+if (wp.hasOwnProperty('serverSideRender')) {
+	const { serverSideRender: ServerSideRender } = wp;
+}
 
 /**
  * Internal dependencies
