@@ -1,5 +1,16 @@
 ## Useful plugins and tools
 
-* [Members](https://wordpress.org/plugins/members/)
-* [Edit Flow](https://editflow.org)
-* [Simple Taxonomy](https://wordpress.org/plugins/simple-taxonomy/)
+### Permissions management
+
+* [Members � Membership & User Role Editor Plugin](https://wordpress.org/plugins/members/)
+
+	(Previously called Members)
+
+### Taxonomy management
+
+* [Simple Taxonomy Refreshed](https://wordpress.org/plugins/simple-taxonomy-refreshed/)
+
+### Document workflow management
+
+* [Edit Flow](https://wordpress.org/plugins/edit-flow/)
+* [PublishPress](https://wordpress.org/plugins/publishpress/)

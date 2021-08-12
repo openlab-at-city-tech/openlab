@@ -1,0 +1,6 @@
+Releases of the Meow Commmon has to be carefully made, and version_compare
+should be used when big changes are made.
+
+= 3.3 (2020/12/19) =
+* is_cornerstone_builder()
+* is_pagebuilder_request()

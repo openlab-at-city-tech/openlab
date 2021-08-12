@@ -138,7 +138,7 @@ class B2S_AutoPost {
 
                 if (isset($limit) && (int) $limit > 0) {
                     if(!empty($this->url) && $networkId == 2) {
-                        $limit = 256;
+                        $limit = 254;
                     }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }

@@ -143,6 +143,7 @@ jQuery( document ).ready( function( $ ) {
       var MapTypeField = "";
       var Linefield = "";
       var PostTypeField ="";
+      var PostType ="";
       var CatFilterField = "";
       var MapBorderField = "";
       var MarkerStyleField = "";
@@ -151,21 +152,11 @@ jQuery( document ).ready( function( $ ) {
       var LatLonField = "";
       var ZoomField = "";
 
-      if($('#tagged_marker_style:checked').val() == "cluster"){
-        var lonlat = ol.proj.transform(TaggedSC_map.getView().getCenter(), "EPSG:3857", "EPSG:4326");
-        var lon = lonlat[0].toFixed(4);
-        var lat = lonlat[1].toFixed(4); 
-        LatLonField = lat + "," + lon;
-        ZoomField = TaggedSC_map.getView().getZoom();
-        ZoomField = ZoomField.toFixed(1);
-      }
-      else {
-        LatLonField = "autolat,autolon";
-        ZoomField = "5";
-      }
+
      
       //var dropdown = document.getElementById("cat");
-      var dropdown = $('#cat').val();
+      //var dropdown = $('#cat').val();
+
 
       var MarkerName    = $('#tagged_marker_icon:checked').val();
 
@@ -201,9 +192,28 @@ jQuery( document ).ready( function( $ ) {
         MapTypeField = " type=\"" + $('#osm_geotag_map_type').val() + "\"";
       }
 
-      PostTypeField = " tagged_type=\""+$('#osm_geotag_posttype').val()+"\"";
+      PostType = $('#osm_geotag_posttype').val();
+      PostTypeField = " tagged_type=\""+PostType+"\"";
+      
       if ($('#osm_geotag_posttype').val() != "none"){
         MarkerField = " marker_name=\"" + MarkerName + "\"";
+      }
+         
+      if($('#tagged_marker_style:checked').val() == "cluster"){
+        var lonlat = ol.proj.transform(TaggedSC_map.getView().getCenter(), "EPSG:3857", "EPSG:4326");
+        var lon = lonlat[0].toFixed(4);
+        var lat = lonlat[1].toFixed(4); 
+        LatLonField = lat + "," + lon;
+        ZoomField = TaggedSC_map.getView().getZoom();
+        ZoomField = ZoomField.toFixed(1);
+      }
+      else {
+        LatLonField = "autolat,autolon";
+        ZoomField = "5";
+      }
+
+      if (PostType == "actual"){
+      LatLonField = "0,0";
       }
 
       if (MarkerName == "mic_black_pinother_02.png"){
@@ -238,7 +248,7 @@ jQuery( document ).ready( function( $ ) {
       } ); /** JQuery **/
 }
 
-   function osm_showTaggedSCmap () {
+function osm_showTaggedSCmap () {
    jQuery( document ).ready( function( $ ) { 
    if($('#tagged_marker_style:checked').val() == "cluster"){
         document.getElementById("TaggedSC_map").style.display = "block"; 

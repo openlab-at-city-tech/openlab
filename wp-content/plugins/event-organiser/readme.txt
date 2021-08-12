@@ -3,8 +3,8 @@ Contributors: stephenharris
 Donate link: http://www.wp-event-organiser.com/donate
 Tags: events, event, event categories, event organizer, events calendar, event management, ical, locations, google map, OpenStreetMap, widget, venues, maps, gigs, shows,
 Requires at least: 3.8.0
-Tested up to: 5.5.1
-Stable tag: 3.10.2
+Tested up to: 5.7.0
+Stable tag: 3.10.7
 License: GPLv3
 
 Create and maintain events, including complex reoccurring patterns, venue management (with Google Maps or OpenStreetMap), calendars and customisable event lists
@@ -221,6 +221,23 @@ More information on shortcodes is [available here](http://wp-event-organiser.com
 8. Events list (using TwentySixteen)
 
 == Changelog ==
+
+= 3.10.7 - 11th June 2021 =
+* bugfix: Fixed bug with license keys not saving on multisite installations.
+
+= 3.10.6 - 17th May 2021 =
+* bugfix: Fix bug with Open Street Map & selecting 'no venue'
+
+= 3.10.5 - 7th March 2021 =
+* bugfix: Replace deprecated jQuery methods
+
+= 3.10.4 - 19th January 2021 =
+* bugfix: Fixed week/day calendar views broken in WP 5.6
+* bugfix: Fixed some jquery-migrate deprecation notices
+
+= 3.10.3 - 15th January 2021 =
+* bugfix: Fixed jQuery errors with WordPress 5.6
+* bugfix: Fixed styling regressions
 
 = 3.10.2 - 13th September 2020 =
 * bugfix: Fixed all-day toggle not working with WordPress 5.5

@@ -140,9 +140,10 @@ class CacheRequest
         $this->_save_local_cache();
     }
 
-    public static function clear_local_cache_for_shortcode($listtoken)
+    public static function clear_local_cache_for_shortcode($account_id, $listtoken)
     {
-        $file_name = 'request_'.$listtoken;
+        $file_name = Helpers::filter_filename($account_id.'_'.$listtoken, false);
+
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(OUTOFTHEBOX_CACHEDIR, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
             if (false === strpos($path->getFilename(), $file_name)) {
                 continue;

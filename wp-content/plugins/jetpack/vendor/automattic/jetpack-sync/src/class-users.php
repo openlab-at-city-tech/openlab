@@ -8,6 +8,7 @@
 namespace Automattic\Jetpack\Sync;
 
 use Automattic\Jetpack\Connection\Manager as Jetpack_Connection;
+use Automattic\Jetpack\Connection\XMLRPC_Async_Call;
 use Automattic\Jetpack\Roles;
 
 /**
@@ -34,8 +35,9 @@ class Users {
 	 * @todo Eventually, connection needs to be instantiated at the top level in the sync package.
 	 */
 	public static function init() {
+		add_action( 'jetpack_user_authorized', array( 'Automattic\\Jetpack\\Sync\\Actions', 'do_initial_sync' ), 10, 0 );
 		$connection = new Jetpack_Connection();
-		if ( $connection->is_active() ) {
+		if ( $connection->has_connected_user() ) {
 			// Kick off synchronization of user role when it changes.
 			add_action( 'set_user_role', array( __CLASS__, 'user_role_change' ) );
 		}
@@ -106,7 +108,7 @@ class Users {
 	 */
 	public static function update_role_on_com( $user_id ) {
 		$signed_role = self::get_signed_role( $user_id );
-		\Jetpack::xmlrpc_async_call( 'jetpack.updateRole', $user_id, $signed_role );
+		XMLRPC_Async_Call::add_call( 'jetpack.updateRole', get_current_user_id(), $user_id, $signed_role );
 	}
 
 	/**

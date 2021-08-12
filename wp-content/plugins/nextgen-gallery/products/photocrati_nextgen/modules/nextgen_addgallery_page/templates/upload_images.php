@@ -45,22 +45,6 @@
 
 <div id="uploader"></div>
 
-<?php
-$global_settings = C_NextGen_Global_Settings::get_instance();
-$display_zips = (!is_multisite() || (is_multisite() && $global_settings->get('wpmuZipUpload')));
-if ($display_zips)
-    $message = __('Drag image and ZIP files here or %{browse}', 'nggallery');
-else
-    $message = __('Drag image files here or %{browse}', 'nggallery');
-
-$allowed_file_types = ['image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png'];
-if ($display_zips)
-    $allowed_file_types[] = '.zip';
-
-$max_size_megabytes = round((int)$max_size / (1024 * 1024));
-$max_size_message = sprintf(__('You may select files up to %dMB', 'nggallery'), $max_size_megabytes);
-?>
-
 <script type="text/javascript">
 
     window.urlencode = function(str) {
@@ -119,114 +103,126 @@ $max_size_message = sprintf(__('You may select files up to %dMB', 'nggallery'), 
             const gallery_select = document.getElementById('gallery_id');
             const gallery_name   = document.getElementById('gallery_name');
             const gallery_create = document.getElementById('gallery_create');
-
-            const uppy = Uppy.Core({
-                locale: Uppy.locales[NggUploadImages_i18n.locale],
-                restrictions: {
-                    maxFileSize: <?php print esc_attr($max_size); ?>,
-                    allowedFileTypes: <?php print json_encode($allowed_file_types); ?>
-                },
+            const uppyCoreSettings = {
+                ...NggUppyDashboardSettings,
                 onBeforeUpload: (files) => {
                     gallery_select.disabled = true;
                     gallery_name.disabled   = true;
                     gallery_create.disabled = true;
                     return true;
                 }
-            }).use(Uppy.Dashboard, {
-                    inline: true,
-                    target: '#uploader',
-                    width: '100%',
-                    proudlyDisplayPoweredByUppy: false,
-                    hideRetryButton: true,
-                    note: "<?php print esc_attr($max_size_message); ?>",
-                    locale: {
-                        strings: {
-                            dropPaste: "<?php print esc_attr($message); ?>"
-                        }
-                    }
-            }).use(Uppy.XHRUpload, {
+            }
+            const uppyXHRSettings = {
+                ...NggXHRSettings,
                 endpoint: set_ngg_upload_url(0, ''),
-                fieldName: 'file',
-                limit: 6,
                 getResponseError: (text, response) => {
                     if ('string' === typeof text) {
                         text = JSON.parse(text);
                     }
                     return text.error;
                 }
-            }).on('file-added', (file) => {
-                // If this is run right away the upload button won't yet exist and can't be found to disable it
-                setTimeout(() => {
-                    adjust_upload_button();
-                }, 250);
-            }).on('file-removed', (file, reason) => {
-                if (reason === 'removed-by-user') {
-                    adjust_upload_button();
-                }
-            }).on('complete', (result) => {
-                // There was at least one error: remove the successful images so users can find out what went wrong
-                if (result.failed.length > 0) {
-                    uppy.getFiles().forEach((file) => {
-                        if ('undefined' === typeof file.error) {
-                            uppy.removeFile(file.id);
+            }
+
+            const uppy = Uppy.Core(uppyCoreSettings)
+                .use(Uppy.Dashboard, NggUppyDashboardSettings)
+                .use(Uppy.XHRUpload, uppyXHRSettings)
+                .use(Uppy.DropTarget, {
+                    target: document.body
+                })
+                .on('file-added', (file) => {
+                        // If this is run right away the upload button won't yet exist and can't be found to disable it
+                        setTimeout(() => {
+                            adjust_upload_button();
+                        }, 250);
+                    })
+                .on('file-removed', (file, reason) => {
+                        if (reason === 'removed-by-user') {
+                            adjust_upload_button();
+                        }
+                    })
+                .on('error', (file, error, response) => {
+                    if (console && console.log) {
+                        console.log(file)
+                        console.log(error)
+                        console.log(response)
+                    }
+                })
+                .on('complete', (result) => {
+                    // There was at least one error: remove the successful images so users can find out what went wrong
+                    if (result.failed.length > 0) {
+                        uppy.getFiles().forEach((file) => {
+                            if ('undefined' === typeof file.error) {
+                                uppy.removeFile(file.id);
+                            }
+                        });
+                    } else {
+                        // All uploads were a success; clear the board and reset the game
+                        setTimeout(() => {
+                            uppy.reset();
+                        }, 2000);
+                    }
+
+                    const gallery_url = '<?php echo admin_url("/admin.php?page=nggallery-manage-gallery&mode=edit&gid=")?>' + gallery_select.value;
+                    const chosen_name = String(gallery_select.selectedOptions[0].dataset.originalValue);
+
+                    let upload_count = result.successful.length;
+
+                    // Adjust the upload count for images uploaded inside a zip file
+                    result.successful.forEach(function(uploaded_file) {
+                        if ('zip' === uploaded_file.extension) {
+                            upload_count = upload_count - 1;
+                            upload_count = upload_count + uploaded_file.response.body.image_ids.length;
                         }
                     });
-                } else {
-                    // All uploads were a success; clear the board and reset the game
-                    setTimeout(() => {
-                        uppy.reset();
-                    }, 2000);
-                }
 
-                const gallery_url = '<?php echo admin_url("/admin.php?page=nggallery-manage-gallery&mode=edit&gid=")?>' + gallery_select.value;
-                const chosen_name = String(gallery_select.selectedOptions[0].dataset.originalValue);
-
-                let upload_count = result.successful.length;
-
-                // Adjust the upload count for images uploaded inside a zip file
-                result.successful.forEach(function(uploaded_file) {
-                    if ('zip' === uploaded_file.extension) {
-                        upload_count = upload_count - 1;
-                        upload_count = upload_count + uploaded_file.response.body.image_ids.length;
+                    /** @var NggUploadImages_i18n object */
+                    let message = NggUploadImages_i18n.x_images_uploaded;
+                    if (upload_count === 0) {
+                        message = NggUploadImages_i18n.no_image_uploaded;
+                    } else if (upload_count === 1) {
+                        message = NggUploadImages_i18n.one_image_uploaded;
                     }
+
+                    if (upload_count >= 1) {
+                        message = message + ' ' + NggUploadImages_i18n.manage_gallery;
+                    }
+
+                    if (result.failed.length > 0) {
+                        uppy.getFiles().forEach((file) => {
+                            message = message + "<br/>" + NggUploadImages_i18n.image_failed;
+                            message = message.replace('{filename}', file.name)
+                                             .replace('{error}', file.error);
+                        })
+                    }
+
+                    message = message.replace('{count}', String(upload_count))
+                                     .replace('{name}', chosen_name);
+
+                    Toastify({
+                        text: message,
+                        duration: 180000,
+                        destination: (upload_count === 0) ? '' : gallery_url,
+                        newWindow: (upload_count !== 0),
+                        close: true,
+                        gravity: 'bottom',
+                        position: 'right',
+                        backgroundColor: 'black',
+                        stopOnFocus: true,
+                        onClick: function() {
+                        }
+                    }).showToast();
+
+                    gallery_select.value = 0;
+                    gallery_name.value   = '';
+
+                    gallery_name.disabled   = false;
+                    gallery_select.disabled = false;
+                    gallery_create.disabled = true;
+
+                    gallery_name.classList.remove('hidden');
+                    gallery_create.classList.remove('hidden');
                 });
-
-                /** @var NggUploadImages_i18n object */
-                let message = NggUploadImages_i18n.x_images_uploaded;
-                if (upload_count === 0) {
-                    message = NggUploadImages_i18n.no_image_uploaded;
-                } else if (upload_count === 1) {
-                    message = NggUploadImages_i18n.one_image_uploaded;
-                }
-
-                message = message + ' ' + NggUploadImages_i18n.manage_gallery;
-                message = message.replace('{count}', String(upload_count))
-                                 .replace('{name}', chosen_name);
-
-                Toastify({
-                    text: message,
-                    duration: 180000,
-                    destination: gallery_url,
-                    newWindow: true,
-                    close: true,
-                    gravity: 'bottom',
-                    position: 'right',
-                    backgroundColor: 'black',
-                    stopOnFocus: true,
-                    onClick: function() {
-                    }
-                }).showToast();
-
-                gallery_select.value = 0;
-                gallery_name.value   = '';
-
-                gallery_name.disabled   = false;
-                gallery_select.disabled = false;
-                gallery_create.disabled = true;
-
-                gallery_name.classList.remove('hidden');
-                gallery_create.classList.remove('hidden');
-            });
+            
 
             // This is used by the NextGEN wizard to determine when the uploads process is complete
             window.ngg_uppy = uppy;

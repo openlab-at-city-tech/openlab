@@ -10,7 +10,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
     <div class="wrap">
       <div class="outofthebox-header">
                 <div class="outofthebox-logo"><a href="https://www.wpcloudplugins.com" target="_blank"><img src="<?php echo OUTOFTHEBOX_ROOTPATH; ?>/css/images/wpcp-logo-dark.svg" height="64" width="64"/></a></div>
-        <div class="outofthebox-form-buttons" style="<?php echo (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG)) ? 'display:none;' : ''; ?>"> <div id="save_settings" class="simple-button default save_settings" name="save_settings"><?php esc_html_e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div></div>
+        <div class="outofthebox-form-buttons" style="<?php echo (false === is_plugin_active_for_network(OUTOFTHEBOX_SLUG)) ? 'display:none;' : ''; ?>"> <div id="wpcp-save-settings-button" class="simple-button default"><?php esc_html_e('Save Settings', 'wpcloudplugins'); ?>&nbsp;<div class='wpcp-spinner'></div></div></div>
         <div class="outofthebox-title"><?php esc_html_e('Settings', 'wpcloudplugins'); ?></div>
       </div>
 
@@ -57,8 +57,8 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
               <div class="outofthebox-option-title"><?php esc_html_e('Network Wide Authorization', 'wpcloudplugins'); ?>
                 <div class="outofthebox-onoffswitch">
                   <input type='hidden' value='No' name='out_of_the_box_settings[network_wide]'/>
-                  <input type="checkbox" name="out_of_the_box_settings[network_wide]" id="network_wide" class="outofthebox-onoffswitch-checkbox" <?php echo (empty($network_wide_authorization)) ? '' : 'checked="checked"'; ?> data-div-toggle="network_wide"/>
-                  <label class="outofthebox-onoffswitch-label" for="network_wide"></label>
+                  <input type="checkbox" name="out_of_the_box_settings[network_wide]" id="wpcp-network_wide-button" class="outofthebox-onoffswitch-checkbox" <?php echo (empty($network_wide_authorization)) ? '' : 'checked="checked"'; ?> data-div-toggle="network_wide"/>
+                  <label class="outofthebox-onoffswitch-label" for="wpcp-network_wide-button"></label>
                 </div>
               </div>
 
@@ -75,12 +75,12 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
                       <div class='account-info-container'>
                         <div class='account-info'>
                           <div class='account-actions'>
-                            <div id='add_dropbox_button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
+                            <div id='wpcp-add-account-button' type='button' class='simple-button blue' data-url="<?php echo $app->get_auth_url(['force_reapprove' => 'true']); ?>" title="<?php esc_html_e('Add account', 'wpcloudplugins'); ?>"><i class='fas fa-plus-circle' aria-hidden='true'></i>&nbsp;<?php esc_html_e('Add account', 'wpcloudplugins'); ?></div>
                           </div>
                           <div class="account-info-name">
-                            <?php esc_html_e('Add account', 'wpcloudplugins'); ?>
+                            <?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?>
                           </div>
-                          <span class="account-info-space"><?php esc_html_e('Link a new account to the plugin', 'wpcloudplugins'); ?></span>
+                          <span class="account-info-space"><a href="#" id="wpcp-read-privacy-policy"><i class="fas fa-shield-alt"></i> <?php esc_html_e('What happens with my data when I authorize the plugin?', 'wpcloudplugins'); ?></a></span>   
                         </div>
                       </div>
                     </div>
@@ -202,7 +202,7 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
           <div class="outofthebox-option-title"><?php esc_html_e('Support & Documentation', 'wpcloudplugins'); ?></div>
           <div id="message">
             <p><?php esc_html_e('Check the documentation of the plugin in case you encounter any problems or are looking for support.', 'wpcloudplugins'); ?></p>
-            <div id='wpcp_documentation_button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
+            <div id='wpcp-open-docs-button' type='button' class='simple-button blue'><?php esc_html_e('Open Documentation', 'wpcloudplugins'); ?></div>
           </div>
           <br/>
           <div class="outofthebox-option-title"><?php esc_html_e('Cache', 'wpcloudplugins'); ?></div>
@@ -213,4 +213,49 @@ $network_wide_authorization = $this->get_processor()->is_network_authorized();
       <!-- End Help info -->
     </div>
   </form>
+
+  <!-- End Privacy Policy -->
+  <div id="wpcp-privacy-policy" style='clear:both;display:none'>  
+    <div class="outofthebox outofthebox-tb-content">
+      <div class="outofthebox-option-title"><?php esc_html_e('Requested scopes and justification', 'wpcloudplugins'); ?></div>
+      <div class="outofthebox-option-description"> <?php echo sprintf(esc_html__('In order to display your content stored on %s, you have to authorize it with your %s account.', 'wpcloudplugins'), 'Dropbox', 'Dropbox'); ?> <?php _e('The authorization will ask you to grant the application the following scopes:', 'wpcloudplugins'); ?>
+
+      <br/><br/>
+      <table class="widefat">
+        <thead>
+          <tr>
+            <th>Scope</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>files.content.write</code></td>
+            <td>Edit content of your Dropbox files and folders. Required to create/upload/copy/rename/delete content on your Dropbox</td>
+          </thead>
+          <tr>
+            <td><code>files.content.read</code></td>
+            <td>View content of your Dropbox files and folders. Used to display your content in the plugins modules, preview it and download the files.</td>
+          </tr>
+          <tr>
+            <td><code>sharing.write</code></td>
+            <td>View and manage your Dropbox sharing settings and collaborators. Required to create shared links or direct links to your files.</td>
+          </tr>
+          <tr>
+            <td><code>account_info.read</code></td>
+            <td><?php (esc_html_e('Allow the plugin to see your publicly available personal info, like email, name and profile picture. This information will only be displayed on this page for easy account identification.', 'wpcloudplugins')); ?></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br/>
+      <div class="outofthebox-option-title"><?php esc_html_e('Information about the data', 'wpcloudplugins'); ?></div>
+      The authorization tokens will be stored, encrypted, on this server and is not accessible by the developer or any third party. When you use the Application, all communications are strictly between your server and the cloud storage service servers. The communication is encrypted and the communication will not go through WP Cloud Plugins servers. We do not collect and do not have access to your personal data.
+      
+      <br/><br/>
+      <i class="fas fa-shield-alt"></i> <?php echo sprintf(esc_html__('Read the full %sPrivacy Policy%s if you have any further privacy concerns.', 'wpcloudplugins'), '<a href="https://www.wpcloudplugins.com/privacy-policy/privacy-policy-out-of-the-box/">', '</a>'); ?></div>
+    </div>
+  </div>
+  <!-- End Short Privacy Policy -->
+
 </div>

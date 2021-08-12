@@ -96,8 +96,7 @@ class CacheNode implements \Serializable
             return false;
         }
 
-        // Update URL so that it directly points to the content
-        return str_replace('www.dropbox.com', 'dl.dropboxusercontent.com', $this->_temporarily_link['url']);
+        return $this->_temporarily_link['url'];
     }
 
     /**

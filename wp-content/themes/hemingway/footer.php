@@ -57,7 +57,7 @@
 			</p>
 			
 			<p class="credits-right">
-				<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'hemingway' ), 'https://www.andersnoren.se' ); ?></span> &mdash; <a title="<?php _e( 'To the top', 'hemingway' ); ?>" class="tothetop"><?php _e( 'Up', 'hemingway' ); ?> &uarr;</a>
+				<span><?php printf( __( 'Theme by <a href="%s">Anders Noren</a>', 'hemingway' ), 'https://andersnoren.se' ); ?></span> &mdash; <a title="<?php _e( 'To the top', 'hemingway' ); ?>" class="tothetop"><?php _e( 'Up', 'hemingway' ); ?> &uarr;</a>
 			</p>
 					
 		</div><!-- .credits-inner -->

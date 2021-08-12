@@ -51,6 +51,7 @@ class GFAPI {
 		$form['is_active']    = $form_info->is_active;
 		$form['date_created'] = $form_info->date_created;
 		$form['is_trash']     = $form_info->is_trash;
+		$form['title']        = $form_info->title;
 
 		return $form;
 
@@ -60,19 +61,22 @@ class GFAPI {
 	 * Returns all the form objects.
 	 *
 	 * @since  1.8.11.5
+	 * @since  2.5 added $sort_column and $sort_dir parameters.
 	 * @access public
 	 *
 	 * @uses GFFormsModel::get_form_ids()
 	 * @uses GFAPI::get_form()
 	 *
-	 * @param bool $active True if active forms are returned. False to get inactive forms. Defaults to true.
-	 * @param bool $trash  True if trashed forms are returned. False to exclude trash. Defaults to false.
+	 * @param bool   $active      True if active forms are returned. False to get inactive forms. Defaults to true.
+	 * @param bool   $trash       True if trashed forms are returned. False to exclude trash. Defaults to false.
+	 * @param string $sort_column The column to sort the results on.
+	 * @param string $sort_dir    The sort direction, ASC or DESC.
 	 *
 	 * @return array The array of Form Objects.
 	 */
-	public static function get_forms( $active = true, $trash = false ) {
+	public static function get_forms( $active = true, $trash = false, $sort_column = 'id', $sort_dir = 'ASC' ) {
 
-		$form_ids = GFFormsModel::get_form_ids( $active, $trash );
+		$form_ids = GFFormsModel::get_form_ids( $active, $trash, $sort_column, $sort_dir );
 		if ( empty( $form_ids ) ) {
 			return array();
 		}
@@ -222,6 +226,10 @@ class GFAPI {
 			return new WP_Error( 'missing_form_id', __( 'Missing form id', 'gravityforms' ) );
 		}
 
+		if ( isset( $form['title'] ) ) {
+			$form['title'] = self::unique_title( $form['title'], $form_id );
+		}
+
 		if ( isset( $form['fields'] ) ) {
 
 			// Make sure the formId is correct.
@@ -302,9 +310,6 @@ class GFAPI {
 	 * @since  1.8.3.15
 	 * @access public
 	 *
-	 * @uses GFFormsModel::get_form_table_name()
-	 * @uses GFFormsModel::get_form_db_columns()
-	 *
 	 * @param array  $form_ids     The IDs of the forms to update.
 	 * @param string $property_key The name of the column in the database e.g. is_trash, is_active, title.
 	 * @param mixed  $value        The new value.
@@ -318,12 +323,27 @@ class GFAPI {
 			return new WP_Error( 'submissions_blocked', __( 'Submissions are currently blocked due to an upgrade in progress', 'gravityforms' ) );
 		}
 
-		$table        = GFFormsModel::get_form_table_name();
-
+		$table      = GFFormsModel::get_form_table_name();
 		$db_columns = GFFormsModel::get_form_db_columns();
 
 		if ( ! in_array( strtolower( $property_key ), $db_columns ) ) {
 			return new WP_Error( 'property_key_incorrect', __( 'Property key incorrect', 'gravityforms' ) );
+		}
+
+		if ( 'title' == $property_key ) {
+			if ( count( $form_ids ) === 1 ) {
+				$value = self::unique_title( $value, $form_ids[0] );
+			} else {
+				foreach ( $form_ids as $form_id ) {
+					$result = self::update_forms_property( array( $form_id ), $property_key, $value );
+					if ( is_wp_error( $result ) ) {
+						// If the result is an error, return the error right away.
+						return $result;
+					}
+				}
+
+				return $result;
+			}
 		}
 
 		$value = esc_sql( $value );
@@ -331,7 +351,7 @@ class GFAPI {
 			$value = sprintf( "'%s'", $value );
 		}
 		$in_str_arr = array_fill( 0, count( $form_ids ), '%d' );
-		$in_str     = join( ',', $in_str_arr );
+		$in_str     = implode( ',', $in_str_arr );
 		$result     = $wpdb->query(
 			$wpdb->prepare(
 				"
@@ -350,8 +370,6 @@ class GFAPI {
 	 *
 	 * @since  1.8.3.15
 	 * @access public
-	 *
-	 * @uses GFAPI::update_forms_property()
 	 *
 	 * @param array|int $form_id      The ID of the forms to update.
 	 * @param string    $property_key The name of the column in the database e.g. is_trash, is_active, title.
@@ -407,11 +425,6 @@ class GFAPI {
 	 * @access public
 	 * @global $wpdb
 	 *
-	 * @uses GFFormsModel::is_unique_title()
-	 * @uses GFFormsModel::insert_form()
-	 * @uses GFAPI::set_property_as_key()
-	 * @uses GFFormsModel::update_form_meta()
-	 *
 	 * @param array $form_meta The Form object.
 	 *
 	 * @return int|WP_Error Either the new Form ID or a WP_Error instance.
@@ -436,12 +449,7 @@ class GFAPI {
 		}
 
 		// Making sure title is not duplicate.
-		$title = $form_meta['title'];
-		$count = 2;
-		while ( ! RGFormsModel::is_unique_title( $title ) ) {
-			$title = $form_meta['title'] . "($count)";
-			$count ++;
-		}
+		$title = self::unique_title( $form_meta['title'] );
 
 		// Inserting form.
 		$form_id = RGFormsModel::insert_form( $title );
@@ -451,6 +459,9 @@ class GFAPI {
 
 		// Updating object's id property.
 		$form_meta['id'] = $form_id;
+
+		// Adding markup version. Increment this when we make breaking changes to form markup.
+		$form_meta['markupVersion'] = rgar( $form_meta, 'markupVersion' ) ? $form_meta['markupVersion'] : 2;
 
 		// Add default confirmation if form has no confirmations.
 		if ( ! isset( $form_meta['confirmations'] ) || empty( $form_meta['confirmations'] ) ) {
@@ -2192,6 +2203,20 @@ class GFAPI {
 			GFLogging::include_logger();
 			GFLogging::log_message( 'gravityformsapi', $message, KLogger::DEBUG );
 		}
+	}
+
+	/**
+	 * Make sure the form title is unique.
+	 *
+	 * @since 2.5
+	 *
+	 * @param string     $title
+	 * @param int|string $form_id
+	 *
+	 * @return string
+	 */
+	public static function unique_title( $title, $form_id = '' ) {
+		return GFFormsModel::maybe_increment_title( $title, $form_id );
 	}
 
 }

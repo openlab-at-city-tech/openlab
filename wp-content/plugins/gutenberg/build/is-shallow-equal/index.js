@@ -1,1 +1,208 @@
-this.wp=this.wp||{},this.wp.isShallowEqual=function(r){var t={};function e(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return r[n].call(o.exports,o,o.exports,e),o.l=!0,o.exports}return e.m=r,e.c=t,e.d=function(r,t,n){e.o(r,t)||Object.defineProperty(r,t,{enumerable:!0,get:n})},e.r=function(r){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(r,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(r,"__esModule",{value:!0})},e.t=function(r,t){if(1&t&&(r=e(r)),8&t)return r;if(4&t&&"object"==typeof r&&r&&r.__esModule)return r;var n=Object.create(null);if(e.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:r}),2&t&&"string"!=typeof r)for(var o in r)e.d(n,o,function(t){return r[t]}.bind(null,o));return n},e.n=function(r){var t=r&&r.__esModule?function(){return r.default}:function(){return r};return e.d(t,"a",t),t},e.o=function(r,t){return Object.prototype.hasOwnProperty.call(r,t)},e.p="",e(e.s=364)}({364:function(r,t,e){"use strict";var n=e(365),o=e(366),u=Array.isArray;r.exports=function(r,t){if(r&&t){if(r.constructor===Object&&t.constructor===Object)return n(r,t);if(u(r)&&u(t))return o(r,t)}return r===t},r.exports.isShallowEqualObjects=n,r.exports.isShallowEqualArrays=o},365:function(r,t,e){"use strict";var n=Object.keys;r.exports=function(r,t){var e,o,u,i,f;if(r===t)return!0;if(e=n(r),o=n(t),e.length!==o.length)return!1;for(u=0;u<e.length;){if(void 0===(f=r[i=e[u]])&&!t.hasOwnProperty(i)||f!==t[i])return!1;u++}return!0}},366:function(r,t,e){"use strict";r.exports=function(r,t){var e;if(r===t)return!0;if(r.length!==t.length)return!1;for(e=0;e<r.length;e++)if(r[e]!==t[e])return!1;return!0}}});
+window["wp"] = window["wp"] || {}; window["wp"]["isShallowEqual"] =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 430);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ 430:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "isShallowEqualObjects", function() { return /* reexport */ isShallowEqualObjects; });
+__webpack_require__.d(__webpack_exports__, "isShallowEqualArrays", function() { return /* reexport */ isShallowEqualArrays; });
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ isShallowEqual; });
+
+// CONCATENATED MODULE: ./packages/is-shallow-equal/build-module/objects.js
+/**
+ * Returns true if the two objects are shallow equal, or false otherwise.
+ *
+ * @param {import('.').ComparableObject} a First object to compare.
+ * @param {import('.').ComparableObject} b Second object to compare.
+ *
+ * @return {boolean} Whether the two objects are shallow equal.
+ */
+function isShallowEqualObjects(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+
+  if (aKeys.length !== bKeys.length) {
+    return false;
+  }
+
+  let i = 0;
+
+  while (i < aKeys.length) {
+    const key = aKeys[i];
+    const aValue = a[key];
+
+    if ( // In iterating only the keys of the first object after verifying
+    // equal lengths, account for the case that an explicit `undefined`
+    // value in the first is implicitly undefined in the second.
+    //
+    // Example: isShallowEqualObjects( { a: undefined }, { b: 5 } )
+    aValue === undefined && !b.hasOwnProperty(key) || aValue !== b[key]) {
+      return false;
+    }
+
+    i++;
+  }
+
+  return true;
+}
+//# sourceMappingURL=objects.js.map
+// CONCATENATED MODULE: ./packages/is-shallow-equal/build-module/arrays.js
+/**
+ * Returns true if the two arrays are shallow equal, or false otherwise.
+ *
+ * @param {any[]} a First array to compare.
+ * @param {any[]} b Second array to compare.
+ *
+ * @return {boolean} Whether the two arrays are shallow equal.
+ */
+function isShallowEqualArrays(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (let i = 0, len = a.length; i < len; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+//# sourceMappingURL=arrays.js.map
+// CONCATENATED MODULE: ./packages/is-shallow-equal/build-module/index.js
+/**
+ * Internal dependencies
+ */
+
+
+
+
+/**
+ * @typedef {Record<string, any>} ComparableObject
+ */
+
+/**
+ * Returns true if the two arrays or objects are shallow equal, or false
+ * otherwise.
+ *
+ * @param {any[]|ComparableObject} a First object or array to compare.
+ * @param {any[]|ComparableObject} b Second object or array to compare.
+ *
+ * @return {boolean} Whether the two values are shallow equal.
+ */
+
+function isShallowEqual(a, b) {
+  if (a && b) {
+    if (a.constructor === Object && b.constructor === Object) {
+      return isShallowEqualObjects(a, b);
+    } else if (Array.isArray(a) && Array.isArray(b)) {
+      return isShallowEqualArrays(a, b);
+    }
+  }
+
+  return a === b;
+}
+//# sourceMappingURL=index.js.map
+
+/***/ })
+
+/******/ });

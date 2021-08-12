@@ -408,10 +408,46 @@ class A_NextGen_Basic_Album extends Mixin
  * Class A_NextGen_Basic_Album_Controller
  * @mixin C_Display_Type_Controller
  * @adapts I_Display_Type_Controller
+ * @property C_Display_Type_Controller|A_NextGen_Basic_Album_Controller $object
  */
 class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
 {
     var $albums = array();
+    protected static $alternate_displayed_galleries = array();
+    /**
+     * @param C_Displayed_Gallery $displayed_gallery
+     * @return C_Displayed_Gallery
+     */
+    function get_alternate_displayed_gallery($displayed_gallery)
+    {
+        // Prevent recursive checks for further alternates causing additional modifications to the settings array
+        $id = $displayed_gallery->id();
+        if (!empty(self::$alternate_displayed_galleries[$id])) {
+            return self::$alternate_displayed_galleries[$id];
+        }
+        // Without this line the param() method will always return NULL when in wp_enqueue_scripts
+        $renderer = C_Displayed_Gallery_Renderer::get_instance('inner');
+        $renderer->do_app_rewrites($displayed_gallery);
+        $display_settings = $displayed_gallery->display_settings;
+        $gallery = $gallery_slug = $this->param('gallery');
+        if ($gallery && strpos($gallery, 'nggpage--') !== 0) {
+            $result = C_Gallery_Mapper::get_instance()->get_by_slug($gallery);
+            if ($result) {
+                $gallery = $result->{$result->id_field};
+            }
+            $parent_albums = $displayed_gallery->get_albums();
+            $gallery_params = array('source' => 'galleries', 'container_ids' => array($gallery), 'display_type' => $display_settings['gallery_display_type'], 'original_display_type' => $displayed_gallery->display_type, 'original_settings' => $display_settings, 'original_album_entities' => $parent_albums);
+            if (!empty($display_settings['gallery_display_template'])) {
+                $gallery_params['template'] = $display_settings['gallery_display_template'];
+            }
+            $displayed_gallery = $renderer->params_to_displayed_gallery($gallery_params);
+            if (is_null($displayed_gallery->id())) {
+                $displayed_gallery->id(md5(json_encode($displayed_gallery->get_entity())));
+            }
+            self::$alternate_displayed_galleries[$id] = $displayed_gallery;
+        }
+        return $displayed_gallery;
+    }
     /**
      * Renders the front-end for the NextGen Basic Album display type
      *
@@ -428,7 +464,6 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
         // a parent_id, which is the album that it belongs to. We need to do this
         // because the link to the gallery, is not /nggallery/gallery--id, but
         // /nggallery/album--id/gallery--id
-        $parent_albums = $displayed_gallery->get_albums();
         // Are we to display a gallery? Ensure our 'gallery' isn't just a paginated album view
         $gallery = $gallery_slug = $this->param('gallery');
         if ($gallery && strpos($gallery, 'nggpage--') !== 0) {
@@ -437,21 +472,16 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
                 return '';
             }
             $GLOBALS['nggShowGallery'] = TRUE;
-            $result = C_Gallery_Mapper::get_instance()->get_by_slug($gallery);
-            if ($result) {
-                $gallery = $result->{$result->id_field};
+            $alternate_displayed_gallery = $this->object->get_alternate_displayed_gallery($displayed_gallery);
+            if ($alternate_displayed_gallery !== $displayed_gallery) {
+                $renderer = C_Displayed_Gallery_Renderer::get_instance('inner');
+                add_filter('ngg_displayed_gallery_rendering', array($this, 'add_description_to_legacy_templates'), 8, 2);
+                add_filter('ngg_displayed_gallery_rendering', array($this, 'add_breadcrumbs_to_legacy_templates'), 9, 2);
+                $output = $renderer->display_images($alternate_displayed_gallery, $return);
+                remove_filter('ngg_displayed_gallery_rendering', array($this, 'add_breadcrumbs_to_legacy_templates'));
+                remove_filter('ngg_displayed_gallery_rendering', array($this, 'add_description_to_legacy_templates'));
+                return $output;
             }
-            $renderer = C_Displayed_Gallery_Renderer::get_instance('inner');
-            $gallery_params = array('source' => 'galleries', 'container_ids' => array($gallery), 'display_type' => $display_settings['gallery_display_type'], 'original_display_type' => $displayed_gallery->display_type, 'original_settings' => $display_settings, 'original_album_entities' => $parent_albums);
-            if (!empty($display_settings['gallery_display_template'])) {
-                $gallery_params['template'] = $display_settings['gallery_display_template'];
-            }
-            add_filter('ngg_displayed_gallery_rendering', array($this, 'add_description_to_legacy_templates'), 8, 2);
-            add_filter('ngg_displayed_gallery_rendering', array($this, 'add_breadcrumbs_to_legacy_templates'), 9, 2);
-            $output = $renderer->display_images($gallery_params, $return);
-            remove_filter('ngg_displayed_gallery_rendering', array($this, 'add_breadcrumbs_to_legacy_templates'));
-            remove_filter('ngg_displayed_gallery_rendering', array($this, 'add_description_to_legacy_templates'));
-            return $output;
         } else {
             if ($album = $this->param('album')) {
                 // Are we to display a sub-album?
@@ -464,7 +494,7 @@ class A_NextGen_Basic_Album_Controller extends Mixin_NextGen_Basic_Pagination
                 $displayed_gallery->sortorder = array();
                 $displayed_gallery->container_ids = ($album === '0' or $album === 'all') ? array() : array($album);
                 $displayed_gallery->display_settings['original_album_id'] = 'a' . $album_sub;
-                $displayed_gallery->display_settings['original_album_entities'] = $parent_albums;
+                $displayed_gallery->display_settings['original_album_entities'] = $displayed_gallery->get_albums();
             }
         }
         // Get the albums
@@ -741,11 +771,18 @@ class A_NextGen_Basic_Album_Mapper extends Mixin
  * Class A_NextGen_Basic_Album_Routes
  * @mixin C_Displayed_Gallery_Renderer
  * @adapts I_Displayed_Gallery_Renderer
+ * @property A_NextGen_Basic_Album_Routes|C_Displayed_Gallery_Renderer $object
  */
 class A_NextGen_Basic_Album_Routes extends Mixin
 {
-    function render($displayed_gallery, $return = FALSE, $mode = NULL)
+    protected static $has_ran;
+    function do_app_rewrites($displayed_gallery)
     {
+        if (self::$has_ran) {
+            return;
+        }
+        self::$has_ran = TRUE;
+        $this->object->call_parent('do_app_rewrites', $displayed_gallery);
         $do_rewrites = FALSE;
         $app = NULL;
         // Get display types
@@ -781,6 +818,10 @@ class A_NextGen_Basic_Album_Routes extends Mixin
         if ($do_rewrites && $app) {
             $app->do_rewrites();
         }
+    }
+    function render($displayed_gallery, $return = FALSE, $mode = NULL)
+    {
+        $this->object->do_app_rewrites($displayed_gallery);
         return $this->call_parent('render', $displayed_gallery, $return, $mode);
     }
 }

@@ -7,7 +7,7 @@
  * @since 1.0.0
  */
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	'use strict';
 
@@ -25,7 +25,7 @@ jQuery( document ).ready( function( $ ) {
 		var import_type = $( this ).val();
 		$( '#tables-import-existing-table' ).prop( 'disabled', ( ( 'replace' !== import_type && 'append' !== import_type ) || 'zip' === extension ) );
 	} )
-	.find( 'input:checked' ).change();
+	.find( 'input:checked' ).trigger( 'change' );
 
 	/**
 	 * Show only the import source field that was selected with the radio button.
@@ -36,7 +36,7 @@ jQuery( document ).ready( function( $ ) {
 		$( '#row-import-source-file-upload, #row-import-source-url, #row-import-source-server, #row-import-source-form-field' ).hide();
 		$( '#row-import-source-' + $(this).val() ).show();
 	} )
-	.find( 'input:checked' ).change();
+	.find( 'input:checked' ).trigger( 'change' );
 
 	/**
 	 * Select correct value in import format dropdown on file select.
@@ -101,7 +101,7 @@ jQuery( document ).ready( function( $ ) {
 			$( selected_import_source_field )
 				.addClass( 'invalid' )
 				.one( 'change', function() { $(this).removeClass( 'invalid' ); } )
-				.focus().select();
+				.trigger( 'focus' ).trigger( 'select' );
 			valid_form = false;
 		}
 
@@ -113,7 +113,7 @@ jQuery( document ).ready( function( $ ) {
 				$( '#tables-import-existing-table' )
 					.addClass( 'invalid' )
 					.one( 'change', function() { $(this).removeClass( 'invalid' ); } )
-					.focus().select();
+					.trigger( 'focus' ).trigger( 'select' );
 				valid_form = false;
 			}
 		}

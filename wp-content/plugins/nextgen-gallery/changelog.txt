@@ -1,6 +1,70 @@
 NextGEN Gallery
 by Imagely
 
+= V3.11  - 05.26.2021
+* Fixed:   Now compatible with NimbleBuilder
+* Fixed:   Importing images from the Media Library was broken due to a z-index issue
+
+= V3.10  - 05.19.2021
+* NEW:     Added option under Misc Options to disable the /ngg_tag/ page feature
+* Fixed:   Misc performance improvements to NGG 3.9.0
+* Fixed:   Opening the rotate-image dialog a second time could show the incorrect image
+* Fixed:   Paginated galleries on paginated WP posts linked to the incorrect URL
+* Fixed:   Widgets were not rendering correctly with some third party page builders
+
+= V3.9.3 - 04.20.2021
+* Changed: Updated uppy.js
+* Fixed:   Conflict with Avada builder
+* Fixed:   ACG fields cannot be toggled
+* Fixed:   Activation issues with NextGEN Starter
+
+= V3.9.2 - 04.07.2021
+* Fixed:   call_user_func() warning when rendering shortcodes in widgets (1168)
+* Fixed:   do_shortcode and legacy shortcodes (1170)
+* Fixed:   Incorrect use of wp_localize_script (1171)
+* Fixed:   Tooltips are illegible (1172)
+* Fixed:   PHP foreach warning (1173)
+
+= V3.9.1 - 03.29.2021 = 
+* Fixed:   C_Dynamic_Stylesheet_Controller error
+* Fixed:   Galleries not displaying
+
+= V3.9.0 - 03.24.2021 =
+* Changed: Resource manager disabled by default
+* Changed: Remove ngg_load_frontend_logic filter
+* Fixed:   Refactored to resolve over 300 plugin & theme conflicts
+* Fixed:   Problem reported with taxonomy controller
+
+= V3.8.0 - 02.24.2021 =
+* NEW:     NGG featured image support for custom post types (1076)
+* Fixed:   Compatibility with Custom Post Type UI plugin (1076)
+* Fixed:   Compatibility with Advanced Custom Fields plugin (1150)
+* Fixed:   Compatibility with Photo Station plugin (855)
+* Fixed:   Compatibility with Stackable (981)
+
+= V3.7.0 - 02.17.2021 =
+* Fixed:   Added ellipsis to pagination to show pages skipped (1099) (1157)
+* Fixed:   Deleted images could still appear in 'random' image galleries (1129)
+* Fixed:   Galleries with only one page were causing pagination links to appear (1156)
+* Fixed:   Inability to change gallerypath on multisite networks (1150)
+* Fixed:   Overriding static resources (CSS & JS) through files in wp-content/ngg/ was not working (1144)
+
+= V3.6.0 - 02.10.2021 =
+* NEW:     Added new 'Bulk actions' option to remove EXIF Orientation from existing images (1137)
+* NEW:     Allow maximum_entity_limit display setting regardless of source (1146)
+* NEW:     Provide hooks to customize Uppy settings (1139)
+* NEW:     Recreated legacy templates as modern "views" (1127)
+* Fixed:   A compatibility warning with NextGEN Plus would appear when users had NextGEN Starter (1097)
+* Fixed:   Compatibility issue with Topscorer Theme (344171)
+* Fixed:   Compatibility with Custom Post Types UI (1076)
+* Fixed:   Compatibility with jQuery.mmenu (1140)
+* Fixed:   Disable marketing additions for users with NextGEN Starter enabled
+* Fixed:   Error responses from the server when uploading images failed were not specific (1121)
+* Fixed:   Image rotation not reliable (1137)
+* Fixed:   Imagebrowser pagination broke on images with UTF8 characters in their title (1135)
+* Fixed:   Shortcodes displaying albums did not appear in the order listed (1128)
+* Fixed:   Transient tracker was calling update_option() on every page (1074)
+
 = v3.5.0 - 12.17.2020 =
 * Changed: Deprecated legacy template functionality
 * Changed: Deprecated built-in custom style / CSS mechanism
@@ -212,11 +276,11 @@ by Imagely
 * Changed: Updated jquery.waitforimages.js
 * Fixed:   Uploading of non-JPEG images and uploading of JPEG with invalid EXIF data
 
-= V3.1.4 - 12.21.2018 =
-* Fixed:   Visual shortcode not displaying in WP 5.0.2
-
 = V3.1.3 - 01.08.2018 =
 * Fixed:   Post thumbnail support for NextGEN Gallery when using Block Editor
+
+= V3.1.4 - 12.21.2018 =
+* Fixed:   Visual shortcode not displaying in WP 5.0.2
 
 = V3.1.2 - 12.18.2018 =
 * Fixed:   Variable mismatch error when using central gallery management pages

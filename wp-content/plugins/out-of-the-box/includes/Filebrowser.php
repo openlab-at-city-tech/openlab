@@ -182,7 +182,7 @@ class Filebrowser
             'virtual' => false,
             'breadcrumb' => $file_path,
             'html' => $filelist_html,
-            'expires' => $expires, ]);
+        ]);
 
         $cached_request = new CacheRequest($this->get_processor());
         $cached_request->add_cached_response($response);
@@ -241,7 +241,7 @@ class Filebrowser
         $return .= "<div class='entry-info'>";
 
         $thumburl = $item->get_icon_retina();
-        $return .= "<div class='entry-info-icon'><div class='preloading'></div><img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='{$thumburl}' data-src-retina='{$thumburl}'/></div>";
+        $return .= "<div class='entry-info-icon'><div class='preloading'></div><img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='{$thumburl}' data-src-retina='{$thumburl}' alt=''/></div>";
 
         $return .= "<div class='entry-info-name'>";
         if ($has_access) {
@@ -266,7 +266,7 @@ class Filebrowser
         $return .= "</div>\n";
         $return .= "</div>\n";
 
-        return $return;
+        return apply_filters('outofthebox_render_filebrowser_entry', $return, $item, $this, $this->get_processor());
     }
 
     public function renderFile(Entry $item)
@@ -277,16 +277,16 @@ class Filebrowser
         $classmoveable = ($this->get_processor()->get_user()->can_move()) ? 'moveable' : '';
 
         $thumbnail_url = ($item->has_own_thumbnail() ? $this->get_processor()->get_client()->get_thumbnail($item, true, 640, 480) : $item->get_icon_retina());
-        $has_tooltip = ($item->has_own_thumbnail() && !empty($thumbnail_url) && ('shortcode' !== $this->get_processor()->get_shortcode_option('mcepopup')) ? "data-tooltip=''" : '');
+        $has_tooltip = ($item->has_own_thumbnail() && !empty($thumbnail_url) && ('shortcode' !== $this->get_processor()->get_shortcode_option('mcepopup')) && ('1' === $this->get_processor()->get_shortcode_option('hover_thumbs'))) ? "data-tooltip=''" : '';
 
         $return = '';
         $return .= "<div class='entry file {$classmoveable}' data-id='".$item->get_id()."' data-url='".rawurlencode($item->get_path_display())."' data-name='".htmlspecialchars($item->get_name(), ENT_QUOTES | ENT_HTML401, 'UTF-8')."' {$has_tooltip}>\n";
         $return .= "<div class='entry_block'>\n";
 
-                $return .= "<div class='entry_thumbnail'><div class='entry_thumbnail-view-bottom'><div class='entry_thumbnail-view-center'>\n";
+        $return .= "<div class='entry_thumbnail'><div class='entry_thumbnail-view-bottom'><div class='entry_thumbnail-view-center'>\n";
 
         $return .= "<div class='preloading'></div>";
-        $return .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' data-src-backup='".$item->get_icon_retina()."'/>";
+        $return .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".$thumbnail_url."' data-src-retina='".$thumbnail_url."' data-src-backup='".$item->get_icon_retina()."' alt='{$title}'/>";
         $return .= "</div></div></div>\n";
 
         if ($duration = $item->get_media('duration')) {
@@ -294,7 +294,7 @@ class Filebrowser
         }
 
         $return .= "<div class='entry-info'>";
-        $return .= "<div class='entry-info-icon'><img src='".$item->get_icon()."'/></div>";
+        $return .= "<div class='entry-info-icon'><img src='{$item->get_icon()}' alt=''/></div>";
         $return .= "<div class='entry-info-name'>";
         $return .= '<a '.$link['url'].' '.$link['target']." class='entry_link ".$link['class']."' ".$link['onclick']." title='".$title."' ".$link['lightbox']." data-filename='".$link['filename']."' data-entry-id='{$item->get_id()}'>";
         $return .= '<span>'.$link['filename'].'</span>';
@@ -317,7 +317,7 @@ class Filebrowser
         $return .= "</div>\n";
         $return .= "</div>\n";
 
-        return $return;
+        return apply_filters('outofthebox_render_filebrowser_entry', $return, $item, $this, $this->get_processor());
     }
 
     public function renderSize(EntryAbstract $item)
@@ -393,7 +393,7 @@ class Filebrowser
                 if ($this->get_processor()->get_client()->has_temporarily_link($item)) {
                     $url = $this->get_processor()->get_client()->get_temporarily_link($item);
                 } elseif ($this->get_processor()->get_client()->has_shared_link($item)) {
-                    $url = $this->get_processor()->get_client()->get_shared_link($item).'?raw=1';
+                    $url = str_replace('/s/', '/s/raw/', $this->get_processor()->get_client()->get_shared_link($item));
                 }
 
                 // Use preview thumbnail or raw  file
@@ -410,7 +410,7 @@ class Filebrowser
             // Check if we need to preview inline
             if ('1' === $this->get_processor()->get_shortcode_option('previewinline')) {
                 $class = 'entry_link ilightbox-group';
-                $onclick = "sendGooglePageView('Preview', '{$item->get_name()}');";
+                $onclick = "sendAnalyticsOFTB('Preview', '{$item->get_name()}');";
 
                 // Lightbox Settings
                 $lightbox = "rel='ilightbox[".$this->get_processor()->get_listtoken()."]' ";
@@ -446,7 +446,7 @@ class Filebrowser
             } else {
                 $class = 'entry_action_external_view';
                 $target = '_blank';
-                $onclick = "sendGooglePageView('Preview  (new window)', '{$item->get_name()}');";
+                $onclick = "sendAnalyticsOFTB('Preview  (new window)', '{$item->get_name()}');";
             }
         } elseif (('0' === $this->get_processor()->get_shortcode_option('mcepopup')) && $this->get_processor()->get_user()->can_download()) {
             // Check if user is allowed to download file
@@ -454,7 +454,7 @@ class Filebrowser
             $url = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
             $class = 'entry_action_download';
 
-            $target = ('url' === $item->get_extension()) ? '"_blank"' : $target;
+            $target = ('url' === $item->get_extension() || 'web' === $item->get_extension()) ? '"_blank"' : $target;
         }
 
         if ('woocommerce' === $this->get_processor()->get_shortcode_option('mcepopup')) {
@@ -470,7 +470,7 @@ class Filebrowser
             $lightbox = '';
             $class = 'entry_action_external_view';
             $target = '_blank';
-            $onclick = "sendGooglePageView('Preview  (new window)', '{$item->get_name()}');";
+            $onclick = "sendAnalyticsOFTB('Preview  (new window)', '{$item->get_name()}');";
         }
 
         if (!empty($url)) {
@@ -541,17 +541,17 @@ class Filebrowser
 
         // View
         $previewurl = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-preview&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
-        $onclick = "sendGooglePageView('Preview', '".$item->get_name()."');";
+        $onclick = "sendAnalyticsOFTB('Preview', '".$item->get_name()."');";
 
         if ($usercanpreview && '1' !== $this->get_processor()->get_shortcode_option('forcedownload')) {
             if ($item->get_can_preview_by_cloud() && '1' === $this->get_processor()->get_shortcode_option('previewinline')) {
                 $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='fas fa-eye '></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
-                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview (new window)', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview (new window)', 'wpcloudplugins').'</a></li>';
+                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
             } elseif ($item->get_can_preview_by_cloud()) {
                 if ('1' === $this->get_processor()->get_shortcode_option('previewinline')) {
                     $html .= "<li><a class='entry_action_view' title='".esc_html__('Preview', 'wpcloudplugins')."'><i class='fas fa-eye '></i>&nbsp;".esc_html__('Preview', 'wpcloudplugins').'</a></li>';
                 }
-                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview (new window)', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview (new window)', 'wpcloudplugins').'</a></li>';
+                $html .= "<li><a href='{$previewurl}' target='_blank' class='entry_action_external_view' onclick=\"{$onclick}\" title='".esc_html__('Preview in new window', 'wpcloudplugins')."'><i class='fas fa-desktop '></i>&nbsp;".esc_html__('Preview in new window', 'wpcloudplugins').'</a></li>';
             }
         }
 
@@ -567,7 +567,7 @@ class Filebrowser
 
         // Download
         if (($item->is_file()) && ($this->get_processor()->get_user()->can_download())) {
-            $target = ('url' === $item->get_extension()) ? 'target="_blank"' : '';
+            $target = ('url' === $item->get_extension() || 'web' === $item->get_extension()) ? 'target="_blank"' : '';
             $html .= "<li><a href='".OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-download&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken()."&dl=1' {$target} data-filename='".$filename."' class='entry_action_download' title='".esc_html__('Download', 'wpcloudplugins')."'><i class='fas fa-arrow-down '></i>&nbsp;".esc_html__('Download', 'wpcloudplugins').'</a></li>';
         }
         if (($this->get_processor()->get_user()->can_download()) && $item->is_dir() && '1' === $this->get_processor()->get_shortcode_option('can_download_zip')) {

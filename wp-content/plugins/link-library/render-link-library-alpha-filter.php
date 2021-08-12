@@ -106,7 +106,7 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 		$argumentarray = array_merge( $argumentarray, $incomingget );
 		$targetaddress = esc_url( add_query_arg( $argumentarray, get_permalink( $post->ID ) ) );
 
-		$output .= '"><a href="' . $targetaddress . '">ALL</a></div>';
+		$output .= '"><a href="' . $targetaddress . '">' . __( 'ALL', 'link-library' ) . '</a></div>';
 	}
 
 	$output .= '</div>';

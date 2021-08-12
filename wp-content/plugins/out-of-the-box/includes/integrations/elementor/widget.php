@@ -49,7 +49,7 @@ class Widget extends \Elementor\Widget_Base
         global $OutoftheBox;
         
 
-        return ['Awesome-Font-5-css', 'OutoftheBox.ShortcodeBuilder', 'OutoftheBox'];
+        return ['Awesome-Font-5', 'OutoftheBox.ShortcodeBuilder', 'OutoftheBox'];
     }
 
     public function is_reload_preview_required()

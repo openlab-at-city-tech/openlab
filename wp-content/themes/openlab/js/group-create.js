@@ -43,13 +43,13 @@ jQuery( document ).ready(
 		$required_fields = $form.find( 'input:required' );
 
 		function maybeShowSiteFields() {
-			if ( ! $setuptoggle.length ) {
+			if ( ! $setuptoggle.length && 'portfolio' !== new_group_type ) {
 				return;
 			}
 
 			var showSiteFields = $setuptoggle.is( ':checked' );
 
-			if ( showSiteFields ) {
+			if ( showSiteFields || 'portfolio' === new_group_type ) {
 				$( '#site-options' ).show();
 			} else {
 				$( '#site-options' ).hide();
@@ -69,14 +69,14 @@ jQuery( document ).ready(
 						$( thisid ).find( 'input' ).each(
 							function(index,element){
 												$( element ).removeClass( 'disabled-opt' );
-												$( element ).removeProp( 'disabled' ).removeClass( 'disabled' );
+												$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
 							}
 						);
 						$( thisid ).find( 'select' ).each(
 							function(index,element){
 								if ($( element ).attr( 'type' ) !== 'radio') {
 									$( element ).removeClass( 'disabled-opt' );
-									$( element ).removeProp( 'disabled' ).removeClass( 'disabled' );
+									$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
 								}
 							}
 						);
@@ -128,7 +128,7 @@ jQuery( document ).ready(
 		}
 
 		function enable_gc_form() {
-			$gc_submit.removeAttr( 'disabled' );
+			$gc_submit.prop( 'disabled', false );
 			$gc_submit.fadeTo( 500, 1.0 );
 		}
 
@@ -343,7 +343,7 @@ jQuery( document ).ready(
 
 							// Un-grey the website clone options
 							$( '#wds-website-clone .radio' ).removeClass( 'disabled-opt' );
-							$( '#wds-website-clone input[name="new_or_old"]' ).removeAttr( 'disabled' );
+							$( '#wds-website-clone input[name="new_or_old"]' ).prop( 'disabled', true );
 
 							// Auto-select the "Name your cloned site" option,
 							// and trigger setup JS
@@ -392,7 +392,11 @@ jQuery( document ).ready(
 		var group_type = $.urlParam( 'type' );
 
 		var $create_or_clone = $( 'input[name="create-or-clone"]' );
-		var create_or_clone   = $create_or_clone.val();
+
+		var create_or_clone = 'create';
+		if ( $create_or_clone.length > 0 ) {
+			create_or_clone = $create_or_clone.val();
+		}
 
 		if ( 'admin' !== form_type && OLGroupCreate.groupTypeCanBeCloned ) {
 			var group_id_to_clone, new_create_or_clone;

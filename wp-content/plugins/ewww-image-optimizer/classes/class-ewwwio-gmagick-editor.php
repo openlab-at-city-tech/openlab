@@ -27,7 +27,7 @@ if ( class_exists( 'WP_Image_Editor_Gmagick' ) ) {
 		protected function _save( $image, $filename = null, $mime_type = null ) {
 			global $ewww_defer;
 			global $ewww_preempt_editor;
-			if ( ! empty( $ewww_preempt_editor ) ) {
+			if ( ! empty( $ewww_preempt_editor ) || ! defined( 'EWWW_IMAGE_OPTIMIZER_ENABLE_EDITOR' ) || ! EWWW_IMAGE_OPTIMIZER_ENABLE_EDITOR ) {
 				return parent::_save( $image, $filename, $mime_type );
 			}
 			list( $filename, $extension, $mime_type ) = $this->get_output_format( $filename, $mime_type );
@@ -36,7 +36,7 @@ if ( class_exists( 'WP_Image_Editor_Gmagick' ) ) {
 			}
 			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
-				$current_size = getimagesize( $filename );
+				$current_size = wp_getimagesize( $filename );
 				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(

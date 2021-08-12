@@ -500,14 +500,25 @@
 		}
 
 		function evaluateFormValidation() {
-
-			if (asyncLoaded && registrationFormValidation.isValid()) {
-				initValidation = true;
+			if ( asyncLoaded ) {
+				registrationFormValidation.whenValid()
+				  .then(
+						function() {
+							initValidation = true;
+							updateSubmitButtonStatus();
+						}
+					).
+					catch(
+						function() {
+							initValidation = false;
+							updateSubmitButtonStatus();
+						}
+					);
+				return;
 			} else {
 				initValidation = false;
+				updateSubmitButtonStatus();
 			}
-
-			updateSubmitButtonStatus();
 		}
 
 		/**

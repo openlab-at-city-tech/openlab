@@ -65,6 +65,7 @@ su_add_shortcode(
 function su_shortcode_user( $atts = null, $content = null ) {
 
 	$atts = su_parse_shortcode_atts( 'user', $atts );
+	$data = '';
 
 	if ( 'user_pass' === $atts['field'] ) {
 
@@ -81,29 +82,24 @@ function su_shortcode_user( $atts = null, $content = null ) {
 		$atts['user_id'] = get_current_user_id();
 	}
 
-	if ( ! is_numeric( $atts['user_id'] ) || $atts['user_id'] < 0 ) {
+	if ( su_is_positive_number( $atts['user_id'] ) ) {
 
-		return su_error_message(
-			'User',
-			__( 'invalid user ID', 'shortcodes-ultimate' )
-		);
+		$user = get_user_by( 'id', $atts['user_id'] );
 
-	}
+		if ( ! $user ) {
 
-	$user = get_user_by( 'id', $atts['user_id'] );
+			return su_error_message(
+				'User',
+				__( 'user not found', 'shortcodes-ultimate' )
+			);
 
-	if ( ! $user ) {
+		}
 
-		return su_error_message(
-			'User',
-			__( 'user not found', 'shortcodes-ultimate' )
-		);
+		$data = $user->get( $atts['field'] );
 
 	}
 
-	$data = $user->get( $atts['field'] );
-
-	if ( ! is_string( $data ) || '' === $data ) {
+	if ( ! is_string( $data ) || empty( $data ) ) {
 		$data = su_do_attribute( $atts['default'] );
 	}
 

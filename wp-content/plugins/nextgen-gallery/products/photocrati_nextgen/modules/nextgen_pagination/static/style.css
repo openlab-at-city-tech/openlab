@@ -29,6 +29,20 @@
     cursor: pointer !important;
 }
 
+.ngg-navigation .ellipsis {
+    background: #BBB;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    color: #fff;
+    display:inline;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 3px;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+
 .ngg-navigation span.current {
     background: #666;
 }

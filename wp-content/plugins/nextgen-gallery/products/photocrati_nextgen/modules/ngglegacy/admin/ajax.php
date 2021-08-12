@@ -57,7 +57,22 @@ function ngg_ajax_operation() {
 			break;
 			case 'get_image_ids' :
 				$result = nggAdmin::get_image_ids( $id );
-			break;
+                break;
+
+            // This will read the EXIF and then write it with the Orientation tag reset
+            case 'strip_orientation_tag':
+                $storage = C_Gallery_Storage::get_instance();
+                $image_path = $storage->get_image_abspath($id);
+                $backup_path = $image_path . '_backup';
+                $exif_abspath = @file_exists($backup_path) ? $backup_path : $image_path;
+                $exif_iptc = @C_Exif_Writer::read_metadata($exif_abspath);
+                foreach ($storage->get_image_sizes($id) as $size) {
+                    if ($size === 'backup')
+                        continue;
+                    @C_Exif_Writer::write_metadata($storage->get_image_abspath($id, $size), $exif_iptc);
+                }
+                $result = '1';
+                break;
 			default :
 				do_action( 'ngg_ajax_' . $_POST['operation'] );
 				die('-1');

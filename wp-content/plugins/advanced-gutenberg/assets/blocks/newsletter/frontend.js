@@ -18,8 +18,9 @@ jQuery(document).ready(function ($) {
         var lastName = $(this).find('.advgb-form-input-lname').val();
         var email = $(this).find('.advgb-form-input-email').val();
         var date = new Date();
-        var submitDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' - ' + date.getHours() + ':' + date.getMinutes();
+        var submitDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' - ' + (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
         var g_id = parseInt($thisForm.find('.advgb-grecaptcha').data('gid'));
+        var emailValid = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
         if (typeof firstName !== "undefined") firstName = firstName.trim();
         if (typeof lastName !== "undefined") lastName = lastName.trim();
@@ -29,6 +30,13 @@ jQuery(document).ready(function ($) {
             var alertText = $thisForm.find('.advgb-form-submit').data('alert');
             alertText = alertText ? alertText : 'You need to fill all fields!';
             alert(alertText);
+            return false;
+        }
+
+        if(emailValid.test(email)) {
+            console.log('Email is valid.');
+        } else {
+            alert('Use a valid email address!');
             return false;
         }
 

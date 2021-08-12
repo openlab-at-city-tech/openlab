@@ -1424,7 +1424,7 @@ S2.define('select2/selection/base',[
       // This needs to be delayed as the active element is the body when the
       // key is pressed.
       window.setTimeout(function () {
-        self.$selection.focus();
+        self.$selection.trigger( 'focus' );
       }, 1);
 
       self._detachCloseHandler(container);
@@ -1481,7 +1481,7 @@ S2.define('select2/selection/base',[
         // Timeout of 1 required for close to finish wrapping up.
         setTimeout(function(){
          $this.find('*:focus').blur();
-         $target.focus();
+         $target.trigger( 'focus' );
         }, 1);
       });
     });
@@ -1578,7 +1578,7 @@ S2.define('select2/selection/single',[
 
     container.on('focus', function (evt) {
       if (!container.isOpen()) {
-        self.$selection.focus();
+        self.$selection.trigger( 'focus' );
       }
     });
 
@@ -1724,7 +1724,7 @@ S2.define('select2/selection/multiple',[
         // This gets reset automatically when focus is triggered.
         self._keyUpPrevented = true;
 
-        self.$search.focus();
+        self.$search.trigger( 'focus' );
       }, 1);
     }
   }
@@ -2094,7 +2094,7 @@ S2.define('select2/selection/search',[
 
     this.resizeSearch();
     if (searchHadFocus) {
-      this.$search.focus();
+      this.$search.trigger( 'focus' );
     }
   };
 
@@ -3532,7 +3532,7 @@ S2.define('select2/data/ajax',[
 
     if (this._request != null) {
       // JSONP requests cannot always be aborted
-      if ($.isFunction(this._request.abort)) {
+      if ('function' === typeof this._request.abort) {
         this._request.abort();
       }
 
@@ -3557,7 +3557,7 @@ S2.define('select2/data/ajax',[
 
         if (self.options.get('debug') && window.console && console.error) {
           // Check to make sure that the response included a `results` key.
-          if (!results || !results.results || !$.isArray(results.results)) {
+          if (!results || !results.results || !Array.isArray(results.results)) {
             console.error(
               'Select2: The AJAX results did not return an array in the ' +
               '`results` key of the response.'
@@ -3616,7 +3616,7 @@ S2.define('select2/data/tags',[
 
     decorated.call(this, $element, options);
 
-    if ($.isArray(tags)) {
+    if (Array.isArray(tags)) {
       for (var t = 0; t < tags.length; t++) {
         var tag = tags[t];
         var item = this._normalizeItem(tag);
@@ -3692,7 +3692,11 @@ S2.define('select2/data/tags',[
   };
 
   Tags.prototype.createTag = function (decorated, params) {
-    var term = $.trim(params.term);
+  	if ( 'string' !== typeof params.term ) {
+  		return null;
+	}
+
+    var term = params.term.trim();
 
     if (term === '') {
       return null;
@@ -3785,7 +3789,7 @@ S2.define('select2/data/tokenizer',[
       // Replace the search term if we have the search box
       if (this.$search.length) {
         this.$search.val(tokenData.term);
-        this.$search.focus();
+        this.$search.trigger( 'focus' );
       }
 
       params.term = tokenData.term;
@@ -4032,10 +4036,10 @@ S2.define('select2/dropdown/search',[
     container.on('open', function () {
       self.$search.attr('tabindex', 0);
       self.$search.attr('aria-owns', resultsId);
-      self.$search.focus();
+      self.$search.trigger( 'focus' );
 
       window.setTimeout(function () {
-        self.$search.focus();
+        self.$search.trigger( 'focus' );
       }, 0);
     });
 
@@ -4048,7 +4052,7 @@ S2.define('select2/dropdown/search',[
 
     container.on('focus', function () {
       if (!container.isOpen()) {
-        self.$search.focus();
+        self.$search.trigger( 'focus' );
       }
     });
 
@@ -4863,7 +4867,7 @@ S2.define('select2/defaults',[
       }
     }
 
-    if ($.isArray(options.language)) {
+    if (Array.isArray(options.language)) {
       var languages = new Translation();
       options.language.push('en');
 
@@ -4926,7 +4930,7 @@ S2.define('select2/defaults',[
 
     function matcher (params, data) {
       // Always return the object if there is nothing to compare
-      if ($.trim(params.term) === '') {
+      if ('string' !== typeof params.term || params.term.trim() === '') {
         return data;
       }
 
@@ -5499,7 +5503,7 @@ S2.define('select2/core',[
             self.focusOnActiveElement();
         } else {
           // Focus on the search if user starts typing.
-          $searchField.focus();
+          $searchField.trigger( 'focus' );
           // Focus back to active selection when finished typing.
           // Small delay so typed character can be read by screen reader.
           setTimeout(function(){
@@ -5519,7 +5523,7 @@ S2.define('select2/core',[
   Select2.prototype.focusOnActiveElement = function () {
     // Don't mess with the focus on touchscreens because it causes havoc with on-screen keyboards.
     if (this.isOpen() && ! Utils.isTouchscreen()) {
-      this.$results.find('li.select2-results__option--highlighted').focus();
+      this.$results.find('li.select2-results__option--highlighted').trigger( 'focus' );
     }
   };
 
@@ -5710,7 +5714,7 @@ S2.define('select2/core',[
 
     var newVal = args[0];
 
-    if ($.isArray(newVal)) {
+    if (Array.isArray(newVal)) {
       newVal = $.map(newVal, function (obj) {
         return obj.toString();
       });
@@ -5787,7 +5791,7 @@ S2.define('select2/compat/utils',[
   function syncCssClasses ($dest, $src, adapter) {
     var classes, replacements = [], adapted;
 
-    classes = $.trim($dest.attr('class'));
+    classes = $dest.attr('class').trim();
 
     if (classes) {
       classes = '' + classes; // for IE which returns object
@@ -5800,7 +5804,7 @@ S2.define('select2/compat/utils',[
       });
     }
 
-    classes = $.trim($src.attr('class'));
+    classes = $src.attr('class').trim();
 
     if (classes) {
       classes = '' + classes; // for IE which returns object
@@ -5841,7 +5845,7 @@ S2.define('select2/compat/containerCss',[
 
     var containerCssClass = this.options.get('containerCssClass') || '';
 
-    if ($.isFunction(containerCssClass)) {
+    if ('function' === typeof containerCssClass) {
       containerCssClass = containerCssClass(this.$element);
     }
 
@@ -5867,7 +5871,7 @@ S2.define('select2/compat/containerCss',[
 
     var containerCss = this.options.get('containerCss') || {};
 
-    if ($.isFunction(containerCss)) {
+    if ('function' === typeof containerCss) {
       containerCss = containerCss(this.$element);
     }
 
@@ -5898,7 +5902,7 @@ S2.define('select2/compat/dropdownCss',[
 
     var dropdownCssClass = this.options.get('dropdownCssClass') || '';
 
-    if ($.isFunction(dropdownCssClass)) {
+    if ('function' === typeof dropdownCssClass) {
       dropdownCssClass = dropdownCssClass(this.$element);
     }
 
@@ -5924,7 +5928,7 @@ S2.define('select2/compat/dropdownCss',[
 
     var dropdownCss = this.options.get('dropdownCss') || {};
 
-    if ($.isFunction(dropdownCss)) {
+    if ('function' === typeof dropdownCss) {
       dropdownCss = dropdownCss(this.$element);
     }
 
@@ -5971,7 +5975,7 @@ S2.define('select2/compat/initSelection',[
     this.initSelection.call(null, this.$element, function (data) {
       self._isInitialized = true;
 
-      if (!$.isArray(data)) {
+      if (!Array.isArray(data)) {
         data = [data];
       }
 
@@ -6117,7 +6121,7 @@ S2.define('select2/compat/matcher',[
     function wrappedMatcher (params, data) {
       var match = $.extend(true, {}, data);
 
-      if (params.term == null || $.trim(params.term) === '') {
+      if (params.term == null || params.term.trim() === '') {
         return match;
       }
 
@@ -6506,11 +6510,11 @@ S2.define('jquery.select2',[
   './select2/core',
   './select2/defaults'
 ], function ($, _, Select2, Defaults) {
-  if ($.fn.selectWoo == null) {
+  if ($.fn.select2TEC == null) {
     // All methods that should return the element
     var thisMethods = ['open', 'close', 'destroy'];
 
-    $.fn.selectWoo = function (options) {
+    $.fn.select2TEC = function (options) {
       options = options || {};
 
       if (typeof options === 'object') {
@@ -6551,15 +6555,15 @@ S2.define('jquery.select2',[
   }
 
   if ($.fn.select2 != null && $.fn.select2.defaults != null) {
-    $.fn.selectWoo.defaults = $.fn.select2.defaults;
+    $.fn.select2TEC.defaults = $.fn.select2.defaults;
   }
 
-  if ($.fn.selectWoo.defaults == null) {
-    $.fn.selectWoo.defaults = Defaults;
+  if ($.fn.select2TEC.defaults == null) {
+    $.fn.select2TEC.defaults = Defaults;
   }
 
   // Also register selectWoo under select2 if select2 is not already present.
-  $.fn.select2 = $.fn.select2 || $.fn.selectWoo;
+  $.fn.select2 = $.fn.select2 || $.fn.select2TEC;
 
   return Select2;
 });
@@ -6579,7 +6583,7 @@ S2.define('jquery.select2',[
   // This allows Select2 to use the internal loader outside of this file, such
   // as in the language files.
   jQuery.fn.select2.amd = S2;
-  jQuery.fn.selectWoo.amd = S2;
+  jQuery.fn.select2TEC.amd = S2;
 
   // Return the Select2 instance for anyone who is importing it.
   return select2;

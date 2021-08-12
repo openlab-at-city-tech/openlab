@@ -1,18 +1,18 @@
 <?php
 /**
- * @package C2C_Plugins
+ * @package C2C_Plugin
  * @author  Scott Reilly
- * @version 050
+ * @version 064
  */
 /*
 Basis for other plugins.
 
-Compatible with WordPress 4.9 through 5.3+.
+Compatible with WordPress 4.9 through 5.7+.
 
 */
 
 /*
-	Copyright (c) 2010-2020 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2010-2021 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -31,9 +31,9 @@ Compatible with WordPress 4.9 through 5.3+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_TextHover_Plugin_050' ) ) :
+if ( ! class_exists( 'c2c_Plugin_064' ) ) :
 
-abstract class c2c_TextHover_Plugin_050 {
+abstract class c2c_Plugin_064 {
 	protected $plugin_css_version = '009';
 	protected $options            = array();
 	protected $options_from_db    = '';
@@ -48,12 +48,14 @@ abstract class c2c_TextHover_Plugin_050 {
 		'input'            => '',
 		'input_attributes' => '',
 		'label'            => '',
+		'more_help'        => '',
 		'no_wrap'          => false,
 		'numbered'         => false,
 		'options'          => '',
 		'output'           => '', // likely deprecated
 		'required'         => false
 	);
+	protected $donation_url       = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522';
 	protected $saved_settings     = false;
 	protected $saved_settings_msg = '';
 
@@ -65,7 +67,7 @@ abstract class c2c_TextHover_Plugin_050 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '050';
+		return '064';
 	}
 
 	/**
@@ -80,7 +82,7 @@ abstract class c2c_TextHover_Plugin_050 {
 	protected function __construct( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
 		$id_base = sanitize_title( $id_base );
 		if ( ! file_exists( $file ) ) {
-			die( sprintf( __( 'Invalid file specified for C2C_Plugin: %s', 'text-hover' ), $file ) );
+			die( sprintf( $this->get_c2c_string( 'Invalid file specified for C2C_Plugin: %s' ), $file ) );
 		}
 
 		$u_id_base = str_replace( '-', '_', $id_base );
@@ -120,27 +122,31 @@ abstract class c2c_TextHover_Plugin_050 {
 		add_action( 'init',                         array( $this, 'init' ) );
 		add_action( 'activate_' . $plugin_file,     array( $this, 'install' ) );
 		add_action( 'deactivate_' . $plugin_file,   array( $this, 'deactivate' ) );
-		if ( $this->is_plugin_admin_page() || $this->is_submitting_form() ) {
-			add_action( 'admin_init', array( $this, 'init_options' ) );
-			if ( ! $this->is_submitting_form() ) {
-				add_action( 'admin_head', array( $this, 'add_c2c_admin_css' ) );
-			}
-		}
+		add_action( 'admin_init',                   array( $this, 'init_options' ) );
+		add_action( 'admin_head',                   array( $this, 'add_c2c_admin_css' ) );
 	}
 
 	/**
-	 * A dummy magic method to prevent object from being cloned
+	 * A dummy magic method to prevent object from being cloned.
 	 *
 	 * @since 036
+	 * @since 062 Throw error to actually prevent cloning.
 	 */
-	public function __clone() { _doing_it_wrong( __FUNCTION__, __( 'Something went wrong.', 'text-hover' ), '036' ); }
+	public function __clone() {
+		/* translators: %s: Name of plugin class. */
+		throw new Error( sprintf( $this->get_c2c_string( '%s cannot be cloned.' ), __CLASS__ ) );
+	}
 
 	/**
-	 * A dummy magic method to prevent object from being unserialized
+	 * A dummy magic method to prevent object from being unserialized.
 	 *
 	 * @since 036
+	 * @since 062 Throw error to actually prevent unserialization.
 	 */
-	public function __wakeup() { _doing_it_wrong( __FUNCTION__, __( 'Something went wrong.', 'text-hover' ), '036' ); }
+	public function __wakeup() {
+		/* translators: %s: Name of plugin class. */
+		throw new Error( sprintf( $this->get_c2c_string( '%s cannot be unserialized.' ), __CLASS__ ) );
+	}
 
 	/**
 	 * Returns the plugin's version.
@@ -192,13 +198,29 @@ abstract class c2c_TextHover_Plugin_050 {
 				if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) ) {
 					add_filter( 'contextual_help', array( $this, 'contextual_help' ), 10, 3 );
 				}
-				if ( $this->is_plugin_admin_page() ) {
-					add_thickbox();
-				}
+				add_action( 'admin_enqueue_scripts', 'add_thickbox' );
 			}
 		}
 
 		$this->register_filters();
+	}
+
+	/**
+	 * Determines if the running WordPress is relative to a given version.
+	 *
+	 * @since 052
+	 *
+	 * @param string $wp_ver   A version string to compare the current WP
+	 *                         version against.
+	 * @param string $operator Optional. A comparison operator compatible with
+	 *                         PHP's `version_compare()`. Default '>='.
+	 * @return bool True if provided version is relative to the current version
+	 *              of WordPress according to comparison operation, else false.
+	 */
+	public function is_wp_version_cmp( $wp_ver, $operator = '>=' ) {
+		$operator = $operator ?: '>=';
+
+		return version_compare( $GLOBALS['wp_version'], $wp_ver, $operator );
 	}
 
 	/**
@@ -285,24 +307,33 @@ abstract class c2c_TextHover_Plugin_050 {
 	 */
 	public function init_options() {
 		register_setting( $this->admin_options_name, $this->admin_options_name, array( $this, 'sanitize_inputs' ) );
+
 		add_settings_section( 'default', '', array( $this, 'options_page_description' ), $this->plugin_file );
-		add_filter( 'whitelist_options', array( $this, 'whitelist_options' ) );
+
+		add_filter(
+			$this->is_wp_version_cmp( '5.5' ) ? 'allowed_options' : 'whitelist_options',
+			array( $this, 'allowed_options' )
+		);
+
 		foreach ( $this->get_option_names( false ) as $opt ) {
 			add_settings_field( $opt, $this->get_option_label( $opt ), array( $this, 'display_option' ), $this->plugin_file, 'default', array( 'label_for' => $opt ) );
 		}
 	}
 
 	/**
-	 * Whitelist the plugin's option(s)
+	 * Allows the plugin's option(s)
 	 *
-	 * @param array $options Array of options.
+	 * @since 052 Renamed from `whitelist_options()`.
 	 *
-	 * @return array The whitelist-amended $options array.
+	 * @param array $options Array of allowed options.
+	 * @return array The amended allowed options array.
 	 */
-	public function whitelist_options( $options ) {
+	public function allowed_options( $options ) {
 		$added = array( $this->admin_options_name => array( $this->admin_options_name ) );
-		$options = add_option_whitelist( $added, $options );
-		return $options;
+
+		return function_exists( 'add_allowed_options' )
+			? add_allowed_options( $added, $options )
+			: add_option_whitelist( $added, $options );
 	}
 
 	/**
@@ -324,7 +355,7 @@ abstract class c2c_TextHover_Plugin_050 {
 			echo '<h1>' . $localized_heading_text . "</h1>\n";
 		}
 		if ( ! $this->disable_contextual_help ) {
-			echo '<p class="see-help">' . __( 'See the "Help" link to the top-right of the page for more help.', 'text-hover' ) . "</p>\n";
+			echo '<p class="see-help">' . $this->get_c2c_string( 'See the "Help" link to the top-right of the page for more help.' ) . "</p>\n";
 		}
 	}
 
@@ -377,7 +408,7 @@ abstract class c2c_TextHover_Plugin_050 {
 		do_action( $this->get_hook( 'before_save_options' ), $this );
 		if ( isset( $_POST['Reset'] ) ) {
 			$options = $this->reset_options();
-			add_settings_error( 'general', 'settings_reset', __( 'Settings reset.', 'text-hover' ), 'updated' );
+			add_settings_error( 'general', 'settings_reset', $this->get_c2c_string( 'Settings reset.' ), 'updated' );
 			unset( $_POST['Reset'] );
 		} else {
 			// Start with the existing options, then start overwriting their potential override value. (This prevents
@@ -390,7 +421,7 @@ abstract class c2c_TextHover_Plugin_050 {
 					if ( $this->config[ $opt ]['input'] == 'checkbox' ) {
 						$options[ $opt ] = '';
 					} elseif ( true === $this->config[ $opt ]['required'] ) {
-						$msg = sprintf( __( 'A value is required for: "%s"', 'text-hover' ), $this->config[ $opt ]['label'] );
+						$msg = sprintf( $this->get_c2c_string( 'A value is required for: "%s"' ), $this->config[ $opt ]['label'] );
 						add_settings_error( 'general', 'setting_required', $msg, 'error' );
 					}
 				}
@@ -398,7 +429,7 @@ abstract class c2c_TextHover_Plugin_050 {
 					$val = $inputs[ $opt ];
 					$error = false;
 					if ( empty( $val ) && ( true === $this->config[ $opt ]['required'] ) ) {
-						$msg = sprintf( __( 'A value is required for: "%s"', 'text-hover' ), $this->config[ $opt ]['label'] );
+						$msg = sprintf( $this->get_c2c_string( 'A value is required for: "%s"' ), $this->config[ $opt ]['label'] );
 						$error = true;
 					} else {
 						$input = $this->config[ $opt ]['input'];
@@ -406,8 +437,12 @@ abstract class c2c_TextHover_Plugin_050 {
 							case 'checkbox':
 								break;
 							case 'int':
+								if ( $val && is_string( $val ) ) {
+									$val = str_replace( ',', '', $val );
+								}
 								if ( ! empty( $val ) && ( ! is_numeric( $val ) || ( intval( $val ) != round( $val ) ) ) ) {
-									$msg = sprintf( __( 'Expected integer value for: %s', 'text-hover' ), $this->config[ $opt ]['label'] );
+									/* translators: %s: Label for setting. */
+									$msg = sprintf( $this->get_c2c_string( 'Expected integer value for: %s' ), $this->config[ $opt ]['label'] );
 									$error = true;
 									$val = '';
 								}
@@ -460,6 +495,15 @@ abstract class c2c_TextHover_Plugin_050 {
 	abstract protected function load_config();
 
 	/**
+	 * Returns translated strings used by c2c_Plugin parent class.
+	 *
+	 * @since 060
+	 *
+	 * @return string[]
+	 */
+	abstract public function get_c2c_string( $string );
+
+	/**
 	 * Adds a new option to the plugin's configuration.
 	 *
 	 * Intended to be used for dynamically adding a new option after the config
@@ -490,7 +534,7 @@ abstract class c2c_TextHover_Plugin_050 {
 		// Ensure required configuration options have been configured via the sub-class. Die if any aren't.
 		foreach ( $this->required_config as $config ) {
 			if ( empty( $this->$config ) ) {
-				die( sprintf( __( "The plugin configuration option '%s' must be supplied.", 'text-hover' ), $config ) );
+				die( sprintf( $this->get_c2c_string( "The plugin configuration option '%s' must be supplied." ), $config ) );
 			}
 		}
 
@@ -535,7 +579,7 @@ abstract class c2c_TextHover_Plugin_050 {
 	 * Loads the localization textdomain for the plugin.
 	 */
 	protected function load_textdomain() {
-		load_plugin_textdomain( 'text-hover' );
+		load_plugin_textdomain( $this->id_base );
 	}
 
 	/**
@@ -548,30 +592,34 @@ abstract class c2c_TextHover_Plugin_050 {
 	}
 
 	/**
-	 * Outputs simple contextual help text, comprising solely of a thickboxed link
-	 * to the plugin's hosted readme.txt file.
+	 * Returns markup for simple contextual help text, comprising solely of a
+	 * thickboxed link to the plugin's hosted readme.txt file.
 	 *
-	 * NOTE: If overriding this in a sub-class, before sure to include the
-	 * check at the beginning of the function to ensure it shows up on its
-	 * own settings admin page.
+	 * NOTE: If overriding this in a sub-class, be sure to include the check at
+	 * the beginning of the function to ensure it shows up on its own settings
+	 * admin page.
 	 *
 	 * @param string $contextual_help The default contextual help.
 	 * @param int    $screen_id       The screen ID.
 	 * @param object $screen          The screen object (only supplied in WP 3.0).
+	 * @return string
 	 */
 	public function contextual_help( $contextual_help, $screen_id, $screen = null ) {
 		if ( $screen_id != $this->options_page ) {
 			return $contextual_help;
 		}
 
-		$help_url = admin_url( "plugin-install.php?tab=plugin-information&amp;plugin={$this->id_base}&amp;TB_iframe=true&amp;width=640&amp;height=514" );
-
-		$help = '<h3>' . __( 'More Plugin Help', 'text-hover' ) . '</h3>';
+		$help = '<h3>' . $this->get_c2c_string( 'More Plugin Help' ) . '</h3>';
 		$help .= '<p class="more-help">';
-		$help .= '<a title="' . esc_attr( sprintf( __( 'More information about %1$s %2$s', 'text-hover' ), $this->name, $this->version ) ) .
-			'" class="thickbox" href="' . $help_url . '">' . __( 'Click for more help on this plugin', 'text-hover' ) . '</a>' .
-			__( ' (especially check out the "Other Notes" tab, if present)', 'text-hover' );
+		$help .= sprintf(
+			'<a title="%s" class="thickbox" href="%s">%s</a>%s',
+			esc_attr( sprintf( $this->get_c2c_string( 'More information about %1$s %2$s' ), $this->name, $this->version ) ),
+			esc_url( admin_url( "plugin-install.php?tab=plugin-information&amp;plugin={$this->id_base}&amp;TB_iframe=true&amp;width=640&amp;height=514" ) ),
+			$this->get_c2c_string( 'Click for more help on this plugin' ),
+			$this->get_c2c_string( ' (especially check out the "Other Notes" tab, if present)' )
+		);
 		$help .= ".</p>\n";
+
 		return $help;
 	}
 
@@ -584,13 +632,17 @@ abstract class c2c_TextHover_Plugin_050 {
 			return;
 		}
 
+		if ( ! $this->is_plugin_admin_page() ) {
+			return;
+		}
+
 		$c2c_plugin_css_was_output = true;
 		$logo = plugins_url( 'c2c_minilogo.png', $this->plugin_file );
 		/**
 		 * Remember to increment the plugin_css_version variable if changing the CSS
 		 */
 		echo <<<HTML
-		<style type="text/css">
+		<style>
 		.long-text {width:98% !important;}
 		#c2c {
 			text-align:center;
@@ -620,7 +672,7 @@ abstract class c2c_TextHover_Plugin_050 {
 		.wrap {margin-bottom:30px !important;}
 		.c2c-form .hr, .c2c-hr {border-bottom:1px solid #ccc;padding:0 2px;margin-bottom:6px;}
 		.c2c-fieldset {border:1px solid #ccc; padding:2px 8px;}
-		.c2c-textarea, .c2c-inline_textarea {width:98%;font-family:"Courier New", Courier, mono; display: block;}
+		.c2c-textarea, .c2c-inline_textarea {width:98%;font-family:"Courier New", Courier, mono; display: block; white-space: pre; word-wrap: normal; overflow-x: scroll;}
 		.see-help {font-size:x-small;font-style:italic;}
 		.more-help {display:block;margin-top:8px;}
 		</style>
@@ -660,13 +712,11 @@ HTML;
 			return;
 		}
 
-		$screen = get_current_screen();
-
-		if ( $screen->id != $this->options_page ) {
+		if ( ! $this->is_plugin_admin_page() ) {
 			return;
 		}
 
-		$this->help_tabs_content( $screen );
+		$this->help_tabs_content( get_current_screen() );
 	}
 
 	/**
@@ -679,7 +729,7 @@ HTML;
 	public function help_tabs_content( $screen ) {
 		$screen->add_help_tab( array(
 			'id'      => 'c2c-more-help-' . $this->id_base,
-			'title'   => __( 'More Help', 'text-hover' ),
+			'title'   => $this->get_c2c_string( 'More Help' ),
 			'content' => self::contextual_help( '', $this->options_page )
 		) );
 	}
@@ -692,7 +742,7 @@ HTML;
 	 * @return array Links associated with a plugin on the admin Plugins page
 	 */
 	public function plugin_action_links( $action_links ) {
-		$settings_link = '<a href="' . $this->settings_page . '.php?page='.$this->plugin_basename.'">' . __( 'Settings', 'text-hover' ) . '</a>';
+		$settings_link = '<a href="' . $this->settings_page . '.php?page='.$this->plugin_basename.'">' . $this->get_c2c_string( 'Settings' ) . '</a>';
 		array_unshift( $action_links, $settings_link );
 		return $action_links;
 	}
@@ -702,10 +752,8 @@ HTML;
 	 */
 	public function donate_link( $links, $file ) {
 		if ( $file == $this->plugin_basename ) {
-			$donation_url  = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522';
-			$donation_url .= urlencode( sprintf( __( 'Donation for coffee2code plugin: %s', 'text-hover' ), $this->name ) );
-			$title         = __( 'Coffee fuels my coding.', 'text-hover' );
-			$links[] = '<a href="' . esc_url( $donation_url ) . '" title="' . esc_attr( $title ) . '">' . __( 'Donate', 'text-hover' ) . '</a>';
+			$title         = $this->get_c2c_string( 'Coffee fuels my coding.' );
+			$links[] = '<a href="' . esc_url( $this->donation_url ) . '" title="' . esc_attr( $title ) . '">' . $this->get_c2c_string( 'Donate' ) . '</a>';
 		}
 		return $links;
 	}
@@ -859,10 +907,33 @@ HTML;
 	/**
 	 * Checks if the current page is the plugin's settings page.
 	 *
+	 * Note: This should not be used during or before `'admin_init'` since the
+	 * current screen won't be set yet.
+	 *
 	 * @return bool True if on the plugin's settings page, else false.
 	 */
 	protected function is_plugin_admin_page() {
-		return ( basename( $_SERVER['PHP_SELF'], '.php' ) == $this->settings_page && isset( $_REQUEST['page'] ) && $_REQUEST['page'] == $this->plugin_basename );
+		if ( ! is_admin() ) {
+			return false;
+		}
+
+		if ( ! did_action( 'admin_init' ) ) {
+			_doing_it_wrong(
+				__METHOD__,
+				sprintf( $this->get_c2c_string( 'The method %1$s should not be called until after the %2$s action.' ), 'is_plugin_admin_page()', 'admin_init' ),
+				'063'
+			);
+		}
+
+		$current_screen = get_current_screen();
+
+		return (
+			$current_screen
+		&&
+			$this->options_page
+		&&
+			$current_screen->id === $this->options_page
+		);
 	}
 
 	/**
@@ -912,6 +983,8 @@ HTML;
 				}
 				$value = $new_value;
 			}
+		} elseif ( $datatype === 'int' && is_numeric( $value ) ) {
+			$value = number_format_i18n( $value );
 		}
 		$attributes = $this->config[ $opt ]['input_attributes'];
 		$this->config[ $opt ]['class'][] = 'c2c-' . $input;
@@ -958,15 +1031,18 @@ HTML;
 			echo '</fieldset>';
 		} elseif ( $input == 'checkbox' ) {
 			echo "<input type='{$input}' {$attribs} value='1' " . checked( $value, 1, false ) . " />\n";
+			if ( ! empty( $this->config[ $opt ]['help'] ) ) {
+				printf( "<label class='description' for='%s'>%s</label>\n", $opt, $this->config[ $opt ]['help'] );
+				$this->config[ $opt ]['help'] = '';
+			}
 		} else { // Only 'text' and 'password' should fall through to here.
 			echo "<input type='{$input}' {$attribs} value='" . esc_attr( $value ) . "' />\n";
 		}
-		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt ) ) {
-			if ( 'checkbox' === $input ) {
-				echo "<label class='description' for='{$opt}'>{$help}</label>\n";
-			} else {
-				echo "<p class='description'>{$help}</p>\n";
-			}
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt, 'help' ) ) {
+			echo "<p class='description'>{$help}</p>\n";
+		}
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['more_help'], $opt, 'more_help' ) ) {
+			echo "<p class='description'>{$help}</p>\n";
 		}
 
 		do_action( $this->get_hook( 'post_display_option' ), $opt );
@@ -983,8 +1059,6 @@ HTML;
 			echo "<div id='message' class='updated fade'><p><strong>" . $this->saved_settings_msg . '</strong></p></div>';
 		}
 
-		$logo = plugins_url( 'c2c_minilogo.png', $this->plugin_file );
-
 		echo "<div class='wrap'>\n";
 
 		do_action( $this->get_hook( 'before_settings_form' ), $this );
@@ -994,22 +1068,22 @@ HTML;
 		settings_fields( $this->admin_options_name );
 		do_settings_sections( $this->plugin_file );
 
-		echo '<input type="submit" name="Submit" class="button-primary" value="' . esc_attr__( 'Save Changes', 'text-hover' ) . '" />' . "\n";
-		echo '<input type="submit" name="Reset" class="button" value="' . esc_attr__( 'Reset Settings', 'text-hover' ) . '" />' . "\n";
+		echo '<input type="submit" name="Submit" class="button-primary" value="' . esc_attr( $this->get_c2c_string( 'Save Changes' ) ) . '" />' . "\n";
+		echo '<input type="submit" name="Reset" class="button" value="' . esc_attr( $this->get_c2c_string( 'Reset Settings' ) ) . '" />' . "\n";
 		echo '</form>' . "\n";
 
 		do_action( $this->get_hook( 'after_settings_form' ), $this );
 
 		echo '<div id="c2c" class="wrap"><div>' . "\n";
 		printf(
-			__( 'This plugin brought to you by %s.', 'text-hover' ),
-			'<a href="http://coffee2code.com" title="coffee2code.com">Scott Reilly (coffee2code)</a>'
+			$this->get_c2c_string( 'This plugin brought to you by %s.' ),
+			'<a href="https://coffee2code.com" title="' . esc_attr( $this->get_c2c_string( 'The plugin author homepage.' ) ) . '">Scott Reilly (coffee2code)</a>'
 		);
 		printf(
 			'<span><a href="%1$s" title="%2$s">%3$s</span>',
-			esc_url( 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522' ),
-			esc_attr__( 'Please consider a donation', 'text-hover' ),
-			__( 'Did you find this plugin useful?', 'text-hover' )
+			esc_url( $this->donation_url ),
+			esc_attr( $this->get_c2c_string( "Thanks for the consideration; it's much appreciated." ) ),
+			$this->get_c2c_string( 'If this plugin has been useful to you, please consider a donation.' )
 		);
 		echo "</div>\n";
 
@@ -1035,7 +1109,7 @@ HTML;
 	 * @return string The URL
 	 */
 	public function readme_url() {
-		return 'https://wordpress.org/plugins/' . $this->id_base . '/tags/' . $this->version . '/readme.txt';
+		return 'https://plugins.svn.wordpress.org/' . $this->id_base . '/tags/' . $this->version . '/readme.txt';
 	}
 } // end class
 

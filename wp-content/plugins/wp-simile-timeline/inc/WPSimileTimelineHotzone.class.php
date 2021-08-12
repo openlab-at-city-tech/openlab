@@ -34,8 +34,8 @@ class WPSimileTimelineHotzone{
 	var $multiple;
 	
 	var $table_name = "stl_timeline_hotzones";
-	
-	function WPSimileTimelineHotzone(){
+
+	function __construct(){
 		// empty constructor
 	}
 	

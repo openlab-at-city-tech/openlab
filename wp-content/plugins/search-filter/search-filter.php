@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Search & Filter
-Plugin URI: http://www.designsandcode.com/447/wordpress-search-filter-plugin-for-taxonomies/
+Plugin URI: https://free.searchandfilter.com/
 Description: Search and Filtering system for Pages, Posts, Categories, Tags and Taxonomies
-Author: Designs & Code
-Author URI: http://www.designsandcode.com/
-Version: 1.2.13
+Author: Code Amp
+Author URI: https://codeamp.com
+Version: 1.2.14
 Text Domain: searchandfilter
 License: GPLv2
 */
@@ -14,7 +14,7 @@ License: GPLv2
 * Set up Plugin Globals
 */
 if (!defined('SEARCHANDFILTER_VERSION_NUM'))
-    define('SEARCHANDFILTER_VERSION_NUM', '1.2.13');
+    define('SEARCHANDFILTER_VERSION_NUM', '1.2.14');
 
 if (!defined('SEARCHANDFILTER_THEME_DIR'))
     define('SEARCHANDFILTER_THEME_DIR', ABSPATH . 'wp-content/themes/' . get_template());
@@ -546,7 +546,7 @@ if ( ! class_exists( 'SearchAndFilter' ) )
 
 			//grab search term for prefilling search input
 			if(isset($wp_query->query['s']))
-			{//!"£$%^&*()
+			{//!"ï¿½$%^&*()
 				$this->searchterm = trim(get_search_query());
 			}
 

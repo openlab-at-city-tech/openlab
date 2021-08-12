@@ -84,6 +84,11 @@ function bp_core_modify_admin_menu_highlight() {
 	if ( in_array( $plugin_page, array( 'bp-tools', 'available-tools' ) ) ) {
 		$submenu_file = $plugin_page;
 	}
+
+	// Keep the BuddyPress tools menu highlighted when using a tools tab.
+	if ( 'bp-optouts' === $plugin_page || 'bp-members-invitations' === $plugin_page ) {
+		$submenu_file = 'bp-tools';
+	}
 }
 
 /**
@@ -279,7 +284,7 @@ function bp_core_activation_notice() {
 
 	// Activate and Register are special cases. They are not components but they need WP pages.
 	// If user registration is disabled, we can skip this step.
-	if ( bp_get_signup_allowed() ) {
+	if ( bp_get_signup_allowed() || bp_get_members_invitations_allowed() ) {
 		$wp_page_components[] = array(
 			'id'   => 'activate',
 			'name' => __( 'Activate', 'buddypress' ),
@@ -389,10 +394,13 @@ function bp_do_activation_redirect() {
  * Output the tabs in the admin area.
  *
  * @since 1.5.0
+ * @since 8.0.0 Adds the `$context` parameter.
  *
  * @param string $active_tab Name of the tab that is active. Optional.
+ * @param string $context    The context of use for the tabs. Defaults to 'settings'.
+ *                           Possible values are 'settings' & 'tools'.
  */
-function bp_core_admin_tabs( $active_tab = '' ) {
+function bp_core_admin_tabs( $active_tab = '', $context = 'settings' ) {
 	$tabs_html    = '';
 	$idle_class   = 'nav-tab';
 	$active_class = 'nav-tab nav-tab-active';
@@ -404,7 +412,7 @@ function bp_core_admin_tabs( $active_tab = '' ) {
 	 *
 	 * @param array $value Array of tabs to output to the admin area.
 	 */
-	$tabs = apply_filters( 'bp_core_admin_tabs', bp_core_get_admin_tabs( $active_tab ) );
+	$tabs = apply_filters( 'bp_core_admin_tabs', bp_core_get_admin_tabs( $active_tab, $context ) );
 
 	// Loop through tabs and build navigation.
 	foreach ( array_values( $tabs ) as $tab_data ) {
@@ -419,46 +427,78 @@ function bp_core_admin_tabs( $active_tab = '' ) {
 	 * Fires after the output of tabs for the admin area.
 	 *
 	 * @since 1.5.0
+	 * @since 8.0.0 Adds the `$context` parameter.
+	 *
+	 * @param string $context The context of use for the tabs.
 	 */
-	do_action( 'bp_admin_tabs' );
+	do_action( 'bp_admin_tabs', $context );
 }
 
 /**
  * Get the data for the tabs in the admin area.
  *
  * @since 2.2.0
+ * @since 8.0.0 Adds the `$context` parameter.
  *
  * @param string $active_tab Name of the tab that is active. Optional.
+ * @param string $context    The context of use for the tabs. Defaults to 'settings'.
+ *                           Possible values are 'settings' & 'tools'.
  * @return string
  */
-function bp_core_get_admin_tabs( $active_tab = '' ) {
-	$tabs = array(
-		'0' => array(
-			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), 'admin.php' ) ),
-			'name' => __( 'Components', 'buddypress' ),
-		),
-		'2' => array(
-			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), 'admin.php' ) ),
-			'name' => __( 'Options', 'buddypress' ),
-		),
-		'1' => array(
-			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) ),
-			'name' => __( 'Pages', 'buddypress' ),
-		),
-		'3' => array(
-			'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-credits' ), 'admin.php' ) ),
-			'name' => __( 'Credits', 'buddypress' ),
-		),
-	);
+function bp_core_get_admin_tabs( $active_tab = '', $context = 'settings' ) {
+	$tabs = array();
+
+	if ( 'settings' === $context ) {
+		$tabs = array(
+			'0' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), 'admin.php' ) ),
+				'name' => __( 'Components', 'buddypress' ),
+			),
+			'2' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-settings' ), 'admin.php' ) ),
+				'name' => __( 'Options', 'buddypress' ),
+			),
+			'1' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-page-settings' ), 'admin.php' ) ),
+				'name' => __( 'Pages', 'buddypress' ),
+			),
+			'3' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-credits' ), 'admin.php' ) ),
+				'name' => __( 'Credits', 'buddypress' ),
+			),
+		);
+	} elseif ( 'tools' === $context ) {
+		$tools_page = 'tools.php';
+		if ( bp_core_do_network_admin() ) {
+			$tools_page = 'admin.php';
+		}
+
+		$tabs = array(
+			'0' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-tools' ), $tools_page ) ),
+				'name' => __( 'Repair', 'buddypress' ),
+			),
+			'1' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-members-invitations' ), $tools_page ) ),
+				'name' => __( 'Manage Invitations', 'buddypress' ),
+			),
+			'2' => array(
+				'href' => bp_get_admin_url( add_query_arg( array( 'page' => 'bp-optouts' ), $tools_page ) ),
+				'name' => __( 'Manage Opt-outs', 'buddypress' ),
+			),
+		);
+	}
 
 	/**
 	 * Filters the tab data used in our wp-admin screens.
 	 *
 	 * @since 2.2.0
+	 * @since 8.0.0 Adds the `$context` parameter.
 	 *
-	 * @param array $tabs Tab data.
+	 * @param array  $tabs    Tab data.
+	 * @param string $context The context of use for the tabs.
 	 */
-	return apply_filters( 'bp_core_get_admin_tabs', $tabs );
+	return apply_filters( 'bp_core_get_admin_tabs', $tabs, $context );
 }
 
 /** Help **********************************************************************/
@@ -586,7 +626,7 @@ function bp_core_add_contextual_help_content( $tab = '' ) {
 			break;
 
 		case 'bp-profile-overview':
-			$retval = __( 'Your users will distinguish themselves through their profile page. Create relevant profile fields that will show on each users profile.', 'buddypress' ) . '<br /><br />' . __( 'Note: Any fields in the first group will appear on the signup page.', 'buddypress' );
+			$retval = __( 'Your users will distinguish themselves through their profile page. Create relevant profile fields that will show on each users profile.', 'buddypress' ) . '<br /><br />' . __( 'Note: Drag fields from other groups and drop them on the "Signup Fields" tab to include them into your registration form.', 'buddypress' );
 			break;
 
 		default:
@@ -1264,33 +1304,20 @@ add_filter( 'admin_body_class', 'bp_core_admin_body_classes' );
  * Adds a BuddyPress category to house BuddyPress blocks.
  *
  * @since 5.0.0
+ * @since 8.0.0 The `bp_block_category_post_types` filter has been deprecated.
  *
- * @param array  $categories Array of block categories.
- * @param object $post       Post being loaded.
+ * @param array          $categories Array of block categories.
+ * @param string|WP_Post $post       Post being loaded.
  */
-function bp_block_category( $categories = array(), $post = null ) {
-	if ( ! ( $post instanceof WP_Post ) ) {
-		return $categories;
-	}
+function bp_block_category( $categories = array(), $editor_name_or_post = null ) {
+	if ( $editor_name_or_post instanceof WP_Post ) {
+		$post_types = array( 'post', 'page' );
 
-	/**
-	 * Filter here to add/remove the supported post types for the BuddyPress blocks category.
-	 *
-	 * @since 5.0.0
-	 *
-	 * @param array $value The list of supported post types. Defaults to WordPress built-in ones.
-	 */
-	$post_types = apply_filters( 'bp_block_category_post_types', array( 'post', 'page' ) );
-
-	if ( ! $post_types ) {
-		return $categories;
-	}
-
-	// Get the post type of the current item.
-	$post_type = get_post_type( $post );
-
-	if ( ! in_array( $post_type, $post_types, true ) ) {
-		return $categories;
+		/*
+		 * As blocks are always loaded even if the category is not available, there's no more interest
+		 * in disabling the BuddyPress category.
+		 */
+		apply_filters_deprecated( 'bp_block_category_post_types', array( $post_types ), '8.0.0' );
 	}
 
 	return array_merge(
@@ -1304,4 +1331,17 @@ function bp_block_category( $categories = array(), $post = null ) {
 		)
 	);
 }
-add_filter( 'block_categories', 'bp_block_category', 1, 2 );
+
+/**
+ * Select the right `block_categories` filter according to WP version.
+ *
+ * @since 8.0.0
+ */
+function bp_block_init_category_filter() {
+	if ( function_exists( 'get_default_block_categories' ) ) {
+		add_filter( 'block_categories_all', 'bp_block_category', 1, 2 );
+	} else {
+		add_filter( 'block_categories', 'bp_block_category', 1, 2 );
+	}
+}
+add_action( 'bp_init', 'bp_block_init_category_filter' );

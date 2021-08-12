@@ -207,7 +207,12 @@ if (!class_exists('SZGoogleModule'))
 
 			foreach($this->moduleWidgets as $optionName=>$classWidgetName) {
 				if (isset($options[$optionName]) and $options[$optionName] == '1') {
-					add_action('widgets_init',create_function('','return register_widget("'.$classWidgetName.'");'));
+					add_action(
+						'widgets_init',
+						function() use ( $classWidgetName ) {
+							return register_widget( $classWidgetName );
+						}
+					);
 				}
 			}
 		}

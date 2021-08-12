@@ -19,7 +19,7 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.12.15';
+	const VERSION             = '4.13.5';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
@@ -140,14 +140,14 @@ class Tribe__Main {
 	}
 
 	/**
-	 * Get's the instantiated context of this class. I.e. the object that instantiated this one.
+	 * Gets the instantiated context of this class. I.e. the object that instantiated this one.
 	 */
 	public function context() {
 		return $this->plugin_context;
 	}
 
 	/**
-	 * Get's the class name of the instantiated plugin context of this class. I.e. the class name of the object that instantiated this one.
+	 * Gets the class name of the instantiated plugin context of this class. I.e. the class name of the object that instantiated this one.
 	 */
 	public function context_class() {
 		return $this->plugin_context_class;
@@ -576,6 +576,8 @@ class Tribe__Main {
 			tribe( 'admin.notice.marketing' );
 		}
 
+		tribe( \Tribe\Admin\Notice\WP_Version::class );
+
 		/**
 		 * Runs after all plugins including Tribe ones have loaded
 		 *
@@ -589,7 +591,7 @@ class Tribe__Main {
 	 *
 	 * @since 4.4
 	 *
-	 * @return void Implementation of components loader doesnt return anything.
+	 * @return void Implementation of components loader doesn't return anything.
 	 */
 	public function bind_implementations() {
 		tribe_singleton( 'settings.manager', 'Tribe__Settings_Manager' );
@@ -624,6 +626,7 @@ class Tribe__Main {
 
 		tribe_singleton( 'admin.notice.php.version', 'Tribe__Admin__Notice__Php_Version', [ 'hook' ] );
 		tribe_singleton( 'admin.notice.marketing', 'Tribe__Admin__Notice__Marketing', [ 'hook' ] );
+		tribe_singleton( \Tribe\Admin\Notice\WP_Version::class, \Tribe\Admin\Notice\WP_Version::class, [ 'hook' ] );
 
 		tribe_register_provider( Tribe__Editor__Provider::class );
 		tribe_register_provider( Tribe__Service_Providers__Debug_Bar::class );

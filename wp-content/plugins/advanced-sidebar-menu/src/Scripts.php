@@ -39,7 +39,7 @@ class Scripts {
 	public function admin_scripts() {
 		wp_enqueue_script(
 			'advanced-sidebar-menu-script',
-			\trailingslashit( ADVANCED_SIDEBAR_MENU_URL ) . 'resources/js/advanced-sidebar-menu.js',
+			trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/js/advanced-sidebar-menu.js',
 			[ 'jquery' ],
 			ADVANCED_SIDEBAR_BASIC_VERSION,
 			false
@@ -47,7 +47,7 @@ class Scripts {
 
 		wp_enqueue_style(
 			'advanced-sidebar-menu-style',
-			\trailingslashit( ADVANCED_SIDEBAR_MENU_URL ) . 'resources/css/advanced-sidebar-menu.css',
+			trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/css/advanced-sidebar-menu.css',
 			[],
 			ADVANCED_SIDEBAR_BASIC_VERSION
 		);

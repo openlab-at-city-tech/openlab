@@ -144,13 +144,21 @@ abstract class Jetpack_JSON_API_Plugins_Endpoint extends Jetpack_JSON_API_Endpoi
 			$plugin['action_links'] = $action_link;
 		}
 
-		$autoupdate = in_array( $plugin_file, Jetpack_Options::get_option( 'autoupdate_plugins', array() ) );
-		$plugin['autoupdate']      = $autoupdate;
+		$plugin['plugin'] = $plugin_file;
+		if ( ! class_exists( 'WP_Automatic_Updater' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		}
+		$autoupdate           = ( new WP_Automatic_Updater() )->should_update( 'plugin', (object) $plugin, WP_PLUGIN_DIR );
+		$plugin['autoupdate'] = $autoupdate;
 
 		$autoupdate_translation = in_array( $plugin_file, Jetpack_Options::get_option( 'autoupdate_plugins_translations', array() ) );
 		$plugin['autoupdate_translation'] = $autoupdate || $autoupdate_translation || Jetpack_Options::get_option( 'autoupdate_translations', false );
 
 		$plugin['uninstallable']   = is_uninstallable_plugin( $plugin_file );
+
+		if ( is_multisite() ) {
+			$plugin['network_active'] = is_plugin_active_for_network( $plugin_file );
+		}
 
 		if ( ! empty ( $this->log[ $plugin_file ] ) ) {
 			$plugin['log'] = $this->log[ $plugin_file ];
@@ -176,12 +184,20 @@ abstract class Jetpack_JSON_API_Plugins_Endpoint extends Jetpack_JSON_API_Endpoi
 			$plugin['action_links'] = $action_link;
 		}
 
-		$autoupdate = $this->plugin_has_autoupdates_enabled( $plugin_file );
-		$plugin['autoupdate']      = $autoupdate;
+		$plugin['plugin'] = $plugin_file;
+		if ( ! class_exists( 'WP_Automatic_Updater' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		}
+		$autoupdate           = ( new WP_Automatic_Updater() )->should_update( 'plugin', (object) $plugin, WP_PLUGIN_DIR );
+		$plugin['autoupdate'] = $autoupdate;
 
 		$autoupdate_translation = $this->plugin_has_translations_autoupdates_enabled( $plugin_file );
 		$plugin['autoupdate_translation'] = $autoupdate || $autoupdate_translation || Jetpack_Options::get_option( 'autoupdate_translations', false );
 		$plugin['uninstallable']   = is_uninstallable_plugin( $plugin_file );
+
+		if ( is_multisite() ) {
+			$plugin['network_active'] = is_plugin_active_for_network( $plugin_file );
+		}
 
 		if ( ! empty ( $this->log[ $plugin_file ] ) ) {
 			$plugin['log'] = $this->log[ $plugin_file ];
@@ -190,14 +206,9 @@ abstract class Jetpack_JSON_API_Plugins_Endpoint extends Jetpack_JSON_API_Endpoi
 		return $plugin;
 	}
 
-	protected function plugin_has_autoupdates_enabled( $plugin_file ) {
-		return (bool) in_array( $plugin_file, Jetpack_Options::get_option( 'autoupdate_plugins', array() ) );
-	}
-
 	protected function plugin_has_translations_autoupdates_enabled( $plugin_file ) {
 		return (bool) in_array( $plugin_file, Jetpack_Options::get_option( 'autoupdate_plugins_translations', array() ) );
 	}
-
 
 	protected function get_file_mod_capabilities() {
 		$reasons_can_not_autoupdate = array();
@@ -248,10 +259,33 @@ abstract class Jetpack_JSON_API_Plugins_Endpoint extends Jetpack_JSON_API_Endpoi
 		$plugins = array();
 		/** This filter is documented in wp-admin/includes/class-wp-plugins-list-table.php */
 		$installed_plugins = apply_filters( 'all_plugins', get_plugins() );
-		foreach( $this->plugins as $plugin ) {
-			if ( ! isset( $installed_plugins[ $plugin ] ) )
+		foreach ( $this->plugins as $plugin ) {
+			if ( ! isset( $installed_plugins[ $plugin ] ) ) {
 				continue;
-			$plugins[] = $this->format_plugin( $plugin, $installed_plugins[ $plugin ] );
+			}
+
+			$formatted_plugin = $this->format_plugin( $plugin, $installed_plugins[ $plugin ] );
+
+			// If this endpoint accepts site based authentication and a blog token is used, skip capabilities check.
+			if ( $this->accepts_site_based_authentication() ) {
+				$plugins[] = $formatted_plugin;
+				continue;
+			}
+
+			/*
+			 * Do not show network-active plugins
+			 * to folks who do not have the permission to see them.
+			 */
+			if (
+				/** This filter is documented in src/wp-admin/includes/class-wp-plugins-list-table.php */
+				! apply_filters( 'show_network_active_plugins', current_user_can( 'manage_network_plugins' ) )
+				&& ! empty( $formatted_plugin['network_active'] )
+				&& true === $formatted_plugin['network_active']
+			) {
+				continue;
+			}
+
+			$plugins[] = $formatted_plugin;
 		}
 		$args = $this->query_args();
 
@@ -270,6 +304,11 @@ abstract class Jetpack_JSON_API_Plugins_Endpoint extends Jetpack_JSON_API_Endpoi
 
 		if ( isset( $args['network_wide'] ) && $args['network_wide'] ) {
 			$this->network_wide = true;
+		}
+
+		// If this endpoint accepts site based authentication and a blog token is used, skip capabilities check.
+		if ( $this->accepts_site_based_authentication() ) {
+			return true;
 		}
 
 		if ( $this->network_wide && ! current_user_can( 'manage_network_plugins' ) ) {

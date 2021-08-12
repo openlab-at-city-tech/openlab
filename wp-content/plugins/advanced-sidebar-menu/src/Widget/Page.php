@@ -163,7 +163,7 @@ class Page extends Widget_Abstract {
 							<?php
 							for ( $i = 1; $i < 10; $i ++ ) {
 								?>
-								<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
+								<option value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
 									<?php echo (int) $i; ?>
 								</option>
 								<?php
@@ -266,8 +266,6 @@ class Page extends Widget_Abstract {
 	 * @param array $instance - Widget settings.
 	 *
 	 * @since 7.2.1
-	 *
-	 * @return void
 	 */
 	public function form( $instance ) {
 		$instance = $this->set_instance( $instance, self::$defaults );
@@ -294,6 +292,8 @@ class Page extends Widget_Abstract {
 		<div class="advanced-sidebar-menu-full-width"><!-- clear --></div>
 		<?php
 		do_action( 'advanced-sidebar-menu/widget/page/after-form', $instance, $this );
+
+		return '';
 	}
 
 

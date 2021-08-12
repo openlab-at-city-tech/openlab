@@ -2,7 +2,6 @@
 
 class MC4WP_Admin_Ajax {
 
-
 	/**
 	 * @var MC4WP_Admin_Tools
 	 */
@@ -30,8 +29,11 @@ class MC4WP_Admin_Ajax {
 	 */
 	public function refresh_mailchimp_lists() {
 		if ( ! $this->tools->is_user_authorized() ) {
-			wp_send_json( false );
+			wp_send_json_error();
+			return;
 		}
+
+		check_ajax_referer( 'mc4wp-ajax' );
 
 		$mailchimp = new MC4WP_MailChimp();
 		$success   = $mailchimp->refresh_lists();
@@ -43,6 +45,11 @@ class MC4WP_Admin_Ajax {
 	 * @throws MC4WP_API_Exception
 	 */
 	public function get_list_details() {
+		if ( ! $this->tools->is_user_authorized() ) {
+			wp_send_json_error();
+			return;
+		}
+
 		$list_ids  = (array) explode( ',', $_GET['ids'] );
 		$data      = array();
 		$mailchimp = new MC4WP_MailChimp();

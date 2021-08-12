@@ -1,3 +1,6 @@
+<?php
+
+?>
 
 <p>
     <label for="fullName">Your Name (required)</label>
@@ -28,7 +31,7 @@
     <div id="other-details">
         <p>
             <label class="sr-only" for="other-details">Other Details</label>
-            [text other-details id:other-details class:form-control] 
+            [text other-details id:other-details class:form-control]
         </p>
     </div>
 

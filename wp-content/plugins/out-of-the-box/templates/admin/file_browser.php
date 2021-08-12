@@ -20,6 +20,8 @@
         'rename' => '1',
         'delete' => '1',
         'addfolder' => '1',
+        'search' => '1',
+        'searchcontents' => '1',
         //'createdocument' => '1',
         'edit' => '1',
         'move' => '1',

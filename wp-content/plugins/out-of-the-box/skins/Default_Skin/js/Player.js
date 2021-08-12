@@ -1,14 +1,6 @@
 'use strict';
 
-if (document.querySelector('.OutoftheBox')) {
-  document.querySelectorAll('.OutoftheBox').forEach(function (container) {
-    container.addEventListener('init_media_player', function (event) {
-      init_default_out_of_the_box_media_player(event.target.getAttribute('data-token'));
-    });
-  });
-}
-
-function init_default_out_of_the_box_media_player(listtoken) {
+window.init_out_of_the_box_media_player = function (listtoken) {
   var container = document.querySelector('.media[data-token="' + listtoken + '"]');
 
   /* Load Playlist via Ajax */

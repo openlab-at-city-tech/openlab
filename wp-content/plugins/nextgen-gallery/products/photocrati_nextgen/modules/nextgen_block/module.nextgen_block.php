@@ -23,7 +23,7 @@ class M_NextGEN_Block extends C_Base_Module
 			'photocrati-nextgen_block',
 			'NextGEN Block',
 			'Provides a NextGEN Block for the Gutenberg interface.',
-			'3.3.21',
+			'3.7.2',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'

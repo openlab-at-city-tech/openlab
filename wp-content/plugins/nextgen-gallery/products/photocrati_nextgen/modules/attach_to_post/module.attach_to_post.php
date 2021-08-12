@@ -105,12 +105,6 @@ class M_Attach_To_Post extends C_Base_Module
 		return (strpos($_SERVER['REQUEST_URI'], 'attach_to_post') !== FALSE OR (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'attach_to_post') !== FALSE) OR array_key_exists('attach_to_post', $_REQUEST));
 	}
 
-	function disable_resource_manager($retval)
-	{
-		if (isset($_REQUEST[NGG_ATTACH_TO_POST_SLUG])) $retval = FALSE;
-		return $retval;
-	}
-
 	function _register_hooks()
 	{
         add_action('ngg_routes', array($this, 'define_routes'), 2);
@@ -128,9 +122,8 @@ class M_Attach_To_Post extends C_Base_Module
 		}
 
 		// Admin-only hooks
-		if (is_admin()) {
-			add_filter('run_ngg_resource_manager', array(&$this, 'disable_resource_manager'));
-
+		if (is_admin())
+		{
 			add_action(
 				'admin_enqueue_scripts',
 				array($this, 'enqueue_static_resources'),
@@ -428,11 +421,10 @@ class M_Attach_To_Post extends C_Base_Module
 			add_editor_style($router->get_static_url('photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.css'));
 			wp_enqueue_script('photocrati_ajax');
 
-			wp_localize_script(
-				'media-editor',
-				'nextgen_gallery_attach_to_post_url',
-				C_NextGen_Settings::get_instance()->attach_to_post_url
-			);
+
+			wp_localize_script('media-editor', 'igw', [
+				'url' => C_NextGen_Settings::get_instance()->attach_to_post_url
+			]);
 
 			wp_localize_script(
 				'photocrati_ajax',

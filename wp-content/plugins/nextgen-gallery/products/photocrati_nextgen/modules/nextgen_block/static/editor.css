@@ -31,7 +31,7 @@ div[data-type="imagely/nextgen-gallery"]:focus::after {
     bottom: 50px;
     right: 35px;
     left: 35px;
-    z-index: 999999;
+    z-index: 99999;
 }
 
 #add-ngg-gallery-modal-background {
@@ -41,7 +41,7 @@ div[data-type="imagely/nextgen-gallery"]:focus::after {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 99999;
+    z-index: 99988;
     opacity: 70%;
 }
 

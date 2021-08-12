@@ -2,7 +2,7 @@
 Contributors: freshlabs
 Tags: api, widget, visualization, javascript, simile, timeline, time, posts, post, ajax, integration, rss, feed, links, lifestream, twitter, xml
 Requires at least: 5.3
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: 0.5.0
 
 Integrates the SIMILE Timeline into WordPress and provides an option interface for the various timeline settings.
@@ -84,6 +84,9 @@ call that file directly to see if posts show up there.
 5. Plugin Extras: Uninstaller and contextual help
 
 == Upgrade Notice ==
+
+= 0.5.3 =
+WordPress 5.7 + compatibility
 
 = 0.5.2 =
 WordPress 5.6 + compatibility

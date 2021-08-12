@@ -126,7 +126,12 @@ class BP_Docs_BP_Integration {
 				// The user can edit, so we check for edit locks
 				// Because we're not using WP autosave at the moment, ensure that
 				// the lock interval always returns as in process
-				add_filter( 'wp_check_post_lock_window', create_function( false, 'return time();' ) );
+				add_filter(
+					'wp_check_post_lock_window',
+					function() {
+						return time();
+					}
+				);
 
 				$lock = wp_check_post_lock( $doc->ID );
 
@@ -602,7 +607,7 @@ class BP_Docs_BP_Integration {
 		$post = get_post( $comment->comment_post_ID );
 
 		if ( $bp->bp_docs->post_type_name == $post->post_type ) {
-			add_filter( 'pre_option_comments_notify', create_function( false, 'return 0;' ) );
+			add_filter( 'pre_option_comments_notify', '__return_zero' );
 		}
 	}
 

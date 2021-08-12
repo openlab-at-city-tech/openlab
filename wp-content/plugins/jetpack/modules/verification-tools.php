@@ -9,14 +9,14 @@
  * Feature: Engagement
  * Additional Search Queries: webmaster, seo, google, bing, pinterest, search, console
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 /**
  * Load Verification Tools code.
  */
 function jetpack_load_verification_tools() {
-	include dirname( __FILE__ ) . '/verification-tools/blog-verification-tools.php';
+	include __DIR__ . '/verification-tools/blog-verification-tools.php';
 }
 
 /**

@@ -1,81 +1,119 @@
-<div class="post-bubbles">
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<a href="<?php the_permalink(); ?>" class="format-bubble" title="<?php the_title_attribute(); ?>"></a>
-		
-	<?php if ( is_sticky() ) : ?>
-		<a href="<?php the_permalink(); ?>" title="<?php _e( 'Sticky post', 'lingonberry' ); ?>: <?php the_title_attribute(); ?>" class="sticky-bubble"><?php _e( 'Sticky post', 'lingonberry' ); ?></a>
+	<?php 
+	$post_format 	= get_post_format() ? get_post_format() : 'default'; 
+	$post_type 		= get_post_type();
+	?>
+
+	<?php if ( $post_type == 'post' && ! is_single() ) : ?>
+
+		<div class="post-bubbles">
+
+			<a href="<?php the_permalink(); ?>" class="format-bubble"></a>
+				
+			<?php if ( is_sticky() ) : ?>
+				<a href="<?php the_permalink(); ?>" class="sticky-bubble"><?php _e( 'Sticky post', 'lingonberry' ); ?></a>
+			<?php endif; ?>
+
+		</div><!-- .post-bubbles -->
+
 	<?php endif; ?>
 
-</div>
+	<div class="content-inner">
 
-<div class="content-inner">
+		<?php
+		$header_hidden_class = ( ! is_single() && in_array( $post_format, array( 'video', 'quote', 'aside', 'chat', 'link' ) ) ) ? ' hidden' : '';
+		?>
 
-	<div class="post-header">
-	
-		<?php if ( has_post_thumbnail() ) : ?>
-	
-			<div class="featured-media">
-			
-				<a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>">
+		<header class="post-header<?php echo $header_hidden_class; ?>">
+		
+			<?php
+			if ( has_post_thumbnail() || $post_format == 'gallery' ) : 
+				?>
+		
+				<figure class="featured-media">
+
+					<?php if ( $post_format == 'gallery' ) : ?>
+
+						<?php lingonberry_flexslider( 'post-image' ); ?>
+
+					<?php else : ?>
 				
-					<?php
+						<a href="<?php the_permalink(); ?>">
 						
-					the_post_thumbnail( 'post-image' );
+							<?php
+								
+							the_post_thumbnail();
 
-					$image_caption = get_post( get_post_thumbnail_id() )->post_excerpt;
-					
-					if ( $image_caption ) : ?>
-									
-						<div class="media-caption-container">
-						
-							<p class="media-caption"><?php echo $image_caption; ?></p>
+							$caption = get_the_post_thumbnail_caption();
 							
-						</div>
-						
+							if ( $caption ) : ?>
+											
+								<figcaption class="media-caption-container">
+									<p class="media-caption"><?php echo $caption; ?></p>
+								</figcaption>
+								
+								<?php 
+							endif;
+							?>
+							
+						</a>
+
 					<?php endif; ?>
+							
+				</figure><!-- .featured-media -->
 					
-				</a>
+				<?php 
+			endif;
+			
+			if ( is_singular() ) :
+
+				the_title( '<h1 class="post-title">', '</h1>' );
+
+			elseif ( get_the_title() ) : 
+				?>
+			
+				<h2 class="post-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+
+				<?php 
+			endif;
+
+			if ( $post_type == 'post' ) {
+				lingonberry_meta();
+			}
+
+			?>
+			
+		</header><!-- .post-header -->
+
+		<?php if ( get_the_content() ) : ?>
+																						
+			<div class="post-content">
+			
+				<?php the_content(); ?>
+
+				<?php wp_link_pages(); ?>
+
+			</div><!-- .post-content -->
+
+		<?php endif; ?>
+		
+		<?php if ( is_single() ) : ?>
+		
+			<div class="post-cat-tags">
 						
-			</div><!-- .featured-media -->
-				
-		<?php endif;
-		
-		if ( is_single() ) :
+				<p class="post-categories"><?php _e( 'Categories:', 'lingonberry' ); ?> <?php the_category( ', ' ); ?></p>
 
-			the_title( '<h1 class="post-title">', '</h1>' );
+				<?php if ( get_the_tags( $post->ID ) ) : ?>
+			
+					<p class="post-tags"><?php the_tags( __( 'Tags:', 'lingonberry' ) . ' ', ', '); ?></p>
 
-		elseif ( get_the_title() ) : ?>
-		
-	    	<h2 class="post-title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+				<?php endif; ?>
+			
+			</div><!-- .post-cat-tags -->
+			
+		<?php endif; ?>
+			
+	</div><!-- .content-inner -->
 
-		<?php endif;
-		
-		lingonberry_meta(); ?>
-	    
-    </div><!-- .post-header -->
-										                                    	    
-    <div class="post-content">
-	
-		<?php the_content(); ?>
-
-		<?php wp_link_pages(); ?>
-
-	</div><!-- .post-content -->
-    
-	<div class="clear"></div>
-	
-	<?php if ( is_single() ) : ?>
-	
-		<div class="post-cat-tags">
-					
-			<p class="post-categories"><?php _e( 'Categories:', 'lingonberry' ); ?> <?php the_category( ', ' ); ?></p>
-		
-			<p class="post-tags"><?php the_tags( __( 'Tags:', 'lingonberry' ) . ' ', ', '); ?></p>
-		
-		</div>
-		
-	<?php endif; ?>
-        
-</div><!-- .post content-inner -->
-
-<div class="clear"></div>
+</article>

@@ -46,6 +46,14 @@ class Queue {
 	public function add( $item ) {
 		global $wpdb;
 		$added = false;
+
+		// Attempt to serialize data, if an exception (closures) return early.
+		try {
+			$item = serialize( $item ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		} catch ( \Exception $ex ) {
+			return;
+		}
+
 		// This basically tries to add the option until enough time has elapsed that
 		// it has a unique (microtime-based) option key.
 		while ( ! $added ) {
@@ -53,7 +61,7 @@ class Queue {
 				$wpdb->prepare(
 					"INSERT INTO $wpdb->options (option_name, option_value, autoload) VALUES (%s, %s,%s)",
 					$this->get_next_data_row_option_name(),
-					serialize( $item ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+					$item,
 					'no'
 				)
 			);
@@ -77,14 +85,19 @@ class Queue {
 		$rows        = array();
 		$count_items = count( $items );
 		for ( $i = 0; $i < $count_items; ++$i ) {
-			$option_name  = esc_sql( $base_option_name . '-' . $i );
-			$option_value = esc_sql( serialize( $items[ $i ] ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
-			$rows[]       = "('$option_name', '$option_value', 'no')";
+			try {
+				$option_name  = esc_sql( $base_option_name . '-' . $i );
+				$option_value = esc_sql( serialize( $items[ $i ] ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+				$rows[]       = "('$option_name', '$option_value', 'no')";
+			} catch ( \Exception $e ) {
+				// Item cannot be serialized so skip.
+				continue;
+			}
 		}
 
 		$rows_added = $wpdb->query( $query . join( ',', $rows ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( count( $items ) === $rows_added ) {
+		if ( count( $items ) !== $rows_added ) {
 			return new \WP_Error( 'row_count_mismatch', "The number of rows inserted didn't match the size of the input array" );
 		}
 		return true;
@@ -152,7 +165,7 @@ class Queue {
 		// Break apart the item name to get the timestamp.
 		$matches = null;
 		if ( preg_match( '/^jpsq_' . $this->id . '-(\d+\.\d+)-/', $first_item_name, $matches ) ) {
-			return $now - floatval( $matches[1] );
+			return $now - (float) $matches[1];
 		} else {
 			return 0;
 		}
@@ -247,7 +260,7 @@ class Queue {
 	 */
 	public function get_ids( $items ) {
 		return array_map(
-			function( $item ) {
+			function ( $item ) {
 				return $item->id;
 			},
 			$items
@@ -521,7 +534,7 @@ class Queue {
 
 		if ( $checkout_value ) {
 			list( $checkout_id, $timestamp ) = explode( ':', $checkout_value );
-			if ( intval( $timestamp ) > time() ) {
+			if ( (int) $timestamp > time() ) {
 				return $checkout_id;
 			}
 		}
@@ -649,6 +662,11 @@ class Queue {
 	private function fetch_items_by_id( $items_ids ) {
 		global $wpdb;
 
+		// return early if $items_ids is empty or not an array.
+		if ( empty( $items_ids ) || ! is_array( $items_ids ) ) {
+			return null;
+		}
+
 		$ids_placeholders        = implode( ', ', array_fill( 0, count( $items_ids ), '%s' ) );
 		$query_with_placeholders = "SELECT option_name AS id, option_value AS value
 				FROM $wpdb->options
@@ -674,7 +692,7 @@ class Queue {
 	private function unserialize_values( $items ) {
 		array_walk(
 			$items,
-			function( $item ) {
+			function ( $item ) {
 				$item->value = maybe_unserialize( $item->value );
 			}
 		);

@@ -279,7 +279,7 @@ class Thumbnail
             }
 
             return true;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             error_log($ex->getMessage());
 
             return false;

@@ -24,9 +24,16 @@ class M_Static_Assets extends C_Base_Module
     static function get_static_url($filename, $module=FALSE)
     {
         $retval = self::get_static_abspath($filename, $module);
+
+        // Allow for overrides from WP_CONTENT/ngg/
+        if (strpos($retval, path_join(WP_CONTENT_DIR, 'ngg')) !== FALSE)
+            $retval = str_replace(wp_normalize_path(WP_CONTENT_DIR), WP_CONTENT_URL, $retval);
+
+        // Normal plugin distributed files
         $retval = str_replace(wp_normalize_path(WP_PLUGIN_DIR), WP_PLUGIN_URL, $retval);
+
         $retval = is_ssl() ? str_replace('http:', 'https:', $retval) : $retval;
-        
+
         return $retval;
     }
 
@@ -42,8 +49,6 @@ class M_Static_Assets extends C_Base_Module
 
     static function get_computed_static_abspath($filename, $module=FALSE)
     {
-        $retval = '';
-        
         if (strpos($filename, '#') !== FALSE) {
             $parts = explode("#", $filename);
             if (count($parts) === 2) {
@@ -73,7 +78,7 @@ class M_Static_Assets extends C_Base_Module
         $static_dir = self::trim_preceding_slash(C_NextGen_Settings::get_instance()->mvc_static_dir);
 
         $override_dir = wp_normalize_path(self::get_static_override_dir($module));
-        $override = path_join(
+        $retval = $override = path_join(
             $override_dir,
             $filename
         );

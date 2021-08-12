@@ -100,6 +100,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	public function get_items( $request ) {
 		$args = array(
 			'user_id'           => $request['user_id'],
+			'user_ids'          => $request['user_ids'],
 			'item_id'           => $request['item_id'],
 			'secondary_item_id' => $request['secondary_item_id'],
 			'component_name'    => $request['component_name'],
@@ -113,6 +114,14 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 
 		if ( empty( $request['component_action'] ) ) {
 			$args['component_action'] = false;
+		}
+
+		if ( ! empty( $args['user_ids'] ) ) {
+			$args['user_id'] = $args['user_ids'];
+		} else {
+			if ( empty( $args['user_id'] ) ) {
+				$args['user_id'] = bp_loggedin_user_id();
+			}
 		}
 
 		if ( empty( $request['component_name'] ) ) {
@@ -156,24 +165,22 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	}
 
 	/**
-	 * Check if a given request has access to notification items.
+	 * Check if a given request has access to the notifications.
 	 *
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to see the notifications.', 'buddypress' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
 
-		if ( ! is_user_logged_in() || ( bp_loggedin_user_id() !== $request['user_id'] && ! $this->can_see() ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to see the notifications.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+		if ( ( is_user_logged_in() && bp_loggedin_user_id() === $request->get_param( 'user_id' ) && ! $request->get_param( 'user_ids' ) ) || $this->can_see() ) {
+			$retval = true;
 		}
 
 		/**
@@ -181,7 +188,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_notifications_get_items_permissions_check', $retval, $request );
@@ -226,41 +233,39 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to see the notification.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
 
-		if ( ! is_user_logged_in() ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to see the notification.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
-		}
+		if ( is_user_logged_in() ) {
+			$notification = $this->get_notification_object( $request );
 
-		$notification = $this->get_notification_object( $request );
-
-		if ( true === $retval && is_null( $notification->item_id ) ) {
-			$retval = new WP_Error(
-				'bp_rest_notification_invalid_id',
-				__( 'Invalid notification ID.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
-		}
-
-		if ( true === $retval && ! $this->can_see( $notification->id ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you cannot view this notification.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+			if ( is_null( $notification->item_id ) ) {
+				$retval = new WP_Error(
+					'bp_rest_notification_invalid_id',
+					__( 'Invalid notification ID.', 'buddypress' ),
+					array(
+						'status' => 404,
+					)
+				);
+			} elseif ( $this->can_see( $notification->id ) ) {
+				$retval = true;
+			} else {
+				$retval = new WP_Error(
+					'bp_rest_authorization_required',
+					__( 'Sorry, you cannot view this notification.', 'buddypress' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			}
 		}
 
 		/**
@@ -268,7 +273,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_notifications_get_item_permissions_check', $retval, $request );
@@ -333,7 +338,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function create_item_permissions_check( $request ) {
 		$retval = $this->get_items_permissions_check( $request );
@@ -343,7 +348,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_notifications_create_item_permissions_check', $retval, $request );
@@ -362,8 +367,9 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		$request->set_param( 'context', 'edit' );
 
 		$notification = $this->get_notification_object( $request );
+		$is_new       = $request->get_param( 'is_new' );
 
-		if ( $request['is_new'] === $notification->is_new ) {
+		if ( $is_new === $notification->is_new ) {
 			return new WP_Error(
 				'bp_rest_user_cannot_update_notification_status',
 				__( 'Notification is already with the status you are trying to update into.', 'buddypress' ),
@@ -374,7 +380,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		}
 
 		$updated = BP_Notifications_Notification::update(
-			array( 'is_new' => $request['is_new'] ),
+			array( 'is_new' => $is_new ),
 			array( 'id' => $notification->id )
 		);
 
@@ -426,7 +432,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error|bool
 	 */
 	public function update_item_permissions_check( $request ) {
 		$retval = $this->get_item_permissions_check( $request );
@@ -436,7 +442,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_notifications_update_item_permissions_check', $retval, $request );
@@ -497,7 +503,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @return true|WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
 		$retval = $this->get_item_permissions_check( $request );
@@ -507,7 +513,7 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_notifications_delete_item_permissions_check', $retval, $request );
@@ -747,64 +753,66 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_notifications',
-			'type'       => 'object',
-			'properties' => array(
-				'id'                => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'A unique numeric ID for the notification.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'integer',
+		if ( is_null( $this->schema ) ) {
+			$this->schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_notifications',
+				'type'       => 'object',
+				'properties' => array(
+					'id'                => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'A unique numeric ID for the notification.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'integer',
+					),
+					'user_id'           => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The ID of the user the notification is addressed to.', 'buddypress' ),
+						'type'        => 'integer',
+						'default'     => bp_loggedin_user_id(),
+					),
+					'item_id'           => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The ID of the item associated with the notification.', 'buddypress' ),
+						'type'        => 'integer',
+					),
+					'secondary_item_id' => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The ID of the secondary item associated with the notification.', 'buddypress' ),
+						'type'        => 'integer',
+					),
+					'component'         => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The name of the BuddyPress component the notification relates to.', 'buddypress' ),
+						'type'        => 'string',
+					),
+					'action'            => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The name of the component\'s action the notification is about.', 'buddypress' ),
+						'type'        => 'string',
+					),
+					'date'              => array(
+						'description' => __( 'The date the notification was created, in the site\'s timezone.', 'buddypress' ),
+						'type'        => 'string',
+						'format'      => 'date-time',
+						'context'     => array( 'view', 'edit' ),
+					),
+					'is_new'            => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Whether it\'s a new notification or not.', 'buddypress' ),
+						'type'        => 'integer',
+						'default'     => 1,
+					),
 				),
-				'user_id'           => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The ID of the user the notification is addressed to.', 'buddypress' ),
-					'type'        => 'integer',
-					'default'     => bp_loggedin_user_id(),
-				),
-				'item_id'           => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The ID of the item associated with the notification.', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'secondary_item_id' => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The ID of the secondary item associated with the notification.', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'component'         => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The name of the BuddyPress component the notification relates to.', 'buddypress' ),
-					'type'        => 'string',
-				),
-				'action'            => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The name of the component\'s action the notification is about.', 'buddypress' ),
-					'type'        => 'string',
-				),
-				'date'              => array(
-					'description' => __( 'The date the notification was created, in the site\'s timezone.', 'buddypress' ),
-					'type'        => 'string',
-					'format'      => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'is_new'            => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Whether it\'s a new notification or not.', 'buddypress' ),
-					'type'        => 'integer',
-					'default'     => 1,
-				),
-			),
-		);
+			);
+		}
 
 		/**
-		 * Filters the notifications schema.
+		 * Filters the notification schema.
 		 *
 		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_notification_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_notification_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**
@@ -860,6 +868,15 @@ class BP_REST_Notifications_Endpoint extends WP_REST_Controller {
 			'default'           => bp_loggedin_user_id(),
 			'type'              => 'integer',
 			'sanitize_callback' => 'absint',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
+		$params['user_ids'] = array(
+			'description'       => __( 'Limit result set to notifications addressed to a list of specific users.', 'buddypress' ),
+			'default'           => array(),
+			'type'              => 'array',
+			'items'             => array( 'type' => 'integer' ),
+			'sanitize_callback' => 'wp_parse_id_list',
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 

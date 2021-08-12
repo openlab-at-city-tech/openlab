@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Tribe\\Events\\Admin\\Notice\\Legacy_Views_Deprecation' => $baseDir . '/src/Tribe/Admin/Notice/Legacy_Views_Deprecation.php',
     'Tribe\\Events\\Aggregator\\Processes\\Batch_Imports' => $baseDir . '/src/Tribe/Aggregator/Processes/Batch_Imports.php',
     'Tribe\\Events\\Aggregator\\Record\\Batch_Queue' => $baseDir . '/src/Tribe/Aggregator/Record/Batch_Queue.php',
     'Tribe\\Events\\Collections\\Lazy_Post_Collection' => $baseDir . '/src/Tribe/Collections/Lazy_Post_Collection.php',
@@ -13,6 +14,10 @@ return array(
     'Tribe\\Events\\Editor\\Objects\\Event' => $baseDir . '/src/Tribe/Editor/Objects/Event.php',
     'Tribe\\Events\\I18n' => $baseDir . '/src/Tribe/I18n.php',
     'Tribe\\Events\\Integrations\\Beaver_Builder' => $baseDir . '/src/Tribe/Integrations/Beaver_Builder.php',
+    'Tribe\\Events\\Integrations\\Fusion\\Service_Provider' => $baseDir . '/src/Tribe/Integrations/Fusion/Service_Provider.php',
+    'Tribe\\Events\\Integrations\\Fusion\\Widget_Shortcode' => $baseDir . '/src/Tribe/Integrations/Fusion/Widget_Shortcode.php',
+    'Tribe\\Events\\Integrations\\Hello_Elementor\\Service_Provider' => $baseDir . '/src/Tribe/Integrations/Hello_Elementor/Service_Provider.php',
+    'Tribe\\Events\\Integrations\\Hello_Elementor\\Templates' => $baseDir . '/src/Tribe/Integrations/Hello_Elementor/Templates.php',
     'Tribe\\Events\\Integrations\\WPML\\Views\\V2\\Filters' => $baseDir . '/src/Tribe/Integrations/WPML/Views/V2/Filters.php',
     'Tribe\\Events\\Integrations\\WP_Rocket' => $baseDir . '/src/Tribe/Integrations/WP_Rocket.php',
     'Tribe\\Events\\Models\\Post_Types\\Event' => $baseDir . '/src/Tribe/Models/Post_Types/Event.php',
@@ -22,6 +27,9 @@ return array(
     'Tribe\\Events\\Service_Providers\\First_Boot' => $baseDir . '/src/Tribe/Service_Providers/First_Boot.php',
     'Tribe\\Events\\Views\\V2\\Assets' => $baseDir . '/src/Tribe/Views/V2/Assets.php',
     'Tribe\\Events\\Views\\V2\\Customizer' => $baseDir . '/src/Tribe/Views/V2/Customizer.php',
+    'Tribe\\Events\\Views\\V2\\Customizer\\Hooks' => $baseDir . '/src/Tribe/Views/V2/Customizer/Hooks.php',
+    'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Month_View' => $baseDir . '/src/Tribe/Views/V2/Customizer/Section/Month_View.php',
+    'Tribe\\Events\\Views\\V2\\Customizer\\Service_Provider' => $baseDir . '/src/Tribe/Views/V2/Customizer/Service_Provider.php',
     'Tribe\\Events\\Views\\V2\\Hooks' => $baseDir . '/src/Tribe/Views/V2/Hooks.php',
     'Tribe\\Events\\Views\\V2\\Implementation_Error' => $baseDir . '/src/Tribe/Views/V2/Implementation_Error.php',
     'Tribe\\Events\\Views\\V2\\Index' => $baseDir . '/src/Tribe/Views/V2/Index.php',
@@ -57,6 +65,7 @@ return array(
     'Tribe\\Events\\Views\\V2\\V1_Compat' => $baseDir . '/src/Tribe/Views/V2/V1_Compat.php',
     'Tribe\\Events\\Views\\V2\\View' => $baseDir . '/src/Tribe/Views/V2/View.php',
     'Tribe\\Events\\Views\\V2\\View_Interface' => $baseDir . '/src/Tribe/Views/V2/View_Interface.php',
+    'Tribe\\Events\\Views\\V2\\View_Register' => $baseDir . '/src/Tribe/Views/V2/View_Register.php',
     'Tribe\\Events\\Views\\V2\\Views\\By_Day_View' => $baseDir . '/src/Tribe/Views/V2/Views/By_Day_View.php',
     'Tribe\\Events\\Views\\V2\\Views\\Day_View' => $baseDir . '/src/Tribe/Views/V2/Views/Day_View.php',
     'Tribe\\Events\\Views\\V2\\Views\\Latest_Past_View' => $baseDir . '/src/Tribe/Views/V2/Views/Latest_Past_View.php',
@@ -72,8 +81,10 @@ return array(
     'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_List_View' => $baseDir . '/src/Tribe/Views/V2/Views/Widgets/Widget_List_View.php',
     'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_View' => $baseDir . '/src/Tribe/Views/V2/Views/Widgets/Widget_View.php',
     'Tribe\\Events\\Views\\V2\\Widgets\\Admin_Template' => $baseDir . '/src/Tribe/Views/V2/Widgets/Admin_Template.php',
+    'Tribe\\Events\\Views\\V2\\Widgets\\Assets' => $baseDir . '/src/Tribe/Views/V2/Widgets/Assets.php',
     'Tribe\\Events\\Views\\V2\\Widgets\\Compatibility' => $baseDir . '/src/Tribe/Views/V2/Widgets/Compatibility.php',
     'Tribe\\Events\\Views\\V2\\Widgets\\Service_Provider' => $baseDir . '/src/Tribe/Views/V2/Widgets/Service_Provider.php',
     'Tribe\\Events\\Views\\V2\\Widgets\\Widget_Abstract' => $baseDir . '/src/Tribe/Views/V2/Widgets/Widget_Abstract.php',
     'Tribe\\Events\\Views\\V2\\Widgets\\Widget_List' => $baseDir . '/src/Tribe/Views/V2/Widgets/Widget_List.php',
+    'Tribe\\Events\\Views\\V2\\iCalendar\\Request' => $baseDir . '/src/Tribe/Views/V2/iCalendar/Request.php',
 );

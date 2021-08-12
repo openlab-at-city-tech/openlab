@@ -54,6 +54,18 @@ When you embed a miscellaneous file, we will use Google's preview embed viewer t
 4. Now, copy the link from the text field highlighted below:<br>
     ![Copy share link](https://cloud.githubusercontent.com/assets/505921/10206018/8cf2af54-6779-11e5-98b8-a75f7c76c205.png)
 
+### Alternate Instructions on iOS Devices
+Note: On iOS, users are required to interact with Google via the Apps, rather than through the browser. 
+1. Open the Google Document and select the ellipsis in the top right corner:
+    ![img_0002](https://user-images.githubusercontent.com/480667/48864926-13f05a00-ed9c-11e8-95ce-087ac5d220b0.jpg)
+2. Select **Share and Export** in the resulting panel:
+
+    ![img_0003](https://user-images.githubusercontent.com/480667/48864965-24a0d000-ed9c-11e8-8de4-336bbf93c7cb.jpg)
+3. Select **Copy Link** and the link will be copied to your clipboard:
+
+    ![img_0004](https://user-images.githubusercontent.com/480667/48865000-31bdbf00-ed9c-11e8-91d5-dcf4848cbf4a.jpg)
+    
+4. That link requires **/edit?usp=sharing** to be manually appended to the end of the URL in order for the shortcode to display the content correctly. 
 ***
 
 ### Other shortcode parameters
@@ -64,7 +76,7 @@ Here are some other custom parameters you can use with the shortcode:
 
 * "height" - Enter in a custom height for your Google Doc if desired. Defaults to "300". Avoid percentages.
 
-* "seamless" - This parameter is only applicable to Documents. If you enter "0", this will show the Google Docs header and footer.  Default value is "1", which means that no Google Docs header or footer will be shown.
+* "seamless" - This parameter is only applicable to Documents. If you enter "0", this will show the Google Docs header and footer.  Default value is "1", which means that no Google Docs header or footer will be shown.  **Note:** This option only works if your document was [published to the web](https://support.google.com/docs/answer/37579?hl=en) and not link-shared.
 
 * "size" - This parameter is only applicable to Slides.  You can enter in "small", "medium" or "large" to use the presentation preset sizes. Dimensions for these presets are: small (480x299), medium (960x559), large (1440x839). To set a custom width and height, use the "width" and "height" parameters listed above instead.
 

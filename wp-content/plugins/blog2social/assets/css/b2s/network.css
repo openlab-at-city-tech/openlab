@@ -869,3 +869,22 @@ ul.b2s-network-item-auth-list li:last-child{
 .b2s-auth-network-6-extension-download-area {
     text-align: center;
 }
+
+.b2s-edit-template-preview-title-4 {
+    font-size: 16px;
+    padding-top: 10px;
+}
+
+.b2s-edit-template-preview-content-4 {
+    padding-top: 20px;
+}
+
+.b2s-edit-template-preview-link-4 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-decoration: underline;
+}
+
+.b2s-edit-template-preview-like-icons-4 {
+    float: right;
+}

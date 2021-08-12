@@ -24,8 +24,8 @@
 	===========================================================================
 */
 class WPSimileTimelineAdmin{
-	function WPSimileTimelineAdmin(){
-		
+	function __construct(){
+
 	}
 	
 	/**

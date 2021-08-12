@@ -135,6 +135,10 @@ function media_upload_nextgen_form($errors) {
 <script type="text/javascript">
 <!--
 	function NGGSetAsThumbnail(id, nonce){
+		if (top.set_ngg_post_thumbnail) {
+			top.set_ngg_post_thumbnail(id, nonce);
+			return;
+		}
 		var $link = jQuery('a#ngg-post-thumbnail-' + id);
 	
 		$link.text( setPostThumbnailL10n.saving );
@@ -191,7 +195,7 @@ if ($chromeless)
 	?>
 	
 	<div class="alignleft actions">
-		<select id="select_gal" name="select_gal" style="width:120px;">
+		<select id="select_gal" name="select_gal" style="width:220px;">
 			<option value="0" <?php selected('0', $galleryID); ?> ><?php esc_attr( _e('No gallery',"nggallery") ); ?></option>
 			<?php
 			// Show gallery selection

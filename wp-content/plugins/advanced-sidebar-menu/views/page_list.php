@@ -2,7 +2,7 @@
 /**
  * The output of the "Advanced Sidebar Pages Menu" widget
  *
- * @since   8.0.0
+ * @since   8.3.3
  *
  * To edit copy this file to a folder in your theme called 'advanced-sidebar-menu' and edit at will.
  *
@@ -23,13 +23,13 @@ $current_menu->title();
 
 // Display parent page.
 if ( $current_menu->include_parent() ) {
-	$content .= '<ul class="parent-sidebar-menu" >';
+	$content .= '<ul class="parent-sidebar-menu" data-level="0">';
 	$list_args = $list_pages->get_args( Page::LEVEL_PARENT );
 	$content .= wp_list_pages( $list_args );
 }
 
 if ( ! empty( $child_pages ) ) {
-	$content .= '<ul class="child-sidebar-menu">';
+	$content .= '<ul class="child-sidebar-menu" data-level="1">';
 	// Child and grandchild pages.
 	$content .= $list_pages->list_pages();
 	$content .= '</ul><!-- End .child-sidebar-menu -->';

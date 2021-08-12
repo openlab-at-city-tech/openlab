@@ -145,5 +145,17 @@ class B2S_Post_Tools {
         }
         return 0;
     }
+    
+    public static function countReadyForApprove($userId = 0) {
+        if($userId > 0) {
+            global $wpdb;
+            $sql = $wpdb->prepare("SELECT count(id) AS approveCount FROM {$wpdb->prefix}b2s_posts WHERE hide = %d AND publish_date = '%s' AND sched_date_utc <= '%s' AND post_for_approve = %d AND blog_user_id = %d", 0, '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 1, (int) $userId);
+            $row = $wpdb->get_row($sql);
+            if (isset($row->approveCount)) {
+                return (int) $row->approveCount;
+            }
+        }
+        return 0;
+    }
 
 }

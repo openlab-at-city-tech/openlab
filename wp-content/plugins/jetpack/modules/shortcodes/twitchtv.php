@@ -6,7 +6,7 @@
  * [twitchtv url='https://www.twitch.tv/paperbat' height='378' width='620' autoplay='false']
  * [twitchtv url='https://www.twitch.tv/paperbat/b/323486192' height='378' width='620' autoplay='false']
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 /**
@@ -47,8 +47,8 @@ function wpcom_twitchtv_shortcode( $atts ) {
 		'time'     => $attr['time'],
 	);
 
-	$width  = intval( $attr['width'] );
-	$height = intval( $attr['height'] );
+	$width  = (int) $attr['width'];
+	$height = (int) $attr['height'];
 
 	$user_id  = $match[1];
 	$video_id = 0;

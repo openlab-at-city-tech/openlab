@@ -148,7 +148,8 @@ jQuery(function ($) {
         _utf8_decode: function (e) {
           var t = "";
           var n = 0;
-          var r, c1, c2; r = c1 = c2 = 0;
+          var r, c1, c2;
+          r = c1 = c2 = 0;
           while (n < e.length) {
             r = e.charCodeAt(n);
             if (r < 128) {
@@ -210,7 +211,7 @@ jQuery(function ($) {
   }
 
   $('input#_uploadable').on('change', function () {
-    var is_uploadable = $('input#_uploadable:checked').size();
+    var is_uploadable = $('input#_uploadable:checked').length;
     $('.show_if_uploadable').hide();
     $('.hide_if_uploadable').hide();
     if (is_uploadable) {
@@ -223,7 +224,7 @@ jQuery(function ($) {
   $('input#_uploadable').trigger('change');
 
   $('input#outofthebox_upload_box').on('change', function () {
-    var outofthebox_upload_box = $('input#outofthebox_upload_box:checked').size();
+    var outofthebox_upload_box = $('input#outofthebox_upload_box:checked').length;
     $('.show_if_outofthebox_upload_box').hide();
     if (outofthebox_upload_box) {
       $('.show_if_outofthebox_upload_box').show();
@@ -232,10 +233,10 @@ jQuery(function ($) {
   $('input#outofthebox_upload_box').trigger('change');
 
   /* Shortcode Generator Popup */
-  $('.OutoftheBox-shortcodegenerator').on('click',function (e) {
+  $('.OutoftheBox-shortcodegenerator').on('click', function (e) {
     var shortcode = $("#outofthebox_upload_box_shortcode").val();
     shortcode = shortcode.replace('[outofthebox ', '').replace('"]', '');
     var query = encodeURIComponent(shortcode).split('%3D%22').join('=').split('%22%20').join('&');
-    tb_show("Build Shortcode for Form", ajaxurl + '?action=outofthebox-getpopup&' + query + '&type=shortcodebuilder&for=woocommerce&asuploadbox=1&callback=wpcp_outofthebox_wc_add_content&TB_iframe=true&height=600&width=800');
+    tb_show("Build Shortcode for Product", ajaxurl + '?action=outofthebox-getpopup&' + query + '&type=shortcodebuilder&for=woocommerce&asuploadbox=1&callback=wpcp_outofthebox_wc_add_content&TB_iframe=true&height=600&width=800');
   });
 });

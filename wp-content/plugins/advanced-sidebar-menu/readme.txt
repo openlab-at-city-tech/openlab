@@ -2,11 +2,11 @@
 
 Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: menus, sidebar menu, hierarchy, category menu, pages menu
-Requires at least: 5.0.0
-Tested up to: 5.6.0
+Tags: menus, sidebar menu, hierarchy, category menu, pages menu, dynamic
+Requires at least: 5.2.0
+Tested up to: 5.7.2
 Requires PHP: 5.6.0
-Stable tag: 8.2.0
+Stable tag: 8.5.0
 
 == Description ==
 
@@ -14,9 +14,9 @@ Uses the parent/child relationship of your pages or categories to generate menus
 
 Keeps the menu clean and usable. Only related items display so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong. 
 
-<strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including priority support, the ability to customize the look and feel, custom link text, excluding of pages, category ordering, accordions, custom post types, custom taxonomies, and so much more!</strong>
+<strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.2.0</a> is now available with improved style targeting including hover styles and border widths!</blockquote>
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 8.3.0</a> is now available with improved style targeting including hover styles and border widths!</blockquote>
 
 <h3>Features</h3>
 * Page and Category widgets.
@@ -78,9 +78,12 @@ Keeps the menu clean and usable. Only related items display so you don't have to
 * Option to display the top-level navigation menu items when there are no child items or not viewing a menu item.
 * Priority support with access to members only support area.
 
-<h3>Currently ships with the following languages</h3>
-* English (US)
+<h3>Translations</h3>
+This plugin includes the following languages:
+* English (en_US)
+* French (fr_FR)
 * German (de_DE)
+* Spanish (es_ES)
    
 <h3>Developers</h3>
 Developer docs may be found <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">here</a>.
@@ -152,14 +155,50 @@ Yes. Based on whatever page, post, or category you are on, the menu will change 
 
 
 == Changelog ==
+= 8.5.0 =
+* Introduce `Utils` class for shared non specific functionality.
+* Introduce `is_checked` method for determining checkbox state from anywhere.
+* Make `Widget_Abstract::set_instance` public for external use.
+* Complete preparations for PRO version 8.4.
+* Minimum required version for PRO 8.4.
+
+= 8.4.0 =
+* Introduce new Category Walker to increase extensibility.
+* Support `data-level` on all widgets.
+
+= 8.3.4 =
+* Support widget fields with array values.
+
+= 8.3.3 =
+* Introduce `data-level` on all page menu levels for specific targeting.
+* Tested to WordPress 5.7.2.
+
+= 8.3.2 =
+* Fully compatible with PHP8.
+* Tested to WordPress 5.7.1.
+
+= 8.3.1 =
+* Add readme for translations.
+* Tested to WordPress 5.7.
+* Require WordPress core 5.2+.
+* Improved PHPCS configuration.
+
+= 8.3.0 =
+* Improved plugin headers.
+* Added translations for French (fr_FR).
+* Added translations for Spanish (es_ES).
+* Expose `Category::is_tax` method for public filters.
+* Improved type casting and PHPStan static type checking.
+* Fix tense in readme.txt words.
+
 = 8.2.0 =
-* Improve widget labels, descriptions and styles.
+* Improved widget labels, descriptions and styles.
 * Support blocked styling borders on all levels.
-* Improve Beaver Builder and Elementor styles.
-* Improve info panel.
+* Improved Beaver Builder and Elementor styles.
+* Improved info panel.
 
 = 8.1.1 =
-* Improve readme.
+* Improved readme.
 * Tested to WordPress 5.6.0.
 
 = 8.1.0 =
@@ -171,7 +210,7 @@ Yes. Based on whatever page, post, or category you are on, the menu will change 
 * Improved JavaScript structure.
 
 = 8.0.4 =
-* Improve styles when used with Beaver Builder.
+* Improved styles when used with Beaver Builder.
 * Require WordPress version 5.0.0+.
 
 = 8.0.3 =
@@ -179,7 +218,7 @@ Yes. Based on whatever page, post, or category you are on, the menu will change 
 * Make debugging functionality more stable.
 
 = 8.0.2 = 
-* Introduce new `advanced-sidebar-menu/menus/category/get-child-terms` filter
+* Introduced new `advanced-sidebar-menu/menus/category/get-child-terms` filter
 * Support filtering the first level of categories.
 * Use `is_excluded` vs `is_first_level_category` in category view.
 
@@ -205,10 +244,10 @@ Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-m
 
 = 7.7.0 =
 * Enable accordion previews when editing via Beaver Builder.
-* Greatly improve widget styles and UI when using Elementor.
+* Greatly improved widget styles and UI when using Elementor.
 * Overall third party page builder improvements.
 * Move scripts and styles into new Scripts class.
-* Introduce a new Singleton trait.
+* Introduced a new Singleton trait.
 
 = 7.6.0 =
 * Elementor support for multiple widgets of the same type on the same page.
@@ -219,32 +258,10 @@ Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-m
 * Convert "Always display child pages" to use our List_Pages structure and support all widget options.
 * Bump required PHP version to 5.4.4.
 
-= 7.4.0 =
-* Added support for Beaver Builder
-
-= 7.3.0 =
-* Greatly improve category widget performance
-
-= 7.2.0 =
-* New improved widget structure
-
-= 7.1.0 =
-* Support Pro Version 3.0.0
-* Add German translations
-* Begin converting code formatting to strict WordPress standards
-
-= 7.0.0 =
-* Restructure the codebase to a more modern PSR4 structure
-* Improve cache handling
-* Improve verbiage in the admin
-* Implement new actions and filters
-* Rebuild templates for improved stability and future changes
-* Improve performance
-* Kill conflicting backward compatibility with version 5
-* Open up more extendability possibilities
-
-
 == Upgrade Notice ==
+= 8.5.0 =
+Update to support PRO version 8.4.0.
+
 = 8.2.0 =
 Update to support PRO version 8.2.0
 

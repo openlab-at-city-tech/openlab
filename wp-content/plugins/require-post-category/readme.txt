@@ -1,9 +1,9 @@
 ﻿=== Require Post Category ===
 Contributors: joshhartman
 Tags: post, category, tags, taxonomy, require, force, publish, save, admin, gutenberg, editor
-Requires at least: 5.3.2
-Tested up to: 5.3
-Stable tag: 2.0.3
+Requires at least: 5.5
+Tested up to: 5.5
+Stable tag: 2.1
 
 Require users to choose a post category before updating or publishing a post.
 
@@ -95,6 +95,11 @@ Visit this plugin's WordPress support forum at https://wordpress.org/support/plu
 2. Alert appears when you try to save a post without selecting a category (Classic)
 
 == Changelog ==
+
+= 2.1 =
+* Updated for WordPress 5.5
+* FIXED: Deprecated function notice listed in jQuery Migrate Helper plugin (Classic Editor)
+* FIXED: Submitting post form by pressing enter in the title field would bypass checks (Classic Editor)
 
 = 2.0.3 =
 * Added Finnish (fi) translation by Sanapaino

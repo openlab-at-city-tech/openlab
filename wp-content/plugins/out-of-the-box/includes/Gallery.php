@@ -151,7 +151,7 @@ class Gallery
             'virtual' => false,
             'breadcrumb' => $file_path,
             'html' => $imageslist_html,
-            'expires' => $expires, ]);
+        ]);
 
         $cached_request = new CacheRequest($this->get_processor());
         $cached_request->add_cached_response($response);
@@ -295,8 +295,7 @@ class Gallery
 
         $url = OUTOFTHEBOX_ADMIN_URL.'?action=outofthebox-preview&OutoftheBoxpath='.rawurlencode($item->get_path()).'&lastpath='.rawurlencode($this->get_processor()->get_last_path()).'&account_id='.$this->get_processor()->get_current_account()->get_id().'&listtoken='.$this->get_processor()->get_listtoken();
         if ($this->get_processor()->get_client()->has_shared_link($item)) {
-            $url = $this->get_processor()->get_client()->get_shared_link($item);
-            $url = $url.'?raw=1';
+            $url = str_replace('/s/', '/s/raw/', $this->get_processor()->get_client()->get_shared_link($item));
         } elseif ($this->get_processor()->get_client()->has_temporarily_link($item)) {
             $url = $this->get_processor()->get_client()->get_temporarily_link($item);
         }
@@ -469,9 +468,11 @@ class Gallery
 
         $height = $this->get_processor()->get_shortcode_option('targetheight');
         $html .= "<div class='image-container image-folder image-add-folder grey newfolder'>";
-        $html .= "<a title='".esc_html__('Add folder', 'wpcloudplugins')."'><div class='folder-text'>".esc_html__('Add folder', 'wpcloudplugins').'</div>';
-        $html .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".plugins_url('css/images/folder.png', dirname(__FILE__))."' width='{$height}' height='{$height}' style='width:".$height.'px;height:'.$height."px;'/>";
+        $html .= "<a title='".esc_html__('Add folder', 'wpcloudplugins')."'>";
+        $html .= "<div class='folder-text'><i class='fas fa-folder-plus'></i>&nbsp;&nbsp;".esc_html__('Add folder', 'wpcloudplugins').'</div>';
+        $html .= "<img class='preloading' src='".OUTOFTHEBOX_ROOTPATH."/css/images/transparant.png' data-src='".plugins_url('css/images/gallery-add-folder.png', dirname(__FILE__))."' data-src-retina='".plugins_url('css/images/gallery-add-folder.png', dirname(__FILE__))."' width='{$height}' height='{$height}' style='width:".$height.'px;height:'.$height."px;'/>";
         $html .= '</a>';
+
         $html .= "</div>\n";
 
         return $html;

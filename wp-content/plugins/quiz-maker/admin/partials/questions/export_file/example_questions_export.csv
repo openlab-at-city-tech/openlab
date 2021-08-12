@@ -1,0 +1,4 @@
+category,question,question_image,question_hint,type,published,wrong_answer_text,right_answer_text,explanation,user_explanation,not_influence_to_score,weight,answers
+Uncategorized,5*40,,,radio,1,,,,off,off,1,300::0::1;;100::0::1;;200::1::2;;
+Uncategorized,10+20,,,radio,1,,,,off,off,1,30::1::2;;40::0::1;;50::0::1;;
+Uncategorized,150/3,,,radio,1,,,,off,off,1,60::0::1;;50::1::2;;100::0::1;;

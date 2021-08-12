@@ -33,7 +33,6 @@ class WP_Document_Revisions_Admin {
 	 * @param unknown $instance (optional, reference).
 	 */
 	public function __construct( &$instance = null ) {
-
 		self::$instance = &$this;
 
 		// create or store parent instance.
@@ -49,21 +48,22 @@ class WP_Document_Revisions_Admin {
 
 		// edit document screen.
 		add_action( 'admin_head', array( &$this, 'make_private' ) );
-		add_action( 'save_post', array( &$this, 'workflow_state_save' ) );
+		add_action( 'set_object_terms', array( &$this, 'workflow_state_save' ), 10, 6 );
+		add_action( 'save_post_document', array( &$this, 'save_document' ) );
 		add_action( 'admin_init', array( &$this, 'enqueue_edit_scripts' ) );
 		add_action( '_wp_put_post_revision', array( &$this, 'revision_filter' ), 10, 1 );
 		add_filter( 'default_hidden_meta_boxes', array( &$this, 'hide_postcustom_metabox' ), 10, 2 );
-		add_action( 'admin_footer', array( &$this, 'bind_upload_cb' ) );
+		add_action( 'admin_print_footer_scripts', array( &$this, 'bind_upload_cb' ), 99 );
 		add_action( 'admin_head', array( &$this, 'hide_upload_header' ) );
+		add_action( 'admin_head', array( &$this, 'check_upload_files' ) );
+		add_filter( 'media_upload_tabs', array( &$this, 'media_upload_tabs_computer' ) );
 
 		// document list.
 		add_filter( 'manage_document_posts_columns', array( &$this, 'rename_author_column' ) );
-		add_filter( 'manage_document_posts_columns', array( &$this, 'add_workflow_state_column' ) );
-		add_action( 'manage_document_posts_custom_column', array( &$this, 'workflow_state_column_cb' ), 10, 2 );
 		add_filter( 'manage_document_posts_columns', array( &$this, 'add_currently_editing_column' ), 20 );
 		add_action( 'manage_document_posts_custom_column', array( &$this, 'currently_editing_column_cb' ), 10, 2 );
 		add_action( 'restrict_manage_posts', array( &$this, 'filter_documents_list' ) );
-		add_filter( 'parse_query', array( &$this, 'convert_id_to_term' ) );
+		add_filter( 'parse_query', array( &$this, 'convert_workflow_state_to_post_status' ) );
 
 		// settings.
 		add_action( 'admin_init', array( &$this, 'settings_fields' ) );
@@ -91,8 +91,8 @@ class WP_Document_Revisions_Admin {
 		// cleanup.
 		add_action( 'delete_post', array( &$this, 'delete_attachments_with_document' ), 10, 1 );
 
-		// edit flow support.
-		add_action( 'admin_init', array( &$this, 'disable_workflow_states' ), 20 );
+		// edit flow or publishpress support.
+		add_action( 'init', array( &$this, 'disable_workflow_states' ), 1901 );  // After main class called.
 
 		// admin css.
 		add_filter( 'admin_body_class', array( &$this, 'admin_body_class_filter' ) );
@@ -171,7 +171,6 @@ class WP_Document_Revisions_Admin {
 	 * @return void
 	 */
 	public function add_help_tab() {
-
 		$screen = get_current_screen();
 
 		// loop through each tab in the help array and add.
@@ -196,7 +195,6 @@ class WP_Document_Revisions_Admin {
 	 * @returns array|string the help text
 	 */
 	public function get_help_text( $screen = null, $return_array = true ) {
-
 		if ( is_null( $screen ) ) {
 			$screen = get_current_screen();
 		}
@@ -248,7 +246,6 @@ class WP_Document_Revisions_Admin {
 		 * @param string $screen current screen name.
 		 */
 		return apply_filters( 'document_help', $output, $screen );
-
 	}
 
 	/**
@@ -256,12 +253,12 @@ class WP_Document_Revisions_Admin {
 	 * @ since 0.5
 	 */
 	public function meta_cb() {
-
 		global $post;
 
 		// remove unused meta boxes.
 		remove_meta_box( 'revisionsdiv', 'document', 'normal' );
 		remove_meta_box( 'postexcerpt', 'document', 'normal' );
+		remove_meta_box( 'slugdiv', 'document', 'normal' );
 		remove_meta_box( 'tagsdiv-workflow_state', 'document', 'side' );
 
 		// add our meta boxes.
@@ -298,8 +295,8 @@ class WP_Document_Revisions_Admin {
 	 * Forces postcustom metabox to be hidden by default, despite the fact that the CPT creates it.
 	 *
 	 * @since 1.0
-	 * @param array $hidden the default hidden metaboxes.
-	 * @param array $screen the current screen.
+	 * @param array     $hidden the default hidden metaboxes.
+	 * @param WP_Screen $screen the current screen.
 	 * @returns array defaults with postcustom
 	 */
 	public function hide_postcustom_metabox( $hidden, $screen ) {
@@ -318,10 +315,9 @@ class WP_Document_Revisions_Admin {
 	 * @param String $body_class the existing body class(es).
 	 */
 	public function admin_body_class_filter( $body_class ) {
-
 		global $post;
 
-		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post->ID : false ) ) ) {
+		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) ) {
 			return $body_class;
 		}
 
@@ -343,7 +339,6 @@ class WP_Document_Revisions_Admin {
 	 * @since 1.2.4
 	 */
 	public function hide_upload_header() {
-
 		global $pagenow;
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -353,6 +348,39 @@ class WP_Document_Revisions_Admin {
 				#media-upload-header {display:none;}
 			</style>
 			<?php
+		}
+	}
+
+
+	/**
+	 * Check that those having edit_document can upload documents.
+	 *
+	 * @since 3.3
+	 */
+	public function check_upload_files() {
+		global $typenow, $pagenow;
+
+		if ( ! current_user_can( 'edit_documents' ) || 'document' !== $typenow || current_user_can( 'upload_files' ) ) {
+			return;
+		}
+
+		if ( 'post.php' === $pagenow ) {
+			?>
+			<div class="notice notice-warning is-dismissible"><p>
+			<?php esc_html_e( 'You do not have the upload_files capability!', 'wp-document-revisions' ); ?>
+			</p><p>
+			<?php esc_html_e( 'You will not be able to upload documents though you may be able change some attributes.', 'wp-document-revisions' ); ?>
+			</p></div>
+			<?php
+		} elseif ( 'post-new.php' === $pagenow ) {
+			?>
+			<div class="notice notice-warning is-dismissible"><p>
+			<?php esc_html_e( 'You do not have the upload_files capability!', 'wp-document-revisions' ); ?>
+			</p><p>
+			<?php esc_html_e( 'You will not be able to upload any documents.', 'wp-document-revisions' ); ?>
+			</p></div>
+			<?php
+			// Need to switch off save capability.
 		}
 	}
 
@@ -395,12 +423,13 @@ class WP_Document_Revisions_Admin {
 			<strong><a href="<?php echo esc_url( get_permalink( $post->ID ) ); ?>" target="_BLANK"><?php esc_html_e( 'Download', 'wp-document-revisions' ); ?></a></strong><br />
 			<em>
 			<?php
+			$mod_date = $latest_version->post_modified;
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-			// translators: %1$s is the post date in words, %2$s is the post date in time format, %3$s is how long ago the post was modified, %4$s is the author's name.
-			printf( __( 'Checked in <abbr class="timestamp" title="%1$s" id="%2$s">%3$s</abbr> ago by %4$s', 'wp-document-revisions' ), $latest_version->post_date, strtotime( $latest_version->post_date ), human_time_diff( (int) get_post_modified_time( 'U', null, $post->ID ) ), get_the_author_meta( 'display_name', $latest_version->post_author ) );
+			// translators: %1$s is the post modified date in words, %2$s is the post modified date in time format, %3$s is how long ago the post was modified, %4$s is the author's name.
+			printf( __( 'Checked in <abbr class="timestamp" title="%1$s" id="%2$s">%3$s</abbr> ago by %4$s', 'wp-document-revisions' ), $mod_date, strtotime( $mod_date ), human_time_diff( (int) get_post_modified_time( 'U', true, $post->ID ), time() ), get_the_author_meta( 'display_name', $latest_version->post_author ) );
 			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
-			</a></em>
+			</em>
 			</p>
 		<?php } ?>
 		<div class="clear"></div>
@@ -417,7 +446,7 @@ class WP_Document_Revisions_Admin {
 		?>
 		<label class="screen-reader-text" for="excerpt"><?php esc_html_e( 'Revision Summary' ); ?></label>
 		<textarea rows="1" cols="40" name="excerpt" tabindex="6" id="excerpt"></textarea>
-		<p><?php esc_html_e( 'Revision summaries are optional notes to store along with this revision that allow other users to quickly and easily see what changes you made without needing to open the actual file.', 'wp-document-revisions' ); ?></a></p>
+		<p><?php esc_html_e( 'Revision summaries are optional notes to store along with this revision that allow other users to quickly and easily see what changes you made without needing to open the actual file.', 'wp-document-revisions' ); ?></p>
 		<?php
 	}
 
@@ -429,7 +458,6 @@ class WP_Document_Revisions_Admin {
 	 * @param object $post the post object.
 	 */
 	public function revision_metabox( $post ) {
-
 		$can_edit_doc = current_user_can( 'edit_document', $post->ID );
 		$revisions    = $this->get_revisions( $post->ID );
 		$key          = $this->get_feed_key();
@@ -442,13 +470,15 @@ class WP_Document_Revisions_Admin {
 				<?php
 				if ( $can_edit_doc ) {
 					?>
-<th><?php esc_html_e( 'Actions', 'wp-document-revisions' ); ?></th><?php } ?>
+					<th><?php esc_html_e( 'Actions', 'wp-document-revisions' ); ?></th>
+				<?php } ?>
 			</tr>
 		<?php
 
+		$i = 0;
 		foreach ( $revisions as $revision ) {
-
-			if ( ! current_user_can( 'read_post', $revision->ID ) || wp_is_post_autosave( $revision ) ) {
+			$i++;
+			if ( ! current_user_can( 'read_document', $revision->ID ) ) {
 				continue;
 			}
 			// preserve original file extension on revision links.
@@ -457,16 +487,20 @@ class WP_Document_Revisions_Admin {
 				$fn   = get_post_meta( $revision->post_content, '_wp_attached_file', true );
 				$fno  = pathinfo( $fn, PATHINFO_EXTENSION );
 				$info = pathinfo( get_permalink( $revision->ID ) );
-				$fn   = $info['dirname'] . '/' . $info['filename'] . '.' . $fno;
+				$fn   = $info['dirname'] . '/' . $info['filename'];
+				// Only add extension if permalink doesnt contain post id as it becomes invalid.
+				if ( ! strpos( $info['filename'], '&p=' ) ) {
+					$fn .= '.' . $fno;
+				}
 			} else {
 				$fn = get_permalink( $revision->ID );
 			}
 			?>
 			<tr>
-				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_date ); ?>" class="timestamp" id="<?php echo esc_attr( strtotime( $revision->post_date ) ); ?>"><?php echo esc_html( human_time_diff( strtotime( $revision->post_date ) ) ); ?></a></td>
+				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_modified ); ?>" class="timestamp" id="<?php echo esc_attr( strtotime( $revision->post_modified ) ); ?>"><?php echo esc_html( human_time_diff( strtotime( $revision->post_modified_gmt ), time() ) ); ?></a></td>
 				<td><?php echo esc_html( get_the_author_meta( 'display_name', $revision->post_author ) ); ?></td>
 				<td><?php echo esc_html( $revision->post_excerpt ); ?></td>
-				<?php if ( $can_edit_doc && $post->ID !== $revision->ID ) { ?>
+				<?php if ( $can_edit_doc && $post->ID !== $revision->ID && $i > 1 ) { ?>
 					<td><a href="
 					<?php
 					echo esc_url(
@@ -501,7 +535,6 @@ class WP_Document_Revisions_Admin {
 	 * @since 0.5
 	 */
 	public function enqueue_edit_scripts() {
-
 		if ( ! $this->verify_post_type() ) {
 			return;
 		}
@@ -509,6 +542,26 @@ class WP_Document_Revisions_Admin {
 		wp_enqueue_script( 'autosave' );
 		add_thickbox();
 		wp_enqueue_script( 'media-upload' );
+	}
+
+
+	/**
+	 * Only load documenrs from Computer.
+	 *
+	 * @since 3.3
+	 *
+	 * @param string[] $_default_tabs An array of media tabs.
+	 */
+	public function media_upload_tabs_computer( $_default_tabs ) {
+		// phpcs:ignore  WordPress.Security.NonceVerification.Recommended
+		if ( $this->verify_post_type() && isset( $_GET['action'] ) ) {
+			// keep just load from computer for the document (but not the thumbnail).
+			unset( $_default_tabs['type_url'] );
+			unset( $_default_tabs['gallery'] );
+			unset( $_default_tabs['library'] );
+		}
+
+		return $_default_tabs;
 	}
 
 
@@ -534,14 +587,13 @@ class WP_Document_Revisions_Admin {
 	 * @returns bool|string false on fail, path to new dir on sucess
 	 */
 	public function sanitize_upload_dir( $dir ) {
-
 		// empty string passed.
 		if ( '' === $dir ) {
 			return $this->document_upload_dir();
 		}
 
-		// if the path is not absolute, assume it's relative to ABSPATH.
-		if ( '/' !== substr( $dir, 0, 1 ) ) {
+		// if the path is not absolute (Linux and Windows tests), assume it's relative to ABSPATH.
+		if ( 0 !== strpos( $dir, '/' ) && ! preg_match( '|^.:\\\|', $dir ) ) {
 			$dir = ABSPATH . $dir;
 		}
 
@@ -571,7 +623,6 @@ class WP_Document_Revisions_Admin {
 	 * @return string sanitized slug
 	 */
 	public function sanitize_document_slug( $slug ) {
-
 		$slug = sanitize_title( $slug, 'documents' );
 
 		// unchanged.
@@ -623,7 +674,6 @@ class WP_Document_Revisions_Admin {
 	 * @since 1.0
 	 */
 	public function network_upload_location_save() {
-
 		if ( ! isset( $_POST['document_upload_location_nonce'] ) ) {
 			return;
 		}
@@ -654,7 +704,6 @@ class WP_Document_Revisions_Admin {
 	 * Callback to validate and save slug on network settings page.
 	 */
 	public function network_slug_save() {
-
 		if ( ! isset( $_POST['document_slug_nonce'] ) ) {
 			return;
 		}
@@ -699,7 +748,6 @@ class WP_Document_Revisions_Admin {
 	 * @returns string the modified location
 	 */
 	public function network_settings_redirect( $location ) {
-
 		// Verify redirect string from /wp-admin/network/edit.php line 164.
 		if ( add_query_arg( 'updated', 'true', network_admin_url( 'settings.php' ) ) === $location ) {
 			// append the settings-updated query arg and return.
@@ -743,7 +791,7 @@ class WP_Document_Revisions_Admin {
 	 */
 	public function document_slug_cb() {
 		?>
-	<code><?php bloginfo( 'url' ); ?>/<input name="document_slug" type="text" id="document_slug" value="<?php echo esc_attr( $this->document_slug() ); ?>" class="medium-text" />/<?php echo esc_html( gmdate( 'Y' ) ); ?>/<?php echo esc_html( gmdate( 'm' ) ); ?>/<?php esc_html_e( 'example-document-title', 'wp-document-revisions' ); ?>.txt</code><br />
+	<code><?php echo esc_html( home_url() ); ?><input name="document_slug" type="text" id="document_slug" value="<?php echo esc_attr( $this->document_slug() ); ?>" class="medium-text" />/<?php echo esc_html( gmdate( 'Y' ) ); ?>/<?php echo esc_html( gmdate( 'm' ) ); ?>/<?php esc_html_e( 'example-document-title', 'wp-document-revisions' ); ?>.txt</code><br />
 	<span class="description">
 		<?php
 		// phpcs:ignore WordPress.Security.EscapeOutput.UnsafePrintingFunction
@@ -751,40 +799,6 @@ class WP_Document_Revisions_Admin {
 		?>
 	</span>
 		<?php
-	}
-
-
-	/**
-	 * Callback to inject JavaScript in page after upload is complete (pre 3.3).
-	 *
-	 * @since 0.5
-	 * @param int $id the ID of the attachment.
-	 * @return unknown
-	 */
-	public function post_upload_js( $id ) {
-
-		// get the post object.
-		$document = get_post( $id );
-
-		// begin output buffer so the javascript can be returned as a string, rather than output directly to the browser.
-		ob_start();
-
-		?>
-		<script>
-		var attachmentID = <?php echo (int) $id; ?>;
-		var extension = '<?php echo esc_js( $this->get_file_type( $document ) ); ?>';
-		jQuery(document).ready(function($) { postDocumentUpload( extension, attachmentID ) });
-		</script>
-		<?php
-
-		// get contents of output buffer.
-		$js = ob_get_contents();
-
-		// dump output buffer.
-		ob_end_clean();
-
-		// return javascript.
-		return $js;
 	}
 
 
@@ -799,7 +813,7 @@ class WP_Document_Revisions_Admin {
 
 		if ( 'media-upload.php' === $pagenow ) :
 			?>
-		<script>jQuery(document).ready(function(){bindPostDocumentUploadCB()});</script>
+			<script type="text/javascript">jQuery(document).ready(function(){bindPostDocumentUploadCB()});</script>
 			<?php
 		endif;
 	}
@@ -873,7 +887,6 @@ class WP_Document_Revisions_Admin {
 	 * @returns string the feed key
 	 */
 	public function get_feed_key( $user = null ) {
-
 		$key = get_user_option( $this->meta_key, $user );
 
 		if ( ! $key ) {
@@ -892,7 +905,6 @@ class WP_Document_Revisions_Admin {
 	 * @returns string feed key
 	 */
 	public function generate_new_feed_key( $user = null ) {
-
 		if ( ! $user ) {
 			$user = get_current_user_id();
 		}
@@ -910,7 +922,6 @@ class WP_Document_Revisions_Admin {
 	 * @since 0.5
 	 */
 	public function profile_update_cb() {
-
 		if ( isset( $_POST['generate-new-feed-key'] ) && isset( $_POST['_document_revisions_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_document_revisions_nonce'] ) ), 'generate-new-feed-key' ) ) {
 			$this->generate_new_feed_key();
 		}
@@ -925,8 +936,7 @@ class WP_Document_Revisions_Admin {
 	 * @param WP_Post $post current post.
 	 */
 	public function manage_document_revisions_limit( $num, $post ) {
-
-		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post->ID : false ) ) ) {
+		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) ) {
 			return $num;
 		}
 
@@ -946,7 +956,6 @@ class WP_Document_Revisions_Admin {
 		$num = apply_filters( 'document_revisions_limit', $num );
 
 		return $num;
-
 	}
 
 
@@ -956,10 +965,9 @@ class WP_Document_Revisions_Admin {
 	 * @since 3.2.2
 	 */
 	public function check_document_revisions_limit() {
-
 		global $post;
 
-		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post->ID : false ) ) ) {
+		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) ) {
 			return;
 		}
 
@@ -1006,67 +1014,55 @@ class WP_Document_Revisions_Admin {
 	 * Allow some filtering of the All Documents list.
 	 */
 	public function filter_documents_list() {
-		global $typenow, $wp_query;
+		global $typenow;
 		// Only applies to document post type.
 		if ( 'document' === $typenow ) {
-
-			// Filter by workflow state/edit flow state.
-			$tax_slug = 'workflow_state';
-			if ( $this->disable_workflow_states() ) {
-				$tax_slug = EF_Custom_Status::taxonomy_key;
-			}
-			$args = array(
-				'name'            => 'workflow_state',
-				'show_option_all' => __( 'All workflow states', 'wp-document-revisions' ),
-				'hide_empty'      => false,
-				'taxonomy'        => $tax_slug,
-			);
-
-			// set selected workflow state.
-			if ( isset( $wp_query->query[ $tax_slug ] ) ) {
-				$term_id = $wp_query->query[ $tax_slug ];
-				if ( ! is_numeric( $term_id ) && '0' !== $term_id ) {
-					$term    = get_term_by( 'slug', $wp_query->query[ $tax_slug ], $tax_slug );
-					$term_id = $term->term_id;
+			$tax_slug = self::$parent->taxonomy_key();
+			if ( ! empty( $tax_slug ) ) {
+				// Filter by workflow state/edit flow/publishpress state.
+				// Note that the name is always workflow state as using post_status will invoke default status handling.
+				// However it may be different on coming back.
+				$so_all = __( 'All workflow states', 'wp-document-revisions' );
+				if ( 'workflow_state' !== $tax_slug ) {
+					$so_all = __( 'All statuses', 'wp-document-revisions' );
 				}
-				$args['selected'] = $term_id;
+				$args = array(
+					'name'            => 'workflow_state',
+					'show_option_all' => $so_all,
+					'taxonomy'        => $tax_slug,
+					'hide_empty'      => false,
+					'value_field'     => 'slug',
+					'selected'        => filter_input( INPUT_GET, 'workflow_state', FILTER_SANITIZE_STRING ),
+				);
 				wp_dropdown_categories( $args );
-			} else {
-				if ( taxonomy_exists( 'workflow_state' ) && ! $this->disable_workflow_states() ) {
-					wp_dropdown_categories( $args );
-				}
 			}
 
 			// author/owner filtering.
 			$args = array(
 				'name'            => 'author',
 				'show_option_all' => __( 'All owners', 'wp-document-revisions' ),
+				'value_field'     => 'slug',
+				'selected'        => filter_input( INPUT_GET, 'author', FILTER_SANITIZE_STRING ),
+				'orderby'         => 'name',
+				'order'           => 'ASC',
 			);
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			if ( isset( $_GET['author'] ) ) {
-				$args['selected'] = sanitize_text_field( wp_unslash( $_GET['author'] ) );
-			}
-			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			wp_dropdown_users( $args );
 		}
 	}
 
 	/**
-	 * Converts id to term used in filter dropdown.
+	 * Need to manipulate workflow_state into taxonomy slug for EF/PP.
+	 *
+	 * Only invoked if taxonomy slug needs to be changed.
 	 *
 	 * @param Object $query the WP_Query object.
 	 */
-	public function convert_id_to_term( $query ) {
+	public function convert_workflow_state_to_post_status( $query ) {
 		global $pagenow, $typenow;
 		if ( 'edit.php' === $pagenow && 'document' === $typenow ) {
-			$tax_slug = 'workflow_state';
-			if ( $this->disable_workflow_states() ) {
-				$tax_slug = EF_Custom_Status::taxonomy_key;
-			}
-			$var = &$query->query_vars[ $tax_slug ];
-			if ( isset( $var ) && is_numeric( $var ) && '0' !== $var ) {
-				$term = get_term_by( 'id', $var, $tax_slug );
-				$var  = $term->slug;
+			if ( 'workflow_state' !== self::$parent->taxonomy_key() && array_key_exists( 'workflow_state', $query->query_vars ) ) {
+				// parameter sent using 'workflow_state', look up with the appropriate taxonomy key.
+				$query->query_vars[ self::$parent->taxonomy_key() ] = $query->query_vars['workflow_state'];
 			}
 		}
 	}
@@ -1079,60 +1075,11 @@ class WP_Document_Revisions_Admin {
 	 * @returns array the modified column labels
 	 */
 	public function rename_author_column( $defaults ) {
-
 		if ( isset( $defaults['author'] ) ) {
 			$defaults['author'] = __( 'Owner', 'wp-document-revisions' );
 		}
 
 		return $defaults;
-	}
-
-
-	/**
-	 * Splices workflow state column as 2nd (3rd) column on documents page.
-	 *
-	 * @since 0.5
-	 * @param array $defaults the original columns.
-	 * @returns array our spliced columns
-	 */
-	public function add_workflow_state_column( $defaults ) {
-
-		// get checkbox and title.
-		$output = array_slice( $defaults, 0, 2 );
-
-		// splice in workflow state.
-		$output['workflow_state'] = __( 'Workflow State', 'wp-document-revisions' );
-
-		// get the rest of the columns.
-		$output = array_merge( $output, array_slice( $defaults, 2 ) );
-
-		return $output;
-	}
-
-
-	/**
-	 * Callback to output data for workflow state column.
-	 *
-	 * @since 0.5
-	 * @param string $column_name the name of the column being propegated.
-	 * @param int    $post_id the ID of the post being displayed.
-	 */
-	public function workflow_state_column_cb( $column_name, $post_id ) {
-
-		// verify column.
-		if ( 'workflow_state' === $column_name && $this->verify_post_type( $post_id ) ) {
-
-			// get terms.
-			$state = wp_get_post_terms( $post_id, 'workflow_state' );
-
-			// verify state exists.
-			if ( 0 === count( $state ) ) {
-				return;
-			}
-
-			// give the workflow state output (but with no return).
-			echo '<a href="' . esc_url( add_query_arg( 'workflow_state', $state[0]->slug ) ) . '">' . esc_html( $state[0]->name ) . '</a>';
-		}
 	}
 
 
@@ -1144,9 +1091,8 @@ class WP_Document_Revisions_Admin {
 	 * @returns array our spliced columns
 	 */
 	public function add_currently_editing_column( $defaults ) {
-
-		// get checkbox, title, and workflow state.
-		$output = array_slice( $defaults, 0, 3 );
+		// get checkbox and title.
+		$output = array_slice( $defaults, 0, 2 );
 
 		// splice in workflow state.
 		$output['currently_editing'] = __( 'Currently Editing', 'wp-document-revisions' );
@@ -1166,7 +1112,6 @@ class WP_Document_Revisions_Admin {
 	 * @param int    $post_id the ID of the post being displayed.
 	 */
 	public function currently_editing_column_cb( $column_name, $post_id ) {
-
 		// verify column.
 		if ( 'currently_editing' === $column_name && $this->verify_post_type( $post_id ) ) {
 
@@ -1186,7 +1131,6 @@ class WP_Document_Revisions_Admin {
 	 * @param object $post the post object.
 	 */
 	public function workflow_state_metabox_cb( $post ) {
-
 		wp_nonce_field( 'wp-document-revisions', 'workflow_state_nonce' );
 
 		$current_state = wp_get_post_terms(
@@ -1211,20 +1155,32 @@ class WP_Document_Revisions_Admin {
 			<?php } ?>
 		</select>
 		<?php
-
 	}
 
-
 	/**
-	 * Callback to save workflow_state metabox.
+	 * Callback to identify change in workflow_state to provide an action point.
 	 *
 	 * @since 0.5
-	 * @param int $doc_id the ID of the post being edited.
+	 *
+	 * @param int    $doc_id     the document ID.
+	 * @param array  $terms      the new terms.
+	 * @param array  $tt_ids     the new term IDs.
+	 * @param string $taxonomy   the taxonomy being changed.
+	 * @param bool   $append     whether it is being appended or replaced.
+	 * @param array  $old_tt_ids term taxonomy ID array before the change.
 	 */
-	public function workflow_state_save( $doc_id ) {
-
+	public function workflow_state_save( $doc_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids ) {
+		// Only interested in replacement to this taxonomy, so if not, bail early.
+		if ( 'workflow_state' !== $taxonomy || $append ) {
+			return;
+		}
 		// autosave check.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// only main item.
+		if ( wp_is_post_revision( $doc_id ) ) {
 			return;
 		}
 
@@ -1233,8 +1189,44 @@ class WP_Document_Revisions_Admin {
 			return;
 		}
 
-		// verify nonce.
-		if ( ! isset( $_POST['workflow_state_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['workflow_state_nonce'] ) ), 'wp-document-revisions' ) ) {
+		// check permissions.
+		if ( ! current_user_can( 'edit_document', $doc_id ) ) {
+			return;
+		}
+
+		if ( empty( $tt_ids ) ) {
+			$new_id = '';
+		} else {
+			$term_obj = get_term_by( 'term_taxonomy_id', $tt_ids[0], $taxonomy );
+			$new_id   = $term_obj->term_id;
+		}
+		if ( empty( $old_tt_ids ) ) {
+			$old_id = '';
+		} else {
+			$term_obj = get_term_by( 'term_taxonomy_id', $old_tt_ids[0], $taxonomy );
+			$old_id   = $term_obj->term_id;
+		}
+
+		if ( $new_id === $old_id ) {
+			return;
+		}
+
+		// Old action hook.
+		do_action( 'change_document_workflow_state', $doc_id, $new_id );
+
+		// Replacement action hook.
+		do_action( 'document_change_workflow_state', $doc_id, $new_id, $old_id );
+	}
+
+	/**
+	 * Callback to unlink loaded featured image.
+	 *
+	 * @since 3.3
+	 * @param int $doc_id the ID of the post being edited.
+	 */
+	public function save_document( $doc_id ) {
+		// autosave check.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
@@ -1243,16 +1235,15 @@ class WP_Document_Revisions_Admin {
 			return;
 		}
 
-		// associate taxonomy with parent, not revision.
-		if ( wp_is_post_revision( $doc_id ) ) {
-			$doc_id = wp_is_post_revision( $doc_id );
+		$parent = wp_is_post_revision( $doc_id );
+		if ( false !== $parent ) {
+			$doc_id = $parent;
 		}
-
 		// if document has featured image loaded with document, then make sure it has no parent
 		// done after we make sure that we have doc_id being parent.
-		global $wpdb;
 		$thumb = get_post_meta( $doc_id, '_thumbnail_id', true );
 		if ( $thumb > 0 ) {
+			global $wpdb;
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 			$post_table = "{$wpdb->prefix}posts";
 			$sql        = $wpdb->prepare(
@@ -1264,21 +1255,15 @@ class WP_Document_Revisions_Admin {
 			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 		}
 
-		$old = wp_get_post_terms( $doc_id, 'workflow_state', true );
-
-		$ws = ( isset( $_POST['workflow_state'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_state'] ) ) : '' );
-
-		// no change, keep moving.
-		if ( isset( $old[0] ) && $old[0]->slug === $ws ) {
+		// Let's work on Workflow state, Verify nonce.
+		if ( ! isset( $_POST['workflow_state_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['workflow_state_nonce'] ) ), 'wp-document-revisions' ) ) {
 			return;
 		}
+		$ws = ( isset( $_POST['workflow_state'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_state'] ) ) : '' );
 
-		// all's good, let's save.
+		// Save it.
 		wp_set_post_terms( $doc_id, array( $ws ), 'workflow_state' );
-
-		do_action( 'change_document_workflow_state', $doc_id, $ws );
 	}
-
 
 	/**
 	 * Slightly modified document author metabox because the current one is ugly.
@@ -1318,7 +1303,6 @@ class WP_Document_Revisions_Admin {
 	public function enqueue_js() {
 		_deprecated_function( __FUNCTION__, '1.3.2 of WP Document Revisions', 'enqueue' );
 		$this->enqueue();
-
 	}
 
 
@@ -1326,7 +1310,6 @@ class WP_Document_Revisions_Admin {
 	 * Enqueue admin JS and CSS files.
 	 */
 	public function enqueue() {
-
 		// only include JS on document pages.
 		if ( ! $this->verify_post_type() ) {
 			return;
@@ -1336,7 +1319,7 @@ class WP_Document_Revisions_Admin {
 		$data = array(
 			'restoreConfirmation' => __( 'Are you sure you want to restore this revision? If you do, no history will be lost. This revision will be copied and become the most recent revision.', 'wp-document-revisions' ),
 			'lockNeedle'          => __( 'is currently editing this' ), // purposely left out text domain.
-			'postUploadNotice'    => '<div id="message" class="updated" style="display:none"><p>' . __( 'File uploaded successfully. Add a revision summary below (optional) or press <strong>Update</strong> to save your changes.', 'wp-document-revisions' ) . '</p></div>',
+			'postUploadNotice'    => '<div id="message" class="updated" style="display:none"><p>' . __( 'File uploaded successfully. Add a revision summary below (optional) and press <strong>Update</strong> to save your changes.', 'wp-document-revisions' ) . '</p></div>',
 			'postDesktopNotice'   => '<div id="message" class="update-nag" style="display:none"><p>' . __( 'After you have saved your document in your office software, <a href="#" onClick="location.reload();">reload this page</a> to see your changes.', 'wp-document-revisions' ) . '</p></div>',
 			// translators: %s is the title of the document.
 			'lostLockNotice'      => __( 'Your lock on the document %s has been overridden. Any changes will be lost.', 'wp-document-revisions' ),
@@ -1365,7 +1348,7 @@ class WP_Document_Revisions_Admin {
 		$suffix = ( WP_DEBUG ) ? '.dev' : '';
 		wp_enqueue_script(
 			'wp_document_revisions',
-			plugins_url( '/js/wp-document-revisions' . $suffix . '.js', dirname( __FILE__ ) ),
+			plugins_url( '/js/wp-document-revisions' . $suffix . '.js', __DIR__ ),
 			array( 'jquery' ),
 			$wpdr->version,
 			false
@@ -1374,7 +1357,6 @@ class WP_Document_Revisions_Admin {
 
 		// enqueue CSS.
 		wp_enqueue_style( 'wp-document-revisions', plugins_url( '/css/style.css', dirname( __FILE__ ) ), null, $wpdr->version );
-
 	}
 
 
@@ -1393,7 +1375,6 @@ class WP_Document_Revisions_Admin {
 	}
 
 
-
 	/**
 	 * Exclude children of documents from query.
 	 *
@@ -1402,11 +1383,6 @@ class WP_Document_Revisions_Admin {
 	 */
 	public function filter_media_where( $where ) {
 		global $wpdb;
-
-		// fix for mysql column ambiguity.
-		// see http://core.trac.wordpress.org/ticket/19779 and http://core.trac.wordpress.org/ticket/20193.
-		$where = str_replace( ' post_parent < 1', " {$wpdb->posts}.post_parent < 1", $where );
-		$where = str_replace( '(post_mime_type LIKE', "({$wpdb->posts}.post_mime_type LIKE", $where );
 
 		$where .= " AND ( wpdr_post_parent.post_type IS NULL OR wpdr_post_parent.post_type != 'document' )";
 
@@ -1421,7 +1397,6 @@ class WP_Document_Revisions_Admin {
 	 * @uses filter_media_join()
 	 */
 	public function filter_from_media() {
-
 		global $pagenow;
 
 		// verify the page.
@@ -1457,7 +1432,6 @@ class WP_Document_Revisions_Admin {
 	 * @param int $id the post id.
 	 */
 	public function revision_filter( $id ) {
-
 		// verify post type.
 		if ( ! $this->verify_post_type( $id ) ) {
 			return;
@@ -1477,7 +1451,6 @@ class WP_Document_Revisions_Admin {
 	 * @param int $post_id the id of the deleted post.
 	 */
 	public function delete_attachments_with_document( $post_id ) {
-
 		if ( ! $this->verify_post_type( $post_id ) ) {
 			return;
 		}
@@ -1508,8 +1481,11 @@ class WP_Document_Revisions_Admin {
 				// phpcs:enable WordPress.DB.DirectDatabaseQuery
 
 				if ( '1' === $doc_link ) {
-					$file = get_attached_file( $document->post_content );
-					wp_delete_attachment( $document->post_content, false );
+					// look for attachment meta (before deleting attachment).
+					$meta = get_post_meta( $attach->ID, '_wp_attachment_metadata', true );
+
+					$file = get_attached_file( $attach->ID );
+					wp_delete_attachment( $attach->ID, false );
 
 					// belt and braces in case above 'deleted' file from media and not document directory.
 					$std_dir = WP_Document_Revisions::$wp_default_dir['basedir'];
@@ -1518,36 +1494,34 @@ class WP_Document_Revisions_Admin {
 						$file = str_replace( $std_dir, $doc_dir, $file );
 					}
 					wp_delete_file_from_directory( $file, $doc_dir );
+
+					// delete any metadata images.
+					if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+						$file_dir = trailingslashit( dirname( $file ) );
+						foreach ( $meta['sizes'] as $size => $sizeinfo ) {
+							wp_delete_file_from_directory( $file_dir . $sizeinfo['file'], $file_dir );
+						}
+					}
 				}
 			}
 		}
 	}
-
-
-	/**
-	 * Provides support for edit flow and disables the default workflow state taxonomy.
-	 *
-	 * @since 1.1
-	 */
-	public function edit_flow_admin_support() {
-		_deprecated_function( 'edit_flow_admin_support', '1.3.2 of WP Document Revisions', 'disable_workflow_states' );
-	}
-
 
 	/**
 	 * Remove all hooks that activate workflow state support
 	 * use filter `document_use_workflow_states` to disable.
 	 */
 	public function disable_workflow_states() {
-
 		if ( self::$parent->use_workflow_states() ) {
 			return false;
 		}
 
-		remove_filter( 'manage_document_posts_columns', array( &$this, 'add_workflow_state_column' ) );
-		remove_action( 'manage_document_posts_custom_column', array( &$this, 'workflow_state_column_cb' ) );
-		remove_action( 'save_post', array( &$this, 'workflow_state_save' ) );
-		remove_action( 'admin_head', array( &$this, 'make_private' ) );
+		remove_action( 'set_object_terms', array( &$this, 'workflow_state_save' ) );
+
+		// Have changed taxonomy key for EF/PP support, so switch off make private.
+		if ( ! empty( self::$parent->taxonomy_key() ) && 'workflow_state' !== self::$parent->taxonomy_key() ) {
+			remove_action( 'admin_head', array( &$this, 'make_private' ) );
+		}
 		return true;
 	}
 
@@ -1560,7 +1534,7 @@ class WP_Document_Revisions_Admin {
 		global $post;
 
 		// verify that this is a new document.
-		if ( ! isset( $post ) || ! $this->verify_post_type( ( isset( $post->ID ) ? $post->ID : false ) ) || strlen( $post->post_content ) > 0 ) {
+		if ( ! isset( $post ) || ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) || strlen( $post->post_content ) > 0 ) {
 			return;
 		}
 
@@ -1580,7 +1554,6 @@ class WP_Document_Revisions_Admin {
 		 */
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = apply_filters( 'document_to_private', $post, $post_pre );
-
 	}
 
 
@@ -1605,7 +1578,6 @@ class WP_Document_Revisions_Admin {
 	 * @ since 3.0.1
 	 */
 	public function dashboard_display() {
-
 		global $wpdr;
 		if ( ! $wpdr ) {
 			$wpdr = new WP_Document_Revisions();
@@ -1643,7 +1615,7 @@ class WP_Document_Revisions_Admin {
 				<?php
 				printf(
 					esc_html( $format_string ),
-					esc_html( human_time_diff( strtotime( $document->post_modified_gmt ) ) ),
+					esc_html( human_time_diff( strtotime( $document->post_modified_gmt ), time() ) ),
 					esc_html( get_the_author_meta( 'display_name', $document->post_author ) ),
 					esc_html( ucwords( $document->post_status ) )
 				);

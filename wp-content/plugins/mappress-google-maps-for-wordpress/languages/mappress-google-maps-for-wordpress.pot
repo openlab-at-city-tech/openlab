@@ -1,15 +1,15 @@
-# Copyright (C) 2020 Chris Richardson
+# Copyright (C) 2021 Chris Richardson
 # This file is distributed under the same license as the MapPress Maps for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Maps for WordPress 2.57.3\n"
+"Project-Id-Version: MapPress Maps for WordPress 2.64.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-12-17T16:35:51+00:00\n"
+"POT-Creation-Date: 2021-06-30T17:06:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 
@@ -33,484 +33,293 @@ msgstr ""
 msgid "https://www.mappresspro.com/chris-contact"
 msgstr ""
 
-#: mappress.php:171
-#: mappress.php:701
+#: mappress.php:223
+#: mappress.php:791
 msgid "Settings"
 msgstr ""
 
-#: mappress.php:172
+#: mappress.php:224
 msgid "Map Library"
 msgstr ""
 
-#: mappress.php:183
+#: mappress.php:225
+msgid "Support"
+msgstr ""
+
+#: mappress.php:236
 msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
 msgstr ""
 
-#: mappress.php:188
+#: mappress.php:241
 msgid "A Google Maps API key is required"
 msgstr ""
 
-#: mappress.php:188
+#: mappress.php:241
 msgid "Please update your"
 msgstr ""
 
-#: mappress.php:188
+#: mappress.php:241
 msgid "MapPress Settings"
 msgstr ""
 
-#: mappress.php:280
-msgid "OK, you deserve it!"
-msgstr ""
-
-#: mappress.php:281
-msgid "Nope, maybe later"
-msgstr ""
-
-#: mappress.php:282
-msgid "I neeed some help"
-msgstr ""
-
-#: mappress.php:284
-msgid "Please Help Spread the Word"
-msgstr ""
-
-#: mappress.php:285
-msgid "If you're enjoying MapPress, would you mind taking a moment to write a brief review?  It would mean the world to me!"
-msgstr ""
-
-#: mappress.php:286
-msgid "If you have any issues or suggestions, please let me know.  I'll be happy to help!"
-msgstr ""
-
-#: mappress.php:402
-#: mappress.php:931
-msgid "Version"
-msgstr ""
-
-#: mappress.php:404
-msgid "Help"
-msgstr ""
-
-#: mappress.php:406
-msgid "Upgrade to MapPress Pro"
-msgstr ""
-
-#: mappress.php:473
-msgid "Please enter your MapPress license key to enable plugin updates"
-msgstr ""
-
-#: mappress.php:477
-msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
-msgstr ""
-
-#: mappress.php:481
-msgid "MapPress has many new features!  Please take a moment to learn %s."
-msgstr ""
-
-#: mappress.php:481
-msgid "what's new"
-msgstr ""
-
-#: mappress.php:487
-msgid "The MapPress map editor has moved!"
-msgstr ""
-
-#: mappress.php:488
-msgid "Use this button to open the new popup editor where you can easily create, edit and insert maps."
-msgstr ""
-
 #: mappress.php:534
-msgid "Are you sure you want to delete?"
+msgid "renew your license"
 msgstr ""
 
 #: mappress.php:535
+msgid "Your MapPress license has expired.  Please %s to get the latest updates and prevent errors."
+msgstr ""
+
+#: mappress.php:544
+msgid "Please enter your MapPress license key to enable plugin updates"
+msgstr ""
+
+#: mappress.php:548
+msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
+msgstr ""
+
+#: mappress.php:552
+msgid "MapPress has many new features!  %s."
+msgstr ""
+
+#: mappress.php:552
+#: mappress.php:556
+#: mappress.php:560
+msgid "Learn more"
+msgstr ""
+
+#: mappress.php:556
+msgid "MapPress popup templates have changed!  Please update custom templates to the new format. %s."
+msgstr ""
+
+#: mappress.php:560
+msgid "MapPress templates and filters have changed.  Please update custom templates and filters. %s."
+msgstr ""
+
+#: mappress.php:625
+msgid "Are you sure you want to delete?"
+msgstr ""
+
+#: mappress.php:626
 msgid "Permanently delete this map from the map library?"
 msgstr ""
 
-#: mappress.php:536
+#: mappress.php:627
 msgid "Error reading KML file"
 msgstr ""
 
-#: mappress.php:537
+#: mappress.php:628
 msgid "URL for KML file"
 msgstr ""
 
-#: mappress.php:538
+#: mappress.php:629
 msgid "Loading"
 msgstr ""
 
-#: mappress.php:539
-msgid "Please select a classic editor block to insert into."
+#: mappress.php:630
+msgid "Please select an editor to insert into."
 msgstr ""
 
-#: mappress.php:540
+#: mappress.php:631
 msgid "Unable to get your location"
 msgstr ""
 
-#: mappress.php:541
+#: mappress.php:632
 msgid "No results"
 msgstr ""
 
-#: mappress.php:542
+#: mappress.php:633
 msgid "Save changes?"
 msgstr ""
 
-#: mappress.php:543
+#: mappress.php:634
 msgid "Shape"
 msgstr ""
 
-#: mappress.php:572
-msgid "Improve this map"
-msgstr ""
-
-#: mappress.php:588
-#: mappress.php:607
+#: mappress.php:664
+#: mappress.php:673
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:589
+#: mappress.php:665
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:590
+#: mappress.php:666
 msgid "Light"
 msgstr ""
 
-#: mappress.php:591
+#: mappress.php:667
 msgid "Dark"
 msgstr ""
 
-#: mappress.php:592
+#: mappress.php:668
+#: mappress.php:681
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:593
+#: mappress.php:669
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress_controls.php:93
-#: templates_admin/widgets.php:42
-msgid "Add"
+#: mappress.php:679
+msgid "Roadmap"
 msgstr ""
 
-#: mappress_controls.php:102
-#: templates_admin/editor.php:47
-#: templates_admin/mce.php:100
-#: templates_admin/widgets.php:94
-msgid "Delete"
+#: mappress.php:680
+msgid "Terrain"
 msgstr ""
 
-#: mappress_map.php:85
-#: mappress_settings.php:321
-#: templates/mappress_map.php:85
+#: mappress.php:682
+msgid "Hybrid"
+msgstr ""
+
+#: mappress.php:792
+#: mappress_settings.php:380
+#: mappress_settings.php:406
+msgid "What's new"
+msgstr ""
+
+#: mappress.php:1041
+msgid "Version"
+msgstr ""
+
+#: mappress_map.php:87
+#: mappress_settings.php:375
+#: mappress_settings.php:401
 msgid "MapPress"
 msgstr ""
 
-#: mappress_map.php:94
-#: templates/mappress_map.php:94
-#: templates_admin/mce.php:30
-#: templates_admin/mce.php:80
-#: templates_admin/mce.php:86
+#: mappress_map.php:97
 msgid "Untitled"
 msgstr ""
 
-#: mappress_map.php:95
-#: templates/mappress_map.php:95
+#: mappress_map.php:98
 msgid "Copy of %s"
 msgstr ""
 
-#: mappress_map.php:199
-#: templates/mappress_map.php:199
+#: mappress_map.php:202
 msgid "Map not found"
 msgstr ""
 
-#: mappress_settings.php:86
-msgid "Sample Map"
+#: mappress_map.php:245
+msgid "Post not found"
 msgstr ""
 
-#: mappress_settings.php:88
-msgid "Basic Settings"
-msgstr ""
-
-#: mappress_settings.php:89
-msgid "Mapping API"
-msgstr ""
-
-#: mappress_settings.php:92
-msgid "Google API key"
-msgstr ""
-
-#: mappress_settings.php:95
-msgid "Mapbox access token"
-msgstr ""
-
-#: mappress_settings.php:99
-msgid "License"
-msgstr ""
-
-#: mappress_settings.php:101
-msgid "Map Settings"
-msgstr ""
-
-#: mappress_settings.php:102
-msgid "Post types"
-msgstr ""
-
-#: mappress_settings.php:103
-msgid "Automatic display"
-msgstr ""
-
-#: mappress_settings.php:104
-msgid "Map alignment"
-msgstr ""
-
-#: mappress_settings.php:105
-#: templates/map-popup.php:3
-#: templates/mashup-popup.php:6
-msgid "Directions"
-msgstr ""
-
-#: mappress_settings.php:108
-msgid "POI Settings"
-msgstr ""
-
-#: mappress_settings.php:109
-msgid "Default zoom"
-msgstr ""
-
-#: mappress_settings.php:110
-#: mappress_settings.php:238
-msgid "Open first POI"
-msgstr ""
-
-#: mappress_settings.php:113
-msgid "Mashups"
-msgstr ""
-
-#: mappress_settings.php:114
-msgid "Icons"
-msgstr ""
-
-#: mappress_settings.php:115
-msgid "Styled Maps"
-msgstr ""
-
-#: mappress_settings.php:116
-msgid "Geocoding"
-msgstr ""
-
-#: mappress_settings.php:117
-msgid "Templates"
-msgstr ""
-
-#: mappress_settings.php:120
-msgid "Localization"
-msgstr ""
-
-#: mappress_settings.php:121
-msgid "Search language"
-msgstr ""
-
-#: mappress_settings.php:122
-msgid "Search country"
-msgstr ""
-
-#: mappress_settings.php:123
-msgid "Directions server"
-msgstr ""
-
-#: mappress_settings.php:125
-msgid "Miscellaneous"
-msgstr ""
-
-#: mappress_settings.php:126
-msgid "Map sizes"
-msgstr ""
-
-#: mappress_settings.php:127
-msgid "Scripts"
-msgstr ""
-
-#: mappress_settings.php:131
-msgid "Compatiblity"
-msgstr ""
-
-#: mappress_settings.php:175
-#: mappress_settings.php:244
-#: pro/mappress_pro_settings.php:234
-#: templates_admin/widgets.php:78
+#: mappress_settings.php:182
 msgid "Default"
 msgstr ""
 
-#: mappress_settings.php:176
-msgid "Center"
-msgstr ""
-
-#: mappress_settings.php:177
-msgid "Left"
-msgstr ""
-
-#: mappress_settings.php:178
-msgid "Right"
-msgstr ""
-
-#: mappress_settings.php:190
-msgid "None"
-msgstr ""
-
-#: mappress_settings.php:191
-msgid "Top of post"
-msgstr ""
-
-#: mappress_settings.php:192
-msgid "Bottom of post"
-msgstr ""
-
-#: mappress_settings.php:199
-#: mappress_settings.php:243
-msgid "(list)"
-msgstr ""
-
-#: mappress_settings.php:204
-msgid "Country code for searches"
-msgstr ""
-
-#: mappress_settings.php:208
-msgid "Prevent other plugins/themes from loading the Google Maps API"
-msgstr ""
-
-#: mappress_settings.php:212
-#: mappress_settings.php:221
-#: pro/mappress_pro_settings.php:232
-msgid "Google"
-msgstr ""
-
-#: mappress_settings.php:212
-msgid "Inline"
-msgstr ""
-
-#: mappress_settings.php:221
-msgid "Leaflet"
-msgstr ""
-
-#: mappress_settings.php:223
-msgid "Leaflet is free and requires no API key.  Google requires an API key and has strict usage limits."
-msgstr ""
-
-#: mappress_settings.php:229
-#: mappress_settings.php:232
-msgid "Output scripts in footer"
-msgstr ""
-
 #: mappress_settings.php:230
-msgid "Disabled because Jetpack Infinite Scroll is active"
+msgid "Maps for WordPress"
 msgstr ""
 
-#: mappress_settings.php:233
-msgid "disable if maps are output using AJAX"
-msgstr ""
-
-#: mappress_settings.php:246
-msgid "Language for searches and Google map controls"
-msgstr ""
-
-#: mappress_settings.php:250
-msgid "Enter token to use Mapbox map tiles"
+#: mappress_settings.php:254
+msgid "Active"
 msgstr ""
 
 #: mappress_settings.php:257
-#: mappress_settings.php:262
-msgid "Map type control"
-msgstr ""
-
-#: mappress_settings.php:258
-msgid "Street view control"
+msgid "Communication error, please try again later: %s"
 msgstr ""
 
 #: mappress_settings.php:259
-#: mappress_settings.php:263
-msgid "Zoom control"
+msgid "License is invalid or expired"
 msgstr ""
 
-#: mappress_settings.php:278
-msgid "Default zoom when displaying a single POI"
+#: mappress_settings.php:267
+msgid "Address line "
 msgstr ""
 
-#: mappress_settings.php:291
-msgid "Easy Google Maps"
+#: mappress_settings.php:268
+msgid "Latitude"
 msgstr ""
 
-#: mappress_settings.php:299
-msgid "Width (px, %, vh, vw)"
+#: mappress_settings.php:268
+msgid "Longitude"
 msgstr ""
 
-#: mappress_settings.php:299
-msgid "Height (px, %, vh, vw)"
+#: mappress_settings.php:268
+#: mappress_template.php:37
+msgid "Title"
 msgstr ""
 
-#: mappress_settings.php:299
-msgid "Default size"
-msgstr ""
-
-#: mappress_settings.php:314
-msgid "Copy maps when overwriting a translation"
-msgstr ""
-
-#: mappress_settings.php:326
-#: mappress_settings.php:334
-msgid "Save Changes"
-msgstr ""
-
-#: mappress_settings.php:327
-#: mappress_settings.php:335
-msgid "Reset Defaults"
-msgstr ""
-
+#: mappress_settings.php:268
 #: mappress_template.php:34
-msgid "Address"
-msgstr ""
-
-#: mappress_template.php:35
-#: pro/mappress_pro_settings.php:338
 msgid "Body"
 msgstr ""
 
-#: mappress_template.php:36
-#: pro/mappress_pro_settings.php:174
-#: pro/mappress_pro_settings.php:338
+#: mappress_settings.php:268
+#: mappress_template.php:35
 msgid "Icon"
 msgstr ""
 
-#: mappress_template.php:37
+#: mappress_settings.php:268
+msgid "Zoom"
+msgstr ""
+
+#: mappress_settings.php:357
+msgid "OK, you deserve it!"
+msgstr ""
+
+#: mappress_settings.php:358
+msgid "Nope, maybe later"
+msgstr ""
+
+#: mappress_settings.php:359
+msgid "I need help using the plugin"
+msgstr ""
+
+#: mappress_settings.php:361
+msgid "Help Spread the Word"
+msgstr ""
+
+#: mappress_settings.php:362
+msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
+msgstr ""
+
+#: mappress_settings.php:379
+#: mappress_settings.php:405
+#: templates/map.php:62
+msgid "Get help"
+msgstr ""
+
+#: mappress_settings.php:382
+#: mappress_settings.php:408
+msgid "Your account"
+msgstr ""
+
+#: mappress_settings.php:384
+#: mappress_settings.php:410
+msgid "Upgrade to MapPress Pro"
+msgstr ""
+
+#: mappress_template.php:33
+msgid "Address"
+msgstr ""
+
+#: mappress_template.php:36
 msgid "Thumbnail"
 msgstr ""
 
 #: mappress_template.php:38
-#: pro/mappress_pro_settings.php:338
-msgid "Title"
-msgstr ""
-
-#: mappress_template.php:39
 msgid "Url"
 msgstr ""
 
-#: mappress_template.php:40
-#: pro/mappress_filter.php:120
-#: pro/mappress_pro_settings.php:343
+#: mappress_template.php:39
+#: pro/mappress_filter.php:192
 msgid "Custom Field"
 msgstr ""
 
 #: pro/mappress_filter.php:84
-#: pro/mappress_filter.php:133
-#: pro/mappress_pro_settings.php:167
+#: pro/mappress_filter.php:205
 msgid "Post type"
 msgstr ""
 
-#: pro/mappress_filter.php:120
+#: pro/mappress_filter.php:192
 msgid "Taxonomy"
 msgstr ""
 
-#: pro/mappress_filter.php:120
+#: pro/mappress_filter.php:192
 msgid "Post field"
 msgstr ""
 
@@ -541,11 +350,7 @@ msgstr ""
 msgid "Invalid JSON from Geocoding service: %s"
 msgstr ""
 
-#: pro/mappress_icons.php:49
-msgid "No file provided"
-msgstr ""
-
-#: pro/mappress_icons.php:74
+#: pro/mappress_icons.php:131
 msgid "Files error: "
 msgstr ""
 
@@ -553,336 +358,8 @@ msgstr ""
 msgid "Automatic"
 msgstr ""
 
-#: pro/mappress_pro_settings.php:16
-msgid "MapPress license key"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:17
-msgid "Beta versions"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:21
-msgid "Geocoder"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:23
-msgid "POI list"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:24
-msgid "POI list layout"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:25
-msgid "Mini width"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:26
-msgid "Sort"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:28
-msgid "Clustering"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:30
-msgid "Popup type"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:32
-msgid "Default icon"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:33
-msgid "Icon directory"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:34
-msgid "Custom icons"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:35
-msgid "Icon scaling"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:36
-msgid "Automatic icons"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:38
-#: templates/map.php:51
-#: templates_admin/mce.php:13
-msgid "Search"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:40
-#: templates/map.php:58
-msgid "Filter"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:41
-msgid "POI content"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:42
-msgid "POI click"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:43
-msgid "KMLs"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:44
-msgid "Thumbnails"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:45
-msgid "Thumbnail size"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:48
-#: pro/mappress_pro_settings.php:50
-msgid "Styled maps"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:51
-msgid "Default style"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:54
-msgid "Geocoding fields"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:55
-msgid "Overwrite"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:56
-msgid "Geocoding errors"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:59
-msgid "Google Server API key"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:61
-msgid "Custom templates"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:62
-#: pro/mappress_pro_settings.php:227
-msgid "Force resize"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:154
-msgid "more info"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:155
-msgid "API key secured by IP address for geocoding (optional)"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:174
-msgid "Value"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:189
-msgid "Enable updates for beta versions"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:193
-msgid "Enable marker clustering"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:202
-msgid "Checkboxes"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:202
-msgid "Select"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:209
-msgid "Key"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:209
-msgid "Format"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:224
-msgid "Permanently resize existing maps (classic editor only)"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:226
-msgid "from %s to %s"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:234
-msgid "Algolia"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:235
-msgid "Nominatim"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:236
-msgid "MapBox"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:246
-#: templates_admin/widgets.php:68
-msgid "Edit"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:260
-msgid "Standard"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:261
-msgid "InfoBox"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:268
-msgid "Left of map"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:269
-msgid "Below map"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:275
-msgid "Get license"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:276
-msgid "Enter license to enable automatic updates"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:289
-msgid "Active"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:294
-msgid "Check now"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:299
 #: pro/mappress_updater.php:116
 msgid "Communication error, please try again later"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:301
-msgid "License is invalid or expired"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:305
-msgid "POI title + POI body"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:305
-msgid "Post title + post excerpt"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:310
-msgid "Open POI"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:310
-msgid "Open post"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:310
-msgid "Open post in new tab"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:315
-msgid "Include KML POIs in mashups"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:327
-msgid "%d Errors"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:337
-msgid "Address line "
-msgstr ""
-
-#: pro/mappress_pro_settings.php:338
-msgid "Latitude"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:338
-msgid "Longitude"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:338
-msgid "Zoom"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:343
-msgid "Map Field"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:356
-msgid "Overwrite maps when posts are saved"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:361
-msgid "Width (px) at which to collapse the left POI list"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:365
-msgid "Show a list of POIs with each map"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:373
-msgid "Enable search"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:377
-msgid "Sort POI list by title"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:383
-msgid "No styles have been defined yet"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:392
-msgid "Snazzy Maps"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:393
-msgid "Enter JSON from %s"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:397
-#: pro/mappress_pro_settings.php:413
-msgid "Style name"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:409
-msgid "Mapbox Studio"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:410
-msgid "Enter styles from %s"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:428
-msgid "Only admins or multisite super-admins can edit templates"
-msgstr ""
-
-#: pro/mappress_pro_settings.php:433
-msgid "WordPress 4.9 or higher is needed to use the template editor."
-msgstr ""
-
-#: pro/mappress_pro_settings.php:447
-msgid "or "
-msgstr ""
-
-#: pro/mappress_pro_settings.php:455
-msgid "Show featured image thumbnails in mashup POIs"
 msgstr ""
 
 #: pro/mappress_updater.php:122
@@ -890,12 +367,12 @@ msgid "JSON error"
 msgstr ""
 
 #: pro/mappress_widget.php:69
-#: pro/mappress_widget_map.php:56
+#: pro/mappress_widget_map.php:59
 msgid "Widget title"
 msgstr ""
 
 #: pro/mappress_widget.php:74
-#: pro/mappress_widget_map.php:66
+#: pro/mappress_widget_map.php:69
 msgid "Map size"
 msgstr ""
 
@@ -924,23 +401,21 @@ msgid "Learn about queries"
 msgstr ""
 
 #: pro/mappress_widget.php:94
-#: pro/mappress_widget_map.php:74
+#: pro/mappress_widget_map.php:77
 msgid "Show POI list"
 msgstr ""
 
 #: pro/mappress_widget.php:101
-#: pro/mappress_widget_map.php:81
+#: pro/mappress_widget_map.php:84
 msgid "Other Settings"
 msgstr ""
 
 #: pro/mappress_widget.php:104
-#: pro/mappress_widget_map.php:84
+#: pro/mappress_widget_map.php:87
 msgid "Example: initialopeninfo=\"true\""
 msgstr ""
 
-#: pro/mappress_widget_map.php:61
-#: templates_admin/mce.php:49
-#: templates_admin/mce.php:69
+#: pro/mappress_widget_map.php:64
 msgid "Map ID"
 msgstr ""
 
@@ -949,14 +424,16 @@ msgid "My location"
 msgstr ""
 
 #: templates/map-directions.php:14
+#: templates/map-popup.php:5
+#: templates/mashup-popup.php:6
 msgid "Get Directions"
 msgstr ""
 
-#: templates/map-filters.php:12
+#: templates/map-filters.php:14
 msgid "Done"
 msgstr ""
 
-#: templates/map-filters.php:13
+#: templates/map-filters.php:15
 msgid "Reset"
 msgstr ""
 
@@ -964,164 +441,90 @@ msgstr ""
 msgid "Results"
 msgstr ""
 
-#: templates/map.php:53
+#: templates/map-loop.php:36
+msgid "%d of %d"
+msgstr ""
+
+#: templates/map.php:16
+#: templates/map.php:39
 msgid "Your Location"
 msgstr ""
 
-#: templates/map.php:67
+#: templates/map.php:37
+msgid "Search"
+msgstr ""
+
+#: templates/map.php:44
+msgid "Filter"
+msgstr ""
+
+#: templates/map.php:53
 msgid "Menu"
 msgstr ""
 
-#: templates/map.php:69
+#: templates/map.php:55
 msgid "Center map"
 msgstr ""
 
-#: templates/map.php:72
+#: templates/map.php:58
 msgid "Traffic"
 msgstr ""
 
-#: templates/map.php:73
+#: templates/map.php:59
 msgid "Bicycling"
 msgstr ""
 
-#: templates/map.php:74
+#: templates/map.php:60
 msgid "Transit"
 msgstr ""
 
-#: templates/map.php:84
+#: templates/map.php:71
 msgid "Show List"
 msgstr ""
 
-#: templates/map.php:85
+#: templates/map.php:72
 msgid "Show Map"
 msgstr ""
 
-#: templates_admin/editor.php:34
+#: templates/mashup-modal.php:18
+msgid "Continue reading"
+msgstr ""
+
+#. translators: %s: Author name.
+#: templates/mashup-modal.php:24
+msgid "By %s"
+msgstr ""
+
+#: templates/mashup-modal.php:28
+msgid "In"
+msgstr ""
+
+#: templates/mashup-modal.php:29
+msgid " Tagged "
+msgstr ""
+
+#: templates_admin/editor.php:19
 msgid "Visual"
 msgstr ""
 
-#: templates_admin/editor.php:34
+#: templates_admin/editor.php:19
 msgid "HTML"
 msgstr ""
 
-#: templates_admin/editor.php:36
+#: templates_admin/editor.php:21
 msgid "Add Media"
 msgstr ""
 
-#: templates_admin/editor.php:45
-#: templates_admin/mce.php:55
-#: templates_admin/widgets.php:91
+#: templates_admin/editor.php:30
 msgid "Save"
 msgstr ""
 
-#: templates_admin/editor.php:46
-#: templates_admin/mce.php:56
-#: templates_admin/widgets.php:92
+#: templates_admin/editor.php:31
 msgid "Cancel"
 msgstr ""
 
-#: templates_admin/mce.php:6
-msgid "Select a map"
-msgstr ""
-
-#: templates_admin/mce.php:7
-msgid "Add New"
-msgstr ""
-
-#: templates_admin/mce.php:14
-msgid "post title"
-msgstr ""
-
-#: templates_admin/mce.php:18
-msgid "Attached to this post"
-msgstr ""
-
-#: templates_admin/mce.php:19
-msgid "All maps"
-msgstr ""
-
-#: templates_admin/mce.php:24
-msgid "Close"
-msgstr ""
-
-#: templates_admin/mce.php:35
-msgid "Size"
-msgstr ""
-
-#: templates_admin/mce.php:59
-msgid "Save center / zoom"
-msgstr ""
-
-#: templates_admin/mce.php:68
-msgid "Map title"
-msgstr ""
-
-#: templates_admin/mce.php:71
-msgid "Attached to"
-msgstr ""
-
-#: templates_admin/mce.php:73
-msgid "Action"
-msgstr ""
-
-#: templates_admin/mce.php:87
-msgid "Current post"
-msgstr ""
-
-#: templates_admin/mce.php:92
-msgid "Unattached"
-msgstr ""
-
-#: templates_admin/mce.php:99
-msgid "Insert into post"
-msgstr ""
-
-#: templates_admin/mce.php:107
-msgid "No maps found"
-msgstr ""
-
-#: templates_admin/widgets.php:7
-msgid "Opacity"
-msgstr ""
-
-#: templates_admin/widgets.php:13
-msgid "Weight"
-msgstr ""
-
-#: templates_admin/widgets.php:28
-msgid "No custom icons have been added yet."
-msgstr ""
-
-#: templates_admin/widgets.php:59
-msgid "Use default icon"
-msgstr ""
-
-#: templates_admin/widgets.php:67
-msgid "Map popup"
-msgstr ""
-
-#: templates_admin/widgets.php:67
-msgid "Map list item"
-msgstr ""
-
-#: templates_admin/widgets.php:67
-msgid "Mashup popup"
-msgstr ""
-
-#: templates_admin/widgets.php:67
-msgid "Mashup list item"
-msgstr ""
-
-#: templates_admin/widgets.php:74
-msgid "New"
-msgstr ""
-
-#: templates_admin/widgets.php:74
-msgid "Custom"
-msgstr ""
-
-#: templates_admin/widgets.php:77
-msgid "Editor"
+#: templates_admin/editor.php:32
+msgid "Delete"
 msgstr ""
 
 #: package.json

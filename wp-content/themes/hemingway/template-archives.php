@@ -4,7 +4,7 @@
 
 get_header(); ?>
 
-<div class="wrapper section-inner group">
+<main class="wrapper section-inner group" id="site-content">
 
 	<div class="content left">
 			
@@ -138,6 +138,6 @@ get_header(); ?>
 	
 	<?php get_sidebar(); ?>
 	
-</div><!-- .wrapper section-inner -->
+</main><!-- .wrapper.section-inner -->
 								
 <?php get_footer(); ?>

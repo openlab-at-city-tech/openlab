@@ -1,3 +1,28 @@
+.ll-grid-item {
+	width: 300px !important;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 12px;
+	margin: 8px;
+}
+
+.cattoggle {
+	margin: 10px;
+	padding: 10px;
+	float: left;
+	border-radius: 5px;
+}
+
+.catactive {
+	background-color: #228B22;
+	color: #FFF;
+}
+
+.catinactive {
+	background-color: #8B0000;	
+	color: #FFF;
+}
+
 .linktable {margin-top: 15px;}
 
 .linktable a {text-decoration:none}
@@ -250,4 +275,24 @@ text-decoration: none;text-align: left;text-indent: 0px;max-width:500px;}
   .lladdlink table th {
     display: block;
   }
+}
+
+.LinkLibraryCat {
+	clear: both;
+	width: 100%;         
+	border-spacing: 5px;
+}
+
+.tablerow {
+	width: auto;
+	clear: both;
+}
+
+.tablecell {
+	float: left;
+	max-width: 400px; 
+	height: 300px;
+	padding:20px;
+	margin: 5px;
+	border: 2px solid #000;
 }

@@ -2,10 +2,10 @@
 /*
 Plugin Name: Google Docs Shortcode
 Plugin URI: https://github.com/cuny-academic-commons/google-docs-shortcode
-Description: Easily embed a Google Doc into your blog posts
+Description: Embed a Google Drive item (document, spreadsheet, presentation, form) into your blog posts with the provided "Google Drive" block or with the "gdoc" shortcode.
 Author: r-a-y
 Author URI: http://profiles.wordpress.org/r-a-y
-Version: 0.4
+Version: 0.5-bleeding
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -15,96 +15,76 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Initializer.
+ *
+ * @since 0.5.0 Added Shortcake support.
  */
 function ray_gdoc_shortcode_init() {
 	add_shortcode( 'gdoc', 'ray_google_docs_shortcode' );
 
-	/**
-	 * Support for Shortcake.
-	 */
+	// Add Shortcake support.
 	if ( function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
-		shortcode_ui_register_for_shortcode(
-			'gdoc',
-			array(
-
-				'label' => __( 'Google Drive', 'google-docs-shortcode' ),
-
-				'listItemImage' => '<img src="https://developers.google.com/drive/images/drive_icon_mono.png" alt="" />',
-
-				// @todo Figure out how to do conditional attributes to support 'size' and 'seamless'
-				'attrs' => array(
-					array(
-						'label' => __( 'Google Doc Link', 'google-docs-shortcode' ),
-						'attr'  => 'link',
-						'type'  => 'text',
-						'description' => __( 'Paste the published-to-the-web Google Doc link or a publicly-shared Google Doc link here.', 'gdrive' )
-					),
-
-					array(
-						'label' => __( 'Width', 'google-docs-shortcode' ),
-						'attr'  => 'width',
-						'type'  => 'number',
-						'meta' => array(
-							'style' => 'width:75px'
-						),
-						'description' => __( "Enter width in pixels. If left blank, this defaults to the theme's width.", 'gdrive' )
-					),
-
-					array(
-						'label' => __( 'Height', 'google-docs-shortcode' ),
-						'attr'  => 'height',
-						'type'  => 'number',
-						'meta' => array(
-							'style' => 'width:75px'
-						),
-						'description' => __( "Enter height in pixels. If left blank, this defaults to 300.", 'gdrive' )
-					),
-
-					array(
-						'label' => __( 'Type (non-Google Doc only)', 'google-docs-shortcode' ),
-						'attr'  => 'type',
-						'type' => 'select',
-						'options' => array(
-							'' => '--',
-							'audio' => __( 'Audio', 'google-docs-shortcode' ),
-							'other' => __( 'Other (Image, PDF, Microsoft Office, etc.)', 'google-docs-shortcode' ),
-						),
-						'description' => __( "If your Google Drive item is not a Doc, Slide, Spreadsheet or Form, select the type of item you are embedding.", 'gdrive' )
-					),
-
-					// maybe later...
-					/*
-					array(
-						'label' => __( 'Size', 'google-docs-shortcode' ),
-						'attr'  => 'size',
-						'type' => 'select',
-						'options' => array(
-							'small'  => __( 'Small - 480 x 299', 'google-docs-shortcode' ),
-							'medium' => __( 'Medium - 960 x 559', 'google-docs-shortcode' ),
-							'large'  => __( 'Large - 1440 x 839', 'google-docs-shortcode' )
-						),
-						'description' => __( 'This is only applicable to Google Slides. If you want to set a custom width and height, use the options above.', 'google-docs-shortcode' )
-					),
-					*/
-
-					// This doesn't quite work yet; commenting out for now
-					// @link https://github.com/fusioneng/Shortcake/pull/413
-					/*
-					array(
-						'label' => __( 'Show Doc Header/Footer', 'google-docs-shortcode' ),
-						'attr'  => 'seamless',
-						'type' => 'checkbox',
-						'value' => 0,
-						'description' => __( 'This is only applicable to Google Docs.', 'google-docs-shortcode' )
-					),
-					*/
-				),
-
-			)
-		);
+		require_once __DIR__ . '/shortcake.php';
 	}
 }
 add_action( 'init', 'ray_gdoc_shortcode_init' );
+
+/**
+ * Initialize Gutenberg support.
+ *
+ * Requires at least WordPress 5.2.0 due to some JS.
+ *
+ * @since 0.5.0
+ */
+function ray_google_docs_gutenberg_init() {
+	// Bail if not at least WP 5.2.
+	if ( ! function_exists( 'wp_is_xml_request' ) ) {
+		return;
+	}
+
+	// Register assets.
+	wp_register_script( 'ray-gdoc-block', plugins_url( basename( dirname( __FILE__ ) ) ) . '/block.js', array(
+		'wp-blocks', 'wp-i18n', 'wp-element'
+	), '20201116' );
+	wp_register_style( 'ray-gdoc-block', plugins_url( basename( dirname( __FILE__ ) ) ) . '/block.css', array(), '' );
+
+	// Register block type.
+	register_block_type( 'ray/google-drive', array(
+		'editor_script'   => 'ray-gdoc-block',
+		'editor_style'    => 'ray-gdoc-block',
+		'render_callback' => 'ray_google_docs_shortcode',
+	) );
+}
+add_action( 'init', 'ray_google_docs_gutenberg_init' );
+
+/**
+ * Enqueues inline JS for Gutenberg.
+ *
+ * Requires at least WordPress 5.2.0.
+ *
+ * @since 0.5.0
+ */
+function ray_google_docs_enqueue_block_assets() {
+	// If not WP 5.2 or if our Google Drive block is not registered, bail.
+	if ( ! function_exists( 'wp_is_xml_request' ) || ! WP_Block_Type_Registry::get_instance()->is_registered( 'ray/google-drive' ) ) {
+		return;
+	}
+
+	/**
+	 * Filter to change the default help URL for the Google Drive block.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param string $url Help URL.
+	 */
+	$help_url = apply_filters( 'ray_gdoc_help_url', 'https://github.com/cuny-academic-commons/google-docs-shortcode/wiki/Sharing-a-Google-Drive-file-and-getting-the-link' );
+
+	wp_localize_script( 'ray-gdoc-block', 'rayGDriveProps', array(
+		'helpUrl'       => esc_url_raw( $help_url ),
+		'defaultWidth'  => ! empty( $GLOBALS['content_width'] ) ? $GLOBALS['content_width'] : 640,
+		'defaultHeight' => 300
+	) );
+}
+add_action( 'enqueue_block_editor_assets', 'ray_google_docs_enqueue_block_assets', 11 );
 
 /**
  * Shortcode to embed a Google Doc.
@@ -131,7 +111,11 @@ function ray_google_docs_shortcode( $atts ) {
 		// only for presentations
 		'size'     => false, // preset presentation size, either 'small', 'medium' or 'large';
 		                     // preset dimensions are as follows: small (480x389), medium (960x749), large (1440x1109)
-		                     // to set custom size, set the 'width' and 'height' params instead
+		                     // to set custom size, set the 'width' and 'height' params instead,
+
+		// links
+		'downloadlink' => false, // add a download link after the embedded content; default: false.
+		'hideiframe'   => false, // hide the iframe, useful if you set 'downloadlink' to true; default: false.
 
 	), $atts );
 
@@ -141,16 +125,18 @@ function ray_google_docs_shortcode( $atts ) {
 	}
 
 	$type = $extra = false;
+	$output = '';
 
 	// set the doc type by looking at the URL
 
 	// document
 	if ( strpos( $r['link'], '/document/' ) !== false ) {
 		$type = 'doc';
+		$base = 'document';
 
 	// presentation
 	} elseif ( strpos( $r['link'], '/presentation/' ) !== false || strpos( $r['link'], '/present/' ) !== false ) {
-		$type = 'presentation';
+		$type = $base = 'presentation';
 
 	// form
 	} elseif ( strpos( $r['link'], '/forms/' ) !== false || strpos( $r['link'], 'form?formkey' ) !== false ) {
@@ -158,11 +144,16 @@ function ray_google_docs_shortcode( $atts ) {
 
 	// spreadsheet
 	} elseif ( strpos( $r['link'], '/spreadsheets/' ) !== false || strpos( $r['link'], '/spreadsheet/' ) !== false ) {
-		$type = 'spreadsheet';
+		$type = $base = 'spreadsheet';
+		$base .= 's';
 
 	// non-google doc
 	} elseif ( ! empty( $r['type'] ) ) {
 		$type = $r['type'];
+
+	// other
+	} elseif ( false !== strpos( $r['link'], '/file/' ) ) {
+		$type = 'other';
 
 	// nada!
 	} else {
@@ -172,7 +163,7 @@ function ray_google_docs_shortcode( $atts ) {
 	// add query args depending on doc type
 	switch ( $type ) {
 		case 'doc' :
-			if ( (int) $r['seamless'] === 1 ) {
+			if ( false !== strpos( $r['link'], '/pub' ) && wp_validate_boolean( $r['seamless'] ) ) {
 				$r['link'] = add_query_arg( 'embedded', 'true', $r['link'] );
 			}
 
@@ -236,7 +227,7 @@ function ray_google_docs_shortcode( $atts ) {
 		case 'form' :
 			// new form format
 			if ( strpos( $r['link'], '/forms/' ) !== false ) {
-				$r['link'] = str_replace( 'viewform', 'viewform?embedded=true', $r['link'] );
+				$r['link'] = add_query_arg( 'embedded', true, $r['link'] );
 
 			// older form format
 			} else {
@@ -264,10 +255,43 @@ function ray_google_docs_shortcode( $atts ) {
 
 		// http://webapps.stackexchange.com/a/84399
 		case 'audio' :
+		case 'other' :
 			$id = str_replace( 'https://drive.google.com/file/d/', '', $r['link'] );
 			$id = str_replace( '/view?usp=sharing', '', $id );
 			$id = esc_attr( $id );
+
+			$r['link'] = $link = esc_url( "https://docs.google.com/uc?export=open&id={$id}" );
 			break;
+	}
+
+	// set up link info
+	if ( true === (bool) $r['downloadlink'] ) {
+		switch ( $type ) {
+			case 'doc' :
+			case 'presentation' :
+			case 'spreadsheet' :
+				$id = str_replace( "https://docs.google.com/{$base}/d/", '', $r['link'] );
+				$id = substr( $id, 0, strrpos( $id, '/' ) );
+
+				// ugh... URL formats are different!
+				switch ( $type ) {
+					case 'doc' :
+						$link = "https://docs.google.com/feeds/download/documents/export/Export?id={$id}&exportFormat=docx";
+						break;
+					case 'presentation' :
+						$link = "https://docs.google.com/feeds/download/presentations/Export?id={$id}&exportFormat=pptx";
+						break;
+					case 'spreadsheet' :
+						$link = "https://docs.google.com/spreadsheets/export?id={$id}&exportFormat=xlsx";
+						break;
+				}
+				break;
+
+			case 'audio' :
+			case 'other' :
+				$link = str_replace( 'open', 'download', $link );
+				break;
+		}
 	}
 
 	// support "anyone with link" functionality
@@ -288,14 +312,36 @@ function ray_google_docs_shortcode( $atts ) {
 	// audio uses HTML5
 	if ( 'audio' === $r['type'] ) {
 		$output = "<audio controls>
-		<source src='http://docs.google.com/uc?export=open&id={$id}'>
-		<p>" . __( 'Your browser does not support HTML5 audio', 'google-docs-shortcode' ) . "</p>
+		<source src='{$r["link"]}'>
+		" . __( 'Your browser does not support HTML5 audio', 'google-docs-shortcode' ) . "
 		</audio>";
 
-	// everything else uses an IFRAME
-	} else {
+	// Use iframe if we're not hiding it.
+	} elseif ( ! wp_validate_boolean( $r['hideiframe'] ) ) {
 		$output = '<iframe id="gdoc-' . md5( $r['link'] ) . '" class="gdocs_shortcode gdocs_' . esc_attr( $type ) . '" src="' .  esc_url( $r['link'] ) . '"' . $r['width'] . $r['height'] . $extra . '></iframe>';
 	}
 
+	// add links if enabled
+	if ( true === (bool) $r['downloadlink'] && 'form' !== $type ) {
+		$link = '<p class="gdoc-download gdoc-type-' . esc_attr( $type ) . '"><span class="dashicons dashicons-download"></span><a href="' . esc_url( $link ) . '">' . __( 'Download', 'google-docs-shortcode' ). '</a></p>';
+		$output .= $link;
+	}
+
+	// Wrap output in <figure> because of Gutenberg.
+	$output = sprintf( '<figure class="wp-block-embed wp-block-embed-gdoc"><div class="wp-block-embed__wrapper">%s</div></figure>', $output );
+
 	return apply_filters( 'ray_google_docs_shortcode_output', $output, $type );
 }
+
+/**
+ * Adds an "Instructions" link to the plugin action row in the admin area.
+ *
+ * @since 0.5.0
+ */
+add_filter( 'plugin_action_links_google-docs-shortcode/gdocs-shortcode.php', function( $actions ) {
+	$actions['instructions'] = sprintf( '<a href="%1$s" target="_blank">%2$s</a>',
+		'https://github.com/cuny-academic-commons/google-docs-shortcode/wiki',
+		esc_html__( 'Instructions', 'google-docs-shortcode' )
+	);
+	return $actions;
+} );

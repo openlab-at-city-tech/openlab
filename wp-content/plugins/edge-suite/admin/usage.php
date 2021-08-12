@@ -1,3 +1,4 @@
+<?php ?>
 <div class="wrap">
   <h2>Edge Suite - Usage & Features</h2>
 

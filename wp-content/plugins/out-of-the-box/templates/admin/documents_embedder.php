@@ -7,13 +7,12 @@ if (!defined('ABSPATH')) {
 
 // Exit if no permission to embed files
 if (!(\TheLion\OutoftheBox\Helpers::check_user_role($this->settings['permissions_add_embedded']))) {
-    die();
+    exit();
 }
 
 // Add own styles and script and remove default ones
 $this->load_scripts();
 $this->load_styles();
-
 
 function OutoftheBox_remove_all_scripts()
 {
@@ -31,8 +30,8 @@ function OutoftheBox_remove_all_styles()
     global $wp_styles;
     $wp_styles->queue = [];
     wp_enqueue_style('OutoftheBox.ShortcodeBuilder');
-    wp_enqueue_style('OutoftheBox');
-    wp_enqueue_style('Awesome-Font-5-css');
+    wp_enqueue_style('OutoftheBox.CustomStyle');
+    wp_enqueue_style('Awesome-Font-5');
 }
 
 add_action('wp_print_scripts', 'OutoftheBox_remove_all_scripts', 1000);
@@ -60,14 +59,14 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
 
         <div class="outofthebox-form-buttons">
           <div id="do_embed" class="simple-button default">
-            <?php esc_html_e('Embed Files','wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right"
+            <?php esc_html_e('Embed Files', 'wpcloudplugins'); ?>&nbsp;<i class="fas fa-chevron-circle-right"
               aria-hidden="true"></i></div>
         </div>
 
         <div class="outofthebox-title"><?php echo esc_html__('Embed Files', 'wpcloudplugins'); ?></div>
       </div>
       <div class="outofthebox-panel outofthebox-panel-full">
-        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)','wpcloudplugins'); ?></p>
+        <p><?php esc_html_e('Please note that the embedded files need to be public (with link)', 'wpcloudplugins'); ?></p>
         <?php
 
       // Add File Browser
@@ -82,6 +81,8 @@ add_action('wp_print_styles', 'OutoftheBox_remove_all_styles', 1000);
           'addfolder' => '0',
           'viewrole' => 'all',
           'candownloadzip' => '0',
+          'search' => '1',
+          'searchcontents' => '1',
           'showsharelink' => '0',
           'previewinline' => '0',
           'mcepopup' => 'embedded',

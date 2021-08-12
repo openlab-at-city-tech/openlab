@@ -4,6 +4,12 @@ namespace TheLion\OutoftheBox;
 
 class Skeleton
 {
+    /**
+     * Return a HTML skeleton for the File Browser module.
+     *
+     * @param string $type   (folder|file)
+     * @param int    $amount
+     */
     public static function get_browser_placeholders($type = 'folder', $amount = 1)
     {
         for ($i = 0; $i < $amount; ++$i) {
@@ -31,6 +37,12 @@ class Skeleton
         }
     }
 
+    /**
+     * Return a HTML skeleton for the Gallery module.
+     *
+     * @param int $target_height
+     * @param int $amount
+     */
     public static function get_gallery_placeholders($target_height, $amount = 1)
     {
         $dimensions = [.5625, 1, 1.33, 1.78]; // Most common aspect ratios

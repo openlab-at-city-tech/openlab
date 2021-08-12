@@ -1,3 +1,8 @@
+= 10.35 (15th March, 2021) =
+
+ * Fix {UNSUBLINK} shortcode
+ * WordPress 5.7 compatibility
+
 = 10.34 (24th August, 2020) =
 
  * Fix gutenberg script loading issue

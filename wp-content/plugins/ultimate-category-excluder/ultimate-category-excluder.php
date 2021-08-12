@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Ultimate Category Excluder
-Version: 1.2
+Version: 1.5
 Plugin URI: http://infolific.com/technology/software-worth-using/ultimate-category-excluder/
 Description: Easily exclude categories from your front page, feeds, archives, and search results.
 Author: Marios Alexandrou
 Author URI: http://infolific.com/technology/
 License: GPLv2 or later
-Text Domain: UCE
+Text Domain: ultimate-category-excluder
 */
 
 /*
@@ -34,10 +34,10 @@ add_action( 'admin_menu', 'ksuce_admin_menu' );
 add_filter( 'pre_get_posts','ksuce_exclude_categories' );
 
 // Include Ultimate Category Excluder language files
-load_plugin_textdomain( 'UCE', false, dirname(plugin_basename(__FILE__)) . '/languages' );
+load_plugin_textdomain( 'ultimate-category-excluder', false, dirname(plugin_basename(__FILE__)) . '/languages' );
 
 function ksuce_admin_menu() {
-	add_options_page( __( 'Ultimate Category Excluder Options', 'UCE'), __( 'Category Excluder', 'UCE' ), "manage_options", basename(__FILE__), 'ksuce_options_page' );
+	add_options_page( __( 'Ultimate Category Excluder Options', 'ultimate-category-excluder'), __( 'Category Excluder', 'ultimate-category-excluder' ), "manage_options", basename(__FILE__), 'ksuce_options_page' );
 }
 
 function ksuce_options_page() {
@@ -48,19 +48,19 @@ function ksuce_options_page() {
 	$options = ksuce_get_options();
 	?>
 	<div class="wrap">
-		<h2><?php _e( 'Ultimate Category Excluder Options', 'UCE' ); ?></h2>
+		<h2><?php _e( 'Ultimate Category Excluder Options', 'ultimate-category-excluder' ); ?></h2>
 		<?php if ( isset( $message ) ) { echo $message; } ?>
-		<p><?php _e( 'Use this page to select the categories you wish to exclude and where you would like to exclude them from.', 'UCE' ); ?></p>
+		<p><?php _e( 'Use this page to select the categories you wish to exclude and where you would like to exclude them from.', 'ultimate-category-excluder' ); ?></p>
 		<form action="options-general.php?page=ultimate-category-excluder.php" method="post">
         <?php wp_nonce_field( 'uce_form' ); ?>
 		<table class="widefat">
 		<thead>
 			<tr>
-				<th scope="col"><?php _e( 'Category', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from Front Page?', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from Feeds?', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from All Archives?', 'UCE' ); ?></th>
-				<th scope="col"><?php _e( 'Exclude from Search?', 'UCE' ); ?></th>
+				<th scope="col"><?php _e( 'Category', 'ultimate-category-excluder' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from Front Page?', 'ultimate-category-excluder' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from Feeds?', 'ultimate-category-excluder' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from All Archives?', 'ultimate-category-excluder' ); ?></th>
+				<th scope="col"><?php _e( 'Exclude from Search?', 'ultimate-category-excluder' ); ?></th>
 			</tr>
 		</thead>
 		<tbody id="the-list">
@@ -82,7 +82,7 @@ function ksuce_options_page() {
 		</tr>			
 	<?php } ?>
 	</table>
-	<p class="submit"><input type="submit" value="<?php _e('Update', 'UCE'); ?>" /></p>
+	<p class="submit"><input type="submit" value="<?php _e('Update', 'ultimate-category-excluder'); ?>" /></p>
 	<input type="hidden" name="ksuce" value="true" />
 	</form>
 	</div>
@@ -115,7 +115,7 @@ function ksuce_process() {
 	$options['exclude_archives'] = $_POST[ 'exclude_archives' ];
 	$options['exclude_search'] = $_POST[ 'exclude_search' ];
 	update_option( 'ksuceExcludes', $options );
-	$message = "<div class='updated'><p>" . ( __( 'Excludes successfully updated', 'UCE' ) ) . "</p></div>";
+	$message = "<div class='updated'><p>" . ( __( 'Excludes successfully updated', 'ultimate-category-excluder' ) ) . "</p></div>";
 	return $message;
 }
 

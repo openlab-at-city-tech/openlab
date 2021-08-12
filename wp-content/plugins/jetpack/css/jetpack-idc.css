@@ -69,7 +69,7 @@ https://github.com/thoughtbot/bourbon
 }
 
 .jp-idc-notice a:not(.dops-notice__action):hover, .jp-idc-notice a:not(.dops-notice__action):focus, .jp-idc-notice a:not(.dops-notice__action):active {
-  color: #3396c8;
+  color: #5d9bd0;
 }
 
 .jp-idc-notice .dops-button {
@@ -103,7 +103,7 @@ https://github.com/thoughtbot/bourbon
 }
 
 .jp-idc-notice__header__emblem {
-  fill: #00BE28;
+  fill: #00be28;
   width: 25px;
   height: 25px;
   margin: 0 1em 0 auto;

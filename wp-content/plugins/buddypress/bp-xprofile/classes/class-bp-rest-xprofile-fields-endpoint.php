@@ -181,7 +181,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return bool
+	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
 
@@ -190,7 +190,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool            $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_xprofile_fields_get_items_permissions_check', true, $request );
@@ -259,7 +259,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return bool
+	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
 
@@ -268,7 +268,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool            $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_xprofile_fields_get_item_permissions_check', true, $request );
@@ -414,19 +414,19 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function create_item_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to create a XProfile field.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
 
-		if ( ! is_user_logged_in() || ! bp_current_user_can( 'bp_moderate' ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to create a XProfile field.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+		if ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) ) {
+			$retval = true;
 		}
 
 		/**
@@ -434,7 +434,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_xprofile_fields_create_item_permissions_check', $retval, $request );
@@ -545,7 +545,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function update_item_permissions_check( $request ) {
 		$retval = $this->delete_item_permissions_check( $request );
@@ -555,7 +555,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_xprofile_fields_update_item_permissions_check', $retval, $request );
@@ -616,41 +616,31 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
-	 * @return WP_Error|bool
+	 * @return true|WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
-		$retval = true;
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to delete this field.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
 
-		if ( ! is_user_logged_in() ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to delete this field.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
-		}
+		if ( is_user_logged_in() ) {
+			$field = $this->get_xprofile_field_object( $request );
 
-		$field = $this->get_xprofile_field_object( $request );
-
-		if ( true === $retval && empty( $field->id ) ) {
-			$retval = new WP_Error(
-				'bp_rest_invalid_id',
-				__( 'Invalid field ID.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
-		}
-
-		if ( true === $retval && ! bp_current_user_can( 'bp_moderate' ) ) {
-			$retval = new WP_Error(
-				'bp_rest_authorization_required',
-				__( 'Sorry, you are not allowed to delete this field.', 'buddypress' ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+			if ( empty( $field->id ) ) {
+				$retval = new WP_Error(
+					'bp_rest_invalid_id',
+					__( 'Invalid field ID.', 'buddypress' ),
+					array(
+						'status' => 404,
+					)
+				);
+			} elseif ( bp_current_user_can( 'bp_moderate' ) ) {
+				$retval = true;
+			}
 		}
 
 		/**
@@ -658,7 +648,7 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param bool|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
 		return apply_filters( 'bp_rest_xprofile_fields_delete_item_permissions_check', $retval, $request );
@@ -967,146 +957,148 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @return array
 	 */
 	public function get_item_schema() {
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'bp_xprofile_field',
-			'type'       => 'object',
-			'properties' => array(
-				'id'                => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'A unique numeric ID for the profile field.', 'buddypress' ),
-					'readonly'    => true,
-					'type'        => 'integer',
-				),
-				'group_id'          => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The ID of the group the field is part of.', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'parent_id'         => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The ID of the parent field.', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'type'              => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The type for the profile field.', 'buddypress' ),
-					'type'        => 'string',
-					'enum'        => buddypress()->profile->field_types,
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_key',
+		if ( is_null( $this->schema ) ) {
+			$this->schema = array(
+				'$schema'    => 'http://json-schema.org/draft-04/schema#',
+				'title'      => 'bp_xprofile_field',
+				'type'       => 'object',
+				'properties' => array(
+					'id'                => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'A unique numeric ID for the profile field.', 'buddypress' ),
+						'readonly'    => true,
+						'type'        => 'integer',
 					),
-				),
-				'name'              => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The name of the profile field.', 'buddypress' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
+					'group_id'          => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The ID of the group the field is part of.', 'buddypress' ),
+						'type'        => 'integer',
 					),
-				),
-				'description'       => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The description of the profile field.', 'buddypress' ),
-					'type'        => 'object',
-					'arg_options' => array(
-						'sanitize_callback' => null, // Note: sanitization implemented in self::prepare_item_for_database().
-						'validate_callback' => null, // Note: validation implemented in self::prepare_item_for_database().
+					'parent_id'         => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The ID of the parent field.', 'buddypress' ),
+						'type'        => 'integer',
 					),
-					'properties'  => array(
-						'raw'      => array(
-							'description' => __( 'Content for the profile field, as it exists in the database.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'edit' ),
-						),
-						'rendered' => array(
-							'description' => __( 'HTML content for the profile field, transformed for display.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
+					'type'              => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The type for the profile field.', 'buddypress' ),
+						'type'        => 'string',
+						'enum'        => buddypress()->profile->field_types,
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_key',
 						),
 					),
-				),
-				'is_required'       => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Whether the profile field must have a value.', 'buddypress' ),
-					'type'        => 'boolean',
-				),
-				'can_delete'        => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Whether the profile field can be deleted or not.', 'buddypress' ),
-					'default'     => true,
-					'type'        => 'boolean',
-				),
-				'field_order'       => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The order of the profile field into the group of fields.', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'option_order'      => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The order of the option into the profile field list of options', 'buddypress' ),
-					'type'        => 'integer',
-				),
-				'order_by'          => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The way profile field\'s options are ordered.', 'buddypress' ),
-					'default'     => 'asc',
-					'type'        => 'string',
-					'enum'        => array( 'asc', 'desc' ),
-				),
-				'is_default_option' => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Whether the option is the default one for the profile field.', 'buddypress' ),
-					'type'        => 'boolean',
-				),
-				'visibility_level'  => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Who may see the saved value for this profile field.', 'buddypress' ),
-					'default'     => 'public',
-					'type'        => 'string',
-					'enum'        => array_keys( bp_xprofile_get_visibility_levels() ),
-				),
-				'options'  => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'Options of the profile field.', 'buddypress' ),
-					'type'        => 'array',
-					'readonly'    => true,
-				),
-				'data'              => array(
-					'context'     => array( 'view', 'edit' ),
-					'description' => __( 'The saved value for this profile field.', 'buddypress' ),
-					'type'        => 'object',
-					'readonly'    => true,
-					'properties'  => array(
-						'raw'          => array(
-							'description' => __( 'Value for the field, as it exists in the database.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
+					'name'              => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The name of the profile field.', 'buddypress' ),
+						'type'        => 'string',
+						'arg_options' => array(
+							'sanitize_callback' => 'sanitize_text_field',
 						),
-						'unserialized' => array(
-							'description' => __( 'Unserialized value for the field, regular string will be casted as array.', 'buddypress' ),
-							'type'        => 'array',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
+					),
+					'description'       => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The description of the profile field.', 'buddypress' ),
+						'type'        => 'object',
+						'arg_options' => array(
+							'sanitize_callback' => null, // Note: sanitization implemented in self::prepare_item_for_database().
+							'validate_callback' => null, // Note: validation implemented in self::prepare_item_for_database().
 						),
-						'rendered'     => array(
-							'description' => __( 'HTML value for the field, transformed for display.', 'buddypress' ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-							'readonly'    => true,
+						'properties'  => array(
+							'raw'      => array(
+								'description' => __( 'Content for the profile field, as it exists in the database.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'edit' ),
+							),
+							'rendered' => array(
+								'description' => __( 'HTML content for the profile field, transformed for display.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => true,
+							),
+						),
+					),
+					'is_required'       => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Whether the profile field must have a value.', 'buddypress' ),
+						'type'        => 'boolean',
+					),
+					'can_delete'        => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Whether the profile field can be deleted or not.', 'buddypress' ),
+						'default'     => true,
+						'type'        => 'boolean',
+					),
+					'field_order'       => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The order of the profile field into the group of fields.', 'buddypress' ),
+						'type'        => 'integer',
+					),
+					'option_order'      => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The order of the option into the profile field list of options', 'buddypress' ),
+						'type'        => 'integer',
+					),
+					'order_by'          => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The way profile field\'s options are ordered.', 'buddypress' ),
+						'default'     => 'asc',
+						'type'        => 'string',
+						'enum'        => array( 'asc', 'desc' ),
+					),
+					'is_default_option' => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Whether the option is the default one for the profile field.', 'buddypress' ),
+						'type'        => 'boolean',
+					),
+					'visibility_level'  => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Who may see the saved value for this profile field.', 'buddypress' ),
+						'default'     => 'public',
+						'type'        => 'string',
+						'enum'        => array_keys( bp_xprofile_get_visibility_levels() ),
+					),
+					'options'  => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'Options of the profile field.', 'buddypress' ),
+						'type'        => 'array',
+						'readonly'    => true,
+					),
+					'data'              => array(
+						'context'     => array( 'view', 'edit' ),
+						'description' => __( 'The saved value for this profile field.', 'buddypress' ),
+						'type'        => 'object',
+						'readonly'    => true,
+						'properties'  => array(
+							'raw'          => array(
+								'description' => __( 'Value for the field, as it exists in the database.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+							),
+							'unserialized' => array(
+								'description' => __( 'Unserialized value for the field, regular string will be casted as array.', 'buddypress' ),
+								'type'        => 'array',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => true,
+							),
+							'rendered'     => array(
+								'description' => __( 'HTML value for the field, transformed for display.', 'buddypress' ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => true,
+							),
 						),
 					),
 				),
-			),
-		);
+			);
+		}
 
 		/**
 		 * Filters the xprofile field schema.
 		 *
 		 * @param array $schema The endpoint schema.
 		 */
-		return apply_filters( 'bp_rest_xprofile_field_schema', $this->add_additional_fields_schema( $schema ) );
+		return apply_filters( 'bp_rest_xprofile_field_schema', $this->add_additional_fields_schema( $this->schema ) );
 	}
 
 	/**

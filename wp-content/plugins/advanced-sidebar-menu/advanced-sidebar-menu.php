@@ -4,9 +4,13 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 8.2.0
+ * Version: 8.5.0
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
+ * Domain Path: /languages/
+ * Network: false
+ * Requires at least: 5.2
+ * Requires PHP: 5.6.0
  *
  * @package advanced-sidebar-menu
  */
@@ -15,7 +19,7 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '8.2.0' );
+define( 'ADVANCED_SIDEBAR_BASIC_VERSION', '8.5.0' );
 define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '8.2.0' );
 define( 'ADVANCED_SIDEBAR_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
@@ -31,6 +35,8 @@ use Advanced_Sidebar_Menu\Notice;
 use Advanced_Sidebar_Menu\Scripts;
 use Advanced_Sidebar_Menu\Traits\Memoize;
 use Advanced_Sidebar_Menu\Traits\Singleton;
+use Advanced_Sidebar_Menu\Utils;
+use Advanced_Sidebar_Menu\Walkers\Category_Walker;
 use Advanced_Sidebar_Menu\Walkers\Page_Walker;
 use Advanced_Sidebar_Menu\Widget\Category as Widget_Category;
 use Advanced_Sidebar_Menu\Widget\Page as Widget_Page;
@@ -77,6 +83,7 @@ function advanced_sidebar_menu_autoload( $class ) {
 		List_Pages::class      => 'List_Pages.php',
 		Notice::class          => 'Notice.php',
 		Scripts::class         => 'Scripts.php',
+		Utils::class           => 'Utils.php',
 
 		// Menus.
 		Category::class        => 'Menus/Category.php',
@@ -88,6 +95,7 @@ function advanced_sidebar_menu_autoload( $class ) {
 		Singleton::class       => 'Traits/Singleton.php',
 
 		// Walkers.
+		Category_Walker::class => 'Walkers/Category_Walker.php',
 		Page_Walker::class     => 'Walkers/Page_Walker.php',
 
 	];

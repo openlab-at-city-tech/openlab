@@ -13,7 +13,7 @@ Plugin Name: EWWW Image Optimizer
 Plugin URI: https://wordpress.org/plugins/ewww-image-optimizer/
 Description: Reduce file sizes for images within WordPress including NextGEN Gallery and GRAND FlAGallery. Uses jpegtran, optipng/pngout, and gifsicle.
 Author: Exactly WWW
-Version: 5.8.2
+Version: 6.1.8
 Author URI: https://ewww.io/
 License: GPLv3
 */
@@ -126,28 +126,4 @@ if ( ! function_exists( 'ewww_image_optimizer_unsupported_php' ) ) {
 	function ewww_image_optimizer_false_init() {
 		load_plugin_textdomain( 'ewww-image-optimizer', false, plugin_dir_path( __FILE__ ) . 'languages/' );
 	}
-}
-
-/**
- * Inform the user that only ewww-image-optimizer-cloud is permitted on Kinsta.
- */
-function ewww_image_optimizer_notice_kinsta() {
-	echo "<div id='ewww-image-optimizer-warning-kinsta' class='error'><p>" . esc_html__( 'The regular version of the EWWW Image Optimizer plugin is not permitted on Kinsta sites. Please deactivate EWWW Image Optimizer and install EWWW Image Optimizer Cloud to optimize your images.', 'ewww-image-optimizer' ) .
-		' <a href="admin.php?action=ewwwio_install_cloud_plugin">' . esc_html__( 'Install now.', 'ewww-image-optimizer' ) . '</a></p></div>';
-}
-
-/**
- * Inform the user that only ewww-image-optimizer-cloud is permitted on Flywheel.
- */
-function ewww_image_optimizer_notice_flywheel() {
-	echo "<div id='ewww-image-optimizer-warning-flywheel' class='error'><p>" . esc_html__( 'The regular version of the EWWW Image Optimizer plugin is not permitted on Flywheel sites. Please deactivate EWWW Image Optimizer and install EWWW Image Optimizer Cloud to optimize your images.', 'ewww-image-optimizer' ) .
-		' <a href="admin.php?action=ewwwio_install_cloud_plugin">' . esc_html__( 'Install now.', 'ewww-image-optimizer' ) . '</a></p></div>';
-}
-
-/**
- * Inform the user that only ewww-image-optimizer-cloud is permitted on WP NET (nz).
- */
-function ewww_image_optimizer_notice_wpnetnz() {
-	echo "<div id='ewww-image-optimizer-warning-wpnetnz' class='error'><p>" . esc_html__( 'The regular version of the EWWW Image Optimizer plugin is not permitted on WP NET sites. Please deactivate EWWW Image Optimizer and install EWWW Image Optimizer Cloud to optimize your images.', 'ewww-image-optimizer' ) .
-		' <a href="admin.php?action=ewwwio_install_cloud_plugin">' . esc_html__( 'Install now.', 'ewww-image-optimizer' ) . '</a></p></div>';
 }

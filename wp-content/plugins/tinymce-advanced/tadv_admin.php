@@ -1,9 +1,7 @@
 <?php
 /**
- * This file is part of the TinyMCE Advanced WordPress plugin and is released under the same license.
- * For more information please see tinymce-advanced.php.
- *
- * Copyright (c) 2007-2018 Andrew Ozz. All rights reserved.
+ * User and admin settings UI.
+ * @package advanced-editor-tools
  */
 
 if ( ! defined( 'TADV_ADMIN_PAGE' ) ) {
@@ -41,8 +39,8 @@ if ( isset( $_POST['tadv-save'] ) ) {
 
 	// TODO: all users
 	?>
-	<div class="wrap tinymce-advanced">
-	<h2><?php _e( 'TinyMCE Advanced Settings Import', 'tinymce-advanced' ); ?></h2>
+	<div class="wrap advanced-editor-tools">
+	<h2><?php _e( 'Advanced Editor Tools Settings Import', 'tinymce-advanced' ); ?></h2>
 
 	<div class="tadv-import-export">
 		<form action="" method="post" enctype="multipart/form-data" class="import-file">
@@ -71,7 +69,7 @@ if ( isset( $_POST['tadv-save'] ) ) {
 } elseif ( isset( $_POST['tadv-import-submit'] ) && ! empty( $_POST['tadv-import'] ) && is_string( $_POST['tadv-import'] ) ) {
 	check_admin_referer( 'tadv-import-settings', 'tadv-import-settings-nonce' );
 
-	// TODO: all users
+	// TODO: all users that can have settings
 	$import = json_decode( trim( wp_unslash( $_POST['tadv-import'] ) ), true );
 
 	if ( ! is_array( $import ) ) {
@@ -116,11 +114,19 @@ $all_buttons = $this->get_all_buttons();
 
 ?>
 <div class="wrap tinymce-advanced block-active<?php if ( is_rtl() ) echo ' mce-rtl'; ?>" id="contain">
-<h2><?php _e( 'Editor Settings', 'tinymce-advanced' ); ?></h2>
+<h2><?php _e( 'Advanced Editor Tools', 'tinymce-advanced' ); ?></h2>
 <?php
 
 // TODO admin || SA
 $this->warn_if_unsupported();
+
+// Add a notice that the plugin was renamed.
+// Remove in the bnext version.
+?>
+<div class="notice notice-warning is-dismissible"><p>
+<?php _e( 'Please note: This plugin was renamed from "TinyMCE Advanced" to "Advanced Editor Tools". The plugin functionality remains the same.', 'tinymce-advanced' ); ?>
+</p></div>
+<?php
 
 if ( isset( $_POST['tadv-save'] ) && empty( $message ) ) {
 	?><div class="updated notice notice-success is-dismissible"><p><?php _e( 'Settings saved.', 'tinymce-advanced' ); ?></p></div><?php
@@ -910,7 +916,6 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 			<label for="table_default_attributes"><?php _e( 'When inserting a table set the HTML border attribute to 1', 'tinymce-advanced' ); ?></label>
 			<p>
 				<?php _e( 'This will add a border around the table unless it is overriden by your theme.', 'tinymce-advanced' ); ?>
-				<?php _e( 'To set other default attributes or inline styles use the Advanced TinyMCE Configuration plugin.', 'tinymce-advanced' ); ?>
 			</p>
 		</div>
 		<div>
@@ -939,20 +944,6 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 			</p>
 		</div>
 	</div>
-	<hr>
-	<div>
-		<p class="tadv-help" id="advanced-tinymce-config">
-		<span class="dashicons dashicons-external"></span>
-		<?php
-
-		$text = __( 'For other advanced TinyMCE settings, including settings for the Classic Paragraph block and more advanced table options, you can use the %1$sAdvanced TinyMCE Configuration plugin%2$s.', 'tinymce-advanced' );
-		/* translators: URL to (localised) Advanced TinyMCE Configuration plugin. */
-		$url = __( 'https://wordpress.org/plugins/advanced-tinymce-configuration/', 'tinymce-advanced' );
-		printf( $text, '<a href="' . esc_url( $url ) . '">', '</a>' );
-
-		?>
-		</p>
-	</div>
 	</div>
 
 	<div class="advanced-options">
@@ -970,18 +961,18 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 		</p>
 	</div>
 	<div>
-		<h4><?php _e( 'Enable the TinyMCE editor enhancements for:', 'tinymce-advanced' ); ?></h4>
+		<h4><?php _e( 'Enable the editor enhancements for:', 'tinymce-advanced' ); ?></h4>
 		<p>
 			<input type="checkbox" id="tadv_enable_1" name="tadv_enable_at[]" value="edit_post_screen" <?php if ( $this->check_admin_setting( 'enable_edit_post_screen' ) ) echo ' checked'; ?> />
 			<label for="tadv_enable_1"><?php _e( 'The Classic Editor (Add New and Edit posts and pages)', 'tinymce-advanced' ); ?></label>
 		</p>
 		<p>
 			<input type="checkbox" id="tadv_enable_2" name="tadv_enable_at[]" value="rest_of_wpadmin" <?php if ( $this->check_admin_setting( 'enable_rest_of_wpadmin' ) ) echo ' checked'; ?> />
-			<label for="tadv_enable_2"><?php _e( 'Other TinyMCE editors in wp-admin', 'tinymce-advanced' ); ?></label>
+			<label for="tadv_enable_2"><?php _e( 'Other instances of the Classic (TinyMCE) editor in wp-admin', 'tinymce-advanced' ); ?></label>
 		</p>
 		<p>
 			<input type="checkbox" id="tadv_enable_3" name="tadv_enable_at[]" value="on_front_end" <?php if ( $this->check_admin_setting( 'enable_on_front_end' ) ) echo ' checked'; ?> />
-			<label for="tadv_enable_3"><?php _e( 'TinyMCE editors on the front end of the site', 'tinymce-advanced' ); ?></label>
+			<label for="tadv_enable_3"><?php _e( 'Instances of the Classic editor on the front end of the site', 'tinymce-advanced' ); ?></label>
 		</p>
 	</div>
 	</div>

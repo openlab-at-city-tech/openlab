@@ -10,167 +10,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Silence is golden.' );
 }
 
-/**
- * Handle a failing oEmbed proxy request to try embedding as a shortcode.
- *
- * @see https://core.trac.wordpress.org/ticket/45447
- *
- * @since 2.3.0
- *
- * @param  WP_HTTP_Response|WP_Error $response The REST Request response.
- * @param  WP_REST_Server            $handler  ResponseHandler instance (usually WP_REST_Server).
- * @param  WP_REST_Request           $request  Request used to generate the response.
- * @return WP_HTTP_Response|object|WP_Error    The REST Request response.
- */
-function gutenberg_filter_oembed_result( $response, $handler, $request ) {
-	if ( ! is_wp_error( $response ) || 'oembed_invalid_url' !== $response->get_error_code() ||
-			'/oembed/1.0/proxy' !== $request->get_route() ) {
-		return $response;
-	}
-
-	// Try using a classic embed instead.
-	global $wp_embed;
-	$html = $wp_embed->shortcode( array(), $_GET['url'] );
-	if ( ! $html ) {
-		return $response;
-	}
-
-	global $wp_scripts;
-
-	// Check if any scripts were enqueued by the shortcode, and include them in
-	// the response.
-	$enqueued_scripts = array();
-	foreach ( $wp_scripts->queue as $script ) {
-		$enqueued_scripts[] = $wp_scripts->registered[ $script ]->src;
-	}
-
-	return array(
-		'provider_name' => __( 'Embed Handler', 'gutenberg' ),
-		'html'          => $html,
-		'scripts'       => $enqueued_scripts,
-	);
-}
-add_filter( 'rest_request_after_callbacks', 'gutenberg_filter_oembed_result', 10, 3 );
 
 /**
- * Add fields required for site editing to the /themes endpoint.
- *
- * @todo Remove once Gutenberg's minimum required WordPress version is v5.5.
- * @see https://core.trac.wordpress.org/ticket/49906
- * @see https://core.trac.wordpress.org/changeset/47921
- *
- * @param WP_REST_Response $response The response object.
- * @param WP_Theme         $theme    Theme object used to create response.
- * @param WP_REST_Request  $request  Request object.
- */
-function gutenberg_filter_rest_prepare_theme( $response, $theme, $request ) {
-	$data   = $response->get_data();
-	$fields = array_keys( $data );
-
-	/**
-	 * The following is basically copied from Core's WP_REST_Themes_Controller::prepare_item_for_response()
-	 * (as of WP v5.5), with `rest_is_field_included()` replaced by `! in_array()`.
-	 * This makes sure that we add all the fields that are missing from Core.
-	 *
-	 * @see https://github.com/WordPress/WordPress/blob/019bc2d244c4d536338d2c634419583e928143df/wp-includes/rest-api/endpoints/class-wp-rest-themes-controller.php#L118-L167
-	 */
-	if ( ! in_array( 'stylesheet', $fields, true ) ) {
-		$data['stylesheet'] = $theme->get_stylesheet();
-	}
-
-	if ( ! in_array( 'template', $fields, true ) ) {
-		/**
-		 * Use the get_template() method, not the 'Template' header, for finding the template.
-		 * The 'Template' header is only good for what was written in the style.css, while
-		 * get_template() takes into account where WordPress actually located the theme and
-		 * whether it is actually valid.
-		 */
-		$data['template'] = $theme->get_template();
-	}
-
-	$plain_field_mappings = array(
-		'requires_php' => 'RequiresPHP',
-		'requires_wp'  => 'RequiresWP',
-		'textdomain'   => 'TextDomain',
-		'version'      => 'Version',
-	);
-
-	foreach ( $plain_field_mappings as $field => $header ) {
-		if ( ! in_array( $field, $fields, true ) ) {
-			$data[ $field ] = $theme->get( $header );
-		}
-	}
-
-	if ( ! in_array( 'screenshot', $fields, true ) ) {
-		// Using $theme->get_screenshot() with no args to get absolute URL.
-		$data['screenshot'] = $theme->get_screenshot() ? $theme->get_screenshot() : '';
-	}
-
-	$rich_field_mappings = array(
-		'author'      => 'Author',
-		'author_uri'  => 'AuthorURI',
-		'description' => 'Description',
-		'name'        => 'Name',
-		'tags'        => 'Tags',
-		'theme_uri'   => 'ThemeURI',
-	);
-
-	foreach ( $rich_field_mappings as $field => $header ) {
-		if ( ! in_array( $field, $fields, true ) ) {
-			$data[ $field ]['raw']      = $theme->display( $header, false, true );
-			$data[ $field ]['rendered'] = $theme->display( $header );
-		}
-	}
-
-	$response->set_data( $data );
-	return $response;
-}
-add_filter( 'rest_prepare_theme', 'gutenberg_filter_rest_prepare_theme', 10, 3 );
-
-/**
- * Start: Include for phase 2
- */
-/**
- * Registers the REST API routes needed by the legacy widget block.
+ * Registers the REST API routes for URL Details.
  *
  * @since 5.0.0
  */
-function gutenberg_register_rest_widget_updater_routes() {
-	$widget_forms = new WP_REST_Widget_Forms();
-	$widget_forms->register_routes();
+function gutenberg_register_url_details_routes() {
+	$url_details_controller = new WP_REST_URL_Details_Controller();
+	$url_details_controller->register_routes();
 }
-add_action( 'rest_api_init', 'gutenberg_register_rest_widget_updater_routes' );
+add_action( 'rest_api_init', 'gutenberg_register_url_details_routes' );
 
 /**
- * Registers the widget area REST API routes.
- *
- * @since 5.7.0
+ * Registers the block pattern directory.
  */
-function gutenberg_register_rest_widget_areas() {
-	$widget_areas_controller = new WP_REST_Widget_Areas_Controller();
-	$widget_areas_controller->register_routes();
-}
-add_action( 'rest_api_init', 'gutenberg_register_rest_widget_areas' );
-
-/**
- * Registers the block directory.
- *
- * @since 6.5.0
- */
-function gutenberg_register_rest_block_directory() {
-	$block_directory_controller = new WP_REST_Block_Directory_Controller();
+function gutenberg_register_rest_pattern_directory() {
+	$block_directory_controller = new WP_REST_Pattern_Directory_Controller();
 	$block_directory_controller->register_routes();
 }
-add_filter( 'rest_api_init', 'gutenberg_register_rest_block_directory' );
+add_filter( 'rest_api_init', 'gutenberg_register_rest_pattern_directory' );
 
-/**
- * Registers the Block types REST API routes.
- */
-function gutenberg_register_block_type() {
-	$block_types = new WP_REST_Block_Types_Controller();
-	$block_types->register_routes();
-}
-add_action( 'rest_api_init', 'gutenberg_register_block_type' );
 /**
  * Registers the menu locations area REST API routes.
  */
@@ -189,15 +49,29 @@ function gutenberg_register_rest_customizer_nonces() {
 }
 add_action( 'rest_api_init', 'gutenberg_register_rest_customizer_nonces' );
 
+/**
+ * Registers the Sidebars & Widgets REST API routes.
+ */
+function gutenberg_register_sidebars_and_widgets_endpoint() {
+	$sidebars = new WP_REST_Sidebars_Controller();
+	$sidebars->register_routes();
+
+	$widgets = new WP_REST_Widgets_Controller();
+	$widgets->register_routes();
+
+	$widget_types = new WP_REST_Widget_Types_Controller();
+	$widget_types->register_routes();
+}
+add_action( 'rest_api_init', 'gutenberg_register_sidebars_and_widgets_endpoint' );
 
 /**
- * Registers the Plugins REST API routes.
+ * Registers the Block editor settings REST API routes.
  */
-function gutenberg_register_plugins_endpoint() {
-	$plugins = new WP_REST_Plugins_Controller();
-	$plugins->register_routes();
+function gutenberg_register_block_editor_settings() {
+	$editor_settings = new WP_REST_Block_Editor_Settings_Controller();
+	$editor_settings->register_routes();
 }
-add_action( 'rest_api_init', 'gutenberg_register_plugins_endpoint' );
+add_action( 'rest_api_init', 'gutenberg_register_block_editor_settings' );
 
 /**
  * Hook in to the nav menu item post type and enable a post type rest endpoint.
@@ -311,12 +185,42 @@ function gutenberg_auto_draft_get_sample_permalink( $permalink, $id, $title, $na
 add_filter( 'get_sample_permalink', 'gutenberg_auto_draft_get_sample_permalink', 10, 5 );
 
 /**
- * Registers the image editor.
+ * Filters WP_User_Query arguments when querying users via the REST API.
  *
- * @since 7.x.0
+ * Allow using the has_published_post argument.
+ *
+ * @param array           $prepared_args Array of arguments for WP_User_Query.
+ * @param WP_REST_Request $request       The REST API request.
+ *
+ * @return array Returns modified $prepared_args.
  */
-function gutenberg_register_image_editor() {
-	$image_editor = new WP_REST_Image_Editor_Controller();
-	$image_editor->register_routes();
+function gutenberg_rest_user_query_has_published_posts( $prepared_args, $request ) {
+	if ( ! empty( $request['has_published_posts'] ) ) {
+		$prepared_args['has_published_posts'] = ( true === $request['has_published_posts'] )
+			? get_post_types( array( 'show_in_rest' => true ), 'names' )
+			: (array) $request['has_published_posts'];
+	}
+	return $prepared_args;
 }
-add_filter( 'rest_api_init', 'gutenberg_register_image_editor' );
+add_filter( 'rest_user_query', 'gutenberg_rest_user_query_has_published_posts', 10, 2 );
+
+
+/**
+ * Filters REST API collection parameters for the users controller.
+ *
+ * @param array $query_params JSON Schema-formatted collection parameters.
+ *
+ * @return array Returns the $query_params with "has_published_posts".
+ */
+function gutenberg_rest_user_collection_params_has_published_posts( $query_params ) {
+	$query_params['has_published_posts'] = array(
+		'description' => __( 'Limit result set to users who have published posts.', 'gutenberg' ),
+		'type'        => array( 'boolean', 'array' ),
+		'items'       => array(
+			'type' => 'string',
+			'enum' => get_post_types( array( 'show_in_rest' => true ), 'names' ),
+		),
+	);
+	return $query_params;
+}
+add_filter( 'rest_user_collection_params', 'gutenberg_rest_user_collection_params_has_published_posts' );

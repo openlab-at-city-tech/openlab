@@ -9,14 +9,14 @@
   "author": "Early Adopter",
   "license": "ISC",
   "devDependencies": {
-    "grunt": "^1.0.4",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-uglify": "^4.0.1",
+    "grunt": "^1.4.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-less": "^3.0.0",
+    "grunt-contrib-uglify": "^5.0.1",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-htmlclean": "^2.7.7",
+    "grunt-htmlclean": "^2.7.18",
     "jcarousellite": "^1.9.2",
-    "jit-grunt": "^0.9.1"
+    "jit-grunt": "^0.10.0"
   },
   "description": ""
 }

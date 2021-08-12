@@ -225,7 +225,7 @@ eventorganiser.versionCompare = function(left, right) {
 	});
 
 	/* Update time format screen option */
-	$('#eofc_time_format').change(function () {
+	$('#eofc_time_format').on('change', function () {
 		format = ($('#eofc_time_format').is(":checked") ? 'HH:mm' : 'h:mmtt');
 		calendar.fullCalendar('option', 'timeFormat', format);
 		$.post(ajaxurl, {
@@ -343,7 +343,7 @@ eventorganiser.versionCompare = function(left, right) {
 			calendar.fullCalendar('gotoDate', new Date(Date.parse(dateText)));
 		}
 	});
-	$('button.ui-datepicker-trigger').button().addClass('fc-button');
+	$('button.ui-datepicker-trigger').button().addClass('fc-button').addClass('fc-state-default');
         
     /* Venue drop-down in modal */
 	$.widget("ui.combobox", {
@@ -455,7 +455,7 @@ eventorganiser.versionCompare = function(left, right) {
 
 		return $("<span class='fc-header-dropdown filter-venue'></span>").append(html);
 	}
-        $(".eo-cal-filter").change(function () {
+        $(".eo-cal-filter").on('change', function () {
             calendar.fullCalendar('rerenderEvents');
         });
         $('.filter-venue .eo-cal-filter').selectmenu({
@@ -556,7 +556,7 @@ $.widget("ui.selectmenu", {
 
 		// click toggle for menu visibility
 		this.newelement
-			.bind( 'mousedown.selectmenu', function( event ) {
+			.on( 'mousedown.selectmenu', function( event ) {
 				self._toggle( event, true );
 				// make sure a click won't open/close instantly
 				if ( o.style == "popup" ) {
@@ -566,7 +566,7 @@ $.widget("ui.selectmenu", {
 
 				event.preventDefault();
 			})
-			.bind( 'click.selectmenu', function( event ) {
+			.on( 'click.selectmenu', function( event ) {
 				event.preventDefault();
 			})
 			.bind( "keydown.selectmenu", function( event ) {
@@ -791,10 +791,10 @@ $.widget("ui.selectmenu", {
 				}
 				var thisA = $( '<a/>', thisAAttr )
 					.bind( 'focus.selectmenu', function() {
-						$( this ).parent().mouseover();
+						$( this ).parent().trigger( "mouseover" );
 					})
 					.bind( 'blur.selectmenu', function() {
-						$( this ).parent().mouseout();
+						$( this ).parent().trigger( "mouseout" );
 					});
 				var thisLi = $( '<li/>', thisLiAttr )
 					.append( thisA )
@@ -926,17 +926,17 @@ $.widget("ui.selectmenu", {
 		this.element.removeData( this.widgetName )
 			.removeClass( 'ui-selectmenu-disabled' + ' ' + 'ui-state-disabled' )
 			.removeAttr( 'aria-disabled' )
-			.unbind( ".selectmenu" );
+			.off( ".selectmenu" );
 
-		$( window ).unbind( ".selectmenu-" + this.ids[ 0 ] );
-		$( document ).unbind( ".selectmenu-" + this.ids[ 0 ] );
+		$( window ).off( ".selectmenu-" + this.ids[ 0 ] );
+		$( document ).off( ".selectmenu-" + this.ids[ 0 ] );
 
 		this.newelementWrap.remove();
 		this.listWrap.remove();
 
 		// unbind click event and show original select
 		this.element
-			.unbind( ".selectmenu" )
+			.off( ".selectmenu" )
 			.show();
 
 		// call widget destroy function
@@ -1330,7 +1330,7 @@ $.widget("ui.selectmenu", {
 
 		this.listWrap
 			.removeAttr( 'style' )
-			.zIndex( this.element.zIndex() + 2 )
+			.css( 'zIndex', this.element.css('zIndex') + 2 )
 			.position( $.extend( positionDefault, o.positionOptions ) );
 	}
 });

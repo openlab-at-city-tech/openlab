@@ -1,6 +1,34 @@
 
 # Changelog
 
+## 2.2.6
+
+	- Added ASM Select so perks no longer need to include this individually.
+
+## 2.2.5
+
+	- Added ASM Select so perks no longer need to include this individually.
+
+## 2.2.4
+
+	- Added additional helper styles for Gravity Forms 2.5 field settings.
+	- Fixed issue where some perks relied on a script file that was loaded in footer.
+	- Fixed issue where Perk minimum requirements would not be enforced in some situations.
+
+## 2.2.3
+
+	- Added support for customizing Gravity Forms tooltips.
+	- Updated admin scripts to be output to the footer.
+	- Added default styles for new `.gp-tooltip-right`. Used by tooltips that are close to the right side of the screen (particularly in the field settings).
+	- Added new styles for child settings in Gravity Forms 2.5.
+	- Fixed issue where Perk minimum requirements would not be enforced in some situations.
+
+## 2.2.2
+
+	- Fixed issue where minimum requirement admin notices were not displayed in WordPress dashboard. Gravity Forms 2.5 no longer shows notices on their settings pages.
+	- Fixed issue where double notices were displayed on plugin row.
+	- Fixed issue where perks' init was not correctly halted when min requirements were not met in Gravity Forms 2.5.
+
 ## 2.2.1
 
 	- Fixed issue where request URL was not logged accurately.
@@ -10,12 +38,6 @@
 	- Added styles for Select2 with .gp-selectwoo selector.
 	- Added support for enabling import/export of feeds for a given Gravity Perk by using the gravityperks_export_feeds_PLUGIN-SLUG filter.
 	- Fixed styling of plugin row notices and disable auto-updater if license is not registered.
-
-## 2.2.2
-
-	- Fixed issue where minimum requirement admin notices were not displayed in WordPress dashboard. Gravity Forms 2.5 no longer shows notices on their settings pages.
-	- Fixed issue where double notices were displayed on plugin row.
-	- Fixed issue where perks' init was not correctly halted when min requirements were not met in Gravity Forms 2.5.
 
 ## 2.2
 

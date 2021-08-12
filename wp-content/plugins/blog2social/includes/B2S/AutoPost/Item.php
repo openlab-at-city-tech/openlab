@@ -36,7 +36,7 @@ class B2S_AutoPost_Item {
         
         $content = '';
         $content .='<div class="panel panel-group b2s-auto-post-own-general-warning"><div class="panel-body">';
-        $content .='<span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span> ' . esc_html__('Auto-posts for Facebook Profiles will be shown in the "Instant Sharing" tab on your "Posts & Sharing" navigation bar and can be shared on your Facebook Profile by clicking on the "Share" button next to your auto-post.', 'blog2social');
+        $content .='<span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span> ' . sprintf(__('Posts for Facebook Profiles will be shown on your "Site & Blog Content" navigation bar in the "Instant Sharing" tab. To share the post on your Facebook Profile just click on the "Share" button next to your post. More information in the <a href="%s" target="_blank">Instant Sharing guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('facebook_instant_sharing'));
         $content .='</div>';
         $content .='</div>';
         $content .='<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter', 'blog2social') . '</h4><a target="_blank" href="'.B2S_Tools::getSupportLink('auto_post_manuell').'">Info</a>';

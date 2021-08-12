@@ -42,9 +42,27 @@ function bp_core_screen_signup() {
 
 	$bp->signup->step = 'request-details';
 
-	if ( !bp_get_signup_allowed() ) {
-		$bp->signup->step = 'registration-disabled';
+	// Could the user be accepting an invitation?
+	$active_invite = false;
+	if ( bp_get_members_invitations_allowed() ) {
+		// Check to see if there's a valid invitation.
+		$maybe_invite = bp_get_members_invitation_from_request();
+		if ( $maybe_invite->id && $maybe_invite->invitee_email ) {
+			// Check if this user is already a member.
+			$args = array(
+				'invitee_email' => $maybe_invite->invitee_email,
+				'accepted'      => 'accepted',
+				'fields'        => 'ids',
+			);
+			$accepted_invites = bp_members_invitations_get_invites( $args );
+			if ( ! $accepted_invites ) {
+				$active_invite = true;
+			}
+		}
+	}
 
+	if ( ! bp_get_signup_allowed() && ! $active_invite ) {
+		$bp->signup->step = 'registration-disabled';
 		// If the signup page is submitted, validate and save.
 	} elseif ( isset( $_POST['signup_submit'] ) && bp_verify_nonce_request( 'bp_new_signup' ) ) {
 
@@ -155,11 +173,22 @@ function bp_core_screen_signup() {
 				 * Filters the error message in the loop.
 				 *
 				 * @since 1.5.0
+				 * @since 8.0.0 Adds the `$fieldname` parameter to the anonymous function.
 				 *
-				 * @param string $value Error message wrapped in html.
+				 * @param string $value     Error message wrapped in html.
+				 * @param string $fieldname The name of the signup field.
 				 */
-				add_action( 'bp_' . $fieldname . '_errors', function() use ( $error_message ) {
-					echo apply_filters( 'bp_members_signup_error_message', "<div class=\"error\">" . $error_message . "</div>" );
+				add_action( 'bp_' . $fieldname . '_errors', function() use ( $error_message, $fieldname ) {
+					/**
+					 * Filter here to edit the error message about the invalid field value.
+					 *
+					 * @since 1.5.0
+					 * @since 8.0.0 Adds the `$fieldname` parameter.
+					 *
+					 * @param string $value     Error message wrapped in html.
+					 * @param string $fieldname The name of the signup field.
+					 */
+					echo apply_filters( 'bp_members_signup_error_message', "<div class=\"error\">" . $error_message . "</div>", $fieldname );
 				} );
 			}
 		} else {

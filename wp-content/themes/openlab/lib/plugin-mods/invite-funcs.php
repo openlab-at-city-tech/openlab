@@ -388,11 +388,11 @@ function openlab_invite_anyone_screen_two_content() {
  * See #1996.
  */
 function openlab_limit_invite_anyone_group_query( $args ) {
+	$dbs = debug_backtrace();
 	if ( ! bp_is_user() ) {
 		return $args;
 	}
 
-	$dbs = debug_backtrace();
 	foreach ( $dbs as $db ) {
 		if ( isset( $db['function'] ) && 'openlab_invite_anyone_screen_one_content' === $db['function'] ) {
 			$args['per_page'] = 100;

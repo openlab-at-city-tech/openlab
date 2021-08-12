@@ -1201,6 +1201,7 @@ function breadcrumb_trail_array_list(){
     $active_plugins = get_option('active_plugins');
 
 
+
     $array_list[] = array(
         'link'=> '#',
         'title' => $breadcrumb_text,
@@ -1213,7 +1214,7 @@ function breadcrumb_trail_array_list(){
         if($breadcrumb_display_home == 'yes')
             $array_list[] = array(
                 'link'=> !empty($breadcrumb_url_hash) ? $breadcrumb_url_hash : $home_url,
-                'title' => $breadcrumb_home_text,
+                'title' => ($breadcrumb_home_text),
 
             );
 
@@ -1222,7 +1223,7 @@ function breadcrumb_trail_array_list(){
         if($breadcrumb_display_home == 'yes')
             $array_list[] = array(
                 'link'=> !empty($breadcrumb_url_hash) ? $breadcrumb_url_hash : $home_url,
-                'title' => $breadcrumb_home_text,
+                'title' => ($breadcrumb_home_text),
             );
 
     }elseif( is_home()){
@@ -1230,7 +1231,7 @@ function breadcrumb_trail_array_list(){
         if($breadcrumb_display_home == 'yes')
             $array_list[] = array(
                 'link'=> $home_url,
-                'title' => $breadcrumb_home_text,
+                'title' => ($breadcrumb_home_text),
             );
 
             $array_list[] = array(
@@ -1247,7 +1248,7 @@ function breadcrumb_trail_array_list(){
         if($breadcrumb_display_home == 'yes')
             $array_list[] = array(
                 'link'=> $home_url,
-                'title' => $breadcrumb_home_text,
+                'title' => ($breadcrumb_home_text),
             );
 
             $array_list[] = array(
@@ -1860,7 +1861,12 @@ function breadcrumb_link_text_limit($string){
         }
     }elseif($limit_by == 'word'){
 
-        $string = wp_trim_words($string, $limit_count, $ending);
+        //$string = wp_trim_words($string, $limit_count, $ending);
+        $string =  force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $string ), $limit_count, $ending ) ) );
+;
+
+
+
         return $string;
     }else{
         return $string;

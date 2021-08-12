@@ -46,7 +46,7 @@ class B2S_Heartbeat {
     private function postSchedToServer() {
         global $wpdb;
         $sendData = array();
-        $sql = "SELECT post.id,post.post_id,post.blog_user_id,post.user_timezone,post.sched_date,post.sched_date_utc,post.relay_primary_post_id,post.post_for_relay,schedDetails.sched_data, schedDetails.image_url,network.network_id, network.network_type,network.network_auth_id,user.token "
+        $sql = "SELECT post.id,post.post_id,post.blog_user_id,post.user_timezone,post.sched_type,post.sched_date,post.sched_date_utc,post.relay_primary_post_id,post.post_for_relay,schedDetails.sched_data, schedDetails.image_url,network.network_id, network.network_type,network.network_auth_id,user.token "
                 . "FROM {$wpdb->prefix}b2s_posts AS post "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_network_details AS network on post.network_details_id = network.id "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS schedDetails on post.sched_details_id = schedDetails.id "

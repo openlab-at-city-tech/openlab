@@ -1,0 +1,555 @@
+img {
+    max-width: 100%;
+    height: auto;
+}
+.clear {
+    clear: both;
+}
+.fl-left {
+    float: left;
+}
+.fl-right {
+    float: right;
+}
+.clearfix:after, .clearfix:before {
+    content: " ";
+    display: table;
+    clear: both;
+}
+.wrap h2.wpdbx-title {
+    margin-bottom: 0;
+    background: url(../images/dropr-logo-25.png) no-repeat 0 14px;
+    padding: 12px 0 25px 32px;
+}
+ul.wpdbx-list-inline {
+    list-style: none;
+    padding: 0;
+    margin: 0 -5px;
+}
+ul.wpdbx-list-inline li {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 5px;
+}
+ul.wpdbx-list-inline label {
+    display: block;
+    margin: 0;
+}
+/* --------------- Right Content Block ------------ */
+
+.wpdbx-left-wrap {
+    float: left;
+    width: 100%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-right: 340px;
+    margin-right: -340px;
+    color: #181818;
+}
+.wpdpx-form-item-block {
+    background: #fff;
+    padding: 30px;
+    margin-bottom: 15px;
+}
+form .wpdpx-form-item-block {
+    margin-bottom: 0;
+}
+form .wpdpx-generic-form-item-block {
+    margin-bottom: 15px;
+}
+.wpdpx-form-item-block h3 {
+    font-size: 20px;
+    margin: 0 0 20px;
+    font-weight: normal;
+}
+.wpdpx-api-key-main {
+    overflow: hidden;
+}
+.wpdpx-form-item-block img.fl-left {
+    margin-right: 20px;
+}
+.wpdpx-api-key-main input, .wpdpx-api-key-main input.button {
+    height: 52px;
+}
+.wpdpx-api-key-main input.api-key {
+    padding: 10px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #ccc;
+    max-width: 350px;
+    margin: 0 10px 10px 0;
+    width: 100%;
+}
+.wpdpx-api-key-main input.button {
+    cursor: pointer;
+    padding: 6px 20px;
+}
+.wpdpx-form-item-block h4 {
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+.button-preview {
+    background: #f5f5f5;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    height: 180px;
+}
+.wpdpx-row {
+    margin: 0 -20px;
+}
+.wpdpx-col-sm-4 {
+    float: left;
+    width: 33.333%;
+}
+.wpdpx-col-sm-4 .inner {
+    padding: 0 20px;
+    border-left: 1px solid #ccc;
+}
+.wpdpx-col-sm-4:first-child .inner {
+    border: none;
+}
+#wpdpx-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -o-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    line-height: 1;
+}
+.wpdpx-form-item {
+    display: block;
+    margin-bottom: 10px;
+}
+.wpdpx-form-item label {
+    display: block;
+    margin-bottom: 8px;
+}
+.wpdpx-form-item:last-child {
+    margin-right: 0;
+}
+.wpdpx-form-item input {
+    max-width: 154px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #ccc;
+    height: 30px;
+}
+.wpdpx-form-item .color-value {
+    float: left;
+    max-width: 120px;
+    margin-right: 10px;
+}
+.wpdpx-form-item .color-value input {
+    width: 100%;
+}
+.wpdpx-form-submit-section {
+    background: #f5f5f5;
+    border-top: 1px solid #ddd;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+}
+form .wpdpx-form-submit-section p.submit {
+    margin: 0;
+    padding: 0;
+    float: right;
+}
+.wpdpx-settings-form .wpdpx-form-submit-section input {
+    height: 40px;
+}
+.wpdpx-settings-form .wpdpx-form-submit-section input.button {
+    padding: 6px 20px;
+}
+.wpdpx-form-submit-section input.btn-transparent {
+    background: none;
+    border: none;
+    color: #0074a2;
+    cursor: pointer;
+}
+/* --------------- Right Author Block ------------ */
+
+.wpdbx-right-wrap {
+    float: right;
+    max-width: 300px;
+    color: #372e2e;
+}
+.wpdbx-right-inner {
+    background: #fff;
+}
+.author-info {
+    padding: 10px 15px;
+    text-align: center;
+}
+.wpdpx-social {
+    text-align: center;
+    list-style-type: none;
+    padding: 15px;
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+    margin-bottom: 0;
+}
+.wpdpx-social li {
+    display: inline-block;
+    margin: 0 6px;
+}
+.wpdpx-icon {
+    background: url(../images/icon-sprite.jpg) no-repeat;
+    display: block;
+    width: 21px;
+    height: 21px;
+    text-indent: -999999px;
+    opacity: 0.46;
+}
+.wpdpx-icon:hover {
+    opacity: 1;
+}
+.wpdpx-icon-facebook {} .wpdpx-icon-twitter {
+    background-position: -26px 0;
+}
+.wpdpx-icon-github {
+    background-position: -52px 0;
+}
+.wpdpx-icon-behance {
+    background-position: -78px 0;
+    width: 28px;
+}
+.wpdpx-icon-dribbble {
+    background-position: right 0;
+}
+/* ----------------------- Form Error ----------------- */
+
+div.wpdpx-error, div.wpdpx-updated {
+    margin: 5px 0 2px;
+    border-width: 1px 1px 1px 4px;
+    border-style: solid;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+div.wpdpx-updated {
+    background-color: #fff;
+    border-color: #eee #eee #eee #7ad03a;
+    padding: 1px 12px;
+}
+div.wpdpx-error {
+    background: none repeat scroll 0 0 #fff;
+    border-color: #eee #eee #eee #dd3d36;
+    padding: 1px 12px;
+}
+div.wpdpx-error p, div.wpdpx-updated p {
+    margin: 0.5em 0;
+    padding: 2px;
+}
+@media (max-width: 1190px) {
+    .wpdbx-left-wrap {
+        float: none;
+        width: 100%;
+        margin-bottom: 30px;
+        padding-right: 0;
+        margin-right: 0;
+    }
+    .wpdbx-right-wrap {
+        float: none;
+        width: 100%;
+    }
+}
+@media (max-width: 670px) {
+    .wpdpx-col-sm-4 {
+        float: none;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .wpdpx-col-sm-4 .inner {
+        border: none;
+    }
+}
+/* ----------------------- Color Picker ------------------- */
+
+.colorSelector {
+    background: url("../images/colorpicker/select.png") no-repeat scroll center center;
+    height: 30px;
+    position: relative;
+    width: 30px;
+    cursor: pointer;
+    float: left;
+}
+.colorSelector div {
+    background: url("../images/colorpicker/select.png") no-repeat center center;
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.colorpicker {
+    width: 356px;
+    height: 176px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 10;
+    background: url(../images/colorpicker/colorpicker_background.png);
+    font-family: Arial, Helvetica, sans-serif;
+    display: none;
+}
+.colorpicker_color {
+    width: 150px;
+    height: 150px;
+    left: 14px;
+    top: 13px;
+    position: absolute;
+    background: #f00;
+    overflow: hidden;
+    cursor: crosshair;
+}
+.colorpicker_color div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: url(../images/colorpicker/colorpicker_overlay.png);
+}
+.colorpicker_color div div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    overflow: hidden;
+    background: url(../images/colorpicker/colorpicker_select.gif);
+    margin: -5px 0 0 -5px;
+}
+.colorpicker_hue {
+    position: absolute;
+    top: 13px;
+    left: 171px;
+    width: 35px;
+    height: 150px;
+    cursor: n-resize;
+}
+.colorpicker_hue div {
+    position: absolute;
+    width: 35px;
+    height: 9px;
+    overflow: hidden;
+    background: url(../images/colorpicker/colorpicker_indic.gif) left top;
+    margin: -4px 0 0 0;
+    left: 0px;
+}
+.colorpicker_new_color {
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    left: 213px;
+    top: 13px;
+    background: #f00;
+}
+.colorpicker_current_color {
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    left: 283px;
+    top: 13px;
+    background: #f00;
+}
+.colorpicker input {
+    background-color: transparent;
+    border: 1px solid transparent;
+    position: absolute;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #898989;
+    top: 4px;
+    right: 11px;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+    height: 11px;
+}
+.colorpicker_hex {
+    position: absolute;
+    width: 72px;
+    height: 22px;
+    background: url(../images/colorpicker/colorpicker_hex.png) top;
+    left: 212px;
+    top: 142px;
+}
+.colorpicker_hex input {
+    right: 6px;
+}
+.colorpicker_field {
+    height: 22px;
+    width: 62px;
+    background-position: top;
+    position: absolute;
+}
+.colorpicker_field span {
+    position: absolute;
+    width: 12px;
+    height: 22px;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    cursor: n-resize;
+}
+.colorpicker_rgb_r {
+    background-image: url(../images/colorpicker/colorpicker_rgb_r.png);
+    top: 52px;
+    left: 212px;
+}
+.colorpicker_rgb_g {
+    background-image: url(../images/colorpicker/colorpicker_rgb_g.png);
+    top: 82px;
+    left: 212px;
+}
+.colorpicker_rgb_b {
+    background-image: url(../images/colorpicker/colorpicker_rgb_b.png);
+    top: 112px;
+    left: 212px;
+}
+.colorpicker_hsb_h {
+    background-image: url(../images/colorpicker/colorpicker_hsb_h.png);
+    top: 52px;
+    left: 282px;
+}
+.colorpicker_hsb_s {
+    background-image: url(../images/colorpicker/colorpicker_hsb_s.png);
+    top: 82px;
+    left: 282px;
+}
+.colorpicker_hsb_b {
+    background-image: url(../images/colorpicker/colorpicker_hsb_b.png);
+    top: 112px;
+    left: 282px;
+}
+.colorpicker_submit {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: url(../images/colorpicker/colorpicker_submit.png) top;
+    left: 322px;
+    top: 142px;
+    overflow: hidden;
+}
+.colorpicker_focus {
+    background-position: center;
+}
+.colorpicker_hex.colorpicker_focus {
+    background-position: bottom;
+}
+.colorpicker_submit.colorpicker_focus {
+    background-position: bottom;
+}
+.colorpicker_slider {
+    background-position: bottom;
+}
+/* ----------------------- Range slider ----------------- */
+
+.slider-container {
+    width: 100%;
+    padding: 13px 0;
+}
+.slider-container .back-bar {
+    height: 10px;
+    position: relative;
+}
+.slider-container .back-bar .selected-bar {
+    position: absolute;
+    height: 100%;
+}
+.slider-container .back-bar .pointer {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    cursor: col-resize;
+    opacity: 1;
+    z-index: 2;
+}
+.slider-container .back-bar .pointer.last-active {
+    z-index: 3;
+}
+.slider-container .back-bar .pointer-label {
+    position: absolute;
+    top: -17px;
+    font-size: 10px;
+    background: white;
+    white-space: nowrap;
+    line-height: 1;
+}
+.slider-container .back-bar .focused {
+    z-index: 10;
+}
+.slider-container .clickable-dummy {
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.slider-container .scale {
+    top: 2px;
+    position: relative;
+}
+.slider-container .scale span {
+    position: absolute;
+    height: 5px;
+    border-left: 1px solid #999;
+    font-size: 0;
+}
+.slider-container .scale ins {
+    font-size: 9px;
+    text-decoration: none;
+    position: absolute;
+    left: 0;
+    top: 5px;
+    color: #999;
+    line-height: 1;
+}
+.slider-container.slider-readonly .clickable-dummy, .slider-container.slider-readonly .pointer {
+    cursor: auto;
+}
+.theme-blue .back-bar {
+    height: 5px;
+    border-radius: 2px;
+    background-color: #d1d1d1;
+}
+.theme-blue .back-bar .selected-bar {
+    border-radius: 2px;
+    background-color: #2ea2cc;
+    border: 1px solid #0074a2;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.theme-blue .back-bar .pointer {
+    width: 14px;
+    height: 14px;
+    top: -5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #0074a2;
+    background-color: #2ea2cc;
+}
+.theme-blue .back-bar .pointer-label {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    padding: 2px 3px;
+    opacity: 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.theme-blue .back-bar .pointer:hover .pointer-label {
+    opacity: 1;
+}

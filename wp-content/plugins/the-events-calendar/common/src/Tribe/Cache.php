@@ -70,7 +70,7 @@ class Tribe__Cache implements ArrayAccess {
 			$expiration = 1;
 
 			// Add so we know what group to use in the future.
-			$this->non_persistent_keys[] = $key;
+			$this->non_persistent_keys[ $id ] = $id;
 		} else {
 			$group = 'tribe-events';
 		}
@@ -108,8 +108,7 @@ class Tribe__Cache implements ArrayAccess {
 	 * @return mixed
 	 */
 	public function get( $id, $expiration_trigger = '', $default = false, $expiration = 0, $args = [] ) {
-		$flipped = array_flip( $this->non_persistent_keys );
-		$group   = isset( $flipped[ $id ] ) ? 'tribe-events-non-persistent' : 'tribe-events';
+		$group   = isset( $this->non_persistent_keys[ $id ] ) ? 'tribe-events-non-persistent' : 'tribe-events';
 		$value   = wp_cache_get( $this->get_id( $id, $expiration_trigger ), $group );
 
 		// Value found.
@@ -150,14 +149,11 @@ class Tribe__Cache implements ArrayAccess {
 	 * @return bool
 	 */
 	public function delete( $id, $expiration_trigger = '' ) {
-		$flipped = array_flip( $this->non_persistent_keys );
-		$group   = isset( $flipped[ $id ] ) ? 'tribe-events-non-persistent' : 'tribe-events';
+		$group   = isset( $this->non_persistent_keys[ $id ] ) ? 'tribe-events-non-persistent' : 'tribe-events';
 
 		// Delete from non-persistent keys list.
 		if ( 'tribe-events-non-persistent' === $group ) {
-			$index = $flipped[ $id ];
-
-			unset( $this->non_persistent_keys[ $index ] );
+			unset( $this->non_persistent_keys[ $id ] );
 		}
 
 		return wp_cache_delete( $this->get_id( $id, $expiration_trigger ), $group );
@@ -385,9 +381,7 @@ class Tribe__Cache implements ArrayAccess {
 	 * @return boolean Whether the offset exists in the cache.
 	 */
 	public function offsetExists( $offset ) {
-		$flipped = array_flip( $this->non_persistent_keys );
-
-		return isset( $flipped[ $offset ] );
+		return isset( $this->non_persistent_keys[ $offset ] );
 	}
 
 	/**
@@ -541,5 +535,100 @@ class Tribe__Cache implements ArrayAccess {
 
 		// If the size of the string is above 90% of the database `max_allowed_packet` setting, then it should not be written to the db.
 		return $size > ( $feature_detection->get_mysql_max_packet_size() * .9 );
+	}
+
+	/**
+	 * Returns a transient that might have been stored, due ot its size, in chunks.
+	 *
+	 * @since 4.13.3
+	 *
+	 * @param string               $id                 The name of the transients to return.
+	 * @param string|array<string> $expiration_trigger The transient expiration trigger(s).
+	 *
+	 * @return false|mixed Either the transient value, joined back into one, or `false` to indicate
+	 *                     the transient was not found or was malformed.
+	 */
+	public function get_chunkable_transient( $id, $expiration_trigger = '' ) {
+		$transient = $this->get_id( $id, $expiration_trigger );
+
+		if ( wp_using_ext_object_cache() ) {
+			return get_transient( $transient );
+		}
+
+		$chunks = [];
+		$i      = 0;
+		do {
+			$chunk_transient            = $transient . '_' . $i++;
+			$chunk                      = get_transient( $chunk_transient );
+			$chunks[ $chunk_transient ] = (string) $chunk;
+		} while ( ! empty( $chunk ) );
+
+		// Remove any piece of data that was added but is not relevant.
+		$chunks = array_filter( $chunks );
+
+		if ( empty( $chunks ) ) {
+			return false;
+		}
+
+		try {
+			$data          = implode( '', $chunks );
+			$is_serialized = preg_match( '/^[aO]:\\d+:/', $data );
+			$unserialized  = maybe_unserialize( implode( '', $chunks ) );
+
+			if ( is_string( $unserialized ) && $unserialized === $data && $is_serialized ) {
+				// Something was messed up.
+				return false;
+			}
+
+			return $unserialized;
+		} catch ( Exception $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Sets a transient in the database with the knowledge that, if too large to be stored in one
+	 * DB row, it will be chunked.
+	 *
+	 * The method will redirect to the `set_transient` function if the site is using object caching.
+	 *
+	 *
+	 * @since 4.13.3
+	 *
+	 * @param string               $id                 The transient ID.
+	 * @param mixed                $value              The value to store, that could be chunked.
+	 * @param int                  $expiration         The transient expiration, in seconds.
+	 * @param string|array<string> $expiration_trigger The transient expiration trigger(s).
+	 *
+	 * @return bool Whether the transient, or the transient chunks, have been stored correctly or not.
+	 */
+	public function set_chunkable_transient( $id, $value, $expiration = 0, $expiration_trigger = '' ) {
+		$transient = $this->get_id( $id, $expiration_trigger );
+
+		if ( wp_using_ext_object_cache() ) {
+			return $this->set_transient( $transient, $value, $expiration );
+		}
+
+		$inserted         = [];
+		$serialized_value = maybe_serialize( $value );
+		$chunk_size       = tribe( 'feature-detection' )->get_mysql_max_packet_size() * 0.9;
+		$chunks           = str_split( $serialized_value, $chunk_size );
+		foreach ( $chunks as $i => $chunk ) {
+			$chunk_transient = $transient . '_' . $i;
+
+			$set = set_transient( $chunk_transient, $chunk, $expiration );
+
+			if ( ! $set ) {
+				foreach ( $inserted as $transient_to_delete ) {
+					delete_transient( $transient_to_delete );
+				}
+
+				return false;
+			}
+
+			$inserted[] = $chunk_transient;
+		}
+
+		return true;
 	}
 }

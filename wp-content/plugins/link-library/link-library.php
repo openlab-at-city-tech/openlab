@@ -3,13 +3,13 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 6.7.12
+Version: 7.2.0
 Author: Yannick Lefebvre
-Author URI: http://ylefebvre.home.blog/
+Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2020 Yannick Lefebvre
+Copyright 2021 Yannick Lefebvre
 
 Translations:
 French Translation courtesy of Luc Capronnier
@@ -262,6 +262,9 @@ class link_library_plugin {
 			ll_reset_gen_settings( 'return_and_set' );
 		}
 
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
 		// Add short codes
 		add_shortcode( 'link-library', array( $this, 'link_library_func' ) );
 		add_shortcode( 'link-library-cats', array( $this, 'link_library_cats_func' ) );
@@ -275,6 +278,7 @@ class link_library_plugin {
 		add_shortcode( 'link-library-count', array( $this, 'link_library_count_func' ) );
 		add_shortcode( 'link-library-filters', array( $this, 'link_library_filters' ) );
 		add_shortcode( 'link-library-tagcloud', array( $this, 'link_library_tagcloud' ) );
+		add_shortcode( 'rss-library', array( $this, 'rss_library_func' ) );
 
 		// Function to determine if Link Library is used on a page before printing headers
 		// the_posts gets triggered before wp_head
@@ -284,6 +288,15 @@ class link_library_plugin {
 		add_action( 'wp_head', array( $this, 'll_rss_link' ) );
 
 		add_filter( 'wp_title', array( $this, 'll_title_creator' ) );
+
+		add_filter( 'get_the_excerpt', array( $this, 'll_display_single_link' ) );
+		add_filter( 'the_excerpt', array( $this, 'll_display_single_link' ) );
+		add_filter( 'post_type_link', array( $this, 'll_get_permalink' ), 10, 4 );
+		add_filter( 'the_title', array( $this, 'll_get_title' ), 10, 2 );
+
+		add_filter( 'block_categories', array( $this, 'll_block_categories' ), 10, 2 );
+		add_action( 'rest_api_init', array( $this, 'll_rest_api_init' ) );
+		
 
 		// Re-write rules filters to allow for custom permalinks
 		add_filter( 'rewrite_rules_array', array( $this, 'll_insertMyRewriteRules' ) );
@@ -315,6 +328,57 @@ class link_library_plugin {
 
 		add_action('auth_redirect', array( $this, 'add_pending_count_filter') ); // modify esc_attr on auth_redirect
 		add_action('admin_menu', array( $this, 'esc_attr_restore' ) ); // restore on admin_menu (very soon)
+
+		if ( $genoptions['add_to_main_rss'] ) {
+			add_action( 'request', array( $this, 'link_library_rss_feed_request' ) );
+			add_filter( 'the_content_feed', array( $this, 'll_display_single_link' ) );
+		}		
+	}
+
+	function ll_rest_api_init() {
+		register_rest_route( 'link-library/v1', '/settingslist', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'll_rest_settings_list' ),
+			'permission_callback' => '__return_true'
+		) );
+	}
+
+	function ll_rest_settings_list( WP_REST_Request $request ) {
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+		
+		if ( empty( $genoptions['numberstylesets'] ) ) {
+			$numberofsets = 1;
+		} else {
+			$numberofsets = $genoptions['numberstylesets'];
+		}
+		$settings_array = array();
+		for ( $counter = 1; $counter <= $numberofsets; $counter ++ ) {
+			$tempoptionname = "LinkLibraryPP" . $counter;
+			$tempoptions          = get_option( $tempoptionname );
+			
+			if ( ! empty( $tempoptions ) && isset( $tempoptions['settingssetname'] ) ) {
+				$settings_array[$counter] = $tempoptions['settingssetname'];
+			}
+		}
+
+		$response = new WP_REST_Response( $settings_array );
+
+		return $response;
+	}
+
+	function ll_block_categories( $categories, $post ) {
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug' => 'link-library',
+					'title' => __( 'Link Library', 'link-library' ),
+					'icon'  => 'wordpress',
+				),
+			)
+		);
 	}
 
 	function ll_posts_where( $where, $query ) {
@@ -327,6 +391,17 @@ class link_library_plugin {
 		}
 
 		return $where;
+	}
+
+	function link_library_rss_feed_request( $qv ) {
+
+ 		if ( isset( $qv['feed'] ) && !isset( $qv['post_type'] ) ) {
+			$qv['post_type'] = array( 'post', 'link_library_links' );
+		} elseif ( isset( $qv['feed'] ) && isset( $qv['post_type'] ) ) {
+			$qv['post_type'][] = 'link_library_links';
+		}
+			
+		return $qv;
 	}
 
 
@@ -401,7 +476,7 @@ class link_library_plugin {
 				array( 'title', 'editor', 'comments' ),
 			'taxonomies' => array( 'link_library_category' ),
 			'menu_icon' =>
-				plugins_url( 'icons/link-icon.png', __FILE__ ),
+				'dashicons-admin-links',
 			'has_archive' => false,
 			'rewrite' => array( 'slug' => $genoptions['cptslug'] . '/%link_library_category%' )
 		);
@@ -426,7 +501,8 @@ class link_library_plugin {
 				'show_ui' => true,
 				'show_tagcloud' => false,
 				'hierarchical' => true,
-				'rewrite' => false,
+				'rewrite' => $genoptions['publicly_queryable'],
+				'show_in_rest' => true
 			)
 		);
 
@@ -440,10 +516,222 @@ class link_library_plugin {
 								   'new_item_name' => 'New Link Library Tag' ),
 				'show_ui' => true,
 				'rewrite' => false,
+				'show_in_rest' => true
 			)
 		);
 
 		add_feed( 'linklibraryfeed', 'link_library_generate_rss_feed' );
+
+		if ( function_exists( 'register_block_type' ) ) {
+			$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
+	 
+			wp_register_script(
+				'link-library-block',
+				plugins_url( 'build/index.js', __FILE__ ),
+				$asset_file['dependencies'],
+				$asset_file['version']
+			);
+		
+			register_block_type( 'link-library/link-block', array( 
+				'editor_script' => 'link-library-block',
+				'render_callback' => array( $this, 'link_library_func' ),
+				'attributes'  => array(
+					'settings'    => array(
+						'type'  => 'string',
+						'default'   => '1',
+					),
+					'linkorderoverride'    => array(
+						'type'  => 'string',
+						'default'   => '',
+					),
+					'linkdirectionoverride'    => array(
+						'type'  => 'string',
+						'default'   => '',
+					),
+					'categorylistoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'excludecategoryoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'taglistoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'maxlinksoverride'    => array(
+						'type'  => 'string',
+						'default'   => '',
+					),
+					'notesoverride'    => array(
+						'type'  => 'boolean',
+						'default'   => false,
+					),
+					'descoverride'    => array(
+						'type'  => 'boolean',
+						'default'   => false,
+					),
+					'rssoverride'    => array(
+						'type'  => 'boolean',
+						'default'   => false,
+					),
+					'categorylistoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+					'excludecategoryoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+					'taglistoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+				),
+			 ) );
+
+			register_block_type( 'link-library/cats-block', array(
+				'editor_script' => 'link-library-block',
+				'render_callback' => array( $this, 'link_library_cats_func' ),
+				'attributes'  => array(
+					'settings'    => array(
+						'type'  => 'string',
+						'default'   => '1',
+					),
+					'categorylistoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'excludecategoryoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'taglistoverride'    => array(
+						'type'  => 'array',
+						'default'   => array(),
+						'items'   => array(
+							'type' => 'string',
+						),
+					),
+					'targetlibrary'    => array(
+						'type'  => 'string',
+						'default'   => '',
+					),
+					'categorylistoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+					'excludecategoryoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+					'taglistoverrideCSV' => array(
+						'type' => 'string',
+						'default' => '',
+					),
+				),
+			 ) );
+			
+			register_block_type( 'link-library/addlink-block', array(
+				'editor_script' => 'link-library-block',
+				'render_callback' => array( $this, 'link_library_addlink_func' ),
+				'attributes'  => array(
+					'settings'    => array(
+						'type'  => 'string',
+						'default'   => '1',
+					),
+				),
+			 ) );
+
+			register_block_type( 'link-library/search-block', array(
+				'editor_script' => 'link-library-block',
+				'render_callback' => array( $this, 'link_library_search_func' ),
+				'attributes'  => array(
+					'settings'    => array(
+						'type'  => 'string',
+						'default'   => '1',
+					),
+				),
+			 ) );
+
+			register_block_type( 'link-library/count-block', array(
+				'editor_script' => 'link-library-block',
+				'render_callback' => array( $this, 'link_library_count_func' ),
+				'attributes'  => array(
+					'settings'    => array(
+						'type'  => 'string',
+						'default'   => '1',
+					),
+				),
+			 ) );
+		}	
+	}
+
+	function link_library_block_callback( $attributes ) {
+		$settings = 1;
+
+		if ( isset( $attributes['settingsid']) && !empty( $attributes['settingsid'] ) ) {
+			$settings = $attributes['settingsid'];
+		}
+		
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		$linkcount = 1;
+		
+		$settingsname = 'LinkLibraryPP' . $settings;
+		$options = get_option( $settingsname );
+		$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+
+		if ( isset( $attributes['categoryOverrideArray'] ) && !empty( $attributes['categoryOverrideArray'] ) ) {
+			$options['categorylist_cpt'] = implode( ',', $attributes['categoryOverrideArray'] );
+		}		
+
+		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-sc.php';
+	  
+		return RenderLinkLibrary( $this, $genoptions, $options, $settings, false, 0, 0, true, false, $linkcount );	  
+	}
+
+	function link_library_cats_block_callback( $attributes ) {
+		$settings = 1;
+
+		if ( isset( $attributes['settingsid']) && !empty( $attributes['settingsid'] ) ) {
+			$settings = $attributes['settingsid'];
+		}
+		
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		$linkcount = 1;
+		
+		$settingsname = 'LinkLibraryPP' . $settings;
+		$options = get_option( $settingsname );
+		$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+
+		if ( isset( $attributes['categoryOverrideArray'] ) && !empty( $attributes['categoryOverrideArray'] ) ) {
+			$options['categorylist_cpt'] = implode( ',', $attributes['categoryOverrideArray'] );
+		}		
+		$targetlibrary = $settings;
+
+		require_once plugin_dir_path( __FILE__ ) . 'render-link-library-cats-sc.php';
+	  
+		return RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary );	  
 	}
 
 	function ll_update_60() {
@@ -684,7 +972,7 @@ class link_library_plugin {
 	/******************************************** Print style data to header *********************************************/
 
 	function ll_rss_link() {
-		global $llstylesheet, $rss_settings;
+		global $llstylesheet, $rss_settings, $settingssetsids;
 
 		if ( !empty( $rss_settings ) ) {
 			$settingsname = 'LinkLibraryPP' . $rss_settings;
@@ -704,6 +992,20 @@ class link_library_plugin {
 				echo "<style id='LinkLibraryStyle' type='text/css'>\n";
 				echo stripslashes( $genoptions['fullstylesheet'] );
 				echo "</style>\n";
+			}
+		}
+
+		if ( !empty( $settingssetsids ) ) {
+			foreach ( $settingssetsids as $setting ) {
+				$settingsname = 'LinkLibraryPP' . $setting;
+				$options = get_option( $settingsname );
+				$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+
+				if ( !empty( $options['stylesheet'] ) ) {
+					echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
+					echo stripslashes( $options['stylesheet'] ) . "\n";
+					echo "</style>\n";
+				}
 			}
 		}
 	}
@@ -739,11 +1041,43 @@ class link_library_plugin {
 		return $title;
 	}
 
+	function ll_get_permalink( $url, $post_id, $sample, $type ) {
+		if ( !is_admin() && is_search() && 'link_library_links' == get_post_type() ) {
+			$genoptions = get_option( 'LinkLibraryGeneral' );
+			$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+			if ( $genoptions['globalsearchresultslinkurl'] ) {
+				$link_url = get_post_meta( get_the_ID(), 'link_url', true );
+
+				if ( !empty( $link_url ) ) {
+					return $link_url;
+				}	
+			}
+		}
+
+		return $url;		
+	}
+
+	function ll_get_title( $title, $id = null ) {
+		if ( !is_admin() && is_search() && 'link_library_links' == get_post_type() ) {
+			$genoptions = get_option( 'LinkLibraryGeneral' );
+			$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+			$post = get_post( $id );
+			if ( $post instanceof WP_Post && !empty( $genoptions['globalsearchresultstitleprefix'] ) ) {
+				return $genoptions['globalsearchresultstitleprefix'] . $title;
+			}			
+		}
+
+		return $title;
+	}
+
 	/************************************* Function to add to rewrite rules for permalink support **********************************/
 	function ll_insertMyRewriteRules( $rules ) {
 		$newrules = array();
 
-		$genoptions = get_option('LinkLibraryGeneral');
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
 		if ( !empty( $genoptions ) ) {
 			for ( $i = 1; $i <= $genoptions['numberstylesets']; $i++ ) {
@@ -796,7 +1130,7 @@ class link_library_plugin {
 		return $return;
 	}
 
-	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '' ) {
+	function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '', $request_type = 'reciprocal' ) {
 		$response = wp_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36', 'timeout' => 10 ) );
 
 		if( is_wp_error( $response ) ) {
@@ -806,6 +1140,21 @@ class link_library_plugin {
 			}
 		} elseif ( $response['response']['code'] == '200' ) {
 
+			$original_protocol = '';
+			$actual_protocol = '';
+
+			if ( false !== strpos( $external_link, 'http://' ) ) {
+				$original_protocol = 'http://';
+			} else if ( false !== strpos( $external_link, 'https://' ) ) {
+				$original_protocol = 'https://';
+			}
+
+			if ( false !== strpos( $response['http_response']->get_response_object()->url, 'http://' ) ) {
+				$actual_protocol = 'http://';
+			} else if ( false !== strpos( $response['http_response']->get_response_object()->url, 'https://' ) ) {
+				$actual_protocol = 'https://';
+			}
+
 			$link_url_without_protocol = str_replace( 'http://', '', $external_link );
 			$link_url_without_protocol = str_replace( 'https://', '', $link_url_without_protocol );
 			$link_url_without_protocol = rtrim( $link_url_without_protocol, '/' );
@@ -814,13 +1163,42 @@ class link_library_plugin {
 			$response_url_without_protocol = str_replace( 'https://', '', $response_url_without_protocol );
 			$response_url_without_protocol = rtrim( $response_url_without_protocol, '/' );
 
-			if ( $link_url_without_protocol != $response_url_without_protocol ) {
+			$parse_original_url = parse_url( $external_link );
+			$parse_actual_url = parse_url( $response['http_response']->get_response_object()->url );
+
+			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] != $parse_actual_url['host'] ) {
+				$original_host_segments = explode( '.', $parse_original_url['host'] );
+				$actual_host_segments = explode( '.', $parse_actual_url['host'] );
+
+				if ( sizeof( $actual_host_segments ) > sizeof( $original_host_segments ) ) {
+					if ( $original_host_segments[ sizeof( $original_host_segments ) - 1 ] == $actual_host_segments[ sizeof( $actual_host_segments ) - 1] && $original_host_segments[ sizeof( $original_host_segments ) - 2 ] == $actual_host_segments[ sizeof( $actual_host_segments ) - 2] ) {
+						return 'exists_subdomain_redirect';
+					}
+				}				
+			}
+
+			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $parse_original_url['host'] == $parse_actual_url['host'] && $link_url_without_protocol != $response_url_without_protocol ) {
+				$basename = basename( $parse_actual_url['path'] );
+				if ( false !== strpos( $basename, '.' ) ) {
+					return 'exists_redirected_fileurl';
+				} else {
+					return 'exists_redirected_subfolder';
+				}				
+			}
+			
+			if ( ( 'broken' == $request_type || 'rss' == $request_type ) && $link_url_without_protocol != $response_url_without_protocol ) {
 				return 'exists_redirected';
-			} else if ( empty( $RecipCheckAddress ) ) {
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && !empty( $original_protocol ) && !empty( $actual_protocol ) && $original_protocol != $actual_protocol ) {
+				return 'exists_protocol_redirect';
+			} elseif ( ( 'broken' == $request_type || 'rss' == $request_type ) && empty( $RecipCheckAddress ) ) {
 				return 'exists_notfound';
-			} elseif ( strpos( $response['body'], $RecipCheckAddress ) === false ) {
+			} else {
+				return 'exists_found';
+			} 			
+			
+			if ( 'reciprocal' == $request_type && strpos( $response['body'], $RecipCheckAddress ) === false ) {
 				return 'exists_notfound';
-			} elseif ( strpos( $response['body'], $RecipCheckAddress ) !== false ) {
+			} elseif ( 'reciprocal' == $request_type && strpos( $response['body'], $RecipCheckAddress ) !== false ) {
 				return 'exists_found';
 			}
 		}
@@ -844,11 +1222,38 @@ class link_library_plugin {
 		$categorylistoverride = '';
 		$excludecategoryoverride = '';
 		$settings = '';
+		$targetlibrary = '';
+
+		if ( isset( $atts['categorylistoverride'] ) && !empty( $atts['categorylistoverride'] ) && is_array( $atts['categorylistoverride'] ) ) {
+			$atts['categorylistoverride'] = implode( ',', $atts['categorylistoverride'] );
+		}
+
+		if ( isset( $atts['categorylistoverrideCSV'] ) && !empty( $atts['categorylistoverrideCSV'] ) ) {
+			$atts['categorylistoverride'] = $atts['categorylistoverrideCSV'];
+		}
+
+		if ( isset( $atts['excludecategoryoverride'] ) && !empty( $atts['excludecategoryoverride'] ) && is_array( $atts['excludecategoryoverride'] ) ) {
+			$atts['excludecategoryoverride'] = implode( ',', $atts['excludecategoryoverride'] );
+		}
+
+		if ( isset( $atts['excludecategoryoverrideCSV'] ) && !empty( $atts['excludecategoryoverrideCSV'] ) ) {
+			$atts['excludecategoryoverride'] = $atts['excludecategoryoverrideCSV'];
+		}
+
+		if ( isset( $atts['taglistoverride'] ) && !empty( $atts['taglistoverride'] ) && is_array( $atts['taglistoverride'] ) ) {
+			$atts['taglistoverride'] = implode( ',', $atts['taglistoverride'] );
+		}
+
+		if ( isset( $atts['taglistoverrideCSV'] ) && !empty( $atts['taglistoverrideCSV'] ) ) {
+			$atts['taglistoverrideCSV'] = $atts['taglistoverrideCSV'];
+		}
 
 		extract( shortcode_atts( array (
 			'categorylistoverride' => '',
 			'excludecategoryoverride' => '',
-			'settings' => ''
+			'settings' => '',
+			'targetlibrary' => '',
+			'taglistoverride' => ''
 		), $atts ) );
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
@@ -971,7 +1376,7 @@ class link_library_plugin {
 			$timeoutput = "\n<!-- [link-library-cats] shortcode execution time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
 		}
 
-		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
+		return ( true == $genoptions['debugmode'] ? $timeoutputstart : '' ) . RenderLinkLibraryCategories( $this, $genoptions, $options, $settings, $targetlibrary )  . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
 	}
 
 	/********************************************** Function to Process [link-library-search] shortcode *********************************************/
@@ -1009,7 +1414,7 @@ class link_library_plugin {
 
 	/********************************************** Function to Process [link-library-add-link] shortcode *********************************************/
 
-	function link_library_addlink_func($atts, $content, $code) {
+	function link_library_addlink_func( $atts, $content, $code ) {
 		$settings = '';
 		$categorylistoverride = '';
 		$excludecategoryoverride = '';
@@ -1021,6 +1426,10 @@ class link_library_plugin {
 			'excludecategoryoverride' => '',
 			'addlinkdefaultcatoverride' => ''
 		), $atts));
+
+		if ( empty( $code ) || is_object( $code ) ) {
+			$code = 'link-library-addlink';
+		}
 
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
@@ -1204,6 +1613,30 @@ class link_library_plugin {
 		$linkdirectionoverride = '';
 		$addlinkdefaultcatoverride = '';
 
+		if ( isset( $atts['categorylistoverride'] ) && !empty( $atts['categorylistoverride'] ) && is_array( $atts['categorylistoverride'] ) ) {
+			$atts['categorylistoverride'] = implode( ',', $atts['categorylistoverride'] );
+		}
+
+		if ( isset( $atts['categorylistoverrideCSV'] ) && !empty( $atts['categorylistoverrideCSV'] ) ) {
+			$atts['categorylistoverride'] = $atts['categorylistoverrideCSV'];
+		}
+
+		if ( isset( $atts['excludecategoryoverride'] ) && !empty( $atts['excludecategoryoverride'] ) && is_array( $atts['excludecategoryoverride'] ) ) {
+			$atts['excludecategoryoverride'] = implode( ',', $atts['excludecategoryoverride'] );
+		}
+
+		if ( isset( $atts['excludecategoryoverrideCSV'] ) && !empty( $atts['excludecategoryoverrideCSV'] ) ) {
+			$atts['excludecategoryoverride'] = $atts['excludecategoryoverrideCSV'];
+		}
+
+		if ( isset( $atts['taglistoverride'] ) && !empty( $atts['taglistoverride'] ) && is_array( $atts['taglistoverride'] ) ) {
+			$atts['taglistoverride'] = implode( ',', $atts['taglistoverride'] );
+		}
+		
+		if ( isset( $atts['taglistoverrideCSV'] ) && !empty( $atts['taglistoverrideCSV'] ) ) {
+			$atts['taglistoverride'] = $atts['taglistoverrideCSV'];
+		}	
+
 		extract( shortcode_atts( array(
 			'categorylistoverride' => '',
 			'excludecategoryoverride' => '',
@@ -1265,7 +1698,7 @@ class link_library_plugin {
 		}
 
 		if ( !empty( $maxlinksoverride ) ) {
-			$options['maxlinks'] = $maxlinksoverride;
+			$options['maxlinks'] = intval( $maxlinksoverride );
 		}
 
 		if ( !empty( $linkorderoverride ) ) {
@@ -1425,6 +1858,173 @@ class link_library_plugin {
 		}
 	}
 
+	/********************************************** Function to Process [link-library] shortcode *********************************************/
+
+	function rss_library_func( $atts = '' ) {
+		$settings = '';
+		$categorylistoverride = '';
+		$excludecategoryoverride = '';
+		$taglistoverride = '';
+
+		if ( isset( $atts['categorylistoverride'] ) && !empty( $atts['categorylistoverride'] ) && is_array( $atts['categorylistoverride'] ) ) {
+			$atts['categorylistoverride'] = implode( ',', $atts['categorylistoverride'] );
+		}
+
+		if ( isset( $atts['categorylistoverrideCSV'] ) && !empty( $atts['categorylistoverrideCSV'] ) ) {
+			$atts['categorylistoverride'] = $atts['categorylistoverrideCSV'];
+		}
+
+		if ( isset( $atts['excludecategoryoverride'] ) && !empty( $atts['excludecategoryoverride'] ) && is_array( $atts['excludecategoryoverride'] ) ) {
+			$atts['excludecategoryoverride'] = implode( ',', $atts['excludecategoryoverride'] );
+		}
+
+		if ( isset( $atts['excludecategoryoverrideCSV'] ) && !empty( $atts['excludecategoryoverrideCSV'] ) ) {
+			$atts['excludecategoryoverride'] = $atts['excludecategoryoverrideCSV'];
+		}
+
+		if ( isset( $atts['taglistoverride'] ) && !empty( $atts['taglistoverride'] ) && is_array( $atts['taglistoverride'] ) ) {
+			$atts['taglistoverride'] = implode( ',', $atts['taglistoverride'] );
+		}
+		
+		if ( isset( $atts['taglistoverrideCSV'] ) && !empty( $atts['taglistoverrideCSV'] ) ) {
+			$atts['taglistoverride'] = $atts['taglistoverrideCSV'];
+		}	
+
+		extract( shortcode_atts( array(
+			'settings' => '',
+			'categorylistoverride' => '',
+			'excludecategoryoverride' => '',
+			'taglistoverride' => '',
+		), $atts ) );
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+
+		if ( floatval( $genoptions['schemaversion'] ) < '5.0' ) {
+			$this->ll_install();
+		}
+
+		if ( empty( $settings ) && !isset( $_POST['settings'] ) ) {
+			$settings = 1;
+		} else if ( isset( $_POST['settings'] ) ) {
+			$settings = intval( $_POST['settings'] );
+		}
+
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
+
+		$settingsname = 'LinkLibraryPP' . $settings;
+		$options = get_option( $settingsname );
+		$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
+
+		if ( !empty( $categorylistoverride ) ) {
+			$options['categorylist_cpt'] = $categorylistoverride;
+
+			$update_list = false;
+			$category_list_array = explode( ',', $categorylistoverride );
+			foreach( $category_list_array as $index => $category_text ) {
+				if ( !is_numeric( $category_text ) ) {
+					$update_list = true;
+					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+
+					if ( $matched_term ) {
+						$category_list_array[$index] = $matched_term->term_id;
+					} else {
+						unset( $category_list_array[$index] );
+					}
+				}
+			}
+			if ( $update_list ) {
+				$options['categorylist_cpt'] = implode( ',', $category_list_array );
+			}
+		}
+
+		if ( !empty( $excludecategoryoverride ) ) {
+			$options['excludecategorylist_cpt'] = $excludecategoryoverride;
+
+			$update_list = false;
+			$exclude_category_list_array = explode( ',', $excludecategoryoverride );
+			foreach( $exclude_category_list_array as $index => $category_text ) {
+				if ( !is_numeric( $category_text ) ) {
+					$update_list = true;
+					$matched_term = get_term_by( 'slug', $category_text, 'link_library_category' );
+
+					if ( $matched_term ) {
+						$exclude_category_list_array[$index] = $matched_term->term_id;
+					} else {
+						unset( $exclude_category_list_array[$index] );
+					}
+				}
+			}
+			if ( $update_list ) {
+				$options['excludecategorylist_cpt'] = implode( ',', $exclude_category_list_array );
+			}
+		}
+
+		if ( !empty( $taglistoverride ) ) {
+			$options['taglist_cpt'] = $taglistoverride;
+
+			$update_list = false;
+			$tag_list_array = explode( ',', $taglistoverride );
+			foreach( $tag_list_array as $index => $tag_text ) {
+				if ( !is_numeric( $tag_text ) ) {
+					$update_list = true;
+					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+
+					if ( $matched_term ) {
+						$tag_list_array[$index] = $matched_term->term_id;
+					} else {
+						unset( $tag_list_array[$index] );
+					}
+				}
+			}
+			if ( $update_list ) {
+				$options['taglist_cpt'] = implode( ',', $tag_list_array );
+			}
+		}
+
+		if ( !empty( $excludecategoryoverride ) ) {
+			$options['excludetaglist_cpt'] = $excludetagoverride;
+
+			$update_list = false;
+			$exclude_tag_list_array = explode( ',', $excludetagoverride );
+			foreach( $exclude_tag_list_array as $index => $tag_text ) {
+				if ( !is_numeric( $tag_text ) ) {
+					$update_list = true;
+					$matched_term = get_term_by( 'slug', $tag_text, 'link_library_tags' );
+
+					if ( $matched_term ) {
+						$exclude_tag_list_array[$index] = $matched_term->term_id;
+					} else {
+						unset( $exclude_tag_list_array[$index] );
+					}
+				}
+			}
+			if ( $update_list ) {
+				$options['excludetaglist_cpt'] = implode( ',', $exclude_category_list_array );
+			}
+		}
+
+		$linklibraryoutput = '';
+
+		if ( $genoptions['debugmode'] ) {
+			$linklibraryoutput .= "\n<!-- RSS Library Settings Info:" . print_r( $options, true ) . "-->\n";
+			$mainoutputstarttime = microtime( true );
+			$linklibraryoutput .= "\n<!-- Start Time: " . $mainoutputstarttime . "-->\n";
+		}
+
+		require_once plugin_dir_path( __FILE__ ) . 'render-rss-library-sc.php';
+		$linkcount = 1;
+		$rss_array_items = array();
+		$linklibraryoutput .= RenderRSSLibrary( $this, $genoptions, $options, $settings, 0, 0, false, $linkcount, $rss_array_items );
+
+		if ( $genoptions['debugmode'] ) {
+			$timeoutput = "\n<!-- [link-library] shortcode execution time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
+		}
+		return $linklibraryoutput . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
+	}	
+
 	function link_library_tagcloud( $atts = '' ) {
 		$link_library_terms = get_terms( array( 'taxonomy' => 'link_library_category' ) );
 		$output = wp_generate_tag_cloud( $link_library_terms );
@@ -1437,9 +2037,14 @@ class link_library_plugin {
 		}
 
 		global $llstylesheet;
+		global $settingssetsids;
+		$settingssetsids = array();
 		$load_jquery = false;
 		$load_thickbox = false;
 		$load_recaptcha = false;
+		$load_masonry = false;
+		$load_style = '';
+		$has_block = false;
 
 		if ( $llstylesheet ) {
 			$load_style = true;
@@ -1456,59 +2061,73 @@ class link_library_plugin {
 			$load_style = false;
 		} else {
 			foreach ( $posts as $post ) {
-				$continuesearch = true;
-				$searchpos = 0;
-				$settingsetids = array();
+				if ( 'link_library_links' != get_post_type( $post->ID ) ) {
+					$tag_array = array( 'link-library', 'link-library-cats', 'link-library-addlink', 'link-library-search', 'link-library-count', 'rss-library' );
+					preg_match_all( '/' . get_shortcode_regex() . '/s', $post->post_content, $matches );
+					if( isset( $matches[2] ) ) {
+						foreach( ( array ) $matches[2] as $key => $value ) {
+							$load_style = true;
+							foreach( $tag_array as $tag ) {
+								if( $tag === $value ) {
+									if ( 'link-library-addlink' == $tag ) {
+										$load_recaptcha = true;
+									}
+									$atts_list = shortcode_parse_atts( $matches[3][$key] );
+									if ( !empty( $atts_list ) ) {
+										foreach ( $atts_list as $key => $value ) {
+											if ( $key = 'settings' && ( empty( $settingssetsids ) || false === array_search( $value, $settingssetsids ) ) ) {
+												$settingssetsids[] = intval( $value );
+											}							 
+										}								
+									} else {
+										$settingssetsids[] = 1;
+									}
+									
+								}							
+							}						
+						}
+					}
 
-				while ( $continuesearch ) {
-					$linklibrarypos = stripos( $post->post_content, 'link-library ', $searchpos );
-					if ( !$linklibrarypos ) {
-						$linklibrarypos = stripos( $post->post_content, 'link-library]', $searchpos );
-						if ( !$linklibrarypos ) {
-							if ( stripos( $post->post_content, 'link-library-cats' ) || stripos( $post->post_content, 'link-library-addlink' ) ) {
-								$load_style = true;
-								if ( 'recaptcha' == $genoptions['captchagenerator'] ) {
+					if ( function_exists( 'has_blocks' ) && function_exists( 'parse_blocks' ) ) {
+						if ( has_blocks( $post->ID ) ) {
+							$blocks = parse_blocks( $post->post_content );
+		
+							foreach ( $blocks as $block ) {
+								if ( in_array( $block['blockName'], array( 'link-library/link-block', 'link-library/cat-block', 'link-library/search-block', 'link-library/addlink-block', 'link-library/count-block' ) ) ) {
+									$load_style = true;
+								}
+	
+								if ( in_array( $block['blockName'], array( 'link-library/addlink-block' ) ) ) {
 									$load_recaptcha = true;
+								}
+	
+								if ( isset( $block['attr']['settings'] ) && false === array_search( $block['attr']['settings'], $settingssetsids ) ) {
+									$settingssetsids[] = $block['attr']['settings'];
+								} elseif ( !isset( $block['attr']['settings'] ) ) {
+									$settingssetsids[] = 1;
 								}
 							}
 						}
-					}
-
-					$continuesearch = $linklibrarypos;
-
-					if ( $continuesearch ) {
-						$load_style = true;
-						$load_jquery = true;
-						$shortcodeend = stripos( $post->post_content, ']', $linklibrarypos );
-						if ( $shortcodeend ) {
-							$searchpos = $shortcodeend;
-						} else {
-							$searchpos = $linklibrarypos + 1;
-						}
-
-						if ( $shortcodeend ) {
-							$settingconfigpos = stripos( $post->post_content, 'settings=', $linklibrarypos );
-							if ( $settingconfigpos && $settingconfigpos < $shortcodeend ) {
-								$settingset = substr( $post->post_content, $settingconfigpos + 9, $shortcodeend - $settingconfigpos - 9 );
-
-								$settingsetids[] = trim($settingset,'"');
-
-							} else if ( 0 == count($settingsetids) ) {
-								$settingsetids[] = 1;
-							}
-						}
-					}
+					}					
 				}
 			}
 
-			if ( $settingsetids ) {
-				foreach ( $settingsetids as $settingsetid ) {
+			if ( empty( $settingssetsids ) ) {
+				$settingssetsids[] = 1;
+			}
+
+			if ( $settingssetsids ) {
+				foreach ( $settingssetsids as $settingsetid ) {
 					$settingsname = 'LinkLibraryPP' . $settingsetid;
 					$options = get_option( $settingsname );
 					$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
 					if ( $options['showonecatonly'] ) {
 						$load_jquery = true;
+					}
+
+					if ( 'linkmasonrygrid' == $options['displayastable'] || 'categorymasonrygrid' == $options['displayastable'] ) {
+						$load_masonry = true;
 					}
 
 					if ( $options['rsspreview'] || ( isset( $options['enable_link_popup'] ) && $options['enable_link_popup'] ) ) {
@@ -1557,6 +2176,10 @@ class link_library_plugin {
 			wp_enqueue_script( 'google_recaptcha', 'https://www.google.com/recaptcha/api.js', array(), false, true );
 		}
 
+		if ( $load_masonry ) {
+			wp_enqueue_script( 'jquery-masonry' );
+		}		
+
 		return $posts;
 	}
 
@@ -1570,9 +2193,13 @@ class link_library_plugin {
 			require_once plugin_dir_path( __FILE__ ) . 'usersubmission.php';
 			link_library_process_user_submission( $this );
 			return '';
-		} else if ( !empty( $_GET['link_library_rss_preview'] ) ) {
+		} elseif ( !empty( $_GET['link_library_rss_preview'] ) ) {
 			require_once plugin_dir_path( __FILE__ ) . 'rsspreview.php';
 			link_library_generate_rss_preview( $this );
+			return '';
+		} elseif( !empty( $_GET['link_library_css'] ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'cssgenerator.php';
+			link_library_generate_css( $this );
 			return '';
 		} else {
 			return $template;
@@ -1580,7 +2207,7 @@ class link_library_plugin {
 	}
 
 	function ll_template_include( $template_path ) {
-		if ( get_post_type() == 'link_library_links' && is_single() ) {
+		if ( get_post_type() == 'link_library_links' && is_single() && !is_admin() ) {
 			// checks if the file exists in the theme first,
 			// otherwise serve the file from the plugin
 			if ( $theme_file = locate_template( array ( 'single-link_library_links.php' ) ) ) {
@@ -1618,7 +2245,13 @@ class link_library_plugin {
 		$genoptions = get_option( 'LinkLibraryGeneral' );
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
-		$content = htmlspecialchars_decode( stripslashes( $genoptions['single_link_layout'] ) );
+		if ( ( is_search() || is_feed() ) && 'link_library_links' == get_post_type() ) {
+			$content = htmlspecialchars_decode( stripslashes( $genoptions['global_search_results_layout'] ) );	
+		} elseif ( is_single() && 'link_library_links' == get_post_type() ) {
+			$content = htmlspecialchars_decode( stripslashes( $genoptions['single_link_layout'] ) );
+		} else {
+			return $content;
+		}		
 
 		$item_id = get_the_ID();
 		if ( !empty( $item_id ) ) {
@@ -1671,7 +2304,7 @@ class link_library_plugin {
 				$content = str_replace( '[link_large_description]', $link_large_description, $content );
 				$content = str_replace( '[link_image]', $link_image, $content );
 				$content = str_replace( '[link_email]', $link_email, $content );
-				$content = str_replace( '[link_telephone]', $link_telephone, $content );
+				$content = str_replace( '[link_telephone]', $link_phone_number, $content );
 
 				$content = str_replace( '[link_price]', $link_price, $content );
 				$content = $this->ll_replace_all_between( '[currency]', '[/currency]', $content, $link_price_currency );

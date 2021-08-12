@@ -848,7 +848,11 @@ jQuery(document).on('click', '.b2s-select-image-modal-open', function () {
 });
 
 jQuery(document).on('click', '.b2s-network-info-modal-btn', function () {
-    jQuery('#b2sInfoNetworkModal').modal('show');
+    if(jQuery('#b2s-curation-post-format').val() == "2") {
+        jQuery('#b2sTextPostInfoModal').modal('show');
+    } else {
+        jQuery('#b2sInfoNetworkModal').modal('show');
+    }
     return false;
 });
 

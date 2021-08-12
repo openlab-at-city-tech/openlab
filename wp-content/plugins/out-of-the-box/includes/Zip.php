@@ -6,11 +6,15 @@ class Zip
 {
     /**
      * Unique ID.
+     *
+     * @var string
      */
     public $request_id;
 
     /**
      * Name of the zip file.
+     *
+     * @var string
      */
     public $zip_name;
     /**
@@ -22,16 +26,30 @@ class Zip
 
     /**
      * Number of bytes that are downloaded so far.
+     *
+     * @var int
      */
     public $bytes_so_far = 0;
 
     /**
      * Bytes that need to be download in total.
+     *
+     * @var int
      */
     public $bytes_total = 0;
 
+    /**
+     * Current status.
+     *
+     * @var string
+     */
     public $current_action = 'starting';
 
+    /**
+     * Message describing the current status.
+     *
+     * @var string
+     */
     public $current_action_str = '';
 
     /**
@@ -49,7 +67,7 @@ class Zip
     private $_processor;
 
     /**
-     * @var \PHPZip\Zip\Stream\ZipStream
+     * @var \ZipStream\ZipStream
      */
     private $_zip_handler;
 
@@ -62,14 +80,63 @@ class Zip
 
     public function do_zip()
     {
+        if (false === $this->is_shortcode_filtered()) {
+            $this->download_zip_via_url();
+        }
+
+        $this->download_zip_via_server();
+
+        exit();
+    }
+
+    /**
+     * Use Dropbox ZIP function for complete folder if possible.
+     */
+    public function download_zip_via_url()
+    {
+        $requested_ids = [$this->get_processor()->get_requested_complete_path()];
+
+        if (isset($_REQUEST['files'])) {
+            $requested_ids = $_REQUEST['files'];
+        }
+
+        if (1 !== count($requested_ids)) {
+            return false;
+        }
+
+        $entry = $this->get_client()->get_entry(reset($requested_ids));
+
+        if (false === $entry) {
+            return false;
+        }
+
+        if ($entry->is_file()) {
+            return false;
+        }
+
+        try {
+            $download_url = $this->get_client()->get_shared_link($entry).'?dl=1';
+        } catch (\Exception $ex) {
+            return false;
+        }
+
+        header('Location: '.$download_url);
+
+        $this->current_action = 'finished';
+        $this->current_action_str = esc_html__('Finished', 'wpcloudplugins');
+        $this->set_progress();
+
+        exit();
+    }
+
+    public function download_zip_via_server()
+    {
         $this->initialize();
         $this->current_action = 'indexing';
         $this->current_action_str = esc_html__('Selecting files...', 'wpcloudplugins');
 
         $this->index();
         $this->create();
-
-        (ob_get_level() > 0) ? ob_flush() : flush();
 
         $this->current_action = 'downloading';
         $this->add_entries();
@@ -82,13 +149,16 @@ class Zip
         $this->current_action = 'finished';
         $this->current_action_str = esc_html__('Finished', 'wpcloudplugins');
         $this->set_progress();
-
-        exit();
     }
 
+    /**
+     * Load the ZIP library and make sure that the root folder is loaded.
+     */
     public function initialize()
     {
-        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/PHPZip/autoload.php';
+        ignore_user_abort(false);
+
+        require_once OUTOFTHEBOX_ROOTDIR.'/vendors/ZipStream/vendor/autoload.php';
 
         // Check if file/folder is cached and still valid
         $folder = $cachedfolder = $this->get_client()->get_folder();
@@ -104,17 +174,37 @@ class Zip
 
         // Set Zip file name
         $last_folder_path = $this->get_processor()->get_last_path();
-        $zip_filename = '_zip_'.$this->get_processor()->get_relative_path($last_folder_path).'_'.uniqid().'.zip';
+        $zip_filename = basename($last_folder_path).'_'.time().'.zip';
         $this->zip_name = apply_filters('outofthebox_zip_filename', $zip_filename, $last_folder_path);
 
         $this->set_progress();
+
+        // Stop WP from buffering
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        } else {
+            flush();
+        }
     }
 
+    /**
+     * Create the ZIP File.
+     */
     public function create()
     {
-        $this->_zip_handler = new \PHPZip\Zip\Stream\ZipStream(\TheLion\OutoftheBox\Helpers::filter_filename($this->zip_name));
+        $options = new \ZipStream\Option\Archive();
+        $options->setSendHttpHeaders(true);
+        $options->setFlushOutput(true);
+        $options->setContentType('application/octet-stream');
+        header('X-Accel-Buffering: no');
+
+        // create a new zipstream object
+        $this->_zip_handler = new \ZipStream\ZipStream(\TheLion\OutoftheBox\Helpers::filter_filename($this->zip_name), $options);
     }
 
+    /**
+     * Create a list of files and folders that need to be zipped.
+     */
     public function index()
     {
         $requested_ids = [$this->get_processor()->get_requested_complete_path()];
@@ -156,13 +246,14 @@ class Zip
         }
     }
 
+    /**
+     * Add all requests files to Zip file.
+     */
     public function add_entries()
     {
         if (count($this->entries) > 0) {
             foreach ($this->entries as $key => $entry) {
                 $this->add_file_to_zip($entry);
-
-                flush();
 
                 unset($this->entries[$key]);
 
@@ -175,16 +266,18 @@ class Zip
                 $this->set_progress();
             }
         }
-
-        flush();
     }
 
+    /**
+     * Download the request file and add it to the ZIP.
+     *
+     * @param Entry $file
+     */
     public function add_file_to_zip(Entry $entry)
     {
         $path = $entry->get_path_display();
 
         if ($entry->is_dir()) {
-            $this->_zip_handler->addDirectory(ltrim($path, '/'));
         } else {
             // Download the File
             // Update the time_limit as this can take a while
@@ -192,11 +285,21 @@ class Zip
 
             $download_stream = fopen('php://temp/maxmemory:'.(5 * 1024 * 1024), 'r+');
 
+            $fileOptions = new \ZipStream\Option\File();
+            if (!empty($entry->get_last_edited())) {
+                $date = new \DateTime();
+                $date->setTimestamp(strtotime($entry->get_last_edited()));
+                $fileOptions->setTime($date);
+            }
+
+            $fileOptions->setComment((string) $entry->get_description());
+
             try {
                 // @var $download_file \TheLion\OutoftheBox\API\Dropbox\Models\File
                 $this->get_client()->get_library()->stream($download_stream, $entry->get_id());
                 // Add file contents to zip
-                $this->_zip_handler->addLargeFile($download_stream, ltrim($path, '/'), $entry->get_last_edited(), $entry->get_description());
+
+                $this->_zip_handler->addFileFromStream(trim($path, '/'), $download_stream, $fileOptions);
 
                 fclose($download_stream);
             } catch (\Exception $ex) {
@@ -211,12 +314,15 @@ class Zip
         }
     }
 
+    /**
+     * Finalize the zip file.
+     */
     public function finalize()
     {
         $this->set_progress();
 
         // Close zip
-        $result = $this->_zip_handler->finalize();
+        $result = $this->_zip_handler->finish();
 
         // Send email if needed
         if ('1' === $this->get_processor()->get_shortcode_option('notificationdownload')) {
@@ -227,11 +333,19 @@ class Zip
         do_action('outofthebox_download_zip', $this->entries_downloaded);
     }
 
+    /**
+     * Received progress information for the ZIP process from database.
+     *
+     * @param string $request_id
+     */
     public static function get_progress($request_id)
     {
         return get_transient('outofthebox_zip_'.substr($request_id, 0, 40));
     }
 
+    /**
+     * Set current progress information for ZIP process in database.
+     */
     public function set_progress()
     {
         $status = [
@@ -249,6 +363,12 @@ class Zip
         return set_transient('outofthebox_zip_'.substr($this->request_id, 0, 40), $status, HOUR_IN_SECONDS);
     }
 
+    /**
+     * Get progress information for the ZIP process
+     * Used to display a progress percentage on Front-End.
+     *
+     * @param string $request_id
+     */
     public static function get_status($request_id)
     {
         // Try to get the upload status of the file
@@ -274,6 +394,24 @@ class Zip
         echo json_encode($result);
 
         exit();
+    }
+
+    /**
+     * Check if the current shortcode is excluding data from view
+     * If that isn't the case, the complete folder can be downloaded instead of indiviual files.
+     */
+    public function is_shortcode_filtered()
+    {
+        $ext = $this->get_processor()->get_shortcode_option('ext');
+        $exclude = $this->get_processor()->get_shortcode_option('exclude');
+        $include = $this->get_processor()->get_shortcode_option('include');
+
+        return
+        '1' !== $this->get_processor()->get_shortcode_option('show_files')
+         || ('1' !== $this->get_processor()->get_shortcode_option('show_folders'))
+          || ('*' !== $ext[0])
+           || ('*' !== $exclude[0])
+            || ('*' !== $include[0]);
     }
 
     /**

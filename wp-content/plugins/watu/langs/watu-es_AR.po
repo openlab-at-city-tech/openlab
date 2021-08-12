@@ -1,0 +1,2223 @@
+# Copyright (C) 2020 Watu Quiz
+# This file is distributed under the same license as the Watu Quiz package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Watu Quiz 3.1.5\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/watu\n"
+"POT-Creation-Date: 2020-01-28 11:38:56+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2020-02-27 13:09+0000\n"
+"Last-Translator: Sebastian <scetrangolo+sc@gmail.com>\n"
+"Language-Team: Español de Argentina\n"
+"Language: es-AR\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.1; wp-5.3.2"
+
+#: controllers/exam.php:8
+msgid "Test updated"
+msgstr "Examen subido"
+
+#: controllers/exam.php:9
+msgid "Error occured"
+msgstr "Ocurrio un error"
+
+#: controllers/exam.php:19
+msgid "Test deleted"
+msgstr "Examen eliminado"
+
+#: controllers/exam.php:85 views/exam_form.php:62 views/show_exam.html.php:70 
+#: views/show_exam.html.php:72
+msgid "Submit"
+msgstr "Enviar"
+
+#: controllers/exam.php:150
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-"
+"DESCRIPTION%%</p>\n"
+"\n"
+"<p>Your answers are shown below:<p>%%ANSWERS%%"
+msgstr ""
+"<p> Felicitaciones: ha completado %%QUIZ_NAME%%. </p>\n"
+"\n"
+"<p> Obtuviste %%POINTS%% puntos de %%MAX-POINTS%%. </p>\n"
+"\n"
+"<p> Su calificación obtenida es <b>%%GRADE-TITLE%%</b></p> <p> %%GRADE-"
+"DESCRIPTION%% </p>\n"
+"\n"
+"<p> Sus respuestas se muestran a continuación: <p> %%ANSWERS%%"
+
+#: controllers/grades.php:9
+msgid "Unrecognized quiz ID"
+msgstr "ID de examen no reconocido"
+
+#: controllers/questions.php:182
+msgid "Please upload file"
+msgstr "Por favor suba el archivo"
+
+#: controllers/show_exam.php:7
+msgid "Please go to <a href='%s'>%s</a> to view the test"
+msgstr "Vaya a <a href='%s'> %s </a> para ver la prueba"
+
+#: controllers/show_exam.php:40
+msgid "%s not found."
+msgstr "%s no encontrado."
+
+#: controllers/show_exam.php:45
+msgid "You need to be registered and logged in to take this %s."
+msgstr "Debe estar registrado e iniciar sesión para tomar este %s."
+
+#: controllers/show_exam.php:45 controllers/show_exam.php:87 
+#: views/exam_form.php:44 watu.php:76
+msgid "quiz"
+msgstr "cuestionario"
+
+#: controllers/show_exam.php:46
+msgid "Log in"
+msgstr "Ingresar"
+
+#: controllers/show_exam.php:48
+msgid "or"
+msgstr "o"
+
+#: controllers/show_exam.php:48
+msgid "Register"
+msgstr "Registrarse"
+
+#: controllers/show_exam.php:73
+msgid "To access this %s you need first to read lesson <a href=\"%s\">%s</a>."
+msgstr ""
+"Para acceder a este %s, primero debe leer la lección <a href=\"%s\"> %s </a>."
+
+#: controllers/show_exam.php:87
+msgid "Sorry, you can take this %s only once!"
+msgstr "Lo sentimos, ¡puedes tomar este %s solo una vez!"
+
+#: controllers/show_exam.php:94
+msgid "Sorry, you can take this quiz only %d times."
+msgstr "Lo sentimos, puedes responder este cuestionario solo %d veces."
+
+#: controllers/show_exam.php:120
+msgid "No answer to the verification question."
+msgstr "No hay respuesta para la pregunta de verificacion."
+
+#: controllers/show_exam.php:130
+msgid "Wrong answer to the verification question."
+msgstr "Respuesta incorrecta a la pregunta de verificación."
+
+#: controllers/show_exam.php:175
+msgid "Question was not answered"
+msgstr "Pregunta no respondida"
+
+#: controllers/show_exam.php:204 models/exam.php:93
+msgid "Failed"
+msgstr "Desaprobado"
+
+#: controllers/show_exam.php:204
+msgid "Just Passed"
+msgstr "Aprobado"
+
+#: controllers/show_exam.php:206
+msgid "Satisfactory"
+msgstr "Satisfactorio"
+
+#: controllers/show_exam.php:206
+msgid "Competent"
+msgstr "Competente"
+
+#: controllers/show_exam.php:206
+msgid "Good"
+msgstr "Bien"
+
+#: controllers/show_exam.php:206
+msgid "Very Good"
+msgstr "Muy bien"
+
+#: controllers/show_exam.php:206
+msgid "Excellent"
+msgstr "Excelente"
+
+#: controllers/show_exam.php:206
+msgid "Unbeatable"
+msgstr "Imbatible"
+
+#: controllers/show_exam.php:206
+msgid "Cheater"
+msgstr "Dudoso"
+
+#: controllers/show_exam.php:213
+msgid "None"
+msgstr "Ninguna"
+
+#: controllers/social-sharing.php:129
+msgid "Share your results on Facebook"
+msgstr "Comparte tus resultados en Facebook"
+
+#: controllers/takings.php:178
+msgid "User or IP Address"
+msgstr "Usuario o dirección IP"
+
+#: controllers/takings.php:178 views/takings.php:89
+msgid "Date"
+msgstr "Fecha"
+
+#: controllers/takings.php:178 views/takings.php:90
+msgid "Points"
+msgstr "Puntos"
+
+#: controllers/takings.php:178
+msgid "% Correct Answers"
+msgstr "% Respuestas correctas"
+
+#: controllers/takings.php:179
+msgid "Num Correct Answers"
+msgstr "Numero correcto de respuestas"
+
+#: controllers/takings.php:179
+msgid "Num Wrong Answers"
+msgstr "Num respuestas incorrectas"
+
+#: controllers/takings.php:179
+msgid "Num Unanswered Questions"
+msgstr "Num Preguntas sin respuesta"
+
+#: controllers/takings.php:180
+msgid "Result/Grade"
+msgstr "Resultado / Calificacion"
+
+#: controllers/takings.php:246 watu.php:136
+msgid "You do not have sufficient permissions to access this page"
+msgstr "No tiene permisos suficientes para acceder a esta página"
+
+#: controllers/takings.php:276
+msgid "You: %d%% correct"
+msgstr "Tu: %d%% correcto"
+
+#: controllers/takings.php:277
+msgid "Avg. %d%% correct"
+msgstr "Promedio %d%% correcto"
+
+#: controllers/takings.php:278
+msgid "Your points: %s"
+msgstr "Tu puntaje: %s"
+
+#: controllers/takings.php:279
+msgid "Avg. points: %s"
+msgstr "Promedio puntaje: %s"
+
+#: controllers/takings.php:353
+msgid "submitted test"
+msgstr "Examen enviado"
+
+#: lib/functions.php:100
+msgid "User results on \"%s\""
+msgstr "Resultados de usuario en \"%s\""
+
+#: lib/functions.php:101 lib/functions.php:134
+msgid "Guest"
+msgstr "Invitado"
+
+#: lib/functions.php:112
+msgid "Your results on \"%s\""
+msgstr "Tus resultados de \"%s\""
+
+#: models/exam.php:52
+msgid ""
+"<p>Congratulations - you have completed %%QUIZ_NAME%%.</p>\n"
+"\n"
+"<p>You scored %%POINTS%% points out of %%MAX-POINTS%% points total.</p>\n"
+"\n"
+"<p>Your obtained grade is <b>%%GRADE-TITLE%%</b></p><p>%%GRADE-"
+"DESCRIPTION%%</p>"
+msgstr ""
+"<p> Felicitaciones: ha completado %%QUIZ_NAME%%. </p>\n"
+"\n"
+"<p> Obtuviste %%POINTS%% puntos de %%MAX-POINTS%%.</p>\n"
+"\n"
+"<p> Su calificación obtenida es <b>%%GRADE-TITLE%%</b></p> <p> %%GRADE-"
+"DESCRIPTION%% </p>"
+
+#: models/exam.php:56
+msgid "Demo Quiz"
+msgstr "Examen demo"
+
+#: models/exam.php:56
+msgid ""
+"This quiz is automatically created to help you get started. It will be "
+"created only once."
+msgstr ""
+"Este cuestionario se crea automáticamente para ayudarlo a comenzar. Se "
+"creará solo una vez."
+
+#: models/exam.php:62
+msgid "Select the correct answer:"
+msgstr "Selecciona las respuestas correctas."
+
+#: models/exam.php:66
+msgid "The Earth is a star"
+msgstr "La tierra es una estrella"
+
+#: models/exam.php:69
+msgid "The Sun is a planet"
+msgstr "El sol es un planeta"
+
+#: models/exam.php:72
+msgid "The Earth is a planet"
+msgstr "La tierra es un planeta"
+
+#: models/exam.php:75
+msgid "Select all correct answers:"
+msgstr "Seleccione todas las respuestas correctas:"
+
+#: models/exam.php:79
+msgid "WordPress is open source software"
+msgstr "WordPress es un software de código abierto"
+
+#: models/exam.php:82
+msgid "There are no quiz plugins for WordPress"
+msgstr "No hay complementos de prueba para WordPress"
+
+#: models/exam.php:85
+msgid "WordPress can be used for a lot more than blogging"
+msgstr "WordPress puede usarse para mucho más que bloguear"
+
+#: models/exam.php:88
+msgid "Do you have any comments about this quiz?"
+msgstr "¿Tienes algún comentario sobre este cuestionario?"
+
+#: models/exam.php:93
+msgid "Sorry, you could not collect enough points to pass this quiz"
+msgstr ""
+"Lo sentimos, no pudo acumular suficientes puntos para pasar este cuestionario"
+
+#: models/exam.php:96
+msgid "Passed"
+msgstr "Aprobado"
+
+#: models/exam.php:96
+msgid "Congratulations, you passed!"
+msgstr "Felicitaciones!, aprobaste el examen."
+
+#: options.php:57
+msgid "Options updated"
+msgstr "Opciones actualizadas"
+
+#: options.php:77
+msgid "What is the color of the snow? = white"
+msgstr "¿De qué color es la nieve? = blanco"
+
+#: options.php:77
+msgid "Is fire hot or cold? = hot"
+msgstr "Es el fuego caliente o frío? = caliente"
+
+#: options.php:78
+msgid "In which continent is Norway? = Europe"
+msgstr "¿En qué continente está Noruega? = Europa"
+
+#: views/exam_form.php:9
+msgid "%1$s %2$s"
+msgstr "%1$s %2$s"
+
+#: views/exam_form.php:13 views/question-form.html.php:5 
+#: views/questions.html.php:10
+msgid "Back to %s"
+msgstr "Volver a %s"
+
+#: views/exam_form.php:15 views/exams.html.php:47 views/grades.html.php:5 
+#: watu.php:127
+msgid "Manage Questions"
+msgstr "Gestionar preguntas"
+
+#: views/exam_form.php:16 views/questions.html.php:12
+msgid "Manage Grades / Results"
+msgstr "Administrar calificaciones / resultados"
+
+#: views/exam_form.php:23
+msgid "%s Name and Settings"
+msgstr "%s Nombre y configuracion"
+
+#: views/exam_form.php:29
+msgid ""
+"Automatically publish this %s in new post once I hit the \"Save\" button. "
+"(The new post will be auto-generated with the %s title used for post title.)"
+msgstr ""
+"Publique automáticamente este %s en una nueva publicación una vez que "
+"presione el botón \"Guardar\". (La nueva publicación se generará "
+"automáticamente con el título %s utilizado para el título de la publicación)."
+
+#: views/exam_form.php:31 views/sidebar.php:7
+msgid "Randomize questions"
+msgstr "Aleatorizar preguntas"
+
+#: views/exam_form.php:31
+msgid "and pull random"
+msgstr "y arrojar al azar"
+
+#: views/exam_form.php:32
+msgid ""
+"questions from the %s. Leave 0 to pull all the questions (default behavior)."
+msgstr ""
+"preguntas de %s. Deje 0 para extraer todas las preguntas (comportamiento "
+"predeterminado)."
+
+#: views/exam_form.php:34
+msgid "Randomize answers"
+msgstr "Aleatorizar respuestas"
+
+#: views/exam_form.php:36
+msgid ""
+"Note: randomization will not work well if you are caching the page where "
+"your %s is published!"
+msgstr ""
+"Nota: ¡la aleatorización no funcionará bien si está almacenando en caché la "
+"página donde se publica su %s!"
+
+#: views/exam_form.php:38
+msgid "Show all questions on single page"
+msgstr "Mostrar todas las preguntas en una sola página"
+
+#: views/exam_form.php:40
+msgid "Show 'previous question' button"
+msgstr "Mostrar el botón \"pregunta anterior\""
+
+#: views/exam_form.php:42
+msgid ""
+"Require user login (displays login and / or register link depending on your "
+"blog settings.)"
+msgstr ""
+"Requerir inicio de sesión del usuario (muestra el enlace de inicio de sesión "
+"y / o registro según la configuración de su blog)."
+
+#: views/exam_form.php:44
+msgid "Allow users to submit the %s multiple times:"
+msgstr "Permitir a los usuarios enviar %s varias veces:"
+
+#: views/exam_form.php:46
+msgid "Allow"
+msgstr "Permitir"
+
+#: views/exam_form.php:46
+msgid ""
+"times (For unlimited times enter 0) There is even more flexibility in "
+"WatuPRO."
+msgstr "veces (para tiempos ilimitados ingrese 0)"
+
+#: views/exam_form.php:48
+msgid ""
+"Notify me when someone takes this %s (the email goes to the address given in "
+"your WordPress Settings page)."
+msgstr ""
+"Notificarme cuando alguien tome este %s (el correo electrónico va a la "
+"dirección indicada en su página de configuración de WordPress)."
+
+#: views/exam_form.php:50
+msgid "Email address(es) to notify:"
+msgstr "Dirección(es) de correo electrónico para notificar:"
+
+#: views/exam_form.php:50
+msgid "You can specify multiple email addresses separated with comma."
+msgstr ""
+"Puede especificar varias direcciones de correo electrónico separadas por "
+"comas."
+
+#: views/exam_form.php:52
+msgid ""
+"Send email to the %s taker (if taker is non-logged in this will generate a "
+"required email field on the %s page)."
+msgstr ""
+"Envíe un correo electrónico al tomador %s (si el tomador no ha iniciado "
+"sesión, esto generará un campo de correo electrónico obligatorio en la "
+"página %s)."
+
+#: views/exam_form.php:54
+msgid "Do not store user answers in the database to save DB space."
+msgstr ""
+"No almacene las respuestas de los usuarios en la base de datos para ahorrar "
+"espacio en la base de datos."
+
+#: views/exam_form.php:56
+msgid "Do not display question numbers."
+msgstr "No mostrar números de preguntas."
+
+#: views/exam_form.php:58
+msgid "Do not alert the user when skipping a non-required question."
+msgstr "No avise al usuario cuando omita una pregunta no requerida."
+
+#: views/exam_form.php:60
+msgid ""
+"Save source URL when submitting the %s (useful if you have published the %s "
+"in multiple places on your site)."
+msgstr ""
+"Guarde la URL de origen cuando envíe %s (útil si ha publicado %s en varios "
+"lugares de su sitio)."
+
+#: views/exam_form.php:62
+msgid "Value of the submit button:"
+msgstr "Valor del botón de enviar:"
+
+#: views/exam_form.php:64
+msgid "Anti-Spam Measures"
+msgstr "Medidas antispam"
+
+#: views/exam_form.php:65
+msgid "Require question based captcha to submit the %s"
+msgstr "Requerir captcha basado en preguntas para enviar el %s"
+
+#: views/exam_form.php:66
+msgid ""
+"Use a \"honeypot\" field (It is almost as efficient as captchas but is "
+"unobtrusive and does not require any action from the user)"
+msgstr ""
+"Utilice un campo \"honeypot\" (es casi tan eficiente como los captchas pero "
+"es discreto y no requiere ninguna acción por parte del usuario)"
+
+#: views/exam_form.php:69
+msgid "MoolaMojo Integration"
+msgstr "MoolaMojo Integration"
+
+#: views/exam_form.php:70
+msgid ""
+"Transfer points from this %s as virtual <a href=\"%s\" target=\"_blank\">"
+"MoolaMojo</a> credits."
+msgstr ""
+"Transfiera puntos de este %s como créditos virtuales <a href=\"%s\" "
+"target=\"_blank\"> MoolaMojo </a>."
+
+#: views/exam_form.php:72
+msgid ""
+"Transfer the earned points as MoolaMojo credits 1:1 (if negative points are "
+"earned, the user will be charged credits)"
+msgstr ""
+"Transfiera los puntos ganados como créditos MoolaMojo 1: 1 (si se ganan "
+"puntos negativos, se le cobrarán créditos al usuario)"
+
+#: views/exam_form.php:73
+msgid ""
+"Transfer fixed amount of points based on the grade/result achieved (A field "
+"will appear for each grade/result on your Grades page to enter amount of "
+"virtual credits to be transferred)"
+msgstr ""
+"Transfiera una cantidad fija de puntos en función de la calificación / "
+"resultado alcanzado (aparecerá un campo para cada calificación / resultado "
+"en su página Calificaciones para ingresar la cantidad de créditos virtuales "
+"que se transferirán)"
+
+#: views/exam_form.php:81
+msgid "Correct Answer Display"
+msgstr "Mostrar respuesta correcta"
+
+#: views/exam_form.php:83
+msgid ""
+"Show the answer of a question immediately after the user have selected an "
+"answer. (Will not work in single page mode and <b>is not secure</b> - use it "
+"only for fun quizzes, not exams. You can handle exams in this mode with "
+"WatuPRO.)"
+msgstr ""
+"Mostrar la respuesta de una pregunta inmediatamente después de que el "
+"usuario haya seleccionado una respuesta. (No funcionará en el modo de página "
+"única y <b> no es seguro </b>: úselo solo para divertidos cuestionarios, no "
+"para exámenes. Puede manejar los exámenes en este modo con WatuPRO)."
+
+#: views/exam_form.php:84
+msgid ""
+"\"<b>Show answers at the end of the Quiz\" is now obsolete option.</b> "
+"Instead of using it, enter the %%ANSWERS%% variable where you want the "
+"results to appear."
+msgstr ""
+"\"<b> Mostrar respuestas al final de la Prueba\" ahora es una opción "
+"obsoleta. </b> En lugar de usarla, ingrese la variable %%ANSWERS%% donde "
+"desea que aparezcan los resultados."
+
+#: views/exam_form.php:89
+msgid "Description"
+msgstr "Descripcion"
+
+#: views/exam_form.php:92
+msgid ""
+"If provided, description shows on top of the %s. It can optionally be "
+"included in the final output as well."
+msgstr ""
+"Si se proporciona, la descripción se muestra encima del %s. Opcionalmente, "
+"también se puede incluir en el resultado final."
+
+#: views/exam_form.php:97
+msgid "Final Screen"
+msgstr "Pantalla final"
+
+#: views/exam_form.php:101
+msgid "Send different content to the notification email sent to user / admin."
+msgstr ""
+"Envíe contenido diferente al correo electrónico de notificación enviado al "
+"usuario / administrador."
+
+#: views/exam_form.php:105
+msgid ""
+"If you leave this empty, the contents from the \"Final screen\" will be sent "
+"by email as well."
+msgstr ""
+"Si lo deja vacío, los contenidos de la \"Pantalla final\" también se "
+"enviarán por correo electrónico."
+
+#: views/exam_form.php:106
+msgid ""
+"By default this content is used for both the email sent to user, and the "
+"email sent to admin. You can however use the %s tag to make the email "
+"contents different. The content before the %s tag will be sent to the user "
+"(if the corresponding checkbox is checked) and the content after the %s tag -"
+" to the admin."
+msgstr ""
+"Por defecto, este contenido se utiliza tanto para el correo electrónico "
+"enviado al usuario como para el correo electrónico enviado al administrador. "
+"Sin embargo, puede usar la etiqueta %s para hacer que el contenido del "
+"correo electrónico sea diferente. El contenido antes de la etiqueta %s se "
+"enviará al usuario (si la casilla de verificación correspondiente está "
+"marcada) y el contenido después de la etiqueta %s, al administrador."
+
+#: views/exam_form.php:109
+msgid "Usable Variables:"
+msgstr "Variables utilizables:"
+
+#: views/exam_form.php:111
+msgid "Variable"
+msgstr "Variable"
+
+#: views/exam_form.php:111
+msgid "Value"
+msgstr "Valor"
+
+#: views/exam_form.php:112
+msgid ""
+"This will display the questions along with the answers that user gave to "
+"them marked as correct or incorrect."
+msgstr ""
+"Esto mostrará las preguntas junto con las respuestas que el usuario les dio "
+"marcadas como correctas o incorrectas."
+
+#: views/exam_form.php:113
+msgid "The number of points collected. (The old %%SCORE%% tag also works)"
+msgstr ""
+"El número de puntos recogidos. (La antigua etiqueta %%SCORE%% también "
+"funciona)"
+
+#: views/exam_form.php:114
+msgid "Maximum number of points"
+msgstr "Numero maximo de puntos"
+
+#: views/exam_form.php:115
+msgid ""
+"Shows the achieved grade - title and description together. If you want to "
+"design this better, you can use %%GRADE-TITLE%% for grade title and %%GRADE-"
+"DESCRIPTION%% for grade description"
+msgstr ""
+"Muestra la calificación obtenida: título y descripción juntos. Si desea "
+"diseñar esto mejor, puede usar %%GRADE-TITLE%% para el título de la "
+"calificación y %%GRADE-DESCRIPTION%% para la descripción de la calificación"
+
+#: views/exam_form.php:116
+msgid ""
+"Number of correct answers. In multiple-select questions even one correct "
+"answer makes the question correct. In WatuPRO this is configurable"
+msgstr ""
+"Número de respuestas correctas. En las preguntas de selección múltiple, "
+"incluso una respuesta correcta hace que la pregunta sea correcta. En WatuPRO "
+"esto es configurable"
+
+#: views/exam_form.php:117
+msgid "Number of answers you got wrong"
+msgstr "Número de respuestas en las que te equivocaste"
+
+#: views/exam_form.php:118
+msgid "Number of unanswered questions"
+msgstr "Número de preguntas sin respuesta"
+
+#: views/exam_form.php:119
+msgid "Percent correct answers given"
+msgstr "Porcentaje de respuestas correctas dadas"
+
+#: views/exam_form.php:120
+msgid ""
+"A rating of your performance - it could be 'Failed'(0-39%), 'Just "
+"Passed'(40%-50%), 'Satisfactory', 'Competent', 'Good', 'Excellent' and "
+"'Unbeatable'(100%)."
+msgstr ""
+"Una calificación de su desempeño: podría ser 'Fallido' (0-39%), 'Aprobado' "
+"(40% -50%), 'Satisfactorio', 'Competente', 'Bueno', 'Excelente' e "
+"'Invencible' (100%)"
+
+#: views/exam_form.php:120
+msgid ""
+"The rating can be changed only by <a href=\"%s\" target=\"_blank\">"
+"translating the plugin</a>. So we recommend you to use the grades instead. "
+"They are fully configurable right from this page."
+msgstr ""
+"La calificación solo se puede cambiar <a href=\"%s\" target=\"_blank\"> "
+"traduciendo el complemento </a>. Por lo tanto, le recomendamos que use las "
+"calificaciones en su lugar. Son totalmente configurables desde esta página."
+
+#: views/exam_form.php:121
+msgid "The name of the %s"
+msgstr "El nombre de %s"
+
+#: views/exam_form.php:122
+msgid "The text entered in the description field."
+msgstr "El texto ingresado en el campo de descripción."
+
+#: views/exam_form.php:123
+msgid "The average points earned by the other %s participants."
+msgstr "El promedio de puntos obtenidos por los otros %s participantes."
+
+#: views/exam_form.php:124
+msgid "Shows the percentage of users collected less points on the %s."
+msgstr "Muestra el porcentaje de usuarios que recolectó menos puntos en el %s."
+
+#: views/exam_form.php:125
+msgid ""
+"The user email address if we know it - use it only if you require / expect "
+"logged in users OR you have selected the option to email user their results "
+"(so email address will be requested)."
+msgstr ""
+"La dirección de correo electrónico del usuario si la conocemos: úsela solo "
+"si necesita / espera usuarios conectados O si ha seleccionado la opción de "
+"enviarle al usuario sus resultados (por lo que se le solicitará una "
+"dirección de correo electrónico)."
+
+#: views/exam_form.php:126
+msgid ""
+"The user name of the logged in user - use it only if you require / expect "
+"logged in users. If the user is not logged in, the variable will display "
+"\"Guest\"."
+msgstr ""
+"El nombre de usuario del usuario conectado: utilícelo solo si necesita / "
+"espera usuarios conectados. Si el usuario no ha iniciado sesión, la variable "
+"mostrará \"Invitado\"."
+
+#: views/exam_form.php:129
+msgid ""
+"The shortcode %s lets you display a chart of user points vs. average "
+"collected points. It accepts arguments <b>%s</b> and <b>%s</b> to specify "
+"the colors of the bars."
+msgstr ""
+"El shortcode %s le permite mostrar un cuadro de puntos de usuario frente a "
+"los puntos acumulados promedio. Acepta argumentos <b> %s </b> y <b> %s </b> "
+"para especificar los colores de las barras."
+
+#: views/exam_form.php:139 views/question-form.html.php:176
+msgid "Save"
+msgstr "Guardar"
+
+#: views/exams.html.php:6
+msgid "Manage %s"
+msgstr "Administrar %s"
+
+#: views/exams.html.php:10
+msgid "Watu for WordPress is a light version of"
+msgstr "Watu para WordPress es una versión ligera de"
+
+#: views/exams.html.php:12 views/options.html.php:7
+msgid "Go to"
+msgstr "Ir a"
+
+#: views/exams.html.php:12 views/options.html.php:3
+msgid "Watu Settings"
+msgstr "Configuracion de examenes"
+
+#: views/exams.html.php:14 views/exams.html.php:61
+msgid "Create New %s"
+msgstr "Crear nueva %s"
+
+#: views/exams.html.php:16 views/options.html.php:8
+msgid "Social Sharing Options"
+msgstr "Opciones de intercambio social"
+
+#: views/exams.html.php:18
+msgid ""
+"To publish a %s copy its shortcode and place it in a post or page. Use only "
+"one %s shortcode in each post or page."
+msgstr ""
+"Para publicar un %s, copie su código corto y colóquelo en una publicación o "
+"página. Use solo un shortcode %s en cada publicación o página."
+
+#: views/exams.html.php:23 views/questions.html.php:46
+msgid "ID"
+msgstr "ID"
+
+#: views/exams.html.php:24
+msgid "Title"
+msgstr "Titulo"
+
+#: views/exams.html.php:25
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: views/exams.html.php:26
+msgid "No. Questions"
+msgstr "Numero de preguntas"
+
+#: views/exams.html.php:27
+msgid "View Results"
+msgstr "Ver resultados"
+
+#: views/exams.html.php:28 views/questions.html.php:51
+msgid "Action"
+msgstr "Accion"
+
+#: views/exams.html.php:46
+msgid "Taken %d times"
+msgstr "Resuelto %d veces"
+
+#: views/exams.html.php:48 watu.php:129
+msgid "Manage Grades"
+msgstr "Administrar calificaciones"
+
+#: views/exams.html.php:49 views/questions.html.php:88
+msgid "Edit"
+msgstr "Editar"
+
+#: views/exams.html.php:50
+msgid ""
+"You are about to delete this %s? This will delete all the questions and "
+"answers within this quiz. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"¿Estás a punto de eliminar este %s? Esto eliminará todas las preguntas y "
+"respuestas dentro de este cuestionario. Presione 'Aceptar' para eliminar y "
+"'Cancelar' para detener."
+
+#: views/exams.html.php:50 views/questions.html.php:89 views/takings.php:94 
+#: views/takings.php:115
+msgid "Delete"
+msgstr "Eliminar"
+
+#: views/exams.html.php:55
+msgid "No %s found."
+msgstr "%s No encontrado."
+
+#: views/exams.html.php:63
+msgid "Get free traffic to your %s by submitting them to"
+msgstr "Obtenga tráfico gratis a su %s enviándolos a"
+
+#: views/exams.html.php:63
+msgid "our directory."
+msgstr "nuestro directorio"
+
+#: views/grades.html.php:3
+msgid "Manage Grading for Quiz '%s'"
+msgstr "Administrar calificación para el cuestionario '%s'"
+
+#: views/grades.html.php:4
+msgid "Back to quizzes list"
+msgstr "Volver a la lista de cuestionarios"
+
+#: views/grades.html.php:6
+msgid "Edit %s"
+msgstr "Editar %s"
+
+#: views/grades.html.php:9
+msgid "Add New Grade / Result"
+msgstr "Nuevo grado/resultado"
+
+#: views/grades.html.php:12 views/grades.html.php:29
+msgid "Grade Title:"
+msgstr "Grado:"
+
+#: views/grades.html.php:12 views/grades.html.php:29
+msgid "Description (optional):"
+msgstr "Descripcion (opcional)"
+
+#: views/grades.html.php:12 views/grades.html.php:29
+msgid "From points:"
+msgstr "Desde puntos:"
+
+#: views/grades.html.php:12 views/grades.html.php:29
+msgid "To points:"
+msgstr "Hasta puntos:"
+
+#: views/grades.html.php:13 views/grades.html.php:30
+msgid "If this grade is achieved redirect to URL (optional):"
+msgstr "Si se alcanza esta calificación, redirija a la URL (opcional):"
+
+#: views/grades.html.php:16 views/grades.html.php:33
+msgid ""
+"If this grade is achieved transfer %s of virtual credits to user's MoolaMojo "
+"balance"
+msgstr ""
+"Si se logra esta calificación, transfiera %s de créditos virtuales al saldo "
+"de MoolaMojo del usuario"
+
+#: views/grades.html.php:18
+msgid "Save new grade"
+msgstr "Guardar nueva calificación"
+
+#: views/grades.html.php:24
+msgid "Existing Grades / Quiz Results"
+msgstr "Grados / resultados de exámenes existentes"
+
+#: views/grades.html.php:35
+msgid "Save grade"
+msgstr "Guardar calificación"
+
+#: views/grades.html.php:36
+msgid "Delete grade"
+msgstr "Eliminar calificación"
+
+#: views/grades.html.php:54
+msgid "Please enter grade title"
+msgstr "Por favor ingrese el título de grado"
+
+#: views/grades.html.php:60
+msgid "Please enter From points, numbers only"
+msgstr "Por favor ingrese puntos DESDE, solo números"
+
+#: views/grades.html.php:66
+msgid "Please enter To points, numbers only"
+msgstr "Por favor, ingrese puntos HASTA, solo números"
+
+#: views/grades.html.php:75 views/questions.html.php:107 views/takings.php:152 
+#: views/takings.php:193
+msgid "Are you sure?"
+msgstr "Estas segur@?"
+
+#: views/help.html.php:2
+msgid "Watu - Help and Support"
+msgstr "Watu - Ayuda y soporte"
+
+#: views/help.html.php:5
+msgid "Creating Quizzes"
+msgstr "Crear cuestionarios"
+
+#: views/help.html.php:7
+msgid ""
+"Go to Watu Quizzes and click on \"Create new %s\". Each %s has title, "
+"description and various settings. The %s also consists of questions and "
+"grades / results."
+msgstr ""
+"Vaya a examenes y haga clic en \"Crear nuevo %s\". Cada % s tiene título, "
+"descripción y varias configuraciones. El %s también consta de preguntas y "
+"calificaciones / resultados."
+
+#: views/help.html.php:8
+msgid ""
+"Questions are mandatory - you cannot have a %s without at least one question."
+" Grades are optional - for example if you want to use %s as surveys you "
+"might not need grades. But the regular %s will have grades because this is "
+"the whole purpose of a %s - to calculate a result based on the collected "
+"points."
+msgstr ""
+"Las preguntas son obligatorias: no puede tener un %s sin al menos una "
+"pregunta. Las calificaciones son opcionales; por ejemplo, si desea utilizar "
+"%s como encuestas, es posible que no necesite calificaciones. Pero el %s "
+"regular tendrá calificaciones porque este es el propósito completo de un %s: "
+"calcular un resultado basado en los puntos recopilados."
+
+#: views/help.html.php:9
+msgid ""
+"Make sure to calculate how many points the user could collect if they answer "
+"all questions correctly or all wrong so your grades cover both edges of "
+"min/max collected points."
+msgstr ""
+"Asegúrese de calcular cuántos puntos podría acumular el usuario si responde "
+"todas las preguntas correctamente o todas de manera incorrecta para que sus "
+"calificaciones cubran ambos bordes de los puntos mínimos / máximos recogidos."
+
+#: views/help.html.php:11
+msgid "Frequently Asked Questions"
+msgstr "Preguntas frecuentes"
+
+#: views/help.html.php:13
+msgid "Please check them <a href=\"%s\" target=\"_blank\">online</a>."
+msgstr "Verifíquelos <a href=\"%s\" target=\"_blank\"> en línea </a>."
+
+#: views/help.html.php:15 views/sidebar.php:15
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: views/help.html.php:16
+msgid ""
+"Watu uses a shortcode to publish %s inside a post, page or any other area of "
+"your site. There are some other useful shortcodes too:"
+msgstr ""
+"Examenes usa un código corto para publicar %s dentro de una publicación, "
+"página o cualquier otra área de su sitio. También hay otros códigos cortos "
+"útiles:"
+
+#: views/help.html.php:18
+msgid ""
+"Displays chart from answers on a given %s. More details on the Edit Quiz "
+"page."
+msgstr ""
+"Muestra el cuadro de las respuestas en un determinado %s. Más detalles en la "
+"página Editar cuestionario."
+
+#: views/help.html.php:19
+msgid ""
+"Displays the table of results on a %s. Get the specific shortcode for each "
+"%s from its \"View results\" page."
+msgstr ""
+"Muestra la tabla de resultados en un %s. Obtenga el shortcode específico "
+"para cada %s en su página \"Ver resultados\"."
+
+#: views/help.html.php:20
+msgid ""
+"Lets you display profile fields from logged in users profile. <a href=\"%s\" "
+"target=\"_blank\">Click here</a> for more details and examples."
+msgstr ""
+"Le permite mostrar los campos de perfil del perfil de los usuarios "
+"registrados. <a href=\"%s\" target=\"_blank\"> Haga clic aquí </a> para "
+"obtener más detalles y ejemplos."
+
+#: views/help.html.php:21
+msgid ""
+"Displays the results table on the selected %s. You can get the exact "
+"shortcode on the \"View results\" page of the %s. The shortcode accepts 3 "
+"other parameters that define whether to show the corresponding data: <b>%s, "
+"%s, and %s</b>. All of these parameters accept values 0 or 1 and default on "
+"all of them is 1 which means the data or column will be shown."
+msgstr ""
+"Muestra la tabla de resultados en el% s seleccionado. Puede obtener el "
+"shortcode exacto en la página \"Ver resultados\" de %s. El shortcode acepta "
+"otros 3 parámetros que definen si mostrar los datos correspondientes: <b>%s,"
+"%s y %s </b>. Todos estos parámetros aceptan valores 0 o 1 y el valor "
+"predeterminado en todos ellos es 1, lo que significa que se mostrarán los "
+"datos o la columna."
+
+#: views/help.html.php:23
+msgid "Requesting Help"
+msgstr "Solicitando ayuda"
+
+#: views/help.html.php:25
+msgid ""
+"When opening a <a href=\"%s\" target=\"_blank\">support thread</a> please "
+"provide URL (link) where we can see your problem."
+msgstr ""
+"Al abrir un <a href=\"%s\" target=\"_blank\"> hilo de soporte </a>, "
+"proporcione la URL (enlace) donde podamos ver su problema."
+
+#: views/help.html.php:27
+msgid "PRO Inquiries"
+msgstr "Consultas PRO"
+
+#: views/help.html.php:29
+msgid ""
+"If you have pre-sales or support questions about WatuPRO please send them "
+"using the contact details on the <a href=\"%s\" target=\"_blank\">official "
+"WatuPRO site</a>. Do not use the wordpress.org forum for this - it allows "
+"only free plugin discussions."
+msgstr ""
+"Si tiene preguntas de preventa o asistencia sobre WatuPRO, envíelas "
+"utilizando los datos de contacto en el <a href=\"%s\" target=\"_blank\"> "
+"sitio oficial de WatuPRO </a>. No use el foro de wordpress.org para esto: "
+"solo permite discusiones gratuitas sobre complementos."
+
+#: views/help.html.php:31
+msgid "MailChimp Integration"
+msgstr "Integracion con MailChimp"
+
+#: views/help.html.php:33
+msgid ""
+"You can integrate your %s with MailChimp so when someone completes a chosen "
+"%s with a given result, they can be subscribed in a mailing list. You will "
+"need <a href=\"%s\" target=\"_blank\">this free bridge</a> to do that."
+msgstr ""
+"Puede integrar su %s con MailChimp para que cuando alguien complete un %s "
+"elegido con un resultado dado, puedan suscribirse en una lista de correo. "
+"Necesitará <a href=\"%s\" target=\"_blank\"> este puente gratuito </a> para "
+"hacerlo."
+
+#: views/import.html.php:2
+msgid "Questions Import"
+msgstr "Importador de preguntas"
+
+#: views/import.html.php:4
+msgid "%s:"
+msgstr "%s:"
+
+#: views/import.html.php:6
+msgid "Back to manage questions"
+msgstr "Volver a gestionar preguntas"
+
+#: views/import.html.php:10
+msgid "The questions were imported."
+msgstr "Las preguntas fueron importadas."
+
+#: views/import.html.php:10
+msgid "There was an error importing your questions."
+msgstr "Se produjo un error al importar sus preguntas."
+
+#: views/import.html.php:13
+msgid ""
+"The imported file was not UTF-8 encoded. If it contains non-English (non-"
+"ASCII) characters there may be problems with the imported questions. If you "
+"notice such problems you will have to delete your questions, <a href=\"%s\" "
+"target=\"_blank\">convert your file to UTF-8</a> and import it then."
+msgstr ""
+"El archivo importado no estaba codificado en UTF-8. Si contiene caracteres "
+"que no están en inglés (no ASCII), puede haber problemas con las preguntas "
+"importadas. Si nota tales problemas, tendrá que eliminar sus preguntas, <a "
+"href=\"%s\" target=\"_blank\"> convierta su archivo a UTF-8 </a> e impórtelo "
+"luego."
+
+#: views/import.html.php:20
+msgid ""
+"Your CSV file should follow exactly the format <a href=\"%s\" "
+"target=\"_blank\">described here</a>."
+msgstr ""
+"Su archivo CSV debe seguir exactamente el formato <a href=\"%s\" "
+"target=\"_blank\"> descrito aquí </a>."
+
+#: views/import.html.php:21
+msgid "Upload file:"
+msgstr "Subir archivo:"
+
+#: views/import.html.php:22
+msgid ""
+"Note: if you are uploading file containing non-English characters you should "
+"make sure the file is in Unicode format (UTF-8 encoded)."
+msgstr ""
+"Nota: si está cargando un archivo que contiene caracteres que no están en "
+"inglés, debe asegurarse de que el archivo esté en formato Unicode "
+"(codificado en UTF-8)."
+
+#: views/import.html.php:24
+msgid "Fields Delimiter:"
+msgstr "Delimitador de campos:"
+
+#: views/import.html.php:25 views/options.html.php:69
+msgid "Comma"
+msgstr "Subsección"
+
+#: views/import.html.php:26
+msgid "Tab"
+msgstr "Tab"
+
+#: views/import.html.php:27
+msgid "Semicolon"
+msgstr "Punto y coma"
+
+#: views/import.html.php:29
+msgid "Skip title row"
+msgstr "Omitir fila de título"
+
+#: views/import.html.php:30
+msgid "If you have problems importing files with foreign characters, please"
+msgstr ""
+"Si tiene problemas para importar archivos con caracteres extranjeros, por "
+"favor"
+
+#: views/import.html.php:30
+msgid "check this checkbox and try again."
+msgstr "marque esta casilla de verificación e intente nuevamente."
+
+#: views/import.html.php:32 views/questions.html.php:13 watu.php:131
+msgid "Import Questions"
+msgstr "Preguntas de importación"
+
+#: views/options.html.php:7
+msgid "Manage Your %s"
+msgstr "Administre su %s"
+
+#: views/options.html.php:12
+msgid "Send the automated emails from this address:"
+msgstr "Envíe los correos electrónicos automatizados desde esta dirección:"
+
+#: views/options.html.php:13
+msgid ""
+"This defaults to your main admin email. However to set a friendlier sender "
+"name you can overwrite it here by entering your name in format: <b>Your Name "
+"&lt;email@domain.com&gt;</b><br>If you have problems with getting your "
+"emails delivered, please install a plugin like <a href=\"%s\" "
+"target=\"_blank\">Postman SMTP</a>. Watu will send the emails through the "
+"SMTP server that you congigure in it."
+msgstr ""
+"Esto predeterminado es su correo electrónico de administrador principal. Sin "
+"embargo, para establecer un nombre de remitente más amigable, puede "
+"sobrescribirlo aquí ingresando su nombre en formato: <b> Su nombre &lt; "
+"email@domain.com&gt; </b> <br> Si tiene problemas para recibir sus correos "
+"electrónicos, por favor instale un complemento como <a href=\"%s\" "
+"target=\"_blank\"> Postman SMTP </a>. cdl enviará los correos electrónicos a "
+"través del servidor SMTP que usted configura en él."
+
+#: views/options.html.php:15
+msgid ""
+"Enable debug mode to see SQL errors. (Useful in case you have any problems)"
+msgstr ""
+"Habilite el modo de depuración para ver los errores de SQL. (Útil en caso de "
+"que tenga algún problema)"
+
+#: views/options.html.php:20
+msgid "Defaults"
+msgstr "Valores predeterminados"
+
+#: views/options.html.php:27 views/question-form.html.php:128
+msgid "Single Answer"
+msgstr "Respuesta única"
+
+#: views/options.html.php:29 views/question-form.html.php:130
+msgid "Multiple Answers"
+msgstr "Respuestas múltiples"
+
+#: views/options.html.php:31
+msgid "Words used for \"quiz/quizzes\":"
+msgstr "Palabras utilizadas para \"cuestionario / cuestionarios\":"
+
+#: views/options.html.php:31
+msgid ""
+"This is not yet fully implemented! You can change any text within the plugin "
+"<a href=\"%s\" target=\"_blank\">this way</a>."
+msgstr ""
+"¡Esto aún no está completamente implementado! Puede cambiar cualquier texto "
+"dentro del complemento <a href=\"%s\" target=\"_blank\"> de esta manera </a>."
+
+#: views/options.html.php:39
+msgid "Question based captcha"
+msgstr "Captcha basado en preguntas"
+
+#: views/options.html.php:41
+msgid ""
+"You can use a simple text-based captcha. We have loaded 3 basic questions "
+"but you can edit them and load your own. Make sure to enter only one "
+"question per line and use = to separate question from answer."
+msgstr ""
+"Puede usar un simple captcha basado en texto. Hemos cargado 3 preguntas "
+"básicas, pero puede editarlas y cargar las suyas. Asegúrese de ingresar solo "
+"una pregunta por línea y use = para separar la pregunta de la respuesta."
+
+#: views/options.html.php:44
+msgid ""
+"This question-based captcha can be enabled individually by selecting a "
+"checkbox in the %s settings form. If you do not check the checkbox, the "
+"captcha question will not be generated."
+msgstr ""
+"Este captcha basado en preguntas se puede habilitar individualmente "
+"seleccionando una casilla de verificación en el formulario de configuración "
+"%s. Si no marca la casilla de verificación, no se generará la pregunta "
+"captcha."
+
+#: views/options.html.php:50
+msgid "Role Management"
+msgstr "Gestión de roles"
+
+#: views/options.html.php:51
+msgid "WordPress roles that can administrate the plugin"
+msgstr "Roles de WordPress que pueden administrar el complemento"
+
+#: views/options.html.php:53
+msgid ""
+"By default this is only the blog administrator. Here you can enable any of "
+"the other roles as well"
+msgstr ""
+"Por defecto, este es solo el administrador. Aquí puede habilitar cualquiera "
+"de los otros roles también"
+
+#: views/options.html.php:67
+msgid "CSV Exports"
+msgstr "Exportar CSV "
+
+#: views/options.html.php:68
+msgid "Field separator:"
+msgstr "Separador de campo:"
+
+#: views/options.html.php:70
+msgid "TAB"
+msgstr "TAB"
+
+#: views/options.html.php:72
+msgid "Add quotes around text fields (recommended)"
+msgstr "Agregar comillas alrededor de los campos de texto (recomendado)"
+
+#: views/options.html.php:77
+msgid "Other settings"
+msgstr "Otras configuraciones"
+
+#: views/options.html.php:79
+msgid ""
+"Use \"the_content\" instead of our custom content filter (do not select this "
+"unless adviced so)"
+msgstr ""
+"Use \"the_content\" en lugar de nuestro filtro de contenido personalizado "
+"(no seleccione esto a menos que se le indique)"
+
+#: views/options.html.php:80
+msgid ""
+"Integrate <a href=\"%s\" target=\"_blank\">MoolaMojo</a> plugin to transfer "
+"%s points to the user virtual credits balance. The plugin must be installed "
+"and activated."
+msgstr ""
+"Integre el complemento <a href=\"%s\" target=\"_blank\"> MoolaMojo </a> para "
+"transferir% s puntos al saldo de créditos virtuales del usuario. El "
+"complemento debe estar instalado y activado."
+
+#: views/options.html.php:81
+msgid ""
+"Do not auto-scroll top the page when user goes from page to page in a "
+"paginated quiz (selecting this is useful only on some page designs)."
+msgstr ""
+"No se desplace automáticamente hacia arriba de la página cuando el usuario "
+"pase de una página a otra en una prueba paginada (seleccionar esto es útil "
+"solo en algunos diseños de página)."
+
+#: views/options.html.php:86
+msgid "Database Option"
+msgstr "Opción de base de datos"
+
+#: views/options.html.php:91
+msgid "Delete stored Watu data when deinstalling the plugin."
+msgstr "Elimine los datos almacenados de CDL al desinstalar el complemento."
+
+#: views/options.html.php:94
+msgid "Please confirm by typing \"yes\" in the box:"
+msgstr "Confirme escribiendo \"yes\" en el cuadro:"
+
+#: views/options.html.php:102
+msgid "Save Options"
+msgstr "Guardar opciones"
+
+#: views/options.html.php:114
+msgid "Ajax in %s"
+msgstr "Ajax en %s"
+
+#: views/options.html.php:116
+msgid ""
+"Here you can select %s which will be submitted by regular post submit rather "
+"than using Ajax. You may want to do this mostly for the following reason:"
+msgstr ""
+"Aquí puede seleccionar %s, que se enviará por envío regular en lugar de usar "
+"Ajax. Es posible que desee hacer esto principalmente por la siguiente razón:"
+
+#: views/options.html.php:119
+msgid ""
+"To embed in the \"Final screen\" content from plugins that do not normally "
+"work well in Ajax mode."
+msgstr ""
+"Para incrustar en el contenido de \"Pantalla final\" desde complementos que "
+"normalmente no funcionan bien en modo Ajax."
+
+#: views/options.html.php:122
+msgid "The selected %s will NOT use Ajax when users submit them."
+msgstr "El %s seleccionado NO utilizará Ajax cuando los usuarios los envíen."
+
+#: views/options.html.php:132
+msgid "Save Ajax Related Settings"
+msgstr "Guardar configuración relacionada con Ajax"
+
+#: views/question-form.html.php:2 views/question-form.html.php:111 
+#: views/questions.html.php:47 views/show_exam.html.php:64
+msgid "Question"
+msgstr "Pregunta"
+
+#: views/question-form.html.php:4
+msgid "Back to questions"
+msgstr "Volver a las preguntas"
+
+#: views/question-form.html.php:23 views/question-form.html.php:143
+msgid "Rich Text Editor"
+msgstr "Editor de texto enriquecido"
+
+#: views/question-form.html.php:34
+msgid "Correct Answer "
+msgstr "Respuesta correcta"
+
+#: views/question-form.html.php:45
+msgid "Points: "
+msgstr "Puntos: "
+
+#: views/question-form.html.php:67
+msgid "Please enter the question"
+msgstr "Por favor ingrese la pregunta"
+
+#: views/question-form.html.php:80
+msgid "Please enter atleast two answers"
+msgstr "Por favor ingrese al menos dos respuestas"
+
+#: views/question-form.html.php:113
+msgid ""
+"Deactivate this question. This will exclude it from showing on the %s, "
+"counting it, including it in reports etc."
+msgstr ""
+"Desactiva esta pregunta. Esto lo excluirá de aparecer en %s, lo contará, lo "
+"incluirá en informes, etc."
+
+#: views/question-form.html.php:118
+msgid "Answer Type"
+msgstr "Tipo de respuesta"
+
+#: views/question-form.html.php:132
+msgid "Open End (Essay)"
+msgstr "Final abierto (ensayo)"
+
+#: views/question-form.html.php:133
+msgid "This is a required question"
+msgstr "Esta pregunta es obligatoria"
+
+#: views/question-form.html.php:137
+msgid "Answers"
+msgstr "Respuestas"
+
+#: views/question-form.html.php:139
+msgid ""
+"Answers to open-end questions will be considered matched when there is exact "
+"case-insensitive match. For more flexibility check <a href=\"%s\" "
+"target=\"_blank\">WatuPRO</a>"
+msgstr ""
+"Las respuestas a las preguntas abiertas se considerarán coincidentes cuando "
+"haya una coincidencia exacta entre mayúsculas y minúsculas."
+
+#: views/question-form.html.php:145
+msgid "Correct Answer"
+msgstr "Respuesta correcta"
+
+#: views/question-form.html.php:147
+msgid "Points:"
+msgstr "Puntos:"
+
+#: views/question-form.html.php:152
+msgid "Add New Answer"
+msgstr "Agregar respuesta"
+
+#: views/question-form.html.php:158
+msgid "Explanation / feedback"
+msgstr "Explicación / retroalimentación"
+
+#: views/question-form.html.php:163
+msgid ""
+"You can use this field to explain the correct answer. This will be shown "
+"only at the end of the %s if you have selected the option to display the "
+"correct answers. You can use the %s tag to specify different feedback for "
+"correctly or incorrectly answered question. Place the explanation that will "
+"be shown for correct answer before the %s tag, and the one that will be "
+"shown for wrong answer after the %s tag. Using the split tag will NOT work "
+"in \"Show the answer of a question immediately after the user have selected "
+"an answer.\" mode.<br> This feedback option is a lot more flexible in <a "
+"href=\"%s\" target=\"_blank\">WatuPRO</a>."
+msgstr ""
+"Puede usar este campo para explicar la respuesta correcta. Esto se mostrará "
+"solo al final de %s si ha seleccionado la opción para mostrar las respuestas "
+"correctas. Puede usar la etiqueta %s para especificar diferentes comentarios "
+"para la pregunta correcta o incorrecta. Coloque la explicación que se "
+"mostrará para la respuesta correcta antes de la etiqueta %s, y la que se "
+"mostrará para la respuesta incorrecta después de la etiqueta %s. El uso de "
+"la etiqueta dividida NO funcionará en \"Mostrar la respuesta de una pregunta "
+"inmediatamente después de que el usuario haya seleccionado una respuesta\". "
+"modo. <br> "
+
+#: views/question-form.html.php:177
+msgid "Save &amp; Reuse as New"
+msgstr "Guardar &amp; Reutilizar como nuevo"
+
+#: views/question-form.html.php:179
+msgid "Save &amp; Add New (Blank)"
+msgstr "Guardar &amp; Agregar nuevo (en blanco)"
+
+#: views/question-form.html.php:182
+msgid "Go to Questions Page"
+msgstr "Ir a la página de preguntas"
+
+#: views/question-form.html.php:193
+msgid "Done. Close this."
+msgstr "Hecho. Cierra esto."
+
+#: views/questions.html.php:6
+msgid "Manage Questions in %s"
+msgstr "Administrar preguntas en %s"
+
+#: views/questions.html.php:11
+msgid "Edit this %s"
+msgstr "Editar esto %s"
+
+#: views/questions.html.php:20
+msgid "To add this %s to your blog, insert the code "
+msgstr "Para agregar este %s a tu blog, inserta el código"
+
+#: views/questions.html.php:20
+msgid "into any post or page."
+msgstr "en cualquier publicación o página."
+
+#: views/questions.html.php:25
+msgid "Show questions of type:"
+msgstr "Mostrar preguntas de tipo:"
+
+#: views/questions.html.php:27
+msgid "All types"
+msgstr "Todos los tipos"
+
+#: views/questions.html.php:28 views/questions.html.php:81
+msgid "Single choice"
+msgstr "Opción única"
+
+#: views/questions.html.php:29 views/questions.html.php:83
+msgid "Open end (essay)"
+msgstr "Final abierto (ensayo)"
+
+#: views/questions.html.php:30 views/questions.html.php:82
+msgid "Multiple choice"
+msgstr "Multiple choice"
+
+#: views/questions.html.php:32
+msgid "with ID (you can separate multiple IDs with comma):"
+msgstr "con ID (puede separar múltiples ID con comas):"
+
+#: views/questions.html.php:34
+msgid "and question contains (phrase):"
+msgstr "y la pregunta contiene (frase):"
+
+#: views/questions.html.php:36
+msgid "Filter questions"
+msgstr "Filtrar preguntas"
+
+#: views/questions.html.php:37
+msgid "Clear filters"
+msgstr "Limpiar filtros"
+
+#: views/questions.html.php:48
+msgid "Question type"
+msgstr "Tipo de pregunta"
+
+#: views/questions.html.php:49
+msgid "Required?"
+msgstr "¿Necesario?"
+
+#: views/questions.html.php:50
+msgid "Number Of Answers"
+msgstr "Número de respuestas"
+
+#: views/questions.html.php:71
+msgid "Move Up"
+msgstr "Mover hacia arriba"
+
+#: views/questions.html.php:74
+msgid "Move Down"
+msgstr "Mover hacia abajo"
+
+#: views/questions.html.php:85
+msgid "Inactive"
+msgstr "Inactivo"
+
+#: views/questions.html.php:86
+msgid "Yes"
+msgstr "Si"
+
+#: views/questions.html.php:86
+msgid "No"
+msgstr "No"
+
+#: views/questions.html.php:89
+msgid ""
+"You are about to delete this question. This will delete the answers to this "
+"question. Press 'OK' to delete and 'Cancel' to stop."
+msgstr ""
+"Estás a punto de eliminar esta pregunta. Esto eliminará las respuestas a "
+"esta pregunta. Presione 'Aceptar' para eliminar y 'Cancelar' para detener."
+
+#: views/questions.html.php:96
+msgid "No questions found."
+msgstr "No se encontraron preguntas"
+
+#: views/questions.html.php:104
+msgid "Create New Question"
+msgstr "Nueva pregunta"
+
+#: views/questions.html.php:107
+msgid "Delete Selected"
+msgstr "Eliminar seleccionado"
+
+#: views/questions.html.php:108
+msgid "Other Mass Changes:"
+msgstr "Otros cambios masivos:"
+
+#: views/questions.html.php:109
+msgid "Change properties of selected questions:"
+msgstr "Cambiar propiedades de preguntas seleccionadas:"
+
+#: views/questions.html.php:110
+msgid "Don't change required status"
+msgstr "No cambie el estado requerido"
+
+#: views/questions.html.php:111
+msgid "Change all to required"
+msgstr "Cambiar todo a requerido"
+
+#: views/questions.html.php:112
+msgid "Change all to not required"
+msgstr "Cambiar todo a no requerido"
+
+#: views/questions.html.php:116
+msgid "Update Selected"
+msgstr "Selección actualizada"
+
+#: views/sharing-options.html.php:2
+msgid "Watu Social Sharing"
+msgstr "Redes sociales"
+
+#: views/sharing-options.html.php:4
+msgid "Back to Watu Options"
+msgstr "Volver a las opciones"
+
+#: views/sharing-options.html.php:6
+msgid ""
+"You can use the shortcode %s to display Facebook share button on the \"Final "
+"screen\" on your %s."
+msgstr ""
+"Puede usar el shortcode %s para mostrar el botón de compartir de Facebook en "
+"la \"Pantalla final\" en su %s."
+
+#: views/sharing-options.html.php:7
+msgid ""
+"The social media buttons are provided by Arbenting. Feel free to replace "
+"them with other icons by replacing the files in img/share folder of the "
+"plugin."
+msgstr ""
+"Arbenting proporciona los botones de redes sociales. Siéntase libre de "
+"reemplazarlos con otros íconos reemplazando los archivos en la carpeta img / "
+"share del complemento."
+
+#: views/sharing-options.html.php:10
+msgid "Facebook Sharing"
+msgstr "Compartir en Facebook"
+
+#: views/sharing-options.html.php:12
+msgid "Your Facebook App ID:"
+msgstr "Su ID de aplicación de Facebook:"
+
+#: views/sharing-options.html.php:12
+msgid "Get one here"
+msgstr "Consigue uno aquí"
+
+#: views/sharing-options.html.php:13
+msgid "If you leave it empty, no Facebook share button will be generated."
+msgstr ""
+"Si lo deja vacío, no se generará ningún botón para compartir en Facebook."
+
+#: views/sharing-options.html.php:15
+msgid "Title:"
+msgstr "Titulo:"
+
+#: views/sharing-options.html.php:16
+msgid "Text:"
+msgstr "Texto: "
+
+#: views/sharing-options.html.php:17
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{url}}}, {{{grade-title}}} and "
+"{{{grade-description}}}."
+msgstr ""
+"Puede usar las variables {{{quiz-name}}}, {{{url}}}, {{{grade-title}}} y "
+"{{{grade-description}}}."
+
+#: views/sharing-options.html.php:19
+msgid ""
+"If you leave title and text empty, grade title and grade description will be "
+"used respectively."
+msgstr ""
+"Si deja el título y el texto en blanco, se utilizará el título y la "
+"descripción de la calificación respectivamente."
+
+#: views/sharing-options.html.php:21
+msgid ""
+"IMPORTANT: Facebook needs to be able to access your site to retrieve the "
+"social sharing data. If the site is on localhost or behind a htaccess login "
+"box sharing will not work properly."
+msgstr ""
+"IMPORTANTE: Facebook debe poder acceder a su sitio para recuperar los datos "
+"de intercambio social. Si el sitio está en localhost o detrás de un cuadro "
+"de inicio de sesión htaccess, el uso compartido no funcionará correctamente."
+
+#: views/sharing-options.html.php:23
+msgid "Twitter Sharing Options:"
+msgstr "Opciones para compartir en Twitter:"
+
+#: views/sharing-options.html.php:25
+msgid ""
+"If you leave \"Tweet text\" empty the tweet text will be extracted from the "
+"grade description. If it is empty, the grade title will be used."
+msgstr ""
+"Si deja \"Tweet text\" vacío, el texto del tweet se extraerá de la "
+"descripción de la calificación. Si está vacío, se usará el título de la "
+"calificación."
+
+#: views/sharing-options.html.php:27
+msgid "Show Tweet button"
+msgstr "Mostrar el botón Tweet"
+
+#: views/sharing-options.html.php:30
+msgid "Show count"
+msgstr "Mostrar recuento"
+
+#: views/sharing-options.html.php:31
+msgid "Via @"
+msgstr "Via @"
+
+#: views/sharing-options.html.php:32
+msgid "Hashtag #"
+msgstr "Hashtag #"
+
+#: views/sharing-options.html.php:33
+msgid "Tweet text (No more than 140 chars):"
+msgstr "Texto del tuit (no más de 140 caracteres):"
+
+#: views/sharing-options.html.php:34
+msgid ""
+"You can use the variables {{{quiz-name}}}, {{{grade-title}}} and {{{grade-"
+"description}}}."
+msgstr ""
+"Puede usar las variables {{{quiz-name}}}, {{{grade-title}}} y {{{grade-"
+"description}}}."
+
+#: views/sharing-options.html.php:37
+msgid ""
+"More social sharing options like Google Plus, LinkedIn, and Email are "
+"available in <a href=\"%s\" target=\"_blank\">WatuPRO</a>"
+msgstr ""
+"Más opciones para compartir en redes sociales como Google Plus, LinkedIn y "
+"correo electrónico están disponibles en <a href=\"%s\" target=\"_blank\"> "
+"WatuPRO </a>"
+
+#: views/sharing-options.html.php:40
+msgid "Save All Settings"
+msgstr "Guardar todas las configuraciones"
+
+#: views/show_exam.html.php:6
+msgid "Please enter your email:"
+msgstr "Por favor introduzca su correo electrónico:"
+
+#: views/show_exam.html.php:53
+msgid "Loading"
+msgstr "Cargando"
+
+#: views/show_exam.html.php:61 watu.php:369
+msgid "Show Answer"
+msgstr "Mostrar respuesta"
+
+#: views/show_exam.html.php:64
+msgid "of"
+msgstr "de"
+
+#: views/show_exam.html.php:66
+msgid "Previous"
+msgstr "Anterior"
+
+#: views/show_exam.html.php:68
+msgid "Next"
+msgstr "Siguiente"
+
+#: views/sidebar.php:2
+msgid "Go PRO!"
+msgstr "Obtén PRO"
+
+#: views/sidebar.php:4
+msgid "Get more powerful features by"
+msgstr "Obtenga funciones más potentes al"
+
+#: views/sidebar.php:4
+msgid "upgrading to the PRO version:"
+msgstr "Actualización a la versión PRO:"
+
+#: views/sidebar.php:4
+msgid "(You will be able to copy all your free quizzes to Pro)"
+msgstr "Podrás copiar todas tus pruebas gratuitas a Pro"
+
+#: views/sidebar.php:7
+msgid "and pull random numbers."
+msgstr "y sacar números aleatorios."
+
+#: views/sidebar.php:8
+msgid "Detailed stats."
+msgstr "Estadísticas detalladas"
+
+#: views/sidebar.php:8
+msgid "You can see who and how has answered to your exam."
+msgstr "Puede ver quién y cómo ha respondido a su examen."
+
+#: views/sidebar.php:9
+msgid "Printable certificates"
+msgstr "Certificados para imprimir"
+
+#: views/sidebar.php:9
+msgid "assigned to the different grades."
+msgstr "asignado a los diferentes grados."
+
+#: views/sidebar.php:10
+msgid "Export results and import/export questions"
+msgstr "Resultados de exportación y preguntas de importación / exportación"
+
+#: views/sidebar.php:10
+msgid "from/to CSV file."
+msgstr "desde / a archivo CSV."
+
+#: views/sidebar.php:11
+msgid "Students dashboard."
+msgstr "Escritorio de estudiantes"
+
+#: views/sidebar.php:11
+msgid "Registered users have a dashboard, can re-take exams etc."
+msgstr ""
+"Los usuarios registrados tienen un panel de control, pueden volver a tomar "
+"exámenes, etc."
+
+#: views/sidebar.php:12
+msgid "Questions and test categories."
+msgstr "Preguntas y categorías de exámenes."
+
+#: views/sidebar.php:12
+msgid "User groups with different access to them."
+msgstr "Grupos de usuarios con diferente acceso a ellos."
+
+#: views/sidebar.php:13
+msgid "Copy %s"
+msgstr "Copiar %s"
+
+#: views/sidebar.php:13
+msgid "and their questions into a new or existing %s."
+msgstr "y sus preguntas en un %s nuevo o existente."
+
+#: views/sidebar.php:14
+msgid "More question types"
+msgstr "Más tipos de preguntas"
+
+#: views/sidebar.php:14
+msgid "and more control on defining correctly answered questions."
+msgstr ""
+"y más control sobre la definición de preguntas respondidas correctamente."
+
+#: views/sidebar.php:15
+msgid "for user reports and user dashboard."
+msgstr "para informes de usuario y panel de usuario."
+
+#: views/sidebar.php:16
+msgid "More social sharing"
+msgstr "Más intercambio social"
+
+#: views/sidebar.php:16
+msgid "options: Google+, LinkedIn, Twitter."
+msgstr "opciones: Google+, LinkedIn, Twitter."
+
+#: views/sidebar.php:17
+msgid "Transfer all your data"
+msgstr "Transferir todos los datos"
+
+#: views/sidebar.php:17
+msgid "from free to PRO with a single click."
+msgstr "de gratis a PRO con un solo clic."
+
+#: views/sidebar.php:18
+msgid "And a lot more - just come to see!"
+msgstr "Y mucho más, ¡solo ven a verlo!"
+
+#: views/sidebar.php:21
+msgid "Just go ahead and"
+msgstr "Solo sigue adelante y"
+
+#: views/sidebar.php:21
+msgid "take the tour"
+msgstr "Tomar el tour"
+
+#: views/sidebar.php:21
+msgid "or check the"
+msgstr "o mira el"
+
+#: views/sidebar.php:21
+msgid "online demo."
+msgstr "Demo online."
+
+#: views/sidebar.php:23
+msgid ""
+"Upgrading to PRO comes with <strong>60 days refund policy</strong>, one year "
+"<strong>free upgrades</strong> and one year <strong>free support</strong>."
+msgstr ""
+"La actualización a PRO incluye una <strong> política de reembolso de 60 días "
+"</strong>, un año de <strong> actualizaciones gratuitas </strong> y un año "
+"de <strong> asistencia gratuita </strong>."
+
+#: views/sidebar.php:28
+msgid "Need Support?"
+msgstr "Necesitta soporte?"
+
+#: views/sidebar.php:30
+msgid "Please ask your question in the"
+msgstr "Por favor haga su pregunta en el"
+
+#: views/sidebar.php:30
+msgid "support forum at Wordpress."
+msgstr "Foro de soporte en WordPress"
+
+#: views/sidebar.php:32
+msgid ""
+"Use the forum only for issues concerning the free version. If you have a pre-"
+"sales question about Watu PRO please contact us"
+msgstr ""
+"Utilice el foro solo para problemas relacionados con la versión gratuita. Si "
+"tiene una pregunta de preventa sobre Watu PRO, contáctenos"
+
+#: views/sidebar.php:32
+msgid "through our site."
+msgstr "a través de nuestro sitio."
+
+#: views/sidebar.php:37
+msgid "Help To Spread The Word!"
+msgstr "Ayuda a correr la voz!"
+
+#: views/sidebar.php:39
+msgid "If you like this plugin you can do some of the following:"
+msgstr "Si le gusta este complemento, puede hacer lo siguiente:"
+
+#: views/sidebar.php:42
+msgid "Rate it 5 starts at Wordpress.org"
+msgstr "Califícalo 5 comienza en Wordpress.org"
+
+#: views/sidebar.php:43
+msgid "Let others know about it by blogging or posting"
+msgstr "Hágales saber a otros al bloguear o publicar"
+
+#: views/sidebar.php:43
+msgid "our home page"
+msgstr "nuestra página de inicio"
+
+#: views/sidebar.php:43
+msgid "on social networks."
+msgstr "en redes sociales."
+
+#: views/sidebar.php:44
+msgid "Go PRO"
+msgstr "Obtén PRO"
+
+#: views/sidebar.php:44
+msgid "to empower your site with extra benefits"
+msgstr "para potenciar su sitio con beneficios adicionales"
+
+#: views/taking_details.html.php:3
+msgid "Details for taken exam "
+msgstr "Detalles para el examen tomado"
+
+#: views/taking_details.html.php:5
+msgid "User:"
+msgstr "Usuario"
+
+#: views/taking_details.html.php:5
+msgid "<b>N/A</b>"
+msgstr "<b>N/A</b>"
+
+#: views/taking_details.html.php:7
+msgid "Email: %s"
+msgstr "Email: %s"
+
+#: views/taking_details.html.php:10
+msgid "Date:"
+msgstr "Fecha: "
+
+#: views/taking_details.html.php:11
+msgid "Total points collected:"
+msgstr "Total de puntos obtenidos:"
+
+#: views/taking_details.html.php:12
+msgid "Achieved grade:"
+msgstr "Grado alcanzado:"
+
+#: views/taking_details.html.php:15
+msgid ""
+"The textual details below show exact snapshot of the questions in the way "
+"that student have seen them when taking the exam. If you have added, edited "
+"or deleted questions since then you will not see these changes here."
+msgstr ""
+"Los detalles textuales a continuación muestran una instantánea exacta de las "
+"preguntas en la forma en que los estudiantes las han visto al tomar el "
+"examen. Si ha agregado, editado o eliminado preguntas desde entonces, no "
+"verá estos cambios aquí."
+
+#: views/takings.php:7
+msgid "Users who submitted the %s '%s'"
+msgstr "Usuarios que enviaron el %s '%s'"
+
+#: views/takings.php:9
+msgid ""
+"A lot more detailed reports, filters, exports, and other important features "
+"are available in"
+msgstr ""
+"Muchos informes más detallados, filtros, exportaciones y otras "
+"características importantes están disponibles en"
+
+#: views/takings.php:11
+msgid "Back to %s list"
+msgstr "Volver al listado de %s"
+
+#: views/takings.php:13
+msgid "Filter/search these records"
+msgstr "Filtrar / buscar estos registros"
+
+#: views/takings.php:15
+msgid "Export as CSV (%s delimited)"
+msgstr "Exportar como CSV (delimitado por %s)"
+
+#: views/takings.php:15
+msgid "comma"
+msgstr "subsección"
+
+#: views/takings.php:15
+msgid "tab"
+msgstr "tab"
+
+#: views/takings.php:15
+msgid "(Filters apply)"
+msgstr "Aplicar filtros"
+
+#: views/takings.php:17
+msgid "Delete all user-submitted data for this %s"
+msgstr "Eliminar todos los datos enviados por el usuario para este %s"
+
+#: views/takings.php:19
+msgid "Shortcode to publish a simplified version of this page:"
+msgstr "Código corto para publicar una versión simplificada de esta página:"
+
+#: views/takings.php:19
+msgid "You can switch off some columns."
+msgstr "Puedes desactivar algunas columnas."
+
+#: views/takings.php:19
+msgid "See the help page for configuration parementers."
+msgstr "Consulte la página de ayuda para ver los parámetros de configuración."
+
+#: views/takings.php:26
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: views/takings.php:27 views/takings.php:33 views/takings.php:39
+msgid "Equals"
+msgstr "Iguales"
+
+#: views/takings.php:28 views/takings.php:34
+msgid "Starts with"
+msgstr "Comienza con"
+
+#: views/takings.php:29 views/takings.php:35
+msgid "Ends with"
+msgstr "Termina con"
+
+#: views/takings.php:30 views/takings.php:36
+msgid "Contains"
+msgstr "Contiene"
+
+#: views/takings.php:32
+msgid "Email"
+msgstr "Email"
+
+#: views/takings.php:38
+msgid "Date Taken"
+msgstr "Fecha que se tendrá"
+
+#: views/takings.php:40
+msgid "Is before"
+msgstr "Es antes"
+
+#: views/takings.php:41
+msgid "Is after"
+msgstr "Es despues"
+
+#: views/takings.php:43
+msgid "Points received"
+msgstr "Puntos recibidos"
+
+#: views/takings.php:44
+msgid "Equal"
+msgstr "Igual"
+
+#: views/takings.php:45
+msgid "Are less than"
+msgstr "Son menos de"
+
+#: views/takings.php:46
+msgid "Are more than"
+msgstr "Son más que"
+
+#: views/takings.php:49
+msgid "Grade/result equals:"
+msgstr "Grado / resultado es igual a:"
+
+#: views/takings.php:50
+msgid "- Any grade / result -"
+msgstr "- Cualquier calificación / resultado -"
+
+#: views/takings.php:54
+msgid "(This filter will exclude grades earned prior to Watu version 2.4.7)"
+msgstr ""
+"(Este filtro excluirá las calificaciones obtenidas antes de Cdl versión 2.4."
+"7)"
+
+#: views/takings.php:57
+msgid "Student in course:"
+msgstr "Estudiante en curso:"
+
+#: views/takings.php:58
+msgid "Any course"
+msgstr "Cualquier curso"
+
+#: views/takings.php:66
+msgid "Submitted from page:"
+msgstr "Enviado desde la pagina: "
+
+#: views/takings.php:67
+msgid "Any source"
+msgstr "Cualquier fuente"
+
+#: views/takings.php:74
+msgid "Search/Filter"
+msgstr "Filtro de búsqueda"
+
+#: views/takings.php:75
+msgid "Clear Filters"
+msgstr "Limpiar filtros"
+
+#: views/takings.php:80
+msgid "%d records found"
+msgstr "%d registros encontrados"
+
+#: views/takings.php:87
+msgid "Name & Email"
+msgstr "Nombre & Email"
+
+#: views/takings.php:88
+msgid "Name"
+msgstr "Nombre"
+
+#: views/takings.php:91
+msgid "% correct"
+msgstr "% correctas"
+
+#: views/takings.php:92
+msgid "Result"
+msgstr "Resultado"
+
+#: views/takings.php:94
+msgid "Details"
+msgstr "Detalles"
+
+#: views/takings.php:104
+msgid "N/a"
+msgstr "N/a"
+
+#: views/takings.php:107
+msgid "Source: %s"
+msgstr "Fuente: %s"
+
+#: views/takings.php:109
+msgid "%d%%"
+msgstr "%d%%"
+
+#: views/takings.php:110
+msgid "%d correct, %d wrong, and %d unanswered"
+msgstr "%d correctas, %d incorrectas, y %d sin responder"
+
+#: views/takings.php:113
+msgid "n/a"
+msgstr "n/a"
+
+#: views/takings.php:114
+msgid "view"
+msgstr "ver"
+
+#: views/takings.php:123
+msgid "Delete selected"
+msgstr "Eliminar seleccionado"
+
+#: views/takings.php:130
+msgid "Previous page"
+msgstr "Pagina anterior"
+
+#: views/takings.php:132
+msgid "Next page"
+msgstr "Pagina siguiente"
+
+#: views/takings.php:135
+msgid "No results match your search criteria."
+msgstr "No hay resultados coincidentes."
+
+#: views/takings.php:158
+msgid "Are you sure? This will delete ALL user results for this %s!"
+msgstr ""
+"¿Estás seguro? ¡Esto eliminará TODOS los resultados de usuario para este %s!"
+
+#: watu.php:78
+msgid "quizzes"
+msgstr "cuestionarios"
+
+#: watu.php:118
+msgid "Watu %s"
+msgstr "Watu %s"
+
+#: watu.php:119
+msgid "Settings"
+msgstr "Configuraciones"
+
+#: watu.php:120
+msgid "Social Sharing"
+msgstr "Compartiendo socialmente"
+
+#: watu.php:121
+msgid "Help &amp; Support"
+msgstr "Soporte"
+
+#: watu.php:126
+msgid "Add/Edit %s"
+msgstr "Agregar/Editar %s"
+
+#: watu.php:128
+msgid "Add/Edit Question"
+msgstr "Agregar/editar pregunta"
+
+#: watu.php:130
+msgid "%s submissions"
+msgstr "%s intentos"
+
+#: watu.php:135
+msgid "Your are not allowed to to perform this operation"
+msgstr "No tiene permitido realizar esta operación"
+
+#: watu.php:313
+msgid ""
+"All the questions in the quiz along with their answers are shown below. Your "
+"answers are bolded. The correct answers have a green background while the "
+"incorrect ones have a red background."
+msgstr ""
+"Todas las preguntas en el cuestionario junto con sus respuestas se muestran "
+"a continuación. Tus respuestas están en negrita. Las respuestas correctas "
+"tienen un fondo verde, mientras que las incorrectas tienen un fondo rojo."
+
+#: watu.php:337
+msgid ""
+"<h2>Thank you for activating Watu!</h2> <p>Please go to your <a href=\"tools."
+"php?page=watu_exams\">Quizzes page</a> to get started! If this is the first "
+"time you have activated the plugin there will be a small demo quiz "
+"automatically created for you. Feel free to explore it to get better idea "
+"how things work.</p>"
+msgstr ""
+"<h2> ¡Gracias por activar Watu! </h2> <p> ¡Para comenzar, vaya a su <a "
+"href=\"tools.php?page=watu_exams\"> página de cuestionarios </a>! Si es la "
+"primera vez que activa el complemento, se creará automáticamente un pequeño "
+"cuestionario de demostración. Siéntase libre de explorarlo para tener una "
+"mejor idea de cómo funcionan las cosas. </p>"
+
+#: watu.php:367
+msgid "You have missed to answer a required question"
+msgstr "Debes responder a todas las preguntas del examen."
+
+#: watu.php:368
+msgid "You did not select any answer. Are you sure you want to continue?"
+msgstr ""
+"No seleccionaste ninguna respuesta. Estás seguro de que quieres continuar?"
+
+#: watu.php:370
+msgid "You need to answer the verification question"
+msgstr "Debes responder la pregunta de verificación"
+
+#: watu.php:371
+msgid "Try again"
+msgstr "Inténtalo de nuevo"
+
+#: watu.php:372
+msgid "Valid email address is required."
+msgstr "Se requiere un correo electrónico válido."
+
+#: watu.php:373
+msgid "Next >"
+msgstr "Siguiente >"

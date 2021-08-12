@@ -1,9 +1,9 @@
-=== TinyMCE Advanced ===
-Contributors: azaozz
+=== Advanced Editor Tools (previously TinyMCE Advanced) ===
+Contributors: automattic, azaozz
 Tags: block editor, classic editor, editor, Gutenberg, formatting, tinymce, write
-Requires at least: 5.4
-Tested up to: 5.4
-Stable tag: 5.4.0
+Requires at least: 5.6
+Tested up to: 5.7
+Stable tag: 5.6.0
 Requires PHP: 5.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,12 +12,12 @@ Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMC
 
 == Description ==
 
-TinyMCE Advanced introduces a "Classic Paragraph" block for the block editor (Gutenberg).
+Advanced Editor Tools (previously TinyMCE Advanced) introduces a "Classic Paragraph" block for the block editor (Gutenberg).
 If you are not quite ready to switch to the block editor, or have plugins that cannot be used there (yet), using the Classic Paragraph block is your best option. It lets you to continue to use the familiar TinyMCE editor for most tasks, and at the same time gives you full access to all blocks and new features in the block editor.
 
-Version 5.4 continues to improve and enhance the new features introduced in version 5.0 of TinyMCE Advanced. It includes an improved "Clear Formatting" button, several advanced settings for tables, and importing and exporting of the settings to a file.
+Version 5.5 continues to improve and enhance the new features introduced in version 5.0 of the plugin. It includes an improved "Clear Formatting" button, several advanced settings for tables, and importing and exporting of the settings to a file.
 
-If you want to continue to use the previous ("classic") editor in WordPress 5.0 and newer, this plugin has an option to replace the new editor with the previous one. If you prefer to have access to both editors side by side or to allow your users to switch editors, it would be better to install the [Classic Editor plugin](https://wordpress.org/plugins/classic-editor/). TinyMCE Advanced is fully compatible with the classic editor plugin and similar plugins that restore use of the previous WordPress editor.
+If you want to continue to use the previous ("classic") editor in WordPress 5.0 and newer, this plugin has an option to replace the new editor with the previous one. If you prefer to have access to both editors side by side or to allow your users to switch editors, it would be better to install the [Classic Editor plugin](https://wordpress.org/plugins/classic-editor/). Advanced Editor Tools is fully compatible with the classic editor plugin and similar plugins that restore use of the previous WordPress editor.
 
 As always this plugin will let you add, remove and arrange the buttons that are shown on the Visual Editor toolbar in the Classic Paragraph and Classic blocks in the block editor, and in the classic editor (when enabled by a plugin). There you can configure up to four rows of buttons including Font Sizes, Font Family, text and background colors, tables, etc.
 
@@ -37,15 +37,26 @@ In addition this plugin adds options for keeping the paragraph tags in text mode
 
 = Privacy =
 
-TinyMCE Advanced does not collect or store any user related data. It does not set cookies, and it does not connect to any third-party websites. It only uses functionality that is available in [WordPress](https://wordpress.org/), and in the [TinyMCE editor](https://tinymce.com/).
+Advanced Editor Tools does not collect or store any user related data. It does not set cookies, and it does not connect to any third-party websites. It only uses functionality that is available in [WordPress](https://wordpress.org/), and in the [TinyMCE editor](https://tinymce.com/).
 
-In that terms TinyMCE Advanced does not affect your website's user privacy in any way.
+In that terms Advanced Editor Tools does not affect your website's user privacy in any way.
 
 == Installation ==
 
 Best is to install directly from WordPress. If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 5.6.0 =
+* Updated for WordPress 5.6 and TinyMCE 4.9.11.
+
+= 5.5.1 =
+* Renamed the plugin to Advanced Editor Tools to comply with trademark requirements.
+
+= 5.5.0 =
+* Updated for WordPress 5.5 and TinyMCE 4.9.10.
+* Updated/renamed the subscript and superscript buttons as these are now in Gutenberg.
+* Minor CSS fixes and enhancements.
 
 = 5.4.0 =
 * Updated for WordPress 5.4.
@@ -263,7 +274,7 @@ Please see the new (as of version 5.2.0) advanced settings for tables. It is pos
 
 = No styles are imported in the Formats sub-menu =
 
-These styles are imported from your current theme editor-style.css file. However some themes do not have this functionality. For these themes TinyMCE Advanced has the option to let you add a customized editor-style.css and import it into the editor.
+These styles are imported from your current theme editor-style.css file. However some themes do not have this functionality. For these themes Advanced Editor Tools has the option to let you add a customized editor-style.css and import it into the editor.
 
 = I have just installed this plugin, but it does not do anything =
 
@@ -281,19 +292,17 @@ Make sure the "Disable the visual editor when writing" checkbox under "Users - Y
 
 Re-save the settings or click the "Restore Default Settings" button on the plugin settings page and then set the buttons again and save.
 
-= Other questions? More screenshots? =
-
-Please post on the support forum or visit the homepage for [TinyMCE Advanced](http://www.laptoptips.ca/projects/tinymce-advanced/).
-
 == Screenshots ==
 
-1. Rich-text toolbar and selected text color settings.
-2. The Classic Paragraph block.
-3. Converting several paragraphs into one classic paragraph.
-4. Converting several paragraphs into one classic paragraph.
-5. Settings for the rich-text toolbar, the Formatting toolbar and the selected text color.
-6. Settings for the toolbars in Classic Paragraph and Classic blocks.
-7. Additional options (defaults are shown).
+1. Rich-text toolbar.
+2. Rich-text toolbar and extra formatting buttons in the Inspector (sidebar).
+3. Many of the buttons can be moved to the Formatting section in the Inspector.
+4. Converting the content of the Classic Paragraph block into separate blocks.
+5. Converting several paragraph blocks into a Classic Paragraph block.
+6. Settings for the Rich-text toolbar and the optional Formatting section in the Inspector.
+7. Settings for the toolbars in Classic Paragraph and Classic blocks.
+8. Additional options.
+9. Advanced options for tables.
 
 == Upgrade Notice ==
 

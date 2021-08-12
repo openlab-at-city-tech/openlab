@@ -44,7 +44,7 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
     // Add default profiles if no profiles exist
     if (!$profiles->have_posts()) {
         $post_data = array(
-            'post_title'  => 'Default',
+            'post_title'  => 'All User Roles',
             'post_type'   => 'advgb_profiles',
             'post_status' => 'publish',
             'meta_input'  => array(
@@ -62,7 +62,7 @@ register_activation_hook(ADVANCED_GUTENBERG_PLUGIN, function () {
     if ($saved_settings === false) {
         update_option('advgb_settings', array(
             'gallery_lightbox' => 1,
-            'gallery_lightbox_caption' => 1,
+            'gallery_lightbox_caption' => '1',
             'blocks_icon_color' => '#5952de',
             'disable_wpautop' => 0,
             'enable_columns_visual_guide' => 1

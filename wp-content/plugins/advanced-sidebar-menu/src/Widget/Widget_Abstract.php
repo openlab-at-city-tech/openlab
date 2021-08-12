@@ -1,12 +1,12 @@
 <?php
 namespace Advanced_Sidebar_Menu\Widget;
 
+use Advanced_Sidebar_Menu\Utils;
+
 /**
  * Base class for this plugin's widgets.
  *
  * @author OnPoint Plugins
- *
- * @since  7.2.0
  */
 abstract class Widget_Abstract extends \WP_Widget {
 	/**
@@ -27,11 +27,9 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 *
 	 * @see   \WP_Widget::form_callback()
 	 *
-	 * @since 7.2.0
-	 *
 	 * @return array
 	 */
-	protected function set_instance( array $instance, array $defaults ) {
+	public function set_instance( array $instance, array $defaults ) {
 		$this->widget_settings = (array) wp_parse_args( $instance, $defaults );
 
 		return $this->widget_settings;
@@ -41,16 +39,14 @@ abstract class Widget_Abstract extends \WP_Widget {
 	/**
 	 * Checks if a widget's checkbox is checked.
 	 *
-	 * Checks first for a value then verifies the value = checked
+	 * Checks first for a value then verifies the value = 'checked'.
 	 *
-	 * @param string $name - name of checkbox.
-	 *
-	 * @since 7.2.0
+	 * @param string $name - Name of checkbox.
 	 *
 	 * @return bool
 	 */
 	public function checked( $name ) {
-		return isset( $this->widget_settings[ $name ] ) && 'checked' === $this->widget_settings[ $name ];
+		return Utils::instance()->is_checked( $name, $this->widget_settings );
 	}
 
 
@@ -64,9 +60,6 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 * @param bool   $reverse              - hide on check instead of show on check.
 	 *
 	 * @todo  Convert all uses of this method to supply the $element_key
-	 *
-	 * @since 7.2.0
-	 * @since 7.2.2 Added the `element_key` argument.
 	 *
 	 * @return void
 	 */
@@ -91,12 +84,10 @@ abstract class Widget_Abstract extends \WP_Widget {
 
 
 	/**
-	 * Outputs a <input type="checkbox" with id and name filled
+	 * Outputs a <input type="checkbox"> with id and name filled.
 	 *
-	 * @param string      $name              - name of field.
-	 * @param string|null $element_to_reveal - element to reveal/hide when box is checked/unchecked.
-	 *
-	 * @since 7.2.0
+	 * @param string      $name              - Name of field.
+	 * @param string|null $element_to_reveal - Element to reveal/hide when box is checked/unchecked.
 	 */
 	public function checkbox( $name, $element_to_reveal = null ) {
 		if ( empty( $this->widget_settings[ $name ] ) ) {
@@ -111,7 +102,7 @@ abstract class Widget_Abstract extends \WP_Widget {
 			value="checked"
 			data-js="advanced-sidebar-menu/widget/<?php echo esc_attr( $this->id_base ); ?>/<?php echo esc_attr( $name ); ?>"
 			<?php echo ( null !== $element_to_reveal ) ? 'onclick="asm_reveal_element( \'' . esc_attr( $this->get_field_id( $element_to_reveal ) ) . '\')"' : ''; ?>
-			<?php echo esc_html( $this->widget_settings[ $name ] ); ?>
+			<?php echo $this->checked( $name ) ? 'checked' : ''; ?>
 		/>
 		<?php
 	}

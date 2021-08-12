@@ -1,0 +1,196 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Project-Id-Version: Advanced Sidebar Menu\n"
+"POT-Creation-Date: 2021-01-20 11:16-0700\n"
+"PO-Revision-Date: 2021-01-20 11:39-0700\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: advanced-sidebar-menu.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: fr_FR\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: advanced-sidebar-menu.php:132
+msgid "widget documentation"
+msgstr "documentation widget"
+
+#. translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>]
+#: src/Notice.php:54
+#, php-format
+msgctxt "{<a>}{</a>}"
+msgid ""
+"Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version %3$s"
+"+. Please update or deactivate the PRO version."
+msgstr ""
+"Le menu Sidebar avancé nécessite %1$sAvanced Sidebar Menu PRO%2$s version "
+"%3$s+. Veuillez mettre à jour ou désactiver la version PRO."
+
+#: src/Notice.php:88
+msgid "Advanced Sidebar Menu PRO"
+msgstr "Advanced Sidebar Menu PRO"
+
+#: src/Notice.php:92
+msgid ""
+"Styling options including borders, bullets, colors, backgrounds, size, and "
+"font weight."
+msgstr ""
+"Options de style incluant les bordures, les balles, les couleurs, les "
+"arrière-plans, la taille et le poids de la police."
+
+#: src/Notice.php:93
+msgid "Accordion menus."
+msgstr "Menus accordéon."
+
+#: src/Notice.php:94
+msgid "Support for custom navigation menus from Appearance -> Menus."
+msgstr "Prise en charge des menus de navigation personnalisés "
+
+#: src/Notice.php:98
+msgid "Select and display custom post types."
+msgstr "Sélectionnez et affichez les types de postes personnalisés."
+
+#: src/Notice.php:102
+msgid "Select and display custom taxonomies."
+msgstr "Sélectionnez et affichez des taxonomies personnalisées."
+
+#: src/Notice.php:106
+msgid "Priority support with access to members only support area."
+msgstr "Soutien prioritaire avec accès aux membres uniquement zone de soutien."
+
+#: src/Notice.php:112
+msgid "So much more..."
+msgstr "Tellement plus..."
+
+#: src/Notice.php:121
+msgid "Upgrade"
+msgstr "Mise à jour"
+
+#: src/Notice.php:137
+msgid "Preview"
+msgstr "Aperçu"
+
+#: src/Widget/Category.php:52
+msgid ""
+"Creates a menu of all the categories using the child/parent relationship"
+msgstr ""
+"Crée un menu de toutes les catégories en utilisant la relation de l'enfant/"
+"parent"
+
+#: src/Widget/Category.php:58
+msgid "Advanced Sidebar Categories Menu"
+msgstr "Sidebar Catégories Menu Avancée"
+
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:123
+#, php-format
+msgid "Display the highest level parent %s"
+msgstr "Affichez les compétences parentales de haut niveau %s"
+
+#. translators: Selected taxonomy single label
+#. translators: Selected post type single label
+#: src/Widget/Category.php:132 src/Widget/Page.php:130
+#, php-format
+msgid "Display menu when there is only the parent %s"
+msgstr "Afficher le menu lorsqu’il n’y a que le parent %s"
+
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:141 src/Widget/Page.php:140
+#, php-format
+msgid "Always display child %s"
+msgstr "Affichez toujours les enfants %s"
+
+#: src/Widget/Category.php:155 src/Widget/Page.php:161
+msgid "- All -"
+msgstr "- Tout -"
+
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:170 src/Widget/Page.php:175
+#, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr "Afficher %1$s niveaux d'%2$s"
+
+#. translators: Selected taxonomy plural label
+#: src/Widget/Category.php:200
+#, php-format
+msgid "Display %s on single posts"
+msgstr "Afficher %s sur les messages simples"
+
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:210
+#, php-format
+msgid "Display each single post's %s"
+msgstr "Affichez les %s"
+
+#: src/Widget/Category.php:220
+msgid "In a new widget"
+msgstr "Dans un nouveau widget"
+
+#: src/Widget/Category.php:223
+msgid "In another list in the same widget"
+msgstr "Dans une autre liste dans le même widget"
+
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:251 src/Widget/Page.php:245
+#, php-format
+msgid "%s to exclude (ids, comma separated)"
+msgstr "%s exclure (ids, virgule séparée)"
+
+#: src/Widget/Category.php:283 src/Widget/Page.php:276
+msgid "Title"
+msgstr "Titre"
+
+#: src/Widget/Page.php:48
+msgid "Creates a menu of all the pages using the child/parent relationship"
+msgstr ""
+"Crée un menu de toutes les pages en utilisant la relation enfant/parent"
+
+#: src/Widget/Page.php:54
+msgid "Advanced Sidebar Pages Menu"
+msgstr "Advanced Sidebar Menu Des Pages"
+
+#. translators: Selected post type single label
+#: src/Widget/Page.php:119
+#, php-format
+msgid "Display highest level parent %s"
+msgstr "Afficher les parents de haut niveau %s"
+
+#: src/Widget/Page.php:202
+msgid "Order by"
+msgstr "Trier par"
+
+#. Plugin Name of the plugin/theme
+msgid "Advanced Sidebar Menu"
+msgstr "Advanced Sidebar Menu"
+
+#. Plugin URI of the plugin/theme
+msgid "https://onpointplugins.com/advanced-sidebar-menu/"
+msgstr "https://onpointplugins.com/advanced-sidebar-menu/"
+
+#. Description of the plugin/theme
+msgid ""
+"Creates dynamic menus based on parent/child relationship of your pages or "
+"categories."
+msgstr ""
+"Crée des menus dynamiques basés sur la relation parent/enfant de vos pages "
+"ou catégories."
+
+#. Author of the plugin/theme
+msgid "OnPoint Plugins"
+msgstr "OnPoint Plugins"
+
+#. Author URI of the plugin/theme
+msgid "https://onpointplugins.com"
+msgstr "https://onpointplugins.com"

@@ -34,8 +34,8 @@ class WPSimileTimeline{
 		'start'=>0,
 		'stop'=>0
 	);
-	
-	function WPSimileTimeline(){
+
+	function __construct(){
 		// empty constructor
 	}
 	
@@ -179,7 +179,7 @@ class WPSimileTimeline{
 			$stl_istimelinepage = true;
 		}
 		else{
-			$stl_timelinepagesarray = split(",", $stl_timelinepages);
+			$stl_timelinepagesarray = explode(",", $stl_timelinepages);
 			foreach($stl_timelinepagesarray as $stl_timelinepageid):
 				if($stl_currentpageid == $stl_timelinepageid){
 					$stl_istimelinepage = true;

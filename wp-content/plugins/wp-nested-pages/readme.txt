@@ -3,9 +3,9 @@ Contributors: kylephillips
 Donate link: https://github.com/sponsors/kylephillips/
 Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.4
-Stable tag: 3.1.12
+Stable tag: 3.1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,16 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.1.5 = 
+* Action added for outputting markup along with the add new/add multiple buttons (nestedpages_top_buttons)
+* PHP 8 deprecation errors corrected
+* Tested with WordPress v5.8
+
+= 3.1.14 =
+* Additional security enhancements (Thanks Nico Mollet)
+* Developer improvements through added filters and filter usage corrections (Thanks Bjørnar Tollaksen & Alexandre Sadowski)
+* Adds post title filter for customizing title display beyond the_title filter
 
 = 3.1.13 =
 * Corrects permission issues introduced in previous update

@@ -51,7 +51,6 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                                         <button class="btn btn-light btn-sm b2s-curation-info-premium-btn pull-left" data-type="image"><?php esc_html_e('Image Post', 'blog2social') ?> <span class="label label-success"><?php esc_html_e("PRO", "blog2social") ?></span></button>
                                         <button class="btn btn-light btn-sm b2s-curation-info-premium-btn pull-left" data-type="text"><?php esc_html_e('Text Post', 'blog2social') ?> <span class="label label-success"><?php esc_html_e("PRO", "blog2social") ?></span></button>
                                     <?php } ?>
-                                    <button class="btn btn-sm btn-link b2sTextPostInfoModalBtn">Info</button>
                                     <input type="hidden" id="b2s-curation-post-format" value="0">
                                 </div>
                             </div>
@@ -255,28 +254,44 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" ><?php esc_html_e('Text Post', 'blog2social'); ?></h4>
+                <h4 class="modal-title" ><?php esc_html_e('Social Media Posts', 'blog2social'); ?></h4>
             </div>
             <div class="modal-body">
-                <?php esc_html_e('Text posts enable you to share pure text messages and personal comments with your followers and readers. You can also use hashtags, @mentions, or emojis to share your feelings. You can share a text post on the following networks:', 'blog2social') ?>
+                <div class="b2s-network-imgs">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Facebook') ?>" src="<?php echo plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Twitter') ?>" src="<?php echo plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('LinkedIn') ?>" src="<?php echo plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('VKontakte') ?>" src="<?php echo plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('XING') ?>" src="<?php echo plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Google My Business') ?>" src="<?php echo plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Telegram') ?>" src="<?php echo plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE) ?>">
+                    
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Flickr') ?>" src="<?php echo plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Diigo') ?>" src="<?php echo plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Pinterest') ?>" src="<?php echo plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Instagram') ?>" src="<?php echo plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Reddit') ?>" src="<?php echo plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Medium') ?>" src="<?php echo plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Tumblr') ?>" src="<?php echo plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Torial') ?>" src="<?php echo plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Bloglovin') ?>" src="<?php echo plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE) ?>">
+                </div>
                 <br>
+                <p><?php esc_html_e('Text posts enable you to share pure text messages and personal comments with your followers and readers. You can also customize your posts with individual hashtags, @mentions, or emojis.', 'blog2social') ?></p>
+                <h4><?php esc_html_e('You can share a text post on the following networks:', 'blog2social') ?></h4>
+                <p class="b2s-bold"><?php esc_attr_e('Facebook (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Twitter (1 Profil)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('LinkedIn') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('VKontakte (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('XING (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Google My Business') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Telegram') ?></p>
                 <br>
-                Facebook<br>
-                Twitter<br>
-                Linkedin<br>
-                Tumblr<br>
-                Diigo<br>
-                Medium<br>
-                Torial<br>
-                Reddit<br>
-                Bloglovin<br>
-                VK<br>
-                Google My Business<br>
-                Xing<br>
-                Telegram<br>
+                <p><?php echo sprintf(__('Get more information on how to share a text post with hashtags, @mentions and emojis in the <a href="%s" target="_blank">social media posts guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('cc_text_post_info')); ?></p>
                 <br>
-                <br>
-                <?php echo sprintf(__('Get more information on how to share a text post with hashtags, @mentions and emojis in the <a href="%s" target="_blank">social media posts guide</a>.', 'blog2social'), B2S_Tools::getSupportLink('cc_text_post_info')); ?>
+                <p><?php echo sprintf(__('Under the <a href="%s">Network Settings</a> you can define the network selection.', 'blog2social'), 'admin.php?page=blog2social-network'); ?>
+                    <br>
+                <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), B2S_Tools::getSupportLink('network_grouping')); ?></p>
             </div>
         </div>
     </div>
@@ -309,42 +324,48 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoNetworkModal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Available networks for Social Media Posts', 'blog2social') ?></h4>
+                <h4 class="modal-title"><?php esc_html_e('Social Media Posts', 'blog2social') ?></h4>
             </div>
-        <div class="modal-body">
-            <div class="b2s-network-imgs">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Facebook') ?>" src="<?php echo plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Twitter') ?>" src="<?php echo plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('LinkedIn') ?>" src="<?php echo plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Pinterest') ?>" src="<?php echo plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Flickr') ?>" src="<?php echo plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Diigo') ?>" src="<?php echo plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Instagram') ?>" src="<?php echo plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Reddit') ?>" src="<?php echo plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('VKontakte') ?>" src="<?php echo plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('XING') ?>" src="<?php echo plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Imgur') ?>" src="<?php echo plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE) ?>">
+            <div class="modal-body">
+                <div class="b2s-network-imgs">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Facebook') ?>" src="<?php echo plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Twitter') ?>" src="<?php echo plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('LinkedIn') ?>" src="<?php echo plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Pinterest') ?>" src="<?php echo plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Flickr') ?>" src="<?php echo plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Diigo') ?>" src="<?php echo plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Instagram') ?>" src="<?php echo plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Reddit') ?>" src="<?php echo plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('VKontakte') ?>" src="<?php echo plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('XING') ?>" src="<?php echo plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Google My Business') ?>" src="<?php echo plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Telegram') ?>" src="<?php echo plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE) ?>">
 
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Google My Business') ?>" src="<?php echo plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Medium') ?>" src="<?php echo plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Tumblr') ?>" src="<?php echo plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Torial') ?>" src="<?php echo plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE) ?>">
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Bloglovin') ?>" src="<?php echo plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Medium') ?>" src="<?php echo plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Tumblr') ?>" src="<?php echo plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Torial') ?>" src="<?php echo plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE) ?>">
+                    <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Bloglovin') ?>" src="<?php echo plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE) ?>">
+                </div>
+                <br>
+                <p><?php esc_html_e('With Blog2Social you can share social media posts consisting of texts, links, images, and videos automatically with your followers and readers and customize your posts with individual hashtags, @mentions, or emojis.') ?></p>
+                <h4><?php esc_html_e('You can share a link post, a video post, or an image post on the following networks:', 'blog2social') ?></h4>
+                <p class="b2s-bold"><?php esc_attr_e('Facebook (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Twitter (1 Profil)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('LinkedIn') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Pinterest') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Flickr') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Diigo') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Instagram') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Reddit') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('VKontakte (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('XING (Profile & Seiten)') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Google My Business') ?></p>
+                <p class="b2s-bold"><?php esc_attr_e('Telegram') ?></p>
+                <br>
+                <p><?php echo sprintf(__('Under the <a href="%s">Network Settings</a> you can define the network selection.', 'blog2social'), 'admin.php?page=blog2social-network'); ?>
+                    <br>
+                <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), B2S_Tools::getSupportLink('network_grouping')); ?></p>
             </div>
-            <br>
-            <p class="b2s-bold"><?php echo sprintf(__('Under <a href="%s">Network Settings</a> you define which network selection is used. <a href="%s" target="_blank">To create a network grouping.</a>', 'blog2social'), 'admin.php?page=blog2social-network', B2S_Tools::getSupportLink('network_grouping')) ?></p>
-            <h4><?php esc_html_e('Available networks', 'blog2social') ?></h4>
-            <p class="b2s-bold"><?php esc_attr_e('Facebook (Profile & Seiten)') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Twitter (1 Profil)') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('LinkedIn') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Pinterest') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Flickr') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Diigo') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Instagram') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Reddit') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('VKontakte (Profile & Seiten)') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('XING (Profile & Seiten)') ?></p>
-            <p class="b2s-bold"><?php esc_attr_e('Imgur') ?></p>
         </div>
     </div>
 </div>

@@ -1,46 +1,55 @@
 === MapPress Maps for WordPress ===
 Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
-Tags: maps, map, google maps, leaflet maps, leaflet map plugin, map plugin, directions, google map plugin, map widget, mapbox, mapping
+Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.3
 Requires PHP: 5.6
-Tested up to: 5.6
-Stable tag: 2.57.3
+Tested up to: 5.7
+Stable tag: 2.64.2
 
 == Description ==
-MapPress adds beautiful interfactive Google and Leaflet maps to WordPress.
+MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
 
-Easily create unlimited maps and locations using the Gutenberg block editor, classic editor or shortcodes.
+Create unlimited maps and map markers using Gutenberg blocks or the classic editor.  The popup map editor makes creating and editing maps easy!
 
-Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for custom markers, searchable mashups, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
+Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more features, including custom markers, searchable mashups, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
 
 [Home Page](https://mappresspro.com/mappress)
-[Documentation](https://mappresspro.com/mappress-beta)
+[What's New](https://mappresspro.com/whats-new)
+[Documentation](https://mappresspro.com/mappress-documentation)
 [FAQ](https://mappresspro.com/mappress-faq)
 [Support](https://mappresspro.com/mappress-faq)
 
+== Screenshots ==
+1. MapPress settings page
+2. Map Library in Gutenberg
+3. Creating a map
+4. Creating a mashup
+
 = Key Features =
+* The only full-featured google map plugin and leaflet map plugin that is compatible with the Gutenberg editor
 * Add unlimited maps and markers to any post, page or custom post type
+* Maps are fully responsive, and can be sized by pixels, viewport units, percents or aspect ratios
 * Locations can be added by address, place, or latitude/longitude, or dragged into position
 * Markers support custom text and HTML including photos, images, and links
 * Google street view and overlays (traffic, bicycling and transit)
-* Markers link to Google maps for detailed turn-by-turn directins
+* Markers link the Google map site for detailed turn-by-turn directins
 * Maps can be generated using PHP for use in themes and templates
 
 = Pro Version Features =
 * Get [MapPress Pro](https://mappresspro.com/mappress) for additional functionality
 * Custom marker icons, or upload your own - 100 standard icons included
-* Combine maps and locations into a searchable "mashup" map
+* Use a Gutenberg "mashup" block to create a searchable map, great for a local directory site or store locator
 * Filter locations by by taxonomy, tag or category
-* Map and mashup widgets
+* Map widget and mashup widget are included
 * Marker clustering for both Leaflet and Google
-* Multiple geocoders including Google, Nominatim, Algolia and MapBox
+* Multiple geocoders including Google, Nominatim, Algolia and Mapbox
 * Customizable marker and list templates
 * Custom map colors and styles using Google styled maps and Mapbox Studio
 * Generate maps automatically from custom fields
 * Automatically assign marker icons by taxonomy, tag, or category
 * KML support for Google Earth
-* Google drawing manager for drawing polygons, circles, and lines directly on your maps
+* Google drawing manager for drawing polygons, circles, and lines on your maps
 * MultiSite compatible
 * Compatible with WPML language settings
 
@@ -74,9 +83,160 @@ Please see the plugin documentation pages:
 
 == Changelog ==
 
-= 2.57.3 =
-* Fixed: notice in multisite admin
-* Fixed: add missing textdomains
+= 2.64.2 =
+* Changed: mashup filters now hide terms that are not assigned to any posts
+* Changed: update google marker clusterer to v.1.2
+* Fixed: missing logo
+
+= 2.64.1 =
+* Fixed: JS libraries were not compiled properly
+
+= 2.64 =
+* Added: welcome guide and support page
+* Fixed: post modal content not shown for logged-out users
+
+= 2.63.2 =
+* Fixed: unable to save default custom style
+
+= 2.63.1 =
+* Fixed: missing POIs in list
+* Changed: menu removed for Leaflet maps
+* Changed: deactivation form updated
+
+= 2.63 =
+* Added: new map control and modal for editing custom map styles
+* Added: new templates for map list items - please update custom templates to match
+* Added: filters now support multiple filter taxonomies
+* Added: POI list now has pagination controls
+* Fixed: icon scale of 0 should be blank (auto scale)
+
+= 2.62.13 =
+* Fixed: popup text not sizing to featured image
+* Fixed: directions server and POI body settings not saving properly
+* Fixed: mapbox default style not applying for maps saved without a map type
+* Changed: updated filters 'mappress_post_query' and 'mappress_pre_filter'
+
+= 2.62.12 =
+* Fixed: mapbox style preview URL not working
+* Added: workaround for Jetpack Infinite Scroll bug that prevents inline scripts
+
+= 2.62.11 =
+* Fixed: default POI zoom setting not saving
+
+= 2.62.10 =
+* Changed: pagination moved to map list toolbar
+* Fixed: compatibility fix for autoptimize
+
+= 2.62.9 =
+* Added: map list is now paged
+* Fixed: enter key in classic editor title not publishing post
+* Fixed: opening map library slow because of 'attach' control
+* Fixed: blank settings screen for missing icons widget
+
+= 2.62.8 =
+* Fixed: Infobox mouse event bleeding through to map
+* Fixed: Mapbox geocoder not setting POI title for new POIs
+* Fixed: POI list position setting not working
+* Fixed: custom Google styles saving with extra slashes
+* Added: better CSS styling for custom map styles table in MapPress settings screen
+
+= 2.62.7 =
+* Fixed: alert for missing drawing API
+
+= 2.62.6 =
+* Fixed: error with missing layout option for sites upgrading from old versions
+
+= 2.62.5 =
+* Fixed: error in geolocate control for non-SSL sites using Leaflet
+* Fixed: error when opening Mapbox style settings
+* Fixed: some themes hide centered maps with opacity:0
+
+= 2.62.4 =
+* Added: Gutenberg map/mashup blocks now support 'wide' and 'full' alignment
+* Added: Gutenberg map/mashup blocks should now better support 'left', 'right' and 'center' alignement
+* Added: A new 'your location' geolocation control has been added over the map +/- zoom controls
+* Removed: the 'your location' control has been removed from the search box
+* Changed: POI list is now enabled by default
+
+= 2.62.3 =
+* Fixed: settings screen not displayed in free version
+
+= 2.62.2 =
+* Fixed: infobox anchor incorrect if icon scale is empty
+* Fixed: license check button JS error
+
+= 2.62.1 =
+* Added: POI click settings for mashups now include showing the entire post in a full-screen popup
+* Changed: POI list widened to 300px
+* Fixed: hover effect not deselecting when new POI hovered
+* Fixed: error in infobox when POI opened on hover and map hasn't initialized yet
+
+= 2.62 =
+* Added: new icon generator to create icons dynamically
+* Added: new color picker
+* Added: new icon picker
+
+= 2.61.1 =
+* Fixed: error "class Mappress_Pro_Settings not found"
+
+= 2.61 =
+* Added: default sizes are now responsive (%) based, pixel and viewport sizes are still supported
+* Added: default sizes are now editable and sortable
+* Added: new settings have been added for users of the free version
+* Added: support for the new block-based widget editor
+* Changed: plugin setttings screen is now React-based
+* Changed: POI editor icon picker and color picker have been converted to React
+* Fixed: POI list not updating when POI is changed
+* Fixed: conflict with Yoast preview slug temporarily appearing blank
+* Fixed: Gutenberg editor setting map alignment on settings screen prevents blocks from being selected
+* Fixed: React error for duplicate keys in multiselect
+
+= 2.60 =
+* Added: updated flex-based mashup list & popup templates with better thumbnail support - please update any custom template
+* Added: updated map popup template and CSS - please update any custom templates
+* Added: for classic editor: put the cursor on a shortcode to open that map in editor
+* Added: better infobox panning and sizing
+* Added: mashup thumbnail position can now be set in MapPress settings
+* Added: setting to open POIs on mouse hover
+* Added: map library now supports column sorting by mapid, map title, and post title
+* Added: window.location is now passed as argument ($args->url) to filter 'mappress_pre_query'
+* Added: classic editor is now React-based
+
+= 2.59 =
+* Fixed: JS files were not compiling for IE11.  Note that IE11 is NOT a supported browser.
+* Fixed: Leaflet icons were not setting scale properly, interfering with marker spiderfier
+* Fixed: error when saving map center of 0,0
+* Added: new marker class to enable effects
+* Added: map data can be recovered after deletion
+* Added: highlighting on mouse over for list and marker hover
+* Added: better z-indexing for hovered marker
+
+= 2.58.3 =
+* Added: selected icon can now be highlighted with a special icon or a circle
+* Fixed: error preventing KML files from being added to map
+
+= 2.58.2 =
+* Fixed: jQuery warning was causing maps to not display in older WP versions
+
+= 2.58.1 =
+* Fixed: places strim trim() not working for maps with center specified by lat/lng
+* Fixed: better error message for sites with obsolete jQuery and jQuery UI
+* Fixed: admin notices not showing correctly on settings page
+* Fixed: added warning for expired license
+* Fixed: errors for invalid KML files were not displaying
+
+= 2.58 =
+* Added: new infobox with better panning and sizing
+* Added: infobox can now be used with Leaflet, in addition to Google
+* Added: standard Leaflet popups now fit to the map dimensions
+* Added: oembed has been enabled for popups, POIs can now include Youtube videos, music, etc
+* Added: maps can be attached/detached from posts in the map list and map library
+* Added: query by specific post IDs added for Gutenberg mashup blocks
+* Added: map type (style) added to the settings for Gutenberg mashup blocks
+* Added: filter 'mappress_poi_excerpt' can be used to control excerpts in map POIs
+* Changed: bigger popups for POI editor
+* Fixed: warning message for mashup widget in new widget editor
+* Fixed: Gutenberg plugin caused blank taxonomy names in mashup blocks
 
 = 2.57.2 =
 * Fixed: remove extra translation json file

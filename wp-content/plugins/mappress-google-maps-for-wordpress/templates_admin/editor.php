@@ -1,35 +1,20 @@
-<script type='text/template' id='mapp-tmpl-edit-loop'>
-	<div class='mapp-list-toggle' data-mapp-action='list-toggle'></div>
-	<div class='mapp-items'>
-		<# _.forEach(pois, function(poi, i) { #>
-			<div class='mapp-item' data-mapp-action='open' data-mapp-poi='{{{i}}}'><# print(poi.render('item')); #></div>
-		<# }); #>
-	</div>
-</script>
-
-<script type='text/template' id='mapp-tmpl-edit-item'>
-	<img class="mapp-icon" src="{{{poi.icon}}}">
-	<div class='mapp-title'>{{{poi.title}}}</div>
-</script>
-
 <script type='text/template' id='mapp-tmpl-edit-popup'>
 	<div class='mapp-poi-header'>
 		<input class='mapp-poi-title' type='text' value='{{poi.title}}'>
-		<# if (!poi.type) { #>
-			<img data-mapp-iconpicker data-mapp-iconid='{{{poi.iconid}}}' class='mapp-icon'>
+		<# if (mappl10n.options.pro && !poi.type) { #>
+			<div id='mapp-poi-iconpicker'></div>
 		<# } else if (poi.isPoly()) { #>
-			<# var colors = poi.getTemplateColors(); #>
-			<span data-mapp-colorpicker class='mapp-colorpicker-toggle' data-mapp-color='{{{colors.color}}}' data-mapp-opacity='{{{colors.opacity}}}' data-mapp-weight='{{{colors.weight}}}' tabindex='0'></span>
+			<div id='mapp-poi-colorpicker'></div>
 		<# } #>
 	</div>
 
-	<div class='mapp-poi-editor-toolbar'>
-		<# if (poi.type == 'kml') { #>
-			<div class='mapp-poi-kml'>
-				<input class='mapp-poi-url' type='text' readonly='readonly' value='<# print( (poi.kml) ? poi.kml.url : '' );#>'/>
-			</div>
-		<# } #>
+	<# if (poi.type == 'kml') { #>
+		<div class='mapp-poi-kml'>
+			<input class='mapp-poi-url' type='text' readonly='readonly' value='<# print( (poi.kml) ? poi.kml.url : '' );#>'/>
+		</div>
+	<# } #>
 
+	<div class='mapp-poi-editor-toolbar'>
 		<div class='mapp-poi-editor-tabs'>
 			<a class='mapp-poi-visual'><?php _e('Visual', 'mappress-google-maps-for-wordpress'); ?></a> | <a class='mapp-poi-html'><?php _e('HTML', 'mappress-google-maps-for-wordpress');?></a>
 			</div>

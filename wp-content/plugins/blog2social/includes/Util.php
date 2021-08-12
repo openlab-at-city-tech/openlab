@@ -438,18 +438,18 @@ class B2S_Util {
             if (mb_strlen($text, 'UTF-8') < $count) {
                 return trim($text);
             }
-            if ($max !== false && mb_strlen($text, 'UTF-8') < $max) {
+            if ($max != false && mb_strlen($text, 'UTF-8') < $max) {
                 return trim($text);
             }
-
-            $stops = array('.', ':', '?', '!', '#');
+            
+            $stops = array('.', '?', '!', '#');
             $min = $count;
             $cleanTruncateWord = true;
             $max = ($max !== false) ? ($max - $min) : ($min - 1);
             if (mb_strlen($text, 'UTF-8') < $max) {
                 return trim($text);
             }
-
+            
             $sub = mb_substr($text, $min, $max, 'UTF-8');
             $stopAt = '';
             $stopAtPos = 0;
@@ -459,7 +459,7 @@ class B2S_Util {
                     $stopAtPos = mb_strripos($sub, $stops[$i]);
                 }
             }
-
+            
             if (!empty($stopAt)) {
                 if (count($subArray = explode($stopAt, $sub)) > 1) {
                     $cleanTruncateWord = false;

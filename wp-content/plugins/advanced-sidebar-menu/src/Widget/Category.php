@@ -158,8 +158,8 @@ class Category extends Widget_Abstract {
 							for ( $i = 1; $i < 6; $i ++ ) {
 								?>
 								<option
-									value="<?php echo esc_attr( $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
-									<?php echo esc_html( $i ); ?>
+									value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
+									<?php echo (int) $i; ?>
 								</option>
 								<?php
 							}
@@ -273,8 +273,6 @@ class Category extends Widget_Abstract {
 	 * @param array $instance - Widget settings.
 	 *
 	 * @since 7.2.1
-	 *
-	 * @return void
 	 */
 	public function form( $instance ) {
 		$instance = $this->set_instance( $instance, self::$defaults );
@@ -303,6 +301,8 @@ class Category extends Widget_Abstract {
 
 		<?php
 		do_action( 'advanced-sidebar-menu/widget/category/after-form', $instance, $this );
+
+		return '';
 	}
 
 

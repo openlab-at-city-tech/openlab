@@ -1,13 +1,11 @@
 <?php
 
 
-/* ---------------------------------------------------------------------------------------------
-   THEME SETUP
-   --------------------------------------------------------------------------------------------- */
+/*	-----------------------------------------------------------------------------------------------
+	THEME SETUP
+--------------------------------------------------------------------------------------------------- */
 
-
-if ( ! function_exists( 'lingonberry_setup' ) ) {
-
+if ( ! function_exists( 'lingonberry_setup' ) ) :
 	function lingonberry_setup() {
 		
 		// Automatic feed
@@ -20,265 +18,324 @@ if ( ! function_exists( 'lingonberry_setup' ) ) {
 		add_theme_support( 'post-formats', array( 'aside', 'audio', 'chat', 'gallery', 'image', 'link', 'quote', 'status', 'video' ) );
 		
 		// Post thumbnails
-		add_theme_support( 'post-thumbnails', array( 'post', 'page' ) );
-		add_image_size( 'post-image', 766, 9999 );
+		add_theme_support( 'post-thumbnails' );
+		set_post_thumbnail_size( 766, 9999 );
 		
 		// Title tag
 		add_theme_support( 'title-tag' );
 
 		// Set content width
 		global $content_width;
-		if ( ! isset( $content_width ) ) $content_width = 766;
+		if ( ! isset( $content_width ) ) {
+			$content_width = 766;
+		} 
 
 		// Custom header (logo)
-		$custom_header_args = array( 'width' => 200, 'height' => 200, 'header-text' => false );
-		add_theme_support( 'custom-header', $custom_header_args );
+		add_theme_support( 'custom-header', array( 
+			'width' 		=> 200, 
+			'height' 		=> 200, 
+			'header-text' 	=> false 
+		) );
+
+		// HTML5 semantic markup for search forms.
+		add_theme_support( 'html5', array( 'search-form' ) );
 		
 		// Add nav menu
 		register_nav_menu( 'primary', 'Primary Menu' );
 		
 		// Make the theme translation ready
-		load_theme_textdomain('lingonberry', get_template_directory() . '/languages');
-		
-		$locale = get_locale();
-		$locale_file = get_template_directory() . "/languages/$locale.php";
-		if ( is_readable($locale_file) )
-		require_once($locale_file);
+		load_theme_textdomain( 'lingonberry', get_template_directory() . '/languages' );
 		
 	}
 	add_action( 'after_setup_theme', 'lingonberry_setup' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   ENQUEUE SCRIPTS
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_load_javascript_files' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	REQUIRED FILES
+	Include required files
+--------------------------------------------------------------------------------------------------- */
 
+// Handle Customizer settings.
+require get_template_directory() . '/inc/classes/class-lingonberry-customize.php';
+
+
+/*	-----------------------------------------------------------------------------------------------
+	ENQUEUE SCRIPTS
+--------------------------------------------------------------------------------------------------- */
+
+if ( ! function_exists( 'lingonberry_load_javascript_files' ) ) :
 	function lingonberry_load_javascript_files() {
 
-		if ( ! is_admin() ) {
-			wp_enqueue_script( 'lingonberry_flexslider', get_template_directory_uri().'/js/flexslider.min.js', array('jquery'), '', true  );
-			wp_enqueue_script( 'lingonberry_global', get_template_directory_uri().'/js/global.js', array('jquery'), '', true );
-			if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
-		}
+		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
+
+		wp_register_script( 'lingonberry_flexslider', get_template_directory_uri().'/assets/js/flexslider.min.js' );
+		wp_enqueue_script( 'lingonberry_global', get_template_directory_uri().'/assets/js/global.js', array( 'jquery', 'lingonberry_flexslider' ), $theme_version, true );
+
+		if ( is_singular() ) wp_enqueue_script( 'comment-reply' );
+
 	}
 	add_action( 'wp_enqueue_scripts', 'lingonberry_load_javascript_files' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   ENQUEUE STYLES
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_load_style' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	ENQUEUE STYLES
+--------------------------------------------------------------------------------------------------- */
 
+if ( ! function_exists( 'lingonberry_load_style' ) ) :
 	function lingonberry_load_style() {
-		if ( ! is_admin() ) {
 
-			$dependencies = array();
+		if ( is_admin() ) return;
 
-			/**
-			 * Translators: If there are characters in your language that are not
-			 * supported by the theme fonts, translate this to 'off'. Do not translate
-			 * into your own language.
-			 */
-			$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
+		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
+		$dependencies = array();
 
-			if ( 'off' !== $google_fonts ) {
+		/**
+		 * Translators: If there are characters in your language that are not
+		 * supported by the theme fonts, translate this to 'off'. Do not translate
+		 * into your own language.
+		 */
+		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
 
-				// Register Google Fonts
-				wp_register_style( 'lingonberry_google_fonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400' );
-				$dependencies[] = 'lingonberry_google_fonts';
-
-			}
-
-			wp_enqueue_style( 'lingonberry_style', get_stylesheet_uri(), $dependencies );
+		if ( 'off' !== $google_fonts ) {
+			wp_register_style( 'lingonberry_google_fonts', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400' );
+			$dependencies[] = 'lingonberry_google_fonts';
 		}
+
+		wp_enqueue_style( 'lingonberry_style', get_stylesheet_uri(), $dependencies, $theme_version );
+
 	}
 	add_action( 'wp_print_styles', 'lingonberry_load_style' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   ADD EDITOR STYLES
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_add_editor_styles' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	EDITOR STYLES
+--------------------------------------------------------------------------------------------------- */
 
+if ( ! function_exists( 'lingonberry_add_editor_styles' ) ) :
 	function lingonberry_add_editor_styles() {
-		add_editor_style( 'lingonberry-editor-styles.css' );
-		$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400';
-		add_editor_style( str_replace( ',', '%2C', $font_url ) );
+
+		add_editor_style( 'assets/css/classic-editor-styles.css' );
+
+		/**
+		 * Translators: If there are characters in your language that are not
+		 * supported by the theme fonts, translate this to 'off'. Do not translate
+		 * into your own language.
+		 */
+		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
+
+		if ( 'off' !== $google_fonts ) {
+			$font_url = '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400';
+			add_editor_style( str_replace( ',', '%2C', $font_url ) );
+		}
+
 	}
 	add_action( 'init', 'lingonberry_add_editor_styles' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   ADD FOOTER WIDGET AREAS
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_sidebar_registration' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	REGISTER WIDGET AREAS
+--------------------------------------------------------------------------------------------------- */
 
+if ( ! function_exists( 'lingonberry_sidebar_registration' ) ) :
 	function lingonberry_sidebar_registration() {
 
-		register_sidebar( array(
+		$shared_args = array(
 			'after_title' 	=> '</h3>',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 			'before_title' 	=> '<h3 class="widget-title">',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
+		);
+
+		register_sidebar( array_merge( $shared_args, array(
 			'description' 	=> __( 'Widgets in this area will be shown in the first column in the footer.', 'lingonberry' ),
 			'id' 			=> 'footer-a',
 			'name' 			=> __( 'Footer A', 'lingonberry' ),
-		) );
+		) ) );
 
-		register_sidebar( array(
-			'after_title' 	=> '</h3>',
-			'after_widget' 	=> '</div><div class="clear"></div></div>',
-			'before_title' 	=> '<h3 class="widget-title">',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+		register_sidebar( array_merge( $shared_args, array(
 			'description' 	=> __( 'Widgets in this area will be shown in the second column in the footer.', 'lingonberry' ),
 			'id' 			=> 'footer-b',
 			'name' 			=> __( 'Footer B', 'lingonberry' ),
-		) );
+		) ) );
 
-		register_sidebar( array(
-			'after_title' 	=> '</h3>',
-			'after_widget' 	=> '</div><div class="clear"></div></div>',
-			'before_title' 	=> '<h3 class="widget-title">',
-			'before_widget' => '<div class="widget %2$s"><div class="widget-content">',
+		register_sidebar( array_merge( $shared_args, array(
 			'description' 	=> __( 'Widgets in this area will be shown in the third column in the footer.', 'lingonberry' ),
 			'id' 			=> 'footer-c',
 			'name' 			=> __( 'Footer C', 'lingonberry' ),
-		) );
+		) ) );
 
 	}
 	add_action( 'widgets_init', 'lingonberry_sidebar_registration' ); 
-
-}
-	
-
-/* ---------------------------------------------------------------------------------------------
-   INCLUDE THEME WIDGETS
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-require_once( get_template_directory() . "/widgets/dribbble-widget.php" );
-require_once( get_template_directory() . "/widgets/flickr-widget.php" );
+/*	-----------------------------------------------------------------------------------------------
+	NO JS CLASS
+--------------------------------------------------------------------------------------------------- */
 
-
-/* ---------------------------------------------------------------------------------------------
-   CHECK FOR JAVASCRIPT
-   --------------------------------------------------------------------------------------------- */
-
-
-if ( ! function_exists( 'lingonberry_html_js_class' ) ) {
-
+if ( ! function_exists( 'lingonberry_html_js_class' ) ) :
 	function lingonberry_html_js_class() {
+
 		echo '<script>document.documentElement.className = document.documentElement.className.replace("no-js","js");</script>'. "\n";
+
 	}
 	add_action( 'wp_head', 'lingonberry_html_js_class', 1 );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   ADD CLASSES TO PAGINATION
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_posts_link_attributes_1' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	ADD CLASSES TO PAGINATION
+--------------------------------------------------------------------------------------------------- */
 
+if ( ! function_exists( 'lingonberry_posts_link_attributes_1' ) ) :
 	function lingonberry_posts_link_attributes_1() {
+
 		return 'class="post-nav-older"';
+
 	}
 	add_filter( 'next_posts_link_attributes', 'lingonberry_posts_link_attributes_1' );
+endif;
 
-}
-
-if ( ! function_exists( 'lingonberry_posts_link_attributes_2' ) ) {
-
+if ( ! function_exists( 'lingonberry_posts_link_attributes_2' ) ) :
 	function lingonberry_posts_link_attributes_2() {
+
 		return 'class="post-nav-newer"';
+
 	}
 	add_filter( 'previous_posts_link_attributes', 'lingonberry_posts_link_attributes_2' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   MENU WALKER ADDING HAS-CHILDREN
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-class lingonberry_nav_walker extends Walker_Nav_Menu {
+/*	-----------------------------------------------------------------------------------------------
+	CUSTOM MORE LINK TEXT
+--------------------------------------------------------------------------------------------------- */
 
-    function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
+if ( ! function_exists( 'lingonberry_custom_more_link' ) ) :
+	function lingonberry_custom_more_link( $more_link, $more_link_text ) {
 
-		$id_field = $this->db_fields['id'];
+		return str_replace( $more_link_text, __( 'Continue reading', 'lingonberry' ), $more_link );
+
+	}
+	add_filter( 'the_content_more_link', 'lingonberry_custom_more_link', 10, 2 );
+endif;
+
+
+/*	-----------------------------------------------------------------------------------------------
+	FILTER ARCHIVE TITLE
+
+	@param	$title string		The initial title
+--------------------------------------------------------------------------------------------------- */
+
+if ( ! function_exists( 'lingonberry_filter_archive_title' ) ) :
+	function lingonberry_filter_archive_title( $title ) {
+
+		$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1; 
+
+		// On home, show no title
+		if ( is_home() ) {
+			if ( $paged == 1 ) {
+				$title = '';
+			} else {
+				global $wp_query;
+				$title = sprintf( __( 'Page %1$s of %2$s', 'lingonberry' ), $paged, $wp_query->max_num_pages );
+			}
+		}
+
+		// On search, show the search query.
+		elseif ( is_search() ) {
+			$title = sprintf( _x( 'Search: %s', '%s = The search query', 'lingonberry' ), '&ldquo;' . get_search_query() . '&rdquo;' );
+		} 
+
+		return $title;
+
+	}
+	add_filter( 'get_the_archive_title', 'lingonberry_filter_archive_title' );
+endif;
+
+
+/*	-----------------------------------------------------------------------------------------------
+	FILTER ARCHIVE DESCRIPTION
+
+	@param	$description string		The initial description
+--------------------------------------------------------------------------------------------------- */
+
+if ( ! function_exists( 'lingonberry_filter_archive_description' ) ) :
+	function lingonberry_filter_archive_description( $description ) {
 		
-        if ( ! empty( $children_elements[ $element->$id_field ] ) ) {
-            $element->classes[] = 'has-children';
+		// On search, show a string describing the results of the search.
+		if ( is_search() ) {
+			global $wp_query;
+			if ( $wp_query->found_posts ) {
+				/* Translators: %s = Number of results */
+				$description = sprintf( _nx( 'We found %s result for your search.', 'We found %s results for your search.',  $wp_query->found_posts, '%s = Number of results', 'lingonberry' ), $wp_query->found_posts );
+			}
+		}
+
+		return $description;
+
+	}
+	add_filter( 'get_the_archive_description', 'lingonberry_filter_archive_description' );
+endif;
+
+
+/*	-----------------------------------------------------------------------------------------------
+	FILTER BODY CLASS
+
+	@param	$classes array		Body classes
+--------------------------------------------------------------------------------------------------- */
+
+if ( ! function_exists( 'lingoberry_filter_body_class' ) ) :
+	function lingoberry_filter_body_class( $classes ) {
+
+		// Slim page template class names (class = name - file suffix).
+		if ( is_page_template() ) {
+			$classes[] = basename( get_page_template_slug(), '.php' );
 		}
 		
-        Walker_Nav_Menu::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
-	}
-	
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   BODY CLASSES
-   --------------------------------------------------------------------------------------------- */
-
-if ( ! function_exists( 'lingonberry_body_classes' ) ) {
-
-	function lingonberry_body_classes( $classes ) {
-
-		// When there's a post thumbnail
-		if ( has_post_thumbnail() ) { 
-			$classes[] = 'has-featured-image';
+		// Add a shared class for styling archive pages.
+		if ( is_search() || is_archive() || is_home() ) {
+			$classes[] = 'archive-template';
 		}
 
 		return $classes;
-	}
-	add_action( 'body_class', 'lingonberry_body_classes' );
 
-}
+	}
+	add_filter( 'body_class', 'lingoberry_filter_body_class' );
+endif;
+
 
 
 /* ---------------------------------------------------------------------------------------------
-   CUSTOM MORE LINK TEXT
+   FILTER THE_CONTENT
    --------------------------------------------------------------------------------------------- */
 
-if ( ! function_exists( 'lingonberry_custom_more_link' ) ) {
+if ( ! function_exists( 'lingonberry_the_content' ) ) :
+	function lingonberry_the_content( $content ) {
 
-	function lingonberry_custom_more_link( $more_link, $more_link_text ) {
-		return str_replace( $more_link_text, __( 'Continue reading', 'lingonberry' ), $more_link );
-	}
-	add_filter( 'the_content_more_link', 'lingonberry_custom_more_link', 10, 2 );
+		// On the archives template, append the content for that template.
+		if ( is_page_template( 'template-archives.php' ) ) {
+			ob_start();
+			include( locate_template( 'inc/archives-template-content.php' ) );
+			$content .= ob_get_clean();
+		}
+		
+		return $content;
 
-}
+	}	
+	add_filter( 'the_content', 'lingonberry_the_content' );
+endif;
 
 
-/* ---------------------------------------------------------------------------------------------
-   FLEXSLIDER OUTPUT FOR IMAGE GALLERY FORMAT
-   --------------------------------------------------------------------------------------------- */
+/*	-----------------------------------------------------------------------------------------------
+	FLEXSLIDER OUTPUT
+--------------------------------------------------------------------------------------------------- */
 
-
-if ( ! function_exists( 'lingonberry_flexslider' ) ) {
-
-	function lingonberry_flexslider( $size = 'thumbnail' ) {
+if ( ! function_exists( 'lingonberry_flexslider' ) ) :
+	function lingonberry_flexslider( $size = 'post-thumbnail' ) {
 
 		$attachment_parent = is_page() ? $post->ID : get_the_ID();
 
@@ -292,54 +349,56 @@ if ( ! function_exists( 'lingonberry_flexslider' ) ) {
 			'posts_per_page'    => -1,
 		) );
 
-		if ( $images ) : ?>
+		if ( ! $images ) return;
 		
-			<div class="flexslider">
-			
-				<ul class="slides">
+		?>
 		
-					<?php foreach( $images as $image ) { 
+		<div class="flexslider">
+		
+			<ul class="slides">
+	
+				<?php 
+				foreach ( $images as $image ) :
 
-						$attimg = wp_get_attachment_image( $image->ID, $size ); 
-						
-						?>
-						
-						<li>
-							<?php echo $attimg; ?>
-							<?php if ( ! empty( $image->post_excerpt ) ) : ?>
-								<div class="media-caption-container">
-									<p class="media-caption"><?php echo $image->post_excerpt; ?></p>
-								</div>
-							<?php endif; ?>
-						</li>
-						
-						<?php 
-					} ?>
+					$attimg = wp_get_attachment_image( $image->ID, $size ); 
+					
+					?>
+					
+					<li>
+						<?php echo $attimg; ?>
+						<?php if ( ! empty( $image->post_excerpt ) ) : ?>
+							<div class="media-caption-container">
+								<p class="media-caption"><?php echo $image->post_excerpt; ?></p>
+							</div>
+						<?php endif; ?>
+					</li>
+					
+					<?php 
+				endforeach;
+				?>
+		
+			</ul>
 			
-				</ul>
-				
-			</div><!-- .flexslider -->
+		</div><!-- .flexslider -->
 			
-			<?php
-			
-		endif;
+		<?php
+
 	}
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   META FUNCTION
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_meta' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	META FUNCTION
+--------------------------------------------------------------------------------------------------- */
 
-	function lingonberry_meta() { ?>
+if ( ! function_exists( 'lingonberry_meta' ) ) :
+	function lingonberry_meta() { 
+		
+		?>
 		
 		<div class="post-meta">
 		
-			<span class="post-date"><a href="<?php the_permalink(); ?>" title="<?php the_time( get_option( 'time_format' ) ); ?>"><?php the_time( get_option( 'date_format' ) ); ?></a></span>
+			<span class="post-date"><a href="<?php the_permalink(); ?>"><?php the_time( get_option( 'date_format' ) ); ?></a></span>
 			
 			<span class="date-sep"> / </span>
 				
@@ -364,42 +423,19 @@ if ( ! function_exists( 'lingonberry_meta' ) ) {
 			<?php edit_post_link(__( 'Edit', 'lingonberry' ), '<span class="date-sep"> / </span>' ); ?>
 									
 		</div><!-- .post-meta -->
+
 		<?php	
 	}
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   STYLE THE ADMIN AREA
-   --------------------------------------------------------------------------------------------- */
+endif;
 
 
-if ( ! function_exists( 'lingonberry_admin_style' ) ) {
+/*	-----------------------------------------------------------------------------------------------
+	COMMENT FUNCTION
+--------------------------------------------------------------------------------------------------- */
 
-	function lingonberry_admin_style() {
-	echo '<style type="text/css">
-	
-			#postimagediv #set-post-thumbnail img {
-				max-width: 100%;
-				height: auto;
-			}
-
-		</style>';
-	}
-	add_action( 'admin_head', 'lingonberry_admin_style' );
-
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   LINGONBERRY COMMENT
-   --------------------------------------------------------------------------------------------- */
-
-
-if ( ! function_exists( 'lingonberry_comment' ) ) {
-	
+if ( ! function_exists( 'lingonberry_comment' ) ) :
 	function lingonberry_comment( $comment, $args, $depth ) {
+
 		switch ( $comment->comment_type ) :
 			case 'pingback' :
 			case 'trackback' :
@@ -448,7 +484,7 @@ if ( ! function_exists( 'lingonberry_comment' ) ) {
 
 				<div class="comment-content post-content">
 				
-					<?php if ( '0' == $comment->comment_approved ) : ?>
+					<?php if ( ! $comment->comment_approved ) : ?>
 					
 						<p class="comment-awaiting-moderation"><?php __( 'Your comment is awaiting moderation.', 'lingonberry' ); ?></p>
 						
@@ -472,135 +508,21 @@ if ( ! function_exists( 'lingonberry_comment' ) ) {
 		<?php
 			break;
 		endswitch;
-	}
-}
-
-
-/* ---------------------------------------------------------------------------------------------
-   LINGONBERRY THEME OPTIONS
-   --------------------------------------------------------------------------------------------- */
-
-
-class lingonberry_customize {
-
-	public static function lingonberry_register( $wp_customize ) {
-
-		// Add our Lingonberry options section
-		$wp_customize->add_section( 'lingonberry_options', array(
-			'capability' 	=> 'edit_theme_options', 
-			'description' 	=> __( 'Allows you to customize theme settings for Lingonberry.', 'lingonberry' ), 
-			'priority' 		=> 35, 
-			'title' 		=> __( 'Options for Lingonberry', 'lingonberry' ), 
-		) );
-
-		// Add a setting for accent color
-		$wp_customize->add_setting( 'accent_color', array(
-			'default' 			=> '#FF706C', 
-			'sanitize_callback' => 'sanitize_hex_color',
-			'transport' 		=> 'postMessage', 
-			'type' 				=> 'theme_mod', 
-		) );
-
-		// And one for the logo
-		$wp_customize->add_setting( 'lingonberry_logo', array( 
-			'sanitize_callback' => 'esc_url_raw'
-		) );
-
-		// Add a control to go along with the accent color setting
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'lingonberry_accent_color', array(
-			'label' 	=> __( 'Accent Color', 'lingonberry' ), 
-			'priority' 	=> 10,
-			'section' 	=> 'colors', 
-			'settings' 	=> 'accent_color', 
-		) ) );
-
-		// Set the bloginfo values to be updated via postMessage (live JS preview)
-		$wp_customize->get_setting( 'blogname' )->transport = 'postMessage';
-		$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
-	}
-
-	// Function handling our header output of styles
-	public static function lingonberry_header_output() {
-
-		echo '<style type="text/css">';
-
-		self::lingonberry_generate_css( 'body a', 'color', 'accent_color' );
-		self::lingonberry_generate_css( 'body a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.header', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.post-bubbles a:hover', 'background-color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-nav a:hover', 'background-color', 'accent_color' );
-		self::lingonberry_generate_css( '.comment-meta-content cite a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.comment-meta-content p a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.comment-actions a:hover', 'background-color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget-content .textwidget a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_archive li a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_categories li a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_meta li a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_nav_menu li a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_rss .widget-content ul a.rsswidget:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '#wp-calendar thead', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.widget_tag_cloud a:hover', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.search-button:hover .genericon', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.flexslider:hover .flex-next:active', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.flexslider:hover .flex-prev:active', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-title a:hover', 'color', 'accent_color' );
-
-		self::lingonberry_generate_css( '.post-content a', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content a:hover', 'border-bottom-color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content fieldset legend', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content input[type="submit"]:hover', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content input[type="button"]:hover', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content input[type="reset"]:hover', 'background', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content .has-accent-color', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.post-content .has-accent-background-color', 'background-color', 'accent_color' );
-
-		self::lingonberry_generate_css( '.comment-header h4 a:hover', 'color', 'accent_color' );
-		self::lingonberry_generate_css( '.form-submit #submit:hover', 'background-color', 'accent_color' );
-
-		echo '</style>';
 
 	}
-
-	// Enqueue javascript for the live preview, with the customize preview as a dependency
-	public static function lingonberry_live_preview() {
-		wp_enqueue_script( 'lingonberry-themecustomizer', get_template_directory_uri() . '/js/theme-customizer.js', array( 'jquery', 'customize-preview' ), '', true );
-	}
-
-	// Function for spitting out CSS code
-	public static function lingonberry_generate_css( $selector, $style, $mod_name, $prefix='', $postfix='', $echo=true ) {
-		$return = '';
-		$mod = get_theme_mod( $mod_name );
-		if ( ! empty( $mod ) ) {
-			$return = sprintf( '%s { %s:%s; }', $selector, $style, $prefix.$mod.$postfix );
-			if ( $echo ) echo $return;
-		}
-		return $return;
-	}
-}
-
-// Setup the Theme Customizer settings and controls...
-add_action( 'customize_register' , array( 'lingonberry_customize' , 'lingonberry_register' ) );
-
-// Output custom CSS to live site
-add_action( 'wp_head' , array( 'lingonberry_customize' , 'lingonberry_header_output' ) );
-
-// Enqueue live preview javascript in Theme Customizer admin screen
-add_action( 'customize_preview_init' , array( 'lingonberry_customize' , 'lingonberry_live_preview' ) );
+endif;
 
 
-/* ---------------------------------------------------------------------------------------------
-   SPECIFY GUTENBERG SUPPORT
------------------------------------------------------------------------------------------------- */
-
+/*	-----------------------------------------------------------------------------------------------
+	BLOCK EDITOR SUPPORT
+--------------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'lingonberry_add_gutenberg_features' ) ) :
-
 	function lingonberry_add_gutenberg_features() {
 
 		/* Gutenberg Palette --------------------------------------- */
 
-		$accent_color = get_theme_mod( 'accent_color' ) ? get_theme_mod( 'accent_color' ) : '#FF706C';
+		$accent_color = get_theme_mod( 'accent_color', '#ff706c' );
 
 		add_theme_support( 'editor-color-palette', array(
 			array(
@@ -631,17 +553,17 @@ if ( ! function_exists( 'lingonberry_add_gutenberg_features' ) ) :
 			array(
 				'name' 	=> _x( 'Light gray', 'Name of the light gray color in the Gutenberg palette', 'lingonberry' ),
 				'slug' 	=> 'light-gray',
-				'color' => '#EEE',
+				'color' => '#eee',
 			),
 			array(
 				'name' 	=> _x( 'Lightest gray', 'Name of the lightest gray color in the Gutenberg palette', 'lingonberry' ),
 				'slug' 	=> 'lightest-gray',
-				'color' => '#F1F1F1',
+				'color' => '#f1f1f1',
 			),
 			array(
 				'name' 	=> _x( 'White', 'Name of the white color in the Gutenberg palette', 'lingonberry' ),
 				'slug' 	=> 'white',
-				'color' => '#FFF',
+				'color' => '#fff',
 			),
 		) );
 
@@ -676,19 +598,17 @@ if ( ! function_exists( 'lingonberry_add_gutenberg_features' ) ) :
 
 	}
 	add_action( 'after_setup_theme', 'lingonberry_add_gutenberg_features' );
-
 endif;
 
 
-/* ---------------------------------------------------------------------------------------------
-   GUTENBERG EDITOR STYLES
-   --------------------------------------------------------------------------------------------- */
-
+/*	-----------------------------------------------------------------------------------------------
+	BLOCK EDITOR STYLES
+--------------------------------------------------------------------------------------------------- */
 
 if ( ! function_exists( 'lingonberry_block_editor_styles' ) ) :
-
 	function lingonberry_block_editor_styles() {
 
+		$theme_version = wp_get_theme( 'lingonberry' )->get( 'Version' );
 		$dependencies = array();
 
 		/**
@@ -699,20 +619,13 @@ if ( ! function_exists( 'lingonberry_block_editor_styles' ) ) :
 		$google_fonts = _x( 'on', 'Google Fonts: on or off', 'lingonberry' );
 
 		if ( 'off' !== $google_fonts ) {
-
-			// Register Google Fonts
-			wp_register_style( 'lingonberry-block-editor-styles-font', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400', false, 1.0, 'all' );
+			wp_register_style( 'lingonberry-block-editor-styles-font', '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Raleway:600,500,400' );
 			$dependencies[] = 'lingonberry-block-editor-styles-font';
-
 		}
 
 		// Enqueue the editor styles
-		wp_enqueue_style( 'lingonberry-block-editor-styles', get_theme_file_uri( '/lingonberry-gutenberg-editor-style.css' ), $dependencies, '1.0', 'all' );
+		wp_enqueue_style( 'lingonberry-block-editor-styles', get_theme_file_uri( '/assets/css/block-editor-styles.css' ), $dependencies, $theme_version, 'all' );
 
 	}
 	add_action( 'enqueue_block_editor_assets', 'lingonberry_block_editor_styles', 1 );
-
 endif;
-
-
-?>

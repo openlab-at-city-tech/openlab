@@ -23,6 +23,8 @@ class Upload
     {
         $this->_client = $_processor->get_client();
         $this->_processor = $_processor;
+
+        wp_using_ext_object_cache(false);
     }
 
     public function upload_pre_process()
@@ -40,7 +42,7 @@ class Upload
     {
         // Upload File to server
         if (!class_exists('WPCP_UploadHandler')) {
-            require OUTOFTHEBOX_ROOTDIR.'/jquery-file-upload/server/UploadHandler.php';
+            require OUTOFTHEBOX_ROOTDIR.'/vendors/jquery-file-upload/server/UploadHandler.php';
         }
         if ('1' === $this->get_processor()->get_shortcode_option('demo')) {
             // TO DO LOG + FAIL ERROR
@@ -163,7 +165,7 @@ class Upload
                 $return['status']['progress'] = 'upload-finished';
                 $return['status']['percentage'] = '100';
 
-                CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_listtoken());
+                CacheRequest::clear_local_cache_for_shortcode($this->get_processor()->get_current_account()->get_id(), $this->get_processor()->get_listtoken());
             } else {
                 error_log($file->error);
                 $return['status']['progress'] = 'upload-failed';
@@ -254,11 +256,14 @@ class Upload
 
     public static function get_upload_progress($file_hash)
     {
+        wp_using_ext_object_cache(false);
+
         return get_transient('outofthebox_upload_'.substr($file_hash, 0, 40));
     }
 
     public static function set_upload_progress($file_hash, $status)
     {
+        wp_using_ext_object_cache(false);
         // Update progress
         return set_transient('outofthebox_upload_'.substr($file_hash, 0, 40), $status, HOUR_IN_SECONDS);
     }
@@ -295,6 +300,9 @@ class Upload
     public function upload_convert()
     {
         // NOT IMPLEMENTED
+        echo json_encode(['result' => 1, 'fileid' => $_REQUEST['fileid']]);
+
+        exit();
     }
 
     public function upload_post_process()

@@ -4,11 +4,11 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.5.0
+ * Version: 3.11
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
- * License: GPLv2
+ * License: GPLv3
  * Text Domain: nggallery
  * Domain Path: /products/photocrati_nextgen/modules/i18n/lang
  * Requires PHP: 5.6
@@ -166,12 +166,17 @@ class C_NextGEN_Bootstrap
 		// We only load the plugin if we're outside of the activation request, loaded in an iframe
 		// by WordPress. Reason being, if WP_DEBUG is enabled, and another Pope-based plugin (such as
 		// the photocrati theme or NextGEN Pro/Plus), then PHP will output strict warnings
-		if ($this->is_not_activating()) {
+		if ($this->is_not_activating() && !$this->is_topscorer_request()) {
 			$this->_define_constants();
 			$this->_load_non_pope();
 			$this->_register_hooks();
 			$this->_load_pope();
 		}
+	}
+
+	function is_topscorer_request()
+	{
+		return strpos($_SERVER['REQUEST_URI'], 'topscorer/v1') !== FALSE;
 	}
 
 	function is_not_activating()
@@ -209,7 +214,7 @@ class C_NextGEN_Bootstrap
 		// Load the installer
 		include_once('non_pope/class.photocrati_installer.php');
 
-		// Load the resource manager
+		// Load the (mostly deprecated) resource manager
 		include_once('non_pope/class.photocrati_resource_manager.php');
 		C_Photocrati_Resource_Manager::init();
 
@@ -374,23 +379,24 @@ class C_NextGEN_Bootstrap
 	public function render_jquery_wp_55_warning()
     {
 		$render  = false;
-		$account_msg = sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://www.imagely.com/account/');
-		if (preg_match("#photocrati#i", wp_get_theme()->get('Name'))) {
-			$account_msg = sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://members.photocrati.com/account/');
-		}
 		global $wp_version;
 
         if (defined('NGG_PRO_PLUGIN_VERSION')  && version_compare(NGG_PRO_PLUGIN_VERSION,  '3.1')  < 0)
         {
 			$render = TRUE;
-
-            $message = __("Your version of NextGEN Pro is known to have some issues with NextGEN Gallery 3.4 and later.", 'nggallery');
+			$message = __("Your version of NextGEN Pro is known to have some issues with NextGEN Gallery 3.4 and later.", 'nggallery');
+			$account_msg = preg_match("#photocrati#i", wp_get_theme()->get('Name'))
+				? sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://members.photocrati.com/account/')
+				: sprintf(__("Please download the latest version of NextGEN Pro from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://www.imagely.com/account/');
         }
 
         if (defined('NGG_PLUS_PLUGIN_VERSION') && version_compare(NGG_PLUS_PLUGIN_VERSION, '1.7') < 0)
         {
             $render = TRUE;
-            $message = __("Your version of NextGEN Plus is known to have some issues with NextGEN 3.4 and later. Please update NextGEN Plus to version 1.7 or higher to ensure your site works correctly.", 'nggallery');
+			$message = __("Your version of NextGEN Plus is known to have some issues with NextGEN Gallery 3.4 and later.", 'nggallery');
+			$account_msg = preg_match("#photocrati#i", wp_get_theme()->get('Name'))
+				? sprintf(__("Please download the latest version of NextGEN Plus from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://members.photocrati.com/account/')
+				: sprintf(__("Please download the latest version of NextGEN Plus from your <a href='%s' target='_blank'>account area</a>", 'nggallery'), 'https://www.imagely.com/account/');
         }
 
         if (!$render)
@@ -460,20 +466,6 @@ class C_NextGEN_Bootstrap
 		}
 
 		add_action('all_admin_notices', [$this, 'render_jquery_wp_55_warning']);
-
-		add_filter('ngg_load_frontend_logic', array($this, 'disable_frontend_logic'), -10, 2);
-
-	}
-
-	function disable_frontend_logic($enabled, $module_id)
-	{
-		if (is_admin())
-		{
-			$settings = C_NextGen_Settings::get_instance();
-			if (!$settings->get('always_enable_frontend_logic'))
-				$enabled = FALSE;
-		}
-		return $enabled;
 	}
 
 	function handle_activation_redirect()
@@ -720,7 +712,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.5.0');
+		define('NGG_PLUGIN_VERSION', '3.11');
 
 		define(
 			'NGG_SCRIPT_VERSION',

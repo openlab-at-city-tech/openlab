@@ -1,7 +1,7 @@
-( function( $ ) {
+( function ( $ ) {
 	let attachmentNoticeNeedHide, $wrap;
 
-	const showAttachmentNotice = function( url ) {
+	const showAttachmentNotice = function ( url ) {
 		$wrap.find( '.dco-attachment' ).addClass( 'dco-hidden' );
 
 		const $notice = $wrap.find( '.dco-attachment-notice' );
@@ -11,51 +11,53 @@
 		attachmentNoticeNeedHide = false;
 	};
 
-	const hideAttachmentNotice = function() {
+	const hideAttachmentNotice = function () {
 		$wrap.find( '.dco-attachment' ).removeClass( 'dco-hidden' );
 		$wrap.find( '.dco-attachment-notice' ).addClass( 'dco-hidden' );
 	};
 
-	$( document ).ready( function() {
-		$( '#the-comment-list' ).on( 'click', '.dco-del-attachment', function(
-			event
-		) {
-			event.preventDefault();
+	$( document ).ready( function () {
+		$( '#the-comment-list' ).on(
+			'click',
+			'.dco-del-attachment',
+			function ( event ) {
+				event.preventDefault();
 
-			/* eslint-disable no-undef, no-alert */
-			if (
-				1 === parseInt( dcoCA.delete_attachment_action ) &&
-				! confirm( dcoCA.delete_attachment_confirm )
-			) {
-				return;
-			}
-			/* eslint-enable no-undef, no-alert */
-
-			const $this = $( this );
-			const nonce = $this.data( 'nonce' );
-			const id = $this.data( 'id' );
-
-			const data = {
-				action: 'delete_attachment',
-				id,
-				_ajax_nonce: nonce, // eslint-disable-line camelcase
-			};
-
-			// eslint-disable-next-line no-undef
-			$.post( ajaxurl, data, function( response ) {
-				if ( response.success ) {
-					const $comment = $this.closest( '.comment' );
-					const $attachment = $comment.children( '.dco-attachment' );
-					$attachment.remove();
-					$this.remove();
+				/* eslint-disable no-undef, no-alert */
+				if (
+					1 === parseInt( dcoCA.delete_attachment_action ) &&
+					! confirm( dcoCA.delete_attachment_confirm )
+				) {
+					return;
 				}
-			} );
-		} );
+				/* eslint-enable no-undef, no-alert */
+
+				const $this = $( this );
+				const nonce = $this.data( 'nonce' );
+				const id = $this.data( 'id' );
+
+				const data = {
+					action: 'delete_attachment',
+					id,
+					_ajax_nonce: nonce, // eslint-disable-line camelcase
+				};
+
+				// eslint-disable-next-line no-undef
+				$.post( ajaxurl, data, function ( response ) {
+					if ( response.success ) {
+						const $comment = $this.closest( '.comment' );
+						const $attachment = $comment.find( '.dco-attachment' );
+						$attachment.remove();
+						$this.remove();
+					}
+				} );
+			}
+		);
 
 		$( '#dco-comment-attachment' ).on(
 			'click',
 			'.dco-set-attachment',
-			function( event ) {
+			function ( event ) {
 				event.preventDefault();
 
 				$wrap = $( this ).closest( '.dco-attachment-wrap' );
@@ -71,7 +73,7 @@
 					},
 				} );
 
-				frame.on( 'select', function() {
+				frame.on( 'select', function () {
 					let $attachment;
 					const $removeAttachment = $wrap.find(
 						'.dco-remove-attachment'
@@ -86,6 +88,9 @@
 
 					if ( $removeAttachment.hasClass( 'dco-hidden' ) ) {
 						$wrap.trigger( 'dco_ca_before_adding' );
+
+						const $clone = $wrap.clone( true, true );
+						$( '#dco-comment-attachment .inside' ).append( $clone );
 					} else {
 						$wrap.trigger( 'dco_ca_before_replacing' );
 					}
@@ -170,41 +175,34 @@
 		$( '#dco-comment-attachment' ).on(
 			'click',
 			'.dco-remove-attachment',
-			function( event ) {
+			function ( event ) {
 				event.preventDefault();
 
-				const $this = $( this );
-				$wrap = $this.closest( '.dco-attachment-wrap' );
-
-				$wrap.find( '.dco-attachment-id' ).val( 0 );
-				$wrap.find( '.dco-attachment' ).addClass( 'dco-hidden' );
-				$wrap.find( '.dco-attachment-notice' ).addClass( 'dco-hidden' );
-				$this.addClass( 'dco-hidden' );
-
-				$wrap
-					.find( '.dco-set-attachment' )
-					.text( dcoCA.add_attachment_label ); // eslint-disable-line no-undef
-
+				$wrap = $( this ).closest( '.dco-attachment-wrap' ).remove();
 				$wrap.trigger( 'dco_ca_removed' );
 			}
 		);
 
-		$( '#dco-file-types' ).on( 'click', '.dco-show-all', function( event ) {
-			event.preventDefault();
+		$( '#dco-file-types' ).on(
+			'click',
+			'.dco-show-all',
+			function ( event ) {
+				event.preventDefault();
 
-			const $this = $( this );
-			const $more = $this.prev();
+				const $this = $( this );
+				const $more = $this.prev();
 
-			if ( $more.is( ':visible' ) ) {
-				$more.removeClass( 'show' );
-				$this.text( dcoCA.show_all ); // eslint-disable-line no-undef
-			} else {
-				$more.addClass( 'show' );
-				$this.text( dcoCA.show_less ); // eslint-disable-line no-undef
+				if ( $more.is( ':visible' ) ) {
+					$more.removeClass( 'show' );
+					$this.text( dcoCA.show_all ); // eslint-disable-line no-undef
+				} else {
+					$more.addClass( 'show' );
+					$this.text( dcoCA.show_less ); // eslint-disable-line no-undef
+				}
 			}
-		} );
+		);
 
-		$( '#dco-file-types' ).on( 'click', '.dco-file-type-name', function() {
+		$( '#dco-file-types' ).on( 'click', '.dco-file-type-name', function () {
 			const $this = $( this );
 			const $type = $this.parent();
 			const $checks = $type.find( 'input' );

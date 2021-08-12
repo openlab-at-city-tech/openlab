@@ -521,7 +521,7 @@ class TablePress_CSSTidy_optimise {
 		$units = &$this->parser->data['csstidy']['units'];
 		$return = array( 0, '' );
 
-		$return[0] = floatval( $string );
+		$return[0] = (float) $string;
 		if ( abs( $return[0] ) > 0 && abs( $return[0] ) < 1 ) {
 			if ( $return[0] < 0 ) {
 				$return[0] = '-' . ltrim( substr( $return[0], 1 ), '0' );
@@ -727,8 +727,7 @@ class TablePress_CSSTidy_optimise {
 		$shorthands = &$this->parser->data['csstidy']['shorthands'];
 
 		foreach ( $shorthands as $key => $value ) {
-			if ( isset( $array[ $value[0] ] ) && isset( $array[ $value[1] ] )
-				&& isset( $array[ $value[2] ] ) && isset( $array[ $value[3] ] ) && 0 !== $value ) {
+			if ( 0 !== $value && isset( $array[ $value[0] ], $array[ $value[1] ], $array[ $value[2] ], $array[ $value[3] ] ) ) {
 				$return[ $key ] = '';
 
 				$important = '';

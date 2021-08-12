@@ -511,16 +511,21 @@ class Meow_WPMC_Rest
 			// FILESYSTEM
 			if ( $entry->type == 0 ) {
 				$entry->thumbnail_url = htmlspecialchars( trailingslashit( $base ) . $entry->path, ENT_QUOTES );
+				$entry->image_url = $entry->thumbnail_url;
 			}
 			// MEDIA
 			else {
 				$attachment_src = wp_get_attachment_image_src( $entry->postId, 'thumbnail' );
+				$attachment_src_large = wp_get_attachment_image_src( $entry->postId, 'large' );
 				$thumbnail = empty( $attachment_src ) ? null : $attachment_src[0];
+				$image = empty( $attachment_src_large ) ? null : $attachment_src_large[0];
 				if ( $filterBy == 'trash' && !empty( $thumbnail ) ) {
 					$new_url = $this->core->clean_url( $thumbnail );
 					$thumbnail = htmlspecialchars( trailingslashit( $base ) . $new_url, ENT_QUOTES );
 				}
 				$entry->thumbnail_url = $thumbnail;
+				$entry->image_url = $image;
+				$entry->title = get_the_title( $entry->postId );
 			}
 		}
 

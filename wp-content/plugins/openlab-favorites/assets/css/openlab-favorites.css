@@ -1,0 +1,14 @@
+.btn-has-hover-text .hover-text {
+	display: none;
+	visibility: hidden;
+}
+
+.btn-has-hover-text:hover .non-hover-text {
+	display: none;
+	visibility: hidden;
+}
+
+.btn-has-hover-text:hover .hover-text {
+	display: inline;
+	visibility: visible;
+}

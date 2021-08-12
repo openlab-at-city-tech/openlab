@@ -320,3 +320,25 @@ li.ngg-next a, li.ngg-prev a {
     border: none;
     text-decoration: none;
 }
+
+/** Caption view */
+.ngg-caption-view-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/** Carousel view */
+.ngg-basic-thumbnails-carousel {
+    display: flex;
+    justify-content: center;
+}
+
+.ngg-basic-thumbnails-carousel-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ngg-galleryoverview.carousel-view .ngg-gallery-thumbnail img {
+    max-width: 80px !important;
+}

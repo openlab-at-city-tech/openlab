@@ -7,6 +7,7 @@
 
 namespace Automattic\Jetpack\Sync\Modules;
 
+use Automattic\Jetpack\Sync\Actions;
 use Automattic\Jetpack\Sync\Defaults;
 use Automattic\Jetpack\Sync\Lock;
 use Automattic\Jetpack\Sync\Modules;
@@ -123,7 +124,7 @@ class Full_Sync_Immediately extends Module {
 	 * @return boolean
 	 */
 	public function is_started() {
-		return ! ! $this->get_status()['started'];
+		return (bool) $this->get_status()['started'];
 	}
 
 	/**
@@ -162,14 +163,14 @@ class Full_Sync_Immediately extends Module {
 		$total_items = array_reduce(
 			array_values( $status['progress'] ),
 			function ( $sum, $sync_item ) {
-				return isset( $sync_item['total'] ) ? ( $sum + intval( $sync_item['total'] ) ) : $sum;
+				return isset( $sync_item['total'] ) ? ( $sum + (int) $sync_item['total'] ) : $sum;
 			},
 			0
 		);
 		$total_sent  = array_reduce(
 			array_values( $status['progress'] ),
 			function ( $sum, $sync_item ) {
-				return isset( $sync_item['sent'] ) ? ( $sum + intval( $sync_item['sent'] ) ) : $sum;
+				return isset( $sync_item['sent'] ) ? ( $sum + (int) $sync_item['sent'] ) : $sum;
 			},
 			0
 		);
@@ -184,7 +185,7 @@ class Full_Sync_Immediately extends Module {
 	 * @return boolean
 	 */
 	public function is_finished() {
-		return ! ! $this->get_status()['finished'];
+		return (bool) $this->get_status()['finished'];
 	}
 
 	/**
@@ -194,7 +195,7 @@ class Full_Sync_Immediately extends Module {
 	 */
 	public function reset_data() {
 		$this->clear_status();
-		( new Lock() )->remove( self::LOCK_NAME );
+		( new Lock() )->remove( self::LOCK_NAME, true );
 	}
 
 	/**
@@ -330,13 +331,37 @@ class Full_Sync_Immediately extends Module {
 	 * @access public
 	 */
 	public function continue_sending() {
-		if ( ! ( new Lock() )->attempt( self::LOCK_NAME ) || ! $this->is_started() || $this->get_status()['finished'] ) {
+		// Return early if Full Sync is not running.
+		if ( ! $this->is_started() || $this->get_status()['finished'] ) {
 			return;
 		}
 
-		$this->send();
+		// Return early if we've gotten a retry-after header response.
+		$retry_time = get_option( Actions::RETRY_AFTER_PREFIX . 'immediate-send' );
+		if ( $retry_time ) {
+			// If expired delete but don't send. Send will occurr in new request to avoid race conditions.
+			if ( microtime( true ) > $retry_time ) {
+				update_option( Actions::RETRY_AFTER_PREFIX . 'immediate-send', false, false );
+			}
+			return false;
+		}
 
-		( new Lock() )->remove( self::LOCK_NAME );
+		// Obtain send Lock.
+		$lock            = new Lock();
+		$lock_expiration = $lock->attempt( self::LOCK_NAME );
+
+		// Return if unable to obtain lock.
+		if ( false === $lock_expiration ) {
+			return;
+		}
+
+		// Send Full Sync actions.
+		$success = $this->send();
+
+		// Remove lock.
+		if ( $success ) {
+			$lock->remove( self::LOCK_NAME, $lock_expiration );
+		}
 	}
 
 	/**
@@ -354,15 +379,19 @@ class Full_Sync_Immediately extends Module {
 
 		foreach ( $this->get_remaining_modules_to_send() as $module ) {
 			$progress[ $module->name() ] = $module->send_full_sync_actions( $config[ $module->name() ], $progress[ $module->name() ], $send_until );
-			if ( ! $progress[ $module->name() ]['finished'] ) {
+			if ( isset( $progress[ $module->name() ]['error'] ) ) {
+				unset( $progress[ $module->name() ]['error'] );
 				$this->update_status( array( 'progress' => $progress ) );
-
-				return;
+				return false;
+			} elseif ( ! $progress[ $module->name() ]['finished'] ) {
+				$this->update_status( array( 'progress' => $progress ) );
+				return true;
 			}
 		}
 
 		$this->send_full_sync_end();
 		$this->update_status( array( 'progress' => $progress ) );
+		return true;
 	}
 
 	/**

@@ -277,6 +277,24 @@ input[type="submit"]{
         width: 95%;
     }
 }
+.panel-privacy-membership-settings {
+	&.hidden-group {
+		display: none;
+	}
+	&.public-group {
+		.privacy-membership-settings-private {
+			display: none;
+		}
+	}
+	&.private-group {
+		.privacy-membership-settings-public {
+			display: none;
+		}
+	}
+	.panel-body label {
+		font-weight: normal;
+	}
+}
 .radio,
 .radio-inline {
     label{
@@ -396,6 +414,13 @@ input[type="submit"]{
         }
     }
     .panel-body {
+		legend {
+			border-bottom: none;
+			font-size: 14px;
+			font-weight: bold;
+			margin-bottom: 5px;
+			width: auto;
+		}
         .radio {
             margin-top: 0;
             label {
@@ -893,6 +918,116 @@ body{
             }
         }
     }
+
+	.group-creators-section {
+		margin-bottom: 20px;
+		margin-top: 20px;
+	}
+
+	ul.group-creator-edit-list {
+		list-style-type: none;
+		padding-left: 0;
+
+		& > li {
+			padding: 5px 10px;
+
+			&:nth-of-type(even) {
+				background: #efefef;
+			}
+		}
+	}
+
+	.group-creator-form-entry {
+		display: flex;
+
+		&.creator-type-member {
+			.creator-fields-non-member-name {
+				display: none;
+			}
+		}
+
+		&.creator-type-non-member {
+			.creator-fields-member-login {
+				display: none;
+			}
+		}
+
+		& > div {
+			flex: 0 1 auto;
+			margin-right: 20px;
+			width: 50%;
+
+			&.creator-fields-member-login {
+				width: 100%;
+			}
+
+			&.creator-preview {
+				width: 100%;
+			}
+		}
+
+		input {
+			width: 100%;
+		}
+
+		.entry-actions {
+			flex-grow: 0;
+			flex-shrink: 1;
+			width: 100px;
+
+			button {
+				background: transparent;
+				border: none;
+				padding: 3px 8px;
+			}
+		}
+
+		.creator-preview {
+			display: none;
+		}
+
+		.edit-entry {
+			display: none;
+		}
+
+		&.is-preview-mode {
+			.creator-form-fields {
+				display: none;
+			}
+
+			.creator-preview {
+				display: inherit;
+			}
+
+			.edit-entry {
+				display: inline;
+			}
+		}
+	}
+
+	.group-creator-edit-list-add-new {
+		margin-bottom: 15px;
+
+		button {
+			background: 0;
+			border: 0;
+			text-decoration: underline;
+		}
+
+		button:hover {
+			text-decoration: none;
+		}
+	}
+
+	&.js {
+		.group-creator-empty-row {
+			display: none;
+		}
+
+		.group-creator-form-entry {
+		}
+	}
+
     ul,
     ol{
         &.inline-element-list{
@@ -1088,6 +1223,11 @@ body{
 	.clone-acknowledgements {
 		p {
 			margin-bottom: .5em;
+			margin-top: .5em;
+
+			&:first-child {
+				margin-top: 0;
+			}
 		}
 	}
     .group-credits{
@@ -2025,6 +2165,7 @@ body form{
         border-radius: @border-radius-bottom;
         border-top: none;
         &:first-of-type,
+			&.sidebar-block-my-favorites,
             &.sidebar-block-learnmore {
             margin: 0;
             border-top: 1px solid @30gray;
@@ -2257,6 +2398,11 @@ body form{
 	display: flex;
 	justify-content: flex-end;
 	margin-right: 7.5px;
+}
+.my-groups-grid {
+	.group-list {
+		margin-top: 28px;
+	}
 }
 .group-list{
     margin-top: 50px;
@@ -3389,6 +3535,13 @@ body{
             }
         }
     }
+}
+.ui-autocomplete {
+	.ui-state-active,
+	.ui-state-hover {
+        background: @aqua;
+        color: @80gray;
+	}
 }
 #ui-datepicker-div{
     width: 18.2em;

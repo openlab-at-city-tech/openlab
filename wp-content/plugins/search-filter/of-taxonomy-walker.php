@@ -193,7 +193,7 @@ class Taxonomy_Walker extends Walker_Category {
 			}
 			
 			$pad = str_repeat('&nbsp;', $this->multidepth * 3);
-			$link = "<option class=\"level-".$this->multidepth."\" value='".$cat_id."'$checked />".$pad.$cat_name;
+			$link = "<option class=\"level-".$this->multidepth."\" value='".$cat_id."'$checked >".$pad.$cat_name;
 
 			if ( !empty($show_count) )
 				$link .= '&nbsp;&nbsp;(' . intval($category->count) . ')';

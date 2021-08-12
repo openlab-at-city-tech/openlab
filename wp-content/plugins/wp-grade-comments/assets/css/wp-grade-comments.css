@@ -6,10 +6,6 @@
 	display: inline;
 }
 
-#respond .olgc-checkboxes input[type="checkbox"] {
-	width: auto;
-}
-
 #respond .olgc-checkboxes label {
 	display: inline;
 }

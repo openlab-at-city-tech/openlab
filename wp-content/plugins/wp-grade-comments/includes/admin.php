@@ -162,6 +162,8 @@ function olgc_add_grade_column_content_to_editcomments( $column_name, $comment_i
  * @param WP_Comment $comment Comment object.
  */
 function olgc_register_meta_boxes( $comment ) {
+	$comment_post = get_post( $comment->comment_post_ID );
+
 	wp_enqueue_style( 'olgc-meta-boxes', OLGC_PLUGIN_URL . '/assets/css/meta-boxes.css' );
 
 	if ( olgc_is_instructor() || ( ! empty( $comment_post->post_author ) && $comment_post->post_author == get_current_user_id() ) ) {
@@ -261,3 +263,89 @@ function olgc_save_comment_extras( $comment_id ) {
 		update_comment_meta( $comment_id, 'olgc_is_private', $private );
 	}
 }
+
+/**
+ * Show activation admin notice.
+ *
+ * @return void
+ */
+function olgc_admin_notice() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( ! apply_filters( 'olgc_display_notices', true ) ) {
+		return;
+	}
+
+	// Notice was dissmised.
+	if ( get_option( 'olgc_notice_dismissed' ) ) {
+		return;
+	}
+
+	// Groan
+	$dismiss_url = $_SERVER['REQUEST_URI'];
+	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
+	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
+	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
+
+	?>
+	<style type="text/css">
+		.olgc-notice-message p {
+			display: flex;
+		}
+		.olgc-notice-message-dismiss {
+			align-self: center;
+			margin-left: 8px;
+		}
+	</style>
+	<div class="notice notice-warning fade olgc-notice-message">
+		<p><span><?php esc_html_e( 'Please note: The WP Grade Comments plugin allows all Site Administrators to add, view, and edit private comments and grades.', 'wp-grade-comments' ); ?> <strong><?php esc_html_e( 'If you deactivate this plugin, any private comments made while the plugin was activated will become visible on your site to anyone who can view the site.', 'wp-grade-comments' ); ?></strong></span>
+		<a class="olgc-notice-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'wp-grade-comments' ); ?></a>
+		</p>
+	</div>
+	<?php
+}
+add_action( 'admin_notices', 'olgc_admin_notice' );
+
+/**
+ * Catch notice dismissals.
+ *
+ * @return void
+ */
+function olgc_catch_notice_dismissals() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( empty( $_GET['olgc-notice-dismiss'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'olgc_notice_dismiss' );
+
+	update_option( 'olgc_notice_dismissed', 1 );
+}
+add_action( 'admin_init', 'olgc_catch_notice_dismissals' );
+
+/**
+ * Display confirmation modal on the plugin deactivation.
+ *
+ * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+ * @return void
+ */
+function olgc_deactivation_notice( $plugin_file ) {
+	if ( 'wp-grade-comments/wp-grade-comments.php' !== $plugin_file ) {
+		return;
+	}
+
+	if ( ! apply_filters( 'olgc_display_notices', true ) ) {
+		return;
+	}
+
+	wp_enqueue_script( 'oglc-deactivation', OLGC_PLUGIN_URL . 'assets/js/deactivation.js', [], false, true );
+	wp_localize_script( 'oglc-deactivation', 'OLGCDeactivate', [
+		'message' => esc_html__( 'If you deactivate this plugin, any private comments made while the plugin was activated will become visible on your site to anyone who can view the site.', 'wp-grade-comments' ),
+	] );
+}
+add_action( 'after_plugin_row', 'olgc_deactivation_notice' );

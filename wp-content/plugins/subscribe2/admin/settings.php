@@ -38,7 +38,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		}
 	} elseif ( isset( $_POST['submit'] ) ) {
 		foreach ( $_POST as $key => $value ) {
-			if ( in_array( $key, array( 'bcclimit', 's2page' ), true ) ) {
+			if ( in_array( $key, array( 'bcclimit', 's2page', 's2_unsub_page' ), true ) ) {
 				// numerical inputs fixed for old option names
 				if ( is_numeric( $_POST[ $key ] ) && $_POST[ $key ] >= 0 ) {
 					$this->subscribe2_options[ $key ] = (int) $_POST[ $key ];
@@ -47,7 +47,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				// check box entries
 				( isset( $_POST[ $key ] ) && '1' === $_POST[ $key ] ) ? $this->subscribe2_options[ $key ] = '1' : $this->subscribe2_options[ $key ] = '0';
 			} elseif ( 'appearance_tab' === $key ) {
-				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'js_ip_updater' );
+				$options = array( 'show_meta', 'show_button', 'ajax', 'widget', 'counterwidget', 's2meta_default', 'js_ip_updater', 's2_unsub_page' );
 				foreach ( $options as $option ) {
 					if ( ! isset( $_POST[ $option ] ) ) {
 						$this->subscribe2_options[ $option ] = '0';
@@ -454,6 +454,9 @@ switch ( $current_tab ) {
 		// WordPress page ID where subscribe2 token is used
 		echo esc_html__( 'Set default Subscribe2 page as', 'subscribe2' ) . ': ';
 		$this->pages_dropdown( $this->subscribe2_options['s2page'] );
+        echo "</br></br>";
+        echo esc_html__( 'Set Subscribe2 unsubscribe page', 'subscribe2' ) . ': ';
+		$this->pages_dropdown( isset($this->subscribe2_options['s2_unsub_page']) ? $this->subscribe2_options['s2_unsub_page'] : 0 , 's2_unsub_page');
 
 		// show link to WordPress page in meta
 		echo '<br><br><label><input type="checkbox" name="show_meta" value="1"' . checked( $this->subscribe2_options['show_meta'], '1', false ) . ' /> ';
@@ -496,9 +499,9 @@ switch ( $current_tab ) {
 		echo "\r\n" . '<br><textarea style="width: 98%;" rows="4" cols="60" name="barred">' . esc_textarea( $this->subscribe2_options['barred'] ) . '</textarea>';
 		echo '</p>';
 		echo '<h3>' . esc_html__( 'Links', 'subscribe2' ) . '</h3>' . "\r\n";
-		echo '<a href="http://wordpress.org/plugins/subscribe2/">' . esc_html__( 'Plugin Site', 'subscribe2' ) . '</a><br>';
-		echo '<a href="http://wordpress.org/support/plugin/subscribe2">' . esc_html__( 'Plugin Forum', 'subscribe2' ) . '</a><br>';
-		echo '<a href="http://subscribe2.wordpress.com/">' . esc_html__( 'Plugin Blog', 'subscribe2' ) . '</a><br>';
+		echo '<a href="https://wordpress.org/plugins/subscribe2/">' . esc_html__( 'Plugin Site', 'subscribe2' ) . '</a><br>';
+		echo '<a href="https://wordpress.org/support/plugin/subscribe2">' . esc_html__( 'Plugin Forum', 'subscribe2' ) . '</a><br>';
+		echo '<a href="https://getwemail.io/subscribe2/">' . esc_html__( 'Plugin Blog', 'subscribe2' ) . '</a><br>';
 		echo '</div>' . "\r\n";
 		break;
 

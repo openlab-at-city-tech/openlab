@@ -9,7 +9,7 @@
 
  * <iframe src="http://archive.org/embed/Experime1940&autoplay=1&poster=http://archive.org/images/map.png" width="640" height="480" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
  *
- * @package Jetpack
+ * @package automattic/jetpack
  */
 
 /**
@@ -69,13 +69,13 @@ function jetpack_archiveorg_shortcode( $atts ) {
 	if ( ! $atts['width'] ) {
 		$width = absint( $content_width );
 	} else {
-		$width = intval( $atts['width'] );
+		$width = (int) $atts['width'];
 	}
 
 	if ( ! $atts['height'] ) {
 		$height = round( ( $width / 640 ) * 360 );
 	} else {
-		$height = intval( $atts['height'] );
+		$height = (int) $atts['height'];
 	}
 
 	if ( $atts['autoplay'] ) {

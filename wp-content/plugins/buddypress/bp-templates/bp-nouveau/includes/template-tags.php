@@ -3,7 +3,7 @@
  * Common template tags
  *
  * @since 3.0.0
- * @version 7.0.0
+ * @version 8.0.0
  */
 
 // Exit if accessed directly.
@@ -547,14 +547,23 @@ function bp_nouveau_loop_classes() {
 		$bp_nouveau = bp_nouveau();
 
 		// @todo: this function could do with passing args so we can pass simple strings in or array of strings
+		$is_directory = bp_is_directory();
 
 		// The $component is faked if it's the single group member loop
-		if ( ! bp_is_directory() && ( bp_is_group() && 'members' === bp_current_action() ) ) {
+		if ( ! $is_directory && ( bp_is_group() && 'members' === bp_current_action() ) ) {
 			$component = 'members_group';
-		} elseif ( ! bp_is_directory() && ( bp_is_user() && 'my-friends' === bp_current_action() ) ) {
+		} elseif ( ! $is_directory && ( bp_is_user() && 'my-friends' === bp_current_action() ) ) {
 			$component = 'members_friends';
 		} else {
 			$component = sanitize_key( bp_current_component() );
+		}
+
+		/*
+		 * For the groups component, we need to take in account the
+		 * Groups directory can list Groups according to a Group Type.
+		 */
+		if ( 'groups' === $component ) {
+			$is_directory = bp_is_groups_directory();
 		}
 
 		$classes = array(
@@ -584,7 +593,7 @@ function bp_nouveau_loop_classes() {
 		);
 
 		// Only the available components supports custom layouts.
-		if ( ! empty( $available_components[ $component ] ) && ( bp_is_directory() || bp_is_group() || bp_is_user() ) ) {
+		if ( ! empty( $available_components[ $component ] ) && ( $is_directory || bp_is_group() || bp_is_user() ) ) {
 			$customizer_option = sprintf( '%s_layout', $component );
 			$layout_prefs      = bp_nouveau_get_temporary_setting(
 				$customizer_option,
@@ -1506,7 +1515,7 @@ function bp_nouveau_container_classes() {
 		}
 
 		// Provide a class token to acknowledge additional extended profile fields added to default account reg screen
-		if ( 'register' === bp_current_component() && bp_is_active( 'xprofile' ) && bp_nouveau_base_account_has_xprofile()) {
+		if ( 'register' === bp_current_component() && bp_is_active( 'xprofile' ) && bp_nouveau_has_signup_xprofile_fields()) {
 			$classes[] = 'extended-default-reg';
 		}
 
@@ -2059,14 +2068,21 @@ function bp_nouveau_current_object() {
 		}
 
 	} else {
-		$data_filter = bp_current_component();
+		$component_id = bp_current_component();
+		if ( ! bp_is_directory() ) {
+			$component_id = bp_core_get_active_components( array( 'slug' => $component_id ) );
+			$component_id = reset( $component_id );
+		}
+
+		$data_filter  = $component_id;
+
 		if ( 'friends' === $data_filter && bp_is_user_friend_requests() ) {
 			$data_filter = 'friend_requests';
 		}
 
 		$component['members_select']   = 'members-order-select';
 		$component['members_order_by'] = 'members-order-by';
-		$component['object']           = bp_current_component();
+		$component['object']           = $component_id;
 		$component['data_filter']      = $data_filter;
 	}
 
@@ -2223,7 +2239,7 @@ function bp_nouveau_filter_options() {
 	function bp_nouveau_get_filter_options() {
 		$output = '';
 
-		if ( 'notifications' === bp_current_component() ) {
+		if ( bp_nouveau_get_component_slug( 'notifications' ) === bp_current_component() ) {
 			$output = bp_nouveau_get_notifications_filters();
 
 		} else {
@@ -2625,14 +2641,19 @@ function bp_nouveau_submit_button( $action, $object_id = 0 ) {
 		printf( '<div class="submit">%s</div>', $submit_input );
 	}
 
+	$nonce = $submit_data['nonce'];
+	if ( isset( $submit_data['nonce_placeholder_value'] ) ) {
+		$nonce = sprintf( $nonce, $submit_data['nonce_placeholder_value'] );
+	}
+
 	if ( empty( $submit_data['nonce_key'] ) ) {
-		wp_nonce_field( $submit_data['nonce'] );
+		wp_nonce_field( $nonce );
 	} else {
 		if ( $object_id ) {
 			$submit_data['nonce_key'] .= '_' . (int) $object_id;
 		}
 
-		wp_nonce_field( $submit_data['nonce'], $submit_data['nonce_key'] );
+		wp_nonce_field( $nonce, $submit_data['nonce_key'] );
 	}
 
 	if ( ! empty( $submit_data['after'] ) ) {
@@ -2673,4 +2694,68 @@ function nouveau_error_template( $message = '', $type = '' ) {
 	</div>
 
 	<?php
+}
+
+/**
+ * Checks whether the Activity RSS links should be output.
+ *
+ * @since 8.0.0
+ *
+ * @return bool True to output the Activity RSS link. False otherwise.
+ */
+function bp_nouveau_is_feed_enable() {
+	$retval     = false;
+	$bp_nouveau = bp_nouveau();
+
+	if ( bp_is_active( 'activity' ) && 'activity' === bp_current_component() ) {
+		if ( isset( $bp_nouveau->activity->current_rss_feed ) ) {
+			$bp_nouveau->activity->current_rss_feed = array(
+				'link'               => '',
+				'tooltip'            => _x( 'RSS Feed', 'BP RSS Tooltip', 'buddypress' ),
+				'screen_reader_text' => _x( 'RSS', 'BP RSS screen reader text', 'buddypress' ),
+			);
+
+			if ( ! bp_is_user() && ! bp_is_group() ) {
+				$retval = bp_activity_is_feed_enable( 'sitewide' );
+
+				if ( $retval ) {
+					$bp_nouveau->activity->current_rss_feed['link'] = bp_get_sitewide_activity_feed_link();
+				}
+			} elseif ( bp_is_user_activity() ) {
+				$retval = bp_activity_is_feed_enable( 'personal' );
+
+				if ( $retval ) {
+					$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/feed' );
+				}
+
+				if ( bp_is_active( 'friends' ) && bp_is_current_action( bp_nouveau_get_component_slug( 'friends' ) ) ) {
+					$retval = bp_activity_is_feed_enable( 'friends' );
+
+					if ( $retval ) {
+						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'friends' ) . '/feed' );
+					}
+				} elseif ( bp_is_active( 'groups' ) && bp_is_current_action( bp_nouveau_get_component_slug( 'groups' ) ) ) {
+					$retval = bp_activity_is_feed_enable( 'mygroups' );
+
+					if ( $retval ) {
+						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'groups' ) . '/feed' );
+					}
+				} elseif ( bp_activity_do_mentions() && bp_is_current_action( 'mentions' ) ) {
+					$retval = bp_activity_is_feed_enable( 'mentions' );
+
+					if ( $retval ) {
+						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/mentions/feed' );
+					}
+				} elseif ( bp_activity_can_favorite() && bp_is_current_action( 'favorites' ) ) {
+					$retval = bp_activity_is_feed_enable( 'mentions' );
+
+					if ( $retval ) {
+						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/favorites/feed' );
+					}
+				}
+			}
+		}
+	}
+
+	return $retval;
 }

@@ -217,6 +217,7 @@ if ( $descendant_of ) {
 							<p class="item-title h2">
 								<a class="no-deco truncate-on-the-fly hyphenate" href="<?php bp_group_permalink() ?>" data-basevalue="55" data-minvalue="20" data-basewidth="290"><?php bp_group_name() ?></a>
 								<span class="original-copy hidden"><?php bp_group_name() ?></span>
+								<?php do_action( 'openlab_group_directory_after_group_title' ); ?>
 							</p>
 
 							<?php if ( 'course' === $this_group_type ) : ?>
